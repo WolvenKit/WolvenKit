@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public abstract partial class gameJournalQuestMapPinBase : gameJournalContainerEntry
 	{
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("enableGPS")] 
 		public CBool EnableGPS
 		{

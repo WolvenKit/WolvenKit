@@ -44,6 +44,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(5)] 
+		[RED("stopTestOnFailure")] 
+		public CBool StopTestOnFailure
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public TestStep()
 		{
 			Args = new();

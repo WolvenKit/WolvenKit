@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class InventoryItemDisplayController : BaseButtonView
 	{
-		[Ordinal(2)] 
+		[Ordinal(5)] 
 		[RED("widgetWrapper")] 
 		public inkWidgetReference WidgetWrapper
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(6)] 
 		[RED("itemName")] 
 		public inkTextWidgetReference ItemName
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(7)] 
 		[RED("itemPrice")] 
 		public inkTextWidgetReference ItemPrice
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(8)] 
 		[RED("itemRarity")] 
 		public inkWidgetReference ItemRarity
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(9)] 
 		[RED("commonModsRoot")] 
 		public inkCompoundWidgetReference CommonModsRoot
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(10)] 
 		[RED("itemImage")] 
 		public inkImageWidgetReference ItemImage
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(11)] 
 		[RED("itemFallbackImage")] 
 		public inkImageWidgetReference ItemFallbackImage
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(12)] 
 		[RED("itemEmptyImage")] 
 		public inkImageWidgetReference ItemEmptyImage
 		{
@@ -68,7 +68,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(13)] 
+		[RED("itemEmptyIcon")] 
+		public inkImageWidgetReference ItemEmptyIcon
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(14)] 
+		[RED("cyberwareEmptyImage")] 
+		public inkImageWidgetReference CyberwareEmptyImage
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(15)] 
 		[RED("itemSelectedArrow")] 
 		public inkWidgetReference ItemSelectedArrow
 		{
@@ -76,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(16)] 
 		[RED("quantintyAmmoIcon")] 
 		public inkWidgetReference QuantintyAmmoIcon
 		{
@@ -84,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(17)] 
 		[RED("quantityWrapper")] 
 		public inkCompoundWidgetReference QuantityWrapper
 		{
@@ -92,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(18)] 
 		[RED("quantityText")] 
 		public inkTextWidgetReference QuantityText
 		{
@@ -100,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(19)] 
 		[RED("weaponType")] 
 		public inkTextWidgetReference WeaponType
 		{
@@ -108,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(20)] 
 		[RED("highlightFrames")] 
 		public CArray<inkWidgetReference> HighlightFrames
 		{
@@ -116,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<inkWidgetReference>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(21)] 
 		[RED("equippedWidgets")] 
 		public CArray<inkWidgetReference> EquippedWidgets
 		{
@@ -124,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<inkWidgetReference>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(22)] 
 		[RED("hideWhenEquippedWidgets")] 
 		public CArray<inkWidgetReference> HideWhenEquippedWidgets
 		{
@@ -132,7 +148,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<inkWidgetReference>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(23)] 
+		[RED("hideWhenCyberwareInInventory")] 
+		public CArray<inkWidgetReference> HideWhenCyberwareInInventory
+		{
+			get => GetPropertyValue<CArray<inkWidgetReference>>();
+			set => SetPropertyValue<CArray<inkWidgetReference>>(value);
+		}
+
+		[Ordinal(24)] 
+		[RED("showWhenCyberwareInInventory")] 
+		public CArray<inkWidgetReference> ShowWhenCyberwareInInventory
+		{
+			get => GetPropertyValue<CArray<inkWidgetReference>>();
+			set => SetPropertyValue<CArray<inkWidgetReference>>(value);
+		}
+
+		[Ordinal(25)] 
 		[RED("showInEmptyWidgets")] 
 		public CArray<inkWidgetReference> ShowInEmptyWidgets
 		{
@@ -140,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<inkWidgetReference>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(26)] 
 		[RED("hideInEmptyWidgets")] 
 		public CArray<inkWidgetReference> HideInEmptyWidgets
 		{
@@ -148,68 +180,12 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<inkWidgetReference>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(27)] 
 		[RED("backgroundFrames")] 
 		public CArray<inkWidgetReference> BackgroundFrames
 		{
 			get => GetPropertyValue<CArray<inkWidgetReference>>();
 			set => SetPropertyValue<CArray<inkWidgetReference>>(value);
-		}
-
-		[Ordinal(21)] 
-		[RED("requirementsWrapper")] 
-		public inkWidgetReference RequirementsWrapper
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(22)] 
-		[RED("iconicTint")] 
-		public inkWidgetReference IconicTint
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(23)] 
-		[RED("transmogContainer")] 
-		public inkCompoundWidgetReference TransmogContainer
-		{
-			get => GetPropertyValue<inkCompoundWidgetReference>();
-			set => SetPropertyValue<inkCompoundWidgetReference>(value);
-		}
-
-		[Ordinal(24)] 
-		[RED("rarityWrapper")] 
-		public inkWidgetReference RarityWrapper
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(25)] 
-		[RED("rarityCommonWrapper")] 
-		public inkWidgetReference RarityCommonWrapper
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(26)] 
-		[RED("weaponTypeImage")] 
-		public inkImageWidgetReference WeaponTypeImage
-		{
-			get => GetPropertyValue<inkImageWidgetReference>();
-			set => SetPropertyValue<inkImageWidgetReference>(value);
-		}
-
-		[Ordinal(27)] 
-		[RED("questItemMaker")] 
-		public inkWidgetReference QuestItemMaker
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(28)] 
@@ -221,6 +197,62 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(29)] 
+		[RED("requirementsWrapper")] 
+		public inkWidgetReference RequirementsWrapper
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(30)] 
+		[RED("iconicTint")] 
+		public inkWidgetReference IconicTint
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(31)] 
+		[RED("transmogContainer")] 
+		public inkCompoundWidgetReference TransmogContainer
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(32)] 
+		[RED("rarityWrapper")] 
+		public inkWidgetReference RarityWrapper
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(33)] 
+		[RED("rarityCommonWrapper")] 
+		public inkWidgetReference RarityCommonWrapper
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(34)] 
+		[RED("weaponTypeImage")] 
+		public inkImageWidgetReference WeaponTypeImage
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(35)] 
+		[RED("questItemMaker")] 
+		public inkWidgetReference QuestItemMaker
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(36)] 
 		[RED("labelsContainer")] 
 		public inkCompoundWidgetReference LabelsContainer
 		{
@@ -228,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(37)] 
 		[RED("backgroundBlueprint")] 
 		public inkWidgetReference BackgroundBlueprint
 		{
@@ -236,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(38)] 
 		[RED("iconBlueprint")] 
 		public inkWidgetReference IconBlueprint
 		{
@@ -244,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(39)] 
 		[RED("fluffBlueprint")] 
 		public inkImageWidgetReference FluffBlueprint
 		{
@@ -252,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(40)] 
 		[RED("lootitemflufficon")] 
 		public inkWidgetReference Lootitemflufficon
 		{
@@ -260,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(41)] 
 		[RED("lootitemtypeicon")] 
 		public inkImageWidgetReference Lootitemtypeicon
 		{
@@ -268,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(42)] 
 		[RED("slotItemsCountWrapper")] 
 		public inkWidgetReference SlotItemsCountWrapper
 		{
@@ -276,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(43)] 
 		[RED("slotItemsCount")] 
 		public inkTextWidgetReference SlotItemsCount
 		{
@@ -284,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(44)] 
 		[RED("iconErrorIndicator")] 
 		public inkWidgetReference IconErrorIndicator
 		{
@@ -292,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(45)] 
 		[RED("newItemsWrapper")] 
 		public inkWidgetReference NewItemsWrapper
 		{
@@ -300,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(46)] 
 		[RED("newItemsCounter")] 
 		public inkTextWidgetReference NewItemsCounter
 		{
@@ -308,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(47)] 
 		[RED("lockIcon")] 
 		public inkWidgetReference LockIcon
 		{
@@ -316,7 +348,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(48)] 
 		[RED("transmogedIcon")] 
 		public inkWidgetReference TransmogedIcon
 		{
@@ -324,7 +356,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(49)] 
 		[RED("iconWardrobeDisabled")] 
 		public inkWidgetReference IconWardrobeDisabled
 		{
@@ -332,7 +364,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(50)] 
 		[RED("comparisionArrow")] 
 		public inkWidgetReference ComparisionArrow
 		{
@@ -340,7 +372,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(51)] 
 		[RED("iconTransmog")] 
 		public inkWidgetReference IconTransmog
 		{
@@ -348,7 +380,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(52)] 
 		[RED("wardrobeInfoContainer")] 
 		public inkWidgetReference WardrobeInfoContainer
 		{
@@ -356,7 +388,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(53)] 
 		[RED("wardrobeInfoText")] 
 		public inkTextWidgetReference WardrobeInfoText
 		{
@@ -364,7 +396,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(54)] 
+		[RED("perkWrapper")] 
+		public inkWidgetReference PerkWrapper
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(55)] 
+		[RED("perkIcon")] 
+		public inkImageWidgetReference PerkIcon
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(56)] 
 		[RED("inventoryDataManager")] 
 		public CHandle<InventoryDataManagerV2> InventoryDataManager
 		{
@@ -372,7 +420,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<InventoryDataManagerV2>>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(57)] 
 		[RED("inventoryScriptableSystem")] 
 		public CHandle<UIInventoryScriptableSystem> InventoryScriptableSystem
 		{
@@ -380,7 +428,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UIInventoryScriptableSystem>>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(58)] 
 		[RED("uiScriptableSystem")] 
 		public CWeakHandle<UIScriptableSystem> UiScriptableSystem
 		{
@@ -388,7 +436,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<UIScriptableSystem>>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(59)] 
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
@@ -396,7 +444,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(60)] 
 		[RED("itemData")] 
 		public gameInventoryItemData ItemData
 		{
@@ -404,7 +452,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameInventoryItemData>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(61)] 
 		[RED("recipeData")] 
 		public CHandle<RecipeData> RecipeData
 		{
@@ -412,7 +460,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<RecipeData>>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(62)] 
 		[RED("equipmentArea")] 
 		public CEnum<gamedataEquipmentArea> EquipmentArea
 		{
@@ -420,7 +468,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataEquipmentArea>>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(63)] 
 		[RED("itemType")] 
 		public CEnum<gamedataItemType> ItemType
 		{
@@ -428,7 +476,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataItemType>>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(64)] 
 		[RED("emptySlotImage")] 
 		public CName EmptySlotImage
 		{
@@ -436,7 +484,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(65)] 
 		[RED("slotName")] 
 		public CString SlotName
 		{
@@ -444,7 +492,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(66)] 
 		[RED("slotIndex")] 
 		public CInt32 SlotIndex
 		{
@@ -452,7 +500,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(67)] 
 		[RED("attachmentsDisplay")] 
 		public CArray<CWeakHandle<InventoryItemModSlotDisplay>> AttachmentsDisplay
 		{
@@ -460,7 +508,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<InventoryItemModSlotDisplay>>>(value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(68)] 
 		[RED("transmogItem")] 
 		public gameItemID TransmogItem
 		{
@@ -468,7 +516,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(69)] 
 		[RED("slotID")] 
 		public TweakDBID SlotID
 		{
@@ -476,7 +524,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(70)] 
 		[RED("itemDisplayContext")] 
 		public CEnum<gameItemDisplayContext> ItemDisplayContext
 		{
@@ -484,7 +532,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameItemDisplayContext>>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(71)] 
 		[RED("labelsContainerController")] 
 		public CWeakHandle<ItemLabelContainerController> LabelsContainerController
 		{
@@ -492,7 +540,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ItemLabelContainerController>>(value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(72)] 
 		[RED("defaultFallbackImage")] 
 		public CName DefaultFallbackImage
 		{
@@ -500,7 +548,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(73)] 
 		[RED("defaultEmptyImage")] 
 		public CName DefaultEmptyImage
 		{
@@ -508,7 +556,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(74)] 
 		[RED("defaultEmptyImageAtlas")] 
 		public CString DefaultEmptyImageAtlas
 		{
@@ -516,7 +564,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(75)] 
 		[RED("emptyImage")] 
 		public CName EmptyImage
 		{
@@ -524,7 +572,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(76)] 
 		[RED("emptyImageAtlas")] 
 		public CString EmptyImageAtlas
 		{
@@ -532,15 +580,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(68)] 
-		[RED("enoughMoney")] 
-		public CBool EnoughMoney
+		[Ordinal(77)] 
+		[RED("isEnoughMoney")] 
+		public CBool IsEnoughMoney
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(69)] 
+		[Ordinal(78)] 
 		[RED("owned")] 
 		public CBool Owned
 		{
@@ -548,7 +596,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(70)] 
+		[Ordinal(79)] 
 		[RED("requirementsMet")] 
 		public CBool RequirementsMet
 		{
@@ -556,7 +604,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(71)] 
+		[Ordinal(80)] 
 		[RED("tooltipData")] 
 		public CHandle<InventoryTooltipData> TooltipData
 		{
@@ -564,7 +612,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<InventoryTooltipData>>(value);
 		}
 
-		[Ordinal(72)] 
+		[Ordinal(81)] 
 		[RED("isNew")] 
 		public CBool IsNew
 		{
@@ -572,7 +620,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(73)] 
+		[Ordinal(82)] 
+		[RED("isNewOverriden")] 
+		public CBool IsNewOverriden
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(83)] 
+		[RED("isQuestBought")] 
+		public CBool IsQuestBought
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(84)] 
 		[RED("newItemsIDs")] 
 		public CArray<gameItemID> NewItemsIDs
 		{
@@ -580,7 +644,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameItemID>>(value);
 		}
 
-		[Ordinal(74)] 
+		[Ordinal(85)] 
 		[RED("newItemsFetched")] 
 		public CBool NewItemsFetched
 		{
@@ -588,7 +652,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(75)] 
+		[Ordinal(86)] 
 		[RED("isBuybackStack")] 
 		public CBool IsBuybackStack
 		{
@@ -596,7 +660,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(76)] 
+		[Ordinal(87)] 
 		[RED("isDLCNewItem")] 
 		public CBool IsDLCNewItem
 		{
@@ -604,7 +668,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(77)] 
+		[Ordinal(88)] 
 		[RED("parentItemData")] 
 		public CWeakHandle<gameItemData> ParentItemData
 		{
@@ -612,7 +676,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameItemData>>(value);
 		}
 
-		[Ordinal(78)] 
+		[Ordinal(89)] 
 		[RED("isLocked")] 
 		public CBool IsLocked
 		{
@@ -620,7 +684,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(79)] 
+		[Ordinal(90)] 
+		[RED("visibleWhenLocked")] 
+		public CBool VisibleWhenLocked
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(91)] 
 		[RED("isTransmoged")] 
 		public CBool IsTransmoged
 		{
@@ -628,7 +700,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(80)] 
+		[Ordinal(92)] 
 		[RED("isWardrobeDisabled")] 
 		public CBool IsWardrobeDisabled
 		{
@@ -636,7 +708,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(81)] 
+		[Ordinal(93)] 
 		[RED("isUpgradable")] 
 		public CBool IsUpgradable
 		{
@@ -644,7 +716,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(82)] 
+		[Ordinal(94)] 
 		[RED("overrideQuantity")] 
 		public CInt32 OverrideQuantity
 		{
@@ -652,7 +724,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(83)] 
+		[Ordinal(95)] 
 		[RED("hasAvailableItems")] 
 		public CBool HasAvailableItems
 		{
@@ -660,7 +732,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(84)] 
+		[Ordinal(96)] 
 		[RED("isSlotTransmogged")] 
 		public CBool IsSlotTransmogged
 		{
@@ -668,7 +740,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(85)] 
+		[Ordinal(97)] 
 		[RED("wardrobeOutfitIndex")] 
 		public CInt32 WardrobeOutfitIndex
 		{
@@ -676,7 +748,31 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(86)] 
+		[Ordinal(98)] 
+		[RED("additionalData")] 
+		public CHandle<IScriptable> AdditionalData
+		{
+			get => GetPropertyValue<CHandle<IScriptable>>();
+			set => SetPropertyValue<CHandle<IScriptable>>(value);
+		}
+
+		[Ordinal(99)] 
+		[RED("isCyberwarePreviewInInventory")] 
+		public CBool IsCyberwarePreviewInInventory
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(100)] 
+		[RED("isPerkRequiredCyberware")] 
+		public CBool IsPerkRequiredCyberware
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(101)] 
 		[RED("delayProxy")] 
 		public CHandle<inkanimProxy> DelayProxy
 		{
@@ -684,7 +780,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(87)] 
+		[Ordinal(102)] 
 		[RED("delayAnimation")] 
 		public CHandle<inkanimDefinition> DelayAnimation
 		{
@@ -692,7 +788,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
-		[Ordinal(88)] 
+		[Ordinal(103)] 
 		[RED("hoverTarget")] 
 		public CWeakHandle<inkWidget> HoverTarget
 		{
@@ -700,7 +796,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(89)] 
+		[Ordinal(104)] 
+		[RED("upgradeProxy")] 
+		public CHandle<inkanimProxy> UpgradeProxy
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(105)] 
+		[RED("selectedCWProxy")] 
+		public CHandle<inkanimProxy> SelectedCWProxy
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(106)] 
 		[RED("DEBUG_isIconError")] 
 		public CBool DEBUG_isIconError
 		{
@@ -708,7 +820,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(90)] 
+		[Ordinal(107)] 
 		[RED("DEBUG_iconErrorInfo")] 
 		public CHandle<DEBUG_IconErrorInfo> DEBUG_iconErrorInfo
 		{
@@ -716,7 +828,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<DEBUG_IconErrorInfo>>(value);
 		}
 
-		[Ordinal(91)] 
+		[Ordinal(108)] 
 		[RED("DEBUG_resolvedIconName")] 
 		public CString DEBUG_resolvedIconName
 		{
@@ -724,7 +836,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(92)] 
+		[Ordinal(109)] 
 		[RED("DEBUG_recordItemName")] 
 		public CString DEBUG_recordItemName
 		{
@@ -732,7 +844,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(93)] 
+		[Ordinal(110)] 
 		[RED("DEBUG_innerItemName")] 
 		public CString DEBUG_innerItemName
 		{
@@ -740,7 +852,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(111)] 
 		[RED("DEBUG_isIconManuallySet")] 
 		public CBool DEBUG_isIconManuallySet
 		{
@@ -748,7 +860,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(112)] 
 		[RED("DEBUG_iconsNameResolverIsDebug")] 
 		public CBool DEBUG_iconsNameResolverIsDebug
 		{
@@ -756,7 +868,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(113)] 
 		[RED("uiInventoryItem")] 
 		public CWeakHandle<UIInventoryItem> UiInventoryItem
 		{
@@ -764,7 +876,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<UIInventoryItem>>(value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(114)] 
 		[RED("displayContextData")] 
 		public CWeakHandle<ItemDisplayContextData> DisplayContextData
 		{
@@ -772,7 +884,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ItemDisplayContextData>>(value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(115)] 
 		[RED("parrentWrappedDataObject")] 
 		public CWeakHandle<WrappedInventoryItemData> ParrentWrappedDataObject
 		{
@@ -790,6 +902,8 @@ namespace WolvenKit.RED4.Types
 			ItemImage = new inkImageWidgetReference();
 			ItemFallbackImage = new inkImageWidgetReference();
 			ItemEmptyImage = new inkImageWidgetReference();
+			ItemEmptyIcon = new inkImageWidgetReference();
+			CyberwareEmptyImage = new inkImageWidgetReference();
 			ItemSelectedArrow = new inkWidgetReference();
 			QuantintyAmmoIcon = new inkWidgetReference();
 			QuantityWrapper = new inkCompoundWidgetReference();
@@ -798,9 +912,12 @@ namespace WolvenKit.RED4.Types
 			HighlightFrames = new();
 			EquippedWidgets = new();
 			HideWhenEquippedWidgets = new();
+			HideWhenCyberwareInInventory = new();
+			ShowWhenCyberwareInInventory = new();
 			ShowInEmptyWidgets = new();
 			HideInEmptyWidgets = new();
 			BackgroundFrames = new();
+			EquippedMarker = new inkWidgetReference();
 			RequirementsWrapper = new inkWidgetReference();
 			IconicTint = new inkWidgetReference();
 			TransmogContainer = new inkCompoundWidgetReference();
@@ -808,7 +925,6 @@ namespace WolvenKit.RED4.Types
 			RarityCommonWrapper = new inkWidgetReference();
 			WeaponTypeImage = new inkImageWidgetReference();
 			QuestItemMaker = new inkWidgetReference();
-			EquippedMarker = new inkWidgetReference();
 			LabelsContainer = new inkCompoundWidgetReference();
 			BackgroundBlueprint = new inkWidgetReference();
 			IconBlueprint = new inkWidgetReference();
@@ -827,6 +943,8 @@ namespace WolvenKit.RED4.Types
 			IconTransmog = new inkWidgetReference();
 			WardrobeInfoContainer = new inkWidgetReference();
 			WardrobeInfoText = new inkTextWidgetReference();
+			PerkWrapper = new inkWidgetReference();
+			PerkIcon = new inkImageWidgetReference();
 			ItemID = new gameItemID();
 			ItemData = new gameInventoryItemData { ID = new gameItemID(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = uint.MaxValue, IsRequirementMet = true, IsEquippable = true, Requirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new gameInventoryItemSortData() };
 			EquipmentArea = Enums.gamedataEquipmentArea.Invalid;
@@ -837,6 +955,7 @@ namespace WolvenKit.RED4.Types
 			DefaultEmptyImage = "icon_add";
 			DefaultEmptyImageAtlas = "base\\gameplay\\gui\\fullscreen\\inventory\\inventory4_atlas.inkatlas";
 			NewItemsIDs = new();
+			VisibleWhenLocked = true;
 			HasAvailableItems = true;
 			WardrobeOutfitIndex = -1;
 

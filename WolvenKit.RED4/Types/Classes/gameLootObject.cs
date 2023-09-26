@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameLootObject : gameObject
 	{
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("lootID")] 
 		public TweakDBID LootID
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("isInIconForcedVisibilityRange")] 
 		public CBool IsInIconForcedVisibilityRange
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("activeQualityRangeInteraction")] 
 		public CName ActiveQualityRangeInteraction
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("lootQuality")] 
 		public CEnum<gamedataQuality> LootQuality
 		{

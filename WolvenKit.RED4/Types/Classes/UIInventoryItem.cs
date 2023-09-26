@@ -53,6 +53,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(6)] 
+		[RED("realItemData")] 
+		public CWeakHandle<gameItemData> RealItemData
+		{
+			get => GetPropertyValue<CWeakHandle<gameItemData>>();
+			set => SetPropertyValue<CWeakHandle<gameItemData>>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("recipeItemData")] 
+		public CHandle<gameItemData> RecipeItemData
+		{
+			get => GetPropertyValue<CHandle<gameItemData>>();
+			set => SetPropertyValue<CHandle<gameItemData>>(value);
+		}
+
+		[Ordinal(8)] 
 		[RED("itemRecord")] 
 		public CWeakHandle<gamedataItem_Record> ItemRecord
 		{
@@ -60,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gamedataItem_Record>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(9)] 
 		[RED("realItemRecord")] 
 		public CWeakHandle<gamedataItem_Record> RealItemRecord
 		{
@@ -68,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gamedataItem_Record>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(10)] 
 		[RED("itemTweakID")] 
 		public TweakDBID ItemTweakID
 		{
@@ -76,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(11)] 
 		[RED("realItemTweakID")] 
 		public TweakDBID RealItemTweakID
 		{
@@ -84,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(12)] 
 		[RED("data")] 
 		public CHandle<UIInventoryItemInternalData> Data
 		{
@@ -92,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UIInventoryItemInternalData>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(13)] 
 		[RED("weaponData")] 
 		public CHandle<UIInventoryWeaponInternalData> WeaponData
 		{
@@ -100,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UIInventoryWeaponInternalData>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(14)] 
 		[RED("programData")] 
 		public CHandle<UIInventoryItemProgramData> ProgramData
 		{
@@ -108,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UIInventoryItemProgramData>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(15)] 
 		[RED("grenadeData")] 
 		public CHandle<UIInventoryItemGrenadeData> GrenadeData
 		{
@@ -116,7 +132,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UIInventoryItemGrenadeData>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(16)] 
+		[RED("cyberwareUpgradeData")] 
+		public CHandle<InventoryTooltiData_CyberwareUpgradeData> CyberwareUpgradeData
+		{
+			get => GetPropertyValue<CHandle<InventoryTooltiData_CyberwareUpgradeData>>();
+			set => SetPropertyValue<CHandle<InventoryTooltiData_CyberwareUpgradeData>>(value);
+		}
+
+		[Ordinal(17)] 
 		[RED("parentItem")] 
 		public CWeakHandle<gameItemData> ParentItem
 		{
@@ -124,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameItemData>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(18)] 
 		[RED("slotID")] 
 		public TweakDBID SlotID
 		{
@@ -132,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("fetchedFlags")] 
 		public CInt32 FetchedFlags
 		{
@@ -140,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("isQuantityDirty")] 
 		public CBool IsQuantityDirty
 		{
@@ -148,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
 		[RED("craftingResult")] 
 		public CWeakHandle<gamedataCraftingResult_Record> CraftingResult
 		{
@@ -156,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gamedataCraftingResult_Record>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(22)] 
 		[RED("TEMP_isEquippedPrefetched")] 
 		public CBool TEMP_isEquippedPrefetched
 		{
@@ -164,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(23)] 
 		[RED("TEMP_isEquipped")] 
 		public CBool TEMP_isEquipped
 		{

@@ -69,6 +69,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(8)] 
+		[RED("AdditionalContentInstallationRequestResult")] 
+		public inkAdditionalContentInstallRequestedCallback AdditionalContentInstallationRequestResult
+		{
+			get => GetPropertyValue<inkAdditionalContentInstallRequestedCallback>();
+			set => SetPropertyValue<inkAdditionalContentInstallRequestedCallback>(value);
+		}
+
+		[Ordinal(9)] 
+		[RED("AdditionalContentInstallationResult")] 
+		public inkAdditionalContentInstalledCallback AdditionalContentInstallationResult
+		{
+			get => GetPropertyValue<inkAdditionalContentInstalledCallback>();
+			set => SetPropertyValue<inkAdditionalContentInstalledCallback>(value);
+		}
+
+		[Ordinal(10)] 
 		[RED("AdditionalContentStatusUpdateResult")] 
 		public inkAdditionalContentStatusUpdateCallback AdditionalContentStatusUpdateResult
 		{
@@ -76,7 +92,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkAdditionalContentStatusUpdateCallback>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(11)] 
+		[RED("AdditionalContentDataReloadProgressCallback")] 
+		public inkAdditionalContentDataReloadProgress AdditionalContentDataReloadProgressCallback
+		{
+			get => GetPropertyValue<inkAdditionalContentDataReloadProgress>();
+			set => SetPropertyValue<inkAdditionalContentDataReloadProgress>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("AdditionalDataInvalidCallback")] 
+		public inkAdditionalContentDataInvalid AdditionalDataInvalidCallback
+		{
+			get => GetPropertyValue<inkAdditionalContentDataInvalid>();
+			set => SetPropertyValue<inkAdditionalContentDataInvalid>(value);
+		}
+
+		[Ordinal(13)] 
 		[RED("UserChanged")] 
 		public inkUserIdResult UserChanged
 		{
@@ -84,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkUserIdResult>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(14)] 
 		[RED("UserIdResult")] 
 		public inkUserIdResult UserIdResult
 		{
@@ -92,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkUserIdResult>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(15)] 
 		[RED("TrialVersionRemainingTimeUpdated")] 
 		public inkTrialVersionRemainingTimeUpdate TrialVersionRemainingTimeUpdated
 		{
@@ -100,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTrialVersionRemainingTimeUpdate>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(16)] 
 		[RED("BoughtFullGame")] 
 		public inkTrialOnBuyFullGame BoughtFullGame
 		{
@@ -108,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTrialOnBuyFullGame>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(17)] 
 		[RED("CloudSavesQueryStatusChanged")] 
 		public inkCloudSavesQueryStatusChange CloudSavesQueryStatusChanged
 		{
@@ -116,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCloudSavesQueryStatusChange>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(18)] 
 		[RED("CloudSaveUploadFinish")] 
 		public inkCloudSaveUploadFinish CloudSaveUploadFinish
 		{

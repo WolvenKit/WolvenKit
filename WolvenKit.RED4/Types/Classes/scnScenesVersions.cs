@@ -13,8 +13,8 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
-		[RED("scenesChanges")] 
-		public CArray<scnScenesVersionsSceneChanges> ScenesChanges
+		[RED("scenes")] 
+		public CArray<scnScenesVersionsSceneChanges> Scenes
 		{
 			get => GetPropertyValue<CArray<scnScenesVersionsSceneChanges>>();
 			set => SetPropertyValue<CArray<scnScenesVersionsSceneChanges>>(value);
@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public scnScenesVersions()
 		{
-			ScenesChanges = new();
+			Scenes = new();
 
 			PostConstruct();
 		}

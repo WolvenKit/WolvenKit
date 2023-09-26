@@ -53,6 +53,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(6)] 
+		[RED("deviceUIStyle")] 
+		public CEnum<gamedataComputerUIStyle> DeviceUIStyle
+		{
+			get => GetPropertyValue<CEnum<gamedataComputerUIStyle>>();
+			set => SetPropertyValue<CEnum<gamedataComputerUIStyle>>(value);
+		}
+
+		[Ordinal(7)] 
 		[RED("blackboard")] 
 		public CWeakHandle<gameIBlackboard> Blackboard
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("isScanned")] 
 		public CBool IsScanned
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("isBeingScanned")] 
 		public CBool IsBeingScanned
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("exposeQuickHacks")] 
 		public CBool ExposeQuickHacks
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("isAttachedToGame")] 
 		public CBool IsAttachedToGame
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("isLogicReady")] 
 		public CBool IsLogicReady
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("maxDevicesToExtractInOneFrame")] 
 		public CInt32 MaxDevicesToExtractInOneFrame
 		{
@@ -111,6 +119,7 @@ namespace WolvenKit.RED4.Types
 		public gameDeviceComponentPS()
 		{
 			AutoToggleQuestMark = true;
+			DeviceUIStyle = Enums.gamedataComputerUIStyle.LightBlue;
 			MaxDevicesToExtractInOneFrame = 10;
 
 			PostConstruct();

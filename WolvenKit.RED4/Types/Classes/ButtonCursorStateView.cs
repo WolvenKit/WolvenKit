@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ButtonCursorStateView : BaseButtonView
 	{
-		[Ordinal(2)] 
+		[Ordinal(5)] 
 		[RED("HoverStateName")] 
 		public CName HoverStateName
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(6)] 
 		[RED("PressStateName")] 
 		public CName PressStateName
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(7)] 
 		[RED("DefaultStateName")] 
 		public CName DefaultStateName
 		{

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class DeviceLinkComponentPS : SharedGameplayPS
 	{
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("parentDevice")] 
 		public DeviceLink ParentDevice
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<DeviceLink>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("isConnected")] 
 		public CBool IsConnected
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("ownerEntityID")] 
 		public entEntityID OwnerEntityID
 		{

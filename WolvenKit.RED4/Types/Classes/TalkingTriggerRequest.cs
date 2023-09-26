@@ -28,6 +28,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<questPhoneTalkingState>>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("visuals")] 
+		public CEnum<questPhoneCallVisuals> Visuals
+		{
+			get => GetPropertyValue<CEnum<questPhoneCallVisuals>>();
+			set => SetPropertyValue<CEnum<questPhoneCallVisuals>>(value);
+		}
+
 		public TalkingTriggerRequest()
 		{
 			PostConstruct();

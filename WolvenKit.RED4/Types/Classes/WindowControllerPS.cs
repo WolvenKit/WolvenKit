@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class WindowControllerPS : DoorControllerPS
 	{
-		[Ordinal(114)] 
+		[Ordinal(117)] 
 		[RED("windowSkillChecks")] 
 		public CHandle<EngDemoContainer> WindowSkillChecks
 		{

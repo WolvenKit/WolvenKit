@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class VirtualItem_TEMP : gameObject
 	{
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("item")] 
 		public CString Item
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("interaction")] 
 		public CHandle<gameinteractionsComponent> Interaction
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameinteractionsComponent>>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("mesh")] 
 		public CHandle<entPhysicalMeshComponent> Mesh
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entPhysicalMeshComponent>>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("mesh1")] 
 		public CHandle<entPhysicalMeshComponent> Mesh1
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entPhysicalMeshComponent>>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("mesh2")] 
 		public CHandle<entPhysicalMeshComponent> Mesh2
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entPhysicalMeshComponent>>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(41)] 
 		[RED("mesh3")] 
 		public CHandle<entPhysicalMeshComponent> Mesh3
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entPhysicalMeshComponent>>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(42)] 
 		[RED("mesh4")] 
 		public CHandle<entPhysicalMeshComponent> Mesh4
 		{

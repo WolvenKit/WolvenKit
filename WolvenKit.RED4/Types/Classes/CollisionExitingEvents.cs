@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CollisionExitingEvents : ImmediateExitWithForceEvents
 	{
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("animFeatureStatusEffect")] 
 		public CHandle<AnimFeature_StatusEffect> AnimFeatureStatusEffect
 		{

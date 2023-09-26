@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class BaseAnimatedDevice : InteractiveDevice
 	{
-		[Ordinal(94)] 
+		[Ordinal(98)] 
 		[RED("openingSpeed")] 
 		public CFloat OpeningSpeed
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(99)] 
 		[RED("closingSpeed")] 
 		public CFloat ClosingSpeed
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(100)] 
 		[RED("animationController")] 
 		public CHandle<entAnimationControllerComponent> AnimationController
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entAnimationControllerComponent>>(value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(101)] 
 		[RED("animFeature")] 
 		public CHandle<AnimFeature_RoadBlock> AnimFeature
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AnimFeature_RoadBlock>>(value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(102)] 
 		[RED("animationType")] 
 		public CEnum<EAnimationType> AnimationType
 		{

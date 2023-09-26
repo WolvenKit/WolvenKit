@@ -140,11 +140,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
+		[Ordinal(17)] 
+		[RED("additionalContentIds")] 
+		public CArray<CName> AdditionalContentIds
+		{
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
+		}
+
 		public inkSaveMetadataInfo()
 		{
 			PlayTime = 0.000000;
 			PlaythroughTime = 0.000000;
 			Level = 0.000000;
+			AdditionalContentIds = new();
 
 			PostConstruct();
 		}

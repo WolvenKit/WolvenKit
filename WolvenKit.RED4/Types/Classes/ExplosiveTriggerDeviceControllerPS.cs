@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ExplosiveTriggerDeviceControllerPS : ExplosiveDeviceControllerPS
 	{
-		[Ordinal(120)] 
+		[Ordinal(124)] 
 		[RED("playerSafePass")] 
 		public CBool PlayerSafePass
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(121)] 
+		[Ordinal(125)] 
 		[RED("triggerExploded")] 
 		public CBool TriggerExploded
 		{

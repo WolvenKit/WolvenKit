@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class scnPlayRidAnimEvent : scnPlayFPPControlAnimEvent
 	{
-		[Ordinal(32)] 
+		[Ordinal(33)] 
 		[RED("ridVersinon")] 
 		public CUInt32 RidVersinon
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(34)] 
 		[RED("animResRefId")] 
 		public scnRidAnimationSRRefId AnimResRefId
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<scnRidAnimationSRRefId>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(35)] 
 		[RED("animOriginMarker")] 
 		public scnMarker AnimOriginMarker
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<scnMarker>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("actorPlacement")] 
 		public CEnum<scnRidActorPlacement> ActorPlacement
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<scnRidActorPlacement>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("actorHasCollision")] 
 		public CBool ActorHasCollision
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("blendInTrajectoryBone")] 
 		public CFloat BlendInTrajectoryBone
 		{

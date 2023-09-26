@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class FanControllerPS : BasicDistractionDeviceControllerPS
 	{
-		[Ordinal(109)] 
+		[Ordinal(113)] 
 		[RED("fanSetup")] 
 		public FanSetup FanSetup
 		{

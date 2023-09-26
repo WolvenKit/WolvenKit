@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ItemTooltipRequirementsModule : ItemTooltipModuleController
 	{
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("levelRequirementsWrapper")] 
 		public inkWidgetReference LevelRequirementsWrapper
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("strenghtOrReflexWrapper")] 
 		public inkWidgetReference StrenghtOrReflexWrapper
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("smartlinkGunWrapper")] 
 		public inkWidgetReference SmartlinkGunWrapper
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("anyAttributeWrapper")] 
 		public inkCompoundWidgetReference AnyAttributeWrapper
 		{
@@ -36,7 +36,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
+		[RED("line")] 
+		public inkWidgetReference Line
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(10)] 
 		[RED("levelRequirementsText")] 
 		public inkTextWidgetReference LevelRequirementsText
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(11)] 
 		[RED("strenghtOrReflexText")] 
 		public inkTextWidgetReference StrenghtOrReflexText
 		{
@@ -52,12 +60,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(12)] 
 		[RED("perkText")] 
 		public inkTextWidgetReference PerkText
 		{
 			get => GetPropertyValue<inkTextWidgetReference>();
 			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(13)] 
+		[RED("perkDot")] 
+		public inkImageWidgetReference PerkDot
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		public ItemTooltipRequirementsModule()
@@ -66,9 +82,11 @@ namespace WolvenKit.RED4.Types
 			StrenghtOrReflexWrapper = new inkWidgetReference();
 			SmartlinkGunWrapper = new inkWidgetReference();
 			AnyAttributeWrapper = new inkCompoundWidgetReference();
+			Line = new inkWidgetReference();
 			LevelRequirementsText = new inkTextWidgetReference();
 			StrenghtOrReflexText = new inkTextWidgetReference();
 			PerkText = new inkTextWidgetReference();
+			PerkDot = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

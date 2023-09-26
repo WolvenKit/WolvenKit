@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(10)] 
+		[RED("barExtra")] 
+		public inkWidgetReference BarExtra
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(11)] 
 		[RED("header")] 
 		public inkTextWidgetReference Header
 		{
@@ -20,7 +28,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
+		[RED("bottomText")] 
+		public inkTextWidgetReference BottomText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(13)] 
 		[RED("percent")] 
 		public inkTextWidgetReference Percent
 		{
@@ -28,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(14)] 
 		[RED("completed")] 
 		public inkTextWidgetReference Completed
 		{
@@ -36,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(15)] 
 		[RED("failed")] 
 		public inkTextWidgetReference Failed
 		{
@@ -44,7 +60,87 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(16)] 
+		[RED("attencionIcon")] 
+		public inkWidgetReference AttencionIcon
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(17)] 
+		[RED("neutralIcon")] 
+		public inkWidgetReference NeutralIcon
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("relicIcon")] 
+		public inkWidgetReference RelicIcon
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(19)] 
+		[RED("moneyIcon")] 
+		public inkWidgetReference MoneyIcon
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(20)] 
+		[RED("apartmentIcon")] 
+		public inkImageWidgetReference ApartmentIcon
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(21)] 
+		[RED("vehicleIcon")] 
+		public inkImageWidgetReference VehicleIcon
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(22)] 
+		[RED("neutralInIcon")] 
+		public inkImageWidgetReference NeutralInIcon
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(23)] 
+		[RED("revealIcon")] 
+		public inkWidgetReference RevealIcon
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(24)] 
+		[RED("vahicleHackIcon")] 
+		public inkWidgetReference VahicleHackIcon
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(25)] 
+		[RED("wrapper")] 
+		public inkWidgetReference Wrapper
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(26)] 
 		[RED("rootWidget")] 
 		public CWeakHandle<inkWidget> RootWidget
 		{
@@ -52,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(27)] 
 		[RED("progressBarBB")] 
 		public CWeakHandle<gameIBlackboard> ProgressBarBB
 		{
@@ -60,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(28)] 
 		[RED("progressBarDef")] 
 		public CHandle<UI_HUDProgressBarDef> ProgressBarDef
 		{
@@ -68,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_HUDProgressBarDef>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(29)] 
 		[RED("activeBBID")] 
 		public CHandle<redCallbackObject> ActiveBBID
 		{
@@ -76,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(30)] 
 		[RED("headerBBID")] 
 		public CHandle<redCallbackObject> HeaderBBID
 		{
@@ -84,7 +180,39 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(31)] 
+		[RED("typeBBID")] 
+		public CHandle<redCallbackObject> TypeBBID
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(32)] 
+		[RED("bottomTextBBID")] 
+		public CHandle<redCallbackObject> BottomTextBBID
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(33)] 
+		[RED("completedTextBBID")] 
+		public CHandle<redCallbackObject> CompletedTextBBID
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(34)] 
+		[RED("failedTextBBID")] 
+		public CHandle<redCallbackObject> FailedTextBBID
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(35)] 
 		[RED("progressBBID")] 
 		public CHandle<redCallbackObject> ProgressBBID
 		{
@@ -92,7 +220,31 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(36)] 
+		[RED("bb")] 
+		public CWeakHandle<gameIBlackboard> Bb
+		{
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
+		}
+
+		[Ordinal(37)] 
+		[RED("bbUIInteractionsDef")] 
+		public CHandle<UIInteractionsDef> BbUIInteractionsDef
+		{
+			get => GetPropertyValue<CHandle<UIInteractionsDef>>();
+			set => SetPropertyValue<CHandle<UIInteractionsDef>>(value);
+		}
+
+		[Ordinal(38)] 
+		[RED("bbChoiceHubDataCallbackId")] 
+		public CHandle<redCallbackObject> BbChoiceHubDataCallbackId
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(39)] 
 		[RED("OutroAnimation")] 
 		public CHandle<inkanimProxy> OutroAnimation
 		{
@@ -100,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(40)] 
 		[RED("LoopAnimation")] 
 		public CHandle<inkanimProxy> LoopAnimation
 		{
@@ -108,7 +260,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(41)] 
+		[RED("VLoopAnimation")] 
+		public CHandle<inkanimProxy> VLoopAnimation
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(42)] 
 		[RED("IntroAnimation")] 
 		public CHandle<inkanimProxy> IntroAnimation
 		{
@@ -116,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(43)] 
 		[RED("IntroWasPlayed")] 
 		public CBool IntroWasPlayed
 		{
@@ -124,7 +284,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(44)] 
+		[RED("title")] 
+		public CString Title
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(45)] 
+		[RED("type")] 
+		public CEnum<gameSimpleMessageType> Type
+		{
+			get => GetPropertyValue<CEnum<gameSimpleMessageType>>();
+			set => SetPropertyValue<CEnum<gameSimpleMessageType>>(value);
+		}
+
+		[Ordinal(46)] 
 		[RED("valueSaved")] 
 		public CFloat ValueSaved
 		{
@@ -135,10 +311,22 @@ namespace WolvenKit.RED4.Types
 		public HUDProgressBarController()
 		{
 			Bar = new inkWidgetReference();
+			BarExtra = new inkWidgetReference();
 			Header = new inkTextWidgetReference();
+			BottomText = new inkTextWidgetReference();
 			Percent = new inkTextWidgetReference();
 			Completed = new inkTextWidgetReference();
 			Failed = new inkTextWidgetReference();
+			AttencionIcon = new inkWidgetReference();
+			NeutralIcon = new inkWidgetReference();
+			RelicIcon = new inkWidgetReference();
+			MoneyIcon = new inkWidgetReference();
+			ApartmentIcon = new inkImageWidgetReference();
+			VehicleIcon = new inkImageWidgetReference();
+			NeutralInIcon = new inkImageWidgetReference();
+			RevealIcon = new inkWidgetReference();
+			VahicleHackIcon = new inkWidgetReference();
+			Wrapper = new inkWidgetReference();
 
 			PostConstruct();
 		}

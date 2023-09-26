@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SharedGameplayPS : gameDeviceComponentPS
 	{
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("deviceState")] 
 		public CEnum<EDeviceStatus> DeviceState
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EDeviceStatus>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("authorizationProperties")] 
 		public AuthorizationData AuthorizationProperties
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<AuthorizationData>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("wasStateCached")] 
 		public CBool WasStateCached
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("wasStateSet")] 
 		public CBool WasStateSet
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("cachedDeviceState")] 
 		public CEnum<EDeviceStatus> CachedDeviceState
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EDeviceStatus>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("revealDevicesGrid")] 
 		public CBool RevealDevicesGrid
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("revealDevicesGridWhenUnpowered")] 
 		public CBool RevealDevicesGridWhenUnpowered
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("wasRevealedInNetworkPing")] 
 		public CBool WasRevealedInNetworkPing
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("hasNetworkBackdoor")] 
 		public CBool HasNetworkBackdoor
 		{

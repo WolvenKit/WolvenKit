@@ -37,6 +37,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(15)] 
+		[RED("useRawTime")] 
+		public CBool UseRawTime
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(16)] 
 		[RED("inputNode")] 
 		public animFloatLink InputNode
 		{

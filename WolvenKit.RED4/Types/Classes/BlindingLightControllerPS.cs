@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class BlindingLightControllerPS : BasicDistractionDeviceControllerPS
 	{
-		[Ordinal(109)] 
+		[Ordinal(113)] 
 		[RED("reflectorSFX")] 
 		public ReflectorSFX ReflectorSFX
 		{

@@ -28,6 +28,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<worldTrafficLaneUID>>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("permanentlyEnabledByDefault")] 
+		public CBool PermanentlyEnabledByDefault
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public worldTrafficNullAreaDynamicBlockade()
 		{
 			OffmeshLinks = new();

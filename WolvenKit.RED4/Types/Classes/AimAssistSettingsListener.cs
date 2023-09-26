@@ -45,6 +45,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
+		[RED("aimAssistDriverCombatEnabled")] 
+		public CBool AimAssistDriverCombatEnabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(6)] 
 		[RED("aimAssistSnapEnabled")] 
 		public CBool AimAssistSnapEnabled
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("currentConfig")] 
 		public CEnum<AimAssistSettingConfig> CurrentConfig
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<AimAssistSettingConfig>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("settingsRecords")] 
 		public CArray<CWeakHandle<gamedataAimAssistSettings_Record>> SettingsRecords
 		{

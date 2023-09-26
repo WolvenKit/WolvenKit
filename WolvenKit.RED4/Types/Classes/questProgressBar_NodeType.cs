@@ -28,11 +28,28 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<LocalizationString>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("bottomText")] 
+		public LocalizationString BottomText
+		{
+			get => GetPropertyValue<LocalizationString>();
+			set => SetPropertyValue<LocalizationString>(value);
+		}
+
+		[Ordinal(4)] 
+		[RED("type")] 
+		public CEnum<gameSimpleMessageType> Type
+		{
+			get => GetPropertyValue<CEnum<gameSimpleMessageType>>();
+			set => SetPropertyValue<CEnum<gameSimpleMessageType>>(value);
+		}
+
 		public questProgressBar_NodeType()
 		{
 			Show = true;
 			Duration = 3.000000F;
 			Text = new() { Unk1 = 0, Value = "" };
+			BottomText = new() { Unk1 = 0, Value = "LocKey#22165" };
 
 			PostConstruct();
 		}

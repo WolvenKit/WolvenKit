@@ -84,6 +84,54 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
+		[Ordinal(10)] 
+		[RED("SmsMessengerActive")] 
+		public gamebbScriptID_Bool SmsMessengerActive
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		[Ordinal(11)] 
+		[RED("MessageToOpenId")] 
+		public gamebbScriptID_CName MessageToOpenId
+		{
+			get => GetPropertyValue<gamebbScriptID_CName>();
+			set => SetPropertyValue<gamebbScriptID_CName>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("PhoneEnabled")] 
+		public gamebbScriptID_Bool PhoneEnabled
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		[Ordinal(13)] 
+		[RED("PhoneVisibility")] 
+		public gamebbScriptID_Variant PhoneVisibility
+		{
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
+		}
+
+		[Ordinal(14)] 
+		[RED("ActivatePhoneElements")] 
+		public gamebbScriptID_Uint32 ActivatePhoneElements
+		{
+			get => GetPropertyValue<gamebbScriptID_Uint32>();
+			set => SetPropertyValue<gamebbScriptID_Uint32>(value);
+		}
+
+		[Ordinal(15)] 
+		[RED("MessageToOpenHash")] 
+		public gamebbScriptID_Int32 MessageToOpenHash
+		{
+			get => GetPropertyValue<gamebbScriptID_Int32>();
+			set => SetPropertyValue<gamebbScriptID_Int32>(value);
+		}
+
 		public UI_ComDeviceDef()
 		{
 			ComDeviceSetStatusText = new gamebbScriptID_CName();
@@ -96,6 +144,12 @@ namespace WolvenKit.RED4.Types
 			PhoneStyle_Minimized = new gamebbScriptID_Bool();
 			IsDisplayingMessage = new gamebbScriptID_Bool();
 			ContactsActive = new gamebbScriptID_Bool();
+			SmsMessengerActive = new gamebbScriptID_Bool();
+			MessageToOpenId = new gamebbScriptID_CName();
+			PhoneEnabled = new gamebbScriptID_Bool();
+			PhoneVisibility = new gamebbScriptID_Variant();
+			ActivatePhoneElements = new gamebbScriptID_Uint32();
+			MessageToOpenHash = new gamebbScriptID_Int32();
 
 			PostConstruct();
 		}

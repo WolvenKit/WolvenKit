@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameJournalMetaQuestObjective : gameJournalEntry
 	{
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("description")] 
 		public LocalizationString Description
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<LocalizationString>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("progressPercent")] 
 		public CUInt32 ProgressPercent
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("iconID")] 
 		public TweakDBID IconID
 		{
@@ -30,6 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameJournalMetaQuestObjective()
 		{
+			JournalEntryOverrideDataList = new();
 			Description = new() { Unk1 = 0, Value = "" };
 
 			PostConstruct();

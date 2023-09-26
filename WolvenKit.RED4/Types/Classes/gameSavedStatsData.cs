@@ -21,6 +21,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("forcedModifiersBuffer")] 
+		public DataBuffer ForcedModifiersBuffer
+		{
+			get => GetPropertyValue<DataBuffer>();
+			set => SetPropertyValue<DataBuffer>(value);
+		}
+
+		[Ordinal(3)] 
+		[RED("savedModifierGroupStatTypesBuffer")] 
+		public DataBuffer SavedModifierGroupStatTypesBuffer
+		{
+			get => GetPropertyValue<DataBuffer>();
+			set => SetPropertyValue<DataBuffer>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("inactiveStats")] 
 		public CArray<CEnum<gamedataStatType>> InactiveStats
 		{
@@ -28,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CEnum<gamedataStatType>>>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(5)] 
 		[RED("recordID")] 
 		public TweakDBID RecordID
 		{
@@ -36,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(6)] 
 		[RED("seed")] 
 		public CUInt32 Seed
 		{

@@ -12,6 +12,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
+		[Ordinal(1)] 
+		[RED("journalEntryOverrideDataList")] 
+		public CArray<gameJournalEntryOverrideData> JournalEntryOverrideDataList
+		{
+			get => GetPropertyValue<CArray<gameJournalEntryOverrideData>>();
+			set => SetPropertyValue<CArray<gameJournalEntryOverrideData>>(value);
+		}
+
 		public gameJournalEntry()
 		{
 			PostConstruct();

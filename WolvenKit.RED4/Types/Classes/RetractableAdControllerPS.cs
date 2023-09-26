@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class RetractableAdControllerPS : BaseAnimatedDeviceControllerPS
 	{
-		[Ordinal(109)] 
+		[Ordinal(112)] 
 		[RED("isControlled")] 
 		public CBool IsControlled
 		{

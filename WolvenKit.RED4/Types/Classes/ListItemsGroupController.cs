@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ListItemsGroupController : CodexListItemController
 	{
-		[Ordinal(19)] 
+		[Ordinal(22)] 
 		[RED("menuList")] 
 		public inkCompoundWidgetReference MenuList
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(23)] 
 		[RED("foldArrowRef")] 
 		public inkWidgetReference FoldArrowRef
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(24)] 
 		[RED("foldoutButton")] 
 		public inkWidgetReference FoldoutButton
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(25)] 
 		[RED("foldoutIndipendently")] 
 		public CBool FoldoutIndipendently
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(26)] 
 		[RED("menuListController")] 
 		public CWeakHandle<inkListController> MenuListController
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkListController>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(27)] 
 		[RED("foldoutButtonController")] 
 		public CWeakHandle<inkButtonController> FoldoutButtonController
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkButtonController>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(28)] 
 		[RED("lastClickedData")] 
 		public CWeakHandle<IScriptable> LastClickedData
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<IScriptable>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(29)] 
 		[RED("data")] 
 		public CArray<CHandle<IScriptable>> Data
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<IScriptable>>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(30)] 
 		[RED("isOpen")] 
 		public CBool IsOpen
 		{

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class TerminalControllerPS : MasterControllerPS
 	{
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("terminalSetup")] 
 		public TerminalSetup TerminalSetup
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TerminalSetup>(value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(109)] 
 		[RED("terminalSkillChecks")] 
 		public CHandle<HackEngContainer> TerminalSkillChecks
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<HackEngContainer>>(value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(110)] 
 		[RED("spawnedSystems")] 
 		public CArray<CHandle<VirtualSystemPS>> SpawnedSystems
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<VirtualSystemPS>>>(value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(111)] 
 		[RED("useKeyloggerHack")] 
 		public CBool UseKeyloggerHack
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(109)] 
+		[Ordinal(112)] 
 		[RED("shouldShowTerminalTitle")] 
 		public CBool ShouldShowTerminalTitle
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(113)] 
 		[RED("defaultGlitchVideoPath")] 
 		public redResourceReferenceScriptToken DefaultGlitchVideoPath
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
 		}
 
-		[Ordinal(111)] 
+		[Ordinal(114)] 
 		[RED("broadcastGlitchVideoPath")] 
 		public redResourceReferenceScriptToken BroadcastGlitchVideoPath
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
 		}
 
-		[Ordinal(112)] 
+		[Ordinal(115)] 
 		[RED("state")] 
 		public CEnum<gameinteractionsReactionState> State
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameinteractionsReactionState>>(value);
 		}
 
-		[Ordinal(113)] 
+		[Ordinal(116)] 
 		[RED("forcedElevatorArrowsState")] 
 		public CEnum<EForcedElevatorArrowsState> ForcedElevatorArrowsState
 		{

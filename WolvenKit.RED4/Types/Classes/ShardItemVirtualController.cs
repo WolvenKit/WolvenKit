@@ -4,7 +4,15 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ShardItemVirtualController : inkVirtualCompoundItemController
 	{
-		[Ordinal(15)] 
+		[Ordinal(18)] 
+		[RED("icon")] 
+		public inkWidgetReference Icon
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(19)] 
 		[RED("label")] 
 		public inkTextWidgetReference Label
 		{
@@ -12,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(20)] 
 		[RED("counter")] 
 		public inkTextWidgetReference Counter
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(21)] 
 		[RED("collapseIcon")] 
 		public inkWidgetReference CollapseIcon
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(22)] 
 		[RED("isNewFlag")] 
 		public inkWidgetReference IsNewFlag
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(23)] 
 		[RED("entryData")] 
 		public CHandle<ShardEntryData> EntryData
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ShardEntryData>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(24)] 
 		[RED("nestedListData")] 
 		public CHandle<VirutalNestedListData> NestedListData
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<VirutalNestedListData>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(25)] 
 		[RED("activeItemSync")] 
 		public CWeakHandle<CodexListSyncData> ActiveItemSync
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<CodexListSyncData>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(26)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(27)] 
 		[RED("isItemHovered")] 
 		public CBool IsItemHovered
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(28)] 
 		[RED("isItemToggled")] 
 		public CBool IsItemToggled
 		{
@@ -84,8 +92,25 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(29)] 
+		[RED("isItemCollapsed")] 
+		public CBool IsItemCollapsed
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(30)] 
+		[RED("clicked")] 
+		public CBool Clicked
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public ShardItemVirtualController()
 		{
+			Icon = new inkWidgetReference();
 			Label = new inkTextWidgetReference();
 			Counter = new inkTextWidgetReference();
 			CollapseIcon = new inkWidgetReference();

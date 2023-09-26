@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SecurityGateControllerPS : MasterControllerPS
 	{
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("securityGateDetectionProperties")] 
 		public SecurityGateDetectionProperties SecurityGateDetectionProperties
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<SecurityGateDetectionProperties>(value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(109)] 
 		[RED("securityGateResponseProperties")] 
 		public SecurityGateResponseProperties SecurityGateResponseProperties
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<SecurityGateResponseProperties>(value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(110)] 
 		[RED("securityGateStatus")] 
 		public CEnum<ESecurityGateStatus> SecurityGateStatus
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ESecurityGateStatus>>(value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(111)] 
 		[RED("trespassersDataList")] 
 		public CArray<TrespasserEntry> TrespassersDataList
 		{

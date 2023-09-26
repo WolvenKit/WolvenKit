@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class TrafficIntersectionManagerControllerPS : MasterControllerPS
 	{
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("trafficLightStatus")] 
 		public CEnum<worldTrafficLightColor> TrafficLightStatus
 		{

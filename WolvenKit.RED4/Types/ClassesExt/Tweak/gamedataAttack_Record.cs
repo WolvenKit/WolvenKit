@@ -35,6 +35,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
+		[RED("explosionDamageVSVehicles")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat ExplosionDamageVSVehicles
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
 		[RED("hitFlags")]
 		[REDProperty(IsIgnored = true)]
 		public CArray<CString> HitFlags
@@ -75,6 +83,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
+		[RED("staminaCost")]
+		[REDProperty(IsIgnored = true)]
+		public CArray<TweakDBID> StaminaCost
+		{
+			get => GetPropertyValue<CArray<TweakDBID>>();
+			set => SetPropertyValue<CArray<TweakDBID>>(value);
+		}
+		
 		[RED("statModifiers")]
 		[REDProperty(IsIgnored = true)]
 		public CArray<TweakDBID> StatModifiers
@@ -105,6 +121,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CString>();
 			set => SetPropertyValue<CString>(value);
+		}
+		
+		[RED("velocity")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat Velocity
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

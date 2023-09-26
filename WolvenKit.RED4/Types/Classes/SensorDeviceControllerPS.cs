@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SensorDeviceControllerPS : ExplosiveDeviceControllerPS
 	{
-		[Ordinal(120)] 
+		[Ordinal(124)] 
 		[RED("isRecognizableBySenses")] 
 		public CBool IsRecognizableBySenses
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(121)] 
+		[Ordinal(125)] 
 		[RED("targetingBehaviour")] 
 		public TargetingBehaviour TargetingBehaviour
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TargetingBehaviour>(value);
 		}
 
-		[Ordinal(122)] 
+		[Ordinal(126)] 
 		[RED("detectionParameters")] 
 		public DetectionParameters DetectionParameters
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<DetectionParameters>(value);
 		}
 
-		[Ordinal(123)] 
+		[Ordinal(127)] 
 		[RED("lookAtPresetVert")] 
 		public TweakDBID LookAtPresetVert
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(124)] 
+		[Ordinal(128)] 
 		[RED("lookAtPresetHor")] 
 		public TweakDBID LookAtPresetHor
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(125)] 
+		[Ordinal(129)] 
 		[RED("scanGameEffectRef")] 
 		public gameEffectRef ScanGameEffectRef
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameEffectRef>(value);
 		}
 
-		[Ordinal(126)] 
+		[Ordinal(130)] 
 		[RED("visionConeEffectRef")] 
 		public gameEffectRef VisionConeEffectRef
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameEffectRef>(value);
 		}
 
-		[Ordinal(127)] 
+		[Ordinal(131)] 
 		[RED("visionConeFriendlyEffectRef")] 
 		public gameEffectRef VisionConeFriendlyEffectRef
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameEffectRef>(value);
 		}
 
-		[Ordinal(128)] 
+		[Ordinal(132)] 
 		[RED("idleActiveRef")] 
 		public gameEffectRef IdleActiveRef
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameEffectRef>(value);
 		}
 
-		[Ordinal(129)] 
+		[Ordinal(133)] 
 		[RED("idleFriendlyRef")] 
 		public gameEffectRef IdleFriendlyRef
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameEffectRef>(value);
 		}
 
-		[Ordinal(130)] 
+		[Ordinal(134)] 
 		[RED("canTagEnemies")] 
 		public CBool CanTagEnemies
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(131)] 
+		[Ordinal(135)] 
 		[RED("tagLockFromSystem")] 
 		public CBool TagLockFromSystem
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(132)] 
+		[Ordinal(136)] 
 		[RED("netrunnerID")] 
 		public entEntityID NetrunnerID
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entEntityID>(value);
 		}
 
-		[Ordinal(133)] 
+		[Ordinal(137)] 
 		[RED("netrunnerProxyID")] 
 		public entEntityID NetrunnerProxyID
 		{
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entEntityID>(value);
 		}
 
-		[Ordinal(134)] 
+		[Ordinal(138)] 
 		[RED("netrunnerTargetID")] 
 		public entEntityID NetrunnerTargetID
 		{
@@ -124,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entEntityID>(value);
 		}
 
-		[Ordinal(135)] 
+		[Ordinal(139)] 
 		[RED("linkedStatusEffect")] 
 		public LinkedStatusEffect LinkedStatusEffect
 		{
@@ -132,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<LinkedStatusEffect>(value);
 		}
 
-		[Ordinal(136)] 
+		[Ordinal(140)] 
 		[RED("questForcedTargetID")] 
 		public entEntityID QuestForcedTargetID
 		{
@@ -140,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entEntityID>(value);
 		}
 
-		[Ordinal(137)] 
+		[Ordinal(141)] 
 		[RED("isInFollowMode")] 
 		public CBool IsInFollowMode
 		{
@@ -148,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(138)] 
+		[Ordinal(142)] 
 		[RED("isAttitudeChanged")] 
 		public CBool IsAttitudeChanged
 		{
@@ -156,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(139)] 
+		[Ordinal(143)] 
 		[RED("isInTagKillMode")] 
 		public CBool IsInTagKillMode
 		{
@@ -164,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(140)] 
+		[Ordinal(144)] 
 		[RED("isIdleForced")] 
 		public CBool IsIdleForced
 		{
@@ -172,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(141)] 
+		[Ordinal(145)] 
 		[RED("questTargetToSpot")] 
 		public entEntityID QuestTargetToSpot
 		{
@@ -180,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entEntityID>(value);
 		}
 
-		[Ordinal(142)] 
+		[Ordinal(146)] 
 		[RED("questTargetSpotted")] 
 		public CBool QuestTargetSpotted
 		{
@@ -188,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(143)] 
+		[Ordinal(147)] 
 		[RED("isAnyTargetIsLocked")] 
 		public CBool IsAnyTargetIsLocked
 		{
@@ -196,9 +196,17 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(144)] 
+		[Ordinal(148)] 
 		[RED("isPartOfPrevention")] 
 		public CBool IsPartOfPrevention
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(149)] 
+		[RED("ignoreTargetTrackerComponent")] 
+		public CBool IgnoreTargetTrackerComponent
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);

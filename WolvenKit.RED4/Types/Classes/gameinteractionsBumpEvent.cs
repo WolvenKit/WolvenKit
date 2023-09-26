@@ -79,7 +79,7 @@ namespace WolvenKit.RED4.Types
 		public gameinteractionsBumpEvent()
 		{
 			Direction = new Vector4();
-			SourcePosition = new Vector4();
+			SourcePosition = new Vector4 { W = 1.000000F };
 			SourceSquaredDistance = float.PositiveInfinity;
 			SourceRadius = 0.400000F;
 			VehicleEntityID = new entEntityID();

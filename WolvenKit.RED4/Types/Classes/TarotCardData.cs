@@ -44,6 +44,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
+		[Ordinal(5)] 
+		[RED("isEp1")] 
+		public CBool IsEp1
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public TarotCardData()
 		{
 			PostConstruct();

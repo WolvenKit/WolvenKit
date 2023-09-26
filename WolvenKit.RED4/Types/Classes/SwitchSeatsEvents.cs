@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SwitchSeatsEvents : VehicleEventsTransition
 	{
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("workspotSystem")] 
 		public CHandle<gameWorkspotGameSystem> WorkspotSystem
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameWorkspotGameSystem>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("enabledSceneMode")] 
 		public CBool EnabledSceneMode
 		{
@@ -22,6 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public SwitchSeatsEvents()
 		{
+			ExitSlot = "default";
 			CameraToggleHoldToResetTimeSeconds = 0.350000F;
 
 			PostConstruct();

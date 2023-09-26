@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameuiWardrobeSetPreviewGameController : gameuiBaseGarmentItemPreviewGameController
 	{
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("colliderWidgetRef")] 
 		public inkWidgetReference ColliderWidgetRef
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("colliderWidget")] 
 		public CWeakHandle<inkWidget> ColliderWidget
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("data")] 
 		public CHandle<InventoryItemPreviewData> Data
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<InventoryItemPreviewData>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("isMouseDown")] 
 		public CBool IsMouseDown
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("isNotification")] 
 		public CBool IsNotification
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("c_GARMENT_ROTATION_SPEED")] 
 		public CFloat C_GARMENT_ROTATION_SPEED
 		{

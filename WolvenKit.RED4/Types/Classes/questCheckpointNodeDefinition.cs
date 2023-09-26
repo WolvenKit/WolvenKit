@@ -37,6 +37,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(6)] 
+		[RED("retryOnFailure")] 
+		public CBool RetryOnFailure
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(7)] 
 		[RED("additionalEndGameRewardsTweak")] 
 		public CArray<TweakDBID> AdditionalEndGameRewardsTweak
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("debugString")] 
 		public CString DebugString
 		{

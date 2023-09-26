@@ -33,7 +33,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         private bool _isManagerLoading;
         private bool _isManagerLoaded;
 
-        private static readonly List<string> s_loadOrder = new() { "memoryresident", "basegame", "audio", "lang" };
+        private static readonly List<string> s_loadOrder = new() { "memoryresident", "ep1", "basegame", "audio", "lang" };
 
         #endregion Fields
 
@@ -189,15 +189,23 @@ namespace WolvenKit.RED4.CR2W.Archive
 
             IsManagerLoading = true;
 
-            var archivedir = Path.Combine(di.Parent.Parent.FullName, "archive", "pc", "content");
-
             var sw = new Stopwatch();
             var sw2 = new Stopwatch();
             sw.Start();
             sw2.Start();
 
-            var archiveFiles = Directory.GetFiles(archivedir, "*.archive").ToList();
+            var archiveDir = Path.Combine(di.Parent.Parent.FullName, "archive", "pc", "content");
+            var archiveFiles = Directory.GetFiles(archiveDir, "*.archive").ToList();
             archiveFiles.Sort(CompareArchives);
+
+            var ep1Dir = Path.Combine(di.Parent.Parent.FullName, "archive", "pc", "ep1");
+            if (Directory.Exists(ep1Dir))
+            {
+                var ep1Files = Directory.GetFiles(ep1Dir, "*.archive").ToList();
+                ep1Files.Sort(CompareArchives);
+
+                archiveFiles = ep1Files.Concat(archiveFiles).ToList();
+            }
 
             var cnt = 0;
             foreach (var file in archiveFiles)

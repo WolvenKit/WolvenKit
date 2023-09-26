@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.Types
 	{
 		public EnteringEvents()
 		{
+			ExitSlot = "default";
 			CameraToggleHoldToResetTimeSeconds = 0.350000F;
 
 			PostConstruct();

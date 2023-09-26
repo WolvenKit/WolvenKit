@@ -68,6 +68,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
+		[Ordinal(8)] 
+		[RED("appearance")] 
+		public CName Appearance
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
 		public questProximityProgressBar_NodeType()
 		{
 			Show = true;

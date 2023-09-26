@@ -4,15 +4,15 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class LevelUpNotification : GenericNotificationController
 	{
-		[Ordinal(12)] 
-		[RED("levelup_data")] 
-		public CHandle<gameuiLevelUpNotificationViewData> Levelup_data
+		[Ordinal(15)] 
+		[RED("levelupData")] 
+		public CHandle<gameuiLevelUpNotificationViewData> LevelupData
 		{
 			get => GetPropertyValue<CHandle<gameuiLevelUpNotificationViewData>>();
 			set => SetPropertyValue<CHandle<gameuiLevelUpNotificationViewData>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(16)] 
 		[RED("animation")] 
 		public CHandle<inkanimProxy> Animation
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(17)] 
 		[RED("bonusRecord")] 
 		public CHandle<gamedataPassiveProficiencyBonus_Record> BonusRecord
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gamedataPassiveProficiencyBonus_Record>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(18)] 
 		[RED("LevelUpLabelText")] 
 		public inkTextWidgetReference LevelUpLabelText
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("LevelUpValue")] 
 		public inkTextWidgetReference LevelUpValue
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("LevelUpHolder")] 
 		public inkWidgetReference LevelUpHolder
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
 		[RED("LevelUpPreviousValue")] 
 		public inkTextWidgetReference LevelUpPreviousValue
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(22)] 
 		[RED("AttributePointsValue")] 
 		public inkTextWidgetReference AttributePointsValue
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(23)] 
 		[RED("AttributePointsPreviousValue")] 
 		public inkTextWidgetReference AttributePointsPreviousValue
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(24)] 
 		[RED("AttributePointsHolder")] 
 		public inkWidgetReference AttributePointsHolder
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(25)] 
 		[RED("PerkPointsValue")] 
 		public inkTextWidgetReference PerkPointsValue
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(26)] 
 		[RED("PerkPreviousValue")] 
 		public inkTextWidgetReference PerkPreviousValue
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(27)] 
 		[RED("SkillIcon")] 
 		public inkImageWidgetReference SkillIcon
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(28)] 
 		[RED("SkillIconShadow")] 
 		public inkImageWidgetReference SkillIconShadow
 		{
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(29)] 
 		[RED("bonusDisplay")] 
 		public CHandle<LevelRewardDisplayData> BonusDisplay
 		{
@@ -124,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<LevelRewardDisplayData>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(30)] 
 		[RED("passiveBonusRewardLabel")] 
 		public inkTextWidgetReference PassiveBonusRewardLabel
 		{
@@ -132,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(31)] 
 		[RED("passiveBonusReward")] 
 		public inkWidgetReference PassiveBonusReward
 		{
@@ -140,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(32)] 
 		[RED("unlockedActivites")] 
 		public CInt32 UnlockedActivites
 		{

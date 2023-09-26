@@ -44,6 +44,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
+		[Ordinal(6)] 
+		[RED("allowCrowdOnPath")] 
+		public CHandle<AIArgumentMapping> AllowCrowdOnPath
+		{
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
+		}
+
 		public AIMoveOnSplineCommandHandler()
 		{
 			PostConstruct();

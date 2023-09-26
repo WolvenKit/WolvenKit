@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public abstract partial class gameuiarcadeBoundingShape : RedBaseClass
+	public abstract partial class gameuiarcadeBoundingShape : IScriptable
 	{
 		[Ordinal(0)] 
 		[RED("boundingShape")] 

@@ -21,6 +21,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
+		[RED("proxyExecutor")] 
+		public CWeakHandle<gameObject> ProxyExecutor
+		{
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
+		}
+
+		[Ordinal(6)] 
+		[RED("costComponents")] 
+		public CArray<CWeakHandle<gamedataObjectActionCost_Record>> CostComponents
+		{
+			get => GetPropertyValue<CArray<CWeakHandle<gamedataObjectActionCost_Record>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<gamedataObjectActionCost_Record>>>(value);
+		}
+
+		[Ordinal(7)] 
 		[RED("objectActionID")] 
 		public TweakDBID ObjectActionID
 		{
@@ -28,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(8)] 
 		[RED("objectActionRecord")] 
 		public CWeakHandle<gamedataObjectAction_Record> ObjectActionRecord
 		{
@@ -36,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gamedataObjectAction_Record>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(9)] 
 		[RED("inkWidgetID")] 
 		public TweakDBID InkWidgetID
 		{
@@ -44,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(10)] 
 		[RED("interactionChoice")] 
 		public gameinteractionsChoice InteractionChoice
 		{
@@ -52,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameinteractionsChoice>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(11)] 
 		[RED("interactionLayer")] 
 		public CName InteractionLayer
 		{
@@ -60,9 +76,81 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(12)] 
 		[RED("isActionRPGCheckDissabled")] 
 		public CBool IsActionRPGCheckDissabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(13)] 
+		[RED("canSkipPayCost")] 
+		public CBool CanSkipPayCost
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(14)] 
+		[RED("calculatedBaseCost")] 
+		public CInt32 CalculatedBaseCost
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(15)] 
+		[RED("deviceActionQueue")] 
+		public CHandle<DeviceActionQueue> DeviceActionQueue
+		{
+			get => GetPropertyValue<CHandle<DeviceActionQueue>>();
+			set => SetPropertyValue<CHandle<DeviceActionQueue>>(value);
+		}
+
+		[Ordinal(16)] 
+		[RED("isActionQueueingUsed")] 
+		public CBool IsActionQueueingUsed
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(17)] 
+		[RED("isQueuedAction")] 
+		public CBool IsQueuedAction
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("isInactive")] 
+		public CBool IsInactive
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(19)] 
+		[RED("isTargetDead")] 
+		public CBool IsTargetDead
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(20)] 
+		[RED("activationTimeReduction")] 
+		public CFloat ActivationTimeReduction
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(21)] 
+		[RED("IsAppliedByMonowire")] 
+		public CBool IsAppliedByMonowire
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);

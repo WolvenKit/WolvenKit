@@ -188,6 +188,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(27)] 
+		[RED("useRayTracingShadowLODBias")] 
+		public CBool UseRayTracingShadowLODBias
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(28)] 
+		[RED("castsRayTracedShadowsFromOriginalGeometry")] 
+		public CBool CastsRayTracedShadowsFromOriginalGeometry
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public CMesh()
 		{
 			Parameters = new();

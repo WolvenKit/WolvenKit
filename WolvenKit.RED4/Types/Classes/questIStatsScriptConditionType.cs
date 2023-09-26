@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public abstract partial class questIStatsScriptConditionType : questIStatsConditionType
 	{
-		[Ordinal(0)] 
+		[Ordinal(1)] 
 		[RED("scriptCondition")] 
 		public CHandle<IScriptable> ScriptCondition
 		{

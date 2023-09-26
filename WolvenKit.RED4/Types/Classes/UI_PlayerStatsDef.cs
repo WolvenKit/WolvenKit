@@ -69,6 +69,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(8)] 
+		[RED("RequiredXP")] 
+		public gamebbScriptID_Int32 RequiredXP
+		{
+			get => GetPropertyValue<gamebbScriptID_Int32>();
+			set => SetPropertyValue<gamebbScriptID_Int32>(value);
+		}
+
+		[Ordinal(9)] 
 		[RED("StreetCredLevel")] 
 		public gamebbScriptID_Int32 StreetCredLevel
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("StreetCredPoints")] 
 		public gamebbScriptID_Int32 StreetCredPoints
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("Attributes")] 
 		public gamebbScriptID_Variant Attributes
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("DevelopmentPoints")] 
 		public gamebbScriptID_Variant DevelopmentPoints
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("Proficiency")] 
 		public gamebbScriptID_Variant Proficiency
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("Perks")] 
 		public gamebbScriptID_Variant Perks
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("ModifiedPerkArea")] 
 		public gamebbScriptID_Variant ModifiedPerkArea
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("weightMax")] 
 		public gamebbScriptID_Int32 WeightMax
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("currentInventoryWeight")] 
 		public gamebbScriptID_Float CurrentInventoryWeight
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Float>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("isReplacer")] 
 		public gamebbScriptID_Bool IsReplacer
 		{
@@ -158,6 +166,7 @@ namespace WolvenKit.RED4.Types
 			ChemicalResistance = new gamebbScriptID_Int32();
 			Level = new gamebbScriptID_Int32();
 			CurrentXP = new gamebbScriptID_Int32();
+			RequiredXP = new gamebbScriptID_Int32();
 			StreetCredLevel = new gamebbScriptID_Int32();
 			StreetCredPoints = new gamebbScriptID_Int32();
 			Attributes = new gamebbScriptID_Variant();

@@ -83,6 +83,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 		
+		[RED("vfx_extra_hit")]
+		[REDProperty(IsIgnored = true)]
+		public CResourceAsyncReference<CResource> Vfx_extra_hit
+		{
+			get => GetPropertyValue<CResourceAsyncReference<CResource>>();
+			set => SetPropertyValue<CResourceAsyncReference<CResource>>(value);
+		}
+		
 		[RED("vfx_ground_throw")]
 		[REDProperty(IsIgnored = true)]
 		public CResourceAsyncReference<CResource> Vfx_ground_throw
@@ -246,6 +254,22 @@ namespace WolvenKit.RED4.Types
 		[RED("vfx_impact_carpet_material")]
 		[REDProperty(IsIgnored = true)]
 		public CName Vfx_impact_carpet_material
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+		
+		[RED("vfx_impact_carpet_techpiercable")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID Vfx_impact_carpet_techpiercable
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("vfx_impact_carpet_techpiercable_material")]
+		[REDProperty(IsIgnored = true)]
+		public CName Vfx_impact_carpet_techpiercable_material
 		{
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
@@ -611,6 +635,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 		
+		[RED("vfx_impact_glass_car_tpp")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID Vfx_impact_glass_car_tpp
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
 		[RED("vfx_impact_glass_dst")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID Vfx_impact_glass_dst
@@ -811,12 +843,100 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
+		[RED("vfx_impact_metal_car_electronics")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID Vfx_impact_metal_car_electronics
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("vfx_impact_metal_car_electronics_material")]
+		[REDProperty(IsIgnored = true)]
+		public CName Vfx_impact_metal_car_electronics_material
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+		
+		[RED("vfx_impact_metal_car_electronics_tpp")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID Vfx_impact_metal_car_electronics_tpp
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
 		[RED("vfx_impact_metal_car_material")]
 		[REDProperty(IsIgnored = true)]
 		public CName Vfx_impact_metal_car_material
 		{
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
+		}
+		
+		[RED("vfx_impact_metal_car_pipe_steam")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID Vfx_impact_metal_car_pipe_steam
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("vfx_impact_metal_car_pipe_steam_material")]
+		[REDProperty(IsIgnored = true)]
+		public CName Vfx_impact_metal_car_pipe_steam_material
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+		
+		[RED("vfx_impact_metal_car_pipe_water")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID Vfx_impact_metal_car_pipe_water
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("vfx_impact_metal_car_pipe_water_material")]
+		[REDProperty(IsIgnored = true)]
+		public CName Vfx_impact_metal_car_pipe_water_material
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+		
+		[RED("vfx_impact_metal_car_ricochet")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID Vfx_impact_metal_car_ricochet
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("vfx_impact_metal_car_ricochet_material")]
+		[REDProperty(IsIgnored = true)]
+		public CName Vfx_impact_metal_car_ricochet_material
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+		
+		[RED("vfx_impact_metal_car_ricochet_tpp")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID Vfx_impact_metal_car_ricochet_tpp
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("vfx_impact_metal_car_tpp")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID Vfx_impact_metal_car_tpp
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
 		[RED("vfx_impact_metal_catwalk")]
@@ -830,6 +950,22 @@ namespace WolvenKit.RED4.Types
 		[RED("vfx_impact_metal_catwalk_material")]
 		[REDProperty(IsIgnored = true)]
 		public CName Vfx_impact_metal_catwalk_material
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+		
+		[RED("vfx_impact_metal_heavypiercable")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID Vfx_impact_metal_heavypiercable
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("vfx_impact_metal_heavypiercable_material")]
+		[REDProperty(IsIgnored = true)]
+		public CName Vfx_impact_metal_heavypiercable_material
 		{
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
@@ -907,6 +1043,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 		
+		[RED("vfx_impact_metal_ricochet")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID Vfx_impact_metal_ricochet
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("vfx_impact_metal_ricochet_material")]
+		[REDProperty(IsIgnored = true)]
+		public CName Vfx_impact_metal_ricochet_material
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+		
 		[RED("vfx_impact_metal_road")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID Vfx_impact_metal_road
@@ -934,6 +1086,22 @@ namespace WolvenKit.RED4.Types
 		[RED("vfx_impact_metal_semitransparent_material")]
 		[REDProperty(IsIgnored = true)]
 		public CName Vfx_impact_metal_semitransparent_material
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+		
+		[RED("vfx_impact_metal_techpiercable")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID Vfx_impact_metal_techpiercable
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("vfx_impact_metal_techpiercable_material")]
+		[REDProperty(IsIgnored = true)]
+		public CName Vfx_impact_metal_techpiercable_material
 		{
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
@@ -1035,12 +1203,44 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
+		[RED("vfx_impact_plastic_car_electronics")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID Vfx_impact_plastic_car_electronics
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("vfx_impact_plastic_car_electronics_material")]
+		[REDProperty(IsIgnored = true)]
+		public CName Vfx_impact_plastic_car_electronics_material
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+		
+		[RED("vfx_impact_plastic_car_electronics_tpp")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID Vfx_impact_plastic_car_electronics_tpp
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
 		[RED("vfx_impact_plastic_car_material")]
 		[REDProperty(IsIgnored = true)]
 		public CName Vfx_impact_plastic_car_material
 		{
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
+		}
+		
+		[RED("vfx_impact_plastic_car_tpp")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID Vfx_impact_plastic_car_tpp
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
 		[RED("vfx_impact_plastic_electronics")]
@@ -1179,6 +1379,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 		
+		[RED("vfx_impact_tire_car_tpp")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID Vfx_impact_tire_car_tpp
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
 		[RED("vfx_impact_trash")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID Vfx_impact_trash
@@ -1225,6 +1433,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
+		}
+		
+		[RED("vfx_impact_upholstery_car_tpp")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID Vfx_impact_upholstery_car_tpp
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
 		[RED("vfx_impact_vehicle_chassis")]

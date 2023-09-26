@@ -12,27 +12,9 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameuiNPCNextToTheCrosshair>(value);
 		}
 
-		[Ordinal(1)] 
-		[RED("buffList")] 
-		public CArray<gameuiBuffInfo> BuffList
-		{
-			get => GetPropertyValue<CArray<gameuiBuffInfo>>();
-			set => SetPropertyValue<CArray<gameuiBuffInfo>>(value);
-		}
-
-		[Ordinal(2)] 
-		[RED("debuffList")] 
-		public CArray<gameuiBuffInfo> DebuffList
-		{
-			get => GetPropertyValue<CArray<gameuiBuffInfo>>();
-			set => SetPropertyValue<CArray<gameuiBuffInfo>>(value);
-		}
-
 		public NpcNameplateVisualData()
 		{
 			NpcNextToCrosshair = new gameuiNPCNextToTheCrosshair { Attitude = Enums.EAIAttitude.AIA_Neutral, HighLevelState = Enums.gamedataNPCHighLevelState.Any };
-			BuffList = new();
-			DebuffList = new();
 
 			PostConstruct();
 		}

@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
 		}
-        
+		
 		[RED("ragdollNoGroundThreshold")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat RagdollNoGroundThreshold

@@ -20,8 +20,18 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("outlineDuration")] 
+		public CFloat OutlineDuration
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public OutlineRequestEvent()
 		{
+			OutlineDuration = 0.200000F;
+
 			PostConstruct();
 		}
 

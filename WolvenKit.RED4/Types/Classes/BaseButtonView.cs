@@ -2,9 +2,9 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public abstract partial class BaseButtonView : inkWidgetLogicController
+	public abstract partial class BaseButtonView : inkDiscreteNavigationController
 	{
-		[Ordinal(1)] 
+		[Ordinal(4)] 
 		[RED("ButtonController")] 
 		public CWeakHandle<inkButtonController> ButtonController
 		{
@@ -14,6 +14,9 @@ namespace WolvenKit.RED4.Types
 
 		public BaseButtonView()
 		{
+			IsNavigalbe = true;
+			SupportsHoldInput = true;
+
 			PostConstruct();
 		}
 

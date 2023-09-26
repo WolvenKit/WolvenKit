@@ -13,6 +13,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("rarityContainer")] 
+		public inkWidgetReference RarityContainer
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(3)] 
+		[RED("rarityWidget")] 
+		public inkImageWidgetReference RarityWidget
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("modAbilitiesContainer")] 
 		public inkCompoundWidgetReference ModAbilitiesContainer
 		{
@@ -20,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(5)] 
 		[RED("partIndicatorController")] 
 		public CWeakHandle<InventoryItemPartDisplay> PartIndicatorController
 		{
@@ -31,6 +47,8 @@ namespace WolvenKit.RED4.Types
 		public ItemTooltipModController()
 		{
 			DotIndicator = new inkWidgetReference();
+			RarityContainer = new inkWidgetReference();
+			RarityWidget = new inkImageWidgetReference();
 			ModAbilitiesContainer = new inkCompoundWidgetReference();
 
 			PostConstruct();

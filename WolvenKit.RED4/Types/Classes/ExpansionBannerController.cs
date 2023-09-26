@@ -13,14 +13,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
-		[RED("bottomPanelRef")] 
-		public inkWidgetReference BottomPanelRef
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(3)] 
 		[RED("inputHintRef")] 
 		public inkWidgetReference InputHintRef
 		{
@@ -28,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(3)] 
 		[RED("indicatorRef")] 
 		public inkWidgetReference IndicatorRef
 		{
@@ -36,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(4)] 
 		[RED("errorPanelRef")] 
 		public inkWidgetReference ErrorPanelRef
 		{
@@ -44,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(5)] 
 		[RED("errorIconRef")] 
 		public inkWidgetReference ErrorIconRef
 		{
@@ -52,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(6)] 
 		[RED("expansionStatus")] 
 		public CEnum<ExpansionStatus> ExpansionStatus
 		{
@@ -60,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ExpansionStatus>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(7)] 
 		[RED("root")] 
 		public CWeakHandle<inkWidget> Root
 		{
@@ -71,7 +63,6 @@ namespace WolvenKit.RED4.Types
 		public ExpansionBannerController()
 		{
 			StatusTextRef = new inkTextWidgetReference();
-			BottomPanelRef = new inkWidgetReference();
 			InputHintRef = new inkWidgetReference();
 			IndicatorRef = new inkWidgetReference();
 			ErrorPanelRef = new inkWidgetReference();

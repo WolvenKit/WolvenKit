@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SecurityAreaCrossingPerimeter : SecurityAreaEvent
 	{
-		[Ordinal(27)] 
+		[Ordinal(40)] 
 		[RED("entered")] 
 		public CBool Entered
 		{

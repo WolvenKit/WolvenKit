@@ -36,6 +36,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
+		[Ordinal(4)] 
+		[RED("smoothNormalsEnabled")] 
+		public CBool SmoothNormalsEnabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public garmentSmoothingParams()
 		{
 			SmoothingRadiusInCM = 15.000000F;

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class DeviceThumbnailWidgetControllerBase : DeviceButtonLogicControllerBase
 	{
-		[Ordinal(26)] 
+		[Ordinal(29)] 
 		[RED("deviceIconRef")] 
 		public inkImageWidgetReference DeviceIconRef
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(30)] 
 		[RED("statusNameWidget")] 
 		public inkTextWidgetReference StatusNameWidget
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(31)] 
 		[RED("thumbnailAction")] 
 		public CWeakHandle<ThumbnailUI> ThumbnailAction
 		{

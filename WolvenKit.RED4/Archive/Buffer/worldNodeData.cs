@@ -37,6 +37,10 @@ public class worldNodeData : IRedType, IRedCloneable
 
     public CUInt16 Uk12 { get; set; }
 
+    public CUInt64 Uk13 { get; set; }
+
+    public CUInt64 Uk14 { get; set; }
+
     public worldNodeData()
     {
 
@@ -61,6 +65,8 @@ public class worldNodeData : IRedType, IRedCloneable
             UkFloat1 = UkFloat1,
             Uk10 = Uk10,
             Uk11 = Uk11,
-            Uk12 = Uk12
+            Uk12 = Uk12,
+            Uk13 = Uk13,
+            Uk14 = Uk14
         };
 }

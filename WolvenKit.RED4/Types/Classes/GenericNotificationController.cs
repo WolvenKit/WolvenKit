@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class GenericNotificationController : gameuiGenericNotificationReceiverGameController
 	{
-		[Ordinal(3)] 
+		[Ordinal(5)] 
 		[RED("titleRef")] 
 		public inkTextWidgetReference TitleRef
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(6)] 
 		[RED("textRef")] 
 		public inkTextWidgetReference TextRef
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(7)] 
 		[RED("actionLabelRef")] 
 		public inkTextWidgetReference ActionLabelRef
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(8)] 
 		[RED("actionRef")] 
 		public inkWidgetReference ActionRef
 		{
@@ -36,7 +36,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(9)] 
+		[RED("paused")] 
+		public CBool Paused
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(10)] 
 		[RED("blockAction")] 
 		public CBool BlockAction
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(11)] 
 		[RED("translationAnimationCtrl")] 
 		public CWeakHandle<inkTextReplaceAnimationController> TranslationAnimationCtrl
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkTextReplaceAnimationController>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(12)] 
 		[RED("data")] 
 		public CHandle<gameuiGenericNotificationViewData> Data
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameuiGenericNotificationViewData>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(13)] 
 		[RED("player")] 
 		public CWeakHandle<gameObject> Player
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(14)] 
 		[RED("isInteractive")] 
 		public CBool IsInteractive
 		{

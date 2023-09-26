@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class HitAttackSubtypePrereq : GenericHitPrereq
 	{
-		[Ordinal(5)] 
+		[Ordinal(8)] 
 		[RED("attackSubtype")] 
 		public CEnum<gamedataAttackSubtype> AttackSubtype
 		{

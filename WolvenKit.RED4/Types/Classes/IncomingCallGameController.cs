@@ -2,9 +2,9 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class IncomingCallGameController : gameuiHUDGameController
+	public partial class IncomingCallGameController : gameuiNewPhoneRelatedHUDGameController
 	{
-		[Ordinal(9)] 
+		[Ordinal(13)] 
 		[RED("contactNameWidget")] 
 		public inkTextWidgetReference ContactNameWidget
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(14)] 
 		[RED("buttonHint")] 
 		public inkWidgetReference ButtonHint
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(15)] 
 		[RED("phoneBlackboard")] 
 		public CWeakHandle<gameIBlackboard> PhoneBlackboard
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(16)] 
 		[RED("phoneBBDefinition")] 
 		public CHandle<UI_ComDeviceDef> PhoneBBDefinition
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_ComDeviceDef>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(17)] 
 		[RED("phoneCallInfoBBID")] 
 		public CHandle<redCallbackObject> PhoneCallInfoBBID
 		{
@@ -44,20 +44,12 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(18)] 
 		[RED("animProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
 			get => GetPropertyValue<CHandle<inkanimProxy>>();
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
-		}
-
-		[Ordinal(15)] 
-		[RED("owner")] 
-		public CWeakHandle<gameObject> Owner
-		{
-			get => GetPropertyValue<CWeakHandle<gameObject>>();
-			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		public IncomingCallGameController()

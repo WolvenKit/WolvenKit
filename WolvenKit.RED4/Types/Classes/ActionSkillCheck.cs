@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public abstract partial class ActionSkillCheck : ActionBool
 	{
-		[Ordinal(25)] 
+		[Ordinal(38)] 
 		[RED("skillCheck")] 
 		public CHandle<SkillCheckBase> SkillCheck
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<SkillCheckBase>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(39)] 
 		[RED("skillCheckName")] 
 		public CEnum<EDeviceChallengeSkill> SkillCheckName
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EDeviceChallengeSkill>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(40)] 
 		[RED("localizedName")] 
 		public CString LocalizedName
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(41)] 
 		[RED("skillcheckDescription")] 
 		public UIInteractionSkillCheck SkillcheckDescription
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<UIInteractionSkillCheck>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(42)] 
 		[RED("wasPassed")] 
 		public CBool WasPassed
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(43)] 
 		[RED("availableUnpowered")] 
 		public CBool AvailableUnpowered
 		{

@@ -100,6 +100,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(12)] 
+		[RED("quality")] 
+		public CEnum<gamedataQuality> Quality
+		{
+			get => GetPropertyValue<CEnum<gamedataQuality>>();
+			set => SetPropertyValue<CEnum<gamedataQuality>>(value);
+		}
+
 		public RecipeData()
 		{
 			Ingredients = new();

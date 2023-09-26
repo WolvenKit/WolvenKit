@@ -139,6 +139,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 		
+		[RED("counterpart")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID Counterpart
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
 		[RED("cpoItemCategory")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID CpoItemCategory
@@ -161,6 +169,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("deprecated")]
+		[REDProperty(IsIgnored = true)]
+		public CBool Deprecated
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 		
 		[RED("displayName")]
@@ -299,6 +315,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 		
+		[RED("isCoreCW")]
+		[REDProperty(IsIgnored = true)]
+		public CBool IsCoreCW
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("isCustomizable")]
 		[REDProperty(IsIgnored = true)]
 		public CBool IsCustomizable
@@ -406,6 +430,14 @@ namespace WolvenKit.RED4.Types
 		[RED("movementSound")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID MovementSound
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("nextUpgradeItem")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID NextUpgradeItem
 		{
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
@@ -531,17 +563,17 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 		
+		[RED("sideUpgradeItem")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID SideUpgradeItem
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
 		[RED("slotPartList")]
 		[REDProperty(IsIgnored = true)]
 		public CArray<TweakDBID> SlotPartList
-		{
-			get => GetPropertyValue<CArray<TweakDBID>>();
-			set => SetPropertyValue<CArray<TweakDBID>>(value);
-		}
-		
-		[RED("slotPartList2")]
-		[REDProperty(IsIgnored = true)]
-		public CArray<TweakDBID> SlotPartList2
 		{
 			get => GetPropertyValue<CArray<TweakDBID>>();
 			set => SetPropertyValue<CArray<TweakDBID>>(value);
@@ -569,6 +601,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CArray<CName>>();
 			set => SetPropertyValue<CArray<CName>>(value);
+		}
+		
+		[RED("upgradeCostMult")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat UpgradeCostMult
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 		
 		[RED("useHeadgearGarmentAggregator")]

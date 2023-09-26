@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class RadioStationListItemController : inkVirtualCompoundItemController
 	{
-		[Ordinal(15)] 
+		[Ordinal(18)] 
 		[RED("label")] 
 		public inkTextWidgetReference Label
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("typeIcon")] 
 		public inkImageWidgetReference TypeIcon
 		{
@@ -20,7 +20,39 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
+		[RED("equilizerIcon")] 
+		public inkHorizontalPanelWidgetReference EquilizerIcon
+		{
+			get => GetPropertyValue<inkHorizontalPanelWidgetReference>();
+			set => SetPropertyValue<inkHorizontalPanelWidgetReference>(value);
+		}
+
+		[Ordinal(21)] 
+		[RED("codeTLicon")] 
+		public inkImageWidgetReference CodeTLicon
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(22)] 
+		[RED("trackName")] 
+		public inkTextWidgetReference TrackName
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(23)] 
+		[RED("playerVehicle")] 
+		public CWeakHandle<vehicleBaseObject> PlayerVehicle
+		{
+			get => GetPropertyValue<CWeakHandle<vehicleBaseObject>>();
+			set => SetPropertyValue<CWeakHandle<vehicleBaseObject>>(value);
+		}
+
+		[Ordinal(24)] 
 		[RED("stationData")] 
 		public CHandle<RadioListItemData> StationData
 		{
@@ -28,10 +60,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<RadioListItemData>>(value);
 		}
 
+		[Ordinal(25)] 
+		[RED("currentRadioStationId")] 
+		public CInt32 CurrentRadioStationId
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
 		public RadioStationListItemController()
 		{
 			Label = new inkTextWidgetReference();
 			TypeIcon = new inkImageWidgetReference();
+			EquilizerIcon = new inkHorizontalPanelWidgetReference();
+			CodeTLicon = new inkImageWidgetReference();
+			TrackName = new inkTextWidgetReference();
+			CurrentRadioStationId = -1;
 
 			PostConstruct();
 		}

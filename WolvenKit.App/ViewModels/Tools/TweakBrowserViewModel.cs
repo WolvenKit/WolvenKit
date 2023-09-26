@@ -208,7 +208,13 @@ public partial class TweakBrowserViewModel : ToolViewModel
             return;
         }
 
-        _tweakDB.LoadDB(Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin"));
+        var dbPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb_ep1.bin");
+        if (!File.Exists(dbPath))
+        {
+            dbPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin");
+        }
+
+        _tweakDB.LoadDB(dbPath);
     }
 
     private void Load(object? sender, EventArgs eventArgs)

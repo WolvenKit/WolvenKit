@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class LaserDetector : ProximityDetector
 	{
-		[Ordinal(90)] 
+		[Ordinal(94)] 
 		[RED("lasers", 2)] 
 		public CArrayFixedSize<CHandle<entMeshComponent>> Lasers
 		{

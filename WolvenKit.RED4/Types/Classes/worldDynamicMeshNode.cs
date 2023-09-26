@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldDynamicMeshNode : worldMeshNode
 	{
-		[Ordinal(16)] 
+		[Ordinal(18)] 
 		[RED("startAsleep")] 
 		public CBool StartAsleep
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(19)] 
 		[RED("isDebris")] 
 		public CBool IsDebris
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("initialGuess")] 
 		public CBool InitialGuess
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(21)] 
 		[RED("dynamicTrafficSetting")] 
 		public TrafficGenDynamicTrafficSetting DynamicTrafficSetting
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TrafficGenDynamicTrafficSetting>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(22)] 
 		[RED("navigationSetting")] 
 		public NavGenNavigationSetting NavigationSetting
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NavGenNavigationSetting>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(23)] 
 		[RED("useMeshNavmeshSettings")] 
 		public CBool UseMeshNavmeshSettings
 		{

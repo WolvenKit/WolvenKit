@@ -367,7 +367,7 @@ namespace WolvenKit.RED4.Types
 			MasterListOfAllCyberware = new();
 			ListOfUnassignedCyberware = new();
 			NeutralChoiceDelayId = new gameDelayID();
-			PreviouslySelectedData = new QuickSlotCommand { IsSlotUnlocked = true, ItemId = new gameItemID(), PlayerVehicleData = new vehiclePlayerVehicle { VehicleType = Enums.gamedataVehicleType.Invalid }, InteractiveActionOwner = new entEntityID() };
+			PreviouslySelectedData = new QuickSlotCommand { IsSlotUnlocked = true, ItemId = new gameItemID(), PlayerVehicleData = new vehiclePlayerVehicle { VehicleType = Enums.gamedataVehicleType.Invalid, DestructionTimeStamp = new EngineTime() }, InteractiveActionOwner = new entEntityID() };
 
 			PostConstruct();
 		}

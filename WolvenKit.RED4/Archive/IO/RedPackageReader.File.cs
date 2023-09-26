@@ -23,11 +23,14 @@ public partial class RedPackageReader : IBufferReader
         var result = new RedPackage();
         _outputFile = result;
 
-        header.version = BaseReader.ReadUInt16();
+        header.version = BaseReader.ReadByte();
         if (header.version is < 2 or > 4)
         {
             return EFileReadErrorCodes.UnsupportedVersion;
         }
+
+        // TODO: [Patch-2.0] Find out what this is
+        header.unk1 = BaseReader.ReadByte();
 
         header.numSections = _reader.ReadUInt16();
         if (header.numSections is < 6 or > 7)
@@ -36,6 +39,7 @@ public partial class RedPackageReader : IBufferReader
         }
 
         result.Version = header.version;
+        result.Unknown1 = header.unk1;
         result.Sections = header.numSections;
 
         header.numComponents = _reader.ReadUInt32();

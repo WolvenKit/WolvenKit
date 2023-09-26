@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class PaperDollSlotController : inkButtonDpadSupportedController
 	{
-		[Ordinal(26)] 
+		[Ordinal(29)] 
 		[RED("equipArea")] 
 		public CEnum<gamedataEquipmentArea> EquipArea
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataEquipmentArea>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(30)] 
 		[RED("slotIndex")] 
 		public CInt32 SlotIndex
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(31)] 
 		[RED("areaTags")] 
 		public CArray<CName> AreaTags
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(32)] 
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(33)] 
 		[RED("slotName")] 
 		public CString SlotName
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(34)] 
 		[RED("itemData")] 
 		public CHandle<gameItemData> ItemData
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameItemData>>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(35)] 
 		[RED("locked")] 
 		public CBool Locked
 		{

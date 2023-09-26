@@ -5,30 +5,6 @@ namespace WolvenKit.RED4.Types
 	public partial class hudTurretController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
-		[RED("Date")] 
-		public inkTextWidgetReference Date
-		{
-			get => GetPropertyValue<inkTextWidgetReference>();
-			set => SetPropertyValue<inkTextWidgetReference>(value);
-		}
-
-		[Ordinal(10)] 
-		[RED("Timer")] 
-		public inkTextWidgetReference Timer
-		{
-			get => GetPropertyValue<inkTextWidgetReference>();
-			set => SetPropertyValue<inkTextWidgetReference>(value);
-		}
-
-		[Ordinal(11)] 
-		[RED("CameraID")] 
-		public inkTextWidgetReference CameraID
-		{
-			get => GetPropertyValue<inkTextWidgetReference>();
-			set => SetPropertyValue<inkTextWidgetReference>(value);
-		}
-
-		[Ordinal(12)] 
 		[RED("healthStatus")] 
 		public inkTextWidgetReference HealthStatus
 		{
@@ -36,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(10)] 
 		[RED("MessageText")] 
 		public inkTextWidgetReference MessageText
 		{
@@ -44,63 +20,111 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
-		[RED("pitchFluff")] 
-		public inkTextWidgetReference PitchFluff
+		[Ordinal(11)] 
+		[RED("yawCounter")] 
+		public inkTextWidgetReference YawCounter
 		{
 			get => GetPropertyValue<inkTextWidgetReference>();
 			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("pitchCounter")] 
+		public inkTextWidgetReference PitchCounter
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(13)] 
+		[RED("pitch")] 
+		public inkCanvasWidgetReference Pitch
+		{
+			get => GetPropertyValue<inkCanvasWidgetReference>();
+			set => SetPropertyValue<inkCanvasWidgetReference>(value);
+		}
+
+		[Ordinal(14)] 
+		[RED("yaw")] 
+		public inkCanvasWidgetReference Yaw
+		{
+			get => GetPropertyValue<inkCanvasWidgetReference>();
+			set => SetPropertyValue<inkCanvasWidgetReference>(value);
 		}
 
 		[Ordinal(15)] 
-		[RED("yawFluff")] 
-		public inkTextWidgetReference YawFluff
+		[RED("pitch_min")] 
+		public CFloat Pitch_min
 		{
-			get => GetPropertyValue<inkTextWidgetReference>();
-			set => SetPropertyValue<inkTextWidgetReference>(value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(16)] 
-		[RED("leftPart")] 
-		public inkWidgetReference LeftPart
+		[RED("pitch_max")] 
+		public CFloat Pitch_max
 		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(17)] 
-		[RED("rightPart")] 
-		public inkWidgetReference RightPart
+		[RED("yaw_min")] 
+		public CFloat Yaw_min
 		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(18)] 
-		[RED("offsetLeft")] 
-		public CFloat OffsetLeft
+		[RED("yaw_max")] 
+		public CFloat Yaw_max
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(19)] 
-		[RED("offsetRight")] 
-		public CFloat OffsetRight
+		[RED("ZoomNumber")] 
+		public inkTextWidgetReference ZoomNumber
 		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(20)] 
-		[RED("currentTime")] 
-		public GameTime CurrentTime
+		[RED("DistanceNumber")] 
+		public inkTextWidgetReference DistanceNumber
 		{
-			get => GetPropertyValue<GameTime>();
-			set => SetPropertyValue<GameTime>(value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(21)] 
+		[RED("DistanceImageRuler")] 
+		public inkImageWidgetReference DistanceImageRuler
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(22)] 
+		[RED("ZoomMoveBracketL")] 
+		public inkImageWidgetReference ZoomMoveBracketL
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(23)] 
+		[RED("ZoomMoveBracketR")] 
+		public inkImageWidgetReference ZoomMoveBracketR
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(24)] 
 		[RED("bbPlayerStats")] 
 		public CWeakHandle<gameIBlackboard> BbPlayerStats
 		{
@@ -108,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(25)] 
 		[RED("bbPlayerEventId")] 
 		public CHandle<redCallbackObject> BbPlayerEventId
 		{
@@ -116,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(26)] 
 		[RED("currentHealth")] 
 		public CInt32 CurrentHealth
 		{
@@ -124,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(27)] 
 		[RED("previousHealth")] 
 		public CInt32 PreviousHealth
 		{
@@ -132,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(28)] 
 		[RED("maximumHealth")] 
 		public CInt32 MaximumHealth
 		{
@@ -140,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(29)] 
 		[RED("playerObject")] 
 		public CWeakHandle<gameObject> PlayerObject
 		{
@@ -148,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(30)] 
 		[RED("playerPuppet")] 
 		public CWeakHandle<gameObject> PlayerPuppet
 		{
@@ -156,7 +180,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(31)] 
+		[RED("controlledObjectRef")] 
+		public CWeakHandle<gameObject> ControlledObjectRef
+		{
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
+		}
+
+		[Ordinal(32)] 
 		[RED("gameInstance")] 
 		public ScriptGameInstance GameInstance
 		{
@@ -164,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<ScriptGameInstance>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(33)] 
 		[RED("animationProxy")] 
 		public CHandle<inkanimProxy> AnimationProxy
 		{
@@ -172,20 +204,63 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
+		[Ordinal(34)] 
+		[RED("psmBlackboard")] 
+		public CWeakHandle<gameIBlackboard> PsmBlackboard
+		{
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
+		}
+
+		[Ordinal(35)] 
+		[RED("PSM_BBID")] 
+		public CHandle<redCallbackObject> PSM_BBID
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(36)] 
+		[RED("zoomDownAnim")] 
+		public CHandle<inkanimProxy> ZoomDownAnim
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(37)] 
+		[RED("zoomUpAnim")] 
+		public CHandle<inkanimProxy> ZoomUpAnim
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(38)] 
+		[RED("argZoomBuffered")] 
+		public CFloat ArgZoomBuffered
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public hudTurretController()
 		{
-			Date = new inkTextWidgetReference();
-			Timer = new inkTextWidgetReference();
-			CameraID = new inkTextWidgetReference();
 			HealthStatus = new inkTextWidgetReference();
 			MessageText = new inkTextWidgetReference();
-			PitchFluff = new inkTextWidgetReference();
-			YawFluff = new inkTextWidgetReference();
-			LeftPart = new inkWidgetReference();
-			RightPart = new inkWidgetReference();
-			OffsetLeft = -838.000000F;
-			OffsetRight = 1495.000000F;
-			CurrentTime = new GameTime();
+			YawCounter = new inkTextWidgetReference();
+			PitchCounter = new inkTextWidgetReference();
+			Pitch = new inkCanvasWidgetReference();
+			Yaw = new inkCanvasWidgetReference();
+			Pitch_min = -360.000000F;
+			Pitch_max = 360.000000F;
+			Yaw_min = -640.000000F;
+			Yaw_max = 640.000000F;
+			ZoomNumber = new inkTextWidgetReference();
+			DistanceNumber = new inkTextWidgetReference();
+			DistanceImageRuler = new inkImageWidgetReference();
+			ZoomMoveBracketL = new inkImageWidgetReference();
+			ZoomMoveBracketR = new inkImageWidgetReference();
 			GameInstance = new ScriptGameInstance();
 
 			PostConstruct();

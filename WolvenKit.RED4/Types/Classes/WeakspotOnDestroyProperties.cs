@@ -109,6 +109,30 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(13)] 
+		[RED("DamageOwnerOnDestroy")] 
+		public CFloat DamageOwnerOnDestroy
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(14)] 
+		[RED("customHitSFx")] 
+		public CName CustomHitSFx
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(15)] 
+		[RED("customDestroySFx")] 
+		public CName CustomDestroySFx
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(16)] 
 		[RED("attackRecordID")] 
 		public TweakDBID AttackRecordID
 		{
@@ -116,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(17)] 
 		[RED("StatusEffectOnDestroyID")] 
 		public TweakDBID StatusEffectOnDestroyID
 		{
@@ -124,10 +148,19 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
+		[Ordinal(18)] 
+		[RED("physicalDestructionComponents")] 
+		public CArray<gameWeakspotPhysicalDestructionComponent> PhysicalDestructionComponents
+		{
+			get => GetPropertyValue<CArray<gameWeakspotPhysicalDestructionComponent>>();
+			set => SetPropertyValue<CArray<gameWeakspotPhysicalDestructionComponent>>(value);
+		}
+
 		public WeakspotOnDestroyProperties()
 		{
 			DisableInteraction = true;
 			DestroyMesh = true;
+			PhysicalDestructionComponents = new();
 
 			PostConstruct();
 		}

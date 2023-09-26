@@ -5,46 +5,6 @@ namespace WolvenKit.RED4.Types
 	public partial class appearanceAppearanceResource : resStreamedResource
 	{
 		[Ordinal(1)] 
-		[RED("baseType")] 
-		public CName BaseType
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-
-		[Ordinal(2)] 
-		[RED("baseEntityType")] 
-		public CName BaseEntityType
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-
-		[Ordinal(3)] 
-		[RED("baseEntity")] 
-		public CResourceAsyncReference<entEntityTemplate> BaseEntity
-		{
-			get => GetPropertyValue<CResourceAsyncReference<entEntityTemplate>>();
-			set => SetPropertyValue<CResourceAsyncReference<entEntityTemplate>>(value);
-		}
-
-		[Ordinal(4)] 
-		[RED("partType")] 
-		public CName PartType
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-
-		[Ordinal(5)] 
-		[RED("preset")] 
-		public CName Preset
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-
-		[Ordinal(6)] 
 		[RED("alternateAppearanceSettingName")] 
 		public CName AlternateAppearanceSettingName
 		{
@@ -52,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(2)] 
 		[RED("alternateAppearanceSuffixes")] 
 		public CArray<CName> AlternateAppearanceSuffixes
 		{
@@ -60,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(3)] 
 		[RED("alternateAppearanceMapping")] 
 		public CArray<appearanceAlternateAppearanceEntry> AlternateAppearanceMapping
 		{
@@ -68,15 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<appearanceAlternateAppearanceEntry>>(value);
 		}
 
-		[Ordinal(9)] 
-		[RED("appearances")] 
-		public CArray<CHandle<appearanceAppearanceDefinition>> Appearances
-		{
-			get => GetPropertyValue<CArray<CHandle<appearanceAppearanceDefinition>>>();
-			set => SetPropertyValue<CArray<CHandle<appearanceAppearanceDefinition>>>(value);
-		}
-
-		[Ordinal(10)] 
+		[Ordinal(4)] 
 		[RED("censorshipMapping")] 
 		public CArray<appearanceCensorshipEntry> CensorshipMapping
 		{
@@ -84,15 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<appearanceCensorshipEntry>>(value);
 		}
 
-		[Ordinal(11)] 
-		[RED("commonCookData")] 
-		public CResourceAsyncReference<appearanceCookedAppearanceData> CommonCookData
-		{
-			get => GetPropertyValue<CResourceAsyncReference<appearanceCookedAppearanceData>>();
-			set => SetPropertyValue<CResourceAsyncReference<appearanceCookedAppearanceData>>(value);
-		}
-
-		[Ordinal(12)] 
+		[Ordinal(5)] 
 		[RED("Wounds")] 
 		public CArray<CHandle<entdismembermentWoundResource>> Wounds
 		{
@@ -100,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<entdismembermentWoundResource>>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(6)] 
 		[RED("DismEffects")] 
 		public CArray<CHandle<entdismembermentEffectResource>> DismEffects
 		{
@@ -108,12 +52,68 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<entdismembermentEffectResource>>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(7)] 
 		[RED("DismWoundConfig")] 
 		public entdismembermentWoundsConfigSet DismWoundConfig
 		{
 			get => GetPropertyValue<entdismembermentWoundsConfigSet>();
 			set => SetPropertyValue<entdismembermentWoundsConfigSet>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("baseType")] 
+		public CName BaseType
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(9)] 
+		[RED("baseEntityType")] 
+		public CName BaseEntityType
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("baseEntity")] 
+		public CResourceAsyncReference<entEntityTemplate> BaseEntity
+		{
+			get => GetPropertyValue<CResourceAsyncReference<entEntityTemplate>>();
+			set => SetPropertyValue<CResourceAsyncReference<entEntityTemplate>>(value);
+		}
+
+		[Ordinal(11)] 
+		[RED("partType")] 
+		public CName PartType
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("preset")] 
+		public CName Preset
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(13)] 
+		[RED("appearances")] 
+		public CArray<CHandle<appearanceAppearanceDefinition>> Appearances
+		{
+			get => GetPropertyValue<CArray<CHandle<appearanceAppearanceDefinition>>>();
+			set => SetPropertyValue<CArray<CHandle<appearanceAppearanceDefinition>>>(value);
+		}
+
+		[Ordinal(14)] 
+		[RED("commonCookData")] 
+		public CResourceAsyncReference<appearanceCookedAppearanceData> CommonCookData
+		{
+			get => GetPropertyValue<CResourceAsyncReference<appearanceCookedAppearanceData>>();
+			set => SetPropertyValue<CResourceAsyncReference<appearanceCookedAppearanceData>>(value);
 		}
 
 		[Ordinal(15)] 
@@ -144,11 +144,11 @@ namespace WolvenKit.RED4.Types
 		{
 			AlternateAppearanceSuffixes = new();
 			AlternateAppearanceMapping = new();
-			Appearances = new();
 			CensorshipMapping = new();
 			Wounds = new();
 			DismEffects = new();
 			DismWoundConfig = new entdismembermentWoundsConfigSet { Configs = new() };
+			Appearances = new();
 			ProxyPolyCount = 1400;
 
 			PostConstruct();

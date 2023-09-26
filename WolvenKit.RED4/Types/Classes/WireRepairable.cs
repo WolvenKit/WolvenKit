@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class WireRepairable : gameObject
 	{
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("isBroken")] 
 		public CBool IsBroken
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("dependableEntities")] 
 		public CArray<NodeRef> DependableEntities
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<NodeRef>>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("interaction")] 
 		public CHandle<gameinteractionsComponent> Interaction
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameinteractionsComponent>>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("brokenmesh")] 
 		public CHandle<entIVisualComponent> Brokenmesh
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entIVisualComponent>>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("fixedmesh")] 
 		public CHandle<entIVisualComponent> Fixedmesh
 		{

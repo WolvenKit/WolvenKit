@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class workSequence : workIContainerEntry
 	{
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("previousLoopInfinitely")] 
 		public CBool PreviousLoopInfinitely
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("loopInfinitely")] 
 		public CBool LoopInfinitely
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("category")] 
 		public CEnum<gamedataWorkspotCategory> Category
 		{

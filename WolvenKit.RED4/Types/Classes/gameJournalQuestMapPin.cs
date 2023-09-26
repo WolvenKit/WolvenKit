@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameJournalQuestMapPin : gameJournalQuestMapPinBase
 	{
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("reference")] 
 		public gameEntityReference Reference
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("slotName")] 
 		public CName SlotName
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("mappinData")] 
 		public gamemappinsMappinData MappinData
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamemappinsMappinData>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("offset")] 
 		public Vector3 Offset
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector3>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("uiAnimation")] 
 		public TweakDBID UiAnimation
 		{
@@ -46,6 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameJournalQuestMapPin()
 		{
+			JournalEntryOverrideDataList = new();
 			Entries = new();
 			EnableGPS = true;
 			Reference = new gameEntityReference { Names = new() };

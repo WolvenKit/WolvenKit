@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SettingsListItem : inkListItemController
 	{
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("Selector")] 
 		public inkWidgetReference Selector
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("settingsSelector")] 
 		public CWeakHandle<inkSettingsSelectorController> SettingsSelector
 		{

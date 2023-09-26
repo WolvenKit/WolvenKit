@@ -21,6 +21,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("wheelShotWidget")] 
+		public inkTextWidgetReference WheelShotWidget
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(4)] 
+		[RED("executedWidget")] 
+		public inkTextWidgetReference ExecutedWidget
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(5)] 
 		[RED("rootWidget")] 
 		public CWeakHandle<inkWidget> RootWidget
 		{
@@ -28,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(6)] 
 		[RED("panelWidget")] 
 		public CWeakHandle<inkWidget> PanelWidget
 		{
@@ -36,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(7)] 
 		[RED("textWidget")] 
 		public CWeakHandle<inkTextWidget> TextWidget
 		{
@@ -44,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkTextWidget>>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(8)] 
 		[RED("gameController")] 
 		public CWeakHandle<DamageDigitsGameController> GameController
 		{
@@ -52,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<DamageDigitsGameController>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(9)] 
 		[RED("active")] 
 		public CBool Active
 		{
@@ -60,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(10)] 
 		[RED("successful")] 
 		public CBool Successful
 		{
@@ -68,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(11)] 
 		[RED("successfulCritical")] 
 		public CBool SuccessfulCritical
 		{
@@ -76,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(12)] 
 		[RED("showingBothDigits")] 
 		public CBool ShowingBothDigits
 		{
@@ -84,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(13)] 
 		[RED("distanceModifier")] 
 		public CFloat DistanceModifier
 		{
@@ -92,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(14)] 
 		[RED("calculatedDistanceHeightBias")] 
 		public CFloat CalculatedDistanceHeightBias
 		{
@@ -100,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(15)] 
 		[RED("stickingDistanceHeightBias")] 
 		public CFloat StickingDistanceHeightBias
 		{
@@ -108,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(16)] 
 		[RED("stickToTarget")] 
 		public CBool StickToTarget
 		{
@@ -116,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(17)] 
 		[RED("forceStickToTarget")] 
 		public CBool ForceStickToTarget
 		{
@@ -124,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(18)] 
 		[RED("projection")] 
 		public CHandle<inkScreenProjection> Projection
 		{
@@ -132,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkScreenProjection>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(19)] 
 		[RED("showPositiveAnimDef")] 
 		public CHandle<inkanimDefinition> ShowPositiveAnimDef
 		{
@@ -140,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("showPositiveAnimFadeInInterpolator")] 
 		public CHandle<inkanimTransparencyInterpolator> ShowPositiveAnimFadeInInterpolator
 		{
@@ -148,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimTransparencyInterpolator>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(21)] 
 		[RED("showPositiveAnimFadeOutInterpolator")] 
 		public CHandle<inkanimTransparencyInterpolator> ShowPositiveAnimFadeOutInterpolator
 		{
@@ -156,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimTransparencyInterpolator>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(22)] 
 		[RED("showPositiveAnimMarginInterpolator")] 
 		public CHandle<inkanimMarginInterpolator> ShowPositiveAnimMarginInterpolator
 		{
@@ -164,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimMarginInterpolator>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(23)] 
 		[RED("showPositiveAnimScaleInterpolator")] 
 		public CHandle<inkanimScaleInterpolator> ShowPositiveAnimScaleInterpolator
 		{
@@ -172,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimScaleInterpolator>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(24)] 
 		[RED("showNegativeAnimDef")] 
 		public CHandle<inkanimDefinition> ShowNegativeAnimDef
 		{
@@ -180,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(25)] 
 		[RED("showNegativeAnimFadeInInterpolator")] 
 		public CHandle<inkanimTransparencyInterpolator> ShowNegativeAnimFadeInInterpolator
 		{
@@ -188,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimTransparencyInterpolator>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(26)] 
 		[RED("showNegativeAnimFadeOutInterpolator")] 
 		public CHandle<inkanimTransparencyInterpolator> ShowNegativeAnimFadeOutInterpolator
 		{
@@ -196,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimTransparencyInterpolator>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(27)] 
 		[RED("showNegativeAnimMarginInterpolator")] 
 		public CHandle<inkanimMarginInterpolator> ShowNegativeAnimMarginInterpolator
 		{
@@ -204,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimMarginInterpolator>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(28)] 
 		[RED("showNegativeAnimScaleInterpolator")] 
 		public CHandle<inkanimScaleInterpolator> ShowNegativeAnimScaleInterpolator
 		{
@@ -212,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimScaleInterpolator>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(29)] 
 		[RED("animStickTargetOffset")] 
 		public Vector4 AnimStickTargetOffset
 		{
@@ -220,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(30)] 
 		[RED("animTimeFadeIn")] 
 		public CFloat AnimTimeFadeIn
 		{
@@ -228,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(31)] 
 		[RED("animTimeFadeOut")] 
 		public CFloat AnimTimeFadeOut
 		{
@@ -236,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(32)] 
 		[RED("animBothTimeFadeIn")] 
 		public CFloat AnimBothTimeFadeIn
 		{
@@ -244,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(33)] 
 		[RED("animBothTimeFadeOut")] 
 		public CFloat AnimBothTimeFadeOut
 		{
@@ -252,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(34)] 
 		[RED("animTimeDelay")] 
 		public CFloat AnimTimeDelay
 		{
@@ -260,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(35)] 
 		[RED("animTimeCritDelay")] 
 		public CFloat AnimTimeCritDelay
 		{
@@ -268,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(36)] 
 		[RED("animBothTimeDelay")] 
 		public CFloat AnimBothTimeDelay
 		{
@@ -276,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(37)] 
 		[RED("animBothTimeCritDelay")] 
 		public CFloat AnimBothTimeCritDelay
 		{
@@ -284,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(38)] 
 		[RED("animStartHeight")] 
 		public CFloat AnimStartHeight
 		{
@@ -292,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(39)] 
 		[RED("animAngleMin1")] 
 		public CFloat AnimAngleMin1
 		{
@@ -300,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(40)] 
 		[RED("animAngleMin2")] 
 		public CFloat AnimAngleMin2
 		{
@@ -308,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(41)] 
 		[RED("animAngleMax1")] 
 		public CFloat AnimAngleMax1
 		{
@@ -316,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(42)] 
 		[RED("animAngleMax2")] 
 		public CFloat AnimAngleMax2
 		{
@@ -324,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(43)] 
 		[RED("animBothAngleMin1")] 
 		public CFloat AnimBothAngleMin1
 		{
@@ -332,7 +348,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(44)] 
 		[RED("animBothAngleMin2")] 
 		public CFloat AnimBothAngleMin2
 		{
@@ -340,7 +356,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(45)] 
 		[RED("animBothAngleMax1")] 
 		public CFloat AnimBothAngleMax1
 		{
@@ -348,7 +364,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(46)] 
 		[RED("animBothAngleMax2")] 
 		public CFloat AnimBothAngleMax2
 		{
@@ -356,7 +372,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(47)] 
 		[RED("animDistanceMin")] 
 		public CFloat AnimDistanceMin
 		{
@@ -364,7 +380,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(48)] 
 		[RED("animDistanceMax")] 
 		public CFloat AnimDistanceMax
 		{
@@ -372,7 +388,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(49)] 
 		[RED("animDistanceMin_Crit")] 
 		public CFloat AnimDistanceMin_Crit
 		{
@@ -380,7 +396,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(50)] 
 		[RED("animDistanceMax_Crit")] 
 		public CFloat AnimDistanceMax_Crit
 		{
@@ -388,7 +404,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(51)] 
 		[RED("animBothOffsetX")] 
 		public CFloat AnimBothOffsetX
 		{
@@ -396,7 +412,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(52)] 
 		[RED("animBothOffsetY")] 
 		public CFloat AnimBothOffsetY
 		{
@@ -404,7 +420,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(53)] 
 		[RED("animBothStickingOffsetY")] 
 		public CFloat AnimBothStickingOffsetY
 		{
@@ -412,7 +428,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(54)] 
 		[RED("animStickTargetWorldZOffset")] 
 		public CFloat AnimStickTargetWorldZOffset
 		{
@@ -420,7 +436,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(55)] 
 		[RED("animStickingOffsetY")] 
 		public CFloat AnimStickingOffsetY
 		{
@@ -428,7 +444,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(56)] 
 		[RED("animDistanceModifierMinDistance")] 
 		public CFloat AnimDistanceModifierMinDistance
 		{
@@ -436,7 +452,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(57)] 
 		[RED("animDistanceModifierMaxDistance")] 
 		public CFloat AnimDistanceModifierMaxDistance
 		{
@@ -444,7 +460,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(58)] 
 		[RED("animDistanceModifierMinValue")] 
 		public CFloat AnimDistanceModifierMinValue
 		{
@@ -452,7 +468,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(59)] 
 		[RED("animDistanceModifierMaxValue")] 
 		public CFloat AnimDistanceModifierMaxValue
 		{
@@ -460,7 +476,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(60)] 
 		[RED("animDistanceHeightBias")] 
 		public CFloat AnimDistanceHeightBias
 		{
@@ -468,7 +484,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(61)] 
 		[RED("animStickingDistanceHeightBias")] 
 		public CFloat AnimStickingDistanceHeightBias
 		{
@@ -476,7 +492,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(62)] 
 		[RED("animPositiveOpacity")] 
 		public CFloat AnimPositiveOpacity
 		{
@@ -484,7 +500,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(63)] 
 		[RED("animNegativeOpacity")] 
 		public CFloat AnimNegativeOpacity
 		{
@@ -492,7 +508,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(64)] 
 		[RED("animDynamicDuration")] 
 		public CFloat AnimDynamicDuration
 		{
@@ -500,7 +516,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(65)] 
 		[RED("animDynamicDelay")] 
 		public CFloat AnimDynamicDelay
 		{
@@ -508,7 +524,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(66)] 
 		[RED("animDynamicCritDuration")] 
 		public CFloat AnimDynamicCritDuration
 		{
@@ -516,7 +532,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(67)] 
 		[RED("animDynamicCritDelay")] 
 		public CFloat AnimDynamicCritDelay
 		{
@@ -528,6 +544,8 @@ namespace WolvenKit.RED4.Types
 		{
 			CritWidget = new inkTextWidgetReference();
 			HeadshotWidget = new inkTextWidgetReference();
+			WheelShotWidget = new inkTextWidgetReference();
+			ExecutedWidget = new inkTextWidgetReference();
 			AnimStickTargetOffset = new Vector4();
 			AnimTimeFadeIn = 0.100000F;
 			AnimTimeFadeOut = 0.400000F;

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class TweakAIActionSelector : TweakAIActionAbstract
 	{
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("selector")] 
 		public TweakDBID Selector
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("selectorRecord")] 
 		public CWeakHandle<gamedataAIActionSelector_Record> SelectorRecord
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gamedataAIActionSelector_Record>>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("nodeIterator")] 
 		public CInt32 NodeIterator
 		{

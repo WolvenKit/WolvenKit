@@ -37,6 +37,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(4)] 
+		[RED("playerStatsListener")] 
+		public CHandle<UIInventoryScriptableStatsListener> PlayerStatsListener
+		{
+			get => GetPropertyValue<CHandle<UIInventoryScriptableStatsListener>>();
+			set => SetPropertyValue<CHandle<UIInventoryScriptableStatsListener>>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("uiSystem")] 
+		public CHandle<gameuiGameSystemUI> UiSystem
+		{
+			get => GetPropertyValue<CHandle<gameuiGameSystemUI>>();
+			set => SetPropertyValue<CHandle<gameuiGameSystemUI>>(value);
+		}
+
+		[Ordinal(6)] 
 		[RED("playerItems")] 
 		public CHandle<inkScriptHashMap> PlayerItems
 		{
@@ -44,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkScriptHashMap>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(7)] 
 		[RED("transactionSystem")] 
 		public CHandle<gameTransactionSystem> TransactionSystem
 		{
@@ -52,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameTransactionSystem>>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(8)] 
 		[RED("inventoryItemsManager")] 
 		public CHandle<UIInventoryItemsManager> InventoryItemsManager
 		{
@@ -60,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UIInventoryItemsManager>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(9)] 
 		[RED("blacklistedTags")] 
 		public CArray<CName> BlacklistedTags
 		{
@@ -68,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(10)] 
 		[RED("cachedNonInventoryItems")] 
 		public CHandle<inkScriptHashMap> CachedNonInventoryItems
 		{
@@ -76,12 +92,76 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkScriptHashMap>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(11)] 
+		[RED("statsDependantItems")] 
+		public CHandle<inkScriptWeakHashMap> StatsDependantItems
+		{
+			get => GetPropertyValue<CHandle<inkScriptWeakHashMap>>();
+			set => SetPropertyValue<CHandle<inkScriptWeakHashMap>>(value);
+		}
+
+		[Ordinal(12)] 
 		[RED("InventoryBlackboard")] 
 		public CWeakHandle<gameIBlackboard> InventoryBlackboard
 		{
 			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
+		}
+
+		[Ordinal(13)] 
+		[RED("CraftingBlackboardDefinition")] 
+		public CHandle<UI_CraftingDef> CraftingBlackboardDefinition
+		{
+			get => GetPropertyValue<CHandle<UI_CraftingDef>>();
+			set => SetPropertyValue<CHandle<UI_CraftingDef>>(value);
+		}
+
+		[Ordinal(14)] 
+		[RED("Blackboard")] 
+		public CWeakHandle<gameIBlackboard> Blackboard
+		{
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
+		}
+
+		[Ordinal(15)] 
+		[RED("UpgradeBlackboardCallback")] 
+		public CHandle<redCallbackObject> UpgradeBlackboardCallback
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(16)] 
+		[RED("TEMP_questSystem")] 
+		public CHandle<questQuestsSystem> TEMP_questSystem
+		{
+			get => GetPropertyValue<CHandle<questQuestsSystem>>();
+			set => SetPropertyValue<CHandle<questQuestsSystem>>(value);
+		}
+
+		[Ordinal(17)] 
+		[RED("TEMP_cuverBarsListener")] 
+		public CUInt32 TEMP_cuverBarsListener
+		{
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("TEMP_separatorBarsListener")] 
+		public CUInt32 TEMP_separatorBarsListener
+		{
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
+		}
+
+		[Ordinal(19)] 
+		[RED("itemsRestored")] 
+		public CBool ItemsRestored
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public UIInventoryScriptableSystem()

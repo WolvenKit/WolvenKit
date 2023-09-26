@@ -4,7 +4,15 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ProficiencyTabButtonController : TabButtonController
 	{
-		[Ordinal(18)] 
+		[Ordinal(21)] 
+		[RED("bottom_bar")] 
+		public inkWidgetReference Bottom_bar
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(22)] 
 		[RED("proxy")] 
 		public CHandle<inkanimProxy> Proxy
 		{
@@ -12,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(23)] 
 		[RED("isToggledState")] 
 		public CBool IsToggledState
 		{
@@ -22,6 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public ProficiencyTabButtonController()
 		{
+			Bottom_bar = new inkWidgetReference();
+
 			PostConstruct();
 		}
 

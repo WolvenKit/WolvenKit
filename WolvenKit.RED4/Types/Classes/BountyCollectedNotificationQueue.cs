@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class BountyCollectedNotificationQueue : gameuiGenericNotificationGameController
 	{
-		[Ordinal(2)] 
+		[Ordinal(4)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(5)] 
 		[RED("bountyNotification")] 
 		public CName BountyNotification
 		{

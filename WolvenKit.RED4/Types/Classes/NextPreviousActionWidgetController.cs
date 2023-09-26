@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class NextPreviousActionWidgetController : DeviceActionWidgetControllerBase
 	{
-		[Ordinal(29)] 
+		[Ordinal(32)] 
 		[RED("defaultContainer")] 
 		public inkWidgetReference DefaultContainer
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(33)] 
 		[RED("declineContainer")] 
 		public inkWidgetReference DeclineContainer
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(34)] 
 		[RED("moneyStatusAnimName")] 
 		public CName MoneyStatusAnimName
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(35)] 
 		[RED("isProcessing")] 
 		public CBool IsProcessing
 		{

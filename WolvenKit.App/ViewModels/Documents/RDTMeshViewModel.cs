@@ -2508,8 +2508,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     continue;
                 }
 
-                foreach (var tile in wntr.TilesData)
+                /*foreach (var tile in wntr.TilesData)
                 {
+                    // TODO: [Patch-2.0] Where did it go?
                     if (tile.TilesBuffer.Data is not TilesBuffer tb)
                     {
                         continue;
@@ -2559,7 +2560,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     group.Children.Add(mesh);
 
                     groups.Add(group);
-                }
+                }*/
             }
             else if (handle.Chunk is worldEntityNode wen)
             {

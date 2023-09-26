@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CraftingGarmentItemPreviewGameController : gameuiWardrobeSetPreviewGameController
 	{
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("initialItems")] 
 		public CArray<gameItemID> InitialItems
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameItemID>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("previewedItem")] 
 		public gameItemID PreviewedItem
 		{

@@ -37,11 +37,27 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(4)] 
+		[RED("effectInstanceName")] 
+		public CName EffectInstanceName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(5)] 
 		[RED("sequenceShift")] 
 		public CUInt32 SequenceShift
 		{
 			get => GetPropertyValue<CUInt32>();
 			set => SetPropertyValue<CUInt32>(value);
+		}
+
+		[Ordinal(6)] 
+		[RED("save")] 
+		public CBool Save
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public questPlayFX_NodeTypeParams()

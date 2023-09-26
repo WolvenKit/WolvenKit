@@ -52,9 +52,18 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(6)] 
+		[RED("GroupingVerticallimit")] 
+		public CFloat GroupingVerticallimit
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public audioAmbientAreaGroupingSettings()
 		{
 			MaxDistance = 100.000000F;
+			GroupingVerticallimit = 3.000000F;
 
 			PostConstruct();
 		}

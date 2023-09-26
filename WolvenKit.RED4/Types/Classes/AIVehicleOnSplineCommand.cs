@@ -140,6 +140,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(23)] 
+		[RED("audioCurvesParam")] 
+		public CWeakHandle<vehicleAudioCurvesParam> AudioCurvesParam
+		{
+			get => GetPropertyValue<CWeakHandle<vehicleAudioCurvesParam>>();
+			set => SetPropertyValue<CWeakHandle<vehicleAudioCurvesParam>>(value);
+		}
+
 		public AIVehicleOnSplineCommand()
 		{
 			SecureTimeOut = 2.000000F;

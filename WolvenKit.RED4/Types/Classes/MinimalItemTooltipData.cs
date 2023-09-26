@@ -69,6 +69,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(8)] 
+		[RED("gameplayDescription")] 
+		public CString GameplayDescription
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(9)] 
 		[RED("weight")] 
 		public CFloat Weight
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("price")] 
 		public CFloat Price
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("dpsValue")] 
 		public CFloat DpsValue
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("dpsDiff")] 
 		public CFloat DpsDiff
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("armorValue")] 
 		public CFloat ArmorValue
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("armorDiff")] 
 		public CFloat ArmorDiff
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("compareDPS")] 
 		public CBool CompareDPS
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("compareArmor")] 
 		public CBool CompareArmor
 		{
@@ -132,7 +140,31 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
+		[RED("comparedQuality")] 
+		public CEnum<gamedataQuality> ComparedQuality
+		{
+			get => GetPropertyValue<CEnum<gamedataQuality>>();
+			set => SetPropertyValue<CEnum<gamedataQuality>>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("qualityF")] 
+		public CFloat QualityF
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(19)] 
+		[RED("comparisonQualityF")] 
+		public CFloat ComparisonQualityF
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(20)] 
 		[RED("attackSpeed")] 
 		public CFloat AttackSpeed
 		{
@@ -140,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(21)] 
 		[RED("projectilesPerShot")] 
 		public CFloat ProjectilesPerShot
 		{
@@ -148,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(22)] 
 		[RED("grenadeData")] 
 		public CHandle<InventoryTooltiData_GrenadeData> GrenadeData
 		{
@@ -156,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<InventoryTooltiData_GrenadeData>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(23)] 
 		[RED("ammoCount")] 
 		public CInt32 AmmoCount
 		{
@@ -164,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(24)] 
 		[RED("hasSilencer")] 
 		public CBool HasSilencer
 		{
@@ -172,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(25)] 
 		[RED("hasScope")] 
 		public CBool HasScope
 		{
@@ -180,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(26)] 
 		[RED("isSilencerInstalled")] 
 		public CBool IsSilencerInstalled
 		{
@@ -188,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(27)] 
 		[RED("isScopeInstalled")] 
 		public CBool IsScopeInstalled
 		{
@@ -196,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(28)] 
 		[RED("requirements")] 
 		public CHandle<MinimalItemTooltipDataRequirements> Requirements
 		{
@@ -204,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<MinimalItemTooltipDataRequirements>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(29)] 
 		[RED("recipeData")] 
 		public CHandle<MinimalItemTooltipRecipeData> RecipeData
 		{
@@ -212,7 +244,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<MinimalItemTooltipRecipeData>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(30)] 
+		[RED("attributeAllocationStats")] 
+		public CArray<CHandle<MinimalItemTooltipStatData>> AttributeAllocationStats
+		{
+			get => GetPropertyValue<CArray<CHandle<MinimalItemTooltipStatData>>>();
+			set => SetPropertyValue<CArray<CHandle<MinimalItemTooltipStatData>>>(value);
+		}
+
+		[Ordinal(31)] 
 		[RED("stats")] 
 		public CArray<CHandle<MinimalItemTooltipStatData>> Stats
 		{
@@ -220,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<MinimalItemTooltipStatData>>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(32)] 
 		[RED("mods")] 
 		public CArray<CHandle<MinimalItemTooltipModData>> Mods
 		{
@@ -228,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<MinimalItemTooltipModData>>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(33)] 
 		[RED("dedicatedMods")] 
 		public CArray<CHandle<MinimalItemTooltipModAttachmentData>> DedicatedMods
 		{
@@ -236,7 +276,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<MinimalItemTooltipModAttachmentData>>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(34)] 
+		[RED("cyberwareUpgradeData")] 
+		public CHandle<InventoryTooltiData_CyberwareUpgradeData> CyberwareUpgradeData
+		{
+			get => GetPropertyValue<CHandle<InventoryTooltiData_CyberwareUpgradeData>>();
+			set => SetPropertyValue<CHandle<InventoryTooltiData_CyberwareUpgradeData>>(value);
+		}
+
+		[Ordinal(35)] 
 		[RED("itemType")] 
 		public CEnum<gamedataItemType> ItemType
 		{
@@ -244,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataItemType>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(36)] 
 		[RED("itemCategory")] 
 		public CEnum<gamedataItemCategory> ItemCategory
 		{
@@ -252,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataItemCategory>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(37)] 
 		[RED("equipmentArea")] 
 		public CEnum<gamedataEquipmentArea> EquipmentArea
 		{
@@ -260,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataEquipmentArea>>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(38)] 
 		[RED("itemEvolution")] 
 		public CEnum<gamedataWeaponEvolution> ItemEvolution
 		{
@@ -268,7 +316,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataWeaponEvolution>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(39)] 
+		[RED("itemPerkGroup")] 
+		public CEnum<gamedataPerkWeaponGroupType> ItemPerkGroup
+		{
+			get => GetPropertyValue<CEnum<gamedataPerkWeaponGroupType>>();
+			set => SetPropertyValue<CEnum<gamedataPerkWeaponGroupType>>(value);
+		}
+
+		[Ordinal(40)] 
 		[RED("lootItemType")] 
 		public CEnum<gameLootItemType> LootItemType
 		{
@@ -276,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameLootItemType>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(41)] 
 		[RED("iconPath")] 
 		public CString IconPath
 		{
@@ -284,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(42)] 
 		[RED("useMaleIcon")] 
 		public CBool UseMaleIcon
 		{
@@ -292,7 +348,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(43)] 
 		[RED("isIconic")] 
 		public CBool IsIconic
 		{
@@ -300,7 +356,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(44)] 
+		[RED("isPlus")] 
+		public CFloat IsPlus
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(45)] 
+		[RED("isBroken")] 
+		public CBool IsBroken
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(46)] 
 		[RED("isCrafted")] 
 		public CBool IsCrafted
 		{
@@ -308,7 +380,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(47)] 
 		[RED("isEquipped")] 
 		public CBool IsEquipped
 		{
@@ -316,7 +388,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(48)] 
 		[RED("hasRarity")] 
 		public CBool HasRarity
 		{
@@ -324,7 +396,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(49)] 
+		[RED("displayContextData")] 
+		public CHandle<ItemDisplayContextData> DisplayContextData
+		{
+			get => GetPropertyValue<CHandle<ItemDisplayContextData>>();
+			set => SetPropertyValue<CHandle<ItemDisplayContextData>>(value);
+		}
+
+		[Ordinal(50)] 
 		[RED("displayContext")] 
 		public CEnum<InventoryTooltipDisplayContext> DisplayContext
 		{
@@ -332,7 +412,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<InventoryTooltipDisplayContext>>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(51)] 
 		[RED("DEBUG_iconErrorInfo")] 
 		public CHandle<DEBUG_IconErrorInfo> DEBUG_iconErrorInfo
 		{
@@ -340,10 +420,37 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<DEBUG_IconErrorInfo>>(value);
 		}
 
+		[Ordinal(52)] 
+		[RED("statsManager")] 
+		public CHandle<UIInventoryItemStatsManager> StatsManager
+		{
+			get => GetPropertyValue<CHandle<UIInventoryItemStatsManager>>();
+			set => SetPropertyValue<CHandle<UIInventoryItemStatsManager>>(value);
+		}
+
+		[Ordinal(53)] 
+		[RED("statsManagerFetched")] 
+		public CBool StatsManagerFetched
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(54)] 
+		[RED("managerRef")] 
+		public CWeakHandle<UIInventoryItemsManager> ManagerRef
+		{
+			get => GetPropertyValue<CWeakHandle<UIInventoryItemsManager>>();
+			set => SetPropertyValue<CWeakHandle<UIInventoryItemsManager>>(value);
+		}
+
 		public MinimalItemTooltipData()
 		{
 			ItemID = new gameItemID();
 			TransmogItem = new gameItemID();
+			QualityF = -1.000000F;
+			ComparisonQualityF = -1.000000F;
+			AttributeAllocationStats = new();
 			Stats = new();
 			Mods = new();
 			DedicatedMods = new();

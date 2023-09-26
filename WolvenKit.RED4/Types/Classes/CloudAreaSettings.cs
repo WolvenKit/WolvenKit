@@ -260,6 +260,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(34)] 
+		[RED("volCoverageOffset")] 
+		public Vector2 VolCoverageOffset
+		{
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
+		}
+
 		public CloudAreaSettings()
 		{
 			Enable = true;
@@ -276,6 +284,7 @@ namespace WolvenKit.RED4.Types
 			VolNoiseWindInfluence = 1.000000F;
 			VolDetailWindInfluence = 1.250000F;
 			VolDistantFogOpacity = 1.000000F;
+			VolCoverageOffset = new Vector2();
 
 			PostConstruct();
 		}

@@ -5,6 +5,14 @@ namespace WolvenKit.RED4.Types
 	public partial class RipperdocScreenAnimationController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
+		[RED("doll")] 
+		public inkWidgetReference Doll
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(2)] 
 		[RED("defaultAnimationTab")] 
 		public inkWidgetReference DefaultAnimationTab
 		{
@@ -12,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("itemAnimationTab")] 
 		public inkWidgetReference ItemAnimationTab
 		{
@@ -20,23 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(3)] 
-		[RED("defaultTab")] 
-		public inkWidgetReference DefaultTab
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
 		[Ordinal(4)] 
-		[RED("itemTab")] 
-		public inkWidgetReference ItemTab
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(5)] 
 		[RED("femaleHovers")] 
 		public inkWidgetReference FemaleHovers
 		{
@@ -44,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(5)] 
 		[RED("maleHovers")] 
 		public inkWidgetReference MaleHovers
 		{
@@ -52,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(6)] 
 		[RED("F_immuneHoverTexture")] 
 		public inkWidgetReference F_immuneHoverTexture
 		{
@@ -60,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(7)] 
 		[RED("F_systemReplacementHoverTexture")] 
 		public inkWidgetReference F_systemReplacementHoverTexture
 		{
@@ -68,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(8)] 
 		[RED("F_integumentaryHoverTexture")] 
 		public inkWidgetReference F_integumentaryHoverTexture
 		{
@@ -76,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(9)] 
 		[RED("F_musculoskeletalHoverTexture")] 
 		public inkWidgetReference F_musculoskeletalHoverTexture
 		{
@@ -84,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(10)] 
 		[RED("F_nervousHoverTexture")] 
 		public inkWidgetReference F_nervousHoverTexture
 		{
@@ -92,15 +84,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(11)] 
 		[RED("F_eyesHoverTexture")] 
-		public inkWidgetReference F_eyesHoverTexture
+		public inkImageWidgetReference F_eyesHoverTexture
 		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(12)] 
 		[RED("F_legsHoverTexture")] 
 		public inkWidgetReference F_legsHoverTexture
 		{
@@ -108,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(13)] 
 		[RED("F_frontalCortexHoverTexture")] 
 		public inkWidgetReference F_frontalCortexHoverTexture
 		{
@@ -116,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(14)] 
 		[RED("F_handsHoverTexture")] 
 		public inkWidgetReference F_handsHoverTexture
 		{
@@ -124,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(15)] 
 		[RED("F_cardiovascularHoverTexture")] 
 		public inkWidgetReference F_cardiovascularHoverTexture
 		{
@@ -132,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(16)] 
 		[RED("F_armsHoverTexture")] 
 		public inkWidgetReference F_armsHoverTexture
 		{
@@ -140,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(17)] 
 		[RED("M_integumentaryHoverTexture")] 
 		public inkWidgetReference M_integumentaryHoverTexture
 		{
@@ -148,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(18)] 
 		[RED("M_armsHoverTexture")] 
 		public inkWidgetReference M_armsHoverTexture
 		{
@@ -156,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(19)] 
 		[RED("M_cardiovascularHoverTexture")] 
 		public inkWidgetReference M_cardiovascularHoverTexture
 		{
@@ -164,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(20)] 
 		[RED("M_handsHoverTexture")] 
 		public inkWidgetReference M_handsHoverTexture
 		{
@@ -172,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(21)] 
 		[RED("M_frontalCortexHoverTexture")] 
 		public inkWidgetReference M_frontalCortexHoverTexture
 		{
@@ -180,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(22)] 
 		[RED("M_immuneHoverTexture")] 
 		public inkWidgetReference M_immuneHoverTexture
 		{
@@ -188,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(23)] 
 		[RED("M_legsHoverTexture")] 
 		public inkWidgetReference M_legsHoverTexture
 		{
@@ -196,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(24)] 
 		[RED("M_systemReplacementHoverTexture")] 
 		public inkWidgetReference M_systemReplacementHoverTexture
 		{
@@ -204,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(25)] 
 		[RED("M_musculoskeletalHoverTexture")] 
 		public inkWidgetReference M_musculoskeletalHoverTexture
 		{
@@ -212,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(26)] 
 		[RED("M_nervousHoverTexture")] 
 		public inkWidgetReference M_nervousHoverTexture
 		{
@@ -220,15 +212,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(27)] 
 		[RED("M_eyesHoverTexture")] 
-		public inkWidgetReference M_eyesHoverTexture
+		public inkImageWidgetReference M_eyesHoverTexture
 		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(28)] 
 		[RED("man_wiresTexture")] 
 		public inkWidgetReference Man_wiresTexture
 		{
@@ -236,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(29)] 
 		[RED("woman_wiresTexture")] 
 		public inkWidgetReference Woman_wiresTexture
 		{
@@ -244,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(30)] 
 		[RED("hoverAnimation")] 
 		public CHandle<inkanimProxy> HoverAnimation
 		{
@@ -252,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(31)] 
 		[RED("hoverOverAnimation")] 
 		public CHandle<inkanimProxy> HoverOverAnimation
 		{
@@ -260,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(32)] 
 		[RED("introDefaultAnimation")] 
 		public CHandle<inkanimProxy> IntroDefaultAnimation
 		{
@@ -268,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(33)] 
 		[RED("outroDefaultAnimation")] 
 		public CHandle<inkanimProxy> OutroDefaultAnimation
 		{
@@ -276,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(34)] 
 		[RED("introPaperdollAnimation")] 
 		public CHandle<inkanimProxy> IntroPaperdollAnimation
 		{
@@ -284,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(35)] 
 		[RED("outroPaperdollAnimation")] 
 		public CHandle<inkanimProxy> OutroPaperdollAnimation
 		{
@@ -292,7 +284,31 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
+		[Ordinal(36)] 
+		[RED("slideAnimation")] 
+		public CHandle<inkanimProxy> SlideAnimation
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
 		[Ordinal(37)] 
+		[RED("hoveredArea")] 
+		public CEnum<gamedataEquipmentArea> HoveredArea
+		{
+			get => GetPropertyValue<CEnum<gamedataEquipmentArea>>();
+			set => SetPropertyValue<CEnum<gamedataEquipmentArea>>(value);
+		}
+
+		[Ordinal(38)] 
+		[RED("introArea")] 
+		public CEnum<gamedataEquipmentArea> IntroArea
+		{
+			get => GetPropertyValue<CEnum<gamedataEquipmentArea>>();
+			set => SetPropertyValue<CEnum<gamedataEquipmentArea>>(value);
+		}
+
+		[Ordinal(39)] 
 		[RED("isFemale")] 
 		public CBool IsFemale
 		{
@@ -300,20 +316,187 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(38)] 
-		[RED("hoveredIn")] 
-		public CBool HoveredIn
+		[Ordinal(40)] 
+		[RED("area")] 
+		public CEnum<gamedataEquipmentArea> Area
+		{
+			get => GetPropertyValue<CEnum<gamedataEquipmentArea>>();
+			set => SetPropertyValue<CEnum<gamedataEquipmentArea>>(value);
+		}
+
+		[Ordinal(41)] 
+		[RED("anim")] 
+		public CHandle<inkanimProxy> Anim
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(42)] 
+		[RED("animHover")] 
+		public CHandle<inkanimProxy> AnimHover
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(43)] 
+		[RED("animCancel")] 
+		public CHandle<inkanimProxy> AnimCancel
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(44)] 
+		[RED("isHovering")] 
+		public CBool IsHovering
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(45)] 
+		[RED("isSelected")] 
+		public CBool IsSelected
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(46)] 
+		[RED("animName")] 
+		public CName AnimName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(47)] 
+		[RED("position")] 
+		public inkMargin Position
+		{
+			get => GetPropertyValue<inkMargin>();
+			set => SetPropertyValue<inkMargin>(value);
+		}
+
+		[Ordinal(48)] 
+		[RED("positionOffset")] 
+		public CFloat PositionOffset
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(49)] 
+		[RED("root")] 
+		public CWeakHandle<inkWidget> Root
+		{
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
+		}
+
+		[Ordinal(50)] 
+		[RED("isSlidingOut")] 
+		public CBool IsSlidingOut
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(51)] 
+		[RED("zoomOutAnim")] 
+		public CHandle<inkanimProxy> ZoomOutAnim
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(52)] 
+		[RED("zoomInAnim")] 
+		public CHandle<inkanimProxy> ZoomInAnim
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(53)] 
+		[RED("slideOutAnim")] 
+		public CHandle<inkanimProxy> SlideOutAnim
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(54)] 
+		[RED("slideInAnim")] 
+		public CHandle<inkanimProxy> SlideInAnim
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(55)] 
+		[RED("slideDirection")] 
+		public CBool SlideDirection
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(56)] 
+		[RED("cancelSlideIn")] 
+		public CBool CancelSlideIn
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(57)] 
+		[RED("isInside")] 
+		public CBool IsInside
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(58)] 
+		[RED("currentArea")] 
+		public CEnum<gamedataEquipmentArea> CurrentArea
+		{
+			get => GetPropertyValue<CEnum<gamedataEquipmentArea>>();
+			set => SetPropertyValue<CEnum<gamedataEquipmentArea>>(value);
+		}
+
+		[Ordinal(59)] 
+		[RED("nextArea")] 
+		public CEnum<gamedataEquipmentArea> NextArea
+		{
+			get => GetPropertyValue<CEnum<gamedataEquipmentArea>>();
+			set => SetPropertyValue<CEnum<gamedataEquipmentArea>>(value);
+		}
+
+		[Ordinal(60)] 
+		[RED("midArea")] 
+		public CEnum<gamedataEquipmentArea> MidArea
+		{
+			get => GetPropertyValue<CEnum<gamedataEquipmentArea>>();
+			set => SetPropertyValue<CEnum<gamedataEquipmentArea>>(value);
+		}
+
+		[Ordinal(61)] 
+		[RED("SLIDE_DURATION")] 
+		public CFloat SLIDE_DURATION
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public RipperdocScreenAnimationController()
 		{
+			Doll = new inkWidgetReference();
 			DefaultAnimationTab = new inkWidgetReference();
 			ItemAnimationTab = new inkWidgetReference();
-			DefaultTab = new inkWidgetReference();
-			ItemTab = new inkWidgetReference();
 			FemaleHovers = new inkWidgetReference();
 			MaleHovers = new inkWidgetReference();
 			F_immuneHoverTexture = new inkWidgetReference();
@@ -321,7 +504,7 @@ namespace WolvenKit.RED4.Types
 			F_integumentaryHoverTexture = new inkWidgetReference();
 			F_musculoskeletalHoverTexture = new inkWidgetReference();
 			F_nervousHoverTexture = new inkWidgetReference();
-			F_eyesHoverTexture = new inkWidgetReference();
+			F_eyesHoverTexture = new inkImageWidgetReference();
 			F_legsHoverTexture = new inkWidgetReference();
 			F_frontalCortexHoverTexture = new inkWidgetReference();
 			F_handsHoverTexture = new inkWidgetReference();
@@ -337,9 +520,12 @@ namespace WolvenKit.RED4.Types
 			M_systemReplacementHoverTexture = new inkWidgetReference();
 			M_musculoskeletalHoverTexture = new inkWidgetReference();
 			M_nervousHoverTexture = new inkWidgetReference();
-			M_eyesHoverTexture = new inkWidgetReference();
+			M_eyesHoverTexture = new inkImageWidgetReference();
 			Man_wiresTexture = new inkWidgetReference();
 			Woman_wiresTexture = new inkWidgetReference();
+			Position = new inkMargin();
+			CurrentArea = Enums.gamedataEquipmentArea.Invalid;
+			SLIDE_DURATION = 0.250000F;
 
 			PostConstruct();
 		}

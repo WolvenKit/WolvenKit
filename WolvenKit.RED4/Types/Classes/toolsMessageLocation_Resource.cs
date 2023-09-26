@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public toolsMessageLocation_Resource()
 		{
-            PostConstruct();
+			PostConstruct();
 		}
 
 		partial void PostConstruct();

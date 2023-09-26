@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SampleInteractiveEntityThatBumpsTheCounter : gameObject
 	{
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("targetEntityWithCounter")] 
 		public NodeRef TargetEntityWithCounter
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NodeRef>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("targetPersistentID")] 
 		public gamePersistentID TargetPersistentID
 		{

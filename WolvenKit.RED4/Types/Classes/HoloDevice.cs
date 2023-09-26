@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class HoloDevice : InteractiveDevice
 	{
-		[Ordinal(94)] 
+		[Ordinal(98)] 
 		[RED("questFactName")] 
 		public CName QuestFactName
 		{

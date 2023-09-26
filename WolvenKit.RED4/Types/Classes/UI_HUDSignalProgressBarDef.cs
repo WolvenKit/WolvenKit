@@ -37,11 +37,19 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(4)] 
-		[RED("IsInRange")] 
-		public gamebbScriptID_Bool IsInRange
+		[RED("Orientation")] 
+		public gamebbScriptID_Uint32 Orientation
 		{
-			get => GetPropertyValue<gamebbScriptID_Bool>();
-			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+			get => GetPropertyValue<gamebbScriptID_Uint32>();
+			set => SetPropertyValue<gamebbScriptID_Uint32>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("Appearance")] 
+		public gamebbScriptID_CName Appearance
+		{
+			get => GetPropertyValue<gamebbScriptID_CName>();
+			set => SetPropertyValue<gamebbScriptID_CName>(value);
 		}
 
 		public UI_HUDSignalProgressBarDef()
@@ -50,7 +58,8 @@ namespace WolvenKit.RED4.Types
 			State = new gamebbScriptID_Uint32();
 			Progress = new gamebbScriptID_Float();
 			SignalStrength = new gamebbScriptID_Float();
-			IsInRange = new gamebbScriptID_Bool();
+			Orientation = new gamebbScriptID_Uint32();
+			Appearance = new gamebbScriptID_CName();
 
 			PostConstruct();
 		}

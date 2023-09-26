@@ -332,11 +332,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameDifficulty>>(value);
 		}
 
+		[Ordinal(41)] 
+		[RED("facts")] 
+		public CArray<CString> Facts
+		{
+			get => GetPropertyValue<CArray<CString>>();
+			set => SetPropertyValue<CArray<CString>>(value);
+		}
+
 		public saveGameMetadata()
 		{
 			PlayerPosition = new Vector3();
 			PlayTime = 0.000000;
 			PlaythroughTime = 0.000000;
+			Facts = new();
 
 			PostConstruct();
 		}

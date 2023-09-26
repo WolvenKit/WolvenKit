@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class WeaponVendorActionWidgetController : DeviceActionWidgetControllerBase
 	{
-		[Ordinal(29)] 
+		[Ordinal(32)] 
 		[RED("buttonText")] 
 		public inkTextWidgetReference ButtonText
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(33)] 
 		[RED("standardButtonContainer")] 
 		public inkWidgetReference StandardButtonContainer
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(34)] 
 		[RED("hoveredButtonContainer")] 
 		public inkWidgetReference HoveredButtonContainer
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(35)] 
 		[RED("buttonState")] 
 		public CEnum<ButtonStatus> ButtonState
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ButtonStatus>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(36)] 
 		[RED("hoverState")] 
 		public CEnum<HoverStatus> HoverState
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<HoverStatus>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(37)] 
 		[RED("isBusy")] 
 		public CBool IsBusy
 		{

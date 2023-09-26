@@ -20,8 +20,18 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("toggledLevels")] 
+		public CArray<CInt32> ToggledLevels
+		{
+			get => GetPropertyValue<CArray<CInt32>>();
+			set => SetPropertyValue<CArray<CInt32>>(value);
+		}
+
 		public CodexListSyncData()
 		{
+			ToggledLevels = new();
+
 			PostConstruct();
 		}
 

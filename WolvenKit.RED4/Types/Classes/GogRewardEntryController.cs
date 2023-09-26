@@ -28,11 +28,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
+		[Ordinal(4)] 
+		[RED("ep1LabelContainer")] 
+		public inkWidgetReference Ep1LabelContainer
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
 		public GogRewardEntryController()
 		{
 			NameWidget = new inkWidgetReference();
 			DescriptionWidget = new inkWidgetReference();
 			IconImage = new inkImageWidgetReference();
+			Ep1LabelContainer = new inkWidgetReference();
 
 			PostConstruct();
 		}

@@ -85,8 +85,8 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(10)] 
-		[RED("LightMode")] 
-		public gamebbScriptID_Int32 LightMode
+		[RED("HeadLightMode")] 
+		public gamebbScriptID_Int32 HeadLightMode
 		{
 			get => GetPropertyValue<gamebbScriptID_Int32>();
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
@@ -212,6 +212,46 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
+		[Ordinal(26)] 
+		[RED("ChaseIsChaseDontAvoidPedestrians")] 
+		public gamebbScriptID_Bool ChaseIsChaseDontAvoidPedestrians
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		[Ordinal(27)] 
+		[RED("ChaseMaxRammingTickets")] 
+		public gamebbScriptID_Uint32 ChaseMaxRammingTickets
+		{
+			get => GetPropertyValue<gamebbScriptID_Uint32>();
+			set => SetPropertyValue<gamebbScriptID_Uint32>(value);
+		}
+
+		[Ordinal(28)] 
+		[RED("ChaseTimeDelayToLeaveVehicle")] 
+		public gamebbScriptID_Float ChaseTimeDelayToLeaveVehicle
+		{
+			get => GetPropertyValue<gamebbScriptID_Float>();
+			set => SetPropertyValue<gamebbScriptID_Float>(value);
+		}
+
+		[Ordinal(29)] 
+		[RED("MinimapMappinDeleteAnim")] 
+		public gamebbScriptID_CName MinimapMappinDeleteAnim
+		{
+			get => GetPropertyValue<gamebbScriptID_CName>();
+			set => SetPropertyValue<gamebbScriptID_CName>(value);
+		}
+
+		[Ordinal(30)] 
+		[RED("UseCarAlarmStim")] 
+		public gamebbScriptID_Bool UseCarAlarmStim
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
 		public VehicleDef()
 		{
 			BikeTilt = new gamebbScriptID_Float();
@@ -224,7 +264,7 @@ namespace WolvenKit.RED4.Types
 			IsAutopilotOn = new gamebbScriptID_Bool();
 			DeclutchTimer = new gamebbScriptID_Float();
 			HandlingPenalty = new gamebbScriptID_Float();
-			LightMode = new gamebbScriptID_Int32();
+			HeadLightMode = new gamebbScriptID_Int32();
 			VehicleState = new gamebbScriptID_Int32();
 			VehicleReady = new gamebbScriptID_Bool();
 			VehRadioState = new gamebbScriptID_Bool();
@@ -240,6 +280,11 @@ namespace WolvenKit.RED4.Types
 			IsInWater = new gamebbScriptID_Bool();
 			RaceTimer = new gamebbScriptID_String();
 			IsTargetingFriendly = new gamebbScriptID_Bool();
+			ChaseIsChaseDontAvoidPedestrians = new gamebbScriptID_Bool();
+			ChaseMaxRammingTickets = new gamebbScriptID_Uint32();
+			ChaseTimeDelayToLeaveVehicle = new gamebbScriptID_Float();
+			MinimapMappinDeleteAnim = new gamebbScriptID_CName();
+			UseCarAlarmStim = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

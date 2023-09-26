@@ -61,19 +61,19 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(7)] 
-		[RED("timeOccluded")] 
-		public CFloat TimeOccluded
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-
-		[Ordinal(8)] 
 		[RED("entityID")] 
 		public entEntityID EntityID
 		{
 			get => GetPropertyValue<entEntityID>();
 			set => SetPropertyValue<entEntityID>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("attachedBoneName")] 
+		public CName AttachedBoneName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public gamesmartGunUITargetParameters()

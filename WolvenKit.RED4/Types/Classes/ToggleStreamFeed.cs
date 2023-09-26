@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ToggleStreamFeed : ActionBool
 	{
-		[Ordinal(25)] 
+		[Ordinal(38)] 
 		[RED("vRoomFake")] 
 		public CBool VRoomFake
 		{
@@ -15,6 +15,7 @@ namespace WolvenKit.RED4.Types
 		public ToggleStreamFeed()
 		{
 			RequesterID = new entEntityID();
+			CostComponents = new();
 			InteractionChoice = new gameinteractionsChoice { CaptionParts = new gameinteractionsChoiceCaption { Parts = new() }, Data = new(), ChoiceMetaData = new gameinteractionsChoiceMetaData { Type = new gameinteractionsChoiceTypeWrapper() }, LookAtDescriptor = new gameinteractionsChoiceLookAtDescriptor { Offset = new Vector3(), OrbId = new gameinteractionsOrbID() } };
 			ActionWidgetPackage = new SActionWidgetPackage { DependendActions = new() };
 			CanTriggerStim = true;

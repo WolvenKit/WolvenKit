@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
 		}
-        
+		
 		[RED("attacks")]
 		[REDProperty(IsIgnored = true)]
 		public CArray<TweakDBID> Attacks
@@ -42,7 +42,7 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
-        
+		
 		[RED("damageType")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID DamageType
@@ -66,7 +66,7 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
 		}
-        
+		
 		[RED("evolution")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID Evolution
@@ -97,6 +97,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("gameplayDescription")]
+		[REDProperty(IsIgnored = true)]
+		public gamedataLocKeyWrapper GameplayDescription
+		{
+			get => GetPropertyValue<gamedataLocKeyWrapper>();
+			set => SetPropertyValue<gamedataLocKeyWrapper>(value);
 		}
 		
 		[RED("holsteredItem")]
@@ -130,7 +138,7 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
-        
+		
 		[RED("manufacturer")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID Manufacturer
@@ -146,7 +154,7 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
 		}
-        
+		
 		[RED("previewEffectName")]
 		[REDProperty(IsIgnored = true)]
 		public CName PreviewEffectName
@@ -202,7 +210,7 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CArray<TweakDBID>>();
 			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
-        
+		
 		[RED("triggerEffectName")]
 		[REDProperty(IsIgnored = true)]
 		public CName TriggerEffectName

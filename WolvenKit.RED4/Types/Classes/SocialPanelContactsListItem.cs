@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SocialPanelContactsListItem : inkToggleController
 	{
-		[Ordinal(13)] 
+		[Ordinal(16)] 
 		[RED("Label")] 
 		public inkTextWidgetReference Label
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(17)] 
 		[RED("ContactInfo")] 
 		public SocialPanelContactInfo ContactInfo
 		{

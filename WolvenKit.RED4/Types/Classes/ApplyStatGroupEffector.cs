@@ -36,6 +36,54 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt64>(value);
 		}
 
+		[Ordinal(4)] 
+		[RED("stackCount")] 
+		public CUInt8 StackCount
+		{
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("removeWithEffector")] 
+		public CBool RemoveWithEffector
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(6)] 
+		[RED("reapplyOnWeaponChange")] 
+		public CBool ReapplyOnWeaponChange
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("owner")] 
+		public CWeakHandle<gameObject> Owner
+		{
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("ownerSlotCallback")] 
+		public CHandle<ApplyStatGroupEffectorCallback> OwnerSlotCallback
+		{
+			get => GetPropertyValue<CHandle<ApplyStatGroupEffectorCallback>>();
+			set => SetPropertyValue<CHandle<ApplyStatGroupEffectorCallback>>(value);
+		}
+
+		[Ordinal(9)] 
+		[RED("ownerSlotListener")] 
+		public CHandle<gameAttachmentSlotsScriptListener> OwnerSlotListener
+		{
+			get => GetPropertyValue<CHandle<gameAttachmentSlotsScriptListener>>();
+			set => SetPropertyValue<CHandle<gameAttachmentSlotsScriptListener>>(value);
+		}
+
 		public ApplyStatGroupEffector()
 		{
 			Target = new gameStatsObjectID { IdType = Enums.gameStatIDType.Invalid };

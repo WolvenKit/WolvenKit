@@ -53,6 +53,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(26)] 
+		[RED("horizontalTileCrop")] 
+		public CFloat HorizontalTileCrop
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(27)] 
+		[RED("verticalTileCrop")] 
+		public CFloat VerticalTileCrop
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(28)] 
 		[RED("textureAtlas")] 
 		public CResourceAsyncReference<inkTextureAtlas> TextureAtlas
 		{
@@ -60,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<inkTextureAtlas>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(29)] 
 		[RED("texturePart")] 
 		public CName TexturePart
 		{
@@ -68,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(30)] 
 		[RED("contentHAlign")] 
 		public CEnum<inkEHorizontalAlign> ContentHAlign
 		{
@@ -76,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<inkEHorizontalAlign>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(31)] 
 		[RED("contentVAlign")] 
 		public CEnum<inkEVerticalAlign> ContentVAlign
 		{
@@ -84,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<inkEVerticalAlign>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(32)] 
 		[RED("tileHAlign")] 
 		public CEnum<inkEHorizontalAlign> TileHAlign
 		{
@@ -92,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<inkEHorizontalAlign>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(33)] 
 		[RED("tileVAlign")] 
 		public CEnum<inkEVerticalAlign> TileVAlign
 		{

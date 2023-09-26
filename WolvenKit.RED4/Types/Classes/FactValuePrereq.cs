@@ -28,6 +28,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EComparisonType>>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("repeated")] 
+		public CBool Repeated
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public FactValuePrereq()
 		{
 			PostConstruct();

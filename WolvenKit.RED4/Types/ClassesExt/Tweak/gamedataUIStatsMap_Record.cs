@@ -27,6 +27,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 		
+		[RED("tooltipStats")]
+		[REDProperty(IsIgnored = true)]
+		public CArray<TweakDBID> TooltipStats
+		{
+			get => GetPropertyValue<CArray<TweakDBID>>();
+			set => SetPropertyValue<CArray<TweakDBID>>(value);
+		}
+		
 		[RED("typesToCompareWith")]
 		[REDProperty(IsIgnored = true)]
 		public CArray<TweakDBID> TypesToCompareWith

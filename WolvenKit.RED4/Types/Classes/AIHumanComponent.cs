@@ -61,6 +61,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(11)] 
+		[RED("prereqsBlackboard")] 
+		public CWeakHandle<gameIBlackboard> PrereqsBlackboard
+		{
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
+		}
+
+		[Ordinal(12)] 
 		[RED("friendlyFireCheckID")] 
 		public CUInt32 FriendlyFireCheckID
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("ffs")] 
 		public CHandle<gameIFriendlyFireSystem> Ffs
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameIFriendlyFireSystem>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("LoSFinderCheckID")] 
 		public CUInt32 LoSFinderCheckID
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("loSFinderSystem")] 
 		public CHandle<gameLoSIFinderSystem> LoSFinderSystem
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameLoSIFinderSystem>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("LoSFinderVisibleObject")] 
 		public CWeakHandle<senseVisibleObject> LoSFinderVisibleObject
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<senseVisibleObject>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("actionAnimationScriptProxy")] 
 		public CHandle<ActionAnimationScriptProxy> ActionAnimationScriptProxy
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ActionAnimationScriptProxy>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("lastOwnerBlockedAttackEventID")] 
 		public gameDelayID LastOwnerBlockedAttackEventID
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("lastOwnerParriedAttackEventID")] 
 		public gameDelayID LastOwnerParriedAttackEventID
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("lastOwnerDodgedAttackEventID")] 
 		public gameDelayID LastOwnerDodgedAttackEventID
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("grenadeThrowQueryTarget")] 
 		public CWeakHandle<gameObject> GrenadeThrowQueryTarget
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("grenadeThrowQueryId")] 
 		public CInt32 GrenadeThrowQueryId
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("scriptContext")] 
 		public AIbehaviorScriptExecutionContext ScriptContext
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<AIbehaviorScriptExecutionContext>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("scriptContextInitialized")] 
 		public CBool ScriptContextInitialized
 		{
@@ -164,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("kerenzikovAbilityRecord")] 
 		public CHandle<gamedataGameplayAbility_Record> KerenzikovAbilityRecord
 		{
@@ -172,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gamedataGameplayAbility_Record>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("highLevelCb")] 
 		public CUInt32 HighLevelCb
 		{
@@ -180,7 +188,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
+		[RED("lastReservedSeatVehicle")] 
+		public entEntityID LastReservedSeatVehicle
+		{
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
+		}
+
+		[Ordinal(28)] 
+		[RED("assignedVehicleStuck")] 
+		public CBool AssignedVehicleStuck
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(29)] 
 		[RED("activeCommands")] 
 		public AIbehaviorUniqueActiveCommandList ActiveCommands
 		{
@@ -195,6 +219,7 @@ namespace WolvenKit.RED4.Types
 			LastOwnerDodgedAttackEventID = new gameDelayID();
 			GrenadeThrowQueryId = -1;
 			ScriptContext = new AIbehaviorScriptExecutionContext();
+			LastReservedSeatVehicle = new entEntityID();
 			ActiveCommands = new AIbehaviorUniqueActiveCommandList();
 
 			PostConstruct();

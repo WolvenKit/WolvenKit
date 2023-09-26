@@ -3,6 +3,14 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gamedataDistrict_Record
 	{
+		[RED("crimeMultiplier")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat CrimeMultiplier
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
 		[RED("enumComment")]
 		[REDProperty(IsIgnored = true)]
 		public CString EnumComment
@@ -65,6 +73,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("policeRadioSceneEntryPoint")]
+		[REDProperty(IsIgnored = true)]
+		public CName PoliceRadioSceneEntryPoint
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 		
 		[RED("preventionPreset")]

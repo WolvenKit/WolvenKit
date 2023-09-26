@@ -61,6 +61,10 @@ public class worldNodeDataReader : Red4Reader, IBufferReader
             t.Uk11 = _reader.ReadUInt16();
             t.Uk12 = _reader.ReadUInt16();
 
+            // TODO: [Path-2.0] Check if its right
+            t.Uk13 = _reader.ReadUInt64();
+            t.Uk14 = _reader.ReadUInt64();
+
             if (!data.Lookup.ContainsKey(t.NodeIndex))
             {
                 data.Lookup[t.NodeIndex] = new();

@@ -11,6 +11,30 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 		
+		[RED("notifyOnAnyChange")]
+		[REDProperty(IsIgnored = true)]
+		public CBool NotifyOnAnyChange
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
+		[RED("notifyOnlyOnStateFulfilled")]
+		[REDProperty(IsIgnored = true)]
+		public CBool NotifyOnlyOnStateFulfilled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
+		[RED("objectToCheck")]
+		[REDProperty(IsIgnored = true)]
+		public CName ObjectToCheck
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+		
 		[RED("statModifiers")]
 		[REDProperty(IsIgnored = true)]
 		public CArray<TweakDBID> StatModifiers

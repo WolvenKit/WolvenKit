@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class inkToggleController : inkButtonController
 	{
-		[Ordinal(10)] 
+		[Ordinal(13)] 
 		[RED("ToggleChanged")] 
 		public inkToggleChangedCallback ToggleChanged
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkToggleChangedCallback>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(14)] 
 		[RED("isToggled")] 
 		public CBool IsToggled
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("autoToggleOnInput")] 
 		public CBool AutoToggleOnInput
 		{

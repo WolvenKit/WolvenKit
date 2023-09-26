@@ -77,6 +77,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(9)] 
+		[RED("ignoreMountedVehicleCollision")] 
+		public CBool IgnoreMountedVehicleCollision
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(10)] 
 		[RED("ricochetData")] 
 		public gameRicochetData RicochetData
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameRicochetData>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("range")] 
 		public CFloat Range
 		{

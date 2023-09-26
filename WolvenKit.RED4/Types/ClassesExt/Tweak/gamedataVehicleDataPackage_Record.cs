@@ -51,12 +51,28 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 		
+		[RED("combatEntering")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat CombatEntering
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
 		[RED("disableSwitchSeats")]
 		[REDProperty(IsIgnored = true)]
 		public CBool DisableSwitchSeats
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
+		}
+		
+		[RED("driverCombat")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID DriverCombat
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
 		[RED("entering")]
@@ -89,14 +105,6 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("hasSiren")]
-		[REDProperty(IsIgnored = true)]
-		public CBool HasSiren
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
 		}
 		
 		[RED("hasSpoiler")]
@@ -235,17 +243,17 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
-		[RED("supportsCombat")]
-		[REDProperty(IsIgnored = true)]
-		public CBool SupportsCombat
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
 		[RED("switchSeats")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat SwitchSeats
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("tireOnVehicleDamageImpulseScalor")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat TireOnVehicleDamageImpulseScalor
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
@@ -259,12 +267,44 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
+		[RED("useAuxiliary")]
+		[REDProperty(IsIgnored = true)]
+		public CBool UseAuxiliary
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("vehSeatSet")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID VehSeatSet
 		{
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("wheelBumperLengthScalor")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat WheelBumperLengthScalor
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("wheelBumperVertOffsetScalor")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat WheelBumperVertOffsetScalor
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("wheelBumperWidthScalor")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat WheelBumperWidthScalor
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 	}
 }

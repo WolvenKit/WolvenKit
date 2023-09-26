@@ -12,8 +12,18 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("includePierced")] 
+		public CBool IncludePierced
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public gameEffectObjectFilter_OnlyNearest_Pierce()
 		{
+			IncludePierced = true;
+
 			PostConstruct();
 		}
 

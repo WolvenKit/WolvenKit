@@ -61,6 +61,54 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(8)] 
+		[RED("missionLinksContainer")] 
+		public inkCompoundWidgetReference MissionLinksContainer
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(9)] 
+		[RED("fluffLinksContainer")] 
+		public inkCompoundWidgetReference FluffLinksContainer
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("mapLinksContainer")] 
+		public inkCompoundWidgetReference MapLinksContainer
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(11)] 
+		[RED("missionLinkLine")] 
+		public inkCompoundWidgetReference MissionLinkLine
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("fluffShardLinkLine")] 
+		public inkCompoundWidgetReference FluffShardLinkLine
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(13)] 
+		[RED("codexLinkLine")] 
+		public inkCompoundWidgetReference CodexLinkLine
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(14)] 
 		[RED("contentContainer")] 
 		public inkWidgetReference ContentContainer
 		{
@@ -68,7 +116,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(15)] 
+		[RED("scrollContainer")] 
+		public inkWidgetReference ScrollContainer
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(16)] 
 		[RED("noSelectedQuestContainer")] 
 		public inkWidgetReference NoSelectedQuestContainer
 		{
@@ -76,7 +132,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(17)] 
+		[RED("ep1Marker")] 
+		public inkWidgetReference Ep1Marker
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("scrollContainerCtrl")] 
+		public CWeakHandle<inkScrollController> ScrollContainerCtrl
+		{
+			get => GetPropertyValue<CWeakHandle<inkScrollController>>();
+			set => SetPropertyValue<CWeakHandle<inkScrollController>>(value);
+		}
+
+		[Ordinal(19)] 
 		[RED("currentQuestData")] 
 		public CWeakHandle<gameJournalQuest> CurrentQuestData
 		{
@@ -84,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameJournalQuest>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(20)] 
 		[RED("journalManager")] 
 		public CWeakHandle<gameJournalManager> JournalManager
 		{
@@ -92,7 +164,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameJournalManager>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(21)] 
+		[RED("shardEntry")] 
+		public CWeakHandle<gameJournalOnscreen> ShardEntry
+		{
+			get => GetPropertyValue<CWeakHandle<gameJournalOnscreen>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalOnscreen>>(value);
+		}
+
+		[Ordinal(22)] 
 		[RED("phoneSystem")] 
 		public CWeakHandle<PhoneSystem> PhoneSystem
 		{
@@ -100,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PhoneSystem>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(23)] 
 		[RED("mappinSystem")] 
 		public CWeakHandle<gamemappinsMappinSystem> MappinSystem
 		{
@@ -108,7 +188,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gamemappinsMappinSystem>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(24)] 
+		[RED("uiSystem")] 
+		public CWeakHandle<gameuiGameSystemUI> UiSystem
+		{
+			get => GetPropertyValue<CWeakHandle<gameuiGameSystemUI>>();
+			set => SetPropertyValue<CWeakHandle<gameuiGameSystemUI>>(value);
+		}
+
+		[Ordinal(25)] 
 		[RED("trackedObjective")] 
 		public CWeakHandle<gameJournalQuestObjective> TrackedObjective
 		{
@@ -116,12 +204,36 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameJournalQuestObjective>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(26)] 
 		[RED("canUsePhone")] 
 		public CBool CanUsePhone
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(27)] 
+		[RED("objectiveOffset")] 
+		public CFloat ObjectiveOffset
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(28)] 
+		[RED("objectiveActionOffset")] 
+		public CFloat ObjectiveActionOffset
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(29)] 
+		[RED("objectiveActionsCount")] 
+		public CInt32 ObjectiveActionsCount
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		public QuestDetailsPanelController()
@@ -133,8 +245,18 @@ namespace WolvenKit.RED4.Types
 			OptionalObjectives = new inkCompoundWidgetReference();
 			CompletedObjectives = new inkCompoundWidgetReference();
 			CodexLinksContainer = new inkCompoundWidgetReference();
+			MissionLinksContainer = new inkCompoundWidgetReference();
+			FluffLinksContainer = new inkCompoundWidgetReference();
+			MapLinksContainer = new inkCompoundWidgetReference();
+			MissionLinkLine = new inkCompoundWidgetReference();
+			FluffShardLinkLine = new inkCompoundWidgetReference();
+			CodexLinkLine = new inkCompoundWidgetReference();
 			ContentContainer = new inkWidgetReference();
+			ScrollContainer = new inkWidgetReference();
 			NoSelectedQuestContainer = new inkWidgetReference();
+			Ep1Marker = new inkWidgetReference();
+			ObjectiveOffset = 20.000000F;
+			ObjectiveActionOffset = 124.000000F;
 
 			PostConstruct();
 		}

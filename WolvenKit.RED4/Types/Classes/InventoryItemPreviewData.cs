@@ -21,6 +21,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(9)] 
+		[RED("itemDescription")] 
+		public CString ItemDescription
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(10)] 
 		[RED("requiredLevel")] 
 		public CInt32 RequiredLevel
 		{
@@ -28,12 +36,28 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("itemQualityState")] 
 		public CName ItemQualityState
 		{
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("itemEvolution")] 
+		public CEnum<gamedataWeaponEvolution> ItemEvolution
+		{
+			get => GetPropertyValue<CEnum<gamedataWeaponEvolution>>();
+			set => SetPropertyValue<CEnum<gamedataWeaponEvolution>>(value);
+		}
+
+		[Ordinal(13)] 
+		[RED("itemPerkGroup")] 
+		public CEnum<gamedataPerkWeaponGroupType> ItemPerkGroup
+		{
+			get => GetPropertyValue<CEnum<gamedataPerkWeaponGroupType>>();
+			set => SetPropertyValue<CEnum<gamedataPerkWeaponGroupType>>(value);
 		}
 
 		public InventoryItemPreviewData()

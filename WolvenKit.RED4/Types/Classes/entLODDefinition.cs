@@ -53,8 +53,8 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(6)] 
-		[RED("largeVehicleInteriorDistanceLODs", 4)] 
-		public CStatic<CFloat> LargeVehicleInteriorDistanceLODs
+		[RED("vehicleDecorationDistanceLODs", 4)] 
+		public CStatic<CFloat> VehicleDecorationDistanceLODs
 		{
 			get => GetPropertyValue<CStatic<CFloat>>();
 			set => SetPropertyValue<CStatic<CFloat>>(value);
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			VehicleDistanceLODs = new(0);
 			CinematicVehicleDistanceLODs = new(0);
 			VehicleInteriorDistanceLODs = new(0);
-			LargeVehicleInteriorDistanceLODs = new(0);
+			VehicleDecorationDistanceLODs = new(0);
 			ConsoleDistanceLODs = new(0);
 
 			PostConstruct();

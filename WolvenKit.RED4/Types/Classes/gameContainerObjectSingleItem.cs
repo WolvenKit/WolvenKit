@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameContainerObjectSingleItem : gameContainerObjectBase
 	{
-		[Ordinal(46)] 
+		[Ordinal(49)] 
 		[RED("itemTDBID")] 
 		public TweakDBID ItemTDBID
 		{

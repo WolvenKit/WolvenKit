@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
+		[RED("itemId")] 
+		public gameItemID ItemId
+		{
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
+		}
+
+		[Ordinal(2)] 
 		[RED("itemName")] 
 		public CString ItemName
 		{
@@ -20,7 +28,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
+		[RED("itemCategoryName")] 
+		public CString ItemCategoryName
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("itemType")] 
 		public CEnum<gamedataItemType> ItemType
 		{
@@ -28,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataItemType>>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(5)] 
 		[RED("equipmentArea")] 
 		public CEnum<gamedataEquipmentArea> EquipmentArea
 		{
@@ -36,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataEquipmentArea>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(6)] 
 		[RED("quality")] 
 		public CEnum<gamedataQuality> Quality
 		{
@@ -44,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataQuality>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(7)] 
 		[RED("isIconic")] 
 		public CBool IsIconic
 		{
@@ -52,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(8)] 
 		[RED("quantity")] 
 		public CInt32 Quantity
 		{
@@ -60,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(9)] 
 		[RED("lootItemType")] 
 		public CEnum<gameLootItemType> LootItemType
 		{
@@ -68,7 +84,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameLootItemType>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(10)] 
+		[RED("isQuestContainer")] 
+		public CBool IsQuestContainer
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(11)] 
 		[RED("tweakDBID")] 
 		public TweakDBID TweakDBID
 		{
@@ -76,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(12)] 
 		[RED("dpsDiff")] 
 		public CFloat DpsDiff
 		{
@@ -84,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(13)] 
 		[RED("armorDiff")] 
 		public CFloat ArmorDiff
 		{
@@ -92,8 +116,27 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(14)] 
+		[RED("qualityF")] 
+		public CFloat QualityF
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(15)] 
+		[RED("comparedQualityF")] 
+		public CFloat ComparedQualityF
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public MinimalLootingListItemData()
 		{
+			ItemId = new gameItemID();
+			ComparedQualityF = -1.000000F;
+
 			PostConstruct();
 		}
 

@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 		public toolsJiraEditIssueResult()
 		{
 			ErrorMessages = new();
-			Errors = new toolsJiraIssueFieldsResult { Labels = new(), FixVersions = new(), Customfield_15306 = new(), Attachment = new() };
+			Errors = new toolsJiraIssueFieldsResult { Attachments = new() };
 
 			PostConstruct();
 		}

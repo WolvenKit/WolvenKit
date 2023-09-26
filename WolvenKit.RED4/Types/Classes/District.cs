@@ -20,6 +20,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("districtRecord")] 
+		public CHandle<gamedataDistrict_Record> DistrictRecord
+		{
+			get => GetPropertyValue<CHandle<gamedataDistrict_Record>>();
+			set => SetPropertyValue<CHandle<gamedataDistrict_Record>>(value);
+		}
+
 		public District()
 		{
 			PostConstruct();

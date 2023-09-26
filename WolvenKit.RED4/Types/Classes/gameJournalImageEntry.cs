@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameJournalImageEntry : gameJournalEntry
 	{
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("imageId")] 
 		public TweakDBID ImageId
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("thumbnailImageId")] 
 		public TweakDBID ThumbnailImageId
 		{
@@ -22,6 +22,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameJournalImageEntry()
 		{
+			JournalEntryOverrideDataList = new();
+
 			PostConstruct();
 		}
 

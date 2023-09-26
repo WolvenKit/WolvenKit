@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SecurityLockerControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("securityLockerProperties")] 
 		public SecurityLockerProperties SecurityLockerProperties
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<SecurityLockerProperties>(value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("isStoringPlayerEquipement")] 
 		public CBool IsStoringPlayerEquipement
 		{

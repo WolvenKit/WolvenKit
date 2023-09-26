@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public abstract partial class gameJournalContainerEntry : gameJournalEntry
 	{
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("entries")] 
 		public CArray<CHandle<gameJournalEntry>> Entries
 		{

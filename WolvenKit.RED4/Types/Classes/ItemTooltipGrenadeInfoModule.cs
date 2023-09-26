@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ItemTooltipGrenadeInfoModule : ItemTooltipModuleController
 	{
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("headerText")] 
 		public inkTextWidgetReference HeaderText
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("totalDamageText")] 
 		public inkTextWidgetReference TotalDamageText
 		{
@@ -20,7 +20,47 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
+		[RED("lineDamage")] 
+		public inkWidgetReference LineDamage
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("damageWrapper")] 
+		public inkWidgetReference DamageWrapper
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(9)] 
+		[RED("damageTypeText")] 
+		public inkTextWidgetReference DamageTypeText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("damageValue")] 
+		public inkTextWidgetReference DamageValue
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(11)] 
+		[RED("damageSec")] 
+		public inkWidgetReference DamageSec
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(12)] 
 		[RED("durationText")] 
 		public inkTextWidgetReference DurationText
 		{
@@ -28,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(13)] 
 		[RED("rangeText")] 
 		public inkTextWidgetReference RangeText
 		{
@@ -36,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(14)] 
 		[RED("deliveryIcon")] 
 		public inkImageWidgetReference DeliveryIcon
 		{
@@ -44,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(15)] 
 		[RED("deliveryText")] 
 		public inkTextWidgetReference DeliveryText
 		{
@@ -56,6 +96,11 @@ namespace WolvenKit.RED4.Types
 		{
 			HeaderText = new inkTextWidgetReference();
 			TotalDamageText = new inkTextWidgetReference();
+			LineDamage = new inkWidgetReference();
+			DamageWrapper = new inkWidgetReference();
+			DamageTypeText = new inkTextWidgetReference();
+			DamageValue = new inkTextWidgetReference();
+			DamageSec = new inkWidgetReference();
 			DurationText = new inkTextWidgetReference();
 			RangeText = new inkTextWidgetReference();
 			DeliveryIcon = new inkImageWidgetReference();

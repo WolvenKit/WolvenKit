@@ -19,9 +19,9 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector3>(value);
 		}
 		
-		[RED("ignoreTransparentSurfaces")]
+		[RED("ignoreNonPenetrableObj")]
 		[REDProperty(IsIgnored = true)]
-		public CBool IgnoreTransparentSurfaces
+		public CBool IgnoreNonPenetrableObj
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);

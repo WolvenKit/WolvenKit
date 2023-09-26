@@ -276,6 +276,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(35)] 
+		[RED("displayContextData")] 
+		public CHandle<ItemDisplayContextData> DisplayContextData
+		{
+			get => GetPropertyValue<CHandle<ItemDisplayContextData>>();
+			set => SetPropertyValue<CHandle<ItemDisplayContextData>>(value);
+		}
+
 		public WardrobeSetEditorUIController()
 		{
 			ItemsGridWidget = new inkWidgetReference();

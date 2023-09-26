@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameItemDropObject : gameLootObject
 	{
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("isEmpty")] 
 		public CBool IsEmpty
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(41)] 
 		[RED("isIconic")] 
 		public CBool IsIconic
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(42)] 
 		[RED("hasQuestItems")] 
 		public CBool HasQuestItems
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(43)] 
 		[RED("spawnedItemID")] 
 		public gameItemID SpawnedItemID
 		{

@@ -125,6 +125,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(15)] 
+		[RED("quickhackPanelKeepContext")] 
+		public gamebbScriptID_Bool QuickhackPanelKeepContext
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		[Ordinal(16)] 
 		[RED("dpadHintRefresh")] 
 		public gamebbScriptID_Bool DpadHintRefresh
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("containerConsumable")] 
 		public gamebbScriptID_Variant ContainerConsumable
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("consumableBeingUsed")] 
 		public gamebbScriptID_Variant ConsumableBeingUsed
 		{
@@ -165,6 +173,7 @@ namespace WolvenKit.RED4.Types
 			QuickhackPanelOpen = new gamebbScriptID_Bool();
 			QuickHackDescritpionVisible = new gamebbScriptID_Bool();
 			QuickHackDataSelected = new gamebbScriptID_Variant();
+			QuickhackPanelKeepContext = new gamebbScriptID_Bool();
 			DpadHintRefresh = new gamebbScriptID_Bool();
 			ContainerConsumable = new gamebbScriptID_Variant();
 			ConsumableBeingUsed = new gamebbScriptID_Variant();

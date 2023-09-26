@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class sampleTimeDilatable : gameTimeDilatable
 	{
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("listener")] 
 		public CHandle<sampleTimeListener> Listener
 		{

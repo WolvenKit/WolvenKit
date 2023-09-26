@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class DataTermControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("linkedFastTravelPoint")] 
 		public CHandle<gameFastTravelPointData> LinkedFastTravelPoint
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameFastTravelPointData>>(value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("triggerType")] 
 		public CEnum<EFastTravelTriggerType> TriggerType
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EFastTravelTriggerType>>(value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(109)] 
 		[RED("fastTravelDeviceType")] 
 		public CEnum<EFastTravelDeviceType> FastTravelDeviceType
 		{

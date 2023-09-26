@@ -101,6 +101,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(12)] 
+		[RED("ignoreHudSafezones")] 
+		public CBool IgnoreHudSafezones
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(13)] 
 		[RED("affectedByGlitchEffect")] 
 		public CBool AffectedByGlitchEffect
 		{
@@ -108,7 +116,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
+		[RED("affectedByBlackwallEffect")] 
+		public CBool AffectedByBlackwallEffect
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(15)] 
 		[RED("spawnBeforeSlots")] 
 		public CBool SpawnBeforeSlots
 		{

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CrosshairGameController_Basic : gameuiCrosshairBaseGameController
 	{
-		[Ordinal(18)] 
+		[Ordinal(27)] 
 		[RED("leftPart")] 
 		public inkImageWidgetReference LeftPart
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(28)] 
 		[RED("rightPart")] 
 		public inkImageWidgetReference RightPart
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(29)] 
 		[RED("upPart")] 
 		public inkImageWidgetReference UpPart
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(30)] 
 		[RED("downPart")] 
 		public inkImageWidgetReference DownPart
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(31)] 
 		[RED("centerPart")] 
 		public inkImageWidgetReference CenterPart
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(32)] 
 		[RED("bufferedSpread")] 
 		public Vector2 BufferedSpread
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector2>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(33)] 
 		[RED("currentFireMode")] 
 		public CEnum<gamedataTriggerMode> CurrentFireMode
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataTriggerMode>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(34)] 
 		[RED("weaponlocalBB")] 
 		public CWeakHandle<gameIBlackboard> WeaponlocalBB
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(35)] 
 		[RED("bbcurrentFireMode")] 
 		public CHandle<redCallbackObject> BbcurrentFireMode
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(36)] 
 		[RED("ricochetModeActive")] 
 		public CUInt32 RicochetModeActive
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(37)] 
 		[RED("RicochetChance")] 
 		public CUInt32 RicochetChance
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(38)] 
 		[RED("horizontalMinSpread")] 
 		public CFloat HorizontalMinSpread
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(39)] 
 		[RED("verticalMinSpread")] 
 		public CFloat VerticalMinSpread
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(40)] 
 		[RED("gameplaySpreadMultiplier")] 
 		public CFloat GameplaySpreadMultiplier
 		{

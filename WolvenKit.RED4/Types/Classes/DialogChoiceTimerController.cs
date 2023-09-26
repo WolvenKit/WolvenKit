@@ -88,7 +88,7 @@ namespace WolvenKit.RED4.Types
 		{
 			Bar = new inkWidgetReference();
 			TimerValue = new inkTextWidgetReference();
-			AnimOptions = new inkanimPlaybackOptions();
+			AnimOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
 
 			PostConstruct();
 		}

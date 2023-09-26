@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class NameplateBarLogicController : ProgressBarSimpleWidgetLogicController
 	{
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("damagePreview")] 
 		public CWeakHandle<DamagePreviewController> DamagePreview
 		{

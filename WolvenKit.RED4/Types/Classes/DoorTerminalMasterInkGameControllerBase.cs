@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class DoorTerminalMasterInkGameControllerBase : MasterDeviceInkGameControllerBase
 	{
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("currentlyActiveDevices")] 
 		public CArray<gamePersistentID> CurrentlyActiveDevices
 		{

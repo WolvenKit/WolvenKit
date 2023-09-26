@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ArmorEquipInventoryItemController : inkButtonDpadSupportedController
 	{
-		[Ordinal(26)] 
+		[Ordinal(29)] 
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(30)] 
 		[RED("itemData")] 
 		public CHandle<gameItemData> ItemData
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameItemData>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(31)] 
 		[RED("empty")] 
 		public CBool Empty
 		{

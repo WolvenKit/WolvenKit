@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ModifyDamageWithVelocity : ModifyDamageEffector
 	{
-		[Ordinal(2)] 
+		[Ordinal(6)] 
 		[RED("percentMult")] 
 		public CFloat PercentMult
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(7)] 
 		[RED("unitThreshold")] 
 		public CFloat UnitThreshold
 		{

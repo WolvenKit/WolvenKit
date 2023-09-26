@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldRotatingMeshNode : worldMeshNode
 	{
-		[Ordinal(16)] 
+		[Ordinal(18)] 
 		[RED("rotationAxis")] 
 		public CEnum<worldRotatingMeshNodeAxis> RotationAxis
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<worldRotatingMeshNodeAxis>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(19)] 
 		[RED("fullRotationTime")] 
 		public CFloat FullRotationTime
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("reverseDirection")] 
 		public CBool ReverseDirection
 		{

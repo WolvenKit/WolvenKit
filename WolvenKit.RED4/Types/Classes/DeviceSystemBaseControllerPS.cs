@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public abstract partial class DeviceSystemBaseControllerPS : MasterControllerPS
 	{
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("quickHacksEnabled")] 
 		public CBool QuickHacksEnabled
 		{

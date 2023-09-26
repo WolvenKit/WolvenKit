@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class BasicDistractionDevice : InteractiveDevice
 	{
-		[Ordinal(94)] 
+		[Ordinal(98)] 
 		[RED("animFeatureDataDistractor")] 
 		public CHandle<AnimFeature_DistractionState> AnimFeatureDataDistractor
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AnimFeature_DistractionState>>(value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(99)] 
 		[RED("animFeatureDataNameDistractor")] 
 		public CName AnimFeatureDataNameDistractor
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(100)] 
 		[RED("distractionComponentSwapNamesToON")] 
 		public CArray<CName> DistractionComponentSwapNamesToON
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(101)] 
 		[RED("distractionComponentSwapNamesToOFF")] 
 		public CArray<CName> DistractionComponentSwapNamesToOFF
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(102)] 
 		[RED("distractionComponentON")] 
 		public CArray<CHandle<entIPlacedComponent>> DistractionComponentON
 		{
@@ -44,12 +44,28 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<entIPlacedComponent>>>(value);
 		}
 
-		[Ordinal(99)] 
-		[RED("cdistractionComponentOFF")] 
-		public CArray<CHandle<entIPlacedComponent>> CdistractionComponentOFF
+		[Ordinal(103)] 
+		[RED("distractionComponentOFF")] 
+		public CArray<CHandle<entIPlacedComponent>> DistractionComponentOFF
 		{
 			get => GetPropertyValue<CArray<CHandle<entIPlacedComponent>>>();
 			set => SetPropertyValue<CArray<CHandle<entIPlacedComponent>>>(value);
+		}
+
+		[Ordinal(104)] 
+		[RED("meshAppearanceNameON")] 
+		public CName MeshAppearanceNameON
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(105)] 
+		[RED("meshAppearanceNameOFF")] 
+		public CName MeshAppearanceNameOFF
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		public BasicDistractionDevice()
@@ -58,7 +74,7 @@ namespace WolvenKit.RED4.Types
 			DistractionComponentSwapNamesToON = new();
 			DistractionComponentSwapNamesToOFF = new();
 			DistractionComponentON = new();
-			CdistractionComponentOFF = new();
+			DistractionComponentOFF = new();
 
 			PostConstruct();
 		}

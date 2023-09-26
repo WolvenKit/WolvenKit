@@ -37,22 +37,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(4)] 
-		[RED("crowd walkable")] 
-		public CColor Crowd_walkable
+		[RED("stairs walkable")] 
+		public CColor Stairs_walkable
 		{
 			get => GetPropertyValue<CColor>();
 			set => SetPropertyValue<CColor>(value);
 		}
 
 		[Ordinal(5)] 
-		[RED("staris walkable")] 
-		public CColor Staris_walkable
-		{
-			get => GetPropertyValue<CColor>();
-			set => SetPropertyValue<CColor>(value);
-		}
-
-		[Ordinal(6)] 
 		[RED("drones")] 
 		public CColor Drones
 		{
@@ -60,9 +52,17 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CColor>(value);
 		}
 
+		[Ordinal(6)] 
+		[RED("terrain")] 
+		public CColor Terrain
+		{
+			get => GetPropertyValue<CColor>();
+			set => SetPropertyValue<CColor>(value);
+		}
+
 		[Ordinal(7)] 
-		[RED("everythign else")] 
-		public CColor Everythign_else
+		[RED("everything else")] 
+		public CColor Everything_else
 		{
 			get => GetPropertyValue<CColor>();
 			set => SetPropertyValue<CColor>(value);
@@ -74,10 +74,10 @@ namespace WolvenKit.RED4.Types
 			Ignored = new CColor();
 			Blocking = new CColor();
 			Road = new CColor();
-			Crowd_walkable = new CColor();
-			Staris_walkable = new CColor();
+			Stairs_walkable = new CColor();
 			Drones = new CColor();
-			Everythign_else = new CColor();
+			Terrain = new CColor();
+			Everything_else = new CColor();
 
 			PostConstruct();
 		}

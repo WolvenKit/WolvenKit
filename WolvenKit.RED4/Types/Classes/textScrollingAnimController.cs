@@ -165,7 +165,7 @@ namespace WolvenKit.RED4.Types
 			BinaryClusterCount = 4;
 			ScrollingText = new ScrollingText { TextArray = new() };
 			LogArray = new();
-			AnimOptions = new inkanimPlaybackOptions();
+			AnimOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
 
 			PostConstruct();
 		}

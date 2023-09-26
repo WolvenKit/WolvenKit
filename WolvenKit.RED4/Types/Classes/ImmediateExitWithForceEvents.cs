@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ImmediateExitWithForceEvents : ExitingEventsBase
 	{
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("exitForce")] 
 		public gamestateMachineResultVector ExitForce
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamestateMachineResultVector>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("bikeForce")] 
 		public gamestateMachineResultVector BikeForce
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamestateMachineResultVector>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("knockOverBike")] 
 		public CHandle<KnockOverBikeEvent> KnockOverBike
 		{

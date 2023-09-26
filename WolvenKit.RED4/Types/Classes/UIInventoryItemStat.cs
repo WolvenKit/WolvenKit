@@ -21,11 +21,27 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
-		[RED("Properties")] 
+		[RED("PropertiesProvider")] 
+		public CHandle<IUIInventoryItemStatsProvider> PropertiesProvider
+		{
+			get => GetPropertyValue<CHandle<IUIInventoryItemStatsProvider>>();
+			set => SetPropertyValue<CHandle<IUIInventoryItemStatsProvider>>(value);
+		}
+
+		[Ordinal(3)] 
+		[RED("properties")] 
 		public CHandle<UIItemStatProperties> Properties
 		{
 			get => GetPropertyValue<CHandle<UIItemStatProperties>>();
 			set => SetPropertyValue<CHandle<UIItemStatProperties>>(value);
+		}
+
+		[Ordinal(4)] 
+		[RED("propertiesFetched")] 
+		public CBool PropertiesFetched
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public UIInventoryItemStat()

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ForkliftControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("forkliftSetup")] 
 		public ForkliftSetup ForkliftSetup
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<ForkliftSetup>(value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("isUp")] 
 		public CBool IsUp
 		{

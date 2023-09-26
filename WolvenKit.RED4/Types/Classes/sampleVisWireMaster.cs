@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class sampleVisWireMaster : gameObject
 	{
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("dependableEntities")] 
 		public CArray<NodeRef> DependableEntities
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<NodeRef>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("inFocus")] 
 		public CBool InFocus
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("found")] 
 		public CBool Found
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("lookedAt")] 
 		public CBool LookedAt
 		{

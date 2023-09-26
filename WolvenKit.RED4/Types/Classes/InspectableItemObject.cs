@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class InspectableItemObject : gameItemObject
 	{
-		[Ordinal(38)] 
+		[Ordinal(40)] 
 		[RED("inspectableClues")] 
 		public CArray<SInspectableClue> InspectableClues
 		{

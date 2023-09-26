@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class TVControllerPS : MediaDeviceControllerPS
 	{
-		[Ordinal(109)] 
+		[Ordinal(112)] 
 		[RED("tvSetup")] 
 		public TVSetup TvSetup
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TVSetup>(value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(113)] 
 		[RED("defaultGlitchVideoPath")] 
 		public redResourceReferenceScriptToken DefaultGlitchVideoPath
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
 		}
 
-		[Ordinal(111)] 
+		[Ordinal(114)] 
 		[RED("broadcastGlitchVideoPath")] 
 		public redResourceReferenceScriptToken BroadcastGlitchVideoPath
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
 		}
 
-		[Ordinal(112)] 
+		[Ordinal(115)] 
 		[RED("globalTVInitialized")] 
 		public CBool GlobalTVInitialized
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(113)] 
+		[Ordinal(116)] 
 		[RED("backupCustomChannels")] 
 		public CArray<STvChannel> BackupCustomChannels
 		{

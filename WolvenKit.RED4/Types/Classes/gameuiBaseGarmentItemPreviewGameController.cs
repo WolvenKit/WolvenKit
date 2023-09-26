@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameuiBaseGarmentItemPreviewGameController : gameuiInventoryPuppetPreviewGameController
 	{
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("placementSlot")] 
 		public TweakDBID PlacementSlot
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("givenItem")] 
 		public gameItemID GivenItem
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("initialItem")] 
 		public gameItemID InitialItem
 		{

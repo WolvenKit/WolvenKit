@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ItemFilterToggleController : ToggleController
 	{
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("newItemDot")] 
 		public inkWidgetReference NewItemDot
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("useCategoryFilter")] 
 		public CBool UseCategoryFilter
 		{

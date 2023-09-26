@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class PhotoModeMenuListItem : inkListItemController
 	{
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("ScrollBarRef")] 
 		public inkWidgetReference ScrollBarRef
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("CounterLabelRef")] 
 		public inkTextWidgetReference CounterLabelRef
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
 		[RED("TextLabelRef")] 
 		public inkTextWidgetReference TextLabelRef
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(22)] 
 		[RED("OptionSelectorRef")] 
 		public inkWidgetReference OptionSelectorRef
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(23)] 
 		[RED("LeftArrow")] 
 		public inkWidgetReference LeftArrow
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(24)] 
 		[RED("RightArrow")] 
 		public inkWidgetReference RightArrow
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(25)] 
 		[RED("LeftButton")] 
 		public inkWidgetReference LeftButton
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(26)] 
 		[RED("RightButton")] 
 		public inkWidgetReference RightButton
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(27)] 
 		[RED("OptionLabelRef")] 
 		public inkTextWidgetReference OptionLabelRef
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(28)] 
 		[RED("SelectedWidgetRef")] 
 		public inkWidgetReference SelectedWidgetRef
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(29)] 
 		[RED("TextRootWidgetRef")] 
 		public inkWidgetReference TextRootWidgetRef
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(30)] 
 		[RED("SliderRootWidgetRef")] 
 		public inkWidgetReference SliderRootWidgetRef
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(31)] 
 		[RED("OptionSelectorRootWidgetRef")] 
 		public inkWidgetReference OptionSelectorRootWidgetRef
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(32)] 
 		[RED("HoldButtonRootWidgetRef")] 
 		public inkWidgetReference HoldButtonRootWidgetRef
 		{
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(33)] 
 		[RED("ScrollBarLineRef")] 
 		public inkWidgetReference ScrollBarLineRef
 		{
@@ -124,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(34)] 
 		[RED("ScrollBarHandleRef")] 
 		public inkWidgetReference ScrollBarHandleRef
 		{
@@ -132,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(35)] 
 		[RED("ScrollSlidingAreaRef")] 
 		public inkWidgetReference ScrollSlidingAreaRef
 		{
@@ -140,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(36)] 
 		[RED("HoldProgressRef")] 
 		public inkWidgetReference HoldProgressRef
 		{
@@ -148,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(37)] 
 		[RED("GridRoot")] 
 		public inkWidgetReference GridRoot
 		{
@@ -156,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(38)] 
 		[RED("GridTopRow")] 
 		public inkWidgetReference GridTopRow
 		{
@@ -164,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(39)] 
 		[RED("GridBottomRow")] 
 		public inkWidgetReference GridBottomRow
 		{
@@ -172,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(40)] 
 		[RED("ScrollBar")] 
 		public CWeakHandle<inkSliderController> ScrollBar
 		{
@@ -180,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkSliderController>>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(41)] 
 		[RED("OptionSelector")] 
 		public CWeakHandle<inkSelectorController> OptionSelector
 		{
@@ -188,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkSelectorController>>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(42)] 
 		[RED("OptionSelectorValues")] 
 		public CArray<gameuiPhotoModeOptionSelectorData> OptionSelectorValues
 		{
@@ -196,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameuiPhotoModeOptionSelectorData>>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(43)] 
 		[RED("GridSelector")] 
 		public CWeakHandle<PhotoModeGridList> GridSelector
 		{
@@ -204,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PhotoModeGridList>>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(44)] 
 		[RED("SliderValue")] 
 		public CFloat SliderValue
 		{
@@ -212,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(45)] 
 		[RED("StepValue")] 
 		public CFloat StepValue
 		{
@@ -220,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(46)] 
 		[RED("SliderShowPercents")] 
 		public CBool SliderShowPercents
 		{
@@ -228,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(47)] 
 		[RED("photoModeController")] 
 		public CWeakHandle<gameuiPhotoModeMenuController> PhotoModeController
 		{
@@ -236,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameuiPhotoModeMenuController>>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(48)] 
 		[RED("doApply")] 
 		public CBool DoApply
 		{
@@ -244,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(49)] 
 		[RED("holdBgInitMargin")] 
 		public inkMargin HoldBgInitMargin
 		{
@@ -252,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkMargin>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(50)] 
 		[RED("allowHold")] 
 		public CBool AllowHold
 		{
@@ -260,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(51)] 
 		[RED("inputDirection")] 
 		public CInt32 InputDirection
 		{
@@ -268,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(52)] 
 		[RED("inputStepTime")] 
 		public CFloat InputStepTime
 		{
@@ -276,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(53)] 
 		[RED("inputHoldTime")] 
 		public CFloat InputHoldTime
 		{
@@ -284,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(54)] 
 		[RED("arrowClickedTime")] 
 		public CFloat ArrowClickedTime
 		{
@@ -292,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(55)] 
 		[RED("isSelected")] 
 		public CBool IsSelected
 		{
@@ -300,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(56)] 
 		[RED("fadeAnim")] 
 		public CHandle<inkanimProxy> FadeAnim
 		{
@@ -308,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(57)] 
 		[RED("RightArrowInitOpacity")] 
 		public CFloat RightArrowInitOpacity
 		{
@@ -316,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(58)] 
 		[RED("LeftArrowInitOpacity")] 
 		public CFloat LeftArrowInitOpacity
 		{
@@ -324,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(59)] 
 		[RED("ScrollBarHandleInitOpacity")] 
 		public CFloat ScrollBarHandleInitOpacity
 		{
@@ -332,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(60)] 
 		[RED("ScrollBarLineInitOpacity")] 
 		public CFloat ScrollBarLineInitOpacity
 		{

@@ -69,6 +69,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(8)] 
+		[RED("briefingPlayerType")] 
+		public CEnum<questBriefingPlayerType> BriefingPlayerType
+		{
+			get => GetPropertyValue<CEnum<questBriefingPlayerType>>();
+			set => SetPropertyValue<CEnum<questBriefingPlayerType>>(value);
+		}
+
+		[Ordinal(9)] 
 		[RED("briefingType")] 
 		public CEnum<questBriefingType> BriefingType
 		{
@@ -76,8 +84,17 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<questBriefingType>>(value);
 		}
 
+		[Ordinal(10)] 
+		[RED("enableScanner")] 
+		public CBool EnableScanner
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public questBriefingSequencePlayer_NodeType()
 		{
+			BriefingPlayerType = Enums.questBriefingPlayerType.Hud;
 			BriefingType = Enums.questBriefingType.Hud;
 
 			PostConstruct();

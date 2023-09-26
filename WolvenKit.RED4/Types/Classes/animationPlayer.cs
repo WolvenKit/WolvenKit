@@ -69,6 +69,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(9)] 
+		[RED("dependsOnTimeDilation")] 
+		public CBool DependsOnTimeDilation
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(10)] 
 		[RED("anim")] 
 		public CHandle<inkanimProxy> Anim
 		{

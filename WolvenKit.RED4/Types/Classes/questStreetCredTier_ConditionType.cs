@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class questStreetCredTier_ConditionType : questIStatsConditionType
 	{
-		[Ordinal(0)] 
+		[Ordinal(1)] 
 		[RED("tierID")] 
 		public TweakDBID TierID
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("comparisonType")] 
 		public CEnum<EComparisonType> ComparisonType
 		{

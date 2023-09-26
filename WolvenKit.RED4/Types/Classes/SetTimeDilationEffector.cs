@@ -52,6 +52,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(6)] 
+		[RED("affectsPlayer")] 
+		public CBool AffectsPlayer
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public SetTimeDilationEffector()
 		{
 			PostConstruct();

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameItemObject : gameTimeDilatable
 	{
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("updateBucket")] 
 		public CEnum<UpdateBucketEnum> UpdateBucket
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<UpdateBucketEnum>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("lootQuality")] 
 		public CEnum<gamedataQuality> LootQuality
 		{
@@ -20,9 +20,17 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataQuality>>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("isIconic")] 
 		public CBool IsIconic
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(39)] 
+		[RED("isBroken")] 
+		public CBool IsBroken
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);

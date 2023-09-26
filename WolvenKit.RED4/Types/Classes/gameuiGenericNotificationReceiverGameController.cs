@@ -12,9 +12,27 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkEmptyCallback>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("NotificationPaused")] 
+		public inkEmptyCallback NotificationPaused
+		{
+			get => GetPropertyValue<inkEmptyCallback>();
+			set => SetPropertyValue<inkEmptyCallback>(value);
+		}
+
+		[Ordinal(4)] 
+		[RED("NotificationResumed")] 
+		public inkEmptyCallback NotificationResumed
+		{
+			get => GetPropertyValue<inkEmptyCallback>();
+			set => SetPropertyValue<inkEmptyCallback>(value);
+		}
+
 		public gameuiGenericNotificationReceiverGameController()
 		{
 			ItemChanged = new inkEmptyCallback();
+			NotificationPaused = new inkEmptyCallback();
+			NotificationResumed = new inkEmptyCallback();
 
 			PostConstruct();
 		}

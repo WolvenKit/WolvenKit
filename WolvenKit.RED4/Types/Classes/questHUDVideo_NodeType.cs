@@ -77,6 +77,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(9)] 
+		[RED("useFullscreenVideoState")] 
+		public CBool UseFullscreenVideoState
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("keepWidescreenAspectRatio")] 
+		public CBool KeepWidescreenAspectRatio
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(11)] 
 		[RED("position")] 
 		public Vector2 Position
 		{
@@ -84,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector2>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(12)] 
 		[RED("size")] 
 		public Vector2 Size
 		{

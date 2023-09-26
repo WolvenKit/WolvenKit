@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class HitIsTheSameTargetPrereqState : GenericHitPrereqState
 	{
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("previousTarget")] 
 		public CWeakHandle<gameObject> PreviousTarget
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("previousSource")] 
 		public CWeakHandle<gameObject> PreviousSource
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("previousWeapon")] 
 		public CWeakHandle<gameweaponObject> PreviousWeapon
 		{

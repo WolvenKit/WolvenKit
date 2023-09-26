@@ -85,6 +85,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(13)] 
+		[RED("rightPanelFluff1")] 
+		public inkWidgetReference RightPanelFluff1
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(14)] 
+		[RED("rightPanelFluff2")] 
+		public inkWidgetReference RightPanelFluff2
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(15)] 
 		[RED("TooltipsManager")] 
 		public CWeakHandle<gameuiTooltipsManager> TooltipsManager
 		{
@@ -92,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameuiTooltipsManager>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(16)] 
 		[RED("InventoryManager")] 
 		public CHandle<InventoryDataManagerV2> InventoryManager
 		{
@@ -100,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<InventoryDataManagerV2>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(17)] 
 		[RED("player")] 
 		public CWeakHandle<PlayerPuppet> Player
 		{
@@ -108,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(18)] 
 		[RED("healthStatsData")] 
 		public CArray<gameStatViewData> HealthStatsData
 		{
@@ -116,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameStatViewData>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(19)] 
 		[RED("DPSStatsData")] 
 		public CArray<gameStatViewData> DPSStatsData
 		{
@@ -124,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameStatViewData>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("armorStatsData")] 
 		public CArray<gameStatViewData> ArmorStatsData
 		{
@@ -132,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameStatViewData>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(21)] 
 		[RED("otherStatsData")] 
 		public CArray<gameStatViewData> OtherStatsData
 		{
@@ -140,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameStatViewData>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(22)] 
 		[RED("playerStatsBlackboard")] 
 		public CWeakHandle<gameIBlackboard> PlayerStatsBlackboard
 		{
@@ -148,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(23)] 
 		[RED("currencyListener")] 
 		public CHandle<redCallbackObject> CurrencyListener
 		{
@@ -156,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(24)] 
 		[RED("characterCredListener")] 
 		public CHandle<redCallbackObject> CharacterCredListener
 		{
@@ -164,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(25)] 
 		[RED("characterLevelListener")] 
 		public CHandle<redCallbackObject> CharacterLevelListener
 		{
@@ -172,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(26)] 
 		[RED("characterCurrentXPListener")] 
 		public CHandle<redCallbackObject> CharacterCurrentXPListener
 		{
@@ -180,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(27)] 
 		[RED("characterCredPointsListener")] 
 		public CHandle<redCallbackObject> CharacterCredPointsListener
 		{
@@ -188,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(28)] 
 		[RED("PDS")] 
 		public CHandle<PlayerDevelopmentSystem> PDS
 		{
@@ -196,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<PlayerDevelopmentSystem>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(29)] 
 		[RED("levelController")] 
 		public CWeakHandle<StatsProgressController> LevelController
 		{
@@ -204,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<StatsProgressController>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(30)] 
 		[RED("streetCredController")] 
 		public CWeakHandle<StatsProgressController> StreetCredController
 		{
@@ -212,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<StatsProgressController>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(31)] 
 		[RED("detailListController")] 
 		public CWeakHandle<StatsDetailListController> DetailListController
 		{
@@ -220,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<StatsDetailListController>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(32)] 
 		[RED("statsStreetCredReward")] 
 		public CWeakHandle<StatsStreetCredReward> StatsStreetCredReward
 		{
@@ -228,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<StatsStreetCredReward>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(33)] 
 		[RED("statsPlayTimeController")] 
 		public CWeakHandle<StatsPlayTimeController> StatsPlayTimeController
 		{
@@ -236,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<StatsPlayTimeController>>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(34)] 
 		[RED("previousMenuData")] 
 		public CHandle<PreviousMenuData> PreviousMenuData
 		{
@@ -244,12 +260,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<PreviousMenuData>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(35)] 
 		[RED("buttonHintsController")] 
 		public CWeakHandle<ButtonHints> ButtonHintsController
 		{
 			get => GetPropertyValue<CWeakHandle<ButtonHints>>();
 			set => SetPropertyValue<CWeakHandle<ButtonHints>>(value);
+		}
+
+		[Ordinal(36)] 
+		[RED("animProxy")] 
+		public CHandle<inkanimProxy> AnimProxy
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		public StatsMainGameController()
@@ -264,6 +288,8 @@ namespace WolvenKit.RED4.Types
 			StatsPlayTimeControllerdRef = new inkWidgetReference();
 			BtnInventory = new inkWidgetReference();
 			ButtonHintsManagerRef = new inkWidgetReference();
+			RightPanelFluff1 = new inkWidgetReference();
+			RightPanelFluff2 = new inkWidgetReference();
 			HealthStatsData = new();
 			DPSStatsData = new();
 			ArmorStatsData = new();

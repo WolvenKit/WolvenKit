@@ -5,38 +5,6 @@ namespace WolvenKit.RED4.Types
 	public partial class VendorHubMenuGameController : gameuiMenuGameController
 	{
 		[Ordinal(3)] 
-		[RED("tabRootContainer")] 
-		public inkWidgetReference TabRootContainer
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(4)] 
-		[RED("tabRootRef")] 
-		public inkWidgetReference TabRootRef
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(5)] 
-		[RED("playerCurrency")] 
-		public inkTextWidgetReference PlayerCurrency
-		{
-			get => GetPropertyValue<inkTextWidgetReference>();
-			set => SetPropertyValue<inkTextWidgetReference>(value);
-		}
-
-		[Ordinal(6)] 
-		[RED("vendorShopLabel")] 
-		public inkTextWidgetReference VendorShopLabel
-		{
-			get => GetPropertyValue<inkTextWidgetReference>();
-			set => SetPropertyValue<inkTextWidgetReference>(value);
-		}
-
-		[Ordinal(7)] 
 		[RED("notificationRoot")] 
 		public inkWidgetReference NotificationRoot
 		{
@@ -44,15 +12,63 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(8)] 
-		[RED("playerWeight")] 
-		public inkTextWidgetReference PlayerWeight
+		[Ordinal(4)] 
+		[RED("tabRootContainer")] 
+		public inkWidgetReference TabRootContainer
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("tabRootRef")] 
+		public inkWidgetReference TabRootRef
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(6)] 
+		[RED("playerCredits")] 
+		public inkWidgetReference PlayerCredits
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("playerCreditsValue")] 
+		public inkTextWidgetReference PlayerCreditsValue
 		{
 			get => GetPropertyValue<inkTextWidgetReference>();
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
+		[Ordinal(8)] 
+		[RED("playerWeight")] 
+		public inkWidgetReference PlayerWeight
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
 		[Ordinal(9)] 
+		[RED("playerWeightValue")] 
+		public inkTextWidgetReference PlayerWeightValue
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("vendorShopLabel")] 
+		public inkTextWidgetReference VendorShopLabel
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(11)] 
 		[RED("levelValue")] 
 		public inkTextWidgetReference LevelValue
 		{
@@ -60,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(12)] 
 		[RED("streetCredLabel")] 
 		public inkTextWidgetReference StreetCredLabel
 		{
@@ -68,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(13)] 
 		[RED("levelBarProgress")] 
 		public inkWidgetReference LevelBarProgress
 		{
@@ -76,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(14)] 
 		[RED("levelBarSpacer")] 
 		public inkWidgetReference LevelBarSpacer
 		{
@@ -84,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(15)] 
 		[RED("streetCredBarProgress")] 
 		public inkWidgetReference StreetCredBarProgress
 		{
@@ -92,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(16)] 
 		[RED("streetCredBarSpacer")] 
 		public inkWidgetReference StreetCredBarSpacer
 		{
@@ -100,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(17)] 
 		[RED("VendorDataManager")] 
 		public CHandle<VendorDataManager> VendorDataManager
 		{
@@ -108,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<VendorDataManager>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(18)] 
 		[RED("vendorUserData")] 
 		public CHandle<VendorUserData> VendorUserData
 		{
@@ -116,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<VendorUserData>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(19)] 
 		[RED("vendorPanelData")] 
 		public CHandle<questVendorPanelData> VendorPanelData
 		{
@@ -124,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<questVendorPanelData>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("storageUserData")] 
 		public CHandle<StorageUserData> StorageUserData
 		{
@@ -132,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<StorageUserData>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(21)] 
 		[RED("PDS")] 
 		public CHandle<PlayerDevelopmentSystem> PDS
 		{
@@ -140,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<PlayerDevelopmentSystem>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(22)] 
 		[RED("root")] 
 		public CWeakHandle<inkWidget> Root
 		{
@@ -148,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(23)] 
 		[RED("tabRoot")] 
 		public CWeakHandle<TabRadioGroup> TabRoot
 		{
@@ -156,7 +172,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<TabRadioGroup>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(24)] 
+		[RED("playerMoneyAnimator")] 
+		public CWeakHandle<MoneyLabelController> PlayerMoneyAnimator
+		{
+			get => GetPropertyValue<CWeakHandle<MoneyLabelController>>();
+			set => SetPropertyValue<CWeakHandle<MoneyLabelController>>(value);
+		}
+
+		[Ordinal(25)] 
 		[RED("VendorBlackboard")] 
 		public CWeakHandle<gameIBlackboard> VendorBlackboard
 		{
@@ -164,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(26)] 
 		[RED("playerStatsBlackboard")] 
 		public CWeakHandle<gameIBlackboard> PlayerStatsBlackboard
 		{
@@ -172,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(27)] 
 		[RED("VendorBlackboardDef")] 
 		public CHandle<UI_VendorDef> VendorBlackboardDef
 		{
@@ -180,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_VendorDef>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(28)] 
 		[RED("VendorUpdatedCallbackID")] 
 		public CHandle<redCallbackObject> VendorUpdatedCallbackID
 		{
@@ -188,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(29)] 
 		[RED("weightListener")] 
 		public CHandle<redCallbackObject> WeightListener
 		{
@@ -196,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(30)] 
 		[RED("characterLevelListener")] 
 		public CHandle<redCallbackObject> CharacterLevelListener
 		{
@@ -204,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(31)] 
 		[RED("characterCurrentXPListener")] 
 		public CHandle<redCallbackObject> CharacterCurrentXPListener
 		{
@@ -212,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(32)] 
 		[RED("characterCredListener")] 
 		public CHandle<redCallbackObject> CharacterCredListener
 		{
@@ -220,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(33)] 
 		[RED("characterCredPointsListener")] 
 		public CHandle<redCallbackObject> CharacterCredPointsListener
 		{
@@ -228,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(34)] 
 		[RED("characterCurrentHealthListener")] 
 		public CHandle<redCallbackObject> CharacterCurrentHealthListener
 		{
@@ -236,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(35)] 
 		[RED("menuEventDispatcher")] 
 		public CWeakHandle<inkMenuEventDispatcher> MenuEventDispatcher
 		{
@@ -244,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(36)] 
 		[RED("player")] 
 		public CWeakHandle<PlayerPuppet> Player
 		{
@@ -252,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(37)] 
 		[RED("menuData")] 
 		public CArray<MenuData> MenuData
 		{
@@ -260,7 +284,31 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<MenuData>>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(38)] 
+		[RED("activeMenu")] 
+		public CInt32 ActiveMenu
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(39)] 
+		[RED("isChangedManually")] 
+		public CBool IsChangedManually
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(40)] 
+		[RED("cameFromRipperdoc")] 
+		public CBool CameFromRipperdoc
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(41)] 
 		[RED("storageDef")] 
 		public CHandle<StorageBlackboardDef> StorageDef
 		{
@@ -268,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<StorageBlackboardDef>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(42)] 
 		[RED("storageBlackboard")] 
 		public CWeakHandle<gameIBlackboard> StorageBlackboard
 		{
@@ -278,12 +326,14 @@ namespace WolvenKit.RED4.Types
 
 		public VendorHubMenuGameController()
 		{
+			NotificationRoot = new inkWidgetReference();
 			TabRootContainer = new inkWidgetReference();
 			TabRootRef = new inkWidgetReference();
-			PlayerCurrency = new inkTextWidgetReference();
+			PlayerCredits = new inkWidgetReference();
+			PlayerCreditsValue = new inkTextWidgetReference();
+			PlayerWeight = new inkWidgetReference();
+			PlayerWeightValue = new inkTextWidgetReference();
 			VendorShopLabel = new inkTextWidgetReference();
-			NotificationRoot = new inkWidgetReference();
-			PlayerWeight = new inkTextWidgetReference();
 			LevelValue = new inkTextWidgetReference();
 			StreetCredLabel = new inkTextWidgetReference();
 			LevelBarProgress = new inkWidgetReference();

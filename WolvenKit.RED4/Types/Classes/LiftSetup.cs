@@ -84,6 +84,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
+		[Ordinal(10)] 
+		[RED("movingCurve")] 
+		public CName MovingCurve
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(11)] 
+		[RED("extraFX")] 
+		public EffectFiringData ExtraFX
+		{
+			get => GetPropertyValue<EffectFiringData>();
+			set => SetPropertyValue<EffectFiringData>(value);
+		}
+
 		public LiftSetup()
 		{
 			LiftSpeed = 2.500000F;
@@ -91,6 +107,8 @@ namespace WolvenKit.RED4.Types
 			LiftTravelTimeOverride = 4.000000F;
 			EmptyLiftSpeedMultiplier = 2.000000F;
 			RadioStationNumer = -1;
+			MovingCurve = "cosine";
+			ExtraFX = new EffectFiringData();
 
 			PostConstruct();
 		}

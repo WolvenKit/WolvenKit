@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class WeaponVendingMachineControllerPS : VendingMachineControllerPS
 	{
-		[Ordinal(112)] 
+		[Ordinal(115)] 
 		[RED("weaponVendingMachineSetup")] 
 		public WeaponVendingMachineSetup WeaponVendingMachineSetup
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<WeaponVendingMachineSetup>(value);
 		}
 
-		[Ordinal(113)] 
+		[Ordinal(116)] 
 		[RED("weaponVendingMachineSFX")] 
 		public WeaponVendingMachineSFX WeaponVendingMachineSFX
 		{

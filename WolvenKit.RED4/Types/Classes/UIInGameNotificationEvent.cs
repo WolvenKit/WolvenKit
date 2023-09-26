@@ -13,11 +13,11 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
-		[RED("additionalInfo")] 
-		public CVariant AdditionalInfo
+		[RED("animContainer")] 
+		public CWeakHandle<inGameMenuAnimContainer> AnimContainer
 		{
-			get => GetPropertyValue<CVariant>();
-			set => SetPropertyValue<CVariant>(value);
+			get => GetPropertyValue<CWeakHandle<inGameMenuAnimContainer>>();
+			set => SetPropertyValue<CWeakHandle<inGameMenuAnimContainer>>(value);
 		}
 
 		[Ordinal(2)] 

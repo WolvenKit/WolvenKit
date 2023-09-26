@@ -21,6 +21,54 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(11)] 
+		[RED("attencionIcon")] 
+		public inkWidgetReference AttencionIcon
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("neutralIcon")] 
+		public inkWidgetReference NeutralIcon
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(13)] 
+		[RED("vehicleIcon")] 
+		public inkWidgetReference VehicleIcon
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(14)] 
+		[RED("apartmentIcon")] 
+		public inkWidgetReference ApartmentIcon
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(15)] 
+		[RED("relicIcon")] 
+		public inkWidgetReference RelicIcon
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(16)] 
+		[RED("moneyIcon")] 
+		public inkWidgetReference MoneyIcon
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(17)] 
 		[RED("blackboard")] 
 		public CWeakHandle<gameIBlackboard> Blackboard
 		{
@@ -28,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(18)] 
 		[RED("blackboardDef")] 
 		public CHandle<UI_NotificationsDef> BlackboardDef
 		{
@@ -36,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_NotificationsDef>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(19)] 
 		[RED("warningMessageCallbackId")] 
 		public CHandle<redCallbackObject> WarningMessageCallbackId
 		{
@@ -44,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(20)] 
 		[RED("simpleMessage")] 
 		public gameSimpleScreenMessage SimpleMessage
 		{
@@ -52,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameSimpleScreenMessage>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(21)] 
 		[RED("blinkingAnim")] 
 		public CHandle<inkanimDefinition> BlinkingAnim
 		{
@@ -60,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(22)] 
 		[RED("showAnim")] 
 		public CHandle<inkanimDefinition> ShowAnim
 		{
@@ -68,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(23)] 
 		[RED("hideAnim")] 
 		public CHandle<inkanimDefinition> HideAnim
 		{
@@ -76,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(24)] 
 		[RED("animProxyShow")] 
 		public CHandle<inkanimProxy> AnimProxyShow
 		{
@@ -84,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(25)] 
 		[RED("animProxyHide")] 
 		public CHandle<inkanimProxy> AnimProxyHide
 		{
@@ -92,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(26)] 
 		[RED("animProxyTimeout")] 
 		public CHandle<inkanimProxy> AnimProxyTimeout
 		{
@@ -103,6 +151,12 @@ namespace WolvenKit.RED4.Types
 		public WarningMessageGameController()
 		{
 			MainTextWidget = new inkTextWidgetReference();
+			AttencionIcon = new inkWidgetReference();
+			NeutralIcon = new inkWidgetReference();
+			VehicleIcon = new inkWidgetReference();
+			ApartmentIcon = new inkWidgetReference();
+			RelicIcon = new inkWidgetReference();
+			MoneyIcon = new inkWidgetReference();
 			SimpleMessage = new gameSimpleScreenMessage();
 
 			PostConstruct();

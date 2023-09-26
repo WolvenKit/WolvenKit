@@ -85,6 +85,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(11)] 
+		[RED("damagePreviewBar")] 
+		public inkWidgetReference DamagePreviewBar
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(12)] 
 		[RED("showBarCap")] 
 		public CBool ShowBarCap
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("animDuration")] 
 		public CFloat AnimDuration
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("full_anim_proxy")] 
 		public CHandle<inkanimProxy> Full_anim_proxy
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("full_anim")] 
 		public CHandle<inkanimDefinition> Full_anim
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("empty_anim_proxy")] 
 		public CHandle<inkanimProxy> Empty_anim_proxy
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("empty_anim")] 
 		public CHandle<inkanimDefinition> Empty_anim
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("changeP_anim_proxy")] 
 		public CHandle<inkanimProxy> ChangeP_anim_proxy
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("changeP_anim")] 
 		public CHandle<inkanimDefinition> ChangeP_anim
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("changeN_anim_proxy")] 
 		public CHandle<inkanimProxy> ChangeN_anim_proxy
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("changeN_anim")] 
 		public CHandle<inkanimDefinition> ChangeN_anim
 		{
@@ -164,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("barCap_anim_proxy")] 
 		public CHandle<inkanimProxy> BarCap_anim_proxy
 		{
@@ -172,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("barCap_anim")] 
 		public CHandle<inkanimDefinition> BarCap_anim
 		{
@@ -180,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("rootWidget")] 
 		public CWeakHandle<inkCompoundWidget> RootWidget
 		{
@@ -198,6 +206,7 @@ namespace WolvenKit.RED4.Types
 			ChangeNBar = new inkWidgetReference();
 			EmptyBar = new inkWidgetReference();
 			BarCap = new inkWidgetReference();
+			DamagePreviewBar = new inkWidgetReference();
 			AnimDuration = 2.000000F;
 
 			PostConstruct();

@@ -36,9 +36,18 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(4)] 
+		[RED("destructionTimeStamp")] 
+		public EngineTime DestructionTimeStamp
+		{
+			get => GetPropertyValue<EngineTime>();
+			set => SetPropertyValue<EngineTime>(value);
+		}
+
 		public vehiclePlayerVehicle()
 		{
 			VehicleType = Enums.gamedataVehicleType.Invalid;
+			DestructionTimeStamp = new EngineTime();
 
 			PostConstruct();
 		}

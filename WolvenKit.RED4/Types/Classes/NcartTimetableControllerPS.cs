@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class NcartTimetableControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("ncartTimetableSetup")] 
 		public NcartTimetableSetup NcartTimetableSetup
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NcartTimetableSetup>(value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("currentTimeToDepart")] 
 		public CInt32 CurrentTimeToDepart
 		{

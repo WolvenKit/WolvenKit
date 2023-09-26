@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class TransmogButtonView : BaseButtonView
 	{
-		[Ordinal(2)] 
+		[Ordinal(5)] 
 		[RED("container")] 
 		public inkWidgetReference Container
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(6)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{

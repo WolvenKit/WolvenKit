@@ -21,6 +21,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(9)] 
+		[RED("reEnterSignpost")] 
+		public CName ReEnterSignpost
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("preExitSignpost")] 
+		public CName PreExitSignpost
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(11)] 
 		[RED("exitCooldown")] 
 		public CFloat ExitCooldown
 		{

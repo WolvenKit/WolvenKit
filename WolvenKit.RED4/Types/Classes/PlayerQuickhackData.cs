@@ -5,6 +5,14 @@ namespace WolvenKit.RED4.Types
 	public partial class PlayerQuickhackData : RedBaseClass
 	{
 		[Ordinal(0)] 
+		[RED("itemID")] 
+		public gameItemID ItemID
+		{
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
+		}
+
+		[Ordinal(1)] 
 		[RED("actionRecord")] 
 		public CWeakHandle<gamedataObjectAction_Record> ActionRecord
 		{
@@ -12,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gamedataObjectAction_Record>>(value);
 		}
 
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("quality")] 
 		public CInt32 Quality
 		{
@@ -22,6 +30,8 @@ namespace WolvenKit.RED4.Types
 
 		public PlayerQuickhackData()
 		{
+			ItemID = new gameItemID();
+
 			PostConstruct();
 		}
 

@@ -29,14 +29,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(6)] 
-		[RED("buttonTrack")] 
-		public inkWidgetReference ButtonTrack
+		[RED("filtersList")] 
+		public inkWidgetReference FiltersList
 		{
 			get => GetPropertyValue<inkWidgetReference>();
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(7)] 
+		[RED("questList")] 
+		public inkWidgetReference QuestList
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(8)] 
 		[RED("game")] 
 		public ScriptGameInstance Game
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<ScriptGameInstance>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("journalManager")] 
 		public CWeakHandle<gameJournalManager> JournalManager
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameJournalManager>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("quests")] 
 		public CArray<CWeakHandle<gameJournalEntry>> Quests
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<gameJournalEntry>>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("resolvedQuests")] 
 		public CArray<CWeakHandle<gameJournalEntry>> ResolvedQuests
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<gameJournalEntry>>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("buttonHintsController")] 
 		public CWeakHandle<ButtonHints> ButtonHintsController
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ButtonHints>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("menuEventDispatcher")] 
 		public CWeakHandle<inkMenuEventDispatcher> MenuEventDispatcher
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("trackedQuest")] 
 		public CWeakHandle<gameJournalQuest> TrackedQuest
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameJournalQuest>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("curreentQuest")] 
 		public CWeakHandle<gameJournalQuest> CurreentQuest
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameJournalQuest>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("externallyOpenedQuestHash")] 
 		public CInt32 ExternallyOpenedQuestHash
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("playerLevel")] 
 		public CInt32 PlayerLevel
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("recommendedLevel")] 
 		public CInt32 RecommendedLevel
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("entryAnimProxy")] 
 		public CHandle<inkanimProxy> EntryAnimProxy
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("canUsePhone")] 
 		public CBool CanUsePhone
 		{
@@ -140,12 +148,156 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(20)] 
-		[RED("listData")] 
-		public CArray<CHandle<VirutalNestedListData>> ListData
+		[Ordinal(21)] 
+		[RED("detailsPanelCtrl")] 
+		public CWeakHandle<QuestDetailsPanelController> DetailsPanelCtrl
 		{
-			get => GetPropertyValue<CArray<CHandle<VirutalNestedListData>>>();
-			set => SetPropertyValue<CArray<CHandle<VirutalNestedListData>>>(value);
+			get => GetPropertyValue<CWeakHandle<QuestDetailsPanelController>>();
+			set => SetPropertyValue<CWeakHandle<QuestDetailsPanelController>>(value);
+		}
+
+		[Ordinal(22)] 
+		[RED("virtualListController")] 
+		public CWeakHandle<QuestListVirtualController> VirtualListController
+		{
+			get => GetPropertyValue<CWeakHandle<QuestListVirtualController>>();
+			set => SetPropertyValue<CWeakHandle<QuestListVirtualController>>(value);
+		}
+
+		[Ordinal(23)] 
+		[RED("filters")] 
+		public CArray<CWeakHandle<QuestListFilterButtonController>> Filters
+		{
+			get => GetPropertyValue<CArray<CWeakHandle<QuestListFilterButtonController>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<QuestListFilterButtonController>>>(value);
+		}
+
+		[Ordinal(24)] 
+		[RED("activeFilter")] 
+		public CWeakHandle<QuestListFilterButtonController> ActiveFilter
+		{
+			get => GetPropertyValue<CWeakHandle<QuestListFilterButtonController>>();
+			set => SetPropertyValue<CWeakHandle<QuestListFilterButtonController>>(value);
+		}
+
+		[Ordinal(25)] 
+		[RED("currentCustomFilterIndex")] 
+		public CInt32 CurrentCustomFilterIndex
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(26)] 
+		[RED("axisDataThreshold")] 
+		public CFloat AxisDataThreshold
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(27)] 
+		[RED("mouseDataThreshold")] 
+		public CFloat MouseDataThreshold
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(28)] 
+		[RED("delayedShowDuration")] 
+		public CFloat DelayedShowDuration
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(29)] 
+		[RED("delayedShow")] 
+		public gameDelayID DelayedShow
+		{
+			get => GetPropertyValue<gameDelayID>();
+			set => SetPropertyValue<gameDelayID>(value);
+		}
+
+		[Ordinal(30)] 
+		[RED("listPanelHoverd")] 
+		public CBool ListPanelHoverd
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(31)] 
+		[RED("isDelayTicking")] 
+		public CBool IsDelayTicking
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(32)] 
+		[RED("firstInit")] 
+		public CBool FirstInit
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(33)] 
+		[RED("filterSwich")] 
+		public CBool FilterSwich
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(34)] 
+		[RED("questData")] 
+		public CWeakHandle<gameJournalQuest> QuestData
+		{
+			get => GetPropertyValue<CWeakHandle<gameJournalQuest>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalQuest>>(value);
+		}
+
+		[Ordinal(35)] 
+		[RED("appliedQuestData")] 
+		public CWeakHandle<gameJournalQuest> AppliedQuestData
+		{
+			get => GetPropertyValue<CWeakHandle<gameJournalQuest>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalQuest>>(value);
+		}
+
+		[Ordinal(36)] 
+		[RED("skipAnimation")] 
+		public CBool SkipAnimation
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(37)] 
+		[RED("listData")] 
+		public CArray<CHandle<QuestListItemData>> ListData
+		{
+			get => GetPropertyValue<CArray<CHandle<QuestListItemData>>>();
+			set => SetPropertyValue<CArray<CHandle<QuestListItemData>>>(value);
+		}
+
+		[Ordinal(38)] 
+		[RED("questTypeList")] 
+		public CArray<CEnum<QuestListItemType>> QuestTypeList
+		{
+			get => GetPropertyValue<CArray<CEnum<QuestListItemType>>>();
+			set => SetPropertyValue<CArray<CEnum<QuestListItemType>>>(value);
+		}
+
+		[Ordinal(39)] 
+		[RED("questToOpen")] 
+		public CWeakHandle<gameJournalQuest> QuestToOpen
+		{
+			get => GetPropertyValue<CWeakHandle<gameJournalQuest>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalQuest>>(value);
 		}
 
 		public questLogGameController()
@@ -153,11 +305,18 @@ namespace WolvenKit.RED4.Types
 			VirtualList = new inkWidgetReference();
 			DetailsPanel = new inkWidgetReference();
 			ButtonHints = new inkWidgetReference();
-			ButtonTrack = new inkWidgetReference();
+			FiltersList = new inkWidgetReference();
+			QuestList = new inkWidgetReference();
 			Game = new ScriptGameInstance();
 			Quests = new();
 			ResolvedQuests = new();
+			Filters = new();
+			AxisDataThreshold = 0.500000F;
+			MouseDataThreshold = 7.000000F;
+			DelayedShowDuration = 0.200000F;
+			DelayedShow = new gameDelayID();
 			ListData = new();
+			QuestTypeList = new();
 
 			PostConstruct();
 		}

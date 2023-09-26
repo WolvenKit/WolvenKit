@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class InventoryWeaponDisplayController : InventoryItemDisplayController
 	{
-		[Ordinal(99)] 
+		[Ordinal(116)] 
 		[RED("weaponSpecyficModsRoot")] 
 		public inkCompoundWidgetReference WeaponSpecyficModsRoot
 		{
@@ -12,47 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(100)] 
-		[RED("statsWrapper")] 
-		public inkWidgetReference StatsWrapper
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(101)] 
-		[RED("dpsText")] 
-		public inkTextWidgetReference DpsText
-		{
-			get => GetPropertyValue<inkTextWidgetReference>();
-			set => SetPropertyValue<inkTextWidgetReference>(value);
-		}
-
-		[Ordinal(102)] 
-		[RED("damageTypeIndicatorImage")] 
-		public inkImageWidgetReference DamageTypeIndicatorImage
-		{
-			get => GetPropertyValue<inkImageWidgetReference>();
-			set => SetPropertyValue<inkImageWidgetReference>(value);
-		}
-
-		[Ordinal(103)] 
-		[RED("dpsWrapper")] 
-		public inkWidgetReference DpsWrapper
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(104)] 
-		[RED("dpsValue")] 
-		public inkTextWidgetReference DpsValue
-		{
-			get => GetPropertyValue<inkTextWidgetReference>();
-			set => SetPropertyValue<inkTextWidgetReference>(value);
-		}
-
-		[Ordinal(105)] 
+		[Ordinal(117)] 
 		[RED("silencerIcon")] 
 		public inkWidgetReference SilencerIcon
 		{
@@ -60,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(118)] 
 		[RED("scopeIcon")] 
 		public inkWidgetReference ScopeIcon
 		{
@@ -68,7 +28,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(119)] 
+		[RED("ammoIcon")] 
+		public inkImageWidgetReference AmmoIcon
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(120)] 
 		[RED("weaponAttachmentsDisplay")] 
 		public CArray<CWeakHandle<InventoryItemPartDisplay>> WeaponAttachmentsDisplay
 		{
@@ -79,13 +47,9 @@ namespace WolvenKit.RED4.Types
 		public InventoryWeaponDisplayController()
 		{
 			WeaponSpecyficModsRoot = new inkCompoundWidgetReference();
-			StatsWrapper = new inkWidgetReference();
-			DpsText = new inkTextWidgetReference();
-			DamageTypeIndicatorImage = new inkImageWidgetReference();
-			DpsWrapper = new inkWidgetReference();
-			DpsValue = new inkTextWidgetReference();
 			SilencerIcon = new inkWidgetReference();
 			ScopeIcon = new inkWidgetReference();
+			AmmoIcon = new inkImageWidgetReference();
 			WeaponAttachmentsDisplay = new();
 
 			PostConstruct();

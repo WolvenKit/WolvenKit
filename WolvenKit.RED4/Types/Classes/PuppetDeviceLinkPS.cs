@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class PuppetDeviceLinkPS : DeviceLinkComponentPS
 	{
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("securitySystemData")] 
 		public SecuritySystemData SecuritySystemData
 		{

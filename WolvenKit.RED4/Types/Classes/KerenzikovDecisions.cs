@@ -12,8 +12,18 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<DefaultTransitionStatListener>>(value);
 		}
 
+		[Ordinal(1)] 
+		[RED("activationGracePeriod")] 
+		public CFloat ActivationGracePeriod
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public KerenzikovDecisions()
 		{
+			ActivationGracePeriod = 0.200000F;
+
 			PostConstruct();
 		}
 

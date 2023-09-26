@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameJournalPhoneChoiceEntry : gameJournalEntry
 	{
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("text")] 
 		public LocalizationString Text
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<LocalizationString>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("isQuestImportant")] 
 		public CBool IsQuestImportant
 		{
@@ -22,6 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameJournalPhoneChoiceEntry()
 		{
+			JournalEntryOverrideDataList = new();
 			Text = new() { Unk1 = 0, Value = "" };
 
 			PostConstruct();

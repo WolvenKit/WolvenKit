@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
+		[RED("source")] 
+		public CHandle<questUniversalRef> Source
+		{
+			get => GetPropertyValue<CHandle<questUniversalRef>>();
+			set => SetPropertyValue<CHandle<questUniversalRef>>(value);
+		}
+
+		[Ordinal(2)] 
 		[RED("comparisonParams")] 
 		public CHandle<questComparisonParam> ComparisonParams
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<questComparisonParam>>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("killed")] 
 		public CBool Killed
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("unconscious")] 
 		public CBool Unconscious
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("defeated")] 
 		public CBool Defeated
 		{

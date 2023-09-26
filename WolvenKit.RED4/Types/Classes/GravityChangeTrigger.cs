@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class GravityChangeTrigger : gameObject
 	{
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("gravityType")] 
 		public CEnum<EGravityType> GravityType
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EGravityType>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("regularStateMachineName")] 
 		public CName RegularStateMachineName
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("lowGravityStateMachineName")] 
 		public CName LowGravityStateMachineName
 		{

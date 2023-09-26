@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CraftableItemLogicController : inkVirtualCompoundItemController
 	{
-		[Ordinal(15)] 
+		[Ordinal(18)] 
 		[RED("normalAppearence")] 
 		public inkCompoundWidgetReference NormalAppearence
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("controller")] 
 		public CWeakHandle<InventoryItemDisplayController> Controller
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<InventoryItemDisplayController>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("itemData")] 
 		public CHandle<ItemCraftingData> ItemData
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ItemCraftingData>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
 		[RED("recipeData")] 
 		public CHandle<RecipeData> RecipeData
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<RecipeData>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(22)] 
 		[RED("isSpawnInProgress")] 
 		public CBool IsSpawnInProgress
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(23)] 
 		[RED("displayToCreate")] 
 		public CName DisplayToCreate
 		{

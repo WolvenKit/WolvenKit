@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class InteractiveAd : InteractiveDevice
 	{
-		[Ordinal(94)] 
+		[Ordinal(98)] 
 		[RED("triggerComponent")] 
 		public CHandle<gameStaticTriggerAreaComponent> TriggerComponent
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>(value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(99)] 
 		[RED("triggerExitComponent")] 
 		public CHandle<gameStaticTriggerAreaComponent> TriggerExitComponent
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>(value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(100)] 
 		[RED("aduiComponent")] 
 		public CHandle<WorldWidgetComponent> AduiComponent
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<WorldWidgetComponent>>(value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(101)] 
 		[RED("showAd")] 
 		public CBool ShowAd
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(102)] 
 		[RED("showVendor")] 
 		public CBool ShowVendor
 		{

@@ -60,6 +60,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<textTextParameterSet>>(value);
 		}
 
+		[Ordinal(7)] 
+		[RED("notReplacedWorkaroundEnabled")] 
+		public CBool NotReplacedWorkaroundEnabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public gameUILocalizationDataPackage()
 		{
 			FloatValues = new();

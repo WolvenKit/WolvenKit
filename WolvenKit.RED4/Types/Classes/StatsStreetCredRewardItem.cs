@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class StatsStreetCredRewardItem : inkButtonController
 	{
-		[Ordinal(10)] 
+		[Ordinal(13)] 
 		[RED("levelRef")] 
 		public inkTextWidgetReference LevelRef
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(14)] 
 		[RED("iconRef")] 
 		public inkImageWidgetReference IconRef
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("data")] 
 		public CHandle<LevelRewardDisplayData> Data
 		{

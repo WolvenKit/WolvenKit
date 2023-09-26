@@ -44,6 +44,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(5)] 
+		[RED("allowCrowdOnPath")] 
+		public CBool AllowCrowdOnPath
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public questSimpleMoveOnSplineParams()
 		{
 			SnapToTerrain = true;

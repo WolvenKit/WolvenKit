@@ -5,15 +5,26 @@ namespace WolvenKit.RED4.Types
 	public partial class worldNavigationDeniedAreaNode : worldAreaShapeNode
 	{
 		[Ordinal(6)] 
-		[RED("flags")] 
-		public CBitField<worldEDeniedAreaFlags> Flags
+		[RED("human")] 
+		public CBool Human
 		{
-			get => GetPropertyValue<CBitField<worldEDeniedAreaFlags>>();
-			set => SetPropertyValue<CBitField<worldEDeniedAreaFlags>>(value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("vehicle")] 
+		public CBool Vehicle
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public worldNavigationDeniedAreaNode()
 		{
+			Human = true;
+			Vehicle = true;
+
 			PostConstruct();
 		}
 

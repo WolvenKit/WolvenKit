@@ -21,6 +21,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("distanceStat")] 
+		public CEnum<gamedataStatType> DistanceStat
+		{
+			get => GetPropertyValue<CEnum<gamedataStatType>>();
+			set => SetPropertyValue<CEnum<gamedataStatType>>(value);
+		}
+
+		[Ordinal(3)] 
 		[RED("invert")] 
 		public CBool Invert
 		{
@@ -30,6 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public ActionTargetInDistancePrereq()
 		{
+			DistanceStat = Enums.gamedataStatType.Invalid;
+
 			PostConstruct();
 		}
 

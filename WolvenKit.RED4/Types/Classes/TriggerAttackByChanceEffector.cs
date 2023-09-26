@@ -5,14 +5,6 @@ namespace WolvenKit.RED4.Types
 	public partial class TriggerAttackByChanceEffector : gameEffector
 	{
 		[Ordinal(0)] 
-		[RED("owner")] 
-		public CWeakHandle<gameObject> Owner
-		{
-			get => GetPropertyValue<CWeakHandle<gameObject>>();
-			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
-		}
-
-		[Ordinal(1)] 
 		[RED("attackTDBID")] 
 		public TweakDBID AttackTDBID
 		{
@@ -20,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(1)] 
 		[RED("chance")] 
 		public CFloat Chance
 		{
@@ -28,8 +20,43 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("statType")] 
+		public CEnum<gamedataStatType> StatType
+		{
+			get => GetPropertyValue<CEnum<gamedataStatType>>();
+			set => SetPropertyValue<CEnum<gamedataStatType>>(value);
+		}
+
+		[Ordinal(3)] 
+		[RED("ownerID")] 
+		public entEntityID OwnerID
+		{
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
+		}
+
+		[Ordinal(4)] 
+		[RED("statListener")] 
+		public CHandle<TriggerAttackByChanceStatListener> StatListener
+		{
+			get => GetPropertyValue<CHandle<TriggerAttackByChanceStatListener>>();
+			set => SetPropertyValue<CHandle<TriggerAttackByChanceStatListener>>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("statBasedChance")] 
+		public CFloat StatBasedChance
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public TriggerAttackByChanceEffector()
 		{
+			StatType = Enums.gamedataStatType.Invalid;
+			OwnerID = new entEntityID();
+
 			PostConstruct();
 		}
 

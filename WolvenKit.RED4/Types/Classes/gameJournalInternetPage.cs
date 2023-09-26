@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameJournalInternetPage : gameJournalEntry
 	{
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("address")] 
 		public CString Address
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("factsToSet")] 
 		public CArray<gameJournalFactNameValue> FactsToSet
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameJournalFactNameValue>>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("additionallyFilledFromScripts")] 
 		public CBool AdditionallyFilledFromScripts
 		{
@@ -28,7 +28,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
+		[RED("reloadOnZoomIn")] 
+		public CBool ReloadOnZoomIn
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(6)] 
 		[RED("widgetFile")] 
 		public CResourceAsyncReference<inkWidgetLibraryResource> WidgetFile
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<inkWidgetLibraryResource>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(7)] 
 		[RED("scale")] 
 		public CFloat Scale
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(8)] 
 		[RED("texts")] 
 		public CArray<CHandle<gameJournalInternetText>> Texts
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<gameJournalInternetText>>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(9)] 
 		[RED("rectangles")] 
 		public CArray<CHandle<gameJournalInternetRectangle>> Rectangles
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<gameJournalInternetRectangle>>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(10)] 
 		[RED("images")] 
 		public CArray<CHandle<gameJournalInternetImage>> Images
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<gameJournalInternetImage>>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(11)] 
 		[RED("videos")] 
 		public CArray<CHandle<gameJournalInternetVideo>> Videos
 		{
@@ -76,14 +84,25 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<gameJournalInternetVideo>>>(value);
 		}
 
+		[Ordinal(12)] 
+		[RED("canvases")] 
+		public CArray<CHandle<gameJournalInternetCanvas>> Canvases
+		{
+			get => GetPropertyValue<CArray<CHandle<gameJournalInternetCanvas>>>();
+			set => SetPropertyValue<CArray<CHandle<gameJournalInternetCanvas>>>(value);
+		}
+
 		public gameJournalInternetPage()
 		{
+			JournalEntryOverrideDataList = new();
 			FactsToSet = new();
+			ReloadOnZoomIn = true;
 			Scale = 1.000000F;
 			Texts = new();
 			Rectangles = new();
 			Images = new();
 			Videos = new();
+			Canvases = new();
 
 			PostConstruct();
 		}

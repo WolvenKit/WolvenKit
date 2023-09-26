@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameuiPuppetPreviewGameController : gameuiPreviewGameController
 	{
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("cameraController")] 
 		public gameuiPuppetPreviewCameraController CameraController
 		{

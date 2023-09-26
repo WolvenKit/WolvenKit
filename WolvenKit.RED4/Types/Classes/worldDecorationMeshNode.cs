@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldDecorationMeshNode : worldMeshNode
 	{
-		[Ordinal(16)] 
+		[Ordinal(18)] 
 		[RED("startAsleep")] 
 		public CBool StartAsleep
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(19)] 
 		[RED("filterDataSource")] 
 		public CEnum<physicsFilterDataSource> FilterDataSource
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<physicsFilterDataSource>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("filterData")] 
 		public CHandle<physicsFilterData> FilterData
 		{

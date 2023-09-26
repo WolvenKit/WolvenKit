@@ -28,10 +28,27 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("mergeScreenshots")] 
+		public CBool MergeScreenshots
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(4)] 
+		[RED("streamingObserverMode")] 
+		public CEnum<rendEStreamingObserverMode> StreamingObserverMode
+		{
+			get => GetPropertyValue<CEnum<rendEStreamingObserverMode>>();
+			set => SetPropertyValue<CEnum<rendEStreamingObserverMode>>(value);
+		}
+
 		public rendScreenshotBatchData()
 		{
 			BatchPositionsPath = new();
 			DelayTime = 1.000000F;
+			StreamingObserverMode = Enums.rendEStreamingObserverMode.Box;
 
 			PostConstruct();
 		}

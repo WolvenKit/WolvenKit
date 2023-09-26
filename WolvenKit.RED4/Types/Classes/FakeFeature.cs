@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class FakeFeature : gameObject
 	{
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("choices")] 
 		public CArray<SFakeFeatureChoice> Choices
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<SFakeFeatureChoice>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("interaction")] 
 		public CHandle<gameinteractionsComponent> Interaction
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameinteractionsComponent>>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("components")] 
 		public CArray<CHandle<entIPlacedComponent>> Components
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<entIPlacedComponent>>>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("scaningComponent")] 
 		public CHandle<gameScanningComponent> ScaningComponent
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameScanningComponent>>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("was_used")] 
 		public CBool Was_used
 		{

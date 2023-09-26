@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ProjectileLauncherRound : gameItemObject
 	{
-		[Ordinal(38)] 
+		[Ordinal(40)] 
 		[RED("projectileComponent")] 
 		public CHandle<gameprojectileComponent> ProjectileComponent
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameprojectileComponent>>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(41)] 
 		[RED("resourceLibraryComponent")] 
 		public CHandle<ResourceLibraryComponent> ResourceLibraryComponent
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ResourceLibraryComponent>>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(42)] 
 		[RED("user")] 
 		public CWeakHandle<gameObject> User
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(43)] 
 		[RED("projectile")] 
 		public CWeakHandle<gameObject> Projectile
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(44)] 
 		[RED("weapon")] 
 		public CWeakHandle<gameweaponObject> Weapon
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameweaponObject>>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(45)] 
 		[RED("projectileSpawnPoint")] 
 		public Vector4 ProjectileSpawnPoint
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(46)] 
 		[RED("launchMode")] 
 		public CEnum<gamedataProjectileLaunchMode> LaunchMode
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataProjectileLaunchMode>>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(47)] 
 		[RED("initialLaunchVelocity")] 
 		public CFloat InitialLaunchVelocity
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(48)] 
 		[RED("installedProjectile")] 
 		public gameItemID InstalledProjectile
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(49)] 
 		[RED("actionType")] 
 		public CEnum<ELauncherActionType> ActionType
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ELauncherActionType>>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(50)] 
 		[RED("attackRecord")] 
 		public CHandle<gamedataAttack_Record> AttackRecord
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gamedataAttack_Record>>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(51)] 
 		[RED("releaseRequestDelayID")] 
 		public gameDelayID ReleaseRequestDelayID
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(52)] 
 		[RED("detonateRequestDelayID")] 
 		public gameDelayID DetonateRequestDelayID
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(53)] 
 		[RED("projectileTrailName")] 
 		public CName ProjectileTrailName
 		{
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(54)] 
 		[RED("projectileCollisionEvaluator")] 
 		public CHandle<ProjectileLauncherRoundCollisionEvaluator> ProjectileCollisionEvaluator
 		{
@@ -124,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ProjectileLauncherRoundCollisionEvaluator>>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(55)] 
 		[RED("isAlive")] 
 		public CBool IsAlive
 		{
@@ -132,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(56)] 
 		[RED("isSinking")] 
 		public CBool IsSinking
 		{
@@ -140,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(57)] 
 		[RED("waterHeight")] 
 		public CFloat WaterHeight
 		{
@@ -148,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(58)] 
 		[RED("deepWaterDepth")] 
 		public CFloat DeepWaterDepth
 		{
@@ -156,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(59)] 
 		[RED("sinkingDetonationDelay")] 
 		public CFloat SinkingDetonationDelay
 		{
@@ -164,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(60)] 
 		[RED("waterSurfaceImpactImpulseRadius")] 
 		public CFloat WaterSurfaceImpactImpulseRadius
 		{
@@ -172,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(61)] 
 		[RED("waterSurfaceImpactImpulseStrength")] 
 		public CFloat WaterSurfaceImpactImpulseStrength
 		{
@@ -180,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(62)] 
 		[RED("waterDetonationImpulseRadius")] 
 		public CFloat WaterDetonationImpulseRadius
 		{
@@ -188,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(63)] 
 		[RED("waterDetonationImpulseStrength")] 
 		public CFloat WaterDetonationImpulseStrength
 		{

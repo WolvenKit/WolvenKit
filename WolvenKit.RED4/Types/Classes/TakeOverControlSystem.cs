@@ -61,6 +61,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(7)] 
+		[RED("isReleaseOnHitLocked")] 
+		public CBool IsReleaseOnHitLocked
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(8)] 
 		[RED("chainLockSources")] 
 		public CArray<CName> ChainLockSources
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("TCDUpdateDelayID")] 
 		public gameDelayID TCDUpdateDelayID
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("TCSupdateRate")] 
 		public CFloat TCSupdateRate
 		{
@@ -84,9 +92,25 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("lastInputSimTime")] 
 		public CFloat LastInputSimTime
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("sniperNestObject")] 
+		public CWeakHandle<gameObject> SniperNestObject
+		{
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
+		}
+
+		[Ordinal(13)] 
+		[RED("timestampLastTCS")] 
+		public CFloat TimestampLastTCS
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);

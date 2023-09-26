@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class MovableDeviceControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("MovableDeviceSetup")] 
 		public MovableDeviceSetup MovableDeviceSetup
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<MovableDeviceSetup>(value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("movableDeviceSkillChecks")] 
 		public CHandle<DemolitionContainer> MovableDeviceSkillChecks
 		{

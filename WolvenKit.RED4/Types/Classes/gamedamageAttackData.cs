@@ -69,6 +69,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(8)] 
+		[RED("numAttackSpread")] 
+		public CInt32 NumAttackSpread
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(9)] 
 		[RED("attackTime")] 
 		public CFloat AttackTime
 		{
@@ -76,7 +84,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
+		[RED("triggerMode")] 
+		public CEnum<gamedataTriggerMode> TriggerMode
+		{
+			get => GetPropertyValue<CEnum<gamedataTriggerMode>>();
+			set => SetPropertyValue<CEnum<gamedataTriggerMode>>(value);
+		}
+
+		[Ordinal(11)] 
 		[RED("flags")] 
 		public CArray<SHitFlag> Flags
 		{
@@ -84,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<SHitFlag>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(12)] 
 		[RED("statusEffects")] 
 		public CArray<SHitStatusEffect> StatusEffects
 		{
@@ -92,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<SHitStatusEffect>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(13)] 
 		[RED("hitType")] 
 		public CEnum<gameuiHitType> HitType
 		{
@@ -100,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameuiHitType>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(14)] 
 		[RED("vehicleImpactForce")] 
 		public CFloat VehicleImpactForce
 		{
@@ -108,12 +124,44 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(15)] 
+		[RED("minimumHealthPercent")] 
+		public CFloat MinimumHealthPercent
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(16)] 
 		[RED("additionalCritChance")] 
 		public CFloat AdditionalCritChance
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(17)] 
+		[RED("randRoll")] 
+		public CFloat RandRoll
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("hitReactionMin")] 
+		public CInt32 HitReactionMin
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(19)] 
+		[RED("hitReactionMax")] 
+		public CInt32 HitReactionMax
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		public gamedamageAttackData()

@@ -5,14 +5,6 @@ namespace WolvenKit.RED4.Types
 	public partial class TargetTrackingExtension : AITargetTrackerComponent
 	{
 		[Ordinal(5)] 
-		[RED("droppedThreatData")] 
-		public DroppedThreatData DroppedThreatData
-		{
-			get => GetPropertyValue<DroppedThreatData>();
-			set => SetPropertyValue<DroppedThreatData>(value);
-		}
-
-		[Ordinal(6)] 
 		[RED("trackedCombatSquads")] 
 		public CArray<CHandle<AICombatSquadScriptInterface>> TrackedCombatSquads
 		{
@@ -20,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<AICombatSquadScriptInterface>>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(6)] 
 		[RED("trackedCombatSquadsCounters")] 
 		public CArray<CInt32> TrackedCombatSquadsCounters
 		{
@@ -28,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CInt32>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(7)] 
 		[RED("threatPersistanceMemory")] 
 		public ThreatPersistanceMemory ThreatPersistanceMemory
 		{
@@ -36,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<ThreatPersistanceMemory>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(8)] 
 		[RED("hasBeenSeenByPlayer")] 
 		public CBool HasBeenSeenByPlayer
 		{
@@ -44,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(9)] 
 		[RED("canBeAddedToBossHealthbar")] 
 		public CBool CanBeAddedToBossHealthbar
 		{
@@ -52,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(10)] 
 		[RED("playerPuppet")] 
 		public CWeakHandle<gameObject> PlayerPuppet
 		{
@@ -62,7 +54,6 @@ namespace WolvenKit.RED4.Types
 
 		public TargetTrackingExtension()
 		{
-			DroppedThreatData = new DroppedThreatData { Position = new Vector4() };
 			TrackedCombatSquads = new();
 			TrackedCombatSquadsCounters = new();
 			ThreatPersistanceMemory = new ThreatPersistanceMemory { Threats = new(), IsPersistent = new() };

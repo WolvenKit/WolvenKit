@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CyberwareSlot : BaseButtonView
 	{
-		[Ordinal(2)] 
+		[Ordinal(5)] 
 		[RED("IconImageRef")] 
 		public inkImageWidgetReference IconImageRef
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(6)] 
 		[RED("SlotEquipArea")] 
 		public CEnum<gamedataEquipmentArea> SlotEquipArea
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataEquipmentArea>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(7)] 
 		[RED("NumSlots")] 
 		public CInt32 NumSlots
 		{

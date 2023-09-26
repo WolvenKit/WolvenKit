@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class characterCreationSummaryListItem : inkListItemController
 	{
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("headerLabel")] 
 		public inkTextWidgetReference HeaderLabel
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("descLabel")] 
 		public inkTextWidgetReference DescLabel
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
 		[RED("data")] 
 		public CHandle<CharacterCreationSummaryListItemData> Data
 		{

@@ -21,6 +21,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("chargeDamageMultiplier")] 
+		public CFloat ChargeDamageMultiplier
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(3)] 
 		[RED("logFlags")] 
 		public CInt64 LogFlags
 		{

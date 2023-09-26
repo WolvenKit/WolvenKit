@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SpiderbotHeavyProjectile : BaseProjectile
 	{
-		[Ordinal(46)] 
+		[Ordinal(48)] 
 		[RED("meshComponent")] 
 		public CHandle<entIComponent> MeshComponent
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entIComponent>>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(49)] 
 		[RED("effect")] 
 		public gameEffectRef Effect
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameEffectRef>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(50)] 
 		[RED("startVelocity")] 
 		public CFloat StartVelocity
 		{
@@ -28,15 +28,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(51)] 
 		[RED("lifetime")] 
-		public CFloat Lifetime_428
+		public CFloat Lifetime_444
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(52)] 
 		[RED("alive")] 
 		public CBool Alive
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(53)] 
 		[RED("hit")] 
 		public CBool Hit
 		{

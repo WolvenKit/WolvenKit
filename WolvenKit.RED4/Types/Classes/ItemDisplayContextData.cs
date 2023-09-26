@@ -20,8 +20,26 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameItemDisplayContext>>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("displayComparison")] 
+		public CBool DisplayComparison
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(3)] 
+		[RED("tags")] 
+		public CArray<CName> Tags
+		{
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
+		}
+
 		public ItemDisplayContextData()
 		{
+			Tags = new();
+
 			PostConstruct();
 		}
 

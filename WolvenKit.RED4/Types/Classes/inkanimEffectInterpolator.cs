@@ -47,7 +47,7 @@ namespace WolvenKit.RED4.Types
 		public inkanimEffectInterpolator()
 		{
 			InterpolationDirection = Enums.inkanimInterpolationDirection.FromTo;
-			EffectName = "";
+			EffectName = "ScanlineWipe_0";
 
 			PostConstruct();
 		}

@@ -5,19 +5,19 @@ namespace WolvenKit.RED4.Types
 	public partial class ForceMoveInCombatEffector : gameEffector
 	{
 		[Ordinal(0)] 
-		[RED("target")] 
-		public CWeakHandle<gameObject> Target
+		[RED("aiComponent")] 
+		public CHandle<AIHumanComponent> AiComponent
 		{
-			get => GetPropertyValue<CWeakHandle<gameObject>>();
-			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
+			get => GetPropertyValue<CHandle<AIHumanComponent>>();
+			set => SetPropertyValue<CHandle<AIHumanComponent>>(value);
 		}
 
 		[Ordinal(1)] 
-		[RED("duration")] 
-		public CFloat Duration
+		[RED("commandStarted")] 
+		public CBool CommandStarted
 		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public ForceMoveInCombatEffector()

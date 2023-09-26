@@ -36,6 +36,38 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(4)] 
+		[RED("fastMode")] 
+		public CBool FastMode
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("isCarryActive")] 
+		public CBool IsCarryActive
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(6)] 
+		[RED("isFriendlyCarry")] 
+		public CBool IsFriendlyCarry
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("wasThrown")] 
+		public CBool WasThrown
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public AnimFeature_Carry()
 		{
 			PostConstruct();

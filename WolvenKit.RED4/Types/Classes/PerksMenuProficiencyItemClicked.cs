@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class PerksMenuProficiencyItemClicked : PerksMenuAttributeItemClicked
 	{
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("index")] 
 		public CInt32 Index
 		{

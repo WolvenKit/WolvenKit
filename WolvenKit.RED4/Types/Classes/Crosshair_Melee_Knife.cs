@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class Crosshair_Melee_Knife : gameuiCrosshairBaseGameController
 	{
-		[Ordinal(18)] 
+		[Ordinal(27)] 
 		[RED("targetColorChange")] 
 		public inkWidgetReference TargetColorChange
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(28)] 
 		[RED("leftPart")] 
 		public inkWidgetReference LeftPart
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(29)] 
 		[RED("rightPart")] 
 		public inkWidgetReference RightPart
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(30)] 
 		[RED("topPart")] 
 		public inkWidgetReference TopPart
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(31)] 
 		[RED("botPart")] 
 		public inkWidgetReference BotPart
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(32)] 
 		[RED("chargeBar")] 
 		public CWeakHandle<inkCanvasWidget> ChargeBar
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkCanvasWidget>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(33)] 
 		[RED("chargeBarFG")] 
 		public CWeakHandle<inkRectangleWidget> ChargeBarFG
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkRectangleWidget>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(34)] 
 		[RED("throwingKnifeResourcePoolListener")] 
 		public CHandle<ThrowingKnifeResourcePoolListener> ThrowingKnifeResourcePoolListener
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ThrowingKnifeResourcePoolListener>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(35)] 
 		[RED("weaponID")] 
 		public entEntityID WeaponID
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entEntityID>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(36)] 
 		[RED("weaponBBID")] 
 		public CHandle<redCallbackObject> WeaponBBID
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(37)] 
 		[RED("meleeWeaponState")] 
 		public CEnum<gamePSMMeleeWeapon> MeleeWeaponState
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamePSMMeleeWeapon>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(38)] 
 		[RED("animProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(39)] 
 		[RED("animOptions")] 
 		public inkanimPlaybackOptions AnimOptions
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkanimPlaybackOptions>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(40)] 
 		[RED("isCrosshairAnimationOpen")] 
 		public CBool IsCrosshairAnimationOpen
 		{
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(41)] 
 		[RED("preloaderThinL")] 
 		public CWeakHandle<inkImageWidget> PreloaderThinL
 		{
@@ -124,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkImageWidget>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(42)] 
 		[RED("preloaderThinR")] 
 		public CWeakHandle<inkImageWidget> PreloaderThinR
 		{
@@ -132,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkImageWidget>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(43)] 
 		[RED("preloaderThickL")] 
 		public CWeakHandle<inkImageWidget> PreloaderThickL
 		{
@@ -140,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkImageWidget>>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(44)] 
 		[RED("preloaderThickR")] 
 		public CWeakHandle<inkImageWidget> PreloaderThickR
 		{
@@ -148,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkImageWidget>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(45)] 
 		[RED("preloader")] 
 		public CWeakHandle<inkCanvasWidget> Preloader
 		{
@@ -164,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			TopPart = new inkWidgetReference();
 			BotPart = new inkWidgetReference();
 			WeaponID = new entEntityID();
-			AnimOptions = new inkanimPlaybackOptions();
+			AnimOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
 
 			PostConstruct();
 		}

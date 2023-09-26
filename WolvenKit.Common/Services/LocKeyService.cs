@@ -33,34 +33,40 @@ namespace WolvenKit.Common.Services
         {
             var gameLanguageCode = Language.ToString().Replace('_', '-');
 
-            ResourcePath depotPath = $@"base\localization\{gameLanguageCode}\onscreens\onscreens_final.json";
+            _primaryKeys[language] = new Dictionary<ulong, localizationPersistenceOnScreenEntry>();
+            _secondaryKeys[language] = new Dictionary<string, localizationPersistenceOnScreenEntry>();
 
-            var file = _archive.Lookup(depotPath.GetRedHash());
-            if (file is { HasValue: true, Value: { } fe })
+            var success = InternalLoadLanguage($@"base\localization\{gameLanguageCode}\onscreens\onscreens_final.json");
+            InternalLoadLanguage($@"ep1\localization\{gameLanguageCode}\onscreens\onscreens_final.json");
+
+            return success;
+
+            bool InternalLoadLanguage(ResourcePath depotPath)
             {
-                using var stream = new MemoryStream();
-                fe.Extract(stream);
-                using var reader = new BinaryReader(stream);
-                var cr2wFile = _parser.ReadRed4File(reader);
-
-                if (cr2wFile?.RootChunk is JsonResource json)
+                var file = _archive.Lookup(depotPath.GetRedHash());
+                if (file is { HasValue: true, Value: { } fe })
                 {
-                    if (json.Root.Chunk is localizationPersistenceOnScreenEntries os)
+                    using var stream = new MemoryStream();
+                    fe.Extract(stream);
+                    using var reader = new BinaryReader(stream);
+                    var cr2wFile = _parser.ReadRed4File(reader);
+
+                    if (cr2wFile?.RootChunk is JsonResource json)
                     {
-                        _primaryKeys[language] = new Dictionary<ulong, localizationPersistenceOnScreenEntry>();
-                        _secondaryKeys[language] = new Dictionary<string, localizationPersistenceOnScreenEntry>();
-
-                        foreach (var entry in os.Entries)
+                        if (json.Root.Chunk is localizationPersistenceOnScreenEntries os)
                         {
-                            _primaryKeys[language][entry.PrimaryKey] = entry;
-                            _secondaryKeys[language][entry.SecondaryKey] = entry;
-                        }
+                            foreach (var entry in os.Entries)
+                            {
+                                _primaryKeys[language][entry.PrimaryKey] = entry;
+                                _secondaryKeys[language][entry.SecondaryKey] = entry;
+                            }
 
-                        return true;
+                            return true;
+                        }
                     }
                 }
+                return false;
             }
-            return false;
         }
 
         private bool IsLoaded() => _primaryKeys.ContainsKey(Language) || LoadCurrentLanguage();

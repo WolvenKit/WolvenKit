@@ -43,6 +43,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 		
+		[RED("deviceHackCategory")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID DeviceHackCategory
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("durationTime")]
+		[REDProperty(IsIgnored = true)]
+		public CArray<TweakDBID> DurationTime
+		{
+			get => GetPropertyValue<CArray<TweakDBID>>();
+			set => SetPropertyValue<CArray<TweakDBID>>(value);
+		}
+		
 		[RED("gameplayCategory")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID GameplayCategory
@@ -54,6 +70,14 @@ namespace WolvenKit.RED4.Types
 		[RED("hackCategory")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID HackCategory
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("hackTier")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID HackTier
 		{
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);

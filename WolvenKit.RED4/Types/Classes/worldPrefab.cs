@@ -149,6 +149,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(19)] 
+		[RED("maxProxyStreamingDistance")] 
+		public CFloat MaxProxyStreamingDistance
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(20)] 
 		[RED("proxyDistanceFactor")] 
 		public CFloat ProxyDistanceFactor
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("averageNodeDiagonal")] 
 		public CFloat AverageNodeDiagonal
 		{
@@ -164,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("boostInnerNodesToProxyDistance")] 
 		public CBool BoostInnerNodesToProxyDistance
 		{
@@ -172,7 +180,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
+		[RED("overrideStreamingPosWithBBoxCenter")] 
+		public CBool OverrideStreamingPosWithBBoxCenter
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(24)] 
 		[RED("ignoreMeshEmbeddedOccluders")] 
 		public CBool IgnoreMeshEmbeddedOccluders
 		{
@@ -180,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(25)] 
 		[RED("ignoreAllOccluders")] 
 		public CBool IgnoreAllOccluders
 		{
@@ -188,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(26)] 
 		[RED("excludeOnConsole")] 
 		public CBool ExcludeOnConsole
 		{
@@ -196,7 +212,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(27)] 
+		[RED("excludeOnNextGenConsoles")] 
+		public CBool ExcludeOnNextGenConsoles
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(28)] 
 		[RED("isTerrainPrefab")] 
 		public CBool IsTerrainPrefab
 		{
@@ -204,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(29)] 
 		[RED("minimapContribution")] 
 		public CEnum<worldPrefabMinimapContribution> MinimapContribution
 		{
@@ -212,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<worldPrefabMinimapContribution>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(30)] 
 		[RED("interiorMapContribution")] 
 		public CEnum<worldPrefabInteriorMapContribution> InteriorMapContribution
 		{
@@ -220,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<worldPrefabInteriorMapContribution>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(31)] 
 		[RED("booleanProxyHelper")] 
 		public CResourceAsyncReference<worldPrefab> BooleanProxyHelper
 		{
@@ -228,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<worldPrefab>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(32)] 
 		[RED("proxyLimiterHelper")] 
 		public CResourceAsyncReference<worldPrefab> ProxyLimiterHelper
 		{
@@ -236,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<worldPrefab>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(33)] 
 		[RED("customProxyMeshHelper")] 
 		public CResourceAsyncReference<CMesh> CustomProxyMeshHelper
 		{

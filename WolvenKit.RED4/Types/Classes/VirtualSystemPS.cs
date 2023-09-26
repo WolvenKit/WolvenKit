@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class VirtualSystemPS : MasterControllerPS
 	{
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("owner")] 
 		public CWeakHandle<MasterControllerPS> Owner
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<MasterControllerPS>>(value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(109)] 
 		[RED("slaves")] 
 		public CArray<CHandle<gameDeviceComponentPS>> Slaves
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<gameDeviceComponentPS>>>(value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(110)] 
 		[RED("slavesCached")] 
 		public CBool SlavesCached
 		{

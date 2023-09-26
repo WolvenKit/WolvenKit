@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameJournalBriefingMapSection : gameJournalBriefingBaseSection
 	{
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("mapLocation")] 
 		public Vector3 MapLocation
 		{
@@ -14,6 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameJournalBriefingMapSection()
 		{
+			JournalEntryOverrideDataList = new();
 			MapLocation = new Vector3();
 
 			PostConstruct();

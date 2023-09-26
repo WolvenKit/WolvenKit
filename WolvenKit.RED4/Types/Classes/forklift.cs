@@ -2,11 +2,17 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-#pragma warning disable CS8981 // The type name only contains lower-cased ascii characters. Such names may become reserved for the language.
 	public partial class forklift : InteractiveDevice
-#pragma warning restore CS8981 // The type name only contains lower-cased ascii characters. Such names may become reserved for the language.
 	{
-		[Ordinal(94)] 
+		[Ordinal(98)] 
+		[RED("reversed")] 
+		public CBool Reversed
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(99)] 
 		[RED("animFeature")] 
 		public CHandle<AnimFeature_ForkliftDevice> AnimFeature
 		{
@@ -14,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AnimFeature_ForkliftDevice>>(value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(100)] 
 		[RED("animationController")] 
 		public CHandle<entAnimationControllerComponent> AnimationController
 		{
@@ -22,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entAnimationControllerComponent>>(value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(101)] 
 		[RED("isPlayerUnder")] 
 		public CBool IsPlayerUnder
 		{
@@ -30,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(102)] 
 		[RED("cargoBox")] 
 		public CHandle<entPhysicalMeshComponent> CargoBox
 		{

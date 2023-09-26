@@ -12,6 +12,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<VehicleTransitionInitData>>(value);
 		}
 
+		[Ordinal(1)] 
+		[RED("exitSlot")] 
+		public CName ExitSlot
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
 		public VehicleTransition()
 		{
 			PostConstruct();

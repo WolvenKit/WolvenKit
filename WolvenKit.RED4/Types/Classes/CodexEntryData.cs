@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CodexEntryData : GenericCodexEntryData
 	{
-		[Ordinal(10)] 
+		[Ordinal(12)] 
 		[RED("category")] 
 		public CInt32 Category
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(13)] 
 		[RED("imageType")] 
 		public CEnum<CodexImageType> ImageType
 		{

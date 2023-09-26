@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ExplosiveDeviceControllerPS : BasicDistractionDeviceControllerPS
 	{
-		[Ordinal(109)] 
+		[Ordinal(113)] 
 		[RED("explosiveSkillChecks")] 
 		public CHandle<EngDemoContainer> ExplosiveSkillChecks
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<EngDemoContainer>>(value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(114)] 
 		[RED("explosionDefinition")] 
 		public CArray<ExplosiveDeviceResourceDefinition> ExplosionDefinition
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<ExplosiveDeviceResourceDefinition>>(value);
 		}
 
-		[Ordinal(111)] 
+		[Ordinal(115)] 
 		[RED("explosiveWithQhacks")] 
 		public CBool ExplosiveWithQhacks
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(112)] 
+		[Ordinal(116)] 
 		[RED("HealthDecay")] 
 		public CFloat HealthDecay
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(113)] 
+		[Ordinal(117)] 
 		[RED("timeToMeshSwap")] 
 		public CFloat TimeToMeshSwap
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(114)] 
+		[Ordinal(118)] 
 		[RED("shouldDistractionHitVFXIgnoreHitPosition")] 
 		public CBool ShouldDistractionHitVFXIgnoreHitPosition
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(115)] 
+		[Ordinal(119)] 
 		[RED("canBeDisabledWithQhacks")] 
 		public CBool CanBeDisabledWithQhacks
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(116)] 
+		[Ordinal(120)] 
 		[RED("disarmed")] 
 		public CBool Disarmed
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(117)] 
+		[Ordinal(121)] 
 		[RED("exploded")] 
 		public CBool Exploded
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(118)] 
+		[Ordinal(122)] 
 		[RED("provideExplodeAction")] 
 		public CBool ProvideExplodeAction
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(119)] 
+		[Ordinal(123)] 
 		[RED("doExplosiveEngineerLogic")] 
 		public CBool DoExplosiveEngineerLogic
 		{

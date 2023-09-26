@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class MovableQuestTrigger : gameObject
 	{
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("factName")] 
 		public CName FactName
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("onlyDetectsPlayer")] 
 		public CBool OnlyDetectsPlayer
 		{

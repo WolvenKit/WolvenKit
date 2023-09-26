@@ -44,6 +44,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(5)] 
+		[RED("objectToCheck")] 
+		public CName ObjectToCheck
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
 		public StatusEffectPrereq()
 		{
 			PostConstruct();

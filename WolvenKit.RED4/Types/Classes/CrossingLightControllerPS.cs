@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CrossingLightControllerPS : TrafficLightControllerPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("crossingLightSFXSetup")] 
 		public CrossingLightSetup CrossingLightSFXSetup
 		{

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class RoadBlockTrap : InteractiveMasterDevice
 	{
-		[Ordinal(94)] 
+		[Ordinal(98)] 
 		[RED("areaComponent")] 
 		public CHandle<gameStaticTriggerAreaComponent> AreaComponent
 		{

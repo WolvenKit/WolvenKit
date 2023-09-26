@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ActivatedDeviceTrapDestruction : ActivatedDeviceTrap
 	{
-		[Ordinal(96)] 
+		[Ordinal(100)] 
 		[RED("physicalMeshNames")] 
 		public CArray<CName> PhysicalMeshNames
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(101)] 
 		[RED("physicalMeshes")] 
 		public CArray<CHandle<entPhysicalMeshComponent>> PhysicalMeshes
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<entPhysicalMeshComponent>>>(value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(102)] 
 		[RED("hideMeshNames")] 
 		public CArray<CName> HideMeshNames
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(103)] 
 		[RED("hideMeshes")] 
 		public CArray<CHandle<entIPlacedComponent>> HideMeshes
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<entIPlacedComponent>>>(value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(104)] 
 		[RED("hitColliderNames")] 
 		public CArray<CName> HitColliderNames
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(105)] 
 		[RED("hitColliders")] 
 		public CArray<CHandle<entIPlacedComponent>> HitColliders
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<entIPlacedComponent>>>(value);
 		}
 
-		[Ordinal(102)] 
+		[Ordinal(106)] 
 		[RED("impulseVector")] 
 		public Vector4 ImpulseVector
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(103)] 
+		[Ordinal(107)] 
 		[RED("physicalMeshImpactVFX")] 
 		public CArray<gameFxResource> PhysicalMeshImpactVFX
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameFxResource>>(value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(108)] 
 		[RED("componentsToEnableNames")] 
 		public CArray<CName> ComponentsToEnableNames
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(109)] 
 		[RED("componentsToEnable")] 
 		public CArray<CHandle<entIPlacedComponent>> ComponentsToEnable
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<entIPlacedComponent>>>(value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(110)] 
 		[RED("hitCount")] 
 		public CInt32 HitCount
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(111)] 
 		[RED("wasAttackPerformed")] 
 		public CBool WasAttackPerformed
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(112)] 
 		[RED("alreadyPlayedVFXComponents")] 
 		public CArray<CName> AlreadyPlayedVFXComponents
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(109)] 
+		[Ordinal(113)] 
 		[RED("shouldCheckPhysicalCollisions")] 
 		public CBool ShouldCheckPhysicalCollisions
 		{
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(114)] 
 		[RED("lastEntityHit")] 
 		public CWeakHandle<IScriptable> LastEntityHit
 		{
@@ -124,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<IScriptable>>(value);
 		}
 
-		[Ordinal(111)] 
+		[Ordinal(115)] 
 		[RED("timeToActivatePhysics")] 
 		public CFloat TimeToActivatePhysics
 		{

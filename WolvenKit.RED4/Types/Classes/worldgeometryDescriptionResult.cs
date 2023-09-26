@@ -174,13 +174,13 @@ namespace WolvenKit.RED4.Types
 
 		public worldgeometryDescriptionResult()
 		{
-			LeftHandData = new worldgeometryHandIKDescriptionResult { GrabPointStart = new Vector4(), GrabPointEnd = new Vector4() };
-			RightHandData = new worldgeometryHandIKDescriptionResult { GrabPointStart = new Vector4(), GrabPointEnd = new Vector4() };
+			LeftHandData = new worldgeometryHandIKDescriptionResult { GrabPointStart = new Vector4 { W = 1.000000F }, GrabPointEnd = new Vector4 { W = 1.000000F } };
+			RightHandData = new worldgeometryHandIKDescriptionResult { GrabPointStart = new Vector4 { W = 1.000000F }, GrabPointEnd = new Vector4 { W = 1.000000F } };
 			CollisionNormal = new Vector4();
 			DistanceVector = new Vector4();
-			TopPoint = new Vector4();
+			TopPoint = new Vector4 { W = 1.000000F };
 			TopNormal = new Vector4();
-			BehindPoint = new Vector4();
+			BehindPoint = new Vector4 { W = 1.000000F };
 			BehindNormal = new Vector4();
 
 			PostConstruct();

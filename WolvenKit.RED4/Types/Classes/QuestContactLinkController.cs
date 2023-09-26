@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class QuestContactLinkController : BaseCodexLinkController
 	{
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("msgLabel")] 
 		public inkTextWidgetReference MsgLabel
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("msgContainer")] 
 		public inkWidgetReference MsgContainer
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("msgCounter")] 
 		public CInt32 MsgCounter
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("contactEntry")] 
 		public CHandle<gameJournalContact> ContactEntry
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameJournalContact>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("journalMgr")] 
 		public CWeakHandle<gameJournalManager> JournalMgr
 		{
@@ -44,12 +44,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameJournalManager>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("phoneSystem")] 
 		public CWeakHandle<PhoneSystem> PhoneSystem
 		{
 			get => GetPropertyValue<CWeakHandle<PhoneSystem>>();
 			set => SetPropertyValue<CWeakHandle<PhoneSystem>>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("uiSystem")] 
+		public CWeakHandle<gameuiGameSystemUI> UiSystem
+		{
+			get => GetPropertyValue<CWeakHandle<gameuiGameSystemUI>>();
+			set => SetPropertyValue<CWeakHandle<gameuiGameSystemUI>>(value);
 		}
 
 		public QuestContactLinkController()

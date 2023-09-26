@@ -20,8 +20,18 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("animationScale")] 
+		public CFloat AnimationScale
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public animAnimFeature_ConsumableAnimation()
 		{
+			AnimationScale = 1.000000F;
+
 			PostConstruct();
 		}
 

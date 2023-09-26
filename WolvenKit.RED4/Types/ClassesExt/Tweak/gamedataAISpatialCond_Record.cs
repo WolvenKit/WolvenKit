@@ -19,6 +19,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector2>(value);
 		}
 		
+		[RED("considerDirectionsOnly")]
+		[REDProperty(IsIgnored = true)]
+		public CBool ConsiderDirectionsOnly
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("distance")]
 		[REDProperty(IsIgnored = true)]
 		public Vector2 Distance

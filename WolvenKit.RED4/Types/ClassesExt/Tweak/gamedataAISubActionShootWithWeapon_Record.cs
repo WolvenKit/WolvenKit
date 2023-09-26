@@ -123,6 +123,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
+		[RED("weaponCustomEvent")]
+		[REDProperty(IsIgnored = true)]
+		public CName WeaponCustomEvent
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+		
 		[RED("weaponSlots")]
 		[REDProperty(IsIgnored = true)]
 		public CArray<TweakDBID> WeaponSlots

@@ -4,15 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ModifyDamageWithDistance : ModifyDamageEffector
 	{
-		[Ordinal(2)] 
-		[RED("increaseWithDistance")] 
-		public CBool IncreaseWithDistance
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(3)] 
+		[Ordinal(6)] 
 		[RED("percentMult")] 
 		public CFloat PercentMult
 		{
@@ -20,12 +12,28 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(4)] 
-		[RED("unitThreshold")] 
-		public CFloat UnitThreshold
+		[Ordinal(7)] 
+		[RED("minDistance")] 
+		public CFloat MinDistance
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("maxDistance")] 
+		public CFloat MaxDistance
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(9)] 
+		[RED("improveWithDistance")] 
+		public CBool ImproveWithDistance
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public ModifyDamageWithDistance()

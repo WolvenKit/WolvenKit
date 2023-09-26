@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class inkButtonDpadSupportedController : inkButtonAnimatedController
 	{
-		[Ordinal(22)] 
+		[Ordinal(25)] 
 		[RED("targetPath_DpadUp")] 
 		public CWeakHandle<inkWidget> TargetPath_DpadUp
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(26)] 
 		[RED("targetPath_DpadDown")] 
 		public CWeakHandle<inkWidget> TargetPath_DpadDown
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(27)] 
 		[RED("targetPath_DpadLeft")] 
 		public CWeakHandle<inkWidget> TargetPath_DpadLeft
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(28)] 
 		[RED("targetPath_DpadRight")] 
 		public CWeakHandle<inkWidget> TargetPath_DpadRight
 		{

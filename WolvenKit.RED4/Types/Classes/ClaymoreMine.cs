@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ClaymoreMine : gameweaponObject
 	{
-		[Ordinal(59)] 
+		[Ordinal(66)] 
 		[RED("visualComponent")] 
 		public CHandle<entMeshComponent> VisualComponent
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(67)] 
 		[RED("triggerAreaIndicator")] 
 		public CHandle<entMeshComponent> TriggerAreaIndicator
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(68)] 
 		[RED("shootCollision")] 
 		public CHandle<entSimpleColliderComponent> ShootCollision
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entSimpleColliderComponent>>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(69)] 
 		[RED("triggerComponent")] 
 		public CHandle<gameStaticTriggerAreaComponent> TriggerComponent
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>(value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(70)] 
 		[RED("alive")] 
 		public CBool Alive
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(71)] 
 		[RED("armed")] 
 		public CBool Armed
 		{

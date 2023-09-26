@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
+		[RED("otherMountableSubType")] 
+		public CEnum<gameMountingObjectSubType> OtherMountableSubType
+		{
+			get => GetPropertyValue<CEnum<gameMountingObjectSubType>>();
+			set => SetPropertyValue<CEnum<gameMountingObjectSubType>>(value);
+		}
+
+		[Ordinal(2)] 
 		[RED("otherObject")] 
 		public CWeakHandle<gameObject> OtherObject
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("relationshipType")] 
 		public CEnum<gameMountingRelationshipType> RelationshipType
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameMountingRelationshipType>>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("slotId")] 
 		public gamemountingMountingSlotId SlotId
 		{

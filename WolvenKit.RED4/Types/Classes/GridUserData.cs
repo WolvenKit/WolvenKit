@@ -20,8 +20,18 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<inkEHorizontalAlign>>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("parent")] 
+		public inkCompoundWidgetReference Parent
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
 		public GridUserData()
 		{
+			Parent = new inkCompoundWidgetReference();
+
 			PostConstruct();
 		}
 

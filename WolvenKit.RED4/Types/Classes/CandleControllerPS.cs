@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CandleControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("candleSkillChecks")] 
 		public CHandle<EngDemoContainer> CandleSkillChecks
 		{

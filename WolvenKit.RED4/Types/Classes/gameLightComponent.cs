@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameLightComponent : entLightComponent
 	{
-		[Ordinal(61)] 
+		[Ordinal(60)] 
 		[RED("emissiveOnly")] 
 		public CBool EmissiveOnly
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(61)] 
 		[RED("materialZone")] 
 		public CEnum<gameEMaterialZone> MaterialZone
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameEMaterialZone>>(value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(62)] 
 		[RED("meshBrokenAppearance")] 
 		public CName MeshBrokenAppearance
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(63)] 
 		[RED("onStrength")] 
 		public CFloat OnStrength
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(64)] 
 		[RED("turnOnByDefault")] 
 		public CBool TurnOnByDefault
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(65)] 
 		[RED("turnOnTime")] 
 		public CFloat TurnOnTime
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(66)] 
 		[RED("turnOnCurve")] 
 		public CName TurnOnCurve
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(67)] 
 		[RED("turnOffTime")] 
 		public CFloat TurnOffTime
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(69)] 
+		[Ordinal(68)] 
 		[RED("turnOffCurve")] 
 		public CName TurnOffCurve
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(70)] 
+		[Ordinal(69)] 
 		[RED("loopTime")] 
 		public CFloat LoopTime
 		{
@@ -84,12 +84,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(71)] 
+		[Ordinal(70)] 
 		[RED("loopCurve")] 
 		public CName LoopCurve
 		{
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(71)] 
+		[RED("synchronizedLoop")] 
+		public CBool SynchronizedLoop
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(72)] 
@@ -122,6 +130,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CResourceAsyncReference<worldEffect>>();
 			set => SetPropertyValue<CResourceAsyncReference<worldEffect>>(value);
+		}
+
+		[Ordinal(76)] 
+		[RED("genericCurveSetOverride")] 
+		public CResourceReference<CurveSet> GenericCurveSetOverride
+		{
+			get => GetPropertyValue<CResourceReference<CurveSet>>();
+			set => SetPropertyValue<CResourceReference<CurveSet>>(value);
 		}
 
 		public gameLightComponent()

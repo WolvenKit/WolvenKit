@@ -6,7 +6,10 @@ namespace WolvenKit.RED4.Archive.Buffer;
 public struct RedPackageHeader
 {
     [FieldOffset(0)]
-    public ushort version;
+    public byte version;
+
+    [FieldOffset(1)]
+    public byte unk1;
 
     [FieldOffset(2)]
     public ushort numSections;
@@ -31,13 +34,6 @@ public struct RedPackageHeader
 
     [FieldOffset(28)]
     public uint chunkDataOffset;
-
-    // need to process separtely
-    //[FieldOffset(32)]
-    //public ushort uk2;
-
-    //[FieldOffset(34)]
-    //public ushort numCruids1;
 }
 
 [StructLayout(LayoutKind.Explicit, Size = 4)]

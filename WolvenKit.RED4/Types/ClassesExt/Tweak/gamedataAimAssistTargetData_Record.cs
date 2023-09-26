@@ -59,6 +59,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 		
+		[RED("magnetismPriorityWeight")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat MagnetismPriorityWeight
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
 		[RED("width")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat Width

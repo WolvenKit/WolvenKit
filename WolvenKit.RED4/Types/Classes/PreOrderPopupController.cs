@@ -29,14 +29,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(4)] 
-		[RED("preOrderButtonSpinner")] 
-		public inkWidgetReference PreOrderButtonSpinner
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(5)] 
 		[RED("releaseDateContainer")] 
 		public inkWidgetReference ReleaseDateContainer
 		{
@@ -44,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(5)] 
 		[RED("buttonController")] 
 		public CWeakHandle<inkButtonController> ButtonController
 		{
@@ -57,7 +49,6 @@ namespace WolvenKit.RED4.Types
 			PreOrderButtonRef = new inkWidgetReference();
 			PreOrderButtonText = new inkTextWidgetReference();
 			PreOrderButtonInputIcon = new inkWidgetReference();
-			PreOrderButtonSpinner = new inkWidgetReference();
 			ReleaseDateContainer = new inkWidgetReference();
 
 			PostConstruct();

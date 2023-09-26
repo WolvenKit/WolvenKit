@@ -44,22 +44,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetLibraryReference>(value);
 		}
 
-		[Ordinal(7)] 
-		[RED("sortInputHints")] 
-		public CBool SortInputHints
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(8)] 
-		[RED("useHideOptim")] 
-		public CBool UseHideOptim
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
 		public gameuiInputHintManagerGameController()
 		{
 			BaseGroupContainer = new inkCompoundWidgetReference();

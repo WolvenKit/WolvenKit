@@ -61,6 +61,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(7)] 
+		[RED("waypointTag")] 
+		public CName WaypointTag
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(8)] 
 		[RED("refOwner")] 
 		public CWeakHandle<gamedataAIActionTarget_Record> RefOwner
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gamedataAIActionTarget_Record>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("refAIActionTarget")] 
 		public CWeakHandle<gamedataAIActionTarget_Record> RefAIActionTarget
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gamedataAIActionTarget_Record>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("refCustomWorldPositionTarget")] 
 		public CWeakHandle<gamedataAIActionTarget_Record> RefCustomWorldPositionTarget
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gamedataAIActionTarget_Record>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("ownerPosition")] 
 		public Vector4 OwnerPosition
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("targetPosition")] 
 		public Vector4 TargetPosition
 		{
@@ -100,7 +108,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
+		[RED("direction")] 
+		public Vector4 Direction
+		{
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
+		}
+
+		[Ordinal(14)] 
 		[RED("fxPosition")] 
 		public Vector4 FxPosition
 		{
@@ -108,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(15)] 
 		[RED("target")] 
 		public CWeakHandle<gameObject> Target
 		{
@@ -116,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(16)] 
 		[RED("owner")] 
 		public CWeakHandle<gameObject> Owner
 		{
@@ -124,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(17)] 
 		[RED("fxInstance")] 
 		public CHandle<gameFxInstance> FxInstance
 		{
@@ -132,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameFxInstance>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(18)] 
 		[RED("targetAcquired")] 
 		public CBool TargetAcquired
 		{
@@ -140,12 +156,28 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(19)] 
 		[RED("startTime")] 
 		public CFloat StartTime
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(20)] 
+		[RED("shootPointPosition")] 
+		public Vector4 ShootPointPosition
+		{
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
+		}
+
+		[Ordinal(21)] 
+		[RED("targetsPosition")] 
+		public CArray<Vector4> TargetsPosition
+		{
+			get => GetPropertyValue<CArray<Vector4>>();
+			set => SetPropertyValue<CArray<Vector4>>(value);
 		}
 
 		public SetCustomShootPosition()
@@ -156,7 +188,10 @@ namespace WolvenKit.RED4.Types
 			ShootToTheGround = true;
 			OwnerPosition = new Vector4();
 			TargetPosition = new Vector4();
+			Direction = new Vector4();
 			FxPosition = new Vector4();
+			ShootPointPosition = new Vector4();
+			TargetsPosition = new();
 
 			PostConstruct();
 		}

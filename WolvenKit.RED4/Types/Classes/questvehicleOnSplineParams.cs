@@ -84,6 +84,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<questParamRubberbanding>>(value);
 		}
 
+		[Ordinal(13)] 
+		[RED("audioCurvesParam")] 
+		public CHandle<vehicleAudioCurvesParam> AudioCurvesParam
+		{
+			get => GetPropertyValue<CHandle<vehicleAudioCurvesParam>>();
+			set => SetPropertyValue<CHandle<vehicleAudioCurvesParam>>(value);
+		}
+
 		public questvehicleOnSplineParams()
 		{
 			PushOtherVehiclesAside = true;

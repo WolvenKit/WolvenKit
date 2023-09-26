@@ -58,13 +58,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
-		
-		[RED("returnBlendDuration")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat ReturnBlendDuration
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
 	}
 }

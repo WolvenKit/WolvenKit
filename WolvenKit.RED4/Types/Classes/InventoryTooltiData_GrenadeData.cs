@@ -76,6 +76,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(9)] 
+		[RED("grenadeType")] 
+		public CEnum<EGrenadeType> GrenadeType
+		{
+			get => GetPropertyValue<CEnum<EGrenadeType>>();
+			set => SetPropertyValue<CEnum<EGrenadeType>>(value);
+		}
+
 		public InventoryTooltiData_GrenadeData()
 		{
 			PostConstruct();

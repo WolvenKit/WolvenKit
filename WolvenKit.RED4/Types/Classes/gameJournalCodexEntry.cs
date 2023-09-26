@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameJournalCodexEntry : gameJournalContainerEntry
 	{
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("title")] 
 		public LocalizationString Title
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<LocalizationString>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("imageId")] 
 		public TweakDBID ImageId
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("linkImageId")] 
 		public TweakDBID LinkImageId
 		{
@@ -30,6 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameJournalCodexEntry()
 		{
+			JournalEntryOverrideDataList = new();
 			Entries = new();
 			Title = new() { Unk1 = 0, Value = "" };
 

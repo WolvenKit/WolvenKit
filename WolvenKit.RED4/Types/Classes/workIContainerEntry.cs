@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("disableAutoTransition")] 
+		public CBool DisableAutoTransition
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("idleAnim")] 
 		public CName IdleAnim
 		{

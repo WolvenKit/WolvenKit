@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class PlayerHandicapSystem : gameScriptableSystem
+	public partial class PlayerHandicapSystem : gameIPlayerHandicapSystem
 	{
 		[Ordinal(0)] 
 		[RED("canDropHealingConsumable")] 

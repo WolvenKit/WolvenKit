@@ -12,6 +12,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<senseStimuliEvent>>(value);
 		}
 
+		[Ordinal(1)] 
+		[RED("fullEventPipeline")] 
+		public CBool FullEventPipeline
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public DelayStimEvent()
 		{
 			PostConstruct();

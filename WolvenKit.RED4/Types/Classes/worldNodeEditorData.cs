@@ -77,6 +77,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(9)] 
+		[RED("excludeOnNextGenConsoles")] 
+		public CBool ExcludeOnNextGenConsoles
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(10)] 
 		[RED("proxyMeshDependency")] 
 		public CEnum<worldProxyMeshDependencyMode> ProxyMeshDependency
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<worldProxyMeshDependencyMode>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("transform")] 
 		public worldNodeTransform Transform
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<worldNodeTransform>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("pivotTransform")] 
 		public Transform PivotTransform
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Transform>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("variantId")] 
 		public CUInt32 VariantId
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("questPrefabRefHash")] 
 		public CUInt64 QuestPrefabRefHash
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt64>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("isInterior")] 
 		public CBool IsInterior
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("isDiscarded")] 
 		public CBool IsDiscarded
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("isSnapTarget")] 
 		public CBool IsSnapTarget
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("isSnapSource")] 
 		public CBool IsSnapSource
 		{
@@ -148,12 +156,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("maxStreamingDistance")] 
 		public CFloat MaxStreamingDistance
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(20)] 
+		[RED("initialGlobalNameHash")] 
+		public CString InitialGlobalNameHash
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		public worldNodeEditorData()

@@ -13,6 +13,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
+		[RED("isThrust")] 
+		public CBool IsThrust
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(2)] 
+		[RED("useMiddlePosition")] 
+		public CBool UseMiddlePosition
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(3)] 
 		[RED("startPosition")] 
 		public Vector4 StartPosition
 		{
@@ -20,7 +36,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(4)] 
+		[RED("middlePosition")] 
+		public Vector4 MiddlePosition
+		{
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
+		}
+
+		[Ordinal(5)] 
 		[RED("endPosition")] 
 		public Vector4 EndPosition
 		{
@@ -28,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(6)] 
 		[RED("ikOffset")] 
 		public Vector3 IkOffset
 		{
@@ -36,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector3>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(7)] 
 		[RED("attackName")] 
 		public CName AttackName
 		{
@@ -44,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(8)] 
 		[RED("attackEffectDirection")] 
 		public CName AttackEffectDirection
 		{
@@ -52,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(9)] 
 		[RED("impactFxSlot")] 
 		public CName ImpactFxSlot
 		{
@@ -60,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(10)] 
 		[RED("attackSpeed")] 
 		public CFloat AttackSpeed
 		{
@@ -68,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(11)] 
 		[RED("attackWindowOpen")] 
 		public CFloat AttackWindowOpen
 		{
@@ -76,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(12)] 
 		[RED("attackWindowClosed")] 
 		public CFloat AttackWindowClosed
 		{
@@ -84,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(13)] 
 		[RED("idleTransitionTime")] 
 		public CFloat IdleTransitionTime
 		{
@@ -92,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(14)] 
 		[RED("holdTransitionTime")] 
 		public CFloat HoldTransitionTime
 		{
@@ -100,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("blockTransitionTime")] 
 		public CFloat BlockTransitionTime
 		{
@@ -108,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(16)] 
 		[RED("attackEffectDuration")] 
 		public CFloat AttackEffectDuration
 		{
@@ -116,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(17)] 
 		[RED("attackEffectDelay")] 
 		public CFloat AttackEffectDelay
 		{
@@ -124,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(18)] 
 		[RED("impulseDelay")] 
 		public CFloat ImpulseDelay
 		{
@@ -132,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("cameraSpaceImpulse")] 
 		public CFloat CameraSpaceImpulse
 		{
@@ -140,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("forwardImpulse")] 
 		public CFloat ForwardImpulse
 		{
@@ -148,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
 		[RED("upImpulse")] 
 		public CFloat UpImpulse
 		{
@@ -156,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(22)] 
 		[RED("staminaCost")] 
 		public CFloat StaminaCost
 		{
@@ -164,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(23)] 
 		[RED("weaponChargeCost")] 
 		public CFloat WeaponChargeCost
 		{
@@ -172,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(24)] 
 		[RED("trailStartDelay")] 
 		public CFloat TrailStartDelay
 		{
@@ -180,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(25)] 
 		[RED("trailStopDelay")] 
 		public CFloat TrailStopDelay
 		{
@@ -188,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(26)] 
 		[RED("startupDuration")] 
 		public CFloat StartupDuration
 		{
@@ -196,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(27)] 
 		[RED("activeDuration")] 
 		public CFloat ActiveDuration
 		{
@@ -204,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(28)] 
 		[RED("recoverDuration")] 
 		public CFloat RecoverDuration
 		{
@@ -212,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(29)] 
 		[RED("activeHitDuration")] 
 		public CFloat ActiveHitDuration
 		{
@@ -220,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(30)] 
 		[RED("recoverHitDuration")] 
 		public CFloat RecoverHitDuration
 		{
@@ -228,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(31)] 
 		[RED("standUpDelay")] 
 		public CFloat StandUpDelay
 		{
@@ -236,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(32)] 
 		[RED("incrementsCombo")] 
 		public CBool IncrementsCombo
 		{
@@ -244,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(33)] 
 		[RED("hasDeflectAnim")] 
 		public CBool HasDeflectAnim
 		{
@@ -252,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(34)] 
 		[RED("hasHitAnim")] 
 		public CBool HasHitAnim
 		{
@@ -260,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(35)] 
 		[RED("useAdjustmentInsteadOfImpulse")] 
 		public CBool UseAdjustmentInsteadOfImpulse
 		{
@@ -268,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(36)] 
 		[RED("enableAdjustingPlayerPositionToTarget")] 
 		public CBool EnableAdjustingPlayerPositionToTarget
 		{
@@ -279,6 +303,7 @@ namespace WolvenKit.RED4.Types
 		public gameMeleeAttackData()
 		{
 			StartPosition = new Vector4();
+			MiddlePosition = new Vector4();
 			EndPosition = new Vector4();
 			IkOffset = new Vector3();
 

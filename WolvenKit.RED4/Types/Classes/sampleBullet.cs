@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class sampleBullet : BaseProjectile
 	{
-		[Ordinal(46)] 
+		[Ordinal(48)] 
 		[RED("meshComponent")] 
 		public CHandle<entIComponent> MeshComponent
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entIComponent>>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(49)] 
 		[RED("countTime")] 
 		public CFloat CountTime
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(50)] 
 		[RED("startVelocity")] 
 		public CFloat StartVelocity
 		{
@@ -28,15 +28,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(51)] 
 		[RED("lifetime")] 
-		public CFloat Lifetime_392
+		public CFloat Lifetime_408
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(52)] 
 		[RED("BulletCollisionEvaluator")] 
 		public CHandle<BulletCollisionEvaluator> BulletCollisionEvaluator
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<BulletCollisionEvaluator>>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(53)] 
 		[RED("alive")] 
 		public CBool Alive
 		{

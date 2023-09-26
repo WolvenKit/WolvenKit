@@ -5,46 +5,22 @@ namespace WolvenKit.RED4.Types
 	public partial class Crosshair_Smart_Rifl_Bucket : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
-		[RED("progressBar")] 
-		public inkWidgetReference ProgressBar
+		[RED("lockingAnimationLength")] 
+		public CFloat LockingAnimationLength
 		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(2)] 
-		[RED("progressBarValue")] 
-		public inkWidgetReference ProgressBarValue
+		[RED("unlockingAnimationLength")] 
+		public CFloat UnlockingAnimationLength
 		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(3)] 
-		[RED("targetIndicator")] 
-		public inkWidgetReference TargetIndicator
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(4)] 
-		[RED("lockedIndicator")] 
-		public inkWidgetReference LockedIndicator
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(5)] 
-		[RED("lockingIndicator")] 
-		public inkWidgetReference LockingIndicator
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(6)] 
 		[RED("data")] 
 		public gamesmartGunUITargetParameters Data
 		{
@@ -52,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamesmartGunUITargetParameters>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(4)] 
 		[RED("lockingAnimationProxy")] 
 		public CHandle<inkanimProxy> LockingAnimationProxy
 		{
@@ -60,14 +36,28 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
+		[Ordinal(5)] 
+		[RED("unlockingAnimationProxy")] 
+		public CHandle<inkanimProxy> UnlockingAnimationProxy
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(6)] 
+		[RED("activeCallbacks")] 
+		public CArray<gameDelayID> ActiveCallbacks
+		{
+			get => GetPropertyValue<CArray<gameDelayID>>();
+			set => SetPropertyValue<CArray<gameDelayID>>(value);
+		}
+
 		public Crosshair_Smart_Rifl_Bucket()
 		{
-			ProgressBar = new inkWidgetReference();
-			ProgressBarValue = new inkWidgetReference();
-			TargetIndicator = new inkWidgetReference();
-			LockedIndicator = new inkWidgetReference();
-			LockingIndicator = new inkWidgetReference();
+			LockingAnimationLength = 1.000000F;
+			UnlockingAnimationLength = 1.000000F;
 			Data = new gamesmartGunUITargetParameters { Pos = new Vector2(), EntityID = new entEntityID() };
+			ActiveCallbacks = new();
 
 			PostConstruct();
 		}

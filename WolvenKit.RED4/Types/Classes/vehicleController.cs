@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Types
 		public vehicleController()
 		{
 			AlarmCurve = "default_alarm";
-			AlarmTime = 0.500000F;
+			AlarmTime = 1.000000F;
 
 			PostConstruct();
 		}

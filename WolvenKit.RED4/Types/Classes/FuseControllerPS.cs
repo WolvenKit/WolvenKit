@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class FuseControllerPS : MasterControllerPS
 	{
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("timeTableSetup")] 
 		public CHandle<DeviceTimeTableManager> TimeTableSetup
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<DeviceTimeTableManager>>(value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(109)] 
 		[RED("maxLightsSwitchedAtOnce")] 
 		public CInt32 MaxLightsSwitchedAtOnce
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(110)] 
 		[RED("timeToNextSwitch")] 
 		public CFloat TimeToNextSwitch
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(111)] 
 		[RED("lightSwitchRandomizerType")] 
 		public CEnum<ELightSwitchRandomizerType> LightSwitchRandomizerType
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ELightSwitchRandomizerType>>(value);
 		}
 
-		[Ordinal(109)] 
+		[Ordinal(112)] 
 		[RED("alternativeNameForON")] 
 		public TweakDBID AlternativeNameForON
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(113)] 
 		[RED("alternativeNameForOFF")] 
 		public TweakDBID AlternativeNameForOFF
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(111)] 
+		[Ordinal(114)] 
 		[RED("alternativeNameForPower")] 
 		public TweakDBID AlternativeNameForPower
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(112)] 
+		[Ordinal(115)] 
 		[RED("alternativeNameForUnpower")] 
 		public TweakDBID AlternativeNameForUnpower
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(113)] 
+		[Ordinal(116)] 
 		[RED("isCLSInitialized")] 
 		public CBool IsCLSInitialized
 		{

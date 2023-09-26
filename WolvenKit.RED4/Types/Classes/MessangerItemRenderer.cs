@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class MessangerItemRenderer : JournalEntryListItemController
 	{
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("image")] 
 		public inkImageWidgetReference Image
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("container")] 
 		public inkWidgetReference Container
 		{
@@ -20,15 +20,39 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
-		[RED("fluffText")] 
-		public inkTextWidgetReference FluffText
+		[Ordinal(21)] 
+		[RED("MessageBubbleBG")] 
+		public inkImageWidgetReference MessageBubbleBG
 		{
-			get => GetPropertyValue<inkTextWidgetReference>();
-			set => SetPropertyValue<inkTextWidgetReference>(value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(22)] 
+		[RED("MessageBubbleFG")] 
+		public inkImageWidgetReference MessageBubbleFG
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(23)] 
+		[RED("ReplyBubbleBG")] 
+		public inkImageWidgetReference ReplyBubbleBG
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(24)] 
+		[RED("ReplyBubbleFG")] 
+		public inkImageWidgetReference ReplyBubbleFG
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(25)] 
 		[RED("stateMessage")] 
 		public CName StateMessage
 		{
@@ -36,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(26)] 
 		[RED("statePlayerReply")] 
 		public CName StatePlayerReply
 		{
@@ -44,7 +68,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(27)] 
+		[RED("stateQuestReply")] 
+		public CName StateQuestReply
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(28)] 
 		[RED("imageId")] 
 		public TweakDBID ImageId
 		{
@@ -56,9 +88,13 @@ namespace WolvenKit.RED4.Types
 		{
 			Image = new inkImageWidgetReference();
 			Container = new inkWidgetReference();
-			FluffText = new inkTextWidgetReference();
+			MessageBubbleBG = new inkImageWidgetReference();
+			MessageBubbleFG = new inkImageWidgetReference();
+			ReplyBubbleBG = new inkImageWidgetReference();
+			ReplyBubbleFG = new inkImageWidgetReference();
 			StateMessage = "Default";
 			StatePlayerReply = "Player";
+			StateQuestReply = "Quest";
 
 			PostConstruct();
 		}

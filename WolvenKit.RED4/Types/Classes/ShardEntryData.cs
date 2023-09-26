@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ShardEntryData : GenericCodexEntryData
 	{
-		[Ordinal(10)] 
+		[Ordinal(12)] 
 		[RED("isCrypted")] 
 		public CBool IsCrypted
 		{

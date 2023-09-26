@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SecuritySystem : DeviceSystemBase
 	{
-		[Ordinal(94)] 
+		[Ordinal(98)] 
 		[RED("savedOutputCache")] 
 		public CArray<OutputValidationDataStruct> SavedOutputCache
 		{

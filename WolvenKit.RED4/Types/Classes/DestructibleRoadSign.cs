@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class DestructibleRoadSign : BaseDestructibleDevice
 	{
-		[Ordinal(87)] 
+		[Ordinal(91)] 
 		[RED("frameMesh")] 
 		public CHandle<entMeshComponent> FrameMesh
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
-		[Ordinal(88)] 
+		[Ordinal(92)] 
 		[RED("uiMesh")] 
 		public CHandle<entMeshComponent> UiMesh
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
-		[Ordinal(89)] 
+		[Ordinal(93)] 
 		[RED("uiMesh_2")] 
 		public CHandle<entMeshComponent> UiMesh_2
 		{

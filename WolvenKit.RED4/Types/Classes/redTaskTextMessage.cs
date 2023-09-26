@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
+		[RED("parent")] 
+		public CUInt32 Parent
+		{
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
+		}
+
+		[Ordinal(2)] 
 		[RED("text")] 
 		public CString Text
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("type")] 
 		public CEnum<redTaskTextMessageType> Type
 		{
@@ -31,6 +39,7 @@ namespace WolvenKit.RED4.Types
 		public redTaskTextMessage()
 		{
 			TaskId = uint.MaxValue;
+			Parent = uint.MaxValue;
 
 			PostConstruct();
 		}

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class cpPlayerDetector : gameObject
 	{
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("range")] 
 		public CFloat Range
 		{

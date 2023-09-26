@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CoderControllerPS : BasicDistractionDeviceControllerPS
 	{
-		[Ordinal(109)] 
+		[Ordinal(113)] 
 		[RED("providedAuthorizationLevel")] 
 		public CEnum<ESecurityAccessLevel> ProvidedAuthorizationLevel
 		{

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ActivatedDeviceNPC : ActivatedDeviceTransfromAnim
 	{
-		[Ordinal(95)] 
+		[Ordinal(99)] 
 		[RED("hasProperAnimations")] 
 		public CBool HasProperAnimations
 		{

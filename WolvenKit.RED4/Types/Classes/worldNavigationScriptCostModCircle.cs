@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldNavigationScriptCostModCircle()
 		{
-			Pos = new Vector4();
+			Pos = new Vector4 { W = 1.000000F };
 			Cost = 1.000000F;
 
 			PostConstruct();

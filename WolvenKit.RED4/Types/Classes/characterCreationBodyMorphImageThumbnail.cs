@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class characterCreationBodyMorphImageThumbnail : inkButtonAnimatedController
 	{
-		[Ordinal(22)] 
+		[Ordinal(25)] 
 		[RED("selector")] 
 		public inkWidgetReference Selector
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(26)] 
 		[RED("equipped")] 
 		public inkWidgetReference Equipped
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(27)] 
 		[RED("bg")] 
 		public inkWidgetReference Bg
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(28)] 
 		[RED("index")] 
 		public CInt32 Index
 		{

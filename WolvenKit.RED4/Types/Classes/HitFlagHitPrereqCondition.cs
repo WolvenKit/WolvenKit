@@ -12,6 +12,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<hitFlag>>(value);
 		}
 
+		[Ordinal(4)] 
+		[RED("invertHitFlag")] 
+		public CBool InvertHitFlag
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public HitFlagHitPrereqCondition()
 		{
 			PostConstruct();

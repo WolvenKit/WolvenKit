@@ -11,6 +11,30 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 		
+		[RED("optimiseCombinedModifiers")]
+		[REDProperty(IsIgnored = true)]
+		public CBool OptimiseCombinedModifiers
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
+		[RED("relatedModifierGroups")]
+		[REDProperty(IsIgnored = true)]
+		public CArray<TweakDBID> RelatedModifierGroups
+		{
+			get => GetPropertyValue<CArray<TweakDBID>>();
+			set => SetPropertyValue<CArray<TweakDBID>>(value);
+		}
+		
+		[RED("saveBasedOnStatType")]
+		[REDProperty(IsIgnored = true)]
+		public CBool SaveBasedOnStatType
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("statModifiers")]
 		[REDProperty(IsIgnored = true)]
 		public CArray<TweakDBID> StatModifiers

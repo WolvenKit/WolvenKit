@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CrosshairGameController_Melee : gameuiCrosshairBaseMelee
 	{
-		[Ordinal(20)] 
+		[Ordinal(28)] 
 		[RED("targetColorChange")] 
 		public inkWidgetReference TargetColorChange
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(29)] 
 		[RED("chargeBar")] 
 		public CWeakHandle<inkCanvasWidget> ChargeBar
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkCanvasWidget>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(30)] 
 		[RED("chargeBarFG")] 
 		public CWeakHandle<inkRectangleWidget> ChargeBarFG
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkRectangleWidget>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(31)] 
 		[RED("chargeBarMonoTop")] 
 		public CWeakHandle<inkImageWidget> ChargeBarMonoTop
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkImageWidget>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(32)] 
 		[RED("chargeBarMonoBottom")] 
 		public CWeakHandle<inkImageWidget> ChargeBarMonoBottom
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkImageWidget>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(33)] 
 		[RED("chargeBarMask")] 
 		public CWeakHandle<inkMaskWidget> ChargeBarMask
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkMaskWidget>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(34)] 
 		[RED("chargeValueL")] 
 		public CWeakHandle<inkTextWidget> ChargeValueL
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkTextWidget>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(35)] 
 		[RED("chargeValueR")] 
 		public CWeakHandle<inkTextWidget> ChargeValueR
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkTextWidget>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(36)] 
 		[RED("bbcharge")] 
 		public CUInt32 Bbcharge
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(37)] 
 		[RED("meleeResourcePoolListener")] 
 		public CHandle<MeleeResourcePoolListener> MeleeResourcePoolListener
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<MeleeResourcePoolListener>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(38)] 
 		[RED("weaponID")] 
 		public entEntityID WeaponID
 		{
@@ -92,12 +92,28 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entEntityID>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(39)] 
 		[RED("displayChargeBar")] 
 		public CBool DisplayChargeBar
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(40)] 
+		[RED("currentState")] 
+		public CInt32 CurrentState
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(41)] 
+		[RED("meleeLeapAttackObjectTagger")] 
+		public CHandle<MeleeLeapAttackObjectTagger> MeleeLeapAttackObjectTagger
+		{
+			get => GetPropertyValue<CHandle<MeleeLeapAttackObjectTagger>>();
+			set => SetPropertyValue<CHandle<MeleeLeapAttackObjectTagger>>(value);
 		}
 
 		public CrosshairGameController_Melee()

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class AOEAreaControllerPS : MasterControllerPS
 	{
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("AOEAreaSetup")] 
 		public AOEAreaSetup AOEAreaSetup
 		{

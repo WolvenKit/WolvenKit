@@ -36,10 +36,19 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(4)] 
+		[RED("lightTypeMask")] 
+		public CInt32 LightTypeMask
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
 		public vehicleControllerPS()
 		{
 			VehicleDoors = new(6);
 			State = Enums.vehicleEState.Default;
+			LightTypeMask = -1;
 
 			PostConstruct();
 		}

@@ -11,6 +11,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
+		[RED("statModifierWeight")]
+		[REDProperty(IsIgnored = true)]
+		public CArray<TweakDBID> StatModifierWeight
+		{
+			get => GetPropertyValue<CArray<TweakDBID>>();
+			set => SetPropertyValue<CArray<TweakDBID>>(value);
+		}
+		
 		[RED("weight")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat Weight

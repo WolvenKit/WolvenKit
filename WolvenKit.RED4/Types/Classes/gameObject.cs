@@ -268,6 +268,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
+		[Ordinal(35)] 
+		[RED("isTargetedWithSmartWeapon")] 
+		public CBool IsTargetedWithSmartWeapon
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public gameObject()
 		{
 			PlayerSocket = new gamePlayerSocket();

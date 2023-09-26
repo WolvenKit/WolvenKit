@@ -36,6 +36,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(4)] 
+		[RED("swappingWeapons")] 
+		public CBool SwappingWeapons
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public animAnimFeature_EquipUnequipItem()
 		{
 			ItemType = -1;

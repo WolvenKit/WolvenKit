@@ -60,11 +60,29 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(7)] 
+		[RED("smartAudioEvents")] 
+		public CArray<CName> SmartAudioEvents
+		{
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("smartAudioEventsDelays")] 
+		public CArray<CFloat> SmartAudioEventsDelays
+		{
+			get => GetPropertyValue<CArray<CFloat>>();
+			set => SetPropertyValue<CArray<CFloat>>(value);
+		}
+
 		public gamesmartGunUIParameters()
 		{
 			Targets = new();
 			Sight = new gamesmartGunUISightParameters { Center = new Vector2(), TargetableRegionSize = new Vector2(), ReticleSize = new Vector2() };
 			CrosshairPos = new Vector2();
+			SmartAudioEvents = new();
+			SmartAudioEventsDelays = new();
 
 			PostConstruct();
 		}

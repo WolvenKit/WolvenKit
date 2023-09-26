@@ -29,6 +29,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(14)] 
+		[RED("weightNode")] 
+		public animFloatLink WeightNode
+		{
+			get => GetPropertyValue<animFloatLink>();
+			set => SetPropertyValue<animFloatLink>(value);
+		}
+
+		[Ordinal(15)] 
+		[RED("animEndEventName")] 
+		public CName AnimEndEventName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(16)] 
 		[RED("animation")] 
 		public CName Animation
 		{
@@ -36,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(17)] 
 		[RED("durationCut")] 
 		public CFloat DurationCut
 		{
@@ -50,6 +66,7 @@ namespace WolvenKit.RED4.Types
 			SpeedInDegreesPerSecond = 120.000000F;
 			AngleOffsetNode = new animFloatLink();
 			TargetAngleOffsetNode = new animFloatLink();
+			WeightNode = new animFloatLink();
 
 			PostConstruct();
 		}

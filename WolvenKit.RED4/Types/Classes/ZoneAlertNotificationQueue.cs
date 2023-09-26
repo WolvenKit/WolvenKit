@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ZoneAlertNotificationQueue : gameuiGenericNotificationGameController
 	{
-		[Ordinal(2)] 
+		[Ordinal(4)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(5)] 
 		[RED("securityBlackBoardID")] 
 		public CHandle<redCallbackObject> SecurityBlackBoardID
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(6)] 
 		[RED("combatBlackBoardID")] 
 		public CHandle<redCallbackObject> CombatBlackBoardID
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(7)] 
 		[RED("wantedValueBlackboardID")] 
 		public CHandle<redCallbackObject> WantedValueBlackboardID
 		{
@@ -36,15 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(6)] 
-		[RED("bountyAmountBlackboardID")] 
-		public CHandle<redCallbackObject> BountyAmountBlackboardID
-		{
-			get => GetPropertyValue<CHandle<redCallbackObject>>();
-			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
-		}
-
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("playerBlackboardID")] 
 		public CHandle<redCallbackObject> PlayerBlackboardID
 		{
@@ -52,20 +44,12 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("blackboard")] 
 		public CWeakHandle<gameIBlackboard> Blackboard
 		{
 			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
-		}
-
-		[Ordinal(9)] 
-		[RED("bountyPrice")] 
-		public CInt32 BountyPrice
-		{
-			get => GetPropertyValue<CInt32>();
-			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(10)] 

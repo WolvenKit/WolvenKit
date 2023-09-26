@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("ep1Icon")] 
+		public inkWidgetReference Ep1Icon
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("previewImage")] 
 		public inkImageWidgetReference PreviewImage
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("previewTitle")] 
 		public inkTextWidgetReference PreviewTitle
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("previewDescription")] 
 		public inkTextWidgetReference PreviewDescription
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("data")] 
 		public CHandle<TarotCardPreviewData> Data
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<TarotCardPreviewData>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("isClosing")] 
 		public CBool IsClosing
 		{
@@ -55,6 +63,7 @@ namespace WolvenKit.RED4.Types
 		public TarotPreviewGameController()
 		{
 			Background = new inkWidgetReference();
+			Ep1Icon = new inkWidgetReference();
 			PreviewImage = new inkImageWidgetReference();
 			PreviewTitle = new inkTextWidgetReference();
 			PreviewDescription = new inkTextWidgetReference();

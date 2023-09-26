@@ -131,6 +131,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
+		[RED("tenderSpringLength")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat TenderSpringLength
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
 		[RED("tireFrictionCoef")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat TireFrictionCoef

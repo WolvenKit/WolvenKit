@@ -60,6 +60,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<DataBuffer>(value);
 		}
 
+		[Ordinal(7)] 
+		[RED("uv")] 
+		public DataBuffer Uv
+		{
+			get => GetPropertyValue<DataBuffer>();
+			set => SetPropertyValue<DataBuffer>(value);
+		}
+
 		public garmentMeshParamGarmentChunkData()
 		{
 			PostConstruct();

@@ -21,16 +21,24 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(9)] 
-		[RED("cwItemData")] 
-		public gameInventoryItemData CwItemData
+		[RED("chosenOptionData")] 
+		public CHandle<gameItemData> ChosenOptionData
 		{
-			get => GetPropertyValue<gameInventoryItemData>();
-			set => SetPropertyValue<gameInventoryItemData>(value);
+			get => GetPropertyValue<CHandle<gameItemData>>();
+			set => SetPropertyValue<CHandle<gameItemData>>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("costData")] 
+		public CyberwareUpgradeCostData CostData
+		{
+			get => GetPropertyValue<CyberwareUpgradeCostData>();
+			set => SetPropertyValue<CyberwareUpgradeCostData>(value);
 		}
 
 		public RipperdocTokenPopupCloseData()
 		{
-			CwItemData = new gameInventoryItemData { ID = new gameItemID(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = uint.MaxValue, IsRequirementMet = true, IsEquippable = true, Requirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new gameInventoryItemSortData() };
+			CostData = new CyberwareUpgradeCostData();
 
 			PostConstruct();
 		}

@@ -12,9 +12,18 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
+		[Ordinal(1)] 
+		[RED("ItemModSystemUpgradingInProgress")] 
+		public gamebbScriptID_Bool ItemModSystemUpgradingInProgress
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
 		public UI_ItemModSystemDef()
 		{
 			ItemModSystemUpdated = new gamebbScriptID_Variant();
+			ItemModSystemUpgradingInProgress = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

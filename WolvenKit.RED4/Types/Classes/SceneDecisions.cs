@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SceneDecisions : VehicleTransition
 	{
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("sceneTierCallback")] 
 		public CHandle<redCallbackObject> SceneTierCallback
 		{
@@ -14,6 +14,8 @@ namespace WolvenKit.RED4.Types
 
 		public SceneDecisions()
 		{
+			ExitSlot = "default";
+
 			PostConstruct();
 		}
 

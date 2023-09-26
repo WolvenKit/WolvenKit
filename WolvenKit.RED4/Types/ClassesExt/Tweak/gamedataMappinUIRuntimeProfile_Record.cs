@@ -59,6 +59,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
+		[RED("isLoot")]
+		[REDProperty(IsIgnored = true)]
+		public CBool IsLoot
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("keepNameplate")]
 		[REDProperty(IsIgnored = true)]
 		public CBool KeepNameplate

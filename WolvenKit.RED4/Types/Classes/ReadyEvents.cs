@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ReadyEvents : WeaponEventsTransition
 	{
-		[Ordinal(3)] 
+		[Ordinal(5)] 
 		[RED("timeStamp")] 
 		public CFloat TimeStamp
 		{

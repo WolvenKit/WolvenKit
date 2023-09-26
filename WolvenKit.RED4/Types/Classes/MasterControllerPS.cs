@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class MasterControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("clearance")] 
 		public CHandle<gamedeviceClearance> Clearance
 		{

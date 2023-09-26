@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class characterCreationGenderBackstoryBtn : inkButtonController
 	{
-		[Ordinal(10)] 
+		[Ordinal(13)] 
 		[RED("selector")] 
 		public inkWidgetReference Selector
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(14)] 
 		[RED("fluffText")] 
 		public inkWidgetReference FluffText
 		{

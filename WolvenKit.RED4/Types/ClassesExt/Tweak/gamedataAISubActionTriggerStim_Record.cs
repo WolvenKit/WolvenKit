@@ -19,6 +19,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 		
+		[RED("purelyDirect")]
+		[REDProperty(IsIgnored = true)]
+		public CBool PurelyDirect
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("radius")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat Radius

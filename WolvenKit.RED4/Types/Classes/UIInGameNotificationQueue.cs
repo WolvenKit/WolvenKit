@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class UIInGameNotificationQueue : gameuiGenericNotificationGameController
 	{
-		[Ordinal(2)] 
+		[Ordinal(4)] 
 		[RED("duration")] 
 		public CFloat Duration
 		{

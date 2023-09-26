@@ -2,9 +2,17 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class HudPhoneGameController : gameuiProjectedHUDGameController
+	public partial class HudPhoneGameController : gameuiSongbirdAudioCallGameController
 	{
-		[Ordinal(9)] 
+		[Ordinal(13)] 
+		[RED("isAudioCall")] 
+		public CBool IsAudioCall
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(14)] 
 		[RED("AvatarControllerRef")] 
 		public inkWidgetReference AvatarControllerRef
 		{
@@ -12,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(15)] 
 		[RED("AvatarController")] 
 		public CWeakHandle<HudPhoneAvatarController> AvatarController
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<HudPhoneAvatarController>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(16)] 
 		[RED("RootWidget")] 
 		public CWeakHandle<inkWidget> RootWidget
 		{
@@ -28,63 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(12)] 
-		[RED("SoundNameActionOnOpen")] 
-		public CName SoundNameActionOnOpen
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-
-		[Ordinal(13)] 
-		[RED("SoundNameActionOnClose")] 
-		public CName SoundNameActionOnClose
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-
-		[Ordinal(14)] 
-		[RED("AudioInitiateCallPositiveEvent")] 
-		public CName AudioInitiateCallPositiveEvent
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-
-		[Ordinal(15)] 
-		[RED("AudioInitiateCallNegativeEvent")] 
-		public CName AudioInitiateCallNegativeEvent
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-
-		[Ordinal(16)] 
-		[RED("AudioInitiateCallEvent")] 
-		public CName AudioInitiateCallEvent
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-
 		[Ordinal(17)] 
-		[RED("AudioPhoneOnEvent")] 
-		public CName AudioPhoneOnEvent
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-
-		[Ordinal(18)] 
-		[RED("AudioPhoneOffEvent")] 
-		public CName AudioPhoneOffEvent
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-
-		[Ordinal(19)] 
 		[RED("Holder")] 
 		public inkWidgetReference Holder
 		{
@@ -92,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(18)] 
 		[RED("Owner")] 
 		public CWeakHandle<gameObject> Owner
 		{
@@ -100,15 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(21)] 
-		[RED("UnreadMessages")] 
-		public CArray<CWeakHandle<gameJournalPhoneMessage>> UnreadMessages
-		{
-			get => GetPropertyValue<CArray<CWeakHandle<gameJournalPhoneMessage>>>();
-			set => SetPropertyValue<CArray<CWeakHandle<gameJournalPhoneMessage>>>(value);
-		}
-
-		[Ordinal(22)] 
+		[Ordinal(19)] 
 		[RED("CurrentFunction")] 
 		public CEnum<EHudPhoneFunction> CurrentFunction
 		{
@@ -116,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EHudPhoneFunction>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(20)] 
 		[RED("CurrentCallInformation")] 
 		public questPhoneCallInformation CurrentCallInformation
 		{
@@ -124,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<questPhoneCallInformation>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(21)] 
 		[RED("CurrentPhoneCallContact")] 
 		public CWeakHandle<gameJournalContact> CurrentPhoneCallContact
 		{
@@ -132,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameJournalContact>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(22)] 
 		[RED("DelaySystem")] 
 		public CWeakHandle<gameDelaySystem> DelaySystem
 		{
@@ -140,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameDelaySystem>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(23)] 
 		[RED("PhoneSystem")] 
 		public CWeakHandle<PhoneSystem> PhoneSystem
 		{
@@ -148,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PhoneSystem>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(24)] 
 		[RED("JournalMgr")] 
 		public CWeakHandle<gameJournalManager> JournalMgr
 		{
@@ -156,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameJournalManager>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(25)] 
 		[RED("gameplayRestrictions")] 
 		public CArray<CName> GameplayRestrictions
 		{
@@ -164,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(26)] 
 		[RED("Blackboard")] 
 		public CWeakHandle<gameIBlackboard> Blackboard
 		{
@@ -172,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(27)] 
 		[RED("BlackboardDef")] 
 		public CHandle<UI_ComDeviceDef> BlackboardDef
 		{
@@ -180,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_ComDeviceDef>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(28)] 
 		[RED("CallInformationBBID")] 
 		public CHandle<redCallbackObject> CallInformationBBID
 		{
@@ -188,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(29)] 
 		[RED("StatusNameBBID")] 
 		public CHandle<redCallbackObject> StatusNameBBID
 		{
@@ -196,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(30)] 
 		[RED("MinimizedListener")] 
 		public CHandle<redCallbackObject> MinimizedListener
 		{
@@ -204,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(31)] 
 		[RED("DelayedCallbackId")] 
 		public gameDelayID DelayedCallbackId
 		{
@@ -212,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(32)] 
 		[RED("DelayedTimeoutCallbackId")] 
 		public gameDelayID DelayedTimeoutCallbackId
 		{
@@ -220,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(33)] 
 		[RED("TimeoutPeroid")] 
 		public CFloat TimeoutPeroid
 		{
@@ -228,47 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(37)] 
-		[RED("portraitIntroAnim")] 
-		public CHandle<inkanimProxy> PortraitIntroAnim
-		{
-			get => GetPropertyValue<CHandle<inkanimProxy>>();
-			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
-		}
-
-		[Ordinal(38)] 
-		[RED("portraitOutroAnim")] 
-		public CHandle<inkanimProxy> PortraitOutroAnim
-		{
-			get => GetPropertyValue<CHandle<inkanimProxy>>();
-			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
-		}
-
-		[Ordinal(39)] 
-		[RED("portraitLoopAnim")] 
-		public CHandle<inkanimProxy> PortraitLoopAnim
-		{
-			get => GetPropertyValue<CHandle<inkanimProxy>>();
-			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
-		}
-
-		[Ordinal(40)] 
-		[RED("options")] 
-		public inkanimPlaybackOptions Options
-		{
-			get => GetPropertyValue<inkanimPlaybackOptions>();
-			set => SetPropertyValue<inkanimPlaybackOptions>(value);
-		}
-
-		[Ordinal(41)] 
-		[RED("updatesProjection")] 
-		public CHandle<inkScreenProjection> UpdatesProjection
-		{
-			get => GetPropertyValue<CHandle<inkScreenProjection>>();
-			set => SetPropertyValue<CHandle<inkScreenProjection>>(value);
-		}
-
-		[Ordinal(42)] 
+		[Ordinal(34)] 
 		[RED("buttonPressed")] 
 		public CBool ButtonPressed
 		{
@@ -279,21 +183,12 @@ namespace WolvenKit.RED4.Types
 		public HudPhoneGameController()
 		{
 			AvatarControllerRef = new inkWidgetReference();
-			SoundNameActionOnOpen = "OnOpen";
-			SoundNameActionOnClose = "OnOpen";
-			AudioInitiateCallPositiveEvent = "PhoneCallPopup";
-			AudioInitiateCallNegativeEvent = "PhoneCallPopup";
-			AudioInitiateCallEvent = "PhoneCallPopup";
-			AudioPhoneOnEvent = "PhoneCallPopup";
-			AudioPhoneOffEvent = "PhoneCallPopup";
 			Holder = new inkWidgetReference();
-			UnreadMessages = new();
 			CurrentCallInformation = new questPhoneCallInformation();
 			GameplayRestrictions = new();
 			DelayedCallbackId = new gameDelayID();
 			DelayedTimeoutCallbackId = new gameDelayID();
 			TimeoutPeroid = 8.000000F;
-			Options = new inkanimPlaybackOptions();
 
 			PostConstruct();
 		}

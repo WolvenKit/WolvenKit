@@ -1,4 +1,4 @@
-//#define IS_PARALLEL
+#define IS_PARALLEL
 
 using System;
 using System.Collections.Concurrent;
@@ -13,6 +13,7 @@ using WolvenKit.FunctionalTests.Model;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.IO;
 using EFileReadErrorCodes = WolvenKit.RED4.Archive.IO.EFileReadErrorCodes;
+using WolvenKit.RED4.Types;
 
 #if IS_PARALLEL
 using System.Threading.Tasks;
@@ -37,6 +38,9 @@ namespace WolvenKit.FunctionalTests
         //{
         //    Test_Extension();
         //}
+
+        [TestMethod]
+        public void Write_bin() => Test_Extension(".bin");
 
         [TestMethod]
         public void Write_acousticdata() => Test_Extension(".acousticdata");
@@ -75,9 +79,6 @@ namespace WolvenKit.FunctionalTests
         public void Write_bikecurveset() => Test_Extension(".bikecurveset");
 
         [TestMethod]
-        public void Write_bin() => Test_Extension(".bin");
-
-        [TestMethod]
         public void Write_bk2() => Test_Extension(".bk2");
 
         [TestMethod]
@@ -114,9 +115,6 @@ namespace WolvenKit.FunctionalTests
         public void Write_cookedanims() => Test_Extension(".cookedanims");
 
         [TestMethod]
-        public void Write_cookedapp() => Test_Extension(".cookedapp");
-
-        [TestMethod]
         public void Write_cookedprefab() => Test_Extension(".cookedprefab");
 
         [TestMethod]
@@ -139,6 +137,9 @@ namespace WolvenKit.FunctionalTests
 
         [TestMethod]
         public void Write_devices() => Test_Extension(".devices");
+
+        [TestMethod]
+        public void Write_dlcManifest() => Test_Extension(".dlc_manifest");
 
         [TestMethod]
         public void Write_dtex() => Test_Extension(".dtex");
@@ -542,6 +543,8 @@ namespace WolvenKit.FunctionalTests
                         originalStream.Seek(0, SeekOrigin.Begin);
 
                         using var originalReader = new CR2WReader(originalStream, Encoding.UTF8, true);
+                        originalReader.ParsingError += TypeGlobal.OnParsingError;
+
                         var readResult = originalReader.ReadFile(out var cr2wFile, DECOMPRESS_BUFFERS);
 
                         switch (readResult)

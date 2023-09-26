@@ -3,12 +3,20 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gamedataAISubActionCallSquadSearchBackUp_Record
 	{
-		[RED("callInLevel")]
+		[RED("delay")]
 		[REDProperty(IsIgnored = true)]
-		public CFloat CallInLevel
+		public CFloat Delay
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("invert")]
+		[REDProperty(IsIgnored = true)]
+		public CBool Invert
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 		
 		[RED("numberOfTargets")]
@@ -25,6 +33,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("useCommsCallLogic")]
+		[REDProperty(IsIgnored = true)]
+		public CBool UseCommsCallLogic
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

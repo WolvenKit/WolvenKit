@@ -37,6 +37,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(4)] 
+		[RED("group")] 
+		public CName Group
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("slotType")] 
+		public CName SlotType
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(6)] 
 		[RED("rewards")] 
 		public CArray<CUInt64> Rewards
 		{

@@ -5,8 +5,8 @@ namespace WolvenKit.RED4.Types
 	public partial class PersistentDotSettingsListener : userSettingsVarListener
 	{
 		[Ordinal(0)] 
-		[RED("ctrl")] 
-		public CWeakHandle<CrosshairGameControllerPersistentDot> Ctrl
+		[RED("controller")] 
+		public CWeakHandle<CrosshairGameControllerPersistentDot> Controller
 		{
 			get => GetPropertyValue<CWeakHandle<CrosshairGameControllerPersistentDot>>();
 			set => SetPropertyValue<CWeakHandle<CrosshairGameControllerPersistentDot>>(value);

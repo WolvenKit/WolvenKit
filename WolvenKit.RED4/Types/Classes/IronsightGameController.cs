@@ -117,6 +117,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(16)] 
+		[RED("firstEquipAnimationName")] 
+		public CName FirstEquipAnimationName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(17)] 
 		[RED("shootAnimation")] 
 		public CHandle<inkanimProxy> ShootAnimation
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("weaponDataShootBBID")] 
 		public CHandle<redCallbackObject> WeaponDataShootBBID
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("currentAmmo")] 
 		public CInt32 CurrentAmmo
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("animIntro")] 
 		public CHandle<inkanimProxy> AnimIntro
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("animLoop")] 
 		public CHandle<inkanimProxy> AnimLoop
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("animReload")] 
 		public CHandle<inkanimProxy> AnimReload
 		{
@@ -164,15 +172,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(22)] 
-		[RED("BufferedRosterData")] 
-		public CHandle<gameSlotDataHolder> BufferedRosterData
+		[Ordinal(23)] 
+		[RED("animPerfectCharge")] 
+		public CHandle<inkanimProxy> AnimPerfectCharge
 		{
-			get => GetPropertyValue<CHandle<gameSlotDataHolder>>();
-			set => SetPropertyValue<CHandle<gameSlotDataHolder>>(value);
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("ActiveWeapon")] 
 		public gameSlotWeaponData ActiveWeapon
 		{
@@ -180,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameSlotWeaponData>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("weaponItemData")] 
 		public gameInventoryItemData WeaponItemData
 		{
@@ -188,7 +196,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameInventoryItemData>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
+		[RED("originalWeapon")] 
+		public CWeakHandle<gameweaponObject> OriginalWeapon
+		{
+			get => GetPropertyValue<CWeakHandle<gameweaponObject>>();
+			set => SetPropertyValue<CWeakHandle<gameweaponObject>>(value);
+		}
+
+		[Ordinal(27)] 
 		[RED("InventoryManager")] 
 		public CHandle<InventoryDataManagerV2> InventoryManager
 		{
@@ -196,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<InventoryDataManagerV2>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(28)] 
 		[RED("bb")] 
 		public CWeakHandle<gameIBlackboard> Bb
 		{
@@ -204,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(29)] 
 		[RED("bbID")] 
 		public CHandle<redCallbackObject> BbID
 		{
@@ -212,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(30)] 
 		[RED("target")] 
 		public CWeakHandle<gameObject> Target
 		{
@@ -220,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(31)] 
 		[RED("targetBB")] 
 		public CWeakHandle<gameIBlackboard> TargetBB
 		{
@@ -228,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(32)] 
 		[RED("targetRange")] 
 		public CFloat TargetRange
 		{
@@ -236,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(33)] 
 		[RED("targetRangeBBID")] 
 		public CHandle<redCallbackObject> TargetRangeBBID
 		{
@@ -244,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(34)] 
 		[RED("targetAttitudeBBID")] 
 		public CHandle<redCallbackObject> TargetAttitudeBBID
 		{
@@ -252,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(35)] 
 		[RED("targetAcquiredBBID")] 
 		public CHandle<redCallbackObject> TargetAcquiredBBID
 		{
@@ -260,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(36)] 
 		[RED("targetRangeObstructedBBID")] 
 		public CHandle<redCallbackObject> TargetRangeObstructedBBID
 		{
@@ -268,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(37)] 
 		[RED("targetAcquiredObstructedBBID")] 
 		public CHandle<redCallbackObject> TargetAcquiredObstructedBBID
 		{
@@ -276,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(38)] 
 		[RED("targetRangeDecimalPrecision")] 
 		public CUInt32 TargetRangeDecimalPrecision
 		{
@@ -284,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(39)] 
 		[RED("targetAttitudeAnimator")] 
 		public CWeakHandle<TargetAttitudeAnimationController> TargetAttitudeAnimator
 		{
@@ -292,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<TargetAttitudeAnimationController>>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(40)] 
 		[RED("targetAttitudeContainer")] 
 		public inkWidgetReference TargetAttitudeContainer
 		{
@@ -300,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(41)] 
 		[RED("targetHealthListener")] 
 		public CHandle<IronsightTargetHealthChangeListener> TargetHealthListener
 		{
@@ -308,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<IronsightTargetHealthChangeListener>>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(42)] 
 		[RED("compass")] 
 		public CWeakHandle<CompassController> Compass
 		{
@@ -316,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<CompassController>>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(43)] 
 		[RED("compassContainer")] 
 		public inkWidgetReference CompassContainer
 		{
@@ -324,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(44)] 
 		[RED("compass2")] 
 		public CWeakHandle<CompassController> Compass2
 		{
@@ -332,7 +348,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<CompassController>>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(45)] 
 		[RED("compassContainer2")] 
 		public inkWidgetReference CompassContainer2
 		{
@@ -340,7 +356,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(46)] 
 		[RED("altimeter")] 
 		public CWeakHandle<AltimeterController> Altimeter
 		{
@@ -348,7 +364,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<AltimeterController>>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(47)] 
 		[RED("altimeterContainer")] 
 		public inkWidgetReference AltimeterContainer
 		{
@@ -356,7 +372,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(48)] 
 		[RED("weaponBB")] 
 		public CWeakHandle<gameIBlackboard> WeaponBB
 		{
@@ -364,7 +380,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(49)] 
 		[RED("chargebar")] 
 		public CWeakHandle<ChargebarController> Chargebar
 		{
@@ -372,7 +388,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ChargebarController>>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(50)] 
 		[RED("chargebarContainer")] 
 		public inkWidgetReference ChargebarContainer
 		{
@@ -380,7 +396,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(51)] 
 		[RED("chargebarValueChanged")] 
 		public CHandle<redCallbackObject> ChargebarValueChanged
 		{
@@ -388,7 +404,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(52)] 
 		[RED("chargebarTriggerModeChanged")] 
 		public CHandle<redCallbackObject> ChargebarTriggerModeChanged
 		{
@@ -396,7 +412,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(53)] 
 		[RED("ADSContainer")] 
 		public inkWidgetReference ADSContainer
 		{
@@ -404,7 +420,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(54)] 
 		[RED("ADSAnimator")] 
 		public CWeakHandle<AimDownSightController> ADSAnimator
 		{
@@ -412,7 +428,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<AimDownSightController>>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(55)] 
 		[RED("playerStateMachineBB")] 
 		public CWeakHandle<gameIBlackboard> PlayerStateMachineBB
 		{
@@ -420,7 +436,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(56)] 
 		[RED("playerStateMachineUpperBodyBBID")] 
 		public CHandle<redCallbackObject> PlayerStateMachineUpperBodyBBID
 		{
@@ -428,7 +444,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(57)] 
 		[RED("crosshairStateChanged")] 
 		public CHandle<redCallbackObject> CrosshairStateChanged
 		{
@@ -436,7 +452,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(58)] 
+		[RED("perfectChargeIndicator")] 
+		public inkWidgetReference PerfectChargeIndicator
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(59)] 
 		[RED("crosshairState")] 
 		public CEnum<gamePSMCrosshairStates> CrosshairState
 		{
@@ -444,7 +468,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamePSMCrosshairStates>>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(60)] 
 		[RED("isTargetEnemy")] 
 		public CBool IsTargetEnemy
 		{
@@ -452,12 +476,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(61)] 
 		[RED("attitude")] 
 		public CEnum<EAIAttitude> Attitude
 		{
 			get => GetPropertyValue<CEnum<EAIAttitude>>();
 			set => SetPropertyValue<CEnum<EAIAttitude>>(value);
+		}
+
+		[Ordinal(62)] 
+		[RED("upperBodyState")] 
+		public CEnum<gamePSMUpperBodyStates> UpperBodyState
+		{
+			get => GetPropertyValue<CEnum<gamePSMUpperBodyStates>>();
+			set => SetPropertyValue<CEnum<gamePSMUpperBodyStates>>(value);
 		}
 
 		public IronsightGameController()
@@ -479,6 +511,7 @@ namespace WolvenKit.RED4.Types
 			AltimeterContainer = new inkWidgetReference();
 			ChargebarContainer = new inkWidgetReference();
 			ADSContainer = new inkWidgetReference();
+			PerfectChargeIndicator = new inkWidgetReference();
 
 			PostConstruct();
 		}

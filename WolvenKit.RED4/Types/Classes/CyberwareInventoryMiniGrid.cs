@@ -5,6 +5,14 @@ namespace WolvenKit.RED4.Types
 	public partial class CyberwareInventoryMiniGrid : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
+		[RED("isLeftAligned")] 
+		public CBool IsLeftAligned
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(2)] 
 		[RED("gridContainer")] 
 		public inkUniformGridWidgetReference GridContainer
 		{
@@ -12,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkUniformGridWidgetReference>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("label")] 
 		public inkTextWidgetReference Label
 		{
@@ -20,39 +28,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(3)] 
-		[RED("sublabel")] 
-		public inkTextWidgetReference Sublabel
-		{
-			get => GetPropertyValue<inkTextWidgetReference>();
-			set => SetPropertyValue<inkTextWidgetReference>(value);
-		}
-
 		[Ordinal(4)] 
-		[RED("number")] 
-		public inkTextWidgetReference Number
-		{
-			get => GetPropertyValue<inkTextWidgetReference>();
-			set => SetPropertyValue<inkTextWidgetReference>(value);
-		}
-
-		[Ordinal(5)] 
-		[RED("numberPanel")] 
-		public inkWidgetReference NumberPanel
+		[RED("isNew")] 
+		public inkWidgetReference IsNew
 		{
 			get => GetPropertyValue<inkWidgetReference>();
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(6)] 
-		[RED("gridWidth")] 
-		public CInt32 GridWidth
-		{
-			get => GetPropertyValue<CInt32>();
-			set => SetPropertyValue<CInt32>(value);
-		}
-
-		[Ordinal(7)] 
+		[Ordinal(5)] 
 		[RED("selectedSlotIndex")] 
 		public CInt32 SelectedSlotIndex
 		{
@@ -60,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(6)] 
 		[RED("equipArea")] 
 		public CEnum<gamedataEquipmentArea> EquipArea
 		{
@@ -68,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataEquipmentArea>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(7)] 
 		[RED("parentObject")] 
 		public CHandle<IScriptable> ParentObject
 		{
@@ -76,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<IScriptable>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(8)] 
 		[RED("onRealeaseCallbackName")] 
 		public CName OnRealeaseCallbackName
 		{
@@ -84,7 +68,95 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
+		[Ordinal(9)] 
+		[RED("opacityAnimation")] 
+		public CHandle<inkanimProxy> OpacityAnimation
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("marginAnimation")] 
+		public CHandle<inkanimProxy> MarginAnimation
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
 		[Ordinal(11)] 
+		[RED("labelAnimation")] 
+		public CHandle<inkanimProxy> LabelAnimation
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("labelPulse")] 
+		public CHandle<PulseAnimation> LabelPulse
+		{
+			get => GetPropertyValue<CHandle<PulseAnimation>>();
+			set => SetPropertyValue<CHandle<PulseAnimation>>(value);
+		}
+
+		[Ordinal(13)] 
+		[RED("margin")] 
+		public inkMargin Margin
+		{
+			get => GetPropertyValue<inkMargin>();
+			set => SetPropertyValue<inkMargin>(value);
+		}
+
+		[Ordinal(14)] 
+		[RED("targetMargin")] 
+		public inkMargin TargetMargin
+		{
+			get => GetPropertyValue<inkMargin>();
+			set => SetPropertyValue<inkMargin>(value);
+		}
+
+		[Ordinal(15)] 
+		[RED("parent")] 
+		public inkCompoundWidgetReference Parent
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(16)] 
+		[RED("player")] 
+		public CWeakHandle<PlayerPuppet> Player
+		{
+			get => GetPropertyValue<CWeakHandle<PlayerPuppet>>();
+			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
+		}
+
+		[Ordinal(17)] 
+		[RED("minigridAnimation")] 
+		public CHandle<inkanimProxy> MinigridAnimation
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("screen")] 
+		public CEnum<CyberwareScreenType> Screen
+		{
+			get => GetPropertyValue<CEnum<CyberwareScreenType>>();
+			set => SetPropertyValue<CEnum<CyberwareScreenType>>(value);
+		}
+
+		[Ordinal(19)] 
+		[RED("displayContext")] 
+		public CHandle<ItemDisplayContextData> DisplayContext
+		{
+			get => GetPropertyValue<CHandle<ItemDisplayContextData>>();
+			set => SetPropertyValue<CHandle<ItemDisplayContextData>>(value);
+		}
+
+		[Ordinal(20)] 
 		[RED("gridData")] 
 		public CArray<CWeakHandle<InventoryItemDisplayController>> GridData
 		{
@@ -92,13 +164,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<InventoryItemDisplayController>>>(value);
 		}
 
+		[Ordinal(21)] 
+		[RED("root")] 
+		public CWeakHandle<inkWidget> Root
+		{
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
+		}
+
 		public CyberwareInventoryMiniGrid()
 		{
 			GridContainer = new inkUniformGridWidgetReference();
 			Label = new inkTextWidgetReference();
-			Sublabel = new inkTextWidgetReference();
-			Number = new inkTextWidgetReference();
-			NumberPanel = new inkWidgetReference();
+			IsNew = new inkWidgetReference();
+			Margin = new inkMargin();
+			TargetMargin = new inkMargin();
+			Parent = new inkCompoundWidgetReference();
 			GridData = new();
 
 			PostConstruct();

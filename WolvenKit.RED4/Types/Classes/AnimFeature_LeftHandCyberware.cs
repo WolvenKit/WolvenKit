@@ -60,6 +60,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(7)] 
+		[RED("chargeNormalized")] 
+		public CFloat ChargeNormalized
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("hasCWPerk")] 
+		public CBool HasCWPerk
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public AnimFeature_LeftHandCyberware()
 		{
 			PostConstruct();

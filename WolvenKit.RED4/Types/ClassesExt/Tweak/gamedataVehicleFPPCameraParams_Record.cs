@@ -3,6 +3,14 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gamedataVehicleFPPCameraParams_Record
 	{
+		[RED("enable_rear_view")]
+		[REDProperty(IsIgnored = true)]
+		public CBool Enable_rear_view
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("forward_offset_value")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat Forward_offset_value
@@ -118,6 +126,30 @@ namespace WolvenKit.RED4.Types
 		[RED("paralax_radius")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat Paralax_radius
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("rear_view_offset")]
+		[REDProperty(IsIgnored = true)]
+		public Vector3 Rear_view_offset
+		{
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
+		}
+		
+		[RED("rear_view_pitch_threshold")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat Rear_view_pitch_threshold
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("rear_view_yaw_threshold")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat Rear_view_yaw_threshold
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);

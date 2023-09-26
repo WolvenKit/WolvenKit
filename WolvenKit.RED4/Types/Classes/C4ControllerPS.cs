@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class C4ControllerPS : ExplosiveDeviceControllerPS
 	{
-		[Ordinal(120)] 
+		[Ordinal(124)] 
 		[RED("itemTweakDBString")] 
 		public CName ItemTweakDBString
 		{

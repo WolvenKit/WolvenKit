@@ -69,6 +69,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(17)] 
+		[RED("noQuickhacks")] 
+		public inkCompoundWidgetReference NoQuickhacks
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("openCyberdeckBtn")] 
+		public inkWidgetReference OpenCyberdeckBtn
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(19)] 
 		[RED("executeBtn")] 
 		public inkWidgetReference ExecuteBtn
 		{
@@ -76,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("executeAndCloseBtn")] 
 		public inkWidgetReference ExecuteAndCloseBtn
 		{
@@ -84,7 +100,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(21)] 
+		[RED("changeTarget")] 
+		public inkWidgetReference ChangeTarget
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(22)] 
+		[RED("tutorialButton")] 
+		public inkWidgetReference TutorialButton
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(23)] 
 		[RED("rightPanel")] 
 		public inkWidgetReference RightPanel
 		{
@@ -92,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(24)] 
 		[RED("networkBreach")] 
 		public inkWidgetReference NetworkBreach
 		{
@@ -100,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(25)] 
 		[RED("costReductionPanel")] 
 		public inkWidgetReference CostReductionPanel
 		{
@@ -108,7 +140,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(26)] 
+		[RED("costReductionText")] 
+		public inkTextWidgetReference CostReductionText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(27)] 
 		[RED("costReductionValue")] 
 		public inkTextWidgetReference CostReductionValue
 		{
@@ -116,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(28)] 
 		[RED("targetName")] 
 		public inkTextWidgetReference TargetName
 		{
@@ -124,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(29)] 
 		[RED("icePanel")] 
 		public inkWidgetReference IcePanel
 		{
@@ -132,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(30)] 
 		[RED("iceValue")] 
 		public inkTextWidgetReference IceValue
 		{
@@ -140,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(31)] 
 		[RED("vulnerabilitiesPanel")] 
 		public inkWidgetReference VulnerabilitiesPanel
 		{
@@ -148,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(32)] 
 		[RED("vulnerabilityFields")] 
 		public CArray<inkWidgetReference> VulnerabilityFields
 		{
@@ -156,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<inkWidgetReference>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(33)] 
 		[RED("subHeader")] 
 		public inkTextWidgetReference SubHeader
 		{
@@ -164,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(34)] 
 		[RED("tier")] 
 		public inkTextWidgetReference Tier
 		{
@@ -172,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(35)] 
 		[RED("description")] 
 		public inkTextWidgetReference Description
 		{
@@ -180,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(36)] 
 		[RED("recompileTimer")] 
 		public inkTextWidgetReference RecompileTimer
 		{
@@ -188,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(37)] 
 		[RED("damage")] 
 		public inkTextWidgetReference Damage
 		{
@@ -196,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(38)] 
 		[RED("duration")] 
 		public inkTextWidgetReference Duration
 		{
@@ -204,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(39)] 
 		[RED("cooldown")] 
 		public inkTextWidgetReference Cooldown
 		{
@@ -212,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(40)] 
 		[RED("uploadTime")] 
 		public inkTextWidgetReference UploadTime
 		{
@@ -220,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(41)] 
 		[RED("memoryCost")] 
 		public inkTextWidgetReference MemoryCost
 		{
@@ -228,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(42)] 
 		[RED("memoryRawCost")] 
 		public inkTextWidgetReference MemoryRawCost
 		{
@@ -236,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(43)] 
 		[RED("warningWidget")] 
 		public inkWidgetReference WarningWidget
 		{
@@ -244,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(44)] 
 		[RED("warningText")] 
 		public inkTextWidgetReference WarningText
 		{
@@ -252,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(45)] 
 		[RED("recompilePanel")] 
 		public inkWidgetReference RecompilePanel
 		{
@@ -260,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(46)] 
 		[RED("recompileText")] 
 		public inkTextWidgetReference RecompileText
 		{
@@ -268,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(47)] 
 		[RED("isUILocked")] 
 		public CBool IsUILocked
 		{
@@ -276,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(48)] 
 		[RED("gameInstance")] 
 		public ScriptGameInstance GameInstance
 		{
@@ -284,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<ScriptGameInstance>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(49)] 
 		[RED("visionModeSystem")] 
 		public CWeakHandle<gameVisionModeSystem> VisionModeSystem
 		{
@@ -292,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameVisionModeSystem>>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(50)] 
 		[RED("scanningCtrl")] 
 		public CWeakHandle<gameScanningController> ScanningCtrl
 		{
@@ -300,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameScanningController>>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(51)] 
 		[RED("uiSystem")] 
 		public CHandle<gameuiGameSystemUI> UiSystem
 		{
@@ -308,7 +348,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameuiGameSystemUI>>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(52)] 
 		[RED("contextHelpOverlay")] 
 		public CBool ContextHelpOverlay
 		{
@@ -316,7 +356,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(53)] 
 		[RED("quickHackDescriptionVisibility")] 
 		public CUInt32 QuickHackDescriptionVisibility
 		{
@@ -324,7 +364,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(54)] 
 		[RED("buffListListener")] 
 		public CHandle<redCallbackObject> BuffListListener
 		{
@@ -332,7 +372,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(55)] 
 		[RED("memoryBoard")] 
 		public CWeakHandle<gameIBlackboard> MemoryBoard
 		{
@@ -340,7 +380,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(56)] 
 		[RED("memoryBoardDef")] 
 		public CHandle<UI_PlayerBioMonitorDef> MemoryBoardDef
 		{
@@ -348,7 +388,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_PlayerBioMonitorDef>>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(57)] 
 		[RED("memoryPercentListener")] 
 		public CHandle<redCallbackObject> MemoryPercentListener
 		{
@@ -356,7 +396,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(58)] 
 		[RED("quickhackBarArray")] 
 		public CArray<CWeakHandle<inkCompoundWidget>> QuickhackBarArray
 		{
@@ -364,7 +404,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<inkCompoundWidget>>>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(59)] 
 		[RED("maxQuickhackBars")] 
 		public CInt32 MaxQuickhackBars
 		{
@@ -372,7 +412,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(60)] 
 		[RED("listController")] 
 		public CWeakHandle<inkListController> ListController
 		{
@@ -380,7 +420,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkListController>>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(61)] 
 		[RED("data")] 
 		public CArray<CHandle<QuickhackData>> Data
 		{
@@ -388,7 +428,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<QuickhackData>>>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(62)] 
 		[RED("selectedData")] 
 		public CHandle<QuickhackData> SelectedData
 		{
@@ -396,7 +436,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<QuickhackData>>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(63)] 
 		[RED("active")] 
 		public CBool Active
 		{
@@ -404,7 +444,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(64)] 
 		[RED("memorySpendAnimation")] 
 		public CHandle<inkanimProxy> MemorySpendAnimation
 		{
@@ -412,7 +452,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(65)] 
 		[RED("memorySpendCounter")] 
 		public CInt32 MemorySpendCounter
 		{
@@ -420,7 +460,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(66)] 
 		[RED("memorySpendIndex")] 
 		public CInt32 MemorySpendIndex
 		{
@@ -428,7 +468,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(67)] 
 		[RED("selectedMemoryLoop")] 
 		public CArray<CHandle<inkanimProxy>> SelectedMemoryLoop
 		{
@@ -436,7 +476,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<inkanimProxy>>>(value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(68)] 
 		[RED("inkIntroAnimProxy")] 
 		public CHandle<inkanimProxy> InkIntroAnimProxy
 		{
@@ -444,7 +484,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(69)] 
 		[RED("inkVulnerabilityAnimProxy")] 
 		public CHandle<inkanimProxy> InkVulnerabilityAnimProxy
 		{
@@ -452,7 +492,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(70)] 
 		[RED("inkWarningAnimProxy")] 
 		public CHandle<inkanimProxy> InkWarningAnimProxy
 		{
@@ -460,7 +500,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(71)] 
 		[RED("inkRecompileAnimProxy")] 
 		public CHandle<inkanimProxy> InkRecompileAnimProxy
 		{
@@ -468,7 +508,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(72)] 
 		[RED("inkReductionAnimProxy")] 
 		public CHandle<inkanimProxy> InkReductionAnimProxy
 		{
@@ -476,7 +516,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(73)] 
 		[RED("HACK_wasPlayedOnTarget")] 
 		public CBool HACK_wasPlayedOnTarget
 		{
@@ -484,7 +524,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(69)] 
+		[Ordinal(74)] 
 		[RED("inkMemoryWarningTransitionAnimProxy")] 
 		public CHandle<inkanimProxy> InkMemoryWarningTransitionAnimProxy
 		{
@@ -492,7 +532,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(70)] 
+		[Ordinal(75)] 
 		[RED("lastMemoryWarningTransitionAnimName")] 
 		public CName LastMemoryWarningTransitionAnimName
 		{
@@ -500,7 +540,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(71)] 
+		[Ordinal(76)] 
 		[RED("hasActiveUpload")] 
 		public CBool HasActiveUpload
 		{
@@ -508,7 +548,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(72)] 
+		[Ordinal(77)] 
 		[RED("lastCompiledTarget")] 
 		public entEntityID LastCompiledTarget
 		{
@@ -516,7 +556,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entEntityID>(value);
 		}
 
-		[Ordinal(73)] 
+		[Ordinal(78)] 
 		[RED("statPoolListenersIndexes")] 
 		public CArray<CInt32> StatPoolListenersIndexes
 		{
@@ -524,7 +564,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CInt32>>(value);
 		}
 
-		[Ordinal(74)] 
+		[Ordinal(79)] 
 		[RED("chunkBlackboard")] 
 		public CWeakHandle<gameIBlackboard> ChunkBlackboard
 		{
@@ -532,7 +572,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(75)] 
+		[Ordinal(80)] 
 		[RED("nameCallbackID")] 
 		public CHandle<redCallbackObject> NameCallbackID
 		{
@@ -540,7 +580,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(76)] 
+		[Ordinal(81)] 
+		[RED("uiScannerChangeTargetTooltipVisibilityCallback")] 
+		public CHandle<redCallbackObject> UiScannerChangeTargetTooltipVisibilityCallback
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(82)] 
 		[RED("lastFillCells")] 
 		public CInt32 LastFillCells
 		{
@@ -548,7 +596,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(77)] 
+		[Ordinal(83)] 
 		[RED("lastUsedCells")] 
 		public CInt32 LastUsedCells
 		{
@@ -556,7 +604,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(78)] 
+		[Ordinal(84)] 
 		[RED("lastMaxCells")] 
 		public CInt32 LastMaxCells
 		{
@@ -564,7 +612,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(79)] 
+		[Ordinal(85)] 
 		[RED("axisInputConsumed")] 
 		public CBool AxisInputConsumed
 		{
@@ -572,7 +620,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(80)] 
+		[Ordinal(86)] 
 		[RED("playerObject")] 
 		public CWeakHandle<gameObject> PlayerObject
 		{
@@ -587,11 +635,16 @@ namespace WolvenKit.RED4.Types
 			MemoryWidget = new inkWidgetReference();
 			AvaliableMemory = new inkTextWidgetReference();
 			ListWidget = new inkWidgetReference();
+			NoQuickhacks = new inkCompoundWidgetReference();
+			OpenCyberdeckBtn = new inkWidgetReference();
 			ExecuteBtn = new inkWidgetReference();
 			ExecuteAndCloseBtn = new inkWidgetReference();
+			ChangeTarget = new inkWidgetReference();
+			TutorialButton = new inkWidgetReference();
 			RightPanel = new inkWidgetReference();
 			NetworkBreach = new inkWidgetReference();
 			CostReductionPanel = new inkWidgetReference();
+			CostReductionText = new inkTextWidgetReference();
 			CostReductionValue = new inkTextWidgetReference();
 			TargetName = new inkTextWidgetReference();
 			IcePanel = new inkWidgetReference();

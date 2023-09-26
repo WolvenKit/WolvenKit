@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class VendingTerminal : InteractiveDevice
 	{
-		[Ordinal(94)] 
+		[Ordinal(98)] 
 		[RED("position")] 
 		public Vector4 Position
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(99)] 
 		[RED("canMeshComponent")] 
 		public CHandle<entMeshComponent> CanMeshComponent
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(100)] 
 		[RED("vendingBlacklist")] 
 		public CArray<CEnum<EVendorMode>> VendingBlacklist
 		{

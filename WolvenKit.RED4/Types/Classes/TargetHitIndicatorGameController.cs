@@ -109,11 +109,11 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(15)] 
-		[RED("weaponChangeBlackboardId")] 
-		public CHandle<redCallbackObject> WeaponChangeBlackboardId
+		[RED("weaponChangedListener")] 
+		public CHandle<gameAttachmentSlotsScriptListener> WeaponChangedListener
 		{
-			get => GetPropertyValue<CHandle<redCallbackObject>>();
-			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+			get => GetPropertyValue<CHandle<gameAttachmentSlotsScriptListener>>();
+			set => SetPropertyValue<CHandle<gameAttachmentSlotsScriptListener>>(value);
 		}
 
 		[Ordinal(16)] 
@@ -226,6 +226,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(30)] 
+		[RED("uiSystem")] 
+		public CHandle<gameuiGameSystemUI> UiSystem
+		{
+			get => GetPropertyValue<CHandle<gameuiGameSystemUI>>();
+			set => SetPropertyValue<CHandle<gameuiGameSystemUI>>(value);
 		}
 
 		public TargetHitIndicatorGameController()

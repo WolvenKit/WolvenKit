@@ -18,7 +18,8 @@ public class RedPackageSettings
 
 public class RedPackage : Red4File, IParseableBuffer, IRedCloneable
 {
-    public ushort Version = 4;
+    public byte Version = 4;
+    public byte Unknown1 = 2;
     public ushort Sections = 7;
 
     public short CruidIndex;

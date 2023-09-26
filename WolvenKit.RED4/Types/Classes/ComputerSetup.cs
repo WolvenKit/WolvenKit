@@ -53,6 +53,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(11)] 
+		[RED("stylePreset")] 
+		public TweakDBID StylePreset
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+
+		[Ordinal(12)] 
 		[RED("mailsStructure")] 
 		public CArray<gamedeviceGenericDataContent> MailsStructure
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gamedeviceGenericDataContent>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("filesStructure")] 
 		public CArray<gamedeviceGenericDataContent> FilesStructure
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gamedeviceGenericDataContent>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("newsFeed")] 
 		public CArray<SNewsFeedElementData> NewsFeed
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<SNewsFeedElementData>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("newsFeedInterval")] 
 		public CFloat NewsFeedInterval
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("internetSubnet")] 
 		public SInternetData InternetSubnet
 		{
@@ -92,12 +100,28 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<SInternetData>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("animationState")] 
 		public CEnum<EComputerAnimationState> AnimationState
 		{
 			get => GetPropertyValue<CEnum<EComputerAnimationState>>();
 			set => SetPropertyValue<CEnum<EComputerAnimationState>>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("animationStateSetFactName")] 
+		public CName AnimationStateSetFactName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(19)] 
+		[RED("ignoreSleepMode")] 
+		public CBool IgnoreSleepMode
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public ComputerSetup()
@@ -106,6 +130,7 @@ namespace WolvenKit.RED4.Types
 			FilesMenu = true;
 			SystemMenu = true;
 			InternetMenu = true;
+			StylePreset = "ComputerUIPresets.DefaultPreset";
 			MailsStructure = new();
 			FilesStructure = new();
 			NewsFeed = new();

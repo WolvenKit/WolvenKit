@@ -204,6 +204,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
+		[Ordinal(31)] 
+		[RED("menuVisited")] 
+		public CBool MenuVisited
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public CharacterCreationStatsMenu()
 		{
 			Attribute_01 = new inkWidgetReference();

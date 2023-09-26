@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class sampleSmartBullet : BaseProjectile
 	{
-		[Ordinal(46)] 
+		[Ordinal(48)] 
 		[RED("meshComponent")] 
 		public CHandle<entIComponent> MeshComponent
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entIComponent>>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(49)] 
 		[RED("effect")] 
 		public gameEffectRef Effect
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameEffectRef>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(50)] 
 		[RED("countTime")] 
 		public CFloat CountTime
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(51)] 
 		[RED("startVelocity")] 
 		public CFloat StartVelocity
 		{
@@ -36,15 +36,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(52)] 
 		[RED("lifetime")] 
-		public CFloat Lifetime_432
+		public CFloat Lifetime_448
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(53)] 
 		[RED("bendTimeRatio")] 
 		public CFloat BendTimeRatio
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(54)] 
 		[RED("bendFactor")] 
 		public CFloat BendFactor
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(55)] 
 		[RED("useParabolicPhase")] 
 		public CBool UseParabolicPhase
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(56)] 
 		[RED("parabolicVelocityMin")] 
 		public CFloat ParabolicVelocityMin
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(57)] 
 		[RED("parabolicVelocityMax")] 
 		public CFloat ParabolicVelocityMax
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(58)] 
 		[RED("parabolicDuration")] 
 		public CFloat ParabolicDuration
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(59)] 
 		[RED("parabolicGravity")] 
 		public Vector4 ParabolicGravity
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(60)] 
 		[RED("spiralParams")] 
 		public CHandle<gameprojectileSpiralParams> SpiralParams
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameprojectileSpiralParams>>(value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(61)] 
 		[RED("useSpiralParams")] 
 		public CBool UseSpiralParams
 		{
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(62)] 
 		[RED("alive")] 
 		public CBool Alive
 		{
@@ -124,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(63)] 
 		[RED("hit")] 
 		public CBool Hit
 		{
@@ -132,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(64)] 
 		[RED("trailName")] 
 		public CName TrailName
 		{
@@ -140,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(65)] 
 		[RED("statsSystem")] 
 		public CHandle<gameStatsSystem> StatsSystem
 		{
@@ -148,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStatsSystem>>(value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(66)] 
 		[RED("weaponID")] 
 		public entEntityID WeaponID
 		{
@@ -156,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entEntityID>(value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(67)] 
 		[RED("parabolicPhaseParams")] 
 		public CHandle<gameprojectileParabolicTrajectoryParams> ParabolicPhaseParams
 		{
@@ -164,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameprojectileParabolicTrajectoryParams>>(value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(68)] 
 		[RED("followPhaseParams")] 
 		public CHandle<gameprojectileFollowCurveTrajectoryParams> FollowPhaseParams
 		{
@@ -172,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameprojectileFollowCurveTrajectoryParams>>(value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(69)] 
 		[RED("linearPhaseParams")] 
 		public CHandle<gameprojectileLinearTrajectoryParams> LinearPhaseParams
 		{
@@ -180,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameprojectileLinearTrajectoryParams>>(value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(70)] 
 		[RED("targeted")] 
 		public CBool Targeted
 		{
@@ -188,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(69)] 
+		[Ordinal(71)] 
 		[RED("trailStarted")] 
 		public CBool TrailStarted
 		{
@@ -196,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(70)] 
+		[Ordinal(72)] 
 		[RED("phase")] 
 		public CEnum<ESmartBulletPhase> Phase
 		{
@@ -204,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ESmartBulletPhase>>(value);
 		}
 
-		[Ordinal(71)] 
+		[Ordinal(73)] 
 		[RED("timeInPhase")] 
 		public CFloat TimeInPhase
 		{
@@ -212,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(72)] 
+		[Ordinal(74)] 
 		[RED("randStartVelocity")] 
 		public CFloat RandStartVelocity
 		{
@@ -220,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(73)] 
+		[Ordinal(75)] 
 		[RED("smartGunMissDelay")] 
 		public CFloat SmartGunMissDelay
 		{
@@ -228,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(74)] 
+		[Ordinal(76)] 
 		[RED("smartGunHitProbability")] 
 		public CFloat SmartGunHitProbability
 		{
@@ -236,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(75)] 
+		[Ordinal(77)] 
 		[RED("smartGunMissRadius")] 
 		public CFloat SmartGunMissRadius
 		{
@@ -244,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(76)] 
+		[Ordinal(78)] 
 		[RED("randomWeaponMissChance")] 
 		public CFloat RandomWeaponMissChance
 		{
@@ -252,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(77)] 
+		[Ordinal(79)] 
 		[RED("randomTargetMissChance")] 
 		public CFloat RandomTargetMissChance
 		{
@@ -260,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(78)] 
+		[Ordinal(80)] 
 		[RED("readyToMiss")] 
 		public CBool ReadyToMiss
 		{
@@ -268,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(79)] 
+		[Ordinal(81)] 
 		[RED("stopAndDropOnTargetingDisruption")] 
 		public CBool StopAndDropOnTargetingDisruption
 		{
@@ -276,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(80)] 
+		[Ordinal(82)] 
 		[RED("shouldStopAndDrop")] 
 		public CBool ShouldStopAndDrop
 		{
@@ -284,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(81)] 
+		[Ordinal(83)] 
 		[RED("targetID")] 
 		public entEntityID TargetID
 		{
@@ -292,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entEntityID>(value);
 		}
 
-		[Ordinal(82)] 
+		[Ordinal(84)] 
 		[RED("ignoredTargetID")] 
 		public entEntityID IgnoredTargetID
 		{
@@ -300,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entEntityID>(value);
 		}
 
-		[Ordinal(83)] 
+		[Ordinal(85)] 
 		[RED("owner")] 
 		public CWeakHandle<gameObject> Owner
 		{
@@ -308,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(84)] 
+		[Ordinal(86)] 
 		[RED("weapon")] 
 		public CWeakHandle<gameObject> Weapon
 		{
@@ -316,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(85)] 
+		[Ordinal(87)] 
 		[RED("startPosition")] 
 		public Vector4 StartPosition
 		{
@@ -324,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(86)] 
+		[Ordinal(88)] 
 		[RED("hasExploded")] 
 		public CBool HasExploded
 		{
@@ -332,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(87)] 
+		[Ordinal(89)] 
 		[RED("attack")] 
 		public CHandle<gameIAttack> Attack
 		{
@@ -340,12 +340,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameIAttack>>(value);
 		}
 
-		[Ordinal(88)] 
+		[Ordinal(90)] 
 		[RED("BulletCollisionEvaluator")] 
 		public CHandle<BulletCollisionEvaluator> BulletCollisionEvaluator
 		{
 			get => GetPropertyValue<CHandle<BulletCollisionEvaluator>>();
 			set => SetPropertyValue<CHandle<BulletCollisionEvaluator>>(value);
+		}
+
+		[Ordinal(91)] 
+		[RED("trackedTargetComponent")] 
+		public CWeakHandle<gameTargetingComponent> TrackedTargetComponent
+		{
+			get => GetPropertyValue<CWeakHandle<gameTargetingComponent>>();
+			set => SetPropertyValue<CWeakHandle<gameTargetingComponent>>(value);
 		}
 
 		public sampleSmartBullet()

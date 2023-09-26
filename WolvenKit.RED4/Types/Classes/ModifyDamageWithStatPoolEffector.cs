@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ModifyDamageWithStatPoolEffector : ModifyDamageEffector
 	{
-		[Ordinal(2)] 
+		[Ordinal(6)] 
 		[RED("statPool")] 
 		public CEnum<gamedataStatPoolType> StatPool
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataStatPoolType>>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(7)] 
 		[RED("poolStatus")] 
 		public CString PoolStatus
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(8)] 
 		[RED("maxDmg")] 
 		public CFloat MaxDmg
 		{
@@ -28,7 +28,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(9)] 
+		[RED("percentMult")] 
+		public CFloat PercentMult
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(10)] 
 		[RED("refObj")] 
 		public CString RefObj
 		{

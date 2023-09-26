@@ -28,6 +28,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
+		[Ordinal(4)] 
+		[RED("outAllowFailsafeTeleport")] 
+		public CHandle<AIArgumentMapping> OutAllowFailsafeTeleport
+		{
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
+		}
+
 		public AIbehaviorExtractMountDataTaskDefinition()
 		{
 			PostConstruct();

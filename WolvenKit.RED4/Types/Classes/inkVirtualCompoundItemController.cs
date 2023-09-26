@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class inkVirtualCompoundItemController : inkButtonController
 	{
-		[Ordinal(10)] 
+		[Ordinal(13)] 
 		[RED("ToggledOff")] 
 		public inkVirtualCompoundItemControllerCallback ToggledOff
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkVirtualCompoundItemControllerCallback>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(14)] 
 		[RED("ToggledOn")] 
 		public inkVirtualCompoundItemControllerCallback ToggledOn
 		{
@@ -20,15 +20,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkVirtualCompoundItemControllerCallback>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("Selected")] 
-		public inkVirtualCompoundItemSelectControllerCallback Selected_672
+		public inkVirtualCompoundItemSelectControllerCallback Selected_744
 		{
 			get => GetPropertyValue<inkVirtualCompoundItemSelectControllerCallback>();
 			set => SetPropertyValue<inkVirtualCompoundItemSelectControllerCallback>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(16)] 
 		[RED("Deselected")] 
 		public inkVirtualCompoundItemControllerCallback Deselected
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkVirtualCompoundItemControllerCallback>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(17)] 
 		[RED("Added")] 
 		public inkVirtualCompoundItemControllerCallback Added
 		{
@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.Types
 		{
 			ToggledOff = new inkVirtualCompoundItemControllerCallback();
 			ToggledOn = new inkVirtualCompoundItemControllerCallback();
-			Selected_672 = new inkVirtualCompoundItemSelectControllerCallback();
+			Selected_744 = new inkVirtualCompoundItemSelectControllerCallback();
 			Deselected = new inkVirtualCompoundItemControllerCallback();
 			Added = new inkVirtualCompoundItemControllerCallback();
 

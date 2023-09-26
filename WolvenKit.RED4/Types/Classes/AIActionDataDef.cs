@@ -252,6 +252,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
+		[Ordinal(31)] 
+		[RED("lastGrenadeThrowTimestamp")] 
+		public gamebbScriptID_Float LastGrenadeThrowTimestamp
+		{
+			get => GetPropertyValue<gamebbScriptID_Float>();
+			set => SetPropertyValue<gamebbScriptID_Float>(value);
+		}
+
 		public AIActionDataDef()
 		{
 			OwnerMeleeAttackBlockedCount = new gamebbScriptID_Int32();
@@ -285,6 +293,7 @@ namespace WolvenKit.RED4.Types
 			AvoidLOSTimeStamp = new gamebbScriptID_Float();
 			AttackBlocked = new gamebbScriptID_Bool();
 			AttackParried = new gamebbScriptID_Bool();
+			LastGrenadeThrowTimestamp = new gamebbScriptID_Float();
 
 			PostConstruct();
 		}

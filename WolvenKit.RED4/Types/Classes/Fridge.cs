@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class Fridge : InteractiveDevice
 	{
-		[Ordinal(94)] 
+		[Ordinal(98)] 
 		[RED("animFeature")] 
 		public CHandle<AnimFeature_SimpleDevice> AnimFeature
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AnimFeature_SimpleDevice>>(value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(99)] 
 		[RED("factOnDoorOpened")] 
 		public CName FactOnDoorOpened
 		{

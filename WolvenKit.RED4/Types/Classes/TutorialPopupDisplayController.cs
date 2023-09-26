@@ -68,6 +68,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
+		[Ordinal(9)] 
+		[RED("data")] 
+		public CHandle<TutorialPopupData> Data
+		{
+			get => GetPropertyValue<CHandle<TutorialPopupData>>();
+			set => SetPropertyValue<CHandle<TutorialPopupData>>(value);
+		}
+
 		public TutorialPopupDisplayController()
 		{
 			Title = new inkTextWidgetReference();

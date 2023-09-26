@@ -12,6 +12,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("effectiveRangeMod")] 
+		public CHandle<gameStatModifierData_Deprecated> EffectiveRangeMod
+		{
+			get => GetPropertyValue<CHandle<gameStatModifierData_Deprecated>>();
+			set => SetPropertyValue<CHandle<gameStatModifierData_Deprecated>>(value);
+		}
+
 		public MeleeChargedHoldEvents()
 		{
 			PostConstruct();

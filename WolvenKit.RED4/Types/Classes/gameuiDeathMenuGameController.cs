@@ -28,6 +28,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
+		[Ordinal(9)] 
+		[RED("axisInputReceived")] 
+		public CBool AxisInputReceived
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("dpadInputReceived")] 
+		public CBool DpadInputReceived
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public gameuiDeathMenuGameController()
 		{
 			ButtonHintsManagerRef = new inkWidgetReference();

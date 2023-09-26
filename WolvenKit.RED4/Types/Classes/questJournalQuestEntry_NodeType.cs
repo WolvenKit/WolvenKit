@@ -28,6 +28,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("optional")] 
+		public CBool Optional
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(4)] 
+		[RED("version")] 
+		public CEnum<questJournalQuestEntry_NodeTypeNodeVersion> Version
+		{
+			get => GetPropertyValue<CEnum<questJournalQuestEntry_NodeTypeNodeVersion>>();
+			set => SetPropertyValue<CEnum<questJournalQuestEntry_NodeTypeNodeVersion>>(value);
+		}
+
 		public questJournalQuestEntry_NodeType()
 		{
 			SendNotification = true;

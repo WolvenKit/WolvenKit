@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class Crosshair_Melee_Nano_Wire : CrosshairGameController_Melee
 	{
-		[Ordinal(32)] 
+		[Ordinal(42)] 
 		[RED("animEnterADS")] 
 		public CHandle<inkanimProxy> AnimEnterADS
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(43)] 
 		[RED("inAimDownSight")] 
 		public CBool InAimDownSight
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(44)] 
 		[RED("isHoveringOfficer")] 
 		public CBool IsHoveringOfficer
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(45)] 
 		[RED("inChargedHold")] 
 		public CBool InChargedHold
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(46)] 
 		[RED("anim_EnterHipFire")] 
 		public CHandle<inkanimProxy> Anim_EnterHipFire
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(47)] 
 		[RED("anim_HoverEnterEnemy")] 
 		public CHandle<inkanimProxy> Anim_HoverEnterEnemy
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(48)] 
 		[RED("anim_EnterStrongAttack")] 
 		public CHandle<inkanimProxy> Anim_EnterStrongAttack
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(49)] 
 		[RED("anim_EnterThrowAttack")] 
 		public CHandle<inkanimProxy> Anim_EnterThrowAttack
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(50)] 
 		[RED("anim_EnterEveryOtherAttack")] 
 		public CHandle<inkanimProxy> Anim_EnterEveryOtherAttack
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(51)] 
 		[RED("anim_EnterChargedHold")] 
 		public CHandle<inkanimProxy> Anim_EnterChargedHold
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(52)] 
 		[RED("anim_HoverExitEnemy")] 
 		public CHandle<inkanimProxy> Anim_HoverExitEnemy
 		{

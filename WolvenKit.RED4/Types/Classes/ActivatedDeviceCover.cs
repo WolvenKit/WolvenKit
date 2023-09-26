@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ActivatedDeviceCover : ActivatedDeviceTransfromAnim
 	{
-		[Ordinal(95)] 
+		[Ordinal(99)] 
 		[RED("offMeshConnection")] 
 		public CHandle<AIOffMeshConnectionComponent> OffMeshConnection
 		{

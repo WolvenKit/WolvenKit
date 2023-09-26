@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameJournalContact : gameJournalFileEntry
 	{
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("name")] 
 		public LocalizationString Name
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<LocalizationString>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("avatarID")] 
 		public TweakDBID AvatarID
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("type")] 
 		public CEnum<gameContactType> Type
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameContactType>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("useFlatMessageLayout")] 
 		public CBool UseFlatMessageLayout
 		{
@@ -36,11 +36,21 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(7)] 
+		[RED("isCallableDefault")] 
+		public CBool IsCallableDefault
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public gameJournalContact()
 		{
+			JournalEntryOverrideDataList = new();
 			Entries = new();
 			Name = new() { Unk1 = 0, Value = "" };
 			UseFlatMessageLayout = true;
+			IsCallableDefault = true;
 
 			PostConstruct();
 		}

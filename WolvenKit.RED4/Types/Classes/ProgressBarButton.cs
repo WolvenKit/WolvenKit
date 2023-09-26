@@ -21,6 +21,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("craftingIconGlyph")] 
+		public inkWidgetReference CraftingIconGlyph
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("ButtonController")] 
 		public CWeakHandle<inkButtonController> ButtonController
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkButtonController>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("progressController")] 
 		public CWeakHandle<ProgressBarsController> ProgressController
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ProgressBarsController>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("available")] 
 		public CBool Available
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("progress")] 
 		public CFloat Progress
 		{
@@ -52,10 +60,19 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(8)] 
+		[RED("isLocked")] 
+		public CBool IsLocked
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public ProgressBarButton()
 		{
 			CraftingFill = new inkWidgetReference();
 			CraftingLabel = new inkTextWidgetReference();
+			CraftingIconGlyph = new inkWidgetReference();
 
 			PostConstruct();
 		}

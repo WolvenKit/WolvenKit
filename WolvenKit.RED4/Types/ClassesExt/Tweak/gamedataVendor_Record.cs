@@ -59,17 +59,17 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
-		[RED("itemStock")]
+		[RED("itemQueries")]
 		[REDProperty(IsIgnored = true)]
-		public CArray<TweakDBID> ItemStock
+		public CArray<TweakDBID> ItemQueries
 		{
 			get => GetPropertyValue<CArray<TweakDBID>>();
 			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 		
-		[RED("itemStock2")]
+		[RED("itemStock")]
 		[REDProperty(IsIgnored = true)]
-		public CArray<TweakDBID> ItemStock2
+		public CArray<TweakDBID> ItemStock
 		{
 			get => GetPropertyValue<CArray<TweakDBID>>();
 			set => SetPropertyValue<CArray<TweakDBID>>(value);

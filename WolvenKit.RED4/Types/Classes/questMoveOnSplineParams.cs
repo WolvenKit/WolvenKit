@@ -45,6 +45,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
+		[RED("splineRecalculation")] 
+		public CBool SplineRecalculation
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(6)] 
 		[RED("additionalParams")] 
 		public CHandle<questMoveOnSplineAdditionalParams> AdditionalParams
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<questMoveOnSplineAdditionalParams>>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("useAlertedState")] 
 		public CBool UseAlertedState
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("useCombatState")] 
 		public CBool UseCombatState
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("executeWhileDespawned")] 
 		public CBool ExecuteWhileDespawned
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("repeatCommandOnInterrupt")] 
 		public CBool RepeatCommandOnInterrupt
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("noWaitToEndDistance")] 
 		public CFloat NoWaitToEndDistance
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("noWaitToEndCompanionDistance")] 
 		public CFloat NoWaitToEndCompanionDistance
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("removeAfterCombat")] 
 		public CBool RemoveAfterCombat
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("ignoreInCombat")] 
 		public CBool IgnoreInCombat
 		{
@@ -116,9 +124,17 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("alwaysUseStealth")] 
 		public CBool AlwaysUseStealth
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(16)] 
+		[RED("disableFootIK")] 
+		public CBool DisableFootIK
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
@@ -128,6 +144,7 @@ namespace WolvenKit.RED4.Types
 		{
 			UseStart = true;
 			UseStop = true;
+			SplineRecalculation = true;
 			ExecuteWhileDespawned = true;
 			RepeatCommandOnInterrupt = true;
 			NoWaitToEndDistance = 10.000000F;

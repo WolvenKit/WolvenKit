@@ -20,6 +20,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("driverCombatButtonHold")] 
+		public CUInt32 DriverCombatButtonHold
+		{
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
+		}
+
+		[Ordinal(3)] 
+		[RED("driverCombatButtonActivate")] 
+		public CUInt32 DriverCombatButtonActivate
+		{
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
+		}
+
 		public PlayerVisionModeControllerInputListeners()
 		{
 			PostConstruct();

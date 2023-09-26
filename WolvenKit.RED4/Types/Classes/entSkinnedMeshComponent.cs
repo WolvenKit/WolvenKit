@@ -22,18 +22,18 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(12)] 
 		[RED("castShadows")] 
-		public CBool CastShadows
+		public CEnum<shadowsShadowCastingMode> CastShadows
 		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
+			get => GetPropertyValue<CEnum<shadowsShadowCastingMode>>();
+			set => SetPropertyValue<CEnum<shadowsShadowCastingMode>>(value);
 		}
 
 		[Ordinal(13)] 
 		[RED("castLocalShadows")] 
-		public CBool CastLocalShadows
+		public CEnum<shadowsShadowCastingMode> CastLocalShadows
 		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
+			get => GetPropertyValue<CEnum<shadowsShadowCastingMode>>();
+			set => SetPropertyValue<CEnum<shadowsShadowCastingMode>>(value);
 		}
 
 		[Ordinal(14)] 
@@ -124,6 +124,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NavGenNavigationSetting>(value);
 		}
 
+		[Ordinal(25)] 
+		[RED("version")] 
+		public CUInt8 Version
+		{
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
+		}
+
 		public entSkinnedMeshComponent()
 		{
 			Name = "Component";
@@ -131,8 +139,6 @@ namespace WolvenKit.RED4.Types
 			RenderSceneLayerMask = Enums.RenderSceneLayerMask.Default;
 			ForceLODLevel = -1;
 			MeshAppearance = "default";
-			CastShadows = true;
-			CastLocalShadows = true;
 			AcceptDismemberment = true;
 			ChunkMask = long.MaxValue;
 			IsEnabled = true;

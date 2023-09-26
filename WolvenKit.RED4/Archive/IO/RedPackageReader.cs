@@ -30,6 +30,8 @@ public partial class RedPackageReader : Red4Reader
         //var unk = _reader.ReadUInt16();
         var fields = BaseStream.ReadStructs<RedPackageFieldHeader>(fieldCount);
 
+        var compiledPropertyData = cls as IRedCompiledPropertyData;
+
         foreach (var f in fields)
         {
             var varName = GetStringValue(f.nameID);
@@ -49,14 +51,29 @@ public partial class RedPackageReader : Red4Reader
             BaseStream.Position = baseOff + f.offset;
             if (prop.IsDynamic)
             {
-                value = Read(redTypeInfos, 0);
+                if (compiledPropertyData != null)
+                {
+                    value = compiledPropertyData.CustomRead(this, 0, varName);
+                }
+                else
+                {
+                    value = Read(redTypeInfos, 0);
+                }
+
                 cls.SetProperty(varName!, value);
             }
             else
             {
                 ArgumentNullException.ThrowIfNull(prop.RedName);
 
-                value = Read(redTypeInfos, 0);
+                if (compiledPropertyData != null)
+                {
+                    value = compiledPropertyData.CustomRead(this, 0, varName);
+                }
+                else
+                {
+                    value = Read(redTypeInfos, 0);
+                }
 
                 if (fieldType != prop.Type)
                 {

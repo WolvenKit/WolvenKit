@@ -5,22 +5,6 @@ namespace WolvenKit.RED4.Types
 	public partial class FxResourceMapperComponent : gameScriptableComponent
 	{
 		[Ordinal(5)] 
-		[RED("areaEffectsData")] 
-		public CArray<SAreaEffectData> AreaEffectsData
-		{
-			get => GetPropertyValue<CArray<SAreaEffectData>>();
-			set => SetPropertyValue<CArray<SAreaEffectData>>(value);
-		}
-
-		[Ordinal(6)] 
-		[RED("areaEffectsInFocusMode")] 
-		public CArray<SAreaEffectTargetData> AreaEffectsInFocusMode
-		{
-			get => GetPropertyValue<CArray<SAreaEffectTargetData>>();
-			set => SetPropertyValue<CArray<SAreaEffectTargetData>>(value);
-		}
-
-		[Ordinal(7)] 
 		[RED("areaEffectData")] 
 		public CArray<CHandle<AreaEffectData>> AreaEffectData
 		{
@@ -28,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<AreaEffectData>>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(6)] 
 		[RED("investigationSlotOffsetMultiplier")] 
 		public CFloat InvestigationSlotOffsetMultiplier
 		{
@@ -36,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(7)] 
 		[RED("areaEffectInFocusMode")] 
 		public CArray<CHandle<AreaEffectTargetData>> AreaEffectInFocusMode
 		{
@@ -44,7 +28,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<AreaEffectTargetData>>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(8)] 
+		[RED("optionalAreaEffectData")] 
+		public CArray<CHandle<OptionalAreaEffectData>> OptionalAreaEffectData
+		{
+			get => GetPropertyValue<CArray<CHandle<OptionalAreaEffectData>>>();
+			set => SetPropertyValue<CArray<CHandle<OptionalAreaEffectData>>>(value);
+		}
+
+		[Ordinal(9)] 
 		[RED("DEBUG_copiedDataFromEntity")] 
 		public CBool DEBUG_copiedDataFromEntity
 		{
@@ -52,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(10)] 
 		[RED("DEBUG_copiedDataFromFXStruct")] 
 		public CBool DEBUG_copiedDataFromFXStruct
 		{
@@ -60,13 +52,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(11)] 
+		[RED("isInitialized")] 
+		public CBool IsInitialized
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public FxResourceMapperComponent()
 		{
-			AreaEffectsData = new();
-			AreaEffectsInFocusMode = new();
 			AreaEffectData = new();
 			InvestigationSlotOffsetMultiplier = 1.000000F;
 			AreaEffectInFocusMode = new();
+			OptionalAreaEffectData = new();
 
 			PostConstruct();
 		}

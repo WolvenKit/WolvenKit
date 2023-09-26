@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class DebugTextDrawer : gameObject
 	{
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("text")] 
 		public CString Text
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("color")] 
 		public CColor Color
 		{

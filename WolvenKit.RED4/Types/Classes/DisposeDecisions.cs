@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class DisposeDecisions : CarriedObject
+	public partial class DisposeDecisions : CarriedObjectDecisions
 	{
 		public DisposeDecisions()
 		{

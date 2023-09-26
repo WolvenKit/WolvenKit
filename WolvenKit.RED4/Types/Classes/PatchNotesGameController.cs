@@ -2,57 +2,49 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class PatchNotesGameController : gameuiMenuGameController
+	public partial class PatchNotesGameController : gameuiWidgetGameController
 	{
-		[Ordinal(3)] 
-		[RED("buttonHintsRef")] 
-		public inkWidgetReference ButtonHintsRef
+		[Ordinal(2)] 
+		[RED("notesContainerRef")] 
+		public inkWidgetReference NotesContainerRef
 		{
 			get => GetPropertyValue<inkWidgetReference>();
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("itemLibraryName")] 
+		public CName ItemLibraryName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
 		[Ordinal(4)] 
-		[RED("animationName")] 
-		public CName AnimationName
+		[RED("introAnimationName")] 
+		public CName IntroAnimationName
 		{
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(5)] 
-		[RED("confirmBtn")] 
-		public inkWidgetReference ConfirmBtn
+		[RED("outroAnimationName")] 
+		public CName OutroAnimationName
 		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(6)] 
-		[RED("selectorRef")] 
-		public inkWidgetReference SelectorRef
+		[RED("closeButtonRef")] 
+		public inkWidgetReference CloseButtonRef
 		{
 			get => GetPropertyValue<inkWidgetReference>();
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(7)] 
-		[RED("patchImageRef")] 
-		public inkImageWidgetReference PatchImageRef
-		{
-			get => GetPropertyValue<inkImageWidgetReference>();
-			set => SetPropertyValue<inkImageWidgetReference>(value);
-		}
-
-		[Ordinal(8)] 
-		[RED("platformSpecificNotes")] 
-		public CArray<inkWidgetReference> PlatformSpecificNotes
-		{
-			get => GetPropertyValue<CArray<inkWidgetReference>>();
-			set => SetPropertyValue<CArray<inkWidgetReference>>(value);
-		}
-
-		[Ordinal(9)] 
 		[RED("uiSystem")] 
 		public CHandle<gameuiGameSystemUI> UiSystem
 		{
@@ -60,23 +52,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameuiGameSystemUI>>(value);
 		}
 
-		[Ordinal(10)] 
-		[RED("menuEventDispatcher")] 
-		public CWeakHandle<inkMenuEventDispatcher> MenuEventDispatcher
-		{
-			get => GetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>();
-			set => SetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>(value);
-		}
-
-		[Ordinal(11)] 
-		[RED("animProxy")] 
-		public CHandle<inkanimProxy> AnimProxy
+		[Ordinal(8)] 
+		[RED("introAnimProxy")] 
+		public CHandle<inkanimProxy> IntroAnimProxy
 		{
 			get => GetPropertyValue<CHandle<inkanimProxy>>();
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(9)] 
 		[RED("isInputBlocked")] 
 		public CBool IsInputBlocked
 		{
@@ -84,118 +68,29 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(13)] 
-		[RED("contentList")] 
-		public CArray<inkCompoundWidgetReference> ContentList
+		[Ordinal(10)] 
+		[RED("data")] 
+		public CHandle<PatchNotesPopupData> Data
 		{
-			get => GetPropertyValue<CArray<inkCompoundWidgetReference>>();
-			set => SetPropertyValue<CArray<inkCompoundWidgetReference>>(value);
+			get => GetPropertyValue<CHandle<PatchNotesPopupData>>();
+			set => SetPropertyValue<CHandle<PatchNotesPopupData>>(value);
 		}
 
-		[Ordinal(14)] 
-		[RED("atlasParts")] 
-		public CArray<CName> AtlasParts
+		[Ordinal(11)] 
+		[RED("requestHandler")] 
+		public CWeakHandle<inkISystemRequestsHandler> RequestHandler
 		{
-			get => GetPropertyValue<CArray<CName>>();
-			set => SetPropertyValue<CArray<CName>>(value);
-		}
-
-		[Ordinal(15)] 
-		[RED("labelsList")] 
-		public CArray<CString> LabelsList
-		{
-			get => GetPropertyValue<CArray<CString>>();
-			set => SetPropertyValue<CArray<CString>>(value);
-		}
-
-		[Ordinal(16)] 
-		[RED("selectedIndex")] 
-		public CInt32 SelectedIndex
-		{
-			get => GetPropertyValue<CInt32>();
-			set => SetPropertyValue<CInt32>(value);
-		}
-
-		[Ordinal(17)] 
-		[RED("contentPatchRef_1500")] 
-		public inkCompoundWidgetReference ContentPatchRef_1500
-		{
-			get => GetPropertyValue<inkCompoundWidgetReference>();
-			set => SetPropertyValue<inkCompoundWidgetReference>(value);
-		}
-
-		[Ordinal(18)] 
-		[RED("contentPatchRef_1600")] 
-		public inkCompoundWidgetReference ContentPatchRef_1600
-		{
-			get => GetPropertyValue<inkCompoundWidgetReference>();
-			set => SetPropertyValue<inkCompoundWidgetReference>(value);
-		}
-
-		[Ordinal(19)] 
-		[RED("contentPatchAtlasPart_1500")] 
-		public CName ContentPatchAtlasPart_1500
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-
-		[Ordinal(20)] 
-		[RED("contentPatchAtlasPart_1600")] 
-		public CName ContentPatchAtlasPart_1600
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-
-		[Ordinal(21)] 
-		[RED("tabsRef")] 
-		public inkWidgetReference TabsRef
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(22)] 
-		[RED("tabsController")] 
-		public CWeakHandle<TabRadioGroup> TabsController
-		{
-			get => GetPropertyValue<CWeakHandle<TabRadioGroup>>();
-			set => SetPropertyValue<CWeakHandle<TabRadioGroup>>(value);
-		}
-
-		[Ordinal(23)] 
-		[RED("cloudSaveSettingsBlockRef")] 
-		public inkCompoundWidgetReference CloudSaveSettingsBlockRef
-		{
-			get => GetPropertyValue<inkCompoundWidgetReference>();
-			set => SetPropertyValue<inkCompoundWidgetReference>(value);
-		}
-
-		[Ordinal(24)] 
-		[RED("cloudSaveSettingsBlock")] 
-		public CWeakHandle<PatchSettingsController> CloudSaveSettingsBlock
-		{
-			get => GetPropertyValue<CWeakHandle<PatchSettingsController>>();
-			set => SetPropertyValue<CWeakHandle<PatchSettingsController>>(value);
+			get => GetPropertyValue<CWeakHandle<inkISystemRequestsHandler>>();
+			set => SetPropertyValue<CWeakHandle<inkISystemRequestsHandler>>(value);
 		}
 
 		public PatchNotesGameController()
 		{
-			ButtonHintsRef = new inkWidgetReference();
-			AnimationName = "intro";
-			ConfirmBtn = new inkWidgetReference();
-			SelectorRef = new inkWidgetReference();
-			PatchImageRef = new inkImageWidgetReference();
-			PlatformSpecificNotes = new();
+			NotesContainerRef = new inkWidgetReference();
+			ItemLibraryName = "item";
+			IntroAnimationName = "intro";
+			CloseButtonRef = new inkWidgetReference();
 			IsInputBlocked = true;
-			ContentList = new();
-			AtlasParts = new();
-			LabelsList = new();
-			ContentPatchRef_1500 = new inkCompoundWidgetReference();
-			ContentPatchRef_1600 = new inkCompoundWidgetReference();
-			TabsRef = new inkWidgetReference();
-			CloudSaveSettingsBlockRef = new inkCompoundWidgetReference();
 
 			PostConstruct();
 		}

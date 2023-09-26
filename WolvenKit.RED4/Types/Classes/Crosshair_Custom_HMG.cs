@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class Crosshair_Custom_HMG : gameuiCrosshairBaseGameController
 	{
-		[Ordinal(18)] 
+		[Ordinal(27)] 
 		[RED("leftPart")] 
 		public inkWidgetReference LeftPart
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(28)] 
 		[RED("rightPart")] 
 		public inkWidgetReference RightPart
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(29)] 
 		[RED("topPart")] 
 		public inkWidgetReference TopPart
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(30)] 
 		[RED("bottomPart")] 
 		public inkWidgetReference BottomPart
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(31)] 
 		[RED("horiPart")] 
 		public inkWidgetReference HoriPart
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(32)] 
 		[RED("vertPart")] 
 		public inkWidgetReference VertPart
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(33)] 
 		[RED("overheatContainer")] 
 		public inkWidgetReference OverheatContainer
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(34)] 
 		[RED("overheatWarning")] 
 		public inkWidgetReference OverheatWarning
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(35)] 
 		[RED("overheatMask")] 
 		public inkWidgetReference OverheatMask
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(36)] 
 		[RED("overheatValueL")] 
 		public inkTextWidgetReference OverheatValueL
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(37)] 
 		[RED("overheatValueR")] 
 		public inkTextWidgetReference OverheatValueR
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(38)] 
 		[RED("leftPartExtra")] 
 		public inkImageWidgetReference LeftPartExtra
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(39)] 
 		[RED("rightPartExtra")] 
 		public inkImageWidgetReference RightPartExtra
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(40)] 
 		[RED("crosshairContainer")] 
 		public inkCanvasWidgetReference CrosshairContainer
 		{
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCanvasWidgetReference>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(41)] 
 		[RED("offsetLeftRight")] 
 		public CFloat OffsetLeftRight
 		{
@@ -124,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(42)] 
 		[RED("offsetLeftRightExtra")] 
 		public CFloat OffsetLeftRightExtra
 		{
@@ -132,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(43)] 
 		[RED("latchVertical")] 
 		public CFloat LatchVertical
 		{
@@ -140,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(44)] 
 		[RED("weaponLocalBB")] 
 		public CWeakHandle<gameIBlackboard> WeaponLocalBB
 		{
@@ -148,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(45)] 
 		[RED("overheatBBID")] 
 		public CHandle<redCallbackObject> OverheatBBID
 		{
@@ -156,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(46)] 
 		[RED("forcedOverheatBBID")] 
 		public CHandle<redCallbackObject> ForcedOverheatBBID
 		{
@@ -164,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(47)] 
 		[RED("targetColorChange")] 
 		public inkWidgetReference TargetColorChange
 		{
@@ -172,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(48)] 
 		[RED("forcedCooldownProxy")] 
 		public CHandle<inkanimProxy> ForcedCooldownProxy
 		{
@@ -180,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(49)] 
 		[RED("forcedCooldownOptions")] 
 		public inkanimPlaybackOptions ForcedCooldownOptions
 		{
@@ -208,7 +208,7 @@ namespace WolvenKit.RED4.Types
 			OffsetLeftRightExtra = 1.200000F;
 			LatchVertical = 40.000000F;
 			TargetColorChange = new inkWidgetReference();
-			ForcedCooldownOptions = new inkanimPlaybackOptions();
+			ForcedCooldownOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
 
 			PostConstruct();
 		}

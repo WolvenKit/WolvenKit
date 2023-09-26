@@ -12,9 +12,18 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(1)] 
+		[RED("extraEvaluationDistance")] 
+		public CFloat ExtraEvaluationDistance
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public senseVisibleObjectetSecondaryDistanceEvent()
 		{
 			Distance = float.MaxValue;
+			ExtraEvaluationDistance = float.MaxValue;
 
 			PostConstruct();
 		}

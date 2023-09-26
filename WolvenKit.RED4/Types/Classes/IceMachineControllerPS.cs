@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class IceMachineControllerPS : VendingMachineControllerPS
 	{
-		[Ordinal(112)] 
+		[Ordinal(115)] 
 		[RED("vendorTweakID")] 
 		public TweakDBID VendorTweakID
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(113)] 
+		[Ordinal(116)] 
 		[RED("iceMachineSFX")] 
 		public IceMachineSFX IceMachineSFX
 		{

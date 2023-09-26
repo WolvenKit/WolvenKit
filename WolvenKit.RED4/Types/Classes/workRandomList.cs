@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class workRandomList : workIContainerEntry
 	{
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("minClips")] 
 		public CInt8 MinClips
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt8>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("maxClips")] 
 		public CInt8 MaxClips
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt8>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("pauseBetweenLength")] 
 		public CFloat PauseBetweenLength
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("pauseLengthDeviation")] 
 		public CFloat PauseLengthDeviation
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("weights")] 
 		public CArray<CFloat> Weights
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CFloat>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("pauseBlendOutTime")] 
 		public CFloat PauseBlendOutTime
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("dontRepeatLastAnims")] 
 		public CInt8 DontRepeatLastAnims
 		{

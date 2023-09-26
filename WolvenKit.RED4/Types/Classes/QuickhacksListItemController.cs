@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class QuickhacksListItemController : inkListItemController
 	{
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("expandAnimationDuration")] 
 		public CFloat ExpandAnimationDuration
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("icon")] 
 		public inkImageWidgetReference Icon
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
 		[RED("description")] 
 		public inkTextWidgetReference Description
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(22)] 
 		[RED("memoryValue")] 
 		public inkTextWidgetReference MemoryValue
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(23)] 
 		[RED("memoryCells")] 
 		public inkCompoundWidgetReference MemoryCells
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(24)] 
 		[RED("actionStateRoot")] 
 		public inkWidgetReference ActionStateRoot
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(25)] 
 		[RED("actionStateText")] 
 		public inkTextWidgetReference ActionStateText
 		{
@@ -60,7 +60,39 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(26)] 
+		[RED("categoryRoot")] 
+		public inkWidgetReference CategoryRoot
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(27)] 
+		[RED("categoryText")] 
+		public inkTextWidgetReference CategoryText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(28)] 
+		[RED("revealRoot")] 
+		public inkWidgetReference RevealRoot
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(29)] 
+		[RED("revealText")] 
+		public inkTextWidgetReference RevealText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(30)] 
 		[RED("cooldownIcon")] 
 		public inkWidgetReference CooldownIcon
 		{
@@ -68,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(31)] 
 		[RED("cooldownValue")] 
 		public inkTextWidgetReference CooldownValue
 		{
@@ -76,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(32)] 
 		[RED("descriptionSize")] 
 		public inkWidgetReference DescriptionSize
 		{
@@ -84,15 +116,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(33)] 
 		[RED("costReductionArrow")] 
-		public inkWidgetReference CostReductionArrow
+		public inkImageWidgetReference CostReductionArrow
 		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(34)] 
 		[RED("curveRadius")] 
 		public CFloat CurveRadius
 		{
@@ -100,7 +132,63 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(35)] 
+		[RED("categorizedHacks")] 
+		public CBool CategorizedHacks
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(36)] 
+		[RED("colorCodedHacks")] 
+		public CBool ColorCodedHacks
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(37)] 
+		[RED("hackColorDamage")] 
+		public CName HackColorDamage
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(38)] 
+		[RED("hackColorControl")] 
+		public CName HackColorControl
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(39)] 
+		[RED("hackColorCovert")] 
+		public CName HackColorCovert
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(40)] 
+		[RED("hackColorUltimate")] 
+		public CName HackColorUltimate
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(41)] 
+		[RED("hackColorDefault")] 
+		public CName HackColorDefault
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(42)] 
 		[RED("selectedLoop")] 
 		public CHandle<inkanimProxy> SelectedLoop
 		{
@@ -108,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(43)] 
 		[RED("currentAnimationName")] 
 		public CName CurrentAnimationName
 		{
@@ -116,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(44)] 
 		[RED("choiceAccepted")] 
 		public CHandle<inkanimProxy> ChoiceAccepted
 		{
@@ -124,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(45)] 
 		[RED("resizeAnim")] 
 		public CHandle<inkanimController> ResizeAnim
 		{
@@ -132,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimController>>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(46)] 
 		[RED("root")] 
 		public CWeakHandle<inkWidget> Root
 		{
@@ -140,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(47)] 
 		[RED("data")] 
 		public CHandle<QuickhackData> Data
 		{
@@ -148,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<QuickhackData>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(48)] 
 		[RED("isSelected")] 
 		public CBool IsSelected
 		{
@@ -156,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(49)] 
 		[RED("expanded")] 
 		public CBool Expanded
 		{
@@ -164,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(50)] 
 		[RED("cachedDescriptionSize")] 
 		public Vector2 CachedDescriptionSize
 		{
@@ -172,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector2>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(51)] 
 		[RED("defaultMargin")] 
 		public inkMargin DefaultMargin
 		{
@@ -189,10 +277,19 @@ namespace WolvenKit.RED4.Types
 			MemoryCells = new inkCompoundWidgetReference();
 			ActionStateRoot = new inkWidgetReference();
 			ActionStateText = new inkTextWidgetReference();
+			CategoryRoot = new inkWidgetReference();
+			CategoryText = new inkTextWidgetReference();
+			RevealRoot = new inkWidgetReference();
+			RevealText = new inkTextWidgetReference();
 			CooldownIcon = new inkWidgetReference();
 			CooldownValue = new inkTextWidgetReference();
 			DescriptionSize = new inkWidgetReference();
-			CostReductionArrow = new inkWidgetReference();
+			CostReductionArrow = new inkImageWidgetReference();
+			HackColorDamage = "QuickHackAction.iconColorDamage";
+			HackColorControl = "QuickHackAction.iconColorControl";
+			HackColorCovert = "QuickHackAction.iconColorCovert";
+			HackColorUltimate = "QuickHackAction.iconColorUltimate";
+			HackColorDefault = "QuickHackAction.textColor";
 			CachedDescriptionSize = new Vector2();
 			DefaultMargin = new inkMargin();
 

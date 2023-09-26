@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ImageActionButtonLogicController : DeviceActionWidgetControllerBase
 	{
-		[Ordinal(29)] 
+		[Ordinal(32)] 
 		[RED("tallImageWidget")] 
 		public inkImageWidgetReference TallImageWidget
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(33)] 
 		[RED("price")] 
 		public CInt32 Price
 		{

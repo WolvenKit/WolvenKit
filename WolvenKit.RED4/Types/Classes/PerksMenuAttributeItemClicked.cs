@@ -28,6 +28,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AttributeData>>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("isHeld")] 
+		public CBool IsHeld
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public PerksMenuAttributeItemClicked()
 		{
 			PostConstruct();

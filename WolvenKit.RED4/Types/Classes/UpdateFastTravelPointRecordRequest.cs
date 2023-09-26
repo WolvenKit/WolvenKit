@@ -5,11 +5,11 @@ namespace WolvenKit.RED4.Types
 	public partial class UpdateFastTravelPointRecordRequest : gameScriptableSystemRequest
 	{
 		[Ordinal(0)] 
-		[RED("pointRecord")] 
-		public TweakDBID PointRecord
+		[RED("markerRef")] 
+		public NodeRef MarkerRef
 		{
-			get => GetPropertyValue<TweakDBID>();
-			set => SetPropertyValue<TweakDBID>(value);
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
 		}
 
 		public UpdateFastTravelPointRecordRequest()

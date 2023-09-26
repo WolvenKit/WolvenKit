@@ -389,6 +389,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(54)] 
+		[RED("randomizing")] 
+		public CBool Randomizing
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(55)] 
 		[RED("scrollController")] 
 		public CWeakHandle<inkScrollController> ScrollController
 		{
@@ -396,7 +404,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkScrollController>>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(56)] 
 		[RED("sliderController")] 
 		public CWeakHandle<inkSliderController> SliderController
 		{
@@ -404,7 +412,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkSliderController>>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(57)] 
 		[RED("inputDisabled")] 
 		public CBool InputDisabled
 		{

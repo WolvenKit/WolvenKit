@@ -13,14 +13,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
-		[RED("ownerData")] 
-		public CArray<CHandle<PlayerDevelopmentData>> OwnerData
-		{
-			get => GetPropertyValue<CArray<CHandle<PlayerDevelopmentData>>>();
-			set => SetPropertyValue<CArray<CHandle<PlayerDevelopmentData>>>(value);
-		}
-
-		[Ordinal(2)] 
 		[RED("playerDevelopmentUpdated")] 
 		public CBool PlayerDevelopmentUpdated
 		{
@@ -28,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(2)] 
 		[RED("progressionBuildUpdated")] 
 		public CBool ProgressionBuildUpdated
 		{
@@ -39,7 +31,6 @@ namespace WolvenKit.RED4.Types
 		public PlayerDevelopmentSystem()
 		{
 			PlayerData = new();
-			OwnerData = new();
 
 			PostConstruct();
 		}

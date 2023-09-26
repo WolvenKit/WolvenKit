@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class WallScreenControllerPS : TVControllerPS
 	{
-		[Ordinal(114)] 
+		[Ordinal(117)] 
 		[RED("isShown")] 
 		public CBool IsShown
 		{

@@ -93,6 +93,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(11)] 
+		[RED("stimPropagation")] 
+		public CEnum<gamedataStimPropagation> StimPropagation
+		{
+			get => GetPropertyValue<CEnum<gamedataStimPropagation>>();
+			set => SetPropertyValue<CEnum<gamedataStimPropagation>>(value);
+		}
+
+		[Ordinal(12)] 
 		[RED("initAnimInWorkspot")] 
 		public CBool InitAnimInWorkspot
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("skipInitialAnimation")] 
 		public CBool SkipInitialAnimation
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("validTillTimeStamp")] 
 		public CFloat ValidTillTimeStamp
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("recentReactionTimeStamp")] 
 		public CFloat RecentReactionTimeStamp
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("escalateProvoke")] 
 		public CBool EscalateProvoke
 		{

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class inkButtonAnimatedController : inkButtonController
 	{
-		[Ordinal(10)] 
+		[Ordinal(13)] 
 		[RED("animTargetHover")] 
 		public inkWidgetReference AnimTargetHover
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(14)] 
 		[RED("animTargetPulse")] 
 		public inkWidgetReference AnimTargetPulse
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("normalRootOpacity")] 
 		public CFloat NormalRootOpacity
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(16)] 
 		[RED("hoverRootOpacity")] 
 		public CFloat HoverRootOpacity
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(17)] 
 		[RED("rootWidget")] 
 		public CWeakHandle<inkCompoundWidget> RootWidget
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkCompoundWidget>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(18)] 
 		[RED("animTarget_Hover")] 
 		public CWeakHandle<inkWidget> AnimTarget_Hover
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("animTarget_Pulse")] 
 		public CWeakHandle<inkWidget> AnimTarget_Pulse
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("animHover")] 
 		public CHandle<inkanimDefinition> AnimHover
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
 		[RED("animPulse")] 
 		public CHandle<inkanimDefinition> AnimPulse
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(22)] 
 		[RED("animHoverProxy")] 
 		public CHandle<inkanimProxy> AnimHoverProxy
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(23)] 
 		[RED("animPulseProxy")] 
 		public CHandle<inkanimProxy> AnimPulseProxy
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(24)] 
 		[RED("animPulseOptions")] 
 		public inkanimPlaybackOptions AnimPulseOptions
 		{
@@ -106,7 +106,7 @@ namespace WolvenKit.RED4.Types
 			AnimTargetPulse = new inkWidgetReference();
 			NormalRootOpacity = 1.000000F;
 			HoverRootOpacity = 1.000000F;
-			AnimPulseOptions = new inkanimPlaybackOptions();
+			AnimPulseOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
 
 			PostConstruct();
 		}

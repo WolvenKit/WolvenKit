@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class DebugInteractionObject : gameObject
 	{
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("choices")] 
 		public CArray<SDebugChoice> Choices
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<SDebugChoice>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("interaction")] 
 		public CHandle<gameinteractionsComponent> Interaction
 		{

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameJournalFile : gameJournalEntry
 	{
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("title")] 
 		public LocalizationString Title
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<LocalizationString>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("content")] 
 		public LocalizationString Content
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<LocalizationString>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("videoResource")] 
 		public CResourceAsyncReference<Bink> VideoResource
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<Bink>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("PictureFilename(legacy)")] 
 		public CString PictureFilename_legacy_
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("pictureTweak")] 
 		public TweakDBID PictureTweak
 		{
@@ -46,6 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameJournalFile()
 		{
+			JournalEntryOverrideDataList = new();
 			Title = new() { Unk1 = 0, Value = "" };
 			Content = new() { Unk1 = 0, Value = "" };
 

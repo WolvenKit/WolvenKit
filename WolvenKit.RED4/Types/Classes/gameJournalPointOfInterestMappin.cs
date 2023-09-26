@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameJournalPointOfInterestMappin : gameJournalEntry
 	{
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("staticNodeRef")] 
 		public NodeRef StaticNodeRef
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NodeRef>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("dynamicEntityRef")] 
 		public gameEntityReference DynamicEntityRef
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameEntityReference>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("securityAreaRef")] 
 		public NodeRef SecurityAreaRef
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NodeRef>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("mappinData")] 
 		public gamemappinsPointOfInterestMappinData MappinData
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamemappinsPointOfInterestMappinData>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("offset")] 
 		public Vector3 Offset
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector3>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("questPath")] 
 		public CHandle<gameJournalPath> QuestPath
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameJournalPath>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("recommendedLevelID")] 
 		public TweakDBID RecommendedLevelID
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("notificationTriggerAreaRef")] 
 		public NodeRef NotificationTriggerAreaRef
 		{
@@ -70,8 +70,9 @@ namespace WolvenKit.RED4.Types
 
 		public gameJournalPointOfInterestMappin()
 		{
+			JournalEntryOverrideDataList = new();
 			DynamicEntityRef = new gameEntityReference { Names = new() };
-			MappinData = new gamemappinsPointOfInterestMappinData { Active = true };
+			MappinData = new gamemappinsPointOfInterestMappinData { Active = true, SlotName = "UI_Interaction", SlotOffset = new Vector3 { Z = 0.500000F }, DynamicMappinRadius = 30.000000F, StaticMappinDef = "Mappins.StaticPointOfInterestMappinDefinition", DynamicMappinDef = "Mappins.DynamicPointOfInterestMappinDefinition" };
 			Offset = new Vector3();
 
 			PostConstruct();

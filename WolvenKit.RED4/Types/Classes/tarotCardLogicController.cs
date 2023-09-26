@@ -21,6 +21,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("ep1Icon")] 
+		public inkWidgetReference Ep1Icon
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("data")] 
 		public TarotCardData Data
 		{
@@ -32,6 +40,7 @@ namespace WolvenKit.RED4.Types
 		{
 			Image = new inkImageWidgetReference();
 			Highlight = new inkWidgetReference();
+			Ep1Icon = new inkWidgetReference();
 			Data = new TarotCardData();
 
 			PostConstruct();

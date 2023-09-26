@@ -37,8 +37,8 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(8)] 
-		[RED("noCollision")] 
-		public CBool NoCollision
+		[RED("noCollisions")] 
+		public CBool NoCollisions
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
@@ -61,14 +61,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(11)] 
-		[RED("applyMaxStreamingDistance")] 
-		public CBool ApplyMaxStreamingDistance
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(12)] 
 		[RED("streamingImportance")] 
 		public CEnum<worldPrefabStreamingImportance> StreamingImportance
 		{
@@ -76,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<worldPrefabStreamingImportance>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(12)] 
 		[RED("streamingOcclusionOverride")] 
 		public CEnum<worldPrefabStreamingOcclusion> StreamingOcclusionOverride
 		{
@@ -84,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<worldPrefabStreamingOcclusion>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(13)] 
 		[RED("interiorMapContribution")] 
 		public CEnum<worldPrefabInteriorMapContribution> InteriorMapContribution
 		{
@@ -92,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<worldPrefabInteriorMapContribution>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(14)] 
 		[RED("ignoreMeshEmbeddedOccluders")] 
 		public CBool IgnoreMeshEmbeddedOccluders
 		{
@@ -100,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(15)] 
 		[RED("ignoreAllOccluders")] 
 		public CBool IgnoreAllOccluders
 		{
@@ -108,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(16)] 
 		[RED("occluderAutoHideDistanceScale")] 
 		public CUInt8 OccluderAutoHideDistanceScale
 		{
@@ -116,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt8>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(17)] 
 		[RED("proxyMeshOnly")] 
 		public CEnum<worldPrefabProxyMeshOnly> ProxyMeshOnly
 		{
@@ -124,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<worldPrefabProxyMeshOnly>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(18)] 
 		[RED("proxyScaleOverride")] 
 		public CBool ProxyScaleOverride
 		{
@@ -132,12 +124,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(19)] 
 		[RED("proxyScale")] 
-		public new Vector3 ProxyScale
+		public Vector3 ProxyScale
 		{
 			get => GetPropertyValue<Vector3>();
 			set => SetPropertyValue<Vector3>(value);
+		}
+
+		[Ordinal(20)] 
+		[RED("applyMaxStreamingDistance")] 
+		public CBool ApplyMaxStreamingDistance
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public worldPrefabNode()

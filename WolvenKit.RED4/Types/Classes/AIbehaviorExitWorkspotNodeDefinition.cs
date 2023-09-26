@@ -53,6 +53,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(7)] 
+		[RED("cancelQueuedCommand")] 
+		public CHandle<AIArgumentMapping> CancelQueuedCommand
+		{
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
+		}
+
+		[Ordinal(8)] 
 		[RED("target")] 
 		public CHandle<AIArgumentMapping> Target
 		{

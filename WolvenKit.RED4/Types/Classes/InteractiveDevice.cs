@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class InteractiveDevice : Device
 	{
-		[Ordinal(84)] 
+		[Ordinal(88)] 
 		[RED("interaction")] 
 		public CHandle<gameinteractionsComponent> Interaction
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameinteractionsComponent>>(value);
 		}
 
-		[Ordinal(85)] 
+		[Ordinal(89)] 
 		[RED("interactionIndicator")] 
 		public CHandle<gameLightComponent> InteractionIndicator
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
-		[Ordinal(86)] 
+		[Ordinal(90)] 
 		[RED("disableAreaIndicatorID")] 
 		public gameDelayID DisableAreaIndicatorID
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(87)] 
+		[Ordinal(91)] 
 		[RED("delayedUIRefreshID")] 
 		public gameDelayID DelayedUIRefreshID
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(88)] 
+		[Ordinal(92)] 
 		[RED("isPlayerAround")] 
 		public CBool IsPlayerAround
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(89)] 
+		[Ordinal(93)] 
 		[RED("disableAreaIndicatorDelayActive")] 
 		public CBool DisableAreaIndicatorDelayActive
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(90)] 
+		[Ordinal(94)] 
 		[RED("objectActionsCallbackCtrl")] 
 		public CHandle<gameObjectActionsCallbackController> ObjectActionsCallbackCtrl
 		{
@@ -60,15 +60,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameObjectActionsCallbackController>>(value);
 		}
 
-		[Ordinal(91)] 
-		[RED("investigationPositionsArray")] 
-		public CArray<Vector4> InvestigationPositionsArray
+		[Ordinal(95)] 
+		[RED("investigationData")] 
+		public CArray<InvestigationData> InvestigationData
 		{
-			get => GetPropertyValue<CArray<Vector4>>();
-			set => SetPropertyValue<CArray<Vector4>>(value);
+			get => GetPropertyValue<CArray<InvestigationData>>();
+			set => SetPropertyValue<CArray<InvestigationData>>(value);
 		}
 
-		[Ordinal(92)] 
+		[Ordinal(96)] 
 		[RED("actionRestrictionPlayerBB")] 
 		public CWeakHandle<gameIBlackboard> ActionRestrictionPlayerBB
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(93)] 
+		[Ordinal(97)] 
 		[RED("actionRestrictionCallbackID")] 
 		public CHandle<redCallbackObject> ActionRestrictionCallbackID
 		{
@@ -88,7 +88,7 @@ namespace WolvenKit.RED4.Types
 		{
 			DisableAreaIndicatorID = new gameDelayID();
 			DelayedUIRefreshID = new gameDelayID();
-			InvestigationPositionsArray = new();
+			InvestigationData = new();
 
 			PostConstruct();
 		}

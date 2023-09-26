@@ -12,6 +12,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(1)] 
+		[RED("showExpansionHint")] 
+		public CBool ShowExpansionHint
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public SingleplayerMenuData()
 		{
 			PostConstruct();

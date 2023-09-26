@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class BaseGrenade : gameweaponGrenade
 	{
-		[Ordinal(40)] 
+		[Ordinal(42)] 
 		[RED("projectileComponent")] 
 		public CHandle<gameprojectileComponent> ProjectileComponent
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameprojectileComponent>>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(43)] 
 		[RED("user")] 
 		public CWeakHandle<gameObject> User
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(44)] 
 		[RED("projectileSpawnPoint")] 
 		public Vector4 ProjectileSpawnPoint
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(45)] 
 		[RED("shootCollision")] 
 		public CHandle<entSimpleColliderComponent> ShootCollision
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entSimpleColliderComponent>>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(46)] 
 		[RED("visualComponent")] 
 		public CHandle<entIComponent> VisualComponent
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entIComponent>>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(47)] 
 		[RED("stickyMeshComponent")] 
 		public CHandle<entIComponent> StickyMeshComponent
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entIComponent>>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(48)] 
 		[RED("decalsStickyComponent")] 
 		public CHandle<entIComponent> DecalsStickyComponent
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entIComponent>>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(49)] 
 		[RED("homingMeshComponent")] 
 		public CHandle<entIComponent> HomingMeshComponent
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entIComponent>>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(50)] 
 		[RED("targetingComponent")] 
 		public CHandle<gameTargetingComponent> TargetingComponent
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameTargetingComponent>>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(51)] 
 		[RED("resourceLibraryComponent")] 
 		public CHandle<ResourceLibraryComponent> ResourceLibraryComponent
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ResourceLibraryComponent>>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(52)] 
 		[RED("mappinID")] 
 		public gameNewMappinID MappinID
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameNewMappinID>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(53)] 
 		[RED("timeSinceLaunch")] 
 		public CFloat TimeSinceLaunch
 		{
@@ -100,7 +100,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(54)] 
+		[RED("timeSinceExplosion")] 
+		public CFloat TimeSinceExplosion
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(55)] 
 		[RED("detonationTimer")] 
 		public CFloat DetonationTimer
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(56)] 
 		[RED("stickyTrackerTimeout")] 
 		public CFloat StickyTrackerTimeout
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(57)] 
 		[RED("timeOfFreezing")] 
 		public CFloat TimeOfFreezing
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(58)] 
 		[RED("spawnBlinkEffectDelayID")] 
 		public gameDelayID SpawnBlinkEffectDelayID
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(59)] 
 		[RED("detonateRequestDelayID")] 
 		public gameDelayID DetonateRequestDelayID
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(60)] 
 		[RED("releaseRequestDelayID")] 
 		public gameDelayID ReleaseRequestDelayID
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(61)] 
 		[RED("delayToDetonate")] 
 		public CFloat DelayToDetonate
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(62)] 
 		[RED("detonationTimerActive")] 
 		public CBool DetonationTimerActive
 		{
@@ -164,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(63)] 
 		[RED("isAlive")] 
 		public CBool IsAlive
 		{
@@ -172,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(64)] 
 		[RED("isSinking")] 
 		public CBool IsSinking
 		{
@@ -180,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(65)] 
 		[RED("landedOnGround")] 
 		public CBool LandedOnGround
 		{
@@ -188,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(66)] 
 		[RED("isStuck")] 
 		public CBool IsStuck
 		{
@@ -196,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(67)] 
 		[RED("isTracking")] 
 		public CBool IsTracking
 		{
@@ -204,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(68)] 
 		[RED("isLockingOn")] 
 		public CBool IsLockingOn
 		{
@@ -212,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(69)] 
 		[RED("isLockedOn")] 
 		public CBool IsLockedOn
 		{
@@ -220,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(70)] 
 		[RED("readyToTrack")] 
 		public CBool ReadyToTrack
 		{
@@ -228,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(71)] 
 		[RED("lockOnFailed")] 
 		public CBool LockOnFailed
 		{
@@ -236,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(69)] 
+		[Ordinal(72)] 
 		[RED("canBeShot")] 
 		public CBool CanBeShot
 		{
@@ -244,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(70)] 
+		[Ordinal(73)] 
 		[RED("shotDownByThePlayer")] 
 		public CBool ShotDownByThePlayer
 		{
@@ -252,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(71)] 
+		[Ordinal(74)] 
 		[RED("forceExplosion")] 
 		public CBool ForceExplosion
 		{
@@ -260,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(72)] 
+		[Ordinal(75)] 
 		[RED("hasClearedIgnoredObject")] 
 		public CBool HasClearedIgnoredObject
 		{
@@ -268,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(73)] 
+		[Ordinal(76)] 
 		[RED("detonateOnImpact")] 
 		public CBool DetonateOnImpact
 		{
@@ -276,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(74)] 
+		[Ordinal(77)] 
 		[RED("setStickyTracker")] 
 		public CBool SetStickyTracker
 		{
@@ -284,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(75)] 
+		[Ordinal(78)] 
 		[RED("isContinuousEffect")] 
 		public CBool IsContinuousEffect
 		{
@@ -292,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(76)] 
+		[Ordinal(79)] 
 		[RED("additionalAttackOnDetonate")] 
 		public CBool AdditionalAttackOnDetonate
 		{
@@ -300,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(77)] 
+		[Ordinal(80)] 
 		[RED("additionalAttackOnCollision")] 
 		public CBool AdditionalAttackOnCollision
 		{
@@ -308,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(78)] 
+		[Ordinal(81)] 
 		[RED("targetAcquired")] 
 		public CBool TargetAcquired
 		{
@@ -316,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(79)] 
+		[Ordinal(82)] 
 		[RED("collidedWithNPC")] 
 		public CBool CollidedWithNPC
 		{
@@ -324,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(80)] 
+		[Ordinal(83)] 
 		[RED("isBroadcastingStim")] 
 		public CBool IsBroadcastingStim
 		{
@@ -332,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(81)] 
+		[Ordinal(84)] 
 		[RED("playingFastBeep")] 
 		public CBool PlayingFastBeep
 		{
@@ -340,7 +348,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(82)] 
+		[Ordinal(85)] 
+		[RED("hasExploded")] 
+		public CBool HasExploded
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(86)] 
 		[RED("targetTracker")] 
 		public CHandle<gameEffectInstance> TargetTracker
 		{
@@ -348,7 +364,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameEffectInstance>>(value);
 		}
 
-		[Ordinal(83)] 
+		[Ordinal(87)] 
 		[RED("potentialHomingTargets")] 
 		public CArray<GrenadePotentialHomingTarget> PotentialHomingTargets
 		{
@@ -356,7 +372,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<GrenadePotentialHomingTarget>>(value);
 		}
 
-		[Ordinal(84)] 
+		[Ordinal(88)] 
 		[RED("homingGrenadeTarget")] 
 		public GrenadePotentialHomingTarget HomingGrenadeTarget
 		{
@@ -364,7 +380,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<GrenadePotentialHomingTarget>(value);
 		}
 
-		[Ordinal(85)] 
+		[Ordinal(89)] 
 		[RED("cuttingGrenadePotentialTargets")] 
 		public CArray<CuttingGrenadePotentialTarget> CuttingGrenadePotentialTargets
 		{
@@ -372,7 +388,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CuttingGrenadePotentialTarget>>(value);
 		}
 
-		[Ordinal(86)] 
+		[Ordinal(90)] 
 		[RED("drillTargetPosition")] 
 		public Vector4 DrillTargetPosition
 		{
@@ -380,7 +396,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(87)] 
+		[Ordinal(91)] 
 		[RED("attacksSpawned")] 
 		public CArray<CHandle<gameEffectInstance>> AttacksSpawned
 		{
@@ -388,7 +404,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<gameEffectInstance>>>(value);
 		}
 
-		[Ordinal(88)] 
+		[Ordinal(92)] 
 		[RED("tweakRecord")] 
 		public CHandle<gamedataGrenade_Record> TweakRecord
 		{
@@ -396,7 +412,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gamedataGrenade_Record>>(value);
 		}
 
-		[Ordinal(89)] 
+		[Ordinal(93)] 
 		[RED("additionalEffect")] 
 		public gameFxResource AdditionalEffect
 		{
@@ -404,7 +420,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameFxResource>(value);
 		}
 
-		[Ordinal(90)] 
+		[Ordinal(94)] 
 		[RED("landedCooldownActive")] 
 		public CBool LandedCooldownActive
 		{
@@ -412,7 +428,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(91)] 
+		[Ordinal(95)] 
 		[RED("landedCooldownTimer")] 
 		public CFloat LandedCooldownTimer
 		{
@@ -420,7 +436,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(92)] 
+		[Ordinal(96)] 
 		[RED("hasHitWater")] 
 		public CBool HasHitWater
 		{
@@ -428,7 +444,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(93)] 
+		[Ordinal(97)] 
 		[RED("waterHeight")] 
 		public CFloat WaterHeight
 		{
@@ -436,7 +452,47 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(98)] 
+		[RED("smokeEffectRadius")] 
+		public CFloat SmokeEffectRadius
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(99)] 
+		[RED("smokeEffectDuration")] 
+		public CFloat SmokeEffectDuration
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(100)] 
+		[RED("smokeVisionBlockerId")] 
+		public CUInt32 SmokeVisionBlockerId
+		{
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
+		}
+
+		[Ordinal(101)] 
+		[RED("isSmokeEffectActive")] 
+		public CBool IsSmokeEffectActive
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(102)] 
+		[RED("smokeVFXDeescalationOffset")] 
+		public CFloat SmokeVFXDeescalationOffset
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(103)] 
 		[RED("cpoTimeBeforeRelease")] 
 		public CFloat CpoTimeBeforeRelease
 		{
@@ -458,6 +514,7 @@ namespace WolvenKit.RED4.Types
 			DrillTargetPosition = new Vector4();
 			AttacksSpawned = new();
 			AdditionalEffect = new gameFxResource();
+			SmokeVFXDeescalationOffset = 3.500000F;
 			CpoTimeBeforeRelease = 3.000000F;
 
 			PostConstruct();

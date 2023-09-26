@@ -19,6 +19,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 		
+		[RED("notAvailableDynamically")]
+		[REDProperty(IsIgnored = true)]
+		public CBool NotAvailableDynamically
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
+		[RED("rarityValue")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat RarityValue
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
 		[RED("statModifiers")]
 		[REDProperty(IsIgnored = true)]
 		public CArray<TweakDBID> StatModifiers

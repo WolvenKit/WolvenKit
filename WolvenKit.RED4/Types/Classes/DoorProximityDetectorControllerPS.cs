@@ -1,11 +1,11 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class DoorProximityDetectorControllerPS : ScriptableDeviceComponentPS
+	public partial class DoorProximityDetectorControllerPS : ProximityDetectorControllerPS
 	{
 		public DoorProximityDetectorControllerPS()
 		{
-			DeviceName = "Gameplay-Devices-DisplayNames-LaserDetector";
+			DeviceName = "Gameplay-Devices-DisplayNames-DoorDetector";
 
 			PostConstruct();
 		}

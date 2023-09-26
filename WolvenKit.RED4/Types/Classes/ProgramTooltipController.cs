@@ -2,9 +2,9 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ProgramTooltipController : AGenericTooltipController
+	public partial class ProgramTooltipController : AGenericTooltipControllerWithDebug
 	{
-		[Ordinal(2)] 
+		[Ordinal(5)] 
 		[RED("backgroundContainer")] 
 		public inkCompoundWidgetReference BackgroundContainer
 		{
@@ -12,7 +12,47 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(6)] 
+		[RED("equipedWrapper")] 
+		public inkWidgetReference EquipedWrapper
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("equipedCorner")] 
+		public inkWidgetReference EquipedCorner
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("recipeWrapper")] 
+		public inkWidgetReference RecipeWrapper
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(9)] 
+		[RED("recipeBG")] 
+		public inkWidgetReference RecipeBG
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("root")] 
+		public inkWidgetReference Root_144
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(11)] 
 		[RED("nameText")] 
 		public inkTextWidgetReference NameText
 		{
@@ -20,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(12)] 
 		[RED("tierText")] 
 		public inkTextWidgetReference TierText
 		{
@@ -28,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(13)] 
 		[RED("durationWidget")] 
 		public inkWidgetReference DurationWidget
 		{
@@ -36,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(14)] 
 		[RED("uploadTimeWidget")] 
 		public inkWidgetReference UploadTimeWidget
 		{
@@ -44,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(15)] 
 		[RED("cooldownWidget")] 
 		public inkWidgetReference CooldownWidget
 		{
@@ -52,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(16)] 
 		[RED("memoryCostValueText")] 
 		public inkTextWidgetReference MemoryCostValueText
 		{
@@ -60,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(17)] 
 		[RED("damageWrapper")] 
 		public inkWidgetReference DamageWrapper
 		{
@@ -68,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(18)] 
 		[RED("damageLabel")] 
 		public inkTextWidgetReference DamageLabel
 		{
@@ -76,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(19)] 
 		[RED("damageValue")] 
 		public inkTextWidgetReference DamageValue
 		{
@@ -84,7 +124,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(20)] 
+		[RED("damageContinuous")] 
+		public inkTextWidgetReference DamageContinuous
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(21)] 
 		[RED("healthPercentageLabel")] 
 		public inkTextWidgetReference HealthPercentageLabel
 		{
@@ -92,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(22)] 
 		[RED("priceContainer")] 
 		public inkWidgetReference PriceContainer
 		{
@@ -100,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(23)] 
 		[RED("priceText")] 
 		public inkTextWidgetReference PriceText
 		{
@@ -108,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(24)] 
 		[RED("descriptionWrapper")] 
 		public inkWidgetReference DescriptionWrapper
 		{
@@ -116,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(25)] 
 		[RED("descriptionText")] 
 		public inkTextWidgetReference DescriptionText
 		{
@@ -124,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(26)] 
 		[RED("hackTypeWrapper")] 
 		public inkWidgetReference HackTypeWrapper
 		{
@@ -132,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(27)] 
 		[RED("hackTypeText")] 
 		public inkTextWidgetReference HackTypeText
 		{
@@ -140,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(28)] 
 		[RED("perkContainer")] 
 		public inkWidgetReference PerkContainer
 		{
@@ -148,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(29)] 
 		[RED("perkText")] 
 		public inkTextWidgetReference PerkText
 		{
@@ -156,7 +204,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(30)] 
+		[RED("qualityContainer")] 
+		public inkWidgetReference QualityContainer
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(31)] 
+		[RED("qualityText")] 
+		public inkTextWidgetReference QualityText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(32)] 
 		[RED("effectsList")] 
 		public inkCompoundWidgetReference EffectsList
 		{
@@ -164,7 +228,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(33)] 
+		[RED("headerSegment")] 
+		public inkWidgetReference HeaderSegment
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(34)] 
+		[RED("typeSegment")] 
+		public inkWidgetReference TypeSegment
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(35)] 
 		[RED("DEBUG_iconErrorWrapper")] 
 		public inkWidgetReference DEBUG_iconErrorWrapper
 		{
@@ -172,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(36)] 
 		[RED("DEBUG_iconErrorText")] 
 		public inkTextWidgetReference DEBUG_iconErrorText
 		{
@@ -180,15 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(24)] 
-		[RED("DEBUG_showAdditionalInfo")] 
-		public CBool DEBUG_showAdditionalInfo
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(25)] 
+		[Ordinal(37)] 
 		[RED("data")] 
 		public CHandle<InventoryTooltipData> Data
 		{
@@ -196,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<InventoryTooltipData>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(38)] 
 		[RED("quickHackData")] 
 		public InventoryTooltipData_QuickhackData QuickHackData
 		{
@@ -204,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<InventoryTooltipData_QuickhackData>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(39)] 
 		[RED("itemData")] 
 		public CWeakHandle<UIInventoryItem> ItemData
 		{
@@ -212,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<UIInventoryItem>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(40)] 
 		[RED("displayContext")] 
 		public CEnum<InventoryTooltipDisplayContext> DisplayContext
 		{
@@ -220,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<InventoryTooltipDisplayContext>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(41)] 
 		[RED("itemDisplayContext")] 
 		public CEnum<gameItemDisplayContext> ItemDisplayContext
 		{
@@ -231,6 +303,11 @@ namespace WolvenKit.RED4.Types
 		public ProgramTooltipController()
 		{
 			BackgroundContainer = new inkCompoundWidgetReference();
+			EquipedWrapper = new inkWidgetReference();
+			EquipedCorner = new inkWidgetReference();
+			RecipeWrapper = new inkWidgetReference();
+			RecipeBG = new inkWidgetReference();
+			Root_144 = new inkWidgetReference();
 			NameText = new inkTextWidgetReference();
 			TierText = new inkTextWidgetReference();
 			DurationWidget = new inkWidgetReference();
@@ -240,6 +317,7 @@ namespace WolvenKit.RED4.Types
 			DamageWrapper = new inkWidgetReference();
 			DamageLabel = new inkTextWidgetReference();
 			DamageValue = new inkTextWidgetReference();
+			DamageContinuous = new inkTextWidgetReference();
 			HealthPercentageLabel = new inkTextWidgetReference();
 			PriceContainer = new inkWidgetReference();
 			PriceText = new inkTextWidgetReference();
@@ -249,7 +327,11 @@ namespace WolvenKit.RED4.Types
 			HackTypeText = new inkTextWidgetReference();
 			PerkContainer = new inkWidgetReference();
 			PerkText = new inkTextWidgetReference();
+			QualityContainer = new inkWidgetReference();
+			QualityText = new inkTextWidgetReference();
 			EffectsList = new inkCompoundWidgetReference();
+			HeaderSegment = new inkWidgetReference();
+			TypeSegment = new inkWidgetReference();
 			DEBUG_iconErrorWrapper = new inkWidgetReference();
 			DEBUG_iconErrorText = new inkTextWidgetReference();
 			QuickHackData = new InventoryTooltipData_QuickhackData { AttackEffects = new() };

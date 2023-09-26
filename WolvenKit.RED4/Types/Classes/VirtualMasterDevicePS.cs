@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class VirtualMasterDevicePS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("owner")] 
 		public CHandle<IScriptable> Owner
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<IScriptable>>(value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("globalActions")] 
 		public CArray<CHandle<gamedeviceAction>> GlobalActions
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<gamedeviceAction>>>(value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(109)] 
 		[RED("context")] 
 		public gameGetActionsContext Context
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameGetActionsContext>(value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(110)] 
 		[RED("connectedDevices")] 
 		public CArray<CHandle<gameDeviceComponentPS>> ConnectedDevices
 		{

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class LiftStatus : BaseDeviceStatus
 	{
-		[Ordinal(26)] 
+		[Ordinal(39)] 
 		[RED("libraryName")] 
 		public CName LibraryName
 		{

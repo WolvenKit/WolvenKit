@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class worldRuntimeSystemNavigation : worldIRuntimeSystem
+	public partial class worldRuntimeSystemNavigation : worldIRuntimeSystemNavigation
 	{
 		public worldRuntimeSystemNavigation()
 		{

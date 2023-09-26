@@ -19,9 +19,81 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 		
+		[RED("affectedByRecoil")]
+		[REDProperty(IsIgnored = true)]
+		public CBool AffectedByRecoil
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
+		[RED("bodyPartsTracking")]
+		[REDProperty(IsIgnored = true)]
+		public CBool BodyPartsTracking
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
+		[RED("bptMaxDot")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat BptMaxDot
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("bptMaxSwitches")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat BptMaxSwitches
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("bptMinInputMag")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat BptMinInputMag
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("bptMinMouseInputMag")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat BptMinMouseInputMag
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("bptMinResetInputMag")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat BptMinResetInputMag
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("breakOnDistance")]
+		[REDProperty(IsIgnored = true)]
+		public CBool BreakOnDistance
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("cameraInputMagToBreak")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat CameraInputMagToBreak
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("cameraMouseInputMagToBreak")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat CameraMouseInputMagToBreak
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
@@ -107,6 +179,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 		
+		[RED("ignoreInputType")]
+		[REDProperty(IsIgnored = true)]
+		public CBool IgnoreInputType
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("isEnabled")]
 		[REDProperty(IsIgnored = true)]
 		public CBool IsEnabled
@@ -153,6 +233,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("targetCycling")]
+		[REDProperty(IsIgnored = true)]
+		public CBool TargetCycling
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

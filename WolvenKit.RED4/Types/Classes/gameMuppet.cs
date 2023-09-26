@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameMuppet : gamePuppetBase
 	{
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("hitRepresantation")] 
 		public CHandle<entSlotComponent> HitRepresantation
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entSlotComponent>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("slotComponent")] 
 		public CHandle<entSlotComponent> SlotComponent
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entSlotComponent>>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("highDamageThreshold")] 
 		public CFloat HighDamageThreshold
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("medDamageThreshold")] 
 		public CFloat MedDamageThreshold
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("lowDamageThreshold")] 
 		public CFloat LowDamageThreshold
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(41)] 
 		[RED("effectTimeStamp")] 
 		public CFloat EffectTimeStamp
 		{

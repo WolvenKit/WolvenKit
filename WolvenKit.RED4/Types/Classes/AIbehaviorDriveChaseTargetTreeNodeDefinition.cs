@@ -44,6 +44,30 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
+		[Ordinal(6)] 
+		[RED("aggressiveRammingEnabled")] 
+		public CHandle<AIArgumentMapping> AggressiveRammingEnabled
+		{
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("ignoreChaseVehiclesLimit")] 
+		public CHandle<AIArgumentMapping> IgnoreChaseVehiclesLimit
+		{
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("boostDrivingStats")] 
+		public CHandle<AIArgumentMapping> BoostDrivingStats
+		{
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
+		}
+
 		public AIbehaviorDriveChaseTargetTreeNodeDefinition()
 		{
 			PostConstruct();

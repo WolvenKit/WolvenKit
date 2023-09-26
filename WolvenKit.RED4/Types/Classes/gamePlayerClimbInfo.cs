@@ -21,6 +21,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("inputDirection")] 
+		public Vector4 InputDirection
+		{
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
+		}
+
+		[Ordinal(3)] 
 		[RED("climbValid")] 
 		public CBool ClimbValid
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("vaultValid")] 
 		public CBool VaultValid
 		{
@@ -38,7 +46,8 @@ namespace WolvenKit.RED4.Types
 
 		public gamePlayerClimbInfo()
 		{
-			ObstacleEnd = new Vector4();
+			ObstacleEnd = new Vector4 { W = 1.000000F };
+			InputDirection = new Vector4();
 
 			PostConstruct();
 		}

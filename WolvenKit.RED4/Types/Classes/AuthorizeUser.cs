@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class AuthorizeUser : ActionBool
 	{
-		[Ordinal(25)] 
+		[Ordinal(38)] 
 		[RED("enteredPassword")] 
 		public CName EnteredPassword
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(39)] 
 		[RED("validPasswords")] 
 		public CArray<CName> ValidPasswords
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(40)] 
 		[RED("libraryName")] 
 		public CName LibraryName
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(41)] 
 		[RED("isforced")] 
 		public CBool Isforced
 		{
@@ -39,6 +39,7 @@ namespace WolvenKit.RED4.Types
 		public AuthorizeUser()
 		{
 			RequesterID = new entEntityID();
+			CostComponents = new();
 			InteractionChoice = new gameinteractionsChoice { CaptionParts = new gameinteractionsChoiceCaption { Parts = new() }, Data = new(), ChoiceMetaData = new gameinteractionsChoiceMetaData { Type = new gameinteractionsChoiceTypeWrapper() }, LookAtDescriptor = new gameinteractionsChoiceLookAtDescriptor { Offset = new Vector3(), OrbId = new gameinteractionsOrbID() } };
 			ActionWidgetPackage = new SActionWidgetPackage { DependendActions = new() };
 			CanTriggerStim = true;

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ComputerDeviceBlackboardDef : MasterDeviceBaseBlackboardDef
 	{
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("MailThumbnailWidgetsData")] 
 		public gamebbScriptID_Variant MailThumbnailWidgetsData
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("FileThumbnailWidgetsData")] 
 		public gamebbScriptID_Variant FileThumbnailWidgetsData
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("MailWidgetsData")] 
 		public gamebbScriptID_Variant MailWidgetsData
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("FileWidgetsData")] 
 		public gamebbScriptID_Variant FileWidgetsData
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("MenuButtonWidgetsData")] 
 		public gamebbScriptID_Variant MenuButtonWidgetsData
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("MainMenuButtonWidgetsData")] 
 		public gamebbScriptID_Variant MainMenuButtonWidgetsData
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("BannerWidgetsData")] 
 		public gamebbScriptID_Variant BannerWidgetsData
 		{

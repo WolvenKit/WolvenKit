@@ -12,6 +12,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceReference<animAnimGraph>>(value);
 		}
 
+		[Ordinal(15)] 
+		[RED("copyAnimInputsAtAttachTime")] 
+		public CBool CopyAnimInputsAtAttachTime
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public animAnimNode_GraphSlot_Test()
 		{
 			PostConstruct();

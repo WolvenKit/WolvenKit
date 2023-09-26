@@ -13,15 +13,25 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
-		[RED("listenerInt")] 
-		public CHandle<redCallbackObject> ListenerInt
+		[RED("listenerInfo")] 
+		public CHandle<redCallbackObject> ListenerInfo
 		{
 			get => GetPropertyValue<CHandle<redCallbackObject>>();
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("dismembermentInfo")] 
+		public DismembermentInstigatedInfo DismembermentInfo
+		{
+			get => GetPropertyValue<DismembermentInstigatedInfo>();
+			set => SetPropertyValue<DismembermentInstigatedInfo>(value);
+		}
+
 		public DismembermentTriggeredPrereqState()
 		{
+			DismembermentInfo = new DismembermentInstigatedInfo { TargetPosition = new Vector4(), AttackPosition = new Vector4() };
+
 			PostConstruct();
 		}
 

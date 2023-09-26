@@ -20,6 +20,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("attunementData")] 
+		public CHandle<MinimalItemTooltipModsAttunementData> AttunementData
+		{
+			get => GetPropertyValue<CHandle<MinimalItemTooltipModsAttunementData>>();
+			set => SetPropertyValue<CHandle<MinimalItemTooltipModsAttunementData>>(value);
+		}
+
 		public MinimalItemTooltipModRecordData()
 		{
 			PostConstruct();

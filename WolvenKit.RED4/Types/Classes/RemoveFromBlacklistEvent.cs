@@ -12,6 +12,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entEntityID>(value);
 		}
 
+		[Ordinal(1)] 
+		[RED("isPlayerEntity")] 
+		public CBool IsPlayerEntity
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public RemoveFromBlacklistEvent()
 		{
 			EntityIDToRemove = new entEntityID();

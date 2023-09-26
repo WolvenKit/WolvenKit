@@ -46,10 +46,10 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(5)] 
 		[RED("blockIndex")] 
-		public CUInt32 BlockIndex
+		public worldStreamingBlockIndex BlockIndex
 		{
-			get => GetPropertyValue<CUInt32>();
-			set => SetPropertyValue<CUInt32>(value);
+			get => GetPropertyValue<worldStreamingBlockIndex>();
+			set => SetPropertyValue<worldStreamingBlockIndex>(value);
 		}
 
 		[Ordinal(6)] 
@@ -72,7 +72,7 @@ namespace WolvenKit.RED4.Types
 		{
 			StreamingBox = new Box { Min = new Vector4 { X = float.MaxValue, Y = float.MaxValue, Z = float.MaxValue, W = float.MaxValue }, Max = new Vector4 { X = float.MinValue, Y = float.MinValue, Z = float.MinValue, W = float.MinValue } };
 			Variants = new();
-			BlockIndex = uint.MaxValue;
+			BlockIndex = new worldStreamingBlockIndex();
 			Category = Enums.worldStreamingSectorCategory.Unknown;
 
 			PostConstruct();

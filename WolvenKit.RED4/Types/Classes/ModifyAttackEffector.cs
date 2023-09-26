@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ModifyAttackEffector : gameEffector
+	public partial class ModifyAttackEffector : HitEventEffector
 	{
 		public ModifyAttackEffector()
 		{

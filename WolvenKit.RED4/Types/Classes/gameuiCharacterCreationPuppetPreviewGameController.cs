@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameuiCharacterCreationPuppetPreviewGameController : gameuiPuppetPreviewGameController
 	{
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("maleSceneName")] 
 		public CName MaleSceneName
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("femaleSceneName")] 
 		public CName FemaleSceneName
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("maleCamera01Ref")] 
 		public NodeRef MaleCamera01Ref
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NodeRef>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("femaleCamera01Ref")] 
 		public NodeRef FemaleCamera01Ref
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NodeRef>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("root")] 
 		public inkCompoundWidgetReference Root
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("image")] 
 		public inkImageWidgetReference Image
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("animLib")] 
 		public inkWidgetLibraryReference AnimLib
 		{
@@ -60,12 +60,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetLibraryReference>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("animName")] 
 		public CName AnimName
 		{
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(17)] 
+		[RED("characterCustomizationSystem")] 
+		public CWeakHandle<gameuiICharacterCustomizationSystem> CharacterCustomizationSystem
+		{
+			get => GetPropertyValue<CWeakHandle<gameuiICharacterCustomizationSystem>>();
+			set => SetPropertyValue<CWeakHandle<gameuiICharacterCustomizationSystem>>(value);
 		}
 
 		public gameuiCharacterCreationPuppetPreviewGameController()

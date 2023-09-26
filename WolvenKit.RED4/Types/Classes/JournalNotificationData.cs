@@ -29,11 +29,43 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(10)] 
-		[RED("menuMode")] 
-		public CBool MenuMode
+		[RED("mode")] 
+		public CEnum<JournalNotificationMode> Mode
+		{
+			get => GetPropertyValue<CEnum<JournalNotificationMode>>();
+			set => SetPropertyValue<CEnum<JournalNotificationMode>>(value);
+		}
+
+		[Ordinal(11)] 
+		[RED("type")] 
+		public CEnum<MessengerContactType> Type
+		{
+			get => GetPropertyValue<CEnum<MessengerContactType>>();
+			set => SetPropertyValue<CEnum<MessengerContactType>>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("contactNameLocKey")] 
+		public CName ContactNameLocKey
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(13)] 
+		[RED("openedFromPhone")] 
+		public CBool OpenedFromPhone
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(14)] 
+		[RED("source")] 
+		public CEnum<PhoneScreenType> Source
+		{
+			get => GetPropertyValue<CEnum<PhoneScreenType>>();
+			set => SetPropertyValue<CEnum<PhoneScreenType>>(value);
 		}
 
 		public JournalNotificationData()

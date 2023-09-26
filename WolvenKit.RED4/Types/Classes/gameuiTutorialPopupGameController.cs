@@ -180,6 +180,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamePopupPosition>>(value);
 		}
 
+		[Ordinal(24)] 
+		[RED("onInputDeviceChangedCallbackID")] 
+		public CHandle<redCallbackObject> OnInputDeviceChangedCallbackID
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
 		public gameuiTutorialPopupGameController()
 		{
 			ActionHint = new inkWidgetReference();

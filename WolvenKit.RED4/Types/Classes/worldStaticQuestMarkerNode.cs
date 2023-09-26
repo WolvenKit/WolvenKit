@@ -21,6 +21,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(6)] 
+		[RED("mapFilteringTag")] 
+		public CName MapFilteringTag
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(7)] 
 		[RED("questMarkerHeight")] 
 		public CFloat QuestMarkerHeight
 		{

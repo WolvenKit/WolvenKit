@@ -48,6 +48,7 @@ namespace WolvenKit.RED4.Types
 		{
 			SetTooltip = true;
 			Text = new() { Unk1 = 0, Value = "" };
+			HoldIndicationType = Enums.inkInputHintHoldIndicationType.Press;
 			QueuePriority = -1;
 
 			PostConstruct();

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class DeviceActionWidgetControllerBase : DeviceButtonLogicControllerBase
 	{
-		[Ordinal(26)] 
+		[Ordinal(29)] 
 		[RED("actions")] 
 		public CArray<CWeakHandle<gamedeviceAction>> Actions
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<gamedeviceAction>>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(30)] 
 		[RED("actionData")] 
 		public CHandle<ResolveActionData> ActionData
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ResolveActionData>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(31)] 
 		[RED("isInactive")] 
 		public CBool IsInactive
 		{

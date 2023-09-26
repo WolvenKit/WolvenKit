@@ -70,9 +70,9 @@ namespace WolvenKit.RED4.Types
 
 		public hudRecordingController()
 		{
-			Option_intro = new inkanimPlaybackOptions();
-			Option_loop = new inkanimPlaybackOptions();
-			Option_outro = new inkanimPlaybackOptions();
+			Option_intro = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+			Option_loop = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+			Option_outro = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
 
 			PostConstruct();
 		}

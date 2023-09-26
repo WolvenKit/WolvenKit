@@ -117,6 +117,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(14)] 
+		[RED("ItemPlus")] 
+		public CFloat ItemPlus
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(15)] 
 		[RED("StatsManager")] 
 		public CHandle<UIInventoryItemStatsManager> StatsManager
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UIInventoryItemStatsManager>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("ModsManager")] 
 		public CHandle<UIInventoryItemModsManager> ModsManager
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UIInventoryItemModsManager>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("RequirementsManager")] 
 		public CHandle<UIInventoryItemRequirementsManager> RequirementsManager
 		{
@@ -140,12 +148,44 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UIInventoryItemRequirementsManager>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("UIItemCategory")] 
 		public CEnum<UIItemCategory> UIItemCategory
 		{
 			get => GetPropertyValue<CEnum<UIItemCategory>>();
 			set => SetPropertyValue<CEnum<UIItemCategory>>(value);
+		}
+
+		[Ordinal(19)] 
+		[RED("ComparisonQuality")] 
+		public CFloat ComparisonQuality
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(20)] 
+		[RED("QualityText")] 
+		public CString QualityText
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(21)] 
+		[RED("IsSellable")] 
+		public CBool IsSellable
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(22)] 
+		[RED("IsBroken")] 
+		public CBool IsBroken
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public UIInventoryItemInternalData()

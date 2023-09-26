@@ -20,6 +20,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("clearAssignedVehicleId")] 
+		public CBool ClearAssignedVehicleId
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public questUnassignAll_NodeType()
 		{
 			VehicleRef = new gameEntityReference { Names = new() };

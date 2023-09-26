@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 		public gamePhantomEntityComponent()
 		{
 			Name = "Component";
-			Params = new gamePhantomEntityParameters { BlendableAppearanceMatches = new() };
+			Params = new gamePhantomEntityParameters { PhantomVisibleStates = new() { Enums.gamePhantomEntityState.RootMotion, Enums.gamePhantomEntityState.Workspot }, BlendableAppearanceMatches = new() };
 
 			PostConstruct();
 		}

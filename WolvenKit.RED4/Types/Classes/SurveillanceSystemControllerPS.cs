@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SurveillanceSystemControllerPS : DeviceSystemBaseControllerPS
 	{
-		[Ordinal(106)] 
+		[Ordinal(109)] 
 		[RED("isRevealingEnemies")] 
 		public CBool IsRevealingEnemies
 		{

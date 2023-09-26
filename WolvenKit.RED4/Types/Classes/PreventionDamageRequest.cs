@@ -13,8 +13,8 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
-		[RED("damagePercentValue")] 
-		public CFloat DamagePercentValue
+		[RED("damageDealtPercentValue")] 
+		public CFloat DamageDealtPercentValue
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
@@ -37,8 +37,8 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(4)] 
-		[RED("isTargetAlive")] 
-		public CBool IsTargetAlive
+		[RED("isTargetKilled")] 
+		public CBool IsTargetKilled
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
@@ -53,11 +53,35 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(6)] 
+		[RED("isTargetVehicle")] 
+		public CBool IsTargetVehicle
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(7)] 
 		[RED("requestedHeat")] 
 		public CEnum<EPreventionHeatStage> RequestedHeat
 		{
 			get => GetPropertyValue<CEnum<EPreventionHeatStage>>();
 			set => SetPropertyValue<CEnum<EPreventionHeatStage>>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("attackType")] 
+		public CEnum<gamedataAttackType> AttackType
+		{
+			get => GetPropertyValue<CEnum<gamedataAttackType>>();
+			set => SetPropertyValue<CEnum<gamedataAttackType>>(value);
+		}
+
+		[Ordinal(9)] 
+		[RED("telemetryInfo")] 
+		public CString TelemetryInfo
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		public PreventionDamageRequest()

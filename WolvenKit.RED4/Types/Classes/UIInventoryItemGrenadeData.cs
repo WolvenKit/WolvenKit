@@ -69,11 +69,27 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(8)] 
+		[RED("GrenadeType")] 
+		public CEnum<EGrenadeType> GrenadeType
+		{
+			get => GetPropertyValue<CEnum<EGrenadeType>>();
+			set => SetPropertyValue<CEnum<EGrenadeType>>(value);
+		}
+
+		[Ordinal(9)] 
 		[RED("TotalDamage")] 
 		public CFloat TotalDamage
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("Player")] 
+		public CWeakHandle<PlayerPuppet> Player
+		{
+			get => GetPropertyValue<CWeakHandle<PlayerPuppet>>();
+			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
 		public UIInventoryItemGrenadeData()

@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gamePatrolSplineProgress : ISerializable
+	public partial class gamePatrolSplineProgress : IScriptable
 	{
 		[Ordinal(0)] 
 		[RED("currentControlPoints")] 

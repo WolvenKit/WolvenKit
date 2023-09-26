@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class TweakAIActionSequence : TweakAIActionAbstract
 	{
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("sequence")] 
 		public TweakDBID Sequence
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("sequenceRecord")] 
 		public CWeakHandle<gamedataAIActionSequence_Record> SequenceRecord
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gamedataAIActionSequence_Record>>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("sequenceIterator")] 
 		public CInt32 SequenceIterator
 		{

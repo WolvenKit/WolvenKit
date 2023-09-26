@@ -43,6 +43,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
+		[RED("avoidThreatIgnoringDirection")]
+		[REDProperty(IsIgnored = true)]
+		public CBool AvoidThreatIgnoringDirection
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("avoidThreatRange")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat AvoidThreatRange
@@ -190,6 +198,14 @@ namespace WolvenKit.RED4.Types
 		[RED("keepLineOfSight")]
 		[REDProperty(IsIgnored = true)]
 		public CName KeepLineOfSight
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+		
+		[RED("lineOfSightPointPreference")]
+		[REDProperty(IsIgnored = true)]
+		public CName LineOfSightPointPreference
 		{
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);

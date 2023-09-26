@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public abstract partial class InputContextTransitionDecisions : DefaultTransition
+	public abstract partial class InputContextTransitionDecisions : InputContextTransition
 	{
 		public InputContextTransitionDecisions()
 		{

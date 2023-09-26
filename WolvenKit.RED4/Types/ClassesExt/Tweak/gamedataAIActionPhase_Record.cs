@@ -51,6 +51,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
+		[RED("forceZeroUpdateInterval")]
+		[REDProperty(IsIgnored = true)]
+		public CBool ForceZeroUpdateInterval
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("maxDuration")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat MaxDuration

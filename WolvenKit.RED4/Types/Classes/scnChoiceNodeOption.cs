@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
+		[RED("caption")] 
+		public CName Caption
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(2)] 
 		[RED("blueline")] 
 		public CBool Blueline
 		{
@@ -20,7 +28,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
+		[RED("isFixedAsRead")] 
+		public CBool IsFixedAsRead
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("isSingleChoice")] 
 		public CBool IsSingleChoice
 		{
@@ -28,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(5)] 
 		[RED("type")] 
 		public gameinteractionsChoiceTypeWrapper Type
 		{
@@ -36,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameinteractionsChoiceTypeWrapper>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(6)] 
 		[RED("timedParams")] 
 		public CHandle<scnChoiceNodeNsTimedParams> TimedParams
 		{
@@ -44,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<scnChoiceNodeNsTimedParams>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(7)] 
 		[RED("questCondition")] 
 		public CHandle<questIBaseCondition> QuestCondition
 		{
@@ -52,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<questIBaseCondition>>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(8)] 
 		[RED("triggerCondition")] 
 		public CHandle<questIBaseCondition> TriggerCondition
 		{
@@ -60,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<questIBaseCondition>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(9)] 
 		[RED("bluelineCondition")] 
 		public CHandle<questIBaseCondition> BluelineCondition
 		{
@@ -68,7 +84,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<questIBaseCondition>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(10)] 
+		[RED("emphasisCondition")] 
+		public CHandle<questIBaseCondition> EmphasisCondition
+		{
+			get => GetPropertyValue<CHandle<questIBaseCondition>>();
+			set => SetPropertyValue<CHandle<questIBaseCondition>>(value);
+		}
+
+		[Ordinal(11)] 
+		[RED("iconCondition")] 
+		public CHandle<questIBaseCondition> IconCondition
+		{
+			get => GetPropertyValue<CHandle<questIBaseCondition>>();
+			set => SetPropertyValue<CHandle<questIBaseCondition>>(value);
+		}
+
+		[Ordinal(12)] 
 		[RED("gameplayAction")] 
 		public TweakDBID GameplayAction
 		{
@@ -76,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(13)] 
 		[RED("iconTagIds")] 
 		public CArray<TweakDBID> IconTagIds
 		{
@@ -84,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(14)] 
 		[RED("exDataFlags")] 
 		public CUInt32 ExDataFlags
 		{
@@ -92,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(15)] 
 		[RED("mappinReferencePointId")] 
 		public scnReferencePointId MappinReferencePointId
 		{
@@ -100,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<scnReferencePointId>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(16)] 
 		[RED("timedCondition")] 
 		public CHandle<scnTimedCondition> TimedCondition
 		{

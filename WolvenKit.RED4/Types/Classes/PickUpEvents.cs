@@ -12,6 +12,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamestateMachineStateMachineInstanceData>(value);
 		}
 
+		[Ordinal(10)] 
+		[RED("noCameraControlApplied")] 
+		public CBool NoCameraControlApplied
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(11)] 
+		[RED("noMovementApplied")] 
+		public CBool NoMovementApplied
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public PickUpEvents()
 		{
 			StyleName = "CarriedObject.Style";

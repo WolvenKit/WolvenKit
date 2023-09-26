@@ -28,6 +28,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
+		[Ordinal(12)] 
+		[RED("isAiming")] 
+		public CBool IsAiming
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(13)] 
+		[RED("psmUpperBodyStateCallback")] 
+		public CHandle<redCallbackObject> PsmUpperBodyStateCallback
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
 		public CrosshairGameControllerPersistentDot()
 		{
 			GroupPath = "/interface";

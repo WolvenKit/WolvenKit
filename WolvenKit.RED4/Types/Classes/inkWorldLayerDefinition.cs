@@ -45,6 +45,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(13)] 
+		[RED("overrideMaxInteractionDistance")] 
+		public CBool OverrideMaxInteractionDistance
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(14)] 
 		[RED("useCustomFaceVector")] 
 		public CBool UseCustomFaceVector
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("faceVector")] 
 		public Vector3 FaceVector
 		{

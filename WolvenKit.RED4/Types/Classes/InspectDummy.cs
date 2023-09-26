@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class InspectDummy : gameObject
 	{
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("mesh")] 
 		public CHandle<entPhysicalMeshComponent> Mesh
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entPhysicalMeshComponent>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("choice")] 
 		public CHandle<gameinteractionsComponent> Choice
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameinteractionsComponent>>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("inspectComp")] 
 		public CHandle<InspectableObjectComponent> InspectComp
 		{

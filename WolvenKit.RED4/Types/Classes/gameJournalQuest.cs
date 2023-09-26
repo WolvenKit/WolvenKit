@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameJournalQuest : gameJournalFileEntry
 	{
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("title")] 
 		public LocalizationString Title
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<LocalizationString>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("type")] 
 		public CEnum<gameJournalQuestType> Type
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameJournalQuestType>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("recommendedLevelID")] 
 		public TweakDBID RecommendedLevelID
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("districtID")] 
 		public CString DistrictID
 		{
@@ -38,6 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameJournalQuest()
 		{
+			JournalEntryOverrideDataList = new();
 			Entries = new();
 			Title = new() { Unk1 = 0, Value = "" };
 

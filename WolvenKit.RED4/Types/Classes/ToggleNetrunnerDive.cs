@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ToggleNetrunnerDive : ActionBool
 	{
-		[Ordinal(25)] 
+		[Ordinal(38)] 
 		[RED("skipMinigame")] 
 		public CBool SkipMinigame
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(39)] 
 		[RED("attempt")] 
 		public CInt32 Attempt
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(40)] 
 		[RED("isRemote")] 
 		public CBool IsRemote
 		{
@@ -31,6 +31,7 @@ namespace WolvenKit.RED4.Types
 		public ToggleNetrunnerDive()
 		{
 			RequesterID = new entEntityID();
+			CostComponents = new();
 			InteractionChoice = new gameinteractionsChoice { CaptionParts = new gameinteractionsChoiceCaption { Parts = new() }, Data = new(), ChoiceMetaData = new gameinteractionsChoiceMetaData { Type = new gameinteractionsChoiceTypeWrapper() }, LookAtDescriptor = new gameinteractionsChoiceLookAtDescriptor { Offset = new Vector3(), OrbId = new gameinteractionsOrbID() } };
 			ActionWidgetPackage = new SActionWidgetPackage { DependendActions = new() };
 			CanTriggerStim = true;

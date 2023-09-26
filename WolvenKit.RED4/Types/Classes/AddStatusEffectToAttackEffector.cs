@@ -13,11 +13,11 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
-		[RED("applicationChance")] 
-		public CFloat ApplicationChance
+		[RED("applicationChanceMods")] 
+		public CArray<CWeakHandle<gamedataStatModifier_Record>> ApplicationChanceMods
 		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
+			get => GetPropertyValue<CArray<CWeakHandle<gamedataStatModifier_Record>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<gamedataStatModifier_Record>>>(value);
 		}
 
 		[Ordinal(2)] 
@@ -38,6 +38,7 @@ namespace WolvenKit.RED4.Types
 
 		public AddStatusEffectToAttackEffector()
 		{
+			ApplicationChanceMods = new();
 			StatusEffect = new SHitStatusEffect();
 
 			PostConstruct();

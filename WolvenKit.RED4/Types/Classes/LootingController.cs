@@ -109,6 +109,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(14)] 
+		[RED("uiInventorySystem")] 
+		public CWeakHandle<UIInventoryScriptableSystem> UiInventorySystem
+		{
+			get => GetPropertyValue<CWeakHandle<UIInventoryScriptableSystem>>();
+			set => SetPropertyValue<CWeakHandle<UIInventoryScriptableSystem>>(value);
+		}
+
+		[Ordinal(15)] 
 		[RED("gameInstance")] 
 		public ScriptGameInstance GameInstance
 		{
@@ -116,7 +124,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<ScriptGameInstance>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
+		[RED("player")] 
+		public CWeakHandle<gameObject> Player
+		{
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
+		}
+
+		[Ordinal(17)] 
 		[RED("maxItemsNum")] 
 		public CInt32 MaxItemsNum
 		{
@@ -124,7 +140,31 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(18)] 
+		[RED("boundOwnerID")] 
+		public entEntityID BoundOwnerID
+		{
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
+		}
+
+		[Ordinal(19)] 
+		[RED("lootingItems")] 
+		public CArray<CWeakHandle<gameItemData>> LootingItems
+		{
+			get => GetPropertyValue<CArray<CWeakHandle<gameItemData>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<gameItemData>>>(value);
+		}
+
+		[Ordinal(20)] 
+		[RED("uiInventoryItems")] 
+		public CArray<CHandle<UIInventoryItem>> UiInventoryItems
+		{
+			get => GetPropertyValue<CArray<CHandle<UIInventoryItem>>>();
+			set => SetPropertyValue<CArray<CHandle<UIInventoryItem>>>(value);
+		}
+
+		[Ordinal(21)] 
 		[RED("tooltipProvider")] 
 		public CWeakHandle<TooltipProvider> TooltipProvider
 		{
@@ -132,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<TooltipProvider>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(22)] 
 		[RED("cachedTooltipData")] 
 		public CHandle<ATooltipData> CachedTooltipData
 		{
@@ -140,7 +180,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ATooltipData>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(23)] 
+		[RED("cachedTooltipUIInventoryItem")] 
+		public CHandle<UIInventoryItem> CachedTooltipUIInventoryItem
+		{
+			get => GetPropertyValue<CHandle<UIInventoryItem>>();
+			set => SetPropertyValue<CHandle<UIInventoryItem>>(value);
+		}
+
+		[Ordinal(24)] 
+		[RED("displayContext")] 
+		public CHandle<ItemDisplayContextData> DisplayContext
+		{
+			get => GetPropertyValue<CHandle<ItemDisplayContextData>>();
+			set => SetPropertyValue<CHandle<ItemDisplayContextData>>(value);
+		}
+
+		[Ordinal(25)] 
 		[RED("startIndex")] 
 		public CInt32 StartIndex
 		{
@@ -148,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(26)] 
 		[RED("selectedItemIndex")] 
 		public CInt32 SelectedItemIndex
 		{
@@ -156,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(27)] 
 		[RED("itemsToCompare")] 
 		public CInt32 ItemsToCompare
 		{
@@ -164,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(28)] 
 		[RED("isShown")] 
 		public CBool IsShown
 		{
@@ -172,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(29)] 
 		[RED("currentComparisonItemId")] 
 		public gameItemID CurrentComparisonItemId
 		{
@@ -180,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(30)] 
 		[RED("lastTooltipItemId")] 
 		public gameItemID LastTooltipItemId
 		{
@@ -188,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(31)] 
 		[RED("currentTooltipItemId")] 
 		public gameItemID CurrentTooltipItemId
 		{
@@ -196,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(32)] 
 		[RED("currentTooltipLootingData")] 
 		public CHandle<TooltipLootingCachedData> CurrentTooltipLootingData
 		{
@@ -204,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<TooltipLootingCachedData>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(33)] 
 		[RED("lastItemOwnerId")] 
 		public entEntityID LastItemOwnerId
 		{
@@ -212,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entEntityID>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(34)] 
 		[RED("currentItemOwnerId")] 
 		public entEntityID CurrentItemOwnerId
 		{
@@ -220,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entEntityID>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(35)] 
 		[RED("currentComparisonEquipmentArea")] 
 		public CEnum<gamedataEquipmentArea> CurrentComparisonEquipmentArea
 		{
@@ -228,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataEquipmentArea>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(36)] 
 		[RED("lastListOpenedState")] 
 		public CBool LastListOpenedState
 		{
@@ -236,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(37)] 
 		[RED("isComaprisonDirty")] 
 		public CBool IsComaprisonDirty
 		{
@@ -244,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(38)] 
 		[RED("bufferedOwnerId")] 
 		public entEntityID BufferedOwnerId
 		{
@@ -252,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entEntityID>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(39)] 
 		[RED("introAnimProxy")] 
 		public CHandle<inkanimProxy> IntroAnimProxy
 		{
@@ -260,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(40)] 
 		[RED("currendData")] 
 		public gameinteractionsvisLootData CurrendData
 		{
@@ -268,15 +324,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameinteractionsvisLootData>(value);
 		}
 
-		[Ordinal(34)] 
-		[RED("activeWeapon")] 
-		public gameInventoryItemData ActiveWeapon
+		[Ordinal(41)] 
+		[RED("activeWeaponID")] 
+		public gameItemID ActiveWeaponID
 		{
-			get => GetPropertyValue<gameInventoryItemData>();
-			set => SetPropertyValue<gameInventoryItemData>(value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(42)] 
 		[RED("isLocked")] 
 		public CBool IsLocked
 		{
@@ -284,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(43)] 
 		[RED("currentWidgetRequestVersion")] 
 		public CInt32 CurrentWidgetRequestVersion
 		{
@@ -292,7 +348,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(44)] 
 		[RED("currentItemRequestVersion")] 
 		public CInt32 CurrentItemRequestVersion
 		{
@@ -300,7 +356,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(45)] 
 		[RED("requestsCounter")] 
 		public CInt32 RequestsCounter
 		{
@@ -321,6 +377,9 @@ namespace WolvenKit.RED4.Types
 			LootList = new();
 			GameInstance = new ScriptGameInstance();
 			MaxItemsNum = 3;
+			BoundOwnerID = new entEntityID();
+			LootingItems = new();
+			UiInventoryItems = new();
 			CurrentComparisonItemId = new gameItemID();
 			LastTooltipItemId = new gameItemID();
 			CurrentTooltipItemId = new gameItemID();
@@ -328,7 +387,7 @@ namespace WolvenKit.RED4.Types
 			CurrentItemOwnerId = new entEntityID();
 			BufferedOwnerId = new entEntityID();
 			CurrendData = new gameinteractionsvisLootData { IsListOpen = true, Choices = new(), ItemIDs = new(), OwnerId = new entEntityID() };
-			ActiveWeapon = new gameInventoryItemData { ID = new gameItemID(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = uint.MaxValue, IsRequirementMet = true, IsEquippable = true, Requirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new gameInventoryItemSortData() };
+			ActiveWeaponID = new gameItemID();
 
 			PostConstruct();
 		}

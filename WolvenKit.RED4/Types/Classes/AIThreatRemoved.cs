@@ -44,6 +44,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(7)] 
+		[RED("distanceBasedInstantDrop")] 
+		public CBool DistanceBasedInstantDrop
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public AIThreatRemoved()
 		{
 			PostConstruct();

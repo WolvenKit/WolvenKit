@@ -450,13 +450,7 @@ namespace WolvenKit.Utility
             var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory, "infodump");
             Directory.CreateDirectory(resultDir);
 
-            var existingFiles = new ConcurrentDictionary<string, byte>();
-            foreach (var file in Directory.GetFiles(resultDir))
-            {
-                existingFiles.TryAdd(file, 0);
-            }
-
-            var failedFiles = new ConcurrentDictionary<string, byte>();
+            var missing = new ConcurrentDictionary<ulong, string>();
 
             var archives = s_bm.Archives.KeyValues.Select(_ => _.Value).ToList();
             foreach (var gameArchive in archives)
@@ -466,9 +460,6 @@ namespace WolvenKit.Utility
                     continue;
                 }
 
-                var dirPath = Path.Combine(resultDir, archive.Name);
-                Directory.CreateDirectory(dirPath);
-
                 Parallel.ForEach(archive.Files, pair =>
                 {
                     if (pair.Value is not FileEntry fileEntry)
@@ -476,48 +467,17 @@ namespace WolvenKit.Utility
                         return;
                     }
 
-                    var resultPath = Path.Combine(dirPath, fileEntry.NameHash64 + ".json");
-                    if (existingFiles.TryRemove(resultPath, out _))
+                    if (fileEntry.NameHash64.ToString() == fileEntry.NameOrHash)
                     {
-                        return;
-                    }
-
-                    try
-                    {
-                        using var ms = new MemoryStream();
-                        archive.ExtractFile(fileEntry, ms);
-                        ms.Seek(0, SeekOrigin.Begin);
-
-                        using var reader = new CR2WReader(ms);
-                        reader.ParsingError += args => true;
-
-                        reader.CollectData = true;
-
-                        if (reader.ReadFile(out _) == EFileReadErrorCodes.NoError)
-                        {
-                            reader.DataCollection.CleanUp();
-
-                            reader.DataCollection.FileName = fileEntry.NameOrHash;
-                            reader.DataCollection.Hash = fileEntry.NameHash64;
-
-                            var json = JsonSerializer.Serialize(reader.DataCollection, new JsonSerializerOptions { WriteIndented = true });
-                            File.WriteAllText(resultPath, json);
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        failedFiles.TryAdd(fileEntry.NameOrHash, 0);
-                        // ignore
+                        missing.TryAdd(fileEntry.NameHash64, fileEntry.GuessedExtension);
                     }
                 });
 
                 archive.ReleaseFileHandle();
             }
 
-            var lst = failedFiles.Keys.ToList();
-            lst.Sort();
-
-            File.WriteAllLines(Path.Join(resultDir, "failed.txt"), lst);
+            var dict = missing.OrderBy(x => x.Key).ToDictionary(x => x.Key.ToString(), x => x.Value);
+            File.WriteAllText(@"C:\Dev\missinghashes.json", JsonSerializer.Serialize(dict));
         }
 
         [TestMethod]

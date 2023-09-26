@@ -12,6 +12,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataBuildType>>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("isDebug")] 
+		public CBool IsDebug
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public SetProgressionBuild()
 		{
 			PostConstruct();

@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(6)] 
+		[RED("owner_id")] 
+		public entEntityID Owner_id
+		{
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
+		}
+
+		[Ordinal(7)] 
 		[RED("npcCollisionComponent")] 
 		public CHandle<entSimpleColliderComponent> NpcCollisionComponent
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entSimpleColliderComponent>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("npcDeathCollisionComponent")] 
 		public CHandle<entSimpleColliderComponent> NpcDeathCollisionComponent
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entSimpleColliderComponent>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("npcHitRepresentationComponent")] 
 		public CHandle<entIComponent> NpcHitRepresentationComponent
 		{
@@ -36,7 +44,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entIComponent>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
+		[RED("statPoolSystem")] 
+		public CHandle<gameStatPoolsSystem> StatPoolSystem
+		{
+			get => GetPropertyValue<CHandle<gameStatPoolsSystem>>();
+			set => SetPropertyValue<CHandle<gameStatPoolsSystem>>(value);
+		}
+
+		[Ordinal(11)] 
 		[RED("hitData")] 
 		public CHandle<animAnimFeature_HitReactionsData> HitData
 		{
@@ -44,8 +60,18 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<animAnimFeature_HitReactionsData>>(value);
 		}
 
+		[Ordinal(12)] 
+		[RED("weakspotDestroyed")] 
+		public CBool WeakspotDestroyed
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public RoyceComponent()
 		{
+			Owner_id = new entEntityID();
+
 			PostConstruct();
 		}
 

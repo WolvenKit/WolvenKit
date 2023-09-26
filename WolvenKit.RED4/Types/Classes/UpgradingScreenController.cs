@@ -4,23 +4,55 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class UpgradingScreenController : CraftingMainLogicController
 	{
-		[Ordinal(39)] 
-		[RED("itemTooltipControllers")] 
-		public CArray<CWeakHandle<AGenericTooltipController>> ItemTooltipControllers
+		[Ordinal(50)] 
+		[RED("itemNameUpgrade")] 
+		public inkTextWidgetReference ItemNameUpgrade
 		{
-			get => GetPropertyValue<CArray<CWeakHandle<AGenericTooltipController>>>();
-			set => SetPropertyValue<CArray<CWeakHandle<AGenericTooltipController>>>(value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(40)] 
-		[RED("tooltipDatas")] 
-		public CArray<CHandle<InventoryTooltipData>> TooltipDatas
+		[Ordinal(51)] 
+		[RED("arrowComparison")] 
+		public inkWidgetReference ArrowComparison
 		{
-			get => GetPropertyValue<CArray<CHandle<InventoryTooltipData>>>();
-			set => SetPropertyValue<CArray<CHandle<InventoryTooltipData>>>(value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(52)] 
+		[RED("itemTooltipControllerLeft")] 
+		public CWeakHandle<AGenericTooltipController> ItemTooltipControllerLeft
+		{
+			get => GetPropertyValue<CWeakHandle<AGenericTooltipController>>();
+			set => SetPropertyValue<CWeakHandle<AGenericTooltipController>>(value);
+		}
+
+		[Ordinal(53)] 
+		[RED("itemTooltipControllerRight")] 
+		public CWeakHandle<AGenericTooltipController> ItemTooltipControllerRight
+		{
+			get => GetPropertyValue<CWeakHandle<AGenericTooltipController>>();
+			set => SetPropertyValue<CWeakHandle<AGenericTooltipController>>(value);
+		}
+
+		[Ordinal(54)] 
+		[RED("tooltipDataLeft")] 
+		public CHandle<MinimalItemTooltipData> TooltipDataLeft
+		{
+			get => GetPropertyValue<CHandle<MinimalItemTooltipData>>();
+			set => SetPropertyValue<CHandle<MinimalItemTooltipData>>(value);
+		}
+
+		[Ordinal(55)] 
+		[RED("tooltipDataRight")] 
+		public CHandle<MinimalItemTooltipData> TooltipDataRight
+		{
+			get => GetPropertyValue<CHandle<MinimalItemTooltipData>>();
+			set => SetPropertyValue<CHandle<MinimalItemTooltipData>>(value);
+		}
+
+		[Ordinal(56)] 
 		[RED("WeaponAreas")] 
 		public CArray<CEnum<gamedataItemType>> WeaponAreas
 		{
@@ -28,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CEnum<gamedataItemType>>>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(57)] 
 		[RED("EquipAreas")] 
 		public CArray<CEnum<gamedataEquipmentArea>> EquipAreas
 		{
@@ -36,37 +68,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CEnum<gamedataEquipmentArea>>>(value);
 		}
 
-		[Ordinal(43)] 
-		[RED("newItem")] 
-		public CWeakHandle<gameItemData> NewItem
+		[Ordinal(58)] 
+		[RED("DELAYED_TOOLTIP_RIGHT")] 
+		public CFloat DELAYED_TOOLTIP_RIGHT
 		{
-			get => GetPropertyValue<CWeakHandle<gameItemData>>();
-			set => SetPropertyValue<CWeakHandle<gameItemData>>(value);
-		}
-
-		[Ordinal(44)] 
-		[RED("statMod")] 
-		public CHandle<gameStatModifierData_Deprecated> StatMod
-		{
-			get => GetPropertyValue<CHandle<gameStatModifierData_Deprecated>>();
-			set => SetPropertyValue<CHandle<gameStatModifierData_Deprecated>>(value);
-		}
-
-		[Ordinal(45)] 
-		[RED("levelMod")] 
-		public CHandle<gameStatModifierData_Deprecated> LevelMod
-		{
-			get => GetPropertyValue<CHandle<gameStatModifierData_Deprecated>>();
-			set => SetPropertyValue<CHandle<gameStatModifierData_Deprecated>>(value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public UpgradingScreenController()
 		{
 			MaxIngredientCount = 8;
-			ItemTooltipControllers = new();
-			TooltipDatas = new();
+			ItemNameUpgrade = new inkTextWidgetReference();
+			ArrowComparison = new inkWidgetReference();
 			WeaponAreas = new();
 			EquipAreas = new();
+			DELAYED_TOOLTIP_RIGHT = 0.150000F;
 
 			PostConstruct();
 		}

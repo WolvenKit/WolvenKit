@@ -20,9 +20,18 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("customPartsToInstall")] 
+		public CArray<gameItemID> CustomPartsToInstall
+		{
+			get => GetPropertyValue<CArray<gameItemID>>();
+			set => SetPropertyValue<CArray<gameItemID>>(value);
+		}
+
 		public gameItemModParams()
 		{
 			ItemID = new gameItemID();
+			CustomPartsToInstall = new();
 
 			PostConstruct();
 		}

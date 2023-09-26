@@ -69,6 +69,30 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(8)] 
+		[RED("snapToGroundStart")] 
+		public CFloat SnapToGroundStart
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(9)] 
+		[RED("snapToGroundEnd")] 
+		public CFloat SnapToGroundEnd
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("snapToGround")] 
+		public CBool SnapToGround
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(11)] 
 		[RED("vehicleChangePhysicsState")] 
 		public CBool VehicleChangePhysicsState
 		{
@@ -76,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(12)] 
 		[RED("vehicleEnabledPhysicsOnEnd")] 
 		public CBool VehicleEnabledPhysicsOnEnd
 		{
@@ -84,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(13)] 
 		[RED("trajectoryLOD")] 
 		public CArray<scnAnimationMotionSample> TrajectoryLOD
 		{

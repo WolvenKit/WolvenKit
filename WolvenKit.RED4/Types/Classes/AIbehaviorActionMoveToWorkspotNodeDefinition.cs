@@ -93,8 +93,8 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(12)] 
-		[RED("canUseInconvenientEntries")] 
-		public CHandle<AIArgumentMapping> CanUseInconvenientEntries
+		[RED("failWhenStoppedByCollision")] 
+		public CHandle<AIArgumentMapping> FailWhenStoppedByCollision
 		{
 			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);

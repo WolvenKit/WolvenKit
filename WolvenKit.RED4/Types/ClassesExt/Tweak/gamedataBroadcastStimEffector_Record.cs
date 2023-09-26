@@ -3,7 +3,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gamedataBroadcastStimEffector_Record
 	{
-        [RED("radius")]
+		[RED("radius")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat Radius
 		{

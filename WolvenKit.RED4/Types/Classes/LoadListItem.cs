@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class LoadListItem : AnimatedListItemController
 	{
-		[Ordinal(30)] 
+		[Ordinal(33)] 
 		[RED("imageReplacement")] 
 		public inkImageWidgetReference ImageReplacement
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(34)] 
 		[RED("label")] 
 		public inkTextWidgetReference Label
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(35)] 
 		[RED("labelDate")] 
 		public inkTextWidgetReference LabelDate
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(36)] 
 		[RED("type")] 
 		public inkTextWidgetReference Type
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(37)] 
 		[RED("quest")] 
 		public inkTextWidgetReference Quest
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(38)] 
 		[RED("level")] 
 		public inkTextWidgetReference Level
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(39)] 
 		[RED("lifepath")] 
 		public inkImageWidgetReference Lifepath
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(40)] 
 		[RED("cloudStatus")] 
 		public inkImageWidgetReference CloudStatus
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(41)] 
 		[RED("playTime")] 
 		public inkTextWidgetReference PlayTime
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(42)] 
 		[RED("characterLevel")] 
 		public inkTextWidgetReference CharacterLevel
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(43)] 
 		[RED("characterLevelLabel")] 
 		public inkTextWidgetReference CharacterLevelLabel
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(44)] 
 		[RED("gameVersion")] 
 		public inkTextWidgetReference GameVersion
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(45)] 
 		[RED("emptySlotWrapper")] 
 		public inkWidgetReference EmptySlotWrapper
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(46)] 
 		[RED("wrapper")] 
 		public inkWidgetReference Wrapper
 		{
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(47)] 
 		[RED("versionParams")] 
 		public CHandle<textTextParameterSet> VersionParams
 		{
@@ -124,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<textTextParameterSet>>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(48)] 
 		[RED("index")] 
 		public CInt32 Index
 		{
@@ -132,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(49)] 
 		[RED("emptySlot")] 
 		public CBool EmptySlot
 		{
@@ -140,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(50)] 
 		[RED("validSlot")] 
 		public CBool ValidSlot
 		{
@@ -148,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(51)] 
 		[RED("initialLoadingID")] 
 		public CUInt64 InitialLoadingID
 		{
@@ -156,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt64>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(52)] 
 		[RED("metadata")] 
 		public CHandle<inkSaveMetadataInfo> Metadata
 		{
@@ -164,12 +164,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkSaveMetadataInfo>>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(53)] 
 		[RED("defaultAtlasPath")] 
 		public redResourceReferenceScriptToken DefaultAtlasPath
 		{
 			get => GetPropertyValue<redResourceReferenceScriptToken>();
 			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
+		}
+
+		[Ordinal(54)] 
+		[RED("tranistionAnimProxy")] 
+		public CHandle<inkanimProxy> TranistionAnimProxy
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		public LoadListItem()

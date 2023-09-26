@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SecuritySystemInput : SecurityAreaEvent
 	{
-		[Ordinal(27)] 
+		[Ordinal(40)] 
 		[RED("lastKnownPosition")] 
 		public Vector4 LastKnownPosition
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(41)] 
 		[RED("notifier")] 
 		public CHandle<SharedGameplayPS> Notifier
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<SharedGameplayPS>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(42)] 
 		[RED("type")] 
 		public CEnum<ESecurityNotificationType> Type
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ESecurityNotificationType>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(43)] 
 		[RED("objectOfInterest")] 
 		public CWeakHandle<gameObject> ObjectOfInterest
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(44)] 
 		[RED("canPerformReprimand")] 
 		public CBool CanPerformReprimand
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(45)] 
 		[RED("shouldLeadReprimend")] 
 		public CBool ShouldLeadReprimend
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(46)] 
 		[RED("id")] 
 		public CInt32 Id
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(47)] 
 		[RED("customRecipientsList")] 
 		public CArray<entEntityID> CustomRecipientsList
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<entEntityID>>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(48)] 
 		[RED("isSharingRestricted")] 
 		public CBool IsSharingRestricted
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(49)] 
 		[RED("debugReporterCharRecord")] 
 		public CHandle<gamedataCharacter_Record> DebugReporterCharRecord
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gamedataCharacter_Record>>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(50)] 
 		[RED("stimTypeTriggeredAlarm")] 
 		public CEnum<gamedataStimType> StimTypeTriggeredAlarm
 		{

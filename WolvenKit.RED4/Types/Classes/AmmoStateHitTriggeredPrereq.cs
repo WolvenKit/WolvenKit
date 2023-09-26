@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class AmmoStateHitTriggeredPrereq : HitTriggeredPrereq
 	{
-		[Ordinal(5)] 
+		[Ordinal(8)] 
 		[RED("valueToListen")] 
 		public CEnum<EMagazineAmmoState> ValueToListen
 		{

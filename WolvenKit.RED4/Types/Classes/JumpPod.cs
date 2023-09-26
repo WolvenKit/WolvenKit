@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class JumpPod : gameObject
 	{
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("activationLight")] 
 		public CHandle<entIVisualComponent> ActivationLight
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entIVisualComponent>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("activationTrigger")] 
 		public CHandle<entIComponent> ActivationTrigger
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entIComponent>>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("impulseForward")] 
 		public CFloat ImpulseForward
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("impulseRight")] 
 		public CFloat ImpulseRight
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("impulseUp")] 
 		public CFloat ImpulseUp
 		{

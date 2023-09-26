@@ -21,14 +21,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
-		[RED("enterClosest")] 
-		public CBool EnterClosest
+		[RED("continuationPolicy")] 
+		public CEnum<AIPatrolContinuationPolicy> ContinuationPolicy
+		{
+			get => GetPropertyValue<CEnum<AIPatrolContinuationPolicy>>();
+			set => SetPropertyValue<CEnum<AIPatrolContinuationPolicy>>(value);
+		}
+
+		[Ordinal(3)] 
+		[RED("startFromClosestPoint")] 
+		public CBool StartFromClosestPoint
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("patrolWithWeapon")] 
 		public CBool PatrolWithWeapon
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("isBackAndForth")] 
 		public CBool IsBackAndForth
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("isInfinite")] 
 		public CBool IsInfinite
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("numberOfLoops")] 
 		public CUInt32 NumberOfLoops
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("sortPatrolPoints")] 
 		public CBool SortPatrolPoints
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("patrolAction")] 
 		public TweakDBID PatrolAction
 		{
@@ -78,7 +86,7 @@ namespace WolvenKit.RED4.Types
 
 		public AIPatrolPathParameters()
 		{
-			EnterClosest = true;
+			StartFromClosestPoint = true;
 			IsInfinite = true;
 			NumberOfLoops = 1;
 			SortPatrolPoints = true;

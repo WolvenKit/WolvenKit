@@ -14,10 +14,10 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(1)] 
 		[RED("valueToCheck")] 
-		public CFloat ValueToCheck
+		public CArray<CWeakHandle<gamedataStatModifier_Record>> ValueToCheck
 		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
+			get => GetPropertyValue<CArray<CWeakHandle<gamedataStatModifier_Record>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<gamedataStatModifier_Record>>>(value);
 		}
 
 		[Ordinal(2)] 
@@ -45,23 +45,17 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
-		[RED("itemTDBID")] 
-		public TweakDBID ItemTDBID
+		[RED("objToCheck")] 
+		public CEnum<ObjectToCheck> ObjToCheck
 		{
-			get => GetPropertyValue<TweakDBID>();
-			set => SetPropertyValue<TweakDBID>(value);
-		}
-
-		[Ordinal(6)] 
-		[RED("checkItem")] 
-		public CBool CheckItem
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
+			get => GetPropertyValue<CEnum<ObjectToCheck>>();
+			set => SetPropertyValue<CEnum<ObjectToCheck>>(value);
 		}
 
 		public StatPoolPrereq()
 		{
+			ValueToCheck = new();
+
 			PostConstruct();
 		}
 

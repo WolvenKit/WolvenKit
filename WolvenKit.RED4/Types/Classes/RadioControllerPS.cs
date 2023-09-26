@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class RadioControllerPS : MediaDeviceControllerPS
 	{
-		[Ordinal(109)] 
+		[Ordinal(112)] 
 		[RED("radioSetup")] 
 		public RadioSetup RadioSetup
 		{
@@ -12,17 +12,9 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<RadioSetup>(value);
 		}
 
-		[Ordinal(110)] 
-		[RED("stations")] 
-		public CArray<RadioStationsMap> Stations
-		{
-			get => GetPropertyValue<CArray<RadioStationsMap>>();
-			set => SetPropertyValue<CArray<RadioStationsMap>>(value);
-		}
-
-		[Ordinal(111)] 
-		[RED("stationsInitialized")] 
-		public CBool StationsInitialized
+		[Ordinal(113)] 
+		[RED("wasRadioSetup")] 
+		public CBool WasRadioSetup
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
@@ -33,8 +25,7 @@ namespace WolvenKit.RED4.Types
 			DeviceName = "LocKey#96";
 			TweakDBRecord = "Devices.Radio";
 			TweakDBDescriptionRecord = 109081313862;
-			RadioSetup = new RadioSetup();
-			Stations = new();
+			RadioSetup = new RadioSetup { HithPitchNoiseVFX = new gameFxResource(), HithPitchNoiseRadius = 5.000000F, AoeDamageVFX = new gameFxResource() };
 
 			PostConstruct();
 		}

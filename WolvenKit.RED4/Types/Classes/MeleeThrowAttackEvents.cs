@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class MeleeThrowAttackEvents : MeleeAttackGenericEvents
 	{
-		[Ordinal(9)] 
+		[Ordinal(14)] 
 		[RED("projectileThrown")] 
 		public CBool ProjectileThrown
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(15)] 
 		[RED("targetObject")] 
 		public CWeakHandle<gameObject> TargetObject
 		{

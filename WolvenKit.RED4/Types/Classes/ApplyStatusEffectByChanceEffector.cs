@@ -37,16 +37,17 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(4)] 
-		[RED("chance")] 
-		public CFloat Chance
+		[RED("effectorChanceMods")] 
+		public CArray<CWeakHandle<gamedataStatModifier_Record>> EffectorChanceMods
 		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
+			get => GetPropertyValue<CArray<CWeakHandle<gamedataStatModifier_Record>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<gamedataStatModifier_Record>>>(value);
 		}
 
 		public ApplyStatusEffectByChanceEffector()
 		{
 			TargetEntityID = new entEntityID();
+			EffectorChanceMods = new();
 
 			PostConstruct();
 		}

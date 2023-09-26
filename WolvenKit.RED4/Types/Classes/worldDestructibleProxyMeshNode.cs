@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class worldDestructibleProxyMeshNode : worldPrefabProxyMeshNode
 	{
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("ownerHash")] 
 		public CUInt64 OwnerHash
 		{

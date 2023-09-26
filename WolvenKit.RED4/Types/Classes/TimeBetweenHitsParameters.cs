@@ -76,6 +76,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(9)] 
+		[RED("coverCoefficient")] 
+		public CFloat CoverCoefficient
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("visionBlockerCoefficient")] 
+		public CFloat VisionBlockerCoefficient
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public TimeBetweenHitsParameters()
 		{
 			PostConstruct();

@@ -44,6 +44,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
+		[Ordinal(5)] 
+		[RED("imageId")] 
+		public TweakDBID ImageId
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+
 		public NotifyShardRead()
 		{
 			ItemID = new gameItemID();

@@ -20,6 +20,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameUILocalizationDataPackage>>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("AttunementData")] 
+		public CHandle<UIInventoryItemModAttunementData> AttunementData
+		{
+			get => GetPropertyValue<CHandle<UIInventoryItemModAttunementData>>();
+			set => SetPropertyValue<CHandle<UIInventoryItemModAttunementData>>(value);
+		}
+
 		public UIInventoryItemModDataPackage()
 		{
 			PostConstruct();

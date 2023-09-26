@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class FridgeControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("isOpen")] 
 		public CBool IsOpen
 		{

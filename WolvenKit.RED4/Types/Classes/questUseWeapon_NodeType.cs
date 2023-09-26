@@ -28,8 +28,26 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("weaponSlotName")] 
+		public CName WeaponSlotName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(4)] 
+		[RED("attackTDBID")] 
+		public TweakDBID AttackTDBID
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+
 		public questUseWeapon_NodeType()
 		{
+			WeaponSlotName = "AttachmentSlots.WeaponRight";
+
 			PostConstruct();
 		}
 

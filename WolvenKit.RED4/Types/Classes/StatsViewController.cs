@@ -36,14 +36,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameStatViewData>(value);
 		}
 
-		[Ordinal(5)] 
-		[RED("buttonConctroller")] 
-		public CWeakHandle<inkButtonController> ButtonConctroller
-		{
-			get => GetPropertyValue<CWeakHandle<inkButtonController>>();
-			set => SetPropertyValue<CWeakHandle<inkButtonController>>(value);
-		}
-
 		public StatsViewController()
 		{
 			StatLabelRef = new inkTextWidgetReference();

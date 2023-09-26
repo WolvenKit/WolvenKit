@@ -19,6 +19,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamedataLocKeyWrapper>(value);
 		}
 		
+		[RED("group")]
+		[REDProperty(IsIgnored = true)]
+		public CName Group
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+		
 		[RED("iconsAtlasSlot")]
 		[REDProperty(IsIgnored = true)]
 		public CName IconsAtlasSlot
@@ -33,6 +41,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CInt32>();
 			set => SetPropertyValue<CInt32>(value);
+		}
+		
+		[RED("slotType")]
+		[REDProperty(IsIgnored = true)]
+		public CName SlotType
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 	}
 }

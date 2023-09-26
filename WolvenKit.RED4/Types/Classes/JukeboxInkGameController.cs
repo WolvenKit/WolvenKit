@@ -44,14 +44,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<NextPreviousActionWidgetController>>(value);
 		}
 
-		[Ordinal(21)] 
-		[RED("isPlaying")] 
-		public CBool IsPlaying
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
 		public JukeboxInkGameController()
 		{
 			ActionsPanel = new inkHorizontalPanelWidgetReference();

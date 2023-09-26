@@ -6,15 +6,15 @@ namespace WolvenKit.RED4.Types
 	{
 		[Ordinal(0)] 
 		[RED("questType")] 
-		public CInt32 QuestType
+		public CEnum<QuestListItemType> QuestType
 		{
-			get => GetPropertyValue<CInt32>();
-			set => SetPropertyValue<CInt32>(value);
+			get => GetPropertyValue<CEnum<QuestListItemType>>();
+			set => SetPropertyValue<CEnum<QuestListItemType>>(value);
 		}
 
 		[Ordinal(1)] 
-		[RED("timestamp")] 
-		public GameTime Timestamp
+		[RED("lastUpdateTimestamp")] 
+		public GameTime LastUpdateTimestamp
 		{
 			get => GetPropertyValue<GameTime>();
 			set => SetPropertyValue<GameTime>(value);
@@ -69,22 +69,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(8)] 
-		[RED("isVisited")] 
-		public CBool IsVisited
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(9)] 
-		[RED("isResolved")] 
-		public CBool IsResolved
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(10)] 
 		[RED("State")] 
 		public CEnum<gameJournalEntryState> State
 		{
@@ -92,7 +76,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameJournalEntryState>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(9)] 
+		[RED("distance")] 
+		public CFloat Distance
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(10)] 
 		[RED("distancesFetched")] 
 		public CBool DistancesFetched
 		{
@@ -100,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(11)] 
 		[RED("objectivesDistances")] 
 		public CArray<CHandle<QuestListDistanceData>> ObjectivesDistances
 		{
@@ -110,7 +102,7 @@ namespace WolvenKit.RED4.Types
 
 		public QuestListItemData()
 		{
-			Timestamp = new GameTime();
+			LastUpdateTimestamp = new GameTime();
 			ObjectivesDistances = new();
 
 			PostConstruct();

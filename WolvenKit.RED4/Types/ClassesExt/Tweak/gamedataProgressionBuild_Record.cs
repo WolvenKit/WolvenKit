@@ -139,6 +139,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 		
+		[RED("startingNewPerks")]
+		[REDProperty(IsIgnored = true)]
+		public CArray<TweakDBID> StartingNewPerks
+		{
+			get => GetPropertyValue<CArray<TweakDBID>>();
+			set => SetPropertyValue<CArray<TweakDBID>>(value);
+		}
+		
 		[RED("startingPerks")]
 		[REDProperty(IsIgnored = true)]
 		public CArray<TweakDBID> StartingPerks
@@ -150,6 +158,14 @@ namespace WolvenKit.RED4.Types
 		[RED("startingProficiencies")]
 		[REDProperty(IsIgnored = true)]
 		public CArray<TweakDBID> StartingProficiencies
+		{
+			get => GetPropertyValue<CArray<TweakDBID>>();
+			set => SetPropertyValue<CArray<TweakDBID>>(value);
+		}
+		
+		[RED("startingPrograms")]
+		[REDProperty(IsIgnored = true)]
+		public CArray<TweakDBID> StartingPrograms
 		{
 			get => GetPropertyValue<CArray<TweakDBID>>();
 			set => SetPropertyValue<CArray<TweakDBID>>(value);

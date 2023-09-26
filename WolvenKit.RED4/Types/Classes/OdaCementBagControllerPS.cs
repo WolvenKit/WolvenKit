@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class OdaCementBagControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("cementEffectCooldown")] 
 		public CFloat CementEffectCooldown
 		{

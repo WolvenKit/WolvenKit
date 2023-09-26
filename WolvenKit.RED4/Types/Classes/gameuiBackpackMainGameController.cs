@@ -373,6 +373,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(49)] 
+		[RED("comparedItemDisplayContext")] 
+		public CHandle<ItemDisplayContextData> ComparedItemDisplayContext
+		{
+			get => GetPropertyValue<CHandle<ItemDisplayContextData>>();
+			set => SetPropertyValue<CHandle<ItemDisplayContextData>>(value);
+		}
+
+		[Ordinal(50)] 
 		[RED("confirmationPopupToken")] 
 		public CHandle<inkGameNotificationToken> ConfirmationPopupToken
 		{
@@ -380,7 +388,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(51)] 
 		[RED("lastItemHoverOverEvent")] 
 		public CHandle<ItemDisplayHoverOverEvent> LastItemHoverOverEvent
 		{
@@ -388,7 +396,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ItemDisplayHoverOverEvent>>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(52)] 
 		[RED("isComparisonDisabled")] 
 		public CBool IsComparisonDisabled
 		{
@@ -396,7 +404,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(53)] 
 		[RED("immediateNotificationListener")] 
 		public CHandle<BakcpackImmediateNotificationListener> ImmediateNotificationListener
 		{
@@ -404,7 +412,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<BakcpackImmediateNotificationListener>>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(54)] 
 		[RED("virtualWidgets")] 
 		public CHandle<inkScriptWeakHashMap> VirtualWidgets
 		{
@@ -412,7 +420,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkScriptWeakHashMap>>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(55)] 
 		[RED("allWidgets")] 
 		public CHandle<inkScriptWeakHashMap> AllWidgets
 		{
@@ -420,7 +428,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkScriptWeakHashMap>>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(56)] 
 		[RED("itemPreviewPopupToken")] 
 		public CHandle<inkGameNotificationToken> ItemPreviewPopupToken
 		{
@@ -428,7 +436,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(57)] 
 		[RED("afterCloseRequest")] 
 		public CBool AfterCloseRequest
 		{

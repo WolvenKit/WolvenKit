@@ -13,6 +13,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
+		[RED("forceGreyStars")] 
+		public CBool ForceGreyStars
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(2)] 
+		[RED("resetGreyStars")] 
+		public CBool ResetGreyStars
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(3)] 
 		[RED("forcePlayerPositionAsLastCrimePoint")] 
 		public CBool ForcePlayerPositionAsLastCrimePoint
 		{
@@ -20,10 +36,16 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(4)] 
+		[RED("forceIgnoreSecurityAreas")] 
+		public CBool ForceIgnoreSecurityAreas
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public SetWantedLevel()
 		{
-			WantedLevel = Enums.EPreventionHeatStage.Heat_1;
-
 			PostConstruct();
 		}
 

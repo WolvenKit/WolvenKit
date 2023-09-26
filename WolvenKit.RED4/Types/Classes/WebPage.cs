@@ -37,6 +37,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
+		[RED("canvasesList")] 
+		public CArray<inkCanvasWidgetReference> CanvasesList
+		{
+			get => GetPropertyValue<CArray<inkCanvasWidgetReference>>();
+			set => SetPropertyValue<CArray<inkCanvasWidgetReference>>(value);
+		}
+
+		[Ordinal(6)] 
 		[RED("lastClickedLinkAddress")] 
 		public CString LastClickedLinkAddress
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("HOME_IMAGE_NAME")] 
 		public CString HOME_IMAGE_NAME
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("HOME_TEXT_NAME")] 
 		public CString HOME_TEXT_NAME
 		{
@@ -66,6 +74,7 @@ namespace WolvenKit.RED4.Types
 			RectangleList = new();
 			ImageList = new();
 			VideoList = new();
+			CanvasesList = new();
 			HOME_IMAGE_NAME = "ImageLink";
 			HOME_TEXT_NAME = "TextLink";
 

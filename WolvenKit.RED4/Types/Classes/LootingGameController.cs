@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("uiInventorySystem")] 
+		public CWeakHandle<UIInventoryScriptableSystem> UiInventorySystem
+		{
+			get => GetPropertyValue<CWeakHandle<UIInventoryScriptableSystem>>();
+			set => SetPropertyValue<CWeakHandle<UIInventoryScriptableSystem>>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("bbInteractions")] 
 		public CWeakHandle<gameIBlackboard> BbInteractions
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("bbEquipmentData")] 
 		public CWeakHandle<gameIBlackboard> BbEquipmentData
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("bbEquipment")] 
 		public CWeakHandle<gameIBlackboard> BbEquipment
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("bbInteractionsDefinition")] 
 		public CHandle<UIInteractionsDef> BbInteractionsDefinition
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UIInteractionsDef>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("bbEquipmentDataDefinition")] 
 		public CHandle<UI_EquipmentDataDef> BbEquipmentDataDefinition
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_EquipmentDataDef>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("bbEquipmentDefinition")] 
 		public CHandle<UI_EquipmentDef> BbEquipmentDefinition
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_EquipmentDef>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("dataListenerId")] 
 		public CHandle<redCallbackObject> DataListenerId
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("activeListenerId")] 
 		public CHandle<redCallbackObject> ActiveListenerId
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("activeHubListenerId")] 
 		public CHandle<redCallbackObject> ActiveHubListenerId
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("weaponDataListenerId")] 
 		public CHandle<redCallbackObject> WeaponDataListenerId
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("itemEquippedListenerId")] 
 		public CHandle<redCallbackObject> ItemEquippedListenerId
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("controller")] 
 		public CWeakHandle<LootingController> Controller
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<LootingController>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("player")] 
 		public CWeakHandle<PlayerPuppet> Player
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("introAnim")] 
 		public CHandle<inkanimProxy> IntroAnim
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("outroAnim")] 
 		public CHandle<inkanimProxy> OutroAnim
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("lastActiveWeapon")] 
 		public gameSlotWeaponData LastActiveWeapon
 		{
@@ -140,15 +148,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameSlotWeaponData>(value);
 		}
 
-		[Ordinal(19)] 
-		[RED("lastActiveWeaponData")] 
-		public gameInventoryItemData LastActiveWeaponData
+		[Ordinal(20)] 
+		[RED("lastActiveWeaponID")] 
+		public gameItemID LastActiveWeaponID
 		{
-			get => GetPropertyValue<gameInventoryItemData>();
-			set => SetPropertyValue<gameInventoryItemData>(value);
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("previousData")] 
 		public gameinteractionsvisLootData PreviousData
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameinteractionsvisLootData>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("lastActiveOwnerId")] 
 		public entEntityID LastActiveOwnerId
 		{
@@ -167,7 +175,7 @@ namespace WolvenKit.RED4.Types
 		public LootingGameController()
 		{
 			LastActiveWeapon = new gameSlotWeaponData { WeaponID = new gameItemID(), AmmoCurrent = -1, MagazineCap = -1, AmmoId = new gameItemID(), TriggerModeCurrent = Enums.gamedataTriggerMode.Invalid, TriggerModeList = new(), Evolution = Enums.gamedataWeaponEvolution.Invalid, IsFirstEquip = true };
-			LastActiveWeaponData = new gameInventoryItemData { ID = new gameItemID(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = uint.MaxValue, IsRequirementMet = true, IsEquippable = true, Requirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new gameSItemStackRequirementData { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new gameInventoryItemSortData() };
+			LastActiveWeaponID = new gameItemID();
 			PreviousData = new gameinteractionsvisLootData { IsListOpen = true, Choices = new(), ItemIDs = new(), OwnerId = new entEntityID() };
 			LastActiveOwnerId = new entEntityID();
 

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class Window : Door
 	{
-		[Ordinal(140)] 
+		[Ordinal(143)] 
 		[RED("soloCollider")] 
 		public CHandle<entIComponent> SoloCollider
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entIComponent>>(value);
 		}
 
-		[Ordinal(141)] 
+		[Ordinal(144)] 
 		[RED("strongSoloHandle")] 
 		public CHandle<entMeshComponent> StrongSoloHandle
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
-		[Ordinal(142)] 
+		[Ordinal(145)] 
 		[RED("duplicateDestruction")] 
 		public CBool DuplicateDestruction
 		{

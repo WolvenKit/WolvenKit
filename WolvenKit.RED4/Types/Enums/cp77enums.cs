@@ -135,6 +135,11 @@ public static partial class Enums
 		SVGlobalNodeRef = 7
 	}
 
+	public enum AIFiniteRoleType
+	{
+		Patrol = 0
+	}
+
 	public enum AIForcedBehaviourPriority : byte
 	{
 		AboveIdle = 0,
@@ -159,6 +164,13 @@ public static partial class Enums
 		ActionRecord = 4,
 		Blackboard = 5,
 		Delegate = 6
+	}
+
+	public enum AIPatrolContinuationPolicy
+	{
+		FromNextControlPoint = 0,
+		FromClosestPoint = 1,
+		FromBeginning = 2
 	}
 
 	public enum AIReactionCountOutcome
@@ -367,6 +379,18 @@ public static partial class Enums
 		ROLLING = 1
 	}
 
+	public enum ActiveBaseContext
+	{
+		None = 0,
+		Locomotion = 1,
+		Ladder = 2,
+		Swimming = 3,
+		BodyCarring = 4,
+		MeleeWeapon = 5,
+		RangedWeapon = 6,
+		BodyCarringWithRangedWeapon = 7
+	}
+
 	public enum ActiveMode
 	{
 		UNINITIALIZED = 0,
@@ -427,21 +451,51 @@ public static partial class Enums
 		MeleeCombat = 4,
 		MeleeCombatIdle = 5,
 		AimingLimbCyber = 6,
-		Aiming = 7,
-		QuickMelee = 8,
-		VehicleCombat = 9,
-		Sprinting = 10,
-		LimbCyber = 11,
-		Count = 12
+		AimingLimbCyberZoomLevel1 = 7,
+		AimingLimbCyberZoomLevel2 = 8,
+		Aiming = 9,
+		QuickMelee = 10,
+		VehicleCombat = 11,
+		Sprinting = 12,
+		LimbCyber = 13,
+		Vehicle = 14,
+		DriverCombat = 15,
+		DriverCombatAiming = 16,
+		DriverCombatTPP = 17,
+		DriverCombatMissiles = 18,
+		DriverCombatMissilesAiming = 19,
+		DriverCombatMeleeTPP = 20,
+		ZoomLevel1 = 21,
+		ZoomLevel2 = 22,
+		Exhausted = 23,
+		Off = 24,
+		Count = 25
+	}
+
+	public enum ArcadeMachineType
+	{
+		Default = 0,
+		Pachinko = 1
 	}
 
 	public enum ArcadeMinigame
 	{
-		INVALID = 0,
+		Quadracer = 0,
 		RoachRace = 1,
-		Panzer = 2,
-		Retros = 3,
-		Quadracer = 4
+		Shooter = 2,
+		Tank = 3,
+		Retros = 4,
+		INVALID = 5
+	}
+
+	public enum AssertType : byte
+	{
+		EQ = 0,
+		NE = 1,
+		GT = 2,
+		GE = 3,
+		LT = 4,
+		LE = 5
 	}
 
 	public enum AttitudeChange
@@ -458,6 +512,13 @@ public static partial class Enums
 		Hover = 1
 	}
 
+	public enum BarType
+	{
+		Armor = 0,
+		CurrentCapacity = 1,
+		Edgerunner = 2
+	}
+
 	public enum BlacklistReason
 	{
 		UNINITIALIZED = 0,
@@ -466,11 +527,87 @@ public static partial class Enums
 		COMBAT = 3
 	}
 
+	public enum BunkerSystems
+	{
+		ALPHA = 0,
+		BRAVO = 1,
+		SIERRA = 2,
+		VICTOR = 3,
+		MAX = 4
+	}
+
 	public enum ButtonStatus
 	{
 		DEFAULT = 0,
 		PROCESSING = 1,
 		DISABLED = 2
+	}
+
+	public enum CasinoTableBet
+	{
+		none = 0,
+		on_0 = 1,
+		on_00 = 2,
+		on_1 = 3,
+		on_2 = 4,
+		on_3 = 5,
+		on_4 = 6,
+		on_5 = 7,
+		on_6 = 8,
+		on_7 = 9,
+		on_8 = 10,
+		on_9 = 11,
+		on_10 = 12,
+		on_11 = 13,
+		on_12 = 14,
+		on_13 = 15,
+		on_14 = 16,
+		on_15 = 17,
+		on_16 = 18,
+		on_17 = 19,
+		on_18 = 20,
+		on_19 = 21,
+		on_20 = 22,
+		on_21 = 23,
+		on_22 = 24,
+		on_23 = 25,
+		on_24 = 26,
+		on_25 = 27,
+		on_26 = 28,
+		on_27 = 29,
+		on_28 = 30,
+		on_29 = 31,
+		on_30 = 32,
+		on_31 = 33,
+		on_32 = 34,
+		on_33 = 35,
+		on_34 = 36,
+		on_35 = 37,
+		on_36 = 38,
+		on_manque_1_18 = 39,
+		on_passe_19_36 = 40,
+		on_red = 41,
+		on_black = 42,
+		on_impair_odd = 43,
+		on_pair_even = 44,
+		on_1st_12 = 45,
+		on_2st_12 = 46,
+		on_3st_12 = 47
+	}
+
+	public enum CasinoTableSlot
+	{
+		Slot1 = 0,
+		Slot2 = 1,
+		Slot3 = 2,
+		Slot4 = 3,
+		Slot5 = 4
+	}
+
+	public enum CasinoTableState
+	{
+		Idle = 0,
+		Game = 1
 	}
 
 	[Flags]
@@ -490,6 +627,13 @@ public static partial class Enums
 	{
 		Attributes = 0,
 		Perks = 1
+	}
+
+	public enum ChargeIndicatorWidgetType
+	{
+		INVALID = 0,
+		JENKINS = 1,
+		TIMEBANK = 2
 	}
 
 	public enum ClueState
@@ -563,7 +707,8 @@ public static partial class Enums
 	public enum ConfigMeshQualityLevel
 	{
 		Default = 0,
-		Console = 1
+		Console = 1,
+		Console_XboxSeriesS = 2
 	}
 
 	public enum ConfigTextureQualityLevel
@@ -575,6 +720,18 @@ public static partial class Enums
 		High = 4,
 		SafeMode = 5,
 		Auto = 6
+	}
+
+	public enum ContactsSortMethod
+	{
+		ByTime = 0,
+		ByName = 1
+	}
+
+	public enum CoverState
+	{
+		Open = 0,
+		Closed = 1
 	}
 
 	public enum CrafringMaterialItemHighlight
@@ -626,16 +783,11 @@ public static partial class Enums
 		Fists = 1
 	}
 
-	public enum CyberwareInfoType
-	{
-		Default = 0,
-		Cyberdeck = 1
-	}
-
 	public enum CyberwareScreenType
 	{
-		Ripperdoc = 0,
-		Inventory = 1
+		Invalid = 0,
+		Ripperdoc = 1,
+		Inventory = 2
 	}
 
 	public enum DamageEffectDisplayType
@@ -659,6 +811,22 @@ public static partial class Enums
 		Explosion = 2,
 		VentilationAreaEffect = 3,
 		None = 4
+	}
+
+	public enum Direction
+	{
+		Next = 0,
+		Previous = 1
+	}
+
+	public enum DoorProximityDetectorAppearanceStateType
+	{
+		On = 0,
+		Off = 1,
+		Bars = 2,
+		Green = 3,
+		Alarm = 4,
+		Glitch = 5
 	}
 
 	public enum DronePose
@@ -1004,7 +1172,8 @@ public static partial class Enums
 		Locked = 1,
 		Recompilation = 2,
 		OutOfMemory = 3,
-		Invalid = 4
+		IsQuickHacked = 4,
+		Invalid = 5
 	}
 
 	public enum EActionType
@@ -1034,7 +1203,8 @@ public static partial class Enums
 	{
 		Off = 0,
 		Light = 1,
-		Standard = 2
+		Standard = 2,
+		Heavy = 3
 	}
 
 	public enum EAllowedTo
@@ -1060,19 +1230,12 @@ public static partial class Enums
 		NONE = 3
 	}
 
-	public enum EApertureValue
+	public enum EAppliedTriangulationHackSpeed
 	{
-		[RED("f/1.0")] f_1_0 = 0,
-		[RED("f/1.4")] f_1_4 = 1,
-		[RED("f/2.0")] f_2_0 = 2,
-		[RED("f/2.8")] f_2_8 = 3,
-		[RED("f/4.0")] f_4_0 = 4,
-		[RED("f/5.6")] f_5_6 = 5,
-		[RED("f/8.0")] f_8_0 = 6,
-		[RED("f/11.0")] f_11_0 = 7,
-		[RED("f/16.0")] f_16_0 = 8,
-		[RED("f/22.0")] f_22_0 = 9,
-		[RED("f/32.0")] f_32_0 = 10
+		NotAssigned = 0,
+		Slow = 1,
+		Normal = 2,
+		Fast = 3
 	}
 
 	public enum EAreaLightShape
@@ -1086,13 +1249,6 @@ public static partial class Enums
 		Object = 0,
 		CoverID = 1,
 		Vector4 = 2
-	}
-
-	public enum EAttackType
-	{
-		Invalid = 0,
-		Ranged = 1,
-		Melee = 2
 	}
 
 	public enum EAxisType
@@ -1198,7 +1354,9 @@ public static partial class Enums
 		Drop = 3,
 		Release = 4,
 		Dispose = 5,
-		Jump = 6
+		Jump = 6,
+		Aim = 7,
+		Throw = 8
 	}
 
 	public enum ECartOperationResult
@@ -1219,6 +1377,21 @@ public static partial class Enums
 		Active = 2,
 		Destroyed = 3,
 		Hacked = 4
+	}
+
+	public enum EChargesAmount
+	{
+		Empty = 0,
+		Last = 1,
+		FirstFromTop = 2,
+		Max = 3
+	}
+
+	public enum EChargesItem
+	{
+		Grenade = 0,
+		HealingItems = 1,
+		ProjectileLauncher = 2
 	}
 
 	public enum EColorChannel
@@ -1662,63 +1835,65 @@ public static partial class Enums
 		EMM_SurfaceHairDirection = 23,
 		EMM_SurfaceHairID = 24,
 		EMM_SurfaceLightBlockerIntensity = 25,
-		EMM_GBuffer1RGB = 26,
-		EMM_GBuffer1A = 27,
-		EMM_ConeAODir = 28,
-		EMM_ConeAOAngle = 29,
-		EMM_VelocityBuffer = 30,
-		EMM_Depth = 31,
-		EMM_UvDensity = 32,
-		EMM_ToneMappingLuminance = 33,
-		EMM_ToneMappingThresholds = 34,
-		EMM_LuminanceSpotMeter = 35,
-		EMM_IlluminanceMeter = 36,
-		EMM_DiffuseLight = 37,
-		EMM_SpecularLight = 38,
-		EMM_ClayView = 39,
-		EMM_PureGreyscaleView = 40,
-		EMM_PureWhiteView = 41,
-		EMM_PureReflectionView = 42,
-		EMM_PureGreyReflectionView = 43,
-		EMM_Cascades = 44,
-		EMM_MaskShadow = 45,
-		EMM_MaskSSAO = 46,
-		EMM_MaskTXAA = 47,
-		EMM_MaskDistortion = 48,
-		EMM_MaskInvalidation = 49,
-		EMM_SurfaceCacheID = 50,
-		EMM_SurfaceCacheResolution = 51,
-		EMM_LightChannels = 52,
-		EMM_DebugHitProxies = 53,
-		EMM_DebugShadowsMode = 54,
-		EMM_RayTracingDebug = 55,
-		EMM_SSRResults = 56,
-		EMM_SSRFade = 57,
-		EMM_DepthOfFieldCoC = 58,
-		EMM_MultilayeredMode = 59,
-		EMM_MultilayeredProxy = 60,
-		EMM_MultilayeredUniqueMasks = 61,
-		EMM_MultilayeredMaskWeight = 62,
-		EMM_LocalShadowsVariance = 63,
-		EMM_LocalShadowsRangesOverlapDynamicsOnly = 64,
-		EMM_LocalShadowsRangesOverlapStaticsOnly = 65,
-		EMM_LODColoring = 66,
-		EMM_TodvisRuntimePreview = 67,
-		EMM_TodvisBakePreview = 68,
-		EMM_RainMask = 69,
-		EMM_VolFogDensity = 70,
-		EMM_PBRValidationBaseColor = 71,
-		EMM_PBRValidationMetalness = 72,
-		EMM_GreyPlayMode = 73,
-		EMM_RTXDIDiffuseRaw = 74,
-		EMM_RTXDISpecularRaw = 75,
-		EMM_RTXDIDiffuseDenoised = 76,
-		EMM_RTXDISpecularDenoised = 77,
-		EMM_RTXDIBRDFFactor = 78,
-		EMM_IndirectDiffuseRaw = 79,
-		EMM_IndirectSpecularRaw = 80,
-		EMM_IndirectDiffuseDenoised = 81,
-		EMM_IndirectSpecularDenoised = 82
+		EMM_GBuffer0A = 26,
+		EMM_GBuffer1RGB = 27,
+		EMM_GBuffer1A = 28,
+		EMM_ConeAODir = 29,
+		EMM_ConeAOAngle = 30,
+		EMM_VelocityBuffer = 31,
+		EMM_Depth = 32,
+		EMM_UvDensity = 33,
+		EMM_ToneMappingLuminance = 34,
+		EMM_ToneMappingThresholds = 35,
+		EMM_LuminanceSpotMeter = 36,
+		EMM_IlluminanceMeter = 37,
+		EMM_DiffuseLight = 38,
+		EMM_SpecularLight = 39,
+		EMM_ClayView = 40,
+		EMM_PureGreyscaleView = 41,
+		EMM_PureWhiteView = 42,
+		EMM_PureReflectionView = 43,
+		EMM_PureGreyReflectionView = 44,
+		EMM_Cascades = 45,
+		EMM_MaskShadow = 46,
+		EMM_MaskSSAO = 47,
+		EMM_MaskTXAA = 48,
+		EMM_MaskDistortion = 49,
+		EMM_MaskInvalidation = 50,
+		EMM_MaskReactivityFSR2 = 51,
+		EMM_SurfaceCacheID = 52,
+		EMM_SurfaceCacheResolution = 53,
+		EMM_LightChannels = 54,
+		EMM_DebugHitProxies = 55,
+		EMM_DebugShadowsMode = 56,
+		EMM_RayTracingDebug = 57,
+		EMM_SSRResults = 58,
+		EMM_SSRFade = 59,
+		EMM_DepthOfFieldCoC = 60,
+		EMM_MultilayeredMode = 61,
+		EMM_MultilayeredProxy = 62,
+		EMM_MultilayeredUniqueMasks = 63,
+		EMM_MultilayeredMaskWeight = 64,
+		EMM_LocalShadowsVariance = 65,
+		EMM_LocalShadowsRangesOverlapDynamicsOnly = 66,
+		EMM_LocalShadowsRangesOverlapStaticsOnly = 67,
+		EMM_LODColoring = 68,
+		EMM_TodvisRuntimePreview = 69,
+		EMM_TodvisBakePreview = 70,
+		EMM_RainMask = 71,
+		EMM_VolFogDensity = 72,
+		EMM_PBRValidationBaseColor = 73,
+		EMM_PBRValidationMetalness = 74,
+		EMM_GreyPlayMode = 75,
+		EMM_RTXDIDiffuseRaw = 76,
+		EMM_RTXDISpecularRaw = 77,
+		EMM_RTXDIDiffuseDenoised = 78,
+		EMM_RTXDISpecularDenoised = 79,
+		EMM_RTXDIBRDFFactor = 80,
+		EMM_IndirectDiffuseRaw = 81,
+		EMM_IndirectSpecularRaw = 82,
+		EMM_IndirectDiffuseDenoised = 83,
+		EMM_IndirectSpecularDenoised = 84
 	}
 
 	public enum EEquipmentSide
@@ -1938,13 +2113,14 @@ public static partial class Enums
 	{
 		Frag = 0,
 		Flash = 1,
-		Piercing = 2,
-		EMP = 3,
-		Biohazard = 4,
-		Incendiary = 5,
-		Recon = 6,
-		Cutting = 7,
-		Sonic = 8
+		Smoke = 2,
+		Piercing = 3,
+		EMP = 4,
+		Biohazard = 5,
+		Incendiary = 6,
+		Recon = 7,
+		Cutting = 8,
+		Sonic = 9
 	}
 
 	public enum EHandEquipSlot
@@ -2040,7 +2216,8 @@ public static partial class Enums
 		Repair_below_loop_high = 7,
 		Repair_below_loop_low = 8,
 		Repair_below_loop_medium = 9,
-		Repair_loop_high = 10
+		Repair_loop_high = 10,
+		Repair_loop_medium = 11
 	}
 
 	public enum EInitReactionAnim
@@ -2072,9 +2249,9 @@ public static partial class Enums
 
 	public enum EInputCustomKey
 	{
-		ICK_Pad_DigitLeftRight = 268,
-		ICK_Pad_DigitUpDown = 269,
-		ICK_Count = 270
+		ICK_Pad_DigitLeftRight = 273,
+		ICK_Pad_DigitUpDown = 274,
+		ICK_Count = 275
 	}
 
 	public enum EInputKey
@@ -2336,17 +2513,17 @@ public static partial class Enums
 		IK_UnknownFE = 254,
 		IK_PS4_OPTIONS = 255,
 		IK_PS4_TOUCH_PRESS = 256,
-		IK_Pad_Fake_LeftAxis = 257,
-		IK_Pad_Fake_RightAxis = 258,
-		IK_Pad_Fake_RelativeLeftAxis = 259,
-		IK_Pad_Fake_RelativeRightAxis = 260,
-		IK_Pad_Fake_DigitLeftRight = 261,
-		IK_Pad_Fake_DigitUpDown = 262,
-		IK_STADIA_CAPTURE = 263,
-		IK_SWITCH_CAPTURE = 264,
-		IK_CAPTURE = 265,
-		IK_Last = 266,
-		IK_Count = 267,
+		IK_Pad_Fake_LeftAxis = 262,
+		IK_Pad_Fake_RightAxis = 263,
+		IK_Pad_Fake_RelativeLeftAxis = 264,
+		IK_Pad_Fake_RelativeRightAxis = 265,
+		IK_Pad_Fake_DigitLeftRight = 266,
+		IK_Pad_Fake_DigitUpDown = 267,
+		IK_STADIA_CAPTURE = 268,
+		IK_SWITCH_CAPTURE = 269,
+		IK_CAPTURE = 270,
+		IK_Last = 271,
+		IK_Count = 272,
 		IK_Pad_First = 136,
 		IK_Pad_Last = 155
 	}
@@ -2446,6 +2623,16 @@ public static partial class Enums
 		LSSM_ExtraSharp = 4
 	}
 
+	public enum ELightState
+	{
+		Reset = 0,
+		DefaultColor = 1,
+		Police = 2,
+		VehicleHealth_Low = 3,
+		VehicleHealth_VeryLow = 4,
+		Quest = 5
+	}
+
 	public enum ELightSwitchRandomizerType
 	{
 		RANDOM = 0,
@@ -2497,6 +2684,14 @@ public static partial class Enums
 		LastBullet = 2
 	}
 
+	public enum EMalfunctioningType
+	{
+		NONE = 0,
+		LOUD_ANNOUNCEMENT = 1,
+		HALF_OPENING = 2,
+		GLITCHING = 3
+	}
+
 	public enum EMappinDisplayMode
 	{
 		PLAYSTYLE = 0,
@@ -2544,7 +2739,8 @@ public static partial class Enums
 		EMATMOD_PlanarReflections = 26,
 		EMATMOD_WaterSim = 27,
 		EMATMOD_TransparencyClipParams = 28,
-		EMATMOD_MAX = 29
+		EMATMOD_FlatTireParams = 29,
+		EMATMOD_MAX = 30
 	}
 
 	public enum EMaterialPriority : byte
@@ -2877,7 +3073,8 @@ public static partial class Enums
 	{
 		NONE = 0,
 		GREEN = 1,
-		RED = 2
+		RED = 2,
+		YELLOW = 3
 	}
 
 	public enum EParticleEventSpawnObject
@@ -2888,11 +3085,12 @@ public static partial class Enums
 
 	public enum EParticleEventType
 	{
-		PET_Any = 4,
+		PET_Any = 5,
 		PET_Death = 0,
 		PET_OverLife = 1,
 		PET_OverDistance = 2,
-		PET_Collision = 3
+		PET_Collision = 3,
+		PET_PlayOneShotSoundOnSpawn = 4
 	}
 
 	public enum EPaymentSchedule
@@ -2952,15 +3150,6 @@ public static partial class Enums
 		TECHIE_AND_NETRUNNER = 2
 	}
 
-	public enum EPowerDifferential
-	{
-		IMPOSSIBLE = -6,
-		HARD = -3,
-		NORMAL = 2,
-		EASY = 4,
-		TRASH = 5
-	}
-
 	public enum EPreventionDebugProcessReason
 	{
 		Redirected_IsPsycho = 0,
@@ -2971,6 +3160,13 @@ public static partial class Enums
 		Abort_SystemLockedBySceneTier = 5
 	}
 
+	public enum EPreventionHackLoopState
+	{
+		IDLE = 0,
+		INTRO_RADIO = 1,
+		HACK_LOOP = 2
+	}
+
 	public enum EPreventionHeatStage
 	{
 		Heat_0 = 0,
@@ -2978,18 +3174,9 @@ public static partial class Enums
 		Heat_2 = 2,
 		Heat_3 = 3,
 		Heat_4 = 4,
-		Size = 5,
-		Invalid = 6
-	}
-
-	public enum EPreventionPsychoLogicType
-	{
-		Start = 0,
-		PoliceKilled = 1,
-		PoliceSpawn = 2,
-		PoliceDespawn = 3,
-		DeescalationZeroExecutionLocked = 4,
-		DeescalationZeroExecute = 5
+		Heat_5 = 5,
+		Size = 6,
+		Invalid = 7
 	}
 
 	public enum EPreventionSystemInstruction
@@ -2997,7 +3184,14 @@ public static partial class Enums
 		Safe = 0,
 		Active = 1,
 		Off = 2,
-		On = 3
+		On = 3,
+		ReconPhaseOn = 4,
+		ReconPhaseOff = 5,
+		Debug_BlinkStart = 6,
+		Debug_BlinkStop = 7,
+		Debug_SearchStart = 8,
+		Debug_SearchStop = 9,
+		Debug_Stars = 10
 	}
 
 	public enum EPriority
@@ -3014,6 +3208,13 @@ public static partial class Enums
 	{
 		QuickHack = 0,
 		PhoneCall = 1
+	}
+
+	public enum EProgressBarState
+	{
+		Available = 0,
+		Blocked = 1,
+		Invisible = 2
 	}
 
 	public enum EProgressBarType
@@ -3047,7 +3248,20 @@ public static partial class Enums
 		POP = 6,
 		LATINO = 7,
 		METAL = 8,
-		NONE = 9
+		MINIMAL_TECHNO = 9,
+		JAZZ = 10,
+		GROWL = 11,
+		DARK_STAR = 12,
+		IMPULSE_FM = 13
+	}
+
+	public enum EReactLogSource
+	{
+		Undefined = 0,
+		Detected = 1,
+		StimEvent = 2,
+		BehaviorCombatCheck = 3,
+		BehaviorCombatTrigger = 4
 	}
 
 	public enum EReactionValue
@@ -3108,6 +3322,8 @@ public static partial class Enums
 		ROT_CustomCharacter1 = 12,
 		ROT_CustomCharacter2 = 13,
 		ROT_CustomCharacter3 = 14,
+		ROT_Blackwall1 = 28,
+		ROT_Blackwall2 = 29,
 		ROT_MainPlayer = 15,
 		ROT_NoAO = 16,
 		ROT_NoLighting = 17,
@@ -3298,6 +3514,14 @@ public static partial class Enums
 		SIMPLE = 0
 	}
 
+	public enum ESenseLogSource
+	{
+		Undefined = 0,
+		AddToBlacklistEvent = 1,
+		RemoveFromBlacklistEvent = 2,
+		SecurityAreaCrossingPerimeter = 3
+	}
+
 	public enum ESensorDeviceStates
 	{
 		NONE = 0,
@@ -3352,6 +3576,14 @@ public static partial class Enums
 		JustifyLeft = 0,
 		JustifyRight = 1,
 		JustifyCenter = 2
+	}
+
+	public enum EStarState
+	{
+		Default = 0,
+		Active = 1,
+		Searching = 2,
+		Blinking = 3
 	}
 
 	public enum EStatusEffectBehaviorType
@@ -3411,38 +3643,39 @@ public static partial class Enums
 	{
 		DiscOperationIndicator = 0,
 		GenericNotModal = 1,
-		GenericMenuInfo = 2,
-		GenericYesNo = 3,
-		Generic = 4,
-		ExitGame = 5,
-		StartNewGame = 6,
-		NoDiscSpace = 7,
-		OverwriteSaveFile = 8,
-		OverwriteSaveFileXbCompatWarning = 9,
-		LoadSaveFileInGame = 10,
-		LoadSaveFile = 11,
-		DeleteSaveFile = 12,
-		TransferSaveFile = 13,
-		CorruptedSaveFile = 14,
-		UnreachableCloudFile = 15,
-		RegionMismatchSaveFile = 16,
-		NoPlayerProfile = 17,
-		GameSaved = 18,
-		SaveFailed = 19,
-		UnavailableForGuest = 20,
-		EnableTelemetry = 21,
-		PointOfNoReturn = 22,
-		PointOfNoReturnWithReward = 23,
-		PointOfNoReturnLootAdded = 24,
-		GenericMenuError = 25,
-		ControllerReconnected = 26,
-		ControllerDisconnected = 27,
-		TrialPeriodEnded = 28,
-		TrialPeriodTimer = 29,
-		FailedToRemoveTransferredSave = 30,
-		LoadModdedSaveFile = 31,
-		MAX = 32,
-		FirstModalHighPriority = 26
+		AchievmentDebug = 2,
+		GenericMenuInfo = 3,
+		GenericYesNo = 4,
+		Generic = 5,
+		ExitGame = 6,
+		StartNewGame = 7,
+		NoDiscSpace = 8,
+		OverwriteSaveFile = 9,
+		OverwriteSaveFileXbCompatWarning = 10,
+		LoadSaveFileInGame = 11,
+		LoadSaveFile = 12,
+		DeleteSaveFile = 13,
+		TransferSaveFile = 14,
+		CorruptedSaveFile = 15,
+		UnreachableCloudFile = 16,
+		RegionMismatchSaveFile = 17,
+		NoPlayerProfile = 18,
+		GameSaved = 19,
+		SaveFailed = 20,
+		UnavailableForGuest = 21,
+		EnableTelemetry = 22,
+		PointOfNoReturn = 23,
+		PointOfNoReturnWithReward = 24,
+		PointOfNoReturnLootAdded = 25,
+		GenericMenuError = 26,
+		ControllerReconnected = 27,
+		ControllerDisconnected = 28,
+		TrialPeriodEnded = 29,
+		TrialPeriodTimer = 30,
+		FailedToRemoveTransferredSave = 31,
+		LoadModdedSaveFile = 32,
+		MAX = 33,
+		FirstModalHighPriority = 27
 	}
 
 	public enum ESystems
@@ -3737,6 +3970,30 @@ public static partial class Enums
 		Invalid = 2
 	}
 
+	public enum EVehicleBrandState
+	{
+		Default = 0,
+		New = 1,
+		Selected = 2
+	}
+
+	public enum EVehicleOfferState
+	{
+		Default = 0,
+		New = 1,
+		Owned = 2,
+		Locked = 3
+	}
+
+	public enum EVehicleSpawnBlockSide
+	{
+		Front = 0,
+		Back = 1,
+		Left = 2,
+		Right = 3,
+		Default = 4
+	}
+
 	public enum EVendorMode
 	{
 		BuyItems = 0,
@@ -3760,6 +4017,14 @@ public static partial class Enums
 		DoorSystem = 2,
 		MediaSystem = 3,
 		SecuritySystem = 4
+	}
+
+	public enum EVisionBlockerType
+	{
+		Smoke = 0,
+		OpticalCamo = 1,
+		OpticalCamoLegendary = 2,
+		Undefined = 32
 	}
 
 	public enum EWeaponNamesList
@@ -3841,24 +4106,26 @@ public static partial class Enums
 		RequestLastUsedOrFirstAvailableRangedWeapon = 8,
 		RequestLastUsedOrFirstAvailableMeleeWeapon = 9,
 		RequestLastUsedOrFirstAvailableOneHandedRangedWeapon = 10,
-		RequestHeavyWeapon = 11,
-		CycleWeaponWheelItem = 12,
-		CycleNextWeaponWheelItem = 13,
-		CyclePreviousWeaponWheelItem = 14,
-		RequestConsumable = 15,
-		RequestGadget = 16,
-		RequestFists = 17,
-		RequestLeftHandCyberware = 18,
-		UnequipWeapon = 19,
-		UnequipConsumable = 20,
-		UnequipGadget = 21,
-		UnequipLeftHandCyberware = 22,
-		UnequipAll = 23,
-		ReequipWeapon = 24,
-		RequestWeaponSlot1 = 25,
-		RequestWeaponSlot2 = 26,
-		RequestWeaponSlot3 = 27,
-		RequestWeaponSlot4 = 28
+		RequestLastUsedOrFirstAvailableDriverCombatRangedWeapon = 11,
+		RequestLastUsedOrFirstAvailableDriverCombatBikeWeapon = 12,
+		RequestHeavyWeapon = 13,
+		CycleWeaponWheelItem = 14,
+		CycleNextWeaponWheelItem = 15,
+		CyclePreviousWeaponWheelItem = 16,
+		RequestConsumable = 17,
+		RequestGadget = 18,
+		RequestFists = 19,
+		RequestLeftHandCyberware = 20,
+		UnequipWeapon = 21,
+		UnequipConsumable = 22,
+		UnequipGadget = 23,
+		UnequipLeftHandCyberware = 24,
+		UnequipAll = 25,
+		ReequipWeapon = 26,
+		RequestWeaponSlot1 = 27,
+		RequestWeaponSlot2 = 28,
+		RequestWeaponSlot3 = 29,
+		RequestWeaponSlot4 = 30
 	}
 
 	public enum EquipmentManipulationRequestSlot
@@ -3894,15 +4161,32 @@ public static partial class Enums
 	{
 		PurchaseFailed = 0,
 		PurchaseDisabled = 1,
-		UpdateGameVersion = 2
+		InstallFailed = 2,
+		InstallRequestFailed = 3,
+		InstallDisabled = 4
+	}
+
+	public enum ExpansionPopupType
+	{
+		Default = 0,
+		Features = 1,
+		ThankYou = 2,
+		Reloading = 3,
+		PreOrder = 4
 	}
 
 	public enum ExpansionStatus
 	{
 		NotAvailable = 0,
-		PreOrder = 1,
-		PreOrderOwned = 2,
-		Processing = 3
+		Available = 1,
+		Owned = 2,
+		Downloaded = 3,
+		Downloading = 4,
+		DownloadError = 5,
+		Reloading = 6,
+		Processing = 7,
+		PreOrder = 8,
+		PreOrderOwned = 9
 	}
 
 	public enum ExplosiveTriggerDeviceLaserState
@@ -3937,11 +4221,6 @@ public static partial class Enums
 	{
 		Mounted = 0,
 		Unmounted = 1
-	}
-
-	public enum FTScriptState
-	{
-		ERROR = 0
 	}
 
 	public enum Ft_Result
@@ -4040,19 +4319,19 @@ public static partial class Enums
 		ZoneNotification = 4,
 		ProgressionNotification = 5,
 		CraftingNotification = 6,
-		InventoryNotification = 7
+		InventoryNotification = 7,
+		PhoneNotification = 8
 	}
 
 	public enum GpuApieBufferUsageType : byte
 	{
 		BUT_Default = 0,
 		BUT_Immutable = 1,
-		BUT_ImmutableInPlace = 2,
-		BUT_Readback = 3,
-		BUT_Dynamic_Legacy = 4,
-		BUT_Transient = 5,
-		BUT_Mapped = 6,
-		BUT_MAX = 7
+		BUT_Readback = 2,
+		BUT_Dynamic_Legacy = 3,
+		BUT_Transient = 4,
+		BUT_Mapped = 5,
+		BUT_MAX = 6
 	}
 
 	public enum GpuWrapApiBufferGroup : byte
@@ -4094,7 +4373,7 @@ public static partial class Enums
 		MAX = 34
 	}
 
-    public enum GpuWrapApiVertexPackingEStreamType : sbyte
+	public enum GpuWrapApiVertexPackingEStreamType : sbyte
 	{
 		ST_Invalid = -1,
 		ST_PerVertex = 0,
@@ -4102,7 +4381,7 @@ public static partial class Enums
 		ST_Max = 2
 	}
 
-    public enum GpuWrapApiVertexPackingePackingType : sbyte
+	public enum GpuWrapApiVertexPackingePackingType : sbyte
 	{
 		PT_Invalid = -1,
 		PT_Float1 = 0,
@@ -4502,6 +4781,20 @@ public static partial class Enums
 		LoadLastCheckpointRequired = 4
 	}
 
+	public enum InnerBunkerCoreStage
+	{
+		Normal = 0,
+		Malfunction = 1,
+		Shutdown = 2
+	}
+
+	public enum InnerBunkerCoreStatus
+	{
+		Online = 0,
+		Offline = 1,
+		Unresponsive = 2
+	}
+
 	public enum InstanceState
 	{
 		DISABLED = 0,
@@ -4649,6 +4942,13 @@ public static partial class Enums
 		Mod = 1
 	}
 
+	public enum JournalNotificationMode
+	{
+		Default = 0,
+		Menu = 1,
+		HUD = 2
+	}
+
 	public enum LadderCameraParams
 	{
 		None = 0,
@@ -4688,12 +4988,25 @@ public static partial class Enums
 		PARAM_Vector = 9
 	}
 
+	public enum LifetimeStatus
+	{
+		Base = 0,
+		Near = 1,
+		Disengaging = 2
+	}
+
 	public enum MechanicalScanType
 	{
 		None = 0,
 		Short = 1,
 		Long = 2,
 		Danger = 3
+	}
+
+	public enum MessageHash
+	{
+		Invalid = 0,
+		Fake = -1
 	}
 
 	public enum MessageViewType
@@ -4704,9 +5017,10 @@ public static partial class Enums
 
 	public enum MessengerContactType : byte
 	{
-		Contact = 0,
-		Group = 1,
-		Thread = 2
+		SingleThread = 0,
+		MultiThread = 1,
+		Contact = 2,
+		Fake_ShowAll = 3
 	}
 
 	public enum MinigameActionType
@@ -4751,7 +5065,9 @@ public static partial class Enums
 
 	public enum NavGenAgentSize
 	{
-		Human = 0
+		Human = 0,
+		Vehicle = 1,
+		AgentSize_Count = 2
 	}
 
 	public enum NavGenNavmeshImpact : ushort
@@ -4760,9 +5076,85 @@ public static partial class Enums
 		Walkable = 0,
 		Blocking = 2,
 		Road = 3,
-		CrowdWalkable = 4,
-		Stairs = 5,
-		Drones = 6
+		Stairs = 4,
+		Drones = 5,
+		Terrain = 6,
+		CrowdWalkable = 0
+	}
+
+	public enum NavGenSamplingDensity : byte
+	{
+		None = 0,
+		Sparse = 1,
+		Dense = 2,
+		[RED("Very dense")] Very_dense = 3
+	}
+
+	public enum NewPeksActiveScreen
+	{
+		Categories = 0,
+		Perks = 1,
+		Espionage = 2,
+		Skills = 3,
+		Count = 4,
+		Invalid = -1
+	}
+
+	public enum NewPerkCellAnimationType
+	{
+		Bought = 0,
+		Maxed = 1,
+		Locked = 2,
+		HoverOver = 3,
+		HoverOut = 4,
+		Sold = 5,
+		Reminder = 6,
+		SellLocked = 7,
+		InsufficientPoints = 8,
+		MaxedLocked = 9,
+		COUNT = 10,
+		INVALID = -1
+	}
+
+	public enum NewPerkTabsArrowDirection
+	{
+		Left = 0,
+		Right = 1,
+		Invalid = 2
+	}
+
+	public enum NewPerksCyberwareDetailsMenu
+	{
+		MantisBlades = 0,
+		GorillaArms = 1,
+		ProjectileLauncher = 2,
+		Monowire = 3,
+		COUNT = 4
+	}
+
+	public enum NewPerksWireState
+	{
+		Default = 0,
+		Available = 1,
+		Bought = 2,
+		Count = 3,
+		All = 4,
+		Invalid = -1
+	}
+
+	public enum ObjectToCheck
+	{
+		Player = 0,
+		Weapon = 1
+	}
+
+	public enum OpeningGateScreenState
+	{
+		Unknown = 0,
+		Idle = 1,
+		Loop = 2,
+		Open = 3,
+		Result = 4
 	}
 
 	public enum OutcomeMessage
@@ -4917,9 +5309,24 @@ public static partial class Enums
 		Body = 0,
 		Reflex = 1,
 		Technical_Ability = 2,
-		Johnny = 3,
-		Cool = 4,
-		Intelligence = 5
+		Cool = 3,
+		Intelligence = 4,
+		Espionage = 5,
+		Johnny = 6,
+		Count = 7,
+		Invalid = -1
+	}
+
+	public enum PhoneDialerTabs
+	{
+		Unread = 0,
+		Contacts = 1
+	}
+
+	public enum PhoneScreenType
+	{
+		Unread = 0,
+		Contacts = 1
 	}
 
 	public enum PlayerChangeCameraAndLeaveVehiclePhase
@@ -4976,6 +5383,28 @@ public static partial class Enums
 		Craft = 6
 	}
 
+	public enum QuestListItemType
+	{
+		MainQuest = 0,
+		SideQuest = 1,
+		Gig = 2,
+		Cyberpsycho = 3,
+		NCPDQuest = 4,
+		Apartment = 5,
+		Courier = 6,
+		Finished = 7,
+		Count = 8,
+		All = 9,
+		Invalid = -1
+	}
+
+	public enum QuestListSortType
+	{
+		Updated = 0,
+		Distance = 1,
+		Size = 2
+	}
+
 	public enum QuickSlotActionType
 	{
 		Undefined = 0,
@@ -5004,6 +5433,24 @@ public static partial class Enums
 		Cyberware = 4,
 		Weapon = 5,
 		Interaction = 6
+	}
+
+	public enum RadialHubMenuElement
+	{
+		None = 0,
+		Inventory = 1,
+		Map = 2,
+		Character = 3,
+		Journal = 4
+	}
+
+	public enum RarityItemType
+	{
+		Item = 0,
+		Cyberdeck = 1,
+		Program = 2,
+		Count = 3,
+		Invalid = 4
 	}
 
 	public enum ReactionZones_Humanoid_Side
@@ -5063,10 +5510,26 @@ public static partial class Enums
 		Buyback = 3
 	}
 
+	public enum RipperdocHoverState
+	{
+		None = 0,
+		BarCapacity = 1,
+		BarArmor = 2,
+		SlotSkeleton = 3,
+		SlotHands = 4
+	}
+
 	public enum RipperdocModes
 	{
 		Default = 0,
 		Item = 1
+	}
+
+	public enum RoboticArmStateType
+	{
+		Idle = 0,
+		Work = 1,
+		Distract = 2
 	}
 
 	public enum SAnimationBufferBitwiseCompression
@@ -5163,6 +5626,12 @@ public static partial class Enums
 		QuickHackDescription = 29
 	}
 
+	public enum ScannerDetailTab
+	{
+		Data = 0,
+		Hacking = 1
+	}
+
 	public enum ScannerNetworkState
 	{
 		NOT_CONNECTED = 0,
@@ -5182,11 +5651,25 @@ public static partial class Enums
 		GENERIC = 4
 	}
 
+	public enum ScreenDisplayContext
+	{
+		Default = 0,
+		Vendor = 1
+	}
+
 	public enum SecurityEventScopeSettings
 	{
 		GLOBAL = 0,
 		AREA_WHERE_PLAYER_IS = 1,
 		SPECIFIC_AGENTS_ONLY = 2
+	}
+
+	public enum ServerState
+	{
+		Inactive = 0,
+		Active = 1,
+		Damaged = 2,
+		Destroyed = 3
 	}
 
 	public enum SettingsType
@@ -5235,6 +5718,19 @@ public static partial class Enums
 		DebugVertexUV_Fullscreen = 2,
 		NoBuffers_Fullscreen = 3,
 		NoBuffers_PointList = 4
+	}
+
+	public enum TakeOverControlSystemInputHintSortPriority
+	{
+		Shoot = 0,
+		SpiderNextAim = 1,
+		Scanner = 2,
+		NextDevice = 3,
+		PreviousDevice = 4,
+		ZoomIn = 5,
+		ZoomOut = 6,
+		SpiderNestView = 7,
+		Exit = 8
 	}
 
 	public enum TestCasePhase : byte
@@ -5349,7 +5845,8 @@ public static partial class Enums
 		VehicleMounted = 6,
 		ModalPopup = 7,
 		RadialWheel = 8,
-		VehicleRace = 9
+		VehicleRace = 9,
+		Berserk = 10
 	}
 
 	public enum UIInGameNotificationType
@@ -5363,7 +5860,17 @@ public static partial class Enums
 		NotEnoughSlotsSaveResctriction = 6,
 		NotEnoughSpaceSaveResctriction = 7,
 		PhotoModeDisabledRestriction = 8,
-		GenericNotification = 9
+		ExpansionInstalled = 9,
+		GenericNotification = 10
+	}
+
+	public enum UIInventoryItemWeaponBarsType
+	{
+		Ranged = 0,
+		Melee = 1,
+		Throwable = 2,
+		CyberwareWeapon = 3,
+		CyberwareRangedWeapon = 4
 	}
 
 	public enum UIItemCategory
@@ -5372,7 +5879,10 @@ public static partial class Enums
 		Weapon = 1,
 		Clothing = 2,
 		Grenade = 3,
-		Cyberware = 4
+		Cyberware = 4,
+		CyberwareWeapon = 5,
+		Cyberdeck = 6,
+		Program = 7
 	}
 
 	public enum UIMenuNotificationType
@@ -5390,7 +5900,11 @@ public static partial class Enums
 		NoAttributePoints = 10,
 		InCombat = 11,
 		CraftingQuickhack = 12,
-		CraftingAmmoCap = 13
+		CraftingAmmoCap = 13,
+		PlayerReqLevelToLow = 14,
+		InventoryNoFreeSlot = 15,
+		FaceUnequipBlocked = 16,
+		TutorialUnequipBlocked = 17
 	}
 
 	public enum UIObjectiveEntryType
@@ -5406,6 +5920,13 @@ public static partial class Enums
 		Vehicle = 0,
 		Character = 1,
 		AttachedObject = 2
+	}
+
+	public enum VehicleQuestEngineLockState
+	{
+		DontToggleIfLocked = 0,
+		Lock = 1,
+		Unlock = 2
 	}
 
 	public enum VendorConfirmationPopupType
@@ -5425,6 +5946,38 @@ public static partial class Enums
 		RUNNING = 1,
 		MALFUNCTIONING = 2,
 		ON = 3
+	}
+
+	public enum WeaponBarType
+	{
+		AttackSpeed = 0,
+		DamagePerHit = 1,
+		ReloadSpeed = 2,
+		Range = 3,
+		Handling = 4,
+		Stamina = 5,
+		RangedCount = 6,
+		MeleeAttackSpeed = 7,
+		MeleeDamagePerHit = 8,
+		MeleeStamina = 9,
+		ThrowableEffectiveRange = 10,
+		ThrowableReturnTime = 11,
+		MeleeCount = 12,
+		CyberwareAttackSpeed = 13,
+		CyberwareDamagePerHit = 14,
+		Invalid = -1
+	}
+
+	public enum WeaponBarTypeGroup
+	{
+		AttackSpeed = 0,
+		DamagePerHit = 1,
+		Range = 2,
+		ReloadSpeed = 3,
+		Stamina = 4,
+		Handling = 5,
+		ReturnTime = 6,
+		Invalid = -1
 	}
 
 	public enum WeaponPartType
@@ -5456,7 +6009,8 @@ public static partial class Enums
 		OneHandedRanged = 3,
 		Melee = 4,
 		MeleeCyberware = 5,
-		LMG = 6
+		LMG = 6,
+		HMG = 7
 	}
 
 	public enum WorldMapTooltipType
@@ -6230,7 +6784,10 @@ public static partial class Enums
 		OutdoorEntities = 2,
 		AllEntitiesAllDirections = 3,
 		IndoorAllDirections = 4,
-		OutdoorAllDirections = 5
+		OutdoorAllDirections = 5,
+		SameRoomEntities = 6,
+		DifferentRoomEntities = 7,
+		DistanceExclusion = 8
 	}
 
 	public enum audioAudioEventFlags
@@ -6380,6 +6937,18 @@ public static partial class Enums
 		Tier3_LimitedGameplay = 3,
 		Tier4_FPPCinematic = 4,
 		Tier5_Cinematic = 5
+	}
+
+	public enum audioLimitedSoundType : byte
+	{
+		Locomotion = 0,
+		Footsteps = 1,
+		Impact = 2,
+		Ragdoll = 3,
+		Physics = 4,
+		Destructibles = 5,
+		Ono = 6,
+		VO = 7
 	}
 
 	public enum audioMaterialHardnessOverride
@@ -6607,7 +7176,10 @@ public static partial class Enums
 	{
 		Stanley = 0,
 		MaximumMike = 1,
-		PoliceDispatch = 2
+		PoliceDispatch = 2,
+		Kurtz = 3,
+		Ash = 4,
+		None = 5
 	}
 
 	public enum audioReflectionVariant
@@ -6617,6 +7189,23 @@ public static partial class Enums
 		FindingMaximumFaceAlignemnt = 2,
 		LocalSpaceSideDirections = 3,
 		FindingMaximumFaceAligment2Sides = 4
+	}
+
+	public enum audioTrafficVehicleAudioAction
+	{
+		StartEngine = 0,
+		StopEngine = 1,
+		StartWheel = 2,
+		StopWheel = 3,
+		StartRainLoop = 4,
+		StopRainLoop = 5,
+		Horn = 6,
+		HornForced = 7,
+		DisableAbilityToPlayRadio = 8,
+		StartBrakeLoop = 9,
+		EndBrakeLoop = 10,
+		ApplyBrake = 11,
+		ReleaseBrake = 12
 	}
 
 	public enum audioTriggerEffectMode : byte
@@ -6942,7 +7531,7 @@ public static partial class Enums
 		Vehicle = 4,
 		CinematicVehicle = 5,
 		VehicleInterior = 6,
-		LargeVehicleInterior = 7,
+		VehicleDecoration = 7,
 		ConsoleLOD = 8
 	}
 
@@ -6951,6 +7540,15 @@ public static partial class Enums
 		AlwaysVisible = 0,
 		Appearance = 1,
 		AppearanceProxy = 2
+	}
+
+	public enum entRenderToTextureFeaturesPlatform : byte
+	{
+		RTFP_All = 0,
+		RTFP_PC = 1,
+		RTFP_PC_PS5_XSX = 2,
+		RTFP_Consoles = 3,
+		RTFP_None = 4
 	}
 
 	public enum entRenderToTextureMode : byte
@@ -7139,6 +7737,18 @@ public static partial class Enums
 		TurnOff = 2
 	}
 
+	public enum gameBreachUITrackingChange
+	{
+		NoChange = 0,
+		StartedNew = 1,
+		StoppedOnTimeout = 2,
+		StoppedOnTargetDeath = 3,
+		StoppedOnDestroyed = 6,
+		StoppedForced = 7,
+		Hidden = 8,
+		Unhidden = 9
+	}
+
 	public enum gameCameraCurve
 	{
 		CentricPitchOfSpeed = 0,
@@ -7172,8 +7782,9 @@ public static partial class Enums
 		Division = 3,
 		Modulo = 4,
 		Invert = 5,
-		Count = 6,
-		Invalid = 7
+		ComplementMultiplication = 6,
+		Count = 7,
+		Invalid = 8
 	}
 
 	public enum gameComparisonType
@@ -7215,10 +7826,11 @@ public static partial class Enums
 	public enum gameDamageCallbackType
 	{
 		HitTriggered = 0,
+		MissTriggered = 3,
 		HitReceived = 1,
 		PipelineProcessed = 2,
-		COUNT = 3,
-		INVALID = 4
+		COUNT = 4,
+		INVALID = 5
 	}
 
 	public enum gameDamageListenerPipelineType
@@ -7233,9 +7845,10 @@ public static partial class Enums
 	{
 		PreProcess = 0,
 		Process = 1,
-		PostProcess = 2,
-		COUNT = 3,
-		INVALID = 4
+		ProcessHitReaction = 2,
+		PostProcess = 3,
+		COUNT = 4,
+		INVALID = 5
 	}
 
 	public enum gameDebugViewETextAlignment
@@ -7276,6 +7889,15 @@ public static partial class Enums
 		CLEAN = 1,
 		COARSE = 2,
 		HOLE = 64
+	}
+
+	public enum gameDynamicVehicleType
+	{
+		None = 0,
+		Car = 1,
+		AV = 2,
+		RoadBlockade = 3,
+		RoadBlockadeWithAV = 4
 	}
 
 	public enum gameEActionFlags : ushort
@@ -7339,7 +7961,8 @@ public static partial class Enums
 		DPAD_UP = 0,
 		DPAD_DOWN = 1,
 		DPAD_RIGHT = 2,
-		RB = 3
+		RB = 3,
+		LBRB = 4
 	}
 
 	public enum gameEInventoryFlags
@@ -7375,6 +7998,15 @@ public static partial class Enums
 		One = 1,
 		Two = 2,
 		Three = 3
+	}
+
+	public enum gameEPowerDifferential
+	{
+		IMPOSSIBLE = -6,
+		HARD = -3,
+		NORMAL = 2,
+		EASY = 4,
+		TRASH = 5
 	}
 
 	public enum gameEPrerequisiteType
@@ -7443,6 +8075,12 @@ public static partial class Enums
 		Z = 2
 	}
 
+	public enum gameEffectObjectFilter_EntityTypeEntityTypeFilter
+	{
+		Puppet = 0,
+		Device = 1
+	}
+
 	public enum gameEffectObjectFilter_HitTypeAction
 	{
 		Accept = 0,
@@ -7494,7 +8132,8 @@ public static partial class Enums
 	{
 		Default = 0,
 		Instant = 1,
-		FirstEquip = 2
+		FirstEquip = 2,
+		HACK_ForceInstantEquip = 3
 	}
 
 	public enum gameEquipmentSetType
@@ -7542,11 +8181,13 @@ public static partial class Enums
 		CP77_Patch_1_5 = 1500,
 		CP77_Patch_1_5_Hotfix1 = 1510,
 		CP77_Patch_1_5_Actual_Hotfix1 = 1520,
+		CP77_Patch_1_5_Development = 1599,
 		CP77_Patch_1_6 = 1600,
 		CP77_Patch_1_6_Hotfix1 = 1610,
 		CP77_Patch_1_6_Hotfix2 = 1620,
 		CP77_Patch_1_6_Hotfix3 = 1630,
-		Current = 1630
+		CP77_Patch_2_0 = 2000,
+		Current = 2000
 	}
 
 	public enum gameGameplayEventFlag
@@ -7632,7 +8273,8 @@ public static partial class Enums
 		Gadget = 3,
 		MeleeCyberware = 4,
 		LauncherCyberware = 5,
-		Fists = 6
+		Fists = 6,
+		TutorialCyberware = 7
 	}
 
 	public enum gameItemIconGender : byte
@@ -7704,7 +8346,9 @@ public static partial class Enums
 		Visited = 1,
 		Tracked = 2,
 		Untracked = 3,
-		Counter = 4
+		Counter = 4,
+		StateDelay = 5,
+		ObjectiveOptional = 6
 	}
 
 	public enum gameJournalNotifyOption
@@ -7723,7 +8367,9 @@ public static partial class Enums
 		CyberPsycho = 4,
 		Contract = 5,
 		VehicleQuest = 6,
-		ApartmentQuest = 7
+		ApartmentQuest = 7,
+		CourierQuest = 8,
+		CourierSideQuest = 9
 	}
 
 	public enum gameKillType
@@ -7765,6 +8411,13 @@ public static partial class Enums
 		KeepState = 1,
 		Vehicle = 3,
 		MovingPlatform = 4
+	}
+
+	public enum gameMountingObjectSubType
+	{
+		Invalid = -1,
+		Car = 0,
+		Bike = 1
 	}
 
 	public enum gameMountingObjectType
@@ -7865,7 +8518,9 @@ public static partial class Enums
 		PickUp = 1,
 		Carry = 2,
 		Dispose = 3,
-		Drop = 4
+		Drop = 4,
+		Aim = 5,
+		Throw = 6
 	}
 
 	public enum gamePSMBodyCarryingLocomotion
@@ -7884,7 +8539,8 @@ public static partial class Enums
 		Any = 0,
 		Default = 1,
 		Friendly = 2,
-		Strong = 3
+		Strong = 3,
+		WoundedSoldier = 4
 	}
 
 	public enum gamePSMCombat
@@ -7925,10 +8581,11 @@ public static partial class Enums
 		GrenadeCharging = 3,
 		Aim = 4,
 		Reload = 5,
-		Sprint = 6,
-		HipFire = 7,
-		LeftHandCyberware = 8,
-		QuickHack = 9
+		ReloadDriverCombatMountedWeapons = 6,
+		Sprint = 7,
+		HipFire = 8,
+		LeftHandCyberware = 9,
+		QuickHack = 10
 	}
 
 	public enum gamePSMDetailedBodyDisposal
@@ -7970,7 +8627,9 @@ public static partial class Enums
 		DeathLand = 26,
 		SuperheroLand = 27,
 		SuperheroLandRecovery = 28,
-		Knockdown = 29
+		Knockdown = 29,
+		CrouchSprint = 30,
+		Felled = 31
 	}
 
 	public enum gamePSMFallStates
@@ -8036,7 +8695,9 @@ public static partial class Enums
 		DodgeAir = 8,
 		Workspot = 9,
 		Slide = 10,
-		SlideFall = 11
+		SlideFall = 11,
+		CrouchSprint = 12,
+		CrouchDodge = 13
 	}
 
 	public enum gamePSMMelee
@@ -8050,27 +8711,28 @@ public static partial class Enums
 	public enum gamePSMMeleeWeapon
 	{
 		NotReady = 0,
-		Idle = 1,
-		Safe = 2,
-		PublicSafe = 3,
-		Parried = 4,
-		Hold = 5,
-		ChargedHold = 6,
-		Block = 7,
-		Targeting = 8,
-		Deflect = 9,
-		ComboAttack = 10,
-		FinalAttack = 11,
-		StrongAttack = 12,
-		SafeAttack = 13,
-		BlockAttack = 14,
-		SprintAttack = 15,
-		CrouchAttack = 16,
-		JumpAttack = 17,
-		ThrowAttack = 18,
-		DeflectAttack = 19,
-		EquipAttack = 20,
-		Default = 21
+		Equipping = 1,
+		Idle = 2,
+		Safe = 3,
+		PublicSafe = 4,
+		Parried = 5,
+		Hold = 6,
+		ChargedHold = 7,
+		Block = 8,
+		Targeting = 9,
+		Deflect = 10,
+		ComboAttack = 11,
+		FinalAttack = 12,
+		StrongAttack = 13,
+		SafeAttack = 14,
+		BlockAttack = 15,
+		SprintAttack = 16,
+		CrouchAttack = 17,
+		JumpAttack = 18,
+		ThrowAttack = 19,
+		DeflectAttack = 20,
+		EquipAttack = 21,
+		Default = 22
 	}
 
 	public enum gamePSMNanoWireLaunchMode
@@ -8082,6 +8744,7 @@ public static partial class Enums
 
 	public enum gamePSMRangedWeaponStates
 	{
+		Any = -1,
 		Default = 0,
 		Charging = 1,
 		Reload = 2,
@@ -8102,7 +8765,8 @@ public static partial class Enums
 	public enum gamePSMStamina
 	{
 		Rested = 0,
-		Exhausted = 1
+		Fatigued = 1,
+		Exhausted = 2
 	}
 
 	public enum gamePSMSwimming
@@ -8110,7 +8774,8 @@ public static partial class Enums
 		Any = -1,
 		Default = 0,
 		Surface = 1,
-		Diving = 2
+		Diving = 2,
+		Climbing = 3
 	}
 
 	public enum gamePSMTakedown
@@ -8211,6 +8876,13 @@ public static partial class Enums
 		Safe = 2,
 		Restricted = 3,
 		Dangerous = 4
+	}
+
+	public enum gamePhantomEntityState
+	{
+		RootMotion = 0,
+		Workspot = 1,
+		MoveOnSpline = 2
 	}
 
 	public enum gamePlatformMovementState
@@ -8382,6 +9054,18 @@ public static partial class Enums
 		PlayerStash = 1000000
 	}
 
+	public enum gameSimpleMessageType
+	{
+		Undefined = 0,
+		Negative = 1,
+		Neutral = 2,
+		Vehicle = 3,
+		Apartment = 4,
+		Relic = 5,
+		Money = 6,
+		Reveal = 7
+	}
+
 	public enum gameSmartObjectInstanceEntryType
 	{
 		UseEntryAnimation = 0,
@@ -8420,7 +9104,9 @@ public static partial class Enums
 		ChargedJump800cmDown = 20,
 		ThrusterJumpUp = 21,
 		ThrusterJumpDown = 22,
-		Climb400cmDown = 23
+		Climb400cmDown = 23,
+		Jump4mDown = 24,
+		VaultJump7mDown = 25
 	}
 
 	public enum gameSpawnInViewState : byte
@@ -8518,9 +9204,20 @@ public static partial class Enums
 		Cinematic = 1
 	}
 
+	public enum gameTStatModifier : byte
+	{
+		Constant = 0,
+		Random = 1,
+		Curve = 2,
+		Combined = 3,
+		Count = 4,
+		Invalid = 5
+	}
+
 	public enum gameTargetingSet
 	{
 		Visible = 0,
+		ClearlyVisible = 1,
 		Frustum = 2,
 		Complete = 3,
 		None = 4
@@ -8705,39 +9402,42 @@ public static partial class Enums
 		FurthestSquadmate = 11,
 		FurthestThreat = 12,
 		HostileOfficer = 13,
-		MountedVehicle = 14,
-		MovementDestination = 15,
-		NearestDefeatedSquadmate = 16,
-		NearestNavigableSquadmate = 17,
-		NearestSquadmate = 18,
-		NearestThreat = 19,
-		NetrunnerProxy = 20,
-		ObjectOfInterest = 21,
-		Owner = 22,
-		Player = 23,
-		PointOfInterest = 24,
-		RingBackDestination = 25,
-		RingBackLeftDestination = 26,
-		RingBackRightDestination = 27,
-		RingFrontDestination = 28,
-		RingFrontLeftDestination = 29,
-		RingFrontRightDestination = 30,
-		RingLeftDestination = 31,
-		RingRightDestination = 32,
-		SelectedCover = 33,
-		SpawnPosition = 34,
-		SquadOfficer = 35,
-		StimSource = 36,
-		StimTarget = 37,
-		TargetDevice = 38,
-		TargetItem = 39,
-		TopFriendly = 40,
-		TopThreat = 41,
-		VisibleFurthestThreat = 42,
-		VisibleNearestThreat = 43,
-		VisibleTopThreat = 44,
-		Count = 45,
-		Invalid = 46
+		In_LastKnownPosition = 14,
+		MountedVehicle = 15,
+		MovementDestination = 16,
+		NearestDefeatedSquadmate = 17,
+		NearestNavigableSquadmate = 18,
+		NearestSquadmate = 19,
+		NearestThreat = 20,
+		NetrunnerProxy = 21,
+		ObjectOfInterest = 22,
+		Out_LastChasePosition = 23,
+		Out_SearchPosition = 24,
+		Owner = 25,
+		Player = 26,
+		PointOfInterest = 27,
+		RingBackDestination = 28,
+		RingBackLeftDestination = 29,
+		RingBackRightDestination = 30,
+		RingFrontDestination = 31,
+		RingFrontLeftDestination = 32,
+		RingFrontRightDestination = 33,
+		RingLeftDestination = 34,
+		RingRightDestination = 35,
+		SelectedCover = 36,
+		SpawnPosition = 37,
+		SquadOfficer = 38,
+		StimSource = 39,
+		StimTarget = 40,
+		TargetDevice = 41,
+		TargetItem = 42,
+		TopFriendly = 43,
+		TopThreat = 44,
+		VisibleFurthestThreat = 45,
+		VisibleNearestThreat = 46,
+		VisibleTopThreat = 47,
+		Count = 48,
+		Invalid = 49
 	}
 
 	public enum gamedataAIActionType
@@ -8772,6 +9472,28 @@ public static partial class Enums
 		Hip = 1,
 		Knee = 2,
 		Undefined = 3,
+		Count = 4,
+		Invalid = 5
+	}
+
+	public enum gamedataAIComparison
+	{
+		Equal = 0,
+		Greater = 1,
+		GreaterOrEqual = 2,
+		Less = 3,
+		LessOrEqual = 4,
+		NotEqual = 5,
+		Count = 6,
+		Invalid = 7
+	}
+
+	public enum gamedataAIDifficulty
+	{
+		Easy = 0,
+		Hard = 1,
+		Story = 2,
+		VeryHard = 3,
 		Count = 4,
 		Invalid = 5
 	}
@@ -8871,10 +9593,11 @@ public static partial class Enums
 		CommandShoot = 7,
 		CommandThrowGrenade = 8,
 		Default = 9,
-		SetNewCombatTarget = 10,
-		TrackedBySecuritySystemAgent = 11,
-		Count = 12,
-		Invalid = 13
+		QuickhackUpload = 10,
+		SetNewCombatTarget = 11,
+		TrackedBySecuritySystemAgent = 12,
+		Count = 13,
+		Invalid = 14
 	}
 
 	public enum gamedataAITicketType
@@ -8884,103 +9607,125 @@ public static partial class Enums
 		Block = 2,
 		CallOff = 3,
 		CatchUp = 4,
-		Charge = 5,
-		CloseRing = 6,
-		CloseRing1stFilter = 7,
-		CloseRing2ndFilter = 8,
-		Crouch = 9,
-		DefaultRing = 10,
-		Dodge = 11,
-		Equip = 12,
-		EquipMelee = 13,
-		ExtremeRing = 14,
-		ExtremeRing1stFilter = 15,
-		ExtremeRing2ndFilter = 16,
-		FarRing = 17,
-		FarRing1stFilter = 18,
-		FarRing2ndFilter = 19,
-		GoToCover = 20,
-		GrenadeThrow = 21,
-		GroupReaction = 22,
-		Investigate = 23,
-		MediumRing = 24,
-		MediumRing1stFilter = 25,
-		MediumRing2ndFilter = 26,
-		Melee = 27,
-		MeleeApproach = 28,
-		MeleeRing = 29,
-		MeleeRing1stFilter = 30,
-		MeleeRing2ndFilter = 31,
-		MeleeSupport = 32,
-		Peek = 33,
-		QuickMelee = 34,
-		Quickhack = 35,
-		Reload = 36,
-		Reprimand = 37,
-		Search = 38,
-		Shoot = 39,
-		SimpleCombat = 40,
-		SimpleCombatMovement = 41,
-		Strafe = 42,
-		StrafeEvade = 43,
-		Sync = 44,
-		TakeCover = 45,
-		Takedown = 46,
-		Taunt = 47,
-		TauntBackground = 48,
-		Count = 49,
-		Invalid = 50
+		CatchUpToMeleePlayerOnHard = 5,
+		CatchUpToMeleePlayerOnVeryHard = 6,
+		Charge = 7,
+		CloseRing = 8,
+		CloseRing1stFilter = 9,
+		CloseRing2ndFilter = 10,
+		Crouch = 11,
+		DefaultRing = 12,
+		Dodge = 13,
+		Equip = 14,
+		EquipMelee = 15,
+		ExtremeRing = 16,
+		ExtremeRing1stFilter = 17,
+		ExtremeRing2ndFilter = 18,
+		FarRing = 19,
+		FarRing1stFilter = 20,
+		FarRing2ndFilter = 21,
+		GoToCover = 22,
+		GrenadeThrow = 23,
+		GrenadeThrow_Hard = 24,
+		GrenadeThrow_VeryHard = 25,
+		GroupReaction = 26,
+		Investigate = 27,
+		MediumRing = 28,
+		MediumRing1stFilter = 29,
+		MediumRing2ndFilter = 30,
+		Melee = 31,
+		MeleeApproach = 32,
+		MeleeRing = 33,
+		MeleeRing1stFilter = 34,
+		MeleeRing2ndFilter = 35,
+		MeleeSupport = 36,
+		OpticalCamo_Hard = 37,
+		OpticalCamo_VeryHard = 38,
+		Peek = 39,
+		QuickMelee = 40,
+		Quickhack = 41,
+		Quickhack_Hard = 42,
+		Quickhack_VeryHard = 43,
+		Reload = 44,
+		Reprimand = 45,
+		Search = 46,
+		Shoot = 47,
+		SimpleCombat = 48,
+		SimpleCombatMovement = 49,
+		SmokeGrenadeThrow = 50,
+		Strafe = 51,
+		StrafeEvade = 52,
+		Sync = 53,
+		TakeCover = 54,
+		Takedown = 55,
+		Taunt = 56,
+		TauntBackground = 57,
+		Count = 58,
+		Invalid = 59
 	}
 
 	public enum gamedataAchievement
 	{
-		Bladerunner = 0,
-		BornToBeWild = 1,
-		Breathtaking = 2,
-		BushidoAndChill = 3,
-		Cyberjunkie = 4,
-		Denied = 5,
-		FollowingTheRiver = 6,
-		Fortuneteller = 7,
-		Gearhead = 8,
-		GetMeThereScottie = 9,
-		GunKata = 10,
-		Gunslinger = 11,
-		HandyMan = 12,
-		IAmMaxTac = 13,
-		LikeFatherLikeSon = 14,
-		LittleTokyo = 15,
-		MasterRunner = 16,
-		MaxPain = 17,
-		MustBeTheRats = 18,
-		NeverFadeAway = 19,
-		NoMansLand = 20,
-		NotTheMobile = 21,
-		QueenOfTheHighway = 22,
-		Roleplayer = 23,
-		Specialist = 24,
-		Temperance = 25,
-		ThatIsSoHardForTheKnees = 26,
-		TheDevil = 27,
-		TheFool = 28,
-		TheHermit = 29,
-		TheHightPriestess = 30,
-		TheLovers = 31,
-		TheStar = 32,
-		TheSun = 33,
-		TheWheelOfFortune = 34,
-		TheWorld = 35,
-		ThisIsPacifica = 36,
-		TradeUnion = 37,
-		TrueSoldier = 38,
-		TrueWarrior = 39,
-		TwoHeadsOneBullet = 40,
-		UnderPressure = 41,
-		VForVendetta = 42,
-		YipMan = 43,
-		YouKnowWhoIAm = 44,
-		Count = 45,
-		Invalid = 46
+		AllThePresidentsMen = 0,
+		Bladerunner = 1,
+		BornToBeWild = 2,
+		Breathtaking = 3,
+		BushidoAndChill = 4,
+		Cyberjunkie = 5,
+		Denied = 6,
+		DirtyWork = 7,
+		DogtownLaw = 8,
+		EasyComeEasyGo = 9,
+		FollowingTheRiver = 10,
+		Fortuneteller = 11,
+		Gearhead = 12,
+		GetMeThereScottie = 13,
+		GunKata = 14,
+		Gunslinger = 15,
+		HandyMan = 16,
+		HydraIsDead = 17,
+		IAmMaxTac = 18,
+		IHateSpider = 19,
+		KingOfTheCups = 20,
+		KingOfThePentacles = 21,
+		KingOfTheSwords = 22,
+		KingOfTheWands = 23,
+		Kingmaker = 24,
+		LikeFatherLikeSon = 25,
+		LittleTokyo = 26,
+		MasterRunner = 27,
+		MaxPain = 28,
+		MustBeTheRats = 29,
+		NeverFadeAway = 30,
+		NoMansLand = 31,
+		NotTheMobile = 32,
+		QueenOfTheHighway = 33,
+		RelicMaster = 34,
+		Roleplayer = 35,
+		Specialist = 36,
+		Temperance = 37,
+		ThatIsSoHardForTheKnees = 38,
+		TheDevil = 39,
+		TheFool = 40,
+		TheHermit = 41,
+		TheHightPriestess = 42,
+		TheLovers = 43,
+		TheStar = 44,
+		TheSun = 45,
+		TheTower = 46,
+		TheWheelOfFortune = 47,
+		TheWorld = 48,
+		ThisIsPacifica = 49,
+		TradeUnion = 50,
+		TrueSoldier = 51,
+		TrueWarrior = 52,
+		TwoHeadsOneBullet = 53,
+		UnderPressure = 54,
+		VForVendetta = 55,
+		YipMan = 56,
+		YouKnowWhoIAm = 57,
+		Count = 58,
+		Invalid = 59
 	}
 
 	public enum gamedataAffiliation
@@ -8989,51 +9734,64 @@ public static partial class Enums
 		Aldecaldos = 1,
 		Animals = 2,
 		Arasaka = 3,
-		Biotechnica = 4,
-		CityCouncil = 5,
-		Civilian = 6,
-		KangTao = 7,
-		Maelstrom = 8,
-		MaelstromAndroid = 9,
-		Militech = 10,
-		NCPD = 11,
-		NetWatch = 12,
-		News54 = 13,
-		RecordingAgency = 14,
-		SSI = 15,
-		Scavengers = 16,
-		ScavengersAndroid = 17,
-		SixthStreet = 18,
-		SixthStreetAndroid = 19,
-		SouthCalifornia = 20,
-		TheMox = 21,
-		TraumaTeam = 22,
-		TygerClaws = 23,
-		Unaffiliated = 24,
-		UnaffiliatedCorpo = 25,
-		Unknown = 26,
-		Valentinos = 27,
-		VoodooBoys = 28,
-		Wraiths = 29,
-		WraithsAndroid = 30,
-		Zetatech = 31,
-		Count = 32,
-		Invalid = 33
+		Barghest = 4,
+		Biotechnica = 5,
+		CityCouncil = 6,
+		Civilian = 7,
+		Classified = 8,
+		KangTao = 9,
+		Maelstrom = 10,
+		MaelstromAndroid = 11,
+		Militech = 12,
+		NCPD = 13,
+		NUSA = 14,
+		NetWatch = 15,
+		News54 = 16,
+		OA = 17,
+		RecordingAgency = 18,
+		SSI = 19,
+		Scavengers = 20,
+		ScavengersAndroid = 21,
+		SixthStreet = 22,
+		SixthStreetAndroid = 23,
+		SouthCalifornia = 24,
+		TheMox = 25,
+		TraumaTeam = 26,
+		TygerClaws = 27,
+		Unaffiliated = 28,
+		UnaffiliatedCorpo = 29,
+		Unknown = 30,
+		Valentinos = 31,
+		VoodooBoys = 32,
+		Wraiths = 33,
+		WraithsAndroid = 34,
+		Zetatech = 35,
+		corpbud = 36,
+		crimson_harvest = 37,
+		growl = 38,
+		highriders = 39,
+		private_press = 40,
+		Count = 41,
+		Invalid = 42
 	}
 
 	public enum gamedataAimAssistType
 	{
-		HeadTarget = 0,
-		LegTarget = 1,
-		MechanicalTarget = 2,
-		Melee = 3,
-		None = 4,
-		QuickHack = 5,
-		Scanning = 6,
-		Shooting = 7,
-		ShootingLimbCyber = 8,
-		Count = 9,
-		Invalid = 10
+		BreachTarget = 0,
+		ChestTarget = 1,
+		DriverCombat = 2,
+		HeadTarget = 3,
+		LegTarget = 4,
+		MechanicalTarget = 5,
+		Melee = 6,
+		None = 7,
+		QuickHack = 8,
+		Scanning = 9,
+		Shooting = 10,
+		ShootingLimbCyber = 11,
+		WeakSpotTarget = 12,
+		Count = 13,
+		Invalid = 14
 	}
 
 	public enum gamedataArchetypeType
@@ -9073,17 +9831,19 @@ public static partial class Enums
 	public enum gamedataAttackSubtype
 	{
 		BlockAttack = 0,
-		ComboAttack = 1,
-		CrouchAttack = 2,
-		DeflectAttack = 3,
-		EquipAttack = 4,
-		FinalAttack = 5,
-		JumpAttack = 6,
-		SafeAttack = 7,
-		SprintAttack = 8,
-		ThrowAttack = 9,
-		Count = 10,
-		Invalid = 11
+		BodySlamAttack = 1,
+		ComboAttack = 2,
+		CrouchAttack = 3,
+		DeflectAttack = 4,
+		EquipAttack = 5,
+		FinalAttack = 6,
+		JumpAttack = 7,
+		SafeAttack = 8,
+		SprintAttack = 9,
+		SpyTreeMeleewareAttack = 10,
+		ThrowAttack = 11,
+		Count = 12,
+		Invalid = 13
 	}
 
 	public enum gamedataAttackType
@@ -9092,101 +9852,98 @@ public static partial class Enums
 		Direct = 1,
 		Effect = 2,
 		Explosion = 3,
-		GuardBreak = 4,
-		Hack = 5,
-		Melee = 6,
-		PressureWave = 7,
-		QuickMelee = 8,
-		Ranged = 9,
-		Reflect = 10,
-		StrongMelee = 11,
-		Thrown = 12,
-		WhipAttack = 13,
-		Count = 14,
-		Invalid = 15
+		ForceKill = 4,
+		GuardBreak = 5,
+		Hack = 6,
+		Melee = 7,
+		PressureWave = 8,
+		QuickMelee = 9,
+		Ranged = 10,
+		Reflect = 11,
+		StrongMelee = 12,
+		Thrown = 13,
+		WhipAttack = 14,
+		Count = 15,
+		Invalid = 16
+	}
+
+	public enum gamedataAttributeDataType
+	{
+		BodyAttributeData = 0,
+		CoolAttributeData = 1,
+		EspionageAttributeData = 2,
+		IntelligenceAttributeData = 3,
+		ReflexesAttributeData = 4,
+		TechnicalAbilityAttributeData = 5,
+		Count = 6,
+		Invalid = 7
 	}
 
 	public enum gamedataBuildType
 	{
-		CombatNetrunner0 = 0,
-		CombatNetrunner10 = 1,
-		CombatNetrunner15 = 2,
-		CombatNetrunner18 = 3,
-		CombatNetrunner20 = 4,
-		CombatNetrunner25 = 5,
-		CombatNetrunner30 = 6,
-		CombatNetrunner35 = 7,
-		CombatNetrunner40 = 8,
-		CombatNetrunner5 = 9,
-		CombatNetrunner50 = 10,
-		CorporateStarting = 11,
-		E32019NetrunnerPhase1 = 12,
-		E32019StrongSoloPhase1 = 13,
+		Avg_10_Int_Netrunner = 0,
+		Body40 = 1,
+		CherryHybrid30 = 2,
+		CherryHybrid50 = 3,
+		CorporateStarting = 4,
+		E32019NetrunnerPhase1 = 5,
+		E32019StrongSoloPhase1 = 6,
+		EP1_Standalone_Corpo_MA_StartingBuild = 7,
+		EP1_Standalone_Corpo_WA_StartingBuild = 8,
+		EP1_Standalone_Nomad_MA_StartingBuild = 9,
+		EP1_Standalone_Nomad_WA_StartingBuild = 10,
+		EP1_Standalone_StartingBuild = 11,
+		EP1_Standalone_Street_MA_StartingBuild = 12,
+		EP1_Standalone_Street_WA_StartingBuild = 13,
 		FunctionalTestsProgressionBuildTest = 14,
 		FunctionalTestsStartingBuild = 15,
 		GYMcclBuild = 16,
 		GymSmoketestMaxedBuild = 17,
 		HandsOnStarting = 18,
-		ItemPass_BaseBuild = 19,
-		ItemPass_FactionMeleeMods = 20,
-		ItemPass_FactionRangedMods = 21,
-		ItemPass_IconicMods = 22,
-		ItemPass_LegendaryMods = 23,
-		ItemPass_PowerMods = 24,
-		ItemPass_SmartMods = 25,
-		ItemPass_StandardMods = 26,
-		ItemPass_TechMods = 27,
-		JohnnyQ101 = 28,
-		JohnnyQ108 = 29,
-		JohnnyQ204 = 30,
-		MaxSkillsAllWeapons = 31,
-		MeleeCombat0 = 32,
-		MeleeCombat10 = 33,
-		MeleeCombat15 = 34,
-		MeleeCombat20 = 35,
-		MeleeCombat25 = 36,
-		MeleeCombat30 = 37,
-		MeleeCombat35 = 38,
-		MeleeCombat40 = 39,
-		MeleeCombat45 = 40,
-		MeleeCombat5 = 41,
-		MeleeCombat50 = 42,
-		NomadStarting = 43,
-		RangedCombat0 = 44,
-		RangedCombat10 = 45,
-		RangedCombat15 = 46,
-		RangedCombat20 = 47,
-		RangedCombat25 = 48,
-		RangedCombat30 = 49,
-		RangedCombat35 = 50,
-		RangedCombat40 = 51,
-		RangedCombat45 = 52,
-		RangedCombat5 = 53,
-		RangedCombat50 = 54,
-		StartingBuild = 55,
-		StreetKidStarting = 56,
-		UIStressTest = 57,
-		mech_netrunner = 58,
-		q003_royce_netrunner = 59,
-		q003_royce_noBuild = 60,
-		q003_royce_solo = 61,
-		q110_sasquatch_netrunner = 62,
-		q110_sasquatch_noBuild = 63,
-		q110_sasquatch_solo = 64,
-		q112_oda_netrunner = 65,
-		q112_oda_noBuild = 66,
-		q112_oda_solo = 67,
-		q113_smasher_melee = 68,
-		q113_smasher_netrunner = 69,
-		q113_smasher_noBuild = 70,
-		q113_smasher_solo = 71,
-		CpoAssassinBuild = 72,
-		CpoDefaultBuild = 73,
-		CpoNetrunnerBuild = 74,
-		CpoSoloBuild = 75,
-		CpoTechieBuild = 76,
-		Count = 77,
-		Invalid = 78
+		Hard_20_Body = 19,
+		Hard_20_Intelligence = 20,
+		Hard_20_Reflex = 21,
+		Hard_30_BodyTech = 22,
+		Hard_30_IntBody = 23,
+		Hard_30_Reflex = 24,
+		JohnnyQ101 = 25,
+		JohnnyQ108 = 26,
+		JohnnyQ204 = 27,
+		KurtMQ301Delivery = 28,
+		KurtMQ301Initiation = 29,
+		MaxSkillsAllWeapons = 30,
+		MaxStealthHacker = 31,
+		NomadStarting = 32,
+		Normal_20_Melee = 33,
+		Normal_20_Netrunner = 34,
+		Normal_20_Ranged = 35,
+		Reflex40 = 36,
+		SmartRunner40 = 37,
+		StartingBuild = 38,
+		Story_15 = 39,
+		Story_25 = 40,
+		Story_5 = 41,
+		Str_10_Tank = 42,
+		Str_30_Cool_Assassin = 43,
+		Str_5_Tank = 44,
+		StreetKidStarting = 45,
+		UIStressTest = 46,
+		VHard_50_BodyCool = 47,
+		VHard_50_CoolRef = 48,
+		VHard_50_IntRef = 49,
+		VHard_50_IntTech = 50,
+		VHard_50_RefBody = 51,
+		VHard_50_TechCool = 52,
+		Weak_10 = 53,
+		Weak_20_Cool = 54,
+		Weak_30 = 55,
+		CpoAssassinBuild = 56,
+		CpoDefaultBuild = 57,
+		CpoNetrunnerBuild = 58,
+		CpoSoloBuild = 59,
+		CpoTechieBuild = 60,
+		Count = 61,
+		Invalid = 62
 	}
 
 	public enum gamedataChargeStep
@@ -9232,6 +9989,15 @@ public static partial class Enums
 		Invalid = 5
 	}
 
+	public enum gamedataComputerUIStyle
+	{
+		DarkBlue = 0,
+		LightBlue = 1,
+		Orange = 2,
+		Count = 3,
+		Invalid = 4
+	}
+
 	public enum gamedataConsumableBaseName
 	{
 		Alcohol = 0,
@@ -9254,6 +10020,24 @@ public static partial class Enums
 		Medical = 1,
 		Count = 2,
 		Invalid = 3
+	}
+
+	public enum gamedataContainerType
+	{
+		AmmoCase = 0,
+		Body = 1,
+		ClothingContainer = 2,
+		ComponentContainer = 3,
+		ConsumableContainer = 4,
+		GadgetCase = 5,
+		Misc = 6,
+		QuestContainer = 7,
+		Safe = 8,
+		ShardCaseContainer = 9,
+		ValuableCrate = 10,
+		WeaponContainer = 11,
+		Count = 12,
+		Invalid = 13
 	}
 
 	public enum gamedataDamageType
@@ -9289,10 +10073,32 @@ public static partial class Enums
 	public enum gamedataDevelopmentPointType
 	{
 		Attribute = 0,
-		Primary = 1,
-		Secondary = 2,
-		Count = 3,
-		Invalid = 4
+		Espionage = 1,
+		Primary = 2,
+		Secondary = 3,
+		Count = 4,
+		Invalid = 5
+	}
+
+	public enum gamedataDeviceHackCategory
+	{
+		ControlHack = 0,
+		CovertHack = 1,
+		DamageHack = 2,
+		VehicleHack = 3,
+		Count = 4,
+		Invalid = 5
+	}
+
+	public enum gamedataDeviceHackTier
+	{
+		Tier1DeviceHack = 0,
+		Tier2DeviceHack = 1,
+		Tier3DeviceHack = 2,
+		Tier4DeviceHack = 3,
+		Tier5DeviceHack = 4,
+		Count = 5,
+		Invalid = 6
 	}
 
 	public enum gamedataDistrict
@@ -9322,102 +10128,126 @@ public static partial class Enums
 		Badlands_SantaClara = 22,
 		Badlands_SierraSonora = 23,
 		Badlands_SoCalBorderCrossing = 24,
-		Badlands_VasquezPass = 25,
-		Badlands_Yucca = 26,
-		Badlands_YuccaGarage = 27,
-		Badlands_YuccaRadioTower = 28,
-		CharterHill = 29,
-		CharterHill_PowerPlant = 30,
-		CityCenter = 31,
-		Coastview = 32,
-		Coastview_BattysHotel = 33,
-		Coastview_ButcherShop = 34,
-		Coastview_GrandImperialMall = 35,
-		Coastview_RundownApartment = 36,
-		Coastview_VDBChapel = 37,
-		Coastview_VDBMaglev = 38,
-		Coastview_q110Cyberspace = 39,
-		CorpoPlaza = 40,
-		CorpoPlaza_Apartment = 41,
-		CorpoPlaza_ArasakaTowerAtrium = 42,
-		CorpoPlaza_ArasakaTowerCEOFloor = 43,
-		CorpoPlaza_ArasakaTowerJenkins = 44,
-		CorpoPlaza_ArasakaTowerJungle = 45,
-		CorpoPlaza_ArasakaTowerLobby = 46,
-		CorpoPlaza_ArasakaTowerNest = 47,
-		CorpoPlaza_ArasakaTowerSaburoOffice = 48,
-		CorpoPlaza_ArasakaTowerUnlistedFloors = 49,
-		CorpoPlaza_ArasakaTowerUpperAtrium = 50,
-		CorpoPlaza_q201Cyberspace = 51,
-		Downtown = 52,
-		Downtown_Jinguji = 53,
-		Downtown_TheHammer = 54,
-		Glen = 55,
-		Glen_Apartment = 56,
-		Glen_Embers = 57,
-		Glen_MusicStore = 58,
-		Glen_NCPDLab = 59,
-		Glen_WichedTires = 60,
-		Heywood = 61,
-		JapanTown = 62,
-		JapanTown_Apartment = 63,
-		JapanTown_Clouds = 64,
-		JapanTown_DarkMatter = 65,
-		JapanTown_Fingers = 66,
-		JapanTown_FourthWallBdStudio = 67,
-		JapanTown_HiromisApartment = 68,
-		JapanTown_MegabuildingH8 = 69,
-		JapanTown_VR_Tutorial = 70,
-		JapanTown_Wakakos_Pachinko_Parlor = 71,
-		Kabuki = 72,
-		Kabuki_JudysApartment = 73,
-		Kabuki_LizziesBar = 74,
-		Kabuki_NoTellMotel = 75,
-		LagunaBend_LakeHut = 76,
-		LittleChina = 77,
-		LittleChina_Afterlife = 78,
-		LittleChina_MistysShop = 79,
-		LittleChina_Q101Cyberspace = 80,
-		LittleChina_RiotClub = 81,
-		LittleChina_TomsDiner = 82,
-		LittleChina_VApartment = 83,
-		LittleChina_VictorsClinic = 84,
-		NorthBadlands = 85,
-		NorthOaks = 86,
-		NorthOaks_Arasaka_Estate = 87,
-		NorthOaks_Columbarium = 88,
-		NorthOaks_Denny_Estate = 89,
-		NorthOaks_Kerry_Estate = 90,
-		Northside = 91,
-		Northside_All_Foods = 92,
-		Northside_Apartment = 93,
-		Northside_CleanCut = 94,
-		Northside_Totentaz = 95,
-		Northside_WNS = 96,
-		Pacifica = 97,
-		RanchoCoronado = 98,
-		RanchoCoronado_Caliente = 99,
-		RanchoCoronado_GunORama = 100,
-		RanchoCoronado_Piez = 101,
-		RanchoCoronado_Softsys = 102,
-		RanchoCoronado_Stylishly = 103,
-		SantoDomingo = 104,
-		SouthBadlands = 105,
-		SouthBadlands_EdgewoodFarm = 106,
-		SouthBadlands_PoppyFarm = 107,
-		SouthBadlands_TrailerPark = 108,
-		SouthBadlands_q201SpaceStation = 109,
-		VistaDelRey = 110,
-		Vista_del_Rey_Delamain = 111,
-		Vista_del_Rey_LaCatrina = 112,
-		Vista_del_rey_Abandoned_Apartment_Building = 113,
-		Vista_del_rey_ElCoyoteCojo = 114,
-		Watson = 115,
-		Wellsprings = 116,
-		WestWindEstate = 117,
-		Westbrook = 118,
-		Count = 119,
-		Invalid = 120
+		Badlands_Spaceport = 25,
+		Badlands_VasquezPass = 26,
+		Badlands_Yucca = 27,
+		Badlands_YuccaGarage = 28,
+		Badlands_YuccaRadioTower = 29,
+		CharterHill = 30,
+		CharterHill_AuCabanon = 31,
+		CharterHill_PowerPlant = 32,
+		CityCenter = 33,
+		Coastview = 34,
+		Coastview_BattysHotel = 35,
+		Coastview_ButcherShop = 36,
+		Coastview_GrandImperialMall = 37,
+		Coastview_RundownApartment = 38,
+		Coastview_VDBChapel = 39,
+		Coastview_VDBMaglev = 40,
+		Coastview_q110Cyberspace = 41,
+		CorpoPlaza = 42,
+		CorpoPlaza_Apartment = 43,
+		CorpoPlaza_ArasakaTowerAtrium = 44,
+		CorpoPlaza_ArasakaTowerCEOFloor = 45,
+		CorpoPlaza_ArasakaTowerJenkins = 46,
+		CorpoPlaza_ArasakaTowerJungle = 47,
+		CorpoPlaza_ArasakaTowerLobby = 48,
+		CorpoPlaza_ArasakaTowerNest = 49,
+		CorpoPlaza_ArasakaTowerSaburoOffice = 50,
+		CorpoPlaza_ArasakaTowerUnlistedFloors = 51,
+		CorpoPlaza_ArasakaTowerUpperAtrium = 52,
+		CorpoPlaza_q201Cyberspace = 53,
+		Dogtown = 54,
+		Dogtown_Akebono = 55,
+		Dogtown_Brooklyn = 56,
+		Dogtown_CapitanCaliente = 57,
+		Dogtown_Cynosure = 58,
+		Dogtown_Expo = 59,
+		Dogtown_Hideout = 60,
+		Dogtown_Worldmap_Sub = 61,
+		Downtown = 62,
+		Downtown_Jinguji = 63,
+		Downtown_TheHammer = 64,
+		Glen = 65,
+		Glen_Apartment = 66,
+		Glen_Embers = 67,
+		Glen_MusicStore = 68,
+		Glen_NCPDLab = 69,
+		Glen_WichedTires = 70,
+		Heywood = 71,
+		JapanTown = 72,
+		JapanTown_Apartment = 73,
+		JapanTown_Clouds = 74,
+		JapanTown_DarkMatter = 75,
+		JapanTown_Fingers = 76,
+		JapanTown_FourthWallBdStudio = 77,
+		JapanTown_HiromisApartment = 78,
+		JapanTown_MegabuildingH8 = 79,
+		JapanTown_VR_Tutorial = 80,
+		JapanTown_Wakakos_Pachinko_Parlor = 81,
+		Kabuki = 82,
+		Kabuki_JudysApartment = 83,
+		Kabuki_LizziesBar = 84,
+		Kabuki_NoTellMotel = 85,
+		LagunaBend_LakeHut = 86,
+		Langley_Clinic = 87,
+		LittleChina = 88,
+		LittleChina_Afterlife = 89,
+		LittleChina_MistysShop = 90,
+		LittleChina_Q101Cyberspace = 91,
+		LittleChina_RiotClub = 92,
+		LittleChina_TomsDiner = 93,
+		LittleChina_VApartment = 94,
+		LittleChina_VictorsClinic = 95,
+		MorroRock = 96,
+		MorroRock_NCX = 97,
+		NorthBadlands = 98,
+		NorthOaks = 99,
+		NorthOaks_Arasaka_Estate = 100,
+		NorthOaks_Columbarium = 101,
+		NorthOaks_Denny_Estate = 102,
+		NorthOaks_Kerry_Estate = 103,
+		Northside = 104,
+		Northside_All_Foods = 105,
+		Northside_Apartment = 106,
+		Northside_CleanCut = 107,
+		Northside_Totentaz = 108,
+		Northside_WNS = 109,
+		Pacifica = 110,
+		RanchoCoronado = 111,
+		RanchoCoronado_Caliente = 112,
+		RanchoCoronado_GunORama = 113,
+		RanchoCoronado_Piez = 114,
+		RanchoCoronado_Softsys = 115,
+		RanchoCoronado_Stylishly = 116,
+		SantoDomingo = 117,
+		SouthBadlands = 118,
+		SouthBadlands_EdgewoodFarm = 119,
+		SouthBadlands_PoppyFarm = 120,
+		SouthBadlands_TrailerPark = 121,
+		SouthBadlands_q201SpaceStation = 122,
+		VistaDelRey = 123,
+		Vista_del_Rey_Delamain = 124,
+		Vista_del_Rey_LaCatrina = 125,
+		Vista_del_rey_Abandoned_Apartment_Building = 126,
+		Vista_del_rey_ElCoyoteCojo = 127,
+		Watson = 128,
+		Wellsprings = 129,
+		WestWindEstate = 130,
+		Westbrook = 131,
+		Count = 132,
+		Invalid = 133
+	}
+
+	public enum gamedataDriverCombatType
+	{
+		CrystalDome = 0,
+		Disabled = 1,
+		Doors = 2,
+		MountedWeapons = 3,
+		Standard = 4,
+		Count = 5,
+		Invalid = 6
 	}
 
 	public enum gamedataEffectorTimeDilationDriver
@@ -9443,39 +10273,40 @@ public static partial class Enums
 		CyberwareWheel = 9,
 		EyesCW = 10,
 		Face = 11,
-		Feet = 12,
-		FrontalCortexCW = 13,
-		Gadget = 14,
-		HandsCW = 15,
-		Head = 16,
-		ImmuneSystemCW = 17,
-		InnerChest = 18,
-		IntegumentarySystemCW = 19,
-		LeftArm = 20,
-		Legs = 21,
-		LegsCW = 22,
-		MusculoskeletalSystemCW = 23,
-		NervousSystemCW = 24,
-		OuterChest = 25,
-		Outfit = 26,
-		PersonalLink = 27,
-		PlayerTattoo = 28,
-		Quest = 29,
-		QuickSlot = 30,
-		QuickWheel = 31,
-		RightArm = 32,
-		SilverhandArm = 33,
-		Splinter = 34,
-		SystemReplacementCW = 35,
-		UnderwearBottom = 36,
-		UnderwearTop = 37,
-		VDefaultHandgun = 38,
-		Weapon = 39,
-		WeaponHeavy = 40,
-		WeaponLeft = 41,
-		WeaponWheel = 42,
-		Count = 43,
-		Invalid = 44
+		FaceCW = 12,
+		Feet = 13,
+		FrontalCortexCW = 14,
+		Gadget = 15,
+		HandsCW = 16,
+		Head = 17,
+		ImmuneSystemCW = 18,
+		InnerChest = 19,
+		IntegumentarySystemCW = 20,
+		LeftArm = 21,
+		Legs = 22,
+		LegsCW = 23,
+		MusculoskeletalSystemCW = 24,
+		NervousSystemCW = 25,
+		OuterChest = 26,
+		Outfit = 27,
+		PersonalLink = 28,
+		PlayerTattoo = 29,
+		Quest = 30,
+		QuickSlot = 31,
+		QuickWheel = 32,
+		RightArm = 33,
+		SilverhandArm = 34,
+		Splinter = 35,
+		SystemReplacementCW = 36,
+		UnderwearBottom = 37,
+		UnderwearTop = 38,
+		VDefaultHandgun = 39,
+		Weapon = 40,
+		WeaponHeavy = 41,
+		WeaponLeft = 42,
+		WeaponWheel = 43,
+		Count = 44,
+		Invalid = 45
 	}
 
 	public enum gamedataEthnicity
@@ -9564,31 +10395,60 @@ public static partial class Enums
 		Resolved = 2
 	}
 
+	public enum gamedataHackCategory
+	{
+		BreachingHack = 0,
+		ControlHack = 1,
+		CovertHack = 2,
+		DamageHack = 3,
+		DeviceHack = 4,
+		NotAHack = 5,
+		UltimateHack = 6,
+		VehicleHack = 7,
+		Count = 8,
+		Invalid = 9
+	}
+
 	public enum gamedataHitPrereqConditionType
 	{
 		AgentMoving = 0,
 		AmmoState = 1,
 		AttackSubType = 2,
-		AttackType = 3,
-		BodyPart = 4,
-		DamageOverTimeType = 5,
-		DamageType = 6,
-		DistanceCovered = 7,
-		HitFlag = 8,
-		InstigatorType = 9,
-		SameTarget = 10,
-		SourceType = 11,
-		StatPool = 12,
-		StatPoolComparison = 13,
-		StatusEffectPresent = 14,
-		TargetKilled = 15,
-		TargetNPCRarity = 16,
-		TargetNPCType = 17,
-		TargetType = 18,
-		WeaponType = 19,
-		WoundedTriggered = 20,
-		Count = 21,
-		Invalid = 22
+		AttackTag = 3,
+		AttackType = 4,
+		BodyPart = 5,
+		ConsecutiveHits = 6,
+		DamageOverTimeType = 7,
+		DamageType = 8,
+		DismembermentTriggered = 9,
+		DistanceCovered = 10,
+		EffectNamePresent = 11,
+		HitFlag = 12,
+		HitIsQuickhackPresentInQueue = 13,
+		InstigatorType = 14,
+		ReactionPreset = 15,
+		SameTarget = 16,
+		SelfHit = 17,
+		SourceType = 18,
+		Stat = 19,
+		StatComparison = 20,
+		StatPool = 21,
+		StatPoolComparison = 22,
+		StatusEffectPresent = 23,
+		TargetBreachCanGetKilledByDamage = 24,
+		TargetCanGetKilledByDamage = 25,
+		TargetIsCrowd = 26,
+		TargetKilled = 27,
+		TargetNPCRarity = 28,
+		TargetNPCType = 29,
+		TargetType = 30,
+		TriggerMode = 31,
+		WeaponEvolution = 32,
+		WeaponItemType = 33,
+		WeaponType = 34,
+		WoundedTriggered = 35,
+		Count = 36,
+		Invalid = 37
 	}
 
 	public enum gamedataImprovementRelation
@@ -9596,6 +10456,15 @@ public static partial class Enums
 		Direct = 0,
 		Inverse = 1,
 		None = 2,
+		Count = 3,
+		Invalid = 4
+	}
+
+	public enum gamedataIsHackable
+	{
+		Always = 0,
+		Dynamic = 1,
+		Never = 2,
 		Count = 3,
 		Invalid = 4
 	}
@@ -9609,8 +10478,9 @@ public static partial class Enums
 		General = 4,
 		Part = 5,
 		Weapon = 6,
-		Count = 7,
-		Invalid = 8
+		WeaponMod = 7,
+		Count = 8,
+		Invalid = 9
 	}
 
 	public enum gamedataItemStructure
@@ -9638,71 +10508,95 @@ public static partial class Enums
 		Con_LongLasting = 11,
 		Con_Skillbook = 12,
 		Cyb_Ability = 13,
-		Cyb_Launcher = 14,
-		Cyb_MantisBlades = 15,
-		Cyb_NanoWires = 16,
-		Cyb_StrongArms = 17,
-		Cyberware = 18,
-		Fla_Launcher = 19,
-		Fla_Rifle = 20,
-		Fla_Shock = 21,
-		Fla_Support = 22,
-		Gad_Grenade = 23,
-		Gen_CraftingMaterial = 24,
-		Gen_DataBank = 25,
-		Gen_Jewellery = 26,
-		Gen_Junk = 27,
-		Gen_Keycard = 28,
-		Gen_Misc = 29,
-		Gen_Readable = 30,
-		GrenadeDelivery = 31,
-		Grenade_Core = 32,
-		Prt_BootsFabricEnhancer = 33,
-		Prt_Capacitor = 34,
-		Prt_FabricEnhancer = 35,
-		Prt_FaceFabricEnhancer = 36,
-		Prt_Fragment = 37,
-		Prt_HandgunMuzzle = 38,
-		Prt_HeadFabricEnhancer = 39,
-		Prt_Magazine = 40,
-		Prt_Mod = 41,
-		Prt_Muzzle = 42,
-		Prt_OuterTorsoFabricEnhancer = 43,
-		Prt_PantsFabricEnhancer = 44,
-		Prt_Program = 45,
-		Prt_Receiver = 46,
-		Prt_RifleMuzzle = 47,
-		Prt_Scope = 48,
-		Prt_ScopeRail = 49,
-		Prt_Stock = 50,
-		Prt_TargetingSystem = 51,
-		Prt_TorsoFabricEnhancer = 52,
-		VendorToken = 53,
-		Wea_AssaultRifle = 54,
-		Wea_Axe = 55,
-		Wea_Chainsword = 56,
-		Wea_Fists = 57,
-		Wea_Hammer = 58,
-		Wea_Handgun = 59,
-		Wea_HeavyMachineGun = 60,
-		Wea_Katana = 61,
-		Wea_Knife = 62,
-		Wea_LightMachineGun = 63,
-		Wea_LongBlade = 64,
-		Wea_Machete = 65,
-		Wea_Melee = 66,
-		Wea_OneHandedClub = 67,
-		Wea_PrecisionRifle = 68,
-		Wea_Revolver = 69,
-		Wea_Rifle = 70,
-		Wea_ShortBlade = 71,
-		Wea_Shotgun = 72,
-		Wea_ShotgunDual = 73,
-		Wea_SniperRifle = 74,
-		Wea_SubmachineGun = 75,
-		Wea_TwoHandedClub = 76,
-		Count = 77,
-		Invalid = 78
+		Cyb_HealingAbility = 14,
+		Cyb_Launcher = 15,
+		Cyb_MantisBlades = 16,
+		Cyb_NanoWires = 17,
+		Cyb_StrongArms = 18,
+		Cyberware = 19,
+		CyberwareStatsShard = 20,
+		CyberwareUpgradeShard = 21,
+		Fla_Launcher = 22,
+		Fla_Rifle = 23,
+		Fla_Shock = 24,
+		Fla_Support = 25,
+		Gad_Grenade = 26,
+		Gen_CraftingMaterial = 27,
+		Gen_DataBank = 28,
+		Gen_Jewellery = 29,
+		Gen_Junk = 30,
+		Gen_Keycard = 31,
+		Gen_Misc = 32,
+		Gen_MoneyShard = 33,
+		Gen_Readable = 34,
+		GrenadeDelivery = 35,
+		Grenade_Core = 36,
+		Prt_AR_SMG_LMGMod = 37,
+		Prt_BladeMod = 38,
+		Prt_BluntMod = 39,
+		Prt_BootsFabricEnhancer = 40,
+		Prt_Capacitor = 41,
+		Prt_FabricEnhancer = 42,
+		Prt_FaceFabricEnhancer = 43,
+		Prt_Fragment = 44,
+		Prt_HandgunMod = 45,
+		Prt_HandgunMuzzle = 46,
+		Prt_HeadFabricEnhancer = 47,
+		Prt_LongScope = 48,
+		Prt_Magazine = 49,
+		Prt_MeleeMod = 50,
+		Prt_Mod = 51,
+		Prt_Muzzle = 52,
+		Prt_OuterTorsoFabricEnhancer = 53,
+		Prt_PantsFabricEnhancer = 54,
+		Prt_PowerMod = 55,
+		Prt_PowerSniperScope = 56,
+		Prt_Precision_Sniper_RifleMod = 57,
+		Prt_Program = 58,
+		Prt_RangedMod = 59,
+		Prt_Receiver = 60,
+		Prt_RifleMuzzle = 61,
+		Prt_Scope = 62,
+		Prt_ScopeRail = 63,
+		Prt_ShortScope = 64,
+		Prt_ShotgunMod = 65,
+		Prt_SmartMod = 66,
+		Prt_Stock = 67,
+		Prt_TargetingSystem = 68,
+		Prt_TechMod = 69,
+		Prt_TechSniperScope = 70,
+		Prt_ThrowableMod = 71,
+		Prt_TorsoFabricEnhancer = 72,
+		VendorToken = 73,
+		Wea_AssaultRifle = 74,
+		Wea_Axe = 75,
+		Wea_Chainsword = 76,
+		Wea_Fists = 77,
+		Wea_GrenadeLauncher = 78,
+		Wea_Hammer = 79,
+		Wea_Handgun = 80,
+		Wea_HeavyMachineGun = 81,
+		Wea_Katana = 82,
+		Wea_Knife = 83,
+		Wea_LightMachineGun = 84,
+		Wea_LongBlade = 85,
+		Wea_Machete = 86,
+		Wea_Melee = 87,
+		Wea_OneHandedClub = 88,
+		Wea_PrecisionRifle = 89,
+		Wea_Revolver = 90,
+		Wea_Rifle = 91,
+		Wea_ShortBlade = 92,
+		Wea_Shotgun = 93,
+		Wea_ShotgunDual = 94,
+		Wea_SniperRifle = 95,
+		Wea_SubmachineGun = 96,
+		Wea_Sword = 97,
+		Wea_TwoHandedClub = 98,
+		Wea_VehicleMissileLauncher = 99,
+		Wea_VehiclePowerWeapon = 100,
+		Count = 101,
+		Invalid = 102
 	}
 
 	public enum gamedataLifePath
@@ -9863,12 +10757,22 @@ public static partial class Enums
 		Zzz06_NCPDGigVariant = 126,
 		Zzz07_PlayerStashVariant = 127,
 		Zzz08_WardrobeVariant = 128,
-		CPO_PingDoorVariant = 129,
-		CPO_PingGoHereVariant = 130,
-		CPO_PingLootVariant = 131,
-		CPO_RemotePlayerVariant = 132,
-		Count = 133,
-		Invalid = 134
+		Zzz09_CourierSandboxActivityVariant = 129,
+		Zzz10_RemoteControlDrivingVariant = 130,
+		Zzz11_RoadBlockadeVariant = 131,
+		Zzz12_QuickHackQueueVariant = 132,
+		Zzz12_WorldEncounterVariant = 133,
+		Zzz13_DogtownGateVariant = 134,
+		Zzz14_ServicePointBlackMarketVariant = 135,
+		Zzz15_QuickHackDurationVariant = 136,
+		Zzz16_RelicDeviceBasicVariant = 137,
+		Zzz16_RelicDeviceSpecialVariant = 138,
+		CPO_PingDoorVariant = 139,
+		CPO_PingGoHereVariant = 140,
+		CPO_PingLootVariant = 141,
+		CPO_RemotePlayerVariant = 142,
+		Count = 143,
+		Invalid = 144
 	}
 
 	public enum gamedataMeleeAttackDirection
@@ -9891,6 +10795,40 @@ public static partial class Enums
 		MetaQuest1 = 0,
 		MetaQuest2 = 1,
 		MetaQuest3 = 2,
+		Count = 3,
+		Invalid = 4
+	}
+
+	public enum gamedataMinigameActionType
+	{
+		AccessPoint = 0,
+		Both = 1,
+		Device = 2,
+		NPC = 3,
+		Count = 4,
+		Invalid = 5
+	}
+
+	public enum gamedataMinigameCategory
+	{
+		CameraAccess = 0,
+		CyberwareAccess = 1,
+		DataAccess = 2,
+		DefenseSystemAccess = 3,
+		NeuralAccess = 4,
+		SecurityAccess = 5,
+		Trojan = 6,
+		TurretAccess = 7,
+		WeaponAccess = 8,
+		Count = 9,
+		Invalid = 10
+	}
+
+	public enum gamedataMinigameTrapType
+	{
+		Both = 0,
+		Device = 1,
+		NPC = 2,
 		Count = 3,
 		Invalid = 4
 	}
@@ -9947,13 +10885,14 @@ public static partial class Enums
 	{
 		Boss = 0,
 		Elite = 1,
-		Normal = 2,
-		Officer = 3,
-		Rare = 4,
-		Trash = 5,
-		Weak = 6,
-		Count = 7,
-		Invalid = 8
+		MaxTac = 2,
+		Normal = 3,
+		Officer = 4,
+		Rare = 5,
+		Trash = 6,
+		Weak = 7,
+		Count = 8,
+		Invalid = 9
 	}
 
 	public enum gamedataNPCStanceState
@@ -9973,13 +10912,15 @@ public static partial class Enums
 	{
 		Android = 0,
 		Any = 1,
-		Device = 2,
-		Drone = 3,
-		Human = 4,
-		Mech = 5,
-		Spiderbot = 6,
-		Count = 7,
-		Invalid = 8
+		Cerberus = 2,
+		Chimera = 3,
+		Device = 4,
+		Drone = 5,
+		Human = 6,
+		Mech = 7,
+		Spiderbot = 8,
+		Count = 9,
+		Invalid = 10
 	}
 
 	public enum gamedataNPCUpperBodyState
@@ -9997,6 +10938,290 @@ public static partial class Enums
 		Taunt = 10,
 		Count = 11,
 		Invalid = 12
+	}
+
+	public enum gamedataNewPerkCategoryType
+	{
+		MasterNewPerkCategory = 0,
+		MilestoneNewPerkCategory = 1,
+		SimpleNewPerkCategory = 2,
+		Count = 3,
+		Invalid = 4
+	}
+
+	public enum gamedataNewPerkSlotType
+	{
+		Central_Milestone_1 = 0,
+		Central_Milestone_2 = 1,
+		Central_Milestone_3 = 2,
+		Central_Perk_1_1 = 3,
+		Central_Perk_1_2 = 4,
+		Central_Perk_1_3 = 5,
+		Central_Perk_1_4 = 6,
+		Central_Perk_2_1 = 7,
+		Central_Perk_2_2 = 8,
+		Central_Perk_2_3 = 9,
+		Central_Perk_2_4 = 10,
+		Central_Perk_3_1 = 11,
+		Central_Perk_3_2 = 12,
+		Central_Perk_3_3 = 13,
+		Central_Perk_3_4 = 14,
+		Espionage_Main_Perk_1 = 15,
+		Espionage_Main_Perk_1_Side_1 = 16,
+		Espionage_Main_Perk_1_Side_2 = 17,
+		Espionage_Main_Perk_1_Side_3 = 18,
+		Espionage_Main_Perk_1_Side_4 = 19,
+		Espionage_Main_Perk_2 = 20,
+		Espionage_Main_Perk_2_Side_1 = 21,
+		Espionage_Main_Perk_3 = 22,
+		Espionage_Main_Perk_3_Side_1 = 23,
+		Inbetween_Left_2 = 24,
+		Inbetween_Left_3 = 25,
+		Inbetween_Right_2 = 26,
+		Inbetween_Right_3 = 27,
+		Left_Milestone_1 = 28,
+		Left_Milestone_2 = 29,
+		Left_Milestone_3 = 30,
+		Left_Perk_1_1 = 31,
+		Left_Perk_1_2 = 32,
+		Left_Perk_1_3 = 33,
+		Left_Perk_1_4 = 34,
+		Left_Perk_2_1 = 35,
+		Left_Perk_2_2 = 36,
+		Left_Perk_2_3 = 37,
+		Left_Perk_2_4 = 38,
+		Left_Perk_3_1 = 39,
+		Left_Perk_3_2 = 40,
+		Left_Perk_3_3 = 41,
+		Left_Perk_3_4 = 42,
+		Master_Perk_1 = 43,
+		Master_Perk_2 = 44,
+		Master_Perk_3 = 45,
+		Master_Perk_4 = 46,
+		Master_Perk_5 = 47,
+		Right_Milestone_1 = 48,
+		Right_Milestone_2 = 49,
+		Right_Milestone_3 = 50,
+		Right_Perk_1_1 = 51,
+		Right_Perk_1_2 = 52,
+		Right_Perk_1_3 = 53,
+		Right_Perk_1_4 = 54,
+		Right_Perk_2_1 = 55,
+		Right_Perk_2_2 = 56,
+		Right_Perk_2_3 = 57,
+		Right_Perk_2_4 = 58,
+		Right_Perk_3_1 = 59,
+		Right_Perk_3_2 = 60,
+		Right_Perk_3_3 = 61,
+		Right_Perk_3_4 = 62,
+		Count = 63,
+		Invalid = 64
+	}
+
+	public enum gamedataNewPerkTierType
+	{
+		AdeptNewPerkTier = 0,
+		EspionageNewPerkTier = 1,
+		ExpertNewPerkTier = 2,
+		MasterNewPerkTier = 3,
+		NoviceNewPerkTier = 4,
+		Count = 5,
+		Invalid = 6
+	}
+
+	public enum gamedataNewPerkType
+	{
+		Body_Central_Milestone_1 = 0,
+		Body_Central_Milestone_3 = 1,
+		Body_Central_Perk_1_1 = 2,
+		Body_Central_Perk_1_2 = 3,
+		Body_Central_Perk_1_3 = 4,
+		Body_Central_Perk_1_4 = 5,
+		Body_Central_Perk_3_1 = 6,
+		Body_Central_Perk_3_2 = 7,
+		Body_Central_Perk_3_4 = 8,
+		Body_Inbetween_Left_3 = 9,
+		Body_Inbetween_Right_3 = 10,
+		Body_Left_Milestone_2 = 11,
+		Body_Left_Milestone_3 = 12,
+		Body_Left_Perk_2_1 = 13,
+		Body_Left_Perk_2_3 = 14,
+		Body_Left_Perk_2_4 = 15,
+		Body_Left_Perk_3_1 = 16,
+		Body_Left_Perk_3_2 = 17,
+		Body_Left_Perk_3_3 = 18,
+		Body_Left_Perk_3_4 = 19,
+		Body_Master_Perk_1 = 20,
+		Body_Master_Perk_2 = 21,
+		Body_Master_Perk_3 = 22,
+		Body_Master_Perk_5 = 23,
+		Body_Right_Milestone_1 = 24,
+		Body_Right_Milestone_2 = 25,
+		Body_Right_Milestone_3 = 26,
+		Body_Right_Perk_2_1 = 27,
+		Body_Right_Perk_2_2 = 28,
+		Body_Right_Perk_2_3 = 29,
+		Body_Right_Perk_2_4 = 30,
+		Body_Right_Perk_3_1 = 31,
+		Body_Right_Perk_3_2 = 32,
+		Cool_Central_Milestone_1 = 33,
+		Cool_Central_Milestone_3 = 34,
+		Cool_Central_Perk_1_1 = 35,
+		Cool_Central_Perk_1_2 = 36,
+		Cool_Central_Perk_1_4 = 37,
+		Cool_Central_Perk_3_1 = 38,
+		Cool_Central_Perk_3_2 = 39,
+		Cool_Central_Perk_3_4 = 40,
+		Cool_Inbetween_Left_2 = 41,
+		Cool_Inbetween_Left_3 = 42,
+		Cool_Inbetween_Right_3 = 43,
+		Cool_Left_Milestone_1 = 44,
+		Cool_Left_Milestone_2 = 45,
+		Cool_Left_Milestone_3 = 46,
+		Cool_Left_Perk_2_1 = 47,
+		Cool_Left_Perk_2_2 = 48,
+		Cool_Left_Perk_2_3 = 49,
+		Cool_Left_Perk_2_4 = 50,
+		Cool_Left_Perk_3_1 = 51,
+		Cool_Left_Perk_3_2 = 52,
+		Cool_Left_Perk_3_3 = 53,
+		Cool_Left_Perk_3_4 = 54,
+		Cool_Master_Perk_1 = 55,
+		Cool_Master_Perk_2 = 56,
+		Cool_Master_Perk_4 = 57,
+		Cool_Right_Milestone_1 = 58,
+		Cool_Right_Milestone_2 = 59,
+		Cool_Right_Milestone_3 = 60,
+		Cool_Right_Perk_1_1 = 61,
+		Cool_Right_Perk_1_2 = 62,
+		Cool_Right_Perk_2_1 = 63,
+		Cool_Right_Perk_2_2 = 64,
+		Cool_Right_Perk_2_3 = 65,
+		Cool_Right_Perk_2_4 = 66,
+		Cool_Right_Perk_3_1 = 67,
+		Cool_Right_Perk_3_2 = 68,
+		Cool_Right_Perk_3_3 = 69,
+		Cool_Right_Perk_3_4 = 70,
+		Espionage_Central_Milestone_1 = 71,
+		Espionage_Central_Perk_1_1 = 72,
+		Espionage_Central_Perk_1_2 = 73,
+		Espionage_Central_Perk_1_3 = 74,
+		Espionage_Central_Perk_1_4 = 75,
+		Espionage_Left_Milestone_Perk = 76,
+		Espionage_Left_Perk_1_2 = 77,
+		Espionage_Right_Milestone_1 = 78,
+		Espionage_Right_Perk_1_1 = 79,
+		Intelligence_Central_Milestone_1 = 80,
+		Intelligence_Central_Milestone_2 = 81,
+		Intelligence_Central_Milestone_3 = 82,
+		Intelligence_Central_Perk_1_1 = 83,
+		Intelligence_Central_Perk_1_2 = 84,
+		Intelligence_Central_Perk_1_3 = 85,
+		Intelligence_Central_Perk_2_1 = 86,
+		Intelligence_Central_Perk_2_2 = 87,
+		Intelligence_Central_Perk_2_3 = 88,
+		Intelligence_Central_Perk_2_4 = 89,
+		Intelligence_Central_Perk_3_1 = 90,
+		Intelligence_Central_Perk_3_2 = 91,
+		Intelligence_Central_Perk_3_3 = 92,
+		Intelligence_Inbetween_Left_2 = 93,
+		Intelligence_Inbetween_Left_3 = 94,
+		Intelligence_Inbetween_Right_2 = 95,
+		Intelligence_Left_Milestone_1 = 96,
+		Intelligence_Left_Milestone_2 = 97,
+		Intelligence_Left_Milestone_3 = 98,
+		Intelligence_Left_Perk_1_1 = 99,
+		Intelligence_Left_Perk_1_2 = 100,
+		Intelligence_Left_Perk_2_1 = 101,
+		Intelligence_Left_Perk_2_2 = 102,
+		Intelligence_Left_Perk_2_3 = 103,
+		Intelligence_Left_Perk_2_4 = 104,
+		Intelligence_Left_Perk_3_1 = 105,
+		Intelligence_Left_Perk_3_2 = 106,
+		Intelligence_Left_Perk_3_4 = 107,
+		Intelligence_Master_Perk_1 = 108,
+		Intelligence_Master_Perk_3 = 109,
+		Intelligence_Master_Perk_4 = 110,
+		Intelligence_Right_Milestone_1 = 111,
+		Intelligence_Right_Milestone_2 = 112,
+		Intelligence_Right_Milestone_3 = 113,
+		Intelligence_Right_Perk_2_1 = 114,
+		Intelligence_Right_Perk_2_2 = 115,
+		Intelligence_Right_Perk_3_1 = 116,
+		Intelligence_Right_Perk_3_2 = 117,
+		Reflexes_Central_Milestone_1 = 118,
+		Reflexes_Central_Milestone_2 = 119,
+		Reflexes_Central_Milestone_3 = 120,
+		Reflexes_Central_Perk_1_1 = 121,
+		Reflexes_Central_Perk_1_2 = 122,
+		Reflexes_Central_Perk_1_3 = 123,
+		Reflexes_Central_Perk_1_4 = 124,
+		Reflexes_Central_Perk_2_1 = 125,
+		Reflexes_Central_Perk_2_2 = 126,
+		Reflexes_Central_Perk_2_3 = 127,
+		Reflexes_Central_Perk_2_4 = 128,
+		Reflexes_Central_Perk_3_2 = 129,
+		Reflexes_Central_Perk_3_3 = 130,
+		Reflexes_Inbetween_Left_3 = 131,
+		Reflexes_Inbetween_Right_2 = 132,
+		Reflexes_Left_Milestone_1 = 133,
+		Reflexes_Left_Milestone_2 = 134,
+		Reflexes_Left_Milestone_3 = 135,
+		Reflexes_Left_Perk_2_2 = 136,
+		Reflexes_Left_Perk_2_3 = 137,
+		Reflexes_Left_Perk_2_4 = 138,
+		Reflexes_Left_Perk_3_1 = 139,
+		Reflexes_Left_Perk_3_2 = 140,
+		Reflexes_Left_Perk_3_3 = 141,
+		Reflexes_Left_Perk_3_4 = 142,
+		Reflexes_Master_Perk_1 = 143,
+		Reflexes_Master_Perk_2 = 144,
+		Reflexes_Master_Perk_3 = 145,
+		Reflexes_Master_Perk_5 = 146,
+		Reflexes_Right_Milestone_2 = 147,
+		Reflexes_Right_Milestone_3 = 148,
+		Reflexes_Right_Perk_2_1 = 149,
+		Reflexes_Right_Perk_2_2 = 150,
+		Reflexes_Right_Perk_2_3 = 151,
+		Reflexes_Right_Perk_3_1 = 152,
+		Reflexes_Right_Perk_3_3 = 153,
+		Reflexes_Right_Perk_3_4 = 154,
+		Tech_Central_Milestone_2 = 155,
+		Tech_Central_Milestone_3 = 156,
+		Tech_Central_Perk_2_1 = 157,
+		Tech_Central_Perk_2_2 = 158,
+		Tech_Central_Perk_2_3 = 159,
+		Tech_Central_Perk_2_4 = 160,
+		Tech_Central_Perk_3_1 = 161,
+		Tech_Central_Perk_3_2 = 162,
+		Tech_Central_Perk_3_3 = 163,
+		Tech_Central_Perk_3_4 = 164,
+		Tech_Inbetween_Left_3 = 165,
+		Tech_Inbetween_Right_2 = 166,
+		Tech_Left_Milestone_1 = 167,
+		Tech_Left_Milestone_2 = 168,
+		Tech_Left_Milestone_3 = 169,
+		Tech_Left_Perk_1_1 = 170,
+		Tech_Left_Perk_1_2 = 171,
+		Tech_Left_Perk_2_1 = 172,
+		Tech_Left_Perk_2_2 = 173,
+		Tech_Left_Perk_2_3 = 174,
+		Tech_Left_Perk_2_4 = 175,
+		Tech_Left_Perk_3_01 = 176,
+		Tech_Left_Perk_3_2 = 177,
+		Tech_Left_Perk_3_3 = 178,
+		Tech_Left_Perk_3_4 = 179,
+		Tech_Master_Perk_2 = 180,
+		Tech_Master_Perk_3 = 181,
+		Tech_Master_Perk_5 = 182,
+		Tech_Right_Milestone_1 = 183,
+		Tech_Right_Milestone_3 = 184,
+		Tech_Right_Perk_3_1 = 185,
+		Tech_Right_Perk_3_2 = 186,
+		Tech_Right_Perk_3_3 = 187,
+		Tech_Right_Perk_3_4 = 188,
+		Count = 189,
+		Invalid = 190
 	}
 
 	public enum gamedataObjectActionReference
@@ -10017,8 +11242,9 @@ public static partial class Enums
 		Payment = 4,
 		PuppetQuickHack = 5,
 		Remote = 6,
-		Count = 7,
-		Invalid = 8
+		VehicleQuickHack = 7,
+		Count = 8,
+		Invalid = 9
 	}
 
 	public enum gamedataOutput
@@ -10041,13 +11267,14 @@ public static partial class Enums
 		LookAt = 15,
 		Panic = 16,
 		PlayerCall = 17,
-		Reprimand = 18,
-		SquadCall = 19,
-		Surrender = 20,
-		TurnAt = 21,
-		WalkAway = 22,
-		Count = 23,
-		Invalid = 24
+		ProjectileInvestigate = 18,
+		Reprimand = 19,
+		SquadCall = 20,
+		Surrender = 21,
+		TurnAt = 22,
+		WalkAway = 23,
+		Count = 24,
+		Invalid = 25
 	}
 
 	public enum gamedataParentAttachmentType
@@ -10424,6 +11651,26 @@ public static partial class Enums
 		Invalid = 4
 	}
 
+	public enum gamedataPerkWeaponGroupType
+	{
+		AssaultRiflesPerkWeaponGroup = 0,
+		BladesPerkWeaponGroup = 1,
+		BluntsPerkWeaponGroup = 2,
+		BodyGunsPerkWeaponGroup = 3,
+		CoolGunsPerkWeaponGroup = 4,
+		HandgunsPerkWeaponGroup = 5,
+		LMGsPerkWeaponGroup = 6,
+		PrecisionGunsPerkWeaponGroup = 7,
+		ReflexesGunsPerkWeaponGroup = 8,
+		SMGsPerkWeaponGroup = 9,
+		ShotgunsPerkWeaponGroup = 10,
+		SmartGunsPerkWeaponGroup = 11,
+		TechGunsPerkWeaponGroup = 12,
+		ThrowablePerkWeaponGroup = 13,
+		Count = 14,
+		Invalid = 15
+	}
+
 	public enum gamedataPingType
 	{
 		Device = 0,
@@ -10463,17 +11710,23 @@ public static partial class Enums
 		Brawling = 2,
 		ColdBlood = 3,
 		CombatHacking = 4,
-		Crafting = 5,
-		Demolition = 6,
-		Engineering = 7,
-		Gunslinger = 8,
-		Hacking = 9,
-		Kenjutsu = 10,
-		Level = 11,
-		Stealth = 12,
-		StreetCred = 13,
-		Count = 14,
-		Invalid = 15
+		CoolSkill = 5,
+		Crafting = 6,
+		Demolition = 7,
+		Engineering = 8,
+		Espionage = 9,
+		Gunslinger = 10,
+		Hacking = 11,
+		IntelligenceSkill = 12,
+		Kenjutsu = 13,
+		Level = 14,
+		ReflexesSkill = 15,
+		Stealth = 16,
+		StreetCred = 17,
+		StrengthSkill = 18,
+		TechnicalAbilitySkill = 19,
+		Count = 20,
+		Invalid = 21
 	}
 
 	public enum gamedataProjectileLaunchMode
@@ -10498,44 +11751,84 @@ public static partial class Enums
 	public enum gamedataQuality
 	{
 		Common = 0,
-		Epic = 1,
-		Iconic = 2,
-		Legendary = 3,
-		Random = 4,
-		Rare = 5,
-		Uncommon = 6,
-		Count = 7,
-		Invalid = 8
+		CommonPlus = 1,
+		Epic = 2,
+		EpicPlus = 3,
+		Iconic = 4,
+		Legendary = 5,
+		LegendaryPlus = 6,
+		LegendaryPlusPlus = 7,
+		Random = 8,
+		Rare = 9,
+		RarePlus = 10,
+		Uncommon = 11,
+		UncommonPlus = 12,
+		Count = 13,
+		Invalid = 14
 	}
 
 	public enum gamedataReactionPresetType
 	{
-		Child = 0,
-		Civilian_Guard = 1,
-		Civilian_Neutral = 2,
-		Civilian_Passive = 3,
-		Corpo_Aggressive = 4,
-		Corpo_Passive = 5,
-		Follower = 6,
-		Ganger_Aggressive = 7,
-		Ganger_Passive = 8,
-		InVehicle_Aggressive = 9,
-		InVehicle_Civilian = 10,
-		InVehicle_Passive = 11,
-		Lore_Aggressive = 12,
-		Lore_Civilian = 13,
-		Lore_Passive = 14,
-		Mechanical_Aggressive = 15,
-		Mechanical_NonCombat = 16,
-		Mechanical_Passive = 17,
-		NoReaction = 18,
-		Police_Aggressive = 19,
-		Police_Passive = 20,
-		Sleep_Aggressive = 21,
-		Sleep_Civilian = 22,
-		Sleep_Passive = 23,
-		Count = 24,
-		Invalid = 25
+		Cerberus_Aggressive = 0,
+		Child = 1,
+		Civilian_Grabbable = 2,
+		Civilian_Guard = 3,
+		Civilian_Neutral = 4,
+		Civilian_Passive = 5,
+		Corpo_Aggressive = 6,
+		Corpo_Passive = 7,
+		Follower = 8,
+		Ganger_Aggressive = 9,
+		Ganger_Passive = 10,
+		InVehicle_Aggressive = 11,
+		InVehicle_Civilian = 12,
+		InVehicle_Passive = 13,
+		Lore_Aggressive = 14,
+		Lore_Civilian = 15,
+		Lore_Passive = 16,
+		Mechanical_Aggressive = 17,
+		Mechanical_NonCombat = 18,
+		Mechanical_Passive = 19,
+		NoReaction = 20,
+		Police_Aggressive = 21,
+		Police_Passive = 22,
+		Sleep_Aggressive = 23,
+		Sleep_Civilian = 24,
+		Sleep_Passive = 25,
+		Count = 26,
+		Invalid = 27
+	}
+
+	public enum gamedataSearchFilterMaskType
+	{
+		Att_Friendly = 0,
+		Att_Hostile = 1,
+		Att_Neutral = 2,
+		Obj_Device = 3,
+		Obj_Other = 4,
+		Obj_Player = 5,
+		Obj_Puppet = 6,
+		Obj_Sensor = 7,
+		Sp_Aggressive = 8,
+		Sp_AimAssistEnabled = 9,
+		Sp_VisibleThroughGeometry = 10,
+		St_Alive = 11,
+		St_AliveAndActive = 12,
+		St_Conscious = 13,
+		St_Dead = 14,
+		St_DeadOrInactive = 15,
+		St_Defeated = 16,
+		St_MountedToBike = 17,
+		St_MountedToCar = 18,
+		St_MountedToVehicle = 19,
+		St_NotDefeated = 20,
+		St_QuickHackable = 21,
+		St_TurnedOff = 22,
+		St_TurnedOn = 23,
+		St_Unconscious = 24,
+		TF_None = 25,
+		Count = 26,
+		Invalid = 27
 	}
 
 	public enum gamedataSenseObjectType
@@ -10570,1127 +11863,1763 @@ public static partial class Enums
 
 	public enum gamedataStatPoolType
 	{
-		Adrenaline = 0,
-		Aggressiveness = 1,
-		Armor = 2,
-		BleedingTrigger = 3,
-		BurningTrigger = 4,
-		CPUPower = 5,
-		CallReinforcementProgress = 6,
-		Durability = 7,
-		E3_BossWeakSpotHealth = 8,
-		ElectrocutedTrigger = 9,
-		Fear = 10,
-		Health = 11,
-		HitShapeArmor = 12,
-		LeftArmHealth = 13,
-		LeftLegHealth = 14,
-		Memory = 15,
-		Oxygen = 16,
-		PhoneCallDuration = 17,
-		PoisonTrigger = 18,
-		QuickHackDuration = 19,
-		QuickHackUpload = 20,
-		ReprimandEscalation = 21,
-		RightLegHealth = 22,
-		Stamina = 23,
-		StunTrigger = 24,
-		ThrowRecovery = 25,
-		UnlockProgress = 26,
-		WeakspotHealth = 27,
-		WeaponCharge = 28,
-		WeaponOverheat = 29,
-		CPOShockedTrigger = 30,
-		CPO_Armor = 31,
-		CPO_NPC_Importance = 32,
-		Count = 33,
-		Invalid = 34
+		AccumulatedDoT = 0,
+		Adrenaline = 1,
+		Aggressiveness = 2,
+		Armor = 3,
+		BerserkCharge = 4,
+		BleedingTrigger = 5,
+		BurningTrigger = 6,
+		CPUPower = 7,
+		CWMaskCharges = 8,
+		CallReinforcementProgress = 9,
+		CyberdeckOverclock = 10,
+		Durability = 11,
+		E3_BossWeakSpotHealth = 12,
+		ElectrocutedTrigger = 13,
+		Fear = 14,
+		GrenadesCharges = 15,
+		HealingItemsCharges = 16,
+		Health = 17,
+		HitShapeArmor = 18,
+		JenkinsHelper = 19,
+		LeftArmHealth = 20,
+		LeftLegHealth = 21,
+		Memory = 22,
+		OpticalCamoCharges = 23,
+		Overshield = 24,
+		Oxygen = 25,
+		PhoneCallDuration = 26,
+		Poise = 27,
+		PoisonTrigger = 28,
+		ProjectileLauncherCharges = 29,
+		QuickHackDuration = 30,
+		QuickHackUpload = 31,
+		ReprimandEscalation = 32,
+		RightLegHealth = 33,
+		SandevistanCharge = 34,
+		Stamina = 35,
+		StunTrigger = 36,
+		ThrowRecovery = 37,
+		TimeBank = 38,
+		UnlockProgress = 39,
+		VehicleMissileLauncherCharges = 40,
+		WeakspotHealth = 41,
+		WeaponCharge = 42,
+		WeaponOverheat = 43,
+		CPOShockedTrigger = 44,
+		CPO_Armor = 45,
+		CPO_NPC_Importance = 46,
+		Count = 47,
+		Invalid = 48
 	}
 
 	public enum gamedataStatType
 	{
-		Acceleration = 0,
-		Accuracy = 1,
-		Adrenaline = 2,
-		AimFOV = 3,
-		AimInTime = 4,
-		AimOffset = 5,
-		AimOutTime = 6,
-		AllowMovementInput = 7,
-		AllowRotation = 8,
-		AmmoPerQuickMelee = 9,
-		Armor = 10,
-		Assault = 11,
-		AssaultMastery = 12,
-		AssaultTrait01Stat = 13,
-		Athletics = 14,
-		AthleticsMastery = 15,
-		AthleticsTrait01Stat = 16,
-		AttackPenetration = 17,
-		AttackSpeed = 18,
-		AttackSpeedPercent = 19,
-		AttacksNumber = 20,
-		AttacksPerSecond = 21,
-		AttacksPerSecondBase = 22,
-		AudioLocomotionStimRangeMultiplier = 23,
-		AudioStimRangeMultiplier = 24,
-		AutoReveal = 25,
-		AutocraftDuration = 26,
-		AutomaticReplenishment = 27,
-		AutomaticUploadPerk = 28,
-		BaseChargeTime = 29,
-		BaseDamage = 30,
-		BaseDamageMax = 31,
-		BaseDamageMin = 32,
-		BaseKnockdownImpulse = 33,
-		BerserkArmorBonus = 34,
-		BerserkCooldownBase = 35,
-		BerserkCooldownReduction = 36,
-		BerserkDurationBase = 37,
-		BerserkHealthRegenBonus = 38,
-		BerserkMeleeDamageBonus = 39,
-		BerserkRecoilReduction = 40,
-		BerserkResistancesBonus = 41,
-		BerserkShockwaveDamage = 42,
-		BerserkShockwaveRangeBonus = 43,
-		BerserkSwayReduction = 44,
-		BleedingApplicationRate = 45,
-		BleedingImmunity = 46,
-		BlindImmunity = 47,
-		BlindResistance = 48,
-		BlockFactor = 49,
-		BlockLocomotionWhenLeaningOutOfCover = 50,
-		BlockReduction = 51,
-		BonusCarryCapacity = 52,
-		BonusChargeDamage = 53,
-		BonusDPS = 54,
-		BonusDamageAgainstBosses = 55,
-		BonusDamageAgainstElites = 56,
-		BonusDamageAgainstMechanicals = 57,
-		BonusDamageAgainstRares = 58,
-		BonusDamagePerHit = 59,
-		BonusDmgVsRaresAndElites = 60,
-		BonusHealth = 61,
-		BonusMemory = 62,
-		BonusQuickHackDamage = 63,
-		BonusRecoilKick = 64,
-		BonusRicochetDamage = 65,
-		BonusSpreadChange = 66,
-		BonusStamina = 67,
-		Brake = 68,
-		BrakeDot = 69,
-		Brawling = 70,
-		BrawlingMastery = 71,
-		BrawlingTrait01Stat = 72,
-		BufferSize = 73,
-		BulletMagnetismDefaultAngle = 74,
-		BulletMagnetismHighVelocityAngle = 75,
-		BulletPseudoPierceHitVFxChance = 76,
-		BulletSurroundingHitVFxChance = 77,
-		BurningApplicationRate = 78,
-		BurningImmunity = 79,
-		BurningRegenStamina = 80,
-		CPUPower = 81,
-		CallReinforcement = 82,
-		CameraShutdownExtension = 83,
-		CanAerialTakedown = 84,
-		CanAimWhileDodging = 85,
-		CanAskToFollowOrder = 86,
-		CanAskToHolsterWeapon = 87,
-		CanAutomaticallyDisassembleJunk = 88,
-		CanAutomaticallyRestoreKnives = 89,
-		CanBleedingCriticallyHit = 90,
-		CanBleedingSlowTarget = 91,
-		CanBlindQuickHack = 92,
-		CanBlock = 93,
-		CanBreatheUnderwater = 94,
-		CanBuffCamoQuickHack = 95,
-		CanBuffMechanicalsOnTakeControl = 96,
-		CanBuffSturdinessQuickHack = 97,
-		CanBurningCriticallyHit = 98,
-		CanCallDrones = 99,
-		CanCallReinforcements = 100,
-		CanCatchUp = 101,
-		CanCatchUpDistance = 102,
-		CanCharge = 103,
-		CanChargedShoot = 104,
-		CanCloseCombat = 105,
-		CanCommsCallInQuickHack = 106,
-		CanCommsCallOutQuickHack = 107,
-		CanCommsNoiseQuickHack = 108,
-		CanControlFullyChargedWeapon = 109,
-		CanCraftEpicItems = 110,
-		CanCraftFromInventory = 111,
-		CanCraftLegendaryItems = 112,
-		CanCraftRareItems = 113,
-		CanCraftTechAmmunition = 114,
-		CanCrouch = 115,
-		CanCyberwareMalfunctionQuickHack = 116,
-		CanDash = 117,
-		CanDataMineQuickHack = 118,
-		CanDealFullDamageToArmored = 119,
-		CanDeathQuickHack = 120,
-		CanDisassemble = 121,
-		CanDisassembleConsumables = 122,
-		CanDisassembleGadgets = 123,
-		CanDropWeapon = 124,
-		CanElectrocuteNullifyStats = 125,
-		CanElectrocuteRoot = 126,
-		CanExitWSOnSoundStimuli = 127,
-		CanExplodeQuickHack = 128,
-		CanFastTravelWhileEncumbered = 129,
-		CanForceDismbember = 130,
-		CanFullyChargeWeapon = 131,
-		CanGrab = 132,
-		CanGrappleAndroids = 133,
-		CanGrappleSilently = 134,
-		CanGrenadeLaunch = 135,
-		CanGrenadeQuickHack = 136,
-		CanGrenadesCriticallyHit = 137,
-		CanGrenadesDealExternalDamage = 138,
-		CanGuardBreak = 139,
-		CanHeartattackQuickHack = 140,
-		CanIgnoreArmorDamageReduction = 141,
-		CanIgnoreStamina = 142,
-		CanInstaKillNPCs = 143,
-		CanInstallTechMods = 144,
-		CanJamWeaponQuickHack = 145,
-		CanJump = 146,
-		CanLandSilently = 147,
-		CanLegendaryCraftedWeaponsBeBoosted = 148,
-		CanLegendaryCraftedWeaponsBeBoosted2 = 149,
-		CanLocomotionMalfunctionQuickHack = 150,
-		CanMadnessQuickHack = 151,
-		CanMalfunctionQuickHack = 152,
-		CanMeleeBerserk = 153,
-		CanMeleeDash = 154,
-		CanMeleeInfinitelyCombo = 155,
-		CanMeleeLeap = 156,
-		CanMeleeLeapTakedown = 157,
-		CanOverchargeWeapon = 158,
-		CanOverheatQuickHack = 159,
-		CanOverloadQuickHack = 160,
-		CanOverrideAttitudeQuickHack = 161,
-		CanOverrideAuthorizationQuickHack = 162,
-		CanParry = 163,
-		CanPickUpBodyAfterTakedown = 164,
-		CanPickUpWeapon = 165,
-		CanPingQuickHack = 166,
-		CanPlayerBoostConsumables = 167,
-		CanPlayerBoostGrenades = 168,
-		CanPlayerPiercePoisonImmunity = 169,
-		CanPoisonLowerArmor = 170,
-		CanPoisonSlow = 171,
-		CanPreciseShoot = 172,
-		CanPushBack = 173,
-		CanPushFromGrapple = 174,
-		CanQuickHackCriticallyHit = 175,
-		CanQuickMeleeStagger = 176,
-		CanQuickhack = 177,
-		CanQuickhackHealPuppet = 178,
-		CanQuickhackTransferBetweenEnemies = 179,
-		CanRegenInCombat = 180,
-		CanRemoveModsFromClothing = 181,
-		CanRemoveModsFromWeapons = 182,
-		CanResurrectAllies = 183,
-		CanRetrieveModsFromDisassemble = 184,
-		CanRunSilently = 185,
-		CanSandevistanSprintHarass = 186,
-		CanScrapPartsFromMechanicals = 187,
-		CanSeeGrenadeRadius = 188,
-		CanSeeRicochetVisuals = 189,
-		CanSeeThroughWalls = 190,
-		CanShareThreatsWithPlayer = 191,
-		CanShootWhileCarryingBody = 192,
-		CanShootWhileDodging = 193,
-		CanShootWhileGrappling = 194,
-		CanShootWhileMoving = 195,
-		CanShootWhileVaulting = 196,
-		CanSilentKill = 197,
-		CanSmartShoot = 198,
-		CanSprint = 199,
-		CanSprintHarass = 200,
-		CanSprintWhileCarryingBody = 201,
-		CanSuicideQuickHack = 202,
-		CanSwitchWeapon = 203,
-		CanTakeControlQuickHack = 204,
-		CanTakedownLethally = 205,
-		CanTakedownSilently = 206,
-		CanTaunt = 207,
-		CanThrowWeapon = 208,
-		CanUpgradeFromInventory = 209,
-		CanUpgradeToLegendaryQuality = 210,
-		CanUseAntiStun = 211,
-		CanUseBiohazardGrenades = 212,
-		CanUseCloseRing = 213,
-		CanUseCombatStims = 214,
-		CanUseConsumables = 215,
-		CanUseCoolingSystem = 216,
-		CanUseCovers = 217,
-		CanUseCuttingGrenades = 218,
-		CanUseEMPGrenades = 219,
-		CanUseExtremeRing = 220,
-		CanUseFarRing = 221,
-		CanUseFlashbangGrenades = 222,
-		CanUseFragGrenades = 223,
-		CanUseGrenades = 224,
-		CanUseHolographicCamo = 225,
-		CanUseIncendiaryGrenades = 226,
-		CanUseLeftHand = 227,
-		CanUseLegs = 228,
-		CanUseMantisBlades = 229,
-		CanUseMediumRing = 230,
-		CanUseMeleeRing = 231,
-		CanUseOpticalCamo = 232,
-		CanUsePainInhibitors = 233,
-		CanUsePersonalSoundSilencer = 234,
-		CanUsePhoneUnderWater = 235,
-		CanUseProjectileLauncher = 236,
-		CanUseReconGrenades = 237,
-		CanUseRetractableShield = 238,
-		CanUseRightHand = 239,
-		CanUseShootingSpots = 240,
-		CanUseStaticCamo = 241,
-		CanUseStrongArms = 242,
-		CanUseTakedowns = 243,
-		CanUseTerrainCamo = 244,
-		CanUseZoom = 245,
-		CanWalkSilently = 246,
-		CanWallStick = 247,
-		CanWeaponBlock = 248,
-		CanWeaponBlockAttack = 249,
-		CanWeaponComboAttack = 250,
-		CanWeaponCriticallyHit = 251,
-		CanWeaponCrouchAttack = 252,
-		CanWeaponDash = 253,
-		CanWeaponDeflect = 254,
-		CanWeaponIgnoreArmor = 255,
-		CanWeaponInfinitlyCombo = 256,
-		CanWeaponJumpAttack = 257,
-		CanWeaponLeap = 258,
-		CanWeaponMalfunctionQuickHack = 259,
-		CanWeaponReduceArmor = 260,
-		CanWeaponReload = 261,
-		CanWeaponReloadWhileInactive = 262,
-		CanWeaponReloadWhileSliding = 263,
-		CanWeaponReloadWhileSprinting = 264,
-		CanWeaponReloadWhileVaulting = 265,
-		CanWeaponSafeAttack = 266,
-		CanWeaponShoot = 267,
-		CanWeaponShootWhileSliding = 268,
-		CanWeaponShootWhileSprinting = 269,
-		CanWeaponShootWhileVaulting = 270,
-		CanWeaponSnapToLimbs = 271,
-		CanWeaponSprintAttack = 272,
-		CanWeaponStrongAttack = 273,
-		CanWeaponTriggerHeadshot = 274,
-		CannotBeDetectedWhileSubmerged = 275,
-		CannotBeHealed = 276,
-		CannotSprintHarass = 277,
-		CarryCapacity = 278,
-		CausingPanicReducesUltimateHacksCost = 279,
-		Charge = 280,
-		ChargeDischargeTime = 281,
-		ChargeFullMultiplier = 282,
-		ChargeMaxTimeInChargedState = 283,
-		ChargeMultiplier = 284,
-		ChargeReadyPercentage = 285,
-		ChargeShouldFireWhenReady = 286,
-		ChargeTime = 287,
-		ChemicalDamage = 288,
-		ChemicalDamageMax = 289,
-		ChemicalDamageMin = 290,
-		ChemicalDamagePercent = 291,
-		ChemicalResistance = 292,
-		ClimbSpeedModifier = 293,
-		ClipTimesCycle = 294,
-		ClipTimesCycleBase = 295,
-		ClipTimesCyclePlusReload = 296,
-		ClipTimesCyclePlusReloadBase = 297,
-		CloudComputingTraps = 298,
-		ColdBlood = 299,
-		ColdBloodBuffBonus = 300,
-		ColdBloodDurationReductor = 301,
-		ColdBloodMastery = 302,
-		ColdBloodMaxDuration = 303,
-		ColdBloodMaxStacks = 304,
-		ColdBloodTrait01 = 305,
-		CombatHacking = 306,
-		CombatHackingMastery = 307,
-		CommsNoiseJamOnQuickhack = 308,
-		ControlledRandomPower = 309,
-		Cool = 310,
-		CoolAlocated = 311,
-		CoolAvailable = 312,
-		Crafting = 313,
-		CraftingBonusArmorValue = 314,
-		CraftingBonusArmorValue2 = 315,
-		CraftingBonusConsumableDuration = 316,
-		CraftingBonusGrenadeDamage = 317,
-		CraftingBonusWeaponDamage = 318,
-		CraftingBonusWeaponDamage2 = 319,
-		CraftingCostReduction = 320,
-		CraftingItemLevelBoost = 321,
-		CraftingMastery = 322,
-		CraftingMaterialDropChance = 323,
-		CraftingMaterialRandomGrantChance = 324,
-		CraftingMaterialRetrieveChance = 325,
-		CraftingTrait01 = 326,
-		CritChance = 327,
-		CritChanceTimeCritDamage = 328,
-		CritDPSBonus = 329,
-		CritDamage = 330,
-		CyberwareCooldownReduction = 331,
-		CycleTime = 332,
-		CycleTimeAimBlockDuration = 333,
-		CycleTimeAimBlockStart = 334,
-		CycleTimeBase = 335,
-		CycleTimeBonus = 336,
-		CycleTimeShootingMult = 337,
-		CycleTimeShootingMultPeriod = 338,
-		CycleTime_Burst = 339,
-		CycleTime_BurstMaxCharge = 340,
-		CycleTime_BurstSecondary = 341,
-		CycleTriggerModeTime = 342,
-		DPS = 343,
-		DamageFalloffDisabled = 344,
-		DamageHackSpread = 345,
-		DamagePerHit = 346,
-		DamageReductionDamageOverTime = 347,
-		DamageReductionExplosion = 348,
-		DamageReductionMelee = 349,
-		DamageReductionQuickhacks = 350,
-		DashAttackStaminaCostReduction = 351,
-		DataLeakTraps = 352,
-		DealsChemicalDamage = 353,
-		DealsElectricDamage = 354,
-		DealsPhysicalDamage = 355,
-		DealsThermalDamage = 356,
-		Deceleration = 357,
-		DefeatedHeadDamageThreshold = 358,
-		DefeatedLArmDamageThreshold = 359,
-		DefeatedLLegDamageThreshold = 360,
-		DefeatedRArmDamageThreshold = 361,
-		DefeatedRLegDamageThreshold = 362,
-		DefeatingEnemiesReduceHacksCost = 363,
-		Demolition = 364,
-		DemolitionMastery = 365,
-		DemolitionTrait01Stat = 366,
-		Detection = 367,
-		DeviceMemoryCostReduction = 368,
-		DisableCyberwareOnBurning = 369,
-		DisassemblingIngredientsDoubleBonus = 370,
-		DisassemblingMaterialQualityObtainChance = 371,
-		DismHeadDamageThreshold = 372,
-		DismLArmDamageThreshold = 373,
-		DismLLegDamageThreshold = 374,
-		DismRArmDamageThreshold = 375,
-		DismRLegDamageThreshold = 376,
-		DoNotCheckFriendlyFireMadnessPassive = 377,
-		DummyModCritDamage = 378,
-		DummyResistanceStat = 379,
-		Durability = 380,
-		DurationBonusBleeding = 381,
-		DurationBonusBurning = 382,
-		DurationBonusElectrified = 383,
-		DurationBonusPoisoned = 384,
-		DurationBonusQuickhack = 385,
-		DurationBonusStun = 386,
-		DurationReductionDot = 387,
-		EMPImmunity = 388,
-		EffectiveDPS = 389,
-		EffectiveDamagePerHit = 390,
-		EffectiveDamagePerHitMax = 391,
-		EffectiveDamagePerHitMin = 392,
-		EffectiveDamagePerHitTimesAttacksPerSecond = 393,
-		EffectiveRange = 394,
-		ElectricDamage = 395,
-		ElectricDamageMax = 396,
-		ElectricDamageMin = 397,
-		ElectricDamagePercent = 398,
-		ElectricResistance = 399,
-		ElectrocuteImmunity = 400,
-		ElectrocutedApplicationRate = 401,
-		ElementalDamagePerHit = 402,
-		ElementalResistanceMultiplier = 403,
-		EmptyReloadTime = 404,
-		EnemyChemicalResistanceReduction = 405,
-		Engineering = 406,
-		EngineeringMastery = 407,
-		EngineeringTrait01 = 408,
-		EquipActionDuration_Corpo = 409,
-		EquipActionDuration_Gang = 410,
-		EquipAnimationDuration_Corpo = 411,
-		EquipAnimationDuration_Gang = 412,
-		EquipDuration = 413,
-		EquipDuration_First = 414,
-		EquipItemTime_Corpo = 415,
-		EquipItemTime_Gang = 416,
-		EvadeImpulse = 417,
-		Evasion = 418,
-		ExplosionKillsRecudeUltimateHacksCost = 419,
-		FFInputLock = 420,
-		FallDamageReduction = 421,
-		FearOnQuickHackKill = 422,
-		FullAutoOnFullCharge = 423,
-		GenericStatPrereqValue = 424,
-		Gunslinger = 425,
-		GunslingerMastery = 426,
-		GunslingerTrait01Stat = 427,
-		HackedEnemiesGetDamagedByFriendlyFire = 428,
-		HackedEnemyArmorReduction = 429,
-		Hacking = 430,
-		HackingMastery = 431,
-		HackingPenetration = 432,
-		HackingResistance = 433,
-		HackingResistanceUltimate = 434,
-		HasAdditionalSplinterSlot = 435,
-		HasAheadTargeting = 436,
-		HasAirHover = 437,
-		HasAirThrusters = 438,
-		HasAutoReloader = 439,
-		HasAutomaticReplenishment = 440,
-		HasAutomaticTagging = 441,
-		HasBerserk = 442,
-		HasBleedImmunity = 443,
-		HasBlindImmunity = 444,
-		HasBoostedCortex = 445,
-		HasBurningBuffs = 446,
-		HasCameraLinking = 447,
-		HasChargeJump = 448,
-		HasCritImmunity = 449,
-		HasCyberdeck = 450,
-		HasCybereye = 451,
-		HasDodge = 452,
-		HasDodgeAir = 453,
-		HasDoubleJump = 454,
-		HasElectricCoating = 455,
-		HasElectroPlating = 456,
-		HasExtendedHitReactionImmunity = 457,
-		HasFireproofSkin = 458,
-		HasGPS = 459,
-		HasGlowingTattoos = 460,
-		HasGraphiteTissue = 461,
-		HasHackingInteractions = 462,
-		HasHealingReapplication = 463,
-		HasHealthMonitorBomb = 464,
-		HasHostileHackImmunity = 465,
-		HasICELevelBooster = 466,
-		HasInfravision = 467,
-		HasJuiceInjector = 468,
-		HasKerenzikov = 469,
-		HasKerenzikovSlide = 470,
-		HasKers = 471,
-		HasLinkToBountySystem = 472,
-		HasLoweringPerception = 473,
-		HasMadnessLvl4Passive = 474,
-		HasMajorQuickhackResistance = 475,
-		HasMechanicalControl = 476,
-		HasMeleeImmunity = 477,
-		HasMeleeTargeting = 478,
-		HasMetabolicEnhancer = 479,
-		HasMuzzleBrake = 480,
-		HasPoisonHeal = 481,
-		HasPoisonImmunity = 482,
-		HasPowerGrip = 483,
-		HasQuickhackResistance = 484,
-		HasRemoteBotAccessPointBreach = 485,
-		HasSandevistan = 486,
-		HasSandevistanTier1 = 487,
-		HasSandevistanTier2 = 488,
-		HasSandevistanTier3 = 489,
-		HasSecondHeart = 490,
-		HasSelfHealingSkin = 491,
-		HasSmartLink = 492,
-		HasSpiderBotControl = 493,
-		HasStunImmunity = 494,
-		HasSubdermalArmor = 495,
-		HasSuperheroFall = 496,
-		HasThermovision = 497,
-		HasTimedImmunity = 498,
-		HasToxicCleanser = 499,
-		HasWallRunSkill = 500,
-		HeadshotDamageMultiplier = 501,
-		HeadshotImmunity = 502,
-		Health = 503,
-		HealthInCombatRegenDelayOnChange = 504,
-		HealthInCombatRegenEnabled = 505,
-		HealthInCombatRegenEndThreshold = 506,
-		HealthInCombatRegenRate = 507,
-		HealthInCombatRegenRateAdd = 508,
-		HealthInCombatRegenRateBase = 509,
-		HealthInCombatRegenRateMult = 510,
-		HealthInCombatRegenStartThreshold = 511,
-		HealthInCombatStartDelay = 512,
-		HealthMonitorCooldownDuration = 513,
-		HealthOutOfCombatRegenDelayOnChange = 514,
-		HealthOutOfCombatRegenEnabled = 515,
-		HealthOutOfCombatRegenEndThreshold = 516,
-		HealthOutOfCombatRegenRate = 517,
-		HealthOutOfCombatRegenRateAdd = 518,
-		HealthOutOfCombatRegenRateBase = 519,
-		HealthOutOfCombatRegenRateMult = 520,
-		HealthOutOfCombatRegenStartThreshold = 521,
-		Hearing = 522,
-		HeavyAttacksNumber = 523,
-		HighlightAccessPoint = 524,
-		HitDismembermentFactor = 525,
-		HitReactionDamageHealthFactor = 526,
-		HitReactionFactor = 527,
-		HitShapeArmor = 528,
-		HitTimerAfterDefeated = 529,
-		HitTimerAfterImpact = 530,
-		HitTimerAfterImpactMelee = 531,
-		HitTimerAfterKnockdown = 532,
-		HitTimerAfterPain = 533,
-		HitTimerAfterStagger = 534,
-		HitTimerAfterStaggerMelee = 535,
-		HitWoundsFactor = 536,
-		HoldDuration = 537,
-		HoldEnterDuration = 538,
-		HoldTimeoutDuration = 539,
-		HolographicSkinCooldownDuration = 540,
-		HolographicSkinDuration = 541,
-		HousingBuffsDurationBonus = 542,
-		IconicItemUpgraded = 543,
-		ImpactDamageThreshold = 544,
-		ImpactDamageThresholdImpulse = 545,
-		ImpactDamageThresholdInCover = 546,
-		Intelligence = 547,
-		IntelligenceAlocated = 548,
-		IntelligenceAvailable = 549,
-		IntelligenceSkillcheckBonus = 550,
-		IntrinsicQuickHackUploadBonus = 551,
-		IntrinsicReloadTimeBonus = 552,
-		IntrinsicZoomLevelBonus = 553,
-		IsAggressive = 554,
-		IsBalanced = 555,
-		IsBlocking = 556,
-		IsCautious = 557,
-		IsCrowd = 558,
-		IsDefensive = 559,
-		IsDeflecting = 560,
-		IsDodgeStaminaFree = 561,
-		IsDodging = 562,
-		IsFastMeleeArchetype = 563,
-		IsFastRangedArchetype = 564,
-		IsGenericMeleeArchetype = 565,
-		IsGenericRangedArchetype = 566,
-		IsHeavyRangedArchetype = 567,
-		IsInvulnerable = 568,
-		IsItemBroken = 569,
-		IsItemCracked = 570,
-		IsItemCrafted = 571,
-		IsItemIconic = 572,
-		IsItemUpgraded = 573,
-		IsManBig = 574,
-		IsManMassive = 575,
-		IsMechanical = 576,
-		IsNetrunnerArchetype = 577,
-		IsNotSlowedDuringADS = 578,
-		IsNotSlowedDuringBlock = 579,
-		IsNotSlowedDuringReload = 580,
-		IsReckless = 581,
-		IsShotgunnerArchetype = 582,
-		IsSniperArchetype = 583,
-		IsSprintStaminaFree = 584,
-		IsStrongMeleeArchetype = 585,
-		IsTechieArchetype = 586,
-		IsTier1Archetype = 587,
-		IsTier2Archetype = 588,
-		IsTier3Archetype = 589,
-		IsTier4Archetype = 590,
-		IsWeakspot = 591,
-		IsWeaponLethal = 592,
-		ItemArmor = 593,
-		ItemLevel = 594,
-		ItemRequiresElectroPlating = 595,
-		ItemRequiresPowerGrip = 596,
-		ItemRequiresSmartLink = 597,
-		JumpHeight = 598,
-		Kenjutsu = 599,
-		KenjutsuMastery = 600,
-		KenjutsuTrait01Stat = 601,
-		KnockdownDamageThreshold = 602,
-		KnockdownDamageThresholdImpulse = 603,
-		KnockdownDamageThresholdInCover = 604,
-		KnockdownImmunity = 605,
-		KnockdownImpulse = 606,
-		Level = 607,
-		Liberty_Padre_BurningApplicationRate = 608,
-		LimbHealth = 609,
-		LinearDirectionUpdateMax = 610,
-		LinearDirectionUpdateMaxADS = 611,
-		LinearDirectionUpdateMin = 612,
-		LinearDirectionUpdateMinADS = 613,
-		LowerActiveCooldownOnDefeat = 614,
-		LowerHackingResistanceOnHack = 615,
-		MagazineCapacity = 616,
-		MagazineCapacityBase = 617,
-		MagazineCapacityBonus = 618,
-		MaxDuration = 619,
-		MaxPercentDamageTakenPerHit = 620,
-		MaxSpeed = 621,
-		MaxStacks = 622,
-		MaxStacksBonusBleeding = 623,
-		MaxStacksBonusBurning = 624,
-		MaximumRange = 625,
-		MechanicalsBuffDPSBonus = 626,
-		MeleeAttackComboDuration = 627,
-		MeleeAttackDuration = 628,
-		MeleeBorgStaminaDrain = 629,
-		Memory = 630,
-		MemoryCostModifier = 631,
-		MemoryCostReduction = 632,
-		MemoryInCombatRegenDelayOnChange = 633,
-		MemoryInCombatRegenEnabled = 634,
-		MemoryInCombatRegenEndThreshold = 635,
-		MemoryInCombatRegenRate = 636,
-		MemoryInCombatRegenRateAdd = 637,
-		MemoryInCombatRegenRateBase = 638,
-		MemoryInCombatRegenRateMult = 639,
-		MemoryInCombatRegenStartThreshold = 640,
-		MemoryInCombatStartDelay = 641,
-		MemoryOutOfCombatRegenDelayOnChange = 642,
-		MemoryOutOfCombatRegenEnabled = 643,
-		MemoryOutOfCombatRegenEndThreshold = 644,
-		MemoryOutOfCombatRegenRate = 645,
-		MemoryOutOfCombatRegenRateAdd = 646,
-		MemoryOutOfCombatRegenRateBase = 647,
-		MemoryOutOfCombatRegenRateMult = 648,
-		MemoryOutOfCombatRegenStartThreshold = 649,
-		MemoryOutOfCombatStartDelay = 650,
-		MemoryTrackerCooldownDuration = 651,
-		MemoryWipeImmunity = 652,
-		MinSpeed = 653,
-		MinigameBufferExtension = 654,
-		MinigameMaterialsEarned = 655,
-		MinigameMemoryRegenPerk = 656,
-		MinigameMoneyMultiplier = 657,
-		MinigameNextInstanceBufferExtensionPerk = 658,
-		MinigameShardChanceMultiplier = 659,
-		MinigameTimeLimitExtension = 660,
-		MinigameTrapsPossibilityChance = 661,
-		MitigationChance = 662,
-		MitigationStrength = 663,
-		MuzzleBreakRicochetBonus = 664,
-		NPCAnimationTime = 665,
-		NPCCorpoEquipItemDuration = 666,
-		NPCCorpoUnequipItemDuration = 667,
-		NPCDamage = 668,
-		NPCEquipItemDuration = 669,
-		NPCGangEquipItemDuration = 670,
-		NPCGangUnequipItemDuration = 671,
-		NPCLoopDuration = 672,
-		NPCRecoverDuration = 673,
-		NPCStartupDuration = 674,
-		NPCUnequipItemDuration = 675,
-		NPCUploadTime = 676,
-		NoJam = 677,
-		NumShotsInBurst = 678,
-		NumShotsInBurstMaxCharge = 679,
-		NumShotsInBurstSecondary = 680,
-		NumShotsToFire = 681,
-		NumberIgnoredTraps = 682,
-		Overheat = 683,
-		Oxygen = 684,
-		PartArmor = 685,
-		PenetrationHealth = 686,
-		PersonalityAggressive = 687,
-		PersonalityCuriosity = 688,
-		PersonalityDisgust = 689,
-		PersonalityFear = 690,
-		PersonalityFunny = 691,
-		PersonalityJoy = 692,
-		PersonalitySad = 693,
-		PersonalityShock = 694,
-		PersonalitySurprise = 695,
-		PhoneCallDuration = 696,
-		PhysicalDamage = 697,
-		PhysicalDamageMax = 698,
-		PhysicalDamageMin = 699,
-		PhysicalDamagePercent = 700,
-		PhysicalImpulse = 701,
-		PhysicalResistance = 702,
-		PoisonImmunity = 703,
-		PoisonRegenHealth = 704,
-		PoisonedApplicationRate = 705,
-		PostLexWilsonBuyPrice = 706,
-		PostTutorialCyberwarePrice = 707,
-		PowerLevel = 708,
-		PreFireTime = 709,
-		PrefersCovers = 710,
-		PrefersShootingSpots = 711,
-		Price = 712,
-		ProjectilesPerShot = 713,
-		ProjectilesPerShotBase = 714,
-		ProjectilesPerShotBonus = 715,
-		Quality = 716,
-		Quantity = 717,
-		QuickHackDuration = 718,
-		QuickHackDurationExtension = 719,
-		QuickHackImmunity = 720,
-		QuickHackResistancesMod = 721,
-		QuickHackSpreadDistance = 722,
-		QuickHackSpreadNumber = 723,
-		QuickHackSuddenDeathChance = 724,
-		QuickHackUpload = 725,
-		QuickhackExtraDamageMultiplier = 726,
-		QuickhackShield = 727,
-		QuickhacksCooldownReduction = 728,
-		RandomCurveInput = 729,
-		Range = 730,
-		Recoil = 731,
-		RecoilAllowSway = 732,
-		RecoilAlternateDir = 733,
-		RecoilAlternateDirADS = 734,
-		RecoilAngle = 735,
-		RecoilAngleADS = 736,
-		RecoilAnimation = 737,
-		RecoilChargeMult = 738,
-		RecoilChargeMultADS = 739,
-		RecoilCycleSize = 740,
-		RecoilCycleSizeADS = 741,
-		RecoilCycleTime = 742,
-		RecoilCycleTimeADS = 743,
-		RecoilDelay = 744,
-		RecoilDir = 745,
-		RecoilDirADS = 746,
-		RecoilDirPlanCycleRandDir = 747,
-		RecoilDirPlanCycleRandDirADS = 748,
-		RecoilDirPlanCycleRandRangeDir = 749,
-		RecoilDirPlanCycleRandRangeDirADS = 750,
-		RecoilDirPlanSequence = 751,
-		RecoilDirPlanSequenceADS = 752,
-		RecoilDriftRandomRangeMax = 753,
-		RecoilDriftRandomRangeMin = 754,
-		RecoilEnableCycleX = 755,
-		RecoilEnableCycleXADS = 756,
-		RecoilEnableCycleY = 757,
-		RecoilEnableCycleYADS = 758,
-		RecoilEnableLinearX = 759,
-		RecoilEnableLinearXADS = 760,
-		RecoilEnableLinearY = 761,
-		RecoilEnableLinearYADS = 762,
-		RecoilEnableScaleX = 763,
-		RecoilEnableScaleXADS = 764,
-		RecoilEnableScaleY = 765,
-		RecoilEnableScaleYADS = 766,
-		RecoilFullChargeMult = 767,
-		RecoilFullChargeMultADS = 768,
-		RecoilHoldDuration = 769,
-		RecoilHoldDurationADS = 770,
-		RecoilKickMax = 771,
-		RecoilKickMaxADS = 772,
-		RecoilKickMin = 773,
-		RecoilKickMinADS = 774,
-		RecoilMagForFullDrift = 775,
-		RecoilMaxLength = 776,
-		RecoilMaxLengthADS = 777,
-		RecoilRecoveryMinSpeed = 778,
-		RecoilRecoveryMinSpeedADS = 779,
-		RecoilRecoverySpeed = 780,
-		RecoilRecoverySpeedADS = 781,
-		RecoilRecoveryTime = 782,
-		RecoilRecoveryTimeADS = 783,
-		RecoilScaleMax = 784,
-		RecoilScaleMaxADS = 785,
-		RecoilScaleTime = 786,
-		RecoilScaleTimeADS = 787,
-		RecoilSpeed = 788,
-		RecoilSpeedADS = 789,
-		RecoilTime = 790,
-		RecoilTimeADS = 791,
-		RecoilUseDifferentStatsInADS = 792,
-		Reflexes = 793,
-		ReflexesAlocated = 794,
-		ReflexesAvailable = 795,
-		RefreshesPingOnQuickhack = 796,
-		RegenerateHPMinigamePerk = 797,
-		ReloadAmount = 798,
-		ReloadEndTime = 799,
-		ReloadTime = 800,
-		ReloadTimeBase = 801,
-		ReloadTimeBonus = 802,
-		RemoveAllStacksWhenDurationEnds = 803,
-		RemoveColdBloodStacksOneByOne = 804,
-		RemoveSprintOnQuickhack = 805,
-		ReprimandEscalation = 806,
-		RestoreMemoryOnDefeat = 807,
-		RevealNetrunnerWhenHacked = 808,
-		RicochetChance = 809,
-		RicochetCount = 810,
-		RicochetMaxAngle = 811,
-		RicochetMinAngle = 812,
-		RicochetTargetSearchAngle = 813,
-		SandevistanDashShoot = 814,
-		ScalingBlocked = 815,
-		ScanDepth = 816,
-		ScanTimeReduction = 817,
-		ScopeFOV = 818,
-		ScopeOffset = 819,
-		ScrapItemChance = 820,
-		SharedCacheTraps = 821,
-		ShootingOffsetAI = 822,
-		ShortCircuitOnCriticalHit = 823,
-		ShortDistanceDamageIncrease = 824,
-		ShorterChains = 825,
-		ShotDelay = 826,
-		SimpleWeaponMod04 = 827,
-		SlideWhenLeaningOutOfCover = 828,
-		SmartGunAddSpiralTrajectory = 829,
-		SmartGunAdsLockingAnglePitch = 830,
-		SmartGunAdsLockingAngleYaw = 831,
-		SmartGunAdsMaxLockedTargets = 832,
-		SmartGunAdsTagLockAnglePitch = 833,
-		SmartGunAdsTagLockAngleYaw = 834,
-		SmartGunAdsTargetableAnglePitch = 835,
-		SmartGunAdsTargetableAngleYaw = 836,
-		SmartGunAdsTimeToLock = 837,
-		SmartGunAdsTimeToUnlock = 838,
-		SmartGunEvenDistributionPeriod = 839,
-		SmartGunHipLockingAnglePitch = 840,
-		SmartGunHipLockingAngleYaw = 841,
-		SmartGunHipMaxLockedTargets = 842,
-		SmartGunHipTagLockAnglePitch = 843,
-		SmartGunHipTagLockAngleYaw = 844,
-		SmartGunHipTargetableAnglePitch = 845,
-		SmartGunHipTargetableAngleYaw = 846,
-		SmartGunHipTimeToLock = 847,
-		SmartGunHipTimeToUnlock = 848,
-		SmartGunHitProbability = 849,
-		SmartGunHitProbabilityMultiplier = 850,
-		SmartGunMissDelay = 851,
-		SmartGunMissRadius = 852,
-		SmartGunNPCApplySpreadAtHitplane = 853,
-		SmartGunNPCLockOnTime = 854,
-		SmartGunNPCLockTimeout = 855,
-		SmartGunNPCLockingAnglePitch = 856,
-		SmartGunNPCLockingAngleYaw = 857,
-		SmartGunNPCProjectileStartingOrientationAngleOffset = 858,
-		SmartGunNPCProjectileVelocity = 859,
-		SmartGunNPCShootProjectilesOnlyStraight = 860,
-		SmartGunNPCSpreadMultiplier = 861,
-		SmartGunNPCTrajectoryCurvatureMultiplier = 862,
-		SmartGunPlayerProjectileVelocity = 863,
-		SmartGunProjectileVelocityVariance = 864,
-		SmartGunSpiralCycleTimeMax = 865,
-		SmartGunSpiralCycleTimeMin = 866,
-		SmartGunSpiralRadius = 867,
-		SmartGunSpiralRampDistanceEnd = 868,
-		SmartGunSpiralRampDistanceStart = 869,
-		SmartGunSpiralRandomizeDirection = 870,
-		SmartGunSpreadMultiplier = 871,
-		SmartGunStartingAccuracy = 872,
-		SmartGunTargetAcquisitionRange = 873,
-		SmartGunTimeToMaxAccuracy = 874,
-		SmartGunTimeToRemoveOccludedTarget = 875,
-		SmartGunTrackAllBodyparts = 876,
-		SmartGunTrackHeadComponents = 877,
-		SmartGunTrackLegComponents = 878,
-		SmartGunTrackMechanicalComponents = 879,
-		SmartGunTrackMultipleEntitiesInADS = 880,
-		SmartGunUseEvenDistributionTargeting = 881,
-		SmartGunUseTagLockTargeting = 882,
-		SmartGunUseTimeBasedAccuracy = 883,
-		SmartTargetingDisruptionProbability = 884,
-		SpecialDamage = 885,
-		SpeedBoost = 886,
-		SpeedBoostMaxSpeed = 887,
-		Spread = 888,
-		SpreadAdsChangePerShot = 889,
-		SpreadAdsChargeMult = 890,
-		SpreadAdsDefaultX = 891,
-		SpreadAdsDefaultY = 892,
-		SpreadAdsFastSpeedMax = 893,
-		SpreadAdsFastSpeedMaxAdd = 894,
-		SpreadAdsFastSpeedMin = 895,
-		SpreadAdsFastSpeedMinAdd = 896,
-		SpreadAdsFullChargeMult = 897,
-		SpreadAdsMaxX = 898,
-		SpreadAdsMaxY = 899,
-		SpreadAdsMinX = 900,
-		SpreadAdsMinY = 901,
-		SpreadAnimation = 902,
-		SpreadChangePerShot = 903,
-		SpreadChargeMult = 904,
-		SpreadCrouchDefaultMult = 905,
-		SpreadCrouchMaxMult = 906,
-		SpreadDefaultX = 907,
-		SpreadDefaultY = 908,
-		SpreadEvenDistributionJitterSize = 909,
-		SpreadEvenDistributionRowCount = 910,
-		SpreadFastSpeedMax = 911,
-		SpreadFastSpeedMaxAdd = 912,
-		SpreadFastSpeedMin = 913,
-		SpreadFastSpeedMinAdd = 914,
-		SpreadFullChargeMult = 915,
-		SpreadMaxAI = 916,
-		SpreadMaxX = 917,
-		SpreadMaxY = 918,
-		SpreadMinX = 919,
-		SpreadMinY = 920,
-		SpreadRandomizeOriginPoint = 921,
-		SpreadResetSpeed = 922,
-		SpreadResetTimeThreshold = 923,
-		SpreadUseCircularSpread = 924,
-		SpreadUseEvenDistribution = 925,
-		SpreadUseInAds = 926,
-		SpreadZeroOnFirstShot = 927,
-		StaggerDamageThreshold = 928,
-		StaggerDamageThresholdImpulse = 929,
-		StaggerDamageThresholdInCover = 930,
-		Stamina = 931,
-		StaminaCostReduction = 932,
-		StaminaCostToBlock = 933,
-		StaminaDamage = 934,
-		StaminaRegenDelayOnChange = 935,
-		StaminaRegenEnabled = 936,
-		StaminaRegenEndThrehold = 937,
-		StaminaRegenRate = 938,
-		StaminaRegenRateAdd = 939,
-		StaminaRegenRateBase = 940,
-		StaminaRegenRateMult = 941,
-		StaminaRegenStartDelay = 942,
-		StaminaRegenStartThreshold = 943,
-		StaminaSprintDecayRate = 944,
-		StatModifierGroupLimit = 945,
-		Stealth = 946,
-		StealthHacksCostReduction = 947,
-		StealthHitDamageMultiplier = 948,
-		StealthMastery = 949,
-		StealthTrait01Stat = 950,
-		StealthWeakspotDamageMultiplier = 951,
-		StreetCred = 952,
-		StreetCredXPBonusMultiplier = 953,
-		Strength = 954,
-		StrengthAlocated = 955,
-		StrengthAvailable = 956,
-		StrengthSkillcheckBonus = 957,
-		StunImmunity = 958,
-		StyleOverSubstanceCount = 959,
-		Sway = 960,
-		SwayCenterMaximumAngleOffset = 961,
-		SwayCurvatureMaximumFactor = 962,
-		SwayCurvatureMinimumFactor = 963,
-		SwayInitialOffsetRandomFactor = 964,
-		SwayResetOnAimStart = 965,
-		SwaySideBottomAngleLimit = 966,
-		SwaySideMaximumAngleDistance = 967,
-		SwaySideMinimumAngleDistance = 968,
-		SwaySideStepChangeMaximumFactor = 969,
-		SwaySideStepChangeMinimumFactor = 970,
-		SwaySideTopAngleLimit = 971,
-		SwayStartBlendTime = 972,
-		SwayStartDelay = 973,
-		SwayTraversalTime = 974,
-		SystemCollapseImmunity = 975,
-		TBHsBaseCoefficient = 976,
-		TBHsBaseSourceMultiplierCoefficient = 977,
-		TBHsCoverTraceLoSIncreaseSpeed = 978,
-		TBHsMinimumLineOfSightTime = 979,
-		TBHsSensesTraceLoSIncreaseSpeed = 980,
-		TBHsVisibilityCooldown = 981,
-		TechBaseChargeThreshold = 982,
-		TechMaxChargeThreshold = 983,
-		TechOverChargeThreshold = 984,
-		TechPierceChargeLevel = 985,
-		TechPierceDamageFactor = 986,
-		TechPierceEnabled = 987,
-		TechPierceScanAngle = 988,
-		TechnicalAbility = 989,
-		TechnicalAbilityAlocated = 990,
-		TechnicalAbilityAvailable = 991,
-		TechnicalAbilitySkillcheckBonus = 992,
-		ThermalDamage = 993,
-		ThermalDamageMax = 994,
-		ThermalDamageMin = 995,
-		ThermalDamagePercent = 996,
-		ThermalResistance = 997,
-		ThreeOrMoreProgramsCooldownRedPerk = 998,
-		ThreeOrMoreProgramsMemoryRegPerk = 999,
-		ThrowRecovery = 1000,
-		TimeDilationGenericDuration = 1001,
-		TimeDilationGenericTimeScale = 1002,
-		TimeDilationKerenzikovDuration = 1003,
-		TimeDilationKerenzikovPlayerTimeScale = 1004,
-		TimeDilationKerenzikovTimeScale = 1005,
-		TimeDilationOnDodgesCooldownDuration = 1006,
-		TimeDilationOnDodgesDuration = 1007,
-		TimeDilationOnDodgesTimeScale = 1008,
-		TimeDilationOnHealthDropCooldownDuration = 1009,
-		TimeDilationOnHealthDropDuration = 1010,
-		TimeDilationOnHealthDropTimeScale = 1011,
-		TimeDilationSandevistanCooldownBase = 1012,
-		TimeDilationSandevistanCooldownReduction = 1013,
-		TimeDilationSandevistanDuration = 1014,
-		TimeDilationSandevistanTimeScale = 1015,
-		TimeDilationWhenEnteringCombatCooldownDuration = 1016,
-		TimeDilationWhenEnteringCombatDuration = 1017,
-		TimeDilationWhenEnteringCombatTimeScale = 1018,
-		TranquilizerImmunity = 1019,
-		TriggerDismembermentChance = 1020,
-		TriggerWoundedChance = 1021,
-		TurretFriendlyExtension = 1022,
-		TurretShutdownExtension = 1023,
-		UltimateHackSpread = 1024,
-		UltimateHacksCostReduction = 1025,
-		UltimateMemoryCostReduction = 1026,
-		UnconsciousImmunity = 1027,
-		UnequipAnimationDuration_Corpo = 1028,
-		UnequipAnimationDuration_Gang = 1029,
-		UnequipDuration = 1030,
-		UnequipDuration_Corpo = 1031,
-		UnequipDuration_Gang = 1032,
-		UnequipItemTime_Corpo = 1033,
-		UnequipItemTime_Gang = 1034,
-		UnlockProgress = 1035,
-		UpgradeCompensate = 1036,
-		UpgradeCount = 1037,
-		UpgradingCostReduction = 1038,
-		UpgradingMaterialDropChance = 1039,
-		UpgradingMaterialRandomGrantChance = 1040,
-		UpgradingMaterialRetrieveChance = 1041,
-		UploadQuickHackMod = 1042,
-		VendorBuyPriceDiscount = 1043,
-		VendorSellPriceDiscount = 1044,
-		Visibility = 1045,
-		VisualStimRangeMultiplier = 1046,
-		VulnerabilityExtension = 1047,
-		WallRunHorSpeedToEnterMin = 1048,
-		WallRunStrafeAngleMax = 1049,
-		WallRunTimeMax = 1050,
-		WallRunVertSpeedToEnterMax = 1051,
-		WasItemUpgraded = 1052,
-		WasQuickHacked = 1053,
-		WeakspotDamageMultiplier = 1054,
-		WeaponHasAutoloader = 1055,
-		WeaponNoise = 1056,
-		WeaponPosAdsX = 1057,
-		WeaponPosAdsY = 1058,
-		WeaponPosAdsZ = 1059,
-		WeaponPosX = 1060,
-		WeaponPosY = 1061,
-		WeaponPosZ = 1062,
-		WeaponRotAdsX = 1063,
-		WeaponRotAdsY = 1064,
-		WeaponRotAdsZ = 1065,
-		WeaponRotX = 1066,
-		WeaponRotY = 1067,
-		WeaponRotZ = 1068,
-		WeaponSwapDuration = 1069,
-		Weight = 1070,
-		WoundHeadDamageThreshold = 1071,
-		WoundLArmDamageThreshold = 1072,
-		WoundLLegDamageThreshold = 1073,
-		WoundRArmDamageThreshold = 1074,
-		WoundRLegDamageThreshold = 1075,
-		XPbonusMultiplier = 1076,
-		ZoomLevel = 1077,
-		CPO_Armor = 1078,
-		CPO_NPC_Importance = 1079,
-		Count = 1080,
-		Invalid = 1081
+		ADSSpeedPercentBonus = 0,
+		ADSSpeedPercentBonusModifierHelper = 1,
+		ADSStaminaRegenMultiplier = 2,
+		ARSMGLMGMod2_HorRecoil = 3,
+		ARSMGLMGMod2_RecoilKick = 4,
+		ARSMGLMGMod2_RecoilKickCover = 5,
+		ARSMGLMGMod3_SpreadPerShot = 6,
+		Acceleration = 7,
+		AccumulatedDoT = 8,
+		AccumulatedDoTDecayDelayOnChange = 9,
+		AccumulatedDoTDecayEnabled = 10,
+		AccumulatedDoTDecayEndThrehold = 11,
+		AccumulatedDoTDecayRate = 12,
+		AccumulatedDoTDecayStartDelay = 13,
+		AccumulatedDoTDecayStartThreshold = 14,
+		Accuracy = 15,
+		AddExtraHitImpactVfx = 16,
+		AdditionalStealthDamage = 17,
+		Adrenaline = 18,
+		AimFOV = 19,
+		AimInTime = 20,
+		AimOffset = 21,
+		AimOutTime = 22,
+		AimTime = 23,
+		AimingCost = 24,
+		AirDrop_BurningApplicationRate = 25,
+		Airdropped = 26,
+		AllDamageDonePercentBonus = 27,
+		AllowMovementInput = 28,
+		AllowRotation = 29,
+		AmmoPerQuickMelee = 30,
+		AntiVirusCooldownReduction = 31,
+		ApplicationChance = 32,
+		Armor = 33,
+		ArmorEffectivenessMultiplier = 34,
+		ArmorMultBonus = 35,
+		ArmorPenetrationBonus = 36,
+		Assault = 37,
+		AssaultMastery = 38,
+		AssaultRifleStaminaCostReduction = 39,
+		AssaultTrait01Stat = 40,
+		Athletics = 41,
+		AthleticsMastery = 42,
+		AthleticsTrait01Stat = 43,
+		AttackPenetration = 44,
+		AttackSpeed = 45,
+		AttackSpeedPercent = 46,
+		AttacksNumber = 47,
+		AttacksPerSecond = 48,
+		AttacksPerSecondBase = 49,
+		AttunementHelper = 50,
+		AttunementHelper2 = 51,
+		AttunementHelper3 = 52,
+		AttunementHelper4 = 53,
+		AttunementHelper5 = 54,
+		AudioLocomotionStimRangeMultiplier = 55,
+		AudioStimRangeMultiplier = 56,
+		AutoReveal = 57,
+		AutocraftDuration = 58,
+		AutomaticReplenishment = 59,
+		AutomaticUploadPerk = 60,
+		AxeStaminaCostReduction = 61,
+		BaseChargeTime = 62,
+		BaseDamage = 63,
+		BaseDamageMax = 64,
+		BaseDamageMin = 65,
+		BaseKnockdownImpulse = 66,
+		BaseMaxChargeThreshold = 67,
+		BaseMeleeAttackStaminaCost = 68,
+		BaseRicochetDamageModifier = 69,
+		BatonStaminaCostReduction = 70,
+		BerserkArmorBonus = 71,
+		BerserkChargesDecayBegins = 72,
+		BerserkChargesDecayEnabled = 73,
+		BerserkChargesDecayEnds = 74,
+		BerserkChargesDecayRate = 75,
+		BerserkChargesDecayRateMult = 76,
+		BerserkChargesDecayStartDelay = 77,
+		BerserkChargesDelayOnChange = 78,
+		BerserkChargesRegenBegins = 79,
+		BerserkChargesRegenEnabled = 80,
+		BerserkChargesRegenEnds = 81,
+		BerserkChargesRegenRate = 82,
+		BerserkCooldownBase = 83,
+		BerserkCooldownReduction = 84,
+		BerserkDurationBase = 85,
+		BerserkDynamicHealthBonusOnActivation = 86,
+		BerserkHealthBonusPerKillCount = 87,
+		BerserkHealthRegenBonus = 88,
+		BerserkKillCount = 89,
+		BerserkMeleeDamageBonus = 90,
+		BerserkRechargeDuration = 91,
+		BerserkRecoilReduction = 92,
+		BerserkResistancesBonus = 93,
+		BerserkShockwaveDamage = 94,
+		BerserkShockwaveRangeBonus = 95,
+		BerserkStaticHealthBonusOnActivation = 96,
+		BerserkSwayReduction = 97,
+		BlackWallStack = 98,
+		BladeMod1_CritChance = 99,
+		BleedingApplicationRate = 100,
+		BleedingApplicationRateModifierHelper = 101,
+		BleedingImmunity = 102,
+		BlindImmunity = 103,
+		BlindResistance = 104,
+		BlockCyberwareBreaches = 105,
+		BlockFactor = 106,
+		BlockLocomotionWhenLeaningOutOfCover = 107,
+		BlockOpticalCamoRelicPerk = 108,
+		BlockQuickhackMenu = 109,
+		BlockReduction = 110,
+		BloodPumpMaxCharges = 111,
+		BloodQueueHealing = 112,
+		BluntFinisherHealthThresholdIncrease = 113,
+		BluntMod1_KnockbackChance = 114,
+		BluntMod2_BleedChance = 115,
+		BluntMod2_BleedConverter = 116,
+		BluntMod3_ModPower = 117,
+		BonusCarryCapacity = 118,
+		BonusChargeDamage = 119,
+		BonusCritChanceVsElectrocutedEnemies = 120,
+		BonusCritChanceVsElectrocutedEnemiesModifierHelper = 121,
+		BonusDPS = 122,
+		BonusDamageAgainstBosses = 123,
+		BonusDamageAgainstBossesModifierHelper = 124,
+		BonusDamageAgainstElites = 125,
+		BonusDamageAgainstMechanicals = 126,
+		BonusDamageAgainstRares = 127,
+		BonusDamagePerHit = 128,
+		BonusDmgVsRaresAndElites = 129,
+		BonusHealth = 130,
+		BonusMemory = 131,
+		BonusPercentDamageToEnemiesAtFullHealth = 132,
+		BonusPercentDamageToEnemiesAtFullHealthModifierHelper = 133,
+		BonusPercentDamageToEnemiesBelowHalfHealth = 134,
+		BonusPercentDamageToEnemiesBelowHalfHealthModifierHelper = 135,
+		BonusPercentDamageVsBurningEnemies = 136,
+		BonusPercentDamageVsBurningEnemiesModifierHelper = 137,
+		BonusQuickHackDamage = 138,
+		BonusQuickHackDamageModifierHelper = 139,
+		BonusRecoilKick = 140,
+		BonusRicochetAngle = 141,
+		BonusRicochetCritChance = 142,
+		BonusRicochetDamage = 143,
+		BonusRicochetDamageModifierHelper = 144,
+		BonusSmartGunTimeToLock = 145,
+		BonusSpreadChange = 146,
+		BonusStamina = 147,
+		BossResistance = 148,
+		BossResistanceModifierHelper = 149,
+		Brake = 150,
+		BrakeDot = 151,
+		Brawling = 152,
+		BrawlingMastery = 153,
+		BrawlingTrait01Stat = 154,
+		BreachStreakBuffBonus = 155,
+		BufferSize = 156,
+		BulletDeadReckoningEnabled = 157,
+		BulletDeadReckoningMaxAngleCorrection = 158,
+		BulletDeadReckoningMaxRange = 159,
+		BulletDeadReckoningMinimumSpeed = 160,
+		BulletMagnetismDefaultAngle = 161,
+		BulletMagnetismHighVelocityAngle = 162,
+		BulletPseudoPierceHitVFxChance = 163,
+		BulletSurroundingHitVFxChance = 164,
+		BurningApplicationRate = 165,
+		BurningApplicationRateModifierHelper = 166,
+		BurningImmunity = 167,
+		BurningRegenStamina = 168,
+		CPUPower = 169,
+		CWMaskCharges = 170,
+		CWMaskChargesDecayStartDelay = 171,
+		CWMaskChargesDelayOnChange = 172,
+		CWMaskChargesRegenBegins = 173,
+		CWMaskChargesRegenEnabled = 174,
+		CWMaskChargesRegenEnds = 175,
+		CWMaskChargesRegenRate = 176,
+		CWMaskMaxCharges = 177,
+		CWMaskRechargeDuration = 178,
+		CallReinforcement = 179,
+		CameraDetectionSpeedReduction = 180,
+		CameraShutdownExtension = 181,
+		CanAerialTakedown = 182,
+		CanAimWhileDodging = 183,
+		CanAskToFollowOrder = 184,
+		CanAskToHolsterWeapon = 185,
+		CanAutomaticallyDisassembleJunk = 186,
+		CanAutomaticallyRestoreKnives = 187,
+		CanBleedingCriticallyHit = 188,
+		CanBleedingSlowTarget = 189,
+		CanBlindQuickHack = 190,
+		CanBlock = 191,
+		CanBreatheUnderwater = 192,
+		CanBuffCamoQuickHack = 193,
+		CanBuffMechanicalsOnTakeControl = 194,
+		CanBuffSturdinessQuickHack = 195,
+		CanBurningCriticallyHit = 196,
+		CanCallDrones = 197,
+		CanCallReinforcements = 198,
+		CanCatchUp = 199,
+		CanCatchUpDistance = 200,
+		CanCharge = 201,
+		CanChargedShoot = 202,
+		CanCloseCombat = 203,
+		CanCommsCallInQuickHack = 204,
+		CanCommsNoiseQuickHack = 205,
+		CanControlFullyChargedWeapon = 206,
+		CanCraftEpicItems = 207,
+		CanCraftFromInventory = 208,
+		CanCraftLegendaryItems = 209,
+		CanCraftRareItems = 210,
+		CanCraftTechAmmunition = 211,
+		CanCrouch = 212,
+		CanCyberwareMalfunctionQuickHack = 213,
+		CanDash = 214,
+		CanDataMineQuickHack = 215,
+		CanDealFullDamageToArmored = 216,
+		CanDeathQuickHack = 217,
+		CanDisassemble = 218,
+		CanDisassembleConsumables = 219,
+		CanDisassembleGadgets = 220,
+		CanDoGrandFinaleWithMantisBlades = 221,
+		CanDoRapidFireWithProjectileLauncher = 222,
+		CanDropWeapon = 223,
+		CanElectrocuteNullifyStats = 224,
+		CanElectrocuteRoot = 225,
+		CanExitWSOnSoundStimuli = 226,
+		CanExplodeQuickHack = 227,
+		CanFastTravelWhileEncumbered = 228,
+		CanFistsCauseBleeding = 229,
+		CanForceDismbember = 230,
+		CanFullyChargeWeapon = 231,
+		CanGrab = 232,
+		CanGrappleAndroids = 233,
+		CanGrappleSilently = 234,
+		CanGrenadeLaunch = 235,
+		CanGrenadeQuickHack = 236,
+		CanGrenadesCriticallyHit = 237,
+		CanGrenadesDealExternalDamage = 238,
+		CanGroundSlamInAir = 239,
+		CanGroundSlamOnGround = 240,
+		CanGuardBreak = 241,
+		CanHeartattackQuickHack = 242,
+		CanIgnoreArmorDamageReduction = 243,
+		CanIgnoreStamina = 244,
+		CanIgnoreWeaponStaminaPenaties = 245,
+		CanInstaKillNPCs = 246,
+		CanInstallTechMods = 247,
+		CanJamWeaponLvl2QuickHack = 248,
+		CanJamWeaponQuickHack = 249,
+		CanJump = 250,
+		CanLandSilently = 251,
+		CanLegendaryCraftedWeaponsBeBoosted = 252,
+		CanLegendaryCraftedWeaponsBeBoosted2 = 253,
+		CanLocomotionMalfunctionQuickHack = 254,
+		CanMadnessQuickHack = 255,
+		CanMalfunctionQuickHack = 256,
+		CanMeleeBerserk = 257,
+		CanMeleeDash = 258,
+		CanMeleeInfinitelyCombo = 259,
+		CanMeleeLeap = 260,
+		CanMeleeLeapInAir = 261,
+		CanMeleeLeapTakedown = 262,
+		CanMemoryWipeQuickHack = 263,
+		CanOnePunchWithGorillaArms = 264,
+		CanOverchargeWeapon = 265,
+		CanOverheatQuickHack = 266,
+		CanOverloadQuickHack = 267,
+		CanOverrideAttitudeQuickHack = 268,
+		CanOverrideAuthorizationQuickHack = 269,
+		CanParry = 270,
+		CanPerformBluntFinisher = 271,
+		CanPerformCoolFinisher = 272,
+		CanPerformMonowireFinisher = 273,
+		CanPerformReflexFinisher = 274,
+		CanPickUpBodyAfterTakedown = 275,
+		CanPickUpWeapon = 276,
+		CanPingQuickHack = 277,
+		CanPlayerBoostConsumables = 278,
+		CanPlayerBoostGrenades = 279,
+		CanPlayerDodgeOnDetection = 280,
+		CanPlayerExitCombatWithOpticalCamo = 281,
+		CanPlayerGagOnDetection = 282,
+		CanPlayerPierceDriver = 283,
+		CanPlayerPiercePoisonImmunity = 284,
+		CanPoisonLowerArmor = 285,
+		CanPoisonSlow = 286,
+		CanPreciseShoot = 287,
+		CanPushBack = 288,
+		CanPushFromGrapple = 289,
+		CanQuickHackCriticallyHit = 290,
+		CanQuickMeleeStagger = 291,
+		CanQuickhack = 292,
+		CanQuickhackHealPuppet = 293,
+		CanQuickhackTransferBetweenEnemies = 294,
+		CanRegenInCombat = 295,
+		CanRemoveModsFromClothing = 296,
+		CanRemoveModsFromWeapons = 297,
+		CanResurrectAllies = 298,
+		CanRetreat = 299,
+		CanRetrieveModsFromDisassemble = 300,
+		CanRunSilently = 301,
+		CanSandevistanSprintHarass = 302,
+		CanScrapPartsFromMechanicals = 303,
+		CanSeeCyberwareBreaches = 304,
+		CanSeeGrenadeRadius = 305,
+		CanSeeRicochetVisuals = 306,
+		CanSeeThroughOpticalCamos = 307,
+		CanSeeThroughSmoke = 308,
+		CanSeeThroughWalls = 309,
+		CanShareThreatsWithPlayer = 310,
+		CanShootWhileCarryingBody = 311,
+		CanShootWhileDodging = 312,
+		CanShootWhileGrappling = 313,
+		CanShootWhileMoving = 314,
+		CanShootWhileVaulting = 315,
+		CanSilentKill = 316,
+		CanSmartShoot = 317,
+		CanSpreadMonoWireQuickhack = 318,
+		CanSprint = 319,
+		CanSprintHarass = 320,
+		CanSprintWhileCarryingBody = 321,
+		CanSuicideQuickHack = 322,
+		CanSwitchWeapon = 323,
+		CanTakeControlQuickHack = 324,
+		CanTakedownLethally = 325,
+		CanTakedownSilently = 326,
+		CanTaunt = 327,
+		CanThrowWeapon = 328,
+		CanUpgradeFromInventory = 329,
+		CanUpgradeToLegendaryQuality = 330,
+		CanUseAntiStun = 331,
+		CanUseBiohazardGrenades = 332,
+		CanUseCloseRing = 333,
+		CanUseCombatStims = 334,
+		CanUseConsumables = 335,
+		CanUseCoolingSystem = 336,
+		CanUseCovers = 337,
+		CanUseCuttingGrenades = 338,
+		CanUseEMPGrenades = 339,
+		CanUseExtremeRing = 340,
+		CanUseFarRing = 341,
+		CanUseFlashbangGrenades = 342,
+		CanUseFragGrenades = 343,
+		CanUseGrenades = 344,
+		CanUseHolographicCamo = 345,
+		CanUseIncendiaryGrenades = 346,
+		CanUseLeftHand = 347,
+		CanUseLegs = 348,
+		CanUseMantisBlades = 349,
+		CanUseMediumRing = 350,
+		CanUseMeleeRing = 351,
+		CanUseNewMeleewareAttackSpyTree = 352,
+		CanUseOpticalCamo = 353,
+		CanUseOverclock = 354,
+		CanUsePainInhibitors = 355,
+		CanUsePersonalSoundSilencer = 356,
+		CanUsePhoneUnderWater = 357,
+		CanUseProjectileLauncher = 358,
+		CanUseReconGrenades = 359,
+		CanUseRetractableShield = 360,
+		CanUseRightHand = 361,
+		CanUseShootingSpots = 362,
+		CanUseSmokeGrenades = 363,
+		CanUseStaticCamo = 364,
+		CanUseStrongArms = 365,
+		CanUseTakedowns = 366,
+		CanUseTerrainCamo = 367,
+		CanUseZoom = 368,
+		CanWalkSilently = 369,
+		CanWallStick = 370,
+		CanWeaponBlock = 371,
+		CanWeaponBlockAttack = 372,
+		CanWeaponComboAttack = 373,
+		CanWeaponCriticallyHit = 374,
+		CanWeaponCrouchAttack = 375,
+		CanWeaponDash = 376,
+		CanWeaponDeflect = 377,
+		CanWeaponIgnoreArmor = 378,
+		CanWeaponInfinitlyCombo = 379,
+		CanWeaponJumpAttack = 380,
+		CanWeaponLeap = 381,
+		CanWeaponMalfunctionQuickHack = 382,
+		CanWeaponReload = 383,
+		CanWeaponReloadWhileInactive = 384,
+		CanWeaponReloadWhileSliding = 385,
+		CanWeaponReloadWhileSprinting = 386,
+		CanWeaponReloadWhileVaulting = 387,
+		CanWeaponSafeAttack = 388,
+		CanWeaponShoot = 389,
+		CanWeaponShootWhileSliding = 390,
+		CanWeaponShootWhileSprinting = 391,
+		CanWeaponShootWhileVaulting = 392,
+		CanWeaponSprintAttack = 393,
+		CanWeaponStrongAttack = 394,
+		CanWeaponTriggerHeadshot = 395,
+		CannotBeDetectedWhileSubmerged = 396,
+		CannotBeHealed = 397,
+		CannotSprintHarass = 398,
+		CapacityBoosterHumanity = 399,
+		CarryCapacity = 400,
+		CarryCapacityModifierHelper = 401,
+		CausingPanicReducesUltimateHacksCost = 402,
+		ChainswordStaminaCostReduction = 403,
+		Charge = 404,
+		ChargeBonus = 405,
+		ChargeDischargeTime = 406,
+		ChargeFullMultiplier = 407,
+		ChargeMaxTimeInChargedState = 408,
+		ChargeMinValueBonus = 409,
+		ChargeMultiplier = 410,
+		ChargeReadyPercentage = 411,
+		ChargeShouldFireWhenReady = 412,
+		ChargeTime = 413,
+		ChemicalDamage = 414,
+		ChemicalDamageAdditiveMultiplier = 415,
+		ChemicalDamageMax = 416,
+		ChemicalDamageMin = 417,
+		ChemicalDamageModifierHelper = 418,
+		ChemicalDamagePercent = 419,
+		ChemicalDamagePercentBonus = 420,
+		ChemicalDamagePercentBonusModifierHelper = 421,
+		ChemicalResistance = 422,
+		ChemicalResistanceModifierHelper = 423,
+		ChimeraModInstalled = 424,
+		ChingadaMadreBonanza = 425,
+		ClimbSpeedModifier = 426,
+		ClipTimesCycle = 427,
+		ClipTimesCycleBase = 428,
+		ClipTimesCyclePlusReload = 429,
+		ClipTimesCyclePlusReloadBase = 430,
+		CloudComputingTraps = 431,
+		ColdBlood = 432,
+		ColdBloodBuffBonus = 433,
+		ColdBloodDurationReductor = 434,
+		ColdBloodMastery = 435,
+		ColdBloodMaxDuration = 436,
+		ColdBloodMaxStacks = 437,
+		ColdBloodTrait01 = 438,
+		CombatHacking = 439,
+		CombatHackingMastery = 440,
+		CommonTierFailsafe = 441,
+		CommsCallDistance = 442,
+		CommsNoiseJamOnQuickhack = 443,
+		ControlledRandomPower = 444,
+		Cool = 445,
+		CoolAllocated = 446,
+		CoolAvailable = 447,
+		CoolSkill = 448,
+		Cool_Inbetween_Right_3_Stacks = 449,
+		CounterattackGuardbreakImmunity = 450,
+		Crafting = 451,
+		CraftingBonusArmorValue = 452,
+		CraftingBonusArmorValue2 = 453,
+		CraftingBonusGrenadeDamage = 454,
+		CraftingBonusWeaponDamage = 455,
+		CraftingBonusWeaponDamage2 = 456,
+		CraftingCostReduction = 457,
+		CraftingItemLevelBoost = 458,
+		CraftingMastery = 459,
+		CraftingMaterialDropChance = 460,
+		CraftingMaterialRandomGrantChance = 461,
+		CraftingMaterialRetrieveChance = 462,
+		CraftingTrait01 = 463,
+		CritChance = 464,
+		CritChanceBonus = 465,
+		CritChanceBonusModifierHelper = 466,
+		CritChanceModifierHelper = 467,
+		CritChanceTimeCritDamage = 468,
+		CritDPSBonus = 469,
+		CritDamage = 470,
+		CritDamageBonus = 471,
+		CritDamageBonusModifierHelper = 472,
+		CritDamageModifierHelper = 473,
+		CrouchSprintStaminaCostReduction = 474,
+		CyberWareMalfunctionBlocked = 475,
+		CyberWareMalfunctionBlockedMaxStacks = 476,
+		CyberWareMalfunctionDoT = 477,
+		CyberdeckOverclockCooldown = 478,
+		CyberdeckOverclockDecayRate = 479,
+		CyberdeckOverclockDecayStartDelay = 480,
+		CyberdeckOverclockDelayOnChange = 481,
+		CyberdeckOverclockDuration = 482,
+		CyberdeckOverclockEmptyStat = 483,
+		CyberdeckOverclockRegenBegins = 484,
+		CyberdeckOverclockRegenEnabled = 485,
+		CyberdeckOverclockRegenEnds = 486,
+		CyberdeckOverclockRegenRate = 487,
+		CyberdeckOverclockStatValue = 488,
+		CyberwareCooldownReduction = 489,
+		CyberwareDurationBuff = 490,
+		CyberwareMalfunctionCanExplode = 491,
+		CyberwareMalfunctionDamageMultiplier = 492,
+		CyberwareMalfunctionStacks = 493,
+		CyberwareRechargeSpeedBonus = 494,
+		CyberwareTinkererStat = 495,
+		CycleTime = 496,
+		CycleTimeAimBlockDuration = 497,
+		CycleTimeAimBlockStart = 498,
+		CycleTimeBase = 499,
+		CycleTimeBonus = 500,
+		CycleTimeDPSComponent = 501,
+		CycleTimeShootingMult = 502,
+		CycleTimeShootingMultPeriod = 503,
+		CycleTime_Burst = 504,
+		CycleTime_BurstMaxCharge = 505,
+		CycleTime_BurstSecondary = 506,
+		CycleTriggerModeTime = 507,
+		DPS = 508,
+		DamageFalloffDisabled = 509,
+		DamageHackSpread = 510,
+		DamageOverTimePercentBonus = 511,
+		DamageOverTimePercentBonusModifierHelper = 512,
+		DamageOverTimeResistance = 513,
+		DamageOverTimeResistanceModifierHelper = 514,
+		DamagePerHit = 515,
+		DamageQuickHackMemoryCostReduction = 516,
+		DamageReduction = 517,
+		DamageReductionBulletExplosion = 518,
+		DamageReductionDamageOverTime = 519,
+		DamageReductionExplosion = 520,
+		DamageReductionMelee = 521,
+		DamageReductionQuickhacks = 522,
+		DashAttackStaminaCostReduction = 523,
+		DataLeakTraps = 524,
+		DealsChemicalDamage = 525,
+		DealsElectricDamage = 526,
+		DealsPhysicalDamage = 527,
+		DealsThermalDamage = 528,
+		Deceleration = 529,
+		DefeatedHeadDamageThreshold = 530,
+		DefeatedLArmDamageThreshold = 531,
+		DefeatedLLegDamageThreshold = 532,
+		DefeatedRArmDamageThreshold = 533,
+		DefeatedRLegDamageThreshold = 534,
+		DefeatingEnemiesReduceHacksCost = 535,
+		Demolition = 536,
+		DemolitionMastery = 537,
+		DemolitionTrait01Stat = 538,
+		Detection = 539,
+		DetectionSpeedDecrease = 540,
+		DeviceMemoryCostReduction = 541,
+		DeviceMemoryCostReductionMult = 542,
+		DisableCyberwareOnBurning = 543,
+		DisassemblingIngredientsDoubleBonus = 544,
+		DisassemblingMaterialQualityObtainChance = 545,
+		DismHeadDamageThreshold = 546,
+		DismLArmDamageThreshold = 547,
+		DismLLegDamageThreshold = 548,
+		DismRArmDamageThreshold = 549,
+		DismRLegDamageThreshold = 550,
+		DoNotCheckFriendlyFireMadnessPassive = 551,
+		DodgeStaminaCostReduction = 552,
+		DodgeStaminaCostReductionModifierHelper = 553,
+		DriverUpdatePerkFlag = 554,
+		DualShotgunStaminaCostReduction = 555,
+		DummyModCritDamage = 556,
+		DummyResistanceStat = 557,
+		Durability = 558,
+		DurationBonusBleeding = 559,
+		DurationBonusBurning = 560,
+		DurationBonusControlQuickhack = 561,
+		DurationBonusCovertQuickhack = 562,
+		DurationBonusElectrified = 563,
+		DurationBonusOverclock = 564,
+		DurationBonusPoisoned = 565,
+		DurationBonusQuickhack = 566,
+		DurationBonusQuickhackModifierHelper = 567,
+		DurationBonusStun = 568,
+		DurationReductionDot = 569,
+		EMPImmunity = 570,
+		EdgerunnerHealthReduction = 571,
+		EffectiveChargeTime = 572,
+		EffectiveDPS = 573,
+		EffectiveDamagePerHit = 574,
+		EffectiveDamagePerHitMax = 575,
+		EffectiveDamagePerHitMin = 576,
+		EffectiveDamagePerHitTimesAttacksPerSecond = 577,
+		EffectiveQualityToMaxQualityRatio = 578,
+		EffectiveRange = 579,
+		EffectiveRangeBonus = 580,
+		EffectiveTier = 581,
+		EffectorChance = 582,
+		ElectricDamage = 583,
+		ElectricDamageAdditiveMultiplier = 584,
+		ElectricDamageMax = 585,
+		ElectricDamageMin = 586,
+		ElectricDamageModifierHelper = 587,
+		ElectricDamagePercent = 588,
+		ElectricDamagePercentBonus = 589,
+		ElectricDamagePercentBonusModifierHelper = 590,
+		ElectricResistance = 591,
+		ElectricResistanceModifierHelper = 592,
+		ElectrocuteImmunity = 593,
+		ElectrocutedApplicationRate = 594,
+		ElectrocutedApplicationRateModifierHelper = 595,
+		ElectroshockMechanismProcChance = 596,
+		ElementalDamagePerHit = 597,
+		ElementalResistanceMultiplier = 598,
+		EmptyReloadEndTime = 599,
+		EmptyReloadTime = 600,
+		EmptySlot_GenerationWeight_On_TierPlus = 601,
+		EmptyStat = 602,
+		EnemyChemicalResistanceReduction = 603,
+		EnemyQuickHackUploadDurationBonus = 604,
+		Engineering = 605,
+		EngineeringMastery = 606,
+		EngineeringTrait01 = 607,
+		EquipActionDuration_Corpo = 608,
+		EquipActionDuration_Gang = 609,
+		EquipAnimationDuration_Corpo = 610,
+		EquipAnimationDuration_Gang = 611,
+		EquipDuration = 612,
+		EquipDuration_First = 613,
+		EquipItemTime_Corpo = 614,
+		EquipItemTime_Gang = 615,
+		Espionage = 616,
+		EvadeImpulse = 617,
+		Evasion = 618,
+		ExecuteDismemberByHealthChance = 619,
+		ExecuteDismemberProximityChance = 620,
+		ExhaustionImmunity = 621,
+		ExplosionDamagePercentBonus = 622,
+		ExplosionDamagePercentBonusModifierHelper = 623,
+		ExplosionKillsRecudeUltimateHacksCost = 624,
+		ExplosionResistance = 625,
+		ExplosionResistanceModifierHelper = 626,
+		ExtendedStealthDuration = 627,
+		FFInputLock = 628,
+		FallDamageReduction = 629,
+		FearOnQuickHackKill = 630,
+		FinisherHealthThresholdIncrease = 631,
+		FinisherHealthThresholdIncreaseForQueue = 632,
+		FinisherIsAvailable = 633,
+		Finisher_TargetHealthMax_Clamp = 634,
+		FirePower = 635,
+		FirePowerBonus = 636,
+		FirstHackInQueueUploadTimeDecrease = 637,
+		FirstHackOfTypeInQueueRAMDecrease = 638,
+		FistsStaminaCostReduction = 639,
+		FocusedGrenadeShootingPerk = 640,
+		ForcePreventResurrect = 641,
+		ForceQualityHelper = 642,
+		FullAutoOnFullCharge = 643,
+		FullAutoStaminaCostPenalty = 644,
+		FullyChargedThreshold = 645,
+		GearheadDamageMultiplier = 646,
+		GenericMod1_Damage = 647,
+		GenericStatPrereqValue = 648,
+		GrenadeDamagePercentBonus = 649,
+		GrenadeDamagePercentBonusModifierHelper = 650,
+		GrenadeExplosionBonusDamage = 651,
+		GrenadeExplosionBonusRange = 652,
+		GrenadesCharges = 653,
+		GrenadesChargesDecayStartDelay = 654,
+		GrenadesChargesDelayOnChange = 655,
+		GrenadesChargesRegenBegins = 656,
+		GrenadesChargesRegenEnabled = 657,
+		GrenadesChargesRegenEnds = 658,
+		GrenadesChargesRegenMult = 659,
+		GrenadesChargesRegenMultModifierHelper = 660,
+		GrenadesChargesRegenRate = 661,
+		GrenadesMaxCharges = 662,
+		GrenadesRechargeDuration = 663,
+		GroundSlamCooldownModifier = 664,
+		Gunslinger = 665,
+		GunslingerMastery = 666,
+		GunslingerTrait01Stat = 667,
+		HGMod1_Accuracy = 668,
+		HGMod1_CommonStacks = 669,
+		HGMod1_EpicStacks = 670,
+		HGMod1_LegendaryStacks = 671,
+		HGMod1_ModCount = 672,
+		HGMod1_RareStacks = 673,
+		HGMod1_StackCount = 674,
+		HGMod1_UncommonStacks = 675,
+		HGMod2_CritChance = 676,
+		HGMod2_Spread = 677,
+		HGMod2_Swap = 678,
+		HGMod3_Sway = 679,
+		HackRevealPositionModifier = 680,
+		HackedEnemiesGetDamagedByFriendlyFire = 681,
+		HackedEnemyArmorReduction = 682,
+		Hacking = 683,
+		HackingMastery = 684,
+		HackingPenetration = 685,
+		HackingResistance = 686,
+		HackingResistanceUltimate = 687,
+		HandgunStaminaCostReduction = 688,
+		Handling = 689,
+		HasAdditionalSplinterSlot = 690,
+		HasAheadTargeting = 691,
+		HasAirHover = 692,
+		HasAirThrusters = 693,
+		HasAutoReloader = 694,
+		HasAutomaticReplenishment = 695,
+		HasAutomaticTagging = 696,
+		HasBerserk = 697,
+		HasBleedImmunity = 698,
+		HasBlindImmunity = 699,
+		HasBoostedCortex = 700,
+		HasBurningBuffs = 701,
+		HasCameraLinking = 702,
+		HasChargeJump = 703,
+		HasCritImmunity = 704,
+		HasCyberdeck = 705,
+		HasCybereye = 706,
+		HasDodge = 707,
+		HasDodgeAir = 708,
+		HasDoubleJump = 709,
+		HasElectricCoating = 710,
+		HasElectroPlating = 711,
+		HasExtendedHitReactionImmunity = 712,
+		HasFireproofSkin = 713,
+		HasGPS = 714,
+		HasGlowingTattoos = 715,
+		HasGraphiteTissue = 716,
+		HasGrenadeHack = 717,
+		HasHackingInteractions = 718,
+		HasHealingReapplication = 719,
+		HasHealthMonitorBomb = 720,
+		HasHostileHackImmunity = 721,
+		HasICELevelBooster = 722,
+		HasImmunityToNPCQuickhacks = 723,
+		HasInfravision = 724,
+		HasJuiceInjector = 725,
+		HasKerenzikov = 726,
+		HasKerenzikovOmen = 727,
+		HasKerenzikovSlide = 728,
+		HasKers = 729,
+		HasKiroshiOpticsFragment = 730,
+		HasKnifeSharpener = 731,
+		HasLinkToBountySystem = 732,
+		HasLoweringPerception = 733,
+		HasMadnessLvl4Passive = 734,
+		HasMajorQuickhackResistance = 735,
+		HasMechanicalControl = 736,
+		HasMeleeHitReactionAndTakedownResistance = 737,
+		HasMeleeTargeting = 738,
+		HasMetabolicEnhancer = 739,
+		HasMuzzleBrake = 740,
+		HasOpticalCamoEpic = 741,
+		HasOpticalCamoLegendary = 742,
+		HasOpticalCamoRare = 743,
+		HasPlatingGlitch = 744,
+		HasPoisonHeal = 745,
+		HasPoisonImmunity = 746,
+		HasPowerGrip = 747,
+		HasQuickhackResistance = 748,
+		HasRemoteBotAccessPointBreach = 749,
+		HasSandevistan = 750,
+		HasSandevistanTier1 = 751,
+		HasSandevistanTier2 = 752,
+		HasSandevistanTier3 = 753,
+		HasSecondHeart = 754,
+		HasSelfHealingSkin = 755,
+		HasSmartLink = 756,
+		HasSpiderBotControl = 757,
+		HasStunImmunity = 758,
+		HasSubdermalArmor = 759,
+		HasSuperheroFall = 760,
+		HasSystemCollapse = 761,
+		HasThermovision = 762,
+		HasTimedImmunity = 763,
+		HasToxicCleanser = 764,
+		HasWallRunSkill = 765,
+		HeadshotCritChance = 766,
+		HeadshotDamageMultiplier = 767,
+		HeadshotDamageMultiplierModifierHelper = 768,
+		HeadshotImmunity = 769,
+		HealOnKillingBleedingTarget = 770,
+		HealOnKillingBleedingTargetModifierHelper = 771,
+		HealingItemMaxCharges = 772,
+		HealingItemsCharges = 773,
+		HealingItemsChargesDecayStartDelay = 774,
+		HealingItemsChargesDelayOnChange = 775,
+		HealingItemsChargesRegenBegins = 776,
+		HealingItemsChargesRegenEnabled = 777,
+		HealingItemsChargesRegenEnds = 778,
+		HealingItemsChargesRegenMult = 779,
+		HealingItemsChargesRegenMultModifierHelper = 780,
+		HealingItemsChargesRegenRate = 781,
+		HealingItemsEffectPercentBonus = 782,
+		HealingItemsEffectPercentBonusModifierHelper = 783,
+		HealingItemsRechargeDuration = 784,
+		Health = 785,
+		HealthBonusBlackmarket = 786,
+		HealthGeneralRegenRateAdd = 787,
+		HealthGeneralRegenRateAddModifierHelper = 788,
+		HealthGeneralRegenRateMult = 789,
+		HealthGeneralRegenRateMultModifierHelper = 790,
+		HealthInCombatRegenDelayOnChange = 791,
+		HealthInCombatRegenEnabled = 792,
+		HealthInCombatRegenEndThreshold = 793,
+		HealthInCombatRegenRate = 794,
+		HealthInCombatRegenRateAdd = 795,
+		HealthInCombatRegenRateBase = 796,
+		HealthInCombatRegenRateMult = 797,
+		HealthInCombatRegenStartThreshold = 798,
+		HealthInCombatStartDelay = 799,
+		HealthModifierHelper = 800,
+		HealthOutOfCombatRegenDelayOnChange = 801,
+		HealthOutOfCombatRegenEnabled = 802,
+		HealthOutOfCombatRegenEndThreshold = 803,
+		HealthOutOfCombatRegenRate = 804,
+		HealthOutOfCombatRegenRateAdd = 805,
+		HealthOutOfCombatRegenRateBase = 806,
+		HealthOutOfCombatRegenRateMult = 807,
+		HealthOutOfCombatRegenStartThreshold = 808,
+		HealthRegainOnKill = 809,
+		HealthRegainOnKillModifierHelper = 810,
+		Hearing = 811,
+		HeavyAttacksNumber = 812,
+		HiddenSlot_GenerationWeight_On_TierPlus = 813,
+		HighlightAccessPoint = 814,
+		HitDismembermentFactor = 815,
+		HitReactionDamageHealthFactor = 816,
+		HitReactionFactor = 817,
+		HitShapeArmor = 818,
+		HitTimerAfterDefeated = 819,
+		HitTimerAfterImpact = 820,
+		HitTimerAfterImpactMelee = 821,
+		HitTimerAfterKnockdown = 822,
+		HitTimerAfterPain = 823,
+		HitTimerAfterStagger = 824,
+		HitTimerAfterStaggerMelee = 825,
+		HitWoundsFactor = 826,
+		HoldDuration = 827,
+		HoldEnterDuration = 828,
+		HoldTimeoutDuration = 829,
+		HolographicSkinCooldownDuration = 830,
+		HolographicSkinDuration = 831,
+		HousingBuffsDurationBonus = 832,
+		Humanity = 833,
+		HumanityAllocated = 834,
+		HumanityAvailable = 835,
+		HumanityOverallocated = 836,
+		HumanityOverallocationPossible = 837,
+		HumanityTotalMaxValue = 838,
+		IconicCWFromTreasureChestLooted = 839,
+		IconicItemUpgraded = 840,
+		IconicJointLockCover = 841,
+		IgnoreAwarenessCostWhenOverclocked = 842,
+		ImpactDamageThreshold = 843,
+		ImpactDamageThresholdImpulse = 844,
+		ImpactDamageThresholdInCover = 845,
+		InVehicleDamageTakenPercent = 846,
+		InhalerBaseHealing = 847,
+		InjectorBaseHealing = 848,
+		InjectorBaseOverTheTimeHealing = 849,
+		InjectorHealingDecayStartDelay = 850,
+		InjectorHealingDelayOnChange = 851,
+		InjectorHealingRegenBegins = 852,
+		InjectorHealingRegenEnabled = 853,
+		InjectorHealingRegenEnds = 854,
+		Intelligence = 855,
+		IntelligenceAllocated = 856,
+		IntelligenceAvailable = 857,
+		IntelligenceSkill = 858,
+		IntelligenceSkillcheckBonus = 859,
+		IntrinsicQuickHackUploadBonus = 860,
+		IntrinsicReloadTimeBonus = 861,
+		IntrinsicZoomLevelBonus = 862,
+		IsAVMaxTac = 863,
+		IsAggressive = 864,
+		IsAimingWithWeapon = 865,
+		IsBalanced = 866,
+		IsBlocking = 867,
+		IsCautious = 868,
+		IsCrowd = 869,
+		IsDefensive = 870,
+		IsDeflecting = 871,
+		IsDodgeStaminaFree = 872,
+		IsDodging = 873,
+		IsExcludedFromExtraHealingOnHigherDifficulties = 874,
+		IsExo = 875,
+		IsFastMeleeArchetype = 876,
+		IsFastRangedArchetype = 877,
+		IsGenericMeleeArchetype = 878,
+		IsGenericRangedArchetype = 879,
+		IsHealingItemEquipped = 880,
+		IsHeavyRangedArchetype = 881,
+		IsIgnoredByEnemyNPC = 882,
+		IsInvulnerable = 883,
+		IsItemBroken = 884,
+		IsItemCracked = 885,
+		IsItemCrafted = 886,
+		IsItemIconic = 887,
+		IsItemPlus = 888,
+		IsItemUpgraded = 889,
+		IsMainBoss = 890,
+		IsManBig = 891,
+		IsManMassive = 892,
+		IsMechanical = 893,
+		IsNetrunnerArchetype = 894,
+		IsNotSlowedDuringADS = 895,
+		IsNotSlowedDuringBlock = 896,
+		IsNotSlowedDuringReload = 897,
+		IsPlayerGuardian = 898,
+		IsReckless = 899,
+		IsShotgunnerArchetype = 900,
+		IsSniperArchetype = 901,
+		IsSprintStaminaFree = 902,
+		IsStrongMeleeArchetype = 903,
+		IsTechieArchetype = 904,
+		IsTier1Archetype = 905,
+		IsTier2Archetype = 906,
+		IsTier3Archetype = 907,
+		IsTier4Archetype = 908,
+		IsWeakspot = 909,
+		IsWeaponLethal = 910,
+		ItemArmor = 911,
+		ItemArmorModifierHelper = 912,
+		ItemLevel = 913,
+		ItemPlusDPS = 914,
+		ItemPurchasedAtVendor = 915,
+		ItemRequiresElectroPlating = 916,
+		ItemRequiresPowerGrip = 917,
+		ItemRequiresSmartLink = 918,
+		JenkinsHelper = 919,
+		JenkinsHelperDecayEnabled = 920,
+		JenkinsHelperDecayPerSecond = 921,
+		JenkinsHelperEmptyStat = 922,
+		JenkinsHelperRegenEnabled = 923,
+		JenkinsHelperRegenPerSecond = 924,
+		JumpHeight = 925,
+		JumpSpeedModifier = 926,
+		KatanaStaminaCostReduction = 927,
+		Kenjutsu = 928,
+		KenjutsuMastery = 929,
+		KenjutsuTrait01Stat = 930,
+		KerenzikovCooldownDuration = 931,
+		KiroshiMaxZoomLevel = 932,
+		KiroshiPierceScanAngle = 933,
+		KiroshiPierceScanRange = 934,
+		KnifeStaminaCostReduction = 935,
+		KnockdownDamageThreshold = 936,
+		KnockdownDamageThresholdImpulse = 937,
+		KnockdownDamageThresholdInCover = 938,
+		KnockdownImmunity = 939,
+		KnockdownImpulse = 940,
+		Level = 941,
+		Liberty_Padre_BurningApplicationRate = 942,
+		LightMachinegunStaminaCostReduction = 943,
+		LimbHealth = 944,
+		LinearDirectionUpdateMax = 945,
+		LinearDirectionUpdateMaxADS = 946,
+		LinearDirectionUpdateMin = 947,
+		LinearDirectionUpdateMinADS = 948,
+		LocomotionExperienceReward = 949,
+		LocomotionPenaltyDisabled = 950,
+		LootLevel = 951,
+		LowerActiveCooldownOnDefeat = 952,
+		LowerHackingResistanceOnHack = 953,
+		MacheteStaminaCostReduction = 954,
+		MagazineAutoRefill = 955,
+		MagazineCapacity = 956,
+		MagazineCapacityBase = 957,
+		MagazineCapacityBonus = 958,
+		MagazineCapacityDPSComponent = 959,
+		ManiacPerkBonusSpeed = 960,
+		ManiacStatCounter = 961,
+		MantisBladesStaminaCostReduction = 962,
+		MaxDuration = 963,
+		MaxPercentDamageTakenPerHit = 964,
+		MaxQuality = 965,
+		MaxQualityWhenLooted = 966,
+		MaxSpeed = 967,
+		MaxSpeedModifierHelper = 968,
+		MaxStacks = 969,
+		MaxStacksBonusBleeding = 970,
+		MaxStacksBonusBurning = 971,
+		MaximumRange = 972,
+		MechResistance = 973,
+		MechResistanceModifierHelper = 974,
+		MechanicalsBuffDPSBonus = 975,
+		MeleeAttackComboDuration = 976,
+		MeleeAttackDuration = 977,
+		MeleeBorgStaminaDrain = 978,
+		MeleeDamagePercentBonus = 979,
+		MeleeDamagePercentBonusModifierHelper = 980,
+		MeleeMod1_CritChance = 981,
+		MeleeMod1_CritDamage = 982,
+		MeleeMod2_Duration = 983,
+		MeleeMod2_Stacks = 984,
+		MeleeMod3_CritChance = 985,
+		MeleeMod3_CritDamage = 986,
+		MeleeProjectileGravitySimulationMultiplier = 987,
+		MeleeResistance = 988,
+		MeleeResistanceModifierHelper = 989,
+		Memory = 990,
+		MemoryCostModifier = 991,
+		MemoryCostReduction = 992,
+		MemoryRegenBonusBlackmarket = 993,
+		MemoryRegenDelayOnChange = 994,
+		MemoryRegenEnabled = 995,
+		MemoryRegenEndThreshold = 996,
+		MemoryRegenRate = 997,
+		MemoryRegenRateAdd = 998,
+		MemoryRegenRateBase = 999,
+		MemoryRegenRateMult = 1000,
+		MemoryRegenStartThreshold = 1001,
+		MemoryStartDelay = 1002,
+		MemoryTrackerCooldownDuration = 1003,
+		MemoryWipeImmunity = 1004,
+		MicroGeneratorExplosionDamage = 1005,
+		MinCharge = 1006,
+		MinSpeed = 1007,
+		MinigameBufferExtension = 1008,
+		MinigameMaterialsEarned = 1009,
+		MinigameMemoryRegenPerk = 1010,
+		MinigameMoneyMultiplier = 1011,
+		MinigameNextInstanceBufferExtensionPerk = 1012,
+		MinigameShardChanceMultiplier = 1013,
+		MinigameTimeLimitExtension = 1014,
+		MinigameTrapsPossibilityChance = 1015,
+		MitigationChance = 1016,
+		MitigationChanceModifierHelper = 1017,
+		MitigationStrength = 1018,
+		MitigationStrengthModifierHelper = 1019,
+		ModifierPower = 1020,
+		ModifierPowerBase = 1021,
+		ModsAmountInGenerationPool = 1022,
+		MonoWiresStaminaCostReduction = 1023,
+		MultiKill_Counter = 1024,
+		MuzzleBreakRicochetBonus = 1025,
+		NPCAnimationTime = 1026,
+		NPCCorpoEquipItemDuration = 1027,
+		NPCCorpoUnequipItemDuration = 1028,
+		NPCDamage = 1029,
+		NPCDoTDPS = 1030,
+		NPCEquipItemDuration = 1031,
+		NPCGangEquipItemDuration = 1032,
+		NPCGangUnequipItemDuration = 1033,
+		NPCLoopDuration = 1034,
+		NPCRarity = 1035,
+		NPCRecoverDuration = 1036,
+		NPCStartupDuration = 1037,
+		NPCThrowImmunity = 1038,
+		NPCUnequipItemDuration = 1039,
+		NPCUploadTime = 1040,
+		NPCWeaponDropHelper = 1041,
+		NPCWeaponDropRandomizer = 1042,
+		NewPerkFinisherBlunt_TargetDistanceMax = 1043,
+		NewPerkFinisherBlunt_TargetHealthMax = 1044,
+		NewPerkFinisherCool_TargetDistanceMax = 1045,
+		NewPerkFinisherCool_TargetHealthMax = 1046,
+		NewPerkFinisherMonowire_TargetDistanceMax = 1047,
+		NewPerkFinisherMonowire_TargetHealthMax = 1048,
+		NewPerkFinisherReflexes_TargetDistanceMax = 1049,
+		NewPerkFinisherReflexes_TargetHealthMax = 1050,
+		NoJam = 1051,
+		NumShotsInBurst = 1052,
+		NumShotsInBurstMaxCharge = 1053,
+		NumShotsInBurstSecondary = 1054,
+		NumShotsToFire = 1055,
+		NumberIgnoredTraps = 1056,
+		OccupiedSlot_GenerationWeight_On_TierPlus = 1057,
+		OnBikeDamageTakenPercent = 1058,
+		OnBikeDamageTakenPercentMaxSpeed = 1059,
+		OnBikeDamageTakenPercentMinSpeed = 1060,
+		OnRevealHackProgressIncrement = 1061,
+		OneHandBladeStaminaCostReduction = 1062,
+		OneHandBluntStaminaCostReduction = 1063,
+		OpticalCamoCharges = 1064,
+		OpticalCamoChargesDecayRate = 1065,
+		OpticalCamoChargesDecayRateMult = 1066,
+		OpticalCamoChargesDecayStartDelay = 1067,
+		OpticalCamoChargesDelayOnChange = 1068,
+		OpticalCamoChargesRegenBegins = 1069,
+		OpticalCamoChargesRegenEnabled = 1070,
+		OpticalCamoChargesRegenEnds = 1071,
+		OpticalCamoChargesRegenRate = 1072,
+		OpticalCamoDuration = 1073,
+		OpticalCamoEmptyStat = 1074,
+		OpticalCamoIsActive = 1075,
+		OpticalCamoRechargeDuration = 1076,
+		OverchargeThreshold = 1077,
+		OverclockSpreadChance = 1078,
+		OverclockedStateHealthCost = 1079,
+		Overheat = 1080,
+		OverheatDurationIncrease = 1081,
+		Overshield = 1082,
+		OvershieldDecayDelayOnChange = 1083,
+		OvershieldDecayEnabled = 1084,
+		OvershieldDecayEndThrehold = 1085,
+		OvershieldDecayRate = 1086,
+		OvershieldDecayStartDelay = 1087,
+		OvershieldDecayStartThreshold = 1088,
+		OvershieldDelayOnChange = 1089,
+		OvershieldGainedToHealAmountMultiplier = 1090,
+		Oxygen = 1091,
+		PRSRMod2_CommonCount = 1092,
+		PRSRMod2_CommonStacks = 1093,
+		PRSRMod2_EpicCount = 1094,
+		PRSRMod2_EpicStacks = 1095,
+		PRSRMod2_Handling = 1096,
+		PRSRMod2_KillCount = 1097,
+		PRSRMod2_LegendaryCount = 1098,
+		PRSRMod2_LegendaryStacks = 1099,
+		PRSRMod2_RareCount = 1100,
+		PRSRMod2_RareStacks = 1101,
+		PRSRMod2_Stacks = 1102,
+		PRSRMod2_UncommonCount = 1103,
+		PRSRMod2_UncommonStacks = 1104,
+		PainEditorDamageReduction = 1105,
+		PartArmor = 1106,
+		PenetrationHealth = 1107,
+		PercentDamageReductionFromPoisonedEnemies = 1108,
+		PercentDamageReductionFromPoisonedEnemiesModifierHelper = 1109,
+		PerfectChargeWindow = 1110,
+		PersonalityAggressive = 1111,
+		PersonalityCuriosity = 1112,
+		PersonalityDisgust = 1113,
+		PersonalityFear = 1114,
+		PersonalityFunny = 1115,
+		PersonalityJoy = 1116,
+		PersonalitySad = 1117,
+		PersonalityShock = 1118,
+		PersonalitySurprise = 1119,
+		PhoneCallDuration = 1120,
+		PhysicalDamage = 1121,
+		PhysicalDamageAdditiveMultiplier = 1122,
+		PhysicalDamageMax = 1123,
+		PhysicalDamageMin = 1124,
+		PhysicalDamageModifierHelper = 1125,
+		PhysicalDamagePercent = 1126,
+		PhysicalImpulse = 1127,
+		PhysicalResistance = 1128,
+		PlayerCorruptedSandevistanChargesDecayEnabled = 1129,
+		PlayerOnRevealHackProgressMultiplier = 1130,
+		PlayerSandevistanChargesDecayEnabled = 1131,
+		PlayerSandevistanChargesDecayPerSecond = 1132,
+		PlayerSandevistanChargesEmptyStat = 1133,
+		Poise = 1134,
+		PoisonImmunity = 1135,
+		PoisonRegenHealth = 1136,
+		PoisonedApplicationRate = 1137,
+		PoisonedApplicationRateModifierHelper = 1138,
+		PostLexWilsonBuyPrice = 1139,
+		PostTutorialCyberwarePrice = 1140,
+		PowerLevel = 1141,
+		PowerMod1_DamageConvert = 1142,
+		PowerMod2_StaminaCost = 1143,
+		PreFireTime = 1144,
+		PrecisionRifleStaminaCostReduction = 1145,
+		PrefersCovers = 1146,
+		PrefersShootingSpots = 1147,
+		PreventQuickhackStaggerDuration = 1148,
+		PreventQuickhacking = 1149,
+		Price = 1150,
+		ProjectileLauncherCharges = 1151,
+		ProjectileLauncherChargesDecayStartDelay = 1152,
+		ProjectileLauncherChargesDelayOnChange = 1153,
+		ProjectileLauncherChargesRegenBegins = 1154,
+		ProjectileLauncherChargesRegenEnds = 1155,
+		ProjectileLauncherChargesRegenMult = 1156,
+		ProjectileLauncherChargesRegenRate = 1157,
+		ProjectileLauncherMaxCharges = 1158,
+		ProjectileLauncherQualityMult = 1159,
+		ProjectileLauncherRechargeDuration = 1160,
+		ProjectileLauncherRegenEnabled = 1161,
+		ProjectilesPerShot = 1162,
+		ProjectilesPerShotBase = 1163,
+		ProjectilesPerShotBonus = 1164,
+		Protection = 1165,
+		Quality = 1166,
+		QualityRequirementMetFlag = 1167,
+		QualityToMaxQualityRatio = 1168,
+		Quantity = 1169,
+		QuickHackBlackWallSpreadNumber = 1170,
+		QuickHackBlindSpreadNumber = 1171,
+		QuickHackContagionSpreadNumber = 1172,
+		QuickHackCritChance = 1173,
+		QuickHackDuration = 1174,
+		QuickHackDurationExtension = 1175,
+		QuickHackEffectsApplied = 1176,
+		QuickHackImmunity = 1177,
+		QuickHackOverclockSpreadNumber = 1178,
+		QuickHackQueueCount = 1179,
+		QuickHackQueueSize = 1180,
+		QuickHackQueueUploadTimeDecrease = 1181,
+		QuickHackResistancesMod = 1182,
+		QuickHackSpreadDistance = 1183,
+		QuickHackSpreadDistanceIncrease = 1184,
+		QuickHackSpreadNumber = 1185,
+		QuickHackSuddenDeathChance = 1186,
+		QuickHackUpload = 1187,
+		QuickHackUploadTimeDecrease = 1188,
+		QuickhackDamageBonusMultiplier = 1189,
+		QuickhackDamageOverTimeBonusMultiplier = 1190,
+		QuickhackExtraDamageMultiplier = 1191,
+		QuickhackResistance = 1192,
+		QuickhackResistanceModifierHelper = 1193,
+		QuickhackShield = 1194,
+		QuickhacksCooldownReduction = 1195,
+		QuickhacksCooldownReductionModifierHelper = 1196,
+		RamManagerCooldownReduction = 1197,
+		RamOnKill = 1198,
+		RamOnKillModifierHelper = 1199,
+		RandomCurveInput = 1200,
+		Range = 1201,
+		RangedMod1_CritChance = 1202,
+		Recoil = 1203,
+		RecoilAllowSway = 1204,
+		RecoilAlternateDir = 1205,
+		RecoilAlternateDirADS = 1206,
+		RecoilAngle = 1207,
+		RecoilAngleADS = 1208,
+		RecoilAngleReduction = 1209,
+		RecoilAnimation = 1210,
+		RecoilChargeMult = 1211,
+		RecoilChargeMultADS = 1212,
+		RecoilCycleSize = 1213,
+		RecoilCycleSizeADS = 1214,
+		RecoilCycleTime = 1215,
+		RecoilCycleTimeADS = 1216,
+		RecoilDelay = 1217,
+		RecoilDir = 1218,
+		RecoilDirADS = 1219,
+		RecoilDirPlanCycleRandDir = 1220,
+		RecoilDirPlanCycleRandDirADS = 1221,
+		RecoilDirPlanCycleRandRangeDir = 1222,
+		RecoilDirPlanCycleRandRangeDirADS = 1223,
+		RecoilDirPlanSequence = 1224,
+		RecoilDirPlanSequenceADS = 1225,
+		RecoilDirReduction = 1226,
+		RecoilDriftRandomRangeMax = 1227,
+		RecoilDriftRandomRangeMin = 1228,
+		RecoilEnableCycleX = 1229,
+		RecoilEnableCycleXADS = 1230,
+		RecoilEnableCycleY = 1231,
+		RecoilEnableCycleYADS = 1232,
+		RecoilEnableLinearX = 1233,
+		RecoilEnableLinearXADS = 1234,
+		RecoilEnableLinearY = 1235,
+		RecoilEnableLinearYADS = 1236,
+		RecoilEnableScaleX = 1237,
+		RecoilEnableScaleXADS = 1238,
+		RecoilEnableScaleY = 1239,
+		RecoilEnableScaleYADS = 1240,
+		RecoilFullChargeMult = 1241,
+		RecoilFullChargeMultADS = 1242,
+		RecoilHoldDuration = 1243,
+		RecoilHoldDurationADS = 1244,
+		RecoilKickMax = 1245,
+		RecoilKickMaxADS = 1246,
+		RecoilKickMin = 1247,
+		RecoilKickMinADS = 1248,
+		RecoilKickReduction = 1249,
+		RecoilMagForFullDrift = 1250,
+		RecoilMaxLength = 1251,
+		RecoilMaxLengthADS = 1252,
+		RecoilPercentBonus = 1253,
+		RecoilPercentBonusModifierHelper = 1254,
+		RecoilRecoveryMinSpeed = 1255,
+		RecoilRecoveryMinSpeedADS = 1256,
+		RecoilRecoverySpeed = 1257,
+		RecoilRecoverySpeedADS = 1258,
+		RecoilRecoveryTime = 1259,
+		RecoilRecoveryTimeADS = 1260,
+		RecoilScaleMax = 1261,
+		RecoilScaleMaxADS = 1262,
+		RecoilScaleTime = 1263,
+		RecoilScaleTimeADS = 1264,
+		RecoilSpeed = 1265,
+		RecoilSpeedADS = 1266,
+		RecoilTime = 1267,
+		RecoilTimeADS = 1268,
+		RecoilUseDifferentStatsInADS = 1269,
+		Reflexes = 1270,
+		ReflexesAllocated = 1271,
+		ReflexesAvailable = 1272,
+		ReflexesSkill = 1273,
+		Reflexes_Left_Milestone_3_Stack = 1274,
+		Reflexes_Left_Milestone_3_StackDecrease = 1275,
+		Reflexes_Left_Milestone_3_StackIncrease = 1276,
+		Reflexes_Right_Milestone_2_StaminaDeflectPerc = 1277,
+		Reflexes_Right_Milestone_2_StaminaReduction = 1278,
+		RefreshesPingOnQuickhack = 1279,
+		RegenerateHPMinigamePerk = 1280,
+		ReloadAmount = 1281,
+		ReloadEndTime = 1282,
+		ReloadEndTimeBase = 1283,
+		ReloadSpeedPercentBonus = 1284,
+		ReloadSpeedPercentBonusModifierHelper = 1285,
+		ReloadTime = 1286,
+		ReloadTimeBase = 1287,
+		ReloadTimeBonus = 1288,
+		ReloadTimeDPSComponent = 1289,
+		ReloadTimeExhaustionPenalty = 1290,
+		RemoveAllStacksWhenDurationEnds = 1291,
+		RemoveColdBloodStacksOneByOne = 1292,
+		RemoveSprintOnQuickhack = 1293,
+		ReprimandEscalation = 1294,
+		RestoreMemoryOnDefeat = 1295,
+		RevealNetrunnerWhenHacked = 1296,
+		RevealPositionMaxDistance = 1297,
+		RevolverStaminaCostReduction = 1298,
+		RicochetChance = 1299,
+		RicochetCount = 1300,
+		RicochetMaxAngle = 1301,
+		RicochetMinAngle = 1302,
+		RicochetTargetSearchAngle = 1303,
+		RoadWarriorDamageMultiplier = 1304,
+		RollForPlusBelowMaxQuality = 1305,
+		RollForPlusOnMaxQuality = 1306,
+		SEApplicationRateBasedOnWeaponCharge = 1307,
+		SandevistanChargesDecayDelayOnChange = 1308,
+		SandevistanChargesDecayStartDelay = 1309,
+		SandevistanChargesRegenBegins = 1310,
+		SandevistanChargesRegenDelayOnChange = 1311,
+		SandevistanChargesRegenEnabled = 1312,
+		SandevistanChargesRegenEnds = 1313,
+		SandevistanChargesRegenStartDelay = 1314,
+		SandevistanDashShoot = 1315,
+		SandevistanKillRechargeValue = 1316,
+		SandevistanRechargeDuration = 1317,
+		SasquatchStaminaDrain = 1318,
+		ScalingBlocked = 1319,
+		ScanDepth = 1320,
+		ScanTimeReduction = 1321,
+		ScopeFOV = 1322,
+		ScopeOffset = 1323,
+		ScrapItemChance = 1324,
+		SecondHeartCooldownDuration = 1325,
+		SecondaryModifiersAdditiveMultiplier = 1326,
+		SharedCacheTraps = 1327,
+		ShinyWeaponRoll = 1328,
+		ShootingOffsetAI = 1329,
+		ShortCircuitOnCriticalHit = 1330,
+		ShortDistanceDamageIncrease = 1331,
+		ShorterChains = 1332,
+		ShotDelay = 1333,
+		ShotgunMod1_BuffDuration = 1334,
+		ShotgunMod1_DismemberBonus = 1335,
+		ShotgunMod1_ModCount = 1336,
+		ShotgunMod2_BulletCountLeftLeg = 1337,
+		ShotgunMod2_BulletCountRightLeg = 1338,
+		ShotgunMod2_ModCount = 1339,
+		ShotgunMod3_Spread = 1340,
+		ShotgunStaminaCostReduction = 1341,
+		ShouldIgnoreSmartUI = 1342,
+		SimpleWeaponMod04 = 1343,
+		SkillBookExperience = 1344,
+		SlideWhenLeaningOutOfCover = 1345,
+		SmartGunAddSpiralTrajectory = 1346,
+		SmartGunAdsLockingAnglePitch = 1347,
+		SmartGunAdsLockingAngleYaw = 1348,
+		SmartGunAdsMaxLockedTargets = 1349,
+		SmartGunAdsTagLockAnglePitch = 1350,
+		SmartGunAdsTagLockAngleYaw = 1351,
+		SmartGunAdsTargetableAnglePitch = 1352,
+		SmartGunAdsTargetableAngleYaw = 1353,
+		SmartGunAdsTimeToLock = 1354,
+		SmartGunAdsTimeToUnlock = 1355,
+		SmartGunContinousLockEnabled = 1356,
+		SmartGunDisableOnReload = 1357,
+		SmartGunEvenDistributionPeriod = 1358,
+		SmartGunHipLockingAnglePitch = 1359,
+		SmartGunHipLockingAngleYaw = 1360,
+		SmartGunHipMaxLockedTargets = 1361,
+		SmartGunHipTagLockAnglePitch = 1362,
+		SmartGunHipTagLockAngleYaw = 1363,
+		SmartGunHipTargetableAnglePitch = 1364,
+		SmartGunHipTargetableAngleYaw = 1365,
+		SmartGunHipTimeToLock = 1366,
+		SmartGunHipTimeToUnlock = 1367,
+		SmartGunHitProbability = 1368,
+		SmartGunHitProbabilityMultiplier = 1369,
+		SmartGunKeepTargetsOnAimStateChange = 1370,
+		SmartGunKeepTargetsOnWeaponSwap = 1371,
+		SmartGunMaxLockedPointsPerTarget = 1372,
+		SmartGunMissDelay = 1373,
+		SmartGunMissRadius = 1374,
+		SmartGunNPCApplySpreadAtHitplane = 1375,
+		SmartGunNPCLockOnTime = 1376,
+		SmartGunNPCLockTimeout = 1377,
+		SmartGunNPCLockingAnglePitch = 1378,
+		SmartGunNPCLockingAngleYaw = 1379,
+		SmartGunNPCProjectileStartingOrientationAngleOffset = 1380,
+		SmartGunNPCProjectileVelocity = 1381,
+		SmartGunNPCShootProjectilesOnlyStraight = 1382,
+		SmartGunNPCSpreadMultiplier = 1383,
+		SmartGunNPCTrajectoryCurvatureMultiplier = 1384,
+		SmartGunPlayerProjectileVelocity = 1385,
+		SmartGunProjectileVelocityVariance = 1386,
+		SmartGunSpiralCycleTimeMax = 1387,
+		SmartGunSpiralCycleTimeMin = 1388,
+		SmartGunSpiralRadius = 1389,
+		SmartGunSpiralRampDistanceEnd = 1390,
+		SmartGunSpiralRampDistanceStart = 1391,
+		SmartGunSpiralRandomizeDirection = 1392,
+		SmartGunSpreadMultiplier = 1393,
+		SmartGunStartingAccuracy = 1394,
+		SmartGunTargetAcquisitionRange = 1395,
+		SmartGunTargetingRectangleSizeIncrease = 1396,
+		SmartGunTimeToLockBreachComponentMultiplier = 1397,
+		SmartGunTimeToLockChestComponentMultiplier = 1398,
+		SmartGunTimeToLockHeadComponentMultiplier = 1399,
+		SmartGunTimeToLockLegComponentMultiplier = 1400,
+		SmartGunTimeToLockMechanicalComponentMultiplier = 1401,
+		SmartGunTimeToLockVehicleComponentMultiplier = 1402,
+		SmartGunTimeToLockWeakSpotComponentMultiplier = 1403,
+		SmartGunTimeToMaxAccuracy = 1404,
+		SmartGunTimeToRemoveOccludedTarget = 1405,
+		SmartGunTrackBreachComponents = 1406,
+		SmartGunTrackChestComponents = 1407,
+		SmartGunTrackHeadComponents = 1408,
+		SmartGunTrackLegComponents = 1409,
+		SmartGunTrackMechanicalComponents = 1410,
+		SmartGunTrackMultipleEntitiesInADS = 1411,
+		SmartGunTrackVehicleComponents = 1412,
+		SmartGunTrackWeakSpotComponents = 1413,
+		SmartGunUseEvenDistributionTargeting = 1414,
+		SmartGunUseTagLockTargeting = 1415,
+		SmartGunUseTimeBasedAccuracy = 1416,
+		SmartMod2_Velocity = 1417,
+		SmartMod3_Zone = 1418,
+		SmartTargetingDisruptionProbability = 1419,
+		SmartTargetingShouldNotDisableCollision = 1420,
+		SmartWeaponDamagePercentBonus = 1421,
+		SniperStaminaCostReduction = 1422,
+		SpecialDamage = 1423,
+		SpeedBoost = 1424,
+		SpeedBoostMaxSpeed = 1425,
+		Spread = 1426,
+		SpreadAdsChangePerShot = 1427,
+		SpreadAdsChargeMult = 1428,
+		SpreadAdsDefaultX = 1429,
+		SpreadAdsDefaultY = 1430,
+		SpreadAdsFastSpeedMax = 1431,
+		SpreadAdsFastSpeedMaxAdd = 1432,
+		SpreadAdsFastSpeedMin = 1433,
+		SpreadAdsFastSpeedMinAdd = 1434,
+		SpreadAdsFullChargeMult = 1435,
+		SpreadAdsMaxX = 1436,
+		SpreadAdsMaxY = 1437,
+		SpreadAdsMinX = 1438,
+		SpreadAdsMinY = 1439,
+		SpreadAnimation = 1440,
+		SpreadChangePerShot = 1441,
+		SpreadChargeMult = 1442,
+		SpreadCrouchDefaultMult = 1443,
+		SpreadCrouchMaxMult = 1444,
+		SpreadDefaultX = 1445,
+		SpreadDefaultY = 1446,
+		SpreadEvenDistributionJitterSize = 1447,
+		SpreadEvenDistributionRowCount = 1448,
+		SpreadFastSpeedMax = 1449,
+		SpreadFastSpeedMaxAdd = 1450,
+		SpreadFastSpeedMin = 1451,
+		SpreadFastSpeedMinAdd = 1452,
+		SpreadFullChargeMult = 1453,
+		SpreadMaxAI = 1454,
+		SpreadMaxX = 1455,
+		SpreadMaxY = 1456,
+		SpreadMinX = 1457,
+		SpreadMinY = 1458,
+		SpreadPenalty = 1459,
+		SpreadQuickhacksOnStart = 1460,
+		SpreadRandomizeOriginPoint = 1461,
+		SpreadResetSpeed = 1462,
+		SpreadResetTimeThreshold = 1463,
+		SpreadToken = 1464,
+		SpreadUseCircularSpread = 1465,
+		SpreadUseEvenDistribution = 1466,
+		SpreadUseInAds = 1467,
+		SpreadZeroOnFirstShot = 1468,
+		SpreadingAttackConeAngle = 1469,
+		SpreadingAttackDamageMultiplier = 1470,
+		SpreadingAttackMaxJumps = 1471,
+		SpreadingAttackMaxTargets = 1472,
+		SpreadingAttackRange = 1473,
+		StaggerDamageThreshold = 1474,
+		StaggerDamageThresholdImpulse = 1475,
+		StaggerDamageThresholdInCover = 1476,
+		Stamina = 1477,
+		StaminaAimingCost = 1478,
+		StaminaCostReduction = 1479,
+		StaminaCostToBlock = 1480,
+		StaminaDamage = 1481,
+		StaminaDecayDelayOnChange = 1482,
+		StaminaDecayEnabled = 1483,
+		StaminaDecayEndThrehold = 1484,
+		StaminaDecayRate = 1485,
+		StaminaDecayStartDelay = 1486,
+		StaminaDecayStartThreshold = 1487,
+		StaminaRatio = 1488,
+		StaminaRegenBonusBlackmarket = 1489,
+		StaminaRegenDelayOnChange = 1490,
+		StaminaRegenEnabled = 1491,
+		StaminaRegenEndThrehold = 1492,
+		StaminaRegenRate = 1493,
+		StaminaRegenRateAdd = 1494,
+		StaminaRegenRateBase = 1495,
+		StaminaRegenRateMult = 1496,
+		StaminaRegenStartDelay = 1497,
+		StaminaRegenStartThreshold = 1498,
+		StaminaSprintDecayRate = 1499,
+		StatModifierGroupLimit = 1500,
+		StaticModifierMultiplier = 1501,
+		Stealth = 1502,
+		StealthHacksCostReduction = 1503,
+		StealthHitDamageBonus = 1504,
+		StealthHitDamageBonusModifierHelper = 1505,
+		StealthHitDamageMultiplier = 1506,
+		StealthMastery = 1507,
+		StealthTrait01Stat = 1508,
+		StealthWeakspotDamageMultiplier = 1509,
+		StreetCred = 1510,
+		StreetCredXPBonusMultiplier = 1511,
+		Strength = 1512,
+		StrengthAllocated = 1513,
+		StrengthAvailable = 1514,
+		StrengthSkill = 1515,
+		StrengthSkillcheckBonus = 1516,
+		StrongArmsStaminaCostReduction = 1517,
+		StunApplicationRate = 1518,
+		StunImmunity = 1519,
+		StyleOverSubstanceCount = 1520,
+		SubMachinegunStaminaCostReduction = 1521,
+		SuicideHackMemoryCostReduction = 1522,
+		Sway = 1523,
+		SwayCenterMaximumAngleOffset = 1524,
+		SwayCurvatureMaximumFactor = 1525,
+		SwayCurvatureMinimumFactor = 1526,
+		SwayInitialOffsetRandomFactor = 1527,
+		SwayResetOnAimStart = 1528,
+		SwaySideBottomAngleLimit = 1529,
+		SwaySideMaximumAngleDistance = 1530,
+		SwaySideMinimumAngleDistance = 1531,
+		SwaySideStepChangeMaximumFactor = 1532,
+		SwaySideStepChangeMinimumFactor = 1533,
+		SwaySideTopAngleLimit = 1534,
+		SwayStartBlendTime = 1535,
+		SwayStartDelay = 1536,
+		SwayTraversalTime = 1537,
+		SystemCollapseImmunity = 1538,
+		SystemCollapseMemoryCostReduction = 1539,
+		TBHsBaseCoefficient = 1540,
+		TBHsBaseSourceMultiplierCoefficient = 1541,
+		TBHsCoverTraceLoSIncreaseSpeed = 1542,
+		TBHsMinimumLineOfSightTime = 1543,
+		TBHsReactionCooldownReduction = 1544,
+		TBHsSensesTraceLoSIncreaseSpeed = 1545,
+		TBHsVisibilityCooldown = 1546,
+		TechBaseChargeThreshold = 1547,
+		TechMaxChargeThreshold = 1548,
+		TechMod1_EMPChance = 1549,
+		TechMod3_ChargeTime = 1550,
+		TechOverChargeThreshold = 1551,
+		TechPierceChargeLevel = 1552,
+		TechPierceDamageFactor = 1553,
+		TechPierceEnabled = 1554,
+		TechPierceHighlightsEnabled = 1555,
+		TechPierceScanAngle = 1556,
+		TechWeaponDamagePercentBonus = 1557,
+		Tech_Central_Perk_2_2_Humanity = 1558,
+		Tech_Master_Perk_3_Humanity = 1559,
+		TechnicalAbility = 1560,
+		TechnicalAbilityAllocated = 1561,
+		TechnicalAbilityAvailable = 1562,
+		TechnicalAbilitySkill = 1563,
+		TechnicalAbilitySkillcheckBonus = 1564,
+		ThermalDamage = 1565,
+		ThermalDamageAdditiveMultiplier = 1566,
+		ThermalDamageMax = 1567,
+		ThermalDamageMin = 1568,
+		ThermalDamageModifierHelper = 1569,
+		ThermalDamagePercent = 1570,
+		ThermalDamagePercentBonus = 1571,
+		ThermalDamagePercentBonusModifierHelper = 1572,
+		ThermalResistance = 1573,
+		ThermalResistanceModifierHelper = 1574,
+		ThreeOrMoreProgramsCooldownRedPerk = 1575,
+		ThreeOrMoreProgramsMemoryRegPerk = 1576,
+		ThrowMod1_CanReturn = 1577,
+		ThrowMod1_ReturnChance = 1578,
+		ThrowMod3_Armor_Pene = 1579,
+		ThrowRecovery = 1580,
+		TimeBankCharges = 1581,
+		TimeBankRegenDelayOnChange = 1582,
+		TimeBankRegenEnabled = 1583,
+		TimeBankRegenEndThrehold = 1584,
+		TimeBankRegenRate = 1585,
+		TimeBankRegenStartDelay = 1586,
+		TimeBankRegenStartThreshold = 1587,
+		TimeDilationGenericDuration = 1588,
+		TimeDilationGenericTimeScale = 1589,
+		TimeDilationKerenzikovDuration = 1590,
+		TimeDilationKerenzikovPlayerTimeScale = 1591,
+		TimeDilationKerenzikovTimeScale = 1592,
+		TimeDilationOnDodgesCooldownDuration = 1593,
+		TimeDilationOnDodgesDuration = 1594,
+		TimeDilationOnDodgesTimeScale = 1595,
+		TimeDilationOnHealthDropCooldownDuration = 1596,
+		TimeDilationOnHealthDropDuration = 1597,
+		TimeDilationOnHealthDropTimeScale = 1598,
+		TimeDilationSandevistanCooldownBase = 1599,
+		TimeDilationSandevistanCooldownReduction = 1600,
+		TimeDilationSandevistanDuration = 1601,
+		TimeDilationSandevistanEnterCost = 1602,
+		TimeDilationSandevistanRechargeDuration = 1603,
+		TimeDilationSandevistanTimeScale = 1604,
+		TimeDilationWhenEnteringCombatCooldownDuration = 1605,
+		TimeDilationWhenEnteringCombatDuration = 1606,
+		TimeDilationWhenEnteringCombatTimeScale = 1607,
+		TranquilizerImmunity = 1608,
+		TriggerDismembermentChance = 1609,
+		TriggerWoundedChance = 1610,
+		TurretFriendlyExtension = 1611,
+		TurretShutdownExtension = 1612,
+		TwoHandBluntStaminaCostReduction = 1613,
+		TwoHandHammerStaminaCostReduction = 1614,
+		UltimateHackSpread = 1615,
+		UltimateHacksCostReduction = 1616,
+		UltimateMemoryCostReduction = 1617,
+		UnconsciousImmunity = 1618,
+		UnequipAnimationDuration_Corpo = 1619,
+		UnequipAnimationDuration_Gang = 1620,
+		UnequipDuration = 1621,
+		UnequipDuration_Corpo = 1622,
+		UnequipDuration_Gang = 1623,
+		UnequipItemTime_Corpo = 1624,
+		UnequipItemTime_Gang = 1625,
+		UnlockProgress = 1626,
+		UpgradeCompensate = 1627,
+		UpgradeCount = 1628,
+		UpgradingCostReduction = 1629,
+		UpgradingMaterialDropChance = 1630,
+		UpgradingMaterialRandomGrantChance = 1631,
+		UpgradingMaterialRetrieveChance = 1632,
+		UploadQuickHackMod = 1633,
+		VehicleDamagePercentBonus = 1634,
+		VehicleDamageQualityDivisor = 1635,
+		VehicleMinHealthPercentWhenDamaged = 1636,
+		VehicleMissileLauncherBaseCharges = 1637,
+		VehicleMissileLauncherCharges = 1638,
+		VehicleMissileLauncherChargesRegenBegins = 1639,
+		VehicleMissileLauncherChargesRegenDelayOnChange = 1640,
+		VehicleMissileLauncherChargesRegenEnds = 1641,
+		VehicleMissileLauncherChargesRegenRate = 1642,
+		VehicleMissileLauncherChargesRegenStartDelay = 1643,
+		VehicleMissileLauncherLockOnTime = 1644,
+		VehicleMissileLauncherMaxCharges = 1645,
+		VehicleMissileLauncherProjectilesPerCharge = 1646,
+		VehicleMissileLauncherRechargeDuration = 1647,
+		VehicleMissileLauncherRegenEnabled = 1648,
+		VehicleMissileLauncherSalvoCharges = 1649,
+		VendorBuyPriceDiscount = 1650,
+		VendorSellPriceDiscount = 1651,
+		Visibility = 1652,
+		VisibilityReduction = 1653,
+		VisibilityReductionModifierHelper = 1654,
+		VisualStimRangeMultiplier = 1655,
+		VulnerabilityExtension = 1656,
+		VulnerableImmunity = 1657,
+		WallRunHorSpeedToEnterMin = 1658,
+		WallRunStrafeAngleMax = 1659,
+		WallRunTimeMax = 1660,
+		WallRunVertSpeedToEnterMax = 1661,
+		WasItemUpgraded = 1662,
+		WasQuickHacked = 1663,
+		WeakspotDamageMultiplier = 1664,
+		WeaponEvolutionToStaminaCost = 1665,
+		WeaponHasAutoloader = 1666,
+		WeaponNoise = 1667,
+		WeaponPosAdsX = 1668,
+		WeaponPosAdsY = 1669,
+		WeaponPosAdsZ = 1670,
+		WeaponPosX = 1671,
+		WeaponPosY = 1672,
+		WeaponPosZ = 1673,
+		WeaponRotAdsX = 1674,
+		WeaponRotAdsY = 1675,
+		WeaponRotAdsZ = 1676,
+		WeaponRotX = 1677,
+		WeaponRotY = 1678,
+		WeaponRotZ = 1679,
+		WeaponSwapDuration = 1680,
+		WeaponTypeToStaminaCost = 1681,
+		WeaponVFX_BulletFxScaleFullAutoRandRange = 1682,
+		WeaponVFX_BulletFxScaleFullAutoRandStart = 1683,
+		WeaponVFX_BulletFxScaleFullAutoRandomization = 1684,
+		WeaponVFX_DecalFxScale = 1685,
+		WeaponVFX_MuzzleFxScale = 1686,
+		WeaponVFX_ProjectileFxScale = 1687,
+		WeaponVFX_ShellsFxScale = 1688,
+		WeaponVFX_TracerFxScale = 1689,
+		WeaponVehicleDamagePercentBonus = 1690,
+		Weight = 1691,
+		WoundHeadDamageThreshold = 1692,
+		WoundLArmDamageThreshold = 1693,
+		WoundLLegDamageThreshold = 1694,
+		WoundRArmDamageThreshold = 1695,
+		WoundRLegDamageThreshold = 1696,
+		WoundedImmunity = 1697,
+		XPbonusMultiplier = 1698,
+		ZoomLevel = 1699,
+		CPO_Armor = 1700,
+		CPO_NPC_Importance = 1701,
+		Count = 1702,
+		Invalid = 1703
 	}
 
 	public enum gamedataStatType_1300DEPRECATED
@@ -12736,65 +14665,70 @@ public static partial class Enums
 		AndroidTurnOn = 1,
 		Berserk = 2,
 		Berserker = 3,
-		Bleeding = 4,
-		Blind = 5,
-		BlockCoverVisibilityReduction = 6,
-		BrainMelt = 7,
-		Burning = 8,
-		Cloaked = 9,
-		CommsCall = 10,
-		CommsNoise = 11,
-		Crippled = 12,
-		DamageBurst = 13,
-		Deafened = 14,
-		Defeated = 15,
-		DefeatedWithRecover = 16,
-		EMP = 17,
-		Electrocuted = 18,
-		Exhausted = 19,
-		ForceShoot = 20,
-		Grapple = 21,
-		Housing = 22,
-		Jam = 23,
-		JamCommuniations = 24,
-		Kill = 25,
-		Knockdown = 26,
-		Madness = 27,
-		MeleeInvulnerability = 28,
-		Misc = 29,
-		MuteAudioStims = 30,
-		NetwatcherHackStage1 = 31,
-		NetwatcherHackStage2 = 32,
-		NetwatcherHackStage3 = 33,
-		Overheat = 34,
-		Overload = 35,
-		Pain = 36,
-		PassiveBuff = 37,
-		PassiveDebuff = 38,
-		PlayerCooldown = 39,
-		Poisoned = 40,
-		QuickHackFreezeLocomotion = 41,
-		QuickHackStaggerCyberware = 42,
-		QuickHackStaggerLocomotion = 43,
-		QuickHackStaggerWeapon = 44,
-		Quickhack = 45,
-		Regeneration = 46,
-		Sandevistan = 47,
-		SetFriendly = 48,
-		Sleep = 49,
-		Stagger = 50,
-		StrongArmsActive = 51,
-		Stunned = 52,
-		SuicideHack = 53,
-		SystemCollapse = 54,
-		Unconscious = 55,
-		UncontrolledMovement = 56,
-		VehicleKnockdown = 57,
-		WeakspotOverload = 58,
-		Wounded = 59,
-		CPOShocked = 60,
-		Count = 61,
-		Invalid = 62
+		BlackwallHack = 4,
+		Bleeding = 5,
+		Blind = 6,
+		BlockCoverVisibilityReduction = 7,
+		BlockTargetingPlayer = 8,
+		BrainMelt = 9,
+		Burning = 10,
+		Cloaked = 11,
+		CommsCall = 12,
+		CommsNoise = 13,
+		Crippled = 14,
+		DamageBurst = 15,
+		Deafened = 16,
+		Defeated = 17,
+		DefeatedWithRecover = 18,
+		EMP = 19,
+		Electrocuted = 20,
+		Exhausted = 21,
+		ForceShoot = 22,
+		Grapple = 23,
+		Housing = 24,
+		Jam = 25,
+		JamCommuniations = 26,
+		Kill = 27,
+		Knockdown = 28,
+		Madness = 29,
+		MagnetDeviceNPC = 30,
+		MechWeaponsDown = 31,
+		MeleeInvulnerability = 32,
+		Misc = 33,
+		MuteAudioStims = 34,
+		NetwatcherHackStage1 = 35,
+		NetwatcherHackStage2 = 36,
+		NetwatcherHackStage3 = 37,
+		Overheat = 38,
+		Overload = 39,
+		Pain = 40,
+		PassiveBuff = 41,
+		PassiveDebuff = 42,
+		PlayerCooldown = 43,
+		Poisoned = 44,
+		QuickHackFreezeLocomotion = 45,
+		QuickHackStaggerCyberware = 46,
+		QuickHackStaggerLocomotion = 47,
+		QuickHackStaggerWeapon = 48,
+		Quickhack = 49,
+		Regeneration = 50,
+		Sandevistan = 51,
+		SetFriendly = 52,
+		Sleep = 53,
+		SoftKill = 54,
+		Stagger = 55,
+		StrongArmsActive = 56,
+		Stunned = 57,
+		SuicideHack = 58,
+		SystemCollapse = 59,
+		Unconscious = 60,
+		UncontrolledMovement = 61,
+		VehicleKnockdown = 62,
+		WeakspotOverload = 63,
+		Wounded = 64,
+		CPOShocked = 65,
+		Count = 66,
+		Invalid = 67
 	}
 
 	public enum gamedataStatusEffectVariation
@@ -12865,37 +14799,41 @@ public static partial class Enums
 		Hacked = 29,
 		HijackVehicle = 30,
 		IllegalAction = 31,
-		IllegalInteraction = 32,
-		LandingHard = 33,
-		LandingRegular = 34,
-		LandingVeryHard = 35,
-		MeleeAttack = 36,
-		MeleeHit = 37,
-		OpeningDoor = 38,
-		ProjectileDistraction = 39,
-		Provoke = 40,
-		Reload = 41,
-		Reprimand = 42,
-		ReprimandFinalWarning = 43,
-		Scream = 44,
-		SecurityBreach = 45,
-		SilencedGunshot = 46,
-		SilentAlarm = 47,
-		SoundDistraction = 48,
-		SpreadFear = 49,
-		StopedAiming = 50,
-		Terror = 51,
-		TooCloseDistance = 52,
-		VehicleHit = 53,
-		VehicleHorn = 54,
-		VisualDistract = 55,
-		WarningDistance = 56,
-		WeaponDisplayed = 57,
-		WeaponHolstered = 58,
-		WeaponSafe = 59,
-		Whistle = 60,
-		Count = 61,
-		Invalid = 62
+		IllegalActionNoCombat = 32,
+		IllegalInteraction = 33,
+		LandingHard = 34,
+		LandingRegular = 35,
+		LandingVeryHard = 36,
+		MeleeAttack = 37,
+		MeleeHit = 38,
+		OpeningDoor = 39,
+		ProjectileDistraction = 40,
+		Provoke = 41,
+		Recon = 42,
+		ReevaluateDetectionOverwrite = 43,
+		Reload = 44,
+		Reprimand = 45,
+		ReprimandFinalWarning = 46,
+		Scream = 47,
+		SecurityBreach = 48,
+		SilencedGunshot = 49,
+		SilentAlarm = 50,
+		SoundDistraction = 51,
+		SpreadFear = 52,
+		StopedAiming = 53,
+		Terror = 54,
+		TooCloseDistance = 55,
+		UndeadCall = 56,
+		VehicleHit = 57,
+		VehicleHorn = 58,
+		VisualDistract = 59,
+		WarningDistance = 60,
+		WeaponDisplayed = 61,
+		WeaponHolstered = 62,
+		WeaponSafe = 63,
+		Whistle = 64,
+		Count = 65,
+		Invalid = 66
 	}
 
 	public enum gamedataSubCharacter
@@ -13016,19 +14954,20 @@ public static partial class Enums
 		Delamain = 5,
 		Herrera = 6,
 		Kaukaz = 7,
-		Makigai = 8,
-		Militech = 9,
-		Mizutani = 10,
-		Porsche = 11,
-		Quadra = 12,
-		Rayfield = 13,
-		Seamurai = 14,
-		Thorton = 15,
-		Villefort = 16,
-		Yaiba = 17,
-		Zetatech = 18,
-		Count = 19,
-		Invalid = 20
+		Mahir = 8,
+		Makigai = 9,
+		Militech = 10,
+		Mizutani = 11,
+		Porsche = 12,
+		Quadra = 13,
+		Rayfield = 14,
+		Seamurai = 15,
+		Thorton = 16,
+		Villefort = 17,
+		Yaiba = 18,
+		Zetatech = 19,
+		Count = 20,
+		Invalid = 21
 	}
 
 	public enum gamedataVehicleModel
@@ -13071,6 +15010,15 @@ public static partial class Enums
 		Invalid = 4
 	}
 
+	public enum gamedataVehicleUnlockType
+	{
+		CourierMissions = 0,
+		Quest = 1,
+		StreetCred = 2,
+		Count = 3,
+		Invalid = 4
+	}
+
 	public enum gamedataVendorType
 	{
 		Armorsmith = 0,
@@ -13104,8 +15052,9 @@ public static partial class Enums
 		Power = 3,
 		Smart = 4,
 		Tech = 5,
-		Count = 6,
-		Invalid = 7
+		Throwable = 6,
+		Count = 7,
+		Invalid = 8
 	}
 
 	public enum gamedataWeaponManufacturer
@@ -13114,6 +15063,19 @@ public static partial class Enums
 		Street = 1,
 		Count = 2,
 		Invalid = 3
+	}
+
+	public enum gamedataWidgetStyle
+	{
+		Arasaka = 0,
+		DarkNet = 1,
+		Konopeki = 2,
+		Maelstrom = 3,
+		Militech = 4,
+		None = 5,
+		Zetatech = 6,
+		Count = 7,
+		Invalid = 8
 	}
 
 	public enum gamedataWorkspotActionType
@@ -13153,24 +15115,27 @@ public static partial class Enums
 	public enum gamedataWorldMapFilter
 	{
 		ApartmentToPurchaseFilter = 0,
-		CommonFilter = 1,
-		CustomFilter = 2,
-		DropPoint = 3,
-		ExplorationFilter = 4,
-		FastTravel = 5,
-		Gigs = 6,
-		NoFilter = 7,
-		PsychoFilter = 8,
-		Quest = 9,
-		RipperdocFilter = 10,
-		ServicePoint = 11,
-		Story = 12,
-		TarotFilter = 13,
-		VehicleForSaleFilter = 14,
-		VehiclesForPurchaseFilter = 15,
-		VendorFilter = 16,
-		Count = 17,
-		Invalid = 18
+		AutofixerFilter = 1,
+		CommonFilter = 2,
+		Courier = 3,
+		CustomFilter = 4,
+		DogtownGateFilter = 5,
+		DropPoint = 6,
+		ExplorationFilter = 7,
+		FastTravel = 8,
+		Gigs = 9,
+		NoFilter = 10,
+		Outpost = 11,
+		PsychoFilter = 12,
+		Quest = 13,
+		RipperdocFilter = 14,
+		ServicePoint = 15,
+		Story = 16,
+		TarotFilter = 17,
+		VehicleForSaleFilter = 18,
+		VendorFilter = 19,
+		Count = 20,
+		Invalid = 21
 	}
 
 	public enum gamedeviceActionPropertyFlags
@@ -13281,7 +15246,8 @@ public static partial class Enums
 		Blueline = 256,
 		Pay = 512,
 		Selected = 1024,
-		Illegal = 2048
+		Illegal = 2048,
+		Glowline = 4096
 	}
 
 	public enum gameinteractionsEBinaryOperator
@@ -13435,11 +15401,11 @@ public static partial class Enums
 
 	public enum gamesmartGunTargetState
 	{
-		Visible = 0,
-		Targetable = 1,
-		Locking = 2,
-		Locked = 3,
-		Unlocking = 4
+		Visible = 1,
+		Targetable = 2,
+		Locking = 4,
+		Locked = 16,
+		Unlocking = 8
 	}
 
 	public enum gamestateMachineParameterAspect
@@ -13459,7 +15425,9 @@ public static partial class Enums
 		ShootingLimbCyber = 1 << 4,
 		HeadTarget = 1 << 5,
 		LegTarget = 1 << 6,
-		MechanicalTarget = 1 << 7
+		MechanicalTarget = 1 << 7,
+		DriverCombat = 1 << 8,
+		BreachTarget = 1 << 9
 	}
 
 	public enum gametargetingSystemETargetFilterStatus
@@ -13502,6 +15470,16 @@ public static partial class Enums
 		St_TurnedOff = 262144,
 		St_QuickHackable = 524288,
 		St_AliveAndActive = 174080
+	}
+
+	public enum gameuiActivePhoneElement
+	{
+		Call = 1,
+		IncomingCall = 2,
+		Contacts = 4,
+		SmsMessenger = 8,
+		Notifications = 16,
+		None = 32
 	}
 
 	public enum gameuiAuthorisationNotificationType
@@ -13557,7 +15535,8 @@ public static partial class Enums
 	{
 		CCBN_Disabled = 0,
 		CCBN_Stage1 = 1,
-		CCBN_Stage2 = 2
+		CCBN_Stage2 = 2,
+		CCBN_FinalScene = 3
 	}
 
 	public enum gameuiChoiceIndicatorType
@@ -13594,6 +15573,7 @@ public static partial class Enums
 		ModalPopup = 1 << 7,
 		RadialWheel = 1 << 8,
 		VehicleRace = 1 << 9,
+		Berserk = 1 << 10,
 		MAX = 1 << 31
 	}
 
@@ -13624,6 +15604,12 @@ public static partial class Enums
 		Off = 0,
 		DamageOnly = 1,
 		On = 2
+	}
+
+	public enum gameuiDriverCombatCrosshairReticleDataState
+	{
+		Default = 0,
+		Dot = 1
 	}
 
 	public enum gameuiEBraindanceLayer
@@ -13693,7 +15679,15 @@ public static partial class Enums
 		Glance = 1,
 		Hit = 2,
 		CriticalHit = 3,
-		CriticalHit_x2 = 4
+		CriticalHit_x2 = 4,
+		Special = 5
+	}
+
+	public enum gameuiInputHintSortingPriority
+	{
+		Top = -2147483648,
+		Bottom = 2147483646,
+		Invalid = 2147483647
 	}
 
 	public enum gameuiMappinGroupState
@@ -13706,13 +15700,17 @@ public static partial class Enums
 
 	public enum gameuiOneTimeMessage
 	{
-		XboxCompatibilityLimitation = 0
+		XboxCompatibilityLimitation = 0,
+		PathtracingPopupSettings = 1,
+		PathtracingPopupMainMenu = 2
 	}
 
 	public enum gameuiPatchIntro
 	{
 		Patch1500_NextGen = 0,
-		Patch1600 = 1
+		Patch1600 = 1,
+		Patch2000 = 2,
+		Patch2000_EP1 = 3
 	}
 
 	public enum gameuiTutorialHiddenReason
@@ -13722,9 +15720,32 @@ public static partial class Enums
 		InPhotomode = 2
 	}
 
+	public enum gameuiarcadeArcadeColliderType
+	{
+		Body = 0,
+		Up = 1,
+		Right = 2,
+		Bottom = 3,
+		Left = 4
+	}
+
 	public enum gameuiarcadeArcadeMinigame
 	{
-		RoachRace = 0
+		RoachRace = 0,
+		Shooter = 1,
+		Tank = 2
+	}
+
+	public enum gameuiarcadeArcadeParallaxPlaneControllerDisplacementAxis
+	{
+		Horizontal = 0,
+		Vertical = 1
+	}
+
+	public enum gameuiarcadeArcadeParallaxPlaneControllerLoopType
+	{
+		None = 0,
+		Repeat = 1
 	}
 
 	public enum gameuiarcadeRoachRaceObjectType
@@ -13732,6 +15753,64 @@ public static partial class Enums
 		BoostObject_Apple = 0,
 		BoostObject_Carrot = 1,
 		Obstacle = 2
+	}
+
+	public enum gameuiarcadeShooterAIType
+	{
+		MELEE = 0,
+		RANGESHOOTER = 1,
+		RANGEGRENADE = 2,
+		FLYINGDRONE = 3,
+		SPIDERDRONE = 4,
+		POWERUPDRONE = 5,
+		TRANSPORT = 6,
+		VIP = 8,
+		VIPPLAT = 9,
+		LANDMINE = 12,
+		BARREL = 13,
+		NINJA = 14,
+		BASILISK = 16,
+		MEATHEAD = 15
+	}
+
+	public enum gameuiarcadeShooterLevelType
+	{
+		HORIZONTAL = 0,
+		VERTICALUP = 1,
+		VERTICALDOWN = 2
+	}
+
+	public enum gameuiarcadeShooterSpawnerCondition
+	{
+		ScreenLeft = 0,
+		ScreenRight = 1,
+		ScreenTop = 2,
+		ScreenBottom = 3,
+		EventTrigger = 4
+	}
+
+	public enum gameuiarcadeShooterTriggerType
+	{
+		Delay = 0,
+		SpawnerFinish = 1,
+		SpawnerObjectsDeath = 2
+	}
+
+	public enum gameuiarcadeTankEnemyMovementType
+	{
+		x_axis = 0,
+		x_axisL = 1,
+		x_axisR = 2,
+		y_axis = 3
+	}
+
+	public enum gameuiarcadeTankPickupType
+	{
+		Patch_Kit = 0,
+		AEAMS = 1,
+		Mini_Tank = 2,
+		Pile_of_Eddies = 3,
+		Pile_of_Guns = 4
 	}
 
 	public enum gameweaponReloadStatus
@@ -13767,6 +15846,14 @@ public static partial class Enums
 		Failure = 6
 	}
 
+	[Flags]
+	public enum gsmGameDefType
+	{
+		BASE = 1 << 0,
+		EP1 = 1 << 1,
+		OTHER = 1 << 2
+	}
+
 	public enum gsmStateError
 	{
 		StateError_OK = 0,
@@ -13775,16 +15862,18 @@ public static partial class Enums
 		StateError_ProfileCorrupted = 3,
 		StateError_ProfileCorrupted_Save = 4,
 		StateError_CannotInitializeContext = 5,
-		StateError_CantInitializeSession = 6,
-		StateError_CantLoadSave_CantLoadFile = 7,
-		StateError_CantLoadSave_CantCreateLoadStream = 8,
-		StateError_CantLoadSave_CensorshipLevelMismatch = 9,
-		StateError_CantLoadSave_RegionMismatch = 10,
-		StateError_CantLoadSave_CensorshipOptionalNudity = 11,
-		StateError_CantLoadSave_VersionMismatch = 12,
-		StateError_CantLoadSave_Corrupted = 13,
-		StateError_CantLoadSave_SessionDescInvalid = 14,
-		StateError_CantLoadSave_CantLoadCloudFile = 15
+		StateError_CantLoadGameDefinition = 6,
+		StateError_CantInitializeSession = 7,
+		StateError_CantLoadSave_CantLoadFile = 8,
+		StateError_CantLoadSave_CantCreateLoadStream = 9,
+		StateError_CantLoadSave_CensorshipLevelMismatch = 10,
+		StateError_CantLoadSave_RegionMismatch = 11,
+		StateError_CantLoadSave_CensorshipOptionalNudity = 12,
+		StateError_CantLoadSave_VersionMismatch = 13,
+		StateError_CantLoadSave_Corrupted = 14,
+		StateError_CantLoadSave_SessionDescInvalid = 15,
+		StateError_CantLoadSave_CantLoadCloudFile = 16,
+		StateError_CantLoadSave_AdditionalContentIDsMismatch = 17
 	}
 
 	public enum hitFlag
@@ -13828,22 +15917,62 @@ public static partial class Enums
 		DisableNPCHitReaction = 36,
 		VehicleDamage = 37,
 		VehicleImpact = 38,
-		RagdollImpact = 39,
-		IgnoreDifficulty = 40,
-		QuickHack = 41,
-		IgnoreVehicles = 42,
-		DamageOverTime = 43,
-		DotApplied = 44,
+		VehicleImpactWithPlayer = 39,
+		RagdollImpact = 40,
+		IgnoreDifficulty = 41,
+		QuickHack = 42,
+		IgnoreVehicles = 43,
+		DamageOverTime = 44,
+		DotApplied = 45,
+		OverridePlayerDamageWithFixedPercentage = 46,
+		NPCPassengerVehicleCollision = 47,
 		PROJECT_SPECIFIC_FLAGS = 100000,
 		UsedKerenzikov = 100001,
 		FragmentationSplinter = 100002,
 		DetonateGrenades = 100003,
 		WeakExplosion = 100004,
-		GrenadeQuickhackExplosion = 100005,
-		FriendlyFireIgnored = 100006,
-		ForceNoCrit = 100007,
-		ReduceDamage = 100008,
-		ForceDismember = 100009
+		BulletExplosion = 100005,
+		GrenadeQuickhackExplosion = 100006,
+		FriendlyFireIgnored = 100007,
+		ForceNoCrit = 100008,
+		ReduceDamage = 100009,
+		ForceDismember = 100010,
+		SaburoKatana = 100011,
+		SaburoTanto = 100012,
+		WasBulletParried = 100013,
+		WasBulletDeflected = 100014,
+		WasBulletBlocked = 100015,
+		HauntedCyberdeck = 100016,
+		HauntedGun = 100017,
+		HauntedKill = 100018,
+		BreachHit = 100019,
+		OnePunch = 100020,
+		GrandFinale = 100021,
+		BleedingDot = 100022,
+		AirDropBurningDoT = 100023,
+		BreachExplosion = 100024,
+		RevengeActivatingHit = 100025,
+		GroundSlam = 100026,
+		PerfectlyCharged = 100027,
+		ChainLightning = 100028,
+		CWExplosion = 100029,
+		RelicGoldenNumbers = 100030,
+		CannotKillPlayer = 100031,
+		ExplosionOverride = 100032,
+		Overheat = 100033,
+		HighSpeedMelee = 100034,
+		PlayerWallImpact = 100035,
+		Explosion = 100036,
+		StunApplied = 100037,
+		IgnoreStatPoolCustomLimit = 100038,
+		ForceKnockdown = 100039,
+		DisablePlayerHitReaction = 100040,
+		ReflexesMasterPerk1 = 100041,
+		BodyPerksMeleeAttack = 100042,
+		CriticalHitNoDamageModifier = 100043,
+		Special = 100044,
+		CWMalfunctionEMPExplosion = 100045,
+		UltimateQuickHack = 100046
 	}
 
 	public enum inkBrushDrawType : byte
@@ -14075,7 +16204,8 @@ public static partial class Enums
 		ColorFill = 8,
 		InnerGlow = 9,
 		ColorCorrection = 10,
-		Multisampling = 11
+		Multisampling = 11,
+		Blackwall = 12
 	}
 
 	public enum inkFinalConfigurationVisibility
@@ -14117,9 +16247,15 @@ public static partial class Enums
 
 	public enum inkInputHintHoldIndicationType : byte
 	{
-		Press = 0,
-		Hold = 1,
-		FromInputConfig = 2
+		FromInputConfig = 0,
+		Press = 1,
+		Hold = 2
+	}
+
+	public enum inkInputHintKeyCombinationType
+	{
+		Or = 0,
+		And = 1
 	}
 
 	public enum inkLanguageId
@@ -14143,7 +16279,8 @@ public static partial class Enums
 		TR = 16,
 		TH = 17,
 		HT = 18,
-		DEBUG = 19
+		UA = 20,
+		DEBUG = 21
 	}
 
 	public enum inkLastTickVideoState
@@ -14199,6 +16336,28 @@ public static partial class Enums
 	{
 		Enabled = 0,
 		Disabled = 1
+	}
+
+	public enum inkRumblePosition : byte
+	{
+		Both = 0,
+		Left = 1,
+		Right = 2
+	}
+
+	public enum inkRumbleStrength : byte
+	{
+		SuperLight = 0,
+		Light = 1,
+		Medium = 2,
+		Heavy = 3
+	}
+
+	public enum inkRumbleType : byte
+	{
+		Fast = 0,
+		Pulse = 1,
+		Slow = 2
 	}
 
 	public enum inkSaveStatus : byte
@@ -14384,7 +16543,22 @@ public static partial class Enums
 		XINPUT_PAD = 5,
 		STADIA = 6,
 		NINTENDO_SWITCH = 7,
+		SCARLETT_GAMEPAD = 8,
+		PROSPERO = 9,
 		EID_COUNT = 10
+	}
+
+	public enum inputEInputScheme : byte
+	{
+		LEGACY = 0,
+		AGILE = 1,
+		ALTERNATIVE = 2
+	}
+
+	public enum inputESimplifiedInputDevice : byte
+	{
+		KBM = 0,
+		PAD = 1
 	}
 
 	public enum locHolocallActorMode : byte
@@ -14472,6 +16646,14 @@ public static partial class Enums
 		Avoid = 2
 	}
 
+	public enum moveLineOfSightPointPreference
+	{
+		None = 0,
+		ClosestToOwner = 1,
+		ClosestToTarget = 2,
+		FurthestFromTarget = 3
+	}
+
 	public enum moveLocomotionAction
 	{
 		Undefined = 0,
@@ -14524,11 +16706,38 @@ public static partial class Enums
 		OffMeshLink = 2
 	}
 
+	public enum navNavAreaID : byte
+	{
+		Unwalkable = 0,
+		Terrain = 1,
+		Crouchable = 2,
+		Regular = 3,
+		Road = 4,
+		Pavement = 5,
+		Door = 10,
+		Ladder = 11,
+		Jump = 12,
+		Elevator = 14,
+		Stairs = 15,
+		Drones = 16,
+		Exploration = 17,
+		CrowdWalkable = 5
+	}
+
 	public enum navNaviPositionType
 	{
 		None = 0,
 		Normal = 1,
 		Projected = 2
+	}
+
+	public enum navPathQueryDebugStatus
+	{
+		InvalidQuery = 0,
+		Active = 1,
+		WaitingForStreaming = 2,
+		Completed = 3,
+		NoPathPossible = 4
 	}
 
 	public enum operationsMode
@@ -14544,6 +16753,19 @@ public static partial class Enums
 		BootingAttempt = 1,
 		BootingSuccess = 2,
 		Loop = 3
+	}
+
+	[Flags]
+	public enum physicsDestructionType
+	{
+		DT_PhysicalNode = 1 << 0,
+		DT_PhysicalComponent = 1 << 1,
+		DT_BakedNode = 1 << 2,
+		DT_BakedComponent = 1 << 3,
+		DT_IDN = 1 << 4,
+		DT_FoliageDestruction = 1 << 5,
+		DT_QuestComponent = 1 << 6,
+		DT_QuestNode = 1 << 7
 	}
 
 	[Flags]
@@ -14564,11 +16786,34 @@ public static partial class Enums
 		Body = 1
 	}
 
+	public enum physicsFractureFieldEffect : byte
+	{
+		FE_Fracture = 0,
+		FE_Erase = 1
+	}
+
+	[Flags]
+	public enum physicsFractureFieldOptions
+	{
+		FFO_OnlyPrefractured = 1 << 0,
+		FFO_DisableReiteration = 1 << 1
+	}
+
 	[Flags]
 	public enum physicsFractureFieldType
 	{
 		FF_Default = 1 << 0,
-		FF_Locomotion = 1 << 1
+		FF_Locomotion = 1 << 1,
+		FF_TriggerDestructionEvent = 1 << 2,
+		FF_FractureFieldNode = 1 << 3,
+		FF_FractureFieldGameEffect = 1 << 4,
+		FF_FractureFieldComponent = 1 << 5
+	}
+
+	public enum physicsFractureFieldValueType : byte
+	{
+		FFVT_Impulse = 0,
+		FFVT_Velocity = 1
 	}
 
 	public enum physicsMaterialFriction
@@ -14594,12 +16839,19 @@ public static partial class Enums
 		Never = 4
 	}
 
+	public enum physicsMaterialTagProjectileRicochet : byte
+	{
+		Default = 0,
+		Always = 1
+	}
+
 	public enum physicsMaterialTagType : byte
 	{
 		AIVisibility = 0,
 		PlayerVisibility = 1,
 		ProjectilePenetration = 2,
-		VehicleTraction = 3
+		ProjectileRicochet = 3,
+		VehicleTraction = 4
 	}
 
 	public enum physicsMaterialTagVehicleTraction : byte
@@ -14707,20 +16959,25 @@ public static partial class Enums
 		Gameplay = 8,
 		GeomDescription = 9,
 		LineOfSightTests = 10,
-		Navigation = 11,
-		Nodes = 12,
-		Ragdoll = 13,
-		Scripts = 14,
-		VehicleAI = 15,
-		Vehicles = 16,
-		VehicleChassis = 17,
-		VehiclesCrowd = 18,
-		VehicleWheel = 19,
-		VehicleStreamingHack = 20,
-		VehicleWater = 21,
-		WorldUI = 22,
-		GameEffects = 23,
-		GameProjectiles = 24
+		MoveZAlignment = 11,
+		Navigation = 12,
+		Nodes = 13,
+		PuppetBlackboardUpdater = 14,
+		Ragdoll = 15,
+		Scripts = 16,
+		TargetingSystem = 17,
+		VehicleAI = 18,
+		VehicleAIColliders = 19,
+		Vehicles = 20,
+		VehicleChassis = 21,
+		VehiclesCrowd = 22,
+		VehicleWheel = 23,
+		VehicleStreamingHack = 24,
+		VehicleWater = 25,
+		VisibilityResolver = 26,
+		WorldUI = 27,
+		GameEffects = 28,
+		GameProjectiles = 29
 	}
 
 	[Flags]
@@ -14845,6 +17102,13 @@ public static partial class Enums
 		UnblockAll = 2
 	}
 
+	public enum questBriefingPlayerType
+	{
+		Fullscreen = 0,
+		Hud = 1,
+		World = 2
+	}
+
 	public enum questBriefingSequencePlayerFunction
 	{
 		StartSequence = 0,
@@ -14855,7 +17119,8 @@ public static partial class Enums
 	public enum questBriefingType
 	{
 		Fullscreen = 0,
-		Hud = 1
+		Hud = 1,
+		World = 2
 	}
 
 	public enum questCameraParallaxSpace
@@ -14879,6 +17144,12 @@ public static partial class Enums
 		Explosion = 1,
 		Melee = 2,
 		Other = 3
+	}
+
+	public enum questChoiceSection_ConditionTypeMode : byte
+	{
+		Highlight = 0,
+		Selection = 1
 	}
 
 	public enum questCombatNodeFunctions
@@ -14910,6 +17181,12 @@ public static partial class Enums
 	{
 		PlacidePhone = 0,
 		VideoCallInterupt = 1
+	}
+
+	public enum questDistanceType
+	{
+		Nearest = 0,
+		Furthest = 1
 	}
 
 	public enum questDrillingState
@@ -14975,6 +17252,15 @@ public static partial class Enums
 		Closed = 1
 	}
 
+	public enum questEUseWeapon_MissileOffsetsSource
+	{
+		None = 0,
+		Predefined_Narrow = 1,
+		Predefined_Wide = 2,
+		TweakDB = 3,
+		List = 4
+	}
+
 	public enum questElevator_ManageNPCAttachment_NodeTypeParamsAction
 	{
 		Attach = 0,
@@ -15019,11 +17305,24 @@ public static partial class Enums
 		NintendoGamepad = 5
 	}
 
+	public enum questInputScheme
+	{
+		Legacy = 0,
+		Agile = 1,
+		Alternative = 2
+	}
+
 	public enum questJournalAlignmentEventType
 	{
 		Left = 0,
 		Center = 1,
 		Right = 2
+	}
+
+	public enum questJournalQuestEntry_NodeTypeNodeVersion : byte
+	{
+		Initial = 0,
+		OptionalProperty = 1
 	}
 
 	public enum questJournalSizeEventType
@@ -15054,6 +17353,13 @@ public static partial class Enums
 		NAND = 3,
 		NOR = 4,
 		NXOR = 5
+	}
+
+	public enum questLookAtAction
+	{
+		Nothing = 0,
+		Reset = 1,
+		Set = 2
 	}
 
 	public enum questLookAtDrivenTurnsMode
@@ -15106,7 +17412,8 @@ public static partial class Enums
 		MoveTo = 1,
 		RotateTo = 2,
 		Patrol = 3,
-		Follow = 4
+		Follow = 4,
+		JoinCrowd = 5
 	}
 
 	public enum questMultiplayerAIDirectorFunction
@@ -15181,6 +17488,12 @@ public static partial class Enums
 		EndCall = 3
 	}
 
+	public enum questPhoneCallVisuals
+	{
+		Default = 0,
+		Somi = 1
+	}
+
 	public enum questPhoneStatus
 	{
 		Available = 0,
@@ -15230,12 +17543,15 @@ public static partial class Enums
 
 	public enum questQuestContentType : byte
 	{
-		Fixer = 0,
-		MainQuest = 1,
-		SideQuest_MainPath = 2,
-		SideQuest_Romance = 3,
-		SideQuest_Standalone = 4,
-		MinorQuestAndSts = 5
+		EP1_MainQuest = 0,
+		EP1_SideQuest = 1,
+		EP1_Minor = 2,
+		Fixer = 3,
+		MainQuest = 4,
+		SideQuest_MainPath = 5,
+		SideQuest_Romance = 6,
+		SideQuest_Standalone = 7,
+		MinorQuestAndSts = 8
 	}
 
 	public enum questQuickItemsSet
@@ -15281,6 +17597,12 @@ public static partial class Enums
 		CutDestination = 4
 	}
 
+	public enum questSpawnDirectionPreference
+	{
+		Behind = 0,
+		InFront = 1
+	}
+
 	public enum questSpawnedVehicleType
 	{
 		EntityReferenced = 0,
@@ -15299,6 +17621,12 @@ public static partial class Enums
 	{
 		PrimaryWeapon = 0,
 		SecondaryWeapon = 1
+	}
+
+	public enum questTimeSkipMode : byte
+	{
+		PreSkip = 0,
+		PostSkip = 1
 	}
 
 	public enum questTriggerConditionType : byte
@@ -15361,7 +17689,9 @@ public static partial class Enums
 		Follow = 1,
 		[RED("Move To")] Move_To = 2,
 		Racing = 3,
-		[RED("Join Traffic")] Join_Traffic = 4
+		[RED("Join Traffic")] Join_Traffic = 4,
+		Panic = 5,
+		Chase = 6
 	}
 
 	public enum questVehicleWeaponQuestID : byte
@@ -15387,7 +17717,10 @@ public static partial class Enums
 	public enum questWeaponUsageType
 	{
 		Shoot = 0,
-		Reload = 1
+		StopShooting = 1,
+		Reload = 2,
+		StartAttack = 3,
+		StopAttack = 4
 	}
 
 	public enum redTaskTextMessageType
@@ -15414,6 +17747,19 @@ public static partial class Enums
 		PSM_None = 0,
 		PSM_Billboard = 1,
 		PSM_Regular = 2
+	}
+
+	public enum rendEPathTracingLightUsage : byte
+	{
+		PTLU_Everywhere = 0,
+		PTLU_OnlyInPathTracing = 1,
+		PTLU_ExcludeFromPathTracing = 2
+	}
+
+	public enum rendEStreamingObserverMode : byte
+	{
+		Point = 0,
+		Box = 1
 	}
 
 	public enum rendGIGroup : byte
@@ -15472,6 +17818,13 @@ public static partial class Enums
 		Scanning = 2,
 		Cancelled = 3,
 		Complete = 4
+	}
+
+	public enum rendRayTracedShadowsPlatform : byte
+	{
+		RLSP_All = 0,
+		RLSP_PC = 1,
+		RLSP_Consoles = 2
 	}
 
 	public enum rendResolutionMultiplier
@@ -15709,7 +18062,10 @@ public static partial class Enums
 		Chinese = 6,
 		Brasilian = 7,
 		English = 8,
-		Korean = 9
+		Korean = 9,
+		Swahili = 10,
+		French = 11,
+		Polish = 12
 	}
 
 	public enum scnDialogLineType
@@ -15725,7 +18081,8 @@ public static partial class Enums
 		OverHeadAlwaysVisible = 9,
 		OwnerlessRegular = 10,
 		AlwaysCinematicNoSpeaker = 11,
-		GlobalTVAlwaysVisible = 12
+		GlobalTVAlwaysVisible = 12,
+		Narrator = 13
 	}
 
 	public enum scnDialogLineVisualStyle : byte
@@ -15738,7 +18095,8 @@ public static partial class Enums
 		innerDialog = 5,
 		overHeadAlwaysVisible = 6,
 		alwaysCinematicNoSpeaker = 7,
-		globalTVAlwaysVisible = 8
+		globalTVAlwaysVisible = 8,
+		narrator = 9
 	}
 
 	public enum scnDistractedConditionTarget : byte
@@ -16059,6 +18417,13 @@ public static partial class Enums
 		FetchFailed = 4
 	}
 
+	public enum shadowsShadowCastingMode : byte
+	{
+		Default = 0,
+		Always = 1,
+		Never = 2
+	}
+
 	public enum sharedCommandResult
 	{
 		Success = 0,
@@ -16196,13 +18561,32 @@ public static partial class Enums
 	{
 		FPP = 0,
 		TPPClose = 1,
-		TPPFar = 2
+		TPPMedium = 2,
+		TPPFar = 3,
+		DriverCombatClose = 4,
+		DriverCombatMedium = 5,
+		DriverCombatFar = 6
 	}
 
 	public enum vehicleCameraType
 	{
 		FPP = 0,
 		TPP = 1
+	}
+
+	public enum vehicleCoolExitImpulseLevel
+	{
+		NoExit = 0,
+		NoImpulse = 1,
+		LowImpulse = 2,
+		MaxImpulse = 3
+	}
+
+	public enum vehicleDisabledReason
+	{
+		FrontTire = 0,
+		RearTire = 1,
+		Other = 2
 	}
 
 	public enum vehicleELightMode
@@ -16348,6 +18732,19 @@ public static partial class Enums
 		PTAIT_EASE_IN_OUT_SIN_NON_SMOOTHED = 18
 	}
 
+	public enum vehiclePoliceStrategy : byte
+	{
+		None = 0,
+		DriveTowardsPlayer = 1,
+		DriveAwayFromPlayer = 2,
+		PatrolNearby = 3,
+		InterceptAtNextIntersection = 4,
+		GetToPlayerFromAnywhere = 5,
+		InitialSearch = 6,
+		SearchFromAnywhere = 7,
+		Count = 8
+	}
+
 	public enum vehicleQuestUIEnable
 	{
 		Gameplay = 0,
@@ -16391,7 +18788,11 @@ public static partial class Enums
 	public enum vehicleTPPCameraDistance
 	{
 		Close = 0,
-		Far = 1
+		Medium = 1,
+		Far = 2,
+		DriverCombatClose = 3,
+		DriverCombatMedium = 4,
+		DriverCombatFar = 5
 	}
 
 	public enum vehicleTPPCameraHeight
@@ -16414,6 +18815,14 @@ public static partial class Enums
 		Closed = 0,
 		Open = 1,
 		Detached = 2
+	}
+
+	public enum vehicleVehicleNetrunnerQuickhackType
+	{
+		ForceBrakes = 0,
+		Explode = 1,
+		Accelerate = 2,
+		NONE = 3
 	}
 
 	public enum vgEStyleAttributeType
@@ -16455,24 +18864,24 @@ public static partial class Enums
 		Ranged = 1,
 		OneHandedRanged = 2,
 		AssaultRifle = 3,
-		Hammer = 5,
-		Handgun = 6,
-		HeavyMachineGun = 7,
-		Katana = 8,
-		Knife = 9,
-		LightMachineGun = 10,
-		LongBlade = 11,
-		Melee = 12,
-		OneHandedClub = 13,
-		PrecisionRifle = 14,
-		Revolver = 15,
-		Rifle = 16,
-		ShortBlade = 17,
-		Shotgun = 18,
-		ShotgunDual = 19,
-		SniperRifle = 20,
-		SubmachineGun = 21,
-		TwoHandedClub = 22
+		Hammer = 8,
+		Handgun = 9,
+		HeavyMachineGun = 10,
+		Katana = 11,
+		Knife = 12,
+		LightMachineGun = 13,
+		LongBlade = 14,
+		Melee = 16,
+		OneHandedClub = 17,
+		PrecisionRifle = 18,
+		Revolver = 19,
+		Rifle = 20,
+		ShortBlade = 21,
+		Shotgun = 22,
+		ShotgunDual = 23,
+		SniperRifle = 24,
+		SubmachineGun = 25,
+		TwoHandedClub = 27
 	}
 
 	public enum workWorkspotDebugMode
@@ -16518,12 +18927,6 @@ public static partial class Enums
 		HierarchicalGrid = 0,
 		AlwaysLoaded = 1,
 		Discard = 2
-	}
-
-	[Flags]
-	public enum worldEDeniedAreaFlags
-	{
-		EDAF_Togglable = 1 << 0
 	}
 
 	public enum worldEditablePrefabType : byte
@@ -16724,6 +19127,7 @@ public static partial class Enums
 		FromConvexHull = 6,
 		BoundsCombine = 7,
 		BlobCrowd = 8,
+		ReduceTarps = 9,
 		KeepCurrent = 127
 	}
 
@@ -16762,11 +19166,44 @@ public static partial class Enums
 		ForceLoad = 1
 	}
 
+	public enum worldQuestPreventionNotifierActivation : byte
+	{
+		OnFootOnly = 0,
+		InVehicleOnly = 1,
+		Always = 2
+	}
+
+	public enum worldQuestPreventionNotifierType : byte
+	{
+		Deescalation = 0,
+		Clear = 1
+	}
+
 	public enum worldQuestType : byte
 	{
 		MainQuest = 0,
 		SideQuest = 1,
-		StreetStory = 2
+		StreetStory = 2,
+		MinorActivities = 3,
+		MiniWorldStories = 4,
+		CyberJunkie = 5,
+		Courier = 6,
+		CourierQuestGiver = 7,
+		StuntChallenges = 8,
+		StuntChallengesQuestGiver = 9,
+		AirDrop = 10,
+		BlackMarket = 11,
+		Food = 12,
+		TechStore = 13,
+		Clothing = 14,
+		Medpoint = 15,
+		WeaponShop = 16,
+		Ripperdoc = 17,
+		CyberwareShop = 18,
+		MeleeWeaponVendor = 19,
+		Netrunner = 20,
+		Outpost = 21,
+		GangWatch = 22
 	}
 
 	public enum worldRainIntensity
@@ -16804,6 +19241,12 @@ public static partial class Enums
 		KeepPitch_WorldSpaceYawRoll = 8
 	}
 
+	public enum worldStreamingDataGroup : byte
+	{
+		Base = 0,
+		EP1 = 1
+	}
+
 	public enum worldStreamingSectorCategory : sbyte
 	{
 		Exterior = 0,
@@ -16818,6 +19261,23 @@ public static partial class Enums
 	{
 		BeginMove = 0,
 		EndMove = 1
+	}
+
+	public enum worldTrafficLanePersistentFlags : ushort
+	{
+		FromRoadSpline = 1,
+		Bidirectional = 2,
+		PatrolRoute = 4,
+		Pavement = 8,
+		Road = 16,
+		Intersection = 32,
+		NeverDeadEnd = 64,
+		TrafficDisabled = 128,
+		CrossWalk = 256,
+		GPSOnly = 512,
+		ShowDebug = 1024,
+		Blockade = 2048,
+		Yield = 4096
 	}
 
 	public enum worldTrafficLightColor

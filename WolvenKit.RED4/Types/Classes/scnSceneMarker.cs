@@ -12,9 +12,18 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<scnSceneMarkerInternalsAnimEventEntry>>(value);
 		}
 
+		[Ordinal(1)] 
+		[RED("workspotMarkers")] 
+		public CArray<scnSceneMarkerInternalsWorkspotEntry> WorkspotMarkers
+		{
+			get => GetPropertyValue<CArray<scnSceneMarkerInternalsWorkspotEntry>>();
+			set => SetPropertyValue<CArray<scnSceneMarkerInternalsWorkspotEntry>>(value);
+		}
+
 		public scnSceneMarker()
 		{
 			Markers = new();
+			WorkspotMarkers = new();
 
 			PostConstruct();
 		}

@@ -20,6 +20,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("toggle")] 
+		public CBool Toggle
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public MessengerForceSelectionEvent()
 		{
 			PostConstruct();

@@ -1,4 +1,4 @@
-//#define IS_PARALLEL
+#define IS_PARALLEL
 
 using System;
 using System.Collections.Concurrent;
@@ -13,6 +13,7 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.FunctionalTests.Model;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.IO;
+using WolvenKit.RED4.Types;
 
 #if IS_PARALLEL
 using System.Threading.Tasks;
@@ -29,7 +30,7 @@ namespace WolvenKit.FunctionalTests
         public static void SetupClass(TestContext context) => Setup(context);
 
         private const bool TEST_EXISTING = true;
-        private const bool DECOMPRESS_BUFFERS = false;
+        private const bool DECOMPRESS_BUFFERS = true;
 
         #endregion Methods
 
@@ -117,9 +118,6 @@ namespace WolvenKit.FunctionalTests
         public void Read_cookedanims() => Test_Extension(".cookedanims");
 
         [TestMethod]
-        public void Read_cookedapp() => Test_Extension(".cookedapp");
-
-        [TestMethod]
         public void Read_cookedprefab() => Test_Extension(".cookedprefab");
 
         [TestMethod]
@@ -142,6 +140,9 @@ namespace WolvenKit.FunctionalTests
 
         [TestMethod]
         public void Read_devices() => Test_Extension(".devices");
+
+        [TestMethod]
+        public void Read_dlcManifest() => Test_Extension(".dlc_manifest");
 
         [TestMethod]
         public void Read_dtex() => Test_Extension(".dtex");
@@ -320,10 +321,6 @@ namespace WolvenKit.FunctionalTests
         [TestMethod]
         public void Read_mt() => Test_Extension(".mt");
 
-        // removed in 1.3
-        //[TestMethod]
-        //public void Read_navmesh() => Test_Extension(".navmesh");
-
         [TestMethod]
         public void Read_null_areas() => Test_Extension(".null_areas");
 
@@ -394,10 +391,10 @@ namespace WolvenKit.FunctionalTests
         public void Read_spatial_representation() => Test_Extension(".spatial_representation");
 
         [TestMethod]
-        public void Read_streamingquerydata() => Test_Extension(".streamingquerydata");
+        public void Read_streamingblock() => Test_Extension(".streamingblock");
 
         [TestMethod]
-        public void Read_streamingblock() => Test_Extension(".streamingblock");
+        public void Read_streamingquerydata() => Test_Extension(".streamingquerydata");
 
         [TestMethod]
         public void Read_streamingsector() => Test_Extension(".streamingsector");
@@ -484,6 +481,8 @@ namespace WolvenKit.FunctionalTests
                         ms.Seek(0, SeekOrigin.Begin);
 
                         using var reader = new CR2WReader(ms);
+                        reader.ParsingError += TypeGlobal.OnParsingError;
+
                         var readResult = reader.ReadFile(out var c, DECOMPRESS_BUFFERS);
 
                         switch (readResult)

@@ -21,14 +21,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
-		[RED("poolModifier")] 
-		public gameStatPoolModifier PoolModifier
-		{
-			get => GetPropertyValue<gameStatPoolModifier>();
-			set => SetPropertyValue<gameStatPoolModifier>(value);
-		}
-
-		[Ordinal(3)] 
 		[RED("poolType")] 
 		public CEnum<gamedataStatPoolType> PoolType
 		{
@@ -36,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataStatPoolType>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(3)] 
 		[RED("modType")] 
 		public CEnum<gameStatPoolModificationTypes> ModType
 		{
@@ -44,19 +36,17 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameStatPoolModificationTypes>>(value);
 		}
 
-		[Ordinal(5)] 
-		[RED("previousMod")] 
-		public gameStatPoolModifier PreviousMod
+		[Ordinal(4)] 
+		[RED("recordId")] 
+		public TweakDBID RecordId
 		{
-			get => GetPropertyValue<gameStatPoolModifier>();
-			set => SetPropertyValue<gameStatPoolModifier>(value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		public ModifyStatPoolModifierEffector()
 		{
 			OwnerEntityID = new entEntityID();
-			PoolModifier = new gameStatPoolModifier();
-			PreviousMod = new gameStatPoolModifier();
 
 			PostConstruct();
 		}

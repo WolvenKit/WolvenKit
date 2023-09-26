@@ -19,6 +19,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
+		[RED("instigator")]
+		[REDProperty(IsIgnored = true)]
+		public CString Instigator
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+		
 		[RED("inverted")]
 		[REDProperty(IsIgnored = true)]
 		public CBool Inverted
@@ -41,6 +49,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("useCountWhenRemoving")]
+		[REDProperty(IsIgnored = true)]
+		public CBool UseCountWhenRemoving
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

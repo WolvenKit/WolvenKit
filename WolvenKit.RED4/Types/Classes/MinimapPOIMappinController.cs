@@ -61,6 +61,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(21)] 
+		[RED("mappinVariant")] 
+		public CEnum<gamedataMappinVariant> MappinVariant
+		{
+			get => GetPropertyValue<CEnum<gamedataMappinVariant>>();
+			set => SetPropertyValue<CEnum<gamedataMappinVariant>>(value);
+		}
+
+		[Ordinal(22)] 
 		[RED("c_pingAnimCount")] 
 		public CUInt32 C_pingAnimCount
 		{
@@ -68,7 +76,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
+		[RED("isNcpdScanner")] 
+		public CBool IsNcpdScanner
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(24)] 
 		[RED("vehicleMinimapMappinComponent")] 
 		public CHandle<VehicleMinimapMappinComponent> VehicleMinimapMappinComponent
 		{
@@ -76,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<VehicleMinimapMappinComponent>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(25)] 
 		[RED("keepIconOnClamping")] 
 		public CBool KeepIconOnClamping
 		{

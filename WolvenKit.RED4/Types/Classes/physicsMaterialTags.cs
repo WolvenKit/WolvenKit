@@ -29,6 +29,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("projectileRicochet")] 
+		public CEnum<physicsMaterialTagProjectileRicochet> ProjectileRicochet
+		{
+			get => GetPropertyValue<CEnum<physicsMaterialTagProjectileRicochet>>();
+			set => SetPropertyValue<CEnum<physicsMaterialTagProjectileRicochet>>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("vehicleTraction")] 
 		public CEnum<physicsMaterialTagVehicleTraction> VehicleTraction
 		{

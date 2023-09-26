@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CodexListItemController : inkListItemController
 	{
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("doMarkNew")] 
 		public CBool DoMarkNew
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("stateMapperRef")] 
 		public inkWidgetReference StateMapperRef
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
 		[RED("stateMapper")] 
 		public CWeakHandle<ListItemStateMapper> StateMapper
 		{

@@ -13,8 +13,8 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(10)] 
-		[RED("healthPersentage")] 
-		public inkTextWidgetReference HealthPersentage
+		[RED("healthPercentage")] 
+		public inkTextWidgetReference HealthPercentage
 		{
 			get => GetPropertyValue<inkTextWidgetReference>();
 			set => SetPropertyValue<inkTextWidgetReference>(value);
@@ -29,6 +29,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(12)] 
+		[RED("dividerContainerRef")] 
+		public inkCompoundWidgetReference DividerContainerRef
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(13)] 
 		[RED("statListener")] 
 		public CHandle<BossHealthStatListener> StatListener
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<BossHealthStatListener>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("boss")] 
 		public CWeakHandle<NPCPuppet> Boss
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<NPCPuppet>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("healthController")] 
 		public CWeakHandle<NameplateBarLogicController> HealthController
 		{
@@ -52,7 +60,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<NameplateBarLogicController>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
+		[RED("thresholds")] 
+		public CArray<CFloat> Thresholds
+		{
+			get => GetPropertyValue<CArray<CFloat>>();
+			set => SetPropertyValue<CArray<CFloat>>(value);
+		}
+
+		[Ordinal(17)] 
 		[RED("root")] 
 		public CWeakHandle<inkWidget> Root
 		{
@@ -60,7 +76,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(18)] 
+		[RED("unfoldAnimation")] 
+		public CHandle<inkanimProxy> UnfoldAnimation
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(19)] 
 		[RED("foldAnimation")] 
 		public CHandle<inkanimProxy> FoldAnimation
 		{
@@ -68,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("bossPuppets")] 
 		public CArray<CWeakHandle<NPCPuppet>> BossPuppets
 		{
@@ -79,8 +103,10 @@ namespace WolvenKit.RED4.Types
 		public BossHealthBarGameController()
 		{
 			HealthControllerRef = new inkWidgetReference();
-			HealthPersentage = new inkTextWidgetReference();
+			HealthPercentage = new inkTextWidgetReference();
 			BossName = new inkTextWidgetReference();
+			DividerContainerRef = new inkCompoundWidgetReference();
+			Thresholds = new();
 			BossPuppets = new();
 
 			PostConstruct();

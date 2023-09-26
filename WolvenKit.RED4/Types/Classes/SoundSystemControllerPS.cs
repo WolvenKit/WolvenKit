@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SoundSystemControllerPS : MasterControllerPS
 	{
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("defaultAction")] 
 		public CInt32 DefaultAction
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(109)] 
 		[RED("soundSystemSettings")] 
 		public CArray<SoundSystemSettings> SoundSystemSettings
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<SoundSystemSettings>>(value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(110)] 
 		[RED("currentEvent")] 
 		public CHandle<ChangeMusicAction> CurrentEvent
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ChangeMusicAction>>(value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(111)] 
 		[RED("cachedEvent")] 
 		public CHandle<ChangeMusicAction> CachedEvent
 		{

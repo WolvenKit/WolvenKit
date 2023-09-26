@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class PlayPauseActionWidgetController : NextPreviousActionWidgetController
 	{
-		[Ordinal(33)] 
+		[Ordinal(36)] 
 		[RED("playContainer")] 
 		public inkWidgetReference PlayContainer
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(37)] 
 		[RED("isPlaying")] 
 		public CBool IsPlaying
 		{

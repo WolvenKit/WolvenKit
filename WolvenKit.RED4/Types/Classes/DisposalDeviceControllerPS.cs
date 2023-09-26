@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class DisposalDeviceControllerPS : ScriptableDeviceComponentPS
 	{
-		[Ordinal(104)] 
+		[Ordinal(107)] 
 		[RED("DisposalDeviceSetup")] 
 		public DisposalDeviceSetup DisposalDeviceSetup
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<DisposalDeviceSetup>(value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(108)] 
 		[RED("distractionSetup")] 
 		public DistractionSetup DistractionSetup
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<DistractionSetup>(value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(109)] 
 		[RED("explosionSetup")] 
 		public DistractionSetup ExplosionSetup
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<DistractionSetup>(value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(110)] 
 		[RED("isDistractionDisabled")] 
 		public CBool IsDistractionDisabled
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(111)] 
 		[RED("wasActivated")] 
 		public CBool WasActivated
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(109)] 
+		[Ordinal(112)] 
 		[RED("wasLethalTakedownPerformed")] 
 		public CBool WasLethalTakedownPerformed
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(113)] 
 		[RED("isPlayerCurrentlyPerformingDisposal")] 
 		public CBool IsPlayerCurrentlyPerformingDisposal
 		{

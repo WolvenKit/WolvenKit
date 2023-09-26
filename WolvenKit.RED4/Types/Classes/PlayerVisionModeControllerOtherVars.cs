@@ -28,6 +28,30 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("buttonHoldPressTime")] 
+		public CFloat ButtonHoldPressTime
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(4)] 
+		[RED("buttonHoldTapTime")] 
+		public CFloat ButtonHoldTapTime
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("buttonHoldTapCount")] 
+		public CInt32 ButtonHoldTapCount
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
 		public PlayerVisionModeControllerOtherVars()
 		{
 			PostConstruct();

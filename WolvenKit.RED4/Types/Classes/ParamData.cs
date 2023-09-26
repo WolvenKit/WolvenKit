@@ -20,6 +20,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("defaultValue")] 
+		public CVariant DefaultValue
+		{
+			get => GetPropertyValue<CVariant>();
+			set => SetPropertyValue<CVariant>(value);
+		}
+
 		public ParamData()
 		{
 			PostConstruct();

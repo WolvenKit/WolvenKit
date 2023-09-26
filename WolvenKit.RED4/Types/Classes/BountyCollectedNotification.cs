@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class BountyCollectedNotification : GenericNotificationController
 	{
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("bountyCollectedUpdateAnimation")] 
 		public CName BountyCollectedUpdateAnimation
 		{

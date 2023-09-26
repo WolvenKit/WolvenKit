@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CreditsGameController : gameuiCreditsController
 	{
-		[Ordinal(26)] 
+		[Ordinal(28)] 
 		[RED("videoContainer")] 
 		public inkCompoundWidgetReference VideoContainer
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(29)] 
 		[RED("sceneTexture")] 
 		public inkImageWidgetReference SceneTexture
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(30)] 
 		[RED("backgroundVideo")] 
 		public inkVideoWidgetReference BackgroundVideo
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkVideoWidgetReference>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(31)] 
 		[RED("binkVideo")] 
 		public inkVideoWidgetReference BinkVideo
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkVideoWidgetReference>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(32)] 
 		[RED("binkVideos")] 
 		public CArray<gameuiBinkResource> BinkVideos
 		{
@@ -44,7 +44,39 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameuiBinkResource>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(33)] 
+		[RED("fastForward")] 
+		public inkTextWidgetReference FastForward
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(34)] 
+		[RED("timerUntilFadeEp1")] 
+		public CFloat TimerUntilFadeEp1
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(35)] 
+		[RED("musicVideoEp1")] 
+		public inkVideoWidgetReference MusicVideoEp1
+		{
+			get => GetPropertyValue<inkVideoWidgetReference>();
+			set => SetPropertyValue<inkVideoWidgetReference>(value);
+		}
+
+		[Ordinal(36)] 
+		[RED("creditsAnimEp1")] 
+		public inkCompoundWidgetReference CreditsAnimEp1
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(37)] 
 		[RED("currentBinkVideo")] 
 		public CInt32 CurrentBinkVideo
 		{
@@ -52,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(38)] 
 		[RED("videoSummary")] 
 		public inkVideoWidgetSummary VideoSummary
 		{
@@ -60,9 +92,25 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkVideoWidgetSummary>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(39)] 
 		[RED("isDataSet")] 
 		public CBool IsDataSet
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(40)] 
+		[RED("accumulatedTime")] 
+		public CFloat AccumulatedTime
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(41)] 
+		[RED("isCounting")] 
+		public CBool IsCounting
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
@@ -75,6 +123,9 @@ namespace WolvenKit.RED4.Types
 			BackgroundVideo = new inkVideoWidgetReference();
 			BinkVideo = new inkVideoWidgetReference();
 			BinkVideos = new();
+			FastForward = new inkTextWidgetReference();
+			MusicVideoEp1 = new inkVideoWidgetReference();
+			CreditsAnimEp1 = new inkCompoundWidgetReference();
 			VideoSummary = new inkVideoWidgetSummary();
 
 			PostConstruct();

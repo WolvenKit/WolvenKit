@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class vehicleBaseObject : gameObject
 	{
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("archetype")] 
 		public CResourceReference<AIArchetype> Archetype
 		{
@@ -12,7 +12,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceReference<AIArchetype>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
+		[RED("isVehicleOnStateLocked")] 
+		public CBool IsVehicleOnStateLocked
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(38)] 
 		[RED("vehicleComponent")] 
 		public CWeakHandle<VehicleComponent> VehicleComponent
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<VehicleComponent>>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(39)] 
 		[RED("uiComponent")] 
 		public CWeakHandle<WorldWidgetComponent> UiComponent
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<WorldWidgetComponent>>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(40)] 
 		[RED("crowdMemberComponent")] 
 		public CHandle<CrowdMemberBaseComponent> CrowdMemberComponent
 		{
@@ -36,7 +44,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<CrowdMemberBaseComponent>>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(41)] 
+		[RED("attitudeAgent")] 
+		public CHandle<gameAttitudeAgent> AttitudeAgent
+		{
+			get => GetPropertyValue<CHandle<gameAttitudeAgent>>();
+			set => SetPropertyValue<CHandle<gameAttitudeAgent>>(value);
+		}
+
+		[Ordinal(42)] 
 		[RED("hitTimestamp")] 
 		public CFloat HitTimestamp
 		{
@@ -44,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(43)] 
 		[RED("drivingTrafficPattern")] 
 		public CName DrivingTrafficPattern
 		{
@@ -52,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(44)] 
 		[RED("onPavement")] 
 		public CBool OnPavement
 		{
@@ -60,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(45)] 
 		[RED("inTrafficLane")] 
 		public CBool InTrafficLane
 		{
@@ -68,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(46)] 
 		[RED("timesSentReactionEvent")] 
 		public CInt32 TimesSentReactionEvent
 		{
@@ -76,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(47)] 
 		[RED("timesToResendHandleReactionEvent")] 
 		public CInt32 TimesToResendHandleReactionEvent
 		{
@@ -84,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(48)] 
 		[RED("hasReactedToStimuli")] 
 		public CBool HasReactedToStimuli
 		{
@@ -92,15 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(46)] 
-		[RED("isPrevention")] 
-		public CBool IsPrevention
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(47)] 
+		[Ordinal(49)] 
 		[RED("gotStuckIncrement")] 
 		public CInt32 GotStuckIncrement
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(50)] 
 		[RED("waitForPassengersToSpawnEventDelayID")] 
 		public gameDelayID WaitForPassengersToSpawnEventDelayID
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(51)] 
 		[RED("triggerPanicDrivingEventDelayID")] 
 		public gameDelayID TriggerPanicDrivingEventDelayID
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(52)] 
 		[RED("reactionTriggerEvent")] 
 		public CHandle<HandleReactionEvent> ReactionTriggerEvent
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<HandleReactionEvent>>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(53)] 
 		[RED("fearInside")] 
 		public CBool FearInside
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(54)] 
 		[RED("vehicleUpsideDown")] 
 		public CBool VehicleUpsideDown
 		{
@@ -148,7 +156,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(55)] 
+		[RED("isQhackUploadInProgress")] 
+		public CBool IsQhackUploadInProgress
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(56)] 
+		[RED("currentlyUploadingAction")] 
+		public CWeakHandle<ScriptableDeviceAction> CurrentlyUploadingAction
+		{
+			get => GetPropertyValue<CWeakHandle<ScriptableDeviceAction>>();
+			set => SetPropertyValue<CWeakHandle<ScriptableDeviceAction>>(value);
+		}
+
+		[Ordinal(57)] 
 		[RED("bumpedRecently")] 
 		public CInt32 BumpedRecently
 		{
@@ -156,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(58)] 
 		[RED("bumpTimestamp")] 
 		public CFloat BumpTimestamp
 		{
@@ -164,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(59)] 
 		[RED("minUnconsciousImpact")] 
 		public CFloat MinUnconsciousImpact
 		{
@@ -172,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(60)] 
 		[RED("driverUnconscious")] 
 		public CBool DriverUnconscious
 		{
@@ -180,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(61)] 
 		[RED("abandoned")] 
 		public CBool Abandoned
 		{

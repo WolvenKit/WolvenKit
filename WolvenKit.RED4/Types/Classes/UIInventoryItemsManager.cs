@@ -61,6 +61,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(7)] 
+		[RED("statsDataSystem")] 
+		public CHandle<gameStatsDataSystem> StatsDataSystem
+		{
+			get => GetPropertyValue<CHandle<gameStatsDataSystem>>();
+			set => SetPropertyValue<CHandle<gameStatsDataSystem>>(value);
+		}
+
+		[Ordinal(8)] 
 		[RED("uiScriptableSystem")] 
 		public CWeakHandle<UIScriptableSystem> UiScriptableSystem
 		{
@@ -68,7 +76,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<UIScriptableSystem>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
+		[RED("inventoryManager")] 
+		public CWeakHandle<gameInventoryManager> InventoryManager
+		{
+			get => GetPropertyValue<CWeakHandle<gameInventoryManager>>();
+			set => SetPropertyValue<CWeakHandle<gameInventoryManager>>(value);
+		}
+
+		[Ordinal(10)] 
 		[RED("equippedItemsFetched")] 
 		public CBool EquippedItemsFetched
 		{
@@ -76,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(11)] 
 		[RED("equippedItems")] 
 		public CArray<gameItemID> EquippedItems
 		{
@@ -84,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameItemID>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(12)] 
 		[RED("transmogItemsFetched")] 
 		public CBool TransmogItemsFetched
 		{
@@ -92,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(13)] 
 		[RED("transmogItems")] 
 		public CArray<gameItemID> TransmogItems
 		{
@@ -100,10 +116,44 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameItemID>>(value);
 		}
 
+		[Ordinal(14)] 
+		[RED("maxStatValuesData")] 
+		public CArray<CHandle<WeaponMaxStatValueData>> MaxStatValuesData
+		{
+			get => GetPropertyValue<CArray<CHandle<WeaponMaxStatValueData>>>();
+			set => SetPropertyValue<CArray<CHandle<WeaponMaxStatValueData>>>(value);
+		}
+
+		[Ordinal(15)] 
+		[RED("notSellableTags")] 
+		public CArray<CName> NotSellableTags
+		{
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
+		}
+
+		[Ordinal(16)] 
+		[RED("TEMP_cuverBarsEnabled")] 
+		public CBool TEMP_cuverBarsEnabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(17)] 
+		[RED("TEMP_separatorBarsEnabled")] 
+		public CBool TEMP_separatorBarsEnabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public UIInventoryItemsManager()
 		{
 			EquippedItems = new();
 			TransmogItems = new();
+			MaxStatValuesData = new();
+			NotSellableTags = new();
 
 			PostConstruct();
 		}

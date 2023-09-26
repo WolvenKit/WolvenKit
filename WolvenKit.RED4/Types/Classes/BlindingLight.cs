@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class BlindingLight : BasicDistractionDevice
 	{
-		[Ordinal(100)] 
+		[Ordinal(106)] 
 		[RED("areaComponent")] 
 		public CHandle<gameStaticTriggerAreaComponent> AreaComponent
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>(value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(107)] 
 		[RED("highLightActive")] 
 		public CBool HighLightActive
 		{

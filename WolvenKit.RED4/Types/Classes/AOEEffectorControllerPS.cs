@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class AOEEffectorControllerPS : ActivatedDeviceControllerPS
 	{
-		[Ordinal(108)] 
+		[Ordinal(111)] 
 		[RED("effectsToPlay")] 
 		public CArray<CName> EffectsToPlay
 		{

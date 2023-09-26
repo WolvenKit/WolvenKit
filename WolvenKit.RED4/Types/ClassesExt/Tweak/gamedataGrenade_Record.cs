@@ -99,6 +99,30 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
+		[RED("enhancedAttackDurationFromPerk")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat EnhancedAttackDurationFromPerk
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("enhancedAttackRadiusFromPerk")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat EnhancedAttackRadiusFromPerk
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("enhancedPerkAttack")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID EnhancedPerkAttack
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
 		[RED("npcHitReactionAttack")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID NpcHitReactionAttack

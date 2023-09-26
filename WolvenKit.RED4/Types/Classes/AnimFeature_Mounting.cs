@@ -20,6 +20,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("parentHorizontalSpeed")] 
+		public CFloat ParentHorizontalSpeed
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public AnimFeature_Mounting()
 		{
 			PostConstruct();

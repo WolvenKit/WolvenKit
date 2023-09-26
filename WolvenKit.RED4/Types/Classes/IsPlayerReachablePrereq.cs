@@ -20,6 +20,30 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("canCheckProxy")] 
+		public CBool CanCheckProxy
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(3)] 
+		[RED("horTolerance")] 
+		public CFloat HorTolerance
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(4)] 
+		[RED("verTolerance")] 
+		public CFloat VerTolerance
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public IsPlayerReachablePrereq()
 		{
 			PostConstruct();

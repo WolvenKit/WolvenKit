@@ -183,13 +183,13 @@ namespace WolvenKit.RED4.Types
 			QuickKeyboardCommands = new();
 			QuickKeyboardCommands_Vehicle = new();
 			WheelList_Vehicles = new();
-			CurrentWheelItem = new QuickSlotCommand { IsSlotUnlocked = true, ItemId = new gameItemID(), PlayerVehicleData = new vehiclePlayerVehicle { VehicleType = Enums.gamedataVehicleType.Invalid }, InteractiveActionOwner = new entEntityID() };
-			CurrentWeaponWheelItem = new QuickSlotCommand { IsSlotUnlocked = true, ItemId = new gameItemID(), PlayerVehicleData = new vehiclePlayerVehicle { VehicleType = Enums.gamedataVehicleType.Invalid }, InteractiveActionOwner = new entEntityID() };
-			CurrentGadgetWheelConsumable = new QuickSlotCommand { IsSlotUnlocked = true, ItemId = new gameItemID(), PlayerVehicleData = new vehiclePlayerVehicle { VehicleType = Enums.gamedataVehicleType.Invalid }, InteractiveActionOwner = new entEntityID() };
-			CurrentGadgetWheelGadget = new QuickSlotCommand { IsSlotUnlocked = true, ItemId = new gameItemID(), PlayerVehicleData = new vehiclePlayerVehicle { VehicleType = Enums.gamedataVehicleType.Invalid }, InteractiveActionOwner = new entEntityID() };
-			CurrentVehicleWheelItem = new QuickSlotCommand { IsSlotUnlocked = true, ItemId = new gameItemID(), PlayerVehicleData = new vehiclePlayerVehicle { VehicleType = Enums.gamedataVehicleType.Invalid }, InteractiveActionOwner = new entEntityID() };
-			CurrentGadgetWheelItem = new QuickSlotCommand { IsSlotUnlocked = true, ItemId = new gameItemID(), PlayerVehicleData = new vehiclePlayerVehicle { VehicleType = Enums.gamedataVehicleType.Invalid }, InteractiveActionOwner = new entEntityID() };
-			CurrentInteractionWheelItem = new QuickSlotCommand { IsSlotUnlocked = true, ItemId = new gameItemID(), PlayerVehicleData = new vehiclePlayerVehicle { VehicleType = Enums.gamedataVehicleType.Invalid }, InteractiveActionOwner = new entEntityID() };
+			CurrentWheelItem = new QuickSlotCommand { IsSlotUnlocked = true, ItemId = new gameItemID(), PlayerVehicleData = new vehiclePlayerVehicle { VehicleType = Enums.gamedataVehicleType.Invalid, DestructionTimeStamp = new EngineTime() }, InteractiveActionOwner = new entEntityID() };
+			CurrentWeaponWheelItem = new QuickSlotCommand { IsSlotUnlocked = true, ItemId = new gameItemID(), PlayerVehicleData = new vehiclePlayerVehicle { VehicleType = Enums.gamedataVehicleType.Invalid, DestructionTimeStamp = new EngineTime() }, InteractiveActionOwner = new entEntityID() };
+			CurrentGadgetWheelConsumable = new QuickSlotCommand { IsSlotUnlocked = true, ItemId = new gameItemID(), PlayerVehicleData = new vehiclePlayerVehicle { VehicleType = Enums.gamedataVehicleType.Invalid, DestructionTimeStamp = new EngineTime() }, InteractiveActionOwner = new entEntityID() };
+			CurrentGadgetWheelGadget = new QuickSlotCommand { IsSlotUnlocked = true, ItemId = new gameItemID(), PlayerVehicleData = new vehiclePlayerVehicle { VehicleType = Enums.gamedataVehicleType.Invalid, DestructionTimeStamp = new EngineTime() }, InteractiveActionOwner = new entEntityID() };
+			CurrentVehicleWheelItem = new QuickSlotCommand { IsSlotUnlocked = true, ItemId = new gameItemID(), PlayerVehicleData = new vehiclePlayerVehicle { VehicleType = Enums.gamedataVehicleType.Invalid, DestructionTimeStamp = new EngineTime() }, InteractiveActionOwner = new entEntityID() };
+			CurrentGadgetWheelItem = new QuickSlotCommand { IsSlotUnlocked = true, ItemId = new gameItemID(), PlayerVehicleData = new vehiclePlayerVehicle { VehicleType = Enums.gamedataVehicleType.Invalid, DestructionTimeStamp = new EngineTime() }, InteractiveActionOwner = new entEntityID() };
+			CurrentInteractionWheelItem = new QuickSlotCommand { IsSlotUnlocked = true, ItemId = new gameItemID(), PlayerVehicleData = new vehiclePlayerVehicle { VehicleType = Enums.gamedataVehicleType.Invalid, DestructionTimeStamp = new EngineTime() }, InteractiveActionOwner = new entEntityID() };
 
 			PostConstruct();
 		}

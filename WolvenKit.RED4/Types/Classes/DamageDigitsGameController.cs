@@ -37,30 +37,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(13)] 
-		[RED("isBeingUsed")] 
-		public CBool IsBeingUsed
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(14)] 
-		[RED("ActiveWeapon")] 
-		public gameSlotWeaponData ActiveWeapon
-		{
-			get => GetPropertyValue<gameSlotWeaponData>();
-			set => SetPropertyValue<gameSlotWeaponData>(value);
-		}
-
-		[Ordinal(15)] 
-		[RED("BufferedRosterData")] 
-		public CHandle<gameSlotDataHolder> BufferedRosterData
-		{
-			get => GetPropertyValue<CHandle<gameSlotDataHolder>>();
-			set => SetPropertyValue<CHandle<gameSlotDataHolder>>(value);
-		}
-
-		[Ordinal(16)] 
 		[RED("individualControllerArray")] 
 		public CArray<CWeakHandle<DamageDigitLogicController>> IndividualControllerArray
 		{
@@ -68,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<DamageDigitLogicController>>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(14)] 
 		[RED("accumulatedControllerArray")] 
 		public CArray<AccumulatedDamageDigitsNode> AccumulatedControllerArray
 		{
@@ -76,15 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<AccumulatedDamageDigitsNode>>(value);
 		}
 
-		[Ordinal(18)] 
-		[RED("damageDigitsMode")] 
-		public CEnum<gameuiDamageDigitsMode> DamageDigitsMode
-		{
-			get => GetPropertyValue<CEnum<gameuiDamageDigitsMode>>();
-			set => SetPropertyValue<CEnum<gameuiDamageDigitsMode>>(value);
-		}
-
-		[Ordinal(19)] 
+		[Ordinal(15)] 
 		[RED("showDigitsIndividual")] 
 		public CBool ShowDigitsIndividual
 		{
@@ -92,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(16)] 
 		[RED("showDigitsAccumulated")] 
 		public CBool ShowDigitsAccumulated
 		{
@@ -100,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(17)] 
 		[RED("damageDigitsStickingMode")] 
 		public CEnum<gameuiDamageDigitsStickingMode> DamageDigitsStickingMode
 		{
@@ -108,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameuiDamageDigitsStickingMode>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(18)] 
 		[RED("spawnedDigits")] 
 		public CInt32 SpawnedDigits
 		{
@@ -116,31 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(23)] 
-		[RED("spawnedAccumulatedDigitsDigits")] 
-		public CInt32 SpawnedAccumulatedDigitsDigits
-		{
-			get => GetPropertyValue<CInt32>();
-			set => SetPropertyValue<CInt32>(value);
-		}
-
-		[Ordinal(24)] 
-		[RED("damageInfoBB")] 
-		public CWeakHandle<gameIBlackboard> DamageInfoBB
-		{
-			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
-			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
-		}
-
-		[Ordinal(25)] 
-		[RED("UIBlackboard")] 
-		public CWeakHandle<gameIBlackboard> UIBlackboard
-		{
-			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
-			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
-		}
-
-		[Ordinal(26)] 
+		[Ordinal(19)] 
 		[RED("damageListBlackboardId")] 
 		public CHandle<redCallbackObject> DamageListBlackboardId
 		{
@@ -148,15 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(27)] 
-		[RED("BBWeaponListBlackboardId")] 
-		public CHandle<redCallbackObject> BBWeaponListBlackboardId
-		{
-			get => GetPropertyValue<CHandle<redCallbackObject>>();
-			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
-		}
-
-		[Ordinal(28)] 
+		[Ordinal(20)] 
 		[RED("damageDigitsModeBlackboardId")] 
 		public CHandle<redCallbackObject> DamageDigitsModeBlackboardId
 		{
@@ -164,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(21)] 
 		[RED("damageDigitsStickingModeBlackboardId")] 
 		public CHandle<redCallbackObject> DamageDigitsStickingModeBlackboardId
 		{
@@ -176,7 +112,6 @@ namespace WolvenKit.RED4.Types
 		{
 			MaxVisible = 50;
 			MaxAccumulatedVisible = 10;
-			ActiveWeapon = new gameSlotWeaponData { WeaponID = new gameItemID(), AmmoCurrent = -1, MagazineCap = -1, AmmoId = new gameItemID(), TriggerModeCurrent = Enums.gamedataTriggerMode.Invalid, TriggerModeList = new(), Evolution = Enums.gamedataWeaponEvolution.Invalid, IsFirstEquip = true };
 			IndividualControllerArray = new();
 			AccumulatedControllerArray = new();
 

@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(10)] 
+		[RED("signalBar")] 
+		public inkWidgetReference SignalBar
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(11)] 
 		[RED("completed")] 
 		public inkWidgetReference Completed
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("signalLost")] 
 		public inkWidgetReference SignalLost
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("percent")] 
 		public inkTextWidgetReference Percent
 		{
@@ -36,15 +44,95 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
-		[RED("signalBars")] 
-		public CArray<inkWidgetReference> SignalBars
+		[Ordinal(14)] 
+		[RED("signalPercent")] 
+		public inkTextWidgetReference SignalPercent
 		{
-			get => GetPropertyValue<CArray<inkWidgetReference>>();
-			set => SetPropertyValue<CArray<inkWidgetReference>>(value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
+		[RED("signalLabel")] 
+		public inkWidgetReference SignalLabel
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(16)] 
+		[RED("signalWrapper")] 
+		public inkWidgetReference SignalWrapper
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(17)] 
+		[RED("appearance")] 
+		public CName Appearance
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("SignalLostAnimationName")] 
+		public CName SignalLostAnimationName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(19)] 
+		[RED("IntroAnimationName")] 
+		public CName IntroAnimationName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(20)] 
+		[RED("OutroAnimationName")] 
+		public CName OutroAnimationName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(21)] 
+		[RED("InRangeAnimationName")] 
+		public CName InRangeAnimationName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(22)] 
+		[RED("OutOfRangeAnimationName")] 
+		public CName OutOfRangeAnimationName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(23)] 
+		[RED("addPercentSign")] 
+		public CBool AddPercentSign
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(24)] 
+		[RED("handleOnComplete")] 
+		public CBool HandleOnComplete
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(25)] 
 		[RED("rootWidget")] 
 		public CWeakHandle<inkWidget> RootWidget
 		{
@@ -52,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(26)] 
 		[RED("progressBarBB")] 
 		public CWeakHandle<gameIBlackboard> ProgressBarBB
 		{
@@ -60,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(27)] 
 		[RED("progressBarDef")] 
 		public CHandle<UI_HUDSignalProgressBarDef> ProgressBarDef
 		{
@@ -68,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_HUDSignalProgressBarDef>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(28)] 
 		[RED("stateBBID")] 
 		public CHandle<redCallbackObject> StateBBID
 		{
@@ -76,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(29)] 
 		[RED("progressBBID")] 
 		public CHandle<redCallbackObject> ProgressBBID
 		{
@@ -84,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(30)] 
 		[RED("signalStrengthBBID")] 
 		public CHandle<redCallbackObject> SignalStrengthBBID
 		{
@@ -92,7 +180,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(31)] 
+		[RED("orientationBBID")] 
+		public CHandle<redCallbackObject> OrientationBBID
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(32)] 
+		[RED("appearanceBBID")] 
+		public CHandle<redCallbackObject> AppearanceBBID
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(33)] 
 		[RED("data")] 
 		public HUDProgressBarData Data
 		{
@@ -100,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<HUDProgressBarData>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(34)] 
 		[RED("OutroAnimation")] 
 		public CHandle<inkanimProxy> OutroAnimation
 		{
@@ -108,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(35)] 
 		[RED("SignalLostAnimation")] 
 		public CHandle<inkanimProxy> SignalLostAnimation
 		{
@@ -116,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(36)] 
 		[RED("IntroAnimation")] 
 		public CHandle<inkanimProxy> IntroAnimation
 		{
@@ -124,7 +228,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(37)] 
+		[RED("OrientationAnimation")] 
+		public CHandle<inkanimProxy> OrientationAnimation
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(38)] 
 		[RED("alpha_fadein")] 
 		public CHandle<inkanimDefinition> Alpha_fadein
 		{
@@ -132,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(39)] 
 		[RED("AnimProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
@@ -140,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(40)] 
 		[RED("AnimOptions")] 
 		public inkanimPlaybackOptions AnimOptions
 		{
@@ -148,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkanimPlaybackOptions>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(41)] 
 		[RED("alphaInterpolator")] 
 		public CHandle<inkanimTransparencyInterpolator> AlphaInterpolator
 		{
@@ -156,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimTransparencyInterpolator>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(42)] 
 		[RED("tick")] 
 		public CFloat Tick
 		{
@@ -164,15 +276,48 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(43)] 
+		[RED("isAppearanceMatch")] 
+		public CBool IsAppearanceMatch
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(44)] 
+		[RED("barSize")] 
+		public Vector2 BarSize
+		{
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
+		}
+
+		[Ordinal(45)] 
+		[RED("signalBarSize")] 
+		public Vector2 SignalBarSize
+		{
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
+		}
+
 		public HUDSignalProgressBarController()
 		{
 			Bar = new inkWidgetReference();
+			SignalBar = new inkWidgetReference();
 			Completed = new inkWidgetReference();
 			SignalLost = new inkWidgetReference();
 			Percent = new inkTextWidgetReference();
-			SignalBars = new();
+			SignalPercent = new inkTextWidgetReference();
+			SignalLabel = new inkWidgetReference();
+			SignalWrapper = new inkWidgetReference();
+			SignalLostAnimationName = "warning";
+			IntroAnimationName = "intro";
+			OutroAnimationName = "outro";
+			AddPercentSign = true;
 			Data = new HUDProgressBarData();
-			AnimOptions = new inkanimPlaybackOptions();
+			AnimOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
+			BarSize = new Vector2();
+			SignalBarSize = new Vector2();
 
 			PostConstruct();
 		}

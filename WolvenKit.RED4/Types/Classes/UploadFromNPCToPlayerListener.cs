@@ -60,6 +60,30 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(9)] 
+		[RED("preventionHackLoopAction")] 
+		public CBool PreventionHackLoopAction
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("shouldStopRevealOnPreventionDeescalation")] 
+		public CBool ShouldStopRevealOnPreventionDeescalation
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(11)] 
+		[RED("squadScriptInterface")] 
+		public CHandle<AISquadScriptInterface> SquadScriptInterface
+		{
+			get => GetPropertyValue<CHandle<AISquadScriptInterface>>();
+			set => SetPropertyValue<CHandle<AISquadScriptInterface>>(value);
+		}
+
 		public UploadFromNPCToPlayerListener()
 		{
 			NpcSquad = new();

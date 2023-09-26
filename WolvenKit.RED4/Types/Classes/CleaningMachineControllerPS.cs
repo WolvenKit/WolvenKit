@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CleaningMachineControllerPS : BasicDistractionDeviceControllerPS
 	{
-		[Ordinal(109)] 
+		[Ordinal(113)] 
 		[RED("cleaningMachineSkillChecks")] 
 		public CHandle<EngDemoContainer> CleaningMachineSkillChecks
 		{

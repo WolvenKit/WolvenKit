@@ -145,7 +145,7 @@ namespace WolvenKit.RED4.Types
 			IndicatorEffectName = "focus_10m";
 			IndicatorEffectSize = 1.000000F;
 			StimRange = 10.000000F;
-			StimLifetime = 3.000000F;
+			StimLifetime = 5.000000F;
 			AdditionaStimSources = new();
 			HighlightTargets = true;
 			HighlightType = Enums.EFocusForcedHighlightType.DISTRACTION;

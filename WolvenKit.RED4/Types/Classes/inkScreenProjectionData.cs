@@ -60,10 +60,27 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<IScriptable>>(value);
 		}
 
+		[Ordinal(7)] 
+		[RED("adjustWithDistance")] 
+		public CBool AdjustWithDistance
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("extraOffsetAtMaxDistance")] 
+		public Vector3 ExtraOffsetAtMaxDistance
+		{
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
+		}
+
 		public inkScreenProjectionData()
 		{
 			StaticWorldPosition = new Vector4();
 			FixedWorldOffset = new Vector4();
+			ExtraOffsetAtMaxDistance = new Vector3();
 
 			PostConstruct();
 		}

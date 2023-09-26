@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ComputerControllerPS : TerminalControllerPS
 	{
-		[Ordinal(114)] 
+		[Ordinal(117)] 
 		[RED("computerSetup")] 
 		public ComputerSetup ComputerSetup
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<ComputerSetup>(value);
 		}
 
-		[Ordinal(115)] 
+		[Ordinal(118)] 
 		[RED("quickHackSetup")] 
 		public ComputerQuickHackData QuickHackSetup
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<ComputerQuickHackData>(value);
 		}
 
-		[Ordinal(116)] 
+		[Ordinal(119)] 
 		[RED("activatorActionSetup")] 
 		public CEnum<EToggleActivationTypeComputer> ActivatorActionSetup
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EToggleActivationTypeComputer>>(value);
 		}
 
-		[Ordinal(117)] 
+		[Ordinal(120)] 
 		[RED("computerSkillChecks")] 
 		public CHandle<HackEngContainer> ComputerSkillChecks
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<HackEngContainer>>(value);
 		}
 
-		[Ordinal(118)] 
+		[Ordinal(121)] 
 		[RED("openedMailAdress")] 
 		public SDocumentAdress OpenedMailAdress
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<SDocumentAdress>(value);
 		}
 
-		[Ordinal(119)] 
+		[Ordinal(122)] 
 		[RED("openedFileAdress")] 
 		public SDocumentAdress OpenedFileAdress
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<SDocumentAdress>(value);
 		}
 
-		[Ordinal(120)] 
+		[Ordinal(123)] 
 		[RED("quickhackPerformed")] 
 		public CBool QuickhackPerformed
 		{
@@ -60,12 +60,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(121)] 
+		[Ordinal(124)] 
 		[RED("isInSleepMode")] 
 		public CBool IsInSleepMode
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(125)] 
+		[RED("computerUIpreset")] 
+		public CHandle<gamedataComputerStyleUIDefinition_Record> ComputerUIpreset
+		{
+			get => GetPropertyValue<CHandle<gamedataComputerStyleUIDefinition_Record>>();
+			set => SetPropertyValue<CHandle<gamedataComputerStyleUIDefinition_Record>>(value);
 		}
 
 		public ComputerControllerPS()
@@ -74,7 +82,7 @@ namespace WolvenKit.RED4.Types
 			TweakDBRecord = "Devices.Computer";
 			TweakDBDescriptionRecord = 122573441327;
 			HasUICameraZoom = true;
-			ComputerSetup = new ComputerSetup { MailsMenu = true, FilesMenu = true, SystemMenu = true, InternetMenu = true, MailsStructure = new(), FilesStructure = new(), NewsFeed = new(), NewsFeedInterval = 5.000000F, InternetSubnet = new SInternetData() };
+			ComputerSetup = new ComputerSetup { MailsMenu = true, FilesMenu = true, SystemMenu = true, InternetMenu = true, StylePreset = "ComputerUIPresets.DefaultPreset", MailsStructure = new(), FilesStructure = new(), NewsFeed = new(), NewsFeedInterval = 5.000000F, InternetSubnet = new SInternetData() };
 			QuickHackSetup = new ComputerQuickHackData();
 			OpenedMailAdress = new SDocumentAdress { FolderID = -1, DocumentID = -1 };
 			OpenedFileAdress = new SDocumentAdress { FolderID = -1, DocumentID = -1 };

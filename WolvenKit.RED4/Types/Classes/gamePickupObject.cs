@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gamePickupObject : gameObject
 	{
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("interactionTag")] 
 		public CName InteractionTag
 		{
