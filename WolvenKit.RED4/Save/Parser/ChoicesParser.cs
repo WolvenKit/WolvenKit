@@ -34,7 +34,8 @@ public class Choices : INodeData
 
 public class ChoicesParser : INodeParser
 {
-    public static string NodeName => Constants.NodeNames.CHOICES;
+    // TODO
+    //public static string NodeName => Constants.NodeNames.CHOICES;
 
     public void Read(BinaryReader reader, NodeEntry node)
     {

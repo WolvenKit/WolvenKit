@@ -5,6 +5,7 @@ namespace WolvenKit.RED4.Save;
 public class UniqueItemCounter : INodeData
 {
     public ushort Count { get; set; }
+    public uint Unknown1 { get; set; }
 }
 
 
@@ -15,7 +16,9 @@ public class UniqueItemCounterParser : INodeParser
     public void Read(BinaryReader reader, NodeEntry node)
     {
         var data = new UniqueItemCounter();
+        
         data.Count = reader.ReadUInt16();
+        data.Unknown1 = reader.ReadUInt32();
 
         node.Value = data;
     }
@@ -25,5 +28,6 @@ public class UniqueItemCounterParser : INodeParser
         var data = (UniqueItemCounter)node.Value;
 
         writer.Write(data.Count);
+        writer.Write(data.Unknown1);
     }
 }
