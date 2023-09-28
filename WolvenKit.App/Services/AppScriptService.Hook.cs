@@ -24,6 +24,7 @@ public partial class AppScriptService
     {
         _hookService.RegisterOnExport(OnExportHook);
         _hookService.RegisterOnPreImport(OnPreImportHook);
+        _hookService.RegisterOnImportFromJson(OnImportFromJson);
         if (_hookService is AppHookService appHookService)
         {
             appHookService.RegisterOnSave(OnSaveHook);
@@ -205,6 +206,39 @@ public partial class AppScriptService
         }
 
         return (Enums.EBOOL.TRUE, args);
+    }
+
+    private void OnImportFromJson(ref string jsonText)
+    {
+        foreach (var scriptFile in GetScripts())
+        {
+            if (scriptFile.HookExtension == "global")
+            {
+                var (status, newJsonText) = OnImportFromJsonExecute(scriptFile, jsonText);
+                if (status == Enums.EBOOL.TRUE)
+                {
+                    jsonText = newJsonText!;
+                }
+            }
+        }
+    }
+
+    private (Enums.EBOOL, string?) OnImportFromJsonExecute(ScriptFile scriptFile, string jsonText)
+    {
+        var result = HookExecute(scriptFile, "onImportFromJson", scriptObj => scriptObj.onImportFromJson(jsonText));
+
+        if ((bool)result[NoHook])
+        {
+            return (Enums.EBOOL.UNINITIALZED, null);
+        }
+
+        if (!result.TryGetValue("jsonText", out var newJsonText) || newJsonText is not string)
+        {
+            _loggerService.Error($"onSave: Missing \"jsonText\" (string) return value");
+            return (Enums.EBOOL.UNINITIALZED, null);
+        }
+
+        return (Enums.EBOOL.TRUE, (string)newJsonText);
     }
 
     private void MergeSettings(AbstractGlobalArgs oldSettings, AbstractGlobalArgs newSettings)

@@ -119,8 +119,10 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="json"></param>
         /// <returns></returns>
         /// <exception cref="InvalidParsingException"></exception>
-        public static CR2WFile? ConvertFromJson(string json)
+        public CR2WFile? ConvertFromJson(string json)
         {
+            _hookService.OnImportFromJson(ref json);
+
             var dto = RedJsonSerializer.Deserialize<RedFileDto>(json);
 
             return dto is null ? null : dto.Data ?? null;

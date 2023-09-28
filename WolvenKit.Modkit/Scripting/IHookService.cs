@@ -12,4 +12,7 @@ public interface IHookService
 
     public void RegisterOnPreImport(OnPreImportHook hook);
     public void OnPreImport(ref RedRelativePath rawRelative, ref GlobalImportArgs args, ref DirectoryInfo? outDir);
+
+    public void RegisterOnImportFromJson(OnImportFromJsonHook hook);
+    public void OnImportFromJson(ref string jsonText);
 }

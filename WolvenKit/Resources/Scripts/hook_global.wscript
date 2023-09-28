@@ -140,3 +140,11 @@ globalThis.onPostImport = function (path, settings) {
         success: true
     }
 }
+
+globalThis.onImportFromJson = function (jsonText) {
+    const json = TypeHelper.JsonParse(jsonText);
+    // Logger.Info(json);
+    return {
+        jsonText: TypeHelper.JsonStringify(json)
+    }
+}
