@@ -147,6 +147,12 @@ public class CyberpunkSaveReader : IDisposable, IErrorHandler
                     }
 
                     parser.Read(reader, node);
+
+                    var readSize = reader.BaseStream.Position - node.Offset;
+                    if (readSize != node.Size)
+                    {
+                        throw new Exception($"Unknown data in {node.Name}");
+                    }
                 }
             }
         }
