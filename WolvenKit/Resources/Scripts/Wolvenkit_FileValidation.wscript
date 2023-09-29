@@ -108,9 +108,9 @@ function checkIfFileIsBroken(data, fileType, _info = '') {
         return false;
     }
 
-    Logger.Error(`${info}: File structure invalid. This will not work (best-case) or crash your game (worst-case).`);
-    Logger.Error(`The following errors have been found:`);
-    errorMsg.forEach((msg) => Logger.Error(`\t${msg}`));
+    Logger.Warning(`${info}: If this .ent file belongs to a character, you can ignore this.`);
+    Logger.Warning(`If this is an item, this will not work (best-case) or crash your game (worst-case). List of errors:`);
+    errorMsg.forEach((msg) => Logger.Warning(`\t${msg}`));
     return true;
 }
 
