@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using DynamicData;
 using DynamicData.Kernel;
 using WolvenKit.Common;
@@ -10,6 +11,7 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Archive;
 using Path = System.IO.Path;
 
@@ -156,9 +158,12 @@ namespace WolvenKit.RED4.CR2W.Archive
                 return;
             }
 
-            IsManagerLoading = true;
+            var redModFolder = archivedir.Name.Contains(Path.DirectorySeparatorChar + "mods" + Path.DirectorySeparatorChar);
 
-            var archiveFiles = Directory.GetFiles(archiveDir.FullName, "*.archive").ToList();
+            IsManagerLoading = true;
+            var archiveFiles = Directory.GetFiles(archivedir.FullName, "*.archive",
+                new EnumerationOptions { RecurseSubdirectories = redModFolder}).ToList();
+
             archiveFiles.Sort(CompareArchives);
 
             foreach (var file in archiveFiles)
@@ -355,37 +360,69 @@ namespace WolvenKit.RED4.CR2W.Archive
 
             var redModBasePath = Path.Combine(di.Parent.Parent.FullName, "mods");
             var legacyModPath = Path.Combine(di.Parent.Parent.FullName, "archive", "pc", "mod");
+            var redModCache = Path.Combine(di.Parent.Parent.FullName, "r6", "cache", "modded");
+            var redModModsJSON = Path.Combine(redModCache, "mods.json");
 
-            var files = new List<string>();
-            if (Directory.Exists(redModBasePath))
-            {
-                foreach (var redModPath in Directory.GetDirectories(redModBasePath))
+            var redModFiles = new List<string>();
+            if (File.Exists(redModModsJSON)) {
+                var modsJSON = File.Open(redModModsJSON, FileMode.Open);
+
+                var redModElement = JsonSerializer.Deserialize<JsonElement>(modsJSON);
+                var modsArr = redModElement.GetProperty("mods").EnumerateArray();
+
+                foreach ( var mod in modsArr )
                 {
-                    var archiveDir = Path.Combine(redModPath, "archives");
-                    if (!Directory.Exists(archiveDir))
+                    // get the properties we care able
+                    string folder = mod.GetProperty("folder").GetString().NotNull();
+                    bool enabled = mod.GetProperty("enabled").GetBoolean();
+                    bool deployed = mod.GetProperty("deployed").GetBoolean();
+
+                    if (!enabled)
                     {
+                        _logger.Info($"Skipping disabled REDMod: {folder}");
                         continue;
                     }
-
-                    foreach (var archiveFile in Directory.GetFiles(archiveDir, "*.archive"))
+                    else
                     {
-                        files.Add(archiveFile);
+                        if (!deployed )
+                        {
+                            _logger.Warning($"REDMod ({folder}) is not deployed, but assets will be available in the Asset Browser.");
+                        }
+
+                        var redModArchivesDir = Path.Combine(redModBasePath, folder, "archives");
+                        if (Directory.Exists(redModArchivesDir))
+                        {
+                            // maybe a better way to do this?
+                            var modArchives = Directory.GetFiles(redModArchivesDir, "*.archive", SearchOption.TopDirectoryOnly).ToList();
+                            modArchives.Sort(string.CompareOrdinal);
+                            modArchives.Reverse();
+
+                            redModFiles.AddRange(modArchives);
+                        }
                     }
                 }
             }
 
+            var legacyFiles = new List<string>();
             if (Directory.Exists(legacyModPath))
             {
-                foreach (var archiveFile in Directory.GetFiles(legacyModPath, "*.archive"))
+                foreach (var archiveFile in Directory.GetFiles(legacyModPath, "*.archive", SearchOption.TopDirectoryOnly))
                 {
-                    files.Add(archiveFile);
+                    legacyFiles.Add(archiveFile);
                 }
             }
 
-            files.Sort(string.CompareOrdinal);
-            files.Reverse();
+            legacyFiles.Sort(string.CompareOrdinal);
+            legacyFiles.Reverse();
 
-            foreach (var file in files)
+            // load legacy mods first
+            foreach (var file in legacyFiles)
+            {
+                LoadModArchive(file, analyzeFiles);
+            }
+
+            // load REDmod mods second
+            foreach (var file in redModFiles)
             {
                 LoadModArchive(file, analyzeFiles);
             }
