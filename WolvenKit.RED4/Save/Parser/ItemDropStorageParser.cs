@@ -1,4 +1,5 @@
 using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.Save.Classes;
 using WolvenKit.RED4.Save.IO;
 using WolvenKit.RED4.Types;
 
@@ -11,7 +12,7 @@ public class ItemDropStorage : INodeData
 
     public Vector4 Unk3 { get; set; }
 
-    public List<InventoryHelper.ItemData> Items { get; set; } = new();
+    public List<ItemData> Items { get; set; } = new();
 }
 
 
@@ -41,12 +42,12 @@ public class ItemDropStorageParser : INodeParser
         {
             node.Children[i].ReadByParent = true;
 
-            var nextItemHeader = InventoryHelper.ReadHeaderThing(reader);
+            var nextItemHeader = InventoryHelper.ReadItemInfo(reader);
 
             reader.ReadUInt32(); // nodeId
             var item = InventoryHelper.ReadItemData(reader);
 
-            if (!nextItemHeader.Equals(item.Header))
+            if (!nextItemHeader.Equals(item.ItemInfo))
             {
                 throw new InvalidDataException($"Expected next item to be '{nextItemHeader}' but found '{item}'");
             }
@@ -71,7 +72,7 @@ public class ItemDropStorageParser : INodeParser
         writer.Write(value.Items.Count);
         foreach (var itemData in value.Items)
         {
-            InventoryHelper.WriteHeaderThing(writer, itemData.Header);
+            InventoryHelper.WriteItemInfo(writer, itemData.ItemInfo);
 
             var subNode = new NodeEntry
             {

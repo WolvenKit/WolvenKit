@@ -117,6 +117,11 @@ public partial class RedPackageWriter : Red4Writer
     {
         if (buffer.Data is ModifiersBuffer modifiersBuffer)
         {
+            if (!modifiersBuffer.IsParsed)
+            {
+                return;
+            }
+
             using var ms = new MemoryStream();
             using var modifiersBufferWriter = new ModifiersBufferWriter(ms);
 

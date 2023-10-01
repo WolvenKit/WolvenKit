@@ -1,176 +1,12 @@
 using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.Save.Classes;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Save;
 
 public class InventoryHelper
 {
-    [Flags]
-    public enum ItemFlag : byte
-    {
-        IsQuestItem = 1,
-        IsNotUnequippable = 2
-    }
-
-    public interface IItemData
-    {
-        
-    }
-
-    public class SubInventory
-    {
-        public ulong InventoryId { get; set; }
-        public List<ItemData> Items { get; set; } = new();
-    }
-
-    public class gameItemIdWrapper : IEquatable<gameItemIdWrapper>
-    {
-        public gameItemID ItemId { get; set; }
-        public Enums.gamedataItemStructure ItemStructure { get; set; }
-
-        public byte Kind =>
-            (byte)ItemStructure switch
-            {
-                1 => 2,
-                2 => 1,
-                3 => 0,
-                _ => (byte)(ItemId.RngSeed != 2 ? 2 : 1)
-            };
-
-        public bool Equals(gameItemIdWrapper? other)
-        {
-            if (ReferenceEquals(null, other))
-            {
-                return false;
-            }
-
-            if (ReferenceEquals(this, other))
-            {
-                return true;
-            }
-
-            return ItemId.Equals(other.ItemId) && ItemStructure == other.ItemStructure;
-        }
-
-        public override bool Equals(object? obj)
-        {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-
-            if (ReferenceEquals(this, obj))
-            {
-                return true;
-            }
-
-            if (obj.GetType() != this.GetType())
-            {
-                return false;
-            }
-
-            return Equals((gameItemIdWrapper)obj);
-        }
-
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hashCode = ItemId.GetHashCode();
-                hashCode = (hashCode * 397) ^ ItemStructure.GetHashCode();
-                return hashCode;
-            }
-        }
-
-        public static bool operator ==(gameItemIdWrapper? left, gameItemIdWrapper? right) => Equals(left, right);
-
-        public static bool operator !=(gameItemIdWrapper? left, gameItemIdWrapper? right) => !Equals(left, right);
-    }
-
-    public class ModHeaderThing : IEquatable<ModHeaderThing>
-    {
-        public TweakDBID LootItemId { get; set; }
-        public uint Unknown2 { get; set; }
-        public float RequiredLevel { get; set; }
-
-        public bool Equals(ModHeaderThing? other)
-        {
-            if (ReferenceEquals(null, other))
-            {
-                return false;
-            }
-
-            if (ReferenceEquals(this, other))
-            {
-                return true;
-            }
-
-            return LootItemId.Equals(other.LootItemId) && Unknown2 == other.Unknown2 && RequiredLevel.Equals(other.RequiredLevel);
-        }
-
-        public override bool Equals(object? obj)
-        {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-
-            if (ReferenceEquals(this, obj))
-            {
-                return true;
-            }
-
-            if (obj.GetType() != this.GetType())
-            {
-                return false;
-            }
-
-            return Equals((ModHeaderThing)obj);
-        }
-
-        public override int GetHashCode() => HashCode.Combine(LootItemId, Unknown2, RequiredLevel);
-    }
-
-    public class ItemData : INodeData
-    {
-        public gameItemIdWrapper Header { get; set; }
-        public ItemFlag Flags { get; set; }
-        public uint CreationTime { get; set; }
-        public IItemData Data { get; set; }
-    }
-
-    public class SimpleItemData : IItemData
-    {
-        public uint Quantity { get; set; }
-
-        public override string ToString()
-        {
-            return $"{Quantity}x";
-        }
-    }
-
-    public class ModableItemData : IItemData
-    {
-        public ModHeaderThing ModHeaderThing { get; set; }
-        public ItemModData RootNode { get; set; }
-    }
-
-    public class ItemModData
-    {
-        public gameItemIdWrapper Header { get; set; }
-        public string AppearanceName { get; set; }
-        public TweakDBID AttachmentSlotTdbId { get; set; }
-        public List<ItemModData> Children { get; set; } = new();
-        public uint Unknown2 { get; set; }
-        public ModHeaderThing ModHeaderThing { get; set; }
-    }
-
-    public class ModableItemWithQuantityData : ModableItemData
-    {
-        public uint Quantity { get; set; }
-    }
-
-    public static gameItemIdWrapper ReadHeaderThing(BinaryReader reader)
+    public static ItemInfo ReadItemInfo(BinaryReader reader)
     {
         var id = reader.ReadUInt64();
         var seed = reader.ReadUInt32();
@@ -178,7 +14,7 @@ public class InventoryHelper
         var uniqueCounter = reader.ReadUInt16();
         var flags = reader.ReadByte();
 
-        return new gameItemIdWrapper
+        return new ItemInfo
         {
             ItemId = new gameItemID
             {
@@ -187,11 +23,11 @@ public class InventoryHelper
                 UniqueCounter = uniqueCounter,
                 Flags = flags
             },
-            ItemStructure = (Enums.gamedataItemStructure)itemStructure
+            ItemStructure = (ItemStructure)itemStructure
         };
     }
 
-    public static void WriteHeaderThing(BinaryWriter writer, gameItemIdWrapper itemHeader)
+    public static void WriteItemInfo(BinaryWriter writer, ItemInfo itemHeader)
     {
         writer.Write((ulong)itemHeader.ItemId.Id);
         writer.Write(itemHeader.ItemId.RngSeed);
@@ -204,21 +40,19 @@ public class InventoryHelper
     {
         var result = new ItemData();
 
-        result.Header = ReadHeaderThing(reader);
+        result.ItemInfo = ReadItemInfo(reader);
         result.Flags = (ItemFlag)reader.ReadByte();
         result.CreationTime = reader.ReadUInt32();
 
-        switch (result.Header.Kind)
+        if (result.HasQuantity())
         {
-            case 0:
-                result.Data = ReadModableItemWithQuantityData(reader);
-                break;
-            case 1:
-                result.Data = ReadSimpleItemData(reader);
-                break;
-            case 2:
-                result.Data = ReadModableItemData(reader);
-                break;
+            result.Quantity = reader.ReadUInt32();
+        }
+
+        if (result.HasExtendedData())
+        {
+            result.ItemAdditionalInfo = ReadItemAdditionalInfo(reader);
+            result.ItemSlotPart = ReadItemSlotPart(reader);
         }
 
         return result;
@@ -226,125 +60,82 @@ public class InventoryHelper
 
     public static void WriteItemData(BinaryWriter writer, ItemData item)
     {
-        WriteHeaderThing(writer, item.Header);
+        WriteItemInfo(writer, item.ItemInfo);
         writer.Write((byte)item.Flags);
         writer.Write(item.CreationTime);
 
-        if (item.Data is ModableItemWithQuantityData modq)
+        if (item.HasQuantity())
         {
-            WriteModableItemWithQuantityData(writer, modq);
+            writer.Write(item.Quantity);
         }
-        else if (item.Data is ModableItemData mod)
+
+        if (item.HasExtendedData())
         {
-            WriteModableItemData(writer, mod);
+            if (item.ItemAdditionalInfo == null || item.ItemSlotPart == null)
+            {
+                throw new Exception();
+            }
+
+            WriteItemAdditionalInfo(writer, item.ItemAdditionalInfo);
+            WriteItemSlotPart(writer, item.ItemSlotPart);
         }
-        else if (item.Data is SimpleItemData simp)
-        {
-            WriteSimpleItemData(writer, simp);
-        }
     }
 
-    public static SimpleItemData ReadSimpleItemData(BinaryReader reader) =>
-        new()
-        {
-            Quantity = reader.ReadUInt32()
-        };
-
-    private static void WriteSimpleItemData(BinaryWriter writer, SimpleItemData simp)
+    public static ItemAdditionalInfo ReadItemAdditionalInfo(BinaryReader reader)
     {
-        writer.Write(simp.Quantity);
-    }
+        var result = new ItemAdditionalInfo();
 
-    public static ModableItemWithQuantityData ReadModableItemWithQuantityData(BinaryReader reader)
-    {
-        var result = new ModableItemWithQuantityData();
-
-        result.Quantity = reader.ReadUInt32();
-        result.ModHeaderThing = ReadModHeaderThing(reader);
-        result.RootNode = ReadKind2DataNode(reader);
-
-        return result;
-    }
-
-    private static void WriteModableItemWithQuantityData(BinaryWriter writer, ModableItemWithQuantityData modq)
-    {
-        writer.Write(modq.Quantity);
-        writer.Write((ulong)modq.ModHeaderThing.LootItemId);
-        writer.Write(modq.ModHeaderThing.Unknown2);
-        writer.Write(modq.ModHeaderThing.RequiredLevel);
-        WriteKind2DataNode(writer, modq.RootNode);
-    }
-
-    public static ModHeaderThing ReadModHeaderThing(BinaryReader reader)
-    {
-        var result = new ModHeaderThing();
-
-        result.LootItemId = reader.ReadUInt64();
+        result.LootItemPoolId = reader.ReadUInt64();
         result.Unknown2 = reader.ReadUInt32();
         result.RequiredLevel = reader.ReadSingle();
 
         return result;
     }
 
-    public static void WriteModHeaderThing(BinaryWriter writer, ModHeaderThing modHeaderThing)
+    public static void WriteItemAdditionalInfo(BinaryWriter writer, ItemAdditionalInfo modHeaderThing)
     {
-        writer.Write((ulong)modHeaderThing.LootItemId);
+        writer.Write((ulong)modHeaderThing.LootItemPoolId);
         writer.Write(modHeaderThing.Unknown2);
         writer.Write(modHeaderThing.RequiredLevel);
     }
 
-    public static ModableItemData ReadModableItemData(BinaryReader reader)
+    public static ItemSlotPart ReadItemSlotPart(BinaryReader reader)
     {
-        var result = new ModableItemData();
+        var result = new ItemSlotPart();
 
-        result.ModHeaderThing = ReadModHeaderThing(reader);
-        result.RootNode = ReadKind2DataNode(reader);
-
-        return result;
-    }
-
-    private static void WriteModableItemData(BinaryWriter writer, ModableItemData mod)
-    {
-        WriteModHeaderThing(writer, mod.ModHeaderThing);
-        WriteKind2DataNode(writer, mod.RootNode);
-    }
-
-    public static ItemModData ReadKind2DataNode(BinaryReader reader)
-    {
-        var result = new ItemModData();
-
-        result.Header = ReadHeaderThing(reader);
+        result.ItemInfo = ReadItemInfo(reader);
         result.AppearanceName = reader.ReadLengthPrefixedString();
         result.AttachmentSlotTdbId = reader.ReadUInt64();
         var count = reader.ReadVLQInt32();
         for (var i = 0; i < count; ++i)
         {
-            result.Children.Add(ReadKind2DataNode(reader));
+            result.Children.Add(ReadItemSlotPart(reader));
         }
-
         result.Unknown2 = reader.ReadUInt32();
-
-        // Always the same as in the parent ModableItem
-        result.ModHeaderThing = ReadModHeaderThing(reader);
+        result.ItemAdditionalInfo = ReadItemAdditionalInfo(reader);
 
         return result;
     }
 
-    private static void WriteKind2DataNode(BinaryWriter writer, ItemModData mod)
+    public static void WriteItemSlotPart(BinaryWriter writer, ItemSlotPart itemSlotPart)
     {
-        WriteHeaderThing(writer, mod.Header);
-        writer.WriteLengthPrefixedString(mod.AppearanceName);
-        writer.Write((ulong)mod.AttachmentSlotTdbId);
-        writer.WriteVLQInt32(mod.Children.Count);
-        foreach (var child in mod.Children)
+        WriteItemInfo(writer, itemSlotPart.ItemInfo);
+        writer.WriteLengthPrefixedString(itemSlotPart.AppearanceName);
+        writer.Write((ulong)itemSlotPart.AttachmentSlotTdbId);
+
+        writer.WriteVLQInt32(itemSlotPart.Children.Count);
+        foreach (var subSlotPart in itemSlotPart.Children)
         {
-            WriteKind2DataNode(writer, child);
+            WriteItemSlotPart(writer, subSlotPart);
         }
-        writer.Write(mod.Unknown2);
-        WriteModHeaderThing(writer, mod.ModHeaderThing);
+
+        writer.Write(itemSlotPart.Unknown2);
+        WriteItemAdditionalInfo(writer, itemSlotPart.ItemAdditionalInfo);
     }
 
-    public static ulong GetItemIdHash(TweakDBID tweakDbId, uint seed, ushort unk1 = 0)
+    public static ulong GetItemIdHash(gameItemID gameItemId) => GetItemIdHash(gameItemId.Id, gameItemId.RngSeed, gameItemId.UniqueCounter);
+
+    public static ulong GetItemIdHash(ulong tweakDbId, uint seed, ushort unk1 = 0)
     {
         var c = 0xC6A4A7935BD1E995;
 

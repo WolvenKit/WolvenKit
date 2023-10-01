@@ -6,5 +6,6 @@ public class ModifiersBuffer : IParseableBuffer
 {
     public IRedType? Data => null;
 
+    public bool IsParsed { get; set; } = true;
     public List<gameStatModifierData_Deprecated> Entries { get; set; } = new();
 }

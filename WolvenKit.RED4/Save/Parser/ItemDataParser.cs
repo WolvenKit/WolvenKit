@@ -1,3 +1,4 @@
+using WolvenKit.RED4.Save.Classes;
 using WolvenKit.RED4.Save.IO;
 
 namespace WolvenKit.RED4.Save;
@@ -13,7 +14,7 @@ public class ItemDataParser : INodeParser
 
     public void Write(NodeWriter writer, NodeEntry node)
     {
-        var value = (InventoryHelper.ItemData)node.Value;
+        var value = (ItemData)node.Value;
 
         InventoryHelper.WriteItemData(writer, value);
     }
