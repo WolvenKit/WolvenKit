@@ -817,12 +817,18 @@ const MISSING_PREFIX_WARNING = 'not starting with *, substitution disabled';
 const WITH_MESH = 'withMesh';
 // For different component types, check DepotPath property
 function entFile_appFile_validateComponent(component, _index, validateRecursively, info) {
-    const componentName = stringifyPotentialCName(component.name, info, isRootEntity) ?? '';
     let type = component.$type || '';
-        
+    const isDebugComponent = type.toLowerCase().includes('debug');
+
+    const componentName = stringifyPotentialCName(component.name, info, (isRootEntity || isDebugComponent)) ?? '';
+
+    // allow empty paths for debug components
+    let depotPathCanBeEmpty = isDebugComponent;
+
     // entGarmentSkinnedMeshComponent - entSkinnedMeshComponent - entMeshComponent
     if (component && component.mesh && component.mesh.DepotPath) {
         type = WITH_MESH;
+        depotPathCanBeEmpty ||= componentName !== 'amm_prop_slot1' && componentName?.startsWith('amm_prop_slot');
     }
 
 
@@ -830,12 +836,11 @@ function entFile_appFile_validateComponent(component, _index, validateRecursivel
     let hasMesh = false;
     switch (type) {
         case WITH_MESH:
-            const canBeEmpty = componentName !== 'amm_prop_slot1' && componentName?.startsWith('amm_prop_slot');
-            checkDepotPath(component.mesh.DepotPath, `${info}.${componentName}`, canBeEmpty);
+            checkDepotPath(component.mesh.DepotPath, `${info}.${componentName}`, depotPathCanBeEmpty);
             hasMesh = true;
             break;
         case 'workWorkspotResourceComponent':
-            checkDepotPath(component.workspotResource.DepotPath, `${info}.${componentName}`);
+            checkDepotPath(component.workspotResource.DepotPath, `${info}.${componentName}`, depotPathCanBeEmpty);
             break;
         default:
             break;
