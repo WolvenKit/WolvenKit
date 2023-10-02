@@ -1,3 +1,4 @@
+using WolvenKit.RED4.Types.TypeConversion;
 using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
@@ -46,18 +47,18 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(9)] 
 		[RED("castShadows")] 
-		public CEnum<shadowsShadowCastingMode> CastShadows
+		public CShadowTypeConverter CastShadows
 		{
-			get => GetPropertyValue<CEnum<shadowsShadowCastingMode>>();
-			set => SetPropertyValue<CEnum<shadowsShadowCastingMode>>(value);
+			get => GetPropertyValue<CShadowTypeConverter>();
+			set => SetPropertyValue<CShadowTypeConverter>(value);
 		}
 
 		[Ordinal(10)] 
 		[RED("castLocalShadows")] 
-		public CEnum<shadowsShadowCastingMode> CastLocalShadows
+		public CShadowTypeConverter CastLocalShadows
 		{
-			get => GetPropertyValue<CEnum<shadowsShadowCastingMode>>();
-			set => SetPropertyValue<CEnum<shadowsShadowCastingMode>>(value);
+			get => GetPropertyValue<CShadowTypeConverter>();
+			set => SetPropertyValue<CShadowTypeConverter>(value);
 		}
 
 		[Ordinal(11)] 
