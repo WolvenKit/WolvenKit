@@ -1,9 +1,10 @@
 ﻿using System.IO;
-using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
-using static WolvenKit.Modkit.Scripting.HookService;
+using WolvenKit.Common.Model;
+using WolvenKit.RED4.Types;
+using static WolvenKit.Common.Services.HookService;
 
-namespace WolvenKit.Modkit.Scripting;
+namespace WolvenKit.Common.Services;
 
 public interface IHookService
 {
@@ -15,4 +16,7 @@ public interface IHookService
 
     public void RegisterOnImportFromJson(OnImportFromJsonHook hook);
     public void OnImportFromJson(ref string jsonText);
+
+    public void RegisterOnParsingError(OnParsingErrorHook hook);
+    public bool OnParsingError(ParsingErrorEventArgs eventData);
 }

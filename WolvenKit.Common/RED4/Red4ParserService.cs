@@ -22,11 +22,13 @@ namespace WolvenKit.RED4.CR2W
     {
         private readonly IHashService _hashService;
         private readonly ILoggerService _loggerService;
+        private readonly IHookService _hookService;
 
-        public Red4ParserService(IHashService hashService, ILoggerService loggerService)
+        public Red4ParserService(IHashService hashService, ILoggerService loggerService, IHookService hookService)
         {
             _hashService = hashService;
             _loggerService = loggerService;
+            _hookService = hookService;
 
             TypeGlobal.Logger = loggerService;
         }
@@ -69,7 +71,7 @@ namespace WolvenKit.RED4.CR2W
                 // TODO: Shouldn't be done here...
                 stream.Seek(0, SeekOrigin.Begin);
                 using var reader = new CR2WReader(stream, Encoding.Default, true) { LoggerService = _loggerService };
-                reader.ParsingError += TypeGlobal.OnParsingError;
+                reader.ParsingError += OnParsingError;
 
                 return reader.ReadFile(out redFile) == EFileReadErrorCodes.NoError;
             }
@@ -95,7 +97,7 @@ namespace WolvenKit.RED4.CR2W
                 // TODO: Shouldn't be done here...
                 br.BaseStream.Seek(0, SeekOrigin.Begin);
                 using var reader = new CR2WReader(br) { LoggerService = _loggerService };
-                reader.ParsingError += TypeGlobal.OnParsingError;
+                reader.ParsingError += OnParsingError;
 
                 return reader.ReadFile(out redFile) == EFileReadErrorCodes.NoError;
             }
@@ -229,6 +231,21 @@ namespace WolvenKit.RED4.CR2W
             stream.Seek(-4, SeekOrigin.Current);
 
             return magic == CR2WFile.MAGIC;
+        }
+
+        private bool OnParsingError(ParsingErrorEventArgs e)
+        {
+            if (_hookService.OnParsingError(e))
+            {
+                return true;
+            }
+
+            if (TypeGlobal.OnParsingError(e))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         #endregion Methods

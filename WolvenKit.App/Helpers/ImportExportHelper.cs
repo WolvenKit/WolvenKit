@@ -9,11 +9,11 @@ using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Helpers;
 using WolvenKit.Modkit.RED4;
-using WolvenKit.Modkit.Scripting;
 using WolvenKit.RED4.Archive;
 
 namespace WolvenKit.App.Helpers;

@@ -1,4 +1,4 @@
-﻿using WolvenKit.Modkit.Scripting;
+﻿using WolvenKit.Common.Services;
 using WolvenKit.RED4.Archive.CR2W;
 
 namespace WolvenKit.App.Services;

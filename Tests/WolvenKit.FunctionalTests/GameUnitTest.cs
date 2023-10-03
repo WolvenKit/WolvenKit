@@ -40,6 +40,7 @@ namespace WolvenKit.FunctionalTests
                         .AddScoped<IProgressService<double>, ProgressService<double>>()
                         .AddSingleton<IHashService, HashService>()
 
+                        .AddScoped<IHookService, HookService>()
                         .AddScoped<Red4ParserService>()
                         .AddScoped<MeshTools>()
                         .AddSingleton<IArchiveManager, ArchiveManager>()

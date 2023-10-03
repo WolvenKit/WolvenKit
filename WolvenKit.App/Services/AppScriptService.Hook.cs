@@ -25,6 +25,7 @@ public partial class AppScriptService
         _hookService.RegisterOnExport(OnExportHook);
         _hookService.RegisterOnPreImport(OnPreImportHook);
         _hookService.RegisterOnImportFromJson(OnImportFromJson);
+        _hookService.RegisterOnParsingError(OnParsingError);
         if (_hookService is AppHookService appHookService)
         {
             appHookService.RegisterOnSave(OnSaveHook);
@@ -239,6 +240,103 @@ public partial class AppScriptService
         }
 
         return (Enums.EBOOL.TRUE, (string)newJsonText);
+    }
+
+    private bool OnParsingError(ParsingErrorEventArgs eventData)
+    {
+        foreach (var scriptFile in GetScripts())
+        {
+            if (scriptFile.HookExtension == "global")
+            {
+                var status = OnParsingErrorExecute(scriptFile, eventData);
+                if (status == Enums.EBOOL.TRUE)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private record InvalidRTTIEventArgsWrapper(string PropertyName, string ExpectedType, CVariant Value);
+    private record InvalidEnumValueEventArgsWrapper(string EnumType, string StringValue);
+
+    private Enums.EBOOL OnParsingErrorExecute(ScriptFile scriptFile, ParsingErrorEventArgs eventData)
+    {
+        var jsonText = SerializeArgs();
+        if (jsonText == null)
+        {
+            return Enums.EBOOL.UNINITIALZED;
+        }
+
+        var result = HookExecute(scriptFile, "onParsingError", scriptObj => scriptObj.onParsingError(jsonText));
+
+        if ((bool)result[NoHook])
+        {
+            return Enums.EBOOL.UNINITIALZED;
+        }
+
+        if (!result.TryGetValue("isPatched", out var isPatchedObj) || isPatchedObj is not bool isPatched)
+        {
+            _loggerService.Error($"onSave: Missing \"isPatched\" (string) return value");
+            return Enums.EBOOL.UNINITIALZED;
+        }
+
+        if (!result.TryGetValue("jsonText", out var newJsonText) || newJsonText is not string newJsonTextStr)
+        {
+            _loggerService.Error($"onSave: Missing \"jsonText\" (string) return value");
+            return Enums.EBOOL.UNINITIALZED;
+        }
+
+        if (isPatched && DeserializeArgs(newJsonTextStr))
+        {
+            return Enums.EBOOL.TRUE;
+        }
+
+        return Enums.EBOOL.FALSE;
+
+        string? SerializeArgs()
+        {
+            if (eventData is InvalidRTTIEventArgs invalidRtti)
+            {
+                var wrapper = new InvalidRTTIEventArgsWrapper(invalidRtti.PropertyName, RedReflection.GetRedTypeFromCSType(invalidRtti.ExpectedType), new CVariant { Value = invalidRtti.Value });
+                return RedJsonSerializer.Serialize(wrapper);
+            }
+
+            if (eventData is InvalidEnumValueEventArgs invalidEnum)
+            {
+                var wrapper = new InvalidEnumValueEventArgsWrapper(RedReflection.GetEnumRedName(invalidEnum.EnumType), invalidEnum.StringValue);
+                return RedJsonSerializer.Serialize(wrapper);
+            }
+
+            return null;
+        }
+
+        bool DeserializeArgs(string json)
+        {
+            if (eventData is InvalidRTTIEventArgs invalidRtti)
+            {
+                var wrapper = RedJsonSerializer.Deserialize<InvalidRTTIEventArgsWrapper>(json);
+                if (wrapper != null)
+                {
+                    invalidRtti.Value = wrapper.Value.Value;
+                    return true;
+                }
+            }
+
+            if (eventData is InvalidEnumValueEventArgs invalidEnum)
+            {
+                var wrapper = RedJsonSerializer.Deserialize<InvalidEnumValueEventArgsWrapper>(json);
+                if (wrapper != null && Enum.TryParse(invalidEnum.EnumType, wrapper.StringValue, out var value))
+                {
+                    invalidEnum.Value = (Enum?)value;
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 
     private void MergeSettings(AbstractGlobalArgs oldSettings, AbstractGlobalArgs newSettings)
