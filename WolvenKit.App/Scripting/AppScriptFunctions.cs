@@ -262,8 +262,24 @@ public class AppScriptFunctions : ScriptFunctions
                 baseFolder = _projectManager.ActiveProject.ModDirectory;
                 break;
 
+            case "resources":
+                baseFolder = _projectManager.ActiveProject.ResourcesDirectory;
+                break;
+
+            case "packed":
+                baseFolder = _projectManager.ActiveProject.PackedRootDirectory;
+                break;
+
+            case "customSounds":
+                baseFolder = _projectManager.ActiveProject.SoundDirectory;
+                break;
+
             case "raw":
                 baseFolder = _projectManager.ActiveProject.RawDirectory;
+                break;
+
+            case "source":
+                baseFolder = _projectManager.ActiveProject.FileDirectory;
                 break;
 
             default:
