@@ -1940,6 +1940,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             "hudEntryName", // ?
             "stateName", // ?
             "characterRecordId", // tweak record children
+            "secondaryKey", // json
+            "femaleVariant", // also json
             "maleVariant", // also json
             "n", // ?
             "componentName", // ?
