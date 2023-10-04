@@ -1816,7 +1816,35 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         if (ResolvedData is IRedArray ary)
         {
+            if (Parent is { Name: "compiledData" } && GetRootModel().Data is C2dArray csv)
+            {
+                var index = 0;
+                for (var i = 0; i < csv.CompiledHeaders.Count; i++)
+                {
+                    if (((string)csv.CompiledHeaders[i]).Contains("name", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        index = i;
+                        break;
+                    }
+                }
+
+                Descriptor = $"{ary[index]}";
+                if (Descriptor != "")
+                {
+                    return;
+                }
+            }
+
             Descriptor = $"[{ary.Count}]";
+        }
+        else if (ResolvedData is animAnimSetEntry)
+        {
+            var animation = ((animAnimSetEntry)ResolvedData).Animation?.GetValue();
+            Descriptor = animation?.GetProperty("Name")?.ToString() ?? "";
+            if (Descriptor != "")
+            {
+                return;
+            }
         }
         else if (ResolvedData is IRedBufferPointer rbp && rbp.GetValue().Data is RedPackage pkg)
         {
@@ -1868,6 +1896,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             Descriptor = $"{q.I}, {q.J}, {q.K}, {q.R}";
         }
+
         if (ResolvedData is CMaterialInstance && Parent is { Data: IRedArray arr } && GetRootModel().Data is CMesh mesh)
         {
             for (var i = 0; i < arr.Count; i++)
@@ -1877,7 +1906,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     continue;
                 }
 
-                var entry = mesh.MaterialEntries.FirstOrDefault(x => x is not null && x.IsLocalInstance && x.Index == i);
+                var entry = mesh.MaterialEntries.FirstOrDefault(x =>
+                    x is not null && x.IsLocalInstance && x.Index == i);
                 if (entry != null)
                 {
                     Descriptor = entry.Name;
@@ -1892,6 +1922,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             {
                 desc += $" {localizationPersistenceOnScreenEntry.SecondaryKey}";
             }
+
             Descriptor = desc;
         }
         else if (ResolvedData is not null)
@@ -1913,21 +1944,25 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         // some common "names" of classes that might be useful to display in the UI
         var propNames = new string[]
         {
-                "name",
-                "partName",
-                "slotName",
-                "hudEntryName",
-                "stateName",
-                "n",
-                "componentName",
-                "parameterName",
-                "debugName",
-                "category",
-                "entryName",
-                "className",
-                "actorName",
-                "sectorHash",
-                "propertyPath"
+            "name", // default property
+            "partName", // ?
+            "slotName", // ?
+            "hudEntryName", // ?
+            "stateName", // ?
+            "characterRecordId", // tweak record children
+            "secondaryKey", // json
+            "femaleVariant", // also json
+            "maleVariant", // also json
+            "n", // ?
+            "componentName", // ?
+            "parameterName", // ?
+            "debugName", // ?
+            "category", // ?
+            "entryName", // ?
+            "className", // ?
+            "actorName", // ?
+            "sectorHash", // sectors
+            "propertyPath" // ?
         };
         if (ResolvedData is RedBaseClass irc)
         {
@@ -1957,6 +1992,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                         {
                             Descriptor = val.ToString().NotNull();
                         }
+
                         return;
                     }
                 }
@@ -2261,10 +2297,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             return;
         }
-        if (item.Data == null)
-        {
-            return;
-        }
 
         var oldParent = item.Parent;
 
@@ -2307,7 +2339,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             int oldIndex = -1, i = 0;
             foreach (var thing in sourceList)
             {
-                if (item.Data is not null && thing.GetHashCode() == item.Data.GetHashCode())
+                if (thing.GetHashCode() == item.Data.GetHashCode())
                 {
                     oldIndex = i;
                     break;
@@ -2322,6 +2354,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 {
                     index--;
                 }
+
                 InsertChild(index, item.Data);
                 Tab?.Parent.SetIsDirty(true);
                 //RecalculateProperties();
