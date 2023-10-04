@@ -2288,10 +2288,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             return;
         }
-        if (item.Data == null)
-        {
-            return;
-        }
 
         var oldParent = item.Parent;
 
@@ -2334,7 +2330,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             int oldIndex = -1, i = 0;
             foreach (var thing in sourceList)
             {
-                if (item.Data is not null && thing.GetHashCode() == item.Data.GetHashCode())
+                if (thing.GetHashCode() == item.Data.GetHashCode())
                 {
                     oldIndex = i;
                     break;
@@ -2350,7 +2346,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     index--;
                 }
 
-                InsertChild(index, item?.Data);
+                InsertChild(index, item.Data);
                 Tab?.Parent.SetIsDirty(true);
                 //RecalculateProperties();
                 if (sourceList.GetHashCode() != destList.GetHashCode())
@@ -2462,12 +2458,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         return false;
     }
 
-    public bool InsertChild(int index, IRedType? item)
+    public bool InsertChild(int index, IRedType item)
     {
-        if (item is null)
-        {
-            return false;
-        }
         try
         {
             if (ResolvedData is IRedArray ira)
