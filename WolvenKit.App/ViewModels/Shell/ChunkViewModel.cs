@@ -1816,10 +1816,19 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         if (ResolvedData is IRedArray ary)
         {
-            // CSV / Factory
-            if (Parent is { Name: "compiledData" } parent && ary is [CString, _, _])
+            if (Parent is { Name: "compiledData" } && GetRootModel().Data is C2dArray csv)
             {
-                Descriptor = $"{ary[0]}";
+                var index = 0;
+                for (var i = 0; i < csv.CompiledHeaders.Count; i++)
+                {
+                    if (((string)csv.CompiledHeaders[i]).Contains("name", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        index = i;
+                        break;
+                    }
+                }
+
+                Descriptor = $"{ary[index]}";
                 if (Descriptor != "")
                 {
                     return;
