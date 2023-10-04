@@ -43,6 +43,7 @@ namespace WolvenKit.Utility
                         .AddSingleton<IHashService, HashService>()
                         .AddSingleton<ITweakDBService, TweakDBService>()
 
+                        .AddScoped<IHookService, HookService>()
                         .AddScoped<Red4ParserService>()
                         .AddScoped<MeshTools>()
                         .AddSingleton<IArchiveManager, ArchiveManager>()
