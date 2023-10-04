@@ -1816,11 +1816,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         if (ResolvedData is IRedArray ary)
         {
-            if (PropertyName == "compiledData" && ary is [IRedArray { Count: 3 } childAry])
+            // CSV / Factory
+            if (Parent is { Name: "compiledData" } parent && ary is [CString, _, _])
             {
-                if (childAry[0] is CString)
+                Descriptor = $"{ary[0]}";
+                if (Descriptor != "")
                 {
-                    Descriptor = $"{childAry[0]}";
                     return;
                 }
             }
