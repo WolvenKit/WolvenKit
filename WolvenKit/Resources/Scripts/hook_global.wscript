@@ -156,7 +156,14 @@ globalThis.onParsingError = function (jsonText) {
     
     let isPatched = false;
     
-    if (json["PropertyName"] === "entSkinnedMeshComponent.castShadows" && json["ExpectedType"] == "shadowsShadowCastingMode" && json["Value"]["$type"] == "Bool") {
+    var shadowProps = [
+        "entSkinnedMeshComponent.castShadows", 
+        "entSkinnedMeshComponent.castLocalShadows",
+        "entGarmentSkinnedMeshComponent.castShadows",
+        "entGarmentSkinnedMeshComponent.castLocalShadows"
+    ];
+    
+    if (shadowProps.includes(json["PropertyName"]) && json["ExpectedType"] == "shadowsShadowCastingMode" && json["Value"]["$type"] == "Bool") {
     	isPatched = true;
     	
     	json["Value"]["$type"] = "shadowsShadowCastingMode";
@@ -165,8 +172,10 @@ globalThis.onParsingError = function (jsonText) {
     	} else {
     		json["Value"]["Value"] = "Always";
     	}
-    } else {
-    	Logger.Info(json);
+    }
+    
+    if (!isPatched) {
+    	Logger.Debug(json);
     }
     
     // Just an example
