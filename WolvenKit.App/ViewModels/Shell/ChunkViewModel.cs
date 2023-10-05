@@ -1837,6 +1837,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
             Descriptor = $"[{ary.Count}]";
         }
+        else if (ResolvedData is appearanceAppearancePart)
+        {
+            Descriptor = ((appearanceAppearancePart)ResolvedData).Resource.DepotPath.ToString() ?? "";
+            if (Descriptor != "")
+            {
+                return;
+            }
+        }
         else if (ResolvedData is animAnimSetEntry)
         {
             var animation = ((animAnimSetEntry)ResolvedData).Animation?.GetValue();
