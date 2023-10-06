@@ -354,7 +354,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
 #pragma warning disable CS8604 // Possible null reference argument.
                 var uses = await db.Files.Include("Archive").Include("Uses")
-                    .Where(x => x.Archive != null && x.Archive.Name == file.ArchiveName && x.Hash == hash)
+                    .Where(x => x.Archive != null && x.Archive.Name == file.ArchiveName && x.Archive.Source == file.ArchiveSource.ToString() && x.Hash == hash)
                     .Where(x => x.Uses != null)
                     .Select(x => x.Uses.Select(y => y.Hash))
                     .ToListAsync();

@@ -451,7 +451,7 @@ namespace WolvenKit.Utility
             Directory.CreateDirectory(resultDir);
 
             var existingFiles = new ConcurrentDictionary<string, byte>();
-            foreach (var file in Directory.GetFiles(resultDir))
+            foreach (var file in Directory.GetFiles(resultDir, "*.json", SearchOption.AllDirectories))
             {
                 existingFiles.TryAdd(file, 0);
             }
@@ -466,7 +466,23 @@ namespace WolvenKit.Utility
                     continue;
                 }
 
-                var dirPath = Path.Combine(resultDir, archive.Name);
+                string? dirPath = null;
+                if (archive.ArchiveAbsolutePath.Contains(@"archive\pc\content"))
+                {
+                    dirPath = Path.Combine(resultDir, "content");
+                }
+
+                if (archive.ArchiveAbsolutePath.Contains(@"archive\pc\ep1"))
+                {
+                    dirPath = Path.Combine(resultDir, "ep1");
+                }
+
+                if (string.IsNullOrEmpty(dirPath))
+                {
+                    throw new Exception();
+                }
+
+                dirPath = Path.Combine(dirPath, archive.Name);
                 Directory.CreateDirectory(dirPath);
 
                 Parallel.ForEach(archive.Files, pair =>

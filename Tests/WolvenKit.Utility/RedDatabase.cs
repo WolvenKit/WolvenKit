@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using EFCore.BulkExtensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Database;
 using WolvenKit.RED4;
@@ -31,10 +32,12 @@ namespace WolvenKit.Utility
             using var db = new RedDBContext();
             foreach (var archive in s_bm.Archives.Items.Reverse())
             {
-                db.Add(new RedArchive { Name = archive.Name });
+                db.Add(new RedArchive { Name = archive.Name, Source = archive.Source.ToString() });
             }
             db.SaveChanges();
         }
+
+        private record ArchiveRecord(string Name, EArchiveSource Source);
 
         [TestMethod]
         public void bGetAllFiles()
@@ -42,23 +45,9 @@ namespace WolvenKit.Utility
             ArgumentNullException.ThrowIfNull(s_bm);
             var infoDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory, "infodump");
 
-            var importDict = new Dictionary<string, ConcurrentDictionary<ulong, ulong[]>>();
-            foreach (var archiveInfoDir in Directory.GetDirectories(infoDir))
-            {
-                var fileImports = new ConcurrentDictionary<ulong, ulong[]>();
-                Parallel.ForEach(Directory.GetFiles(archiveInfoDir), infoFile =>
-                {
-                    var data = JsonSerializer.Deserialize<DataCollection>(File.ReadAllText(infoFile))!;
-
-                    var imports = GetImports(data);
-                    if (imports.Count > 0)
-                    {
-                        fileImports.TryAdd(data.Hash, imports.ToArray());
-                    }
-                });
-
-                importDict.Add(Path.GetFileName(archiveInfoDir), fileImports);
-            }
+            var importDict = new Dictionary<ArchiveRecord, ConcurrentDictionary<ulong, ulong[]>>();
+            ParseDump(Path.Combine(infoDir, "content"), EArchiveSource.Base);
+            ParseDump(Path.Combine(infoDir, "ep1"), EArchiveSource.EP1);
 
             using var db = new RedDBContext();
 
@@ -67,20 +56,24 @@ namespace WolvenKit.Utility
             {
                 foreach (var dbArchive in db.Archives)
                 {
-                    if (s_bm.Archives.Items.FirstOrDefault(x => x.Name == dbArchive.Name) is not Archive archive)
+                    if (s_bm.Archives.Items.FirstOrDefault(x => x.Name == dbArchive.Name && x.Source.ToString() == dbArchive.Source) is not Archive archive)
                     {
                         throw new Exception();
                     }
 
-                    var fileImports = importDict[archive.Name];
+                    var fileImports = importDict
+                        .Where(x => x.Key.Name == archive.Name && x.Key.Source == archive.Source)
+                        .Select(x => x.Value)
+                        .First();
+
                     foreach (var (hash, file) in archive.Files)
                     {
                         var dbFile = new RedFile { ArchiveId = dbArchive.Id, Hash = hash };
 
-                        if (fileImports.ContainsKey(hash))
+                        if (fileImports.TryGetValue(hash, out var fileImport))
                         {
                             dbFile.Uses = new List<RedFileUse>();
-                            foreach (var import in fileImports[hash])
+                            foreach (var import in fileImport)
                             {
                                 dbFile.Uses.Add(new RedFileUse { Hash = import });
                             }
@@ -112,7 +105,28 @@ namespace WolvenKit.Utility
 
             db.SaveChanges();
 
-            static HashSet<ulong> GetImports(DataCollection dc)
+
+            void ParseDump(string infoDir, EArchiveSource source)
+            {
+                foreach (var archiveInfoDir in Directory.GetDirectories(infoDir))
+                {
+                    var fileImports = new ConcurrentDictionary<ulong, ulong[]>();
+                    Parallel.ForEach(Directory.GetFiles(archiveInfoDir), infoFile =>
+                    {
+                        var data = JsonSerializer.Deserialize<DataCollection>(File.ReadAllText(infoFile))!;
+
+                        var imports = GetImports(data);
+                        if (imports.Count > 0)
+                        {
+                            fileImports.TryAdd(data.Hash, imports.ToArray());
+                        }
+                    });
+
+                    importDict.Add(new ArchiveRecord(Path.GetFileName(archiveInfoDir), source), fileImports);
+                }
+            }
+
+            HashSet<ulong> GetImports(DataCollection dc)
             {
                 var result = new HashSet<ulong>();
 
