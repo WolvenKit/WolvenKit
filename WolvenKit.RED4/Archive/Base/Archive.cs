@@ -40,6 +40,8 @@ public class Archive : ICyberGameArchive, IDisposable
 
     public string Name => Path.GetFileName(ArchiveAbsolutePath);
 
+    public EArchiveSource Source { get; set; } = EArchiveSource.Unknown;
+
     public EArchiveType TypeName => EArchiveType.Archive;
 
     public int FileCount => Files?.Count ?? 0;

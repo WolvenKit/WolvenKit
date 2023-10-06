@@ -41,7 +41,7 @@ namespace WolvenKit.Common.Model
 
         public abstract void LoadGameArchives(FileInfo executable, bool rebuildtree = true);
 
-        public abstract void LoadArchive(string path, bool ispatch = false);
+        public abstract void LoadArchive(string path, EArchiveSource source = EArchiveSource.Unknown);
 
         public abstract void LoadModArchive(string filename, bool analyzeFiles = true);
 

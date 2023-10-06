@@ -104,6 +104,15 @@ namespace WolvenKit.Common
         Debug
     }
 
+    public enum EArchiveSource
+    {
+        Unknown,
+        Base,
+        EP1,
+        Mod,
+        Project
+    }
+
     public enum EArchiveType
     {
         ANY,

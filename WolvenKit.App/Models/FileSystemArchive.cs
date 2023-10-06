@@ -20,6 +20,7 @@ public class FileSystemArchive : ICyberGameArchive
     public string ArchiveRelativePath { get; set; }
     public Dictionary<ulong, IGameFile> Files { get; set; } = new();
     public string Name { get; }
+    public EArchiveSource Source => EArchiveSource.Project;
     public EArchiveType TypeName { get; set; }
     public Cp77Project Project { get; }
 
