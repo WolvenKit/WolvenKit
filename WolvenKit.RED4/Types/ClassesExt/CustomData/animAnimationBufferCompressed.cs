@@ -47,6 +47,14 @@ public partial class animAnimationBufferCompressed //: IRedAppendix
         set => SetPropertyValue<CArray<animKey>>(value);
     }
 
+    [RED("trackKeys")]
+    [REDProperty(IsIgnored = true)]
+    public CArray<animKeyFloat> TrackKeys
+    {
+        get => GetPropertyValue<CArray<animKeyFloat>>();
+        set => SetPropertyValue<CArray<animKeyFloat>>(value);
+    }
+
     [RED("constTrackKeys")]
     [REDProperty(IsIgnored = true)]
     public CArray<animKeyFloat> ConstTrackKeys
@@ -205,6 +213,20 @@ public partial class animAnimationBufferCompressed //: IRedAppendix
             ConstAnimKeys.Add(ToAnimKey(timeNormalized, boneIdx, component, x, y, z, wSign));
         }
 
+        TrackKeys = new();
+        for (uint i = 0; i < NumTrackKeys; i++)
+        {
+            var idx = br.ReadUInt16();
+            var time = br.ReadUInt16() / (float)ushort.MaxValue; //is it time or some garbage idk
+            float value = br.ReadSingle();
+            TrackKeys.Add(new animKeyFloat()
+            {
+                Idx = idx,
+                Time = time,
+                Value = value,
+            });
+        }
+
         ConstTrackKeys = new();
         for (uint i = 0; i < NumConstTrackKeys; i++)
         {
@@ -273,6 +295,13 @@ public partial class animAnimationBufferCompressed //: IRedAppendix
             bw.Write((float)x);
             bw.Write((float)y);
             bw.Write((float)z);
+        }
+
+        for (int i = 0; i < TrackKeys.Count; i++)
+        {
+            bw.Write(TrackKeys[i].Idx);
+            bw.Write((ushort)(TrackKeys[i].Time * ushort.MaxValue));
+            bw.Write((float)TrackKeys[i].Value);
         }
 
         for (int i = 0; i < ConstTrackKeys.Count; i++)
