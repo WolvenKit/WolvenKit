@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using WolvenKit.Core.Compression;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Types.Exceptions;
@@ -147,7 +148,13 @@ public partial class animAnimationBufferCompressed //: IRedAppendix
         MemoryStream defferedBuffer = null;
         if (InplaceCompressedBuffer != null)
         {
-            defferedBuffer = new MemoryStream(InplaceCompressedBuffer.Buffer.GetBytes());
+            var tmpBytes = InplaceCompressedBuffer.Buffer.GetBytes();
+            if (Oodle.IsCompressed(tmpBytes))
+            {
+                Oodle.DecompressBuffer(tmpBytes, out var raw);
+                tmpBytes = raw;
+            }
+            defferedBuffer = new MemoryStream(tmpBytes);
         }
         else if (DefferedBuffer != null)
         {
