@@ -2323,7 +2323,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                                 continue;
                             }
 
-                            if (geo is CVXMCacheEntry cce)
+                            if (geo is SimpleCVXMCacheEntry cce)
                             {
                                 var mb = new MeshBuilder
                                 {
@@ -2333,7 +2333,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                                 var positions = new Vector3Collection();
                                 for (var i = 0; i < cce.Vertices.Count; i++)
                                 {
-                                    positions.Add(cce.Vertices[i].NotNull().ToVector3());
+                                    positions.Add(cce.Vertices[i]);
                                 }
 
                                 //foreach (var face in cce.Faces)
@@ -2369,8 +2369,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                                 for (var i = 0; i < cce.FaceData.Count; i++)
                                 {
                                     var count = mb.Positions.Count;
-                                    var face = cce.Faces[i].NotNull();
-                                    var faceData = cce.FaceData[i].NotNull();
+                                    var face = cce.Faces[i];
+                                    var faceData = cce.FaceData[i];
 
                                     switch (face.Count)
                                     {
@@ -2378,9 +2378,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                                             mb.Positions.Add(positions[face[0]]);
                                             mb.Positions.Add(positions[face[1]]);
                                             mb.Positions.Add(positions[face[2]]);
-                                            mb.Normals.Add(faceData.Normal.ToVector3());
-                                            mb.Normals.Add(faceData.Normal.ToVector3());
-                                            mb.Normals.Add(faceData.Normal.ToVector3());
+                                            mb.Normals.Add(faceData);
+                                            mb.Normals.Add(faceData);
+                                            mb.Normals.Add(faceData);
                                             mb.TriangleIndices.Add(count);
                                             mb.TriangleIndices.Add(count + 1);
                                             mb.TriangleIndices.Add(count + 2);
@@ -2390,10 +2390,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                                             mb.Positions.Add(positions[face[1]]);
                                             mb.Positions.Add(positions[face[2]]);
                                             mb.Positions.Add(positions[face[3]]);
-                                            mb.Normals.Add(faceData.Normal.ToVector3());
-                                            mb.Normals.Add(faceData.Normal.ToVector3());
-                                            mb.Normals.Add(faceData.Normal.ToVector3());
-                                            mb.Normals.Add(faceData.Normal.ToVector3());
+                                            mb.Normals.Add(faceData);
+                                            mb.Normals.Add(faceData);
+                                            mb.Normals.Add(faceData);
+                                            mb.Normals.Add(faceData);
                                             mb.TriangleIndices.Add(count);
                                             mb.TriangleIndices.Add(count + 1);
                                             mb.TriangleIndices.Add(count + 2);
@@ -2405,7 +2405,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                                             for (var j = 0; j < face.Count; j++)
                                             {
                                                 mb.Positions.Add(positions[face[j]]);
-                                                mb.Normals.Add(faceData.Normal.ToVector3());
+                                                mb.Normals.Add(faceData);
                                             }
                                             for (var j = 0; j + 2 < face.Count; j++)
                                             {
@@ -2421,7 +2421,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                                 geometry = mb.ToMeshGeometry3D();
                             }
-                            else if (geo is MeshCacheEntry mce)
+                            else if (geo is SimpleMeshCacheEntry mce)
                             {
                                 var mb = new MeshBuilder
                                 {
@@ -2431,7 +2431,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                                 var positions = new Vector3Collection();
                                 for (var i = 0; i < mce.Vertices.Count; i++)
                                 {
-                                    positions.Add(mce.Vertices[i].NotNull().ToVector3());
+                                    positions.Add(mce.Vertices[i]);
                                 }
 
                                 foreach (var face in mce.Faces)
@@ -2501,17 +2501,20 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             }
             else if (handle.Chunk is worldNavigationNode wnm)
             {
-                var navmeshFile = Parent.GetFileFromDepotPathOrCache(wnm.NavigationTileResource.DepotPath);
-
-                if (navmeshFile?.RootChunk is not worldNavigationTileResource wntr)
+                var emb = Parent.Cr2wFile.EmbeddedFiles.FirstOrDefault(x => x.FileName == wnm.NavigationTileResource.DepotPath);
+                if (emb == null)
                 {
                     continue;
                 }
 
-                /*foreach (var tile in wntr.TilesData)
+                if (emb.Content is not worldNavigationTileResource wntr)
                 {
-                    // TODO: [Patch-2.0] Where did it go?
-                    if (tile.TilesBuffer.Data is not TilesBuffer tb)
+                    continue;
+                }
+
+                foreach (var tile in wntr.TilesData)
+                {
+                    if (wntr.TileBuffers[(int)(uint)tile.BufferIndex].Data is not TilesBuffer tb)
                     {
                         continue;
                     }
@@ -2560,7 +2563,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     group.Children.Add(mesh);
 
                     groups.Add(group);
-                }*/
+                }
             }
             else if (handle.Chunk is worldEntityNode wen)
             {
@@ -3184,7 +3187,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             }
 
             List<entTemplateAppearance?> appearances;
-            if (appearanceName == null)
+            if (appearance != null)
+            {
+                appearances = ent.Appearances.Where(x => x is not null && x.Name == ent.DefaultAppearance).ToList();
+            }
+            else if (appearanceName == null)
             {
                 appearances = ent.Appearances.ToList();
             }

@@ -19,7 +19,7 @@ public static class BufferHelper
         s_bufferReaders.Add("meshMeshMaterialBuffer.rawData", typeof(CR2WListReader));
         s_bufferReaders.Add("entEntityParametersBuffer.parameterBuffers", typeof(CR2WListReader));
         s_bufferReaders.Add("animAnimDataChunk.buffer", typeof(AnimationReader));
-        s_bufferReaders.Add("worldNavigationTileData.tilesBuffer", typeof(TilesReader));
+        s_bufferReaders.Add("worldNavigationTileResource.tileBuffers", typeof(TilesReader));
         s_bufferReaders.Add("worldSharedDataBuffer.buffer", typeof(WorldSharedDataBufferReader));
         s_bufferReaders.Add("worldStreamingSector.transforms", typeof(worldNodeDataReader));
         s_bufferReaders.Add("worldCollisionNode.compiledData", typeof(CollisionReader));

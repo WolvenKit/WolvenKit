@@ -90,7 +90,17 @@ namespace WolvenKit.RED4.CR2W
         /// <param name="br">The <see cref="BinaryReader">BinaryReader</see> to read from</param>
         /// <param name="redFile">The resulting <see cref="CR2WFile">CR2WFile</see></param>
         /// <returns>Returns true if successful, otherwise false</returns>
-        public bool TryReadRed4File(BinaryReader br, [NotNullWhen(true)] out CR2WFile? redFile)
+        public bool TryReadRed4File(BinaryReader br, [NotNullWhen(true)] out CR2WFile? redFile) => 
+            TryReadRed4File(br, true, out redFile);
+
+        /// <summary>
+        /// Try reading <see cref="CR2WFile">CR2WFile</see> from a <see cref="BinaryReader">BinaryReader</see>
+        /// </summary>
+        /// <param name="br">The <see cref="BinaryReader">BinaryReader</see> to read from</param>
+        /// <param name="parseBuffers"></param>
+        /// <param name="redFile">The resulting <see cref="CR2WFile">CR2WFile</see></param>
+        /// <returns>Returns true if successful, otherwise false</returns>
+        public bool TryReadRed4File(BinaryReader br, bool parseBuffers, [NotNullWhen(true)] out CR2WFile? redFile)
         {
             try
             {
@@ -99,7 +109,7 @@ namespace WolvenKit.RED4.CR2W
                 using var reader = new CR2WReader(br) { LoggerService = _loggerService };
                 reader.ParsingError += OnParsingError;
 
-                return reader.ReadFile(out redFile) == EFileReadErrorCodes.NoError;
+                return reader.ReadFile(out redFile, parseBuffers) == EFileReadErrorCodes.NoError;
             }
             catch (Exception e)
             {
@@ -128,10 +138,11 @@ namespace WolvenKit.RED4.CR2W
         /// Reads a <see cref="CR2WFile">CR2WFile</see> from a <see cref="BinaryReader">BinaryReader</see>
         /// </summary>
         /// <param name="br">The <see cref="BinaryReader">BinaryReader</see> to read from</param>
+        /// <param name="parseBuffers"></param>
         /// <returns>The resulting <see cref="CR2WFile">CR2WFile</see> or null if unsuccessful</returns>
-        public CR2WFile? ReadRed4File(BinaryReader br)
+        public CR2WFile? ReadRed4File(BinaryReader br, bool parseBuffers = true)
         {
-            TryReadRed4File(br, out var redFile);
+            TryReadRed4File(br, parseBuffers, out var redFile);
             return redFile;
         }
 
