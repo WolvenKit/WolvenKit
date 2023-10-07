@@ -1,6 +1,6 @@
 // Exports file and all referenced files (recursively)
 // @author Simarilius, Dzk & Seberoth
-// @version 1.1
+// @version 1.2
 import * as Logger from 'Logger.wscript';
 import * as TypeHelper from 'TypeHelper.wscript';
 
