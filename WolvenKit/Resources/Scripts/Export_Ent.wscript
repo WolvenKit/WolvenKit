@@ -1,6 +1,6 @@
 // Exports file and all referenced files (recursively)
 // @author Simarilius, Dzk & Seberoth
-// @version 1.1
+// @version 1.2
 import * as Logger from 'Logger.wscript';
 import * as TypeHelper from 'TypeHelper.wscript';
 
@@ -60,7 +60,7 @@ for (const fileName of projectSet) {
 
     // Load project vesion if it exists, otherwise add to the project
     if (wkit.FileExistsInProject(fileName)) {
-        var file = GetFileFromProject(fileName, OpenAs.GameFile);
+        var file = wkit.GetFileFromProject(fileName, OpenAs.GameFile);
     }
     else {
         var file = wkit.GetFileFromBase(fileName);
