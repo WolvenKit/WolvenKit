@@ -6,6 +6,8 @@ namespace WolvenKit.RED4.Types;
 
 public partial class worldCompiledEffectInfo : IRedCompiledPropertyData
 {
+    public bool IsCustomReadNeeded(RedPackageHeader redPackageHeader) => redPackageHeader.unk1 == 2;
+
     public IRedType? CustomRead(Red4Reader reader, uint size, CName propertyName)
     {
         IRedType? result = null;
@@ -104,6 +106,8 @@ public partial class worldCompiledEffectInfo : IRedCompiledPropertyData
 
         return result;
     }
+
+    public bool IsCustomWriteNeeded(RedPackageHeader redPackageHeader) => redPackageHeader.unk1 == 2;
 
     public void CustomWrite(Red4Writer writer, CName propertyName)
     {

@@ -51,7 +51,7 @@ public partial class RedPackageReader : Red4Reader
             BaseStream.Position = baseOff + f.offset;
             if (prop.IsDynamic)
             {
-                if (compiledPropertyData != null)
+                if (compiledPropertyData != null && compiledPropertyData.IsCustomReadNeeded(header))
                 {
                     value = compiledPropertyData.CustomRead(this, 0, varName);
                 }
@@ -66,7 +66,7 @@ public partial class RedPackageReader : Red4Reader
             {
                 ArgumentNullException.ThrowIfNull(prop.RedName);
 
-                if (compiledPropertyData != null)
+                if (compiledPropertyData != null && compiledPropertyData.IsCustomReadNeeded(header))
                 {
                     value = compiledPropertyData.CustomRead(this, 0, varName);
                 }
