@@ -896,10 +896,10 @@ public partial class AssetBrowserViewModel : ToolViewModel
         var filesToSearch =
             gameFilesOrMods
                 .Items
-                .SelectMany(x => x.Files)
-                .GroupBy(x => x.Key)
-                .Select(x => x.First().Value)
+                .SelectMany(x => x.Files.Values)
                 .Where(file => searchAsSequentialRefinements.All(refinement => refinement.Match(file)))
+                .GroupBy(x => x.Key)
+                .Select(x => x.First())
                 .Select(matchingFile => new RedFileViewModel(matchingFile));
 
         // Should add an indicator here of failures and non-matches

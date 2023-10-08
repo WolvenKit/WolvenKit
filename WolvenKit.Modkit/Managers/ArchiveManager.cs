@@ -300,6 +300,8 @@ namespace WolvenKit.RED4.CR2W.Archive
                 return;
             }
 
+            archive.Source = EArchiveSource.Mod;
+
             if (analyzeFiles)
             {
                 var importError = false;
