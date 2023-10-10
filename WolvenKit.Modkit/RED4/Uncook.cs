@@ -654,7 +654,7 @@ namespace WolvenKit.Modkit.RED4
                 ExtractParts(inkTextureAtlas.Slots[2]!.Texture.DepotPath, inkTextureAtlas.Slots[2]!.Parts, Path.Combine(outFile.FullName, "720p"));
             }
 
-            return false;
+            return true;
 
             void ExtractParts(ResourcePath texturePath, CArray<inkTextureAtlasMapper> parts, string outDir)
             {

@@ -17,6 +17,7 @@ namespace WolvenKit.Common.Model.Arguments
             _argsList.Add(typeof(OpusImportArgs), new OpusImportArgs());
             _argsList.Add(typeof(MlmaskImportArgs), new MlmaskImportArgs());
             _argsList.Add(typeof(ReImportArgs), new ReImportArgs());
+            _argsList.Add(typeof(FntImportArgs), new FntImportArgs());
         }
 
         /// <summary>
