@@ -2,7 +2,7 @@
 
   <PropertyGroup>
       <TargetFramework>net7.0</TargetFramework>
-      <Version>2.00.0</Version>
+      <Version>2.01.0</Version>
       <Platforms>x64</Platforms>
       <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 	  <Nullable>enable</Nullable>
