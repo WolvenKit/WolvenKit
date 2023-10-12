@@ -16,7 +16,7 @@ jobs:
         dotnet-version: 7.x
 
     # Pack and upload nugets for Types, Modkit and CLI
-    - run: dotnet pack .\WolvenKit.RED4\WolvenKit.RED4.Types.csproj
+    - run: dotnet pack .\WolvenKit.RED4\WolvenKit.RED4.csproj
     - run: dotnet nuget push .\WolvenKit.RED4\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
 
     - run: dotnet pack .\WolvenKit.Modkit\WolvenKit.Modkit.csproj
