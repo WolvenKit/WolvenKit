@@ -8,6 +8,22 @@
     <Platforms>x64</Platforms>
   </PropertyGroup>
 
+   <PropertyGroup>
+      <PackageId>WolvenKit.RED4</PackageId>
+      <Product>WolvenKit.RED4</Product>
+      <Description>Types for Cyberpunk 2077.</Description>
+
+      <Company>WolvenKit</Company>
+      <PackageLicenseExpression>MIT</PackageLicenseExpression>
+      <PackageProjectUrl>https://github.com/WolvenKit/WolvenKit</PackageProjectUrl>
+      <RepositoryUrl>https://github.com/WolvenKit/WolvenKit</RepositoryUrl>
+      <RepositoryType>git</RepositoryType>
+      <PackageTags>wolvenkit, cyberpunk2077</PackageTags>
+
+      <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+      <PackageOutputPath>./nupkg</PackageOutputPath>
+    </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="K4os.Compression.LZ4" />
   </ItemGroup>
