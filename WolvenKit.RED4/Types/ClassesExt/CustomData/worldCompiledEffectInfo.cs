@@ -25,6 +25,19 @@ public partial class worldCompiledEffectInfo : IRedCompiledPropertyData
             result = tmp;
         }
 
+        if (propertyName == "componentNames")
+        {
+            var tmp = new CArray<CName>();
+
+            var cnt = reader.BaseReader.ReadInt32();
+            for (var i = 0; i < cnt; i++)
+            {
+                tmp.Add(reader.ReadCName());
+            }
+
+            result = tmp;
+        }
+
         if (propertyName == "relativePositions")
         {
             var tmp = new CArray<Vector3>();
