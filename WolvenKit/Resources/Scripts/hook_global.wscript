@@ -155,15 +155,8 @@ globalThis.onParsingError = function (jsonText) {
     const json = TypeHelper.JsonParse(jsonText);
     
     let isPatched = false;
-    
-    var shadowProps = [
-        "entSkinnedMeshComponent.castShadows", 
-        "entSkinnedMeshComponent.castLocalShadows",
-        "entGarmentSkinnedMeshComponent.castShadows",
-        "entGarmentSkinnedMeshComponent.castLocalShadows"
-    ];
-    
-    if (shadowProps.includes(json["PropertyName"]) && json["ExpectedType"] == "shadowsShadowCastingMode" && json["Value"]["$type"] == "Bool") {
+
+    if (json["ExpectedType"] === "shadowsShadowCastingMode" && json["Value"]["$type"] === "Bool") {
     	isPatched = true;
     	
     	json["Value"]["$type"] = "shadowsShadowCastingMode";
