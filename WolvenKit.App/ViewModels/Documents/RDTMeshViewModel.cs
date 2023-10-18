@@ -3186,7 +3186,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 }
             }
 
-            List<entTemplateAppearance?> appearances;
+            List<entTemplateAppearance> appearances;
             if (appearance != null)
             {
                 appearances = ent.Appearances.Where(x => x is not null && x.Name == ent.DefaultAppearance).ToList();
