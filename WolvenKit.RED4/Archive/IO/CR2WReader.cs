@@ -87,21 +87,34 @@ public partial class CR2WReader : Red4Reader
         var typename = GetStringValue(typeId);
 
         // Read Size
-        var sizepos = _reader.BaseStream.Position;
+        var sizePos = _reader.BaseStream.Position;
         var size = _reader.ReadUInt32();
+
+        var propName = $"{RedReflection.GetRedTypeFromCSType(cls.GetType())}.{varName}";
 
         var (type, flags) = RedReflection.GetCSTypeFromRedType(typename!);
         var redTypeInfos = RedReflection.GetRedTypeInfos(typename!);
-        CheckRedTypeInfos(ref redTypeInfos);
 
         var typeInfo = RedReflection.GetTypeInfo(cls);
 
-        IRedType? value;
         var prop = RedReflection.GetPropertyByRedName(cls.GetType(), varName!);
-        if (prop == null)
+        var (hasError, errorRedName) = CheckRedTypeInfos(ref redTypeInfos);
+        if (hasError)
         {
-            prop = cls.AddDynamicProperty(varName!, type);
+            if (prop == null)
+            {
+                LoggerService?.Warning($"Type \"{errorRedName}\" is not known! Non-RTTI property \"{propName}\" will be ignored");
+
+                _reader.BaseStream.Position = sizePos + size;
+                return true;
+            }
+
+            throw new Exception($"Type \"{errorRedName}\" is not known! RTTI property \"{propName}\"");
         }
+
+        IRedType? value;
+        
+        prop ??= cls.AddDynamicProperty(varName!, type);
 
         if (prop.IsDynamic)
         {
@@ -115,7 +128,6 @@ public partial class CR2WReader : Red4Reader
 
             value = Read(redTypeInfos, size - 4);
 
-            var propName = $"{RedReflection.GetRedTypeFromCSType(cls.GetType())}.{varName}";
             if (type != prop.Type)
             {
                 var args = new InvalidRTTIEventArgs(propName, prop.Type, type, value);

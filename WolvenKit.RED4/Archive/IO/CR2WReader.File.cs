@@ -241,7 +241,8 @@ public partial class CR2WReader
 
         if (BaseStream.Position - info.dataOffset != info.dataSize)
         {
-            throw new TodoException("Chunk size mismatch");
+            LoggerService?.Warning("Chunk size mismatch! Could lead to problems");
+            BaseStream.Position = info.dataOffset + info.dataSize;
         }
     }
 
@@ -288,6 +289,8 @@ public partial class CR2WReader
                 {
                     pReader.Settings.ImportsAsHash = true;
                 }
+
+                pReader.LoggerService = LoggerService;
             }
 
             reader.ReadBuffer(buffer);
