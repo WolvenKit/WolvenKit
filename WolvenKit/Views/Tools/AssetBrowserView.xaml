@@ -2,7 +2,7 @@
     x:Class="WolvenKit.Views.Tools.AssetBrowserView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:converters1="clr-namespace:WolvenKit.Converters"
+    xmlns:converters="clr-namespace:WolvenKit.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
@@ -106,8 +106,6 @@
                         SearchStarted="FileSearchBar_SearchStarted"
                         ShowClearButton="False"
                         Style="{StaticResource SearchBarPlus}" />
-
-
                 </Grid>
 
                 <syncfusion:Splitter Grid.Row="1" Background="{DynamicResource MahApps.Brushes.Gray.SemiTransparent}" />
@@ -125,7 +123,7 @@
                     <Grid Grid.Column="0" Margin="0">
 
                         <Grid.Resources>
-                            <converters1:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
+                            <converters:ExtensionToImageConverter x:Key="ExtensionToImageConverter" />
                             <DataTemplate x:Key="TemplateToolTip">
                                 <Grid>
                                     <Grid.RowDefinitions>
@@ -140,7 +138,6 @@
                         </Grid.Resources>
 
                         <!--  Folder Tree  -->
-                        <!--  RequestTreeItems="LeftNavigation_RequestTreeItems"  -->
                         <syncfusion:SfTreeGrid
                             x:Name="LeftNavigation"
                             Margin="0"
@@ -223,7 +220,6 @@
                             <syncfusion:SfTreeGrid.ExpanderContextMenu>
                                 <ContextMenu>
                                     <MenuItem Click="Expand_OnClick" Header="Expand" />
-                                    <!--<MenuItem Click="ExpandAll_OnClick" Header="Expand all" />-->
                                     <MenuItem Click="Collapse_OnClick" Header="Collapse" />
                                     <MenuItem Click="CollapseAll_OnClick" Header="Collapse all" />
                                 </ContextMenu>
@@ -266,6 +262,9 @@
 
                             <syncfusion:SfDataGrid.RecordContextMenu>
                                 <ContextMenu>
+                                    <ContextMenu.Resources>
+                                        <converters:IGameArchiveToMenuItemStringConverter x:Key="IGameArchiveToMenuItemStringConverter" />
+                                    </ContextMenu.Resources>
                                     <MenuItem
                                         x:Name="AddSelected"
                                         Header="Add selected items to project"
@@ -277,6 +276,18 @@
                                                 Foreground="{StaticResource WolvenKitYellow}"
                                                 Kind="ArrowCircleLeft" />
                                         </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem
+                                        x:Name="AddFromArchive"
+                                        Header="Add selected from archive"
+                                        Visibility="{Binding Path=DataGrid.DataContext.ProjectLoaded, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                        ItemsSource="{Binding Path=DataGrid.DataContext.AddFromArchiveItems}">
+                                        <MenuItem.ItemContainerStyle>
+                                            <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource {x:Type MenuItem}}">
+                                                <Setter Property="Header" Value="{Binding Path=DataContext, RelativeSource={RelativeSource Self}, Converter={StaticResource IGameArchiveToMenuItemStringConverter}}"/>
+                                                <Setter Property="Command" Value="{Binding Path=AddFromSelectedArchiveItem_Click}" />
+                                            </Style>
+                                        </MenuItem.ItemContainerStyle>
                                     </MenuItem>
                                     <Separator Visibility="{Binding Path=DataGrid.DataContext.ProjectLoaded, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                     <MenuItem x:Name="OpenFileOnly" Header="Open without adding to project">
@@ -316,7 +327,7 @@
                                     <Setter Property="Padding" Value="0,0,0,2" />
                                 </Style>
 
-                                <converters1:ExtensionToBitmapConverter x:Key="ExtensionToBmp" />
+                                <converters:ExtensionToBitmapConverter x:Key="ExtensionToBmp" />
 
                                 <DataTemplate x:Key="TemplateToolTip">
                                     <TextBlock Text="{Binding FullName}" />

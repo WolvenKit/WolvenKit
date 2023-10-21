@@ -29,6 +29,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
+using WolvenKit.RED4.Archive;
 
 namespace WolvenKit.App.ViewModels.Tools;
 
@@ -208,6 +209,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     [NotifyCanExecuteChangedFor(nameof(BrowseToFolderCommand))]
     [NotifyCanExecuteChangedFor(nameof(OpenFileOnlyCommand))]
     [NotifyCanExecuteChangedFor(nameof(CopyRelPathCommand))]
+    [NotifyPropertyChangedFor(nameof(AddFromArchiveItems))]
     private IFileSystemViewModel? _rightSelectedItem;
 
     [ObservableProperty]
@@ -224,6 +226,9 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
     [ObservableProperty] 
     private string? _optionsSearchBarText;
+
+    [ObservableProperty]
+    private ObservableCollectionEx<IGameArchive> _addFromArchiveItems = new();
 
     #endregion properties
 
@@ -378,6 +383,20 @@ public partial class AssetBrowserViewModel : ToolViewModel
         });
 
         _progressService.IsIndeterminate = false;
+    }
+
+    public void UpdateSearchInArchives()
+    {
+        if (RightSelectedItem is RedFileViewModel file)
+        {
+            AddFromArchiveItems.Clear();
+
+            var archives = _archiveManager.Archives.Items.Where(_ => _.Files.ContainsKey(file.GetGameFile().Key));
+            foreach (var archive in archives)
+            {
+                AddFromArchiveItems.Add(archive);
+            }
+        }
     }
 
     /// <summary>
