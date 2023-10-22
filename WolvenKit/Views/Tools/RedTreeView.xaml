@@ -248,36 +248,9 @@
                         IsCheckable="False"
                         Style="{StaticResource SyncfusionMenuItemStyle}" />
                     <MenuItem
-                        Command="{Binding Path=PlacementTarget.Tag.CreateTXLOverrideCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                        Header="Append to Array"
+                        Command="{Binding Path=PlacementTarget.Tag.CopyTXLOverrideCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                        Header="Copy to Clipboard"
                         IsCheckable="False"
-                        IsEnabled="False"
-                        Style="{StaticResource SyncfusionMenuItemStyle}" />
-                    <MenuItem
-                        Command="{Binding Path=PlacementTarget.Tag.CreateTXLOverrideCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                        Header="Prepend to Array"
-                        IsCheckable="False"
-                        IsEnabled="False"
-                        Style="{StaticResource SyncfusionMenuItemStyle}" />
-                    <Separator />
-                    <MenuItem
-                        Command="{Binding Path=PlacementTarget.Tag.CreateTXLOverrideCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                        Header="Append to Array (Once)"
-                        IsCheckable="False"
-                        IsEnabled="False"
-                        Style="{StaticResource SyncfusionMenuItemStyle}" />
-                    <MenuItem
-                        Command="{Binding Path=PlacementTarget.Tag.CreateTXLOverrideCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                        Header="Prepend to Array (Once)"
-                        IsCheckable="False"
-                        IsEnabled="False"
-                        Style="{StaticResource SyncfusionMenuItemStyle}" />
-                    <Separator />
-                    <MenuItem
-                        Command="{Binding Path=PlacementTarget.Tag.CreateTXLOverrideCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                        Header="Remove from Array"
-                        IsCheckable="False"
-                        IsEnabled="False"
                         Style="{StaticResource SyncfusionMenuItemStyle}" />
                 </MenuItem>
 

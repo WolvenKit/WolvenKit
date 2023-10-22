@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
@@ -814,8 +815,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     #region commands
 
-    [RelayCommand]
-    private void CreateTXLOverride()
+    private TweakXL GetTXL()
     {
         var recordName = Name;
         IRedType? tdbEntry = null;
@@ -848,7 +848,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             case TweakDBID tweakDBID:
                 tdbEntry = TweakDBService.GetFlat(tweakDBID);
                 tdbEntry ??= TweakDBService.GetRecord(tweakDBID);
-                txl.ID = tweakDBID;              
+                txl.ID = tweakDBID;
                 if (TweakDBService.TryGetType(tweakDBID, out var type))
                 {
                     txl.Type = type.Name;
@@ -869,6 +869,33 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             record.GetPropertyNames().ForEach(name => txl.Properties.Add(name, record.GetProperty(name).NotNull()));
         }
 
+        return txl;
+    }
+
+    private string GetTXLString(TweakXL txl)
+    {
+        var serializer = new SerializerBuilder()
+                    .WithTypeConverter(new TweakXLYamlTypeConverter(_locKeyService, _tweakDbService))
+                    .WithIndentedSequences()
+                    .Build();
+        var yaml = serializer.Serialize(new TweakXLFile { txl });
+        return yaml;
+    }
+
+    [RelayCommand]
+    private void CopyTXLOverride()
+    {
+        var yaml = GetTXLString(GetTXL());
+        if (!string.IsNullOrEmpty(yaml))
+        {
+            Clipboard.SetDataObject(yaml);
+        }
+    }
+
+    [RelayCommand]
+    private void CreateTXLOverride()
+    {
+        var txl = GetTXL();
         var saveFileDialog = new SaveFileDialog
         {
             Filter = "YAML files (*.yaml; *.yml)|*.yaml;*.yml|All files (*.*)|*.*",
@@ -881,16 +908,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             try
             {
-                using var stream = saveFileDialog.OpenFile();
-                var serializer = new SerializerBuilder()
-                    .WithTypeConverter(new TweakXLYamlTypeConverter(_locKeyService, _tweakDbService))
-                    .WithIndentedSequences()
-                    .Build();
+                var yaml = GetTXLString(txl);
 
-                var yaml = serializer.Serialize(new TweakXLFile { txl });
+                using var stream = saveFileDialog.OpenFile();
                 stream.Write(yaml.ToCharArray().Select(c => (byte)c).ToArray());
 
-                _loggerService.Success($"TweakXL YAML written for {recordName}.");
+                _loggerService.Success($"TweakXL YAML written for {txl.ID.ResolvedText}.");
             }
             catch (Exception ex)
             {
