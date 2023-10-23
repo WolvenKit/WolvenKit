@@ -27,14 +27,29 @@
         </Grid.Resources>
 
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="4*" />
             <RowDefinition Height="5" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
 
+        <hc:SearchBar
+            Grid.Row="0"
+            Margin="3"
+            VerticalAlignment="Top"
+            hc:InfoElement.Placeholder="Search all localisation keys"
+            hc:TitleElement.Title=" Search for localisation: "
+            hc:TitleElement.TitlePlacement="Left"
+            FlowDirection="LeftToRight"
+            IsRealTime="True"
+            KeyUp="TextBox_KeyEnterUpdate"
+            ShowClearButton="True"
+            Style="{StaticResource SearchBarPlus}"
+            Text="{Binding SearchText}" />
+
         <!--  AllowGrouping="True" IsGroupDropAreaExpanded="True"  ShowGroupDropArea="True"  -->
         <syncfusion:SfDataGrid
-            Grid.Row="0"
+            Grid.Row="1"
             Margin="1"
             AllowFiltering="True"
             AllowResizingColumns="True"
@@ -67,10 +82,10 @@
             </syncfusion:SfDataGrid.Columns>
         </syncfusion:SfDataGrid>
 
-        <syncfusion:SfGridSplitter Grid.Row="1" HorizontalAlignment="Stretch" />
+        <syncfusion:SfGridSplitter Grid.Row="2" HorizontalAlignment="Stretch" />
 
         <TextBox
-            Grid.Row="2"
+            Grid.Row="3"
             Padding="10"
             VerticalContentAlignment="Top"
             Background="{StaticResource ContentBackgroundAlt3}"

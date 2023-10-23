@@ -29,11 +29,7 @@ namespace WolvenKit.Views.Tools
                 var tBox = (TextBox)sender;
                 var prop = TextBox.TextProperty;
 
-                var binding = BindingOperations.GetBindingExpression(tBox, prop);
-                if (binding != null)
-                {
-                    binding.UpdateSource();
-                }
+                BindingOperations.GetBindingExpression(tBox, prop)?.UpdateSource();
             }
         }
     }

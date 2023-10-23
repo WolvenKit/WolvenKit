@@ -42,6 +42,8 @@ public partial class LocKeyBrowserViewModel : ToolViewModel
 
     public string Extension { get; set; } = "json";
 
+    [ObservableProperty] private string _searchText = string.Empty;
+
     public LocKeyBrowserViewModel(
         IProjectManager projectManager,
         ILoggerService loggerService,
@@ -86,11 +88,23 @@ public partial class LocKeyBrowserViewModel : ToolViewModel
         }
     }
 
+    partial void OnSearchTextChanged(string value) => SetupLocKeys(value);
+
     public ObservableCollection<LocKeyViewModel> LocKeys { get; set; } = new();
 
     public void SetupLocKeys()
     {
         LocKeys = new(_locKeyService.GetEntries().Select(x => new LocKeyViewModel(x.PrimaryKey, x.SecondaryKey, x.FemaleVariant)));
+        OnPropertyChanged(nameof(LocKeys));
+    }
+
+    public void SetupLocKeys(string filter)
+    {
+        LocKeys = new(
+            _locKeyService
+            .GetEntries()
+            .Where(x => x.FemaleVariant.ToString().Contains(filter, StringComparison.InvariantCultureIgnoreCase))
+            .Select(x => new LocKeyViewModel(x.PrimaryKey, x.SecondaryKey, x.FemaleVariant)));
         OnPropertyChanged(nameof(LocKeys));
     }
 
