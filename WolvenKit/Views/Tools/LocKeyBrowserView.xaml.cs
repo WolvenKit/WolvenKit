@@ -1,8 +1,10 @@
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using ReactiveUI;
 using WolvenKit.App.ViewModels.Tools;
+using static WolvenKit.Modkit.RED4.Serialization.Serialization;
 
 namespace WolvenKit.Views.Tools
 {
@@ -32,5 +34,11 @@ namespace WolvenKit.Views.Tools
                 BindingOperations.GetBindingExpression(tBox, prop)?.UpdateSource();
             }
         }
+
+        private void primaryKeyBtn_Click(object sender, System.Windows.RoutedEventArgs e) => Clipboard.SetDataObject(primaryKeyTextBox.Text);
+
+        private void secondaryKeyBtn_Click(object sender, System.Windows.RoutedEventArgs e) => Clipboard.SetDataObject(secondaryKeyTextBox.Text);
+
+        private void contentBtn_Click(object sender, System.Windows.RoutedEventArgs e) => Clipboard.SetDataObject(contentTextBox.Text);
     }
 }

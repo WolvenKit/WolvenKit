@@ -6,9 +6,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
     xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:WolvenKit.Views.Tools"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:others="clr-namespace:WolvenKit.Views.Others"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:tools="clr-namespace:WolvenKit.App.ViewModels.Tools;assembly=WolvenKit.App"
@@ -84,14 +84,103 @@
 
         <syncfusion:SfGridSplitter Grid.Row="2" HorizontalAlignment="Stretch" />
 
-        <TextBox
-            Grid.Row="3"
-            Padding="10"
-            VerticalContentAlignment="Top"
-            Background="{StaticResource ContentBackgroundAlt3}"
-            FontSize="16"
-            IsReadOnly="True"
-            Text="{Binding SelectedContent, Mode=OneWay}" />
+        <Grid Grid.Row="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Label
+                        Grid.Column="0"
+                        VerticalAlignment="Center"
+                        Content="Primary Key: "
+                        FontWeight="Bold" />
+                    <TextBlock
+                        x:Name="primaryKeyTextBox"
+                        Grid.Column="1"
+                        Padding="10"
+                        Background="{StaticResource ContentBackgroundAlt3}"
+                        FontSize="16"
+                        Foreground="Gold"
+                        Text="{Binding SelectedPrimaryKey, Mode=OneWay}" />
+                    <Button
+                        x:Name="primaryKeyBtn"
+                        Grid.Column="2"
+                        Padding="10"
+                        Background="Transparent"
+                        Click="primaryKeyBtn_Click"
+                        ToolTip="Copy">
+                        <iconPacks:PackIconCodicons Padding="0,0,2,2" Kind="Copy" />
+                    </Button>
+                </Grid>
+
+                <Grid Grid.Column="1" Margin="15,0,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Label
+                        Grid.Column="0"
+                        VerticalAlignment="Center"
+                        Content="Secondary Key: "
+                        FontWeight="Bold" />
+                    <TextBlock
+                        x:Name="secondaryKeyTextBox"
+                        Grid.Column="1"
+                        Padding="10"
+                        Background="{StaticResource ContentBackgroundAlt3}"
+                        FontSize="16"
+                        Foreground="CornflowerBlue"
+                        Text="{Binding SelectedSecondaryKey, Mode=OneWay}" />
+                    <Button
+                        x:Name="secondaryKeyBtn"
+                        Grid.Column="2"
+                        Padding="10"
+                        Background="Transparent"
+                        Click="secondaryKeyBtn_Click"
+                        ToolTip="Copy">
+                        <iconPacks:PackIconCodicons Padding="0,0,2,2" Kind="Copy" />
+                    </Button>
+                </Grid>
+            </Grid>
+
+            <Separator Grid.Row="1" />
+
+            <Grid Grid.Row="2">
+                <TextBox
+                    x:Name="contentTextBox"
+                    Padding="10"
+                    VerticalContentAlignment="Top"
+                    Background="{StaticResource ContentBackgroundAlt3}"
+                    FontSize="16"
+                    IsReadOnly="True"
+                    Text="{Binding SelectedContent, Mode=OneWay}" />
+                <Button
+                    x:Name="contentBtn"
+                    Padding="10"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Background="Transparent"
+                    Click="contentBtn_Click"
+                    ToolTip="Copy">
+                    <iconPacks:PackIconCodicons Padding="0,0,2,2" Kind="Copy" />
+                </Button>
+            </Grid>
+        </Grid>
 
     </Grid>
 </reactiveUi:ReactiveUserControl>

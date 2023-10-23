@@ -110,7 +110,11 @@ public partial class LocKeyBrowserViewModel : ToolViewModel
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(SelectedContent))]
+    [NotifyPropertyChangedFor(nameof(SelectedPrimaryKey))]
+    [NotifyPropertyChangedFor(nameof(SelectedSecondaryKey))]
     private LocKeyViewModel? _selectedLocKey;
 
     public string SelectedContent => SelectedLocKey?.Content ?? "";
+    public string SelectedPrimaryKey => SelectedLocKey?.PrimaryKey.ToString() ?? "";
+    public string SelectedSecondaryKey => SelectedLocKey?.SecondaryKey.ToString() ?? "";
 }
