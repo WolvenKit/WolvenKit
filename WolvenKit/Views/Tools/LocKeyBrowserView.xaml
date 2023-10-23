@@ -168,7 +168,8 @@
                     Background="{StaticResource ContentBackgroundAlt3}"
                     FontSize="16"
                     IsReadOnly="True"
-                    Text="{Binding SelectedContent, Mode=OneWay}" />
+                    Text="{Binding SelectedContent, Mode=OneWay}"
+                    TextWrapping="Wrap" />
                 <Button
                     x:Name="contentBtn"
                     Padding="10"
