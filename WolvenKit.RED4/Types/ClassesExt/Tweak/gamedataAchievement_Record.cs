@@ -35,6 +35,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 		
+		[RED("playthroughSpecific")]
+		[REDProperty(IsIgnored = true)]
+		public CBool PlaythroughSpecific
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("PS4Key")]
 		[REDProperty(IsIgnored = true)]
 		public CInt32 PS4Key
@@ -57,6 +65,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CArray<CName>>();
 			set => SetPropertyValue<CArray<CName>>(value);
+		}
+		
+		[RED("thresholdValue")]
+		[REDProperty(IsIgnored = true)]
+		public CInt32 ThresholdValue
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 		
 		[RED("XB1Key")]

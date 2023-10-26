@@ -4125,7 +4125,8 @@ public static partial class Enums
 		RequestWeaponSlot1 = 27,
 		RequestWeaponSlot2 = 28,
 		RequestWeaponSlot3 = 29,
-		RequestWeaponSlot4 = 30
+		RequestWeaponSlot4 = 30,
+		RequestNextThrowableWeapon = 31
 	}
 
 	public enum EquipmentManipulationRequestSlot
@@ -4163,7 +4164,8 @@ public static partial class Enums
 		PurchaseDisabled = 1,
 		InstallFailed = 2,
 		InstallRequestFailed = 3,
-		InstallDisabled = 4
+		InstallDisabled = 4,
+		DataInvalid = 5
 	}
 
 	public enum ExpansionPopupType
@@ -4373,7 +4375,7 @@ public static partial class Enums
 		MAX = 34
 	}
 
-	public enum GpuWrapApiVertexPackingEStreamType : sbyte
+public enum GpuWrapApiVertexPackingEStreamType : sbyte
 	{
 		ST_Invalid = -1,
 		ST_PerVertex = 0,
@@ -4381,7 +4383,7 @@ public static partial class Enums
 		ST_Max = 2
 	}
 
-	public enum GpuWrapApiVertexPackingePackingType : sbyte
+public enum GpuWrapApiVertexPackingePackingType : sbyte
 	{
 		PT_Invalid = -1,
 		PT_Float1 = 0,
@@ -4418,7 +4420,7 @@ public static partial class Enums
 		PT_Max = 31
 	}
 
-	public enum GpuWrapApiVertexPackingePackingUsage : sbyte
+public enum GpuWrapApiVertexPackingePackingUsage : sbyte
 	{
 		PS_Invalid = -1,
 		PS_SysPosition = 0,
@@ -4717,7 +4719,7 @@ public static partial class Enums
 		PT_MAX = 18
 	}
 
-	public enum InGameConfigChangeReason : sbyte
+public enum InGameConfigChangeReason : sbyte
 	{
 		Invalid = -1,
 		Accepted = 0,
@@ -8128,6 +8130,13 @@ public static partial class Enums
 		Death = 4
 	}
 
+	public enum gameEntityStubClass : byte
+	{
+		Other = 0,
+		Puppet = 1,
+		Vehicle = 2
+	}
+
 	public enum gameEquipAnimationType
 	{
 		Default = 0,
@@ -8187,7 +8196,9 @@ public static partial class Enums
 		CP77_Patch_1_6_Hotfix2 = 1620,
 		CP77_Patch_1_6_Hotfix3 = 1630,
 		CP77_Patch_2_0 = 2000,
-		Current = 2000
+		CP77_Patch_2_0_Hotfix1 = 2010,
+		CP77_Patch_2_0_Hotfix2 = 2020,
+		Current = 2020
 	}
 
 	public enum gameGameplayEventFlag
@@ -9202,6 +9213,14 @@ public static partial class Enums
 	{
 		Gameplay = 0,
 		Cinematic = 1
+	}
+
+	public enum gameStubMappinType : byte
+	{
+		None = 0,
+		Police = 1,
+		PoliceVehicle = 2,
+		Vehicle = 3
 	}
 
 	public enum gameTStatModifier : byte
@@ -15972,7 +15991,8 @@ public static partial class Enums
 		CriticalHitNoDamageModifier = 100043,
 		Special = 100044,
 		CWMalfunctionEMPExplosion = 100045,
-		UltimateQuickHack = 100046
+		UltimateQuickHack = 100046,
+		DamageBasedOnMissingMemoryBonus = 100047
 	}
 
 	public enum inkBrushDrawType : byte
@@ -19247,7 +19267,7 @@ public static partial class Enums
 		EP1 = 1
 	}
 
-	public enum worldStreamingSectorCategory : sbyte
+public enum worldStreamingSectorCategory : sbyte
 	{
 		Exterior = 0,
 		Interior = 1,

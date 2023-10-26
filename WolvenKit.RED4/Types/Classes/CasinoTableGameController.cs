@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
 		public CasinoTableGameController()
 		{
-			CasinoChipTDBID = 98578367659;
+			CasinoChipTDBID = "Items.q303_casino_chip";
 			Multiplier = 1000;
 			Slots = new(5);
 			CasinoChipID = new gameItemID();

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class scnUseSceneWorkspotParamsV1 : questUseWorkspotParamsV1
 	{
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("workspotInstanceId")] 
 		public scnSceneWorkspotInstanceId WorkspotInstanceId
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<scnSceneWorkspotInstanceId>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("playAtActorLocation")] 
 		public CBool PlayAtActorLocation
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("itemOverride")] 
 		public workWorkspotItemOverride ItemOverride
 		{

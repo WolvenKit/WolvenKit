@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ForceIgnoreTargets : ActionBool
 	{
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("Repeat")] 
 		public CBool Repeat
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("Attitude")] 
 		public CEnum<EAIAttitude> Attitude
 		{

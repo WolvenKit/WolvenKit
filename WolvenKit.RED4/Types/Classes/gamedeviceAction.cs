@@ -28,6 +28,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("paymentQuantity")] 
+		public CInt32 PaymentQuantity
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
 		public gamedeviceAction()
 		{
 			PostConstruct();

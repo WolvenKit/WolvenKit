@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class FactQuickHack : ActionBool
 	{
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("factProperties")] 
 		public ComputerQuickHackData FactProperties
 		{

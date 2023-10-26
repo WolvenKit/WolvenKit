@@ -43,14 +43,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 		
-		[RED("maxFactor")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat MaxFactor
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
 		[RED("nameValues")]
 		[REDProperty(IsIgnored = true)]
 		public CArray<CName> NameValues

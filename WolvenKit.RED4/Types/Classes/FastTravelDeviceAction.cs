@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class FastTravelDeviceAction : ActionBool
 	{
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("fastTravelPointData")] 
 		public CHandle<gameFastTravelPointData> FastTravelPointData
 		{

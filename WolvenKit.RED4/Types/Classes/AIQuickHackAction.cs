@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class AIQuickHackAction : PuppetAction
 	{
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("target")] 
 		public CWeakHandle<gameObject> Target
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("scaleUploadTime")] 
 		public CBool ScaleUploadTime
 		{

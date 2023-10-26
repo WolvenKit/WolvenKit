@@ -26,13 +26,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CArray<TweakDBID>>();
 			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
-		
-		[RED("maxShotsToDefeatCrowd")]
-		[REDProperty(IsIgnored = true)]
-		public CName MaxShotsToDefeatCrowd
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
 	}
 }

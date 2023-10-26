@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SetCustomPersonalLinkReason : ScriptableDeviceAction
 	{
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("reason")] 
 		public TweakDBID Reason
 		{

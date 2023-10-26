@@ -20,6 +20,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("distantCrowdOnly")] 
+		public CBool DistantCrowdOnly
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public questCrowdManagerNodeType_ControlCrowd()
 		{
 			PostConstruct();

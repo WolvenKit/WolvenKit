@@ -29,6 +29,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("isHackable")] 
+		public CBool IsHackable
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("wheelRuntimeData", 4)] 
 		public CStatic<vehicleWheelRuntimePSData> WheelRuntimeData
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CStatic<vehicleWheelRuntimePSData>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("questEnforcedTransform")] 
 		public Transform QuestEnforcedTransform
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Transform>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("destruction")] 
 		public vehicleDestructionPSData Destruction
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<vehicleDestructionPSData>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("audio")] 
 		public vehicleAudioPSData Audio
 		{
@@ -62,6 +70,7 @@ namespace WolvenKit.RED4.Types
 
 		public vehiclePersistentDataPS()
 		{
+			IsHackable = true;
 			WheelRuntimeData = new(4);
 			QuestEnforcedTransform = new Transform { Position = new Vector4 { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity }, Orientation = new Quaternion { R = 1.000000F } };
 			Destruction = new vehicleDestructionPSData { GridValues = new(30), WindshieldPoints = new(), DetachedParts = new() };
