@@ -11,14 +11,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector2>(value);
 		}
 		
-		[RED("effectorClassName")]
-		[REDProperty(IsIgnored = true)]
-		public CBool EffectorClassName
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
 		[RED("positionTarget")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID PositionTarget

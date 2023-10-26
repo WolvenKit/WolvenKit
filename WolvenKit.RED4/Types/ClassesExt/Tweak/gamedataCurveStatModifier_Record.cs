@@ -11,14 +11,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 		
-		[RED("heightToEnterFall")]
-		[REDProperty(IsIgnored = true)]
-		public gamedataLocKeyWrapper HeightToEnterFall
-		{
-			get => GetPropertyValue<gamedataLocKeyWrapper>();
-			set => SetPropertyValue<gamedataLocKeyWrapper>(value);
-		}
-		
 		[RED("id")]
 		[REDProperty(IsIgnored = true)]
 		public CString Id
