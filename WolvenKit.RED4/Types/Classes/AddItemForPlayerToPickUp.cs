@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class AddItemForPlayerToPickUp : ScriptableDeviceAction
 	{
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("lootTable")] 
 		public TweakDBID LootTable
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("shouldAdd")] 
 		public CBool ShouldAdd
 		{

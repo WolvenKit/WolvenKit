@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class OnSpecialQuickhackTriggeredEvent : DelayEvent
 	{
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("quickhackData")] 
 		public CHandle<QuickhackData> QuickhackData
 		{

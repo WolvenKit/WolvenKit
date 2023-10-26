@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ReserveItemToThisDropPoint : ScriptableDeviceAction
 	{
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("item")] 
 		public TweakDBID Item
 		{

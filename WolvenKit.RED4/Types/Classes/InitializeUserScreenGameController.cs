@@ -20,6 +20,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>(value);
 		}
 
+		[Ordinal(5)] 
+		[RED("requestHandler")] 
+		public CWeakHandle<inkISystemRequestsHandler> RequestHandler
+		{
+			get => GetPropertyValue<CWeakHandle<inkISystemRequestsHandler>>();
+			set => SetPropertyValue<CWeakHandle<inkISystemRequestsHandler>>(value);
+		}
+
 		public InitializeUserScreenGameController()
 		{
 			BackgroundVideo = new inkVideoWidgetReference();

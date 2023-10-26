@@ -28,6 +28,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("isElevator")] 
+		public CBool IsElevator
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public gameMovingPlatformMoveTo()
 		{
 			PostConstruct();

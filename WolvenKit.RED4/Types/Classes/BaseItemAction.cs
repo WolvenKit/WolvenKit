@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public abstract partial class BaseItemAction : BaseScriptableAction
 	{
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("itemData")] 
 		public CWeakHandle<gameItemData> ItemData
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameItemData>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("removeAfterUse")] 
 		public CBool RemoveAfterUse
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("quantity")] 
 		public CInt32 Quantity
 		{

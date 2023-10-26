@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class QuestFollowTarget : ActionEntityReference
 	{
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("ForcedTarget")] 
 		public entEntityID ForcedTarget
 		{

@@ -6,10 +6,10 @@ namespace WolvenKit.RED4.Types
 	{
 		[Ordinal(0)] 
 		[RED("healthBar")] 
-		public CWeakHandle<healthbarWidgetGameController> HealthBar
+		public CWeakHandle<gameuiHudHealthbarGameController> HealthBar
 		{
-			get => GetPropertyValue<CWeakHandle<healthbarWidgetGameController>>();
-			set => SetPropertyValue<CWeakHandle<healthbarWidgetGameController>>(value);
+			get => GetPropertyValue<CWeakHandle<gameuiHudHealthbarGameController>>();
+			set => SetPropertyValue<CWeakHandle<gameuiHudHealthbarGameController>>(value);
 		}
 
 		public OverclockListener()

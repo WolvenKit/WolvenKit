@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class DeactivateC4 : ActionBool
 	{
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{

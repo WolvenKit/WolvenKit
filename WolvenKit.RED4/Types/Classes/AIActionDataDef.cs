@@ -62,10 +62,10 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(7)] 
 		[RED("ownerLastAnimVariationAction")] 
-		public gamebbScriptID_CName OwnerLastAnimVariationAction
+		public gamebbScriptID_Variant OwnerLastAnimVariationAction
 		{
-			get => GetPropertyValue<gamebbScriptID_CName>();
-			set => SetPropertyValue<gamebbScriptID_CName>(value);
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
 		[Ordinal(8)] 
@@ -269,7 +269,7 @@ namespace WolvenKit.RED4.Types
 			OwnerLastAttackName = new gamebbScriptID_CName();
 			OwnerInTumble = new gamebbScriptID_Bool();
 			OwnerCurrentAnimVariationSet = new gamebbScriptID_Bool();
-			OwnerLastAnimVariationAction = new gamebbScriptID_CName();
+			OwnerLastAnimVariationAction = new gamebbScriptID_Variant();
 			OwnerLastAnimVariation = new gamebbScriptID_Int32();
 			OwnerLastBlockAnimVariation = new gamebbScriptID_Int32();
 			OwnerItemsToEquip = new gamebbScriptID_Variant();

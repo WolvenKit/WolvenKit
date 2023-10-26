@@ -652,6 +652,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ScreenDisplayContext>>(value);
 		}
 
+		[Ordinal(84)] 
+		[RED("globalSellInputPending")] 
+		public CBool GlobalSellInputPending
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(85)] 
+		[RED("isPopupPending")] 
+		public CBool IsPopupPending
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public FullscreenVendorGameController()
 		{
 			TooltipsManagerRef = new inkWidgetReference();
