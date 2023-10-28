@@ -100,6 +100,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<EffectFiringData>(value);
 		}
 
+		[Ordinal(12)] 
+		[RED("useExtraVerification")] 
+		public CBool UseExtraVerification
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(13)] 
+		[RED("errorMargin")] 
+		public CFloat ErrorMargin
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public LiftSetup()
 		{
 			LiftSpeed = 2.500000F;
@@ -109,6 +125,7 @@ namespace WolvenKit.RED4.Types
 			RadioStationNumer = -1;
 			MovingCurve = "cosine";
 			ExtraFX = new EffectFiringData();
+			ErrorMargin = 7.000000F;
 
 			PostConstruct();
 		}

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class PingDevice : ActionBool
 	{
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("shouldForward")] 
 		public CBool ShouldForward
 		{

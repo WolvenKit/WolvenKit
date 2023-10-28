@@ -100,6 +100,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(110)] 
+		[RED("usedFallbackOnce")] 
+		public CBool UsedFallbackOnce
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public LiftDevice()
 		{
 			ControllerTypeName = "LiftController";

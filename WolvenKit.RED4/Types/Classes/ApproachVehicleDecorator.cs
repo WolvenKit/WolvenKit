@@ -84,6 +84,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(10)] 
+		[RED("slotOccupiedTimestamp")] 
+		public CFloat SlotOccupiedTimestamp
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public ApproachVehicleDecorator()
 		{
 			MountEntryPoint = new Vector4();

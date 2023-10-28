@@ -20,14 +20,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(3)] 
-		[RED("maxValue")] 
-		public CInt32 MaxValue
-		{
-			get => GetPropertyValue<CInt32>();
-			set => SetPropertyValue<CInt32>(value);
-		}
-
 		public SetAchievementProgressRequest()
 		{
 			PostConstruct();

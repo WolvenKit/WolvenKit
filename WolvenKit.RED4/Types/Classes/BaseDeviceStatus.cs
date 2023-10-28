@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class BaseDeviceStatus : ActionEnum
 	{
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("isRestarting")] 
 		public CBool IsRestarting
 		{

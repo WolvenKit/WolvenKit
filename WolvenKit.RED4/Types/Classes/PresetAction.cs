@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class PresetAction : ActionBool
 	{
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("preset")] 
 		public CHandle<SmartHousePreset> Preset
 		{

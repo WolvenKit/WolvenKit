@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class VehicleOverrideForceBrakes : ActionBool
 	{
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("isRequestedFormOtherDevice")] 
 		public CBool IsRequestedFormOtherDevice
 		{

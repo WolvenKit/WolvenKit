@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ActionDemolition : ActionSkillCheck
 	{
-		[Ordinal(44)] 
+		[Ordinal(45)] 
 		[RED("slotID")] 
 		public gamemountingMountingSlotId SlotID
 		{

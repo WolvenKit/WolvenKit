@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CallElevator : ActionBool
 	{
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("destination")] 
 		public CInt32 Destination
 		{

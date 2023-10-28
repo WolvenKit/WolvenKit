@@ -28,6 +28,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(8)] 
+		[RED("earlyEquip")] 
+		public CBool EarlyEquip
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public CoolExitingEvents()
 		{
 			ExitSlot = "cool";

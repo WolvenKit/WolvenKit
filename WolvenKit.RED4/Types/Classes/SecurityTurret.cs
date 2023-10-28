@@ -141,6 +141,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(214)] 
+		[RED("weaponRecord")] 
+		public CHandle<gamedataWeaponItem_Record> WeaponRecord
+		{
+			get => GetPropertyValue<CHandle<gamedataWeaponItem_Record>>();
+			set => SetPropertyValue<CHandle<gamedataWeaponItem_Record>>(value);
+		}
+
+		[Ordinal(215)] 
+		[RED("weaponTDBID")] 
+		public TweakDBID WeaponTDBID
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+
+		[Ordinal(216)] 
 		[RED("netClientCurrentlyAppliedState")] 
 		public CHandle<SecurityTurretReplicatedState> NetClientCurrentlyAppliedState
 		{
