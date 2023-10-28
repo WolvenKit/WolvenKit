@@ -31,9 +31,7 @@ function stringifyPotentialCName(cnameOrString, _info = '', suppressSpaceCheck =
 
     if (ret && ret.trim && ret.trim() !== ret) {
         Logger.Error(`${info}has trailing or leading spaces! Make sure to remove them, or the component might not work!`);
-    }
-
-    if (!suppressSpaceCheck && ret?.indexOf && ret.indexOf(" ") >= 0) {
+    } else if (!suppressSpaceCheck && ret?.indexOf && ret.indexOf(" ") >= 0) {
         Logger.Warning(`${info}includes spaces. Please use _ instead.`);
     }
     return ret;
@@ -655,7 +653,7 @@ function appFile_validateAppearance(appearance, index, validateRecursively, vali
 
     const allComponentNames = components.map((component, index) => {
 
-        return stringifyPotentialCName(component.name, `${appearanceName}.components[${index}]`);
+        return stringifyPotentialCName(component.name, `${appearanceName}.components[${index}]`, (component.$type || '').toLowerCase().includes('debug'));
     });
     const numAmmComponents = allComponentNames.filter((name) => !!name && name.startsWith('amm_prop_slot')).length;
     if (numAmmComponents > 0 && numAmmComponents < 4 && !allComponentNames.includes('amm_prop_slot1')) {
@@ -1060,7 +1058,6 @@ export function validateEntFile(ent, _entSettings) {
     entSettings = _entSettings;
     resetInternalFlagsAndCaches();
 
-
     const allComponentNames = [];
     const duplicateComponentNames = [];
 
@@ -1085,7 +1082,8 @@ export function validateEntFile(ent, _entSettings) {
     // validate ent component names
     for (let i = 0; i < (ent.components.length || 0); i++) {
         const component = ent.components[i];
-        const componentName = stringifyPotentialCName(component.name, `ent.components[${i}]`, isRootEntity) || `${i}`;
+        const isDebugComponent = (component?.$type || '').toLowerCase().includes('debug');
+        const componentName = stringifyPotentialCName(component.name, `ent.components[${i}]`, isRootEntity || isDebugComponent) || `${i}`;
         entFile_appFile_validateComponent(component, i, _entSettings.validateRecursively, `ent.components.${componentName}`);
         // put its name into the correct map
         (allComponentNames.includes(componentName) ? duplicateComponentNames : allComponentNames).push(componentName);
@@ -1097,7 +1095,6 @@ export function validateEntFile(ent, _entSettings) {
     }
 
     isRootEntity = isRootEntity && !entSettings.skipRootEntityCheck;
-
 
     if (!isRootEntity && _entSettings.checkComponentNameDuplication && duplicateComponentNames.length > 0) {
         Logger.Warning(`The following components are defined more than once: [ ${duplicateComponentNames.join(', ')} ]`)
