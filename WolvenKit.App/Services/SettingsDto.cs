@@ -39,6 +39,7 @@ public class SettingsDto : ISettingsDto
         ScriptStatus = settings.ScriptStatus;
         AnalyzeModArchives = settings.AnalyzeModArchives;
         ExtraModDirPath = settings.ExtraModDirPath;
+        LastUsedProjectPath = settings.LastUsedProjectPath;
         
         if (settings.SettingsVersion < 2)
         {
@@ -73,6 +74,7 @@ public class SettingsDto : ISettingsDto
     public Dictionary<string, bool>? ScriptStatus { get; set; }
     public bool AnalyzeModArchives { get; set; } = true;
     public string? ExtraModDirPath { get; set; }
+    public string? LastUsedProjectPath { get; set; }
 
     public SettingsManager ReconfigureSettingsManager(SettingsManager settingsManager)
     {
@@ -108,6 +110,7 @@ public class SettingsDto : ISettingsDto
         settingsManager.GameLanguage = GameLanguage;
         settingsManager.AnalyzeModArchives = AnalyzeModArchives;
         settingsManager.ExtraModDirPath = ExtraModDirPath;
+        settingsManager.LastUsedProjectPath = LastUsedProjectPath;
 
         return settingsManager;
     }

@@ -650,7 +650,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private async Task NewProject()
     {
         //IsOverlayShown = false;
-        await SetActiveDialog(new ProjectWizardViewModel
+        await SetActiveDialog(new ProjectWizardViewModel(_settingsManager)
         {
             FileHandler = NewProject
         });

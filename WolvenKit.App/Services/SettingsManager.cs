@@ -52,7 +52,8 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(ShowReferenceGraph),
             nameof(GameLanguage),
             nameof(AnalyzeModArchives),
-            nameof(ExtraModDirPath)
+            nameof(ExtraModDirPath),
+            nameof(LastUsedProjectPath)
             )
           .Subscribe(_ =>
           {
@@ -236,6 +237,10 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [Display(Name = "Additional Mod directory", Description = "Path to an optional directory containing mod archives", GroupName = "Cyberpunk")]
     [ObservableProperty]
     private string? _extraModDirPath;
+
+    [ObservableProperty]
+    [property: Browsable(false)]
+    private string? _lastUsedProjectPath;
 
     #endregion properties
 
