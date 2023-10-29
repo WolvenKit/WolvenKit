@@ -895,31 +895,28 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     [RelayCommand]
     private void CreateTXLOverride()
     {
-        var txl = GetTXL();
-        var saveFileDialog = new SaveFileDialog
+        if (_projectManager.ActiveProject is null)
         {
-            Filter = "YAML files (*.yaml; *.yml)|*.yaml;*.yml|All files (*.*)|*.*",
-            FilterIndex = 1,
-            FileName = $"{txl.ID.ResolvedText}.yaml",
-            InitialDirectory = _projectManager.ActiveProject?.ResourcesDirectory
-        };
-
-        if (saveFileDialog.ShowDialog() == true)
-        {
-            try
-            {
-                var yaml = GetTXLString(txl);
-
-                using var stream = saveFileDialog.OpenFile();
-                stream.Write(yaml.ToCharArray().Select(c => (byte)c).ToArray());
-
-                _loggerService.Success($"TweakXL YAML written for {txl.ID.ResolvedText}.");
-            }
-            catch (Exception ex)
-            {
-                _loggerService.Error(ex);
-            }
+            return;
         }
+
+        var txl = GetTXL();
+        var dir = Path.Combine(_projectManager.ActiveProject.ResourcesDirectory, "r6", "tweaks", _projectManager.ActiveProject.Name);
+        var path = Path.Combine(dir, $"{txl.ID.ResolvedText}.yaml");
+
+        try
+        {
+            var yaml = GetTXLString(txl);
+            Directory.CreateDirectory(dir);
+            File.WriteAllText(path, yaml);
+
+            _loggerService.Success($"TweakXL YAML written for {txl.ID.ResolvedText}.");
+        }
+        catch (Exception ex)
+        {
+            _loggerService.Error(ex);
+        }
+        
     }
 
     public bool CanBeDroppedOn(ChunkViewModel target) => PropertyType == target.PropertyType;
