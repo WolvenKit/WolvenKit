@@ -604,38 +604,6 @@ namespace WolvenKit.Views.Tools
 
         private void TreeGrid_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (!StaticReferences.AllowVideoPreview)
-            {
-                return;
-            }
-
-            if (e.ChangedButton == MouseButton.Left && e.ClickCount == 2)
-            {
-                var dg = sender as SfTreeGrid;
-                if (dg.SelectedItem == null)
-                {
-                    return;
-                }
-                var selected = dg.SelectedItem as FileModel;
-
-                if (!selected.FullName.ToLower().Contains("bk2"))
-                {
-                    return;
-                }
-
-                var args = $"\"{selected.FullName}\" /I102 /p";
-                var procInfo =
-                    new System.Diagnostics.ProcessStartInfo(Path.Combine(ISettingsManager.GetWorkDir(),
-                        "test.exe"))
-                    {
-
-                        Arguments = args,
-                        WorkingDirectory = ISettingsManager.GetWorkDir()
-                    };
-
-                var process = Process.Start(procInfo);
-                process?.WaitForInputIdle();
-            }
         }
     }
 }

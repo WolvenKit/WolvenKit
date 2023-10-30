@@ -180,9 +180,6 @@
     <Content Include="Resources\Media\Images\Icons\Files\tweak.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Media\t1.kark">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Resources\Media\t2.kark">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1761,7 +1758,6 @@
     <None Remove="Resources\Media\Images\Icons\Files\wizdef.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\workspot2.svg" />
     <None Remove="Resources\Media\rau.kark" />
-    <None Remove="Resources\Media\t1.kark" />
     <None Remove="Resources\Media\t2.kark" />
     <None Remove="Resources\Media\t3.kark" />
     <None Remove="Resources\Media\t4.kark" />

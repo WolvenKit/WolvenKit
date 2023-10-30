@@ -149,15 +149,6 @@ public class RED4Controller : ObservableObject, IGameController
         {
             switch (path)
             {
-                case @"Resources\Media\t1.kark":
-                    if (!File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "test.exe")))
-                    {
-                        _ = Oodle.OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "test.exe"), true,
-                            false);
-                    }
-
-                    break;
-
                 case @"Resources\Media\t2.kark":
                     if (!File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "testconv.exe")))
                     {
