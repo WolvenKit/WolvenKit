@@ -1515,19 +1515,29 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             {
                 return;
             }
-
-            if (PropertyType.IsAssignableTo(typeof(IRedArray)))
+            if (RedDocumentTabViewModel.CopiedChunk is IRedCloneable irc)
             {
-                if (!CreateArray())
+                if (PropertyType.IsAssignableTo(typeof(IRedArray)))
                 {
-                    throw new Exception("Error while accessing or creating the array!");
-                }
+                    if (!CreateArray())
+                    {
+                        throw new Exception("Error while accessing or creating the array!");
+                    }
 
-                InsertChild(-1, RedDocumentTabViewModel.CopiedChunk);
-            }
-            else if (Parent != null && Parent.PropertyType.IsAssignableTo(typeof(IRedArray)))
-            {
-                Parent.InsertChild(Parent.GetIndexOf(this) + 1, RedDocumentTabViewModel.CopiedChunk!);
+                    var clone = irc.DeepCopy();
+                    if (clone is IRedType redtype)
+                    {
+                        InsertChild(-1, redtype);
+                    }
+                }
+                else if (Parent != null && Parent.PropertyType.IsAssignableTo(typeof(IRedArray)))
+                {
+                    var clone = irc.DeepCopy();
+                    if (clone is IRedType redtype)
+                    {
+                        Parent.InsertChild(Parent.GetIndexOf(this) + 1, redtype);
+                    }
+                }
             }
         }
         catch (Exception ex)
