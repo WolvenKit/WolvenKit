@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NAudio.Vorbis
+namespace Wkit.Vorbis
 {
     // https://github.com/naudio/Vorbis/blob/adb0443f6a3e87e29fdd0e592efa57396f014832/NAudio.Vorbis/EndOfStreamEventArgs.cs
     /// <summary>
