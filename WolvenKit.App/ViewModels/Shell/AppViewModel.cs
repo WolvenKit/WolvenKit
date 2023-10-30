@@ -36,6 +36,7 @@ using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
 using WolvenKit.Common.Extensions;
+using WolvenKit.Common.Model.Database;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
@@ -1077,6 +1078,16 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     public void OpenFileFromDepotPath(ResourcePath path)
     {
+        foreach (var file in DockedViews.OfType<IDocumentViewModel>())
+        {
+            if (file.FilePath == path)
+            {
+                ActiveDocument = file;
+                UpdateTitle();
+                return;
+            }
+        }
+
         if (OpenFileFromProject(path))
         {
             return;
@@ -1091,7 +1102,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         OpenFileFromHash(path);
     }
 
-    public void OpenFileFromHash(ulong hash)
+    public void OpenFileFromHash(ResourcePath hash)
     {
         if (hash != 0)
         {
@@ -1106,8 +1117,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
                     if (OpenStream(stream, fe.FileName, out var redfile))
                     {
-                        var fileNameWithExt = $"{Path.GetFileNameWithoutExtension(fe.FileName)}{fe.Extension}";
-                        var fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(redfile, fileNameWithExt, this, true);
+                        var resourcePath = hash.GetResolvedText() ?? $"{Path.GetFileNameWithoutExtension(fe.FileName)}{fe.Extension}";
+                        var fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(redfile, resourcePath, this, true);
                         if (!DockedViews.Contains(fileViewModel))
                         {
                             DockedViews.Add(fileViewModel);
@@ -1500,7 +1511,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             case EWolvenKitFile.Cr2w:
                 if (OpenFile(fullPath, out var file))
                 {
-                    fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(file, fullPath, this, false);
+                    var resourcePath = ActiveProject is null ? fullPath : Path.GetRelativePath(ActiveProject.ModDirectory, fullPath);
+                    fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(file, resourcePath, this, false);
                     result = fileViewModel.IsInitialized();
                 }
                 break;
