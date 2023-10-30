@@ -139,22 +139,13 @@
                             </DataTemplate>
                         </Grid.Resources>
 
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-
-                        <!--  Search Bar  -->
-                        <Grid Grid.Row="0" />
-
                         <!--  Folder Tree  -->
                         <!--  RequestTreeItems="LeftNavigation_RequestTreeItems"  -->
                         <syncfusion:SfTreeGrid
                             x:Name="LeftNavigation"
-                            Grid.Row="1"
                             Margin="0"
-                            AllowFiltering="False"
-                            AllowSorting="False"
+                            AllowFiltering="True"
+                            AllowSorting="True"
                             AllowTriStateSorting="False"
                             AutoExpandMode="RootNodesExpanded"
                             AutoGenerateColumns="False"
@@ -163,8 +154,7 @@
                             ColumnSizer="Star"
                             CurrentCellBorderThickness="0"
                             ExpandStateMappingName="IsExpanded"
-                            FilterLevel="All"
-                            HeaderRowHeight="3"
+                            FilterLevel="Root"
                             RowHeight="19"
                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                             SelectionChanged="LeftNavigation_OnSelectionChanged">
@@ -198,7 +188,7 @@
 
                                 <syncfusion:TreeGridTextColumn
                                     ColumnSizer="Star"
-                                    HeaderText=""
+                                    HeaderText="Archive Name"
                                     HorizontalHeaderContentAlignment="Left"
                                     ImmediateUpdateColumnFilter="True"
                                     MappingName="Name"
