@@ -561,18 +561,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         var modpath = Path.Combine(ActiveProject.NotNull().ModDirectory, FileModel.GetRelativeName(SelectedItem.NotNull().FullName, ActiveProject));
         modpath = Path.ChangeExtension(modpath, ".bk2");
         var directoryName = Path.GetDirectoryName(modpath).NotNull();
-        Directory.CreateDirectory(directoryName);
-
-        var args = $"\"{SelectedItem.FullName}\" \"{modpath}\" /o /#";
-        var procInfo =
-            new ProcessStartInfo(Path.Combine(ISettingsManager.GetWorkDir(), "testc.exe"))
-            {
-                Arguments = args,
-                WorkingDirectory = ISettingsManager.GetWorkDir()
-            };
-
-        var process = Process.Start(procInfo);
-        process?.WaitForInputIdle();
+       
     }
 
     private bool CanBk2Export() => SelectedItem != null && !IsInRawFolder(SelectedItem) && SelectedItem.Extension.ToLower().Contains("bk2") && ActiveProject is not null;
@@ -582,19 +571,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         var rawpath = Path.Combine(ActiveProject.NotNull().RawDirectory, FileModel.GetRelativeName(SelectedItem.NotNull().FullName, ActiveProject));
         rawpath = Path.ChangeExtension(rawpath, ".avi");
         var directoryName = Path.GetDirectoryName(rawpath).NotNull();
-        Directory.CreateDirectory(directoryName);
-
-        var args = $"\"{SelectedItem.FullName}\" \"{rawpath}\" /o /#";
-        var procInfo =
-            new ProcessStartInfo(Path.Combine(ISettingsManager.GetWorkDir(),
-                "testconv.exe"))
-            {
-                Arguments = args,
-                WorkingDirectory = ISettingsManager.GetWorkDir()
-            };
-
-        var process = Process.Start(procInfo);
-        process?.WaitForInputIdle();
+        
     }
 
     private bool CanConvertTo() => SelectedItems != null && ActiveProject is not null;
