@@ -920,6 +920,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             case EWolvenKitFile.ArchiveXl:
             case EWolvenKitFile.TweakXl:
+            {
+                //prep the subdirs
+                var tweakDirName = Path.GetDirectoryName(file.FullPath).NotNull();
+                Directory.CreateDirectory(tweakDirName);
                 if (!string.IsNullOrEmpty(file.SelectedFile.Template))
                 {
                     await using var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream($"WolvenKit.App.Resources.{file.SelectedFile.Template}").NotNull();
@@ -931,8 +935,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                     stream = File.Create(file.FullPath);
                 }
                 break;
+            }
             case EWolvenKitFile.RedScript:
             case EWolvenKitFile.CETLua:
+            {
                 //prep the subdirs
                 var scriptDirName = Path.GetDirectoryName(file.FullPath).NotNull();
                 Directory.CreateDirectory(scriptDirName);
@@ -947,6 +953,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                     stream = File.Create(file.FullPath);
                 }
                 break;
+            }  
             case EWolvenKitFile.Cr2w:
                 var redType = file.SelectedFile.Name;
                 if (!string.IsNullOrEmpty(redType))
