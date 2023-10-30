@@ -1523,20 +1523,17 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     throw new Exception("Error while accessing or creating the array!");
                 }
 
-                if (InsertChild(-1, RedDocumentTabViewModel.CopiedChunk))
-                {
-                    RedDocumentTabViewModel.CopiedChunk = null;
-                }
+                InsertChild(-1, RedDocumentTabViewModel.CopiedChunk);
             }
             else if (Parent != null && Parent.PropertyType.IsAssignableTo(typeof(IRedArray)))
             {
-                if (Parent.InsertChild(Parent.GetIndexOf(this) + 1, RedDocumentTabViewModel.CopiedChunk!))
-                {
-                    RedDocumentTabViewModel.CopiedChunk = null;
-                }
+                Parent.InsertChild(Parent.GetIndexOf(this) + 1, RedDocumentTabViewModel.CopiedChunk!);
             }
         }
-        catch (Exception ex) { _loggerService.Error(ex); }
+        catch (Exception ex)
+        { 
+            _loggerService.Error(ex);
+        }
     }
 
     private bool CanDeleteAll() => !IsReadOnly && (IsArray && PropertyCount > 0 || IsInArray && Parent is not null && Parent.PropertyCount > 0);   // TODO RelayCommand check notify
