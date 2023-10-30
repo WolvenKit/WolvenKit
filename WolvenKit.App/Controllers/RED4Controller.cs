@@ -330,10 +330,8 @@ public class RED4Controller : ObservableObject, IGameController
         };
     }
 
-    private static string GetTweakResourcePath(Cp77Project cp77Proj) => Path.Combine(cp77Proj.ResourcesDirectory, "r6", "tweaks");
-    private static string GetScriptResourcePath(Cp77Project cp77Proj) => Path.Combine(cp77Proj.ResourcesDirectory, "r6", "scripts");
-
-    private static IEnumerable<string> GetScriptFiles(Cp77Project cp77Proj) => Directory.EnumerateFiles(GetScriptResourcePath(cp77Proj), "*.*", SearchOption.AllDirectories).Where(name => IsCDPRScript(name));
+    private static IEnumerable<string> GetScriptFiles(Cp77Project cp77Proj) 
+        => Directory.EnumerateFiles(cp77Proj.ResourceScriptsDirectory, "*.*", SearchOption.AllDirectories).Where(name => IsCDPRScript(name));
 
 
     private static IEnumerable<string> GetArchiveXlFiles(Cp77Project cp77Proj) => Directory.EnumerateFiles(cp77Proj.ResourcesDirectory, "*.xl", SearchOption.AllDirectories);

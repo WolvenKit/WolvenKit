@@ -352,8 +352,7 @@ public partial class TweakBrowserViewModel : ToolViewModel
 
         var txlFile = new TweakXLFile { txl };
 
-        var dir = Path.Combine(_projectManager.ActiveProject.ResourcesDirectory, "r6", "tweaks", _projectManager.ActiveProject.Name);
-        var path = Path.Combine(dir, $"{SelectedRecordEntry.DisplayName}.yaml");
+        var path = Path.Combine(_projectManager.ActiveProject.ResourceTweakDirectory, $"{SelectedRecordEntry.DisplayName}.yaml");
         var serializer = new SerializerBuilder()
                  .WithTypeConverter(new TweakXLYamlTypeConverter(_locKeyService, _tweakDB))
                  .WithIndentedSequences()
@@ -362,7 +361,6 @@ public partial class TweakBrowserViewModel : ToolViewModel
         try
         {
             var yaml = serializer.Serialize(txlFile);
-            Directory.CreateDirectory(dir);
             File.WriteAllText(path, yaml);
 
             _loggerService.Success($"{SelectedRecordEntry.DisplayName} TweakXL written to: {path}");

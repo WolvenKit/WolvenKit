@@ -901,13 +901,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         var txl = GetTXL();
-        var dir = Path.Combine(_projectManager.ActiveProject.ResourcesDirectory, "r6", "tweaks", _projectManager.ActiveProject.Name);
-        var path = Path.Combine(dir, $"{txl.ID.ResolvedText}.yaml");
+        var path = Path.Combine(_projectManager.ActiveProject.ResourceTweakDirectory, $"{txl.ID.ResolvedText}.yaml");
 
         try
         {
             var yaml = GetTXLString(txl);
-            Directory.CreateDirectory(dir);
             File.WriteAllText(path, yaml);
 
             _loggerService.Success($"TweakXL YAML written for {txl.ID.ResolvedText}.");

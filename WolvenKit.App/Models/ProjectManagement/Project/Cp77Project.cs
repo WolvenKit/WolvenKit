@@ -200,8 +200,35 @@ public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
         }
     }
 
-    // packed folders
+    public string ResourceTweakDirectory
+    {
+        get
+        {
+            var dir = Path.Combine(ResourcesDirectory, "r6", "tweaks", Name);
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
 
+            return dir;
+        }
+    }
+
+    public string ResourceScriptsDirectory
+    {
+        get
+        {
+            var dir = Path.Combine(ResourcesDirectory, "r6", "scripts", Name);
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+
+            return dir;
+        }
+    }
+
+    // packed folders
     public string PackedRootDirectory
     {
         get
