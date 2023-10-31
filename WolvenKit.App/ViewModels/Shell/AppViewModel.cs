@@ -1511,8 +1511,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             case EWolvenKitFile.Cr2w:
                 if (OpenFile(fullPath, out var file))
                 {
-                    var resourcePath = ActiveProject is null ? fullPath : Path.GetRelativePath(ActiveProject.ModDirectory, fullPath);
-                    fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(file, resourcePath, this, false);
+                    fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(file, fullPath, this, false);
                     result = fileViewModel.IsInitialized();
                 }
                 break;
