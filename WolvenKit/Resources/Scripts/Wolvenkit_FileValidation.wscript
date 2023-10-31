@@ -1,6 +1,5 @@
 import * as Logger from 'Logger.wscript';
 import * as TypeHelper from 'TypeHelper.wscript';
-import {CName} from "TypeHelper.wscript";
 
 /*
  *     .___                      __           .__                                     __  .__    .__           _____.__.__
@@ -247,6 +246,11 @@ function resetInternalFlagsAndCaches() {
     // ent file
     hasEmptyAppearanceName = false;
     isRootEntity = false;
+    componentIds.length = 0;
+
+    // mesh stuff
+    meshAppearancesNotFound = {}
+    meshAppearancesNotFoundByComponent = {}
 }
 
 //#region animFile
@@ -440,7 +444,7 @@ const overriddenComponents = [];
 const componentOverrideCollisions = [];
 
 /**
- * List of mesh paths from .app appearance's components. 
+ * List of mesh paths from .app appearance's components.
  * Will be used to check against meshesByEntityPath[entityDepotPath] for duplications.
  */
 const meshPathsFromComponents = [];
@@ -450,19 +454,24 @@ const meshPathsFromComponents = [];
  */
 const alreadyVerifiedAppFiles = [];
 
+/**
+ * For ent files: Make sure that there's no duplication of component IDs
+ */
+const componentIds = [];
+
 let appFileSettings = {};
 
 function component_collectAppearancesFromMesh(componentMeshPath) {
     if (!componentMeshPath || /^\d+$/.test(componentMeshPath) || !wkit.FileExists(componentMeshPath)) return;
-    if (undefined === appearanceNamesByMeshFile[componentMeshPath] ) {
+    if (undefined === appearanceNamesByMeshFile[componentMeshPath]) {
         try {
-            const fileContent = wkit.LoadGameFileFromProject(componentMeshPath, 'json');            
+            const fileContent = wkit.LoadGameFileFromProject(componentMeshPath, 'json');
             const mesh = TypeHelper.JsonParse(fileContent);
             if (!mesh || !mesh.Data || !mesh.Data.RootChunk || !mesh.Data.RootChunk.appearances) {
                 return;
             }
             appearanceNamesByMeshFile[componentMeshPath] = mesh.Data.RootChunk.appearances
-                .map((appearance) => stringifyPotentialCName(appearance.Data.name));              
+                .map((appearance) => stringifyPotentialCName(appearance.Data.name));
         } catch (err) {
             Logger.Warning(`Couldn't parse ${componentMeshPath}`);
             appearanceNamesByMeshFile[componentMeshPath] = null;
@@ -516,11 +525,6 @@ function appearanceNotFound(meshPath, meshAppearanceName, calledFrom) {
     meshAppearancesNotFoundByComponent[meshPath] ||= [];
     meshAppearancesNotFoundByComponent[meshPath].push(calledFrom);
 }
-
-function resetAppearanceNotFoundLookup() {
-    
-}
-
 function appFile_validatePartsOverride(override, index, appearanceName) {
     
     let info = `${appearanceName}.partsOverride[${index}]`;    
@@ -587,7 +591,6 @@ function appFile_validateAppearance(appearance, index, validateRecursively, vali
     let appearanceName = stringifyPotentialCName(appearance.Data ? appearance.Data.name : '');
 
     if (appearanceName.length === 0 || /^[^A-Za-z0-9]+$/.test(appearanceName)) return;
-    const appearanceErrors = [];
     
     if (!appearanceName) {
         appearanceName = `appearances[${index}]`;
@@ -791,9 +794,9 @@ function getArchiveXlMeshPaths(depotPath) {
     let ret = [];
     paths.forEach((path) => {
         const resolvedPaths = getArchiveXlMeshPaths(path);
-        ret = [...ret, ...resolvedPaths];        
+        ret = [...ret, ...resolvedPaths];
     })
-    
+
     // If nothing was substituted: We're done here
     return ret.map((path) => path.replace('*', ''));
 }
@@ -824,11 +827,10 @@ function entFile_appFile_validateComponent(component, _index, validateRecursivel
     let depotPathCanBeEmpty = isDebugComponent;
 
     // entGarmentSkinnedMeshComponent - entSkinnedMeshComponent - entMeshComponent
-    if (component && component.mesh && component.mesh.DepotPath) {
+    if (component?.mesh && component?.mesh.DepotPath || type.toLowerCase().includes('mesh')) {
         type = WITH_MESH;
         depotPathCanBeEmpty ||= componentName !== 'amm_prop_slot1' && componentName?.startsWith('amm_prop_slot');
     }
-
 
     // flag for mesh validation, in case this is called recursively from app file
     let hasMesh = false;
@@ -844,16 +846,37 @@ function entFile_appFile_validateComponent(component, _index, validateRecursivel
             break;
     }
 
+    // TODO: This will potentially be resolved on Wolvenkit side. One day. Hopefully.
+    // Check if component IDs are even numbers and unique within the scope of the entity.
+    // They should probably be globally unique, but we're not checking this, oh no, sir.
+    if (hasMesh && entSettings.checkComponentIdsForGarmentSupport && !!component.id) {
+        const componentIdErrors = [];
+        if (componentIds.includes(component.id)) {
+            componentIdErrors.push("not unique");
+        } else {
+            componentIds.push(component.id);
+        }
+        // parseInt or parseFloat will lead to weird side effects here. Give it an ID of 1638580377071202307, 
+        // and it'll arrive at the numeric value of 1638580377071202300. 
+        if (!/^[02468]$/.test((component.id.match(/\d$/) || ["0"])[0])) {
+            componentIdErrors.push("not an even number");
+        }
+        if (componentIdErrors.length) {
+            Logger.Warning(`${info}: Component ID ${component.id} may cause errors with garment support:`);
+            Logger.Warning(`\t${componentIdErrors.join("\n\t")}`);
+        }
+    }
+
     if (!validateRecursively || !hasMesh || hasUppercasePaths) {
         // Logger.Error(`${componentMeshPath}: not validating mesh`);
         return;
     }
-    
+
     const meshDepotPath = stringifyPotentialCName(component.mesh.DepotPath);
     const componentMeshPaths = getArchiveXlMeshPaths(meshDepotPath);
-        
+
     componentMeshPaths.forEach((componentMeshPath) => {
-        
+
         // check for component name uniqueness
         if (meshesByComponentName[componentName] && meshesByComponentName[componentName] !== componentMeshPath) {
             componentNameCollisions[componentMeshPath] = componentName;
@@ -932,10 +955,9 @@ function getAppearanceNamesInAppFile(_depotPath) {
         const fileContent = wkit.LoadGameFileFromProject(depotPath, 'json');
         const appFile = TypeHelper.JsonParse(fileContent);
         if (null !== appFile) {
-            const appNames = (appFile.Data.RootChunk.appearances || [])
+            appearanceNamesByAppFile[depotPath] = (appFile.Data.RootChunk.appearances || [])
                 .map((app, index) => stringifyPotentialCName(app.Data.name, `${depotPath}: appearances[${index}].name`))
                 .filter((name) => !PLACEHOLDER_NAME_REGEX.test(name));
-            appearanceNamesByAppFile[depotPath] = appNames;
         }
     }
     return appearanceNamesByAppFile[depotPath];
@@ -949,9 +971,8 @@ const invalidFiles = [];
 
 /**
  * @param appearance the appearance object
- * @param index numeric index (for debugging)
  */
-function entFile_validateAppearance(appearance, index) {
+function entFile_validateAppearance(appearance) {
     const appearanceName = (stringifyPotentialCName(appearance.name) || '');
     let appearanceNameInAppFile = (stringifyPotentialCName(appearance.appearanceName) || '').trim()
     if (!appearanceNameInAppFile || appearanceNameInAppFile === 'None') {
@@ -1011,10 +1032,10 @@ function entFile_validateAppearance(appearance, index) {
     if (isRootEntity) {
         const fileContent = wkit.LoadGameFileFromProject(appFilePath, 'json');
         const appFile = TypeHelper.JsonParse(fileContent);
-        if (null === appFile) {
-            Logger.Warning(`File ${appFilePath} exists, but couldn't be parsed.`);
+        if (null === appFile && !invalidFiles.includes(appFilePath)) {
+            Logger.Warning(`${info}: File ${appFilePath} exists, but couldn't be parsed. If everything works, you can ignore this warning.`);
             invalidFiles.push(appFilePath);
-        } else {
+        } else if (null !== appFile) {
             _validateAppFile(appFile, entSettings.validateRecursively, true);
         }
     }
@@ -1022,25 +1043,28 @@ function entFile_validateAppearance(appearance, index) {
     pathToCurrentFile = entFilePath;
 }
 
+
+const emptyAppearanceString = "base\\characters\\appearances\\player\\items\\empty_appearance.app / default";
+
 function validateAppearanceNameSuffixes(appearanceName, entAppearanceNames) {
     if (!appearanceName || !appearanceName.includes('&')) {
         return;
     }
     if (appearanceName.includes('FPP') && !entAppearanceNames.includes(appearanceName.replace('FPP', 'TPP'))) {
         Logger.Warning(`${appearanceName}: You have not defined a third person appearance.`)
-        Logger.Warning(`To avoid display bugs, add the tag "EmptyAppearance:TPP" or define "${appearanceName.replace('FPP', 'TPP')}" and point it to an empty appearance in the .app file.`);
+        Logger.Warning(`To avoid display bugs, add the tag "EmptyAppearance:TPP" or define "${appearanceName.replace('FPP', 'TPP')}" and point it to ${emptyAppearanceString}.`);
     }
     if (appearanceName.includes('TPP') && !entAppearanceNames.includes(appearanceName.replace('TPP', 'FPP'))) {
         Logger.Warning(`${appearanceName}: You have not defined a first person appearance.`);
-        Logger.Warning(`To avoid display bugs, add the tag "EmptyAppearance:FPP" or define "${appearanceName.replace('TPP', 'FPP')}" and point it to an empty appearance in the .app file.`);
+        Logger.Warning(`To avoid display bugs, add the tag "EmptyAppearance:FPP" or define "${appearanceName.replace('TPP', 'FPP')}" and point it to ${emptyAppearanceString}.`);
     }
     if (appearanceName.includes('Male') && !entAppearanceNames.includes(appearanceName.replace('Male', 'Female'))) {
         Logger.Warning(`${appearanceName}: You have not defined a female variant.`);
-        Logger.Warning(`To avoid display bugs, add the tag "EmptyAppearance:Female" or define "${appearanceName.replace('Male', 'Female')}" and point it to an empty appearance in the .app file.`);
+        Logger.Warning(`To avoid display bugs, add the tag "EmptyAppearance:Female" or define "${appearanceName.replace('Male', 'Female')}" and point it to ${emptyAppearanceString}.`);
     }
     if (appearanceName.includes('Female') && !entAppearanceNames.includes(appearanceName.replace('Female', 'Male'))) {
         Logger.Warning(`${appearanceName}: You have not defined a male variant.`);
-        Logger.Warning(`To avoid display bugs, add the tag "EmptyAppearance:Female" or define "${appearanceName.replace('Female', 'Male')}" and point it to an empty appearance in the .app file.`);
+        Logger.Warning(`To avoid display bugs, add the tag "EmptyAppearance:Female" or define "${appearanceName.replace('Female', 'Male')}" and point it to ${emptyAppearanceString}.`);
     }
 }
 
@@ -1052,7 +1076,7 @@ function validateAppearanceNameSuffixes(appearanceName, entAppearanceNames) {
 export function validateEntFile(ent, _entSettings) {
     if (!_entSettings?.Enabled) return;
 
-    if (ent?.Data?.RootChunk) return validateEntFile(ent.Data.RootChunk);
+    if (ent?.Data?.RootChunk) return validateEntFile(ent.Data.RootChunk, _entSettings);
     if (checkIfFileIsBroken(ent, 'ent')) return;
 
     entSettings = _entSettings;
@@ -1425,7 +1449,7 @@ export function validateMeshFile(mesh, _meshSettings) {
     }
 
     return true;
-};
+}
 
 //#endregion
 
@@ -1759,7 +1783,7 @@ function workspotFile_SetIndexOrder(rootEntry) {
     for (let i = 0; i < rootEntry.Data.list.length; i++) {
         const animSet = rootEntry.Data.list[i];
         currentId += 1;
-        if (animSet.Data.id.id != currentId) {
+        if (animSet.Data.id.id !== currentId) {
             indexChanged += 1;
         }
 
@@ -1767,7 +1791,7 @@ function workspotFile_SetIndexOrder(rootEntry) {
         for (let j = 0; j < animSet.Data.list.length; j++) {
             const childItem = animSet.Data.list[j];
             currentId += 1;
-            if (childItem.Data.id.id != currentId) {
+            if (childItem.Data.id.id !== currentId) {
                 indexChanged += 1;
             }
             childItem.Data.id.id = currentId;
