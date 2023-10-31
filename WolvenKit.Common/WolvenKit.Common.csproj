@@ -42,12 +42,6 @@
         <Pack>true</Pack>
         <PackagePath>lib\net6.0</PackagePath>
     </Content>
-    <Content Include="lib\in_vgmstream.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib\xmp-vgmstream.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
   <ItemGroup>
