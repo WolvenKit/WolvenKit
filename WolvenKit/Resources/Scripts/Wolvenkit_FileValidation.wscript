@@ -1179,15 +1179,16 @@ export function validateEntFile(ent, _entSettings) {
     // validate default appearance
     if (isRootEntity && entAppearanceNames.length) {
         const defaultAppearance = stringifyPotentialCName(ent.defaultAppearance);
-        if (!defaultAppearance || !entAppearanceNames.includes(defaultAppearance)) {
-            Logger.Warning('Root entity: default appearance not found. Entity will spawn invisible. Please set to one of your defined appearances.')
+        if (!!defaultAppearance && !entAppearanceNames.includes(defaultAppearance)) {
+            Logger.Info(`Root entity: defaultAppearance ${defaultAppearance} not found. If this is a prop, then it will spawn invisible.`)
         }
 
     }
 
     ent.inplaceResources ||= [];
     for (let i = 0; i < ent.inplaceResources.length; i++) {
-        checkDepotPath(ent.inplaceResources[i].DepotPath, `inplaceResources[${i}]`);
+        checkDepotPath(ent.inplaceResources[i].DepotPath, `
+            inplaceResources[${i}]`);
     }
 
     if (entSettings.checkDynamicAppearanceTag && (hasEmptyAppearanceName || isUsingSubstitution) && ent.appearances?.length) {
