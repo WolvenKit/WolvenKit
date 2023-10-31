@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Media;
 using ColorPicker;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.Tools
@@ -13,6 +14,8 @@ namespace WolvenKit.Views.Tools
     public partial class RedColorPicker : PickerControlBase
     {
         private bool _updateFromColor;
+
+        private ChunkViewModel _cvm => DataContext as ChunkViewModel;
 
         public RedColorPicker()
         {
@@ -86,8 +89,11 @@ namespace WolvenKit.Views.Tools
                 Green = (CFloat)Color.RGB_G / 255F,
                 Blue = (CFloat)Color.RGB_B / 255F
             });
+            
 
             UpdateBrush();
+            _cvm.NotifyChain(nameof(ChunkViewModel.Data));
+            _cvm.RecalculateProperties();
 
             _updateFromColor = false;
         }

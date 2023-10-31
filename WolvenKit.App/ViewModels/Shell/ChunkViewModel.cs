@@ -51,7 +51,7 @@ namespace WolvenKit.App.ViewModels.Shell;
 public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemModel, INode<ReferenceSocket>
 {
     private readonly IChunkViewmodelFactory _chunkViewmodelFactory;
-    private readonly ChunkViewModelTools _chunkViewModelTools = new ChunkViewModelTools();
+    private readonly ChunkViewModelTools _chunkViewModelTools = new();
     private readonly IDocumentTabViewmodelFactory _tabViewmodelFactory;
     private readonly ILoggerService _loggerService;
     private readonly ISettingsManager _settingsManager;

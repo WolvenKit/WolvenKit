@@ -16,6 +16,7 @@ namespace WolvenKit.Converters
         public DataTemplate RedChunkMaskEditor { get; set; }
         public DataTemplate RedIntegerEditor { get; set; }
         public DataTemplate RedColorEditor { get; set; }
+        public DataTemplate RedColorPicker { get; set; }
         public DataTemplate RedCurveEditor { get; set; }
         public DataTemplate RedCurvePointEditor { get; set; }
         public DataTemplate RedRefEditor { get; set; }
@@ -119,6 +120,10 @@ namespace WolvenKit.Converters
                 if (vm.PropertyType.IsAssignableTo(typeof(CColor)))
                 {
                     return RedColorEditor;
+                }
+                if (vm.PropertyType.IsAssignableTo(typeof(HDRColor)))
+                {
+                    return RedColorPicker;
                 }
                 //if (vm.PropertyType.IsAssignableTo(typeof(IRedArray)))
                 //{
