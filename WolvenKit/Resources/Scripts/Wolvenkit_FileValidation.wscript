@@ -1176,6 +1176,15 @@ export function validateEntFile(ent, _entSettings) {
         validateAppearanceNameSuffixes(stringifyPotentialCName(appearance.name, `ent.appearances[${i}].name`) || '', entAppearanceNames);
     }
 
+    // validate default appearance
+    if (isRootEntity && entAppearanceNames.length) {
+        const defaultAppearance = stringifyPotentialCName(ent.defaultAppearance);
+        if (!defaultAppearance || !entAppearanceNames.includes(defaultAppearance)) {
+            Logger.Warning('Root entity: default appearance not found. Entity will spawn invisible. Please set to one of your defined appearances.')
+        }
+
+    }
+
     ent.inplaceResources ||= [];
     for (let i = 0; i < ent.inplaceResources.length; i++) {
         checkDepotPath(ent.inplaceResources[i].DepotPath, `inplaceResources[${i}]`);
