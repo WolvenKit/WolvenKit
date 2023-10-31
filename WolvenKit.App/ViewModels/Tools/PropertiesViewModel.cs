@@ -310,13 +310,6 @@ public partial class PropertiesViewModel : ToolViewModel
 
     private void PreviewCr2wFile(CR2WFile cr2w)
     {
-        //if (string.Equals(extension, ERedExtension.bk2.ToString(),
-        //   System.StringComparison.OrdinalIgnoreCase))
-        //{
-        //    IsVideoPreviewVisible = true;
-        //    SetExeCommand?.Invoke("test.exe | test2.bk2 /J /I2 /P");
-        //}
-
         if (cr2w.RootChunk is CMesh cmesh)
         {
             LoadModel(cmesh);

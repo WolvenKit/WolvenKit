@@ -83,9 +83,6 @@ public class RED4Controller : ObservableObject, IGameController
             // load archives
             await LoadArchiveManager();
 
-            // requires oodle
-            InitializeBk();
-
             _progressService.IsIndeterminate = false;
             _progressService.Completed();
         }
@@ -131,70 +128,6 @@ public class RED4Controller : ObservableObject, IGameController
                 {
                     _hashService.AddCustom(presetEntry.NotNull().Name.ToString().NotNull());
                 }
-            }
-        }
-    }
-
-    private void InitializeBk()
-    {
-        string[] binkhelpers = { @"Resources\Media\t1.kark", @"Resources\Media\t2.kark", @"Resources\Media\t3.kark", @"Resources\Media\t4.kark", @"Resources\Media\t5.kark" };
-
-        if (string.IsNullOrEmpty(_settingsManager.GetRED4GameRootDir()))
-        {
-            Trace.WriteLine("That worked to cancel Loading oodle! :D");
-            return;
-        }
-
-        foreach (var path in binkhelpers)
-        {
-            switch (path)
-            {
-                case @"Resources\Media\t1.kark":
-                    if (!File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "test.exe")))
-                    {
-                        _ = Oodle.OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "test.exe"), true,
-                            false);
-                    }
-
-                    break;
-
-                case @"Resources\Media\t2.kark":
-                    if (!File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "testconv.exe")))
-                    {
-                        _ = Oodle.OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "testconv.exe"), true,
-                            false);
-                    }
-
-                    break;
-
-                case @"Resources\Media\t3.kark":
-                    if (!File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "testc.exe")))
-                    {
-                        _ = Oodle.OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "testc.exe"), true,
-                            false);
-                    }
-
-                    break;
-
-                case @"Resources\Media\t4.kark":
-                    if (!File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "radutil.dll")))
-                    {
-                        _ = Oodle.OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "radutil.dll"), true,
-                            false);
-                    }
-
-                    break;
-
-                case @"Resources\Media\t5.kark":
-                    if (!File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "bink2make.dll")))
-                    {
-                        _ = Oodle.OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "bink2make.dll"), true,
-                            false);
-                    }
-
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
         }
     }

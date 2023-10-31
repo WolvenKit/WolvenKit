@@ -180,21 +180,6 @@
     <Content Include="Resources\Media\Images\Icons\Files\tweak.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Media\t1.kark">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Media\t2.kark">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Media\t3.kark">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Media\t4.kark">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Media\t5.kark">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Resources\Scripts\*">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1761,11 +1746,6 @@
     <None Remove="Resources\Media\Images\Icons\Files\wizdef.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\workspot2.svg" />
     <None Remove="Resources\Media\rau.kark" />
-    <None Remove="Resources\Media\t1.kark" />
-    <None Remove="Resources\Media\t2.kark" />
-    <None Remove="Resources\Media\t3.kark" />
-    <None Remove="Resources\Media\t4.kark" />
-    <None Remove="Resources\Media\t5.kark" />
     <None Remove="Resources\Media\test.kark" />
     <None Remove="Resources\Media\testc.kark" />
     <None Remove="Resources\Media\testconv.kark" />

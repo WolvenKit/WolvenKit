@@ -442,96 +442,11 @@ namespace WolvenKit.Views.Tools
 
         private void VidPreviewMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            if (!StaticReferences.AllowVideoPreview)
-            {
-                return;
-            }
-
-            if (RightFileView.SelectedItem == null)
-            {
-                return;
-            }
-            var selected = RightFileView.SelectedItem as RedFileViewModel;
-
-            if (selected != null && !selected.FullName.ToLower().Contains("bk2"))
-            {
-                return;
-            }
-
-            //Extract to Temp dir
-
-            var tempPath = ISettingsManager.GetTemp_Video_PreviewPath();
-            var endPath = Path.Combine(tempPath, Path.GetFileName(selected.Name));
-
-            foreach (var f in Directory.GetFiles(tempPath))
-            {
-                try
-                {
-                    File.Delete(f);
-                }
-                catch
-                {
-                    // ignored
-                }
-            }
-
-            using (var fs = new FileStream(endPath, FileMode.Create, FileAccess.Write))
-            {
-                selected.GetGameFile().Extract(fs);
-            }
-
-            if (!File.Exists(endPath))
-            {
-                return;
-            }
-
-
-            var args = $"\"{endPath}\" /I102 /p";
-            var procInfo =
-                new ProcessStartInfo(Path.Combine(ISettingsManager.GetWorkDir(),
-                    "test.exe"))
-                {
-
-                    Arguments = args,
-                    WorkingDirectory = ISettingsManager.GetWorkDir()
-                };
-
-            var process = Process.Start(procInfo);
-            process?.WaitForInputIdle();
-
         }
 
         private void BKExport_Click(object sender, RoutedEventArgs e)
         {
-            //var q = RightFileView.SelectedItems[0] as FileEntryViewModel;
-
-            //if (!q.Extension.ToLower().Contains("bk2"))
-            //{ return; }
-
-            /////Extract to Temp dir
-
-            //var tempPath = ISettingsManager.GetTemp_Video_PreviewPath();
-            //var endPath = Path.Combine(tempPath, Path.GetFileName(q.Name));
-            //using (var fs = new FileStream(endPath, FileMode.Create, FileAccess.Write))
-            //{
-            //    q.GetGameFile().Extract(fs);
-            //}
-            //if (!File.Exists(endPath))
-            //{
-            //    return;
-            //}
-
-            //// Need to get this file to RAW
-
-            //var procInfo = new System.Diagnostics.ProcessStartInfo(Path.Combine(ISettingsManager.GetWorkDir(), "testconv.exe"));
-            //procInfo.Arguments = endPath + " " + Path.ChangeExtension(endPath, ".avi") + "/o /#";
-            //procInfo.WorkingDirectory = System.IO.Path.GetDirectoryName(Path.Combine(ISettingsManager.GetWorkDir(), "testconv.exe"));
-            //// Start the process
-            //var process = System.Diagnostics.Process.Start(procInfo);
-            //// Wait for process to be created and enter idle condition
-            //process.WaitForInputIdle();
         }
-
 
         #endregion
 
