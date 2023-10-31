@@ -457,7 +457,7 @@ const alreadyVerifiedAppFiles = [];
 /**
  * For ent files: Make sure that there's no duplication of component IDs
  */
-const componentIds = [];
+let componentIds = [];
 
 let appFileSettings = {};
 
@@ -500,6 +500,8 @@ function appFile_collectComponentsFromEntPath(entityDepotPath, validateRecursive
             const entity = TypeHelper.JsonParse(fileContent);
             const components = entity && entity.Data && entity.Data.RootChunk ? entity.Data.RootChunk.components || [] : [];
             isInvalidVariantComponent = false;
+            const _componentIds = componentIds;
+            componentIds.length = 0;
             for (let i = 0; i < components.length; i++) {
                 const component = components[i];
                 entFile_appFile_validateComponent(component, i, validateRecursively, `${info}.components[${i}]`);
@@ -508,6 +510,7 @@ function appFile_collectComponentsFromEntPath(entityDepotPath, validateRecursive
                     meshesInEntityFile.push(meshPath);
                 }
             }
+            componentIds = _componentIds;
         } catch (err) {
             Logger.Error(`Couldn't load file from depot path: ${entityDepotPath} (${err.message})`);
             Logger.Info(`\tThat can happen if you use a root entity instead of a mesh entity.`);
@@ -607,10 +610,13 @@ function appFile_validateAppearance(appearance, index, validateRecursively, vali
 
     // we'll collect all mesh paths that are linked in entity paths
     meshPathsFromComponents.length = 0;
-    
+
     // might be null
-    const components = appearance.Data.components || [];    
-    
+    const components = appearance.Data.components || [];
+
+    const _componentIds = componentIds;
+    componentIds.length = 0;
+
     if (isDynamicAppearance && components.length) {
         appearanceErrorMessages[appearanceName].push(`.app ${appearanceName} is loaded as dynamic, but it has components outside of a mesh entity. They will be IGNORED.`)
     } else {
@@ -623,11 +629,13 @@ function appFile_validateAppearance(appearance, index, validateRecursively, vali
                 const meshDepotPath = stringifyPotentialCName(component.mesh.DepotPath);
                 meshPathsFromComponents.push(meshDepotPath);
             }
-        }        
+        }
     }
 
+    componentIds = _componentIds;
+
     const meshPathsFromEntityFiles = [];
-    
+
     // check these before the overrides, because we're parsing the linked files
     for (let i = 0; i < appearance.Data.partsValues.length; i++) {
         const partsValue = appearance.Data.partsValues[i];
