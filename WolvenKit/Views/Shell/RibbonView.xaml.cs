@@ -252,7 +252,7 @@ namespace WolvenKit.Views.Shell
                         Process.Start(new ProcessStartInfo
                         {
                             FileName = _settingsManager.GetRED4GameLaunchCommand(),
-                            Arguments = $"-save={header}",
+                            Arguments = $"{_settingsManager.GetRED4GameLaunchOptions()} -save={header}",
                             ErrorDialog = true,
                             UseShellExecute = true,
                         });
