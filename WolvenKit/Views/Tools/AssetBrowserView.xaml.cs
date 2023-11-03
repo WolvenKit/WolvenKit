@@ -42,29 +42,6 @@ namespace WolvenKit.Views.Tools
                     SetCurrentValue(ViewModelProperty, vm);
                 }
 
-                //ViewModel.ExpandAllCommand.Subscribe(x => ExpandAllNodes());
-                //ViewModel.CollapseAllCommand.Subscribe(x => CollapseAllNodes());
-                //ViewModel.ExpandCommand.Subscribe(x => ExpandNode());
-                //ViewModel.CollapseCommand.Subscribe(x => CollapseNode());
-
-                // top search
-                //var observable1 = Observable.FromEventPattern<EventHandler<FunctionEventArgs<string>>, FunctionEventArgs<string>>(
-                //            handler => FileSearchBar.SearchStarted += handler,
-                //            handler => FileSearchBar.SearchStarted -= handler)
-                //    .Select(x => x.EventArgs.Info)
-                //    .Subscribe(query =>
-                //   {
-                //       ViewModel.PerformSearch(query);
-                //   });
-                //var observable2 = Observable.FromEventPattern<EventHandler<FunctionEventArgs<string>>, FunctionEventArgs<string>>(
-                //            handler => OptionsSearchBar.SearchStarted += handler,
-                //            handler => OptionsSearchBar.SearchStarted -= handler)
-                //    .Select(x => x.EventArgs.Info)
-                //    .Subscribe(query =>
-                //    {
-                //        ViewModel.PerformSearch(query);
-                //    });
-
                 this.Bind(ViewModel,
                       viewModel => viewModel.SearchBarText,
                       view => view.FileSearchBar.Text)
@@ -89,10 +66,6 @@ namespace WolvenKit.Views.Tools
                         viewModel => viewModel.RightSelectedItem,
                         view => view.RightFileView.SelectedItem)
                     .DisposeWith(disposables);
-                //this.Bind(ViewModel,
-                //      viewModel => viewModel.RightSelectedItems,
-                //      view => view.RightFileView.SelectedItems)
-                //  .DisposeWith(disposables);
 
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.FindUsesCommand,
@@ -125,111 +98,7 @@ namespace WolvenKit.Views.Tools
 
         }
 
-        #region methods
-
-        private static void PreviewMesh(PropertiesViewModel propertiesViewModel, RedFileViewModel selectedItem, IGameFile selectedGameFile)
-        {
-            //propertiesViewModel.AB_SelectedItem = selectedItem;
-            //propertiesViewModel.LoadModel(selectedItem.FullName);
-            //propertiesViewModel.AB_MeshPreviewVisible = true;
-            //propertiesViewModel.SelectedIndex = 1;
-
-
-            //using (var meshStream = new MemoryStream())
-            //{
-            //    selectedGameFile.Extract(meshStream);
-            //    propertiesViewModel.LoadModel(meshStream);
-            //}
-
-            //var managerCacheDir = ISettingsManager.GetTemp_MeshPath();
-            //_ = Directory.CreateDirectory(managerCacheDir);
-            //foreach (var f in Directory.GetFiles(managerCacheDir))
-            //{
-            //    try
-            //    {
-            //        File.Delete(f);
-            //    }
-            //    catch
-            //    {
-            //        // ignored
-            //    }
-            //}
-
-            //using (var meshStream = new MemoryStream())
-            //{
-            //    selectedGameFile.Extract(meshStream);
-            //    meshStream.Seek(0, SeekOrigin.Begin);
-            //    var outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileName(selectedItem.Name) ?? throw new InvalidOperationException());
-            //    outPath = Path.ChangeExtension(outPath, ".glb");
-            //    if (Locator.Current.GetService<MeshTools>().ExportMeshPreviewer(meshStream, new FileInfo(outPath)))
-            //    {
-            //        propertiesViewModel.LoadModel(outPath);
-            //    }
-            //    meshStream.Dispose();
-            //    meshStream.Close();
-            //}
-        }
-
-        private static void PreviewWem(PropertiesViewModel propertiesViewModel, IFileSystemViewModel selectedItem, IGameFile selectedGameFile)
-        {
-            propertiesViewModel.IsAudioPreviewVisible = true;
-            propertiesViewModel.SelectedIndex = 2;
-
-            var managerCacheDir = ISettingsManager.GetTemp_Audio_importPath();
-            _ = Directory.CreateDirectory(managerCacheDir);
-
-            var endPath = Path.Combine(managerCacheDir, Path.GetFileName(selectedItem.Name) ?? throw new InvalidOperationException());
-            foreach (var f in Directory.GetFiles(managerCacheDir))
-            {
-                try
-                {
-                    File.Delete(f);
-                }
-                catch
-                {
-                    // ignored
-                }
-            }
-
-            var buffer = Array.Empty<byte>();
-            using (var ms = new MemoryStream())
-            {
-                selectedGameFile.Extract(ms);
-                buffer = ms.ToArray();
-            }
-
-            propertiesViewModel.PreviewAudioCommand.SafeExecute(new AudioObject(Path.GetFileNameWithoutExtension(endPath), buffer));
-        }
-
-        private async void PreviewTexture(PropertiesViewModel propertiesViewModel, RedFileViewModel selectedItem, IGameFile selectedGameFile)
-        {
-            propertiesViewModel.IsImagePreviewVisible = true;
-            propertiesViewModel.SelectedIndex = 3;
-
-            var man = Locator.Current.GetService<IModTools>();
-
-            // extract cr2w to stream
-            await using var cr2wstream = new MemoryStream();
-            selectedGameFile.Extract(cr2wstream);
-
-            var parser = Locator.Current.GetService<Red4ParserService>();
-            if (parser != null && parser.TryReadRed4File(cr2wstream, out var cr2w))
-            {
-                var img = RedImage.FromRedFile(cr2w);
-
-                if (img.Metadata.Format == DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM)
-                {
-                    return;
-                }
-
-                var bitmapImage = new BitmapImage();
-                bitmapImage.BeginInit();
-                bitmapImage.StreamSource = new MemoryStream(img.GetPreview());
-                bitmapImage.EndInit();
-
-                propertiesViewModel.LoadImage(bitmapImage);
-            }
-        }
+        #region Methods
 
         private bool FilterNodes(object o) => o is RedFileSystemModel data && data.Name.Contains(_currentFolderQuery);
 
@@ -390,48 +259,6 @@ namespace WolvenKit.Views.Tools
             var propertiesViewModel = Locator.Current.GetService<PropertiesViewModel>();
 
             propertiesViewModel.ExecuteSelectFile(vm.RightSelectedItem);
-
-            /*
-
-            if (propertiesViewModel.State is DockState.AutoHidden or DockState.Hidden)
-            {
-                return;
-            }
-
-            var settings = Locator.Current.GetService<ISettingsManager>();
-
-            propertiesViewModel.AB_SelectedItem = vm.RightSelectedItem;
-
-            if (!settings.ShowFilePreview)
-            {
-                return;
-            }
-
-            propertiesViewModel.IsMeshPreviewVisible = false;
-            propertiesViewModel.IsAudioPreviewVisible = false;
-            propertiesViewModel.IsImagePreviewVisible = false;
-            propertiesViewModel.SelectedIndex = 0;
-
-            if (propertiesViewModel.AB_SelectedItem is RedFileViewModel selectedItem)
-            {
-                var selectedGameFile = selectedItem.GetGameFile();
-
-                if (string.Equals(selectedItem.Extension, ERedExtension.mesh.ToString(), StringComparison.OrdinalIgnoreCase))
-                {
-                    PreviewMesh(propertiesViewModel, selectedItem, selectedGameFile);
-                }
-
-                if (string.Equals(selectedItem.Extension, ERedExtension.wem.ToString(), StringComparison.OrdinalIgnoreCase))
-                {
-                    PreviewWem(propertiesViewModel, selectedItem, selectedGameFile);
-                }
-
-                if (string.Equals(selectedItem.Extension, ERedExtension.xbm.ToString(), StringComparison.OrdinalIgnoreCase))
-                {
-                    PreviewTexture(propertiesViewModel, selectedItem, selectedGameFile);
-                }
-            }
-            */
         }
 
         private void RightFileView_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -442,10 +269,8 @@ namespace WolvenKit.Views.Tools
 
         private void VidPreviewMenuItem_Click(object sender, RoutedEventArgs e)
         {
-        }
+            // not implemented
 
-        private void BKExport_Click(object sender, RoutedEventArgs e)
-        {
         }
 
         #endregion

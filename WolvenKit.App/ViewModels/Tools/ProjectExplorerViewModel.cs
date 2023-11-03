@@ -189,8 +189,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [NotifyCanExecuteChangedFor(nameof(OpenInFileExplorerCommand))]
     [NotifyCanExecuteChangedFor(nameof(PasteFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(RenameFileCommand))]
-    [NotifyCanExecuteChangedFor(nameof(Bk2ImportCommand))]
-    [NotifyCanExecuteChangedFor(nameof(Bk2ExportCommand))]
     [NotifyCanExecuteChangedFor(nameof(ConvertToCommand))]
     [NotifyCanExecuteChangedFor(nameof(ConvertFromCommand))]
     [NotifyCanExecuteChangedFor(nameof(OpenInAssetBrowserCommand))]
@@ -205,8 +203,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [NotifyCanExecuteChangedFor(nameof(OpenInFileExplorerCommand))]
     [NotifyCanExecuteChangedFor(nameof(PasteFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(RenameFileCommand))]
-    [NotifyCanExecuteChangedFor(nameof(Bk2ImportCommand))]
-    [NotifyCanExecuteChangedFor(nameof(Bk2ExportCommand))]
     [NotifyCanExecuteChangedFor(nameof(OpenInAssetBrowserCommand))]
     [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
     private FileModel? _selectedItem;
@@ -553,26 +549,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private bool IsInArchiveFolder(FileModel model) => ActiveProject is not null && model.FullName.Contains(ActiveProject.ModDirectory);
     private bool IsInRawFolder(FileModel model) => ActiveProject is not null && model.FullName.Contains(ActiveProject.RawDirectory);
-
-    private bool CanBk2Import() => SelectedItem != null && IsInRawFolder(SelectedItem) && SelectedItem.Extension.ToLower().Contains("avi") && ActiveProject is not null;
-    [RelayCommand(CanExecute = nameof(CanBk2Import))]
-    private void Bk2Import()
-    {
-        var modpath = Path.Combine(ActiveProject.NotNull().ModDirectory, FileModel.GetRelativeName(SelectedItem.NotNull().FullName, ActiveProject));
-        modpath = Path.ChangeExtension(modpath, ".bk2");
-        var directoryName = Path.GetDirectoryName(modpath).NotNull();
-       
-    }
-
-    private bool CanBk2Export() => SelectedItem != null && !IsInRawFolder(SelectedItem) && SelectedItem.Extension.ToLower().Contains("bk2") && ActiveProject is not null;
-    [RelayCommand(CanExecute = nameof(CanBk2Export))]
-    private void Bk2Export()
-    {
-        var rawpath = Path.Combine(ActiveProject.NotNull().RawDirectory, FileModel.GetRelativeName(SelectedItem.NotNull().FullName, ActiveProject));
-        rawpath = Path.ChangeExtension(rawpath, ".avi");
-        var directoryName = Path.GetDirectoryName(rawpath).NotNull();
-        
-    }
 
     private bool CanConvertTo() => SelectedItems != null && ActiveProject is not null;
     [RelayCommand(CanExecute = nameof(CanConvertTo))]
