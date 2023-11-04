@@ -111,7 +111,7 @@ function ParseFile(fileName, parentFile) {
     }
 
     if (extension !== 'unknown') {
-        const embeddedFile = parentFile?.Data?.EmbeddedFiles || [];
+        const embeddedFiles = parentFile?.Data?.EmbeddedFiles || [];
         for (let embeddedFile of embeddedFiles) {
             if (embeddedFile["FileName"] === fileName) {
                 convertEmbedded(embeddedFile);
@@ -139,6 +139,7 @@ function ParseFile(fileName, parentFile) {
         return;
     }
 
+    let file = null;
     // Load from project if it exists, otherwise get the base game file
     if (wkit.FileExistsInProject(fileName)) {
         file = wkit.GetFileFromProject(fileName, OpenAs.GameFile);
