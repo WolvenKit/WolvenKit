@@ -3,9 +3,13 @@
 // @version 1.2
 import * as Logger from 'Logger.wscript';
 import * as TypeHelper from 'TypeHelper.wscript';
+import * as Export_Mesh from 'Export_Mesh.wscript';
 
 // Export all sectors in project? (set to false to only use sectors list below)
 const add_from_project = true;
+
+// Set this to true if you want to export all meshes
+const run_export_meshes = false;
 
 // Set to true to disable warnings about failed meshes
 const suppressLogFileOutput = false;
@@ -41,7 +45,6 @@ const fileTemplate = '{"Header":{"WKitJsonVersion":"0.0.7","DataType":"CR2W"},"D
 const jsonExtensions = [".app", ".ent", ".mi", ".mt", ".streamingsector"];
 const exportExtensions = [".mesh", ".xbm"];
 const exportEmbeddedExtensions = [".mesh", ".xbm", ".mlmask"];
-
 
 const sectorPathInFiles = 'base\\worlds\\03_night_city\\_compiled\\default';
 for (let i = 0; i < sectors.length; i += 1) {
@@ -97,6 +100,9 @@ for (const fileName of projectSet) {
     }
 }
 
+if (run_export_meshes) {
+    Export_Mesh.Run(true);
+}
 
 // export all of our files with the default export settings
 Logger.Info(`Exporting ${exportSet.size} files...`);
