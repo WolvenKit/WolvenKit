@@ -11,8 +11,7 @@ let meshes = [
 ];
 
 // Set this flag to true to export _all_ files in your project. Warning: This can take a long time.
-cpmst
-addFilesFromProject = false;
+const addFilesFromProject = false;
 
 /*
  * ===================================== Change below this line at own risk ========================================
