@@ -3,6 +3,7 @@
 // @version 1.2
 import * as Logger from 'Logger.wscript';
 import * as TypeHelper from 'TypeHelper.wscript';
+import * as Export_Mesh from 'Export_Mesh.wscript';
 
 // Export all sectors in project? (set to false to only use sectors list below)
 const add_from_project = true;
@@ -42,7 +43,6 @@ const jsonExtensions = [".app", ".ent", ".mi", ".mt", ".streamingsector"];
 const exportExtensions = [".mesh", ".xbm"];
 const exportEmbeddedExtensions = [".mesh", ".xbm", ".mlmask"];
 
-
 const sectorPathInFiles = 'base\\worlds\\03_night_city\\_compiled\\default';
 for (let i = 0; i < sectors.length; i += 1) {
     let sectorPath = sectors[i];
@@ -79,8 +79,8 @@ for (let sect in sectors) {
     ParseFile(sectors[sect], null);
 }
 
-// save all our files to the project and export JSONs
-Logger.Info(`Exporting ${projectSet.size} files to json. \n\tThis can take a while...`);
+// save all our files to the project
+Logger.Info(`Exporting ${projectSet.size} files to JSON. This might take a while...`);
 for (const fileName of projectSet) {
     let file;
     if (wkit.FileExistsInProject(fileName)) {
@@ -89,14 +89,12 @@ for (const fileName of projectSet) {
         file = wkit.GetFileFromBase(fileName);
         wkit.SaveToProject(fileName, file);
     }
-
-    if (!!file?.Extension && jsonSet.has(fileName) && jsonExtensions.includes(file.Extension)) {
+    if (!!file && jsonSet.has(fileName) && jsonExtensions.includes(file.Extension)) {
         const path = wkit.ChangeExtension(file.Name, `${file.Extension}.json`);
         const json = wkit.GameFileToJson(file);
         wkit.SaveToRaw(path, json);
     }
 }
-
 
 // export all of our files with the default export settings
 Logger.Info(`Exporting ${exportSet.size} files...`);
@@ -139,18 +137,16 @@ function ParseFile(fileName, parentFile) {
         if (!(jsonExtensions.includes(extension) || exportExtensions.includes(extension))) {
             return;
         }
+        const embeddedFiles = parentFile?.Data?.EmbeddedFiles || [];
+        for (let embeddedFile of embeddedFiles) {
+            if (embeddedFile["FileName"] === fileName) {
+                convertEmbedded(embeddedFile);
 
-        if (parentFile != null && parentFile["Data"]["EmbeddedFiles"].length > 0) {
-            for (let embeddedFile of parentFile["Data"]["EmbeddedFiles"]) {
-                if (embeddedFile["FileName"] === fileName) {
-                    convertEmbedded(embeddedFile);
+                // add nested file to export list
+                if (jsonExtensions.includes(extension)) jsonSet.add(fileName);
+                if (exportEmbeddedExtensions.includes(extension)) exportSet.add(fileName);
 
-                    // add nested file to export list
-                    if (jsonExtensions.includes(extension)) jsonSet.add(fileName);
-                    if (exportEmbeddedExtensions.includes(extension)) exportSet.add(fileName);
-
-                    return;
-                }
+                return;
             }
         }
     }
