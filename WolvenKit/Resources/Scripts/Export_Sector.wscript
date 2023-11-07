@@ -30,7 +30,10 @@ let sectors = [
     // 'interior_-25_5_0_1', 'interior_-51_10_1_0', 'interior_-51_11_1_0', 'interior_-50_11_1_0', 'interior_-26_5_0_1',
 
     /* V's penthouse */
-    // 'exterior_-21_18_1_0', 'interior_-11_9_0_2', 'interior_-21_18_1_1', 'interior_-22_18_1_1 ', 'interior_-43_37_3_0 ', 'interior_-43_39_3_0', 'quest_81387f43768bad6c',
+    // 'exterior_-21_18_1_0', 'interior_-11_9_0_2', 'interior_-21_18_1_1', 'interior_-22_18_1_1 ', 'interior_-43_37_3_0 ', 'interior_-43_39_3_0', 'quest_81387f43768bad6c',    
+
+    /* V's Dogtown apartment */
+    // 'ep1\\interior_-70_-81_2_0', 'ep1\\exterior_-35_-40_1_0', 'ep1\\exterior_-35_-41_1_0', 'ep1\\exterior_-18_-21_0_1', 'ep1\\interior_-70_-80_2_0'    
 ];
 
 /*
@@ -46,7 +49,7 @@ const exportEmbeddedExtensions = [".mesh", ".xbm", ".mlmask"];
 const sectorPathInFiles = 'base\\worlds\\03_night_city\\_compiled\\default';
 for (let i = 0; i < sectors.length; i += 1) {
     let sectorPath = sectors[i];
-    if (!sectorPath.includes("\\")) {
+    if ((sectorPath.match(/\/\//g) || []).length < 2) {    // one double slash is ok (for PL sectors)
         sectorPath = `${sectorPathInFiles}\\${sectorPath}`;
     }
     if (!sectorPath.endsWith('.streamingsector')) {
