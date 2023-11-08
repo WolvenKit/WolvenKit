@@ -860,7 +860,7 @@ function entFile_appFile_validateComponent(component, _index, validateRecursivel
     // They should probably be globally unique, but we're not checking this, oh no, sir.
     if (hasMesh && entSettings.checkComponentIdsForGarmentSupport && !!component.id && !info?.startsWith('app')) {
         const componentIdErrors = [];
-        if (componentIds.includes(component.id)) {
+        if (componentIds.includes(component.id) && !componentName.startsWith("amm")) {
             componentIdErrors.push("not unique");
         } else {
             componentIds.push(component.id);
