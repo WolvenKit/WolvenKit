@@ -360,12 +360,14 @@ function printInvalidAppearanceWarningIfFound() {
         Logger.Warning(`${meshPath} with the appearances [ ${definedAppearances} }`);
 
         // print as table
-        Logger.Warning(`  ${'Source'.padEnd(50, ' ')} | Appearance`);
+        Logger.Warning(`  ${'Source'.padEnd(65, ' ')} | Appearance`);
         // print table entries
         for (let i = componentNames.length; i > 0; i -= 1) {
-            const calledFrom = componentNames.pop();
+            let calledFrom = componentNames.pop();
+            // truncate at the beginning if too long
+            if (calledFrom.length >= 60) calledFrom = `…${calledFrom.substring(calledFrom.length - 60)}`;
             const appearanceName = appearanceNames.pop();
-            Logger.Warning(`  ${calledFrom.padEnd(50, ' ')} | ${appearanceName}`);
+            Logger.Warning(`  ${calledFrom.padEnd(65, ' ')} | ${appearanceName}`);
         }
     })
 
@@ -943,7 +945,7 @@ function entFile_appFile_validateComponent(component, _index, validateRecursivel
         if (meshAppearanceName.startsWith(ARCHIVE_XL_VARIANT_INDICATOR)) {
             // TODO: ArchiveXL variant checking
         } else if (meshAppearances && meshAppearances.length > 0 && !meshAppearances.includes(meshAppearanceName)) {
-            appearanceNotFound(componentMeshPath, meshAppearanceName, `ent component[${_index}] (${componentName})`);
+            appearanceNotFound(componentMeshPath, meshAppearanceName, `${info} (${componentName})`);
         }
     })
 }
