@@ -1015,7 +1015,6 @@ function entFile_validateAppearance(appearance) {
         return;
     }
 
-    Logger.Success(`${info}: ${appearanceNameInAppFile}`);
     if (!appFilePath.endsWith('app')) {
         Logger.Warning(`${info}: appearanceResource '${appFilePath}' does not appear to be an .app file`);
         return;
