@@ -1011,10 +1011,11 @@ function entFile_validateAppearance(appearance) {
     }
 
     const appFilePath = stringifyPotentialCName(appearance.appearanceResource.DepotPath);
-    if (!checkDepotPath(appFilePath, info) || alreadyVerifiedAppFiles.includes(appFilePath)) {
+    if (!checkDepotPath(appFilePath, info)) {
         return;
     }
 
+    Logger.Success(`${info}: ${appearanceNameInAppFile}`);
     if (!appFilePath.endsWith('app')) {
         Logger.Warning(`${info}: appearanceResource '${appFilePath}' does not appear to be an .app file`);
         return;
