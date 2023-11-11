@@ -40,6 +40,7 @@ using WolvenKit.RED4.Types;
 using YamlDotNet.Serialization;
 using static WolvenKit.App.ViewModels.Dialogs.DialogViewModel;
 using static WolvenKit.RED4.Types.RedReflection;
+using CKeyValuePair = WolvenKit.RED4.Types.CKeyValuePair;
 using IRedString = WolvenKit.RED4.Types.IRedString;
 using Mat4 = System.Numerics.Matrix4x4;
 using Quat = System.Numerics.Quaternion;
@@ -317,13 +318,22 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     // Fix annoying "Property not found" error spam
     public bool IsDeletable => true;
 
+    // Second view column. Populated in CalculateValue().
+    // For view style, see PropertyValueStyle in RedTreeView.xml
     [ObservableProperty] private string? _value;
 
+    // First view column (e.g. name). 
+    // For view style, see PropertyKeyStyle in RedTreeView.xml
     [ObservableProperty] private string? _descriptor;
 
+    // For view decoration, default values will be displayed in italic
     [ObservableProperty] private bool _isDefault;
 
+    // Would be cool to still allow copying from readonly nodes :/
     [ObservableProperty] private bool _isReadOnly;
+
+    // For view decoration. Extrapolated values will be darker.
+    [ObservableProperty] private bool _isValueExtrapolated;
 
     [ObservableProperty]
     //[NotifyCanExecuteChangedFor(nameof(OpenRefCommand))]
@@ -1715,11 +1725,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     private void CalculateValue()
     {
         Value = "";
-        if (Data == null)
+
+        if (Data is null)
         {
             Value = "null";
         }
-
         if (PropertyType.IsAssignableTo(typeof(IRedString)) && Data is IRedString s)
         {
             var value = s.GetString();
@@ -1751,6 +1761,34 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             var value = f;
             Value = value.ToBitFieldString();
+        }
+        else if (ResolvedData is CKeyValuePair kvp)
+        {
+            // If the CValuePair has a value, we'll try to resolve it
+            Value = kvp.Value switch
+            {
+                CName cname => cname.GetResolvedText() ?? "",
+                CResourceReference<ITexture> reference => reference.DepotPath.ToString(),
+                _ => kvp.Value.ToString()
+            };
+            IsValueExtrapolated = true;
+        }
+        else if (ResolvedData is meshMeshAppearance { ChunkMaterials: not null } appearance)
+        {
+            Descriptor = appearance.Name;
+            Value = string.Join(", ", appearance.ChunkMaterials);
+            IsValueExtrapolated = true;
+            return;
+        }
+        else if (ResolvedData is CMaterialInstance { BaseMaterial: { } cResourceReference })
+        {
+            Value = cResourceReference.DepotPath;
+            IsValueExtrapolated = true;
+        }
+        else if (ResolvedData is CResourceAsyncReference<IMaterial> materialRef)
+        {
+            Value = materialRef.DepotPath;
+            IsValueExtrapolated = true;
         }
         //else if (PropertyType.IsAssignableTo(typeof(TweakDBID)))
         //{
@@ -1817,10 +1855,16 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             Value = ibt.GetBrowsableValue();
         }
 
+      
         if (Value is null)
         {
             Value = "null";
         }
+        else if (ResolvedData is CMeshMaterialEntry materialEntry && !materialEntry.IsLocalInstance)
+        {
+            Value = $"(external) {Value}";
+        }
+
     }
 
     public void CalculateDescriptor()
@@ -1841,6 +1885,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         if (ResolvedData is IRedArray ary)
         {
+            // csv files and the like 
             if (Parent is { Name: "compiledData" } && GetRootModel().Data is C2dArray csv)
             {
                 var index = 0;
@@ -1945,6 +1990,28 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 {
                     Descriptor = entry.Name;
                 }
+                break;
+            }
+        }
+        // External materials in meshes
+        else if (ResolvedData is CResourceAsyncReference<IMaterial> &&
+                 Parent is { Data: IRedArray externalMaterials } && GetRootModel().Data is CMesh pMesh)
+        {
+            for (var i = 0; i < externalMaterials.Count; i++)
+            {
+                if (externalMaterials[i]?.GetHashCode() != Data.GetHashCode())
+                {
+                    continue;
+                }
+
+                var entry = pMesh.MaterialEntries.FirstOrDefault(x =>
+                    x is not null && !x.IsLocalInstance && x.Index == i);
+
+                if (entry != null)
+                {
+                    Descriptor = entry.Name;
+                }
+
                 break;
             }
         }

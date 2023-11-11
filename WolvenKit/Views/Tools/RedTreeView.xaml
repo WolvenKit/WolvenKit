@@ -16,7 +16,7 @@
     mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
-            <Style x:Key="PropertyValueStyle" TargetType="TextBlock">
+            <Style x:Key="PropertyKeyStyle" TargetType="TextBlock">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="null">
                         <Setter Property="Foreground" Value="{StaticResource Border}" />
@@ -27,6 +27,28 @@
                     </DataTrigger>
                     <DataTrigger Binding="{Binding IsReadOnly}" Value="True">
                         <Setter Property="Foreground" Value="{StaticResource WolvenKitTan50}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="PropertyValueStyle" TargetType="TextBlock">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Value="null">
+                        <Setter Property="Foreground" Value="{StaticResource Border}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Value="True">
+                        <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
+                        <Setter Property="FontStyle" Value="Italic" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsReadOnly}" Value="True">
+                        <Setter Property="Foreground" Value="{StaticResource WolvenKitTan50}" />
+                    </DataTrigger>
+                    <DataTrigger
+                        Binding="{Binding IsValueExtrapolated, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                        Value="True">
+                        <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
@@ -162,7 +184,7 @@
                         <TextBlock
                             Name="PropertyDescriptor"
                             Margin="0,0,4,2"
-                            Style="{StaticResource PropertyValueStyle}"
+                            Style="{StaticResource PropertyKeyStyle}"
                             Text="{Binding Descriptor, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                             TextTrimming="CharacterEllipsis" />
                         <TextBlock
