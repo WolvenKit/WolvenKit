@@ -26,6 +26,7 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
         public Quaternion[]? AposeLSRot;
         public Vector3[]? AposeLSScale;
         public int baseTendencyCount;
+        public float[]? ReferenceTracks;
     }
     public class MeshesInfo
     {
