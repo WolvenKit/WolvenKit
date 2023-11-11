@@ -145,15 +145,6 @@ function checkDepotPath(_depotPath, _info, allowEmpty = false) {
         return false;
     }
 
-    if (depotPath.startsWith(ARCHIVE_XL_VARIANT_INDICATOR) && !(depotPath.includes("{"))) {
-        Logger.Error(`${info}${depotPath} starts with an * but doesn't contain substitution. This will crash your game!`);
-        return false;
-    }
-    // check if the path is using substitutions
-    if (!checkCurlyBraces(depotPath)) {
-        Logger.Warning(`${info}${depotPath}'s { and } count doesn't match. Did you make a typo?`);
-    }
-
     // ArchiveXL 1.5 variant magic requires checking this in a loop
     const componentMeshPaths = getArchiveXlMeshPaths(stringifyPotentialCName(depotPath));
     let ret = true;
@@ -170,11 +161,8 @@ function checkDepotPath(_depotPath, _info, allowEmpty = false) {
         }
         // File does not exist
         if (shouldHaveSubstitution(resolvedMeshPath)) {
-            if (!resolvedMeshPath.startsWith(ARCHIVE_XL_VARIANT_INDICATOR)) {
-                Logger.Warning(`${info}${resolvedMeshPath}: Not starting with *, substitution disabled`);
-            } else if (!checkCurlyBraces(resolvedMeshPath)) {
-                Logger.Warning(`${info}${resolvedMeshPath}: Number of { not matching number of }`);
-            } else {
+            const nameHasSubstitution = resolvedMeshPath && resolvedMeshPath.includes("{") || resolvedMeshPath.includes("}")
+            if (nameHasSubstitution && entSettings.checkComponentNameDuplication) {
                 Logger.Info(`${info}${resolvedMeshPath}: substitution couldn't be resolved. It's either invalid or not yet supported in Wolvenkit.`);
             }
         } else {
@@ -783,7 +771,6 @@ function getArchiveXlMeshPaths(depotPath) {
     if (!depotPath.startsWith(ARCHIVE_XL_VARIANT_INDICATOR)) {
         return [depotPath];
     }
-
     let paths = [];
     if (!shouldHaveSubstitution(depotPath) || !checkCurlyBraces(depotPath)) {
         paths.push(depotPath);
@@ -804,12 +791,18 @@ function getArchiveXlMeshPaths(depotPath) {
 
     let ret = [];
     paths.forEach((path) => {
-        const resolvedPaths = getArchiveXlMeshPaths(path);
+        const resolvedPaths = getArchiveXlMeshPaths(path).map((paths) => {
+            if (depotPath.indexOf(path) && !path.startsWith(ARCHIVE_XL_VARIANT_INDICATOR) && depotPath.replace(path, "") === "*") {
+                return `*${path}`;
+            }
+            return shouldHaveSubstitution(path) ? path : path.replaceAll('*', '');
+        });
+
         ret = [...ret, ...resolvedPaths];
     })
 
     // If nothing was substituted: We're done here
-    return ret.map((path) => path.replace('*', ''));
+    return ret;
 }
 
 //#region entFile

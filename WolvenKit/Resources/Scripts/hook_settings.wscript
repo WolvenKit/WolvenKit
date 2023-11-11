@@ -100,6 +100,10 @@ const Settings = {
          * in the root entity, or the presence of string substitution in nested files.
          */
         checkDynamicAppearanceTag: true,
+        /*
+         * Set to "false" to suppress warnings about incomplete substitution
+         */
+        warnAboutIncompleteSubstitution: true,
     },
     Inkatlas: {
         /*
