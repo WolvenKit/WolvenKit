@@ -308,11 +308,24 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     preload.Properties[meshMaterialEntry.Index].CalculateValue();
                 }
             }
-            // if we were an external material instance without a descriptor because we haven't been unique
-            else if (Parent.Data is CResourceAsyncReference<IMaterial> && (Descriptor ?? "").Length == 0)
+            // if we were an external material instance without a descriptor because we haven't been unique, update all
+            else if (
+                Parent.Data is CResourceAsyncReference<IMaterial>
+                || Data is CResourceAsyncReference<IMaterial>
+            )
             {
                 CalculateDescriptor();
-                CalculateValue();
+                Parent.CalculateDescriptor();
+            }
+            else if (Data is CName && Parent.Data is IRedArray && Parent.Parent?.ResolvedData is meshMeshAppearance)
+            {
+                Parent.Parent?.CalculateValue();
+            }
+
+            // if we were an external material instance without a descriptor because we haven't been unique, update all
+            if (Data is CResourceAsyncReference<IMaterial>)
+            {
+                Parent.RecalculateProperties();
             }
 
             if (Parent.IsValueExtrapolated)
@@ -2017,7 +2030,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             {
                 for (var i = 0; i < arr.Count; i++)
                 {
-                    if (ReferenceEquals(arr[i], ResolvedData)
+                    if (!ReferenceEquals(arr[i], Data)
                         || (isExternal && arr[i]?.GetHashCode() != ResolvedData.GetHashCode()))
                     {
                         continue;
