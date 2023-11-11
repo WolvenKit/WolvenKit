@@ -56,8 +56,8 @@
     <PackageVersion Include="Serilog.Sinks.Console" Version="4.1.0" />
     <PackageVersion Include="Serilog.Sinks.File" Version="5.0.0" />
     <PackageVersion Include="SharpDX.Direct3D11" Version="4.2.0" />
-    <PackageVersion Include="SharpGLTF.Core" Version="1.0.0-alpha0023" />
-    <PackageVersion Include="SharpGLTF.Toolkit" Version="1.0.0-alpha0023" />
+    <PackageVersion Include="SharpGLTF.Core" Version="1.0.0-alpha0030" />
+    <PackageVersion Include="SharpGLTF.Toolkit" Version="1.0.0-alpha0030" />
     <PackageVersion Include="SharpVectors.Wpf" Version="1.8.1" />
     <PackageVersion Include="SharpZipLib" Version="1.4.2" />
     <PackageVersion Include="Splat" Version="14.6.8" />
