@@ -103,7 +103,7 @@ const Settings = {
         /*
          * Set to "false" to suppress warnings about incomplete substitution
          */
-        warnAboutIncompleteSubstitution: true,
+        warnAboutIncompleteSubstitution: false,
     },
     Inkatlas: {
         /*

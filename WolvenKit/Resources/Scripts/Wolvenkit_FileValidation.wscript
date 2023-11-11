@@ -162,7 +162,7 @@ function checkDepotPath(_depotPath, _info, allowEmpty = false) {
         // File does not exist
         if (shouldHaveSubstitution(resolvedMeshPath)) {
             const nameHasSubstitution = resolvedMeshPath && resolvedMeshPath.includes("{") || resolvedMeshPath.includes("}")
-            if (nameHasSubstitution && entSettings.checkComponentNameDuplication) {
+            if (nameHasSubstitution && entSettings.warnAboutIncompleteSubstitution) {
                 Logger.Info(`${info}${resolvedMeshPath}: substitution couldn't be resolved. It's either invalid or not yet supported in Wolvenkit.`);
             }
         } else {
