@@ -16,6 +16,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData.Binding;
+using Microsoft.ClearScript.JavaScript;
 using Microsoft.Win32;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
@@ -40,6 +41,7 @@ using WolvenKit.RED4.Types;
 using YamlDotNet.Serialization;
 using static WolvenKit.App.ViewModels.Dialogs.DialogViewModel;
 using static WolvenKit.RED4.Types.RedReflection;
+using CKeyValuePair = WolvenKit.RED4.Types.CKeyValuePair;
 using IRedString = WolvenKit.RED4.Types.IRedString;
 using Mat4 = System.Numerics.Matrix4x4;
 using Quat = System.Numerics.Quaternion;
@@ -281,19 +283,54 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
             Parent.CalculateDescriptor();
 
-            if (Parent.Data is CMeshMaterialEntry meshMaterialEntry && meshMaterialEntry.IsLocalInstance)
+            // For materials: Update display of other entry
+            if (Parent.Data is CMeshMaterialEntry meshMaterialEntry)
             {
-                var materials = GetRootModel().GetModelFromPath("localMaterialBuffer.materials");
-                if (materials != null && materials.Properties.Count > meshMaterialEntry.Index)
+                var materialKey = "localMaterialBuffer.materials";
+                var preloadKey = "preloadLocalMaterialInstances";
+                if (!meshMaterialEntry.IsLocalInstance)
                 {
-                    materials.Properties[meshMaterialEntry.Index].CalculateDescriptor();
+                    materialKey = "externalMaterials";
+                    preloadKey = "preloadExternalMaterials";
                 }
 
-                var preload = GetRootModel().GetModelFromPath("preloadLocalMaterialInstances");
-                if (preload != null && preload.Properties.Count > meshMaterialEntry.Index)
+                var materials = GetRootModel().GetModelFromPath(materialKey);
+                if (materials is not null && materials.Properties.Count > meshMaterialEntry.Index)
+                {
+                    materials.Properties[meshMaterialEntry.Index].CalculateDescriptor();
+                    materials.Properties[meshMaterialEntry.Index].CalculateValue();
+                }
+
+                var preload = GetRootModel().GetModelFromPath(preloadKey);
+                if (preload is not null && preload.Properties.Count > meshMaterialEntry.Index)
                 {
                     preload.Properties[meshMaterialEntry.Index].CalculateDescriptor();
+                    preload.Properties[meshMaterialEntry.Index].CalculateValue();
                 }
+            }
+            // if we were an external material instance without a descriptor because we haven't been unique, update all
+            else if (
+                Parent.Data is CResourceAsyncReference<IMaterial>
+                || Data is CResourceAsyncReference<IMaterial>
+            )
+            {
+                CalculateDescriptor();
+                Parent.CalculateDescriptor();
+            }
+            else if (Data is CName && Parent.Data is IRedArray && Parent.Parent?.ResolvedData is meshMeshAppearance)
+            {
+                Parent.Parent?.CalculateValue();
+            }
+
+            // if we were an external material instance without a descriptor because we haven't been unique, update all
+            if (Data is CResourceAsyncReference<IMaterial>)
+            {
+                Parent.RecalculateProperties();
+            }
+
+            if (Parent.IsValueExtrapolated)
+            {
+                Parent.CalculateValue();
             }
         }
     }
@@ -317,13 +354,22 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     // Fix annoying "Property not found" error spam
     public bool IsDeletable => true;
 
+    // Second view column. Populated in CalculateValue().
+    // For view style, see PropertyValueStyle in RedTreeView.xml
     [ObservableProperty] private string? _value;
 
+    // First view column (e.g. name). 
+    // For view style, see PropertyKeyStyle in RedTreeView.xml
     [ObservableProperty] private string? _descriptor;
 
+    // For view decoration, default values will be displayed in italic
     [ObservableProperty] private bool _isDefault;
 
+    // Would be cool to still allow copying from readonly nodes :/
     [ObservableProperty] private bool _isReadOnly;
+
+    // For view decoration. Extrapolated values will be darker.
+    [ObservableProperty] private bool _isValueExtrapolated;
 
     [ObservableProperty]
     //[NotifyCanExecuteChangedFor(nameof(OpenRefCommand))]
@@ -1564,7 +1610,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     [RelayCommand(CanExecute = nameof(CanDuplicateChunk))]
     private void DuplicateChunk()
     {
-        if (Parent is null)
+        if (Parent is null || Data is null)
         {
             return;
         }
@@ -1573,7 +1619,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             Parent.InsertChild(Parent.GetIndexOf(this) + 1, (IRedType)irc.DeepCopy());
         }
-        else if (Data is not null)
+        else 
         {
             Parent.InsertChild(Parent.GetIndexOf(this) + 1, Data);
         }
@@ -1715,11 +1761,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     private void CalculateValue()
     {
         Value = "";
-        if (Data == null)
+
+        if (Data is null)
         {
             Value = "null";
         }
-
         if (PropertyType.IsAssignableTo(typeof(IRedString)) && Data is IRedString s)
         {
             var value = s.GetString();
@@ -1751,6 +1797,38 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             var value = f;
             Value = value.ToBitFieldString();
+        }
+        else if (ResolvedData is CKeyValuePair kvp)
+        {
+            // If the CValuePair has a value, we'll try to resolve it
+            Value = kvp.Value switch
+            {
+                CName cname => cname.GetResolvedText() ?? "",
+                CResourceReference<ITexture> reference => reference.DepotPath.ToString(),
+                _ => kvp.Value.ToString()
+            };
+            IsValueExtrapolated = true;
+        }
+        else if (ResolvedData is meshMeshAppearance { ChunkMaterials: not null } appearance)
+        {
+            Value = string.Join(", ", appearance.ChunkMaterials);
+            IsValueExtrapolated = true;
+        }
+        else if (ResolvedData is CMaterialInstance { BaseMaterial: { } cResourceReference })
+        {
+            Value = cResourceReference.DepotPath;
+            IsValueExtrapolated = true;
+        }
+        else if (ResolvedData is CResourceAsyncReference<IMaterial> materialRef)
+        {
+            Value = materialRef.DepotPath;
+            IsValueExtrapolated = true;
+        }
+        else if (ResolvedData is CMeshMaterialEntry materialDefinition)
+        {
+            var isExternal = materialDefinition.IsLocalInstance ? "" : " (external)";
+            Value = $"{materialDefinition.Index}{isExternal}";
+            IsValueExtrapolated = true;
         }
         //else if (PropertyType.IsAssignableTo(typeof(TweakDBID)))
         //{
@@ -1817,10 +1895,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             Value = ibt.GetBrowsableValue();
         }
 
+      
         if (Value is null)
         {
             Value = "null";
         }
+
     }
 
     public void CalculateDescriptor()
@@ -1841,6 +1921,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         if (ResolvedData is IRedArray ary)
         {
+            // csv files and the like 
             if (Parent is { Name: "compiledData" } && GetRootModel().Data is C2dArray csv)
             {
                 var index = 0;
@@ -1930,23 +2011,43 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             Descriptor = $"{q.I}, {q.J}, {q.K}, {q.R}";
         }
 
-        if (ResolvedData is CMaterialInstance && Parent is { Data: IRedArray arr } && GetRootModel().Data is CMesh mesh)
+        if (ResolvedData is CMaterialInstance or CResourceAsyncReference<IMaterial> &&
+            Parent is { Data: IRedArray arr } && GetRootModel().Data is CMesh mesh)
         {
-            for (var i = 0; i < arr.Count; i++)
-            {
-                if (!ReferenceEquals(arr[i], Data))
-                {
-                    continue;
-                }
+            var isExternal = ResolvedData is CResourceAsyncReference<IMaterial>;
 
-                var entry = mesh.MaterialEntries.FirstOrDefault(x =>
-                    x is not null && x.IsLocalInstance && x.Index == i);
-                if (entry != null)
-                {
-                    Descriptor = entry.Name;
-                }
-                break;
+            // For external materials, we can only tell item uniqueness by index
+            var hasDuplicateEntries = isExternal && arr.ToEnumerable()
+                .Where(item => item?.GetHashCode() == ResolvedData.GetHashCode())
+                .GroupBy(item => item?.GetHashCode() ?? 0)
+                .Any(group => group.Count() > 1);
+
+            if (hasDuplicateEntries)
+            {
+                Descriptor = "";
             }
+            else
+            {
+                for (var i = 0; i < arr.Count; i++)
+                {
+                    if (!ReferenceEquals(arr[i], Data)
+                        || (isExternal && arr[i]?.GetHashCode() != ResolvedData.GetHashCode()))
+                    {
+                        continue;
+                    }
+
+                    var entry = mesh.MaterialEntries.FirstOrDefault(x =>
+                        x is not null && x.IsLocalInstance == !isExternal && x.Index == i);
+                    if (entry != null)
+                    {
+                        Descriptor = entry.Name;
+                    }
+
+                    break;
+                }
+            }
+
+            
         }
         else if (ResolvedData is localizationPersistenceOnScreenEntry localizationPersistenceOnScreenEntry)
         {
