@@ -2,8 +2,8 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class scnRidCameraAnimationSRRef : RedBaseClass
-	{
+	public partial class scnRidCameraAnimationSRRef : scnSRRefId
+    {
 		[Ordinal(0)] 
 		[RED("resourceId")] 
 		public scnRidResourceId ResourceId
@@ -20,12 +20,12 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<scnRidSerialNumber>(value);
 		}
 
-		public scnRidCameraAnimationSRRef()
+		public scnRidCameraAnimationSRRef() : base()
 		{
 			ResourceId = new scnRidResourceId { Id = uint.MaxValue };
 			AnimationSN = new scnRidSerialNumber { SerialNumber = uint.MaxValue };
 
-			PostConstruct();
+			
 		}
 
 		partial void PostConstruct();

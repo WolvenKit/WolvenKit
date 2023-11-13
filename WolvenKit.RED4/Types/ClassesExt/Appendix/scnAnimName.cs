@@ -6,64 +6,95 @@ namespace WolvenKit.RED4.Types;
 
 public partial class scnAnimName : IRedAppendix
 {
-    [RED("unk1")]
+    // this is a union type in c++
+    // CName
+    // RidAnimationSRRefId
+    // RidAnimationContainerSRRefId
+    // DynAnim
+
+
+    [RED("directName")]
     [REDProperty(IsIgnored = true)]
-    public CArray<CName> Unk1
+    public CName DirectName
     {
-        get => GetPropertyValue<CArray<CName>>();
-        set => SetPropertyValue<CArray<CName>>(value);
+        get => GetPropertyValue<CName>();
+        set => SetPropertyValue<CName>(value);
     }
 
-    [RED("unk2")]
+    [RED("refName")]
     [REDProperty(IsIgnored = true)]
-    public CArray<CUInt16> Unk2
+    public scnRidAnimationSRRefId RefName
     {
-        get => GetPropertyValue<CArray<CUInt16>>();
-        set => SetPropertyValue<CArray<CUInt16>>(value);
+        get => GetPropertyValue<scnRidAnimationSRRefId>();
+        set => SetPropertyValue<scnRidAnimationSRRefId>(value);
+    }
+
+    [RED("container")]
+    [REDProperty(IsIgnored = true)]
+    public scnRidAnimationContainerSRRefId Container
+    {
+        get => GetPropertyValue<scnRidAnimationContainerSRRefId>();
+        set => SetPropertyValue<scnRidAnimationContainerSRRefId>(value);
+    }
+
+    // struct dynAnim
+    [RED("animName")]
+    [REDProperty(IsIgnored = true)]
+    public CName AnimName
+    {
+        get => GetPropertyValue<CName>();
+        set => SetPropertyValue<CName>(value);
+    }
+
+    [RED("dynVariable")]
+    [REDProperty(IsIgnored = true)]
+    public CName DynVariable
+    {
+        get => GetPropertyValue<CName>();
+        set => SetPropertyValue<CName>(value);
     }
 
     public void Read(Red4Reader reader, uint size)
     {
-        if (size % 2 != 0)
+        if (Type == Enums.scnAnimNameType.direct)
         {
-            throw new TodoException();
+            DirectName = reader.ReadCName();
         }
-
-        var cnt = size / 2;
-
-        if (Type == Enums.scnAnimNameType.reference)
+        else if (Type == Enums.scnAnimNameType.reference)
         {
-            Unk2 = new CArray<CUInt16>();
-            for (int i = 0; i < cnt; i++)
-            {
-                Unk2.Add(reader.BaseReader.ReadUInt16());
-            }
+            RefName = new();
+            RefName.Id = reader.BaseReader.ReadUInt32();
         }
-        else
+        else if (Type == Enums.scnAnimNameType.container)
         {
-            Unk1 = new CArray<CName>();
-            for (int i = 0; i < cnt; i++)
-            {
-                Unk1.Add(reader.ReadCName());
-            }
+            Container = new();
+            Container.Id = reader.BaseReader.ReadUInt32();
+        }
+        else if (Type == Enums.scnAnimNameType.dynamic)
+        {
+            AnimName = reader.ReadCName();
+            DynVariable = reader.ReadCName();
         }
     }
 
     public void Write(Red4Writer writer)
     {
-        if (Type == Enums.scnAnimNameType.reference)
+        if (Type == Enums.scnAnimNameType.direct)
         {
-            foreach (var val in Unk2)
-            {
-                writer.Write(val);
-            }
+            writer.Write(DirectName);
         }
-        else
+        else if (Type == Enums.scnAnimNameType.reference)
         {
-            foreach (var val in Unk1)
-            {
-                writer.Write(val);
-            }
+            writer.Write(RefName.Id);
+        }
+        else if (Type == Enums.scnAnimNameType.container)
+        {
+            writer.Write(Container.Id);
+        }
+        else if (Type == Enums.scnAnimNameType.dynamic)
+        {
+            writer.Write(AnimName);
+            writer.Write(DynVariable);
         }
     }
 }
