@@ -286,27 +286,24 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             // For materials: Update display of other entry
             if (Parent.Data is CMeshMaterialEntry meshMaterialEntry)
             {
-                var materialKey = "localMaterialBuffer.materials";
-                var preloadKey = "preloadLocalMaterialInstances";
-                if (!meshMaterialEntry.IsLocalInstance)
+                string[] keys =
                 {
-                    materialKey = "externalMaterials";
-                    preloadKey = "preloadExternalMaterials";
-                }
+                    "localMaterialBuffer.materials", "preloadLocalMaterialInstances", "externalMaterials",
+                    "preloadExternalMaterials",
+                };
 
-                var materials = GetRootModel().GetModelFromPath(materialKey);
-                if (materials is not null && materials.Properties.Count > meshMaterialEntry.Index)
-                {
-                    materials.Properties[meshMaterialEntry.Index].CalculateDescriptor();
-                    materials.Properties[meshMaterialEntry.Index].CalculateValue();
-                }
+                ushort idx = meshMaterialEntry.Index;
 
-                var preload = GetRootModel().GetModelFromPath(preloadKey);
-                if (preload is not null && preload.Properties.Count > meshMaterialEntry.Index)
+                foreach (var key in keys)
                 {
-                    preload.Properties[meshMaterialEntry.Index].CalculateDescriptor();
-                    preload.Properties[meshMaterialEntry.Index].CalculateValue();
+                    var list = GetRootModel().GetModelFromPath(key);
+                    if (list is not null && list.Properties.Count > idx)
+                    {
+                        list.Properties[idx].CalculateDescriptor();
+                        list.Properties[idx].CalculateValue();
+                    }
                 }
+                
             }
             // if we were an external material instance without a descriptor because we haven't been unique, update all
             else if (
@@ -314,19 +311,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 || Data is CResourceAsyncReference<IMaterial>
             )
             {
+                Parent.RecalculateProperties();
                 CalculateDescriptor();
                 Parent.CalculateDescriptor();
             }
             else if (Data is CName && Parent.Data is IRedArray && Parent.Parent?.ResolvedData is meshMeshAppearance)
             {
-                Parent.Parent?.CalculateValue();
+                Parent.Parent?.RecalculateProperties();
             }
 
-            // if we were an external material instance without a descriptor because we haven't been unique, update all
-            if (Data is CResourceAsyncReference<IMaterial>)
-            {
-                Parent.RecalculateProperties();
-            }
 
             if (Parent.IsValueExtrapolated)
             {
@@ -1826,8 +1819,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
         else if (ResolvedData is CMeshMaterialEntry materialDefinition)
         {
-            var isExternal = materialDefinition.IsLocalInstance ? "" : " (external)";
-            Value = $"{materialDefinition.Index}{isExternal}";
+            Value = materialDefinition.IsLocalInstance ? "" : " (external)";
             IsValueExtrapolated = true;
         }
         //else if (PropertyType.IsAssignableTo(typeof(TweakDBID)))
@@ -2016,38 +2008,23 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             var isExternal = ResolvedData is CResourceAsyncReference<IMaterial>;
 
-            // For external materials, we can only tell item uniqueness by index
-            var hasDuplicateEntries = isExternal && arr.ToEnumerable()
-                .Where(item => item?.GetHashCode() == ResolvedData.GetHashCode())
-                .GroupBy(item => item?.GetHashCode() ?? 0)
-                .Any(group => group.Count() > 1);
+            var matchingItems = arr.ToEnumerable()
+                .Select((item, index) => new { Item = item, Index = index })
+                .Where(item => ReferenceEquals(item.Item, Data) ||
+                               (isExternal && item.Item.GetHashCode() == ResolvedData.GetHashCode()))
+                .ToList();
 
-            if (hasDuplicateEntries)
+            // If we have multiple matching items, we can't tell them apart. In this case, don't set the name. 
+            if (matchingItems.Count < 2)
             {
-                Descriptor = "";
-            }
-            else
-            {
-                for (var i = 0; i < arr.Count; i++)
+                var i = matchingItems.FirstOrDefault()?.Index ?? -1;
+                var entry = mesh.MaterialEntries.FirstOrDefault(x =>
+                    x is not null && x.IsLocalInstance != isExternal && x.Index == i);
+                if (entry != null)
                 {
-                    if (!ReferenceEquals(arr[i], Data)
-                        || (isExternal && arr[i]?.GetHashCode() != ResolvedData.GetHashCode()))
-                    {
-                        continue;
-                    }
-
-                    var entry = mesh.MaterialEntries.FirstOrDefault(x =>
-                        x is not null && x.IsLocalInstance == !isExternal && x.Index == i);
-                    if (entry != null)
-                    {
-                        Descriptor = entry.Name;
-                    }
-
-                    break;
+                    Descriptor = entry.Name;
                 }
             }
-
-            
         }
         else if (ResolvedData is localizationPersistenceOnScreenEntry localizationPersistenceOnScreenEntry)
         {
