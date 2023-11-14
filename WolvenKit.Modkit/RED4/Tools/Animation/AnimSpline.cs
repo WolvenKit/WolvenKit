@@ -49,7 +49,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                     {
                         rotations[r.Idx] = new Dictionary<float, Quat>();
                     }
-                    rotations[r.Idx][r.Time] = RQuatYup(r.Rotation);
+                    rotations[r.Idx][r.Time] = RQuaternionYup(r.Rotation);
                 }
                 else if (key is animKeyScale s)
                 {
@@ -77,7 +77,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                     {
                         rotations[r.Idx] = new Dictionary<float, Quat>();
                     }
-                    rotations[r.Idx][r.Time] = RQuatYup(r.Rotation);
+                    rotations[r.Idx][r.Time] = RQuaternionYup(r.Rotation);
                 }
                 else if (key is animKeyScale s)
                 {
@@ -105,7 +105,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                     {
                         rotations[r.Idx] = new Dictionary<float, Quat>();
                     }
-                    rotations[r.Idx][r.Time] = RQuatYup(r.Rotation);
+                    rotations[r.Idx][r.Time] = RQuaternionYup(r.Rotation);
                 }
                 else if (key is animKeyScale s)
                 {
@@ -127,12 +127,15 @@ namespace WolvenKit.Modkit.RED4.Animation
                 animAnimDes.FrameClamping,
                 animAnimDes.FrameClampingStartFrame,
                 animAnimDes.FrameClampingEndFrame,
-                blob.HasRawRotations,
                 blob.NumExtraJoints,
                 blob.NumExtraTracks,
                 blob.ConstTrackKeys.Select(_ => new AnimConstTrackKeySerializable(_.TrackIndex, _.Time, _.Value)).ToList(),
                 blob.TrackKeys.Select(_ => new AnimTrackKeySerializable(_.TrackIndex, _.Time, _.Value)).ToList(),
-                blob.FallbackFrameIndices.Select(_ => (ushort)_).ToList()
+                blob.FallbackFrameIndices.Select(_ => (ushort)_).ToList(),
+                new AnimationOptimizationHints(
+                    false,
+                    blob.HasRawRotations ? AnimationEncoding.Uncompressed : AnimationEncoding.QuaternionAsFixed3x16bit
+                )
             );
 
             // All the data is gathered, stitch it together

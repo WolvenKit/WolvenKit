@@ -222,13 +222,20 @@ namespace WolvenKit.Modkit.RED4
             foreach (var srcAnim in model.LogicalAnimations)
             {
                 // Can switch to system Json when SharpGLTF support released (maybe in .31)
-                var extras = JsonSerializer.Deserialize<AnimationExtrasForGltf>(srcAnim.Extras.ToJson(), SerializationOptions());
-
-                // TODO can we migrate?
-                if (!IsSchemaVersionCompatible(extras))
+                if (srcAnim.Extras.Content is null)
                 {
-                    throw new InvalidOperationException($"{gltfFileName}: Unsupported schema type or version for extra data on animation {srcAnim.Name}: {extras.Schema.Type} {extras.Schema.Version}!");
+                    throw new InvalidOperationException($"{gltfFileName}: animation {srcAnim.Name} has no extra data, can't import!");
                 }
+
+                var result = TryMigrateAndValidate(srcAnim.Extras);
+
+                if (result is Invalid invalid)
+                {
+                    _loggerService.Error($"{gltfFileName}: {srcAnim.Name}: {invalid.Reason}. Can't import!");
+                    continue;
+                }
+
+                var extras = ((Valid)result).Extras;
 
                 // TODO should be able to insert new anims too, need to set it up though
                 var tmpAnim = anims.Animations.FirstOrDefault(_ => _?.Chunk?.Animation.Chunk?.Name.GetResolvedText() == srcAnim.Name);
@@ -315,6 +322,8 @@ namespace WolvenKit.Modkit.RED4
                 var animKeys = new List<animKey?>();
                 var animKeysRaw = new List<animKey?>();
 
+                var rotationCompressionAllowed = extras.OptimizationHints.MaxRotationCompression != AnimationEncoding.Uncompressed;
+
                 for (ushort jointIdx = 0; jointIdx < (ushort)rig.BoneCount; ++jointIdx) {
 
                     // Const keyframes are all similarly encoded, S, R and T
@@ -344,7 +353,7 @@ namespace WolvenKit.Modkit.RED4
                         animKeysRaw.Add(new animKeyScale() { Idx = jointIdx, Time = time, Scale = SVectorZup(value), });
                     }
 
-                    var preferredStorage = extras.PreferLosslessLinearRotationEncoding ? animKeysRaw : animKeys;
+                    var preferredStorage = rotationCompressionAllowed ? animKeys : animKeysRaw;
 
                     foreach (var (time, value) in keyRotations.GetValueOrDefault(jointIdx, new ()))
                     {
@@ -373,7 +382,6 @@ namespace WolvenKit.Modkit.RED4
                     }
                 ).ToList() ?? new List<animKeyTrack?>();
 
-
                 // Have all the raw data in hand now, let's mangle it into CR2W
 
                 animAnimDes.AnimationType = (Enums.animAnimationType)Enum.Parse(typeof(Enums.animAnimationType), extras.AnimationType);
@@ -386,7 +394,7 @@ namespace WolvenKit.Modkit.RED4
                     Duration = srcAnim.Duration,
                     NumFrames = FramesToAccommodateDuration(srcAnim.Duration),
                     NumExtraJoints = extras.NumExtraJoints,
-                    NumExtraTracks = extras.NumeExtraTracks,
+                    NumExtraTracks = extras.NumExtraTracks,
                     NumJoints = Convert.ToUInt16(rig.BoneCount),
                     NumTracks = Convert.ToUInt16(rig.ReferenceTracks?.Length ?? 0),
                     NumConstAnimKeys = Convert.ToUInt32(constAnimKeys.Count),
@@ -395,7 +403,7 @@ namespace WolvenKit.Modkit.RED4
                     NumConstTrackKeys = Convert.ToUInt32(constTrackKeys.Count),
                     NumTrackKeys = Convert.ToUInt32(trackKeys.Count),
                     IsScaleConstant = keyScales.Count + constKeyScales.Count < 1,
-                    HasRawRotations = extras.PreferLosslessLinearRotationEncoding,
+                    HasRawRotations = !rotationCompressionAllowed,
 
                     FallbackFrameIndices = new CArray<CUInt16>(fallbackIndices),
 
