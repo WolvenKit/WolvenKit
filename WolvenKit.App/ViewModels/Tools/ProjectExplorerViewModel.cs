@@ -283,6 +283,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
 
     public static bool IsShiftBeingHeld => Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
+    public static bool IsCtrlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
 
     /// <summary>
     /// Copies relative path of node (Or absolute path, if ctrl+shift key is held)
@@ -292,8 +293,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private void CopyRelPath()
     {
         var absolutePath = SelectedItem.NotNull().FullName;
-        if (IsShiftBeingHeld)
+        if ((IsShiftBeingHeld || IsCtrlBeingHeld) && Path.Exists(absolutePath))
         {
+            absolutePath = absolutePath.Replace('/', Path.DirectorySeparatorChar);
+            if (IsCtrlBeingHeld)
+            {
+                absolutePath = Path.GetDirectoryName(absolutePath);
+            }
             Clipboard.SetDataObject(absolutePath);
             return;
         }
