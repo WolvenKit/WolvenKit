@@ -213,45 +213,50 @@ namespace WolvenKit.Modkit.RED4
         }
 
 
-        private bool PutAnimations(ref animAnimSet anims, ref RawArmature rig, ref ModelRoot model, string gltfFileName, string rigFileName) {
-
-            // Clear out the old animdata if it looks like we have something to import
+        private bool PutAnimations(ref animAnimSet anims, ref RawArmature rig, ref ModelRoot model, string gltfFileName, string rigFileName)
+        {
             _loggerService.Info($"{gltfFileName}: found {model.LogicalAnimations.Count} animations to import");
-            anims.AnimationDataChunks.Clear();
 
-            foreach (var srcAnim in model.LogicalAnimations)
+            var (importedCount, retainedCount, skippedImportCount) = (0, 0, 0);
+
+            var newAnimSetEntries = new CArray<CHandle<animAnimSetEntry>>();
+            var newAnimChunks = new CArray<animAnimDataChunk>();
+
+            foreach (var incomingAnim in model.LogicalAnimations)
             {
                 // Can switch to system Json when SharpGLTF support released (maybe in .31)
-                if (srcAnim.Extras.Content is null)
+                if (incomingAnim.Extras.Content is null)
                 {
-                    throw new InvalidOperationException($"{gltfFileName}: animation {srcAnim.Name} has no extra data, can't import!");
+                    throw new InvalidOperationException($"{gltfFileName}: animation {incomingAnim.Name} has no extra data, can't import!");
                 }
 
-                var result = TryMigrateAndValidate(srcAnim.Extras);
+                var result = TryMigrateAndValidate(incomingAnim.Extras);
 
                 if (result is Invalid invalid)
                 {
-                    _loggerService.Error($"{gltfFileName}: {srcAnim.Name}: {invalid.Reason}. Can't import!");
+                    _loggerService.Error($"{gltfFileName}: {incomingAnim.Name}: {invalid.Reason}. Can't import!");
                     continue;
                 }
 
                 var extras = ((Valid)result).Extras;
 
-                // TODO should be able to insert new anims too, need to set it up though
-                var tmpAnim = anims.Animations.FirstOrDefault(_ => _?.Chunk?.Animation.Chunk?.Name.GetResolvedText() == srcAnim.Name);
-                if (tmpAnim == null)
+                // TODO https://github.com/WolvenKit/WolvenKit/issues/1425
+                //      - Should be able to insert new anims too, need to set it up though
+                var oldAnim = anims.Animations.FirstOrDefault(_ => _?.Chunk?.Animation.Chunk?.Name.GetResolvedText() == incomingAnim.Name);
+                if (oldAnim == null)
                 {
-                    _loggerService.Warning($"{gltfFileName}: animation {srcAnim.Name} not found in animset, skipping! (New animations are not supported currently!)");
+                    _loggerService.Warning($"{gltfFileName}: animation {incomingAnim.Name} not found in animset, skipping! (New animations are not supported currently!)");
+                    skippedImportCount += 1;
                     continue;
                 }
 
-                ArgumentNullException.ThrowIfNull(tmpAnim.Chunk);
-                ArgumentNullException.ThrowIfNull(tmpAnim.Chunk.Animation.Chunk);
+                ArgumentNullException.ThrowIfNull(oldAnim.Chunk);
+                ArgumentNullException.ThrowIfNull(oldAnim.Chunk.Animation.Chunk);
 
-                var animAnimDes = tmpAnim.Chunk.Animation.Chunk;
+                var oldAnimDesc = oldAnim.Chunk.Animation.Chunk;
 
-                if (animAnimDes.AnimBuffer.Chunk is animAnimationBufferSimd) {
-                    _loggerService.Warning($"{gltfFileName}: original animation {srcAnim.Name} is a SIMD animation, will try to import data as a CompressedBuffer instead but full support is not implemented yet so this may not work correctly!");
+                if (oldAnimDesc.AnimBuffer.Chunk is animAnimationBufferSimd) {
+                    _loggerService.Warning($"{gltfFileName}: original animation {incomingAnim.Name} is a SIMD animation, will try to import as non-SIMD but this is not fully supported and may perform poorly so keep an eye on it!");
                 }
 
                 var keyframeTranslations = new Dictionary<AnimationInterpolationMode, Dictionary<ushort, Dictionary<float, Vec3>>> {
@@ -269,33 +274,33 @@ namespace WolvenKit.Modkit.RED4
                     [AnimationInterpolationMode.LINEAR] = new (),
                 };
 
-                foreach (var chan in srcAnim.Channels)
+                foreach (var chan in incomingAnim.Channels)
                 {
                     var idx = Array.IndexOf(rig.Names.NotNull(), chan.TargetNode.Name);
                     if (idx < 0)
                     {
-                        throw new Exception($"{gltfFileName} ${srcAnim.Name}: Invalid Joint Transform, joint {chan.TargetNode.Name} not present in the associated rig {rigFileName}");
+                        throw new Exception($"{gltfFileName} ${incomingAnim.Name}: Invalid Joint Transform, joint {chan.TargetNode.Name} not present in the associated rig {rigFileName}");
                     }
 
                     switch (chan.TargetNodePath)
                     {
                         case PropertyPath.translation:
                             var translationSampler = chan.GetTranslationSampler();
-                            var typedTranslations = keyframeTranslations[translationSampler.InterpolationMode] ?? throw new Exception($"{gltfFileName} ${srcAnim.Name}: Unsupported interpolation mode {translationSampler.InterpolationMode}!");
+                            var typedTranslations = keyframeTranslations[translationSampler.InterpolationMode] ?? throw new Exception($"{gltfFileName} ${incomingAnim.Name}: Unsupported interpolation mode {translationSampler.InterpolationMode}!");
 
                             typedTranslations.Add((ushort)idx, translationSampler.GetLinearKeys().ToDictionary(_ => _.Key, _ => _.Value));
                             break;
 
                         case PropertyPath.rotation:
                             var rotationSampler = chan.GetRotationSampler();
-                            var typedRotations = keyframeRotations[rotationSampler.InterpolationMode] ?? throw new Exception($"{gltfFileName} ${srcAnim.Name}: Unsupported interpolation mode {rotationSampler.InterpolationMode}!");
+                            var typedRotations = keyframeRotations[rotationSampler.InterpolationMode] ?? throw new Exception($"{gltfFileName} ${incomingAnim.Name}: Unsupported interpolation mode {rotationSampler.InterpolationMode}!");
 
                             typedRotations.Add((ushort)idx, rotationSampler.GetLinearKeys().ToDictionary(_ => _.Key, _ => _.Value));
                             break;
 
                         case PropertyPath.scale:
                             var scaleSampler = chan.GetScaleSampler();
-                            var typedScales = keyframeScales[scaleSampler.InterpolationMode] ?? throw new Exception($"{gltfFileName} ${srcAnim.Name}: Unsupported interpolation mode {scaleSampler.InterpolationMode}!");
+                            var typedScales = keyframeScales[scaleSampler.InterpolationMode] ?? throw new Exception($"{gltfFileName} ${incomingAnim.Name}: Unsupported interpolation mode {scaleSampler.InterpolationMode}!");
 
                             typedScales.Add((ushort)idx, scaleSampler.GetLinearKeys().ToDictionary(_ => _.Key, _ => _.Value));
                             break;
@@ -303,7 +308,7 @@ namespace WolvenKit.Modkit.RED4
                         case PropertyPath.weights:
                             // Fallthrough, no morph anims yet
                         default:
-                            throw new System.Exception($"{gltfFileName} ${srcAnim.Name}: Unsupported channel target {chan.TargetNodePath}!");
+                            throw new System.Exception($"{gltfFileName} ${incomingAnim.Name}: Unsupported channel target {chan.TargetNodePath}!");
                     }
                 }
   
@@ -384,15 +389,11 @@ namespace WolvenKit.Modkit.RED4
 
                 // Have all the raw data in hand now, let's mangle it into CR2W
 
-                animAnimDes.AnimationType = (Enums.animAnimationType)Enum.Parse(typeof(Enums.animAnimationType), extras.AnimationType);
-                animAnimDes.FrameClamping = extras.FrameClamping;
-                animAnimDes.FrameClampingStartFrame = Convert.ToSByte(extras.FrameClampingStartFrame);
-                animAnimDes.FrameClampingEndFrame = Convert.ToSByte(extras.FrameClampingEndFrame);
 
                 var compressed = new animAnimationBufferCompressed()
                 {
-                    Duration = srcAnim.Duration,
-                    NumFrames = FramesToAccommodateDuration(srcAnim.Duration),
+                    Duration = incomingAnim.Duration,
+                    NumFrames = FramesToAccommodateDuration(incomingAnim.Duration),
                     NumExtraJoints = extras.NumExtraJoints,
                     NumExtraTracks = extras.NumExtraTracks,
                     NumJoints = Convert.ToUInt16(rig.BoneCount),
@@ -421,26 +422,59 @@ namespace WolvenKit.Modkit.RED4
                 // ...specifically TempBuffer, here.
                 compressed.WriteBuffer();
 
-                // For now just dump the data always into `AnimationDataChunk`s,
-                // may need to handle `InplaceCompressedBuffer` and `DefferedBuffer` (sic)
-                // separately if this doesn't work for those reliably...
-                var dataChk = new animAnimDataChunk()
-                {
-                    Buffer = new SerializationDeferredDataBuffer(compressed.TempBuffer.Buffer.GetBytes())
-                };
-
                 // These could also be written to a single chunk (or fewer chunks)
                 // but for now we'll do a chunk per animation.
                 //
                 // Might have some kind of streaming optimization potential chunk count vs. size?
-                compressed.DataAddress.UnkIndex = (uint)anims.AnimationDataChunks.Count;
+                compressed.DataAddress.UnkIndex = (uint)newAnimChunks.Count;
                 compressed.DataAddress.FsetInBytes = 0;
                 compressed.DataAddress.ZeInBytes = compressed.TempBuffer.Buffer.MemSize;
 
-                anims.AnimationDataChunks.Add(dataChk);
-                animAnimDes.AnimBuffer.Chunk = compressed;
+                // For now just dump the data always into `AnimationDataChunk`s,
+                // may need to handle `InplaceCompressedBuffer` and `DefferedBuffer` (sic)
+                // separately if this doesn't work for those reliably...
+                var newAnimDataChunk = new animAnimDataChunk()
+                {
+                    Buffer = new SerializationDeferredDataBuffer(compressed.TempBuffer.Buffer.GetBytes())
+                };
+                newAnimChunks.Add(newAnimDataChunk);
+
+                var newAnimDesc = new animAnimation()
+                {
+                    Name = incomingAnim.Name,
+                    AnimBuffer = new(compressed),
+                    Duration = incomingAnim.Duration,
+                    AnimationType = (Enums.animAnimationType)Enum.Parse(typeof(Enums.animAnimationType), extras.AnimationType),
+                    FrameClamping = extras.FrameClamping,
+                    FrameClampingStartFrame = Convert.ToSByte(extras.FrameClampingStartFrame),
+                    FrameClampingEndFrame = Convert.ToSByte(extras.FrameClampingEndFrame),
+                    // Copy for now at least
+                    Tags = (redTagList)oldAnimDesc.Tags.DeepCopy(),
+                    AdditionalTracks = (animAdditionalFloatTrackContainer)oldAnimDesc.AdditionalTracks.DeepCopy(),
+                    AdditionalTransforms = (animAdditionalTransformContainer)oldAnimDesc.AdditionalTransforms.DeepCopy(),
+                    MotionExtraction = oldAnimDesc.MotionExtraction != null
+                                        ? (CHandle<animIMotionExtraction>)oldAnimDesc.MotionExtraction.DeepCopy()
+                                        : new CHandle<animIMotionExtraction>(),
+                };
+
+                var newAnim = new animAnimSetEntry()
+                {
+                    Animation = new(newAnimDesc),
+                    Events = (CHandle<animEventsContainer>)oldAnim.Chunk.Events.DeepCopy(),
+                };
+
+                newAnimSetEntries.Add(newAnim);
+                importedCount += 1;
             }
 
+            // If we get this far, can replace the old with the new
+            //
+            // TODO https://github.com/WolvenKit/WolvenKit/issues/1425
+            //      - Actually replace the *entire* old with the new, not just the anims
+            anims.AnimationDataChunks = newAnimChunks;
+            anims.Animations = newAnimSetEntries;
+
+            _loggerService.Info($"{gltfFileName}: imported {importedCount}, kept {retainedCount}, skipped {skippedImportCount} animations");
             return true;
         }
 
