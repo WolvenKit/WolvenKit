@@ -242,7 +242,7 @@ namespace WolvenKit.Modkit.RED4
 
                 // TODO https://github.com/WolvenKit/WolvenKit/issues/1425
                 //      - Should be able to insert new anims too, need to set it up though
-                var oldAnim = anims.Animations.FirstOrDefault(_ => _?.Chunk?.Animation.Chunk?.Name.GetResolvedText() == incomingAnim.Name);
+                var oldAnim = anims.Animations.FirstOrDefault(_ => _?.Chunk?.Animation.Chunk?.Name.GetResolvedText() == incomingAnim.Name)?.Chunk;
                 if (oldAnim == null)
                 {
                     _loggerService.Warning($"{gltfFileName}: animation {incomingAnim.Name} not found in animset, skipping! (New animations are not supported currently!)");
@@ -250,13 +250,21 @@ namespace WolvenKit.Modkit.RED4
                     continue;
                 }
 
-                ArgumentNullException.ThrowIfNull(oldAnim.Chunk);
-                ArgumentNullException.ThrowIfNull(oldAnim.Chunk.Animation.Chunk);
+                ArgumentNullException.ThrowIfNull(oldAnim);
+                ArgumentNullException.ThrowIfNull(oldAnim.Animation.Chunk);
 
-                var oldAnimDesc = oldAnim.Chunk.Animation.Chunk;
+                var oldAnimDesc = oldAnim.Animation.Chunk;
 
-                if (oldAnimDesc.AnimBuffer.Chunk is animAnimationBufferSimd) {
-                    _loggerService.Warning($"{gltfFileName}: original animation {incomingAnim.Name} is a SIMD animation, will try to import as non-SIMD but this is not fully supported and may perform poorly so keep an eye on it!");
+                // SIMD skipped, keep old
+                //
+                // TODO https://github.com/WolvenKit/WolvenKit/issues/1425
+                //      - Need to still parse the SIMD data correctly
+                if (oldAnimDesc.AnimBuffer.Chunk is animAnimationBufferSimd oldSimdBuffer && extras.OptimizationHints.PreferSIMD) {
+                    _loggerService.Warning($"{gltfFileName}: keeping old {incomingAnim.Name}! Importing SIMD is not yet supported.");
+
+                    CopyOldAnim(ref anims, ref oldSimdBuffer, ref oldAnim, ref newAnimSetEntries, ref newAnimChunks);
+                    retainedCount += 1;
+                    continue;
                 }
 
                 var keyframeTranslations = new Dictionary<AnimationInterpolationMode, Dictionary<ushort, Dictionary<float, Vec3>>> {
@@ -437,7 +445,6 @@ namespace WolvenKit.Modkit.RED4
                 {
                     Buffer = new SerializationDeferredDataBuffer(compressed.TempBuffer.Buffer.GetBytes())
                 };
-                newAnimChunks.Add(newAnimDataChunk);
 
                 var newAnimDesc = new animAnimation()
                 {
@@ -454,15 +461,18 @@ namespace WolvenKit.Modkit.RED4
                     AdditionalTransforms = (animAdditionalTransformContainer)oldAnimDesc.AdditionalTransforms.DeepCopy(),
                     MotionExtraction = oldAnimDesc.MotionExtraction != null
                                         ? (CHandle<animIMotionExtraction>)oldAnimDesc.MotionExtraction.DeepCopy()
-                                        : new CHandle<animIMotionExtraction>(),
+                                        : new(),
                 };
 
                 var newAnim = new animAnimSetEntry()
                 {
                     Animation = new(newAnimDesc),
-                    Events = (CHandle<animEventsContainer>)oldAnim.Chunk.Events.DeepCopy(),
+                    Events = oldAnim.Events != null
+                                ? (CHandle<animEventsContainer>)oldAnim.Events.DeepCopy()
+                                : new(),
                 };
 
+                newAnimChunks.Add(newAnimDataChunk);
                 newAnimSetEntries.Add(newAnim);
                 importedCount += 1;
             }
@@ -478,6 +488,29 @@ namespace WolvenKit.Modkit.RED4
             return true;
         }
 
+        private static void CopyOldAnim(ref animAnimSet anims, ref animAnimationBufferSimd oldSimdBuffer, ref animAnimSetEntry oldAnim, ref CArray<CHandle<animAnimSetEntry>> newAnimSetEntries, ref CArray<animAnimDataChunk> newAnimChunks)
+        {
+            var copiedAnim = (animAnimSetEntry)oldAnim.DeepCopy();
+            var oldDataAddress = oldSimdBuffer.DataAddress;
+            var oldChunk = anims.AnimationDataChunks[(int)(uint)oldDataAddress.UnkIndex].Buffer.Buffer;
+
+            // Need to extract just the part of the old buffer we need
+            var span = oldChunk.GetBytes()[(int)(uint)oldDataAddress.FsetInBytes..(int)(uint)(oldDataAddress.FsetInBytes + oldDataAddress.ZeInBytes)];
+            var copiedDataAddress = ((animAnimationBufferSimd)copiedAnim!.Animation!.Chunk!.AnimBuffer)!.DataAddress;
+
+            copiedDataAddress.UnkIndex = (uint)newAnimChunks.Count;
+            copiedDataAddress.FsetInBytes = 0;
+            copiedDataAddress.ZeInBytes = (uint)span.Length;
+
+            var newChunk = new animAnimDataChunk()
+            {
+                Buffer = new SerializationDeferredDataBuffer(span),
+            };
+
+            // Should be peachy keen now, nobody gonna mess with our buffer...
+            newAnimChunks.Add(newChunk);
+            newAnimSetEntries.Add(copiedAnim);
+        }
 
         #endregion importanims
     }
