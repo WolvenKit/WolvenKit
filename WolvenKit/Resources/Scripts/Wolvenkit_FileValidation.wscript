@@ -795,7 +795,7 @@ function getArchiveXlMeshPaths(depotPath) {
             if (depotPath.indexOf(path) && !path.startsWith(ARCHIVE_XL_VARIANT_INDICATOR) && depotPath.replace(path, "") === "*") {
                 return `*${path}`;
             }
-            return shouldHaveSubstitution(path) ? path : path.replaceAll('*', '');
+            return shouldHaveSubstitution(path, true) ? path : path.replaceAll('*', '');
         });
 
         ret = [...ret, ...resolvedPaths];
@@ -831,9 +831,11 @@ function entFile_appFile_validateComponent(component, _index, validateRecursivel
     let depotPathCanBeEmpty = isDebugComponent;
 
     // entGarmentSkinnedMeshComponent - entSkinnedMeshComponent - entMeshComponent
-    if (component?.mesh && component?.mesh.DepotPath || type.toLowerCase().includes('mesh')) {
+    if (component?.mesh?.DepotPath) {
         type = WITH_MESH;
         depotPathCanBeEmpty ||= componentName !== 'amm_prop_slot1' && componentName?.startsWith('amm_prop_slot');
+    } else if (!isRootEntity && type.toLowerCase().includes('mesh')) {
+        Logger.Info(`Component of type ${type} doesn't have a mesh path`);
     }
 
     // flag for mesh validation, in case this is called recursively from app file
@@ -1175,10 +1177,9 @@ export function validateEntFile(ent, _entSettings) {
     // validate default appearance
     if (isRootEntity && entAppearanceNames.length) {
         const defaultAppearance = stringifyPotentialCName(ent.defaultAppearance);
-        if (!!defaultAppearance && !entAppearanceNames.includes(defaultAppearance)) {
+        if (!!defaultAppearance && !('random' === defaultAppearance || entAppearanceNames.includes(defaultAppearance))) {
             Logger.Info(`Root entity: defaultAppearance ${defaultAppearance} not found. If this is a prop, then it will spawn invisible.`)
         }
-
     }
 
     ent.inplaceResources ||= [];
