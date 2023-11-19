@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Threading;
 using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -280,12 +281,26 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [RelayCommand(CanExecute = nameof(CanCopyFile))]
     private void CopyFile() => Clipboard.SetDataObject(SelectedItem.NotNull().FullName);
 
+
+    public static bool IsShiftBeingHeld => Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
+
     /// <summary>
-    /// Copies relative path of node.
+    /// Copies relative path of node (Or absolute path, if ctrl+shift key is held)
     /// </summary>
     private bool CanCopyRelPath() => ActiveProject != null && SelectedItem != null;
     [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
-    private void CopyRelPath() => Clipboard.SetDataObject(FileModel.GetRelativeName(SelectedItem.NotNull().FullName, ActiveProject.NotNull()));
+    private void CopyRelPath()
+    {
+        var absolutePath = SelectedItem.NotNull().FullName;
+        if (IsShiftBeingHeld)
+        {
+            Clipboard.SetDataObject(absolutePath);
+            return;
+        }
+
+        Clipboard.SetDataObject(FileModel.GetRelativeName(absolutePath, ActiveProject.NotNull()));
+    }
+
 
     /// <summary>
     /// Reimports the game file to replace the current one
