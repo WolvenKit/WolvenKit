@@ -1590,14 +1590,14 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             if (dlg.ShowDialog().GetValueOrDefault())
             {
                 fileToSave.FilePath = dlg.FileName;
-                ActiveDocument?.SaveCommand.SafeExecute();
+                fileToSave.SaveCommand.SafeExecute();
             }
             _watcherService.IsSuspended = false;
             _watcherService.QueueRefresh();
         }
         else
         {
-            ActiveDocument?.SaveCommand.SafeExecute();
+            fileToSave.SaveCommand.SafeExecute();
         }
 
     }
