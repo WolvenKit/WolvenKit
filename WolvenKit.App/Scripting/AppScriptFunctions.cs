@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.ClearScript;
@@ -39,6 +40,7 @@ public class AppScriptFunctions : ScriptFunctions
     private readonly IModTools _modTools;
     private readonly ImportExportHelper _importExportHelper;
     private readonly IGameControllerFactory _gameController;
+    private readonly GeometryCacheService _geometryCacheService;
 
     public AppViewModel? AppViewModel;
 
@@ -50,7 +52,8 @@ public class AppScriptFunctions : ScriptFunctions
         IWatcherService watcherService,
         IModTools modTools,
         ImportExportHelper importExportHelper,
-        IGameControllerFactory gameController)
+        IGameControllerFactory gameController,
+        GeometryCacheService geometryCacheService)
         : base(loggerService, archiveManager, parserService)
     {
         _projectManager = projectManager;
@@ -58,6 +61,7 @@ public class AppScriptFunctions : ScriptFunctions
         _modTools = modTools;
         _importExportHelper = importExportHelper;
         _gameController = gameController;
+        _geometryCacheService = geometryCacheService;
     }
 
     /// <summary>
@@ -714,5 +718,29 @@ public class AppScriptFunctions : ScriptFunctions
         }
 
         DispatcherHelper.RunOnMainThread(() => AppViewModel.OpenRedFileCommand.SafeExecute(gameFile));
+    }
+
+    public virtual string? ExportGeometryCacheEntry(string sectorHashStr, string entryHashStr)
+    {
+        if (!ulong.TryParse(sectorHashStr, out var sectorHash))
+        {
+            _loggerService.Error($"\"{nameof(sectorHashStr)}\" needs to be a ulong");
+            throw new Exception();
+        }
+
+        if (!ulong.TryParse(entryHashStr, out var entryHash))
+        {
+            _loggerService.Error($"\"{nameof(entryHashStr)}\" needs to be a ulong");
+            throw new Exception();
+        }
+
+        var cacheEntry = _geometryCacheService.GetEntry(sectorHash, entryHash);
+        if (cacheEntry == null)
+        {
+            _loggerService.Info("Cache entry not found!");
+            return null;
+        }
+
+        return JsonSerializer.Serialize((object)cacheEntry, new JsonSerializerOptions { IncludeFields = true, WriteIndented = true });
     }
 }
