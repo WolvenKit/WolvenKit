@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using SharpDX;
 using WolvenKit.Core.Extensions;
@@ -17,6 +18,8 @@ public class BV4Tree
     public Vector3 ExtentsOrMaxCoeff { get; private set; }
 
     public bool Quantized { get; set; }
+
+    public List<PackedQuantizedAABB> Nodes { get; } = new();
 
     public bool Load(BinaryReader reader)
     {
@@ -43,9 +46,10 @@ public class BV4Tree
         }
 
         var nbNodes = reader.ReadUInt32();
-
-        // TODO: BVDataPacked
-        var test = reader.ReadBytes((int)(nbNodes * 4 * 4));
+        for (var i = 0; i < nbNodes; i++)
+        {
+            Nodes.Add(reader.BaseStream.ReadStruct<PackedQuantizedAABB>());
+        }
 
         return true;
     }

@@ -48,3 +48,23 @@ public struct LocalBounds
     public Vector3 Center;
     public float ExtentsMagnitude;
 }
+
+[StructLayout(LayoutKind.Sequential)]
+public struct QuantizedAABB
+{
+    public struct DataStruct
+    {
+        public ushort Extents;
+        public short Center;
+    };
+
+    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
+    public DataStruct[] Data;
+}
+
+[StructLayout(LayoutKind.Sequential)]
+public struct PackedQuantizedAABB
+{
+    public QuantizedAABB AABB;
+    public uint Data;
+}
