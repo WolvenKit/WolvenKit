@@ -66,7 +66,6 @@ namespace WolvenKit.Views.Tools
                         viewModel => viewModel.RightSelectedItem,
                         view => view.RightFileView.SelectedItem)
                     .DisposeWith(disposables);
-
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.FindUsesCommand,
                         view => view.RightContextMenuFindUsesMenuItem)
@@ -83,7 +82,6 @@ namespace WolvenKit.Views.Tools
                       viewModel => viewModel.CopyRelPathCommand,
                       view => view.RightContextMenuCopyPathMenuItem)
                   .DisposeWith(disposables);
-
                 this.BindCommand(ViewModel,
                       viewModel => viewModel.OpenFileOnlyCommand,
                       view => view.OpenFileOnly)
@@ -92,6 +90,9 @@ namespace WolvenKit.Views.Tools
                       viewModel => viewModel.AddSelectedCommand,
                       view => view.AddSelected)
                   .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                    viewModel => viewModel.AddFromArchiveCommand,
+                    view => view.AddFromArchive);
 
                 LeftNavigation.KeyUp += LeftNavigation_KeyDown;
             });
@@ -263,9 +264,9 @@ namespace WolvenKit.Views.Tools
             vm.UpdateSearchInArchives();
         }
 
-        private void AddFromSelectedArchiveItem_Click(object sender, RoutedEventArgs e)
-        {
-        }
+        //private void AddFromSelectedArchiveItem_Click(object sender, RoutedEventArgs e)
+        //{
+        //}
 
         private void RightFileView_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {

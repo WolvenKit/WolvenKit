@@ -208,6 +208,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(BrowseToFolderCommand))]
     [NotifyCanExecuteChangedFor(nameof(OpenFileOnlyCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddFromArchiveCommand))]
     [NotifyCanExecuteChangedFor(nameof(CopyRelPathCommand))]
     [NotifyPropertyChangedFor(nameof(AddFromArchiveItems))]
     private IFileSystemViewModel? _rightSelectedItem;
@@ -387,11 +388,12 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
     public void UpdateSearchInArchives()
     {
+        AddFromArchiveItems.Clear();
         if (RightSelectedItem is RedFileViewModel file)
         {
-            AddFromArchiveItems.Clear();
-
-            var archives = _archiveManager.Archives.Items.Where(_ => _.Files.ContainsKey(file.GetGameFile().Key));
+            var key = file.GetGameFile().Key;
+            var archives = _archiveManager.Archives.Items.Where(_ => _.Files.ContainsKey(key))
+                    .Concat(_archiveManager.ModArchives.Items.Where(_ => _.Files.ContainsKey(key)));
             foreach (var archive in archives)
             {
                 AddFromArchiveItems.Add(archive);
@@ -620,17 +622,16 @@ public partial class AssetBrowserViewModel : ToolViewModel
     [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
     private void CopyRelPath() => Clipboard.SetDataObject(RightSelectedItem.NotNull().FullName);
 
-    //[RelayCommand]
-    //private void ExpandAll() { }
-
-    //[RelayCommand]
-    //private void CollapseAll() { }
-
-    //[RelayCommand]
-    //private void Collapse() { }
-
-    //[RelayCommand]
-    //private void Expand() { }
+    private bool CanAddFromArchive() => RightSelectedItem is RedFileViewModel;
+    [RelayCommand(CanExecute = nameof(CanAddFromArchive))]
+    private void AddFromArchive(IGameArchive archive)
+    {
+        if (archive is ICyberGameArchive cyberArchive && RightSelectedItem is RedFileViewModel fileVm)
+        {
+            var realGameFile = cyberArchive.Files.First(_ => _.Value.Name == fileVm.GetGameFile().Name).Value; // must use "Value" here to force the exact archive
+            _gameController.GetController().AddFileToModModal(realGameFile); 
+        }
+    }
 
     #endregion commands
 

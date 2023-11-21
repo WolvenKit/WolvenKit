@@ -158,12 +158,12 @@ namespace WolvenKit.RED4.CR2W.Archive
                 return;
             }
 
-            var redModFolder = archivedir.Name.Contains(Path.DirectorySeparatorChar + "mods" + Path.DirectorySeparatorChar);
+            var redModFolder = archiveDir.Name.Contains(Path.DirectorySeparatorChar + "mods" + Path.DirectorySeparatorChar);
 
             IsManagerLoading = true;
 
             // TODO: this will still load things in sub-directories beyond "archive" for REDMod mods
-            var archiveFiles = Directory.GetFiles(archivedir.FullName, "*.archive",
+            var archiveFiles = Directory.GetFiles(archiveDir.FullName, "*.archive",
                 new EnumerationOptions { RecurseSubdirectories = redModFolder}).ToList();
 
             archiveFiles.Sort(CompareArchives);
