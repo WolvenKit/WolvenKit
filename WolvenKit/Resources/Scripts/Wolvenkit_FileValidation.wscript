@@ -1156,16 +1156,29 @@ export function validateEntFile(ent, _entSettings) {
 
     const entAppearanceNames = [];
 
-    // if there is just one appearance and the root name ends in an underscore, assume as dynamic
-    isDynamicAppearance ||= ent.appearances.length === 1 && stringifyPotentialCName(ent.appearances[0].name).endsWith('_');
+    // Check naming pattern
+    if (!isDynamicAppearance && ent.appearances.length === 1) {
+        const entName = stringifyPotentialCName(ent.appearances[0].name);
+        const entAppearanceName = stringifyPotentialCName(ent.appearances[0].appearanceName)
+        isDynamicAppearance ||= (entName.endsWith("_") && (entAppearanceName === entName || entAppearanceNames === ''));
+    }
 
     const _pathToCurrentFile = pathToCurrentFile;
+
+    let isUsingSuffixesOnDynamicEnt = false;
 
     for (let i = 0; i < ent.appearances.length; i++) {
         const appearance = ent.appearances[i];
         entFile_validateAppearance(appearance, i);
-        entAppearanceNames.push((stringifyPotentialCName(appearance.name) || ''));
+        const name = (stringifyPotentialCName(appearance.name) || '');
+        entAppearanceNames.push(name);
+        isUsingSuffixesOnDynamicEnt ||= (stringifyPotentialCName(appearance.appearanceName) || '').includes('&');
+        isUsingSuffixesOnDynamicEnt ||= name.includes('&');
         pathToCurrentFile = _pathToCurrentFile;
+    }
+
+    if (isUsingSuffixesOnDynamicEnt) {
+        Logger.Warning('Dynamic appearances: You\'re not supposed to use suffixes (&something) in names or appearance names in your root entity!');
     }
 
     // now validate names
