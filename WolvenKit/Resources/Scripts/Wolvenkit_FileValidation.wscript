@@ -1183,6 +1183,10 @@ export function validateEntFile(ent, _entSettings) {
     if (isUsingSuffixesOnDynamicEnt) {
         Logger.Warning('Dynamic appearances: You\'re not supposed to use suffixes (&something) in names or appearance names in your root entity!');
     }
+    if (isRootEntity && isDynamicAppearance && visualTagList.includes('EmptyAppearance:FPP')) {
+        const exampleAppearanceName = [...entAppearanceNames].pop() || 'appearance';
+        Logger.Warning(`Dynamic appearances: EmptyAppearance:FPP might be flaky. Rename your appearance(s) in the .app file like ${exampleAppearanceName}&camera:tpp instead.`);
+    }
 
     // now validate names
     for (let i = 0; i < ent.appearances.length; i++) {
