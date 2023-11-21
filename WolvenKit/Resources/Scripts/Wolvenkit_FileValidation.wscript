@@ -1024,7 +1024,10 @@ function entFile_validateAppearance(appearance) {
 
     const namesInAppFile = getAppearanceNamesInAppFile(appFilePath, appearanceName) || [];
 
-    if (!namesInAppFile.includes(appearanceNameInAppFile)) {
+    // if we're being dynamic here, also check for appearance names with suffixes. 
+    if (!namesInAppFile.includes(appearanceNameInAppFile)
+        && !isDynamicAppearance && !namesInAppFile.includes(appearanceNameInAppFile.split('&').pop() || '')
+    ) {
         entAppearancesNotFoundByFile[appFilePath] ||= {};
         entAppearancesNotFoundByFile[appFilePath][appearanceName] = appearanceNameInAppFile;
     }
