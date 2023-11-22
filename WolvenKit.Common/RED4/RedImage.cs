@@ -950,7 +950,7 @@ public class RedImage : IDisposable
         }
 
 
-        if (!result._metadata.IsCubemap() && info.FlipV)
+        if (!TexHelper.Instance.IsCompressed(metadata.Format) && !result._metadata.IsCubemap() && info.FlipV)
         {
             result.InternalScratchImage = result.InternalScratchImage.FlipRotate(TEX_FR_FLAGS.FLIP_VERTICAL);
         }
