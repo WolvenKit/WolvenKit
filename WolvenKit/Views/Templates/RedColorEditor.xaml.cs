@@ -1,4 +1,6 @@
+using System.ComponentModel;
 using System.Reactive;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -28,7 +30,19 @@ namespace WolvenKit.Views.Editors
             set => SetValue(RedColorProperty, value);
         }
         public static readonly DependencyProperty RedColorProperty = DependencyProperty.Register(
-            nameof(RedColor), typeof(CColor), typeof(RedColorEditor), new PropertyMetadata(default(CColor)));
+            nameof(RedColor), typeof(CColor), typeof(RedColorEditor), new PropertyMetadata(default(CColor), OnRedColorChanged));
+
+        private static void OnRedColorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is RedColorEditor view)
+            {
+                view.OnPropertyChanged(nameof(Color));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         public ReactiveCommand<object, Unit> SelectedColorCommand { get; set; }
 
@@ -42,10 +56,14 @@ namespace WolvenKit.Views.Editors
         {
             dynamic d = e;
             var mediaColor = d.Brush.Color;
-            RedColor.Alpha = mediaColor.A;
-            RedColor.Red = mediaColor.R;
-            RedColor.Green = mediaColor.G;
-            RedColor.Blue = mediaColor.B;
+
+            SetCurrentValue(RedColorProperty, new CColor
+            {
+                Alpha = mediaColor.A,
+                Red = mediaColor.R,
+                Green = mediaColor.G,
+                Blue = mediaColor.B
+            });
 
             _cvm.NotifyChain(nameof(ChunkViewModel.Data));
             _cvm.RecalculateProperties();
@@ -56,10 +74,13 @@ namespace WolvenKit.Views.Editors
             dynamic d = value;
             var mediaColor = d.Brush.Color;
 
-            RedColor.Alpha = mediaColor.A;
-            RedColor.Red = mediaColor.R;
-            RedColor.Green = mediaColor.G;
-            RedColor.Blue = mediaColor.B;
+            SetCurrentValue(RedColorProperty, new CColor
+            {
+                Alpha = mediaColor.A,
+                Red = mediaColor.R,
+                Green = mediaColor.G,
+                Blue = mediaColor.B
+            });
         }
 
         private Color GetValueFromRedValue()
