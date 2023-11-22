@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using DirectXTexNet;
+using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using WolvenKit.Common.DDS;
@@ -941,15 +942,9 @@ public class RedImage : IDisposable
         }
 
         var result = new RedImage(TexHelper.Instance.LoadFromDDSMemory(memIntPtr, ddsLength, DDS_FLAGS.NONE, out var metadata));
-        if (TexHelper.Instance.IsCompressed(metadata.Format))
-        {
-            result._compressionFormat = metadata.Format;
 
-            var textureFormat = CommonFunctions.GetDXGIFormat(Enums.ETextureCompression.TCM_None, info.RawFormat, info.IsGamma);
-            result.InternalScratchImage = result.InternalScratchImage.Decompress((DXGI_FORMAT)textureFormat);
-        }
-
-        if (result.Metadata.MipLevels > 1)
+        // This fails on compressed files 
+        if (!TexHelper.Instance.IsCompressed(metadata.Format) && result.Metadata.MipLevels > 1)
         {
             result.InternalScratchImage = result.InternalScratchImage.CreateCopyWithEmptyMipMaps(1, result._metadata.Format, CP_FLAGS.NONE, false);
         }
