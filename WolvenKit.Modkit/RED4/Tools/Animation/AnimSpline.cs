@@ -151,22 +151,41 @@ namespace WolvenKit.Modkit.RED4.Animation
             // -.-
             anim.Extras = SharpGLTF.IO.JsonContent.Parse(JsonSerializer.Serialize(animExtras, SerializationOptions()));
 
+            // TODO https://github.com/WolvenKit/WolvenKit/issues/1425
+            //      - Additive* poses may need to skip the local transform?
             for (ushort i = 0; i < blob.NumJoints - blob.NumExtraJoints; i++)
             {
                 var node = skin.GetJoint(i).Joint;
                 if (rotations.ContainsKey(i))
                 {
                     var isLinear = rotations[i].Count > 1;
+
+                    foreach (var (t, r) in rotations[i])
+                    {
+                        rotations[i][t] = node.LocalTransform.Rotation * r;
+                    }
+
                     anim.CreateRotationChannel(node, rotations[i], isLinear);
                 }
                 if (positions.ContainsKey(i))
                 {
                     var isLinear = positions[i].Count > 1;
+
+                    foreach (var (t, p) in positions[i])
+                    {
+                        positions[i][t] = node.LocalTransform.Translation + p;
+                    }
                     anim.CreateTranslationChannel(node, positions[i], isLinear);
                 }
                 if (scales.ContainsKey(i))
                 {
                     var isLinear = scales[i].Count > 1;
+
+                    foreach (var (t, s) in scales[i])
+                    {
+                        scales[i][t] = node.LocalTransform.Scale + s;
+                    }
+
                     anim.CreateScaleChannel(node, scales[i], isLinear);
                 }
             }

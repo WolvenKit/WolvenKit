@@ -260,11 +260,11 @@ namespace WolvenKit.Modkit.RED4
                 // TODO https://github.com/WolvenKit/WolvenKit/issues/1425
                 //      - Need to still parse the SIMD data correctly
                 if (oldAnimDesc.AnimBuffer.Chunk is animAnimationBufferSimd oldSimdBuffer && extras.OptimizationHints.PreferSIMD) {
-                    _loggerService.Warning($"{gltfFileName}: keeping old {incomingAnim.Name}! Importing SIMD is not yet supported.");
+                    // _loggerService.Warning($"{gltfFileName}: keeping old {incomingAnim.Name}! Importing SIMD is not yet supported.");
 
-                    CopyOldAnim(ref anims, ref oldSimdBuffer, ref oldAnim, ref newAnimSetEntries, ref newAnimChunks);
-                    retainedCount += 1;
-                    continue;
+                    // CopyOldAnim(ref anims, ref oldSimdBuffer, ref oldAnim, ref newAnimSetEntries, ref newAnimChunks);
+                    // retainedCount += 1;
+                    // continue;
                 }
 
                 var keyframeTranslations = new Dictionary<AnimationInterpolationMode, Dictionary<ushort, Dictionary<float, Vec3>>> {
