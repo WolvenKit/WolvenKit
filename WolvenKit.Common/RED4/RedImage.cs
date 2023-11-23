@@ -368,7 +368,6 @@ public class RedImage : IDisposable
         }
         else
         {
-            InternalScratchImage.SaveToWICFile(0, WIC_FLAGS.NONE, wicCodec, "test.png");
             buffer = SaveToMemory(InternalScratchImage.SaveToWICMemory(0, WIC_FLAGS.NONE, wicCodec));
         }
 
