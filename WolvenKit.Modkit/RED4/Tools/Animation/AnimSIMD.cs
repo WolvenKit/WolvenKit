@@ -30,7 +30,8 @@ namespace WolvenKit.Modkit.RED4.Animation
             var br = new BinaryReader(defferedBuffer);
 
             // Not entirely sure if this should be used everywhere instead of blob.NumJoints
-            var jointsCountAligned = (blob.NumJoints + 3U) & (~3U); // simd 4 alignment
+            var jointsCountAligned = (blob.NumJoints - blob.NumExtraJoints + 3U) & (~3U); // simd 4 alignment
+            var simdBlockWidth = 4; // ...are these two the same thing?
 
             float frameTime = blob.Duration / (blob.NumFrames - 1);
 
@@ -69,13 +70,13 @@ namespace WolvenKit.Modkit.RED4.Animation
                 {
                     for (uint e = 0; e < blob.NumJoints; e += 4)
                     {
-                        for (uint eye = 0; eye < 4; eye++)
+                        for (uint block = 0; block < simdBlockWidth; block++)
                         {
                             var q = new Quat
                             {
-                                X = floatsDecompressed[(i * jointsCountAligned * 3) + (e * 3) + eye],
-                                Y = floatsDecompressed[(i * jointsCountAligned * 3) + (e * 3) + 4 + eye],
-                                Z = floatsDecompressed[(i * jointsCountAligned * 3) + (e * 3) + 8 + eye]
+                                X = floatsDecompressed[(i * jointsCountAligned * 3) + (e * 3) + block],
+                                Y = floatsDecompressed[(i * jointsCountAligned * 3) + (e * 3) + 4 + block],
+                                Z = floatsDecompressed[(i * jointsCountAligned * 3) + (e * 3) + 8 + block]
                             };
 
                             var dotPr = (q.X * q.X) + (q.Y * q.Y) + (q.Z * q.Z);
@@ -84,9 +85,9 @@ namespace WolvenKit.Modkit.RED4.Animation
                             q.Z *= Convert.ToSingle(Math.Sqrt(2f - dotPr));
                             q.W = 1f - dotPr;
                             q = Quat.Normalize(q);
-                            if (e + eye < blob.NumJoints)
+                            if (e + block < blob.NumJoints)
                             {
-                                rotationsYup[i, e + eye] = new Quat(q.X, q.Z, -q.Y, q.W);
+                                rotationsYup[i, e + block] = new Quat(q.X, q.Z, -q.Y, q.W);
                             }
                         }
                     }
@@ -95,48 +96,27 @@ namespace WolvenKit.Modkit.RED4.Animation
             }
             else // non-compressed rotations
             {
-                var qZeros = new List<(uint, uint, Quat, Quat)>();
-                var qoldZeros = new List<(uint, uint)>();
                 for (uint nf = 0; nf < blob.NumFrames; nf++)
                 {
-                    for (uint nj = 0; nj < blob.NumJoints; nj++)
+                    for (uint nj = 0; nj < blob.NumJoints / simdBlockWidth; nj++)
                     {
-                        var i = br.ReadUInt32();
-                        var j = br.ReadUInt32();
-                        var k = br.ReadUInt32();
-                        var r = br.ReadUInt32();
+                        var xs = Enumerable.Range(0, simdBlockWidth).Select(_ => br.ReadSingle()).ToArray();
+                        var ys = Enumerable.Range(0, simdBlockWidth).Select(_ => br.ReadSingle()).ToArray();
+                        var zs = Enumerable.Range(0, simdBlockWidth).Select(_ => br.ReadSingle()).ToArray();
+                        var ws = Enumerable.Range(0, simdBlockWidth).Select(_ => br.ReadSingle()).ToArray();
 
-                        var q = new Quat
+                        for (uint block = 0; block < simdBlockWidth; block++)
                         {
-                            X = DequantU32toF32(i),
-                            Y = DequantU32toF32(j),
-                            Z = DequantU32toF32(k),
-                            W = DequantU32toF32(r),
-                        };
+                            var rotYup = new Quat
+                            {
+                                X = xs[block],
+                                Y = zs[block],
+                                Z = -ys[block],
+                                W = ws[block]
+                            };
 
-                        var nq = Quat.Normalize(q);
-
-                        defferedBuffer.Seek(-16, SeekOrigin.Current);
-                        var qo = new Quat
-                        {
-                            X = br.ReadSingle(),
-                            Y = br.ReadSingle(),
-                            Z = br.ReadSingle(),
-                            W = br.ReadSingle(),
-                        };
-                        var nqo = Quat.Normalize(qo);
-
-                        if (nq == Quat.Zero || Single.IsNaN(nq.X) || Single.IsNaN(nq.Y) || Single.IsNaN(nq.Z) || Single.IsNaN(nq.W))
-                        {
-                            qZeros.Add((nf, nj, q, qo));
-                            nq = Quat.Identity;
+                            rotationsYup[nf, nj + block] = Quat.Normalize(rotYup);
                         }
-                        if (nqo == Quat.Zero)
-                        {
-                            qoldZeros.Add((nf, nj));
-                        }
-
-                        rotationsYup[nf, nj] = new Quat(nq.X, nq.Z, -nq.Y, nq.W);
                     }
                 }
             }
