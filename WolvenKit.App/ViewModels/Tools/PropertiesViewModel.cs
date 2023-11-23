@@ -10,6 +10,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
+using SharpDX.DirectWrite;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
@@ -20,6 +21,7 @@ using WolvenKit.Common.DDS;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
@@ -351,16 +353,18 @@ public partial class PropertiesViewModel : ToolViewModel
 
     public void SetupImage(RedBaseClass cls)
     {
-        var image = RedImage.FromRedClass(cls);
-
-        if (image.Metadata.Format == DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM)
+        using var ddsstream = new MemoryStream();
+        if (!ModTools.ConvertRedClassToDdsStream(cls, ddsstream, out var texformat, out var decompressedFormat))
         {
             return;
         }
 
+        ddsstream.Seek(0, SeekOrigin.Begin);
+        var buffer = Texconv.ConvertFromDds(ddsstream, EUncookExtension.png);
+
         var bitmapImage = new BitmapImage();
         bitmapImage.BeginInit();
-        bitmapImage.StreamSource = new MemoryStream(image.GetPreview());
+        bitmapImage.StreamSource = new MemoryStream(buffer);
         bitmapImage.EndInit();
 
         LoadedBitmapFrame = bitmapImage;

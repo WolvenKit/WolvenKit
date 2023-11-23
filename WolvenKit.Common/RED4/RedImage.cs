@@ -11,6 +11,7 @@ using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
+using static System.Net.WebRequestMethods;
 using static WolvenKit.RED4.Types.Enums;
 using DXGI_FORMAT = DirectXTexNet.DXGI_FORMAT;
 using TEX_DIMENSION = DirectXTexNet.TEX_DIMENSION;
@@ -367,6 +368,7 @@ public class RedImage : IDisposable
         }
         else
         {
+            InternalScratchImage.SaveToWICFile(0, WIC_FLAGS.NONE, wicCodec, "test.png");
             buffer = SaveToMemory(InternalScratchImage.SaveToWICMemory(0, WIC_FLAGS.NONE, wicCodec));
         }
 
@@ -397,7 +399,7 @@ public class RedImage : IDisposable
         }
         else
         {
-            return SaveToMemory(InternalScratchImage.SaveToWICMemory(0, WIC_FLAGS.FORCE_RGB, TexHelper.Instance.GetWICCodec(WICCodecs.PNG)));
+            return SaveToWICMemory(TexHelper.Instance.GetWICCodec(WICCodecs.PNG));
         }
     }
 
