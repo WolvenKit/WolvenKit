@@ -948,7 +948,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
     {
         if (mouseButtonEventArgs.LeftButton == MouseButtonState.Pressed && modelHit is SubmeshComponent { Parent: MeshComponent { Parent: MeshComponent mesh } })
         {
-            Parent.GetLoggerService().Info((mesh.WorldNodeIndex != null ? "worldNodeData[" + mesh.WorldNodeIndex + "] : " : "Mesh Name :") + mesh.Text);
+            Parent.GetLoggerService().Info((mesh.WorldNodeIndex != null ? $"nodes[{mesh.WorldNodeIndex}] (Type: \"{mesh.WorldNodeType}\", nodeDataIndices: [{mesh.WorldNodeDataIndices}]) : " : "Mesh Name :") + mesh.Text);
         }
 
     }
@@ -2084,6 +2084,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             var name = handle.Chunk.NotNull().DebugName.ToString().NotNull();
             name = "_" + name.Replace("{", "").Replace("}", "").Replace("\\", "_").Replace(".", "_").Replace("!", "").Replace("-", "_") ?? "none";
 
+            var indexStr = string.Join(", ", transforms.Select(x => buffer.IndexOf(x)));
+            var typeStr = handle.Chunk.GetType().Name;
+
             if (handle.Chunk is IRedMeshNode irmn)
             {
                 var meshFile = Parent.GetFileFromDepotPathOrCache(irmn.Mesh.DepotPath);
@@ -2100,6 +2103,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     Name = name,
                     Text = name,
                     WorldNodeIndex = $"{handleIndex}",
+                    WorldNodeType = typeStr,
+                    WorldNodeDataIndices = indexStr,
                     AppearanceName = irmn.MeshAppearance,
                     DepotPath = irmn.Mesh.DepotPath
                 };
@@ -2274,6 +2279,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 var mesh = new MeshComponent()
                 {
                     WorldNodeIndex = $"{handleIndex}",
+                    WorldNodeType = typeStr,
+                    WorldNodeDataIndices = indexStr,
                     Name = "collisionNode_" + wcn.SectorHash,
                     Text = "collisionNode_" + wcn.SectorHash
                 };
@@ -2294,6 +2301,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     var actorGroup = new MeshComponent()
                     {
                         WorldNodeIndex = $"{handleIndex}",
+                        WorldNodeType = typeStr,
+                        WorldNodeDataIndices = indexStr,
                         Name = "actor_" + cb.Actors.IndexOf(actor),
                         Text = "actor_" + cb.Actors.IndexOf(actor)
                     };
