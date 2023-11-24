@@ -267,17 +267,17 @@ namespace WolvenKit.Modkit.RED4
                     // continue;
                 }
 
-                var keyframeTranslations = new Dictionary<AnimationInterpolationMode, Dictionary<ushort, Dictionary<float, Vec3>>> {
+                var keyframeTranslations = new Dictionary<AnimationInterpolationMode, Dictionary<ushort, List<(float, Vec3)>>> {
                     [AnimationInterpolationMode.STEP] = new (),
                     [AnimationInterpolationMode.LINEAR] = new (),
                 };
 
-                var keyframeRotations = new Dictionary<AnimationInterpolationMode, Dictionary<ushort, Dictionary<float, Quat>>> {
+                var keyframeRotations = new Dictionary<AnimationInterpolationMode, Dictionary<ushort, List<(float, Quat)>>> {
                     [AnimationInterpolationMode.STEP] = new (),
                     [AnimationInterpolationMode.LINEAR] = new (),
                 };
 
-                var keyframeScales = new Dictionary<AnimationInterpolationMode, Dictionary<ushort, Dictionary<float, Vec3>>> {
+                var keyframeScales = new Dictionary<AnimationInterpolationMode, Dictionary<ushort, List<(float, Vec3)>>> {
                     [AnimationInterpolationMode.STEP] = new (),
                     [AnimationInterpolationMode.LINEAR] = new (),
                 };
@@ -296,21 +296,33 @@ namespace WolvenKit.Modkit.RED4
                             var translationSampler = chan.GetTranslationSampler();
                             var typedTranslations = keyframeTranslations[translationSampler.InterpolationMode] ?? throw new Exception($"{gltfFileName} ${incomingAnim.Name}: Unsupported interpolation mode {translationSampler.InterpolationMode}!");
 
-                            typedTranslations.Add((ushort)idx, translationSampler.GetLinearKeys().ToDictionary(_ => _.Key, _ => _.Value));
+                            var translationsWithoutBind = translationSampler.GetLinearKeys().Select(tAtTime =>
+                                (tAtTime.Key, tAtTime.Value - chan.TargetNode.LocalTransform.Translation)
+                            ).ToList();
+
+                            typedTranslations.Add((ushort)idx, translationsWithoutBind);
                             break;
 
                         case PropertyPath.rotation:
                             var rotationSampler = chan.GetRotationSampler();
                             var typedRotations = keyframeRotations[rotationSampler.InterpolationMode] ?? throw new Exception($"{gltfFileName} ${incomingAnim.Name}: Unsupported interpolation mode {rotationSampler.InterpolationMode}!");
 
-                            typedRotations.Add((ushort)idx, rotationSampler.GetLinearKeys().ToDictionary(_ => _.Key, _ => _.Value));
+                            var rotationsWithoutBind = rotationSampler.GetLinearKeys().Select(rAtTime =>
+                                (rAtTime.Key, rAtTime.Value / chan.TargetNode.LocalTransform.Rotation)
+                            ).ToList();
+
+                            typedRotations.Add((ushort)idx, rotationsWithoutBind);
                             break;
 
                         case PropertyPath.scale:
                             var scaleSampler = chan.GetScaleSampler();
                             var typedScales = keyframeScales[scaleSampler.InterpolationMode] ?? throw new Exception($"{gltfFileName} ${incomingAnim.Name}: Unsupported interpolation mode {scaleSampler.InterpolationMode}!");
 
-                            typedScales.Add((ushort)idx, scaleSampler.GetLinearKeys().ToDictionary(_ => _.Key, _ => _.Value));
+                            var scalesWithoutBind = scaleSampler.GetLinearKeys().Select(sAtTime =>
+                                (sAtTime.Key, sAtTime.Value - chan.TargetNode.LocalTransform.Scale)
+                            ).ToList();
+
+                            typedScales.Add((ushort)idx, scalesWithoutBind);
                             break;
 
                         case PropertyPath.weights:
