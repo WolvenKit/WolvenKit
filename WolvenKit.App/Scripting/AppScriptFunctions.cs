@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,10 +23,12 @@ using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.Scripting;
+using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.JSON;
+using WolvenKit.RED4.Types;
 using EFileReadErrorCodes = WolvenKit.RED4.Archive.IO.EFileReadErrorCodes;
 
 namespace WolvenKit.App.Scripting;
@@ -288,19 +291,73 @@ public class AppScriptFunctions : ScriptFunctions
         var exportArgs = new T();
         foreach (var prop in exportArgs.GetType().GetProperties())
         {
+            if (scriptSettingsObject.PropertyNames.Contains(prop.Name))
+            {
+                SetValue(prop, exportArgs, prop.Name);
+            }
+
             if (Attribute.GetCustomAttribute(prop, typeof(WkitScriptAccess)) is WkitScriptAccess scriptAccess && scriptSettingsObject.PropertyNames.Contains(scriptAccess.ScriptName))
             {
-                if (prop.PropertyType.IsEnum)
-                {
-                    prop.SetValue(exportArgs, Enum.Parse(prop.PropertyType, (string)scriptSettingsObject[scriptAccess.ScriptName]));
-                }
-                else
-                {
-                    prop.SetValue(exportArgs, scriptSettingsObject[scriptAccess.ScriptName]);
-                }
+                SetValue(prop, exportArgs, scriptAccess.ScriptName);
             }
         }
         return exportArgs;
+
+        void SetValue(PropertyInfo prop, object instance, string name)
+        {
+            if (prop.PropertyType.IsEnum)
+            {
+                prop.SetValue(exportArgs, Enum.Parse(prop.PropertyType, (string)scriptSettingsObject[name]));
+            }
+            else if (prop.PropertyType == typeof(List<FileEntry>))
+            {
+                if (scriptSettingsObject[name] is not IList lstValue)
+                {
+                    _loggerService.Error($"Setting \"{name}\" needs to be a array of strings");
+                    throw new NotSupportedException();
+                }
+
+                var lst = new List<FileEntry>();
+
+                foreach (var entry in lstValue)
+                {
+                    if (entry is not string entryStr)
+                    {
+                        _loggerService.Error($"Setting \"{name}\" needs to be a array of strings");
+                        throw new NotSupportedException();
+                    }
+
+                    ResourcePath resourcePath;
+                    if (ulong.TryParse(entryStr, out var entryStrHash))
+                    {
+                        resourcePath = entryStrHash;
+                    }
+                    else
+                    {
+                        resourcePath = entryStr;
+                    }
+
+                    var fileEntry = _archiveManager.Archives.Items
+                        .SelectMany(x => x.Files.Values)
+                        .Cast<FileEntry>()
+                        .FirstOrDefault(x => x.NameHash64 == resourcePath);
+
+                    if (fileEntry is not { })
+                    {
+                        _loggerService.Warning($"File \"{entryStr}\" could not be found. Skipping");
+                        continue;
+                    }
+
+                    lst.Add(fileEntry);
+                }
+
+                prop.SetValue(exportArgs, lst);
+            }
+            else
+            {
+                prop.SetValue(exportArgs, scriptSettingsObject[name]);
+            }
+        }
     }
 
     private GlobalExportArgs GetGlobalExportArgs(ScriptObject settings)
