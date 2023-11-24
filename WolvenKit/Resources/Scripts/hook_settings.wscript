@@ -85,15 +85,25 @@ const Settings = {
 
         /*
          * Set this to "false" to disable warnings about duplicate component names,
-         * e.g. "] The following components are defined more than once: [ pants_black ]"
+         * e.g. "The following components are defined more than once: [ pants_black ]"
          */
         checkComponentNameDuplication: false,
-        
+
+        /*
+         * Set this to "false" to disable warnings about component IDs and duplication,
+         * e.g. " The following components are defined more than once: [ pants_black ]"
+         */
+        checkComponentIdsForGarmentSupport: true,
+
         /*
          * Checks for ArchiveXL >= 1.5's dynamic appearance activator by checking for empty appearance names
          * in the root entity, or the presence of string substitution in nested files.
          */
         checkDynamicAppearanceTag: true,
+        /*
+         * Set to "false" to suppress warnings about incomplete substitution
+         */
+        warnAboutIncompleteSubstitution: false,
     },
     Inkatlas: {
         /*

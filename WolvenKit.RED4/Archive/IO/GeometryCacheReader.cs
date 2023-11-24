@@ -174,6 +174,9 @@ public class GeometryCacheReader : Red4Reader, IBufferReader
                         {
                             entry.Uk7.Add(_reader.ReadByte());
                         }
+
+                        // TODO: Added with 2.0, not checked where it belongs. Somewhere between here and uk7Count
+                        entry.Uk8 = _reader.ReadUInt32();
                     }
                 }
                 else

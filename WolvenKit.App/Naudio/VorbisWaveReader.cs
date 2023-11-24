@@ -4,10 +4,10 @@ using NAudio.Dsp;
 using NAudio.Extras;
 using NAudio.Wave;
 
-namespace NAudio.Vorbis
+namespace Wkit.Vorbis
 {
     // https://github.com/naudio/Vorbis/blob/adb0443f6a3e87e29fdd0e592efa57396f014832/NAudio.Vorbis/VorbisWaveReader.cs
-    public class VorbisWaveReader : Wave.WaveStream, ISampleProvider
+    public class VorbisWaveReader : NAudio.Wave.WaveStream, ISampleProvider
     {
         VorbisSampleProvider _sampleProvider;
 
@@ -69,7 +69,7 @@ namespace NAudio.Vorbis
             base.Dispose(disposing);
         }
 
-        public override Wave.WaveFormat WaveFormat => _sampleProvider!.WaveFormat!;
+        public override NAudio.Wave.WaveFormat WaveFormat => _sampleProvider!.WaveFormat!;
 
         public override long Length => _sampleProvider.Length * _sampleProvider!.WaveFormat!.BlockAlign;
 

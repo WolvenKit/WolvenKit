@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class AccessBreach : PuppetAction
 	{
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("attempt")] 
 		public CInt32 Attempt
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("networkName")] 
 		public CString NetworkName
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(41)] 
 		[RED("npcCount")] 
 		public CInt32 NpcCount
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(42)] 
 		[RED("isRemote")] 
 		public CBool IsRemote
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(43)] 
 		[RED("isSuicide")] 
 		public CBool IsSuicide
 		{

@@ -36,6 +36,7 @@ using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
 using WolvenKit.Common.Extensions;
+using WolvenKit.Common.Model.Database;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
@@ -650,7 +651,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private async Task NewProject()
     {
         //IsOverlayShown = false;
-        await SetActiveDialog(new ProjectWizardViewModel
+        await SetActiveDialog(new ProjectWizardViewModel(_settingsManager)
         {
             FileHandler = NewProject
         });
@@ -920,6 +921,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             case EWolvenKitFile.ArchiveXl:
             case EWolvenKitFile.TweakXl:
+            {
+                //prep the subdirs
+                var tweakDirName = Path.GetDirectoryName(file.FullPath).NotNull();
+                Directory.CreateDirectory(tweakDirName);
                 if (!string.IsNullOrEmpty(file.SelectedFile.Template))
                 {
                     await using var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream($"WolvenKit.App.Resources.{file.SelectedFile.Template}").NotNull();
@@ -931,8 +936,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                     stream = File.Create(file.FullPath);
                 }
                 break;
+            }
             case EWolvenKitFile.RedScript:
             case EWolvenKitFile.CETLua:
+            {
                 //prep the subdirs
                 var scriptDirName = Path.GetDirectoryName(file.FullPath).NotNull();
                 Directory.CreateDirectory(scriptDirName);
@@ -947,6 +954,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                     stream = File.Create(file.FullPath);
                 }
                 break;
+            }  
             case EWolvenKitFile.Cr2w:
                 var redType = file.SelectedFile.Name;
                 if (!string.IsNullOrEmpty(redType))
@@ -1070,6 +1078,16 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     public void OpenFileFromDepotPath(ResourcePath path)
     {
+        foreach (var file in DockedViews.OfType<IDocumentViewModel>())
+        {
+            if (file.FilePath == path)
+            {
+                ActiveDocument = file;
+                UpdateTitle();
+                return;
+            }
+        }
+
         if (OpenFileFromProject(path))
         {
             return;
@@ -1084,7 +1102,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         OpenFileFromHash(path);
     }
 
-    public void OpenFileFromHash(ulong hash)
+    public void OpenFileFromHash(ResourcePath hash)
     {
         if (hash != 0)
         {
@@ -1099,8 +1117,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
                     if (OpenStream(stream, fe.FileName, out var redfile))
                     {
-                        var fileNameWithExt = $"{Path.GetFileNameWithoutExtension(fe.FileName)}{fe.Extension}";
-                        var fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(redfile, fileNameWithExt, this, true);
+                        var resourcePath = hash.GetResolvedText() ?? $"{Path.GetFileNameWithoutExtension(fe.FileName)}{fe.Extension}";
+                        var fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(redfile, resourcePath, this, true);
                         if (!DockedViews.Contains(fileViewModel))
                         {
                             DockedViews.Add(fileViewModel);
@@ -1572,14 +1590,14 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             if (dlg.ShowDialog().GetValueOrDefault())
             {
                 fileToSave.FilePath = dlg.FileName;
-                ActiveDocument?.SaveCommand.SafeExecute();
+                fileToSave.SaveCommand.SafeExecute();
             }
             _watcherService.IsSuspended = false;
             _watcherService.QueueRefresh();
         }
         else
         {
-            ActiveDocument?.SaveCommand.SafeExecute();
+            fileToSave.SaveCommand.SafeExecute();
         }
 
     }

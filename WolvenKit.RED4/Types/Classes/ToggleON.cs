@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ToggleON : ActionBool
 	{
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("TrueRecordName")] 
 		public CString TrueRecordName
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("FalseRecordName")] 
 		public CString FalseRecordName
 		{

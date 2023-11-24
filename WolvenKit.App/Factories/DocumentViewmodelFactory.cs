@@ -3,8 +3,8 @@ using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common;
+using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.Modkit.Scripting;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 

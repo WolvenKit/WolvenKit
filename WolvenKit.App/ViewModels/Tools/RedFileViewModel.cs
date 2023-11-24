@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using WolvenKit.Common;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 
@@ -47,6 +48,8 @@ public class RedFileViewModel : FileSystemViewModel
     public override string SizeString => FormatSize(_fileEntry.Size);
 
     [Display(Name = "Archive")] public string ArchiveName { get; }
+
+    public EArchiveSource ArchiveSource => _fileEntry.GetArchive().Source;
 
     #endregion Properties
 

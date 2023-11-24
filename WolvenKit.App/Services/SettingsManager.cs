@@ -52,7 +52,8 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(ShowReferenceGraph),
             nameof(GameLanguage),
             nameof(AnalyzeModArchives),
-            nameof(ExtraModDirPath)
+            nameof(ExtraModDirPath),
+            nameof(LastUsedProjectPath)
             )
           .Subscribe(_ =>
           {
@@ -237,6 +238,10 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [ObservableProperty]
     private string? _extraModDirPath;
 
+    [ObservableProperty]
+    [property: Browsable(false)]
+    private string? _lastUsedProjectPath;
+
     #endregion properties
 
     #region methods
@@ -264,15 +269,9 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
 
     public string GetRED4GameExecutablePath() => CP77ExecutablePath.NotNull();
 
-    public string GetRED4GameLaunchCommand()
-    {
-        return string.IsNullOrEmpty(CP77LaunchCommand) ? "" : CP77LaunchCommand.NotNull();
-    }
+    public string GetRED4GameLaunchCommand() => CP77LaunchCommand ?? "";
 
-    public string GetRED4GameLaunchOptions()
-    {
-        return string.IsNullOrEmpty(CP77LaunchOptions) ? "" : CP77LaunchOptions.NotNull();
-    }
+    public string GetRED4GameLaunchOptions() => CP77LaunchOptions ?? "";
 
     public string GetRED4GameLegacyModDir()
     {

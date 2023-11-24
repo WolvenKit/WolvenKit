@@ -134,21 +134,22 @@ public partial class ConsoleFunctions
             _mlmaskExportArgs.Value,
             _wemExportArgs.Value
         );
+
         if (options.flip != null)
         {
             exportArgs.Get<XbmExportArgs>().Flip = options.flip.Value;
         }
+
         if (options.uext != null)
         {
             exportArgs.Get<XbmExportArgs>().UncookExtension = options.uext.Value;
             exportArgs.Get<MlmaskExportArgs>().UncookExtension = options.uext.Value;
             exportArgs.Get<MeshExportArgs>().MaterialUncookExtension = options.uext.Value;
         }
+
         if (options.meshExportType != null)
         {
             exportArgs.Get<MeshExportArgs>().meshExportType = options.meshExportType.Value;
-            exportArgs.Get<MeshExportArgs>().MaterialRepo = string.IsNullOrEmpty(options.meshExportMaterialRepo) ? outDir.FullName : options.meshExportMaterialRepo;
-            exportArgs.Get<MeshExportArgs>().ArchiveDepot = basedir.FullName;
         }
 
         if (options.meshExportExperimentalMergedExport == true)
@@ -160,6 +161,9 @@ public partial class ConsoleFunctions
         {
             exportArgs.Get<MeshExportArgs>().LodFilter = true;
         }
+
+        exportArgs.Get<MeshExportArgs>().MaterialRepo = string.IsNullOrEmpty(options.meshExportMaterialRepo) ? outDir.FullName : options.meshExportMaterialRepo;
+        exportArgs.Get<MeshExportArgs>().ArchiveDepot = basedir.FullName;
 
         var archiveDepot = exportArgs.Get<MeshExportArgs>().ArchiveDepot;
         if (!string.IsNullOrEmpty(archiveDepot) && Directory.Exists(archiveDepot))

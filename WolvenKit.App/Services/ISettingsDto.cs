@@ -35,4 +35,5 @@ public interface ISettingsDto
     public Dictionary<string, bool>? ScriptStatus { get; set; }
     public bool AnalyzeModArchives { get; set; }
     public string? ExtraModDirPath { get; set; }
+    public string? LastUsedProjectPath { get; set; }
 }

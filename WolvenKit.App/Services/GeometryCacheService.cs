@@ -1,20 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WolvenKit.Core.Extensions;
+using WolvenKit.App.Helpers;
+using WolvenKit.App.PhysX;
+using WolvenKit.Common;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 
-namespace WolvenKit.Common.Services
+namespace WolvenKit.App.Services
 {
     public class GeometryCacheService
     {
-        private readonly Dictionary<ulong, Dictionary<ulong, GeometryCacheEntry>> _entries = new();
+        private readonly Dictionary<ulong, Dictionary<ulong, PhysXMesh>> _entries = new();
 
         private readonly Red4ParserService _parser;
         private readonly IArchiveManager _archive;
@@ -37,7 +35,7 @@ namespace WolvenKit.Common.Services
                 using var stream = new MemoryStream();
                 fe.Extract(stream);
                 using var reader = new BinaryReader(stream);
-                var cr2wFile = _parser.ReadRed4File(reader);
+                var cr2wFile = _parser.ReadRed4File(reader, false);
 
                 if (cr2wFile?.RootChunk is physicsGeometryCache pgc)
                 {
@@ -60,12 +58,9 @@ namespace WolvenKit.Common.Services
                             throw new ArgumentNullException();
                         }
 
-                        if (pgc.BufferTableSectors[sectorIndex]!.Data is not GeometryCacheBuffer gcb)
-                        {
-                            continue;
-                        }
+                        var gcb = GeometryCacheReader.ReadBuffer(pgc.BufferTableSectors[sectorIndex]!.Buffer);
 
-                        for (var entryIndex = 0; entryIndex < gcb.Entries.Count; entryIndex++)
+                        for (var entryIndex = 0; entryIndex < gcb.Count; entryIndex++)
                         {
                             if (pgc.SectorGeometries == null || pgc.SectorGeometries.Count <= totalEntryIndex || pgc.SectorGeometries[totalEntryIndex] == null)
                             {
@@ -79,12 +74,12 @@ namespace WolvenKit.Common.Services
                                 entryHash |= (ulong)entry.Ta[i] << (i * 8);
                             }
 
-                            if (gcb.Entries == null || gcb.Entries.Count <= entryIndex)
+                            if (gcb == null || gcb.Count <= entryIndex)
                             {
                                 throw new ArgumentNullException();
                             }
 
-                            _entries[sectorHash][entryHash] = gcb.Entries[entryIndex]!;
+                            _entries[sectorHash][entryHash] = gcb[entryIndex]!;
                             totalEntryIndex++;
                         }
                     }
@@ -94,12 +89,9 @@ namespace WolvenKit.Common.Services
                         _entries[0] = new();
                     }
 
-                    if (pgc.AlwaysLoadedSectorDDB.Data is not GeometryCacheBuffer algcb)
-                    {
-                        return;
-                    }
+                    var algcb = GeometryCacheReader.ReadBuffer(pgc.AlwaysLoadedSectorDDB.Buffer);
 
-                    foreach (var als in algcb.Entries)
+                    foreach (var als in algcb)
                     {
                         if (pgc.SectorGeometries == null || pgc.SectorGeometries.Count <= totalEntryIndex || pgc.SectorGeometries[totalEntryIndex] == null)
                         {
@@ -119,7 +111,7 @@ namespace WolvenKit.Common.Services
             }
         }
 
-        public GeometryCacheEntry? GetEntry(ulong sectorHash, ulong entryHash)
+        public PhysXMesh? GetEntry(ulong sectorHash, ulong entryHash)
         {
             if (!_isLoaded)
             {

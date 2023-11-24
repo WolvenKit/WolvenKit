@@ -20,6 +20,7 @@ using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
+using WolvenKit.App.PhysX;
 using WolvenKit.App.Services;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
@@ -947,7 +948,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
     {
         if (mouseButtonEventArgs.LeftButton == MouseButtonState.Pressed && modelHit is SubmeshComponent { Parent: MeshComponent { Parent: MeshComponent mesh } })
         {
-            Parent.GetLoggerService().Info((mesh.WorldNodeIndex != null ? "worldNodeData[" + mesh.WorldNodeIndex + "] : " : "Mesh Name :") + mesh.Text);
+            Parent.GetLoggerService().Info((mesh.WorldNodeIndex != null ? $"nodes[{mesh.WorldNodeIndex}] (Type: \"{mesh.WorldNodeType}\", nodeDataIndices: [{mesh.WorldNodeDataIndices}]) : " : "Mesh Name :") + mesh.Text);
         }
 
     }
@@ -2083,6 +2084,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             var name = handle.Chunk.NotNull().DebugName.ToString().NotNull();
             name = "_" + name.Replace("{", "").Replace("}", "").Replace("\\", "_").Replace(".", "_").Replace("!", "").Replace("-", "_") ?? "none";
 
+            var indexStr = string.Join(", ", transforms.Select(x => buffer.IndexOf(x)));
+            var typeStr = handle.Chunk.GetType().Name;
+
             if (handle.Chunk is IRedMeshNode irmn)
             {
                 var meshFile = Parent.GetFileFromDepotPathOrCache(irmn.Mesh.DepotPath);
@@ -2099,6 +2103,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     Name = name,
                     Text = name,
                     WorldNodeIndex = $"{handleIndex}",
+                    WorldNodeType = typeStr,
+                    WorldNodeDataIndices = indexStr,
                     AppearanceName = irmn.MeshAppearance,
                     DepotPath = irmn.Mesh.DepotPath
                 };
@@ -2273,6 +2279,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 var mesh = new MeshComponent()
                 {
                     WorldNodeIndex = $"{handleIndex}",
+                    WorldNodeType = typeStr,
+                    WorldNodeDataIndices = indexStr,
                     Name = "collisionNode_" + wcn.SectorHash,
                     Text = "collisionNode_" + wcn.SectorHash
                 };
@@ -2293,6 +2301,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     var actorGroup = new MeshComponent()
                     {
                         WorldNodeIndex = $"{handleIndex}",
+                        WorldNodeType = typeStr,
+                        WorldNodeDataIndices = indexStr,
                         Name = "actor_" + cb.Actors.IndexOf(actor),
                         Text = "actor_" + cb.Actors.IndexOf(actor)
                     };
@@ -2323,7 +2333,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                                 continue;
                             }
 
-                            if (geo is CVXMCacheEntry cce)
+                            if (geo is ConvexMesh convexMesh)
                             {
                                 var mb = new MeshBuilder
                                 {
@@ -2331,69 +2341,39 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                                 };
 
                                 var positions = new Vector3Collection();
-                                for (var i = 0; i < cce.Vertices.Count; i++)
+                                for (var i = 0; i < convexMesh.HullData.HullVertices.Count; i++)
                                 {
-                                    positions.Add(cce.Vertices[i].NotNull().ToVector3());
+                                    positions.Add(convexMesh.HullData.HullVertices[i]);
                                 }
 
-                                //foreach (var face in cce.Faces)
-                                //{
-                                //    var points = new List<SharpDX.Vector3>();
-                                //    foreach (var point in face)
-                                //    {
-                                //        points.Add(positions[point]);
-                                //    }
-                                //    switch (points.Count)
-                                //    {
-                                //        case 3:
-                                //            mb.AddTriangle(points[0], points[1], points[2]);
-                                //            break;
-                                //        case 4:
-                                //            mb.AddQuad(points[3], points[2], points[1], points[0]);
-                                //            break;
-                                //        default:
-                                //            for (int i = 0; i + 2 < points.Count; i++)
-                                //            {
-                                //                mb.AddTriangle(points[0], points[i + 1], points[i + 2]);
-                                //            }
-                                //            break;
-                                //    }
-                                //}
-
-
-                                //for (var i = 0; i < cce.Vertices.Count; i++)
-                                //{
-                                //    mb.Positions.Add(cce.Vertices[i].ToVector3());
-                                //}
-
-                                for (var i = 0; i < cce.FaceData.Count; i++)
+                                var faceIndex = 0;
+                                for (var i = 0; i < convexMesh.HullData.Polygons.Count; i++)
                                 {
                                     var count = mb.Positions.Count;
-                                    var face = cce.Faces[i].NotNull();
-                                    var faceData = cce.FaceData[i].NotNull();
+                                    var faceData = convexMesh.HullData.Polygons[i];
 
-                                    switch (face.Count)
+                                    switch (faceData.NbVerts)
                                     {
                                         case 3:
-                                            mb.Positions.Add(positions[face[0]]);
-                                            mb.Positions.Add(positions[face[1]]);
-                                            mb.Positions.Add(positions[face[2]]);
-                                            mb.Normals.Add(faceData.Normal.ToVector3());
-                                            mb.Normals.Add(faceData.Normal.ToVector3());
-                                            mb.Normals.Add(faceData.Normal.ToVector3());
+                                            mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex]]);
+                                            mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex + 1]]);
+                                            mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex + 2]]);
+                                            mb.Normals.Add(faceData.Plane.N);
+                                            mb.Normals.Add(faceData.Plane.N);
+                                            mb.Normals.Add(faceData.Plane.N);
                                             mb.TriangleIndices.Add(count);
                                             mb.TriangleIndices.Add(count + 1);
                                             mb.TriangleIndices.Add(count + 2);
                                             break;
                                         case 4:
-                                            mb.Positions.Add(positions[face[0]]);
-                                            mb.Positions.Add(positions[face[1]]);
-                                            mb.Positions.Add(positions[face[2]]);
-                                            mb.Positions.Add(positions[face[3]]);
-                                            mb.Normals.Add(faceData.Normal.ToVector3());
-                                            mb.Normals.Add(faceData.Normal.ToVector3());
-                                            mb.Normals.Add(faceData.Normal.ToVector3());
-                                            mb.Normals.Add(faceData.Normal.ToVector3());
+                                            mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex]]);
+                                            mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex + 1]]);
+                                            mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex + 2]]);
+                                            mb.Positions.Add(positions[convexMesh.HullData.VertexData8[faceIndex + 3]]);
+                                            mb.Normals.Add(faceData.Plane.N);
+                                            mb.Normals.Add(faceData.Plane.N);
+                                            mb.Normals.Add(faceData.Plane.N);
+                                            mb.Normals.Add(faceData.Plane.N);
                                             mb.TriangleIndices.Add(count);
                                             mb.TriangleIndices.Add(count + 1);
                                             mb.TriangleIndices.Add(count + 2);
@@ -2402,12 +2382,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                                             mb.TriangleIndices.Add(count);
                                             break;
                                         default:
-                                            for (var j = 0; j < face.Count; j++)
+                                            for (var j = 0; j < faceData.NbVerts; j++)
                                             {
-                                                mb.Positions.Add(positions[face[j]]);
-                                                mb.Normals.Add(faceData.Normal.ToVector3());
+                                                mb.Positions.Add(positions[convexMesh.HullData.VertexData8[j]]);
+                                                mb.Normals.Add(faceData.Plane.N);
                                             }
-                                            for (var j = 0; j + 2 < face.Count; j++)
+                                            for (var j = 0; j + 2 < faceData.NbVerts; j++)
                                             {
                                                 mb.TriangleIndices.Add(count);
                                                 mb.TriangleIndices.Add(count + j + 1);
@@ -2415,13 +2395,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                                             }
                                             break;
                                     }
-                                }
 
-                                //mb.ComputeNormalsAndTangents(MeshFaces.Default);
+                                    faceIndex += faceData.NbVerts;
+                                }
 
                                 geometry = mb.ToMeshGeometry3D();
                             }
-                            else if (geo is MeshCacheEntry mce)
+
+                            if (geo is BV4TriangleMesh bv4TriangleMesh)
                             {
                                 var mb = new MeshBuilder
                                 {
@@ -2429,17 +2410,17 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                                 };
 
                                 var positions = new Vector3Collection();
-                                for (var i = 0; i < mce.Vertices.Count; i++)
+                                for (var i = 0; i < bv4TriangleMesh.Vertices.Count; i++)
                                 {
-                                    positions.Add(mce.Vertices[i].NotNull().ToVector3());
+                                    positions.Add(bv4TriangleMesh.Vertices[i]);
                                 }
 
-                                foreach (var face in mce.Faces)
+                                foreach (var face in bv4TriangleMesh.Triangles)
                                 {
                                     var points = new List<SharpDX.Vector3>();
                                     foreach (var point in face)
                                     {
-                                        points.Add(positions[point]);
+                                        points.Add(positions[(int)point]);
                                     }
                                     mb.AddTriangle(points[0], points[1], points[2]);
                                 }
@@ -2501,17 +2482,20 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             }
             else if (handle.Chunk is worldNavigationNode wnm)
             {
-                var navmeshFile = Parent.GetFileFromDepotPathOrCache(wnm.NavigationTileResource.DepotPath);
-
-                if (navmeshFile?.RootChunk is not worldNavigationTileResource wntr)
+                var emb = Parent.Cr2wFile.EmbeddedFiles.FirstOrDefault(x => x.FileName == wnm.NavigationTileResource.DepotPath);
+                if (emb == null)
                 {
                     continue;
                 }
 
-                /*foreach (var tile in wntr.TilesData)
+                if (emb.Content is not worldNavigationTileResource wntr)
                 {
-                    // TODO: [Patch-2.0] Where did it go?
-                    if (tile.TilesBuffer.Data is not TilesBuffer tb)
+                    continue;
+                }
+
+                foreach (var tile in wntr.TilesData)
+                {
+                    if (wntr.TileBuffers[(int)(uint)tile.BufferIndex].Data is not TilesBuffer tb)
                     {
                         continue;
                     }
@@ -2560,7 +2544,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     group.Children.Add(mesh);
 
                     groups.Add(group);
-                }*/
+                }
             }
             else if (handle.Chunk is worldEntityNode wen)
             {
@@ -3183,8 +3167,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 }
             }
 
-            List<entTemplateAppearance?> appearances;
-            if (appearanceName == null)
+            List<entTemplateAppearance> appearances;
+            if (appearance != null)
+            {
+                appearances = ent.Appearances.Where(x => x is not null && x.Name == ent.DefaultAppearance).ToList();
+            }
+            else if (appearanceName == null)
             {
                 appearances = ent.Appearances.ToList();
             }

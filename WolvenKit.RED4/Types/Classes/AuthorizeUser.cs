@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class AuthorizeUser : ActionBool
 	{
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("enteredPassword")] 
 		public CName EnteredPassword
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("validPasswords")] 
 		public CArray<CName> ValidPasswords
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(41)] 
 		[RED("libraryName")] 
 		public CName LibraryName
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(42)] 
 		[RED("isforced")] 
 		public CBool Isforced
 		{

@@ -140,7 +140,7 @@ namespace WolvenKit.Common.Model.Arguments
     public class XbmExportArgs : ExportArgs
     {
         private EUncookExtension _uncookExtension = EUncookExtension.png;
-        private bool _flip;
+        private bool _flip = true;
 
         /// <summary>
         ///  Uncook Format for XBM.
@@ -316,7 +316,7 @@ namespace WolvenKit.Common.Model.Arguments
     /// </summary>
     public class WemExportArgs : ExportArgs
     {
-        private WemExportTypes _wemExportType = WemExportTypes.Mp3;
+        private WemExportTypes _wemExportType = WemExportTypes.Ogg;
 
         /// <summary>
         /// Wem Export type
@@ -380,7 +380,8 @@ namespace WolvenKit.Common.Model.Arguments
     public enum WemExportTypes
     {
         Wav,
-        Mp3
+        Mp3,
+        Ogg
     }
 
     /// <summary>

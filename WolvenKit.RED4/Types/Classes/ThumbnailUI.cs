@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ThumbnailUI : ActionBool
 	{
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("thumbnailWidgetPackage")] 
 		public SThumbnailWidgetPackage ThumbnailWidgetPackage
 		{

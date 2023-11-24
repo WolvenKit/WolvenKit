@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Threading;
 using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -189,8 +190,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [NotifyCanExecuteChangedFor(nameof(OpenInFileExplorerCommand))]
     [NotifyCanExecuteChangedFor(nameof(PasteFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(RenameFileCommand))]
-    [NotifyCanExecuteChangedFor(nameof(Bk2ImportCommand))]
-    [NotifyCanExecuteChangedFor(nameof(Bk2ExportCommand))]
     [NotifyCanExecuteChangedFor(nameof(ConvertToCommand))]
     [NotifyCanExecuteChangedFor(nameof(ConvertFromCommand))]
     [NotifyCanExecuteChangedFor(nameof(OpenInAssetBrowserCommand))]
@@ -205,8 +204,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [NotifyCanExecuteChangedFor(nameof(OpenInFileExplorerCommand))]
     [NotifyCanExecuteChangedFor(nameof(PasteFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(RenameFileCommand))]
-    [NotifyCanExecuteChangedFor(nameof(Bk2ImportCommand))]
-    [NotifyCanExecuteChangedFor(nameof(Bk2ExportCommand))]
     [NotifyCanExecuteChangedFor(nameof(OpenInAssetBrowserCommand))]
     [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
     private FileModel? _selectedItem;
@@ -284,12 +281,32 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [RelayCommand(CanExecute = nameof(CanCopyFile))]
     private void CopyFile() => Clipboard.SetDataObject(SelectedItem.NotNull().FullName);
 
+
+    public static bool IsShiftBeingHeld => Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
+    public static bool IsCtrlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+
     /// <summary>
-    /// Copies relative path of node.
+    /// Copies relative path of node (Or absolute path, if ctrl+shift key is held)
     /// </summary>
     private bool CanCopyRelPath() => ActiveProject != null && SelectedItem != null;
     [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
-    private void CopyRelPath() => Clipboard.SetDataObject(FileModel.GetRelativeName(SelectedItem.NotNull().FullName, ActiveProject.NotNull()));
+    private void CopyRelPath()
+    {
+        var absolutePath = SelectedItem.NotNull().FullName;
+        if ((IsShiftBeingHeld || IsCtrlBeingHeld) && Path.Exists(absolutePath))
+        {
+            absolutePath = absolutePath.Replace('/', Path.DirectorySeparatorChar);
+            if (IsCtrlBeingHeld)
+            {
+                absolutePath = Path.GetDirectoryName(absolutePath);
+            }
+            Clipboard.SetDataObject(absolutePath);
+            return;
+        }
+
+        Clipboard.SetDataObject(FileModel.GetRelativeName(absolutePath, ActiveProject.NotNull()));
+    }
+
 
     /// <summary>
     /// Reimports the game file to replace the current one
@@ -553,49 +570,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private bool IsInArchiveFolder(FileModel model) => ActiveProject is not null && model.FullName.Contains(ActiveProject.ModDirectory);
     private bool IsInRawFolder(FileModel model) => ActiveProject is not null && model.FullName.Contains(ActiveProject.RawDirectory);
-
-    private bool CanBk2Import() => SelectedItem != null && IsInRawFolder(SelectedItem) && SelectedItem.Extension.ToLower().Contains("avi") && ActiveProject is not null;
-    [RelayCommand(CanExecute = nameof(CanBk2Import))]
-    private void Bk2Import()
-    {
-        var modpath = Path.Combine(ActiveProject.NotNull().ModDirectory, FileModel.GetRelativeName(SelectedItem.NotNull().FullName, ActiveProject));
-        modpath = Path.ChangeExtension(modpath, ".bk2");
-        var directoryName = Path.GetDirectoryName(modpath).NotNull();
-        Directory.CreateDirectory(directoryName);
-
-        var args = $"\"{SelectedItem.FullName}\" \"{modpath}\" /o /#";
-        var procInfo =
-            new ProcessStartInfo(Path.Combine(ISettingsManager.GetWorkDir(), "testc.exe"))
-            {
-                Arguments = args,
-                WorkingDirectory = ISettingsManager.GetWorkDir()
-            };
-
-        var process = Process.Start(procInfo);
-        process?.WaitForInputIdle();
-    }
-
-    private bool CanBk2Export() => SelectedItem != null && !IsInRawFolder(SelectedItem) && SelectedItem.Extension.ToLower().Contains("bk2") && ActiveProject is not null;
-    [RelayCommand(CanExecute = nameof(CanBk2Export))]
-    private void Bk2Export()
-    {
-        var rawpath = Path.Combine(ActiveProject.NotNull().RawDirectory, FileModel.GetRelativeName(SelectedItem.NotNull().FullName, ActiveProject));
-        rawpath = Path.ChangeExtension(rawpath, ".avi");
-        var directoryName = Path.GetDirectoryName(rawpath).NotNull();
-        Directory.CreateDirectory(directoryName);
-
-        var args = $"\"{SelectedItem.FullName}\" \"{rawpath}\" /o /#";
-        var procInfo =
-            new ProcessStartInfo(Path.Combine(ISettingsManager.GetWorkDir(),
-                "testconv.exe"))
-            {
-                Arguments = args,
-                WorkingDirectory = ISettingsManager.GetWorkDir()
-            };
-
-        var process = Process.Start(procInfo);
-        process?.WaitForInputIdle();
-    }
 
     private bool CanConvertTo() => SelectedItems != null && ActiveProject is not null;
     [RelayCommand(CanExecute = nameof(CanConvertTo))]

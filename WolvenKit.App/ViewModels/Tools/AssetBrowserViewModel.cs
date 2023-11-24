@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reactive;
-using System.Reactive.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -355,7 +354,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
 #pragma warning disable CS8604 // Possible null reference argument.
                 var uses = await db.Files.Include("Archive").Include("Uses")
-                    .Where(x => x.Archive != null && x.Archive.Name == file.ArchiveName && x.Hash == hash)
+                    .Where(x => x.Archive != null && x.Archive.Name == file.ArchiveName && x.Archive.Source == file.ArchiveSource.ToString() && x.Hash == hash)
                     .Where(x => x.Uses != null)
                     .Select(x => x.Uses.Select(y => y.Hash))
                     .ToListAsync();
@@ -876,13 +875,6 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
     private void CyberEnhancedSearch()
     {
-        // Exceptions - this is bananatown you can't put this outside the func, but otherwise we're repeating the types all over the place
-        IObservable<IChangeSet<RedFileViewModel, ulong>> LogExceptionAndReturnEmpty(Exception ex)
-        {
-            _loggerService.Error($"Error performing search: {ex.Message}");
-            return Observable.Empty<IChangeSet<RedFileViewModel, ulong>>();
-        }
-
         if (string.IsNullOrWhiteSpace(SearchBarText))
         {
             RightItems.Clear();
@@ -903,29 +895,18 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
         var filesToSearch =
             gameFilesOrMods
-                .Connect()   // Maybe we could avoid reconnecting every time? Dunno if it makes a difference
-                .TransformMany(archive => archive.Files.Values, fileInArchive => fileInArchive.Key);
-
-        var filesMatchingQuery =
-            filesToSearch
-                .Filter((file) =>
-                    searchAsSequentialRefinements.All(refinement => refinement.Match(file)));
-
-        var viewableFileList =
-            filesMatchingQuery
-                .Transform(matchingFile => new RedFileViewModel(matchingFile))
-                .Catch((Func<Exception, IObservable<IChangeSet<RedFileViewModel, ulong>>>)LogExceptionAndReturnEmpty)
-                .Bind(out var list);
-
-        viewableFileList
-            .Subscribe()
-            .Dispose();
+                .Items
+                .SelectMany(x => x.Files.Values)
+                .Where(file => searchAsSequentialRefinements.All(refinement => refinement.Match(file)))
+                .GroupBy(x => x.Key)
+                .Select(x => x.First())
+                .Select(matchingFile => new RedFileViewModel(matchingFile));
 
         // Should add an indicator here of failures and non-matches
 
         RightItems.SuppressNotification = true;
         RightItems.Clear();
-        RightItems.AddRange(list);
+        RightItems.AddRange(filesToSearch);
         RightItems.SuppressNotification = false;
     }
 

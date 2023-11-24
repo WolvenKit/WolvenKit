@@ -1,6 +1,5 @@
 import * as Logger from 'Logger.wscript';
 import * as TypeHelper from 'TypeHelper.wscript';
-import {CName} from "TypeHelper.wscript";
 
 /*
  *     .___                      __           .__                                     __  .__    .__           _____.__.__
@@ -31,9 +30,7 @@ function stringifyPotentialCName(cnameOrString, _info = '', suppressSpaceCheck =
 
     if (ret && ret.trim && ret.trim() !== ret) {
         Logger.Error(`${info}has trailing or leading spaces! Make sure to remove them, or the component might not work!`);
-    }
-
-    if (!suppressSpaceCheck && ret?.indexOf && ret.indexOf(" ") >= 0) {
+    } else if (!suppressSpaceCheck && ret?.indexOf && ret.indexOf(" ") >= 0) {
         Logger.Warning(`${info}includes spaces. Please use _ instead.`);
     }
     return ret;
@@ -42,15 +39,15 @@ function stringifyPotentialCName(cnameOrString, _info = '', suppressSpaceCheck =
 /**
  * For ArchiveXL path validation: does the string contain the same number of { and }?
  * Will set flag to allow checking for root entity
- * 
+ *
  * @param inputString depot path to check
  */
 function checkCurlyBraces(inputString) {
-   if (!inputString.includes('{') || inputString.includes('}')) {
-       return true;
-   }
+    if (!inputString.includes('{') || inputString.includes('}')) {
+        return true;
+    }
     isUsingSubstitution = true;
-   
+
     let openBraceCount = 0;
     let closeBraceCount = 0;
 
@@ -108,9 +105,9 @@ function checkIfFileIsBroken(data, fileType, _info = '') {
         return false;
     }
 
-    Logger.Error(`${info}: File structure invalid. This will not work (best-case) or crash your game (worst-case).`);
-    Logger.Error(`The following errors have been found:`);
-    errorMsg.forEach((msg) => Logger.Error(`\t${msg}`));
+    Logger.Warning(`${info}: If this .ent file belongs to a character, you can ignore this.`);
+    Logger.Warning(`If this is an item, this will not work (best-case) or crash your game (worst-case). List of errors:`);
+    errorMsg.forEach((msg) => Logger.Warning(`\t${msg}`));
     return true;
 }
 
@@ -125,9 +122,9 @@ function checkDepotPath(_depotPath, _info, allowEmpty = false) {
         return false;
     }
     const info = _info ? `${_info}: ` : '';
-    
+
     // if (!_info) {         throw new Error();     }
-    
+
     const depotPath = stringifyPotentialCName(_depotPath) || '';
     if (!depotPath) {
         if (allowEmpty) {
@@ -136,9 +133,9 @@ function checkDepotPath(_depotPath, _info, allowEmpty = false) {
         Logger.Warning(`${info}DepotPath not set`);
         return false;
     }
-    
+
     // check if the path has uppercase characters
-    if (hasUppercase(depotPath)) {        
+    if (hasUppercase(depotPath)) {
         return false;
     }
 
@@ -147,20 +144,11 @@ function checkDepotPath(_depotPath, _info, allowEmpty = false) {
         Logger.Warning(`${info}No depot path set, only hash given`);
         return false;
     }
-    
-    if (depotPath.startsWith(ARCHIVE_XL_VARIANT_INDICATOR) && !(depotPath.includes("{"))) {
-        Logger.Error(`${info}${depotPath} starts with an * but doesn't contain substitution. This will crash your game!`);
-        return false;
-    }
-    // check if the path is using substitutions
-    if (!checkCurlyBraces(depotPath)) {
-        Logger.Warning(`${info}${depotPath}'s { and } count doesn't match. Did you make a typo?`);
-    }
 
     // ArchiveXL 1.5 variant magic requires checking this in a loop
     const componentMeshPaths = getArchiveXlMeshPaths(stringifyPotentialCName(depotPath));
     let ret = true;
-    
+
     componentMeshPaths.forEach((resolvedMeshPath) => {
         if (pathToCurrentFile === resolvedMeshPath) {
             Logger.Error(`${info}Depot path ${resolvedMeshPath} references itself. This _will_ crash the game!`);
@@ -170,18 +158,15 @@ function checkDepotPath(_depotPath, _info, allowEmpty = false) {
         // all fine
         if (wkit.FileExists(resolvedMeshPath)) {
             return;
-        }        
+        }
         // File does not exist
         if (shouldHaveSubstitution(resolvedMeshPath)) {
-            if (!resolvedMeshPath.startsWith(ARCHIVE_XL_VARIANT_INDICATOR)) {
-                Logger.Warning(`${info}${resolvedMeshPath}: Not starting with *, substitution disabled`);
-            } else if (!checkCurlyBraces(resolvedMeshPath)) {
-                Logger.Warning(`${info}${resolvedMeshPath}: Number of { not matching number of }`);
-            } else {
-                Logger.Info(`${info}${resolvedMeshPath}: substitution couldn't be resolved. It's either invalid or not yet supported in Wolvenkit.`);                
+            const nameHasSubstitution = resolvedMeshPath && resolvedMeshPath.includes("{") || resolvedMeshPath.includes("}")
+            if (nameHasSubstitution && entSettings.warnAboutIncompleteSubstitution) {
+                Logger.Info(`${info}${resolvedMeshPath}: substitution couldn't be resolved. It's either invalid or not yet supported in Wolvenkit.`);
             }
         } else {
-            Logger.Warning(`${info}${resolvedMeshPath} not found in project or game files`);                
+            Logger.Warning(`${info}${resolvedMeshPath} not found in project or game files`);
         }
         ret = false;
     })
@@ -193,10 +178,10 @@ function validateShaderTemplate(depotPath, _info) {
     if (!checkDepotPath(depotPath, _info)) {
         return;
     }
-    
+
     // shouldn't be falsy, checkDepotPath should take care of that, but better safe than sorry
     const basePathString = stringifyPotentialCName(depotPath) || '';
-    
+
     const extensionParts = basePathString.match(/[^.]+$/);
 
     if (!extensionParts || validMaterialFileExtensions.includes(extensionParts[0])) {
@@ -224,7 +209,7 @@ function shouldHaveSubstitution(str, ignoreAsterisk = false) {
 }
 
 /**
- * Matches placeholders such as 
+ * Matches placeholders such as
  * ----------------
  * ================
  */
@@ -249,6 +234,11 @@ function resetInternalFlagsAndCaches() {
     // ent file
     hasEmptyAppearanceName = false;
     isRootEntity = false;
+    componentIds.length = 0;
+
+    // mesh stuff
+    meshAppearancesNotFound = {}
+    meshAppearancesNotFoundByComponent = {}
 }
 
 //#region animFile
@@ -358,12 +348,14 @@ function printInvalidAppearanceWarningIfFound() {
         Logger.Warning(`${meshPath} with the appearances [ ${definedAppearances} }`);
 
         // print as table
-        Logger.Warning(`  ${'Source'.padEnd(50, ' ')} | Appearance`);
+        Logger.Warning(`  ${'Source'.padEnd(65, ' ')} | Appearance`);
         // print table entries
         for (let i = componentNames.length; i > 0; i -= 1) {
-            const calledFrom = componentNames.pop();
+            let calledFrom = componentNames.pop();
+            // truncate at the beginning if too long
+            if (calledFrom.length >= 60) calledFrom = `…${calledFrom.substring(calledFrom.length - 60)}`;
             const appearanceName = appearanceNames.pop();
-            Logger.Warning(`  ${calledFrom.padEnd(50, ' ')} | ${appearanceName}`);
+            Logger.Warning(`  ${calledFrom.padEnd(65, ' ')} | ${appearanceName}`);
         }
     })
 
@@ -405,10 +397,10 @@ function printSubstitutionWarningsIfFound() {
     if (!warningKeys.length) {
         return;
     }
-    
-    Logger.Info('Some of your components seem to include ArchiveXL dynamic variants, but they may have errors:');    
+
+    Logger.Info('Some of your components seem to include ArchiveXL dynamic variants, but they may have errors:');
     warningKeys.forEach((warningSource) => {
-        const warnings = (invalidVariantAndSubstitutions[warningSource] || []).filter(function(item, pos, self) {
+        const warnings = (invalidVariantAndSubstitutions[warningSource] || []).filter(function (item, pos, self) {
             return self.indexOf(item) === pos;
         });
         if (warnings.length) {
@@ -416,7 +408,7 @@ function printSubstitutionWarningsIfFound() {
             Logger.Warning(`${warningSource}: ${output}`);
         }
     });
-    
+
 }
 
 
@@ -442,7 +434,7 @@ const overriddenComponents = [];
 const componentOverrideCollisions = [];
 
 /**
- * List of mesh paths from .app appearance's components. 
+ * List of mesh paths from .app appearance's components.
  * Will be used to check against meshesByEntityPath[entityDepotPath] for duplications.
  */
 const meshPathsFromComponents = [];
@@ -452,19 +444,24 @@ const meshPathsFromComponents = [];
  */
 const alreadyVerifiedAppFiles = [];
 
+/**
+ * For ent files: Make sure that there's no duplication of component IDs
+ */
+let componentIds = [];
+
 let appFileSettings = {};
 
 function component_collectAppearancesFromMesh(componentMeshPath) {
     if (!componentMeshPath || /^\d+$/.test(componentMeshPath) || !wkit.FileExists(componentMeshPath)) return;
-    if (undefined === appearanceNamesByMeshFile[componentMeshPath] ) {
+    if (undefined === appearanceNamesByMeshFile[componentMeshPath]) {
         try {
-            const fileContent = wkit.LoadGameFileFromProject(componentMeshPath, 'json');            
+            const fileContent = wkit.LoadGameFileFromProject(componentMeshPath, 'json');
             const mesh = TypeHelper.JsonParse(fileContent);
             if (!mesh || !mesh.Data || !mesh.Data.RootChunk || !mesh.Data.RootChunk.appearances) {
                 return;
             }
             appearanceNamesByMeshFile[componentMeshPath] = mesh.Data.RootChunk.appearances
-                .map((appearance) => stringifyPotentialCName(appearance.Data.name));              
+                .map((appearance) => stringifyPotentialCName(appearance.Data.name));
         } catch (err) {
             Logger.Warning(`Couldn't parse ${componentMeshPath}`);
             appearanceNamesByMeshFile[componentMeshPath] = null;
@@ -493,6 +490,8 @@ function appFile_collectComponentsFromEntPath(entityDepotPath, validateRecursive
             const entity = TypeHelper.JsonParse(fileContent);
             const components = entity && entity.Data && entity.Data.RootChunk ? entity.Data.RootChunk.components || [] : [];
             isInvalidVariantComponent = false;
+            const _componentIds = componentIds;
+            componentIds.length = 0;
             for (let i = 0; i < components.length; i++) {
                 const component = components[i];
                 entFile_appFile_validateComponent(component, i, validateRecursively, `${info}.components[${i}]`);
@@ -501,6 +500,7 @@ function appFile_collectComponentsFromEntPath(entityDepotPath, validateRecursive
                     meshesInEntityFile.push(meshPath);
                 }
             }
+            componentIds = _componentIds;
         } catch (err) {
             Logger.Error(`Couldn't load file from depot path: ${entityDepotPath} (${err.message})`);
             Logger.Info(`\tThat can happen if you use a root entity instead of a mesh entity.`);
@@ -514,24 +514,19 @@ function appFile_collectComponentsFromEntPath(entityDepotPath, validateRecursive
 function appearanceNotFound(meshPath, meshAppearanceName, calledFrom) {
     meshAppearancesNotFound[meshPath] ||= [];
     meshAppearancesNotFound[meshPath].push(meshAppearanceName);
-    
+
     meshAppearancesNotFoundByComponent[meshPath] ||= [];
     meshAppearancesNotFoundByComponent[meshPath].push(calledFrom);
 }
-
-function resetAppearanceNotFoundLookup() {
-    
-}
-
 function appFile_validatePartsOverride(override, index, appearanceName) {
-    
-    let info = `${appearanceName}.partsOverride[${index}]`;    
+
+    let info = `${appearanceName}.partsOverride[${index}]`;
     const depotPath = stringifyPotentialCName(override.partResource.DepotPath, info);
 
     if (!checkDepotPath(depotPath, info, true)) {
         return;
     }
-    
+
     if (depotPath && !depotPath.endsWith(".ent")) {
         Logger.Error(`${info}: ${depotPath} does not point to an entity file! This can crash your game!`);
         return;
@@ -540,7 +535,7 @@ function appFile_validatePartsOverride(override, index, appearanceName) {
     if (isDynamicAppearance && depotPath && shouldHaveSubstitution(depotPath)) {
         Logger.Warning(`${info}: Substitution in depot path not supported.`);
     }
-    
+
     const appFilePath = pathToCurrentFile;
     pathToCurrentFile = depotPath;
 
@@ -561,14 +556,15 @@ function appFile_validatePartsOverride(override, index, appearanceName) {
             }
         }
     }
-    
+
     // restore app file path 
     pathToCurrentFile = appFilePath;
-    
+
 }
-function appFile_validatePartsValue(partsValueEntityDepotPath, index, appearanceName, validateRecursively) {    
+
+function appFile_validatePartsValue(partsValueEntityDepotPath, index, appearanceName, validateRecursively) {
     const info = `${appearanceName}.partsValues[${index}]`;
-    
+
     if (!checkDepotPath(partsValueEntityDepotPath, info)) {
         return;
     }
@@ -585,17 +581,16 @@ function appFile_validateAppearance(appearance, index, validateRecursively, vali
     if (hasUppercasePaths) {
         return;
     }
-    
+
     let appearanceName = stringifyPotentialCName(appearance.Data ? appearance.Data.name : '');
 
     if (appearanceName.length === 0 || /^[^A-Za-z0-9]+$/.test(appearanceName)) return;
-    const appearanceErrors = [];
-    
+
     if (!appearanceName) {
         appearanceName = `appearances[${index}]`;
         appearanceErrorMessages[appearanceName].push(`appearance definition #${index} has no name yet`);
     }
-    
+
     appearanceErrorMessages[appearanceName] ||= [];
 
     if (alreadyDefinedAppearanceNames.includes(appearanceName)) {
@@ -606,10 +601,13 @@ function appFile_validateAppearance(appearance, index, validateRecursively, vali
 
     // we'll collect all mesh paths that are linked in entity paths
     meshPathsFromComponents.length = 0;
-    
+
     // might be null
-    const components = appearance.Data.components || [];    
-    
+    const components = appearance.Data.components || [];
+
+    const _componentIds = componentIds;
+    componentIds.length = 0;
+
     if (isDynamicAppearance && components.length) {
         appearanceErrorMessages[appearanceName].push(`.app ${appearanceName} is loaded as dynamic, but it has components outside of a mesh entity. They will be IGNORED.`)
     } else {
@@ -622,11 +620,13 @@ function appFile_validateAppearance(appearance, index, validateRecursively, vali
                 const meshDepotPath = stringifyPotentialCName(component.mesh.DepotPath);
                 meshPathsFromComponents.push(meshDepotPath);
             }
-        }        
+        }
     }
 
+    componentIds = _componentIds;
+
     const meshPathsFromEntityFiles = [];
-    
+
     // check these before the overrides, because we're parsing the linked files
     for (let i = 0; i < appearance.Data.partsValues.length; i++) {
         const partsValue = appearance.Data.partsValues[i];
@@ -655,7 +655,7 @@ function appFile_validateAppearance(appearance, index, validateRecursively, vali
 
     const allComponentNames = components.map((component, index) => {
 
-        return stringifyPotentialCName(component.name, `${appearanceName}.components[${index}]`);
+        return stringifyPotentialCName(component.name, `${appearanceName}.components[${index}]`, (component.$type || '').toLowerCase().includes('debug'));
     });
     const numAmmComponents = allComponentNames.filter((name) => !!name && name.startsWith('amm_prop_slot')).length;
     if (numAmmComponents > 0 && numAmmComponents < 4 && !allComponentNames.includes('amm_prop_slot1')) {
@@ -676,11 +676,11 @@ function appFile_validateAppearance(appearance, index, validateRecursively, vali
             })
         }
     }
-    
+
     for (let i = 0; i < appearance.Data.partsOverrides.length; i++) {
         appFile_validatePartsOverride(appearance.Data.partsOverrides[i], i, appearanceName);
     }
-    
+
     if (!appearanceErrorMessages[appearanceName]?.length) {
         delete appearanceErrorMessages[appearanceName];
     }
@@ -688,7 +688,7 @@ function appFile_validateAppearance(appearance, index, validateRecursively, vali
 
 export function validateAppFile(app, _appFileSettings) {
     if (!_appFileSettings.Enabled) return;
-    
+
     appFileSettings = _appFileSettings;
 
     resetInternalFlagsAndCaches();
@@ -718,13 +718,13 @@ function _validateAppFile(app, validateRecursively, calledFromEntFileValidation)
     const validateCollisions = calledFromEntFileValidation
         ? entSettings.checkComponentNameDuplication
         : appFileSettings.checkComponentNameDuplication;
-    
-    
+
+
     invalidVariantAndSubstitutions = {};
-    
+
     meshAppearancesNotFound = {};
     meshAppearancesNotFoundByComponent = {};
-    
+
     appearanceErrorMessages = {};
 
     for (let i = 0; i < app.appearances.length; i++) {
@@ -754,7 +754,7 @@ function getVariantsFromYaml() {
 }
 
 function getArchiveXLVariantComponentNames() {
-    
+
 }
 
 const archiveXLVarsAndValues = {
@@ -771,8 +771,7 @@ function getArchiveXlMeshPaths(depotPath) {
     if (!depotPath.startsWith(ARCHIVE_XL_VARIANT_INDICATOR)) {
         return [depotPath];
     }
-    
-    let paths = [];    
+    let paths = [];
     if (!shouldHaveSubstitution(depotPath) || !checkCurlyBraces(depotPath)) {
         paths.push(depotPath);
     } else {
@@ -784,20 +783,26 @@ function getArchiveXlMeshPaths(depotPath) {
             }
         });
     }
-    
+
     // If nothing was substituted: We're done here
     if (!paths.length) {
         paths.push(depotPath.replace('*', ''));
     }
-    
+
     let ret = [];
     paths.forEach((path) => {
-        const resolvedPaths = getArchiveXlMeshPaths(path);
-        ret = [...ret, ...resolvedPaths];        
+        const resolvedPaths = getArchiveXlMeshPaths(path).map((paths) => {
+            if (depotPath.indexOf(path) && !path.startsWith(ARCHIVE_XL_VARIANT_INDICATOR) && depotPath.replace(path, "") === "*") {
+                return `*${path}`;
+            }
+            return shouldHaveSubstitution(path, true) ? path : path.replaceAll('*', '');
+        });
+
+        ret = [...ret, ...resolvedPaths];
     })
-    
+
     // If nothing was substituted: We're done here
-    return ret.map((path) => path.replace('*', ''));
+    return ret;
 }
 
 //#region entFile
@@ -817,48 +822,75 @@ const MISSING_PREFIX_WARNING = 'not starting with *, substitution disabled';
 const WITH_MESH = 'withMesh';
 // For different component types, check DepotPath property
 function entFile_appFile_validateComponent(component, _index, validateRecursively, info) {
-    const componentName = stringifyPotentialCName(component.name, info, isRootEntity) ?? '';
     let type = component.$type || '';
-        
-    // entGarmentSkinnedMeshComponent - entSkinnedMeshComponent - entMeshComponent
-    if (component && component.mesh && component.mesh.DepotPath) {
-        type = WITH_MESH;
-    }
+    const isDebugComponent = type.toLowerCase().includes('debug');
 
+    const componentName = stringifyPotentialCName(component.name, info, (isRootEntity || isDebugComponent)) ?? '';
+
+    // allow empty paths for debug components
+    let depotPathCanBeEmpty = isDebugComponent;
+
+    // entGarmentSkinnedMeshComponent - entSkinnedMeshComponent - entMeshComponent
+    if (component?.mesh?.DepotPath) {
+        type = WITH_MESH;
+        depotPathCanBeEmpty ||= componentName !== 'amm_prop_slot1' && componentName?.startsWith('amm_prop_slot');
+    } else if (!isRootEntity && type.toLowerCase().includes('mesh')) {
+        Logger.Info(`Component of type ${type} doesn't have a mesh path`);
+    }
 
     // flag for mesh validation, in case this is called recursively from app file
     let hasMesh = false;
     switch (type) {
         case WITH_MESH:
-            const canBeEmpty = componentName !== 'amm_prop_slot1' && componentName?.startsWith('amm_prop_slot');
-            checkDepotPath(component.mesh.DepotPath, `${info}.${componentName}`, canBeEmpty);
+            checkDepotPath(component.mesh.DepotPath, `${info}.${componentName}`, depotPathCanBeEmpty);
             hasMesh = true;
             break;
         case 'workWorkspotResourceComponent':
-            checkDepotPath(component.workspotResource.DepotPath, `${info}.${componentName}`);
+            checkDepotPath(component.workspotResource.DepotPath, `${info}.${componentName}`, depotPathCanBeEmpty);
             break;
         default:
             break;
+    }
+
+    // TODO: This will potentially be resolved on Wolvenkit side. One day. Hopefully.
+    // Check if component IDs are even numbers and unique within the scope of the entity.
+    // They should probably be globally unique, but we're not checking this, oh no, sir.
+    if (hasMesh && entSettings.checkComponentIdsForGarmentSupport && !!component.id && !info?.startsWith('app')) {
+        const componentIdErrors = [];
+        if (componentIds.includes(component.id) && !componentName.startsWith("amm")) {
+            componentIdErrors.push("not unique");
+        } else {
+            componentIds.push(component.id);
+        }
+        // parseInt or parseFloat will lead to weird side effects here. Give it an ID of 1638580377071202307, 
+        // and it'll arrive at the numeric value of 1638580377071202300. 
+        if (!/^[02468]$/.test((component.id.match(/\d$/) || ["0"])[0])) {
+            componentIdErrors.push("not an even number");
+        }
+        if (componentIdErrors.length) {
+            Logger.Warning(`${info}: Component ID ${component.id} may cause errors with garment support:`);
+            Logger.Warning(`\t${componentIdErrors.join("\n\t")}`);
+        }
     }
 
     if (!validateRecursively || !hasMesh || hasUppercasePaths) {
         // Logger.Error(`${componentMeshPath}: not validating mesh`);
         return;
     }
-    
+
     const meshDepotPath = stringifyPotentialCName(component.mesh.DepotPath);
     const componentMeshPaths = getArchiveXlMeshPaths(meshDepotPath);
-        
+
     componentMeshPaths.forEach((componentMeshPath) => {
-        
+
         // check for component name uniqueness
         if (meshesByComponentName[componentName] && meshesByComponentName[componentName] !== componentMeshPath) {
             componentNameCollisions[componentMeshPath] = componentName;
             componentNameCollisions[meshesByComponentName[componentName]] = componentName;
         }
-        
+
         meshesByComponentName[componentName] = componentMeshPath;
-    
+
         if (/^\d+$/.test(componentMeshPath)) {
             return;
         }
@@ -868,38 +900,38 @@ function entFile_appFile_validateComponent(component, _index, validateRecursivel
         }
 
         // ArchiveXL: Check for invalid component substitution
-        
+
         const meshAppearanceName = stringifyPotentialCName(component.meshAppearance);
         const nameHasSubstitution = meshAppearanceName && meshAppearanceName.includes("{") || meshAppearanceName.includes("}")
         const pathHasSubstitution = componentMeshPath && componentMeshPath.includes("{") || componentMeshPath.includes("}")
-        
+
         const localErrors = [];
         isUsingSubstitution = isUsingSubstitution || nameHasSubstitution || pathHasSubstitution;
-        
+
         if (nameHasSubstitution && !checkCurlyBraces(meshAppearanceName)) {
-            localErrors.push(CURLY_BRACES_WARNING);            
-        } 
+            localErrors.push(CURLY_BRACES_WARNING);
+        }
         if (nameHasSubstitution && !meshAppearanceName.startsWith(ARCHIVE_XL_VARIANT_INDICATOR)) {
-            localErrors.push(MISSING_PREFIX_WARNING);            
-        } 
+            localErrors.push(MISSING_PREFIX_WARNING);
+        }
         if (localErrors.length) {
             invalidVariantAndSubstitutions[info] ||= [];
             invalidVariantAndSubstitutions[info].push(`meshAppearance: ${meshAppearanceName}: ${localErrors.join(', ')}`);
             localErrors.length = 0;
         }
-                
+
         if (pathHasSubstitution && !checkCurlyBraces(componentMeshPath)) {
-            localErrors.push(CURLY_BRACES_WARNING);            
-        } 
+            localErrors.push(CURLY_BRACES_WARNING);
+        }
         if (pathHasSubstitution && !componentMeshPath.startsWith(ARCHIVE_XL_VARIANT_INDICATOR)) {
-            localErrors.push(MISSING_PREFIX_WARNING);            
-        } 
+            localErrors.push(MISSING_PREFIX_WARNING);
+        }
         if (localErrors.length) {
             invalidVariantAndSubstitutions[info] ||= [];
             invalidVariantAndSubstitutions[info].push(`DepotPath: ${componentMeshPath}: ${localErrors.join(', ')}`);
             localErrors.length = 0;
         }
-        
+
         const meshAppearances = component_collectAppearancesFromMesh(componentMeshPath);
         if (!meshAppearances) { // for debugging
             // Logger.Error(`failed to collect appearances from ${componentMeshPath}`);
@@ -908,7 +940,7 @@ function entFile_appFile_validateComponent(component, _index, validateRecursivel
         if (meshAppearanceName.startsWith(ARCHIVE_XL_VARIANT_INDICATOR)) {
             // TODO: ArchiveXL variant checking
         } else if (meshAppearances && meshAppearances.length > 0 && !meshAppearances.includes(meshAppearanceName)) {
-            appearanceNotFound(componentMeshPath, meshAppearanceName, `ent component[${_index}] (${componentName})`);            
+            appearanceNotFound(componentMeshPath, meshAppearanceName, `${info} (${componentName})`);
         }
     })
 }
@@ -929,10 +961,9 @@ function getAppearanceNamesInAppFile(_depotPath) {
         const fileContent = wkit.LoadGameFileFromProject(depotPath, 'json');
         const appFile = TypeHelper.JsonParse(fileContent);
         if (null !== appFile) {
-            const appNames = (appFile.Data.RootChunk.appearances || [])
+            appearanceNamesByAppFile[depotPath] = (appFile.Data.RootChunk.appearances || [])
                 .map((app, index) => stringifyPotentialCName(app.Data.name, `${depotPath}: appearances[${index}].name`))
                 .filter((name) => !PLACEHOLDER_NAME_REGEX.test(name));
-            appearanceNamesByAppFile[depotPath] = appNames;
         }
     }
     return appearanceNamesByAppFile[depotPath];
@@ -946,9 +977,8 @@ const invalidFiles = [];
 
 /**
  * @param appearance the appearance object
- * @param index numeric index (for debugging)
  */
-function entFile_validateAppearance(appearance, index) {
+function entFile_validateAppearance(appearance) {
     const appearanceName = (stringifyPotentialCName(appearance.name) || '');
     let appearanceNameInAppFile = (stringifyPotentialCName(appearance.appearanceName) || '').trim()
     if (!appearanceNameInAppFile || appearanceNameInAppFile === 'None') {
@@ -968,33 +998,36 @@ function entFile_validateAppearance(appearance, index) {
     if (isDynamicAppearance && appearanceName.includes('&')) {
         Logger.Error(`${info}: dynamic appearances can't support suffixes in the root entity!`);
     }
-    
+
     if (!!appearanceName && alreadyDefinedAppearanceNames.includes(`ent_${appearanceName}`)) {
         Logger.Warning(`.ent file: An appearance with the name ${appearanceName} is already defined`);
     } else {
-        alreadyDefinedAppearanceNames.push(`ent_${appearanceName}`);        
+        alreadyDefinedAppearanceNames.push(`ent_${appearanceName}`);
     }
-    
+
     const appFilePath = stringifyPotentialCName(appearance.appearanceResource.DepotPath);
-    if (!checkDepotPath(appFilePath, info) || alreadyVerifiedAppFiles.includes(appFilePath)) {
+    if (!checkDepotPath(appFilePath, info)) {
         return;
     }
-    
+
     if (!appFilePath.endsWith('app')) {
         Logger.Warning(`${info}: appearanceResource '${appFilePath}' does not appear to be an .app file`);
         return;
     }
-    
+
     if (!entSettings.validateRecursively) {
         return;
     }
-    
+
     const entFilePath = pathToCurrentFile;
-    pathToCurrentFile = appFilePath; 
-    
+    pathToCurrentFile = appFilePath;
+
     const namesInAppFile = getAppearanceNamesInAppFile(appFilePath, appearanceName) || [];
-    
-    if (!namesInAppFile.includes(appearanceNameInAppFile)) {
+
+    // if we're being dynamic here, also check for appearance names with suffixes. 
+    if (!namesInAppFile.includes(appearanceNameInAppFile)
+        && !isDynamicAppearance && !namesInAppFile.includes(appearanceNameInAppFile.split('&').pop() || '')
+    ) {
         entAppearancesNotFoundByFile[appFilePath] ||= {};
         entAppearancesNotFoundByFile[appFilePath][appearanceName] = appearanceNameInAppFile;
     }
@@ -1008,10 +1041,10 @@ function entFile_validateAppearance(appearance, index) {
     if (isRootEntity) {
         const fileContent = wkit.LoadGameFileFromProject(appFilePath, 'json');
         const appFile = TypeHelper.JsonParse(fileContent);
-        if (null === appFile) {
-            Logger.Warning(`File ${appFilePath} exists, but couldn't be parsed.`);
+        if (null === appFile && !invalidFiles.includes(appFilePath)) {
+            Logger.Warning(`${info}: File ${appFilePath} exists, but couldn't be parsed. If everything works, you can ignore this warning.`);
             invalidFiles.push(appFilePath);
-        } else {
+        } else if (null !== appFile) {
             _validateAppFile(appFile, entSettings.validateRecursively, true);
         }
     }
@@ -1019,25 +1052,28 @@ function entFile_validateAppearance(appearance, index) {
     pathToCurrentFile = entFilePath;
 }
 
+
+const emptyAppearanceString = "base\\characters\\appearances\\player\\items\\empty_appearance.app / default";
+
 function validateAppearanceNameSuffixes(appearanceName, entAppearanceNames) {
     if (!appearanceName || !appearanceName.includes('&')) {
         return;
     }
     if (appearanceName.includes('FPP') && !entAppearanceNames.includes(appearanceName.replace('FPP', 'TPP'))) {
         Logger.Warning(`${appearanceName}: You have not defined a third person appearance.`)
-        Logger.Warning(`To avoid display bugs, add the tag "EmptyAppearance:TPP" or define "${appearanceName.replace('FPP', 'TPP')}" and point it to an empty appearance in the .app file.`);
+        Logger.Warning(`To avoid display bugs, add the tag "EmptyAppearance:TPP" or define "${appearanceName.replace('FPP', 'TPP')}" and point it to ${emptyAppearanceString}.`);
     }
     if (appearanceName.includes('TPP') && !entAppearanceNames.includes(appearanceName.replace('TPP', 'FPP'))) {
         Logger.Warning(`${appearanceName}: You have not defined a first person appearance.`);
-        Logger.Warning(`To avoid display bugs, add the tag "EmptyAppearance:FPP" or define "${appearanceName.replace('TPP', 'FPP')}" and point it to an empty appearance in the .app file.`);
+        Logger.Warning(`To avoid display bugs, add the tag "EmptyAppearance:FPP" or define "${appearanceName.replace('TPP', 'FPP')}" and point it to ${emptyAppearanceString}.`);
     }
     if (appearanceName.includes('Male') && !entAppearanceNames.includes(appearanceName.replace('Male', 'Female'))) {
         Logger.Warning(`${appearanceName}: You have not defined a female variant.`);
-        Logger.Warning(`To avoid display bugs, add the tag "EmptyAppearance:Female" or define "${appearanceName.replace('Male', 'Female')}" and point it to an empty appearance in the .app file.`);
+        Logger.Warning(`To avoid display bugs, add the tag "EmptyAppearance:Female" or define "${appearanceName.replace('Male', 'Female')}" and point it to ${emptyAppearanceString}.`);
     }
     if (appearanceName.includes('Female') && !entAppearanceNames.includes(appearanceName.replace('Female', 'Male'))) {
         Logger.Warning(`${appearanceName}: You have not defined a male variant.`);
-        Logger.Warning(`To avoid display bugs, add the tag "EmptyAppearance:Female" or define "${appearanceName.replace('Female', 'Male')}" and point it to an empty appearance in the .app file.`);
+        Logger.Warning(`To avoid display bugs, add the tag "EmptyAppearance:Female" or define "${appearanceName.replace('Female', 'Male')}" and point it to ${emptyAppearanceString}.`);
     }
 }
 
@@ -1049,12 +1085,11 @@ function validateAppearanceNameSuffixes(appearanceName, entAppearanceNames) {
 export function validateEntFile(ent, _entSettings) {
     if (!_entSettings?.Enabled) return;
 
-    if (ent?.Data?.RootChunk) return validateEntFile(ent.Data.RootChunk);
+    if (ent?.Data?.RootChunk) return validateEntFile(ent.Data.RootChunk, _entSettings);
     if (checkIfFileIsBroken(ent, 'ent')) return;
 
     entSettings = _entSettings;
     resetInternalFlagsAndCaches();
-
 
     const allComponentNames = [];
     const duplicateComponentNames = [];
@@ -1080,7 +1115,8 @@ export function validateEntFile(ent, _entSettings) {
     // validate ent component names
     for (let i = 0; i < (ent.components.length || 0); i++) {
         const component = ent.components[i];
-        const componentName = stringifyPotentialCName(component.name, `ent.components[${i}]`, isRootEntity) || `${i}`;
+        const isDebugComponent = (component?.$type || '').toLowerCase().includes('debug');
+        const componentName = stringifyPotentialCName(component.name, `ent.components[${i}]`, isRootEntity || isDebugComponent) || `${i}`;
         entFile_appFile_validateComponent(component, i, _entSettings.validateRecursively, `ent.components.${componentName}`);
         // put its name into the correct map
         (allComponentNames.includes(componentName) ? duplicateComponentNames : allComponentNames).push(componentName);
@@ -1092,7 +1128,6 @@ export function validateEntFile(ent, _entSettings) {
     }
 
     isRootEntity = isRootEntity && !entSettings.skipRootEntityCheck;
-
 
     if (!isRootEntity && _entSettings.checkComponentNameDuplication && duplicateComponentNames.length > 0) {
         Logger.Warning(`The following components are defined more than once: [ ${duplicateComponentNames.join(', ')} ]`)
@@ -1124,16 +1159,33 @@ export function validateEntFile(ent, _entSettings) {
 
     const entAppearanceNames = [];
 
-    // if there is just one appearance and the root name ends in an underscore, assume as dynamic
-    isDynamicAppearance ||= ent.appearances.length === 1 && stringifyPotentialCName(ent.appearances[0].name).endsWith('_');
+    // Check naming pattern
+    if (!isDynamicAppearance && ent.appearances.length === 1) {
+        const entName = stringifyPotentialCName(ent.appearances[0].name);
+        const entAppearanceName = stringifyPotentialCName(ent.appearances[0].appearanceName)
+        isDynamicAppearance ||= (entName.endsWith("_") && (entAppearanceName === entName || entAppearanceNames === ''));
+    }
 
     const _pathToCurrentFile = pathToCurrentFile;
+
+    let isUsingSuffixesOnDynamicEnt = false;
 
     for (let i = 0; i < ent.appearances.length; i++) {
         const appearance = ent.appearances[i];
         entFile_validateAppearance(appearance, i);
-        entAppearanceNames.push((stringifyPotentialCName(appearance.name) || ''));
+        const name = (stringifyPotentialCName(appearance.name) || '');
+        entAppearanceNames.push(name);
+        isUsingSuffixesOnDynamicEnt ||= (stringifyPotentialCName(appearance.appearanceName) || '').includes('&');
+        isUsingSuffixesOnDynamicEnt ||= name.includes('&');
         pathToCurrentFile = _pathToCurrentFile;
+    }
+
+    if (isUsingSuffixesOnDynamicEnt) {
+        Logger.Warning('Dynamic appearances: You\'re not supposed to use suffixes (&something) in names or appearance names in your root entity!');
+    }
+    if (isRootEntity && isDynamicAppearance && visualTagList.includes('EmptyAppearance:FPP')) {
+        const exampleAppearanceName = [...entAppearanceNames].pop() || 'appearance';
+        Logger.Warning(`Dynamic appearances: EmptyAppearance:FPP might be flaky. Rename your appearance(s) in the .app file like ${exampleAppearanceName}&camera:tpp instead.`);
     }
 
     // now validate names
@@ -1142,9 +1194,18 @@ export function validateEntFile(ent, _entSettings) {
         validateAppearanceNameSuffixes(stringifyPotentialCName(appearance.name, `ent.appearances[${i}].name`) || '', entAppearanceNames);
     }
 
+    // validate default appearance
+    if (isRootEntity && entAppearanceNames.length) {
+        const defaultAppearance = stringifyPotentialCName(ent.defaultAppearance);
+        if (!!defaultAppearance && !('random' === defaultAppearance || entAppearanceNames.includes(defaultAppearance))) {
+            Logger.Info(`Root entity: defaultAppearance ${defaultAppearance} not found. If this is a prop, then it will spawn invisible.`)
+        }
+    }
+
     ent.inplaceResources ||= [];
     for (let i = 0; i < ent.inplaceResources.length; i++) {
-        checkDepotPath(ent.inplaceResources[i].DepotPath, `inplaceResources[${i}]`);
+        checkDepotPath(ent.inplaceResources[i].DepotPath, `
+            inplaceResources[${i}]`);
     }
 
     if (entSettings.checkDynamicAppearanceTag && (hasEmptyAppearanceName || isUsingSubstitution) && ent.appearances?.length) {
@@ -1186,28 +1247,28 @@ let listOfUsedMaterialSetups = {};
 
 /**
  * Shared for .mesh and .mi files: will validate an entry of the values array of a material definition
- * 
+ *
  * @param key Key of array, e.g. BaseColor, Normal, MultilayerSetup
  * @param materialValue The material value definition contained within
  * @param info String for debugging, e.g. name of material and index of value
  * @param validateRecursively If set to true, file validation will try to follow the .mi chain
  */
-function validateMaterialKeyValuePair(key, materialValue, info, validateRecursively) {    
+function validateMaterialKeyValuePair(key, materialValue, info, validateRecursively) {
     if (key === "$type" || hasUppercasePaths) {
         return;
-    } 
-    
+    }
+
     const materialDepotPath = stringifyPotentialCName(materialValue.DepotPath);
 
     if (hasUppercase(materialDepotPath) || isNumericHash(materialDepotPath)) {
         return;
-    }    
-    
+    }
+
     if (validateRecursively && materialDepotPath.endsWith('.mi') && !materialDepotPath.startsWith('base')) {
         const miFileContent = TypeHelper.JsonParse(wkit.LoadGameFileFromProject(materialDepotPath, 'json'));
         _validateMiFile(miFileContent);
     }
-    
+
     switch (key) {
         case "MultilayerSetup":
             if (!materialDepotPath.endsWith(".mlsetup")) {
@@ -1215,12 +1276,12 @@ function validateMaterialKeyValuePair(key, materialValue, info, validateRecursiv
                 return;
             }
             if (meshSettings.checkDuplicateMlSetupFilePaths) {
-                listOfUsedMaterialSetups[materialDepotPath] ||= [];                 
-                 
+                listOfUsedMaterialSetups[materialDepotPath] ||= [];
+
                 if (listOfUsedMaterialSetups[materialDepotPath].length > 0) {
                     Logger.Warning(`${info} uses the same .mlsetup as (a) previous material(s): [ ${
                         listOfUsedMaterialSetups[materialDepotPath].join(", ")
-                    } ]`)  
+                    } ]`)
                 }
                 listOfUsedMaterialSetups[materialDepotPath].push(info);
             }
@@ -1252,8 +1313,8 @@ function meshFile_validatePlaceholderMaterial(material, info) {
         Logger.Warning(`Placeholder ${info} defines values. Consider deleting them.`);
     }
 
-    if (!meshSettings.validatePlaceholderMaterialPaths) return; 
-    
+    if (!meshSettings.validatePlaceholderMaterialPaths) return;
+
     const baseMaterial = stringifyPotentialCName(material.baseMaterial.DepotPath);
 
     if (!checkDepotPath(baseMaterial, info, true)) {
@@ -1262,21 +1323,21 @@ function meshFile_validatePlaceholderMaterial(material, info) {
 }
 function meshFile_CheckMaterialProperties(material, materialName) {
     const baseMaterial = stringifyPotentialCName(material.baseMaterial.DepotPath);
-    
+
     if (checkDepotPath(baseMaterial, materialName)) {
         validateShaderTemplate(baseMaterial, materialName);
     }
-    
+
     for (let i = 0; i < material.values.length; i++) {
         let tmp = material.values[i];
-        
+
         const type = tmp["$type"] || tmp["type"];
-            
+
         if (!type.startsWith("rRef:")) {
             continue;
         }
 
-        Object.entries(tmp).forEach(([key, definedMaterial]) => {            
+        Object.entries(tmp).forEach(([key, definedMaterial]) => {
             validateMaterialKeyValuePair(key, definedMaterial, `${materialName}.Values[${i}]`, meshSettings.validateMaterialsRecursively);
         });
     }
@@ -1289,7 +1350,7 @@ function checkMeshMaterialIndices(mesh) {
     }
 
     if (mesh.localMaterialBuffer.materials !== null && mesh.localMaterialBuffer.materials.length > 0
-         && mesh.preloadLocalMaterialInstances.length > 0) {
+        && mesh.preloadLocalMaterialInstances.length > 0) {
         Logger.Warning("Your mesh is trying to use both localMaterialBuffer.materials and preloadLocalMaterialInstances. To avoid unspecified behaviour, use only one of the lists. Material validation will abort.");
     }
 
@@ -1306,7 +1367,7 @@ function checkMeshMaterialIndices(mesh) {
         let materialEntry = mesh.materialEntries[i];
         // Put all material names into a list - we'll use it to verify the appearances later
         let name = stringifyPotentialCName(materialEntry.name);
-        
+
         if (name in materialNames && !PLACEHOLDER_NAME_REGEX.test(name)) {
             Logger.Warning(`materialEntries[${i}] (${name}) is already defined in materialEntries[${materialNames[name]}]`);
         } else {
@@ -1362,8 +1423,8 @@ export function validateMeshFile(mesh, _meshSettings) {
             if (PLACEHOLDER_NAME_REGEX.test(materialName)) {
                 meshFile_validatePlaceholderMaterial(material, `localMaterialBuffer.materials[${i}]`);
             } else {
-                if (!/^[a-z]+/.test(materialName)) {
-                    Logger.Info(`materials[${i}]: ${materialName} does not begin with a lower case letter. It might not load.`);
+                if (!/^[a-z\d]+/.test(materialName)) {
+                    Logger.Info(`materials[${i}]: ${materialName} does not begin with a lower case letter or number. It might not load.`);
                 }
                 meshFile_CheckMaterialProperties(material, `localMaterialBuffer.${materialName}`);
             }
@@ -1423,7 +1484,7 @@ export function validateMeshFile(mesh, _meshSettings) {
     }
 
     return true;
-};
+}
 
 //#endregion
 
@@ -1435,39 +1496,40 @@ export function validateMeshFile(mesh, _meshSettings) {
  *  mi file
  * ===============================================================================================================
  */
-    let miSettings = {};
-    export function validateMiFile(mi, _miSettings) {
-        // check if enabled in settings
-        if (!_miSettings.Enabled) return;
+let miSettings = {};
 
-        // check if file is valid (prevent exceptions)
-        if (checkIfFileIsBroken(mi, 'mi')) return;
+export function validateMiFile(mi, _miSettings) {
+    // check if enabled in settings
+    if (!_miSettings.Enabled) return;
 
-        miSettings = _miSettings;
-        resetInternalFlagsAndCaches();
-        _validateMiFile(mi, '');
+    // check if file is valid (prevent exceptions)
+    if (checkIfFileIsBroken(mi, 'mi')) return;
+
+    miSettings = _miSettings;
+    resetInternalFlagsAndCaches();
+    _validateMiFile(mi, '');
+}
+
+function _validateMiFile(mi, debugInfo) {
+    if (mi["Data"] && mi["Data"]["RootChunk"]) {
+        return _validateMiFile(mi["Data"]["RootChunk"]);
     }
-    
-    function _validateMiFile(mi, debugInfo) {
-        if (mi["Data"] && mi["Data"]["RootChunk"]) {
-            return _validateMiFile(mi["Data"]["RootChunk"]);
+
+    validateShaderTemplate(mi.baseMaterial.DepotPath, debugInfo);
+
+    const values = mi.values || [];
+    for (let i = 0; i < values.length; i++) {
+        let tmp = values[i];
+
+        if (!tmp["$type"].startsWith("rRef:")) {
+            continue;
         }
-        
-        validateShaderTemplate(mi.baseMaterial.DepotPath, debugInfo);
 
-        const values = mi.values || [];
-        for (let i = 0; i < values.length; i++) {
-            let tmp = values[i];
-
-            if (!tmp["$type"].startsWith("rRef:")) {
-                continue;
-            }
-
-            Object.entries(tmp).forEach(([key, definedMaterial]) => {
-                validateMaterialKeyValuePair(key, definedMaterial, `Values[${i}]`, miSettings.validateRecursively);
-            });
-        }
+        Object.entries(tmp).forEach(([key, definedMaterial]) => {
+            validateMaterialKeyValuePair(key, definedMaterial, `Values[${i}]`, miSettings.validateRecursively);
+        });
     }
+}
 //#endregion
 
 //#region csvFile
@@ -1502,11 +1564,11 @@ export function validateCsvFile(csvData, csvSettings) {
             if (!/^(.+)([\/\\])([^\/]+)$/.test(potentialPath)) {
                 potentiallyInvalidFactoryPaths.push(`${potentialName}: ${potentialPath}`);
             } else if (!wkit.FileExists(potentialPath)) {
-                Logger.Warning(`${potentialName}: ${potentialPath} seems to be a file path, but can't be found in project or game files`);                
+                Logger.Warning(`${potentialName}: ${potentialPath} seems to be a file path, but can't be found in project or game files`);
             }
         }
     }
-    
+
     if (csvSettings.warnAboutInvalidDepotPaths && potentiallyInvalidFactoryPaths.length) {
         Logger.Warning(`One or more entries couldn't be resolved to depot paths. Is this a valid factory? The following elements have warnings:`);
         Logger.Info(`\t${potentiallyInvalidFactoryPaths.join(',\n\t')}`);
@@ -1544,24 +1606,24 @@ export function validateJsonFile(jsonData, jsonSettings) {
 
         if (!PLACEHOLDER_NAME_REGEX.test(secondaryKey)) {
             secondaryKeys.push(secondaryKey);
-            
+
             if (potentialMaleVariant && !potentialFemaleVariant) {
                 emptyFemaleVariants.push(secondaryKey);
             }
-            
-            if (jsonSettings.checkDuplicateTranslations) {            
+
+            if (jsonSettings.checkDuplicateTranslations) {
                 if (potentialFemaleVariant && femaleTranslations.includes(potentialFemaleVariant)) {
                     Logger.Warning(`entry ${i}: ${potentialFemaleVariant} already defined`);
                 } else {
                     femaleTranslations.push(secondaryKey);
-                }                
+                }
                 if (potentialMaleVariant && maleTranslations.includes(potentialMaleVariant)) {
                     Logger.Warning(`entry ${i}: ${potentialMaleVariant} already defined`);
                 } else {
                     maleTranslations.push(potentialMaleVariant);
                 }
             }
-            
+
             if (potentialPrimaryKey && potentialPrimaryKey !== '0') {
                 duplicatePrimaryKeys.push(potentialPrimaryKey);
             }
@@ -1581,14 +1643,14 @@ export function validateJsonFile(jsonData, jsonSettings) {
             Logger.Warning('You have duplicate secondary keys in your file. The following entries will overwrite each other:'
             + duplicateKeys.length === 1 ? `${duplicateKeys}` : `[ ${duplicateKeys.join(", ")} ]`);
         }
-    } 
-    
+    }
+
     if (jsonSettings.checkEmptyFemaleVariant && emptyFemaleVariants.length > 0) {
         Logger.Warning(`The following entries have no default value (femaleVariant): [ ${emptyFemaleVariants.join(', ')}]`);
         Logger.Info('Ignore this if your item is masc V only and you\'re using itemsFactoryAppearanceSuffix.Camera or dynamic appearances.');
-        
+
     }
-} 
+}
 
 //#endregion
 
@@ -1658,8 +1720,8 @@ function workspotFile_CheckFinalAnimSet(idx, animSet) {
         return;
     }
 
-    const rigDepotPathValue = animSet.rig && animSet.rig.DepotPath ? stringifyPotentialCName(animSet.rig.DepotPath) : '';    
-    
+    const rigDepotPathValue = animSet.rig && animSet.rig.DepotPath ? stringifyPotentialCName(animSet.rig.DepotPath) : '';
+
     if (!rigDepotPathValue || !rigDepotPathValue.endsWith('.rig')) {
         Logger.Error(`finalAnimsets[${idx}]: invalid rig: ${rigDepotPathValue}. This will crash your game!`);
     } else if (!wkit.FileExists(rigDepotPathValue)) {
@@ -1667,8 +1729,8 @@ function workspotFile_CheckFinalAnimSet(idx, animSet) {
     }
 
     if (!animSet.animations) {
-		return;
-	}
+        return;
+    }
 
     // Check that all animSets in the .animations are also hooked up in the loadingHandles
     const loadingHandles = animSet.loadingHandles || [];
@@ -1718,8 +1780,8 @@ function workspotFile_CheckAnimSet(idx, animSet) {
     }
 
     if ((animSet.Data.list || []).length === 0) {
-		return;
-	}
+        return;
+    }
 
     for (let i = 0; i < animSet.Data.list.length; i++) {
         const childItem = animSet.Data.list[i];
@@ -1757,7 +1819,7 @@ function workspotFile_SetIndexOrder(rootEntry) {
     for (let i = 0; i < rootEntry.Data.list.length; i++) {
         const animSet = rootEntry.Data.list[i];
         currentId += 1;
-        if (animSet.Data.id.id != currentId) {
+        if (animSet.Data.id.id !== currentId) {
             indexChanged += 1;
         }
 
@@ -1765,7 +1827,7 @@ function workspotFile_SetIndexOrder(rootEntry) {
         for (let j = 0; j < animSet.Data.list.length; j++) {
             const childItem = animSet.Data.list[j];
             currentId += 1;
-            if (childItem.Data.id.id != currentId) {
+            if (childItem.Data.id.id !== currentId) {
                 indexChanged += 1;
             }
             childItem.Data.id.id = currentId;
@@ -1857,7 +1919,7 @@ export function validateWorkspotFile(workspot, _workspotSettings) {
             }
         });
     }
-    
+
     const unusedAnimSetNames = workspotAnimSetNames.filter((name) => !allAnimNamesFromAnimFiles.includes(name));
     if (workspotSettings.showUndefinedWorkspotAnims && unusedAnimSetNames.length > 0) {
         Logger.Info(`Items from .workspot not found in .anim files:`);
@@ -1895,5 +1957,5 @@ export function validateInkatlasFile(inkatlas, _inkatlasSettings) {
             checkDepotPath(depotPath, `inkatlas.slots[${index}].texture`, index > 0);
         });
     }
-    
+
 }

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SpiderbotBoolAction : ActionBool
 	{
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("TrueRecord")] 
 		public CString TrueRecord
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("FalseRecord")] 
 		public CString FalseRecord
 		{

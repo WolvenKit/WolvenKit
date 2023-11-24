@@ -114,7 +114,7 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         #region sorting
 
-        private static int CompareArchives(string x, string y)
+        private static int CompareArchives(string? x, string? y)
         {
             if (ReferenceEquals(x, y))
             {
@@ -148,17 +148,17 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <summary>
         /// Loads all archives from a folder
         /// </summary>
-        /// <param name="archivedir"></param>
-        public override void LoadFromFolder(DirectoryInfo archivedir)
+        /// <param name="archiveDir"></param>
+        public override void LoadFromFolder(DirectoryInfo archiveDir)
         {
-            if (!archivedir.Exists)
+            if (!archiveDir.Exists)
             {
                 return;
             }
 
             IsManagerLoading = true;
 
-            var archiveFiles = Directory.GetFiles(archivedir.FullName, "*.archive").ToList();
+            var archiveFiles = Directory.GetFiles(archiveDir.FullName, "*.archive").ToList();
             archiveFiles.Sort(CompareArchives);
 
             foreach (var file in archiveFiles)
@@ -194,9 +194,13 @@ namespace WolvenKit.RED4.CR2W.Archive
             sw.Start();
             sw2.Start();
 
-            var archiveDir = Path.Combine(di.Parent.Parent.FullName, "archive", "pc", "content");
-            var archiveFiles = Directory.GetFiles(archiveDir, "*.archive").ToList();
-            archiveFiles.Sort(CompareArchives);
+            var cnt = 0;
+
+            var baseDir = Path.Combine(di.Parent.Parent.FullName, "archive", "pc", "content");
+            var baseFiles = Directory.GetFiles(baseDir, "*.archive").ToList();
+            baseFiles.Sort(CompareArchives);
+
+            var totalCnt = baseFiles.Count;
 
             var ep1Dir = Path.Combine(di.Parent.Parent.FullName, "archive", "pc", "ep1");
             if (Directory.Exists(ep1Dir))
@@ -204,18 +208,27 @@ namespace WolvenKit.RED4.CR2W.Archive
                 var ep1Files = Directory.GetFiles(ep1Dir, "*.archive").ToList();
                 ep1Files.Sort(CompareArchives);
 
-                archiveFiles = ep1Files.Concat(archiveFiles).ToList();
+                totalCnt += ep1Files.Count;
+
+                foreach (var file in ep1Files)
+                {
+                    sw.Restart();
+
+                    LoadArchive(file, EArchiveSource.EP1);
+                    cnt++;
+
+                    _logger.Debug($"Loaded archive {Path.GetFileName(file)} {cnt}/{totalCnt} in {sw.ElapsedMilliseconds}ms");
+                }
             }
 
-            var cnt = 0;
-            foreach (var file in archiveFiles)
+            foreach (var file in baseFiles)
             {
                 sw.Restart();
 
-                LoadArchive(file);
+                LoadArchive(file, EArchiveSource.Base);
                 cnt++;
 
-                _logger.Debug($"Loaded archive {Path.GetFileName(file)} {cnt}/{archiveFiles.Count} in {sw.ElapsedMilliseconds}ms");
+                _logger.Debug($"Loaded archive {Path.GetFileName(file)} {cnt}/{totalCnt} in {sw.ElapsedMilliseconds}ms");
             }
 
             if (rebuildtree)
@@ -245,8 +258,8 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// Load a single bundle
         /// </summary>
         /// <param name="path"></param>
-        /// <param name="ispatch"></param>
-        public override void LoadArchive(string path, bool ispatch = false)
+        /// <param name="source"></param>
+        public override void LoadArchive(string path, EArchiveSource source = EArchiveSource.Unknown)
         {
             if (Archives.Lookup(path).HasValue)
             {
@@ -261,6 +274,7 @@ namespace WolvenKit.RED4.CR2W.Archive
                 return;
             }
 
+            archive.Source = source;
             Archives.AddOrUpdate(archive);
         }
 
@@ -270,6 +284,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <param name="filename">
         /// file to process
         /// </param>
+        /// <param name="analyzeFiles"></param>
         public override void LoadModArchive(string filename, bool analyzeFiles = true)
         {
             if (ModArchives.Lookup(filename).HasValue)
@@ -284,6 +299,8 @@ namespace WolvenKit.RED4.CR2W.Archive
                 _logger.Warning($"Unable to load mod archive: {filename}");
                 return;
             }
+
+            archive.Source = EArchiveSource.Mod;
 
             if (analyzeFiles)
             {

@@ -26,7 +26,7 @@ public interface ISettingsManager : ISettingsDto, INotifyPropertyChanged
 
     string? GetRED4GameLaunchCommand();
 
-    string? GetRED4GameLaunchOptions();
+    string GetRED4GameLaunchOptions();
 
     public string GetRED4GameLegacyModDir();
     public string GetRED4GameModDir();

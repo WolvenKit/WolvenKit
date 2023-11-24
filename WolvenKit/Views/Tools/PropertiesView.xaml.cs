@@ -23,22 +23,12 @@ namespace WolvenKit.Views.Tools
     {
         public string _fileName;
 
-        //private readonly MediaPlayer mediaPlayer = new();
-
         public PropertiesView()
         {
             InitializeComponent();
 
             ViewModel = Locator.Current.GetService<PropertiesViewModel>();
             DataContext = ViewModel;
-
-            //var themeResources = Application.LoadComponent(new Uri("Resources/Styles/ExpressionDark.xaml", UriKind.Relative)) as ResourceDictionary;
-            //Resources.MergedDictionaries.Add(themeResources);
-
-            //appControl.ExeName = "binkpl64.exe";
-            //appControl.Args = "test2.bk2 /J /I2 /P";
-            //this.Unloaded += new RoutedEventHandler((s, e) => { appControl.Dispose(); });
-
 
             ViewModel.ModelGroup.CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
             {
@@ -149,18 +139,6 @@ namespace WolvenKit.Views.Tools
 
         #endregion
 
-        #region properties
-
-        //public TimeSpan ChannelPosition { get; set; }
-
-        //public string AudioPositionText { get; set; }
-
-        //public string CurrentTrackName { get; set; }
-
-        //public string ChannelLength { get; set; }
-
-        #endregion
-
         private void PropertyGrid_OnAutoGeneratingPropertyGridItem(object sender, AutoGeneratingPropertyGridItemEventArgs e)
         {
             switch (e.DisplayName)
@@ -175,17 +153,6 @@ namespace WolvenKit.Views.Tools
             }
             e.ReadOnly = true;
         }
-
-        //private Stream StreamFromBitmapSource(BitmapSource writeBmp)
-        //{
-        //    Stream bmp = new MemoryStream();
-
-        //    BitmapEncoder enc = new BmpBitmapEncoder();
-        //    enc.Frames.Add(BitmapFrame.Create(writeBmp));
-        //    enc.Save(bmp);
-
-        //    return bmp;
-        //}
 
         private void ReloadModels(object sender, RoutedEventArgs e) => hxViewport.ZoomExtents();
     }

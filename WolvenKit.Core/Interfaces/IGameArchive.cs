@@ -10,5 +10,6 @@ public interface IGameArchive
 
     public Dictionary<ulong, IGameFile> Files { get; }
     public string Name { get; }
+    EArchiveSource Source { get; }
     EArchiveType TypeName { get; }
 }

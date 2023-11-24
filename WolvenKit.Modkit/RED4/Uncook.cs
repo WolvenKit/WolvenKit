@@ -8,8 +8,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using SharpGLTF.Schema2;
-using SharpGLTF.Validation;
+
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Common.DDS;
@@ -17,6 +16,7 @@ using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
+using WolvenKit.Core.Wwise;
 using WolvenKit.Modkit.Extensions;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.Opus;
@@ -26,6 +26,11 @@ using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.JSON;
 using WolvenKit.RED4.Types;
+
+using SharpGLTF.Schema2;
+using SharpGLTF.Validation;
+using NAudio.Wave;
+using NAudio.Lame;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -405,8 +410,7 @@ namespace WolvenKit.Modkit.RED4
             {
                 if (settings.Get<WemExportArgs>() is { } wemaArgs && wemaArgs.FileName is not null)
                 {
-                    var wemoutfile = Path.ChangeExtension(outfile.FullName, wemaArgs.wemExportType.ToString());
-                    UncookWem(wemaArgs.FileName, wemoutfile);
+                    UncookWem(outfile, wemaArgs);
                     return true;
                 }
 
@@ -654,7 +658,7 @@ namespace WolvenKit.Modkit.RED4
                 ExtractParts(inkTextureAtlas.Slots[2]!.Texture.DepotPath, inkTextureAtlas.Slots[2]!.Parts, Path.Combine(outFile.FullName, "720p"));
             }
 
-            return false;
+            return true;
 
             void ExtractParts(ResourcePath texturePath, CArray<inkTextureAtlasMapper> parts, string outDir)
             {
@@ -1079,28 +1083,52 @@ namespace WolvenKit.Modkit.RED4
 
 #endregion NewMeshExporter
 
-        private static void UncookWem(string infile, string outfile)
+        private static void UncookWem(FileInfo outfile, WemExportArgs args)
         {
+            
+
+            if (args.FileName is null)
+            {
+                return;
+            }
             if (WolvenTesting.IsTesting)
             {
                 return;
             }
 
-            var arg = infile.ToEscapedPath() + " -o " + outfile.ToEscapedPath();
-            var si = new ProcessStartInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "lib", "test.exe"), arg)
+            var wemoutfile = Path.ChangeExtension(outfile.FullName, args.wemExportType.ToString());
+            var oggBuffer = Wem.Convert(File.ReadAllBytes(args.FileName));
+
+            switch (args.wemExportType)
             {
-                CreateNoWindow = true,
-                WindowStyle = ProcessWindowStyle.Hidden,
-                UseShellExecute = false,
-                RedirectStandardError = true,
-                RedirectStandardOutput = true,
-                Verb = "runas"
-            };
-            var proc = Process.Start(si);
-            if (proc != null)
-            {
-                proc.WaitForExit();
-                Trace.WriteLine(proc.StandardOutput.ReadToEnd());
+                case WemExportTypes.Wav:
+                {
+                    using var ms = new MemoryStream(oggBuffer);
+                    using var reader = new NAudio.Vorbis.VorbisWaveReader(ms);
+                    WaveFileWriter.CreateWaveFile(wemoutfile, reader);
+
+                    break;
+                }
+                case WemExportTypes.Mp3:
+                {
+                    using var ms = new MemoryStream(oggBuffer);
+                    using var reader = new NAudio.Vorbis.VorbisWaveReader(ms);
+
+                    var mp3Writer = new LameMP3FileWriter(wemoutfile, reader.WaveFormat, 128);
+                    reader.CopyTo(mp3Writer);
+                    mp3Writer.Flush();
+                    mp3Writer.Close();
+
+                    break;
+                }
+                case WemExportTypes.Ogg:
+                {
+                    File.WriteAllBytes(wemoutfile, oggBuffer);
+
+                    break;
+                }
+                default:
+                    break;
             }
         }
 

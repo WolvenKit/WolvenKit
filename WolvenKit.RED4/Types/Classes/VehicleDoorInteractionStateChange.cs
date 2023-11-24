@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class VehicleDoorInteractionStateChange : ActionBool
 	{
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("door")] 
 		public CEnum<vehicleEVehicleDoor> Door
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<vehicleEVehicleDoor>>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("newState")] 
 		public CEnum<vehicleVehicleDoorInteractionState> NewState
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<vehicleVehicleDoorInteractionState>>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(41)] 
 		[RED("source")] 
 		public CString Source
 		{

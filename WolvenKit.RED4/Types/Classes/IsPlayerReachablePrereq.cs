@@ -21,6 +21,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("checkOnlyRMA")] 
+		public CBool CheckOnlyRMA
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(3)] 
+		[RED("minRMADistance")] 
+		public CFloat MinRMADistance
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("canCheckProxy")] 
 		public CBool CanCheckProxy
 		{
@@ -28,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(5)] 
 		[RED("horTolerance")] 
 		public CFloat HorTolerance
 		{
@@ -36,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(6)] 
 		[RED("verTolerance")] 
 		public CFloat VerTolerance
 		{

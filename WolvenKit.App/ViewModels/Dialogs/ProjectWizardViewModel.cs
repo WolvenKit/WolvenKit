@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Helpers;
+using WolvenKit.App.Services;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
 
 public partial class ProjectWizardViewModel : DialogViewModel
 {
     #region Fields
+
+    private readonly ISettingsManager _settingsManager;
 
     public delegate Task ReturnHandler(ProjectWizardViewModel? project);
     public ReturnHandler? FileHandler;
@@ -23,11 +26,16 @@ public partial class ProjectWizardViewModel : DialogViewModel
 
     #region Constructors
 
-    public ProjectWizardViewModel()
+    public ProjectWizardViewModel(ISettingsManager settingsManager)
     {
+        _settingsManager = settingsManager;
+
         Title = "Project Wizard";
 
         _projectType = new ObservableCollection<string> { "Cyberpunk 2077" };
+
+        // project path
+        _projectPath = _settingsManager.LastUsedProjectPath ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
     }
 
     #endregion Constructors
@@ -45,24 +53,22 @@ public partial class ProjectWizardViewModel : DialogViewModel
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(OkCommand))]
     private string? _projectPath = null!;
+    
     [ObservableProperty] private string? _author;
+    
     [ObservableProperty] private string? _email;
+    
     [ObservableProperty] private string? _version;
+    
     [ObservableProperty] private ObservableCollection<string> _projectType = new();
-
-
-    ///// <summary>
-    ///// Gets/Sets the author's profile image brush.
-    ///// </summary>
-    //public ImageBrush ProfileImageBrush { get; set; }
-
-    ///// <summary>
-    ///// Gets/Sets the author's profile image path.
-    ///// </summary>
-    //public string ProfileImageBrushPath { get; set; }
 
     #endregion Properties
 
+    partial void OnProjectPathChanged(string? value)
+    {
+        _settingsManager.LastUsedProjectPath = value;
+        _settingsManager.Save();
+    }
 
     [ObservableProperty] private string? _whyNotCreate;
 

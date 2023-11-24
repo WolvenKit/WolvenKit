@@ -28,6 +28,8 @@ namespace WolvenKit.Modkit.RED4.RigFile
                 LocalPosn = animRig.BoneTransforms.Select(p => new Vec3(p.Translation.X, p.Translation.Z, -p.Translation.Y)).ToArray(),
                 LocalRot = animRig.BoneTransforms.Select(p => new Quat(p.Rotation.I, p.Rotation.K, -p.Rotation.J, p.Rotation.R)).ToArray(),
                 LocalScale = animRig.BoneTransforms.Select(p => new Vec3(p.Scale.X, p.Scale.Y, p.Scale.Z)).ToArray(),
+
+                ReferenceTracks = animRig.ReferenceTracks.Select(_ => (float)_).ToArray(),
             };
 
             // if AposeWorld/AposeMS Exists then..... this can be done better i guess...
@@ -167,7 +169,8 @@ namespace WolvenKit.Modkit.RED4.RigFile
                 LocalScale = localScale.ToArray(),
                 LocalRot = localRot.ToArray(),
                 AposeLSExits = false,
-                AposeMSExits = false
+                AposeMSExits = false,
+                ReferenceTracks = Array.Empty<float>(),
             };
 
             return combinedRig;

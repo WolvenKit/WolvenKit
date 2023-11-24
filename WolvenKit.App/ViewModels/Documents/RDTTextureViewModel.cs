@@ -104,7 +104,7 @@ public partial class RDTTextureViewModel : RedDocumentTabViewModel
     [RelayCommand]
     private async Task ReplaceTexture()
     {
-        if (Parent.Cr2wFile.RootChunk is not CBitmapTexture bitmap)
+        if (_data is not CBitmapTexture bitmap)
         {
             return;
         }
@@ -155,7 +155,30 @@ public partial class RDTTextureViewModel : RedDocumentTabViewModel
             var newxbm = image.SaveToXBM(xbmImportArgs);
 
             // set properties in file
-            Parent.Cr2wFile.RootChunk = newxbm;
+            var replaced = false;
+            if (ReferenceEquals(Parent.Cr2wFile.RootChunk, _data))
+            {
+                Parent.Cr2wFile.RootChunk = newxbm;
+                replaced = true;
+            }
+            else
+            {
+                foreach (var embeddedFile in Parent.Cr2wFile.EmbeddedFiles)
+                {
+                    if (ReferenceEquals(embeddedFile.Content, _data))
+                    {
+                        embeddedFile.Content = newxbm;
+                        replaced = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!replaced)
+            {
+                return;
+            }
+            
             // save file
             await Parent.Save(null);
 

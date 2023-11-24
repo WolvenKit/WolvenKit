@@ -140,3 +140,45 @@ globalThis.onPostImport = function (path, settings) {
         success: true
     }
 }
+
+globalThis.onImportFromJson = function (jsonText) {
+    const json = TypeHelper.JsonParse(jsonText);
+    
+    // json["Data"]["RootChunk"]["cookingPlatform"] = "PLATFORM_PS5";
+
+    return {
+        jsonText: TypeHelper.JsonStringify(json)
+    }
+}
+
+globalThis.onParsingError = function (jsonText) {
+    const json = TypeHelper.JsonParse(jsonText);
+    
+    let isPatched = false;
+
+    if (json["ExpectedType"] === "shadowsShadowCastingMode" && json["Value"]["$type"] === "Bool") {
+    	isPatched = true;
+    	
+    	json["Value"]["$type"] = "shadowsShadowCastingMode";
+    	if (json["Value"]["Value"] === 0) {
+    		json["Value"]["Value"] = "Never";
+    	} else {
+    		json["Value"]["Value"] = "Always";
+    	}
+    }
+    
+    if (!isPatched) {
+    	Logger.Debug(json);
+    }
+    
+    // Just an example
+    // if(json["EnumType"] === "ECookingPlatform") { 
+    // 	   isPatched = true;
+    //     json["StringValue"] = "PLATFORM_PC";
+    // }
+
+    return {
+    	isPatched : isPatched,
+        jsonText: TypeHelper.JsonStringify(json)
+    }
+}

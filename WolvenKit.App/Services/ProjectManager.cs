@@ -9,6 +9,7 @@ using WolvenKit.App.Models.ProjectManagement;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Services;
 
@@ -150,7 +151,7 @@ public partial class ProjectManager : ObservableObject, IProjectManager
                 return null;
             }
 
-            Cp77Project result = new(path, obj.Name, _hashService)
+            Cp77Project project = new(path, obj.Name, _hashService)
             {
                 Author = obj.Author,
                 Email = obj.Email,
@@ -161,7 +162,7 @@ public partial class ProjectManager : ObservableObject, IProjectManager
             {
                 hashService.ClearProjectHashes();
 
-                var projectHashesFile = Path.Combine(result.ProjectDirectory, "project_hashes.txt");
+                var projectHashesFile = Path.Combine(project.ProjectDirectory, "project_hashes.txt");
                 if (File.Exists(projectHashesFile))
                 {
                     var paths = await File.ReadAllLinesAsync(projectHashesFile);
@@ -174,17 +175,40 @@ public partial class ProjectManager : ObservableObject, IProjectManager
 
 
             // fix legacy folders
-            MoveLegacyFolder(new DirectoryInfo(Path.Combine(result.FileDirectory, "tweaks")), result);
-            MoveLegacyFolder(new DirectoryInfo(Path.Combine(result.FileDirectory, "scripts")), result);
-            MoveLegacyFolder(new DirectoryInfo(Path.Combine(result.FileDirectory, "archiveXL")), result);
+            MoveLegacyFolder(new DirectoryInfo(Path.Combine(project.FileDirectory, "tweaks")), project);
+            MoveLegacyFolder(new DirectoryInfo(Path.Combine(project.FileDirectory, "scripts")), project);
+            MoveLegacyFolder(new DirectoryInfo(Path.Combine(project.FileDirectory, "archiveXL")), project);
 
-            return result;
+            // fix legacy yaml tweaks
+            MoveLegacyYamlTweaks(project);
+
+            return project;
         }
         catch (Exception e)
         {
             _loggerService.Error($"Failed to load project.");
             _loggerService.Error(e);
             return null;
+        }
+    }
+
+    private void MoveLegacyYamlTweaks(Cp77Project project)
+    {
+        var yamlFiles = Directory.GetFiles(project.ResourcesDirectory, "*.yaml", SearchOption.TopDirectoryOnly);
+        foreach (var file in yamlFiles)
+        {
+            var fileName = Path.GetFileName(file);
+            var destPath = Path.Combine(project.ResourceTweakDirectory, fileName);
+            try
+            {
+                File.Move(file, destPath);
+                _loggerService.Info($"Yaml tweak file was moved to the new location: {fileName}");
+            }
+            catch (Exception e)
+            {
+                _loggerService.Error($"Could not move file. Error: {e}");
+            }
+            
         }
     }
 

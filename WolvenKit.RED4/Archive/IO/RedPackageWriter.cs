@@ -94,7 +94,7 @@ public partial class RedPackageWriter : Red4Writer
             BaseStream.Position = currentDataPosition;
             // write data, prefixed with size?
             
-            if (compiledPropertyData != null)
+            if (compiledPropertyData != null && compiledPropertyData.IsCustomWriteNeeded(_header))
             {
                 compiledPropertyData.CustomWrite(this, propertyInfo.RedName);
             }

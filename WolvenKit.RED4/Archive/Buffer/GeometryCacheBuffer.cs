@@ -65,6 +65,8 @@ public class CVXMCacheEntry : GeometryCacheEntry
 
     public CArray<CUInt8> Uk7 { get; set; } = new();
 
+    public CUInt32 Uk8 { get; set; }
+
     public CVXMCacheEntry() : base()
     {
 

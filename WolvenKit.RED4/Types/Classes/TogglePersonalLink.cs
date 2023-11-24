@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class TogglePersonalLink : ActionBool
 	{
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("cachedStatus")] 
 		public CEnum<EPersonalLinkConnectionStatus> CachedStatus
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EPersonalLinkConnectionStatus>>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("shouldSkipMiniGame")] 
 		public CBool ShouldSkipMiniGame
 		{

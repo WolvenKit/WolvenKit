@@ -4,7 +4,7 @@ using System.IO;
 using System.Windows;
 using Discord.Audio.Streams;
 using NAudio.Extras;
-using NAudio.Vorbis;
+using Wkit.Vorbis;
 using NAudio.Wave;
 
 namespace NAudioWpfDemo.AudioPlaybackDemo

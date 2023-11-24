@@ -396,7 +396,15 @@ public class RedImage : IDisposable
         }
         else
         {
-            return SaveToMemory(InternalScratchImage.SaveToWICMemory(0, WIC_FLAGS.FORCE_RGB, TexHelper.Instance.GetWICCodec(WICCodecs.PNG)));
+            // decompress here
+            if (TexHelper.Instance.IsCompressed(_metadata.Format))
+            {
+                InternalScratchImage = InternalScratchImage.Decompress(DXGI_FORMAT.UNKNOWN);
+            }
+            // flip for preview
+            InternalScratchImage = InternalScratchImage.FlipRotate(TEX_FR_FLAGS.FLIP_VERTICAL);
+            
+            return SaveToWICMemory(TexHelper.Instance.GetWICCodec(WICCodecs.PNG));
         }
     }
 
@@ -941,25 +949,13 @@ public class RedImage : IDisposable
         }
 
         var result = new RedImage(TexHelper.Instance.LoadFromDDSMemory(memIntPtr, ddsLength, DDS_FLAGS.NONE, out var metadata));
-        if (TexHelper.Instance.IsCompressed(metadata.Format))
-        {
-            result._compressionFormat = metadata.Format;
 
-            var textureFormat = CommonFunctions.GetDXGIFormat(Enums.ETextureCompression.TCM_None, info.RawFormat, info.IsGamma);
-            result.InternalScratchImage = result.InternalScratchImage.Decompress((DXGI_FORMAT)textureFormat);
-        }
-
-        if (result.Metadata.MipLevels > 1)
+        // This fails on compressed files 
+        if (!TexHelper.Instance.IsCompressed(metadata.Format) && result.Metadata.MipLevels > 1)
         {
             result.InternalScratchImage = result.InternalScratchImage.CreateCopyWithEmptyMipMaps(1, result._metadata.Format, CP_FLAGS.NONE, false);
         }
-
-
-        if (!result._metadata.IsCubemap() && info.FlipV)
-        {
-            result.InternalScratchImage = result.InternalScratchImage.FlipRotate(TEX_FR_FLAGS.FLIP_VERTICAL);
-        }
-
+        
         return result;
     }
 

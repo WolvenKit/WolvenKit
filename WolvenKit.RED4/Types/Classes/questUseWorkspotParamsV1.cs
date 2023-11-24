@@ -180,6 +180,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(22)] 
+		[RED("dangleResetSimulation")] 
+		public CBool DangleResetSimulation
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public questUseWorkspotParamsV1()
 		{
 			Teleport = true;

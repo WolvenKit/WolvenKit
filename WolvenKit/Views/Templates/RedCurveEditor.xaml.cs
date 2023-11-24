@@ -11,7 +11,7 @@ namespace WolvenKit.Views.Editors
     /// </summary>
     public partial class RedCurveEditor : UserControl
     {
-        public ChunkViewModel cvm => DataContext as ChunkViewModel;
+        private ChunkViewModel _cvm => DataContext as ChunkViewModel;
 
         public RedCurveEditor()
         {
@@ -29,9 +29,9 @@ namespace WolvenKit.Views.Editors
 
         private void CurveEditorButton_OnClick(object sender, RoutedEventArgs e)
         {
-            if (cvm.Data is not IRedLegacySingleChannelCurve data)
+            if (_cvm.Data is not IRedLegacySingleChannelCurve data)
             {
-                data = (IRedLegacySingleChannelCurve)System.Activator.CreateInstance(cvm.PropertyType);
+                data = (IRedLegacySingleChannelCurve)System.Activator.CreateInstance(_cvm.PropertyType);
             }
 
             var curveEditorWindow = new CurveEditorWindow(data);
@@ -43,7 +43,7 @@ namespace WolvenKit.Views.Editors
                 {
                     if (c.Points.Count == 0)
                     {
-                        cvm.Data = null;
+                        _cvm.Data = null;
                     }
                     else
                     {
@@ -55,9 +55,9 @@ namespace WolvenKit.Views.Editors
                             data.Add((float)point.Item1, point.Item2);
                         }
 
-                        cvm.Data = data;
-                        cvm.NotifyChain("Data");
-                        cvm.RecalculateProperties();
+                        _cvm.Data = data;
+                        _cvm.NotifyChain(nameof(ChunkViewModel.Data));
+                        _cvm.RecalculateProperties();
                     }
                 }
             }

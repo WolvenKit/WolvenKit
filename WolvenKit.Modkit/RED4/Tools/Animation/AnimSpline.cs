@@ -1,23 +1,21 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using System.Text.Json;
 using SharpGLTF.Schema2;
 using WolvenKit.RED4.Types;
+
 using Quat = System.Numerics.Quaternion;
 using Vec3 = System.Numerics.Vector3;
+
+using static WolvenKit.Modkit.RED4.Animation.Fun;
+using static WolvenKit.Modkit.RED4.Animation.Gltf;
 
 namespace WolvenKit.Modkit.RED4.Animation
 {
     public class CompressedBuffer
     {
-        public static Vec3 TRVector(float x, float y, float z) => new(x, z, -y);
-
-        public static Quat RQuat(float x, float y, float z, float w) => new(x, z, -y, w);
-
-        public static Vec3 SVector(float x, float y, float z) => new(x, z, y);
-
-        public static void AddAnimation(ref ModelRoot model, animAnimation animAnimDes, bool incRootMotion = true)
+        public static void ExportAsAnimationToModel(ref ModelRoot model, animAnimation animAnimDes, bool incRootMotion = true)
         {
             if (animAnimDes.AnimBuffer.GetValue() is not animAnimationBufferCompressed blob)
             {
@@ -29,8 +27,6 @@ namespace WolvenKit.Modkit.RED4.Animation
             var positions = new Dictionary<ushort, Dictionary<float, Vec3>>();
             var rotations = new Dictionary<ushort, Dictionary<float, Quat>>();
             var scales = new Dictionary<ushort, Dictionary<float, Vec3>>();
-
-            var tracks = new Dictionary<ushort, float>();
 
             if (animAnimDes.MotionExtraction != null && animAnimDes.MotionExtraction.Chunk != null && incRootMotion)
             {
@@ -45,7 +41,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                     {
                         positions[p.Idx] = new Dictionary<float, Vec3>();
                     }
-                    positions[p.Idx][p.Time] = TRVector(p.Position.X, p.Position.Y, p.Position.Z);
+                    positions[p.Idx][p.Time] = TRVectorYup(p.Position);
                 }
                 else if (key is animKeyRotation r)
                 {
@@ -53,7 +49,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                     {
                         rotations[r.Idx] = new Dictionary<float, Quat>();
                     }
-                    rotations[r.Idx][r.Time] = RQuat(r.Rotation.I, r.Rotation.J, r.Rotation.K, r.Rotation.R);
+                    rotations[r.Idx][r.Time] = RQuatYup(r.Rotation);
                 }
                 else if (key is animKeyScale s)
                 {
@@ -61,7 +57,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                     {
                         scales[s.Idx] = new Dictionary<float, Vec3>();
                     }
-                    scales[s.Idx][s.Time] = SVector(s.Scale.X, s.Scale.Y, s.Scale.Z);
+                    scales[s.Idx][s.Time] = SVectorYup(s.Scale);
                 }
             }
 
@@ -73,7 +69,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                     {
                         positions[p.Idx] = new Dictionary<float, Vec3>();
                     }
-                    positions[p.Idx][p.Time] = TRVector(p.Position.X, p.Position.Y, p.Position.Z);
+                    positions[p.Idx][p.Time] = TRVectorYup(p.Position);
                 }
                 else if (key is animKeyRotation r)
                 {
@@ -81,7 +77,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                     {
                         rotations[r.Idx] = new Dictionary<float, Quat>();
                     }
-                    rotations[r.Idx][r.Time] = RQuat(r.Rotation.I, r.Rotation.J, r.Rotation.K, r.Rotation.R);
+                    rotations[r.Idx][r.Time] = RQuatYup(r.Rotation);
                 }
                 else if (key is animKeyScale s)
                 {
@@ -89,20 +85,19 @@ namespace WolvenKit.Modkit.RED4.Animation
                     {
                         scales[s.Idx] = new Dictionary<float, Vec3>();
                     }
-                    scales[s.Idx][s.Time] = SVector(s.Scale.X, s.Scale.Y, s.Scale.Z);
+                    scales[s.Idx][s.Time] = SVectorYup(s.Scale);
                 }
             }
 
             foreach (var key in blob.ConstAnimKeys)
             {
-                // using x.Time here causes some problems - not sure what data it actually is. maybe a hold time?
                 if (key is animKeyPosition p)
                 {
                     if (!positions.ContainsKey(p.Idx))
                     {
                         positions[p.Idx] = new Dictionary<float, Vec3>();
                     }
-                    positions[p.Idx][0] = TRVector(p.Position.X, p.Position.Y, p.Position.Z);
+                    positions[p.Idx][p.Time] = TRVectorYup(p.Position);
                 }
                 else if (key is animKeyRotation r)
                 {
@@ -110,7 +105,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                     {
                         rotations[r.Idx] = new Dictionary<float, Quat>();
                     }
-                    rotations[r.Idx][0] = RQuat(r.Rotation.I, r.Rotation.J, r.Rotation.K, r.Rotation.R);
+                    rotations[r.Idx][r.Time] = RQuatYup(r.Rotation);
                 }
                 else if (key is animKeyScale s)
                 {
@@ -118,9 +113,29 @@ namespace WolvenKit.Modkit.RED4.Animation
                     {
                         scales[s.Idx] = new Dictionary<float, Vec3>();
                     }
-                    scales[s.Idx][0] = SVector(s.Scale.X, s.Scale.Y, s.Scale.Z);
+                    scales[s.Idx][s.Time] = SVectorYup(s.Scale);
                 }
             }
+
+            // Can switch to system Json when SharpGLTF support released (maybe in .31)
+            // Right now it's not possible to add an empty array to a JsonContent.
+            // Can work around that elsewhere but... just don't implement your own
+            // JSON parser, kids.
+            var animExtras = new AnimationExtrasForGltf(
+                CurrentSchema(),
+                animAnimDes.AnimationType.ToString(),
+                animAnimDes.FrameClamping,
+                animAnimDes.FrameClampingStartFrame,
+                animAnimDes.FrameClampingEndFrame,
+                blob.HasRawRotations,
+                blob.NumExtraJoints,
+                blob.NumExtraTracks,
+                blob.ConstTrackKeys.Select(_ => new AnimConstTrackKeySerializable(_.TrackIndex, _.Time, _.Value)).ToList(),
+                blob.TrackKeys.Select(_ => new AnimTrackKeySerializable(_.TrackIndex, _.Time, _.Value)).ToList(),
+                blob.FallbackFrameIndices.Select(_ => (ushort)_).ToList()
+            );
+
+            // All the data is gathered, stitch it together
 
             var anim = model.CreateAnimation(animAnimDes.Name);
             var skin = model.LogicalSkins.FirstOrDefault(_ => _.Name is "Armature");
@@ -129,55 +144,27 @@ namespace WolvenKit.Modkit.RED4.Animation
                 ArgumentNullException.ThrowIfNull(nameof(skin));
                 return;
             }
-            if (animAnimDes.AnimationType == Enums.animAnimationType.Additive)
-            {
 
-                for (ushort i = 0; i < blob.NumJoints - blob.NumExtraJoints; i++)
-                {
-                    var node = skin.GetJoint(i).Joint;
-                    if (positions.ContainsKey(i))
-                    {
-                        foreach (var (t, position) in positions[i])
-                        {
-                            positions[i][t] = node.LocalTransform.Translation + position;
-                        }
-                        anim.CreateTranslationChannel(node, positions[i]);
-                    }
-                    if (rotations.ContainsKey(i))
-                    {
-                        foreach (var (t, rotation) in rotations[i])
-                        {
-                            rotations[i][t] = node.LocalTransform.Rotation * rotation;
-                        }
-                        anim.CreateRotationChannel(node, rotations[i]);
-                    }
-                    if (scales.ContainsKey(i))
-                    {
-                        foreach (var (t, scale) in scales[i])
-                        {
-                            scales[i][t] = node.LocalTransform.Scale + scale;
-                        }
-                        anim.CreateScaleChannel(node, scales[i]);
-                    }
-                }
-            }
-            else
+            // -.-
+            anim.Extras = SharpGLTF.IO.JsonContent.Parse(JsonSerializer.Serialize(animExtras, SerializationOptions()));
+
+            for (ushort i = 0; i < blob.NumJoints - blob.NumExtraJoints; i++)
             {
-                for (ushort i = 0; i < blob.NumJoints - blob.NumExtraJoints; i++)
+                var node = skin.GetJoint(i).Joint;
+                if (rotations.ContainsKey(i))
                 {
-                    var node = skin.GetJoint(i).Joint;
-                    if (positions.ContainsKey(i))
-                    {
-                        anim.CreateTranslationChannel(node, positions[i]);
-                    }
-                    if (rotations.ContainsKey(i))
-                    {
-                        anim.CreateRotationChannel(node, rotations[i]);
-                    }
-                    if (scales.ContainsKey(i))
-                    {
-                        anim.CreateScaleChannel(node, scales[i]);
-                    }
+                    var isLinear = rotations[i].Count > 1;
+                    anim.CreateRotationChannel(node, rotations[i], isLinear);
+                }
+                if (positions.ContainsKey(i))
+                {
+                    var isLinear = positions[i].Count > 1;
+                    anim.CreateTranslationChannel(node, positions[i], isLinear);
+                }
+                if (scales.ContainsKey(i))
+                {
+                    var isLinear = scales[i].Count > 1;
+                    anim.CreateScaleChannel(node, scales[i], isLinear);
                 }
             }
         }

@@ -96,17 +96,7 @@
                         </Grid>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem
-                    x:Name="BKImport"
-                    Command="{Binding Bk2ImportCommand}"
-                    Header="Import Avi to BK2"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                <MenuItem
-                    x:Name="BKExport"
-                    Command="{Binding Bk2ExportCommand}"
-                    Header="Export BK2 to Avi"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
-
+               
                 <Separator />
 
                 <MenuItem

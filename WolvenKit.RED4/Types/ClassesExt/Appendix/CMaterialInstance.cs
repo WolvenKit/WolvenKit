@@ -22,7 +22,12 @@ public partial class CMaterialInstance : IRedAppendix
             var typename = reader.ReadCName();
                 
             var redTypeInfos = RedReflection.GetRedTypeInfos(typename);
-            reader.CheckRedTypeInfos(ref redTypeInfos);
+
+            var (hasError, errorRedName) = reader.CheckRedTypeInfos(ref redTypeInfos);
+            if (hasError)
+            {
+                throw new Exception($"Type \"{errorRedName}\" is not known!");
+            }
 
             var value = reader.Read(redTypeInfos, (uint)valueSize);
 

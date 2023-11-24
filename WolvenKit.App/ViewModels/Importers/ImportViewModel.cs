@@ -260,6 +260,24 @@ public partial class ImportViewModel : AbstractImportViewModel
         return false;
     }
 
+    /// <summary>
+    /// Check if the file should be included in the import tool's view. Currently excluded:
+    /// - .png files associated with an .mlmask
+    /// </summary>
+    /// <param name="filePath">The file path as string</param>
+    /// <returns>true if this file should not be shown in the import browser</returns>
+    private static bool ShouldFileBeFiltered(string filePath)
+    {
+        if (!filePath.EndsWith(".png"))
+        {
+            return false;
+        }
+
+        // Check if a masklist file exists in the parent directory
+        var masklistPath = (Path.GetDirectoryName(filePath) ?? "").Replace("_layers", ".masklist");
+        return File.Exists(masklistPath);
+    }
+
     protected override async Task LoadFilesAsync()
     {
         if (_projectManager.ActiveProject is null)
@@ -267,7 +285,9 @@ public partial class ImportViewModel : AbstractImportViewModel
             return;
         }
 
-        var files = Directory.GetFiles(_projectManager.ActiveProject.RawDirectory, "*", SearchOption.AllDirectories).Where(CanImport);
+        var files = Directory.GetFiles(_projectManager.ActiveProject.RawDirectory, "*", SearchOption.AllDirectories)
+            .Where(filePath => !ShouldFileBeFiltered(filePath))
+            .Where(CanImport);
 
         // do not refresh if the files are the same
         if(Enumerable.SequenceEqual( Items.Select(x => x.BaseFile), files))

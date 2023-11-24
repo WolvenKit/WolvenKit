@@ -168,7 +168,7 @@ namespace WolvenKit.Common.DDS
                 var extension = filetype.ToString().ToLower();
                 var newpath = Path.Combine(outDir, $"{fileName}.{extension}");
 
-                image = RedImage.LoadFromDDSMemory(rentedBuffer, Enums.ETextureRawFormat.TRF_HDRFloat); // forcing best?
+                image = RedImage.LoadFromDDSMemory(rentedBuffer); // forcing best?
                 if (image == null)
                 {
                     throw new ArgumentException($"Could not load image file");

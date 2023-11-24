@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
-using WolvenKit.Common.FNV1A;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.RED4.Animation;
 using WolvenKit.Modkit.RED4.GeneralStructs;
@@ -15,10 +15,20 @@ using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
 
+using static WolvenKit.Modkit.RED4.Animation.Const;
+using static WolvenKit.Modkit.RED4.Animation.Fun;
+using static WolvenKit.Modkit.RED4.Animation.Gltf;
+
+using Quat = System.Numerics.Quaternion;
+using Vec3 = System.Numerics.Vector3;
+
 namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
+
+#region exportanims
+
         public bool ExportAnim(Stream animStream, List<ICyberGameArchive> archives, FileInfo outfile, bool isGLBinary = true, bool incRootMotion = true)
         {
             var animsFile = _parserService.ReadRed4File(animStream);
@@ -32,17 +42,7 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            var animDataBuffers = new List<MemoryStream>();
-            foreach (var chk in anims.AnimationDataChunks)
-            {
-                var ms = new MemoryStream();
-                ms.Write(chk.Buffer.Buffer.GetBytes());
-
-                animDataBuffers.Add(ms);
-            }
-
             CR2WFile? rigFile = null;
-            // find first rig in archives
             foreach (var ar in archives)
             {
                 if (ar.Files.TryGetValue(anims.Rig.DepotPath, out var gameFile))
@@ -76,226 +76,7 @@ namespace WolvenKit.Modkit.RED4
 
             return true;
         }
-        public bool ImportAnims(FileInfo gltfFile, Stream animStream, List<ICyberGameArchive> archives)
-        {
-            var animsFile = _parserService.ReadRed4File(animStream);
-            if (animsFile is not { RootChunk: animAnimSet anims })
-            {
-                return false;
-            }
 
-            CR2WFile? rigFile = null;
-            // find first rig in archives
-            foreach (var ar in archives)
-            {
-                if (ar.Files.TryGetValue(anims.Rig.DepotPath, out var gameFile))
-                {
-                    var ms = new MemoryStream();
-                    gameFile.Extract(ms);
-                    if (_parserService.TryReadRed4File(ms, out rigFile))
-                    {
-                        break;
-                    }
-                }
-            }
-
-            if (rigFile is null)
-            {
-                _loggerService.Warning("No rig found");
-                return false;
-            }
-
-            var rig = RIG.ProcessRig(rigFile);
-            if (rig is null || rig.BoneCount < 1)
-            {
-                return false;
-            }
-
-            var model = ModelRoot.Load(gltfFile.FullName, new ReadSettings(ValidationMode.TryFix));
-
-            foreach (var srcAnim in model.LogicalAnimations)
-            {
-                var tmpAnim = anims.Animations.FirstOrDefault(_ => _?.Chunk?.Animation.Chunk?.Name.GetResolvedText() == srcAnim.Name);
-                if (tmpAnim == null)
-                {
-                    continue;
-                }
-
-                ArgumentNullException.ThrowIfNull(tmpAnim.Chunk);
-                ArgumentNullException.ThrowIfNull(tmpAnim.Chunk.Animation.Chunk);
-
-                var animAnimDes = tmpAnim.Chunk.Animation.Chunk;
-
-                var positions = new Dictionary<ushort, Dictionary<float, System.Numerics.Vector3>>();
-                var rotations = new Dictionary<ushort, Dictionary<float, System.Numerics.Quaternion>>();
-                var scales = new Dictionary<ushort, Dictionary<float, System.Numerics.Vector3>>();
-
-
-                foreach (var chan in srcAnim.Channels)
-                {
-                    var idx = Array.IndexOf(rig.Names.NotNull(), chan.TargetNode.Name);
-                    if (idx < 0)
-                    {
-                        throw new Exception($"Invalid Joint Transform, Joint: {chan.TargetNode.Name} not present in the src/original Rig");
-                    }
-
-                    switch (chan.TargetNodePath)
-                    {
-                        case PropertyPath.translation:
-                            positions.Add((ushort)idx, chan.GetTranslationSampler().GetLinearKeys().ToDictionary(_ => _.Key, _ => _.Value));
-                            break;
-                        case PropertyPath.rotation:
-                            rotations.Add((ushort)idx, chan.GetRotationSampler().GetLinearKeys().ToDictionary(_ => _.Key, _ => _.Value));
-                            break;
-                        case PropertyPath.scale:
-                            scales.Add((ushort)idx, chan.GetScaleSampler().GetLinearKeys().ToDictionary(_ => _.Key, _ => _.Value));
-                            break;
-                        case PropertyPath.weights:
-                            throw new System.Exception("Morph weights channel import not supported!");
-                        default:
-                            break;
-                    }
-                }
-
-                List<ushort>? fallbackIndices = null;
-                if (animAnimDes.AnimBuffer.Chunk is animAnimationBufferCompressed animAnimationBufferCompressed)
-                {
-                    fallbackIndices = animAnimationBufferCompressed.FallbackFrameIndices.Select(_ => (ushort)_).ToList();
-                }
-                if (animAnimDes.AnimBuffer.Chunk is animAnimationBufferSimd animAnimationBufferSimd)
-                {
-                    fallbackIndices = animAnimationBufferSimd.FallbackFrameIndices.Select(_ => (ushort)_).ToList();
-                }
-
-                var compressed = new animAnimationBufferCompressed()
-                {
-                    Duration = srcAnim.Duration,
-                    NumFrames = Convert.ToUInt32(srcAnim.Duration * 30.1846575),
-                    NumExtraJoints = 0,
-                    NumExtraTracks = 0,
-                    NumJoints = Convert.ToUInt16(rig.BoneCount),
-                    NumTracks = 0,
-                    NumAnimKeys = 0,
-                    NumAnimKeysRaw = 0,
-                    NumConstAnimKeys = 0,
-                    NumTrackKeys = 0,
-                    NumConstTrackKeys = 0,
-                    IsScaleConstant = scales.Count < 1,
-                    HasRawRotations = true
-                };
-                if (fallbackIndices != null)
-                {
-                    foreach (var idx in fallbackIndices)
-                    {
-                        compressed.FallbackFrameIndices.Add(idx);
-
-                    }
-                }
-
-                var buffer = new MemoryStream();
-                var bw = new BinaryWriter(buffer);
-
-                foreach (var bone in positions.Keys)
-                {
-                    var dict = positions[bone];
-                    foreach (var time in dict.Keys)
-                    {
-                        var timeNormalized = NormalizeTime(time, srcAnim.Duration);
-                        var t = Convert.ToUInt16(Math.Clamp(timeNormalized, 0, 1.0f) * ushort.MaxValue);
-                        bw.Write(t);
-                        bw.Write(bone);
-                        var posn = new System.Numerics.Vector3(dict[time].X, -dict[time].Z, dict[time].Y);
-                        bw.Write(posn.X);
-                        bw.Write(posn.Y);
-                        bw.Write(posn.Z);
-                        compressed.NumAnimKeysRaw++;
-                    }
-                }
-                foreach (var bone in rotations.Keys)
-                {
-                    var dict = rotations[bone];
-                    foreach (var time in dict.Keys)
-                    {
-                        var timeNormalized = NormalizeTime(time, srcAnim.Duration);
-                        var t = Convert.ToUInt16(Math.Clamp(timeNormalized, 0, 1.0f) * ushort.MaxValue);
-                        bw.Write(t);
-
-
-                        var rotn = new System.Numerics.Quaternion(dict[time].X, -dict[time].Z, dict[time].Y, dict[time].W);
-
-                        var bitwise = bone;
-                        bitwise |= 1 << 13;
-
-                        if (rotn.W < 0)
-                        {
-                            rotn.W = -rotn.W;
-                            bitwise |= 1 << 15;
-                        }
-                        bw.Write(bitwise);
-
-                        var dotPr = 1f - rotn.W;
-
-
-                        rotn.X /= Convert.ToSingle(Math.Sqrt(2f - dotPr));
-                        rotn.Y /= Convert.ToSingle(Math.Sqrt(2f - dotPr));
-                        rotn.Z /= Convert.ToSingle(Math.Sqrt(2f - dotPr));
-
-                        var zzczxc = (rotn.X * rotn.X) + (rotn.Y * rotn.Y) + (rotn.Z * rotn.Z);
-
-                        bw.Write(rotn.X);
-                        bw.Write(rotn.Y);
-                        bw.Write(rotn.Z);
-
-                        compressed.NumAnimKeysRaw++;
-                    }
-                }
-
-                foreach (var bone in scales.Keys)
-                {
-                    var dict = scales[bone];
-                    foreach (var time in dict.Keys)
-                    {
-                        var timeNormalized = NormalizeTime(time, srcAnim.Duration);
-                        var t = Convert.ToUInt16(Math.Clamp(timeNormalized, 0, 1.0f) * ushort.MaxValue);
-                        bw.Write(t);
-
-                        var bitwise = bone;
-                        bitwise |= 2 << 13;
-                        bw.Write(bitwise);
-
-                        var scal = new System.Numerics.Vector3(dict[time].X, dict[time].Y, dict[time].Z);
-
-                        bw.Write(scal.X);
-                        bw.Write(scal.Y);
-                        bw.Write(scal.Z);
-
-                        compressed.NumAnimKeysRaw++;
-                    }
-                }
-                var dataChk = new animAnimDataChunk()
-                {
-                    Buffer = new SerializationDeferredDataBuffer(buffer.ToArray())
-                };
-                compressed.DataAddress.UnkIndex = (uint)anims.AnimationDataChunks.Count;
-                compressed.DataAddress.FsetInBytes = 0;
-                compressed.DataAddress.ZeInBytes = (uint)buffer.Length;
-
-                anims.AnimationDataChunks.Add(dataChk);
-                animAnimDes.AnimBuffer.Chunk = compressed;
-            }
-
-            var outMs = new MemoryStream();
-            using var writer = new CR2WWriter(outMs, Encoding.UTF8, true) { LoggerService = _loggerService };
-            writer.WriteFile(animsFile);
-
-            outMs.Seek(0, SeekOrigin.Begin);
-            animStream.SetLength(0);
-            outMs.CopyTo(animStream);
-
-            return true;
-
-            static float NormalizeTime(float time, float sceneLength) => (0 == time * sceneLength) ? 0 : time / sceneLength;
-        }
         public static bool GetAnimation(CR2WFile animsFile, CR2WFile rigFile, ref ModelRoot model, bool includeRig = true, bool incRootMotion = true)
         {
 
@@ -304,6 +85,9 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
+            // The buffers have been pre-split into chunks for us by `RED4.Archive.IO.AnimationReader`
+            // so we can just assume there's logically one buffer per animation rather than mess with
+            // the indexing here.
             var animDataBuffers = new List<MemoryStream>();
             foreach (var chk in anims.AnimationDataChunks)
             {
@@ -357,10 +141,302 @@ namespace WolvenKit.Modkit.RED4
                 }
                 else if (animAnimDes.AnimBuffer.Chunk is animAnimationBufferCompressed)
                 {
-                    CompressedBuffer.AddAnimation(ref model, animAnimDes, incRootMotion);
+                    CompressedBuffer.ExportAsAnimationToModel(ref model, animAnimDes, incRootMotion);
                 }
             }
             return true;
         }
+
+#endregion exportanims
+
+#region importanims
+
+        public bool ImportAnims(FileInfo gltfFile, Stream animStream, List<ICyberGameArchive> archives)
+        {
+            var animsArchive = _parserService.ReadRed4File(animStream);
+            if (animsArchive is not { RootChunk: animAnimSet anims })
+            {
+                return false;
+            }
+
+            CR2WFile? rigArchive = null;
+            // find first rig in archives
+            foreach (var ar in archives)
+            {
+                if (ar.Files.TryGetValue(anims.Rig.DepotPath, out var gameFile))
+                {
+                    var ms = new MemoryStream();
+                    gameFile.Extract(ms);
+                    if (_parserService.TryReadRed4File(ms, out rigArchive))
+                    {
+                        break;
+                    }
+                }
+            }
+
+            var gltfFileName = gltfFile.Name;
+            var rigFileName = anims.Rig.DepotPath.GetResolvedText() ?? "<unknown rig depotpath??>";
+
+            if (rigArchive is null)
+            {
+                _loggerService.Error($"{gltfFileName}: No rig found for {rigFileName}, can't import animations!");
+                return false;
+            }
+
+            var rig = RIG.ProcessRig(rigArchive);
+            if (rig is null || rig.BoneCount < 1)
+            {
+                _loggerService.Error($"{gltfFileName}: couldn't process rig from {rigFileName}, can't import anims!");
+                return false;
+            }
+
+            var model = ModelRoot.Load(gltfFile.FullName, new ReadSettings(ValidationMode.TryFix));
+
+            if (model.LogicalAnimations.Count < 1)
+            {
+                _loggerService.Error($"No animations found in {gltfFileName}!");
+                return false;
+            }
+
+            PutAnimations(ref anims, ref rig, ref model, gltfFileName, rigFileName);
+
+            var outMs = new MemoryStream();
+            using var writer = new CR2WWriter(outMs, Encoding.UTF8, true) { LoggerService = _loggerService };
+            writer.WriteFile(animsArchive);
+
+            outMs.Seek(0, SeekOrigin.Begin);
+            animStream.SetLength(0);
+            outMs.CopyTo(animStream);
+
+            return true;
+
+        }
+
+
+        private bool PutAnimations(ref animAnimSet anims, ref RawArmature rig, ref ModelRoot model, string gltfFileName, string rigFileName) {
+
+            // Clear out the old animdata if it looks like we have something to import
+            _loggerService.Info($"{gltfFileName}: found {model.LogicalAnimations.Count} animations to import");
+            anims.AnimationDataChunks.Clear();
+
+            foreach (var srcAnim in model.LogicalAnimations)
+            {
+                // Can switch to system Json when SharpGLTF support released (maybe in .31)
+                var extras = JsonSerializer.Deserialize<AnimationExtrasForGltf>(srcAnim.Extras.ToJson(), SerializationOptions());
+
+                // TODO can we migrate?
+                if (!IsSchemaVersionCompatible(extras))
+                {
+                    throw new InvalidOperationException($"{gltfFileName}: Unsupported schema type or version for extra data on animation {srcAnim.Name}: {extras.Schema.Type} {extras.Schema.Version}!");
+                }
+
+                // TODO should be able to insert new anims too, need to set it up though
+                var tmpAnim = anims.Animations.FirstOrDefault(_ => _?.Chunk?.Animation.Chunk?.Name.GetResolvedText() == srcAnim.Name);
+                if (tmpAnim == null)
+                {
+                    _loggerService.Warning($"{gltfFileName}: animation {srcAnim.Name} not found in animset, skipping! (New animations are not supported currently!)");
+                    continue;
+                }
+
+                ArgumentNullException.ThrowIfNull(tmpAnim.Chunk);
+                ArgumentNullException.ThrowIfNull(tmpAnim.Chunk.Animation.Chunk);
+
+                var animAnimDes = tmpAnim.Chunk.Animation.Chunk;
+
+                if (animAnimDes.AnimBuffer.Chunk is animAnimationBufferSimd) {
+                    _loggerService.Warning($"{gltfFileName}: original animation {srcAnim.Name} is a SIMD animation, will try to import data as a CompressedBuffer instead but full support is not implemented yet so this may not work correctly!");
+                }
+
+                var keyframeTranslations = new Dictionary<AnimationInterpolationMode, Dictionary<ushort, Dictionary<float, Vec3>>> {
+                    [AnimationInterpolationMode.STEP] = new (),
+                    [AnimationInterpolationMode.LINEAR] = new (),
+                };
+
+                var keyframeRotations = new Dictionary<AnimationInterpolationMode, Dictionary<ushort, Dictionary<float, Quat>>> {
+                    [AnimationInterpolationMode.STEP] = new (),
+                    [AnimationInterpolationMode.LINEAR] = new (),
+                };
+
+                var keyframeScales = new Dictionary<AnimationInterpolationMode, Dictionary<ushort, Dictionary<float, Vec3>>> {
+                    [AnimationInterpolationMode.STEP] = new (),
+                    [AnimationInterpolationMode.LINEAR] = new (),
+                };
+
+                foreach (var chan in srcAnim.Channels)
+                {
+                    var idx = Array.IndexOf(rig.Names.NotNull(), chan.TargetNode.Name);
+                    if (idx < 0)
+                    {
+                        throw new Exception($"{gltfFileName} ${srcAnim.Name}: Invalid Joint Transform, joint {chan.TargetNode.Name} not present in the associated rig {rigFileName}");
+                    }
+
+                    switch (chan.TargetNodePath)
+                    {
+                        case PropertyPath.translation:
+                            var translationSampler = chan.GetTranslationSampler();
+                            var typedTranslations = keyframeTranslations[translationSampler.InterpolationMode] ?? throw new Exception($"{gltfFileName} ${srcAnim.Name}: Unsupported interpolation mode {translationSampler.InterpolationMode}!");
+
+                            typedTranslations.Add((ushort)idx, translationSampler.GetLinearKeys().ToDictionary(_ => _.Key, _ => _.Value));
+                            break;
+
+                        case PropertyPath.rotation:
+                            var rotationSampler = chan.GetRotationSampler();
+                            var typedRotations = keyframeRotations[rotationSampler.InterpolationMode] ?? throw new Exception($"{gltfFileName} ${srcAnim.Name}: Unsupported interpolation mode {rotationSampler.InterpolationMode}!");
+
+                            typedRotations.Add((ushort)idx, rotationSampler.GetLinearKeys().ToDictionary(_ => _.Key, _ => _.Value));
+                            break;
+
+                        case PropertyPath.scale:
+                            var scaleSampler = chan.GetScaleSampler();
+                            var typedScales = keyframeScales[scaleSampler.InterpolationMode] ?? throw new Exception($"{gltfFileName} ${srcAnim.Name}: Unsupported interpolation mode {scaleSampler.InterpolationMode}!");
+
+                            typedScales.Add((ushort)idx, scaleSampler.GetLinearKeys().ToDictionary(_ => _.Key, _ => _.Value));
+                            break;
+
+                        case PropertyPath.weights:
+                            // Fallthrough, no morph anims yet
+                        default:
+                            throw new System.Exception($"{gltfFileName} ${srcAnim.Name}: Unsupported channel target {chan.TargetNodePath}!");
+                    }
+                }
+  
+                // We could validate there's only one of each const but not 100% that's a requirement
+                var constKeyTranslations = keyframeTranslations[AnimationInterpolationMode.STEP];
+                var constKeyRotations = keyframeRotations[AnimationInterpolationMode.STEP];
+                var constKeyScales = keyframeScales[AnimationInterpolationMode.STEP];
+
+                var keyTranslations = keyframeTranslations[AnimationInterpolationMode.LINEAR];
+                var keyRotations = keyframeRotations[AnimationInterpolationMode.LINEAR];
+                var keyScales = keyframeScales[AnimationInterpolationMode.LINEAR];
+
+                // TODO umm do we need to remove root motion if it was present in the original anim?
+
+                var constAnimKeys = new List<animKey?>();
+                var animKeys = new List<animKey?>();
+                var animKeysRaw = new List<animKey?>();
+
+                for (ushort jointIdx = 0; jointIdx < (ushort)rig.BoneCount; ++jointIdx) {
+
+                    // Const keyframes are all similarly encoded, S, R and T
+
+                    // Order of SRT doesn't seem to matter
+                    foreach (var (time, value) in constKeyRotations.GetValueOrDefault(jointIdx, new ()))
+                    {
+                        constAnimKeys.Add(new animKeyRotation() { Idx = jointIdx, Time = time, Rotation = RQuaternionZup(value), });
+                    }
+                    foreach (var (time, value) in constKeyTranslations.GetValueOrDefault(jointIdx, new ()))
+                    {
+                        constAnimKeys.Add(new animKeyPosition() { Idx = jointIdx, Time = time, Position = TRVectorZup(value), });
+                    }
+                    foreach (var (time, value) in constKeyScales.GetValueOrDefault(jointIdx, new ()))
+                    {
+                        constAnimKeys.Add(new animKeyScale() { Idx = jointIdx, Time = time, Scale = SVectorZup( value ), });
+                    }
+
+                    // For linear keyframes, T and S are always 'raw' but R can optionally be compressed
+
+                    foreach (var (time, value) in keyTranslations.GetValueOrDefault(jointIdx, new ()))
+                    {
+                        animKeysRaw.Add(new animKeyPosition() { Idx = jointIdx, Time = time, Position = TRVectorZup( value ), });
+                    }
+                    foreach (var (time, value) in keyScales.GetValueOrDefault(jointIdx, new ()))
+                    {
+                        animKeysRaw.Add(new animKeyScale() { Idx = jointIdx, Time = time, Scale = SVectorZup(value), });
+                    }
+
+                    var preferredStorage = extras.PreferLosslessLinearRotationEncoding ? animKeysRaw : animKeys;
+
+                    foreach (var (time, value) in keyRotations.GetValueOrDefault(jointIdx, new ()))
+                    {
+                        preferredStorage.Add(new animKeyRotation() { Idx = jointIdx, Time = time, Rotation = RQuaternionZup(value), });
+                    }
+                }
+
+                // -.-
+                var fallbackIndices = extras.FallbackFrameIndices?.Select(_ =>
+                    (CUInt16)_
+                ).ToList() ?? new List<CUInt16>();
+
+                var constTrackKeys = extras.ConstTrackKeys?.Select<AnimConstTrackKeySerializable, animKeyTrack?>(_ =>
+                    new animKeyTrack() {
+                        TrackIndex = _.TrackIndex,
+                        Time = _.Time,
+                        Value = _.Value,
+                    }
+                ).ToList() ?? new List<animKeyTrack?>();
+
+                var trackKeys = extras.TrackKeys?.Select<AnimTrackKeySerializable, animKeyTrack?>(_ =>
+                    new animKeyTrack() {
+                        TrackIndex = _.TrackIndex,
+                        Time = _.Time,
+                        Value = _.Value,
+                    }
+                ).ToList() ?? new List<animKeyTrack?>();
+
+
+                // Have all the raw data in hand now, let's mangle it into CR2W
+
+                animAnimDes.AnimationType = (Enums.animAnimationType)Enum.Parse(typeof(Enums.animAnimationType), extras.AnimationType);
+                animAnimDes.FrameClamping = extras.FrameClamping;
+                animAnimDes.FrameClampingStartFrame = Convert.ToSByte(extras.FrameClampingStartFrame);
+                animAnimDes.FrameClampingEndFrame = Convert.ToSByte(extras.FrameClampingEndFrame);
+
+                var compressed = new animAnimationBufferCompressed()
+                {
+                    Duration = srcAnim.Duration,
+                    NumFrames = FramesToAccommodateDuration(srcAnim.Duration),
+                    NumExtraJoints = extras.NumExtraJoints,
+                    NumExtraTracks = extras.NumeExtraTracks,
+                    NumJoints = Convert.ToUInt16(rig.BoneCount),
+                    NumTracks = Convert.ToUInt16(rig.ReferenceTracks?.Length ?? 0),
+                    NumConstAnimKeys = Convert.ToUInt32(constAnimKeys.Count),
+                    NumAnimKeysRaw = Convert.ToUInt32(animKeysRaw.Count),
+                    NumAnimKeys = Convert.ToUInt32(animKeys.Count),
+                    NumConstTrackKeys = Convert.ToUInt32(constTrackKeys.Count),
+                    NumTrackKeys = Convert.ToUInt32(trackKeys.Count),
+                    IsScaleConstant = keyScales.Count + constKeyScales.Count < 1,
+                    HasRawRotations = extras.PreferLosslessLinearRotationEncoding,
+
+                    FallbackFrameIndices = new CArray<CUInt16>(fallbackIndices),
+
+                    // These are internal only, they'll be packed into a buffer...
+                    ConstAnimKeys = new (constAnimKeys),
+                    AnimKeysRaw = new (animKeysRaw),
+                    AnimKeys = new (animKeys),
+
+                    ConstTrackKeys = new (constTrackKeys),
+                    TrackKeys = new (trackKeys),
+
+                    TempBuffer = new (),
+                };
+
+                // ...specifically TempBuffer, here.
+                compressed.WriteBuffer();
+
+                // For now just dump the data always into `AnimationDataChunk`s,
+                // may need to handle `InplaceCompressedBuffer` and `DefferedBuffer` (sic)
+                // separately if this doesn't work for those reliably...
+                var dataChk = new animAnimDataChunk()
+                {
+                    Buffer = new SerializationDeferredDataBuffer(compressed.TempBuffer.Buffer.GetBytes())
+                };
+
+                // These could also be written to a single chunk (or fewer chunks)
+                // but for now we'll do a chunk per animation.
+                //
+                // Might have some kind of streaming optimization potential chunk count vs. size?
+                compressed.DataAddress.UnkIndex = (uint)anims.AnimationDataChunks.Count;
+                compressed.DataAddress.FsetInBytes = 0;
+                compressed.DataAddress.ZeInBytes = compressed.TempBuffer.Buffer.MemSize;
+
+                anims.AnimationDataChunks.Add(dataChk);
+                animAnimDes.AnimBuffer.Chunk = compressed;
+            }
+
+            return true;
+        }
+
+
+        #endregion importanims
     }
 }

@@ -83,9 +83,6 @@ public class RED4Controller : ObservableObject, IGameController
             // load archives
             await LoadArchiveManager();
 
-            // requires oodle
-            InitializeBk();
-
             _progressService.IsIndeterminate = false;
             _progressService.Completed();
         }
@@ -131,70 +128,6 @@ public class RED4Controller : ObservableObject, IGameController
                 {
                     _hashService.AddCustom(presetEntry.NotNull().Name.ToString().NotNull());
                 }
-            }
-        }
-    }
-
-    private void InitializeBk()
-    {
-        string[] binkhelpers = { @"Resources\Media\t1.kark", @"Resources\Media\t2.kark", @"Resources\Media\t3.kark", @"Resources\Media\t4.kark", @"Resources\Media\t5.kark" };
-
-        if (string.IsNullOrEmpty(_settingsManager.GetRED4GameRootDir()))
-        {
-            Trace.WriteLine("That worked to cancel Loading oodle! :D");
-            return;
-        }
-
-        foreach (var path in binkhelpers)
-        {
-            switch (path)
-            {
-                case @"Resources\Media\t1.kark":
-                    if (!File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "test.exe")))
-                    {
-                        _ = Oodle.OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "test.exe"), true,
-                            false);
-                    }
-
-                    break;
-
-                case @"Resources\Media\t2.kark":
-                    if (!File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "testconv.exe")))
-                    {
-                        _ = Oodle.OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "testconv.exe"), true,
-                            false);
-                    }
-
-                    break;
-
-                case @"Resources\Media\t3.kark":
-                    if (!File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "testc.exe")))
-                    {
-                        _ = Oodle.OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "testc.exe"), true,
-                            false);
-                    }
-
-                    break;
-
-                case @"Resources\Media\t4.kark":
-                    if (!File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "radutil.dll")))
-                    {
-                        _ = Oodle.OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "radutil.dll"), true,
-                            false);
-                    }
-
-                    break;
-
-                case @"Resources\Media\t5.kark":
-                    if (!File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "bink2make.dll")))
-                    {
-                        _ = Oodle.OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "bink2make.dll"), true,
-                            false);
-                    }
-
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
         }
     }
@@ -317,15 +250,7 @@ public class RED4Controller : ObservableObject, IGameController
     {
         return Path.GetExtension(fileName) switch
         {
-            ".yaml" or ".yml" or ".xl" or ".script" or ".ws" or ".tweak" => true,
-            _ => false,
-        };
-    }
-    private static bool IsYaml(string fileName)
-    {
-        return Path.GetExtension(fileName) switch
-        {
-            ".yaml" or ".yml" => true,
+            ".xl" or ".script" or ".ws" or ".tweak" => true,
             _ => false,
         };
     }
@@ -338,13 +263,14 @@ public class RED4Controller : ObservableObject, IGameController
         };
     }
 
-    private static IEnumerable<string> GetTweakXLFiles(Cp77Project cp77Proj) => Directory.EnumerateFiles(cp77Proj.ResourcesDirectory, "*", SearchOption.AllDirectories).Where(file => IsYaml(file));
+    private static IEnumerable<string> GetScriptFiles(Cp77Project cp77Proj) 
+        => Directory.EnumerateFiles(cp77Proj.ResourceScriptsDirectory, "*.*", SearchOption.AllDirectories).Where(name => IsCDPRScript(name));
+
+
     private static IEnumerable<string> GetArchiveXlFiles(Cp77Project cp77Proj) => Directory.EnumerateFiles(cp77Proj.ResourcesDirectory, "*.xl", SearchOption.AllDirectories);
     private static IEnumerable<string> GetResourceFiles(Cp77Project cp77Proj) => Directory.EnumerateFiles(cp77Proj.ResourcesDirectory, "*.*", SearchOption.AllDirectories)
         .Where(name => !IsSpecialExtension(name))
-        .Where(x => Path.GetFileName(x) != "info.json")
-        ;
-    private static IEnumerable<string> GetScriptFiles(Cp77Project cp77Proj) => Directory.EnumerateFiles(cp77Proj.ResourcesDirectory, "*.*", SearchOption.AllDirectories).Where(name => IsCDPRScript(name));
+        .Where(x => Path.GetFileName(x) != "info.json");
     private static IEnumerable<string> GetTweakFiles(Cp77Project cp77Proj) => Directory.EnumerateFiles(cp77Proj.ResourcesDirectory, "*.tweak", SearchOption.AllDirectories);
 
     /// <summary>
@@ -407,22 +333,8 @@ public class RED4Controller : ObservableObject, IGameController
             _loggerService.Info($"{cp77Proj.Name} archives packed into {cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)}");
         }
 
-        // pack tweakXL files
-        var files = GetTweakXLFiles(cp77Proj);
-        if (files.Any())
-        {
-            if (!PackTweakXlFiles(cp77Proj, files))
-            {
-                _progressService.IsIndeterminate = false;
-                _loggerService.Error("Packing tweakXL files failed, aborting.");
-                _notificationService.Error("Packing tweakXL files failed, aborting.");
-                return false;
-            }
-            _loggerService.Info($"{cp77Proj.Name} tweakXL files packed into {cp77Proj.PackedTweakDirectory}");
-        }
-
         // pack archiveXL files
-        files = GetArchiveXlFiles(cp77Proj);
+        var files = GetArchiveXlFiles(cp77Proj);
         if (files.Any())
         {
             if (!PackArchiveXlFiles(cp77Proj, files, options))
@@ -633,24 +545,6 @@ public class RED4Controller : ObservableObject, IGameController
 
             // copy files, with overwriting
             File.Copy(file, fileOutputPath, true);
-        }
-        return true;
-    }
-
-    private static bool PackTweakXlFiles(Cp77Project cp77Proj, IEnumerable<string> tweakFiles)
-    {
-        foreach (var f in tweakFiles)
-        {
-            var outDir = Path.Combine(cp77Proj.PackedTweakDirectory, Path.GetRelativePath(cp77Proj.ResourcesDirectory, Path.GetDirectoryName(f).NotNull()));
-
-            if (!Directory.Exists(outDir))
-            {
-                Directory.CreateDirectory(outDir);
-            }
-
-            var filename = Path.GetFileName(f);
-            var outPath = Path.Combine(outDir, filename);
-            File.Copy(f, outPath, true);
         }
         return true;
     }

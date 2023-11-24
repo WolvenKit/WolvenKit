@@ -39,6 +39,10 @@ public class RedDBContext : DbContext
                 .Property(a => a.Name)
                 .HasMaxLength(255)
                 .IsRequired();
+
+            entity
+                .HasIndex(nameof(RedArchive.Name), nameof(RedArchive.Source))
+                .IsUnique();
         });
 
         modelBuilder.Entity<RedFile>(entity =>

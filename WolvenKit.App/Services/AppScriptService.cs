@@ -11,6 +11,7 @@ using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.Scripting;
 using WolvenKit.RED4.CR2W;
@@ -36,12 +37,13 @@ public partial class AppScriptService : ScriptService
         IModTools modTools,
         ImportExportHelper importExportHelper,
         IHookService hookService,
-        IGameControllerFactory gameController) : base(loggerService)
+        IGameControllerFactory gameController,
+        GeometryCacheService geometryCacheService) : base(loggerService)
     {
         _settingsManager = settingsManager;
         _hookService = hookService;
 
-        _wkit = new AppScriptFunctions(_loggerService, projectManager, archiveManager, red4ParserService, watcherService, modTools, importExportHelper, gameController);
+        _wkit = new AppScriptFunctions(_loggerService, projectManager, archiveManager, red4ParserService, watcherService, modTools, importExportHelper, gameController, geometryCacheService);
         _ui = new UiScriptFunctions(this);
         
         DefaultHostObject = new() { { "wkit", _wkit } };

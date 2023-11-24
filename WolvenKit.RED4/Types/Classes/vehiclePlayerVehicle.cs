@@ -37,6 +37,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(4)] 
+		[RED("uiFavoriteIndex")] 
+		public CInt32 UiFavoriteIndex
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(5)] 
 		[RED("destructionTimeStamp")] 
 		public EngineTime DestructionTimeStamp
 		{
@@ -47,6 +55,7 @@ namespace WolvenKit.RED4.Types
 		public vehiclePlayerVehicle()
 		{
 			VehicleType = Enums.gamedataVehicleType.Invalid;
+			UiFavoriteIndex = -1;
 			DestructionTimeStamp = new EngineTime();
 
 			PostConstruct();

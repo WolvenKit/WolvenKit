@@ -1,22 +1,28 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
+using ControlzEx.Standard;
+using Octokit;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App.Models;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Views.Shell
 {
     public partial class RibbonView : ReactiveUserControl<RibbonViewModel>
     {
         private readonly ISettingsManager _settingsManager;
-        //private bool _profilesLoaded;
+        private readonly ILoggerService _loggerService;
 
         public RibbonView()
         {
@@ -25,8 +31,7 @@ namespace WolvenKit.Views.Shell
             InitializeComponent();
 
             _settingsManager = Locator.Current.GetService<ISettingsManager>();
-
-            //GetLaunchProfiles();
+            _loggerService = Locator.Current.GetService<ILoggerService>();
 
             this.WhenActivated(disposables =>
             {
@@ -79,7 +84,7 @@ namespace WolvenKit.Views.Shell
                         view => view.ToolbarHotInstallButton)
                     .DisposeWith(disposables);
 
-
+                // Launch profiles
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.MainViewModel.LaunchOptionsCommand,
                         view => view.LaunchOptionsMenuItem)
@@ -98,16 +103,16 @@ namespace WolvenKit.Views.Shell
                     view => view.LaunchMenu.IsEnabled,
                     p => p is not null)
                     .DisposeWith(disposables);
+
+                // game launch
+                this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.LaunchGameCommand,
+                    view => view.MenuItemLaunchGame)
+                .DisposeWith(disposables);
             });
 
-            _settingsManager.WhenAnyValue(x => x.LaunchProfiles).Subscribe(dict =>
-            {
-                //if (_profilesLoaded)
-                {
-                    GetLaunchProfiles();
-                }
-
-            });
+            _settingsManager.WhenAnyValue(x => x.LaunchProfiles).Subscribe(_ => GetLaunchProfiles());
+            
         }
 
         private void GetLaunchProfiles()
@@ -187,6 +192,79 @@ namespace WolvenKit.Views.Shell
                     ViewModel.LaunchProfileText = header;
                 }
             }
+        }
+
+        private void MenuItem_SubmenuOpened(object sender, RoutedEventArgs e)
+        {
+            // get save files
+            var saveDir = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                "Saved Games", "CD Projekt Red", "Cyberpunk 2077");
+            if (!Directory.Exists(saveDir))
+            {
+                return;
+            }
+
+            // clear
+            foreach (var item in MenuItemLaunchGameSave.Items)
+            {
+                if (item is MenuItem menuItem)
+                {
+                    menuItem.Click -= LaunchSaveItem_Click;
+                }
+            }
+            MenuItemLaunchGameSave.Items.Clear();
+
+            // populate items
+            foreach (var folder in Directory.GetDirectories(saveDir))
+            {
+                var save = Path.Combine(folder, "sav.dat");
+                if (File.Exists(save))
+                {
+                    var dirName = new DirectoryInfo(folder).Name;
+                    //var info = Path.Combine(folder, "metadata.9.json");
+                    //var tooltip = File.Exists(info) ? File.ReadAllText(info) : "";
+                    var screenshot = Path.Combine(folder, "screenshot.png");
+                    var imageControl = new Image();
+                    var bitmapImage = new BitmapImage(new Uri(screenshot, UriKind.RelativeOrAbsolute));
+                    imageControl.Source = bitmapImage;
+
+                    MenuItem item = new()
+                    {
+                        Header = dirName,
+                        ToolTip = imageControl
+                    };
+                    item.Click += LaunchSaveItem_Click;
+                    MenuItemLaunchGameSave.Items.Add(item);
+                }
+            }
+        }
+
+        private void LaunchSaveItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (e.Source is MenuItem item)
+            {
+                if (item.Header is string header)
+                {
+                    // -save=ManualSave-168 
+                    try
+                    {
+                        Process.Start(new ProcessStartInfo
+                        {
+                            FileName = _settingsManager.GetRED4GameLaunchCommand(),
+                            Arguments = $"{_settingsManager.GetRED4GameLaunchOptions()} -save={header}",
+                            ErrorDialog = true,
+                            UseShellExecute = true,
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        _loggerService.Error("Launch: error launching game! Please check your executable path in Settings.");
+                        _loggerService.Info($"Launch: error debug info: {ex.Message}");
+                    }
+                }
+            }
+                   
         }
     }
 }

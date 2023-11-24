@@ -265,7 +265,12 @@ public partial class Red4Reader : IErrorHandler, IDataCollector, IDisposable
 
         var redType = GetStringValue(_reader.ReadUInt16());
         var redTypeInfos = RedReflection.GetRedTypeInfos(redType!);
-        CheckRedTypeInfos(ref redTypeInfos);
+
+        var (hasError, errorRedName) = CheckRedTypeInfos(ref redTypeInfos);
+        if (hasError)
+        {
+            throw new Exception($"Type \"{errorRedName}\" is not known!");
+        }
 
         var size = _reader.ReadUInt32() - 4;
         if (size > 0)
@@ -638,7 +643,7 @@ public partial class Red4Reader : IErrorHandler, IDataCollector, IDisposable
 
     #region Helper
 
-    protected internal void CheckRedTypeInfos(ref List<RedTypeInfo> redTypeInfos)
+    protected internal (bool, string?) CheckRedTypeInfos(ref List<RedTypeInfo> redTypeInfos)
     {
         for (int i = 0; i < redTypeInfos.Count; i++)
         {
@@ -649,11 +654,13 @@ public partial class Red4Reader : IErrorHandler, IDataCollector, IDisposable
                 var args = new UnknownTypeEventArgs(specialRedTypeInfo.RedName);
                 if (!HandleParsingError(args))
                 {
-                    throw new Exception($"Type \"{specialRedTypeInfo.RedName}\" is not known!");
+                    return (true, specialRedTypeInfo.RedName);
                 }
                 redTypeInfos[i] = args.Result;
             }
         }
+
+        return (false, null);
     }
 
     protected IRedType ThrowNotImplemented([CallerMemberName] string callerMemberName = "")

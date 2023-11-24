@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class DispenceItemFromVendor : ActionBool
 	{
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("price")] 
 		public CInt32 Price
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(41)] 
 		[RED("atlasTexture")] 
 		public CName AtlasTexture
 		{

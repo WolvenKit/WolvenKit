@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ActivateDevice : ActionBool
 	{
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("tweakDBChoiceName")] 
 		public CString TweakDBChoiceName
 		{

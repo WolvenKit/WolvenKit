@@ -6,11 +6,26 @@ namespace WolvenKit.RED4.Types;
 
 public partial class worldCompiledEffectInfo : IRedCompiledPropertyData
 {
+    public bool IsCustomReadNeeded(RedPackageHeader redPackageHeader) => redPackageHeader.unk1 == 2;
+
     public IRedType? CustomRead(Red4Reader reader, uint size, CName propertyName)
     {
         IRedType? result = null;
 
         if (propertyName == "placementTags")
+        {
+            var tmp = new CArray<CName>();
+
+            var cnt = reader.BaseReader.ReadInt32();
+            for (var i = 0; i < cnt; i++)
+            {
+                tmp.Add(reader.ReadCName());
+            }
+
+            result = tmp;
+        }
+
+        if (propertyName == "componentNames")
         {
             var tmp = new CArray<CName>();
 
@@ -104,6 +119,8 @@ public partial class worldCompiledEffectInfo : IRedCompiledPropertyData
 
         return result;
     }
+
+    public bool IsCustomWriteNeeded(RedPackageHeader redPackageHeader) => redPackageHeader.unk1 == 2;
 
     public void CustomWrite(Red4Writer writer, CName propertyName)
     {

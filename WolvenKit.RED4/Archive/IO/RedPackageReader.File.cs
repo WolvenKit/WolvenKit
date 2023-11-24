@@ -127,6 +127,19 @@ public partial class RedPackageReader : IBufferReader
         for (var i = 0; i < _chunks.Count; i++)
         {
             ReadClass(_chunks[i].Instance, 0);
+
+
+            var endPos = BaseStream.Length;
+            if (i + 1 < _chunks.Count)
+            {
+                endPos = baseOff + chunkHeaders[i + 1].offset;
+            }
+
+            if (BaseStream.Position != endPos)
+            {
+                LoggerService?.Warning("Chunk size mismatch! Could lead to problems");
+                BaseStream.Position = endPos;
+            }
         }
 
         foreach (var kvp in _chunks)

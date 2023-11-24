@@ -68,7 +68,6 @@ namespace WolvenKit.Views.Dialogs
                     .DisposeWith(disposables);
 
 
-                projectPathTxtbx.SetCurrentValue(TextBox.TextProperty, Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
                 xprojectNameTxtbx.VerifyData();
             });
         }

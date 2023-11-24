@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using SharpDX.Win32;
 using WolvenKit.App.Factories;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
@@ -332,6 +333,10 @@ public partial class TweakBrowserViewModel : ToolViewModel
         {
             return;
         }
+        if (_projectManager.ActiveProject is null)
+        {
+            return;
+        }
 
         var txl = new TweakXL
         {
@@ -347,35 +352,25 @@ public partial class TweakBrowserViewModel : ToolViewModel
 
         var txlFile = new TweakXLFile { txl };
 
-        Stream myStream;
-        var saveFileDialog = new Microsoft.Win32.SaveFileDialog
+        var path = Path.Combine(_projectManager.ActiveProject.ResourceTweakDirectory, $"{SelectedRecordEntry.DisplayName}.yaml");
+        var serializer = new SerializerBuilder()
+                 .WithTypeConverter(new TweakXLYamlTypeConverter(_locKeyService, _tweakDB))
+                 .WithIndentedSequences()
+                 .Build();
+
+        try
         {
-            Filter = "YAML files (*.yaml; *.yml)|*.yaml;*.yml|All files (*.*)|*.*",
-            FilterIndex = 1,
-            FileName = $"{SelectedRecordEntry.DisplayName}.yaml",
-            InitialDirectory = _projectManager.ActiveProject?.ResourcesDirectory
-        };
+            var yaml = serializer.Serialize(txlFile);
+            File.WriteAllText(path, yaml);
 
-        if (saveFileDialog.ShowDialog() == true)
-        {
-            if ((myStream = saveFileDialog.OpenFile()) is not null)
-            {
-                var serializer = new SerializerBuilder()
-                    .WithTypeConverter(new TweakXLYamlTypeConverter(_locKeyService, _tweakDB))
-                    .WithIndentedSequences()
-                    .Build();
-
-                var yaml = serializer.Serialize(txlFile);
-                myStream.Write(yaml.ToCharArray().Select(c => (byte)c).ToArray());
-                myStream.Close();
-
-                _loggerService.Success($"{SelectedRecordEntry.DisplayName} TweakXL written to: {saveFileDialog.FileName}");
-            }
-            else
-            {
-                _loggerService.Error($"Could not open file: {saveFileDialog.FileName}");
-            }
+            _loggerService.Success($"{SelectedRecordEntry.DisplayName} TweakXL written to: {path}");
         }
+        catch (Exception ex)
+        {
+            _loggerService.Error($"Failed to create TweakXL yaml. Error: {ex}");
+            throw;
+        }
+        
     }
 
     #endregion
