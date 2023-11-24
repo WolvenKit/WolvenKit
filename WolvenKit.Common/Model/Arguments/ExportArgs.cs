@@ -140,7 +140,7 @@ namespace WolvenKit.Common.Model.Arguments
     public class XbmExportArgs : ExportArgs
     {
         private EUncookExtension _uncookExtension = EUncookExtension.png;
-        private bool _flip;
+        private bool _flip = true;
 
         /// <summary>
         ///  Uncook Format for XBM.
