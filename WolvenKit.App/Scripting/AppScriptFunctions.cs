@@ -777,6 +777,13 @@ public class AppScriptFunctions : ScriptFunctions
         DispatcherHelper.RunOnMainThread(() => AppViewModel.OpenRedFileCommand.SafeExecute(gameFile));
     }
 
+    /// <summary>
+    /// Exports an geometry_cache entry
+    /// </summary>
+    /// <param name="sectorHashStr">Sector hash as string</param>
+    /// <param name="entryHashStr">Entry hash as string</param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
     public virtual string? ExportGeometryCacheEntry(string sectorHashStr, string entryHashStr)
     {
         if (!ulong.TryParse(sectorHashStr, out var sectorHash))
