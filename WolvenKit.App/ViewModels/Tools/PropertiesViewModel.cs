@@ -353,18 +353,15 @@ public partial class PropertiesViewModel : ToolViewModel
 
     public void SetupImage(RedBaseClass cls)
     {
-        using var ddsstream = new MemoryStream();
-        if (!ModTools.ConvertRedClassToDdsStream(cls, ddsstream, out var texformat, out var decompressedFormat))
+        var image = RedImage.FromRedClass(cls);
+        if (image.Metadata.Format == DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM)
         {
             return;
         }
 
-        ddsstream.Seek(0, SeekOrigin.Begin);
-        var buffer = Texconv.ConvertFromDds(ddsstream, EUncookExtension.png);
-
         var bitmapImage = new BitmapImage();
         bitmapImage.BeginInit();
-        bitmapImage.StreamSource = new MemoryStream(buffer);
+        bitmapImage.StreamSource = new MemoryStream(image.GetPreview());
         bitmapImage.EndInit();
 
         LoadedBitmapFrame = bitmapImage;
