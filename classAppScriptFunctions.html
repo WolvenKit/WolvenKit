@@ -149,6 +149,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5943d53f39a302111a156f2a472f7e62"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAppScriptFunctions.html#a5943d53f39a302111a156f2a472f7e62">OpenDocument</a> (IGameFile gameFile)</td></tr>
 <tr class="memdesc:a5943d53f39a302111a156f2a472f7e62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opens an archive game file  <a href="classAppScriptFunctions.html#a5943d53f39a302111a156f2a472f7e62">More...</a><br /></td></tr>
 <tr class="separator:a5943d53f39a302111a156f2a472f7e62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a226121a37b386cd2563745b15a8fe48f"><td class="memItemLeft" align="right" valign="top">virtual ? string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAppScriptFunctions.html#a226121a37b386cd2563745b15a8fe48f">ExportGeometryCacheEntry</a> (string sectorHashStr, string entryHashStr)</td></tr>
+<tr class="memdesc:a226121a37b386cd2563745b15a8fe48f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Exports an geometry_cache entry  <a href="classAppScriptFunctions.html#a226121a37b386cd2563745b15a8fe48f">More...</a><br /></td></tr>
+<tr class="separator:a226121a37b386cd2563745b15a8fe48f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classScriptFunctions"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classScriptFunctions')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classScriptFunctions.html">ScriptFunctions</a></td></tr>
 <tr class="memitem:a0baf0f2c0fe2a1cad481b1ce125c25f5 inherit pub_methods_classScriptFunctions"><td class="memItemLeft" align="right" valign="top">virtual IEnumerable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classScriptFunctions.html#a0baf0f2c0fe2a1cad481b1ce125c25f5">GetArchiveFiles</a> ()</td></tr>
 <tr class="memdesc:a0baf0f2c0fe2a1cad481b1ce125c25f5 inherit pub_methods_classScriptFunctions"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a list of the files available in the game archives Note to myself: Don't use IEnumerable&lt;T&gt;  <a href="classScriptFunctions.html#a0baf0f2c0fe2a1cad481b1ce125c25f5">More...</a><br /></td></tr>
@@ -216,6 +219,58 @@ Public Member Functions</h2></td></tr>
     <tr><td class="paramname">fileList</td><td></td></tr>
     <tr><td class="paramname">defaultSettings</td><td></td></tr>
     <tr><td class="paramname">blocking</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a226121a37b386cd2563745b15a8fe48f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a226121a37b386cd2563745b15a8fe48f">&#9670;&nbsp;</a></span>ExportGeometryCacheEntry()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual ? string AppScriptFunctions.ExportGeometryCacheEntry </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>sectorHashStr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>entryHashStr</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Exports an geometry_cache entry </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">sectorHashStr</td><td>Sector hash as string</td></tr>
+    <tr><td class="paramname">entryHashStr</td><td>Entry hash as string</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Exception</td><td></td></tr>
   </table>
   </dd>
 </dl>
