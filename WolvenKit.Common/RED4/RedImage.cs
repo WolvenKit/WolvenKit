@@ -955,13 +955,7 @@ public class RedImage : IDisposable
         {
             result.InternalScratchImage = result.InternalScratchImage.CreateCopyWithEmptyMipMaps(1, result._metadata.Format, CP_FLAGS.NONE, false);
         }
-
-
-        if (!TexHelper.Instance.IsCompressed(metadata.Format) && !result._metadata.IsCubemap() && info.FlipV)
-        {
-            result.InternalScratchImage = result.InternalScratchImage.FlipRotate(TEX_FR_FLAGS.FLIP_VERTICAL);
-        }
-
+        
         return result;
     }
 
