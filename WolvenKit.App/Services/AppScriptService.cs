@@ -37,12 +37,13 @@ public partial class AppScriptService : ScriptService
         IModTools modTools,
         ImportExportHelper importExportHelper,
         IHookService hookService,
-        IGameControllerFactory gameController) : base(loggerService)
+        IGameControllerFactory gameController,
+        GeometryCacheService geometryCacheService) : base(loggerService)
     {
         _settingsManager = settingsManager;
         _hookService = hookService;
 
-        _wkit = new AppScriptFunctions(_loggerService, projectManager, archiveManager, red4ParserService, watcherService, modTools, importExportHelper, gameController);
+        _wkit = new AppScriptFunctions(_loggerService, projectManager, archiveManager, red4ParserService, watcherService, modTools, importExportHelper, gameController, geometryCacheService);
         _ui = new UiScriptFunctions(this);
         
         DefaultHostObject = new() { { "wkit", _wkit } };
