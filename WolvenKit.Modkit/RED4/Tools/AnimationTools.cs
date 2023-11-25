@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using NAudio.MediaFoundation;
 using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
 using WolvenKit.Core.Extensions;
@@ -15,6 +16,7 @@ using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
 
+using static WolvenKit.RED4.Types.Enums;
 using static WolvenKit.Modkit.RED4.Animation.Const;
 using static WolvenKit.Modkit.RED4.Animation.Fun;
 using static WolvenKit.Modkit.RED4.Animation.Gltf;
@@ -63,7 +65,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             var model = ModelRoot.CreateModel();
-            GetAnimation(animsFile, rigFile, ref model, true, incRootMotion);
+            GetAnimation(animsFile, rigFile, outfile.Name, ref model, true, incRootMotion);
 
             if (isGLBinary)
             {
@@ -77,7 +79,7 @@ namespace WolvenKit.Modkit.RED4
             return true;
         }
 
-        public static bool GetAnimation(CR2WFile animsFile, CR2WFile rigFile, ref ModelRoot model, bool includeRig = true, bool incRootMotion = true)
+        public bool GetAnimation(CR2WFile animsFile, CR2WFile rigFile, string animsFileName, ref ModelRoot model, bool includeRig = true, bool incRootMotion = true)
         {
 
             if (animsFile.RootChunk is not animAnimSet anims)
@@ -108,6 +110,16 @@ namespace WolvenKit.Modkit.RED4
                 skin.BindJoints(RIG.ExportNodes(ref model, rig).Values.ToArray());
             }
 
+            var rigFileName = anims.Rig.DepotPath.GetResolvedText() ?? "<unknown rig depotpath??>";
+
+            _loggerService.Info($"{animsFileName}: Found {anims.Animations.Count} animations to export, using rig {rigFileName}");
+
+            var stats = new
+            {
+                AdditiveAnims = 0,
+                SimdAnims = 0,
+            };
+
             foreach (var anim in anims.Animations)
             {
                 ArgumentNullException.ThrowIfNull(anim.Chunk);
@@ -115,8 +127,16 @@ namespace WolvenKit.Modkit.RED4
 
                 var animAnimDes = anim.Chunk.Animation.Chunk;
 
+                if (animAnimDes.MotionExtraction != null && animAnimDes.MotionExtraction.Chunk != null && !incRootMotion)
+                {
+                    _loggerService.Debug($"{animsFileName}: {animAnimDes.Name}: contains root motion but it's not exported!");
+                }
+
+                stats = animAnimDes.AnimationType == animAnimationType.Normal ? stats : stats with { AdditiveAnims = stats.AdditiveAnims + 1 };
+
                 if (animAnimDes.AnimBuffer.Chunk is animAnimationBufferSimd animBuffSimd)
                 {
+                    stats = stats with { SimdAnims = stats.SimdAnims + 1 };
 
                     MemoryStream deferredBuffer;
                     if (animBuffSimd.InplaceCompressedBuffer != null)
@@ -137,6 +157,7 @@ namespace WolvenKit.Modkit.RED4
                         deferredBuffer = new MemoryStream(animBuffSimd.DefferedBuffer.Buffer.GetBytes());
                     }
                     deferredBuffer.Seek(0, SeekOrigin.Begin);
+                    _loggerService.Debug($"{animsFileName}: Exporting SIMD animation {animAnimDes.Name} with {animBuffSimd.NumFrames * animBuffSimd.NumJoints} S/R/T transforms and {animBuffSimd.NumFrames * animBuffSimd.NumTracks} tracks");
                     SIMD.AddAnimationSIMD(ref model, animBuffSimd, animAnimDes.Name!, deferredBuffer, animAnimDes, incRootMotion);
                 }
                 else if (animAnimDes.AnimBuffer.Chunk is animAnimationBufferCompressed)
@@ -144,6 +165,17 @@ namespace WolvenKit.Modkit.RED4
                     CompressedBuffer.ExportAsAnimationToModel(ref model, animAnimDes, incRootMotion);
                 }
             }
+
+            if (stats.SimdAnims > 0)
+            {
+                _loggerService.Info($"{animsFileName}: Exported {stats.SimdAnims} SIMD animations. They can only be imported back as regular animations, so you may want to simplify them when editing, or omit them from the re-import to keep the old ones."); 
+            }
+
+            if (stats.AdditiveAnims > 0)
+            {
+                _loggerService.Info($"{animsFileName}: Exported {stats.AdditiveAnims} additive animations already added to the bind pose. Reimport will strip the bind pose again.");
+            }
+
             return true;
         }
 
@@ -213,10 +245,12 @@ namespace WolvenKit.Modkit.RED4
         }
 
 
-        private bool PutAnimations(ref animAnimSet anims, ref RawArmature rig, ref ModelRoot model, string gltfFileName, string rigFileName) {
-
-            // Clear out the old animdata if it looks like we have something to import
+        private bool PutAnimations(ref animAnimSet anims, ref RawArmature rig, ref ModelRoot model, string gltfFileName, string rigFileName)
+        {
             _loggerService.Info($"{gltfFileName}: found {model.LogicalAnimations.Count} animations to import");
+
+            var (importedCount, retainedCount, skippedImportCount, simdCount, additiveCount) = (0, 0, 0, 0, 0);
+
             var newAnimSetEntries = new CArray<CHandle<animAnimSetEntry>>();
             var newAnimChunks = new CArray<animAnimDataChunk>();
 
@@ -253,28 +287,33 @@ namespace WolvenKit.Modkit.RED4
 
                 var oldAnimDesc = oldAnim.Animation.Chunk;
 
-                var keyframeTranslations = new Dictionary<AnimationInterpolationMode, Dictionary<ushort, Dictionary<float, Vec3>>> {
+                var keyframeTranslations = new Dictionary<AnimationInterpolationMode, Dictionary<ushort, List<(float, Vec3)>>> {
                     [AnimationInterpolationMode.STEP] = new (),
                     [AnimationInterpolationMode.LINEAR] = new (),
                 };
 
-                var keyframeRotations = new Dictionary<AnimationInterpolationMode, Dictionary<ushort, Dictionary<float, Quat>>> {
+                var keyframeRotations = new Dictionary<AnimationInterpolationMode, Dictionary<ushort, List<(float, Quat)>>> {
                     [AnimationInterpolationMode.STEP] = new (),
                     [AnimationInterpolationMode.LINEAR] = new (),
                 };
 
-                var keyframeScales = new Dictionary<AnimationInterpolationMode, Dictionary<ushort, Dictionary<float, Vec3>>> {
+                var keyframeScales = new Dictionary<AnimationInterpolationMode, Dictionary<ushort, List<(float, Vec3)>>> {
                     [AnimationInterpolationMode.STEP] = new (),
                     [AnimationInterpolationMode.LINEAR] = new (),
                 };
 
                 var incomingAnimationType = (animAnimationType)Enum.Parse(typeof(animAnimationType), extras.AnimationType);
                 var stripLocalFromAdditives = incomingAnimationType != animAnimationType.Normal;
+
+                additiveCount += stripLocalFromAdditives ? 1 : 0;
+                simdCount += extras.OptimizationHints.PreferSIMD ? 1 : 0;
+
+                foreach (var chan in incomingAnim.Channels)
                 {
                     var idx = Array.IndexOf(rig.Names.NotNull(), chan.TargetNode.Name);
                     if (idx < 0)
                     {
-                        throw new Exception($"{gltfFileName} ${srcAnim.Name}: Invalid Joint Transform, joint {chan.TargetNode.Name} not present in the associated rig {rigFileName}");
+                        throw new Exception($"{gltfFileName} ${incomingAnim.Name}: Invalid Joint Transform, joint {chan.TargetNode.Name} not present in the associated rig {rigFileName}");
                     }
 
                     switch (chan.TargetNodePath)
@@ -315,7 +354,7 @@ namespace WolvenKit.Modkit.RED4
                         case PropertyPath.weights:
                             // Fallthrough, no morph anims yet
                         default:
-                            throw new System.Exception($"{gltfFileName} ${srcAnim.Name}: Unsupported channel target {chan.TargetNodePath}!");
+                            throw new Exception($"{gltfFileName} ${incomingAnim.Name}: Unsupported channel target {chan.TargetNodePath}!");
                     }
                 }
   
@@ -334,6 +373,8 @@ namespace WolvenKit.Modkit.RED4
                 var animKeys = new List<animKey?>();
                 var animKeysRaw = new List<animKey?>();
 
+                var rotationCompressionAllowed = extras.OptimizationHints.MaxRotationCompression != AnimationEncoding.Uncompressed;
+
                 for (ushort jointIdx = 0; jointIdx < (ushort)rig.BoneCount; ++jointIdx) {
 
                     // Const keyframes are all similarly encoded, S, R and T
@@ -341,33 +382,33 @@ namespace WolvenKit.Modkit.RED4
                     // Order of SRT doesn't seem to matter
                     foreach (var (time, value) in constKeyRotations.GetValueOrDefault(jointIdx, new ()))
                     {
-                        constAnimKeys.Add(new animKeyRotation() { Idx = jointIdx, Time = time, Rotation = RQuaternionZup(value), });
+                        constAnimKeys.Add(new animKeyRotation() { Idx = jointIdx, Time = time, Rotation = RQuaternionZupLhs(value), });
                     }
                     foreach (var (time, value) in constKeyTranslations.GetValueOrDefault(jointIdx, new ()))
                     {
-                        constAnimKeys.Add(new animKeyPosition() { Idx = jointIdx, Time = time, Position = TRVectorZup(value), });
+                        constAnimKeys.Add(new animKeyPosition() { Idx = jointIdx, Time = time, Position = TRVectorZupLhs(value), });
                     }
                     foreach (var (time, value) in constKeyScales.GetValueOrDefault(jointIdx, new ()))
                     {
-                        constAnimKeys.Add(new animKeyScale() { Idx = jointIdx, Time = time, Scale = SVectorZup( value ), });
+                        constAnimKeys.Add(new animKeyScale() { Idx = jointIdx, Time = time, Scale = SVectorZupLhs( value ), });
                     }
 
                     // For linear keyframes, T and S are always 'raw' but R can optionally be compressed
 
                     foreach (var (time, value) in keyTranslations.GetValueOrDefault(jointIdx, new ()))
                     {
-                        animKeysRaw.Add(new animKeyPosition() { Idx = jointIdx, Time = time, Position = TRVectorZup( value ), });
+                        animKeysRaw.Add(new animKeyPosition() { Idx = jointIdx, Time = time, Position = TRVectorZupLhs( value ), });
                     }
                     foreach (var (time, value) in keyScales.GetValueOrDefault(jointIdx, new ()))
                     {
-                        animKeysRaw.Add(new animKeyScale() { Idx = jointIdx, Time = time, Scale = SVectorZup(value), });
+                        animKeysRaw.Add(new animKeyScale() { Idx = jointIdx, Time = time, Scale = SVectorZupLhs(value), });
                     }
 
-                    var preferredStorage = extras.PreferLosslessLinearRotationEncoding ? animKeysRaw : animKeys;
+                    var preferredStorage = rotationCompressionAllowed ? animKeys : animKeysRaw;
 
                     foreach (var (time, value) in keyRotations.GetValueOrDefault(jointIdx, new ()))
                     {
-                        preferredStorage.Add(new animKeyRotation() { Idx = jointIdx, Time = time, Rotation = RQuaternionZup(value), });
+                        preferredStorage.Add(new animKeyRotation() { Idx = jointIdx, Time = time, Rotation = RQuaternionZupLhs(value), });
                     }
                 }
 
