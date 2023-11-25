@@ -72,6 +72,13 @@ function isNumericHash(str) {
     return !!str && /^\d+$/.test(str);
 }
 
+function formatArrayForPrint(ary) {
+    if (!ary || undefined === ary.length) return '';
+    if (0 === ary.length) return '[ ]';
+    if (1 === ary.length) return `[ ${ary[0]} ]`;
+    return `[\n\t${ary.join('\n\t')}\n]`;
+}
+
 /**
  * Some users had files that were outright broken - they didn't make the game crash, but silently failed to work
  * and caused exceptions in file validation because certain values weren't set. This method fixes the structure
@@ -869,14 +876,14 @@ function entFile_appFile_validateComponent(component, _index, validateRecursivel
     // They should probably be globally unique, but we're not checking this, oh no, sir.
     if (hasMesh && entSettings.checkComponentIdsForGarmentSupport && !!component.id && !info?.startsWith('app')) {
         if (componentIds.includes(component.id) && !componentName.startsWith("amm")) {
-            componentIdErrors.push("not unique");
+            componentIdErrors.push(`${component.id}: not unique`);
         } else {
             componentIds.push(component.id);
         }
         // parseInt or parseFloat will lead to weird side effects here. Give it an ID of 1638580377071202307, 
         // and it'll arrive at the numeric value of 1638580377071202300. 
         if (!/^[02468]$/.test((component.id.match(/\d$/) || ["0"])[0])) {
-            componentIdErrors.push("not an even number");
+            componentIdErrors.push(`${component.id}: not an even number`);
         }
     }
 
@@ -1134,8 +1141,8 @@ export function validateEntFile(ent, _entSettings) {
     }
 
     if (componentIdErrors.length) {
-        Logger.Warning(`${info}: Component ID(s) ${component.id} may cause errors with garment support:`);
-        Logger.Warning(`\t${componentIdErrors.join("\n\t")}`);
+        const currentFileName = pathToCurrentFile.replace(/^.*[\\/]/, '');
+        Logger.Warning(`${currentFileName}: Component ID(s) may cause errors with garment support: ${formatArrayForPrint(componentIdErrors)}`);
     }
 
     const numAmmComponents = allComponentNames.filter((name) => !!name && name.startsWith('amm_prop_slot')).length;
