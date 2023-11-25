@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
-
+using SharpGLTF.IO;
+using WolvenKit.Modkit.RED4.Animation.Deprecated;
 using Quat = System.Numerics.Quaternion;
 using Vec3 = System.Numerics.Vector3;
 
@@ -21,15 +22,15 @@ namespace WolvenKit.Modkit.RED4.Animation
 
     internal static class Fun
     {
-        public static Vec3 TRVectorZup(Vec3 v) => new(v.X, -v.Z, v.Y);
-        public static Vec3 TRVectorYup(Vec3 v) => new(v.X, v.Z, -v.Y);
+        public static Vec3 TRVectorZupLhs(Vec3 yupV) => new(yupV.X, -yupV.Z, yupV.Y);
+        public static Vec3 TRVectorYupRhs(Vec3 zupV) => new(zupV.X, zupV.Z, -zupV.Y);
 
         // NB scale is not affected by handedness
-        public static Vec3 SVectorZup(Vec3 v) => new(v.X, v.Z, v.Y);
-        public static Vec3 SVectorYup(Vec3 v) => new(v.X, v.Y, v.Z);
+        public static Vec3 SVectorZupLhs(Vec3 yupV) => new(yupV.X, yupV.Z, yupV.Y);
+        public static Vec3 SVectorYupRhs(Vec3 zupV) => new(zupV.X, zupV.Y, zupV.Z);
 
-        public static Quat RQuaternionZup(Quat q) => new(q.X, -q.Z, q.Y, q.W);
-        public static Quat RQuatYup(Quat q) => new(q.X, q.Z, -q.Y, q.W);
+        public static Quat RQuaternionZupLhs(Quat yupQ) => new(yupQ.X, -yupQ.Z, yupQ.Y, yupQ.W);
+        public static Quat RQuaternionYupRhs(Quat zupQ) => new(zupQ.X, zupQ.Z, -zupQ.Y, zupQ.W);
     }
 
     internal static class Gltf
@@ -157,9 +158,9 @@ namespace WolvenKit.Modkit.RED4.Animation
             bool PreferLosslessLinearRotationEncoding,
             byte NumExtraJoints,
             byte NumeExtraTracks,
-        List<AnimConstTrackKeySerializable> ConstTrackKeys,
-        List<AnimTrackKeySerializable> TrackKeys,
-        List<ushort> FallbackFrameIndices
-    );
+            List<AnimConstTrackKeySerializable> ConstTrackKeys,
+            List<AnimTrackKeySerializable> TrackKeys,
+            List<ushort> FallbackFrameIndices
+        );
     }
 }
