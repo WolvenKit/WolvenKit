@@ -785,9 +785,9 @@ namespace WolvenKit.Modkit.RED4
 
             var expMeshes = new List<RawMeshContainer>();
             var matData = new List<MatData>();
-            foreach (var meshStream in meshStreamS.Keys)
+            foreach (var meshStream in meshStreamS)
             {
-                var cr2w = _parserService.ReadRed4File(meshStream);
+                var cr2w = _parserService.ReadRed4File(meshStream.Key);
                 if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob == null || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
                 {
                     continue;
@@ -797,14 +797,14 @@ namespace WolvenKit.Modkit.RED4
 
                 var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh);
 
-                var Meshes = MeshTools.ContainRawMesh(ms, meshesinfo, meshExportArgs.LodFilter);
-                MeshTools.UpdateSkinningParamCloth(ref Meshes, meshStream, cr2w);
+                var Meshes = MeshTools.ContainRawMesh(ms, meshesinfo, meshExportArgs.LodFilter,  ulong.MaxValue,  false, meshStream.Value );
+                MeshTools.UpdateSkinningParamCloth(ref Meshes, meshStream.Key, cr2w);
 
                 MeshTools.WriteGarmentParametersToMesh(ref Meshes, cMesh, meshExportArgs.ExportGarmentSupport);
 
                 var meshRig = MeshTools.GetOrphanRig(cMesh);
 
-                MeshTools.UpdateMeshJoints(ref Meshes, expRig, meshRig, meshStreamS[meshStream]);
+                MeshTools.UpdateMeshJoints(ref Meshes, expRig, meshRig, meshStreamS[meshStream.Key]);
 
                 if (meshExportArgs.withMaterials)
                 {
@@ -813,13 +813,13 @@ namespace WolvenKit.Modkit.RED4
                         _loggerService.Error("Depot path is not set: Choose a Depot location within Settings for generating materials.");
                         return false;
                     }
-                    matData.Add(SetupMaterial(cr2w, meshStream, meshExportArgs.Archives, meshExportArgs.MaterialRepo, meshesinfo, meshExportArgs.MaterialUncookExtension));
+                    matData.Add(SetupMaterial(cr2w, meshStream.Key, meshExportArgs.Archives, meshExportArgs.MaterialRepo, meshesinfo, meshExportArgs.MaterialUncookExtension));
                 }
 
                 expMeshes.AddRange(Meshes);
 
-                meshStream.Dispose();
-                meshStream.Close();
+                meshStream.Key.Dispose();
+                meshStream.Key.Close();
             }
             var model = MeshTools.RawMeshesToGLTF(expMeshes, expRig, withMaterials: meshExportArgs.withMaterials);
 

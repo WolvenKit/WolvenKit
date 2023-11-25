@@ -355,7 +355,7 @@ namespace WolvenKit.Modkit.RED4.Tools
 
             return meshesInfo;
         }
-        public static List<RawMeshContainer> ContainRawMesh(MemoryStream gfs, MeshesInfo info, bool lodFilter, ulong chunkMask = ulong.MaxValue, bool mergeMeshes = false)
+        public static List<RawMeshContainer> ContainRawMesh(MemoryStream gfs, MeshesInfo info, bool lodFilter, ulong chunkMask = ulong.MaxValue, bool mergeMeshes = false, string meshname="")
         {
             ArgumentNullException.ThrowIfNull(info.appearances, nameof(info));
 
@@ -550,19 +550,33 @@ namespace WolvenKit.Modkit.RED4.Tools
                     meshContainer.indices[i] = gbr.ReadUInt16();
                 }
 
+                if (meshname.Length>0)
+                {
+                    meshContainer.name = mergeMeshes ?
+                                        info.appearances.Keys.FirstOrDefault("default") :
+                                        Path.GetFileNameWithoutExtension(meshname)+"_submesh_" + Convert.ToString(index).PadLeft(2, '0') + "_LOD_" + info.LODLvl[index];
 
-                meshContainer.name = mergeMeshes ?
-                    info.appearances.Keys.FirstOrDefault("default") :
-                    "submesh_" + Convert.ToString(index).PadLeft(2, '0') + "_LOD_" + info.LODLvl[index];
+                }
+                else
+                {
+                    meshContainer.name = mergeMeshes ?
+                                        info.appearances.Keys.FirstOrDefault("default") :
+                                        "submesh_" + Convert.ToString(index).PadLeft(2, '0') + "_LOD_" + info.LODLvl[index];
+                }
+                
 
                 meshContainer.materialNames = new string[info.appearances.Count];
+
+                
+                var Mesh_apps = info.appearances.Keys.Select(key => Path.GetFileNameWithoutExtension(meshname)+'_' + key).ToList();
+
                 var apps = info.appearances.Keys.ToList();
 
                 for (var e = 0; e < apps.Count; e++)
                 {
                     // Null-proof materials
                     var d = info.appearances[apps[e]];
-                    info.appearances[apps[e]] = InitializeDefaultMaterial(info.meshCount, d.NotNull());
+                    info.appearances[Mesh_apps[e]] = InitializeDefaultMaterial(info.meshCount, d.NotNull());
                     meshContainer.materialNames[e] = d[index];
                 }
 
