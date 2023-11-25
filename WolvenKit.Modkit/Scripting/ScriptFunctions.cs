@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.IO;
+using System.Linq;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Common.FNV1A;
@@ -151,13 +152,17 @@ public class ScriptFunctions
             return null;
         }
 
-        var fileOpt = _archiveManager.Lookup(hash);
-        if (!fileOpt.HasValue)
+        var fileEntry = _archiveManager.Archives.Items
+            .SelectMany(x => x.Files.Values)
+            .Cast<FileEntry>()
+            .FirstOrDefault(x => x.NameHash64 == hash);
+
+        if (fileEntry == null)
         {
             return null;
         }
 
-        return ConvertGameFile(fileOpt.Value, openAs);
+        return ConvertGameFile(fileEntry, openAs);
     }
 
     /// <summary>

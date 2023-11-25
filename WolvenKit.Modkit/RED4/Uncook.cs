@@ -954,7 +954,7 @@ namespace WolvenKit.Modkit.RED4
             SaveMaterials(outfile, materialDataToExport);
             _SaveMeshes(outfile, modelsAndRigsCombinedToExport);
 
-            _loggerService.Info($"Mesh export completed, {meshesToExport.Count} meshes, {materialDataToExport.Count} materials, {rigsCombinedToExport?.Names?.Length ?? 0} rigs");
+            _loggerService.Info($"Mesh export completed, {meshesToExport.Count} meshes, {materialDataToExport.Count} materials, {rigsCombinedToExport?.Names?.Length ?? 0} bones");
             return true;
 
 
