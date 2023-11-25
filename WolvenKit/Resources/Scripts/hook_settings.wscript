@@ -174,6 +174,16 @@ const Settings = {
          */
         validateRecursively: true,
     },
+    Morphtarget: {
+        /*
+         * Set this to "false" to disable file validation for .mi files.
+         */
+        Enabled: true,
+        /*
+         * Should file validation check materials in inherited meshes? (Only outside of /base) 
+         */
+        validateRecursively: true,
+    },
     Workspot: {
         /*
          * Set this to "false" to disable file validation for .workspot files.

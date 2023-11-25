@@ -115,6 +115,8 @@ function checkIfFileIsBroken(data, fileType, _info = '') {
  * @param _depotPath the depot path to analyse
  * @param _info info string for the user
  * @param allowEmpty suppress warning if depot path is unset (partsOverrides will target player entity)
+ *
+ * @return true if the depot path exists and can be resolved.
  */
 function checkDepotPath(_depotPath, _info, allowEmpty = false) {
     // Don't validate if uppercase file names are present
@@ -819,7 +821,10 @@ const CURLY_BRACES_WARNING = 'different number of { and }, check for typos';
 //  for warnings
 const MISSING_PREFIX_WARNING = 'not starting with *, substitution disabled';
 
+
+let componentIdErrors = [];
 const WITH_MESH = 'withMesh';
+
 // For different component types, check DepotPath property
 function entFile_appFile_validateComponent(component, _index, validateRecursively, info) {
     let type = component.$type || '';
@@ -829,26 +834,33 @@ function entFile_appFile_validateComponent(component, _index, validateRecursivel
 
     // allow empty paths for debug components
     let depotPathCanBeEmpty = isDebugComponent;
+    let componentPropertyKeyWithDepotPath = '';
 
     // entGarmentSkinnedMeshComponent - entSkinnedMeshComponent - entMeshComponent
     if (component?.mesh?.DepotPath) {
         type = WITH_MESH;
+        componentPropertyKeyWithDepotPath = 'mesh';
         depotPathCanBeEmpty ||= componentName !== 'amm_prop_slot1' && componentName?.startsWith('amm_prop_slot');
-    } else if (!isRootEntity && type.toLowerCase().includes('mesh')) {
-        Logger.Info(`Component of type ${type} doesn't have a mesh path`);
+    }
+    if (component?.morphResource?.DepotPath) {
+        type = WITH_MESH;
+        componentPropertyKeyWithDepotPath = 'morphResource';
     }
 
     // flag for mesh validation, in case this is called recursively from app file
     let hasMesh = false;
     switch (type) {
         case WITH_MESH:
-            checkDepotPath(component.mesh.DepotPath, `${info}.${componentName}`, depotPathCanBeEmpty);
+            checkDepotPath(component[componentPropertyKeyWithDepotPath].DepotPath, `${info}.${componentName}`, depotPathCanBeEmpty);
             hasMesh = true;
             break;
         case 'workWorkspotResourceComponent':
             checkDepotPath(component.workspotResource.DepotPath, `${info}.${componentName}`, depotPathCanBeEmpty);
             break;
         default:
+            if (!isRootEntity && type.toLowerCase().includes('mesh')) {
+                Logger.Info(`Component of type ${type} doesn't have a mesh path`);
+            }
             break;
     }
 
@@ -856,7 +868,6 @@ function entFile_appFile_validateComponent(component, _index, validateRecursivel
     // Check if component IDs are even numbers and unique within the scope of the entity.
     // They should probably be globally unique, but we're not checking this, oh no, sir.
     if (hasMesh && entSettings.checkComponentIdsForGarmentSupport && !!component.id && !info?.startsWith('app')) {
-        const componentIdErrors = [];
         if (componentIds.includes(component.id) && !componentName.startsWith("amm")) {
             componentIdErrors.push("not unique");
         } else {
@@ -867,18 +878,18 @@ function entFile_appFile_validateComponent(component, _index, validateRecursivel
         if (!/^[02468]$/.test((component.id.match(/\d$/) || ["0"])[0])) {
             componentIdErrors.push("not an even number");
         }
-        if (componentIdErrors.length) {
-            Logger.Warning(`${info}: Component ID ${component.id} may cause errors with garment support:`);
-            Logger.Warning(`\t${componentIdErrors.join("\n\t")}`);
-        }
     }
 
-    if (!validateRecursively || !hasMesh || hasUppercasePaths) {
+    const meshDepotPath = `${hasMesh ? stringifyPotentialCName(component[componentPropertyKeyWithDepotPath]?.DepotPath) : '' || ''}`;
+
+    if (!validateRecursively || !hasMesh || hasUppercasePaths || meshDepotPath.endsWith('.morphtarget')) {
         // Logger.Error(`${componentMeshPath}: not validating mesh`);
         return;
     }
 
-    const meshDepotPath = stringifyPotentialCName(component.mesh.DepotPath);
+    if (!meshDepotPath.endsWith('.mesh') && !/^\d+$/.test(meshDepotPath)) {
+        Logger.Warning(`${info}: ${componentPropertyKeyWithDepotPath} does not end with .mesh! This will crash your game!`);
+    }
     const componentMeshPaths = getArchiveXlMeshPaths(meshDepotPath);
 
     componentMeshPaths.forEach((componentMeshPath) => {
@@ -1122,6 +1133,11 @@ export function validateEntFile(ent, _entSettings) {
         (allComponentNames.includes(componentName) ? duplicateComponentNames : allComponentNames).push(componentName);
     }
 
+    if (componentIdErrors.length) {
+        Logger.Warning(`${info}: Component ID(s) ${component.id} may cause errors with garment support:`);
+        Logger.Warning(`\t${componentIdErrors.join("\n\t")}`);
+    }
+
     const numAmmComponents = allComponentNames.filter((name) => !!name && name.startsWith('amm_prop_slot')).length;
     if (numAmmComponents > 0 && numAmmComponents < 4 && !allComponentNames.includes('amm_prop_slot1')) {
         Logger.Info('Is this an AMM prop appearance? Only components with the names "amm_prop_slot1" - "amm_prop_slot4" will support scaling.');
@@ -1237,6 +1253,7 @@ export function validateEntFile(ent, _entSettings) {
  */
 
 let meshSettings = {};
+let morphtargetSettings = {};
 
 // scan materials, save for the next function
 let materialNames = {};
@@ -1394,6 +1411,39 @@ function ignoreChunkMaterialName(materialName) {
     if (!materialName || !materialName.endsWith) return false;
     const name = materialName.toLowerCase();
     return name.includes("none") || name.includes("invis") || name.includes("hide") || name.includes("hidden");
+}
+
+export function validateMorphtargetFile(morphtarget, _morphargetSettings) {
+    // check if settings are enabled
+    if (!_morphargetSettings?.Enabled) return;
+
+    // check if file needs to be called recursively or is invalid
+    if (morphtarget?.Data?.RootChunk) return validateMeshFile(morphtarget.Data.RootChunk, _morphargetSettings);
+
+    morphtargetSettings = _morphargetSettings;
+    resetInternalFlagsAndCaches();
+
+    const meshDepotPath = stringifyPotentialCName(morphtarget.baseMesh.DepotPath);
+    if (!checkDepotPath(meshDepotPath, 'baseMesh')) {
+        return;
+    }
+    if (!meshDepotPath.endsWith('.mesh') && /^\d+$/.test(meshDepotPath)) {
+        Logger.Warning(`baseMesh ${meshDepotPath} does not end in .mesh. This might crash the game.`);
+    }
+
+    if (!morphtargetSettings.validateRecursively) return;
+
+    const defaultAppearance = stringifyPotentialCName(morphtarget.baseMeshAppearance, 'baseMeshAppearance');
+    const appearancesInMesh = component_collectAppearancesFromMesh(meshDepotPath) || [];
+
+    if (!appearancesInMesh.includes(defaultAppearance)) {
+        Logger.Warning(`Appearance ${defaultAppearance} not found in ${meshDepotPath}. `);
+        if (!appearancesInMesh.length) {
+            Logger.Info(`No appearances could be found. Is something wrong with the path?`);
+            return;
+        }
+        Logger.Info(`Only the following appearances are defined: \t${appearancesInMesh}`);
+    }
 }
 
 export function validateMeshFile(mesh, _meshSettings) {

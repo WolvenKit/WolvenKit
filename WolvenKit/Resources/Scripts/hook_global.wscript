@@ -47,6 +47,9 @@ globalThis.onSave = function (ext, file) {
             case "mesh":
                 FileValidation.validateMeshFile(data, Settings.Mesh);
                 break;
+            case "morphtarget":
+                FileValidation.validateMorphtargetFile(data, Settings.Morphtarget);
+                break;
             case "mi":
                 FileValidation.validateMiFile(data, Settings.Mi);
                 break;
