@@ -213,7 +213,7 @@ namespace WolvenKit.Modkit.RED4.Tools
             return true;
         }
 
-        public static MeshesInfo GetMeshesinfo(rendRenderMeshBlob rendMeshBlob, CMesh? cMesh = null)
+        public static MeshesInfo GetMeshesinfo(rendRenderMeshBlob rendMeshBlob, CMesh? cMesh = null, string meshname="")
         {
             var meshesInfo = new MeshesInfo(rendMeshBlob.Header.RenderChunkInfos.Count);
             var redQuantScale = rendMeshBlob.Header.QuantizationScale;
@@ -349,7 +349,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                         ArgumentNullException.ThrowIfNull(m);
                         materialNames[e] = m;
                     }
-                    meshesInfo.appearances.Add(app.Name + $"{i}", materialNames);
+                    meshesInfo.appearances.Add(Path.GetFileNameWithoutExtension(meshname) + '_' + app.Name + $"{i}", materialNames);
                 }
             }
 
@@ -568,7 +568,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                 meshContainer.materialNames = new string[info.appearances.Count];
 
                 
-                var Mesh_apps = info.appearances.Keys.Select(key => Path.GetFileNameWithoutExtension(meshname)+'_' + key).ToList();
+                //var Mesh_apps = info.appearances.Keys.Select(key => Path.GetFileNameWithoutExtension(meshname)+'_' + key).ToList();
 
                 var apps = info.appearances.Keys.ToList();
 
@@ -576,7 +576,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                 {
                     // Null-proof materials
                     var d = info.appearances[apps[e]];
-                    info.appearances[Mesh_apps[e]] = InitializeDefaultMaterial(info.meshCount, d.NotNull());
+                    info.appearances[apps[e]] = InitializeDefaultMaterial(info.meshCount, d.NotNull());
                     meshContainer.materialNames[e] = d[index];
                 }
 

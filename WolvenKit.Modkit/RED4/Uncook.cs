@@ -795,7 +795,7 @@ namespace WolvenKit.Modkit.RED4
 
                 using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
-                var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh);
+                var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh, meshStream.Value);
 
                 var Meshes = MeshTools.ContainRawMesh(ms, meshesinfo, meshExportArgs.LodFilter,  ulong.MaxValue,  false, meshStream.Value );
                 MeshTools.UpdateSkinningParamCloth(ref Meshes, meshStream.Key, cr2w);
