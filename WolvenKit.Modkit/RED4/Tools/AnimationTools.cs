@@ -268,7 +268,8 @@ namespace WolvenKit.Modkit.RED4
                     [AnimationInterpolationMode.LINEAR] = new (),
                 };
 
-                foreach (var chan in srcAnim.Channels)
+                var incomingAnimationType = (animAnimationType)Enum.Parse(typeof(animAnimationType), extras.AnimationType);
+                var stripLocalFromAdditives = incomingAnimationType != animAnimationType.Normal;
                 {
                     var idx = Array.IndexOf(rig.Names.NotNull(), chan.TargetNode.Name);
                     if (idx < 0)
@@ -280,23 +281,35 @@ namespace WolvenKit.Modkit.RED4
                     {
                         case PropertyPath.translation:
                             var translationSampler = chan.GetTranslationSampler();
-                            var typedTranslations = keyframeTranslations[translationSampler.InterpolationMode] ?? throw new Exception($"{gltfFileName} ${srcAnim.Name}: Unsupported interpolation mode {translationSampler.InterpolationMode}!");
+                            var typedTranslations = keyframeTranslations[translationSampler.InterpolationMode] ?? throw new Exception($"{gltfFileName} ${incomingAnim.Name}: Unsupported interpolation mode {translationSampler.InterpolationMode}!");
 
-                            typedTranslations.Add((ushort)idx, translationSampler.GetLinearKeys().ToDictionary(_ => _.Key, _ => _.Value));
+                            var translations = stripLocalFromAdditives
+                                ?  translationSampler.GetLinearKeys().Select(_ => (_.Key, _.Value - chan.TargetNode.LocalTransform.Translation)).ToList()
+                                : translationSampler.GetLinearKeys().Select(_ => (_.Key, _.Value)).ToList();
+
+                            typedTranslations.Add((ushort)idx, translations);
                             break;
 
                         case PropertyPath.rotation:
                             var rotationSampler = chan.GetRotationSampler();
-                            var typedRotations = keyframeRotations[rotationSampler.InterpolationMode] ?? throw new Exception($"{gltfFileName} ${srcAnim.Name}: Unsupported interpolation mode {rotationSampler.InterpolationMode}!");
+                            var typedRotations = keyframeRotations[rotationSampler.InterpolationMode] ?? throw new Exception($"{gltfFileName} ${incomingAnim.Name}: Unsupported interpolation mode {rotationSampler.InterpolationMode}!");
 
-                            typedRotations.Add((ushort)idx, rotationSampler.GetLinearKeys().ToDictionary(_ => _.Key, _ => _.Value));
+                            var rotations = stripLocalFromAdditives
+                                ? rotationSampler.GetLinearKeys().Select(_ => (_.Key, _.Value / chan.TargetNode.LocalTransform.Rotation)).ToList()
+                                : rotationSampler.GetLinearKeys().Select(_ => (_.Key, _.Value)).ToList();
+
+                            typedRotations.Add((ushort)idx, rotations);
                             break;
 
                         case PropertyPath.scale:
                             var scaleSampler = chan.GetScaleSampler();
-                            var typedScales = keyframeScales[scaleSampler.InterpolationMode] ?? throw new Exception($"{gltfFileName} ${srcAnim.Name}: Unsupported interpolation mode {scaleSampler.InterpolationMode}!");
+                            var typedScales = keyframeScales[scaleSampler.InterpolationMode] ?? throw new Exception($"{gltfFileName} ${incomingAnim.Name}: Unsupported interpolation mode {scaleSampler.InterpolationMode}!");
 
-                            typedScales.Add((ushort)idx, scaleSampler.GetLinearKeys().ToDictionary(_ => _.Key, _ => _.Value));
+                            var scales = stripLocalFromAdditives
+                                ? scaleSampler.GetLinearKeys().Select(_ => (_.Key, _.Value - chan.TargetNode.LocalTransform.Scale)).ToList()
+                                : scaleSampler.GetLinearKeys().Select(_ => (_.Key, _.Value)).ToList();
+
+                            typedScales.Add((ushort)idx, scales);
                             break;
 
                         case PropertyPath.weights:
