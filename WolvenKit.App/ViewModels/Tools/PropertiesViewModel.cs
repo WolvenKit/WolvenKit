@@ -361,7 +361,7 @@ public partial class PropertiesViewModel : ToolViewModel
 
         var bitmapImage = new BitmapImage();
         bitmapImage.BeginInit();
-        bitmapImage.StreamSource = new MemoryStream(image.GetPreview());
+        bitmapImage.StreamSource = new MemoryStream(image.GetPreview(true));
         bitmapImage.EndInit();
 
         LoadedBitmapFrame = bitmapImage;
@@ -386,7 +386,7 @@ public partial class PropertiesViewModel : ToolViewModel
 
         var bitmapImage = new BitmapImage();
         bitmapImage.BeginInit();
-        bitmapImage.StreamSource = new MemoryStream(image.GetPreview());
+        bitmapImage.StreamSource = new MemoryStream(image.GetPreview(false));
         bitmapImage.EndInit();
 
         LoadedBitmapFrame = bitmapImage;

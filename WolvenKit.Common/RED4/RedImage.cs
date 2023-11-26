@@ -372,8 +372,14 @@ public class RedImage : IDisposable
         return buffer;
     }
 
-    public byte[] GetPreview()
+    public byte[] GetPreview(bool flip)
     {
+        if (TexHelper.Instance.IsCompressed(_metadata.Format))
+        {
+            InternalScratchImage = InternalScratchImage.Decompress(DXGI_FORMAT.UNKNOWN);
+            _metadata = InternalScratchImage.GetMetadata();
+        }
+
         if (_metadata.IsCubemap())
         {
             var s_offsetx = new[] { 2, 0, 1, 1, 1, 3 };
@@ -396,14 +402,11 @@ public class RedImage : IDisposable
         }
         else
         {
-            // decompress here
-            if (TexHelper.Instance.IsCompressed(_metadata.Format))
+            if (flip)
             {
-                InternalScratchImage = InternalScratchImage.Decompress(DXGI_FORMAT.UNKNOWN);
+                InternalScratchImage = InternalScratchImage.FlipRotate(TEX_FR_FLAGS.FLIP_VERTICAL);
             }
-            // flip for preview
-            InternalScratchImage = InternalScratchImage.FlipRotate(TEX_FR_FLAGS.FLIP_VERTICAL);
-            
+
             return SaveToWICMemory(TexHelper.Instance.GetWICCodec(WICCodecs.PNG));
         }
     }

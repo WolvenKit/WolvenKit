@@ -81,7 +81,7 @@ public partial class RDTTextureViewModel : RedDocumentTabViewModel
 
         var bitmapImage = new BitmapImage();
         bitmapImage.BeginInit();
-        bitmapImage.StreamSource = new MemoryStream(_redImage.GetPreview());
+        bitmapImage.StreamSource = new MemoryStream(_redImage.GetPreview(true));
         bitmapImage.EndInit();
 
         Image = bitmapImage;
