@@ -380,7 +380,6 @@ function printInvalidAppearanceWarningIfFound() {
         })
     }
 
-
     warningKeys = (Object.keys(entAppearancesNotFoundByFile) || [])
         .filter((depotPath) => !!depotPath && wkit.FileExists(depotPath) && !invalidFiles.includes(depotPath));
 
@@ -398,7 +397,7 @@ function printInvalidAppearanceWarningIfFound() {
         Object.keys(data).forEach((appearancName) => {
             Logger.Warning(`  ${appearancName.padEnd(50, ' ')} | ${data[appearancName]}`);
         })
-    })
+    });
 }
 
 function printSubstitutionWarningsIfFound() {
@@ -651,39 +650,39 @@ function appFile_validateAppearance(appearance, index, validateRecursively, vali
         Object.values(componentNameCollisions)
             .filter((name) => overriddenComponents.includes(name))
             .filter((name) => !componentOverrideCollisions.includes(name))
-            .forEach((name) => componentOverrideCollisions.push(name));
-
-        if ((componentOverrideCollisions?.length || 0) > 0) {
-            Logger.Info("Inside partsValues, validation found components of the same name pointing at different meshes.");
-            Logger.Info("Ignore this if the files below are pointing at gendered/camera variants. Found the following meshes/component names:");
-            Object.keys(componentNameCollisions).forEach((meshPath) => {
-                Logger.Warning(`${componentNameCollisions[meshPath]}: ${meshPath}`);
+            // check if it's colliding with a different variant of itself
+            .filter((name) => !componentOverrideCollisions.map((name) => name.replace(/&.*/, '')).includes(name))
+            .forEach((name) => {
+                appearanceErrorMessages[appearanceName].push(`components.${name}: Multiple components point at the same mesh. Did you make a copy-paste mistake?`);
             });
-        }
     }
 
     const allComponentNames = components.map((component, index) => {
-
         return stringifyPotentialCName(component.name, `${appearanceName}.components[${index}]`, (component.$type || '').toLowerCase().includes('debug'));
     });
+
     const numAmmComponents = allComponentNames.filter((name) => !!name && name.startsWith('amm_prop_slot')).length;
     if (numAmmComponents > 0 && numAmmComponents < 4 && !allComponentNames.includes('amm_prop_slot1')) {
-        Logger.Info(`app[${appearanceName}] Is this an AMM prop appearance? Only components with the names "amm_prop_slot1" - "amm_prop_slot4" will support scaling.`);
+        appearanceErrorMessages[appearanceName].push(`Is this an AMM prop appearance? Only components with the names "amm_prop_slot1" - "amm_prop_slot4" will support scaling.`);
     }
 
     // Dynamic appearances will ignore the components in the mesh. We'll use 'isUsingSubstitution' as indicator,
     // since those only work for dynamic appearances, and the app file doesn't know if it's dynamic otherwise. 
     if (!isDynamicAppearance && !isUsingSubstitution) {
-        const duplicateMeshes = meshPathsFromComponents
+        meshPathsFromComponents
             .filter((path, i, array) => !!path && array.indexOf(path) === i) // only unique
             .filter((path) => meshPathsFromEntityFiles.includes(path))
+            .forEach((path) => {
+                appearanceErrorMessages[appearanceName].push(`Path is added twice (via entity file and via .app). Use only one: ${path}`);
+            });
+    }
 
-        if (duplicateMeshes.length > 0) {
-            Logger.Warning(`${appearanceName}: You are adding meshes via partsValues (entity file) AND components. To avoid visual glitches and broken appearances, use only one!`);
-            duplicateMeshes.forEach((path) => {
-                Logger.Warning(`\t\t${path}`);
-            })
-        }
+    // Check if the user has 'gender=f' in their component title, because it's 'gender=w'. The user is me.
+    if (isDynamicAppearance) {
+        allComponentNames.filter((name) => name.includes('gender=f'))
+            .forEach((name) => {
+                appearanceErrorMessages[appearanceName].push(`components.${name}: Incorrect substitution! It's 'gender=w'!`);
+            });
     }
 
     for (let i = 0; i < appearance.Data.partsOverrides.length; i++) {
@@ -828,6 +827,9 @@ const CURLY_BRACES_WARNING = 'different number of { and }, check for typos';
 //  for warnings
 const MISSING_PREFIX_WARNING = 'not starting with *, substitution disabled';
 
+//  for warnings
+const INVALID_GENDER_SUBSTITUTION = 'it\'s "gender=w", not "gender=f"';
+
 
 let componentIdErrors = [];
 const WITH_MESH = 'withMesh';
@@ -877,14 +879,16 @@ function entFile_appFile_validateComponent(component, _index, validateRecursivel
     if (hasMesh && entSettings.checkComponentIdsForGarmentSupport && !!component.id && !info?.startsWith('app')) {
         if (componentIds.includes(component.id) && !componentName.startsWith("amm")) {
             componentIdErrors.push(`${component.id}: not unique`);
-        } else {
-            componentIds.push(component.id);
         }
         // parseInt or parseFloat will lead to weird side effects here. Give it an ID of 1638580377071202307, 
         // and it'll arrive at the numeric value of 1638580377071202300. 
         if (!/^[02468]$/.test((component.id.match(/\d$/) || ["0"])[0])) {
             componentIdErrors.push(`${component.id}: not an even number`);
         }
+    }
+
+    if (componentName.includes('gender=f')) {
+        Logger.Warning(`${info} name: invalid substitution, it's 'gender=w'!`);
     }
 
     const meshDepotPath = `${hasMesh ? stringifyPotentialCName(component[componentPropertyKeyWithDepotPath]?.DepotPath) : '' || ''}`;
@@ -897,10 +901,10 @@ function entFile_appFile_validateComponent(component, _index, validateRecursivel
     if (!meshDepotPath.endsWith('.mesh') && !/^\d+$/.test(meshDepotPath)) {
         Logger.Warning(`${info}: ${componentPropertyKeyWithDepotPath} does not end with .mesh! This will crash your game!`);
     }
-    const componentMeshPaths = getArchiveXlMeshPaths(meshDepotPath);
+
+    const componentMeshPaths = getArchiveXlMeshPaths(meshDepotPath) || []
 
     componentMeshPaths.forEach((componentMeshPath) => {
-
         // check for component name uniqueness
         if (meshesByComponentName[componentName] && meshesByComponentName[componentName] !== componentMeshPath) {
             componentNameCollisions[componentMeshPath] = componentName;
@@ -927,11 +931,12 @@ function entFile_appFile_validateComponent(component, _index, validateRecursivel
         isUsingSubstitution = isUsingSubstitution || nameHasSubstitution || pathHasSubstitution;
 
         if (nameHasSubstitution && !checkCurlyBraces(meshAppearanceName)) {
-            localErrors.push(CURLY_BRACES_WARNING);
+            localErrors.push(`name: ${CURLY_BRACES_WARNING}`);
         }
         if (nameHasSubstitution && !meshAppearanceName.startsWith(ARCHIVE_XL_VARIANT_INDICATOR)) {
-            localErrors.push(MISSING_PREFIX_WARNING);
+            localErrors.push(`name: ${MISSING_PREFIX_WARNING}`);
         }
+
         if (localErrors.length) {
             invalidVariantAndSubstitutions[info] ||= [];
             invalidVariantAndSubstitutions[info].push(`meshAppearance: ${meshAppearanceName}: ${localErrors.join(', ')}`);
@@ -939,10 +944,13 @@ function entFile_appFile_validateComponent(component, _index, validateRecursivel
         }
 
         if (pathHasSubstitution && !checkCurlyBraces(componentMeshPath)) {
-            localErrors.push(CURLY_BRACES_WARNING);
+            localErrors.push(`path: ${CURLY_BRACES_WARNING}`);
         }
         if (pathHasSubstitution && !componentMeshPath.startsWith(ARCHIVE_XL_VARIANT_INDICATOR)) {
-            localErrors.push(MISSING_PREFIX_WARNING);
+            localErrors.push(`path: ${MISSING_PREFIX_WARNING}`);
+        }
+        if (nameHasSubstitution && componentMeshPath.includes('gender=f')) {
+            localErrors.push(`path: ${INVALID_GENDER_SUBSTITUTION}`);
         }
         if (localErrors.length) {
             invalidVariantAndSubstitutions[info] ||= [];
@@ -1140,7 +1148,7 @@ export function validateEntFile(ent, _entSettings) {
         (allComponentNames.includes(componentName) ? duplicateComponentNames : allComponentNames).push(componentName);
     }
 
-    if (componentIdErrors.length) {
+    if (componentIdErrors.length > 0) {
         const currentFileName = pathToCurrentFile.replace(/^.*[\\/]/, '');
         Logger.Warning(`${currentFileName}: Component ID(s) may cause errors with garment support: ${formatArrayForPrint(componentIdErrors)}`);
     }
