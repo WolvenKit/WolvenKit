@@ -53,7 +53,6 @@ namespace WolvenKit.App.ViewModels.Shell;
 public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemModel, INode<ReferenceSocket>
 {
     private readonly IChunkViewmodelFactory _chunkViewmodelFactory;
-    private readonly ChunkViewModelTools _chunkViewModelTools = new();
     private readonly IDocumentTabViewmodelFactory _tabViewmodelFactory;
     private readonly ILoggerService _loggerService;
     private readonly ISettingsManager _settingsManager;
@@ -211,7 +210,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         if (IsShiftBeingHeld)
         {
-            _chunkViewModelTools.SetChildExpansionStates(this, IsExpanded);
+            SetChildExpansionStates(IsExpanded);
         }
     }
 
@@ -2718,11 +2717,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    public static bool IsControlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+
+    // Shift: recursively fold/unfold child nodes
     public static bool IsShiftBeingHeld => Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
 
-    // node stuff
-
+    // Shift+Control: recursively fold/unfold nodes all the way
+    public static bool IsControlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
 
 
     public IList<ReferenceSocket> Inputs
