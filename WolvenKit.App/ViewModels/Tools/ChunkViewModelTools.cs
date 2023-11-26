@@ -9,7 +9,7 @@ namespace WolvenKit.App.ViewModels.Tools;
 
 public class ChunkViewModelTools
 {
-    public void SetChildExpansionStates(ChunkViewModel? node, bool isExpanded)
+    public void SetChildExpansionStates(ChunkViewModel? node, bool isExpanded, bool calledFromParent = false)
     {
         if (node is null)
         {
@@ -47,10 +47,10 @@ public class ChunkViewModelTools
             return;
         }
 
-        // mesh: material, expand values array (recursively)
+        // mesh: material, expand values array (but not recursively)
         if (node.Data is CMaterialInstance)
         {
-            SetChildExpansionStates(properties.Last(), isExpanded);
+            SetChildExpansionStates(properties.Last(), isExpanded, true);
             return;
         }
 
@@ -71,7 +71,7 @@ public class ChunkViewModelTools
             return;
         }
 
-        if (node.Data is CArray<CKeyValuePair>)
+        if (node.Data is CArray<CKeyValuePair> && !calledFromParent)
         {
                 foreach (var chunkViewModel in properties)
                 {
