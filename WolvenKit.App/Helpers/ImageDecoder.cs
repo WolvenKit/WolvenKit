@@ -16,7 +16,7 @@ public static class ImageDecoder
     {
         var bitmapImage = new BitmapImage();
         bitmapImage.BeginInit();
-        bitmapImage.StreamSource = new MemoryStream(img.GetPreview());
+        bitmapImage.StreamSource = new MemoryStream(img.GetPreview(true));
         bitmapImage.EndInit();
 
         return bitmapImage;
