@@ -349,7 +349,14 @@ namespace WolvenKit.Modkit.RED4.Tools
                         ArgumentNullException.ThrowIfNull(m);
                         materialNames[e] = m;
                     }
-                    meshesInfo.appearances.Add(Path.GetFileNameWithoutExtension(meshname) + '_' + app.Name + $"{i}", materialNames);
+                    if (meshname.Length > 0)
+                    {
+                        meshesInfo.appearances.Add(Path.GetFileNameWithoutExtension(meshname) + '_' + app.Name + $"{i}", materialNames);
+                    }
+                    else
+                    {
+                        meshesInfo.appearances.Add( app.Name + $"{i}", materialNames);
+                    }
                 }
             }
 
