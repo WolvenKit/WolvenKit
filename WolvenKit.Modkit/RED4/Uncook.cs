@@ -798,7 +798,7 @@ namespace WolvenKit.Modkit.RED4
                 var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh, meshName);
 
                 var Meshes = MeshTools.ContainRawMesh(ms, meshesinfo, meshExportArgs.LodFilter,  ulong.MaxValue,  false, meshName);
-                MeshTools.UpdateSkinningParamCloth(ref Meshes, meshStream.Key, cr2w);
+                MeshTools.UpdateSkinningParamCloth(ref Meshes, meshStream, cr2w);
 
                 MeshTools.WriteGarmentParametersToMesh(ref Meshes, cMesh, meshExportArgs.ExportGarmentSupport);
 
