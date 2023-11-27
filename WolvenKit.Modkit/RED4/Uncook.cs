@@ -804,7 +804,7 @@ namespace WolvenKit.Modkit.RED4
 
                 var meshRig = MeshTools.GetOrphanRig(cMesh);
 
-                MeshTools.UpdateMeshJoints(ref Meshes, expRig, meshRig, meshStreamS[meshStream]);
+                MeshTools.UpdateMeshJoints(ref Meshes, expRig, meshRig, meshName);
 
                 if (meshExportArgs.withMaterials)
                 {
