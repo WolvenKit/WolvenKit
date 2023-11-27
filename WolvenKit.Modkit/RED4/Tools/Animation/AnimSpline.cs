@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using SharpGLTF.Schema2;
+
 using WolvenKit.RED4.Types;
 
 using Quat = System.Numerics.Quaternion;
 using Vec3 = System.Numerics.Vector3;
 
+using static WolvenKit.RED4.Types.Enums;
 using static WolvenKit.Modkit.RED4.Animation.Fun;
 using static WolvenKit.Modkit.RED4.Animation.Gltf;
 
@@ -41,7 +43,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                     {
                         positions[p.Idx] = new Dictionary<float, Vec3>();
                     }
-                    positions[p.Idx][p.Time] = TRVectorYup(p.Position);
+                    positions[p.Idx][p.Time] = TRVectorYupRhs(p.Position);
                 }
                 else if (key is animKeyRotation r)
                 {
@@ -49,7 +51,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                     {
                         rotations[r.Idx] = new Dictionary<float, Quat>();
                     }
-                    rotations[r.Idx][r.Time] = RQuatYup(r.Rotation);
+                    rotations[r.Idx][r.Time] = RQuaternionYupRhs(r.Rotation);
                 }
                 else if (key is animKeyScale s)
                 {
@@ -57,7 +59,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                     {
                         scales[s.Idx] = new Dictionary<float, Vec3>();
                     }
-                    scales[s.Idx][s.Time] = SVectorYup(s.Scale);
+                    scales[s.Idx][s.Time] = SVectorYupRhs(s.Scale);
                 }
             }
 
@@ -69,7 +71,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                     {
                         positions[p.Idx] = new Dictionary<float, Vec3>();
                     }
-                    positions[p.Idx][p.Time] = TRVectorYup(p.Position);
+                    positions[p.Idx][p.Time] = TRVectorYupRhs(p.Position);
                 }
                 else if (key is animKeyRotation r)
                 {
@@ -77,7 +79,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                     {
                         rotations[r.Idx] = new Dictionary<float, Quat>();
                     }
-                    rotations[r.Idx][r.Time] = RQuatYup(r.Rotation);
+                    rotations[r.Idx][r.Time] = RQuaternionYupRhs(r.Rotation);
                 }
                 else if (key is animKeyScale s)
                 {
@@ -85,7 +87,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                     {
                         scales[s.Idx] = new Dictionary<float, Vec3>();
                     }
-                    scales[s.Idx][s.Time] = SVectorYup(s.Scale);
+                    scales[s.Idx][s.Time] = SVectorYupRhs(s.Scale);
                 }
             }
 
@@ -97,7 +99,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                     {
                         positions[p.Idx] = new Dictionary<float, Vec3>();
                     }
-                    positions[p.Idx][p.Time] = TRVectorYup(p.Position);
+                    positions[p.Idx][p.Time] = TRVectorYupRhs(p.Position);
                 }
                 else if (key is animKeyRotation r)
                 {
@@ -105,7 +107,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                     {
                         rotations[r.Idx] = new Dictionary<float, Quat>();
                     }
-                    rotations[r.Idx][r.Time] = RQuatYup(r.Rotation);
+                    rotations[r.Idx][r.Time] = RQuaternionYupRhs(r.Rotation);
                 }
                 else if (key is animKeyScale s)
                 {
@@ -113,7 +115,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                     {
                         scales[s.Idx] = new Dictionary<float, Vec3>();
                     }
-                    scales[s.Idx][s.Time] = SVectorYup(s.Scale);
+                    scales[s.Idx][s.Time] = SVectorYupRhs(s.Scale);
                 }
             }
 
@@ -127,12 +129,15 @@ namespace WolvenKit.Modkit.RED4.Animation
                 animAnimDes.FrameClamping,
                 animAnimDes.FrameClampingStartFrame,
                 animAnimDes.FrameClampingEndFrame,
-                blob.HasRawRotations,
                 blob.NumExtraJoints,
                 blob.NumExtraTracks,
                 blob.ConstTrackKeys.Select(_ => new AnimConstTrackKeySerializable(_.TrackIndex, _.Time, _.Value)).ToList(),
                 blob.TrackKeys.Select(_ => new AnimTrackKeySerializable(_.TrackIndex, _.Time, _.Value)).ToList(),
-                blob.FallbackFrameIndices.Select(_ => (ushort)_).ToList()
+                blob.FallbackFrameIndices.Select(_ => (ushort)_).ToList(),
+                new AnimationOptimizationHints(
+                    false,
+                    blob.HasRawRotations ? AnimationEncoding.Uncompressed : AnimationEncoding.QuaternionAsFixed3x16bit
+                )
             );
 
             // All the data is gathered, stitch it together
@@ -148,22 +153,51 @@ namespace WolvenKit.Modkit.RED4.Animation
             // -.-
             anim.Extras = SharpGLTF.IO.JsonContent.Parse(JsonSerializer.Serialize(animExtras, SerializationOptions()));
 
+            var exportAdditiveToBind = animAnimDes.AnimationType != animAnimationType.Normal;
+
             for (ushort i = 0; i < blob.NumJoints - blob.NumExtraJoints; i++)
             {
                 var node = skin.GetJoint(i).Joint;
                 if (rotations.ContainsKey(i))
                 {
                     var isLinear = rotations[i].Count > 1;
+
+                    if (exportAdditiveToBind)
+                    {
+                        foreach (var (t, r) in rotations[i])
+                        {
+                            rotations[i][t] = node.LocalTransform.Rotation * r;
+                        }
+                    }
+
                     anim.CreateRotationChannel(node, rotations[i], isLinear);
                 }
                 if (positions.ContainsKey(i))
                 {
                     var isLinear = positions[i].Count > 1;
+
+                    if (exportAdditiveToBind)
+                    {
+                        foreach (var (t, p) in positions[i])
+                        {
+                            positions[i][t] = node.LocalTransform.Translation + p;
+                        }
+                    }
+
                     anim.CreateTranslationChannel(node, positions[i], isLinear);
                 }
                 if (scales.ContainsKey(i))
                 {
                     var isLinear = scales[i].Count > 1;
+
+                    if (exportAdditiveToBind)
+                    {
+                        foreach (var (t, s) in scales[i])
+                        {
+                            scales[i][t] = node.LocalTransform.Scale * s;
+                        }
+                    }
+
                     anim.CreateScaleChannel(node, scales[i], isLinear);
                 }
             }
