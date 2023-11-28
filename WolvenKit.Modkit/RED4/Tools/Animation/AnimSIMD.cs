@@ -29,7 +29,7 @@ namespace WolvenKit.Modkit.RED4.Animation
             }
             var br = new BinaryReader(defferedBuffer);
 
-            var simdBlockWidth = 4;
+            var simdBlockWidth = 4; // 128 bits
             var simdBlockPadding = (uint)simdBlockWidth - 1U;
             var numJointsSimdAligned = (blob.NumJoints - blob.NumExtraJoints + simdBlockPadding) & (~simdBlockPadding);
 
@@ -64,15 +64,15 @@ namespace WolvenKit.Modkit.RED4.Animation
 
                 for (uint i = 0; i < blob.NumFrames; i++)
                 {
-                    for (uint e = 0; e < blob.NumJoints; e += 4)
+                    for (uint j = 0; j < numJointsSimdAligned; j += (uint)simdBlockWidth)
                     {
                         for (uint block = 0; block < simdBlockWidth; block++)
                         {
                             var q = new Quat
                             {
-                                X = floatsDecompressed[(i * numJointsSimdAligned * 3) + (e * 3) + block],
-                                Y = floatsDecompressed[(i * numJointsSimdAligned * 3) + (e * 3) + 4 + block],
-                                Z = floatsDecompressed[(i * numJointsSimdAligned * 3) + (e * 3) + 8 + block]
+                                X = floatsDecompressed[(i * numJointsSimdAligned * 3) + (j * 3) + block],
+                                Y = floatsDecompressed[(i * numJointsSimdAligned * 3) + (j * 3) + 4 + block],
+                                Z = floatsDecompressed[(i * numJointsSimdAligned * 3) + (j * 3) + 8 + block]
                             };
 
                             var dotPr = (q.X * q.X) + (q.Y * q.Y) + (q.Z * q.Z);
@@ -81,10 +81,10 @@ namespace WolvenKit.Modkit.RED4.Animation
                             q.Z *= Convert.ToSingle(Math.Sqrt(2f - dotPr));
                             q.W = 1f - dotPr;
                             q = Quat.Normalize(q);
-                            if (e + block < blob.NumJoints)
+                            if (j + block < blob.NumJoints)
                             {
 
-                                rotationsYup[i, e + block] = new Quat(q.X, q.Z, -q.Y, q.W);
+                                rotationsYup[i, j + block] = new Quat(q.X, q.Z, -q.Y, q.W);
                             }
                         }
                     }
