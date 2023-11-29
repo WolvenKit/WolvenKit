@@ -283,7 +283,7 @@ namespace WolvenKit.Modkit.RED4
                 var oldAnim = anims.Animations.FirstOrDefault(_ => _?.Chunk?.Animation.Chunk?.Name.GetResolvedText() == incomingAnim.Name)?.Chunk;
                 if (oldAnim == null)
                 {
-                    _loggerService.Debug($"{gltfFileName}: animation `{incomingAnim.Name}` not found in animset, treating as new animation!");
+                    _loggerService.Debug($"{gltfFileName}: new: `{incomingAnim.Name}` not found in animset, treating as new animation!");
                 }
 
                 var keyframeTranslations = new Dictionary<AnimationInterpolationMode, Dictionary<ushort, List<(float, Vec3)>>> {
@@ -532,7 +532,7 @@ namespace WolvenKit.Modkit.RED4
                 foreach (var original in originalAnimsToCopy)
                 {
                     CopyOldAnim(ref anims, original, ref newAnimSetEntries, ref newAnimChunks);
-                    _loggerService.Debug($"{gltfFileName}: copied existing animation `{original.Animation!.Chunk!.Name.GetResolvedText()}` to new animset");
+                    _loggerService.Debug($"{gltfFileName}: keep: `{original.Animation!.Chunk!.Name.GetResolvedText()}`, copied to new animset");
                 }
             }
 
@@ -552,7 +552,7 @@ namespace WolvenKit.Modkit.RED4
                 _loggerService.Info($"{gltfFileName}: stripped bind pose transform from all {additiveCount} additive animations");
             }
 
-            _loggerService.Info($"{gltfFileName}: total {newAnimSetEntries.Count} animations in the set ({updatedAnims.Count} updated, {newAnimsImported.Count} added, {originalAnimsNotInImport.Count} originals kept)");
+            _loggerService.Success($"{gltfFileName}: total: {newAnimSetEntries.Count} animations ({updatedAnims.Count} updated, {newAnimsImported.Count} new, {originalAnimsNotInImport.Count} originals kept)");
             return true;
         }
 
