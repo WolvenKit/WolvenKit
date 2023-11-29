@@ -213,7 +213,7 @@ namespace WolvenKit.Modkit.RED4.Tools
             return true;
         }
 
-        public static MeshesInfo GetMeshesinfo(rendRenderMeshBlob rendMeshBlob, CMesh? cMesh = null)
+        public static MeshesInfo GetMeshesinfo(rendRenderMeshBlob rendMeshBlob, CMesh? cMesh = null, string meshname="")
         {
             var meshesInfo = new MeshesInfo(rendMeshBlob.Header.RenderChunkInfos.Count);
             var redQuantScale = rendMeshBlob.Header.QuantizationScale;
@@ -349,13 +349,20 @@ namespace WolvenKit.Modkit.RED4.Tools
                         ArgumentNullException.ThrowIfNull(m);
                         materialNames[e] = m;
                     }
-                    meshesInfo.appearances.Add(app.Name + $"{i}", materialNames);
+                    if (meshname.Length > 0)
+                    {
+                        meshesInfo.appearances.Add(Path.GetFileNameWithoutExtension(meshname) + '_' + app.Name + $"{i}", materialNames);
+                    }
+                    else
+                    {
+                        meshesInfo.appearances.Add( app.Name + $"{i}", materialNames);
+                    }
                 }
             }
 
             return meshesInfo;
         }
-        public static List<RawMeshContainer> ContainRawMesh(MemoryStream gfs, MeshesInfo info, bool lodFilter, ulong chunkMask = ulong.MaxValue, bool mergeMeshes = false)
+        public static List<RawMeshContainer> ContainRawMesh(MemoryStream gfs, MeshesInfo info, bool lodFilter, ulong chunkMask = ulong.MaxValue, bool mergeMeshes = false, string meshname="")
         {
             ArgumentNullException.ThrowIfNull(info.appearances, nameof(info));
 
@@ -550,12 +557,26 @@ namespace WolvenKit.Modkit.RED4.Tools
                     meshContainer.indices[i] = gbr.ReadUInt16();
                 }
 
+                if (meshname.Length>0)
+                {
+                    meshContainer.name = mergeMeshes ?
+                                        info.appearances.Keys.FirstOrDefault("default") :
+                                        Path.GetFileNameWithoutExtension(meshname)+"_submesh_" + Convert.ToString(index).PadLeft(2, '0') + "_LOD_" + info.LODLvl[index];
 
-                meshContainer.name = mergeMeshes ?
-                    info.appearances.Keys.FirstOrDefault("default") :
-                    "submesh_" + Convert.ToString(index).PadLeft(2, '0') + "_LOD_" + info.LODLvl[index];
+                }
+                else
+                {
+                    meshContainer.name = mergeMeshes ?
+                                        info.appearances.Keys.FirstOrDefault("default") :
+                                        "submesh_" + Convert.ToString(index).PadLeft(2, '0') + "_LOD_" + info.LODLvl[index];
+                }
+                
 
                 meshContainer.materialNames = new string[info.appearances.Count];
+
+                
+                //var Mesh_apps = info.appearances.Keys.Select(key => Path.GetFileNameWithoutExtension(meshname)+'_' + key).ToList();
+
                 var apps = info.appearances.Keys.ToList();
 
                 for (var e = 0; e < apps.Count; e++)
