@@ -355,6 +355,7 @@ namespace WolvenKit.Modkit.RED4
             var matData = new MatData(matRepo, rawMaterials, texturesList, matTemplates, info.appearances);
 
             return matData;
+
             void ExtractFile(string path)
             {
                 if (string.IsNullOrEmpty(path))

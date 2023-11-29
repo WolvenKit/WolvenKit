@@ -785,7 +785,7 @@ namespace WolvenKit.Modkit.RED4
 
             var expMeshes = new List<RawMeshContainer>();
             var matData = new List<MatData>();
-            foreach (var meshStream in meshStreamS.Keys)
+            foreach (var (meshStream, meshName) in meshStreamS)
             {
                 var cr2w = _parserService.ReadRed4File(meshStream);
                 if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob == null || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
@@ -795,16 +795,16 @@ namespace WolvenKit.Modkit.RED4
 
                 using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
-                var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh);
+                var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh, meshName);
 
-                var Meshes = MeshTools.ContainRawMesh(ms, meshesinfo, meshExportArgs.LodFilter);
+                var Meshes = MeshTools.ContainRawMesh(ms, meshesinfo, meshExportArgs.LodFilter,  ulong.MaxValue,  false, meshName);
                 MeshTools.UpdateSkinningParamCloth(ref Meshes, meshStream, cr2w);
 
                 MeshTools.WriteGarmentParametersToMesh(ref Meshes, cMesh, meshExportArgs.ExportGarmentSupport);
 
                 var meshRig = MeshTools.GetOrphanRig(cMesh);
 
-                MeshTools.UpdateMeshJoints(ref Meshes, expRig, meshRig, meshStreamS[meshStream]);
+                MeshTools.UpdateMeshJoints(ref Meshes, expRig, meshRig, meshName);
 
                 if (meshExportArgs.withMaterials)
                 {

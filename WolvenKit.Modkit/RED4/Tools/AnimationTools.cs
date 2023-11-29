@@ -249,43 +249,42 @@ namespace WolvenKit.Modkit.RED4
         {
             _loggerService.Info($"{gltfFileName}: found {model.LogicalAnimations.Count} animations to import");
 
-            var (importedCount, retainedCount, skippedImportCount, simdCount, additiveCount) = (0, 0, 0, 0, 0);
+            var (simdCount, additiveCount) = (0, 0);
 
             var newAnimSetEntries = new CArray<CHandle<animAnimSetEntry>>();
             var newAnimChunks = new CArray<animAnimDataChunk>();
 
+            var originalAnimNames = new HashSet<string>(anims.Animations.Select(_ => _?.Chunk?.Animation.Chunk?.Name.GetResolvedText())!);
+            var importedAnimNames = new HashSet<string>();
+
             foreach (var incomingAnim in model.LogicalAnimations)
             {
+                if (importedAnimNames.Contains(incomingAnim.Name))
+                {
+                    throw new InvalidOperationException($"{gltfFileName}: animation `{incomingAnim.Name}` appears more than once, can't import!");
+                }
+
                 // Can switch to system Json when SharpGLTF support released (maybe in .31)
                 if (incomingAnim.Extras.Content is null)
                 {
-                    throw new InvalidOperationException($"{gltfFileName}: animation {incomingAnim.Name} has no extra data, can't import!");
+                    throw new InvalidOperationException($"{gltfFileName}: animation `{incomingAnim.Name}` has no extra data, can't import!");
                 }
 
                 var result = TryMigrateAndValidate(incomingAnim.Extras);
 
                 if (result is Invalid invalid)
                 {
-                    _loggerService.Error($"{gltfFileName}: {incomingAnim.Name}: {invalid.Reason}. Can't import!");
+                    _loggerService.Error($"{gltfFileName}: can't import `{incomingAnim.Name}`: {invalid.Reason}!");
                     continue;
                 }
 
                 var extras = ((Valid)result).Extras;
 
-                // TODO https://github.com/WolvenKit/WolvenKit/issues/1425
-                //      - Should be able to insert new anims too, need to set it up though
                 var oldAnim = anims.Animations.FirstOrDefault(_ => _?.Chunk?.Animation.Chunk?.Name.GetResolvedText() == incomingAnim.Name)?.Chunk;
                 if (oldAnim == null)
                 {
-                    _loggerService.Warning($"{gltfFileName}: animation {incomingAnim.Name} not found in animset, skipping! (New animations are not supported currently!)");
-                    skippedImportCount += 1;
-                    continue;
+                    _loggerService.Debug($"{gltfFileName}: new: `{incomingAnim.Name}` not found in animset, treating as new animation!");
                 }
-
-                ArgumentNullException.ThrowIfNull(oldAnim);
-                ArgumentNullException.ThrowIfNull(oldAnim.Animation.Chunk);
-
-                var oldAnimDesc = oldAnim.Animation.Chunk;
 
                 var keyframeTranslations = new Dictionary<AnimationInterpolationMode, Dictionary<ushort, List<(float, Vec3)>>> {
                     [AnimationInterpolationMode.STEP] = new (),
@@ -484,6 +483,9 @@ namespace WolvenKit.Modkit.RED4
                     Buffer = new SerializationDeferredDataBuffer(compressed.TempBuffer.Buffer.GetBytes())
                 };
 
+                // Backfill from original where possible, for now
+                var oldAnimDesc = oldAnim?.Animation?.Chunk;
+
                 var newAnimDesc = new animAnimation()
                 {
                     Name = incomingAnim.Name,
@@ -493,26 +495,45 @@ namespace WolvenKit.Modkit.RED4
                     FrameClamping = extras.FrameClamping,
                     FrameClampingStartFrame = Convert.ToSByte(extras.FrameClampingStartFrame),
                     FrameClampingEndFrame = Convert.ToSByte(extras.FrameClampingEndFrame),
-                    // Copy for now at least
-                    Tags = (redTagList)oldAnimDesc.Tags.DeepCopy(),
-                    AdditionalTracks = (animAdditionalFloatTrackContainer)oldAnimDesc.AdditionalTracks.DeepCopy(),
-                    AdditionalTransforms = (animAdditionalTransformContainer)oldAnimDesc.AdditionalTransforms.DeepCopy(),
-                    MotionExtraction = oldAnimDesc.MotionExtraction != null
-                                        ? (CHandle<animIMotionExtraction>)oldAnimDesc.MotionExtraction.DeepCopy()
-                                        : new(),
+                    MotionExtraction = new((animIMotionExtraction?)(oldAnimDesc?.MotionExtraction?.Chunk?.DeepCopy())),
                 };
+
+                // I hate C#
+                if (oldAnimDesc != null)
+                {
+                    newAnimDesc.AdditionalTracks = (animAdditionalFloatTrackContainer)oldAnimDesc.AdditionalTracks.DeepCopy();
+                    newAnimDesc.AdditionalTransforms = (animAdditionalTransformContainer)oldAnimDesc.AdditionalTransforms.DeepCopy();
+                    newAnimDesc.Tags = (redTagList)oldAnimDesc.Tags.DeepCopy();
+                }
 
                 var newAnim = new animAnimSetEntry()
                 {
                     Animation = new(newAnimDesc),
-                    Events = oldAnim.Events != null
-                                ? (CHandle<animEventsContainer>)oldAnim.Events.DeepCopy()
-                                : new(),
+                    Events = new((animEventsContainer?)(oldAnim?.Events?.Chunk?.DeepCopy())),
                 };
 
                 newAnimChunks.Add(newAnimDataChunk);
                 newAnimSetEntries.Add(newAnim);
-                importedCount += 1;
+
+                importedAnimNames.Add(incomingAnim.Name);
+            }
+
+            // Check if there's any animations from the original set that were not in the import
+            var originalAnimsNotInImport = originalAnimNames.Except(importedAnimNames).ToList();
+            var newAnimsImported = importedAnimNames.Except(originalAnimNames).ToList();
+            var updatedAnims = originalAnimNames.Intersect(importedAnimNames).ToList();
+
+            if (originalAnimsNotInImport.Count > 0)
+            {
+                var originalAnimsToCopy = anims.Animations
+                    .Where(_ => originalAnimsNotInImport.Contains(_?.Chunk?.Animation.Chunk?.Name.GetResolvedText()!))
+                    .Select(_ => _.Chunk!);
+
+                foreach (var original in originalAnimsToCopy)
+                {
+                    CopyOldAnim(ref anims, original, ref newAnimSetEntries, ref newAnimChunks);
+                    _loggerService.Debug($"{gltfFileName}: keep: `{original.Animation!.Chunk!.Name.GetResolvedText()}`, copied to new animset");
+                }
             }
 
             // If we get this far, can replace the old with the new
@@ -522,39 +543,46 @@ namespace WolvenKit.Modkit.RED4
             anims.AnimationDataChunks = newAnimChunks;
             anims.Animations = newAnimSetEntries;
 
-            _loggerService.Info($"{gltfFileName}: imported {importedCount}, kept {retainedCount}, skipped {skippedImportCount} animations");
-
             if (simdCount > 0)
             {
-                _loggerService.Info($"{gltfFileName}: converted {simdCount} SIMD animations to normal. If they play heavy, this could be the reason.");
+                _loggerService.Warning($"{gltfFileName}: EXPERIMENTAL: SIMD anims are not fully supported, converted {simdCount} to normal anims. These mostly work ok, but if you have trouble, you can omit them from the animset to keep the existing SIMD versions.");
             }
             if (additiveCount > 0)
             {
                 _loggerService.Info($"{gltfFileName}: stripped bind pose transform from all {additiveCount} additive animations");
             }
+
+            _loggerService.Success($"{gltfFileName}: total: {newAnimSetEntries.Count} animations ({updatedAnims.Count} updated, {newAnimsImported.Count} new, {originalAnimsNotInImport.Count} originals kept)");
             return true;
         }
 
-        private static void CopyOldAnim(ref animAnimSet anims, ref animAnimationBufferSimd oldSimdBuffer, ref animAnimSetEntry oldAnim, ref CArray<CHandle<animAnimSetEntry>> newAnimSetEntries, ref CArray<animAnimDataChunk> newAnimChunks)
+        private static void CopyOldAnim(ref animAnimSet anims, animAnimSetEntry oldAnim, ref CArray<CHandle<animAnimSetEntry>> newAnimSetEntries, ref CArray<animAnimDataChunk> newAnimChunks)
         {
             var copiedAnim = (animAnimSetEntry)oldAnim.DeepCopy();
-            var oldDataAddress = oldSimdBuffer.DataAddress;
-            var oldChunk = anims.AnimationDataChunks[(int)(uint)oldDataAddress.UnkIndex].Buffer.Buffer;
+
+            // Manually polyed morphs
+            var copiedDataAddress = copiedAnim.Animation!.Chunk!.AnimBuffer!.Chunk! switch
+                {
+                    animAnimationBufferCompressed compressed => compressed.DataAddress,
+                    animAnimationBufferSimd simd => simd.DataAddress,
+                    _ => throw new Exception("Unexpected animation buffer type"),
+                };
 
             // Need to extract just the part of the old buffer we need
-            var span = oldChunk.GetBytes()[(int)(uint)oldDataAddress.FsetInBytes..(int)(uint)(oldDataAddress.FsetInBytes + oldDataAddress.ZeInBytes)];
-            var copiedDataAddress = ((animAnimationBufferSimd)copiedAnim!.Animation!.Chunk!.AnimBuffer)!.DataAddress;
+            var oldChunk = anims.AnimationDataChunks[(int)(uint)copiedDataAddress.UnkIndex].Buffer.Buffer;
+            var span = oldChunk.GetBytes()[(int)(uint)copiedDataAddress.FsetInBytes..(int)(uint)(copiedDataAddress.FsetInBytes + copiedDataAddress.ZeInBytes)];
+
+            // Individual chonker for every animation
+            var newBuffer = new SerializationDeferredDataBuffer(span);
+            var newChunk = new animAnimDataChunk() { Buffer = newBuffer, };
 
             copiedDataAddress.UnkIndex = (uint)newAnimChunks.Count;
             copiedDataAddress.FsetInBytes = 0;
             copiedDataAddress.ZeInBytes = (uint)span.Length;
 
-            var newChunk = new animAnimDataChunk()
-            {
-                Buffer = new SerializationDeferredDataBuffer(span),
-            };
+            // ...Do we need to polE3 morph to set TempBuffer also?
 
-            // Should be peachy keen now, nobody gonna mess with our buffer...
+            // Otherwise should be peachy keen now, nobody gonna mess with our buffer...
             newAnimChunks.Add(newChunk);
             newAnimSetEntries.Add(copiedAnim);
         }
