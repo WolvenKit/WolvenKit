@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
@@ -260,6 +261,10 @@ public partial class ImportViewModel : AbstractImportViewModel
         return false;
     }
 
+    // for checking if a dds file is part of a morphtarget
+    [GeneratedRegex("\\d+\\.dds$")]
+    private static partial Regex NumberedDdsFileRegex();
+    
     /// <summary>
     /// Check if the file should be included in the import tool's view. Currently excluded:
     /// - .png files associated with an .mlmask
@@ -268,14 +273,20 @@ public partial class ImportViewModel : AbstractImportViewModel
     /// <returns>true if this file should not be shown in the import browser</returns>
     private static bool ShouldFileBeFiltered(string filePath)
     {
-        if (!filePath.EndsWith(".png"))
+        switch (Path.GetExtension(filePath))
         {
-            return false;
+            // masklist items
+            case ".png":
+                var masklistPath = (Path.GetDirectoryName(filePath) ?? "").Replace("_layers", ".masklist");
+                return File.Exists(masklistPath);
+            // morphtarget texturesF
+            case ".dds":
+                var parentDirName = new DirectoryInfo(Path.GetDirectoryName(filePath) ?? string.Empty).Name;
+                var morphtargetFolderName = NumberedDdsFileRegex().Replace(Path.GetFileName(filePath), "textures");
+                return parentDirName == morphtargetFolderName;
+            default:
+                return false;
         }
-
-        // Check if a masklist file exists in the parent directory
-        var masklistPath = (Path.GetDirectoryName(filePath) ?? "").Replace("_layers", ".masklist");
-        return File.Exists(masklistPath);
     }
 
     protected override async Task LoadFilesAsync()
@@ -409,4 +420,5 @@ public partial class ImportViewModel : AbstractImportViewModel
             }
         }
     }
+
 }
