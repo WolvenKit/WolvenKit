@@ -1816,6 +1816,16 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             Value = materialRef.DepotPath;
             IsValueExtrapolated = true;
         }
+        else if (ResolvedData is workWorkEntryId id)
+        {
+            Value = $"{id.Id}";
+            IsValueExtrapolated = true;
+        }
+        else if (ResolvedData is workWorkspotAnimsetEntry animsetEntry)
+        {
+            Value = $"{animsetEntry.Rig.DepotPath}";
+            IsValueExtrapolated = true;
+        }
         else if (ResolvedData is CMeshMaterialEntry materialDefinition)
         {
             Value = materialDefinition.IsLocalInstance ? "" : " (external)";
@@ -2067,6 +2077,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             "componentName", // ?
             "parameterName", // ?
             "debugName", // ?
+            "idleAnim", // .workspot handle work entry items
             "category", // ?
             "entryName", // ?
             "className", // ?
