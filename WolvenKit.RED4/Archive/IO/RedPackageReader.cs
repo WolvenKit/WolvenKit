@@ -314,10 +314,10 @@ public partial class RedPackageReader : Red4Reader
         var flags = InternalEnums.EImportFlags.Default;
 
         var index = _reader.ReadInt16();
-        if (index >= 0 && index < importsList.Count)
+        if (index >= 0 && index < _importsList.Count)
         {
-            depotPath = importsList[index].DepotPath;
-            flags = importsList[index].Flags;
+            depotPath = _importsList[index].DepotPath;
+            flags = _importsList[index].Flags;
         }
 
         var type = RedReflection.GetFullType(redTypeInfos);
@@ -340,10 +340,10 @@ public partial class RedPackageReader : Red4Reader
         var flags = InternalEnums.EImportFlags.Default;
 
         var index = _reader.ReadInt16();
-        if (index >= 0 && index < importsList.Count)
+        if (index >= 0 && index < _importsList.Count)
         {
-            depotPath = importsList[index].DepotPath;
-            flags = importsList[index].Flags;
+            depotPath = _importsList[index].DepotPath;
+            flags = _importsList[index].Flags;
         }
 
         var type = RedReflection.GetFullType(redTypeInfos);

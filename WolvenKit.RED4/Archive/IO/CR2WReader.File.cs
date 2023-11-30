@@ -54,6 +54,16 @@ public partial class CR2WReader
         info.BufferInfo = ReadTable<CR2WBufferInfo>(tableHeaders[5]);  // block 6
         info.EmbeddedInfo = ReadTable<CR2WEmbeddedInfo>(tableHeaders[6]); // block 7
 
+        foreach (var nameInfo in info.NameInfo)
+        {
+            _namesList.Add(ReadName(nameInfo, info.StringDict));
+        }
+
+        foreach (var importInfo in info.ImportInfo)
+        {
+            _importsList.Add(ReadImport(importInfo, info.StringDict));
+        }
+
         return EFileReadErrorCodes.NoError;
     }
 
@@ -89,16 +99,6 @@ public partial class CR2WReader
         }
 
         #region Read Data
-
-        foreach (var nameInfo in _cr2wFile.Info.NameInfo)
-        {
-            _namesList.Add(ReadName(nameInfo, _cr2wFile.Info.StringDict));
-        }
-
-        foreach (var importInfo in _cr2wFile.Info.ImportInfo)
-        {
-            importsList.Add(ReadImport(importInfo, _cr2wFile.Info.StringDict));
-        }
 
         foreach (var propertyInfo in _cr2wFile.Info.PropertyInfo)
         {
@@ -312,7 +312,7 @@ public partial class CR2WReader
 
         var result = new CR2WEmbedded
         {
-            FileName = importsList[(int)info.importIndex - 1].DepotPath!,
+            FileName = _importsList[(int)info.importIndex - 1].DepotPath!,
             Content = _chunks[(int)info.chunkIndex].Instance
         };
 

@@ -96,7 +96,7 @@ public partial class RedPackageReader : IBufferReader
         foreach (var r in refDesc)
         {
             BaseStream.Position = baseOff + r.offset;
-            importsList.Add(ReadImport(r));
+            _importsList.Add(ReadImport(r));
         }
 
         // read strings
