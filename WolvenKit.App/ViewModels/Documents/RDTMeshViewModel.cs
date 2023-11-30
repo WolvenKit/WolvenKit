@@ -2801,7 +2801,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
             if (modelGroup is SectorGroup sectorGroup)
             {
-                var path = (ResourcePath)$@"base\worlds\03_night_city\_compiled\default\{sectorGroup.Text}.streamingsector";
+                // TODO: Could check if ep1 is found, not sure though if the same filename could be in both folders...
+
+                var path = (ResourcePath)$@"base\worlds\03_night_city\_compiled\default\ep1\{sectorGroup.Text}.streamingsector";
+                _gameController.GetController().AddToMod(path);
+
+                path = (ResourcePath)$@"base\worlds\03_night_city\_compiled\default\{sectorGroup.Text}.streamingsector";
                 _gameController.GetController().AddToMod(path);
             }
         }
