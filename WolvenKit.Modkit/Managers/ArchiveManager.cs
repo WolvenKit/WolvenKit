@@ -446,20 +446,20 @@ namespace WolvenKit.RED4.CR2W.Archive
             legacyFiles.Sort(string.CompareOrdinal);
             legacyFiles.Reverse();
 
-            // load REDmod mods first
-            foreach (var file in redModFiles)
-            {
-                LoadModArchive(file, analyzeFiles);
-            }
-
-            // load legacy mods in "modlist.txt" second
+            // load legacy mods in "modlist.txt"
             foreach (var file in legacyModTxtFiles)
             {
                 LoadModArchive(file, analyzeFiles);
             }
 
-            // finally, legacy mods that aren't in "modlist.txt"
+            // legacy mods that aren't in "modlist.txt" next
             foreach (var file in legacyFiles)
+            {
+                LoadModArchive(file, analyzeFiles);
+            }
+            
+            // load REDmod mods last
+            foreach (var file in redModFiles)
             {
                 LoadModArchive(file, analyzeFiles);
             }
