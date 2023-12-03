@@ -6,6 +6,7 @@ using WolvenKit.Core.Compression;
 using WolvenKit.Core.CRC;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Archive.IO;
@@ -171,7 +172,20 @@ public class ArchiveWriter
             uint lastoffsetidx;
             var flags = 0;
 
-            if (reader.ReadFileInfo(out var info) == EFileReadErrorCodes.NoError)
+            EFileReadErrorCodes readStatus;
+            CR2WFileInfo? info;
+
+            try
+            {
+                readStatus = reader.ReadFileInfo(out info);
+            }
+            catch (Exception e)
+            {
+                _loggerService.Error($"Could not read \"{fileInfo.FullName}\".");
+                return null;
+            }
+
+            if (readStatus == EFileReadErrorCodes.NoError)
             {
                 // kraken the file and write
                 var cr2wfilesize = (int)info!.FileHeader.objectsEnd;
