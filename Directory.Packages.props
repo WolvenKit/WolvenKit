@@ -12,30 +12,33 @@
     <PackageVersion Include="DiscordRichPresence" Version="1.2.1.24" />
     <PackageVersion Include="DrawStringLineHeight" Version="1.0.0" />
     <PackageVersion Include="DynamicData" Version="8.1.1" />
-    <PackageVersion Include="EFCore.BulkExtensions" Version="7.0.1" />
+    <PackageVersion Include="EFCore.BulkExtensions" Version="8.0.0" />
     <PackageVersion Include="Fluent.Ribbon" Version="9.0.4" />
     <PackageVersion Include="HandyControls" Version="3.3.11" />
     <PackageVersion Include="HelixToolkit.SharpDX.Core.Wpf" Version="2.24.0" />
     <PackageVersion Include="K4os.Compression.LZ4" Version="1.3.6" />
-    <PackageVersion Include="MahApps.Metro" Version="2.4.9" />
+    <PackageVersion Include="MahApps.Metro" Version="2.4.10" />
     <PackageVersion Include="MahApps.Metro.IconPacks" Version="4.11.0" />
     <PackageVersion Include="Microsoft.Build.Framework" Version="17.8.3" />
     <PackageVersion Include="Microsoft.ClearScript.V8" Version="7.4.4" />
     <PackageVersion Include="Microsoft.ClearScript.V8.Native.win-x64" Version="7.4.4" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.2" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.2" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Logging" Version="7.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Options" Version="7.0.0" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageVersion>
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Logging" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Options" Version="8.0.0" />
     <PackageVersion Include="Microsoft.IO.RecyclableMemoryStream" Version="2.3.2" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageVersion Include="Microsoft.Web.WebView2" Version="1.0.2151.40" />
-    <PackageVersion Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.755" />
+    <PackageVersion Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.2428" />
     <PackageVersion Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.77" />
     <PackageVersion Include="MSTest.TestAdapter" Version="3.1.1" />
     <PackageVersion Include="MSTest.TestFramework" Version="3.1.1" />
@@ -47,10 +50,10 @@
     <PackageVersion Include="Octokit" Version="9.0.0" />
     <PackageVersion Include="PixiEditor.ColorPicker" Version="3.4.1" />
     <PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />
-    <PackageVersion Include="ReactiveUI" Version="18.4.1" />
+    <PackageVersion Include="ReactiveUI" Version="19.5.1" />
+    <PackageVersion Include="ReactiveUI.WPF" Version="19.5.1" />
     <PackageVersion Include="ReactiveUI.Events.WPF" Version="15.1.1" />
     <PackageVersion Include="ReactiveUI.Validation" Version="3.0.22" />
-    <PackageVersion Include="ReactiveUI.WPF" Version="18.4.1" />
     <PackageVersion Include="Serilog" Version="3.1.1" />
     <PackageVersion Include="Serilog.Sinks.Async" Version="1.5.0" />
     <PackageVersion Include="Serilog.Sinks.Console" Version="5.0.1" />
@@ -60,9 +63,9 @@
     <PackageVersion Include="SharpGLTF.Toolkit" Version="1.0.0-alpha0030" />
     <PackageVersion Include="SharpVectors.Wpf" Version="1.8.2" />
     <PackageVersion Include="SharpZipLib" Version="1.4.2" />
-    <PackageVersion Include="Splat" Version="14.6.8" />
-    <PackageVersion Include="Splat.Microsoft.Extensions.DependencyInjection" Version="14.6.8" />
-    <PackageVersion Include="Splat.Microsoft.Extensions.Logging" Version="14.6.8" />
+    <PackageVersion Include="Splat" Version="14.8.6" />
+    <PackageVersion Include="Splat.Microsoft.Extensions.DependencyInjection" Version="14.8.6" />
+    <PackageVersion Include="Splat.Microsoft.Extensions.Logging" Version="14.8.6" />
     <PackageVersion Include="Syncfusion.Edit.WPF" Version="23.2.6" />
     <PackageVersion Include="Syncfusion.PropertyGrid.WPF" Version="23.2.6" />
     <PackageVersion Include="Syncfusion.SfAccordion.WPF" Version="23.2.6" />
@@ -82,7 +85,8 @@
     <PackageVersion Include="Syncfusion.Themes.MaterialDark.WPF" Version="23.2.6" />
     <PackageVersion Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
     <PackageVersion Include="System.CommandLine.Hosting" Version="0.4.0-alpha.22272.1" />
-    <PackageVersion Include="System.Reflection.MetadataLoadContext" Version="7.0.0" />
+    <PackageVersion Include="System.Reflection.Metadata" Version="8.0.0" />
+    <PackageVersion Include="System.Reflection.MetadataLoadContext" Version="8.0.0" />
     <PackageVersion Include="WpfAnalyzers" Version="4.1.1" />
     <PackageVersion Include="YamlDotNet" Version="13.7.1" />
     <PackageVersion Include="coverlet.collector" Version="6.0.0">
@@ -92,6 +96,6 @@
     <PackageVersion Include="semver" Version="2.3.0" />
     <PackageVersion Include="CommunityToolkit.WinUI" Version="7.1.2" />
     <PackageVersion Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
-    <PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.2.230118.102" />
+    <PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.4.231115000" />
   </ItemGroup>
 </Project>
