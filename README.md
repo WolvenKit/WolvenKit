@@ -31,10 +31,10 @@ It's completely open source, licensed under the <a href="https://github.com/Wolv
   
 ## Installation
 
-Wolvenkit requires the latest .NET 7.0 runtime:
+Wolvenkit requires the latest .NET 8.0 runtime:
 
-1. Go to [Microsoft's .NET download page](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
-2. Find the ".NET Desktop Runtime 7.0.x" section and download the installer for your architecture (x64)
+1. Go to [Microsoft's .NET download page](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+2. Find the ".NET Desktop Runtime 8.0.x" section and download the installer for your architecture (x64)
 3. Run the downloaded installer
 
 ----------
