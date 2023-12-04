@@ -179,9 +179,6 @@
     <Content Include="Resources\Media\Images\Icons\Files\tweak.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Wolvenkit.Installer.Package.appinstaller">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
 
     <Resource Include="Resources\Media\Images\Application\Sammy_Alpha_Mask.png" />
     <Resource Include="Resources\Media\Images\Application\Sammy_Grayscale.png" />
@@ -1758,7 +1755,6 @@
     <None Remove="Resources\SkyboxTextures\skyrender0005.bmp" />
     <None Remove="Resources\SyntaxHighlighting\JavaScript-DarkMode.xshd" />
     <None Remove="Resources\SyntaxHighlighting\YAML.xshd" />
-    <None Remove="Resources\Wolvenkit.Installer.Package.appinstaller" />
     <None Remove="sample.mp4" />
     <None Remove="SplashScreen1.png" />
     <None Remove="TaskBarIcon.ico" />

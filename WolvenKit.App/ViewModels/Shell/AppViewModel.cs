@@ -458,8 +458,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             }
         }
 
-        // check if installer is installed
-        await InstallInstaller();
 
         // get remote version without GitHub API calls
         var owner = "WolvenKit";
@@ -507,104 +505,16 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
         else
         {
-            if (DesktopBridgeHelper.IsWindows10OrHigher() && DesktopBridgeHelper.PowershellExists())
+            // old style update
+            // TODO use inno
+            var url = $"https://github.com/{owner}/{name}/releases/latest";
+            var res = await Interactions.ShowMessageBoxAsync($"Update available: {remoteVersion}\nYou are on the {_settingsManager.UpdateChannel} release channel.\n\nVisit {url} ?", name, WMessageBoxButtons.OkCancel);
+            if (res == WMessageBoxResult.OK)
             {
-                // win10 updater app
-                var res = await Interactions.ShowMessageBoxAsync($"Update available: {remoteVersion}\nYou are on the {_settingsManager.UpdateChannel} release channel.\n\nUpdate now?", name, WMessageBoxButtons.OkCancel);
-                if (res == WMessageBoxResult.OK)
-                {
-                    // run installer app
-                    (_, var location) = GetInstallerPackage();
-                    if (!string.IsNullOrEmpty(location))
-                    {
-                        var executable = Path.Combine(location, "Wolvenkit.Installer.exe");
-                        if (File.Exists(executable))
-                        {
-                            var id = name;
-                            if (thisVersion.ToString().Contains("nightly"))
-                            {
-                                id = "WolvenKit Nightly";
-                            }
-                            var thisLocation = AppDomain.CurrentDomain.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar).TrimEnd(Path.AltDirectorySeparatorChar);
-
-                            var process = new Process();
-                            process.StartInfo.FileName = executable;
-                            var args = $"-t \"{thisLocation}\" -i \"{id}\" -v {thisVersion}";
-                            process.StartInfo.Arguments = args;
-                            process.Start();
-                        }
-                    }
-                }
-            }
-            else
-            {
-                // old style update
-                // TODO use inno
-                var url = $"https://github.com/{owner}/{name}/releases/latest";
-                var res = await Interactions.ShowMessageBoxAsync($"Update available: {remoteVersion}\nYou are on the {_settingsManager.UpdateChannel} release channel.\n\nVisit {url} ?", name, WMessageBoxButtons.OkCancel);
-                if (res == WMessageBoxResult.OK)
-                {
-                    Process.Start("explorer", url);
-                }
-            }
-
-        }
-
-    }
-
-    private async Task InstallInstaller()
-    {
-        if (!DesktopBridgeHelper.IsWindows10OrHigher())
-        {
-            _loggerService.Warning("The auto-update feature is only supported for Windows 10 or later");
-            return;
-        }
-
-        if (!DesktopBridgeHelper.PowershellExists())
-        {
-            _loggerService.Warning("The auto-update feature requires powershell to be installed");
-            return;
-        }
-
-        string location;
-
-        // only check if installer has been installed.
-        (var localInstallerVersion, location) = GetInstallerPackage();
-        // and check if version is > 0.2.2
-
-        var minVersion = SemVersion.Parse("0.2.2", SemVersionStyles.OptionalMinorPatch);
-
-        // if not installed or installed version is lower than minversion
-        if (string.IsNullOrEmpty(location) || localInstallerVersion is not null && localInstallerVersion.CompareSortOrderTo(minVersion) <= 0)
-        {
-            if (await Interactions.ShowMessageBoxAsync($"WolvenKit will install a helper tool to check for updates.", "WolvenKit.Installer", WMessageBoxButtons.OkCancel) == WMessageBoxResult.OK)
-            {
-                var fileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Wolvenkit.Installer.Package.appinstaller");
-
-                try
-                {
-                    using var p = new Process();
-                    p.StartInfo.FileName = "powershell.exe";
-                    p.StartInfo.Arguments = $"Add-AppxPackage -AppInstallerFile '{fileName}'";
-                    p.StartInfo.UseShellExecute = false;
-                    p.StartInfo.CreateNoWindow = true;
-                    p.StartInfo.RedirectStandardOutput = true;
-                    p.Start();
-
-                    var output = p.StandardOutput.ReadToEnd();
-
-                    p.WaitForExit();
-
-                    _loggerService.Info("Wolvenkit.Installer was installed");
-                    _loggerService.Info(output);
-                }
-                catch (Exception ex)
-                {
-                    _loggerService.Success("Error installing Wolvenkit.Installer");
-                    _loggerService.Error(ex);
-                }
+                Process.Start("explorer", url);
             }
         }
+
     }
 
     [RelayCommand]
