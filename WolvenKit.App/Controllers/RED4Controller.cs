@@ -403,7 +403,7 @@ public class RED4Controller : ObservableObject, IGameController
                 _notificationService.Error("Installing mod failed, aborting.");
                 return false;
             }
-            _loggerService.Success($"{cp77Proj.Name} installed!");
+            _loggerService.Success($"{cp77Proj.Name} installed to {_settingsManager.GetRED4GameRootDir()}");
             _notificationService.Success($"{cp77Proj.Name} installed!");
         }
 
