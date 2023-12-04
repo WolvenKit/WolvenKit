@@ -249,7 +249,7 @@
                         Text="Effects" />
                 </StackPanel>
                 <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
-                <ItemsControl ItemsSource="{Binding inkEffects}">
+                <ItemsControl ItemsSource="{Binding InkEffects}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Vertical" />
