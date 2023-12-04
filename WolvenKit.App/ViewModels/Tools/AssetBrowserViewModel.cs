@@ -29,6 +29,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
+using WolvenKit.RED4.Archive;
 
 namespace WolvenKit.App.ViewModels.Tools;
 
@@ -207,7 +208,9 @@ public partial class AssetBrowserViewModel : ToolViewModel
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(BrowseToFolderCommand))]
     [NotifyCanExecuteChangedFor(nameof(OpenFileOnlyCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddFromArchiveCommand))]
     [NotifyCanExecuteChangedFor(nameof(CopyRelPathCommand))]
+    [NotifyPropertyChangedFor(nameof(AddFromArchiveItems))]
     private IFileSystemViewModel? _rightSelectedItem;
 
     [ObservableProperty]
@@ -224,6 +227,9 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
     [ObservableProperty] 
     private string? _optionsSearchBarText;
+
+    [ObservableProperty]
+    private ObservableCollectionEx<IGameArchive> _addFromArchiveItems = new();
 
     #endregion properties
 
@@ -378,6 +384,21 @@ public partial class AssetBrowserViewModel : ToolViewModel
         });
 
         _progressService.IsIndeterminate = false;
+    }
+
+    public void UpdateSearchInArchives()
+    {
+        AddFromArchiveItems.Clear();
+        if (RightSelectedItem is RedFileViewModel file)
+        {
+            var key = file.GetGameFile().Key;
+            var archives = _archiveManager.Archives.Items.Where(_ => _.Files.ContainsKey(key))
+                    .Concat(_archiveManager.ModArchives.Items.Where(_ => _.Files.ContainsKey(key)));
+            foreach (var archive in archives)
+            {
+                AddFromArchiveItems.Add(archive);
+            }
+        }
     }
 
     /// <summary>
@@ -601,17 +622,16 @@ public partial class AssetBrowserViewModel : ToolViewModel
     [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
     private void CopyRelPath() => Clipboard.SetDataObject(RightSelectedItem.NotNull().FullName);
 
-    //[RelayCommand]
-    //private void ExpandAll() { }
-
-    //[RelayCommand]
-    //private void CollapseAll() { }
-
-    //[RelayCommand]
-    //private void Collapse() { }
-
-    //[RelayCommand]
-    //private void Expand() { }
+    private bool CanAddFromArchive() => RightSelectedItem is RedFileViewModel;
+    [RelayCommand(CanExecute = nameof(CanAddFromArchive))]
+    private void AddFromArchive(IGameArchive archive)
+    {
+        if (archive is ICyberGameArchive cyberArchive && RightSelectedItem is RedFileViewModel fileVm)
+        {
+            var realGameFile = cyberArchive.Files.First(_ => _.Value.Name == fileVm.GetGameFile().Name).Value; // must use "Value" here to force the exact archive
+            _gameController.GetController().AddFileToModModal(realGameFile); 
+        }
+    }
 
     #endregion commands
 
