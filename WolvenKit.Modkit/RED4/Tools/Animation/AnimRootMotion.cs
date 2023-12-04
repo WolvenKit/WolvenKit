@@ -36,8 +36,8 @@ namespace WolvenKit.Modkit.RED4.Animation
             {
                 numPositions = lc.PosFrames.Count;
                 numRotations = lc.RotFrames.Count;
-                posTime = lc.PosTime.Cast<float>().ToArray();
-                rotTime = lc.RotTime.Cast<float>().ToArray();
+                posTime = lc.PosTime.Select( x => (float)x).ToArray();
+                rotTime = lc.RotTime.Select(x => (float)x).ToArray();
 
                 if (numPositions > 0)
                 {

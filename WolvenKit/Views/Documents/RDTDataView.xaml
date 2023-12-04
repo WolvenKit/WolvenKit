@@ -149,7 +149,6 @@
                 <DataTemplate>
                     <nodify:Connection
                         Direction="Forward"
-                        OffsetMode="Edge"
                         Source="{Binding Source.Anchor}"
                         SourceOffset="12,0"
                         Target="{Binding Destination.Anchor}"

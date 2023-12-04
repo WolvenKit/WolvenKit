@@ -65,7 +65,7 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
 
     private bool CanRun() => !_scriptService.IsRunning;
     [RelayCommand(CanExecute = nameof(CanRun))]
-    private async void Run() => await _scriptService.ExecuteAsync(Text);
+    private async Task Run() => await _scriptService.ExecuteAsync(Text);
 
     private bool CanStop() => _scriptService.IsRunning;
     [RelayCommand(CanExecute = nameof(CanStop))]

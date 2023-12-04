@@ -96,7 +96,7 @@ public partial class WelcomePageViewModel : PageViewModel
     }
 
     [RelayCommand]
-    private async void OpenInExplorer(string parameter)
+    private async Task OpenInExplorer(string parameter)
     {
         if (!File.Exists(parameter))
         {

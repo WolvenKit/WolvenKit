@@ -3,7 +3,7 @@
   <PropertyGroup>
       <Platforms>x64</Platforms>
       <OutputType>Exe</OutputType>
-      <TargetFramework>net7.0</TargetFramework>
+      <TargetFramework>net8.0</TargetFramework>
       <VersionPrefix>1.11.0</VersionPrefix>
       <VersionSuffix>$(VersionSuffix)</VersionSuffix>
 
@@ -43,6 +43,9 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Build.Framework" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" />
     <PackageReference Include="System.CommandLine" />
     <PackageReference Include="System.CommandLine.Hosting" />
 
