@@ -1,8 +1,10 @@
 using System;
+using System.ComponentModel;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
+using System.Windows.Input;
 using Syncfusion.Windows.PropertyGrid;
 using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.RED4.Types;
@@ -88,9 +90,12 @@ namespace WolvenKit.Converters
             public object Create(PropertyInfo propertyInfo)
             {
                 _editor = new RedBaseTypeEditor();
-
                 return _editor;
             }
+
+            public object Create(PropertyDescriptor PropertyDescriptor) => throw new NotImplementedException();
+            public bool ShouldPropertyGridTryToHandleKeyDown(Key key) => true;
+            
             public void Detach(PropertyViewItem property)
             {
 
@@ -132,6 +137,10 @@ namespace WolvenKit.Converters
 
                 return _editor;
             }
+            
+            public object Create(PropertyDescriptor PropertyDescriptor) => throw new NotImplementedException();
+            public bool ShouldPropertyGridTryToHandleKeyDown(Key key) => true;
+            
             public void Detach(PropertyViewItem property)
             {
 
@@ -214,6 +223,10 @@ namespace WolvenKit.Converters
 
                 return _editor;
             }
+            
+            public object Create(PropertyDescriptor PropertyDescriptor) => throw new NotImplementedException();
+            public bool ShouldPropertyGridTryToHandleKeyDown(Key key) => true;
+            
             public void Detach(PropertyViewItem property)
             {
 
@@ -252,9 +265,12 @@ namespace WolvenKit.Converters
             public object Create(PropertyInfo propertyInfo)
             {
                 _editor = new HandleTemplateView();
-
                 return _editor;
             }
+            
+            public object Create(PropertyDescriptor PropertyDescriptor) => throw new NotImplementedException();
+            public bool ShouldPropertyGridTryToHandleKeyDown(Key key) => true;
+            
             public void Detach(PropertyViewItem property)
             {
 
@@ -296,6 +312,10 @@ namespace WolvenKit.Converters
 
                 return _editor;
             }
+            
+            public object Create(PropertyDescriptor PropertyDescriptor) => throw new NotImplementedException();
+            public bool ShouldPropertyGridTryToHandleKeyDown(Key key) => true;
+            
             public void Detach(PropertyViewItem property)
             {
 
@@ -337,6 +357,10 @@ namespace WolvenKit.Converters
 
                 return _editor;
             }
+            
+            public object Create(PropertyDescriptor PropertyDescriptor) => throw new NotImplementedException();
+            public bool ShouldPropertyGridTryToHandleKeyDown(Key key) => true;
+            
             public void Detach(PropertyViewItem property)
             {
 
@@ -378,6 +402,10 @@ namespace WolvenKit.Converters
 
                 return _editor;
             }
+            
+            public object Create(PropertyDescriptor PropertyDescriptor) => throw new NotImplementedException();
+            public bool ShouldPropertyGridTryToHandleKeyDown(Key key) => true;
+            
             public void Detach(PropertyViewItem property)
             {
 
@@ -419,6 +447,10 @@ namespace WolvenKit.Converters
 
                 return _editor;
             }
+            
+            public object Create(PropertyDescriptor PropertyDescriptor) => throw new NotImplementedException();
+            public bool ShouldPropertyGridTryToHandleKeyDown(Key key) => true;
+            
             public void Detach(PropertyViewItem property)
             {
 
@@ -460,6 +492,10 @@ namespace WolvenKit.Converters
 
                 return _editor;
             }
+            
+            public object Create(PropertyDescriptor PropertyDescriptor) => throw new NotImplementedException();
+            public bool ShouldPropertyGridTryToHandleKeyDown(Key key) => true;
+            
             public void Detach(PropertyViewItem property)
             {
 
@@ -501,6 +537,10 @@ namespace WolvenKit.Converters
 
                 return _editor;
             }
+            
+            public object Create(PropertyDescriptor PropertyDescriptor) => throw new NotImplementedException();
+            public bool ShouldPropertyGridTryToHandleKeyDown(Key key) => true;
+            
             public void Detach(PropertyViewItem property)
             {
 
@@ -542,6 +582,10 @@ namespace WolvenKit.Converters
 
                 return _editor;
             }
+            
+            public object Create(PropertyDescriptor PropertyDescriptor) => throw new NotImplementedException();
+            public bool ShouldPropertyGridTryToHandleKeyDown(Key key) => true;
+            
             public void Detach(PropertyViewItem property)
             {
 
@@ -583,6 +627,10 @@ namespace WolvenKit.Converters
 
                 return _editor;
             }
+            
+            public object Create(PropertyDescriptor PropertyDescriptor) => throw new NotImplementedException();
+            public bool ShouldPropertyGridTryToHandleKeyDown(Key key) => true;
+            
             public void Detach(PropertyViewItem property)
             {
 
@@ -624,6 +672,10 @@ namespace WolvenKit.Converters
 
                 return _editor;
             }
+            
+            public object Create(PropertyDescriptor PropertyDescriptor) => throw new NotImplementedException();
+            public bool ShouldPropertyGridTryToHandleKeyDown(Key key) => true;
+            
             public void Detach(PropertyViewItem property)
             {
 
@@ -667,6 +719,10 @@ namespace WolvenKit.Converters
 
                 return _editor;
             }
+            
+            public object Create(PropertyDescriptor PropertyDescriptor) => throw new NotImplementedException();
+            public bool ShouldPropertyGridTryToHandleKeyDown(Key key) => true;
+            
             public void Detach(PropertyViewItem property)
             {
 

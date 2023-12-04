@@ -63,23 +63,23 @@
     <PackageVersion Include="Splat" Version="14.6.8" />
     <PackageVersion Include="Splat.Microsoft.Extensions.DependencyInjection" Version="14.6.8" />
     <PackageVersion Include="Splat.Microsoft.Extensions.Logging" Version="14.6.8" />
-    <PackageVersion Include="Syncfusion.Edit.WPF" Version="20.4.0.44" />
-    <PackageVersion Include="Syncfusion.PropertyGrid.WPF" Version="20.4.0.44" />
-    <PackageVersion Include="Syncfusion.SfAccordion.WPF" Version="20.4.0.44" />
-    <PackageVersion Include="Syncfusion.SfBusyIndicator.WPF" Version="20.4.0.44" />
-    <PackageVersion Include="Syncfusion.SfGrid.WPF" Version="20.4.0.44" />
-    <PackageVersion Include="Syncfusion.SfHubTile.WPF" Version="20.4.0.44" />
-    <PackageVersion Include="Syncfusion.SfImageEditor.WPF" Version="20.4.0.44" />
-    <PackageVersion Include="Syncfusion.SfInput.WPF" Version="20.4.0.44" />
-    <PackageVersion Include="Syncfusion.SfNavigationDrawer.WPF" Version="20.4.0.44" />
-    <PackageVersion Include="Syncfusion.SfProgressBar.WPF" Version="20.4.0.44" />
-    <PackageVersion Include="Syncfusion.SfRadialMenu.WPF" Version="20.4.0.44" />
-    <PackageVersion Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="20.4.0.44" />
-    <PackageVersion Include="Syncfusion.SfSkinManager.WPF" Version="20.4.0.44" />
-    <PackageVersion Include="Syncfusion.SfTextInputLayout.WPF" Version="20.4.0.44" />
-    <PackageVersion Include="Syncfusion.SfTreeNavigator.WPF" Version="20.4.0.44" />
-    <PackageVersion Include="Syncfusion.SfTreeView.WPF" Version="20.4.0.44" />
-    <PackageVersion Include="Syncfusion.Themes.MaterialDark.WPF" Version="20.4.0.44" />
+    <PackageVersion Include="Syncfusion.Edit.WPF" Version="23.2.6" />
+    <PackageVersion Include="Syncfusion.PropertyGrid.WPF" Version="23.2.6" />
+    <PackageVersion Include="Syncfusion.SfAccordion.WPF" Version="23.2.6" />
+    <PackageVersion Include="Syncfusion.SfBusyIndicator.WPF" Version="23.2.6" />
+    <PackageVersion Include="Syncfusion.SfGrid.WPF" Version="23.2.6" />
+    <PackageVersion Include="Syncfusion.SfHubTile.WPF" Version="23.2.6" />
+    <PackageVersion Include="Syncfusion.SfImageEditor.WPF" Version="23.2.6" />
+    <PackageVersion Include="Syncfusion.SfInput.WPF" Version="23.2.6" />
+    <PackageVersion Include="Syncfusion.SfNavigationDrawer.WPF" Version="23.2.6" />
+    <PackageVersion Include="Syncfusion.SfProgressBar.WPF" Version="23.2.6" />
+    <PackageVersion Include="Syncfusion.SfRadialMenu.WPF" Version="23.2.6" />
+    <PackageVersion Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="23.2.6" />
+    <PackageVersion Include="Syncfusion.SfSkinManager.WPF" Version="23.2.6" />
+    <PackageVersion Include="Syncfusion.SfTextInputLayout.WPF" Version="23.2.6" />
+    <PackageVersion Include="Syncfusion.SfTreeNavigator.WPF" Version="23.2.6" />
+    <PackageVersion Include="Syncfusion.SfTreeView.WPF" Version="23.2.6" />
+    <PackageVersion Include="Syncfusion.Themes.MaterialDark.WPF" Version="23.2.6" />
     <PackageVersion Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
     <PackageVersion Include="System.CommandLine.Hosting" Version="0.4.0-alpha.22272.1" />
     <PackageVersion Include="System.Reflection.MetadataLoadContext" Version="7.0.0" />
