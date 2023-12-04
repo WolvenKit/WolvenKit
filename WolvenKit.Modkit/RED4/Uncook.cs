@@ -1218,10 +1218,10 @@ namespace WolvenKit.Modkit.RED4
             decompressedFormat = DXGI_FORMAT.DXGI_FORMAT_UNKNOWN;
 
             // read the cr2wfile
-            return _parserService.TryReadRed4File(redInFile, out var cr2w) && ConvertRedClassToDdsStream(cr2w.RootChunk, outstream, out texformat, out decompressedFormat);
+            return _parserService.TryReadRed4File(redInFile, out var cr2w) && ConvertRedClassToDdsStream(cr2w.RootChunk, outstream, out texformat, out decompressedFormat, false);
         }
 
-        public static bool ConvertRedClassToDdsStream(RedBaseClass cls, Stream outstream, out DXGI_FORMAT texformat, out DXGI_FORMAT decompressedFormat, bool flipV = false)
+        public static bool ConvertRedClassToDdsStream(RedBaseClass cls, Stream outstream, out DXGI_FORMAT texformat, out DXGI_FORMAT decompressedFormat, bool flipV = true)
         {
             texformat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
             decompressedFormat = DXGI_FORMAT.DXGI_FORMAT_UNKNOWN;
@@ -1232,9 +1232,9 @@ namespace WolvenKit.Modkit.RED4
 
                 texformat = img.Metadata.Format;
                 decompressedFormat = img.Metadata.Format;
-                if (img.CompressionFormat != null)
+                if (img.UncompressedFormat != null)
                 {
-                    texformat = (DXGI_FORMAT)img.CompressionFormat;
+                    decompressedFormat = (DXGI_FORMAT)img.UncompressedFormat;
                 }
 
                 if (flipV)

@@ -49,7 +49,7 @@ public class RedImage : IDisposable
     private ScratchImage _scratchImage;
     private TexMetadata _metadata;
 
-    private DXGI_FORMAT? _compressionFormat;
+    private DXGI_FORMAT? _uncompressedFormat;
 
     private bool _disposed = false;
 
@@ -98,26 +98,26 @@ public class RedImage : IDisposable
     public uint Flags { get; set; } = 1;
     public uint Version { get; set; } = 2;
 
-    public WolvenKit.Common.DDS.DXGI_FORMAT? CompressionFormat
+    public WolvenKit.Common.DDS.DXGI_FORMAT? UncompressedFormat
     {
         get
         {
-            if (_compressionFormat != null)
+            if (_uncompressedFormat != null)
             {
-                return (WolvenKit.Common.DDS.DXGI_FORMAT)(uint)_compressionFormat;
+                return (WolvenKit.Common.DDS.DXGI_FORMAT)(uint)_uncompressedFormat;
             }
 
             return null;
         }
-        set
+        private set
         {
             if (value != null)
             {
-                _compressionFormat = (DXGI_FORMAT)(uint)value;
+                _uncompressedFormat = (DXGI_FORMAT)(uint)value;
             }
             else
             {
-                _compressionFormat = null;
+                _uncompressedFormat = null;
             }
 
         }
@@ -422,7 +422,16 @@ public class RedImage : IDisposable
         return new RedImage(croppedImage);
     }
 
-    public void FlipV() => InternalScratchImage = InternalScratchImage.FlipRotate(TEX_FR_FLAGS.FLIP_VERTICAL);
+    public void FlipV()
+    {
+        if (TexHelper.Instance.IsCompressed(_metadata.Format))
+        {
+            InternalScratchImage = InternalScratchImage.Decompress(DXGI_FORMAT.UNKNOWN);
+            _metadata = InternalScratchImage.GetMetadata();
+        }
+
+        InternalScratchImage = InternalScratchImage.FlipRotate(TEX_FR_FLAGS.FLIP_VERTICAL);
+    }
 
     public void Convert(Common.DDS.DXGI_FORMAT format)
     {
@@ -952,6 +961,11 @@ public class RedImage : IDisposable
         }
 
         var result = new RedImage(TexHelper.Instance.LoadFromDDSMemory(memIntPtr, ddsLength, DDS_FLAGS.NONE, out var metadata));
+
+        if (TexHelper.Instance.IsCompressed(metadata.Format))
+        {
+            result.UncompressedFormat = CommonFunctions.GetDXGIFormat(ETextureCompression.TCM_None, info.RawFormat, info.IsGamma);
+        }
 
         // This fails on compressed files 
         if (!TexHelper.Instance.IsCompressed(metadata.Format) && result.Metadata.MipLevels > 1)
