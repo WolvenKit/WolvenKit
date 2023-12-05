@@ -26,5 +26,13 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
 		}
+		
+		[RED("visibilityConeStartAngle")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID VisibilityConeStartAngle
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
 	}
 }

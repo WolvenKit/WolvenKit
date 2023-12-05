@@ -19,6 +19,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
+		[RED("minFallHeightToConsiderInputToggles")]
+		[REDProperty(IsIgnored = true)]
+		public CArray<TweakDBID> MinFallHeightToConsiderInputToggles
+		{
+			get => GetPropertyValue<CArray<TweakDBID>>();
+			set => SetPropertyValue<CArray<TweakDBID>>(value);
+		}
+		
 		[RED("perc")]
 		[REDProperty(IsIgnored = true)]
 		public CBool Perc

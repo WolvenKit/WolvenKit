@@ -131,6 +131,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector3>(value);
 		}
 		
+		[RED("canDrop")]
+		[REDProperty(IsIgnored = true)]
+		public CBool CanDrop
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("connections")]
 		[REDProperty(IsIgnored = true)]
 		public CArray<TweakDBID> Connections

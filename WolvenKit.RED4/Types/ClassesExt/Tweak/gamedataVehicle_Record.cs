@@ -35,6 +35,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 		
+		[RED("bikeDriveModelData")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID BikeDriveModelData
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
 		[RED("blockadeLeftPassengerOffset")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat BlockadeLeftPassengerOffset
@@ -393,6 +401,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<Vector3>();
 			set => SetPropertyValue<Vector3>(value);
+		}
+		
+		[RED("tankDriveModelData")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID TankDriveModelData
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
 		[RED("tppCameraParams")]

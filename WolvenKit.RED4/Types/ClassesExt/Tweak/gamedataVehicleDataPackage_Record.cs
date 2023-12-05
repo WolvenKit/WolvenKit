@@ -306,5 +306,13 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
+		
+		[RED("windowsRollDown")]
+		[REDProperty(IsIgnored = true)]
+		public CBool WindowsRollDown
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
 	}
 }
