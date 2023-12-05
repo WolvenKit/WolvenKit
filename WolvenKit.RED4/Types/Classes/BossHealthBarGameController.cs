@@ -93,6 +93,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(20)] 
+		[RED("fastTravelCallbackID")] 
+		public CHandle<redCallbackObject> FastTravelCallbackID
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(21)] 
 		[RED("bossPuppets")] 
 		public CArray<CWeakHandle<NPCPuppet>> BossPuppets
 		{

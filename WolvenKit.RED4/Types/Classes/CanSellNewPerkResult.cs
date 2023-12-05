@@ -28,6 +28,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("perkType")] 
+		public CEnum<gamedataNewPerkType> PerkType
+		{
+			get => GetPropertyValue<CEnum<gamedataNewPerkType>>();
+			set => SetPropertyValue<CEnum<gamedataNewPerkType>>(value);
+		}
+
 		public CanSellNewPerkResult()
 		{
 			PostConstruct();

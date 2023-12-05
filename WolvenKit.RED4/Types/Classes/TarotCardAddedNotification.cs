@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class TarotCardAddedNotification : GenericNotificationController
 	{
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("cardImage")] 
 		public inkImageWidgetReference CardImage
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("cardNameLabel")] 
 		public inkTextWidgetReference CardNameLabel
 		{

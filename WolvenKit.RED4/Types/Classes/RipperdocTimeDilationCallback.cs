@@ -6,10 +6,10 @@ namespace WolvenKit.RED4.Types
 	{
 		[Ordinal(0)] 
 		[RED("controller")] 
-		public CWeakHandle<RipperDocGameController> Controller
+		public CWeakHandle<VendorHubMenuGameController> Controller
 		{
-			get => GetPropertyValue<CWeakHandle<RipperDocGameController>>();
-			set => SetPropertyValue<CWeakHandle<RipperDocGameController>>(value);
+			get => GetPropertyValue<CWeakHandle<VendorHubMenuGameController>>();
+			set => SetPropertyValue<CWeakHandle<VendorHubMenuGameController>>(value);
 		}
 
 		public RipperdocTimeDilationCallback()

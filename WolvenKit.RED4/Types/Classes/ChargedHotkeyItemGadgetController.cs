@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ChargedHotkeyItemGadgetController : ChargedHotkeyItemBaseController
 	{
-		[Ordinal(42)] 
+		[Ordinal(44)] 
 		[RED("currentStatPoolType")] 
 		public CEnum<gamedataStatPoolType> CurrentStatPoolType
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataStatPoolType>>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(45)] 
 		[RED("c_grenadeKey")] 
 		public CName C_grenadeKey
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(46)] 
 		[RED("c_projectileLauncherKey")] 
 		public CName C_projectileLauncherKey
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(47)] 
 		[RED("c_opticalCamoKey")] 
 		public CName C_opticalCamoKey
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(48)] 
 		[RED("c_cwMaskKey")] 
 		public CName C_cwMaskKey
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(49)] 
 		[RED("opticalCamoTags")] 
 		public CArray<CName> OpticalCamoTags
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(50)] 
 		[RED("currentCombatState")] 
 		public CEnum<gamePSMCombat> CurrentCombatState
 		{
@@ -60,12 +60,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamePSMCombat>>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(51)] 
 		[RED("combatStateCallback")] 
 		public CHandle<redCallbackObject> CombatStateCallback
 		{
 			get => GetPropertyValue<CHandle<redCallbackObject>>();
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(52)] 
+		[RED("c_grenadeFlashSalePerkType")] 
+		public CEnum<gamedataNewPerkType> C_grenadeFlashSalePerkType
+		{
+			get => GetPropertyValue<CEnum<gamedataNewPerkType>>();
+			set => SetPropertyValue<CEnum<gamedataNewPerkType>>(value);
 		}
 
 		public ChargedHotkeyItemGadgetController()
@@ -75,6 +83,7 @@ namespace WolvenKit.RED4.Types
 			C_opticalCamoKey = "OpticalCamo";
 			C_cwMaskKey = "CWMask";
 			OpticalCamoTags = new();
+			C_grenadeFlashSalePerkType = Enums.gamedataNewPerkType.Tech_Left_Perk_3_3;
 
 			PostConstruct();
 		}

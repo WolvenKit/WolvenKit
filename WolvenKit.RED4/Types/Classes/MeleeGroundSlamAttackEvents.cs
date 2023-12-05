@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class MeleeGroundSlamAttackEvents : MeleeAttackGenericEvents
 	{
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("knockdownImmunityModifier")] 
 		public CHandle<gameStatModifierData_Deprecated> KnockdownImmunityModifier
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStatModifierData_Deprecated>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("stunImmunityModifier")] 
 		public CHandle<gameStatModifierData_Deprecated> StunImmunityModifier
 		{

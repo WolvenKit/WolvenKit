@@ -5,6 +5,14 @@ namespace WolvenKit.RED4.Types
 	public partial class ItemTooltipCyberwareWeaponModule : ItemTooltipModuleController
 	{
 		[Ordinal(5)] 
+		[RED("wrapper")] 
+		public inkWidgetReference Wrapper
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(6)] 
 		[RED("bars")] 
 		public CArray<inkWidgetReference> Bars
 		{
@@ -12,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<inkWidgetReference>>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("diffBars")] 
 		public CArray<inkWidgetReference> DiffBars
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<inkWidgetReference>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("betterColorDummyHolder")] 
 		public inkWidgetReference BetterColorDummyHolder
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("worseColorDummyHolder")] 
 		public inkWidgetReference WorseColorDummyHolder
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("statsToDisplay")] 
 		public CArray<CEnum<WeaponBarType>> StatsToDisplay
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CEnum<WeaponBarType>>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("disableSeparators")] 
 		public CBool DisableSeparators
 		{
@@ -54,6 +62,7 @@ namespace WolvenKit.RED4.Types
 
 		public ItemTooltipCyberwareWeaponModule()
 		{
+			Wrapper = new inkWidgetReference();
 			Bars = new();
 			DiffBars = new();
 			BetterColorDummyHolder = new inkWidgetReference();

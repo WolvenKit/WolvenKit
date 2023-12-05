@@ -54,14 +54,18 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(6)] 
 		[RED("type")] 
-		public CUInt32 Type
+		public CEnum<gameSimpleMessageType> Type
 		{
-			get => GetPropertyValue<CUInt32>();
-			set => SetPropertyValue<CUInt32>(value);
+			get => GetPropertyValue<CEnum<gameSimpleMessageType>>();
+			set => SetPropertyValue<CEnum<gameSimpleMessageType>>(value);
 		}
 
 		public HUDProgressBarData()
 		{
+			BottomText = "LocKey#22169";
+			CompletedText = "LocKey#15455";
+			FailedText = "LocKey#15353";
+
 			PostConstruct();
 		}
 

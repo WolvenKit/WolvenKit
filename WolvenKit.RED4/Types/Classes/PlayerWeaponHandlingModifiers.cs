@@ -2,9 +2,25 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class PlayerWeaponHandlingModifiers : RedBaseClass
+	public partial class PlayerWeaponHandlingModifiers : IScriptable
 	{
 		[Ordinal(0)] 
+		[RED("player")] 
+		public CWeakHandle<PlayerPuppet> Player
+		{
+			get => GetPropertyValue<CWeakHandle<PlayerPuppet>>();
+			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
+		}
+
+		[Ordinal(1)] 
+		[RED("opSymbol")] 
+		public CName OpSymbol
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(2)] 
 		[RED("recoilGroup")] 
 		public CArray<CHandle<gameConstantStatModifierData_Deprecated>> RecoilGroup
 		{
@@ -12,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<gameConstantStatModifierData_Deprecated>>>(value);
 		}
 
-		[Ordinal(1)] 
+		[Ordinal(3)] 
 		[RED("timeOutGroup")] 
 		public CArray<CHandle<gameConstantStatModifierData_Deprecated>> TimeOutGroup
 		{
@@ -20,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<gameConstantStatModifierData_Deprecated>>>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(4)] 
 		[RED("multSwayGroup")] 
 		public CArray<CHandle<gameConstantStatModifierData_Deprecated>> MultSwayGroup
 		{
@@ -28,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<gameConstantStatModifierData_Deprecated>>>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(5)] 
 		[RED("addSwayGroup")] 
 		public CArray<CHandle<gameConstantStatModifierData_Deprecated>> AddSwayGroup
 		{
@@ -36,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<gameConstantStatModifierData_Deprecated>>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(6)] 
 		[RED("spreadGroup")] 
 		public CArray<CHandle<gameConstantStatModifierData_Deprecated>> SpreadGroup
 		{

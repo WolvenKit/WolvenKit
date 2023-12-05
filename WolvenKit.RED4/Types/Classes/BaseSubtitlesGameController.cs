@@ -177,7 +177,7 @@ namespace WolvenKit.RED4.Types
 			LineMap = new();
 			PendingShowLines = new();
 			PendingHideLines = new();
-			GroupPath = "/audio/subtitles";
+			GroupPath = "/accessibility/subtitles";
 			GameInstance = new ScriptGameInstance();
 
 			PostConstruct();

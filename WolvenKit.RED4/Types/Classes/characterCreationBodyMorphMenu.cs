@@ -420,6 +420,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(58)] 
+		[RED("isPresetHoveredOver")] 
+		public CBool IsPresetHoveredOver
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public characterCreationBodyMorphMenu()
 		{
 			DefaultPreviewSlot = "UI_Skin";

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ZoneAlertNotification : GenericNotificationController
 	{
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("animation")] 
 		public CHandle<inkanimProxy> Animation
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("zone_data")] 
 		public CHandle<ZoneAlertNotificationViewData> Zone_data
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ZoneAlertNotificationViewData>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("ZoneLabelText")] 
 		public inkTextWidgetReference ZoneLabelText
 		{

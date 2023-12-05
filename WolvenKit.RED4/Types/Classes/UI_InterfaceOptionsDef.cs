@@ -28,11 +28,29 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("NPCNameplatesEnabled")] 
+		public gamebbScriptID_Bool NPCNameplatesEnabled
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		[Ordinal(4)] 
+		[RED("HUDMarkersEnabled")] 
+		public gamebbScriptID_Bool HUDMarkersEnabled
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
 		public UI_InterfaceOptionsDef()
 		{
 			CrowdsOnMinimap = new gamebbScriptID_Bool();
 			ObjectMarkersEnabled = new gamebbScriptID_Bool();
 			NPCNamesEnabled = new gamebbScriptID_Bool();
+			NPCNameplatesEnabled = new gamebbScriptID_Bool();
+			HUDMarkersEnabled = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class NewHudPhoneGameController : gameuiNewHudPhoneGameController
 	{
-		[Ordinal(12)] 
+		[Ordinal(17)] 
 		[RED("player")] 
 		public CWeakHandle<PlayerPuppet> Player
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(18)] 
 		[RED("journalMgr")] 
 		public CWeakHandle<gameJournalManager> JournalMgr
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameJournalManager>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(19)] 
 		[RED("questsSystem")] 
 		public CWeakHandle<questQuestsSystem> QuestsSystem
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<questQuestsSystem>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(20)] 
 		[RED("uiSystem")] 
 		public CWeakHandle<gameuiGameSystemUI> UiSystem
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameuiGameSystemUI>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(21)] 
 		[RED("fact1ListenerId")] 
 		public CUInt32 Fact1ListenerId
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(22)] 
 		[RED("fact2ListenerId")] 
 		public CUInt32 Fact2ListenerId
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(23)] 
 		[RED("fact3ListenerId")] 
 		public CUInt32 Fact3ListenerId
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(24)] 
 		[RED("onNotificationsQueueChanged")] 
 		public CHandle<redCallbackObject> OnNotificationsQueueChanged
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(25)] 
 		[RED("currActiveQueueId")] 
 		public CInt32 CurrActiveQueueId
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(26)] 
 		[RED("CurrentFunction")] 
 		public CEnum<EHudPhoneFunction> CurrentFunction
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EHudPhoneFunction>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(27)] 
 		[RED("gameplayRestrictions")] 
 		public CArray<CName> GameplayRestrictions
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(28)] 
 		[RED("buttonPressed")] 
 		public CBool ButtonPressed
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(29)] 
 		[RED("repeatingScrollActionEnabled")] 
 		public CBool RepeatingScrollActionEnabled
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(30)] 
 		[RED("TimeoutPeroid")] 
 		public CFloat TimeoutPeroid
 		{
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(31)] 
 		[RED("activePhoneElements")] 
 		public CUInt32 ActivePhoneElements
 		{
@@ -124,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(32)] 
 		[RED("bbSystem")] 
 		public CWeakHandle<gameBlackboardSystem> BbSystem
 		{
@@ -132,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameBlackboardSystem>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(33)] 
 		[RED("bbUiSystemDef")] 
 		public CHandle<UI_SystemDef> BbUiSystemDef
 		{
@@ -140,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_SystemDef>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(34)] 
 		[RED("bbUiSystem")] 
 		public CWeakHandle<gameIBlackboard> BbUiSystem
 		{
@@ -148,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(35)] 
 		[RED("isInMenuCallback")] 
 		public CHandle<redCallbackObject> IsInMenuCallback
 		{
@@ -156,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(36)] 
 		[RED("bbUiComDeviceDef")] 
 		public CHandle<UI_ComDeviceDef> BbUiComDeviceDef
 		{
@@ -164,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_ComDeviceDef>>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(37)] 
 		[RED("bbUiComDevice")] 
 		public CWeakHandle<gameIBlackboard> BbUiComDevice
 		{
@@ -172,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(38)] 
 		[RED("phoneCallInformationCallback")] 
 		public CHandle<redCallbackObject> PhoneCallInformationCallback
 		{
@@ -180,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(39)] 
 		[RED("phoneStatusChangedCallback")] 
 		public CHandle<redCallbackObject> PhoneStatusChangedCallback
 		{
@@ -188,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(40)] 
 		[RED("phoneMinimizedCallback")] 
 		public CHandle<redCallbackObject> PhoneMinimizedCallback
 		{
@@ -196,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(41)] 
 		[RED("contactsActiveCallback")] 
 		public CHandle<redCallbackObject> ContactsActiveCallback
 		{
@@ -204,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(42)] 
 		[RED("messageToOpenCallback")] 
 		public CHandle<redCallbackObject> MessageToOpenCallback
 		{
@@ -212,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(43)] 
 		[RED("phoneEnabledBBId")] 
 		public CHandle<redCallbackObject> PhoneEnabledBBId
 		{
@@ -220,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(44)] 
 		[RED("bbUiQuickSlotsDataDef")] 
 		public CHandle<UI_QuickSlotsDataDef> BbUiQuickSlotsDataDef
 		{
@@ -228,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_QuickSlotsDataDef>>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(45)] 
 		[RED("bbUiQuickSlotsData")] 
 		public CWeakHandle<gameIBlackboard> BbUiQuickSlotsData
 		{
@@ -236,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(46)] 
 		[RED("bbUiPlayerStatsDef")] 
 		public CHandle<UI_PlayerStatsDef> BbUiPlayerStatsDef
 		{
@@ -244,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_PlayerStatsDef>>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(47)] 
 		[RED("bbUiPlayerStats")] 
 		public CWeakHandle<gameIBlackboard> BbUiPlayerStats
 		{
@@ -252,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(48)] 
 		[RED("DelaySystem")] 
 		public CWeakHandle<gameDelaySystem> DelaySystem
 		{
@@ -260,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameDelaySystem>>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(49)] 
 		[RED("DelayedTimeoutCallbackId")] 
 		public gameDelayID DelayedTimeoutCallbackId
 		{
@@ -268,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(50)] 
 		[RED("PhoneSystem")] 
 		public CWeakHandle<PhoneSystem> PhoneSystem
 		{
@@ -276,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PhoneSystem>>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(51)] 
 		[RED("CurrentCallInformation")] 
 		public questPhoneCallInformation CurrentCallInformation
 		{
@@ -284,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<questPhoneCallInformation>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(52)] 
 		[RED("CurrentPhoneCallContact")] 
 		public CWeakHandle<gameJournalContact> CurrentPhoneCallContact
 		{
@@ -292,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameJournalContact>>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(53)] 
 		[RED("holoAudioCallLogicController")] 
 		public CWeakHandle<HoloAudioCallLogicController> HoloAudioCallLogicController
 		{
@@ -300,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<HoloAudioCallLogicController>>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(54)] 
 		[RED("contactListLogicController")] 
 		public CWeakHandle<PhoneDialerLogicController> ContactListLogicController
 		{
@@ -308,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PhoneDialerLogicController>>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(55)] 
 		[RED("phoneIconAnimProxy")] 
 		public CHandle<inkanimProxy> PhoneIconAnimProxy
 		{
@@ -316,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(56)] 
 		[RED("backgroundAnimProxy")] 
 		public CHandle<inkanimProxy> BackgroundAnimProxy
 		{
@@ -324,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(57)] 
 		[RED("screenType")] 
 		public CEnum<PhoneScreenType> ScreenType
 		{
@@ -332,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<PhoneScreenType>>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(58)] 
 		[RED("messagesPanelVisible")] 
 		public CBool MessagesPanelVisible
 		{
@@ -340,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(59)] 
 		[RED("messagesPanelSpawned")] 
 		public CBool MessagesPanelSpawned
 		{
@@ -348,7 +348,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(60)] 
 		[RED("threadsVisible")] 
 		public CBool ThreadsVisible
 		{
@@ -356,7 +356,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(61)] 
 		[RED("messageToOpenHash")] 
 		public CInt32 MessageToOpenHash
 		{
@@ -364,7 +364,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(62)] 
 		[RED("indexToSelect")] 
 		public CUInt32 IndexToSelect
 		{
@@ -372,7 +372,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(63)] 
 		[RED("isSingleThread")] 
 		public CBool IsSingleThread
 		{
@@ -380,7 +380,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(64)] 
 		[RED("isShowingAllMessages")] 
 		public CBool IsShowingAllMessages
 		{
@@ -388,7 +388,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(65)] 
+		[RED("keepOpenWhenInHubMenu")] 
+		public CBool KeepOpenWhenInHubMenu
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(66)] 
 		[RED("audioSystem")] 
 		public CWeakHandle<gameGameAudioSystem> AudioSystem
 		{
@@ -396,7 +404,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameGameAudioSystem>>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(67)] 
 		[RED("isRemoteControllingDevice")] 
 		public CBool IsRemoteControllingDevice
 		{
@@ -404,9 +412,17 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(68)] 
 		[RED("psmIsControllingDeviceCallback")] 
 		public CHandle<redCallbackObject> PsmIsControllingDeviceCallback
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(69)] 
+		[RED("vehicleEnterCallback")] 
+		public CHandle<redCallbackObject> VehicleEnterCallback
 		{
 			get => GetPropertyValue<CHandle<redCallbackObject>>();
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);

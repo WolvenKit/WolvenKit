@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SniperNest : SensorDevice
 	{
-		[Ordinal(197)] 
+		[Ordinal(200)] 
 		[RED("animFeature")] 
 		public CHandle<AnimFeature_SecurityTurretData> AnimFeature
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AnimFeature_SecurityTurretData>>(value);
 		}
 
-		[Ordinal(198)] 
+		[Ordinal(201)] 
 		[RED("animFeatureName")] 
 		public CName AnimFeatureName
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(199)] 
+		[Ordinal(202)] 
 		[RED("weapon")] 
 		public CWeakHandle<gameweaponObject> Weapon
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameweaponObject>>(value);
 		}
 
-		[Ordinal(200)] 
+		[Ordinal(203)] 
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
-		[Ordinal(201)] 
+		[Ordinal(204)] 
 		[RED("teleportAfterEnter")] 
 		public NodeRef TeleportAfterEnter
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NodeRef>(value);
 		}
 
-		[Ordinal(202)] 
+		[Ordinal(205)] 
 		[RED("burstDelayEvtID")] 
 		public gameDelayID BurstDelayEvtID
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(203)] 
+		[Ordinal(206)] 
 		[RED("isBurstDelayOngoing")] 
 		public CBool IsBurstDelayOngoing
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(204)] 
+		[Ordinal(207)] 
 		[RED("nextShootCycleDelayEvtID")] 
 		public gameDelayID NextShootCycleDelayEvtID
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(205)] 
+		[Ordinal(208)] 
 		[RED("isShootingOngoing")] 
 		public CBool IsShootingOngoing
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(206)] 
+		[Ordinal(209)] 
 		[RED("timeToNextShot")] 
 		public CFloat TimeToNextShot
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(207)] 
+		[Ordinal(210)] 
 		[RED("player")] 
 		public CWeakHandle<PlayerPuppet> Player
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
-		[Ordinal(208)] 
+		[Ordinal(211)] 
 		[RED("targetZoom")] 
 		public CFloat TargetZoom
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(209)] 
+		[Ordinal(212)] 
 		[RED("startZoom")] 
 		public CFloat StartZoom
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(210)] 
+		[Ordinal(213)] 
 		[RED("zoomLerpTimeStamp")] 
 		public CFloat ZoomLerpTimeStamp
 		{
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(211)] 
+		[Ordinal(214)] 
 		[RED("zoomLerpDuration")] 
 		public CFloat ZoomLerpDuration
 		{

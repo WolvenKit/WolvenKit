@@ -12,6 +12,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
+		[Ordinal(1)] 
+		[RED("force")] 
+		public CBool Force
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public DoorTriggerDelayedEvent()
 		{
 			PostConstruct();

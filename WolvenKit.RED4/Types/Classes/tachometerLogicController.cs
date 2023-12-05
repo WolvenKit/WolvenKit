@@ -68,11 +68,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(9)] 
+		[RED("currentRPM")] 
+		public CInt32 CurrentRPM
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
 		public tachometerLogicController()
 		{
 			RpmValueWidget = new inkTextWidgetReference();
 			RpmGaugeForegroundWidget = new inkRectangleWidgetReference();
 			RpmGaugeMaxSize = new Vector2();
+			CurrentRPM = -1;
 
 			PostConstruct();
 		}

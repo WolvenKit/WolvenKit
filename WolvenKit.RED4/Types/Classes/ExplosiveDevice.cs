@@ -125,6 +125,30 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(121)] 
+		[RED("explodedByQuickhack")] 
+		public CBool ExplodedByQuickhack
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(122)] 
+		[RED("switchAppearanceOnExplosion")] 
+		public CBool SwitchAppearanceOnExplosion
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(123)] 
+		[RED("explodedAppearanceName")] 
+		public CName ExplodedAppearanceName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(124)] 
 		[RED("componentsON")] 
 		public CArray<CHandle<entIPlacedComponent>> ComponentsON
 		{
@@ -132,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<entIPlacedComponent>>>(value);
 		}
 
-		[Ordinal(122)] 
+		[Ordinal(125)] 
 		[RED("componentsOFF")] 
 		public CArray<CHandle<entIPlacedComponent>> ComponentsOFF
 		{

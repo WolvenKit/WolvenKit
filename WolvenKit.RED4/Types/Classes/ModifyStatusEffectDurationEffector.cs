@@ -45,6 +45,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
+		[RED("canGoOverInitialDuration")] 
+		public CBool CanGoOverInitialDuration
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(6)] 
 		[RED("gameInstance")] 
 		public ScriptGameInstance GameInstance
 		{

@@ -124,6 +124,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(65)] 
+		[RED("timeUntilReset")] 
+		public CFloat TimeUntilReset
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public CraftingLogicController()
 		{
 			MaxIngredientCount = 5;
@@ -133,6 +141,7 @@ namespace WolvenKit.RED4.Types
 			GarmentPreviewContainer = new inkWidgetReference();
 			PerkNotificationContainer = new inkWidgetReference();
 			PerkNotificationText = new inkTextWidgetReference();
+			TimeUntilReset = 1.000000F;
 
 			PostConstruct();
 		}

@@ -44,6 +44,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameJournalPath>>(value);
 		}
 
+		[Ordinal(7)] 
+		[RED("isQuestImportant")] 
+		public CBool IsQuestImportant
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public gameJournalPhoneMessage()
 		{
 			JournalEntryOverrideDataList = new();

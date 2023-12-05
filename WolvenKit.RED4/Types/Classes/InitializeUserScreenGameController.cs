@@ -13,6 +13,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(4)] 
+		[RED("breachingContainer")] 
+		public inkCompoundWidgetReference BreachingContainer
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("progressBar")] 
+		public inkCompoundWidgetReference ProgressBar
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(6)] 
 		[RED("menuEventDispatcher")] 
 		public CWeakHandle<inkMenuEventDispatcher> MenuEventDispatcher
 		{
@@ -20,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(7)] 
 		[RED("requestHandler")] 
 		public CWeakHandle<inkISystemRequestsHandler> RequestHandler
 		{
@@ -28,9 +44,19 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkISystemRequestsHandler>>(value);
 		}
 
+		[Ordinal(8)] 
+		[RED("progressBarController")] 
+		public CWeakHandle<LoadingScreenProgressBarController> ProgressBarController
+		{
+			get => GetPropertyValue<CWeakHandle<LoadingScreenProgressBarController>>();
+			set => SetPropertyValue<CWeakHandle<LoadingScreenProgressBarController>>(value);
+		}
+
 		public InitializeUserScreenGameController()
 		{
 			BackgroundVideo = new inkVideoWidgetReference();
+			BreachingContainer = new inkCompoundWidgetReference();
+			ProgressBar = new inkCompoundWidgetReference();
 
 			PostConstruct();
 		}

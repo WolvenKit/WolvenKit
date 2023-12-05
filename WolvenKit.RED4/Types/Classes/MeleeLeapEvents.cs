@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class MeleeLeapEvents : MeleeEventsTransition
 	{
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("enableVaultFromLeapAttack")] 
 		public CBool EnableVaultFromLeapAttack
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("exitingToMeleeStrongAttack")] 
 		public CBool ExitingToMeleeStrongAttack
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("isFinisher")] 
 		public CBool IsFinisher
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("isTargetKnockedOver")] 
 		public CBool IsTargetKnockedOver
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("textLayerId")] 
 		public CUInt32 TextLayerId
 		{

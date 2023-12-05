@@ -314,7 +314,7 @@ namespace WolvenKit.RED4.Types
 			IntroAnimationName = "intro";
 			OutroAnimationName = "outro";
 			AddPercentSign = true;
-			Data = new HUDProgressBarData();
+			Data = new HUDProgressBarData { BottomText = "LocKey#22169", CompletedText = "LocKey#15455", FailedText = "LocKey#15353" };
 			AnimOptions = new inkanimPlaybackOptions { CustomTimeDilation = 1.000000F };
 			BarSize = new Vector2();
 			SignalBarSize = new Vector2();

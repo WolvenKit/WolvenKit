@@ -6,10 +6,10 @@ namespace WolvenKit.RED4.Types
 	{
 		[Ordinal(0)] 
 		[RED("radioWidgetController")] 
-		public CWeakHandle<HotkeyRadioWidgetController> RadioWidgetController
+		public CWeakHandle<HotkeyConsumableWidgetController> RadioWidgetController
 		{
-			get => GetPropertyValue<CWeakHandle<HotkeyRadioWidgetController>>();
-			set => SetPropertyValue<CWeakHandle<HotkeyRadioWidgetController>>(value);
+			get => GetPropertyValue<CWeakHandle<HotkeyConsumableWidgetController>>();
+			set => SetPropertyValue<CWeakHandle<HotkeyConsumableWidgetController>>(value);
 		}
 
 		public HotkeyRadioStatusListener()

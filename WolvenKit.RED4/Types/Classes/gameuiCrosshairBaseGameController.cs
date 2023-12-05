@@ -189,6 +189,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(25)] 
+		[RED("isCamoActiveOnPlayer")] 
+		public CBool IsCamoActiveOnPlayer
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(26)] 
 		[RED("staminaChangedCallback")] 
 		public CHandle<redCallbackObject> StaminaChangedCallback
 		{
@@ -196,12 +204,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("staminaListener")] 
 		public CHandle<CrosshairStaminaListener> StaminaListener
 		{
 			get => GetPropertyValue<CHandle<CrosshairStaminaListener>>();
 			set => SetPropertyValue<CHandle<CrosshairStaminaListener>>(value);
+		}
+
+		[Ordinal(28)] 
+		[RED("opticalCamoListener")] 
+		public CHandle<OpticalCamoListener> OpticalCamoListener
+		{
+			get => GetPropertyValue<CHandle<OpticalCamoListener>>();
+			set => SetPropertyValue<CHandle<OpticalCamoListener>>(value);
 		}
 
 		public gameuiCrosshairBaseGameController()

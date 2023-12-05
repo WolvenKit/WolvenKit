@@ -44,6 +44,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameinteractionsChoiceLookAtDescriptor>(value);
 		}
 
+		[Ordinal(5)] 
+		[RED("doNotTurnOffPreventionSystem")] 
+		public CBool DoNotTurnOffPreventionSystem
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public gameinteractionsChoice()
 		{
 			CaptionParts = new gameinteractionsChoiceCaption { Parts = new() };

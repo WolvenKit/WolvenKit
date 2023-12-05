@@ -461,6 +461,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(66)] 
+		[RED("isControllingDevice")] 
+		public CBool IsControllingDevice
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(67)] 
 		[RED("currentVisionPSM")] 
 		public CEnum<gamePSMVision> CurrentVisionPSM
 		{
@@ -468,7 +476,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamePSMVision>>(value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(68)] 
 		[RED("combatModePSM")] 
 		public CEnum<gamePSMCombat> CombatModePSM
 		{
@@ -476,7 +484,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamePSMCombat>>(value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(69)] 
 		[RED("sceneTier")] 
 		public CEnum<GameplayTier> SceneTier
 		{
@@ -484,7 +492,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<GameplayTier>>(value);
 		}
 
-		[Ordinal(69)] 
+		[Ordinal(70)] 
 		[RED("godModeStatListener")] 
 		public CHandle<GodModeStatListener> GodModeStatListener
 		{
@@ -492,7 +500,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<GodModeStatListener>>(value);
 		}
 
-		[Ordinal(70)] 
+		[Ordinal(71)] 
 		[RED("memoryStatListener")] 
 		public CHandle<HealthbarMemoryStatListener> MemoryStatListener
 		{
@@ -500,7 +508,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<HealthbarMemoryStatListener>>(value);
 		}
 
-		[Ordinal(71)] 
+		[Ordinal(72)] 
 		[RED("playerStatsBlackboard")] 
 		public CWeakHandle<gameIBlackboard> PlayerStatsBlackboard
 		{
@@ -508,7 +516,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(72)] 
+		[Ordinal(73)] 
 		[RED("characterCurrentXPListener")] 
 		public CHandle<redCallbackObject> CharacterCurrentXPListener
 		{
@@ -516,7 +524,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(73)] 
+		[Ordinal(74)] 
 		[RED("levelUpBlackboard")] 
 		public CWeakHandle<gameIBlackboard> LevelUpBlackboard
 		{
@@ -524,7 +532,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(74)] 
+		[Ordinal(75)] 
 		[RED("playerLevelUpListener")] 
 		public CHandle<redCallbackObject> PlayerLevelUpListener
 		{
@@ -532,7 +540,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(75)] 
+		[Ordinal(76)] 
 		[RED("currentLevel")] 
 		public CInt32 CurrentLevel
 		{
@@ -540,7 +548,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(76)] 
+		[Ordinal(77)] 
 		[RED("playerObject")] 
 		public CWeakHandle<gameObject> PlayerObject
 		{
@@ -548,7 +556,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(77)] 
+		[Ordinal(78)] 
 		[RED("playerDevelopmentSystem")] 
 		public CHandle<PlayerDevelopmentSystem> PlayerDevelopmentSystem
 		{
@@ -556,7 +564,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<PlayerDevelopmentSystem>>(value);
 		}
 
-		[Ordinal(78)] 
+		[Ordinal(79)] 
 		[RED("gameInstance")] 
 		public ScriptGameInstance GameInstance
 		{
@@ -564,7 +572,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<ScriptGameInstance>(value);
 		}
 
-		[Ordinal(79)] 
+		[Ordinal(80)] 
 		[RED("foldingAnimProxy")] 
 		public CHandle<inkanimProxy> FoldingAnimProxy
 		{
@@ -572,7 +580,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(80)] 
+		[Ordinal(81)] 
 		[RED("memoryFillCells")] 
 		public CFloat MemoryFillCells
 		{
@@ -580,7 +588,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(81)] 
+		[Ordinal(82)] 
 		[RED("memoryMaxCells")] 
 		public CInt32 MemoryMaxCells
 		{
@@ -588,7 +596,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(82)] 
+		[Ordinal(83)] 
 		[RED("pendingRequests")] 
 		public CInt32 PendingRequests
 		{
@@ -596,7 +604,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(83)] 
+		[Ordinal(84)] 
 		[RED("spawnTokens")] 
 		public CArray<CWeakHandle<inkAsyncSpawnRequest>> SpawnTokens
 		{
@@ -604,7 +612,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<inkAsyncSpawnRequest>>>(value);
 		}
 
-		[Ordinal(84)] 
+		[Ordinal(85)] 
 		[RED("overshieldListener")] 
 		public CHandle<OvershieldListener> OvershieldListener
 		{
@@ -612,7 +620,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<OvershieldListener>>(value);
 		}
 
-		[Ordinal(85)] 
+		[Ordinal(86)] 
 		[RED("overshieldBarController")] 
 		public CWeakHandle<NameplateBarLogicController> OvershieldBarController
 		{
@@ -620,7 +628,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<NameplateBarLogicController>>(value);
 		}
 
-		[Ordinal(86)] 
+		[Ordinal(87)] 
 		[RED("useOevershield")] 
 		public CBool UseOevershield
 		{
@@ -628,7 +636,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(87)] 
+		[Ordinal(88)] 
 		[RED("currentOvershieldValue")] 
 		public CInt32 CurrentOvershieldValue
 		{
@@ -636,7 +644,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(88)] 
+		[Ordinal(89)] 
 		[RED("currentOvershieldValuePercent")] 
 		public CFloat CurrentOvershieldValuePercent
 		{
@@ -644,7 +652,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(89)] 
+		[Ordinal(90)] 
 		[RED("overclockListener")] 
 		public CHandle<OverclockListener> OverclockListener
 		{
@@ -652,7 +660,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<OverclockListener>>(value);
 		}
 
-		[Ordinal(90)] 
+		[Ordinal(91)] 
 		[RED("isInOverclockedState")] 
 		public CBool IsInOverclockedState
 		{
@@ -660,7 +668,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(91)] 
+		[Ordinal(92)] 
 		[RED("pulseBar")] 
 		public CHandle<PulseAnimation> PulseBar
 		{
@@ -668,7 +676,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<PulseAnimation>>(value);
 		}
 
-		[Ordinal(92)] 
+		[Ordinal(93)] 
 		[RED("pulseText")] 
 		public CHandle<PulseAnimation> PulseText
 		{
@@ -676,7 +684,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<PulseAnimation>>(value);
 		}
 
-		[Ordinal(93)] 
+		[Ordinal(94)] 
 		[RED("pulse")] 
 		public CHandle<PulseAnimation> Pulse
 		{
@@ -684,7 +692,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<PulseAnimation>>(value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(95)] 
 		[RED("healthMemoryJumpAnim")] 
 		public CHandle<inkanimProxy> HealthMemoryJumpAnim
 		{
@@ -692,7 +700,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(96)] 
 		[RED("healthMemoryFlashAnim")] 
 		public CHandle<inkanimProxy> HealthMemoryFlashAnim
 		{

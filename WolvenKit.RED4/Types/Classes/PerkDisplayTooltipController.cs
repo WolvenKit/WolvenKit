@@ -308,6 +308,54 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<BasePerksMenuTooltipData>>(value);
 		}
 
+		[Ordinal(43)] 
+		[RED("settings")] 
+		public CHandle<userSettingsUserSettings> Settings
+		{
+			get => GetPropertyValue<CHandle<userSettingsUserSettings>>();
+			set => SetPropertyValue<CHandle<userSettingsUserSettings>>(value);
+		}
+
+		[Ordinal(44)] 
+		[RED("settingsListener")] 
+		public CHandle<PerkDisplayTooltipSettingsListener> SettingsListener
+		{
+			get => GetPropertyValue<CHandle<PerkDisplayTooltipSettingsListener>>();
+			set => SetPropertyValue<CHandle<PerkDisplayTooltipSettingsListener>>(value);
+		}
+
+		[Ordinal(45)] 
+		[RED("groupPath")] 
+		public CName GroupPath
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(46)] 
+		[RED("tooltipWrapper")] 
+		public inkWidgetReference TooltipWrapper
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(47)] 
+		[RED("horizontalSizer")] 
+		public inkWidgetReference HorizontalSizer
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(48)] 
+		[RED("bigFontEnabled")] 
+		public CBool BigFontEnabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public PerkDisplayTooltipController()
 		{
 			Root_24 = new inkWidgetReference();
@@ -347,6 +395,9 @@ namespace WolvenKit.RED4.Types
 			CyberwareDetailsInfo = new inkWidgetReference();
 			DEBUG_iconErrorWrapper = new inkWidgetReference();
 			DEBUG_iconErrorText = new inkTextWidgetReference();
+			GroupPath = "/accessibility/interface";
+			TooltipWrapper = new inkWidgetReference();
+			HorizontalSizer = new inkWidgetReference();
 
 			PostConstruct();
 		}

@@ -36,9 +36,18 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<vehicleBaseObject>>(value);
 		}
 
+		[Ordinal(5)] 
+		[RED("currentSpeed")] 
+		public CInt32 CurrentSpeed
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
 		public speedometerLogicController()
 		{
 			SpeedTextWidget = new inkTextWidgetReference();
+			CurrentSpeed = -1;
 
 			PostConstruct();
 		}

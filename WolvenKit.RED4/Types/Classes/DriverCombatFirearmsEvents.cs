@@ -53,6 +53,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(26)] 
+		[RED("photoModeActiveListener")] 
+		public CHandle<redCallbackObject> PhotoModeActiveListener
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(27)] 
+		[RED("isPhotoModeActive")] 
+		public CBool IsPhotoModeActive
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(28)] 
 		[RED("minSwaySpeed")] 
 		public CFloat MinSwaySpeed
 		{
@@ -60,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(29)] 
 		[RED("prevSpeed")] 
 		public CFloat PrevSpeed
 		{

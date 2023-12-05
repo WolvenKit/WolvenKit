@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class RadioHotkeyController : GenericHotkeyController
 	{
-		[Ordinal(23)] 
+		[Ordinal(25)] 
 		[RED("vehicleBB")] 
 		public CWeakHandle<gameIBlackboard> VehicleBB
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(26)] 
 		[RED("vehicleEnterListener")] 
 		public CHandle<redCallbackObject> VehicleEnterListener
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(27)] 
 		[RED("factListener")] 
 		public CUInt32 FactListener
 		{
@@ -28,12 +28,36 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(28)] 
 		[RED("animationProxy")] 
 		public CHandle<inkanimProxy> AnimationProxy
 		{
 			get => GetPropertyValue<CHandle<inkanimProxy>>();
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(29)] 
+		[RED("equalizerAnimProxy")] 
+		public CHandle<inkanimProxy> EqualizerAnimProxy
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(30)] 
+		[RED("pocketRadioToken")] 
+		public CHandle<inkGameNotificationToken> PocketRadioToken
+		{
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
+		}
+
+		[Ordinal(31)] 
+		[RED("isInDefaultState")] 
+		public CBool IsInDefaultState
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public RadioHotkeyController()

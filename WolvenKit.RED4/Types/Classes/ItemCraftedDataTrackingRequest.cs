@@ -12,6 +12,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("amount")] 
+		public CInt32 Amount
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
 		public ItemCraftedDataTrackingRequest()
 		{
 			TargetItem = new gameItemID();

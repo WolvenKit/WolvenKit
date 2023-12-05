@@ -85,6 +85,38 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(12)] 
+		[RED("playerBalanceText")] 
+		public inkTextWidgetReference PlayerBalanceText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(13)] 
+		[RED("playerBalanceAnimator")] 
+		public CWeakHandle<MoneyLabelController> PlayerBalanceAnimator
+		{
+			get => GetPropertyValue<CWeakHandle<MoneyLabelController>>();
+			set => SetPropertyValue<CWeakHandle<MoneyLabelController>>(value);
+		}
+
+		[Ordinal(14)] 
+		[RED("callback")] 
+		public CHandle<VehicleShopPlayerBalanceCallback> Callback
+		{
+			get => GetPropertyValue<CHandle<VehicleShopPlayerBalanceCallback>>();
+			set => SetPropertyValue<CHandle<VehicleShopPlayerBalanceCallback>>(value);
+		}
+
+		[Ordinal(15)] 
+		[RED("inventoryListener")] 
+		public CHandle<gameInventoryScriptListener> InventoryListener
+		{
+			get => GetPropertyValue<CHandle<gameInventoryScriptListener>>();
+			set => SetPropertyValue<CHandle<gameInventoryScriptListener>>(value);
+		}
+
+		[Ordinal(16)] 
 		[RED("uiScriptableSystem")] 
 		public CWeakHandle<UIScriptableSystem> UiScriptableSystem
 		{
@@ -92,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<UIScriptableSystem>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(17)] 
 		[RED("brandButtons")] 
 		public CArray<CWeakHandle<VehicleBrandFilterLogicController>> BrandButtons
 		{
@@ -100,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<VehicleBrandFilterLogicController>>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(18)] 
 		[RED("offerButtons")] 
 		public CArray<CWeakHandle<VehicleOfferLogicController>> OfferButtons
 		{
@@ -108,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<VehicleOfferLogicController>>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(19)] 
 		[RED("detailsController")] 
 		public CWeakHandle<VehicleDetailsLogicController> DetailsController
 		{
@@ -116,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<VehicleDetailsLogicController>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(20)] 
 		[RED("currentBrandController")] 
 		public CWeakHandle<VehicleBrandFilterLogicController> CurrentBrandController
 		{
@@ -124,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<VehicleBrandFilterLogicController>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(21)] 
 		[RED("discount")] 
 		public CFloat Discount
 		{
@@ -132,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(22)] 
 		[RED("c_discountFactTDBID")] 
 		public TweakDBID C_discountFactTDBID
 		{
@@ -140,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(23)] 
 		[RED("c_discountValuesTDBID")] 
 		public TweakDBID C_discountValuesTDBID
 		{
@@ -160,6 +192,7 @@ namespace WolvenKit.RED4.Types
 			OffersGridWidget = new inkCompoundWidgetReference();
 			HeaderText = new inkTextWidgetReference();
 			ScrollControllerWidget = new inkWidgetReference();
+			PlayerBalanceText = new inkTextWidgetReference();
 			BrandButtons = new();
 			OfferButtons = new();
 			C_discountFactTDBID = "RTDB.VehicleDiscountSettings.discountFact";

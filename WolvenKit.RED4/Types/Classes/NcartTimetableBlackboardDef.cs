@@ -12,9 +12,18 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
+		[Ordinal(8)] 
+		[RED("NextTrainLine")] 
+		public gamebbScriptID_Int32 NextTrainLine
+		{
+			get => GetPropertyValue<gamebbScriptID_Int32>();
+			set => SetPropertyValue<gamebbScriptID_Int32>(value);
+		}
+
 		public NcartTimetableBlackboardDef()
 		{
 			TimeToDepart = new gamebbScriptID_Int32();
+			NextTrainLine = new gamebbScriptID_Int32();
 
 			PostConstruct();
 		}

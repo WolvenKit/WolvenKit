@@ -37,8 +37,16 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(4)] 
-		[RED("parentHash")] 
-		public CInt32 ParentHash
+		[RED("conversationHash")] 
+		public CInt32 ConversationHash
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("contactHash")] 
+		public CInt32 ContactHash
 		{
 			get => GetPropertyValue<CInt32>();
 			set => SetPropertyValue<CInt32>(value);
