@@ -3,7 +3,6 @@ using System.Buffers;
 using System.IO;
 using System.Runtime.InteropServices;
 using DirectXTexNet;
-using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.CR2W;
@@ -107,8 +106,10 @@ namespace WolvenKit.Common.DDS
         /// <param name="ms">The input dds stream</param>
         /// <param name="outfilename">The output filename. Extension will be overwritten with the correct filetype</param>
         /// <param name="args"></param>
+        /// <param name="vflip"></param>
+        /// <param name="decompressedFormat"></param>
         /// <returns></returns>
-        public static bool ConvertFromDdsAndSave(Stream ms, string outfilename, ExportArgs args, DXGI_FORMAT decompressedFormat = DXGI_FORMAT.DXGI_FORMAT_UNKNOWN)
+        public static bool ConvertFromDdsAndSave(Stream ms, string outfilename, ExportArgs args, bool vflip, DXGI_FORMAT decompressedFormat = DXGI_FORMAT.DXGI_FORMAT_UNKNOWN)
         {
             // check if stream is dds
             if (!DDSUtils.IsDdsFile(ms))
@@ -118,28 +119,22 @@ namespace WolvenKit.Common.DDS
 
             // get arguments
             var uext = EUncookExtension.dds;
-            var vflip = false;
             if (args is not XbmExportArgs and not MlmaskExportArgs)
             {
                 return false;
 
             }
-            switch (args)
-            {
-                case XbmExportArgs xbm:
-                    uext = xbm.UncookExtension;
-                    vflip = xbm.Flip;
-                    break;
-                case MlmaskExportArgs ml:
-                    uext = ml.UncookExtension;
-                    break;
-                default:
-                    break;
-            }
 
-            return ConvertFromDdsAndSave(ms, outfilename, ToSaveFormat(uext), vflip, false, decompressedFormat);
+            uext = args switch
+            {
+                XbmExportArgs xbm => xbm.UncookExtension,
+                MlmaskExportArgs ml => ml.UncookExtension,
+                _ => uext
+            };
+
+            return ConvertFromDdsAndSave(ms, outfilename, ToSaveFormat(uext), vflip, decompressedFormat);
         }
-        public static bool ConvertFromDdsAndSave(Stream ms, string outfilename, TexconvNative.ESaveFileTypes filetype, bool vflip = false, bool hflip = false, DXGI_FORMAT decompressedFormat = DXGI_FORMAT.DXGI_FORMAT_UNKNOWN)
+        public static bool ConvertFromDdsAndSave(Stream ms, string outfilename, TexconvNative.ESaveFileTypes filetype, bool vflip, DXGI_FORMAT decompressedFormat = DXGI_FORMAT.DXGI_FORMAT_UNKNOWN)
         {
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
@@ -162,7 +157,7 @@ namespace WolvenKit.Common.DDS
                     offset += readBytes;
                 }
 
-                var outDir = new FileInfo(outfilename)?.Directory?.FullName;
+                var outDir = new FileInfo(outfilename).Directory?.FullName;
                 Directory.CreateDirectory(outDir.NotNull());
                 var fileName = Path.GetFileNameWithoutExtension(outfilename);
                 var extension = filetype.ToString().ToLower();
@@ -219,7 +214,7 @@ namespace WolvenKit.Common.DDS
         /// <summary>
         /// Converts a dds image to another texture format
         /// </summary>
-        public static byte[] ConvertFromDds(Stream stream, EUncookExtension textureType, bool vflip = false, bool hflip = false)
+        public static byte[] ConvertFromDds(Stream stream, EUncookExtension textureType)
         {
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {

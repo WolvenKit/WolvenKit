@@ -73,8 +73,7 @@ namespace WolvenKit.Modkit.RED4
                     Depth = 1,
                     MipCount = 1,
                     SliceCount = 1,
-                    TextureType = Enums.GpuWrapApieTextureType.TEXTYPE_2D,
-                    FlipV = false
+                    TextureType = Enums.GpuWrapApieTextureType.TEXTYPE_2D
                 };
 
                 yield return RedImage.Create(info, maskData);

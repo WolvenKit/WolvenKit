@@ -31,7 +31,6 @@ internal class UncookCommand : CommandBase
         AddOption(new Option<string>(new[] { "--pattern", "-w" }, "Use optional search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized."));
         AddOption(new Option<string>(new[] { "--regex", "-r" }, "Use optional regex pattern."));
         AddOption(new Option<EUncookExtension?>(new[] { "--uext" }, "Format to uncook to (tga, bmp, jpg, png, dds), TGA by default."));
-        AddOption(new Option<bool?>(new[] { "--flip", "-f" }, "Flip textures vertically (can help with legibility if there's text)."));
         AddOption(new Option<ulong>(new[] { "--hash" }, "Extract single file with a given hash."));
         AddOption(new Option<bool>(new[] { "--unbundle", "-u" }, "Also unbundle files."));
         AddOption(new Option<ECookedFileFormat[]>(new[] { "--forcebuffers", "-fb" }, "Force uncooking to buffers for given extension. e.g. mesh"));
@@ -41,11 +40,11 @@ internal class UncookCommand : CommandBase
         AddOption(new Option<bool>(new[] { "--mesh-export-lod-filter" }, "Filter out lod models."));
         AddOption(new Option<bool>(new[] { "--mesh-export-experimental-merged-export" }, "[EXPERIMENTAL] Merged mesh export. (Only supports Default or WithMaterials, re-import not supported)"));
 
-        SetInternalHandler(CommandHandler.Create<FileSystemInfo[], string, string, EUncookExtension?, bool?, ulong, string, string, bool, ECookedFileFormat[], 
+        SetInternalHandler(CommandHandler.Create<FileSystemInfo[], string, string, EUncookExtension?, ulong, string, string, bool, ECookedFileFormat[], 
         bool?, MeshExportType?, string, bool?, bool?, IHost>(Action));
     }
 
-    private int Action(FileSystemInfo[] path, string outpath, string raw, EUncookExtension? uext, bool? flip, ulong hash, string pattern,
+    private int Action(FileSystemInfo[] path, string outpath, string raw, EUncookExtension? uext, ulong hash, string pattern,
         string regex, bool unbundle, ECookedFileFormat[] forcebuffers, bool? serialize, MeshExportType? meshExportType, string meshExportMaterialRepo, 
         bool? meshExportLodFilter, bool? meshExportExperimentalMergedExport, IHost host)
     {
@@ -64,7 +63,6 @@ internal class UncookCommand : CommandBase
             outpath = string.IsNullOrEmpty(outpath) ? null : new DirectoryInfo(outpath),
             rawOutDir = raw,
             uext = uext,
-            flip = flip,
             hash = hash,
             pattern = pattern,
             regex = regex,

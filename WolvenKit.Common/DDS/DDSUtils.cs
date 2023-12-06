@@ -181,8 +181,6 @@ namespace WolvenKit.Common.DDS
             public uint MipCount { get; set; }
             public uint SliceCount { get; set; }
             public Enums.GpuWrapApieTextureType TextureType { get; set; }
-
-            public bool FlipV { get; set; }
         }
 
         public static void GenerateAndWriteHeader(Stream stream, DDSInfo info)

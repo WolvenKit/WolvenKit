@@ -12,7 +12,7 @@ namespace WolvenKit.App.Helpers;
 
 public static class ImageDecoder
 {
-    public static BitmapImage CreateBitmapImage(RedImage img, bool flip = true)
+    public static BitmapImage CreateBitmapImage(RedImage img, bool flip)
     {
         var bitmapImage = new BitmapImage();
         bitmapImage.BeginInit();
