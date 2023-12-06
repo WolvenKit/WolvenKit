@@ -961,6 +961,11 @@ public class RedImage : IDisposable
         }
 
         var result = new RedImage(TexHelper.Instance.LoadFromDDSMemory(memIntPtr, ddsLength, DDS_FLAGS.NONE, out var metadata));
+        if (TexHelper.Instance.IsCompressed(metadata.Format))
+        {
+            result._uncompressedFormat = metadata.Format;
+            result.InternalScratchImage = result.InternalScratchImage.Decompress(DXGI_FORMAT.UNKNOWN);
+        }
 
         if (TexHelper.Instance.IsCompressed(metadata.Format))
         {
