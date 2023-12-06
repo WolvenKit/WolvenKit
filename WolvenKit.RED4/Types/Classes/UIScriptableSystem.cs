@@ -45,6 +45,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
+		[RED("playerFavouriteItems")] 
+		public CArray<gameItemID> PlayerFavouriteItems
+		{
+			get => GetPropertyValue<CArray<gameItemID>>();
+			set => SetPropertyValue<CArray<gameItemID>>(value);
+		}
+
+		[Ordinal(6)] 
 		[RED("newItems")] 
 		public CArray<gameItemID> NewItems
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameItemID>>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("DLCAddedItems")] 
 		public CArray<TweakDBID> DLCAddedItems
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("newWardrobeSets")] 
 		public CArray<CEnum<gameWardrobeClothingSetIndex>> NewWardrobeSets
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CEnum<gameWardrobeClothingSetIndex>>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("newWardrobeItems")] 
 		public CArray<gameItemID> NewWardrobeItems
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameItemID>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("availableCars")] 
 		public CArray<CName> AvailableCars
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("previousAttributeLevels")] 
 		public CArray<UIScriptableSystemAttributeLevel> PreviousAttributeLevels
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<UIScriptableSystemAttributeLevel>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("comparisionTooltipDisabled")] 
 		public CBool ComparisionTooltipDisabled
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("attachedPlayer")] 
 		public CWeakHandle<PlayerPuppet> AttachedPlayer
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("inventoryListenerCallback")] 
 		public CHandle<UIScriptableInventoryListenerCallback> InventoryListenerCallback
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UIScriptableInventoryListenerCallback>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("inventoryListener")] 
 		public CHandle<gameInventoryScriptListener> InventoryListener
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameInventoryScriptListener>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("DEV_useNewTooltips")] 
 		public CBool DEV_useNewTooltips
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("DEV_useLongScanTooltips")] 
 		public CBool DEV_useLongScanTooltips
 		{
@@ -142,6 +150,7 @@ namespace WolvenKit.RED4.Types
 
 		public UIScriptableSystem()
 		{
+			PlayerFavouriteItems = new();
 			NewItems = new();
 			DLCAddedItems = new();
 			NewWardrobeSets = new();

@@ -261,6 +261,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(34)] 
+		[RED("player")] 
+		public CWeakHandle<gameObject> Player
+		{
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
+		}
+
+		[Ordinal(35)] 
 		[RED("closeData")] 
 		public CHandle<QuantityPickerPopupCloseData> CloseData
 		{

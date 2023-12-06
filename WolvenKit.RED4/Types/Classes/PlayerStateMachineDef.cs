@@ -717,6 +717,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(89)] 
+		[RED("MountedPreventFirstEquip")] 
+		public gamebbScriptID_Bool MountedPreventFirstEquip
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		[Ordinal(90)] 
 		[RED("IgnoreBarbedWireStateEnterTime")] 
 		public gamebbScriptID_Float IgnoreBarbedWireStateEnterTime
 		{
@@ -724,7 +732,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Float>(value);
 		}
 
-		[Ordinal(90)] 
+		[Ordinal(91)] 
 		[RED("IsInLoreAnimationScene")] 
 		public gamebbScriptID_Bool IsInLoreAnimationScene
 		{
@@ -732,7 +740,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(91)] 
+		[Ordinal(92)] 
 		[RED("Felled")] 
 		public gamebbScriptID_Bool Felled
 		{
@@ -740,7 +748,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(92)] 
+		[Ordinal(93)] 
 		[RED("IsVehicleInTPP")] 
 		public gamebbScriptID_Bool IsVehicleInTPP
 		{
@@ -748,7 +756,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(93)] 
+		[Ordinal(94)] 
 		[RED("IsDriverCombatInTPP")] 
 		public gamebbScriptID_Bool IsDriverCombatInTPP
 		{
@@ -756,7 +764,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(95)] 
 		[RED("DriverCombatWeaponType")] 
 		public gamebbScriptID_Int32 DriverCombatWeaponType
 		{
@@ -764,7 +772,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(96)] 
 		[RED("TrackedTarget")] 
 		public gamebbScriptID_Variant TrackedTarget
 		{
@@ -772,7 +780,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(97)] 
 		[RED("TPPAimPosition")] 
 		public gamebbScriptID_Vector4 TPPAimPosition
 		{
@@ -780,7 +788,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Vector4>(value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(98)] 
 		[RED("BodySlamBump")] 
 		public gamebbScriptID_Int32 BodySlamBump
 		{
@@ -788,7 +796,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(99)] 
 		[RED("IsInBodySlamState")] 
 		public gamebbScriptID_Bool IsInBodySlamState
 		{
@@ -796,7 +804,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(100)] 
 		[RED("AimInTimeRemaining")] 
 		public gamebbScriptID_Float AimInTimeRemaining
 		{
@@ -804,7 +812,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Float>(value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(101)] 
 		[RED("AimInTime")] 
 		public gamebbScriptID_Float AimInTime
 		{
@@ -812,7 +820,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Float>(value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(102)] 
 		[RED("CanThrowCarriedNPC")] 
 		public gamebbScriptID_Bool CanThrowCarriedNPC
 		{
@@ -820,7 +828,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(102)] 
+		[Ordinal(103)] 
 		[RED("IsWeaponFirstEquip")] 
 		public gamebbScriptID_Bool IsWeaponFirstEquip
 		{
@@ -919,6 +927,7 @@ namespace WolvenKit.RED4.Types
 			SceneSafeForced = new gamebbScriptID_Bool();
 			SceneWeaponLoweringSpeedOverride = new gamebbScriptID_Float();
 			ScenePreventFirstEquip = new gamebbScriptID_Bool();
+			MountedPreventFirstEquip = new gamebbScriptID_Bool();
 			IgnoreBarbedWireStateEnterTime = new gamebbScriptID_Float();
 			IsInLoreAnimationScene = new gamebbScriptID_Bool();
 			Felled = new gamebbScriptID_Bool();

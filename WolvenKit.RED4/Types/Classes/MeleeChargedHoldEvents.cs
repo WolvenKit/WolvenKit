@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class MeleeChargedHoldEvents : MeleeRumblingEvents
 	{
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("clearWeaponCharge")] 
 		public CBool ClearWeaponCharge
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("effectiveRangeMod")] 
 		public CHandle<gameStatModifierData_Deprecated> EffectiveRangeMod
 		{

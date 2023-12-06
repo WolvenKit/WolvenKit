@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class BaseTechCrosshairController : gameuiCrosshairBaseGameController
 	{
-		[Ordinal(27)] 
+		[Ordinal(29)] 
 		[RED("player")] 
 		public CWeakHandle<gameObject> Player
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(30)] 
 		[RED("statsSystem")] 
 		public CHandle<gameStatsSystem> StatsSystem
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStatsSystem>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(31)] 
 		[RED("fullChargeAvailable")] 
 		public CBool FullChargeAvailable
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(32)] 
 		[RED("overChargeAvailable")] 
 		public CBool OverChargeAvailable
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(33)] 
 		[RED("fullChargeListener")] 
 		public CHandle<CrosshairWeaponStatsListener> FullChargeListener
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<CrosshairWeaponStatsListener>>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(34)] 
 		[RED("overChargeListener")] 
 		public CHandle<CrosshairWeaponStatsListener> OverChargeListener
 		{

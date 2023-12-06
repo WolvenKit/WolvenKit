@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class NCPDJobDoneNotification : JournalNotification
 	{
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("NCPD_Reward")] 
 		public inkWidgetReference NCPD_Reward
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("NCPD_XP_RewardText")] 
 		public inkTextWidgetReference NCPD_XP_RewardText
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("NCPD_SC_RewardText")] 
 		public inkTextWidgetReference NCPD_SC_RewardText
 		{

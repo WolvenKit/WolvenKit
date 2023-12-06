@@ -517,6 +517,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(65)] 
+		[RED("currentItems")] 
+		public CArray<CWeakHandle<WrappedInventoryItemData>> CurrentItems
+		{
+			get => GetPropertyValue<CArray<CWeakHandle<WrappedInventoryItemData>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<WrappedInventoryItemData>>>(value);
+		}
+
+		[Ordinal(66)] 
+		[RED("previousSelectedItem")] 
+		public gameItemID PreviousSelectedItem
+		{
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
+		}
+
+		[Ordinal(67)] 
 		[RED("virtualGridInitialized")] 
 		public CBool VirtualGridInitialized
 		{
@@ -524,7 +540,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(68)] 
 		[RED("replaceModNotification")] 
 		public CHandle<inkGameNotificationToken> ReplaceModNotification
 		{
@@ -532,7 +548,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(69)] 
 		[RED("installModData")] 
 		public CHandle<InstallModConfirmationData> InstallModData
 		{
@@ -540,7 +556,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<InstallModConfirmationData>>(value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(70)] 
 		[RED("HACK_lastItemDisplayEvent")] 
 		public CHandle<ItemDisplayClickEvent> HACK_lastItemDisplayEvent
 		{
@@ -566,6 +582,8 @@ namespace WolvenKit.RED4.Types
 			WardrobeOutfitSlotControllers = new();
 			DelayedTimeoutCallbackId = new gameDelayID();
 			TimeoutPeroid = 0.500000F;
+			CurrentItems = new();
+			PreviousSelectedItem = new gameItemID();
 
 			PostConstruct();
 		}

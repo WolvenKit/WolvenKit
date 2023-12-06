@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("displayContext")] 
+		public CHandle<ItemDisplayContextData> DisplayContext
+		{
+			get => GetPropertyValue<CHandle<ItemDisplayContextData>>();
+			set => SetPropertyValue<CHandle<ItemDisplayContextData>>(value);
+		}
+
+		[Ordinal(3)] 
 		[RED("tooltipDisplayContext")] 
 		public CEnum<InventoryTooltipDisplayContext> TooltipDisplayContext
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<InventoryTooltipDisplayContext>>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("itemDisplayContext")] 
 		public CEnum<gameItemDisplayContext> ItemDisplayContext
 		{

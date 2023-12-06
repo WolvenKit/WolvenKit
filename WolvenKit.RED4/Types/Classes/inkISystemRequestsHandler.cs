@@ -101,11 +101,11 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(12)] 
-		[RED("AdditionalDataInvalidCallback")] 
-		public inkAdditionalContentDataInvalid AdditionalDataInvalidCallback
+		[RED("ToggleBreachingCallback")] 
+		public inkToggleBreachingCallback ToggleBreachingCallback
 		{
-			get => GetPropertyValue<inkAdditionalContentDataInvalid>();
-			set => SetPropertyValue<inkAdditionalContentDataInvalid>(value);
+			get => GetPropertyValue<inkToggleBreachingCallback>();
+			set => SetPropertyValue<inkToggleBreachingCallback>(value);
 		}
 
 		[Ordinal(13)] 

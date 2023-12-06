@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SettingsSelectorControllerList : SettingsSelectorControllerRange
 	{
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("dotsContainer")] 
 		public inkHorizontalPanelWidgetReference DotsContainer
 		{

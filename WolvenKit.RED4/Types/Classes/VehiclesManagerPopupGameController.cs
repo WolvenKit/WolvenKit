@@ -92,6 +92,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
+		[Ordinal(26)] 
+		[RED("initialIndex")] 
+		public CUInt32 InitialIndex
+		{
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
+		}
+
 		public VehiclesManagerPopupGameController()
 		{
 			RepairOverlay = new inkWidgetReference();

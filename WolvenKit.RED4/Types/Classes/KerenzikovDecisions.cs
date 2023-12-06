@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public KerenzikovDecisions()
 		{
-			ActivationGracePeriod = 0.200000F;
+			ActivationGracePeriod = 0.330000F;
 
 			PostConstruct();
 		}

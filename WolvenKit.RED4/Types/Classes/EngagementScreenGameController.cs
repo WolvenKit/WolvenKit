@@ -13,8 +13,8 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(4)] 
-		[RED("proceedConfirmation")] 
-		public inkCompoundWidgetReference ProceedConfirmation
+		[RED("proceedConfirmationContainer")] 
+		public inkCompoundWidgetReference ProceedConfirmationContainer
 		{
 			get => GetPropertyValue<inkCompoundWidgetReference>();
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
@@ -29,6 +29,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(6)] 
+		[RED("pressKeyWidget")] 
+		public inkWidgetReference PressKeyWidget
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("breachingWidget")] 
+		public inkWidgetReference BreachingWidget
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(8)] 
 		[RED("menuEventDispatcher")] 
 		public CWeakHandle<inkMenuEventDispatcher> MenuEventDispatcher
 		{
@@ -36,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(9)] 
 		[RED("requestHandler")] 
 		public CWeakHandle<inkISystemRequestsHandler> RequestHandler
 		{
@@ -44,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkISystemRequestsHandler>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(10)] 
 		[RED("progressBarController")] 
 		public CWeakHandle<LoadingScreenProgressBarController> ProgressBarController
 		{
@@ -52,11 +68,21 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<LoadingScreenProgressBarController>>(value);
 		}
 
+		[Ordinal(11)] 
+		[RED("breachingEnabled")] 
+		public CBool BreachingEnabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public EngagementScreenGameController()
 		{
 			BackgroundVideo = new inkVideoWidgetReference();
-			ProceedConfirmation = new inkCompoundWidgetReference();
+			ProceedConfirmationContainer = new inkCompoundWidgetReference();
 			ProgressBar = new inkCompoundWidgetReference();
+			PressKeyWidget = new inkWidgetReference();
+			BreachingWidget = new inkWidgetReference();
 
 			PostConstruct();
 		}

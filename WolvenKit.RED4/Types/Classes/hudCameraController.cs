@@ -69,6 +69,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(17)] 
+		[RED("dateAndTimeHolder")] 
+		public inkHorizontalPanelWidgetReference DateAndTimeHolder
+		{
+			get => GetPropertyValue<inkHorizontalPanelWidgetReference>();
+			set => SetPropertyValue<inkHorizontalPanelWidgetReference>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("recHolder")] 
+		public inkCanvasWidgetReference RecHolder
+		{
+			get => GetPropertyValue<inkCanvasWidgetReference>();
+			set => SetPropertyValue<inkCanvasWidgetReference>(value);
+		}
+
+		[Ordinal(19)] 
 		[RED("Date")] 
 		public inkTextWidgetReference Date
 		{
@@ -76,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("Timer")] 
 		public inkTextWidgetReference Timer
 		{
@@ -84,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(21)] 
 		[RED("CameraID")] 
 		public inkTextWidgetReference CameraID
 		{
@@ -92,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(22)] 
 		[RED("timerHrs")] 
 		public inkTextWidgetReference TimerHrs
 		{
@@ -100,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(23)] 
 		[RED("timerMin")] 
 		public inkTextWidgetReference TimerMin
 		{
@@ -108,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(24)] 
 		[RED("timerSec")] 
 		public inkTextWidgetReference TimerSec
 		{
@@ -116,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(25)] 
 		[RED("watermark")] 
 		public inkWidgetReference Watermark
 		{
@@ -124,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(26)] 
 		[RED("yawCounter")] 
 		public inkTextWidgetReference YawCounter
 		{
@@ -132,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(27)] 
 		[RED("pitchCounter")] 
 		public inkTextWidgetReference PitchCounter
 		{
@@ -140,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(28)] 
 		[RED("pitch")] 
 		public inkCanvasWidgetReference Pitch
 		{
@@ -148,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCanvasWidgetReference>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(29)] 
 		[RED("yaw")] 
 		public inkCanvasWidgetReference Yaw
 		{
@@ -156,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCanvasWidgetReference>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(30)] 
 		[RED("tele")] 
 		public inkCanvasWidgetReference Tele
 		{
@@ -164,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCanvasWidgetReference>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(31)] 
 		[RED("teleScale")] 
 		public inkCanvasWidgetReference TeleScale
 		{
@@ -172,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCanvasWidgetReference>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(32)] 
 		[RED("psmBlackboard")] 
 		public CWeakHandle<gameIBlackboard> PsmBlackboard
 		{
@@ -180,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(33)] 
 		[RED("tcsBlackboard")] 
 		public CWeakHandle<gameIBlackboard> TcsBlackboard
 		{
@@ -188,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(34)] 
 		[RED("PSM_BBID")] 
 		public CHandle<redCallbackObject> PSM_BBID
 		{
@@ -196,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(35)] 
 		[RED("tcs_BBID")] 
 		public CHandle<redCallbackObject> Tcs_BBID
 		{
@@ -204,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(36)] 
 		[RED("deviceChain_BBID")] 
 		public CHandle<redCallbackObject> DeviceChain_BBID
 		{
@@ -212,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(37)] 
 		[RED("root")] 
 		public CWeakHandle<inkCompoundWidget> Root
 		{
@@ -220,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkCompoundWidget>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(38)] 
 		[RED("currentZoom")] 
 		public CFloat CurrentZoom
 		{
@@ -228,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(39)] 
 		[RED("controlledObjectRef")] 
 		public CWeakHandle<gameObject> ControlledObjectRef
 		{
@@ -236,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(40)] 
 		[RED("alpha_fadein")] 
 		public CHandle<inkanimDefinition> Alpha_fadein
 		{
@@ -244,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(41)] 
 		[RED("AnimProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
@@ -252,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(42)] 
 		[RED("AnimOptions")] 
 		public inkanimPlaybackOptions AnimOptions
 		{
@@ -260,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkanimPlaybackOptions>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(43)] 
 		[RED("ownerObject")] 
 		public CWeakHandle<gameObject> OwnerObject
 		{
@@ -268,12 +284,36 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(44)] 
 		[RED("maxZoomLevel")] 
 		public CInt32 MaxZoomLevel
 		{
 			get => GetPropertyValue<CInt32>();
 			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(45)] 
+		[RED("overclockListener")] 
+		public CHandle<OverclockHudListener> OverclockListener
+		{
+			get => GetPropertyValue<CHandle<OverclockHudListener>>();
+			set => SetPropertyValue<CHandle<OverclockHudListener>>(value);
+		}
+
+		[Ordinal(46)] 
+		[RED("isOverclockActive")] 
+		public CBool IsOverclockActive
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(47)] 
+		[RED("canActivateOverclock")] 
+		public CBool CanActivateOverclock
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public hudCameraController()
@@ -286,6 +326,8 @@ namespace WolvenKit.RED4.Types
 			Tele_max = 360.000000F;
 			Tele_scale = 0.750000F;
 			Max_zoom_level = 4.000000F;
+			DateAndTimeHolder = new inkHorizontalPanelWidgetReference();
+			RecHolder = new inkCanvasWidgetReference();
 			Date = new inkTextWidgetReference();
 			Timer = new inkTextWidgetReference();
 			CameraID = new inkTextWidgetReference();

@@ -13,6 +13,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("nameTextContainer")] 
+		public inkWidgetReference NameTextContainer
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(4)] 
+		[RED("nameForRecipeText")] 
+		public inkTextWidgetReference NameForRecipeText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(5)] 
 		[RED("itemRarityText")] 
 		public inkTextWidgetReference ItemRarityText
 		{
@@ -20,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(6)] 
 		[RED("rarityBars")] 
 		public inkWidgetReference RarityBars
 		{
@@ -28,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(7)] 
 		[RED("categoriesWrapper")] 
 		public inkCompoundWidgetReference CategoriesWrapper
 		{
@@ -36,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(8)] 
 		[RED("topContainer")] 
 		public inkCompoundWidgetReference TopContainer
 		{
@@ -44,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(9)] 
 		[RED("headerContainer")] 
 		public inkCompoundWidgetReference HeaderContainer
 		{
@@ -52,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(10)] 
 		[RED("statsContainer")] 
 		public inkCompoundWidgetReference StatsContainer
 		{
@@ -60,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(11)] 
 		[RED("hacksContainer")] 
 		public inkCompoundWidgetReference HacksContainer
 		{
@@ -68,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(12)] 
 		[RED("descriptionContainer")] 
 		public inkCompoundWidgetReference DescriptionContainer
 		{
@@ -76,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(13)] 
 		[RED("bottomContainer")] 
 		public inkCompoundWidgetReference BottomContainer
 		{
@@ -84,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(14)] 
 		[RED("statsList")] 
 		public inkCompoundWidgetReference StatsList
 		{
@@ -92,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(15)] 
 		[RED("priceContainer")] 
 		public inkCompoundWidgetReference PriceContainer
 		{
@@ -100,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(16)] 
 		[RED("descriptionText")] 
 		public inkTextWidgetReference DescriptionText
 		{
@@ -108,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(17)] 
 		[RED("priceText")] 
 		public inkTextWidgetReference PriceText
 		{
@@ -116,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(18)] 
 		[RED("equipedWrapper")] 
 		public inkWidgetReference EquipedWrapper
 		{
@@ -124,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(19)] 
 		[RED("itemTypeText")] 
 		public inkTextWidgetReference ItemTypeText
 		{
@@ -132,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("itemWeightWrapper")] 
 		public inkWidgetReference ItemWeightWrapper
 		{
@@ -140,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(21)] 
 		[RED("itemWeightText")] 
 		public inkTextWidgetReference ItemWeightText
 		{
@@ -148,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(22)] 
 		[RED("cybderdeckBaseMemoryValue")] 
 		public inkTextWidgetReference CybderdeckBaseMemoryValue
 		{
@@ -156,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(23)] 
 		[RED("cybderdeckBufferValue")] 
 		public inkTextWidgetReference CybderdeckBufferValue
 		{
@@ -164,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(24)] 
 		[RED("cybderdeckSlotsValue")] 
 		public inkTextWidgetReference CybderdeckSlotsValue
 		{
@@ -172,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(25)] 
 		[RED("deviceHacksGrid")] 
 		public inkCompoundWidgetReference DeviceHacksGrid
 		{
@@ -180,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(26)] 
 		[RED("deviceHackHeader")] 
 		public inkTextWidgetReference DeviceHackHeader
 		{
@@ -188,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(27)] 
 		[RED("namesTextContainer")] 
 		public inkWidgetReference NamesTextContainer
 		{
@@ -196,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(28)] 
 		[RED("deviceHackNamesText")] 
 		public inkTextWidgetReference DeviceHackNamesText
 		{
@@ -204,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(29)] 
 		[RED("textBG")] 
 		public inkWidgetReference TextBG
 		{
@@ -212,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(30)] 
 		[RED("namesTextContainer2")] 
 		public inkWidgetReference NamesTextContainer2
 		{
@@ -220,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(31)] 
 		[RED("deviceHackNamesText2")] 
 		public inkTextWidgetReference DeviceHackNamesText2
 		{
@@ -228,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(32)] 
 		[RED("textBG2")] 
 		public inkWidgetReference TextBG2
 		{
@@ -236,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(33)] 
 		[RED("namesTextContainer3")] 
 		public inkWidgetReference NamesTextContainer3
 		{
@@ -244,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(34)] 
 		[RED("deviceHackNamesText3")] 
 		public inkTextWidgetReference DeviceHackNamesText3
 		{
@@ -252,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(35)] 
 		[RED("textBG3")] 
 		public inkWidgetReference TextBG3
 		{
@@ -260,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(36)] 
 		[RED("namesTextContainer4")] 
 		public inkWidgetReference NamesTextContainer4
 		{
@@ -268,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(37)] 
 		[RED("deviceHackNamesText4")] 
 		public inkTextWidgetReference DeviceHackNamesText4
 		{
@@ -276,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(38)] 
 		[RED("textBG4")] 
 		public inkWidgetReference TextBG4
 		{
@@ -284,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(39)] 
 		[RED("itemIconImage")] 
 		public inkImageWidgetReference ItemIconImage
 		{
@@ -292,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(40)] 
 		[RED("itemAttributeRequirementsWrapper")] 
 		public inkWidgetReference ItemAttributeRequirementsWrapper
 		{
@@ -300,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(41)] 
 		[RED("itemAttributeRequirements")] 
 		public inkWidgetReference ItemAttributeRequirements
 		{
@@ -308,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(42)] 
 		[RED("itemAttributeRequirementsText")] 
 		public inkTextWidgetReference ItemAttributeRequirementsText
 		{
@@ -316,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(43)] 
 		[RED("allocationCostsWrapper")] 
 		public inkCompoundWidgetReference AllocationCostsWrapper
 		{
@@ -324,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(44)] 
 		[RED("iconicLines")] 
 		public inkImageWidgetReference IconicLines
 		{
@@ -332,7 +348,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(45)] 
 		[RED("equipedCorner")] 
 		public inkWidgetReference EquipedCorner
 		{
@@ -340,15 +356,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(46)] 
 		[RED("root")] 
-		public inkWidgetReference Root_1024
+		public inkWidgetReference Root_1072
 		{
 			get => GetPropertyValue<inkWidgetReference>();
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(47)] 
 		[RED("iconicBG")] 
 		public inkWidgetReference IconicBG
 		{
@@ -356,7 +372,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(48)] 
 		[RED("recipeWrapper")] 
 		public inkWidgetReference RecipeWrapper
 		{
@@ -364,7 +380,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(49)] 
 		[RED("recipeBG")] 
 		public inkWidgetReference RecipeBG
 		{
@@ -372,7 +388,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(50)] 
+		[RED("illegalBG")] 
+		public inkWidgetReference IllegalBG
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(51)] 
 		[RED("cyberwareUpgradeContainer")] 
 		public inkWidgetReference CyberwareUpgradeContainer
 		{
@@ -380,7 +404,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(52)] 
 		[RED("itemCWQuickHackMenuLinkContainer")] 
 		public inkWidgetReference ItemCWQuickHackMenuLinkContainer
 		{
@@ -388,7 +412,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(53)] 
 		[RED("additionalModulesLibraryRes")] 
 		public redResourceReferenceScriptToken AdditionalModulesLibraryRes
 		{
@@ -396,7 +420,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(54)] 
 		[RED("cyberwareUpgradeModuleName")] 
 		public CName CyberwareUpgradeModuleName
 		{
@@ -404,7 +428,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(55)] 
 		[RED("rarityBarsController")] 
 		public CWeakHandle<LevelBarsController> RarityBarsController
 		{
@@ -412,7 +436,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<LevelBarsController>>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(56)] 
 		[RED("data")] 
 		public CHandle<InventoryTooltipData> Data
 		{
@@ -420,7 +444,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<InventoryTooltipData>>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(57)] 
 		[RED("itemDisplayContext")] 
 		public CEnum<gameItemDisplayContext> ItemDisplayContext
 		{
@@ -428,7 +452,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameItemDisplayContext>>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(58)] 
 		[RED("player")] 
 		public CWeakHandle<PlayerPuppet> Player
 		{
@@ -436,7 +460,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(59)] 
 		[RED("cyberwareUpgradeController")] 
 		public CWeakHandle<ItemTooltipCyberwareUpgradeController> CyberwareUpgradeController
 		{
@@ -444,7 +468,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ItemTooltipCyberwareUpgradeController>>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(60)] 
 		[RED("hasVehiclePerk")] 
 		public CBool HasVehiclePerk
 		{
@@ -452,7 +476,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(61)] 
 		[RED("animProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
@@ -460,7 +484,47 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(62)] 
+		[RED("settings")] 
+		public CHandle<userSettingsUserSettings> Settings
+		{
+			get => GetPropertyValue<CHandle<userSettingsUserSettings>>();
+			set => SetPropertyValue<CHandle<userSettingsUserSettings>>(value);
+		}
+
+		[Ordinal(63)] 
+		[RED("settingsListener")] 
+		public CHandle<CyberdeckTooltipSettingsListener> SettingsListener
+		{
+			get => GetPropertyValue<CHandle<CyberdeckTooltipSettingsListener>>();
+			set => SetPropertyValue<CHandle<CyberdeckTooltipSettingsListener>>(value);
+		}
+
+		[Ordinal(64)] 
+		[RED("groupPath")] 
+		public CName GroupPath
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(65)] 
+		[RED("minWidth")] 
+		public inkWidgetReference MinWidth
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(66)] 
+		[RED("bigFontEnabled")] 
+		public CBool BigFontEnabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(67)] 
 		[RED("itemData")] 
 		public CWeakHandle<UIInventoryItem> ItemData
 		{
@@ -468,7 +532,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<UIInventoryItem>>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(68)] 
 		[RED("displayContext")] 
 		public CHandle<ItemDisplayContextData> DisplayContext
 		{
@@ -476,7 +540,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ItemDisplayContextData>>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(69)] 
 		[RED("comparisonData")] 
 		public CHandle<UIInventoryItemComparisonManager> ComparisonData
 		{
@@ -484,7 +548,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UIInventoryItemComparisonManager>>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(70)] 
 		[RED("tooltipDisplayContext")] 
 		public CEnum<InventoryTooltipDisplayContext> TooltipDisplayContext
 		{
@@ -495,6 +559,8 @@ namespace WolvenKit.RED4.Types
 		public CyberdeckTooltip()
 		{
 			ItemNameText = new inkTextWidgetReference();
+			NameTextContainer = new inkWidgetReference();
+			NameForRecipeText = new inkTextWidgetReference();
 			ItemRarityText = new inkTextWidgetReference();
 			RarityBars = new inkWidgetReference();
 			CategoriesWrapper = new inkCompoundWidgetReference();
@@ -536,14 +602,17 @@ namespace WolvenKit.RED4.Types
 			AllocationCostsWrapper = new inkCompoundWidgetReference();
 			IconicLines = new inkImageWidgetReference();
 			EquipedCorner = new inkWidgetReference();
-			Root_1024 = new inkWidgetReference();
+			Root_1072 = new inkWidgetReference();
 			IconicBG = new inkWidgetReference();
 			RecipeWrapper = new inkWidgetReference();
 			RecipeBG = new inkWidgetReference();
+			IllegalBG = new inkWidgetReference();
 			CyberwareUpgradeContainer = new inkWidgetReference();
 			ItemCWQuickHackMenuLinkContainer = new inkWidgetReference();
 			AdditionalModulesLibraryRes = new redResourceReferenceScriptToken { Resource = new CResourceAsyncReference<CResource>(@"base\gameplay\gui\common\tooltip\cyberware_tooltip_modules.inkwidget") };
 			CyberwareUpgradeModuleName = "itemCyberwareUpgrade";
+			GroupPath = "/accessibility/interface";
+			MinWidth = new inkWidgetReference();
 
 			PostConstruct();
 		}

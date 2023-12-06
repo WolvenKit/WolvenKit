@@ -12,6 +12,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<UIGameContext>>(value);
 		}
 
+		[Ordinal(1)] 
+		[RED("invalidate")] 
+		public CBool Invalidate
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public gameuiRequestPopContextEvent()
 		{
 			PostConstruct();

@@ -5,14 +5,22 @@ namespace WolvenKit.RED4.Types
 	public partial class PatchNotesGameController : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
-		[RED("notesContainerRef")] 
-		public inkWidgetReference NotesContainerRef
+		[RED("21NotesContainerRef")] 
+		public inkWidgetReference _21NotesContainerRef
 		{
 			get => GetPropertyValue<inkWidgetReference>();
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
+		[RED("20NotesContainerRef")] 
+		public inkWidgetReference _20NotesContainerRef
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("itemLibraryName")] 
 		public CName ItemLibraryName
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("introAnimationName")] 
 		public CName IntroAnimationName
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("outroAnimationName")] 
 		public CName OutroAnimationName
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("closeButtonRef")] 
 		public inkWidgetReference CloseButtonRef
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("uiSystem")] 
 		public CHandle<gameuiGameSystemUI> UiSystem
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameuiGameSystemUI>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("introAnimProxy")] 
 		public CHandle<inkanimProxy> IntroAnimProxy
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("isInputBlocked")] 
 		public CBool IsInputBlocked
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("data")] 
 		public CHandle<PatchNotesPopupData> Data
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<PatchNotesPopupData>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("requestHandler")] 
 		public CWeakHandle<inkISystemRequestsHandler> RequestHandler
 		{
@@ -86,7 +94,8 @@ namespace WolvenKit.RED4.Types
 
 		public PatchNotesGameController()
 		{
-			NotesContainerRef = new inkWidgetReference();
+			_21NotesContainerRef = new inkWidgetReference();
+			_20NotesContainerRef = new inkWidgetReference();
 			ItemLibraryName = "item";
 			IntroAnimationName = "intro";
 			CloseButtonRef = new inkWidgetReference();

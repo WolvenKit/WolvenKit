@@ -21,6 +21,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(11)] 
+		[RED("isRemoteControllingVehicle")] 
+		public CBool IsRemoteControllingVehicle
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(12)] 
 		[RED("visibilityFact1ListenerId")] 
 		public CUInt32 VisibilityFact1ListenerId
 		{
@@ -28,12 +36,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("visibilityFact2ListenerId")] 
 		public CUInt32 VisibilityFact2ListenerId
 		{
 			get => GetPropertyValue<CUInt32>();
 			set => SetPropertyValue<CUInt32>(value);
+		}
+
+		[Ordinal(14)] 
+		[RED("remoteControlledVehicleDataCallback")] 
+		public CHandle<redCallbackObject> RemoteControlledVehicleDataCallback
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
 		public gameuiNewPhoneRelatedHUDGameController()

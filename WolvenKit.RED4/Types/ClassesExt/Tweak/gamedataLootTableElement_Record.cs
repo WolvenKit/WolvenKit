@@ -11,6 +11,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
+		[RED("dropChanceModifiers")]
+		[REDProperty(IsIgnored = true)]
+		public CArray<TweakDBID> DropChanceModifiers
+		{
+			get => GetPropertyValue<CArray<TweakDBID>>();
+			set => SetPropertyValue<CArray<TweakDBID>>(value);
+		}
+		
 		[RED("dropCountMax")]
 		[REDProperty(IsIgnored = true)]
 		public CInt32 DropCountMax

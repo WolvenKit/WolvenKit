@@ -20,8 +20,18 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("delayFromStat")] 
+		public CEnum<gamedataStatType> DelayFromStat
+		{
+			get => GetPropertyValue<CEnum<gamedataStatType>>();
+			set => SetPropertyValue<CEnum<gamedataStatType>>(value);
+		}
+
 		public GameTimePrereq()
 		{
+			DelayFromStat = Enums.gamedataStatType.Invalid;
+
 			PostConstruct();
 		}
 

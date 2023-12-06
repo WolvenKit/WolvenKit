@@ -182,7 +182,7 @@ namespace WolvenKit.RED4.Types
 
 		public GameplaySettingsListener()
 		{
-			DifficultyPath = "/gameplay/difficulty";
+			DifficultyPath = "/accessibility/difficulty";
 			MiscPath = "/gameplay/misc";
 			ControlsPath = "/controls";
 			VehicleControlsPath = "/controls/vehicle";

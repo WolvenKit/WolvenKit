@@ -204,6 +204,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(29)] 
+		[RED("isShadowMesh")] 
+		public CBool IsShadowMesh
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(30)] 
+		[RED("isPlayerShadowMesh")] 
+		public CBool IsPlayerShadowMesh
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public CMesh()
 		{
 			Parameters = new();

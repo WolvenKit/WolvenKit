@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
+		[RED("hideOnItemsAdded")] 
+		public CArray<gameItemID> HideOnItemsAdded
+		{
+			get => GetPropertyValue<CArray<gameItemID>>();
+			set => SetPropertyValue<CArray<gameItemID>>(value);
+		}
+
+		[Ordinal(2)] 
 		[RED("isHidden")] 
 		public CBool IsHidden
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("amount")] 
 		public CInt32 Amount
 		{
@@ -30,6 +38,8 @@ namespace WolvenKit.RED4.Types
 
 		public ItemRecipe()
 		{
+			HideOnItemsAdded = new();
+
 			PostConstruct();
 		}
 

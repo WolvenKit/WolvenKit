@@ -77,6 +77,30 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(19)] 
+		[RED("RestrictInCombat")] 
+		public CBool RestrictInCombat
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(20)] 
+		[RED("RestrictIfWanted")] 
+		public CBool RestrictIfWanted
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(21)] 
+		[RED("RestrictDuringPhonecall")] 
+		public CBool RestrictDuringPhonecall
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(22)] 
 		[RED("factToEnableName")] 
 		public CName FactToEnableName
 		{
@@ -84,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(23)] 
 		[RED("quickHackCost")] 
 		public CInt32 QuickHackCost
 		{
@@ -92,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(24)] 
 		[RED("callbackID")] 
 		public CUInt32 CallbackID
 		{

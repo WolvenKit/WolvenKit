@@ -27,6 +27,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
+		[RED("is_paralax")]
+		[REDProperty(IsIgnored = true)]
+		public CArray<TweakDBID> Is_paralax
+		{
+			get => GetPropertyValue<CArray<TweakDBID>>();
+			set => SetPropertyValue<CArray<TweakDBID>>(value);
+		}
+		
 		[RED("multiplier")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat Multiplier

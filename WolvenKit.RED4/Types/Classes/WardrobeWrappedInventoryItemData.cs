@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class WardrobeWrappedInventoryItemData : WrappedInventoryItemData
 	{
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("AppearanceName")] 
 		public CString AppearanceName
 		{

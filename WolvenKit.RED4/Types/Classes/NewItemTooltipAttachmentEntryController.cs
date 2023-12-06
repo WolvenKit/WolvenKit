@@ -36,12 +36,53 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
+		[Ordinal(5)] 
+		[RED("settings")] 
+		public CHandle<userSettingsUserSettings> Settings
+		{
+			get => GetPropertyValue<CHandle<userSettingsUserSettings>>();
+			set => SetPropertyValue<CHandle<userSettingsUserSettings>>(value);
+		}
+
+		[Ordinal(6)] 
+		[RED("settingsListener")] 
+		public CHandle<NewItemTooltipAttachmentEntrySettingsListener> SettingsListener
+		{
+			get => GetPropertyValue<CHandle<NewItemTooltipAttachmentEntrySettingsListener>>();
+			set => SetPropertyValue<CHandle<NewItemTooltipAttachmentEntrySettingsListener>>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("groupPath")] 
+		public CName GroupPath
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("bigFontEnabled")] 
+		public CBool BigFontEnabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(9)] 
+		[RED("isCrafting")] 
+		public CBool IsCrafting
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public NewItemTooltipAttachmentEntryController()
 		{
 			Text = new inkTextWidgetReference();
 			AttunementContainer = new inkWidgetReference();
 			AttunementText = new inkTextWidgetReference();
 			AttunementIcon = new inkImageWidgetReference();
+			GroupPath = "/accessibility/interface";
 
 			PostConstruct();
 		}

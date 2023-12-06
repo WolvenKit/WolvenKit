@@ -3,6 +3,14 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gamedataModifyStatPoolValueEffector_Record
 	{
+		[RED("applicationTarget")]
+		[REDProperty(IsIgnored = true)]
+		public CName ApplicationTarget
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+		
 		[RED("setValue")]
 		[REDProperty(IsIgnored = true)]
 		public CBool SetValue

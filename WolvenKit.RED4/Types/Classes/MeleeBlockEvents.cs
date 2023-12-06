@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class MeleeBlockEvents : MeleeRumblingEvents
 	{
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("blockStatFlag")] 
 		public CHandle<gameStatModifierData_Deprecated> BlockStatFlag
 		{

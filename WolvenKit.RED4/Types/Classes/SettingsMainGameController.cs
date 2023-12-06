@@ -269,14 +269,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(36)] 
-		[RED("isKeybindingAlertEnabled")] 
-		public CBool IsKeybindingAlertEnabled
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(37)] 
 		[RED("applyButtonEnabled")] 
 		public CBool ApplyButtonEnabled
 		{
@@ -284,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(37)] 
 		[RED("resetButtonEnabled")] 
 		public CBool ResetButtonEnabled
 		{
@@ -292,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(38)] 
 		[RED("closeSettingsRequest")] 
 		public CBool CloseSettingsRequest
 		{
@@ -300,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(39)] 
 		[RED("resetSettingsRequest")] 
 		public CBool ResetSettingsRequest
 		{
@@ -308,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(40)] 
 		[RED("isDlcSettings")] 
 		public CBool IsDlcSettings
 		{
@@ -316,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(41)] 
 		[RED("isBenchmarkSettings")] 
 		public CBool IsBenchmarkSettings
 		{
@@ -324,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(42)] 
 		[RED("showHdrButton")] 
 		public CBool ShowHdrButton
 		{
@@ -332,7 +324,31 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(43)] 
+		[RED("showBrightnessButton")] 
+		public CBool ShowBrightnessButton
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		[Ordinal(44)] 
+		[RED("useRightAligned")] 
+		public CBool UseRightAligned
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(45)] 
+		[RED("currentHDRindex")] 
+		public CInt32 CurrentHDRindex
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(46)] 
 		[RED("selectorCtrl")] 
 		public CWeakHandle<inkListController> SelectorCtrl
 		{

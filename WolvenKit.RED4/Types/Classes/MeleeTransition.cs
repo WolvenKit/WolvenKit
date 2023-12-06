@@ -12,6 +12,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
+		[Ordinal(1)] 
+		[RED("driverCombatListener")] 
+		public CHandle<DriverCombatListener> DriverCombatListener
+		{
+			get => GetPropertyValue<CHandle<DriverCombatListener>>();
+			set => SetPropertyValue<CHandle<DriverCombatListener>>(value);
+		}
+
 		public MeleeTransition()
 		{
 			PostConstruct();

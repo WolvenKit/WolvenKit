@@ -36,6 +36,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStatModifierData_Deprecated>>(value);
 		}
 
+		[Ordinal(10)] 
+		[RED("sprintAnimBlocked")] 
+		public CBool SprintAnimBlocked
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public SprintEvents()
 		{
 			PostConstruct();

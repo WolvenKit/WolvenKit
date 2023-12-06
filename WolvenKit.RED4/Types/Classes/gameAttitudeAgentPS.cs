@@ -12,6 +12,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
+		[Ordinal(1)] 
+		[RED("currentAttitudeGroupUnsavable")] 
+		public CName CurrentAttitudeGroupUnsavable
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
 		public gameAttitudeAgentPS()
 		{
 			PostConstruct();

@@ -29,6 +29,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(4)] 
+		[RED("overrides")] 
+		public CArray<inkStyleOverride> Overrides
+		{
+			get => GetPropertyValue<CArray<inkStyleOverride>>();
+			set => SetPropertyValue<CArray<inkStyleOverride>>(value);
+		}
+
+		[Ordinal(5)] 
 		[RED("hideInInheritingStyles")] 
 		public CBool HideInInheritingStyles
 		{
@@ -41,6 +49,7 @@ namespace WolvenKit.RED4.Types
 			Styles = new();
 			StyleImports = new();
 			Themes = new();
+			Overrides = new();
 
 			PostConstruct();
 		}

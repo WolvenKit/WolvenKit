@@ -35,6 +35,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
+		[RED("dontStopInfiniteOnSubActionsCompletion")]
+		[REDProperty(IsIgnored = true)]
+		public CBool DontStopInfiniteOnSubActionsCompletion
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("duration")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat Duration

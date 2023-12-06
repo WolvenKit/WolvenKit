@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class MeleePublicSafeEvents : MeleeRumblingEvents
 	{
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("unequipTime")] 
 		public CFloat UnequipTime
 		{

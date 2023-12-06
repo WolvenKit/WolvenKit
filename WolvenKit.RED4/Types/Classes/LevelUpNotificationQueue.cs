@@ -60,6 +60,30 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
+		[Ordinal(11)] 
+		[RED("warningBlackboard")] 
+		public CWeakHandle<gameIBlackboard> WarningBlackboard
+		{
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("warningBlackboardDef")] 
+		public CHandle<UI_NotificationsDef> WarningBlackboardDef
+		{
+			get => GetPropertyValue<CHandle<UI_NotificationsDef>>();
+			set => SetPropertyValue<CHandle<UI_NotificationsDef>>(value);
+		}
+
+		[Ordinal(13)] 
+		[RED("warningMessageCallbackId")] 
+		public CHandle<redCallbackObject> WarningMessageCallbackId
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
 		public LevelUpNotificationQueue()
 		{
 			Duration = 2.000000F;

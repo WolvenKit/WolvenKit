@@ -149,14 +149,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(20)] 
-		[RED("choiceIntroAnimName")] 
-		public CName ChoiceIntroAnimName
+		[RED("twoChoiceIntroAnimName")] 
+		public CName TwoChoiceIntroAnimName
 		{
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(21)] 
+		[RED("threeChoiceIntroAnimName")] 
+		public CName ThreeChoiceIntroAnimName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(22)] 
 		[RED("noChoiceOutroAnimName")] 
 		public CName NoChoiceOutroAnimName
 		{
@@ -164,31 +172,47 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(22)] 
-		[RED("choice1OutroAnimName")] 
-		public CName Choice1OutroAnimName
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-
 		[Ordinal(23)] 
-		[RED("choice2OutroAnimName")] 
-		public CName Choice2OutroAnimName
+		[RED("twoChoice1OutroAnimName")] 
+		public CName TwoChoice1OutroAnimName
 		{
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(24)] 
-		[RED("choice3OutroAnimName")] 
-		public CName Choice3OutroAnimName
+		[RED("twoChoice2OutroAnimName")] 
+		public CName TwoChoice2OutroAnimName
 		{
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(25)] 
+		[RED("threeChoice1OutroAnimName")] 
+		public CName ThreeChoice1OutroAnimName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(26)] 
+		[RED("threeChoice2OutroAnimName")] 
+		public CName ThreeChoice2OutroAnimName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(27)] 
+		[RED("threeChoice3OutroAnimName")] 
+		public CName ThreeChoice3OutroAnimName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(28)] 
 		[RED("holdInputName")] 
 		public CName HoldInputName
 		{
@@ -196,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(29)] 
 		[RED("exitInputName")] 
 		public CName ExitInputName
 		{
@@ -204,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(30)] 
 		[RED("buttonHintsRoot")] 
 		public inkWidgetReference ButtonHintsRoot
 		{
@@ -212,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(31)] 
 		[RED("itemToolitpResRef")] 
 		public redResourceReferenceScriptToken ItemToolitpResRef
 		{
@@ -220,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(32)] 
 		[RED("itemTooltipName")] 
 		public CName ItemTooltipName
 		{
@@ -228,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(33)] 
 		[RED("cyberdeckToolitpResRef")] 
 		public redResourceReferenceScriptToken CyberdeckToolitpResRef
 		{
@@ -236,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(34)] 
 		[RED("cyberdeckTooltipName")] 
 		public CName CyberdeckTooltipName
 		{
@@ -244,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(35)] 
 		[RED("toolitpWidgetRef")] 
 		public redResourceReferenceScriptToken ToolitpWidgetRef
 		{
@@ -252,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(36)] 
 		[RED("tooltipName")] 
 		public CName TooltipName
 		{
@@ -260,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(37)] 
 		[RED("itemTooltipController0")] 
 		public CWeakHandle<AGenericTooltipController> ItemTooltipController0
 		{
@@ -268,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<AGenericTooltipController>>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(38)] 
 		[RED("itemTooltipController1")] 
 		public CWeakHandle<AGenericTooltipController> ItemTooltipController1
 		{
@@ -276,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<AGenericTooltipController>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(39)] 
 		[RED("itemTooltipController2")] 
 		public CWeakHandle<AGenericTooltipController> ItemTooltipController2
 		{
@@ -284,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<AGenericTooltipController>>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(40)] 
 		[RED("itemTooltipController3")] 
 		public CWeakHandle<AGenericTooltipController> ItemTooltipController3
 		{
@@ -292,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<AGenericTooltipController>>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(41)] 
 		[RED("itemTooltipCyberwareUpgrade")] 
 		public CWeakHandle<ItemTooltipCyberwareUpgradeController> ItemTooltipCyberwareUpgrade
 		{
@@ -300,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ItemTooltipCyberwareUpgradeController>>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(42)] 
 		[RED("option1ProgressBar")] 
 		public CWeakHandle<inkWidget> Option1ProgressBar
 		{
@@ -308,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(43)] 
 		[RED("option2ProgressBar")] 
 		public CWeakHandle<inkWidget> Option2ProgressBar
 		{
@@ -316,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(44)] 
 		[RED("option3ProgressBar")] 
 		public CWeakHandle<inkWidget> Option3ProgressBar
 		{
@@ -324,7 +348,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(45)] 
 		[RED("audioSystem")] 
 		public CWeakHandle<gameGameAudioSystem> AudioSystem
 		{
@@ -332,7 +356,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameGameAudioSystem>>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(46)] 
 		[RED("data")] 
 		public CHandle<RipperdocTokenPopupData> Data
 		{
@@ -340,7 +364,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<RipperdocTokenPopupData>>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(47)] 
 		[RED("multichoice")] 
 		public CBool Multichoice
 		{
@@ -348,7 +372,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(48)] 
 		[RED("thirdChoiceAvailable")] 
 		public CBool ThirdChoiceAvailable
 		{
@@ -356,7 +380,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(49)] 
 		[RED("progressStarted")] 
 		public CBool ProgressStarted
 		{
@@ -364,7 +388,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(50)] 
 		[RED("introAnimationPlaying")] 
 		public CBool IntroAnimationPlaying
 		{
@@ -372,7 +396,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(51)] 
 		[RED("choicesAnimProxy")] 
 		public CHandle<inkanimProxy> ChoicesAnimProxy
 		{
@@ -380,7 +404,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(52)] 
 		[RED("buttonAnimProxy")] 
 		public CHandle<inkanimProxy> ButtonAnimProxy
 		{
@@ -388,7 +412,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(53)] 
 		[RED("currentOption")] 
 		public CInt32 CurrentOption
 		{
@@ -396,7 +420,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(54)] 
 		[RED("choice")] 
 		public CInt32 Choice
 		{
@@ -404,7 +428,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(55)] 
 		[RED("result")] 
 		public CBool Result
 		{
@@ -412,7 +436,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(56)] 
 		[RED("inputListenersRegistered")] 
 		public CBool InputListenersRegistered
 		{

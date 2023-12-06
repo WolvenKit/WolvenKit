@@ -29,6 +29,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(4)] 
+		[RED("flipVerticalAttachment")] 
+		public CBool FlipVerticalAttachment
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(5)] 
 		[RED("rootMargin")] 
 		public inkMargin RootMargin
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkMargin>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("screenMargin")] 
 		public inkMargin ScreenMargin
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkMargin>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("TooltipRequesters")] 
 		public CArray<inkWidgetReference> TooltipRequesters
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<inkWidgetReference>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("GenericTooltipsNames")] 
 		public CArray<CName> GenericTooltipsNames
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("TooltipLibrariesReferences")] 
 		public CArray<TooltipWidgetReference> TooltipLibrariesReferences
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<TooltipWidgetReference>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("TooltipLibrariesStyledReferences")] 
 		public CArray<TooltipWidgetStyledReference> TooltipLibrariesStyledReferences
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<TooltipWidgetStyledReference>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("TooltipsLibrary")] 
 		public redResourceReferenceScriptToken TooltipsLibrary
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("MenuTooltipStylePath")] 
 		public redResourceReferenceScriptToken MenuTooltipStylePath
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("HudTooltipStylePath")] 
 		public redResourceReferenceScriptToken HudTooltipStylePath
 		{
@@ -100,7 +108,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
+		[RED("prespawnLazyModules")] 
+		public CBool PrespawnLazyModules
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(15)] 
 		[RED("IndexedTooltips")] 
 		public CArray<CWeakHandle<AGenericTooltipController>> IndexedTooltips
 		{
@@ -108,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<AGenericTooltipController>>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(16)] 
 		[RED("NamedTooltips")] 
 		public CArray<CHandle<NamedTooltipController>> NamedTooltips
 		{
@@ -116,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<NamedTooltipController>>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(17)] 
 		[RED("TooltipStylePath")] 
 		public redResourceReferenceScriptToken TooltipStylePath
 		{
@@ -124,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(18)] 
 		[RED("enableTransitionAnimation")] 
 		public CBool EnableTransitionAnimation
 		{
@@ -132,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(19)] 
 		[RED("tooltipAnimHideDef")] 
 		public CHandle<inkanimDefinition> TooltipAnimHideDef
 		{
@@ -140,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("tooltipDelayedShowDef")] 
 		public CHandle<inkanimDefinition> TooltipDelayedShowDef
 		{
@@ -148,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(21)] 
 		[RED("tooltipAnimHide")] 
 		public CHandle<inkanimProxy> TooltipAnimHide
 		{
@@ -156,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(22)] 
 		[RED("tooltipDelayedShow")] 
 		public CHandle<inkanimProxy> TooltipDelayedShow
 		{
@@ -164,7 +180,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(23)] 
+		[RED("tooltipShowAnimProxy")] 
+		public CHandle<inkanimProxy> TooltipShowAnimProxy
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(24)] 
 		[RED("axisDataThreshold")] 
 		public CFloat AxisDataThreshold
 		{
@@ -172,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(25)] 
 		[RED("mouseDataThreshold")] 
 		public CFloat MouseDataThreshold
 		{
@@ -180,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(26)] 
 		[RED("isHidden")] 
 		public CBool IsHidden
 		{

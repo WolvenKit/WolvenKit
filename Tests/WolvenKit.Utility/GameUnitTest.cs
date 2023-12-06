@@ -126,7 +126,7 @@ namespace WolvenKit.Utility
 
             Locator.CurrentMutable.RegisterConstant(new TweakDBService(), typeof(ITweakDBService));
 
-            s_tweakDbPath = Path.Combine(gameDirectory.FullName, "r6", "cache", "tweakdb.bin");
+            s_tweakDbPath = Path.Combine(gameDirectory.FullName, "r6", "cache", "tweakdb_ep1.bin");
             //var tweakService = _host.Services.GetRequiredService<ITweakDBService>();
             //tweakService.LoadDB(s_tweakDbPath);
 

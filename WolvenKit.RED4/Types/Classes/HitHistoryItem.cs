@@ -21,11 +21,11 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
-		[RED("isMelee")] 
-		public CBool IsMelee
+		[RED("attackType")] 
+		public CEnum<gamedataAttackType> AttackType
 		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
+			get => GetPropertyValue<CEnum<gamedataAttackType>>();
+			set => SetPropertyValue<CEnum<gamedataAttackType>>(value);
 		}
 
 		public HitHistoryItem()

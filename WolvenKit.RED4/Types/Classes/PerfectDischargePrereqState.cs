@@ -20,6 +20,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<PerfectDischargePrereqListener>>(value);
 		}
 
+		[Ordinal(6)] 
+		[RED("wasPerfectlyCharged")] 
+		public CBool WasPerfectlyCharged
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public PerfectDischargePrereqState()
 		{
 			PostConstruct();

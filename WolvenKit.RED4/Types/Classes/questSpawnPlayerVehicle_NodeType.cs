@@ -60,6 +60,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(7)] 
+		[RED("retryUntilStubCreated")] 
+		public CBool RetryUntilStubCreated
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public questSpawnPlayerVehicle_NodeType()
 		{
 			Offset = new Vector3();

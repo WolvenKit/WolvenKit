@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class ModifyStatPoolValueEffector : gameEffector
+	public partial class ModifyStatPoolValueEffector : HitEventEffector
 	{
 		[Ordinal(0)] 
 		[RED("statPoolUpdates")] 

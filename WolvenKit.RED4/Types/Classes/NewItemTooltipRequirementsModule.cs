@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class NewItemTooltipRequirementsModule : NewItemTooltipModuleController
 	{
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("smartlinkGunWrapper")] 
 		public inkWidgetReference SmartlinkGunWrapper
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("line")] 
 		public inkWidgetReference Line
 		{

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class InventoryWeaponDisplayController : InventoryItemDisplayController
 	{
-		[Ordinal(116)] 
+		[Ordinal(120)] 
 		[RED("weaponSpecyficModsRoot")] 
 		public inkCompoundWidgetReference WeaponSpecyficModsRoot
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(117)] 
+		[Ordinal(121)] 
 		[RED("silencerIcon")] 
 		public inkWidgetReference SilencerIcon
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(118)] 
+		[Ordinal(122)] 
 		[RED("scopeIcon")] 
 		public inkWidgetReference ScopeIcon
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(119)] 
+		[Ordinal(123)] 
 		[RED("ammoIcon")] 
 		public inkImageWidgetReference AmmoIcon
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(120)] 
+		[Ordinal(124)] 
 		[RED("weaponAttachmentsDisplay")] 
 		public CArray<CWeakHandle<InventoryItemPartDisplay>> WeaponAttachmentsDisplay
 		{

@@ -61,6 +61,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(7)] 
+		[RED("difficultySettingsPath")] 
+		public CName DifficultySettingsPath
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(8)] 
 		[RED("currentConfig")] 
 		public CEnum<AimAssistSettingConfig> CurrentConfig
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<AimAssistSettingConfig>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("settingsRecords")] 
 		public CArray<CWeakHandle<gamedataAimAssistSettings_Record>> SettingsRecords
 		{
@@ -78,6 +86,7 @@ namespace WolvenKit.RED4.Types
 
 		public AimAssistSettingsListener()
 		{
+			DifficultySettingsPath = "/accessibility/difficulty";
 			SettingsRecords = new();
 
 			PostConstruct();

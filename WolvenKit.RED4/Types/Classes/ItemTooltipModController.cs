@@ -44,6 +44,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<InventoryItemPartDisplay>>(value);
 		}
 
+		[Ordinal(6)] 
+		[RED("isCrafting")] 
+		public CBool IsCrafting
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public ItemTooltipModController()
 		{
 			DotIndicator = new inkWidgetReference();

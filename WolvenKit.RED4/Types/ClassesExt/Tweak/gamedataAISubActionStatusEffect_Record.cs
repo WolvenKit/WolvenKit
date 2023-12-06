@@ -11,6 +11,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 		
+		[RED("condition")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID Condition
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
 		[RED("delay")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat Delay
