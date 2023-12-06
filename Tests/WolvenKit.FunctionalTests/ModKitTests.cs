@@ -355,8 +355,7 @@ namespace WolvenKit.FunctionalTests
             var exportArgs = new GlobalExportArgs().Register(
                 new XbmExportArgs()
                 {
-                    UncookExtension = EUncookExtension.png,
-                    Flip = false
+                    UncookExtension = EUncookExtension.png
                 }
             );
 

@@ -25,13 +25,12 @@ internal class ExportCommand : CommandBase
         AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output directory path for all files to export to."));
 
         AddOption(new Option<EUncookExtension?>(new[] { "--uext" }, "Format to uncook textures into (tga, bmp, jpg, png, dds), DDS by default."));
-        AddOption(new Option<bool?>(new[] { "--flip", "-f" }, "Flips textures vertically."));
         AddOption(new Option<ECookedFileFormat[]>(new[] { "--forcebuffers", "-fb" }, "Force uncooking to buffers for given extension. e.g. mesh."));
 
-        SetInternalHandler(CommandHandler.Create<FileSystemInfo[], string, EUncookExtension?, bool?, ECookedFileFormat[], IHost>(Action));
+        SetInternalHandler(CommandHandler.Create<FileSystemInfo[], string, EUncookExtension?, ECookedFileFormat[], IHost>(Action));
     }
 
-    private int Action(FileSystemInfo[] path, string outpath, EUncookExtension? uext, bool? flip, ECookedFileFormat[] forcebuffers, IHost host)
+    private int Action(FileSystemInfo[] path, string outpath, EUncookExtension? uext, ECookedFileFormat[] forcebuffers, IHost host)
     {
         var serviceProvider = host.Services;
         var logger = serviceProvider.GetRequiredService<ILoggerService>();
@@ -43,6 +42,6 @@ internal class ExportCommand : CommandBase
         }
 
         var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-        return consoleFunctions.ExportTask(path, string.IsNullOrEmpty(outpath) ? null : new DirectoryInfo(outpath), uext, flip, forcebuffers);
+        return consoleFunctions.ExportTask(path, string.IsNullOrEmpty(outpath) ? null : new DirectoryInfo(outpath), uext, forcebuffers);
     }
 }

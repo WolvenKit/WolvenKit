@@ -246,7 +246,7 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
         }
 
         using var ddsstream = new MemoryStream();
-        if (!ModTools.ConvertRedClassToDdsStream(xbm, ddsstream, out _, out var decompressedFormat))
+        if (!ModTools.ConvertRedClassToDdsStream(xbm, ddsstream, out _, out var decompressedFormat, true))
         {
             return;
         }

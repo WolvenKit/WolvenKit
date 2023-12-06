@@ -483,14 +483,14 @@ public class RedImage : IDisposable
         }
     }
 
-    public CBitmapTexture SaveToXBM(XbmImportArgs args)
+    public CBitmapTexture SaveToXBM(XbmImportArgs args, bool vFlip)
     {
         if (args.Compression == ETextureCompression.TCM_DXTAlpha)
         {
             args.PremultiplyAlpha = true;
         }
 
-        var settings = new RedImageTransformSettings(args.TextureGroup, args.IsGamma, args.VFlip, args.RawFormat, args.Compression, args.GenerateMipMaps, args.PremultiplyAlpha, args.IsStreamable);
+        var settings = new RedImageTransformSettings(args.TextureGroup, args.IsGamma, vFlip, args.RawFormat, args.Compression, args.GenerateMipMaps, args.PremultiplyAlpha, args.IsStreamable);
 
         // get resource
         var (setup, blob) = GetSetupAndBlob(settings);
@@ -607,14 +607,7 @@ public class RedImage : IDisposable
         var metadata = _metadata;
 
         var outImageFormat = CommonFunctions.GetDXGIFormat(settings.Compression, settings.RawFormat, settings.IsGamma);
-        //if (!TexHelper.Instance.IsCompressed(outImageFormat))
-        //{
-        //    throw new ArgumentOutOfRangeException(nameof(outImageFormat));
-        //}
-        //if (TexHelper.Instance.IsSRGB(metadata.Format) != TexHelper.Instance.IsSRGB((DXGI_FORMAT)outImageFormat))
-        //{
-        //    throw new ArgumentOutOfRangeException(nameof(outImageFormat));
-        //}
+
         if (settings.Compression == ETextureCompression.TCM_None && metadata.Format != (DXGI_FORMAT)outImageFormat)
         {
             tmpImage = true;
@@ -930,8 +923,7 @@ public class RedImage : IDisposable
             Depth = blob.Header.SizeInfo.Depth,
             MipCount = blob.Header.TextureInfo.MipCount,
             SliceCount = blob.Header.TextureInfo.SliceCount,
-            TextureType = blob.Header.TextureInfo.Type,
-            FlipV = true
+            TextureType = blob.Header.TextureInfo.Type
         };
         var imgData = blob.TextureData.Buffer.GetBytes();
 
@@ -963,8 +955,8 @@ public class RedImage : IDisposable
         var result = new RedImage(TexHelper.Instance.LoadFromDDSMemory(memIntPtr, ddsLength, DDS_FLAGS.NONE, out var metadata));
         if (TexHelper.Instance.IsCompressed(metadata.Format))
         {
-            result._uncompressedFormat = metadata.Format;
             result.InternalScratchImage = result.InternalScratchImage.Decompress(DXGI_FORMAT.UNKNOWN);
+            result._uncompressedFormat = metadata.Format;
         }
 
         if (TexHelper.Instance.IsCompressed(metadata.Format))

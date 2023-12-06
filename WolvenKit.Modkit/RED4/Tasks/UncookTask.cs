@@ -17,7 +17,6 @@ public record UncookTaskOptions
     public DirectoryInfo? outpath { get; init; }
     public string? rawOutDir { get; init; }
     public EUncookExtension? uext { get; init; }
-    public bool? flip { get; init; }
     public ulong hash { get; init; }
     public string? pattern { get; init; }
     public string? regex { get; init; }
@@ -134,11 +133,6 @@ public partial class ConsoleFunctions
             _mlmaskExportArgs.Value,
             _wemExportArgs.Value
         );
-
-        if (options.flip != null)
-        {
-            exportArgs.Get<XbmExportArgs>().Flip = options.flip.Value;
-        }
 
         if (options.uext != null)
         {

@@ -59,12 +59,6 @@ namespace WolvenKit.Common.Model.Arguments
         [Description("If true, the file will be handled as a SRGB file")]
         public bool IsGamma { get; set; } = false;
 
-        [Category("General Import Settings")]
-        [Description("Vertical Flip")]
-        public bool VFlip { get; set; } = true;
-
-
-
         [Category("Image Import Settings")]
         public ETextureRawFormat RawFormat { get; set; } = ETextureRawFormat.TRF_TrueColor;
 
