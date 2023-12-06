@@ -10,6 +10,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Database;
+using WolvenKit.Core.Compression;
 using WolvenKit.RED4;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Types;
@@ -163,7 +164,7 @@ namespace WolvenKit.Utility
             var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
 
             var buffer = RedBuffer.CreateBuffer(0, File.ReadAllBytes(db.DbPath));
-            File.WriteAllBytes(Path.Combine(resultDir, "red.kark"), buffer.GetCompressedBytes());
+            File.WriteAllBytes(Path.Combine(resultDir, "red.kark"), buffer.GetCompressedBytes(Oodle.CompressionLevel.Optimal5));
         }
     }
 }
