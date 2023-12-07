@@ -22,7 +22,7 @@ public class ContainerManager : INodeData
 
 public class ContainerManagerParser : INodeParser
 {
-    public static string NodeName => Constants.NodeNames.CONTAINER_MANAGER;
+    //public static string NodeName => Constants.NodeNames.CONTAINER_MANAGER;
 
     public void Read(BinaryReader reader, NodeEntry node)
     {
@@ -35,8 +35,11 @@ public class ContainerManagerParser : INodeParser
             entry.CNameHash = reader.ReadUInt64();
             entry.Unknown1 = reader.ReadUInt16();
             entry.Unknown2 = reader.ReadByte();
+
             data.Entries.Add(entry);
         }
+
+        // TODO: if entry.Unknown2 > 0...
 
         node.Value = data;
     }
