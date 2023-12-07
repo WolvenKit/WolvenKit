@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ExplosiveTriggerDevice : ExplosiveDevice
 	{
-		[Ordinal(123)] 
+		[Ordinal(126)] 
 		[RED("meshTrigger")] 
 		public CHandle<entMeshComponent> MeshTrigger
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
-		[Ordinal(124)] 
+		[Ordinal(127)] 
 		[RED("trapTrigger")] 
 		public CHandle<gameStaticTriggerAreaComponent> TrapTrigger
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>(value);
 		}
 
-		[Ordinal(125)] 
+		[Ordinal(128)] 
 		[RED("triggerName")] 
 		public CName TriggerName
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(126)] 
+		[Ordinal(129)] 
 		[RED("surroundingArea")] 
 		public CHandle<gameStaticTriggerAreaComponent> SurroundingArea
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>(value);
 		}
 
-		[Ordinal(127)] 
+		[Ordinal(130)] 
 		[RED("surroundingAreaName")] 
 		public CName SurroundingAreaName
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(128)] 
+		[Ordinal(131)] 
 		[RED("soundIsActive")] 
 		public CBool SoundIsActive
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(129)] 
+		[Ordinal(132)] 
 		[RED("playerIsInSurroundingArea")] 
 		public CBool PlayerIsInSurroundingArea
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(130)] 
+		[Ordinal(133)] 
 		[RED("proximityExplosionEventID")] 
 		public gameDelayID ProximityExplosionEventID
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(131)] 
+		[Ordinal(134)] 
 		[RED("proximityExplosionEventSent")] 
 		public CBool ProximityExplosionEventSent
 		{

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <Version>8.11.2</Version>
     <Platforms>x64</Platforms>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>

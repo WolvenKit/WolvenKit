@@ -20,10 +20,19 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("trainLines")] 
+		public CArray<CInt32> TrainLines
+		{
+			get => GetPropertyValue<CArray<CInt32>>();
+			set => SetPropertyValue<CArray<CInt32>>(value);
+		}
+
 		public NcartTimetableSetup()
 		{
 			DepartFrequency = 5;
 			UiUpdateFrequency = 1;
+			TrainLines = new();
 
 			PostConstruct();
 		}

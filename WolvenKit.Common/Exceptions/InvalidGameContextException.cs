@@ -17,9 +17,5 @@ namespace WolvenKit.Common.Model
         public InvalidGameContextException(string? message, Exception? innerException) : base(message, innerException)
         {
         }
-
-        protected InvalidGameContextException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
     }
 }

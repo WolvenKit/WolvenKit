@@ -60,6 +60,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(17)] 
+		[RED("bikeKnockdown")] 
+		public CBool BikeKnockdown
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public KnockdownEvents()
 		{
 			CachedPlayerVelocity = new Vector4();

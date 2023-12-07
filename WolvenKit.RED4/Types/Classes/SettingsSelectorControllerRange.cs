@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SettingsSelectorControllerRange : inkSettingsSelectorController
 	{
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("ValueText")] 
 		public inkTextWidgetReference ValueText
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("LeftArrow")] 
 		public inkWidgetReference LeftArrow
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("RightArrow")] 
 		public inkWidgetReference RightArrow
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("ProgressBar")] 
 		public inkWidgetReference ProgressBar
 		{

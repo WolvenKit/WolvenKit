@@ -12,9 +12,18 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
+		[Ordinal(1)] 
+		[RED("marginToScalecorrectOverride")] 
+		public inkMargin MarginToScalecorrectOverride
+		{
+			get => GetPropertyValue<inkMargin>();
+			set => SetPropertyValue<inkMargin>(value);
+		}
+
 		public gameuiResolutionSensitiveWidget()
 		{
 			Widget = new inkWidgetReference();
+			MarginToScalecorrectOverride = new inkMargin();
 
 			PostConstruct();
 		}

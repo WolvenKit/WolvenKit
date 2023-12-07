@@ -12,6 +12,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(7)] 
+		[RED("hadStrongArmsEquipped")] 
+		public CBool HadStrongArmsEquipped
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public TemporaryUnequipEvents()
 		{
 			PostConstruct();

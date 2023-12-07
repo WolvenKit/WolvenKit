@@ -20,6 +20,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(4)] 
+		[RED("questCondition")] 
+		public CHandle<questIBaseCondition> QuestCondition
+		{
+			get => GetPropertyValue<CHandle<questIBaseCondition>>();
+			set => SetPropertyValue<CHandle<questIBaseCondition>>(value);
+		}
+
 		public gameJournalPhoneChoiceEntry()
 		{
 			JournalEntryOverrideDataList = new();

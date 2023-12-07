@@ -69,6 +69,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(8)] 
+		[RED("uiScriptableSystem")] 
+		public CHandle<UIScriptableSystem> UiScriptableSystem
+		{
+			get => GetPropertyValue<CHandle<UIScriptableSystem>>();
+			set => SetPropertyValue<CHandle<UIScriptableSystem>>(value);
+		}
+
+		[Ordinal(9)] 
 		[RED("inventoryItemsManager")] 
 		public CHandle<UIInventoryItemsManager> InventoryItemsManager
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UIInventoryItemsManager>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("blacklistedTags")] 
 		public CArray<CName> BlacklistedTags
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("cachedNonInventoryItems")] 
 		public CHandle<inkScriptHashMap> CachedNonInventoryItems
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkScriptHashMap>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("statsDependantItems")] 
 		public CHandle<inkScriptWeakHashMap> StatsDependantItems
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkScriptWeakHashMap>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("InventoryBlackboard")] 
 		public CWeakHandle<gameIBlackboard> InventoryBlackboard
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("CraftingBlackboardDefinition")] 
 		public CHandle<UI_CraftingDef> CraftingBlackboardDefinition
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_CraftingDef>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("Blackboard")] 
 		public CWeakHandle<gameIBlackboard> Blackboard
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("UpgradeBlackboardCallback")] 
 		public CHandle<redCallbackObject> UpgradeBlackboardCallback
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("TEMP_questSystem")] 
 		public CHandle<questQuestsSystem> TEMP_questSystem
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<questQuestsSystem>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("TEMP_cuverBarsListener")] 
 		public CUInt32 TEMP_cuverBarsListener
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("TEMP_separatorBarsListener")] 
 		public CUInt32 TEMP_separatorBarsListener
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("itemsRestored")] 
 		public CBool ItemsRestored
 		{

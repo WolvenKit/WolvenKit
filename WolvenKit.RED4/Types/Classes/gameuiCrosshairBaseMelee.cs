@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameuiCrosshairBaseMelee : gameuiCrosshairBaseGameController
 	{
-		[Ordinal(27)] 
+		[Ordinal(29)] 
 		[RED("meleeStateBlackboardId")] 
 		public CHandle<redCallbackObject> MeleeStateBlackboardId
 		{

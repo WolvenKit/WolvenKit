@@ -155,7 +155,7 @@ namespace WolvenKit.Modkit.RED4
 
                     if (GetFileFromResourcePath(anims.Rig.DepotPath, out var rigFile))
                     {
-                        GetAnimation(animsFile, rigFile, ref root, true);
+                        GetAnimation(animsFile, rigFile, outfile.Name, ref root, true);
                     }
 
                     var nodes = new Dictionary<string, Node>();

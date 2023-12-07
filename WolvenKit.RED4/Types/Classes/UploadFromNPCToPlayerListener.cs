@@ -29,8 +29,8 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
-		[RED("variantHud")] 
-		public HUDProgressBarData VariantHud
+		[RED("HUDData")] 
+		public HUDProgressBarData HUDData
 		{
 			get => GetPropertyValue<HUDProgressBarData>();
 			set => SetPropertyValue<HUDProgressBarData>(value);
@@ -84,10 +84,18 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AISquadScriptInterface>>(value);
 		}
 
+		[Ordinal(12)] 
+		[RED("useInterruptionPrereqs")] 
+		public CBool UseInterruptionPrereqs
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public UploadFromNPCToPlayerListener()
 		{
 			NpcSquad = new();
-			VariantHud = new HUDProgressBarData();
+			HUDData = new HUDProgressBarData { BottomText = "LocKey#22169", CompletedText = "LocKey#15455", FailedText = "LocKey#15353" };
 
 			PostConstruct();
 		}

@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(10)] 
+		[RED("SpeedUnits")] 
+		public inkTextWidgetReference SpeedUnits
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(11)] 
 		[RED("RPMChunks")] 
 		public CArray<inkImageWidgetReference> RPMChunks
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<inkImageWidgetReference>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("psmBlackboard")] 
 		public CWeakHandle<gameIBlackboard> PsmBlackboard
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("PSM_BBID")] 
 		public CHandle<redCallbackObject> PSM_BBID
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("currentZoom")] 
 		public CFloat CurrentZoom
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("currentTime")] 
 		public GameTime CurrentTime
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<GameTime>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("activeVehicleUIBlackboard")] 
 		public CWeakHandle<gameIBlackboard> ActiveVehicleUIBlackboard
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("vehicleBBStateConectionId")] 
 		public CHandle<redCallbackObject> VehicleBBStateConectionId
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("speedBBConnectionId")] 
 		public CHandle<redCallbackObject> SpeedBBConnectionId
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("gearBBConnectionId")] 
 		public CHandle<redCallbackObject> GearBBConnectionId
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("tppBBConnectionId")] 
 		public CHandle<redCallbackObject> TppBBConnectionId
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("rpmValueBBConnectionId")] 
 		public CHandle<redCallbackObject> RpmValueBBConnectionId
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("leanAngleBBConnectionId")] 
 		public CHandle<redCallbackObject> LeanAngleBBConnectionId
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("playerStateBBConnectionId")] 
 		public CHandle<redCallbackObject> PlayerStateBBConnectionId
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("activeChunks")] 
 		public CInt32 ActiveChunks
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("rpmMaxValue")] 
 		public CFloat RpmMaxValue
 		{
@@ -132,7 +140,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
+		[RED("currentSpeed")] 
+		public CInt32 CurrentSpeed
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(27)] 
 		[RED("activeVehicle")] 
 		public CWeakHandle<vehicleBaseObject> ActiveVehicle
 		{
@@ -140,9 +156,41 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<vehicleBaseObject>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(28)] 
 		[RED("driver")] 
 		public CBool Driver
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(29)] 
+		[RED("settings")] 
+		public CHandle<userSettingsUserSettings> Settings
+		{
+			get => GetPropertyValue<CHandle<userSettingsUserSettings>>();
+			set => SetPropertyValue<CHandle<userSettingsUserSettings>>(value);
+		}
+
+		[Ordinal(30)] 
+		[RED("settingsListener")] 
+		public CHandle<CarSpeedometerSettingsListener> SettingsListener
+		{
+			get => GetPropertyValue<CHandle<CarSpeedometerSettingsListener>>();
+			set => SetPropertyValue<CHandle<CarSpeedometerSettingsListener>>(value);
+		}
+
+		[Ordinal(31)] 
+		[RED("groupPath")] 
+		public CName GroupPath
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(32)] 
+		[RED("kmOn")] 
+		public CBool KmOn
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
@@ -151,8 +199,11 @@ namespace WolvenKit.RED4.Types
 		public hudCarController()
 		{
 			SpeedValue = new inkTextWidgetReference();
+			SpeedUnits = new inkTextWidgetReference();
 			RPMChunks = new();
 			CurrentTime = new GameTime();
+			CurrentSpeed = -1;
+			GroupPath = "/interface";
 
 			PostConstruct();
 		}

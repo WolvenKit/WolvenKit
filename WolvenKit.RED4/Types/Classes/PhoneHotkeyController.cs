@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class PhoneHotkeyController : GenericHotkeyController
 	{
-		[Ordinal(23)] 
+		[Ordinal(25)] 
 		[RED("mainIcon")] 
 		public inkImageWidgetReference MainIcon
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(26)] 
 		[RED("questIcon")] 
 		public inkImageWidgetReference QuestIcon
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(27)] 
 		[RED("callIcon")] 
 		public inkImageWidgetReference CallIcon
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(28)] 
 		[RED("messageCounterLabel")] 
 		public inkWidgetReference MessageCounterLabel
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(29)] 
 		[RED("messageCounterLabelCircle")] 
 		public inkWidgetReference MessageCounterLabelCircle
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(30)] 
 		[RED("messageCounter")] 
 		public inkTextWidgetReference MessageCounter
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(31)] 
 		[RED("messageCounterCircle")] 
 		public inkTextWidgetReference MessageCounterCircle
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(32)] 
 		[RED("journalManager")] 
 		public CWeakHandle<gameJournalManager> JournalManager
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameJournalManager>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(33)] 
 		[RED("phoneIconAtlas")] 
 		public CString PhoneIconAtlas
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(34)] 
 		[RED("phoneIconName")] 
 		public CName PhoneIconName
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(35)] 
 		[RED("proxy")] 
 		public CHandle<inkanimProxy> Proxy
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(36)] 
 		[RED("questImportantAnimProxy")] 
 		public CHandle<inkanimProxy> QuestImportantAnimProxy
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(37)] 
 		[RED("comDeviceBB")] 
 		public CWeakHandle<gameIBlackboard> ComDeviceBB
 		{
@@ -108,7 +108,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(38)] 
+		[RED("quickSlotBB")] 
+		public CWeakHandle<gameIBlackboard> QuickSlotBB
+		{
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
+		}
+
+		[Ordinal(39)] 
 		[RED("phoneEnabledBBId")] 
 		public CHandle<redCallbackObject> PhoneEnabledBBId
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(40)] 
 		[RED("isVehiclesPopupVisibleBBId")] 
 		public CHandle<redCallbackObject> IsVehiclesPopupVisibleBBId
 		{
@@ -124,9 +132,17 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(41)] 
 		[RED("isRadioPopupVisibleBBId")] 
 		public CHandle<redCallbackObject> IsRadioPopupVisibleBBId
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(42)] 
+		[RED("isRadialMenuVisibleBBId")] 
+		public CHandle<redCallbackObject> IsRadialMenuVisibleBBId
 		{
 			get => GetPropertyValue<CHandle<redCallbackObject>>();
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);

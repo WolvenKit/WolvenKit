@@ -109,6 +109,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(16)] 
+		[RED("doNotTurnOffPreventionSystem")] 
+		public CBool DoNotTurnOffPreventionSystem
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(17)] 
 		[RED("ataParams")] 
 		public scnChoiceNodeNsAttachToActorParams AtaParams
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<scnChoiceNodeNsAttachToActorParams>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("atpParams")] 
 		public scnChoiceNodeNsAttachToPropParams AtpParams
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<scnChoiceNodeNsAttachToPropParams>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("atgoParams")] 
 		public scnChoiceNodeNsAttachToGameObjectParams AtgoParams
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<scnChoiceNodeNsAttachToGameObjectParams>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("atsParams")] 
 		public scnChoiceNodeNsAttachToScreenParams AtsParams
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<scnChoiceNodeNsAttachToScreenParams>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("atwParams")] 
 		public scnChoiceNodeNsAttachToWorldParams AtwParams
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<scnChoiceNodeNsAttachToWorldParams>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("choicePriority")] 
 		public CUInt8 ChoicePriority
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt8>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("hubPriority")] 
 		public CUInt8 HubPriority
 		{
@@ -164,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt8>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("mappinParams")] 
 		public CHandle<scnChoiceNodeNsMappinParams> MappinParams
 		{
@@ -172,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<scnChoiceNodeNsMappinParams>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("interruptCapability")] 
 		public CEnum<scnInterruptCapability> InterruptCapability
 		{
@@ -180,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<scnInterruptCapability>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("interruptionSpeakerOverride")] 
 		public scnActorId InterruptionSpeakerOverride
 		{
@@ -188,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<scnActorId>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("choiceFlags")] 
 		public CBitField<scnChoiceNodeNsChoiceNodeBitFlags> ChoiceFlags
 		{
@@ -196,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBitField<scnChoiceNodeNsChoiceNodeBitFlags>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("alwaysUseBrainGender")] 
 		public CBool AlwaysUseBrainGender
 		{
@@ -204,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("timedSectionCondition")] 
 		public CHandle<scnTimedCondition> TimedSectionCondition
 		{
@@ -212,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<scnTimedCondition>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("reminderCondition")] 
 		public CHandle<scnReminderCondition> ReminderCondition
 		{

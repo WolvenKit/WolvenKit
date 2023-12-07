@@ -52,6 +52,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Quaternion>(value);
 		}
 
+		[Ordinal(12)] 
+		[RED("fallbackData")] 
+		public CArray<scneventsAttachPropToPerformerFallbackData> FallbackData
+		{
+			get => GetPropertyValue<CArray<scneventsAttachPropToPerformerFallbackData>>();
+			set => SetPropertyValue<CArray<scneventsAttachPropToPerformerFallbackData>>(value);
+		}
+
 		public scneventsAttachPropToPerformer()
 		{
 			Id = new scnSceneEventId { Id = long.MaxValue };
@@ -60,6 +68,7 @@ namespace WolvenKit.RED4.Types
 			Slot = "(Root)";
 			CustomOffsetPos = new Vector3();
 			CustomOffsetRot = new Quaternion { R = 1.000000F };
+			FallbackData = new();
 
 			PostConstruct();
 		}

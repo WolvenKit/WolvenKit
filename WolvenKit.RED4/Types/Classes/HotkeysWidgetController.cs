@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class HotkeysWidgetController : gameuiNewPhoneRelatedHUDGameController
 	{
-		[Ordinal(13)] 
+		[Ordinal(15)] 
 		[RED("phoneSlot")] 
 		public inkCompoundWidgetReference PhoneSlot
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(16)] 
 		[RED("carSlot")] 
 		public inkCompoundWidgetReference CarSlot
 		{
@@ -20,7 +20,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(17)] 
+		[RED("radioSlot")] 
+		public inkCompoundWidgetReference RadioSlot
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(18)] 
 		[RED("dpadHintsPanel")] 
 		public inkCompoundWidgetReference DpadHintsPanel
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("phone")] 
 		public CWeakHandle<inkWidget> Phone
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("car")] 
 		public CWeakHandle<inkWidget> Car
 		{
@@ -44,7 +52,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
+		[RED("radio")] 
+		public CWeakHandle<inkWidget> Radio
+		{
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
+		}
+
+		[Ordinal(22)] 
 		[RED("consumables")] 
 		public CWeakHandle<inkWidget> Consumables
 		{
@@ -52,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(23)] 
 		[RED("gadgets")] 
 		public CWeakHandle<inkWidget> Gadgets
 		{
@@ -60,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(24)] 
 		[RED("cyberware")] 
 		public CWeakHandle<inkWidget> Cyberware
 		{
@@ -68,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(25)] 
 		[RED("leeroy")] 
 		public CWeakHandle<inkWidget> Leeroy
 		{
@@ -76,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(26)] 
 		[RED("timeBank")] 
 		public CWeakHandle<inkWidget> TimeBank
 		{
@@ -84,15 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(23)] 
-		[RED("remoteControlledVehicleDataCallback")] 
-		public CHandle<redCallbackObject> RemoteControlledVehicleDataCallback
-		{
-			get => GetPropertyValue<CHandle<redCallbackObject>>();
-			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
-		}
-
-		[Ordinal(24)] 
+		[Ordinal(27)] 
 		[RED("berserkEnabledBBId")] 
 		public CHandle<redCallbackObject> BerserkEnabledBBId
 		{
@@ -100,18 +108,11 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(25)] 
-		[RED("isRemoteControllingVehicle")] 
-		public CBool IsRemoteControllingVehicle
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
 		public HotkeysWidgetController()
 		{
 			PhoneSlot = new inkCompoundWidgetReference();
 			CarSlot = new inkCompoundWidgetReference();
+			RadioSlot = new inkCompoundWidgetReference();
 			DpadHintsPanel = new inkCompoundWidgetReference();
 
 			PostConstruct();

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class MeleeChargedHoldDecisions : MeleeHoldGenericDecisions
+	public partial class MeleeChargedHoldDecisions : MeleeTransition
 	{
 		public MeleeChargedHoldDecisions()
 		{

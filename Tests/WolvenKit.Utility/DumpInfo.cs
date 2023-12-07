@@ -305,13 +305,23 @@ namespace WolvenKit.Utility
             File.WriteAllBytes(Path.Combine(resultDir, filename), outBuffer.ToArray());
         }
 
-        [TestMethod]
-        public void MergeAllStrings() => MergeStrings(false);
+        public enum Merge
+        {
+            All,
+            Facts,
+            NodeRefs
+        }
 
         [TestMethod]
-        public void MergeFactStrings() => MergeStrings(true);
+        public void MergeAllStrings() => MergeStrings(Merge.All);
 
-        private void MergeStrings(bool factOnly)
+        [TestMethod]
+        public void MergeFactStrings() => MergeStrings(Merge.Facts);
+
+        [TestMethod]
+        public void MergeNodeRefStrings() => MergeStrings(Merge.NodeRefs);
+
+        private void MergeStrings(Merge merge)
         {
             ArgumentNullException.ThrowIfNull(s_bm);
 
@@ -329,7 +339,7 @@ namespace WolvenKit.Utility
 
                 var lst = new HashSet<string>();
 
-                if (factOnly)
+                if (merge == Merge.Facts)
                 {
                     var ext = ERedExtensionHelper.FromString(dc.FileName);
                     if (ext == ERedExtension.unknown)
@@ -367,7 +377,7 @@ namespace WolvenKit.Utility
 
             });
 
-            if (factOnly)
+            if (merge == Merge.Facts)
             {
                 var nDict = dict.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
                 File.WriteAllText(Path.Join(resultDir, "facts.json"), JsonSerializer.Serialize(nDict, new JsonSerializerOptions { WriteIndented = true }));
@@ -377,12 +387,12 @@ namespace WolvenKit.Utility
                 var nList = dict2.Keys.ToList();
                 nList.Sort();
 
-                File.WriteAllLines(Path.Join(resultDir, "merged.txt"), nList);
+                File.WriteAllLines(Path.Join(resultDir, $"merged_{merge}.txt"), nList);
             }
 
             void DumpFileInfo(DataCollection dc, HashSet<string> lst)
             {
-                if (!factOnly)
+                if (merge == Merge.All)
                 {
                     if (dc.UnusedStrings != null)
                     {
@@ -425,11 +435,25 @@ namespace WolvenKit.Utility
                     }
                 }
 
-                if (dc.FactStrings != null)
+                if (merge == Merge.All || merge == Merge.Facts)
                 {
-                    foreach (var str in dc.FactStrings)
+                    if (dc.FactStrings != null)
                     {
-                        lst.Add(str);
+                        foreach (var str in dc.FactStrings)
+                        {
+                            lst.Add(str);
+                        }
+                    }
+                }
+
+                if (merge == Merge.All || merge == Merge.NodeRefs)
+                {
+                    if (dc.NodeRefs != null)
+                    {
+                        foreach (var str in dc.NodeRefs)
+                        {
+                            lst.Add(str);
+                        }
                     }
                 }
 

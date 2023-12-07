@@ -27,6 +27,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamedataLocKeyWrapper>(value);
 		}
 		
+		[RED("prereqsForUIValidation")]
+		[REDProperty(IsIgnored = true)]
+		public CArray<TweakDBID> PrereqsForUIValidation
+		{
+			get => GetPropertyValue<CArray<TweakDBID>>();
+			set => SetPropertyValue<CArray<TweakDBID>>(value);
+		}
+		
 		[RED("prereqsForUse")]
 		[REDProperty(IsIgnored = true)]
 		public CArray<TweakDBID> PrereqsForUse

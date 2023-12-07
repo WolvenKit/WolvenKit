@@ -765,6 +765,38 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(95)] 
+		[RED("civilianVehicleDestructionCount")] 
+		public CInt32 CivilianVehicleDestructionCount
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(96)] 
+		[RED("lastCivilianVehicleDestructionTimeStamp")] 
+		public CFloat LastCivilianVehicleDestructionTimeStamp
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(97)] 
+		[RED("civilianVehicleDestructionThreshold")] 
+		public CInt32 CivilianVehicleDestructionThreshold
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(98)] 
+		[RED("civilianVehicleDestructionTimeout")] 
+		public CFloat CivilianVehicleDestructionTimeout
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(99)] 
 		[RED("vehicleSpawnTickCaller")] 
 		public CHandle<IntervalCaller> VehicleSpawnTickCaller
 		{
@@ -772,7 +804,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<IntervalCaller>>(value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(100)] 
 		[RED("ressuplyVehicleTicketCaller")] 
 		public CHandle<IntervalCaller> RessuplyVehicleTicketCaller
 		{
@@ -780,7 +812,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<IntervalCaller>>(value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(101)] 
 		[RED("isVehicleDelayOver")] 
 		public CBool IsVehicleDelayOver
 		{
@@ -788,7 +820,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(102)] 
 		[RED("currentVehicleTicketCount")] 
 		public CInt32 CurrentVehicleTicketCount
 		{
@@ -796,7 +828,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(103)] 
 		[RED("failedVehicleSpawnAttempts")] 
 		public CInt32 FailedVehicleSpawnAttempts
 		{
@@ -804,7 +836,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(104)] 
 		[RED("codeRedReinforcement")] 
 		public CBool CodeRedReinforcement
 		{
@@ -812,7 +844,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(105)] 
 		[RED("lastStarChangeTimeStamp")] 
 		public CFloat LastStarChangeTimeStamp
 		{
@@ -820,7 +852,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(102)] 
+		[Ordinal(106)] 
 		[RED("firstStarTimeStamp")] 
 		public CFloat FirstStarTimeStamp
 		{
@@ -828,7 +860,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(103)] 
+		[Ordinal(107)] 
 		[RED("setCallRejectionIncrement")] 
 		public CBool SetCallRejectionIncrement
 		{
@@ -871,6 +903,9 @@ namespace WolvenKit.RED4.Types
 			AvSpawnPointList = new();
 			MaxAllowedDistanceToPlayer = 20.000000F;
 			LastAVRequestedSpawnPositionsArray = new();
+			LastCivilianVehicleDestructionTimeStamp = -1.000000F;
+			CivilianVehicleDestructionThreshold = 3;
+			CivilianVehicleDestructionTimeout = 60.000000F;
 
 			PostConstruct();
 		}

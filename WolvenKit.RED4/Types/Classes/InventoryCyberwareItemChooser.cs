@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class InventoryCyberwareItemChooser : InventoryGenericItemChooser
 	{
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("leftSlotsContainer")] 
 		public inkCompoundWidgetReference LeftSlotsContainer
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("rightSlotsContainer")] 
 		public inkCompoundWidgetReference RightSlotsContainer
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("itemData")] 
 		public gameInventoryItemData ItemData
 		{

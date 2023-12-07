@@ -29,6 +29,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(8)] 
+		[RED("itemEvolutionIcon")] 
+		public inkImageWidgetReference ItemEvolutionIcon
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(9)] 
 		[RED("localizedIconicText")] 
 		public CString LocalizedIconicText
 		{
@@ -41,6 +49,7 @@ namespace WolvenKit.RED4.Types
 			ItemNameText = new inkTextWidgetReference();
 			ItemRarityText = new inkTextWidgetReference();
 			ItemTypeText = new inkTextWidgetReference();
+			ItemEvolutionIcon = new inkImageWidgetReference();
 
 			PostConstruct();
 		}

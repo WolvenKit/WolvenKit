@@ -53,7 +53,6 @@ namespace WolvenKit.App.ViewModels.Shell;
 public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemModel, INode<ReferenceSocket>
 {
     private readonly IChunkViewmodelFactory _chunkViewmodelFactory;
-    private readonly ChunkViewModelTools _chunkViewModelTools = new();
     private readonly IDocumentTabViewmodelFactory _tabViewmodelFactory;
     private readonly ILoggerService _loggerService;
     private readonly ISettingsManager _settingsManager;
@@ -211,7 +210,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         if (IsShiftBeingHeld)
         {
-            _chunkViewModelTools.SetChildExpansionStates(this, IsExpanded);
+            SetChildExpansionStates(IsExpanded);
         }
     }
 
@@ -1817,6 +1816,16 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             Value = materialRef.DepotPath;
             IsValueExtrapolated = true;
         }
+        else if (ResolvedData is workWorkEntryId id)
+        {
+            Value = $"{id.Id}";
+            IsValueExtrapolated = true;
+        }
+        else if (ResolvedData is workWorkspotAnimsetEntry animsetEntry)
+        {
+            Value = $"{animsetEntry.Rig.DepotPath}";
+            IsValueExtrapolated = true;
+        }
         else if (ResolvedData is CMeshMaterialEntry materialDefinition)
         {
             Value = materialDefinition.IsLocalInstance ? "" : " (external)";
@@ -2068,6 +2077,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             "componentName", // ?
             "parameterName", // ?
             "debugName", // ?
+            "idleAnim", // .workspot handle work entry items
             "category", // ?
             "entryName", // ?
             "className", // ?
@@ -2718,11 +2728,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    public static bool IsControlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+
+    // Shift: recursively fold/unfold child nodes
     public static bool IsShiftBeingHeld => Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
 
-    // node stuff
-
+    // Shift+Control: recursively fold/unfold nodes all the way
+    public static bool IsControlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
 
 
     public IList<ReferenceSocket> Inputs

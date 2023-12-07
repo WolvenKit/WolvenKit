@@ -21,6 +21,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("deadEyeWidget")] 
+		public inkWidgetReference DeadEyeWidget
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("data")] 
 		public gamesmartGunUITargetParameters Data
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamesmartGunUITargetParameters>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("lockingAnimationProxy")] 
 		public CHandle<inkanimProxy> LockingAnimationProxy
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("unlockingAnimationProxy")] 
 		public CHandle<inkanimProxy> UnlockingAnimationProxy
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("activeCallbacks")] 
 		public CArray<gameDelayID> ActiveCallbacks
 		{
@@ -52,10 +60,27 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameDelayID>>(value);
 		}
 
+		[Ordinal(8)] 
+		[RED("hasDeadEye")] 
+		public CBool HasDeadEye
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(9)] 
+		[RED("deadEyeAnimProxy")] 
+		public CHandle<inkanimProxy> DeadEyeAnimProxy
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
 		public Crosshair_Smart_Rifl_Bucket()
 		{
 			LockingAnimationLength = 1.000000F;
 			UnlockingAnimationLength = 1.000000F;
+			DeadEyeWidget = new inkWidgetReference();
 			Data = new gamesmartGunUITargetParameters { Pos = new Vector2(), EntityID = new entEntityID() };
 			ActiveCallbacks = new();
 

@@ -181,6 +181,62 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(25)] 
+		[RED("isRipperdoc")] 
+		public CBool IsRipperdoc
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(26)] 
+		[RED("isRipperdocViktorTutorial")] 
+		public CBool IsRipperdocViktorTutorial
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(27)] 
+		[RED("statusEffectSystem")] 
+		public CWeakHandle<gameStatusEffectSystem> StatusEffectSystem
+		{
+			get => GetPropertyValue<CWeakHandle<gameStatusEffectSystem>>();
+			set => SetPropertyValue<CWeakHandle<gameStatusEffectSystem>>(value);
+		}
+
+		[Ordinal(28)] 
+		[RED("questSystem")] 
+		public CWeakHandle<questQuestsSystem> QuestSystem
+		{
+			get => GetPropertyValue<CWeakHandle<questQuestsSystem>>();
+			set => SetPropertyValue<CWeakHandle<questQuestsSystem>>(value);
+		}
+
+		[Ordinal(29)] 
+		[RED("ripperdocTimeDilationCallback")] 
+		public CHandle<RipperdocTimeDilationCallback> RipperdocTimeDilationCallback
+		{
+			get => GetPropertyValue<CHandle<RipperdocTimeDilationCallback>>();
+			set => SetPropertyValue<CHandle<RipperdocTimeDilationCallback>>(value);
+		}
+
+		[Ordinal(30)] 
+		[RED("timeDilationEnabling")] 
+		public CBool TimeDilationEnabling
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(31)] 
+		[RED("equipAnimationCategories")] 
+		public CArray<CHandle<RipperdocCyberwareEquipAnimationCategory>> EquipAnimationCategories
+		{
+			get => GetPropertyValue<CArray<CHandle<RipperdocCyberwareEquipAnimationCategory>>>();
+			set => SetPropertyValue<CArray<CHandle<RipperdocCyberwareEquipAnimationCategory>>>(value);
+		}
+
+		[Ordinal(32)] 
 		[RED("VendorBlackboard")] 
 		public CWeakHandle<gameIBlackboard> VendorBlackboard
 		{
@@ -188,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(33)] 
 		[RED("playerStatsBlackboard")] 
 		public CWeakHandle<gameIBlackboard> PlayerStatsBlackboard
 		{
@@ -196,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(34)] 
 		[RED("VendorBlackboardDef")] 
 		public CHandle<UI_VendorDef> VendorBlackboardDef
 		{
@@ -204,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_VendorDef>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(35)] 
 		[RED("VendorUpdatedCallbackID")] 
 		public CHandle<redCallbackObject> VendorUpdatedCallbackID
 		{
@@ -212,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(36)] 
 		[RED("weightListener")] 
 		public CHandle<redCallbackObject> WeightListener
 		{
@@ -220,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(37)] 
 		[RED("characterLevelListener")] 
 		public CHandle<redCallbackObject> CharacterLevelListener
 		{
@@ -228,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(38)] 
 		[RED("characterCurrentXPListener")] 
 		public CHandle<redCallbackObject> CharacterCurrentXPListener
 		{
@@ -236,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(39)] 
 		[RED("characterCredListener")] 
 		public CHandle<redCallbackObject> CharacterCredListener
 		{
@@ -244,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(40)] 
 		[RED("characterCredPointsListener")] 
 		public CHandle<redCallbackObject> CharacterCredPointsListener
 		{
@@ -252,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(41)] 
 		[RED("characterCurrentHealthListener")] 
 		public CHandle<redCallbackObject> CharacterCurrentHealthListener
 		{
@@ -260,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(42)] 
 		[RED("menuEventDispatcher")] 
 		public CWeakHandle<inkMenuEventDispatcher> MenuEventDispatcher
 		{
@@ -268,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(43)] 
 		[RED("player")] 
 		public CWeakHandle<PlayerPuppet> Player
 		{
@@ -276,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(44)] 
 		[RED("menuData")] 
 		public CArray<MenuData> MenuData
 		{
@@ -284,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<MenuData>>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(45)] 
 		[RED("activeMenu")] 
 		public CInt32 ActiveMenu
 		{
@@ -292,7 +348,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(46)] 
 		[RED("isChangedManually")] 
 		public CBool IsChangedManually
 		{
@@ -300,7 +356,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(47)] 
 		[RED("cameFromRipperdoc")] 
 		public CBool CameFromRipperdoc
 		{
@@ -308,7 +364,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(48)] 
 		[RED("storageDef")] 
 		public CHandle<StorageBlackboardDef> StorageDef
 		{
@@ -316,7 +372,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<StorageBlackboardDef>>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(49)] 
 		[RED("storageBlackboard")] 
 		public CWeakHandle<gameIBlackboard> StorageBlackboard
 		{
@@ -340,6 +396,7 @@ namespace WolvenKit.RED4.Types
 			LevelBarSpacer = new inkWidgetReference();
 			StreetCredBarProgress = new inkWidgetReference();
 			StreetCredBarSpacer = new inkWidgetReference();
+			EquipAnimationCategories = new();
 			MenuData = new();
 
 			PostConstruct();

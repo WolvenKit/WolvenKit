@@ -76,6 +76,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(9)] 
+		[RED("ChimeraMod")] 
+		public CBool ChimeraMod
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("IsPlayerFavourite")] 
+		public CBool IsPlayerFavourite
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public gameInventoryItemSortData()
 		{
 			PostConstruct();

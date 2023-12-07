@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class MeleeDeflectEvents : MeleeEventsTransition
 	{
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("deflectStatFlag")] 
 		public CHandle<gameStatModifierData_Deprecated> DeflectStatFlag
 		{

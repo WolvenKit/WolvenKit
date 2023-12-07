@@ -2,13 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using SharpGLTF.Schema2;
 using WolvenKit.RED4.Types;
+
 using Quat = System.Numerics.Quaternion;
 using Vec3 = System.Numerics.Vector3;
 
+using static WolvenKit.RED4.Types.Enums;
+using static WolvenKit.Modkit.RED4.Animation.Fun;
+using static WolvenKit.Modkit.RED4.Animation.Gltf;
+
 namespace WolvenKit.Modkit.RED4.Animation
 {
+
     internal class SIMD
     {
         public static void AddAnimationSIMD(ref ModelRoot model, animAnimationBufferSimd blob, string animName, Stream defferedBuffer, animAnimation animAnimDes, bool incRootMotion = true)
@@ -22,64 +29,105 @@ namespace WolvenKit.Modkit.RED4.Animation
             }
             var br = new BinaryReader(defferedBuffer);
 
-            var jointsCountAligned = (blob.NumJoints + 3U) & (~3U); // simd 4 alignment
-            var totalFloatCount = ((blob.NumFrames * jointsCountAligned * 3) + 3U) & (~3U);  // simd 4 alignment
-            var rotCompressedBuffSize = totalFloatCount * blob.QuantizationBits / 8U;
-            rotCompressedBuffSize = (rotCompressedBuffSize + 15U) & (~15U); // 16byte padding aligment
-            var mask = (1U << blob.QuantizationBits) - 1U;
+            var simdBlockWidth = 4; // 128 bits
+            var simdBlockPadding = (uint)simdBlockWidth - 1U;
+            var numJointsSimdAligned = (blob.NumJoints - blob.NumExtraJoints + simdBlockPadding) & (~simdBlockPadding);
 
-            var floatsPacked = new ushort[totalFloatCount];
-            for (uint i = 0; i < totalFloatCount; i++)
+            float frameTime = blob.Duration / (blob.NumFrames - 1);
+
+            var rotationsYup = new Quat[blob.NumFrames, blob.NumJoints];
+            var isQuantizedRotations = blob.QuantizationBits != 0;  // Apparently 0 means no quantization, logical.
+
+            if (isQuantizedRotations)
             {
-                var bitOff = i * blob.QuantizationBits;
-                var byteOff = bitOff / 8;
-                var shift = bitOff % 8;
-                defferedBuffer.Position = byteOff;
-                var val = br.ReadUInt32();
-                val >>= (int)shift;
-                floatsPacked[i] = Convert.ToUInt16(val & mask);
-            }
-            var floatsDecompressed = new float[totalFloatCount];
-            for (uint i = 0; i < totalFloatCount; i++)
-            {
-                floatsDecompressed[i] = (1f / mask * floatsPacked[i] * 2) - 1f;
-            }
-            var rotations = new Quat[blob.NumFrames, blob.NumJoints];
-            for (uint i = 0; i < blob.NumFrames; i++)
-            {
-                for (uint e = 0; e < blob.NumJoints; e += 4)
+                var totalFloatCount = ((blob.NumFrames * numJointsSimdAligned * 3) + 3U) & (~3U);  // simd 4 alignment
+                var rotCompressedBuffSize = totalFloatCount * blob.QuantizationBits / 8U;
+                rotCompressedBuffSize = (rotCompressedBuffSize + 15U) & (~15U); // 16byte padding aligment
+                var mask = (1U << blob.QuantizationBits) - 1U;
+
+                var floatsPacked = new ushort[totalFloatCount];
+                for (uint i = 0; i < totalFloatCount; i++)
                 {
-                    for (uint eye = 0; eye < 4; eye++)
-                    {
-                        var q = new Quat
-                        {
-                            X = floatsDecompressed[(i * jointsCountAligned * 3) + (e * 3) + eye],
-                            Y = floatsDecompressed[(i * jointsCountAligned * 3) + (e * 3) + 4 + eye],
-                            Z = floatsDecompressed[(i * jointsCountAligned * 3) + (e * 3) + 8 + eye]
-                        };
+                    var bitOff = i * blob.QuantizationBits;
+                    var byteOff = bitOff / 8;
+                    var shift = bitOff % 8;
+                    defferedBuffer.Position = byteOff;
+                    var val = br.ReadUInt32();
+                    val >>= (int)shift;
+                    floatsPacked[i] = Convert.ToUInt16(val & mask);
+                }
+                var floatsDecompressed = new float[totalFloatCount];
+                for (uint i = 0; i < totalFloatCount; i++)
+                {
+                    floatsDecompressed[i] = (1f / mask * floatsPacked[i] * 2) - 1f;
+                }
 
-                        var dotPr = (q.X * q.X) + (q.Y * q.Y) + (q.Z * q.Z);
-                        q.X *= Convert.ToSingle(Math.Sqrt(2f - dotPr));
-                        q.Y *= Convert.ToSingle(Math.Sqrt(2f - dotPr));
-                        q.Z *= Convert.ToSingle(Math.Sqrt(2f - dotPr));
-                        q.W = 1f - dotPr;
-                        q = Quat.Normalize(q);
-                        if (e + eye < blob.NumJoints)
+                for (uint i = 0; i < blob.NumFrames; i++)
+                {
+                    for (uint j = 0; j < numJointsSimdAligned; j += (uint)simdBlockWidth)
+                    {
+                        for (uint block = 0; block < simdBlockWidth; block++)
                         {
-                            rotations[i, e + eye] = new Quat(q.X, q.Z, -q.Y, q.W);
+                            var q = new Quat
+                            {
+                                X = floatsDecompressed[(i * numJointsSimdAligned * 3) + (j * 3) + block],
+                                Y = floatsDecompressed[(i * numJointsSimdAligned * 3) + (j * 3) + 4 + block],
+                                Z = floatsDecompressed[(i * numJointsSimdAligned * 3) + (j * 3) + 8 + block]
+                            };
+
+                            var dotPr = (q.X * q.X) + (q.Y * q.Y) + (q.Z * q.Z);
+                            q.X *= Convert.ToSingle(Math.Sqrt(2f - dotPr));
+                            q.Y *= Convert.ToSingle(Math.Sqrt(2f - dotPr));
+                            q.Z *= Convert.ToSingle(Math.Sqrt(2f - dotPr));
+                            q.W = 1f - dotPr;
+                            q = Quat.Normalize(q);
+                            if (j + block < blob.NumJoints)
+                            {
+
+                                rotationsYup[i, j + block] = new Quat(q.X, q.Z, -q.Y, q.W);
+                            }
+                        }
+                    }
+                }
+                defferedBuffer.Position = rotCompressedBuffSize;
+            }
+            else // non-compressed rotations
+            {
+                for (uint f = 0; f < blob.NumFrames; f++)
+                {
+                    for (uint j = 0; j < numJointsSimdAligned; j += (uint)simdBlockWidth)
+                    {
+                        var xs = Enumerable.Range(0, simdBlockWidth).Select(_ => br.ReadSingle()).ToArray();
+                        var ys = Enumerable.Range(0, simdBlockWidth).Select(_ => br.ReadSingle()).ToArray();
+                        var zs = Enumerable.Range(0, simdBlockWidth).Select(_ => br.ReadSingle()).ToArray();
+                        var ws = Enumerable.Range(0, simdBlockWidth).Select(_ => br.ReadSingle()).ToArray();
+
+                        for (uint band = 0; band < simdBlockWidth; band++)
+                        {
+                            var rot = new Quat
+                            {
+                                X = xs[band],
+                                Y = ys[band],
+                                Z = zs[band],
+                                W = ws[band]
+                            };
+
+                            rotationsYup[f, j + band] = RQuaternionYupRhs(rot);
                         }
                     }
                 }
             }
+
             var evalAlignedPositions = new float[blob.NumFrames * blob.NumTranslationsToEvalAlignedToSimd * 3];
-            defferedBuffer.Position = rotCompressedBuffSize;
             for (uint i = 0; i < blob.NumFrames * blob.NumTranslationsToEvalAlignedToSimd * 3; i++)
             {
                 evalAlignedPositions[i] = br.ReadSingle();
             }
-            var scales = new Vec3[blob.NumFrames, blob.NumJoints];
+
+            var scalesYup = new Vec3[blob.NumFrames, blob.NumJoints];
             if (blob.IsScaleConstant)
             {
+                // I guess these are aligned too?
                 var scalesRaw = new float[4];
                 for (uint i = 0; i < 4; i++)
                 {
@@ -93,16 +141,16 @@ namespace WolvenKit.Modkit.RED4.Animation
                         {
                             X = scalesRaw[0],
                             Y = scalesRaw[1],
-                            Z = scalesRaw[2]
+                            Z = scalesRaw[2],
                         };
-                        scales[i, e] = v;
+                        scalesYup[i, e] = SVectorYupRhs(v);
                     }
                 }
             }
             else
             {
-                var scalesRaw = new float[blob.NumFrames * jointsCountAligned * 3];
-                for (uint i = 0; i < blob.NumFrames * jointsCountAligned * 3; i++)
+                var scalesRaw = new float[blob.NumFrames * numJointsSimdAligned * 3];
+                for (uint i = 0; i < blob.NumFrames * numJointsSimdAligned * 3; i++)
                 {
                     scalesRaw[i] = br.ReadSingle();
                 }
@@ -114,25 +162,58 @@ namespace WolvenKit.Modkit.RED4.Animation
                         {
                             var v = new Vec3
                             {
-                                X = scalesRaw[(i * jointsCountAligned * 3) + (e * 3) + eye],
-                                Y = scalesRaw[(i * jointsCountAligned * 3) + (e * 3) + 4 + eye],
-                                Z = scalesRaw[(i * jointsCountAligned * 3) + (e * 3) + 8 + eye]
+                                X = scalesRaw[(i * numJointsSimdAligned * 3) + (e * 3) + eye],
+                                Y = scalesRaw[(i * numJointsSimdAligned * 3) + (e * 3) + 4 + eye], // just magnitude for scale, no flip
+                                Z = scalesRaw[(i * numJointsSimdAligned * 3) + (e * 3) + 8 + eye],
                             };
-                            scales[i, e + eye] = v;
+                            scalesYup[i, e + eye] = SVectorYupRhs(v);
                         }
                     }
                 }
             }
+
+            // Track data - need to review how to best map this more optimally
+            List<AnimConstTrackKeySerializable> constTrackKeys = new();
+            List<AnimTrackKeySerializable> trackKeys = new();
+
             if (blob.NumTracks > 0)
             {
-                if (!blob.IsTrackConstant)
+                // Uniform track for *every* frame and joint
+                if (blob.IsTrackConstant)
                 {
-                    uint asas = ((blob.NumTracks + 3U) & (~3U)) * blob.NumFrames * 4;
-                    defferedBuffer.Seek(asas, SeekOrigin.Current);
+                    var uniformValue = br.ReadSingle();
+
+                    for (uint i = 0; i < blob.NumTracks; i++)
+                    {
+                        constTrackKeys.Add(new AnimConstTrackKeySerializable
+                        {
+                            TrackIndex = Convert.ToUInt16(i),
+                            Time = 0,
+                            Value = uniformValue,
+                        });
+                    }
                 }
+                // This is possibly just not UNIFORM across tracks rather than non-const per track,
+                // so it's very likely at least some could be flattened to constTrackKeys
                 else
                 {
-                    defferedBuffer.Seek(4, SeekOrigin.Current);
+                    uint numTracks4byteAligned = (blob.NumTracks + 3U) & (~3U);
+                    uint paddingBytes = (numTracks4byteAligned - blob.NumTracks) * sizeof(float);
+
+                    // [frame0 = [track0, ...trackM, padding], ...frameN]
+                    for (uint f = 0; f < blob.NumFrames; f++)
+                    {
+                        for (uint i = 0; i < blob.NumTracks; i++)
+                        {
+                            trackKeys.Add(new AnimTrackKeySerializable
+                            {
+                                TrackIndex = Convert.ToUInt16(i),
+                                Time = frameTime * f,
+                                Value = br.ReadSingle()
+                            });
+                        }
+                        defferedBuffer.Seek(paddingBytes, SeekOrigin.Current);
+                    }
                 }
             }
 
@@ -151,6 +232,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                 copyIndices[e] = br.ReadInt16();
             }
 
+            // NB this also reads possible padding at the end of the buffer
             for (uint e = 0; e < blob.NumTranslationsToEvalAlignedToSimd; e++)
             {
                 evalIndices[e] = br.ReadInt16();
@@ -170,6 +252,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                             Z = evalAlignedPositions[(i * blob.NumTranslationsToEvalAlignedToSimd * 3) + (e * 3) + 8 + eye]
                         };
 
+                        // Skip padding, store real indices
                         if (evalIndices[e + eye] > -1)
                         {
                             positions[i, evalIndices[e + eye]] = new Vec3(v.X, v.Z, -v.Y);
@@ -189,7 +272,33 @@ namespace WolvenKit.Modkit.RED4.Animation
                 }
             }
 
-            var a = model.CreateAnimation(animName);
+            // Can switch to system Json when SharpGLTF support released (maybe in .31)
+            // Right now it's not possible to add an empty array to a JsonContent.
+            // Can work around that elsewhere but... just don't implement your own
+            // JSON parser, kids.
+            var animExtras = new AnimationExtrasForGltf(
+                CurrentSchema(),
+                animAnimDes.AnimationType.ToString(),
+                animAnimDes.FrameClamping,
+                animAnimDes.FrameClampingStartFrame,
+                animAnimDes.FrameClampingEndFrame,
+                blob.NumExtraJoints,
+                blob.NumExtraTracks,
+                constTrackKeys,
+                trackKeys,
+                blob.FallbackFrameIndices.Select(_ => (ushort)_).ToList(),
+                new AnimationOptimizationHints(
+                    true,
+                    blob.QuantizationBits == 0 ? AnimationEncoding.Uncompressed : AnimationEncoding.QuaternionAsFixed3x16bit
+                )
+            );
+
+            // All the data is gathered, stitch it together
+            //
+            // TODO: this duplicates `AnimSpline` logic, need
+            // to see about refactoring the commonalities.
+
+            var anim = model.CreateAnimation(animAnimDes.Name);
             var skin = model.LogicalSkins.FirstOrDefault(_ => _.Name is "Armature");
             if (skin is null)
             {
@@ -197,24 +306,40 @@ namespace WolvenKit.Modkit.RED4.Animation
                 return;
             }
 
-            for (var e = 0; e < blob.NumJoints - blob.NumExtraJoints; e++)
+            // -.-
+            anim.Extras = SharpGLTF.IO.JsonContent.Parse(JsonSerializer.Serialize(animExtras, SerializationOptions()));
+
+            var exportAdditiveToBind = animAnimDes.AnimationType != animAnimationType.Normal;
+
+            for (var j = 0; j < blob.NumJoints - blob.NumExtraJoints; j++)
             {
-                var node = skin.GetJoint(e).Joint;
+                var node = skin.GetJoint(j).Joint;
+                var localTransform = node.LocalTransform;
+
                 var pos = new Dictionary<float, Vec3>();
                 var rot = new Dictionary<float, Quat>();
                 var sca = new Dictionary<float, Vec3>();
-                var diff = blob.Duration / (blob.NumFrames - 1);
-                for (var i = 0; i < blob.NumFrames; i++)
-                {
-                    pos.Add(i * diff, positions[i, e]);
-                    rot.Add(i * diff, rotations[i, e]);
-                    sca.Add(i * diff, scales[i, e]);
-                }
-                a.CreateRotationChannel(node, rot);
-                a.CreateTranslationChannel(node, pos);
-                a.CreateScaleChannel(node, sca);
-            }
 
+                for (var f = 0; f < blob.NumFrames; f++)
+                {
+                    if (exportAdditiveToBind)
+                    {
+                        pos.Add(f * frameTime, localTransform.Translation + positions[f, j]); // Also yup but TODO to fix naming along the way
+                        rot.Add(f * frameTime, localTransform.Rotation * rotationsYup[f, j]);
+                        sca.Add(f * frameTime, localTransform.Scale * scalesYup[f, j]);
+                    }
+                    else
+                    {
+                        pos.Add(f * frameTime, positions[f, j]);
+                        rot.Add(f * frameTime, rotationsYup[f, j]);
+                        sca.Add(f * frameTime, scalesYup[f, j]);
+                    }
+                }
+
+                anim.CreateRotationChannel(node, rot);
+                anim.CreateTranslationChannel(node, pos);
+                anim.CreateScaleChannel(node, sca);
+            }
         }
     }
 }

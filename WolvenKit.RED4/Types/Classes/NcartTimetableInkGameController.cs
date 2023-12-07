@@ -29,6 +29,62 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(19)] 
+		[RED("trainImage")] 
+		public CWeakHandle<inkImageWidget> TrainImage
+		{
+			get => GetPropertyValue<CWeakHandle<inkImageWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkImageWidget>>(value);
+		}
+
+		[Ordinal(20)] 
+		[RED("cachedLine")] 
+		public CInt32 CachedLine
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(21)] 
+		[RED("lineAIcon")] 
+		public inkImageWidgetReference LineAIcon
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(22)] 
+		[RED("lineBIcon")] 
+		public inkImageWidgetReference LineBIcon
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(23)] 
+		[RED("lineCIcon")] 
+		public inkImageWidgetReference LineCIcon
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(24)] 
+		[RED("lineDIcon")] 
+		public inkImageWidgetReference LineDIcon
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(25)] 
+		[RED("lineEIcon")] 
+		public inkImageWidgetReference LineEIcon
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(26)] 
 		[RED("onGlitchingStateChangedListener")] 
 		public CHandle<redCallbackObject> OnGlitchingStateChangedListener
 		{
@@ -36,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(27)] 
 		[RED("onTimeToDepartChangedListener")] 
 		public CHandle<redCallbackObject> OnTimeToDepartChangedListener
 		{
@@ -44,8 +100,30 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
+		[Ordinal(28)] 
+		[RED("onCurrentLineNumberChangedListener")] 
+		public CHandle<redCallbackObject> OnCurrentLineNumberChangedListener
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(29)] 
+		[RED("animProxy")] 
+		public CHandle<inkanimProxy> AnimProxy
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
 		public NcartTimetableInkGameController()
 		{
+			LineAIcon = new inkImageWidgetReference();
+			LineBIcon = new inkImageWidgetReference();
+			LineCIcon = new inkImageWidgetReference();
+			LineDIcon = new inkImageWidgetReference();
+			LineEIcon = new inkImageWidgetReference();
+
 			PostConstruct();
 		}
 

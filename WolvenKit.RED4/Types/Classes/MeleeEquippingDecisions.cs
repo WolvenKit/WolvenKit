@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class MeleeEquippingDecisions : MeleeIdleDecisions
 	{
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("hasEquipAttack")] 
 		public CBool HasEquipAttack
 		{

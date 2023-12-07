@@ -105,33 +105,39 @@ public partial class AppScriptService
             loadedFiles.Add(Path.GetFileName(scriptFilePath));
         }
 
-        foreach (var scriptFilePath in Directory.GetFiles(@"Resources\Scripts", "ui_*.wscript"))
+        DirectoryInfo resourceDir = new(@"Resources\Scripts");
+        if (resourceDir.Exists)
         {
-            if (loadedFiles.Contains(Path.GetFileName(scriptFilePath)))
+            foreach (var fileInfo in resourceDir.GetFiles("ui_*.wscript"))
             {
-                continue;
-            }
+                var scriptFilePath = fileInfo.FullName;
+                if (loadedFiles.Contains(Path.GetFileName(scriptFilePath)))
+                {
+                    continue;
+                }
 
-            if (_settingsManager.ScriptStatus.TryGetValue(scriptFilePath, out var enabled) && !enabled)
-            {
-                continue;
-            }
+                if (_settingsManager.ScriptStatus.TryGetValue(scriptFilePath, out var enabled) && !enabled)
+                {
+                    continue;
+                }
 
-            var code = File.ReadAllText(scriptFilePath);
+                var code = File.ReadAllText(scriptFilePath);
 
-            try
-            {
-                _uiEngine.Execute(new DocumentInfo { Category = ModuleCategory.Standard }, code);
-            }
-            catch (ScriptEngineException ex1)
-            {
-                _loggerService?.Error($"{ex1.ErrorDetails}\r\nin {scriptFilePath}");
-            }
-            catch (Exception ex2)
-            {
-                _loggerService?.Error(ex2);
+                try
+                {
+                    _uiEngine.Execute(new DocumentInfo { Category = ModuleCategory.Standard }, code);
+                }
+                catch (ScriptEngineException ex1)
+                {
+                    _loggerService?.Error($"{ex1.ErrorDetails}\r\nin {scriptFilePath}");
+                }
+                catch (Exception ex2)
+                {
+                    _loggerService?.Error(ex2);
+                }
             }
         }
+        
 
         foreach (var (name, scriptableControl) in _uiControls)
         {

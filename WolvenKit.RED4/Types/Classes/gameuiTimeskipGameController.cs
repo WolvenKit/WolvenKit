@@ -435,7 +435,7 @@ namespace WolvenKit.RED4.Types
 			HoursToSkip = 1;
 			AxisInputCache = new Vector2();
 			Radius = 310.000000F;
-			AxisInputThreshold = 0.000500F;
+			AxisInputThreshold = 0.100000F;
 			AnimationDurationMin = 3.000000F;
 			AnimationDurationMax = 6.000000F;
 

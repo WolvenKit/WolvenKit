@@ -221,6 +221,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(29)] 
+		[RED("expansionErrorToken")] 
+		public CHandle<inkGameNotificationToken> ExpansionErrorToken
+		{
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
+		}
+
+		[Ordinal(30)] 
 		[RED("patchNotesToken")] 
 		public CHandle<inkGameNotificationToken> PatchNotesToken
 		{
@@ -228,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("expansionStateToken")] 
 		public CHandle<inkGameNotificationToken> ExpansionStateToken
 		{

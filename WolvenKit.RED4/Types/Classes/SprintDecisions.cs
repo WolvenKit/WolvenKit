@@ -20,6 +20,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(5)] 
+		[RED("dodgeForwardPressed")] 
+		public CBool DodgeForwardPressed
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public SprintDecisions()
 		{
 			PostConstruct();

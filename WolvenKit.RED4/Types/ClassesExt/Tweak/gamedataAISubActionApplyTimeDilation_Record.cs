@@ -3,6 +3,14 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gamedataAISubActionApplyTimeDilation_Record
 	{
+		[RED("condition")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID Condition
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
 		[RED("duration")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat Duration
@@ -49,6 +57,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
+		}
+		
+		[RED("useRealTime")]
+		[REDProperty(IsIgnored = true)]
+		public CBool UseRealTime
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

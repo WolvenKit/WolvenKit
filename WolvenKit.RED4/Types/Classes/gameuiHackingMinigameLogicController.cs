@@ -45,6 +45,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(6)] 
+		[RED("timerContainer")] 
+		public inkWidgetReference TimerContainer
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("timerPlaceholder")] 
+		public inkWidgetReference TimerPlaceholder
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(8)] 
 		[RED("accessInformationText")] 
 		public inkTextWidgetReference AccessInformationText
 		{
@@ -52,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(9)] 
 		[RED("activatedTraps")] 
 		public inkCompoundWidgetReference ActivatedTraps
 		{
@@ -60,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(10)] 
 		[RED("gridVerticalHiglight")] 
 		public inkWidgetReference GridVerticalHiglight
 		{
@@ -68,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(11)] 
 		[RED("gridHorizontalHiglight")] 
 		public inkWidgetReference GridHorizontalHiglight
 		{
@@ -76,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(12)] 
 		[RED("programsColumnHiglight")] 
 		public inkWidgetReference ProgramsColumnHiglight
 		{
@@ -84,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(13)] 
 		[RED("successScreenWidget")] 
 		public inkCompoundWidgetReference SuccessScreenWidget
 		{
@@ -92,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(14)] 
 		[RED("failScreenWidget")] 
 		public inkCompoundWidgetReference FailScreenWidget
 		{
@@ -100,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(15)] 
 		[RED("successExitTerminalText")] 
 		public inkTextWidgetReference SuccessExitTerminalText
 		{
@@ -108,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(16)] 
 		[RED("failedExitTerminalText")] 
 		public inkTextWidgetReference FailedExitTerminalText
 		{
@@ -116,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(17)] 
 		[RED("successExitButton")] 
 		public inkWidgetReference SuccessExitButton
 		{
@@ -124,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(18)] 
 		[RED("failureExitButton")] 
 		public inkWidgetReference FailureExitButton
 		{
@@ -132,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(19)] 
 		[RED("resetButton")] 
 		public inkWidgetReference ResetButton
 		{
@@ -140,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("introAnimName")] 
 		public CName IntroAnimName
 		{
@@ -148,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(21)] 
 		[RED("loopAnimName")] 
 		public CName LoopAnimName
 		{
@@ -156,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(22)] 
 		[RED("cursorAnimName")] 
 		public CName CursorAnimName
 		{
@@ -164,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(23)] 
 		[RED("higlightAnimName")] 
 		public CName HiglightAnimName
 		{
@@ -172,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(24)] 
 		[RED("gameWonAnimName")] 
 		public CName GameWonAnimName
 		{
@@ -180,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(25)] 
 		[RED("gameLostAnimName")] 
 		public CName GameLostAnimName
 		{
@@ -188,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(26)] 
 		[RED("terminalShutdownAnimName")] 
 		public CName TerminalShutdownAnimName
 		{
@@ -196,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(27)] 
 		[RED("trapActivatedAnimName")] 
 		public CName TrapActivatedAnimName
 		{
@@ -204,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(28)] 
 		[RED("programSucceedAnimName")] 
 		public CName ProgramSucceedAnimName
 		{
@@ -212,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(29)] 
 		[RED("programFailedAnimName")] 
 		public CName ProgramFailedAnimName
 		{
@@ -220,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(30)] 
 		[RED("programResetFromFailedAnimName")] 
 		public CName ProgramResetFromFailedAnimName
 		{
@@ -228,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(31)] 
 		[RED("gridCellHoverAnimName")] 
 		public CName GridCellHoverAnimName
 		{
@@ -236,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(32)] 
 		[RED("gridCellClickFlashAnimName")] 
 		public CName GridCellClickFlashAnimName
 		{
@@ -244,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(33)] 
 		[RED("bufferCellHoverAnimName")] 
 		public CName BufferCellHoverAnimName
 		{
@@ -252,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(34)] 
 		[RED("bufferCellClickFlashAnimName")] 
 		public CName BufferCellClickFlashAnimName
 		{
@@ -260,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(35)] 
 		[RED("programCellClickFlashAnimName")] 
 		public CName ProgramCellClickFlashAnimName
 		{
@@ -268,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(36)] 
 		[RED("activatedTrapIconLibraryName")] 
 		public CName ActivatedTrapIconLibraryName
 		{
@@ -276,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(37)] 
 		[RED("bufferCellLibraryName")] 
 		public CName BufferCellLibraryName
 		{
@@ -284,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(38)] 
 		[RED("programCellLibraryName")] 
 		public CName ProgramCellLibraryName
 		{
@@ -292,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(39)] 
 		[RED("gridCellLibraryName")] 
 		public CName GridCellLibraryName
 		{
@@ -300,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(40)] 
 		[RED("programEntryLibraryName")] 
 		public CName ProgramEntryLibraryName
 		{
@@ -308,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(41)] 
 		[RED("trapIconsContainerRelativePath")] 
 		public CName TrapIconsContainerRelativePath
 		{
@@ -316,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(42)] 
 		[RED("bufferCellTextWidgetRelativePath")] 
 		public CName BufferCellTextWidgetRelativePath
 		{
@@ -324,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(43)] 
 		[RED("programCellTextWidgetRelativePath")] 
 		public CName ProgramCellTextWidgetRelativePath
 		{
@@ -332,7 +348,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(44)] 
 		[RED("gridCellTrapIconWidgetRelativePath")] 
 		public CName GridCellTrapIconWidgetRelativePath
 		{
@@ -340,7 +356,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(45)] 
 		[RED("gridCellTrapIconContainerRelativePath")] 
 		public CName GridCellTrapIconContainerRelativePath
 		{
@@ -348,7 +364,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(46)] 
 		[RED("gridCellTextWidgetRelativePath")] 
 		public CName GridCellTextWidgetRelativePath
 		{
@@ -356,7 +372,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(47)] 
 		[RED("gridCellProgramHighlightRelativePath")] 
 		public CName GridCellProgramHighlightRelativePath
 		{
@@ -364,7 +380,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(48)] 
 		[RED("programEntryTextWidgetRelativePath")] 
 		public CName ProgramEntryTextWidgetRelativePath
 		{
@@ -372,7 +388,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(49)] 
 		[RED("programEntryNoteWidgetRelativePath")] 
 		public CName ProgramEntryNoteWidgetRelativePath
 		{
@@ -380,7 +396,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(50)] 
 		[RED("programEntryInstructionContainerRelativePath")] 
 		public CName ProgramEntryInstructionContainerRelativePath
 		{
@@ -388,7 +404,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(51)] 
 		[RED("programEntryIconPath")] 
 		public CName ProgramEntryIconPath
 		{
@@ -396,7 +412,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(52)] 
 		[RED("cursorWidgetRelativePath")] 
 		public CName CursorWidgetRelativePath
 		{
@@ -404,7 +420,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(53)] 
 		[RED("gridCellDefaultStateName")] 
 		public CName GridCellDefaultStateName
 		{
@@ -412,7 +428,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(54)] 
 		[RED("gridCellHoveredStateName")] 
 		public CName GridCellHoveredStateName
 		{
@@ -420,7 +436,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(55)] 
 		[RED("gridCellSelectedStateName")] 
 		public CName GridCellSelectedStateName
 		{
@@ -428,7 +444,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(56)] 
 		[RED("gridCellDisabledStateName")] 
 		public CName GridCellDisabledStateName
 		{
@@ -436,7 +452,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(57)] 
 		[RED("programSucceedStateName")] 
 		public CName ProgramSucceedStateName
 		{
@@ -444,7 +460,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(58)] 
 		[RED("programFailedStateName")] 
 		public CName ProgramFailedStateName
 		{
@@ -452,7 +468,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(59)] 
 		[RED("programCellReadyStateName")] 
 		public CName ProgramCellReadyStateName
 		{
@@ -460,7 +476,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(60)] 
 		[RED("programCellHighlightStateName")] 
 		public CName ProgramCellHighlightStateName
 		{
@@ -468,7 +484,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(61)] 
 		[RED("mainHiglightBarStateName")] 
 		public CName MainHiglightBarStateName
 		{
@@ -476,7 +492,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(62)] 
 		[RED("secondaryHiglightBarStateName")] 
 		public CName SecondaryHiglightBarStateName
 		{
@@ -484,7 +500,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(63)] 
 		[RED("inactiveHiglightBarStateName")] 
 		public CName InactiveHiglightBarStateName
 		{
@@ -492,7 +508,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(64)] 
 		[RED("gridCellDisabledSymbol")] 
 		public CString GridCellDisabledSymbol
 		{
@@ -507,6 +523,8 @@ namespace WolvenKit.RED4.Types
 			Programs = new inkCompoundWidgetReference();
 			Timer = new inkTextWidgetReference();
 			TimerProgressBar = new inkWidgetReference();
+			TimerContainer = new inkWidgetReference();
+			TimerPlaceholder = new inkWidgetReference();
 			AccessInformationText = new inkTextWidgetReference();
 			ActivatedTraps = new inkCompoundWidgetReference();
 			GridVerticalHiglight = new inkWidgetReference();

@@ -84,6 +84,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
+		[Ordinal(11)] 
+		[RED("isCrafting")] 
+		public CBool IsCrafting
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public NewItemTooltipAttachmentGroupController()
 		{
 			IndicatorContainer = new inkWidgetReference();

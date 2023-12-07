@@ -33,6 +33,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Config", "Config", "{F1348669-20CA-400C-9726-A9645C1FEF50}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		Directory.Build.props = Directory.Build.props
 		Directory.Packages.props = Directory.Packages.props
 	EndProjectSection
 EndProject
@@ -124,6 +125,7 @@ Global
 		{9BECAA2C-1F77-4FF1-843A-BF6FB937ADB1}.Debug|x64.Build.0 = Debug|x64
 		{9BECAA2C-1F77-4FF1-843A-BF6FB937ADB1}.Profile|x64.ActiveCfg = Debug|x64
 		{9BECAA2C-1F77-4FF1-843A-BF6FB937ADB1}.Release|x64.ActiveCfg = Release|x64
+		{9BECAA2C-1F77-4FF1-843A-BF6FB937ADB1}.Release|x64.Build.0 = Release|x64
 		{917E59E4-8211-4F20-8AA8-D640D3636F7A}.Debug|x64.ActiveCfg = Debug|x64
 		{917E59E4-8211-4F20-8AA8-D640D3636F7A}.Debug|x64.Build.0 = Debug|x64
 		{917E59E4-8211-4F20-8AA8-D640D3636F7A}.Profile|x64.ActiveCfg = Debug|x64

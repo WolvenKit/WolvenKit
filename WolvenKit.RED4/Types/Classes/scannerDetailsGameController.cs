@@ -141,6 +141,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(26)] 
+		[RED("uiSystemIsInMenuCallbackID")] 
+		public CHandle<redCallbackObject> UiSystemIsInMenuCallbackID
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(27)] 
 		[RED("introAnimProxy")] 
 		public CHandle<inkanimProxy> IntroAnimProxy
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("outroAnimProxy")] 
 		public CHandle<inkanimProxy> OutroAnimProxy
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("scannerToggleTabAnimProxy")] 
 		public CHandle<inkanimProxy> ScannerToggleTabAnimProxy
 		{

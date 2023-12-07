@@ -53,6 +53,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(9)] 
+		[RED("s_saturationGroup")] 
+		public CName S_saturationGroup
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(10)] 
 		[RED("s_calibrationImageDay")] 
 		public CName S_calibrationImageDay
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("s_calibrationImageNight")] 
 		public CName S_calibrationImageNight
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("s_currentCalibrationImage")] 
 		public CName S_currentCalibrationImage
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("paperWhiteOptionSelector")] 
 		public inkCompoundWidgetReference PaperWhiteOptionSelector
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("maxBrightnessOptionSelector")] 
 		public inkCompoundWidgetReference MaxBrightnessOptionSelector
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("toneMappingOptionSelector")] 
 		public inkCompoundWidgetReference ToneMappingOptionSelector
 		{
@@ -100,7 +108,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
+		[RED("saturationOptionSelector")] 
+		public inkCompoundWidgetReference SaturationOptionSelector
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(17)] 
 		[RED("targetImageWidget")] 
 		public inkWidgetReference TargetImageWidget
 		{
@@ -108,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(18)] 
 		[RED("menuEventDispatcher")] 
 		public CWeakHandle<inkMenuEventDispatcher> MenuEventDispatcher
 		{
@@ -116,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(19)] 
 		[RED("settings")] 
 		public CHandle<userSettingsUserSettings> Settings
 		{
@@ -124,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<userSettingsUserSettings>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("settingsListener")] 
 		public CHandle<HDRSettingsVarListener> SettingsListener
 		{
@@ -132,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<HDRSettingsVarListener>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(21)] 
 		[RED("SettingsElements")] 
 		public CArray<CWeakHandle<inkSettingsSelectorController>> SettingsElements
 		{
@@ -140,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<inkSettingsSelectorController>>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(22)] 
 		[RED("isPreGame")] 
 		public CBool IsPreGame
 		{
@@ -148,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(23)] 
 		[RED("calibrationImagesCycleAnimDef")] 
 		public CHandle<inkanimDefinition> CalibrationImagesCycleAnimDef
 		{
@@ -156,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(24)] 
 		[RED("calibrationImagesCycleProxy")] 
 		public CHandle<inkanimProxy> CalibrationImagesCycleProxy
 		{
@@ -170,6 +186,7 @@ namespace WolvenKit.RED4.Types
 			PaperWhiteOptionSelector = new inkCompoundWidgetReference();
 			MaxBrightnessOptionSelector = new inkCompoundWidgetReference();
 			ToneMappingOptionSelector = new inkCompoundWidgetReference();
+			SaturationOptionSelector = new inkCompoundWidgetReference();
 			TargetImageWidget = new inkWidgetReference();
 			SettingsElements = new();
 

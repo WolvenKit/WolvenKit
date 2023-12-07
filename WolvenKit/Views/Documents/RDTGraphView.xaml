@@ -94,7 +94,6 @@
             <editors:AutomaticNodifyEditor.ConnectionTemplate>
                 <DataTemplate>
                     <nodify:Connection
-                        OffsetMode="Edge"
                         Source="{Binding Source.Anchor}"
                         SourceOffset="7,0"
                         Target="{Binding Destination.Anchor}"

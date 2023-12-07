@@ -125,6 +125,46 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(17)] 
+		[RED("settings")] 
+		public CHandle<userSettingsUserSettings> Settings
+		{
+			get => GetPropertyValue<CHandle<userSettingsUserSettings>>();
+			set => SetPropertyValue<CHandle<userSettingsUserSettings>>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("settingsListener")] 
+		public CHandle<EspionageTooltipSettingsListener> SettingsListener
+		{
+			get => GetPropertyValue<CHandle<EspionageTooltipSettingsListener>>();
+			set => SetPropertyValue<CHandle<EspionageTooltipSettingsListener>>(value);
+		}
+
+		[Ordinal(19)] 
+		[RED("groupPath")] 
+		public CName GroupPath
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(20)] 
+		[RED("bigFontEnabled")] 
+		public CBool BigFontEnabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(21)] 
+		[RED("wrapper")] 
+		public inkWidgetReference Wrapper
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(22)] 
 		[RED("c_swipeLeftOut")] 
 		public CName C_swipeLeftOut
 		{
@@ -132,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(23)] 
 		[RED("c_swipeLeftIn")] 
 		public CName C_swipeLeftIn
 		{
@@ -140,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(24)] 
 		[RED("c_swipeRightOut")] 
 		public CName C_swipeRightOut
 		{
@@ -148,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(25)] 
 		[RED("c_swipeRightIn")] 
 		public CName C_swipeRightIn
 		{
@@ -169,6 +209,8 @@ namespace WolvenKit.RED4.Types
 			InputHints = new inkWidgetReference();
 			BuyHint = new inkWidgetReference();
 			SellHint = new inkWidgetReference();
+			GroupPath = "/accessibility/interface";
+			Wrapper = new inkWidgetReference();
 			C_swipeLeftOut = "espionage_central_swipe_left_out";
 			C_swipeLeftIn = "espionage_central_swipe_left_in";
 			C_swipeRightOut = "espionage_central_swipe_right_out";

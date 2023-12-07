@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.Types
 
 		public CrosshairGameControllerPersistentDot()
 		{
-			GroupPath = "/interface";
+			GroupPath = "/accessibility/interface";
 
 			PostConstruct();
 		}

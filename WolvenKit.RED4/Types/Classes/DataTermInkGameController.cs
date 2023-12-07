@@ -44,6 +44,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
+		[Ordinal(21)] 
+		[RED("onToggleHologramListener")] 
+		public CHandle<redCallbackObject> OnToggleHologramListener
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
 		public DataTermInkGameController()
 		{
 			PostConstruct();

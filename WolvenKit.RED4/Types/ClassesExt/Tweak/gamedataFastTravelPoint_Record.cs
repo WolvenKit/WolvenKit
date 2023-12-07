@@ -42,5 +42,13 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
+		
+		[RED("SubwayStation")]
+		[REDProperty(IsIgnored = true)]
+		public CBool SubwayStation
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
 	}
 }

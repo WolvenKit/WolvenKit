@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class VisualDisplayController : InventoryItemDisplayController
 	{
-		[Ordinal(116)] 
+		[Ordinal(120)] 
 		[RED("equipped")] 
 		public CBool Equipped
 		{

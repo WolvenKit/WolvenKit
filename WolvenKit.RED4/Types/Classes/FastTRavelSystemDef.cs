@@ -44,6 +44,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
+		[Ordinal(5)] 
+		[RED("LastSubwayGateUsed")] 
+		public gamebbScriptID_EntityID LastSubwayGateUsed
+		{
+			get => GetPropertyValue<gamebbScriptID_EntityID>();
+			set => SetPropertyValue<gamebbScriptID_EntityID>(value);
+		}
+
 		public FastTRavelSystemDef()
 		{
 			DestinationPoint = new gamebbScriptID_Variant();
@@ -51,6 +59,7 @@ namespace WolvenKit.RED4.Types
 			FastTravelStarted = new gamebbScriptID_Bool();
 			FastTravelLoadingScreenStarted = new gamebbScriptID_Bool();
 			FastTravelLoadingScreenFinished = new gamebbScriptID_Bool();
+			LastSubwayGateUsed = new gamebbScriptID_EntityID();
 
 			PostConstruct();
 		}

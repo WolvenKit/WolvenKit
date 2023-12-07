@@ -246,7 +246,7 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
         }
 
         using var ddsstream = new MemoryStream();
-        if (!ModTools.ConvertRedClassToDdsStream(xbm, ddsstream, out _, out var decompressedFormat))
+        if (!ModTools.ConvertRedClassToDdsStream(xbm, ddsstream, out _, out var decompressedFormat, true))
         {
             return;
         }
@@ -267,7 +267,7 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
                 var width = Math.Round(part.ClippingRectInUVCoords.Right * image.Metadata.Width) - x;
                 var height = Math.Round(part.ClippingRectInUVCoords.Bottom * image.Metadata.Height) - y;
 
-                var partImage = await Task.Run(() => ImageDecoder.CreateBitmapImage(image.Crop((int)x, (int)y, (int)width, (int)height)));
+                var partImage = await Task.Run(() => ImageDecoder.CreateBitmapImage(image.Crop((int)x, (int)y, (int)width, (int)height), false));
 
                 InkCache.Resources.Add(key, partImage);
             }

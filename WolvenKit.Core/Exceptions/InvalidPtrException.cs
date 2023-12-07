@@ -19,10 +19,6 @@ namespace WolvenKit.Interfaces.Core
         {
         }
 
-        protected InvalidPtrException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
-
         #endregion Constructors
     }
 }

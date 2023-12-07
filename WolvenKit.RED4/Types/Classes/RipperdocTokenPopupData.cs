@@ -84,6 +84,30 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameItemData>>(value);
 		}
 
+		[Ordinal(17)] 
+		[RED("option1SideItemData")] 
+		public CHandle<gameItemData> Option1SideItemData
+		{
+			get => GetPropertyValue<CHandle<gameItemData>>();
+			set => SetPropertyValue<CHandle<gameItemData>>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("option2SideItemData")] 
+		public CHandle<gameItemData> Option2SideItemData
+		{
+			get => GetPropertyValue<CHandle<gameItemData>>();
+			set => SetPropertyValue<CHandle<gameItemData>>(value);
+		}
+
+		[Ordinal(19)] 
+		[RED("option3SideItemData")] 
+		public CHandle<gameItemData> Option3SideItemData
+		{
+			get => GetPropertyValue<CHandle<gameItemData>>();
+			set => SetPropertyValue<CHandle<gameItemData>>(value);
+		}
+
 		public RipperdocTokenPopupData()
 		{
 			CostData = new CyberwareUpgradeCostData();

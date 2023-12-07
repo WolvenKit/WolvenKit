@@ -36,8 +36,42 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(4)] 
+		[RED("sfxThreshold")] 
+		public CFloat SfxThreshold
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("sfxDelay")] 
+		public CFloat SfxDelay
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(6)] 
+		[RED("sfxName")] 
+		public CName SfxName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("delayID")] 
+		public gameDelayID DelayID
+		{
+			get => GetPropertyValue<gameDelayID>();
+			set => SetPropertyValue<gameDelayID>(value);
+		}
+
 		public StaminaListener()
 		{
+			DelayID = new gameDelayID();
+
 			PostConstruct();
 		}
 

@@ -141,6 +141,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(18)] 
+		[RED("conversationHash")] 
+		public CInt32 ConversationHash
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(19)] 
+		[RED("contactHash")] 
+		public CInt32 ContactHash
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(20)] 
 		[RED("typingAnimProxy")] 
 		public CHandle<inkanimProxy> TypingAnimProxy
 		{
@@ -148,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(21)] 
 		[RED("delayTypingAnimProxy")] 
 		public CHandle<inkanimProxy> DelayTypingAnimProxy
 		{
@@ -156,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(22)] 
 		[RED("singleThreadMode")] 
 		public CBool SingleThreadMode
 		{
@@ -164,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(23)] 
 		[RED("hasFocus")] 
 		public CBool HasFocus
 		{
@@ -172,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(24)] 
 		[RED("audioSystem")] 
 		public CWeakHandle<gameGameAudioSystem> AudioSystem
 		{
@@ -180,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameGameAudioSystem>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(25)] 
 		[RED("minimumTypingDelay")] 
 		public CFloat MinimumTypingDelay
 		{
@@ -188,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(26)] 
 		[RED("breakingTypingAnimProxy")] 
 		public CHandle<inkanimProxy> BreakingTypingAnimProxy
 		{

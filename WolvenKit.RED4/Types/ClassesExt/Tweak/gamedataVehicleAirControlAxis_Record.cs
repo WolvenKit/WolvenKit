@@ -35,6 +35,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
+		[RED("angleDampFactor")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat AngleDampFactor
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
 		[RED("brakeMultiplierWhenNoInput")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat BrakeMultiplierWhenNoInput
@@ -49,6 +57,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
+		}
+		
+		[RED("inputDampFactor")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat InputDampFactor
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 		
 		[RED("maxAngleCompensation")]
@@ -67,17 +83,17 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
-		[RED("maxVelocityCompensation")]
+		[RED("maxVelocity")]
 		[REDProperty(IsIgnored = true)]
-		public CFloat MaxVelocityCompensation
+		public CFloat MaxVelocity
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
-		[RED("multiplier")]
+		[RED("maxVelocityCompensation")]
 		[REDProperty(IsIgnored = true)]
-		public CFloat Multiplier
+		public CFloat MaxVelocityCompensation
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
@@ -89,6 +105,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
+		}
+		
+		[RED("velocityDampFactor")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat VelocityDampFactor
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 		
 		[RED("velocityDampingFactorMax")]

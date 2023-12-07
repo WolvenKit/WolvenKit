@@ -389,7 +389,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             // create resource
-            var bitmap = image.SaveToXBM(args);
+            var bitmap = image.SaveToXBM(args, true);
 
             var outpath = new RedRelativePath(rawRelative)
                 .ChangeBaseDir(outDir)

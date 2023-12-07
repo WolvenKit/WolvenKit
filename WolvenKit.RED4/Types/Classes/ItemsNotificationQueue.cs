@@ -108,6 +108,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamePSMCombat>>(value);
 		}
 
+		[Ordinal(17)] 
+		[RED("delaySystem")] 
+		public CHandle<gameDelaySystem> DelaySystem
+		{
+			get => GetPropertyValue<CHandle<gameDelaySystem>>();
+			set => SetPropertyValue<CHandle<gameDelaySystem>>(value);
+		}
+
 		public ItemsNotificationQueue()
 		{
 			ShowDuration = 6.000000F;

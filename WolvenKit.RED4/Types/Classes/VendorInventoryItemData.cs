@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class VendorInventoryItemData : WrappedInventoryItemData
 	{
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("IsVendorItem")] 
 		public CBool IsVendorItem
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("IsEnoughMoney")] 
 		public CBool IsEnoughMoney
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("IsBuybackStack")] 
 		public CBool IsBuybackStack
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("IsDLCAddedActiveItem")] 
 		public CBool IsDLCAddedActiveItem
 		{

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class Crosshair_Melee_Misc : gameuiCrosshairBaseGameController
 	{
-		[Ordinal(27)] 
+		[Ordinal(29)] 
 		[RED("targetColorChange")] 
 		public inkWidgetReference TargetColorChange
 		{

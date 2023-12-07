@@ -116,6 +116,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
+		[Ordinal(14)] 
+		[RED("IsQuestNotificationUp")] 
+		public gamebbScriptID_Bool IsQuestNotificationUp
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
 		public UIInteractionsDef()
 		{
 			InteractionChoiceHub = new gamebbScriptID_Variant();
@@ -132,6 +140,7 @@ namespace WolvenKit.RED4.Types
 			LastAttemptedChoice = new gamebbScriptID_Variant();
 			LookAtTargetVisualizerID = new gamebbScriptID_Int32();
 			HasScrollableInteraction = new gamebbScriptID_Bool();
+			IsQuestNotificationUp = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

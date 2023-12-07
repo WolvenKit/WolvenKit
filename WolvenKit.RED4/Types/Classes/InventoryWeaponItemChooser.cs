@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class InventoryWeaponItemChooser : InventoryGenericItemChooser
 	{
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("scopeRootContainer")] 
 		public inkCompoundWidgetReference ScopeRootContainer
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("magazineRootContainer")] 
 		public inkCompoundWidgetReference MagazineRootContainer
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("silencerRootContainer")] 
 		public inkCompoundWidgetReference SilencerRootContainer
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("scopeContainer")] 
 		public inkCompoundWidgetReference ScopeContainer
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("magazineContainer")] 
 		public inkCompoundWidgetReference MagazineContainer
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("silencerContainer")] 
 		public inkCompoundWidgetReference SilencerContainer
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("attachmentsLabel")] 
 		public inkTextWidgetReference AttachmentsLabel
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("attachmentsContainer")] 
 		public inkWidgetReference AttachmentsContainer
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("softwareModsLabel")] 
 		public inkTextWidgetReference SoftwareModsLabel
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("softwareModsPush")] 
 		public inkWidgetReference SoftwareModsPush
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("softwareModsContainer")] 
 		public inkWidgetReference SoftwareModsContainer
 		{

@@ -5,6 +5,14 @@ namespace WolvenKit.RED4.Types
 	public partial class QuestTrackerGameController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
+		[RED("questTrackerContainer")] 
+		public inkWidgetReference QuestTrackerContainer
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(10)] 
 		[RED("QuestTitle")] 
 		public inkTextWidgetReference QuestTitle
 		{
@@ -12,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("ObjectiveContainer")] 
 		public inkCompoundWidgetReference ObjectiveContainer
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("TrackedMappinTitle")] 
 		public inkTextWidgetReference TrackedMappinTitle
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("TrackedMappinContainer")] 
 		public inkWidgetReference TrackedMappinContainer
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("TrackedMappinObjectiveContainer")] 
 		public inkCompoundWidgetReference TrackedMappinObjectiveContainer
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("player")] 
 		public CWeakHandle<gameObject> Player
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("mappinSystem")] 
 		public CWeakHandle<gamemappinsMappinSystem> MappinSystem
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gamemappinsMappinSystem>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("journalManager")] 
 		public CWeakHandle<gameJournalManager> JournalManager
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameJournalManager>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("bufferedEntry")] 
 		public CWeakHandle<gameJournalQuestObjective> BufferedEntry
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameJournalQuestObjective>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("bufferedPhase")] 
 		public CWeakHandle<gameJournalQuestPhase> BufferedPhase
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameJournalQuestPhase>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("bufferedQuest")] 
 		public CWeakHandle<gameJournalQuest> BufferedQuest
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameJournalQuest>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("root")] 
 		public CWeakHandle<inkWidget> Root
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("blackboard")] 
 		public CWeakHandle<gameIBlackboard> Blackboard
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("uiSystemBB")] 
 		public CHandle<UI_SystemDef> UiSystemBB
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_SystemDef>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("uiSystemId")] 
 		public CHandle<redCallbackObject> UiSystemId
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("trackedMappinId")] 
 		public CHandle<redCallbackObject> TrackedMappinId
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("trackedMappinSpawnRequest")] 
 		public CWeakHandle<inkAsyncSpawnRequest> TrackedMappinSpawnRequest
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkAsyncSpawnRequest>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("currentMappin")] 
 		public CWeakHandle<gamemappinsIMappin> CurrentMappin
 		{
@@ -150,6 +158,7 @@ namespace WolvenKit.RED4.Types
 
 		public QuestTrackerGameController()
 		{
+			QuestTrackerContainer = new inkWidgetReference();
 			QuestTitle = new inkTextWidgetReference();
 			ObjectiveContainer = new inkCompoundWidgetReference();
 			TrackedMappinTitle = new inkTextWidgetReference();

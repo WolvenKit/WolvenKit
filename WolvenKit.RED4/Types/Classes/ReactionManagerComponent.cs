@@ -717,6 +717,7 @@ namespace WolvenKit.RED4.Types
 			Personalities = new();
 			FearToIdleDistance = new Vector2();
 			ExitWorkspotAim = new Vector2();
+			CrowdAimingReactionDistance = 20.000000F;
 			DisturbComfortZoneEventId = new gameDelayID();
 			CheckComfortZoneEventId = new gameDelayID();
 			SpreadingFearEventId = new gameDelayID();

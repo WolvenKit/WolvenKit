@@ -489,22 +489,23 @@ namespace WolvenKit.Modkit.RED4
                     if (WolvenTesting.IsTesting)
                     {
                         using var ms = new MemoryStream();
-                        return ConvertXbmToDdsStream(cr2wStream, ms, out _, out _);
+                        return ConvertXbmToDdsStream(cr2wStream, ms, true, out _, out _);
                     }
 
                     using (var ms = new MemoryStream())
                     {
-                        if (!ConvertXbmToDdsStream(cr2wStream, ms, out _, out var decompressedFormat))
+                        // always flip on export
+                        if (!ConvertXbmToDdsStream(cr2wStream, ms, true, out _, out var decompressedFormat))
                         {
                             return false;
                         }
 
                         // convert if needed else save to file
                         var ddsPath = Path.ChangeExtension(outfile.FullName, ERawFileFormat.dds.ToString());
-                        if (xbmargs.UncookExtension != EUncookExtension.dds || xbmargs.Flip)
+                        if (xbmargs.UncookExtension != EUncookExtension.dds)
                         {
                             ms.Seek(0, SeekOrigin.Begin);
-                            return Texconv.ConvertFromDdsAndSave(ms, ddsPath, xbmargs, decompressedFormat);
+                            return Texconv.ConvertFromDdsAndSave(ms, ddsPath, xbmargs, false, decompressedFormat);
                         }
                         else
                         {
@@ -785,7 +786,7 @@ namespace WolvenKit.Modkit.RED4
 
             var expMeshes = new List<RawMeshContainer>();
             var matData = new List<MatData>();
-            foreach (var meshStream in meshStreamS.Keys)
+            foreach (var (meshStream, meshName) in meshStreamS)
             {
                 var cr2w = _parserService.ReadRed4File(meshStream);
                 if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob == null || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
@@ -795,16 +796,16 @@ namespace WolvenKit.Modkit.RED4
 
                 using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
-                var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh);
+                var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh, meshName);
 
-                var Meshes = MeshTools.ContainRawMesh(ms, meshesinfo, meshExportArgs.LodFilter);
+                var Meshes = MeshTools.ContainRawMesh(ms, meshesinfo, meshExportArgs.LodFilter,  ulong.MaxValue,  false, meshName);
                 MeshTools.UpdateSkinningParamCloth(ref Meshes, meshStream, cr2w);
 
                 MeshTools.WriteGarmentParametersToMesh(ref Meshes, cMesh, meshExportArgs.ExportGarmentSupport);
 
                 var meshRig = MeshTools.GetOrphanRig(cMesh);
 
-                MeshTools.UpdateMeshJoints(ref Meshes, expRig, meshRig, meshStreamS[meshStream]);
+                MeshTools.UpdateMeshJoints(ref Meshes, expRig, meshRig, meshName);
 
                 if (meshExportArgs.withMaterials)
                 {
@@ -954,7 +955,7 @@ namespace WolvenKit.Modkit.RED4
             SaveMaterials(outfile, materialDataToExport);
             _SaveMeshes(outfile, modelsAndRigsCombinedToExport);
 
-            _loggerService.Info($"Mesh export completed, {meshesToExport.Count} meshes, {materialDataToExport.Count} materials, {rigsCombinedToExport?.Names?.Length ?? 0} rigs");
+            _loggerService.Info($"Mesh export completed, {meshesToExport.Count} meshes, {materialDataToExport.Count} materials, {rigsCombinedToExport?.Names?.Length ?? 0} bones");
             return true;
 
 
@@ -1212,16 +1213,16 @@ namespace WolvenKit.Modkit.RED4
             return true;
         }
 
-        public bool ConvertXbmToDdsStream(Stream redInFile, Stream outstream, out DXGI_FORMAT texformat, out DXGI_FORMAT decompressedFormat)
+        public bool ConvertXbmToDdsStream(Stream redInFile, Stream outstream, bool flipV, out DXGI_FORMAT texformat, out DXGI_FORMAT decompressedFormat)
         {
             texformat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
             decompressedFormat = DXGI_FORMAT.DXGI_FORMAT_UNKNOWN;
 
             // read the cr2wfile
-            return _parserService.TryReadRed4File(redInFile, out var cr2w) && ConvertRedClassToDdsStream(cr2w.RootChunk, outstream, out texformat, out decompressedFormat);
+            return _parserService.TryReadRed4File(redInFile, out var cr2w) && ConvertRedClassToDdsStream(cr2w.RootChunk, outstream, out texformat, out decompressedFormat, flipV);
         }
 
-        public static bool ConvertRedClassToDdsStream(RedBaseClass cls, Stream outstream, out DXGI_FORMAT texformat, out DXGI_FORMAT decompressedFormat, bool flipV = false)
+        public static bool ConvertRedClassToDdsStream(RedBaseClass cls, Stream outstream, out DXGI_FORMAT texformat, out DXGI_FORMAT decompressedFormat, bool flipV)
         {
             texformat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
             decompressedFormat = DXGI_FORMAT.DXGI_FORMAT_UNKNOWN;
@@ -1232,9 +1233,9 @@ namespace WolvenKit.Modkit.RED4
 
                 texformat = img.Metadata.Format;
                 decompressedFormat = img.Metadata.Format;
-                if (img.CompressionFormat != null)
+                if (img.UncompressedFormat != null)
                 {
-                    texformat = (DXGI_FORMAT)img.CompressionFormat;
+                    decompressedFormat = (DXGI_FORMAT)img.UncompressedFormat;
                 }
 
                 if (flipV)

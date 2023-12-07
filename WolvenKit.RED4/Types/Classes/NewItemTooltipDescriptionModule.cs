@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class NewItemTooltipDescriptionModule : NewItemTooltipModuleController
 	{
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("descriptionText")] 
 		public inkTextWidgetReference DescriptionText
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("defaultMargin")] 
 		public inkMargin DefaultMargin
 		{

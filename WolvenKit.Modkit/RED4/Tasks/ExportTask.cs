@@ -12,7 +12,7 @@ namespace CP77Tools.Tasks;
 
 public partial class ConsoleFunctions
 {
-    public int ExportTask(FileSystemInfo[] path, DirectoryInfo outDir, EUncookExtension? uncookext, bool? flip, ECookedFileFormat[] forcebuffers)
+    public int ExportTask(FileSystemInfo[] path, DirectoryInfo outDir, EUncookExtension? uncookext, ECookedFileFormat[] forcebuffers)
     {
         if (path == null || path.Length < 1)
         {
@@ -21,11 +21,11 @@ public partial class ConsoleFunctions
         }
 
         var result = 0;
-        Parallel.ForEach(path, file => result += ExportTaskInner(file, outDir, uncookext, flip, forcebuffers));
+        Parallel.ForEach(path, file => result += ExportTaskInner(file, outDir, uncookext, forcebuffers));
         return result;
     }
 
-    private int ExportTaskInner(FileSystemInfo path, DirectoryInfo outDir, EUncookExtension? uext, bool? flip, ECookedFileFormat[] forcebuffers)
+    private int ExportTaskInner(FileSystemInfo path, DirectoryInfo outDir, EUncookExtension? uext, ECookedFileFormat[] forcebuffers)
     {
         #region checks
 
@@ -73,10 +73,7 @@ public partial class ConsoleFunctions
             _wemExportArgs.Value,
             _animationExportArgs.Value
         );
-        if (flip != null)
-        {
-            exportArgs.Get<XbmExportArgs>().Flip = flip.Value;
-        }
+
         if (uext != null)
         {
             exportArgs.Get<XbmExportArgs>().UncookExtension = uext.Value;

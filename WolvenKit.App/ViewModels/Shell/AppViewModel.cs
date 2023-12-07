@@ -6,10 +6,12 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -17,6 +19,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using Semver;
+using SharpGLTF.Schema2;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Factories;
@@ -229,6 +232,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }    
 
         CheckForUpdatesCommand.SafeExecute(true);
+        CheckForScriptUpdatesCommand.SafeExecute();
     }
 
     public bool AddDockedPane(string paneString)
@@ -366,6 +370,77 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanStartTask))]
     private async Task PackInstallRedModRun() => await LaunchAsync(new LaunchProfile() { Install = true, LaunchGame = true, IsRedmod = true, DeployWithRedmod = true });
 
+
+    [RelayCommand]
+    private async Task CheckForScriptUpdates()
+    {
+        // check remote version (no github API call)
+        HttpClient _client = new();
+        var hashUrl = $@"https://wolvenkit.github.io/Wolvenkit-Resources/hash.txt";
+        var response = await _client.GetAsync(new Uri(hashUrl));
+
+        try
+        {
+            response.EnsureSuccessStatusCode();
+        }
+        catch (HttpRequestException ex)
+        {
+            _loggerService.Error($"Failed to respond to url: {hashUrl}");
+            _loggerService.Error(ex);
+            return;
+        }
+
+        var localHash = "";
+        var resourceDir = new DirectoryInfo(Path.Combine("Resources", "Scripts"));
+        FileInfo hashPath = new(Path.Combine("Resources", "scripthash.txt"));
+        if (hashPath.Exists)
+        {
+            localHash = File.ReadAllText(hashPath.FullName);
+        }
+
+        // check hash
+        using var ms = new MemoryStream();
+        await response.Content.CopyToAsync(ms);
+        ms.Seek(0, SeekOrigin.Begin);
+        using var reader = new StreamReader(ms, Encoding.UTF8);
+        var remoteHash = await reader.ReadToEndAsync();
+        remoteHash = remoteHash.TrimEnd('\r', '\n');
+        if (localHash == remoteHash)
+        {
+            // early out
+            return;
+        }
+
+        // clean
+        if (resourceDir.Exists)
+        {
+            resourceDir.Delete(true);
+        }
+        Directory.CreateDirectory(resourceDir.FullName);
+
+        // download zipfile
+        var contentUrl = $@"https://wolvenkit.github.io/Wolvenkit-Resources/scripts.zip";
+        response = await _client.GetAsync(new Uri(contentUrl));
+        try
+        {
+            response.EnsureSuccessStatusCode();
+        }
+        catch (HttpRequestException ex)
+        {
+            _loggerService.Error($"Failed to respond to url: {contentUrl}");
+            _loggerService.Error(ex);
+            return;
+        }
+
+        var zip = await response.Content.ReadAsStreamAsync();
+        zip.Seek(0, SeekOrigin.Begin);
+        ZipArchive zipArchive = new(zip);
+        zipArchive.ExtractToDirectory(resourceDir.FullName, true);
+
+        File.WriteAllText(hashPath.FullName, remoteHash);
+        _scriptService.RefreshUIScripts();
+    }
+
     [RelayCommand]
     private async Task CheckForUpdates(bool checkForCheckForUpdates)
     {
@@ -383,8 +458,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             }
         }
 
-        // check if installer is installed
-        await InstallInstaller();
 
         // get remote version without GitHub API calls
         var owner = "WolvenKit";
@@ -432,104 +505,16 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
         else
         {
-            if (DesktopBridgeHelper.IsWindows10OrHigher() && DesktopBridgeHelper.PowershellExists())
+            // old style update
+            // TODO use inno
+            var url = $"https://github.com/{owner}/{name}/releases/latest";
+            var res = await Interactions.ShowMessageBoxAsync($"Update available: {remoteVersion}\nYou are on the {_settingsManager.UpdateChannel} release channel.\n\nVisit {url} ?", name, WMessageBoxButtons.OkCancel);
+            if (res == WMessageBoxResult.OK)
             {
-                // win10 updater app
-                var res = await Interactions.ShowMessageBoxAsync($"Update available: {remoteVersion}\nYou are on the {_settingsManager.UpdateChannel} release channel.\n\nUpdate now?", name, WMessageBoxButtons.OkCancel);
-                if (res == WMessageBoxResult.OK)
-                {
-                    // run installer app
-                    (_, var location) = GetInstallerPackage();
-                    if (!string.IsNullOrEmpty(location))
-                    {
-                        var executable = Path.Combine(location, "Wolvenkit.Installer.exe");
-                        if (File.Exists(executable))
-                        {
-                            var id = name;
-                            if (thisVersion.ToString().Contains("nightly"))
-                            {
-                                id = "WolvenKit Nightly";
-                            }
-                            var thisLocation = AppDomain.CurrentDomain.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar).TrimEnd(Path.AltDirectorySeparatorChar);
-
-                            var process = new Process();
-                            process.StartInfo.FileName = executable;
-                            var args = $"-t \"{thisLocation}\" -i \"{id}\" -v {thisVersion}";
-                            process.StartInfo.Arguments = args;
-                            process.Start();
-                        }
-                    }
-                }
-            }
-            else
-            {
-                // old style update
-                // TODO use inno
-                var url = $"https://github.com/{owner}/{name}/releases/latest";
-                var res = await Interactions.ShowMessageBoxAsync($"Update available: {remoteVersion}\nYou are on the {_settingsManager.UpdateChannel} release channel.\n\nVisit {url} ?", name, WMessageBoxButtons.OkCancel);
-                if (res == WMessageBoxResult.OK)
-                {
-                    Process.Start("explorer", url);
-                }
-            }
-
-        }
-
-    }
-
-    private async Task InstallInstaller()
-    {
-        if (!DesktopBridgeHelper.IsWindows10OrHigher())
-        {
-            _loggerService.Warning("The auto-update feature is only supported for Windows 10 or later");
-            return;
-        }
-
-        if (!DesktopBridgeHelper.PowershellExists())
-        {
-            _loggerService.Warning("The auto-update feature requires powershell to be installed");
-            return;
-        }
-
-        string location;
-
-        // only check if installer has been installed.
-        (var localInstallerVersion, location) = GetInstallerPackage();
-        // and check if version is > 0.2.2
-
-        var minVersion = SemVersion.Parse("0.2.2", SemVersionStyles.OptionalMinorPatch);
-
-        // if not installed or installed version is lower than minversion
-        if (string.IsNullOrEmpty(location) || localInstallerVersion is not null && localInstallerVersion.CompareSortOrderTo(minVersion) <= 0)
-        {
-            if (await Interactions.ShowMessageBoxAsync($"WolvenKit will install a helper tool to check for updates.", "WolvenKit.Installer", WMessageBoxButtons.OkCancel) == WMessageBoxResult.OK)
-            {
-                var fileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Wolvenkit.Installer.Package.appinstaller");
-
-                try
-                {
-                    using var p = new Process();
-                    p.StartInfo.FileName = "powershell.exe";
-                    p.StartInfo.Arguments = $"Add-AppxPackage -AppInstallerFile '{fileName}'";
-                    p.StartInfo.UseShellExecute = false;
-                    p.StartInfo.CreateNoWindow = true;
-                    p.StartInfo.RedirectStandardOutput = true;
-                    p.Start();
-
-                    var output = p.StandardOutput.ReadToEnd();
-
-                    p.WaitForExit();
-
-                    _loggerService.Info("Wolvenkit.Installer was installed");
-                    _loggerService.Info(output);
-                }
-                catch (Exception ex)
-                {
-                    _loggerService.Success("Error installing Wolvenkit.Installer");
-                    _loggerService.Error(ex);
-                }
+                Process.Start("explorer", url);
             }
         }
+
     }
 
     [RelayCommand]

@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class NewLocationNotification : JournalNotification
 	{
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("districtName")] 
 		public inkTextWidgetReference DistrictName
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("districtIcon")] 
 		public inkImageWidgetReference DistrictIcon
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("districtFluffIcon")] 
 		public inkImageWidgetReference DistrictFluffIcon
 		{

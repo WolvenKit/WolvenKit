@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CrosshairGameController_Smart_Rifl : gameuiCrosshairBaseGameController
 	{
-		[Ordinal(27)] 
+		[Ordinal(29)] 
 		[RED("txtAccuracy")] 
 		public inkTextWidgetReference TxtAccuracy
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(30)] 
 		[RED("txtTargetsCount")] 
 		public inkTextWidgetReference TxtTargetsCount
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(31)] 
 		[RED("txtFluffStatus")] 
 		public inkTextWidgetReference TxtFluffStatus
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(32)] 
 		[RED("leftPart")] 
 		public inkImageWidgetReference LeftPart
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(33)] 
 		[RED("rightPart")] 
 		public inkImageWidgetReference RightPart
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(34)] 
 		[RED("leftPartExtra")] 
 		public inkImageWidgetReference LeftPartExtra
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(35)] 
 		[RED("rightPartExtra")] 
 		public inkImageWidgetReference RightPartExtra
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(36)] 
 		[RED("offsetLeftRight")] 
 		public CFloat OffsetLeftRight
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(37)] 
 		[RED("offsetLeftRightExtra")] 
 		public CFloat OffsetLeftRightExtra
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(38)] 
 		[RED("latchVertical")] 
 		public CFloat LatchVertical
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(39)] 
 		[RED("topPart")] 
 		public inkImageWidgetReference TopPart
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(40)] 
 		[RED("bottomPart")] 
 		public inkImageWidgetReference BottomPart
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(41)] 
 		[RED("horiPart")] 
 		public inkWidgetReference HoriPart
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(42)] 
 		[RED("vertPart")] 
 		public inkWidgetReference VertPart
 		{
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(43)] 
 		[RED("targetWidgetLibraryName")] 
 		public CName TargetWidgetLibraryName
 		{
@@ -124,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(44)] 
 		[RED("targetsPullSize")] 
 		public CInt32 TargetsPullSize
 		{
@@ -132,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(45)] 
 		[RED("targetColorChange")] 
 		public inkWidgetReference TargetColorChange
 		{
@@ -140,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(46)] 
 		[RED("targetingFrame")] 
 		public inkWidgetReference TargetingFrame
 		{
@@ -148,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(47)] 
 		[RED("reticleFrame")] 
 		public inkWidgetReference ReticleFrame
 		{
@@ -156,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(48)] 
 		[RED("bufferFrame")] 
 		public inkWidgetReference BufferFrame
 		{
@@ -164,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(49)] 
 		[RED("targetHolder")] 
 		public inkCompoundWidgetReference TargetHolder
 		{
@@ -172,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(50)] 
 		[RED("lockHolder")] 
 		public inkCompoundWidgetReference LockHolder
 		{
@@ -180,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(51)] 
 		[RED("reloadIndicator")] 
 		public inkCompoundWidgetReference ReloadIndicator
 		{
@@ -188,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(52)] 
 		[RED("reloadIndicatorInv")] 
 		public inkCompoundWidgetReference ReloadIndicatorInv
 		{
@@ -196,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(53)] 
 		[RED("smartLinkDot")] 
 		public inkCompoundWidgetReference SmartLinkDot
 		{
@@ -204,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(54)] 
 		[RED("smartLinkFrame")] 
 		public inkCompoundWidgetReference SmartLinkFrame
 		{
@@ -212,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(55)] 
 		[RED("smartLinkFluff")] 
 		public inkCompoundWidgetReference SmartLinkFluff
 		{
@@ -220,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(56)] 
 		[RED("smartLinkFirmwareOnline")] 
 		public inkCompoundWidgetReference SmartLinkFirmwareOnline
 		{
@@ -228,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(57)] 
 		[RED("smartLinkFirmwareOffline")] 
 		public inkCompoundWidgetReference SmartLinkFirmwareOffline
 		{
@@ -236,7 +236,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(58)] 
+		[RED("hasSmartLink")] 
+		public CBool HasSmartLink
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(59)] 
 		[RED("weaponBlackboard")] 
 		public CWeakHandle<gameIBlackboard> WeaponBlackboard
 		{
@@ -244,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(60)] 
 		[RED("weaponParamsListenerId")] 
 		public CHandle<redCallbackObject> WeaponParamsListenerId
 		{
@@ -252,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(61)] 
 		[RED("smartData")] 
 		public CHandle<gamesmartGunUIParameters> SmartData
 		{
@@ -260,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gamesmartGunUIParameters>>(value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(62)] 
 		[RED("targetsPool")] 
 		public CArray<CWeakHandle<inkWidget>> TargetsPool
 		{
@@ -268,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<inkWidget>>>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(63)] 
 		[RED("targets")] 
 		public CArray<CWeakHandle<inkWidget>> Targets
 		{
@@ -276,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<inkWidget>>>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(64)] 
 		[RED("isBlocked")] 
 		public CBool IsBlocked
 		{
@@ -284,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(65)] 
 		[RED("isAimDownSights")] 
 		public CBool IsAimDownSights
 		{
@@ -292,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(66)] 
 		[RED("bufferedSpread")] 
 		public Vector2 BufferedSpread
 		{
@@ -300,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector2>(value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(67)] 
 		[RED("reloadAnimationProxy")] 
 		public CHandle<inkanimProxy> ReloadAnimationProxy
 		{
@@ -308,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(68)] 
 		[RED("prevTargetedEntityIDs")] 
 		public CArray<entEntityID> PrevTargetedEntityIDs
 		{
@@ -316,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<entEntityID>>(value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(69)] 
 		[RED("currTargetedEntityIDs")] 
 		public CArray<entEntityID> CurrTargetedEntityIDs
 		{
@@ -324,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<entEntityID>>(value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(70)] 
 		[RED("numLockedTargets")] 
 		public CInt32 NumLockedTargets
 		{
@@ -332,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(71)] 
 		[RED("playerDevelopmentData")] 
 		public CWeakHandle<PlayerDevelopmentData> PlayerDevelopmentData
 		{

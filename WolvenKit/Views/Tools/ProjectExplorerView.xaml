@@ -96,7 +96,7 @@
                         </Grid>
                     </MenuItem.Icon>
                 </MenuItem>
-               
+
                 <Separator />
 
                 <MenuItem
@@ -681,7 +681,7 @@
             RowDropIndicatorMode="Line"
             RowHeight="19"
             SelectedItem="{Binding SelectedItem}"
-            SelectedItems="{Binding SelectedItems}"
+            SelectedItems="{Binding SelectedItems, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
             SelectionMode="Extended"
             SelfRelationRootValue="0"
             VirtualizingPanel.IsVirtualizing="True"

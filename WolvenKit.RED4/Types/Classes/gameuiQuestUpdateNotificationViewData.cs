@@ -37,6 +37,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(9)] 
+		[RED("SMSLocKey")] 
+		public CString SMSLocKey
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(10)] 
 		[RED("dontRemoveOnRequest")] 
 		public CBool DontRemoveOnRequest
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("entryHash")] 
 		public CInt32 EntryHash
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("rewardSC")] 
 		public CInt32 RewardSC
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("rewardXP")] 
 		public CInt32 RewardXP
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("priority")] 
 		public CEnum<EGenericNotificationPriority> Priority
 		{

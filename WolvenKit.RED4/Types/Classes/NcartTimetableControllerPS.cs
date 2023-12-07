@@ -20,12 +20,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
+		[Ordinal(109)] 
+		[RED("currentLine")] 
+		public CInt32 CurrentLine
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
 		public NcartTimetableControllerPS()
 		{
 			DeviceName = "LocKey#1653";
 			TweakDBRecord = "Devices.NcartTimetable";
 			TweakDBDescriptionRecord = 147694950908;
-			NcartTimetableSetup = new NcartTimetableSetup { DepartFrequency = 5, UiUpdateFrequency = 1 };
+			NcartTimetableSetup = new NcartTimetableSetup { DepartFrequency = 5, UiUpdateFrequency = 1, TrainLines = new() };
 
 			PostConstruct();
 		}
