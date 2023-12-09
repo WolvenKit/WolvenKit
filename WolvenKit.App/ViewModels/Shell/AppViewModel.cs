@@ -837,7 +837,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private async Task ShowScriptManager()
     {
         CloseModalCommand.Execute(null);
-        await SetActiveDialog(new ScriptManagerViewModel(this, _scriptService, _settingsManager));
+        await SetActiveDialog(new ScriptManagerViewModel(this, _scriptService, _settingsManager, _loggerService));
     }
 
     private bool CanShowPlugin() => !IsDialogShown;
