@@ -46,9 +46,7 @@
                 Orientation="Vertical" />
         </StackPanel>
 
-        <!--  Separator  -->
-        <Separator Grid.Row="1" />
-
+        <!--  Main grid  -->
         <Grid Grid.Row="2">
 
             <Grid.RowDefinitions>

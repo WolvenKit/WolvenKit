@@ -59,9 +59,6 @@
 
         </StackPanel>
 
-        <!--  Separator  -->
-        <Separator Grid.Row="1" />
-
         <!--  Main grid  -->
         <ListBox
             x:Name="PluginList"
