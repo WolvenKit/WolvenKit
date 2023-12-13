@@ -12,7 +12,7 @@
     xmlns:viewmodels="clr-namespace:WolvenKit.ViewModels"
     x:TypeArguments="viewmodels:SettingsPageViewModel">
 
-    <Grid MinWidth="300" MinHeight="300">
+    <Grid>
 
         <Grid.Resources>
 
@@ -37,7 +37,7 @@
         <syncfusion:PropertyGrid
             x:Name="SettingsPropertygrid"
             Grid.Row="0"
-            Margin="20,85,20,20"
+            Margin="25,85,25,25"
             AutoGeneratingPropertyGridItem="SettingsPropertygrid_OnAutoGeneratingPropertyGridItem"
             BorderThickness="0"
             ButtonPanelVisibility="Collapsed"
@@ -55,7 +55,7 @@
 
         <StackPanel
             Height="85"
-            Margin="25,0,5,0"
+            Margin="25,0,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Orientation="Horizontal">

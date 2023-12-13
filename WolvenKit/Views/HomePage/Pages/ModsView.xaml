@@ -33,6 +33,14 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Orientation="Horizontal">
+            <StackPanel.Resources>
+                <Style BasedOn="{StaticResource ButtonDefault}" TargetType="Button">
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt}" />
+                    <Setter Property="Padding" Value="15,0" />
+                </Style>
+            </StackPanel.Resources>
+
             <TextBlock
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center "
@@ -55,7 +63,7 @@
             </Grid.RowDefinitions>
 
             <!--  Toolbar  -->
-            <Grid Grid.Row="0" Margin="10,0,0,0">
+            <Grid Grid.Row="0" Margin="25,0,0,25">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
@@ -69,7 +77,7 @@
                 <syncfusion:RibbonButton
                     x:Name="ButtonRefresh"
                     Grid.Column="0"
-                    Margin="5"
+                    Margin="0"
                     Command="{Binding RefreshCommand}"
                     IconStretch="Fill"
                     IconType="Icon"
@@ -167,7 +175,7 @@
             <syncfusion:SfDataGrid
                 x:Name="DataGridEvents"
                 Grid.Row="1"
-                Margin="5"
+                Margin="25,85,25,25"
                 d:ItemsSource="{d:SampleData ItemCount=5}"
                 AllowDraggingColumns="True"
                 AllowDraggingRows="True"
