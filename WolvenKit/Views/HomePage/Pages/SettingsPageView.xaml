@@ -14,46 +14,28 @@
 
     <Grid>
 
-        <Grid.Resources>
-
-            <ResourceDictionary>
-                <System:Boolean x:Key="FalseValue">False</System:Boolean>
-                <!--<ResourceDictionary.MergedDictionaries>
-                    <hc:ThemeResources RequestedTheme="Dark" />
-                    <hc:Theme />
-                </ResourceDictionary.MergedDictionaries>-->
-
-                <ResourceDictionary.MergedDictionaries>
-                    <ResourceDictionary Source="pack://application:,,,/AdonisUI;component/ColorSchemes/Dark.xaml" />
-                    <ResourceDictionary Source="pack://application:,,,/AdonisUI.ClassicTheme;component/Resources.xaml" />
-                </ResourceDictionary.MergedDictionaries>
-            </ResourceDictionary>
-        </Grid.Resources>
-
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <syncfusion:PropertyGrid
-            x:Name="SettingsPropertygrid"
-            Grid.Row="0"
-            Margin="25,85,25,25"
-            AutoGeneratingPropertyGridItem="SettingsPropertygrid_OnAutoGeneratingPropertyGridItem"
-            BorderThickness="0"
-            ButtonPanelVisibility="Collapsed"
-            CategoryForeground="{StaticResource WolvenKitRed}"
-            EnableGrouping="True"
-            PropertyNameColumnDefinition="200"
-            SearchBoxVisibility="Collapsed">
-            <!--syncfusion:PropertyGrid.Resources>
-                <Style TargetType="{x:Type propertygrid:PropertyViewItem}" BasedOn="{StaticResource SyncfusionPropertyViewItemStyle}">
-                    <Setter Property="IsCategoryEditorEnabled" Value="False" />
-                </Style>
-            </syncfusion:PropertyGrid.Resources-->
-        </syncfusion:PropertyGrid>
+        <Grid.Resources>
+            <ResourceDictionary>
+                <System:Boolean x:Key="FalseValue">False</System:Boolean>
+                <!--<ResourceDictionary.MergedDictionaries>
+                <hc:ThemeResources RequestedTheme="Dark" />
+                <hc:Theme />
+                </ResourceDictionary.MergedDictionaries>-->
 
+                <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/AdonisUI;component/ColorSchemes/Dark.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/AdonisUI.ClassicTheme;component/Resources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </Grid.Resources>
 
         <StackPanel
+            Grid.Row="0"
             Height="85"
             Margin="25,0,0,0"
             HorizontalAlignment="Left"
@@ -124,6 +106,24 @@
             </Button-->
 
         </StackPanel>
+
+        <syncfusion:PropertyGrid
+            x:Name="SettingsPropertygrid"
+            Grid.Row="1"
+            Margin="25,0,25,25"
+            AutoGeneratingPropertyGridItem="SettingsPropertygrid_OnAutoGeneratingPropertyGridItem"
+            BorderThickness="0"
+            ButtonPanelVisibility="Collapsed"
+            CategoryForeground="{StaticResource WolvenKitRed}"
+            EnableGrouping="True"
+            PropertyNameColumnDefinition="200"
+            SearchBoxVisibility="Collapsed">
+            <!--syncfusion:PropertyGrid.Resources>
+            <Style TargetType="{x:Type propertygrid:PropertyViewItem}" BasedOn="{StaticResource SyncfusionPropertyViewItemStyle}">
+                <Setter Property="IsCategoryEditorEnabled" Value="False" />
+            </Style>
+            </syncfusion:PropertyGrid.Resources-->
+    </syncfusion:PropertyGrid>
 
     </Grid>
 </reactiveUi:ReactiveUserControl>

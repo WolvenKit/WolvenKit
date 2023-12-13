@@ -175,7 +175,7 @@
             <syncfusion:SfDataGrid
                 x:Name="DataGridEvents"
                 Grid.Row="1"
-                Margin="25,85,25,25"
+                Margin="25,0,25,25"
                 d:ItemsSource="{d:SampleData ItemCount=5}"
                 AllowDraggingColumns="True"
                 AllowDraggingRows="True"
