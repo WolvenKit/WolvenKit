@@ -12,10 +12,7 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     d:DataContext="{d:DesignInstance Type=homepage:PluginsToolViewModel}"
-    d:DesignHeight="600"
-    d:DesignWidth="800"
     x:TypeArguments="homepage:PluginsToolViewModel"
-    Background="{StaticResource ContentBackgroundAlt3}"
     mc:Ignorable="d">
 
     <Grid>
@@ -29,21 +26,22 @@
 
         <!--  Header  -->
         <StackPanel
-            Grid.Row="0"
             Height="85"
-            Margin="25,0,5,0"
+            Margin="25,0,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Orientation="Horizontal">
-
-
             <TextBlock
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center"
+                VerticalAlignment="Center "
                 FontSize="20"
-                Foreground="White"
                 Text="Plugins" />
-
+            <hc:Divider
+                Height="45"
+                Margin="15"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Orientation="Vertical" />
         </StackPanel>
 
         <!--  Separator  -->
