@@ -42,39 +42,25 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Orientation="Vertical" />
+
+            <Button
+                x:Name="CheckButton"
+                Height="40"
+                Margin="15">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconMaterial
+                            Width="20"
+                            Height="20"
+                            Foreground="{StaticResource WolvenKitPurple}"
+                            Kind="Sync" />
+                        <TextBlock Padding="10,0,0,0" FontSize="14" Text="Check for updates" />
+                    </StackPanel>
+            </Button>
+
         </StackPanel>
 
         <!--  Separator  -->
         <Separator Grid.Row="1" />
-
-        <!--  Buttons  -->
-        <Grid Grid.Row="2">
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-
-            <Button
-                x:Name="CheckButton"
-                Grid.Column="0"
-                Height="45"
-                Margin="10,10,0,0">
-                <StackPanel Orientation="Horizontal">
-                    <iconPacks:PackIconMaterial
-                        Width="30"
-                        Height="30"
-                        Foreground="CadetBlue"
-                        Kind="Sync" />
-                    <TextBlock
-                        Margin="5,0,10,0"
-                        VerticalAlignment="Center"
-                        FontSize="16"
-                        Text="Check for Updates" />
-                </StackPanel>
-            </Button>
-
-        </Grid>
 
         <!--  Main grid  -->
         <ListBox

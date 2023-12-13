@@ -15,7 +15,7 @@
     <Grid MinWidth="300" MinHeight="300">
 
         <Grid.Resources>
-            
+
             <ResourceDictionary>
                 <System:Boolean x:Key="FalseValue">False</System:Boolean>
                 <!--<ResourceDictionary.MergedDictionaries>
@@ -85,14 +85,32 @@
                 CommandParameter="{StaticResource FalseValue}"
                 Height="40"
                 Margin="15">
-                <TextBlock FontSize="14" Text="Check for updates" />
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial
+                        Width="20"
+                        Height="20"
+                        Foreground="{StaticResource WolvenKitPurple}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Kind="Sync" />
+                    <TextBlock Padding="10,0,0,0" FontSize="14" Text="Check for updates" />
+                </StackPanel>
             </Button>
 
             <Button
                 x:Name="SaveCloseButton"
                 Height="40"
                 Margin="0">
-                <TextBlock FontSize="14" Text="Save &amp; Close" />
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial
+                        Width="20"
+                        Height="20"
+                        Foreground="{StaticResource WolvenKitCyan}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Kind="ContentSave" />
+                    <TextBlock Padding="10,0,0,0" FontSize="14" Text="Save &amp; Close" />
+                </StackPanel>
             </Button>
 
             <!--
@@ -109,3 +127,4 @@
 
     </Grid>
 </reactiveUi:ReactiveUserControl>
+

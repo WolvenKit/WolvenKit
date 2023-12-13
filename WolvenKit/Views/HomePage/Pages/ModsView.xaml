@@ -84,7 +84,7 @@
                                 Height="auto"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Stretch"
-                                Foreground="CornflowerBlue"
+                                Foreground="{StaticResource WolvenKitPurple}"
                                 Kind="Refresh" />
                         </DataTemplate>
                     </syncfusion:RibbonButton.IconTemplate>
@@ -106,7 +106,7 @@
                                 Height="auto"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Stretch"
-                                Foreground="Red"
+                                Foreground="{StaticResource WolvenKitRed}"
                                 Kind="DesktopDownload" />
                         </DataTemplate>
                     </syncfusion:RibbonButton.IconTemplate>
@@ -128,7 +128,7 @@
                                 Height="auto"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Stretch"
-                                Foreground="ForestGreen"
+                                Foreground="{StaticResource WolvenKitYellow}"
                                 Kind="DebugStart" />
                         </DataTemplate>
                     </syncfusion:RibbonButton.IconTemplate>
@@ -157,7 +157,7 @@
                                 Height="auto"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Stretch"
-                                Foreground="Goldenrod"
+                                Foreground="{StaticResource WolvenKitTan}"
                                 Kind="FolderOpened" />
                         </DataTemplate>
                     </syncfusion:RibbonButton.IconTemplate>
