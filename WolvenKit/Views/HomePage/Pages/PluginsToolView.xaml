@@ -89,13 +89,22 @@
                             </Grid.ColumnDefinitions>
 
 
-                            <StackPanel Grid.Column="0">
-                                <TextBlock FontSize="20" Text="{Binding Name}" />
+                            <StackPanel
+                                Grid.Column="0"
+                                VerticalAlignment="Center">
                                 <TextBlock
-                                    FontSize="14"
+                                    FontSize="16"
                                     FontWeight="Bold"
+                                    Foreground="White"
+                                    Text="{Binding Name}" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="Gray"
+                                    Text="{Binding Description}" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="White"
                                     Text="{Binding Version}" />
-                                <TextBlock FontSize="14" Text="{Binding Description}" />
                             </StackPanel>
 
                             <Button
@@ -111,7 +120,7 @@
                                 <iconPacks:PackIconMaterial
                                     Width="30"
                                     Height="30"
-                                    Foreground="CadetBlue"
+                                    Foreground="{StaticResource WolvenKitCyan}"
                                     Kind="Download" />
                             </Button>
                             <Button
@@ -126,7 +135,7 @@
                                 <iconPacks:PackIconMaterial
                                     Width="30"
                                     Height="30"
-                                    Foreground="LawnGreen"
+                                    Foreground="{StaticResource WolvenKitPurple}"
                                     Kind="Check" />
                             </Button>
 
