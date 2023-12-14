@@ -7,7 +7,6 @@
     xmlns:homepage="clr-namespace:WolvenKit.App.ViewModels.HomePage.Pages;assembly=WolvenKit.App"
     xmlns:converters="clr-namespace:WolvenKit.Converters"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:local="clr-namespace:WolvenKit.Views.HomePage.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
@@ -242,7 +241,6 @@
         <!--    -->
         <Grid
             Grid.Row="2"
-            Grid.RowSpan="2"
             Background="{StaticResource ContentBackground}"
             Visibility="{Binding IsProcessing, Converter={StaticResource boolToVisibilityConverter}}">
 
