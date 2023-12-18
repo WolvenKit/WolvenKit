@@ -17,9 +17,8 @@ public partial class ConsoleFunctions
         if (wem)
         {
             var inBuffer = File.ReadAllBytes(path.FullName);
-            var oggBuffer = Wem.Convert(inBuffer);
 
-            if (oggBuffer.Length == 0)
+            if (!Wem.TryConvert(inBuffer, out var oggBuffer) || oggBuffer.Length == 0)
             {
                 _loggerService.Error($"Failed to convert {path} to OGG");
                 return ERROR_GENERAL_ERROR;

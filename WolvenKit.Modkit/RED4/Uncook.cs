@@ -113,11 +113,12 @@ namespace WolvenKit.Modkit.RED4
 
                 #region extract buffers
 
-                var hasBuffers = (entry.SegmentsEnd - entry.SegmentsStart) > 1;
-                if (!hasBuffers)
-                {
-                    return true;
-                }
+                // Why is that here? Doesn't work with wem files - S. Eberoth
+                //var hasBuffers = (entry.SegmentsEnd - entry.SegmentsStart) > 1;
+                //if (!hasBuffers)
+                //{
+                //    return true;
+                //}
 
                 // uncook main file buffers to raw out dir
                 if (rawOutDir is null or { Exists: false })
@@ -1098,7 +1099,11 @@ namespace WolvenKit.Modkit.RED4
             }
 
             var wemoutfile = Path.ChangeExtension(outfile.FullName, args.wemExportType.ToString());
-            var oggBuffer = Wem.Convert(File.ReadAllBytes(args.FileName));
+
+            if (!Wem.TryConvert(File.ReadAllBytes(args.FileName), out var oggBuffer))
+            {
+                return;
+            }
 
             switch (args.wemExportType)
             {

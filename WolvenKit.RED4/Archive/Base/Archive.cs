@@ -92,7 +92,7 @@ public class Archive : ICyberGameArchive, IDisposable
         var hasBuffers = (archiveItem.SegmentsEnd - archiveItem.SegmentsStart) > 1;
 
         var values = Enum.GetNames(typeof(ECookedFileFormat));
-        var b = values.Any(e => e == archiveItem.Extension) || hasBuffers;
+        var b = values.Any(e => e == archiveItem.Extension[1..]) || hasBuffers;
         return b;
     }
 

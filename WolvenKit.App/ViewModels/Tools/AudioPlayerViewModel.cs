@@ -81,7 +81,10 @@ public partial class AudioPlayerViewModel : ObservableObject
     {
         SelectedFile = audioObject.Title;
 
-        var oggBuffer = Wem.Convert(audioObject.Data);
+        if (!Wem.TryConvert(audioObject.Data, out var oggBuffer))
+        {
+            return;
+        }
 
         var ms = new MemoryStream(oggBuffer);
         _audioPlayback.LoadOgg(ms);

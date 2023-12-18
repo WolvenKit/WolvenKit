@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Runtime.InteropServices;
 
@@ -14,6 +15,20 @@ public static class Wem
         Marshal.Copy(buffer, outBuffer, 0, (int)outBufferSize);
         Marshal.FreeCoTaskMem(buffer);
         return outBuffer;
+    }
+
+    public static bool TryConvert(byte[] inBuffer, [NotNullWhen(true)]out byte[]? outBuffer)
+    {
+        try
+        {
+            outBuffer = Convert(inBuffer);
+            return true;
+        }
+        catch (Exception)
+        {
+            outBuffer = null;
+            return false;
+        }
     }
 
     [DllImport("wwtools")]
