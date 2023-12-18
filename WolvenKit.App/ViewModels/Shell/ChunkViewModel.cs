@@ -1920,7 +1920,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
-        if (ResolvedData is IRedArray ary)
+        if (ResolvedData is IRedArray ary && ary.Count > 0)
         {
             // csv files and the like 
             if (Parent is { Name: "compiledData" } && GetRootModel().Data is C2dArray csv)
