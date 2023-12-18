@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using DynamicData;
 using DynamicData.Kernel;
 using WolvenKit.Common;
@@ -11,6 +12,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.Types;
 using Path = System.IO.Path;
 
 namespace WolvenKit.RED4.CR2W.Archive
@@ -156,9 +158,14 @@ namespace WolvenKit.RED4.CR2W.Archive
                 return;
             }
 
+            var redModFolder = archiveDir.Name.Contains(Path.DirectorySeparatorChar + "mods" + Path.DirectorySeparatorChar);
+
             IsManagerLoading = true;
 
-            var archiveFiles = Directory.GetFiles(archiveDir.FullName, "*.archive").ToList();
+            // TODO: this will still load things in sub-directories beyond "archive" for REDMod mods
+            var archiveFiles = Directory.GetFiles(archiveDir.FullName, "*.archive",
+                new EnumerationOptions { RecurseSubdirectories = redModFolder}).ToList();
+
             archiveFiles.Sort(CompareArchives);
 
             foreach (var file in archiveFiles)
@@ -355,37 +362,104 @@ namespace WolvenKit.RED4.CR2W.Archive
 
             var redModBasePath = Path.Combine(di.Parent.Parent.FullName, "mods");
             var legacyModPath = Path.Combine(di.Parent.Parent.FullName, "archive", "pc", "mod");
+            var redModCache = Path.Combine(di.Parent.Parent.FullName, "r6", "cache", "modded");
+            var redModModsJSON = Path.Combine(redModCache, "mods.json");
+            var legacyModlistTxt = Path.Combine(legacyModPath, "modlist.txt");
 
-            var files = new List<string>();
-            if (Directory.Exists(redModBasePath))
-            {
-                foreach (var redModPath in Directory.GetDirectories(redModBasePath))
+            // parse redmod files
+            var redModFiles = new List<string>();
+            if (File.Exists(redModModsJSON)) {
+                var modsJSON = File.Open(redModModsJSON, FileMode.Open);
+
+                var redModElement = JsonSerializer.Deserialize<JsonElement>(modsJSON);
+                var modsArr = redModElement.GetProperty("mods").EnumerateArray();
+
+                foreach ( var mod in modsArr )
                 {
-                    var archiveDir = Path.Combine(redModPath, "archives");
-                    if (!Directory.Exists(archiveDir))
+                    // get the properties we care able
+                    string folder = mod.GetProperty("folder").GetString().NotNull();
+                    bool enabled = mod.GetProperty("enabled").GetBoolean();
+                    bool deployed = mod.GetProperty("deployed").GetBoolean();
+
+                    if (!enabled)
                     {
+                        _logger.Info($"Skipping disabled REDMod: {folder}");
                         continue;
                     }
-
-                    foreach (var archiveFile in Directory.GetFiles(archiveDir, "*.archive"))
+                    else
                     {
-                        files.Add(archiveFile);
+                        if (!deployed )
+                        {
+                            _logger.Warning($"REDMod ({folder}) is enabled but not deployed. Assets will still be available in the Asset Browser.");
+                        }
+
+                        var redModArchivesDir = Path.Combine(redModBasePath, folder, "archives");
+                        if (Directory.Exists(redModArchivesDir))
+                        {
+                            var modArchives = Directory.GetFiles(redModArchivesDir, "*.archive", SearchOption.TopDirectoryOnly).ToList();
+                            modArchives.Sort(string.CompareOrdinal);
+                            modArchives.Reverse();
+
+                            redModFiles.AddRange(modArchives);
+                        }
+                    }
+                }
+                modsJSON.Close();
+            }
+
+            var legacyModTxtFiles = new List<string>();
+            if (File.Exists(legacyModlistTxt))
+            {
+                var legacyOrder = File.ReadAllLines(legacyModlistTxt)
+                    .Where(line => line.Length > 0);
+
+                foreach (var archiveName in legacyOrder)
+                {
+                    var archiveFile = Path.Combine(legacyModPath, $"{archiveName}.archive");
+                    if (File.Exists(archiveFile))
+                    {
+                        legacyModTxtFiles.Add(archiveFile);
+                    }
+                    else
+                    {
+                        _logger.Warning($"\"{archiveName}\" is present in \"modslist.txt\" but does not exist. Skipping.");
                     }
                 }
             }
 
+            var legacyFiles = new List<string>();
             if (Directory.Exists(legacyModPath))
             {
-                foreach (var archiveFile in Directory.GetFiles(legacyModPath, "*.archive"))
+                foreach (var archiveFile in Directory.GetFiles(legacyModPath, "*.archive", SearchOption.TopDirectoryOnly))
                 {
-                    files.Add(archiveFile);
+                    if (!legacyModlistTxt.Contains(archiveFile))
+                    {
+                        legacyFiles.Add(archiveFile);
+                    }
+                    else
+                    {
+                        _logger.Debug($"Skipping {archiveFile} during legacy loading.");
+                    }
                 }
             }
 
-            files.Sort(string.CompareOrdinal);
-            files.Reverse();
+            legacyFiles.Sort(string.CompareOrdinal);
+            legacyFiles.Reverse();
 
-            foreach (var file in files)
+            // load legacy mods in "modlist.txt"
+            foreach (var file in legacyModTxtFiles)
+            {
+                LoadModArchive(file, analyzeFiles);
+            }
+
+            // legacy mods that aren't in "modlist.txt" next
+            foreach (var file in legacyFiles)
+            {
+                LoadModArchive(file, analyzeFiles);
+            }
+            
+            // load REDmod mods last
+            foreach (var file in redModFiles)
             {
                 LoadModArchive(file, analyzeFiles);
             }

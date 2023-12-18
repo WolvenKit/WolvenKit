@@ -132,6 +132,30 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(16)] 
+		[RED("ignoreHudScaleOverride")] 
+		public CBool IgnoreHudScaleOverride
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(17)] 
+		[RED("hudScalingInterpolationValue")] 
+		public CFloat HudScalingInterpolationValue
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("hudScalingMarginCorrection")] 
+		public inkMargin HudScalingMarginCorrection
+		{
+			get => GetPropertyValue<inkMargin>();
+			set => SetPropertyValue<inkMargin>(value);
+		}
+
 		public inkHudWidgetSpawnEntry()
 		{
 			Enabled = true;
@@ -140,6 +164,8 @@ namespace WolvenKit.RED4.Types
 			AnchorPoint = new Vector2();
 			Margins = new inkMargin();
 			SlotParams = new inkWidgetSlotAttachmentParams { UseSlotLayout = true, LayoutOverride = new inkWidgetLayout { Padding = new inkMargin(), Margin = new inkMargin(), AnchorPoint = new Vector2(), SizeCoefficient = 1.000000F } };
+			HudScalingInterpolationValue = 1.000000F;
+			HudScalingMarginCorrection = new inkMargin();
 
 			PostConstruct();
 		}

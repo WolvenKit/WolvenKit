@@ -61,8 +61,48 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(11)] 
+		[RED("hudScalingSensitiveWidgets")] 
+		public CArray<gameuiHudScalingSensitiveWidget> HudScalingSensitiveWidgets
+		{
+			get => GetPropertyValue<CArray<gameuiHudScalingSensitiveWidget>>();
+			set => SetPropertyValue<CArray<gameuiHudScalingSensitiveWidget>>(value);
+		}
+
+		[Ordinal(12)] 
 		[RED("phoneIconMarker")] 
 		public inkWidgetReference PhoneIconMarker
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(13)] 
+		[RED("phoneIconVehicleMarker")] 
+		public inkWidgetReference PhoneIconVehicleMarker
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(14)] 
+		[RED("callMarker")] 
+		public inkWidgetReference CallMarker
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(15)] 
+		[RED("contactsMarker")] 
+		public inkWidgetReference ContactsMarker
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(16)] 
+		[RED("notificationMarker")] 
+		public inkWidgetReference NotificationMarker
 		{
 			get => GetPropertyValue<inkWidgetReference>();
 			set => SetPropertyValue<inkWidgetReference>(value);
@@ -77,7 +117,12 @@ namespace WolvenKit.RED4.Types
 			NotificationsElement = new gameuiPhoneElementVisibility { Slot = new inkCompoundWidgetReference() };
 			PhoneIconElement = new gameuiLocalPhoneElement();
 			ResolutionSensitiveWidgets = new();
+			HudScalingSensitiveWidgets = new();
 			PhoneIconMarker = new inkWidgetReference();
+			PhoneIconVehicleMarker = new inkWidgetReference();
+			CallMarker = new inkWidgetReference();
+			ContactsMarker = new inkWidgetReference();
+			NotificationMarker = new inkWidgetReference();
 
 			PostConstruct();
 		}

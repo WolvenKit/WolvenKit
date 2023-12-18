@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CrosshairGameController_BlackwallForce : CrosshairGameController_Smart_Rifl
 	{
-		[Ordinal(69)] 
+		[Ordinal(72)] 
 		[RED("lastSmartParams")] 
 		public CHandle<gamesmartGunUIParameters> LastSmartParams
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gamesmartGunUIParameters>>(value);
 		}
 
-		[Ordinal(70)] 
+		[Ordinal(73)] 
 		[RED("smartGunData")] 
 		public CHandle<gamesmartGunUIParameters> SmartGunData
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gamesmartGunUIParameters>>(value);
 		}
 
-		[Ordinal(71)] 
+		[Ordinal(74)] 
 		[RED("targetList")] 
 		public CArray<gamesmartGunUITargetParameters> TargetList
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gamesmartGunUITargetParameters>>(value);
 		}
 
-		[Ordinal(72)] 
+		[Ordinal(75)] 
 		[RED("targetData")] 
 		public gamesmartGunUITargetParameters TargetData
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamesmartGunUITargetParameters>(value);
 		}
 
-		[Ordinal(73)] 
+		[Ordinal(76)] 
 		[RED("numOfTargets")] 
 		public CInt32 NumOfTargets
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(74)] 
+		[Ordinal(77)] 
 		[RED("owner")] 
 		public CWeakHandle<gameObject> Owner
 		{

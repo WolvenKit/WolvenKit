@@ -21,6 +21,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(100)] 
+		[RED("metroAnimationNode")] 
+		public NodeRef MetroAnimationNode
+		{
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
+		}
+
+		[Ordinal(101)] 
+		[RED("SubwayGateBroken")] 
+		public CBool SubwayGateBroken
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(102)] 
 		[RED("fastTravelComponent")] 
 		public CHandle<FastTravelComponent> FastTravelComponent
 		{
@@ -28,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<FastTravelComponent>>(value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(103)] 
 		[RED("lockColiderComponent")] 
 		public CHandle<entIPlacedComponent> LockColiderComponent
 		{
@@ -36,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entIPlacedComponent>>(value);
 		}
 
-		[Ordinal(102)] 
+		[Ordinal(104)] 
 		[RED("mappinID")] 
 		public gameNewMappinID MappinID
 		{
@@ -44,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameNewMappinID>(value);
 		}
 
-		[Ordinal(103)] 
+		[Ordinal(105)] 
 		[RED("isShortGlitchActive")] 
 		public CBool IsShortGlitchActive
 		{
@@ -52,12 +68,28 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(106)] 
 		[RED("shortGlitchDelayID")] 
 		public gameDelayID ShortGlitchDelayID
 		{
 			get => GetPropertyValue<gameDelayID>();
 			set => SetPropertyValue<gameDelayID>(value);
+		}
+
+		[Ordinal(107)] 
+		[RED("hologramMeshGreen")] 
+		public CHandle<entIPlacedComponent> HologramMeshGreen
+		{
+			get => GetPropertyValue<CHandle<entIPlacedComponent>>();
+			set => SetPropertyValue<CHandle<entIPlacedComponent>>(value);
+		}
+
+		[Ordinal(108)] 
+		[RED("hologramMeshRed")] 
+		public CHandle<entIPlacedComponent> HologramMeshRed
+		{
+			get => GetPropertyValue<CHandle<entIPlacedComponent>>();
+			set => SetPropertyValue<CHandle<entIPlacedComponent>>(value);
 		}
 
 		public DataTerm()

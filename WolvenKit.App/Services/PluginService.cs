@@ -261,8 +261,7 @@ public partial class PluginService : ObservableObject, IPluginService
             IEnumerable<Octokit.ReleaseAsset> asset = new List<Octokit.ReleaseAsset>();
             try
             {
-                var releases = await ghClient.Repository.Release.GetAll(id.GetUrl().Split('/').First(), id.GetUrl().Split('/').Last());
-                var latest = releases[0];
+                var latest = await ghClient.Repository.Release.GetLatest(id.GetUrl().Split('/').First(), id.GetUrl().Split('/').Last());
                 var assets = latest.Assets.ToList();
                 asset = assets.Where(x => Regex.IsMatch(x.Name, id.GetFile()));
             }

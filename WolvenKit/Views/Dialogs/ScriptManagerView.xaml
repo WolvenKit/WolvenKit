@@ -172,6 +172,11 @@
                 HorizontalAlignment="Left"
                 Click="Add_OnClick"
                 Content="Add" />
+            <Button
+                Width="90"
+                HorizontalAlignment="Right"
+                Command="{Binding UpdateScriptsCommand}"
+                Content="Update Scripts" />
         </DockPanel>
     </Grid>
 </reactiveUi:ReactiveUserControl>

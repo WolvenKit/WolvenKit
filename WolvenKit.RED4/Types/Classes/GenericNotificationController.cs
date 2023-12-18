@@ -84,6 +84,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(15)] 
+		[RED("customInputActionName")] 
+		public CName CustomInputActionName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
 		public GenericNotificationController()
 		{
 			TitleRef = new inkTextWidgetReference();

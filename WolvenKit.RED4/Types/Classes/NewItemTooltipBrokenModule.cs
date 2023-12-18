@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class NewItemTooltipBrokenModule : NewItemTooltipModuleController
 	{
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("descriptionText")] 
 		public inkTextWidgetReference DescriptionText
 		{

@@ -1,7 +1,7 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class inkIgnoreHUDSafeZones : inkUserData
+	public partial class inkIgnoreHUDSafeZones : inkInitializedWidgetUserData
 	{
 		public inkIgnoreHUDSafeZones()
 		{

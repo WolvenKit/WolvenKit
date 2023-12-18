@@ -68,6 +68,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EFilterType>>(value);
 		}
 
+		[Ordinal(8)] 
+		[RED("shouldHideOnMinimap")] 
+		public CBool ShouldHideOnMinimap
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public SecurityAreaData()
 		{
 			Id = new gamePersistentID();

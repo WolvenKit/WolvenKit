@@ -152,7 +152,7 @@ public partial class RDTTextureViewModel : RedDocumentTabViewModel
             };
 
             // import raw texture to xbm
-            var newxbm = image.SaveToXBM(xbmImportArgs);
+            var newxbm = image.SaveToXBM(xbmImportArgs, true);
 
             // set properties in file
             var replaced = false;

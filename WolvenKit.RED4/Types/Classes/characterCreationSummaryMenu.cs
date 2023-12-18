@@ -77,6 +77,30 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(15)] 
+		[RED("attributeUnsetValue")] 
+		public inkTextWidgetReference AttributeUnsetValue
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(16)] 
+		[RED("unsetAttributeWrapper")] 
+		public inkWidgetReference UnsetAttributeWrapper
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(17)] 
+		[RED("expansionInfoWrapper")] 
+		public inkWidgetReference ExpansionInfoWrapper
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(18)] 
 		[RED("previousPageBtn")] 
 		public inkWidgetReference PreviousPageBtn
 		{
@@ -84,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("glitchBtn")] 
 		public inkWidgetReference GlitchBtn
 		{
@@ -92,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("animationProxy")] 
 		public CHandle<inkanimProxy> AnimationProxy
 		{
@@ -100,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
 		[RED("loadingAnimationProxy")] 
 		public CHandle<inkanimProxy> LoadingAnimationProxy
 		{
@@ -108,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(22)] 
 		[RED("loadingFinished")] 
 		public CBool LoadingFinished
 		{
@@ -116,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(23)] 
 		[RED("glitchClicks")] 
 		public CInt32 GlitchClicks
 		{
@@ -135,6 +159,9 @@ namespace WolvenKit.RED4.Types
 			AttributeReflexesValue = new inkTextWidgetReference();
 			AttributeTechnicalAbilityValue = new inkTextWidgetReference();
 			AttributeCoolValue = new inkTextWidgetReference();
+			AttributeUnsetValue = new inkTextWidgetReference();
+			UnsetAttributeWrapper = new inkWidgetReference();
+			ExpansionInfoWrapper = new inkWidgetReference();
 			PreviousPageBtn = new inkWidgetReference();
 			GlitchBtn = new inkWidgetReference();
 

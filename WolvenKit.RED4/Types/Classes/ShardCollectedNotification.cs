@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ShardCollectedNotification : GenericNotificationController
 	{
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("shardTitle")] 
 		public inkTextWidgetReference ShardTitle
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("bbListenerId")] 
 		public CHandle<redCallbackObject> BbListenerId
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("animProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{

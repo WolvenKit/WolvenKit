@@ -36,12 +36,29 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
+		[Ordinal(5)] 
+		[RED("backgroundWidget")] 
+		public inkWidgetReference BackgroundWidget
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(6)] 
+		[RED("isUnlocked")] 
+		public CBool IsUnlocked
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public GogRewardEntryController()
 		{
 			NameWidget = new inkWidgetReference();
 			DescriptionWidget = new inkWidgetReference();
 			IconImage = new inkImageWidgetReference();
 			Ep1LabelContainer = new inkWidgetReference();
+			BackgroundWidget = new inkWidgetReference();
 
 			PostConstruct();
 		}

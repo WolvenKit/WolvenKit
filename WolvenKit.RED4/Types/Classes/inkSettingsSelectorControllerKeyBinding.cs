@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class inkSettingsSelectorControllerKeyBinding : inkSettingsSelectorController
 	{
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("text")] 
 		public inkRichTextBoxWidgetReference Text
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkRichTextBoxWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("buttonRef")] 
 		public inkWidgetReference ButtonRef
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("editView")] 
 		public inkWidgetReference EditView
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("editOpacity")] 
 		public CFloat EditOpacity
 		{

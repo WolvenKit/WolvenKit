@@ -77,6 +77,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(11)] 
+		[RED("headerText")] 
+		public inkTextWidgetReference HeaderText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(12)] 
 		[RED("sellItemsFullQuantity")] 
 		public inkTextWidgetReference SellItemsFullQuantity
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("sellItemsLimitedQuantity")] 
 		public inkTextWidgetReference SellItemsLimitedQuantity
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("buttonHintsController")] 
 		public CWeakHandle<ButtonHints> ButtonHintsController
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ButtonHints>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("gameData")] 
 		public CHandle<gameItemData> GameData
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameItemData>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("buttonOk")] 
 		public inkWidgetReference ButtonOk
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("buttonCancel")] 
 		public inkWidgetReference ButtonCancel
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("closeAnimProxy")] 
 		public CHandle<inkanimProxy> CloseAnimProxy
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("data")] 
 		public CHandle<VendorSellJunkPopupData> Data
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<VendorSellJunkPopupData>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("libraryPath")] 
 		public inkWidgetLibraryReference LibraryPath
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetLibraryReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("closeData")] 
 		public CHandle<VendorSellJunkPopupCloseData> CloseData
 		{
@@ -167,6 +175,7 @@ namespace WolvenKit.RED4.Types
 			ItemPriceText = new inkTextWidgetReference();
 			Root = new inkWidgetReference();
 			Background = new inkWidgetReference();
+			HeaderText = new inkTextWidgetReference();
 			SellItemsFullQuantity = new inkTextWidgetReference();
 			SellItemsLimitedQuantity = new inkTextWidgetReference();
 			ButtonOk = new inkWidgetReference();

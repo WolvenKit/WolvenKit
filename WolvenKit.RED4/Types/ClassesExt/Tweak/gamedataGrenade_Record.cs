@@ -123,6 +123,54 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
+		[RED("hardDifficultySelfDamagePerTick")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat HardDifficultySelfDamagePerTick
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("normalDifficultySelfDamagePerTick")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat NormalDifficultySelfDamagePerTick
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("npc_hardDifficultySelfDamagePerTick")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat Npc_hardDifficultySelfDamagePerTick
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("npc_normalDifficultySelfDamagePerTick")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat Npc_normalDifficultySelfDamagePerTick
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("npc_storyDifficultySelfDamagePerTick")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat Npc_storyDifficultySelfDamagePerTick
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("npc_veryHardDifficultySelfDamagePerTick")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat Npc_veryHardDifficultySelfDamagePerTick
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
 		[RED("npcHitReactionAttack")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID NpcHitReactionAttack
@@ -259,6 +307,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 		
+		[RED("storyDifficultySelfDamagePerTick")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat StoryDifficultySelfDamagePerTick
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
 		[RED("underwaterDetonationRumbleName")]
 		[REDProperty(IsIgnored = true)]
 		public CString UnderwaterDetonationRumbleName
@@ -281,6 +337,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
+		}
+		
+		[RED("veryHardDifficultySelfDamagePerTick")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat VeryHardDifficultySelfDamagePerTick
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 		
 		[RED("waterDetonationImpulseRadiusCoef")]

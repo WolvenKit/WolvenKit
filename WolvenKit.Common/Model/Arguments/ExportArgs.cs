@@ -140,7 +140,6 @@ namespace WolvenKit.Common.Model.Arguments
     public class XbmExportArgs : ExportArgs
     {
         private EUncookExtension _uncookExtension = EUncookExtension.png;
-        private bool _flip = true;
 
         /// <summary>
         ///  Uncook Format for XBM.
@@ -149,19 +148,12 @@ namespace WolvenKit.Common.Model.Arguments
         [Display(Name = "XBM Export Type")]
         [WkitScriptAccess("ImageType")]
         public EUncookExtension UncookExtension { get => _uncookExtension; set => SetProperty(ref _uncookExtension, value); }
-        /// <summary>
-        /// Flip Image argument
-        /// </summary>
-        [Category("Export Settings")]
-        [Display(Name = "Flip Image")]
-        [WkitScriptAccess()]
-        public bool Flip { get => _flip; set => SetProperty(ref _flip, value); }
 
         /// <summary>
         /// String Override to display info in datagrid.
         /// </summary>
         /// <returns>String</returns>
-        public override string ToString() => $"{UncookExtension} | Flip : {Flip}";
+        public override string ToString() => $"{UncookExtension}";
     }
     /// <summary>
     /// ENT Export Arguments

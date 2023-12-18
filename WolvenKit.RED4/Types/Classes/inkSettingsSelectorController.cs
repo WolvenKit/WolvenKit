@@ -53,6 +53,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(7)] 
+		[RED("indentMarker")] 
+		public inkWidgetReference IndentMarker
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(8)] 
 		[RED("SettingsEntry")] 
 		public CWeakHandle<userSettingsVar> SettingsEntry
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<userSettingsVar>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("hoveredChildren")] 
 		public CArray<CWeakHandle<inkWidget>> HoveredChildren
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<inkWidget>>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("IsPreGame")] 
 		public CBool IsPreGame
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("varGroupPath")] 
 		public CName VarGroupPath
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("varName")] 
 		public CName VarName
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("additionalText")] 
 		public CName AdditionalText
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("hoverInAnim")] 
 		public CHandle<inkanimProxy> HoverInAnim
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("hoverOutAnim")] 
 		public CHandle<inkanimProxy> HoverOutAnim
 		{
@@ -124,6 +132,7 @@ namespace WolvenKit.RED4.Types
 			OptionSwitchHint = new inkWidgetReference();
 			HoverGeneralHighlight = new inkWidgetReference();
 			Container = new inkWidgetReference();
+			IndentMarker = new inkWidgetReference();
 			HoveredChildren = new();
 
 			PostConstruct();

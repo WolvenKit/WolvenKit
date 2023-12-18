@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameuiDriverCombatMountedMissileLauncherCrosshairGameController : gameuiCrosshairBaseGameController
 	{
-		[Ordinal(27)] 
+		[Ordinal(29)] 
 		[RED("lockingAnimationWidget")] 
 		public inkWidgetReference LockingAnimationWidget
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(30)] 
 		[RED("lockingAnimationProxy")] 
 		public CHandle<inkanimProxy> LockingAnimationProxy
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(31)] 
 		[RED("psmTrackedTargetChangedCallback")] 
 		public CHandle<redCallbackObject> PsmTrackedTargetChangedCallback
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(32)] 
 		[RED("currentTarget")] 
 		public CWeakHandle<entIPlacedComponent> CurrentTarget
 		{

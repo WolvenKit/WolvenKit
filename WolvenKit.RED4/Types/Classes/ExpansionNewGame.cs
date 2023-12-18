@@ -148,6 +148,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
+		[Ordinal(24)] 
+		[RED("isInputLocked")] 
+		public CBool IsInputLocked
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public ExpansionNewGame()
 		{
 			NewGameDescription = new inkTextWidgetReference();

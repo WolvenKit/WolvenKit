@@ -107,6 +107,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 		
+		[RED("interruptionPrereqs")]
+		[REDProperty(IsIgnored = true)]
+		public CArray<TweakDBID> InterruptionPrereqs
+		{
+			get => GetPropertyValue<CArray<TweakDBID>>();
+			set => SetPropertyValue<CArray<TweakDBID>>(value);
+		}
+		
 		[RED("objectActionType")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID ObjectActionType

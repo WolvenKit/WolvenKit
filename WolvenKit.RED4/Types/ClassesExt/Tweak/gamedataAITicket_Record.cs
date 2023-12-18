@@ -131,6 +131,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 		
+		[RED("stdDevStarsTrash")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID StdDevStarsTrash
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
 		[RED("syncTimeout")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat SyncTimeout

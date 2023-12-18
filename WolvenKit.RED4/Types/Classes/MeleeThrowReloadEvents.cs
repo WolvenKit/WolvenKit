@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class MeleeThrowReloadEvents : MeleeEventsTransition
 	{
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("isSwitchingWeapon")] 
 		public CBool IsSwitchingWeapon
 		{

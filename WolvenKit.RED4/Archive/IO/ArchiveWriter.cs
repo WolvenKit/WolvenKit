@@ -6,6 +6,7 @@ using WolvenKit.Core.Compression;
 using WolvenKit.Core.CRC;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Archive.IO;
@@ -48,6 +49,8 @@ public class ArchiveWriter
         _loggerService = loggerService;
     }
 
+    private record FileInfoEntry(string RelPath, FileInfo FileInfo);
+
     public Archive? WriteArchive(DirectoryInfo infolder, DirectoryInfo outpath, string? modname = null)
     {
         infolder = new DirectoryInfo(Path.GetFullPath(infolder.FullName).TrimEnd('\\'));
@@ -66,23 +69,75 @@ public class ArchiveWriter
             _loggerService.Warning("Oodle couldn't be loaded. Using Kraken.dll instead could cause errors.");
         }
 
+        var regex = new Regex("^(\\d+)\\.");
+
         // get files
-        var includedExtensions = Enum.GetNames<ERedExtension>().ToList();
-        includedExtensions.Add("bin");
-        var allfiles = infolder.GetFiles("*", SearchOption.AllDirectories);
-        var parentfiles = allfiles
-            .Where(_ => includedExtensions.Any(x => _.Extension.TrimStart('.').ToLower() == x));
-        var fileInfos = parentfiles
-            .OrderBy(_ => FNV1A64HashAlgorithm.HashString(_.FullName[(infolder.FullName.Length + 1)..]))
-            .ToList();
+        var supportedExtensions = Enum.GetNames<ERedExtension>().ToList();
+        supportedExtensions.Add("bin");
 
-        var customPaths = (from fileInfo in fileInfos
-                           select ResourcePath.SanitizePath(fileInfo.FullName[(infolder.FullName.Length + 1)..])
-                           into relPath
-                           let hash = FNV1A64HashAlgorithm.HashString(relPath)
-                           where !_hashService.Contains(hash, false)
-                           select relPath).ToList();
+        var customPaths = new List<string>();
 
+        var fileDict = new Dictionary<ulong, List<FileInfoEntry>>();
+        foreach (var fileInfo in infolder.GetFiles("*", SearchOption.AllDirectories))
+        {
+            var relPath = fileInfo.FullName[(infolder.FullName.Length + 1)..];
+
+            if (!supportedExtensions.Contains(fileInfo.Extension[1..].ToLower()))
+            {
+                _loggerService.Warning($"Unknown file extension for \"{relPath}\". Skipping");
+                continue;
+            }
+
+            ulong hash;
+            var match = regex.Match(relPath);
+            if (match.Success)
+            {
+                if (!ulong.TryParse(match.Groups[1].Value, out hash))
+                {
+                    _loggerService.Warning($"Couldn't extract hash for \"{relPath}\". Skipping");
+                    continue;
+                }
+            }
+            else
+            {
+                var sanitizedPath = ResourcePath.SanitizePath(relPath);
+                hash = FNV1A64HashAlgorithm.HashString(sanitizedPath);
+
+                if (!_hashService.Contains(hash, false) && !_hashService.GetMissingHashes().Contains(hash))
+                {
+                    customPaths.Add(sanitizedPath);
+                }
+            }
+
+            if (!fileDict.ContainsKey(hash))
+            {
+                fileDict.Add(hash, new List<FileInfoEntry>());
+            }
+            fileDict[hash].Add(new FileInfoEntry(relPath, fileInfo));
+        }
+
+        var duplicateFound = false;
+        foreach (var (hash, fileEntries) in fileDict)
+        {
+            if (fileEntries.Count == 1)
+            {
+                continue;
+            }
+
+            duplicateFound = true;
+
+            _loggerService.Error($"The following files have the same hash ({hash}):");
+            foreach (var (relPath, _) in fileEntries)
+            {
+                _loggerService.Error($"\t{relPath}");
+            }
+        }
+
+        if (duplicateFound)
+        {
+            _loggerService.Error($"Duplicated files found. Aborting");
+            return null;
+        }
 
         var outfile = Path.Combine(outpath.FullName, $"{infolder.Name}.archive");
         if (modname != null)
@@ -117,11 +172,13 @@ public class ArchiveWriter
         #region write files
 
         HashSet<ulong> importsHashSet = new();
-        var regex = new Regex("^(\\d+)\\.");
+        
 
         var progress = 0;
-        foreach (var fileInfo in fileInfos)
+        foreach (var (hash, fileEntries) in fileDict)
         {
+            var fileInfo = fileEntries[0].FileInfo;
+
             if (s_uncompressedFiles.Contains(fileInfo.Extension.ToLower()) && fileInfo.Length > uint.MaxValue)
             {
                 _loggerService.Error($"{fileInfo.FullName} is too large. Maximum size for uncompressed files is {uint.MaxValue} bytes.");
@@ -135,31 +192,6 @@ public class ArchiveWriter
                 return null;
             }
 
-            var relpath = fileInfo.FullName[(infolder.FullName.Length + 1)..];
-            var sanitizedPath = ResourcePath.SanitizePath(relpath);
-
-            ulong hash;
-            var match = regex.Match(relpath);
-            if (match.Success)
-            {
-                if (!ulong.TryParse(match.Groups[1].Value, out hash))
-                {
-                    continue;
-                }
-            }
-            else
-            {
-                hash = FNV1A64HashAlgorithm.HashString(sanitizedPath);
-            }
-
-            if (!_hashService.Contains(hash))
-            {
-                if (!_hashService.GetMissingHashes().Contains(hash))
-                {
-                    customPaths.Add(sanitizedPath);
-                }
-            }
-
             using var fileStream = new FileStream(fileInfo.FullName, FileMode.Open);
             using var fileBinaryReader = new BinaryReader(fileStream);
             using var reader = new CR2WReader(fileBinaryReader);
@@ -171,7 +203,20 @@ public class ArchiveWriter
             uint lastoffsetidx;
             var flags = 0;
 
-            if (reader.ReadFileInfo(out var info) == EFileReadErrorCodes.NoError)
+            EFileReadErrorCodes readStatus;
+            CR2WFileInfo? info;
+
+            try
+            {
+                readStatus = reader.ReadFileInfo(out info);
+            }
+            catch (Exception e)
+            {
+                _loggerService.Error($"Could not read \"{fileInfo.FullName}\".");
+                return null;
+            }
+
+            if (readStatus == EFileReadErrorCodes.NoError)
             {
                 // kraken the file and write
                 var cr2wfilesize = (int)info!.FileHeader.objectsEnd;

@@ -877,14 +877,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(109)] 
-		[RED("UI_MainMenu")] 
-		public CHandle<UI_MainMenuDef> UI_MainMenu
-		{
-			get => GetPropertyValue<CHandle<UI_MainMenuDef>>();
-			set => SetPropertyValue<CHandle<UI_MainMenuDef>>(value);
-		}
-
-		[Ordinal(110)] 
 		[RED("TokenUpgradedCyberwareBlackboard")] 
 		public CHandle<TokenUpgradedCyberwareBlackboardDef> TokenUpgradedCyberwareBlackboard
 		{
@@ -892,7 +884,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<TokenUpgradedCyberwareBlackboardDef>>(value);
 		}
 
-		[Ordinal(111)] 
+		[Ordinal(110)] 
 		[RED("CombatGadget")] 
 		public CHandle<CombatGadgetDataDef> CombatGadget
 		{
@@ -900,7 +892,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<CombatGadgetDataDef>>(value);
 		}
 
-		[Ordinal(112)] 
+		[Ordinal(111)] 
 		[RED("Mines")] 
 		public CHandle<MinesDataDef> Mines
 		{
@@ -908,7 +900,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<MinesDataDef>>(value);
 		}
 
-		[Ordinal(113)] 
+		[Ordinal(112)] 
 		[RED("DebugData")] 
 		public CHandle<DebugDataDef> DebugData
 		{
@@ -916,7 +908,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<DebugDataDef>>(value);
 		}
 
-		[Ordinal(114)] 
+		[Ordinal(113)] 
 		[RED("DeviceDebug")] 
 		public CHandle<DeviceDebugDef> DeviceDebug
 		{
@@ -924,7 +916,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<DeviceDebugDef>>(value);
 		}
 
-		[Ordinal(115)] 
+		[Ordinal(114)] 
 		[RED("ChargedGrenadesBlackBoard")] 
 		public CHandle<ChargedGrenadesBlackBoardDef> ChargedGrenadesBlackBoard
 		{
@@ -932,7 +924,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ChargedGrenadesBlackBoardDef>>(value);
 		}
 
-		[Ordinal(116)] 
+		[Ordinal(115)] 
 		[RED("ChargedHealingBlackBoard")] 
 		public CHandle<ChargedHealingBlackBoardDef> ChargedHealingBlackBoard
 		{
@@ -940,7 +932,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ChargedHealingBlackBoardDef>>(value);
 		}
 
-		[Ordinal(117)] 
+		[Ordinal(116)] 
 		[RED("BlackwallDeathAnim")] 
 		public CHandle<BlackwallAnimDef> BlackwallDeathAnim
 		{
@@ -948,7 +940,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<BlackwallAnimDef>>(value);
 		}
 
-		[Ordinal(118)] 
+		[Ordinal(117)] 
 		[RED("CustomCentaurBlackboard")] 
 		public CHandle<CustomCentaurBlackboardDef> CustomCentaurBlackboard
 		{
@@ -956,7 +948,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<CustomCentaurBlackboardDef>>(value);
 		}
 
-		[Ordinal(119)] 
+		[Ordinal(118)] 
 		[RED("CW_MuteArm")] 
 		public CHandle<CW_MuteArmDef> CW_MuteArm
 		{
@@ -964,7 +956,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<CW_MuteArmDef>>(value);
 		}
 
-		[Ordinal(120)] 
+		[Ordinal(119)] 
 		[RED("PhotoMode")] 
 		public CHandle<PhotoModeDef> PhotoMode
 		{
@@ -972,7 +964,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<PhotoModeDef>>(value);
 		}
 
-		[Ordinal(121)] 
+		[Ordinal(120)] 
 		[RED("GameplaySettings")] 
 		public CHandle<GameplaySettingsDef> GameplaySettings
 		{
@@ -980,7 +972,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<GameplaySettingsDef>>(value);
 		}
 
-		[Ordinal(122)] 
+		[Ordinal(121)] 
 		[RED("InputSchemes")] 
 		public CHandle<InputSchemesDef> InputSchemes
 		{
@@ -988,7 +980,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<InputSchemesDef>>(value);
 		}
 
-		[Ordinal(123)] 
+		[Ordinal(122)] 
 		[RED("PoliceChaseParams")] 
 		public CHandle<PoliceChaseParamsDef> PoliceChaseParams
 		{

@@ -44,9 +44,18 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
+		[Ordinal(5)] 
+		[RED("cachedModifier")] 
+		public gameStatPoolModifier CachedModifier
+		{
+			get => GetPropertyValue<gameStatPoolModifier>();
+			set => SetPropertyValue<gameStatPoolModifier>(value);
+		}
+
 		public ModifyStatPoolModifierEffector()
 		{
 			OwnerEntityID = new entEntityID();
+			CachedModifier = new gameStatPoolModifier();
 
 			PostConstruct();
 		}

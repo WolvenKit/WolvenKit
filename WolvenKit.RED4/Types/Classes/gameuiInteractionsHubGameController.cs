@@ -45,6 +45,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(14)] 
+		[RED("TooltipsAnchorPoint")] 
+		public inkWidgetReference TooltipsAnchorPoint
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(15)] 
 		[RED("TooltipsManager")] 
 		public CWeakHandle<gameuiTooltipsManager> TooltipsManager
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameuiTooltipsManager>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("tooltipProvider")] 
 		public CWeakHandle<TooltipProvider> TooltipProvider
 		{
@@ -67,6 +75,7 @@ namespace WolvenKit.RED4.Types
 			BotInteractionWidgetsLibraries = new();
 			BotInteractionsRoot = new inkWidgetReference();
 			TooltipsManagerRef = new inkWidgetReference();
+			TooltipsAnchorPoint = new inkWidgetReference();
 
 			PostConstruct();
 		}

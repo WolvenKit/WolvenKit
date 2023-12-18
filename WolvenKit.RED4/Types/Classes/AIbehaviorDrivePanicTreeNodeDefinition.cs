@@ -44,6 +44,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
+		[Ordinal(6)] 
+		[RED("needDriver")] 
+		public CHandle<AIArgumentMapping> NeedDriver
+		{
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
+		}
+
 		public AIbehaviorDrivePanicTreeNodeDefinition()
 		{
 			PostConstruct();

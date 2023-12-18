@@ -12,11 +12,11 @@ namespace WolvenKit.App.Helpers;
 
 public static class ImageDecoder
 {
-    public static BitmapImage CreateBitmapImage(RedImage img)
+    public static BitmapImage CreateBitmapImage(RedImage img, bool flip)
     {
         var bitmapImage = new BitmapImage();
         bitmapImage.BeginInit();
-        bitmapImage.StreamSource = new MemoryStream(img.GetPreview(true));
+        bitmapImage.StreamSource = new MemoryStream(img.GetPreview(flip));
         bitmapImage.EndInit();
 
         return bitmapImage;
@@ -31,7 +31,7 @@ public static class ImageDecoder
                 return null;
             }
 
-            return CreateBitmapImage(image);
+            return CreateBitmapImage(image, false);
         });
 
     public static Task<BitmapImage?> RenderToBitmapImageDds(Stream stream, Enums.ETextureRawFormat format) =>
@@ -43,7 +43,7 @@ public static class ImageDecoder
                 return null;
             }
 
-            return CreateBitmapImage(image);
+            return CreateBitmapImage(image, false);
         });
 
     /// <summary>
@@ -57,7 +57,7 @@ public static class ImageDecoder
             var image = RedImage.LoadFromFile(file);
             if (image != null)
             {
-                return CreateBitmapImage(image);
+                return CreateBitmapImage(image, false);
             }
 
             return null;

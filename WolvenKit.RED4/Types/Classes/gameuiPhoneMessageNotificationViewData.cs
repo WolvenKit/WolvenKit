@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameuiPhoneMessageNotificationViewData : gameuiQuestUpdateNotificationViewData
 	{
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("threadHash")] 
 		public CInt32 ThreadHash
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("contactHash")] 
 		public CInt32 ContactHash
 		{

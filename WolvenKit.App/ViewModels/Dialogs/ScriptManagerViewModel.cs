@@ -9,6 +9,7 @@ using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Scripting;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.Scripting;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
@@ -20,13 +21,15 @@ public partial class ScriptManagerViewModel : DialogViewModel
     private readonly AppViewModel _appViewModel;
     private readonly AppScriptService _scriptService;
     private readonly ISettingsManager _settingsManager;
+    private readonly ILoggerService _loggerService;
 
     
-    public ScriptManagerViewModel(AppViewModel appViewModel, AppScriptService scriptService, ISettingsManager settingsManager)
+    public ScriptManagerViewModel(AppViewModel appViewModel, AppScriptService scriptService, ISettingsManager settingsManager, ILoggerService loggerService)
     {
         _appViewModel = appViewModel;
         _scriptService = scriptService;
         _settingsManager = settingsManager;
+        _loggerService = loggerService;
 
         GetScriptFiles();
     }
@@ -64,6 +67,15 @@ public partial class ScriptManagerViewModel : DialogViewModel
 
     [RelayCommand]
     private void Cancel() => _appViewModel.CloseModalCommand.Execute(null);
+
+    [RelayCommand]
+    private async Task UpdateScripts()
+    {
+        await _appViewModel.CheckForScriptUpdatesCommand.ExecuteAsync(null);
+        GetScriptFiles();
+
+        _loggerService.Info("Scripts update complete");
+    }
 
     public void GetScriptFiles()
     {

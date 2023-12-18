@@ -2,9 +2,9 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class characterCreationBodyMorphColorOption : inkWidgetLogicController
+	public partial class characterCreationBodyMorphColorOption : CharacterCreationBodyMorphBaseOption
 	{
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("optionLabel")] 
 		public inkTextWidgetReference OptionLabel
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("colorPickerBtn")] 
 		public inkWidgetReference ColorPickerBtn
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("selectorNextBtn")] 
 		public inkWidgetReference SelectorNextBtn
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("selectorPrevBtn")] 
 		public inkWidgetReference SelectorPrevBtn
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("selectorTexture")] 
 		public inkImageWidgetReference SelectorTexture
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("arrowsTexture")] 
 		public inkImageWidgetReference ArrowsTexture
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("optionSwitchHint")] 
 		public inkWidgetReference OptionSwitchHint
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("colorPickerOption")] 
 		public CWeakHandle<gameuiCharacterCustomizationOption> ColorPickerOption
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameuiCharacterCustomizationOption>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("appearanceInfo")] 
 		public CWeakHandle<gameuiAppearanceInfo> AppearanceInfo
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameuiAppearanceInfo>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("currColorIndex")] 
 		public CInt32 CurrColorIndex
 		{
@@ -84,20 +84,12 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("selector")] 
 		public CWeakHandle<inkWidget> Selector
 		{
 			get => GetPropertyValue<CWeakHandle<inkWidget>>();
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
-		}
-
-		[Ordinal(12)] 
-		[RED("isPrevOrNextBtnHoveredOver")] 
-		public CBool IsPrevOrNextBtnHoveredOver
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(13)] 

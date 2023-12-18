@@ -52,6 +52,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
+		[Ordinal(13)] 
+		[RED("actionType")] 
+		public CEnum<VendorSellJunkActionType> ActionType
+		{
+			get => GetPropertyValue<CEnum<VendorSellJunkActionType>>();
+			set => SetPropertyValue<CEnum<VendorSellJunkActionType>>(value);
+		}
+
 		public VendorSellJunkPopupData()
 		{
 			Items = new();

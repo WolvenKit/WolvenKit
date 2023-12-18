@@ -37,22 +37,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(22)] 
-		[RED("trackName")] 
-		public inkTextWidgetReference TrackName
-		{
-			get => GetPropertyValue<inkTextWidgetReference>();
-			set => SetPropertyValue<inkTextWidgetReference>(value);
-		}
-
-		[Ordinal(23)] 
-		[RED("playerVehicle")] 
-		public CWeakHandle<vehicleBaseObject> PlayerVehicle
-		{
-			get => GetPropertyValue<CWeakHandle<vehicleBaseObject>>();
-			set => SetPropertyValue<CWeakHandle<vehicleBaseObject>>(value);
-		}
-
-		[Ordinal(24)] 
 		[RED("stationData")] 
 		public CHandle<RadioListItemData> StationData
 		{
@@ -60,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<RadioListItemData>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(23)] 
 		[RED("currentRadioStationId")] 
 		public CInt32 CurrentRadioStationId
 		{
@@ -74,7 +58,6 @@ namespace WolvenKit.RED4.Types
 			TypeIcon = new inkImageWidgetReference();
 			EquilizerIcon = new inkHorizontalPanelWidgetReference();
 			CodeTLicon = new inkImageWidgetReference();
-			TrackName = new inkTextWidgetReference();
 			CurrentRadioStationId = -1;
 
 			PostConstruct();

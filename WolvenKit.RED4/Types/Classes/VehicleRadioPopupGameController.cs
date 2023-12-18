@@ -13,22 +13,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(16)] 
-		[RED("scrollArea")] 
-		public inkScrollAreaWidgetReference ScrollArea
-		{
-			get => GetPropertyValue<inkScrollAreaWidgetReference>();
-			set => SetPropertyValue<inkScrollAreaWidgetReference>(value);
-		}
-
-		[Ordinal(17)] 
-		[RED("scrollControllerWidget")] 
-		public inkWidgetReference ScrollControllerWidget
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(18)] 
 		[RED("trackName")] 
 		public inkTextWidgetReference TrackName
 		{
@@ -36,7 +20,47 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
+		[Ordinal(17)] 
+		[RED("scrollArea")] 
+		public inkScrollAreaWidgetReference ScrollArea
+		{
+			get => GetPropertyValue<inkScrollAreaWidgetReference>();
+			set => SetPropertyValue<inkScrollAreaWidgetReference>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("scrollControllerWidget")] 
+		public inkWidgetReference ScrollControllerWidget
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
 		[Ordinal(19)] 
+		[RED("radioVolumeSettings")] 
+		public inkWidgetReference RadioVolumeSettings
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(20)] 
+		[RED("volumeSettingGroupName")] 
+		public CName VolumeSettingGroupName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(21)] 
+		[RED("volumeSettingVarName")] 
+		public CName VolumeSettingVarName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(22)] 
 		[RED("dataView")] 
 		public CHandle<RadioStationsDataView> DataView
 		{
@@ -44,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<RadioStationsDataView>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(23)] 
 		[RED("dataSource")] 
 		public CHandle<inkScriptableDataSourceWrapper> DataSource
 		{
@@ -52,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkScriptableDataSourceWrapper>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(24)] 
 		[RED("quickSlotsManager")] 
 		public CWeakHandle<QuickSlotsManager> QuickSlotsManager
 		{
@@ -60,7 +84,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<QuickSlotsManager>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(25)] 
+		[RED("player")] 
+		public CWeakHandle<PlayerPuppet> Player
+		{
+			get => GetPropertyValue<CWeakHandle<PlayerPuppet>>();
+			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
+		}
+
+		[Ordinal(26)] 
 		[RED("playerVehicle")] 
 		public CWeakHandle<vehicleBaseObject> PlayerVehicle
 		{
@@ -68,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<vehicleBaseObject>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(27)] 
 		[RED("startupIndex")] 
 		public CUInt32 StartupIndex
 		{
@@ -76,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(28)] 
 		[RED("currentRadioId")] 
 		public CInt32 CurrentRadioId
 		{
@@ -84,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(29)] 
 		[RED("selectedItem")] 
 		public CWeakHandle<RadioStationListItemController> SelectedItem
 		{
@@ -92,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<RadioStationListItemController>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(30)] 
 		[RED("scrollController")] 
 		public CWeakHandle<inkScrollController> ScrollController
 		{
@@ -100,12 +132,39 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkScrollController>>(value);
 		}
 
+		[Ordinal(31)] 
+		[RED("canVolumeDown")] 
+		public CBool CanVolumeDown
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(32)] 
+		[RED("canVolumeUp")] 
+		public CBool CanVolumeUp
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(33)] 
+		[RED("radioVolumeSettingsController")] 
+		public CWeakHandle<RadioVolumeSettingsController> RadioVolumeSettingsController
+		{
+			get => GetPropertyValue<CWeakHandle<RadioVolumeSettingsController>>();
+			set => SetPropertyValue<CWeakHandle<RadioVolumeSettingsController>>(value);
+		}
+
 		public VehicleRadioPopupGameController()
 		{
 			Icon = new inkImageWidgetReference();
+			TrackName = new inkTextWidgetReference();
 			ScrollArea = new inkScrollAreaWidgetReference();
 			ScrollControllerWidget = new inkWidgetReference();
-			TrackName = new inkTextWidgetReference();
+			RadioVolumeSettings = new inkWidgetReference();
+			VolumeSettingGroupName = "/audio/volume";
+			VolumeSettingVarName = "CarRadioVolume";
 
 			PostConstruct();
 		}

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Documents;
@@ -18,8 +19,11 @@ namespace WolvenKit.Views.Tools
     /// <summary>
     /// Interaction logic for LogView.xaml
     /// </summary>
-    public partial class LogView : ReactiveUserControl<LogViewModel>
+    public partial class LogView
     {
+        private const uint s_logLen_cull_at = 1000;
+        private const int s_logLen_cull_to = 500;
+        
         public LogView()
         {
             InitializeComponent();
@@ -27,26 +31,16 @@ namespace WolvenKit.Views.Tools
             ViewModel = Locator.Current.GetService<LogViewModel>();
             DataContext = ViewModel;
 
-            //var logger = Locator.Current.GetService<ILoggerService>();
-            //logger.Connect()
-            //    .ObserveOn(RxApp.MainThreadScheduler)
-            //    .Bind(out var _logEntries)
-            //    .Subscribe(OnNext);
-
-            var _sink = Locator.Current.GetService<MySink>();
-            var myOperation = _sink.Connect()
-            //.Transform(x => x.RenderMessage())
+            var sink = Locator.Current.GetService<MySink>();
+            var _ = sink.Connect()
             .ObserveOn(RxApp.MainThreadScheduler)
-            .Bind(out var _logEntries)
+            .Bind(out var _)
             .DisposeMany()
             .Subscribe(OnNext);
 
             var consolas = new FontFamily("Consolas");
-            if (consolas != null)
-            {
-                LogRichTextBox.FontFamily = consolas;
-                LogRichTextBox.FontSize = 10;
-            }
+            LogRichTextBox.FontFamily = consolas;
+            LogRichTextBox.FontSize = 10;
         }
 
         private void OnNext(IChangeSet<LogEvent> obj)
@@ -106,14 +100,24 @@ namespace WolvenKit.Views.Tools
                 FontSize = 12,
             };
             paragraph.Inlines.Add(run);
+
+            // cull after certain amount of blocks
+            if (LogRichTextBox.Document.Blocks.Count > s_logLen_cull_at)
+            {
+                var elementsToRemove = LogRichTextBox.Document.Blocks.Take(s_logLen_cull_to).ToList();
+                foreach (var element in elementsToRemove)
+                {
+                    LogRichTextBox.Document.Blocks.Remove(element);
+                }
+                
+            }
             LogRichTextBox.Document.Blocks.Add(paragraph);
 
             DispatcherHelper.RunOnMainThread(() => LogRichTextBox.ScrollToEnd(), DispatcherPriority.Background);
         }
 
-        private static Logtype ToLogtype(LogEventLevel level)
-        {
-            return level switch
+        private static Logtype ToLogtype(LogEventLevel level) =>
+            level switch
             {
                 LogEventLevel.Verbose => Logtype.Debug,
                 LogEventLevel.Debug => Logtype.Debug,
@@ -123,7 +127,6 @@ namespace WolvenKit.Views.Tools
                 LogEventLevel.Fatal => Logtype.Error,
                 _ => Logtype.Normal,
             };
-        }
 
         private static Brush GetBrushForLevel(Logtype level) => level switch
         {

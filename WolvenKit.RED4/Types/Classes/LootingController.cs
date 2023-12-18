@@ -357,6 +357,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(45)] 
+		[RED("brokenLocPrefix")] 
+		public CString BrokenLocPrefix
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(46)] 
 		[RED("requestsCounter")] 
 		public CInt32 RequestsCounter
 		{

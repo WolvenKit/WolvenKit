@@ -115,13 +115,10 @@ namespace WolvenKit.UnitTests
             Directory.CreateDirectory(Path.GetFullPath("texc"));
             var bytes = File.ReadAllBytes(testFile);
 
-            //var outFile = Path.GetFullPath(Path.Combine("texc", $"q204_columbarium_1080p_1.tga"));
-            //var result = TexconvNative.ConvertAndSaveDdsImage(bytes, outFile, TexconvNative.ESaveFileTypes.TGA);
-
             var outFile2 = Path.GetFullPath(Path.Combine("texc", $"{GetTestFile()}.tga"));
             using var ms = new MemoryStream(bytes);
             ms.Seek(0, SeekOrigin.Begin);
-            Assert.IsTrue(Texconv.ConvertFromDdsAndSave(ms, outFile2, TexconvNative.ESaveFileTypes.TGA));
+            Assert.IsTrue(Texconv.ConvertFromDdsAndSave(ms, outFile2, TexconvNative.ESaveFileTypes.TGA, true));
 
             // verify
             var metadata = new TexconvNative.TexMetadata()
@@ -136,9 +133,6 @@ namespace WolvenKit.UnitTests
                 format = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM,
                 dimension = TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D
             };
-
-            //var md = Texconv.GetMetadataFromTGAFile(outFile);
-            //Assert.AreEqual(md, new DDSMetadata(metadata, 32, true));
 
             var md2 = Texconv.GetMetadataFromTGAFile(outFile2);
             Assert.AreEqual(md2, new DDSMetadata(metadata, 32, true));

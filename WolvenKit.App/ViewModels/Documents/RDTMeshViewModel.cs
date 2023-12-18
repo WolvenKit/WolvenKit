@@ -1646,7 +1646,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 if (normalFile != null && normalFile.RootChunk is ITexture it)
                 {
                     var stream = new MemoryStream();
-                    ModTools.ConvertRedClassToDdsStream(it, stream, out _, out var decompressedFormat);
+                    ModTools.ConvertRedClassToDdsStream(it, stream, out _, out var decompressedFormat, true);
 
                     var normal = await ImageDecoder.RenderToBitmapImageDds(stream, decompressedFormat);
                     if (normal == null)
@@ -1784,7 +1784,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             }
 
             var stream = new FileStream(filename_d, FileMode.Create);
-            ModTools.ConvertRedClassToDdsStream(it, stream, out var format, out _);
+            ModTools.ConvertRedClassToDdsStream(it, stream, out var format, out _, true);
             stream.Dispose();
         }
 
@@ -1798,7 +1798,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             }
 
             var stream = new FileStream(filename_d, FileMode.Create);
-            ModTools.ConvertRedClassToDdsStream(it, stream, out var format, out _);
+            ModTools.ConvertRedClassToDdsStream(it, stream, out var format, out _, true);
             stream.Dispose();
         }
 
@@ -1812,7 +1812,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             }
 
             var stream = new FileStream(filename_d, FileMode.Create);
-            ModTools.ConvertRedClassToDdsStream(it, stream, out var format, out _);
+            ModTools.ConvertRedClassToDdsStream(it, stream, out var format, out _, true);
             stream.Dispose();
         }
 
@@ -1842,7 +1842,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             //stream.Dispose();
 
             var stream = new MemoryStream();
-            ModTools.ConvertRedClassToDdsStream(it, stream, out _, out var decompressedFormat);
+            ModTools.ConvertRedClassToDdsStream(it, stream, out _, out var decompressedFormat, true);
 
             var normal = await ImageDecoder.RenderToBitmapImageDds(stream, decompressedFormat);
             if (normal == null)
@@ -1903,7 +1903,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             //stream.Dispose();
 
             var stream = new MemoryStream();
-            ModTools.ConvertRedClassToDdsStream(it, stream, out _, out var decompressedFormat);
+            ModTools.ConvertRedClassToDdsStream(it, stream, out _, out var decompressedFormat, true);
 
             var normal = await ImageDecoder.RenderToBitmapImageDds(stream, decompressedFormat);
             if (normal == null)
@@ -2801,7 +2801,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
             if (modelGroup is SectorGroup sectorGroup)
             {
-                var path = (ResourcePath)$@"base\worlds\03_night_city\_compiled\default\{sectorGroup.Text}.streamingsector";
+                // TODO: Could check if ep1 is found, not sure though if the same filename could be in both folders...
+
+                var path = (ResourcePath)$@"base\worlds\03_night_city\_compiled\default\ep1\{sectorGroup.Text}.streamingsector";
+                _gameController.GetController().AddToMod(path);
+
+                path = (ResourcePath)$@"base\worlds\03_night_city\_compiled\default\{sectorGroup.Text}.streamingsector";
                 _gameController.GetController().AddToMod(path);
             }
         }

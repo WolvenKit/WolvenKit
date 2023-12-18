@@ -44,10 +44,43 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(7)] 
+		[RED("currentScreenType")] 
+		public CEnum<GogPopupScreenType> CurrentScreenType
+		{
+			get => GetPropertyValue<CEnum<GogPopupScreenType>>();
+			set => SetPropertyValue<CEnum<GogPopupScreenType>>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("currentWidget")] 
+		public CWeakHandle<inkWidget> CurrentWidget
+		{
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
+		}
+
+		[Ordinal(9)] 
+		[RED("gogRewardsList")] 
+		public CArray<CHandle<GogRewardEntryData>> GogRewardsList
+		{
+			get => GetPropertyValue<CArray<CHandle<GogRewardEntryData>>>();
+			set => SetPropertyValue<CArray<CHandle<GogRewardEntryData>>>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("uiSystem")] 
+		public CHandle<gameuiGameSystemUI> UiSystem
+		{
+			get => GetPropertyValue<CHandle<gameuiGameSystemUI>>();
+			set => SetPropertyValue<CHandle<gameuiGameSystemUI>>(value);
+		}
+
 		public GOGProfileGameController()
 		{
 			RetryButton = new inkWidgetReference();
 			ParentContainerWidget = new inkWidgetReference();
+			GogRewardsList = new();
 
 			PostConstruct();
 		}

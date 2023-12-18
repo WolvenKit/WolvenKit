@@ -52,6 +52,46 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EMeasurementUnit>>(value);
 		}
 
+		[Ordinal(7)] 
+		[RED("settings")] 
+		public CHandle<userSettingsUserSettings> Settings
+		{
+			get => GetPropertyValue<CHandle<userSettingsUserSettings>>();
+			set => SetPropertyValue<CHandle<userSettingsUserSettings>>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("settingsListener")] 
+		public CHandle<ItemTooltipStatSettingsListener> SettingsListener
+		{
+			get => GetPropertyValue<CHandle<ItemTooltipStatSettingsListener>>();
+			set => SetPropertyValue<CHandle<ItemTooltipStatSettingsListener>>(value);
+		}
+
+		[Ordinal(9)] 
+		[RED("groupPath")] 
+		public CName GroupPath
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("bigFontEnabled")] 
+		public CBool BigFontEnabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(11)] 
+		[RED("inCrafting")] 
+		public CBool InCrafting
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public ItemTooltipStatController()
 		{
 			StatName = new inkTextWidgetReference();
@@ -59,6 +99,7 @@ namespace WolvenKit.RED4.Types
 			StatComparedContainer = new inkWidgetReference();
 			StatComparedValue = new inkTextWidgetReference();
 			Arrow = new inkImageWidgetReference();
+			GroupPath = "/accessibility/interface";
 
 			PostConstruct();
 		}

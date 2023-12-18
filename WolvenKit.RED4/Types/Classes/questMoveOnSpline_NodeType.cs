@@ -61,6 +61,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(7)] 
+		[RED("trafficDeletionMode")] 
+		public CEnum<vehicleAIPathTrafficDeletionMode> TrafficDeletionMode
+		{
+			get => GetPropertyValue<CEnum<vehicleAIPathTrafficDeletionMode>>();
+			set => SetPropertyValue<CEnum<vehicleAIPathTrafficDeletionMode>>(value);
+		}
+
+		[Ordinal(8)] 
 		[RED("sceneBlendInDistance")] 
 		public CFloat SceneBlendInDistance
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("sceneBlendOutDistance")] 
 		public CFloat SceneBlendOutDistance
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("overrides")] 
 		public CHandle<questIVehicleMoveOnSpline_Overrides> Overrides
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<questIVehicleMoveOnSpline_Overrides>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("audioCurves")] 
 		public CResourceReference<vehicleAudioVehicleCurveSet> AudioCurves
 		{

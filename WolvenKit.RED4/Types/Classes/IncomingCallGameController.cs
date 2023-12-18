@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class IncomingCallGameController : gameuiNewPhoneRelatedHUDGameController
 	{
-		[Ordinal(13)] 
+		[Ordinal(15)] 
 		[RED("contactNameWidget")] 
 		public inkTextWidgetReference ContactNameWidget
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(16)] 
 		[RED("buttonHint")] 
 		public inkWidgetReference ButtonHint
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(17)] 
 		[RED("phoneBlackboard")] 
 		public CWeakHandle<gameIBlackboard> PhoneBlackboard
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(18)] 
 		[RED("phoneBBDefinition")] 
 		public CHandle<UI_ComDeviceDef> PhoneBBDefinition
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_ComDeviceDef>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(19)] 
 		[RED("phoneCallInfoBBID")] 
 		public CHandle<redCallbackObject> PhoneCallInfoBBID
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("animProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{

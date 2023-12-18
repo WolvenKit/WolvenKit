@@ -4,58 +4,38 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:System="clr-namespace:System;assembly=mscorlib"
-    xmlns:sp="clr-namespace:WolvenKit.Views.HomePage.Pages"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:viewmodels="clr-namespace:WolvenKit.ViewModels"
     x:TypeArguments="viewmodels:SettingsPageViewModel">
 
-    <Grid MinWidth="300" MinHeight="300">
-
-        <Grid.Resources>
-            
-            <ResourceDictionary>
-                <System:Boolean x:Key="FalseValue">False</System:Boolean>
-                <!--<ResourceDictionary.MergedDictionaries>
-                    <hc:ThemeResources RequestedTheme="Dark" />
-                    <hc:Theme />
-                </ResourceDictionary.MergedDictionaries>-->
-
-                <ResourceDictionary.MergedDictionaries>
-                    <ResourceDictionary Source="pack://application:,,,/AdonisUI;component/ColorSchemes/Dark.xaml" />
-                    <ResourceDictionary Source="pack://application:,,,/AdonisUI.ClassicTheme;component/Resources.xaml" />
-                </ResourceDictionary.MergedDictionaries>
-            </ResourceDictionary>
-        </Grid.Resources>
+    <Grid>
 
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <syncfusion:PropertyGrid
-            x:Name="SettingsPropertygrid"
-            Grid.Row="0"
-            Margin="20,85,20,20"
-            AutoGeneratingPropertyGridItem="SettingsPropertygrid_OnAutoGeneratingPropertyGridItem"
-            BorderThickness="0"
-            ButtonPanelVisibility="Collapsed"
-            CategoryForeground="{StaticResource WolvenKitRed}"
-            EnableGrouping="True"
-            PropertyNameColumnDefinition="200"
-            SearchBoxVisibility="Collapsed">
-            <!--syncfusion:PropertyGrid.Resources>
-                <Style TargetType="{x:Type propertygrid:PropertyViewItem}" BasedOn="{StaticResource SyncfusionPropertyViewItemStyle}">
-                    <Setter Property="IsCategoryEditorEnabled" Value="False" />
-                </Style>
-            </syncfusion:PropertyGrid.Resources-->
-        </syncfusion:PropertyGrid>
+        <Grid.Resources>
+            <ResourceDictionary>
+                <System:Boolean x:Key="FalseValue">False</System:Boolean>
+                <!--<ResourceDictionary.MergedDictionaries>
+                <hc:ThemeResources RequestedTheme="Dark" />
+                <hc:Theme />
+                </ResourceDictionary.MergedDictionaries>-->
 
+                <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/AdonisUI;component/ColorSchemes/Dark.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/AdonisUI.ClassicTheme;component/Resources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </Grid.Resources>
 
         <StackPanel
+            Grid.Row="0"
             Height="85"
-            Margin="25,0,5,0"
+            Margin="25,0,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Orientation="Horizontal">
@@ -74,7 +54,7 @@
                 Foreground="White"
                 Text="Settings" />
             <hc:Divider
-                Height="50"
+                Height="45"
                 Margin="15"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
@@ -85,14 +65,32 @@
                 CommandParameter="{StaticResource FalseValue}"
                 Height="40"
                 Margin="15">
-                <TextBlock FontSize="14" Text="Check for updates" />
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial
+                        Width="20"
+                        Height="20"
+                        Foreground="{StaticResource WolvenKitPurple}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Kind="Sync" />
+                    <TextBlock Padding="10,0,0,0" FontSize="14" Text="Check for updates" />
+                </StackPanel>
             </Button>
 
             <Button
                 x:Name="SaveCloseButton"
                 Height="40"
                 Margin="0">
-                <TextBlock FontSize="14" Text="Save &amp; Close" />
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial
+                        Width="20"
+                        Height="20"
+                        Foreground="{StaticResource WolvenKitCyan}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Kind="ContentSave" />
+                    <TextBlock Padding="10,0,0,0" FontSize="14" Text="Save &amp; Close" />
+                </StackPanel>
             </Button>
 
             <!--
@@ -107,5 +105,24 @@
 
         </StackPanel>
 
+        <syncfusion:PropertyGrid
+            x:Name="SettingsPropertygrid"
+            Grid.Row="1"
+            Margin="25,0,25,25"
+            AutoGeneratingPropertyGridItem="SettingsPropertygrid_OnAutoGeneratingPropertyGridItem"
+            BorderThickness="0"
+            ButtonPanelVisibility="Collapsed"
+            CategoryForeground="{StaticResource WolvenKitRed}"
+            EnableGrouping="True"
+            PropertyNameColumnDefinition="200"
+            SearchBoxVisibility="Collapsed">
+            <!--syncfusion:PropertyGrid.Resources>
+            <Style TargetType="{x:Type propertygrid:PropertyViewItem}" BasedOn="{StaticResource SyncfusionPropertyViewItemStyle}">
+                <Setter Property="IsCategoryEditorEnabled" Value="False" />
+            </Style>
+            </syncfusion:PropertyGrid.Resources-->
+    </syncfusion:PropertyGrid>
+
     </Grid>
 </reactiveUi:ReactiveUserControl>
+
