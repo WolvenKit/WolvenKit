@@ -242,6 +242,10 @@ public class HandleConverter : CustomRedConverter<IRedBaseHandle>
                     {
                         handle = (IRedBaseHandle)RedTypeManager.CreateRedType(typeToConvert, _referenceResolver.ResolveReference(refId));
                     }
+                    else
+                    {
+                        handle = (IRedBaseHandle)RedTypeManager.CreateRedType(typeToConvert);
+                    }
 
                     break;
                 }
