@@ -1,10 +1,11 @@
+using WolvenKit.RED4.Save.Classes;
 using WolvenKit.RED4.Save.IO;
 
 namespace WolvenKit.RED4.Save;
 
 public class Inventory : INodeData
 {
-    public List<InventoryHelper.SubInventory> SubInventories { get; set; } = new();
+    public List<SubInventory> SubInventories { get; set; } = new();
 }
 
 
@@ -46,7 +47,7 @@ public class InventoryParser : INodeParser
             writer.Write(subInventory.Items.Count);
             foreach (var itemData in subInventory.Items)
             {
-                InventoryHelper.WriteHeaderThing(writer, itemData.Header);
+                InventoryHelper.WriteItemInfo(writer, itemData.ItemInfo);
 
                 var subNode = new NodeEntry
                 {
@@ -60,9 +61,9 @@ public class InventoryParser : INodeParser
 
     #region Reader
 
-    private InventoryHelper.SubInventory ReadSubInventory(BinaryReader reader, NodeEntry node, int offset)
+    private SubInventory ReadSubInventory(BinaryReader reader, NodeEntry node, int offset)
     {
-        var subInventory = new InventoryHelper.SubInventory();
+        var subInventory = new SubInventory();
         subInventory.InventoryId = reader.ReadUInt64();
 
         var parser = ParserHelper.GetParser(Constants.NodeNames.ITEM_DATA);
@@ -75,14 +76,14 @@ public class InventoryParser : INodeParser
 
         for (int i = 0; i < cnt; i++)
         {
-            var nextItemHeader = InventoryHelper.ReadHeaderThing(reader);
+            var nextItemHeader = InventoryHelper.ReadItemInfo(reader);
 
             reader.ReadUInt32(); // nodeId
             parser.Read(reader, node.Children[offset + i]);
 
-            var item = (InventoryHelper.ItemData)node.Children[offset + i].Value;
+            var item = (ItemData)node.Children[offset + i].Value;
 
-            if (!nextItemHeader.Equals(item.Header))
+            if (!nextItemHeader.Equals(item.ItemInfo))
             {
                 throw new InvalidDataException($"Expected next item to be '{nextItemHeader}' but found '{item}'");
             }

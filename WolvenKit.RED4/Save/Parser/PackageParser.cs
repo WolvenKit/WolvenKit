@@ -19,8 +19,7 @@ public class PackageParser : INodeParser, IErrorHandler
     {
         var dummyBuffer = new RedBuffer();
 
-        reader.ReadInt32(); // dataSize
-        var subReader = new RedPackageReader(reader);
+        var subReader = GetSubReader(reader, node);
         subReader.Settings.RedPackageType = redPackageType;
         subReader.ParsingError += HandleParsingError;
 
@@ -30,6 +29,14 @@ public class PackageParser : INodeParser, IErrorHandler
         }
 
         node.Value = new Package { Content = dummyBuffer.Data! };
+    }
+
+    protected RedPackageReader GetSubReader(BinaryReader reader, NodeEntry node)
+    {
+        var dataSize = reader.ReadInt32();
+        var buffer = reader.ReadBytes(dataSize);
+
+        return new RedPackageReader(new MemoryStream(buffer));
     }
 
     public virtual void Write(NodeWriter writer, NodeEntry node) => Write(writer, node, RedPackageType.InkLibResource);

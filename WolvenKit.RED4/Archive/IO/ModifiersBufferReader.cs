@@ -17,55 +17,62 @@ public class ModifiersBufferReader : Red4Reader, IBufferReader
     {
         var data = new ModifiersBuffer();
 
-        while (_reader.BaseStream.Position < _reader.BaseStream.Length)
+        try
         {
-            var clsName = _reader.ReadLengthPrefixedString();
-
-            var statType = SaveHashHelper.GetStatType(_reader.ReadUInt64());
-            var modifierType = (Enums.gameStatModifierType)_reader.ReadUInt32();
-
-            if (clsName == "gameConstantStatModifier")
+            while (_reader.BaseStream.Position < _reader.BaseStream.Length)
             {
-                data.Entries.Add(new gameConstantStatModifierData_Deprecated
-                {
-                    StatType = statType,
-                    ModifierType = modifierType,
-                    Value = ReadCFloat()
-                });
-            }
-            else if (clsName == "gameCombinedStatModifier")
-            {
-                data.Entries.Add(new gameCombinedStatModifierData_Deprecated
-                {
-                    StatType = statType,
-                    ModifierType = modifierType,
-                    RefStatType = SaveHashHelper.GetStatType(_reader.ReadUInt64()),
-                    Operation = (Enums.gameCombinedStatOperation)_reader.ReadUInt32(),
-                    RefObject = (Enums.gameStatObjectsRelation)_reader.ReadUInt32(),
-                    Value = ReadCFloat()
-                });
-            }
-            else if (clsName == "gameCurveStatModifier")
-            {
-                data.Entries.Add(new gameCurveStatModifierData_Deprecated
-                {
-                    StatType = statType,
-                    ModifierType = modifierType,
-                    CurveName = _reader.ReadLengthPrefixedString(),
-                    ColumnName = _reader.ReadLengthPrefixedString(),
-                    CurveStat = SaveHashHelper.GetStatType(_reader.ReadUInt64()),
-                });
+                var clsName = _reader.ReadLengthPrefixedString();
 
-                var unk = _reader.ReadUInt32();
-                if (unk != 0)
+                var statType = SaveHashHelper.GetStatType(_reader.ReadUInt64());
+                var modifierType = (Enums.gameStatModifierType)_reader.ReadUInt32();
+
+                if (clsName == "gameConstantStatModifier")
                 {
-                    throw new TodoException("gameCurveStatModifier");
+                    data.Entries.Add(new gameConstantStatModifierData_Deprecated
+                    {
+                        StatType = statType,
+                        ModifierType = modifierType,
+                        Value = ReadCFloat()
+                    });
+                }
+                else if (clsName == "gameCombinedStatModifier")
+                {
+                    data.Entries.Add(new gameCombinedStatModifierData_Deprecated
+                    {
+                        StatType = statType,
+                        ModifierType = modifierType,
+                        RefStatType = SaveHashHelper.GetStatType(_reader.ReadUInt64()),
+                        Operation = (Enums.gameCombinedStatOperation)_reader.ReadUInt32(),
+                        RefObject = (Enums.gameStatObjectsRelation)_reader.ReadUInt32(),
+                        Value = ReadCFloat()
+                    });
+                }
+                else if (clsName == "gameCurveStatModifier")
+                {
+                    data.Entries.Add(new gameCurveStatModifierData_Deprecated
+                    {
+                        StatType = statType,
+                        ModifierType = modifierType,
+                        CurveName = _reader.ReadLengthPrefixedString(),
+                        ColumnName = _reader.ReadLengthPrefixedString(),
+                        CurveStat = SaveHashHelper.GetStatType(_reader.ReadUInt64()),
+                    });
+
+                    var unk = _reader.ReadUInt32();
+                    if (unk != 0)
+                    {
+                        throw new TodoException("gameCurveStatModifier");
+                    }
+                }
+                else
+                {
+                    throw new NotImplementedException(clsName);
                 }
             }
-            else
-            {
-                throw new NotImplementedException(clsName);
-            }
+        }
+        catch (Exception)
+        {
+            data.IsParsed = false;
         }
 
         buffer.Data = data;

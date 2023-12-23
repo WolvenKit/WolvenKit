@@ -1,3 +1,5 @@
+using WolvenKit.RED4.Save.Classes;
+
 namespace WolvenKit.RED4.Save;
 
 public class NodeEntry
@@ -45,7 +47,7 @@ public class NodeEntry
         var s = $"[{Id}] {Name}";
 
         // TODO: Make this generic or something
-        if (Value is InventoryHelper.ItemData)
+        if (Value is ItemData)
         {
             s = $"[{Id}] {Value}";
         }

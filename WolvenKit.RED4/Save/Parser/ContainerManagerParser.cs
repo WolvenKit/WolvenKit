@@ -15,13 +15,14 @@ public class ContainerManager : INodeData
     {
         public ulong CNameHash { get; set; }
         public ushort Unknown1 { get; set; }
+        public byte Unknown2 { get; set; }
     }
 }
 
 
 public class ContainerManagerParser : INodeParser
 {
-    public static string NodeName => Constants.NodeNames.CONTAINER_MANAGER;
+    //public static string NodeName => Constants.NodeNames.CONTAINER_MANAGER;
 
     public void Read(BinaryReader reader, NodeEntry node)
     {
@@ -33,8 +34,12 @@ public class ContainerManagerParser : INodeParser
 
             entry.CNameHash = reader.ReadUInt64();
             entry.Unknown1 = reader.ReadUInt16();
+            entry.Unknown2 = reader.ReadByte();
+
             data.Entries.Add(entry);
         }
+
+        // TODO: if entry.Unknown2 > 0...
 
         node.Value = data;
     }
@@ -48,6 +53,7 @@ public class ContainerManagerParser : INodeParser
         {
             writer.Write(entry.CNameHash);
             writer.Write(entry.Unknown1);
+            writer.Write(entry.Unknown2);
         }
     }
 }

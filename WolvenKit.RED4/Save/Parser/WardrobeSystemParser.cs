@@ -1,4 +1,5 @@
 using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.Save.Classes;
 using WolvenKit.RED4.Save.IO;
 
 namespace WolvenKit.RED4.Save;
@@ -16,7 +17,7 @@ public class WardrobeSystem : INodeData
 public class WardrobeSystemEntry : INodeData
 {
     public string AppearanceName { get; set; }
-    public InventoryHelper.gameItemIdWrapper ItemId { get; set; }
+    public ItemInfo ItemId { get; set; }
 }
 
 public class WardrobeSystemParser : INodeParser
@@ -32,7 +33,7 @@ public class WardrobeSystemParser : INodeParser
         {
             var entry = new WardrobeSystemEntry();
             entry.AppearanceName = reader.ReadLengthPrefixedString();
-            entry.ItemId = InventoryHelper.ReadHeaderThing(reader);
+            entry.ItemId = InventoryHelper.ReadItemInfo(reader);
 
             data.Entries.Add(entry);
         }
@@ -48,7 +49,7 @@ public class WardrobeSystemParser : INodeParser
         foreach (var entry in data.Entries)
         {
             writer.WriteLengthPrefixedString(entry.AppearanceName);
-            InventoryHelper.WriteHeaderThing(writer, entry.ItemId);
+            InventoryHelper.WriteItemInfo(writer, entry.ItemId);
         }
     }
 }

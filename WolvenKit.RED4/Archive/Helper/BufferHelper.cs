@@ -33,6 +33,7 @@ public static class BufferHelper
         s_bufferReaders.Add("animFacialSetup.correctivePosesData", typeof(AnimFacialSetupCorrectivePosesDataReader));
 
         // Save
+        s_bufferReaders.Add("gameSavedStatsData.forcedModifiersBuffer", typeof(ModifiersBufferReader));
         s_bufferReaders.Add("gameSavedStatsData.modifiersBuffer", typeof(ModifiersBufferReader));
 
         // REDmod
