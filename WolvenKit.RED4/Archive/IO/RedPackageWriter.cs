@@ -131,6 +131,23 @@ public partial class RedPackageWriter : Red4Writer
 
             buffer.SetBytes(newData);
         }
+
+        if (buffer.Data is SavedModifierGroupStatTypesBuffer savedModifierGroupStatTypesBuffer)
+        {
+            if (!savedModifierGroupStatTypesBuffer.IsParsed)
+            {
+                return;
+            }
+
+            using var ms = new MemoryStream();
+            using var modifiersBufferWriter = new SavedModifierGroupStatTypesBufferWriter(ms);
+
+            modifiersBufferWriter.WriteBuffer(savedModifierGroupStatTypesBuffer);
+
+            var newData = ms.ToArray();
+
+            buffer.SetBytes(newData);
+        }
     }
 
     public override void Write(IRedEnum instance)
