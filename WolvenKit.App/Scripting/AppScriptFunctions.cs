@@ -117,7 +117,7 @@ public class AppScriptFunctions : ScriptFunctions
     }
 
     /// <summary>
-    /// Save the specified file to the project raw folders, in either json or CR2W
+    /// Save the specified text to the specified path in the raw folder
     /// </summary>
     /// <param name="path">The file to write to</param>
     /// <param name="content">The string to write to the file</param>
@@ -128,6 +128,20 @@ public class AppScriptFunctions : ScriptFunctions
             return;
         }
         SaveAs(Path.Combine(_projectManager.ActiveProject.RawDirectory, path), s => File.WriteAllText(s, content));
+    }
+
+    /// <summary>
+    /// Save the specified text to the specified path in the resources folder
+    /// </summary>
+    /// <param name="path">The file to write to</param>
+    /// <param name="content">The string to write to the file</param>
+    public virtual void SaveToResources(string path, string content)
+    {
+        if (_projectManager.ActiveProject is null)
+        {
+            return;
+        }
+        SaveAs(Path.Combine(_projectManager.ActiveProject.ResourcesDirectory, path), s => File.WriteAllText(s, content));
     }
 
     private void SaveAs(string path, Action<string> action)
