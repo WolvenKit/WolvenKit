@@ -93,8 +93,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a3ad97e8b4888be9af9df3d1d6e153e69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add the specified gameFile file to the project from the game archives.  <a href="classAppScriptFunctions.html#a3ad97e8b4888be9af9df3d1d6e153e69">More...</a><br /></td></tr>
 <tr class="separator:a3ad97e8b4888be9af9df3d1d6e153e69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a91545ea2945eeaccca43d5a344059325"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAppScriptFunctions.html#a91545ea2945eeaccca43d5a344059325">SaveToRaw</a> (string path, string content)</td></tr>
-<tr class="memdesc:a91545ea2945eeaccca43d5a344059325"><td class="mdescLeft">&#160;</td><td class="mdescRight">Save the specified file to the project raw folders, in either json or CR2W  <a href="classAppScriptFunctions.html#a91545ea2945eeaccca43d5a344059325">More...</a><br /></td></tr>
+<tr class="memdesc:a91545ea2945eeaccca43d5a344059325"><td class="mdescLeft">&#160;</td><td class="mdescRight">Save the specified text to the specified path in the raw folder  <a href="classAppScriptFunctions.html#a91545ea2945eeaccca43d5a344059325">More...</a><br /></td></tr>
 <tr class="separator:a91545ea2945eeaccca43d5a344059325"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afcdedc12beea6d8bca76f2cce6e431f3"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAppScriptFunctions.html#afcdedc12beea6d8bca76f2cce6e431f3">SaveToResources</a> (string path, string content)</td></tr>
+<tr class="memdesc:afcdedc12beea6d8bca76f2cce6e431f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Save the specified text to the specified path in the resources folder  <a href="classAppScriptFunctions.html#afcdedc12beea6d8bca76f2cce6e431f3">More...</a><br /></td></tr>
+<tr class="separator:afcdedc12beea6d8bca76f2cce6e431f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80d02289d49fcddb43a6ac26c392523b"><td class="memItemLeft" align="right" valign="top">virtual ? object&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAppScriptFunctions.html#a80d02289d49fcddb43a6ac26c392523b">LoadGameFileFromProject</a> (string path, string type)</td></tr>
 <tr class="memdesc:a80d02289d49fcddb43a6ac26c392523b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the specified game file from the project files rather than game archives.  <a href="classAppScriptFunctions.html#a80d02289d49fcddb43a6ac26c392523b">More...</a><br /></td></tr>
 <tr class="separator:a80d02289d49fcddb43a6ac26c392523b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1003,7 +1006,52 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Save the specified file to the project raw folders, in either json or CR2W </p>
+<p>Save the specified text to the specified path in the raw folder </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>The file to write to</td></tr>
+    <tr><td class="paramname">content</td><td>The string to write to the file</td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="afcdedc12beea6d8bca76f2cce6e431f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afcdedc12beea6d8bca76f2cce6e431f3">&#9670;&nbsp;</a></span>SaveToResources()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void AppScriptFunctions.SaveToResources </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>content</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Save the specified text to the specified path in the resources folder </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">path</td><td>The file to write to</td></tr>
