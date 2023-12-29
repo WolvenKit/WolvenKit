@@ -155,6 +155,24 @@
                                         VerticalAlignment="Center"
                                         Orientation="Vertical">
 
+                                        <ToggleButton
+                                            Padding="10,5"
+                                            IsChecked="{Binding IsPinned, Mode=TwoWay}"
+                                            Style="{StaticResource ToggleButtonCustom}"
+                                            ToolTip="Pin project">
+                                            <ToggleButton.Resources>
+                                                <Style TargetType="{x:Type iconPacks:PackIconCodicons}">
+                                                    <Setter Property="Kind" Value="StarEmpty" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=ToggleButton}}" Value="True">
+                                                            <Setter Property="Kind" Value="StarFull" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </ToggleButton.Resources>
+                                            <iconPacks:PackIconCodicons Width="16" />
+                                        </ToggleButton>
+
                                         <Button
                                             Padding="10,5"
                                             Command="{Binding ElementName=topGrid, Path=DataContext.OpenInExplorerCommand}"
@@ -203,77 +221,130 @@
             </ResourceDictionary>
         </Grid.Resources>
 
-        <Grid
+        <!--  WK Text Logo  -->
+        <Image
             Grid.Row="0"
             Grid.Column="1"
-            Grid.ColumnSpan="2">
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-
-            <!--  WK Text Logo  -->
-            <Image
-                Margin="66,30,66,20"
-                HorizontalAlignment="Center"
-                RenderOptions.BitmapScalingMode="HighQuality"
-                Source="pack://application:,,,/Resources/Media/Images/Application/wkit_logo_text_singlestack_white.png" />
-
-            <!--  Recent Projects Header  -->
-            <StackPanel VerticalAlignment="Bottom">
-                <StackPanel Margin="9,0,0,20" Orientation="Horizontal">
-                    <Border Width="{Binding ActualWidth, ElementName=PercentageThingHalf}" />
-                    <iconPacks:PackIconCodicons
-                        Grid.Row="0"
-                        Width="18"
-                        Height="18"
-                        VerticalAlignment="Center"
-                        Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                        Kind="GoToFile"
-                        Spin="False"
-                        SpinAutoReverse="False" />
-
-                    <TextBlock
-                        x:Name="RecentProjectTour"
-                        Margin="8,0,0,0"
-                        FontSize="24"
-                        Text="Recent Projects" />
-                </StackPanel>
-            </StackPanel>
-
-        </Grid>
+            Grid.ColumnSpan="2"
+            Margin="66,30,66,20"
+            HorizontalAlignment="Center"
+            RenderOptions.BitmapScalingMode="HighQuality"
+            Source="pack://application:,,,/Resources/Media/Images/Application/wkit_logo_text_singlestack_white.png" />
 
 
-        <!--  Recent Grid  -->
+        <!--  Left Column \ Projects  -->
         <Grid
-            Grid.Row="2"
+            Grid.Row="1"
             Grid.Column="1"
             Background="Transparent">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
+            <!--  Pinned Projects  -->
+            <Grid Grid.Row="0" Visibility="{Binding ShowPinned, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-            <!--  Cards  -->
-            <syncfusion:CardView
-                Name="cardView"
-                Margin="10,0,0,0"
-                HorizontalAlignment="Left"
-                Background="Transparent"
-                CanSort="False"
-                ItemContainerStyle="{StaticResource CardViewItemStyle}"
-                ItemsSource="{Binding FancyProjects}"
-                Orientation="Horizontal"
-                ShowHeader="False">
-                <syncfusion:CardView.Resources>
-                    <!--  gets rid of margin around items  -->
-                    <Style TargetType="{x:Type ItemsPresenter}">
-                        <Setter Property="Margin" Value="-10" />
-                    </Style>
-                </syncfusion:CardView.Resources>
-            </syncfusion:CardView>
+                <!--  Header  -->
+                <StackPanel Grid.Row="0" VerticalAlignment="Bottom">
+                    <StackPanel Margin="9,0,0,20" Orientation="Horizontal">
+                        <Border Width="{Binding ActualWidth, ElementName=PercentageThingHalf}" />
+                        <iconPacks:PackIconCodicons
+                            Width="18"
+                            Height="18"
+                            VerticalAlignment="Center"
+                            Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                            Kind="StarFull"
+                            Spin="False"
+                            SpinAutoReverse="False" />
+
+                        <TextBlock
+                            x:Name="PinnedProjectTour"
+                            Margin="8,0,0,0"
+                            FontSize="24"
+                            Text="Pinned Projects" />
+                    </StackPanel>
+                </StackPanel>
+
+                <!--  Cards  -->
+                <syncfusion:CardView
+                    Name="PinnedCardView"
+                    Grid.Row="1"
+                    MaxHeight="190"
+                    Margin="10,0,0,0"
+                    HorizontalAlignment="Left"
+                    Background="Transparent"
+                    CanSort="False"
+                    ItemContainerStyle="{StaticResource CardViewItemStyle}"
+                    ItemsSource="{Binding FancyPinnedProjects}"
+                    Orientation="Horizontal"
+                    ShowHeader="False">
+                    <syncfusion:CardView.Resources>
+                        <!--  gets rid of margin around items  -->
+                        <Style TargetType="{x:Type ItemsPresenter}">
+                            <Setter Property="Margin" Value="-10" />
+                        </Style>
+                    </syncfusion:CardView.Resources>
+                </syncfusion:CardView>
+            </Grid>
+
+            <!--  Recent Projects  -->
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!--  Header  -->
+                <StackPanel Grid.Row="0" VerticalAlignment="Bottom">
+                    <StackPanel Margin="9,0,0,20" Orientation="Horizontal">
+                        <Border Width="{Binding ActualWidth, ElementName=PercentageThingHalf}" />
+                        <iconPacks:PackIconCodicons
+                            Width="18"
+                            Height="18"
+                            VerticalAlignment="Center"
+                            Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                            Kind="GoToFile"
+                            Spin="False"
+                            SpinAutoReverse="False" />
+
+                        <TextBlock
+                            x:Name="RecentProjectTour"
+                            Margin="8,0,0,0"
+                            FontSize="24"
+                            Text="Recent Projects" />
+                    </StackPanel>
+                </StackPanel>
+
+                <!--  Cards  -->
+                <syncfusion:CardView
+                    Name="RecentCardView"
+                    Grid.Row="1"
+                    Margin="10,0,0,0"
+                    HorizontalAlignment="Left"
+                    Background="Transparent"
+                    CanSort="False"
+                    ItemContainerStyle="{StaticResource CardViewItemStyle}"
+                    ItemsSource="{Binding FancyProjects}"
+                    Orientation="Horizontal"
+                    ShowHeader="False">
+                    <syncfusion:CardView.Resources>
+                        <!--  gets rid of margin around items  -->
+                        <Style TargetType="{x:Type ItemsPresenter}">
+                            <Setter Property="Margin" Value="-10" />
+                        </Style>
+                    </syncfusion:CardView.Resources>
+                </syncfusion:CardView>
+            </Grid>
         </Grid>
 
+
         <!--  Right Column  -->
-        <Grid Grid.Row="2" Grid.Column="2">
+        <Grid Grid.Row="1" Grid.Column="2">
             <Grid>
                 <Border
                     Margin="0,0,0,0"

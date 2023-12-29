@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
+using DynamicData.Binding;
 using Microsoft.Win32;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
@@ -41,10 +42,19 @@ public partial class WelcomePageViewModel : PageViewModel
             //.ObserveOn(RxApp.MainThreadScheduler)
             .Bind(out _recentlyUsedItems)
             .Subscribe(OnRecentlyUsedItemsChanged);
-        
     }
 
-    private void OnRecentlyUsedItemsChanged(IChangeSet<RecentlyUsedItemModel, string> obj) => ConvertRecentProjects();
+    private void OnRecentlyUsedItemsChanged(IChangeSet<RecentlyUsedItemModel, string> obj)
+    {
+        ConvertRecentProjects();
+
+        var changeSet = _recentlyUsedItems
+            .ToObservableChangeSet();
+
+        changeSet
+            .WhenAnyPropertyChanged()
+            .Subscribe(_ => ConvertRecentProjects());
+    }
 
     #endregion Constructors
 
@@ -57,10 +67,16 @@ public partial class WelcomePageViewModel : PageViewModel
     public string YoutubeLink = "https://www.youtube.com/channel/UCl3JpsP49JgYLMYAYQvoaLg";
 
     [ObservableProperty]
+    private ObservableCollection<FancyProjectObject> _fancyPinnedProjects = new();
+
+    [ObservableProperty]
     private ObservableCollection<FancyProjectObject> _fancyProjects = new();
 
     [ObservableProperty]
     private List<RecentlyUsedItemModel> _pinnedItems = new();
+
+    [ObservableProperty]
+    private bool _showPinned;
 
     #endregion Properties
 
@@ -188,7 +204,7 @@ public partial class WelcomePageViewModel : PageViewModel
             if (items.Count > 0)
             {
                 var item = items.First();
-                _recentlyUsedItemsService.AddItem(new RecentlyUsedItemModel(parameter, item.DateTime, item.Modified));
+                _recentlyUsedItemsService.AddItem(new RecentlyUsedItemModel(parameter, item.DateTime, item.LastOpened));
                 _recentlyUsedItemsService.RemoveItem(item);
                 return parameter;
             }
@@ -199,24 +215,25 @@ public partial class WelcomePageViewModel : PageViewModel
 
     private void ConvertRecentProjects() // Converts Recent projects for the homepage.
     {
+        DispatcherHelper.RunOnMainThread(() => FancyPinnedProjects.Clear());
         DispatcherHelper.RunOnMainThread(() => FancyProjects.Clear());
 
         var sorted = _recentlyUsedItems.ToList();
         sorted.Sort(delegate (RecentlyUsedItemModel a, RecentlyUsedItemModel b)
         {
             DateTime ad, bd;
-            if (a.Modified != default)
+            if (a.LastOpened != default)
             {
-                ad = a.Modified;
+                ad = a.LastOpened;
             }
             else
             {
                 ad = a.DateTime;
             }
 
-            if (b.Modified != default)
+            if (b.LastOpened != default)
             {
-                bd = b.Modified;
+                bd = b.LastOpened;
             }
             else
             {
@@ -230,32 +247,35 @@ public partial class WelcomePageViewModel : PageViewModel
         {
             var fi = new FileInfo(item.Name);
 
-            var n = item.Name;
-            var cd = item.Modified != default ? item.Modified : item.DateTime;
-            var p = item.Name;
+            var cd = item.LastOpened != default ? item.LastOpened : item.DateTime;
+            var path = item.Name;
 
             var newfo = fi.Name.Split('.');
-            var newfi = fi.Directory + "\\" + newfo[0] + "\\" + "img.png";
+            var image = fi.Directory + "\\" + newfo[0] + "\\" + "img.png";
 
-            var IsThere = File.Exists(newfi);
-            File.GetLastWriteTime(item.Name);
-
-            FancyProjectObject NewItem;
             if (Path.GetExtension(item.Name).TrimStart('.') == EProjectType.cpmodproj.ToString())
             {
-                if (!IsThere)
-                { newfi = "pack://application:,,,/Resources/Media/Images/Application/V Male Logo Cropped.png"; }
-                NewItem = new FancyProjectObject(fi.Name, cd, "Cyberpunk 2077", p, newfi);
-                DispatcherHelper.RunOnMainThread(() => FancyProjects.Add(NewItem));
-            }
-            if (Path.GetExtension(item.Name).TrimStart('.') == EProjectType.w3modproj.ToString())
-            {
-                if (!IsThere)
-                { newfi = "pack://application:,,,/Resources/Media/Images/Application/tw3proj.png"; }
+                if (!File.Exists(image))
+                {
+                    image = "pack://application:,,,/Resources/Media/Images/Application/V Male Logo Cropped.png";
+                }
 
-                NewItem = new FancyProjectObject(n, cd, "The Witcher 3", p, newfi);
-                DispatcherHelper.RunOnMainThread(() => FancyProjects.Add(NewItem));
+                var newItem = new FancyProjectObject(item, fi.Name, cd, "Cyberpunk 2077", path, image);
+
+                DispatcherHelper.RunOnMainThread(() =>
+                {
+                    if (newItem.IsPinned)
+                    {
+                        FancyPinnedProjects.Add(newItem);
+                    }
+                    else
+                    {
+                        FancyProjects.Add(newItem);
+                    }
+                });
             }
         }
+
+        ShowPinned = FancyPinnedProjects.Count > 0;
     }
 }

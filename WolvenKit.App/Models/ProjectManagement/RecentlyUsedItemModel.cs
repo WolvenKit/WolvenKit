@@ -1,17 +1,26 @@
 ﻿using System;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace WolvenKit.App.Models.ProjectManagement;
 
-public class RecentlyUsedItemModel
+public partial class RecentlyUsedItemModel : ObservableObject
 {
-    public RecentlyUsedItemModel(string name, DateTime dateTime, DateTime modified)
-    {
-        Name = name;
-        DateTime = dateTime;
-    }
+    [ObservableProperty]
+    private string _name;
 
-    public string Name { get; set; }
-    public DateTime DateTime { get; set; }
-    public DateTime Modified { get; set; }
-    public bool IsPinned { get; set; }
+    [ObservableProperty]
+    private DateTime _dateTime;
+
+    [ObservableProperty]
+    private DateTime _lastOpened;
+
+    [ObservableProperty]
+    private bool _isPinned;
+
+    public RecentlyUsedItemModel(string name, DateTime dateTime, DateTime lastOpened)
+    {
+        _name = name;
+        _dateTime = dateTime;
+        _lastOpened = lastOpened;
+    }
 }

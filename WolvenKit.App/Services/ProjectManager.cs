@@ -92,9 +92,15 @@ public partial class ProjectManager : ObservableObject, IProjectManager
                     ActiveProject = x.Result;
                     IsProjectLoaded = true;
 
-                    if (_recentlyUsedItemsService.Items.Items.All(item => item.Name != location))
+                    var recentItem = _recentlyUsedItemsService.Items.Items.FirstOrDefault(item => item.Name == location);
+                    if (recentItem == null)
                     {
-                        _recentlyUsedItemsService.AddItem(new RecentlyUsedItemModel(location, DateTime.Now, DateTime.Now));
+                        recentItem = new RecentlyUsedItemModel(location, DateTime.Now, DateTime.Now);
+                        _recentlyUsedItemsService.AddItem(recentItem);
+                    }
+                    else
+                    {
+                        recentItem.LastOpened = DateTime.Now;
                     }
                 }
             }

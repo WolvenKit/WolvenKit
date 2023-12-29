@@ -330,7 +330,7 @@ public class RED4Controller : ObservableObject, IGameController
                 _notificationService.Error("Packing archives failed, aborting.");
                 return false;
             }
-            _loggerService.Info($"{cp77Proj.ModName} archives packed into {cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)}");
+            _loggerService.Info($"{cp77Proj.Name} archives packed into {cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)}");
         }
 
         // pack archiveXL files
