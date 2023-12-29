@@ -261,33 +261,6 @@ public partial class ImportViewModel : AbstractImportViewModel
         return false;
     }
 
-    // for checking if a dds file is part of a morphtarget
-    [GeneratedRegex("\\d+\\.dds$")]
-    private static partial Regex NumberedDdsFileRegex();
-    
-    /// <summary>
-    /// Check if the file should be included in the import tool's view. Currently excluded:
-    /// - .png files associated with an .mlmask
-    /// </summary>
-    /// <param name="filePath">The file path as string</param>
-    /// <returns>true if this file should not be shown in the import browser</returns>
-    private static bool ShouldFileBeFiltered(string filePath)
-    {
-        switch (Path.GetExtension(filePath))
-        {
-            // masklist items
-            case ".png":
-                var masklistPath = (Path.GetDirectoryName(filePath) ?? "").Replace("_layers", ".masklist");
-                return File.Exists(masklistPath);
-            // morphtarget texturesF
-            case ".dds":
-                var parentDirName = new DirectoryInfo(Path.GetDirectoryName(filePath) ?? string.Empty).Name;
-                var morphtargetFolderName = NumberedDdsFileRegex().Replace(Path.GetFileName(filePath), "textures");
-                return parentDirName == morphtargetFolderName;
-            default:
-                return false;
-        }
-    }
 
     protected override async Task LoadFilesAsync()
     {
@@ -297,7 +270,6 @@ public partial class ImportViewModel : AbstractImportViewModel
         }
 
         var files = Directory.GetFiles(_projectManager.ActiveProject.RawDirectory, "*", SearchOption.AllDirectories)
-            .Where(filePath => !ShouldFileBeFiltered(filePath))
             .Where(CanImport);
 
         // do not refresh if the files are the same
@@ -322,9 +294,33 @@ public partial class ImportViewModel : AbstractImportViewModel
         _progressService.IsIndeterminate = false;
     }
 
-    
+    // for checking if a dds file is part of a morphtarget
+    [GeneratedRegex("\\d+\\.dds$")]
+    private static partial Regex NumberedDdsFileRegex();
 
-    private static bool CanImport(string x) => Enum.TryParse<ERawFileFormat>(Path.GetExtension(x).TrimStart('.'), out var _);
+    private static bool CanImport(string filePath)
+    {
+        var fileExtension = Path.GetExtension(filePath).TrimStart('.');
+        if (!Enum.TryParse<ERawFileFormat>(fileExtension, out var _))
+        {
+            return false;
+        }
+
+        switch (fileExtension)
+        {
+            // masklist items
+            case "png":
+                var masklistPath = (Path.GetDirectoryName(filePath) ?? "").Replace("_layers", ".masklist");
+                return !File.Exists(masklistPath);
+            // morphtarget texturesF
+            case "dds":
+                var parentDirName = new DirectoryInfo(Path.GetDirectoryName(filePath) ?? string.Empty).Name;
+                var morphtargetFolderName = NumberedDdsFileRegex().Replace(Path.GetFileName(filePath), "textures");
+                return parentDirName != morphtargetFolderName;
+            default:
+                return true;
+        }
+    }
 
     public Task InitCollectionEditor(CallbackArguments args)
     {
