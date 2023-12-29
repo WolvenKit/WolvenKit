@@ -659,9 +659,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     {
         try
         {
-            var newProjectname = project.ProjectName.NotNull().Trim();
-            var projectLocation = Path.Combine(project.ProjectPath.NotNull(), newProjectname, newProjectname + ".cpmodproj");
-            Cp77Project np = new(projectLocation, newProjectname, _hashService)
+            var newProjectName = project.ProjectName.NotNull().Trim();
+            var newModName = project.ModName.NotNull().Trim();
+            var projectLocation = Path.Combine(project.ProjectPath.NotNull(), newProjectName, newProjectName + ".cpmodproj");
+            Cp77Project np = new(projectLocation, newProjectName, newModName, _hashService)
             {
                 Author = project.Author,
                 Email = project.Email,
@@ -691,9 +692,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             _loggerService.Error("Failed to create a new project!");
             _loggerService.Error(ex);
-            
         }
-
     }
 
     [RelayCommand]

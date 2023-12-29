@@ -3,12 +3,12 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:av="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dialogs="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    xmlns:dialogs="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
     Width="400"
     x:TypeArguments="dialogs:ProjectWizardViewModel"
     Background="{StaticResource ContentBackgroundAlt3}"
@@ -18,6 +18,7 @@
 
     <Grid Margin="20,20">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -46,27 +47,30 @@
         </StackPanel>
 
         <hc:TextBox
-            x:Name="xprojectNameTxtbx"
+            x:Name="ProjectNameTextBox"
             Grid.Row="1"
+            Grid.Column="0"
             Grid.ColumnSpan="2"
             Margin="0,0,0,10"
             hc:InfoElement.Necessary="True"
             hc:InfoElement.Title="Project Name"
             hc:InfoElement.TitlePlacement="Top"
             hc:InfoElement.TitleWidth="120"
-            VerifyFunc="VerifyModName" />
+            TextChanged="ProjectNameTextBox_OnTextChanged"
+            VerifyFunc="VerifyProjectName" />
 
 
         <hc:TextBox
-            x:Name="projectPathTxtbx"
+            x:Name="ProjectPathTextBox"
             Grid.Row="2"
+            Grid.Column="0"
             Margin="0,5,5,10"
             VerticalAlignment="Top"
-            IsReadOnly="True"
             hc:InfoElement.Necessary="True"
             hc:InfoElement.Title="Creation Location"
             hc:InfoElement.TitlePlacement="Top"
             hc:InfoElement.TitleWidth="120"
+            IsReadOnly="True"
             VerifyFunc="VerifyFolder" />
 
         <Button
@@ -93,8 +97,22 @@
         </Button>
 
         <hc:TextBox
-            x:Name="projectAuthorTxtbx"
+            x:Name="ModNameTextBox"
             Grid.Row="3"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Margin="0,0,0,10"
+            hc:InfoElement.Necessary="True"
+            hc:InfoElement.Title="Mod Name (Used as RedMod Name / Archive Name)"
+            hc:InfoElement.TitlePlacement="Top"
+            hc:InfoElement.TitleWidth="120"
+            TextChanged="ModNameTextBox_OnTextChanged"
+            VerifyFunc="VerifyModName" />
+
+        <hc:TextBox
+            x:Name="AuthorTextBox"
+            Grid.Row="4"
+            Grid.Column="0"
             Grid.ColumnSpan="2"
             Margin="0,5,0,0"
             hc:InfoElement.Title="Author Name"
@@ -102,8 +120,9 @@
             hc:InfoElement.TitleWidth="120" />
 
         <hc:TextBox
-            x:Name="projectEmailTxtbx"
-            Grid.Row="4"
+            x:Name="EmailTextBox"
+            Grid.Row="5"
+            Grid.Column="0"
             Grid.ColumnSpan="2"
             Margin="0,5,0,0"
             hc:InfoElement.Title="Email"
@@ -111,8 +130,9 @@
             hc:InfoElement.TitleWidth="120" />
 
         <hc:TextBox
-            x:Name="projectVersionTxtbx"
-            Grid.Row="5"
+            x:Name="VersionTextBox"
+            Grid.Row="6"
+            Grid.Column="0"
             Grid.ColumnSpan="2"
             Margin="0,5,0,0"
             hc:InfoElement.Title="Version"
@@ -120,7 +140,8 @@
             hc:InfoElement.TitleWidth="120" />
 
         <Grid
-            Grid.Row="6"
+            Grid.Row="7"
+            Grid.Column="0"
             Grid.ColumnSpan="2"
             Height="28"
             Margin="0,15,0,0">

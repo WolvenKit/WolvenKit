@@ -151,10 +151,13 @@ public partial class ProjectManager : ObservableObject, IProjectManager
                 return null;
             }
 
-            Cp77Project project = new(path, obj.Name, _hashService)
+            obj.ModName ??= obj.Name;
+
+            Cp77Project project = new(path, obj.Name, obj.ModName, _hashService)
             {
                 Author = obj.Author,
                 Email = obj.Email,
+                Description = obj.Description,
                 Version = obj.Version,
             };
 

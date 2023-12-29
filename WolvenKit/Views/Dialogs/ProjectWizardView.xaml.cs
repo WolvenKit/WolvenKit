@@ -1,6 +1,7 @@
 using System;
 using System.Reactive.Disposables;
 using System.Windows.Controls;
+using System.Windows.Input;
 using ReactiveUI;
 using WolvenKit.App.ViewModels.Dialogs;
 
@@ -8,6 +9,9 @@ namespace WolvenKit.Views.Dialogs
 {
     public partial class ProjectWizardView : ReactiveUserControl<ProjectWizardViewModel>
     {
+        private bool _syncModName = true;
+        private bool _autoUpdate = false;
+
         public ProjectWizardView()
         {
             InitializeComponent();
@@ -18,6 +22,9 @@ namespace WolvenKit.Views.Dialogs
 
             this.WhenActivated(disposables =>
             {
+                _syncModName = true;
+                _autoUpdate = false;
+
                 //this.Bind(ViewModel,
                 //    vm => vm,
                 //    v => v.DataContext).DisposeWith(disposables);
@@ -34,19 +41,22 @@ namespace WolvenKit.Views.Dialogs
 
                 this.Bind(ViewModel,
                         vm => vm.ProjectName,
-                        v => v.xprojectNameTxtbx.Text).DisposeWith(disposables);
+                        v => v.ProjectNameTextBox.Text).DisposeWith(disposables);
                 this.Bind(ViewModel,
                         vm => vm.ProjectPath,
-                        v => v.projectPathTxtbx.Text).DisposeWith(disposables);
+                        v => v.ProjectPathTextBox.Text).DisposeWith(disposables);
+                this.Bind(ViewModel,
+                    vm => vm.ModName,
+                    v => v.ModNameTextBox.Text).DisposeWith(disposables);
                 this.Bind(ViewModel,
                         vm => vm.Author,
-                        v => v.projectAuthorTxtbx.Text).DisposeWith(disposables);
+                        v => v.AuthorTextBox.Text).DisposeWith(disposables);
                 this.Bind(ViewModel,
                         vm => vm.Email,
-                        v => v.projectEmailTxtbx.Text).DisposeWith(disposables);
+                        v => v.EmailTextBox.Text).DisposeWith(disposables);
                 this.Bind(ViewModel,
                         vm => vm.Version,
-                        v => v.projectVersionTxtbx.Text).DisposeWith(disposables);
+                        v => v.VersionTextBox.Text).DisposeWith(disposables);
                 //this.OneWayBind(ViewModel,
                 //        vm => vm.ProjectType,
                 //        v => v.ProjectypeTextBox.ItemsSource)
@@ -68,22 +78,33 @@ namespace WolvenKit.Views.Dialogs
                     .DisposeWith(disposables);
 
 
-                xprojectNameTxtbx.VerifyData();
+                ProjectNameTextBox.VerifyData();
+                ModNameTextBox.VerifyData();
             });
         }
 
-        private HandyControl.Data.OperationResult<bool> VerifyModName(string str)
+        private HandyControl.Data.OperationResult<bool> VerifyProjectName(string str)
         {
             if (string.IsNullOrEmpty(str))
             {
                 return HandyControl.Data.OperationResult.Failed("Please enter a Project name!");
             }
 
-            if (System.IO.Directory.Exists(System.IO.Path.Combine(projectPathTxtbx.Text, xprojectNameTxtbx.Text)))
+            if (System.IO.Directory.Exists(System.IO.Path.Combine(ProjectPathTextBox.Text, ProjectNameTextBox.Text)))
             {
                 return HandyControl.Data.OperationResult.Failed("A project with this name already exists!");
             }
             
+            return HandyControl.Data.OperationResult.Success();
+        }
+
+        private HandyControl.Data.OperationResult<bool> VerifyModName(string str)
+        {
+            if (string.IsNullOrEmpty(str))
+            {
+                return HandyControl.Data.OperationResult.Failed("Please enter a mod name!");
+            }
+
             return HandyControl.Data.OperationResult.Success();
         }
 
@@ -94,7 +115,7 @@ namespace WolvenKit.Views.Dialogs
                 return HandyControl.Data.OperationResult.Failed("Selected path does not exist");
             }
 
-            xprojectNameTxtbx.VerifyData();
+            ProjectNameTextBox.VerifyData();
 
             return HandyControl.Data.OperationResult.Success();
         }
@@ -106,6 +127,34 @@ namespace WolvenKit.Views.Dialogs
 
         //private void DraggableTitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e) => throw new NotImplementedException();
 
+        private void ProjectNameTextBox_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (ProjectNameTextBox.Text != ModNameTextBox.Text)
+            {
+                return;
+            }
 
+            ModNameTextBox.SetCurrentValue(TextBox.TextProperty, ProjectNameTextBox.Text);
+        }
+
+        private void ProjectNameTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!_syncModName)
+            {
+                return;
+            }
+
+            _autoUpdate = true;
+            ModNameTextBox.SetCurrentValue(TextBox.TextProperty, ProjectNameTextBox.Text);
+            _autoUpdate = false;
+        }
+
+        private void ModNameTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!_autoUpdate)
+            {
+                _syncModName = false;
+            }
+        }
     }
 }

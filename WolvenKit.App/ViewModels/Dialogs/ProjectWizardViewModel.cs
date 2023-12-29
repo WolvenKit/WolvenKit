@@ -48,7 +48,12 @@ public partial class ProjectWizardViewModel : DialogViewModel
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(OkCommand))]
     private string? _projectName = null!;
-    
+
+    [NotNull]
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(OkCommand))]
+    private string? _modName = null!;
+
     [NotNull]
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(OkCommand))]
@@ -98,6 +103,7 @@ public partial class ProjectWizardViewModel : DialogViewModel
     private bool CanExecuteOk() =>
         !string.IsNullOrEmpty(ProjectName) && 
         !string.IsNullOrEmpty(ProjectPath) &&
+        !string.IsNullOrEmpty(ModName) &&
         Directory.Exists(ProjectPath) &&
         !Directory.Exists(Path.Combine(ProjectPath, ProjectName));
 
