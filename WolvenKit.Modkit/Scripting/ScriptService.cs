@@ -104,6 +104,11 @@ public partial class ScriptService : ObservableObject
         return engine;
     }
 
+    /// <summary>
+    /// Exclude files including these partials from script manager's view
+    /// </summary>
+    private static readonly string[] s_hideFromScriptManager = { "\\Internal\\", "Helper.wscript", "Logger.wscript" };
+    
     public virtual IList<ScriptFile> GetScripts(string path)
     {
         var result = new List<ScriptFile>();
@@ -129,7 +134,7 @@ public partial class ScriptService : ObservableObject
 
         // hide Wolvenkit's internal logic from the script manager, there's no reason to run Logger.wscript or Mesh_Helper.wscript
         return result
-            .Where((file) => !file.Path.Contains("\\Internal\\") && !file.Path.Contains("Helper.wscript"))
+            .Where(file => s_hideFromScriptManager.All(exclude => !file.Path.Contains(exclude)))
             .ToArray();
     }
 }
