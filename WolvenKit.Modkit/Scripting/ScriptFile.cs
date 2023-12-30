@@ -7,12 +7,14 @@ namespace WolvenKit.Modkit.Scripting;
 
 public partial class ScriptFile
 {
-    private ScriptFile()
+    public ScriptFile(string path)
     {
+        Path = path;
+        Name = System.IO.Path.GetFileNameWithoutExtension(path);
     }
 
-    public string Path { get; private set; } = null!;
-    public string Name { get; private set; } = null!;
+    public string Path { get; }
+    public string Name { get; }
 
     public ScriptType Type { get; private set; } = ScriptType.General;
     public string? HookExtension { get; private set; }
@@ -20,35 +22,20 @@ public partial class ScriptFile
     public string? Version { get; private set; }
     public string? Author { get; private set; }
 
+    public string Content { get; private set; } = string.Empty;
+
     private DateTime _lastModified = DateTime.MinValue;
-    private string _content = string.Empty;
 
-    public string GetContent()
+    public bool Reload(ILoggerService? loggerService)
     {
-        var localLastModified = File.GetLastWriteTimeUtc(Path);
-        if (_lastModified >= localLastModified)
+        var lastModified = File.GetLastWriteTimeUtc(Path);
+        if (_lastModified >= lastModified)
         {
-            return _content;
+            return true;
         }
+        _lastModified = lastModified;
 
-        _content = File.ReadAllText(Path);
-        _lastModified = localLastModified;
-
-        return _content;
-    }
-
-    [GeneratedRegex("^// @([^\\s]+) (.*)$")]
-    private static partial Regex InfoHeaderRegex();
-
-    public static ScriptFile? Load(string path, ILoggerService loggerService)
-    {
-        var result = new ScriptFile
-        {
-            Path = path,
-            Name = System.IO.Path.GetFileNameWithoutExtension(path)
-        };
-
-        foreach (var line in File.ReadAllLines(result.Path))
+        foreach (var line in File.ReadAllLines(Path))
         {
             if (!line.StartsWith("//"))
             {
@@ -61,27 +48,27 @@ public partial class ScriptFile
                 switch (match.Groups[1].Value)
                 {
                     case "version":
-                        result.Version = match.Groups[2].Value;
+                        Version = match.Groups[2].Value;
                         break;
 
                     case "author":
-                        result.Author = match.Groups[2].Value;
+                        Author = match.Groups[2].Value;
                         break;
 
                     case "type":
                         if (Enum.TryParse<ScriptType>(match.Groups[2].Value, true, out var scriptType))
                         {
-                            result.Type = scriptType;
+                            Type = scriptType;
                         }
                         else
                         {
-                            loggerService.Error($"Could not load \"{result.Path}\". Field \"type\" is invalid \"{match.Groups[2].Value}\"");
-                            return null;
+                            loggerService?.Error($"Could not load \"{Path}\". Field \"type\" is invalid \"{match.Groups[2].Value}\"");
+                            return false;
                         }
                         break;
 
                     case "hook_extension":
-                        result.HookExtension = match.Groups[2].Value;
+                        HookExtension = match.Groups[2].Value;
                         break;
 
                     default:
@@ -90,14 +77,19 @@ public partial class ScriptFile
             }
         }
 
-        if (result.Type == ScriptType.Hook && string.IsNullOrEmpty(result.HookExtension))
+        if (Type == ScriptType.Hook && string.IsNullOrEmpty(HookExtension))
         {
-            loggerService.Error($"Could not load \"{result.Path}\". Field \"hook_extension\" is not set");
-            return null;
+            loggerService?.Error($"Could not load \"{Path}\". Field \"hook_extension\" is not set");
+            return false;
         }
 
-        return result;
+        Content = File.ReadAllText(Path);
+
+        return true;
     }
+
+    [GeneratedRegex("^// @([^\\s]+) (.*)$")]
+    private static partial Regex InfoHeaderRegex();
 }
 
 public enum ScriptType

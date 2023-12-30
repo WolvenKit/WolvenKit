@@ -200,6 +200,8 @@ public partial class ScriptManagerViewModel : DialogViewModel
 
         if (response == WMessageBoxResult.Yes)
         {
+            _scriptService.RemoveFromCache(scriptFile.Path);
+
             File.Delete(scriptFile.Path);
             GetScriptFiles();
         }

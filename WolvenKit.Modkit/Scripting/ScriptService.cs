@@ -121,19 +121,20 @@ public partial class ScriptService : ObservableObject
         {
             if (!_scriptCache.TryGetValue(file, out var scriptFile))
             {
-                scriptFile = ScriptFile.Load(file, _loggerService);
-                if (scriptFile != null)
-                {
-                    _scriptCache.TryAdd(file, scriptFile);
-                }
+                scriptFile = new ScriptFile(file);
+                _scriptCache.TryAdd(file, scriptFile);
             }
 
-            if (scriptFile != null)
+            if (!scriptFile.Reload(_loggerService))
             {
-                result.Add(scriptFile);
+                _scriptCache.Remove(file, out _);
             }
+
+            result.Add(scriptFile);
         }
 
         return result;
     }
+
+    public void RemoveFromCache(string path) => _scriptCache.Remove(path, out _);
 }

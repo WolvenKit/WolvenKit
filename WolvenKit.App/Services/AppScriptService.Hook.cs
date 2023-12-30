@@ -367,7 +367,7 @@ public partial class AppScriptService
     {
         var engine = GetScriptEngine(DefaultHostObject);
 
-        var code = scriptFile.GetContent();
+        var code = scriptFile.Content;
 
         var result = new Dictionary<string, object>
         {

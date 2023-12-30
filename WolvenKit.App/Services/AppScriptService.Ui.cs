@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using Microsoft.ClearScript.JavaScript;
 using Microsoft.ClearScript;
-using System.IO;
 using Microsoft.ClearScript.V8;
-using System.Threading.Tasks;
 using WolvenKit.App.Scripting;
-using WolvenKit.RED4.Types;
+using WolvenKit.Modkit.Scripting;
 
 namespace WolvenKit.App.Services;
 
@@ -75,69 +73,33 @@ public partial class AppScriptService
         UnloadUiScripts();
 
         _uiEngine = GetScriptEngine(new Dictionary<string, object> { { "ui", _ui }, { "wkit", _wkit } });
-
-        var loadedFiles = new List<string>();
-
         _settingsManager.ScriptStatus ??= new();
 
-        foreach (var scriptFilePath in Directory.GetFiles(ISettingsManager.GetWScriptDir(), "ui_*.wscript"))
+        foreach (var script in GetScripts())
         {
-            if (_settingsManager.ScriptStatus.TryGetValue(scriptFilePath, out var enabled) && !enabled)
+            if (script.Type != ScriptType.Ui)
             {
                 continue;
             }
 
-            var code = File.ReadAllText(scriptFilePath);
+            if (_settingsManager.ScriptStatus.TryGetValue(script.Path, out var enabled) && !enabled)
+            {
+                continue;
+            }
 
             try
             {
-                _uiEngine.Execute(new DocumentInfo { Category = ModuleCategory.Standard }, code);
+                _uiEngine.Execute(new DocumentInfo { Category = ModuleCategory.Standard }, script.Content);
             }
             catch (ScriptEngineException ex1)
             {
-                _loggerService?.Error($"{ex1.ErrorDetails}\r\nin {scriptFilePath}");
+                _loggerService?.Error($"{ex1.ErrorDetails}\r\nin {script.Path}");
             }
             catch (Exception ex2)
             {
                 _loggerService?.Error(ex2);
             }
-
-            loadedFiles.Add(Path.GetFileName(scriptFilePath));
         }
-
-        DirectoryInfo resourceDir = new(@"Resources\Scripts");
-        if (resourceDir.Exists)
-        {
-            foreach (var fileInfo in resourceDir.GetFiles("ui_*.wscript"))
-            {
-                var scriptFilePath = fileInfo.FullName;
-                if (loadedFiles.Contains(Path.GetFileName(scriptFilePath)))
-                {
-                    continue;
-                }
-
-                if (_settingsManager.ScriptStatus.TryGetValue(scriptFilePath, out var enabled) && !enabled)
-                {
-                    continue;
-                }
-
-                var code = File.ReadAllText(scriptFilePath);
-
-                try
-                {
-                    _uiEngine.Execute(new DocumentInfo { Category = ModuleCategory.Standard }, code);
-                }
-                catch (ScriptEngineException ex1)
-                {
-                    _loggerService?.Error($"{ex1.ErrorDetails}\r\nin {scriptFilePath}");
-                }
-                catch (Exception ex2)
-                {
-                    _loggerService?.Error(ex2);
-                }
-            }
-        }
-        
 
         foreach (var (name, scriptableControl) in _uiControls)
         {
