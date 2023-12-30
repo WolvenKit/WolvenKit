@@ -103,6 +103,8 @@ public class ImportableItemViewModel : ImportExportItemViewModel
         // get settings from texgroup
         xbmArgs = CommonFunctions.TextureSetupFromTextureGroup(texGroup);
 
+        xbmArgs.PremultiplyAlpha = CommonFunctions.ShouldPremultiplyAlpha(Path.GetFileNameWithoutExtension(fileName));
+
         // get the format again, cos CDPR
         // load and, if needed, decompress file
         var image = RedImage.LoadFromFile(fileName);

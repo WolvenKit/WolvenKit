@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.RED4.Archive;
-using static WolvenKit.RED4.CR2W.RedImage;
 using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.CR2W;
@@ -230,47 +229,46 @@ public static class CommonFunctions
         };
     }
 
+    private static readonly char[] s_digitChars = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+
+    /// <summary>
+    /// Tries to guess the texture's type from its name by using CDPR's naming conventions
+    /// </summary>
+    /// <param name="fileName">Name of file without extension</param>
+    /// <returns>the GpuWrapApieTextureGroup</returns>
     public static GpuWrapApieTextureGroup GetTextureGroupFromFileName(string fileName)
     {
-        GpuWrapApieTextureGroup ret;
-        if (fileName.EndsWith("_n"))
+        //remove trailing digits - filenames like _n01.xbm  
+        fileName = fileName.TrimEnd(s_digitChars);
+
+        return fileName switch
         {
-            ret = GpuWrapApieTextureGroup.TEXG_Generic_Normal;
-        }
-        else if (fileName.EndsWith("_rm"))
+            _ when fileName.EndsWith("_n") || fileName.EndsWith("nm") => GpuWrapApieTextureGroup.TEXG_Generic_Normal,
+            _ when fileName.EndsWith("_r") || fileName.EndsWith("_m") => GpuWrapApieTextureGroup.TEXG_Generic_Grayscale,
+            _ when fileName.EndsWith("_data") => GpuWrapApieTextureGroup.TEXG_Generic_Data,
+            _ when fileName.EndsWith("_lut") => GpuWrapApieTextureGroup.TEXG_Generic_LUT,
+            _ => GpuWrapApieTextureGroup.TEXG_Generic_Color
+        };
+    }
+
+    /// <summary>
+    /// Tries to guess if PremultiplyAlpha should be checked from file name
+    /// </summary>
+    /// <param name="fileName">Name of file without extension</param>
+    /// <returns>true/false for assignment to import settings</returns>
+    public static bool ShouldPremultiplyAlpha(string fileName)
+    {
+        //remove trailing digits - filenames like _n01.xbm - and convert to lower case
+        fileName = fileName.TrimEnd(s_digitChars).ToLower();
+
+        // corresponds to greyscale textures - roughness and maps
+        if (fileName.EndsWith("_r") || fileName.EndsWith("_m"))
         {
-            ret = GpuWrapApieTextureGroup.TEXG_Generic_Color;
-        }
-        else if (fileName.EndsWith("_r"))
-        {
-            ret = GpuWrapApieTextureGroup.TEXG_Generic_Grayscale;
-        }
-        else if (fileName.EndsWith("_m"))
-        {
-            ret = GpuWrapApieTextureGroup.TEXG_Generic_Grayscale;
-        }
-        else if (fileName.EndsWith("_b"))
-        {
-            ret = GpuWrapApieTextureGroup.TEXG_Generic_Color;
-        }
-        else if (fileName.EndsWith("nm"))
-        {
-            ret = GpuWrapApieTextureGroup.TEXG_Generic_Normal;
-        }
-        else if (fileName.EndsWith("_data"))
-        {
-            ret = GpuWrapApieTextureGroup.TEXG_Generic_Data;
-        }
-        else if (fileName.EndsWith("_lut"))
-        {
-            ret = GpuWrapApieTextureGroup.TEXG_Generic_LUT;
-        }
-        else
-        {
-            ret = GpuWrapApieTextureGroup.TEXG_Generic_Color;
+            return false;
         }
 
-        return ret;
+        // what else could we possibly check for?
+        return fileName.Contains("decal");
     }
 
 }
