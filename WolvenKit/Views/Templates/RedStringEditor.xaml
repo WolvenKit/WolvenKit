@@ -15,7 +15,7 @@
         <TextBox
             x:Name="TextBox"
             helpers:TextBoxBehavior.TripleClickSelectAll="True"
-            Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextWrapping="Wrap" />
 
     </Grid>
 </UserControl>
