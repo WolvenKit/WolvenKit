@@ -119,12 +119,19 @@ public partial class ScriptService : ObservableObject
 
         foreach (var file in Directory.GetFiles(path, $"*.{ScriptExtension}", SearchOption.AllDirectories))
         {
-            if (!_scriptCache.ContainsKey(file))
+            if (!_scriptCache.TryGetValue(file, out var scriptFile))
             {
-                _scriptCache.TryAdd(file, new ScriptFile(file));
+                scriptFile = ScriptFile.Load(file, _loggerService);
+                if (scriptFile != null)
+                {
+                    _scriptCache.TryAdd(file, scriptFile);
+                }
             }
 
-            result.Add(_scriptCache[file]);
+            if (scriptFile != null)
+            {
+                result.Add(scriptFile);
+            }
         }
 
         return result;

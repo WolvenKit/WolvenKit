@@ -52,6 +52,7 @@
             SelectionChanged="TabControl_OnSelectionChanged">
             <TabItem Header="General" />
             <TabItem Header="Hook" />
+            <TabItem Header="Lib" />
             <TabItem Header="UI" />
         </TabControl>
 

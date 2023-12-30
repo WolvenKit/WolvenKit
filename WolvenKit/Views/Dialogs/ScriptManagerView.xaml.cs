@@ -133,7 +133,8 @@ public partial class ScriptManagerView : ReactiveUserControl<ScriptManagerViewMo
         {
             0 => ScriptType.General,
             1 => ScriptType.Hook,
-            2 => ScriptType.Ui,
+            2 => ScriptType.Lib,
+            3 => ScriptType.Ui,
             _ => throw new ArgumentOutOfRangeException(nameof(TabControl.SelectedIndex))
         };
 

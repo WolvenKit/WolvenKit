@@ -100,6 +100,7 @@ public partial class ScriptManagerViewModel : DialogViewModel
         {
             var generalScriptDir = new ScriptDirectoryViewModel(scriptSource, ScriptType.General, _settingsManager);
             var hookScriptDir = new ScriptDirectoryViewModel(scriptSource, ScriptType.Hook, _settingsManager);
+            var libScriptDir = new ScriptDirectoryViewModel(scriptSource, ScriptType.Lib, _settingsManager);
             var uiScriptDir = new ScriptDirectoryViewModel(scriptSource, ScriptType.Ui, _settingsManager);
 
             foreach (var systemScript in _scriptService.GetScripts(path))
@@ -114,6 +115,9 @@ public partial class ScriptManagerViewModel : DialogViewModel
                     case ScriptType.Hook:
                         hookScriptDir.Files.Add(new ScriptFileViewModel(_settingsManager, scriptSource, systemScript));
                         break;
+                    case ScriptType.Lib:
+                        libScriptDir.Files.Add(new ScriptFileViewModel(_settingsManager, scriptSource, systemScript));
+                        break;
                     case ScriptType.Ui:
                         uiScriptDir.Files.Add(new ScriptFileViewModel(_settingsManager, scriptSource, systemScript));
                         break;
@@ -124,6 +128,7 @@ public partial class ScriptManagerViewModel : DialogViewModel
 
             Scripts.Add(generalScriptDir);
             Scripts.Add(hookScriptDir);
+            Scripts.Add(libScriptDir);
             Scripts.Add(uiScriptDir);
         }
     }
