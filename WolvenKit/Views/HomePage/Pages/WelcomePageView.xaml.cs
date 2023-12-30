@@ -24,6 +24,8 @@ namespace WolvenKit.Views.HomePage.Pages
             {
                 this.Bind(ViewModel, vm => vm.SelectedPinnedOrder, v => v.PinnedOrder.SelectedValue);
                 this.Bind(ViewModel, vm => vm.SelectedRecentOrder, v => v.RecentOrder.SelectedValue);
+                this.Bind(ViewModel, vm => vm.PinnedFilter, v => v.PinnedFilter.Text);
+                this.Bind(ViewModel, vm => vm.RecentFilter, v => v.RecentFilter.Text);
 
                 this.BindCommand(
                     ViewModel,

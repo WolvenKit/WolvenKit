@@ -98,7 +98,13 @@ public partial class WelcomePageViewModel : PageViewModel
     private int _selectedPinnedOrder;
 
     [ObservableProperty]
+    private string _pinnedFilter = "";
+
+    [ObservableProperty]
     private int _selectedRecentOrder;
+
+    [ObservableProperty]
+    private string _recentFilter = "";
 
     public Dictionary<string, int> SortMode => _sortMode;
 
@@ -249,7 +255,7 @@ public partial class WelcomePageViewModel : PageViewModel
             _settingsManager.PinnedOrder = SelectedPinnedOrder;
 
             FancyPinnedProjects.Clear();
-            FancyPinnedProjects.AddRange(GetSortedItems(true, SelectedPinnedOrder));
+            FancyPinnedProjects.AddRange(GetSortedItems(true, SelectedPinnedOrder, PinnedFilter));
 
             ShowPinned = FancyPinnedProjects.Count > 0;
         });
@@ -260,14 +266,20 @@ public partial class WelcomePageViewModel : PageViewModel
             _settingsManager.RecentOrder = SelectedRecentOrder;
 
             FancyProjects.Clear();
-            FancyProjects.AddRange(GetSortedItems(false, SelectedRecentOrder));
+            FancyProjects.AddRange(GetSortedItems(false, SelectedRecentOrder, RecentFilter));
         });
 
-    private List<FancyProjectObject> GetSortedItems(bool isPinned, int order)
+    private List<FancyProjectObject> GetSortedItems(bool isPinned, int order, string filter)
     {
         var result = new List<FancyProjectObject>();
 
         var pinnedItems = _recentlyUsedItems.Where(x => x.IsPinned == isPinned);
+
+        if (!string.IsNullOrEmpty(filter))
+        {
+            pinnedItems = pinnedItems.Where(x => x.Name.Contains(filter, StringComparison.InvariantCultureIgnoreCase));
+        }
+
         pinnedItems = order switch
         {
             0 => pinnedItems.OrderBy(x => x.LastOpened),
@@ -307,4 +319,6 @@ public partial class WelcomePageViewModel : PageViewModel
 
     partial void OnSelectedPinnedOrderChanged(int value) => RefreshPinnedProjects();
     partial void OnSelectedRecentOrderChanged(int value) => RefreshRecentProjects();
+    partial void OnPinnedFilterChanged(string value) => RefreshPinnedProjects();
+    partial void OnRecentFilterChanged(string value) => RefreshRecentProjects();
 }
