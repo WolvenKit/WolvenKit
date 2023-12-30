@@ -40,6 +40,8 @@ public class SettingsDto : ISettingsDto
         AnalyzeModArchives = settings.AnalyzeModArchives;
         ExtraModDirPath = settings.ExtraModDirPath;
         LastUsedProjectPath = settings.LastUsedProjectPath;
+        PinnedOrder = settings.PinnedOrder;
+        RecentOrder = settings.RecentOrder;
         
         if (settings.SettingsVersion < 2)
         {
@@ -75,6 +77,8 @@ public class SettingsDto : ISettingsDto
     public bool AnalyzeModArchives { get; set; } = true;
     public string? ExtraModDirPath { get; set; }
     public string? LastUsedProjectPath { get; set; }
+    public int PinnedOrder { get; set; }
+    public int RecentOrder { get; set; }
 
     public SettingsManager ReconfigureSettingsManager(SettingsManager settingsManager)
     {
@@ -111,6 +115,8 @@ public class SettingsDto : ISettingsDto
         settingsManager.AnalyzeModArchives = AnalyzeModArchives;
         settingsManager.ExtraModDirPath = ExtraModDirPath;
         settingsManager.LastUsedProjectPath = LastUsedProjectPath;
+        settingsManager.PinnedOrder = PinnedOrder;
+        settingsManager.RecentOrder = RecentOrder;
 
         return settingsManager;
     }

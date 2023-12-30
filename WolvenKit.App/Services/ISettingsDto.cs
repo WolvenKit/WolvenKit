@@ -36,4 +36,6 @@ public interface ISettingsDto
     public bool AnalyzeModArchives { get; set; }
     public string? ExtraModDirPath { get; set; }
     public string? LastUsedProjectPath { get; set; }
+    public int PinnedOrder { get; set; }
+    public int RecentOrder { get; set; }
 }
