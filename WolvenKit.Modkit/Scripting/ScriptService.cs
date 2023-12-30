@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.ClearScript;
@@ -123,10 +124,12 @@ public partial class ScriptService : ObservableObject
             {
                 _scriptCache.TryAdd(file, new ScriptFile(file));
             }
-
             result.Add(_scriptCache[file]);
         }
 
-        return result;
+        // hide Wolvenkit's internal logic from the script manager, there's no reason to run Logger.wscript or Mesh_Helper.wscript
+        return result
+            .Where((file) => !file.Path.Contains("\\Internal\\") && !file.Path.Contains("Helper.wscript"))
+            .ToArray();
     }
 }
