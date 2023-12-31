@@ -314,9 +314,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 CalculateDescriptor();
                 Parent.CalculateDescriptor();
             }
-            else if (Data is CName && Parent.Data is IRedArray && Parent.Parent?.ResolvedData is meshMeshAppearance)
+            else if (Data is CName && Parent.Data is IRedArray &&
+                     Parent.Parent is { ResolvedData: meshMeshAppearance } grandparent)
             {
-                Parent.Parent?.RecalculateProperties();
+                grandparent.CalculateValue();
             }
 
 
@@ -1895,7 +1896,24 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             Value = ibt.GetBrowsableValue();
         }
-
+        // factory.csv
+        else if (Parent is { Name: "compiledData" } && GetRootModel().Data is C2dArray &&
+                 Data is CArray<CString> { Count: 3 } ary)
+        {
+            IsValueExtrapolated = true;
+            Value = ary[1];
+        }
+        // i18n.json
+        else if (Data is localizationPersistenceOnScreenEntry i18n)
+        {
+            IsValueExtrapolated = true;
+            // fall back to male variant only if female variant is
+            Value = i18n.FemaleVariant;
+            if (Value == "" && i18n.MaleVariant != "")
+            {
+                Value = i18n.MaleVariant;
+            }
+        }
       
         if (Value is null)
         {
