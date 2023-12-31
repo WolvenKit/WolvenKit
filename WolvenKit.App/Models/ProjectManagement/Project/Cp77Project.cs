@@ -13,10 +13,11 @@ public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
 {
     private readonly IHashService _hashService;
 
-    public Cp77Project(string location, string name, IHashService hashService)
+    public Cp77Project(string location, string name, string modName, IHashService hashService)
     {
-        Location = location;
         Name = name;
+        Location = location;
+        ModName = modName;
 
         _hashService= hashService;
     }
@@ -24,6 +25,8 @@ public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
     public string Name { get; set; }
 
     public string Location { get; set; }
+
+    public string ModName { get; set; }
 
 
     public string? Author { get; set; }
@@ -35,12 +38,7 @@ public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
     public string? Version { get; set; }
 
 
-    public bool IsDirty { get; set; }
-
-
-
     public GameType GameType => GameType.Cyberpunk2077;
-
 
 
     public List<string> Files
@@ -247,7 +245,7 @@ public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
     {
         get
         {
-            var dir = Path.Combine(PackedRootDirectory, "mods", Name);
+            var dir = Path.Combine(PackedRootDirectory, "mods", ModName);
             if (!Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);
@@ -331,7 +329,7 @@ public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
 
     public object Clone()
     {
-        Cp77Project clone = new(Location, Name, _hashService)
+        Cp77Project clone = new(Location, Name, ModName, _hashService)
         {
             Author = Author,
             Email = Email,
@@ -351,7 +349,7 @@ public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
     public override int GetHashCode() => Location != null ? Location.GetHashCode() : 0;
     public ModInfo GetInfo()
     {
-        ModInfo modInfo = new(Name, Version ?? "1.0")
+        ModInfo modInfo = new(ModName, Version ?? "1.0")
         {
             Description = Description,
         };

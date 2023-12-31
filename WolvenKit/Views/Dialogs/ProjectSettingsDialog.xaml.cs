@@ -20,6 +20,9 @@ public partial class ProjectSettingsDialog : ReactiveUserControl<ProjectSettings
             this.OneWayBind(ViewModel, x => x.Project.Name, x => x.ProjectNameTextBox.Text)
                 .DisposeWith(disposables);
 
+            this.Bind(ViewModel, x => x.Project.ModName, x => x.ModNameTextBox.Text)
+                .DisposeWith(disposables);
+
             this.Bind(ViewModel, x => x.Project.Author, x => x.AuthorTextBox.Text)
                 .DisposeWith(disposables);
 

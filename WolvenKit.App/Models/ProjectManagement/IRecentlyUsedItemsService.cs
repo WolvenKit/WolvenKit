@@ -13,4 +13,5 @@ public interface IRecentlyUsedItemsService
     void RemoveItem(RecentlyUsedItemModel itemModel);
     void PinItem(string key);
     void UnpinItem(string key);
+    void Save();
 }

@@ -8,11 +8,13 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
+using DynamicData.Binding;
 using Microsoft.Win32;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models.ProjectManagement;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
 
 namespace WolvenKit.App.ViewModels.HomePage.Pages;
@@ -22,29 +24,53 @@ public partial class WelcomePageViewModel : PageViewModel
     #region Fields
 
     private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
-
     private readonly AppViewModel _mainViewModel;
+    private readonly ISettingsManager _settingsManager;
+
 
     private readonly ReadOnlyObservableCollection<RecentlyUsedItemModel> _recentlyUsedItems;
+
+    private Dictionary<string, int> _sortMode = new()
+    {
+        {"Last opened", 0},
+        {"Last opened (Desc)", 1},
+        {"Created", 2},
+        {"Created (Desc)", 3},
+        {"Name", 4},
+        {"Name (Desc)", 5},
+    };
 
     #endregion Fields
 
     #region Constructors
 
-    public WelcomePageViewModel(IRecentlyUsedItemsService recentlyUsedItemsService, AppViewModel mainViewModel)
+    public WelcomePageViewModel(IRecentlyUsedItemsService recentlyUsedItemsService, AppViewModel mainViewModel, ISettingsManager settingsManager)
     {
         _recentlyUsedItemsService = recentlyUsedItemsService;
         _mainViewModel = mainViewModel;
+        _settingsManager = settingsManager;
+
+        _selectedPinnedOrder = _settingsManager.PinnedOrder;
+        _selectedRecentOrder = _settingsManager.RecentOrder;
 
         recentlyUsedItemsService.Items
             .Connect()
             //.ObserveOn(RxApp.MainThreadScheduler)
             .Bind(out _recentlyUsedItems)
             .Subscribe(OnRecentlyUsedItemsChanged);
-        
     }
 
-    private void OnRecentlyUsedItemsChanged(IChangeSet<RecentlyUsedItemModel, string> obj) => ConvertRecentProjects();
+    private void OnRecentlyUsedItemsChanged(IChangeSet<RecentlyUsedItemModel, string> obj)
+    {
+        ConvertRecentProjects();
+
+        var changeSet = _recentlyUsedItems
+            .ToObservableChangeSet();
+
+        changeSet
+            .WhenAnyPropertyChanged()
+            .Subscribe(_ => ConvertRecentProjects());
+    }
 
     #endregion Constructors
 
@@ -57,10 +83,30 @@ public partial class WelcomePageViewModel : PageViewModel
     public string YoutubeLink = "https://www.youtube.com/channel/UCl3JpsP49JgYLMYAYQvoaLg";
 
     [ObservableProperty]
+    private ObservableCollection<FancyProjectObject> _fancyPinnedProjects = new();
+
+    [ObservableProperty]
     private ObservableCollection<FancyProjectObject> _fancyProjects = new();
 
     [ObservableProperty]
     private List<RecentlyUsedItemModel> _pinnedItems = new();
+
+    [ObservableProperty]
+    private bool _showPinned;
+
+    [ObservableProperty]
+    private int _selectedPinnedOrder;
+
+    [ObservableProperty]
+    private string _pinnedFilter = "";
+
+    [ObservableProperty]
+    private int _selectedRecentOrder;
+
+    [ObservableProperty]
+    private string _recentFilter = "";
+
+    public Dictionary<string, int> SortMode => _sortMode;
 
     #endregion Properties
 
@@ -188,7 +234,7 @@ public partial class WelcomePageViewModel : PageViewModel
             if (items.Count > 0)
             {
                 var item = items.First();
-                _recentlyUsedItemsService.AddItem(new RecentlyUsedItemModel(parameter, item.DateTime, item.Modified));
+                _recentlyUsedItemsService.AddItem(new RecentlyUsedItemModel(parameter, item.DateTime, item.LastOpened));
                 _recentlyUsedItemsService.RemoveItem(item);
                 return parameter;
             }
@@ -199,63 +245,80 @@ public partial class WelcomePageViewModel : PageViewModel
 
     private void ConvertRecentProjects() // Converts Recent projects for the homepage.
     {
-        DispatcherHelper.RunOnMainThread(() => FancyProjects.Clear());
+        RefreshPinnedProjects();
+        RefreshRecentProjects();
+    }
 
-        var sorted = _recentlyUsedItems.ToList();
-        sorted.Sort(delegate (RecentlyUsedItemModel a, RecentlyUsedItemModel b)
+    private void RefreshPinnedProjects() =>
+        DispatcherHelper.RunOnMainThread(() =>
         {
-            DateTime ad, bd;
-            if (a.Modified != default)
-            {
-                ad = a.Modified;
-            }
-            else
-            {
-                ad = a.DateTime;
-            }
+            _settingsManager.PinnedOrder = SelectedPinnedOrder;
 
-            if (b.Modified != default)
-            {
-                bd = b.Modified;
-            }
-            else
-            {
-                bd = b.DateTime;
-            }
+            FancyPinnedProjects.Clear();
+            FancyPinnedProjects.AddRange(GetSortedItems(true, SelectedPinnedOrder, PinnedFilter));
 
-            return bd.CompareTo(ad);
+            ShowPinned = FancyPinnedProjects.Count > 0;
         });
 
-        foreach (var item in sorted)
+    private void RefreshRecentProjects() =>
+        DispatcherHelper.RunOnMainThread(() =>
+        {
+            _settingsManager.RecentOrder = SelectedRecentOrder;
+
+            FancyProjects.Clear();
+            FancyProjects.AddRange(GetSortedItems(false, SelectedRecentOrder, RecentFilter));
+        });
+
+    private List<FancyProjectObject> GetSortedItems(bool isPinned, int order, string filter)
+    {
+        var result = new List<FancyProjectObject>();
+
+        var pinnedItems = _recentlyUsedItems.Where(x => x.IsPinned == isPinned);
+
+        if (!string.IsNullOrEmpty(filter))
+        {
+            pinnedItems = pinnedItems.Where(x => x.Name.Contains(filter, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        pinnedItems = order switch
+        {
+            0 => pinnedItems.OrderBy(x => x.LastOpened),
+            1 => pinnedItems.OrderByDescending(x => x.LastOpened),
+            2 => pinnedItems.OrderBy(x => x.DateTime),
+            3 => pinnedItems.OrderByDescending(x => x.DateTime),
+            4 => pinnedItems.OrderBy(x => x.Name),
+            5 => pinnedItems.OrderByDescending(x => x.Name),
+            _ => pinnedItems
+        };
+
+        foreach (var item in pinnedItems)
         {
             var fi = new FileInfo(item.Name);
 
-            var n = item.Name;
-            var cd = item.Modified != default ? item.Modified : item.DateTime;
-            var p = item.Name;
+            var cd = item.LastOpened != default ? item.LastOpened : item.DateTime;
+            var path = item.Name;
 
             var newfo = fi.Name.Split('.');
-            var newfi = fi.Directory + "\\" + newfo[0] + "\\" + "img.png";
+            var image = fi.Directory + "\\" + newfo[0] + "\\" + "img.png";
 
-            var IsThere = File.Exists(newfi);
-            File.GetLastWriteTime(item.Name);
-
-            FancyProjectObject NewItem;
             if (Path.GetExtension(item.Name).TrimStart('.') == EProjectType.cpmodproj.ToString())
             {
-                if (!IsThere)
-                { newfi = "pack://application:,,,/Resources/Media/Images/Application/V Male Logo Cropped.png"; }
-                NewItem = new FancyProjectObject(fi.Name, cd, "Cyberpunk 2077", p, newfi);
-                DispatcherHelper.RunOnMainThread(() => FancyProjects.Add(NewItem));
-            }
-            if (Path.GetExtension(item.Name).TrimStart('.') == EProjectType.w3modproj.ToString())
-            {
-                if (!IsThere)
-                { newfi = "pack://application:,,,/Resources/Media/Images/Application/tw3proj.png"; }
+                if (!File.Exists(image))
+                {
+                    image = "pack://application:,,,/Resources/Media/Images/Application/V Male Logo Cropped.png";
+                }
 
-                NewItem = new FancyProjectObject(n, cd, "The Witcher 3", p, newfi);
-                DispatcherHelper.RunOnMainThread(() => FancyProjects.Add(NewItem));
+                var newItem = new FancyProjectObject(item, fi.Name, cd, "Cyberpunk 2077", path, image);
+
+                result.Add(newItem);
             }
         }
+
+        return result;
     }
+
+    partial void OnSelectedPinnedOrderChanged(int value) => RefreshPinnedProjects();
+    partial void OnSelectedRecentOrderChanged(int value) => RefreshRecentProjects();
+    partial void OnPinnedFilterChanged(string value) => RefreshPinnedProjects();
+    partial void OnRecentFilterChanged(string value) => RefreshRecentProjects();
 }

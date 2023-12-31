@@ -1,6 +1,7 @@
 using System;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App.ViewModels.HomePage.Pages;
@@ -21,6 +22,11 @@ namespace WolvenKit.Views.HomePage.Pages
 
             this.WhenActivated(disposables =>
             {
+                this.Bind(ViewModel, vm => vm.SelectedPinnedOrder, v => v.PinnedOrder.SelectedValue);
+                this.Bind(ViewModel, vm => vm.SelectedRecentOrder, v => v.RecentOrder.SelectedValue);
+                this.Bind(ViewModel, vm => vm.PinnedFilter, v => v.PinnedFilter.Text);
+                this.Bind(ViewModel, vm => vm.RecentFilter, v => v.RecentFilter.Text);
+
                 this.BindCommand(
                     ViewModel,
                     vm => vm.OpenLinkCommand,

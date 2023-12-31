@@ -14,20 +14,26 @@ public partial class ProjectManager
 
         public CP77Mod(Cp77Project project)
         {
+            Name = project.Name;
+            ModName = project.ModName;
+
             Author = project.Author;
             Email = project.Email;
-            Name = project.Name;
+            Description = project.Description;
             Version = project.Version;
         }
+
+        public string? Name { get; set; }
+
+        public string? ModName { get; set; }
+
 
         public string? Author { get; set; }
 
         public string? Email { get; set; }
 
-        public string? Name { get; set; }
+        public string? Description { get; set; }
 
         public string? Version { get; set; }
-        public bool IsRedMod { get; set; }
-        public bool ExecuteDeploy { get; set; }
     }
 }

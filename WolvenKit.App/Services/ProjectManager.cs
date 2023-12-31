@@ -92,9 +92,15 @@ public partial class ProjectManager : ObservableObject, IProjectManager
                     ActiveProject = x.Result;
                     IsProjectLoaded = true;
 
-                    if (_recentlyUsedItemsService.Items.Items.All(item => item.Name != location))
+                    var recentItem = _recentlyUsedItemsService.Items.Items.FirstOrDefault(item => item.Name == location);
+                    if (recentItem == null)
                     {
-                        _recentlyUsedItemsService.AddItem(new RecentlyUsedItemModel(location, DateTime.Now, DateTime.Now));
+                        recentItem = new RecentlyUsedItemModel(location, DateTime.Now, DateTime.Now);
+                        _recentlyUsedItemsService.AddItem(recentItem);
+                    }
+                    else
+                    {
+                        recentItem.LastOpened = DateTime.Now;
                     }
                 }
             }
@@ -151,10 +157,13 @@ public partial class ProjectManager : ObservableObject, IProjectManager
                 return null;
             }
 
-            Cp77Project project = new(path, obj.Name, _hashService)
+            obj.ModName ??= obj.Name;
+
+            Cp77Project project = new(path, obj.Name, obj.ModName, _hashService)
             {
                 Author = obj.Author,
                 Email = obj.Email,
+                Description = obj.Description,
                 Version = obj.Version,
             };
 

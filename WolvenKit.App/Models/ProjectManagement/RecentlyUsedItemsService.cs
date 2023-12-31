@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -27,6 +28,11 @@ public class RecentlyUsedItemsService : IRecentlyUsedItemsService
                 _recentlyUsedItems.Edit(innerCache => innerCache.AddOrUpdate(dto.Values));
             }
         }
+
+        Items
+            .Connect()
+            .WhenAnyPropertyChanged()
+            .Subscribe(_ => Save());
     }
 
     public void AddItem(RecentlyUsedItemModel itemModel)
@@ -51,7 +57,7 @@ public class RecentlyUsedItemsService : IRecentlyUsedItemsService
         //TODO
     }
 
-    private void Save()
+    public void Save()
     {
         var options = new JsonSerializerOptions
         {

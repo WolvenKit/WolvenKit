@@ -194,15 +194,15 @@ public class RED4Controller : ObservableObject, IGameController
         {
             try
             {
-                _modTools.Pack( new DirectoryInfo(_projectManager.ActiveProject.ModDirectory), new DirectoryInfo(hotdirectory), _projectManager.ActiveProject.Name);
+                _modTools.Pack( new DirectoryInfo(_projectManager.ActiveProject.ModDirectory), new DirectoryInfo(hotdirectory), _projectManager.ActiveProject.ModName);
             }
             catch (PackException)
             {
                 return false;
             }
         }
-        _loggerService.Success($"{_projectManager.ActiveProject.Name} packed into {hotdirectory}");
-        _notificationService.Success($"{_projectManager.ActiveProject.Name} packed into {hotdirectory}");
+        _loggerService.Success($"{_projectManager.ActiveProject.ModName} packed into {hotdirectory}");
+        _notificationService.Success($"{_projectManager.ActiveProject.ModName} packed into {hotdirectory}");
 
         return true;
     }
@@ -518,7 +518,7 @@ public class RED4Controller : ObservableObject, IGameController
     {
         try
         {
-            _modTools.Pack(new DirectoryInfo(cp77Proj.ModDirectory), new DirectoryInfo(cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)), cp77Proj.Name);
+            _modTools.Pack(new DirectoryInfo(cp77Proj.ModDirectory), new DirectoryInfo(cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)), cp77Proj.ModName);
         }
         catch (PackException ex)
         {
@@ -789,8 +789,6 @@ public class RED4Controller : ObservableObject, IGameController
 
             installlog.Root.Add(fileroot);
             installlog.Save(logPath);
-
-
         }
         catch (Exception ex)
         {

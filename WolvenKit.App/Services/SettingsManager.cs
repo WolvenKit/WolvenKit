@@ -53,7 +53,9 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(GameLanguage),
             nameof(AnalyzeModArchives),
             nameof(ExtraModDirPath),
-            nameof(LastUsedProjectPath)
+            nameof(LastUsedProjectPath),
+            nameof(PinnedOrder),
+            nameof(RecentOrder)
             )
           .Subscribe(_ =>
           {
@@ -253,6 +255,18 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [property: Browsable(false)]
 #pragma warning restore CS0657 // Not a valid attribute location for this declaration
     private string? _lastUsedProjectPath;
+
+    [ObservableProperty]
+#pragma warning disable CS0657 // Not a valid attribute location for this declaration
+    [property: Browsable(false)]
+#pragma warning restore CS0657 // Not a valid attribute location for this declaration
+    private int _pinnedOrder;
+
+    [ObservableProperty]
+#pragma warning disable CS0657 // Not a valid attribute location for this declaration
+    [property: Browsable(false)]
+#pragma warning restore CS0657 // Not a valid attribute location for this declaration
+    private int _recentOrder;
 
     #endregion properties
 

@@ -109,13 +109,12 @@ public partial class NewFileViewModel : DialogViewModel
             return;
         }
 
-        var sep = Path.DirectorySeparatorChar;
 #pragma warning disable IDE0072 // Add missing cases
         FileName = SelectedFile?.Type switch
         {
-            EWolvenKitFile.TweakXl => $"r6{sep}tweaks{sep}{project.Name}{sep}untitled.{value.Extension.NotNull().ToLower()}",
-            EWolvenKitFile.RedScript => $"r6{sep}scripts{sep}{project.Name}{sep}untitled.{value.Extension.NotNull().ToLower()}",
-            EWolvenKitFile.CETLua => $"bin{sep}x64{sep}plugins{sep}cyber_engine_tweaks{sep}mods{sep}{project.Name}{sep}init.{value.Extension.NotNull().ToLower()}",
+            EWolvenKitFile.TweakXl => Path.Combine("r6", "tweaks", project.Name, $"untitled.{value.Extension.NotNull().ToLower()}"),
+            EWolvenKitFile.RedScript => Path.Combine("r6", "scripts", project.Name, $"untitled.{value.Extension.NotNull().ToLower()}"),
+            EWolvenKitFile.CETLua => Path.Combine("bin", "x64", "plugins", "cyber_engine_tweaks", "mods", project.Name, $"init.{value.Extension.NotNull().ToLower()}"),
             _ => $"{value.Name.NotNull().Split(' ').First()}1.{value.Extension.NotNull().ToLower()}",
         };
 #pragma warning restore IDE0072 // Add missing cases

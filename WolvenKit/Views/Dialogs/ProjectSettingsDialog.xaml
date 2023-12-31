@@ -57,6 +57,16 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
+                    <Label Grid.Column="0">Mod Name</Label>
+                    <hc:TextBox x:Name="ModNameTextBox" Grid.Column="1" />
+                </Grid>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
                     <Label Grid.Column="0">Author</Label>
                     <hc:TextBox x:Name="AuthorTextBox" Grid.Column="1" />
                 </Grid>
