@@ -22,6 +22,12 @@ public partial class C2dArray : IRedAppendix
         set => SetPropertyValue<CArray<CArray<CString>>>(value);
     }
 
+    partial void PostConstruct()
+    {
+        CompiledHeaders = new CArray<CString>();
+        CompiledData = new CArray<CArray<CString>>();
+    }
+
     public void Read(Red4Reader reader, uint size)
     {
         var cnt1 = reader.BaseReader.ReadVLQInt32();
@@ -62,11 +68,5 @@ public partial class C2dArray : IRedAppendix
                 writer.Write(entry);
             }
         }
-    }
-
-    partial void PostConstruct()
-    {
-        CompiledHeaders = new CArray<CString>();
-        CompiledData = new CArray<CArray<CString>>();
     }
 }

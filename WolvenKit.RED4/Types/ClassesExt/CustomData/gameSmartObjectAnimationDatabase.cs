@@ -31,6 +31,13 @@ public partial class gameSmartObjectAnimationDatabase : IRedCustomData
         set => SetPropertyValue<CArray<gameSmartObjectAnimationDatabase_PathHashPair>>(value);
     }
 
+    partial void PostConstruct()
+    {
+        Unk1 = new CArray<gameSmartObjectAnimationDatabase_App1>();
+        Unk2 = new CArray<gameSmartObjectAnimationDatabase_App3>();
+        PathHashes = new CArray<gameSmartObjectAnimationDatabase_PathHashPair>();
+    }
+
     public void CustomRead(Red4Reader reader, uint size)
     {
         Unk1 = new CArray<gameSmartObjectAnimationDatabase_App1>();

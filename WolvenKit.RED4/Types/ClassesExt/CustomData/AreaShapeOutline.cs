@@ -13,6 +13,11 @@ public partial class AreaShapeOutline : IRedCustomData
         set => SetPropertyValue<CByteArray>(value);
     }
 
+    partial void PostConstruct()
+    {
+        Buffer = new CByteArray();
+    }
+
     // TODO: cnt + (Vector4? * cnt) + Height
     public void CustomRead(Red4Reader reader, uint size) => Buffer = reader.BaseReader.ReadBytes((int)size);
 

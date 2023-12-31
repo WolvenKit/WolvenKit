@@ -14,6 +14,11 @@ public partial class CMaterialTemplate : IRedAppendix
         set => SetPropertyValue<CArray<CArray<CMaterialParameterInfo>>>(value);
     }
 
+    partial void PostConstruct()
+    {
+        ParameterInfo = new CArray<CArray<CMaterialParameterInfo>>();
+    }
+
     public void Read(Red4Reader reader, uint size)
     {
         ParameterInfo = new();

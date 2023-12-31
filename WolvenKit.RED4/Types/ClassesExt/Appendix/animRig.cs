@@ -21,6 +21,12 @@ public partial class animRig : IRedAppendix
         set => SetPropertyValue<CArray<QsTransform>>(value);
     }
 
+    partial void PostConstruct()
+    {
+        BoneParentIndexes = new CArray<CInt16>();
+        BoneTransforms = new CArray<QsTransform>();
+    }
+
     public void Read(Red4Reader reader, uint size)
     {
         BoneParentIndexes = new CArray<CInt16>();

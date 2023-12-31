@@ -14,6 +14,11 @@ public partial class gameDeviceResourceData : IRedAppendix
         set => SetPropertyValue<CArray<gameDeviceResourceData_Cls1>>(value);
     }
 
+    partial void PostConstruct()
+    {
+        Unk1 = new CArray<gameDeviceResourceData_Cls1>();
+    }
+
     public void Read(Red4Reader reader, uint size)
     {
         Unk1 = new CArray<gameDeviceResourceData_Cls1>();

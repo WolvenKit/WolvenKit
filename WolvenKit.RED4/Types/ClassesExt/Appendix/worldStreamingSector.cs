@@ -71,6 +71,14 @@ public partial class worldStreamingSector : IRedAppendix
         set => SetPropertyValue<CArray<CArray<RedBaseClass>>>(value);
     }
 
+    partial void PostConstruct()
+    {
+        NodeData = new DataBuffer();
+        Nodes = new CArray<CHandle<worldNode>>();
+        NodeRefs = new CArray<NodeRef>();
+        VariantIndices = new CArray<CInt32>();
+    }
+
     public void Read(Red4Reader reader, uint size)
     {
         Nodes = new CArray<CHandle<worldNode>>();

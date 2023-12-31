@@ -22,6 +22,12 @@ public partial class physicsMaterialLibraryResource : IRedAppendix
         set => SetPropertyValue<CArray<CHandle<physicsMaterialResource>>>(value);
     }
 
+    partial void PostConstruct()
+    {
+        Unk1 = new CArray<CName>();
+        Unk2 = new CArray<CHandle<physicsMaterialResource>>();
+    }
+
     public void Read(Red4Reader reader, uint size)
     {
         Unk1 = new CArray<CName>();

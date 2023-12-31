@@ -15,6 +15,11 @@ public partial class worldTrafficCompiledNode : IRedAppendix
         set => SetPropertyValue<CArray<worldTrafficCompiledNode_App1>>(value);
     }
 
+    partial void PostConstruct()
+    {
+        Unk1 = new CArray<worldTrafficCompiledNode_App1>();
+    }
+
     public void Read(Red4Reader reader, uint size)
     {
         Unk1 = new CArray<worldTrafficCompiledNode_App1>();

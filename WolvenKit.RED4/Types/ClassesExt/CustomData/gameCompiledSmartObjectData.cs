@@ -12,6 +12,11 @@ public partial class gameCompiledSmartObjectData : IRedCustomData
         set => SetPropertyValue<CByteArray>(value);
     }
 
+    partial void PostConstruct()
+    {
+        Buffer = new CByteArray();
+    }
+
     public void CustomRead(Red4Reader reader, uint size) => Buffer = reader.BaseReader.ReadBytes((int)size);
 
     public void CustomWrite(Red4Writer writer) => writer.BaseWriter.Write(Buffer);

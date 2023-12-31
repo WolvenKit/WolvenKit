@@ -12,6 +12,11 @@ public partial class CMaterialInstance : IRedAppendix
         set => SetPropertyValue<CArray<CKeyValuePair>>(value);
     }
 
+    partial void PostConstruct()
+    {
+        Values = new CArray<CKeyValuePair>();
+    }
+
     public void Read(Red4Reader reader, uint size)
     {
         var entryCount = reader.BaseReader.ReadInt32();
@@ -55,10 +60,5 @@ public partial class CMaterialInstance : IRedAppendix
             writer.BaseWriter.Write((uint)innerSize);
             writer.BaseStream.Position = endPos;
         }
-    }
-
-    partial void PostConstruct()
-    {
-        Values = new CArray<CKeyValuePair>();
     }
 }

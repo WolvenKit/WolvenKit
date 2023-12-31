@@ -22,6 +22,11 @@ public partial class physicsColliderMesh : IRedAppendix
         set => SetPropertyValue<CArray<CUInt16>>(value);
     }
 
+    partial void PostConstruct()
+    {
+        Unk2 = new CArray<CUInt16>();
+    }
+
     public void Read(Red4Reader reader, uint size)
     {
         Unk2 = new CArray<CUInt16>();

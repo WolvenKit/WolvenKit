@@ -22,6 +22,12 @@ public partial class scnAnimName : IRedAppendix
         set => SetPropertyValue<CArray<CUInt16>>(value);
     }
 
+    partial void PostConstruct()
+    {
+        Unk1 = new CArray<CName>();
+        Unk2 = new CArray<CUInt16>();
+    }
+
     public void Read(Red4Reader reader, uint size)
     {
         if (size % 2 != 0)

@@ -21,6 +21,12 @@ public partial class gameLootResourceData : IRedAppendix
         set => SetPropertyValue<CArray<CArray<TweakDBID>>>(value);
     }
 
+    partial void PostConstruct()
+    {
+        NodeRefsHash = new CArray<CUInt64>();
+        TweakDbIds = new CArray<CArray<TweakDBID>>();
+    }
+
     public void Read(Red4Reader reader, uint size)
     {
         NodeRefsHash = new CArray<CUInt64>();
