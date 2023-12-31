@@ -681,6 +681,8 @@ namespace WolvenKit.Modkit.RED4
                 if (_parserService.TryReadRed4File(ms, out var file))
                 {
                     var img = RedImage.FromRedFile(file);
+                    img.FlipV();
+
                     foreach (var part in parts)
                     {
                         var x = Math.Round(part.ClippingRectInUVCoords.Left * img.Metadata.Width);

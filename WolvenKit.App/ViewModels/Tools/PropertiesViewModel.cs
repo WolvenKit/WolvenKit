@@ -354,10 +354,6 @@ public partial class PropertiesViewModel : ToolViewModel
     public void SetupImage(RedBaseClass cls)
     {
         var image = RedImage.FromRedClass(cls);
-        if (image.Metadata.Format == DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM)
-        {
-            return;
-        }
 
         var bitmapImage = new BitmapImage();
         bitmapImage.BeginInit();
@@ -376,11 +372,6 @@ public partial class PropertiesViewModel : ToolViewModel
         if (image == null)
         {
             _loggerService.Error($"\"{fileName}\" could not be loaded!");
-            return;
-        }
-
-        if (image.Metadata.Format == DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM)
-        {
             return;
         }
 

@@ -74,11 +74,6 @@ public partial class RDTTextureViewModel : RedDocumentTabViewModel
             return;
         }
 
-        if (_redImage.Metadata.Format == DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM)
-        {
-            return;
-        }
-
         var bitmapImage = new BitmapImage();
         bitmapImage.BeginInit();
         bitmapImage.StreamSource = new MemoryStream(_redImage.GetPreview(true));
