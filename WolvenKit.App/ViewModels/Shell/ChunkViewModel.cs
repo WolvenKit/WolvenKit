@@ -2036,6 +2036,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             Descriptor = qnd.Id.ToString();
         }
+        else if (ResolvedData is scnSceneGraphNode sgn)
+        {
+            Descriptor = sgn.NodeId.Id.ToString();
+        }
         else if (Data is TweakDBID tdb)
         {
             //Descriptor = Locator.Current.GetService<TweakDBService>().GetString(tdb);
