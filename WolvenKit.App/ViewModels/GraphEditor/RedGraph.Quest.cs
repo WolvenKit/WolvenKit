@@ -114,7 +114,7 @@ public partial class RedGraph
         wrappedInstance.Location = point;
 
         ((graphGraphDefinition)_data).Nodes.Add(new CHandle<graphGraphNodeDefinition>(instance));
-        if (GetNodesChunkViewModel() is { } nodes)
+        if (GetQuestNodesChunkViewModel() is { } nodes)
         {
             nodes.RecalculateProperties();
         }
@@ -161,7 +161,9 @@ public partial class RedGraph
                     var connection = (QuestConnectionViewModel)Connections[i];
                     if (ReferenceEquals(connection.ConnectionDefinition, inputConnection))
                     {
+                        connection.Source.IsConnected = ((QuestOutputConnectorViewModel)connection.Source).Data.Connections.Count > 0;
                         Connections.RemoveAt(i);
+                        RefreshCVM([((QuestOutputConnectorViewModel)connection.Source).Data]);
                     }
                 }
             }
@@ -188,7 +190,9 @@ public partial class RedGraph
                     var connection = (QuestConnectionViewModel)Connections[i];
                     if (ReferenceEquals(connection.ConnectionDefinition, outputConnection))
                     {
+                        connection.Target.IsConnected = ((QuestInputConnectorViewModel)connection.Target).Data.Connections.Count > 0;
                         Connections.RemoveAt(i);
+                        RefreshCVM([((QuestInputConnectorViewModel)connection.Target).Data]);
                     }
                 }
             }
@@ -199,23 +203,16 @@ public partial class RedGraph
         {
             if (ReferenceEquals(graph[i].Chunk, node.Data))
             {
-                RemoveNodeAt(i);
+                graph.RemoveAt(i);
+
+                if (GetQuestNodesChunkViewModel() is { } nodes)
+                {
+                    nodes.RecalculateProperties();
+                }
             }
         }
 
         Nodes.Remove(node);
-    }
-
-    private void RemoveNodeAt(int index)
-    {
-        var graph = ((graphGraphDefinition)_data).Nodes;
-
-        graph.RemoveAt(index);
-
-        if (GetNodesChunkViewModel() is { } nodes)
-        {
-            nodes.RecalculateProperties();
-        }
     }
 
     private Type GetWrapperType(Type type)
@@ -293,7 +290,6 @@ public partial class RedGraph
             questTarget.IsConnected = questTarget.Data.Connections.Count > 0;
 
             Connections.RemoveAt(i);
-
             RefreshCVM([questSource.Data, questTarget.Data]);
 
             return;
@@ -310,33 +306,32 @@ public partial class RedGraph
         questTarget.Data.Connections.Add(handle);
 
         Connections.Add(new QuestConnectionViewModel(questSource, questTarget, graphGraphConnectionDefinition));
-
         RefreshCVM([questSource.Data, questTarget.Data]);
+    }
 
-        void RefreshCVM(questSocketDefinition[] sockets)
+    private void RefreshCVM(questSocketDefinition[] sockets)
+    {
+        if (GetQuestNodesChunkViewModel() is { } nodes)
         {
-            if (GetNodesChunkViewModel() is { } nodes)
+            var list = new List<ChunkViewModel>();
+            foreach (var property in nodes.GetAllProperties())
             {
-                var list = new List<ChunkViewModel>();
-                foreach (var property in nodes.GetAllProperties())
+                foreach (var socket in sockets)
                 {
-                    foreach (var socket in sockets)
+                    if (ReferenceEquals(property.Data, socket.Connections))
                     {
-                        if (ReferenceEquals(property.Data, socket.Connections))
-                        {
-                            list.Add(property.Parent!);
-                        }
+                        list.Add(property.Parent!);
                     }
                 }
-                foreach (var model in list)
-                {
-                    model.RecalculateProperties();
-                }
+            }
+            foreach (var model in list)
+            {
+                model.RecalculateProperties();
             }
         }
     }
 
-    private ChunkViewModel? GetNodesChunkViewModel()
+    private ChunkViewModel? GetQuestNodesChunkViewModel()
     {
         if (DocumentViewModel?.GetMainFile() is not RDTDataViewModel dataViewModel)
         {
@@ -361,6 +356,7 @@ public partial class RedGraph
             if (ReferenceEquals(questSource.Data.Connections[i].Chunk, questConnection.ConnectionDefinition))
             {
                 questSource.Data.Connections.RemoveAt(i);
+                questSource.IsConnected = questSource.Data.Connections.Count > 0;
             }
         }
 
@@ -369,14 +365,10 @@ public partial class RedGraph
             if (ReferenceEquals(questDestination.Data.Connections[i].Chunk, questConnection.ConnectionDefinition))
             {
                 questDestination.Data.Connections.RemoveAt(i);
+                questDestination.IsConnected = questDestination.Data.Connections.Count > 0;
             }
         }
         Connections.Remove(questConnection);
-
-        if (DocumentViewModel?.GetMainFile() is RDTDataViewModel dataViewModel)
-        {
-            dataViewModel.Chunks[0].GetModelFromPath("graph.nodes")?.RecalculateProperties();
-        }
     }
 
     public static RedGraph GenerateQuestGraph(string title, graphGraphDefinition questGraph, INodeWrapperFactory nodeWrapperFactory)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DynamicData;
+using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
 using WolvenKit.App.ViewModels.Shell;
@@ -33,6 +34,11 @@ public partial class RedGraph
         wrappedInstance.Location = point;
 
         ((scnSceneResource)_data).SceneGraph.Chunk!.Graph.Add(new CHandle<scnSceneGraphNode>(instance));
+        if (GetSceneNodesChunkViewModel() is { } nodes)
+        {
+            nodes.RecalculateProperties();
+        }
+
         Nodes.Add(wrappedInstance);
     }
 
@@ -88,6 +94,7 @@ public partial class RedGraph
                 if (Connections[i].Source == node.Output[j])
                 {
                     node.Output.RemoveAt(j);
+                    UpdateTargetNode((SceneInputConnectorViewModel)Connections[i].Target);
                     Connections.RemoveAt(i);
                     break;
                 }
@@ -111,10 +118,13 @@ public partial class RedGraph
                         if (connectionSource.Data.Destinations[k].NodeId.Id == node.UniqueId)
                         {
                             connectionSource.Data.Destinations.RemoveAt(k);
+                            //UpdateTargetNode((SceneInputConnectorViewModel)Connections[i].Target);
                         }
                     }
 
                     node.Input.RemoveAt(j);
+                    connectionSource.IsConnected = connectionSource.Data.Destinations.Count > 0;
+
                     Connections.RemoveAt(i);
                     break;
                 }
@@ -127,6 +137,11 @@ public partial class RedGraph
             if (ReferenceEquals(graph[i].Chunk, node.Data))
             {
                 graph.RemoveAt(i);
+
+                if (GetSceneNodesChunkViewModel() is { } nodes)
+                {
+                    nodes.RecalculateProperties();
+                }
             }
         }
 
@@ -300,7 +315,7 @@ public partial class RedGraph
 
     private void RefreshCVM(scnOutputSocket socket)
     {
-        if (GetNodesChunkViewModel() is { } nodes)
+        if (GetSceneNodesChunkViewModel() is { } nodes)
         {
             var list = new List<ChunkViewModel>();
             foreach (var property in nodes.GetAllProperties())
@@ -315,6 +330,21 @@ public partial class RedGraph
                 model.RecalculateProperties();
             }
         }
+    }
+
+    private ChunkViewModel? GetSceneNodesChunkViewModel()
+    {
+        if (DocumentViewModel?.GetMainFile() is not RDTDataViewModel dataViewModel)
+        {
+            return null;
+        }
+
+        if (dataViewModel.Chunks[0].GetModelFromPath("sceneGraph.graph") is not { } nodes)
+        {
+            return null;
+        }
+
+        return nodes;
     }
 
     private void RemoveSceneConnection(SceneConnectionViewModel sceneConnection)
