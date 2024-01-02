@@ -1991,6 +1991,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             Descriptor = kvp.Key;
         }
+        else if (ResolvedData is questNodeDefinition qnd)
+        {
+            Descriptor = qnd.Id.ToString();
+        }
         else if (Data is TweakDBID tdb)
         {
             //Descriptor = Locator.Current.GetService<TweakDBService>().GetString(tdb);
@@ -2778,7 +2782,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         return result;
     }
 
-    private ChunkViewModel? GetModelFromPath(string path)
+    public ChunkViewModel? GetModelFromPath(string path)
     {
         var parts = path.Split('.');
 
@@ -2795,6 +2799,19 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         return result;
+    }
+
+    public IEnumerable<ChunkViewModel> GetAllProperties()
+    {
+        foreach (var property in Properties)
+        {
+            yield return property;
+
+            foreach (var childProperty in property.GetAllProperties())
+            {
+                yield return childProperty;
+            }
+        }
     }
 
     public void NotifyChain(string property)
