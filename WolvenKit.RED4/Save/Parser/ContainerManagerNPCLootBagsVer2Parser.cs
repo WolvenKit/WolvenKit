@@ -46,11 +46,6 @@ public class ContainerManagerNPCLootBagsVer2Parser : INodeParser
 
     public void Read(BinaryReader reader, NodeEntry node)
     {
-        var pos = reader.BaseStream.Position;
-        var buffer = reader.ReadBytes(node.Size - 4);
-        reader.BaseStream.Position = pos;
-        File.WriteAllBytes(@"C:\Dev\buffer.bin", buffer);
-
         var result = new ContainerManagerNPCLootBagsVer2();
         var entryCount = reader.ReadVLQInt32();
         for (int i = 0; i < entryCount; i++)
