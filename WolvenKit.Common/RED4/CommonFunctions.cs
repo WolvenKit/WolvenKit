@@ -268,7 +268,7 @@ public static class CommonFunctions
         }
 
         // what else could we possibly check for?
-        return fileName.Contains("decal");
+        return fileName.Contains("decal") || fileName.Contains("icon");
     }
 
 }
