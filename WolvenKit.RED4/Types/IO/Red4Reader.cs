@@ -654,6 +654,15 @@ public partial class Red4Reader : IErrorHandler, IDataCollector, IDisposable
                 var args = new UnknownTypeEventArgs(specialRedTypeInfo.RedName);
                 if (!HandleParsingError(args))
                 {
+                    // If not handled yet and parent is Handle/WeakHandle, this must be a class, not an enum
+                    if (i > 0 && (redTypeInfos[i - 1].BaseRedType == BaseRedType.Handle ||
+                                  redTypeInfos[i - 1].BaseRedType == BaseRedType.WeakHandle))
+                    {
+                        redTypeInfos[i].BaseRedType = BaseRedType.Class;
+                        redTypeInfos[i].RedObjectType = typeof(DynamicBaseClass);
+                        continue;
+                    }
+
                     return (true, specialRedTypeInfo.RedName);
                 }
                 redTypeInfos[i] = args.Result;
