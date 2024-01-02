@@ -237,7 +237,7 @@ public partial class RedGraph
         {
             nodeWrapper = _nodeWrapperFactory!.QuestPhaseNodeDefinitionWrapper((questPhaseNodeDefinition)node);
         }
-        else if (wrapperType == typeof(questSceneNodeDefinition))
+        else if (wrapperType == typeof(questSceneNodeDefinitionWrapper))
         {
             nodeWrapper = _nodeWrapperFactory!.QuestSceneNodeDefinitionWrapper((questSceneNodeDefinition)node);
         }
