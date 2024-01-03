@@ -334,6 +334,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                      } or
                      {
                          ResolvedData: redTagList
+                     } or
+                     {
+                         ResolvedData: entVisualTagsSchema
                      })
 
         {
