@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.RED4;
+using WolvenKit.RED4.Archive;
 
 namespace CP77Tools.Tasks;
 
@@ -47,7 +48,6 @@ public partial class ConsoleFunctions
         #endregion checks
 
         DirectoryInfo basedir;
-        List<FileInfo> archiveFileInfos;
         switch (path)
         {
             case FileInfo file:
@@ -56,16 +56,17 @@ public partial class ConsoleFunctions
                     _loggerService.Error("Input file is not an .archive.");
                     return ERROR_BAD_ARGUMENTS;
                 }
-                archiveFileInfos = new List<FileInfo> { file };
+                _archiveManager.LoadArchive(file.FullName);
                 basedir = file.Directory.NotNull();
                 break;
             case DirectoryInfo directory:
-                archiveFileInfos = directory.GetFiles().Where(_ => _.Extension == ".archive").ToList();
+                var archiveFileInfos = directory.GetFiles().Where(_ => _.Extension == ".archive").ToList();
                 if (archiveFileInfos.Count == 0)
                 {
                     _loggerService.Error("No .archive file to process in the input directory");
                     return ERROR_BAD_ARGUMENTS;
                 }
+                _archiveManager.LoadFromFolder(directory);
                 basedir = directory;
                 break;
             default:
@@ -89,13 +90,11 @@ public partial class ConsoleFunctions
         }
 
         var result = 0;
-        foreach (var fileInfo in archiveFileInfos)
+        foreach (var gameArchive in _archiveManager.Archives.Items)
         {
-            // read archive
-            var ar = _wolvenkitFileService.ReadRed4Archive(fileInfo.FullName, _hashService);
-            if (ar is null)
+            // TODO[ModKit]
+            if (gameArchive is not Archive ar)
             {
-                _loggerService.Error($"Could not parse archive {fileInfo}");
                 continue;
             }
 

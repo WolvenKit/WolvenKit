@@ -71,7 +71,6 @@ public partial class ConsoleFunctions
         #endregion checks
 
         DirectoryInfo basedir;
-        List<FileInfo> archiveFileInfos;
         switch (path)
         {
             case FileInfo file:
@@ -80,16 +79,17 @@ public partial class ConsoleFunctions
                     _loggerService.Error("Input file is not an .archive.");
                     return ERROR_BAD_ARGUMENTS;
                 }
-                archiveFileInfos = new List<FileInfo> { file };
+                _archiveManager.LoadArchive(file.FullName);
                 basedir = file.Directory.NotNull();
                 break;
             case DirectoryInfo directory:
-                archiveFileInfos = directory.GetFiles().Where(_ => _.Extension == ".archive").ToList();
+                var archiveFileInfos = directory.GetFiles().Where(_ => _.Extension == ".archive").ToList();
                 if (archiveFileInfos.Count == 0)
                 {
                     _loggerService.Error("No .archive file to process in the input directory");
                     return ERROR_BAD_ARGUMENTS;
                 }
+                _archiveManager.LoadFromFolder(directory);
                 basedir = directory;
                 break;
             default:
@@ -163,9 +163,6 @@ public partial class ConsoleFunctions
         if (!string.IsNullOrEmpty(archiveDepot) && Directory.Exists(archiveDepot))
         {
             _archiveManager.LoadFromFolder(new DirectoryInfo(archiveDepot));
-            exportArgs.Get<MeshExportArgs>().Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-            exportArgs.Get<MorphTargetExportArgs>().Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-            exportArgs.Get<AnimationExportArgs>().Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
         }
         else
         {
@@ -173,9 +170,6 @@ public partial class ConsoleFunctions
             if (!string.IsNullOrEmpty(archiveDepot) && Directory.Exists(archiveDepot))
             {
                 _archiveManager.LoadFromFolder(new DirectoryInfo(archiveDepot));
-                exportArgs.Get<MeshExportArgs>().Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-                exportArgs.Get<MorphTargetExportArgs>().Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-                exportArgs.Get<AnimationExportArgs>().Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
             }
             else
             {
@@ -183,40 +177,35 @@ public partial class ConsoleFunctions
                 if (!string.IsNullOrEmpty(archiveDepot) && Directory.Exists(archiveDepot))
                 {
                     _archiveManager.LoadFromFolder(new DirectoryInfo(archiveDepot));
-                    exportArgs.Get<MeshExportArgs>().Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-                    exportArgs.Get<MorphTargetExportArgs>().Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-                    exportArgs.Get<AnimationExportArgs>().Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
                 }
             }
         }
 
         var result = 0;
-        foreach (var fileInfo in archiveFileInfos)
+        foreach (var gameArchive in _archiveManager.Archives.Items)
         {
-            if (_wolvenkitFileService.TryReadRed4Archive(fileInfo.FullName, _hashService, out var ar))
+            // TODO[ModKit]
+            if (gameArchive is not ICyberGameArchive ar)
             {
-                if (options.hash != 0)
+                continue;
+            }
+
+            if (options.hash != 0)
+            {
+                if (_modTools.UncookSingle(ar, options.hash, outDir, exportArgs, rawOutDirInfo, options.forcebuffers, options.serialize ?? false))
                 {
-                    if (_modTools.UncookSingle(ar, options.hash, outDir, exportArgs, rawOutDirInfo, options.forcebuffers, options.serialize ?? false))
-                    {
-                        _loggerService.Success($" {ar.ArchiveAbsolutePath}: Uncooked file: {options.hash}");
-                    }
-                    else
-                    {
-                        _loggerService.Warning($" {ar.ArchiveAbsolutePath}: Failed to uncook file: {options.hash}");
-                        result += 1;
-                    }
+                    _loggerService.Success($" {ar.ArchiveAbsolutePath}: Uncooked file: {options.hash}");
                 }
                 else
                 {
-                    // TODO return success
-                    _modTools.UncookAll(ar, outDir, exportArgs, options.unbundle, options.pattern, options.regex, rawOutDirInfo, options.forcebuffers, options.serialize ?? false);
+                    _loggerService.Warning($" {ar.ArchiveAbsolutePath}: Failed to uncook file: {options.hash}");
+                    result += 1;
                 }
             }
             else
             {
-                _loggerService.Error($"Could not parse archive {fileInfo}");
-                continue;
+                // TODO return success
+                _modTools.UncookAll(ar, outDir, exportArgs, options.unbundle, options.pattern, options.regex, rawOutDirInfo, options.forcebuffers, options.serialize ?? false);
             }
         }
 

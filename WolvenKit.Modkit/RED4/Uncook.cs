@@ -466,12 +466,12 @@ namespace WolvenKit.Modkit.RED4
                     // actual type extension we want it to...
                     var typePreservingOutfile = new FileInfo($"{outfile.FullName}.dummyextguardthatwillberemoved");
 
-                    return ExportMorphTargets(cr2wStream, typePreservingOutfile, settings.Get<MorphTargetExportArgs>().Archives, modFolderPath, settings.Get<MorphTargetExportArgs>().IsBinary);
+                    return ExportMorphTargets(cr2wStream, typePreservingOutfile, modFolderPath, settings.Get<MorphTargetExportArgs>().IsBinary);
                 
                 case ECookedFileFormat.anims:
                     try
                     {
-                        return ExportAnim(cr2wStream, settings.Get<AnimationExportArgs>().Archives, outfile, settings.Get<AnimationExportArgs>().IsBinary, settings.Get<AnimationExportArgs>().incRootMotion);
+                        return ExportAnim(cr2wStream, outfile, settings.Get<AnimationExportArgs>().IsBinary, settings.Get<AnimationExportArgs>().incRootMotion);
                     }
                     catch (Exception e)
                     {
@@ -744,7 +744,7 @@ namespace WolvenKit.Modkit.RED4
                     _loggerService.Error("Depot path is not set: Choose a Depot location within Settings for generating materials.");
                     return false;
                 }
-                ParseMaterials(cr2w, meshStream, outfile, meshExportArgs.Archives, meshExportArgs.MaterialRepo, meshesinfo, meshExportArgs.MaterialUncookExtension);
+                ParseMaterials(cr2w, meshStream, outfile, meshExportArgs.MaterialRepo, meshesinfo, meshExportArgs.MaterialUncookExtension);
             }
 
             var model = MeshTools.RawMeshesToGLTF(expMeshes, Rig);
@@ -817,7 +817,7 @@ namespace WolvenKit.Modkit.RED4
                         _loggerService.Error("Depot path is not set: Choose a Depot location within Settings for generating materials.");
                         return false;
                     }
-                    matData.Add(SetupMaterial(cr2w, meshStream, meshExportArgs.Archives, meshExportArgs.MaterialRepo, meshesinfo, meshExportArgs.MaterialUncookExtension));
+                    matData.Add(SetupMaterial(cr2w, meshStream, meshExportArgs.MaterialRepo, meshesinfo, meshExportArgs.MaterialUncookExtension));
                 }
 
                 expMeshes.AddRange(Meshes);
@@ -849,7 +849,6 @@ namespace WolvenKit.Modkit.RED4
 
         public bool ExportMesh(Stream meshStream, FileInfo outfile, MeshExportArgs meshExportArgs, ValidationMode vmode = ValidationMode.TryFix)
         {
-            var archives = meshExportArgs.Archives;
             var eUncookExtension = meshExportArgs.MaterialUncookExtension;
 
             var cr2w = _parserService.ReadRed4File(meshStream);
@@ -870,7 +869,7 @@ namespace WolvenKit.Modkit.RED4
                     _loggerService.Error("Depot path is not set: Choose a Depot location within Settings for generating materials.");
                     return false;
                 }
-                ParseMaterials(cr2w, meshStream, outfile, archives, meshExportArgs.MaterialRepo, meshesinfo, eUncookExtension);
+                ParseMaterials(cr2w, meshStream, outfile, meshExportArgs.MaterialRepo, meshesinfo, eUncookExtension);
             }
 
             return MeshTools.ExportMesh(cr2w, outfile, meshExportArgs, vmode);
@@ -1007,7 +1006,7 @@ namespace WolvenKit.Modkit.RED4
 
                     if (meshExportArgs.withMaterials && meshExportArgs.MaterialRepo is not null)
                     {
-                        matData.Add(SetupMaterial(cr2w, meshStream, meshExportArgs.Archives, meshExportArgs.MaterialRepo, meshesinfo, meshExportArgs.MaterialUncookExtension, meshExportArgs.MeshExporter == MeshExporterType.Experimental));
+                        matData.Add(SetupMaterial(cr2w, meshStream, meshExportArgs.MaterialRepo, meshesinfo, meshExportArgs.MaterialUncookExtension, meshExportArgs.MeshExporter == MeshExporterType.Experimental));
                     }
 
                     expMeshes.AddRange(Meshes);

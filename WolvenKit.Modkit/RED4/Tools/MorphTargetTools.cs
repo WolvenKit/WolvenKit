@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.Extensions.DependencyModel;
 using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
+using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
@@ -23,7 +24,7 @@ namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
-        public bool ExportMorphTargets(Stream targetStream, FileInfo outfile, List<ICyberGameArchive> archives, string modFolder, bool isGLBinary = true, ValidationMode vMode = ValidationMode.TryFix)
+        public bool ExportMorphTargets(Stream targetStream, FileInfo outfile, string modFolder, bool isGLBinary = true, ValidationMode vMode = ValidationMode.TryFix)
         {
             var cr2w = _parserService.ReadRed4File(targetStream);
             if (cr2w is not { RootChunk: MorphTargetMesh morphBlob } || morphBlob.Blob.Chunk is not rendRenderMorphTargetMeshBlob blob || blob.BaseBlob.Chunk is not rendRenderMeshBlob rendBlob)
@@ -35,21 +36,11 @@ namespace WolvenKit.Modkit.RED4
             RawArmature? rig = null;
 
             var hash = morphBlob.BaseMesh.DepotPath.GetRedHash(); //FNV1A64HashAlgorithm.HashString(morphBlob.BaseMesh.DepotPath.ToString().NotNull());
-            var meshStream = new MemoryStream();
-            foreach (var ar in archives)
-            {
-                if (ar.Files.TryGetValue(hash, out var gameFile))
-                {
-                    gameFile.Extract(meshStream);
-                    break;
-                }
-            }
-            var meshCr2w = _parserService.ReadRed4File(meshStream);
-            if (meshCr2w is { RootChunk: CMesh { RenderResourceBlob.Chunk: rendRenderMeshBlob } baseMeshBlob })
+            if (TryFindFile(morphBlob.BaseMesh.DepotPath, out var result) == FindFileResult.NoError && 
+                result.File is { RootChunk: CMesh { RenderResourceBlob.Chunk: rendRenderMeshBlob } baseMeshBlob })
             {
                 rig = MeshTools.GetOrphanRig(baseMeshBlob);
             }
-
 
             using var meshBuffer = new MemoryStream(rendBlob.RenderBuffer.Buffer.GetBytes());
 

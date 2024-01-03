@@ -54,9 +54,7 @@ public class ImportExportHelper
     public bool Finalize(GlobalExportArgs args, FileSystemArchive projectArchive) =>
         Finalize(args.Get<MeshExportArgs>(), projectArchive) &&
         Finalize(args.Get<MorphTargetExportArgs>()) &&
-        Finalize(args.Get<OpusExportArgs>()) &&
-        Finalize(args.Get<EntityExportArgs>()) &&
-        Finalize(args.Get<AnimationExportArgs>());
+        Finalize(args.Get<OpusExportArgs>());
 
     public bool Finalize(MeshExportArgs args, FileSystemArchive projectArchive)
     {
@@ -65,13 +63,6 @@ public class ImportExportHelper
             _loggerService.Error("No project loaded");
             return false;
         }
-
-        args.Archives.Clear();
-        if (_gameController.GetController() is RED4Controller)
-        {
-            args.Archives.AddRange(_archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList());
-        }
-        args.Archives.Insert(0, projectArchive);
 
         args.MaterialRepo = _settingsManager.MaterialRepositoryPath;
 
@@ -84,12 +75,6 @@ public class ImportExportHelper
         {
             _loggerService.Error("No project loaded");
             return false;
-        }
-
-        args.Archives.Clear();
-        if (_gameController.GetController() is RED4Controller)
-        {
-            args.Archives.AddRange(_archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList());
         }
 
         args.ModFolderPath = proj.ModDirectory;
@@ -107,28 +92,6 @@ public class ImportExportHelper
 
         args.RawFolderPath = proj.RawDirectory;
         args.ModFolderPath = proj.ModDirectory;
-
-        return true;
-    }
-
-    public bool Finalize(EntityExportArgs args)
-    {
-        args.Archives.Clear();
-        if (_gameController.GetController() is RED4Controller)
-        {
-            args.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-        }
-
-        return true;
-    }
-
-    public bool Finalize(AnimationExportArgs args)
-    {
-        args.Archives.Clear();
-        if (_gameController.GetController() is RED4Controller)
-        {
-            args.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-        }
 
         return true;
     }

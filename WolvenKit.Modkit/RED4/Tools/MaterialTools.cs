@@ -77,7 +77,7 @@ namespace WolvenKit.Modkit.RED4
             return true;
         }
         */
-        private void GetMaterialEntries(CR2WFile cr2w, Stream meshStream, ref List<string> primaryDependencies, ref List<string> materialEntryNames, ref List<CMaterialInstance> materialEntries, List<ICyberGameArchive> archives)
+        private void GetMaterialEntries(CR2WFile cr2w, Stream meshStream, ref List<string> primaryDependencies, ref List<string> materialEntryNames, ref List<CMaterialInstance> materialEntries)
         {
             if (cr2w.RootChunk is not CMesh cmesh)
             {
@@ -94,11 +94,11 @@ namespace WolvenKit.Modkit.RED4
                     continue;
                 }
 
-                var findStatus = TryFindFile(archives, path, out var result);
+                var findStatus = TryFindFile(path, out var result);
                 if (findStatus == FindFileResult.NoError)
                 {
                     ArgumentNullException.ThrowIfNull(result, nameof(result));
-                    if (result.File.RootChunk is CMaterialInstance mi)
+                    if (result.File!.RootChunk is CMaterialInstance mi)
                     {
                         externalMaterial.Add(mi);
                     }
@@ -115,7 +115,7 @@ namespace WolvenKit.Modkit.RED4
                     }
 
 
-                    foreach (var import in result.Imports)
+                    foreach (var import in result.Imports!)
                     {
                         if (!primaryDependencies.Contains(import.DepotPath.ToString().NotNull()))
                         {
@@ -141,11 +141,11 @@ namespace WolvenKit.Modkit.RED4
                     continue;
                 }
 
-                var findStatus = TryFindFile(archives, path, out var result);
+                var findStatus = TryFindFile(path, out var result);
                 if (findStatus == FindFileResult.NoError)
                 {
                     ArgumentNullException.ThrowIfNull(result, nameof(result));
-                    if (result.File.RootChunk is CMaterialInstance mi)
+                    if (result.File!.RootChunk is CMaterialInstance mi)
                     {
                         externalMaterial.Add(mi);
                     }
@@ -161,7 +161,7 @@ namespace WolvenKit.Modkit.RED4
                         externalMaterial.Add(fakeMaterialInstance);
                     }
 
-                    foreach (var import in result.Imports)
+                    foreach (var import in result.Imports!)
                     {
                         if (!primaryDependencies.Contains(import.DepotPath.ToString().NotNull()))
                         {
@@ -252,15 +252,15 @@ namespace WolvenKit.Modkit.RED4
                 var path = p;
                 while (true)
                 {
-                    var findStatus = TryFindFile(archives, path, out var result);
+                    var findStatus = TryFindFile(path, out var result);
                     if (findStatus == FindFileResult.NoError)
                     {
                         ArgumentNullException.ThrowIfNull(result, nameof(result));
-                        if (result.File.RootChunk is CMaterialInstance mi)
+                        if (result.File!.RootChunk is CMaterialInstance mi)
                         {
                             path = mi.BaseMaterial.DepotPath;
 
-                            foreach (var import in result.Imports)
+                            foreach (var import in result.Imports!)
                             {
                                 if (!primaryDependencies.Contains(import.DepotPath.ToString().NotNull()))
                                 {
@@ -270,7 +270,7 @@ namespace WolvenKit.Modkit.RED4
                         }
                         else if (result.File.RootChunk is CMaterialTemplate mt)
                         {
-                            foreach (var import in result.Imports)
+                            foreach (var import in result.Imports!)
                             {
                                 if (!primaryDependencies.Contains(import.DepotPath.ToString().NotNull()))
                                 {
@@ -296,14 +296,14 @@ namespace WolvenKit.Modkit.RED4
             }
         }
 
-        private MatData SetupMaterial(CR2WFile cr2w, Stream meshStream, List<ICyberGameArchive> archives, string matRepo, MeshesInfo info, EUncookExtension eUncookExtension = EUncookExtension.dds, bool experimentUseNewMeshExporter = false)
+        private MatData SetupMaterial(CR2WFile cr2w, Stream meshStream, string matRepo, MeshesInfo info, EUncookExtension eUncookExtension = EUncookExtension.dds, bool experimentUseNewMeshExporter = false)
         {
             var primaryDependencies = new List<string>();
 
             var materialEntryNames = new List<string>();
             var materialEntries = new List<CMaterialInstance>();
 
-            GetMaterialEntries(cr2w, meshStream, ref primaryDependencies, ref materialEntryNames, ref materialEntries, archives);
+            GetMaterialEntries(cr2w, meshStream, ref primaryDependencies, ref materialEntryNames, ref materialEntries);
 
             var mlSetupNames = new List<string>();
 
@@ -330,7 +330,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             var usedMts = GetEmbeddedMaterialTemplates(ref cr2w);
-            var rawMaterials = materialEntries.Select((t, i) => ContainRawMaterial(t, materialEntryNames[i], archives, ref usedMts)).ToList();
+            var rawMaterials = materialEntries.Select((t, i) => ContainRawMaterial(t, materialEntryNames[i], ref usedMts)).ToList();
 
             var matTemplates = new List<RawMaterial>();
             {
@@ -405,7 +405,7 @@ namespace WolvenKit.Modkit.RED4
                     var destFileName = Path.Combine(matRepo, Path.ChangeExtension(extractionPath, "." + exportArgs.Get<XbmExportArgs>().UncookExtension));
                     if (!File.Exists(destFileName))
                     {
-                        UncookFile(archives, extractionPath, matRepo, exportArgs);
+                        UncookFile(extractionPath, matRepo, exportArgs);
                     }
                 }
 
@@ -420,7 +420,7 @@ namespace WolvenKit.Modkit.RED4
                     if (!File.Exists(destFileName))
                     {
                         exportArgs.Get<MlmaskExportArgs>().AsList = false;
-                        UncookFile(archives, extractionPath, matRepo, exportArgs);
+                        UncookFile(extractionPath, matRepo, exportArgs);
                     }
                 }
 
@@ -436,7 +436,7 @@ namespace WolvenKit.Modkit.RED4
                     var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(extractionPath, ".hp.json")));
                     if (!fi.Exists)
                     {
-                        var findStatus = TryFindFile(archives, extractionPath, out var result);
+                        var findStatus = TryFindFile(extractionPath, out var result);
                         if (findStatus == FindFileResult.NoError)
                         {
                             ArgumentNullException.ThrowIfNull(result, "result");
@@ -445,7 +445,7 @@ namespace WolvenKit.Modkit.RED4
                                 fi.Directory.Create();
                             }
 
-                            var dto = new RedFileDto(result.File);
+                            var dto = new RedFileDto(result.File!);
                             var doc = RedJsonSerializer.Serialize(dto);
                             File.WriteAllText(fi.FullName, doc);
                         }
@@ -468,7 +468,7 @@ namespace WolvenKit.Modkit.RED4
                     var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(extractionPath, ".mlsetup.json")));
                     if (!fi.Exists)
                     {
-                        var findStatus = TryFindFile(archives, extractionPath, out var result);
+                        var findStatus = TryFindFile(extractionPath, out var result);
                         if (findStatus == FindFileResult.NoError)
                         {
                             ArgumentNullException.ThrowIfNull(result, "result");
@@ -477,11 +477,11 @@ namespace WolvenKit.Modkit.RED4
                                 fi.Directory.Create();
                             }
 
-                            var dto = new RedFileDto(result.File);
+                            var dto = new RedFileDto(result.File!);
                             var doc = RedJsonSerializer.Serialize(dto);
                             File.WriteAllText(fi.FullName, doc);
 
-                            foreach (var import in result.Imports)
+                            foreach (var import in result.Imports!)
                             {
                                 ExtractFile(import.DepotPath.ToString().NotNull());
                             }
@@ -505,7 +505,7 @@ namespace WolvenKit.Modkit.RED4
                     var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(extractionPath, ".mltemplate.json")));
                     if (!fi.Exists)
                     {
-                        var findStatus = TryFindFile(archives, extractionPath, out var result);
+                        var findStatus = TryFindFile(extractionPath, out var result);
                         if (findStatus == FindFileResult.NoError)
                         {
                             ArgumentNullException.ThrowIfNull(result, "result");
@@ -514,16 +514,16 @@ namespace WolvenKit.Modkit.RED4
                                 fi.Directory.Create();
                             }
 
-                            var dto = new RedFileDto(result.File);
+                            var dto = new RedFileDto(result.File!);
                             var doc = RedJsonSerializer.Serialize(dto);
                             File.WriteAllText(fi.FullName, doc);
 
-                            foreach (var import in result.Imports)
+                            foreach (var import in result.Imports!)
                             {
                                 ExtractFile(import.DepotPath.ToString().NotNull());
                             }
 
-                            var mlTemplateMats = result.File.RootChunk.FindType(typeof(CResourceReference<CBitmapTexture>));
+                            var mlTemplateMats = result.File!.RootChunk.FindType(typeof(CResourceReference<CBitmapTexture>));
                             foreach (var mat in mlTemplateMats.Select(mlTemplateMat => (CResourceReference<CBitmapTexture>)mlTemplateMat.Value))
                             {
                                 ExtractXBM(mat.DepotPath.ToString().NotNull());
@@ -548,7 +548,7 @@ namespace WolvenKit.Modkit.RED4
                     var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(extractionPath, ".gradient.json")));
                     if (!fi.Exists)
                     {
-                        var findStatus = TryFindFile(archives, extractionPath, out var result);
+                        var findStatus = TryFindFile(extractionPath, out var result);
                         if (findStatus == FindFileResult.NoError)
                         {
                             ArgumentNullException.ThrowIfNull(result, "result");
@@ -557,7 +557,7 @@ namespace WolvenKit.Modkit.RED4
                                 fi.Directory.Create();
                             }
 
-                            var dto = new RedFileDto(result.File);
+                            var dto = new RedFileDto(result.File!);
                             var doc = RedJsonSerializer.Serialize(dto);
                             File.WriteAllText(fi.FullName, doc);
                         }
@@ -590,14 +590,14 @@ namespace WolvenKit.Modkit.RED4
 
         }
 
-        private void ParseMaterials(CR2WFile cr2w, Stream meshStream, FileInfo outfile, List<ICyberGameArchive> archives, string matRepo, MeshesInfo info, EUncookExtension eUncookExtension = EUncookExtension.dds)
+        private void ParseMaterials(CR2WFile cr2w, Stream meshStream, FileInfo outfile, string matRepo, MeshesInfo info, EUncookExtension eUncookExtension = EUncookExtension.dds)
         {
             var primaryDependencies = new List<string>();
 
             var materialEntryNames = new List<string>();
             var materialEntries = new List<CMaterialInstance>();
 
-            GetMaterialEntries(cr2w, meshStream, ref primaryDependencies, ref materialEntryNames, ref materialEntries, archives);
+            GetMaterialEntries(cr2w, meshStream, ref primaryDependencies, ref materialEntryNames, ref materialEntries);
 
             var mlSetupNames = new List<string>();
 
@@ -619,7 +619,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             var usedMts = GetEmbeddedMaterialTemplates(ref cr2w);
-            var rawMaterials = materialEntries.Select((t, i) => ContainRawMaterial(t, materialEntryNames[i], archives, ref usedMts)).ToList();
+            var rawMaterials = materialEntries.Select((t, i) => ContainRawMaterial(t, materialEntryNames[i], ref usedMts)).ToList();
 
             var matTemplates = new List<RawMaterial>();
             {
@@ -690,7 +690,7 @@ namespace WolvenKit.Modkit.RED4
                     var destFileName = Path.Combine(matRepo, Path.ChangeExtension(extractionPath, "." + exportArgs.Get<XbmExportArgs>().UncookExtension));
                     if (!File.Exists(destFileName))
                     {
-                        UncookFile(archives, extractionPath, matRepo, exportArgs);
+                        UncookFile(extractionPath, matRepo, exportArgs);
                     }
                 }
 
@@ -705,7 +705,7 @@ namespace WolvenKit.Modkit.RED4
                     if (!File.Exists(destFileName))
                     {
                         exportArgs.Get<MlmaskExportArgs>().AsList = false;
-                        UncookFile(archives, extractionPath, matRepo, exportArgs);
+                        UncookFile(extractionPath, matRepo, exportArgs);
                     }
                 }
 
@@ -721,7 +721,7 @@ namespace WolvenKit.Modkit.RED4
                     var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(extractionPath, ".hp.json")));
                     if (!fi.Exists)
                     {
-                        var findStatus = TryFindFile(archives, extractionPath, out var result);
+                        var findStatus = TryFindFile(extractionPath, out var result);
                         if (findStatus == FindFileResult.NoError)
                         {
                             if (fi.Directory is not null && !fi.Directory.Exists)
@@ -730,7 +730,7 @@ namespace WolvenKit.Modkit.RED4
                             }
 
                             ArgumentNullException.ThrowIfNull(result, nameof(result));
-                            var dto = new RedFileDto(result.File);
+                            var dto = new RedFileDto(result.File!);
                             var doc = RedJsonSerializer.Serialize(dto);
                             File.WriteAllText(fi.FullName, doc);
                         }
@@ -753,7 +753,7 @@ namespace WolvenKit.Modkit.RED4
                     var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(extractionPath, ".mlsetup.json")));
                     if (!fi.Exists)
                     {
-                        var findStatus = TryFindFile(archives, extractionPath, out var result);
+                        var findStatus = TryFindFile(extractionPath, out var result);
                         if (findStatus == FindFileResult.NoError)
                         {
                             ArgumentNullException.ThrowIfNull(result, nameof(result));
@@ -762,11 +762,11 @@ namespace WolvenKit.Modkit.RED4
                                 fi.Directory.Create();
                             }
 
-                            var dto = new RedFileDto(result.File);
+                            var dto = new RedFileDto(result.File!);
                             var doc = RedJsonSerializer.Serialize(dto);
                             File.WriteAllText(fi.FullName, doc);
 
-                            foreach (var import in result.Imports)
+                            foreach (var import in result.Imports!)
                             {
                                 ExtractFile(import.DepotPath.ToString().NotNull());
                             }
@@ -790,7 +790,7 @@ namespace WolvenKit.Modkit.RED4
                     var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(extractionPath, ".mltemplate.json")));
                     if (!fi.Exists)
                     {
-                        var findStatus = TryFindFile(archives, extractionPath, out var result);
+                        var findStatus = TryFindFile(extractionPath, out var result);
                         if (findStatus == FindFileResult.NoError)
                         {
                             ArgumentNullException.ThrowIfNull(result, nameof(result));
@@ -799,16 +799,16 @@ namespace WolvenKit.Modkit.RED4
                                 fi.Directory.Create();
                             }
 
-                            var dto = new RedFileDto(result.File);
+                            var dto = new RedFileDto(result.File!);
                             var doc = RedJsonSerializer.Serialize(dto);
                             File.WriteAllText(fi.FullName, doc);
 
-                            foreach (var import in result.Imports)
+                            foreach (var import in result.Imports!)
                             {
                                 ExtractFile(import.DepotPath.ToString().NotNull());
                             }
 
-                            var mlTemplateMats = result.File.RootChunk.FindType(typeof(CResourceReference<CBitmapTexture>));
+                            var mlTemplateMats = result.File!.RootChunk.FindType(typeof(CResourceReference<CBitmapTexture>));
                             foreach (var mat in mlTemplateMats.Select(mlTemplateMat => (CResourceReference<CBitmapTexture>)mlTemplateMat.Value))
                             {
                                 ExtractXBM(mat.DepotPath.ToString().NotNull());
@@ -833,7 +833,7 @@ namespace WolvenKit.Modkit.RED4
                     var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(extractionPath, ".gradient.json")));
                     if (!fi.Exists)
                     {
-                        var findStatus = TryFindFile(archives, extractionPath, out var result);
+                        var findStatus = TryFindFile(extractionPath, out var result);
                         if (findStatus == FindFileResult.NoError)
                         {
                             ArgumentNullException.ThrowIfNull(result, nameof(result));
@@ -842,7 +842,7 @@ namespace WolvenKit.Modkit.RED4
                                 fi.Directory.Create();
                             }
 
-                            var dto = new RedFileDto(result.File);
+                            var dto = new RedFileDto(result.File!);
                             var doc = RedJsonSerializer.Serialize(dto);
                             File.WriteAllText(fi.FullName, doc);
                         }
@@ -1101,30 +1101,25 @@ namespace WolvenKit.Modkit.RED4
                 _ => throw new NotImplementedException(materialParameter.GetType().Name)
             };
 
-        private CR2WFile LoadFile(string path, List<ICyberGameArchive> archives)
+        private CR2WFile LoadFile(string path)
         {
             var hash = FNV1A64HashAlgorithm.HashString(path);
-            foreach (var archive in archives)
+
+            var status = TryFindFile(hash, out var result);
+            switch (status)
             {
-                if (archive.Files.TryGetValue(hash, out var gameFile))
-                {
-                    var ms = new MemoryStream();
-                    gameFile.Extract(ms);
-                    ms.Seek(0, SeekOrigin.Begin);
-
-                    if (!_parserService.TryReadRed4File(ms, out var file))
-                    {
-                        throw new Exception("Invalid CR2W file");
-                    }
-
-                    return file;
-                }
+                case FindFileResult.NoError:
+                    return result.File!;
+                case FindFileResult.FileNotFound:
+                    throw new FileNotFoundException(path);
+                case FindFileResult.NoCR2W:
+                    throw new Exception("Invalid CR2W file");
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
-
-            throw new FileNotFoundException(path);
         }
 
-        private (string? materialTemplate, Dictionary<string, object?> valueDict, bool enableMask) GetMaterialChain(CMaterialInstance cMaterialInstance, List<ICyberGameArchive> archives, ref Dictionary<string, CMaterialTemplate> mts)
+        private (string? materialTemplate, Dictionary<string, object?> valueDict, bool enableMask) GetMaterialChain(CMaterialInstance cMaterialInstance, ref Dictionary<string, CMaterialTemplate> mts)
         {
             var resultDict = new Dictionary<string, object?>();
 
@@ -1143,7 +1138,7 @@ namespace WolvenKit.Modkit.RED4
                     return (null, resultDict, cMaterialInstance.EnableMask);
                 }
 
-                var file = LoadFile(path.ToString().NotNull(), archives);
+                var file = LoadFile(path.ToString().NotNull());
                 if (file.RootChunk is not CMaterialInstance mi)
                 {
                     throw new Exception("Invalid .mi file");
@@ -1162,7 +1157,7 @@ namespace WolvenKit.Modkit.RED4
             }
             else
             {
-                var file = LoadFile(spath, archives);
+                var file = LoadFile(spath);
                 mt = (CMaterialTemplate)file.RootChunk;
                 mts.Add(spath, mt);
             }
@@ -1207,9 +1202,9 @@ namespace WolvenKit.Modkit.RED4
             return (path, resultDict, mt.CanBeMasked && cMaterialInstance.EnableMask);
         }
 
-        private RawMaterial ContainRawMaterial(CMaterialInstance cMaterialInstance, string name, List<ICyberGameArchive> archives, ref Dictionary<string, CMaterialTemplate> mts)
+        private RawMaterial ContainRawMaterial(CMaterialInstance cMaterialInstance, string name, ref Dictionary<string, CMaterialTemplate> mts)
         {
-            var (materialTemplatePath, valueDict, enableMask) = GetMaterialChain(cMaterialInstance, archives, ref mts);
+            var (materialTemplatePath, valueDict, enableMask) = GetMaterialChain(cMaterialInstance, ref mts);
             if (materialTemplatePath == null)
             {
                 _loggerService.Warning($"Missing path in \"{name}\"");
@@ -1264,7 +1259,7 @@ namespace WolvenKit.Modkit.RED4
             return materialTemplates;
         }
 
-        public bool WriteMatToMesh(ref CR2WFile cr2w, string _matData, List<ICyberGameArchive> archives)
+        public bool WriteMatToMesh(ref CR2WFile cr2w, string _matData)
         {
             if (cr2w.RootChunk is not CMesh { RenderResourceBlob.Chunk: rendRenderMeshBlob } cMesh)
             {
@@ -1323,21 +1318,10 @@ namespace WolvenKit.Modkit.RED4
                 else
                 {
                     var hash = FNV1A64HashAlgorithm.HashString(mat.MaterialTemplate);
-                    foreach (var ar in archives)
+                    if (TryFindFile(hash, out var result) == FindFileResult.NoError && result.File!.RootChunk is CMaterialTemplate _mt)
                     {
-                        if (ar.Files.TryGetValue(hash, out var gameFile))
-                        {
-                            var ms = new MemoryStream();
-                            gameFile.Extract(ms);
-                            ms.Seek(0, SeekOrigin.Begin);
-
-                            if (_parserService.TryReadRed4File(ms, out var f) && f.RootChunk is CMaterialTemplate _mt)
-                            {
-                                mt = _mt;
-                                mts.Add(mat.MaterialTemplate, mt);
-                                break;
-                            }
-                        }
+                        mt = _mt;
+                        mts.Add(mat.MaterialTemplate, mt);
                     }
                 }
 
@@ -1346,7 +1330,7 @@ namespace WolvenKit.Modkit.RED4
                     BaseMaterial = new CResourceReference<IMaterial>(mat.BaseMaterial),
                     Values = new CArray<CKeyValuePair>()
                 };
-                var (materialTemplate, valueDict, enableMask) = GetMaterialChain(fakeMaterialInstance, archives, ref mts);
+                var (materialTemplate, valueDict, enableMask) = GetMaterialChain(fakeMaterialInstance, ref mts);
 
                 if (mt != null)
                 {

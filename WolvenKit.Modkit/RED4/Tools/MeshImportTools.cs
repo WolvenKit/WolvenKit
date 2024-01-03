@@ -301,7 +301,7 @@ namespace WolvenKit.Modkit.RED4
 
             if (File.Exists(Path.ChangeExtension(inGltfFile.FullName, ".Material.json")) && (args.ImportMaterialOnly || args.ImportMaterials))
             {
-                WriteMatToMesh(ref cr2w, File.ReadAllText(Path.ChangeExtension(inGltfFile.FullName, ".Material.json")), args.Archives);
+                WriteMatToMesh(ref cr2w, File.ReadAllText(Path.ChangeExtension(inGltfFile.FullName, ".Material.json")));
                 if (args.ImportMaterialOnly)
                 {
                     var matOnlyStream = new MemoryStream();
