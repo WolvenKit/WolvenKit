@@ -6,7 +6,7 @@ public class questPauseConditionNodeDefinitionWrapper : questSignalStoppingNodeD
 {
     public questPauseConditionNodeDefinitionWrapper(questPauseConditionNodeDefinition graphGraphNodeDefinition) : base(graphGraphNodeDefinition)
     {
-        if (graphGraphNodeDefinition.Condition.Chunk != null)
+        if (graphGraphNodeDefinition.Condition?.Chunk != null)
         {
             Details.Add("Type", graphGraphNodeDefinition.Condition.Chunk.GetType().Name[5..^9]);
         }
