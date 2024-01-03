@@ -50,7 +50,7 @@ public class questPhaseNodeDefinitionWrapper : questEmbeddedGraphNodeDefinitionW
         }
         else if (_castedData.PhaseResource.DepotPath != ResourcePath.Empty)
         {
-            var cr2w = GetGameFile(_castedData.PhaseResource.DepotPath);
+            var cr2w = _archiveManager.GetCR2WFile(_castedData.PhaseResource.DepotPath);
 
             if (cr2w is not { RootChunk: questQuestPhaseResource res } || res.Graph?.Chunk == null)
             {
@@ -60,7 +60,7 @@ public class questPhaseNodeDefinitionWrapper : questEmbeddedGraphNodeDefinitionW
             var fileName = ((ulong)_castedData.PhaseResource.DepotPath).ToString();
             if (_castedData.PhaseResource.DepotPath.IsResolvable)
             {
-                fileName = _castedData.PhaseResource.DepotPath.GetResolvedText();
+                fileName = Path.GetFileName(_castedData.PhaseResource.DepotPath.GetResolvedText());
             }
 
             _graph = RedGraph.GenerateQuestGraph(fileName!, res.Graph.Chunk, _nodeWrapperFactory);
@@ -82,7 +82,7 @@ public class questPhaseNodeDefinitionWrapper : questEmbeddedGraphNodeDefinitionW
 
         if (_castedData.PhaseResource.DepotPath != ResourcePath.Empty)
         {
-            var cr2w = GetGameFile(_castedData.PhaseResource.DepotPath);
+            var cr2w = _archiveManager.GetCR2WFile(_castedData.PhaseResource.DepotPath);
 
             if (cr2w is not { RootChunk: questQuestPhaseResource res } || res.Graph?.Chunk == null)
             {
@@ -112,63 +112,6 @@ public class questPhaseNodeDefinitionWrapper : questEmbeddedGraphNodeDefinitionW
         }
 
         GenerateSockets();
-    }
-
-    private CR2WFile? GetGameFile(ResourcePath path)
-    {
-        /*if (ProjectArchive != null && ProjectArchive.Files.TryGetValue(path, out var projectFile))
-        {
-            using var ms = new MemoryStream();
-            projectFile.Extract(ms);
-            ms.Position = 0;
-
-            if (_wolvenkitFileService.TryReadRed4File(ms, out var redFile))
-            {
-                return redFile;
-            }
-        }*/
-
-        var modFile = _archiveManager.ModArchives
-            .Items
-            .Select(x => x.Files)
-            .Where(x => x.ContainsKey(path))
-            .Select(x => x[path])
-            .FirstOrDefault();
-
-        if (modFile != null)
-        {
-            using var ms = new MemoryStream();
-            modFile.Extract(ms);
-            ms.Position = 0;
-
-            using var cr = new CR2WReader(ms);
-            if (cr.ReadFile(out var redFile) == EFileReadErrorCodes.NoError)
-            {
-                return redFile!;
-            }
-        }
-
-        var baseFile = _archiveManager.Archives
-            .Items
-            .Select(x => x.Files)
-            .Where(x => x.ContainsKey(path))
-            .Select(x => x[path])
-            .FirstOrDefault();
-
-        if (baseFile != null)
-        {
-            using var ms = new MemoryStream();
-            baseFile.Extract(ms);
-            ms.Position = 0;
-
-            using var cr = new CR2WReader(ms);
-            if (cr.ReadFile(out var redFile) == EFileReadErrorCodes.NoError)
-            {
-                return redFile!;
-            }
-        }
-
-        return null;
     }
 
     internal override void CreateDefaultSockets() => CreateSocket("CutDestination", Enums.questSocketType.CutDestination);

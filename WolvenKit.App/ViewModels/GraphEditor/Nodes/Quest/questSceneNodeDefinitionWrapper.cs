@@ -52,28 +52,20 @@ public class questSceneNodeDefinitionWrapper : questSignalStoppingNodeDefinition
     {
         if (_castedData.SceneFile.DepotPath != ResourcePath.Empty && _castedData.SceneFile.DepotPath.IsResolvable)
         {
-            var file = _archiveManager.Lookup(_castedData.SceneFile.DepotPath);
-            if (!file.HasValue)
-            {
-                throw new Exception();
-            }
-
-            using var ms = new MemoryStream();
-            file.Value.Extract(ms);
-            ms.Position = 0;
-
-            using var reader = new CR2WReader(ms);
-            if (reader.ReadFile(out var cr2w) != EFileReadErrorCodes.NoError)
-            {
-                throw new Exception();
-            }
+            var cr2w = _archiveManager.GetCR2WFile(_castedData.SceneFile.DepotPath);
 
             if (cr2w!.RootChunk is not scnSceneResource res)
             {
                 throw new Exception();
             }
 
-            _graph = RedGraph.GenerateSceneGraph(Path.GetFileName(file.Value.FileName), res);
+            var fileName = ((ulong)_castedData.SceneFile.DepotPath).ToString();
+            if (_castedData.SceneFile.DepotPath.IsResolvable)
+            {
+                fileName = Path.GetFileName(_castedData.SceneFile.DepotPath.GetResolvedText());
+            }
+
+            _graph = RedGraph.GenerateSceneGraph(fileName!, res);
         }
         else
         {
