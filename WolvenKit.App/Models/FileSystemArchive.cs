@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
 using WolvenKit.App.Models.ProjectManagement.Project;
@@ -14,11 +15,11 @@ namespace WolvenKit.App.Models;
 
 public class FileSystemArchive : ICyberGameArchive
 {
-    private readonly Dictionary<ulong, string> _filePaths = new();
+    private readonly IHashService _hashService;
 
     public string ArchiveAbsolutePath { get; set; }
     public string ArchiveRelativePath { get; set; }
-    public Dictionary<ulong, IGameFile> Files { get; set; } = new();
+    public Dictionary<ulong, IGameFile> Files => GetFiles();
     public string Name { get; }
     public EArchiveSource Source => EArchiveSource.Project;
     public EArchiveType TypeName { get; set; }
@@ -28,7 +29,7 @@ public class FileSystemArchive : ICyberGameArchive
 
     public void CopyFileToStream(Stream stream, ulong hash, bool decompressBuffers)
     {
-        if (!_filePaths.TryGetValue(hash, out var filePath))
+        if (!TryGetFile(hash, out var filePath))
         {
             return;
         }
@@ -39,7 +40,7 @@ public class FileSystemArchive : ICyberGameArchive
 
     public async Task CopyFileToStreamAsync(Stream stream, ulong hash, bool decompressBuffers)
     {
-        if (!_filePaths.TryGetValue(hash, out var filePath))
+        if (!TryGetFile(hash, out var filePath))
         {
             return;
         }
@@ -48,31 +49,53 @@ public class FileSystemArchive : ICyberGameArchive
         await fs.CopyToAsync(stream);
     }
 
+    private bool TryGetFile(ulong hash, [NotNullWhen(true)] out string? path)
+    {
+        foreach (var filePath in Directory.EnumerateFiles(Project.ModDirectory, "*", SearchOption.AllDirectories))
+        {
+            var tHash = FNV1A64HashAlgorithm.HashString(ResourcePath.SanitizePath(filePath[(Project.ModDirectory.Length + 1)..]));
+            if (tHash == hash)
+            {
+                path = filePath;
+                return true;
+            }
+        }
+
+        path = null;
+        return false;
+    }
+
+    private Dictionary<ulong, IGameFile> GetFiles()
+    {
+        var result = new Dictionary<ulong, IGameFile>();
+
+        foreach (var filePath in Directory.EnumerateFiles(Project.ModDirectory, "*", SearchOption.AllDirectories))
+        {
+            var hash = FNV1A64HashAlgorithm.HashString(ResourcePath.SanitizePath(filePath[(Project.ModDirectory.Length + 1)..]));
+
+            result.Add(hash, new FileEntry(_hashService)
+            {
+                Archive = this,
+                NameHash64 = hash
+            });
+        }
+
+        return result;
+    }
+
     public FileSystemArchive(Cp77Project project, IHashService hashService)
     {
+        _hashService = hashService;
+
         Project = project;
 
         ArchiveAbsolutePath = $"<virtual FileSystemArchive>";
         ArchiveRelativePath = $"<virtual FileSystemArchive>";
         Name = $"<{Project.Name}>";
 
-        var modDirectory = Project.ModDirectory;
-
-        if (string.IsNullOrEmpty(modDirectory) || !Directory.Exists(modDirectory))
+        if (string.IsNullOrEmpty(Project.ModDirectory) || !Directory.Exists(Project.ModDirectory))
         {
-            throw new ArgumentException(nameof(modDirectory));
-        }
-
-        foreach (var filePath in Directory.EnumerateFiles(modDirectory, "*", SearchOption.AllDirectories))
-        {
-            var hash = FNV1A64HashAlgorithm.HashString(ResourcePath.SanitizePath(filePath[(modDirectory.Length + 1)..]));
-
-            _filePaths.Add(hash, filePath);
-            Files.Add(hash, new FileEntry(hashService)
-            {
-                Archive = this,
-                NameHash64 = hash
-            });
+            throw new ArgumentException(nameof(Project.ModDirectory));
         }
     }
 }

@@ -7,9 +7,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Models.ProjectManagement;
 using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Services;
 
@@ -22,18 +22,21 @@ public partial class ProjectManager : ObservableObject, IProjectManager
     private readonly INotificationService _notificationService;
     private readonly ILoggerService _loggerService;
     private readonly IHashService _hashService;
+    private readonly IArchiveManager _archiveManager;
 
     public ProjectManager(
         IRecentlyUsedItemsService recentlyUsedItemsService,
         INotificationService notificationService,
         ILoggerService loggerService,
-        IHashService hashService
+        IHashService hashService,
+        IArchiveManager archiveManager
     )
     {
         _recentlyUsedItemsService = recentlyUsedItemsService;
         _notificationService = notificationService;
         _loggerService = loggerService;
         _hashService = hashService;
+        _archiveManager = archiveManager;
     }
 
     #region properties
@@ -90,6 +93,7 @@ public partial class ProjectManager : ObservableObject, IProjectManager
                 else
                 {
                     ActiveProject = x.Result;
+                    _archiveManager.ProjectArchive = x.Result.AsArchive();
                     IsProjectLoaded = true;
 
                     var recentItem = _recentlyUsedItemsService.Items.Items.FirstOrDefault(item => item.Name == location);

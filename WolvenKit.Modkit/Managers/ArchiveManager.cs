@@ -12,8 +12,8 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
-using Path = System.IO.Path;
 
 namespace WolvenKit.RED4.CR2W.Archive
 {
@@ -81,6 +81,8 @@ namespace WolvenKit.RED4.CR2W.Archive
         public override IObservable<IChangeSet<RedFileSystemModel>> ConnectModRoot() => _modCache.Connect();
 
         public override EArchiveType TypeName => EArchiveType.Archive;
+
+        public override IGameArchive? ProjectArchive { get; set; }
 
         #endregion properties
 
@@ -639,6 +641,61 @@ namespace WolvenKit.RED4.CR2W.Archive
                     return i == splits.Length - 1 ? currentDir : null;
                 }
             }
+            return null;
+        }
+
+        public override IGameFile? GetGameFile(ResourcePath path, bool includeMods = true, bool includeProject = true)
+        {
+            if (includeProject && ProjectArchive != null && ProjectArchive.Files.TryGetValue(path, out var projectFile))
+            {
+                return projectFile;
+            }
+
+            if (includeMods)
+            {
+                var modFile = ModArchives
+                    .Items
+                    .Select(x => x.Files)
+                    .Where(x => x.ContainsKey(path))
+                    .Select(x => x[path])
+                    .FirstOrDefault();
+
+                if (modFile != null)
+                {
+                    return modFile;
+                }
+            }
+
+            var baseFile = Archives
+                .Items
+                .Select(x => x.Files)
+                .Where(x => x.ContainsKey(path))
+                .Select(x => x[path])
+                .FirstOrDefault();
+
+            if (baseFile != null)
+            {
+                return baseFile;
+            }
+
+            return null;
+        }
+
+        public override CR2WFile? GetCR2WFile(ResourcePath path, bool includeMods = true, bool includeProject = true)
+        {
+            var gameFile = GetGameFile(path, includeMods, includeProject);
+            if (gameFile != null)
+            {
+                using var ms = new MemoryStream();
+                gameFile.Extract(ms);
+                ms.Position = 0;
+
+                if (_wolvenkitFileService.TryReadRed4File(ms, out var redFile))
+                {
+                    return redFile;
+                }
+            }
+
             return null;
         }
 
