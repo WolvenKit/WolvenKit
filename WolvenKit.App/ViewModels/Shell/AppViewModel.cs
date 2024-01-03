@@ -670,6 +670,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             };
 
             _projectManager.ActiveProject = np;
+            _archiveManager.ProjectArchive = np.AsArchive();
+
             await _projectManager.SaveAsync();
             np.CreateDefaultDirectories();
 

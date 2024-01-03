@@ -10,6 +10,8 @@ using DynamicData.Kernel;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Model
 {
@@ -36,6 +38,8 @@ namespace WolvenKit.Common.Model
         public abstract bool IsManagerLoaded { get; set; }
 
         public bool IsModBrowserActive { get; set; }
+
+        public abstract IGameArchive? ProjectArchive { get; set; }
 
         #endregion
 
@@ -146,6 +150,9 @@ namespace WolvenKit.Common.Model
         public abstract IEnumerable<FileEntry> GetFiles();
 
         public abstract void LoadFromFolder(DirectoryInfo archivedir);
+
+        public abstract IGameFile? GetGameFile(ResourcePath path, bool includeMods = true, bool includeProject = true);
+        public abstract CR2WFile? GetCR2WFile(ResourcePath path, bool includeMods = true, bool includeProject = true);
 
 
         public abstract IObservable<IChangeSet<RedFileSystemModel>> ConnectGameRoot();
