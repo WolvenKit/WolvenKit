@@ -3,16 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
-using SharpGLTF.Schema2;
-using SharpGLTF.Validation;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Modkit.RED4.GeneralStructs;
-using WolvenKit.Modkit.RED4.Tools;
-using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W.JSON;
@@ -26,57 +22,6 @@ namespace WolvenKit.Modkit.RED4
     /// </summary>
     public partial class ModTools
     {
-        // Unused?
-        /*
-        public bool ExportMeshWithMaterials(Stream meshStream, FileInfo outfile, MeshExportArgs meshArgs, ValidationMode vmode = ValidationMode.TryFix)
-        {
-            var archives = meshArgs.Archives;
-            var matRepo = meshArgs.MaterialRepo;
-            var eUncookExtension = meshArgs.MaterialUncookExtension;
-            var isGLBinary = meshArgs.isGLBinary;
-            var LodFilter = meshArgs.LodFilter;
-            var mergeMeshes = meshArgs.ExperimentalMergedExport;
-
-            if (matRepo == null)
-            {
-                throw new Exception("Depot path is not set: Choose a Depot location within Settings for generating materials.");
-            }
-
-            var cr2w = _parserService.ReadRed4File(meshStream);
-            if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob == null || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
-            {
-                return false;
-            }
-
-            using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
-
-            var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh);
-
-            var expMeshes = MeshTools.ContainRawMesh(ms, meshesinfo, LodFilter);
-            MeshTools.UpdateSkinningParamCloth(ref expMeshes, meshStream, cr2w);
-            MeshTools.WriteGarmentParametersToMesh(ref expMeshes, cMesh, meshArgs.ExportGarmentSupport);
-
-            var Rig = MeshTools.GetOrphanRig(cMesh);
-
-            var model = MeshTools.RawMeshesToGLTF(expMeshes, Rig, mergeMeshes);
-
-            ParseMaterials(cr2w, meshStream, outfile, archives, matRepo, meshesinfo, eUncookExtension);
-
-            if (isGLBinary)
-            {
-                model.SaveGLB(outfile.FullName, new WriteSettings(vmode));
-            }
-            else
-            {
-                model.SaveGLTF(outfile.FullName, new WriteSettings(vmode));
-            }
-
-            meshStream.Dispose();
-            meshStream.Close();
-
-            return true;
-        }
-        */
         private void GetMaterialEntries(CR2WFile cr2w, Stream meshStream, ref List<string> primaryDependencies, ref List<string> materialEntryNames, ref List<CMaterialInstance> materialEntries)
         {
             if (cr2w.RootChunk is not CMesh cmesh)
@@ -458,7 +403,7 @@ namespace WolvenKit.Modkit.RED4
 
                 void ExtractMlSetup(string extractionPath)
                 {
-                    if (mlSetupNames.Contains(path))
+                    if (mlSetupNames.Contains(extractionPath))
                     {
                         return;
                     }
@@ -569,6 +514,7 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
         }
+
         private void SaveMaterials(FileInfo outfile, List<MatData> mats)
         {
             var consMatData = new MatData(mats[0].MaterialRepo, new List<RawMaterial>(), new List<string>(), new List<RawMaterial>(), new());
@@ -592,267 +538,9 @@ namespace WolvenKit.Modkit.RED4
 
         private void ParseMaterials(CR2WFile cr2w, Stream meshStream, FileInfo outfile, string matRepo, MeshesInfo info, EUncookExtension eUncookExtension = EUncookExtension.dds)
         {
-            var primaryDependencies = new List<string>();
-
-            var materialEntryNames = new List<string>();
-            var materialEntries = new List<CMaterialInstance>();
-
-            GetMaterialEntries(cr2w, meshStream, ref primaryDependencies, ref materialEntryNames, ref materialEntries);
-
-            var mlSetupNames = new List<string>();
-
-            var mlTemplateNames = new List<string>();
-
-            var hairProfileNames = new List<string>();
-
-            var texturesList = new List<string>();
-
-            var exportArgs =
-                new GlobalExportArgs().Register(
-                    new XbmExportArgs() { UncookExtension = eUncookExtension },
-                    new MlmaskExportArgs() { UncookExtension = eUncookExtension }
-                );
-
-            foreach (var p in primaryDependencies)
-            {
-                ExtractFile(p);
-            }
-
-            var usedMts = GetEmbeddedMaterialTemplates(ref cr2w);
-            var rawMaterials = materialEntries.Select((t, i) => ContainRawMaterial(t, materialEntryNames[i], ref usedMts)).ToList();
-
-            var matTemplates = new List<RawMaterial>();
-            {
-                var keys = usedMts.Keys.ToList();
-                foreach (var key in keys)
-                {
-                    var rawMat = new RawMaterial
-                    {
-                        Name = key,
-                        Data = new Dictionary<string, object?>()
-                    };
-
-                    foreach (var item in usedMts[key].Parameters[2].NotNull())
-                    {
-                        rawMat.Data.Add(item.NotNull().Chunk.NotNull().ParameterName.ToString().NotNull(), GetSerializableValue(item.Chunk.NotNull()));
-                    }
-
-                    matTemplates.Add(rawMat);
-                }
-            }
-
-            var matData = new MatData(matRepo, rawMaterials, texturesList, matTemplates, info.appearances);
-
+            var matData = SetupMaterial(cr2w, meshStream, matRepo, info, eUncookExtension);
             var str = RedJsonSerializer.Serialize(matData);
-
             File.WriteAllText(Path.ChangeExtension(outfile.FullName, ".Material.json"), str);
-
-            void ExtractFile(string path)
-            {
-                var extension = Path.GetExtension(path).ToLower();
-
-                switch (extension)
-                {
-                    case ".xbm":
-                        ExtractXBM(path);
-                        break;
-
-                    case ".mlmask":
-                        ExtractMlMask(path);
-                        break;
-
-                    case ".hp":
-                        ExtractHP(path);
-                        break;
-
-                    case ".mlsetup":
-                        ExtractMlSetup(path);
-                        break;
-
-                    case ".mltemplate":
-                        ExtractMlTemplate(path);
-                        break;
-
-                    case ".gradient":
-                        ExtractGradient(path);
-                        break;
-                    default:
-                        break;
-                }
-
-                void ExtractXBM(string extractionPath)
-                {
-                    if (!texturesList.Contains(extractionPath))
-                    {
-                        texturesList.Add(extractionPath);
-                    }
-
-                    var destFileName = Path.Combine(matRepo, Path.ChangeExtension(extractionPath, "." + exportArgs.Get<XbmExportArgs>().UncookExtension));
-                    if (!File.Exists(destFileName))
-                    {
-                        UncookFile(extractionPath, matRepo, exportArgs);
-                    }
-                }
-
-                void ExtractMlMask(string extractionPath)
-                {
-                    if (!texturesList.Contains(extractionPath))
-                    {
-                        texturesList.Add(extractionPath);
-                    }
-
-                    var destFileName = Path.Combine(matRepo, extractionPath.Replace(".mlmask", $"_0.{exportArgs.Get<XbmExportArgs>().UncookExtension}"));
-                    if (!File.Exists(destFileName))
-                    {
-                        exportArgs.Get<MlmaskExportArgs>().AsList = false;
-                        UncookFile(extractionPath, matRepo, exportArgs);
-                    }
-                }
-
-                void ExtractHP(string extractionPath)
-                {
-                    if (hairProfileNames.Contains(extractionPath))
-                    {
-                        return;
-                    }
-
-                    hairProfileNames.Add(extractionPath);
-
-                    var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(extractionPath, ".hp.json")));
-                    if (!fi.Exists)
-                    {
-                        var findStatus = TryFindFile(extractionPath, out var result);
-                        if (findStatus == FindFileResult.NoError)
-                        {
-                            if (fi.Directory is not null && !fi.Directory.Exists)
-                            {
-                                fi.Directory.Create();
-                            }
-
-                            ArgumentNullException.ThrowIfNull(result, nameof(result));
-                            var dto = new RedFileDto(result.File!);
-                            var doc = RedJsonSerializer.Serialize(dto);
-                            File.WriteAllText(fi.FullName, doc);
-                        }
-                        else if (findStatus == FindFileResult.NoCR2W)
-                        {
-                            throw new InvalidParsingException("Error while parsing a file");
-                        }
-                    }
-                }
-
-                void ExtractMlSetup(string extractionPath)
-                {
-                    if (mlSetupNames.Contains(extractionPath))
-                    {
-                        return;
-                    }
-
-                    mlSetupNames.Add(extractionPath);
-
-                    var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(extractionPath, ".mlsetup.json")));
-                    if (!fi.Exists)
-                    {
-                        var findStatus = TryFindFile(extractionPath, out var result);
-                        if (findStatus == FindFileResult.NoError)
-                        {
-                            ArgumentNullException.ThrowIfNull(result, nameof(result));
-                            if (fi.Directory is not null && !fi.Directory.Exists)
-                            {
-                                fi.Directory.Create();
-                            }
-
-                            var dto = new RedFileDto(result.File!);
-                            var doc = RedJsonSerializer.Serialize(dto);
-                            File.WriteAllText(fi.FullName, doc);
-
-                            foreach (var import in result.Imports!)
-                            {
-                                ExtractFile(import.DepotPath.ToString().NotNull());
-                            }
-                        }
-                        else if (findStatus == FindFileResult.NoCR2W)
-                        {
-                            throw new InvalidParsingException("Error while parsing a file");
-                        }
-                    }
-                }
-
-                void ExtractMlTemplate(string extractionPath)
-                {
-                    if (mlTemplateNames.Contains(extractionPath))
-                    {
-                        return;
-                    }
-
-                    mlTemplateNames.Add(extractionPath);
-
-                    var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(extractionPath, ".mltemplate.json")));
-                    if (!fi.Exists)
-                    {
-                        var findStatus = TryFindFile(extractionPath, out var result);
-                        if (findStatus == FindFileResult.NoError)
-                        {
-                            ArgumentNullException.ThrowIfNull(result, nameof(result));
-                            if (fi.Directory is not null && !fi.Directory.Exists)
-                            {
-                                fi.Directory.Create();
-                            }
-
-                            var dto = new RedFileDto(result.File!);
-                            var doc = RedJsonSerializer.Serialize(dto);
-                            File.WriteAllText(fi.FullName, doc);
-
-                            foreach (var import in result.Imports!)
-                            {
-                                ExtractFile(import.DepotPath.ToString().NotNull());
-                            }
-
-                            var mlTemplateMats = result.File!.RootChunk.FindType(typeof(CResourceReference<CBitmapTexture>));
-                            foreach (var mat in mlTemplateMats.Select(mlTemplateMat => (CResourceReference<CBitmapTexture>)mlTemplateMat.Value))
-                            {
-                                ExtractXBM(mat.DepotPath.ToString().NotNull());
-                            }
-                        }
-                        else if (findStatus == FindFileResult.NoCR2W)
-                        {
-                            throw new InvalidParsingException("Error while parsing a file");
-                        }
-                    }
-                }
-
-                void ExtractGradient(string extractionPath)
-                {
-                    if (texturesList.Contains(extractionPath))
-                    {
-                        return;
-                    }
-
-                    texturesList.Add(extractionPath);
-
-                    var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(extractionPath, ".gradient.json")));
-                    if (!fi.Exists)
-                    {
-                        var findStatus = TryFindFile(extractionPath, out var result);
-                        if (findStatus == FindFileResult.NoError)
-                        {
-                            ArgumentNullException.ThrowIfNull(result, nameof(result));
-                            if (fi.Directory is not null && !fi.Directory.Exists)
-                            {
-                                fi.Directory.Create();
-                            }
-
-                            var dto = new RedFileDto(result.File!);
-                            var doc = RedJsonSerializer.Serialize(dto);
-                            File.WriteAllText(fi.FullName, doc);
-                        }
-                        else if (findStatus == FindFileResult.NoCR2W)
-                        {
-                            throw new InvalidParsingException("Error while parsing a file");
-                        }
-                    }
-                }
-            }
         }
 
         private IRedType? GetMaterialParameterValue(Type materialParameterType, object? obj)
