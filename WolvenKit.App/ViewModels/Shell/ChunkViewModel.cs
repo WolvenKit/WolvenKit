@@ -2098,8 +2098,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
             Descriptor = desc;
         }
-        // mesh: boneTransforms
-        else if (NodeIdxInParent > -1 && Parent?.Name == "boneTransforms" &&
+        // mesh: boneTransforms (in different coordinate spaces)
+        else if (NodeIdxInParent > -1 &&
+                 (Parent?.Name == "boneTransforms" || Parent?.Name == "aPoseLS" || Parent?.Name == "aPoseMS") &&
                  GetRootModel().GetModelFromPath("boneNames")?.ResolvedData is CArray<CName> boneNames &&
                  boneNames.Count > NodeIdxInParent)
         {
