@@ -89,7 +89,19 @@ public class questPhaseNodeDefinitionWrapper : questEmbeddedGraphNodeDefinitionW
                 throw new Exception();
             }
 
-            foreach (var nodeHandle in res.Graph.Chunk.Nodes)
+            InternalRecalculateSockets(res.Graph.Chunk);
+        }
+
+        if (_castedData.PhaseGraph is { Chunk: { } phaseGraph })
+        {
+            InternalRecalculateSockets(phaseGraph);
+        }
+
+        GenerateSockets();
+
+        void InternalRecalculateSockets(graphGraphDefinition graphDefinition)
+        {
+            foreach (var nodeHandle in graphDefinition.Nodes)
             {
                 if (nodeHandle.Chunk is questInputNodeDefinition inputNode)
                 {
@@ -110,8 +122,6 @@ public class questPhaseNodeDefinitionWrapper : questEmbeddedGraphNodeDefinitionW
                 }
             }
         }
-
-        GenerateSockets();
     }
 
     internal override void CreateDefaultSockets() => CreateSocket("CutDestination", Enums.questSocketType.CutDestination);
