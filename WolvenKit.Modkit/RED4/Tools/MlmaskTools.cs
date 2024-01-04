@@ -2,11 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using CP77.Common.Image;
-using SharpDX.Win32;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Common.Services;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 
@@ -82,9 +80,19 @@ namespace WolvenKit.Modkit.RED4
 
         public bool UncookMlmask(Stream cr2wStream, FileInfo outfile, MlmaskExportArgs args)
         {
-            // read the cr2wfile
             var cr2w = _parserService.ReadRed4File(cr2wStream);
-            if (cr2w == null || cr2w.RootChunk is not Multilayer_Mask mlmask || mlmask.RenderResourceBlob.RenderResourceBlobPC.Chunk is not rendRenderMultilayerMaskBlobPC blob)
+            if (cr2w == null || cr2w.RootChunk is not Multilayer_Mask mlmask)
+            {
+                return false;
+            }
+
+            return UncookMlmask(mlmask, outfile, args);
+        }
+
+        public bool UncookMlmask(Multilayer_Mask mlmask, FileInfo outfile, MlmaskExportArgs args)
+        {
+            // read the cr2wfile
+            if (mlmask.RenderResourceBlob.RenderResourceBlobPC.Chunk is not rendRenderMultilayerMaskBlobPC blob)
             {
                 return false;
             }

@@ -10,17 +10,17 @@ using EFileReadErrorCodes = WolvenKit.RED4.Archive.IO.EFileReadErrorCodes;
 
 namespace WolvenKit.Modkit.RED4;
 
+public enum FindFileResult
+{
+    NoError,
+    FileNotFound,
+    NoCR2W
+}
+
+public record FindFileRecord(ICyberGameArchive? Archive, CR2WFile? File, List<IRedImport>? Imports, bool IsEmbedded = false);
+
 public partial class ModTools
 {
-    private enum FindFileResult
-    {
-        NoError,
-        FileNotFound,
-        NoCR2W
-    }
-
-    private record FindFileRecord(ICyberGameArchive? Archive, CR2WFile? File, List<IRedImport>? Imports);
-
     private FindFileResult TryFindFile(ResourcePath path, out FindFileRecord result, bool excludeCustomArchives = false)
     {
         var status = InternalTryFindFile(path, out result, excludeCustomArchives);

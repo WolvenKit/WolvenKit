@@ -443,7 +443,7 @@ namespace WolvenKit.Modkit.RED4
                         else
                         {
                             _loggerService.Info("Using classic mesh exporter.");
-                            return HandleMesh(cr2wStream, outfile, settings.Get<MeshExportArgs>());
+                            return HandleMesh(cr2wStream, relPath, outfile, settings.Get<MeshExportArgs>());
                         }
                     }
                     catch (Exception e)
@@ -482,41 +482,7 @@ namespace WolvenKit.Modkit.RED4
                     }
                 case ECookedFileFormat.xbm:
                 {
-                    if (settings.Get<XbmExportArgs>() is not { } xbmargs)
-                    {
-                        return false;
-                    }
-
-                    if (WolvenTesting.IsTesting)
-                    {
-                        using var ms = new MemoryStream();
-                        return ConvertXbmToDdsStream(cr2wStream, ms, true, out _, out _);
-                    }
-
-                    using (var ms = new MemoryStream())
-                    {
-                        // always flip on export
-                        if (!ConvertXbmToDdsStream(cr2wStream, ms, true, out _, out var decompressedFormat))
-                        {
-                            return false;
-                        }
-
-                        // convert if needed else save to file
-                        var ddsPath = Path.ChangeExtension(outfile.FullName, ERawFileFormat.dds.ToString());
-                        if (xbmargs.UncookExtension != EUncookExtension.dds)
-                        {
-                            ms.Seek(0, SeekOrigin.Begin);
-                            return Texconv.ConvertFromDdsAndSave(ms, ddsPath, xbmargs, false, decompressedFormat);
-                        }
-                        else
-                        {
-                            using var fs = new FileStream(ddsPath, FileMode.Create, FileAccess.Write);
-                            ms.Seek(0, SeekOrigin.Begin);
-                            ms.CopyTo(fs);
-                        }
-                    }
-
-                    return true;
+                    return UncookXBM(cr2wStream, outfile, settings);
                 }
                 case ECookedFileFormat.csv:
                 {
@@ -585,6 +551,48 @@ namespace WolvenKit.Modkit.RED4
                 default:
                     throw new ArgumentOutOfRangeException($"Uncooking failed for extension: {extAsEnum}.");
             }
+        }
+
+        public bool UncookXBM(Stream cr2wStream, FileInfo outfile, GlobalExportArgs settings) => 
+            _parserService.TryReadRed4File(cr2wStream, out var cr2w) && 
+            cr2w.RootChunk is CBitmapTexture cBitmapTexture && 
+            UncookXBM(cBitmapTexture, outfile, settings);
+
+        public bool UncookXBM(CBitmapTexture cBitmapTexture, FileInfo outfile, GlobalExportArgs settings)
+        {
+            if (settings.Get<XbmExportArgs>() is not { } xbmargs)
+            {
+                return false;
+            }
+
+            if (WolvenTesting.IsTesting)
+            {
+                using var ms = new MemoryStream();
+                return ConvertRedClassToDdsStream(cBitmapTexture, ms, out _, out _, true);
+            }
+
+            using (var ms = new MemoryStream())
+            {
+                // always flip on export
+                if (!ConvertRedClassToDdsStream(cBitmapTexture, ms, out _, out var decompressedFormat, true))
+                {
+                    return false;
+                }
+
+                // convert if needed else save to file
+                var ddsPath = Path.ChangeExtension(outfile.FullName, ERawFileFormat.dds.ToString());
+                if (xbmargs.UncookExtension != EUncookExtension.dds)
+                {
+                    ms.Seek(0, SeekOrigin.Begin);
+                    return Texconv.ConvertFromDdsAndSave(ms, ddsPath, xbmargs, false, decompressedFormat);
+                }
+
+                using var fs = new FileStream(ddsPath, FileMode.Create, FileAccess.Write);
+                ms.Seek(0, SeekOrigin.Begin);
+                ms.CopyTo(fs);
+            }
+
+            return true;
         }
 
         private bool HandleOpus(OpusExportArgs opusExportArgs)
@@ -713,7 +721,7 @@ namespace WolvenKit.Modkit.RED4
 
             return true;
         }
-        public bool ExportMeshWithRig(Stream meshStream, Stream rigStream, FileInfo outfile, MeshExportArgs meshExportArgs, ValidationMode vmode = ValidationMode.TryFix)
+        public bool ExportMeshWithRig(Stream meshStream, Stream rigStream, string relPath, FileInfo outfile, MeshExportArgs meshExportArgs, ValidationMode vmode = ValidationMode.TryFix)
         {
             var cr2w = _parserService.ReadRed4File(meshStream);
 
@@ -721,6 +729,8 @@ namespace WolvenKit.Modkit.RED4
             {
                 return false;
             }
+
+            cr2w.MetaData.FileName = relPath;
 
             using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
@@ -797,6 +807,8 @@ namespace WolvenKit.Modkit.RED4
                     continue;
                 }
 
+                cr2w.MetaData.FileName = meshName;
+
                 using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
                 var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh, meshName);
@@ -847,7 +859,7 @@ namespace WolvenKit.Modkit.RED4
             return true;
         }
 
-        public bool ExportMesh(Stream meshStream, FileInfo outfile, MeshExportArgs meshExportArgs, ValidationMode vmode = ValidationMode.TryFix)
+        public bool ExportMesh(Stream meshStream, string relPath, FileInfo outfile, MeshExportArgs meshExportArgs, ValidationMode vmode = ValidationMode.TryFix)
         {
             var eUncookExtension = meshExportArgs.MaterialUncookExtension;
 
@@ -857,6 +869,8 @@ namespace WolvenKit.Modkit.RED4
             {
                 return false;
             }
+
+            cr2w.MetaData.FileName = relPath;
 
             using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
@@ -875,12 +889,12 @@ namespace WolvenKit.Modkit.RED4
             return MeshTools.ExportMesh(cr2w, outfile, meshExportArgs, vmode);
         }
 
-        private bool HandleMesh(Stream cr2wStream, FileInfo cr2wFileName, MeshExportArgs meshargs)
+        private bool HandleMesh(Stream cr2wStream, string relPath, FileInfo cr2wFileName, MeshExportArgs meshargs)
         {
             switch (meshargs.meshExportType)
             {
                 case MeshExportType.MeshOnly:
-                    return ExportMesh(cr2wStream, cr2wFileName, meshargs);
+                    return ExportMesh(cr2wStream, relPath, cr2wFileName, meshargs);
 
                 case MeshExportType.WithRig:
                 {
@@ -894,7 +908,7 @@ namespace WolvenKit.Modkit.RED4
                     using var ms = new MemoryStream();
                     entry.Extract(ms);
 
-                    return ExportMeshWithRig(cr2wStream, ms, cr2wFileName, meshargs);
+                    return ExportMeshWithRig(cr2wStream, ms, relPath, cr2wFileName, meshargs);
                 }
                 case MeshExportType.Multimesh:
                 {
@@ -990,6 +1004,8 @@ namespace WolvenKit.Modkit.RED4
                         _loggerService.Error($"Mesh stream does not look valid: {streamName}");
                         continue;
                     }
+
+                    cr2w.MetaData.FileName = streamName;
 
                     using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
