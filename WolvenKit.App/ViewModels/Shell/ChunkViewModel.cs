@@ -1877,7 +1877,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
         else if (ResolvedData is redTagList list)
         {
-            Value = $"[ {string.Join(", ", list.Tags.ToList().Select(t => t.GetResolvedText().NotNull()).ToArray())} ]";
+            Value = $"[ {string.Join(", ", list.Tags.ToList().Select(t => t.GetResolvedText() ?? "").ToArray())} ]";
             IsValueExtrapolated = true;
         }
         else if (NodeIdxInParent > -1 && Parent?.Name == "referenceTracks" &&
@@ -1934,7 +1934,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             var depotPath = rr.DepotPath;
             if (!_hashService.Contains(depotPath) && !ResourcePath.IsNullOrEmpty(depotPath))
             {
-                _hashService.AddCustom(depotPath.GetResolvedText().NotNull());
+                _hashService.AddCustom(depotPath.GetResolvedText() ?? "");
             }
 
             if (depotPath.IsResolvable)
@@ -1988,7 +1988,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         if (Data is worldStreamingSectorDescriptor wssd)
         {
-            Descriptor = wssd.Data.DepotPath.GetResolvedText().NotNull()
+            Descriptor = (wssd.Data.DepotPath.GetResolvedText() ?? "")
                 .Replace("base\\worlds\\03_night_city\\_compiled\\default\\", "").Replace(".streamingsector", "");
             return;
         }
@@ -3772,7 +3772,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                                 {
                                     name = line.name + "_" + i1,
                                     app = line.app == "" ? "default" : line.app,
-                                    template_path = mesh.Mesh.DepotPath.GetResolvedText().NotNull(),
+                                    template_path = mesh.Mesh.DepotPath.GetResolvedText() ?? "",
                                     scale = line.scale
                                 };
 
