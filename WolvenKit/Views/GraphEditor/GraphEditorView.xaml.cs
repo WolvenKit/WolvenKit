@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -57,6 +59,14 @@ public partial class GraphEditorView : UserControl
     {
         get => _selectedNode;
         set => SetField(ref _selectedNode, value);
+    }
+
+    private ObservableCollection<object> _selectedNodes = new();
+
+    public ObservableCollection<object> SelectedNodes
+    {
+        get => _selectedNodes;
+        set => SetField(ref _selectedNodes, value);
     }
 
     public Point ViewportLocation { get; set; }
@@ -132,6 +142,15 @@ public partial class GraphEditorView : UserControl
         node.ContextMenu ??= new ContextMenu();
 
         node.ContextMenu.Items.Clear();
+
+        if (SelectedNodes.Count > 0)
+        {
+            node.ContextMenu.Items.Add(CreateMenuItem("Remove Nodes", () => Source.RemoveNodes(SelectedNodes)));
+            node.ContextMenu.SetCurrentValue(ContextMenu.IsOpenProperty, true);
+
+            e.Handled = true;
+            return;
+        }
 
         if (node.DataContext is IDynamicInputNode dynamicInputNode)
         {

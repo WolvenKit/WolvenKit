@@ -24,6 +24,7 @@
             ItemsSource="{Binding ElementName=uc, Path=Source.Nodes}"
             PendingConnection="{Binding ElementName=uc, Path=Source.PendingConnection}"
             SelectedItem="{Binding ElementName=uc, Path=SelectedNode}"
+            SelectedItems="{Binding ElementName=uc, Path=SelectedNodes}"
             ViewportLocation="{Binding ElementName=uc, Path=ViewportLocation}">
             <nodify:NodifyEditor.Resources>
                 <DataTemplate x:Key="HeaderTemplate">

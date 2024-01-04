@@ -165,6 +165,25 @@ public partial class RedGraph : IDisposable
         }
     }
 
+    public void RemoveNodes(IList<object> nodes)
+    {
+        var removableNodes = new List<NodeViewModel>();
+        foreach (var node in nodes)
+        {
+            if (node is not NodeViewModel nvm)
+            {
+                throw new Exception();
+            }
+
+            removableNodes.Add(nvm);
+        }
+
+        foreach (var node in removableNodes)
+        {
+            RemoveNode(node);
+        }
+    }
+
     public void ArrangeNodes(double xOffset = 0, double yOffset = 0)
     {
         var graph = new GeometryGraph();
