@@ -142,60 +142,12 @@ public partial class RedGraph
     {
         foreach (var inputConnectorViewModel in node.Input)
         {
-            var inputConnector = (QuestInputConnectorViewModel)inputConnectorViewModel;
-
-            foreach (var inputConnectionHandle in inputConnector.Data.Connections)
-            {
-                var inputConnection = inputConnectionHandle.Chunk!;
-
-                for (var i = inputConnection.Source.Chunk!.Connections.Count - 1; i >= 0; i--)
-                {
-                    if (ReferenceEquals(inputConnection.Source.Chunk!.Connections[i].Chunk, inputConnection))
-                    {
-                        inputConnection.Source.Chunk!.Connections.RemoveAt(i);
-                    }
-                }
-
-                for (var i = Connections.Count - 1; i >= 0; i--)
-                {
-                    var connection = (QuestConnectionViewModel)Connections[i];
-                    if (ReferenceEquals(connection.ConnectionDefinition, inputConnection))
-                    {
-                        connection.Source.IsConnected = ((QuestOutputConnectorViewModel)connection.Source).Data.Connections.Count > 0;
-                        Connections.RemoveAt(i);
-                        RefreshCVM([((QuestOutputConnectorViewModel)connection.Source).Data]);
-                    }
-                }
-            }
+            Disconnect(inputConnectorViewModel);
         }
 
         foreach (var outputConnectorViewModel in node.Output)
         {
-            var outputConnector = (QuestOutputConnectorViewModel)outputConnectorViewModel;
-
-            foreach (var outputConnectionHandle in outputConnector.Data.Connections)
-            {
-                var outputConnection = outputConnectionHandle.Chunk!;
-
-                for (var i = outputConnection.Destination.Chunk!.Connections.Count - 1; i >= 0; i--)
-                {
-                    if (ReferenceEquals(outputConnection.Destination.Chunk!.Connections[i].Chunk, outputConnection))
-                    {
-                        outputConnection.Destination.Chunk!.Connections.RemoveAt(i);
-                    }
-                }
-
-                for (var i = Connections.Count - 1; i >= 0; i--)
-                {
-                    var connection = (QuestConnectionViewModel)Connections[i];
-                    if (ReferenceEquals(connection.ConnectionDefinition, outputConnection))
-                    {
-                        connection.Target.IsConnected = ((QuestInputConnectorViewModel)connection.Target).Data.Connections.Count > 0;
-                        Connections.RemoveAt(i);
-                        RefreshCVM([((QuestInputConnectorViewModel)connection.Target).Data]);
-                    }
-                }
-            }
+            Disconnect(outputConnectorViewModel);
         }
 
         var graph = ((graphGraphDefinition)_data).Nodes;

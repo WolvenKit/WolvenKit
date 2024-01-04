@@ -143,7 +143,7 @@ public partial class GraphEditorView : UserControl
 
         node.ContextMenu.Items.Clear();
 
-        if (SelectedNodes.Count > 0)
+        if (SelectedNodes.Count > 1)
         {
             node.ContextMenu.Items.Add(CreateMenuItem("Remove Nodes", () => Source.RemoveNodes(SelectedNodes)));
             node.ContextMenu.SetCurrentValue(ContextMenu.IsOpenProperty, true);

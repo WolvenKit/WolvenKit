@@ -82,53 +82,14 @@ public partial class RedGraph
 
     private void RemoveSceneNode(BaseSceneViewModel node)
     {
-        for (var i = Connections.Count - 1; i >= 0; i--)
+        foreach (var inputConnectorViewModel in node.Input)
         {
-            if (node.Output.Count == 0)
-            {
-                break;
-            }
-
-            for (var j = node.Output.Count - 1; j >= 0; j--)
-            {
-                if (Connections[i].Source == node.Output[j])
-                {
-                    node.Output.RemoveAt(j);
-                    UpdateTargetNode((SceneInputConnectorViewModel)Connections[i].Target);
-                    Connections.RemoveAt(i);
-                    break;
-                }
-            }
+            Disconnect(inputConnectorViewModel);
         }
 
-        for (var i = Connections.Count - 1; i >= 0; i--)
+        foreach (var outputConnectorViewModel in node.Output)
         {
-            if (node.Input.Count == 0)
-            {
-                break;
-            }
-
-            for (var j = node.Input.Count - 1; j >= 0; j--)
-            {
-                if (Connections[i].Target == node.Input[j])
-                {
-                    var connectionSource = (SceneOutputConnectorViewModel)Connections[i].Source;
-                    for (var k = connectionSource.Data.Destinations.Count - 1; k >= 0; k--)
-                    {
-                        if (connectionSource.Data.Destinations[k].NodeId.Id == node.UniqueId)
-                        {
-                            connectionSource.Data.Destinations.RemoveAt(k);
-                            //UpdateTargetNode((SceneInputConnectorViewModel)Connections[i].Target);
-                        }
-                    }
-
-                    node.Input.RemoveAt(j);
-                    connectionSource.IsConnected = connectionSource.Data.Destinations.Count > 0;
-
-                    Connections.RemoveAt(i);
-                    break;
-                }
-            }
+            Disconnect(outputConnectorViewModel);
         }
 
         var graph = ((scnSceneResource)_data).SceneGraph.Chunk!.Graph!;
