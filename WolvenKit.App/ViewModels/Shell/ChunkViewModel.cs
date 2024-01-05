@@ -2101,6 +2101,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
             Descriptor = desc;
         }
+        else if (ResolvedData is inkTextureSlot texturesSlot)
+        {
+            var desc = texturesSlot.Texture.DepotPath.GetResolvedText();
+            if (!string.IsNullOrEmpty(desc))
+            {
+                Descriptor = desc;
+            }
+        }
         // mesh: boneTransforms (in different coordinate spaces)
         else if (NodeIdxInParent > -1 &&
                  (Parent?.Name == "boneTransforms" || Parent?.Name == "aPoseLS" || Parent?.Name == "aPoseMS") &&
