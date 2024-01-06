@@ -228,111 +228,125 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         CalculateDescriptor();
         CalculateIsDefault();
 
-        if (Parent is not null)
+        if (Parent is null)
         {
-            if (Tab is not null)
+            return;
+        }
+
+        if (Tab is not null)
+        {
+            if (Parent.Data is IRedArray arr)
             {
-                if (Parent.Data is IRedArray arr)
+                // use PropertyName for now, since Name doesn't always work
+                var index = int.Parse(PropertyName);
+                if (index != -1)
                 {
-                    // use PropertyName for now, since Name doesn't always work
-                    var index = int.Parse(PropertyName);
-                    if (index != -1)
-                    {
-                        arr[index] = Data;
-                        Tab.Parent.SetIsDirty(true);
-                        Parent.NotifyChain("Data");
-                    }
-                }
-
-                var parentData = Parent.Data;
-
-                if (Parent.Data is IRedBaseHandle handle)
-                {
-                    parentData = handle.GetValue();
-                }
-                else if (Parent.Data is CVariant cVariant)
-                {
-                    parentData = cVariant.Value;
-                }
-                
-                if (parentData is RedBaseClass rbc)
-                {
-                    if (Data is RedDummy)
-                    {
-                        rbc.ResetProperty(PropertyName);
-                    }
-                    else
-                    {
-                        rbc.SetProperty(PropertyName, Data);
-                    }
-                    
+                    arr[index] = Data;
                     Tab.Parent.SetIsDirty(true);
                     Parent.NotifyChain("Data");
                 }
+            }
+
+            var parentData = Parent.Data;
+
+            if (Parent.Data is IRedBaseHandle handle)
+            {
+                parentData = handle.GetValue();
+            }
+            else if (Parent.Data is CVariant cVariant)
+            {
+                parentData = cVariant.Value;
+            }
+
+            if (parentData is RedBaseClass rbc)
+            {
+                if (Data is RedDummy)
+                {
+                    rbc.ResetProperty(PropertyName);
+                }
                 else
                 {
-                    var pi = parentData?.GetType().GetProperty(PropertyName);
-                    if (pi is not null)
+                    rbc.SetProperty(PropertyName, Data);
+                }
+
+                Tab.Parent.SetIsDirty(true);
+                Parent.NotifyChain("Data");
+            }
+            else
+            {
+                var pi = parentData?.GetType().GetProperty(PropertyName);
+                if (pi is not null)
+                {
+                    if (pi.CanWrite)
                     {
-                        if (pi.CanWrite)
-                        {
-                            pi.SetValue(parentData, Data is RedDummy ? null : Data);
-                        }
-                        else
-                        {
-                            Parent.Data = parentData is IRedRef ? RedTypeManager.CreateRedType(parentData.RedType, Data) : throw new Exception();
-                        }
-                        Tab.Parent.SetIsDirty(true);
-                        Parent.NotifyChain("Data");
+                        pi.SetValue(parentData, Data is RedDummy ? null : Data);
                     }
+                    else
+                    {
+                        Parent.Data = parentData is IRedRef
+                            ? RedTypeManager.CreateRedType(parentData.RedType, Data)
+                            : throw new Exception();
+                    }
+
+                    Tab.Parent.SetIsDirty(true);
+                    Parent.NotifyChain("Data");
                 }
             }
+        }
 
+        Parent.CalculateDescriptor();
+
+        // For materials: Update display of other entry
+        if (Parent.Data is CMeshMaterialEntry meshMaterialEntry)
+        {
+            string[] keys =
+            {
+                "localMaterialBuffer.materials", "preloadLocalMaterialInstances", "externalMaterials",
+                "preloadExternalMaterials",
+            };
+
+            ushort idx = meshMaterialEntry.Index;
+
+            foreach (var key in keys)
+            {
+                var list = GetRootModel().GetModelFromPath(key);
+                if (list is not null && list.Properties.Count > idx)
+                {
+                    list.Properties[idx].CalculateDescriptor();
+                    list.Properties[idx].CalculateValue();
+                }
+            }
+        }
+        // if we were an external material instance without a descriptor because we haven't been unique, update all
+        else if (
+            Parent.Data is CResourceAsyncReference<IMaterial>
+            || Data is CResourceAsyncReference<IMaterial>
+        )
+        {
+            Parent.RecalculateProperties();
+            CalculateDescriptor();
             Parent.CalculateDescriptor();
+        }
+        else if (Data is CName && Parent.Data is IRedArray &&
+                 Parent.Parent is
+                     {
+                         ResolvedData: meshMeshAppearance
+                     } or
+                     {
+                         ResolvedData: redTagList
+                     } or
+                     {
+                         ResolvedData: entVisualTagsSchema
+                     })
 
-            // For materials: Update display of other entry
-            if (Parent.Data is CMeshMaterialEntry meshMaterialEntry)
-            {
-                string[] keys =
-                {
-                    "localMaterialBuffer.materials", "preloadLocalMaterialInstances", "externalMaterials",
-                    "preloadExternalMaterials",
-                };
-
-                ushort idx = meshMaterialEntry.Index;
-
-                foreach (var key in keys)
-                {
-                    var list = GetRootModel().GetModelFromPath(key);
-                    if (list is not null && list.Properties.Count > idx)
-                    {
-                        list.Properties[idx].CalculateDescriptor();
-                        list.Properties[idx].CalculateValue();
-                    }
-                }
-                
-            }
-            // if we were an external material instance without a descriptor because we haven't been unique, update all
-            else if (
-                Parent.Data is CResourceAsyncReference<IMaterial>
-                || Data is CResourceAsyncReference<IMaterial>
-            )
-            {
-                Parent.RecalculateProperties();
-                CalculateDescriptor();
-                Parent.CalculateDescriptor();
-            }
-            else if (Data is CName && Parent.Data is IRedArray &&
-                     Parent.Parent is { ResolvedData: meshMeshAppearance } grandparent)
-            {
-                grandparent.CalculateValue();
-            }
+        {
+            Parent.Parent?.CalculateValue();
+        }
 
 
-            if (Parent.IsValueExtrapolated)
-            {
-                Parent.CalculateValue();
-            }
+        if (Parent.IsValueExtrapolated)
+        {
+            Parent.CalculateValue();
         }
     }
 
@@ -1214,9 +1228,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
 
         }
-        if (Data is DataBuffer db2)
+        if (Data is DataBuffer { Data: null } db2)
         {
-            if (Name == "rawData" && db2.Data is null)
+            if (Parent?.Data is worldStreamingSector)
+            {
+                db2.Buffer = RedBuffer.CreateBuffer(0, new byte[] { 0 });
+                db2.Data = new worldNodeDataBuffer();
+            }
+
+            if (Name == "rawData")
             {
                 db2.Buffer = RedBuffer.CreateBuffer(0, new byte[] { 0 });
                 db2.Data = new CR2WList();
@@ -1863,7 +1883,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
         else if (ResolvedData is redTagList list)
         {
-            Value = $"[ {string.Join(", ", list.Tags.ToList().Select(t => t.GetResolvedText().NotNull()).ToArray())} ]";
+            Value = $"[ {string.Join(", ", list.Tags.ToList().Select(t => t.GetResolvedText() ?? "").ToArray())} ]";
             IsValueExtrapolated = true;
         }
         else if (NodeIdxInParent > -1 && Parent?.Name == "referenceTracks" &&
@@ -1920,7 +1940,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             var depotPath = rr.DepotPath;
             if (!_hashService.Contains(depotPath) && !ResourcePath.IsNullOrEmpty(depotPath))
             {
-                _hashService.AddCustom(depotPath.GetResolvedText().NotNull());
+                _hashService.AddCustom(depotPath.GetResolvedText() ?? "");
             }
 
             if (depotPath.IsResolvable)
@@ -1966,7 +1986,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         Descriptor = "";
 
-        if (Data is worldNodeData sst && Tab is RDTDataViewModel dvm && dvm.Chunks[0].Data is worldStreamingSector wss)
+        if (Data is worldNodeData sst && Tab is RDTDataViewModel dvm && dvm.Chunks[0].Data is worldStreamingSector wss && sst.NodeIndex < wss.Nodes.Count)
         {
             Descriptor = $"[{sst.NodeIndex}] {wss.Nodes[sst.NodeIndex].NotNull().Chunk.NotNull().DebugName}";
             return;
@@ -1974,7 +1994,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         if (Data is worldStreamingSectorDescriptor wssd)
         {
-            Descriptor = wssd.Data.DepotPath.GetResolvedText().NotNull()
+            Descriptor = (wssd.Data.DepotPath.GetResolvedText() ?? "")
                 .Replace("base\\worlds\\03_night_city\\_compiled\\default\\", "").Replace(".streamingsector", "");
             return;
         }
@@ -2095,8 +2115,17 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
             Descriptor = desc;
         }
-        // mesh: boneTransforms
-        else if (NodeIdxInParent > -1 && Parent?.Name == "boneTransforms" &&
+        else if (ResolvedData is inkTextureSlot texturesSlot)
+        {
+            var desc = texturesSlot.Texture.DepotPath.GetResolvedText();
+            if (!string.IsNullOrEmpty(desc))
+            {
+                Descriptor = desc;
+            }
+        }
+        // mesh: boneTransforms (in different coordinate spaces)
+        else if (NodeIdxInParent > -1 &&
+                 (Parent?.Name == "boneTransforms" || Parent?.Name == "aPoseLS" || Parent?.Name == "aPoseMS") &&
                  GetRootModel().GetModelFromPath("boneNames")?.ResolvedData is CArray<CName> boneNames &&
                  boneNames.Count > NodeIdxInParent)
         {
@@ -2424,7 +2453,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     }
                 }
 
-                if (Data is worldNodeData sst && Tab is RDTDataViewModel dvm && dvm.Chunks[0].Data is worldStreamingSector wss)
+                if (Data is worldNodeData sst && Tab is { } dvm && dvm.Chunks[0].Data is worldStreamingSector wss && sst.NodeIndex < wss.Nodes.Count)
                 {
                     try
                     {
@@ -3778,7 +3807,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                                 {
                                     name = line.name + "_" + i1,
                                     app = line.app == "" ? "default" : line.app,
-                                    template_path = mesh.Mesh.DepotPath.GetResolvedText().NotNull(),
+                                    template_path = mesh.Mesh.DepotPath.GetResolvedText() ?? "",
                                     scale = line.scale
                                 };
 
