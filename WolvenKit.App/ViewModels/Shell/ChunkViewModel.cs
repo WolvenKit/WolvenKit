@@ -1228,9 +1228,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
 
         }
-        if (Data is DataBuffer db2)
+        if (Data is DataBuffer { Data: null } db2)
         {
-            if (Name == "rawData" && db2.Data is null)
+            if (Parent?.Data is worldStreamingSector)
+            {
+                db2.Buffer = RedBuffer.CreateBuffer(0, new byte[] { 0 });
+                db2.Data = new worldNodeDataBuffer();
+            }
+
+            if (Name == "rawData")
             {
                 db2.Buffer = RedBuffer.CreateBuffer(0, new byte[] { 0 });
                 db2.Data = new CR2WList();
@@ -1980,7 +1986,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         Descriptor = "";
 
-        if (Data is worldNodeData sst && Tab is RDTDataViewModel dvm && dvm.Chunks[0].Data is worldStreamingSector wss)
+        if (Data is worldNodeData sst && Tab is RDTDataViewModel dvm && dvm.Chunks[0].Data is worldStreamingSector wss && sst.NodeIndex < wss.Nodes.Count)
         {
             Descriptor = $"[{sst.NodeIndex}] {wss.Nodes[sst.NodeIndex].NotNull().Chunk.NotNull().DebugName}";
             return;
@@ -2439,7 +2445,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     }
                 }
 
-                if (Data is worldNodeData sst && Tab is RDTDataViewModel dvm && dvm.Chunks[0].Data is worldStreamingSector wss)
+                if (Data is worldNodeData sst && Tab is { } dvm && dvm.Chunks[0].Data is worldStreamingSector wss && sst.NodeIndex < wss.Nodes.Count)
                 {
                     try
                     {
