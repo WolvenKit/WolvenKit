@@ -32,6 +32,11 @@ namespace WolvenKit.Views.Documents
             {
                 graphViewModel.Load();
             }
+
+            if (e.NewSelectedItem.DataContext is RDTGraphViewModel2 graphViewModel2)
+            {
+                graphViewModel2.Load();
+            }
         }
     }
 }
