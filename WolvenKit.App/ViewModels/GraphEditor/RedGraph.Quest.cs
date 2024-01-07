@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DynamicData;
 using WolvenKit.App.Factories;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
-using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Types;
 
@@ -338,9 +336,9 @@ public partial class RedGraph
         Connections.Remove(questConnection);
     }
 
-    private void RecalculateQuestSockets(BaseQuestViewModel questNode)
+    private void RecalculateQuestSockets(IGraphProvider nodeViewModel)
     {
-        if (questNode is not questPhaseNodeDefinitionWrapper phaseNode)
+        if (nodeViewModel is not BaseQuestViewModel phaseNode)
         {
             return;
         }
@@ -409,7 +407,7 @@ public partial class RedGraph
             }
         }
 
-        phaseNode.RecalculateSockets();
+        nodeViewModel.RecalculateSockets();
 
         foreach (var inputConnectorViewModel in phaseNode.Input)
         {

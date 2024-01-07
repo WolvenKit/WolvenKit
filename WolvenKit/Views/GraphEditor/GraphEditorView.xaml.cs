@@ -1,21 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using Nodify;
 using WolvenKit.App.ViewModels.GraphEditor;
@@ -178,9 +168,9 @@ public partial class GraphEditorView : UserControl
             node.ContextMenu.Items.Add(new Separator());
         }
 
-        if (node.DataContext is questPhaseNodeDefinitionWrapper questPhase)
+        if (node.DataContext is IGraphProvider graphProvider)
         {
-            node.ContextMenu.Items.Add(CreateMenuItem("Recalculate sockets", () => Source.RecalculateSockets(questPhase)));
+            node.ContextMenu.Items.Add(CreateMenuItem("Recalculate sockets", () => Source.RecalculateSockets(graphProvider)));
             node.ContextMenu.Items.Add(new Separator());
         }
 

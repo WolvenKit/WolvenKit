@@ -1,23 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using ReactiveUI;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 using WolvenKit.App.ViewModels.GraphEditor;
-using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 using WolvenKit.Views.GraphEditor;
+using Splat;
+using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Views.Documents;
 /// <summary>
@@ -51,8 +41,15 @@ public partial class RDTGraphView2
     {
         if (Editor.SelectedNode is IGraphProvider provider)
         {
-            ViewModel!.History.Add(provider.Graph);
-            Editor.SetCurrentValue(GraphEditorView.SourceProperty, provider.Graph);
+            var subGraph = provider.Graph;
+            if (subGraph == null)
+            {
+                Locator.Current.GetService<ILoggerService>().Error("SubGraph is not defined!");
+                return;
+            }
+
+            ViewModel!.History.Add(subGraph);
+            Editor.SetCurrentValue(GraphEditorView.SourceProperty, subGraph);
 
             BuildBreadcrumb();
         }

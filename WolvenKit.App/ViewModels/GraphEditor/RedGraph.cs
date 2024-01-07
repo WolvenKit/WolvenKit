@@ -184,11 +184,11 @@ public partial class RedGraph : IDisposable
         }
     }
 
-    public void RecalculateSockets(NodeViewModel nodeViewModel)
+    public void RecalculateSockets(IGraphProvider nodeViewModel)
     {
-        if (nodeViewModel is BaseQuestViewModel questNode)
+        if (nodeViewModel is BaseQuestViewModel)
         {
-            RecalculateQuestSockets(questNode);
+            RecalculateQuestSockets(nodeViewModel);
         }
     }
 

@@ -1,12 +1,8 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using WolvenKit.App.Factories;
 using WolvenKit.Common;
-using WolvenKit.RED4.Archive.CR2W;
-using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
-using EFileReadErrorCodes = WolvenKit.RED4.Archive.IO.EFileReadErrorCodes;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 
@@ -17,7 +13,7 @@ public class questPhaseNodeDefinitionWrapper : questEmbeddedGraphNodeDefinitionW
 
     private RedGraph? _graph = null;
 
-    public RedGraph Graph
+    public RedGraph? Graph
     {
         get
         {
@@ -25,7 +21,7 @@ public class questPhaseNodeDefinitionWrapper : questEmbeddedGraphNodeDefinitionW
             {
                 GenerateSubGraph();
             }
-            return _graph!;
+            return _graph;
         }
     }
 
@@ -64,10 +60,6 @@ public class questPhaseNodeDefinitionWrapper : questEmbeddedGraphNodeDefinitionW
             }
 
             _graph = RedGraph.GenerateQuestGraph(fileName!, res.Graph.Chunk, _nodeWrapperFactory);
-        }
-        else
-        {
-            throw new Exception();
         }
     }
 

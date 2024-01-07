@@ -1,11 +1,8 @@
 ﻿using System;
 using System.IO;
 using WolvenKit.App.Controllers;
-using WolvenKit.App.Factories;
 using WolvenKit.Common;
-using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
-using EFileReadErrorCodes = WolvenKit.RED4.Archive.IO.EFileReadErrorCodes;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 
@@ -50,7 +47,7 @@ public class questSceneNodeDefinitionWrapper : questSignalStoppingNodeDefinition
 
     private void GenerateSubGraph()
     {
-        if (_castedData.SceneFile.DepotPath != ResourcePath.Empty && _castedData.SceneFile.DepotPath.IsResolvable)
+        if (_castedData.SceneFile.DepotPath != ResourcePath.Empty)
         {
             var cr2w = _archiveManager.GetCR2WFile(_castedData.SceneFile.DepotPath);
 
@@ -67,10 +64,57 @@ public class questSceneNodeDefinitionWrapper : questSignalStoppingNodeDefinition
 
             _graph = RedGraph.GenerateSceneGraph(fileName!, res);
         }
-        else
+    }
+
+    public void RecalculateSockets()
+    {
+        _castedData.Sockets.Clear();
+        _castedData.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition
         {
-            throw new Exception();
+            Name = "CutDestination",
+            Type = Enums.questSocketType.CutDestination
+        }));
+
+        if (_castedData.SceneFile.DepotPath != ResourcePath.Empty)
+        {
+            var cr2w = _archiveManager.GetCR2WFile(_castedData.SceneFile.DepotPath);
+
+            if (cr2w!.RootChunk is not scnSceneResource res)
+            {
+                throw new Exception();
+            }
+
+            foreach (var entryPoint in res.EntryPoints)
+            {
+                _castedData.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition
+                {
+                    Name = entryPoint.Name,
+                    Type = Enums.questSocketType.Input
+                }));
+            }
+
+            foreach (var exitPoint in res.ExitPoints)
+            {
+                _castedData.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition
+                {
+                    Name = exitPoint.Name,
+                    Type = Enums.questSocketType.Output
+                }));
+            }
         }
+
+        _castedData.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition
+        {
+            Name = "Default INT",
+            Type = Enums.questSocketType.Output
+        }));
+        _castedData.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition
+        {
+            Name = "Default RET",
+            Type = Enums.questSocketType.Output
+        }));
+
+        GenerateSockets();
     }
 
     internal override void CreateDefaultSockets()
