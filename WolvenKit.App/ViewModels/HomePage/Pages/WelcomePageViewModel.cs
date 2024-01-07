@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -257,7 +258,7 @@ public partial class WelcomePageViewModel : PageViewModel
             FancyPinnedProjects.Clear();
             FancyPinnedProjects.AddRange(GetSortedItems(true, SelectedPinnedOrder, PinnedFilter));
 
-            ShowPinned = FancyPinnedProjects.Count > 0;
+            ShowPinned = _recentlyUsedItems.Count(x => x.IsPinned) > 0;
         });
 
     private void RefreshRecentProjects() =>
