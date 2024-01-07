@@ -1,11 +1,10 @@
-# Pull request template
+# $PULL_REQUEST_TITLE
 
-<PULL REQUEST TITLE>
+**Implemented:**
+- your_feature_1
 
-Implemented:
-- <Features implemented>
+**Fixed:**
+- your_bugfix_1
 
-Fixed:
-- <Fixes>
-
-<Additional notes>
+**Additional notes:**
+Wolvenkit is awesome :)
