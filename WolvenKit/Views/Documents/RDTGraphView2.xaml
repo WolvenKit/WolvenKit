@@ -26,6 +26,7 @@
         <graphEditor:GraphEditorView
             x:Name="Editor"
             Grid.Row="1"
-            Source="{Binding MainGraph}" />
+            Source="{Binding MainGraph}"
+            NodeDoubleClick="Editor_OnNodeDoubleClick"/>
     </Grid>
 </reactiveUi:ReactiveUserControl>

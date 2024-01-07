@@ -16,6 +16,7 @@ using ReactiveUI;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 using WolvenKit.App.ViewModels.GraphEditor;
 using Syncfusion.Windows.PropertyGrid;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 using WolvenKit.Views.GraphEditor;
 
 namespace WolvenKit.Views.Documents;
@@ -36,27 +37,45 @@ public partial class RDTGraphView2
         });
     }
 
+    private void Editor_OnNodeDoubleClick(object sender, RoutedEventArgs e) => HandleSubGraph();
+
     private void OnKeyDown(object sender, KeyEventArgs e)
     {
-        if (e.Key == Key.Tab && Editor.SelectedNode != null)
+        if (e.Key == Key.Tab)
         {
-            if (Editor.SelectedNode is IGraphProvider provider)
+            HandleSubGraph();
+        }
+    }
+
+    private void HandleSubGraph()
+    {
+        if (Editor.SelectedNode is IGraphProvider provider)
+        {
+            ViewModel!.History.Add(provider.Graph);
+            Editor.SetCurrentValue(GraphEditorView.SourceProperty, provider.Graph);
+
+            BuildBreadcrumb();
+        }
+
+        if (Editor.SelectedNode is questInputNodeDefinitionWrapper or questOutputNodeDefinitionWrapper)
+        {
+            if (ViewModel!.History.Count > 1)
             {
-                ViewModel!.History.Add(provider.Graph);
-                Editor.SetCurrentValue(GraphEditorView.SourceProperty, provider.Graph);
+                ViewModel.History.Remove(ViewModel.History[^1]);
+                Editor.SetCurrentValue(GraphEditorView.SourceProperty, ViewModel.History[^1]);
 
                 BuildBreadcrumb();
             }
+        }
 
-            if (Editor.SelectedNode is questInputNodeDefinitionWrapper input)
+        if (Editor.SelectedNode is scnStartNodeWrapper or scnEndNodeWrapper)
+        {
+            if (ViewModel!.History.Count > 1)
             {
-                if (ViewModel!.History.Count > 1)
-                {
-                    ViewModel.History.Remove(ViewModel.History[^1]);
-                    Editor.SetCurrentValue(GraphEditorView.SourceProperty, ViewModel.History[^1]);
+                ViewModel.History.Remove(ViewModel.History[^1]);
+                Editor.SetCurrentValue(GraphEditorView.SourceProperty, ViewModel.History[^1]);
 
-                    BuildBreadcrumb();
-                }
+                BuildBreadcrumb();
             }
         }
     }

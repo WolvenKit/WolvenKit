@@ -53,6 +53,14 @@ public partial class GraphEditorView : UserControl
         set => SetValue(SourceProperty, value);
     }
 
+    public static readonly RoutedEvent NodeDoubleClickEvent = EventManager.RegisterRoutedEvent(nameof(NodeDoubleClick), RoutingStrategy.Direct, typeof(RoutedEventHandler), typeof(GraphEditorView));
+
+    public event RoutedEventHandler NodeDoubleClick
+    {
+        add => AddHandler(NodeDoubleClickEvent, value);
+        remove => RemoveHandler(NodeDoubleClickEvent, value);
+    }
+
     private NodeViewModel _selectedNode;
 
     public NodeViewModel SelectedNode
@@ -216,4 +224,6 @@ public partial class GraphEditorView : UserControl
     }
 
     #endregion
+
+    private void Node_OnMouseDoubleClick(object sender, MouseButtonEventArgs e) => RaiseEvent(new RoutedEventArgs(NodeDoubleClickEvent));
 }

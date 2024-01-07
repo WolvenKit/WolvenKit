@@ -87,6 +87,7 @@
                         Header="{Binding}"
                         HeaderTemplate="{StaticResource DetailedHeaderTemplate}"
                         Input="{Binding Input}"
+                        MouseDoubleClick="Node_OnMouseDoubleClick"
                         Output="{Binding Output}">
                         <nodify:Node.ContextMenu>
                             <ContextMenu />
