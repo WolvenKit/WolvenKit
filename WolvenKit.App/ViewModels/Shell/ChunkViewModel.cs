@@ -2055,10 +2055,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         else if (ResolvedData is questNodeDefinition qnd)
         {
             Descriptor = qnd.Id.ToString();
+            return;
         }
         else if (ResolvedData is scnSceneGraphNode sgn)
         {
             Descriptor = sgn.NodeId.Id.ToString();
+            return;
         }
         else if (Data is TweakDBID tdb)
         {
