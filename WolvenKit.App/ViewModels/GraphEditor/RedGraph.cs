@@ -184,6 +184,14 @@ public partial class RedGraph : IDisposable
         }
     }
 
+    public void RecalculateSockets(NodeViewModel nodeViewModel)
+    {
+        if (nodeViewModel is BaseQuestViewModel questNode)
+        {
+            RecalculateQuestSockets(questNode);
+        }
+    }
+
     public void ArrangeNodes(double xOffset = 0, double yOffset = 0)
     {
         var graph = new GeometryGraph();

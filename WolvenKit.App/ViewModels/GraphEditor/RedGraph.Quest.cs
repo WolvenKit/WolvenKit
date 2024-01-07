@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DynamicData;
 using WolvenKit.App.Factories;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
@@ -298,6 +299,20 @@ public partial class RedGraph
         return nodes;
     }
 
+    private void AddQuestConnection(QuestOutputConnectorViewModel source, QuestInputConnectorViewModel destination)
+    {
+        var connection = new graphGraphConnectionDefinition()
+        {
+            Source = new CWeakHandle<graphGraphSocketDefinition>(source.Data),
+            Destination = new CWeakHandle<graphGraphSocketDefinition>(destination.Data)
+        };
+
+        source.Data.Connections.Add(new CHandle<graphGraphConnectionDefinition>(connection));
+        destination.Data.Connections.Add(new CHandle<graphGraphConnectionDefinition>(connection));
+
+        Connections.Add(new QuestConnectionViewModel(source, destination, connection));
+    }
+
     private void RemoveQuestConnection(QuestConnectionViewModel questConnection)
     {
         var questSource = (QuestOutputConnectorViewModel)questConnection.Source;
@@ -321,6 +336,106 @@ public partial class RedGraph
             }
         }
         Connections.Remove(questConnection);
+    }
+
+    private void RecalculateQuestSockets(BaseQuestViewModel questNode)
+    {
+        if (questNode is not questPhaseNodeDefinitionWrapper phaseNode)
+        {
+            return;
+        }
+
+        var inputCache = new Dictionary<string, List<QuestOutputConnectorViewModel>>();
+        foreach (var inputConnectorViewModel in phaseNode.Input)
+        {
+            var questInputConnectorViewModel = (QuestInputConnectorViewModel)inputConnectorViewModel;
+
+            if (questInputConnectorViewModel.Data.Connections.Count > 0)
+            {
+                inputCache.Add(questInputConnectorViewModel.Name, new List<QuestOutputConnectorViewModel>());
+                foreach (var connection in questInputConnectorViewModel.Data.Connections)
+                {
+                    var source = connection.Chunk!.Source.Chunk!;
+
+                    source.Connections.Remove(connection);
+
+                    for (var i = Connections.Count - 1; i >= 0; i--)
+                    {
+                        var questOutputConnectorViewModel = (QuestOutputConnectorViewModel)Connections[i].Source;
+
+                        if (ReferenceEquals(questOutputConnectorViewModel.Data, source) &&
+                            ReferenceEquals(Connections[i].Target, questInputConnectorViewModel))
+                        {
+                            questOutputConnectorViewModel.IsConnected = questOutputConnectorViewModel.Data.Connections.Count > 0;
+
+                            inputCache[questInputConnectorViewModel.Name].Add(questOutputConnectorViewModel);
+                            Connections.RemoveAt(i);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        var outputCache = new Dictionary<string, List<QuestInputConnectorViewModel>>();
+        foreach (var outputConnectorViewModel in phaseNode.Output)
+        {
+            var questOutputConnectorViewModel = (QuestOutputConnectorViewModel)outputConnectorViewModel;
+
+            if (questOutputConnectorViewModel.Data.Connections.Count > 0)
+            {
+                outputCache.Add(questOutputConnectorViewModel.Name, new List<QuestInputConnectorViewModel>());
+                foreach (var connection in questOutputConnectorViewModel.Data.Connections)
+                {
+                    var destination = connection.Chunk!.Destination.Chunk!;
+
+                    destination.Connections.Remove(connection);
+
+                    for (var i = Connections.Count - 1; i >= 0; i--)
+                    {
+                        var questInputConnectorViewModel = (QuestInputConnectorViewModel)Connections[i].Target;
+
+                        if (ReferenceEquals(Connections[i].Source, questOutputConnectorViewModel) && 
+                            ReferenceEquals(questInputConnectorViewModel.Data, destination))
+                        {
+                            questInputConnectorViewModel.IsConnected = questInputConnectorViewModel.Data.Connections.Count > 0;
+
+                            outputCache[questOutputConnectorViewModel.Name].Add(questInputConnectorViewModel);
+                            Connections.RemoveAt(i);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        phaseNode.RecalculateSockets();
+
+        foreach (var inputConnectorViewModel in phaseNode.Input)
+        {
+            var questInputConnectorViewModel = (QuestInputConnectorViewModel)inputConnectorViewModel;
+
+            if (inputCache.TryGetValue(questInputConnectorViewModel.Name, out var sockets))
+            {
+                foreach (var questOutputConnectorViewModel in sockets)
+                {
+                    AddQuestConnection(questOutputConnectorViewModel, questInputConnectorViewModel);
+                }
+            }
+        }
+
+        foreach (var outputConnectorViewModel in phaseNode.Output)
+        {
+            var questOutputConnectorViewModel = (QuestOutputConnectorViewModel)outputConnectorViewModel;
+
+            if (outputCache.TryGetValue(questOutputConnectorViewModel.Name, out var sockets))
+            {
+                foreach (var questInputConnectorViewModel in sockets)
+                {
+                    AddQuestConnection(questOutputConnectorViewModel, questInputConnectorViewModel);
+                }
+            }
+        }
     }
 
     public static RedGraph GenerateQuestGraph(string title, graphGraphDefinition questGraph, INodeWrapperFactory nodeWrapperFactory)

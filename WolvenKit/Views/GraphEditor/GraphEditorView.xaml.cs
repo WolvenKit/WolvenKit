@@ -172,7 +172,7 @@ public partial class GraphEditorView : UserControl
 
         if (node.DataContext is questPhaseNodeDefinitionWrapper questPhase)
         {
-            node.ContextMenu.Items.Add(CreateMenuItem("Recalculate sockets", () => questPhase.RecalculateSockets()));
+            node.ContextMenu.Items.Add(CreateMenuItem("Recalculate sockets", () => Source.RecalculateSockets(questPhase)));
             node.ContextMenu.Items.Add(new Separator());
         }
 
