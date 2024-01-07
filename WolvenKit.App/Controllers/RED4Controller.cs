@@ -17,12 +17,10 @@ using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
-using WolvenKit.Core.Compression;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Helpers;
-using WolvenKit.Modkit.Exceptions;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 
@@ -192,11 +190,7 @@ public class RED4Controller : ObservableObject, IGameController
         var modfiles = Directory.GetFiles(_projectManager.ActiveProject.ModDirectory, "*", SearchOption.AllDirectories);
         if (modfiles.Any())
         {
-            try
-            {
-                _modTools.Pack( new DirectoryInfo(_projectManager.ActiveProject.ModDirectory), new DirectoryInfo(hotdirectory), _projectManager.ActiveProject.ModName);
-            }
-            catch (PackException)
+            if (!_modTools.Pack(new DirectoryInfo(_projectManager.ActiveProject.ModDirectory), new DirectoryInfo(hotdirectory), _projectManager.ActiveProject.ModName))
             {
                 return false;
             }
@@ -514,20 +508,8 @@ public class RED4Controller : ObservableObject, IGameController
         }
     }
 
-    private bool PackArchives(Cp77Project cp77Proj, LaunchProfile options)
-    {
-        try
-        {
-            _modTools.Pack(new DirectoryInfo(cp77Proj.ModDirectory), new DirectoryInfo(cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)), cp77Proj.ModName);
-        }
-        catch (PackException ex)
-        {
-            _loggerService.Error(ex);
-            return false;
-        }
-
-        return true;
-    }
+    private bool PackArchives(Cp77Project cp77Proj, LaunchProfile options) => 
+        _modTools.Pack(new DirectoryInfo(cp77Proj.ModDirectory), new DirectoryInfo(cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)), cp77Proj.ModName);
 
     private static bool PackResources(Cp77Project cp77Proj, IEnumerable<string> files)
     {

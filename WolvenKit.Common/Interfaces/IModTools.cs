@@ -11,7 +11,7 @@ namespace WolvenKit.Common.Interfaces
 {
     public interface IModTools
     {
-        public Archive Pack(DirectoryInfo infolder, DirectoryInfo outpath, string? modname = null);
+        public bool Pack(DirectoryInfo infolder, DirectoryInfo outpath, string? modname = null);
 
         public bool ConvertXbmToDdsStream(Stream redInFile, Stream outstream, bool flipV, out DXGI_FORMAT texformat, out DXGI_FORMAT decompressedFormat);
 

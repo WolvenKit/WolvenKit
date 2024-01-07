@@ -1,4 +1,5 @@
 using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
@@ -51,17 +52,12 @@ public class ArchiveWriter
 
     private record FileInfoEntry(string RelPath, FileInfo FileInfo);
 
-    public Archive? WriteArchive(DirectoryInfo infolder, DirectoryInfo outpath, string? modname = null)
+    public bool WriteArchive(DirectoryInfo infolder, Stream outStream)
     {
         infolder = new DirectoryInfo(Path.GetFullPath(infolder.FullName).TrimEnd('\\'));
         if (!infolder.Exists)
         {
-            return null;
-        }
-
-        if (!outpath.Exists)
-        {
-            return null;
+            return false;
         }
 
         if (!CompressionSettings.Get().UseOodle)
@@ -136,18 +132,11 @@ public class ArchiveWriter
         if (duplicateFound)
         {
             _loggerService.Error($"Duplicated files found. Aborting");
-            return null;
+            return false;
         }
 
-        var outfile = Path.Combine(outpath.FullName, $"{infolder.Name}.archive");
-        if (modname != null)
-        {
-            outfile = Path.Combine(outpath.FullName, $"{modname}.archive");
-        }
-
-        var ar = new Archive(outfile);
-        using var fs = new FileStream(outfile, FileMode.Create);
-        using var bw = new BinaryWriter(fs);
+        var ar = new Archive(string.Empty);
+        using var bw = new BinaryWriter(outStream, Encoding.UTF8, true);
 
         #region write header
 
@@ -182,14 +171,14 @@ public class ArchiveWriter
             if (s_uncompressedFiles.Contains(fileInfo.Extension.ToLower()) && fileInfo.Length > uint.MaxValue)
             {
                 _loggerService.Error($"{fileInfo.FullName} is too large. Maximum size for uncompressed files is {uint.MaxValue} bytes.");
-                return null;
+                return false;
             }
 
             // TODO: This is due to max byte[] size (MS also uses byte[]) is int.MaxValue - 56 and we need it for compression
             if (!s_uncompressedFiles.Contains(fileInfo.Extension.ToLower()) && fileInfo.Length > int.MaxValue - 57)
             {
                 _loggerService.Error($"{fileInfo.FullName} is too large. Maximum size for compressed files is {int.MaxValue - 57} bytes.");
-                return null;
+                return false;
             }
 
             using var fileStream = new FileStream(fileInfo.FullName, FileMode.Open);
@@ -213,7 +202,7 @@ public class ArchiveWriter
             catch (Exception e)
             {
                 _loggerService.Error($"Could not read \"{fileInfo.FullName}\".");
-                return null;
+                return false;
             }
 
             if (readStatus == EFileReadErrorCodes.NoError)
@@ -278,7 +267,7 @@ public class ArchiveWriter
 
                 if (s_uncompressedFiles.Contains(fileInfo.Extension.ToLower()))
                 {
-                    fileStream.CopyTo(fs);
+                    fileStream.CopyTo(outStream);
                     var size = (uint)fileStream.Length;
 
                     ar.Index.FileSegments.Add(new FileSegment(offset, size, size));
@@ -343,7 +332,9 @@ public class ArchiveWriter
         WriteHeader(bw, ar.Header);
         bw.Write(customDataLength);
 
-        return ar;
+        bw.Flush();
+
+        return true;
     }
 
     private void WriteDependency(BinaryWriter bw, Dependency dependency) => bw.Write(dependency.Hash);
