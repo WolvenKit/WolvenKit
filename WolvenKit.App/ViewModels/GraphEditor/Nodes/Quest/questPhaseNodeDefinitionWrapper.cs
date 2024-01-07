@@ -66,11 +66,6 @@ public class questPhaseNodeDefinitionWrapper : questEmbeddedGraphNodeDefinitionW
     public void RecalculateSockets()
     {
         _castedData.Sockets.Clear();
-        _castedData.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition
-        {
-            Name = "CutDestination",
-            Type = Enums.questSocketType.CutDestination
-        }));
 
         if (_castedData.PhaseResource.DepotPath != ResourcePath.Empty)
         {
@@ -88,6 +83,12 @@ public class questPhaseNodeDefinitionWrapper : questEmbeddedGraphNodeDefinitionW
         {
             InternalRecalculateSockets(phaseGraph);
         }
+
+        _castedData.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition
+        {
+            Name = "CutDestination",
+            Type = Enums.questSocketType.CutDestination
+        }));
 
         GenerateSockets();
 
