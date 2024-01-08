@@ -113,6 +113,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab9d6232b408dd9d78355971a8f1fb05e"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classScriptFunctions.html#ab9d6232b408dd9d78355971a8f1fb05e">FileExistsInArchive</a> (ulong hash)</td></tr>
 <tr class="memdesc:ab9d6232b408dd9d78355971a8f1fb05e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if file exists in the game archives  <a href="classScriptFunctions.html#ab9d6232b408dd9d78355971a8f1fb05e">More...</a><br /></td></tr>
 <tr class="separator:ab9d6232b408dd9d78355971a8f1fb05e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53283f2b91701a154861e8dd56cb299f"><td class="memItemLeft" align="right" valign="top">virtual string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classScriptFunctions.html#a53283f2b91701a154861e8dd56cb299f">YamlToJson</a> (string yamlText)</td></tr>
+<tr class="memdesc:a53283f2b91701a154861e8dd56cb299f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a YAML string to a JSON string  <a href="classScriptFunctions.html#a53283f2b91701a154861e8dd56cb299f">More...</a><br /></td></tr>
+<tr class="separator:a53283f2b91701a154861e8dd56cb299f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01e3161254f7435d9bb1d9888f844c33"><td class="memItemLeft" align="right" valign="top">virtual string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classScriptFunctions.html#a01e3161254f7435d9bb1d9888f844c33">JsonToYaml</a> (string jsonText)</td></tr>
+<tr class="memdesc:a01e3161254f7435d9bb1d9888f844c33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a JSON string to a YAML string  <a href="classScriptFunctions.html#a01e3161254f7435d9bb1d9888f844c33">More...</a><br /></td></tr>
+<tr class="separator:a01e3161254f7435d9bb1d9888f844c33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>TODO </p>
@@ -496,6 +502,76 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
+<a id="a01e3161254f7435d9bb1d9888f844c33"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a01e3161254f7435d9bb1d9888f844c33">&#9670;&nbsp;</a></span>JsonToYaml()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual string ScriptFunctions.JsonToYaml </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>jsonText</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Converts a JSON string to a YAML string </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">jsonText</td><td>The JSON string to convert</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The converted YAML string</dd></dl>
+
+</div>
+</div>
+<a id="a53283f2b91701a154861e8dd56cb299f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a53283f2b91701a154861e8dd56cb299f">&#9670;&nbsp;</a></span>YamlToJson()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual string ScriptFunctions.YamlToJson </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>yamlText</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Converts a YAML string to a JSON string </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">yamlText</td><td>The YAML string to convert</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The converted JSON string</dd></dl>
 
 </div>
 </div>

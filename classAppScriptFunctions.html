@@ -98,6 +98,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:afcdedc12beea6d8bca76f2cce6e431f3"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAppScriptFunctions.html#afcdedc12beea6d8bca76f2cce6e431f3">SaveToResources</a> (string path, string content)</td></tr>
 <tr class="memdesc:afcdedc12beea6d8bca76f2cce6e431f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Save the specified text to the specified path in the resources folder  <a href="classAppScriptFunctions.html#afcdedc12beea6d8bca76f2cce6e431f3">More...</a><br /></td></tr>
 <tr class="separator:afcdedc12beea6d8bca76f2cce6e431f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa49b8e34a85ca7490386055d2a3d593d"><td class="memItemLeft" align="right" valign="top">virtual ? string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAppScriptFunctions.html#aa49b8e34a85ca7490386055d2a3d593d">LoadFromResources</a> (string path)</td></tr>
+<tr class="memdesc:aa49b8e34a85ca7490386055d2a3d593d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the content of a text file from resources  <a href="classAppScriptFunctions.html#aa49b8e34a85ca7490386055d2a3d593d">More...</a><br /></td></tr>
+<tr class="separator:aa49b8e34a85ca7490386055d2a3d593d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80d02289d49fcddb43a6ac26c392523b"><td class="memItemLeft" align="right" valign="top">virtual ? object&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAppScriptFunctions.html#a80d02289d49fcddb43a6ac26c392523b">LoadGameFileFromProject</a> (string path, string type)</td></tr>
 <tr class="memdesc:a80d02289d49fcddb43a6ac26c392523b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads the specified game file from the project files rather than game archives.  <a href="classAppScriptFunctions.html#a80d02289d49fcddb43a6ac26c392523b">More...</a><br /></td></tr>
 <tr class="separator:a80d02289d49fcddb43a6ac26c392523b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -186,6 +189,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab9d6232b408dd9d78355971a8f1fb05e inherit pub_methods_classScriptFunctions"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classScriptFunctions.html#ab9d6232b408dd9d78355971a8f1fb05e">FileExistsInArchive</a> (ulong hash)</td></tr>
 <tr class="memdesc:ab9d6232b408dd9d78355971a8f1fb05e inherit pub_methods_classScriptFunctions"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if file exists in the game archives  <a href="classScriptFunctions.html#ab9d6232b408dd9d78355971a8f1fb05e">More...</a><br /></td></tr>
 <tr class="separator:ab9d6232b408dd9d78355971a8f1fb05e inherit pub_methods_classScriptFunctions"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53283f2b91701a154861e8dd56cb299f inherit pub_methods_classScriptFunctions"><td class="memItemLeft" align="right" valign="top">virtual string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classScriptFunctions.html#a53283f2b91701a154861e8dd56cb299f">YamlToJson</a> (string yamlText)</td></tr>
+<tr class="memdesc:a53283f2b91701a154861e8dd56cb299f inherit pub_methods_classScriptFunctions"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a YAML string to a JSON string  <a href="classScriptFunctions.html#a53283f2b91701a154861e8dd56cb299f">More...</a><br /></td></tr>
+<tr class="separator:a53283f2b91701a154861e8dd56cb299f inherit pub_methods_classScriptFunctions"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01e3161254f7435d9bb1d9888f844c33 inherit pub_methods_classScriptFunctions"><td class="memItemLeft" align="right" valign="top">virtual string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classScriptFunctions.html#a01e3161254f7435d9bb1d9888f844c33">JsonToYaml</a> (string jsonText)</td></tr>
+<tr class="memdesc:a01e3161254f7435d9bb1d9888f844c33 inherit pub_methods_classScriptFunctions"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a JSON string to a YAML string  <a href="classScriptFunctions.html#a01e3161254f7435d9bb1d9888f844c33">More...</a><br /></td></tr>
+<tr class="separator:a01e3161254f7435d9bb1d9888f844c33 inherit pub_methods_classScriptFunctions"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>TODO </p>
@@ -718,6 +727,41 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
+<a id="aa49b8e34a85ca7490386055d2a3d593d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa49b8e34a85ca7490386055d2a3d593d">&#9670;&nbsp;</a></span>LoadFromResources()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual ? string AppScriptFunctions.LoadFromResources </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Loads the content of a text file from resources </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">path</td><td>The relative path of the text file</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The content or null</dd></dl>
 
 </div>
 </div>

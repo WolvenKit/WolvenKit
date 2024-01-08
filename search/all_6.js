@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['loadgamefilefromproject_21',['LoadGameFileFromProject',['../classAppScriptFunctions.html#a80d02289d49fcddb43a6ac26c392523b',1,'AppScriptFunctions']]],
-  ['loadrawjsonfromproject_22',['LoadRawJsonFromProject',['../classAppScriptFunctions.html#a2c8c114690df9c9cbe6564ca44be0956',1,'AppScriptFunctions']]]
+  ['loadfromresources_22',['LoadFromResources',['../classAppScriptFunctions.html#aa49b8e34a85ca7490386055d2a3d593d',1,'AppScriptFunctions']]],
+  ['loadgamefilefromproject_23',['LoadGameFileFromProject',['../classAppScriptFunctions.html#a80d02289d49fcddb43a6ac26c392523b',1,'AppScriptFunctions']]],
+  ['loadrawjsonfromproject_24',['LoadRawJsonFromProject',['../classAppScriptFunctions.html#a2c8c114690df9c9cbe6564ca44be0956',1,'AppScriptFunctions']]]
 ];
