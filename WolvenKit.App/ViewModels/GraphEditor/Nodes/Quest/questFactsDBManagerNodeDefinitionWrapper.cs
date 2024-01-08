@@ -27,6 +27,12 @@ public class questFactsDBManagerNodeDefinitionWrapper : questDisableableNodeDefi
 
     public questFactsDBManagerNodeDefinitionWrapper(questFactsDBManagerNodeDefinition graphGraphNodeDefinition) : base(graphGraphNodeDefinition)
     {
+        if (_castedData.Type.Chunk is questSetVar_NodeType setVar)
+        {
+            Title += " - Set";
+            Details["Name"] = setVar.FactName;
+            Details["Value"] = setVar.Value.ToString();
+        }
     }
 
     internal override void CreateDefaultSockets()

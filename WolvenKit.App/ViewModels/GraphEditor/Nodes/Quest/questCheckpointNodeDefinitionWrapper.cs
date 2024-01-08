@@ -6,6 +6,7 @@ public class questCheckpointNodeDefinitionWrapper : questSignalStoppingNodeDefin
 {
     public questCheckpointNodeDefinitionWrapper(questCheckpointNodeDefinition questSignalStoppingNodeDefinition) : base(questSignalStoppingNodeDefinition)
     {
+        Details.Add("Debug String", questSignalStoppingNodeDefinition.DebugString);
     }
 
     internal override void CreateDefaultSockets()

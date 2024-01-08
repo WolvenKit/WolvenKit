@@ -6,6 +6,7 @@ public class questEventManagerNodeDefinitionWrapper : questDisableableNodeDefini
 {
     public questEventManagerNodeDefinitionWrapper(questEventManagerNodeDefinition questDisableableNodeDefinition) : base(questDisableableNodeDefinition)
     {
+        Details.Add("Manager Name", questDisableableNodeDefinition.ManagerName);
     }
 
     internal override void CreateDefaultSockets()
