@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
@@ -310,9 +311,9 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
 
         emitter.Emit(new MappingStart(null, null, false, MappingStyle.Flow));
         emitter.Emit(new Scalar("x"));
-        emitter.Emit(new Scalar(vector2.X.ToString()));
+        emitter.Emit(new Scalar(vector2.X.ToString(CultureInfo.InvariantCulture)));
         emitter.Emit(new Scalar("y"));
-        emitter.Emit(new Scalar(vector2.Y.ToString()));
+        emitter.Emit(new Scalar(vector2.Y.ToString(CultureInfo.InvariantCulture)));
         emitter.Emit(new MappingEnd());
     }
 
@@ -325,11 +326,11 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
 
         emitter.Emit(new MappingStart(null, null, false, MappingStyle.Flow));
         emitter.Emit(new Scalar("x"));
-        emitter.Emit(new Scalar($"{vector3.X}"));
+        emitter.Emit(new Scalar(vector3.X.ToString(CultureInfo.InvariantCulture)));
         emitter.Emit(new Scalar("y"));
-        emitter.Emit(new Scalar($"{vector3.Y}"));
+        emitter.Emit(new Scalar(vector3.Y.ToString(CultureInfo.InvariantCulture)));
         emitter.Emit(new Scalar("z"));
-        emitter.Emit(new Scalar($"{vector3.Z}"));
+        emitter.Emit(new Scalar(vector3.Z.ToString(CultureInfo.InvariantCulture)));
         emitter.Emit(new MappingEnd());
     }
 
@@ -360,6 +361,9 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
                         break;
                     case gamedataLocKeyWrapper locKeyWrapper:
                         WriteLocKey(emitter, locKeyWrapper);
+                        break;
+                    case IRedInteger integer:
+                        emitter.Emit(new Scalar(integer.ToString(CultureInfo.InvariantCulture)));
                         break;
                     default:
                         emitter.Emit(new Scalar(redType.ToString().NotNull()));
@@ -441,6 +445,10 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
                             break;
                         case gamedataLocKeyWrapper locKeyWrapper:
                             WriteLocKey(emitter, locKeyWrapper, propertyToWrite);
+                            break;
+                        case IRedInteger integer:
+                            emitter.Emit(new Scalar(propertyToWrite));
+                            emitter.Emit(new Scalar(integer.ToString(CultureInfo.InvariantCulture)));
                             break;
                         // CArray of the types
                         case IRedArray redArray:
