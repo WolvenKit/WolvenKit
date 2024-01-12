@@ -238,15 +238,17 @@ public class ArchiveWriter
                         bsize));
                 }
 
+                // Disable this. Prevents other mods to overwrite files in this archive if present
+
                 //register imports
-                foreach (var cr2WImportWrapper in reader.ImportsList)
-                {
-                    // maybe only .Default, not sure as nothing else is used
-                    if (cr2WImportWrapper.Flags is not InternalEnums.EImportFlags.Soft and not InternalEnums.EImportFlags.Embedded)
-                    {
-                        importsHashSet.Add(cr2WImportWrapper.DepotPath);
-                    }
-                }
+                //foreach (var cr2WImportWrapper in reader.ImportsList)
+                //{
+                //    // maybe only .Default, not sure as nothing else is used
+                //    if (cr2WImportWrapper.Flags is not InternalEnums.EImportFlags.Soft and not InternalEnums.EImportFlags.Embedded)
+                //    {
+                //        importsHashSet.Add(cr2WImportWrapper.DepotPath);
+                //    }
+                //}
 
                 lastimportidx = (uint)importsHashSet.Count;
 
