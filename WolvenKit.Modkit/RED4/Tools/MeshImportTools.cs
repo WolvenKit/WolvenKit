@@ -1737,7 +1737,7 @@ namespace WolvenKit.Modkit.RED4
             }
         }
 
-        private static void UpdateGarmentSupportParameters(List<RawMeshContainer> meshes, CR2WFile cr2w, bool importGarmentSupport = false)
+        private static void UpdateGarmentSupportParameters(List<RawMeshContainer> meshes, CR2WFile cr2w, bool importGarmentSupport = true)
         {
             if (importGarmentSupport && cr2w.RootChunk is CMesh cMesh)
             {
