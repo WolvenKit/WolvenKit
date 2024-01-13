@@ -60,7 +60,7 @@ namespace WolvenKit.Modkit.RED4
             // import files
             return extAsEnum switch
             {
-                ERawFileFormat.bmp or ERawFileFormat.jpg or ERawFileFormat.png or ERawFileFormat.tiff or ERawFileFormat.tga or ERawFileFormat.dds => HandleTextures(rawRelative, outDir, args),
+                ERawFileFormat.bmp or ERawFileFormat.jpg or ERawFileFormat.png or ERawFileFormat.tiff or ERawFileFormat.tga or ERawFileFormat.dds or ERawFileFormat.cube => HandleTextures(rawRelative, outDir, args),
                 ERawFileFormat.gltf or ERawFileFormat.glb => ImportGltf(rawRelative, outDir, args.Get<GltfImportArgs>()),
                 ERawFileFormat.fbx => ImportFbx(rawRelative, outDir, args.Get<CommonImportArgs>()),
                 ERawFileFormat.masklist => ImportMlmask(rawRelative, outDir),

@@ -153,6 +153,8 @@ public partial class RedImage : IDisposable
                     return LoadFromTGAFile(filePath);
                 case ".DDS":
                     return LoadFromDDSFile(filePath);
+                case ".CUBE":
+                    return CreateFromLutCube(File.ReadAllLines(filePath));
                 default:
                 {
                     LoggerService?.Error($"[RedImage] \"{fileName}\" has an unsupported extension!");

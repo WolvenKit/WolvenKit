@@ -2,13 +2,25 @@
 using System.Globalization;
 using System.Text;
 using System;
+using System.IO;
 
 namespace WolvenKit.RED4.CR2W;
 
 public partial class RedImage
 {
+    public void SaveToCube(string szFile) => File.WriteAllText(szFile, GetLutCube());
+    
+    public void SaveToHald(string szFile) => File.WriteAllBytes(szFile, GetHaldPreview());
+
     public unsafe string GetLutCube()
     {
+        if (_metadata.Dimension != TEX_DIMENSION.TEXTURE3D || 
+            _metadata.Depth != _metadata.Width ||
+            _metadata.Depth != _metadata.Height)
+        {
+            throw new Exception();
+        }
+
         var sb = new StringBuilder();
 
         sb.AppendLine($"LUT_3D_SIZE {_metadata.Depth}");
@@ -47,14 +59,14 @@ public partial class RedImage
                 continue;
             }
 
-            if (line.StartsWith("LUT_1D_SIZE"))
+            if (stripedLine.StartsWith("LUT_1D_SIZE"))
             {
                 throw new NotSupportedException("1D cube files are not supported");
             }
 
-            if (line.StartsWith("LUT_3D_SIZE"))
+            if (stripedLine.StartsWith("LUT_3D_SIZE"))
             {
-                var buf = line.Split(' ');
+                var buf = stripedLine.Split(' ');
                 dimension = int.Parse(buf[1]);
 
                 result = TexHelper.Instance.Initialize3D(DXGI_FORMAT.R32G32B32A32_FLOAT, dimension, dimension, dimension, 1, CP_FLAGS.NONE);
@@ -68,7 +80,7 @@ public partial class RedImage
                 throw new Exception("Invalid file format");
             }
 
-            var buf2 = line.Split(' ');
+            var buf2 = stripedLine.Split(' ');
 
             outPtr[index++] = float.Parse(buf2[0], CultureInfo.InvariantCulture);
             outPtr[index++] = float.Parse(buf2[1], CultureInfo.InvariantCulture);
@@ -85,6 +97,13 @@ public partial class RedImage
     // https://legacy.imagemagick.org/discourse-server/viewtopic.php?p=162163#p162163
     private unsafe byte[] CreateHaldImage(uint haldSize = 8)
     {
+        if (_metadata.Dimension != TEX_DIMENSION.TEXTURE3D ||
+            _metadata.Depth != _metadata.Width ||
+            _metadata.Depth != _metadata.Height)
+        {
+            throw new Exception();
+        }
+
         var dimension = _metadata.Depth;
 
         var data = new float[dimension, dimension, dimension, 3];
