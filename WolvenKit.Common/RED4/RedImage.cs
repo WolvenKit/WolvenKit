@@ -40,7 +40,7 @@ public class TexMetadataWrapper
     public bool IsVolumemap() => _metadata.IsVolumemap();
 }
 
-public class RedImage : IDisposable
+public partial class RedImage : IDisposable
 {
     public static ILoggerService? LoggerService { private get; set; }
 
@@ -585,11 +585,11 @@ public class RedImage : IDisposable
             case DXGI_FORMAT.IA44:
             case DXGI_FORMAT.A8P8:
             case DXGI_FORMAT.B4G4R4A4_UNORM:
-            //case XBOX_DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT:
-            //case XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT:
-            //case XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM:
+                //case XBOX_DXGI_FORMAT_R10G10B10_7E3_A2_FLOAT:
+                //case XBOX_DXGI_FORMAT_R10G10B10_6E4_A2_FLOAT:
+                //case XBOX_DXGI_FORMAT_R10G10B10_SNORM_A2_UNORM:
                 return true;
-            
+
             default:
                 return false;
         }
@@ -736,7 +736,7 @@ public class RedImage : IDisposable
                 }
                 break;
             case TEX_DIMENSION.TEXTURE3D:
-                blob.Header.TextureInfo.Type = Enums.GpuWrapApieTextureType.TEXTYPE_2D;
+                blob.Header.TextureInfo.Type = Enums.GpuWrapApieTextureType.TEXTYPE_3D;
                 break;
             case TEX_DIMENSION.TEXTURE1D:
             default:
@@ -761,7 +761,7 @@ public class RedImage : IDisposable
                         Layout =
                         {
                             RowPitch = (CUInt32)tmpImg.RowPitch,
-                            SlicePitch = (CUInt32)tmpImg.SlicePitch
+                            SlicePitch = (CUInt32)(tmpImg.SlicePitch * metadata.Depth) // TODO: Confirm this
                         },
                         Placement = {
                             Offset = mipMapOffset,
@@ -969,7 +969,7 @@ public class RedImage : IDisposable
         {
             result.InternalScratchImage = result.InternalScratchImage.CreateCopyWithEmptyMipMaps(1, result._metadata.Format, CP_FLAGS.NONE, false);
         }
-        
+
         return result;
     }
 
