@@ -40,7 +40,9 @@ public partial class RedImage
         var dimension = 0;
         foreach (var line in lines)
         {
-            if (line.StartsWith("TITLE ") || line.StartsWith("#"))
+            var stripedLine = line.Trim();
+
+            if (string.IsNullOrEmpty(stripedLine) || stripedLine.StartsWith("TITLE ") || stripedLine.StartsWith("#"))
             {
                 continue;
             }
