@@ -367,6 +367,19 @@ namespace WolvenKit.Modkit.RED4
                 };
             }
 
+            var extension = Path.GetExtension(infilePath);
+            if (args.TextureGroup != GpuWrapApieTextureGroup.TEXG_Generic_LUT && extension == ".cube")
+            {
+                _loggerService.Error("Wrong import settings. cube files only work with \"TextureGroup = TEXG_Generic_LUT\"");
+                return false;
+            }
+
+            if (args.TextureGroup == GpuWrapApieTextureGroup.TEXG_Generic_LUT && extension != ".cube" && extension != ".dds")
+            {
+                _loggerService.Error($"Wrong import settings. LUT import only works with dds or cube. Got \"{extension}\"");
+                return false;
+            }
+
             var image = RedImage.LoadFromFile(infilePath);
             if (image == null)
             {
