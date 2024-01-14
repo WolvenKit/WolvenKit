@@ -96,6 +96,7 @@ namespace WolvenKit.Common.DDS
                 EUncookExtension.tga => TexconvNative.ESaveFileTypes.TGA,
                 EUncookExtension.tiff => TexconvNative.ESaveFileTypes.TIFF,
                 EUncookExtension.dds => TexconvNative.ESaveFileTypes.DDS,
+                EUncookExtension.cube => TexconvNative.ESaveFileTypes.CUBE,
                 _ => throw new ArgumentOutOfRangeException(nameof(extension), extension, null)
             };
 
@@ -193,6 +194,9 @@ namespace WolvenKit.Common.DDS
                         break;
                     case TexconvNative.ESaveFileTypes.JPEG:
                         image.SaveToJPEG(newpath);
+                        break;
+                    case TexconvNative.ESaveFileTypes.CUBE:
+                        image.SaveToCube(newpath);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(filetype), filetype, null);
