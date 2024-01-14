@@ -7,4 +7,4 @@
 - your_bugfix_1
 
 **Additional notes:**
-Wolvenkit is awesome :)
+closes_issue_number
