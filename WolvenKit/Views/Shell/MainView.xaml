@@ -137,6 +137,9 @@
                     <DataTemplate DataType="{x:Type dialogVMs:SelectRedTypeDialogViewModel}">
                         <dialogs:SelectRedTypeDialog ViewModel="{Binding}" />
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type dialogVMs:TypeSelectorDialogViewModel}">
+                        <dialogs:TypeSelectorDialog ViewModel="{Binding}" />
+                    </DataTemplate>
                     <DataTemplate DataType="{x:Type dialogVMs:ProjectWizardViewModel}">
                         <dialogs:ProjectWizardView ViewModel="{Binding}" />
                     </DataTemplate>

@@ -1063,7 +1063,27 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     var type = arr.InnerType;
                     if (type == typeof(CKeyValuePair))
                     {
-                        await _appViewModel.SetActiveDialog(new SelectRedTypeDialogViewModel
+                        var types = new List<TypeEntry>
+                        {
+                            new("Color", "Color description", typeof(CColor)),
+                            new("CpuNameU64", "blub", typeof(CName)),
+                            new("Cube", "Reference to cube xbm", typeof(CResourceReference<ITexture>)),
+                            new("DynamicTexture", "blub", typeof(CResourceReference<ITexture>)),
+                            new("FoliageParameters", "Reference to fp file", typeof(CResourceReference<CFoliageProfile>)),
+                            new("Gradient", "Reference to gradient file", typeof(CResourceReference<CGradient>)),
+                            new("HairParameters", "blub", typeof(CResourceReference<CHairProfile>)),
+                            new("MultilayerMask", "blub", typeof(CResourceReference<Multilayer_Mask>)),
+                            new("MultilayerSetup", "blub", typeof(CResourceReference<Multilayer_Setup>)),
+                            new("Scalar", "blub", typeof(CFloat)),
+                            new("SkinParameters", "blub", typeof(CResourceReference<CSkinProfile>)),
+                            //new("StructBuffer", "blub", null), // still not sure what this does
+                            new("TerrainSetup", "blub", typeof(CResourceReference<CTerrainSetup>)),
+                            new("Texture", "blub", typeof(CResourceReference<ITexture>)),
+                            new("TextureArray", "blub", typeof(CResourceReference<ITexture>)),
+                            new("Vector", "blub", typeof(Vector4)),
+                        };
+
+                        await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
                         {
                             DialogHandler = HandleCKeyValuePair
                         });
@@ -2951,9 +2971,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     public void HandleCKeyValuePair(DialogViewModel? sender)
     {
         _appViewModel.CloseDialogCommand.Execute(null);
-        if (sender is SelectRedTypeDialogViewModel vm && vm.SelectedType is not null)
+        if (sender is TypeSelectorDialogViewModel { SelectedEntry.UserData: { } userData })
         {
-            if (System.Activator.CreateInstance(vm.SelectedType) is IRedType t)
+            if (System.Activator.CreateInstance((Type)userData) is IRedType t)
             {
                 var instance = new CKeyValuePair(CName.Empty, t);
                 InsertChild(-1, instance);
