@@ -269,10 +269,10 @@ public static class CommonFunctions
         }
 
         // what else could we possibly check for?
-        var keywordsToCheck = new List<string> { "decal", "icon", "overlay", "alpha" };
+        var partialsToCheck = new List<string> { "decal", "icon", "icons", "overlay", "alpha" };
 
         // check if we have a match (filename has already been toLower)
-        return keywordsToCheck.Any(keyword => fileName.Contains(keyword));
+        return partialsToCheck.Any(partial => fileName.Contains($"_{partial}") || fileName.Contains($"{partial}_"));
     }
 
 }
