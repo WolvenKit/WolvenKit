@@ -169,6 +169,27 @@ public class AppScriptFunctions : ScriptFunctions
     }
 
     /// <summary>
+    /// Loads the content of a text file from resources
+    /// </summary>
+    /// <param name="path">The relative path of the text file</param>
+    /// <returns>The content or null</returns>
+    public virtual string? LoadFromResources(string path)
+    {
+        if (_projectManager.ActiveProject is null)
+        {
+            return null;
+        }
+
+        var fullPath = Path.Combine(_projectManager.ActiveProject.ResourcesDirectory, path);
+        if (!File.Exists(fullPath))
+        {
+            return null;
+        }
+
+        return File.ReadAllText(fullPath);
+    }
+
+    /// <summary>
     /// Loads the specified game file from the project files rather than game archives.
     /// </summary>
     /// <param name="path">The file to open for reading</param>

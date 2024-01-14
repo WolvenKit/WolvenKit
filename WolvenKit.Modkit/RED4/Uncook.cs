@@ -31,6 +31,8 @@ using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
 using NAudio.Wave;
 using NAudio.Lame;
+using WolvenKit.RED4.Archive.IO;
+using EFileReadErrorCodes = WolvenKit.RED4.Archive.IO.EFileReadErrorCodes;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -481,43 +483,7 @@ namespace WolvenKit.Modkit.RED4
                         return false;
                     }
                 case ECookedFileFormat.xbm:
-                {
-                    if (settings.Get<XbmExportArgs>() is not { } xbmargs)
-                    {
-                        return false;
-                    }
-
-                    if (WolvenTesting.IsTesting)
-                    {
-                        using var ms = new MemoryStream();
-                        return ConvertXbmToDdsStream(cr2wStream, ms, true, out _, out _);
-                    }
-
-                    using (var ms = new MemoryStream())
-                    {
-                        // always flip on export
-                        if (!ConvertXbmToDdsStream(cr2wStream, ms, true, out _, out var decompressedFormat))
-                        {
-                            return false;
-                        }
-
-                        // convert if needed else save to file
-                        var ddsPath = Path.ChangeExtension(outfile.FullName, ERawFileFormat.dds.ToString());
-                        if (xbmargs.UncookExtension != EUncookExtension.dds)
-                        {
-                            ms.Seek(0, SeekOrigin.Begin);
-                            return Texconv.ConvertFromDdsAndSave(ms, ddsPath, xbmargs, false, decompressedFormat);
-                        }
-                        else
-                        {
-                            using var fs = new FileStream(ddsPath, FileMode.Create, FileAccess.Write);
-                            ms.Seek(0, SeekOrigin.Begin);
-                            ms.CopyTo(fs);
-                        }
-                    }
-
-                    return true;
-                }
+                    return HandleXbm(cr2wStream, outfile, settings.Get<XbmExportArgs>());
                 case ECookedFileFormat.csv:
                 {
                     if (WolvenTesting.IsTesting)
@@ -585,6 +551,86 @@ namespace WolvenKit.Modkit.RED4
                 default:
                     throw new ArgumentOutOfRangeException($"Uncooking failed for extension: {extAsEnum}.");
             }
+        }
+
+        private bool HandleXbm(Stream cr2wStream, FileInfo outfile, XbmExportArgs xbmargs)
+        {
+            if (WolvenTesting.IsTesting)
+            {
+                using var ms = new MemoryStream();
+                return ConvertXbmToDdsStream(cr2wStream, ms, true, out _, out _);
+            }
+
+            using var cr2wReader = new CR2WReader(cr2wStream);
+            if (cr2wReader.ReadFile(out var cr2wFile) != EFileReadErrorCodes.NoError || cr2wFile!.RootChunk is not CBitmapTexture bitmapTexture)
+            {
+                return false;
+            }
+
+            var redImage = RedImage.FromXBM(bitmapTexture);
+            if (redImage == null)
+            {
+                return false;
+            }
+
+            var destFile = Path.ChangeExtension(outfile.FullName, xbmargs.UncookExtension.ToString());
+
+            if (bitmapTexture.Setup.Group == Enums.GpuWrapApieTextureGroup.TEXG_Generic_LUT)
+            {
+                switch (xbmargs.UncookExtension)
+                {
+                    case EUncookExtension.dds:
+                        redImage.FlipV(); // Not sure yet
+                        redImage.SaveToDDS(destFile);
+                        break;
+                    case EUncookExtension.png:
+                        redImage.SaveToHald(destFile);
+                        break;
+                    case EUncookExtension.cube:
+                        redImage.SaveToCube(destFile);
+                        break;
+                    case EUncookExtension.tga:
+                    case EUncookExtension.bmp:
+                    case EUncookExtension.jpg:
+                    case EUncookExtension.tiff:
+                        _loggerService.Error($"Exporting to \"{xbmargs.UncookExtension}\" is not supported for LUT files");
+                        return false;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+            else
+            {
+                redImage.FlipV();
+                switch (xbmargs.UncookExtension)
+                {
+                    case EUncookExtension.dds:
+                        redImage.SaveToDDS(destFile);
+                        break;
+                    case EUncookExtension.tga:
+                        redImage.SaveToTGA(destFile);
+                        break;
+                    case EUncookExtension.bmp:
+                        redImage.SaveToBMP(destFile);
+                        break;
+                    case EUncookExtension.jpg:
+                        redImage.SaveToJPEG(destFile);
+                        break;
+                    case EUncookExtension.png:
+                        redImage.SaveToPNG(destFile);
+                        break;
+                    case EUncookExtension.tiff:
+                        redImage.SaveToTIFF(destFile);
+                        break;
+                    case EUncookExtension.cube:
+                        _loggerService.Error($"Exporting to \"cube\" is not supported for non LUT files");
+                        return false;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+
+            return true;
         }
 
         private bool HandleOpus(OpusExportArgs opusExportArgs)

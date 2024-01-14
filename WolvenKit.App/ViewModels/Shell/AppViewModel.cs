@@ -1046,7 +1046,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
             if (OpenStream(stream, file.FileName, out var redfile))
             {
-                var fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(redfile, file.FileName, this, false);
+                var fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(redfile, Path.Combine(proj.ModDirectory, file.FileName), this, false);
                 if (!DockedViews.Contains(fileViewModel))
                 {
                     DockedViews.Add(fileViewModel);

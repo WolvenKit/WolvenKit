@@ -14,15 +14,26 @@ using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
+
 using Vec3 = System.Numerics.Vector3;
 using Vec4 = System.Numerics.Vector4;
+
+using TargetAccessor = System.Collections.Generic.IReadOnlyDictionary<string, SharpGLTF.Schema2.Accessor>;
+
 
 namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
+        #region importapi
+
         public bool ImportMorphTargets(FileInfo inGltfFile, Stream inTargetStream, GltfImportArgs args/*, Stream outStream = null*/)
         {
+            if (args.FillEmpty)
+            {
+                throw new NotImplementedException("FillEmpty not supported for morphtarget import! Should it be?");
+            }
+
             var cr2w = _parserService.ReadRed4File(inTargetStream);
             if (cr2w is not { RootChunk: MorphTargetMesh targetRoot } 
                 || targetRoot.Blob.Chunk is not rendRenderMorphTargetMeshBlob renderBlob 
@@ -53,27 +64,72 @@ namespace WolvenKit.Modkit.RED4
             var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(args.ValidationMode));
             VerifyGLTF(model, args);
 
-            var rawMeshes = new List<RawMeshContainer>();
+            // Quick validations and GarmentSupport vs. real targets handling first...
 
-            foreach (var node in model.LogicalNodes)
+            var subMeshesCount = model.LogicalMeshes.Count;
+
+            var gsAndTargetsPerSubmesh = model.LogicalMeshes.Select(submesh => {
+                var targets = Enumerable.Range(0, submesh.Primitives[0].MorphTargetsCount).Select(t =>
+                    submesh.Primitives[0].GetMorphTargetAccessors(t)
+                );
+
+                var hasGS = submesh.Primitives[0].GetVertexAccessor("_GARMENTSUPPORTWEIGHT") != null &&
+                            submesh.Primitives[0].GetVertexAccessor("_GARMENTSUPPORTCAP") != null;
+
+                var gsCount = hasGS ? 1 : 0;
+
+                return (gs: targets.Take(gsCount).ToArray(), real: targets.Skip(gsCount).ToArray());
+            });
+
+            var garmentSupportPerSubmesh = gsAndTargetsPerSubmesh.Select(_ => _.gs).ToArray();
+            var realTargetsPerSubmesh = gsAndTargetsPerSubmesh.Select(_ => _.real).ToArray();
+
+            var hasAtMostOneGsPerSubmesh = garmentSupportPerSubmesh.All(gs => gs.Length <= 1);
+
+            if (!hasAtMostOneGsPerSubmesh)
             {
-                if (node.Mesh != null)
-                {
-                    var rawMesh = GltfMeshToRawContainer(node);
-                    // This should probably be fixed in the mesh import code,
-                    // but that stuff needs to be rewritten anyway so surgical for now
-                    rawMesh.garmentMorph = Array.Empty<Vec3>();
-                    rawMeshes.Add(rawMesh);
-                }
-                else if (args.FillEmpty)
-                {
-                    rawMeshes.Add(CreateEmptyMesh(node.Name));
-                }
+                throw new ArgumentException("Multiple GarmentSupport targets per submesh are not allowed!");
             }
 
-            rawMeshes = rawMeshes.OrderBy(o => o.name).ToList();
+            _loggerService.Debug($"{garmentSupportPerSubmesh.Count(gs => gs.Length == 1)} out of {subMeshesCount} submeshes have GarmentSupport");
 
-            var (maxBound, minBound) = CalculateModelBoundsWithMorphs(rawMeshes, model);
+            var targetCounts = realTargetsPerSubmesh.Select(targets => targets.Length);
+            var targetCountsMatch = targetCounts.All(count => count == targetCounts.First());
+
+            if (!targetCountsMatch)
+            {
+                throw new ArgumentException($"All submeshes don't have the same number of morph targets! (GarmentSupport targets excluded.)");
+            }
+
+            var morphTargetCount = targetCounts.First();
+
+            if (morphTargetCount == 0)
+            {
+                throw new ArgumentException("Mesh contains no morph targets to import.");
+            }
+
+            // Ok, moving on to importing...
+
+            var rawMeshes = new List<RawMeshContainer>();
+
+            for (var i = 0; i < subMeshesCount; i++)
+            {
+                var submesh = model.LogicalMeshes[i];
+                var rawMesh = GltfMeshToRawContainer(submesh);
+
+                // Substitute whatever mesh import did with what we know to be the GarmentSupport (or none)
+                rawMesh.garmentMorph = garmentSupportPerSubmesh[i].Select(gs =>
+                    gs["POSITION"].AsVector3Array().Select(p => new Vec3(p.X, -p.Z, p.Y)).ToArray()
+                ).FirstOrDefault([]);
+
+                rawMeshes.Add(rawMesh);
+            }
+
+            var rawMeshesSorted = rawMeshes.OrderBy(m => m.name).ToList();
+
+            // TODO: Calculated without GarmentSupport for now because that's what mesh import does
+            // TODO: https://github.com/WolvenKit/WolvenKit/issues/1504 
+            var (maxBound, minBound) = WholeModelAdditiveBoundsZup(rawMeshesSorted, realTargetsPerSubmesh);
 
             targetRoot.BoundingBox.Max = new Vector4 { X = maxBound.X, Y = maxBound.Y, Z = maxBound.Z, W = 1f };
             targetRoot.BoundingBox.Min = new Vector4 { X = minBound.X, Y = minBound.Y, Z = minBound.Z, W = 1f };
@@ -92,42 +148,22 @@ namespace WolvenKit.Modkit.RED4
                 };
             }
 
-            MeshTools.UpdateMeshJoints(ref rawMeshes, newRig, oldRig);
+            MeshTools.UpdateMeshJoints(ref rawMeshesSorted, newRig, oldRig);
 
-            var red4Meshes = rawMeshes.Select(_ => RawMeshToRE4Mesh(_, baseQuantScale, baseQuantOffset)).ToList();
+            // Finish up creating the baseBlob (not the base mesh!)
+
+            var red4Meshes = rawMeshesSorted.Select(_ => RawMeshToRE4Mesh(_, baseQuantScale, baseQuantOffset)).ToList();
 
             var meshBuffer = new MemoryStream();
             var meshesInfo = BufferWriter(red4Meshes, ref meshBuffer, args);
 
+            // And then finally the targets
+
             meshesInfo.quantScale = baseQuantScale;
             meshesInfo.quantTrans = baseQuantOffset;
 
-            // ^ This basically finishes up the mesh setup. MorphTargets are
-            // effectively injected at this point, and the mesh written out
-            // at the end. The mesh processing needs to be unified so that
-            // it's not duplicated here and in MeshImportTools.
-
             var diffsBuffer = new MemoryStream();
             var mappingsBuffer = new MemoryStream();
-
-            // Reset some more data - why is this not a new data structure, again?
-            // Resetting up here because this is mutable data so there's no telling
-            // who might fuck with it somewhere.
-
-            var subMeshesCount = red4Meshes.Count;
-            var morphTargetCount = model.LogicalMeshes[0].Primitives[0].MorphTargetsCount;
-            var targetCountsMatch = model.LogicalMeshes.All(l => l.Primitives[0].MorphTargetsCount == morphTargetCount);
-
-            if (!targetCountsMatch)
-            {
-                var totals = model.LogicalMeshes.Select(subMesh => $"{subMesh.Name}: {morphTargetCount}").ToArray();
-                throw new Exception($"All submeshes don't have the same number of morph targets!\n{string.Join("\n", totals)}");
-            }
-
-            if (morphTargetCount == 0)
-            {
-                throw new Exception("Mesh contains no morph targets to import.");
-            }
 
             renderBlob.Header.NumDiffs = 0;
             renderBlob.Header.NumDiffsMapping = 0;
@@ -152,10 +188,7 @@ namespace WolvenKit.Modkit.RED4
 
             // Do the thing
             
-            // fix possible overflow in unchecked context
-            var morphTargetCountUInt = morphTargetCount >= 0 ? (uint)morphTargetCount : throw new InvalidOperationException("Morph target count cannot be negative.");
-            var subMeshesCountUInt = subMeshesCount >= 0 ? (uint)subMeshesCount : throw new InvalidOperationException("Sub-mesh count cannot be negative.");
-            ConvertAndSetTargetsData(cr2w, morphTargetCountUInt, subMeshesCountUInt, model, renderBlob, diffsBuffer, mappingsBuffer);
+            ConvertAndSetTargetsData(cr2w, realTargetsPerSubmesh, renderBlob, diffsBuffer, mappingsBuffer);
 
             // Well most of the thing, this part of the thing is here instead
             renderBlob.DiffsBuffer.Buffer.SetBytes(diffsBuffer.ToArray());
@@ -171,123 +204,37 @@ namespace WolvenKit.Modkit.RED4
             return true;
         }
 
-        private (Vec3 maxBounds, Vec3 minBounds) CalculateModelBoundsWithMorphs(List<RawMeshContainer> rawMeshes, ModelRoot model)
-        {
-            var modelMax = new Vec3(float.MinValue, float.MinValue, float.MinValue);
-            var modelMin = new Vec3(float.MaxValue, float.MaxValue, float.MaxValue);
-
-            for (var subMeshIndex = 0; subMeshIndex < rawMeshes.Count; subMeshIndex++)
-            {
-                var (smMorphDeltaMax, smMorphDeltaMin) = GetZupPositionDeltaBoundsForSubMesh(model, subMeshIndex);
-
-                var subMeshPositions = rawMeshes[subMeshIndex].positions;
-                ArgumentNullException.ThrowIfNull(subMeshPositions);
-
-                foreach (var position in subMeshPositions)
-                {
-                    modelMax.X = Math.Max(modelMax.X, position.X + smMorphDeltaMax.X);
-                    modelMax.Y = Math.Max(modelMax.Y, position.Y + smMorphDeltaMax.Y);
-                    modelMax.Z = Math.Max(modelMax.Z, position.Z + smMorphDeltaMax.Z);
-
-                    modelMin.X = Math.Min(modelMin.X, position.X + smMorphDeltaMin.X);
-                    modelMin.Y = Math.Min(modelMin.Y, position.Y + smMorphDeltaMin.Y);
-                    modelMin.Z = Math.Min(modelMin.Z, position.Z + smMorphDeltaMin.Z);
-                }
-            }
-
-            return (modelMax, modelMin);
-        }
-
-        // Is this info already in the GLTF? Yes
-        // Can I somehow get the POSITION.min/.max values with SharpGLTF? Also y-- no. Definitely no.
-        // Are we therefore looping through all the vertices for like the 15th time? We sure are!
-        private (Vec3 cumulativeMax, Vec3 cumulativeMin) GetZupPositionDeltaBoundsForSubMesh(ModelRoot model, int subMeshIndex)
-        {
-            var morphTargetCount = model.LogicalMeshes[0].Primitives[0].MorphTargetsCount;
-
-            var maxDeltasPerTarget = new Vec3[morphTargetCount];
-            var minDeltasPerTarget = new Vec3[morphTargetCount];
-
-            // Need to flip to LHCS Zup here (...and again later)
-            for (var targetIndex = 0; targetIndex < morphTargetCount; targetIndex++)
-            {
-                var positionDeltas = model.LogicalMeshes[subMeshIndex].Primitives[0].GetMorphTargetAccessors(targetIndex)["POSITION"].AsVector3Array();
-
-                maxDeltasPerTarget[targetIndex] = new Vec3( positionDeltas.Max(l => l.X), positionDeltas.Max(l => -l.Z), positionDeltas.Max(l => l.Y));
-                minDeltasPerTarget[targetIndex] = new Vec3( positionDeltas.Min(l => l.X), positionDeltas.Min(l => -l.Z), positionDeltas.Min(l => l.Y));
-            }
-
-            var cumulativeMax = new Vec3(
-                maxDeltasPerTarget.Select(v => v.X > 0 ? v.X : 0).Sum(),
-                maxDeltasPerTarget.Select(v => v.Y > 0 ? v.Y : 0).Sum(),
-                maxDeltasPerTarget.Select(v => v.Z > 0 ? v.Z : 0).Sum()
-            );
-
-            var cumulativeMin = new Vec3(
-                minDeltasPerTarget.Select(v => v.X < 0 ? v.X : 0).Sum(),
-                minDeltasPerTarget.Select(v => v.Y < 0 ? v.Y : 0).Sum(),
-                minDeltasPerTarget.Select(v => v.Z < 0 ? v.Z : 0).Sum()
-            );
-
-            return (cumulativeMax, cumulativeMin);
-        }
-
-        // Quantization reduces vertex data to the range of values in the model.
-        // ...But the algorithm isn't always the same.
-        private (Vec4 scale, Vec4 offset) CalculateQuantizationForTargetInZUp(ModelRoot model, int morphTargetId)
-        {
-            var logicalMesh = model.LogicalMeshes[0].Primitives[0];
-            var morphTarget = logicalMesh.GetMorphTargetAccessors(morphTargetId);
-            var morphPositionDeltas = morphTarget["POSITION"].AsVector3Array();
-
-            var max = new Vec3(morphPositionDeltas[0].X, -morphPositionDeltas[0].Z, morphPositionDeltas[0].Y);
-            var min = new Vec3(morphPositionDeltas[0].X, -morphPositionDeltas[0].Z, morphPositionDeltas[0].Y);
-
-            foreach (var mesh in model.LogicalMeshes)
-            {
-                morphPositionDeltas = mesh.Primitives[0].GetMorphTargetAccessors(morphTargetId)["POSITION"].AsVector3Array();
-
-                max.X = Math.Max(max.X, morphPositionDeltas.Max(l => l.X));
-                max.Y = Math.Max(max.Y, morphPositionDeltas.Max(l => -l.Z));
-                max.Z = Math.Max(max.Z, morphPositionDeltas.Max(l => l.Y));
-
-                min.X = Math.Min(min.X, morphPositionDeltas.Min(l => l.X));
-                min.Y = Math.Min(min.Y, morphPositionDeltas.Min(l => -l.Z));
-                min.Z = Math.Min(min.Z, morphPositionDeltas.Min(l => l.Y));
-            }
-
-            var quantScale = new Vec4(max.X - min.X, max.Y - min.Y, max.Z - min.Z, 0);
-            var quantOffset = new Vec4(min.X, min.Y, min.Z, 0);
-
-            return (quantScale, quantOffset);
-        }
+        #endregion
+        #region targetimport
 
         // Inverse, export transform is (mostly) in `ContainRawTarget()`
-        private void ConvertAndSetTargetsData(CR2WFile cr2w, uint morphTargetCount, uint subMeshCount, ModelRoot model, rendRenderMorphTargetMeshBlob blob, Stream diffsBuffer, Stream mappingsBuffer)
+        private void ConvertAndSetTargetsData(CR2WFile cr2w, TargetAccessor[][] morphTargetsPerSubmesh, rendRenderMorphTargetMeshBlob blob, Stream diffsBuffer, Stream mappingsBuffer)
         {
+            uint subMeshCount = Convert.ToUInt32(morphTargetsPerSubmesh.Length);
+            uint morphTargetCount = Convert.ToUInt32(morphTargetsPerSubmesh[0].Length);
+
             var diffsWriter = new BinaryWriter(diffsBuffer);
             var mappingsWriter = new BinaryWriter(mappingsBuffer);
 
             for (var targetIndex = 0; targetIndex < morphTargetCount; targetIndex++)
             {
-                var (targetQuantScale, targetQuantOffset) = CalculateQuantizationForTargetInZUp(model, targetIndex);
+                var (targetQuantScale, targetQuantOffset) = TargetwiseQuantizationZup(morphTargetsPerSubmesh, targetIndex);
 
                 blob.Header.TargetPositionDiffOffset[targetIndex] = targetQuantOffset; 
                 blob.Header.TargetPositionDiffScale[targetIndex] = targetQuantScale;
 
                 for (var subMeshIndex = 0; subMeshIndex < subMeshCount; subMeshIndex++)
                 {
-                    var subMesh = model.LogicalMeshes[subMeshIndex].Primitives[0];
-                    var morphTarget = subMesh.GetMorphTargetAccessors(targetIndex);
+                    var morphTarget = morphTargetsPerSubmesh[subMeshIndex][targetIndex];
 
                     if (!morphTarget.ContainsKey("TANGENT"))
                     {
-                        throw new Exception($"Morph target {targetIndex} does not contain any tangents. Did you remember to export them?");
+                        throw new Exception($"Morph target {targetIndex} is missing TANGENT data. Use the cp77 Blender plugin or ensure they're exported.");
                     }
 
                     if (!morphTarget.ContainsKey("NORMAL"))
                     {
-                        throw new Exception($"Morph target {targetIndex} does not contain any normals. Did you remember to export them?");
+                        throw new Exception($"Morph target {targetIndex} is missing NORMAL data. Use the cp77 Blender plugin or ensure they're exported.");
                     }
 
                     var positionDeltas = morphTarget["POSITION"].AsVector3Array();
@@ -406,5 +353,100 @@ namespace WolvenKit.Modkit.RED4
 
             return;
         }
+
+        #endregion
+        #region boundsandquantizationhelpers
+
+        // This is calculated including possible GarmentSupport, may need to revisit.
+        // TODO: https://github.com/WolvenKit/WolvenKit/issues/1504 
+        private (Vec3 maxBounds, Vec3 minBounds) WholeModelAdditiveBoundsZup(List<RawMeshContainer> rawMeshes, TargetAccessor[][] morphTargetsPerSubmesh)
+        {
+            var modelMax = new Vec3(float.MinValue, float.MinValue, float.MinValue);
+            var modelMin = new Vec3(float.MaxValue, float.MaxValue, float.MaxValue);
+
+            for (var subMeshIndex = 0; subMeshIndex < rawMeshes.Count; subMeshIndex++)
+            {
+                var (submeshAdditiveMax, submeshAdditiveMin) = SubmeshwiseAdditiveBoundsZup(morphTargetsPerSubmesh, subMeshIndex);
+
+                var subMeshPositions = rawMeshes[subMeshIndex].positions;
+                ArgumentNullException.ThrowIfNull(subMeshPositions);
+
+                foreach (var position in subMeshPositions)
+                {
+                    modelMax.X = Math.Max(modelMax.X, position.X + submeshAdditiveMax.X);
+                    modelMax.Y = Math.Max(modelMax.Y, position.Y + submeshAdditiveMax.Y);
+                    modelMax.Z = Math.Max(modelMax.Z, position.Z + submeshAdditiveMax.Z);
+
+                    modelMin.X = Math.Min(modelMin.X, position.X + submeshAdditiveMin.X);
+                    modelMin.Y = Math.Min(modelMin.Y, position.Y + submeshAdditiveMin.Y);
+                    modelMin.Z = Math.Min(modelMin.Z, position.Z + submeshAdditiveMin.Z);
+                }
+            }
+
+            return (modelMax, modelMin);
+        }
+
+        // Is this info already in the GLTF? Yes
+        // Can I somehow get the POSITION.min/.max values with SharpGLTF? Also y-- no. Definitely no.
+        // Are we therefore looping through all the vertices for like the 15th time? We sure are!
+        private (Vec3 additiveMax, Vec3 additiveMin) SubmeshwiseAdditiveBoundsZup(TargetAccessor[][] morphTargetsPerSubmesh, int subMeshIndex)
+        {
+            var morphTargetCount = morphTargetsPerSubmesh[subMeshIndex].Length;
+
+            var maxDeltasPerTarget = new Vec3[morphTargetCount];
+            var minDeltasPerTarget = new Vec3[morphTargetCount];
+
+            // Need to flip to LHCS Zup here (...and again later)
+            for (var targetIndex = 0; targetIndex < morphTargetCount; targetIndex++)
+            {
+                var positionDeltas = morphTargetsPerSubmesh[subMeshIndex][targetIndex]["POSITION"].AsVector3Array();
+
+                maxDeltasPerTarget[targetIndex] = new Vec3( positionDeltas.Max(l => l.X), positionDeltas.Max(l => -l.Z), positionDeltas.Max(l => l.Y));
+                minDeltasPerTarget[targetIndex] = new Vec3( positionDeltas.Min(l => l.X), positionDeltas.Min(l => -l.Z), positionDeltas.Min(l => l.Y));
+            }
+
+            var cumulativeMax = new Vec3(
+                maxDeltasPerTarget.Select(v => v.X > 0 ? v.X : 0).Sum(),
+                maxDeltasPerTarget.Select(v => v.Y > 0 ? v.Y : 0).Sum(),
+                maxDeltasPerTarget.Select(v => v.Z > 0 ? v.Z : 0).Sum()
+            );
+
+            var cumulativeMin = new Vec3(
+                minDeltasPerTarget.Select(v => v.X < 0 ? v.X : 0).Sum(),
+                minDeltasPerTarget.Select(v => v.Y < 0 ? v.Y : 0).Sum(),
+                minDeltasPerTarget.Select(v => v.Z < 0 ? v.Z : 0).Sum()
+            );
+
+            return (cumulativeMax, cumulativeMin);
+        }
+
+
+        // Quantization for each target across all submeshes
+        private (Vec4 scale, Vec4 offset) TargetwiseQuantizationZup(TargetAccessor[][] morphTargetsPerSubmesh, int targetIndex)
+        {
+            var max = new Vec3(float.MinValue, float.MinValue, float.MinValue);
+            var min = new Vec3(float.MaxValue, float.MaxValue, float.MaxValue);
+
+            foreach (var submesh in morphTargetsPerSubmesh)
+            {
+                var morphPositionDeltas = submesh[targetIndex]["POSITION"].AsVector3Array();
+
+                max.X = Math.Max(max.X, morphPositionDeltas.Max(l => l.X));
+                max.Y = Math.Max(max.Y, morphPositionDeltas.Max(l => -l.Z));
+                max.Z = Math.Max(max.Z, morphPositionDeltas.Max(l => l.Y));
+
+                min.X = Math.Min(min.X, morphPositionDeltas.Min(l => l.X));
+                min.Y = Math.Min(min.Y, morphPositionDeltas.Min(l => -l.Z));
+                min.Z = Math.Min(min.Z, morphPositionDeltas.Min(l => l.Y));
+            }
+
+            var quantScale = new Vec4(max.X - min.X, max.Y - min.Y, max.Z - min.Z, 0);
+            var quantOffset = new Vec4(min.X, min.Y, min.Z, 0);
+
+            return (quantScale, quantOffset);
+        }
+
+        #endregion
+
     }
 }

@@ -83,6 +83,8 @@
                     <MenuItem Click="ResetZoomPan" Header="Reset Zoom/Pan" />
                     <MenuItem Click="SaveImage" Header="Save Image" />
                     <MenuItem Command="{Binding ReplaceTextureCommand}" Header="Replace Texture" />
+                    <MenuItem Command="{Binding SaveAsCubeCommand}" Header="Save as cube" />
+                    <MenuItem Command="{Binding LoadFromCubeCommand}" Header="Load from cube" />
                 </ContextMenu>
             </Border.ContextMenu>
             <Border

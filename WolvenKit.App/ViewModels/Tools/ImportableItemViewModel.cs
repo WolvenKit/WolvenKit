@@ -72,6 +72,7 @@ public class ImportableItemViewModel : ImportExportItemViewModel
             ERawFileFormat.png => xbmArgs,
             ERawFileFormat.tiff => xbmArgs,
             ERawFileFormat.dds => xbmArgs,
+            ERawFileFormat.cube => xbmArgs,
 
             ERawFileFormat.glb => new GltfImportArgs(),
             ERawFileFormat.gltf => new GltfImportArgs(),

@@ -37,16 +37,14 @@
                         <ItemsControl ItemsSource="{Binding Details}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel MaxWidth="200" Orientation="Vertical">
+                                    <StackPanel MaxWidth="200" Orientation="Horizontal">
                                         <TextBlock
                                             Margin="0,0,4,0"
-                                            HorizontalAlignment="Left"
                                             Foreground="#999999"
                                             Text="{Binding Key}"
                                             TextTrimming="CharacterEllipsis"
                                             ToolTip="{Binding Key}" />
                                         <TextBlock
-                                            HorizontalAlignment="Left"
                                             Text="{Binding Value}"
                                             TextAlignment="Right"
                                             TextTrimming="CharacterEllipsis"

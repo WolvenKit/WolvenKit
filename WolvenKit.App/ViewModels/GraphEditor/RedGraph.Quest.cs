@@ -355,7 +355,13 @@ public partial class RedGraph
                 {
                     var source = connection.Chunk!.Source.Chunk!;
 
-                    source.Connections.Remove(connection);
+                    for (var i = source.Connections.Count - 1; i >= 0; i--)
+                    {
+                        if (ReferenceEquals(source.Connections[i].Chunk, connection.Chunk))
+                        {
+                            source.Connections.RemoveAt(i);
+                        }
+                    }
 
                     for (var i = Connections.Count - 1; i >= 0; i--)
                     {
@@ -387,7 +393,13 @@ public partial class RedGraph
                 {
                     var destination = connection.Chunk!.Destination.Chunk!;
 
-                    destination.Connections.Remove(connection);
+                    for (var i = destination.Connections.Count - 1; i >= 0; i--)
+                    {
+                        if (ReferenceEquals(destination.Connections[i].Chunk, connection.Chunk))
+                        {
+                            destination.Connections.RemoveAt(i);
+                        }
+                    }
 
                     for (var i = Connections.Count - 1; i >= 0; i--)
                     {

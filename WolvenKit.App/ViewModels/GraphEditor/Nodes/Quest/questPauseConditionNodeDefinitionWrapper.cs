@@ -1,4 +1,5 @@
-﻿using WolvenKit.RED4.Types;
+﻿using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 
@@ -8,7 +9,13 @@ public class questPauseConditionNodeDefinitionWrapper : questSignalStoppingNodeD
     {
         if (graphGraphNodeDefinition.Condition?.Chunk != null)
         {
-            Details.Add("Type", graphGraphNodeDefinition.Condition.Chunk.GetType().Name[5..^9]);
+            var (suffix, details) = QuestConditionHelper.GetDetails(graphGraphNodeDefinition.Condition.Chunk);
+
+            Title += " " + graphGraphNodeDefinition.Condition.Chunk.GetType().Name[5..^9] + suffix;
+            foreach (var detail in details)
+            {
+                Details.Add(detail.Key, detail.Value);
+            }
         }
     }
 
