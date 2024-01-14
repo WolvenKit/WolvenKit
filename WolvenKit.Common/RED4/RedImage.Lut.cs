@@ -21,11 +21,21 @@ public partial class RedImage
             throw new Exception();
         }
 
+        nint pixels;
+
+        ScratchImage? tmpImage = null;
+        if (_metadata.Format == DXGI_FORMAT.R32G32B32A32_FLOAT)
+        {
+            pixels = InternalScratchImage.GetPixels();
+        }
+        else
+        {
+            tmpImage = InternalScratchImage.Convert(DXGI_FORMAT.R32G32B32A32_FLOAT, TEX_FILTER_FLAGS.DEFAULT, 0.5F);
+            pixels = tmpImage.GetPixels();
+        }
+
         var sb = new StringBuilder();
-
         sb.AppendLine($"LUT_3D_SIZE {_metadata.Depth}");
-
-        var pixels = InternalScratchImage.GetPixels();
 
         var inPtr = (float*)pixels.ToPointer();
 
@@ -39,6 +49,8 @@ public partial class RedImage
 
             sb.AppendLine($"{r.ToString("F6", CultureInfo.InvariantCulture)} {g.ToString("F6", CultureInfo.InvariantCulture)} {b.ToString("F6", CultureInfo.InvariantCulture)}");
         }
+
+        tmpImage?.Dispose();
 
         return sb.ToString();
     }
@@ -104,11 +116,23 @@ public partial class RedImage
             throw new Exception();
         }
 
+        nint pixels;
+
+        ScratchImage? tmpImage = null;
+        if (_metadata.Format == DXGI_FORMAT.R32G32B32A32_FLOAT)
+        {
+            pixels = InternalScratchImage.GetPixels();
+        }
+        else
+        {
+            tmpImage = InternalScratchImage.Convert(DXGI_FORMAT.R32G32B32A32_FLOAT, TEX_FILTER_FLAGS.DEFAULT, 0.5F);
+            pixels = tmpImage.GetPixels();
+        }
+
         var dimension = _metadata.Depth;
 
         var data = new float[dimension, dimension, dimension, 3];
 
-        var pixels = InternalScratchImage.GetPixels();
         var inPtr = (float*)pixels.ToPointer();
 
         var r = 0;
@@ -208,6 +232,8 @@ public partial class RedImage
         }
 
         result = result.Convert(DXGI_FORMAT.B8G8R8A8_UNORM, TEX_FILTER_FLAGS.DEFAULT, 0.5F);
+
+        tmpImage?.Dispose();
 
         return SaveToMemory(result.SaveToWICMemory(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.PNG)));
     }
