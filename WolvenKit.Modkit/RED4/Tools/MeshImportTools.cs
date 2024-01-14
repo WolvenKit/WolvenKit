@@ -392,6 +392,8 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
+            // GarmentSupport not accounted here. Might be an issue?
+            // TODO: https://github.com/WolvenKit/WolvenKit/issues/1504 
             meshBlob.BoundingBox.Min = new Vector4 { X = min.X, Y = min.Y, Z = min.Z, W = 1f };
             meshBlob.BoundingBox.Max = new Vector4 { X = max.X, Y = max.Y, Z = max.Z, W = 1f };
 
@@ -521,6 +523,8 @@ namespace WolvenKit.Modkit.RED4
             return meshContainer;
         }
 
+        // TODO: https://github.com/WolvenKit/WolvenKit/issues/1505
+        // Maintaining compatibility but need to review if we really want to support empties via nodes
         private static RawMeshContainer GltfMeshToRawContainer(Node node)
         {
             if (node.Mesh == null)
@@ -528,12 +532,16 @@ namespace WolvenKit.Modkit.RED4
                 return CreateEmptyMesh(node.Name);
             }
 
-            var mesh = node.Mesh;
+            return GltfMeshToRawContainer(node.Mesh);
+        }
+
+        private static RawMeshContainer GltfMeshToRawContainer(Mesh mesh)
+        {
             var accessors = mesh.Primitives[0].VertexAccessors.Keys.ToList();
 
             var meshContainer = new RawMeshContainer
             {
-                name = node.Name,
+                name = mesh.Name,
 
                 // Copying PNT w/ RHS to LHS Y+ to Z+
                 positions = mesh.Primitives[0].GetVertices("POSITION").AsVector3Array().ToList().AsParallel().Select(p => new Vec3(p.X, -p.Z, p.Y)).ToArray(),
@@ -651,6 +659,9 @@ namespace WolvenKit.Modkit.RED4
             }
 
             meshContainer.garmentMorph = Array.Empty<Vec3>();
+            // TODO: https://github.com/WolvenKit/WolvenKit/issues/1506
+            //       Mesh Import Needs to Actually Check it's Working with GarmentSupport Targets.
+            //       For now we'll keep assuming GS is at index 0
             if (mesh.Primitives[0].MorphTargetsCount > 0)
             {
                 var idx = mesh.Primitives[0].GetMorphTargetAccessors(0).Keys.ToList().IndexOf("POSITION");
@@ -1726,7 +1737,7 @@ namespace WolvenKit.Modkit.RED4
             }
         }
 
-        private static void UpdateGarmentSupportParameters(List<RawMeshContainer> meshes, CR2WFile cr2w, bool importGarmentSupport = false)
+        private static void UpdateGarmentSupportParameters(List<RawMeshContainer> meshes, CR2WFile cr2w, bool importGarmentSupport = true)
         {
             if (importGarmentSupport && cr2w.RootChunk is CMesh cMesh)
             {
