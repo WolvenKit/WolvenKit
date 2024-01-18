@@ -358,14 +358,14 @@ namespace WolvenKit.Modkit.RED4
             {
                 if (node.Mesh != null)
                 {
-                    meshes.Add(GltfMeshToRawContainer(node));
+                    meshes.Add(GltfMeshToRawContainer(node, args));
                 }
                 else if (args.FillEmpty)
                 {
                     meshes.Add(CreateEmptyMesh(node.Name));
                 }
             }
-            meshes = meshes.OrderBy(o => o.name).ToList();
+            meshes = meshes.OrderBy(mesh => mesh.name).ToList();
 
             var max = new Vec3(float.MinValue, float.MinValue, float.MinValue);
             var min = new Vec3(float.MaxValue, float.MaxValue, float.MaxValue);
@@ -525,23 +525,38 @@ namespace WolvenKit.Modkit.RED4
 
         // TODO: https://github.com/WolvenKit/WolvenKit/issues/1505
         // Maintaining compatibility but need to review if we really want to support empties via nodes
-        private static RawMeshContainer GltfMeshToRawContainer(Node node)
+        private RawMeshContainer GltfMeshToRawContainer(Node node, GltfImportArgs args)
         {
             if (node.Mesh == null)
             {
+                _loggerService.Warning($"Node {node.Name} has no mesh, creating empty mesh (this is probably wrong.)");
                 return CreateEmptyMesh(node.Name);
             }
 
-            return GltfMeshToRawContainer(node.Mesh);
+            return GltfMeshToRawContainer(node.Mesh, args);
         }
 
-        private static RawMeshContainer GltfMeshToRawContainer(Mesh mesh)
+        private RawMeshContainer GltfMeshToRawContainer(Mesh mesh, GltfImportArgs args)
         {
             var accessors = mesh.Primitives[0].VertexAccessors.Keys.ToList();
 
+            var parenting = mesh.VisualParents.ToList();
+
+            if (parenting.Count > 1)
+            {
+                throw new ArgumentException($"Mesh {mesh.Name} has more than one parent node! Duplicate the mesh instead of sharing it.");
+            }
+
+            var node = parenting[0];
+
+            if (mesh.Name != node.Name)
+            {
+                _loggerService.Warning($"Mesh name `{mesh.Name}` does not match parent node name `{node.Name}`. Using {(args.OverrideMeshNameWithNodeName ? "NODE" : "MESH")} name.");
+            }
+
             var meshContainer = new RawMeshContainer
             {
-                name = mesh.Name,
+                name = args.OverrideMeshNameWithNodeName ? node.Name : mesh.Name,
 
                 // Copying PNT w/ RHS to LHS Y+ to Z+
                 positions = mesh.Primitives[0].GetVertices("POSITION").AsVector3Array().ToList().AsParallel().Select(p => new Vec3(p.X, -p.Z, p.Y)).ToArray(),

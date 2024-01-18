@@ -115,7 +115,7 @@ namespace WolvenKit.Modkit.RED4
             for (var i = 0; i < subMeshesCount; i++)
             {
                 var submesh = model.LogicalMeshes[i];
-                var rawMesh = GltfMeshToRawContainer(submesh);
+                var rawMesh = GltfMeshToRawContainer(submesh, args);
 
                 // Substitute whatever mesh import did with what we know to be the GarmentSupport (or none)
                 rawMesh.garmentMorph = garmentSupportPerSubmesh[i].Select(gs =>
@@ -125,7 +125,7 @@ namespace WolvenKit.Modkit.RED4
                 rawMeshes.Add(rawMesh);
             }
 
-            var rawMeshesSorted = rawMeshes.OrderBy(m => m.name).ToList();
+            var rawMeshesSorted = rawMeshes.OrderBy(r => r.name).ToList();
 
             // TODO: Calculated without GarmentSupport for now because that's what mesh import does
             // TODO: https://github.com/WolvenKit/WolvenKit/issues/1504 
