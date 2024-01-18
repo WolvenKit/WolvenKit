@@ -112,7 +112,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("Import Settings")]
         [Display(Name = "Use Object Name as Submesh Name (Compatibility)")]
         [Description("If checked, each submesh name will be overridden by the node name (e.g. Blender object) to match previous behavior.")]
-        public bool OverrideMeshNameWithNodeName { get; set; } = false;
+        public bool OverrideMeshNameWithNodeName { get; set; } = true;
 
         /// <summary>
         /// Should a Material.Json be imported?
