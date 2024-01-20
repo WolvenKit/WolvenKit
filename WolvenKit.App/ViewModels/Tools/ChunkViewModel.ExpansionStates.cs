@@ -94,7 +94,8 @@ public partial class ChunkViewModel : ObservableObject
                 break;
 
             // Generic Array
-            case CArray<IRedType> or CArray<appearanceAppearancePart> or CArray<RedBaseClass>:
+            case CArray<IRedType> or CArray<appearanceAppearancePart> or CArray<RedBaseClass>
+                or CArray<CHandle<meshMeshAppearance>>:
             {
                 foreach (var chunkViewModel in properties)
                 {
