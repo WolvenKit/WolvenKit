@@ -27,7 +27,7 @@ public class questFactsDBManagerNodeDefinitionWrapper : questDisableableNodeDefi
 
     public questFactsDBManagerNodeDefinitionWrapper(questFactsDBManagerNodeDefinition graphGraphNodeDefinition) : base(graphGraphNodeDefinition)
     {
-        if (_castedData.Type.Chunk is questSetVar_NodeType setVar)
+        if (_castedData.Type?.Chunk is questSetVar_NodeType setVar)
         {
             Title += " - Set";
             Details["Name"] = setVar.FactName;
