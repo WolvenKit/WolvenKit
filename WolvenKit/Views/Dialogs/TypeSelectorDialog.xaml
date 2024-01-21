@@ -37,6 +37,7 @@
             AllowFiltering="True"
             AutoGenerateColumns="False"
             ColumnSizer="Star"
+            FilterRowPosition="FixedTop"
             GridLinesVisibility="None"
             IsReadOnly="True"
             ItemsSource="{Binding Entries}"
@@ -50,6 +51,7 @@
                     FilterRowEditorType="TextBox"
                     HeaderText="Name"
                     HorizontalHeaderContentAlignment="Left"
+                    ImmediateUpdateColumnFilter="True"
                     MappingName="Name">
                     <Syncfusion:GridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -60,7 +62,10 @@
                                     <ColumnDefinition Width="1*" />
                                 </Grid.ColumnDefinitions>
 
-                                <TextBlock Grid.Column="0" Text="{Binding Name}" />
+                                <TextBlock
+                                    Grid.Column="0"
+                                    Margin="5,0"
+                                    Text="{Binding Name}" />
                                 <TextBlock
                                     Grid.Column="2"
                                     Foreground="{StaticResource BorderAlt2}"

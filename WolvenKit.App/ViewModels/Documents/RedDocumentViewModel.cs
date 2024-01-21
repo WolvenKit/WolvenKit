@@ -135,12 +135,12 @@ public partial class RedDocumentViewModel : DocumentViewModel
     [RelayCommand(CanExecute = nameof(CanExecuteNewEmbeddedFile))]
     private async Task NewEmbeddedFile()
     {
-        var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(s => s.GetTypes())
-            .Where(p => p.IsAssignableTo(typeof(CResource)) && p.IsClass)
-            .Select(x => x.Name));
+        var types = FileTypeHelper.FileTypes
+            .OrderBy(x => x.Extension)
+            .Select(fileType => new TypeEntry(fileType.Extension.ToString(), fileType.Description, fileType.RootType))
+            .ToList();
 
-        await _appViewModel.SetActiveDialog(new CreateClassDialogViewModel(existing, true)
+        await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
         {
             DialogHandler = HandleEmbeddedFile
         });
@@ -350,9 +350,9 @@ public partial class RedDocumentViewModel : DocumentViewModel
         }
 
         _appViewModel.CloseDialogCommand.Execute(null);
-        if (sender is not null and CreateClassDialogViewModel dvm)
+        if (sender is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType })
         {
-            var instance = RedTypeManager.Create(dvm.SelectedClass.NotNull());
+            var instance = RedTypeManager.Create(selectedType);
 
             var file = new CR2WEmbedded
             {

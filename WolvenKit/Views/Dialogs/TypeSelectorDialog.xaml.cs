@@ -31,6 +31,8 @@ public partial class TypeSelectorDialog : ReactiveUserControl<TypeSelectorDialog
 
         this.WhenActivated(disposables =>
         {
+            TypeDataGrid.ClearFilters();
+
             this.BindCommand(ViewModel, x => x.OkCommand, x => x.OkButton)
                 .DisposeWith(disposables);
 

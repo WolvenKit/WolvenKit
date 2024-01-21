@@ -13,6 +13,7 @@ public partial class TypeSelectorDialogViewModel : DialogViewModel
     private ObservableCollection<TypeEntry> _entries;
 
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(OkCommand))]
     private TypeEntry? _selectedEntry;
 
     public TypeSelectorDialogViewModel(List<TypeEntry> entries)
@@ -20,7 +21,9 @@ public partial class TypeSelectorDialogViewModel : DialogViewModel
         _entries = new ObservableCollection<TypeEntry>(entries);
     }
 
-    [RelayCommand]
+    private bool CanExecuteOk() => SelectedEntry != null;
+
+    [RelayCommand(CanExecute = nameof(CanExecuteOk))]
     private void Ok() => DialogHandler?.Invoke(this);
 
     [RelayCommand]
