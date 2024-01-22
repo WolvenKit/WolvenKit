@@ -120,6 +120,8 @@ namespace WolvenKit.Views.Documents
                     Widgets.Add(widget);
                     ViewModel.Widgets.Add(new CHandle<inkWidget>(root));
                     stack.Children.Add(widget);
+                    // only load root
+                    break;
                 }
                 WidgetTreeView.ExpandAll();
 
