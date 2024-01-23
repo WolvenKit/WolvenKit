@@ -69,9 +69,8 @@
             TabPanelBackground="#313131"
             Tag="{Binding}">
 
-            <syncfusion:TabControlExt.NewButtonTemplate>
-
-                <ControlTemplate>
+            <syncfusion:TabControlExt.NewTabButtonTemplate>
+                <DataTemplate>
                     <Button
                         Margin="0"
                         Padding="5,5"
@@ -88,9 +87,8 @@
                                 Kind="Add" />
                         </Button.Content>
                     </Button>
-                </ControlTemplate>
-
-            </syncfusion:TabControlExt.NewButtonTemplate>
+                </DataTemplate>
+            </syncfusion:TabControlExt.NewTabButtonTemplate>
 
             <syncfusion:TabControlExt.ItemTemplate>
                 <DataTemplate>

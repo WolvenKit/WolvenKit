@@ -1012,8 +1012,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         var data = RedTypeManager.CreateRedType(PropertyType);
         if (data is IRedBaseHandle handle)
         {
-            var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => handle.InnerType.IsAssignableFrom(p) && p.IsClass).Select(x => x.Name));
-            await _appViewModel.SetActiveDialog(new CreateClassDialogViewModel(existing, false)
+            var types = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(p => handle.InnerType.IsAssignableFrom(p) && p.IsClass && !p.IsAbstract)
+                .Select(x => new TypeEntry(x.Name, "", x))
+                .ToList();
+
+            await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
             {
                 DialogHandler = HandlePointer
             });
@@ -1052,18 +1057,39 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     innerType = innerType.GetGenericTypeDefinition();
                 }
 
-                var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies()
+                var types = AppDomain.CurrentDomain.GetAssemblies()
                     .SelectMany(s => s.GetTypes())
                     .Where(p => innerType.IsAssignableFrom(p) && p.IsClass && !p.IsAbstract)
-                    .Select(x => x.Name));
+                    .Select(x => new TypeEntry(x.Name, "", x))
+                    .ToList();
 
                 // no inheritable
-                if (existing.Count == 1)
+                if (types.Count == 1)
                 {
                     var type = arr.InnerType;
                     if (type == typeof(CKeyValuePair))
                     {
-                        await _appViewModel.SetActiveDialog(new SelectRedTypeDialogViewModel
+                        types = new List<TypeEntry>
+                        {
+                            new("Color", "Color description", typeof(CColor)),
+                            new("CpuNameU64", "", typeof(CName)),
+                            new("Cube", "Reference to cube xbm", typeof(CResourceReference<ITexture>)),
+                            new("DynamicTexture", "Reference to dtex file", typeof(CResourceReference<ITexture>)),
+                            new("FoliageParameters", "Reference to fp file", typeof(CResourceReference<CFoliageProfile>)),
+                            new("Gradient", "Reference to gradient file", typeof(CResourceReference<CGradient>)),
+                            new("HairParameters", "Reference to hp file", typeof(CResourceReference<CHairProfile>)),
+                            new("MultilayerMask", "Reference to mlmask file", typeof(CResourceReference<Multilayer_Mask>)),
+                            new("MultilayerSetup", "Reference to mlsetup file", typeof(CResourceReference<Multilayer_Setup>)),
+                            new("Scalar", "", typeof(CFloat)),
+                            new("SkinParameters", "Reference to sp file", typeof(CResourceReference<CSkinProfile>)),
+                            //new("StructBuffer", "", null), // still not sure what this does
+                            new("TerrainSetup", "Reference to terrainsetup file", typeof(CResourceReference<CTerrainSetup>)),
+                            new("Texture", "Reference to xbm file", typeof(CResourceReference<ITexture>)),
+                            new("TextureArray", "Reference to texarray file", typeof(CResourceReference<ITexture>)),
+                            new("Vector", "", typeof(Vector4)),
+                        };
+
+                        await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
                         {
                             DialogHandler = HandleCKeyValuePair
                         });
@@ -1081,7 +1107,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 }
                 else
                 {
-                    await _appViewModel.SetActiveDialog(new CreateClassDialogViewModel(existing, true)
+                    await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
                     {
                         DialogHandler = handler
                     });
@@ -1246,7 +1272,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         if (Data is IRedBufferPointer db)
         {
-            ObservableCollection<string> existing = new();
+            var types = new List<TypeEntry>();
+
             if (db.GetValue().Data is worldNodeDataBuffer worldNodeDataBuffer)
             {
                 worldNodeDataBuffer.Add(new worldNodeData());
@@ -1255,9 +1282,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
             if (db.GetValue().Data is RedPackage pkg)
             {
-                existing = new ObservableCollection<string>(pkg.Chunks.Select(t => t.GetType().Name).Distinct());
+                types = pkg.Chunks
+                    .Select(x => new TypeEntry(x.GetType().Name, "", x.GetType()))
+                    .DistinctBy(x => x.Name)
+                    .ToList();
             }
-            await _appViewModel.SetActiveDialog(new CreateClassDialogViewModel(existing, true)
+            await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
             {
                 DialogHandler = HandleChunk
             });
@@ -2924,9 +2954,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     public void HandlePointer(DialogViewModel? sender)
     {
         _appViewModel.CloseDialogCommand.Execute(null);
-        if (sender is CreateClassDialogViewModel vm && vm.SelectedClass is not null )
+        if (sender is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType })
         {
-            var instance = RedTypeManager.Create(vm.SelectedClass);
+            var instance = RedTypeManager.Create(selectedType);
             var data = RedTypeManager.CreateRedType(PropertyType);
             if (data is IRedBaseHandle handle)
             {
@@ -2951,9 +2981,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     public void HandleCKeyValuePair(DialogViewModel? sender)
     {
         _appViewModel.CloseDialogCommand.Execute(null);
-        if (sender is SelectRedTypeDialogViewModel vm && vm.SelectedType is not null)
+        if (sender is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType })
         {
-            if (System.Activator.CreateInstance(vm.SelectedType) is IRedType t)
+            if (System.Activator.CreateInstance(selectedType) is IRedType t)
             {
                 var instance = new CKeyValuePair(CName.Empty, t);
                 InsertChild(-1, instance);
@@ -2964,9 +2994,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     public void HandleChunk(DialogViewModel? sender)
     {
         _appViewModel.CloseDialogCommand.Execute(null);
-        if (sender is CreateClassDialogViewModel vm && vm.SelectedType is not null)
+        if (sender is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType })
         {
-            var instance = RedTypeManager.CreateRedType(vm.SelectedType);
+            var instance = RedTypeManager.CreateRedType(selectedType);
             if (!InsertChild(-1, instance))
             {
                 _loggerService.Error("Unable to insert child");
@@ -2977,12 +3007,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     public void HandleChunkPointer(DialogViewModel? sender)
     {
         _appViewModel.CloseDialogCommand.Execute(null);
-        if (sender is CreateClassDialogViewModel vm && Data is IRedArray arr && vm.SelectedClass is not null)
+        if (sender is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType } && Data is IRedArray arr)
         {
             var newItem = RedTypeManager.CreateRedType(arr.InnerType);
             if (newItem is IRedBaseHandle handle)
             {
-                var instance = RedTypeManager.Create(vm.SelectedClass);
+                var instance = RedTypeManager.Create(selectedType);
                 handle.SetValue(instance);
                 if (!InsertChild(-1, newItem))
                 {

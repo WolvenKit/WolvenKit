@@ -2,15 +2,19 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Nodify;
+using Splat;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.GraphEditor;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
+using WolvenKit.App.ViewModels.Shell;
 
 namespace WolvenKit.Views.GraphEditor;
 /// <summary>
@@ -69,12 +73,14 @@ public partial class GraphEditorView : UserControl
 
     public Point ViewportLocation { get; set; }
 
+    private readonly AppViewModel _appViewModel;
+
     public GraphEditorView()
     {
         InitializeComponent();
-    }
 
-    private void MenuItem_OnClick(object sender, RoutedEventArgs e) => ArrangeNodes();
+        _appViewModel = Locator.Current.GetService<AppViewModel>();
+    }
 
     private void ArrangeNodes()
     {
@@ -99,12 +105,34 @@ public partial class GraphEditorView : UserControl
 
         if (Source.GraphType == RedGraphType.Scene)
         {
-            var addMenu = new MenuItem { Header = "Add..." };
-
             var nodeTypes = Source.GetSceneNodeTypes();
+            var types = nodeTypes
+                .Select(x => new TypeEntry(GetCleanTypeName(x.Name), "", x))
+                .OrderBy(x => x.Name)
+                .ToList();
+
+            var addMenu = new MenuItem { Header = "Add ..." };
+
+            addMenu.Items.Add(CreateMenuItem("Open Dialog ...", async () =>
+            {
+                await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
+                {
+                    DialogHandler = model =>
+                    {
+                        _appViewModel.CloseDialogCommand.Execute(null);
+                        if (model is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType })
+                        {
+                            Source.CreateSceneNode(selectedType, ViewportLocation);
+                        }
+                    }
+                });
+            }));
+
+            addMenu.Items.Add(new Separator());
+
             foreach (var nodeType in nodeTypes)
             {
-                addMenu.Items.Add(CreateMenuItem(nodeType.Name[3..^4], () => Source.CreateSceneNode(nodeType, ViewportLocation)));
+                addMenu.Items.Add(CreateMenuItem(GetCleanTypeName(nodeType.Name), () => Source.CreateSceneNode(nodeType, ViewportLocation)));
             }
 
             nodifyEditor.ContextMenu.Items.Add(addMenu);
@@ -112,12 +140,34 @@ public partial class GraphEditorView : UserControl
 
         if (Source.GraphType == RedGraphType.Quest)
         {
+            var nodeTypes = Source.GetQuestNodeTypes();
+            var types = nodeTypes
+                .Select(x => new TypeEntry(GetCleanTypeName(x.Name), "", x))
+                .OrderBy(x => x.Name)
+                .ToList();
+
             var addMenu = new MenuItem { Header = "Add..." };
 
-            var nodeTypes = Source.GetQuestNodeTypes();
+            addMenu.Items.Add(CreateMenuItem("Open Dialog ...", async () =>
+            {
+                await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
+                {
+                    DialogHandler = model =>
+                    {
+                        _appViewModel.CloseDialogCommand.Execute(null);
+                        if (model is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType })
+                        {
+                            Source.CreateQuestNode(selectedType, ViewportLocation);
+                        }
+                    }
+                });
+            }));
+
+            addMenu.Items.Add(new Separator());
+
             foreach (var nodeType in nodeTypes)
             {
-                addMenu.Items.Add(CreateMenuItem(nodeType.Name[5..^14], () => Source.CreateQuestNode(nodeType, ViewportLocation)));
+                addMenu.Items.Add(CreateMenuItem(GetCleanTypeName(nodeType.Name), () => Source.CreateQuestNode(nodeType, ViewportLocation)));
             }
 
             nodifyEditor.ContextMenu.Items.Add(addMenu);
@@ -128,6 +178,29 @@ public partial class GraphEditorView : UserControl
         nodifyEditor.ContextMenu.SetCurrentValue(ContextMenu.IsOpenProperty, true);
 
         e.Handled = true;
+    }
+
+    private string GetCleanTypeName(string typeName)
+    {
+        if (typeName.StartsWith("quest"))
+        {
+            typeName = typeName[5..];
+        }
+        else if (typeName.StartsWith("scn"))
+        {
+            typeName = typeName[3..];
+        }
+
+        if (typeName.EndsWith("NodeDefinition"))
+        {
+            typeName = typeName[..^14];
+        }
+        else if (typeName.EndsWith("Node"))
+        {
+            typeName = typeName[..^4];
+        }
+
+        return typeName;
     }
 
     private void Node_ContextMenuOpening(object sender, ContextMenuEventArgs e)
