@@ -93,6 +93,7 @@ public partial class RDTTextureViewModel : RedDocumentTabViewModel
     }
 
     private bool IsLut() => 
+        CanReplaceTexture() &&
         _data is CBitmapTexture bitmapTexture &&
         bitmapTexture.Setup.Group == GpuWrapApieTextureGroup.TEXG_Generic_LUT;
 
@@ -149,7 +150,9 @@ public partial class RDTTextureViewModel : RedDocumentTabViewModel
         }
     }
 
-    [RelayCommand]
+    private bool CanReplaceTexture() => !Parent.IsReadOnly;
+
+    [RelayCommand(CanExecute = nameof(CanReplaceTexture))]
     private async Task ReplaceTexture()
     {
         if (_data is not CBitmapTexture bitmap)
