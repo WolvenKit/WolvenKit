@@ -13,8 +13,6 @@ namespace WolvenKit.Common.Interfaces
     {
         public bool Pack(DirectoryInfo infolder, DirectoryInfo outpath, string? modname = null);
 
-        public bool ConvertXbmToDdsStream(Stream redInFile, Stream outstream, bool flipV, out DXGI_FORMAT texformat, out DXGI_FORMAT decompressedFormat);
-
         public Task<bool> Import(RedRelativePath rawRelative, GlobalImportArgs args, DirectoryInfo? outDir = null);
         public Task<bool> ImportFolder(DirectoryInfo inDir, GlobalImportArgs args, DirectoryInfo? outDir = null);
 
@@ -33,7 +31,7 @@ namespace WolvenKit.Common.Interfaces
             DirectoryInfo outDir,
             GlobalExportArgs args,
             DirectoryInfo? rawOutDir = null,
-            ECookedFileFormat[]? forcebuffers = null,
+            ECookedFileFormat[]? forceBuffers = null,
             bool serialize = false);
 
         public Task<bool> UncookSingleAsync(
@@ -42,7 +40,7 @@ namespace WolvenKit.Common.Interfaces
             DirectoryInfo outDir,
             GlobalExportArgs args,
             DirectoryInfo? rawOutDir = null,
-            ECookedFileFormat[]? forcebuffers = null,
+            ECookedFileFormat[]? forceBuffers = null,
             bool serialize = false);
 
         void UncookAll(
@@ -53,7 +51,7 @@ namespace WolvenKit.Common.Interfaces
             string? pattern = null,
             string? regex = null,
             DirectoryInfo? rawOutDir = null,
-            ECookedFileFormat[]? forcebuffers = null,
+            ECookedFileFormat[]? forceBuffers = null,
             bool serialize = false);
 
 

@@ -31,12 +31,6 @@ namespace WolvenKit.Modkit.RED4
 
 #region exportanims
 
-        public bool ExportAnim(Stream animStream, FileInfo outfile, bool isGLBinary = true, bool incRootMotion = true)
-        {
-            var animsFile = _parserService.ReadRed4File(animStream);
-            return animsFile is { RootChunk: animAnimSet anims } && ExportAnim(animsFile, outfile, isGLBinary, incRootMotion);
-        }
-
         public bool ExportAnim(CR2WFile animsFile, FileInfo outfile, bool isGLBinary = true, bool incRootMotion = true, ValidationMode vmode = ValidationMode.TryFix)
         {
             if (animsFile.RootChunk is not animAnimSet anims)

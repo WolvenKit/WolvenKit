@@ -5,6 +5,7 @@ using CP77.Common.Image;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 
@@ -76,17 +77,6 @@ namespace WolvenKit.Modkit.RED4
 
                 yield return RedImage.Create(info, maskData);
             }
-        }
-
-        public bool UncookMlmask(Stream cr2wStream, FileInfo outfile, MlmaskExportArgs args)
-        {
-            var cr2w = _parserService.ReadRed4File(cr2wStream);
-            if (cr2w == null || cr2w.RootChunk is not Multilayer_Mask mlmask)
-            {
-                return false;
-            }
-
-            return UncookMlmask(mlmask, outfile, args);
         }
 
         public bool UncookMlmask(Multilayer_Mask mlmask, FileInfo outfile, MlmaskExportArgs args)

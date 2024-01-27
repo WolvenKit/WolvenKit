@@ -299,7 +299,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
             if (file.Content != null)
             {
                 var vm = _documentTabViewmodelFactory.RDTDataViewModel(file.Content, this, _appViewModel, _chunkViewmodelFactory);
-                vm.FilePath = file.FileName;
+                vm.FilePath = file.FileName.GetResolvedText()!;
                 vm.IsEmbeddedFile = true;
 
                 TabItemViewModels.Add(vm);
@@ -364,7 +364,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
             IsDirty = true;
 
             var vm = _documentTabViewmodelFactory.RDTDataViewModel(file.Content, this, _appViewModel, _chunkViewmodelFactory);
-            vm.FilePath = file.FileName;
+            vm.FilePath = file.FileName.GetResolvedText()!;
             vm.IsEmbeddedFile = true;
 
             TabItemViewModels.Add(vm);

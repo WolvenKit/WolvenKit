@@ -2,19 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.Extensions.DependencyModel;
 using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
-using WolvenKit.Common;
 using WolvenKit.Common.DDS;
-using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
-using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.Modkit.RED4.Tools;
-using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 using Vec3 = System.Numerics.Vector3;
@@ -24,9 +19,8 @@ namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
-        public bool ExportMorphTargets(Stream targetStream, FileInfo outfile, string modFolder, bool isGLBinary = true, ValidationMode vMode = ValidationMode.TryFix)
+        public bool ExportMorphTargets(CR2WFile cr2w, FileInfo outfile, string modFolder, bool isGLBinary = true, ValidationMode vMode = ValidationMode.TryFix)
         {
-            var cr2w = _parserService.ReadRed4File(targetStream);
             if (cr2w is not { RootChunk: MorphTargetMesh morphBlob } || morphBlob.Blob.Chunk is not rendRenderMorphTargetMeshBlob blob || blob.BaseBlob.Chunk is not rendRenderMeshBlob rendBlob)
             {
                 _loggerService.Error("Morphtarget: does not look like a valid morphtarget");
@@ -104,9 +98,6 @@ namespace WolvenKit.Modkit.RED4
             {
                 File.WriteAllBytes(Path.Combine(dir.FullName, $"{Path.GetFileNameWithoutExtension(outfile.FullName)}_{i}.dds"), textureStreams[i].ToArray());
             }
-
-            targetStream.Dispose();
-            targetStream.Close();
 
             return true;
         }

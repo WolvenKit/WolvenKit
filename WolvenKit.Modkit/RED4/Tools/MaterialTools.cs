@@ -19,7 +19,7 @@ namespace WolvenKit.Modkit.RED4
     /// </summary>
     public partial class ModTools
     {
-        private MatData SetupMaterial(CR2WFile cr2w, Stream meshStream, string matRepo, MeshesInfo info, EUncookExtension eUncookExtension = EUncookExtension.dds, bool experimentUseNewMeshExporter = false)
+        private MatData SetupMaterial(CR2WFile cr2w, string matRepo, MeshesInfo info, EUncookExtension eUncookExtension = EUncookExtension.dds, bool experimentUseNewMeshExporter = false)
         {
             var exportArgs =
                 new GlobalExportArgs().Register(
@@ -54,9 +54,9 @@ namespace WolvenKit.Modkit.RED4
 
         }
 
-        private void ParseMaterials(CR2WFile cr2w, Stream meshStream, FileInfo outfile, string matRepo, MeshesInfo info, EUncookExtension eUncookExtension = EUncookExtension.dds)
+        private void ParseMaterials(CR2WFile cr2w, FileInfo outfile, string matRepo, MeshesInfo info, EUncookExtension eUncookExtension = EUncookExtension.dds)
         {
-            var matData = SetupMaterial(cr2w, meshStream, matRepo, info, eUncookExtension);
+            var matData = SetupMaterial(cr2w, matRepo, info, eUncookExtension);
             var str = RedJsonSerializer.Serialize(matData);
             File.WriteAllText(Path.ChangeExtension(outfile.FullName, ".Material.json"), str);
         }
@@ -457,7 +457,7 @@ namespace WolvenKit.Modkit.RED4
                 {
                     if (file.Content is CMaterialTemplate mt)
                     {
-                        materialTemplates.Add(file.FileName, mt);
+                        materialTemplates.Add(file.FileName.GetResolvedText()!, mt);
                     }
                 }
             }

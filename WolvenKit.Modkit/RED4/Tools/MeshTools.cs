@@ -1208,8 +1208,6 @@ namespace WolvenKit.Modkit.RED4.Tools
             }
         }
 
-        public static void UpdateSkinningParamCloth(ref List<RawMeshContainer> meshes, Stream ms, CR2WFile cr2w) => UpdateSkinningParamCloth(ref meshes, cr2w);
-
         public static void UpdateSkinningParamCloth(ref List<RawMeshContainer> meshes, CR2WFile cr2w)
         {
             var clothBLob = ((CMesh)cr2w.RootChunk).Parameters.FirstOrDefault(x => x.Chunk is meshMeshParamCloth);

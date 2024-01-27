@@ -84,7 +84,7 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
             }
             if (embeddedFile != null)
             {
-                var newfilename = Interactions.Rename(embeddedFile.FileName);
+                var newfilename = Interactions.Rename(embeddedFile.FileName.GetResolvedText()!);
 
                 if (string.IsNullOrEmpty(newfilename))
                 {
