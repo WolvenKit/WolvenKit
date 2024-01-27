@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.RED4.Archive;
@@ -250,7 +251,7 @@ public static class CommonFunctions
             _ => GpuWrapApieTextureGroup.TEXG_Generic_Color
         };
     }
-
+    
     /// <summary>
     /// Tries to guess if PremultiplyAlpha should be checked from file name
     /// </summary>
@@ -268,7 +269,10 @@ public static class CommonFunctions
         }
 
         // what else could we possibly check for?
-        return fileName.Contains("decal") || fileName.Contains("icon");
+        var partialsToCheck = new List<string> { "decal", "icon", "icons", "overlay", "alpha" };
+
+        // check if we have a match (filename has already been toLower)
+        return partialsToCheck.Any(partial => fileName.Contains($"_{partial}") || fileName.Contains($"{partial}_"));
     }
 
 }

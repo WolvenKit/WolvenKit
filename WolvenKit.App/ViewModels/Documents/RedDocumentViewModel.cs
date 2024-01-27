@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -16,6 +17,7 @@ using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Helpers;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
@@ -44,6 +46,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
     private readonly IWatcherService _watcherService;
     private readonly IArchiveManager _archiveManager;
     private readonly IHookService _hookService;
+    private readonly INodeWrapperFactory _nodeWrapperFactory;
 
     private readonly AppViewModel _appViewModel;
 
@@ -60,7 +63,8 @@ public partial class RedDocumentViewModel : DocumentViewModel
         Red4ParserService parserService,
         IWatcherService watcherService,
         IArchiveManager archiveManager,
-        IHookService hookService, 
+        IHookService hookService,
+        INodeWrapperFactory nodeWrapperFactory,
         bool isReadyOnly = false) : base(path)
     {
         _documentTabViewmodelFactory = documentTabViewmodelFactory;
@@ -72,6 +76,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
         _watcherService = watcherService;
         _archiveManager = archiveManager;
         _hookService = hookService;
+        _nodeWrapperFactory = nodeWrapperFactory;
 
         _appViewModel = appViewModel;
         _embedHashSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
@@ -130,12 +135,12 @@ public partial class RedDocumentViewModel : DocumentViewModel
     [RelayCommand(CanExecute = nameof(CanExecuteNewEmbeddedFile))]
     private async Task NewEmbeddedFile()
     {
-        var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(s => s.GetTypes())
-            .Where(p => p.IsAssignableTo(typeof(CResource)) && p.IsClass)
-            .Select(x => x.Name));
+        var types = FileTypeHelper.FileTypes
+            .OrderBy(x => x.Extension)
+            .Select(fileType => new TypeEntry(fileType.Extension.ToString(), fileType.Description, fileType.RootType))
+            .ToList();
 
-        await _appViewModel.SetActiveDialog(new CreateClassDialogViewModel(existing, true)
+        await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
         {
             DialogHandler = HandleEmbeddedFile
         });
@@ -149,9 +154,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
     public override async Task Save(object? parameter)
     {
-        var tmpPath = Path.ChangeExtension(FilePath, ".tmp");
-
-        using var fs = new FileStream(tmpPath, FileMode.Create, FileAccess.ReadWrite);
+        var ms = new MemoryStream();
         var file = GetMainFile();
 
         try
@@ -159,7 +162,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
             // if we're in a text view, use a normal StreamWriter, else use the CR2W one
             if (file is RDTTextViewModel textViewModel)
             {
-                using var tw = new StreamWriter(fs);
+                using var tw = new StreamWriter(ms, null, -1, true);
                 var text = textViewModel.Text;
                 tw.Write(text);
             }
@@ -169,14 +172,10 @@ public partial class RedDocumentViewModel : DocumentViewModel
                 if (_hookService is AppHookService appHookService && !appHookService.OnSave(FilePath, ref cr2w))
                 {
                     _loggerService.Error($"Error while processing onSave script");
-
-                    fs.Dispose();
-                    File.Delete(tmpPath);
-
                     return;
                 }
 
-                using var writer = new CR2WWriter(fs) { LoggerService = _loggerService };
+                using var writer = new CR2WWriter(ms, Encoding.UTF8, true) { LoggerService = _loggerService };
                 writer.WriteFile(cr2w);
             }
         }
@@ -185,17 +184,10 @@ public partial class RedDocumentViewModel : DocumentViewModel
             _loggerService.Error($"Error while saving {FilePath}");
             _loggerService.Error(e);
 
-            fs.Dispose();
-            File.Delete(tmpPath);
-
             return;
         }
 
-        if (File.Exists(FilePath))
-        {
-            File.Delete(FilePath);
-        }
-        File.Move(tmpPath, FilePath);
+        FileHelper.SafeWrite(ms, FilePath, _loggerService);
 
         SetIsDirty(false);
         _loggerService.Success($"Saved file {FilePath}");
@@ -284,20 +276,10 @@ public partial class RedDocumentViewModel : DocumentViewModel
         {
             TabItemViewModels.Add(_documentTabViewmodelFactory.RDTMeshViewModel(wsb, this));
         }
-        if (cls is graphGraphResource ggr)
+        if (_globals.Value.ENABLE_NODE_EDITOR && cls is graphGraphResource or scnSceneResource)
         {
-            if (_globals.Value.ENABLE_NODE_EDITOR)
-            {
-                TabItemViewModels.Add(new RDTGraphViewModel(ggr, this));
-            }
+            TabItemViewModels.Add(new RDTGraphViewModel2(cls, this, _nodeWrapperFactory));
         }
-        //if (cls is scnSceneResource ssr)
-        //{
-        //    if (_globals.Value.ENABLE_NODE_EDITOR)
-        //    {
-        //        TabItemViewModels.Add(new RDTGraphViewModel(ssr, this));
-        //    }
-        //}
     }
 
     public void PopulateItems()
@@ -368,9 +350,9 @@ public partial class RedDocumentViewModel : DocumentViewModel
         }
 
         _appViewModel.CloseDialogCommand.Execute(null);
-        if (sender is not null and CreateClassDialogViewModel dvm)
+        if (sender is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType })
         {
-            var instance = RedTypeManager.Create(dvm.SelectedClass.NotNull());
+            var instance = RedTypeManager.Create(selectedType);
 
             var file = new CR2WEmbedded
             {

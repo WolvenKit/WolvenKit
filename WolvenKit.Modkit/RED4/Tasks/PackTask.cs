@@ -1,7 +1,5 @@
 using System.IO;
 using System.Threading.Tasks;
-using SharpDX;
-using WolvenKit.Modkit.Exceptions;
 
 namespace CP77Tools.Tasks;
 
@@ -63,16 +61,12 @@ public partial class ConsoleFunctions
 
         #endregion checks
 
-        try
-        {
-            var ar = _modTools.Pack(basedir, outDir);
-            _loggerService.Success($"Finished packing {ar.ArchiveAbsolutePath}.");
-            return 0;
-        }
-        catch (PackException)
+        if (!_modTools.Pack(basedir, outDir))
         {
             _loggerService.Error($"Packing failed.");
             return ERROR_GENERAL_ERROR;
         }
+
+        return 0;
     }
 }

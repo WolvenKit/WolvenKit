@@ -238,6 +238,13 @@
                 SelectionChanged="ImportGrid_SelectionChanged"
                 SelectionMode="Extended">
 
+                <syncfusion:SfDataGrid.Resources>
+                    <DataTemplate x:Key="TemplateToolTip">
+                        <TextBlock Text="{Binding Path=FullPath}" />
+                    </DataTemplate>
+                </syncfusion:SfDataGrid.Resources>
+
+
                 <syncfusion:SfDataGrid.Columns>
                     <syncfusion:GridCheckBoxColumn
                         Width="50"
@@ -259,6 +266,8 @@
                         FilterRowEditorType="TextBoxExt"
                         HeaderText="Name"
                         HorizontalHeaderContentAlignment="Left"
+                        ShowToolTip="True"
+                        ToolTipTemplate="{StaticResource TemplateToolTip}"
                         MappingName="Name" />
                     <syncfusion:GridTextColumn
                         AllowFiltering="False"

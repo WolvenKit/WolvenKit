@@ -102,7 +102,10 @@ namespace WolvenKit.Modkit.RED4.Animation
                         var zs = Enumerable.Range(0, simdBlockWidth).Select(_ => br.ReadSingle()).ToArray();
                         var ws = Enumerable.Range(0, simdBlockWidth).Select(_ => br.ReadSingle()).ToArray();
 
-                        for (uint band = 0; band < simdBlockWidth; band++)
+                        // We can safely *read* the padding but can't write it
+                        var bandWidth = Math.Min(simdBlockWidth, blob.NumJoints - j);
+
+                        for (uint band = 0; band < bandWidth; band++)
                         {
                             var rot = new Quat
                             {

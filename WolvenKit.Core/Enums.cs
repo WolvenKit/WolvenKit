@@ -168,7 +168,8 @@ namespace WolvenKit.Common
         wav,
         masklist,
         csv,
-        re
+        re,
+        cube
     }
 
     public enum EConvertableOutput
@@ -223,7 +224,8 @@ namespace WolvenKit.Common
         bmp,
         jpg,
         png,
-        tiff
+        tiff,
+        cube
     }
 
     /// <summary>

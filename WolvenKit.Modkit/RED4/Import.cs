@@ -60,7 +60,7 @@ namespace WolvenKit.Modkit.RED4
             // import files
             return extAsEnum switch
             {
-                ERawFileFormat.bmp or ERawFileFormat.jpg or ERawFileFormat.png or ERawFileFormat.tiff or ERawFileFormat.tga or ERawFileFormat.dds => HandleTextures(rawRelative, outDir, args),
+                ERawFileFormat.bmp or ERawFileFormat.jpg or ERawFileFormat.png or ERawFileFormat.tiff or ERawFileFormat.tga or ERawFileFormat.dds or ERawFileFormat.cube => HandleTextures(rawRelative, outDir, args),
                 ERawFileFormat.gltf or ERawFileFormat.glb => ImportGltf(rawRelative, outDir, args.Get<GltfImportArgs>()),
                 ERawFileFormat.fbx => ImportFbx(rawRelative, outDir, args.Get<CommonImportArgs>()),
                 ERawFileFormat.masklist => ImportMlmask(rawRelative, outDir),
@@ -365,6 +365,19 @@ namespace WolvenKit.Modkit.RED4
                     RawFormat = Enum.Parse<ETextureRawFormat>(xbm.Setup.RawFormat.ToString()),
                     TextureGroup = xbm.Setup.Group
                 };
+            }
+
+            var extension = Path.GetExtension(infilePath);
+            if (args.TextureGroup != GpuWrapApieTextureGroup.TEXG_Generic_LUT && extension == ".cube")
+            {
+                _loggerService.Error("Wrong import settings. cube files only work with \"TextureGroup = TEXG_Generic_LUT\"");
+                return false;
+            }
+
+            if (args.TextureGroup == GpuWrapApieTextureGroup.TEXG_Generic_LUT && extension != ".cube" && extension != ".dds")
+            {
+                _loggerService.Error($"Wrong import settings. LUT import only works with dds or cube. Got \"{extension}\"");
+                return false;
             }
 
             var image = RedImage.LoadFromFile(infilePath);

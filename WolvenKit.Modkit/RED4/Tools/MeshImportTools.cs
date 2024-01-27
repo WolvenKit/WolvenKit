@@ -358,14 +358,14 @@ namespace WolvenKit.Modkit.RED4
             {
                 if (node.Mesh != null)
                 {
-                    meshes.Add(GltfMeshToRawContainer(node));
+                    meshes.Add(GltfMeshToRawContainer(node, args));
                 }
                 else if (args.FillEmpty)
                 {
                     meshes.Add(CreateEmptyMesh(node.Name));
                 }
             }
-            meshes = meshes.OrderBy(o => o.name).ToList();
+            meshes = meshes.OrderBy(mesh => mesh.name).ToList();
 
             var max = new Vec3(float.MinValue, float.MinValue, float.MinValue);
             var min = new Vec3(float.MaxValue, float.MaxValue, float.MaxValue);
@@ -392,6 +392,8 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
+            // GarmentSupport not accounted here. Might be an issue?
+            // TODO: https://github.com/WolvenKit/WolvenKit/issues/1504 
             meshBlob.BoundingBox.Min = new Vector4 { X = min.X, Y = min.Y, Z = min.Z, W = 1f };
             meshBlob.BoundingBox.Max = new Vector4 { X = max.X, Y = max.Y, Z = max.Z, W = 1f };
 
@@ -521,19 +523,40 @@ namespace WolvenKit.Modkit.RED4
             return meshContainer;
         }
 
-        private static RawMeshContainer GltfMeshToRawContainer(Node node)
+        // TODO: https://github.com/WolvenKit/WolvenKit/issues/1505
+        // Maintaining compatibility but need to review if we really want to support empties via nodes
+        private RawMeshContainer GltfMeshToRawContainer(Node node, GltfImportArgs args)
         {
             if (node.Mesh == null)
             {
+                _loggerService.Warning($"Node {node.Name} has no mesh, creating empty mesh (this is probably wrong.)");
                 return CreateEmptyMesh(node.Name);
             }
 
-            var mesh = node.Mesh;
+            return GltfMeshToRawContainer(node.Mesh, args);
+        }
+
+        private RawMeshContainer GltfMeshToRawContainer(Mesh mesh, GltfImportArgs args)
+        {
             var accessors = mesh.Primitives[0].VertexAccessors.Keys.ToList();
+
+            var parenting = mesh.VisualParents.ToList();
+
+            if (parenting.Count > 1)
+            {
+                throw new ArgumentException($"Mesh {mesh.Name} has more than one parent node! Duplicate the mesh instead of sharing it.");
+            }
+
+            var node = parenting[0];
+
+            if (mesh.Name != node.Name)
+            {
+                _loggerService.Warning($"Mesh name `{mesh.Name}` does not match parent node name `{node.Name}`. Using {(args.OverrideMeshNameWithNodeName ? "NODE" : "MESH")} name.");
+            }
 
             var meshContainer = new RawMeshContainer
             {
-                name = node.Name,
+                name = args.OverrideMeshNameWithNodeName ? node.Name : mesh.Name,
 
                 // Copying PNT w/ RHS to LHS Y+ to Z+
                 positions = mesh.Primitives[0].GetVertices("POSITION").AsVector3Array().ToList().AsParallel().Select(p => new Vec3(p.X, -p.Z, p.Y)).ToArray(),
@@ -651,6 +674,9 @@ namespace WolvenKit.Modkit.RED4
             }
 
             meshContainer.garmentMorph = Array.Empty<Vec3>();
+            // TODO: https://github.com/WolvenKit/WolvenKit/issues/1506
+            //       Mesh Import Needs to Actually Check it's Working with GarmentSupport Targets.
+            //       For now we'll keep assuming GS is at index 0
             if (mesh.Primitives[0].MorphTargetsCount > 0)
             {
                 var idx = mesh.Primitives[0].GetMorphTargetAccessors(0).Keys.ToList().IndexOf("POSITION");
@@ -1726,7 +1752,7 @@ namespace WolvenKit.Modkit.RED4
             }
         }
 
-        private static void UpdateGarmentSupportParameters(List<RawMeshContainer> meshes, CR2WFile cr2w, bool importGarmentSupport = false)
+        private static void UpdateGarmentSupportParameters(List<RawMeshContainer> meshes, CR2WFile cr2w, bool importGarmentSupport = true)
         {
             if (importGarmentSupport && cr2w.RootChunk is CMesh cMesh)
             {

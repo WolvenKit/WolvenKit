@@ -31,11 +31,11 @@ public class CStatic<T> : CArrayBase<T>, IRedStatic<T> where T : IRedType
         {
             if (_internalList[i] is IRedCloneable cl)
             {
-                other[i] = (T)cl.DeepCopy();
+                other.Add((T)cl.DeepCopy());
             }
             else
             {
-                other[i] = _internalList[i];
+                other.Add(_internalList[i]);
             }
         }
 

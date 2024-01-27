@@ -85,6 +85,7 @@ public static class TexconvNative
         TGA,
         //HDR, //broken for some reason, disabling for now
         TIFF,
+        CUBE,
         /*WIC_CODEC_WMP,
         CODEC_HDP,
         CODEC_JXR,

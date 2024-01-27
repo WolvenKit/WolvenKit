@@ -39,15 +39,15 @@ public partial class ChunkViewModel : ObservableObject
         var _recursionLevel = recursionLevel + 1;
 
         // Remember if this was expanded recursively so that it can swallow its next event and not re-expand its children  
-        this.ExpansionStateChangedFromParent = _recursionLevel > 0;
+        ExpansionStateChangedFromParent = _recursionLevel > 0;
 
         // Possible that we're calling this recursively
         this.IsExpanded = isExpanded;
 
-        ObservableCollectionExtended<ChunkViewModel> properties = this.Properties;
-        if (properties.Count == 0 && this.TVProperties.Count > 0)
+        ObservableCollectionExtended<ChunkViewModel> properties = Properties;
+        if (properties.Count == 0 && TVProperties.Count > 0)
         {
-            properties = this.TVProperties;
+            properties = TVProperties;
         }
 
         if (properties.Count == 0)
@@ -55,7 +55,7 @@ public partial class ChunkViewModel : ObservableObject
             return;
         }
 
-        switch (this.Data)
+        switch (ResolvedData)
         {
             // .app: appearance definition (expand components, partsValues, partsOverrides)
             case CHandle<appearanceAppearanceDefinition> or appearanceAppearanceDefinition:
@@ -73,6 +73,16 @@ public partial class ChunkViewModel : ObservableObject
 
                 break;
             }
+            // .visualTags (.app file and nested under .ent.visualTagSchema)
+            case redTagList when properties.Count == 1:
+                properties[0].IsExpanded = isExpanded;
+                break;
+            // visualTagSchema (.ent file)
+            //      - schema 
+            //      - redTagList visualTags
+            case entVisualTagsSchema when properties.Count == 2:
+                properties[1].SetChildExpansionStatesInternal(isExpanded, _recursionLevel);
+                break;
             // mesh: material, expand values array (but not recursively)
             case CMaterialInstance or CHandle<IMaterial>:
                 properties.Last().SetChildExpansionStatesInternal(isExpanded, _recursionLevel);
@@ -84,7 +94,8 @@ public partial class ChunkViewModel : ObservableObject
                 break;
 
             // Generic Array
-            case CArray<IRedType> or CArray<appearanceAppearancePart> or CArray<RedBaseClass>:
+            case CArray<IRedType> or CArray<appearanceAppearancePart> or CArray<RedBaseClass>
+                or CArray<CHandle<meshMeshAppearance>>:
             {
                 foreach (var chunkViewModel in properties)
                 {
@@ -116,7 +127,7 @@ public partial class ChunkViewModel : ObservableObject
             return;
         }
 
-        foreach (var chunkViewModel in this.Properties)
+        foreach (var chunkViewModel in Properties)
         {
             chunkViewModel.IsExpanded = false;
         }

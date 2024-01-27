@@ -76,11 +76,65 @@ public partial class RDTTextureViewModel : RedDocumentTabViewModel
 
         var bitmapImage = new BitmapImage();
         bitmapImage.BeginInit();
-        bitmapImage.StreamSource = new MemoryStream(_redImage.GetPreview(true));
+
+        if (IsLut())
+        {
+            bitmapImage.StreamSource = new MemoryStream(_redImage.GetHaldPreview());
+        }
+        else
+        {
+            bitmapImage.StreamSource = new MemoryStream(_redImage.GetPreview(true));
+        }
+
         bitmapImage.EndInit();
 
         Image = bitmapImage;
         IsRendered = true;
+    }
+
+    private bool IsLut() => 
+        CanReplaceTexture() &&
+        _data is CBitmapTexture bitmapTexture &&
+        bitmapTexture.Setup.Group == GpuWrapApieTextureGroup.TEXG_Generic_LUT;
+
+    [RelayCommand(CanExecute = nameof(IsLut))]
+    private void SaveAsCube()
+    {
+        var saveFileDialog1 = new SaveFileDialog
+        {
+            Filter = "cube Image|*.cube",
+            Title = "Save cube file",
+            FileName = Path.GetFileNameWithoutExtension(FilePath) + ".cube"
+        };
+        saveFileDialog1.ShowDialog();
+
+        if (saveFileDialog1.FileName != "" && _redImage is not null)
+        {
+            var lines = _redImage.GetLutCube();
+
+            File.WriteAllText(saveFileDialog1.FileName, lines);
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(IsLut))]
+    private async Task LoadFromCube()
+    {
+        var dlg = new OpenFileDialog()
+        {
+            Filter = "cube files (*.cube)|*.cube|All files (*.*)|*.*",
+        };
+
+        if (dlg.ShowDialog().GetValueOrDefault())
+        {
+            var image = RedImage.CreateFromLutCube(await File.ReadAllLinesAsync(dlg.FileName));
+            if (image == null)
+            {
+                _loggerService.Error($"\"{dlg.FileName}\" could not be loaded!");
+                return;
+            }
+
+            await ReplaceXBM(image);
+        }
     }
 
     public void UpdateFromImage()
@@ -96,7 +150,9 @@ public partial class RDTTextureViewModel : RedDocumentTabViewModel
         }
     }
 
-    [RelayCommand]
+    private bool CanReplaceTexture() => !Parent.IsReadOnly;
+
+    [RelayCommand(CanExecute = nameof(CanReplaceTexture))]
     private async Task ReplaceTexture()
     {
         if (_data is not CBitmapTexture bitmap)
@@ -118,78 +174,88 @@ public partial class RDTTextureViewModel : RedDocumentTabViewModel
                 return;
             }
 
-            if (image.Metadata.Width % 2 != 0 || image.Metadata.Height % 2 != 0)
-            {
-                if (bitmap.Setup.Compression != ETextureCompression.TCM_None)
-                {
-                    _loggerService.Error("Image dimension (width and/or height) is an odd number. To import regardless, set Compression to TCM_None at own risk.");
-                    return;
-                }
+            await ReplaceXBM(image);
+        }
+    }
 
-                if (bitmap.Setup.Group != GpuWrapApieTextureGroup.TEXG_Generic_Data)
-                {
-                    _loggerService.Warning("Image dimension (width and/or height) is an odd number. Texture might not work as expected.");
-                }
-            }
+    private async Task ReplaceXBM(RedImage newImage)
+    {
+        if (_data is not CBitmapTexture bitmap)
+        {
+            return;
+        }
 
-            var xbmImportArgs = new XbmImportArgs
+        if (newImage.Metadata.Width % 2 != 0 || newImage.Metadata.Height % 2 != 0)
+        {
+            if (bitmap.Setup.Compression != ETextureCompression.TCM_None)
             {
-                RawFormat = Enum.Parse<ETextureRawFormat>(bitmap.Setup.RawFormat.ToString()),
-                Compression = Enum.Parse<ETextureCompression>(bitmap.Setup.Compression.ToString()),
-                GenerateMipMaps = bitmap.Setup.HasMipchain,
-                IsGamma = bitmap.Setup.IsGamma,
-                TextureGroup = bitmap.Setup.Group,
-                //IsStreamable = bitmap.Setup.IsStreamable,
-                //PlatformMipBiasPC = bitmap.Setup.PlatformMipBiasPC,
-                //PlatformMipBiasConsole = bitmap.Setup.PlatformMipBiasConsole,
-                //AllowTextureDowngrade = bitmap.Setup.AllowTextureDowngrade,
-                //AlphaToCoverageThreshold = bitmap.Setup.AlphaToCoverageThreshold
-            };
-
-            // import raw texture to xbm
-            var newxbm = image.SaveToXBM(xbmImportArgs, true);
-
-            // set properties in file
-            var replaced = false;
-            if (ReferenceEquals(Parent.Cr2wFile.RootChunk, _data))
-            {
-                Parent.Cr2wFile.RootChunk = newxbm;
-                replaced = true;
-            }
-            else
-            {
-                foreach (var embeddedFile in Parent.Cr2wFile.EmbeddedFiles)
-                {
-                    if (ReferenceEquals(embeddedFile.Content, _data))
-                    {
-                        embeddedFile.Content = newxbm;
-                        replaced = true;
-                        break;
-                    }
-                }
-            }
-
-            if (!replaced)
-            {
+                _loggerService.Error("Image dimension (width and/or height) is an odd number. To import regardless, set Compression to TCM_None at own risk.");
                 return;
             }
-            
-            // save file
-            await Parent.Save(null);
 
-            // reload from itself
-            Parent.TabItemViewModels.Clear();
-
-            // TODO check this
-            var path = Parent.FilePath;
-            if (OpenFile(path, out var file))
+            if (bitmap.Setup.Group != GpuWrapApieTextureGroup.TEXG_Generic_Data)
             {
-                Parent.Cr2wFile = file;
+                _loggerService.Warning("Image dimension (width and/or height) is an odd number. Texture might not work as expected.");
             }
-            Parent.PopulateItems();
-
-            Parent.SelectedIndex = 1;
         }
+
+        var xbmImportArgs = new XbmImportArgs
+        {
+            RawFormat = Enum.Parse<ETextureRawFormat>(bitmap.Setup.RawFormat.ToString()),
+            Compression = Enum.Parse<ETextureCompression>(bitmap.Setup.Compression.ToString()),
+            GenerateMipMaps = bitmap.Setup.HasMipchain,
+            IsGamma = bitmap.Setup.IsGamma,
+            TextureGroup = bitmap.Setup.Group,
+            //IsStreamable = bitmap.Setup.IsStreamable,
+            //PlatformMipBiasPC = bitmap.Setup.PlatformMipBiasPC,
+            //PlatformMipBiasConsole = bitmap.Setup.PlatformMipBiasConsole,
+            //AllowTextureDowngrade = bitmap.Setup.AllowTextureDowngrade,
+            //AlphaToCoverageThreshold = bitmap.Setup.AlphaToCoverageThreshold
+        };
+
+        // import raw texture to xbm
+        var newxbm = newImage.SaveToXBM(xbmImportArgs, true);
+
+        // set properties in file
+        var replaced = false;
+        if (ReferenceEquals(Parent.Cr2wFile.RootChunk, _data))
+        {
+            Parent.Cr2wFile.RootChunk = newxbm;
+            replaced = true;
+        }
+        else
+        {
+            foreach (var embeddedFile in Parent.Cr2wFile.EmbeddedFiles)
+            {
+                if (ReferenceEquals(embeddedFile.Content, _data))
+                {
+                    embeddedFile.Content = newxbm;
+                    replaced = true;
+                    break;
+                }
+            }
+        }
+
+        if (!replaced)
+        {
+            return;
+        }
+
+        // save file
+        await Parent.Save(null);
+
+        // reload from itself
+        Parent.TabItemViewModels.Clear();
+
+        // TODO check this
+        var path = Parent.FilePath;
+        if (OpenFile(path, out var file))
+        {
+            Parent.Cr2wFile = file;
+        }
+        Parent.PopulateItems();
+
+        Parent.SelectedIndex = 1;
     }
 
     private bool OpenStream(Stream stream, string path, [NotNullWhen(true)] out CR2WFile? file)
