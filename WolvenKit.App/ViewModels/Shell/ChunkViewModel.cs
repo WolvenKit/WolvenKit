@@ -2101,11 +2101,36 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             Descriptor = $"{q.I}, {q.J}, {q.K}, {q.R}";
         }
 
+        // For local and external materials
         if (ResolvedData is CMaterialInstance or CResourceAsyncReference<IMaterial> && NodeIdxInParent > -1
             && GetRootModel().GetModelFromPath("materialEntries")?.ResolvedData is CArray<CMeshMaterialEntry>
                 materialEntries && materialEntries.Count > NodeIdxInParent)
         {
-            Descriptor = materialEntries[NodeIdxInParent].Name.GetResolvedText() ?? "";
+            var isLocalMaterial = ResolvedData is CMaterialInstance;
+            var entry = materialEntries[NodeIdxInParent];
+
+            // If we immediately found the right material: use material name
+            if (entry.IsLocalInstance == isLocalMaterial && entry.Index == NodeIdxInParent)
+            {
+                Descriptor = entry.Name.GetResolvedText();
+                if (Descriptor != null)
+                {
+                    return;
+                }
+            }
+
+            // Else: Iterate to find material name
+            entry = materialEntries
+                .Where((e, idx) => e.Index == NodeIdxInParent && e.IsLocalInstance == isLocalMaterial)
+                .FirstOrDefault();
+
+            // Will return null if no entry is found
+            Descriptor = entry?.Name.GetResolvedText();
+
+            if (Descriptor != null)
+            {
+                return;
+            }
         }
         else if (ResolvedData is localizationPersistenceOnScreenEntry localizationPersistenceOnScreenEntry)
         {
