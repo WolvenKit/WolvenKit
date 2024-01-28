@@ -1393,6 +1393,16 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             {
                 DeleteFullSelection(ts.Select(_ => int.Parse(_.Name)).ToList(), db4);
             }
+            else if (Parent.Data is IRedLegacySingleChannelCurve curve)
+            {
+                foreach (var index in ts.Select(x => int.Parse(x.Name)).OrderByDescending(x => x))
+                {
+                    curve.RemoveAt(index);
+                }
+
+                Tab.Parent.SetIsDirty(true);
+                Parent.RecalculateProperties();
+            }
             else if (Parent.Data is null)
             {
                 _loggerService.Warning($"Parent.Data is null");
