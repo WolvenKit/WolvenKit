@@ -1,11 +1,4 @@
 var searchData=
 [
-  ['save_26',['Save',['../classScriptDocumentWrapper.html#a7b98a9e6863b9dd5d5a3813f843f8f40',1,'ScriptDocumentWrapper']]],
-  ['savetoproject_27',['SaveToProject',['../classAppScriptFunctions.html#a9e69eb9498e88a61e2a612e5a4408bba',1,'AppScriptFunctions.SaveToProject(string path, CR2WFile cr2w)'],['../classAppScriptFunctions.html#a3ad97e8b4888be9af9df3d1d6e153e69',1,'AppScriptFunctions.SaveToProject(string path, IGameFile gameFile)']]],
-  ['savetoraw_28',['SaveToRaw',['../classAppScriptFunctions.html#a91545ea2945eeaccca43d5a344059325',1,'AppScriptFunctions']]],
-  ['savetoresources_29',['SaveToResources',['../classAppScriptFunctions.html#afcdedc12beea6d8bca76f2cce6e431f3',1,'AppScriptFunctions']]],
-  ['scriptdocumentwrapper_30',['ScriptDocumentWrapper',['../classScriptDocumentWrapper.html',1,'']]],
-  ['scriptfunctions_31',['ScriptFunctions',['../classScriptFunctions.html',1,'']]],
-  ['showmessagebox_32',['ShowMessageBox',['../classAppScriptFunctions.html#a2b439af762f06c0067ed8c35b5d21909',1,'AppScriptFunctions']]],
-  ['suspendfilewatcher_33',['SuspendFileWatcher',['../classAppScriptFunctions.html#a99debe5fb3fafd0e3f05680c5f54aeda',1,'AppScriptFunctions']]]
+  ['reload_26',['Reload',['../classScriptDocumentWrapper.html#af57cd7619179da2e5862e1b8ca15e046',1,'ScriptDocumentWrapper']]]
 ];
