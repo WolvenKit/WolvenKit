@@ -3049,8 +3049,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
         else if (ResolvedData is IRedLegacySingleChannelCurve curve)
         {
-            //_resolvedDataCache = null;
-            //Data = null;     // TODO ???
+            curve.Clear();
         }
         else if (ResolvedData is IRedBufferPointer db && db.GetValue().Data is RedPackage pkg)
         {
