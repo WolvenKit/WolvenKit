@@ -13,10 +13,10 @@ using WolvenKit.App.Models;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Exporters;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
-using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
@@ -30,6 +30,7 @@ namespace WolvenKit.App.ViewModels.Importers;
 
 public partial class ImportViewModel : AbstractImportViewModel
 {
+    private readonly AppViewModel _appViewModel;
     private readonly ILoggerService _loggerService;
     private readonly IWatcherService _watcherService;
     private readonly IProjectManager _projectManager;
@@ -39,6 +40,7 @@ public partial class ImportViewModel : AbstractImportViewModel
     private readonly ImportExportHelper _importExportHelper;
 
     public ImportViewModel(
+        AppViewModel appViewModel,
         IArchiveManager archiveManager, 
         INotificationService notificationService, 
         ISettingsManager settingsManager,
@@ -50,6 +52,7 @@ public partial class ImportViewModel : AbstractImportViewModel
         Red4ParserService parserService,
         ImportExportHelper importExportHelper) : base(archiveManager, notificationService, settingsManager, "Import Tool", "Import Tool")
     {
+        _appViewModel = appViewModel;
         _loggerService = loggerService;
         _watcherService = watcherService;
         _projectManager = projectManager;
@@ -158,6 +161,7 @@ public partial class ImportViewModel : AbstractImportViewModel
             .Where(x => !x.Extension.Equals(ERawFileFormat.wav.ToString()))
             .Cast<ImportableItemViewModel>()
             .ToList();
+
         total = toBeImported.Count;
         foreach (var item in toBeImported)
         {
@@ -200,6 +204,8 @@ public partial class ImportViewModel : AbstractImportViewModel
         }
 
         _progressService.Completed();
+
+        await _appViewModel.ReloadChangedFiles();
     }
 
     private Task<bool> ImportWavs(List<string> wavs)

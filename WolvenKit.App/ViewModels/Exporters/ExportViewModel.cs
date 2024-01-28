@@ -9,27 +9,22 @@ using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
-using WolvenKit.Common.Extensions;
-using WolvenKit.Common.Interfaces;
-using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
-using WolvenKit.Helpers;
-using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.Archive;
-using WolvenKit.RED4.Archive.CR2W;
-using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.App.ViewModels.Exporters;
 
 public partial class ExportViewModel : AbstractExportViewModel
 {
+    private readonly AppViewModel _appViewModel;
     private readonly ILoggerService _loggerService;
     private readonly IWatcherService _watcherService;
     private readonly IProjectManager _projectManager;
@@ -37,6 +32,7 @@ public partial class ExportViewModel : AbstractExportViewModel
     private readonly ImportExportHelper _importExportHelper;
 
     public ExportViewModel(
+        AppViewModel appViewModel,
         IArchiveManager archiveManager,
         INotificationService notificationService,
         ISettingsManager settingsManager,
@@ -46,6 +42,7 @@ public partial class ExportViewModel : AbstractExportViewModel
         IProgressService<double> progressService,
         ImportExportHelper importExportHelper) : base(archiveManager, notificationService, settingsManager, "Export Tool", "Export Tool")
     {
+        _appViewModel = appViewModel;
         _loggerService = loggerService;
         _watcherService = watcherService;
         _projectManager = projectManager;
@@ -122,6 +119,7 @@ public partial class ExportViewModel : AbstractExportViewModel
         total = toBeExported.Count;
         foreach (var item in toBeExported)
         {
+            _appViewModel.SaveFile(item.BaseFile);
             if (await ExportSingleAsync(item, projectArchive))
             {
                 sucessful++;

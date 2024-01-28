@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Services;
+using WolvenKit.Core.Interfaces;
+using WolvenKit.Helpers;
 using WolvenKit.Modkit.Scripting;
 
 namespace WolvenKit.App.ViewModels.Documents;
@@ -113,6 +115,7 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
 
         SetIsDirty(false);
         LoadDocument(FilePath);
+        LastWriteTime = File.GetLastWriteTime(FilePath);
 
         await Task.CompletedTask;
     }

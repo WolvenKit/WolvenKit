@@ -3,16 +3,8 @@ using System.IO;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Extensions.Options;
-using WolvenKit.App.Helpers;
 using WolvenKit.App.Models.Docking;
-using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
-using WolvenKit.Common;
-using WolvenKit.Common.Services;
-using WolvenKit.Core.Extensions;
-using WolvenKit.Core.Interfaces;
-using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.App.ViewModels.Documents;
 
@@ -27,6 +19,11 @@ public abstract partial class DocumentViewModel : PaneViewModel, IDocumentViewMo
         State = DockState.Document;
         SideInDockedMode = DockSide.Tabbed;
         CanSerialize = false;
+
+        if (File.Exists(path))
+        {
+            LastWriteTime = File.GetLastWriteTime(path);
+        }
     }
 
     [ObservableProperty] private string _filePath;
@@ -47,6 +44,8 @@ public abstract partial class DocumentViewModel : PaneViewModel, IDocumentViewMo
         IsDirty = b;
         Header = GetHeader();
     }
+
+    public DateTime LastWriteTime { get; protected set; } = DateTime.MaxValue;
 
     private string GetHeader() => Path.GetFileName(ContentId) + (IsDirty ? "*" : "");
 

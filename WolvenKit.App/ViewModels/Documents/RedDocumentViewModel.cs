@@ -187,7 +187,10 @@ public partial class RedDocumentViewModel : DocumentViewModel
             return;
         }
 
-        FileHelper.SafeWrite(ms, FilePath, _loggerService);
+        if (FileHelper.SafeWrite(ms, FilePath, _loggerService))
+        {
+            LastWriteTime = File.GetLastWriteTime(FilePath);
+        }
 
         SetIsDirty(false);
         _loggerService.Success($"Saved file {FilePath}");

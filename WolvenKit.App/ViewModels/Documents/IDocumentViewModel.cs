@@ -1,3 +1,4 @@
+using System;
 using System.Reactive;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
@@ -12,6 +13,7 @@ public interface IDocumentViewModel : IDockElement
     /// </summary>
     string FilePath { get; set; }
     bool IsReadOnly { get; set; }
+    DateTime LastWriteTime { get; }
 
     IAsyncRelayCommand<object> SaveCommand { get; }
     IRelayCommand<object> SaveAsCommand { get; }
