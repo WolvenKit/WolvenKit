@@ -50,6 +50,10 @@
             Key="B"
             Command="{Binding PackModCommand}"
             Modifiers="Control" />
+        <KeyBinding
+            Key="R"
+            Command="{Binding ReloadFileCommand}"
+            Modifiers="Control" />
         <KeyBinding Key="Esc" Command="{Binding CloseModalCommand}" />
     </syncfusion:ChromelessWindow.InputBindings>
 

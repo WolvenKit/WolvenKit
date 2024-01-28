@@ -705,6 +705,31 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanSaveFile))]
     private void SaveFile() => Save(ActiveDocument.NotNull());
 
+    private bool CanReloadFile() => ActiveDocument is not null;
+    [RelayCommand(CanExecute = nameof(CanReloadFile))]
+    private void ReloadFile()
+    {
+        if (ActiveDocument == null)
+        {
+            return;
+        }
+
+        if (ActiveDocument is DocumentViewModel { IsDirty: true })
+        {
+            var result = Interactions.ShowConfirmation(($"The file {ActiveDocument.FilePath} has unsaved changes. Do you want to reload it?",
+                "File Modified",
+                WMessageBoxImage.Question,
+                WMessageBoxButtons.YesNo));
+
+            if (result == WMessageBoxResult.No)
+            {
+                return;
+            }
+        }
+        
+        ActiveDocument.Reload(true);
+    }
+
     [RelayCommand(CanExecute = nameof(CanSaveFile))]
     private void SaveAs() => Save(ActiveDocument.NotNull(), true);
 
@@ -1013,7 +1038,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
     }
 
-    public async Task ReloadChangedFiles()
+    public void ReloadChangedFiles()
     {
         for (var i = DockedViews.Count - 1; i >= 0; i--)
         {
@@ -1032,9 +1057,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
                 if (result == WMessageBoxResult.Yes)
                 {
-                    CloseFile(documentViewModel);
-                    
-                    await RequestFileOpen(documentViewModel.FilePath);
+                    documentViewModel.Reload(true);
                 }
             }
         }

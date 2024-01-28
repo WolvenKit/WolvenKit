@@ -121,6 +121,25 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
     }
 
     public override void SaveAs(object parameter) => throw new NotImplementedException();
+    public override bool Reload(bool force)
+    {
+        if (!File.Exists(FilePath))
+        {
+            return false;
+        }
+
+        if (!force && IsDirty)
+        {
+            return false;
+        }
+
+        Text = File.ReadAllText(FilePath);
+        
+        SetIsDirty(false);
+        LastWriteTime = File.GetLastWriteTime(FilePath);
+
+        return true;
+    }
 
     private void LoadDocument(string paramFilePath)
     {

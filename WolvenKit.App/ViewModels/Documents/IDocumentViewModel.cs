@@ -1,6 +1,4 @@
 using System;
-using System.Reactive;
-using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Models.Docking;
 
@@ -17,10 +15,11 @@ public interface IDocumentViewModel : IDockElement
 
     IAsyncRelayCommand<object> SaveCommand { get; }
     IRelayCommand<object> SaveAsCommand { get; }
-
+    
     //public ICommand Close { get; set; }
 
     string ContentId { get; }
 
     bool IsInitialized();
+    bool Reload(bool force);
 }
