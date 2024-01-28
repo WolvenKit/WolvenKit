@@ -2824,7 +2824,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         return false;
     }
 
-    public void RecalculateProperties(IRedType? selectChild = null)
+    public void RecalculateProperties(IRedType? selectChild = null, bool expand = true)
     {
         PropertyCount = -1;
         // might not be needed
@@ -2835,9 +2835,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         OnPropertyChanged("Data");
 
-        IsExpanded = true;
+        IsExpanded = expand;
 
-        if (selectChild is not null)
+        if (expand && selectChild is not null)
         {
             foreach (var prop in Properties)
             {
