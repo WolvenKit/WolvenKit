@@ -513,7 +513,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         get
         {
-            var type = Data.GetType();
+            var type = Data?.GetType() ?? typeof(RedDummy);
             if (Parent is not null)
             {
                 //var parent = Parent.Data;
@@ -1496,7 +1496,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     RedDocumentTabViewModel.CopiedChunk = null;
                 }
             }
-            else if (Data is RedDummy)
+            else if (Data is RedDummy || Data is null)
             {
                 if (PropertyType.GetGenericTypeDefinition() == typeof(CHandle<>))
                 {
@@ -2300,8 +2300,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
         else if (obj is inkWidgetReference iwr)
         {
-            // need to add XPath somewhere in the data structure
-            Properties.Add(_chunkViewmodelFactory.ChunkViewModel((CString)"TODO", nameof(inkWidgetReference), _appViewModel, this));
+            Properties.Add(_chunkViewmodelFactory.ChunkViewModel(iwr.Widget, "widget", _appViewModel, this, isreadonly));
         }
         else if (obj is RedBaseClass redClass)
         {
