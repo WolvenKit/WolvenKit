@@ -70,7 +70,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         "meshMeshMaterialBuffer.rawDataHeaders", 
         "meshMeshMaterialBuffer.rawData", 
         "entEntityTemplate.compiledData", 
-        "appearanceAppearanceDefinition.compiledData" 
+        "appearanceAppearanceDefinition.compiledData",
+        "inkWidgetLibraryItem.packageData"
     };
 
     private bool _propertiesLoaded;
@@ -2297,10 +2298,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     Properties.Add(_chunkViewmodelFactory.ChunkViewModel(kvp.Value, "Value", _appViewModel, this, isreadonly));
                 }
             }
-        }
-        else if (obj is inkWidgetReference iwr)
-        {
-            Properties.Add(_chunkViewmodelFactory.ChunkViewModel(iwr.Widget, "widget", _appViewModel, this, isreadonly));
         }
         else if (obj is RedBaseClass redClass)
         {
