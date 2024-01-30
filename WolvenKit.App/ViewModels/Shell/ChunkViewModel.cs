@@ -423,6 +423,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public bool ShouldShowExportNodeData => Parent is not null && Parent.Data is DataBuffer rb && rb.Data is worldNodeDataBuffer;
 
+    public bool ShouldShowTweakXLMenu => Data is gamedataTweakDBRecord || Data is TweakDBID || Parent?.Data is gamedataTweakDBRecord || Parent?.Data is TweakDBID;
+
     public bool ShouldShowHandleOperations => PropertyType.IsAssignableTo(typeof(IRedBaseHandle));
 
     public bool ShouldShowArrayOps => IsInArray || IsArray;
@@ -3083,15 +3085,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 }
             }
         }
-    }
-
-    public bool ShouldShowTweakXLMenu()
-    {
-        var ret = Data is gamedataTweakDBRecord;
-        ret |= Data is TweakDBID;
-        ret |= Parent?.Data is gamedataTweakDBRecord;
-        ret |= Parent?.Data is TweakDBID;
-        return ret;
     }
 
     public void ClearChildren()
