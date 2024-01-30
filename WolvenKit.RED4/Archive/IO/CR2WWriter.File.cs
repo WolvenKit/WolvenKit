@@ -397,16 +397,6 @@ public partial class CR2WWriter
 
         if (buffer.Data is CR2WWrapper wrapper)
         {
-            // copy package to packageData
-            if (buffer.Parent is inkWidgetLibraryItem item)
-            {
-                item.PackageData = new DataBuffer();
-                item.PackageData.Buffer = new RedBuffer();
-                var package = new RedPackage();
-                package.Chunks = new List<RedBaseClass>() { wrapper.File.RootChunk };
-                item.PackageData.Buffer.Data = package;
-            }
-
             using var ms = new MemoryStream();
             using var wrapperWriter = new CR2WWrapperWriter(ms) { LoggerService = LoggerService };
 
