@@ -33,21 +33,17 @@
 
             <Style x:Key="PropertyValueStyle" TargetType="TextBlock">
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                                 Value="null">
+                    <DataTrigger Binding="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="null">
                         <Setter Property="Foreground" Value="{StaticResource Border}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                                 Value="True">
+                    <DataTrigger Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
                         <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
                         <Setter Property="FontStyle" Value="Italic" />
                     </DataTrigger>
                     <DataTrigger Binding="{Binding IsReadOnly}" Value="True">
                         <Setter Property="Foreground" Value="{StaticResource WolvenKitTan50}" />
                     </DataTrigger>
-                    <DataTrigger
-                        Binding="{Binding IsValueExtrapolated, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                        Value="True">
+                    <DataTrigger Binding="{Binding IsValueExtrapolated, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
                         <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
                     </DataTrigger>
                 </Style.Triggers>
@@ -354,6 +350,54 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Kind="ContentDuplicate" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.RenameDynamicClassCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Rename Class"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowDynamicClassOperations, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial
+                            Width="13"
+                            Height="13"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="Text" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.RenamePropertyCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Rename Property"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowDynamicPropertyOperations, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial
+                            Width="13"
+                            Height="13"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="Text" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.DeletePropertyCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Delete Property"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowDynamicPropertyOperations, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconCodicons
+                            Width="13"
+                            Height="13"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="Remove" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
@@ -427,9 +428,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public bool ShouldShowHandleOperations => PropertyType.IsAssignableTo(typeof(IRedBaseHandle));
 
-    public bool ShouldShowArrayOps => IsInArray || IsArray;
+    public bool ShouldShowDynamicClassOperations => ResolvedData is IDynamicClass;
 
-    public bool ShouldShowClassOperations => PropertyType.IsAssignableTo(typeof(RedBaseClass));
+    public bool ShouldShowDynamicPropertyOperations => Parent is not null && Parent.ResolvedData is IDynamicClass;
+
+    public bool ShouldShowArrayOps => IsInArray || IsArray;
 
     public IRedArray? ArraySelfOrParent => Parent?.ResolvedData is IRedArray ira ? ira : ResolvedData as IRedArray;
 
@@ -1250,16 +1253,19 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             //var existing = new ObservableCollection<string>();
             //existing.Add("inkWidgetReference");
-            var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => typeof(inkWidgetReference).IsAssignableFrom(p) && p.IsClass).Select(x => x.Name));
-            //foreach (var prop in rbc.GetDynamicPropertyNames())
-            //{
-            //    if (rbc.GetProperty(prop) is IRedType irt)
-            //    {
-            //        existing.Add(irt.RedType);
-            //    }
-            //}
-            //var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => handle.InnerType.IsAssignableFrom(p) && p.IsClass).Select(x => x.Name));
-            await _appViewModel.SetActiveDialog(new CreateClassDialogViewModel(existing, true)
+            //var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => typeof(inkWidgetReference).IsAssignableFrom(p) && p.IsClass).Select(x => x.Name));
+
+            //var types = pkg.Chunks
+            //    .Select(x => new TypeEntry(x.GetType().Name, "", x.GetType()))
+            //    .DistinctBy(x => x.Name)
+            //    .ToList();
+
+            var types = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(p => typeof(inkWidgetReference).IsAssignableFrom(p) && p.IsClass && !p.IsAbstract)
+                .Select(x => new TypeEntry(x.Name, "", x))
+                .ToList();
+            await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
             {
                 DialogHandler = HandleNewDynamicProperty
             });
@@ -1269,16 +1275,19 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     public void HandleNewDynamicProperty(DialogViewModel? sender)
     {
         _appViewModel.CloseDialogCommand.Execute(null);
-        if (sender is CreateClassDialogViewModel vm && vm.SelectedType is not null && ResolvedData is RedBaseClass rbc)
+
+        if (sender is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType }
+            && selectedType is not null && ResolvedData is RedBaseClass rbc)
         {
             var propertyName = Interactions.Rename("");
-            var instance = RedTypeManager.CreateRedType(vm.SelectedType);
-            rbc.AddDynamicProperty(propertyName, vm.SelectedType);
+            var instance = RedTypeManager.CreateRedType(selectedType);
+            rbc.AddDynamicProperty(propertyName, selectedType);
             rbc.SetProperty(propertyName, instance);
             //if (Data is IRedBaseHandle handle)
             //{
             //    handle.SetValue(rbc);
             //}
+            Tab?.Parent.SetIsDirty(true);
             RecalculateProperties(instance);
         }
     }
@@ -1290,6 +1299,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         if (ResolvedData is IDynamicClass dbc)
         {
             dbc.ClassName = Interactions.Rename(dbc.ClassName!);
+            Tab?.Parent.SetIsDirty(true);
             RecalculateProperties();
         }
     }
@@ -1547,6 +1557,41 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             Tab.Parent.TabItemViewModels.Add(_tabViewmodelFactory.RDTDataViewModel(cls, Tab.Parent, _appViewModel, _chunkViewmodelFactory));
         }
+    }
+
+    private bool CanRenameProperty() => Parent is not null && Parent.ResolvedData is IDynamicClass;   // TODO RelayCommand check notify
+    [RelayCommand(CanExecute = nameof(CanRenameProperty))]
+    private void RenameProperty()
+    {
+        try
+        {
+            if (Parent is not null && Parent.ResolvedData is RedBaseClass rbc)
+            {
+                var newName = Interactions.Rename(PropertyName);
+                rbc.RenameDynamicProperty(PropertyName, newName);
+                Tab?.Parent.SetIsDirty(true);
+                Parent.RecalculateProperties();
+            }
+        }
+        catch (Exception ex) { _loggerService.Error(ex); }
+
+    }
+
+    private bool CanDeleteProperty() => Parent is not null && Parent.ResolvedData is IDynamicClass;   // TODO RelayCommand check notify
+    [RelayCommand(CanExecute = nameof(CanDeleteProperty))]
+    private void DeleteProperty()
+    {
+        try
+        {
+            if (Parent is not null && Parent.ResolvedData is RedBaseClass rbc)
+            {
+                rbc.RemoveDynamicProperty(PropertyName);
+                Tab?.Parent.SetIsDirty(true);
+                Parent.RecalculateProperties();
+            }
+        }
+        catch (Exception ex) { _loggerService.Error(ex); }
+
     }
 
     private bool CanCopyHandle() => Data is IRedBaseHandle;   // TODO RelayCommand check notify

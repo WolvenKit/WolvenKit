@@ -88,7 +88,7 @@
                     Background="Transparent"
                     Command="{Binding CreateDynamicPropertyCommand}"
                     Style="{StaticResource ButtonCustom}"
-                    ToolTip="Add New Dynamic Property"
+                    ToolTip="Add Dynamic Property"
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconVaadinIcons
@@ -100,7 +100,7 @@
                             Margin="1,0,4,0"
                             VerticalAlignment="Center"
                             Foreground="{StaticResource WolvenKitYellow}"
-                            Text="New Dynamic Property" />
+                            Text="Add Property" />
                     </StackPanel>
                 </Button>
             </DataTemplate>
@@ -473,7 +473,6 @@
                                 </TextBlock.Style>
                             </TextBlock>
                             <ContentPresenter ContentTemplate="{StaticResource AddToCompiledDataButton}" />
-                            <ContentPresenter ContentTemplate="{StaticResource RenameDynamicClass}" />
                             <ContentPresenter ContentTemplate="{StaticResource AddDynamicProperty}" />
                             <ContentPresenter ContentTemplate="{StaticResource AddHandleButton}" />
                             <ContentPresenter ContentTemplate="{StaticResource DeleteAllButton}" />
@@ -544,7 +543,6 @@
                                     </TextBlock>
                                     <ContentPresenter ContentTemplate="{StaticResource AddToArrayButton}" />
                                     <ContentPresenter ContentTemplate="{StaticResource AddToCompiledDataButton}" />
-                                    <ContentPresenter ContentTemplate="{StaticResource RenameDynamicClass}" />
                                     <ContentPresenter ContentTemplate="{StaticResource AddDynamicProperty}" />
                                     <ContentPresenter ContentTemplate="{StaticResource AddHandleButton}" />
                                     <ContentPresenter ContentTemplate="{StaticResource DeleteAllButton}" />
@@ -748,7 +746,6 @@
                         Content="{Binding}"
                         ContentTemplate="{StaticResource AddToCompiledDataButton}" />
                     <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource AddToArrayButton}" />
-                    <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource RenameDynamicClass}" />
                     <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource AddDynamicProperty}" />
                     <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource AddHandleButton}" />
                     <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DeleteAllButton}" />
