@@ -1,3 +1,4 @@
+using System.Windows.Input;
 using ReactiveUI;
 using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.App.ViewModels.Documents;
@@ -19,6 +20,11 @@ namespace WolvenKit.Views.Documents
                     SetCurrentValue(ViewModelProperty, vm);
                 }
             });
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
         }
 
         private void TabControl_OnSelectedItemChangedEvent(object sender, SelectedItemChangedEventArgs e)

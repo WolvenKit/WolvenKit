@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Services;
+using WolvenKit.Core.Interfaces;
+using WolvenKit.Helpers;
 using WolvenKit.Modkit.Scripting;
 
 namespace WolvenKit.App.ViewModels.Documents;
@@ -113,11 +115,31 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
 
         SetIsDirty(false);
         LoadDocument(FilePath);
+        LastWriteTime = File.GetLastWriteTime(FilePath);
 
         await Task.CompletedTask;
     }
 
     public override void SaveAs(object parameter) => throw new NotImplementedException();
+    public override bool Reload(bool force)
+    {
+        if (!File.Exists(FilePath))
+        {
+            return false;
+        }
+
+        if (!force && IsDirty)
+        {
+            return false;
+        }
+
+        Text = File.ReadAllText(FilePath);
+        
+        SetIsDirty(false);
+        LastWriteTime = File.GetLastWriteTime(FilePath);
+
+        return true;
+    }
 
     private void LoadDocument(string paramFilePath)
     {

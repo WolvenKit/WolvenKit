@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents.DocumentStructures;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -261,7 +262,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                     return true;
                 case EDockedViews.ImportViewModel:
                 {
-                    var vm = _paneViewModelFactory.ImportViewModel();
+                    var vm = _paneViewModelFactory.ImportViewModel(this);
                     vm.State = DockState.Dock;
                     vm.SideInDockedMode = DockSide.Right;
                     DockedViews.Add(vm);
@@ -269,7 +270,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 }
                 case EDockedViews.ExportViewModel:
                 {
-                    var vm = _paneViewModelFactory.ExportViewModel();
+                    var vm = _paneViewModelFactory.ExportViewModel(this);
                     vm.State = DockState.Dock;
                     vm.SideInDockedMode = DockSide.Right;
                     DockedViews.Add(vm);
@@ -704,6 +705,31 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanSaveFile))]
     private void SaveFile() => Save(ActiveDocument.NotNull());
 
+    private bool CanReloadFile() => ActiveDocument is not null;
+    [RelayCommand(CanExecute = nameof(CanReloadFile))]
+    private void ReloadFile()
+    {
+        if (ActiveDocument == null)
+        {
+            return;
+        }
+
+        if (ActiveDocument is DocumentViewModel { IsDirty: true })
+        {
+            var result = Interactions.ShowConfirmation(($"The file {ActiveDocument.FilePath} has unsaved changes. Do you want to reload it?",
+                "File Modified",
+                WMessageBoxImage.Question,
+                WMessageBoxButtons.YesNo));
+
+            if (result == WMessageBoxResult.No)
+            {
+                return;
+            }
+        }
+        
+        ActiveDocument.Reload(true);
+    }
+
     [RelayCommand(CanExecute = nameof(CanSaveFile))]
     private void SaveAs() => Save(ActiveDocument.NotNull(), true);
 
@@ -988,6 +1014,55 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
     }
 
+    public void SaveFile(string fileName)
+    {
+        foreach (var dockElement in DockedViews)
+        {
+            if (dockElement is not RedDocumentViewModel redDocumentViewModel)
+            {
+                continue;
+            }
+
+            if (redDocumentViewModel.FilePath == fileName && redDocumentViewModel.IsDirty)
+            {
+                var result = Interactions.ShowConfirmation(($"The file {redDocumentViewModel.FilePath} has unsaved changes. Do you want to save it?",
+                    "File Modified",
+                    WMessageBoxImage.Question,
+                    WMessageBoxButtons.YesNo));
+
+                if (result == WMessageBoxResult.Yes)
+                {
+                    redDocumentViewModel.SaveCommand.SafeExecute();
+                }
+            }
+        }
+    }
+
+    public void ReloadChangedFiles()
+    {
+        for (var i = DockedViews.Count - 1; i >= 0; i--)
+        {
+            if (DockedViews[i] is not IDocumentViewModel documentViewModel)
+            {
+                continue;
+            }
+
+            if (File.Exists(documentViewModel.FilePath) &&
+                File.GetLastWriteTime(documentViewModel.FilePath) > documentViewModel.LastWriteTime)
+            {
+                var result = Interactions.ShowConfirmation(($"The file {documentViewModel.FilePath} has been modified externally. Do you want to reload it?",
+                    "File Modified",
+                    WMessageBoxImage.Question,
+                    WMessageBoxButtons.YesNo));
+
+                if (result == WMessageBoxResult.Yes)
+                {
+                    documentViewModel.Reload(true);
+                }
+            }
+        }
+    }
+
     [RelayCommand]
     private async Task OpenRedFileAsync(FileEntry file)
     {
@@ -1153,7 +1228,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand]
     private void ShowTextureImporter()
     {
-        var vm = _paneViewModelFactory.ImportViewModel();
+        var vm = _paneViewModelFactory.ImportViewModel(this);
         vm.State = DockState.Float;
         DockedViews.Add(vm);
     }
@@ -1161,7 +1236,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand]
     private void ShowTextureExporter()
     {
-        var vm = _paneViewModelFactory.ExportViewModel();
+        var vm = _paneViewModelFactory.ExportViewModel(this);
         vm.State = DockState.Float;
         DockedViews.Add(vm);
     }

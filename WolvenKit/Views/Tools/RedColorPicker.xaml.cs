@@ -15,8 +15,6 @@ namespace WolvenKit.Views.Tools
     {
         private bool _updateFromColor;
 
-        private ChunkViewModel _cvm => DataContext as ChunkViewModel;
-
         public RedColorPicker()
         {
             InitializeComponent();
@@ -92,9 +90,14 @@ namespace WolvenKit.Views.Tools
             
 
             UpdateBrush();
-            _cvm.NotifyChain(nameof(ChunkViewModel.Data));
-            _cvm.RecalculateProperties();
 
+            if (DataContext is ChunkViewModel cvm)
+            {
+                cvm.Tab?.Parent.SetIsDirty(true);
+                cvm.NotifyChain(nameof(ChunkViewModel.Data));
+                cvm.RecalculateProperties(null, false);
+            }
+            
             _updateFromColor = false;
         }
 

@@ -14,7 +14,7 @@ public interface IPaneViewModelFactory
     public AssetBrowserViewModel AssetBrowserViewModel(AppViewModel appViewModel);
     public TweakBrowserViewModel TweakBrowserViewModel(AppViewModel appViewModel);
     public LocKeyBrowserViewModel LocKeyBrowserViewModel();
-    public ImportViewModel ImportViewModel();
-    public ExportViewModel ExportViewModel();
+    public ImportViewModel ImportViewModel(AppViewModel appViewModel);
+    public ExportViewModel ExportViewModel(AppViewModel appViewModel);
     public HashToolViewModel HashToolViewModel();
 }
