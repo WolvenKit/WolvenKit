@@ -583,14 +583,9 @@ public partial class CR2WWriter
 
     private string? GetClassName(RedBaseClass cls)
     {
-        if (cls is DynamicResource dres)
+        if (cls is IDynamicClass dres)
         {
             return dres.ClassName;
-        }
-
-        if (cls is DynamicBaseClass dbc)
-        {
-            return dbc.ClassName;
         }
 
         return RedReflection.GetTypeRedName(cls.GetType());

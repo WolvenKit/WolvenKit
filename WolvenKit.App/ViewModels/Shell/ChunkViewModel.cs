@@ -7,6 +7,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Metadata;
 using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Factories;
 using WolvenKit.App.Helpers;
+using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.Nodify;
 using WolvenKit.App.Services;
@@ -639,10 +641,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 {
                     count += 2;
                 }
-                else if (ResolvedData is inkWidgetReference)
-                {
-                    count += 1; // TODO
-                }
+                //else if (ResolvedData is inkWidgetReference)
+                //{
+                //    count += 1; // TODO
+                //}
                 else if (Data is TweakDBID tdb)
                 {
                     // not actual
@@ -1205,6 +1207,61 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         if (vc != null)
         {
             vc.AppearanceDependency = list;
+            RecalculateProperties();
+        }
+    }
+
+
+    // Dynamic Properties
+
+    private bool CanCreateDynamicProperty() => ResolvedData is IDynamicClass;   // TODO RelayCommand check notify
+    [RelayCommand(CanExecute = nameof(CanCreateDynamicProperty))]
+    private async Task CreateDynamicProperty()
+    {
+        if (ResolvedData is RedBaseClass rbc)
+        {
+            //var existing = new ObservableCollection<string>();
+            //existing.Add("inkWidgetReference");
+            var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => typeof(inkWidgetReference).IsAssignableFrom(p) && p.IsClass).Select(x => x.Name));
+            //foreach (var prop in rbc.GetDynamicPropertyNames())
+            //{
+            //    if (rbc.GetProperty(prop) is IRedType irt)
+            //    {
+            //        existing.Add(irt.RedType);
+            //    }
+            //}
+            //var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => handle.InnerType.IsAssignableFrom(p) && p.IsClass).Select(x => x.Name));
+            await _appViewModel.SetActiveDialog(new CreateClassDialogViewModel(existing, true)
+            {
+                DialogHandler = HandleNewDynamicProperty
+            });
+        }
+    }
+
+    public void HandleNewDynamicProperty(DialogViewModel? sender)
+    {
+        _appViewModel.CloseDialogCommand.Execute(null);
+        if (sender is CreateClassDialogViewModel vm && vm.SelectedType is not null && ResolvedData is RedBaseClass rbc)
+        {
+            var propertyName = Interactions.Rename("");
+            var instance = RedTypeManager.CreateRedType(vm.SelectedType);
+            rbc.AddDynamicProperty(propertyName, vm.SelectedType);
+            rbc.SetProperty(propertyName, instance);
+            //if (Data is IRedBaseHandle handle)
+            //{
+            //    handle.SetValue(rbc);
+            //}
+            RecalculateProperties(instance);
+        }
+    }
+
+    private bool CanRenameDynamicClass() => ResolvedData is IDynamicClass;   // TODO RelayCommand check notify
+    [RelayCommand(CanExecute = nameof(CanRenameDynamicClass))]
+    private void RenameDynamicClass()
+    {
+        if (ResolvedData is IDynamicClass dbc)
+        {
+            dbc.ClassName = Interactions.Rename(dbc.ClassName!);
             RecalculateProperties();
         }
     }
