@@ -1025,8 +1025,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 .Where(p => handle.InnerType.IsAssignableFrom(p) && p.IsClass && !p.IsAbstract)
                 .Select(x => new TypeEntry(x.Name, "", x))
                 .ToList();
+            var allowCreating = handle.InnerType.IsAssignableTo(typeof(inkWidgetLogicController)) || handle.InnerType.IsAssignableTo(typeof(inkIWidgetController));
 
-            await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
+            await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types, allowCreating)
             {
                 DialogHandler = HandlePointer
             });
@@ -3064,9 +3065,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     public void HandlePointer(DialogViewModel? sender)
     {
         _appViewModel.CloseDialogCommand.Execute(null);
-        if (sender is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType })
+        if (sender is TypeSelectorDialogViewModel { SelectedEntry: TypeEntry selectedEntry } && selectedEntry.UserData is Type selectedType)
         {
             var instance = RedTypeManager.Create(selectedType);
+            if (instance is DynamicBaseClass dbc)
+            {
+                dbc.ClassName = selectedEntry.Name;
+            }
             var data = RedTypeManager.CreateRedType(PropertyType);
             if (data is IRedBaseHandle handle)
             {
@@ -3086,6 +3091,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 Tab?.Parent.SetIsDirty(true);
             }
         }
+        else
+        {
+            _loggerService.Error("Could not create handle");
+        } 
     }
 
     public void HandleCKeyValuePair(DialogViewModel? sender)
