@@ -2112,6 +2112,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 return;
             }
         }
+        else if (ResolvedData is rendChunk rendChunk)
+        {
+            Descriptor = rendChunk.RenderMask.ToBitFieldString();
+        }
         else if (ResolvedData is IRedBufferPointer rbp && rbp.GetValue().Data is RedPackage pkg)
         {
             Descriptor = $"[{pkg.Chunks.Count}]";

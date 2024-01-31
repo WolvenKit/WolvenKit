@@ -262,6 +262,8 @@ public partial class ImportViewModel : AbstractImportViewModel
         {
             _loggerService.Error($"Could not import {item.Name}");
             _loggerService.Error(e);
+            _loggerService.Error($"Exception type: {e.GetType()}");
+            _loggerService.Error($"Exception type: {e.GetType().Name}");
         }
 
         return false;
