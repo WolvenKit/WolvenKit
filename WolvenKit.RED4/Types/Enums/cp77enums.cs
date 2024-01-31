@@ -1584,7 +1584,8 @@ public static partial class Enums
 		CycleObjective = 14,
 		VehicleInsideWheel = 15,
 		ConsumableWheel = 16,
-		PocketRadio = 17
+		PocketRadio = 17,
+		VehicleVisualCustomization = 18
 	}
 
 	public enum EDeathType
@@ -5925,8 +5926,9 @@ public static partial class Enums
 		NotEnoughSlotsSaveResctriction = 6,
 		NotEnoughSpaceSaveResctriction = 7,
 		PhotoModeDisabledRestriction = 8,
-		ExpansionInstalled = 9,
-		GenericNotification = 10
+		SandevistanInCallRestriction = 9,
+		ExpansionInstalled = 10,
+		GenericNotification = 11
 	}
 
 	public enum UIInventoryItemWeaponBarsType
@@ -5935,7 +5937,9 @@ public static partial class Enums
 		Melee = 1,
 		Throwable = 2,
 		CyberwareWeapon = 3,
-		CyberwareRangedWeapon = 4
+		CyberwareRangedWeapon = 4,
+		InjectorHealing = 5,
+		InhalerHealing = 6
 	}
 
 	public enum UIItemCategory
@@ -5970,7 +5974,8 @@ public static partial class Enums
 		PlayerReqLevelToLow = 15,
 		InventoryNoFreeSlot = 16,
 		FaceUnequipBlocked = 17,
-		TutorialUnequipBlocked = 18
+		TutorialUnequipBlocked = 18,
+		NoJunkToDisassemble = 19
 	}
 
 	public enum UIObjectiveEntryType
@@ -5995,6 +6000,16 @@ public static partial class Enums
 		Unlock = 2
 	}
 
+	public enum VehicleVisualCustomizationWidgetCarPart
+	{
+		Default = 0,
+		Body = 1,
+		Hood = 2,
+		Door = 3,
+		Bumper = 4,
+		Spoiler = 5,
+		SpoilerHidden = 6
+	}
 	public enum VendorConfirmationPopupType
 	{
 		Default = 0,
@@ -6038,6 +6053,10 @@ public static partial class Enums
 		MeleeCount = 12,
 		CyberwareAttackSpeed = 13,
 		CyberwareDamagePerHit = 14,
+		CyberwareCount = 15,
+		Healing = 16,
+		HealingOverTime = 17,
+		HealingCount = 18,
 		Invalid = -1
 	}
 
@@ -6050,6 +6069,8 @@ public static partial class Enums
 		Stamina = 4,
 		Handling = 5,
 		ReturnTime = 6,
+		Healing = 7,
+		HealingOverTime = 8,
 		Invalid = -1
 	}
 
@@ -8270,7 +8291,8 @@ public static partial class Enums
 		CP77_Patch_2_0_Hotfix1 = 2010,
 		CP77_Patch_2_0_Hotfix2 = 2020,
 		CP77_Patch_2_1 = 2100,
-		Current = 2100
+		CP77_Patch_2_1_Hotfix1 = 2110,
+		Current = 2110
 	}
 
 	public enum gameGameplayEventFlag
@@ -10625,74 +10647,75 @@ public static partial class Enums
 		Gen_Misc = 32,
 		Gen_MoneyShard = 33,
 		Gen_Readable = 34,
-		GrenadeDelivery = 35,
-		Grenade_Core = 36,
-		Prt_AR_SMG_LMGMod = 37,
-		Prt_BladeMod = 38,
-		Prt_BluntMod = 39,
-		Prt_BootsFabricEnhancer = 40,
-		Prt_Capacitor = 41,
-		Prt_FabricEnhancer = 42,
-		Prt_FaceFabricEnhancer = 43,
-		Prt_Fragment = 44,
-		Prt_HandgunMod = 45,
-		Prt_HandgunMuzzle = 46,
-		Prt_HeadFabricEnhancer = 47,
-		Prt_LongScope = 48,
-		Prt_Magazine = 49,
-		Prt_MeleeMod = 50,
-		Prt_Mod = 51,
-		Prt_Muzzle = 52,
-		Prt_OuterTorsoFabricEnhancer = 53,
-		Prt_PantsFabricEnhancer = 54,
-		Prt_PowerMod = 55,
-		Prt_PowerSniperScope = 56,
-		Prt_Precision_Sniper_RifleMod = 57,
-		Prt_Program = 58,
-		Prt_RangedMod = 59,
-		Prt_Receiver = 60,
-		Prt_RifleMuzzle = 61,
-		Prt_Scope = 62,
-		Prt_ScopeRail = 63,
-		Prt_ShortScope = 64,
-		Prt_ShotgunMod = 65,
-		Prt_SmartMod = 66,
-		Prt_Stock = 67,
-		Prt_TargetingSystem = 68,
-		Prt_TechMod = 69,
-		Prt_TechSniperScope = 70,
-		Prt_ThrowableMod = 71,
-		Prt_TorsoFabricEnhancer = 72,
-		VendorToken = 73,
-		Wea_AssaultRifle = 74,
-		Wea_Axe = 75,
-		Wea_Chainsword = 76,
-		Wea_Fists = 77,
-		Wea_GrenadeLauncher = 78,
-		Wea_Hammer = 79,
-		Wea_Handgun = 80,
-		Wea_HeavyMachineGun = 81,
-		Wea_Katana = 82,
-		Wea_Knife = 83,
-		Wea_LightMachineGun = 84,
-		Wea_LongBlade = 85,
-		Wea_Machete = 86,
-		Wea_Melee = 87,
-		Wea_OneHandedClub = 88,
-		Wea_PrecisionRifle = 89,
-		Wea_Revolver = 90,
-		Wea_Rifle = 91,
-		Wea_ShortBlade = 92,
-		Wea_Shotgun = 93,
-		Wea_ShotgunDual = 94,
-		Wea_SniperRifle = 95,
-		Wea_SubmachineGun = 96,
-		Wea_Sword = 97,
-		Wea_TwoHandedClub = 98,
-		Wea_VehicleMissileLauncher = 99,
-		Wea_VehiclePowerWeapon = 100,
-		Count = 101,
-		Invalid = 102
+		Gen_Tarot = 35,
+		GrenadeDelivery = 36,
+		Grenade_Core = 37,
+		Prt_AR_SMG_LMGMod = 38,
+		Prt_BladeMod = 39,
+		Prt_BluntMod = 40,
+		Prt_BootsFabricEnhancer = 41,
+		Prt_Capacitor = 42,
+		Prt_FabricEnhancer = 43,
+		Prt_FaceFabricEnhancer = 44,
+		Prt_Fragment = 45,
+		Prt_HandgunMod = 46,
+		Prt_HandgunMuzzle = 47,
+		Prt_HeadFabricEnhancer = 48,
+		Prt_LongScope = 49,
+		Prt_Magazine = 50,
+		Prt_MeleeMod = 51,
+		Prt_Mod = 52,
+		Prt_Muzzle = 53,
+		Prt_OuterTorsoFabricEnhancer = 54,
+		Prt_PantsFabricEnhancer = 55,
+		Prt_PowerMod = 56,
+		Prt_PowerSniperScope = 57,
+		Prt_Precision_Sniper_RifleMod = 58,
+		Prt_Program = 59,
+		Prt_RangedMod = 60,
+		Prt_Receiver = 61,
+		Prt_RifleMuzzle = 62,
+		Prt_Scope = 63,
+		Prt_ScopeRail = 64,
+		Prt_ShortScope = 65,
+		Prt_ShotgunMod = 66,
+		Prt_SmartMod = 67,
+		Prt_Stock = 68,
+		Prt_TargetingSystem = 69,
+		Prt_TechMod = 70,
+		Prt_TechSniperScope = 71,
+		Prt_ThrowableMod = 72,
+		Prt_TorsoFabricEnhancer = 73,
+		VendorToken = 74,
+		Wea_AssaultRifle = 75,
+		Wea_Axe = 76,
+		Wea_Chainsword = 77,
+		Wea_Fists = 78,
+		Wea_GrenadeLauncher = 79,
+		Wea_Hammer = 80,
+		Wea_Handgun = 81,
+		Wea_HeavyMachineGun = 82,
+		Wea_Katana = 83,
+		Wea_Knife = 84,
+		Wea_LightMachineGun = 85,
+		Wea_LongBlade = 86,
+		Wea_Machete = 87,
+		Wea_Melee = 88,
+		Wea_OneHandedClub = 89,
+		Wea_PrecisionRifle = 90,
+		Wea_Revolver = 91,
+		Wea_Rifle = 92,
+		Wea_ShortBlade = 93,
+		Wea_Shotgun = 94,
+		Wea_ShotgunDual = 95,
+		Wea_SniperRifle = 96,
+		Wea_SubmachineGun = 97,
+		Wea_Sword = 98,
+		Wea_TwoHandedClub = 99,
+		Wea_VehicleMissileLauncher = 100,
+		Wea_VehiclePowerWeapon = 101,
+		Count = 102,
+		Invalid = 103
 	}
 
 	public enum gamedataLifePath
@@ -11872,29 +11895,30 @@ public static partial class Enums
 		Civilian_Grabbable = 2,
 		Civilian_Guard = 3,
 		Civilian_Neutral = 4,
-		Civilian_Passive = 5,
-		Corpo_Aggressive = 6,
-		Corpo_Passive = 7,
-		Follower = 8,
-		Ganger_Aggressive = 9,
-		Ganger_Passive = 10,
-		InVehicle_Aggressive = 11,
-		InVehicle_Civilian = 12,
-		InVehicle_Passive = 13,
-		Lore_Aggressive = 14,
-		Lore_Civilian = 15,
-		Lore_Passive = 16,
-		Mechanical_Aggressive = 17,
-		Mechanical_NonCombat = 18,
-		Mechanical_Passive = 19,
-		NoReaction = 20,
-		Police_Aggressive = 21,
-		Police_Passive = 22,
-		Sleep_Aggressive = 23,
-		Sleep_Civilian = 24,
-		Sleep_Passive = 25,
-		Count = 26,
-		Invalid = 27
+		Civilian_NoReaction = 5,
+		Civilian_Passive = 6,
+		Corpo_Aggressive = 7,
+		Corpo_Passive = 8,
+		Follower = 9,
+		Ganger_Aggressive = 10,
+		Ganger_Passive = 11,
+		InVehicle_Aggressive = 12,
+		InVehicle_Civilian = 13,
+		InVehicle_Passive = 14,
+		Lore_Aggressive = 15,
+		Lore_Civilian = 16,
+		Lore_Passive = 17,
+		Mechanical_Aggressive = 18,
+		Mechanical_NonCombat = 19,
+		Mechanical_Passive = 20,
+		NoReaction = 21,
+		Police_Aggressive = 22,
+		Police_Passive = 23,
+		Sleep_Aggressive = 24,
+		Sleep_Civilian = 25,
+		Sleep_Passive = 26,
+		Count = 27,
+		Invalid = 28
 	}
 
 	public enum gamedataSearchFilterMaskType
@@ -16033,6 +16057,7 @@ public static partial class Enums
 		OverridePlayerDamageWithFixedPercentage = 46,
 		DeviceExplosionAttack = 47,
 		NPCPassengerVehicleCollision = 48,
+		TargetWasAlreadyDeadNoStatPool = 49,
 		PROJECT_SPECIFIC_FLAGS = 100000,
 		UsedKerenzikov = 100001,
 		FragmentationSplinter = 100002,
@@ -17267,7 +17292,8 @@ public static partial class Enums
 		Undefined = 0,
 		VeryNear = 1,
 		Near = 2,
-		Normal = 3
+		Normal = 3,
+		None = 4
 	}
 
 	public enum questCharacterHitEventType
@@ -18713,6 +18739,19 @@ public static partial class Enums
 		TPP = 1
 	}
 
+	public enum vehicleColorSelectorActiveMode
+	{
+		None = 0,
+		Primary = 1,
+		Secondary = 2
+	}
+
+	public enum vehicleColorSelectorMenuCloseReason
+	{
+		Apply = 0,
+		Reset = 1,
+		Cancel = 2
+	}
 	public enum vehicleCoolExitImpulseLevel
 	{
 		NoExit = 0,
@@ -19416,7 +19455,9 @@ public static partial class Enums
 		GPSOnly = 512,
 		ShowDebug = 1024,
 		Blockade = 2048,
-		Yield = 4096
+		Yield = 4096,
+		NoAIDriving = 8192,
+		Highway = 16384
 	}
 
 	public enum worldTrafficLightColor

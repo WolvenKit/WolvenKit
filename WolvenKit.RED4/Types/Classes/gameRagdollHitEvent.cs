@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameRagdollHitEvent : gameeventsHitEvent
 	{
-		[Ordinal(12)] 
+		[Ordinal(11)] 
 		[RED("impactForce")] 
 		public CFloat ImpactForce
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(12)] 
 		[RED("speedDelta")] 
 		public CFloat SpeedDelta
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(13)] 
 		[RED("heightDelta")] 
 		public CFloat HeightDelta
 		{

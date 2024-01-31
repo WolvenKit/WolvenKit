@@ -101,6 +101,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(18)] 
+		[RED("rubberBandingTargetForwardOffset")] 
+		public CFloat RubberBandingTargetForwardOffset
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(19)] 
 		[RED("rubberBandingMinDistance")] 
 		public CFloat RubberBandingMinDistance
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("rubberBandingMaxDistance")] 
 		public CFloat RubberBandingMaxDistance
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("rubberBandingStopAndWait")] 
 		public CBool RubberBandingStopAndWait
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("rubberBandingTeleportToCatchUp")] 
 		public CBool RubberBandingTeleportToCatchUp
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("rubberBandingStayInFront")] 
 		public CBool RubberBandingStayInFront
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("audioCurvesParam")] 
 		public CWeakHandle<vehicleAudioCurvesParam> AudioCurvesParam
 		{

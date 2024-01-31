@@ -668,6 +668,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(86)] 
+		[RED("cursorData")] 
+		public CHandle<MenuCursorUserData> CursorData
+		{
+			get => GetPropertyValue<CHandle<MenuCursorUserData>>();
+			set => SetPropertyValue<CHandle<MenuCursorUserData>>(value);
+		}
+
+		[Ordinal(87)] 
+		[RED("pressedItemDisplay")] 
+		public CWeakHandle<InventoryItemDisplayController> PressedItemDisplay
+		{
+			get => GetPropertyValue<CWeakHandle<InventoryItemDisplayController>>();
+			set => SetPropertyValue<CWeakHandle<InventoryItemDisplayController>>(value);
+		}
+
 		public FullscreenVendorGameController()
 		{
 			TooltipsManagerRef = new inkWidgetReference();

@@ -45,6 +45,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(14)] 
+		[RED("lastOpenTab")] 
+		public CEnum<ScannerDetailTab> LastOpenTab
+		{
+			get => GetPropertyValue<CEnum<ScannerDetailTab>>();
+			set => SetPropertyValue<CEnum<ScannerDetailTab>>(value);
+		}
+
+		[Ordinal(15)] 
 		[RED("player")] 
 		public CWeakHandle<gameObject> Player
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("scanningState")] 
 		public CEnum<gameScanningState> ScanningState
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameScanningState>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("scannedObjectType")] 
 		public CEnum<ScannerObjectType> ScannedObjectType
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ScannerObjectType>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("currentTab")] 
 		public CEnum<ScannerDetailTab> CurrentTab
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ScannerDetailTab>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("isQuickHackAble")] 
 		public CBool IsQuickHackAble
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("isQuickHackPanelOpened")] 
 		public CBool IsQuickHackPanelOpened
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("asyncSpawnRequests")] 
 		public CArray<CWeakHandle<inkAsyncSpawnRequest>> AsyncSpawnRequests
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<inkAsyncSpawnRequest>>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("uiScannedObjectTypeChangedCallbackID")] 
 		public CHandle<redCallbackObject> UiScannedObjectTypeChangedCallbackID
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("uiScanningStateChangedCallbackID")] 
 		public CHandle<redCallbackObject> UiScanningStateChangedCallbackID
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("uiScannedObjectChangedCallbackID")] 
 		public CHandle<redCallbackObject> UiScannedObjectChangedCallbackID
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("uiQHDescriptionChangedCallbackID")] 
 		public CHandle<redCallbackObject> UiQHDescriptionChangedCallbackID
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("uiQHPanelOpenedCallbackID")] 
 		public CHandle<redCallbackObject> UiQHPanelOpenedCallbackID
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("uiSystemIsInMenuCallbackID")] 
 		public CHandle<redCallbackObject> UiSystemIsInMenuCallbackID
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("introAnimProxy")] 
 		public CHandle<inkanimProxy> IntroAnimProxy
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("outroAnimProxy")] 
 		public CHandle<inkanimProxy> OutroAnimProxy
 		{
@@ -164,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("scannerToggleTabAnimProxy")] 
 		public CHandle<inkanimProxy> ScannerToggleTabAnimProxy
 		{

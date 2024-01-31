@@ -52,8 +52,18 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<IScriptable>>(value);
 		}
 
+		[Ordinal(6)] 
+		[RED("isSortable")] 
+		public CBool IsSortable
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public VirutalNestedListData()
 		{
+			IsSortable = true;
+
 			PostConstruct();
 		}
 

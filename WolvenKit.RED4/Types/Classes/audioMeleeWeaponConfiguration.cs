@@ -77,6 +77,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(10)] 
+		[RED("attackChargedThreshold")] 
+		public CFloat AttackChargedThreshold
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(11)] 
 		[RED("attackChargedSound")] 
 		public audioMeleeSound AttackChargedSound
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<audioMeleeSound>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("attackDischargedSound")] 
 		public audioMeleeSound AttackDischargedSound
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<audioMeleeSound>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("meleeSoundsByHitPerMaterialType")] 
 		public CHandle<audioMeleeHitTypeMeleeSoundDictionary> MeleeSoundsByHitPerMaterialType
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<audioMeleeHitTypeMeleeSoundDictionary>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("meleeWeaponConfigurationsByRigTypeMap")] 
 		public audioMeleeRigTypeMeleeWeaponConfigurationMap MeleeWeaponConfigurationsByRigTypeMap
 		{
@@ -119,6 +127,7 @@ namespace WolvenKit.RED4.Types
 			UnequipSound = new audioMeleeSound { Events = new() };
 			BlockSound = new audioMeleeSound { Events = new() };
 			ParrySound = new audioMeleeSound { Events = new() };
+			AttackChargedThreshold = 90.000000F;
 			AttackChargedSound = new audioMeleeSound { Events = new() };
 			AttackDischargedSound = new audioMeleeSound { Events = new() };
 			MeleeWeaponConfigurationsByRigTypeMap = new audioMeleeRigTypeMeleeWeaponConfigurationMap { MapItems = new() };

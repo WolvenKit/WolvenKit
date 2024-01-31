@@ -117,6 +117,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(15)] 
+		[RED("rubberBandingTargetForwardOffset")] 
+		public CHandle<AIArgumentMapping> RubberBandingTargetForwardOffset
+		{
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
+		}
+
+		[Ordinal(16)] 
 		[RED("rubberBandingMinDistance")] 
 		public CHandle<AIArgumentMapping> RubberBandingMinDistance
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("rubberBandingMaxDistance")] 
 		public CHandle<AIArgumentMapping> RubberBandingMaxDistance
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("rubberBandingStopAndWait")] 
 		public CHandle<AIArgumentMapping> RubberBandingStopAndWait
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("rubberBandingTeleportToCatchUp")] 
 		public CHandle<AIArgumentMapping> RubberBandingTeleportToCatchUp
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("rubberBandingStayInFront")] 
 		public CHandle<AIArgumentMapping> RubberBandingStayInFront
 		{

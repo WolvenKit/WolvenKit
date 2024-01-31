@@ -61,6 +61,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(13)] 
+		[RED("rubberBandingTargetForwardOffset")] 
+		public CFloat RubberBandingTargetForwardOffset
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(14)] 
 		[RED("rubberBandingMinDistance")] 
 		public CFloat RubberBandingMinDistance
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("rubberBandingMaxDistance")] 
 		public CFloat RubberBandingMaxDistance
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("rubberBandingStopAndWait")] 
 		public CBool RubberBandingStopAndWait
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("rubberBandingTeleportToCatchUp")] 
 		public CBool RubberBandingTeleportToCatchUp
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("rubberBandingStayInFront")] 
 		public CBool RubberBandingStayInFront
 		{

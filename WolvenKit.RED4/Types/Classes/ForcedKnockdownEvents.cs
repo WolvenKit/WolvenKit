@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ForcedKnockdownEvents : KnockdownEvents
 	{
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("firstUpdate")] 
 		public CBool FirstUpdate
 		{
