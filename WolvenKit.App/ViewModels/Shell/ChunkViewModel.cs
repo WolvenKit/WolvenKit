@@ -16,7 +16,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData.Binding;
-using Microsoft.ClearScript.JavaScript;
 using Microsoft.Win32;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
@@ -1795,7 +1794,41 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 }
             }
 
-            var index = Parent.GetIndexOf(this) + 1;
+            var index = 0;
+            // If shift is being held: Clear the array we're currently pasting into.
+            // Otherwise: Paste at end of array / after currently selected element
+            if (IsShiftBeingHeld)
+            {
+                if (ResolvedData is IRedBufferPointer db)
+                {
+                    if (db.GetValue().Data is RedPackage pkg)
+                    {
+                        pkg.Chunks.Clear();
+                    }
+                    else if (db.GetValue().Data is CR2WList list)
+                    {
+                        list.Files.Clear();
+                    }
+                }
+
+                if (Parent.PropertyType.IsAssignableTo(typeof(IRedArray)))
+                {
+                    var parentAry = (IRedArray)Parent.Data;
+                    parentAry.Clear();
+                }
+
+                if (PropertyType.IsAssignableTo(typeof(IRedArray)))
+                {
+                    var ary = (IRedArray)Data;
+                    ary.Clear();
+                }
+            }
+            else
+            {
+                index = Parent.GetIndexOf(this) + 1;
+            }
+            
+            
             for (var i = 0; i < RedDocumentTabViewModel.CopiedChunks.Count; i++)
             {
                 var e = RedDocumentTabViewModel.CopiedChunks[i];
@@ -2927,6 +2960,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     // Shift+Control: recursively fold/unfold nodes all the way
     public static bool IsControlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+
+
+    // Shift+Control: recursively fold/unfold nodes all the way
+    public static string PasteSelectionIntoArrayHeader => IsShiftBeingHeld
+        ? "Overwrite Array/Buffer with Selection"
+        : "Paste Selection into Array/Buffer";
 
 
     public IList<ReferenceSocket> Inputs
