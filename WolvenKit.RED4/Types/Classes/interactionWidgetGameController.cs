@@ -125,6 +125,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(24)] 
+		[RED("dataActive")] 
+		public CBool DataActive
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(25)] 
 		[RED("progressBarHolder")] 
 		public inkWidgetReference ProgressBarHolder
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("progressBar")] 
 		public CWeakHandle<DialogChoiceTimerController> ProgressBar
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<DialogChoiceTimerController>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("hasProgressBar")] 
 		public CBool HasProgressBar
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("bb")] 
 		public CWeakHandle<gameIBlackboard> Bb
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("bbUIInteractionsDef")] 
 		public CHandle<UIInteractionsDef> BbUIInteractionsDef
 		{
@@ -164,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UIInteractionsDef>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("bbLastAttemptedChoiceCallbackId")] 
 		public CHandle<redCallbackObject> BbLastAttemptedChoiceCallbackId
 		{
@@ -172,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("OnZoneChangeCallback")] 
 		public CHandle<redCallbackObject> OnZoneChangeCallback
 		{
@@ -180,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
 		[RED("pendingRequests")] 
 		public CInt32 PendingRequests
 		{
@@ -188,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(33)] 
 		[RED("spawnTokens")] 
 		public CArray<CWeakHandle<inkAsyncSpawnRequest>> SpawnTokens
 		{
@@ -196,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<inkAsyncSpawnRequest>>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(34)] 
 		[RED("currentOptions")] 
 		public CArray<gameinteractionsvisInteractionChoiceData> CurrentOptions
 		{

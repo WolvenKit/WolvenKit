@@ -117,6 +117,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(15)] 
+		[RED("outRubberBandingTargetForwardOffset")] 
+		public CHandle<AIArgumentMapping> OutRubberBandingTargetForwardOffset
+		{
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
+		}
+
+		[Ordinal(16)] 
 		[RED("outRubberBandingMinDistance")] 
 		public CHandle<AIArgumentMapping> OutRubberBandingMinDistance
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("outRubberBandingMaxDistance")] 
 		public CHandle<AIArgumentMapping> OutRubberBandingMaxDistance
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("outRubberBandingStopAndWait")] 
 		public CHandle<AIArgumentMapping> OutRubberBandingStopAndWait
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("outRubberBandingTeleportToCatchUp")] 
 		public CHandle<AIArgumentMapping> OutRubberBandingTeleportToCatchUp
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("outRubberBandingStayInFront")] 
 		public CHandle<AIArgumentMapping> OutRubberBandingStayInFront
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("outAudioCurvesParam")] 
 		public CHandle<AIArgumentMapping> OutAudioCurvesParam
 		{

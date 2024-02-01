@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameeventsCoverHitEvent : gameeventsHitEvent
 	{
-		[Ordinal(12)] 
+		[Ordinal(11)] 
 		[RED("cover")] 
 		public CWeakHandle<gameObject> Cover
 		{

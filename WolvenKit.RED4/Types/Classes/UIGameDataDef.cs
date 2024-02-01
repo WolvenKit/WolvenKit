@@ -276,6 +276,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
+		[Ordinal(34)] 
+		[RED("Popup_CarColorPicker_IsShown")] 
+		public gamebbScriptID_Bool Popup_CarColorPicker_IsShown
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
 		public UIGameDataDef()
 		{
 			BreachUIParams = new gamebbScriptID_Variant();
@@ -312,6 +320,7 @@ namespace WolvenKit.RED4.Types
 			Popup_VehiclesManager_IsShown = new gamebbScriptID_Bool();
 			Popup_Radio_IsShown = new gamebbScriptID_Bool();
 			Popup_Radio_Enabled = new gamebbScriptID_Bool();
+			Popup_CarColorPicker_IsShown = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

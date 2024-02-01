@@ -100,6 +100,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(12)] 
+		[RED("settings")] 
+		public CHandle<RadioportSettingsListener> Settings
+		{
+			get => GetPropertyValue<CHandle<RadioportSettingsListener>>();
+			set => SetPropertyValue<CHandle<RadioportSettingsListener>>(value);
+		}
+
 		public PocketRadio()
 		{
 			Restrictions = new();

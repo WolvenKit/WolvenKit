@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class UpgradingScreenController : CraftingMainLogicController
 	{
-		[Ordinal(50)] 
+		[Ordinal(51)] 
 		[RED("itemNameUpgrade")] 
 		public inkTextWidgetReference ItemNameUpgrade
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(52)] 
 		[RED("arrowComparison")] 
 		public inkWidgetReference ArrowComparison
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(53)] 
 		[RED("itemTooltipControllerLeft")] 
 		public CWeakHandle<AGenericTooltipController> ItemTooltipControllerLeft
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<AGenericTooltipController>>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(54)] 
 		[RED("itemTooltipControllerRight")] 
 		public CWeakHandle<AGenericTooltipController> ItemTooltipControllerRight
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<AGenericTooltipController>>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(55)] 
 		[RED("tooltipDataLeft")] 
 		public CHandle<MinimalItemTooltipData> TooltipDataLeft
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<MinimalItemTooltipData>>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(56)] 
 		[RED("tooltipDataRight")] 
 		public CHandle<MinimalItemTooltipData> TooltipDataRight
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<MinimalItemTooltipData>>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(57)] 
 		[RED("WeaponAreas")] 
 		public CArray<CEnum<gamedataItemType>> WeaponAreas
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CEnum<gamedataItemType>>>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(58)] 
 		[RED("EquipAreas")] 
 		public CArray<CEnum<gamedataEquipmentArea>> EquipAreas
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CEnum<gamedataEquipmentArea>>>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(59)] 
 		[RED("DELAYED_TOOLTIP_RIGHT")] 
 		public CFloat DELAYED_TOOLTIP_RIGHT
 		{

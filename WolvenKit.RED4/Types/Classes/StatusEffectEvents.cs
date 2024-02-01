@@ -36,6 +36,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
+		[Ordinal(10)] 
+		[RED("timeInAnimState")] 
+		public CFloat TimeInAnimState
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(11)] 
+		[RED("timeInEffect")] 
+		public CFloat TimeInEffect
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public StatusEffectEvents()
 		{
 			PostConstruct();

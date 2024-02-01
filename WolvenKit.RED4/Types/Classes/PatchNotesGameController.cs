@@ -5,16 +5,16 @@ namespace WolvenKit.RED4.Types
 	public partial class PatchNotesGameController : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
-		[RED("21NotesContainerRef")] 
-		public inkWidgetReference _21NotesContainerRef
+		[RED("notesContainerRef")] 
+		public inkCompoundWidgetReference NotesContainerRef
 		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
-		[RED("20NotesContainerRef")] 
-		public inkWidgetReference _20NotesContainerRef
+		[RED("patch20TitleContainerRef")] 
+		public inkWidgetReference Patch20TitleContainerRef
 		{
 			get => GetPropertyValue<inkWidgetReference>();
 			set => SetPropertyValue<inkWidgetReference>(value);
@@ -94,8 +94,8 @@ namespace WolvenKit.RED4.Types
 
 		public PatchNotesGameController()
 		{
-			_21NotesContainerRef = new inkWidgetReference();
-			_20NotesContainerRef = new inkWidgetReference();
+			NotesContainerRef = new inkCompoundWidgetReference();
+			Patch20TitleContainerRef = new inkWidgetReference();
 			ItemLibraryName = "item";
 			IntroAnimationName = "intro";
 			CloseButtonRef = new inkWidgetReference();

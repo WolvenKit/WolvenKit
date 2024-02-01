@@ -91,6 +91,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CResource>>(value);
 		}
 		
+		[RED("customizableAppearance")]
+		[REDProperty(IsIgnored = true)]
+		public CName CustomizableAppearance
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+		
 		[RED("debugStatusString")]
 		[REDProperty(IsIgnored = true)]
 		public CString DebugStatusString
@@ -193,6 +201,22 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("hasSideWindows")]
+		[REDProperty(IsIgnored = true)]
+		public CBool HasSideWindows
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
+		[RED("hasVisualCustomization")]
+		[REDProperty(IsIgnored = true)]
+		public CBool HasVisualCustomization
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 		
 		[RED("headlightColor")]
@@ -657,6 +681,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("visualCustomizationTeaser")]
+		[REDProperty(IsIgnored = true)]
+		public CBool VisualCustomizationTeaser
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 		
 		[RED("visualDestruction")]

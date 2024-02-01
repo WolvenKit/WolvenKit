@@ -205,6 +205,30 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(132)] 
+		[RED("vehicleApperanceCustomizationActive")] 
+		public CBool VehicleApperanceCustomizationActive
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(133)] 
+		[RED("vehicleAppearanceCustomizationBlockedByDamage")] 
+		public CBool VehicleAppearanceCustomizationBlockedByDamage
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(134)] 
+		[RED("vehicleApperanceDefinition")] 
+		public vehicleVisualModdingDefinition VehicleApperanceDefinition
+		{
+			get => GetPropertyValue<vehicleVisualModdingDefinition>();
+			set => SetPropertyValue<vehicleVisualModdingDefinition>(value);
+		}
+
+		[Ordinal(135)] 
 		[RED("ready")] 
 		public CBool Ready
 		{
@@ -212,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(133)] 
+		[Ordinal(136)] 
 		[RED("isPlayerPerformingBodyDisposal")] 
 		public CBool IsPlayerPerformingBodyDisposal
 		{
@@ -220,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(134)] 
+		[Ordinal(137)] 
 		[RED("submergedTimestamp")] 
 		public CFloat SubmergedTimestamp
 		{
@@ -228,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(135)] 
+		[Ordinal(138)] 
 		[RED("vehicleControllerPS")] 
 		public CHandle<vehicleControllerPS> VehicleControllerPS
 		{
@@ -241,6 +265,7 @@ namespace WolvenKit.RED4.Types
 			ExposeQuickHacks = true;
 			NpcOccupiedSlots = new();
 			PreviousInteractionState = new();
+			VehicleApperanceDefinition = new vehicleVisualModdingDefinition();
 
 			PostConstruct();
 		}
