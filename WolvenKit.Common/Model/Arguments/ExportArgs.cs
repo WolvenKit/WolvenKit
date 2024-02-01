@@ -25,6 +25,7 @@ namespace WolvenKit.Common.Model.Arguments
     /// </summary>
     public abstract class ExportArgs : ImportExportArgs
     {
+        
     }
 
     /// <summary>
@@ -208,7 +209,8 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("Default Export Settings")]
         [Display(Name = "LOD Filter")]
-        [Description("If selected LOD meshes will not be included. May cause complications with clipping decals.")]
+        [Description(
+            "Select to exclude submeshes for lower LOD. May cause complications with clipping decals or hitboxes.")]
         [WkitScriptAccess()]
         public bool LodFilter { get => _lodFilter; set => SetProperty(ref _lodFilter, value); }
 
@@ -301,6 +303,17 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         /// <returns>String</returns>
         public override string ToString() => $"GLTF/GLB | Export Type : {meshExportType} | Lod filter : {LodFilter} | Is Binary : {isGLBinary}";
+
+        public override ImportExportArgs AdjustDefaultFromFilepath(string baseFile)
+        {
+            // We don't want LOD filters to be active by default for weapon meshes 
+            if (baseFile.Contains("weapon", StringComparison.CurrentCultureIgnoreCase))
+            {
+                LodFilter = false;
+            }
+
+            return this;
+        }
     }
 
     /// <summary>
