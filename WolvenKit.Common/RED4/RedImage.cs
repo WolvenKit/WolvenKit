@@ -11,6 +11,7 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 using static WolvenKit.RED4.Types.Enums;
+using Device = SharpDX.Direct3D11.Device;
 using DXGI_FORMAT = DirectXTexNet.DXGI_FORMAT;
 using TEX_DIMENSION = DirectXTexNet.TEX_DIMENSION;
 
@@ -44,7 +45,8 @@ public partial class RedImage : IDisposable
 {
     public static ILoggerService? LoggerService { private get; set; }
 
-    private static readonly SharpDX.Direct3D11.Device? s_device;
+    private static Device? s_device;
+    private static bool s_deviceNotSupported;
 
     private ScratchImage _scratchImage;
     private TexMetadata _metadata;
@@ -78,16 +80,6 @@ public partial class RedImage : IDisposable
     }
 
     public TexMetadataWrapper Metadata => new(_metadata);
-
-    static RedImage()
-    {
-        s_device = new SharpDX.Direct3D11.Device(DriverType.Hardware, DeviceCreationFlags.BgraSupport);
-        if (s_device.FeatureLevel < FeatureLevel.Level_10_0)
-        {
-            s_device.Dispose();
-            s_device = null;
-        }
-    }
 
     public Enums.GpuWrapApieTextureGroup Group { get; set; }
     public bool IsStreamable { get; set; }
@@ -124,6 +116,49 @@ public partial class RedImage : IDisposable
     }
 
     public bool IsGamma => TexHelper.Instance.IsSRGB(_metadata.Format);
+
+    private static Device? GetDevice()
+    {
+        if (s_deviceNotSupported)
+        {
+            return null;
+        }
+
+        if (s_device != null && s_device.DeviceRemovedReason != 0)
+        {
+            LoggerService?.Warning($"Error while getting GPU instance. Reason: {s_device.DeviceRemovedReason}. Retrying...");
+            s_device.Dispose();
+            s_device = null;
+        }
+
+        if (s_device == null)
+        {
+            s_device = new Device(DriverType.Hardware, DeviceCreationFlags.BgraSupport);
+            if (s_device.FeatureLevel < FeatureLevel.Level_10_0)
+            {
+                LoggerService?.Debug("Your GPU doesn't support hardware compression. Fallback to software compression.");
+
+                s_device.Dispose();
+                s_device = null;
+
+                s_deviceNotSupported = true;
+                return null;
+            }
+        }
+
+        if (s_device.DeviceRemovedReason != 0)
+        {
+            LoggerService?.Warning($"Error while getting GPU instance. Reason: {s_device.DeviceRemovedReason}");
+            LoggerService?.Warning("Fallback to software compression. Please try restarting WolvenKit to fix this issue.");
+            s_device.Dispose();
+            s_device = null;
+
+            // Don't try again until WolvenKit is restarted
+            s_deviceNotSupported = true;
+        }
+
+        return s_device;
+    }
 
     #region LoadFromFileFormat
 
@@ -471,13 +506,14 @@ public partial class RedImage : IDisposable
             throw new ArgumentOutOfRangeException(nameof(format));
         }
 
+        var device = GetDevice();
         if (format is DXGI_FORMAT.BC6H_UF16
                 or DXGI_FORMAT.BC6H_SF16
                 or DXGI_FORMAT.BC7_UNORM
                 or DXGI_FORMAT.BC7_UNORM_SRGB &&
-            s_device != null)
+            device != null)
         {
-            InternalScratchImage = InternalScratchImage.Compress(s_device.NativePointer, format, TEX_COMPRESS_FLAGS.DEFAULT, 1.0F);
+            InternalScratchImage = InternalScratchImage.Compress(device.NativePointer, format, TEX_COMPRESS_FLAGS.DEFAULT, 1.0F);
         }
         else
         {
@@ -679,9 +715,10 @@ public partial class RedImage : IDisposable
         tmpImage = true;
         if (settings.Compression != ETextureCompression.TCM_None)
         {
-            if ((DXGI_FORMAT)outImageFormat is DXGI_FORMAT.BC6H_UF16 or DXGI_FORMAT.BC6H_SF16 or DXGI_FORMAT.BC7_UNORM or DXGI_FORMAT.BC7_UNORM_SRGB && s_device != null)
+            var device = GetDevice();
+            if ((DXGI_FORMAT)outImageFormat is DXGI_FORMAT.BC6H_UF16 or DXGI_FORMAT.BC6H_SF16 or DXGI_FORMAT.BC7_UNORM or DXGI_FORMAT.BC7_UNORM_SRGB && device != null)
             {
-                img = img.Compress(s_device.NativePointer, (DXGI_FORMAT)outImageFormat, TEX_COMPRESS_FLAGS.DEFAULT, 1.0F);
+                img = img.Compress(device.NativePointer, (DXGI_FORMAT)outImageFormat, TEX_COMPRESS_FLAGS.DEFAULT, 1.0F);
             }
             else
             {

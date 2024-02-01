@@ -11,6 +11,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
+		[RED("evaluateOnRegister")]
+		[REDProperty(IsIgnored = true)]
+		public CBool EvaluateOnRegister
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("invert")]
 		[REDProperty(IsIgnored = true)]
 		public CBool Invert

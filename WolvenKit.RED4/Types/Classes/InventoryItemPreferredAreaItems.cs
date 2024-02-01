@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
+		[RED("itemType")] 
+		public CEnum<gamedataItemType> ItemType
+		{
+			get => GetPropertyValue<CEnum<gamedataItemType>>();
+			set => SetPropertyValue<CEnum<gamedataItemType>>(value);
+		}
+
+		[Ordinal(2)] 
 		[RED("items")] 
 		public CArray<CWeakHandle<UIInventoryItem>> Items
 		{

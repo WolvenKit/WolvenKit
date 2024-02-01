@@ -84,6 +84,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
+		[Ordinal(11)] 
+		[RED("outIgnoreNoAIDrivingLanes")] 
+		public CHandle<AIArgumentMapping> OutIgnoreNoAIDrivingLanes
+		{
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
+		}
+
 		public AIDriveToNodeCommandHandler()
 		{
 			PostConstruct();

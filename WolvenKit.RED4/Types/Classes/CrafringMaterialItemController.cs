@@ -45,6 +45,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(10)] 
+		[RED("tooltipAnchor")] 
+		public inkWidgetReference TooltipAnchor
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(11)] 
 		[RED("data")] 
 		public CHandle<CachedCraftingMaterial> Data
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<CachedCraftingMaterial>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("quantity")] 
 		public CInt32 Quantity
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("hovered")] 
 		public CBool Hovered
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("lastState")] 
 		public CEnum<CrafringMaterialItemHighlight> LastState
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<CrafringMaterialItemHighlight>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("shouldBeHighlighted")] 
 		public CBool ShouldBeHighlighted
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("useSimpleFromat")] 
 		public CBool UseSimpleFromat
 		{
@@ -92,9 +100,17 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("hideIfZero")] 
 		public CBool HideIfZero
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("isCollapsed")] 
+		public CBool IsCollapsed
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
@@ -107,6 +123,7 @@ namespace WolvenKit.RED4.Types
 			QuantityChangeText = new inkTextWidgetReference();
 			Icon = new inkImageWidgetReference();
 			Frame = new inkWidgetReference();
+			TooltipAnchor = new inkWidgetReference();
 
 			PostConstruct();
 		}

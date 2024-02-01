@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class CraftingLogicController : CraftingMainLogicController
 	{
-		[Ordinal(50)] 
+		[Ordinal(51)] 
 		[RED("ingredientsWeaponContainer")] 
 		public inkCompoundWidgetReference IngredientsWeaponContainer
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(52)] 
 		[RED("itemPreviewContainer")] 
 		public inkWidgetReference ItemPreviewContainer
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(53)] 
 		[RED("weaponPreviewContainer")] 
 		public inkWidgetReference WeaponPreviewContainer
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(54)] 
 		[RED("garmentPreviewContainer")] 
 		public inkWidgetReference GarmentPreviewContainer
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(55)] 
 		[RED("perkNotificationContainer")] 
 		public inkWidgetReference PerkNotificationContainer
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(56)] 
 		[RED("perkNotificationText")] 
 		public inkTextWidgetReference PerkNotificationText
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(57)] 
 		[RED("itemTooltipController")] 
 		public CWeakHandle<AGenericTooltipController> ItemTooltipController
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<AGenericTooltipController>>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(58)] 
 		[RED("quickHackTooltipController")] 
 		public CWeakHandle<AGenericTooltipController> QuickHackTooltipController
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<AGenericTooltipController>>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(59)] 
 		[RED("tooltipData")] 
 		public CHandle<ATooltipData> TooltipData
 		{
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ATooltipData>>(value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(60)] 
 		[RED("ingredientWeaponController")] 
 		public CWeakHandle<InventoryWeaponDisplayController> IngredientWeaponController
 		{
@@ -84,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<InventoryWeaponDisplayController>>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(61)] 
 		[RED("ingredientClothingController")] 
 		public CWeakHandle<InventoryWeaponDisplayController> IngredientClothingController
 		{
@@ -92,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<InventoryWeaponDisplayController>>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(62)] 
 		[RED("selectedItemGameData")] 
 		public CHandle<gameItemData> SelectedItemGameData
 		{
@@ -100,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameItemData>>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(63)] 
 		[RED("quantityPickerPopupToken")] 
 		public CHandle<inkGameNotificationToken> QuantityPickerPopupToken
 		{
@@ -108,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(64)] 
 		[RED("playerCraftBook")] 
 		public CWeakHandle<CraftBook> PlayerCraftBook
 		{
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<CraftBook>>(value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(65)] 
 		[RED("hasSpawnedQuickHackTooltip")] 
 		public CBool HasSpawnedQuickHackTooltip
 		{
@@ -124,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(66)] 
 		[RED("timeUntilReset")] 
 		public CFloat TimeUntilReset
 		{

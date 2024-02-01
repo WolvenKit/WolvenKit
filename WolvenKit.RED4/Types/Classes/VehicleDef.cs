@@ -252,6 +252,54 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
+		[Ordinal(31)] 
+		[RED("VehicleCustomizationBlockedByDamage")] 
+		public gamebbScriptID_Bool VehicleCustomizationBlockedByDamage
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		[Ordinal(32)] 
+		[RED("VehicleCustomizationActive")] 
+		public gamebbScriptID_Bool VehicleCustomizationActive
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		[Ordinal(33)] 
+		[RED("VehicleCustomizationDecoPreset")] 
+		public gamebbScriptID_Int32 VehicleCustomizationDecoPreset
+		{
+			get => GetPropertyValue<gamebbScriptID_Int32>();
+			set => SetPropertyValue<gamebbScriptID_Int32>(value);
+		}
+
+		[Ordinal(34)] 
+		[RED("VehicleCustomizationInstant")] 
+		public gamebbScriptID_Bool VehicleCustomizationInstant
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		[Ordinal(35)] 
+		[RED("VehicleCustomizationWidgetDelay")] 
+		public gamebbScriptID_Float VehicleCustomizationWidgetDelay
+		{
+			get => GetPropertyValue<gamebbScriptID_Float>();
+			set => SetPropertyValue<gamebbScriptID_Float>(value);
+		}
+
+		[Ordinal(36)] 
+		[RED("VehicleCustomizationPhotoMode")] 
+		public gamebbScriptID_Bool VehicleCustomizationPhotoMode
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
 		public VehicleDef()
 		{
 			BikeTilt = new gamebbScriptID_Float();
@@ -285,6 +333,12 @@ namespace WolvenKit.RED4.Types
 			ChaseTimeDelayToLeaveVehicle = new gamebbScriptID_Float();
 			MinimapMappinDeleteAnim = new gamebbScriptID_CName();
 			UseCarAlarmStim = new gamebbScriptID_Bool();
+			VehicleCustomizationBlockedByDamage = new gamebbScriptID_Bool();
+			VehicleCustomizationActive = new gamebbScriptID_Bool();
+			VehicleCustomizationDecoPreset = new gamebbScriptID_Int32();
+			VehicleCustomizationInstant = new gamebbScriptID_Bool();
+			VehicleCustomizationWidgetDelay = new gamebbScriptID_Float();
+			VehicleCustomizationPhotoMode = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

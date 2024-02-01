@@ -52,6 +52,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
+		[Ordinal(6)] 
+		[RED("evaluateOnRegister")] 
+		public CBool EvaluateOnRegister
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public StatusEffectPrereq()
 		{
 			PostConstruct();

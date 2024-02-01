@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(16)] 
+		[RED("vehicleCustomizationSlot")] 
+		public inkCompoundWidgetReference VehicleCustomizationSlot
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(17)] 
 		[RED("container")] 
 		public inkCompoundWidgetReference Container
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("DpadHintLibraryPath")] 
 		public inkWidgetLibraryReference DpadHintLibraryPath
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetLibraryReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("IsInDriverCombat")] 
 		public CBool IsInDriverCombat
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("IsPoliceVehicle")] 
 		public CBool IsPoliceVehicle
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("isRadioBlocked")] 
 		public CBool IsRadioBlocked
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("isInVehicleScene")] 
 		public CBool IsInVehicleScene
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("isQuestBlocked")] 
 		public CBool IsQuestBlocked
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("carHudListenerId")] 
 		public CUInt32 CarHudListenerId
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("statusListener")] 
 		public CHandle<HotkeyRadioStatusListener> StatusListener
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<HotkeyRadioStatusListener>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("PlayerEnteredVehicleListener")] 
 		public CHandle<redCallbackObject> PlayerEnteredVehicleListener
 		{
@@ -95,6 +103,7 @@ namespace WolvenKit.RED4.Types
 		public HotkeyConsumableWidgetController()
 		{
 			RadioSlot = new inkCompoundWidgetReference();
+			VehicleCustomizationSlot = new inkCompoundWidgetReference();
 			Container = new inkCompoundWidgetReference();
 			DpadHintLibraryPath = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
 

@@ -84,6 +84,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(16)] 
+		[RED("ignoreNoAIDrivingLanes")] 
+		public CBool IgnoreNoAIDrivingLanes
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public AIVehicleToNodeCommand()
 		{
 			StopAtPathEnd = true;

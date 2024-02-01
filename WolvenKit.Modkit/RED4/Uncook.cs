@@ -561,8 +561,7 @@ namespace WolvenKit.Modkit.RED4
                 return ConvertXbmToDdsStream(cr2wStream, ms, true, out _, out _);
             }
 
-            using var cr2wReader = new CR2WReader(cr2wStream);
-            if (cr2wReader.ReadFile(out var cr2wFile) != EFileReadErrorCodes.NoError || cr2wFile!.RootChunk is not CBitmapTexture bitmapTexture)
+            if (!_parserService.TryReadRed4File(cr2wStream, out var cr2wFile) || cr2wFile.RootChunk is not CBitmapTexture bitmapTexture)
             {
                 return false;
             }

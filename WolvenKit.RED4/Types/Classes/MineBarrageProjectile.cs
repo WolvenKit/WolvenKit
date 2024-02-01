@@ -84,9 +84,18 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
+		[Ordinal(58)] 
+		[RED("mappinID")] 
+		public gameNewMappinID MappinID
+		{
+			get => GetPropertyValue<gameNewMappinID>();
+			set => SetPropertyValue<gameNewMappinID>(value);
+		}
+
 		public MineBarrageProjectile()
 		{
 			LandIndicatorFX = new gameFxResource();
+			MappinID = new gameNewMappinID();
 
 			PostConstruct();
 		}

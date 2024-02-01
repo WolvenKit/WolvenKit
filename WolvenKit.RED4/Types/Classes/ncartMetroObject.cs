@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ncartMetroObject : vehicleAVBaseObject
 	{
-		[Ordinal(63)] 
+		[Ordinal(64)] 
 		[RED("pitchAdjustmentDelayID")] 
 		public gameDelayID PitchAdjustmentDelayID
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(65)] 
 		[RED("Z")] 
 		public CFloat Z
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(66)] 
 		[RED("checkForLeveling")] 
 		public CBool CheckForLeveling
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(67)] 
 		[RED("pitchingValue")] 
 		public CInt32 PitchingValue
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(68)] 
 		[RED("pitchAngleCheckInterval")] 
 		public CFloat PitchAngleCheckInterval
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(69)] 
 		[RED("pitchAngleReturnInterval")] 
 		public CFloat PitchAngleReturnInterval
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(69)] 
+		[Ordinal(70)] 
 		[RED("trainReverseDirectionFactName")] 
 		public CName TrainReverseDirectionFactName
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(70)] 
+		[Ordinal(71)] 
 		[RED("pitchAngleAdjustmentTreshold")] 
 		public CFloat PitchAngleAdjustmentTreshold
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(71)] 
+		[Ordinal(72)] 
 		[RED("pitchAngleLevelOutTreshold")] 
 		public CFloat PitchAngleLevelOutTreshold
 		{

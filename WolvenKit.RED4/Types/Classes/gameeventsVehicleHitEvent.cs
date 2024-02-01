@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameeventsVehicleHitEvent : gameeventsHitEvent
 	{
-		[Ordinal(12)] 
+		[Ordinal(11)] 
 		[RED("vehicleVelocity")] 
 		public Vector4 VehicleVelocity
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(12)] 
 		[RED("preyVelocity")] 
 		public Vector4 PreyVelocity
 		{

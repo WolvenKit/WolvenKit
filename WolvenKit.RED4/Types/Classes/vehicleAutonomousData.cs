@@ -221,6 +221,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(27)] 
+		[RED("rubberBandingTargetForwardOffset")] 
+		public CFloat RubberBandingTargetForwardOffset
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(28)] 
 		[RED("rubberBandingMinDistance")] 
 		public CFloat RubberBandingMinDistance
 		{
@@ -228,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("rubberBandingMaxDistance")] 
 		public CFloat RubberBandingMaxDistance
 		{
@@ -236,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("rubberBandingStopAndWait")] 
 		public CBool RubberBandingStopAndWait
 		{
@@ -244,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("rubberBandingTeleportToCatchUp")] 
 		public CBool RubberBandingTeleportToCatchUp
 		{
@@ -252,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
 		[RED("rubberBandingStayInFront")] 
 		public CBool RubberBandingStayInFront
 		{
@@ -260,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(33)] 
 		[RED("secureTimeOut")] 
 		public CFloat SecureTimeOut
 		{
@@ -268,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(34)] 
 		[RED("portalsList")] 
 		public CHandle<vehiclePortalsList> PortalsList
 		{
@@ -276,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<vehiclePortalsList>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(35)] 
 		[RED("trafficTryNeighborsForStart")] 
 		public CBool TrafficTryNeighborsForStart
 		{
@@ -284,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("trafficTryNeighborsForEnd")] 
 		public CBool TrafficTryNeighborsForEnd
 		{
@@ -292,7 +300,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
+		[RED("ignoreNoAIDrivingLanes")] 
+		public CBool IgnoreNoAIDrivingLanes
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(38)] 
 		[RED("allowSimplifiedMovement")] 
 		public CBool AllowSimplifiedMovement
 		{
@@ -300,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(39)] 
 		[RED("ignoreTickets")] 
 		public CBool IgnoreTickets
 		{
@@ -308,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(40)] 
 		[RED("disableStuckDetection")] 
 		public CBool DisableStuckDetection
 		{
@@ -316,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(41)] 
 		[RED("tryDriveAwayFromPlayer")] 
 		public CBool TryDriveAwayFromPlayer
 		{
@@ -324,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(42)] 
 		[RED("useSpeedBasedLookupRange")] 
 		public CBool UseSpeedBasedLookupRange
 		{
@@ -332,7 +348,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(43)] 
 		[RED("clearTrafficOnPath")] 
 		public CBool ClearTrafficOnPath
 		{
@@ -340,7 +356,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(44)] 
 		[RED("emergencyPatrol")] 
 		public CBool EmergencyPatrol
 		{
@@ -348,7 +364,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(45)] 
 		[RED("numPatrolLoops")] 
 		public CUInt32 NumPatrolLoops
 		{

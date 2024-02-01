@@ -125,6 +125,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(31)] 
+		[RED("sun_moon_container")] 
+		public inkWidgetReference Sun_moon_container
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(32)] 
 		[RED("weather_sun_widget")] 
 		public inkImageWidgetReference Weather_sun_widget
 		{
@@ -132,7 +140,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(33)] 
+		[RED("weather_moon_widget")] 
+		public inkImageWidgetReference Weather_moon_widget
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(34)] 
 		[RED("weather_cloud_a_widget")] 
 		public inkImageWidgetReference Weather_cloud_a_widget
 		{
@@ -140,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(35)] 
 		[RED("weather_cloud_b_widget")] 
 		public inkImageWidgetReference Weather_cloud_b_widget
 		{
@@ -148,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(36)] 
 		[RED("weather_rain_widget")] 
 		public inkImageWidgetReference Weather_rain_widget
 		{
@@ -156,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(37)] 
 		[RED("speed_display")] 
 		public inkTextWidgetReference Speed_display
 		{
@@ -164,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(38)] 
 		[RED("speed_display_deco_1")] 
 		public inkImageWidgetReference Speed_display_deco_1
 		{
@@ -172,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(39)] 
 		[RED("speed_display_deco_2")] 
 		public inkImageWidgetReference Speed_display_deco_2
 		{
@@ -180,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(40)] 
 		[RED("speed_display_deco_3")] 
 		public inkImageWidgetReference Speed_display_deco_3
 		{
@@ -188,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(41)] 
 		[RED("speed_display_deco_4")] 
 		public inkImageWidgetReference Speed_display_deco_4
 		{
@@ -196,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(42)] 
 		[RED("cachedActiveLine")] 
 		public CInt32 CachedActiveLine
 		{
@@ -204,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(43)] 
 		[RED("cachedNextStation")] 
 		public CInt32 CachedNextStation
 		{
@@ -212,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(44)] 
 		[RED("cachedDistrict")] 
 		public CEnum<ENcartDistricts> CachedDistrict
 		{
@@ -220,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ENcartDistricts>>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(45)] 
 		[RED("updateDistrictName")] 
 		public CBool UpdateDistrictName
 		{
@@ -228,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(46)] 
 		[RED("ownerObject")] 
 		public CWeakHandle<vehicleBaseObject> OwnerObject
 		{
@@ -236,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<vehicleBaseObject>>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(47)] 
 		[RED("vehicleBlackboard")] 
 		public CWeakHandle<gameIBlackboard> VehicleBlackboard
 		{
@@ -244,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(48)] 
 		[RED("AnimProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
@@ -252,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(49)] 
 		[RED("speedListner")] 
 		public CHandle<redCallbackObject> SpeedListner
 		{
@@ -260,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(50)] 
 		[RED("speedLastValue")] 
 		public CFloat SpeedLastValue
 		{
@@ -277,7 +293,9 @@ namespace WolvenKit.RED4.Types
 			StationStatusWidget = new inkTextWidgetReference();
 			DistrictNameWidget = new inkTextWidgetReference();
 			StationDistrictBackgroundColor = new inkImageWidgetReference();
+			Sun_moon_container = new inkWidgetReference();
 			Weather_sun_widget = new inkImageWidgetReference();
+			Weather_moon_widget = new inkImageWidgetReference();
 			Weather_cloud_a_widget = new inkImageWidgetReference();
 			Weather_cloud_b_widget = new inkImageWidgetReference();
 			Weather_rain_widget = new inkImageWidgetReference();
