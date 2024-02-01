@@ -11,8 +11,8 @@
     <PackageVersion Include="Discord.Net" Version="3.13.0" />
     <PackageVersion Include="DiscordRichPresence" Version="1.2.1.24" />
     <PackageVersion Include="DrawStringLineHeight" Version="1.0.0" />
-    <PackageVersion Include="DynamicData" Version="8.1.1" />
-    <PackageVersion Include="EFCore.BulkExtensions" Version="8.0.0" />
+    <PackageVersion Include="DynamicData" Version="8.3.27" />
+    <PackageVersion Include="EFCore.BulkExtensions" Version="8.0.1" />
     <PackageVersion Include="Fluent.Ribbon" Version="9.0.4" />
     <PackageVersion Include="HandyControls" Version="3.3.11" />
     <PackageVersion Include="HelixToolkit.SharpDX.Core.Wpf" Version="2.24.0" />
@@ -22,8 +22,8 @@
     <PackageVersion Include="Microsoft.Build.Framework" Version="17.8.3" />
     <PackageVersion Include="Microsoft.ClearScript.V8" Version="7.4.4" />
     <PackageVersion Include="Microsoft.ClearScript.V8.Native.win-x64" Version="7.4.4" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0">
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.1" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageVersion>
@@ -34,10 +34,9 @@
     <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Options" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.IO.RecyclableMemoryStream" Version="2.3.2" />
+    <PackageVersion Include="Microsoft.Extensions.Options" Version="8.0.1" />
+    <PackageVersion Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.0" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
-    <PackageVersion Include="Microsoft.Web.WebView2" Version="1.0.2151.40" />
     <PackageVersion Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.2428" />
     <PackageVersion Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.77" />
     <PackageVersion Include="MSTest.TestAdapter" Version="3.1.1" />
@@ -88,7 +87,7 @@
     <PackageVersion Include="System.Reflection.Metadata" Version="8.0.0" />
     <PackageVersion Include="System.Reflection.MetadataLoadContext" Version="8.0.0" />
     <PackageVersion Include="WpfAnalyzers" Version="4.1.1" />
-    <PackageVersion Include="YamlDotNet" Version="13.7.1" />
+    <PackageVersion Include="YamlDotNet" Version="15.1.0" />
     <PackageVersion Include="coverlet.collector" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

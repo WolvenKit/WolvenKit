@@ -51,7 +51,6 @@
     <PackageReference Include="Splat" />
     <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" />
     <PackageReference Include="Splat.Microsoft.Extensions.Logging" />
-    <PackageReference Include="Microsoft.Web.WebView2" />
     <PackageReference Include="Serilog.Sinks.Console" />
     <PackageReference Include="Serilog.Sinks.File" />
 

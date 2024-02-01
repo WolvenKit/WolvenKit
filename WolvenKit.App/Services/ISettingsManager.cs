@@ -109,17 +109,6 @@ public interface ISettingsManager : ISettingsDto, INotifyPropertyChanged
         return dir;
     }
 
-    public static string GetWebViewDataPath()
-    {
-        var dir = Path.Combine(GetAppData(), "WebViewData");
-        if (!Directory.Exists(dir))
-        {
-            Directory.CreateDirectory(dir);
-        }
-
-        return dir;
-    }
-
     public static string GetWScriptDir()
     {
         var dir = Path.Combine(GetAppData(), "WScript");

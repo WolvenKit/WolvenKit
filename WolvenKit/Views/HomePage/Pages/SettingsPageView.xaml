@@ -2,10 +2,10 @@
     x:Class="WolvenKit.Views.HomePage.Pages.SettingsPageView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:System="clr-namespace:System;assembly=mscorlib"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:reactiveUi="http://reactiveui.net"
-    xmlns:System="clr-namespace:System;assembly=mscorlib"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:viewmodels="clr-namespace:WolvenKit.ViewModels"
     x:TypeArguments="viewmodels:SettingsPageViewModel">
@@ -26,9 +26,9 @@
                 </ResourceDictionary.MergedDictionaries>-->
 
                 <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/AdonisUI;component/ColorSchemes/Dark.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/AdonisUI.ClassicTheme;component/Resources.xaml" />
-            </ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary Source="pack://application:,,,/AdonisUI;component/ColorSchemes/Dark.xaml" />
+                    <ResourceDictionary Source="pack://application:,,,/AdonisUI.ClassicTheme;component/Resources.xaml" />
+                </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
         </Grid.Resources>
 
@@ -62,18 +62,21 @@
 
             <Button
                 x:Name="CheckForUpdatesButton"
-                CommandParameter="{StaticResource FalseValue}"
                 Height="40"
-                Margin="15">
+                Margin="15"
+                CommandParameter="{StaticResource FalseValue}">
                 <StackPanel Orientation="Horizontal">
                     <iconPacks:PackIconMaterial
                         Width="20"
                         Height="20"
-                        Foreground="{StaticResource WolvenKitPurple}"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
+                        Foreground="{StaticResource WolvenKitPurple}"
                         Kind="Sync" />
-                    <TextBlock Padding="10,0,0,0" FontSize="14" Text="Check for updates" />
+                    <TextBlock
+                        Padding="10,0,0,0"
+                        FontSize="14"
+                        Text="Check for updates" />
                 </StackPanel>
             </Button>
 
@@ -85,11 +88,14 @@
                     <iconPacks:PackIconMaterial
                         Width="20"
                         Height="20"
-                        Foreground="{StaticResource WolvenKitCyan}"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
+                        Foreground="{StaticResource WolvenKitCyan}"
                         Kind="ContentSave" />
-                    <TextBlock Padding="10,0,0,0" FontSize="14" Text="Save &amp; Close" />
+                    <TextBlock
+                        Padding="10,0,0,0"
+                        FontSize="14"
+                        Text="Save &amp; Close" />
                 </StackPanel>
             </Button>
 
@@ -121,7 +127,7 @@
                 <Setter Property="IsCategoryEditorEnabled" Value="False" />
             </Style>
             </syncfusion:PropertyGrid.Resources-->
-    </syncfusion:PropertyGrid>
+        </syncfusion:PropertyGrid>
 
     </Grid>
 </reactiveUi:ReactiveUserControl>
