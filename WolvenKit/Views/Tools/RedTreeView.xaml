@@ -407,7 +407,7 @@
                 </MenuItem>
                 <MenuItem
                     Command="{Binding Path=PlacementTarget.Tag.PasteSelectionCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Paste Selection To Array/Buffer"
+                    Header="{ Binding PlacementTarget.Tag.PasteSelectionIntoArrayHeader, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     IsCheckable="False"
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowArrayOps, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
