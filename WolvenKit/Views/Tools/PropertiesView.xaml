@@ -453,7 +453,7 @@
                     Background="{StaticResource ContentBackground}"
                     BorderThickness="1"
                     ClipToBounds="True">
-                    <Canvas x:Name="ImagePreview" RenderTransformOrigin="0.5,0.5">
+                    <Grid x:Name="ImagePreview">
                         <Image
                             x:Name="ActualImage"
                             HorizontalAlignment="Stretch"
@@ -461,9 +461,9 @@
                             ClipToBounds="False"
                             Opacity="1"
                             RenderOptions.BitmapScalingMode="NearestNeighbor"
-                            RenderTransformOrigin="0.5,0.5"
-                            Source="{Binding LoadedBitmapFrame}" />
-                    </Canvas>
+                            Source="{Binding LoadedBitmapFrame}"
+                            Stretch="Uniform" />
+                    </Grid>
                 </Border>
             </syncfusion:TabItemExt>
 
