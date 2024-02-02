@@ -1799,29 +1799,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             // Otherwise: Paste at end of array / after currently selected element
             if (IsShiftBeingHeld)
             {
-                if (ResolvedData is IRedBufferPointer db)
-                {
-                    if (db.GetValue().Data is RedPackage pkg)
-                    {
-                        pkg.Chunks.Clear();
-                    }
-                    else if (db.GetValue().Data is CR2WList list)
-                    {
-                        list.Files.Clear();
-                    }
-                }
-
-                if (Parent.PropertyType.IsAssignableTo(typeof(IRedArray)))
-                {
-                    var parentAry = (IRedArray)Parent.Data;
-                    parentAry.Clear();
-                }
-
-                if (PropertyType.IsAssignableTo(typeof(IRedArray)))
-                {
-                    var ary = (IRedArray)Data;
-                    ary.Clear();
-                }
+                DeleteAll();
             }
             else
             {
