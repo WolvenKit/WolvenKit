@@ -45,6 +45,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(40)] 
+		[RED("pocketRadioStation")] 
+		public CInt32 PocketRadioStation
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(41)] 
 		[RED("permanentHealthBonus")] 
 		public CFloat PermanentHealthBonus
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(42)] 
 		[RED("permanentStaminaBonus")] 
 		public CFloat PermanentStaminaBonus
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(43)] 
 		[RED("permanentMemoryBonus")] 
 		public CFloat PermanentMemoryBonus
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(44)] 
 		[RED("minigameBB")] 
 		public CWeakHandle<gameIBlackboard> MinigameBB
 		{

@@ -217,9 +217,35 @@ public partial class RedBaseClass : IRedClass, IRedCloneable, IEquatable<RedBase
 
         var property = new ExtendedPropertyInfo(RedReflection.GetTypeInfo(GetType()), redName, type);
 
-        _dynamicProperties.Add(redName , property);
+        _dynamicProperties.Add(redName, property);
 
         return property;
+    }
+
+    public void RenameDynamicProperty(string oldName, string newName)
+    {
+        if (!_dynamicProperties.ContainsKey(oldName))
+        {
+            throw new TodoException("Property does not exist");
+        }
+
+        var property = _dynamicProperties[oldName];
+        var value = GetProperty(oldName);
+        var newProperty = new ExtendedPropertyInfo(RedReflection.GetTypeInfo(GetType()), newName, property.Type);
+
+        _dynamicProperties.Add(newName, newProperty);       
+        _dynamicProperties.Remove(oldName);
+        SetProperty(newName, value);
+    }
+
+    public void RemoveDynamicProperty(string redName)
+    {
+        if (!_dynamicProperties.ContainsKey(redName))
+        {
+            throw new TodoException("Property does not exist");
+        }
+
+        _dynamicProperties.Remove(redName);
     }
 
     public IEnumerable<ExtendedPropertyInfo> GetWritableProperties()

@@ -389,6 +389,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(52)] 
+		[RED("customizableApperanceApplied")] 
+		public CBool CustomizableApperanceApplied
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(53)] 
 		[RED("vehicleController")] 
 		public CHandle<vehicleController> VehicleController
 		{

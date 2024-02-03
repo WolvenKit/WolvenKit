@@ -244,6 +244,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
+		[Ordinal(32)] 
+		[RED("vehicleVisualCustomizationSelectorToken")] 
+		public CHandle<inkGameNotificationToken> VehicleVisualCustomizationSelectorToken
+		{
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
+		}
+
 		public gameuiPopupsManager()
 		{
 			BracketsContainer = new inkCompoundWidgetReference();

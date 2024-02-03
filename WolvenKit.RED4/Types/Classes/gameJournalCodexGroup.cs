@@ -12,11 +12,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<LocalizationString>(value);
 		}
 
+		[Ordinal(4)] 
+		[RED("isSorted")] 
+		public CBool IsSorted
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public gameJournalCodexGroup()
 		{
 			JournalEntryOverrideDataList = new();
 			Entries = new();
 			GroupName = new() { Unk1 = 0, Value = "" };
+			IsSorted = true;
 
 			PostConstruct();
 		}

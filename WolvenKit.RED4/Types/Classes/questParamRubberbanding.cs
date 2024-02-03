@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
+		[RED("targetForwardOffset")] 
+		public CFloat TargetForwardOffset
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(2)] 
 		[RED("minDistance")] 
 		public CFloat MinDistance
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("maxDistance")] 
 		public CFloat MaxDistance
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("stopAndWait")] 
 		public CBool StopAndWait
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("teleportToCatchUp")] 
 		public CBool TeleportToCatchUp
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("stayInFront")] 
 		public CBool StayInFront
 		{

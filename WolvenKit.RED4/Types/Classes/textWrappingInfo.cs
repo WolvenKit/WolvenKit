@@ -28,6 +28,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<textWrappingPolicy>>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("forceMinimumWidthToWrappingAtPosition")] 
+		public CBool ForceMinimumWidthToWrappingAtPosition
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public textWrappingInfo()
 		{
 			PostConstruct();

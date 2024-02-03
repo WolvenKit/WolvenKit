@@ -37,7 +37,7 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
 
     public static IRedType? CopiedChunk;
 
-    public static List<IRedType> CopiedChunks = new();
+    public static List<IRedType> CopiedChunks { get; } = new();
 
     private bool CanDeleteEmbeddedFile() => this is RDTDataViewModel data && data.IsEmbeddedFile;
     [RelayCommand(CanExecute = nameof(CanDeleteEmbeddedFile))]

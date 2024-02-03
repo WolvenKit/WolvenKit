@@ -836,6 +836,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
+		[Ordinal(104)] 
+		[RED("IsVisualCustomizationPhotomodeVehicleSlotTaken")] 
+		public gamebbScriptID_Bool IsVisualCustomizationPhotomodeVehicleSlotTaken
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
 		public PlayerStateMachineDef()
 		{
 			Locomotion = new gamebbScriptID_Int32();
@@ -942,6 +950,7 @@ namespace WolvenKit.RED4.Types
 			AimInTime = new gamebbScriptID_Float();
 			CanThrowCarriedNPC = new gamebbScriptID_Bool();
 			IsWeaponFirstEquip = new gamebbScriptID_Bool();
+			IsVisualCustomizationPhotomodeVehicleSlotTaken = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

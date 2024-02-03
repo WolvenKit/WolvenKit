@@ -396,6 +396,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(50)] 
+		[RED("isFirstOpen")] 
+		public CBool IsFirstOpen
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public CraftingMainLogicController()
 		{
 			TIME_UNTIL_SELECTION = 0.300000F;
@@ -418,6 +426,7 @@ namespace WolvenKit.RED4.Types
 			Filters = new();
 			ItemTooltipPath = new redResourceReferenceScriptToken();
 			Game = new ScriptGameInstance();
+			IsFirstOpen = true;
 
 			PostConstruct();
 		}

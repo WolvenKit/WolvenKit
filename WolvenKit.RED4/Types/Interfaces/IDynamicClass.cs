@@ -2,7 +2,7 @@
 
 public interface IDynamicClass
 {
-    public string ClassName { get; set; }
+    public CName ClassName { get; set; }
 }
 
 public interface IDynamicResource : IDynamicClass

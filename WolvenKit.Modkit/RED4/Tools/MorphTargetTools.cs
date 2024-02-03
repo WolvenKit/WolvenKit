@@ -29,7 +29,6 @@ namespace WolvenKit.Modkit.RED4
 
             RawArmature? rig = null;
 
-            var hash = morphBlob.BaseMesh.DepotPath.GetRedHash(); //FNV1A64HashAlgorithm.HashString(morphBlob.BaseMesh.DepotPath.ToString().NotNull());
             if (TryFindFile(morphBlob.BaseMesh.DepotPath, out var result) == FindFileResult.NoError && 
                 result.File is { RootChunk: CMesh { RenderResourceBlob.Chunk: rendRenderMeshBlob } baseMeshBlob })
             {
@@ -38,7 +37,7 @@ namespace WolvenKit.Modkit.RED4
 
             using var meshBuffer = new MemoryStream(rendBlob.RenderBuffer.Buffer.GetBytes());
 
-            var meshesInfo = MeshTools.GetMeshesinfo(rendBlob, cr2w.RootChunk as CMesh);
+            var meshesInfo = MeshTools.GetMeshesinfo(rendBlob, result.File?.RootChunk as CMesh);
 
             var expMeshes = MeshTools.ContainRawMesh(meshBuffer, meshesInfo, true);
 

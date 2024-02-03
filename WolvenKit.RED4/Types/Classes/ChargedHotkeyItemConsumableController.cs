@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ChargedHotkeyItemConsumableController : ChargedHotkeyItemBaseController
 	{
-		[Ordinal(44)] 
+		[Ordinal(45)] 
 		[RED("c_statPool")] 
 		public CEnum<gamedataStatPoolType> C_statPool
 		{

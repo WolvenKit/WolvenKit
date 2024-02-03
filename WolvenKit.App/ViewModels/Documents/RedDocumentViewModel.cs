@@ -171,7 +171,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
                 var cr2w = Cr2wFile;
                 if (_hookService is AppHookService appHookService && !appHookService.OnSave(FilePath, ref cr2w))
                 {
-                    _loggerService.Error($"Error while processing onSave script");
+                    _loggerService.Error($"Error while processing onSave hooks");
                     return;
                 }
 
@@ -187,7 +187,10 @@ public partial class RedDocumentViewModel : DocumentViewModel
             return;
         }
 
-        FileHelper.SafeWrite(ms, FilePath, _loggerService);
+        if (FileHelper.SafeWrite(ms, FilePath, _loggerService))
+        {
+            LastWriteTime = File.GetLastWriteTime(FilePath);
+        }
 
         SetIsDirty(false);
         _loggerService.Success($"Saved file {FilePath}");
@@ -197,6 +200,33 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
     public override void SaveAs(object parameter) => throw new NotImplementedException();
 
+    public override bool Reload(bool force)
+    {
+        if (!File.Exists(FilePath))
+        {
+            return false;
+        }
+
+        if (!force && IsDirty)
+        {
+            return false;
+        }
+
+        using var fs = File.Open(FilePath, FileMode.Open);
+        if (_parserService.TryReadRed4File(fs, out var cr2wFile))
+        {
+            Cr2wFile = cr2wFile;
+            PopulateItems();
+            
+            SetIsDirty(false);
+            LastWriteTime = File.GetLastWriteTime(FilePath);
+
+            return true;
+        }
+
+        return false;
+    }
+
     public RedDocumentTabViewModel? GetMainFile()
     {
         if (SelectedTabItemViewModel is RDTTextViewModel textVM)
@@ -204,11 +234,9 @@ public partial class RedDocumentViewModel : DocumentViewModel
             return textVM;
         }
 
-        var r = TabItemViewModels
-        .OfType<RDTDataViewModel>()
-        .Where(x => x.DocumentItemType == ERedDocumentItemType.MainFile)
-        .FirstOrDefault();
-        return r;
+        return TabItemViewModels
+            .OfType<RDTDataViewModel>()
+            .FirstOrDefault(x => x.DocumentItemType == ERedDocumentItemType.MainFile);
     }
 
     protected void AddTabForRedType(RedBaseClass cls)
@@ -284,10 +312,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
     public void PopulateItems()
     {
-        if (Cr2wFile is null)
-        {
-            return;
-        }
+        TabItemViewModels.Clear();
 
         var root = _documentTabViewmodelFactory.RDTDataViewModel(Cr2wFile.RootChunk, this, _appViewModel, _chunkViewmodelFactory);
         root.FilePath = "(root)";

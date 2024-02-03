@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ChargedHotkeyItemGadgetController : ChargedHotkeyItemBaseController
 	{
-		[Ordinal(44)] 
+		[Ordinal(45)] 
 		[RED("currentStatPoolType")] 
 		public CEnum<gamedataStatPoolType> CurrentStatPoolType
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataStatPoolType>>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(46)] 
 		[RED("c_grenadeKey")] 
 		public CName C_grenadeKey
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(47)] 
 		[RED("c_projectileLauncherKey")] 
 		public CName C_projectileLauncherKey
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(48)] 
 		[RED("c_opticalCamoKey")] 
 		public CName C_opticalCamoKey
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(49)] 
 		[RED("c_cwMaskKey")] 
 		public CName C_cwMaskKey
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(50)] 
 		[RED("opticalCamoTags")] 
 		public CArray<CName> OpticalCamoTags
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(51)] 
 		[RED("currentCombatState")] 
 		public CEnum<gamePSMCombat> CurrentCombatState
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamePSMCombat>>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(52)] 
 		[RED("combatStateCallback")] 
 		public CHandle<redCallbackObject> CombatStateCallback
 		{
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(53)] 
 		[RED("c_grenadeFlashSalePerkType")] 
 		public CEnum<gamedataNewPerkType> C_grenadeFlashSalePerkType
 		{

@@ -80,6 +80,54 @@
                     </StackPanel>
                 </Button>
             </DataTemplate>
+            <DataTemplate x:Key="AddDynamicProperty" DataType="{x:Type shell:ChunkViewModel}">
+                <Button
+                    Height="12"
+                    Padding="0"
+                    VerticalAlignment="Center"
+                    Background="Transparent"
+                    Command="{Binding CreateDynamicPropertyCommand}"
+                    Style="{StaticResource ButtonCustom}"
+                    ToolTip="Add Dynamic Property"
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconVaadinIcons
+                            Padding="2"
+                            VerticalAlignment="Center"
+                            Foreground="{StaticResource WolvenKitYellow}"
+                            Kind="PlusCircle" />
+                        <TextBlock
+                            Margin="1,0,4,0"
+                            VerticalAlignment="Center"
+                            Foreground="{StaticResource WolvenKitYellow}"
+                            Text="Add Property" />
+                    </StackPanel>
+                </Button>
+            </DataTemplate>
+            <DataTemplate x:Key="RenameDynamicClass" DataType="{x:Type shell:ChunkViewModel}">
+                <Button
+                    Height="12"
+                    Padding="0"
+                    VerticalAlignment="Center"
+                    Background="Transparent"
+                    Command="{Binding RenameDynamicClassCommand}"
+                    Style="{StaticResource ButtonCustom}"
+                    ToolTip="Rename Dynamic Class"
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconVaadinIcons
+                            Padding="2"
+                            VerticalAlignment="Center"
+                            Foreground="{StaticResource WolvenKitCyan}"
+                            Kind="Cursor" />
+                        <TextBlock
+                            Margin="1,0,4,0"
+                            VerticalAlignment="Center"
+                            Foreground="{StaticResource WolvenKitCyan}"
+                            Text="Rename Dynamic Class" />
+                    </StackPanel>
+                </Button>
+            </DataTemplate>
             <DataTemplate x:Key="AddToArrayButton">
                 <Button
                     Height="12"
@@ -425,6 +473,7 @@
                                 </TextBlock.Style>
                             </TextBlock>
                             <ContentPresenter ContentTemplate="{StaticResource AddToCompiledDataButton}" />
+                            <ContentPresenter ContentTemplate="{StaticResource AddDynamicProperty}" />
                             <ContentPresenter ContentTemplate="{StaticResource AddHandleButton}" />
                             <ContentPresenter ContentTemplate="{StaticResource DeleteAllButton}" />
                         </StackPanel>
@@ -494,6 +543,7 @@
                                     </TextBlock>
                                     <ContentPresenter ContentTemplate="{StaticResource AddToArrayButton}" />
                                     <ContentPresenter ContentTemplate="{StaticResource AddToCompiledDataButton}" />
+                                    <ContentPresenter ContentTemplate="{StaticResource AddDynamicProperty}" />
                                     <ContentPresenter ContentTemplate="{StaticResource AddHandleButton}" />
                                     <ContentPresenter ContentTemplate="{StaticResource DeleteAllButton}" />
                                 </StackPanel>
@@ -696,6 +746,7 @@
                         Content="{Binding}"
                         ContentTemplate="{StaticResource AddToCompiledDataButton}" />
                     <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource AddToArrayButton}" />
+                    <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource AddDynamicProperty}" />
                     <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource AddHandleButton}" />
                     <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DeleteAllButton}" />
                 </StackPanel>

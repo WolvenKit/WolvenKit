@@ -85,14 +85,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(10)] 
-		[RED("wasAliveBeforeHit")] 
-		public CBool WasAliveBeforeHit
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(11)] 
 		[RED("projectionPipeline")] 
 		public CBool ProjectionPipeline
 		{

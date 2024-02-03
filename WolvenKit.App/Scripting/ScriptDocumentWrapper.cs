@@ -23,6 +23,12 @@ public class ScriptDocumentWrapper
         _appViewModel = appViewModel;
 
         FilePath = _documentViewModel.FilePath;
+
+        if (documentViewModel is RedDocumentViewModel redDocumentViewModel)
+        {
+            RelativePath = redDocumentViewModel.RelativePath;
+        }
+
         FileName = Path.GetFileName(FilePath);
         Extension = Path.GetExtension(FilePath).Replace(".", "");
 
@@ -33,6 +39,8 @@ public class ScriptDocumentWrapper
     }
 
     public string FilePath { get; }
+    public string? RelativePath { get; }
+    
     public string FileName { get; }
     public string Extension { get; }
 
@@ -69,6 +77,13 @@ public class ScriptDocumentWrapper
     /// Saves the document
     /// </summary>
     public void Save() => _documentViewModel.SaveCommand.SafeExecute();
+
+    /// <summary>
+    /// Reloads the document
+    /// </summary>
+    /// <param name="force">If force is true, any unsaved changes will be discarded</param>
+    /// <returns></returns>
+    public bool Reload(bool force) => _documentViewModel.Reload(force);
 
     /// <summary>
     /// Closes the document without saving

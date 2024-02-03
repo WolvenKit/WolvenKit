@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ChargeIndicatorGameController : ChargedHotkeyItemBaseController
 	{
-		[Ordinal(44)] 
+		[Ordinal(45)] 
 		[RED("itemIcon")] 
 		public inkImageWidgetReference ItemIcon
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(46)] 
 		[RED("type")] 
 		public CEnum<ChargeIndicatorWidgetType> Type
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ChargeIndicatorWidgetType>>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(47)] 
 		[RED("statPoolType")] 
 		public CEnum<gamedataStatPoolType> StatPoolType
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataStatPoolType>>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(48)] 
 		[RED("iconName")] 
 		public CString IconName
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(49)] 
 		[RED("itemType")] 
 		public CName ItemType
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(50)] 
 		[RED("eqArea")] 
 		public CEnum<gamedataEquipmentArea> EqArea
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataEquipmentArea>>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(51)] 
 		[RED("OnEquipmentChangedIDBBID")] 
 		public CHandle<redCallbackObject> OnEquipmentChangedIDBBID
 		{
@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(52)] 
 		[RED("c_fullChargeOpacity")] 
 		public CFloat C_fullChargeOpacity
 		{

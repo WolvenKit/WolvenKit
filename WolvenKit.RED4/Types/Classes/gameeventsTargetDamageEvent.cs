@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameeventsTargetDamageEvent : gameeventsTargetHitEvent
 	{
-		[Ordinal(12)] 
+		[Ordinal(11)] 
 		[RED("damage")] 
 		public CFloat Damage
 		{

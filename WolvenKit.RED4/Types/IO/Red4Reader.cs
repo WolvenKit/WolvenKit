@@ -430,6 +430,23 @@ public partial class Red4Reader : IErrorHandler, IDataCollector, IDisposable
             _chunks[pointer].IsUsed = true;
         }
 
+        if (instance is DynamicBaseClass dbc)
+        {
+            var innerType = type.GetGenericArguments()[0];
+            if (innerType == typeof(inkIWidgetController))
+            {
+                instance = dbc.ToDynamicWidgetController();
+                _chunks[pointer] = new ChunkInfo(instance);
+                _chunks[pointer].IsUsed = true;
+            }
+            else if (innerType == typeof(inkWidgetLogicController))
+            {
+                instance = dbc.ToDynamicWidgetLogicController();
+                _chunks[pointer] = new ChunkInfo(instance);
+                _chunks[pointer].IsUsed = true;
+            }
+        }
+
         if (Activator.CreateInstance(type, instance) is not IRedHandle result)
         {
             throw new Exception();

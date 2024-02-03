@@ -20,10 +20,19 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("itemQuantityChanged")] 
+		public gamebbScriptID_Variant ItemQuantityChanged
+		{
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
+		}
+
 		public UI_InventoryDef()
 		{
 			ItemAdded = new gamebbScriptID_Variant();
 			ItemRemoved = new gamebbScriptID_Variant();
+			ItemQuantityChanged = new gamebbScriptID_Variant();
 
 			PostConstruct();
 		}
