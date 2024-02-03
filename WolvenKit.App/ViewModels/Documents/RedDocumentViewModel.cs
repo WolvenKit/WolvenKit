@@ -171,7 +171,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
                 var cr2w = Cr2wFile;
                 if (_hookService is AppHookService appHookService && !appHookService.OnSave(FilePath, ref cr2w))
                 {
-                    _loggerService.Error($"Error while processing onSave script");
+                    _loggerService.Error($"Error while processing onSave hooks");
                     return;
                 }
 

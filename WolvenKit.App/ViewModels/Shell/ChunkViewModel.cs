@@ -2,11 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Metadata;
 using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -21,6 +23,7 @@ using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Factories;
 using WolvenKit.App.Helpers;
+using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.Nodify;
 using WolvenKit.App.Services;
@@ -69,7 +72,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         "meshMeshMaterialBuffer.rawDataHeaders", 
         "meshMeshMaterialBuffer.rawData", 
         "entEntityTemplate.compiledData", 
-        "appearanceAppearanceDefinition.compiledData" 
+        "appearanceAppearanceDefinition.compiledData",
+        "inkWidgetLibraryItem.packageData"
     };
 
     private bool _propertiesLoaded;
@@ -419,11 +423,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public bool ShouldShowExportNodeData => Parent is not null && Parent.Data is DataBuffer rb && rb.Data is worldNodeDataBuffer;
 
+    public bool ShouldShowTweakXLMenu => Data is gamedataTweakDBRecord || Data is TweakDBID || Parent?.Data is gamedataTweakDBRecord || Parent?.Data is TweakDBID;
+
     public bool ShouldShowHandleOperations => PropertyType.IsAssignableTo(typeof(IRedBaseHandle));
 
-    public bool ShouldShowArrayOps => IsInArray || IsArray;
+    public bool ShouldShowDynamicClassOperations => ResolvedData is IDynamicClass;
 
-    public bool ShouldShowClassOperations => PropertyType.IsAssignableTo(typeof(RedBaseClass));
+    public bool ShouldShowDynamicPropertyOperations => Parent is not null && Parent.ResolvedData is IDynamicClass;
+
+    public bool ShouldShowArrayOps => IsInArray || IsArray;
 
     // When shift is not held, paste into array
     public bool ShouldShowPasteIntoArray => ShouldShowArrayOps && !IsShiftBeingHeld;
@@ -525,7 +533,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         get
         {
-            var type = Data.GetType();
+            var type = Data?.GetType() ?? typeof(RedDummy);
             if (Parent is not null)
             {
                 //var parent = Parent.Data;
@@ -650,10 +658,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 {
                     count += 2;
                 }
-                else if (ResolvedData is inkWidgetReference)
-                {
-                    count += 1; // TODO
-                }
+                //else if (ResolvedData is inkWidgetReference)
+                //{
+                //    count += 1; // TODO
+                //}
                 else if (Data is TweakDBID tdb)
                 {
                     // not actual
@@ -1029,8 +1037,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 .Where(p => handle.InnerType.IsAssignableFrom(p) && p.IsClass && !p.IsAbstract)
                 .Select(x => new TypeEntry(x.Name, "", x))
                 .ToList();
+            var allowCreating = handle.InnerType.IsAssignableTo(typeof(inkWidgetLogicController)) || handle.InnerType.IsAssignableTo(typeof(inkIWidgetController));
 
-            await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
+            await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types, allowCreating)
             {
                 DialogHandler = HandlePointer
             });
@@ -1242,6 +1251,68 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         if (vc != null)
         {
             vc.AppearanceDependency = list;
+            RecalculateProperties();
+        }
+    }
+
+
+    // Dynamic Properties
+
+    private bool CanCreateDynamicProperty() => ResolvedData is IDynamicClass;   // TODO RelayCommand check notify
+    [RelayCommand(CanExecute = nameof(CanCreateDynamicProperty))]
+    private async Task CreateDynamicProperty()
+    {
+        if (ResolvedData is RedBaseClass rbc)
+        {
+            //var existing = new ObservableCollection<string>();
+            //existing.Add("inkWidgetReference");
+            //var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => typeof(inkWidgetReference).IsAssignableFrom(p) && p.IsClass).Select(x => x.Name));
+
+            //var types = pkg.Chunks
+            //    .Select(x => new TypeEntry(x.GetType().Name, "", x.GetType()))
+            //    .DistinctBy(x => x.Name)
+            //    .ToList();
+
+            var types = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(p => typeof(inkWidgetReference).IsAssignableFrom(p) && p.IsClass && !p.IsAbstract)
+                .Select(x => new TypeEntry(x.Name, "", x))
+                .ToList();
+            await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
+            {
+                DialogHandler = HandleNewDynamicProperty
+            });
+        }
+    }
+
+    public void HandleNewDynamicProperty(DialogViewModel? sender)
+    {
+        _appViewModel.CloseDialogCommand.Execute(null);
+
+        if (sender is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType }
+            && selectedType is not null && ResolvedData is RedBaseClass rbc)
+        {
+            var propertyName = Interactions.Rename("");
+            var instance = RedTypeManager.CreateRedType(selectedType);
+            rbc.AddDynamicProperty(propertyName, selectedType);
+            rbc.SetProperty(propertyName, instance);
+            //if (Data is IRedBaseHandle handle)
+            //{
+            //    handle.SetValue(rbc);
+            //}
+            Tab?.Parent.SetIsDirty(true);
+            RecalculateProperties(instance);
+        }
+    }
+
+    private bool CanRenameDynamicClass() => ResolvedData is IDynamicClass;   // TODO RelayCommand check notify
+    [RelayCommand(CanExecute = nameof(CanRenameDynamicClass))]
+    private void RenameDynamicClass()
+    {
+        if (ResolvedData is IDynamicClass dbc)
+        {
+            dbc.ClassName = Interactions.Rename(dbc.ClassName!);
+            Tab?.Parent.SetIsDirty(true);
             RecalculateProperties();
         }
     }
@@ -1501,6 +1572,41 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
+    private bool CanRenameProperty() => Parent is not null && Parent.ResolvedData is IDynamicClass;   // TODO RelayCommand check notify
+    [RelayCommand(CanExecute = nameof(CanRenameProperty))]
+    private void RenameProperty()
+    {
+        try
+        {
+            if (Parent is not null && Parent.ResolvedData is RedBaseClass rbc)
+            {
+                var newName = Interactions.Rename(PropertyName);
+                rbc.RenameDynamicProperty(PropertyName, newName);
+                Tab?.Parent.SetIsDirty(true);
+                Parent.RecalculateProperties();
+            }
+        }
+        catch (Exception ex) { _loggerService.Error(ex); }
+
+    }
+
+    private bool CanDeleteProperty() => Parent is not null && Parent.ResolvedData is IDynamicClass;   // TODO RelayCommand check notify
+    [RelayCommand(CanExecute = nameof(CanDeleteProperty))]
+    private void DeleteProperty()
+    {
+        try
+        {
+            if (Parent is not null && Parent.ResolvedData is RedBaseClass rbc)
+            {
+                rbc.RemoveDynamicProperty(PropertyName);
+                Tab?.Parent.SetIsDirty(true);
+                Parent.RecalculateProperties();
+            }
+        }
+        catch (Exception ex) { _loggerService.Error(ex); }
+
+    }
+
     private bool CanCopyHandle() => Data is IRedBaseHandle;   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanCopyHandle))]
     private void CopyHandle()
@@ -1548,7 +1654,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     RedDocumentTabViewModel.CopiedChunk = null;
                 }
             }
-            else if (Data is RedDummy)
+            else if (Data is RedDummy || Data is null)
             {
                 if (PropertyType.GetGenericTypeDefinition() == typeof(CHandle<>))
                 {
@@ -2488,11 +2594,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 }
             }
         }
-        else if (obj is inkWidgetReference iwr)
-        {
-            // need to add XPath somewhere in the data structure
-            Properties.Add(_chunkViewmodelFactory.ChunkViewModel((CString)"TODO", nameof(inkWidgetReference), _appViewModel, this));
-        }
         else if (obj is RedBaseClass redClass)
         {
             var pis = GetTypeInfo(redClass).PropertyInfos.Sort((a, b) => a.Name.CompareTo(b.Name));
@@ -3106,9 +3207,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     public void HandlePointer(DialogViewModel? sender)
     {
         _appViewModel.CloseDialogCommand.Execute(null);
-        if (sender is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType })
+        if (sender is TypeSelectorDialogViewModel { SelectedEntry: TypeEntry selectedEntry } && selectedEntry.UserData is Type selectedType)
         {
             var instance = RedTypeManager.Create(selectedType);
+            if (instance is DynamicBaseClass dbc)
+            {
+                dbc.ClassName = selectedEntry.Name;
+            }
             var data = RedTypeManager.CreateRedType(PropertyType);
             if (data is IRedBaseHandle handle)
             {
@@ -3128,6 +3233,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 Tab?.Parent.SetIsDirty(true);
             }
         }
+        else
+        {
+            _loggerService.Error("Could not create handle");
+        } 
     }
 
     public void HandleCKeyValuePair(DialogViewModel? sender)
@@ -3172,15 +3281,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 }
             }
         }
-    }
-
-    public bool ShouldShowTweakXLMenu()
-    {
-        var ret = Data is gamedataTweakDBRecord;
-        ret |= Data is TweakDBID;
-        ret |= Parent?.Data is gamedataTweakDBRecord;
-        ret |= Parent?.Data is TweakDBID;
-        return ret;
     }
 
     public void ClearChildren()

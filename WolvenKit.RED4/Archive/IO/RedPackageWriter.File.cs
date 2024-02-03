@@ -297,7 +297,7 @@ public partial class RedPackageWriter
 
     private string? GetClassName(RedBaseClass cls)
     {
-        if (cls is DynamicBaseClass dbc)
+        if (cls is IDynamicClass dbc)
         {
             return dbc.ClassName;
         }
