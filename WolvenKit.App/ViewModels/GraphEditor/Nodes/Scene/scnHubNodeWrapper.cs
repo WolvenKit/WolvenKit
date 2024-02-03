@@ -3,29 +3,13 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 
-public class scnHubNodeWrapper : BaseSceneViewModel<scnHubNode>, IDynamicInputNode
+public class scnHubNodeWrapper : BaseSceneViewModel<scnHubNode>
 {
     public scnHubNodeWrapper(scnHubNode scnSceneGraphNode) : base(scnSceneGraphNode)
     {
+        InputSocketNames.Add(0, "In");
+        InputSocketNames.Add(1, "Cancel");
+
+        OutputSocketNames.Add(0, "Out");
     }
-
-    internal override void GenerateSockets()
-    {
-        for (var i = 0; i < _castedData.OutputSockets.Count; i++)
-        {
-            Output.Add(new SceneOutputConnectorViewModel($"Out{i}", $"Out{i}", UniqueId, _castedData.OutputSockets[i]));
-        }
-    }
-
-    public BaseConnectorViewModel AddInput()
-    {
-        var index = (ushort)Input.Count;
-        var input = new SceneInputConnectorViewModel($"In{index}", $"In{index}", UniqueId, index);
-
-        Input.Add(input);
-
-        return input;
-    }
-
-    public void RemoveInput() => Input.Remove(Input[^1]);
 }

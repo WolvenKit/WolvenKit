@@ -1,10 +1,15 @@
-﻿using WolvenKit.RED4.Types;
+﻿using System.Collections.Generic;
+using System.Linq;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
 
 public abstract class BaseSceneViewModel : NodeViewModel
 {
     public override uint UniqueId => ((scnSceneGraphNode)Data).NodeId.Id;
+
+    public Dictionary<ushort, string> InputSocketNames = new();
+    public Dictionary<ushort, string> OutputSocketNames = new();
 
     protected BaseSceneViewModel(scnSceneGraphNode scnSceneGraphNode) : base(scnSceneGraphNode)
     {
@@ -22,11 +27,31 @@ public abstract class BaseSceneViewModel<T> : BaseSceneViewModel where T : scnSc
 
     internal override void GenerateSockets()
     {
-        Input.Add(new SceneInputConnectorViewModel("In", "In", UniqueId, 0));
-
-        for (var i = 0; i < _castedData.OutputSockets.Count; i++)
+        Input.Clear();
+        foreach (var (socketNameId, socketName) in InputSocketNames)
         {
-            Output.Add(new SceneOutputConnectorViewModel($"Out{i}", $"Out{i}", UniqueId, _castedData.OutputSockets[i]));
+            Input.Add(new SceneInputConnectorViewModel(socketName, socketName, UniqueId, socketNameId, 0));
+        }
+
+        Output.Clear();
+        foreach (var (socketNameId, socketName) in OutputSocketNames)
+        {
+            var sockets = _castedData.OutputSockets
+                .Where(x => x.Stamp.Name == socketNameId)
+                .OrderBy(x => (ushort)x.Stamp.Ordinal)
+                .ToList();
+
+            if (sockets.Count > 0)
+            {
+                foreach (var socket in sockets)
+                {
+                    Output.Add(new SceneOutputConnectorViewModel($"{socketName}_{socket.Stamp.Ordinal}", $"{socketName}_{socket.Stamp.Ordinal}", UniqueId, socket));
+                }
+            }
+            else
+            {
+                Output.Add(new SceneOutputConnectorViewModel($"{socketName}_0", $"{socketName}_0", UniqueId));
+            }
         }
     }
 }

@@ -3,29 +3,12 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 
-public class scnDeletionMarkerNodeWrapper : BaseSceneViewModel<scnDeletionMarkerNode>, IDynamicInputNode
+public class scnDeletionMarkerNodeWrapper : BaseSceneViewModel<scnDeletionMarkerNode>
 {
     public scnDeletionMarkerNodeWrapper(scnDeletionMarkerNode scnSceneGraphNode) : base(scnSceneGraphNode)
     {
+        InputSocketNames.Add(666, "In");
+
+        OutputSocketNames.Add(666, "Out");
     }
-
-    internal override void GenerateSockets()
-    {
-        for (var i = 0; i < _castedData.OutputSockets.Count; i++)
-        {
-            Output.Add(new SceneOutputConnectorViewModel($"Out{i}", $"Out{i}", UniqueId, _castedData.OutputSockets[i]));
-        }
-    }
-
-    public BaseConnectorViewModel AddInput()
-    {
-        var index = (ushort)Input.Count;
-        var input = new SceneInputConnectorViewModel($"In{index}", $"In{index}", UniqueId, index);
-
-        Input.Add(input);
-
-        return input;
-    }
-
-    public void RemoveInput() => Input.Remove(Input[^1]);
 }

@@ -14,6 +14,19 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
 
     public scnChoiceNodeWrapper(scnChoiceNode scnSceneGraphNode, scnSceneResource scnSceneResource) : base(scnSceneGraphNode)
     {
+        InputSocketNames.Add(0, "In");
+        InputSocketNames.Add(1, "Cancel");
+        InputSocketNames.Add(2, "ReactivateGroup");
+        InputSocketNames.Add(3, "TimeLimitedFinish");
+
+        OutputSocketNames.Add(0, "Option");
+        OutputSocketNames.Add(1, "AnyOption");
+        OutputSocketNames.Add(2, "Immediate");
+        OutputSocketNames.Add(3, "CancelFwd");
+        OutputSocketNames.Add(4, "NoOption");
+        OutputSocketNames.Add(5, "WhenDisplayed");
+        OutputSocketNames.Add(6, "Reminder");
+
         _sceneResource = scnSceneResource;
 
         var notable = _sceneResource
@@ -28,18 +41,36 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
         GetChoices();
 
         Input.Clear();
-        Input.Add(new SceneInputConnectorViewModel("In", "In", UniqueId, 0));
+        foreach (var (socketNameId, socketName) in InputSocketNames)
+        {
+            Input.Add(new SceneInputConnectorViewModel(socketName, socketName, UniqueId, socketNameId, 0));
+        }
 
         Output.Clear();
-        for (var i = 0; i < _castedData.OutputSockets.Count; i++)
+        foreach (var (socketNameId, socketName) in OutputSocketNames)
         {
-            var title = $"Out{i}";
-            if (i < Options.Count)
-            {
-                title = Options[i];
-            }
+            var sockets = _castedData.OutputSockets
+                .Where(x => x.Stamp.Name == socketNameId)
+                .OrderBy(x => (ushort)x.Stamp.Ordinal)
+                .ToList();
 
-            Output.Add(new SceneOutputConnectorViewModel($"Out{i}", title, UniqueId, _castedData.OutputSockets[i]));
+            if (sockets.Count > 0)
+            {
+                foreach (var socket in sockets)
+                {
+                    var title = $"{socketName}_{socket.Stamp.Ordinal}";
+                    if (socketNameId == 0 && socket.Stamp.Ordinal < Options.Count)
+                    {
+                        title += $" {Options[socket.Stamp.Ordinal]}";
+                    }
+
+                    Output.Add(new SceneOutputConnectorViewModel(title, title, UniqueId, socket));
+                }
+            }
+            else
+            {
+                Output.Add(new SceneOutputConnectorViewModel($"{socketName}_0", $"{socketName}_0", UniqueId));
+            }
         }
     }
 
@@ -65,13 +96,6 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
 
             Options.Add($"[{vdEntry.LocaleId.ToEnumString()}] {vpEntry.Content}");
         }
-
-        Options.Add("OnExit");
-        Options.Add("Reminder?");
-        Options.Add("Reminder?");
-        Options.Add("Reminder?");
-        Options.Add("Reminder?");
-        Options.Add("OnEnter");
     }
 
     public void AddChoice()

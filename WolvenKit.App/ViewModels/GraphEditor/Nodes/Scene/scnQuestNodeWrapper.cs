@@ -28,18 +28,21 @@ public class scnQuestNodeWrapper : BaseSceneViewModel<scnQuestNode>
             Input.Add(new SceneInputConnectorViewModel(name, name, UniqueId, i));
         }*/
 
-        for (ushort i = 0; i < _castedData.IsockMappings.Count; i++)
+        Input.Add(new SceneInputConnectorViewModel("CutDestination_0", "CutDestination_0", UniqueId, 1, 0));
+        Input.Add(new SceneInputConnectorViewModel("In_0", "In_0", UniqueId, 0, 0));
+
+        for (ushort i = 2; i < _castedData.IsockMappings.Count; i++)
         {
-            var name = _castedData.IsockMappings[i].GetResolvedText()!;
-            Input.Add(new SceneInputConnectorViewModel(name, name, UniqueId, i));
+            var name = $"In_{i} {_castedData.IsockMappings[i].GetResolvedText()!}";
+            Input.Add(new SceneInputConnectorViewModel(name, name, UniqueId, 0, i));
         }
 
         for (var i = 0; i < _castedData.OutputSockets.Count; i++)
         {
-            var name = $"Out{i}";
+            var name = $"Out_{i}";
             if (_castedData.OsockMappings.Count > i)
             {
-                name = _castedData.OsockMappings[i].GetResolvedText()!;
+                name = $"{_castedData.OsockMappings[i].GetResolvedText()!} {name}";
             }
 
             Output.Add(new SceneOutputConnectorViewModel(name, name, UniqueId, _castedData.OutputSockets[i]));

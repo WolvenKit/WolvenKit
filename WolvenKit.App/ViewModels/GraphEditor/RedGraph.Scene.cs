@@ -150,6 +150,10 @@ public partial class RedGraph
 
             nodeWrapper = new scnEndNodeWrapper(endNode, endPoint);
         }
+        else if (node is scnFlowControlNode flowControl)
+        {
+            nodeWrapper = new scnFlowControlNodeWrapper(flowControl);
+        }
         else if (node is scnHubNode hubNode)
         {
             nodeWrapper = new scnHubNodeWrapper(hubNode);
@@ -219,7 +223,7 @@ public partial class RedGraph
                 continue;
             }
 
-            for (var j = sceneSource.Data.Destinations.Count - 1; j >= 0; j--)
+            for (var j = sceneSource.Data!.Destinations.Count - 1; j >= 0; j--)
             {
                 if (sceneSource.Data.Destinations[j].NodeId.Id == sceneTarget.OwnerId &&
                     sceneSource.Data.Destinations[j].IsockStamp.Ordinal == sceneTarget.Ordinal)
@@ -250,7 +254,7 @@ public partial class RedGraph
             }
         };
 
-        sceneSource.Data.Destinations.Add(input);
+        sceneSource.Data!.Destinations.Add(input);
         Connections.Add(new SceneConnectionViewModel(sceneSource, sceneTarget));
         RefreshCVM(sceneSource.Data);
     }
@@ -262,7 +266,7 @@ public partial class RedGraph
         {
             foreach (SceneOutputConnectorViewModel output in node.Output)
             {
-                foreach (var destination in output.Data.Destinations)
+                foreach (var destination in output.Data!.Destinations)
                 {
                     if (destination.NodeId.Id == sceneTarget.OwnerId && node.Output.Count > 0)
                     {
@@ -311,7 +315,7 @@ public partial class RedGraph
     private void RemoveSceneConnection(SceneConnectionViewModel sceneConnection)
     {
         var sceneSource = (SceneOutputConnectorViewModel)sceneConnection.Source;
-        var sceneDestination = sceneSource.Data.Destinations.FirstOrDefault(x => x.NodeId.Id == sceneConnection.Target.OwnerId);
+        var sceneDestination = sceneSource.Data!.Destinations.FirstOrDefault(x => x.NodeId.Id == sceneConnection.Target.OwnerId);
 
         if (sceneDestination != null)
         {
@@ -351,23 +355,25 @@ public partial class RedGraph
             {
                 var sceneOutputConnector = (SceneOutputConnectorViewModel)outputConnector;
 
-                foreach (var destination in sceneOutputConnector.Data.Destinations)
+                if (sceneOutputConnector.Data == null)
+                {
+                    continue;
+                }
+                
+                foreach (var destination in sceneOutputConnector.Data!.Destinations)
                 {
                     var targetNode = nodeCache[destination.NodeId.Id];
-                    if (targetNode is IDynamicInputNode dynamicInputNode)
+
+                    var sceneInputConnector = targetNode.Input
+                        .Cast<SceneInputConnectorViewModel>()
+                        .FirstOrDefault(x => x.NameId == destination.IsockStamp.Name);
+
+                    if (sceneInputConnector == null)
                     {
-                        while (dynamicInputNode.Input.Count <= destination.IsockStamp.Ordinal)
-                        {
-                            dynamicInputNode.AddInput();
-                        }
+                        
                     }
 
-                    if (destination.IsockStamp.Ordinal >= targetNode.Input.Count)
-                    {
-
-                    }
-
-                    graph.Connections.Add(new SceneConnectionViewModel(outputConnector, targetNode.Input[destination.IsockStamp.Ordinal]));
+                    graph.Connections.Add(new SceneConnectionViewModel(outputConnector, sceneInputConnector!));
                 }
             }
         }
