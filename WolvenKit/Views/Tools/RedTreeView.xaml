@@ -256,13 +256,7 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowTweakXLMenu, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="DatabaseExportOutline" />
+                        <iconPacks:PackIconMaterial Style="{StaticResource ContextMenuIconStyleMaterial}" Kind="DatabaseExportOutline" />
                     </MenuItem.Icon>
                     <MenuItem
                         Command="{Binding Path=PlacementTarget.Tag.CreateTXLOverrideCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
@@ -283,13 +277,7 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="References" />
+                        <iconPacks:PackIconCodicons Style="{StaticResource ContextMenuIconStyleCodicons}" Kind="References" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
@@ -299,13 +287,7 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="ContentDuplicate" />
+                        <iconPacks:PackIconMaterial Style="{StaticResource ContextMenuIconStyleMaterial}" Kind="ContentDuplicate" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
@@ -315,13 +297,7 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="ContentSave" />
+                        <iconPacks:PackIconMaterial Style="{StaticResource ContextMenuIconStyleMaterial}" Kind="ContentSave" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
@@ -331,13 +307,7 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="FolderOpen" />
+                        <iconPacks:PackIconMaterial Style="{StaticResource ContextMenuIconStyleMaterial}" Kind="FolderOpen" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
@@ -347,13 +317,7 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowArrayOps, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="ContentDuplicate" />
+                        <iconPacks:PackIconMaterial Style="{StaticResource ContextMenuIconStyleMaterial}" Kind="ContentDuplicate" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
@@ -363,13 +327,7 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowHandleOperations, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="ContentCopy" />
+                        <iconPacks:PackIconMaterial Style="{StaticResource ContextMenuIconStyleMaterial}" Kind="ContentCopy" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
@@ -379,13 +337,7 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowArrayOps, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="ContentCopy" />
+                        <iconPacks:PackIconMaterial Style="{StaticResource ContextMenuIconStyleMaterial}" Kind="ContentCopy" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
@@ -396,35 +348,37 @@
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowArrayOps, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
 
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="ContentCopy" />
+                        <iconPacks:PackIconMaterial Style="{StaticResource ContextMenuIconStyleMaterial}" Kind="ContentCopy" />
                     </MenuItem.Icon>
                 </MenuItem>
+
+                <!-- Paste Selection To Array/Buffer -->
                 <MenuItem
                     Command="{Binding Path=PlacementTarget.Tag.PasteSelectionCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="{ Binding PlacementTarget.Tag.PasteSelectionIntoArrayHeader, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Paste Selection To Array/Buffer"
                     IsCheckable="False"
                     Style="{StaticResource SyncfusionMenuItemStyle}"
-                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowArrayOps, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowPasteIntoArray, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
 
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="ContentPaste" />
+                        <iconPacks:PackIconMaterial Style="{StaticResource ContextMenuIconStyleMaterial}" Kind="ContentPaste" />
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <!-- Overwrite Array/Buffer With Selection -->
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.ClearAndPasteSelectionCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Clear Array/Buffer and Paste Selection"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowOverwriteArray, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
 
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Style="{StaticResource ContextMenuIconStyleMaterial}" Kind="ContentPaste" />
+                    </MenuItem.Icon>
+                </MenuItem>
 
+                <!-- Paste Handle -->
                 <MenuItem
                     Command="{Binding Path=PlacementTarget.Tag.PasteHandleCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Paste Handle"
@@ -432,45 +386,44 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowHandleOperations, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="ContentPaste" />
+                        <iconPacks:PackIconMaterial Style="{StaticResource ContextMenuIconStyleMaterial}" Kind="ContentPaste" />
                     </MenuItem.Icon>
                 </MenuItem>
+
+                <!-- Paste Into Array/Buffer -->
                 <MenuItem
                     Command="{Binding Path=PlacementTarget.Tag.PasteChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Paste Into Array/Buffer"
                     IsCheckable="False"
                     Style="{StaticResource SyncfusionMenuItemStyle}"
-                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowArrayOps, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowPasteIntoArray, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
 
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="ContentPaste" />
+                        <iconPacks:PackIconMaterial Style="{StaticResource ContextMenuIconStyleMaterial}" Kind="ContentPaste" />
                     </MenuItem.Icon>
                 </MenuItem>
+
+                <!-- Clear Array/Buffer and Paste -->
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.ClearAndPasteChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Clear Array/Buffer and Paste"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowOverwriteArray, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Style="{StaticResource ContextMenuIconStyleMaterial}"
+                                                    Kind="ContentPaste" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                
                 <MenuItem
                     Command="{Binding Path=PlacementTarget.Tag.ExportChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Export to JSON"
                     IsCheckable="False"
                     Style="{StaticResource SyncfusionMenuItemStyle}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="Json" />
+                        <iconPacks:PackIconCodicons Style="{StaticResource ContextMenuIconStyleCodicons}" Kind="Json" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
@@ -480,13 +433,7 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowExportNodeData, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="Json" />
+                        <iconPacks:PackIconCodicons Style="{StaticResource ContextMenuIconStyleCodicons}" Kind="Json" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
@@ -496,13 +443,7 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowWorldNodeDataImport, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="Json" />
+                        <iconPacks:PackIconCodicons Style="{StaticResource ContextMenuIconStyleCodicons}" Kind="Json" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
@@ -512,13 +453,7 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowWorldNodeDataImport, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="Json" />
+                        <iconPacks:PackIconCodicons Style="{StaticResource ContextMenuIconStyleCodicons}" Kind="Json" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
@@ -529,13 +464,7 @@
                     IsCheckable="False"
                     Style="{StaticResource SyncfusionMenuItemStyle}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="Copy" />
+                        <iconPacks:PackIconCodicons Style="{StaticResource ContextMenuIconStyleCodicons}" Kind="Copy" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
@@ -545,13 +474,7 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowArrayOps, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="Remove" />
+                        <iconPacks:PackIconCodicons Style="{StaticResource ContextMenuIconStyleCodicons}" Kind="Remove" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
@@ -561,13 +484,7 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowArrayOps, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="Remove" />
+                        <iconPacks:PackIconCodicons Style="{StaticResource ContextMenuIconStyleCodicons}" Kind="Remove" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
@@ -578,13 +495,8 @@
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowArrayOps, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
 
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="NotificationClearAll" />
+                        <iconPacks:PackIconMaterial Style="{StaticResource ContextMenuIconStyleMaterial}"
+                                                    Kind="NotificationClearAll" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
@@ -594,13 +506,8 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="Refresh" />
+                        <iconPacks:PackIconMaterial Style="{StaticResource ContextMenuIconStyleMaterial}"
+                                                    Kind="Refresh" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
@@ -609,13 +516,8 @@
                     IsCheckable="False"
                     Style="{StaticResource SyncfusionMenuItemStyle}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="Delete" />
+                        <iconPacks:PackIconMaterial Style="{StaticResource ContextMenuIconStyleMaterial}"
+                                                    Kind="Delete" />
                     </MenuItem.Icon>
                 </MenuItem>
             </ContextMenu>

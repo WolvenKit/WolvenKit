@@ -425,6 +425,19 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public bool ShouldShowClassOperations => PropertyType.IsAssignableTo(typeof(RedBaseClass));
 
+    // When shift is not held, paste into array
+    public bool ShouldShowPasteIntoArray => ShouldShowArrayOps && !IsShiftBeingHeld;
+
+    // When shift is being held, overwrite array with selection
+    public bool ShouldShowOverwriteArray => ShouldShowArrayOps && IsShiftBeingHeld;
+
+    // Shift: recursively fold/unfold child nodes
+    private protected static bool IsShiftBeingHeld =>
+        Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
+
+    // Shift+Control: recursively fold/unfold nodes all the way
+    public static bool IsControlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+    
     public IRedArray? ArraySelfOrParent => Parent?.ResolvedData is IRedArray ira ? ira : ResolvedData as IRedArray;
 
     public RDTDataViewModel? Tab => _tab ?? Parent?.Tab;
@@ -1613,6 +1626,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     } // TODO RelayCommand check notify
 
     [RelayCommand(CanExecute = nameof(CanPasteChunks))]
+    private void ClearAndPasteChunk()
+    {
+        DeleteAll();
+        PasteChunk();
+    }
+    
+    [RelayCommand(CanExecute = nameof(CanPasteChunks))]
     private void PasteChunk()
     {
         try
@@ -1749,6 +1769,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         //Tab.SelectedChunk = Parent;
     }
 
+    
     private bool CanPasteSelection()
     {
         if (RedDocumentTabViewModel.CopiedChunks.Count == 0)
@@ -1775,37 +1796,33 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     } // TODO RelayCommand check notify
 
     [RelayCommand(CanExecute = nameof(CanPasteSelection))]
+    private void ClearAndPasteSelection()
+    {
+        DeleteAll();
+        PasteSelection();
+    }
+    
+    [RelayCommand(CanExecute = nameof(CanPasteSelection))]
     private void PasteSelection()
     {
         ArgumentNullException.ThrowIfNull(Parent);
 
+        if (RedDocumentTabViewModel.CopiedChunks.Count == 0)
+        {
+            return;
+        }
+
+        if (PropertyType.IsAssignableTo(typeof(IRedArray)) && ResolvedData is RedDummy)
+        {
+            if (!CreateArray())
+            {
+                throw new Exception("Error while accessing or creating the array!");
+            }
+        }
+
         try
         {
-            if (RedDocumentTabViewModel.CopiedChunks.Count == 0)
-            {
-                return;
-            }
-
-            if (PropertyType.IsAssignableTo(typeof(IRedArray)) && ResolvedData is RedDummy)
-            {
-                if (!CreateArray())
-                {
-                    throw new Exception("Error while accessing or creating the array!");
-                }
-            }
-
-            var index = 0;
-            // If shift is being held: Clear the array we're currently pasting into.
-            // Otherwise: Paste at end of array / after currently selected element
-            if (IsShiftBeingHeld)
-            {
-                DeleteAll();
-            }
-            else
-            {
-                index = Parent.GetIndexOf(this) + 1;
-            }
-            
+            var index = Parent.GetIndexOf(this) + 1;
             
             for (var i = 0; i < RedDocumentTabViewModel.CopiedChunks.Count; i++)
             {
@@ -2996,20 +3013,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
         }
     }
-
-
-    // Shift: recursively fold/unfold child nodes
-    public static bool IsShiftBeingHeld => Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
-
-    // Shift+Control: recursively fold/unfold nodes all the way
-    public static bool IsControlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
-
-
-    // Shift+Control: recursively fold/unfold nodes all the way
-    public static string PasteSelectionIntoArrayHeader => IsShiftBeingHeld
-        ? "Overwrite Array/Buffer with Selection"
-        : "Paste Selection into Array/Buffer";
-
 
     public IList<ReferenceSocket> Inputs
     {
