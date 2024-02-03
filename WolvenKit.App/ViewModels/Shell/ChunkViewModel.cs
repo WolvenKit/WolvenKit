@@ -16,7 +16,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData.Binding;
-using Microsoft.ClearScript.JavaScript;
 using Microsoft.Win32;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
@@ -2028,6 +2027,21 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             Value = ibt.GetBrowsableValue();
         }
+        else if (ResolvedData is animPoseLink link)
+        {
+            if (link.Node is not null)
+            {
+                var desc = GetNodeName(link.Node);
+
+                if (!string.IsNullOrEmpty(desc))
+                {
+                    Value = desc;
+                    IsValueExtrapolated = true;
+                    return;
+                }
+            }
+        }
+        
         // factory.csv
         else if (Parent is { Name: "compiledData" } && GetRootModel().Data is C2dArray &&
                  Data is CArray<CString> { Count: 3 } ary)
@@ -2045,7 +2059,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             {
                 Value = i18n.MaleVariant;
             }
-        }
+        } 
       
         if (Value is null)
         {
@@ -2112,6 +2126,26 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 return;
             }
         }
+        // animgraph - something is broken here. Why does the orange text go away? Why do I need the try/catch
+        // around the GetNodename?
+        else if (Data is CHandle<animAnimNode_Base> handle)
+        {
+            if (handle.Chunk is animAnimNode_Switch)
+            {
+                var inputNodes = handle.Chunk.GetProperty("InputNodes");
+                if (inputNodes is CArray<animPoseLink> animAry)
+                {
+                    var names = animAry
+                        .Select((animPoseLink) => GetNodeName(animPoseLink.Node) ?? "")
+                        .Where((name) => name != "")
+                        .ToArray();
+                    Descriptor = string.Join(", ", names);
+                    // Value = string.Join(", ", names);
+                    // IsValueExtrapolated = true;
+                    return;
+                }
+            }
+        }
         else if (ResolvedData is IRedBufferPointer rbp && rbp.GetValue().Data is RedPackage pkg)
         {
             Descriptor = $"[{pkg.Chunks.Count}]";
@@ -2132,6 +2166,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         else if (ResolvedData is scnSceneGraphNode sgn)
         {
             Descriptor = sgn.NodeId.Id.ToString();
+            return;
+        }
+        else if (ResolvedData is worldCompiledEffectInfo info)
+        {
+            Descriptor = string.Join(", ", info.PlacementInfos);
             return;
         }
         else if (Data is TweakDBID tdb)
@@ -2261,7 +2300,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             "n", // ?
             "componentName", // ?
             "parameterName", // ?
-            "debugName", // ?
+            "debugName", // e.g. nodes
+            "expressionString", // e.g. animMathExpressionNodes
             "idleAnim", // .workspot handle work entry items
             "category", // ?
             "entryName", // ?
@@ -2278,6 +2318,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 if (prop is not null)
                 {
                     var p = irc.GetProperty(prop.RedName.NotNull());
+                    if (p?.ToString() is null or "None")
+                    {
+                        continue;
+                    }
                     Descriptor = p?.ToString();
                     return;
                 }
@@ -2304,6 +2348,26 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 }
             }
         }
+    }
+
+    private string? GetNodeName(CWeakHandle<animAnimNode_Base>? linkNode)
+    {
+        if (linkNode is null)
+        {
+            return null;
+        }
+
+        string? desc = null;
+        if (linkNode.GetValue() is not null && linkNode.GetValue()?.GetType() is { Name: not null } t)
+        {
+            desc = t.Name.Split("_")?.LastOrDefault();
+        }
+        else if (linkNode.InnerType is { Name: not null })
+        {
+            desc = linkNode.InnerType.Name?.Split("_")?.LastOrDefault();
+        }
+
+        return desc;
     }
 
     public void CalculateProperties()
