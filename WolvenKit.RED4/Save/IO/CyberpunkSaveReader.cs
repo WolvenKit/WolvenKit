@@ -92,7 +92,8 @@ public class CyberpunkSaveReader : IDisposable, IErrorHandler
                 NextId = BaseReader.ReadInt32(),
                 ChildId = BaseReader.ReadInt32(),
                 Offset = BaseReader.ReadInt32(),
-                Size = BaseReader.ReadInt32()
+                Size = BaseReader.ReadInt32(),
+                GameVersion = ((CyberpunkSaveHeaderStruct)info).gameVersion
             });
         }
 

@@ -1,4 +1,5 @@
 using WolvenKit.RED4.Save.Classes;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Save;
 
@@ -24,6 +25,8 @@ public class NodeEntry
     public NodeEntry? PreviousNode { get; set; }
     public NodeEntry? NextNode { get; set; }
     public bool ReadByParent { get; set; } = false;
+    
+    public uint GameVersion { get; set; } = (uint)Enums.gameGameVersion.Current;
 
     public NodeEntry()
     {
