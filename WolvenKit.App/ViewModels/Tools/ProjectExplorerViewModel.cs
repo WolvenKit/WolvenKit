@@ -111,53 +111,56 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     partial void OnSelectedItemChanged(FileModel? value)
     {
-        if (value is not null)
+        if (value is null)
         {
-            _mainViewModel.SelectFileCommand.SafeExecute(value);
-                
-            // toggle context menu buttons
-            if (SelectedItems is not null && SelectedItems.Any())
+            return;
+        }
+
+        _mainViewModel.SelectFileCommand.SafeExecute(value);
+
+        // toggle context menu buttons
+        if (SelectedItems is not null && SelectedItems.Any())
+        {
+            var selected = SelectedItems.OfType<FileModel>().ToList();
+            // if all are in raw folder, then enable convertFrom
+            if (selected.All(x => IsInRawFolder(x)))
             {
-                var selected = SelectedItems.OfType<FileModel>().ToList();
-                // if all are in raw folder, then enable convertFrom
-                if (selected.All(x => IsInRawFolder(x)))
-                {
-                    ConvertToIsEnabled = false;
-                    ConvertFromIsEnabled = true;
-                }
-                // if all are in archive folder, then enable convertTo
-                else if (selected.All(x => IsInArchiveFolder(x)))
-                {
-                    ConvertToIsEnabled = true;
-                    ConvertFromIsEnabled = false;
-                }
-                // else disable both
-                else
-                {
-                    ConvertToIsEnabled = false;
-                    ConvertFromIsEnabled = false;
-                }
+                ConvertToIsEnabled = false;
+                ConvertFromIsEnabled = true;
             }
-            else if (value is not null)
+            // if all are in archive folder, then enable convertTo
+            else if (selected.All(x => IsInArchiveFolder(x)))
             {
-                if (IsInRawFolder(value))
-                {
-                    ConvertToIsEnabled = false;
-                    ConvertFromIsEnabled = true;
-                }
-                // if all are in archive folder, then enable convertTo
-                else if (IsInArchiveFolder(value))
-                {
-                    ConvertToIsEnabled = true;
-                    ConvertFromIsEnabled = false;
-                }
-                // else disable both
-                else
-                {
-                    ConvertToIsEnabled = false;
-                    ConvertFromIsEnabled = false;
-                }
+                ConvertToIsEnabled = true;
+                ConvertFromIsEnabled = false;
             }
+            // else disable both
+            else
+            {
+                ConvertToIsEnabled = false;
+                ConvertFromIsEnabled = false;
+            }
+
+            return;
+        }
+
+        if (IsInRawFolder(value))
+        {
+            ConvertToIsEnabled = false;
+            ConvertFromIsEnabled = true;
+        }
+        // if all are in archive folder, then enable convertTo
+        else if (IsInArchiveFolder(value))
+        {
+            ConvertToIsEnabled = true;
+            ConvertFromIsEnabled = false;
+            IsCurrentSelectionArchiveFile = File.Exists(value.FullName);
+        }
+        // else disable both
+        else
+        {
+            ConvertToIsEnabled = false;
+            ConvertFromIsEnabled = false;
         }
     }
 
@@ -173,8 +176,21 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     public bool IsKeyUpEventAssigned { get; set; }
 
-    
+    // Modifier: Shift key
+    private static bool IsShiftBeingHeld => Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
 
+    // Modifier: Ctrl key
+    private static bool IsCtrlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+
+    // Modifier: Alt key
+    private static bool IsAltBeingHeld => Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt);
+
+    // Modifier: Alt key
+    private static bool IsCurrentSelectionArchiveFile
+    {
+        get;
+        set;
+    } = false;
 
     [ObservableProperty]
     private ObservableCollection<FileModel> _bindGrid1 = new();
@@ -184,6 +200,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [NotifyCanExecuteChangedFor(nameof(OpenRootFolderCommand))]
     [NotifyCanExecuteChangedFor(nameof(CopyFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(CopyRelPathCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyAbsPathCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyPathToParentCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyPathToRawParentCommand))]
     [NotifyCanExecuteChangedFor(nameof(ReimportFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(CutFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(DeleteFileCommand))]
@@ -199,6 +218,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(CopyFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(CopyRelPathCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyAbsPathCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyPathToParentCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyPathToRawParentCommand))]
     [NotifyCanExecuteChangedFor(nameof(ReimportFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(CutFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(OpenInFileExplorerCommand))]
@@ -220,6 +242,18 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     [ObservableProperty] private bool _convertToIsEnabled;
     [ObservableProperty] private bool _convertFromIsEnabled;
+
+    private bool ShowCopyRelativePath { get; } = !IsShiftBeingHeld && !IsCtrlBeingHeld && !IsAltBeingHeld;
+
+    // A file with Shift being held: Copy absolute path to file (for opening in program)
+    private bool ShowCopyAbsolutePath { get; } = IsShiftBeingHeld && !IsCtrlBeingHeld && !IsAltBeingHeld;
+
+    // A file with Shift+Ctrl being held: Copy absolute path to containing folder (for pasting into Explorer)
+    private bool ShowCopyAbsoluteFolderPath { get; } = IsShiftBeingHeld && IsCtrlBeingHeld && !IsAltBeingHeld;
+
+    // A file under /archive/ with Alt being held: Copy absolute path to containing folder under /raw/
+    private bool ShowCopyAbsoluteRawFolderPath { get; } =
+        IsAltBeingHeld && IsShiftBeingHeld && IsCurrentSelectionArchiveFile;
 
     public FileModel? LastSelected => _watcherService.LastSelect;
 
@@ -281,32 +315,137 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [RelayCommand(CanExecute = nameof(CanCopyFile))]
     private void CopyFile() => Clipboard.SetDataObject(SelectedItem.NotNull().FullName);
 
+    /// <summary>
+    /// Gets path to current selection. Will default to relative path in project. Optional argument returns
+    /// absolute path to current selection with OS-adjusted path separators.
+    /// </summary>
+    /// <param name="getRelativePath">Set to false if you want the item's absolute path</param>
+    /// <returns></returns>
+    private string? GetPathToCurrentSelection(bool getRelativePath = true, bool getParentDir = false)
+    {
+        var filePath = SelectedItem.NotNull().FullName;
+        if (!Path.Exists(filePath))
+        {
+            return null;
+        }
 
-    public static bool IsShiftBeingHeld => Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
-    public static bool IsCtrlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+        if (getRelativePath)
+        {
+            filePath = FileModel.GetRelativeName(filePath, ActiveProject.NotNull());
+        }
+        else
+        {
+            // change modifiers
+            filePath = filePath.Replace('/', Path.DirectorySeparatorChar);
 
+            // No parent dir for relative path, makes no sense
+            if (getParentDir && Path.Exists(filePath))
+            {
+                filePath = Path.GetDirectoryName(filePath);
+            }
+        }
+
+
+        // If the file doesn't exist, return null
+        return Path.Exists(filePath) ? filePath : null;
+    }
+    
     /// <summary>
     /// Copies relative path of node (Or absolute path, if ctrl+shift key is held)
     /// </summary>
-    private bool CanCopyRelPath() => ActiveProject != null && SelectedItem != null;
-    [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
+    private bool CanCopyPath() => ActiveProject != null && SelectedItem != null;
+
+    [RelayCommand(CanExecute = nameof(CanCopyPath))]
     private void CopyRelPath()
     {
-        var absolutePath = SelectedItem.NotNull().FullName;
-        if ((IsShiftBeingHeld || IsCtrlBeingHeld) && Path.Exists(absolutePath))
+        // relative path
+        var pathToCurrentFile = GetPathToCurrentSelection();
+        // TODO: Need to make sure we get the relative game file under /archive/, even if we select a raw file 
+        if (null != pathToCurrentFile && Path.Exists(pathToCurrentFile))
         {
-            absolutePath = absolutePath.Replace('/', Path.DirectorySeparatorChar);
-            if (IsCtrlBeingHeld)
-            {
-                absolutePath = Path.GetDirectoryName(absolutePath);
-            }
-            Clipboard.SetDataObject(absolutePath);
+            Clipboard.SetDataObject(pathToCurrentFile);
+        }
+    }
+
+
+    private bool CanCopyAbsolutePath() => CanCopyPath() && IsShiftBeingHeld;
+
+    /// <summary>
+    /// Control: Copies relative path to directory
+    /// Control + Shift: Copies absolute path to directory
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(CanCopyAbsolutePath))]
+    private void CopyAbsPath()
+    {
+        if (!IsShiftBeingHeld)
+        {
+            CopyRelPath();
             return;
         }
 
-        Clipboard.SetDataObject(FileModel.GetRelativeName(absolutePath, ActiveProject.NotNull()));
+        // get absolute path
+        var pathToCurrentFile = GetPathToCurrentSelection(false);
+        if (null != pathToCurrentFile)
+        {
+            Clipboard.SetDataObject(pathToCurrentFile);
+        }
     }
 
+    private bool CanCopyParentPath() => CanCopyPath() && IsCtrlBeingHeld;
+
+    /// <summary>
+    /// Control: Copies relative path to directory
+    /// Control + Shift: Copies absolute path to directory
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(CanCopyParentPath))]
+    private void CopyPathToParent()
+    {
+        if (!IsCtrlBeingHeld)
+        {
+            CopyAbsPath();
+            return;
+        }
+
+        var pathToCurrentFile = GetPathToCurrentSelection(!IsShiftBeingHeld, true);
+        if (null != pathToCurrentFile && Path.Exists(pathToCurrentFile))
+        {
+            Clipboard.SetDataObject(pathToCurrentFile);
+        }
+    }
+
+    private bool CanCopyRawParentPath() => CanCopyPath() && IsAltBeingHeld;
+
+    /// <summary>
+    /// Control: Copies relative path to directory
+    /// Control + Shift: Copies absolute path to directory
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(CanCopyRawParentPath))]
+    private void CopyPathToRawParent()
+    {
+        if (!IsAltBeingHeld)
+        {
+            CopyAbsPath(); // Will check for status of shift
+            return;
+        }
+
+        var pathToCurrentFile = GetPathToCurrentSelection(false, true);
+
+        // parent dir under archive
+        if (null == pathToCurrentFile)
+        {
+            return;
+        }
+
+        // we want the path to the raw folder
+        pathToCurrentFile = pathToCurrentFile.Replace($"{Path.PathSeparator}archive{Path.PathSeparator}",
+            $"{Path.PathSeparator}raw{Path.PathSeparator}");
+
+        var pathToParentDir = Path.GetDirectoryName(pathToCurrentFile);
+        if (null != pathToParentDir && Path.Exists(pathToParentDir))
+        {
+            Clipboard.SetDataObject(pathToParentDir);
+        }
+    }
 
     /// <summary>
     /// Reimports the game file to replace the current one

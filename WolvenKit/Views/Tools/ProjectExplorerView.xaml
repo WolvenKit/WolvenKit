@@ -69,13 +69,7 @@
                     Visibility="{Binding Path=ConvertToIsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
                         <Grid>
-                            <iconPacks:PackIconCodicons
-                                Width="13"
-                                Height="13"
-                                Padding="0,0,0,0"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Kind="Json" />
+                            <iconPacks:PackIconCodicons Style="{ StaticResource ContextMenuIconStyleCodicons}" Kind="Json" />
                         </Grid>
                     </MenuItem.Icon>
                 </MenuItem>
@@ -86,13 +80,7 @@
                     Visibility="{Binding Path=ConvertFromIsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
                         <Grid>
-                            <iconPacks:PackIconCodicons
-                                Width="13"
-                                Height="13"
-                                Padding="0,0,0,0"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Kind="Json" />
+                            <iconPacks:PackIconCodicons Style="{ StaticResource ContextMenuIconStyleCodicons}" Kind="Json" />
                         </Grid>
                     </MenuItem.Icon>
                 </MenuItem>
@@ -104,12 +92,7 @@
                     Header="Delete"
                     InputGestureText="Del">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconForkAwesome
-                            Width="13"
-                            Height="13"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Stretch"
-                            Kind="Trash" />
+                        <iconPacks:PackIconForkAwesome Style="{ StaticResource ContextMenuIconStyleForkAwesome}" Kind="Trash" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
@@ -117,49 +100,48 @@
                     Header="Rename"
                     InputGestureText="F2">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconForkAwesome
-                            Width="13"
-                            Height="13"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Stretch"
-                            Kind="Pencil" />
+                        <iconPacks:PackIconForkAwesome Style="{ StaticResource ContextMenuIconStyleForkAwesome}" Kind="Pencil" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Command="{Binding CopyFileCommand}" Header="Copy">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Stretch"
-                            Kind="ContentCopy" />
+                        <iconPacks:PackIconMaterial Style="{ StaticResource ContextMenuIconStyleMaterial}" Kind="ContentCopy" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Command="{Binding PasteFileCommand}" Header="Paste">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Stretch"
-                            Kind="ContentPaste" />
+                        <iconPacks:PackIconMaterial Style="{ StaticResource ContextMenuIconStyleMaterial}" Kind="ContentPaste" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <Separator />
 
-                <MenuItem Command="{Binding CopyRelPathCommand}" Header="Copy relative path" />
+                <!-- show "copy relative path" if no modifiers are pressed -->
+                <MenuItem Command="{Binding CopyRelPathCommand}" Header="Copy relative path"
+                          Visibility="{Binding Path=ShowCopyRelativePath, RelativeSource={RelativeSource Self}, Mode=OneWay, 
+                          UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                <!-- show "copy absolute path" if shift is pressed -->
+                <MenuItem Command="{Binding CopyAbsPathCommand}" Header="Copy absolute path"
+                          Visibility="{Binding Path=ShowCopyAbsolutePath, RelativeSource={RelativeSource Self}, Mode=OneWay, 
+                          UpdateSourceTrigger=PropertyChanged,  Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                <!-- show "copy absolute folder path" if shift+ctrl is pressed -->
+                <MenuItem Command="{Binding CopyPathToParentCommand}" Header="Copy absolute folder path"
+                          Visibility="{Binding Path=ShowCopyAbsoluteFolderPath, RelativeSource={RelativeSource Self}, Mode=OneWay, 
+                          UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                <!-- show "copy absolute path to raw folder" if shift is pressed and current file is under archive -->
+                <MenuItem Command="{Binding CopyPathToRawParentCommand}" Header="Copy absolute path to raw folder"
+                          Visibility="{Binding Path=ShowCopyAbsoluteRawFolderPath, RelativeSource={RelativeSource Self}, Mode=OneWay, 
+                          UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                
                 <MenuItem
                     Command="{Binding OpenInAssetBrowserCommand}"
                     Header="Open in Asset Browser"
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconForkAwesome
-                            Width="13"
-                            Height="13"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Stretch"
-                            Kind="ArrowCircleRight" />
+                        <iconPacks:PackIconForkAwesome Style="{ StaticResource ContextMenuIconStyleForkAwesome}" Kind="ArrowCircleRight" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
@@ -167,12 +149,7 @@
                     Header="Replace with original"
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconForkAwesome
-                            Width="13"
-                            Height="13"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Stretch"
-                            Kind="Refresh" />
+                        <iconPacks:PackIconForkAwesome Style="{ StaticResource ContextMenuIconStyleForkAwesome}" Kind="Refresh" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
@@ -180,12 +157,7 @@
                     Header="Add dependencies"
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconForkAwesome
-                            Width="13"
-                            Height="13"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Stretch"
-                            Kind="ArrowCircleDown" />
+                        <iconPacks:PackIconForkAwesome Style="{ StaticResource ContextMenuIconStyleForkAwesome}" Kind="ArrowCircleDown" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -193,12 +165,7 @@
 
                 <MenuItem Command="{Binding OpenInFileExplorerCommand}" Header="Open in File Explorer">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Stretch"
-                            Kind="FolderOpen" />
+                        <iconPacks:PackIconMaterial Style="{ StaticResource ContextMenuIconStyleMaterial}" Kind="FolderOpen" />
                     </MenuItem.Icon>
                 </MenuItem>
 
