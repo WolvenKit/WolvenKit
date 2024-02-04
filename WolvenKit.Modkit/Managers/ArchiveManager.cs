@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Kernel;
 using WolvenKit.Common;
@@ -20,7 +17,7 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.CR2W.Archive
 {
-    public class ArchiveManager : ObservableObject, IArchiveManager
+    public class ArchiveManager : RED4ArchiveManager
     {
         #region Fields
 
@@ -58,46 +55,66 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         #region properties
 
-        public bool IsManagerLoading
+        public override bool IsManagerLoading
         {
             get => _isManagerLoading;
             set => SetProperty(ref _isManagerLoading, value);
         }
 
-        public bool IsManagerLoaded
+        public override bool IsManagerLoaded
         {
             get => _isManagerLoaded;
             set => SetProperty(ref _isManagerLoaded, value);
         }
 
 
-        public SourceCache<IGameArchive, string> Archives { get; set; } = new(x => x.ArchiveAbsolutePath);
+        public override SourceCache<IGameArchive, string> Archives { get; set; } = new(x => x.ArchiveAbsolutePath);
 
-        public SourceCache<IGameArchive, string> ModArchives { get; set; } = new(x => x.ArchiveAbsolutePath);
+        public override SourceCache<IGameArchive, string> ModArchives { get; set; } = new(x => x.ArchiveAbsolutePath);
 
 
         public IObservable<IChangeSet<IGameArchive, string>> ConnectArchives() => Archives.Connect();
 
 
-        public IObservable<IChangeSet<RedFileSystemModel>> ConnectGameRoot() => _rootCache.Connect();
+        public override IObservable<IChangeSet<RedFileSystemModel>> ConnectGameRoot() => _rootCache.Connect();
 
-        public IObservable<IChangeSet<RedFileSystemModel>> ConnectModRoot() => _modCache.Connect();
+        public override IObservable<IChangeSet<RedFileSystemModel>> ConnectModRoot() => _modCache.Connect();
 
-        public EArchiveType TypeName => EArchiveType.Archive;
+        public override EArchiveType TypeName => EArchiveType.Archive;
 
-        public IGameArchive? ProjectArchive { get; set; }
-
-        public bool IsModBrowserActive { get; set; }
-
-        public RedFileSystemModel? RootNode { get; set; }
-
-        public List<RedFileSystemModel> ModRoots { get; set; } = new();
-
-        public IEnumerable<string>? Extensions { get; set; }
+        public override IGameArchive? ProjectArchive { get; set; }
 
         #endregion properties
 
         #region methods
+
+        //[ProtoAfterDeserialization]
+        //public void AfterDeserializationCallback()
+        //{
+        //    foreach (var archive in Archives.Values)
+        //    {
+        //        var fileEntries = (archive as Archive).Index.FileEntries.Values;
+        //        foreach (var file in fileEntries)
+        //        {
+        //            file.Archive = archive;
+        //            archive.Files.Add(file.Key, file);
+        //            file.SetHashService(_hashService);
+        //        }
+        //        var deps = (archive as Archive).Index.Dependencies;
+        //        foreach (var d in deps)
+        //        {
+        //            d.SetHashService(_hashService);
+        //        }
+        //    }
+
+        //    Items.Edit(innerList =>
+        //    {
+        //        innerList.Clear();
+        //        innerList.AddOrUpdate(Archives.Values.SelectMany(_ => _.Files));
+        //    });
+
+        //    RebuildRootNode();
+        //}
 
         #region sorting
 
@@ -136,7 +153,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// Loads all archives from a folder
         /// </summary>
         /// <param name="archiveDir"></param>
-        public void LoadFromFolder(DirectoryInfo archiveDir)
+        public override void LoadFromFolder(DirectoryInfo archiveDir)
         {
             if (!archiveDir.Exists)
             {
@@ -167,7 +184,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// </summary>
         /// <param name="executable"></param>
         /// <param name="rebuildtree"></param>
-        public void LoadGameArchives(FileInfo executable, bool rebuildtree = true)
+        public override void LoadGameArchives(FileInfo executable, bool rebuildtree = true)
         {
             var di = executable.Directory;
             if (di?.Parent?.Parent is null)
@@ -246,52 +263,12 @@ namespace WolvenKit.RED4.CR2W.Archive
             IsManagerLoaded = true;
         }
 
-        protected void RebuildGameRoot(IHashService hashService)
-        {
-            RootNode = new RedFileSystemModel(TypeName.ToString());
-
-            var allFiles = Archives.Items
-                .SelectMany(x => x.Files)
-                .GroupBy(x => x.Key)
-                .Select(x => x.First());
-
-            Parallel.ForEach(allFiles, (file) =>
-            {
-                var path = hashService.Get(file.Key);
-                if (path == null)
-                {
-                    RootNode.Files.Enqueue(file.Value);
-                    return;
-                }
-
-                var lastNode = RootNode;
-
-                var sb = new StringBuilder();
-                for (var i = 0; i < path.Length; i++)
-                {
-                    if (path[i] == '\\')
-                    {
-                        var str = sb.ToString();
-
-                        if (!lastNode.Directories.TryGetValue(str, out var tmpNode))
-                        {
-                            tmpNode = new RedFileSystemModel(str);
-                            lastNode.Directories.TryAdd(str, tmpNode);
-                        }
-                        lastNode = tmpNode;
-                    }
-                    sb.Append(path[i]);
-                }
-                lastNode.Files.Enqueue(file.Value);
-            });
-        }
-
         /// <summary>
         /// Load a single bundle
         /// </summary>
         /// <param name="path"></param>
         /// <param name="source"></param>
-        public void LoadArchive(string path, EArchiveSource source = EArchiveSource.Unknown)
+        public override void LoadArchive(string path, EArchiveSource source = EArchiveSource.Unknown)
         {
             if (Archives.Lookup(path).HasValue)
             {
@@ -317,7 +294,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// file to process
         /// </param>
         /// <param name="analyzeFiles"></param>
-        public void LoadModArchive(string filename, bool analyzeFiles = true)
+        public override void LoadModArchive(string filename, bool analyzeFiles = true)
         {
             if (ModArchives.Lookup(filename).HasValue)
             {
@@ -369,7 +346,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <summary>
         /// Loads bundles from specified mods and dlc folder
         /// </summary>
-        public void LoadModsArchives(FileInfo executable, bool analyzeFiles = true)
+        public override void LoadModsArchives(FileInfo executable, bool analyzeFiles = true)
         {
             var di = executable.Directory;
             if (di?.Parent?.Parent is null)
@@ -506,46 +483,7 @@ namespace WolvenKit.RED4.CR2W.Archive
             IsManagerLoaded = true;
         }
 
-        protected void RebuildModRoot()
-        {
-            ModRoots.Clear();
-
-            foreach (var archive in ModArchives.Items)
-            {
-                ArgumentNullException.ThrowIfNull(archive.ArchiveRelativePath);
-
-                var modroot = new RedFileSystemModel(archive.ArchiveRelativePath);
-
-                // loop through all files
-                //Parallel.ForEach(archive.Files, item =>
-                foreach (var item in archive.Files)
-                {
-                    var currentNode = modroot;
-                    var model = item.Value;
-                    var parts = model.Name.Split('\\');
-
-                    // loop through path
-                    var fullpath = "";
-                    for (var i = 0; i < parts.Length - 1; i++)
-                    {
-                        var part = parts[i];
-                        fullpath += part + Path.DirectorySeparatorChar;
-
-                        var dirPath = fullpath.TrimEnd(Path.DirectorySeparatorChar);
-                        var x = currentNode.Directories.GetOrAdd(dirPath, new RedFileSystemModel(dirPath));
-                        currentNode = x;
-                    }
-
-                    // add file to the last directory in path
-                    currentNode.Files.Enqueue(item.Value);
-                }
-                //);
-
-                ModRoots.Add(modroot);
-            }
-        }
-
-        public void LoadAdditionalModArchives(string archiveBasePath, bool analyzeFiles = true)
+        public override void LoadAdditionalModArchives(string archiveBasePath, bool analyzeFiles = true)
         {
             if (!Directory.Exists(archiveBasePath))
             {
@@ -601,7 +539,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// Get files grouped by extension in all archives
         /// </summary>
         /// <returns></returns>
-        public Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles() =>
+        public override Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles() =>
             IsModBrowserActive
             ? ModArchives.Items
               .SelectMany(_ => _.Files.Values)
@@ -616,7 +554,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// Get all files in all archives
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<FileEntry> GetFiles() =>
+        public override IEnumerable<FileEntry> GetFiles() =>
             IsModBrowserActive
             ? ModArchives.Items
                 .SelectMany(_ => _.Files.Values)
@@ -637,7 +575,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// </summary>
         /// <param name="hash"></param>
         /// <returns></returns>
-        public Optional<IGameFile> Lookup(ulong hash)
+        public override Optional<IGameFile> Lookup(ulong hash)
         {
             return IsModBrowserActive
                 ? Optional<IGameFile>.ToOptional(
@@ -654,7 +592,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <param name="fullpath"></param>
         /// <param name="expandAll"></param>
         /// <returns></returns>
-        public RedFileSystemModel? LookupDirectory(string fullpath, bool expandAll = false)
+        public override RedFileSystemModel? LookupDirectory(string fullpath, bool expandAll = false)
         {
             if (IsModBrowserActive)
             {
@@ -706,7 +644,7 @@ namespace WolvenKit.RED4.CR2W.Archive
             return null;
         }
 
-        public IGameFile? GetGameFile(ResourcePath path, bool includeMods = true, bool includeProject = true)
+        public override IGameFile? GetGameFile(ResourcePath path, bool includeMods = true, bool includeProject = true)
         {
             if (includeProject && ProjectArchive != null && ProjectArchive.Files.TryGetValue(path, out var projectFile))
             {
@@ -743,7 +681,7 @@ namespace WolvenKit.RED4.CR2W.Archive
             return null;
         }
 
-        public CR2WFile? GetCR2WFile(ResourcePath path, bool includeMods = true, bool includeProject = true)
+        public override CR2WFile? GetCR2WFile(ResourcePath path, bool includeMods = true, bool includeProject = true)
         {
             var gameFile = GetGameFile(path, includeMods, includeProject);
             if (gameFile != null)
