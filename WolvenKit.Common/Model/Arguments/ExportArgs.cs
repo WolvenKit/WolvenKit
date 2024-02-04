@@ -47,11 +47,6 @@ namespace WolvenKit.Common.Model.Arguments
 
         [Category("Export Settings")]
         public List<uint> SelectedForExport { get => _selectedForExport; set => SetProperty(ref _selectedForExport, value); }
-        [Browsable(false)]
-        public string? ModFolderPath { get; set; }
-
-        [Browsable(false)]
-        public string? RawFolderPath { get; set; }
 
         [Category("Export Settings")]
         [Display(Name = "Dump all information inside OpusInfo to Json.")]
@@ -82,8 +77,6 @@ namespace WolvenKit.Common.Model.Arguments
         [Browsable(false)]
         public string? ArchiveDepot { get; set; }
 
-        [Browsable(false)]
-        public string? ModFolderPath { get; set; }
         /// <summary>
         /// String Override to display info in datagrid.
         /// </summary>

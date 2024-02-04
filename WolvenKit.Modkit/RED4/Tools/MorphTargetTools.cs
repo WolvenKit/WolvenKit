@@ -19,7 +19,7 @@ namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
-        public bool ExportMorphTargets(CR2WFile cr2w, FileInfo outfile, string modFolder, bool isGLBinary = true, ValidationMode vMode = ValidationMode.TryFix)
+        public bool ExportMorphTargets(CR2WFile cr2w, FileInfo outfile, bool isGLBinary = true, ValidationMode vMode = ValidationMode.TryFix)
         {
             if (cr2w is not { RootChunk: MorphTargetMesh morphBlob } || morphBlob.Blob.Chunk is not rendRenderMorphTargetMeshBlob blob || blob.BaseBlob.Chunk is not rendRenderMeshBlob rendBlob)
             {

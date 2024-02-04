@@ -413,6 +413,11 @@ public class FileTypeHelper
             ext = ext[1..];
         }
 
-        return Enum.TryParse<ERedExtension>(ext, true, out _);
+        if (!Enum.TryParse<ERedExtension>(ext, true, out var redExtension))
+        {
+            return false;
+        }
+
+        return FileTypes.FirstOrDefault(x => x.Extension == redExtension) != null;
     }
 }

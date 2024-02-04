@@ -52,46 +52,11 @@ public class ImportExportHelper
     #region FinalizeArgs
 
     public bool Finalize(GlobalExportArgs args, FileSystemArchive projectArchive) =>
-        Finalize(args.Get<MeshExportArgs>(), projectArchive) &&
-        Finalize(args.Get<MorphTargetExportArgs>()) &&
-        Finalize(args.Get<OpusExportArgs>());
+        Finalize(args.Get<MeshExportArgs>(), projectArchive);
 
     public bool Finalize(MeshExportArgs args, FileSystemArchive projectArchive)
     {
-        if (_projectManager.ActiveProject is not { } proj)
-        {
-            _loggerService.Error("No project loaded");
-            return false;
-        }
-
         args.MaterialRepo = _settingsManager.MaterialRepositoryPath;
-
-        return true;
-    }
-
-    public bool Finalize(MorphTargetExportArgs args)
-    {
-        if (_projectManager.ActiveProject is not { } proj)
-        {
-            _loggerService.Error("No project loaded");
-            return false;
-        }
-
-        args.ModFolderPath = proj.ModDirectory;
-
-        return true;
-    }
-
-    public bool Finalize(OpusExportArgs args)
-    {
-        if (_projectManager.ActiveProject is not { } proj)
-        {
-            _loggerService.Error("No project loaded");
-            return false;
-        }
-
-        args.RawFolderPath = proj.RawDirectory;
-        args.ModFolderPath = proj.ModDirectory;
 
         return true;
     }
