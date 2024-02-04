@@ -4,7 +4,6 @@ using System.Windows.Data;
 using System.Windows.Input;
 using ReactiveUI;
 using WolvenKit.App.ViewModels.Tools;
-using static WolvenKit.Modkit.RED4.Serialization.Serialization;
 
 namespace WolvenKit.Views.Tools
 {
