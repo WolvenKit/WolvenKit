@@ -22,8 +22,6 @@ public class ImportExportHelper
 {
     private readonly ILoggerService _loggerService;
     private readonly IProjectManager _projectManager;
-    private readonly IGameControllerFactory _gameController;
-    private readonly IArchiveManager _archiveManager;
     private readonly ISettingsManager _settingsManager;
     private readonly IPluginService _pluginService;
     private readonly IModTools _modTools;
@@ -31,9 +29,7 @@ public class ImportExportHelper
 
     public ImportExportHelper(
         ILoggerService loggerService,
-        IProjectManager projectManager, 
-        IGameControllerFactory gameController, 
-        IArchiveManager archiveManager, 
+        IProjectManager projectManager,
         ISettingsManager settingsManager,
         IPluginService pluginService,
         IModTools modTools,
@@ -41,8 +37,6 @@ public class ImportExportHelper
     {
         _loggerService = loggerService;
         _projectManager = projectManager;
-        _gameController = gameController;
-        _archiveManager = archiveManager;
         _settingsManager = settingsManager;
         _pluginService = pluginService;
         _modTools = modTools;
@@ -51,33 +45,18 @@ public class ImportExportHelper
 
     #region FinalizeArgs
 
-    public bool Finalize(GlobalExportArgs args, FileSystemArchive projectArchive) =>
-        Finalize(args.Get<MeshExportArgs>(), projectArchive);
+    public bool Finalize(GlobalExportArgs args) =>
+        Finalize(args.Get<MeshExportArgs>());
 
-    public bool Finalize(MeshExportArgs args, FileSystemArchive projectArchive)
+    public bool Finalize(MeshExportArgs args)
     {
         args.MaterialRepo = _settingsManager.MaterialRepositoryPath;
 
         return true;
     }
 
-    public bool Finalize(ImportArgs mainArgs, GlobalImportArgs args, FileSystemArchive projectArchive)
-    {
-        if (mainArgs is ReImportArgs && !Finalize(args.Get<ReImportArgs>()))
-        {
-            return false;
-        }
-
-        return Finalize(args.Get<GltfImportArgs>(), projectArchive);
-    }
-
-    public bool Finalize(GltfImportArgs args, FileSystemArchive projectArchive)
-    {
-        args.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-        args.Archives.Insert(0, projectArchive);
-
-        return true;
-    }
+    public bool Finalize(ImportArgs mainArgs, GlobalImportArgs args) => 
+        mainArgs is not ReImportArgs || Finalize(args.Get<ReImportArgs>());
 
     public bool Finalize(ReImportArgs args)
     {

@@ -38,7 +38,7 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            if (TryFindFile(anims.Rig.DepotPath, out var result) != FindFileResult.NoCR2W)
+            if (TryFindFile(anims.Rig.DepotPath, out var result) != FindFileResult.NoError)
             {
                 _loggerService.Warning("No rig found");
                 return false;
@@ -175,7 +175,7 @@ namespace WolvenKit.Modkit.RED4
             var rigFileName = anims.Rig.DepotPath.GetResolvedText() ?? "<unknown rig depotpath??>";
 
             // find first rig in archives
-            if (TryFindFile(anims.Rig.DepotPath, out var result) != FindFileResult.NoCR2W)
+            if (TryFindFile(anims.Rig.DepotPath, out var result) != FindFileResult.NoError)
             {
                 _loggerService.Error($"{gltfFileName}: No rig found for {rigFileName}, can't import animations!");
                 return false;

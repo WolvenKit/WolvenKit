@@ -169,7 +169,7 @@ public partial class ExportViewModel : AbstractExportViewModel
         }
 
         var settings = new GlobalExportArgs().Register(e);
-        if (!_importExportHelper.Finalize(settings, projectArchive))
+        if (!_importExportHelper.Finalize(settings))
         {
             return false;
         }

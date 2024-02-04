@@ -195,12 +195,6 @@ namespace WolvenKit.Common.Model.Arguments
         public bool KeepRig { get; set; } = false;
 
         /// <summary>
-        /// List of Archives for Morphtarget Import.
-        /// </summary>
-        [Browsable(false)]
-        public List<ICyberGameArchive> Archives { get; set; } = new();
-
-        /// <summary>
         /// String Override to display info in datagrid.
         /// </summary>
         /// <returns>String</returns>
