@@ -405,7 +405,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     /// Browse the left side folder tree to the folder containing the selected item. (e.g. for after searching)
     /// </summary>
     private bool CanBrowseToFolder() => RightSelectedItem is RedFileViewModel &&
-                                        _archiveManager.GetGameFile(RightSelectedItem!.FullName) is not null;
+                                        _archiveManager.GetGameFile(RightSelectedItem!.FullName, false, false) is not null;
     [RelayCommand(CanExecute = nameof(CanBrowseToFolder))]
     private void BrowseToFolder()
     {
