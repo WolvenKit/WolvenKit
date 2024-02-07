@@ -7,9 +7,9 @@
     xmlns:exporters="clr-namespace:WolvenKit.Views.Exporters"
     xmlns:exportvms="clr-namespace:WolvenKit.App.ViewModels.Exporters;assembly=WolvenKit.App"
     xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:importers="clr-namespace:WolvenKit.Views.Importers"
     xmlns:importvms="clr-namespace:WolvenKit.App.ViewModels.Importers;assembly=WolvenKit.App"
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:tools="clr-namespace:WolvenKit.Views.Tools"
     xmlns:toolvm="clr-namespace:WolvenKit.App.ViewModels.Tools;assembly=WolvenKit.App">
@@ -104,7 +104,7 @@
                         <Setter Property="DockPanel.Dock" Value="Right" />
                     </Style>
 
-                    <!-- Menu icon -->
+                    <!--  Menu icon  -->
                     <Style x:Key="ContextMenuIconStyleCodicons" TargetType="{x:Type iconPacks:PackIconCodicons}">
                         <Setter Property="Width" Value="13" />
                         <Setter Property="Height" Value="13" />
@@ -113,7 +113,7 @@
                         <Setter Property="VerticalAlignment" Value="Center" />
                     </Style>
 
-                    <!-- Menu icon -->
+                    <!--  Menu icon  -->
                     <Style x:Key="ContextMenuIconStyleMaterial" TargetType="{x:Type iconPacks:PackIconMaterial}">
                         <Setter Property="Width" Value="13" />
                         <Setter Property="Height" Value="13" />
@@ -209,6 +209,6 @@
             <SolidColorBrush x:Key="AccentColorBrush" Color="Black" />
 
         </ResourceDictionary>
-        
+
     </Application.Resources>
 </Application>
