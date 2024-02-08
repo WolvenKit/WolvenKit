@@ -323,7 +323,7 @@ namespace WolvenKit.Modkit.RED4
 
                             var translations = stripLocalFromAdditives
                                 ?  translationSampler.GetLinearKeys().Select(_ => (_.Key, _.Value - chan.TargetNode.LocalTransform.Translation)).ToList()
-                                : translationSampler.GetLinearKeys().Select(_ => (_.Key, _.Value)).ToList();
+                                : translationSampler.GetLinearKeys().ToList();
 
                             typedTranslations.Add((ushort)idx, translations);
                             break;
@@ -334,7 +334,7 @@ namespace WolvenKit.Modkit.RED4
 
                             var rotations = stripLocalFromAdditives
                                 ? rotationSampler.GetLinearKeys().Select(_ => (_.Key, _.Value / chan.TargetNode.LocalTransform.Rotation)).ToList()
-                                : rotationSampler.GetLinearKeys().Select(_ => (_.Key, _.Value)).ToList();
+                                : rotationSampler.GetLinearKeys().ToList();
 
                             typedRotations.Add((ushort)idx, rotations);
                             break;
@@ -343,11 +343,15 @@ namespace WolvenKit.Modkit.RED4
                             var scaleSampler = chan.GetScaleSampler();
                             var typedScales = keyframeScales[scaleSampler.InterpolationMode] ?? throw new Exception($"{gltfFileName} ${incomingAnim.Name}: Unsupported interpolation mode {scaleSampler.InterpolationMode}!");
 
-                            var scales = stripLocalFromAdditives
-                                ? scaleSampler.GetLinearKeys().Select(_ => (_.Key, _.Value - chan.TargetNode.LocalTransform.Scale)).ToList()
-                                : scaleSampler.GetLinearKeys().Select(_ => (_.Key, _.Value)).ToList();
+                            var localScale = WithEpsilon(chan.TargetNode.LocalTransform.Scale, Scale1to1);
 
-                            typedScales.Add((ushort)idx, scales);
+                            var scales = stripLocalFromAdditives
+                                ? scaleSampler.GetLinearKeys().Select(_ =>
+                                    (_.Key, Value: WithEpsilon(_.Value, Scale1to1) / localScale))
+                                : scaleSampler.GetLinearKeys();
+
+                            var onlyScaled = scales.Where(_ => !EqWithEpsilon(_.Value, Scale1to1)).ToList();
+                            typedScales.Add((ushort)idx, onlyScaled);
                             break;
 
                         case PropertyPath.weights:

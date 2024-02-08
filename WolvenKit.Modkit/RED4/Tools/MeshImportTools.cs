@@ -401,8 +401,8 @@ namespace WolvenKit.Modkit.RED4
             var quantTrans = new Vec4((max.X + min.X) / 2, (max.Y + min.Y) / 2, (max.Z + min.Z) / 2, 1);
             
 
-            RawArmature? oldRig = null;
-            RawArmature? newRig = null;
+            RawArmature? incomingJoints = null;
+            RawArmature? existingJoints = null;
             if (originalRig != null)
             {
 
@@ -418,18 +418,18 @@ namespace WolvenKit.Modkit.RED4
                     Array.Clear(mesh.boneindices, 0, mesh.boneindices.Length);
                 }
 
-                oldRig = MeshTools.GetOrphanRig(meshBlob);
+                incomingJoints = MeshTools.GetOrphanRig(meshBlob);
 
                 using var msr = new MemoryStream();
                 originalRig.Extract(msr);
-                newRig = RIG.ProcessRig(_parserService.ReadRed4File(msr));
+                existingJoints = RIG.ProcessRig(_parserService.ReadRed4File(msr));
             }
             else
             {
-                newRig = MeshTools.GetOrphanRig(meshBlob);
+                existingJoints = MeshTools.GetOrphanRig(meshBlob);
                 if (model.LogicalSkins.Count > 0 && model.LogicalSkins[0].JointsCount > 0)
                 {
-                    oldRig = new RawArmature
+                    incomingJoints = new RawArmature
                     {
                         BoneCount = model.LogicalSkins[0].JointsCount,
                         Names = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.Name).ToArray()
@@ -438,7 +438,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
 
-            MeshTools.UpdateMeshJoints(ref meshes, newRig, oldRig);
+            MeshTools.UpdateMeshJoints(ref meshes, existingJoints, incomingJoints);
 
             UpdateSkinningParamCloth(ref meshes, ref cr2w, args);
 

@@ -31,6 +31,20 @@ namespace WolvenKit.Modkit.RED4.Animation
 
         public static Quat RQuaternionZupLhs(Quat yupQ) => new(yupQ.X, -yupQ.Z, yupQ.Y, yupQ.W);
         public static Quat RQuaternionYupRhs(Quat zupQ) => new(zupQ.X, zupQ.Z, -zupQ.Y, zupQ.W);
+
+        public static Vec3 Scale1to1 = new(1.0f, 1.0f, 1.0f);
+
+        public static Vec3 WithEpsilon(Vec3 vec, Vec3 reference) =>
+            new(
+                Math.Abs(vec.X - reference.X) <= Single.Epsilon ? reference.X : vec.X,
+                Math.Abs(vec.Y - reference.Y) <= Single.Epsilon ? reference.Y : vec.Y,
+                Math.Abs(vec.Z - reference.Z) <= Single.Epsilon ? reference.Z : vec.Z
+            );
+
+        public static bool EqWithEpsilon(Vec3 a, Vec3 b) =>
+            Math.Abs(a.X - b.X) <= Single.Epsilon &&
+            Math.Abs(a.Y - b.Y) <= Single.Epsilon &&
+            Math.Abs(a.Z - b.Z) <= Single.Epsilon;
     }
 
     internal static class Gltf
