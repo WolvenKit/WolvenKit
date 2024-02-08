@@ -19,7 +19,8 @@
     d:DesignWidth="800"
     x:TypeArguments="shell:ChunkViewModel"
     mc:Ignorable="d">
-    <Grid Background="{StaticResource ContentBackground}" IsSharedSizeScope="True">
+    <Grid Background="{StaticResource ContentBackground}" IsSharedSizeScope="True"
+          KeyboardNavigation.TabNavigation="Contained">
         <Grid.Resources>
             <sys:Double x:Key="RowHeight">26</sys:Double>
             <SolidColorBrush x:Key="RedTypeColor" Color="{StaticResource WolvenKitTanColor}" />

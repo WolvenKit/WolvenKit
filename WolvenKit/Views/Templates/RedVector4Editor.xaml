@@ -8,10 +8,10 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf" 
     d:DesignHeight="100"
     d:DesignWidth="400"
-    mc:Ignorable="d">
-
+    mc:Ignorable="d"
+    KeyboardNavigation.TabNavigation="Contained">
+    
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedVector4Editor}}}">
-        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20" />
             <ColumnDefinition />
@@ -22,40 +22,50 @@
             <ColumnDefinition Width="20" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        
+
+        <!-- X -->
         <TextBlock
             Grid.Column="0"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Text="X" />
-        <syncfusion:DoubleTextBox 
+        <syncfusion:DoubleTextBox
+            KeyboardNavigation.TabIndex="1"
             Grid.Column="1"
-            NumberDecimalDigits="4"
-            Value="{Binding XValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            NumberDecimalDigits="4" />
+
+        <!-- Y -->
         <TextBlock
             Grid.Column="2"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Text="Y" />
-        <syncfusion:DoubleTextBox 
+        <syncfusion:DoubleTextBox
+            KeyboardNavigation.TabIndex="2"
             Grid.Column="3"
             NumberDecimalDigits="4"
             Value="{Binding YValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+        <!-- Z -->
         <TextBlock
             Grid.Column="4"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Text="Z" />
-        <syncfusion:DoubleTextBox 
+        <syncfusion:DoubleTextBox
+            KeyboardNavigation.TabIndex="3"
             Grid.Column="5"
             NumberDecimalDigits="4"
             Value="{Binding ZValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+        <!-- W -->
         <TextBlock
             Grid.Column="6"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Text="W" />
-        <syncfusion:DoubleTextBox 
+        <syncfusion:DoubleTextBox
+            KeyboardNavigation.TabIndex="4"
             Grid.Column="7"
             NumberDecimalDigits="4"
             Value="{Binding WValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
