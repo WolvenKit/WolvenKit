@@ -32,7 +32,8 @@
         <syncfusion:DoubleTextBox
             KeyboardNavigation.TabIndex="1"
             Grid.Column="1"
-            NumberDecimalDigits="4" />
+            NumberDecimalDigits="4"
+            Value="{Binding XValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
         <!-- Y -->
         <TextBlock
