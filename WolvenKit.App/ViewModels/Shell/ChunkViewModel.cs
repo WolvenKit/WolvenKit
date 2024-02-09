@@ -1394,7 +1394,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             Tab.SelectedChunk = Parent;
             if (Parent.Data is IRedArray ary)
             {
-                ary.RemoveAt(int.Parse(Name));
+                var childIdx = int.Parse(Name);
+                if (childIdx < ary.Count)
+                {
+                    ary.RemoveAt(childIdx);
+                }
+                else
+                {
+                    _loggerService.Error("Something went wrong here. Please reload the file (Hotkey: Ctrl+R)");
+                }
             }
             else if (Parent.Data is IRedLegacySingleChannelCurve curve)
             {
