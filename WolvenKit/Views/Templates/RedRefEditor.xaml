@@ -8,6 +8,7 @@
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     d:DesignHeight="100"
     d:DesignWidth="400"
+    KeyboardNavigation.TabNavigation="Local"
     mc:Ignorable="d">
 
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedRefEditor}}}">
@@ -29,15 +30,16 @@
             Text="DepotPath" />
 
         <TextBox
-            x:Name="TextBox"
             Grid.Row="0"
             Grid.Column="1"
+            KeyboardNavigation.TabIndex="1"
             helpers:TextBoxBehavior.TripleClickSelectAll="True"
             Text="{Binding DepotPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
         <TextBox
             x:Name="HashBox"
             Grid.Row="0"
             Grid.Column="2"
+            KeyboardNavigation.TabIndex="2"
             helpers:TextBoxBehavior.TripleClickSelectAll="True"
             Background="{StaticResource ContentBackgroundAlt}"
             BorderBrush="{StaticResource BorderAlt}"
@@ -58,6 +60,7 @@
             Grid.Row="1"
             Grid.Column="1"
             Grid.ColumnSpan="2"
+            KeyboardNavigation.TabIndex="3"
             ItemsSource="{Binding EnumValues}"
             SelectedItem="{Binding RedRef.Flags, Mode=OneWay}" />
     </Grid>
