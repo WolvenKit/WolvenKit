@@ -436,7 +436,10 @@ public partial class AssetBrowserViewModel : ToolViewModel
     /// <summary>
     /// Add File to Project
     /// </summary>
-    [RelayCommand]
+    /// 
+    private bool CanAddToProject() => ProjectLoaded;
+
+    [RelayCommand(CanExecute = nameof(CanAddToProject))]
     private async Task AddSelectedAsync()
     {
         _watcherService.IsSuspended = true;
