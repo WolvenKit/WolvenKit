@@ -2396,6 +2396,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
             Descriptor = desc;
         }
+        else if (ResolvedData is worldCompiledEffectPlacementInfo info
+                 && Parent?.Parent?.GetModelFromPath("placementTags")?.ResolvedData is CArray<CName> placementTags
+                 && placementTags.Count > info.PlacementTagIndex)
+        {
+            Descriptor = placementTags[info.PlacementTagIndex];
+        }
         else if (ResolvedData is inkTextureSlot texturesSlot)
         {
             var desc = texturesSlot.Texture.DepotPath.GetResolvedText();
@@ -2450,6 +2456,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             "entryName", // ?
             "className", // ?
             "actorName", // ?
+            "effectName", // entEffectDesc and its handles
             "sectorHash", // sectors
             "propertyPath" // ?
         };
