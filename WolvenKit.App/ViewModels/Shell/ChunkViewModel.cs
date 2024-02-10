@@ -330,6 +330,18 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             CalculateDescriptor();
             Parent.CalculateDescriptor();
         }
+        // if we were a placementTag, update placementInfos
+        else if (
+            Parent.Data is CArray<CName>
+            && Parent.Name == "placementTags"
+            && Parent.Parent?.GetModelFromPath("placementInfos") is
+            {
+                ResolvedData: CArray<worldCompiledEffectPlacementInfo>
+            } placementInfos
+        )
+        {
+            placementInfos.RecalculateProperties();
+        }
         else if (Data is CName && Parent.Data is IRedArray &&
                  Parent.Parent is
                      {
