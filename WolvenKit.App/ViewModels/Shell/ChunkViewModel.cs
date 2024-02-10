@@ -629,7 +629,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public string ResolvedType => ResolvedPropertyType is not null ? GetTypeRedName(ResolvedPropertyType) ?? ResolvedPropertyType.Name : "";
 
-    public bool TypesDiffer => PropertyType != ResolvedPropertyType;
+    public bool TypesDiffer => PropertyType != ResolvedPropertyType || IsValueExtrapolated;
 
     public bool IsInArray => Parent is not null && Parent.IsArray;
 
@@ -2079,6 +2079,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         else if (ResolvedData is CMeshMaterialEntry materialDefinition)
         {
             Value = materialDefinition.IsLocalInstance ? "" : " (external)";
+            Value = $"{materialDefinition.Index}{Value}";
             IsValueExtrapolated = true;
         }
         else if (NodeIdxInParent > -1 && ResolvedData is physicsRagdollBodyInfo &&
@@ -3090,6 +3091,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return true;
         }
         catch (Exception ex) { _loggerService.Error(ex); }
+
         return false;
     }
 
@@ -3106,20 +3108,57 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         IsExpanded = expand;
 
-        if (expand && selectChild is not null)
+        if (!expand || selectChild is null)
         {
-            foreach (var prop in Properties)
+            return;
+        }
+
+        var prop = Properties.FirstOrDefault(p => p.Data != null && p.Data.GetHashCode() == selectChild.GetHashCode());
+        if (prop == null)
+        {
+            return;
+        }
+
+        prop.IsExpanded = true;
+        prop.SetChildExpansionStates(true);
+
+        if (Tab is RDTDataViewModel dvm)
+        {
+            dvm.SelectedChunk = prop;
+        }
+
+        /*
+         * QOL: Increment index property in new child
+         */
+        switch (ResolvedData)
+        {
+            // For placement tags: set PlacementTagIndex to previous sibling's plus one
+            case CArray<worldCompiledEffectPlacementInfo> infoArray when
+                prop.ResolvedData is worldCompiledEffectPlacementInfo info:
+
+                var effectsIndex = infoArray
+                    .OrderBy(mat => Int32.Parse(mat.PlacementTagIndex.ToString()))
+                    .Select(mat => mat.PlacementTagIndex)
+                    .Last();
+                info.PlacementTagIndex = effectsIndex + 1;
+                prop.RecalculateProperties();
+                break;
+
+            // For material definitions: Find highest index of local/external material and increment by one
+            case CArray<CMeshMaterialEntry> materialDefinitionArray when
+                prop.ResolvedData is CMeshMaterialEntry materialDefinition:
             {
-                if (prop.Data is not null && prop.Data.GetHashCode() == selectChild.GetHashCode())
-                {
-                    prop.IsExpanded = true;
-                    if (Tab is RDTDataViewModel dvm)
-                    {
-                        dvm.SelectedChunk = prop;
-                    }
-                    break;
-                }
+                var materialIndex = materialDefinitionArray
+                    .Where(mat => mat.IsLocalInstance.Equals(materialDefinition.IsLocalInstance))
+                    .OrderBy(mat => Int32.Parse(mat.Index.ToString()))
+                    .Select(mat => mat.Index)
+                    .Last();
+                materialDefinition.Index = materialIndex + 1;
+                prop.RecalculateProperties();
+                break;
             }
+            default:
+                break;
         }
     }
 
