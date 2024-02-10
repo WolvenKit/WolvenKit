@@ -2404,6 +2404,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 Descriptor = desc;
             }
         }
+        else if (ResolvedData is entEffectDesc desc && desc.EffectName is CName name)
+        {
+            Descriptor = name;
+            return;
+        }
         // mesh: boneTransforms (in different coordinate spaces)
         else if (NodeIdxInParent > -1 &&
                  (Parent?.Name == "boneTransforms" || Parent?.Name == "aPoseLS" || Parent?.Name == "aPoseMS") &&
