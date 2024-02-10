@@ -97,7 +97,10 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void About() => Process.Start("explorer.exe", @"https://github.com/WolvenKit/WolvenKit");
+    private void About()
+    {
+        //Process.Start("explorer.exe", @"https://github.com/WolvenKit/WolvenKit");
+    }
 
     #endregion
 

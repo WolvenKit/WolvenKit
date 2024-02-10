@@ -279,7 +279,41 @@ public static class Commonfunctions
     /// Show the given path in the windows explorer.
     /// </summary>
     /// <param name="path">The file/folder to show.</param>
-    public static void ShowFileInExplorer(string path) => Process.Start("explorer.exe", "/select, \"" + path + "\"");
+    public static void ShowFileInExplorer(string path)
+    {
+        if (File.Exists(path))
+        {
+            var parent = new FileInfo(path).Directory;
+            if (parent is not null && parent.Exists)
+            {
+                var cmd = new Process()
+                {
+                    StartInfo = new ProcessStartInfo()
+                    {
+                        FileName = "cmd",
+                        CreateNoWindow = true,
+                        UseShellExecute = false,
+                        RedirectStandardInput = true
+                    }
+                };
+                cmd.Start();
+                var processId = cmd.Id;
+                var args = $"start \"\" \"{parent}\"\r\n";
+                cmd.StandardInput.Write(args);
+                cmd.StandardInput.Write("exit\r\n");
+                cmd = null;
+
+                try
+                {
+                    var isCmdStillThere = Process.GetProcessById(processId);
+                }
+                catch (Exception errorQueryingProcess)
+                {
+                    Debug.Assert(errorQueryingProcess.Message == "Process with an Id of " + processId + " is not running.");
+                }
+            }
+        }
+    }
 
     /// <summary>
     /// Show the given folder in the windows explorer.
@@ -289,7 +323,31 @@ public static class Commonfunctions
     {
         if (Directory.Exists(path))
         {
-            Process.Start("explorer.exe", "\"" + path + "\"");
+            var cmd = new Process()
+            {
+                StartInfo = new ProcessStartInfo()
+                {
+                    FileName = "cmd",
+                    CreateNoWindow = true,
+                    UseShellExecute = false,
+                    RedirectStandardInput = true
+                }
+            };
+            cmd.Start();
+            var processId = cmd.Id;
+            var args = $"start \"\" \"{path}\"\r\n";
+            cmd.StandardInput.Write(args);
+            cmd.StandardInput.Write("exit\r\n");
+            cmd = null;
+
+            try
+            {
+                var isCmdStillThere = Process.GetProcessById(processId);
+            }
+            catch (Exception errorQueryingProcess)
+            {
+                Debug.Assert(errorQueryingProcess.Message == "Process with an Id of " + processId + " is not running.");
+            }
         }
     }
 

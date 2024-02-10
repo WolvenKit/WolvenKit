@@ -404,35 +404,42 @@ public partial class AssetBrowserViewModel : ToolViewModel
     /// <summary>
     /// Browse the left side folder tree to the folder containing the selected item. (e.g. for after searching)
     /// </summary>
-    private bool CanBrowseToFolder() => RightSelectedItem is RedFileViewModel;
+    private bool CanBrowseToFolder() => RightSelectedItem is RedFileViewModel &&
+                                        _archiveManager.GetGameFile(RightSelectedItem!.FullName, false, false) is not null;
     [RelayCommand(CanExecute = nameof(CanBrowseToFolder))]
     private void BrowseToFolder()
     {
-        if (RightSelectedItem is RedFileViewModel file)
+        if (RightSelectedItem is not RedFileViewModel file ||
+            _archiveManager.GetGameFile(RightSelectedItem!.FullName) is null)
         {
-            var fullPath = "";
-            var parentDir = LeftItems.ElementAt(0);
-            parentDir.IsExpanded = true;
-
-            foreach (var dir in file.GetParentPath().Split(Path.DirectorySeparatorChar))
-            {
-                fullPath += dir;
-                parentDir = parentDir.Directories
-                    .Where(x => x.Key == fullPath)
-                    .First()
-                    .Value;
-                parentDir.IsExpanded = true;
-                fullPath += Path.DirectorySeparatorChar;
-            }
-            MoveToFolder(parentDir);
-            RightSelectedItem = RightItems.Where(x => x.FullName == file.FullName).First();
+            return;
         }
+
+        var fullPath = "";
+        var parentDir = LeftItems.ElementAt(0);
+        parentDir.IsExpanded = true;
+
+        foreach (var dir in file.GetParentPath().Split(Path.DirectorySeparatorChar))
+        {
+            fullPath += dir;
+            parentDir = parentDir.Directories
+                .First(x => x.Key == fullPath)
+                .Value;
+            parentDir.IsExpanded = true;
+            fullPath += Path.DirectorySeparatorChar;
+        }
+
+        MoveToFolder(parentDir);
+        RightSelectedItem = RightItems.FirstOrDefault(x => x.FullName == file.FullName);
     }
 
     /// <summary>
     /// Add File to Project
     /// </summary>
-    [RelayCommand]
+    /// 
+    private bool CanAddToProject() => ProjectLoaded;
+
+    [RelayCommand(CanExecute = nameof(CanAddToProject))]
     private async Task AddSelectedAsync()
     {
         _watcherService.IsSuspended = true;

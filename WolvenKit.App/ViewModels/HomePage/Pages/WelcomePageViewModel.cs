@@ -145,17 +145,17 @@ public partial class WelcomePageViewModel : PageViewModel
     [RelayCommand]
     private async Task OpenInExplorer(string parameter)
     {
-        if (!File.Exists(parameter))
-        {
-            parameter = await LocateMissingProjectAsync(parameter);
-        }
-
         if (string.IsNullOrEmpty(parameter))
         {
             return;
         }
 
-        Process.Start("explorer.exe", $"/select, \"{parameter}\"");
+        if (!File.Exists(parameter))
+        {
+            parameter = await LocateMissingProjectAsync(parameter);
+        }
+
+        Commonfunctions.ShowFileInExplorer(parameter);
     }
 
     [RelayCommand]

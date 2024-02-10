@@ -163,7 +163,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
-                    Command="{Binding ReimportFileCommand}"
+                    Command="{Binding OverwriteWithGameFileCommand}"
                     Header="Replace with original"
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
@@ -742,7 +742,7 @@
             PreviewMouseDown="TreeGrid_MouseDown"
             RowHeight="19"
             SelectedItem="{Binding SelectedItem}"
-            SelectedItems="{Binding SelectedItems}"
+            SelectedItems="{Binding SelectedItems, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
             SelectionMode="Extended"
             SelfRelationRootValue="0"
             VirtualizingPanel.IsVirtualizing="True"

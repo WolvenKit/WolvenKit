@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Windows.Input;
 using DynamicData;
 using Syncfusion.UI.Xaml.Grid;
+using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.Common.Interfaces;
 
 namespace WolvenKit.Layout
@@ -16,25 +18,22 @@ namespace WolvenKit.Layout
 
         private static void OnCanExecuteCheckAndUnCheck(object sender, CanExecuteRoutedEventArgs args) => args.CanExecute = true;
 
+        // NOTE: this is needed because sfdatagrid.SelectAll() does not send OnSelectionChanged events
         private static void OnCheckUnCheckCommand(object sender, ExecutedRoutedEventArgs args)
         {
-            if (args.Parameter is not SfDataGrid sfdatagrid)
-            {
-                return;
-            }
-            if (sender is not CheckBox checkBox)
+            if (args.Parameter is not SfDataGrid { ItemsSource: IEnumerable<object> source } sfDataGrid ||
+                sender is not CheckBox checkBox || checkBox.IsChecked is null)
             {
                 return;
             }
 
-            // NOTE: this is needed because sfdatagrid.SelectAll() does not send OnSelectionChanged events
             if (checkBox.IsChecked.Value)
             {
-                sfdatagrid.SelectedItems.AddRange(sfdatagrid.ItemsSource as IEnumerable<object>);
+                sfDataGrid.SelectedItems.AddRange(source);
             }
             else
             {
-                sfdatagrid.SelectedItems.RemoveMany(sfdatagrid.ItemsSource as IEnumerable<object>);
+                sfDataGrid.SelectedItems.RemoveMany(source);
             }
         }
     }
