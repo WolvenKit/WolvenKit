@@ -1,13 +1,7 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using WolvenKit.Common;
-using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Common.Services;
-using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive;
 
 namespace CP77Tools.Tasks;
@@ -16,6 +10,7 @@ public record UncookTaskOptions
 {
     public DirectoryInfo? outpath { get; init; }
     public string? rawOutDir { get; init; }
+    public string? gamepath { get; set; }
     public EUncookExtension? uext { get; init; }
     public ulong hash { get; init; }
     public string? pattern { get; init; }
@@ -31,34 +26,17 @@ public record UncookTaskOptions
 
 public partial class ConsoleFunctions
 {
-    public int UncookTask(FileSystemInfo[] path, UncookTaskOptions options)
+    public int UncookTask(FileSystemInfo[] paths, UncookTaskOptions options)
     {
-        if (path == null || path.Length < 1)
+        if (paths.Length < 1 && string.IsNullOrEmpty(options.gamepath))
         {
             _loggerService.Error("Please fill in an input path.");
             return ERROR_BAD_ARGUMENTS;
         }
 
-        var result = 0;
-        foreach (var file in path)
+        if (options.outpath == null)
         {
-            result += UncookTaskInner(file, options);
-        }
-        return result > 0 ? ERROR_COMPLETED_WITH_ERRORS : 0;
-    }
-
-    private int UncookTaskInner(FileSystemInfo path, UncookTaskOptions options)
-    {
-        #region checks
-
-        if (path is null)
-        {
-            _loggerService.Error("Please fill in an input path.");
-            return ERROR_BAD_ARGUMENTS;
-        }
-        if (!path.Exists)
-        {
-            _loggerService.Error("Input path does not exist.");
+            _loggerService.Error("Please fill in an output path.");
             return ERROR_BAD_ARGUMENTS;
         }
 
@@ -68,51 +46,62 @@ public partial class ConsoleFunctions
             return ERROR_INVALID_COMMAND_LINE;
         }
 
-        #endregion checks
-
-        DirectoryInfo basedir;
-        switch (path)
+        if (!string.IsNullOrEmpty(options.gamepath) && Directory.Exists(options.gamepath))
         {
-            case FileInfo file:
-                if (file.Extension != ".archive")
-                {
-                    _loggerService.Error("Input file is not an .archive.");
-                    return ERROR_BAD_ARGUMENTS;
-                }
-                _archiveManager.LoadArchive(file.FullName);
-                basedir = file.Directory.NotNull();
-                break;
-            case DirectoryInfo directory:
-                var archiveFileInfos = directory.GetFiles().Where(_ => _.Extension == ".archive").ToList();
-                if (archiveFileInfos.Count == 0)
-                {
-                    _loggerService.Error("No .archive file to process in the input directory");
-                    return ERROR_BAD_ARGUMENTS;
-                }
-                _archiveManager.LoadFromFolder(directory);
-                basedir = directory;
-                break;
-            default:
-                _loggerService.Error("Not a valid file or directory name.");
-                return ERROR_BAD_ARGUMENTS;
+            var exePath = new FileInfo(Path.Combine(options.gamepath, "bin", "x64", "Cyberpunk2077.exe"));
+            _archiveManager.LoadGameArchives(exePath, false);
         }
 
-        // get outdirectory
-        DirectoryInfo outDir;
-        if (options.outpath is null)
+        var result = 0;
+        foreach (var path in paths)
         {
-            outDir = new DirectoryInfo(basedir.FullName);
-        }
-        else
-        {
-            outDir = options.outpath;
-            if (!outDir.Exists)
+            if (!path.Exists)
             {
-                outDir = Directory.CreateDirectory(options.outpath.FullName);
+                _loggerService.Error($"\"{path.FullName}\" could not be found!");
+                result += ERROR_BAD_ARGUMENTS;
+                continue;
+            }
+
+            switch (path)
+            {
+                case FileInfo file:
+                    if (file.Extension != ".archive")
+                    {
+                        _loggerService.Error("Input file is not an .archive.");
+                        return ERROR_BAD_ARGUMENTS;
+                    }
+                    _archiveManager.LoadModArchive(file.FullName);
+                    break;
+                case DirectoryInfo directory:
+                    var archiveFileInfos = directory.GetFiles().Where(_ => _.Extension == ".archive").ToList();
+                    if (archiveFileInfos.Count == 0)
+                    {
+                        _loggerService.Error("No .archive file to process in the input directory");
+                        return ERROR_BAD_ARGUMENTS;
+                    }
+                    _archiveManager.LoadAdditionalModArchives(directory.FullName, false);
+                    break;
+                default:
+                    _loggerService.Error($"\"{path.FullName}\" is not a valid file or directory name.");
+                    break;
             }
         }
 
-        DirectoryInfo? rawOutDirInfo = null;
+        result += UncookTaskInner(options);
+
+        return result > 0 ? ERROR_COMPLETED_WITH_ERRORS : 0;
+    }
+
+    private int UncookTaskInner(UncookTaskOptions options)
+    {
+        // get outdirectory
+        var outDir = options.outpath!;
+        if (!outDir.Exists)
+        {
+            outDir = Directory.CreateDirectory(outDir.FullName);
+        }
+
+        DirectoryInfo? rawOutDirInfo;
         if (string.IsNullOrEmpty(options.rawOutDir))
         {
             rawOutDirInfo = outDir;

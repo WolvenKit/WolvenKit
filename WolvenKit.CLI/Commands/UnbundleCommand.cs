@@ -1,7 +1,6 @@
 #define IS_ASYNC
 #undef IS_ASYNC
 
-using System;
 using System.CommandLine;
 using System.CommandLine.NamingConventionBinder;
 using System.IO;
@@ -29,15 +28,17 @@ internal class UnbundleCommand : CommandBase
         // TODO revert to DirectoryInfo once System.Commandline is updated https://github.com/dotnet/command-line-api/issues/1872
         AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output directory for all input archives."));
 
+        AddOption(new Option<string>(new[] { "--gamepath", "-gp" }, "Path to the Cyberpunk 2077 directory."));
+
         AddOption(new Option<string>(new[] { "--pattern", "-w" }, "Use optional search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized."));
         AddOption(new Option<string>(new[] { "--regex", "-r" }, "Use optional regex pattern."));
         AddOption(new Option<string>(new[] { "--hash" }, "Extract single file with a given hash. If a path is supplied, all hashes will be extracted."));
         AddOption(new Option<bool>(new[] { "--DEBUG_decompress" }, "Decompresses all buffers in the unbundled files."));
 
-        SetInternalHandler(CommandHandler.Create<FileSystemInfo[], string, string, string, string, bool, IHost>(Action));
+        SetInternalHandler(CommandHandler.Create<FileSystemInfo[], string, string, string, string, string, bool, IHost>(Action));
     }
 
-    private int Action(FileSystemInfo[] path, string outpath, string pattern, string regex, string hash, bool DEBUG_decompress, IHost host)
+    private int Action(FileSystemInfo[] path, string outpath, string gamepath, string pattern, string regex, string hash, bool DEBUG_decompress, IHost host)
     {
         var serviceProvider = host.Services;
         var logger = serviceProvider.GetRequiredService<ILoggerService>();
@@ -54,7 +55,16 @@ internal class UnbundleCommand : CommandBase
         //Task.WhenAll(consoleFunctions.UnbundleTaskAsync(path, outpath, hash, pattern, regex, DEBUG_decompress)).Wait();#
         throw new NotImplementedException();
 #else
-        return consoleFunctions.UnbundleTask(path, string.IsNullOrEmpty(outpath) ? null : new DirectoryInfo(outpath), hash, pattern, regex, DEBUG_decompress);
+        //return consoleFunctions.UnbundleTask(path, string.IsNullOrEmpty(outpath) ? null : new DirectoryInfo(outpath), hash, pattern, regex, DEBUG_decompress);
+        return consoleFunctions.UnbundleTask(path, new UnbundleTaskOptions
+        {
+            outpath = string.IsNullOrEmpty(outpath) ? null : new DirectoryInfo(outpath),
+            gamepath = gamepath,
+            hash = hash,
+            pattern = pattern,
+            regex = regex,
+            DEBUG_decompress = DEBUG_decompress
+        });
 #endif
     }
 }

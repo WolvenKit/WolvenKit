@@ -1,6 +1,5 @@
 using System.IO;
 using System.Threading.Tasks;
-using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.RED4.Archive;
@@ -22,8 +21,8 @@ namespace WolvenKit.Common.Interfaces
 
         bool RebuildBuffer(RedRelativePath rawRelativePath, DirectoryInfo outDir);
 
-        void ExtractAll(ICyberGameArchive ar, DirectoryInfo outDir, string pattern = "", string regex = "", bool decompressBuffers = false);
-        Task ExtractAllAsync(ICyberGameArchive ar, DirectoryInfo outDir, string pattern = "", string regex = "", bool decompressBuffers = false);
+        void ExtractAll(ICyberGameArchive ar, DirectoryInfo outDir, string? pattern = null, string? regex = null, bool decompressBuffers = false);
+        Task ExtractAllAsync(ICyberGameArchive ar, DirectoryInfo outDir, string? pattern = null, string? regex = null, bool decompressBuffers = false);
 
         public bool UncookSingle(
             ICyberGameArchive archive,

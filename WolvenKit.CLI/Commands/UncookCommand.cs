@@ -27,6 +27,8 @@ internal class UncookCommand : CommandBase
         // TODO revert to DirectoryInfo once System.Commandline is updated https://github.com/dotnet/command-line-api/issues/1872
         AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output directory to extract main files to."));
 
+        AddOption(new Option<string>(new[] { "--gamepath", "-gp" }, "Path to the Cyberpunk 2077 directory."));
+
         AddOption(new Option<string>(new[] { "--raw", "-or" }, "Optional seperate directory to extract raw files to."));
         AddOption(new Option<string>(new[] { "--pattern", "-w" }, "Use optional search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized."));
         AddOption(new Option<string>(new[] { "--regex", "-r" }, "Use optional regex pattern."));
@@ -40,18 +42,18 @@ internal class UncookCommand : CommandBase
         AddOption(new Option<bool>(new[] { "--mesh-export-lod-filter" }, "Filter out lod models."));
         AddOption(new Option<bool>(new[] { "--mesh-export-experimental-merged-export" }, "[EXPERIMENTAL] Merged mesh export. (Only supports Default or WithMaterials, re-import not supported)"));
 
-        SetInternalHandler(CommandHandler.Create<FileSystemInfo[], string, string, EUncookExtension?, ulong, string, string, bool, ECookedFileFormat[], 
+        SetInternalHandler(CommandHandler.Create<FileSystemInfo[], string, string, string, EUncookExtension?, ulong, string, string, bool, ECookedFileFormat[], 
         bool?, MeshExportType?, string, bool?, bool?, IHost>(Action));
     }
 
-    private int Action(FileSystemInfo[] path, string outpath, string raw, EUncookExtension? uext, ulong hash, string pattern,
+    private int Action(FileSystemInfo[] path, string outpath, string gamepath, string raw, EUncookExtension? uext, ulong hash, string pattern,
         string regex, bool unbundle, ECookedFileFormat[] forcebuffers, bool? serialize, MeshExportType? meshExportType, string meshExportMaterialRepo, 
         bool? meshExportLodFilter, bool? meshExportExperimentalMergedExport, IHost host)
     {
         var serviceProvider = host.Services;
         var logger = serviceProvider.GetRequiredService<ILoggerService>();
 
-        if (path == null || path.Length < 1)
+        if ((path == null || path.Length < 1) && string.IsNullOrEmpty(gamepath))
         {
             logger.Error("Please fill in an input path.");
             return ConsoleFunctions.ERROR_BAD_ARGUMENTS;
@@ -62,6 +64,7 @@ internal class UncookCommand : CommandBase
         {
             outpath = string.IsNullOrEmpty(outpath) ? null : new DirectoryInfo(outpath),
             rawOutDir = raw,
+            gamepath = gamepath,
             uext = uext,
             hash = hash,
             pattern = pattern,
