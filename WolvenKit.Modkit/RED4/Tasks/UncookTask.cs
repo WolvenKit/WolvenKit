@@ -18,6 +18,7 @@ public record UncookTaskOptions
     public bool unbundle { get; init; }
     public ECookedFileFormat[]? forcebuffers { get; init; }
     public bool? serialize { get; init; }
+    public MeshExporterType? meshExporterType { get; init; }
     public MeshExportType? meshExportType { get; init; }
     public string? meshExportMaterialRepo { get; init; }
     public bool? meshExportLodFilter { get; init; }
@@ -128,6 +129,17 @@ public partial class ConsoleFunctions
             exportArgs.Get<XbmExportArgs>().UncookExtension = options.uext.Value;
             exportArgs.Get<MlmaskExportArgs>().UncookExtension = options.uext.Value;
             exportArgs.Get<MeshExportArgs>().MaterialUncookExtension = options.uext.Value;
+        }
+
+        if (options.meshExporterType != null)
+        {
+            if (options.meshExporterType == MeshExporterType.REDmod)
+            {
+                _loggerService.Error("When using --mesh-exporter-type REDMod isn't supported");
+                return ERROR_BAD_ARGUMENTS;
+            }
+            
+            exportArgs.Get<MeshExportArgs>().MeshExporter = options.meshExporterType.Value;
         }
 
         if (options.meshExportType != null)
