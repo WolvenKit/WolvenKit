@@ -156,30 +156,8 @@ public partial class ConsoleFunctions
             exportArgs.Get<MeshExportArgs>().LodFilter = true;
         }
 
+        exportArgs.Get<GeneralExportArgs>().MaterialRepositoryPath = string.IsNullOrEmpty(options.meshExportMaterialRepo) ? outDir.FullName : options.meshExportMaterialRepo;
         exportArgs.Get<MeshExportArgs>().MaterialRepo = string.IsNullOrEmpty(options.meshExportMaterialRepo) ? outDir.FullName : options.meshExportMaterialRepo;
-        exportArgs.Get<MeshExportArgs>().ArchiveDepot = basedir.FullName;
-
-        var archiveDepot = exportArgs.Get<MeshExportArgs>().ArchiveDepot;
-        if (!string.IsNullOrEmpty(archiveDepot) && Directory.Exists(archiveDepot))
-        {
-            _archiveManager.LoadFromFolder(new DirectoryInfo(archiveDepot));
-        }
-        else
-        {
-            archiveDepot = exportArgs.Get<MorphTargetExportArgs>().ArchiveDepot;
-            if (!string.IsNullOrEmpty(archiveDepot) && Directory.Exists(archiveDepot))
-            {
-                _archiveManager.LoadFromFolder(new DirectoryInfo(archiveDepot));
-            }
-            else
-            {
-                archiveDepot = exportArgs.Get<AnimationExportArgs>().ArchiveDepot;
-                if (!string.IsNullOrEmpty(archiveDepot) && Directory.Exists(archiveDepot))
-                {
-                    _archiveManager.LoadFromFolder(new DirectoryInfo(archiveDepot));
-                }
-            }
-        }
 
         var result = 0;
         foreach (var gameArchive in _archiveManager.Archives.Items)

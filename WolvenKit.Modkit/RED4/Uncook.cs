@@ -30,13 +30,13 @@ using SharpGLTF.Validation;
 using NAudio.Wave;
 using NAudio.Lame;
 using WolvenKit.RED4.Archive.CR2W;
-using SharpDX;
-using WolvenKit.Common.FNV1A;
 
 namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
+        private readonly ConcurrentDictionary<string, byte> _uncookedLookup = new();
+        
         /// <summary>
         /// Uncooks a single file by hash. This will both extract and uncook the redengine file
         /// </summary>
@@ -357,66 +357,6 @@ namespace WolvenKit.Modkit.RED4
         }
 
         /// <summary>
-        /// Extracts and decompresses buffers of a cr2w file
-        /// uncooks buffers to raw format
-        /// </summary>
-        /// <param name="cr2wFile">the cooked RedEngine file input</param>
-        /// <param name="relPath">if a depot is used the relPath is a relative base path, if no depot is used, the relPath is simply the filename</param>
-        /// <param name="settings">GlobalExportSettings</param>
-        /// <param name="rawOutDir">the output directory. the outfile is combined from the rawOutDir and the relative path</param>
-        /// <param name="forceBuffers"></param>
-        /// <returns></returns>
-        private bool UncookBuffers(CR2WFile cr2wFile, string relPath, GlobalExportArgs settings, DirectoryInfo rawOutDir, ECookedFileFormat[]? forceBuffers = null)
-        {
-            var outfile = new FileInfo(Path.Combine(rawOutDir.FullName, $"{relPath.Replace('\\', Path.DirectorySeparatorChar)}"));
-            if (outfile.Directory == null)
-            {
-                return false;
-            }
-
-            var ext = Path.GetExtension(relPath).TrimStart('.');
-
-            // files where uncook methods are NOT implemented: just extract buffers
-            if (!WolvenTesting.IsTesting)
-            {
-                Directory.CreateDirectory(outfile.Directory.FullName);
-            }
-
-            var isForcedBuffer = forceBuffers != null && forceBuffers.Any() && forceBuffers.Select(format => format.ToString()).Contains(ext);
-            if (!Enum.GetNames(typeof(ECookedFileFormat)).Contains(ext) || isForcedBuffer)
-            {
-                var i = 0;
-
-                foreach (var buffer in cr2wFile.GetBuffers())
-                {
-                    var ms = new MemoryStream();
-                    ms.Write(buffer.GetBytes());
-
-                    var bufferpath = $"{outfile.FullName}.{i}.buffer";
-                    if (!WolvenTesting.IsTesting)
-                    {
-                        using var fs = new FileStream(bufferpath, FileMode.Create, FileAccess.Write);
-                        i++;
-                        ms.Seek(0, SeekOrigin.Begin);
-                        ms.CopyTo(fs);
-                    }
-
-                    ms.Dispose();
-                }
-
-                return true;
-            }
-
-            // handle files where uncook methods ARE implemented
-            if (!Enum.TryParse(ext, true, out ECookedFileFormat extAsEnum))
-            {
-                return false;
-            }
-
-            return InternalUncookBuffers(cr2wFile, relPath, outfile, settings, rawOutDir);
-        }
-
-        /// <summary>
         /// Extracts and decompresses buffers of a cr2w stream
         /// uncooks buffers to raw format
         /// </summary>
@@ -428,6 +368,11 @@ namespace WolvenKit.Modkit.RED4
         /// <returns></returns>
         private bool UncookBuffers(Stream cr2wStream, string relPath, GlobalExportArgs settings, DirectoryInfo rawOutDir, ECookedFileFormat[]? forceBuffers = null)
         {
+            if (IsUncooked(settings.Get<GeneralExportArgs>().MaterialRepositoryPath, rawOutDir.FullName, relPath))
+            {
+                return true;
+            }
+
             var outfile = new FileInfo(Path.Combine(rawOutDir.FullName, $"{relPath.Replace('\\', Path.DirectorySeparatorChar)}"));
             if (outfile.Directory == null)
             {
@@ -469,6 +414,40 @@ namespace WolvenKit.Modkit.RED4
             }
 
             cr2wFile.MetaData.FileName = relPath;
+
+            return UncookBuffers(cr2wFile, relPath, settings, rawOutDir, forceBuffers, true);
+        }
+
+        /// <summary>
+        /// Extracts and decompresses buffers of a cr2w file
+        /// uncooks buffers to raw format
+        /// </summary>
+        /// <param name="cr2wFile">the cooked RedEngine file input</param>
+        /// <param name="relPath">if a depot is used the relPath is a relative base path, if no depot is used, the relPath is simply the filename</param>
+        /// <param name="settings">GlobalExportSettings</param>
+        /// <param name="rawOutDir">the output directory. the outfile is combined from the rawOutDir and the relative path</param>
+        /// <param name="forceBuffers"></param>
+        /// <returns></returns>
+        private bool UncookBuffers(CR2WFile cr2wFile, string relPath, GlobalExportArgs settings, DirectoryInfo rawOutDir, ECookedFileFormat[]? forceBuffers = null, bool ignoreLookup = false)
+        {
+            if (!ignoreLookup && IsUncooked(settings.Get<GeneralExportArgs>().MaterialRepositoryPath, rawOutDir.FullName, relPath))
+            {
+                return true;
+            }
+
+            var outfile = new FileInfo(Path.Combine(rawOutDir.FullName, $"{relPath.Replace('\\', Path.DirectorySeparatorChar)}"));
+            if (outfile.Directory == null)
+            {
+                return false;
+            }
+
+            var ext = Path.GetExtension(relPath).TrimStart('.');
+
+            // files where uncook methods are NOT implemented: just extract buffers
+            if (!WolvenTesting.IsTesting)
+            {
+                Directory.CreateDirectory(outfile.Directory.FullName);
+            }
 
             var isForcedBuffer = forceBuffers != null && forceBuffers.Any() && forceBuffers.Select(format => format.ToString()).Contains(ext);
             if (!Enum.GetNames(typeof(ECookedFileFormat)).Contains(ext) || isForcedBuffer)
@@ -518,6 +497,18 @@ namespace WolvenKit.Modkit.RED4
             }
 
             return InternalUncookBuffers(cr2wFile, relPath, outfile, settings, rawOutDir);
+        }
+
+        public bool IsUncooked(string? depotPath, string destName, string relPath)
+        {
+            if (depotPath is not null &&
+                destName.StartsWith(depotPath) &&
+                !_uncookedLookup.TryAdd(relPath, 0))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private bool InternalUncookBuffers(CR2WFile cr2wFile, string relPath, FileInfo outfile, GlobalExportArgs settings, DirectoryInfo rawOutDir)

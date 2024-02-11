@@ -46,7 +46,15 @@ public class ImportExportHelper
     #region FinalizeArgs
 
     public bool Finalize(GlobalExportArgs args) =>
+        Finalize(args.Get<GeneralExportArgs>()) &&
         Finalize(args.Get<MeshExportArgs>());
+
+    public bool Finalize(GeneralExportArgs args)
+    {
+        args.MaterialRepositoryPath = _settingsManager.MaterialRepositoryPath;
+
+        return true;
+    }
 
     public bool Finalize(MeshExportArgs args)
     {

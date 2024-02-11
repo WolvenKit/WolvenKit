@@ -34,6 +34,11 @@ namespace WolvenKit.Common.Model.Arguments
     {
     }
 
+    public class GeneralExportArgs : ExportArgs
+    {
+        public string? MaterialRepositoryPath { get; set; }
+    }
+
     public class OpusExportArgs : ExportArgs
     {
         private bool _useMod;
@@ -70,12 +75,6 @@ namespace WolvenKit.Common.Model.Arguments
         [Description("If selected the mesh will be exported as GLB, if unchecked as GLTF")]
         [WkitScriptAccess("Binary")]
         public bool IsBinary { get => _isBinary; set => SetProperty(ref _isBinary, value); }
-
-        /// <summary>
-        /// Archive path for Console Morphtarget Export.
-        /// </summary>
-        [Browsable(false)]
-        public string? ArchiveDepot { get; set; }
 
         /// <summary>
         /// String Override to display info in datagrid.
@@ -257,12 +256,6 @@ namespace WolvenKit.Common.Model.Arguments
         public EUncookExtension MaterialUncookExtension { get; set; } = EUncookExtension.png;
 
         /// <summary>
-        /// Optional archive path for WithMaterials Mesh Export.
-        /// </summary>
-        [Browsable(false)]
-        public string? ArchiveDepot { get; set; }
-
-        /// <summary>
         /// Material Repository path for WithMaterials Mesh Export.
         /// </summary>
         [Browsable(false)]
@@ -327,12 +320,6 @@ namespace WolvenKit.Common.Model.Arguments
         [Description("If selected the anims will have the root translations")]
         [WkitScriptAccess()]
         public bool incRootMotion { get; set; } = false;
-
-        /// <summary>
-        /// Archive path for Console Anims Export.
-        /// </summary>
-        [Browsable(false)]
-        public string? ArchiveDepot { get; set; }
 
         /// <summary>
         /// String Override to display info in datagrid.

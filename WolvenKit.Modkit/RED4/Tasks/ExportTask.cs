@@ -81,28 +81,6 @@ public partial class ConsoleFunctions
             exportArgs.Get<MeshExportArgs>().MaterialUncookExtension = uext.Value;
         }
 
-        var archiveDepot = exportArgs.Get<MeshExportArgs>().ArchiveDepot;
-        if (!string.IsNullOrEmpty(archiveDepot) && Directory.Exists(archiveDepot))
-        {
-            _archiveManager.LoadFromFolder(new DirectoryInfo(archiveDepot));
-        }
-        else
-        {
-            archiveDepot = exportArgs.Get<MorphTargetExportArgs>().ArchiveDepot;
-            if (!string.IsNullOrEmpty(archiveDepot) && Directory.Exists(archiveDepot))
-            {
-                _archiveManager.LoadFromFolder(new DirectoryInfo(archiveDepot));
-            }
-            else
-            {
-                archiveDepot = exportArgs.Get<AnimationExportArgs>().ArchiveDepot;
-                if (!string.IsNullOrEmpty(archiveDepot) && Directory.Exists(archiveDepot))
-                {
-                    _archiveManager.LoadFromFolder(new DirectoryInfo(archiveDepot));
-                }
-            }
-        }
-
         var result = 0;
         foreach (var fileInfo in filesToExport)
         {

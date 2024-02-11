@@ -24,8 +24,6 @@ public class MaterialExtractor
     private readonly string _materialRepositoryPath;
     private readonly GlobalExportArgs _globalExportArgs;
 
-    private readonly HashSet<string> _extractedResources = new();
-
     private readonly List<string> _textureList = new();
 
     public MaterialExtractor(ModTools modTools, IArchiveManager archiveManager, string materialRepositoryPath, GlobalExportArgs globalExportArgs)
@@ -227,7 +225,7 @@ public class MaterialExtractor
             var relativePath = GetRelativePath();
             var fullPath = new FileInfo(Path.Combine(_materialRepositoryPath, relativePath));
 
-            if (!_extractedResources.Add(fullPath.FullName) || fullPath.Exists)
+            if (_modTools.IsUncooked(_materialRepositoryPath, fullPath.FullName, relativePath))
             {
                 return relativePath;
             }
