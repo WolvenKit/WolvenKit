@@ -502,7 +502,7 @@ public class AppScriptFunctions : ScriptFunctions
         {
             if (kvp.Value.Get<MeshExportArgs>().MeshExporter == MeshExporterType.REDmod)
             {
-                Task.Run(() => _importExportHelper.Export(new DirectoryInfo(proj.ModDirectory), kvp.Key, new DirectoryInfo(proj.RawDirectory)));
+                Task.Run(() => _importExportHelper.Export(new DirectoryInfo(proj.ModDirectory), kvp.Key, new DirectoryInfo(proj.RawDirectory), kvp.Value.Get<MeshExportArgs>()));
             }
             else
             {

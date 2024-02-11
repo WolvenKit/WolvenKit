@@ -843,6 +843,27 @@ namespace WolvenKit.Modkit.RED4
 
             return true;
         }
+
+        public bool ExportMaterials(CR2WFile cr2w, FileInfo outfile, MeshExportArgs meshExportArgs)
+        {
+            if (meshExportArgs.MaterialRepo is null)
+            {
+                _loggerService.Error("Depot path is not set: Choose a Depot location within Settings for generating materials.");
+                return false;
+            }
+
+            if (cr2w.RootChunk is not CMesh { RenderResourceBlob.Chunk: rendRenderMeshBlob rendblob } cMesh)
+            {
+                return false;
+            }
+
+            var meshesInfo = MeshTools.GetMeshesinfo(rendblob, cMesh);
+
+            ParseMaterials(cr2w, outfile, meshExportArgs.MaterialRepo, meshesInfo, meshExportArgs.MaterialUncookExtension);
+
+            return true;
+        }
+        
         public bool ExportMeshWithRig(CR2WFile cr2w, Stream rigStream, FileInfo outfile, MeshExportArgs meshExportArgs, ValidationMode vmode = ValidationMode.TryFix)
         {
             if (cr2w.RootChunk is not CMesh { RenderResourceBlob.Chunk: rendRenderMeshBlob rendblob } cMesh)

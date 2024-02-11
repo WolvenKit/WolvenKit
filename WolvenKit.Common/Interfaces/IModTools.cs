@@ -61,7 +61,7 @@ namespace WolvenKit.Common.Interfaces
         public Task<bool> ConvertFromJsonAndWriteAsync(FileInfo fileInfo, DirectoryInfo outputDirInfo);
 
         public bool ExportEntity(CR2WFile entFile, CName appearance, FileInfo outfile);
-        
+        public bool ExportMaterials(CR2WFile cr2w, FileInfo outfile, MeshExportArgs meshExportArgs);
     }
 
 }

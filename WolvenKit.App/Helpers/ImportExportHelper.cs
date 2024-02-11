@@ -1,8 +1,6 @@
-﻿using System.IO;
-using System.Linq;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
-using WolvenKit.App.Controllers;
-using WolvenKit.App.Models;
 using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
@@ -15,6 +13,8 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.Helpers;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.Archive.IO;
+using EFileReadErrorCodes = WolvenKit.RED4.Archive.IO.EFileReadErrorCodes;
 
 namespace WolvenKit.App.Helpers;
 
@@ -97,7 +97,7 @@ public class ImportExportHelper
     /// <param name="inputFile"></param>
     /// <param name="outDirectory"></param>
     /// <returns></returns>
-    public async Task<bool> Export(DirectoryInfo depot, FileInfo inputFile, DirectoryInfo outDirectory)
+    public async Task<bool> Export(DirectoryInfo depot, FileInfo inputFile, DirectoryInfo outDirectory, MeshExportArgs meshExportArgs)
     {
         var redModPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
         if (!File.Exists(redModPath))
@@ -108,12 +108,28 @@ public class ImportExportHelper
 
         var redRelative = new RedRelativePath(depot, inputFile.GetRelativePath(depot));
         var outputPath = new RedRelativePath(outDirectory, inputFile.GetRelativePath(depot)).ChangeExtension(EConvertableOutput.fbx.ToString());
+        var xmlPath = new RedRelativePath(outDirectory, inputFile.GetRelativePath(depot)).ChangeExtension("xml");
 
         var outDir = new FileInfo(outputPath.FullPath).Directory;
         Directory.CreateDirectory(outDir.NotNull().FullName);
+        await File.WriteAllTextAsync(xmlPath.FullPath, "");
 
         var args = RedMod.GetExportArgs(depot, redRelative.RelativePath, new FileInfo(outputPath.FullPath));
-        return await ExecuteAsync(redModPath, args);
+        var result = await ExecuteAsync(redModPath, args);
+
+        if (result && meshExportArgs.withMaterials)
+        {
+            await using var fs = File.Open(inputFile.FullName, FileMode.Open);
+            using var cr = new CR2WReader(fs);
+
+            if (cr.ReadFile(out var cr2w) != EFileReadErrorCodes.NoError)
+            {
+                throw new Exception();
+            }
+            _modTools.ExportMaterials(cr2w!, outputPath.ToFileInfo(), meshExportArgs);
+        }
+        
+        return result;
     }
 
     /// <summary>
@@ -158,7 +174,7 @@ public class ImportExportHelper
             _hookService.OnExport(ref cr2wFile, ref args);
             if (args.Get<MeshExportArgs>().MeshExporter == MeshExporterType.REDmod)
             {
-                return await Export(basedir, cr2wFile, rawoutdir!);
+                return await Export(basedir, cr2wFile, rawoutdir!, args.Get<MeshExportArgs>());
             }
 
             return _modTools.Export(cr2wFile, args, basedir, rawoutdir, forcebuffers);
