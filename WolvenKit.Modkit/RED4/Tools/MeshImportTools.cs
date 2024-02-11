@@ -1056,6 +1056,10 @@ namespace WolvenKit.Modkit.RED4
                     }
                 }
             }
+
+            //source mesh renderMasks for updation 
+            var renderMasks = blob.Header.RenderChunkInfos.Select(s => s.RenderMask).ToList();
+
             // removing existing rendChunks
             blob.Header.RenderChunkInfos.Clear();
 
@@ -1065,7 +1069,7 @@ namespace WolvenKit.Modkit.RED4
                 var chunk = new rendChunk
                 {
                     LodMask = (byte)info.LODLvl[i],
-                    RenderMask = Enums.EMeshChunkFlags.MCF_RenderInScene | Enums.EMeshChunkFlags.MCF_RenderInShadows,
+                    RenderMask = renderMasks[i >= renderMasks.Count ? 0 : i],
                     // based upon VertexBlock, subject to change, incremental will be good, for weightcount ++ etc
                     // VertexFactory is really important to be taken care of properly
                     VertexFactory = 2,
