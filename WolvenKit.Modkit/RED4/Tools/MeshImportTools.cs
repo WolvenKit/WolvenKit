@@ -1091,22 +1091,9 @@ namespace WolvenKit.Modkit.RED4
 
                 chunk.ChunkVertices.VertexLayout = new GpuWrapApiVertexLayoutDesc
                 {
-                    //hash and slotmask are not understood/no-interest, subject to change
-                    Hash = 0,
-                    SlotMask = 0
+                    //hash is not understood/no-interest, subject to change
+                    Hash = 0
                 };
-
-                chunk.ChunkVertices.VertexLayout.SlotStrides.Add((byte)info.vpStrides[i]);
-                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(4);
-                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(8);
-                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(8);
-
-                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(info.unknownOffsets[i] == 0 ? (byte)0 : (byte)4);
-
-                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(0);
-                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(0);
-
-                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(info.weightCounts[i] == 0 ? (byte)48 : (byte)64);
 
                 // Position
                 chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
@@ -1295,6 +1282,27 @@ namespace WolvenKit.Modkit.RED4
                     StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_Invalid
                 });
 
+                chunk.ChunkVertices.VertexLayout.SlotStrides = new CStatic<CUInt8>(8);
+                for (var j = 0; j < 8; j++)
+                {
+                    chunk.ChunkVertices.VertexLayout.SlotStrides.Add(0);
+                }
+
+                foreach (var element in chunk.ChunkVertices.VertexLayout.Elements)
+                {
+                    chunk.ChunkVertices.VertexLayout.SlotStrides[element.StreamIndex] += GetDataSize(element.Type);
+                }
+
+                var slotMask = 0;
+                for (var j = 0; j < chunk.ChunkVertices.VertexLayout.SlotStrides.Count; j++)
+                {
+                    if (chunk.ChunkVertices.VertexLayout.SlotStrides[j] > 0)
+                    {
+                        slotMask |= (1 << j);
+                    }
+                }
+                chunk.ChunkVertices.VertexLayout.SlotMask = (uint)slotMask;
+
                 // Adding Chunk
                 blob.Header.RenderChunkInfos.Add(chunk);
             }
@@ -1337,6 +1345,45 @@ namespace WolvenKit.Modkit.RED4
 
             return ms;
         }
+
+        private static CUInt8 GetDataSize(Enums.GpuWrapApiVertexPackingePackingType type) =>
+            type switch
+            {
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Invalid => 0,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Float1 => 4,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Float2 => 8,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Float3 => 12,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Float4 => 16,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Float16_2 => 4,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Float16_4 => 8,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_UShort1 => 2,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_UShort2 => 4,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_UShort4 => 8,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_UShort4N => 8,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Short1 => 2,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Short2 => 4,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Short4 => 8,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Short4N => 8,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_UInt1 => 4,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_UInt2 => 8,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_UInt3 => 12,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_UInt4 => 16,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Int1 => 4,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Int2 => 8,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Int3 => 12,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Int4 => 16,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Color => 4,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_UByte1 => 1,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_UByte1F => 1,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_UByte4 => 4,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_UByte4N => 4,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Byte4N => 4,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Dec4 => 4,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Index16 => throw new NotImplementedException(),
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Index32 => throw new NotImplementedException(),
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Max => throw new NotImplementedException(),
+                _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+            };
 
         private static void VerifyGLTF(ModelRoot model, GltfImportArgs args)
         {
