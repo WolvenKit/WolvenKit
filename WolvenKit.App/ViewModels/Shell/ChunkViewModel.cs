@@ -433,6 +433,16 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public bool ShouldShowArrayOps => IsInArray || IsArray;
 
+    // If shift is not being held and we're a CMeshMaterialEntry or a WorldCompiledEffectPlacemenentInfo, 
+    // show "Duplicate as new item" instead of "Duplicate Selection" 
+    public bool ShouldShowDuplicateAsNew()
+    {
+        if (IsShiftBeingHeld || !IsInArray) return false;
+        return ResolvedData is worldCompiledEffectPlacementInfo || ResolvedData is CMeshMaterialEntry;
+    }
+
+    public bool ShouldShowDuplicate => IsInArray && !ShouldShowDuplicateAsNew();
+
     // When shift is not held, paste into array
     public bool ShouldShowPasteIntoArray => ShouldShowArrayOps && !IsShiftBeingHeld;
 
@@ -3095,6 +3105,50 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         return false;
     }
 
+    /*
+     * QOL: Increment index property in new child
+     */
+    private void AdjustPropertiesAfterPasteAsNewItem(ChunkViewModel? SelectedChildNode)
+    {
+        if (null == SelectedChildNode || SelectedChildNode.ResolvedData is RedDummy || IsShiftBeingHeld)
+        {
+            return;
+        }
+
+        switch (ResolvedData)
+        {
+            // For placement tags: set PlacementTagIndex to previous sibling's plus one
+            case CArray<worldCompiledEffectPlacementInfo> infoArray when
+                SelectedChildNode.ResolvedData is worldCompiledEffectPlacementInfo info:
+
+                var effectsIndex = infoArray
+                    .OrderBy(mat => Int32.Parse(mat.PlacementTagIndex.ToString()))
+                    .Select(mat => mat.PlacementTagIndex)
+                    .Last();
+                info.PlacementTagIndex = effectsIndex + 1;
+                break;
+
+            // For material definitions: Find highest index of local/external material and increment by one
+            case CArray<CMeshMaterialEntry> materialDefinitionArray when
+                SelectedChildNode.ResolvedData is CMeshMaterialEntry materialDefinition:
+            {
+                var materialIndex = materialDefinitionArray
+                    .Where(mat => mat.IsLocalInstance.Equals(materialDefinition.IsLocalInstance))
+                    .OrderBy(mat => Int32.Parse(mat.Index.ToString()))
+                    .Select(mat => mat.Index)
+                    .Last();
+                materialDefinition.Index = materialIndex + 1;
+                break;
+            }
+            default:
+                return;
+        }
+
+        SelectedChildNode.RecalculateProperties();
+        SelectedChildNode.CalculateValue();
+        SelectedChildNode.CalculateDescriptor();
+    }
+
     public void RecalculateProperties(IRedType? selectChild = null, bool expand = true)
     {
         PropertyCount = -1;
@@ -3127,39 +3181,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             dvm.SelectedChunk = prop;
         }
 
-        /*
-         * QOL: Increment index property in new child
-         */
-        switch (ResolvedData)
-        {
-            // For placement tags: set PlacementTagIndex to previous sibling's plus one
-            case CArray<worldCompiledEffectPlacementInfo> infoArray when
-                prop.ResolvedData is worldCompiledEffectPlacementInfo info:
-
-                var effectsIndex = infoArray
-                    .OrderBy(mat => Int32.Parse(mat.PlacementTagIndex.ToString()))
-                    .Select(mat => mat.PlacementTagIndex)
-                    .Last();
-                info.PlacementTagIndex = effectsIndex + 1;
-                prop.RecalculateProperties();
-                break;
-
-            // For material definitions: Find highest index of local/external material and increment by one
-            case CArray<CMeshMaterialEntry> materialDefinitionArray when
-                prop.ResolvedData is CMeshMaterialEntry materialDefinition:
-            {
-                var materialIndex = materialDefinitionArray
-                    .Where(mat => mat.IsLocalInstance.Equals(materialDefinition.IsLocalInstance))
-                    .OrderBy(mat => Int32.Parse(mat.Index.ToString()))
-                    .Select(mat => mat.Index)
-                    .Last();
-                materialDefinition.Index = materialIndex + 1;
-                prop.RecalculateProperties();
-                break;
-            }
-            default:
-                break;
-        }
+        AdjustPropertiesAfterPasteAsNewItem(prop);
     }
 
     public IList<ReferenceSocket> Inputs
