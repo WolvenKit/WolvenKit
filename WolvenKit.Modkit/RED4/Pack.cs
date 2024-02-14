@@ -1,5 +1,6 @@
 using System.IO;
 using WolvenKit.Helpers;
+using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.IO;
 
 namespace WolvenKit.Modkit.RED4
@@ -30,30 +31,44 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            ArchiveWriter writer = new(_hashService, _loggerService);
-
-
-            var ms = new MemoryStream();
-            var archive = writer.WriteArchive(infolder, ms);
-            if (!archive)
+            var outFile = Path.Combine(outpath.FullName, $"{infolder.Name}.archive");
+            if (modname != null)
             {
-                _loggerService.Error($"Could not pack archive");
+                outFile = Path.Combine(outpath.FullName, $"{modname}.archive");
+            }
+            var tmpFile = Path.ChangeExtension(outFile, "tmp");
+
+            if (!FileHelper.SafeDelete(tmpFile, _loggerService) || !FileHelper.SafeDelete(outFile, _loggerService))
+            {
                 return false;
             }
 
-            var outfile = Path.Combine(outpath.FullName, $"{infolder.Name}.archive");
-            if (modname != null)
+            bool success;
+            using (var fs = File.Create(tmpFile))
             {
-                outfile = Path.Combine(outpath.FullName, $"{modname}.archive");
+                ArchiveWriter writer = new(_hashService, _loggerService);
+                success = writer.WriteArchive(infolder, fs);
             }
 
-            if (FileHelper.SafeWrite(ms, outfile, _loggerService))
+            if (!success)
             {
-                _loggerService.Success($"Finished packing {outfile}.");
-                return true;
+                _loggerService.Error("Could not pack archive");
+
+                FileHelper.SafeDelete(tmpFile);
+                return false;
             }
 
-            return false;
+            var moveSuccess = FileHelper.SafeMove(tmpFile, outFile, _loggerService);
+            
+            FileHelper.SafeDelete(tmpFile);
+
+            if (!moveSuccess)
+            {
+                return false;
+            }
+
+            _loggerService.Success($"Finished packing {outFile}.");
+            return true;
         }
     }
 }
