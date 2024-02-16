@@ -1103,12 +1103,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             return false;
         }
 
-        if (_projectManager.ActiveProject is not { } proj)
+        if (_archiveManager.ProjectArchive is not FileSystemArchive projArchive)
         {
             return false;
         }
 
-        var projArchive = proj.AsArchive();
         foreach (var (hash, file) in projArchive.Files)
         {
             if (path != hash)
@@ -1121,7 +1120,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
             if (OpenStream(stream, file.FileName, out var redfile))
             {
-                var fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(redfile, Path.Combine(proj.ModDirectory, file.FileName), this, false);
+                var fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(redfile, Path.Combine(projArchive.Project.ModDirectory, file.FileName), this, false);
                 if (!DockedViews.Contains(fileViewModel))
                 {
                     DockedViews.Add(fileViewModel);

@@ -92,8 +92,7 @@ public partial class ExportViewModel : AbstractExportViewModel
 
     protected override async Task ExecuteProcessBulk(bool all = false)
     {
-        var proj = _projectManager.ActiveProject;
-        if (proj == null)
+        if (_archiveManager.ProjectArchive is not FileSystemArchive projectArchive)
         {
             _loggerService.Error("No project loaded!");
             return;
@@ -109,8 +108,6 @@ public partial class ExportViewModel : AbstractExportViewModel
 
         //prepare a list of failed items
         var failedItems = new List<string>();
-
-        var projectArchive = proj.AsArchive();
 
         var toBeExported = Items
             .Where(_ => all || _.IsChecked)
