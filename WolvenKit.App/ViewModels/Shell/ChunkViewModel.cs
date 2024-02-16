@@ -1841,6 +1841,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
+    [RelayCommand(CanExecute = nameof(CanDuplicateChunk))]
+    private void DuplicateAsNewChunk()
+    {
+        DuplicateChunk();
+        Parent?.GetChildNode(NodeIdxInParent + 1)?.AdjustPropertiesAfterPasteAsNewItem();
+    }
+
     private bool CanCopySelection() => IsInArray && Parent is not null;   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanCopySelection))]
     private void CopySelection()
@@ -2994,6 +3001,22 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         return false;
     }
 
+    /// <summary>
+    /// Will return a ChunkViewModel if the node is an array and the index is valid
+    /// </summary>
+    /// <param name="index">numeric index of target node</param>
+    /// <returns>ChunkViewModel or null</returns>
+    public ChunkViewModel? GetChildNode(int index)
+    {
+        if (!IsArray || TVProperties is not ObservableCollectionExtended<ChunkViewModel> children ||
+            index >= children.Count)
+        {
+            return null;
+        }
+
+        return children[index];
+    }
+
     public bool InsertChild(int index, IRedType item)
     {
         try
@@ -3108,18 +3131,18 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     /*
      * QOL: Increment index property in new child
      */
-    private void AdjustPropertiesAfterPasteAsNewItem(ChunkViewModel? SelectedChildNode)
+    private void AdjustPropertiesAfterPasteAsNewItem()
     {
-        if (null == SelectedChildNode || SelectedChildNode.ResolvedData is RedDummy || IsShiftBeingHeld)
+        if (ResolvedData is RedDummy || IsShiftBeingHeld || Parent?.ResolvedData is not IRedArray)
         {
             return;
         }
 
-        switch (ResolvedData)
+        switch (Parent.ResolvedData)
         {
             // For placement tags: set PlacementTagIndex to previous sibling's plus one
             case CArray<worldCompiledEffectPlacementInfo> infoArray when
-                SelectedChildNode.ResolvedData is worldCompiledEffectPlacementInfo info:
+                ResolvedData is worldCompiledEffectPlacementInfo info:
 
                 var effectsIndex = infoArray
                     .OrderBy(mat => Int32.Parse(mat.PlacementTagIndex.ToString()))
@@ -3130,7 +3153,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
             // For material definitions: Find highest index of local/external material and increment by one
             case CArray<CMeshMaterialEntry> materialDefinitionArray when
-                SelectedChildNode.ResolvedData is CMeshMaterialEntry materialDefinition:
+                ResolvedData is CMeshMaterialEntry materialDefinition:
             {
                 var materialIndex = materialDefinitionArray
                     .Where(mat => mat.IsLocalInstance.Equals(materialDefinition.IsLocalInstance))
@@ -3144,9 +3167,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 return;
         }
 
-        SelectedChildNode.RecalculateProperties();
-        SelectedChildNode.CalculateValue();
-        SelectedChildNode.CalculateDescriptor();
+        RecalculateProperties();
+        CalculateValue();
+        CalculateDescriptor();
     }
 
     public void RecalculateProperties(IRedType? selectChild = null, bool expand = true)
@@ -3180,8 +3203,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             dvm.SelectedChunk = prop;
         }
-
-        AdjustPropertiesAfterPasteAsNewItem(prop);
     }
 
     public IList<ReferenceSocket> Inputs

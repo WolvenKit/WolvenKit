@@ -317,7 +317,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.DuplicateChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Command="{Binding Path=PlacementTarget.Tag.DuplicateAsNewChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Duplicate as new Item"
                     IsCheckable="False"
                     Style="{StaticResource SyncfusionMenuItemStyle}"
