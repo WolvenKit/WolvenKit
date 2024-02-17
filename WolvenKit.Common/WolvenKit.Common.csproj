@@ -24,12 +24,14 @@
     <None Remove="RED3\**" />
     <None Remove="lib\texconv.dll" />
     <None Remove="lib\texconv.pdb" />
+    <None Remove="Resources\basecruids.kark" />
     <None Remove="Resources\missinghashes.txt" />
     <None Remove="Resources\noderefs.kark" />
     <None Remove="Resources\tweakdbstr.kark" />
     <None Remove="Resources\tweakdbstr_add.kark" />
     <None Remove="Resources\unusedhashes.kark" />
     <None Remove="Resources\usedhashes.kark" />
+    <EmbeddedResource Include="Resources\basecruids.kark" />
     <EmbeddedResource Include="Resources\missinghashes.json" />
     <EmbeddedResource Include="Resources\noderefs.kark" />
     <EmbeddedResource Include="Resources\usedhashes.kark" />
