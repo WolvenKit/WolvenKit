@@ -131,8 +131,7 @@ public partial class ImportViewModel : AbstractImportViewModel
             return;
         }
 
-        var proj = _projectManager.ActiveProject;
-        if (proj is null)
+        if (_archiveManager.ProjectArchive is not FileSystemArchive projectArchive)
         {
             _loggerService.Error("No project loaded!");
             return;
@@ -153,8 +152,6 @@ public partial class ImportViewModel : AbstractImportViewModel
 
         //prepare a list of failed items
         var failedItems = new List<string>();
-
-        var projectArchive = proj.AsArchive();
 
         var toBeImported = Items
             .Where(_ => all || _.IsChecked)
