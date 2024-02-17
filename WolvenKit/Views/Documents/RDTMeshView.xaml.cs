@@ -29,22 +29,39 @@ namespace WolvenKit.Views.Documents
 
             this.WhenActivated(disposables =>
             {
-                if (DataContext is RDTMeshViewModel vm)
-                {
-                    SetCurrentValue(ViewModelProperty, vm);
-                    hxViewport.MouseDown3D += vm.MouseDown3D;
-                }
+                HandleActivation();
 
-                if (!ReferenceEquals(hxContentVisual.DataContext, DataContext))
-                {
-                    ViewModel.SelectedAppearance?.ModelGroup.RemoveSelf();
-                }
+                Disposable
+                    .Create(HandleDeactivation)
+                    .DisposeWith(disposables);
 
                 this.OneWayBind(ViewModel,
                         viewModel => viewModel.SelectedAppearance.ModelGroup,
                         view => view.hxContentVisual.ItemsSource)
                     .DisposeWith(disposables);
             });
+        }
+
+        private void HandleActivation()
+        {
+            if (DataContext is RDTMeshViewModel vm)
+            {
+                SetCurrentValue(ViewModelProperty, vm);
+                hxViewport.MouseDown3D += vm.MouseDown3D;
+            }
+
+            if (!ReferenceEquals(hxContentVisual.DataContext, DataContext))
+            {
+                ViewModel.SelectedAppearance?.ModelGroup.RemoveSelf();
+            }
+        }
+
+        private void HandleDeactivation()
+        {
+            if (ViewModel is { } vm)
+            {
+                vm.EffectsManager?.Dispose();
+            }
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
