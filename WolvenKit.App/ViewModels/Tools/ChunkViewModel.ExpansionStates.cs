@@ -58,16 +58,12 @@ public partial class ChunkViewModel : ObservableObject
         switch (ResolvedData)
         {
             // .app: appearance definition (expand components, partsValues, partsOverrides)
-            case CHandle<appearanceAppearanceDefinition> or appearanceAppearanceDefinition:
+            case CHandle<appearanceAppearanceDefinition> or appearanceAppearanceDefinition when _recursionLevel < 2:
             {
                 foreach (var chunkViewModel in properties.Where((prop) =>
-                             prop.Name is "components" or "partsOverrides" or "partsValues"))
+                             prop.Name is "components" or "partsOverrides" or "partsValues" or "visualTags"))
                 {
-                    if (chunkViewModel.Name == "components")
-                    {
-                        chunkViewModel.IsExpanded = isExpanded;
-                    }
-
+                    chunkViewModel.ExpansionStateChangedFromParent = true;
                     chunkViewModel.SetChildExpansionStatesInternal(isExpanded, _recursionLevel);
                 }
 
@@ -93,9 +89,47 @@ public partial class ChunkViewModel : ObservableObject
                 chunkNames.ExpansionStateChangedFromParent = IsExpanded;
                 break;
 
-            // Generic Array
-            case CArray<IRedType> or CArray<appearanceAppearancePart> or CArray<RedBaseClass>
-                or CArray<CHandle<meshMeshAppearance>>:
+            /*
+             * effect info
+             *     - placementInfos
+             */
+            case worldCompiledEffectInfo when _recursionLevel < 2 || !isExpanded:
+                properties.FirstOrDefault(prop => prop.Name == "placementInfos")
+                    ?.SetChildExpansionStatesInternal(isExpanded, _recursionLevel);
+                break;
+            /*
+             * entEffectSpawnerComponent:
+             *    - effectDescs
+             */
+            case entEffectSpawnerComponent when properties.FirstOrDefault(prop => prop.Name == "effectDescs") is
+                { } effectsArray:
+                effectsArray.IsExpanded = isExpanded;
+                if (_recursionLevel == 0 || !isExpanded)
+                {
+                    effectsArray.SetChildExpansionStatesInternal(isExpanded, _recursionLevel);
+                }
+
+                break;
+            /*
+             * effect slots
+             *     - slots
+             */
+            case entSlotComponent when _recursionLevel == 0 || !isExpanded:
+                properties.FirstOrDefault(prop => prop.Name == "slots")
+                    ?.SetChildExpansionStatesInternal(isExpanded, _recursionLevel);
+                break;
+            /*
+             * effect slots
+             *     - slots
+             */
+            case CHandle<entEffectDesc> when _recursionLevel == 0 || !isExpanded:
+                properties.FirstOrDefault(prop => prop.Name == "compiledEffectInfo")
+                    ?.SetChildExpansionStatesInternal(isExpanded, _recursionLevel);
+                break;
+
+            // Components array, or array of effect descriptors
+            case CArray<entIComponent> when _recursionLevel == 0 || !isExpanded:
+            case CArray<CHandle<entEffectDesc>> when _recursionLevel == 0 || !isExpanded:
             {
                 foreach (var chunkViewModel in properties)
                 {
@@ -112,6 +146,23 @@ public partial class ChunkViewModel : ObservableObject
                 foreach (var chunkViewModel in properties)
                 {
                     chunkViewModel.ExpansionStateChangedFromParent = true;
+                    chunkViewModel.SetChildExpansionStatesInternal(isExpanded, _recursionLevel);
+                }
+
+                break;
+            }
+            /*
+             * Generic array, or stuff with just one property
+             */
+            case CArray<IRedType>
+                or CArray<appearanceAppearancePart>
+                or CArray<RedBaseClass>
+                or CArray<CHandle<meshMeshAppearance>>
+                or CArray<CHandle<appearanceAppearanceDefinition>>
+                or CArray<CHandle<entEffectDesc>>:
+            {
+                foreach (var chunkViewModel in properties)
+                {
                     chunkViewModel.SetChildExpansionStatesInternal(isExpanded, _recursionLevel);
                 }
 
