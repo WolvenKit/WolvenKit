@@ -334,44 +334,27 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         }
 
         chunk.IsSelected = true;
-
-        if (SelectedChunks is not IList lst)
+        if (SelectedChunks is IList lst)
         {
-            SelectedChunk = chunk;
-            return;
+            lst.Add(chunk);
         }
 
-        lst.Add(chunk);
-
-        if (lst.Count == 1)
-        {
-            SelectedChunk = chunk;
-        }
+        SelectedChunk = chunk;
     }
 
     public void RemoveFromSelection(ChunkViewModel? chunk)
     {
-        if (chunk is null)
+        if (chunk is not null)
         {
-            return;
+            chunk.IsSelected = false;
         }
 
-        chunk.IsSelected = false;
-
-        if (SelectedChunks is IList lst)
+        if (SelectedChunks is IList lst && chunk is not null)
         {
             lst.Remove(chunk);
-            if (lst.Count == 0)
-            {
-                SelectedChunk = null;
-            }
-            return;
         }
 
-        if (SelectedChunk == chunk)
-        {
-            SelectedChunk = null;
-        }
+        SelectedChunk = null;
     }
 
 
@@ -379,26 +362,27 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     {
         ClearSelection();
         SelectedChunk = chunk;
+        if (SelectedChunks is IList lst)
+        {
+            lst.Add(chunk);
+        }
     }
 
     public void SetSelection(List<ChunkViewModel> chunks)
     {
         ClearSelection();
+
+        // should never happen, but alas, it's nullable
         if (SelectedChunks is not IList lst)
         {
             return;
-        }
-
-        if (chunks.Count == 1)
-        {
-            SelectedChunk = chunks[0];
-            return;
-        }
+        }     
 
         foreach (var chunkViewModel in chunks)
         {
             lst.Add(chunkViewModel);
             chunkViewModel.IsSelected = true;
+            SelectedChunk = chunkViewModel;
         }
     }
 

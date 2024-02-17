@@ -1793,6 +1793,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 return;
             }
 
+            Tab?.ClearSelection();
+
             object copy;
             if (RedDocumentTabViewModel.CopiedChunk is IRedCloneable irc)
             {
@@ -1828,6 +1830,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     Parent.InsertChild(Parent.GetIndexOf(this) + 1, redtype);
                 }
             }
+
+            Tab?.Parent.SetIsDirty(true);
+            Parent?.RecalculateProperties();
         }
         catch (Exception ex)
         { 
