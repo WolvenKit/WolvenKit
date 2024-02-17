@@ -438,15 +438,17 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public bool ShouldShowArrayOps => IsInArray || IsArray;
 
+    //TODO: Unsure which array to use here. Properties? DisplayProperties? TVProperties? What's even the difference?
+    public int[] SelectedNodeIndices =>
+        Properties.Where((x) => x.IsSelected).Select((x) => x.NodeIdxInParent).Where((x) => x > -1).ToArray();
+
     // If shift is not being held and we're a CMeshMaterialEntry or a WorldCompiledEffectPlacemenentInfo, 
     // show "Duplicate as new item" instead of "Duplicate Selection" 
-    public bool ShouldShowDuplicateAsNew()
-    {
-        if (IsShiftBeingHeld || !IsInArray) return false;
-        return ResolvedData is worldCompiledEffectPlacementInfo || ResolvedData is CMeshMaterialEntry;
-    }
+    public bool ShouldShowDuplicateAsNew =>
+        IsInArray && !IsShiftBeingHeld && ResolvedData is worldCompiledEffectPlacementInfo ||
+        ResolvedData is CMeshMaterialEntry;
 
-    public bool ShouldShowDuplicate => IsInArray && !ShouldShowDuplicateAsNew();
+    public bool ShouldShowDuplicate => IsInArray && !ShouldShowDuplicateAsNew;
 
     // When shift is not held, paste into array
     public bool ShouldShowPasteIntoArray => ShouldShowArrayOps && !IsShiftBeingHeld;
@@ -1474,18 +1476,18 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         //                .Where(_ => _.IsSelected)
         //                .Select(_ => _.Data)
         //                .ToList();
-
+        
         var ts = Parent.DisplayProperties
-                        .Where(_ => _.IsSelected)
-                        .Select(_ => _)
-                        .ToList();
+            .Where(_ => _.IsSelected)
+            .Select(_ => _)
+            .ToList();
 
+        List<int> indices = ts.Select(_ => _.NodeIdxInParent).ToList();
+        
         try
         {
             if (Parent.Data is IRedBufferPointer db3 && db3.GetValue().Data is IRedArray dict)
             {
-                //var indices = selection.Select(_ => (int)((worldNodeData)_).NodeIndex).ToList();
-                var indices = ts.Select(_ => _.Name).ToList().ConvertAll(int.Parse);
                 if (indices.Count == 0)
                 {
                     _loggerService.Warning("Please select something first");
@@ -1497,11 +1499,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
             else if (Parent.Data is IRedArray db4)
             {
-                DeleteFullSelection(ts.Select(_ => int.Parse(_.Name)).ToList(), db4);
+                DeleteFullSelection(indices, db4);
             }
             else if (Parent.Data is IRedLegacySingleChannelCurve curve)
             {
-                foreach (var index in ts.Select(x => int.Parse(x.Name)).OrderByDescending(x => x))
+                foreach (var index in indices.OrderByDescending(x => x))
                 {
                     curve.RemoveAt(index);
                 }
@@ -1523,7 +1525,24 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             _loggerService.Warning($"Something went wrong while trying to delete the selection : {ex}");
         }
 
-        Tab.SelectedChunk = Parent;
+        try
+        {
+            Parent.ReindexChildren();
+
+            // If last item is part of the selection, select second-to-last
+            indices = indices.Select((x, idx) => Math.Min(x - (indices.Count - 1), Parent.TVProperties.Count - 1))
+                .ToList();
+
+            List<ChunkViewModel> selectedChunks = Parent.TVProperties
+                .Where(x => indices.Contains(x.NodeIdxInParent))
+                .ToList();
+
+            Tab.SetSelection(selectedChunks);
+        }
+        catch
+        {
+            Tab.SetSelection(Parent);
+        }
     }
 
     private bool CanExportNodeData() => IsInArray && Parent?.Data is DataBuffer rb && Parent?.Parent?.Data is worldStreamingSector && rb.Data is worldNodeDataBuffer;   // TODO RelayCommand check notify
@@ -1827,30 +1846,115 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private bool CanDuplicateChunk() => IsInArray && Parent is not null;   // TODO RelayCommand check notify
-    [RelayCommand(CanExecute = nameof(CanDuplicateChunk))]
-    private void DuplicateChunk()
+    private void DuplicateInParent(int offset = 0)
     {
         if (Parent is null || Data is null)
         {
             return;
         }
 
+        this.IsSelected = false;
+
+        var newIndex = Parent.GetIndexOf(this) + 1 + offset;
+        
         if (Data is IRedCloneable irc)
         {
-            Parent.InsertChild(Parent.GetIndexOf(this) + 1, (IRedType)irc.DeepCopy());
+            Parent.InsertChild(newIndex, (IRedType)irc.DeepCopy());
         }
-        else 
+        else
         {
-            Parent.InsertChild(Parent.GetIndexOf(this) + 1, Data);
+            Parent.InsertChild(newIndex, Data);
         }
+    }
+
+    private bool CanDuplicateChunk() => IsInArray && Parent is not null; // TODO RelayCommand check notify
+
+    [RelayCommand(CanExecute = nameof(CanDuplicateChunk))]
+    private void DuplicateChunk()
+    {
+        if (Parent is null || Tab is not { SelectedChunks: IList lst })
+        {
+            return;
+        }
+
+        try
+        {
+            var ts = Parent.DisplayProperties.Where(property => lst.Contains(property)).ToList();
+
+            var indices = ts.Select(_ => int.Parse(_.Name)).ToList();
+
+            // get selected nodes and order them by node index
+            var fullselection = Parent.TVProperties
+                .Where(_ => indices.Contains(_.NodeIdxInParent) && _.Data is not null)
+                .ToList()
+                .OrderBy(_ => _.NodeIdxInParent);
+
+            Tab.ClearSelection();
+
+            var offset = 0;
+            foreach (var i in fullselection)
+            {
+                i.DuplicateInParent(offset);
+                offset += 1;
+            }
+        }
+        catch (Exception ex)
+        {
+            _loggerService.Error($"Something went wrong while trying to duplicate selection : {ex}");
+            DuplicateInParent();
+        }
+
+        Parent.RecalculateProperties();
     }
 
     [RelayCommand(CanExecute = nameof(CanDuplicateChunk))]
     private void DuplicateAsNewChunk()
     {
+        if (Parent is null) return;
+
         DuplicateChunk();
-        Parent?.GetChildNode(NodeIdxInParent + 1)?.AdjustPropertiesAfterPasteAsNewItem();
+
+        try
+        {
+            // Recalculate properties for all selected nodes 
+            if (Tab is not { SelectedChunks: IList lst })
+            {
+                Parent.GetChildNode(NodeIdxInParent + 1)?.AdjustPropertiesAfterPasteAsNewItem();
+                return;
+            }
+
+            Parent.RecalculateProperties();
+
+            var selectedChunks = lst.OfType<ChunkViewModel>()
+                .OrderBy(g => g.NodeIdxInParent)
+                .GroupBy(x => x.NodeIdxInParent)
+                .Select(g => g.First())
+                .ToList();
+
+            foreach (var i in selectedChunks)
+            {
+                i.AdjustPropertiesAfterPasteAsNewItem();
+                i.IsSelected = true;
+                Parent.RecalculateProperties();
+            }
+        }
+        catch (Exception ex)
+        {
+            _loggerService.Error($"Failed to recalculate properties after duplicating entries: {ex}");
+        }
+    }
+
+    private void ReindexChildren()
+    {
+        if (!IsArray)
+        {
+            return;
+        }
+
+        for (var i = 0; i < this.Properties.Count; i++)
+        {
+            Properties[i].NodeIdxInParent = i;
+        }
     }
 
     private bool CanCopySelection() => IsInArray && Parent is not null;   // TODO RelayCommand check notify
@@ -2087,6 +2191,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         else if (ResolvedData is meshMeshAppearance { ChunkMaterials: not null } appearance)
         {
             Value = string.Join(", ", appearance.ChunkMaterials);
+            Value = $"[{appearance.ChunkMaterials.Count}] {Value}";
             IsValueExtrapolated = true;
         }
         // Material instance (mesh): "[2] - engine\materials\multilayered.mt" (show #keyValuePairs)
@@ -2830,7 +2935,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             return child.NodeIdxInParent;
         }
-
         // It should never come to this now, should it?
         for (var i = 0; i < Properties.Count; i++)
         {
@@ -2840,7 +2944,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 return i;
             }
         }
-
         return -1;
     }
 
@@ -3144,6 +3247,17 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             Tab?.Parent.SetIsDirty(true);
             RecalculateProperties(item);
 
+            // re-number children
+            ReindexChildren();
+
+            if (TVProperties.Count > index && Tab is not null)
+            {
+                var chunkModel = TVProperties.Where((x) => x.NodeIdxInParent == index).LastOrDefault();
+                if (chunkModel is not null && !chunkModel.IsSelected)
+                {
+                    Tab.AddToSelection(chunkModel);
+                }
+            }
             return true;
         }
         catch (Exception ex) { _loggerService.Error(ex); }

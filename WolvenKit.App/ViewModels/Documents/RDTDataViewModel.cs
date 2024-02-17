@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -309,5 +310,102 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         //    }
         //}
     }
+
+    public void ClearSelection()
+    {
+        if (SelectedChunks is IList lst)
+        {
+            foreach (var obj in lst.OfType<ChunkViewModel>())
+            {
+                obj.IsSelected = false;
+            }
+
+            lst.Clear();
+            SelectedChunks = lst;
+        }
+
+        SelectedChunk = null;
+    }
+
+    public void AddToSelection(ChunkViewModel? chunk)
+    {
+        if (chunk is null)
+        {
+            return;
+        }
+
+        chunk.IsSelected = true;
+
+        if (SelectedChunks is not IList lst)
+        {
+            SelectedChunk = chunk;
+            return;
+        }
+
+        lst.Add(chunk);
+        SelectedChunks = lst;
+
+        if (lst.Count == 1)
+        {
+            SelectedChunk = chunk;
+        }
+    }
+
+    public void RemoveFromSelection(ChunkViewModel? chunk)
+    {
+        if (chunk is null)
+        {
+            return;
+        }
+
+        chunk.IsSelected = false;
+
+        if (SelectedChunks is IList lst)
+        {
+            lst.Remove(chunk);
+            if (lst.Count == 0)
+            {
+                SelectedChunk = null;
+            }
+
+            SelectedChunks = lst;
+            return;
+        }
+
+        if (SelectedChunk == chunk)
+        {
+            SelectedChunk = null;
+        }
+    }
+
+
+    public void SetSelection(ChunkViewModel chunk)
+    {
+        ClearSelection();
+        SelectedChunk = chunk;
+    }
+
+    public void SetSelection(List<ChunkViewModel> chunks)
+    {
+        ClearSelection();
+        if (SelectedChunks is not IList lst)
+        {
+            return;
+        }
+
+        if (chunks.Count == 1)
+        {
+            SelectedChunk = chunks[0];
+            return;
+        }
+
+        foreach (var chunkViewModel in chunks)
+        {
+            lst.Add(chunkViewModel);
+            chunkViewModel.IsSelected = true;
+        }
+    }
+
+    
     #endregion
 }
