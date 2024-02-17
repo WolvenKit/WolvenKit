@@ -220,9 +220,7 @@ public partial class ImportViewModel : AbstractImportViewModel
 
         if (_gameController.GetController() is RED4Controller cp77Controller)
         {
-            OpusTools opusTools = new(proj.ModDirectory, proj.RawDirectory, _archiveManager, true);
-
-            return Task.Run(() => opusTools.ImportWavs(wavs.ToArray()));
+            return Task.Run(() => OpusTools.ImportWavs(_archiveManager, wavs, new DirectoryInfo(proj.RawDirectory), new DirectoryInfo(proj.ModDirectory)));
         }
 
         return Task.FromResult(false);
@@ -243,7 +241,7 @@ public partial class ImportViewModel : AbstractImportViewModel
         }
 
         var settings = new GlobalImportArgs().Register(prop);
-        if (!_importExportHelper.Finalize(prop, settings, projectArchive))
+        if (!_importExportHelper.Finalize(prop, settings))
         {
             return false;
         }

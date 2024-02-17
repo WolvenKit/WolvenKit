@@ -377,6 +377,19 @@ public class FileTypeHelper
         return extensions.ToArray();
     }
 
+    public static string[] GetFileExtensions(RedBaseClass resource)
+    {
+        var extensions = new List<string>();
+        foreach (var fileType in FileTypes)
+        {
+            if (fileType.RootType == resource.GetType())
+            {
+                extensions.Add(fileType.Extension.ToString());
+            }
+        }
+        return extensions.ToArray();
+    }
+
     public static Type? GetRootNodeType(string ext)
     {
         if (Enum.TryParse<ERedExtension>(ext, true, out var fileType))
@@ -391,5 +404,20 @@ public class FileTypeHelper
         }
 
         return null;
+    }
+
+    public static bool IsCR2WFile(string ext)
+    {
+        if (ext.StartsWith('.'))
+        {
+            ext = ext[1..];
+        }
+
+        if (!Enum.TryParse<ERedExtension>(ext, true, out var redExtension))
+        {
+            return false;
+        }
+
+        return FileTypes.FirstOrDefault(x => x.Extension == redExtension) != null;
     }
 }

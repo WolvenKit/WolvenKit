@@ -1,41 +1,29 @@
-using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
+using EFileReadErrorCodes = WolvenKit.RED4.Archive.IO.EFileReadErrorCodes;
 
 namespace WolvenKit.Modkit.RED4;
 
+public enum FindFileResult
+{
+    NoError,
+    FileNotFound,
+    NoCR2W
+}
+
+public record FindFileRecord(ICyberGameArchive? Archive, CR2WFile? File, List<IRedImport>? Imports, bool IsEmbedded = false);
+
 public partial class ModTools
 {
-    private enum FindFileResult
+    private FindFileResult TryFindFile(ResourcePath path, out FindFileRecord result, bool excludeCustomArchives = false)
     {
-        NoError,
-        FileNotFound,
-        NoCR2W
-    }
-
-    private class FindFileEntry
-    {
-        public CR2WFile File { get; }
-        public List<IRedImport> Imports { get; }
-
-        public FindFileEntry(CR2WFile file, List<IRedImport> imports)
-        {
-            File = file;
-            Imports = imports;
-        }
-    }
-
-    private FindFileResult TryFindFile(List<ICyberGameArchive> archives, ResourcePath path, out FindFileEntry? result, bool excludeCustomArchives = false)
-    {
-        var status = InternalTryFindFile(archives, path, out result, excludeCustomArchives);
+        var status = InternalTryFindFile(path, out result, excludeCustomArchives);
 
         var pathStr = path.GetResolvedText();
         if (status == FindFileResult.FileNotFound)
@@ -65,64 +53,47 @@ public partial class ModTools
         return status;
     }
 
-    private FindFileResult InternalTryFindFile(List<ICyberGameArchive> archives, ulong hash, out FindFileEntry? result, bool excludeCustomArchives = false)
+    private FindFileResult InternalTryFindFile(ulong hash, out FindFileRecord result, bool excludeCustomArchives = false)
     {
-        result = null;
-
-        foreach (var archive in archives)
+        var gameFile = _archiveManager.GetGameFile(hash, true, !excludeCustomArchives);
+        if (gameFile == null)
         {
-            if (excludeCustomArchives && archive is not Archive)
-            {
-                continue;
-            }
-
-            if (archive.Files.TryGetValue(hash, out var gameFile))
-            {
-                var ms = new MemoryStream();
-                gameFile.Extract(ms);
-                ms.Seek(0, SeekOrigin.Begin);
-
-                using var reader = new CR2WReader(ms);
-                reader.ParsingError += args => args is InvalidDefaultValueEventArgs;
-
-                if (reader.ReadFile(out var file) != EFileReadErrorCodes.NoError)
-                {
-                    return FindFileResult.NoCR2W;
-                }
-
-                ArgumentNullException.ThrowIfNull(file);
-                result = new FindFileEntry(file.NotNull(), reader.ImportsList);
-
-                return FindFileResult.NoError;
-            }
+            result = new FindFileRecord(null, null, null);
+            return FindFileResult.FileNotFound;
         }
 
-        return FindFileResult.FileNotFound;
+        var ms = new MemoryStream();
+        gameFile.Extract(ms);
+        ms.Seek(0, SeekOrigin.Begin);
+
+        using var reader = new CR2WReader(ms);
+        reader.ParsingError += args => args is InvalidDefaultValueEventArgs;
+
+        if (reader.ReadFile(out var file) != EFileReadErrorCodes.NoError)
+        {
+            result = new FindFileRecord(null, null, null);
+            return FindFileResult.NoCR2W;
+        }
+
+        result = new FindFileRecord((ICyberGameArchive)gameFile.GetArchive(), file, reader.ImportsList);
+        return FindFileResult.NoError;
     }
 
-    private bool UncookFile(List<ICyberGameArchive> archives, string path, string matRepo, GlobalExportArgs args, bool excludeCustomArchives = false) => UncookFile(archives, FNV1A64HashAlgorithm.HashString(path), matRepo, args, excludeCustomArchives);
+    private bool UncookFile(string path, string matRepo, GlobalExportArgs args, bool excludeCustomArchives = false) => UncookFile(FNV1A64HashAlgorithm.HashString(path), matRepo, args, excludeCustomArchives);
 
-    private bool UncookFile(List<ICyberGameArchive> archives, ulong hash, string matRepo, GlobalExportArgs args, bool excludeCustomArchives = false)
+    private bool UncookFile(ulong hash, string matRepo, GlobalExportArgs args, bool excludeCustomArchives = false)
     {
-        foreach (var archive in archives)
+        if (InternalTryFindFile(hash, out var result, excludeCustomArchives) != FindFileResult.NoError)
         {
-            if (excludeCustomArchives && archive is not Archive)
-            {
-                continue;
-            }
-
-            if (archive.Files.TryGetValue(hash, out var gameFile))
-            {
-                var di = new DirectoryInfo(matRepo);
-                if (!di.Exists)
-                {
-                    di.Create();
-                }
-
-                return UncookSingle(archive, gameFile.Key, di, args);
-            }
+            return false;
         }
 
-        return false;
+        var di = new DirectoryInfo(matRepo);
+        if (!di.Exists)
+        {
+            di.Create();
+        }
+
+        return UncookSingle(result!.Archive!, hash, di, args);
     }
 }

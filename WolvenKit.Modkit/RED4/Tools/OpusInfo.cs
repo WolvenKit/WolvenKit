@@ -128,7 +128,7 @@ namespace WolvenKit.Modkit.RED4.Opus
             p?.WaitForExit();
         }
 
-        public void WriteOpusToPak(MemoryStream opus, ref Stream pak, uint hash, MemoryStream wav)
+        public void WriteOpusToPak(MemoryStream opus, Stream pak, uint hash, MemoryStream wav)
         {
             var br = new BinaryReader(pak);
             pak.Position = 0;

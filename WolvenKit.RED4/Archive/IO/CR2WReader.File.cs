@@ -2,7 +2,6 @@ using System.Diagnostics;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
-using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
 
@@ -61,7 +60,10 @@ public partial class CR2WReader
 
         foreach (var importInfo in info.ImportInfo)
         {
-            _importsList.Add(ReadImport(importInfo, info.StringDict));
+            var import = ReadImport(importInfo, info.StringDict);
+
+            info.Imports.Add(import);
+            _importsList.Add(import);
         }
 
         return EFileReadErrorCodes.NoError;

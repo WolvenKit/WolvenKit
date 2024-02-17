@@ -166,7 +166,7 @@ public partial class ExportViewModel : AbstractExportViewModel
         }
 
         var settings = new GlobalExportArgs().Register(e);
-        if (!_importExportHelper.Finalize(settings, projectArchive))
+        if (!_importExportHelper.Finalize(settings))
         {
             return false;
         }
@@ -253,8 +253,13 @@ public partial class ExportViewModel : AbstractExportViewModel
         }
 
 
-        OpusTools opusTools = new(_projectManager.ActiveProject.NotNull().ModDirectory, _projectManager.ActiveProject.RawDirectory, _archiveManager, opusExportArgs.UseMod);
-        var availableItems = opusTools.Info.OpusHashes.Select(x => new CollectionItemViewModel<uint>(x));
+        var info = OpusTools.GetOpusInfo(_archiveManager, opusExportArgs.UseMod);
+        if (info == null)
+        {
+            return;
+        }
+
+        var availableItems = info.OpusHashes.Select(x => new CollectionItemViewModel<uint>(x));
 
         // open dialogue
         var result = Interactions.ShowCollectionView((availableItems, selectedItems));

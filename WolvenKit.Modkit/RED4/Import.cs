@@ -507,7 +507,7 @@ namespace WolvenKit.Modkit.RED4
                         result = ImportMorphTargets(rawRelative.ToFileInfo(), redFs, args);
                         break;
                     case GltfImportAsFormat.Anims:
-                        result = ImportAnims(rawRelative.ToFileInfo(), redFs, args.Archives);
+                        result = ImportAnims(rawRelative.ToFileInfo(), redFs);
                         break;
                     case GltfImportAsFormat.MeshWithRig:
                         result = ImportMesh(rawRelative.ToFileInfo(), redFs, args);

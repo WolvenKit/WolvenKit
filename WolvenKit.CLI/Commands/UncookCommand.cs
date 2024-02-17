@@ -1,9 +1,9 @@
 using System.CommandLine;
-using System.CommandLine.NamingConventionBinder;
 using System.IO;
 using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WolvenKit.CLI;
 using WolvenKit.Common;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Interfaces;
@@ -27,6 +27,8 @@ internal class UncookCommand : CommandBase
         // TODO revert to DirectoryInfo once System.Commandline is updated https://github.com/dotnet/command-line-api/issues/1872
         AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output directory to extract main files to."));
 
+        AddOption(new Option<string>(new[] { "--gamepath", "-gp" }, "Path to the Cyberpunk 2077 directory."));
+
         AddOption(new Option<string>(new[] { "--raw", "-or" }, "Optional seperate directory to extract raw files to."));
         AddOption(new Option<string>(new[] { "--pattern", "-w" }, "Use optional search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized."));
         AddOption(new Option<string>(new[] { "--regex", "-r" }, "Use optional regex pattern."));
@@ -35,23 +37,24 @@ internal class UncookCommand : CommandBase
         AddOption(new Option<bool>(new[] { "--unbundle", "-u" }, "Also unbundle files."));
         AddOption(new Option<ECookedFileFormat[]>(new[] { "--forcebuffers", "-fb" }, "Force uncooking to buffers for given extension. e.g. mesh"));
         AddOption(new Option<bool>(new[] { "--serialize", "-s" }, "Serialize to JSON"));
+        AddOption(new Option<MeshExporterType?>(new[] { "--mesh-exporter-type" }, "Mesh exporter type (Default, Experimental)."));
         AddOption(new Option<MeshExportType?>(new[] { "--mesh-export-type" }, "Mesh export type (MeshOnly, WithMaterials (Default), WithRig, Multimesh)."));
         AddOption(new Option<string>(new[] { "--mesh-export-material-repo" }, "Location of the material repo, if not specified, it uses the outpath."));
         AddOption(new Option<bool>(new[] { "--mesh-export-lod-filter" }, "Filter out lod models."));
         AddOption(new Option<bool>(new[] { "--mesh-export-experimental-merged-export" }, "[EXPERIMENTAL] Merged mesh export. (Only supports Default or WithMaterials, re-import not supported)"));
 
-        SetInternalHandler(CommandHandler.Create<FileSystemInfo[], string, string, EUncookExtension?, ulong, string, string, bool, ECookedFileFormat[], 
-        bool?, MeshExportType?, string, bool?, bool?, IHost>(Action));
+        SetInternalHandler(CommandHandlerEx.Create<FileSystemInfo[], string, string, string, EUncookExtension?, ulong, string, string, bool, ECookedFileFormat[], 
+        bool?, MeshExporterType?, MeshExportType?, string, bool?, bool?, IHost>(Action));
     }
 
-    private int Action(FileSystemInfo[] path, string outpath, string raw, EUncookExtension? uext, ulong hash, string pattern,
-        string regex, bool unbundle, ECookedFileFormat[] forcebuffers, bool? serialize, MeshExportType? meshExportType, string meshExportMaterialRepo, 
+    private int Action(FileSystemInfo[] path, string outpath, string gamepath, string raw, EUncookExtension? uext, ulong hash, string pattern,
+        string regex, bool unbundle, ECookedFileFormat[] forcebuffers, bool? serialize, MeshExporterType? meshExporterType, MeshExportType? meshExportType, string meshExportMaterialRepo, 
         bool? meshExportLodFilter, bool? meshExportExperimentalMergedExport, IHost host)
     {
         var serviceProvider = host.Services;
         var logger = serviceProvider.GetRequiredService<ILoggerService>();
 
-        if (path == null || path.Length < 1)
+        if ((path == null || path.Length < 1) && string.IsNullOrEmpty(gamepath))
         {
             logger.Error("Please fill in an input path.");
             return ConsoleFunctions.ERROR_BAD_ARGUMENTS;
@@ -62,6 +65,7 @@ internal class UncookCommand : CommandBase
         {
             outpath = string.IsNullOrEmpty(outpath) ? null : new DirectoryInfo(outpath),
             rawOutDir = raw,
+            gamepath = gamepath,
             uext = uext,
             hash = hash,
             pattern = pattern,
@@ -69,6 +73,7 @@ internal class UncookCommand : CommandBase
             unbundle = unbundle,
             forcebuffers = forcebuffers,
             serialize = serialize,
+            meshExporterType = meshExporterType,
             meshExportType = meshExportType,
             meshExportMaterialRepo = meshExportMaterialRepo,
             meshExportLodFilter = meshExportLodFilter,

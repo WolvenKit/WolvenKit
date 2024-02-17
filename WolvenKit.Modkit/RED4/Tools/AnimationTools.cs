@@ -31,41 +31,21 @@ namespace WolvenKit.Modkit.RED4
 
 #region exportanims
 
-        public bool ExportAnim(Stream animStream, List<ICyberGameArchive> archives, FileInfo outfile, bool isGLBinary = true, bool incRootMotion = true)
-        {
-            var animsFile = _parserService.ReadRed4File(animStream);
-            return animsFile is { RootChunk: animAnimSet anims } && ExportAnim(animsFile, archives, outfile, isGLBinary, incRootMotion);
-        }
-
-        public bool ExportAnim(CR2WFile animsFile, List<ICyberGameArchive> archives, FileInfo outfile, bool isGLBinary = true, bool incRootMotion = true, ValidationMode vmode = ValidationMode.TryFix)
+        public bool ExportAnim(CR2WFile animsFile, FileInfo outfile, bool isGLBinary = true, bool incRootMotion = true, ValidationMode vmode = ValidationMode.TryFix)
         {
             if (animsFile.RootChunk is not animAnimSet anims)
             {
                 return false;
             }
 
-            CR2WFile? rigFile = null;
-            foreach (var ar in archives)
-            {
-                if (ar.Files.TryGetValue(anims.Rig.DepotPath, out var gameFile))
-                {
-                    var ms = new MemoryStream();
-                    gameFile.Extract(ms);
-                    if (_parserService.TryReadRed4File(ms, out rigFile))
-                    {
-                        break;
-                    }
-                }
-            }
-
-            if (rigFile is null)
+            if (TryFindFile(anims.Rig.DepotPath, out var result) != FindFileResult.NoError)
             {
                 _loggerService.Warning("No rig found");
                 return false;
             }
 
             var model = ModelRoot.CreateModel();
-            GetAnimation(animsFile, rigFile, outfile.Name, ref model, true, incRootMotion);
+            GetAnimation(animsFile, result.File!, outfile.Name, ref model, true, incRootMotion);
 
             if (isGLBinary)
             {
@@ -183,7 +163,7 @@ namespace WolvenKit.Modkit.RED4
 
 #region importanims
 
-        public bool ImportAnims(FileInfo gltfFile, Stream animStream, List<ICyberGameArchive> archives)
+        public bool ImportAnims(FileInfo gltfFile, Stream animStream)
         {
             var animsArchive = _parserService.ReadRed4File(animStream);
             if (animsArchive is not { RootChunk: animAnimSet anims })
@@ -191,31 +171,17 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            CR2WFile? rigArchive = null;
-            // find first rig in archives
-            foreach (var ar in archives)
-            {
-                if (ar.Files.TryGetValue(anims.Rig.DepotPath, out var gameFile))
-                {
-                    var ms = new MemoryStream();
-                    gameFile.Extract(ms);
-                    if (_parserService.TryReadRed4File(ms, out rigArchive))
-                    {
-                        break;
-                    }
-                }
-            }
-
             var gltfFileName = gltfFile.Name;
             var rigFileName = anims.Rig.DepotPath.GetResolvedText() ?? "<unknown rig depotpath??>";
 
-            if (rigArchive is null)
+            // find first rig in archives
+            if (TryFindFile(anims.Rig.DepotPath, out var result) != FindFileResult.NoError)
             {
                 _loggerService.Error($"{gltfFileName}: No rig found for {rigFileName}, can't import animations!");
                 return false;
             }
 
-            var rig = RIG.ProcessRig(rigArchive);
+            var rig = RIG.ProcessRig(result.File!);
             if (rig is null || rig.BoneCount < 1)
             {
                 _loggerService.Error($"{gltfFileName}: couldn't process rig from {rigFileName}, can't import anims!");

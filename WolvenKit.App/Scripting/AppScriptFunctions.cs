@@ -475,11 +475,6 @@ public class AppScriptFunctions : ScriptFunctions
             return;
         }
 
-        if (_archiveManager.ProjectArchive is not FileSystemArchive projectArchive)
-        {
-            throw new Exception();
-        }
-
         var fileDict = new Dictionary<FileInfo, GlobalExportArgs>();
         foreach (var entry in fileList)
         {
@@ -487,20 +482,20 @@ public class AppScriptFunctions : ScriptFunctions
             {
                 if (settingsPair is [string filePath1])
                 {
-                    AddFile(filePath1, projectArchive, defaultSettings);
+                    AddFile(filePath1, defaultSettings);
                     continue;
                 }
 
                 if (settingsPair is [string filePath2, ScriptObject settings])
                 {
-                    AddFile(filePath2, projectArchive, settings);
+                    AddFile(filePath2, settings);
                     continue;
                 }
             }
 
             if (entry is string fileStr)
             {
-                AddFile(fileStr, projectArchive, defaultSettings);
+                AddFile(fileStr, defaultSettings);
                 continue;
             }
 
@@ -511,7 +506,7 @@ public class AppScriptFunctions : ScriptFunctions
         {
             if (kvp.Value.Get<MeshExportArgs>().MeshExporter == MeshExporterType.REDmod)
             {
-                Task.Run(() => _importExportHelper.Export(new DirectoryInfo(proj.ModDirectory), kvp.Key, new DirectoryInfo(proj.RawDirectory)));
+                Task.Run(() => _importExportHelper.Export(new DirectoryInfo(proj.ModDirectory), kvp.Key, new DirectoryInfo(proj.RawDirectory), kvp.Value.Get<MeshExportArgs>()));
             }
             else
             {
@@ -519,7 +514,7 @@ public class AppScriptFunctions : ScriptFunctions
             }
         });
 
-        void AddFile(string filePath, FileSystemArchive projectArchive, ScriptObject? settings = null)
+        void AddFile(string filePath, ScriptObject? settings = null)
         {
             var fileInfo = new FileInfo(Path.Combine(proj.ModDirectory, filePath));
             if (!fileInfo.Exists)
@@ -535,7 +530,7 @@ public class AppScriptFunctions : ScriptFunctions
             }
 
             var globalExport = settings != null ? GetGlobalExportArgs(settings) : new GlobalExportArgs();
-            _importExportHelper.Finalize(globalExport, projectArchive);
+            _importExportHelper.Finalize(globalExport);
 
             fileDict.Add(fileInfo, globalExport);
         }

@@ -184,10 +184,7 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
         [JsonConstructor]
         public MatData()
         {
-            Header = new MaterialDataHeader
-            {
-                MaterialJsonVersion = SemVersion.Parse("0.0.0", SemVersionStyles.Strict)
-            };
+            Header = new MaterialDataHeader();
             MaterialRepo = "";
             Materials = new List<RawMaterial>();
             TexturesList = new List<string>();

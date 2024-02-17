@@ -47,7 +47,6 @@ public partial class ConsoleFunctions
 
         #endregion checks
 
-        List<FileInfo> archiveFileInfos;
         switch (path)
         {
             case FileInfo file:
@@ -56,11 +55,11 @@ public partial class ConsoleFunctions
                     _loggerService.Error("Input file is not an .archive.");
                     return ConsoleFunctions.ERROR_BAD_ARGUMENTS;
                 }
-                archiveFileInfos = new List<FileInfo> { file };
+                _archiveManager.LoadArchive(file.FullName);
 
                 break;
             case DirectoryInfo directory:
-                archiveFileInfos = directory.GetFiles().Where(_ => _.Extension == ".archive").ToList();
+                var archiveFileInfos = directory.GetFiles().Where(_ => _.Extension == ".archive").ToList();
 
                 if (archiveFileInfos.Count == 0)
                 {
@@ -68,21 +67,16 @@ public partial class ConsoleFunctions
                     return ERROR_BAD_ARGUMENTS;
                 }
 
+                _archiveManager.LoadFromFolder(directory);
+
                 break;
             default:
                 _loggerService.Error("Not a valid file or directory name.");
                 return ERROR_BAD_ARGUMENTS;
         }
 
-        foreach (var processedarchive in archiveFileInfos)
+        foreach (var ar in _archiveManager.Archives.Items)
         {
-            // read archive
-            var ar = _wolvenkitFileService.ReadRed4Archive(processedarchive.FullName, _hashService);
-            if (ar is null)
-            {
-                _loggerService.Error($"Could not parse {processedarchive.FullName}");
-                continue;
-            }
             // run
 
             // check search pattern then regex
