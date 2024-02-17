@@ -66,6 +66,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     private readonly ITweakDBService _tweakDbService;
     private readonly ILocKeyService _locKeyService;
     private readonly Red4ParserService _parserService;
+    private readonly CRUIDService _cruidService;
 
     private static readonly List<string> s_hiddenProperties = new() 
     { 
@@ -102,6 +103,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
         Red4ParserService parserService,
+        CRUIDService cruidService,
         ChunkViewModel? parent = null,
         bool isReadOnly = false
     )
@@ -117,6 +119,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         _tweakDbService = tweakDbService;
         _locKeyService = locKeyService;
         _parserService = parserService;
+        _cruidService = cruidService;
 
         _appViewModel = appViewModel;
         _data = data;
@@ -158,11 +161,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
         Red4ParserService parserService,
+        CRUIDService cruidService,
         bool isReadOnly = false
         ) 
         : this(data, nameof(RDTDataViewModel), appViewModel,
             chunkViewmodelFactory, tabViewmodelFactory, hashService, loggerService, projectManager,
-            gameController, settingsManager, archiveManager, tweakDbService, locKeyService, parserService, null,
+            gameController, settingsManager, archiveManager, tweakDbService, locKeyService, parserService, cruidService, null,
             isReadOnly
               )
     {
@@ -192,11 +196,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
         Red4ParserService parserService,
+        CRUIDService cruidService,
         bool isReadOnly = false
         ) 
         : this(export, nameof(ReferenceSocket), appViewModel,
               chunkViewmodelFactory, tabViewmodelFactory, hashService, loggerService, projectManager,
-              gameController, settingsManager, archiveManager, tweakDbService, locKeyService, parserService, null, isReadOnly
+              gameController, settingsManager, archiveManager, tweakDbService, locKeyService, parserService, cruidService, null, isReadOnly
               )
     {
         Socket = socket;
@@ -2008,6 +2013,19 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
         }
         catch (Exception ex) { _loggerService.Error(ex); }
+    }
+
+    private bool CanGenerateCRUID() => PropertyType == typeof(CRUID);
+
+    [RelayCommand(CanExecute = nameof(CanGenerateCRUID))]
+    private void GenerateCRUID()
+    {
+        if (!CanGenerateCRUID())
+        {
+            return;
+        }
+        
+        Data = _cruidService.GenerateNewCRUID();
     }
 
     #endregion

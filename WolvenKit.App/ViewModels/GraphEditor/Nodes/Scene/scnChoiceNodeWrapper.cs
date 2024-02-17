@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
@@ -79,7 +80,7 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
         var random = new Random();
 
         // VariantId is 4 higher then LocstringId, doesn't seem important
-        var cruid = (CRUID)(ulong)random.NextInt64();
+        var cruid = (CRUID)random.NextCRUID();
 
         // needs to be 256 higher, if lower the previous text is used, if higher nothing is shown...
         var id = _sceneResource.ScreenplayStore.Options[^1].ItemId.Id + 256;
