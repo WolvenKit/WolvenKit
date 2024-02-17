@@ -364,14 +364,17 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     #region Properties
 
-    public ObservableCollectionExtended<ChunkViewModel> Properties { get; } = new();
-
     public ObservableCollectionExtended<ChunkViewModel> SelfList { get; set; } = new();
 
     public ObservableCollectionExtended<ChunkViewModel> TempList { get; set; } = new();
 
+    // Full list of properties (TVProperties + DisplayProperties)
+    public ObservableCollectionExtended<ChunkViewModel> Properties { get; } = new();
+
+    // Tree view properties (for the panel on the left)
     public ObservableCollectionExtended<ChunkViewModel> TVProperties => _propertiesLoaded ? Properties : TempList;
 
+    // DisplayProperties (for the panel on the right)
     public ObservableCollectionExtended<ChunkViewModel> DisplayProperties => MightHaveChildren() ? Properties : SelfList;
 
     // Fix annoying "Property not found" error spam
@@ -438,7 +441,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public bool ShouldShowArrayOps => IsInArray || IsArray;
 
-    //TODO: Unsure which array to use here. Properties? DisplayProperties? TVProperties? What's even the difference?
+    // Iterate over _all_ properties
     public int[] SelectedNodeIndices =>
         Properties.Where((x) => x.IsSelected).Select((x) => x.NodeIdxInParent).Where((x) => x > -1).ToArray();
 
@@ -3134,7 +3137,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     /// <returns>ChunkViewModel or null</returns>
     public ChunkViewModel? GetChildNode(int index)
     {
-        if (!IsArray || TVProperties is not ObservableCollectionExtended<ChunkViewModel> children ||
+        if (!IsArray || Properties is not ObservableCollectionExtended<ChunkViewModel> children ||
             index >= children.Count)
         {
             return null;
@@ -3250,10 +3253,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             // re-number children
             ReindexChildren();
 
-            if (TVProperties.Count > index && Tab is not null)
+            if (Properties.Count > index && Tab is not null)
             {
-                var chunkModel = TVProperties.Where((x) => x.NodeIdxInParent == index).LastOrDefault();
-                if (chunkModel is not null && !chunkModel.IsSelected)
+                // New item will have "isSelected" active because it's a new node
+                var chunkModel = Properties.Where((x) => x.IsSelected && x.NodeIdxInParent == index).LastOrDefault();
+                if (chunkModel is not null)
                 {
                     Tab.AddToSelection(chunkModel);
                 }

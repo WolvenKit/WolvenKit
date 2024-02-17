@@ -321,7 +321,6 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
             }
 
             lst.Clear();
-            SelectedChunks = lst;
         }
 
         SelectedChunk = null;
@@ -343,7 +342,6 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         }
 
         lst.Add(chunk);
-        SelectedChunks = lst;
 
         if (lst.Count == 1)
         {
@@ -367,8 +365,6 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
             {
                 SelectedChunk = null;
             }
-
-            SelectedChunks = lst;
             return;
         }
 
