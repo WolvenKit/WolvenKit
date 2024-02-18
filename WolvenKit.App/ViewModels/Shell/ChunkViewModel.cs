@@ -368,7 +368,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public ObservableCollectionExtended<ChunkViewModel> TempList { get; set; } = new();
 
-    // Full list of properties (TVProperties + DisplayProperties)
+    // Full list of properties
     public ObservableCollectionExtended<ChunkViewModel> Properties { get; } = new();
 
     // Tree view properties (for the panel on the left)
@@ -1528,24 +1528,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             _loggerService.Warning($"Something went wrong while trying to delete the selection : {ex}");
         }
 
-        try
-        {
-            Parent.ReindexChildren();
-
-            // If last item is part of the selection, select second-to-last
-            indices = indices.Select((x, idx) => Math.Min(x - (indices.Count - 1), Parent.TVProperties.Count - 1))
-                .ToList();
-
-            List<ChunkViewModel> selectedChunks = Parent.TVProperties
-                .Where(x => indices.Contains(x.NodeIdxInParent))
-                .ToList();
-
-            Tab.SetSelection(selectedChunks);
-        }
-        catch
-        {
-            Tab.SetSelection(Parent);
-        }
+        Parent.ReindexChildren();
     }
 
     private bool CanExportNodeData() => IsInArray && Parent?.Data is DataBuffer rb && Parent?.Parent?.Data is worldStreamingSector && rb.Data is worldNodeDataBuffer;   // TODO RelayCommand check notify
@@ -1854,24 +1837,27 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private void DuplicateInParent(int offset = 0)
+    private void DuplicateInParent(int index = -1)
     {
         if (Parent is null || Data is null)
         {
             return;
         }
 
-        this.IsSelected = false;
+        IsSelected = false;
 
-        var newIndex = Parent.GetIndexOf(this) + 1 + offset;
+        if (index == -1)
+        {
+            index = NodeIdxInParent + 1;
+        }
         
         if (Data is IRedCloneable irc)
         {
-            Parent.InsertChild(newIndex, (IRedType)irc.DeepCopy());
+            Parent.InsertChild(index, (IRedType)irc.DeepCopy());
         }
         else
         {
-            Parent.InsertChild(newIndex, Data);
+            Parent.InsertChild(index, Data);
         }
     }
 
@@ -1885,30 +1871,25 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
-        try
+        // get selected nodes and order them by node index
+        var fullSelection = Parent.TVProperties
+            .Where(lst.Contains)
+            .OrderBy(x => x.NodeIdxInParent)
+            .ToList();
+
+        Tab.ClearSelection();
+        
+        if (fullSelection.Count > 0)
         {
-            var ts = Parent.DisplayProperties.Where(property => lst.Contains(property)).ToList();
-
-            var indices = ts.Select(_ => int.Parse(_.Name)).ToList();
-
-            // get selected nodes and order them by node index
-            var fullselection = Parent.TVProperties
-                .Where(_ => indices.Contains(_.NodeIdxInParent) && _.Data is not null)
-                .ToList()
-                .OrderBy(_ => _.NodeIdxInParent);
-
-            Tab.ClearSelection();
-
-            var offset = 0;
-            foreach (var i in fullselection)
+            var index = fullSelection[^1].NodeIdxInParent + 1;
+            foreach (var i in fullSelection)
             {
-                i.DuplicateInParent(offset);
-                offset += 1;
+                i.DuplicateInParent(index++);
             }
         }
-        catch (Exception ex)
+        else
         {
-            _loggerService.Error($"Something went wrong while trying to duplicate selection : {ex}");
+            // Duplicates the item which is clicked on, even if its not selected
             DuplicateInParent();
         }
 
@@ -3260,8 +3241,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
             if (Properties.Count > index && Tab is not null)
             {
-                // New item will have "isSelected" active because it's a new node
-                var chunkModel = Properties.Where((x) => x.IsSelected && x.NodeIdxInParent == index).LastOrDefault();
+                var chunkModel = Properties.LastOrDefault(x => x.NodeIdxInParent == index);
                 if (chunkModel is not null)
                 {
                     Tab.AddToSelection(chunkModel);
