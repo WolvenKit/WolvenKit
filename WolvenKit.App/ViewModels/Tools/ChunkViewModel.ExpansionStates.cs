@@ -84,7 +84,7 @@ public partial class ChunkViewModel : ObservableObject
                 properties.Last().SetChildExpansionStatesInternal(isExpanded, _recursionLevel);
                 break;
             // mesh: appearances
-            case CHandle<meshMeshAppearance> when properties.First() is { } chunkNames:
+            case CHandle<meshMeshAppearance> or meshMeshAppearance when properties.First() is { } chunkNames:
                 chunkNames.IsExpanded = this.IsExpanded;
                 chunkNames.ExpansionStateChangedFromParent = IsExpanded;
                 break;

@@ -308,7 +308,7 @@
                 </MenuItem>
                 <MenuItem
                     Command="{Binding Path=PlacementTarget.Tag.DuplicateChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Duplicate Item in Array/Buffer"
+                    Header="Duplicate Item(s) in Array/Buffer"
                     IsCheckable="False"
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowDuplicate, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -318,7 +318,7 @@
                 </MenuItem>
                 <MenuItem
                     Command="{Binding Path=PlacementTarget.Tag.DuplicateAsNewChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Duplicate as new Item"
+                    Header="Duplicate as new Item(s)"
                     IsCheckable="False"
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowDuplicateAsNew, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
