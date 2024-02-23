@@ -114,96 +114,123 @@ public class MaterialExtractor
         return materialData;
     }
 
+    private const string s_defaultMaterialPath =
+        @"base\environment\architecture\common\int\int_nkt_jp_corridor_a\materials\debug_to_replace.mi";
+
+    private static readonly CR2WFile s_defaultMaterialFile = new() { MetaData = { FileName = s_defaultMaterialPath } };
+
+    private static readonly IMaterial s_defaultMaterialInstance =
+        new CMaterialInstance() { BaseMaterial = new CResourceReference<IMaterial>(s_defaultMaterialPath) };
+
+    private static readonly IRedRef
+        s_defaultMaterialRef = new CResourceReference<CMaterialTemplate>(new ResourcePath());
+
+    private static string? s_defaultResourceExtraction = null;
+
     private (RawMaterial mergedMaterial, RawMaterial template) MergeMaterialChain(CR2WFile parentFile, IMaterial material)
     {
         RawMaterial mergedMaterial = null!, template = null!;
 
-        if (material is CMaterialInstance cMaterialInstance)
+        switch (material)
         {
-            if (cMaterialInstance.BaseMaterial.DepotPath != ResourcePath.Empty)
+            case CMaterialInstance cMaterialInstance:
             {
+                // If material is empty, invalid, or if it's using a "none" material (for file validation), 
+                // fall back to default material
+                if (cMaterialInstance.BaseMaterial.DepotPath == ResourcePath.Empty)
+                {
+                    cMaterialInstance.BaseMaterial = new CResourceReference<IMaterial>(s_defaultMaterialPath);
+                }
+                
                 var status = TryFindFile2(parentFile, cMaterialInstance.BaseMaterial, out var result);
-                if (status == FindFileResult.NoCR2W)
+                if (status == FindFileResult.NoCR2W || status == FindFileResult.FileNotFound ||
+                    result.File!.RootChunk is not IMaterial childMaterial)
                 {
-                    throw new Exception($"Error while parsing the file: {cMaterialInstance.BaseMaterial.DepotPath.GetResolvedText()}");
-                }
-                if (status == FindFileResult.FileNotFound)
-                {
-                    throw new Exception($"Error while finding the file: {cMaterialInstance.BaseMaterial.DepotPath.GetResolvedText()}");
-                }
-
-                if (result.File!.RootChunk is not IMaterial childMaterial)
-                {
-                    throw new Exception("???");
-                }
-
-                (mergedMaterial, template) = MergeMaterialChain(result.File, childMaterial);
-            }
-
-            mergedMaterial.BaseMaterial = cMaterialInstance.BaseMaterial.DepotPath.GetResolvedText()!;
-            mergedMaterial.EnableMask = (bool)template.EnableMask! && (bool)cMaterialInstance.EnableMask;
-
-            foreach (var pair in cMaterialInstance.Values)
-            {
-                // could compare if it differs but meh
-                if (pair.Value is IRedRef resourceReference && resourceReference.DepotPath != ResourcePath.Empty)
-                {
-                    mergedMaterial.Data![pair.Key.GetResolvedText()!] = ExtractResource(resourceReference);
+                    // If there's anything wrong with the file, we're falling back to the default material 
+                    (mergedMaterial, template) = MergeMaterialChain(s_defaultMaterialFile, s_defaultMaterialInstance);
                 }
                 else
                 {
-                    mergedMaterial.Data![pair.Key.GetResolvedText()!] = GetSerializableValue(pair.Value);
+                    (mergedMaterial, template) = MergeMaterialChain(result.File, childMaterial);
                 }
-            }
 
-            return (mergedMaterial, template);
-        }
+                mergedMaterial.BaseMaterial = cMaterialInstance.BaseMaterial.DepotPath.GetResolvedText()!;
+                mergedMaterial.EnableMask = (bool)template.EnableMask! && (bool)cMaterialInstance.EnableMask;
 
-        if (material is CMaterialTemplate cMaterialTemplate)
-        {
-            mergedMaterial = new RawMaterial
-            {
-                BaseMaterial = parentFile.MetaData.FileName,
-                MaterialTemplate = parentFile.MetaData.FileName,
-                Data = new Dictionary<string, object?>()
-            };
-
-            template = new RawMaterial
-            {
-                Name = parentFile.MetaData.FileName,
-                Data = new Dictionary<string, object?>(),
-                EnableMask = cMaterialTemplate.CanBeMasked
-            };
-
-            var usedParameterNames = new List<string>();
-            foreach (var usedParameter in cMaterialTemplate.UsedParameters[2])
-            {
-                usedParameterNames.Add(usedParameter.Name.GetResolvedText()!);
-            }
-
-            foreach (var parameterHandle in cMaterialTemplate.Parameters[2].NotNull())
-            {
-                var refer = parameterHandle.Chunk!;
-                if (usedParameterNames.Contains(refer.ParameterName.GetResolvedText()!))
+                foreach (var pair in cMaterialInstance.Values)
                 {
-                    object? value = GetMaterialParameterValue(refer);
-
-                    if (value is IRedRef resourceReference && resourceReference.DepotPath != ResourcePath.Empty)
+                    // could compare if it differs but meh
+                    if (pair.Value is IRedRef resourceReference && resourceReference.DepotPath != ResourcePath.Empty)
                     {
-                        value = ExtractResource(resourceReference);
+                        var key = pair.Key.GetResolvedText()!;
+                        try
+                        {
+                            mergedMaterial.Data![key] = ExtractResource(resourceReference);
+                        }
+                        catch
+                        {
+                            s_defaultResourceExtraction ??= ExtractResource(s_defaultMaterialRef);
+                            mergedMaterial.Data![key] = s_defaultResourceExtraction;
+                        }
                     }
-
-                    if (value is IRedType redValue)
+                    else
                     {
-                        value = GetSerializableValue(redValue);
+                        mergedMaterial.Data![pair.Key.GetResolvedText()!] = GetSerializableValue(pair.Value);
                     }
-
-                    mergedMaterial.Data.Add(refer.ParameterName.GetResolvedText()!, value);
-                    template.Data.Add(refer.ParameterName.GetResolvedText()!, value);
                 }
-            }
 
-            return (mergedMaterial, template);
+                return (mergedMaterial, template);
+            }
+            case CMaterialTemplate cMaterialTemplate:
+            {
+                var fileName = (parentFile.MetaData.FileName ?? string.Empty).ToLower().Replace("none", "");
+                if (fileName == string.Empty)
+                {
+                    fileName = s_defaultMaterialPath;
+                }
+
+                mergedMaterial = new RawMaterial
+                {
+                    BaseMaterial = fileName, MaterialTemplate = fileName, Data = new Dictionary<string, object?>()
+                };
+
+                template = new RawMaterial
+                {
+                    Name = fileName,
+                    Data = new Dictionary<string, object?>(),
+                    EnableMask = cMaterialTemplate.CanBeMasked
+                };
+
+                var usedParameterNames = new List<string>();
+                foreach (var usedParameter in cMaterialTemplate.UsedParameters[2])
+                {
+                    usedParameterNames.Add(usedParameter.Name.GetResolvedText()!);
+                }
+
+                foreach (var parameterHandle in cMaterialTemplate.Parameters[2].NotNull())
+                {
+                    var refer = parameterHandle.Chunk!;
+                    if (usedParameterNames.Contains(refer.ParameterName.GetResolvedText()!))
+                    {
+                        object? value = GetMaterialParameterValue(refer);
+
+                        if (value is IRedRef resourceReference && resourceReference.DepotPath != ResourcePath.Empty)
+                        {
+                            value = ExtractResource(resourceReference);
+                        }
+
+                        if (value is IRedType redValue)
+                        {
+                            value = GetSerializableValue(redValue);
+                        }
+
+                        mergedMaterial.Data.Add(refer.ParameterName.GetResolvedText()!, value);
+                        template.Data.Add(refer.ParameterName.GetResolvedText()!, value);
+                    }
+                }
+
+                return (mergedMaterial, template);
+            }
         }
 
         throw new Exception("???");
