@@ -459,6 +459,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     // When shift is being held, overwrite array with selection
     public bool ShouldShowOverwriteArray => ShouldShowArrayOps && IsShiftBeingHeld;
 
+    // For arrays of indexables, allow renumbering index properties (e.g. for materialDefinitions)
+    // to get rid of duplicates and have all the ducks in a row
+    public bool ShouldShowRenumberArrayIndexProperties =>
+        IsArray && ResolvedData is CArray<CMeshMaterialEntry> or CArray<worldCompiledEffectPlacementInfo>;
+
     // Shift: recursively fold/unfold child nodes
     private protected static bool IsShiftBeingHeld =>
         Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
@@ -1759,6 +1764,55 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         return CheckTypeCompatibility(innerType, RedDocumentTabViewModel.CopiedChunk.GetType()) != TypeCompability.None;
     } // TODO RelayCommand check notify
 
+
+    // Visibility check: ShouldShowRenumberArrayIndexProperties
+    private bool CanReindexChildDataIndexProperties()
+    {
+        return IsArray && Properties.Count > 0 &&
+               ResolvedData is CArray<CMeshMaterialEntry> or CArray<worldCompiledEffectPlacementInfo>;
+    }
+
+    // Renumber index property of children - this is useful for e.g. material definitions after paste
+    [RelayCommand(CanExecute = nameof(CanReindexChildDataIndexProperties))]
+    private void ReindexChildDataIndexProperties()
+    {
+        if (!IsArray)
+        {
+            return;
+        }
+
+        // For materials, we need to hold two different kinds of index counter
+        var numExternalMaterials = 0;
+        var numLocalMaterials = 0;
+
+        for (var i = 0; i < Properties.Count; i++)
+        {
+            var prop = Properties[i];
+            if (prop.ResolvedData is not CMeshMaterialEntry materialDefinition)
+            {
+                prop.SetDataIndexProperty(i);
+                continue;
+            }
+
+            // Check if material is a local or an external instance; renumber index
+            if (materialDefinition.IsLocalInstance)
+            {
+                prop.SetDataIndexProperty(numLocalMaterials);
+                numLocalMaterials += 1;
+            }
+            else
+            {
+                prop.SetDataIndexProperty(numExternalMaterials);
+                numExternalMaterials += 1;
+            }
+        }
+
+        RecalculateProperties();
+        CalculateDescriptor();
+        CalculateValue();
+    }
+    
+    
     [RelayCommand(CanExecute = nameof(CanPasteChunks))]
     private void ClearAndPasteChunk()
     {
@@ -3254,12 +3308,37 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         return false;
     }
 
+    private void SetDataIndexProperty(int newIndex)
+    {
+        if (ResolvedData is RedDummy || !IsInArray)
+        {
+            return;
+        }
+
+        switch (ResolvedData)
+        {
+            case worldCompiledEffectPlacementInfo info:
+                info.PlacementTagIndex = (CUInt8)newIndex;
+                break;
+            case CMeshMaterialEntry materialDefinition:
+                materialDefinition.Index = (CUInt16)newIndex;
+                break;
+            default:
+                return;
+        }
+
+        OnPropertyChanged("Data");
+        
+        RecalculateProperties();
+        CalculateValue();
+        CalculateDescriptor();
+    }
     /*
      * QOL: Increment index property in new child
      */
     private void AdjustPropertiesAfterPasteAsNewItem()
     {
-        if (ResolvedData is RedDummy || IsShiftBeingHeld || Parent?.ResolvedData is not IRedArray)
+        if (Parent is null || !IsInArray || ResolvedData is RedDummy || IsShiftBeingHeld)
         {
             return;
         }
@@ -3274,7 +3353,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     .OrderBy(mat => Int32.Parse(mat.PlacementTagIndex.ToString()))
                     .Select(mat => mat.PlacementTagIndex)
                     .Last();
-                info.PlacementTagIndex = effectsIndex + 1;
+                SetDataIndexProperty(effectsIndex + 1);
                 break;
 
             // For material definitions: Find highest index of local/external material and increment by one
@@ -3286,16 +3365,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     .OrderBy(mat => Int32.Parse(mat.Index.ToString()))
                     .Select(mat => mat.Index)
                     .Last();
-                materialDefinition.Index = materialIndex + 1;
+
+                SetDataIndexProperty(materialIndex + 1);
                 break;
             }
             default:
                 return;
         }
-
-        RecalculateProperties();
-        CalculateValue();
-        CalculateDescriptor();
     }
 
     public void RecalculateProperties(IRedType? selectChild = null, bool expand = true)
