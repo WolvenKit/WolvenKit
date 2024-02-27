@@ -33,7 +33,7 @@ namespace WolvenKit.Modkit.RED4
         /// <returns></returns>
         public static string GetExportArgs(DirectoryInfo depot, string input, FileInfo output)
         {
-            var args = $"resource-export -depot=\"{depot.FullName}\" -input=\"{input}\" -output={output.FullName}";
+            var args = $"resource-export -depot=\"{depot.FullName}\" -input=\"{input}\" -output=\"{output.FullName}\"";
 
             return args;
         }
