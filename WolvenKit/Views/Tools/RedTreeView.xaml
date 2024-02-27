@@ -470,6 +470,22 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <!--  
+                For arrays of indexables: Renumber Indices of child nodes, starting at 0
+                Useful if you paste a bunch of material definitions from multiple sources 
+                -->
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.ReindexChildDataIndexPropertiesCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Recalculate child index properties"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowRenumberArrayIndexProperties, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="Calculator" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
                 <MenuItem
                     Command="{Binding Path=PlacementTarget.Tag.ExportChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Export to JSON"
