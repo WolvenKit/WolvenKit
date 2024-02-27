@@ -104,18 +104,26 @@ public class ImportableItemViewModel : ImportExportItemViewModel
         // get settings from texgroup
         xbmArgs = CommonFunctions.TextureSetupFromTextureGroup(texGroup);
 
-        xbmArgs.PremultiplyAlpha = CommonFunctions.ShouldPremultiplyAlpha(Path.GetFileNameWithoutExtension(fileName));
-
+        // Set image compression for normal map
+        Enums.ETextureCompression? imageCompression = null;
+        if (texGroup is Enums.GpuWrapApieTextureGroup.TEXG_Generic_Normal)
+        {
+            imageCompression = Enums.ETextureCompression.TCM_Normalmap;
+        }
+        
         // get the format again, cos CDPR
         // load and, if needed, decompress file
         var image = RedImage.LoadFromFile(fileName);
         if (image != null)
         {
             var (rawFormat, compression, _) = CommonFunctions.MapGpuToEngineTextureFormat(image.Metadata.Format);
+            
             xbmArgs.RawFormat = rawFormat;
-            xbmArgs.Compression = compression;      // todo if this is already set use the previous one
-            //xbmArgs.PremultiplyAlpha              // todo ???
+            xbmArgs.Compression = imageCompression ?? compression;
+            xbmArgs.PremultiplyAlpha =
+                CommonFunctions.ShouldPremultiplyAlpha(Path.GetFileNameWithoutExtension(fileName));
         }
+
 
         return xbmArgs;
     }
