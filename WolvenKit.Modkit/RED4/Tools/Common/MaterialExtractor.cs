@@ -7,6 +7,7 @@ using WolvenKit.Common.Conversion;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Extensions;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
@@ -25,6 +26,8 @@ public class MaterialExtractor
     private readonly GlobalExportArgs _globalExportArgs;
 
     private readonly List<string> _textureList = new();
+
+    private ILoggerService _logger = SerilogWrapper.Instance;
 
     public MaterialExtractor(ModTools modTools, IArchiveManager archiveManager, string materialRepositoryPath, GlobalExportArgs globalExportArgs)
     {
@@ -212,20 +215,29 @@ public class MaterialExtractor
                     var refer = parameterHandle.Chunk!;
                     if (usedParameterNames.Contains(refer.ParameterName.GetResolvedText()!))
                     {
-                        object? value = GetMaterialParameterValue(refer);
-
-                        if (value is IRedRef resourceReference && resourceReference.DepotPath != ResourcePath.Empty)
+                        try
                         {
-                            value = ExtractResource(resourceReference);
-                        }
+                            object? value = GetMaterialParameterValue(refer);
 
-                        if (value is IRedType redValue)
+                            if (value is IRedRef resourceReference && resourceReference.DepotPath != ResourcePath.Empty)
+                            {
+                                value = ExtractResource(resourceReference);
+                            }
+
+                            if (value is IRedType redValue)
+                            {
+                                value = GetSerializableValue(redValue);
+                            }
+
+                            mergedMaterial.Data.Add(refer.ParameterName.GetResolvedText()!, value);
+                            template.Data.Add(refer.ParameterName.GetResolvedText()!, value);
+                        }
+                        catch (Exception ex)
                         {
-                            value = GetSerializableValue(redValue);
+                            _logger.Warning(
+                                $"Skipped extraction of material parameter {refer.ParameterName.GetResolvedText()}");
+                            _logger.Error(ex.Message);
                         }
-
-                        mergedMaterial.Data.Add(refer.ParameterName.GetResolvedText()!, value);
-                        template.Data.Add(refer.ParameterName.GetResolvedText()!, value);
                     }
                 }
 
