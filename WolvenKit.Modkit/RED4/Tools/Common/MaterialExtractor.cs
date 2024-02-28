@@ -24,17 +24,19 @@ public class MaterialExtractor
 
     private readonly string _materialRepositoryPath;
     private readonly GlobalExportArgs _globalExportArgs;
+    private readonly ILoggerService _loggerService;
 
     private readonly List<string> _textureList = new();
 
-    private ILoggerService _logger = SerilogWrapper.Instance;
-
-    public MaterialExtractor(ModTools modTools, IArchiveManager archiveManager, string materialRepositoryPath, GlobalExportArgs globalExportArgs)
+    public MaterialExtractor(ModTools modTools, IArchiveManager archiveManager, string materialRepositoryPath,
+        GlobalExportArgs globalExportArgs, ILoggerService loggerService)
     {
         _modTools = modTools;
+        
         _archiveManager = archiveManager;
         _materialRepositoryPath = materialRepositoryPath;
         _globalExportArgs = globalExportArgs;
+        _loggerService = loggerService;
     }
 
     public MatData GenerateMaterialData(CR2WFile mainFile)
@@ -234,9 +236,9 @@ public class MaterialExtractor
                         }
                         catch (Exception ex)
                         {
-                            _logger.Warning(
+                            _loggerService.Warning(
                                 $"Skipped extraction of material parameter {refer.ParameterName.GetResolvedText()}");
-                            _logger.Error(ex.Message);
+                            _loggerService.Warning($"\t{ex.Message}");
                         }
                     }
                 }

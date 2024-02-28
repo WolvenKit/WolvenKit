@@ -27,7 +27,8 @@ namespace WolvenKit.Modkit.RED4
                     new MlmaskExportArgs() { UncookExtension = eUncookExtension }
                 );
 
-            var matData = new MaterialExtractor(this, _archiveManager, matRepo, exportArgs).GenerateMaterialData(cr2w);
+            var matData = new MaterialExtractor(this, _archiveManager, matRepo, exportArgs, _loggerService)
+                .GenerateMaterialData(cr2w);
             matData.Appearances = info.appearances;
 
             return matData;

@@ -6,14 +6,9 @@ namespace WolvenKit
 {
     public class SerilogWrapper : ILoggerService
     {
-        private static ILoggerService? s_instance = null;
         public LoggerVerbosity LoggerVerbosity { get; private set; } = LoggerVerbosity.Normal;
 
         public void SetLoggerVerbosity(LoggerVerbosity verbosity) => LoggerVerbosity = verbosity;
-
-        public SerilogWrapper() => s_instance = this;
-
-        public static ILoggerService Instance => s_instance ??= new SerilogWrapper();
 
         // error
         public void Error(string msg) => Serilog.Log.Error(msg);
