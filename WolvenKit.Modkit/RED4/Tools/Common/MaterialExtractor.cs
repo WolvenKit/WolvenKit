@@ -128,9 +128,7 @@ public class MaterialExtractor
         new CMaterialInstance() { BaseMaterial = new CResourceReference<IMaterial>(s_defaultMaterialPath) };
 
     private static readonly IRedRef
-        s_defaultMaterialRef = new CResourceReference<CMaterialTemplate>(new ResourcePath());
-
-    private static string? s_defaultResourceExtraction = null;
+        s_defaultMaterialRef = new CResourceReference<CMaterialTemplate>((ResourcePath)s_defaultMaterialPath);
 
     private (RawMaterial mergedMaterial, RawMaterial template) MergeMaterialChain(CR2WFile parentFile, IMaterial material)
     {
@@ -174,8 +172,7 @@ public class MaterialExtractor
                         }
                         catch
                         {
-                            s_defaultResourceExtraction ??= ExtractResource(s_defaultMaterialRef);
-                            mergedMaterial.Data![key] = s_defaultResourceExtraction;
+                            mergedMaterial.Data![key] = s_defaultMaterialPath;
                         }
                     }
                     else
