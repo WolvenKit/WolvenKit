@@ -126,13 +126,8 @@ public partial class AssetBrowserViewModel : ToolViewModel
         CheckView();
     }
 
-    private void OnNext(IChangeSet<RedFileSystemModel> obj)
-    {
-        DispatcherHelper.RunOnMainThread(() =>
-        {
-            LeftItems = new ObservableCollection<RedFileSystemModel>(_boundRootNodes);
-        }, DispatcherPriority.ContextIdle);
-    }
+    private void OnNext(IChangeSet<RedFileSystemModel> obj) => 
+        DispatcherHelper.RunOnMainThread(() => LeftItems = new ObservableCollection<RedFileSystemModel>(_boundRootNodes), DispatcherPriority.ContextIdle);
 
     private void CheckView()
     {
@@ -157,7 +152,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     {
         if (e.PropertyName == nameof(IProjectManager.IsProjectLoaded))
         {
-            ProjectLoaded = _projectManager.IsProjectLoaded;
+            DispatcherHelper.RunOnMainThread(() => ProjectLoaded = _projectManager.IsProjectLoaded, DispatcherPriority.ContextIdle);
         }
     }
 
@@ -182,6 +177,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     #region properties
 
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(AddSelectedCommand))]
     private bool _projectLoaded;
 
     [ObservableProperty]
