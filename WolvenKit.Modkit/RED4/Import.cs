@@ -515,6 +515,9 @@ namespace WolvenKit.Modkit.RED4
                     case GltfImportAsFormat.Rig:
                         result = ImportRig(rawRelative.ToFileInfo(), redFs, args);
                         break;
+                    case GltfImportAsFormat.PhysicalScene:
+                        result = ImportMesh(rawRelative.ToFileInfo(), redFs, args);
+                        break;
                     default:
                         break;
                 }
