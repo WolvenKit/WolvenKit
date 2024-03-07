@@ -6,6 +6,7 @@
       <TargetFramework>net8.0</TargetFramework>
       <VersionPrefix>8.13.0</VersionPrefix>
       <VersionSuffix>$(VersionSuffix)</VersionSuffix>
+	  <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 
       <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
       <StartupObject>WolvenKit.CLI.Program</StartupObject>
