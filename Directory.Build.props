@@ -1,5 +1,6 @@
 <Project>
 	<PropertyGroup>
 		<EnableSourceControlManagerQueries>true</EnableSourceControlManagerQueries>
+		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 	</PropertyGroup>
 </Project>
