@@ -275,6 +275,11 @@ namespace WolvenKit.Views.Tools
 
         private void OnKeyUp(object sender, KeyEventArgs e)
         {
+            if (PESearchBar.IsFocused)
+            {
+                return;
+            }
+            
             if (e.Key == Key.F2 )
             {
                 ViewModel.RenameFileCommand.SafeExecute(null);
