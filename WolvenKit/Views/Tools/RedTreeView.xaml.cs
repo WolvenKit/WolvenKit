@@ -278,8 +278,14 @@ namespace WolvenKit.Views.Tools
 
         private void Copy_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            if (sender is Grid g && g.DataContext is ChunkViewModel cvm)
+            if (sender is Grid { DataContext: ChunkViewModel cvm })
             {
+                if (cvm.Data is TweakDBID tweakDbId)
+                {
+                    Clipboard.SetText(tweakDbId.IsResolvable ? tweakDbId.ResolvedText : ((ulong)tweakDbId).ToString("X16"));
+                    return;
+                }
+                
                 Clipboard.SetText(cvm.Value);
             }
         }
