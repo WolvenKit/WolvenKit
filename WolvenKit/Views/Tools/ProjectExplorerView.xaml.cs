@@ -177,7 +177,7 @@ namespace WolvenKit.Views.Tools
 
         private void AddKeyUpEvent()
         {
-            if (ViewModel?.IsKeyUpEventAssigned != true)
+            if (ViewModel is null || ViewModel.IsKeyUpEventAssigned)
             {
                 return;
             }
@@ -290,12 +290,12 @@ namespace WolvenKit.Views.Tools
             if (e.Key == Key.F2 )
             {
                 ViewModel?.RenameFileCommand.SafeExecute(null);
-
+                return;
             }
-            else if (e.Key == Key.Delete)
+
+            if (e.Key == Key.Delete)
             {
                 ViewModel?.DeleteFileCommand.SafeExecute(null);
-
             }
         }
 

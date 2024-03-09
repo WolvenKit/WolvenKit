@@ -554,9 +554,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
 
     /// <summary>
-    /// Renames selected node.
+    /// Renames selected node. Works for files and directories.
     /// </summary>
-    private bool CanRenameFile() => ActiveProject != null && SelectedItem != null && !SelectedItem.IsDirectory;
+    private bool CanRenameFile() => ActiveProject != null && SelectedItem != null;
     [RelayCommand(CanExecute = nameof(CanRenameFile))]
     private void RenameFile()
     {
