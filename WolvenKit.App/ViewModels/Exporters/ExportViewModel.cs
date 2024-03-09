@@ -83,7 +83,7 @@ public partial class ExportViewModel : AbstractExportViewModel
 
             if (Activator.CreateInstance(item.Properties.GetType()) is ImportExportArgs a)
             {
-                item.Properties = a;
+                item.SetProperties(a);
             }
         }
     }

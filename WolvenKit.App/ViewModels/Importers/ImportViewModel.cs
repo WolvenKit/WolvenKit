@@ -92,7 +92,7 @@ public partial class ImportViewModel : AbstractImportViewModel
             }
 
             // set default settings from filename
-            item.Properties = ImportableItemViewModel.LoadXbmDefaultSettings(item.BaseFile);
+            item.SetProperties(ImportableItemViewModel.LoadXbmDefaultSettings(item.BaseFile));
             _loggerService?.Info($"Loaded settings for \"{item.Name}\": Parsed filename");
         }
     }
@@ -110,13 +110,13 @@ public partial class ImportViewModel : AbstractImportViewModel
             // import settings from vanilla
             if (ImportableItemViewModel.TryLoadXbmSettingsFromGame(item.BaseFile, _archiveManager, _projectManager, _parserService, out var args))
             {
-                item.Properties = args;
+                item.SetProperties(args);
                 _loggerService?.Info($"Loaded settings for \"{item.Name}\": Parsed game file");
             }
             else
             {
                 // fall back to default settings
-                item.Properties = ImportableItemViewModel.LoadXbmDefaultSettings(item.BaseFile);
+                item.SetProperties(ImportableItemViewModel.LoadXbmDefaultSettings(item.BaseFile));
                 _loggerService?.Warning($"Could not load settings for \"{item.Name}\" from game");
             }
         }

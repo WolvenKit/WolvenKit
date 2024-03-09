@@ -42,4 +42,14 @@ public abstract partial class ImportExportItemViewModel : ObservableObject, ISel
 
     // This is used by ExportView.xaml and TextureImportView.xaml
     public string FullPath => ProjectSubfolderRegex().Replace(BaseFile, string.Empty);
+
+    public void SetProperties(ImportExportArgs args)
+    {
+        Properties.PropertyChanged -= Properties_PropertyChanged;
+        
+        Properties = args;
+        PropertiesDisplay = Properties.ToString();
+        
+        Properties.PropertyChanged += Properties_PropertyChanged;
+    }
 }
