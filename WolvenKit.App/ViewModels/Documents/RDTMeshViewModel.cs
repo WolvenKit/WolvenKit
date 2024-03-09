@@ -207,7 +207,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
     public EffectsManager? EffectsManager
     {
         get => _effectsManager;
-        private set => SetProperty(ref _effectsManager, value);
+        set => SetProperty(ref _effectsManager, value);
     }
 
     public HelixToolkit.Wpf.SharpDX.Camera? Camera

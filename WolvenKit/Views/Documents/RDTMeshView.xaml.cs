@@ -2,6 +2,7 @@ using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using HelixToolkit.SharpDX.Core;
 using ReactiveUI;
 using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.App.ViewModels.Documents;
@@ -47,6 +48,10 @@ namespace WolvenKit.Views.Documents
             if (DataContext is RDTMeshViewModel vm)
             {
                 SetCurrentValue(ViewModelProperty, vm);
+                if (vm.EffectsManager == null || vm.EffectsManager.IsDisposed)
+                {
+                    vm.EffectsManager = new DefaultEffectsManager();
+                }
                 hxViewport.MouseDown3D += vm.MouseDown3D;
             }
 
