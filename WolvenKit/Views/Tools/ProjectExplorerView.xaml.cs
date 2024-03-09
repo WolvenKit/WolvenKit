@@ -440,9 +440,27 @@ namespace WolvenKit.Views.Tools
 
         private void CollapseChildren_OnClick(object sender, RoutedEventArgs e) => CollapseChildren();
 
-        private void ExpandAll() => TreeGrid.ExpandAllNodes();
+        private void ExpandAll()
+        {
+            foreach (var viewNode in TreeGrid.View.Nodes)
+            {
+                if (viewNode.Item is not FileModel || IsFileIn(viewNode.Item))
+                {
+                    TreeGrid.ExpandAllNodes(viewNode);
+                }
+            }
+        }
 
-        private void CollapseAll() => TreeGrid.CollapseAllNodes();
+        private void CollapseAll()
+        {
+            foreach (var viewNode in TreeGrid.View.Nodes)
+            {
+                if (viewNode.Item is not FileModel || IsFileIn(viewNode.Item))
+                {
+                    TreeGrid.CollapseAllNodes(viewNode);
+                }
+            }
+        }
 
         private void ExpandAll_OnClick(object sender, RoutedEventArgs e) => ExpandAll();
 
