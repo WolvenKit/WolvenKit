@@ -152,12 +152,27 @@ public partial class ChunkViewModel : ObservableObject
                 break;
             }
             /*
+             * meshMeshMaterialBuffer: For top level, expand everything
+             */
+            case meshMeshMaterialBuffer:
+            {
+                var child = properties[0];
+                child.IsExpanded = true;
+                foreach (var chunkViewModel in child.Properties)
+                {
+                    chunkViewModel.SetChildExpansionStates(isExpanded);
+                }
+
+                break;
+            }
+            /*
              * Generic array, or stuff with just one property
              */
             case CArray<IRedType>
                 or CArray<appearanceAppearancePart>
                 or CArray<RedBaseClass>
                 or CArray<CHandle<meshMeshAppearance>>
+                or CArray<IMaterial>
                 or CArray<CHandle<appearanceAppearanceDefinition>>
                 or CArray<CHandle<entEffectDesc>>:
             {
