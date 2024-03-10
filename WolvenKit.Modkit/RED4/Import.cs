@@ -220,7 +220,8 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
-            _loggerService.Warning($"No existing redfile found to rebuild for {rawRelative.Name}");
+            _loggerService.Warning($"No existing redfile found to rebuild for {rawRelative.Name}, check the wiki for more information:");
+            _loggerService.Info("\t https://wiki.redmodding.org/wolvenkit/wolvenkit-app/usage/import-export/models#importing-mesh-files");
             return false;
 
             bool RebuildTexture(string redparent)
@@ -339,7 +340,8 @@ namespace WolvenKit.Modkit.RED4
 
                 if (string.IsNullOrEmpty(redfile))
                 {
-                    _loggerService.Warning($"No existing redfile found to rebuild for {rawRelative.Name}");
+                    _loggerService.Warning($"No existing redfile found to rebuild for {rawRelative.Name}, check the wiki for more information:");
+                    _loggerService.Info("\t https://wiki.redmodding.org/wolvenkit/wolvenkit-app/usage/import-export/models#importing-mesh-files");
                     return false;
                 }
 
@@ -482,6 +484,8 @@ namespace WolvenKit.Modkit.RED4
                 if (!maybeMatchingRedFile.HasValue)
                 {
                     _loggerService.Warning($"No existing redfile found to rebuild for {rawRelative.Name} (tried {possibleRedPath})");
+                    _loggerService.Warning($"Check the wiki for more information:");
+                    _loggerService.Info("\t https://wiki.redmodding.org/wolvenkit/wolvenkit-app/usage/import-export/models#importing-mesh-files");
                     return false;
                 }
 
