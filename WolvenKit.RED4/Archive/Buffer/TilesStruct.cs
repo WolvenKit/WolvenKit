@@ -48,6 +48,6 @@ public struct TilesBufferHeader
     public uint count8;
 
     [FieldOffset(56)]
-    public uint count9;
+    public uint uk4;
 
 }

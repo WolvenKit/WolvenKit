@@ -2177,7 +2177,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 }
                 else if (handle.Chunk is worldInstancedDestructibleMeshNode widmn)
                 {
-                    if (widmn.CookedInstanceTransforms.SharedDataBuffer.Chunk.NotNull().Buffer.Data is not CookedInstanceTransformsBuffer citb)
+                    if (widmn.CookedInstanceTransforms.SharedDataBuffer?.Chunk.NotNull().Buffer.Data is not CookedInstanceTransformsBuffer citb)
                     {
                         continue;
                     }
