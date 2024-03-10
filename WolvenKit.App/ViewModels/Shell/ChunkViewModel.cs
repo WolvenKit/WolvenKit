@@ -2020,6 +2020,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 .Select(_ => _.Data.NotNull())
                 .ToList();
 
+            // can't be merged with next block; will cause compiler errors
             if (Parent.Data is IRedBufferPointer)
             {
                 RedDocumentTabViewModel.CopiedChunks.Clear();
@@ -2052,6 +2053,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         //Tab.SelectedChunk = Parent;
     }
 
+    private bool CanCopyArrayContents()
+    {
+        return Properties.Count > 0 && !Properties[0].IsArray;
+    }
     
     private bool CanPasteSelection()
     {
@@ -2077,6 +2082,21 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         return RedDocumentTabViewModel.CopiedChunks.All(chunk => CheckTypeCompatibility(innerType, chunk.GetType()) != TypeCompability.None);
     } // TODO RelayCommand check notify
+
+
+    [RelayCommand(CanExecute = nameof(CanCopyArrayContents))]
+    private void CopyArrayContents()
+    {
+        var fullselection = DisplayProperties
+            .Select(_ => _.Data.NotNull())
+            .ToList();
+
+        RedDocumentTabViewModel.CopiedChunks.Clear();
+        foreach (var i in fullselection)
+        {
+            AddToCopiedChunks(i);
+        }
+    }
 
     [RelayCommand(CanExecute = nameof(CanPasteSelection))]
     private void ClearAndPasteSelection()
