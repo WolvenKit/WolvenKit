@@ -432,6 +432,19 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <!-- Copy Array Contents  -->
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.CopyArrayContentsCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Copy Array Contents"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.IsArray, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="ContentPaste" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
                 <!--  Paste Handle  -->
                 <MenuItem
                     Command="{Binding Path=PlacementTarget.Tag.PasteHandleCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
