@@ -14,7 +14,8 @@ public abstract partial class ImportExportItemViewModel : ObservableObject, ISel
     protected ImportExportItemViewModel(string baseFile, ImportExportArgs properties)
     {
         BaseFile = baseFile;
-        _properties = properties;
+
+        _properties = properties.AdjustDefaultFromFilepath(baseFile);
 
         _propertiesDisplay = _properties.ToString();
 
