@@ -50,7 +50,7 @@ namespace WolvenKit
         }
 
         // Application OnStartup Override.
-        protected override async void OnStartup(StartupEventArgs e)
+        protected override void OnStartup(StartupEventArgs e)
         {
             Interactions.ShowFirstTimeSetup = () => {
                 var dialog = new FirstSetupView();
@@ -59,29 +59,11 @@ namespace WolvenKit
                 return result;
             };
 
-            //Interactions.ShowFirstTimeSetup.RegisterHandler(interaction =>
-            //{
-            //    var dialog = new FirstSetupView();
-
-            //    return Observable.Start(() =>
-            //    {
-            //        var result = dialog.ShowDialog() == true;
-            //        interaction.SetOutput(result);
-            //    }, RxApp.MainThreadScheduler);
-            //});
-
-           
-
             var settings = Locator.Current.GetService<ISettingsManager>();
             var loggerService = Locator.Current.GetService<ILoggerService>();
 
-
-            // Startup speed boosting (HC)
-            //ApplicationHelper.StartProfileOptimization();
-
             loggerService.Info("Starting application");
             loggerService.Info($"Version: {settings.GetVersionNumber()}");
-            await Initializations.InitializeWebview2(loggerService);
 
             loggerService.Debug("Initializing red database");
             Initializations.InitializeThemeHelper();
@@ -98,11 +80,7 @@ namespace WolvenKit
 
             RedImage.LoggerService = loggerService;
 
-            // Some things can only be initialized after base.OnStartup(e);
             base.OnStartup(e);
-
-            //loggerService.Info("Initializing NodeNetwork.");
-            //NNViewRegistrar.RegisterSplat();
         }
 
         protected override void OnExit(ExitEventArgs e)

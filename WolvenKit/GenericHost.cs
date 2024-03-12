@@ -198,20 +198,11 @@ namespace WolvenKit
                     services.AddTransient<HomePageViewModel>();
                     services.AddTransient<IViewFor<HomePageViewModel>, HomePageView>();
 
-                    services.AddTransient<GithubPageViewModel>();
-                    services.AddTransient<IViewFor<GithubPageViewModel>, GithubPageView>();
-
                     services.AddTransient<SettingsPageViewModel>();
                     services.AddTransient<IViewFor<SettingsPageViewModel>, SettingsPageView>();
 
-                    services.AddTransient<WebsitePageViewModel>();
-                    services.AddTransient<IViewFor<WebsitePageViewModel>, WebsitePageView>();
-
                     services.AddTransient<WelcomePageViewModel>();
                     services.AddTransient<IViewFor<WelcomePageViewModel>, WelcomePageView>();
-
-                    services.AddTransient<WikiPageViewModel>();
-                    services.AddTransient<IViewFor<WikiPageViewModel>, WikiPageView>();
 
                     services.AddTransient<ModsViewModel>();
                     services.AddTransient<IViewFor<ModsViewModel>, ModsView>();

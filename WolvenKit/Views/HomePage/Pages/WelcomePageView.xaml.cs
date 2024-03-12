@@ -18,8 +18,6 @@ namespace WolvenKit.Views.HomePage.Pages
             ViewModel = Locator.Current.GetService<WelcomePageViewModel>();
             DataContext = ViewModel;
 
-            InitWebView2();
-
             this.WhenActivated(disposables =>
             {
                 this.Bind(ViewModel, vm => vm.SelectedPinnedOrder, v => v.PinnedOrder.SelectedValue);
@@ -72,26 +70,6 @@ namespace WolvenKit.Views.HomePage.Pages
 
             });
 
-        }
-
-        private async void InitWebView2()
-        {
-            if (!StaticReferences.IsWebView2Enabled)
-            {
-                return;
-            }
-
-            try
-            {
-                await Task.CompletedTask;
-                //await FeaturedVideo.EnsureCoreWebView2Async(Helpers.objCoreWebView2Environment);
-
-                //FeaturedVideo.SetCurrentValue(Microsoft.Web.WebView2.Wpf.WebView2.SourceProperty, (System.Uri)new Uri("https://www.youtube.com/embed/WfEi3QwhTIs"));
-            }
-            catch (Exception)
-            {
-                // TODO: handle this
-            }
         }
     }
 }
