@@ -4,8 +4,10 @@ namespace WolvenKit.RED4.Archive.Buffer;
 
 public class TilesBuffer : IParseableBuffer, IRedType
 {
-    public IRedType Data => this;
-        
+    public IRedType? Data => null;
+
+    public TilesMetadata Metadata { get; set; } = new();
+
     public Vector3 Uk1 { get; set; } = new();
 
     public Vector3 Min { get; set; } = new();
@@ -22,9 +24,13 @@ public class TilesBuffer : IParseableBuffer, IRedType
 
     public CArray<TilesBufferUk3> Indices { get; set; } = new();
 
+    public CArray<Vector3> Uk3 { get; set; } = new();
+
     public CArray<CUInt32> Flags { get; set; } = new();
 
     public CArray<TilesBufferUk4> Info { get; set; } = new();
+
+    public CArray<TilesBufferUk5> Uk4 { get; set; } = new();
 
     public TilesBuffer()
     {
@@ -88,4 +94,34 @@ public class TilesBufferUk4_1 : IRedType
     public CInt8 Value { get; set; }
 
     public CInt8 Flag { get; set; }
+}
+
+public class TilesBufferUk5 : IRedType
+{
+    public Vector3 Uk1 { get; set; } = new();
+
+    public Vector3 Uk2 { get; set; } = new();
+
+    public CFloat Uk3 { get; set; }
+
+    public CUInt32 Uk4 { get; set; }
+    
+    public CUInt32 Uk5 { get; set; }
+    
+    public CUInt32 Uk6 { get; set; }
+}
+
+public class TilesMetadata : IRedType
+{
+    public CUInt32 Uk1 { get; set; }
+    
+    public CUInt32 TileX { get; set; }
+    
+    public CUInt32 TileY { get; set; }
+    
+    public CUInt32 Uk2 { get; set; }
+    
+    public CUInt32 Uk3 { get; set; }
+    
+    public CUInt32 Uk4 { get; set; }
 }

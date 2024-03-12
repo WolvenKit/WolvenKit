@@ -1,6 +1,5 @@
 using System.IO;
 using System.Threading.Tasks;
-using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.RED4.Archive;
@@ -13,8 +12,6 @@ namespace WolvenKit.Common.Interfaces
     {
         public bool Pack(DirectoryInfo infolder, DirectoryInfo outpath, string? modname = null);
 
-        public bool ConvertXbmToDdsStream(Stream redInFile, Stream outstream, bool flipV, out DXGI_FORMAT texformat, out DXGI_FORMAT decompressedFormat);
-
         public Task<bool> Import(RedRelativePath rawRelative, GlobalImportArgs args, DirectoryInfo? outDir = null);
         public Task<bool> ImportFolder(DirectoryInfo inDir, GlobalImportArgs args, DirectoryInfo? outDir = null);
 
@@ -24,8 +21,8 @@ namespace WolvenKit.Common.Interfaces
 
         bool RebuildBuffer(RedRelativePath rawRelativePath, DirectoryInfo outDir);
 
-        void ExtractAll(ICyberGameArchive ar, DirectoryInfo outDir, string pattern = "", string regex = "", bool decompressBuffers = false);
-        Task ExtractAllAsync(ICyberGameArchive ar, DirectoryInfo outDir, string pattern = "", string regex = "", bool decompressBuffers = false);
+        void ExtractAll(ICyberGameArchive ar, DirectoryInfo outDir, string? pattern = null, string? regex = null, bool decompressBuffers = false);
+        Task ExtractAllAsync(ICyberGameArchive ar, DirectoryInfo outDir, string? pattern = null, string? regex = null, bool decompressBuffers = false);
 
         public bool UncookSingle(
             ICyberGameArchive archive,
@@ -33,7 +30,7 @@ namespace WolvenKit.Common.Interfaces
             DirectoryInfo outDir,
             GlobalExportArgs args,
             DirectoryInfo? rawOutDir = null,
-            ECookedFileFormat[]? forcebuffers = null,
+            ECookedFileFormat[]? forceBuffers = null,
             bool serialize = false);
 
         public Task<bool> UncookSingleAsync(
@@ -42,7 +39,7 @@ namespace WolvenKit.Common.Interfaces
             DirectoryInfo outDir,
             GlobalExportArgs args,
             DirectoryInfo? rawOutDir = null,
-            ECookedFileFormat[]? forcebuffers = null,
+            ECookedFileFormat[]? forceBuffers = null,
             bool serialize = false);
 
         void UncookAll(
@@ -53,7 +50,7 @@ namespace WolvenKit.Common.Interfaces
             string? pattern = null,
             string? regex = null,
             DirectoryInfo? rawOutDir = null,
-            ECookedFileFormat[]? forcebuffers = null,
+            ECookedFileFormat[]? forceBuffers = null,
             bool serialize = false);
 
 
@@ -64,7 +61,7 @@ namespace WolvenKit.Common.Interfaces
         public Task<bool> ConvertFromJsonAndWriteAsync(FileInfo fileInfo, DirectoryInfo outputDirInfo);
 
         public bool ExportEntity(CR2WFile entFile, CName appearance, FileInfo outfile);
-        
+        public bool ExportMaterials(CR2WFile cr2w, FileInfo outfile, MeshExportArgs meshExportArgs);
     }
 
 }

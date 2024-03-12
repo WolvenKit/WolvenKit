@@ -41,6 +41,7 @@ public class ExportableItemViewModel : ImportExportItemViewModel
             //ECookedFileFormat.app => new EntityExportArgs(),
             ECookedFileFormat.anims => new AnimationExportArgs(),
             ECookedFileFormat.inkatlas => new InkAtlasExportArgs(),
+            ECookedFileFormat.physicalscene => new MeshExportArgs(),
             _ => throw new ArgumentOutOfRangeException()
         };
     }

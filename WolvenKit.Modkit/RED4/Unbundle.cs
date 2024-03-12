@@ -24,7 +24,7 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="regex"></param>
         /// <param name="decompressBuffers"></param>
         /// <returns></returns>
-        public void ExtractAll(ICyberGameArchive ar, DirectoryInfo outDir, string pattern = "", string regex = "", bool decompressBuffers = false)
+        public void ExtractAll(ICyberGameArchive ar, DirectoryInfo outDir, string? pattern = null, string? regex = null, bool decompressBuffers = false)
         {
             var extractedList = new ConcurrentBag<string>();
             var failedList = new ConcurrentBag<string>();
@@ -114,7 +114,7 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="regex"></param>
         /// <param name="decompressBuffers"></param>
         /// <returns></returns>
-        public async Task ExtractAllAsync(ICyberGameArchive ar, DirectoryInfo outDir, string pattern = "", string regex = "", bool decompressBuffers = false)
+        public async Task ExtractAllAsync(ICyberGameArchive ar, DirectoryInfo outDir, string? pattern = null, string? regex = null, bool decompressBuffers = false)
         {
             var extractedList = new ConcurrentBag<string>();
             var failedList = new ConcurrentBag<string>();

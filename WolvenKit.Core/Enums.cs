@@ -147,7 +147,8 @@ namespace WolvenKit.Common
         opusinfo,
         anims,
         //ent,
-        inkatlas
+        inkatlas,
+        physicalscene
     }
 
     /// <summary>

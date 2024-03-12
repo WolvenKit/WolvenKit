@@ -79,14 +79,14 @@ public abstract partial class ImportExportViewModel : FloatingPaneViewModel
         {
             var (settings, type) = _currentSettings;
 
-            if (item.Properties is null || item.Properties.GetType() != type)
+            if (item.Properties.GetType() != type)
             {
                 continue;
             }
 
             if (settings.Deserialize(type, _jsonSerializerSettings) is ImportExportArgs ds)
             {
-                item.Properties = ds;
+                item.SetProperties(ds);
                 count++;
             }
         }

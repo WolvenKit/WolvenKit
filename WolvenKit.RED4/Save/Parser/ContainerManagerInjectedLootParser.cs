@@ -32,7 +32,9 @@ public class ContainerManagerInjectedLoot : INodeData
         public uint Unknown3 { get; set; }
         public List<string> Unknown4 { get; set; } = new();
         public TweakDBID Unknown5 { get; set; }
-        public ulong Unknown6 { get; set; }
+        public uint Unknown6 { get; set; }
+        public float Unknown7 { get; set; }
+        public byte Unknown8 { get; set; }
     }
 }
 
@@ -71,8 +73,14 @@ public class ContainerManagerInjectedLootParser : INodeParser
                 }
 
                 subEntry.Unknown5 = reader.ReadUInt64();
-                subEntry.Unknown6 = reader.ReadUInt64();
+                subEntry.Unknown6 = reader.ReadUInt32();
+                subEntry.Unknown7 = reader.ReadSingle();
 
+                if (node.GameVersion >= 2110)
+                {
+                    subEntry.Unknown8 = reader.ReadByte();
+                }
+                
                 entry.Entries.Add(subEntry);
             }
         }
@@ -109,6 +117,12 @@ public class ContainerManagerInjectedLootParser : INodeParser
 
                 writer.Write((ulong)subEntry.Unknown5);
                 writer.Write(subEntry.Unknown6);
+                writer.Write(subEntry.Unknown7);
+
+                if (node.GameVersion >= 2110)
+                {
+                    writer.Write(subEntry.Unknown8);
+                }
             }
         }
         writer.Write(data.TrailingBytes);

@@ -36,7 +36,7 @@ public static class RedReflection
 
     public static ExtendedTypeInfo GetTypeInfo(IRedType value)
     {
-        if (value is DynamicBaseClass dbc)
+        if (value is IDynamicClass dbc)
         {
             if (!s_dynamicTypeInfoCache.TryGetValue(dbc.ClassName, out var result))
             {

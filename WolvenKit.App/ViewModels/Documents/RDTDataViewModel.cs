@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -309,5 +310,82 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         //    }
         //}
     }
+
+    public void ClearSelection()
+    {
+        if (SelectedChunks is IList lst)
+        {
+            foreach (var obj in lst.OfType<ChunkViewModel>())
+            {
+                obj.IsSelected = false;
+            }
+
+            lst.Clear();
+        }
+
+        SelectedChunk = null;
+    }
+
+    public void AddToSelection(ChunkViewModel? chunk)
+    {
+        if (chunk is null)
+        {
+            return;
+        }
+
+        chunk.IsSelected = true;
+        if (SelectedChunks is IList lst)
+        {
+            lst.Add(chunk);
+        }
+
+        SelectedChunk = chunk;
+    }
+
+    public void RemoveFromSelection(ChunkViewModel? chunk)
+    {
+        if (chunk is not null)
+        {
+            chunk.IsSelected = false;
+        }
+
+        if (SelectedChunks is IList lst && chunk is not null)
+        {
+            lst.Remove(chunk);
+        }
+
+        SelectedChunk = null;
+    }
+
+
+    public void SetSelection(ChunkViewModel chunk)
+    {
+        ClearSelection();
+        SelectedChunk = chunk;
+        if (SelectedChunks is IList lst)
+        {
+            lst.Add(chunk);
+        }
+    }
+
+    public void SetSelection(List<ChunkViewModel> chunks)
+    {
+        ClearSelection();
+
+        // should never happen, but alas, it's nullable
+        if (SelectedChunks is not IList lst)
+        {
+            return;
+        }     
+
+        foreach (var chunkViewModel in chunks)
+        {
+            lst.Add(chunkViewModel);
+            chunkViewModel.IsSelected = true;
+            SelectedChunk = chunkViewModel;
+        }
+    }
+
+    
     #endregion
 }

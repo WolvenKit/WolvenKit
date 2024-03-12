@@ -43,22 +43,11 @@ namespace WolvenKit.Modkit.RED4
             }
 
             RawArmature? newRig = null;
+            
+            if (TryFindFile(targetRoot.BaseMesh.DepotPath, out var result) == FindFileResult.NoError &&
+                result.File is { RootChunk: CMesh { RenderResourceBlob.Chunk: rendRenderMeshBlob } mesh })
             {
-                var hash = targetRoot.BaseMesh.DepotPath.GetRedHash(); //FNV1A64HashAlgorithm.HashString(blob.BaseMesh.DepotPath.ToString().NotNull());
-                var meshStream = new MemoryStream();
-                foreach (var ar in args.Archives)
-                {
-                    if (ar.Files.TryGetValue(hash, out var gameFile))
-                    {
-                        gameFile.Extract(meshStream);
-                        break;
-                    }
-                }
-                var meshCr2w = _parserService.ReadRed4File(meshStream);
-                if (meshCr2w is { RootChunk: CMesh { RenderResourceBlob.Chunk: rendRenderMeshBlob } mesh })
-                {
-                    newRig = MeshTools.GetOrphanRig(mesh);
-                }
+                newRig = MeshTools.GetOrphanRig(mesh);
             }
 
             var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(args.ValidationMode));

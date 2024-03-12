@@ -7,6 +7,7 @@ namespace WolvenKit.Common.Model.Arguments
     {
         public GlobalExportArgs()
         {
+            _argsList.Add(typeof(GeneralExportArgs), new GeneralExportArgs());
             _argsList.Add(typeof(CommonExportArgs), new CommonExportArgs());
             _argsList.Add(typeof(MorphTargetExportArgs), new MorphTargetExportArgs());
             _argsList.Add(typeof(MlmaskExportArgs), new MlmaskExportArgs());

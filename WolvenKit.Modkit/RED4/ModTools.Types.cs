@@ -42,6 +42,7 @@ public partial class ModTools
 			"morphtarget" => GltfImportAsFormat.Morphtarget,
 			"rig" => GltfImportAsFormat.Rig,
 			"meshwithrig" => GltfImportAsFormat.MeshWithRig,
+			"physicalscene" => GltfImportAsFormat.PhysicalScene,
 			_ => throw new ArgumentOutOfRangeException(nameof(type), type, "Unknown extension, probably shouldn't be calling this function")
 		};
 }

@@ -34,6 +34,11 @@ namespace WolvenKit.Common.Model.Arguments
     {
     }
 
+    public class GeneralExportArgs : ExportArgs
+    {
+        public string? MaterialRepositoryPath { get; set; }
+    }
+
     public class OpusExportArgs : ExportArgs
     {
         private bool _useMod;
@@ -47,11 +52,6 @@ namespace WolvenKit.Common.Model.Arguments
 
         [Category("Export Settings")]
         public List<uint> SelectedForExport { get => _selectedForExport; set => SetProperty(ref _selectedForExport, value); }
-        [Browsable(false)]
-        public string? ModFolderPath { get; set; }
-
-        [Browsable(false)]
-        public string? RawFolderPath { get; set; }
 
         [Category("Export Settings")]
         [Display(Name = "Dump all information inside OpusInfo to Json.")]
@@ -75,19 +75,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Description("If selected the mesh will be exported as GLB, if unchecked as GLTF")]
         [WkitScriptAccess("Binary")]
         public bool IsBinary { get => _isBinary; set => SetProperty(ref _isBinary, value); }
-        /// <summary>
-        /// List of Archives for Morphtarget Export.
-        /// </summary>
-        [Browsable(false)]
-        public List<ICyberGameArchive> Archives { get; set; } = new();
-        /// <summary>
-        /// Archive path for Console Morphtarget Export.
-        /// </summary>
-        [Browsable(false)]
-        public string? ArchiveDepot { get; set; }
 
-        [Browsable(false)]
-        public string? ModFolderPath { get; set; }
         /// <summary>
         /// String Override to display info in datagrid.
         /// </summary>
@@ -160,11 +148,6 @@ namespace WolvenKit.Common.Model.Arguments
     /// </summary>
     public class EntityExportArgs : ExportArgs
     {
-        /// <summary>
-        /// List of Archives for Gltf Mesh Export.
-        /// </summary>
-        [Browsable(false)]
-        public List<ICyberGameArchive> Archives { get; set; } = new();
         /// <summary>
         /// String Override to display info in datagrid.
         /// </summary>
@@ -273,18 +256,6 @@ namespace WolvenKit.Common.Model.Arguments
         public EUncookExtension MaterialUncookExtension { get; set; } = EUncookExtension.png;
 
         /// <summary>
-        /// List of Archives for WithMaterials Mesh Export.
-        /// </summary>
-        [Browsable(false)]
-        public List<ICyberGameArchive> Archives { get; set; } = new();
-
-        /// <summary>
-        /// Optional archive path for WithMaterials Mesh Export.
-        /// </summary>
-        [Browsable(false)]
-        public string? ArchiveDepot { get; set; }
-
-        /// <summary>
         /// Material Repository path for WithMaterials Mesh Export.
         /// </summary>
         [Browsable(false)]
@@ -340,6 +311,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Description("If selected the anims will be exported as GLB, if unchecked as GLTF")]
         [WkitScriptAccess("Binary")]
         public bool IsBinary { get => _isBinary; set => SetProperty(ref _isBinary, value); }
+
         /// <summary>
         /// Root Motion Export Bool
         /// </summary>
@@ -349,16 +321,6 @@ namespace WolvenKit.Common.Model.Arguments
         [WkitScriptAccess()]
         public bool incRootMotion { get; set; } = false;
 
-        /// <summary>
-        /// List of Archives for Animations Export.
-        /// </summary>
-        [Browsable(false)]
-        public List<ICyberGameArchive> Archives { get; set; } = new();
-        /// <summary>
-        /// Archive path for Console Anims Export.
-        /// </summary>
-        [Browsable(false)]
-        public string? ArchiveDepot { get; set; }
         /// <summary>
         /// String Override to display info in datagrid.
         /// </summary>

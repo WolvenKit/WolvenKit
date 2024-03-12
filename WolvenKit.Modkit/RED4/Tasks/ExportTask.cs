@@ -3,29 +3,47 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using WolvenKit.Common;
-using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Extensions;
-using WolvenKit.RED4.Archive;
 
 namespace CP77Tools.Tasks;
 
+public record ExportTaskOptions
+{
+    public DirectoryInfo? outpath { get; init; }
+    public string? gamepath { get; set; }
+    public EUncookExtension? uext { get; init; }
+    public ECookedFileFormat[]? forcebuffers { get; init; }
+}
+
 public partial class ConsoleFunctions
 {
-    public int ExportTask(FileSystemInfo[] path, DirectoryInfo outDir, EUncookExtension? uncookext, ECookedFileFormat[] forcebuffers)
+    public int ExportTask(FileSystemInfo[] path, ExportTaskOptions options)
     {
-        if (path == null || path.Length < 1)
+        if (path.Length < 1)
         {
             _loggerService.Warning("Please fill in an input path.");
             return ERROR_BAD_ARGUMENTS;
         }
 
+        if (options.outpath == null || !options.outpath.Exists)
+        {
+            _loggerService.Error("Please fill in an output path.");
+            return ERROR_BAD_ARGUMENTS;
+        }
+
+        if (!string.IsNullOrEmpty(options.gamepath) && Directory.Exists(options.gamepath))
+        {
+            var exePath = new FileInfo(Path.Combine(options.gamepath, "bin", "x64", "Cyberpunk2077.exe"));
+            _archiveManager.LoadGameArchives(exePath, false);
+        }
+
         var result = 0;
-        Parallel.ForEach(path, file => result += ExportTaskInner(file, outDir, uncookext, forcebuffers));
+        Parallel.ForEach(path, file => result += ExportTaskInner(file, options));
         return result;
     }
 
-    private int ExportTaskInner(FileSystemInfo path, DirectoryInfo outDir, EUncookExtension? uext, ECookedFileFormat[] forcebuffers)
+    private int ExportTaskInner(FileSystemInfo path, ExportTaskOptions options)
     {
         #region checks
 
@@ -37,11 +55,6 @@ public partial class ConsoleFunctions
         if (!path.Exists)
         {
             _loggerService.Error("Input path does not exist.");
-            return ERROR_BAD_ARGUMENTS;
-        }
-        if (outDir is not null && !outDir.Exists)
-        {
-            _loggerService.Warning("Please fill in a valid outdirectory path.");
             return ERROR_BAD_ARGUMENTS;
         }
 
@@ -74,48 +87,17 @@ public partial class ConsoleFunctions
             _animationExportArgs.Value
         );
 
-        if (uext != null)
+        if (options.uext != null)
         {
-            exportArgs.Get<XbmExportArgs>().UncookExtension = uext.Value;
-            exportArgs.Get<MlmaskExportArgs>().UncookExtension = uext.Value;
-            exportArgs.Get<MeshExportArgs>().MaterialUncookExtension = uext.Value;
-        }
-
-        var archiveDepot = exportArgs.Get<MeshExportArgs>().ArchiveDepot;
-        if (!string.IsNullOrEmpty(archiveDepot) && Directory.Exists(archiveDepot))
-        {
-            _archiveManager.LoadFromFolder(new DirectoryInfo(archiveDepot));
-            exportArgs.Get<MeshExportArgs>().Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-            exportArgs.Get<MorphTargetExportArgs>().Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-            exportArgs.Get<AnimationExportArgs>().Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-        }
-        else
-        {
-            archiveDepot = exportArgs.Get<MorphTargetExportArgs>().ArchiveDepot;
-            if (!string.IsNullOrEmpty(archiveDepot) && Directory.Exists(archiveDepot))
-            {
-                _archiveManager.LoadFromFolder(new DirectoryInfo(archiveDepot));
-                exportArgs.Get<MeshExportArgs>().Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-                exportArgs.Get<MorphTargetExportArgs>().Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-                exportArgs.Get<AnimationExportArgs>().Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-            }
-            else
-            {
-                archiveDepot = exportArgs.Get<AnimationExportArgs>().ArchiveDepot;
-                if (!string.IsNullOrEmpty(archiveDepot) && Directory.Exists(archiveDepot))
-                {
-                    _archiveManager.LoadFromFolder(new DirectoryInfo(archiveDepot));
-                    exportArgs.Get<MeshExportArgs>().Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-                    exportArgs.Get<MorphTargetExportArgs>().Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-                    exportArgs.Get<AnimationExportArgs>().Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
-                }
-            }
+            exportArgs.Get<XbmExportArgs>().UncookExtension = options.uext.Value;
+            exportArgs.Get<MlmaskExportArgs>().UncookExtension = options.uext.Value;
+            exportArgs.Get<MeshExportArgs>().MaterialUncookExtension = options.uext.Value;
         }
 
         var result = 0;
         foreach (var fileInfo in filesToExport)
         {
-            if (_modTools.Export(fileInfo, exportArgs, basedir, outDir, forcebuffers))
+            if (_modTools.Export(fileInfo, exportArgs, basedir, options.outpath, options.forcebuffers))
             {
                 _loggerService.Success($"Successfully exported {path}.");
             }

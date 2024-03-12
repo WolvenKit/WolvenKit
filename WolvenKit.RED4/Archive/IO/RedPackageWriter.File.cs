@@ -82,7 +82,7 @@ public partial class RedPackageWriter
                         else
                         {
                             // TODO: Proper way to get these?
-                            cruids.Add((ulong)Random.Shared.NextInt64());
+                            cruids.Add(Random.Shared.NextCRUID());
                         }
                     }
                     else if (chunkList[i] is entEntity ent)
@@ -123,7 +123,7 @@ public partial class RedPackageWriter
                     else
                     {
                         // TODO: Proper way to get these?
-                        cruids.Add((ulong)Random.Shared.NextInt64());
+                        cruids.Add(Random.Shared.NextCRUID());
                     }
                 }
             }
@@ -297,7 +297,7 @@ public partial class RedPackageWriter
 
     private string? GetClassName(RedBaseClass cls)
     {
-        if (cls is DynamicBaseClass dbc)
+        if (cls is IDynamicClass dbc)
         {
             return dbc.ClassName;
         }

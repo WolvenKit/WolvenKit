@@ -18,6 +18,16 @@ public class TilesReader : Red4Reader, IBufferReader
 
         var header = _reader.BaseStream.ReadStruct<TilesBufferHeader>();
 
+        tiles.Metadata = new TilesMetadata()
+        {
+            Uk1 = header.uk1,
+            TileX = header.tileX,
+            TileY = header.tileY,
+            Uk2 = header.uk2,
+            Uk3 = header.uk3,
+            Uk4 = header.uk4
+        };
+
         tiles.Uk1.X = _reader.ReadSingle();
         tiles.Uk1.Y = _reader.ReadSingle();
         tiles.Uk1.Z = _reader.ReadSingle();
@@ -49,10 +59,12 @@ public class TilesReader : Red4Reader, IBufferReader
             {
                 u.Indices.Add(_reader.ReadUInt16());
             }
+
             for (int j = 0; j < 3; j++)
             {
                 u.ConnectedFaces.Add(new TileConnectedFace(_reader.ReadUInt16()));
             }
+
             u.Three = _reader.ReadUInt16();
             u.NumIndices = _reader.ReadByte();
             u.Bits = _reader.ReadByte();
@@ -76,28 +88,58 @@ public class TilesReader : Red4Reader, IBufferReader
             tiles.Indices.Add(u);
         }
 
-        for (int i = 0; i < header.count4; i++)
+        for (int i = 0; i < header.count5; i++)
         {
-            tiles.Flags.Add(_reader.ReadUInt32());
+            tiles.Uk3.Add(new Vector3
+            {
+                X = _reader.ReadSingle(),
+                Y = _reader.ReadSingle(),
+                Z = _reader.ReadSingle(),
+            });
         }
 
         for (int i = 0; i < header.count6; i++)
         {
+            tiles.Flags.Add(_reader.ReadUInt32());
+        }
+
+        for (int i = 0; i < header.count7; i++)
+        {
             var u = new TilesBufferUk4();
             for (int j = 0; j < 6; j++)
             {
-                u.Uk1.Add(new TilesBufferUk4_1()
-                {
-                    Value = _reader.ReadSByte(),
-                    Flag = _reader.ReadSByte()
-                });
+                u.Uk1.Add(new TilesBufferUk4_1() { Value = _reader.ReadSByte(), Flag = _reader.ReadSByte() });
             }
+
             u.Uk2 = _reader.ReadUInt32();
             tiles.Info.Add(u);
         }
 
-        buffer.Data = tiles;
+        for (int i = 0; i < header.count8; i++)
+        {
+            tiles.Uk4.Add(new TilesBufferUk5
+            {
+                Uk1 = new Vector3
+                {
+                    X = _reader.ReadSingle(),
+                    Y = _reader.ReadSingle(),
+                    Z = _reader.ReadSingle()
+                },
+                Uk2 = new Vector3
+                {
+                    X = _reader.ReadSingle(),
+                    Y = _reader.ReadSingle(),
+                    Z = _reader.ReadSingle()
+                },
+                Uk3 = _reader.ReadSingle(),
+                Uk4 = _reader.ReadUInt32(),
+                Uk5 = _reader.ReadUInt32(),
+                Uk6 = _reader.ReadUInt32()
+        });
+        }
 
+        buffer.Data = tiles;
+        
         return EFileReadErrorCodes.NoError;
     }
 }

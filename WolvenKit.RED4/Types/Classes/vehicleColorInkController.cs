@@ -61,6 +61,30 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(16)] 
+		[RED("vvcComponent")] 
+		public CWeakHandle<vehicleVisualCustomizationComponent> VvcComponent
+		{
+			get => GetPropertyValue<CWeakHandle<vehicleVisualCustomizationComponent>>();
+			set => SetPropertyValue<CWeakHandle<vehicleVisualCustomizationComponent>>(value);
+		}
+
+		[Ordinal(17)] 
+		[RED("primaryColorPane")] 
+		public inkWidgetReference PrimaryColorPane
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("secondaryColorPane")] 
+		public inkWidgetReference SecondaryColorPane
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(19)] 
 		[RED("primaryColor")] 
 		public CArray<inkImageWidgetReference> PrimaryColor
 		{
@@ -68,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<inkImageWidgetReference>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("secondaryColor")] 
 		public CArray<inkImageWidgetReference> SecondaryColor
 		{
@@ -76,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<inkImageWidgetReference>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
 		[RED("carPartType")] 
 		public CEnum<VehicleVisualCustomizationWidgetCarPart> CarPartType
 		{
@@ -84,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<VehicleVisualCustomizationWidgetCarPart>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(22)] 
 		[RED("colorModDefinition")] 
 		public CHandle<redCallbackObject> ColorModDefinition
 		{
@@ -92,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(23)] 
 		[RED("cachedPrimaryColor")] 
 		public CColor CachedPrimaryColor
 		{
@@ -100,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CColor>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(24)] 
 		[RED("cachedSecondaryColor")] 
 		public CColor CachedSecondaryColor
 		{
@@ -108,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CColor>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(25)] 
 		[RED("colorSecondaryCodeListener")] 
 		public CHandle<redCallbackObject> ColorSecondaryCodeListener
 		{
@@ -116,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(26)] 
 		[RED("vehicleCollisionListener")] 
 		public CHandle<redCallbackObject> VehicleCollisionListener
 		{
@@ -124,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(27)] 
 		[RED("vehicleDamageListener")] 
 		public CHandle<redCallbackObject> VehicleDamageListener
 		{
@@ -132,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(28)] 
 		[RED("vehicleModBlockedByDamageListener")] 
 		public CHandle<redCallbackObject> VehicleModBlockedByDamageListener
 		{
@@ -140,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(29)] 
 		[RED("vehicleModActiveListener")] 
 		public CHandle<redCallbackObject> VehicleModActiveListener
 		{
@@ -148,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(30)] 
 		[RED("vehicleTPPCallbackID")] 
 		public CHandle<redCallbackObject> VehicleTPPCallbackID
 		{
@@ -156,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(31)] 
 		[RED("vehicleSpeedListener")] 
 		public CHandle<redCallbackObject> VehicleSpeedListener
 		{
@@ -164,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(32)] 
 		[RED("cachedColorDefinitions")] 
 		public vehicleVisualModdingDefinition CachedColorDefinitions
 		{
@@ -172,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<vehicleVisualModdingDefinition>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(33)] 
 		[RED("moddingBlockedByDamage")] 
 		public CBool ModdingBlockedByDamage
 		{
@@ -180,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(34)] 
 		[RED("visualCustomizationActive")] 
 		public CBool VisualCustomizationActive
 		{
@@ -188,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(35)] 
 		[RED("spoilerDeployed")] 
 		public CBool SpoilerDeployed
 		{
@@ -196,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(36)] 
 		[RED("cachedTppView")] 
 		public CBool CachedTppView
 		{
@@ -204,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(37)] 
 		[RED("fakeUpdateProxy")] 
 		public CHandle<inkanimProxy> FakeUpdateProxy
 		{
@@ -212,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(38)] 
 		[RED("damageAnimLoopProxy")] 
 		public CHandle<inkanimProxy> DamageAnimLoopProxy
 		{
@@ -222,6 +246,8 @@ namespace WolvenKit.RED4.Types
 
 		public vehicleColorInkController()
 		{
+			PrimaryColorPane = new inkWidgetReference();
+			SecondaryColorPane = new inkWidgetReference();
 			PrimaryColor = new();
 			SecondaryColor = new();
 			CachedPrimaryColor = new CColor();

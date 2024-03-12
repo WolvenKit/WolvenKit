@@ -51,9 +51,10 @@ public class FileSystemArchive : ICyberGameArchive
 
     private bool TryGetFile(ulong hash, [NotNullWhen(true)] out string? path)
     {
-        foreach (var filePath in Directory.EnumerateFiles(Project.ModDirectory, "*", SearchOption.AllDirectories))
+        var modDirectory = Project.ModDirectory;
+        foreach (var filePath in Directory.EnumerateFiles(modDirectory, "*", SearchOption.AllDirectories))
         {
-            var tHash = FNV1A64HashAlgorithm.HashString(ResourcePath.SanitizePath(filePath[(Project.ModDirectory.Length + 1)..]));
+            var tHash = FNV1A64HashAlgorithm.HashString(ResourcePath.SanitizePath(filePath[(modDirectory.Length + 1)..]));
             if (tHash == hash)
             {
                 path = filePath;
@@ -69,9 +70,10 @@ public class FileSystemArchive : ICyberGameArchive
     {
         var result = new Dictionary<ulong, IGameFile>();
 
-        foreach (var filePath in Directory.EnumerateFiles(Project.ModDirectory, "*", SearchOption.AllDirectories))
+        var modDirectory = Project.ModDirectory;
+        foreach (var filePath in Directory.EnumerateFiles(modDirectory, "*", SearchOption.AllDirectories))
         {
-            var hash = FNV1A64HashAlgorithm.HashString(ResourcePath.SanitizePath(filePath[(Project.ModDirectory.Length + 1)..]));
+            var hash = FNV1A64HashAlgorithm.HashString(ResourcePath.SanitizePath(filePath[(modDirectory.Length + 1)..]));
 
             result.Add(hash, new FileEntry(_hashService)
             {
@@ -85,6 +87,11 @@ public class FileSystemArchive : ICyberGameArchive
 
     public FileSystemArchive(Cp77Project project, IHashService hashService)
     {
+        if (string.IsNullOrEmpty(project.ModDirectory) || !Directory.Exists(project.ModDirectory))
+        {
+            throw new ArgumentException(nameof(project.ModDirectory));
+        }
+
         _hashService = hashService;
 
         Project = project;
@@ -92,10 +99,5 @@ public class FileSystemArchive : ICyberGameArchive
         ArchiveAbsolutePath = $"<virtual FileSystemArchive>";
         ArchiveRelativePath = $"<virtual FileSystemArchive>";
         Name = $"<{Project.Name}>";
-
-        if (string.IsNullOrEmpty(Project.ModDirectory) || !Directory.Exists(Project.ModDirectory))
-        {
-            throw new ArgumentException(nameof(Project.ModDirectory));
-        }
     }
 }

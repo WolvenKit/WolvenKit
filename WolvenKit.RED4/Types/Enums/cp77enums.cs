@@ -6010,6 +6010,7 @@ public static partial class Enums
 		Spoiler = 5,
 		SpoilerHidden = 6
 	}
+	
 	public enum VendorConfirmationPopupType
 	{
 		Default = 0,
@@ -8292,7 +8293,8 @@ public static partial class Enums
 		CP77_Patch_2_0_Hotfix2 = 2020,
 		CP77_Patch_2_1 = 2100,
 		CP77_Patch_2_1_Hotfix1 = 2110,
-		Current = 2110
+		CP77_Patch_2_1_Hotfix2 = 2120,
+		Current = 2120
 	}
 
 	public enum gameGameplayEventFlag
@@ -18743,8 +18745,9 @@ public static partial class Enums
 	{
 		None = 0,
 		Primary = 1,
-		Secondary = 2
-	}
+		Secondary = 2,
+        Lights = 3
+    }
 
 	public enum vehicleColorSelectorMenuCloseReason
 	{
@@ -18752,6 +18755,7 @@ public static partial class Enums
 		Reset = 1,
 		Cancel = 2
 	}
+	
 	public enum vehicleCoolExitImpulseLevel
 	{
 		NoExit = 0,

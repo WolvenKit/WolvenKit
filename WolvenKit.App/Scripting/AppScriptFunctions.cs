@@ -197,40 +197,44 @@ public class AppScriptFunctions : ScriptFunctions
     /// <returns></returns>
     public virtual object? LoadGameFileFromProject(string path, string type)
     {
-        if (_projectManager.ActiveProject == null)
+        if (_archiveManager.ProjectArchive is not FileSystemArchive projectArchive)
         {
             _loggerService.Error("No project loaded");
             return null;
         }
 
-        foreach (var file in Directory.EnumerateFiles(_projectManager.ActiveProject.ModDirectory, "*.*", SearchOption.AllDirectories))
+        foreach (var (_, gameFile) in projectArchive.Files)
         {
-            var relPath = Path.GetRelativePath(_projectManager.ActiveProject.ModDirectory, file);
-            if (relPath == path)
+            if (gameFile.FileName != path)
             {
-                using var fs = File.Open(file, FileMode.Open);
-                using var cr = new CR2WReader(fs);
+                continue;
+            }
 
-                if (cr.ReadFile(out var cr2wFile) != EFileReadErrorCodes.NoError)
-                {
-                    _loggerService.Error($"\"{relPath}\" is not a CR2W file");
-                    return null;
-                }
+            using var ms = new MemoryStream();
+            gameFile.Extract(ms);
+            ms.Position = 0;
+            
+            using var cr = new CR2WReader(ms);
 
-                if (type == "cr2w")
-                {
-                    return cr2wFile;
-                }
-
-                if (type == "json")
-                {
-                    var dto = new RedFileDto(cr2wFile!);
-                    return RedJsonSerializer.Serialize(dto);
-                }
-
-                _loggerService.Error($"Unsupported load type \"{type}\"");
+            if (cr.ReadFile(out var cr2wFile) != EFileReadErrorCodes.NoError)
+            {
+                _loggerService.Error($"\"{gameFile.FileName}\" is not a CR2W file");
                 return null;
             }
+
+            if (type == "cr2w")
+            {
+                return cr2wFile;
+            }
+
+            if (type == "json")
+            {
+                var dto = new RedFileDto(cr2wFile!);
+                return RedJsonSerializer.Serialize(dto);
+            }
+
+            _loggerService.Error($"Unsupported load type \"{type}\"");
+            return null;
         }
 
         return null;
@@ -244,15 +248,15 @@ public class AppScriptFunctions : ScriptFunctions
     /// <returns></returns>
     public virtual object? LoadRawJsonFromProject(string path, string type)
     {
-        if (_projectManager.ActiveProject == null)
+        if (_archiveManager.ProjectArchive is not FileSystemArchive projectArchive)
         {
             _loggerService.Error("No project loaded");
             return null;
         }
 
-        foreach (var file in Directory.EnumerateFiles(_projectManager.ActiveProject.RawDirectory, "*.*", SearchOption.AllDirectories))
+        foreach (var file in Directory.EnumerateFiles(projectArchive.Project.RawDirectory, "*.*", SearchOption.AllDirectories))
         {
-            var relPath = Path.GetRelativePath(_projectManager.ActiveProject.RawDirectory, file);
+            var relPath = Path.GetRelativePath(projectArchive.Project.RawDirectory, file);
             if (relPath == path)
             {
                 var json = File.ReadAllText(file);
@@ -471,8 +475,6 @@ public class AppScriptFunctions : ScriptFunctions
             return;
         }
 
-        var projectArchive = proj.AsArchive();
-
         var fileDict = new Dictionary<FileInfo, GlobalExportArgs>();
         foreach (var entry in fileList)
         {
@@ -480,20 +482,20 @@ public class AppScriptFunctions : ScriptFunctions
             {
                 if (settingsPair is [string filePath1])
                 {
-                    AddFile(filePath1, projectArchive, defaultSettings);
+                    AddFile(filePath1, defaultSettings);
                     continue;
                 }
 
                 if (settingsPair is [string filePath2, ScriptObject settings])
                 {
-                    AddFile(filePath2, projectArchive, settings);
+                    AddFile(filePath2, settings);
                     continue;
                 }
             }
 
             if (entry is string fileStr)
             {
-                AddFile(fileStr, projectArchive, defaultSettings);
+                AddFile(fileStr, defaultSettings);
                 continue;
             }
 
@@ -504,7 +506,7 @@ public class AppScriptFunctions : ScriptFunctions
         {
             if (kvp.Value.Get<MeshExportArgs>().MeshExporter == MeshExporterType.REDmod)
             {
-                Task.Run(() => _importExportHelper.Export(new DirectoryInfo(proj.ModDirectory), kvp.Key, new DirectoryInfo(proj.RawDirectory)));
+                Task.Run(() => _importExportHelper.Export(new DirectoryInfo(proj.ModDirectory), kvp.Key, new DirectoryInfo(proj.RawDirectory), kvp.Value.Get<MeshExportArgs>()));
             }
             else
             {
@@ -512,7 +514,7 @@ public class AppScriptFunctions : ScriptFunctions
             }
         });
 
-        void AddFile(string filePath, FileSystemArchive projectArchive, ScriptObject? settings = null)
+        void AddFile(string filePath, ScriptObject? settings = null)
         {
             var fileInfo = new FileInfo(Path.Combine(proj.ModDirectory, filePath));
             if (!fileInfo.Exists)
@@ -528,7 +530,7 @@ public class AppScriptFunctions : ScriptFunctions
             }
 
             var globalExport = settings != null ? GetGlobalExportArgs(settings) : new GlobalExportArgs();
-            _importExportHelper.Finalize(globalExport, projectArchive);
+            _importExportHelper.Finalize(globalExport);
 
             fileDict.Add(fileInfo, globalExport);
         }
@@ -574,7 +576,12 @@ public class AppScriptFunctions : ScriptFunctions
         }
 
         IGameFile? targetFile = null;
-        var projectArchive = _projectManager.ActiveProject.AsArchive();
+
+        if (_archiveManager.ProjectArchive is not FileSystemArchive projectArchive)
+        {
+            throw new Exception();
+        }
+
         foreach (var (fileHash, file) in projectArchive.Files)
         {
             if (fileHash == hash)

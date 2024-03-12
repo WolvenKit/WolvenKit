@@ -2,18 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.Extensions.DependencyModel;
 using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
 using WolvenKit.Common.DDS;
-using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
-using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.Modkit.RED4.Tools;
-using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 using Vec3 = System.Numerics.Vector3;
@@ -23,9 +19,8 @@ namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
-        public bool ExportMorphTargets(Stream targetStream, FileInfo outfile, List<ICyberGameArchive> archives, string modFolder, bool isGLBinary = true, ValidationMode vMode = ValidationMode.TryFix)
+        public bool ExportMorphTargets(CR2WFile cr2w, FileInfo outfile, bool isGLBinary = true, ValidationMode vMode = ValidationMode.TryFix)
         {
-            var cr2w = _parserService.ReadRed4File(targetStream);
             if (cr2w is not { RootChunk: MorphTargetMesh morphBlob } || morphBlob.Blob.Chunk is not rendRenderMorphTargetMeshBlob blob || blob.BaseBlob.Chunk is not rendRenderMeshBlob rendBlob)
             {
                 _loggerService.Error("Morphtarget: does not look like a valid morphtarget");
@@ -34,26 +29,15 @@ namespace WolvenKit.Modkit.RED4
 
             RawArmature? rig = null;
 
-            var hash = morphBlob.BaseMesh.DepotPath.GetRedHash(); //FNV1A64HashAlgorithm.HashString(morphBlob.BaseMesh.DepotPath.ToString().NotNull());
-            var meshStream = new MemoryStream();
-            foreach (var ar in archives)
-            {
-                if (ar.Files.TryGetValue(hash, out var gameFile))
-                {
-                    gameFile.Extract(meshStream);
-                    break;
-                }
-            }
-            var meshCr2w = _parserService.ReadRed4File(meshStream);
-            if (meshCr2w is { RootChunk: CMesh { RenderResourceBlob.Chunk: rendRenderMeshBlob } baseMeshBlob })
+            if (TryFindFile(morphBlob.BaseMesh.DepotPath, out var result) == FindFileResult.NoError && 
+                result.File is { RootChunk: CMesh { RenderResourceBlob.Chunk: rendRenderMeshBlob } baseMeshBlob })
             {
                 rig = MeshTools.GetOrphanRig(baseMeshBlob);
             }
 
-
             using var meshBuffer = new MemoryStream(rendBlob.RenderBuffer.Buffer.GetBytes());
 
-            var meshesInfo = MeshTools.GetMeshesinfo(rendBlob, meshCr2w?.RootChunk as CMesh);
+            var meshesInfo = MeshTools.GetMeshesinfo(rendBlob, result.File?.RootChunk as CMesh);
 
             var expMeshes = MeshTools.ContainRawMesh(meshBuffer, meshesInfo, true);
 
@@ -113,9 +97,6 @@ namespace WolvenKit.Modkit.RED4
             {
                 File.WriteAllBytes(Path.Combine(dir.FullName, $"{Path.GetFileNameWithoutExtension(outfile.FullName)}_{i}.dds"), textureStreams[i].ToArray());
             }
-
-            targetStream.Dispose();
-            targetStream.Close();
 
             return true;
         }

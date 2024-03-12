@@ -176,6 +176,11 @@ namespace WolvenKit.Views.Shell
             {
                 hs.SaveUserHashes();
             }
+            var cruidService = Locator.Current.GetService<CRUIDService>();
+            if (cruidService is { } cs)
+            {
+                cs.SaveUserCRUIDS();
+            }
             Application.Current.Shutdown();
         }
 

@@ -2,9 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <VersionPrefix>2.1.1</VersionPrefix>
+    <VersionPrefix>8.13.0</VersionPrefix>
     <VersionSuffix>$(VersionSuffix)</VersionSuffix>
-    <Platforms>x64</Platforms>
+	<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    
+	  <Platforms>x64</Platforms>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 	<Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

@@ -83,7 +83,7 @@ public partial class ExportViewModel : AbstractExportViewModel
 
             if (Activator.CreateInstance(item.Properties.GetType()) is ImportExportArgs a)
             {
-                item.Properties = a;
+                item.SetProperties(a);
             }
         }
     }
@@ -92,8 +92,7 @@ public partial class ExportViewModel : AbstractExportViewModel
 
     protected override async Task ExecuteProcessBulk(bool all = false)
     {
-        var proj = _projectManager.ActiveProject;
-        if (proj == null)
+        if (_archiveManager.ProjectArchive is not FileSystemArchive projectArchive)
         {
             _loggerService.Error("No project loaded!");
             return;
@@ -109,8 +108,6 @@ public partial class ExportViewModel : AbstractExportViewModel
 
         //prepare a list of failed items
         var failedItems = new List<string>();
-
-        var projectArchive = proj.AsArchive();
 
         var toBeExported = Items
             .Where(_ => all || _.IsChecked)
@@ -169,7 +166,7 @@ public partial class ExportViewModel : AbstractExportViewModel
         }
 
         var settings = new GlobalExportArgs().Register(e);
-        if (!_importExportHelper.Finalize(settings, projectArchive))
+        if (!_importExportHelper.Finalize(settings))
         {
             return false;
         }
@@ -256,8 +253,13 @@ public partial class ExportViewModel : AbstractExportViewModel
         }
 
 
-        OpusTools opusTools = new(_projectManager.ActiveProject.NotNull().ModDirectory, _projectManager.ActiveProject.RawDirectory, _archiveManager, opusExportArgs.UseMod);
-        var availableItems = opusTools.Info.OpusHashes.Select(x => new CollectionItemViewModel<uint>(x));
+        var info = OpusTools.GetOpusInfo(_archiveManager, opusExportArgs.UseMod);
+        if (info == null)
+        {
+            return;
+        }
+
+        var availableItems = info.OpusHashes.Select(x => new CollectionItemViewModel<uint>(x));
 
         // open dialogue
         var result = Interactions.ShowCollectionView((availableItems, selectedItems));

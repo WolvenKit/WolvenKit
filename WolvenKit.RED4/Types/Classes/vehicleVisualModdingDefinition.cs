@@ -69,6 +69,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(8)] 
+		[RED("lightsColorDefined")] 
+		public CBool LightsColorDefined
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(9)] 
+		[RED("lightsColorH")] 
+		public CFloat LightsColorH
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(10)] 
 		[RED("decoPreset")] 
 		public CInt32 DecoPreset
 		{
@@ -76,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(11)] 
 		[RED("defaultAppearance")] 
 		public CName DefaultAppearance
 		{

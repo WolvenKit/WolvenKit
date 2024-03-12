@@ -7,6 +7,7 @@
     xmlns:exporters="clr-namespace:WolvenKit.Views.Exporters"
     xmlns:exportvms="clr-namespace:WolvenKit.App.ViewModels.Exporters;assembly=WolvenKit.App"
     xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:importers="clr-namespace:WolvenKit.Views.Importers"
     xmlns:importvms="clr-namespace:WolvenKit.App.ViewModels.Importers;assembly=WolvenKit.App"
     xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
@@ -102,6 +103,24 @@
                         <Setter Property="BorderThickness" Value="1" />
                         <Setter Property="DockPanel.Dock" Value="Right" />
                     </Style>
+
+                    <!--  Menu icon  -->
+                    <Style x:Key="ContextMenuIconStyleCodicons" TargetType="{x:Type iconPacks:PackIconCodicons}">
+                        <Setter Property="Width" Value="13" />
+                        <Setter Property="Height" Value="13" />
+                        <Setter Property="Padding" Value="0,0,0,0" />
+                        <Setter Property="HorizontalAlignment" Value="Center" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                    </Style>
+
+                    <!--  Menu icon  -->
+                    <Style x:Key="ContextMenuIconStyleMaterial" TargetType="{x:Type iconPacks:PackIconMaterial}">
+                        <Setter Property="Width" Value="13" />
+                        <Setter Property="Height" Value="13" />
+                        <Setter Property="Padding" Value="0,0,0,0" />
+                        <Setter Property="HorizontalAlignment" Value="Center" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                    </Style>
                 </ResourceDictionary>
 
                 <!--  Converters  -->
@@ -188,6 +207,8 @@
             <Geometry x:Key="HomeIcon">M 16,8.41421L 11.5,3.91421L 4.41421,11L 6,11L 6,12L 6,19L 9,19L 9,13L 14,13L 14,19L 17,19L 17,11L 18.5858,11L 17,9.41421L 17,6.00001L 16,6.00001L 16,8.41421 Z M 2,12L 11.5,2.50001L 15,6L 15,5L 18,5L 18,9L 21,12L 18,12L 17.9993,19.9983L 12.9993,19.9983L 12.9993,13.9983L 9.99939,13.998L 9.99939,19.998L 4.99939,19.998L 4.99939,12L 2,12 Z</Geometry>
 
             <SolidColorBrush x:Key="AccentColorBrush" Color="Black" />
+
         </ResourceDictionary>
+
     </Application.Resources>
 </Application>

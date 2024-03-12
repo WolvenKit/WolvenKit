@@ -8,7 +8,8 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     d:DesignHeight="100"
     d:DesignWidth="400"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    KeyboardNavigation.TabNavigation="Contained">
 
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedVector3Editor}}}">
         <Grid.ColumnDefinitions>
@@ -26,6 +27,7 @@
             Text="X" />
         <syncfusion:DoubleTextBox 
             Grid.Column="1"
+            KeyboardNavigation.TabIndex="1"
             NumberDecimalDigits="4"
             Value="{Binding XValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         <TextBlock
@@ -35,6 +37,7 @@
             Text="Y" />
         <syncfusion:DoubleTextBox 
             Grid.Column="3"
+            KeyboardNavigation.TabIndex="2"
             NumberDecimalDigits="4"
             Value="{Binding YValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         <TextBlock
@@ -42,7 +45,8 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Text="Z" />
-        <syncfusion:DoubleTextBox 
+        <syncfusion:DoubleTextBox
+            KeyboardNavigation.TabIndex="3"
             Grid.Column="5"
             NumberDecimalDigits="4"
             Value="{Binding ZValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />

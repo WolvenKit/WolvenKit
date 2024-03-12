@@ -29,6 +29,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
     private readonly ITweakDBService _tweakDbService;
     private readonly ILocKeyService _locKeyService;
     private readonly Red4ParserService _parserService;
+    private readonly CRUIDService _cruidService;
 
     public ChunkViewmodelFactory(
         IDocumentTabViewmodelFactory tabViewmodelFactory,
@@ -40,7 +41,8 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
         IArchiveManager archiveManager,
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
-        Red4ParserService parserService)
+        Red4ParserService parserService,
+        CRUIDService cruidService)
     {
         _documentTabViewmodelFactory = tabViewmodelFactory;
         _hashService = hashService;
@@ -52,6 +54,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
         _tweakDbService = tweakDbService;
         _locKeyService = locKeyService;
         _parserService = parserService;
+        _cruidService = cruidService;
     }
 
     public ChunkViewModel ChunkViewModel(IRedType rootChunk, string name, AppViewModel appViewModel, ChunkViewModel? parent = null, bool isReadOnly = false)
@@ -68,6 +71,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
             _tweakDbService,
             _locKeyService,
             _parserService,
+            _cruidService,
             parent,
             isReadOnly);
     }
@@ -86,6 +90,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
             _tweakDbService,
             _locKeyService,
             _parserService,
+            _cruidService,
             isReadOnly);
     }
 
@@ -103,6 +108,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
             _tweakDbService,
             _locKeyService,
             _parserService,
+            _cruidService,
             isReadOnly);
     }
 }

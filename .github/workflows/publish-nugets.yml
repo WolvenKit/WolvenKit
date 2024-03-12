@@ -13,7 +13,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 7.x
+        dotnet-version: 8.x
 
     # Pack and upload nugets for Types, Modkit and CLI
     - run: dotnet pack .\WolvenKit.RED4\WolvenKit.RED4.csproj

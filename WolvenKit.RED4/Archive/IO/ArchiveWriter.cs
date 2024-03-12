@@ -135,6 +135,8 @@ public class ArchiveWriter
             return false;
         }
 
+        fileDict = fileDict.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
+
         var ar = new Archive(string.Empty);
         using var bw = new BinaryWriter(outStream, Encoding.UTF8, true);
 

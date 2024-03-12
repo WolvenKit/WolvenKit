@@ -184,7 +184,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [NotifyCanExecuteChangedFor(nameof(OpenRootFolderCommand))]
     [NotifyCanExecuteChangedFor(nameof(CopyFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(CopyRelPathCommand))]
-    [NotifyCanExecuteChangedFor(nameof(ReimportFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(OverwriteWithGameFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(CutFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(DeleteFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(OpenInFileExplorerCommand))]
@@ -199,7 +199,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(CopyFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(CopyRelPathCommand))]
-    [NotifyCanExecuteChangedFor(nameof(ReimportFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(OverwriteWithGameFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(CutFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(OpenInFileExplorerCommand))]
     [NotifyCanExecuteChangedFor(nameof(PasteFileCommand))]
@@ -359,40 +359,70 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         await Task.CompletedTask;
     }
-
+    
     /// <summary>
     /// Reimports the game file to replace the current one
     /// </summary>
-    private bool CanReimportFile() => ActiveProject != null && SelectedItem != null && !IsInRawFolder(SelectedItem);
-    [RelayCommand(CanExecute = nameof(CanReimportFile))]
-    private async Task ReimportFile()
+    private bool CanOverwriteWithGameFile() =>
+        ActiveProject != null && SelectedItem != null && !IsInRawFolder(SelectedItem);
+
+    [RelayCommand(CanExecute = nameof(CanOverwriteWithGameFile))]
+    private async Task OverwriteWithGameFile()
     {
-        if (SelectedItem.NotNull().IsDirectory)
+        // Make sure we have something to export
+        if (SelectedItem is null && (SelectedItems?.Count ?? 0) == 0)
         {
-            _watcherService.IsSuspended = true;
+            return;
+        }
 
-            var progress = 0;
-            _progressService.Report(0);
 
-            var files = Directory.GetFiles(SelectedItem.FullName, "*", SearchOption.AllDirectories).ToList();
-            foreach (var file in files)
+        // Collect hashes of all selected items, we'll export them after
+        HashSet<ulong> selectedItems = [];
+
+        foreach (var currentItem in (SelectedItems ?? []).Cast<FileModel>())
+        {
+            if (!currentItem.IsDirectory)
             {
-                var relPath = FileModel.GetRelativeName(file, ActiveProject.NotNull());
-                var hash = FNV1A64HashAlgorithm.HashString(relPath);
-                await Task.Run(() => _gameController.GetController().AddToMod(hash));
-
-                progress++;
-                _progressService.Report(progress / (float)files.Count);
+                selectedItems.Add(currentItem.Hash);
+                continue;
             }
 
-            _watcherService.IsSuspended = false;
+            var files = Directory.GetFiles(currentItem.FullName, "*", SearchOption.AllDirectories).ToList();
+            foreach (var hash in files
+                         .Select(file => FileModel.GetRelativeName(file, ActiveProject.NotNull()))
+                         .Select(FNV1A64HashAlgorithm.HashString))
+            {
+                selectedItems.Add(hash);
+            }
+        }
 
-            _progressService.Completed();
-        }
-        else
+        if (SelectedItem is not null)
         {
-            _gameController.GetController().AddToMod(SelectedItem.Hash);
+            selectedItems.Add(SelectedItem.Hash); // HashSet won't add duplicate items
         }
+
+        // Suspend file watcher, then export everything
+        _watcherService.IsSuspended = true;
+
+        // Progress nreporting
+        var progress = 0;
+        _progressService.Report(0);
+
+        // Define var outside of loop
+        var controller = _gameController.GetController();
+
+        foreach (var hash in selectedItems)
+        {
+            await Task.Run(() => controller.AddToMod(hash));
+            progress++;
+            _progressService.Report(progress / (float)selectedItems.Count);
+        }
+
+        // OK, we're done
+        _progressService.Completed();
+
+        // un-suspend watcher service again
+        _watcherService.IsSuspended = false;
     }
 
     /// <summary>
@@ -524,9 +554,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
 
     /// <summary>
-    /// Renames selected node.
+    /// Renames selected node. Works for files and directories.
     /// </summary>
-    private bool CanRenameFile() => ActiveProject != null && SelectedItem != null && !SelectedItem.IsDirectory;
+    private bool CanRenameFile() => ActiveProject != null && SelectedItem != null;
     [RelayCommand(CanExecute = nameof(CanRenameFile))]
     private void RenameFile()
     {

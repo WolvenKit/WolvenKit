@@ -24,7 +24,7 @@ public partial class WorldSharedDataBufferReader : Red4Reader, IBufferReader
                     return ReadWorldTransformsBuffer(buffer);
                 }   
                 else if (value is worldInstancedDestructibleMeshNode node2
-                         && node2.CookedInstanceTransforms.SharedDataBuffer.GetValue() is worldSharedDataBuffer sdb2
+                         && node2.CookedInstanceTransforms.SharedDataBuffer?.GetValue() is worldSharedDataBuffer sdb2
                          && ReferenceEquals(sdb2.Buffer.Buffer, buffer))
                 {
                     return ReadCookedInstanceTransformsBuffer(buffer);
