@@ -264,6 +264,22 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = Value != "";
                 break;
             }
+            case entSkinnedMeshComponent skinnedMeshComponent:
+            {
+                Value = "";
+                if (skinnedMeshComponent.ParentTransform?.GetValue() is entHardTransformBinding parentTransformValue)
+                {
+                    Value = Stringify(parentTransformValue);
+                }
+
+                if (skinnedMeshComponent.Mesh.DepotPath.GetResolvedText() is string dePathText)
+                {
+                    Value = Value.Length == 0 ? $"{dePathText}" : $" ({dePathText})";
+                }
+
+                IsValueExtrapolated = Value != "";
+                break;
+            }
             case entDynamicActorRepellingComponent repComponent when
                 repComponent.ParentTransform?.GetValue() is entHardTransformBinding parentTransformValue:
                 Value = Stringify(parentTransformValue);
