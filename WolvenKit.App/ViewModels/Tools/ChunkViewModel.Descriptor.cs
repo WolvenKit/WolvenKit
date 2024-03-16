@@ -251,6 +251,14 @@ public partial class ChunkViewModel
                 return;
             }
         }
+        else if (ResolvedData is localizationPersistenceOnScreenEntries jsonRoot)
+        {
+            Descriptor = $"[{jsonRoot.Entries.Count}]";
+            if (Descriptor is not null and not "")
+            {
+                return;
+            }
+        }
         else if (ResolvedData is gameFxResource fxResource)
         {
             Descriptor = fxResource.Effect.DepotPath.GetResolvedText();
