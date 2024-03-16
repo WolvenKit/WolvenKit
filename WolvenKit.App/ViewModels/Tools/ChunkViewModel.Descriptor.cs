@@ -21,7 +21,7 @@ public partial class ChunkViewModel
         if (Data is worldNodeData sst && Tab is RDTDataViewModel dvm &&
             dvm.Chunks[0].Data is worldStreamingSector wss && sst.NodeIndex < wss.Nodes.Count)
         {
-            Descriptor = $"[{sst.NodeIndex}] {wss.Nodes[sst.NodeIndex].NotNull().Chunk.NotNull().DebugName}";
+            Descriptor = $"[{sst.NodeIndex}] {GetNameFrom(wss.Nodes[sst.NodeIndex].NotNull().Chunk)}";
             return;
         }
 
@@ -204,14 +204,31 @@ public partial class ChunkViewModel
         {
             Descriptor = tBinding.BindName;
         }
-        else if (ResolvedData is WorldTransform wBinding)
+        else if (ResolvedData is WorldTransform bind)
         {
-            Descriptor = $"{wBinding.Position}, ${wBinding.Orientation}";
+            Descriptor =
+                $"Pos: (X: {(float)bind.Position.X:G9}, Y: {(float)bind.Position.Y:G9}, Z: {(float)bind.Position.Z:G9})";
+            Descriptor =
+                $"{Descriptor}, Orientation: ({bind.Orientation})";
+            return;
+        }
+        else if (ResolvedData is WorldPosition position)
+        {
+            Descriptor = $"{(float)position.X:G9}, {(float)position.Y:G9}, {(float)position.Z:G9}";
             return;
         }
         else if (ResolvedData is inkTextureSlot texturesSlot)
         {
             var desc = texturesSlot.Texture.DepotPath.GetResolvedText();
+            if (!string.IsNullOrEmpty(desc))
+            {
+                Descriptor = desc;
+            }
+        }
+        else if (ResolvedData is worldInstancedMeshNode instancedMeshNode)
+        {
+            // If this isn't overwritten by debugName, put the mesh name instead
+            var desc = GetNameFrom(instancedMeshNode);
             if (!string.IsNullOrEmpty(desc))
             {
                 Descriptor = desc;
@@ -237,6 +254,14 @@ public partial class ChunkViewModel
         else if (ResolvedData is FxResourceMapData mapData)
         {
             Descriptor = mapData.Key;
+            if (Descriptor is not null and not "")
+            {
+                return;
+            }
+        }
+        else if (ResolvedData is localizationPersistenceOnScreenEntries jsonRoot)
+        {
+            Descriptor = $"[{jsonRoot.Entries.Count}]";
             if (Descriptor is not null and not "")
             {
                 return;
@@ -274,8 +299,9 @@ public partial class ChunkViewModel
                 Descriptor = $"[{dict.Count}]";
             }
         }
-
+        
         // some common "names" of classes that might be useful to display in the UI
+        // Only overwrite existing value if the new one isn't empty
         var propNames = new string[]
         {
             "name", // default property
@@ -305,17 +331,19 @@ public partial class ChunkViewModel
             foreach (var propName in propNames)
             {
                 var prop = GetPropertyByRedName(irc.GetType(), propName);
-                if (prop is not null)
+                if (prop is null)
                 {
-                    var p = irc.GetProperty(prop.RedName.NotNull());
-                    if (p?.ToString() is null or "None")
-                    {
-                        continue;
-                    }
-
-                    Descriptor = p?.ToString();
-                    return;
+                    continue;
                 }
+
+                var desc = irc.GetProperty(prop.RedName.NotNull())?.ToString();
+                if (desc is null or "None" or "")
+                {
+                    continue;
+                }
+
+                Descriptor = desc;
+                return;
             }
         }
         else
@@ -328,10 +356,10 @@ public partial class ChunkViewModel
 
                     if (prop is not null)
                     {
-                        var val = prop.GetValue(Data);
-                        if (val is not null)
+                        var val = prop.GetValue(Data)?.ToString();
+                        if (val is not null and not "" and not "None")
                         {
-                            Descriptor = val.ToString().NotNull();
+                            Descriptor = val;
                         }
 
                         return;
@@ -339,5 +367,28 @@ public partial class ChunkViewModel
                 }
             }
         }
+
+        // Make sure that it's not null
+        Descriptor ??= "";
+    }
+
+    private static string GetNameFrom(worldNode? linkNode)
+    {
+        if (linkNode is null)
+        {
+            return "None";
+        }
+
+        if (linkNode.DebugName.GetResolvedText() is string s && s != "" && s != "None")
+        {
+            return s;
+        }
+
+        if (linkNode is worldInstancedMeshNode inst)
+        {
+            return inst.Mesh.DepotPath.GetResolvedText()?.Split("/").LastOrDefault() ?? "None";
+        }
+
+        return "None";
     }
 }

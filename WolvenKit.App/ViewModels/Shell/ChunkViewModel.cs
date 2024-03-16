@@ -350,6 +350,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             Parent.Parent?.CalculateValue();
         }
+        else if (Data is WorldPosition && Parent.Data is WorldTransform)
+
+        {
+            Parent.CalculateDescriptor();
+        }
 
 
         if (Parent.IsValueExtrapolated)
@@ -453,10 +458,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public bool ShouldShowDuplicate => IsInArray && !ShouldShowDuplicateAsNew;
 
-    // When shift is not held, paste into array
+    // When shift is not held, paste into array => PasteChunk
     public bool ShouldShowPasteIntoArray => ShouldShowArrayOps && !IsShiftBeingHeld;
 
-    // When shift is being held, overwrite array with selection
+    // When shift is being held, overwrite array with selection => ClearAndPasteChunk
     public bool ShouldShowOverwriteArray => ShouldShowArrayOps && IsShiftBeingHeld;
 
     // For arrays of indexables, allow renumbering index properties (e.g. for materialDefinitions)
@@ -1811,13 +1816,19 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         CalculateDescriptor();
         CalculateValue();
     }
-    
-    
+
     [RelayCommand(CanExecute = nameof(CanPasteChunks))]
     private void ClearAndPasteChunk()
     {
+        var isExpanded = IsExpanded;
         DeleteAll();
         PasteChunk();
+        if (!IsControlBeingHeld)
+        {
+            SetChildExpansionStates(false);
+        }
+
+        IsExpanded = isExpanded;
     }
     
     [RelayCommand(CanExecute = nameof(CanPasteChunks))]

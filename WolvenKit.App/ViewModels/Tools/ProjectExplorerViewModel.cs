@@ -714,12 +714,16 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         var modPath = Path.Combine(ActiveProject.NotNull().ModDirectory, FileModel.GetRelativeName(file, ActiveProject));
         var outDirectoryPath = Path.GetDirectoryName(modPath);
-        if (outDirectoryPath != null)
+        if (outDirectoryPath is null)
         {
-            Directory.CreateDirectory(outDirectoryPath);
-
-            await _modTools.ConvertFromJsonAndWriteAsync(new FileInfo(file), new DirectoryInfo(outDirectoryPath));
+            return;
         }
+
+        Directory.CreateDirectory(outDirectoryPath);
+
+        await _modTools.ConvertFromJsonAndWriteAsync(new FileInfo(file), new DirectoryInfo(outDirectoryPath));
+
+        _mainViewModel.ReloadChangedFiles();
 
     }
 
