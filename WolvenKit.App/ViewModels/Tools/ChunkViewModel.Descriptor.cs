@@ -204,9 +204,17 @@ public partial class ChunkViewModel
         {
             Descriptor = tBinding.BindName;
         }
-        else if (ResolvedData is WorldTransform wBinding)
+        else if (ResolvedData is WorldTransform bind)
         {
-            Descriptor = $"{wBinding.Position}, ${wBinding.Orientation}";
+            Descriptor =
+                $"Pos: (X: {(float)bind.Position.X:G9}, Y: {(float)bind.Position.Y:G9}, Z: {(float)bind.Position.Z:G9})";
+            Descriptor =
+                $"{Descriptor}, Orientation: ({bind.Orientation})";
+            return;
+        }
+        else if (ResolvedData is WorldPosition position)
+        {
+            Descriptor = $"{(float)position.X:G9}, {(float)position.Y:G9}, {(float)position.Z:G9}";
             return;
         }
         else if (ResolvedData is inkTextureSlot texturesSlot)
