@@ -43,7 +43,11 @@ public abstract partial class ImportExportItemViewModel : ObservableObject, ISel
 
     public void SetProperties(ImportExportArgs args)
     {
+        Properties.PropertyChanged -= Properties_PropertyChanged;
+        
         Properties = args;
         PropertiesDisplay = Properties.ToString();
+
+        Properties.PropertyChanged += Properties_PropertyChanged;
     }
 }
