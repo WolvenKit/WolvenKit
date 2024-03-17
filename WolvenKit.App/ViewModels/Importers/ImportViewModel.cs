@@ -188,8 +188,10 @@ public partial class ImportViewModel : AbstractImportViewModel
 
         if (sucessful > 0)
         {
-            _notificationService.Success($"{sucessful}/{total} files have been processed and are available in the Project Explorer");
-            _loggerService.Success($"{sucessful}/{total} files have been processed and are available in the Project Explorer");
+            _notificationService.Success(
+                $"{sucessful}/{total} files have been processed and are available in the Project Explorer's 'archive' section");
+            _loggerService.Success(
+                $"{sucessful}/{total} files have been processed and are available in the Project Explorer's 'archive' section");
         }
 
         //We format the list of failed export/import items here
