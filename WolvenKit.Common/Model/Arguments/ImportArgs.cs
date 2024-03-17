@@ -1,7 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Linq;
+using DynamicData;
 using SharpGLTF.Validation;
 using WolvenKit.RED4.Archive;
 using static WolvenKit.RED4.Types.Enums;
@@ -88,7 +91,31 @@ namespace WolvenKit.Common.Model.Arguments
         /// String Override to display info in datagrid.
         /// </summary>
         /// <returns>String</returns>
-        public override string ToString() => TextureGroup.ToString();
+        public override string ToString()
+        {
+            List<string> stringArgs = [];
+            stringArgs.Add(TextureGroup.ToString().Replace("TEXG_", ""));
+
+            if (PremultiplyAlpha)
+            {
+                stringArgs.Add("premultiplyAlpha: true");
+            }
+
+            if (IsGamma)
+            {
+                stringArgs.Add("isGamma: true");
+            }
+
+            if (GenerateMipMaps)
+            {
+                stringArgs.Add("mipMaps: true");
+            }
+
+            stringArgs.Add($"Compression: {Compression.ToString()}");
+            stringArgs.Add($"raw format: {RawFormat.ToString()}");
+
+            return string.Join(" | ", stringArgs);
+        }
     }
 
     /// <summary>
@@ -198,7 +225,44 @@ namespace WolvenKit.Common.Model.Arguments
         /// String Override to display info in datagrid.
         /// </summary>
         /// <returns>String</returns>
-        public override string ToString() => $"Mesh/Morphtarget | Import Format :  {ImportFormat}";
+        public override string ToString()
+        {
+            var stringParts = new List<string>();
+            switch (ImportFormat)
+            {
+                case GltfImportAsFormat.Anims:
+                    stringParts.Add("Animation");
+                    break;
+                case GltfImportAsFormat.Morphtarget:
+                    stringParts.Add("Morphtarget");
+                    break;
+                case GltfImportAsFormat.Rig:
+                    stringParts.Add("Armature");
+                    break;
+                case GltfImportAsFormat.PhysicalScene:
+                default:
+                case GltfImportAsFormat.MeshWithRig:
+                case GltfImportAsFormat.Mesh:
+                    stringParts.Add("Mesh");
+                    break;
+            }
+
+            if (ImportMaterials)
+            {
+                stringParts.Add("material: true");
+            }
+            else if (ImportMaterialOnly)
+            {
+                stringParts.Add("only material");
+            }
+
+            if (ImportGarmentSupport)
+            {
+                stringParts.Add("garmentSupport: true");
+            }
+
+            return string.Join(" | ", stringParts);
+        } 
     }
 
     public enum GltfImportAsFormat

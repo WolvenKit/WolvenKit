@@ -69,8 +69,8 @@ public class ImportableItemViewModel : ImportExportItemViewModel
                 => new GltfImportArgs()
                 {
                     ImportFormat = formatFromFilename ?? GltfImportAsFormat.Mesh,
-                    ImportGarmentSupport =
-                        formatFromFilename is GltfImportAsFormat.Mesh or GltfImportAsFormat.MeshWithRig
+                    // Mesh won't have an internal extension
+                    ImportGarmentSupport = formatFromFilename is null or GltfImportAsFormat.MeshWithRig 
                 },
 
             // common import
