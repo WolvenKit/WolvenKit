@@ -338,7 +338,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// String Override to display info in datagrid.
         /// </summary>
         /// <returns>String</returns>
-        public override string ToString() => "GLTF/GLB | " + $"Is Binary :  {IsBinary}";
+        public override string ToString() => "GLTF/GLB | " + $"Is Binary: {IsBinary}, Root Motion: {incRootMotion}";
     }
 
     /// <summary>

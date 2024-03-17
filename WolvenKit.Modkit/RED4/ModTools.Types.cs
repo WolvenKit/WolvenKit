@@ -29,11 +29,22 @@ public partial class ModTools
 			_ => $".{internalType}"
 		};
 
+    /// <summary>
+    /// Will match any potential type extension before the .glb/gltf
+    /// </summary>
     private static readonly Func<string, Optional<string>> TypeFromFileExt = (path) =>
 		TypeExtensionMatcher.Match(path).Groups["typeExtension"].Value switch {
 			string matched when !string.IsNullOrWhiteSpace(matched) => Optional.Some(matched.ToLower()),
 			_ => Optional.None<string>()
 		};
+
+    public static GltfImportAsFormat? GltfImportAsFormatFromFileExt(string path)
+    {
+	    var internalExtension = TypeFromFileExt(path).ToString() ?? "_";
+	    var importFormatString = char.ToUpper(internalExtension[0]) + internalExtension.Substring(1);
+
+	    return Enum.TryParse<GltfImportAsFormat>(importFormatString, out var importFormat) ? importFormat : null;
+    }
 
 	private static readonly Func<string, GltfImportAsFormat> ImportFormatFor = (type) =>
 		type switch {

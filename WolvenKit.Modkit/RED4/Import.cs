@@ -424,12 +424,7 @@ namespace WolvenKit.Modkit.RED4
         {
             var maybeType = TypeFromFileExt(rawRelative.Name);
 
-            var (internalExt, importFormat) =
-                maybeType.HasValue
-                ? (InternalExtForType(maybeType.Value), ImportFormatFor(maybeType.Value))
-                : args.ImportFormat == GltfImportAsFormat.MeshWithRig
-                    ? ($".mesh", args.ImportFormat)
-                    : ($".{args.ImportFormat.ToString().ToLower()}", args.ImportFormat);
+            var (internalExt, importFormat) = GetImportExtensionAndFormat(args, maybeType);
 
             // Drops the .glb/.gltf, and either adds or replaces the already present type ext
             var possibleRedPath =
@@ -548,6 +543,23 @@ namespace WolvenKit.Modkit.RED4
 
 
         }
+
+        private static (string, GltfImportAsFormat) GetImportExtensionAndFormat(GltfImportArgs args,
+            Optional<string> maybeType)
+        {
+            if (!maybeType.HasValue || maybeType.Value == "anims")
+            {
+                return (InternalExtForType(maybeType.Value), ImportFormatFor(maybeType.Value));
+            }
+
+            return args.ImportFormat switch
+            {
+                GltfImportAsFormat.MeshWithRig => ($".mesh", args.ImportFormat),
+                GltfImportAsFormat.Anims => ($".anims", GltfImportAsFormat.Anims),
+                _ => ($".{args.ImportFormat.ToString().ToLower()}", args.ImportFormat)
+            };
+        }
+            
 
 #pragma warning disable IDE0072 // Add missing cases
         private static ECookedFileFormat FromRawExtension(ERawFileFormat rawextension) =>

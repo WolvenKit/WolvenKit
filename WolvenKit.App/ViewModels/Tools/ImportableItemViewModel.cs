@@ -2,11 +2,13 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using DynamicData.Kernel;
 using WolvenKit.App.Models;
 using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 
@@ -44,69 +46,44 @@ public class ImportableItemViewModel : ImportExportItemViewModel
             throw new ArgumentException("extension is not ERawFileFormat", nameof(fileName));
         }
 
-        // get texture group from filename
-        var xbmArgs = new XbmImportArgs();
-        if (!IsRawTexture(rawFileFormat))
-        {
-            return rawFileFormat switch
-            {
-                ERawFileFormat.tga => xbmArgs,
-                ERawFileFormat.bmp => xbmArgs,
-                ERawFileFormat.jpg => xbmArgs,
-                ERawFileFormat.png => xbmArgs,
-                ERawFileFormat.tiff => xbmArgs,
-                ERawFileFormat.dds => xbmArgs,
-                ERawFileFormat.cube => xbmArgs,
-
-                ERawFileFormat.glb => new GltfImportArgs(),
-                ERawFileFormat.gltf => new GltfImportArgs(),
-
-                ERawFileFormat.ttf => new FntImportArgs(),
-                ERawFileFormat.wav => new OpusImportArgs(),
-                ERawFileFormat.masklist => new MlmaskImportArgs(),
-                ERawFileFormat.re => new ReImportArgs(),
-
-                ERawFileFormat.fbx => new CommonImportArgs(),
-                ERawFileFormat.csv => new CommonImportArgs(),
-                _ => throw new ArgumentOutOfRangeException
-                {
-                    HelpLink = null, HResult = 0, Source = rawFileFormat.ToString()
-                }
-            };
-        }
-
-        // first get settings from game
-        if (TryLoadXbmSettingsFromGame(fileName, archiveManager, projectManager, parserService, out var args))
-        {
-            xbmArgs = args;
-        }
-        else
-        {
-            // if not, get defaults from filename
-            xbmArgs = LoadXbmDefaultSettings(fileName);
-        }
+        var formatFromFilename = ModTools.GltfImportAsFormatFromFileExt(fileName);
 
         return rawFileFormat switch
         {
-            ERawFileFormat.tga => xbmArgs,
-            ERawFileFormat.bmp => xbmArgs,
-            ERawFileFormat.jpg => xbmArgs,
-            ERawFileFormat.png => xbmArgs,
-            ERawFileFormat.tiff => xbmArgs,
-            ERawFileFormat.dds => xbmArgs,
-            ERawFileFormat.cube => xbmArgs,
+            // xbm: try to guess texture format
+            ERawFileFormat.tga
+                or ERawFileFormat.bmp
+                or ERawFileFormat.jpg
+                or ERawFileFormat.png
+                or ERawFileFormat.tiff
+                or ERawFileFormat.dds
+                or ERawFileFormat.cube
+                => TryLoadXbmSettingsFromGame(fileName, archiveManager, projectManager, parserService,
+                    out var args)
+                    ? args
+                    : LoadXbmDefaultSettings(fileName),
 
-            ERawFileFormat.glb => new GltfImportArgs(),
-            ERawFileFormat.gltf => new GltfImportArgs(),
+            // glb or gltf: use format we read from file name, fall back to mesh
+            ERawFileFormat.glb
+                or ERawFileFormat.gltf
+                => new GltfImportArgs()
+                {
+                    ImportFormat = formatFromFilename ?? GltfImportAsFormat.Mesh,
+                    ImportGarmentSupport =
+                        formatFromFilename is GltfImportAsFormat.Mesh or GltfImportAsFormat.MeshWithRig
+                },
 
+            // common import
+            ERawFileFormat.fbx
+                or ERawFileFormat.csv => new CommonImportArgs(),
+
+            // everything else
             ERawFileFormat.ttf => new FntImportArgs(),
             ERawFileFormat.wav => new OpusImportArgs(),
             ERawFileFormat.masklist => new MlmaskImportArgs(),
             ERawFileFormat.re => new ReImportArgs(),
 
-            ERawFileFormat.fbx => new CommonImportArgs(),
-            ERawFileFormat.csv => new CommonImportArgs(),
-            _ => throw new ArgumentOutOfRangeException()
+            _ => throw new ArgumentOutOfRangeException(nameof(fileName), $"Couldn't import {nameof(rawFileFormat)}"),
         };
     }
 
@@ -196,6 +173,4 @@ public class ImportableItemViewModel : ImportExportItemViewModel
         return true;
 
     }
-
-    private static bool IsRawTexture(ERawFileFormat fmt) => fmt is ERawFileFormat.tga or ERawFileFormat.bmp or ERawFileFormat.jpg or ERawFileFormat.png or ERawFileFormat.dds or ERawFileFormat.tiff;
 }

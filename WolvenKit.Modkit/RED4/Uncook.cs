@@ -553,6 +553,7 @@ namespace WolvenKit.Modkit.RED4
                 case animAnimSet:
                     try
                     {
+                        // Add "anims" to outfile name so we can "guess" it back later
                         return ExportAnim(cr2wFile, outfile, settings.Get<AnimationExportArgs>().IsBinary, settings.Get<AnimationExportArgs>().incRootMotion);
                     }
                     catch (Exception e)
