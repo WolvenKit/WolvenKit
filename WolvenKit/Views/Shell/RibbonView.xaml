@@ -377,7 +377,8 @@
                 </Menu>
 
                 <Menu>
-                    <MenuItem Header="Launch Game" SubmenuOpened="MenuItem_SubmenuOpened">
+                    <MenuItem
+                        x:Name="MenuHeaderLaunchGame" Header="Launch Game" SubmenuOpened="MenuItem_SubmenuOpened">
                         <MenuItem.Icon>
                             <iconPacks:PackIconCodicons
                                 Foreground="{StaticResource WolvenKitYellow}"
@@ -401,11 +402,27 @@
                             </MenuItem.Icon>
                         </MenuItem>
 
-                        <!--  launch game fromsave  -->
+                        <!--  launch game and load last save  -->
+                        <MenuItem
+                            x:Name="MenuItemLaunchGameFromLastSave"
+                            Margin="2,1"
+                            CommandParameter="0"
+                            Header="Launch from last save"
+                            ToolTip="Launch game and load last save">
+                            <MenuItem.Icon>
+                                <iconPacks:PackIconCodicons
+                                    Margin="6,0"
+                                    Foreground="{StaticResource WolvenKitYellow}"
+                                    Kind="Play"
+                                    Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+
+                        <!--  launch game from save  -->
                         <MenuItem
                             x:Name="MenuItemLaunchGameSave"
                             Margin="2,1"
-                            Header="Launch game from save"
+                            Header="Launch game from save..."
                             ToolTip="Launch Game from savefile">
                             <MenuItem.Icon>
                                 <iconPacks:PackIconCodicons
