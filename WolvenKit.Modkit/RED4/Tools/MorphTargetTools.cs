@@ -19,7 +19,13 @@ namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
-        public bool ExportMorphTargets(CR2WFile cr2w, FileInfo outfile, bool isGLBinary = true, ValidationMode vMode = ValidationMode.TryFix)
+        public bool ExportMorphTargets(
+            CR2WFile cr2w,
+            FileInfo outfile,
+            bool isGLBinary = true,
+            bool exportTextures = false,
+            ValidationMode vMode = ValidationMode.TryFix
+        )
         {
             if (cr2w is not { RootChunk: MorphTargetMesh morphBlob } || morphBlob.Blob.Chunk is not rendRenderMorphTargetMeshBlob blob || blob.BaseBlob.Chunk is not rendRenderMeshBlob rendBlob)
             {
@@ -69,7 +75,9 @@ namespace WolvenKit.Modkit.RED4
                 expTargets.Add(ContainRawTarget(diffsBuffer, mappingBuffer, tempNumVertexDiffsInEachChunk, tempNumVertexDiffsMappingInEachChunk, targetsInfo.TargetStartsInVertexDiffs[i], targetsInfo.TargetStartsInVertexDiffsMapping[i], targetsInfo.TargetPositionDiffOffset[i], targetsInfo.TargetPositionDiffScale[i], expMeshes.Count));
             }
 
-            var textureStreams = ContainTextureStreams(blob, texBuffer);
+            // Only add textures to list if the setting is checked in the export
+            var textureStreams = exportTextures ? ContainTextureStreams(blob, texBuffer) : [];
+                
             var model = RawTargetsToGLTF(expMeshes, expTargets, targetsInfo.Names, rig);
 
             if (WolvenTesting.IsTesting)
@@ -86,12 +94,14 @@ namespace WolvenKit.Modkit.RED4
                 model.SaveGLTF(outfile.FullName, new WriteSettings(vMode));
             }
 
+            if (textureStreams.Count == 0)
+            {
+                return true;
+            }
+            
             var dir = new DirectoryInfo(outfile.FullName.Replace(Path.GetExtension(outfile.FullName), string.Empty) + "_textures");
 
-            if (textureStreams.Count > 0)
-            {
-                Directory.CreateDirectory(dir.FullName);
-            }
+            Directory.CreateDirectory(dir.FullName);
 
             for (var i = 0; i < textureStreams.Count; i++)
             {
