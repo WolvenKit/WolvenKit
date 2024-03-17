@@ -93,7 +93,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// String Override to display info in datagrid.
         /// </summary>
         /// <returns>String</returns>
-        public override string ToString() => $"GLTF/GLB | Is Binary: {IsBinary} | Textures: {ExportTextures}";
+        public override string ToString() => $"{(IsBinary ? "glb" : "gltf")} | Textures: {ExportTextures}";
 
     }
 
@@ -284,7 +284,18 @@ namespace WolvenKit.Common.Model.Arguments
         /// String Override to display info in datagrid.
         /// </summary>
         /// <returns>String</returns>
-        public override string ToString() => $"GLTF/GLB | Export Type : {meshExportType} | Lod filter : {LodFilter} | Is Binary : {isGLBinary}";
+        public override string ToString()
+        {
+            var stringParts = new List<string> { isGLBinary ? "glb" : "gltf" };
+            if (withMaterials)
+            {
+                stringParts.Add("materials: true");
+            }
+
+            stringParts.Add(meshExportType.ToString());
+            stringParts.Add($"Lod filter : {LodFilter}");
+            return string.Join(" | ", stringParts);
+        }
     }
 
     /// <summary>
@@ -338,7 +349,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// String Override to display info in datagrid.
         /// </summary>
         /// <returns>String</returns>
-        public override string ToString() => "GLTF/GLB | " + $"Is Binary: {IsBinary}, Root Motion: {incRootMotion}";
+        public override string ToString() => $"{(IsBinary ? "glb" : "gltf")}, Root Motion: {incRootMotion}";
     }
 
     /// <summary>

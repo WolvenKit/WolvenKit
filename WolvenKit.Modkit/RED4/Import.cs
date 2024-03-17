@@ -547,11 +547,12 @@ namespace WolvenKit.Modkit.RED4
         private static (string, GltfImportAsFormat) GetImportExtensionAndFormat(GltfImportArgs args,
             Optional<string> maybeType)
         {
-            if (!maybeType.HasValue || maybeType.Value == "anims")
+            // Anything but .mesh should have a value
+            if (!maybeType.HasValue)
             {
-                return (InternalExtForType(maybeType.Value), ImportFormatFor(maybeType.Value));
+                return ($".mesh", args.ImportFormat);
             }
-
+           
             return args.ImportFormat switch
             {
                 GltfImportAsFormat.MeshWithRig => ($".mesh", args.ImportFormat),

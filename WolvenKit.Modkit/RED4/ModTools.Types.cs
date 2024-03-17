@@ -26,7 +26,7 @@ public partial class ModTools
     private static readonly Func<string, string> InternalExtForType = (internalType) =>
 		internalType switch {
 			"meshwithrig" => ".mesh",
-			_ => $".{internalType}"
+			_ => $" "
 		};
 
     /// <summary>
