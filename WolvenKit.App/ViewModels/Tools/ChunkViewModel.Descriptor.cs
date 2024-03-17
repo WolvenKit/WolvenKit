@@ -217,6 +217,11 @@ public partial class ChunkViewModel
             Descriptor = $"{(float)position.X:G9}, {(float)position.Y:G9}, {(float)position.Z:G9}";
             return;
         }
+        else if (ResolvedData is gameAnimParamSlotsOption slotsOption)
+        {
+            Descriptor = $"{slotsOption.SlotID.GetResolvedText() ?? slotsOption.ParamName.GetResolvedText() ?? ""}";
+            return;
+        }
         else if (ResolvedData is inkTextureSlot texturesSlot)
         {
             var desc = texturesSlot.Texture.DepotPath.GetResolvedText();
