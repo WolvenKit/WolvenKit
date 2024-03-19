@@ -199,7 +199,7 @@ public partial class ImportView : ReactiveUserControl<ImportViewModel>
     {
         foreach (var item in e.AddedItems)
         {
-            if (item is GridRowInfo info && info.RowData is ImportExportItemViewModel vm)
+            if (item is GridRowInfo { RowData: ImportExportItemViewModel vm })
             {
                 vm.IsChecked = true;
             }
@@ -207,18 +207,17 @@ public partial class ImportView : ReactiveUserControl<ImportViewModel>
 
         foreach (var item in e.RemovedItems)
         {
-            if (item is GridRowInfo info && info.RowData is ImportExportItemViewModel vm)
+            if (item is GridRowInfo { RowData: ImportExportItemViewModel vm } && !e.AddedItems.Contains(item))
             {
                 vm.IsChecked = false;
             }
         }
 
-
-        ViewModel.ProcessSelectedCommand.NotifyCanExecuteChanged();
-        ViewModel.CopyArgumentsTemplateToCommand.NotifyCanExecuteChanged();
-        ViewModel.PasteArgumentsTemplateToCommand.NotifyCanExecuteChanged();
-        ViewModel.ImportSettingsCommand.NotifyCanExecuteChanged();
-        ViewModel.DefaultSettingsCommand.NotifyCanExecuteChanged();
+        ViewModel?.ProcessSelectedCommand.NotifyCanExecuteChanged();
+        ViewModel?.CopyArgumentsTemplateToCommand.NotifyCanExecuteChanged();
+        ViewModel?.PasteArgumentsTemplateToCommand.NotifyCanExecuteChanged();
+        ViewModel?.ImportSettingsCommand.NotifyCanExecuteChanged();
+        ViewModel?.DefaultSettingsCommand.NotifyCanExecuteChanged();
 
         // toggle additional options
         ShowSettings();

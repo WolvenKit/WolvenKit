@@ -546,11 +546,14 @@ namespace WolvenKit.Modkit.RED4
                     // actual type extension we want it to...
                     var typePreservingOutfile = new FileInfo($"{outfile.FullName}.dummyextguardthatwillberemoved");
 
-                    return ExportMorphTargets(cr2wFile, typePreservingOutfile, settings.Get<MorphTargetExportArgs>().IsBinary);
+                    return ExportMorphTargets(cr2wFile, typePreservingOutfile,
+                        settings.Get<MorphTargetExportArgs>().IsBinary,
+                        settings.Get<MorphTargetExportArgs>().ExportTextures);
 
                 case animAnimSet:
                     try
                     {
+                        // Add "anims" to outfile name so we can "guess" it back later
                         return ExportAnim(cr2wFile, outfile, settings.Get<AnimationExportArgs>().IsBinary, settings.Get<AnimationExportArgs>().incRootMotion);
                     }
                     catch (Exception e)

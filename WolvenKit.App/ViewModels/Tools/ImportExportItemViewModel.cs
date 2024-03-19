@@ -21,10 +21,8 @@ public abstract partial class ImportExportItemViewModel : ObservableObject, ISel
         Properties.PropertyChanged += Properties_PropertyChanged;
     }
 
-    private void Properties_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
+    private void Properties_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) =>
         PropertiesDisplay = Properties.ToString();
-    }
 
     public string BaseFile { get; set; }
 
@@ -49,7 +47,7 @@ public abstract partial class ImportExportItemViewModel : ObservableObject, ISel
         
         Properties = args;
         PropertiesDisplay = Properties.ToString();
-        
+
         Properties.PropertyChanged += Properties_PropertyChanged;
     }
 }

@@ -1,7 +1,7 @@
-﻿using System.Reactive.Disposables;
+﻿using System.Linq;
+using System.Reactive.Disposables;
 using ReactiveUI;
 using Syncfusion.UI.Xaml.Grid;
-using Syncfusion.UI.Xaml.Grid.Cells;
 using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.App.ViewModels.Exporters;
 using WolvenKit.App.ViewModels.Tools;
@@ -49,17 +49,16 @@ public partial class ExportView : ReactiveUserControl<ExportViewModel>
 
     private void OverlayPropertyGrid_AutoGeneratingPropertyGridItem(object sender, AutoGeneratingPropertyGridItemEventArgs e)
     {
-        switch (e.DisplayName)
+        if (e.DisplayName is
+            nameof(ReactiveObject.Changed) or
+            nameof(ReactiveObject.Changing) or
+            nameof(ReactiveObject.ThrownExceptions)
+           )
         {
-            case nameof(ReactiveObject.Changed):
-            case nameof(ReactiveObject.Changing):
-            case nameof(ReactiveObject.ThrownExceptions):
-                e.Cancel = true;
-                return;
-            default:
-                break;
+            e.Cancel = true;
+            return;
         }
-
+        
         // Generate special editors for certain properties
         // we need the callback function
         // we need the propertyname
@@ -84,7 +83,7 @@ public partial class ExportView : ReactiveUserControl<ExportViewModel>
     {
         foreach (var item in e.AddedItems)
         {
-            if (item is GridRowInfo info && info.RowData is ImportExportItemViewModel vm)
+            if (item is GridRowInfo { RowData: ImportExportItemViewModel vm })
             {
                 vm.IsChecked = true;
             }
@@ -92,17 +91,17 @@ public partial class ExportView : ReactiveUserControl<ExportViewModel>
 
         foreach (var item in e.RemovedItems)
         {
-            if (item is GridRowInfo info && info.RowData is ImportExportItemViewModel vm)
+            if (item is GridRowInfo { RowData: ImportExportItemViewModel vm } &&
+                !e.AddedItems.Contains(item))
             {
                 vm.IsChecked = false;
             }
         }
 
-
-        ViewModel.ProcessSelectedCommand.NotifyCanExecuteChanged();
-        ViewModel.CopyArgumentsTemplateToCommand.NotifyCanExecuteChanged();
-        ViewModel.PasteArgumentsTemplateToCommand.NotifyCanExecuteChanged();
-        ViewModel.ImportSettingsCommand.NotifyCanExecuteChanged();
+        ViewModel?.ProcessSelectedCommand.NotifyCanExecuteChanged();
+        ViewModel?.CopyArgumentsTemplateToCommand.NotifyCanExecuteChanged();
+        ViewModel?.PasteArgumentsTemplateToCommand.NotifyCanExecuteChanged();
+        ViewModel?.ImportSettingsCommand.NotifyCanExecuteChanged();
     }
 
 }

@@ -35,6 +35,7 @@ public partial class RibbonViewModel : ObservableObject
         MainViewModel.PropertyChanged += MainViewModel_OnPropertyChanged;
 
         _launchProfileText = "Launch Profiles";
+        _launchGameText = "Launch Game";
     }
 
     private void MainViewModel_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -93,7 +94,8 @@ public partial class RibbonViewModel : ObservableObject
     }
 
 
-
     [ObservableProperty] private string _launchProfileText;
+
+    [ObservableProperty] private string _launchGameText;
 
 }

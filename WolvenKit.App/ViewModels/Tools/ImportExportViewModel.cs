@@ -72,28 +72,24 @@ public abstract partial class ImportExportViewModel : FloatingPaneViewModel
     [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]  // TODO NotifyCanExecuteChangedFor
     private void PasteArgumentsTemplateTo()
     {
-        var results = Items.Where(x => x.IsChecked);
-        var count = 0;
+        var (settings, type) = _currentSettings;
 
-        foreach (var item in results)
-        {
-            var (settings, type) = _currentSettings;
-
-            if (item.Properties.GetType() != type)
+        var count = Items
+            .Where(item => item.IsChecked && item.Properties.GetType() == type)
+            .Count(item =>
             {
-                continue;
-            }
+                if (settings.Deserialize(type, _jsonSerializerSettings) is not ImportExportArgs ds)
+                {
+                    return false;
+                }
 
-            if (settings.Deserialize(type, _jsonSerializerSettings) is ImportExportArgs ds)
-            {
                 item.SetProperties(ds);
-                count++;
-            }
-        }
+                return true;
+            });
 
         if (count > 0)
         {
-            _notificationService.Success($"Template has been copied to the selected items.");
+            _notificationService.Success($"Template has been copied to {count} items.");
         }
     }
 

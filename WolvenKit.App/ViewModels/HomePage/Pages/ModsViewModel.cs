@@ -192,8 +192,9 @@ public partial class ModsViewModel : PageViewModel
         if (!_pluginService.IsInstalled(EPlugin.redmod))
         {
             var res = await Interactions
-                .ShowMessageBoxAsync("The RedMod tools are not installed and mod compilation will not work. Would you like to install the RedMod tools now?",
-                "RedMod not found");
+                .ShowMessageBoxAsync(
+                    "The RedMod tools are not installed and mod compilation will not work. Would you like to install the RedMod tools now?",
+                    "RedMod not found");
 
             switch (res)
             {
@@ -208,6 +209,25 @@ public partial class ModsViewModel : PageViewModel
                 default:
                     break;
             }
+        }
+    }
+    
+    [RelayCommand]
+    private void LaunchGameFromLastSave()
+    {
+        try
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = _settings.GetRED4GameLaunchCommand(),
+                Arguments = $"{_settings.GetRED4GameLaunchOptions()} -modded",
+                ErrorDialog = true,
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.Error("Launch: error launching game! Please check your executable path in Settings.");
+            _logger.Info($"Launch: error debug info: {ex.Message}");
         }
     }
 

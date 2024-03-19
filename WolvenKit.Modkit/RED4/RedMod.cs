@@ -12,7 +12,7 @@ namespace WolvenKit.Modkit.RED4
             var args = $"animation-import -depot=\"{depot}\" -input=\"{input}\" -animset={animset}";
             if (!string.IsNullOrEmpty(output))
             {
-                args += $" -output={output}";
+                args += $" -output={output.Replace(".anims", "")}";
             }
             if (!string.IsNullOrEmpty(animationRename))
             {
