@@ -16,6 +16,7 @@ namespace WolvenKit.Converters
         public DataTemplate RedChunkMaskEditor { get; set; }
         public DataTemplate RedIntegerEditor { get; set; }
         public DataTemplate RedColorEditor { get; set; }
+        public DataTemplate RedVectorColorEditor { get; set; }
         public DataTemplate RedColorPicker { get; set; }
         public DataTemplate RedCurveEditor { get; set; }
         public DataTemplate RedCurvePointEditor { get; set; }
@@ -79,6 +80,11 @@ namespace WolvenKit.Converters
                 }
                 if (vm.PropertyType.IsAssignableTo(typeof(Vector4)))
                 {
+                    // Some vectors are actually colours
+                    if (vm.Parent?.ResolvedData is CKeyValuePair pair && pair.Key.GetResolvedText() == "BaseColorScale")
+                    {
+                        return RedVectorColorEditor;
+                    }
                     return RedVector4Editor;
                 }
                 if (vm.PropertyType.IsAssignableTo(typeof(Quaternion)))

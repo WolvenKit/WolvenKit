@@ -10,7 +10,7 @@ namespace WolvenKit.App.ViewModels.Shell;
 public partial class ChunkViewModel
 {
     [MemberNotNull(nameof(Value))]
-    protected void CalculateValue()
+    public void CalculateValue()
     {
         Value = Data is null ? "null" : "";
 
