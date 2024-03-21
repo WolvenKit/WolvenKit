@@ -351,6 +351,15 @@
                         <editors:RedColorEditor DataContext="{Binding}" RedColor="{Binding Data, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedColorEditor>
+                <converters:RedEditorTemplateSelector.RedVectorColorEditor>
+                    <DataTemplate>
+                        <editors:RedVectorColorEditor
+                            W="{Binding Data.W, Mode=TwoWay}"
+                            X="{Binding Data.X, Mode=TwoWay}"
+                            Y="{Binding Data.Y, Mode=TwoWay}"
+                            Z="{Binding Data.Z, Mode=TwoWay}" />
+                    </DataTemplate>
+                </converters:RedEditorTemplateSelector.RedVectorColorEditor>
                 <converters:RedEditorTemplateSelector.RedColorPicker>
                     <DataTemplate>
                         <tools:RedColorPicker
