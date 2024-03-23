@@ -2,9 +2,12 @@ using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using ReactiveUI;
 using Splat;
 using Syncfusion.UI.Xaml.TreeView;
 using Syncfusion.UI.Xaml.TreeView.Engine;
@@ -14,6 +17,7 @@ using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
+using WolvenKit.Views.Dialogs.Windows;
 
 namespace WolvenKit.Views.Tools
 {
@@ -288,6 +292,34 @@ namespace WolvenKit.Views.Tools
                 
                 Clipboard.SetText(cvm.Value);
             }
+        }
+
+        public bool HasSelection => null != SelectedItem ||
+                                    (SelectedItems is ObservableCollection<ChunkViewModel> items && items.Any());
+
+        [RelayCommand()]
+        private void OpenSearchAndReplaceDialog()
+        {
+            if (SelectedItem is null && SelectedItems is null)
+            {
+                return;
+            }
+
+            var dialog = new SearchAndReplaceDialog();
+            if (dialog.ShowDialog() != true || SelectedItems is not ObservableCollection<object> selection)
+            {
+                return;
+            }
+
+            var searchText = dialog.ViewModel?.SearchText ?? "";
+            var replaceText = dialog.ViewModel?.ReplaceText ?? "";
+            var ignoreCase = dialog.ViewModel?.IgnoreCase ?? false;
+
+            selection.OfType<ChunkViewModel>().ToList()
+                .ForEach(chunkViewModel =>
+                {
+                    chunkViewModel.SearchAndReplace(searchText, replaceText, ignoreCase);
+                });
         }
 
         //private void TreeView_QueryNodeSize(object sender, QueryNodeSizeEventArgs e)

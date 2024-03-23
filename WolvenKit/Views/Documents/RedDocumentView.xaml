@@ -135,7 +135,7 @@
                                 </MenuItem>
                             </ContextMenu>
                         </Grid.ContextMenu>
-
+                        
                     </Grid>
                 </DataTemplate>
             </syncfusion:TabControlExt.ItemTemplate>
