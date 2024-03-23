@@ -130,7 +130,15 @@ public partial class ChunkViewModel : ObservableObject
                     wasChanged = true;
                     if (irc.GetType().GetProperty(propertyName) is { CanWrite: true } propInfo)
                     {
-                        propInfo.SetValue(irc, newValue);
+                        // TODO: This throws exceptions with CNames, how do we prevent that?
+                        try
+                        {
+                            propInfo.SetValue(irc, newValue);
+                        }
+                        catch
+                        {
+                            // don't set it then, I GUESS
+                        }
                     }
                 }
 
