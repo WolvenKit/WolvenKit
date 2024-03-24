@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
+using Microsoft.EntityFrameworkCore.Metadata;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
 
@@ -138,8 +139,13 @@ public partial class ChunkViewModel : ObservableObject
 
                     if (!propInfo.GetType().IsAssignableTo(prop.GetType()))
                     {
-                        _loggerService.Debug(
-                            $"Can't replace in {propertyName} ({propInfo.GetType().Name}) can't be assigned to {prop.GetType().Name})");
+                        if (!propInfo.GetType().Name.StartsWith("Runtime"))
+                        {
+                            _loggerService.Debug(
+                                $"Can't replace in {propertyName} ({propInfo.GetType().Name}) can't be assigned to {prop.GetType().Name})");
+                        }
+
+                        return false;
                     }
 
                     // TODO: This throws exceptions with CNames, how do we prevent that?
