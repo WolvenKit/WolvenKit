@@ -132,7 +132,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             NodeIdxInParent = arrayIndex;
         }
-            
 
         SelfList = new ObservableCollectionExtended<ChunkViewModel>(new[] { this });
 
@@ -173,6 +172,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         _tab = tab;
         RelativePath = _tab.Parent.RelativePath;
         IsExpanded = true;
+        
         //Data = export;
         //if (!PropertiesLoaded)
         //{
@@ -401,7 +401,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     // For view decoration. Extrapolated values will be darker.
     [ObservableProperty] private bool _isValueExtrapolated;
-
+    
     [ObservableProperty]
     //[NotifyCanExecuteChangedFor(nameof(OpenRefCommand))]
     //[NotifyCanExecuteChangedFor(nameof(AddRefCommand))]
@@ -1642,7 +1642,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
         }
         catch (Exception ex) { _loggerService.Error(ex); }
+    }
 
+    public void SearchAndReplace(string searchText, string replaceText, bool ignoreCase)
+    {
+        if (SearchAndReplaceInProperties(searchText, replaceText, ignoreCase))
+        {
+            Tab?.Parent.SetIsDirty(true);
+        }
     }
 
     private bool CanCopyHandle() => Data is IRedBaseHandle;   // TODO RelayCommand check notify

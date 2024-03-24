@@ -222,6 +222,10 @@ namespace WolvenKit.Views.Tools
 
         public bool CanNodeExpand()
         {
+            if (LeftNavigation is null)
+            {
+                return false;
+            }
             var selectedIndex = LeftNavigation.SelectedIndex + 1;
             return LeftNavigation.GetNodeAtRowIndex(selectedIndex).HasChildNodes;
         }

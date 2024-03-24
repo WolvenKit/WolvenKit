@@ -322,6 +322,10 @@ public partial class ChunkViewModel
                 Value = $"{rN.ParentAnimName.GetResolvedText() ?? ""} -> {rN.ChildAnimName.GetResolvedText() ?? ""}";
                 IsValueExtrapolated = true;
                 break;
+            case CArray<CName> ary when Descriptor is "" or "None":
+                Value = $"[ {string.Join(", ", ary.ToList().Select(t => t.GetResolvedText() ?? "").ToArray())} ]";
+                IsValueExtrapolated = true;
+                break;
             default:
                 break;
         }

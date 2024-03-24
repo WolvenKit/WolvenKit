@@ -300,35 +300,10 @@ public partial class ChunkViewModel
             }
         }
         
-        // some common "names" of classes that might be useful to display in the UI
-        // Only overwrite existing value if the new one isn't empty
-        var propNames = new string[]
-        {
-            "name", // default property
-            "partName", // ?
-            "slotName", // ?
-            "hudEntryName", // ?
-            "stateName", // ?
-            "characterRecordId", // tweak record children
-            "secondaryKey", // json
-            "femaleVariant", // also json
-            "maleVariant", // also json
-            "n", // ?
-            "componentName", // ?
-            "parameterName", // ?
-            "debugName", // e.g. nodes
-            "expressionString", // e.g. animMathExpressionNodes
-            "idleAnim", // .workspot handle work entry items
-            "category", // ?
-            "entryName", // ?
-            "className", // ?
-            "actorName", // ?
-            "sectorHash", // sectors
-            "propertyPath" // ?
-        };
+        
         if (ResolvedData is RedBaseClass irc)
         {
-            foreach (var propName in propNames)
+            foreach (var propName in s_DescriptorPropNames)
             {
                 var prop = GetPropertyByRedName(irc.GetType(), propName);
                 if (prop is null)
@@ -348,23 +323,22 @@ public partial class ChunkViewModel
         }
         else
         {
-            foreach (var propName in propNames)
+            foreach (var propName in s_DescriptorPropNames)
             {
-                if (Data is not null)
+                var prop = Data?.GetType().GetProperty(propName);
+
+                if (prop is null)
                 {
-                    var prop = Data.GetType().GetProperty(propName);
-
-                    if (prop is not null)
-                    {
-                        var val = prop.GetValue(Data)?.ToString();
-                        if (val is not null and not "" and not "None")
-                        {
-                            Descriptor = val;
-                        }
-
-                        return;
-                    }
+                    continue;
                 }
+
+                var val = prop.GetValue(Data)?.ToString();
+                if (val is not null and not "" and not "None")
+                {
+                    Descriptor = val;
+                }
+
+                return;
             }
         }
 
@@ -391,4 +365,32 @@ public partial class ChunkViewModel
 
         return "None";
     }
+
+    /// <summary>
+    /// Property names for descriptor field
+    /// </summary>
+    private static readonly string[] s_DescriptorPropNames =
+    [
+        "name", // default property
+        "partName", // ?
+        "slotName", // ?
+        "hudEntryName", // ?
+        "stateName", // ?
+        "characterRecordId", // tweak record children
+        "secondaryKey", // json
+        "femaleVariant", // also json
+        "maleVariant", // also json
+        "n", // ?
+        "componentName", // ?
+        "parameterName", // ?
+        "debugName", // e.g. nodes
+        "expressionString", // e.g. animMathExpressionNodes
+        "idleAnim", // .workspot handle work entry items
+        "category", // ?
+        "entryName", // ?
+        "className", // ?
+        "actorName", // ?
+        "sectorHash", // sectors
+        "propertyPath" // ?
+    ];
 }

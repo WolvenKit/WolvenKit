@@ -359,6 +359,22 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
+                    Command="{Binding OpenSearchAndReplaceDialogCommand, Source={x:Reference redTreeView}}"
+                    Header="Search and Replace in Selection"
+                    IsCheckable="False"
+                    Visibility="{Binding Path=HasSelection, Source={x:Reference redTreeView}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Style="{StaticResource SyncfusionMenuItemStyle}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial
+                            Width="13"
+                            Height="13"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="FindReplace" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
                     Command="{Binding Path=PlacementTarget.Tag.DeletePropertyCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Delete Property"
                     IsCheckable="False"
