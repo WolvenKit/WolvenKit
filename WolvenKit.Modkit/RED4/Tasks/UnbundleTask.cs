@@ -87,7 +87,7 @@ public partial class ConsoleFunctions
         }
 
         var result = 0;
-        foreach (var gameArchive in _archiveManager.Archives.Items)
+        foreach (var gameArchive in _archiveManager.ModArchives.Items)
         {
             // TODO[ModKit]
             if (gameArchive is not Archive ar)
