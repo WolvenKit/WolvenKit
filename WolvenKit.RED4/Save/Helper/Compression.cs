@@ -151,6 +151,8 @@ public class Compression
 
     private static CompressionHeader ReadCompressionHeader(BinaryReader reader)
     {
+        var position = reader.BaseStream.Position;
+        
         var magicInt = BitConverter.ToUInt32(Encoding.ASCII.GetBytes("FZLC"), 0);
         if (reader.ReadUInt32() != magicInt)
             throw new Exception();
@@ -168,7 +170,7 @@ public class Compression
             });
         }
 
-        result.MaxEntries = (result.DataChunkInfos[0].Offset - 33) / 12;
+        result.MaxEntries = (result.DataChunkInfos[0].Offset - (int)(position + 8)) / 12;
         reader.BaseStream.Position = result.DataChunkInfos[0].Offset;
 
         return result;
@@ -251,7 +253,8 @@ public class Compression
             throw new Exception();
 
         reader.BaseStream.Position = 0;
-        result.Write(reader.ReadBytes(25));
+        result.Write(reader.ReadBytes((int)compressionTablePos));
+
         var compressionHeader = ReadCompressionHeader(reader);
         compressionSettings = compressionHeader.Settings;
 

@@ -32,7 +32,7 @@ public class CyberpunkSaveWriter : IDisposable
         _file = file;
 
         _writer.Write(CyberpunkSaveFile.MAGIC);
-        _writer.Write(file.FileHeader);
+        file.FileHeader.Write(_writer);
 
         var uncompressedData = GetNodeData(out var nodeInfos);
         NodeInfos = nodeInfos;

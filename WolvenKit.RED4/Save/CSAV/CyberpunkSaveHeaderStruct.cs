@@ -1,22 +1,31 @@
-using System.Runtime.InteropServices;
+using WolvenKit.Core.Extensions;
 
 namespace WolvenKit.RED4.Save;
 
-[StructLayout(LayoutKind.Explicit, Size = 21)]
 public struct CyberpunkSaveHeaderStruct
 {
-    [FieldOffset(0)]
-    public uint saveVersion;
+    public uint SaveVersion;
+    public uint GameVersion;
+    public string GameDefPath;
+    public ulong TimeStamp;
+    public uint ArchiveVersion;
 
-    [FieldOffset(4)]
-    public uint gameVersion;
+    public static CyberpunkSaveHeaderStruct Read(BinaryReader reader) =>
+        new()
+        {
+            SaveVersion = reader.ReadUInt32(),
+            GameVersion = reader.ReadUInt32(),
+            GameDefPath = reader.ReadLengthPrefixedString(),
+            TimeStamp = reader.ReadUInt64(),
+            ArchiveVersion = reader.ReadUInt32()
+        };
 
-    [FieldOffset(8)]
-    public byte padding;
-
-    [FieldOffset(9)]
-    public ulong timeStamp;
-
-    [FieldOffset(17)]
-    public uint archiveVersion;
+    public void Write(BinaryWriter writer)
+    {
+        writer.Write(SaveVersion);
+        writer.Write(GameVersion);
+        writer.WriteLengthPrefixedString(GameDefPath);
+        writer.Write(TimeStamp);
+        writer.Write(ArchiveVersion);
+    }
 }

@@ -45,7 +45,7 @@ public class CyberpunkSaveReader : IDisposable, IErrorHandler
             return EFileReadErrorCodes.NoCSav;
         }
 
-        info = BaseStream.ReadStruct<CyberpunkSaveHeaderStruct>();
+        info = CyberpunkSaveHeaderStruct.Read(BaseReader);
         return EFileReadErrorCodes.NoError;
     }
 
@@ -58,7 +58,7 @@ public class CyberpunkSaveReader : IDisposable, IErrorHandler
             return result;
         }
 
-        if (((CyberpunkSaveHeaderStruct)info).gameVersion < (ulong)Enums.gameGameVersion.CP77_Patch_2_0)
+        if (((CyberpunkSaveHeaderStruct)info).GameVersion < (ulong)Enums.gameGameVersion.CP77_Patch_2_0)
         {
             file = null;
             return EFileReadErrorCodes.UnsupportedVersion;
@@ -93,13 +93,12 @@ public class CyberpunkSaveReader : IDisposable, IErrorHandler
                 ChildId = BaseReader.ReadInt32(),
                 Offset = BaseReader.ReadInt32(),
                 Size = BaseReader.ReadInt32(),
-                GameVersion = ((CyberpunkSaveHeaderStruct)info).gameVersion
+                GameVersion = ((CyberpunkSaveHeaderStruct)info).GameVersion
             });
         }
 
         NodeEntries = flatNodes;
 
-        BaseStream.Position = 0;
         var dataStream = Compression.Decompress(_reader, out var compressionSettings);
         _csavFile.CompressionSettings = compressionSettings;
 
