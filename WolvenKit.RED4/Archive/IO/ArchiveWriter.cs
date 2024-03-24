@@ -78,7 +78,7 @@ public class ArchiveWriter
         {
             var relPath = fileInfo.FullName[(infolder.FullName.Length + 1)..];
 
-            if (!supportedExtensions.Contains(fileInfo.Extension[1..].ToLower()))
+            if (fileInfo.Extension.Length == 0 || !supportedExtensions.Contains(fileInfo.Extension[1..].ToLower()))
             {
                 _loggerService.Warning($"Unknown file extension for \"{relPath}\". Skipping");
                 continue;
