@@ -16,6 +16,17 @@
     mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
+            <Style TargetType="StackPanel" x:Key="VisibleOnEmptyValueStyle">
+                <Setter Property="Visibility" Value="Collapsed" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="">
+                        <Setter Property="Visibility" Value="Visible" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsValueExtrapolated, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                        <Setter Property="Visibility" Value="Visible" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
             <Style x:Key="PropertyKeyStyle" TargetType="TextBlock">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="null">
@@ -139,23 +150,17 @@
                         VerticalAlignment="Center"
                         Kind="{Binding Extension}" />
                     <StackPanel
+                        Style="{StaticResource VisibleOnEmptyValueStyle}"
+                        Name="PropertyTypeDescriptor"
                         Grid.Column="1"
                         Margin="0,0,4,0"
                         Orientation="Horizontal">
-                        <StackPanel.Style>
-                            <Style TargetType="StackPanel">
-                                <Setter Property="Visibility" Value="Collapsed" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="">
-                                        <Setter Property="Visibility" Value="Visible" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </StackPanel.Style>
+                        
                         <TextBlock
                             Name="PropertyType"
                             Foreground="{StaticResource WolvenKitTan}"
                             Text="{Binding Type}" />
+                        <!-- icon -->
                         <StackPanel Orientation="Horizontal">
                             <StackPanel.Style>
                                 <Style TargetType="StackPanel">
