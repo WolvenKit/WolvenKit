@@ -15,6 +15,7 @@ public partial class ChunkViewModel : ObservableObject
     private bool SearchAndReplaceInReference(string search, string replace, StringComparison searchMode,
         IRedRef reference, out IRedRef outReference)
     {
+        var original = reference;
         outReference = reference;
         if (reference.DepotPath.GetResolvedText() is not string depotPath)
         {
@@ -38,7 +39,8 @@ public partial class ChunkViewModel : ObservableObject
         }
 
         var genericType = referenceType.GetGenericArguments()[0];
-        var resourceReferenceType = typeof(CResourceReference<>).MakeGenericType(genericType);
+        var resourceReferenceType = type.MakeGenericType(genericType);
+        
         var constructor = resourceReferenceType?.GetConstructor([typeof(ResourcePath)]);
 
         if (constructor == null)
@@ -82,11 +84,12 @@ public partial class ChunkViewModel : ObservableObject
                 ret = (CName)replaced;
                 return true;
             case IRedRef reference:
-                if (SearchAndReplaceInReference(search, replace, searchMode, reference, out var newReference))
+                if (!SearchAndReplaceInReference(search, replace, searchMode, reference, out var newReference))
                 {
-                    ret = newReference;
+                    return false;
                 }
 
+                ret = newReference;
                 return true;
             case CKeyValuePair keyValuePair:
                 var newKey = keyValuePair.Key.GetResolvedText()?.Replace(search, replace, searchMode);
@@ -122,23 +125,32 @@ public partial class ChunkViewModel : ObservableObject
                     {
                         continue;
                     }
+                    
 
                     // Check if the property exists and is writable. Go to public property setter from name field
                     var propertyName = prop.RedName.TrimStart('_');
                     propertyName = char.ToUpper(propertyName[0]) + propertyName[1..];
 
-                    wasChanged = true;
-                    if (irc.GetType().GetProperty(propertyName) is { CanWrite: true } propInfo)
+                    if (irc.GetType().GetProperty(propertyName) is not { CanWrite: true } propInfo)
                     {
-                        // TODO: This throws exceptions with CNames, how do we prevent that?
-                        try
-                        {
-                            propInfo.SetValue(irc, newValue);
-                        }
-                        catch
-                        {
-                            // don't set it then, I GUESS
-                        }
+                        continue;
+                    }
+
+                    if (!propInfo.GetType().IsAssignableTo(prop.GetType()))
+                    {
+                        _loggerService.Debug(
+                            $"Can't replace in {propertyName} ({propInfo.GetType().Name}) can't be assigned to {prop.GetType().Name})");
+                    }
+
+                    // TODO: This throws exceptions with CNames, how do we prevent that?
+                    try
+                    {
+                        propInfo.SetValue(irc, newValue);
+                        wasChanged = true;
+                    }
+                    catch
+                    {
+                        // don't set it then, I GUESS
                     }
                 }
 
@@ -204,11 +216,25 @@ public partial class ChunkViewModel : ObservableObject
         // Log changed states from children
         var wasChanged = false;
 
+        var _data = Data;
+        var _resolvedData = ResolvedData;
 
-        if (SearchAndReplaceInObjectProperties(search, replace, searchMode, ResolvedData, out var newType))
+        if (SearchAndReplaceInObjectProperties(search, replace, searchMode, _resolvedData, out var newType))
         {
-            wasChanged = true;
-            Data = newType;
+            if (Data is IRedHandle handle && newType is RedBaseClass newRedType)
+            {
+                handle.SetValue(newRedType);
+                wasChanged = true;
+            }
+            else if (newType.GetType().IsAssignableTo(_data.GetType()))
+            {
+                Data = newType;
+                wasChanged = true;
+            }
+            else
+            {
+                _loggerService.Debug($"failed to replace ${Data.GetType().Name} with ${newType.GetType().Name}");
+            }
         }
 
         wasChanged = ReplaceInFields(search, replace, searchMode) || wasChanged;
@@ -219,7 +245,14 @@ public partial class ChunkViewModel : ObservableObject
         // ReSharper disable once LoopCanBeConvertedToQuery Not this time
         foreach (var t in Properties)
         {
-            wasChanged = t.SearchAndReplaceInProperties(search, replace, searchMode) || wasChanged;
+            try
+            {
+                wasChanged = t.SearchAndReplaceInProperties(search, replace, searchMode) || wasChanged;
+            }
+            catch (Exception e)
+            {
+                _loggerService.Debug($"Error when trying to set {t.Name}: {e.Message}");
+            }
         }
 
         CalculateValue();
