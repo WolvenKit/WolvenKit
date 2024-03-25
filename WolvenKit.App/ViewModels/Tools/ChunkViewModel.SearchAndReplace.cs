@@ -58,6 +58,7 @@ public partial class ChunkViewModel : ObservableObject
     {
         var wasChanged = false;
         ret = original;
+        string? replaced;
         switch (original)
         {
             case RedDummy:
@@ -76,7 +77,7 @@ public partial class ChunkViewModel : ObservableObject
                     return false;
                 }
 
-                var replaced = (cname.GetResolvedText() ?? "").Replace(search, replace, searchMode);
+                replaced = (cname.GetResolvedText() ?? "").Replace(search, replace, searchMode);
                 if (replaced == (cname.GetResolvedText() ?? ""))
                 {
                     return false;
@@ -84,7 +85,17 @@ public partial class ChunkViewModel : ObservableObject
 
                 ret = (CName)replaced;
                 return true;
+            case CString cstring:
+                replaced = (cstring.ToString() ?? "").Replace(search, replace, searchMode);
+                if (replaced == cstring.ToString())
+                {
+                    return false;
+                }
+
+                ret = (CString)replaced;
+                return true;
             case IRedRef reference:
+                
                 if (!SearchAndReplaceInReference(search, replace, searchMode, reference, out var newReference))
                 {
                     return false;
