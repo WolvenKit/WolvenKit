@@ -582,8 +582,8 @@ namespace WolvenKit.Modkit.RED4.Tools
                 for (var e = 0; e < apps.Count; e++)
                 {
                     // Null-proof materials
-                    var d = info.appearances[apps[e]];
-                    info.appearances[apps[e]] = InitializeDefaultMaterial(info.meshCount, d.NotNull());
+                    var d = InitializeDefaultMaterial(info.meshCount, info.appearances[apps[e]]);
+                    info.appearances[apps[e]] = d;
                     meshContainer.materialNames[e] = d[index];
                 }
 
