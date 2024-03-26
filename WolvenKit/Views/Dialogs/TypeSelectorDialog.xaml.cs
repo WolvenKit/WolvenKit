@@ -33,6 +33,12 @@ public partial class TypeSelectorDialog : ReactiveUserControl<TypeSelectorDialog
         {
             TypeDataGrid.ClearFilters();
 
+            this.Bind(ViewModel, x => x.SelectedMode, x => x.TabControl.SelectedIndex)
+                .DisposeWith(disposables);
+
+            this.Bind(ViewModel, x => x.EnteredText, x => x.CustomNameTextBox.Text)
+                .DisposeWith(disposables);
+
             this.BindCommand(ViewModel, x => x.OkCommand, x => x.OkButton)
                 .DisposeWith(disposables);
 
