@@ -34,18 +34,44 @@ public class CWeakHandle<T> : IRedWeakHandle<T>, IEquatable<CWeakHandle<T>> wher
     [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
     public T? Chunk { get; set; }
 
+    [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+    public DynamicBaseClass? DynamicChunk { get; set; }
+
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     public Type InnerType => typeof(T);
 
-    public CWeakHandle() {}
-    public CWeakHandle(T? chunk) => Chunk = chunk;
 
-    public RedBaseClass? GetValue() => Chunk;
-    public void SetValue(RedBaseClass? cls) => Chunk = (T?)cls;
+    public RedBaseClass? GetValue()
+    {
+        if (IsDynamicClass)
+        {
+            return DynamicChunk;
+        }
+        return Chunk;
+    }
+
+    public void SetValue(RedBaseClass? cls)
+    {
+        if (cls is DynamicBaseClass dbc)
+        {
+            DynamicChunk = dbc;
+        }
+        else
+        {
+            Chunk = (T?)cls;
+        }
+    }
+
+
+    public CWeakHandle() {}
+    public CWeakHandle(RedBaseClass? chunk) => SetValue(chunk);
 
 
     public static implicit operator CWeakHandle<T>(T value) => new(value);
     public static implicit operator T?(CWeakHandle<T> value) => value.Chunk;
+
+
+    public bool IsDynamicClass => DynamicChunk != null;
 
 
     public bool Equals(CWeakHandle<T>? other)
