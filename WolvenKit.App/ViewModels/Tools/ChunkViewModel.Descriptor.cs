@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.App.Models;
 using WolvenKit.App.ViewModels.Documents;
@@ -71,6 +72,133 @@ public partial class ChunkViewModel
             if (Descriptor != "")
             {
                 return;
+            }
+        }
+        else if (ResolvedData is scnWorkspotData_ExternalWorkspotResource externalWorkspotResource)
+        {
+            Descriptor = $"{externalWorkspotResource.DataId.Id.ToString()}";
+            return;
+        }
+        else if (ResolvedData is scnSceneWorkspotInstanceId workspotInstanceId)
+        {
+            Descriptor = $"{workspotInstanceId.Id}";
+            return;
+        }
+        else if (ResolvedData is scnWorkspotInstance workspotInstance)
+        {
+            Descriptor = $"{workspotInstance.OriginMarker.NodeRef.GetResolvedText()}";
+            return;
+        }
+        else if (ResolvedData is scnChoiceNodeOption choiceNodeOption)
+        {
+            Descriptor = $"{choiceNodeOption.Caption}";
+            return;
+        }
+        else if (ResolvedData is scnSectionNode sectionNode)
+        {
+            Descriptor = $"{sectionNode.NodeId.Id}";
+            return;
+        }
+        else if (ResolvedData is scnInteractionShapeParams shapeParams)
+        {
+            Descriptor = $"{shapeParams.Preset}";
+            return;
+        }
+        else if (ResolvedData is scnSceneWorkspotDataId workspotDataId)
+        {
+            Descriptor = $"{workspotDataId.Id}";
+            return;
+        }
+        else if (ResolvedData is scnNodeId id)
+        {
+            Descriptor = $"{id.Id}";
+            return;
+        }
+        else if (ResolvedData is scnPlayerActorDef playerActorDef)
+        {
+            Descriptor = $"{playerActorDef.PlayerName}";
+            return;
+        }
+        else if (ResolvedData is scnMarker sceneMarker)
+        {
+            Descriptor = sceneMarker.NodeRef.GetResolvedText();
+        }
+        else if (ResolvedData is scnlocLocStoreEmbeddedVariantDescriptorEntry locDescriptorEmbedded &&
+                 locDescriptorEmbedded.VpeIndex > 0)
+        {
+            Descriptor = locDescriptorEmbedded.VpeIndex.ToString();
+        }
+        else if (ResolvedData is scnlocLocStoreEmbeddedVariantPayloadEntry locPayloadEmbedded)
+        {
+            Descriptor = locPayloadEmbedded.VariantId.Ruid.ToString();
+        }
+        else if (ResolvedData is scnPropDef propDef)
+        {
+            Descriptor = $"{propDef.PropName}";
+            if (propDef.SpecPropRecordId.GetResolvedText() is string s && s != "")
+            {
+                Descriptor = $"{Descriptor} ID: {s}";
+            }
+
+            return;
+        }
+        else if (ResolvedData is scnSpawnDespawnEntityParams spawnDespawnParams)
+        {
+            Descriptor = $"{spawnDespawnParams.DynamicEntityUniqueName.GetResolvedText()}";
+            if (spawnDespawnParams.SpawnMarkerNodeRef.GetResolvedText() is string s && s != "")
+            {
+                Descriptor = $"{Descriptor} ID: {s}";
+            }
+
+            return;
+        }
+        else if (ResolvedData is scnNodeSymbol scnNodeSymbol)
+        {
+            Descriptor = $"NodeID: {scnNodeSymbol.NodeId.Id}";
+            return;
+        }
+        else if (ResolvedData is scnWorkspotSymbol scnWorkspotSymbol)
+        {
+            Descriptor = $"NodeID: {scnWorkspotSymbol.WsInstance.Id} (Instance {scnWorkspotSymbol.WsInstance.Id})";
+            return;
+        }
+        else if (ResolvedData is scnSceneEventSymbol sceneEventSymbol)
+        {
+            Descriptor = $"EditorEventId: {sceneEventSymbol.EditorEventId}";
+            return;
+        }
+        else if (ResolvedData is scnPerformerSymbol performerSymbol)
+        {
+            Descriptor = $"{performerSymbol.EntityRef.DynamicEntityUniqueName.GetResolvedText()}";
+            return;
+        }
+        else if (ResolvedData is gameEntityReference gameEntRef)
+        {
+            Descriptor = $"{gameEntRef.DynamicEntityUniqueName.GetResolvedText()}";
+            return;
+        }
+        else if (ResolvedData is scnLipsyncAnimSetSRRef lipsyncAnim)
+        {
+            if (lipsyncAnim.LipsyncAnimSet.DepotPath.GetResolvedText() is string animSetDepotPath &&
+                animSetDepotPath != "")
+            {
+                Descriptor = $"{animSetDepotPath}";
+            }
+            else if (lipsyncAnim.AsyncRefLipsyncAnimSet.DepotPath.GetResolvedText() is string asyncSetDepotPath &&
+                     asyncSetDepotPath != "")
+            {
+                Descriptor = $"{asyncSetDepotPath}";
+            }
+
+            return;
+        }
+        else if (ResolvedData is scnscreenplayDialogLine scnscreenplayDialogLine)
+        {
+            Descriptor = scnscreenplayDialogLine.FemaleLipsyncAnimationName.GetResolvedText() ?? "";
+            if (scnscreenplayDialogLine.MaleLipsyncAnimationName.GetResolvedText() is string s1 && s1 != "")
+            {
+                var separator = Value == "" ? "" : " | ";
+                Descriptor = $"{Descriptor}{separator}${s1}";
             }
         }
         // animgraph - something is broken here. Why does the orange text go away? Why do I need the try/catch
@@ -393,4 +521,15 @@ public partial class ChunkViewModel
         "sectorHash", // sectors
         "propertyPath" // ?
     ];
+
+    private static string CNameArrayToString(CArray<CName> ary)
+    {
+        string[] cnames = { };
+        foreach (var cName in ary)
+        {
+            cnames.Append(cName.ToString());
+        }
+
+        return $"[{string.Join(",", cnames)}]";
+    }
 }
