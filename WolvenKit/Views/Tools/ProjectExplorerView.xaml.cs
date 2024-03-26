@@ -184,6 +184,7 @@ namespace WolvenKit.Views.Tools
 
             // register to KeyUp because KeyDown doesn't forward "F2"
             KeyUp += OnKeyUp;
+            KeyDown += OnKeystateChanged; 
             ViewModel.IsKeyUpEventAssigned = true;
         }
 
@@ -280,13 +281,20 @@ namespace WolvenKit.Views.Tools
             }
         }
 
+        private void OnKeystateChanged(object sender, KeyEventArgs e)
+        {
+            ViewModel?.RefreshModifierStates();
+        }
+
         private void OnKeyUp(object sender, KeyEventArgs e)
         {
+            // For context menu switching
+            ViewModel?.RefreshModifierStates();
+            
             if (PESearchBar.IsFocused)
             {
                 return;
             }
-            
             if (e.Key == Key.F2 )
             {
                 ViewModel?.RenameFileCommand.SafeExecute(null);
