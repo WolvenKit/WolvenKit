@@ -440,7 +440,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 Path.GetFileNameWithoutExtension(activeItemPath));
         }
 
-        if (!Path.Exists(activeItemPath))
+        if (isAbsolute && !Path.Exists(activeItemPath))
         {
             return;
         }
