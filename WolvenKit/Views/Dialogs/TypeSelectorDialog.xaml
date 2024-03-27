@@ -21,7 +21,7 @@
             <RowDefinition Height="40" />
         </Grid.RowDefinitions>
 
-        <TabControl Grid.Row="0">
+        <TabControl x:Name="TabControl" Grid.Row="0">
             <TabItem>
                 <TabItem.Header>
                     <TextBlock
@@ -77,7 +77,7 @@
                     </Syncfusion:SfDataGrid.Columns>
                 </Syncfusion:SfDataGrid>
             </TabItem>
-            <TabItem Visibility="{Binding AllowCreating}">
+            <TabItem Visibility="{Binding AllowCreating, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <TabItem.Header>
                     <TextBlock
                         Margin="3"
@@ -98,10 +98,10 @@
                         FontSize="12"
                         Text="Class Name:" />
                     <TextBox
+                        x:Name="CustomNameTextBox"
                         Grid.Column="1"
                         VerticalAlignment="Top"
-                        FontSize="12"
-                        Text="{Binding EnteredText}" />
+                        FontSize="12" />
                 </Grid>
             </TabItem>
         </TabControl>

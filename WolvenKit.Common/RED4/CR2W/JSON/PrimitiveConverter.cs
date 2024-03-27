@@ -638,6 +638,20 @@ public class RedClassConverter : CustomRedConverter<RedBaseClass>
             throw new JsonException();
         }
 
+        if (cls is DynamicBaseClass dbc)
+        {
+            reader.Read();
+
+            propertyName = reader.GetString();
+            if (propertyName != "$className")
+            {
+                throw new JsonException();
+            }
+            reader.Read();
+            
+            dbc.ClassName = reader.GetString().NotNull();
+        }
+
         while (reader.Read())
         {
             if (reader.TokenType == JsonTokenType.EndObject)
@@ -741,6 +755,11 @@ public class RedClassConverter : CustomRedConverter<RedBaseClass>
         writer.WriteStartObject();
 
         writer.WriteString("$type", RedReflection.GetRedTypeFromCSType(value.GetType()));
+
+        if (value is DynamicBaseClass dbc)
+        {
+            writer.WriteString("$className", dbc.ClassName);
+        }
 
         var typeInfo = RedReflection.GetTypeInfo(value);
         foreach (var propertyInfo in typeInfo.PropertyInfos.OrderBy(x => x.RedName))

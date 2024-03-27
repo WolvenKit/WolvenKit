@@ -34,31 +34,44 @@ public class CHandle<T> : IRedHandle<T>, IEquatable<CHandle<T>>, IRedCloneable w
     [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
     public T? Chunk { get; set; }
 
+    [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+    public DynamicBaseClass? DynamicChunk { get; set; }
+
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     public Type InnerType => typeof(T);
 
+    
+    public RedBaseClass? GetValue()
+    {
+        if (IsDynamicClass)
+        {
+            return DynamicChunk;
+        }
+        return Chunk;
+    }
 
-
-    public RedBaseClass? GetValue() => Chunk; 
-    public void SetValue(RedBaseClass cls)
+    public void SetValue(RedBaseClass? cls)
     {
         if (cls is DynamicBaseClass dbc)
         {
-            Chunk = dbc.Convert<T>();
+            DynamicChunk = dbc;
         }
         else
         {
-            Chunk = (T)cls;
+            Chunk = (T?)cls;
         }
     }
 
     public CHandle() {}
-    public CHandle(T? chunk) => Chunk = chunk;
+    public CHandle(RedBaseClass? chunk) => SetValue(chunk);
 
 
     public static implicit operator CHandle<T>(T value) => new(value);
     public static implicit operator T?(CHandle<T> value) => value.Chunk;
 
+
+    public bool IsDynamicClass => DynamicChunk != null;
+    
 
     public bool Equals(CHandle<T>? other)
     {
