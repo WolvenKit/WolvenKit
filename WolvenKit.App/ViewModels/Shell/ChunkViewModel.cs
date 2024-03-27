@@ -1966,6 +1966,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             DuplicateInParent();
         }
 
+        Tab?.Parent.SetIsDirty(true);
         Parent.RecalculateProperties();
     }
 
@@ -2004,6 +2005,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             _loggerService.Error($"Failed to recalculate properties after duplicating entries: {ex}");
         }
+
+        Tab?.Parent.SetIsDirty(true);
+        // Parent.RecalculateProperties();
     }
 
     private void ReindexChildren()
@@ -2212,6 +2216,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
         
         Data = _cruidService.GenerateNewCRUID();
+        Tab?.Parent.SetIsDirty(true);
     }
 
     #endregion
