@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
 using System.Windows.Threading;
 using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -32,7 +31,7 @@ using WolvenKit.RED4.Archive;
 
 namespace WolvenKit.App.ViewModels.Tools;
 
-public partial class ProjectExplorerViewModel : ToolViewModel
+public partial class ProjectExplorerViewModel : ToolViewModelViewStates
 {
     #region fields
 
@@ -95,7 +94,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             .BindToObservableList(out _observableList)
             .Subscribe(OnNext);
 
-        RefreshModifierStates();
         _projectManager.ActiveProjectChanged += ProjectManager_ActiveProjectChanged;
     }
 
@@ -282,10 +280,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [RelayCommand(CanExecute = nameof(CanCopyFile))]
     private void CopyFile() => Clipboard.SetDataObject(SelectedItem.NotNull().FullName);
 
-    private bool IsShiftBeingHeld => Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
-    private bool IsCtrlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
-
-
     private bool _isShowRelativePath;
 
     /// <summary>
@@ -458,7 +452,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// Copy absolute path to current file. Don't change anything else.
     /// </summary>
     [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
-    private void CopyAbsPathToCurrentFile() => CopyItemPathToClipboard(true, false, false);
+    private void CopyAbsPathToCurrentFile() => CopyItemPathToClipboard(true);
 
     /// <summary>
     /// Copy absolute path to current folder. If currently selected item _is_ a folder, don't cut off the file name.
@@ -977,15 +971,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     private void SetupToolDefaults() => ContentId = ToolContentId;           // Define a unique contentid for this toolwindow//BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow//bi.BeginInit();//bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");//bi.EndInit();//IconSource = bi;
 
-    public void RefreshModifierStates()
+
+    protected override void OnModifierStateChanged()
     {
-        IsShowRelativePath = !IsShiftBeingHeld && !IsCtrlBeingHeld;
-        IsShowAbsolutePathToCurrentFolder = !IsShiftBeingHeld && IsCtrlBeingHeld;
-        IsShowAbsolutePathToCurrentFile = IsShiftBeingHeld && !IsCtrlBeingHeld;
-        IsShowAbsolutePathToRawFolder = IsShiftBeingHeld && IsCtrlBeingHeld &&
-                                        SelectedItem?.FullName.Contains(s_archiveFolder) == true;
-        IsShowAbsolutePathToArchiveFolder = IsShiftBeingHeld && IsCtrlBeingHeld &&
-                                            SelectedItem?.FullName.Contains(s_rawFolder) == true;
+        IsShowAbsolutePathToRawFolder =
+            IsCtrlShiftOnlyPressed && SelectedItem?.FullName.Contains(s_archiveFolder) == true;
+
+        IsShowAbsolutePathToArchiveFolder =
+            IsCtrlShiftOnlyPressed && SelectedItem?.FullName.Contains(s_rawFolder) == true;
     }
 
     

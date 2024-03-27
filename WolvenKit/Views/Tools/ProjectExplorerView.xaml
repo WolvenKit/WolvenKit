@@ -153,13 +153,13 @@
                 <!-- ======================================================================= -->
 
                 <MenuItem Command="{Binding CopyRelPathCommand}" Header="Copy relative path to game file"
-                          Visibility="{Binding Path=IsShowRelativePath, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                          Visibility="{Binding Path=IsNoModifierPressed, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                 <MenuItem Command="{Binding CopyAbsPathToCurrentFileCommand}" Header="Copy absolute path"
-                          Visibility="{Binding Path=IsShowAbsolutePathToCurrentFile,  Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                          Visibility="{Binding Path=IsShiftKeyPressedOnly, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                 <MenuItem Command="{Binding CopyAbsPathToCurrentFolderCommand}" Header="Copy absolute path to containing folder"
-                          Visibility="{Binding Path=IsShowAbsolutePathToCurrentFolder, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                          Visibility="{Binding Path=IsCtrlKeyOnlyPressed, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                 <MenuItem Command="{Binding CopyAbsPathToRawFolderCommand}" Header="Copy absolute path to raw folder"
                           Visibility="{Binding Path=IsShowAbsolutePathToRawFolder, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
