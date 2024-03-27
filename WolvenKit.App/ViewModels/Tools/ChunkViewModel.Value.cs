@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
@@ -20,9 +22,9 @@ public partial class ChunkViewModel
             return;
         }
 
-        if (PropertyType.IsAssignableTo(typeof(IRedString)) && Data is IRedString s)
+        if (PropertyType.IsAssignableTo(typeof(IRedString)) && Data is IRedString redString)
         {
-            var value = s.GetString();
+            var value = redString.GetString();
             if (!string.IsNullOrEmpty(value))
             {
                 Value = value;
@@ -157,6 +159,12 @@ public partial class ChunkViewModel
                 Value = i18n.MaleVariant;
             }
         }
+        // i18n.json
+        else if (Data is IRedBaseHandle handle && handle.GetValue() is scnSceneGraphNode sgn)
+        {
+            IsValueExtrapolated = true;
+            Value = StringHelper.Stringify(sgn.OutputSockets);
+        }
 
 
         switch (ResolvedData)
@@ -189,22 +197,53 @@ public partial class ChunkViewModel
                 Value = text;
                 IsValueExtrapolated = Value != "";
                 break;
+            case scnSceneWorkspotDataId sceneWorkspotData when sceneWorkspotData.Id != 0:
+                Value = $"{sceneWorkspotData.Id}";
+                IsValueExtrapolated = sceneWorkspotData.Id != 0;
+                break;
+            case scnSceneWorkspotInstanceId sceneWorkspotInstance when sceneWorkspotInstance.Id != 0:
+                Value = $"{sceneWorkspotInstance.Id}";
+                IsValueExtrapolated = sceneWorkspotInstance.Id != 0;
+                break;
+            case scnNotablePoint scnNotablePoint when scnNotablePoint.NodeId.Id != 0:
+                Value = $"NodeId: {scnNotablePoint.NodeId.Id}";
+                IsValueExtrapolated = true;
+                break;
+            case scnActorId scnActorId:
+                Value = $"{scnActorId.Id}";
+                IsValueExtrapolated = scnActorId.Id != 0;
+                break;
+            case scnPlayerActorDef playerActorDef:
+                Value = $"NodeId: {playerActorDef.SpecCharacterRecordId.GetResolvedText()}";
+                IsValueExtrapolated = true;
+                break;
             case workWorkEntryId id:
                 Value = $"{id.Id}";
                 IsValueExtrapolated = true;
                 break;
+
+            case scnCinematicAnimSetSRRef scnCineAnimRef:
+                Value = $"{scnCineAnimRef.AsyncAnimSet.DepotPath.GetResolvedText()}";
+                IsValueExtrapolated = Value != "";
+                if (scnCineAnimRef.IsOverride)
+                {
+                    var separator = Value == "" ? "" : " | ";
+                    Value = $"{Value}{separator}IsOverride: true";
+                }
+
+                return;
             case scnVoicesetComponent voiceset:
                 Value = voiceset.CombatVoSettingsName.GetResolvedText() ?? "";
                 IsValueExtrapolated = Value != "";
                 break;
             case entSoundListenerComponent listener when
                 listener.ParentTransform?.GetValue() is entHardTransformBinding tBinding:
-                Value = Stringify(tBinding);
+                Value = StringHelper.Stringify(tBinding);
                 IsValueExtrapolated = Value != "";
                 break;
             case entSlotComponent slotComponent when
                 slotComponent.ParentTransform?.GetValue() is entHardTransformBinding tBinding4:
-                Value = Stringify(tBinding4);
+                Value = StringHelper.Stringify(tBinding4);
                 IsValueExtrapolated = Value != "";
                 break;
             case gameaudioSoundComponent soundComponent:
@@ -221,14 +260,154 @@ public partial class ChunkViewModel
                 break;
             case entTriggerComponent triggerComponent when
                 triggerComponent.ParentTransform?.GetValue() is entHardTransformBinding tBinding2:
-                Value = Stringify(tBinding2);
+                Value = StringHelper.Stringify(tBinding2);
                 IsValueExtrapolated = Value != "";
                 break;
+            case scnlocLocstringId stringId when
+                stringId.Ruid != 0:
+                Value = stringId.Ruid.ToString();
+                IsValueExtrapolated = true;
+                break;
+            case scnEntryPoint entryPoint:
+                Value = $"NodeID: {entryPoint.NodeId.Id}";
+                IsValueExtrapolated = true;
+                break;
+            case scnExitPoint exitPoint:
+                Value = $"NodeID: {exitPoint.NodeId.Id}";
+                IsValueExtrapolated = true;
+                break;
+            case scnlocVariantId variantId:
+                Value = variantId.Ruid.ToString();
+                break;
+            case scnPerformerId performerId:
+                Value = performerId.Id.ToString();
+                break;
+            case CArray<CName> cNames:
+                Value = StringHelper.Stringify(cNames);
+                IsValueExtrapolated = cNames.Count != 0;
+                break;
+            case CArray<TweakDBID> tweakIds:
+                Value = StringHelper.Stringify(tweakIds);
+                IsValueExtrapolated = tweakIds.Count != 0;
+                break;
+            case scnInterruptionScenarioId scenarioId:
+                Value = scenarioId.Id.ToString();
+                break;
+            case scnscreenplayItemId scnscreenplayItemId:
+                Value = scnscreenplayItemId.Id.ToString();
+                break;
+            case scnscreenplayDialogLine scnscreenplayDialogLine:
+                Value = scnscreenplayDialogLine.LocstringId.Ruid.ToString();
+                IsValueExtrapolated = scnscreenplayDialogLine.LocstringId.Ruid != 0;
+                break;
+            case scnWorkspotInstance workspotInstance:
+                Value = $"{workspotInstance.WorkspotInstanceId.Id}";
+                IsValueExtrapolated = workspotInstance.WorkspotInstanceId.Id != 0;
+                break;
+            case scnWorkspotData_ExternalWorkspotResource externalWorkspotResource:
+                Value = externalWorkspotResource.WorkspotResource.DepotPath.GetResolvedText();
+                IsValueExtrapolated =
+                    externalWorkspotResource.WorkspotResource.DepotPath.GetResolvedText() is not (null or "" or "none");
+                break;
+            case scnWorkspotData_EmbeddedWorkspotTree externalWorkspotTree:
+                Value = externalWorkspotTree.DataId.Id.ToString();
+                IsValueExtrapolated = externalWorkspotTree.DataId.Id != 0;
+                break;
+            case scnGenderMask scnGenderMask:
+                Value = scnGenderMask.Mask.ToString();
+                IsValueExtrapolated = scnGenderMask.Mask != 0;
+                break;
+            case scnPerformerSymbol performerSymbol:
+                Value = performerSymbol.PerformerId.Id.ToString();
+                IsValueExtrapolated = performerSymbol.PerformerId.Id != 0;
+                break;
+            case scnSceneEventSymbol sceneEventSymbol:
+                Value = sceneEventSymbol.OriginNodeId.Id.ToString();
+                IsValueExtrapolated = sceneEventSymbol.OriginNodeId.Id != 0;
+                break;
+            case scnWorkspotSymbol scnWorkspotSymbol:
+                Value = scnWorkspotSymbol.WsEditorEventId.ToString();
+                IsValueExtrapolated = scnWorkspotSymbol.WsEditorEventId != 0;
+                break;
+            case scnCinematicAnimSetSRRefId cinematicAnimSetRefId:
+                Value = cinematicAnimSetRefId.Id.ToString();
+                break;
+            case scnlocSignature locSignature:
+                Value = locSignature.Val.ToString();
+                IsValueExtrapolated = locSignature.Val != 0;
+                break;
+            case gameEntityReference gameEntRef:
+                Value = gameEntRef.Reference.GetResolvedText();
+                IsValueExtrapolated = Value != "";
+                break;
+            case scnPropDef propDef when propDef.FindEntityInNodeParams.NodeRef.GetResolvedText() is string nodeRef &&
+                                         nodeRef != "":
+                Value = $"NodeRef: {nodeRef}";
+                IsValueExtrapolated = true;
+                return;
+            case scnAnimSetAnimNames animNames when animNames.AnimationNames.Count > 0:
+                Value = $"{StringHelper.Stringify(animNames.AnimationNames)}";
+                IsValueExtrapolated = true;
+                return;
+            case scnInputSocketId socketId:
+                Value = $"{socketId.NodeId.Id}";
+                IsValueExtrapolated = socketId.NodeId.Id != 0;
+                return;
+            case ICollection<scnInputSocketId> socketIds:
+                Value = $"{StringHelper.Stringify(socketIds.Select(s => s.NodeId.Id.ToString()).ToArray())}";
+                IsValueExtrapolated = Value != "";
+                return;
+            case scnChoiceNodeOption scnChoiceNodeOption:
+                Value = $"{scnChoiceNodeOption.Caption.GetResolvedText()}";
+                IsValueExtrapolated = Value != "";
+                return;
+            case scnscreenplayOptionUsage screenplayOptionUsage:
+                Value = $"{screenplayOptionUsage.PlayerGenderMask.Mask}";
+                IsValueExtrapolated = screenplayOptionUsage.PlayerGenderMask.Mask == 0;
+                IsValueExtrapolated = !IsDefault;
+                return;
+            case scnscreenplayChoiceOption screenplayOption:
+                Value = $"{screenplayOption.ItemId.Id} => {screenplayOption.LocstringId.Ruid}";
+                IsValueExtrapolated = screenplayOption.ItemId.Id != 0 || screenplayOption.LocstringId.Ruid != 0;
+                return;
+            case scnSpawnDespawnEntityParams spawnDespawnParams
+                when spawnDespawnParams.SpecRecordId.GetResolvedText() is string specRecordId && specRecordId != "":
+                Value = $"{specRecordId}";
+                IsValueExtrapolated = true;
+                return;
+            case Transform transform:
+                Value = $"{StringHelper.Stringify(transform.Position)}";
+                IsValueExtrapolated = Value != "";
+                return;
+            case scnPropId propId:
+                Value = $"{propId.Id}";
+                IsValueExtrapolated = propId.Id != 0;
+                return;
+            case scnSceneSolutionHash scnSolutionHash:
+                Value = $"{scnSolutionHash.SceneSolutionHash.SceneSolutionHashDate}";
+                IsValueExtrapolated = scnSolutionHash.SceneSolutionHash.SceneSolutionHashDate != 0;
+                return;
+            case scnSceneSolutionHashHash scnSolutionHashHash:
+                Value = $"{scnSolutionHashHash.SceneSolutionHashDate}";
+                IsValueExtrapolated = scnSolutionHashHash.SceneSolutionHashDate != 0;
+                return;
+            case scnGameplayAnimSetSRRef animSetRRef:
+                Value = $"{animSetRRef.AsyncAnimSet.DepotPath.GetResolvedText()}";
+                IsValueExtrapolated = Value != "";
+                return;
+            case scnFindEntityInNodeParams findInParams
+                when findInParams.NodeRef.GetResolvedText() is string s && s != "":
+                Value = $"NodeRef: {s}";
+                return;
+            case scnFindEntityInNodeParams nodeParams
+                when nodeParams.NodeRef.GetResolvedText() is string s && s != "":
+                Value = $"NodeRef: {s}";
+                return;
             case entTriggerActivatorComponent tActivatorComponent:
             {
                 if (tActivatorComponent.ParentTransform?.GetValue() is entHardTransformBinding tBinding3)
                 {
-                    Value = Stringify(tBinding3);
+                    Value = StringHelper.Stringify(tBinding3);
                 }
 
                 if (tActivatorComponent.Channels.ToString().Length > 0)
@@ -253,7 +432,7 @@ public partial class ChunkViewModel
                 Value = "";
                 if (meshComponent.ParentTransform?.GetValue() is entHardTransformBinding parentTransformValue)
                 {
-                    Value = Stringify(parentTransformValue);
+                    Value = StringHelper.Stringify(parentTransformValue);
                 }
 
                 if (meshComponent.Mesh.DepotPath.GetResolvedText() is string dePathText)
@@ -269,7 +448,7 @@ public partial class ChunkViewModel
                 Value = "";
                 if (skinnedMeshComponent.ParentTransform?.GetValue() is entHardTransformBinding parentTransformValue)
                 {
-                    Value = Stringify(parentTransformValue);
+                    Value = StringHelper.Stringify(parentTransformValue);
                 }
 
                 if (skinnedMeshComponent.Mesh.DepotPath.GetResolvedText() is string dePathText)
@@ -282,7 +461,7 @@ public partial class ChunkViewModel
             }
             case entDynamicActorRepellingComponent repComponent when
                 repComponent.ParentTransform?.GetValue() is entHardTransformBinding parentTransformValue:
-                Value = Stringify(parentTransformValue);
+                Value = StringHelper.Stringify(parentTransformValue);
                 IsValueExtrapolated = Value != "";
                 break;
             case gameFxResource fxResource:
@@ -322,8 +501,8 @@ public partial class ChunkViewModel
                 Value = $"{rN.ParentAnimName.GetResolvedText() ?? ""} -> {rN.ChildAnimName.GetResolvedText() ?? ""}";
                 IsValueExtrapolated = true;
                 break;
-            case CArray<CName> ary when Descriptor is "" or "None":
-                Value = $"[ {string.Join(", ", ary.ToList().Select(t => t.GetResolvedText() ?? "").ToArray())} ]";
+            case scnNodeSymbol scnNodeSymbol when scnNodeSymbol.EditorNodeId.Id != 0:
+                Value = $"EditorNodeId: {scnNodeSymbol.EditorNodeId.Id}";
                 IsValueExtrapolated = true;
                 break;
             default:
@@ -334,14 +513,4 @@ public partial class ChunkViewModel
         Value ??= "null";
     }
 
-    private static string Stringify(entHardTransformBinding hardTransformBinding)
-    {
-        var ret = $"{hardTransformBinding.SlotName}".Replace("None", "");
-        if (ret == "")
-        {
-            ret = $"{hardTransformBinding.BindName}".Replace("None", "");
-        }
-
-        return ret;
-    }
 }
