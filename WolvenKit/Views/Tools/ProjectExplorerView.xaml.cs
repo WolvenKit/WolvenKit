@@ -587,6 +587,8 @@ namespace WolvenKit.Views.Tools
 
         private async Task ProcessFileAction(List<string> sourceFiles, string targetDirectory, bool onlyCopy)
         {
+            var controlKeyDown = _modifierViewStatesModel.IsKeyPressed(ModifierKey.Ctrl);
+            
             foreach (var sourceFile in sourceFiles)
             {
                 var newFile = Path.Combine(targetDirectory, Path.GetFileName(sourceFile));
@@ -617,7 +619,7 @@ namespace WolvenKit.Views.Tools
                         }
                     }
 
-                    if (_modifierViewStatesModel.IsCtrlKeyPressed || onlyCopy)
+                    if (controlKeyDown || onlyCopy)
                     {
                         File.Copy(sourceFile, newFile, true);
                     }

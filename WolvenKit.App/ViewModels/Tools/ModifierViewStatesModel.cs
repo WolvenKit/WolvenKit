@@ -35,6 +35,9 @@ public class ModifierViewStatesModel : ObservableObject
 
     private bool _isNoModifierPressed = true;
 
+    /// <summary>
+    /// Use for view state binding as observable. From the model, please use GetKeyState(Modifiers.None) instead.
+    /// </summary>
     public bool IsNoModifierPressed
     {
         get => _isNoModifierPressed;
@@ -52,6 +55,9 @@ public class ModifierViewStatesModel : ObservableObject
 
     private bool _isShiftKeyPressed;
 
+    /// <summary>
+    /// Use for view state binding as observable. From the model, please use GetKeyState(Modifiers.Shift) instead.
+    /// </summary>
     public bool IsShiftKeyPressed
     {
         get => _isShiftKeyPressed;
@@ -69,6 +75,9 @@ public class ModifierViewStatesModel : ObservableObject
 
     private bool _isShiftKeyPressedOnly;
 
+    /// <summary>
+    /// Use for view state binding as observable. From the model, please use GetKeyState(Modifiers.Shift, true) instead.
+    /// </summary>
     public bool IsShiftKeyPressedOnly
     {
         get => _isShiftKeyPressedOnly;
@@ -84,37 +93,43 @@ public class ModifierViewStatesModel : ObservableObject
         }
     }
 
-    private bool _isSCtrlShiftOnlyPressed;
+    private bool _isCtrlShiftOnlyPressed;
 
+    /// <summary>
+    /// Use for view state binding as observable. From the model, please use GetKeyState twice, or call RefreshKeyStates first.
+    /// </summary>
     // ReSharper disable once MemberCanBeProtected.Global
     public bool IsCtrlShiftOnlyPressed
     {
-        get => _isSCtrlShiftOnlyPressed;
+        get => _isCtrlShiftOnlyPressed;
         private set
         {
-            if (_isSCtrlShiftOnlyPressed == value)
+            if (_isCtrlShiftOnlyPressed == value)
             {
                 return;
             }
 
-            _isSCtrlShiftOnlyPressed = value;
+            _isCtrlShiftOnlyPressed = value;
             OnPropertyChanged();
         }
     }
 
-    private bool _isSAltShiftOnlyPressed;
+    private bool _isAltShiftOnlyPressed;
 
+    /// <summary>
+    /// Use for view state binding as observable. From the model, please use GetKeyState twice, or call RefreshKeyStates first.
+    /// </summary>
     public bool IsAltShiftOnlyPressed
     {
-        get => _isSAltShiftOnlyPressed;
+        get => _isAltShiftOnlyPressed;
         private set
         {
-            if (_isSAltShiftOnlyPressed == value)
+            if (_isAltShiftOnlyPressed == value)
             {
                 return;
             }
 
-            _isSAltShiftOnlyPressed = value;
+            _isAltShiftOnlyPressed = value;
             OnPropertyChanged();
         }
     }
@@ -122,6 +137,9 @@ public class ModifierViewStatesModel : ObservableObject
 
     private bool _isSCtrlAltOnlyPressed;
 
+    /// <summary>
+    /// Use for view state binding as observable. From the model, please use GetKeyState twice, or call RefreshKeyStates first.
+    /// </summary>
     public bool IsCtrlAltOnlyPressed
     {
         get => _isSCtrlAltOnlyPressed;
@@ -140,6 +158,10 @@ public class ModifierViewStatesModel : ObservableObject
 
     private bool _isAltKeyPressed;
 
+    /// <summary>
+    /// Use for view state binding as observable. From the model, please use GetKeyState(Modifiers.Alt) instead.
+    /// </summary>
+    // ReSharper disable once MemberCanBePrivate.Global
     public bool IsAltKeyPressed
     {
         get => _isAltKeyPressed;
@@ -157,6 +179,10 @@ public class ModifierViewStatesModel : ObservableObject
 
     private bool _isAltKeyPressedOnly;
 
+    /// <summary>
+    /// Use for view state binding as observable. From the model, please use GetKeyState(Modifiers.Alt, true) instead.
+    /// </summary>
+    // ReSharper disable once MemberCanBePrivate.Global
     public bool IsAltKeyPressedOnly
     {
         get => _isAltKeyPressedOnly;
@@ -174,6 +200,9 @@ public class ModifierViewStatesModel : ObservableObject
 
     private bool _isCtrlKeyPressed;
 
+    /// <summary>
+    /// Use for view state binding as observable. From the model, please use GetKeyState(Modifiers.Ctrl) instead.
+    /// </summary>
     public bool IsCtrlKeyPressed
     {
         get => _isCtrlKeyPressed;
@@ -191,6 +220,10 @@ public class ModifierViewStatesModel : ObservableObject
 
     private bool _isCtrlKeyPressedOnly;
 
+
+    /// <summary>
+    /// Use for view state binding as observable. From the model, please use GetKeyState(Modifiers.Ctrl, true) instead.
+    /// </summary>
     public bool IsCtrlKeyPressedOnly
     {
         get => _isCtrlKeyPressedOnly;
@@ -230,6 +263,30 @@ public class ModifierViewStatesModel : ObservableObject
         OnModifierStateChanged();
     }
 
+    /// <summary>
+    /// In model, bind to this rather than the observable properties, as it'll refresh the internal states
+    /// </summary>
+    public bool IsKeyPressed(ModifierKey key, bool noOtherModifiersPressed = false)
+    {
+        RefreshModifierStates();
+        return key switch
+        {
+            ModifierKey.Alt => noOtherModifiersPressed ? IsAltKeyPressed : IsAltKeyPressedOnly,
+            ModifierKey.Shift => noOtherModifiersPressed ? IsShiftKeyPressed : IsShiftKeyPressedOnly,
+            ModifierKey.Ctrl => noOtherModifiersPressed ? IsCtrlKeyPressed : IsCtrlKeyPressedOnly,
+            ModifierKey.None => IsNoModifierPressed,
+            _ => false
+        };
+    }
+
     public event Action? ModifierStateChanged;
     private void OnModifierStateChanged() => ModifierStateChanged?.Invoke();
+}
+
+public enum ModifierKey
+{
+    Shift,
+    Alt,
+    Ctrl,
+    None
 }
