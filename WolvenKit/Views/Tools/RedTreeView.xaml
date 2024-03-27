@@ -838,13 +838,13 @@
                             Margin="5,2,5,0"
                             VerticalAlignment="Center"
                             Text="Duplicate item to this index (release control to move)"
-                            Visibility="{Binding Data[0].Content.IsControlBeingHeld, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                            Visibility="{Binding Data[0].Content.IsCtrlKeyPressed, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         <TextBlock
                             Grid.Row="0"
                             Margin="5,2,5,0"
                             VerticalAlignment="Center"
                             Text="Move item to this index (hold control to duplicate)"
-                            Visibility="{Binding Data[0].Content.IsControlBeingHeld, Converter={StaticResource InvertBooleanVisibilityConverter}}" />
+                            Visibility="{Binding Data[0].Content.IsCtrlKeyPressed, Converter={StaticResource InvertBooleanVisibilityConverter}}" />
                         <StackPanel Grid.Row="1" Orientation="Horizontal">
                             <TextBlock
                                 Margin="5,0,5,2"

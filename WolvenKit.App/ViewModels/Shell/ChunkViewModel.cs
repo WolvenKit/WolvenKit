@@ -1633,12 +1633,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         catch (Exception ex) { _loggerService.Error(ex); }
     }
 
-    public void SearchAndReplace(string searchText, string replaceText, bool ignoreCase)
+    public bool SearchAndReplace(string searchText, string replaceText, bool ignoreCase)
     {
-        if (SearchAndReplaceInProperties(searchText, replaceText, ignoreCase))
-        {
-            Tab?.Parent.SetIsDirty(true);
-        }
+        return SearchAndReplaceInProperties(searchText, replaceText, ignoreCase);
     }
 
     private bool CanCopyHandle() => Data is IRedBaseHandle;   // TODO RelayCommand check notify

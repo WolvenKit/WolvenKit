@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -13,6 +14,125 @@ namespace WolvenKit.App.ViewModels.Shell;
 
 public partial class ChunkViewModel : ObservableObject
 {
+    private List<int> resolvedHashes = new();
+
+    /// <summary>
+    ///  Entry point for search/replace
+    /// </summary>
+    /// <param name="search"></param>
+    /// <param name="replace"></param>
+    /// <param name="ignoreCase"></param>
+    /// <returns></returns>
+    private bool SearchAndReplaceInProperties(string search, string replace, bool ignoreCase = false)
+    {
+        resolvedHashes.Clear();
+
+        var result = SearchAndReplaceInProperties(search, replace,
+            ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal);
+
+        if (result)
+        {
+            RecalculateProperties();
+            CalculateValue();
+            CalculateDescriptor();
+        }
+
+        return result;
+    }
+
+
+    // Level 1 (will call itself recursively, so let's abort here if we can)
+    private bool SearchAndReplaceInProperties(string search, string replace, StringComparison searchMode)
+    {
+        if (resolvedHashes.Contains(ResolvedData.GetHashCode()))
+        {
+            return false;
+        }
+
+        var expansionState = IsExpanded;
+
+        // Log changed states from children
+        var wasChanged = false;
+
+        var _data = Data;
+        var _resolvedData = ResolvedData;
+
+        switch (ResolvedData)
+        {
+            case RedDummy:
+            case CBool:
+            case CUInt8:
+            case CByteArray:
+            case CUInt16:
+            case CUInt32:
+            case CUInt64:
+            case CFloat:
+            case CDouble:
+            case CRUID:
+            case FixedPoint:
+                return false;
+            default:
+                break;
+        }
+
+        if (PropertyType.IsAssignableTo(typeof(IRedEnum))
+            || PropertyType.IsAssignableTo(typeof(IRedInteger))
+            || PropertyType.IsAssignableTo(typeof(IRedBitField))
+            || PropertyType.IsAssignableTo(typeof(IRedCurvePoint))
+            || PropertyType.IsAssignableTo(typeof(IRedMultiChannelCurve))
+            || PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)))
+        {
+            return false;
+        }
+
+        if (SearchAndReplaceInObjectProperties(search, replace, searchMode, _resolvedData, out var newType))
+        {
+            if (Data is IRedHandle handle && newType is RedBaseClass newRedType)
+            {
+                handle.SetValue(newRedType);
+                wasChanged = true;
+            }
+            else if (newType.GetType().IsAssignableTo(_data.GetType()))
+            {
+                Data = newType;
+                wasChanged = true;
+            }
+            else
+            {
+                _loggerService.Debug($"failed to replace ${Data.GetType().Name} with ${newType.GetType().Name}");
+            }
+        }
+
+
+        wasChanged = ReplaceInFields(search, replace, searchMode) || wasChanged;
+
+        // RecalculateProperties();
+
+        // Now, replace in child properties
+        // ReSharper disable once LoopCanBeConvertedToQuery Not this time
+        foreach (var t in Properties)
+        {
+            try
+            {
+                wasChanged = t.SearchAndReplaceInProperties(search, replace, searchMode) || wasChanged;
+            }
+            catch (Exception e)
+            {
+                _loggerService.Debug($"Error when trying to set {t.Name}: {e.Message}");
+            }
+        }
+
+        // CalculateValue();
+        // CalculateDescriptor();
+
+        // Any changed properties will be expanded, let's re-fold to how it used to be
+        IsExpanded = expansionState;
+
+        resolvedHashes.Add(ResolvedData.GetHashCode());
+
+        return wasChanged;
+    }
+    
     private bool SearchAndReplaceInReference(string search, string replace, StringComparison searchMode,
         IRedRef reference, out IRedRef outReference)
     {
@@ -63,14 +183,10 @@ public partial class ChunkViewModel : ObservableObject
         {
             case RedDummy:
             case CBool:
-            case CUInt8:
+            case IRedInteger:
             case CByteArray:
-            case CUInt16:
-            case CUInt32:
-            case CUInt64:
-            case CFloat:
-            case CDouble:
-            case CRUID:
+            case IRedEnum:
+            case IRedBitField:
                 return false;
             case CName cname:
                 if (cname.GetResolvedText() is (null or "" or "None"))
@@ -86,15 +202,45 @@ public partial class ChunkViewModel : ObservableObject
 
                 ret = (CName)replaced;
                 return true;
-            case CString cstring:
-                replaced = (cstring.ToString() ?? "").Replace(search, replace, searchMode);
-                if (replaced == cstring.ToString())
+            case IRedArray redArray:
+                wasChanged = false;
+                foreach (var o in redArray)
+                {
+                    switch (o)
+                    {
+                        case IRedBaseHandle handle when handle.GetValue() is IRedType handleValue &&
+                                                        SearchAndReplaceInObjectProperties(search, replace, searchMode,
+                                                            handleValue,
+                                                            out var newHandleValue):
+                        {
+                            handle.SetValue((RedBaseClass)newHandleValue);
+                            return true;
+                        }
+                        case IRedType redType:
+                            return SearchAndReplaceInObjectProperties(search, replace, searchMode, redType,
+                                out var newType);
+                        default:
+                            return false;
+                    }
+                }
+
+                return wasChanged;
+            case IRedString str:
+                replaced = (str.ToString() ?? "").Replace(search, replace, searchMode);
+                if (replaced == str.ToString())
                 {
                     return false;
                 }
 
-                ret = (CString)replaced;
-                return true;
+                if (str is CString)
+                {
+                    ret = (CString)replaced;
+                    return true;
+                }
+
+                _loggerService.Info(
+                    $"Search&Replace not yet implemented for IRedString {original.GetType().Name}");
+                return false;
             case IRedRef reference:
                 
                 if (!SearchAndReplaceInReference(search, replace, searchMode, reference, out var newReference))
@@ -186,133 +332,16 @@ public partial class ChunkViewModel : ObservableObject
 
                 return false;
             }
-            case IRedArray redArray:
-                wasChanged = false;
-                foreach (var o in redArray)
-                {
-                    switch (o)
-                    {
-                        case IRedBaseHandle handle when handle.GetValue() is IRedType handleValue &&
-                                                        SearchAndReplaceInObjectProperties(search, replace, searchMode,
-                                                            handleValue,
-                                                            out var newHandleValue):
-                        {
-                            handle.SetValue((RedBaseClass)newHandleValue);
-                            return true;
-                        }
-                        case IRedType redType:
-                            return SearchAndReplaceInObjectProperties(search, replace, searchMode, redType,
-                                out var newType);
-                        default:
-                            return false;
-                    }
-                }
-
-                return wasChanged;
             default:
             {
-                LogInvalidDataType();
+                _loggerService.Info(
+                    $"Search&Replace not yet implemented for {original.GetType().Name}");
                 
                 return false;
             }
         }
     }
-
-    private void LogInvalidDataType()
-    {
-        if (
-            PropertyType.IsAssignableTo(typeof(IRedEnum))
-            || PropertyType.IsAssignableTo(typeof(IRedInteger))
-            || PropertyType.IsAssignableTo(typeof(IRedBitField))
-            || PropertyType.IsAssignableTo(typeof(IRedCurvePoint))
-            || PropertyType.IsAssignableTo(typeof(IRedMultiChannelCurve))
-            || PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve))
-        )
-        {
-            return;
-        }
-
-        _loggerService.Info(
-            $"Search&Replace not yet implemented for {ResolvedData.GetType().Name}");
-    }
-
-    private bool SearchAndReplaceInProperties(string search, string replace, bool ignoreCase = false) =>
-        SearchAndReplaceInProperties(search, replace,
-            ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal);
-
-    private bool SearchAndReplaceInProperties(string search, string replace, StringComparison searchMode)
-    {
-        var expansionState = IsExpanded;
-
-        // Log changed states from children
-        var wasChanged = false;
-
-        var _data = Data;
-        var _resolvedData = ResolvedData;
-
-        if (SearchAndReplaceInObjectProperties(search, replace, searchMode, _resolvedData, out var newType))
-        {
-            if (Data is IRedHandle handle && newType is RedBaseClass newRedType)
-            {
-                handle.SetValue(newRedType);
-                wasChanged = true;
-            }
-            else if (newType.GetType().IsAssignableTo(_data.GetType()))
-            {
-                Data = newType;
-                wasChanged = true;
-            }
-            else
-            {
-                _loggerService.Debug($"failed to replace ${Data.GetType().Name} with ${newType.GetType().Name}");
-            }
-        }
-
-        wasChanged = ReplaceInFields(search, replace, searchMode) || wasChanged;
-
-        RecalculateProperties();
-
-        // Now, replace in child properties
-        // ReSharper disable once LoopCanBeConvertedToQuery Not this time
-        foreach (var t in Properties)
-        {
-            try
-            {
-                wasChanged = t.SearchAndReplaceInProperties(search, replace, searchMode) || wasChanged;
-            }
-            catch (Exception e)
-            {
-                _loggerService.Debug($"Error when trying to set {t.Name}: {e.Message}");
-            }
-        }
-
-        CalculateValue();
-        CalculateDescriptor();
-
-        // Any changed properties will be expanded, let's re-fold to how it used to be
-        IsExpanded = expansionState;
-
-        return wasChanged;
-    }
-
-    private bool ReplaceInArrayElement(string search, string replace, StringComparison searchMode, object o)
-    {
-        switch (o)
-        {
-            case IRedBaseHandle handle
-                when SearchAndReplaceInObjectProperties(search, replace, searchMode, handle, out var newHandle):
-            {
-                var pointee = RedTypeManager.CreateRedType(handle.InnerType);
-                handle.SetValue((RedBaseClass)newHandle);
-                return true;
-            }
-            case IRedType redType:
-                return SearchAndReplaceInObjectProperties(search, replace, searchMode, redType, out var newType);
-            default:
-                return false;
-        }
-    }
-
+    
 
     /// <summary>
     /// Without this, some items in CKeyValueArrays are being left out. I guess I'm leaving this in!
@@ -321,47 +350,66 @@ public partial class ChunkViewModel : ObservableObject
     private bool ReplaceInFields(string search, string replace, StringComparison searchMode)
     {
         var wasChanged = false;
-        var fields = ResolvedData.GetType()
-            .GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
-        foreach (var field in fields)
+        foreach (var property in ResolvedData.GetType().GetProperties())
         {
-            if (field.GetValue(ResolvedData) is not (List<CName> or CName))
+            try
             {
-                continue;
-            }
+                // Get the name of the property
+                string propertyName = property.Name;
 
-            string? newValue;
-            switch (field.GetValue(ResolvedData))
-            {
-                case List<CName> ary:
+                // Get the value of the property
+                object? propertyValue = property.GetValue(ResolvedData);
+
+                if (propertyValue is not (List<CName> or CName) && propertyValue is IRedType redType)
                 {
-                    for (var i = 0; i < ary.Count; i++)
+                    if (SearchAndReplaceInObjectProperties(search, replace, searchMode, redType,
+                            out var newPropertyValue))
                     {
-                        newValue = ary[i].GetResolvedText()?.Replace(search, replace, searchMode);
-                        if (null == newValue || ary[i].GetResolvedText() == newValue)
-                        {
-                            continue;
-                        }
-
-                        ary[i] = (CName)newValue;
                         wasChanged = true;
+                        property.SetValue(ResolvedData, newPropertyValue);
                     }
 
                     continue;
                 }
-                case CName cname when cname.GetResolvedText() is string s:
 
-                    newValue = s.Replace(search, replace, searchMode);
-                    if (!Equals(s, newValue))
+                string? newValue;
+                switch (propertyValue)
+                {
+                    case List<CName> ary:
                     {
-                        field.SetValue(ResolvedData, s.Replace(search, replace, searchMode));
-                        wasChanged = true;
-                    }
+                        for (var i = 0; i < ary.Count; i++)
+                        {
+                            newValue = ary[i].GetResolvedText()?.Replace(search, replace, searchMode);
+                            if (null == newValue || ary[i].GetResolvedText() == newValue)
+                            {
+                                continue;
+                            }
 
-                    continue;
-                default:
-                    continue;
+                            ary[i] = (CName)newValue;
+                            wasChanged = true;
+                        }
+
+                        continue;
+                    }
+                    case CName cname when cname.GetResolvedText() is string s:
+
+                        newValue = s.Replace(search, replace, searchMode);
+                        if (!Equals(s, newValue))
+                        {
+                            property.SetValue(ResolvedData, s.Replace(search, replace, searchMode));
+                            wasChanged = true;
+                        }
+
+                        continue;
+                    default:
+                        continue;
+                }
+            }
+            catch // (Exception ex)
+            {
+                // If we can't read the property, we don't wanna replace in it.
+                // _loggerService.Debug("Ran into exception for property: " + property.Name + " " + ex.Message);
             }
         }
 

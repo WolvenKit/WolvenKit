@@ -315,11 +315,16 @@ namespace WolvenKit.Views.Tools
             var replaceText = dialog.ViewModel?.ReplaceText ?? "";
             var ignoreCase = dialog.ViewModel?.IgnoreCase ?? false;
 
-            selection.OfType<ChunkViewModel>().ToList()
-                .ForEach(chunkViewModel =>
-                {
-                    chunkViewModel.SearchAndReplace(searchText, replaceText, ignoreCase);
-                });
+            var results = selection.OfType<ChunkViewModel>()
+                .Select(cvm => cvm.SearchAndReplace(searchText, replaceText, ignoreCase))
+                .ToList();
+
+            if (results.Contains(true))
+            {
+                selection.OfType<ChunkViewModel>().FirstOrDefault()?.Tab?.Parent?.SetIsDirty(true);
+            }
+
+            
         }
 
         //private void TreeView_QueryNodeSize(object sender, QueryNodeSizeEventArgs e)
