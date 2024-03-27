@@ -327,5 +327,14 @@ namespace WolvenKit.Views.Tools
         //    e.Height = e.Node.Content.();
         //    e.Handled = true;
         //}
+        private void OnKeystateChanged(object sender, KeyEventArgs e)
+        {
+            if (SelectedItem is not ChunkViewModel item)
+            {
+                return;
+            }
+
+            item.OnKeystateChanged(null);
+        }
     }
 }

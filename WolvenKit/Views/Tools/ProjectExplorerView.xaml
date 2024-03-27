@@ -159,7 +159,7 @@
                           Visibility="{Binding Path=IsShiftKeyPressedOnly, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                 <MenuItem Command="{Binding CopyAbsPathToCurrentFolderCommand}" Header="Copy absolute path to containing folder"
-                          Visibility="{Binding Path=IsCtrlKeyOnlyPressed, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                          Visibility="{Binding Path=IsCtrlKeyPressedOnly, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                 <MenuItem Command="{Binding CopyAbsPathToRawFolderCommand}" Header="Copy absolute path to raw folder"
                           Visibility="{Binding Path=IsShowAbsolutePathToRawFolder, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />

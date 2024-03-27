@@ -240,7 +240,11 @@
                 </Style.Triggers>
             </Style>
 
-            <ContextMenu x:Key="TreeViewContextMenu" DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}">
+            <ContextMenu x:Key="TreeViewContextMenu"
+                         KeyUp="OnKeystateChanged"
+                         KeyDown="OnKeystateChanged"
+                         DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}">
+               
                 <ContextMenu.Resources>
                     <Style TargetType="MenuItem">
                         <Style.Triggers>
@@ -565,6 +569,7 @@
                     CommandTarget="{Binding}"
                     Header="Copy Value to Clipboard"
                     IsCheckable="False"
+                    Visibility="{Binding Path=PlacementTarget.Tag.HasValue, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}"
                     Style="{StaticResource SyncfusionMenuItemStyle}">
                     <MenuItem.Icon>
                         <iconPacks:PackIconCodicons Kind="Copy" Style="{StaticResource ContextMenuIconStyleCodicons}" />
@@ -575,7 +580,7 @@
                     Header="Delete Item in Array/Buffer"
                     IsCheckable="False"
                     Style="{StaticResource SyncfusionMenuItemStyle}"
-                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowArrayOps, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    Visibility="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
                         <iconPacks:PackIconCodicons Kind="Remove" Style="{StaticResource ContextMenuIconStyleCodicons}" />
                     </MenuItem.Icon>
@@ -585,7 +590,7 @@
                     Header="Delete Selection in Array/Buffer"
                     IsCheckable="False"
                     Style="{StaticResource SyncfusionMenuItemStyle}"
-                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowArrayOps, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    Visibility="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
                         <iconPacks:PackIconCodicons Kind="Remove" Style="{StaticResource ContextMenuIconStyleCodicons}" />
                     </MenuItem.Icon>

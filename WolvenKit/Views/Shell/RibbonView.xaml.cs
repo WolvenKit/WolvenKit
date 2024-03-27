@@ -7,16 +7,13 @@ using System.Reactive.Disposables;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using CommunityToolkit.Mvvm.ComponentModel;
-using ControlzEx.Standard;
-using Octokit;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App.Models;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Core.Interfaces;
 
 enum LaunchGameProfile
@@ -32,10 +29,7 @@ namespace WolvenKit.Views.Shell
     {
         private readonly ISettingsManager _settingsManager;
         private readonly ILoggerService _loggerService;
-
-
-        // Shift-click on "Start Game" will start game from last save
-        private static bool IsShiftBeingHeld => Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
+        private readonly ModifierViewStatesModel _modifierViewStatesModel = ModifierViewStatesModel.GetInstance();
 
         
         public RibbonView()
@@ -261,7 +255,7 @@ namespace WolvenKit.Views.Shell
         private void MenuItem_SubmenuOpened(object o, RoutedEventArgs args)
         {
             // TODO: Hacky workaround, fix with https://github.com/WolvenKit/WolvenKit/issues/1486
-            if (IsShiftBeingHeld)
+            if (_modifierViewStatesModel.IsShiftKeyPressed)
             {
                 // launch game from last save
                 MenuItemLaunchGameFromLastSave.RaiseEvent(new RoutedEventArgs(MenuItem.ClickEvent));

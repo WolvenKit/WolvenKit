@@ -67,6 +67,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     private readonly ILocKeyService _locKeyService;
     private readonly Red4ParserService _parserService;
     private readonly CRUIDService _cruidService;
+    private readonly ModifierViewStatesModel _modifierViewStatesModel = ModifierViewStatesModel.GetInstance();
 
     private static readonly List<string> s_hiddenProperties = new() 
     { 
@@ -126,6 +127,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         Parent = parent;
         _propertyName = name;
         IsReadOnly = isReadOnly;
+
+        // Initially set view flags
+        OnKeystateChanged(null);
+
+        _modifierViewStatesModel.ModifierStateChanged += OnModifierStateChanged;
+        _modifierViewStatesModel.PropertyChanged += ModifierViewStatesModel_OnPropertyChanged;
 
         // If the parent is an array, the numeric index will be passed as property name 
         if (IsInArray && int.TryParse(name, out var arrayIndex))
@@ -224,7 +231,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             CalculateProperties();
         }
 
-        if (IsShiftBeingHeld)
+        if (IsShiftKeyPressed)
         {
             SetChildExpansionStates(IsExpanded);
         }
@@ -450,32 +457,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     public int[] SelectedNodeIndices =>
         Properties.Where((x) => x.IsSelected).Select((x) => x.NodeIdxInParent).Where((x) => x > -1).ToArray();
 
-    // If shift is not being held and we're a CMeshMaterialEntry or a WorldCompiledEffectPlacemenentInfo, 
-    // show "Duplicate as new item" instead of "Duplicate Selection" 
-    public bool ShouldShowDuplicateAsNew =>
-        IsInArray && !IsShiftBeingHeld && ResolvedData is worldCompiledEffectPlacementInfo ||
-        ResolvedData is CMeshMaterialEntry;
-
-    public bool ShouldShowDuplicate => IsInArray && !ShouldShowDuplicateAsNew;
-
-    // When shift is not held, paste into array => PasteChunk
-    public bool ShouldShowPasteIntoArray => ShouldShowArrayOps && !IsShiftBeingHeld;
-
-    // When shift is being held, overwrite array with selection => ClearAndPasteChunk
-    public bool ShouldShowOverwriteArray => ShouldShowArrayOps && IsShiftBeingHeld;
-
     // For arrays of indexables, allow renumbering index properties (e.g. for materialDefinitions)
     // to get rid of duplicates and have all the ducks in a row
     public bool ShouldShowRenumberArrayIndexProperties =>
         IsArray && ResolvedData is CArray<CMeshMaterialEntry> or CArray<worldCompiledEffectPlacementInfo>;
 
-    // Shift: recursively fold/unfold child nodes
-    private protected static bool IsShiftBeingHeld =>
-        Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
-
-    // Shift+Control: recursively fold/unfold nodes all the way
-    public static bool IsControlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
-    
     public IRedArray? ArraySelfOrParent => Parent?.ResolvedData is IRedArray ira ? ira : ResolvedData as IRedArray;
 
     public RDTDataViewModel? Tab => _tab ?? Parent?.Tab;
@@ -663,6 +649,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     public bool TypesDiffer => IsValueExtrapolated || PropertyType != ResolvedPropertyType;
 
     public bool IsInArray => Parent is not null && Parent.IsArray;
+
+    public bool HasValue => Value is not null && Value != "" && Value.ToLower() != "none";
 
     public bool IsArray =>(PropertyType.IsAssignableTo(typeof(IRedArray)) ||
                 ResolvedPropertyType is not null && ResolvedPropertyType.IsAssignableTo(typeof(IList)) ||
@@ -1831,7 +1819,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         var isExpanded = IsExpanded;
         DeleteAll();
         PasteChunk();
-        if (!IsControlBeingHeld)
+        if (!IsCtrlKeyPressed)
         {
             SetChildExpansionStates(false);
         }
@@ -2875,7 +2863,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
      */
     private void AdjustPropertiesAfterPasteAsNewItem()
     {
-        if (Parent is null || !IsInArray || ResolvedData is RedDummy || IsShiftBeingHeld)
+        if (Parent is null || !IsInArray || ResolvedData is RedDummy || IsShiftKeyPressed)
         {
             return;
         }

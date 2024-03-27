@@ -1,12 +1,39 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace WolvenKit.App.ViewModels.Tools;
 
-public abstract class ToolViewModelViewStates : ToolViewModel
+/// <summary>
+/// Use as composite pattern (declare instance variable and set it to GetInstance())
+/// </summary>
+/// <example>
+/// In your implementing object's constructor, hook the following events:
+/// <code>
+/// _modifierViewStatesModel.ModifierStateChanged += OnModifierStateChanged;
+/// _modifierViewStatesModel.PropertyChanged += ModifierViewStatesModel_OnPropertyChanged;
+/// </code>
+/// <br/>
+/// Declare internal method OnModifierStateChanged to react to view state modifier changes (custom view vars etc.)
+/// <br/>
+/// Declare internal method ModifierViewStatesModel_OnPropertyChanged to forward the change event:
+/// <code>
+/// private void ModifierViewStatesModel_PropertyChangedRaised(object? sender, PropertyChangedEventArgs e) {
+///   OnPropertyChanged(e.PropertyName);
+/// } 
+/// </code>
+/// </example>
+public class ModifierViewStatesModel : ObservableObject
 {
-    protected ToolViewModelViewStates(string name) : base(name) => RefreshModifierStates();
+    private static ModifierViewStatesModel? s_instance;
 
-    private bool _isNoModifierPressed;
+    public static ModifierViewStatesModel GetInstance()
+    {
+        s_instance ??= new ModifierViewStatesModel();
+        return s_instance;
+    }
+
+    private bool _isNoModifierPressed = true;
 
     public bool IsNoModifierPressed
     {
@@ -162,19 +189,19 @@ public abstract class ToolViewModelViewStates : ToolViewModel
         }
     }
 
-    private bool _isCtrlKeyOnlyPressed;
+    private bool _isCtrlKeyPressedOnly;
 
-    public bool IsCtrlKeyOnlyPressed
+    public bool IsCtrlKeyPressedOnly
     {
-        get => _isCtrlKeyOnlyPressed;
+        get => _isCtrlKeyPressedOnly;
         private set
         {
-            if (_isCtrlKeyOnlyPressed == value)
+            if (_isCtrlKeyPressedOnly == value)
             {
                 return;
             }
 
-            _isCtrlKeyOnlyPressed = value;
+            _isCtrlKeyPressedOnly = value;
             OnPropertyChanged();
         }
     }
@@ -188,7 +215,7 @@ public abstract class ToolViewModelViewStates : ToolViewModel
         IsNoModifierPressed = !IsShiftBeingHeld && !IsCtrlBeingHeld && !IsAltBeingHeld;
 
         IsCtrlKeyPressed = IsCtrlBeingHeld;
-        IsCtrlKeyOnlyPressed = IsCtrlBeingHeld && !IsShiftBeingHeld && !IsAltBeingHeld;
+        IsCtrlKeyPressedOnly = IsCtrlBeingHeld && !IsShiftBeingHeld && !IsAltBeingHeld;
 
         IsShiftKeyPressed = IsShiftBeingHeld;
         IsShiftKeyPressedOnly = IsShiftBeingHeld && !IsCtrlBeingHeld && !IsAltBeingHeld;
@@ -203,5 +230,6 @@ public abstract class ToolViewModelViewStates : ToolViewModel
         OnModifierStateChanged();
     }
 
-    protected abstract void OnModifierStateChanged();
+    public event Action? ModifierStateChanged;
+    private void OnModifierStateChanged() => ModifierStateChanged?.Invoke();
 }

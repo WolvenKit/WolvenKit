@@ -46,20 +46,14 @@ namespace WolvenKit.Views.Tools
         public static readonly DependencyProperty FlatItemSourceProperty =
             DependencyProperty.Register(nameof(FlatItemSource), typeof(ObservableCollection<FileModel>),
                 typeof(ProjectExplorerView), new PropertyMetadata(null));
-
-
-        // Shift: fold/unfold child nodes
-        private static bool IsShiftBeingHeld => Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
-
-        // Ctrl: copy file on drag&drop instead of moving
-        private static bool IsControlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
-
         
         public ObservableCollection<FileModel> FlatItemSource
         {
             get => (ObservableCollection<FileModel>)GetValue(FlatItemSourceProperty);
             set => SetValue(FlatItemSourceProperty, value);
         }
+
+        private readonly ModifierViewStatesModel _modifierViewStatesModel = ModifierViewStatesModel.GetInstance();
 
         #region Constructors
 
@@ -264,7 +258,10 @@ namespace WolvenKit.Views.Tools
                     TreeGrid.ExpandNode(node);
                 }
 
-                if (IsShiftBeingHeld) return;
+                if (_modifierViewStatesModel.IsShiftKeyPressed)
+                {
+                    return;
+                }
 
                 foreach (var childNode in node.ChildNodes)
                 {
@@ -620,7 +617,7 @@ namespace WolvenKit.Views.Tools
                         }
                     }
 
-                    if (IsControlBeingHeld || onlyCopy)
+                    if (_modifierViewStatesModel.IsCtrlKeyPressed || onlyCopy)
                     {
                         File.Copy(sourceFile, newFile, true);
                     }
@@ -670,7 +667,7 @@ namespace WolvenKit.Views.Tools
                 }
 
                 // Disable collapsing of child nodes with Ctrl
-                if (!IsControlBeingHeld)
+                if (!_modifierViewStatesModel.IsCtrlKeyPressed)
                 {
                     TreeGrid.CollapseAllNodes(childNode);
                 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -31,7 +32,7 @@ using WolvenKit.RED4.Archive;
 
 namespace WolvenKit.App.ViewModels.Tools;
 
-public partial class ProjectExplorerViewModel : ToolViewModelViewStates
+public partial class ProjectExplorerViewModel : ToolViewModel
 {
     #region fields
 
@@ -52,6 +53,7 @@ public partial class ProjectExplorerViewModel : ToolViewModelViewStates
     private readonly IProgressService<double> _progressService;
     private readonly IGameControllerFactory _gameController;
     private readonly AppViewModel _mainViewModel;
+    private readonly ModifierViewStatesModel _modifierViewStatesModel = ModifierViewStatesModel.GetInstance();
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
@@ -85,6 +87,12 @@ public partial class ProjectExplorerViewModel : ToolViewModelViewStates
         _mainViewModel = appViewModel;
 
         SideInDockedMode = DockSide.Left;
+
+        _modifierViewStatesModel.ModifierStateChanged += OnModifierStateChanged;
+
+        _modifierViewStatesModel.PropertyChanged += ModifierViewStatesModel_OnPropertyChanged;
+  
+
 
         SetupToolDefaults();
 
@@ -971,16 +979,31 @@ public partial class ProjectExplorerViewModel : ToolViewModelViewStates
     /// </summary>
     private void SetupToolDefaults() => ContentId = ToolContentId;           // Define a unique contentid for this toolwindow//BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow//bi.BeginInit();//bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");//bi.EndInit();//IconSource = bi;
 
+    #endregion Methods
 
-    protected override void OnModifierStateChanged()
+    #region ModifierStateAwareness
+
+    // ####################################################################################
+    // Integrate with _modifierViewStatesModel to expose keys to view 
+    // ####################################################################################
+
+    public bool IsShiftKeyPressedOnly => _modifierViewStatesModel.IsShiftKeyPressedOnly;
+    public bool IsCtrlKeyPressedOnly => _modifierViewStatesModel.IsCtrlKeyPressedOnly;
+    public bool IsNoModifierPressed => _modifierViewStatesModel.IsNoModifierPressed;
+
+    private void OnModifierStateChanged()
     {
         IsShowAbsolutePathToRawFolder =
-            IsCtrlShiftOnlyPressed && SelectedItem?.FullName.Contains(s_archiveFolder) == true;
+            _modifierViewStatesModel.IsCtrlShiftOnlyPressed && SelectedItem?.FullName.Contains(s_archiveFolder) == true;
 
         IsShowAbsolutePathToArchiveFolder =
-            IsCtrlShiftOnlyPressed && SelectedItem?.FullName.Contains(s_rawFolder) == true;
+            _modifierViewStatesModel.IsCtrlShiftOnlyPressed && SelectedItem?.FullName.Contains(s_rawFolder) == true;
     }
 
-    
-    #endregion Methods
+    private void ModifierViewStatesModel_OnPropertyChanged(object? sender, PropertyChangedEventArgs e) =>
+        OnPropertyChanged(e.PropertyName);
+
+    public void RefreshModifierStates() => _modifierViewStatesModel.RefreshModifierStates();
+
+    #endregion
 }
