@@ -646,7 +646,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     public string ResolvedType => ResolvedPropertyType is not null ? GetTypeRedName(ResolvedPropertyType) ?? ResolvedPropertyType.Name : "";
 
     // Controls if value text is being displayed or not
-    public bool TypesDiffer => IsValueExtrapolated || PropertyType != ResolvedPropertyType;
+    public bool TypesDiffer => PropertyType != ResolvedPropertyType;
 
     public bool IsInArray => Parent is not null && Parent.IsArray;
 

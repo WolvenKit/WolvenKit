@@ -123,7 +123,11 @@ public class ExtendedPropertyInfo
         }
         else
         {
-            DefaultValue = RedTypeManager.CreateRedType(Type);
+            DefaultValue = null;
+            if (Type.IsValueType)
+            {
+                DefaultValue = System.Activator.CreateInstance(Type);
+            }
         }
 
         _isDefaultSet = true;

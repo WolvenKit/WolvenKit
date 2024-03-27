@@ -39,7 +39,14 @@ public partial class RDTTextureViewModel : RedDocumentTabViewModel
         _parserService = parserService;
 
         _data = data;
-        _redImage = RedImage.FromRedClass(data);
+        try
+        {
+            _redImage = RedImage.FromRedClass(data);
+        }
+        catch (Exception)
+        {
+            _loggerService.Error("Error while loading an image");
+        }
 
         Render = SetupImage;
     }

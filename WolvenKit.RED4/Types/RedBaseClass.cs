@@ -143,9 +143,14 @@ public partial class RedBaseClass : IRedClass, IRedCloneable, IEquatable<RedBase
 
     public IRedType? GetProperty(string propertyName)
     {
-        if (_dynamicProperties.ContainsKey(propertyName))
+        if (_dynamicProperties.TryGetValue(propertyName, out var dynamicPropertyInfo))
         {
-            return _properties[propertyName];
+            if (_properties.TryGetValue(propertyName, out var value))
+            {
+                return value;
+            }
+
+            return (IRedType?)RedReflection.GetDefaultValue(dynamicPropertyInfo.Type);
         }
 
         var propertyInfo = RedReflection.GetNativePropertyInfo(GetType(), propertyName);
