@@ -70,6 +70,7 @@ public partial class ChunkViewModel : ObservableObject
             case CUInt64:
             case CFloat:
             case CDouble:
+            case CRUID:
                 return false;
             case CName cname:
                 if (cname.GetResolvedText() is (null or "" or "None"))
@@ -210,16 +211,29 @@ public partial class ChunkViewModel : ObservableObject
                 return wasChanged;
             default:
             {
-                if (PropertyType.IsAssignableTo(typeof(IRedEnum)))
-                {
-                    return false;
-                }
-
-                _loggerService.Info(
-                    $"Search&Replace not yet implemented for {ResolvedData.GetType().Name}");
+                LogInvalidDataType();
+                
                 return false;
             }
         }
+    }
+
+    private void LogInvalidDataType()
+    {
+        if (
+            PropertyType.IsAssignableTo(typeof(IRedEnum))
+            || PropertyType.IsAssignableTo(typeof(IRedInteger))
+            || PropertyType.IsAssignableTo(typeof(IRedBitField))
+            || PropertyType.IsAssignableTo(typeof(IRedCurvePoint))
+            || PropertyType.IsAssignableTo(typeof(IRedMultiChannelCurve))
+            || PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve))
+        )
+        {
+            return;
+        }
+
+        _loggerService.Info(
+            $"Search&Replace not yet implemented for {ResolvedData.GetType().Name}");
     }
 
     private bool SearchAndReplaceInProperties(string search, string replace, bool ignoreCase = false) =>
