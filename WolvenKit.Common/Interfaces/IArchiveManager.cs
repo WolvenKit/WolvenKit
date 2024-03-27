@@ -45,10 +45,8 @@ namespace WolvenKit.Common
         public void LoadAdditionalModArchives(string archiveBasePath, bool analyzeFiles = true);
 
         public Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles();
-        public IEnumerable<FileEntry> GetFiles();
         void LoadFromFolder(DirectoryInfo archivedir);
 
-        RedFileSystemModel? LookupDirectory(string fullpath, bool expandAll = false);
         public Optional<IGameFile> Lookup(ulong hash);
         public IGameFile? GetGameFile(ResourcePath path, bool includeMods = true, bool includeProject = true);
         public CR2WFile? GetCR2WFile(ResourcePath path, bool includeMods = true, bool includeProject = true);

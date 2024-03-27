@@ -64,7 +64,7 @@ namespace WolvenKit.Common.Model
         {
             RootNode = new RedFileSystemModel(TypeName.ToString());
 
-            var allFiles = Archives.Items
+            var allFiles = GetGameArchives()
                 .SelectMany(x => x.Files)
                 .GroupBy(x => x.Key)
                 .Select(x => x.First());
@@ -141,11 +141,7 @@ namespace WolvenKit.Common.Model
 
         public abstract Optional<IGameFile> Lookup(ulong hash);
 
-        public abstract RedFileSystemModel? LookupDirectory(string fullpath, bool expandAll = false);
-
         public abstract Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles();
-
-        public abstract IEnumerable<FileEntry> GetFiles();
 
         public abstract void LoadFromFolder(DirectoryInfo archivedir);
 
@@ -156,6 +152,9 @@ namespace WolvenKit.Common.Model
         public abstract IObservable<IChangeSet<RedFileSystemModel>> ConnectGameRoot();
 
         public abstract IObservable<IChangeSet<RedFileSystemModel>> ConnectModRoot();
-        public IEnumerable<IGameArchive> GetModArchives() => Archives.Items.Where(x => x.Source == WolvenKit.Common.EArchiveSource.Mod);
+        public IEnumerable<IGameArchive> GetModArchives() => Archives.Items.Where(x => x.Source is EArchiveSource.Mod);
+        public IEnumerable<IGameArchive> GetBaseArchives() => Archives.Items.Where(x => x.Source is EArchiveSource.Base );
+        public IEnumerable<IGameArchive> GetEp1Archives() => Archives.Items.Where(x => x.Source is EArchiveSource.EP1);
+        public IEnumerable<IGameArchive> GetGameArchives() => Archives.Items.Where(x => x.Source is EArchiveSource.EP1 or EArchiveSource.Base);
     }
 }

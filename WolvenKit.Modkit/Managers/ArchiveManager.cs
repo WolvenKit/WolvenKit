@@ -512,14 +512,15 @@ namespace WolvenKit.RED4.CR2W.Archive
                 LoadModArchive(file, analyzeFiles);
             }
 
-            foreach (var modArchive in Archives.Items)
+            // set relative paths
+            foreach (var archive in Archives.Items)
             {
-                if (!files.Contains(modArchive.ArchiveAbsolutePath))
+                if (!files.Contains(archive.ArchiveAbsolutePath))
                 {
                     continue;
                 }
 
-                modArchive.ArchiveRelativePath = Path.GetRelativePath(archiveBasePath, modArchive.ArchiveAbsolutePath);
+                archive.ArchiveRelativePath = Path.GetRelativePath(archiveBasePath, archive.ArchiveAbsolutePath);
             }
 
             RebuildModRoot();
@@ -551,30 +552,10 @@ namespace WolvenKit.RED4.CR2W.Archive
             }
             else
             {
-                return Archives.Items
+                return GetGameArchives()
                   .SelectMany(_ => _.Files.Values)
                   .GroupBy(_ => _.Extension)
                   .ToDictionary(_ => _.Key, _ => _.Select(x => x));
-            }
-        }
-
-        /// <summary>
-        /// Get all files in all archives
-        /// </summary>
-        /// <returns></returns>
-        public override IEnumerable<FileEntry> GetFiles()
-        {
-            if (IsModBrowserActive)
-            {
-                return GetModArchives()
-                    .SelectMany(_ => _.Files.Values)
-                    .Cast<FileEntry>();
-            }
-            else
-            {
-                return Archives.Items
-                    .SelectMany(_ => _.Files.Values)
-                    .Cast<FileEntry>();
             }
         }
 
@@ -592,76 +573,36 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <returns></returns>
         public override Optional<IGameFile> Lookup(ulong hash)
         {
-            if (IsModBrowserActive)
+            // first check the ep1 archives
+            foreach (var item in GetEp1Archives())
             {
-                return Optional<IGameFile>.ToOptional(
-                    (from item in GetModArchives() where item.Files.ContainsKey(hash) select item.Files[hash])
-                .FirstOrDefault());
-            }
-            else
-            {
-                return Optional<IGameFile>.ToOptional(
-                    (from item in Archives.Items where item.Files.ContainsKey(hash) select item.Files[hash])
-                .FirstOrDefault());
-            }
-        }
-
-        /// <summary>
-        /// Retrieves a directory with the given fullpath
-        /// </summary>
-        /// <param name="fullpath"></param>
-        /// <param name="expandAll"></param>
-        /// <returns></returns>
-        public override RedFileSystemModel? LookupDirectory(string fullpath, bool expandAll = false)
-        {
-            if (IsModBrowserActive)
-            {
-                foreach (var item in ModRoots)
+                if (item.Files.TryGetValue(hash, out var value))
                 {
-                    var result = LookupDirectory(fullpath, item, expandAll);
-                    if (result is not null)
-                    {
-                        return result;
-                    }
-                }
-                return null;
-            }
-            else
-            {
-                return LookupDirectory(fullpath, RootNode.NotNull(), expandAll);
-            }
-        }
-
-        private static RedFileSystemModel? LookupDirectory(string fullpath, RedFileSystemModel currentDir, bool expandAll = false)
-        {
-            var splits = fullpath.Split(Path.DirectorySeparatorChar);
-            if (expandAll)
-            {
-                currentDir.IsExpanded = true;
-            }
-
-            for (var i = 0; i < splits.Length; i++)
-            {
-                var s = splits[i];
-
-                if (currentDir.Directories.ContainsKey(s))
-                {
-                    currentDir = currentDir.Directories[s];
-                    if (expandAll)
-                    {
-                        currentDir.IsExpanded = true;
-                    }
-                    if (i == splits.Length - 1)
-                    {
-                        return currentDir;
-                    }
-                }
-                else
-                {
-                    return i == splits.Length - 1 ? currentDir : null;
+                    return Optional<IGameFile>.ToOptional(value);
                 }
             }
-            return null;
+
+            // then check the base archives
+            foreach (var item in GetBaseArchives())
+            {
+                if (item.Files.TryGetValue(hash, out var value))
+                {
+                    return Optional<IGameFile>.ToOptional(value);
+                }
+            }
+
+            // then check the mod archives
+            foreach (var item in GetModArchives())
+            {
+                if (item.Files.TryGetValue(hash, out var value))
+                {
+                    return Optional<IGameFile>.ToOptional(value);
+                }
+            }
+
+            // TODO what about Porject and Unknown?
+
+            return Optional<IGameFile>.None;
         }
 
         public override IGameFile? GetGameFile(ResourcePath path, bool includeMods = true, bool includeProject = true)
