@@ -20,20 +20,20 @@ namespace WolvenKit.Common
         #region Properties
 
         SourceCache<IGameArchive, string> Archives { get; set; }
-        SourceCache<IGameArchive, string> ModArchives { get; set; }
-        //SourceCache<IGameFile, ulong> Items { get; }
+
         RedFileSystemModel? RootNode { get; set; }
+
         public List<RedFileSystemModel> ModRoots { get; }
 
         IGameArchive? ProjectArchive { get; set; }
 
-        //IEnumerable<string> AutocompleteSource { get; }
         IEnumerable<string>? Extensions { get; set; }
-        //IEnumerable<IGameFile> FileList { get; }
         EArchiveType TypeName { get; }
 
         public bool IsManagerLoading { get; }
+
         public bool IsManagerLoaded { get; }
+
         bool IsModBrowserActive { get; set; }
 
         #endregion Properties
@@ -55,5 +55,6 @@ namespace WolvenKit.Common
 
         public IObservable<IChangeSet<RedFileSystemModel>> ConnectGameRoot();
         public IObservable<IChangeSet<RedFileSystemModel>> ConnectModRoot();
+        IEnumerable<IGameArchive> GetModArchives();
     }
 }

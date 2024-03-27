@@ -11,6 +11,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Model
@@ -22,9 +23,6 @@ namespace WolvenKit.Common.Model
         public abstract EArchiveType TypeName { get; }
 
         public abstract SourceCache<IGameArchive, string> Archives { get; set; }
-
-        public abstract SourceCache<IGameArchive, string> ModArchives { get; set; }
-
 
         public RedFileSystemModel? RootNode { get; set; }
 
@@ -106,7 +104,7 @@ namespace WolvenKit.Common.Model
         {
             ModRoots.Clear();
 
-            foreach (var archive in ModArchives.Items)
+            foreach (var archive in GetModArchives())
             {
                 ArgumentNullException.ThrowIfNull(archive.ArchiveRelativePath);
 
@@ -158,5 +156,6 @@ namespace WolvenKit.Common.Model
         public abstract IObservable<IChangeSet<RedFileSystemModel>> ConnectGameRoot();
 
         public abstract IObservable<IChangeSet<RedFileSystemModel>> ConnectModRoot();
+        public IEnumerable<IGameArchive> GetModArchives() => Archives.Items.Where(x => x.Source == WolvenKit.Common.EArchiveSource.Mod);
     }
 }
