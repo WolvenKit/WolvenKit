@@ -241,6 +241,42 @@ public partial class ChunkViewModel
                 Value = StringHelper.Stringify(tBinding);
                 IsValueExtrapolated = Value != "";
                 break;
+            case entAnimationSetupExtensionComponent animSetupComp when
+                animSetupComp.ControlBinding.GetValue() is entAnimationControlBinding controlBinding:
+                Value = $"{controlBinding.BindName.GetResolvedText()}";
+                IsValueExtrapolated = Value != "";
+                break;
+            case entVisualControllerDependency controllerDep:
+                Value = $"{controllerDep.Mesh.DepotPath.GetResolvedText()}";
+                IsValueExtrapolated = Value != "";
+                break;
+            case entVisualControllerComponent entVisualControllerComponent:
+                Value = $"{entVisualControllerComponent.ForcedLodDistance}";
+                if (entVisualControllerComponent.MeshProxy.DepotPath.GetResolvedText() is string meshProxyPath &&
+                    meshProxyPath != "")
+                {
+                    var separator = Value == "" ? "" : " | ";
+                    Value = $"{Value}{separator}{meshProxyPath}";
+                }
+
+                IsValueExtrapolated = Value != "";
+                break;
+            case entAnimatedComponent animComp:
+                if (animComp.FacialSetup.DepotPath.GetResolvedText() is string path)
+                {
+                    Value = path;
+                }
+                else if (animComp.Graph.DepotPath.GetResolvedText() is string graphPath)
+                {
+                    Value = graphPath;
+                }
+                else
+                {
+                    Value = $"{animComp.Rig.DepotPath.GetResolvedText()}";
+                }
+
+                IsValueExtrapolated = Value != "";
+                break;
             case entSlotComponent slotComponent when
                 slotComponent.ParentTransform?.GetValue() is entHardTransformBinding tBinding4:
                 Value = StringHelper.Stringify(tBinding4);
