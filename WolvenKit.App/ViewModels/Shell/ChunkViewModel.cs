@@ -127,13 +127,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         Parent = parent;
         _propertyName = name;
         IsReadOnly = isReadOnly;
-
-        // Initially set view flags
-        OnKeystateChanged(null);
-
-        _modifierViewStatesModel.ModifierStateChanged += OnModifierStateChanged;
-        _modifierViewStatesModel.PropertyChanged += ModifierViewStatesModel_OnPropertyChanged;
-
+        
         // If the parent is an array, the numeric index will be passed as property name 
         if (IsInArray && int.TryParse(name, out var arrayIndex))
         {
@@ -445,7 +439,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public bool ShouldShowTweakXLMenu => Data is gamedataTweakDBRecord || Data is TweakDBID || Parent?.Data is gamedataTweakDBRecord || Parent?.Data is TweakDBID;
 
-    public bool ShouldShowHandleOperations => PropertyType.IsAssignableTo(typeof(IRedBaseHandle));
+    public bool ShouldShowHandleOperations => PropertyType.IsAssignableTo(typeof(IRedBaseHandle)) && !IsArray;
 
     public bool ShouldShowDynamicClassOperations => ResolvedData is IDynamicClass;
 
@@ -650,7 +644,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public bool IsInArray => Parent is not null && Parent.IsArray;
 
-    public bool HasValue => Value is not null && Value != "" && Value.ToLower() != "none";
+    public bool HasValue => !IsValueExtrapolated && Value is not null && Value != "" && Value.ToLower() != "none";
 
     public bool IsArray =>(PropertyType.IsAssignableTo(typeof(IRedArray)) ||
                 ResolvedPropertyType is not null && ResolvedPropertyType.IsAssignableTo(typeof(IList)) ||
@@ -987,6 +981,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         return yaml;
     }
 
+    
     [RelayCommand]
     private void CopyTXLOverride()
     {
@@ -994,6 +989,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         if (!string.IsNullOrEmpty(yaml))
         {
             Clipboard.SetDataObject(yaml);
+        }
+    }
+
+    [RelayCommand]
+    private void CopyTXLOverrideName()
+    {
+        if (GetTXL()?.ID.GetResolvedText() is string str && str != "")
+        {
+            Clipboard.SetDataObject(str);
         }
     }
 
@@ -1733,6 +1737,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         try
         {
             RedDocumentTabViewModel.CopiedChunk = Data is IRedCloneable irc ? (IRedType)irc.DeepCopy() : Data;
+            RefreshContextMenuFlags();
         }
         catch (Exception ex) { _loggerService.Error(ex); }
     }

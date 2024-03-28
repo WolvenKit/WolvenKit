@@ -1,32 +1,27 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
+using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.App.ViewModels.Tools;
 
 /// <summary>
 /// Use as composite pattern (declare instance variable and set it to GetInstance())
+/// Set up change detection as far up the component hierarchy as you can get away with, refresh child components
+/// from hand. Until we can make this a proper singleton and untangle the event propagation, that's the only
+/// way to avoid memory leaking from hell
 /// </summary>
 /// <example>
-/// In your implementing object's constructor, hook the following events:
+/// In implementing object's constructor:
 /// <code>
-/// _modifierViewStatesModel.ModifierStateChanged += OnModifierStateChanged;
-/// _modifierViewStatesModel.PropertyChanged += ModifierViewStatesModel_OnPropertyChanged;
-/// </code>
-/// <br/>
-/// Declare internal method OnModifierStateChanged to react to view state modifier changes (custom view vars etc.)
-/// <br/>
-/// Declare internal method ModifierViewStatesModel_OnPropertyChanged to forward the change event:
-/// <code>
-/// private void ModifierViewStatesModel_PropertyChangedRaised(object? sender, PropertyChangedEventArgs e) {
-///   OnPropertyChanged(e.PropertyName);
-/// } 
+/// _modifierViewStates.ModifierStateChanged += OnModifierStateChanged;
 /// </code>
 /// </example>
 public class ModifierViewStatesModel : ObservableObject
 {
     private static ModifierViewStatesModel? s_instance;
-
+    
     public static ModifierViewStatesModel GetInstance()
     {
         s_instance ??= new ModifierViewStatesModel();
@@ -50,6 +45,8 @@ public class ModifierViewStatesModel : ObservableObject
 
             _isNoModifierPressed = value;
             OnPropertyChanged();
+            ModifierStateChanged?.Invoke();
+           
         }
     }
 
@@ -70,6 +67,7 @@ public class ModifierViewStatesModel : ObservableObject
 
             _isShiftKeyPressed = value;
             OnPropertyChanged();
+            ModifierStateChanged?.Invoke();
         }
     }
 
@@ -90,6 +88,7 @@ public class ModifierViewStatesModel : ObservableObject
 
             _isShiftKeyPressedOnly = value;
             OnPropertyChanged();
+            ModifierStateChanged?.Invoke();
         }
     }
 
@@ -111,6 +110,7 @@ public class ModifierViewStatesModel : ObservableObject
 
             _isCtrlShiftOnlyPressed = value;
             OnPropertyChanged();
+            ModifierStateChanged?.Invoke();
         }
     }
 
@@ -131,6 +131,7 @@ public class ModifierViewStatesModel : ObservableObject
 
             _isAltShiftOnlyPressed = value;
             OnPropertyChanged();
+            ModifierStateChanged?.Invoke();
         }
     }
 
@@ -152,7 +153,7 @@ public class ModifierViewStatesModel : ObservableObject
 
             _isSCtrlAltOnlyPressed = value;
             OnPropertyChanged();
-            OnPropertyChanged();
+            ModifierStateChanged?.Invoke();
         }
     }
 
@@ -174,6 +175,7 @@ public class ModifierViewStatesModel : ObservableObject
 
             _isAltKeyPressed = value;
             OnPropertyChanged();
+            ModifierStateChanged?.Invoke();
         }
     }
 
@@ -195,6 +197,7 @@ public class ModifierViewStatesModel : ObservableObject
 
             _isAltKeyPressedOnly = value;
             OnPropertyChanged();
+            ModifierStateChanged?.Invoke();
         }
     }
 
@@ -215,6 +218,7 @@ public class ModifierViewStatesModel : ObservableObject
 
             _isCtrlKeyPressed = value;
             OnPropertyChanged();
+            ModifierStateChanged?.Invoke();
         }
     }
 
@@ -236,6 +240,7 @@ public class ModifierViewStatesModel : ObservableObject
 
             _isCtrlKeyPressedOnly = value;
             OnPropertyChanged();
+            ModifierStateChanged?.Invoke();
         }
     }
 
@@ -243,50 +248,93 @@ public class ModifierViewStatesModel : ObservableObject
     private static bool IsCtrlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
     private static bool IsAltBeingHeld => Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt);
 
-    public void RefreshModifierStates()
+    private readonly Dictionary<Key, bool> _keyStates = [];
+
+    public void OnKeystateChanged(KeyEventArgs? e)
+    {
+        if (e?.Key is not (Key.RightCtrl or Key.LeftCtrl or Key.LeftShift or Key.RightShift or Key.LeftAlt
+            or Key.RightAlt))
+        {
+            return;
+        }
+
+        // If the key state hasn't changed, ignore the event
+        if (_keyStates.TryGetValue(e.Key, out var value) && value == e.IsDown)
+        {
+            return;
+        }
+
+        RefreshModifierStates();
+    }
+
+    public void RefreshModifierStates(bool skipUpdate = false)
     {
         IsNoModifierPressed = !IsShiftBeingHeld && !IsCtrlBeingHeld && !IsAltBeingHeld;
 
         IsCtrlKeyPressed = IsCtrlBeingHeld;
         IsCtrlKeyPressedOnly = IsCtrlBeingHeld && !IsShiftBeingHeld && !IsAltBeingHeld;
-
+        _keyStates[Key.LeftCtrl] = IsCtrlBeingHeld;
+        _keyStates[Key.RightCtrl] = IsCtrlBeingHeld;
+        
         IsShiftKeyPressed = IsShiftBeingHeld;
         IsShiftKeyPressedOnly = IsShiftBeingHeld && !IsCtrlBeingHeld && !IsAltBeingHeld;
+        _keyStates[Key.LeftShift] = IsShiftBeingHeld;
+        _keyStates[Key.RightShift] = IsShiftBeingHeld;
 
         IsAltKeyPressed = IsAltBeingHeld;
         IsAltKeyPressedOnly = IsAltBeingHeld && !IsCtrlBeingHeld && !IsShiftBeingHeld;
-
+        _keyStates[Key.LeftAlt] = IsAltBeingHeld;
+        _keyStates[Key.RightAlt] = IsAltBeingHeld;
+        
         IsCtrlShiftOnlyPressed = IsShiftBeingHeld && IsCtrlBeingHeld && !IsAltBeingHeld;
         IsCtrlAltOnlyPressed = IsShiftBeingHeld && !IsCtrlBeingHeld && IsAltBeingHeld;
         IsAltShiftOnlyPressed = IsShiftBeingHeld && IsCtrlBeingHeld && !IsAltBeingHeld;
 
-        OnModifierStateChanged();
+        if (skipUpdate)
+        {
+            return;
+        }
+
+        ModifierStateChanged?.Invoke();
     }
 
     /// <summary>
     /// In model, bind to this rather than the observable properties, as it'll refresh the internal states
     /// </summary>
-    public bool IsKeyPressed(ModifierKey key, bool noOtherModifiersPressed = false)
+    public bool GetModifierState(ModifierKeys key, bool noOtherModifiersPressed = false)
     {
-        RefreshModifierStates();
+        RefreshModifierStates(true);
         return key switch
         {
-            ModifierKey.Alt => noOtherModifiersPressed ? IsAltKeyPressed : IsAltKeyPressedOnly,
-            ModifierKey.Shift => noOtherModifiersPressed ? IsShiftKeyPressed : IsShiftKeyPressedOnly,
-            ModifierKey.Ctrl => noOtherModifiersPressed ? IsCtrlKeyPressed : IsCtrlKeyPressedOnly,
-            ModifierKey.None => IsNoModifierPressed,
+            ModifierKeys.Alt => noOtherModifiersPressed ? IsAltKeyPressed : IsAltKeyPressedOnly,
+            ModifierKeys.Shift => noOtherModifiersPressed ? IsShiftKeyPressed : IsShiftKeyPressedOnly,
+            ModifierKeys.Control => noOtherModifiersPressed ? IsCtrlKeyPressed : IsCtrlKeyPressedOnly,
+            ModifierKeys.None => IsNoModifierPressed,
+            ModifierKeys.Windows => false,
             _ => false
         };
     }
 
     public event Action? ModifierStateChanged;
-    private void OnModifierStateChanged() => ModifierStateChanged?.Invoke();
-}
 
-public enum ModifierKey
-{
-    Shift,
-    Alt,
-    Ctrl,
-    None
+    // ReSharper disable once UnusedMember.Local - Needed for ModifierStateChanged to work
+#pragma warning disable IDE0051
+    private void OnModifierStateChanged()
+    {
+        _loggerService?.Debug("OnModifierStateChanged");
+        ModifierStateChanged?.Invoke();
+    }
+#pragma warning restore IDE0051
+
+    private ILoggerService? _loggerService;
+
+    public void SetLogger(ILoggerService loggerService)
+    {
+        if (_loggerService is not null)
+        {
+            return;
+        }
+
+        _loggerService = loggerService;
+    }
 }

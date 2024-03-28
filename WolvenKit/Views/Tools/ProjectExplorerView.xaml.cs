@@ -111,27 +111,8 @@ namespace WolvenKit.Views.Tools
                         }
 
                         return innerVm.Text;
-
-                        //return Observable.Start(() =>
-                        //{
-                        //    var result = "";
-                        //    if (dialog.ShowDialog(Application.Current.MainWindow) == true)
-                        //    {
-                        //        var innerVm = dialog.ViewModel;
-
-                        //        result = innerVm.Text;
-                        //    }
-
-                        //    interaction.SetOutput(result);
-                        //}, RxApp.MainThreadScheduler);
                     };
-
-                //ViewModel?.ExpandAllCommand.Subscribe(x => ExpandAll());
-                //ViewModel?.CollapseAllCommand.Subscribe(x => CollapseAll());
-                //ViewModel?.ExpandChildrenCommand.Subscribe(x => ExpandChildren());
-                //ViewModel?.CollapseChildrenCommand.Subscribe(x => CollapseChildren());
-
-                
+               
 
                 //EventBindings
                 Observable
@@ -278,15 +259,18 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        private void OnKeystateChanged(object sender, KeyEventArgs e)
-        {
-            ViewModel?.RefreshModifierStates();
-        }
+        /// <summary>
+        /// Called from view on keyup/keydown event. Synchronises modifier state with ModifierViewStateModel.
+        /// </summary>
+        private void OnKeystateChanged(object sender, KeyEventArgs e) => ViewModel?.RefreshModifierStates();
 
+        /// <summary>
+        /// Called from view on key down event. Handles search bar and rename/delete commands.
+        /// </summary>
         private void OnKeyUp(object sender, KeyEventArgs e)
         {
             // For context menu switching
-            ViewModel?.RefreshModifierStates();
+            OnKeystateChanged(sender, e);
             
             if (PESearchBar.IsFocused)
             {
@@ -587,7 +571,7 @@ namespace WolvenKit.Views.Tools
 
         private async Task ProcessFileAction(List<string> sourceFiles, string targetDirectory, bool onlyCopy)
         {
-            var controlKeyDown = _modifierViewStatesModel.IsKeyPressed(ModifierKey.Ctrl);
+            var controlKeyDown = _modifierViewStatesModel.GetModifierState(ModifierKeys.Control);
             
             foreach (var sourceFile in sourceFiles)
             {

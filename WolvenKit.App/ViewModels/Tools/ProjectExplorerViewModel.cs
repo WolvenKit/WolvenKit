@@ -88,12 +88,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         SideInDockedMode = DockSide.Left;
 
-        _modifierViewStatesModel.ModifierStateChanged += OnModifierStateChanged;
-
-        _modifierViewStatesModel.PropertyChanged += ModifierViewStatesModel_OnPropertyChanged;
-  
-
-
+        RegisterModifierStateAwareness();
+        
         SetupToolDefaults();
 
         _watcherService.Files
@@ -986,12 +982,25 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     // ####################################################################################
     // Integrate with _modifierViewStatesModel to expose keys to view 
     // ####################################################################################
-
+    
     public bool IsShiftKeyPressedOnly => _modifierViewStatesModel.IsShiftKeyPressedOnly;
     public bool IsCtrlKeyPressedOnly => _modifierViewStatesModel.IsCtrlKeyPressedOnly;
     public bool IsNoModifierPressed => _modifierViewStatesModel.IsNoModifierPressed;
 
-    private void OnModifierStateChanged()
+    /// <summary>
+    /// Called in constructor
+    /// </summary>
+    private void RegisterModifierStateAwareness()
+    {
+        _modifierViewStatesModel.SetLogger(_loggerService);
+        _modifierViewStatesModel.ModifierStateChanged += OnModifierUpdateEvent;
+        _modifierViewStatesModel.PropertyChanged += OnModifierChanged;
+    }
+
+    /// <summary>
+    /// Reacts to ModifierViewStatesModel's emitted events
+    /// </summary>
+    private void OnModifierUpdateEvent()
     {
         IsShowAbsolutePathToRawFolder =
             _modifierViewStatesModel.IsCtrlShiftOnlyPressed && SelectedItem?.FullName.Contains(s_archiveFolder) == true;
@@ -1000,9 +1009,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             _modifierViewStatesModel.IsCtrlShiftOnlyPressed && SelectedItem?.FullName.Contains(s_rawFolder) == true;
     }
 
-    private void ModifierViewStatesModel_OnPropertyChanged(object? sender, PropertyChangedEventArgs e) =>
-        OnPropertyChanged(e.PropertyName);
+    /// <summary>
+    /// Forward ModifierViewStateModel's PropertyChanged events to the view
+    /// </summary>
+    private void OnModifierChanged(object? sender, PropertyChangedEventArgs e) => OnPropertyChanged(e.PropertyName);
 
+    /// <summary>
+    /// Passes key state changes from view down to ModifierViewStatesModel
+    /// </summary>
     public void RefreshModifierStates() => _modifierViewStatesModel.RefreshModifierStates();
 
     #endregion
