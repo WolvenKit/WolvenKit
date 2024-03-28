@@ -232,15 +232,20 @@ public partial class ChunkViewModel : ObservableObject
                     return false;
                 }
 
-                if (str is CString)
+                switch (str)
                 {
-                    ret = (CString)replaced;
-                    return true;
+                    case CString:
+                        ret = (CString)replaced;
+                        return true;
+                    case ResourcePath:
+                        ret = (ResourcePath)replaced;
+                        return true;
+                    default:
+                        _loggerService.Info(
+                            $"Search&Replace not yet implemented for IRedString {original.GetType().Name}");
+                        return false;
                 }
 
-                _loggerService.Info(
-                    $"Search&Replace not yet implemented for IRedString {original.GetType().Name}");
-                return false;
             case IRedRef reference:
                 
                 if (!SearchAndReplaceInReference(search, replace, searchMode, reference, out var newReference))
