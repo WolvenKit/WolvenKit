@@ -38,6 +38,7 @@ public class PaneViewModelFactory : IPaneViewModelFactory
     private readonly ImportExportHelper _importExportHelper;
 
     private readonly PropertiesViewModel _propertiesViewModel;
+    private readonly IModifierViewStateService _modifierSvc;
 
     public PaneViewModelFactory(
         IProjectManager projectManager,
@@ -55,7 +56,8 @@ public class PaneViewModelFactory : IPaneViewModelFactory
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
         PropertiesViewModel propertiesViewModel,
-        ImportExportHelper importExportHelper
+        ImportExportHelper importExportHelper,
+        IModifierViewStateService modifierSvc
         )
     {
         _projectManager = projectManager;
@@ -74,11 +76,13 @@ public class PaneViewModelFactory : IPaneViewModelFactory
         _locKeyService = locKeyService;
         _propertiesViewModel = propertiesViewModel;
         _importExportHelper = importExportHelper;
+        _modifierSvc = modifierSvc;
     }
 
     public LogViewModel LogViewModel() => new(_loggerService);
     public ProjectExplorerViewModel ProjectExplorerViewModel(AppViewModel appViewModel)
-        => new(appViewModel, _projectManager, _loggerService, _watcherService, _progressService, _modTools, _gameController, _pluginService, _settingsManager);
+        => new(appViewModel, _projectManager, _loggerService, _watcherService, _progressService, _modTools,
+            _gameController, _pluginService, _settingsManager, _modifierSvc);
     public PropertiesViewModel PropertiesViewModel()
         => _propertiesViewModel;
     public AssetBrowserViewModel AssetBrowserViewModel(AppViewModel appViewModel)

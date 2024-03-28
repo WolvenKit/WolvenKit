@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Core.Services;
 
 namespace WolvenKit.App.ViewModels.Tools;
 
@@ -18,13 +19,13 @@ namespace WolvenKit.App.ViewModels.Tools;
 /// _modifierViewStates.ModifierStateChanged += OnModifierStateChanged;
 /// </code>
 /// </example>
-public class ModifierViewStatesModel : ObservableObject
+public class ModifierViewStateService : ObservableObject, IModifierViewStateService
 {
-    private static ModifierViewStatesModel? s_instance;
-    
-    public static ModifierViewStatesModel GetInstance()
+    private static ModifierViewStateService? s_instance;
+
+    public static ModifierViewStateService GetInstance()
     {
-        s_instance ??= new ModifierViewStatesModel();
+        s_instance ??= new ModifierViewStateService();
         return s_instance;
     }
 

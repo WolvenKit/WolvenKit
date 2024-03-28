@@ -1,18 +1,14 @@
 using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Reactive;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData.Kernel;
-using ReactiveUI;
 using Splat;
 using Syncfusion.UI.Xaml.TreeView;
-using Syncfusion.UI.Xaml.TreeView.Engine;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
@@ -29,13 +25,13 @@ namespace WolvenKit.Views.Tools
     /// </summary>
     public partial class RedTreeView : UserControl
     {
-        private ModifierViewStatesModel _modifierViewStates = ModifierViewStatesModel.GetInstance();
+        private ModifierViewStateService _modifierViewStateSvc = ModifierViewStateService.GetInstance();
 
         public RedTreeView()
         {
             InitializeComponent();
 
-            _modifierViewStates.ModifierStateChanged += OnModifierStateChanged;
+            _modifierViewStateSvc.ModifierStateChanged += OnModifierStateSvcChanged;
                 
             TreeView.ApplyTemplate();
         }
@@ -154,7 +150,7 @@ namespace WolvenKit.Views.Tools
             //    e.Cancel = true;
         }
 
-        public bool IsControlBeingHeld => _modifierViewStates.GetModifierState(ModifierKeys.Control);
+        public bool IsControlBeingHeld => _modifierViewStateSvc.GetModifierState(ModifierKeys.Control);
 
 
         private bool IsAllowDrop(TreeViewItemDragOverEventArgs e)
@@ -340,17 +336,17 @@ namespace WolvenKit.Views.Tools
             
         }
 
-        private void OnModifierStateChanged()
+        private void OnModifierStateSvcChanged()
         {
             (SelectedItems as ObservableCollection<object>)?.OfType<ChunkViewModel>().AsList()
                 .ForEach((chunk) => chunk.RefreshContextMenuFlags());
         }
 
-        private void OnKeystateChanged(object sender, KeyEventArgs e) => _modifierViewStates.OnKeystateChanged(e);
+        private void OnKeystateChanged(object sender, KeyEventArgs e) => _modifierViewStateSvc.OnKeystateChanged(e);
 
         private void OnContextMenuOpened(object sender, ContextMenuEventArgs e)
         {
-            _modifierViewStates.RefreshModifierStates();
+            _modifierViewStateSvc.RefreshModifierStates();
             // OnModifierStateChanged();
         }
     }

@@ -29,7 +29,7 @@ namespace WolvenKit.Views.Shell
     {
         private readonly ISettingsManager _settingsManager;
         private readonly ILoggerService _loggerService;
-        private readonly ModifierViewStatesModel _modifierViewStatesModel = ModifierViewStatesModel.GetInstance();
+        private readonly ModifierViewStateService _modifierViewStateService = ModifierViewStateService.GetInstance();
 
         
         public RibbonView()
@@ -255,7 +255,7 @@ namespace WolvenKit.Views.Shell
         private void MenuItem_SubmenuOpened(object o, RoutedEventArgs args)
         {
             // TODO: Hacky workaround, fix with https://github.com/WolvenKit/WolvenKit/issues/1486
-            if (_modifierViewStatesModel.IsShiftKeyPressed)
+            if (_modifierViewStateService.IsShiftKeyPressed)
             {
                 // launch game from last save
                 MenuItemLaunchGameFromLastSave.RaiseEvent(new RoutedEventArgs(MenuItem.ClickEvent));

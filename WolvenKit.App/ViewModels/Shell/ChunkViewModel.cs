@@ -67,7 +67,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     private readonly ILocKeyService _locKeyService;
     private readonly Red4ParserService _parserService;
     private readonly CRUIDService _cruidService;
-    private readonly ModifierViewStatesModel _modifierViewStatesModel = ModifierViewStatesModel.GetInstance();
+    private readonly ModifierViewStateService _modifierViewStateService = ModifierViewStateService.GetInstance();
 
     private static readonly List<string> s_hiddenProperties = new() 
     { 

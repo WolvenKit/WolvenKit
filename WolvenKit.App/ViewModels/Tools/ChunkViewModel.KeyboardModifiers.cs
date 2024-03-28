@@ -25,9 +25,9 @@ public partial class ChunkViewModel : ObservableObject
         _loggerService.Debug($"ShouldShowDuplicate: {ShouldShowDuplicate}");
     }
 
-    private bool IsShiftKeyPressed => _modifierViewStatesModel.IsShiftKeyPressed;
-    private bool IsShiftKeyPressedOnly => _modifierViewStatesModel.IsShiftKeyPressedOnly;
-    private bool IsCtrlKeyPressed => _modifierViewStatesModel.IsCtrlKeyPressed;
+    private bool IsShiftKeyPressed => _modifierViewStateService.IsShiftKeyPressed;
+    private bool IsShiftKeyPressedOnly => _modifierViewStateService.IsShiftKeyPressedOnly;
+    private bool IsCtrlKeyPressed => _modifierViewStateService.IsCtrlKeyPressed;
 
     [ObservableProperty] private bool _shouldShowDuplicateAsNew;
 
