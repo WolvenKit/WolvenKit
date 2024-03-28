@@ -186,6 +186,7 @@ public partial class ChunkViewModel : ObservableObject
             case IRedInteger:
             case CByteArray:
             case IRedEnum:
+            case SerializationDeferredDataBuffer:
             case IRedBitField:
                 return false;
             case CName cname:
