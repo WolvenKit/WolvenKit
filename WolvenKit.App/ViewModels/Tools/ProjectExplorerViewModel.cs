@@ -287,110 +287,36 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [RelayCommand(CanExecute = nameof(CanCopyFile))]
     private void CopyFile() => Clipboard.SetDataObject(SelectedItem.NotNull().FullName);
 
-    private bool _isShowRelativePath;
-
     /// <summary>
     /// If neither control nor shift is being held, show "Copy relative path" context menu entry.
     /// This will also return the relative path of the current game file if executed from raw folder view.
     /// </summary>
-    public bool IsShowRelativePath
-    {
-        get => _isShowRelativePath;
-        set
-        {
-            if (_isShowRelativePath == value)
-            {
-                return;
-            }
-
-            _isShowRelativePath = value;
-            OnPropertyChanged();
-        }
-    }
-
-    private bool _isShowAbsolutePathToRawFolder;
+    [ObservableProperty]
+    private bool _isShowRelativePath;
 
     /// <summary>
     /// When holding Ctrl+Shift and right-clicking an archive item or folder, the context menu will show "Copy absolute path to raw folder".
     /// </summary>
-
-    public bool IsShowAbsolutePathToRawFolder
-    {
-        get => _isShowAbsolutePathToRawFolder;
-        set
-        {
-            if (_isShowAbsolutePathToRawFolder == value)
-            {
-                return;
-            }
-
-            _isShowAbsolutePathToRawFolder = value;
-            OnPropertyChanged();
-        }
-    }
-
-    private bool _isShowAbsolutePathToArchiveFolder;
+    [ObservableProperty]
+    private bool _isShowAbsolutePathToRawFolder;
 
     /// <summary>
     /// When holding Ctrl+Shift and right-clicking an item in "ra", the context menu will show "Copy absolute path to archive folder".
     /// </summary>
-
-    public bool IsShowAbsolutePathToArchiveFolder
-    {
-        get => _isShowAbsolutePathToArchiveFolder;
-        set
-        {
-            if (_isShowAbsolutePathToArchiveFolder == value)
-            {
-                return;
-            }
-
-            _isShowAbsolutePathToArchiveFolder = value;
-            OnPropertyChanged();
-        }
-    }
-
-    private bool _isShowAbsolutePathToCurrentFile;
+    [ObservableProperty]
+    private bool _isShowAbsolutePathToArchiveFolder;
 
     /// <summary>
     /// When holding Shift, the context menu will show "Copy absolute path".
     /// </summary>
-
-    public bool IsShowAbsolutePathToCurrentFile
-    {
-        get => _isShowAbsolutePathToCurrentFile;
-        set
-        {
-            if (_isShowAbsolutePathToCurrentFile == value)
-            {
-                return;
-            }
-
-            _isShowAbsolutePathToCurrentFile = value;
-            OnPropertyChanged();
-        }
-    }
-
-    private bool _isShowAbsolutePathToCurrentFolder;
+    [ObservableProperty]
+    private bool _isShowAbsolutePathToCurrentFile;
 
     /// <summary>
     /// When holding Control, the context menu will show "Copy absolute path to folder".
     /// </summary>
-
-    public bool IsShowAbsolutePathToCurrentFolder
-    {
-        get => _isShowAbsolutePathToCurrentFolder;
-        set
-        {
-            if (_isShowAbsolutePathToCurrentFolder == value)
-            {
-                return;
-            }
-
-            _isShowAbsolutePathToCurrentFolder = value;
-            OnPropertyChanged();
-        }
-    }
+    [ObservableProperty]
+    private bool _isShowAbsolutePathToCurrentFolder;
 
     private static readonly string s_rawFolder = $"{Path.DirectorySeparatorChar}raw{Path.DirectorySeparatorChar}";
 

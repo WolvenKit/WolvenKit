@@ -67,31 +67,6 @@ namespace WolvenKit.Views.Tools
             set => SetValue(SelectedItemsProperty, value);
         }
 
-        /*
-
-                //
-                // Summary:
-                //     Identifies the Syncfusion.UI.Xaml.TreeView.SfTreeView.SelectedItems dependency
-                //     property.
-                public static readonly DependencyProperty SelectedItemsProperty =
-                    DependencyProperty.Register(nameof(SelectedItems), typeof(ObservableCollection<object>), typeof(RedTreeView));
-                //    , new PropertyMetadata(null, delegate (DependencyObject sender, DependencyPropertyChangedEventArgs args) {(sender as RedTreeView).OnPropertyChanged(args); }));
-
-                //
-                // Summary:
-                //     Gets or sets the selected items for selection.
-                //
-                // Value:
-                //     The collection of object that contains data item that are selected.
-                public ObservableCollection<object> SelectedItems
-                {
-                    get { return (ObservableCollection<object>)GetValue(SelectedItemsProperty); }
-                    set { SetValue(SelectedItemsProperty, value); }
-                }
-
-
-        */
-
         private void OnSelectionChanged(object sender, Syncfusion.UI.Xaml.TreeView.ItemSelectionChangedEventArgs e)
         {
             foreach (var removedItem in e.RemovedItems)
@@ -100,11 +75,6 @@ namespace WolvenKit.Views.Tools
                 {
                     selectable.IsSelected = false;
                 }
-                // if (removedItem is ChunkViewModel chunk)
-                // {
-                //     _modifierViewStates.ModifierStateChanged -= removedItem.OnModifierStateChanged;
-                //     _modifierViewStates.PropertyChanged -= removedItem.ModifierViewStatesModel_OnPropertyChanged;
-                // }
             }
 
             foreach (var removedItem in e.AddedItems)
@@ -350,7 +320,6 @@ namespace WolvenKit.Views.Tools
         private void OnContextMenuOpened(object sender, ContextMenuEventArgs e)
         {
             _modifierViewStateSvc.RefreshModifierStates();
-            // OnModifierStateChanged();
         }
     }
 }

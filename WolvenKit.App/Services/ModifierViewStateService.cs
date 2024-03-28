@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.Core.Interfaces;
@@ -19,230 +20,76 @@ namespace WolvenKit.App.Services;
 /// _modifierViewStates.ModifierStateChanged += OnModifierStateChanged;
 /// </code>
 /// </example>
-public class ModifierViewStateService : ObservableObject, IModifierViewStateService
+public partial class ModifierViewStateService() : ObservableObject, IModifierViewStateService
 {
-    private readonly ILoggerService? _loggerService;
-
-    public ModifierViewStateService(ILoggerService loggerService)
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
-        _loggerService = loggerService;
+        base.OnPropertyChanged(e);
+
+        ModifierStateChanged?.Invoke();
     }
 
-    private bool _isNoModifierPressed = true;
+    public event Action? ModifierStateChanged;
 
     /// <summary>
     /// Use for view state binding as observable. From the model, please use GetKeyState(Modifiers.None) instead.
     /// </summary>
-    public bool IsNoModifierPressed
-    {
-        get => _isNoModifierPressed;
-        private set
-        {
-            if (_isNoModifierPressed == value)
-            {
-                return;
-            }
-
-            _isNoModifierPressed = value;
-            OnPropertyChanged();
-            ModifierStateChanged?.Invoke();
-
-        }
-    }
-
-    private bool _isShiftKeyPressed;
+    [ObservableProperty]    
+    private bool _isNoModifierPressed = true;
 
     /// <summary>
     /// Use for view state binding as observable. From the model, please use GetKeyState(Modifiers.Shift) instead.
     /// </summary>
-    public bool IsShiftKeyPressed
-    {
-        get => _isShiftKeyPressed;
-        private set
-        {
-            if (_isShiftKeyPressed == value)
-            {
-                return;
-            }
-
-            _isShiftKeyPressed = value;
-            OnPropertyChanged();
-            ModifierStateChanged?.Invoke();
-        }
-    }
-
-    private bool _isShiftKeyPressedOnly;
+    [ObservableProperty]
+    private bool _isShiftKeyPressed;
 
     /// <summary>
     /// Use for view state binding as observable. From the model, please use GetKeyState(Modifiers.Shift, true) instead.
     /// </summary>
-    public bool IsShiftKeyPressedOnly
-    {
-        get => _isShiftKeyPressedOnly;
-        private set
-        {
-            if (_isShiftKeyPressedOnly == value)
-            {
-                return;
-            }
+    [ObservableProperty]
+    private bool _isShiftKeyPressedOnly;
 
-            _isShiftKeyPressedOnly = value;
-            OnPropertyChanged();
-            ModifierStateChanged?.Invoke();
-        }
-    }
-
+    /// <summary>
+    /// Use for view state binding as observable. From the model, please use GetKeyState twice, or call RefreshKeyStates first.
+    /// </summary>
+    [ObservableProperty]
     private bool _isCtrlShiftOnlyPressed;
 
     /// <summary>
     /// Use for view state binding as observable. From the model, please use GetKeyState twice, or call RefreshKeyStates first.
     /// </summary>
-    // ReSharper disable once MemberCanBeProtected.Global
-    public bool IsCtrlShiftOnlyPressed
-    {
-        get => _isCtrlShiftOnlyPressed;
-        private set
-        {
-            if (_isCtrlShiftOnlyPressed == value)
-            {
-                return;
-            }
-
-            _isCtrlShiftOnlyPressed = value;
-            OnPropertyChanged();
-            ModifierStateChanged?.Invoke();
-        }
-    }
-
+    [ObservableProperty]
     private bool _isAltShiftOnlyPressed;
 
     /// <summary>
     /// Use for view state binding as observable. From the model, please use GetKeyState twice, or call RefreshKeyStates first.
     /// </summary>
-    public bool IsAltShiftOnlyPressed
-    {
-        get => _isAltShiftOnlyPressed;
-        private set
-        {
-            if (_isAltShiftOnlyPressed == value)
-            {
-                return;
-            }
-
-            _isAltShiftOnlyPressed = value;
-            OnPropertyChanged();
-            ModifierStateChanged?.Invoke();
-        }
-    }
-
-
-    private bool _isSCtrlAltOnlyPressed;
-
-    /// <summary>
-    /// Use for view state binding as observable. From the model, please use GetKeyState twice, or call RefreshKeyStates first.
-    /// </summary>
-    public bool IsCtrlAltOnlyPressed
-    {
-        get => _isSCtrlAltOnlyPressed;
-        private set
-        {
-            if (_isSCtrlAltOnlyPressed == value)
-            {
-                return;
-            }
-
-            _isSCtrlAltOnlyPressed = value;
-            OnPropertyChanged();
-            ModifierStateChanged?.Invoke();
-        }
-    }
-
-    private bool _isAltKeyPressed;
+    [ObservableProperty]
+    private bool _isCtrlAltOnlyPressed;
 
     /// <summary>
     /// Use for view state binding as observable. From the model, please use GetKeyState(Modifiers.Alt) instead.
     /// </summary>
-    // ReSharper disable once MemberCanBePrivate.Global
-    public bool IsAltKeyPressed
-    {
-        get => _isAltKeyPressed;
-        private set
-        {
-            if (_isAltKeyPressed == value)
-            {
-                return;
-            }
-
-            _isAltKeyPressed = value;
-            OnPropertyChanged();
-            ModifierStateChanged?.Invoke();
-        }
-    }
-
-    private bool _isAltKeyPressedOnly;
+    [ObservableProperty]
+    private bool _isAltKeyPressed;
 
     /// <summary>
     /// Use for view state binding as observable. From the model, please use GetKeyState(Modifiers.Alt, true) instead.
     /// </summary>
-    // ReSharper disable once MemberCanBePrivate.Global
-    public bool IsAltKeyPressedOnly
-    {
-        get => _isAltKeyPressedOnly;
-        private set
-        {
-            if (_isAltKeyPressedOnly == value)
-            {
-                return;
-            }
-
-            _isAltKeyPressedOnly = value;
-            OnPropertyChanged();
-            ModifierStateChanged?.Invoke();
-        }
-    }
-
-    private bool _isCtrlKeyPressed;
+    [ObservableProperty]
+    private bool _isAltKeyPressedOnly;
 
     /// <summary>
     /// Use for view state binding as observable. From the model, please use GetKeyState(Modifiers.Ctrl) instead.
     /// </summary>
-    public bool IsCtrlKeyPressed
-    {
-        get => _isCtrlKeyPressed;
-        private set
-        {
-            if (_isCtrlKeyPressed == value)
-            {
-                return;
-            }
-
-            _isCtrlKeyPressed = value;
-            OnPropertyChanged();
-            ModifierStateChanged?.Invoke();
-        }
-    }
-
-    private bool _isCtrlKeyPressedOnly;
-
+    [ObservableProperty]
+    private bool _isCtrlKeyPressed;
 
     /// <summary>
     /// Use for view state binding as observable. From the model, please use GetKeyState(Modifiers.Ctrl, true) instead.
     /// </summary>
-    public bool IsCtrlKeyPressedOnly
-    {
-        get => _isCtrlKeyPressedOnly;
-        private set
-        {
-            if (_isCtrlKeyPressedOnly == value)
-            {
-                return;
-            }
-
-            _isCtrlKeyPressedOnly = value;
-            OnPropertyChanged();
-            ModifierStateChanged?.Invoke();
-        }
-    }
+    [ObservableProperty]
+    private bool _isCtrlKeyPressedOnly;
 
     private static bool IsShiftBeingHeld => Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
     private static bool IsCtrlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
@@ -315,14 +162,5 @@ public class ModifierViewStateService : ObservableObject, IModifierViewStateServ
         };
     }
 
-    public event Action? ModifierStateChanged;
-
-    // ReSharper disable once UnusedMember.Local - Needed for ModifierStateChanged to work
-#pragma warning disable IDE0051
-    private void OnModifierStateChanged()
-    {
-        _loggerService?.Debug("OnModifierStateChanged");
-        ModifierStateChanged?.Invoke();
-    }
-#pragma warning restore IDE0051
+    
 }
