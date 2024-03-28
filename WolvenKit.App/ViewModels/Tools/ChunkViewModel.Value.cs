@@ -282,6 +282,10 @@ public partial class ChunkViewModel
                 Value = StringHelper.Stringify(tBinding4);
                 IsValueExtrapolated = Value != "";
                 break;
+            case entSkinningBinding entSkinningBinding:
+                Value = $"{entSkinningBinding.BindName.GetResolvedText()}";
+                IsValueExtrapolated = Value != "";
+                break;
             case gameaudioSoundComponent soundComponent:
                 Value = $"{soundComponent.AudioName}";
                 IsValueExtrapolated = Value != "";
