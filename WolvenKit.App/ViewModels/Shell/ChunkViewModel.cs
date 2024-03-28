@@ -34,6 +34,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Core.Services;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
@@ -67,7 +68,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     private readonly ILocKeyService _locKeyService;
     private readonly Red4ParserService _parserService;
     private readonly CRUIDService _cruidService;
-    private readonly ModifierViewStateService _modifierViewStateService = ModifierViewStateService.GetInstance();
+    private readonly IModifierViewStateService _modifierViewStateService;
 
     private static readonly List<string> s_hiddenProperties = new() 
     { 
@@ -103,6 +104,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         IArchiveManager archiveManager,
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
+        IModifierViewStateService modifierViewStateService,
         Red4ParserService parserService,
         CRUIDService cruidService,
         ChunkViewModel? parent = null,
@@ -121,6 +123,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         _locKeyService = locKeyService;
         _parserService = parserService;
         _cruidService = cruidService;
+        _modifierViewStateService = modifierViewStateService;
 
         _appViewModel = appViewModel;
         _data = data;
@@ -160,13 +163,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         IArchiveManager archiveManager,
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
+        IModifierViewStateService modifierViewStateService,
         Red4ParserService parserService,
         CRUIDService cruidService,
         bool isReadOnly = false
         ) 
         : this(data, nameof(RDTDataViewModel), appViewModel,
             chunkViewmodelFactory, tabViewmodelFactory, hashService, loggerService, projectManager,
-            gameController, settingsManager, archiveManager, tweakDbService, locKeyService, parserService, cruidService, null,
+            gameController, settingsManager, archiveManager, tweakDbService, locKeyService, modifierViewStateService, parserService, cruidService, null,
             isReadOnly
               )
     {
@@ -196,13 +200,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         IArchiveManager archiveManager,
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
+        IModifierViewStateService modifierViewStateService,
         Red4ParserService parserService,
         CRUIDService cruidService,
         bool isReadOnly = false
         ) 
         : this(export, nameof(ReferenceSocket), appViewModel,
               chunkViewmodelFactory, tabViewmodelFactory, hashService, loggerService, projectManager,
-              gameController, settingsManager, archiveManager, tweakDbService, locKeyService, parserService, cruidService, null, isReadOnly
+              gameController, settingsManager, archiveManager, tweakDbService, locKeyService, modifierViewStateService, parserService, cruidService, null, isReadOnly
               )
     {
         Socket = socket;

@@ -53,7 +53,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private readonly IProgressService<double> _progressService;
     private readonly IGameControllerFactory _gameController;
     private readonly AppViewModel _mainViewModel;
-    private readonly IModifierViewStateService _modifierViewStateService;
+    public readonly IModifierViewStateService ModifierViewStateService;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
@@ -85,7 +85,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _gameController = gameController;
         _pluginService = pluginService;
         _settingsManager = settingsManager;
-        _modifierViewStateService = modifierSvc;
+        ModifierViewStateService = modifierSvc;
 
         _mainViewModel = appViewModel;
 
@@ -287,110 +287,36 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [RelayCommand(CanExecute = nameof(CanCopyFile))]
     private void CopyFile() => Clipboard.SetDataObject(SelectedItem.NotNull().FullName);
 
-    private bool _isShowRelativePath;
-
     /// <summary>
     /// If neither control nor shift is being held, show "Copy relative path" context menu entry.
     /// This will also return the relative path of the current game file if executed from raw folder view.
     /// </summary>
-    public bool IsShowRelativePath
-    {
-        get => _isShowRelativePath;
-        set
-        {
-            if (_isShowRelativePath == value)
-            {
-                return;
-            }
-
-            _isShowRelativePath = value;
-            OnPropertyChanged();
-        }
-    }
-
-    private bool _isShowAbsolutePathToRawFolder;
+    [ObservableProperty]
+    private bool _isShowRelativePath;
 
     /// <summary>
     /// When holding Ctrl+Shift and right-clicking an archive item or folder, the context menu will show "Copy absolute path to raw folder".
     /// </summary>
-
-    public bool IsShowAbsolutePathToRawFolder
-    {
-        get => _isShowAbsolutePathToRawFolder;
-        set
-        {
-            if (_isShowAbsolutePathToRawFolder == value)
-            {
-                return;
-            }
-
-            _isShowAbsolutePathToRawFolder = value;
-            OnPropertyChanged();
-        }
-    }
-
-    private bool _isShowAbsolutePathToArchiveFolder;
+    [ObservableProperty]
+    private bool _isShowAbsolutePathToRawFolder;
 
     /// <summary>
     /// When holding Ctrl+Shift and right-clicking an item in "ra", the context menu will show "Copy absolute path to archive folder".
     /// </summary>
-
-    public bool IsShowAbsolutePathToArchiveFolder
-    {
-        get => _isShowAbsolutePathToArchiveFolder;
-        set
-        {
-            if (_isShowAbsolutePathToArchiveFolder == value)
-            {
-                return;
-            }
-
-            _isShowAbsolutePathToArchiveFolder = value;
-            OnPropertyChanged();
-        }
-    }
-
-    private bool _isShowAbsolutePathToCurrentFile;
+    [ObservableProperty]
+    private bool _isShowAbsolutePathToArchiveFolder;
 
     /// <summary>
     /// When holding Shift, the context menu will show "Copy absolute path".
     /// </summary>
-
-    public bool IsShowAbsolutePathToCurrentFile
-    {
-        get => _isShowAbsolutePathToCurrentFile;
-        set
-        {
-            if (_isShowAbsolutePathToCurrentFile == value)
-            {
-                return;
-            }
-
-            _isShowAbsolutePathToCurrentFile = value;
-            OnPropertyChanged();
-        }
-    }
-
-    private bool _isShowAbsolutePathToCurrentFolder;
+    [ObservableProperty]
+    private bool _isShowAbsolutePathToCurrentFile;
 
     /// <summary>
     /// When holding Control, the context menu will show "Copy absolute path to folder".
     /// </summary>
-
-    public bool IsShowAbsolutePathToCurrentFolder
-    {
-        get => _isShowAbsolutePathToCurrentFolder;
-        set
-        {
-            if (_isShowAbsolutePathToCurrentFolder == value)
-            {
-                return;
-            }
-
-            _isShowAbsolutePathToCurrentFolder = value;
-            OnPropertyChanged();
-        }
-    }
+    [ObservableProperty]
+    private bool _isShowAbsolutePathToCurrentFolder;
 
     private static readonly string s_rawFolder = $"{Path.DirectorySeparatorChar}raw{Path.DirectorySeparatorChar}";
 
@@ -986,18 +912,17 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     // Integrate with _modifierViewStatesModel to expose keys to view 
     // ####################################################################################
 
-    public bool IsShiftKeyPressedOnly => _modifierViewStateService.IsShiftKeyPressedOnly;
-    public bool IsCtrlKeyPressedOnly => _modifierViewStateService.IsCtrlKeyPressedOnly;
-    public bool IsNoModifierPressed => _modifierViewStateService.IsNoModifierPressed;
+    public bool IsShiftKeyPressedOnly => ModifierViewStateService.IsShiftKeyPressedOnly;
+    public bool IsCtrlKeyPressedOnly => ModifierViewStateService.IsCtrlKeyPressedOnly;
+    public bool IsNoModifierPressed => ModifierViewStateService.IsNoModifierPressed;
 
     /// <summary>
     /// Called in constructor
     /// </summary>
     private void RegisterModifierStateAwareness()
     {
-        _modifierViewStateService.SetLogger(_loggerService);
-        _modifierViewStateService.ModifierStateChanged += OnModifierUpdateEvent;
-        _modifierViewStateService.PropertyChanged += OnModifierChanged;
+        ModifierViewStateService.ModifierStateChanged += OnModifierUpdateEvent;
+        ModifierViewStateService.PropertyChanged += OnModifierChanged;
     }
 
     /// <summary>
@@ -1006,11 +931,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private void OnModifierUpdateEvent()
     {
         IsShowAbsolutePathToRawFolder =
-            _modifierViewStateService.IsCtrlShiftOnlyPressed &&
+            ModifierViewStateService.IsCtrlShiftOnlyPressed &&
             SelectedItem?.FullName.Contains(s_archiveFolder) == true;
 
         IsShowAbsolutePathToArchiveFolder =
-            _modifierViewStateService.IsCtrlShiftOnlyPressed && SelectedItem?.FullName.Contains(s_rawFolder) == true;
+            ModifierViewStateService.IsCtrlShiftOnlyPressed && SelectedItem?.FullName.Contains(s_rawFolder) == true;
     }
 
     /// <summary>
@@ -1021,7 +946,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <summary>
     /// Passes key state changes from view down to ModifierViewStatesModel
     /// </summary>
-    public void RefreshModifierStates() => _modifierViewStateService.RefreshModifierStates();
+    public void RefreshModifierStates() => ModifierViewStateService.RefreshModifierStates();
 
     #endregion
 }

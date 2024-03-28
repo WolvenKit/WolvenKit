@@ -7,11 +7,12 @@ using ObservableObject = HelixToolkit.SharpDX.Core.Model.ObservableObject;
 
 namespace WolvenKit.Core.Services;
 
-public interface IModifierViewStateService
+public interface IModifierViewStateService: INotifyPropertyChanged
 {
     public abstract void RefreshModifierStates(bool skipUpdate = false);
     public abstract bool GetModifierState(ModifierKeys key, bool noOtherModifiersPressed = false);
-    public abstract void SetLogger(ILoggerService loggerService);
+    void OnKeystateChanged(KeyEventArgs? e);
+
     public abstract bool IsShiftKeyPressed { get; }
     public abstract bool IsShiftKeyPressedOnly { get; }
 
@@ -27,6 +28,4 @@ public interface IModifierViewStateService
     public abstract bool IsAltShiftOnlyPressed { get; }
 
     public abstract event Action? ModifierStateChanged;
-
-    public event PropertyChangedEventHandler? PropertyChanged;
 }
