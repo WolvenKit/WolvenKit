@@ -11,6 +11,9 @@ namespace WolvenKit.Views.Dialogs.Windows
 {
     public partial class SearchAndReplaceDialog : IViewFor<SearchAndReplaceDialogViewModel>
     {
+        private static string LastSearch = "";
+        private static string LastReplace = "";
+        
         public SearchAndReplaceDialog()
         {
             InitializeComponent();
@@ -18,7 +21,8 @@ namespace WolvenKit.Views.Dialogs.Windows
             ViewModel = Locator.Current.GetService<SearchAndReplaceDialogViewModel>();
             DataContext = ViewModel;
 
-
+            LoadLastSelection();
+            
             this.WhenActivated(disposables =>
             {
                 this.Bind(ViewModel,
@@ -34,6 +38,10 @@ namespace WolvenKit.Views.Dialogs.Windows
                         x => x.IgnoreCase,
                         x => x.IgnoreCaseCheckBox.IsChecked)
                     .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        x => x.RememberValues,
+                        x => x.RememberValuesCheckBox.IsChecked)
+                    .DisposeWith(disposables);
             });
         }
 
@@ -46,6 +54,46 @@ namespace WolvenKit.Views.Dialogs.Windows
             return ShowDialog();
         }
 
+        private void LoadLastSelection()
+        {
+            if (ViewModel is null)
+            {
+                return;
+            }
+
+            if (LastSearch != "")
+            {
+                ViewModel.SearchText = LastSearch;
+                ViewModel.RememberValues = true;
+            }
+
+            if (LastReplace == "")
+            {
+                return;
+            }
+
+            ViewModel.ReplaceText = LastReplace;
+            ViewModel.RememberValues = true;
+        }
+
+        private void SaveLastSelection()
+        {
+            if (ViewModel is null)
+            {
+                return;
+            }
+
+            if (!ViewModel.RememberValues)
+            {
+                LastSearch = "";
+                LastReplace = "";
+                return;
+            }
+
+            LastSearch = ViewModel.SearchText;
+            LastReplace = ViewModel.ReplaceText;
+        }
+
         private void WizardPage_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key != Key.Enter)
@@ -53,6 +101,7 @@ namespace WolvenKit.Views.Dialogs.Windows
                 return;
             }
 
+            SaveLastSelection();
             e.Handled = true;
             DialogResult = true;
             Close();

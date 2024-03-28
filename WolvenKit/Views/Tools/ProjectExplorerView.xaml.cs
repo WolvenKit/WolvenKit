@@ -46,20 +46,13 @@ namespace WolvenKit.Views.Tools
         public static readonly DependencyProperty FlatItemSourceProperty =
             DependencyProperty.Register(nameof(FlatItemSource), typeof(ObservableCollection<FileModel>),
                 typeof(ProjectExplorerView), new PropertyMetadata(null));
-
-
-        // Shift: fold/unfold child nodes
-        private static bool IsShiftBeingHeld => Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
-
-        // Ctrl: copy file on drag&drop instead of moving
-        private static bool IsControlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
-
         
         public ObservableCollection<FileModel> FlatItemSource
         {
             get => (ObservableCollection<FileModel>)GetValue(FlatItemSourceProperty);
             set => SetValue(FlatItemSourceProperty, value);
         }
+
 
         #region Constructors
 
@@ -117,27 +110,8 @@ namespace WolvenKit.Views.Tools
                         }
 
                         return innerVm.Text;
-
-                        //return Observable.Start(() =>
-                        //{
-                        //    var result = "";
-                        //    if (dialog.ShowDialog(Application.Current.MainWindow) == true)
-                        //    {
-                        //        var innerVm = dialog.ViewModel;
-
-                        //        result = innerVm.Text;
-                        //    }
-
-                        //    interaction.SetOutput(result);
-                        //}, RxApp.MainThreadScheduler);
                     };
-
-                //ViewModel?.ExpandAllCommand.Subscribe(x => ExpandAll());
-                //ViewModel?.CollapseAllCommand.Subscribe(x => CollapseAll());
-                //ViewModel?.ExpandChildrenCommand.Subscribe(x => ExpandChildren());
-                //ViewModel?.CollapseChildrenCommand.Subscribe(x => CollapseChildren());
-
-                
+               
 
                 //EventBindings
                 Observable
@@ -184,6 +158,7 @@ namespace WolvenKit.Views.Tools
 
             // register to KeyUp because KeyDown doesn't forward "F2"
             KeyUp += OnKeyUp;
+            KeyDown += OnKeystateChanged; 
             ViewModel.IsKeyUpEventAssigned = true;
         }
 
@@ -263,7 +238,10 @@ namespace WolvenKit.Views.Tools
                     TreeGrid.ExpandNode(node);
                 }
 
-                if (IsShiftBeingHeld) return;
+                if (ViewModel.ModifierViewStateService.IsShiftKeyPressed)
+                {
+                    return;
+                }
 
                 foreach (var childNode in node.ChildNodes)
                 {
@@ -280,13 +258,23 @@ namespace WolvenKit.Views.Tools
             }
         }
 
+        /// <summary>
+        /// Called from view on keyup/keydown event. Synchronises modifier state with ModifierViewStateModel.
+        /// </summary>
+        private void OnKeystateChanged(object sender, KeyEventArgs e) => ViewModel?.RefreshModifierStates();
+
+        /// <summary>
+        /// Called from view on key down event. Handles search bar and rename/delete commands.
+        /// </summary>
         private void OnKeyUp(object sender, KeyEventArgs e)
         {
+            // For context menu switching
+            OnKeystateChanged(sender, e);
+            
             if (PESearchBar.IsFocused)
             {
                 return;
             }
-            
             if (e.Key == Key.F2 )
             {
                 ViewModel?.RenameFileCommand.SafeExecute(null);
@@ -582,6 +570,8 @@ namespace WolvenKit.Views.Tools
 
         private async Task ProcessFileAction(List<string> sourceFiles, string targetDirectory, bool onlyCopy)
         {
+            var controlKeyDown = ViewModel.ModifierViewStateService.GetModifierState(ModifierKeys.Control);
+            
             foreach (var sourceFile in sourceFiles)
             {
                 var newFile = Path.Combine(targetDirectory, Path.GetFileName(sourceFile));
@@ -612,7 +602,7 @@ namespace WolvenKit.Views.Tools
                         }
                     }
 
-                    if (IsControlBeingHeld || onlyCopy)
+                    if (controlKeyDown || onlyCopy)
                     {
                         File.Copy(sourceFile, newFile, true);
                     }
@@ -662,7 +652,7 @@ namespace WolvenKit.Views.Tools
                 }
 
                 // Disable collapsing of child nodes with Ctrl
-                if (!IsControlBeingHeld)
+                if (!ViewModel.ModifierViewStateService.IsCtrlKeyPressed)
                 {
                     TreeGrid.CollapseAllNodes(childNode);
                 }
