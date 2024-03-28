@@ -18,11 +18,6 @@ public partial class ChunkViewModel : ObservableObject
             ResolvedData is worldCompiledEffectPlacementInfo or CMeshMaterialEntry;
 
         ShouldShowDuplicate = !ShouldShowDuplicateAsNew && IsInArray;
-
-        _loggerService.Debug($"ShouldShowPaste: {ShouldShowPasteIntoArray}");
-        _loggerService.Debug($"ShouldShowOverwrite: {ShouldShowOverwriteArray}");
-        _loggerService.Debug($"ShouldShowDuplicateAsNew: {ShouldShowDuplicateAsNew}");
-        _loggerService.Debug($"ShouldShowDuplicate: {ShouldShowDuplicate}");
     }
 
     private bool IsShiftKeyPressed => _modifierViewStateService.IsShiftKeyPressed;
