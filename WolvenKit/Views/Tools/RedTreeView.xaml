@@ -677,7 +677,7 @@
                     Command="{Binding Path=PlacementTarget.Tag.ResetObjectCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Reset Object"
                     IsCheckable="False"
-                    Style="{StaticResource SyncfusionMenuItemStyle}">
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=!PlacementTarget.Tag.IsArray, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
                         <iconPacks:PackIconMaterial Kind="Delete" Style="{StaticResource ContextMenuIconStyleMaterial}" />
