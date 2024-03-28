@@ -22,7 +22,6 @@
     <UserControl.Resources>
 
         <ResourceDictionary>
-
             <ResourceDictionary.MergedDictionaries>
                 <hc:ThemeResources RequestedTheme="Dark" />
                 <hc:Theme />
@@ -47,8 +46,9 @@
             <ContextMenu
                 x:Key="TreeGridContextMenu"
                 FontSize="11"
+                KeyUp="OnKeystateChanged"
+                KeyDown="OnKeystateChanged"
                 Style="{DynamicResource WPFContextMenuStyle}">
-
                 <MenuItem
                     Margin="0"
                     Header="Actions"
@@ -148,7 +148,31 @@
 
                 <Separator />
 
-                <MenuItem Command="{Binding CopyRelPathCommand}" Header="Copy relative path" />
+                <!-- ======================================================================= -->
+                <!--                             Copy commands                               -->
+                <!-- ======================================================================= -->
+
+                <MenuItem Command="{Binding CopyRelPathCommand}" Header="Copy relative path to game file"
+                          Visibility="{Binding Path=IsNoModifierPressed, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                <MenuItem Command="{Binding CopyAbsPathToCurrentFileCommand}" Header="Copy absolute path"
+                          Visibility="{Binding Path=IsShiftKeyPressedOnly, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                <MenuItem Command="{Binding CopyAbsPathToCurrentFolderCommand}" Header="Copy absolute path to containing folder"
+                          Visibility="{Binding Path=IsCtrlKeyPressedOnly, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                <MenuItem Command="{Binding CopyAbsPathToRawFolderCommand}" Header="Copy absolute path to raw folder"
+                          Visibility="{Binding Path=IsShowAbsolutePathToRawFolder, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                <MenuItem Command="{Binding CopyAbsPathToArchiveFolderCommand}" Header="Copy absolute path to archive folder"
+                          Visibility="{Binding Path=IsShowAbsolutePathToArchiveFolder, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+
+                <!-- ======================================================================= -->
+                <!--                            /Copy commands                               -->
+                <!-- ======================================================================= -->
+
+                
                 <MenuItem
                     Command="{Binding OpenInAssetBrowserCommand}"
                     Header="Open in Asset Browser"
@@ -443,7 +467,6 @@
     </UserControl.Resources>
 
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
-
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />

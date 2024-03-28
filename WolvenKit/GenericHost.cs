@@ -91,6 +91,7 @@ namespace WolvenKit
                     services.AddTransient<RED4Controller>();
                     services.AddTransient<IGameControllerFactory, GameControllerFactory>();
                     services.AddSingleton<IPluginService, PluginService>();
+                    services.AddSingleton<IModifierViewStateService, ModifierViewStateService>();
 
                     // factories
                     services.AddTransient<IPageViewModelFactory, PageViewModelFactory>();

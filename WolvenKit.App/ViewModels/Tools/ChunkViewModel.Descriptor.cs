@@ -79,6 +79,16 @@ public partial class ChunkViewModel
             Descriptor = $"{externalWorkspotResource.DataId.Id.ToString()}";
             return;
         }
+        else if (ResolvedData is animAnimSetupEntry animSetupEntry)
+        {
+            Descriptor = $"{animSetupEntry.AnimSet.DepotPath.GetResolvedText()}";
+            return;
+        }
+        else if (ResolvedData is entAnimationControlBinding controlBinding)
+        {
+            Descriptor = $"{controlBinding.BindName.GetResolvedText()}";
+            return;
+        }
         else if (ResolvedData is scnSceneWorkspotInstanceId workspotInstanceId)
         {
             Descriptor = $"{workspotInstanceId.Id}";

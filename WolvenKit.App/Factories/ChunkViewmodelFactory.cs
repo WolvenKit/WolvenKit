@@ -8,6 +8,7 @@ using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.Services;
+using WolvenKit.Core.Services;
 
 namespace WolvenKit.App.Factories;
 
@@ -28,6 +29,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
     private readonly IArchiveManager _archiveManager;
     private readonly ITweakDBService _tweakDbService;
     private readonly ILocKeyService _locKeyService;
+    private readonly IModifierViewStateService _modifierViewStateService;
     private readonly Red4ParserService _parserService;
     private readonly CRUIDService _cruidService;
 
@@ -41,6 +43,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
         IArchiveManager archiveManager,
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
+        IModifierViewStateService modifierViewStateService,
         Red4ParserService parserService,
         CRUIDService cruidService)
     {
@@ -55,6 +58,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
         _locKeyService = locKeyService;
         _parserService = parserService;
         _cruidService = cruidService;
+        _modifierViewStateService = modifierViewStateService;
     }
 
     public ChunkViewModel ChunkViewModel(IRedType rootChunk, string name, AppViewModel appViewModel, ChunkViewModel? parent = null, bool isReadOnly = false)
@@ -70,6 +74,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
             _archiveManager,
             _tweakDbService,
             _locKeyService,
+            _modifierViewStateService,
             _parserService,
             _cruidService,
             parent,
@@ -89,6 +94,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
             _archiveManager,
             _tweakDbService,
             _locKeyService,
+            _modifierViewStateService,
             _parserService,
             _cruidService,
             isReadOnly);
@@ -107,6 +113,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
             _archiveManager,
             _tweakDbService,
             _locKeyService,
+            _modifierViewStateService,
             _parserService,
             _cruidService,
             isReadOnly);

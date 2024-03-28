@@ -34,6 +34,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Core.Services;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
@@ -67,6 +68,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     private readonly ILocKeyService _locKeyService;
     private readonly Red4ParserService _parserService;
     private readonly CRUIDService _cruidService;
+    private readonly IModifierViewStateService _modifierViewStateService;
 
     private static readonly List<string> s_hiddenProperties = new() 
     { 
@@ -102,6 +104,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         IArchiveManager archiveManager,
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
+        IModifierViewStateService modifierViewStateService,
         Red4ParserService parserService,
         CRUIDService cruidService,
         ChunkViewModel? parent = null,
@@ -120,13 +123,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         _locKeyService = locKeyService;
         _parserService = parserService;
         _cruidService = cruidService;
+        _modifierViewStateService = modifierViewStateService;
 
         _appViewModel = appViewModel;
         _data = data;
         Parent = parent;
         _propertyName = name;
         IsReadOnly = isReadOnly;
-
+        
         // If the parent is an array, the numeric index will be passed as property name 
         if (IsInArray && int.TryParse(name, out var arrayIndex))
         {
@@ -159,13 +163,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         IArchiveManager archiveManager,
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
+        IModifierViewStateService modifierViewStateService,
         Red4ParserService parserService,
         CRUIDService cruidService,
         bool isReadOnly = false
         ) 
         : this(data, nameof(RDTDataViewModel), appViewModel,
             chunkViewmodelFactory, tabViewmodelFactory, hashService, loggerService, projectManager,
-            gameController, settingsManager, archiveManager, tweakDbService, locKeyService, parserService, cruidService, null,
+            gameController, settingsManager, archiveManager, tweakDbService, locKeyService, modifierViewStateService, parserService, cruidService, null,
             isReadOnly
               )
     {
@@ -195,13 +200,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         IArchiveManager archiveManager,
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
+        IModifierViewStateService modifierViewStateService,
         Red4ParserService parserService,
         CRUIDService cruidService,
         bool isReadOnly = false
         ) 
         : this(export, nameof(ReferenceSocket), appViewModel,
               chunkViewmodelFactory, tabViewmodelFactory, hashService, loggerService, projectManager,
-              gameController, settingsManager, archiveManager, tweakDbService, locKeyService, parserService, cruidService, null, isReadOnly
+              gameController, settingsManager, archiveManager, tweakDbService, locKeyService, modifierViewStateService, parserService, cruidService, null, isReadOnly
               )
     {
         Socket = socket;
@@ -224,7 +230,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             CalculateProperties();
         }
 
-        if (IsShiftBeingHeld)
+        if (IsShiftKeyPressed)
         {
             SetChildExpansionStates(IsExpanded);
         }
@@ -438,7 +444,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public bool ShouldShowTweakXLMenu => Data is gamedataTweakDBRecord || Data is TweakDBID || Parent?.Data is gamedataTweakDBRecord || Parent?.Data is TweakDBID;
 
-    public bool ShouldShowHandleOperations => PropertyType.IsAssignableTo(typeof(IRedBaseHandle));
+    public bool ShouldShowHandleOperations => PropertyType.IsAssignableTo(typeof(IRedBaseHandle)) && !IsArray;
 
     public bool ShouldShowDynamicClassOperations => ResolvedData is IDynamicClass;
 
@@ -450,32 +456,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     public int[] SelectedNodeIndices =>
         Properties.Where((x) => x.IsSelected).Select((x) => x.NodeIdxInParent).Where((x) => x > -1).ToArray();
 
-    // If shift is not being held and we're a CMeshMaterialEntry or a WorldCompiledEffectPlacemenentInfo, 
-    // show "Duplicate as new item" instead of "Duplicate Selection" 
-    public bool ShouldShowDuplicateAsNew =>
-        IsInArray && !IsShiftBeingHeld && ResolvedData is worldCompiledEffectPlacementInfo ||
-        ResolvedData is CMeshMaterialEntry;
-
-    public bool ShouldShowDuplicate => IsInArray && !ShouldShowDuplicateAsNew;
-
-    // When shift is not held, paste into array => PasteChunk
-    public bool ShouldShowPasteIntoArray => ShouldShowArrayOps && !IsShiftBeingHeld;
-
-    // When shift is being held, overwrite array with selection => ClearAndPasteChunk
-    public bool ShouldShowOverwriteArray => ShouldShowArrayOps && IsShiftBeingHeld;
-
     // For arrays of indexables, allow renumbering index properties (e.g. for materialDefinitions)
     // to get rid of duplicates and have all the ducks in a row
     public bool ShouldShowRenumberArrayIndexProperties =>
         IsArray && ResolvedData is CArray<CMeshMaterialEntry> or CArray<worldCompiledEffectPlacementInfo>;
 
-    // Shift: recursively fold/unfold child nodes
-    private protected static bool IsShiftBeingHeld =>
-        Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
-
-    // Shift+Control: recursively fold/unfold nodes all the way
-    public static bool IsControlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
-    
     public IRedArray? ArraySelfOrParent => Parent?.ResolvedData is IRedArray ira ? ira : ResolvedData as IRedArray;
 
     public RDTDataViewModel? Tab => _tab ?? Parent?.Tab;
@@ -663,6 +648,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     public bool TypesDiffer => PropertyType != ResolvedPropertyType;
 
     public bool IsInArray => Parent is not null && Parent.IsArray;
+
+    public bool HasValue => !IsValueExtrapolated && Value is not null && Value != "" && Value.ToLower() != "none";
 
     public bool IsArray =>(PropertyType.IsAssignableTo(typeof(IRedArray)) ||
                 ResolvedPropertyType is not null && ResolvedPropertyType.IsAssignableTo(typeof(IList)) ||
@@ -999,6 +986,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         return yaml;
     }
 
+    
     [RelayCommand]
     private void CopyTXLOverride()
     {
@@ -1006,6 +994,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         if (!string.IsNullOrEmpty(yaml))
         {
             Clipboard.SetDataObject(yaml);
+        }
+    }
+
+    [RelayCommand]
+    private void CopyTXLOverrideName()
+    {
+        if (GetTXL()?.ID.GetResolvedText() is string str && str != "")
+        {
+            Clipboard.SetDataObject(str);
         }
     }
 
@@ -1645,12 +1642,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         catch (Exception ex) { _loggerService.Error(ex); }
     }
 
-    public void SearchAndReplace(string searchText, string replaceText, bool ignoreCase)
+    public bool SearchAndReplace(string searchText, string replaceText, bool ignoreCase)
     {
-        if (SearchAndReplaceInProperties(searchText, replaceText, ignoreCase))
-        {
-            Tab?.Parent.SetIsDirty(true);
-        }
+        return SearchAndReplaceInProperties(searchText, replaceText, ignoreCase);
     }
 
     private bool CanCopyHandle() => Data is IRedBaseHandle;   // TODO RelayCommand check notify
@@ -1748,6 +1742,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         try
         {
             RedDocumentTabViewModel.CopiedChunk = Data is IRedCloneable irc ? (IRedType)irc.DeepCopy() : Data;
+            RefreshContextMenuFlags();
         }
         catch (Exception ex) { _loggerService.Error(ex); }
     }
@@ -1831,7 +1826,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         var isExpanded = IsExpanded;
         DeleteAll();
         PasteChunk();
-        if (!IsControlBeingHeld)
+        if (!IsCtrlKeyPressed)
         {
             SetChildExpansionStates(false);
         }
@@ -2875,7 +2870,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
      */
     private void AdjustPropertiesAfterPasteAsNewItem()
     {
-        if (Parent is null || !IsInArray || ResolvedData is RedDummy || IsShiftBeingHeld)
+        if (Parent is null || !IsInArray || ResolvedData is RedDummy || IsShiftKeyPressed)
         {
             return;
         }

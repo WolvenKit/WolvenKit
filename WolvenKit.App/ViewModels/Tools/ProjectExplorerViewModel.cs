@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
 using System.Windows.Threading;
 using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -53,6 +53,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private readonly IProgressService<double> _progressService;
     private readonly IGameControllerFactory _gameController;
     private readonly AppViewModel _mainViewModel;
+    public readonly IModifierViewStateService ModifierViewStateService;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
@@ -72,7 +73,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         IModTools modTools,
         IGameControllerFactory gameController,
         IPluginService pluginService,
-        ISettingsManager settingsManager) : base(ToolTitle)
+        ISettingsManager settingsManager,
+        IModifierViewStateService modifierSvc
+    ) : base(ToolTitle)
     {
         _projectManager = projectManager;
         _loggerService = loggerService;
@@ -82,11 +85,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _gameController = gameController;
         _pluginService = pluginService;
         _settingsManager = settingsManager;
+        ModifierViewStateService = modifierSvc;
 
         _mainViewModel = appViewModel;
 
         SideInDockedMode = DockSide.Left;
 
+        RegisterModifierStateAwareness();
+        
         SetupToolDefaults();
 
         _watcherService.Files
@@ -281,31 +287,127 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [RelayCommand(CanExecute = nameof(CanCopyFile))]
     private void CopyFile() => Clipboard.SetDataObject(SelectedItem.NotNull().FullName);
 
-
-    public static bool IsShiftBeingHeld => Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
-    public static bool IsCtrlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+    /// <summary>
+    /// If neither control nor shift is being held, show "Copy relative path" context menu entry.
+    /// This will also return the relative path of the current game file if executed from raw folder view.
+    /// </summary>
+    [ObservableProperty]
+    private bool _isShowRelativePath;
 
     /// <summary>
-    /// Copies relative path of node (Or absolute path, if ctrl+shift key is held)
+    /// When holding Ctrl+Shift and right-clicking an archive item or folder, the context menu will show "Copy absolute path to raw folder".
     /// </summary>
-    private bool CanCopyRelPath() => ActiveProject != null && SelectedItem != null;
-    [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
-    private void CopyRelPath()
+    [ObservableProperty]
+    private bool _isShowAbsolutePathToRawFolder;
+
+    /// <summary>
+    /// When holding Ctrl+Shift and right-clicking an item in "ra", the context menu will show "Copy absolute path to archive folder".
+    /// </summary>
+    [ObservableProperty]
+    private bool _isShowAbsolutePathToArchiveFolder;
+
+    /// <summary>
+    /// When holding Shift, the context menu will show "Copy absolute path".
+    /// </summary>
+    [ObservableProperty]
+    private bool _isShowAbsolutePathToCurrentFile;
+
+    /// <summary>
+    /// When holding Control, the context menu will show "Copy absolute path to folder".
+    /// </summary>
+    [ObservableProperty]
+    private bool _isShowAbsolutePathToCurrentFolder;
+
+    private static readonly string s_rawFolder = $"{Path.DirectorySeparatorChar}raw{Path.DirectorySeparatorChar}";
+
+    private static readonly string s_archiveFolder =
+        $"{Path.DirectorySeparatorChar}archive{Path.DirectorySeparatorChar}";
+
+    /// <summary>
+    /// Copies the path to an item in clipboard
+    /// </summary>
+    /// <param name="isAbsolute"></param>
+    /// <param name="switchToRaw"></param>
+    /// <param name="gamefileOnly"></param>
+    /// <param name="cutOffFileName"></param>
+    private void CopyItemPathToClipboard(
+        bool isAbsolute = false,
+        bool switchToRaw = false,
+        bool gamefileOnly = false,
+        bool cutOffFileName = false)
     {
-        var absolutePath = SelectedItem.NotNull().FullName;
-        if ((IsShiftBeingHeld || IsCtrlBeingHeld) && Path.Exists(absolutePath))
+        var activeItemPath = SelectedItem.NotNull().FullName;
+        if (!Path.Exists(activeItemPath))
         {
-            absolutePath = absolutePath.Replace('/', Path.DirectorySeparatorChar);
-            if (IsCtrlBeingHeld)
-            {
-                absolutePath = Path.GetDirectoryName(absolutePath);
-            }
-            Clipboard.SetDataObject(absolutePath);
             return;
         }
 
-        Clipboard.SetDataObject(FileModel.GetRelativeName(absolutePath, ActiveProject.NotNull()));
+        activeItemPath = activeItemPath.Replace('/', Path.DirectorySeparatorChar);
+        if (!isAbsolute)
+        {
+            activeItemPath = FileModel.GetRelativeName(activeItemPath, ActiveProject.NotNull());
+        }
+
+        if (switchToRaw && !gamefileOnly && activeItemPath.Contains(s_rawFolder))
+        {
+            activeItemPath = activeItemPath.Replace(s_rawFolder, s_archiveFolder);
+        }
+
+        if (gamefileOnly && activeItemPath.Contains(s_archiveFolder))
+        {
+            activeItemPath = activeItemPath.Replace(s_archiveFolder, s_rawFolder);
+            activeItemPath = Path.GetDirectoryName(activeItemPath) ?? activeItemPath;
+        }
+
+        if (cutOffFileName)
+        {
+            activeItemPath = Path.Combine(Path.GetDirectoryName(activeItemPath) ?? "",
+                Path.GetFileNameWithoutExtension(activeItemPath));
+        }
+
+        if (isAbsolute && !Path.Exists(activeItemPath))
+        {
+            return;
+        }
+
+        Clipboard.SetDataObject(activeItemPath);
     }
+    
+    private bool CanCopyRelPath() => ActiveProject != null && SelectedItem != null;
+
+    /// <summary>
+    /// Copy relative path to game file. If the current file is under "raw", switch to "archive" and cut off extension.
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
+    private void CopyRelPath() => CopyItemPathToClipboard(false, false, true);
+
+    /// <summary>
+    /// Copy absolute path to current file. Don't change anything else.
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
+    private void CopyAbsPathToCurrentFile() => CopyItemPathToClipboard(true);
+
+    /// <summary>
+    /// Copy absolute path to current folder. If currently selected item _is_ a folder, don't cut off the file name.
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
+    private void CopyAbsPathToCurrentFolder() =>
+        CopyItemPathToClipboard(true, false, false,
+            SelectedItem?.FullName is not null && Directory.Exists(SelectedItem?.FullName));
+
+
+    /// <summary>
+    /// Ctrl+Shift with /archive/ file or folder selected: Copy absolute path to raw folder (convenience for quick switching)
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
+    private void CopyAbsPathToRawFolder() => CopyItemPathToClipboard(true, true, false);
+
+
+    /// <summary>
+    /// Ctrl+Shift with /raw/ file or folder selected: Copy absolute path to archive folder (convenience for quick switching)
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
+    private void CopyAbsPathToArchiveFolder() => CopyItemPathToClipboard(true, true, true);
 
 
     /// <summary>
@@ -802,6 +904,49 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     private void SetupToolDefaults() => ContentId = ToolContentId;           // Define a unique contentid for this toolwindow//BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow//bi.BeginInit();//bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");//bi.EndInit();//IconSource = bi;
 
-
     #endregion Methods
+
+    #region ModifierStateAwareness
+
+    // ####################################################################################
+    // Integrate with _modifierViewStatesModel to expose keys to view 
+    // ####################################################################################
+
+    public bool IsShiftKeyPressedOnly => ModifierViewStateService.IsShiftKeyPressedOnly;
+    public bool IsCtrlKeyPressedOnly => ModifierViewStateService.IsCtrlKeyPressedOnly;
+    public bool IsNoModifierPressed => ModifierViewStateService.IsNoModifierPressed;
+
+    /// <summary>
+    /// Called in constructor
+    /// </summary>
+    private void RegisterModifierStateAwareness()
+    {
+        ModifierViewStateService.ModifierStateChanged += OnModifierUpdateEvent;
+        ModifierViewStateService.PropertyChanged += OnModifierChanged;
+    }
+
+    /// <summary>
+    /// Reacts to ModifierViewStatesModel's emitted events
+    /// </summary>
+    private void OnModifierUpdateEvent()
+    {
+        IsShowAbsolutePathToRawFolder =
+            ModifierViewStateService.IsCtrlShiftOnlyPressed &&
+            SelectedItem?.FullName.Contains(s_archiveFolder) == true;
+
+        IsShowAbsolutePathToArchiveFolder =
+            ModifierViewStateService.IsCtrlShiftOnlyPressed && SelectedItem?.FullName.Contains(s_rawFolder) == true;
+    }
+
+    /// <summary>
+    /// Forward ModifierViewStateModel's PropertyChanged events to the view
+    /// </summary>
+    private void OnModifierChanged(object? sender, PropertyChangedEventArgs e) => OnPropertyChanged(e.PropertyName);
+
+    /// <summary>
+    /// Passes key state changes from view down to ModifierViewStatesModel
+    /// </summary>
+    public void RefreshModifierStates() => ModifierViewStateService.RefreshModifierStates();
+
+    #endregion
 }
