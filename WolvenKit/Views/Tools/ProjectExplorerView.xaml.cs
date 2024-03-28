@@ -53,7 +53,6 @@ namespace WolvenKit.Views.Tools
             set => SetValue(FlatItemSourceProperty, value);
         }
 
-        private readonly ModifierViewStateService _modifierViewStateService = ModifierViewStateService.GetInstance();
 
         #region Constructors
 
@@ -239,7 +238,7 @@ namespace WolvenKit.Views.Tools
                     TreeGrid.ExpandNode(node);
                 }
 
-                if (_modifierViewStateService.IsShiftKeyPressed)
+                if (ViewModel.ModifierViewStateService.IsShiftKeyPressed)
                 {
                     return;
                 }
@@ -571,7 +570,7 @@ namespace WolvenKit.Views.Tools
 
         private async Task ProcessFileAction(List<string> sourceFiles, string targetDirectory, bool onlyCopy)
         {
-            var controlKeyDown = _modifierViewStateService.GetModifierState(ModifierKeys.Control);
+            var controlKeyDown = ViewModel.ModifierViewStateService.GetModifierState(ModifierKeys.Control);
             
             foreach (var sourceFile in sourceFiles)
             {
@@ -653,7 +652,7 @@ namespace WolvenKit.Views.Tools
                 }
 
                 // Disable collapsing of child nodes with Ctrl
-                if (!_modifierViewStateService.IsCtrlKeyPressed)
+                if (!ViewModel.ModifierViewStateService.IsCtrlKeyPressed)
                 {
                     TreeGrid.CollapseAllNodes(childNode);
                 }

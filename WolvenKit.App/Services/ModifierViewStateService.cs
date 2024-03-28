@@ -5,7 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 
-namespace WolvenKit.App.ViewModels.Tools;
+namespace WolvenKit.App.Services;
 
 /// <summary>
 /// Use as composite pattern (declare instance variable and set it to GetInstance())
@@ -21,12 +21,11 @@ namespace WolvenKit.App.ViewModels.Tools;
 /// </example>
 public class ModifierViewStateService : ObservableObject, IModifierViewStateService
 {
-    private static ModifierViewStateService? s_instance;
+    private readonly ILoggerService? _loggerService;
 
-    public static ModifierViewStateService GetInstance()
+    public ModifierViewStateService(ILoggerService loggerService)
     {
-        s_instance ??= new ModifierViewStateService();
-        return s_instance;
+        _loggerService = loggerService;
     }
 
     private bool _isNoModifierPressed = true;
@@ -47,7 +46,7 @@ public class ModifierViewStateService : ObservableObject, IModifierViewStateServ
             _isNoModifierPressed = value;
             OnPropertyChanged();
             ModifierStateChanged?.Invoke();
-           
+
         }
     }
 
@@ -276,7 +275,7 @@ public class ModifierViewStateService : ObservableObject, IModifierViewStateServ
         IsCtrlKeyPressedOnly = IsCtrlBeingHeld && !IsShiftBeingHeld && !IsAltBeingHeld;
         _keyStates[Key.LeftCtrl] = IsCtrlBeingHeld;
         _keyStates[Key.RightCtrl] = IsCtrlBeingHeld;
-        
+
         IsShiftKeyPressed = IsShiftBeingHeld;
         IsShiftKeyPressedOnly = IsShiftBeingHeld && !IsCtrlBeingHeld && !IsAltBeingHeld;
         _keyStates[Key.LeftShift] = IsShiftBeingHeld;
@@ -286,7 +285,7 @@ public class ModifierViewStateService : ObservableObject, IModifierViewStateServ
         IsAltKeyPressedOnly = IsAltBeingHeld && !IsCtrlBeingHeld && !IsShiftBeingHeld;
         _keyStates[Key.LeftAlt] = IsAltBeingHeld;
         _keyStates[Key.RightAlt] = IsAltBeingHeld;
-        
+
         IsCtrlShiftOnlyPressed = IsShiftBeingHeld && IsCtrlBeingHeld && !IsAltBeingHeld;
         IsCtrlAltOnlyPressed = IsShiftBeingHeld && !IsCtrlBeingHeld && IsAltBeingHeld;
         IsAltShiftOnlyPressed = IsShiftBeingHeld && IsCtrlBeingHeld && !IsAltBeingHeld;
@@ -326,16 +325,4 @@ public class ModifierViewStateService : ObservableObject, IModifierViewStateServ
         ModifierStateChanged?.Invoke();
     }
 #pragma warning restore IDE0051
-
-    private ILoggerService? _loggerService;
-
-    public void SetLogger(ILoggerService loggerService)
-    {
-        if (_loggerService is not null)
-        {
-            return;
-        }
-
-        _loggerService = loggerService;
-    }
 }

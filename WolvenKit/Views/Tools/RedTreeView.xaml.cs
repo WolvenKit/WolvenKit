@@ -15,6 +15,7 @@ using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Core.Services;
 using WolvenKit.RED4.Types;
 using WolvenKit.Views.Dialogs.Windows;
 
@@ -25,10 +26,12 @@ namespace WolvenKit.Views.Tools
     /// </summary>
     public partial class RedTreeView : UserControl
     {
-        private ModifierViewStateService _modifierViewStateSvc = ModifierViewStateService.GetInstance();
+        private readonly IModifierViewStateService _modifierViewStateSvc;
 
         public RedTreeView()
         {
+            _modifierViewStateSvc = Locator.Current.GetService<IModifierViewStateService>();
+
             InitializeComponent();
 
             _modifierViewStateSvc.ModifierStateChanged += OnModifierStateSvcChanged;

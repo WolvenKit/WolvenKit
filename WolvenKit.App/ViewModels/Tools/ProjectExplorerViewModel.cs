@@ -53,7 +53,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private readonly IProgressService<double> _progressService;
     private readonly IGameControllerFactory _gameController;
     private readonly AppViewModel _mainViewModel;
-    private readonly IModifierViewStateService _modifierViewStateService;
+    public readonly IModifierViewStateService ModifierViewStateService;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
@@ -85,7 +85,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _gameController = gameController;
         _pluginService = pluginService;
         _settingsManager = settingsManager;
-        _modifierViewStateService = modifierSvc;
+        ModifierViewStateService = modifierSvc;
 
         _mainViewModel = appViewModel;
 
@@ -986,18 +986,17 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     // Integrate with _modifierViewStatesModel to expose keys to view 
     // ####################################################################################
 
-    public bool IsShiftKeyPressedOnly => _modifierViewStateService.IsShiftKeyPressedOnly;
-    public bool IsCtrlKeyPressedOnly => _modifierViewStateService.IsCtrlKeyPressedOnly;
-    public bool IsNoModifierPressed => _modifierViewStateService.IsNoModifierPressed;
+    public bool IsShiftKeyPressedOnly => ModifierViewStateService.IsShiftKeyPressedOnly;
+    public bool IsCtrlKeyPressedOnly => ModifierViewStateService.IsCtrlKeyPressedOnly;
+    public bool IsNoModifierPressed => ModifierViewStateService.IsNoModifierPressed;
 
     /// <summary>
     /// Called in constructor
     /// </summary>
     private void RegisterModifierStateAwareness()
     {
-        _modifierViewStateService.SetLogger(_loggerService);
-        _modifierViewStateService.ModifierStateChanged += OnModifierUpdateEvent;
-        _modifierViewStateService.PropertyChanged += OnModifierChanged;
+        ModifierViewStateService.ModifierStateChanged += OnModifierUpdateEvent;
+        ModifierViewStateService.PropertyChanged += OnModifierChanged;
     }
 
     /// <summary>
@@ -1006,11 +1005,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private void OnModifierUpdateEvent()
     {
         IsShowAbsolutePathToRawFolder =
-            _modifierViewStateService.IsCtrlShiftOnlyPressed &&
+            ModifierViewStateService.IsCtrlShiftOnlyPressed &&
             SelectedItem?.FullName.Contains(s_archiveFolder) == true;
 
         IsShowAbsolutePathToArchiveFolder =
-            _modifierViewStateService.IsCtrlShiftOnlyPressed && SelectedItem?.FullName.Contains(s_rawFolder) == true;
+            ModifierViewStateService.IsCtrlShiftOnlyPressed && SelectedItem?.FullName.Contains(s_rawFolder) == true;
     }
 
     /// <summary>
@@ -1021,7 +1020,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <summary>
     /// Passes key state changes from view down to ModifierViewStatesModel
     /// </summary>
-    public void RefreshModifierStates() => _modifierViewStateService.RefreshModifierStates();
+    public void RefreshModifierStates() => ModifierViewStateService.RefreshModifierStates();
 
     #endregion
 }

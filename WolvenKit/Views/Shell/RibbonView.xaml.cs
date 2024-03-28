@@ -15,6 +15,7 @@ using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Core.Services;
 
 enum LaunchGameProfile
 {
@@ -29,7 +30,7 @@ namespace WolvenKit.Views.Shell
     {
         private readonly ISettingsManager _settingsManager;
         private readonly ILoggerService _loggerService;
-        private readonly ModifierViewStateService _modifierViewStateService = ModifierViewStateService.GetInstance();
+        private readonly IModifierViewStateService _modifierViewStateService;
 
         
         public RibbonView()
@@ -40,6 +41,7 @@ namespace WolvenKit.Views.Shell
 
             _settingsManager = Locator.Current.GetService<ISettingsManager>();
             _loggerService = Locator.Current.GetService<ILoggerService>();
+            _modifierViewStateService = Locator.Current.GetService<IModifierViewStateService>();
 
             this.WhenActivated(disposables =>
             {
