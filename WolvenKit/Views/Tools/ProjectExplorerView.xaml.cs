@@ -668,7 +668,7 @@ namespace WolvenKit.Views.Tools
                 }
 
                 // Disable collapsing of child nodes with Ctrl
-                if (!ViewModel.ModifierViewStateService.IsCtrlKeyPressed)
+                if (ViewModel is { ModifierViewStateService.IsCtrlKeyPressed: false })
                 {
                     TreeGrid.CollapseAllNodes(childNode);
                 }

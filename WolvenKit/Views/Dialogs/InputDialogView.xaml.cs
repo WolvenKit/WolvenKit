@@ -15,6 +15,7 @@ namespace WolvenKit.Views.Dialogs
             DialogTitle = dialogTitle;
             
             InitializeComponent();
+            Loaded += (s, e) => TextBox.Focus();
 
             ViewModel = Locator.Current.GetService<InputDialogViewModel>();
             DataContext = ViewModel;
