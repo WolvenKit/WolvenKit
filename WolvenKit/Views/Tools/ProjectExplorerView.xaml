@@ -172,7 +172,8 @@
                 <!--                            /Copy commands                               -->
                 <!-- ======================================================================= -->
 
-                
+
+                <!-- Context menu: Open in Asset Browser -->
                 <MenuItem
                     Command="{Binding OpenInAssetBrowserCommand}"
                     Header="Open in Asset Browser"
@@ -186,6 +187,8 @@
                             Kind="ArrowCircleRight" />
                     </MenuItem.Icon>
                 </MenuItem>
+
+                <!-- Context menu: Replace with original -->
                 <MenuItem
                     Command="{Binding OverwriteWithGameFileCommand}"
                     Header="Replace with original"
@@ -199,6 +202,8 @@
                             Kind="Refresh" />
                     </MenuItem.Icon>
                 </MenuItem>
+
+                <!-- Context menu: Add dependencies -->
                 <MenuItem
                     Command="{Binding AddDependenciesCommand}"
                     Header="Add dependencies"
@@ -215,7 +220,23 @@
 
                 <Separator />
 
-                <MenuItem Command="{Binding OpenInFileExplorerCommand}" Header="Open in File Explorer">
+                <!-- Context menu: Create new folder -->
+                <MenuItem
+                    Command="{Binding Path= CreateNewDirectoryCommand}"
+                    Header="Create new folder"
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconForkAwesome
+                            Width="13"
+                            Height="13"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Stretch"
+                            Kind="Folder" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <!-- Context menu: Open in Explorer -->
+                <MenuItem Command="{Binding OpenInFileExplorerCommand}" Header="Open in Windows Explorer">
                     <MenuItem.Icon>
                         <iconPacks:PackIconMaterial
                             Width="13"
@@ -318,28 +339,32 @@
                         Margin="5,0,0,2"
                         VerticalAlignment="Center"
                         Text="{Binding Path=Name}" />
+
+                    <!-- Open in Windows Explorer - Open file - Delete --> 
                     <StackPanel
                         Grid.Column="2"
                         Background="{StaticResource ContentBackground}"
                         Orientation="Horizontal">
 
+                        <!-- Open in Explorer -->
                         <helpers:TreeGridButton
                             BorderBrush="{StaticResource WolvenKitYellow}"
                             Command="{Binding ViewModel.OpenInFileExplorerCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ProjectExplorerView}}}"
                             CommandParameter="{Binding}"
                             HoverBackground="{StaticResource WolvenKitYellowShadow}"
-                            Style="{StaticResource WolvenKitTreeGridButton}"
-                            ToolTip="Open in Explorer">
+                            Style="{StaticResource WolvenKitTreeGridButtonDirectory}"
+                            ToolTip="Open in Windows Explorer">
                             <helpers:TreeGridButton.Content>
                                 <iconPacks:PackIconMaterial
                                     Width="11"
                                     Height="11"
-                                    Margin="-1,0,0,0"
+                                    Margin="0,0,0,0"
                                     Foreground="#222"
                                     Kind="FolderOpen" />
                             </helpers:TreeGridButton.Content>
                         </helpers:TreeGridButton>
 
+                        <!-- Open File --> 
                         <helpers:TreeGridButton
                             BorderBrush="{StaticResource WolvenKitCyan}"
                             Command="{Binding ViewModel.OpenFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ProjectExplorerView}}}"
@@ -357,6 +382,7 @@
                             </helpers:TreeGridButton.Content>
                         </helpers:TreeGridButton>
 
+                        <!-- Delete -->
                         <helpers:TreeGridButton
                             syncfusion:FocusManagerHelper.FocusedElement="True"
                             BorderBrush="{StaticResource WolvenKitRed}"
