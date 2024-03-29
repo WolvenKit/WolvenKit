@@ -8,7 +8,7 @@
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     Title="{Binding Title, RelativeSource={RelativeSource Self}}"
     SizeToContent="WidthAndHeight"
-    FocusManager.FocusedElement="{Binding ElementName=SearchTextBox}"
+    FocusManager.FocusedElement="{Binding ElementName=TextBox}"
     WindowStartupLocation="CenterScreen">
 
     <Grid
