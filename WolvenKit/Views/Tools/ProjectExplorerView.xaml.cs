@@ -513,17 +513,19 @@ namespace WolvenKit.Views.Tools
             {
                 if (e.Data.GetDataPresent(DataFormats.FileDrop))
                 {
-                    if (e.TargetNode.Item is FileModel targetFile)
+                    if (e.TargetNode.Item is not FileModel targetFile)
                     {
-                        var targetDirectory = Path.GetDirectoryName(targetFile.FullName);
-                        if (File.GetAttributes(targetFile.FullName).HasFlag(FileAttributes.Directory))
-                        {
-                            targetDirectory = targetFile.FullName;
-                        }
-
-                        var files = new List<string>((string[])e.Data.GetData(DataFormats.FileDrop) ?? []);
-                        await ProcessFileAction(files, targetDirectory, true);
+                        return;
                     }
+
+                    var targetDirectory = Path.GetDirectoryName(targetFile.FullName);
+                    if (File.GetAttributes(targetFile.FullName).HasFlag(FileAttributes.Directory))
+                    {
+                        targetDirectory = targetFile.FullName;
+                    }
+
+                    var files = new List<string>((string[])e.Data.GetData(DataFormats.FileDrop) ?? []);
+                    await ProcessFileAction(files, targetDirectory);
                 }
                 else if (e.Data.GetDataPresent("Nodes"))
                 {
@@ -548,14 +550,14 @@ namespace WolvenKit.Views.Tools
                             files.Add(sourceFile.FullName);
                         }
                     }
-
+                    
                     // 1146: addresses "prevent self-drag-and-drop" 
                     if (files.Count > 0 && files[0] == targetDirectory)
                     {
                         return;
                     }
 
-                    await ProcessFileAction(files, targetDirectory, false);
+                    await ProcessFileAction(files, targetDirectory);
                 }
             }
             catch (Exception error)
@@ -568,50 +570,127 @@ namespace WolvenKit.Views.Tools
 
         }
 
-        private async Task ProcessFileAction(List<string> sourceFiles, string targetDirectory, bool onlyCopy)
+        /// <summary>
+        ///  Since the previous implementation would sometimes fail silently and claim that perfectly viable files weren't found,
+        /// here's an attempt at implementing everything in a more robust way that's also more in line with windows move/copy behaviour.
+        /// </summary>
+        private async Task ProcessFileAction(IReadOnlyList<string> sourceFiles, string targetDirectory)
         {
-            var controlKeyDown = ViewModel.ModifierViewStateService.GetModifierState(ModifierKeys.Control);
-            
-            foreach (var sourceFile in sourceFiles)
+            var isCopy = ViewModel?.ModifierViewStateService.GetModifierState(ModifierKeys.Control) == true;
+
+            // Abort if a directory is dragged on itself or its parent
+            if (!isCopy && sourceFiles.Count == 1 &&
+                (sourceFiles[0] == targetDirectory || !isCopy && Path.GetDirectoryName(sourceFiles[0]) == targetDirectory))
             {
-                var newFile = Path.Combine(targetDirectory, Path.GetFileName(sourceFile));
-                if (File.GetAttributes(sourceFile).HasFlag(FileAttributes.Directory))
+                return;
+            }
+
+            // Split files and directories apart for cleaner handling
+            var directories = sourceFiles.Where(s => File.GetAttributes(s).HasFlag(FileAttributes.Directory)).ToList();
+
+            // Create a dictionary to map source files to target files
+            var fileMap = new Dictionary<string, string>();
+
+            // Add files directly under the source directories to the map
+            foreach (var sourceFile in sourceFiles.Where(s => !directories.Contains(s)))
+            {
+                var targetFile = Path.Combine(targetDirectory, Path.GetFileName(sourceFile));
+                fileMap[sourceFile] = targetFile;
+            }
+
+            // Add files under the subdirectories of the source directories to the map
+            foreach (var directory in directories.Where(Directory.Exists))
+            {
+                var directoryParent = Path.GetDirectoryName(directory) ?? directory;
+                foreach (var sourceFile in Directory.EnumerateFiles(directory, "*.*", SearchOption.AllDirectories))
                 {
-                    foreach (var dirPath in Directory.GetDirectories(sourceFile, "*", SearchOption.AllDirectories))
+                    // we don't care about directories, just about files
+                    if (File.GetAttributes(sourceFile).HasFlag(FileAttributes.Directory))
                     {
-                        Directory.CreateDirectory(dirPath.Replace(sourceFile, newFile));
+                        continue;
                     }
 
-                    foreach (var newPath in Directory.GetFiles(sourceFile, "*.*", SearchOption.AllDirectories))
+                    var relativePath = sourceFile.Substring(directoryParent.Length).TrimStart(Path.DirectorySeparatorChar);
+                    var targetFile = Path.Combine(targetDirectory, relativePath);
+                    if (targetFile == sourceFile && isCopy)
                     {
-                        File.Copy(newPath, newPath.Replace(sourceFile, newFile), true);
+                        var directoryName = Path.GetFileName(Path.GetDirectoryName(sourceFile)) ?? "INVALID";
+                        relativePath = relativePath.Replace(directoryName, $"{directoryName} - Copy");
+                        targetFile = Path.Combine(targetDirectory, relativePath);
                     }
+
+                    fileMap[sourceFile] = targetFile;
+                }
+            }
+
+            var existingFiles = fileMap.Values.Where(File.Exists)
+                .Select(s => s.Replace(targetDirectory, "")).OrderBy(s => s).Distinct()
+                .ToList();
+
+            // If we have 0 - 10 files, we'll show one dialogue. Otherwise, we'll ask for each file individually.
+            var isOverwrite = existingFiles.Count == 0;
+            var isAskIndividually = existingFiles.Count > 10;
+
+            if (existingFiles.Count is < 10 and > 0)
+            {
+                var messageBoxResult = await Interactions.ShowMessageBoxAsync(
+                    $"Overwrite the following files? \n\n  {string.Join("\n  ", existingFiles)}",
+                    "File Overwrite Confirmation", WMessageBoxButtons.YesNoCancel);
+
+                if (messageBoxResult == WMessageBoxResult.Cancel)
+                {
+                    return;
+                }
+
+                isOverwrite = messageBoxResult == WMessageBoxResult.Yes;
+            }
+
+            foreach (var copyMe in fileMap)
+            {
+                var targetFile = copyMe.Value ?? "";
+
+                var canWriteToTargetFile =
+                    !File.Exists(targetFile)
+                    || isOverwrite
+                    || (isAskIndividually && await Interactions.ShowMessageBoxAsync(
+                        $"Overwrite the following file? {targetFile}",
+                        "File Overwrite Confirmation",
+                        WMessageBoxButtons.YesNo) == WMessageBoxResult.Yes);
+                if (!canWriteToTargetFile)
+                {
+                    if (!isCopy)
+                    {
+                        continue;
+                    }
+
+                    var filenameWithoutExtension = Path.GetFileNameWithoutExtension(targetFile);
+                    targetFile = targetFile.Replace(filenameWithoutExtension, $"{filenameWithoutExtension} - Copy");
+                }
+
+                var containingDirectory = Path.GetDirectoryName(targetFile) ?? "";
+                if (!Directory.Exists(containingDirectory))
+                {
+                    Directory.CreateDirectory(containingDirectory);
+                }
+
+                if (isCopy)
+                {
+                    File.Copy(copyMe.Key, targetFile, true);
                 }
                 else
                 {
-                    if (sourceFile == newFile)
-                    {
-                        return;
-                    }
-
-                    if (File.Exists(newFile))
-                    {
-                        if (await Interactions.ShowMessageBoxAsync("File already exists at that location - overwrite it?", "File Overwrite Confirmation", WMessageBoxButtons.YesNo) == WMessageBoxResult.No)
-                        {
-                            return;
-                        }
-                    }
-
-                    if (controlKeyDown || onlyCopy)
-                    {
-                        File.Copy(sourceFile, newFile, true);
-                    }
-                    else
-                    {
-                        File.Move(sourceFile, newFile, true);
-                    }
+                    File.Move(copyMe.Key, targetFile, true);
                 }
             }
+
+            if (isCopy)
+            {
+                return;
+            }
+
+            // We have been moving, so let's make sure we're not leaving any empty directories behind
+            directories.OrderByDescending(dir => dir.Length).Where(dir => !Directory.EnumerateFileSystemEntries(dir).Any()).ToList()
+                .ForEach(Directory.Delete);
         }
 
         private void TreeGrid_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
