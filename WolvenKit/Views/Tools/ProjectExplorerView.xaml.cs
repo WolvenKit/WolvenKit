@@ -688,9 +688,15 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            // We have been moving, so let's make sure we're not leaving any empty directories behind
-            directories.OrderByDescending(dir => dir.Length).Where(dir => !Directory.EnumerateFileSystemEntries(dir).Any()).ToList()
-                .ForEach(Directory.Delete);
+            foreach (var directory in directories.OrderByDescending(dir => dir.Length).ToList())
+            {
+                if (Directory.EnumerateFiles(directory, "*.*", SearchOption.AllDirectories).Any())
+                {
+                    continue;
+                }
+
+                Directory.Delete(directory, true);
+            }
         }
 
         private void TreeGrid_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
