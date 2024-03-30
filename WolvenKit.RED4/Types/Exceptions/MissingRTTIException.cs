@@ -9,7 +9,7 @@ public class MissingRTTIException : Exception
 
 public class InvalidRTTIException : Exception
 {
-    public InvalidRTTIException(string propName, Type expectedType, Type actualType) : base($"Invalid in wolven rtti:\"{propName}\" [Expected: \"{expectedType.Name}\" | Got: \"{actualType.Name}\"]")
+    public InvalidRTTIException(string propName, string expectedType, string actualType) : base($"Invalid in wolven rtti:\"{propName}\" [Expected: \"{expectedType}\" | Got: \"{actualType}\"]")
     {
     }
 }

@@ -6,8 +6,8 @@ namespace WolvenKit.RED4.Types;
 public interface IRedCompiledPropertyData
 {
     public bool IsCustomReadNeeded(RedPackageHeader redPackageHeader);
-    public IRedType? CustomRead(Red4Reader reader, uint size, CName propertyName);
+    public IRedType? CustomRead(Red4Reader reader, uint size, string propertyName);
 
     public bool IsCustomWriteNeeded(RedPackageHeader redPackageHeader);
-    public void CustomWrite(Red4Writer writer, CName propertyName);
+    public void CustomWrite(Red4Writer writer, string propertyName);
 }
