@@ -599,7 +599,7 @@ public partial class ChunkViewModel
                 break;
         }
 
-        if (TVProperties is [ChunkViewModel child])
+        if (string.IsNullOrEmpty(Value) && TVProperties is [ChunkViewModel child])
         {
             Value = child.Descriptor ?? child.Value;
             IsValueExtrapolated = !string.IsNullOrEmpty(Value);
