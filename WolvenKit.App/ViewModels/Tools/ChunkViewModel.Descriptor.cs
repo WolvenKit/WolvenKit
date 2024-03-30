@@ -2,8 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.App.Models;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.Core.Extensions;
@@ -408,6 +406,14 @@ public partial class ChunkViewModel
         else if (ResolvedData is gameFxResource fxResource)
         {
             Descriptor = fxResource.Effect.DepotPath.GetResolvedText();
+            if (Descriptor is not null and not "")
+            {
+                return;
+            }
+        }
+        else if (ResolvedData is gameBinkVideoRecord videoRecord)
+        {
+            Descriptor = $"{videoRecord.BinkDuration}";
             if (Descriptor is not null and not "")
             {
                 return;
