@@ -33,11 +33,13 @@ namespace WolvenKit.Views.Tools
     public partial class RedTreeView : UserControl
     {
         private readonly IModifierViewStateService _modifierViewStateSvc;
+        private ILoggerService _loggerService;
 
         public RedTreeView()
         {
             _modifierViewStateSvc = Locator.Current.GetService<IModifierViewStateService>();
-
+            _loggerService = Locator.Current.GetService<ILoggerService>(); 
+            
             InitializeComponent();
 
             _modifierViewStateSvc.ModifierStateChanged += OnModifierStateSvcChanged;
@@ -313,12 +315,12 @@ namespace WolvenKit.Views.Tools
 
             if (numReplaced <= 0)
             {
-                cvm?._loggerService.Info("Nothing to replace!");
+                _loggerService.Info("Nothing to replace!");
                 return;
             }
 
             cvm?.Tab?.Parent.SetIsDirty(true);
-            cvm?._loggerService.Info($"Replaced {ChunkViewModel.NumReplacedEntries} occurrences of '{searchText}' with '{replaceText}'");
+            _loggerService.Info($"Replaced {ChunkViewModel.NumReplacedEntries} occurrences of '{searchText}' with '{replaceText}'");
         }
 
         /// <summary>
