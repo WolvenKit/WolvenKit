@@ -6,6 +6,7 @@ using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types.Pools;
 
 namespace WolvenKit.App.ViewModels.Shell;
 
@@ -248,6 +249,10 @@ public partial class ChunkViewModel
                 break;
             case entVisualControllerDependency controllerDep:
                 Value = $"{controllerDep.Mesh.DepotPath.GetResolvedText()}";
+                IsValueExtrapolated = Value != "";
+                break;
+            case gameBinkVideoRecord videoRecord:
+                Value = ResourcePathPool.ResolveHash(videoRecord.ResourceHash);
                 IsValueExtrapolated = Value != "";
                 break;
             case entVisualControllerComponent entVisualControllerComponent:
