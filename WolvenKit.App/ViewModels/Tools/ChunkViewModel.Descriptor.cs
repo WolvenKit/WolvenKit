@@ -2,11 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types.Pools;
 using static WolvenKit.RED4.Types.RedReflection;
 
 namespace WolvenKit.App.ViewModels.Shell;
@@ -55,18 +57,38 @@ public partial class ChunkViewModel
 
             Descriptor = $"[{ary.Count}]";
         }
-        else if (ResolvedData is appearanceAppearancePart)
+        else if (ResolvedData is appearanceAppearancePart part)
         {
-            Descriptor = ((appearanceAppearancePart)ResolvedData).Resource.DepotPath.GetResolvedText() ?? "";
+            Descriptor = part.Resource.DepotPath.GetResolvedText() ?? "";
             if (Descriptor != "")
             {
                 return;
             }
         }
-        else if (ResolvedData is animAnimSetEntry)
+        else if (ResolvedData is locVoLineEntry voLineEntry)
         {
-            var animation = ((animAnimSetEntry)ResolvedData).Animation?.GetValue();
-            Descriptor = animation?.GetProperty("Name")?.ToString() ?? "";
+            Descriptor = voLineEntry.StringId.ToString();
+            if (Descriptor != "")
+            {
+                return;
+            }
+        }
+        else if (ResolvedData is locVoLengthEntry voLengthEntry)
+        {
+            Descriptor = voLengthEntry.StringId.ToString();
+            if (Descriptor != "")
+            {
+                return;
+            }
+        }
+        else if (ResolvedData is animAnimSetEntry entry && entry.Animation?.GetValue() is animAnimation animation)
+        {
+            Descriptor = animation.GetProperty(nameof(Name))?.ToString() ?? "";
+
+            if (ulong.TryParse(Descriptor, out var result))
+            {
+                Descriptor = ResourcePathPool.ResolveHash(result);
+            }
             if (Descriptor != "")
             {
                 return;
