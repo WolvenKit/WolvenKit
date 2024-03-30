@@ -58,7 +58,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 {
     private readonly IChunkViewmodelFactory _chunkViewmodelFactory;
     private readonly IDocumentTabViewmodelFactory _tabViewmodelFactory;
-    private readonly ILoggerService _loggerService;
+    public readonly ILoggerService _loggerService;
     private readonly ISettingsManager _settingsManager;
     private readonly IProjectManager _projectManager;
     private readonly IGameControllerFactory _gameController;
@@ -1285,6 +1285,86 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     }
 
 
+    private bool CanDeleteUnusedMaterials() => ResolvedData is CMesh;
+
+    [RelayCommand(CanExecute = nameof(CanDeleteUnusedMaterials))]
+    private void DeleteUnusedMaterials()
+    {
+        if (ResolvedData is not CMesh mesh)
+        {
+            return;
+        }
+
+        // Collect material names from appearance chunk materials
+        var appearanceNames = mesh.Appearances
+            .Select((handle) => handle.GetValue() as meshMeshAppearance).Where((i) => i != null)
+            .SelectMany(mA => mA!.ChunkMaterials.Select(chunkMaterial => chunkMaterial.GetResolvedText()).ToArray())
+            .ToList();
+
+        var localMatIdxList = mesh.MaterialEntries.Where((mE) =>
+            mE.IsLocalInstance && mE.Name.GetResolvedText() is string s && appearanceNames.Contains(s)
+        ).Select(me => (int)me.Index).ToList();
+
+        var externalMatIdxList = mesh.MaterialEntries.Where((mE) =>
+            !mE.IsLocalInstance && mE.Name.GetResolvedText() is string s && appearanceNames.Contains(s)
+        ).Select(me => (int)me.Index).ToList();
+
+        var numUnusedMaterials = mesh.MaterialEntries.Count - (localMatIdxList.Count + externalMatIdxList.Count);
+
+        if (numUnusedMaterials == 0)
+        {
+            _loggerService.Info("No unused materials in current mesh. Yay!");
+            return;
+        }
+
+
+        var keepLocal = mesh.LocalMaterialBuffer.Materials
+            .Where((material, i) => localMatIdxList.Contains(i)).ToArray();
+
+        var keepExternal = mesh.ExternalMaterials
+            .Where((material, i) => externalMatIdxList.Contains(i)).ToArray();
+
+        var usedMaterialDefinitions = mesh.MaterialEntries.Where(me =>
+            (me.IsLocalInstance && localMatIdxList.Contains(me.Index)) ||
+            (!me.IsLocalInstance && externalMatIdxList.Contains(me.Index))
+        ).ToArray();
+
+
+        if (keepLocal.Length + keepExternal.Length != usedMaterialDefinitions.Length &&
+            !_appViewModel.ShowConfirmationDialog("Not all remaining materials match up. Continue? (You need to validate by hand)",
+                "Really delete materials?"))
+        {
+            return;
+        }
+
+        mesh.LocalMaterialBuffer.Materials.Clear();
+        foreach (var t in keepLocal)
+        {
+            mesh.LocalMaterialBuffer.Materials.Add(t);
+        }
+
+        mesh.ExternalMaterials.Clear();
+        foreach (var t in keepExternal)
+        {
+            mesh.ExternalMaterials.Add(t);
+        }
+
+        mesh.MaterialEntries.Clear();
+        for (var i = 0; i < usedMaterialDefinitions.Length; i++)
+        {
+            var t = usedMaterialDefinitions[i];
+            t.Index = (CUInt16)i;
+            mesh.MaterialEntries.Add(t);
+        }
+
+        RecalculateProperties();
+
+        Tab?.Parent.SetIsDirty(true);
+
+        _loggerService.Info($"Deleted {numUnusedMaterials} unused materials.");
+    }
+
+
     // Dynamic Properties
 
     private bool CanCreateDynamicProperty() => ResolvedData is IDynamicClass;   // TODO RelayCommand check notify
@@ -2014,7 +2094,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             Properties[i].NodeIdxInParent = i;
         }
     }
-
+    
     private bool CanCopySelection() => IsInArray && Parent is not null;   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanCopySelection))]
     private void CopySelection()

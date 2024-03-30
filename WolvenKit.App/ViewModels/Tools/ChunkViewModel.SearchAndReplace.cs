@@ -14,7 +14,13 @@ namespace WolvenKit.App.ViewModels.Shell;
 
 public partial class ChunkViewModel : ObservableObject
 {
-    private List<int> resolvedHashes = new();
+    private readonly List<int> resolvedHashes = new();
+
+    public static int NumReplacedEntries = 0;
+
+    private static void ResetReplacementCounter() => NumReplacedEntries = 0;
+
+    private static void IncrementReplacementCounter() => NumReplacedEntries += 1;
 
     /// <summary>
     ///  Entry point for search/replace
@@ -26,7 +32,8 @@ public partial class ChunkViewModel : ObservableObject
     private bool SearchAndReplaceInProperties(string search, string replace, bool ignoreCase = false)
     {
         resolvedHashes.Clear();
-
+        ResetReplacementCounter();
+        
         var result = SearchAndReplaceInProperties(search, replace,
             ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal);
 
@@ -44,7 +51,7 @@ public partial class ChunkViewModel : ObservableObject
     // Level 1 (will call itself recursively, so let's abort here if we can)
     private bool SearchAndReplaceInProperties(string search, string replace, StringComparison searchMode)
     {
-        if (resolvedHashes.Contains(ResolvedData.GetHashCode()))
+        if (!IsInArray && resolvedHashes.Contains(ResolvedData.GetHashCode()))
         {
             return false;
         }
@@ -56,21 +63,22 @@ public partial class ChunkViewModel : ObservableObject
 
         var _data = Data;
         var _resolvedData = ResolvedData;
-
+        
         switch (ResolvedData)
         {
             case RedDummy:
-            case CBool:
-            case CUInt8:
+            case IRedInteger:
             case CByteArray:
-            case CUInt16:
-            case CUInt32:
-            case CUInt64:
-            case CFloat:
-            case CDouble:
-            case CRUID:
+            case IRedBufferWrapper:
             case FixedPoint:
                 return false;
+            case IRedPrimitive when !IsArray:
+                if (ResolvedData is not IRedPrimitive<string>)
+                {
+                    return false;
+                }
+
+                break;
             default:
                 break;
         }
@@ -90,11 +98,13 @@ public partial class ChunkViewModel : ObservableObject
             if (Data is IRedHandle handle && newType is RedBaseClass newRedType)
             {
                 handle.SetValue(newRedType);
+                IncrementReplacementCounter();
                 wasChanged = true;
             }
             else if (newType.GetType().IsAssignableTo(_data.GetType()))
             {
                 Data = newType;
+                IncrementReplacementCounter();
                 wasChanged = true;
             }
             else
@@ -128,7 +138,11 @@ public partial class ChunkViewModel : ObservableObject
         // Any changed properties will be expanded, let's re-fold to how it used to be
         IsExpanded = expansionState;
 
-        resolvedHashes.Add(ResolvedData.GetHashCode());
+        // Certain types have the same hash as their children
+        if (Properties.Count != 1)
+        {
+            resolvedHashes.Add(ResolvedData.GetHashCode());
+        }
 
         return wasChanged;
     }
@@ -170,6 +184,7 @@ public partial class ChunkViewModel : ObservableObject
         }
 
         outReference = (IRedRef)constructor.Invoke([(ResourcePath)newValue]);
+        IncrementReplacementCounter();
         return true;
     }
 
@@ -182,12 +197,12 @@ public partial class ChunkViewModel : ObservableObject
         switch (original)
         {
             case RedDummy:
-            case CBool:
             case IRedInteger:
             case CByteArray:
             case IRedEnum:
-            case SerializationDeferredDataBuffer:
+            case IRedBufferWrapper:
             case IRedBitField:
+            case meshMeshMaterialBuffer: 
                 return false;
             case CName cname:
                 if (cname.GetResolvedText() is (null or "" or "None"))
@@ -202,6 +217,7 @@ public partial class ChunkViewModel : ObservableObject
                 }
 
                 ret = (CName)replaced;
+                IncrementReplacementCounter();
                 return true;
             case IRedArray redArray:
                 wasChanged = false;
@@ -219,8 +235,10 @@ public partial class ChunkViewModel : ObservableObject
                         }
                             break;
                         case IRedType redType:
-                            wasChanged = SearchAndReplaceInObjectProperties(search, replace, searchMode, redType,
-                                out var newType) || wasChanged;
+                            if (SearchAndReplaceInObjectProperties(search, replace, searchMode, redType, out var newType))
+                            {
+                                wasChanged = true;
+                            } 
                             break;
                         default:
                             break;
@@ -239,13 +257,14 @@ public partial class ChunkViewModel : ObservableObject
                 {
                     case CString:
                         ret = (CString)replaced;
+                        IncrementReplacementCounter();
                         return true;
                     case ResourcePath:
                         ret = (ResourcePath)replaced;
+                        IncrementReplacementCounter();
                         return true;
                     default:
-                        _loggerService.Info(
-                            $"Search&Replace not yet implemented for IRedString {original.GetType().Name}");
+                        _loggerService.Info($"Search&Replace not yet implemented for IRedString {original.GetType().Name}");
                         return false;
                 }
 
@@ -262,15 +281,45 @@ public partial class ChunkViewModel : ObservableObject
                 var newKey = keyValuePair.Key.GetResolvedText()?.Replace(search, replace, searchMode);
                 if (newKey is not null && newKey != keyValuePair.Key.GetResolvedText())
                 {
-                    keyValuePair.Key = newKey;
+                    IncrementReplacementCounter();
                     wasChanged = true;
+                    keyValuePair.Key = newKey;
                 }
 
                 if (keyValuePair.Value is IRedRef valueRef &&
                     SearchAndReplaceInReference(search, replace, searchMode, valueRef, out var newRef))
                 {
+                    IncrementReplacementCounter();
                     wasChanged = true;
                     keyValuePair.Value = newRef;
+                }
+
+                return wasChanged;
+            
+            case IRedBaseHandle handle when handle.GetValue() is IRedType handleValue:
+
+            {
+                if (SearchAndReplaceInObjectProperties(search, replace, searchMode, handleValue,
+                        out var newHandleValue))
+                {
+                    handle.SetValue((RedBaseClass)newHandleValue);
+                    return true;
+                }
+
+                return false;
+            }
+            case CMaterialInstance materialInstance:
+
+                if (SearchAndReplaceInReference(search, replace, searchMode, materialInstance.BaseMaterial, out var newMaterial))
+                {
+                    materialInstance.BaseMaterial = (CResourceReference<IMaterial>)newMaterial;
+                    wasChanged = true;
+                }
+
+                if (SearchAndReplaceInObjectProperties(search, replace, searchMode, materialInstance.Values, out var newValues))
+                {
+                    materialInstance.Values = (CArray<CKeyValuePair>)newValues;
+                    wasChanged = true;
                 }
 
                 return wasChanged;
@@ -292,7 +341,7 @@ public partial class ChunkViewModel : ObservableObject
                     {
                         continue;
                     }
-                    
+
 
                     // Check if the property exists and is writable. Go to public property setter from name field
                     var propertyName = prop.RedName.TrimStart('_');
@@ -318,6 +367,7 @@ public partial class ChunkViewModel : ObservableObject
                     try
                     {
                         propInfo.SetValue(irc, newValue);
+                        IncrementReplacementCounter();
                         wasChanged = true;
                     }
                     catch
@@ -328,22 +378,16 @@ public partial class ChunkViewModel : ObservableObject
 
                 return wasChanged;
             }
-            case IRedBaseHandle handle when handle.GetValue() is IRedType handleValue:
-
-            {
-                if (SearchAndReplaceInObjectProperties(search, replace, searchMode, handleValue,
-                        out var newHandleValue))
-                {
-                    handle.SetValue((RedBaseClass)newHandleValue);
-                    return true;
-                }
-
-                return false;
-            }
             default:
             {
-                _loggerService.Info(
-                    $"Search&Replace not yet implemented for {original.GetType().Name}");
+                if (original is IRedPrimitive primitive &&
+                    !(primitive.GetType().IsGenericType &&
+                      primitive.GetType().GetGenericTypeDefinition() == typeof(IRedPrimitive<string>)))
+                {
+                    return false;
+                }
+
+                _loggerService.Info($"Search&Replace not yet implemented for {original.GetType().Name}");
                 
                 return false;
             }
@@ -395,6 +439,7 @@ public partial class ChunkViewModel : ObservableObject
                             }
 
                             ary[i] = (CName)newValue;
+                            IncrementReplacementCounter();
                             wasChanged = true;
                         }
 
@@ -406,6 +451,7 @@ public partial class ChunkViewModel : ObservableObject
                         if (!Equals(s, newValue))
                         {
                             property.SetValue(ResolvedData, s.Replace(search, replace, searchMode));
+                            IncrementReplacementCounter();
                             wasChanged = true;
                         }
 
