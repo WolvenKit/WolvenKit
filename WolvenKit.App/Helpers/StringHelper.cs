@@ -75,4 +75,34 @@ public class StringHelper
 
         return $"[{string.Join(", ", stringCollection)}]";
     }
+
+    public static string Stringify(CArray<CResourceAsyncReference<animAnimSet>> animSets, bool getFilenameOnly = false)
+    {
+        if (animSets.Count == 0)
+        {
+            return "";
+        }
+
+        var paths = animSets
+            .Select((animRef) => animRef.DepotPath.GetResolvedText() ?? "")
+            .Where((text) => text != "")
+            .Select(text => !getFilenameOnly ? text : text.Split('\\').LastOrDefault() ?? text)
+            .ToList();
+        return $"[ {string.Join(", ", paths)} ]";
+    }
+
+    public static string? StringifyOrNull(ResourcePath? depotPath, bool getFilenameOnly)
+    {
+        if (depotPath?.GetResolvedText() is not string path || path == "")
+        {
+            return null;
+        }
+
+        if (getFilenameOnly)
+        {
+            return path.Split("\\").LastOrDefault() ?? path;
+        }
+
+        return path;
+    }
 }

@@ -166,8 +166,7 @@ public partial class ChunkViewModel
             IsValueExtrapolated = true;
             Value = StringHelper.Stringify(sgn.OutputSockets);
         }
-
-
+        
         switch (ResolvedData)
         {
             case CKeyValuePair kvp:
@@ -250,6 +249,48 @@ public partial class ChunkViewModel
             case entVisualControllerDependency controllerDep:
                 Value = $"{controllerDep.Mesh.DepotPath.GetResolvedText()}";
                 IsValueExtrapolated = Value != "";
+                break;
+            case IRedArray<CRUID> entry:
+                Value = StringHelper.Stringify(entry.Select(id => id.ToString()).ToArray());
+                IsValueExtrapolated = Value != "";
+                break;
+            case animLipsyncMappingSceneEntry entry:
+                Value = StringHelper.Stringify(entry.AnimSets, true);
+                IsValueExtrapolated = true;
+                break;
+            case locVoiceoverMap entry:
+                Value = $"[{entry.Entries.Count}]";
+                IsValueExtrapolated = true;
+                break;
+            case locVoLengthEntry entry:
+                Value = $"{entry.FemaleLength.ToString()}";
+                if (entry.MaleLength != 0)
+                {
+                    Value = $"Fem: {Value} | Masc: {entry.MaleLength.ToString()}";
+                }
+
+                IsValueExtrapolated = true;
+                break;
+            case locVoLineEntry voLineEntry:
+                Value = StringHelper.StringifyOrNull(voLineEntry.FemaleResPath.DepotPath, true)
+                        ?? StringHelper.StringifyOrNull(voLineEntry.MaleResPath.DepotPath, true)
+                        ?? "";
+                IsValueExtrapolated = Value != "";
+                break;
+            case CArray<CResourceAsyncReference<animAnimSet>> entry:
+                Value = StringHelper.Stringify(entry);
+                IsValueExtrapolated = true;
+                break;
+            case animAnimSetEntry entry when entry.Animation?.GetValue() is animAnimation animation:
+
+                Value = animation.GetProperty(nameof(Name))?.ToString() ?? "";
+                if (ulong.TryParse(Value, out var result))
+                {
+                    Value = $"{ResourcePathPool.ResolveHash(result)}";
+                }
+
+                IsValueExtrapolated = Value != "";
+
                 break;
             case gameBinkVideoRecord videoRecord:
                 Value = ResourcePathPool.ResolveHash(videoRecord.ResourceHash);
@@ -504,6 +545,10 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = Value != "";
                 break;
             }
+            case locVoiceoverLengthMap lengthMap:
+                Value = $"[{lengthMap.Entries.Count}]";
+                IsValueExtrapolated = Value != "";
+                break;
             case entDynamicActorRepellingComponent repComponent when
                 repComponent.ParentTransform?.GetValue() is entHardTransformBinding parentTransformValue:
                 Value = StringHelper.Stringify(parentTransformValue);
@@ -552,6 +597,12 @@ public partial class ChunkViewModel
                 break;
             default:
                 break;
+        }
+
+        if (TVProperties is [ChunkViewModel child])
+        {
+            Value = child.Descriptor ?? child.Value;
+            IsValueExtrapolated = !string.IsNullOrEmpty(Value);
         }
 
         // Make sure it's never null
