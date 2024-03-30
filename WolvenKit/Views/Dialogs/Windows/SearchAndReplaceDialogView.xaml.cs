@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Input;
@@ -9,8 +11,8 @@ namespace WolvenKit.Views.Dialogs.Windows
 {
     public partial class SearchAndReplaceDialog : IViewFor<SearchAndReplaceDialogViewModel>
     {
-        private static string s_lastSearch = "";
-        private static string s_lastReplace = "";
+        private static string LastSearch = "";
+        private static string LastReplace = "";
         
         public SearchAndReplaceDialog()
         {
@@ -59,18 +61,18 @@ namespace WolvenKit.Views.Dialogs.Windows
                 return;
             }
 
-            if (s_lastSearch != "")
+            if (LastSearch != "")
             {
-                ViewModel.SearchText = s_lastSearch;
+                ViewModel.SearchText = LastSearch;
                 ViewModel.RememberValues = true;
             }
 
-            if (s_lastReplace == "")
+            if (LastReplace == "")
             {
                 return;
             }
 
-            ViewModel.ReplaceText = s_lastReplace;
+            ViewModel.ReplaceText = LastReplace;
             ViewModel.RememberValues = true;
         }
 
@@ -83,13 +85,13 @@ namespace WolvenKit.Views.Dialogs.Windows
 
             if (!ViewModel.RememberValues)
             {
-                s_lastSearch = "";
-                s_lastReplace = "";
+                LastSearch = "";
+                LastReplace = "";
                 return;
             }
 
-            s_lastSearch = ViewModel.SearchText;
-            s_lastReplace = ViewModel.ReplaceText;
+            LastSearch = ViewModel.SearchText;
+            LastReplace = ViewModel.ReplaceText;
         }
 
         private void WizardPage_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -104,7 +106,5 @@ namespace WolvenKit.Views.Dialogs.Windows
             DialogResult = true;
             Close();
         }
-
-        private void WizardControl_OnFinish(object sender, RoutedEventArgs e) => SaveLastSelection();
     }
 }

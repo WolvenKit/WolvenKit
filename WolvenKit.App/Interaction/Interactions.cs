@@ -30,8 +30,6 @@ public static class Interactions
 
     public static Func<string, string> Rename { get; set; } = _ => throw new NotImplementedException();
 
-    public static Func<string> AskForTextInput { get; set; } = () => throw new NotImplementedException();
-
     //custom views
     public static Func<bool> ShowFirstTimeSetup { get; set; } = () => throw new NotImplementedException();
     public static Func<bool> ShowLaunchProfilesView { get; set; } = () => throw new NotImplementedException();

@@ -215,15 +215,13 @@ public partial class ChunkViewModel : ObservableObject
                                                             out var newHandleValue):
                         {
                             handle.SetValue((RedBaseClass)newHandleValue);
-                            wasChanged = true;
+                            return true;
                         }
-                            break;
                         case IRedType redType:
-                            wasChanged = SearchAndReplaceInObjectProperties(search, replace, searchMode, redType,
-                                out var newType) || wasChanged;
-                            break;
+                            return SearchAndReplaceInObjectProperties(search, replace, searchMode, redType,
+                                out var newType);
                         default:
-                            break;
+                            return false;
                     }
                 }
 

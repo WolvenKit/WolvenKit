@@ -7,9 +7,8 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
-using CommunityToolkit.Mvvm.Input;
 using HandyControl.Data;
 using ReactiveUI;
 using Syncfusion.UI.Xaml.Grid;
@@ -20,7 +19,6 @@ using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Tools;
-using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
 using Application = System.Windows.Application;
 using DataFormats = System.Windows.DataFormats;
@@ -113,20 +111,6 @@ namespace WolvenKit.Views.Tools
 
                         return innerVm.Text;
                     };
-
-
-                Interactions.AskForTextInput = () =>
-                {
-                    var dialog = new InputDialogView();
-
-                    if (dialog.ViewModel is not InputDialogViewModel innerVm
-                        || dialog.ShowDialog(Application.Current.MainWindow) != true)
-                    {
-                        return "";
-                    }
-
-                    return innerVm.Text;
-                };
                
 
                 //EventBindings
@@ -668,7 +652,7 @@ namespace WolvenKit.Views.Tools
                 }
 
                 // Disable collapsing of child nodes with Ctrl
-                if (ViewModel is { ModifierViewStateService.IsCtrlKeyPressed: false })
+                if (!ViewModel.ModifierViewStateService.IsCtrlKeyPressed)
                 {
                     TreeGrid.CollapseAllNodes(childNode);
                 }
