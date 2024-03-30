@@ -580,7 +580,7 @@ namespace WolvenKit.Views.Tools
 
             // Abort if a directory is dragged on itself or its parent
             if (!isCopy && sourceFiles.Count == 1 &&
-                (sourceFiles[0] == targetDirectory || !isCopy && Path.GetDirectoryName(sourceFiles[0]) == targetDirectory))
+                (sourceFiles[0] == targetDirectory || Path.GetDirectoryName(sourceFiles[0]) == targetDirectory))
             {
                 return;
             }
