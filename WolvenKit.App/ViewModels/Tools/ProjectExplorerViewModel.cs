@@ -39,12 +39,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <summary>
     /// Identifies the <see ref="ContentId"/> of this tool window.
     /// </summary>
-    public const string ToolContentId = "ProjectExplorer_Tool";
+    private const string s_toolContentId = "ProjectExplorer_Tool";
 
     /// <summary>
     /// Identifies the caption string used for this tool window.
     /// </summary>
-    public const string ToolTitle = "Project Explorer";
+    private const string s_toolTitle = "Project Explorer";
 
     private readonly ILoggerService _loggerService;
     private readonly IProjectManager _projectManager;
@@ -58,6 +58,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
     private IPluginService _pluginService;
+    
+    
 
     private readonly ISettingsManager _settingsManager;
     private readonly IObservableList<FileModel> _observableList;
@@ -75,7 +77,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         IPluginService pluginService,
         ISettingsManager settingsManager,
         IModifierViewStateService modifierSvc
-    ) : base(ToolTitle)
+    ) : base(s_toolTitle)
     {
         _projectManager = projectManager;
         _loggerService = loggerService;
@@ -108,72 +110,39 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     {
         if (e.Project is not null)
         {
-            DispatcherHelper.RunOnMainThread( () => 
-            {
-                ActiveProject = e.Project;
-            }, DispatcherPriority.ContextIdle);
+            DispatcherHelper.RunOnMainThread(() => ActiveProject = e.Project, DispatcherPriority.ContextIdle);
         }
     }
 
+
+    /// <summary>
+    /// Enable ConvertTo and ConvertFrom
+    /// If the item is in the archive folder, it can be converted to json
+    /// If the item is in the raw folder, it can be converted from json
+    /// </summary>
     partial void OnSelectedItemChanged(FileModel? value)
     {
-        if (value is not null)
+        if (value is null)
         {
-            _mainViewModel.SelectFileCommand.SafeExecute(value);
-                
-            // toggle context menu buttons
-            if (SelectedItems is not null && SelectedItems.Any())
-            {
-                var selected = SelectedItems.OfType<FileModel>().ToList();
-                // if all are in raw folder, then enable convertFrom
-                if (selected.All(x => IsInRawFolder(x)))
-                {
-                    ConvertToIsEnabled = false;
-                    ConvertFromIsEnabled = true;
-                }
-                // if all are in archive folder, then enable convertTo
-                else if (selected.All(x => IsInArchiveFolder(x)))
-                {
-                    ConvertToIsEnabled = true;
-                    ConvertFromIsEnabled = false;
-                }
-                // else disable both
-                else
-                {
-                    ConvertToIsEnabled = false;
-                    ConvertFromIsEnabled = false;
-                }
-            }
-            else if (value is not null)
-            {
-                if (IsInRawFolder(value))
-                {
-                    ConvertToIsEnabled = false;
-                    ConvertFromIsEnabled = true;
-                }
-                // if all are in archive folder, then enable convertTo
-                else if (IsInArchiveFolder(value))
-                {
-                    ConvertToIsEnabled = true;
-                    ConvertFromIsEnabled = false;
-                }
-                // else disable both
-                else
-                {
-                    ConvertToIsEnabled = false;
-                    ConvertFromIsEnabled = false;
-                }
-            }
+            return;
         }
+
+        _mainViewModel.SelectFileCommand.SafeExecute(value);
+
+        // toggle context menu buttons for all selected items
+        SelectedItems?.OfType<FileModel>().ToList().ForEach((selectedItem) =>
+        {
+            ConvertToIsEnabled = IsInArchiveFolder(selectedItem);
+            ConvertFromIsEnabled = IsInRawFolder(selectedItem);
+        });
+
+        ConvertToIsEnabled = IsInArchiveFolder(value);
+        ConvertFromIsEnabled = IsInRawFolder(value);
     }
 
-    private void OnNext(IChangeSet<FileModel, ulong> obj)
-    {
-        DispatcherHelper.RunOnMainThread(() =>
-        {
-            BindGrid1 = new ObservableCollection<FileModel>(_observableList.Items);
-        }, DispatcherPriority.ContextIdle);
-    }
+    private void OnNext(IChangeSet<FileModel, ulong> obj) =>
+        DispatcherHelper.RunOnMainThread(() => BindGrid1 = new ObservableCollection<FileModel>(_observableList.Items),
+            DispatcherPriority.ContextIdle);
 
     #region properties
 
@@ -193,6 +162,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [NotifyCanExecuteChangedFor(nameof(OverwriteWithGameFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(CutFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(DeleteFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CreateNewDirectoryCommand))]
     [NotifyCanExecuteChangedFor(nameof(OpenInFileExplorerCommand))]
     [NotifyCanExecuteChangedFor(nameof(PasteFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(RenameFileCommand))]
@@ -207,6 +177,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [NotifyCanExecuteChangedFor(nameof(CopyRelPathCommand))]
     [NotifyCanExecuteChangedFor(nameof(OverwriteWithGameFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(CutFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CreateNewDirectoryCommand))]
     [NotifyCanExecuteChangedFor(nameof(OpenInFileExplorerCommand))]
     [NotifyCanExecuteChangedFor(nameof(PasteFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(RenameFileCommand))]
@@ -417,45 +388,53 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [RelayCommand(CanExecute = nameof(CanAddDependencies))]
     private async Task AddDependencies()
     {
-        if (!SelectedItem.NotNull().IsDirectory)
+        if (SelectedItem.NotNull().IsDirectory)
         {
-            // parse xml
-            var filename = SelectedItem.FullName;
-            var serializer = new XmlSerializer(typeof(MaterialXmlModel));
+            await Task.CompletedTask;
+            return;
+        }
 
-            using Stream reader = new FileStream(filename, FileMode.Open);
-            // Call the Deserialize method to restore the object's state.
-            if (serializer.Deserialize(reader) is MaterialXmlModel model)
+        // parse xml
+        var filename = SelectedItem.FullName;
+        var serializer = new XmlSerializer(typeof(MaterialXmlModel));
+
+        await using Stream reader = new FileStream(filename, FileMode.Open);
+        // Call the Deserialize method to restore the object's state.
+        if (serializer.Deserialize(reader) is MaterialXmlModel model)
+        {
+            var materials = new List<string>();
+            if (model.Materials is not null)
             {
-                var materials = new List<string>();
-                if (model.Materials is not null)
+                foreach (var material in model.Materials)
                 {
-                    foreach (var material in model.Materials)
+                    if (material.Param is null)
                     {
-                        if (material.Param is not null)
+                        continue;
+                    }
+
+                    foreach (var param in material.Param)
+                    {
+                        if (string.IsNullOrEmpty(param.Value) || string.IsNullOrEmpty(param.Type) ||
+                            !param.Type.StartsWith("rRef:"))
                         {
-                            foreach (var param in material.Param)
-                            {
-                                if (!string.IsNullOrEmpty(param.Value) && !string.IsNullOrEmpty(param.Type) && param.Type.StartsWith("rRef:"))
-                                {
-                                    var path = param.Value;
-                                    if (!materials.Contains(path))
-                                    {
-                                        materials.Add(path);
-                                    }
-                                }
-                            }
+                            continue;
+                        }
+
+                        var path = param.Value;
+                        if (!materials.Contains(path))
+                        {
+                            materials.Add(path);
                         }
                     }
                 }
+            }
 
-                // add from AB
-                foreach (var material in materials)
-                {
-                    var relPath = FileModel.GetRelativeName(material, ActiveProject.NotNull());
-                    var hash = FNV1A64HashAlgorithm.HashString(relPath);
-                    await Task.Run(() => _gameController.GetController().AddToMod(hash));
-                }
+            // add from AB
+            foreach (var material in materials)
+            {
+                var relPath = FileModel.GetRelativeName(material, ActiveProject.NotNull());
+                var hash = FNV1A64HashAlgorithm.HashString(relPath);
+                await Task.Run(() => _gameController.GetController().AddToMod(hash));
             }
         }
 
@@ -465,8 +444,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <summary>
     /// Reimports the game file to replace the current one
     /// </summary>
-    private bool CanOverwriteWithGameFile() =>
-        ActiveProject != null && SelectedItem != null && !IsInRawFolder(SelectedItem);
+    private bool CanOverwriteWithGameFile() => ActiveProject != null && SelectedItem != null && !IsInRawFolder(SelectedItem);
 
     [RelayCommand(CanExecute = nameof(CanOverwriteWithGameFile))]
     private async Task OverwriteWithGameFile()
@@ -506,7 +484,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         // Suspend file watcher, then export everything
         _watcherService.IsSuspended = true;
 
-        // Progress nreporting
+        // Progress reporting
         var progress = 0;
         _progressService.Report(0);
 
@@ -535,14 +513,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private void CutFile() => throw new NotImplementedException();
 
     /// <summary>
-    /// Delets selected node.
+    /// Deletes selected node.
     /// </summary>
     private bool CanDeleteFile() => ActiveProject != null && SelectedItems != null;
     [RelayCommand(CanExecute = nameof(CanDeleteFile))]
-    public void DeleteFile()
+    private void DeleteFile()
     {
         var selected = SelectedItems.NotNull().OfType<FileModel>().ToList();
-        var delete = Interactions.DeleteFiles(selected.Select(_ => _.Name));
+        var delete = Interactions.DeleteFiles(selected.Select(d => d.Name));
         if (!delete)
         {
             return;
@@ -551,25 +529,25 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         // Delete from file structure
         foreach (var item in selected)
         {
-            var fullpath = item.FullName;
+            var fullPath = item.FullName;
             try
             {
                 if (item.IsDirectory)
                 {
-                    Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(fullpath
+                    Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(fullPath
                         , Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs
                         , Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
                 }
                 else
                 {
-                    Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(fullpath
+                    Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(fullPath
                         , Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs
                         , Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
                 }
             }
             catch (Exception)
             {
-                _loggerService.Error("Failed to delete " + fullpath + ".\r\n");
+                _loggerService.Error("Failed to delete " + fullPath + ".\r\n");
             }
         }
     }
@@ -655,6 +633,28 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     }
 
 
+    private bool CanCreateNewDirectory() => ActiveProject != null && SelectedItem?.IsDirectory == true;
+
+    [RelayCommand(CanExecute = nameof(CanCreateNewDirectory))]
+    private void CreateNewDirectory(FileModel value)
+    {
+        var model = value ?? SelectedItem;
+        if (model?.IsDirectory != true)
+        {
+            return;
+        }
+
+        var newFolderPath = Path.Combine(model.FullName, Interactions.AskForTextInput());
+
+        if (Directory.Exists(newFolderPath))
+        {
+            return;
+        }
+
+        Directory.CreateDirectory(newFolderPath);
+    }
+
+
     /// <summary>
     /// Renames selected node. Works for files and directories.
     /// </summary>
@@ -663,34 +663,35 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private void RenameFile()
     {
         var filename = SelectedItem.NotNull().FullName;
-        var newfilename = Interactions.Rename(filename);
+        var newFilename = Interactions.Rename(filename);
 
-        if (string.IsNullOrEmpty(newfilename))
+        if (string.IsNullOrEmpty(newFilename))
         {
             return;
         }
 
-        var newfullpath = Path.Combine(Path.GetDirectoryName(filename).NotNull(), newfilename);
+        var newFullPath = Path.Combine(Path.GetDirectoryName(filename).NotNull(), newFilename);
 
-        if (File.Exists(newfullpath))
+        if (File.Exists(newFullPath))
         {
             return;
         }
 
         try
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(newfullpath).NotNull());
+            Directory.CreateDirectory(Path.GetDirectoryName(newFullPath).NotNull());
             if (SelectedItem.IsDirectory)
             {
-                Directory.Move(filename, newfullpath);
+                Directory.Move(filename, newFullPath);
             }
             else
             {
-                File.Move(filename, newfullpath);
+                File.Move(filename, newFullPath);
             }
         }
         catch
         {
+            // Swallow error
         }
 
 
@@ -776,7 +777,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         List<string> files = new();
 
         // get all files
-        foreach (var item in SelectedItems.NotNull().OfType<FileModel>().Where(x => IsInRawFolder(x)))
+        foreach (var item in SelectedItems.NotNull().OfType<FileModel>().Where(IsInRawFolder))
         {
             if (item.IsDirectory)
             {
@@ -832,7 +833,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <summary>
     /// Opens selected node in asset browser.
     /// </summary>
-    private bool CanOpenInAssetBrowser() => ActiveProject != null && SelectedItem != null && !SelectedItem.IsDirectory;
+    private bool CanOpenInAssetBrowser() => ActiveProject != null && SelectedItem is { IsDirectory: false };
     [RelayCommand(CanExecute = nameof(CanOpenInAssetBrowser))]
     private void OpenInAssetBrowser()
     {
@@ -842,13 +843,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private static string GetSecondExtension(FileModel model) => Path.GetExtension(Path.ChangeExtension(model.FullName, "").TrimEnd('.')).TrimStart('.');
 
-    private bool CanOpenInMlsb()
-    {
-        return ActiveProject != null && SelectedItem != null && !SelectedItem.IsDirectory 
-            && IsInRawFolder(SelectedItem) && SelectedItem.Extension.ToLower().Equals(ETextConvertFormat.json.ToString(), StringComparison.Ordinal) 
-            && GetSecondExtension(SelectedItem).Equals(ERedExtension.mlsetup.ToString(), StringComparison.Ordinal)
-            && PluginService.IsInstalled(EPlugin.mlsetupbuilder);
-    }
+    private bool CanOpenInMlsb() =>
+        ActiveProject != null
+        && SelectedItem is { IsDirectory: false }
+        && IsInRawFolder(SelectedItem) && SelectedItem.Extension.ToLower()
+            .Equals(ETextConvertFormat.json.ToString(), StringComparison.Ordinal)
+        && GetSecondExtension(SelectedItem).Equals(ERedExtension.mlsetup.ToString(), StringComparison.Ordinal)
+        && PluginService.IsInstalled(EPlugin.mlsetupbuilder);
 
     [RelayCommand(CanExecute = nameof(CanOpenInMlsb))]
     private void OpenInMlsb()
@@ -857,22 +858,22 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         {
             if (!Directory.Exists(path))
             {
-                _loggerService.Error($"Mlsetupbuilder not found: {path}");
+                _loggerService.Error($"MlSetupBuilder not found: {path}");
                 return;
             }
 
             var firstFolder = Directory.GetDirectories(path).FirstOrDefault();
             if (firstFolder is null)
             {
-                _loggerService.Error($"Mlsetupbuilder not found: {path}");
+                _loggerService.Error($"MlSetupBuilder not found: {path}");
                 return;
             }
 
-            var exe = Path.Combine(firstFolder, "MlsetupBuilder.exe");
+            var exe = Path.Combine(firstFolder, "MlSetupBuilder.exe");
 
             if (!File.Exists(exe))
             {
-                _loggerService.Error($"Mlsetupbuilder exe not found: {exe}");
+                _loggerService.Error($"MlSetupBuilder.exe not found: {exe}");
                 return;
             }
 
@@ -902,7 +903,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <summary>
     /// Initialize Avalondock specific defaults that are specific to this tool window.
     /// </summary>
-    private void SetupToolDefaults() => ContentId = ToolContentId;           // Define a unique contentid for this toolwindow//BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow//bi.BeginInit();//bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");//bi.EndInit();//IconSource = bi;
+    private void SetupToolDefaults() =>
+        ContentId = s_toolContentId; // Define a unique contentId for this toolwindow//BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow//bi.BeginInit();//bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");//bi.EndInit();//IconSource = bi;
 
     #endregion Methods
 

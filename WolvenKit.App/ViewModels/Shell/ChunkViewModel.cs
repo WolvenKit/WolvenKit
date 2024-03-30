@@ -45,6 +45,7 @@ using YamlDotNet.Serialization;
 using static WolvenKit.App.ViewModels.Dialogs.DialogViewModel;
 using static WolvenKit.RED4.Types.RedReflection;
 using CKeyValuePair = WolvenKit.RED4.Types.CKeyValuePair;
+using IRedArray = WolvenKit.RED4.Types.IRedArray;
 using IRedString = WolvenKit.RED4.Types.IRedString;
 using Mat4 = System.Numerics.Matrix4x4;
 using Quat = System.Numerics.Quaternion;
@@ -2724,6 +2725,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             if (ResolvedData is IRedArray ira)
             {
+                index = Math.Min(index, ira.Count - 1);
                 var comp = CheckTypeCompatibility(ira.InnerType, item.GetType());
                 switch (comp)
                 {
@@ -2750,6 +2752,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
             else if (Data is IRedArray ira2) // Not sure why, but seems to be important^^
             {
+                index = Math.Min(index, ira2.Count - 1);
                 var comp = CheckTypeCompatibility(ira2.InnerType, item.GetType());
                 switch (comp)
                 {
@@ -2819,11 +2822,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             //CalculateProperties();
             //Tab.File.SetIsDirty(true);
 
-            Tab?.Parent.SetIsDirty(true);
             RecalculateProperties(item);
 
             // re-number children
             ReindexChildren();
+            Tab?.Parent.SetIsDirty(true);
 
             if (Properties.Count > index && Tab is not null)
             {
