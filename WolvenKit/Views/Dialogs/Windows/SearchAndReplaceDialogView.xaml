@@ -27,7 +27,7 @@
         </Grid.Resources>
 
 
-        <syncfusion:WizardControl CancelButtonCancelsWindow="True" FinishButtonClosesWindow="True">
+        <syncfusion:WizardControl CancelButtonCancelsWindow="True" FinishButtonClosesWindow="True" Finish="WizardControl_OnFinish">
             <syncfusion:WizardPage
                 BackVisibility="Collapsed"
                 CancelVisibility="Visible"
