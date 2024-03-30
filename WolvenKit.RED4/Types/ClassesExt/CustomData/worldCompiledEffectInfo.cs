@@ -8,7 +8,7 @@ public partial class worldCompiledEffectInfo : IRedCompiledPropertyData
 {
     public bool IsCustomReadNeeded(RedPackageHeader redPackageHeader) => redPackageHeader.unk1 == 2;
 
-    public IRedType? CustomRead(Red4Reader reader, uint size, CName propertyName)
+    public IRedType? CustomRead(Red4Reader reader, uint size, string propertyName)
     {
         IRedType? result = null;
 
@@ -122,7 +122,7 @@ public partial class worldCompiledEffectInfo : IRedCompiledPropertyData
 
     public bool IsCustomWriteNeeded(RedPackageHeader redPackageHeader) => redPackageHeader.unk1 == 2;
 
-    public void CustomWrite(Red4Writer writer, CName propertyName)
+    public void CustomWrite(Red4Writer writer, string propertyName)
     {
         if (propertyName == "placementTags")
         {

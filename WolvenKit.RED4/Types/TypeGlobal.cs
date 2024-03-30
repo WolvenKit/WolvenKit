@@ -15,7 +15,7 @@ public static class TypeGlobal
 
         if (e is InvalidRTTIEventArgs e1)
         {
-            if (e1.ExpectedType == typeof(redResourceReferenceScriptToken) && e1.ActualType == typeof(CString))
+            if (e1 is { ExpectedType: "redResourceReferenceScriptToken", ActualType: "String" })
             {
                 var orgStr = (string)(CString)e1.Value!;
 
@@ -24,26 +24,23 @@ public static class TypeGlobal
                     Resource = new CResourceAsyncReference<CResource>(orgStr)
                 };
 
-                Logger?.Warning($"Invalid in wolven rtti for \"{e1.PropertyName}\": [Expected: \"{e1.ExpectedType.Name}\" | Got: \"{e1.ActualType.Name}\"]");
+                Logger?.Warning($"Invalid in wolven rtti for \"{e1.PropertyName}\": [Expected: \"{e1.ExpectedType}\" | Got: \"{e1.ActualType}\"]");
 
                 return true;
             }
 
-            if (e1.ExpectedType == typeof(CResourceAsyncReference<inkWidgetLibraryResource>) &&
-                e1.ActualType == typeof(CResourceReference<inkWidgetLibraryResource>))
+            if (e1 is { ExpectedType: "raRef:inkWidgetLibraryResource", ActualType: "rRef:inkWidgetLibraryResource" })
             {
                 var orgVal = (CResourceReference<inkWidgetLibraryResource>)e1.Value!;
 
                 e1.Value = new CResourceAsyncReference<inkWidgetLibraryResource>(orgVal.DepotPath, orgVal.Flags);
 
-                Logger?.Warning($"Invalid in wolven rtti for \"{e1.PropertyName}\": [Expected: \"{e1.ExpectedType.Name}\" | Got: \"{e1.ActualType.Name}\"]");
+                Logger?.Warning($"Invalid in wolven rtti for \"{e1.PropertyName}\": [Expected: \"{e1.ExpectedType}\" | Got: \"{e1.ActualType}\"]");
 
                 return true;
             }
 
-            if (e1.PropertyName == "SsimpleBanerData.content" &&
-                e1.ExpectedType == typeof(redResourceReferenceScriptToken) && 
-                e1.ActualType == typeof(CName))
+            if (e1 is { PropertyName: "SsimpleBanerData.content", ExpectedType: "redResourceReferenceScriptToken", ActualType: "CName" })
             {
                 var orgStr = (CName)e1.Value!;
 
@@ -52,7 +49,7 @@ public static class TypeGlobal
                     Resource = new CResourceAsyncReference<CResource>((ulong)orgStr)
                 };
 
-                Logger?.Warning($"Invalid in wolven rtti for \"{e1.PropertyName}\": [Expected: \"{e1.ExpectedType.Name}\" | Got: \"{e1.ActualType.Name}\"]");
+                Logger?.Warning($"Invalid in wolven rtti for \"{e1.PropertyName}\": [Expected: \"{e1.ExpectedType}\" | Got: \"{e1.ActualType}\"]");
 
                 return true;
             }

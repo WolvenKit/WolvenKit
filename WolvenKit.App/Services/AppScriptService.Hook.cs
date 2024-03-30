@@ -300,7 +300,7 @@ public partial class AppScriptService
         {
             if (eventData is InvalidRTTIEventArgs invalidRtti)
             {
-                var wrapper = new InvalidRTTIEventArgsWrapper(invalidRtti.PropertyName, RedReflection.GetRedTypeFromCSType(invalidRtti.ExpectedType), new CVariant { Value = invalidRtti.Value });
+                var wrapper = new InvalidRTTIEventArgsWrapper(invalidRtti.PropertyName, invalidRtti.ExpectedType, new CVariant { Value = invalidRtti.Value });
                 return RedJsonSerializer.Serialize(wrapper);
             }
 
