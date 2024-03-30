@@ -1038,6 +1038,15 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
     }
 
+    public bool ShowConfirmationDialog(string dialogMessage, string dialogTitle = "")
+    {
+        var result = Interactions.ShowConfirmation((dialogMessage, dialogTitle,
+            WMessageBoxImage.Question,
+            WMessageBoxButtons.YesNo));
+
+        return result == WMessageBoxResult.Yes;
+    }
+
     public void ReloadChangedFiles()
     {
         for (var i = DockedViews.Count - 1; i >= 0; i--)

@@ -1,15 +1,18 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData.Kernel;
 using Splat;
 using Syncfusion.UI.Xaml.TreeView;
 using WolvenKit.App.Interaction;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools;
@@ -17,7 +20,10 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.Types;
+using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
+using Point = System.Windows.Point;
+using TreeViewItem = System.Windows.Controls.TreeViewItem;
 
 namespace WolvenKit.Views.Tools
 {
@@ -35,7 +41,7 @@ namespace WolvenKit.Views.Tools
             InitializeComponent();
 
             _modifierViewStateSvc.ModifierStateChanged += OnModifierStateSvcChanged;
-                
+
             TreeView.ApplyTemplate();
         }
 
@@ -83,7 +89,7 @@ namespace WolvenKit.Views.Tools
                 {
                     selectable.IsSelected = true;
                 }
-                
+
             }
         }
 
@@ -125,7 +131,6 @@ namespace WolvenKit.Views.Tools
 
         public bool IsControlBeingHeld => _modifierViewStateSvc.GetModifierState(ModifierKeys.Control);
 
-
         private bool IsAllowDrop(TreeViewItemDragOverEventArgs e)
         {
             if (e.DraggingNodes?[0].Content is not ChunkViewModel source ||
@@ -134,7 +139,7 @@ namespace WolvenKit.Views.Tools
             {
                 return false;
             }
-            
+
 
             switch (IsControlBeingHeld)
             {
@@ -276,10 +281,10 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        public bool HasSelection => null != SelectedItem ||
-                                    (SelectedItems is ObservableCollection<ChunkViewModel> items && items.Any());
+        public bool CanOpenSearchAndReplaceDialog => SelectedItem is ChunkViewModel { Parent: not null };
 
-        [RelayCommand()]
+        // [RelayCommand(CanExecute = nameof(CanOpenSearchAndReplaceDialog))]
+        [RelayCommand]
         private void OpenSearchAndReplaceDialog()
         {
             if (SelectedItem is null && SelectedItems is null)
@@ -288,7 +293,8 @@ namespace WolvenKit.Views.Tools
             }
 
             var dialog = new SearchAndReplaceDialog();
-            if (dialog.ShowDialog() != true || SelectedItems is not ObservableCollection<object> selection)
+            var selectedChunkViewModels = GetSelectedChunks();
+            if (dialog.ShowDialog() != true || selectedChunkViewModels.Count == 0)
             {
                 return;
             }
@@ -297,23 +303,31 @@ namespace WolvenKit.Views.Tools
             var replaceText = dialog.ViewModel?.ReplaceText ?? "";
             var ignoreCase = dialog.ViewModel?.IgnoreCase ?? false;
 
-            var results = selection.OfType<ChunkViewModel>()
-                .Select(cvm => cvm.SearchAndReplace(searchText, replaceText, ignoreCase))
+            var results = selectedChunkViewModels
+                .Select(item => item.SearchAndReplace(searchText, replaceText, ignoreCase))
                 .ToList();
 
-            if (results.Contains(true))
+            var numReplaced = results.Count(r => r == true);
+
+            var cvm = selectedChunkViewModels.FirstOrDefault();
+
+            if (numReplaced <= 0)
             {
-                selection.OfType<ChunkViewModel>().FirstOrDefault()?.Tab?.Parent.SetIsDirty(true);
+                cvm?._loggerService.Info("Nothing to replace!");
+                return;
             }
 
-            
+            cvm?.Tab?.Parent.SetIsDirty(true);
+            cvm?._loggerService.Info($"Replaced {ChunkViewModel.NumReplacedEntries} occurrences of '{searchText}' with '{replaceText}'");
         }
 
-        private void OnModifierStateSvcChanged()
-        {
-            (SelectedItems as ObservableCollection<object>)?.OfType<ChunkViewModel>().AsList()
-                .ForEach((chunk) => chunk.RefreshContextMenuFlags());
-        }
+        /// <summary>
+        /// Gets all selected chunks. If none are selected / if selection is invalid, it will return an empty list.
+        /// </summary>
+        private List<ChunkViewModel> GetSelectedChunks() =>
+            SelectedItems is not ObservableCollection<object> selection ? [] : selection.OfType<ChunkViewModel>().ToList();
+
+        private void OnModifierStateSvcChanged() => GetSelectedChunks().ForEach((chunk) => chunk.RefreshContextMenuFlags());
 
         private void OnKeystateChanged(object sender, KeyEventArgs e) => _modifierViewStateSvc.OnKeystateChanged(e);
 
