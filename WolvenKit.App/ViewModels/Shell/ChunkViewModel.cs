@@ -58,7 +58,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 {
     private readonly IChunkViewmodelFactory _chunkViewmodelFactory;
     private readonly IDocumentTabViewmodelFactory _tabViewmodelFactory;
-    public readonly ILoggerService _loggerService;
+    private readonly ILoggerService _loggerService;
     private readonly ISettingsManager _settingsManager;
     private readonly IProjectManager _projectManager;
     private readonly IGameControllerFactory _gameController;
