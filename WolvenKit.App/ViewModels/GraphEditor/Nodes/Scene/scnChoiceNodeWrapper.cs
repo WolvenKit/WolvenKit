@@ -19,9 +19,12 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
 
         var notable = _sceneResource
             .NotablePoints
-            .First(x => x.NodeId.Id == scnSceneGraphNode.NodeId.Id);
+            .FirstOrDefault(x => x.NodeId.Id == scnSceneGraphNode.NodeId.Id);
 
-        Title = $"{notable.Name.GetResolvedText()} ({Data.GetType().Name[3..^4]}) [{UniqueId}]";
+        if (notable != null)
+        {
+            Title = $"{notable.Name.GetResolvedText()} ({Data.GetType().Name[3..^4]}) [{UniqueId}]";
+        }
     }
 
     internal override void GenerateSockets()
@@ -57,14 +60,20 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
             var vdEntry = _sceneResource
                 .LocStore
                 .VdEntries
-                .First(x => x.LocstringId.Ruid == screenPlay.LocstringId.Ruid);
+                .FirstOrDefault(x => x.LocstringId.Ruid == screenPlay.LocstringId.Ruid);
 
-            var vpEntry = _sceneResource
-                .LocStore
-                .VpEntries
-                .First(x => x.VariantId.Ruid == vdEntry.VariantId.Ruid);
+            if (vdEntry != null)
+            {
+                var vpEntry = _sceneResource
+                    .LocStore
+                    .VpEntries
+                    .FirstOrDefault(x => x.VariantId.Ruid == vdEntry.VariantId.Ruid);
 
-            Options.Add($"[{vdEntry.LocaleId.ToEnumString()}] {vpEntry.Content}");
+                if (vpEntry != null)
+                    Options.Add($"[{vdEntry.LocaleId.ToEnumString()}] {vpEntry.Content}");
+            }
+            else
+                Options.Add($"Out{Options.Count} [{option.ScreenplayOptionId.Id}]");
         }
 
         Options.Add("OnExit");
