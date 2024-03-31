@@ -70,10 +70,14 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
                     .FirstOrDefault(x => x.VariantId.Ruid == vdEntry.VariantId.Ruid);
 
                 if (vpEntry != null)
+                {
                     Options.Add($"[{vdEntry.LocaleId.ToEnumString()}] {vpEntry.Content}");
+                }
             }
             else
+            {
                 Options.Add($"Out{Options.Count} [{option.ScreenplayOptionId.Id}]");
+            }
         }
 
         Options.Add("OnExit");
