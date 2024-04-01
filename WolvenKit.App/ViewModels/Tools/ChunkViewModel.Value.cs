@@ -184,6 +184,15 @@ public partial class ChunkViewModel
                 Value = $"[{appearance.ChunkMaterials.Count}] {Value}";
                 IsValueExtrapolated = true;
                 break;
+            case CArray<CHandle<meshMeshAppearance>> appearanceArray:
+                Value = $"[ {string.Join(", ",
+                    appearanceArray.Select(e => (e.GetValue() as meshMeshAppearance)?.Name ?? "").Where((el) => el != ""))} ]";
+                IsValueExtrapolated = true;
+                break;
+            case CArray<CMeshMaterialEntry> materialDefinitions:
+                Value = $"[ {string.Join(", ", materialDefinitions.Select((m) => m.Name))} ]";
+                IsValueExtrapolated = true;
+                break;
             // Material instance (mesh): "[2] - engine\materials\multilayered.mt" (show #keyValuePairs)
             case CMaterialInstance { BaseMaterial: { } cResourceReference } material:
             {
@@ -574,6 +583,15 @@ public partial class ChunkViewModel
             case CMeshMaterialEntry materialDefinition:
                 Value = materialDefinition.IsLocalInstance ? "" : " (external)";
                 Value = $"{materialDefinition.Index}{Value}";
+                IsValueExtrapolated = true;
+                break;
+            case rendRenderTextureBlobSizeInfo rtbSizeInfo:
+                Value = $"{rtbSizeInfo.Width} x {rtbSizeInfo.Height}";
+                if (rtbSizeInfo.Depth != 1)
+                {
+                    Value = $"{Value} x {rtbSizeInfo.Depth}";
+                }
+
                 IsValueExtrapolated = true;
                 break;
             case animRigRetarget retarget:
