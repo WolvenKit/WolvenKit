@@ -937,6 +937,7 @@
         SelectedItem="{Binding ElementName=redTreeView, Path=SelectedItem, Mode=TwoWay}"
         SelectedItems="{Binding ElementName=redTreeView, Path=SelectedItems, Mode=TwoWay}"
         SelectionChanged="OnSelectionChanged"
+        MouseDoubleClick="OnDoubleClick"
         SelectionMode="Extended"
         ShowLines="True"
         VirtualizingPanel.IsVirtualizing="True"
