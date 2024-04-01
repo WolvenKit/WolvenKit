@@ -595,6 +595,22 @@ public partial class ChunkViewModel
                 Value = $"EditorNodeId: {scnNodeSymbol.EditorNodeId.Id}";
                 IsValueExtrapolated = true;
                 break;
+            case rendRenderTextureBlobMemoryLayout rendTexBlobLayout:
+                Value = $"rowPitch: {rendTexBlobLayout.RowPitch}, slicePitch: {rendTexBlobLayout.SlicePitch}";
+                IsValueExtrapolated = true;
+                break;
+            case rendRenderTextureBlobPlacement rendTexBlobPlacement:
+                Value = $"Offset: {rendTexBlobPlacement.Offset}, size: {rendTexBlobPlacement.Size}";
+                IsValueExtrapolated = true;
+                break;
+            case rendRenderTextureBlobMipMapInfo rendTexMipmapInfo:
+                Value = $"rowPitch: {rendTexMipmapInfo.Layout.RowPitch}, slicePitch: {rendTexMipmapInfo.Layout.SlicePitch}";
+                IsValueExtrapolated = true;
+                break;
+            case rendRenderTextureBlobTextureInfo rtbtInfo:
+                Value = $"sliceCount: {rtbtInfo.SliceCount}, MipCount: {rtbtInfo.MipCount}";
+                IsValueExtrapolated = true;
+                break;
             default:
                 break;
         }
