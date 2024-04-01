@@ -16,7 +16,8 @@ public partial class ChunkViewModel : ObservableObject
     /// Can recursively set expansion states of child nodes.
     /// </summary>
     /// <param name="isExpanded">Expansion state (open/closed)</param>
-    public void SetChildExpansionStates(bool isExpanded)
+    /// <param name="skipRecursion">Do not recurse into child nodes</param>
+    public void SetChildExpansionStates(bool isExpanded, bool skipRecursion = false)
     {
         // If we've been triggered from the change event and our state has been set internally, swallow the event
         if (ExpansionStateChangedFromParent)
@@ -25,7 +26,7 @@ public partial class ChunkViewModel : ObservableObject
             return;
         }
 
-        SetChildExpansionStatesInternal(isExpanded, -1);
+        SetChildExpansionStatesInternal(isExpanded, skipRecursion ? 99 : -1);
     }
 
     /// <summary>
@@ -176,8 +177,13 @@ public partial class ChunkViewModel : ObservableObject
                 or CArray<CHandle<appearanceAppearanceDefinition>>
                 or CArray<CHandle<entEffectDesc>>:
             {
+                if (recursionLevel == 99)
+                {
+                    break;
+                }
                 foreach (var chunkViewModel in properties)
                 {
+                    
                     chunkViewModel.SetChildExpansionStatesInternal(isExpanded, _recursionLevel);
                 }
 

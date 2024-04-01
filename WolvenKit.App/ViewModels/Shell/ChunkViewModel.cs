@@ -231,7 +231,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             CalculateProperties();
         }
 
-        if (IsShiftKeyPressed)
+        if (_modifierViewStateService.GetModifierState(ModifierKeys.Shift))
         {
             SetChildExpansionStates(IsExpanded);
         }
@@ -1952,6 +1952,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 if (clone is IRedType redtype)
                 {
                     InsertChild(-1, redtype);
+                    RecalculateProperties();
                 }
             }
             else if (Parent != null && Parent.ResolvedData is IRedArray)
@@ -1961,10 +1962,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 {
                     Parent.InsertChild(Parent.GetIndexOf(this) + 1, redtype);
                 }
+
+                Parent?.RecalculateProperties();
             }
 
             Tab?.Parent.SetIsDirty(true);
-            Parent?.RecalculateProperties();
         }
         catch (Exception ex)
         { 
