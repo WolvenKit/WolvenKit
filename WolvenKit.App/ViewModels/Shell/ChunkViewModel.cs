@@ -1952,6 +1952,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 if (clone is IRedType redtype)
                 {
                     InsertChild(-1, redtype);
+                    RecalculateProperties();
                 }
             }
             else if (Parent != null && Parent.ResolvedData is IRedArray)
@@ -1960,11 +1961,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 if (clone is IRedType redtype)
                 {
                     Parent.InsertChild(Parent.GetIndexOf(this) + 1, redtype);
+                    Parent?.RecalculateProperties();
                 }
             }
 
             Tab?.Parent.SetIsDirty(true);
-            Parent?.RecalculateProperties();
         }
         catch (Exception ex)
         { 
@@ -2752,30 +2753,31 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         ArgumentNullException.ThrowIfNull(Parent);
 
-        if (ResolvedData is IRedArray || PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)))
+        if (ResolvedData is not IRedArray && !PropertyType.IsAssignableTo(typeof(IRedArray)) &&
+            !PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)))
         {
-            if (Data is RedDummy)
+            return false;
+        }
+
+        if (Data is not RedDummy)
+        {
+            return true;
+        }
+
+        if (_flags == null || _flags.Equals(Flags.Empty))
+        {
+            if (System.Activator.CreateInstance(PropertyType) is IRedType o)
             {
-                if (_flags == null || _flags.Equals(Flags.Empty))
-                {
-                    if (System.Activator.CreateInstance(PropertyType) is IRedType o)
-                    {
-                        Data = o;
-                        return true;
-                    }
-                }
-                else
-                {
-                    var flags = Flags.NotNull();
-                    if (System.Activator.CreateInstance(PropertyType, flags.MoveNext() ? flags.Current : 0) is IRedType o)
-                    {
-                        Data = o;
-                        return true;
-                    }
-                }
+                Data = o;
+                return true;
             }
-            else
+        }
+        else
+        {
+            var flags = Flags.NotNull();
+            if (System.Activator.CreateInstance(PropertyType, flags.MoveNext() ? flags.Current : 0) is IRedType o)
             {
+                Data = o;
                 return true;
             }
         }
