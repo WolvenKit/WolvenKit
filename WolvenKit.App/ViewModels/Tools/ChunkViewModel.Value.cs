@@ -611,6 +611,15 @@ public partial class ChunkViewModel
                 Value = $"sliceCount: {rtbtInfo.SliceCount}, MipCount: {rtbtInfo.MipCount}";
                 IsValueExtrapolated = true;
                 break;
+            case rendRenderTextureBlobSizeInfo rtbSizeInfo:
+                Value = $"{rtbSizeInfo.Width} x {rtbSizeInfo.Height}";
+                if (rtbSizeInfo.Depth != 1)
+                {
+                    Value = $"{Value} x {rtbSizeInfo.Depth}";
+                }
+
+                IsValueExtrapolated = true;
+                break;
             default:
                 break;
         }
