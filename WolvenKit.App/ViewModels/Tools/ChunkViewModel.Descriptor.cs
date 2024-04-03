@@ -557,17 +557,21 @@ public partial class ChunkViewModel
         "className", // ?
         "actorName", // ?
         "sectorHash", // sectors
-        "propertyPath" // ?
+        "propertyPath", // ?
     ];
 
-    private static string CNameArrayToString(CArray<CName> ary)
-    {
-        string[] cnames = { };
-        foreach (var cName in ary)
-        {
-            cnames.Append(cName.ToString());
-        }
+    private static readonly string[] s_nonRenamableProperties =
+    [
+        "propertyPath",
+        "className",
+    ];
+    // For search&replace
 
-        return $"[{string.Join(",", cnames)}]";
-    }
+    private static readonly string[] s_replacementPropertyNames = s_DescriptorPropNames
+        .Where((s) => !s_nonRenamableProperties.Contains(s))
+        .Concat<string>([
+            "depotPath",
+            "meshAppearance",
+        ]).ToArray();
+    
 }
