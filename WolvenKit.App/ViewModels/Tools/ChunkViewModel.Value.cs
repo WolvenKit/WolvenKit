@@ -585,15 +585,6 @@ public partial class ChunkViewModel
                 Value = $"{materialDefinition.Index}{Value}";
                 IsValueExtrapolated = true;
                 break;
-            case rendRenderTextureBlobSizeInfo rtbSizeInfo:
-                Value = $"{rtbSizeInfo.Width} x {rtbSizeInfo.Height}";
-                if (rtbSizeInfo.Depth != 1)
-                {
-                    Value = $"{Value} x {rtbSizeInfo.Depth}";
-                }
-
-                IsValueExtrapolated = true;
-                break;
             case animRigRetarget retarget:
                 Value = $"{retarget.SourceRig}";
                 IsValueExtrapolated = true;
