@@ -2,7 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
 
-public partial class RenameDialogViewModel : DialogWindowViewModel
+public partial class RenameDialogViewModel : DialogViewModel
 {
     public RenameDialogViewModel() => Title = "Rename";
     [ObservableProperty] private string? _text;

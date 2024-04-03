@@ -20,6 +20,22 @@ public static class Interactions
         return await Task.FromResult(result);
     }
 
+    // wrappers
+    public static async Task<string> ShowInputBoxAsync(string originalName)
+    {
+        string result = "";
+        DispatcherHelper.RunOnMainThread(() => result = AskForTextInput());
+        return await Task.FromResult(result);
+    }
+
+    // wrappers
+    public static async Task<string> ShowRenameBoxAsync(string originalName)
+    {
+        string result = "";
+        DispatcherHelper.RunOnMainThread(() => result = Rename(originalName));
+        return await Task.FromResult(result);
+    }
+
 
 
     // classic popups

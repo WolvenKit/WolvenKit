@@ -414,6 +414,44 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <!-- Mesh only -->
+                <!-- Rename Material -->
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.RenameMaterialCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Rename Material"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.IsMaterial, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial
+                            Width="13"
+                            Height="13"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="RenameBox" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <!-- Mesh only -->
+                <!-- Add material and definition -->
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.AddMaterialAndDefinitionCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Add material and definition"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.IsMaterialArray, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial
+                            Width="13"
+                            Height="13"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="Plus" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                
                 <!-- Delete unused materials -->
                 <MenuItem
                     Command="{Binding Path=PlacementTarget.Tag.DeleteUnusedMaterialsCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
