@@ -273,6 +273,11 @@ public partial class ChunkViewModel
             Descriptor = sgn.NodeId.Id.ToString();
             return;
         }
+        else if (ResolvedData is meshMeshMaterialBuffer matBuffer)
+        {
+            Descriptor = $"[{matBuffer.Materials?.Count ?? 0}]";
+            return;
+        }
         else if (ResolvedData is worldCompiledEffectInfo info)
         {
             Descriptor = string.Join(", ", info.PlacementInfos);

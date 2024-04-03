@@ -337,5 +337,20 @@ namespace WolvenKit.Views.Tools
         {
             _modifierViewStateSvc.RefreshModifierStates();
         }
+
+        private void OnDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (SelectedItem is not ChunkViewModel chunk)
+            {
+                return;
+            }
+
+            var expansionState = chunk.IsExpanded;
+            var expansionStates = chunk.GetAllProperties().Select((child) => child.IsExpanded).ToList();
+            chunk.SetChildExpansionStates(!expansionStates.Contains(true));
+
+
+            chunk.IsExpanded = expansionState;
+        }
     }
 }
