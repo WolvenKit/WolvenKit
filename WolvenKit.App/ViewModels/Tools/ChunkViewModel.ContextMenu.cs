@@ -43,7 +43,7 @@ public partial class ChunkViewModel : ObservableObject
         ShouldShowPasteIntoArray = ShouldShowArrayOps && !IsShiftKeyPressedOnly;
         ShouldShowOverwriteArray = ShouldShowArrayOps && IsShiftKeyPressedOnly;
 
-        IsMaterial = ResolvedData is CMaterialInstance or IMaterial;
+        IsMaterial = ResolvedData is CMaterialInstance or CResourceAsyncReference<IMaterial>;
 
         IsMaterialArray = ResolvedData is CArray<IMaterial> or CArray<CResourceAsyncReference<IMaterial>>;
    

@@ -336,22 +336,32 @@ public partial class ChunkViewModel : ObservableObject
                         continue;
                     }
 
-                    var newValue = propValue.ToString()?.Replace(search, replace, searchMode);
+                    string? newValue = propValue.ToString()?.Replace(search, replace, searchMode);
+                   
+
                     if (propValue.ToString() == newValue)
                     {
                         continue;
                     }
 
-
                     // Check if the property exists and is writable. Go to public property setter from name field
                     var propertyName = prop.RedName.TrimStart('_');
                     propertyName = char.ToUpper(propertyName[0]) + propertyName[1..];
+
 
                     if (irc.GetType().GetProperty(propertyName) is not { CanWrite: true } propInfo)
                     {
                         continue;
                     }
 
+                    if (propValue is CName && null != newValue)
+                    {
+                        propInfo.SetValue(irc, (CName)newValue);
+                        IncrementReplacementCounter();
+                        wasChanged = true;
+                        break;
+                    }
+                    
                     if (!propInfo.GetType().IsAssignableTo(prop.GetType()))
                     {
                         if (!propInfo.GetType().Name.StartsWith("Runtime"))
@@ -360,8 +370,9 @@ public partial class ChunkViewModel : ObservableObject
                                 $"Can't replace in {propertyName} ({propInfo.GetType().Name}) can't be assigned to {prop.GetType().Name})");
                         }
 
-                        return false;
+                        continue;       
                     }
+
 
                     // TODO: This throws exceptions with CNames, how do we prevent that?
                     try

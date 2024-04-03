@@ -20,20 +20,28 @@
             <Style TargetType="StackPanel" x:Key="VisibleOnEmptyValueStyle">
                 <Setter Property="Visibility" Value="Collapsed" />
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="">
+                    <DataTrigger
+                        Binding="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                        Value="">
                         <Setter Property="Visibility" Value="Visible" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding IsValueExtrapolated, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                    <DataTrigger
+                        Binding="{Binding IsValueExtrapolated, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                        Value="True">
                         <Setter Property="Visibility" Value="Visible" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
             <Style x:Key="PropertyKeyStyle" TargetType="TextBlock">
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="null">
+                    <DataTrigger
+                        Binding="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                        Value="null">
                         <Setter Property="Foreground" Value="{StaticResource Border}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                    <DataTrigger
+                        Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                        Value="True">
                         <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
                         <Setter Property="FontStyle" Value="Italic" />
                     </DataTrigger>
@@ -45,17 +53,23 @@
 
             <Style x:Key="PropertyValueStyle" TargetType="TextBlock">
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="null">
+                    <DataTrigger
+                        Binding="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                        Value="null">
                         <Setter Property="Foreground" Value="{StaticResource Border}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                    <DataTrigger
+                        Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                        Value="True">
                         <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
                         <Setter Property="FontStyle" Value="Italic" />
                     </DataTrigger>
                     <DataTrigger Binding="{Binding IsReadOnly}" Value="True">
                         <Setter Property="Foreground" Value="{StaticResource WolvenKitTan50}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding IsValueExtrapolated, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                    <DataTrigger
+                        Binding="{Binding IsValueExtrapolated, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                        Value="True">
                         <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
                     </DataTrigger>
                 </Style.Triggers>
@@ -67,26 +81,36 @@
                         <Style x:Key="ExpanderHider" TargetType="TextBlock">
                             <Setter Property="Visibility" Value="Collapsed" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TreeViewItem}}}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TreeViewItem}}}"
+                                    Value="True">
                                     <Setter Property="Visibility" Value="Collapsed" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                    <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
+                                <DataTrigger
+                                    Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Value="True">
+                                    <Setter Property="Foreground"
+                                        Value="{StaticResource BorderAlt2}" />
                                     <Setter Property="FontStyle" Value="Italic" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding IsReadOnly}" Value="True">
-                                    <Setter Property="Foreground" Value="{StaticResource WolvenKitTan50}" />
+                                    <Setter Property="Foreground"
+                                        Value="{StaticResource WolvenKitTan50}" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
                         <Style TargetType="TextBlock">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                    <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
+                                <DataTrigger
+                                    Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Value="True">
+                                    <Setter Property="Foreground"
+                                        Value="{StaticResource BorderAlt2}" />
                                     <Setter Property="FontStyle" Value="Italic" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding IsReadOnly}" Value="True">
-                                    <Setter Property="Foreground" Value="{StaticResource WolvenKitTan50}" />
+                                    <Setter Property="Foreground"
+                                        Value="{StaticResource WolvenKitTan50}" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -110,7 +134,8 @@
                 </Grid>
             </DataTemplate>
 
-            <DataTemplate x:Key="GroupedPropertyNameTemplate" DataType="{x:Type shell:GroupedChunkViewModel}">
+            <DataTemplate x:Key="GroupedPropertyNameTemplate"
+                DataType="{x:Type shell:GroupedChunkViewModel}">
                 <Grid>
                     <TextBlock
                         Width="Auto"
@@ -124,16 +149,22 @@
                     <Grid.Resources>
                         <Style TargetType="{x:Type TextBlock}">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                    <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
+                                <DataTrigger
+                                    Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Value="True">
+                                    <Setter Property="Foreground"
+                                        Value="{StaticResource BorderAlt2}" />
                                     <Setter Property="FontStyle" Value="Italic" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
                         <Style TargetType="{x:Type iconPacks:PackIconCodicons}">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                    <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
+                                <DataTrigger
+                                    Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Value="True">
+                                    <Setter Property="Foreground"
+                                        Value="{StaticResource BorderAlt2}" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -156,7 +187,7 @@
                         Grid.Column="1"
                         Margin="0,0,4,0"
                         Orientation="Horizontal">
-                        
+
                         <TextBlock
                             Name="PropertyType"
                             Foreground="{StaticResource WolvenKitTan}"
@@ -166,7 +197,9 @@
                             <StackPanel.Style>
                                 <Style TargetType="StackPanel">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding TypesDiffer, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                        <DataTrigger
+                                            Binding="{Binding TypesDiffer, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                            Value="False">
                                             <Setter Property="Visibility" Value="Collapsed" />
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -176,7 +209,8 @@
                                 Height="7"
                                 VerticalAlignment="Center"
                                 Kind="ArrowRight" />
-                            <TextBlock Foreground="{StaticResource WolvenKitTan}" Text="{Binding ResolvedType, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBlock Foreground="{StaticResource WolvenKitTan}"
+                                Text="{Binding ResolvedType, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                     </StackPanel>
                     <StackPanel
@@ -235,18 +269,20 @@
                     <DataTrigger Binding="{Binding IsInArray}" Value="True">
                         <Setter Property="Width" Value="{Binding ArrayIndexWidth}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                    <DataTrigger
+                        Binding="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                        Value="{x:Null}">
                         <Setter Property="Width" Value="0" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
 
             <ContextMenu x:Key="TreeViewContextMenu"
-                         Name="TreeViewContextMenu"
-                         KeyUp="OnKeystateChanged"
-                         KeyDown="OnKeystateChanged"
-                         DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}">
-               
+                Name="TreeViewContextMenu"
+                KeyUp="OnKeystateChanged"
+                KeyDown="OnKeystateChanged"
+                DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}">
+
                 <ContextMenu.Resources>
                     <Style TargetType="MenuItem">
                         <Style.Triggers>
@@ -271,7 +307,8 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowTweakXLMenu, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="DatabaseExportOutline" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <iconPacks:PackIconMaterial Kind="DatabaseExportOutline"
+                            Style="{StaticResource ContextMenuIconStyleMaterial}" />
                     </MenuItem.Icon>
 
                     <!-- Create new Twak XL Override -->
@@ -306,7 +343,8 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="ContentDuplicate" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <iconPacks:PackIconMaterial Kind="ContentDuplicate"
+                            Style="{StaticResource ContextMenuIconStyleMaterial}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -318,7 +356,8 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="ContentSave" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <iconPacks:PackIconMaterial Kind="ContentSave"
+                            Style="{StaticResource ContextMenuIconStyleMaterial}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -330,7 +369,8 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="FolderOpen" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <iconPacks:PackIconMaterial Kind="FolderOpen"
+                            Style="{StaticResource ContextMenuIconStyleMaterial}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -342,7 +382,8 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons Kind="References" Style="{StaticResource ContextMenuIconStyleCodicons}" />
+                        <iconPacks:PackIconCodicons Kind="References"
+                            Style="{StaticResource ContextMenuIconStyleCodicons}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -362,7 +403,9 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowDuplicate, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Style="{StaticResource ContextMenuIconStyleMaterial}" Kind="ContentDuplicate" />
+                        <iconPacks:PackIconMaterial
+                            Style="{StaticResource ContextMenuIconStyleMaterial}"
+                            Kind="ContentDuplicate" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -374,7 +417,8 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowDuplicateAsNew, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="ContentDuplicate" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <iconPacks:PackIconMaterial Kind="ContentDuplicate"
+                            Style="{StaticResource ContextMenuIconStyleMaterial}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -429,7 +473,7 @@
                             Padding="0,0,0,0"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Kind="Text" />
+                            Kind="RenameBox" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -448,10 +492,10 @@
                             Padding="0,0,0,0"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Kind="Text" />
+                            Kind="Plus" />
                     </MenuItem.Icon>
                 </MenuItem>
-                
+
                 <!-- Delete unused materials -->
                 <MenuItem
                     Command="{Binding Path=PlacementTarget.Tag.DeleteUnusedMaterialsCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
@@ -500,7 +544,8 @@
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowRenumberArrayIndexProperties, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
 
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="Calculator" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <iconPacks:PackIconMaterial Kind="Calculator"
+                            Style="{StaticResource ContextMenuIconStyleMaterial}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -512,7 +557,8 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="Refresh" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <iconPacks:PackIconMaterial Kind="Refresh"
+                            Style="{StaticResource ContextMenuIconStyleMaterial}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -524,7 +570,8 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="Dice3Outline" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <iconPacks:PackIconMaterial Kind="Dice3Outline"
+                            Style="{StaticResource ContextMenuIconStyleMaterial}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -547,7 +594,8 @@
                     Visibility="{Binding Path=PlacementTarget.Tag.HasValue, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}"
                     Style="{StaticResource SyncfusionMenuItemStyle}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons Kind="Copy" Style="{StaticResource ContextMenuIconStyleCodicons}" />
+                        <iconPacks:PackIconCodicons Kind="Copy"
+                            Style="{StaticResource ContextMenuIconStyleCodicons}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -559,7 +607,8 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowHandleOperations, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="ContentCopy" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <iconPacks:PackIconMaterial Kind="ContentCopy"
+                            Style="{StaticResource ContextMenuIconStyleMaterial}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -571,7 +620,8 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="ContentCopy" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <iconPacks:PackIconMaterial Kind="ContentCopy"
+                            Style="{StaticResource ContextMenuIconStyleMaterial}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -584,7 +634,8 @@
                     Visibility="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
 
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="ContentCopy" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <iconPacks:PackIconMaterial Kind="ContentCopy"
+                            Style="{StaticResource ContextMenuIconStyleMaterial}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -597,7 +648,8 @@
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowPasteIntoArray, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
 
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="ContentPaste" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <iconPacks:PackIconMaterial Kind="ContentPaste"
+                            Style="{StaticResource ContextMenuIconStyleMaterial}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -610,7 +662,8 @@
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowOverwriteArray, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
 
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="ContentPaste" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <iconPacks:PackIconMaterial Kind="ContentPaste"
+                            Style="{StaticResource ContextMenuIconStyleMaterial}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -623,7 +676,8 @@
                     Visibility="{Binding Path=PlacementTarget.Tag.IsArray, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
 
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="ContentPaste" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <iconPacks:PackIconMaterial Kind="ContentPaste"
+                            Style="{StaticResource ContextMenuIconStyleMaterial}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -635,7 +689,8 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowHandleOperations, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="ContentPaste" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <iconPacks:PackIconMaterial Kind="ContentPaste"
+                            Style="{StaticResource ContextMenuIconStyleMaterial}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -648,7 +703,8 @@
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowPasteIntoArray, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
 
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="ContentPaste" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <iconPacks:PackIconMaterial Kind="ContentPaste"
+                            Style="{StaticResource ContextMenuIconStyleMaterial}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -661,7 +717,8 @@
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowOverwriteArray, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
 
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="ContentPaste" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <iconPacks:PackIconMaterial Kind="ContentPaste"
+                            Style="{StaticResource ContextMenuIconStyleMaterial}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -698,7 +755,8 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons Kind="Remove" Style="{StaticResource ContextMenuIconStyleCodicons}" />
+                        <iconPacks:PackIconCodicons Kind="Remove"
+                            Style="{StaticResource ContextMenuIconStyleCodicons}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -710,7 +768,8 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons Kind="Remove" Style="{StaticResource ContextMenuIconStyleCodicons}" />
+                        <iconPacks:PackIconCodicons Kind="Remove"
+                            Style="{StaticResource ContextMenuIconStyleCodicons}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -723,7 +782,8 @@
                     Visibility="{Binding Path=PlacementTarget.Tag.IsArray, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
 
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="NotificationClearAll" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <iconPacks:PackIconMaterial Kind="NotificationClearAll"
+                            Style="{StaticResource ContextMenuIconStyleMaterial}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -735,7 +795,8 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=!PlacementTarget.Tag.IsArray, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="Delete" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <iconPacks:PackIconMaterial Kind="Delete"
+                            Style="{StaticResource ContextMenuIconStyleMaterial}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -754,7 +815,8 @@
                     IsCheckable="False"
                     Style="{StaticResource SyncfusionMenuItemStyle}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons Kind="Json" Style="{StaticResource ContextMenuIconStyleCodicons}" />
+                        <iconPacks:PackIconCodicons Kind="Json"
+                            Style="{StaticResource ContextMenuIconStyleCodicons}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -766,7 +828,8 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowExportNodeData, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons Kind="Json" Style="{StaticResource ContextMenuIconStyleCodicons}" />
+                        <iconPacks:PackIconCodicons Kind="Json"
+                            Style="{StaticResource ContextMenuIconStyleCodicons}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -778,7 +841,8 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowWorldNodeDataImport, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons Kind="Json" Style="{StaticResource ContextMenuIconStyleCodicons}" />
+                        <iconPacks:PackIconCodicons Kind="Json"
+                            Style="{StaticResource ContextMenuIconStyleCodicons}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -790,14 +854,16 @@
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowWorldNodeDataImport, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons Kind="Json" Style="{StaticResource ContextMenuIconStyleCodicons}" />
+                        <iconPacks:PackIconCodicons Kind="Json"
+                            Style="{StaticResource ContextMenuIconStyleCodicons}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
 
             </ContextMenu>
 
-            <converters:TreeViewItemTemplateSelector x:Key="itemTemplateSelector" x:Name="itemTemplateSelector">
+            <converters:TreeViewItemTemplateSelector x:Key="itemTemplateSelector"
+                x:Name="itemTemplateSelector">
                 <converters:TreeViewItemTemplateSelector.GroupedTemplate>
                     <DataTemplate>
                         <Grid Background="Transparent" Tag="{Binding}">
@@ -915,7 +981,8 @@
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Center"
                                 ContentTemplate="{StaticResource PropertyNameTemplate}" />
-                            <!--iconPacks:PackIconCodicons Kind="References" Height="14" Grid.Column="1"
+                            <!--iconPacks:PackIconCodicons
+                            Kind="References" Height="14" Grid.Column="1"
                                     Width="14" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="0,0,6,0" />
                                 <TextBlock Text="{Binding Value}" Grid.Column="2" /-->
                             <ContentPresenter
@@ -975,6 +1042,7 @@
         SelectedItem="{Binding ElementName=redTreeView, Path=SelectedItem, Mode=TwoWay}"
         SelectedItems="{Binding ElementName=redTreeView, Path=SelectedItems, Mode=TwoWay}"
         SelectionChanged="OnSelectionChanged"
+        MouseDoubleClick="OnDoubleClick"
         SelectionMode="Extended"
         ShowLines="True"
         VirtualizingPanel.IsVirtualizing="True"
