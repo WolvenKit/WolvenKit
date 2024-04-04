@@ -23,6 +23,7 @@ using static WolvenKit.Modkit.RED4.Animation.Gltf;
 
 using Quat = System.Numerics.Quaternion;
 using Vec3 = System.Numerics.Vector3;
+using WolvenKit.Common.Model.Arguments;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -31,7 +32,7 @@ namespace WolvenKit.Modkit.RED4
 
 #region exportanims
 
-        public bool ExportAnim(CR2WFile animsFile, FileInfo outfile, bool isGLBinary = true, bool incRootMotion = true, ValidationMode vmode = ValidationMode.TryFix)
+        public bool ExportAnim(CR2WFile animsFile, FileInfo outfile, bool isGLBinary = true, bool additiveAddRelative = true, bool incRootMotion = true, ValidationMode vmode = ValidationMode.TryFix)
         {
             if (animsFile.RootChunk is not animAnimSet anims)
             {
@@ -45,7 +46,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             var model = ModelRoot.CreateModel();
-            GetAnimation(animsFile, result.File!, outfile.Name, ref model, true, incRootMotion);
+            GetAnimation(animsFile, result.File!, outfile.Name, ref model, true, additiveAddRelative, incRootMotion);
 
             if (isGLBinary)
             {
@@ -59,7 +60,7 @@ namespace WolvenKit.Modkit.RED4
             return true;
         }
 
-        public bool GetAnimation(CR2WFile animsFile, CR2WFile rigFile, string animsFileName, ref ModelRoot model, bool includeRig = true, bool incRootMotion = true)
+        public bool GetAnimation(CR2WFile animsFile, CR2WFile rigFile, string animsFileName, ref ModelRoot model, bool includeRig = true, bool additiveAddRelative = true, bool incRootMotion = true)
         {
 
             if (animsFile.RootChunk is not animAnimSet anims)
@@ -138,11 +139,11 @@ namespace WolvenKit.Modkit.RED4
                     }
                     deferredBuffer.Seek(0, SeekOrigin.Begin);
                     _loggerService.Debug($"{animsFileName}: Exporting SIMD animation {animAnimDes.Name} with {animBuffSimd.NumFrames * animBuffSimd.NumJoints} S/R/T transforms and {animBuffSimd.NumFrames * animBuffSimd.NumTracks} tracks");
-                    SIMD.AddAnimationSIMD(ref model, animBuffSimd, animAnimDes.Name!, deferredBuffer, animAnimDes, incRootMotion);
+                    SIMD.AddAnimationSIMD(ref model, animBuffSimd, animAnimDes.Name!, deferredBuffer, animAnimDes, additiveAddRelative, incRootMotion);
                 }
                 else if (animAnimDes.AnimBuffer.Chunk is animAnimationBufferCompressed)
                 {
-                    CompressedBuffer.ExportAsAnimationToModel(ref model, animAnimDes, incRootMotion);
+                    CompressedBuffer.ExportAsAnimationToModel(ref model, animAnimDes, additiveAddRelative, incRootMotion);
                 }
             }
 
@@ -153,7 +154,14 @@ namespace WolvenKit.Modkit.RED4
 
             if (stats.AdditiveAnims > 0)
             {
-                _loggerService.Info($"{animsFileName}: Exported {stats.AdditiveAnims} additive animations already added to the bind pose. Reimport will strip the bind pose again.");
+                if (additiveAddRelative)
+                {
+                    _loggerService.Info($"{animsFileName}: Exported {stats.AdditiveAnims} additive animations already added to the bind pose. Reimport will strip the bind pose again.");
+                }
+                else
+                {
+                    _loggerService.Info($"{animsFileName}: {stats.AdditiveAnims} additive anims exported as-is, without relative local transform.");
+                }
             }
 
             return true;
@@ -163,7 +171,7 @@ namespace WolvenKit.Modkit.RED4
 
 #region importanims
 
-        public bool ImportAnims(FileInfo gltfFile, Stream animStream)
+        public bool ImportAnims(FileInfo gltfFile, Stream animStream, GltfImportArgs importArgs)
         {
             var animsArchive = _parserService.ReadRed4File(animStream);
             if (animsArchive is not { RootChunk: animAnimSet anims })
@@ -196,7 +204,7 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            PutAnimations(ref anims, ref rig, ref model, gltfFileName, rigFileName);
+            PutAnimations(ref anims, ref rig, ref model, gltfFileName, rigFileName, importArgs);
 
             var outMs = new MemoryStream();
             using var writer = new CR2WWriter(outMs, Encoding.UTF8, true) { LoggerService = _loggerService };
@@ -211,11 +219,11 @@ namespace WolvenKit.Modkit.RED4
         }
 
 
-        private bool PutAnimations(ref animAnimSet anims, ref RawArmature rig, ref ModelRoot model, string gltfFileName, string rigFileName)
+        private bool PutAnimations(ref animAnimSet anims, ref RawArmature rig, ref ModelRoot model, string gltfFileName, string rigFileName, GltfImportArgs importArgs)
         {
             _loggerService.Info($"{gltfFileName}: found {model.LogicalAnimations.Count} animations to import");
 
-            var (simdCount, additiveCount) = (0, 0);
+            var (simdCount, additiveCount, additiveStrippedCount) = (0, 0, 0);
 
             var newAnimSetEntries = new CArray<CHandle<animAnimSetEntry>>();
             var newAnimChunks = new CArray<animAnimDataChunk>();
@@ -268,9 +276,12 @@ namespace WolvenKit.Modkit.RED4
                 };
 
                 var incomingAnimationType = (animAnimationType)Enum.Parse(typeof(animAnimationType), extras.AnimationType);
-                var stripLocalFromAdditives = incomingAnimationType != animAnimationType.Normal;
 
-                additiveCount += stripLocalFromAdditives ? 1 : 0;
+                var stripLocalFromAdditives = incomingAnimationType != animAnimationType.Normal &&
+                                              importArgs.AdditiveStripLocalTransform;
+
+                additiveCount += incomingAnimationType != animAnimationType.Normal ? 1 : 0;
+                additiveStrippedCount += stripLocalFromAdditives ? 1 : 0;
                 simdCount += extras.OptimizationHints.PreferSIMD ? 1 : 0;
 
                 foreach (var chan in incomingAnim.Channels)
@@ -532,9 +543,13 @@ namespace WolvenKit.Modkit.RED4
             {
                 _loggerService.Warning($"{gltfFileName}: EXPERIMENTAL: SIMD anims are not fully supported, converted {simdCount} to normal anims. These mostly work ok, but if you have trouble, you can omit them from the animset to keep the existing SIMD versions.");
             }
-            if (additiveCount > 0)
+            if (additiveStrippedCount > 0)
             {
-                _loggerService.Info($"{gltfFileName}: stripped bind pose transform from all {additiveCount} additive animations");
+                _loggerService.Info($"{gltfFileName}: stripped local transform from all {additiveStrippedCount} additive animations");
+            }
+            if (additiveCount != additiveStrippedCount)
+            {
+                _loggerService.Warning($"{gltfFileName}: additive animations present but were not stripped of local transform, make sure this is what you want");
             }
 
             _loggerService.Success($"{gltfFileName}: total: {newAnimSetEntries.Count} animations ({updatedAnims.Count} updated, {newAnimsImported.Count} new, {originalAnimsNotInImport.Count} originals kept)");
