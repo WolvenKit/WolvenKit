@@ -18,7 +18,7 @@ namespace WolvenKit.Modkit.RED4.Animation
 
     internal class SIMD
     {
-        public static void AddAnimationSIMD(ref ModelRoot model, animAnimationBufferSimd blob, string animName, Stream defferedBuffer, animAnimation animAnimDes, bool incRootMotion = true)
+        public static void AddAnimationSIMD(ref ModelRoot model, animAnimationBufferSimd blob, string animName, Stream defferedBuffer, animAnimation animAnimDes, bool additiveAddRelative = true, bool incRootMotion = true)
         {
             var rootPositions = new Dictionary<ushort, Dictionary<float, Vec3>>();
             var rootRotations = new Dictionary<ushort, Dictionary<float, Quat>>();
@@ -312,7 +312,7 @@ namespace WolvenKit.Modkit.RED4.Animation
             // -.-
             anim.Extras = SharpGLTF.IO.JsonContent.Parse(JsonSerializer.Serialize(animExtras, SerializationOptions()));
 
-            var exportAdditiveToBind = animAnimDes.AnimationType != animAnimationType.Normal;
+            var exportAdditiveToBind = additiveAddRelative && animAnimDes.AnimationType != animAnimationType.Normal;
 
             for (var j = 0; j < blob.NumJoints - blob.NumExtraJoints; j++)
             {
@@ -327,6 +327,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                 {
                     if (exportAdditiveToBind)
                     {
+                        // TODO: https://github.com/WolvenKit/WolvenKit/issues/1630 Scale handling review
                         pos.Add(f * frameTime, localTransform.Translation + positions[f, j]); // Also yup but TODO to fix naming along the way
                         rot.Add(f * frameTime, localTransform.Rotation * rotationsYup[f, j]);
                         sca.Add(f * frameTime, localTransform.Scale * scalesYup[f, j]);

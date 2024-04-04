@@ -337,6 +337,15 @@ namespace WolvenKit.Common.Model.Arguments
         public bool IsBinary { get => _isBinary; set => SetProperty(ref _isBinary, value); }
 
         /// <summary>
+        /// Additive Animation Relative Positioning Bool, 
+        /// </summary>
+        [Category("Export Settings")]
+        [Display(Name = "Additive Anims Relative to Local Transform")]
+        [Description("Additive animations are typically relative to origin. If selected, they will be relative to the joint's Local Transform (e.g. vehicle parts will be in 'correct' position), which is probably what you want. By default import will strip them out again.")]
+        [WkitScriptAccess()]
+        public bool AdditiveRelativeToLocalTransform { get; set; } = true;
+
+        /// <summary>
         /// Root Motion Export Bool
         /// </summary>
         [Category("Export Settings")]
@@ -349,7 +358,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// String Override to display info in datagrid.
         /// </summary>
         /// <returns>String</returns>
-        public override string ToString() => $"{(IsBinary ? "glb" : "gltf")}, Root Motion: {incRootMotion}";
+        public override string ToString() => $"{(IsBinary ? "glb" : "gltf")}, Additive Anims Relative: { AdditiveRelativeToLocalTransform }, Root Motion: {incRootMotion}";
     }
 
     /// <summary>

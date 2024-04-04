@@ -23,6 +23,7 @@ using static WolvenKit.Modkit.RED4.Animation.Gltf;
 
 using Quat = System.Numerics.Quaternion;
 using Vec3 = System.Numerics.Vector3;
+using WolvenKit.Common.Model.Arguments;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -31,7 +32,7 @@ namespace WolvenKit.Modkit.RED4
 
 #region exportanims
 
-        public bool ExportAnim(CR2WFile animsFile, FileInfo outfile, bool isGLBinary = true, bool incRootMotion = true, ValidationMode vmode = ValidationMode.TryFix)
+        public bool ExportAnim(CR2WFile animsFile, FileInfo outfile, bool isGLBinary = true, bool additiveAddRelative = true, bool incRootMotion = true, ValidationMode vmode = ValidationMode.TryFix)
         {
             if (animsFile.RootChunk is not animAnimSet anims)
             {
@@ -45,7 +46,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             var model = ModelRoot.CreateModel();
-            GetAnimation(animsFile, result.File!, outfile.Name, ref model, true, incRootMotion);
+            GetAnimation(animsFile, result.File!, outfile.Name, ref model, true, additiveAddRelative, incRootMotion);
 
             if (isGLBinary)
             {
@@ -59,7 +60,7 @@ namespace WolvenKit.Modkit.RED4
             return true;
         }
 
-        public bool GetAnimation(CR2WFile animsFile, CR2WFile rigFile, string animsFileName, ref ModelRoot model, bool includeRig = true, bool incRootMotion = true)
+        public bool GetAnimation(CR2WFile animsFile, CR2WFile rigFile, string animsFileName, ref ModelRoot model, bool includeRig = true, bool additiveAddRelative = true, bool incRootMotion = true)
         {
 
             if (animsFile.RootChunk is not animAnimSet anims)
@@ -138,11 +139,11 @@ namespace WolvenKit.Modkit.RED4
                     }
                     deferredBuffer.Seek(0, SeekOrigin.Begin);
                     _loggerService.Debug($"{animsFileName}: Exporting SIMD animation {animAnimDes.Name} with {animBuffSimd.NumFrames * animBuffSimd.NumJoints} S/R/T transforms and {animBuffSimd.NumFrames * animBuffSimd.NumTracks} tracks");
-                    SIMD.AddAnimationSIMD(ref model, animBuffSimd, animAnimDes.Name!, deferredBuffer, animAnimDes, incRootMotion);
+                    SIMD.AddAnimationSIMD(ref model, animBuffSimd, animAnimDes.Name!, deferredBuffer, animAnimDes, additiveAddRelative, incRootMotion);
                 }
                 else if (animAnimDes.AnimBuffer.Chunk is animAnimationBufferCompressed)
                 {
-                    CompressedBuffer.ExportAsAnimationToModel(ref model, animAnimDes, incRootMotion);
+                    CompressedBuffer.ExportAsAnimationToModel(ref model, animAnimDes, additiveAddRelative, incRootMotion);
                 }
             }
 
@@ -153,7 +154,14 @@ namespace WolvenKit.Modkit.RED4
 
             if (stats.AdditiveAnims > 0)
             {
-                _loggerService.Info($"{animsFileName}: Exported {stats.AdditiveAnims} additive animations already added to the bind pose. Reimport will strip the bind pose again.");
+                if (additiveAddRelative)
+                {
+                    _loggerService.Info($"{animsFileName}: Exported {stats.AdditiveAnims} additive animations already added to the bind pose. Reimport will strip the bind pose again.");
+                }
+                else
+                {
+                    _loggerService.Info($"{animsFileName}: {stats.AdditiveAnims} additive anims exported as-is, without relative local transform.");
+                }
             }
 
             return true;
@@ -163,7 +171,7 @@ namespace WolvenKit.Modkit.RED4
 
 #region importanims
 
-        public bool ImportAnims(FileInfo gltfFile, Stream animStream)
+        public bool ImportAnims(FileInfo gltfFile, Stream animStream, GltfImportArgs importArgs)
         {
             var animsArchive = _parserService.ReadRed4File(animStream);
             if (animsArchive is not { RootChunk: animAnimSet anims })
@@ -196,7 +204,7 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            PutAnimations(ref anims, ref rig, ref model, gltfFileName, rigFileName);
+            PutAnimations(ref anims, ref rig, ref model, gltfFileName, rigFileName, importArgs);
 
             var outMs = new MemoryStream();
             using var writer = new CR2WWriter(outMs, Encoding.UTF8, true) { LoggerService = _loggerService };
@@ -211,11 +219,11 @@ namespace WolvenKit.Modkit.RED4
         }
 
 
-        private bool PutAnimations(ref animAnimSet anims, ref RawArmature rig, ref ModelRoot model, string gltfFileName, string rigFileName)
+        private bool PutAnimations(ref animAnimSet anims, ref RawArmature rig, ref ModelRoot model, string gltfFileName, string rigFileName, GltfImportArgs importArgs)
         {
             _loggerService.Info($"{gltfFileName}: found {model.LogicalAnimations.Count} animations to import");
 
-            var (simdCount, additiveCount) = (0, 0);
+            var (simdCount, additiveCount, additiveStrippedCount) = (0, 0, 0);
 
             var newAnimSetEntries = new CArray<CHandle<animAnimSetEntry>>();
             var newAnimChunks = new CArray<animAnimDataChunk>();
@@ -268,9 +276,12 @@ namespace WolvenKit.Modkit.RED4
                 };
 
                 var incomingAnimationType = (animAnimationType)Enum.Parse(typeof(animAnimationType), extras.AnimationType);
-                var stripLocalFromAdditives = incomingAnimationType != animAnimationType.Normal;
 
-                additiveCount += stripLocalFromAdditives ? 1 : 0;
+                var stripLocalFromAdditives = incomingAnimationType != animAnimationType.Normal &&
+                                              importArgs.AdditiveStripLocalTransform;
+
+                additiveCount += incomingAnimationType != animAnimationType.Normal ? 1 : 0;
+                additiveStrippedCount += stripLocalFromAdditives ? 1 : 0;
                 simdCount += extras.OptimizationHints.PreferSIMD ? 1 : 0;
 
                 foreach (var chan in incomingAnim.Channels)
@@ -289,7 +300,7 @@ namespace WolvenKit.Modkit.RED4
 
                             var translations = stripLocalFromAdditives
                                 ?  translationSampler.GetLinearKeys().Select(_ => (_.Key, _.Value - chan.TargetNode.LocalTransform.Translation)).ToList()
-                                : translationSampler.GetLinearKeys().Select(_ => (_.Key, _.Value)).ToList();
+                                : translationSampler.GetLinearKeys().ToList();
 
                             typedTranslations.Add((ushort)idx, translations);
                             break;
@@ -300,7 +311,7 @@ namespace WolvenKit.Modkit.RED4
 
                             var rotations = stripLocalFromAdditives
                                 ? rotationSampler.GetLinearKeys().Select(_ => (_.Key, _.Value / chan.TargetNode.LocalTransform.Rotation)).ToList()
-                                : rotationSampler.GetLinearKeys().Select(_ => (_.Key, _.Value)).ToList();
+                                : rotationSampler.GetLinearKeys().ToList();
 
                             typedRotations.Add((ushort)idx, rotations);
                             break;
@@ -309,9 +320,15 @@ namespace WolvenKit.Modkit.RED4
                             var scaleSampler = chan.GetScaleSampler();
                             var typedScales = keyframeScales[scaleSampler.InterpolationMode] ?? throw new Exception($"{gltfFileName} ${incomingAnim.Name}: Unsupported interpolation mode {scaleSampler.InterpolationMode}!");
 
+                            var localScale = WithEpsilon(chan.TargetNode.LocalTransform.Scale, Scale1to1);
+
                             var scales = stripLocalFromAdditives
-                                ? scaleSampler.GetLinearKeys().Select(_ => (_.Key, _.Value - chan.TargetNode.LocalTransform.Scale)).ToList()
-                                : scaleSampler.GetLinearKeys().Select(_ => (_.Key, _.Value)).ToList();
+                                ? scaleSampler.GetLinearKeys().Select(_ =>
+                                    (_.Key, Value: WithEpsilon(_.Value, Scale1to1) / localScale)).ToList()
+                                // TODO: https://github.com/WolvenKit/WolvenKit/issues/1630 Scale handling review
+                                //      It's possible we shouldn't be normalizing here, but I think this might be safer
+                                : scaleSampler.GetLinearKeys().Select(_ =>
+                                    (_.Key, Value: WithEpsilon(_.Value, Scale1to1))).ToList();
 
                             typedScales.Add((ushort)idx, scales);
                             break;
@@ -398,8 +415,21 @@ namespace WolvenKit.Modkit.RED4
                     }
                 ).ToList() ?? new List<animKeyTrack?>();
 
-                // Have all the raw data in hand now, let's mangle it into CR2W
+                // TODO: https://github.com/WolvenKit/WolvenKit/issues/1630 Scale handling review
+                //
+                // There's three ways 'constant scale' could be understood:
+                //
+                // 1. Each joint maintains the scale of the bind, i.e. 1
+                // 2. Every joint maintains same scale S throughout anim
+                // 3. Each joint  maintains separate scale S' throughout anim
+                //
+                // Using the first definition here. Not sure it's the right one, need to test,
+                // but I think it's safe enough to be conservative initially.
+                var allScales1 =
+                    keyScales.All(j => j.Value.All(s => EqWithEpsilon(s.Item2, Scale1to1))) &&
+                    constKeyScales.All(j => j.Value.All(s => EqWithEpsilon(s.Item2, Scale1to1)));
 
+                // Have all the raw data in hand now, let's mangle it into CR2W
 
                 var compressed = new animAnimationBufferCompressed()
                 {
@@ -414,7 +444,7 @@ namespace WolvenKit.Modkit.RED4
                     NumAnimKeys = Convert.ToUInt32(animKeys.Count),
                     NumConstTrackKeys = Convert.ToUInt32(constTrackKeys.Count),
                     NumTrackKeys = Convert.ToUInt32(trackKeys.Count),
-                    IsScaleConstant = keyScales.Count + constKeyScales.Count < 1,
+                    IsScaleConstant = allScales1,
                     HasRawRotations = !rotationCompressionAllowed,
 
                     FallbackFrameIndices = new CArray<CUInt16>(fallbackIndices),
@@ -513,9 +543,13 @@ namespace WolvenKit.Modkit.RED4
             {
                 _loggerService.Warning($"{gltfFileName}: EXPERIMENTAL: SIMD anims are not fully supported, converted {simdCount} to normal anims. These mostly work ok, but if you have trouble, you can omit them from the animset to keep the existing SIMD versions.");
             }
-            if (additiveCount > 0)
+            if (additiveStrippedCount > 0)
             {
-                _loggerService.Info($"{gltfFileName}: stripped bind pose transform from all {additiveCount} additive animations");
+                _loggerService.Info($"{gltfFileName}: stripped local transform from all {additiveStrippedCount} additive animations");
+            }
+            if (additiveCount != additiveStrippedCount)
+            {
+                _loggerService.Warning($"{gltfFileName}: additive animations present but were not stripped of local transform, make sure this is what you want");
             }
 
             _loggerService.Success($"{gltfFileName}: total: {newAnimSetEntries.Count} animations ({updatedAnims.Count} updated, {newAnimsImported.Count} new, {originalAnimsNotInImport.Count} originals kept)");
