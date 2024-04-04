@@ -2,7 +2,9 @@ using System;
 using System.CommandLine;
 using System.CommandLine.Builder;
 using System.CommandLine.Hosting;
+using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
+using System.Threading.Tasks;
 using CP77Tools.Commands;
 using CP77Tools.Tasks;
 using Microsoft.Build.Framework;
@@ -25,6 +27,17 @@ internal class Program
         {
             Console.Error.WriteLine("Failed to load any oodle libraries. Aborting");
             return ConsoleFunctions.ERROR_GENERAL_ERROR;
+        }
+
+        if (Core.NativeMethods.RtlAreLongPathsEnabled() == 0)
+        {
+            // TODO: Use logger for that. Tried it as middleware but doesn't get called at all then -.-
+            var text = "Long path support is disabled in your OS!" + Environment.NewLine +
+                       "Please do so to ensure that WolvenKit works properly." + Environment.NewLine + Environment.NewLine +
+                       "For more informations:" + Environment.NewLine +
+                       "https://wiki.redmodding.org/wolvenkit/help/faq/long-file-path-support" + Environment.NewLine + Environment.NewLine;
+            
+            Console.Error.Write(text);
         }
 
         var rootCommand = new RootCommand
