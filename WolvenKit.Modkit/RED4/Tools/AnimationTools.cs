@@ -289,7 +289,7 @@ namespace WolvenKit.Modkit.RED4
 
                             var translations = stripLocalFromAdditives
                                 ?  translationSampler.GetLinearKeys().Select(_ => (_.Key, _.Value - chan.TargetNode.LocalTransform.Translation)).ToList()
-                                : translationSampler.GetLinearKeys().Select(_ => (_.Key, _.Value)).ToList();
+                                : translationSampler.GetLinearKeys().ToList();
 
                             typedTranslations.Add((ushort)idx, translations);
                             break;
@@ -300,7 +300,7 @@ namespace WolvenKit.Modkit.RED4
 
                             var rotations = stripLocalFromAdditives
                                 ? rotationSampler.GetLinearKeys().Select(_ => (_.Key, _.Value / chan.TargetNode.LocalTransform.Rotation)).ToList()
-                                : rotationSampler.GetLinearKeys().Select(_ => (_.Key, _.Value)).ToList();
+                                : rotationSampler.GetLinearKeys().ToList();
 
                             typedRotations.Add((ushort)idx, rotations);
                             break;
@@ -309,9 +309,15 @@ namespace WolvenKit.Modkit.RED4
                             var scaleSampler = chan.GetScaleSampler();
                             var typedScales = keyframeScales[scaleSampler.InterpolationMode] ?? throw new Exception($"{gltfFileName} ${incomingAnim.Name}: Unsupported interpolation mode {scaleSampler.InterpolationMode}!");
 
+                            var localScale = WithEpsilon(chan.TargetNode.LocalTransform.Scale, Scale1to1);
+
                             var scales = stripLocalFromAdditives
-                                ? scaleSampler.GetLinearKeys().Select(_ => (_.Key, _.Value - chan.TargetNode.LocalTransform.Scale)).ToList()
-                                : scaleSampler.GetLinearKeys().Select(_ => (_.Key, _.Value)).ToList();
+                                ? scaleSampler.GetLinearKeys().Select(_ =>
+                                    (_.Key, Value: WithEpsilon(_.Value, Scale1to1) / localScale)).ToList()
+                                // TODO: https://github.com/WolvenKit/WolvenKit/issues/1630 Scale handling review
+                                //      It's possible we shouldn't be normalizing here, but I think this might be safer
+                                : scaleSampler.GetLinearKeys().Select(_ =>
+                                    (_.Key, Value: WithEpsilon(_.Value, Scale1to1))).ToList();
 
                             typedScales.Add((ushort)idx, scales);
                             break;
@@ -398,8 +404,21 @@ namespace WolvenKit.Modkit.RED4
                     }
                 ).ToList() ?? new List<animKeyTrack?>();
 
-                // Have all the raw data in hand now, let's mangle it into CR2W
+                // TODO: https://github.com/WolvenKit/WolvenKit/issues/1630 Scale handling review
+                //
+                // There's three ways 'constant scale' could be understood:
+                //
+                // 1. Each joint maintains the scale of the bind, i.e. 1
+                // 2. Every joint maintains same scale S throughout anim
+                // 3. Each joint  maintains separate scale S' throughout anim
+                //
+                // Using the first definition here. Not sure it's the right one, need to test,
+                // but I think it's safe enough to be conservative initially.
+                var allScales1 =
+                    keyScales.All(j => j.Value.All(s => EqWithEpsilon(s.Item2, Scale1to1))) &&
+                    constKeyScales.All(j => j.Value.All(s => EqWithEpsilon(s.Item2, Scale1to1)));
 
+                // Have all the raw data in hand now, let's mangle it into CR2W
 
                 var compressed = new animAnimationBufferCompressed()
                 {
@@ -414,7 +433,7 @@ namespace WolvenKit.Modkit.RED4
                     NumAnimKeys = Convert.ToUInt32(animKeys.Count),
                     NumConstTrackKeys = Convert.ToUInt32(constTrackKeys.Count),
                     NumTrackKeys = Convert.ToUInt32(trackKeys.Count),
-                    IsScaleConstant = keyScales.Count + constKeyScales.Count < 1,
+                    IsScaleConstant = allScales1,
                     HasRawRotations = !rotationCompressionAllowed,
 
                     FallbackFrameIndices = new CArray<CUInt16>(fallbackIndices),
