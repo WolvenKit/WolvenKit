@@ -10,7 +10,10 @@ public class questSpawnManagerNodeDefinitionWrapper : questSignalStoppingNodeDef
         var actions = new List<string>();
         foreach (var action in questSignalStoppingNodeDefinition.Actions)
         {
-            actions.Add(action.Type.Chunk!.Action.ToEnumString());
+            if (action.Type?.Chunk != null)
+            {
+                actions.Add(action.Type.Chunk.Action.ToEnumString());
+            }
         }
 
         if (actions.Count > 0)
