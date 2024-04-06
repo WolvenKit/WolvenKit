@@ -2,34 +2,27 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Reflection.Metadata;
 using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData.Binding;
 using Microsoft.Win32;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Factories;
-using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.Nodify;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Documents;
-using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
@@ -243,6 +236,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         CalculateDescriptor();
         CalculateIsDefault();
 
+        // Certain properties should not be editable by or visible to the user
+        CalculateUserInteractionStates();
+
         if (Parent is null)
         {
             return;
@@ -408,6 +404,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     // For view decoration. Extrapolated values will be darker.
     [ObservableProperty] private bool _isValueExtrapolated;
+
+    // For view visibility - if the noob filter is enabled, only show properties that the user wants to edit
+    [ObservableProperty] private bool _isHiddenByNoobFilter;
     
     [ObservableProperty]
     //[NotifyCanExecuteChangedFor(nameof(OpenRefCommand))]
