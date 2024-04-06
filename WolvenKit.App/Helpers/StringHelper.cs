@@ -95,7 +95,7 @@ public static class StringHelper
     public static string Stringify(CColor color)
     {
         var ret = $"R: {color.Red}, G: {color.Green}, B: {color.Blue}";
-        return color.Alpha == 1 ? ret : $"{ret}, A: {color.Alpha}";
+        return color.Alpha == 255 ? ret : $"{ret}, A: {color.Alpha}";
     }
 
 

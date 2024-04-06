@@ -513,6 +513,10 @@ public partial class ChunkViewModel
                 Value = $"sliceCount: {rtbtInfo.SliceCount}, MipCount: {rtbtInfo.MipCount}";
                 IsValueExtrapolated = true;
                 break;
+            case rendGradientEntry gradient:
+                Value = $"{StringHelper.Stringify(gradient.Color)}";
+                IsValueExtrapolated = true;
+                break;
             case rendRenderTextureBlobSizeInfo rtbSizeInfo:
                 Value = $"{rtbSizeInfo.Width} x {rtbSizeInfo.Height}";
                 if (rtbSizeInfo.Depth != 1)

@@ -390,7 +390,7 @@ public partial class ChunkViewModel
                 break;
             }
             case rendGradientEntry rendGradientEntry:
-                Descriptor = $"{StringHelper.Stringify(rendGradientEntry.Color)}";
+                Descriptor = $"{rendGradientEntry.Value}";
                 break;
             case localizationPersistenceOnScreenEntries jsonRoot:
             {
