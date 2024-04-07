@@ -434,12 +434,29 @@ public partial class ChunkViewModel
                 Value = StringHelper.Stringify(cNames);
                 IsValueExtrapolated = cNames.Count != 0;
                 break;
+            case CEvaluatorFloatConst floatConst:
+                Value = $"{floatConst.Value}";
+                break;
             case CArray<TweakDBID> tweakIds:
                 Value = StringHelper.Stringify(tweakIds);
                 IsValueExtrapolated = tweakIds.Count != 0;
                 break;
+            case CParticleEmitter particleEmitter:
+            {
+                Value = particleEmitter.Material.DepotPath.GetResolvedText() ?? "";
+                IsValueExtrapolated = Value != "";
+                break;
+            }
             case scnInterruptionScenarioId scenarioId:
                 Value = scenarioId.Id.ToString();
+                break;
+            case effectTrackItemParticles particlesEffect:
+                Value = particlesEffect.ParticleSystem.DepotPath.GetResolvedText() ?? "";
+                IsValueExtrapolated = Value != "";
+                break;
+            case effectTrackItemLoopMarker loopMarker:
+                Value = $"{loopMarker.TimeDuration}";
+                IsValueExtrapolated = Value != "";
                 break;
             case scnscreenplayItemId scnscreenplayItemId:
                 Value = scnscreenplayItemId.Id.ToString();

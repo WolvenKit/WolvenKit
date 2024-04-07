@@ -389,6 +389,16 @@ public partial class ChunkViewModel
 
                 break;
             }
+            case CParticleEmitter particleEmitter:
+            {
+                Descriptor = particleEmitter.EditorName;
+                if (Descriptor is not null and not "")
+                {
+                    return;
+                }
+
+                break;
+            }
             case rendGradientEntry rendGradientEntry:
                 Descriptor = $"{rendGradientEntry.Value}";
                 break;
