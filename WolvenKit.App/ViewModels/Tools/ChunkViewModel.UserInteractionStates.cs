@@ -119,5 +119,7 @@ public partial class ChunkViewModel
                 "opacityMicromaps", "quantizationOffset", "quantizationScale", "renderChunks"
             ]
         },
+        { typeof(inkTextureAtlas), ["activeTexture", "dynamicTexture", "parts", "slices", "texture"] },
+        { typeof(inkTextureSlot), ["slices"] }
     };
 }
