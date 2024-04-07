@@ -2809,7 +2809,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             if (ResolvedData is IRedArray ira)
             {
-                index = Math.Min(index, ira.Count - 1);
+                index = Math.Min(index, ira.Count);
                 var comp = CheckTypeCompatibility(ira.InnerType, item.GetType());
                 switch (comp)
                 {
