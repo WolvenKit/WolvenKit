@@ -44,5 +44,13 @@ namespace WolvenKit.Views.Documents
                 graphViewModel2.Load();
             }
         }
+
+        private void OnToggleNoobFilter(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount > 1 && DataContext is RedDocumentViewModel vm)
+            {
+                vm.IsSimpleViewEnabled = !vm.IsSimpleViewEnabled;
+            }
+        }
     }
 }

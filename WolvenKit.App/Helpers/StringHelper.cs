@@ -40,8 +40,7 @@ public static class StringHelper
             return "";
         }
 
-        return $"[ {string.Join(", ",
-            tweakDbIdCollection.ToList().Select(t => t.GetResolvedText() ?? "").Where((item) => item != "").ToArray())} ]";
+        return $"[ {Stringify(tweakDbIdCollection.ToList().Select(t => t.GetResolvedText() ?? "").ToArray())} ]";
     }
 
     public static string Stringify(entHardTransformBinding hardTransformBinding)
@@ -62,8 +61,7 @@ public static class StringHelper
             return "";
         }
 
-        return $"[ {string.Join(", ",
-            cNameCollection.ToList().Select(t => t.GetResolvedText() ?? "").Where((item) => item != "").ToArray())} ]";
+        return $"[ {Stringify(cNameCollection.ToList().Select(t => t.GetResolvedText() ?? "").ToArray())} ]";
     }
 
     public static string Stringify(string[] stringCollection)

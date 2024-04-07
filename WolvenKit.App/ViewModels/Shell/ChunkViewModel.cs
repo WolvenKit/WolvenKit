@@ -144,6 +144,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         CalculateValue();
         CalculateDescriptor();
         CalculateIsDefault();
+        CalculateUserInteractionStates();
     }
 
     public ChunkViewModel(IRedType data, RDTDataViewModel tab, AppViewModel appViewModel,
@@ -223,7 +224,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             CalculateProperties();
         }
-
+        
         if (_modifierViewStateService.GetModifierState(ModifierKeys.Shift))
         {
             SetChildExpansionStates(IsExpanded);

@@ -449,7 +449,8 @@ public partial class ChunkViewModel
                 Descriptor = sgn.NodeId.Id.ToString();
                 return;
             case meshMeshMaterialBuffer matBuffer:
-                Descriptor = $"[{matBuffer.Materials.Count}]";
+                // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract this can be null!
+                Descriptor = $"[{matBuffer.Materials?.Count ?? 0}]";
                 return;
             case worldCompiledEffectInfo info:
                 Descriptor = string.Join(", ", info.PlacementInfos);

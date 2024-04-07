@@ -28,6 +28,7 @@ public abstract partial class DocumentViewModel : PaneViewModel, IDocumentViewMo
 
     [ObservableProperty] private string _filePath;
     [ObservableProperty] private bool _isReadOnly;
+    [ObservableProperty] private bool _isSimpleViewEnabled;
 
     private bool _isDirty;
 
@@ -56,6 +57,6 @@ public abstract partial class DocumentViewModel : PaneViewModel, IDocumentViewMo
     [RelayCommand]
     public abstract void SaveAs(object parameter);
 
-    
+
     public abstract bool Reload(bool force);
 }

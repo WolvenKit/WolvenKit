@@ -51,7 +51,6 @@
             </DataTemplate>
 
         </Grid.Resources>
-
         <syncfusion:TabControlExt
             x:Name="TabControl"
             Margin="-3,-2,-3,-3"
@@ -69,6 +68,7 @@
             TabPanelBackground="#313131"
             Tag="{Binding}">
 
+            
             <syncfusion:TabControlExt.NewTabButtonTemplate>
                 <DataTemplate>
                     <Button
@@ -89,14 +89,18 @@
                     </Button>
                 </DataTemplate>
             </syncfusion:TabControlExt.NewTabButtonTemplate>
-
+            
+            
+            
             <syncfusion:TabControlExt.ItemTemplate>
                 <DataTemplate>
                     <Grid Margin="-5" Tag="{Binding}">
+                        
                         <TextBlock
                             Padding="5"
                             Text="{Binding Header}"
-                            ToolTip="{Binding FilePath}" />
+                            ToolTip="{Binding FilePath}"
+                            Mouse.MouseDown="OnToggleNoobFilter" />
 
                         <Grid.ContextMenu>
                             <ContextMenu DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}">
