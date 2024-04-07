@@ -33,6 +33,10 @@ public partial class ChunkViewModel
 
     private void CalculateIsReadOnly()
     {
+        if (IsReadOnly)
+        {
+            return;
+        }
         if (Parent?.IsReadOnly is true || s_globalReadonlyFields.Contains(Name) || s_globalReadonlyTypes.Contains(ResolvedData.GetType()))
         {
             IsReadOnly = true;
@@ -45,21 +49,22 @@ public partial class ChunkViewModel
         }
     }
 
-    internal void CalculateUserInteractionStates()
+    private void CalculateUserInteractionStates()
     {
         // Either a root field, or a field that isn't initialized yet
-        if (Parent is null || ResolvedData is RedDummy || IsReadOnly || IsHiddenByNoobFilter)
+        if (Parent is null || ResolvedData is RedDummy)
         {
             return;
         }
 
         CalculateIsReadOnly();
+        CalculateConditionalHiding();
+    }
 
-        // If we're in simple view, hide all "unnecessary" properties from the user
-        if (_settingsManager.IsNoobFilterDefaultEnabled())
-        {
-            CalculateConditionalHiding();
-        }
+    public bool ExcludeFromSimpleView()
+    {
+        CalculateConditionalHiding();
+        return IsHiddenByNoobFilter;
     }
 
     /// <summary>
@@ -68,6 +73,13 @@ public partial class ChunkViewModel
     /// </summary>
     private void CalculateConditionalHiding()
     {
+        // If we're in simple view, hide all "unnecessary" properties from the user
+        if (Tab?.IsSimpleViewEnabled != true)
+        {
+            IsHiddenByNoobFilter = false;
+            return;
+        }
+        
         if (s_alwaysHiddenFields.Contains(Name))
         {
             IsHiddenByNoobFilter = true;

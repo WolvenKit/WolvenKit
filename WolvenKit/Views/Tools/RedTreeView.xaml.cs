@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -11,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData.Kernel;
+using ReactiveUI;
 using Splat;
 using Syncfusion.UI.Xaml.TreeView;
 using WolvenKit.App.Interaction;
@@ -44,6 +46,11 @@ namespace WolvenKit.Views.Tools
             
             InitializeComponent();
 
+            // Listen for the "UpdateFilteredItemsSource" message
+            MessageBus.Current.Listen<string>("Command")
+                .Where(x => x == "UpdateFilteredItemsSource")
+                .Subscribe(_ => UpdateFilteredItemsSource(ItemsSource));
+
             _modifierViewStateSvc.ModifierStateChanged += OnModifierStateSvcChanged;
 
             TreeView.ApplyTemplate();
@@ -53,14 +60,20 @@ namespace WolvenKit.Views.Tools
 
         private void UpdateFilteredItemsSource(object value)
         {
-            if (value is not IEnumerable<ChunkViewModel> itemsSource)
+            var collectionView = value switch
             {
-                return;
+                IEnumerable<ChunkViewModel> itemsSource => CollectionViewSource.GetDefaultView(itemsSource),
+                ICollectionView view => view,
+                _ => null
+            };
+
+            if (collectionView is not null)
+            {
+                collectionView.Filter = item => (item as ChunkViewModel)?.ExcludeFromSimpleView() != true;
+                SetCurrentValue(ItemsSourceProperty, collectionView);
             }
 
-            var collectionView = CollectionViewSource.GetDefaultView(itemsSource);
-            collectionView.Filter = item => (item as ChunkViewModel)?.IsHiddenByNoobFilter != true;
-            SetCurrentValue(ItemsSourceProperty, collectionView);
+
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ItemsSource)));
         }

@@ -28,7 +28,6 @@ public abstract partial class DocumentViewModel : PaneViewModel, IDocumentViewMo
 
     [ObservableProperty] private string _filePath;
     [ObservableProperty] private bool _isReadOnly;
-    [ObservableProperty] private bool _isSimpleViewEnabled;
 
     private bool _isDirty;
 
@@ -36,6 +35,14 @@ public abstract partial class DocumentViewModel : PaneViewModel, IDocumentViewMo
     {
         get => _isDirty;
         protected set => SetProperty(ref _isDirty, value);
+    }
+
+    private bool _isSimpleViewEnabled;
+
+    public bool IsSimpleViewEnabled
+    {
+        get => _isSimpleViewEnabled;
+        set => SetProperty(ref _isSimpleViewEnabled, value);
     }
 
     public bool IsInitialized() => _isInitialized;

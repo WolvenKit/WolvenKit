@@ -131,9 +131,4 @@ public interface ISettingsManager : ISettingsDto, INotifyPropertyChanged
     /// For "simple" editor view: hides fields that the user shouldn't edit 
     /// </summary>
     bool IsNoobFilterDefaultEnabled();
-
-    /// <summary>
-    /// For "simple" editor view: hides fields that the user shouldn't edit 
-    /// </summary>
-    bool HideNoobFilterToggleButton();
 }

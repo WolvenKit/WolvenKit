@@ -199,10 +199,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     private uint _treeViewGroupSize = 100;
 
     [Display(Name = "Default to simple mode", GroupName = "File Editor")] [ObservableProperty]
-    private bool _enableNoobFilter;
-
-    [Display(Name = "Hide simple mode toggle", GroupName = "File Editor")] [ObservableProperty]
-    private bool _hideNoobFilterToggle;
+    private bool _enableNoobFilterByDefault;
 
     [Display(Name = "Ignored Extensions (Open using System Editor. Syntax: .ext1|.ext2)", GroupName = "File Editor")]
     [ObservableProperty]
@@ -334,9 +331,8 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
 
     public bool IsHealthy() => File.Exists(CP77ExecutablePath) && File.Exists(GetRED4OodleDll());
 
-    public bool IsNoobFilterDefaultEnabled() => true; // EnableNoobFilter;
+    public bool IsNoobFilterDefaultEnabled() => EnableNoobFilterByDefault;
 
-    public bool HideNoobFilterToggleButton() => HideNoobFilterToggle;
 
     #endregion methods
 }
