@@ -563,8 +563,18 @@ namespace WolvenKit.Modkit.RED4
                 normals = mesh.Primitives[0].GetVertices("NORMAL").AsVector3Array().ToList().AsParallel().Select(p => new Vec3(p.X, -p.Z, p.Y)).ToArray(),
                 tangents = mesh.Primitives[0].GetVertices("TANGENT").AsVector4Array().ToList().AsParallel().Select(p => new Vec4(p.X, -p.Z, p.Y, p.W)).ToArray(),
 
-                colors0 = accessors.Contains("COLOR_0") ? mesh.Primitives[0].GetVertices("COLOR_0").AsVector4Array().ToArray() : Array.Empty<Vec4>(),
-                colors1 = accessors.Contains("COLOR_1") ? mesh.Primitives[0].GetVertices("COLOR_1").AsVector4Array().ToArray() : Array.Empty<Vec4>(),
+                // Blender glTF omits alpha if possible
+                colors0 = accessors.Contains("COLOR_0")
+                            ? (mesh.Primitives[0].GetVertices("COLOR_0").Attribute.Dimensions == DimensionType.VEC4
+                                ? mesh.Primitives[0].GetVertices("COLOR_0").AsVector4Array().ToArray()
+                                : mesh.Primitives[0].GetVertices("COLOR_0").AsVector3Array().Select(vec3 => new Vec4(vec3, 1)).ToArray())
+                            : [],
+                colors1 = accessors.Contains("COLOR_1")
+                            ? (mesh.Primitives[0].GetVertices("COLOR_1").Attribute.Dimensions == DimensionType.VEC4
+                                ? mesh.Primitives[0].GetVertices("COLOR_1").AsVector4Array().ToArray()
+                                : mesh.Primitives[0].GetVertices("COLOR_1").AsVector3Array().Select(vec3 => new Vec4(vec3, 1)).ToArray())
+                            : [],
+
                 texCoords0 = accessors.Contains("TEXCOORD_0") ? mesh.Primitives[0].GetVertices("TEXCOORD_0").AsVector2Array().ToArray() : Array.Empty<Vec2>(),
                 texCoords1 = accessors.Contains("TEXCOORD_1") ? mesh.Primitives[0].GetVertices("TEXCOORD_1").AsVector2Array().ToArray() : Array.Empty<Vec2>(),
 
