@@ -49,6 +49,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
         _data = data;
 
+        IsSimpleViewEnabled = Parent.IsSimpleViewEnabled;
 
         parent.PropertyChanged += RDTDataViewModel_PropertyChanged;
         

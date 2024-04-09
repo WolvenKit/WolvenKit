@@ -50,6 +50,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(ShowNodeRefAsHex),
             nameof(ShowTweakDBIDAsHex),
             nameof(ShowReferenceGraph),
+            nameof(EnableNoobFilterByDefault),
             nameof(GameLanguage),
             nameof(AnalyzeModArchives),
             nameof(ExtraModDirPath),
