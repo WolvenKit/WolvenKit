@@ -1,14 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData.Kernel;
+using ReactiveUI;
 using Splat;
 using Syncfusion.UI.Xaml.TreeView;
 using WolvenKit.App.Interaction;
@@ -42,14 +46,50 @@ namespace WolvenKit.Views.Tools
             
             InitializeComponent();
 
+            // Listen for the "UpdateFilteredItemsSource" message
+            MessageBus.Current.Listen<string>("Command")
+                .Where(x => x == "UpdateFilteredItemsSource")
+                .Subscribe(_ => UpdateFilteredItemsSource(ItemsSource));
+
             _modifierViewStateSvc.ModifierStateChanged += OnModifierStateSvcChanged;
 
             TreeView.ApplyTemplate();
         }
 
-        public static readonly DependencyProperty ItemsSourceProperty =
-            DependencyProperty.Register(nameof(ItemsSource), typeof(object), typeof(RedTreeView));
+        public event PropertyChangedEventHandler PropertyChanged;
 
+        private void UpdateFilteredItemsSource(object value)
+        {
+            var collectionView = value switch
+            {
+                IEnumerable<ChunkViewModel> itemsSource => CollectionViewSource.GetDefaultView(itemsSource),
+                ICollectionView view => view,
+                _ => null
+            };
+
+            if (collectionView is not null)
+            {
+                collectionView.Filter = item => (item as ChunkViewModel)?.ExcludeFromSimpleView() != true;
+                SetCurrentValue(ItemsSourceProperty, collectionView);
+            }
+
+
+
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ItemsSource)));
+        }
+
+        public static readonly DependencyProperty ItemsSourceProperty =
+            DependencyProperty.Register(nameof(ItemsSource), typeof(object), typeof(RedTreeView),
+                new PropertyMetadata(null, OnItemsSourceChanged));
+
+        private static void OnItemsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is RedTreeView redTreeView)
+            {
+                redTreeView.UpdateFilteredItemsSource(e.NewValue);
+            }
+        }
+        
         public object ItemsSource
         {
             get => GetValue(ItemsSourceProperty);

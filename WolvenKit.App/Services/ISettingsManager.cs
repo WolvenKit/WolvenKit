@@ -126,4 +126,9 @@ public interface ISettingsManager : ISettingsDto, INotifyPropertyChanged
     void SetThemeAccent(Color color);
 
     string GetVersionNumber();
+
+    /// <summary>
+    /// For "simple" editor view: hides fields that the user shouldn't edit 
+    /// </summary>
+    bool IsNoobFilterDefaultEnabled();
 }

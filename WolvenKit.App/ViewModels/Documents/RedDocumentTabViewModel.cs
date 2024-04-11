@@ -35,6 +35,7 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
 
     [ObservableProperty] private bool _canClose;
 
+
     public static IRedType? CopiedChunk;
 
     public static List<IRedType> CopiedChunks { get; } = new();
@@ -45,6 +46,7 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
     {
         if (this is RDTDataViewModel datavm)
         {
+            
             for (var i = 0; i < Parent.Cr2wFile.EmbeddedFiles.Count; i++)
             {
                 var file = Parent.Cr2wFile.EmbeddedFiles[i];

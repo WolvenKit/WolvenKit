@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using WolvenKit.App.Helpers.StringHelpers;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Helpers;
 
-public class StringHelper
+public static class StringHelper
 {
     public static string Stringify(CArray<scnOutputSocket> scnOutputAry)
     {
@@ -39,8 +40,7 @@ public class StringHelper
             return "";
         }
 
-        return $"[ {string.Join(", ",
-            tweakDbIdCollection.ToList().Select(t => t.GetResolvedText() ?? "").Where((item) => item != "").ToArray())} ]";
+        return $"[ {Stringify(tweakDbIdCollection.ToList().Select(t => t.GetResolvedText() ?? "").ToArray())} ]";
     }
 
     public static string Stringify(entHardTransformBinding hardTransformBinding)
@@ -61,8 +61,7 @@ public class StringHelper
             return "";
         }
 
-        return $"[ {string.Join(", ",
-            cNameCollection.ToList().Select(t => t.GetResolvedText() ?? "").Where((item) => item != "").ToArray())} ]";
+        return $"[ {Stringify(cNameCollection.ToList().Select(t => t.GetResolvedText() ?? "").ToArray())} ]";
     }
 
     public static string Stringify(string[] stringCollection)
@@ -91,7 +90,17 @@ public class StringHelper
         return $"[ {string.Join(", ", paths)} ]";
     }
 
-    public static string? StringifyOrNull(ResourcePath? depotPath, bool getFilenameOnly)
+    public static string Stringify(CColor color)
+    {
+        var ret = $"R: {color.Red}, G: {color.Green}, B: {color.Blue}";
+        return color.Alpha == 255 ? ret : $"{ret}, A: {color.Alpha}";
+    }
+
+
+    public static string Stringify(ResourcePath? depotPath, bool getFilenameOnly = false) =>
+        StringifyOrNull(depotPath, getFilenameOnly) ?? "";
+
+    public static string? StringifyOrNull(ResourcePath? depotPath, bool getFilenameOnly = false)
     {
         if (depotPath?.GetResolvedText() is not string path || path == "")
         {
@@ -105,4 +114,37 @@ public class StringHelper
 
         return path;
     }
+
+    public static string? StringifyOrNull(CName cname)
+    {
+        if (cname.GetResolvedText() is not string path || path == "")
+        {
+            return null;
+        }
+
+        return cname.GetResolvedText();
+    }
+
+    public static string Stringify(WorldTransform bind) =>
+        $"Pos: (X: {(float)bind.Position.X:G9}, Y: {(float)bind.Position.Y:G9}, Z: {(float)bind.Position.Z:G9}), Orientation: ({bind.Orientation})";
+
+    public static string Stringify(WorldPosition position) => $"{(float)position.X:G9}, {(float)position.Y:G9}, {(float)position.Z:G9}";
+
+    public static string Stringify(worldNode? worldNode, bool asValue = false) => StringHelperWorldNode.Stringify(worldNode, asValue);
+
+    public static string Stringify(animAnimNode_Base node, bool asValue = false) => StringHelperAnimNode.Stringify(node, asValue);
+    public static string Stringify(redTagList tagList) => Stringify(tagList.Tags);
+
+    public static string StringifyMeshAppearance(CResourceAsyncReference<CMesh> mesh, CName? meshAppearance)
+    {
+        var ret = mesh.DepotPath.GetResolvedText() ?? "";
+        if (meshAppearance?.GetResolvedText() is not string s || s == "" || s == "default")
+        {
+            return ret;
+        }
+
+        return $"{ret} ({s})";
+    }
+
+    public static string? GetNodeName(CWeakHandle<animAnimNode_Base> linkNode) => StringHelperAnimNode.GetNodeName(linkNode);
 }

@@ -50,6 +50,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(ShowNodeRefAsHex),
             nameof(ShowTweakDBIDAsHex),
             nameof(ShowReferenceGraph),
+            nameof(EnableNoobFilterByDefault),
             nameof(GameLanguage),
             nameof(AnalyzeModArchives),
             nameof(ExtraModDirPath),
@@ -198,6 +199,9 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [ObservableProperty]
     private uint _treeViewGroupSize = 100;
 
+    [Display(Name = "Default to simple mode", GroupName = "File Editor")] [ObservableProperty]
+    private bool _enableNoobFilterByDefault;
+
     [Display(Name = "Ignored Extensions (Open using System Editor. Syntax: .ext1|.ext2)", GroupName = "File Editor")]
     [ObservableProperty]
     private string? _treeViewIgnoredExtensions = "";
@@ -327,6 +331,9 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             : Path.Combine(GetRED4GameRootDir(), "bin", "x64", Core.Constants.Oodle);
 
     public bool IsHealthy() => File.Exists(CP77ExecutablePath) && File.Exists(GetRED4OodleDll());
+
+    public bool IsNoobFilterDefaultEnabled() => EnableNoobFilterByDefault;
+
 
     #endregion methods
 }

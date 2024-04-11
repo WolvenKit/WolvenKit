@@ -122,7 +122,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _scriptService.SetAppViewModel(this);
 
         _progressService.PropertyChanged += ProgressService_PropertyChanged;
-
+        
         UpdateTitle();
 
         ShowFirstTimeSetup();
@@ -723,7 +723,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private bool CanReloadFile() => ActiveDocument is not null;
     [RelayCommand(CanExecute = nameof(CanReloadFile))]
-    private void ReloadFile()
+    public void ReloadFile()
     {
         if (ActiveDocument == null)
         {

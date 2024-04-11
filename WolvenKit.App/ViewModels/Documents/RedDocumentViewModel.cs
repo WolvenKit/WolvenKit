@@ -65,6 +65,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
         IArchiveManager archiveManager,
         IHookService hookService,
         INodeWrapperFactory nodeWrapperFactory,
+        bool isSimpleViewEnabled = false,
         bool isReadyOnly = false) : base(path)
     {
         _documentTabViewmodelFactory = documentTabViewmodelFactory;
@@ -93,6 +94,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
         Cr2wFile = file;
         IsReadOnly = isReadyOnly;
+        IsSimpleViewEnabled = isSimpleViewEnabled;
         _isInitialized = true;
         PopulateItems();
     }
