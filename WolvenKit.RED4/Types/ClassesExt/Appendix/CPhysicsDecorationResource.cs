@@ -31,6 +31,9 @@ public partial class CPhysicsDecorationResource : IRedAppendix
     {
         Unk1 = reader.BaseReader.ReadInt32();
         Unk2 = reader.ReadDataBuffer();
+
+        Unk2.Buffer.ParentTypes.Add($"{GetType().Name}.unk2");
+        Unk2.Buffer.Parent = this;
     }
 
     public void Write(Red4Writer writer)

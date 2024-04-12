@@ -32,6 +32,8 @@ public static class BufferHelper
         s_bufferReaders.Add("animFacialSetup.mainPosesData", typeof(AnimFacialSetupMainPosesDataReader));
         s_bufferReaders.Add("animFacialSetup.correctivePosesData", typeof(AnimFacialSetupCorrectivePosesDataReader));
 
+        s_bufferReaders.Add("CPhysicsDecorationResource.unk2", typeof(UnkPhysicsReader));
+
         // Save
         s_bufferReaders.Add("gameSavedStatsData.forcedModifiersBuffer", typeof(ModifiersBufferReader));
         s_bufferReaders.Add("gameSavedStatsData.modifiersBuffer", typeof(ModifiersBufferReader));
