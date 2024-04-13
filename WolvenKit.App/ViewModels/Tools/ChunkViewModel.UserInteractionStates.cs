@@ -79,8 +79,9 @@ public partial class ChunkViewModel
             IsHiddenByNoobFilter = false;
             return;
         }
-        
-        if (s_alwaysHiddenFields.Contains(Name))
+
+        // DataBuffers should always be hidden
+        if (s_alwaysHiddenFields.Contains(Name) || PropertyType.IsAssignableTo(typeof(DataBuffer)))
         {
             IsHiddenByNoobFilter = true;
             return;
@@ -94,6 +95,7 @@ public partial class ChunkViewModel
 
     private static readonly List<string> s_alwaysHiddenFields = new()
     {
+        "cookingPlatform",
         "topology",
         "topologyData",
         "topologyDataStride",
@@ -120,6 +122,67 @@ public partial class ChunkViewModel
             ]
         },
         { typeof(inkTextureAtlas), ["activeTexture", "dynamicTexture", "parts", "slices", "texture"] },
-        { typeof(inkTextureSlot), ["slices"] }
+        { typeof(inkTextureSlot), ["slices"] },
+        // .app file
+        {
+            typeof(appearanceAppearanceResource), [
+                "alternateAppearanceMapping",
+                "alternateAppearanceSettingName",
+                "alternateAppearanceSuffixes",
+                "baseEntity",
+                "baseEntityType",
+                "baseType",
+                "DismEffects",
+                "DismWoundConfig",
+                "forceCompileProxy",
+                "generatePlayerBlockingCollisionForProxy",
+                "proxyPolyCount",
+                "Wounds",
+            ]
+        },
+        // .app file: appearance definition
+        {
+            typeof(appearanceAppearanceDefinition), [
+                "censorFlags",
+                "cookedDataPathOverride",
+                "forcedLodDistance",
+                "hitRepresentationOverrides",
+                "parametersBuffer",
+                "parentAppearance",
+            ]
+        },
+        // .app file: appearance definition: parts override - ArchiveXL will handle this
+        { typeof(appearanceAppearancePartOverrides), ["partResource"] },
+        // .app file: appearance definition: parts override
+        { typeof(appearancePartComponentOverrides), ["acceptDismemberment"] },
+
+        /*
+         * .ent file
+         */
+        {
+            typeof(entEntityTemplate),
+            ["backendDataOverrides", "bindingOverrides", "compiledEntityLODFlags", "componentResolveSettings", "includes", "entity"]
+        },
+        /*
+         * .ent/.app file components
+         */
+        {
+            typeof(entGarmentSkinnedMeshComponent), [
+                "acceptDismemberment", "autoHideDistance", "isEnabled", "isReplicable", "navigationImpact", "order",
+                "overrideMeshNavigationImpact", "renderSceneLayerMask", "visibilityAnimationParam"
+            ]
+        },
+        {
+            typeof(entSkinnedMeshComponent), [
+                "acceptDismemberment", "autoHideDistance", "isEnabled", "isReplicable", "navigationImpact", "order",
+                "overrideMeshNavigationImpact", "renderSceneLayerMask", "visibilityAnimationParam"
+            ]
+        },
+        {
+            typeof(entMeshComponent), [
+                "autoHideDistance", "isEnabled", "isReplicable", "navigationImpact", "numInstances", "order",
+                "overrideMeshNavigationImpact", "objectTypeID", "renderSceneLayerMask", "visibilityAnimationParam"
+            ]
+        },
     };
 }
