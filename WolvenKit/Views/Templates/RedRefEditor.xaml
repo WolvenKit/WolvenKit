@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:WolvenKit.Views.Editors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     d:DesignHeight="100"
     d:DesignWidth="400"
     KeyboardNavigation.TabNavigation="Local"
@@ -29,12 +30,12 @@
             VerticalAlignment="Center"
             Text="DepotPath" />
 
-        <TextBox
+        <templates:TruncatingTextBox
             Grid.Row="0"
             Grid.Column="1"
             KeyboardNavigation.TabIndex="1"
             helpers:TextBoxBehavior.TripleClickSelectAll="True"
-            Text="{Binding DepotPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            EditText="{Binding DepotPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
         <TextBox
             x:Name="HashBox"
             Grid.Row="0"
