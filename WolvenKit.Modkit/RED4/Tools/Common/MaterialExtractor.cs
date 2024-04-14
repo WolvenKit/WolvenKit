@@ -56,7 +56,20 @@ public class MaterialExtractor
 
         foreach (var materialEntry in cMesh.MaterialEntries)
         {
-            materialDict.Add(materialEntry.IsLocalInstance ? $"l_{materialEntry.Index}" : $"e_{materialEntry.Index}", materialEntry.Name.GetResolvedText()!);
+            var indexName = materialEntry.IsLocalInstance ? $"l_{materialEntry.Index}" : $"e_{materialEntry.Index}";
+            var materialName = materialEntry.Name.GetResolvedText()!;
+
+            if (materialDict.TryGetValue(indexName, out var oldValue))
+            {
+                if (oldValue != materialName)
+                {
+                    _loggerService.Warning($"Duplicated materialEntry \"{indexName}\" found (First name \"{oldValue}\"| Current name \"{materialName}\"). Skipping!");
+                }
+                
+                continue;
+            }
+            
+            materialDict.Add(indexName, materialName);
         }
 
         for (var i = 0; i < cMesh.ExternalMaterials.Count; i++)
