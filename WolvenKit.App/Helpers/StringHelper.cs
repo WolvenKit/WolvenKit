@@ -147,4 +147,22 @@ public static class StringHelper
     }
 
     public static string? GetNodeName(CWeakHandle<animAnimNode_Base> linkNode) => StringHelperAnimNode.GetNodeName(linkNode);
+
+    public static string? GetDepotPath(object obj)
+    {
+        var depotPathProperty = obj.GetType().GetProperty("DepotPath");
+        if (depotPathProperty == null)
+        {
+            return null;
+        }
+
+        var depotPath = depotPathProperty.GetValue(obj);
+        var getResolvedTextMethod = depotPath?.GetType().GetMethod("GetResolvedText");
+        if (getResolvedTextMethod != null)
+        {
+            return getResolvedTextMethod.Invoke(depotPath, null) as string ?? "";
+        }
+
+        return null;
+    }
 }
