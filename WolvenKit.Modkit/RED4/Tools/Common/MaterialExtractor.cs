@@ -435,6 +435,7 @@ public class MaterialExtractor
         ms.Position = 0;
 
         using var reader = new CR2WReader(ms);
+        reader.ParsingError += args => args is InvalidDefaultValueEventArgs;
 
         if (reader.ReadFile(out tmp) != EFileReadErrorCodes.NoError)
         {
