@@ -7,7 +7,7 @@
                 <ControlTemplate TargetType="{x:Type local:TruncatingTextBox}">
                     <Grid>
                         <TextBox x:Name="DisplayTextBox" Text="{Binding DisplayText, RelativeSource={RelativeSource TemplatedParent}}"
-                                 Visibility="{Binding HasFocus, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}" />
+                                 Visibility="{Binding HasNoFocus, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         <TextBox x:Name="EditTextBox" Text="{Binding EditText, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
                                  Visibility="{Binding HasFocus, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}}" />
                     </Grid>
