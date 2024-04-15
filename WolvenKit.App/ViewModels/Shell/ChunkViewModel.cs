@@ -2045,7 +2045,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             DuplicateInParent();
         }
 
-        Parent.RecalculateProperties();
+        Parent.CalculateDescriptor();
+        Parent.CalculateValue();
+        Parent.ReindexChildren();
     }
 
     [RelayCommand(CanExecute = nameof(CanDuplicateChunk))]

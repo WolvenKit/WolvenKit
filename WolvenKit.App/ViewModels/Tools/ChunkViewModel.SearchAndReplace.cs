@@ -90,6 +90,7 @@ public partial class ChunkViewModel : ObservableObject
             || PropertyType.IsAssignableTo(typeof(IRedBitField))
             || PropertyType.IsAssignableTo(typeof(IRedCurvePoint))
             || PropertyType.IsAssignableTo(typeof(IRedMultiChannelCurve))
+            || PropertyType.IsAssignableTo(typeof(DataBuffer))
             || PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)))
         {
             return false;
