@@ -215,7 +215,13 @@ namespace WolvenKit
             }
             finally
             {
-                _logger.Error(exception);
+                while (exception != null)
+                {
+                    _logger.Error(exception);
+                    _logger.Error("-----------------------");
+
+                    exception = exception.InnerException;
+                }
                 //Application.Current.Shutdown();
             }
         }
