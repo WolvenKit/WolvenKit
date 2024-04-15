@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using WolvenKit.RED4.Types;
 
 // ReSharper disable once CheckNamespace
@@ -81,7 +82,7 @@ public partial class ChunkViewModel
         }
 
         // DataBuffers should always be hidden
-        if (s_alwaysHiddenFields.Contains(Name) || PropertyType.IsAssignableTo(typeof(DataBuffer)))
+        if (PropertyType.IsAssignableTo(typeof(DataBuffer)))
         {
             IsHiddenByNoobFilter = true;
             return;
@@ -92,148 +93,27 @@ public partial class ChunkViewModel
             return;
         }
 
-        if (s_hiddenFields.TryGetValue(Parent.ResolvedData.GetType(), out var hiddenFields) && hiddenFields.Contains(Name))
+        if (Parent.ResolvedData is not RedBaseClass baseClass)
+        {
+            return;
+        }
+
+        if (baseClass.GetHiddenFieldNames().ToList().Contains(Name))
         {
             IsHiddenByNoobFilter = true;
             return;
         }
 
         // Some fields should be hidden if they are empty, or false 
-        if (!s_hideIfHasDefaultValueFields.TryGetValue(Parent.ResolvedData.GetType(), out var hiddenArrayFields) ||
-            !hiddenArrayFields.Contains(Name))
+        if (baseClass.GetHiddenIfDefaultFieldNames().ToList().Contains(Name))
         {
-            return;
-        }
-
-        if ((IsArray && Properties.Count == 0) // empty array
+            if ((IsArray && Properties.Count == 0) // empty array
             || (ResolvedData is CBool boolValue && boolValue == false) //false boolean
             || (ResolvedData is CName cname && (cname.GetResolvedText() ?? "").ToLower().Replace("none", "") == "") // empty cname
-           )
-        {
-            IsHiddenByNoobFilter = true;
+               )
+            {
+                IsHiddenByNoobFilter = true;
+            }
         }
     }
-
-    private static readonly List<string> s_alwaysHiddenFields = new()
-    {
-        "cookingPlatform",
-        "topology",
-        "topologyData",
-        "topologyDataStride",
-        "topologyMetadata",
-        "topologyMetadataStride",
-        "version",
-        "vertexBufferSize"
-    };
-
-
-    /// <summary>
-    /// Some fields should only be hidden if they are not empty (e.g. preloadLocalMaterials in a mesh, or resolvedDependencies in an app).
-    /// </summary>
-    private static readonly Dictionary<Type, List<string>> s_hideIfHasDefaultValueFields = new()
-    {
-        {
-            typeof(CMesh), [
-                "preloadExternalMaterials", "preloadLocalMaterials", "preloadLocalMaterialInstances", "preloadLocalMaterials",
-                "inplaceResources",
-            ]
-        }, // .app file
-        {
-            typeof(appearanceAppearanceResource), [
-                "censorshipMapping",
-            ]
-        },
-        // .app file: appearance definition
-        {
-            typeof(appearanceAppearanceDefinition), [
-                "looseDependencies",
-            ]
-        },
-    };
-
-
-    /// <summary>
-    /// Some fields can be needed if they are not empty (e.g. preloadLocalMaterials).
-    /// </summary>
-    private static readonly Dictionary<Type, List<string>> s_hiddenFields = new()
-    {
-        {
-            typeof(CMesh), [
-                "boundingBox", "boneNames", "boneVertexEpsilons", "boneRigMatrices", "castGlobalShadowsCachedInCook",
-                "castLocalShadowsCachedInCook",
-                "castsRayTracedShadowsFromOriginalGeometry", "consoleBias", "floatTrackNames", "forceLoadAllAppearances", "lodBoneMask",
-                "isPlayerShadowMesh", "isShadowMesh", "geometryHash",
-                "objectType", "resourceVersion", "saveDateTime", "surfaceAreaPerAxis", "useRayTracingShadowLODBias"
-            ]
-        },
-        { // Mesh: Render blob header
-            typeof(rendRenderMeshBlobHeader), [
-                "bonePositions", "customData", "customDataElemStride", "dataProcessing", "indexBufferOffset", "indexBufferStride",
-                "opacityMicromaps", "quantizationOffset", "quantizationScale", "renderChunks"
-            ]
-        },
-        { typeof(inkTextureAtlas), ["activeTexture", "dynamicTexture", "parts", "slices", "texture"] },
-        { typeof(inkTextureSlot), ["slices"] },
-        // .app file
-        {
-            typeof(appearanceAppearanceResource), [
-                "alternateAppearanceMapping",
-                "alternateAppearanceSettingName",
-                "alternateAppearanceSuffixes",
-                "baseEntity",
-                "baseEntityType",
-                "baseType",
-                "DismEffects",
-                "DismWoundConfig",
-                "forceCompileProxy",
-                "generatePlayerBlockingCollisionForProxy",
-                "proxyPolyCount",
-                "Wounds",
-            ]
-        },
-        // .app file: appearance definition
-        {
-            typeof(appearanceAppearanceDefinition), [
-                "censorFlags",
-                "cookedDataPathOverride",
-                "forcedLodDistance",
-                "hitRepresentationOverrides",
-                "parametersBuffer",
-                "parentAppearance",
-            ]
-        },
-        // .app file: appearance definition: parts override - ArchiveXL will handle this
-        { typeof(appearanceAppearancePartOverrides), ["partResource"] },
-        // .app file: appearance definition: parts override
-        { typeof(appearancePartComponentOverrides), ["acceptDismemberment"] },
-
-        /*
-         * .ent file
-         */
-        {
-            typeof(entEntityTemplate),
-            ["backendDataOverrides", "bindingOverrides", "compiledEntityLODFlags", "componentResolveSettings", "includes", "entity"]
-        },
-        /*
-         * .ent/.app file components
-         */
-        {
-            typeof(entGarmentSkinnedMeshComponent), [
-                "acceptDismemberment", "autoHideDistance", "isEnabled", "isReplicable", "navigationImpact", "order",
-                "overrideMeshNavigationImpact", "renderSceneLayerMask", "visibilityAnimationParam"
-            ]
-        },
-        {
-            typeof(entSkinnedMeshComponent), [
-                "acceptDismemberment", "autoHideDistance", "isEnabled", "isReplicable", "navigationImpact", "order",
-                "overrideMeshNavigationImpact", "renderSceneLayerMask", "visibilityAnimationParam"
-            ]
-        },
-        {
-            typeof(entMeshComponent), [
-                "autoHideDistance", "isEnabled", "isReplicable", "navigationImpact", "numInstances", "order",
-                "overrideMeshNavigationImpact", "objectTypeID", "renderSceneLayerMask", "visibilityAnimationParam"
-            ]
-        },
-    };
 }
