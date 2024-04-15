@@ -12,11 +12,6 @@ public partial class ChunkViewModel
     private static readonly List<Type> s_globalReadonlyTypes =
     [
         typeof(SerializationDeferredDataBuffer),
-        typeof(rendRenderTextureBlobMemoryLayout),
-        typeof(rendRenderTextureBlobPlacement),
-        typeof(rendRenderTextureBlobMipMapInfo),
-        typeof(rendRenderTextureBlobTextureInfo),
-        typeof(rendRenderTextureBlobSizeInfo),
     ];
 
     private void CalculateIsReadOnly()
@@ -33,7 +28,7 @@ public partial class ChunkViewModel
 
         if (Parent is not null && Parent.ResolvedData is RedBaseClass baseClass)
         {
-            IsReadOnly = baseClass.GetReadonlyFieldNames().Contains(Name);
+            IsReadOnly = baseClass.IsReadonlyClass() || baseClass.GetReadonlyFieldNames().Contains(Name);
         }
     }
 

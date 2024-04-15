@@ -218,6 +218,9 @@ public partial class RedBaseClass : IRedClass, IRedCloneable, IEquatable<RedBase
     ];
 
     public virtual IEnumerable<string> GetHiddenIfDefaultFieldNames() => [];
+
+    public virtual bool IsReadonlyClass() => false; 
+
     public virtual IEnumerable<string> GetReadonlyFieldNames() => [
         "saveDateTime", "resourceVersion", "cookingPlatform", "renderBuffer"
     ];
