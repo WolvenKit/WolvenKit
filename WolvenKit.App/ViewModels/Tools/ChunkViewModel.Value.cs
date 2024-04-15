@@ -158,7 +158,7 @@ public partial class ChunkViewModel
                 Value = kvp.Value switch
                 {
                     CName cname => cname.GetResolvedText() ?? "",
-                    CResourceReference<ITexture> reference => reference.DepotPath.GetResolvedText() ?? "",
+                    IRedRef reference => reference.DepotPath.GetResolvedText() ?? "",
                     _ => kvp.Value.ToString()
                 };
                 IsValueExtrapolated = true;
