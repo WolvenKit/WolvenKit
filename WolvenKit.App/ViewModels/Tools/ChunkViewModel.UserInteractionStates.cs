@@ -19,34 +19,21 @@ public partial class ChunkViewModel
         typeof(rendRenderTextureBlobSizeInfo),
     ];
 
-    // Properties (by name) that should never be changed by the user
-    private static readonly List<string> s_globalReadonlyFields =
-    [
-        "saveDateTime", "resourceVersion", "cookingPlatform", "renderBuffer"
-    ];
-
-    // Fields (by parent class) that should be marked as read-only
-    private static readonly Dictionary<Type, List<string>> s_readonlyFields = new()
-    {
-        { typeof(CBitmapTexture), ["width", "height"] }, // xbm
-        { typeof(CMesh), ["geometryHash", "consoleBias"] }, // mesh
-    };
-
     private void CalculateIsReadOnly()
     {
         if (IsReadOnly)
         {
             return;
         }
-        if (Parent?.IsReadOnly is true || s_globalReadonlyFields.Contains(Name) || s_globalReadonlyTypes.Contains(ResolvedData.GetType()))
+        if (Parent?.IsReadOnly is true || s_globalReadonlyTypes.Contains(ResolvedData.GetType()))
         {
             IsReadOnly = true;
             return;
         }
 
-        if (Parent is not null && s_readonlyFields.TryGetValue(Parent.ResolvedData.GetType(), out var hiddenFields))
+        if (Parent is not null && Parent.ResolvedData is RedBaseClass baseClass)
         {
-            IsReadOnly = hiddenFields.Contains(Name);
+            IsReadOnly = baseClass.GetReadonlyFieldNames().Contains(Name);
         }
     }
 

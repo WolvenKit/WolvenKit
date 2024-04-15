@@ -38,5 +38,9 @@ public partial class CMesh
             "useRayTracingShadowLODBias"
         ]);
     }
-   
+
+    public override IEnumerable<string> GetReadonlyFieldNames()
+    {
+        return base.GetReadonlyFieldNames().Concat(["geometryHash", "consoleBias"]);
+    }
 }
