@@ -43,6 +43,8 @@
                 </Style.Triggers>
             </Style>
 
+
+            <!-- Text block --> 
             <Style x:Key="PropertyValueStyle" TargetType="TextBlock">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="null">
@@ -61,6 +63,7 @@
                 </Style.Triggers>
             </Style>
 
+            <!-- Property name --> 
             <DataTemplate x:Key="PropertyNameTemplate" DataType="{x:Type shell:ChunkViewModel}">
                 <Grid>
                     <Grid.Resources>
@@ -79,7 +82,7 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                        <Style TargetType="TextBlock">
+                        <Style x:Key="TextblockFormatter" TargetType="TextBlock">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
                                     <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
@@ -95,6 +98,15 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
+                    <!-- <Grid.Style> -->
+                    <!--     <Style TargetType="Grid"> -->
+                    <!--         <Style.Triggers> -->
+                    <!--             <DataTrigger Binding="{Binding IsHiddenByNoobFilter}" Value="True"> -->
+                    <!--                 <Setter Property="Visibility" Value="Collapsed" /> -->
+                    <!--             </DataTrigger> -->
+                    <!--         </Style.Triggers> -->
+                    <!--     </Style> -->
+                    <!-- </Grid.Style> -->
                     <TextBlock
                         Grid.Column="1"
                         Width="Auto"

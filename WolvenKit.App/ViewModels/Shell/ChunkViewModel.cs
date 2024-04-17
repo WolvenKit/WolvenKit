@@ -2,34 +2,27 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Reflection.Metadata;
 using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData.Binding;
 using Microsoft.Win32;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Factories;
-using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.Nodify;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Documents;
-using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
@@ -151,6 +144,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         CalculateValue();
         CalculateDescriptor();
         CalculateIsDefault();
+        CalculateUserInteractionStates();
     }
 
     public ChunkViewModel(IRedType data, RDTDataViewModel tab, AppViewModel appViewModel,
@@ -230,7 +224,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             CalculateProperties();
         }
-
+        
         if (_modifierViewStateService.GetModifierState(ModifierKeys.Shift))
         {
             SetChildExpansionStates(IsExpanded);
@@ -242,6 +236,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         CalculateValue();
         CalculateDescriptor();
         CalculateIsDefault();
+
+        // Certain properties should not be editable by or visible to the user
+        CalculateUserInteractionStates();
 
         if (Parent is null)
         {
@@ -408,6 +405,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     // For view decoration. Extrapolated values will be darker.
     [ObservableProperty] private bool _isValueExtrapolated;
+
+    // For view visibility - if the noob filter is enabled, only show properties that the user wants to edit
+    [ObservableProperty] private bool _isHiddenByNoobFilter;
     
     [ObservableProperty]
     //[NotifyCanExecuteChangedFor(nameof(OpenRefCommand))]
@@ -1961,6 +1961,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 if (clone is IRedType redtype)
                 {
                     Parent.InsertChild(Parent.GetIndexOf(this) + 1, redtype);
+                    Parent?.RecalculateProperties();
                 }
 
                 Parent?.RecalculateProperties();
@@ -2044,7 +2045,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             DuplicateInParent();
         }
 
-        Parent.RecalculateProperties();
+        Parent.CalculateDescriptor();
+        Parent.CalculateValue();
+        Parent.ReindexChildren();
     }
 
     [RelayCommand(CanExecute = nameof(CanDuplicateChunk))]
@@ -2754,30 +2757,31 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         ArgumentNullException.ThrowIfNull(Parent);
 
-        if (ResolvedData is IRedArray || PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)))
+        if (ResolvedData is not IRedArray && !PropertyType.IsAssignableTo(typeof(IRedArray)) &&
+            !PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)))
         {
-            if (Data is RedDummy)
+            return false;
+        }
+
+        if (Data is not RedDummy)
+        {
+            return true;
+        }
+
+        if (_flags == null || _flags.Equals(Flags.Empty))
+        {
+            if (System.Activator.CreateInstance(PropertyType) is IRedType o)
             {
-                if (_flags == null || _flags.Equals(Flags.Empty))
-                {
-                    if (System.Activator.CreateInstance(PropertyType) is IRedType o)
-                    {
-                        Data = o;
-                        return true;
-                    }
-                }
-                else
-                {
-                    var flags = Flags.NotNull();
-                    if (System.Activator.CreateInstance(PropertyType, flags.MoveNext() ? flags.Current : 0) is IRedType o)
-                    {
-                        Data = o;
-                        return true;
-                    }
-                }
+                Data = o;
+                return true;
             }
-            else
+        }
+        else
+        {
+            var flags = Flags.NotNull();
+            if (System.Activator.CreateInstance(PropertyType, flags.MoveNext() ? flags.Current : 0) is IRedType o)
             {
+                Data = o;
                 return true;
             }
         }
@@ -2807,7 +2811,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             if (ResolvedData is IRedArray ira)
             {
-                index = Math.Min(index, ira.Count - 1);
+                index = Math.Min(index, ira.Count);
                 var comp = CheckTypeCompatibility(ira.InnerType, item.GetType());
                 switch (comp)
                 {

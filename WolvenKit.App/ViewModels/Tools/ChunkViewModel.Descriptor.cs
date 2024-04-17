@@ -11,470 +11,478 @@ using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Pools;
 using static WolvenKit.RED4.Types.RedReflection;
 
+// ReSharper disable once CheckNamespace
 namespace WolvenKit.App.ViewModels.Shell;
 
 public partial class ChunkViewModel
 {
+    private bool CalculateDescriptorFromData()
+    {
+        switch (Data)
+        {
+            case IBrowsableDictionary ibd:
+            {
+                var pns = ibd.GetPropertyNames();
+                Descriptor = $"[{pns.Count()}]";
+                return true;
+            }
+            case IList list:
+                Descriptor = $"[{list.Count}]";
+                return true;
+            case Dictionary<string, object> dict:
+                Descriptor = $"[{dict.Count}]";
+                return true;
+            case TweakDBID tdb:
+                //Descriptor = Locator.Current.GetService<TweakDBService>().GetString(tdb);
+                Descriptor = tdb.GetResolvedText();
+                return true;
+            case gamedataLocKeyWrapper locKey:
+                Descriptor = ((ulong)locKey).ToString();
+                //Value = Locator.Current.GetService<LocKeyService>().GetFemaleVariant(value);
+                return true;
+            case IRedString str:
+            {
+                var s = str.GetString();
+                if (s is not null && s.StartsWith("LocKey#") && ulong.TryParse(s[7..], out var locKey2))
+                {
+                    Descriptor = locKey2.ToString();
+                }
+
+                return true;
+            }
+            //if (ResolvedData is CMaterialInstance && Parent is not null)
+            //{
+            //    if (Parent.Parent is not null && Parent.Parent.Parent is not null && Parent.Parent.Data is CMesh mesh)
+            //    {
+            //        Descriptor = mesh.MaterialEntries[int.Parse(Name)].Name;
+            //    }
+            //}
+            case Vector3 v3:
+                Descriptor = $"{v3.X}, {v3.Y}, {v3.Z}";
+                return true;
+            case Vector4 v4:
+                Descriptor = $"{v4.X}, {v4.Y}, {v4.Z}, {v4.W}";
+                return true;
+            case Quaternion q:
+                Descriptor = $"{q.I}, {q.J}, {q.K}, {q.R}";
+                return true;
+
+            default:
+                return false;
+        }
+    }
+    
     public void CalculateDescriptor()
     {
         Descriptor = "";
 
-        if (Data is worldNodeData sst && Tab is RDTDataViewModel dvm &&
-            dvm.Chunks[0].Data is worldStreamingSector wss && sst.NodeIndex < wss.Nodes.Count)
-        {
-            Descriptor = $"[{sst.NodeIndex}] {GetNameFrom(wss.Nodes[sst.NodeIndex].NotNull().Chunk)}";
-            return;
-        }
 
-        if (Data is worldStreamingSectorDescriptor wssd)
+        switch (ResolvedData)
         {
-            Descriptor = (wssd.Data.DepotPath.GetResolvedText() ?? "")
-                .Replace("base\\worlds\\03_night_city\\_compiled\\default\\", "").Replace(".streamingsector", "");
-            return;
-        }
+            case null:
+            case RedDummy:
+                return;
 
-        if (ResolvedData is IRedArray ary && ary.Count > 0)
-        {
-            // csv files and the like 
-            if (Parent is { Name: "compiledData" } && GetRootModel().Data is C2dArray csv)
-            {
-                var index = 0;
-                for (var i = 0; i < csv.CompiledHeaders.Count; i++)
-                {
-                    if (((string)csv.CompiledHeaders[i]).Contains("name", StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        index = i;
-                        break;
-                    }
-                }
+            case worldNodeData sst when Tab is RDTDataViewModel dvm &&
+                                        dvm.Chunks[0].Data is worldStreamingSector wss && sst.NodeIndex < wss.Nodes.Count:
+                Descriptor = $"[{sst.NodeIndex}] {StringHelper.Stringify(wss.Nodes[sst.NodeIndex].Chunk)}";
+                return;
+            case worldStreamingSectorDescriptor wssd:
+                Descriptor = (wssd.Data.DepotPath.GetResolvedText() ?? "")
+                    .Replace(@"base\worlds\03_night_city\_compiled\default\", "").Replace(".streamingsector", "");
+                break;
+            case worldNode worldNode when StringHelper.Stringify(worldNode) is string s && s != "":
+                Descriptor = s;
+                return;
+            case worldNode:
+                // TODO find fallback properties for other node types
+                break;
+            case CHandle<animAnimNode_Base> { Chunk: animAnimNode_Switch } handle
+                when handle.Chunk.GetProperty("InputNodes") is CArray<animPoseLink> animAry:
 
-                Descriptor = $"{ary[index]}";
+                Descriptor = StringHelper.Stringify(animAry
+                    .Select((animPoseLink) => GetNodeName(animPoseLink.Node) ?? "").ToArray());
                 if (Descriptor != "")
                 {
                     return;
                 }
-            }
 
-            Descriptor = $"[{ary.Count}]";
-        }
-        else if (ResolvedData is appearanceAppearancePart part)
-        {
-            Descriptor = part.Resource.DepotPath.GetResolvedText() ?? "";
-            if (Descriptor != "")
-            {
-                return;
-            }
-        }
-        else if (ResolvedData is locVoLineEntry voLineEntry)
-        {
-            Descriptor = voLineEntry.StringId.ToString();
-            if (Descriptor != "")
-            {
-                return;
-            }
-        }
-        else if (ResolvedData is locVoLengthEntry voLengthEntry)
-        {
-            Descriptor = voLengthEntry.StringId.ToString();
-            if (Descriptor != "")
-            {
-                return;
-            }
-        }
-        else if (ResolvedData is animAnimSetEntry entry && entry.Animation?.GetValue() is animAnimation animation)
-        {
-            Descriptor = animation.GetProperty(nameof(Name))?.ToString() ?? "";
+                break;
+            // csv files
+            case IRedArray { Count: > 0 } csvAry when Parent is { Name: "compiledData" } && GetRootModel().Data is C2dArray csv:
 
-            if (ulong.TryParse(Descriptor, out var result))
-            {
-                Descriptor = ResourcePathPool.ResolveHash(result);
-            }
-            if (Descriptor != "")
-            {
-                return;
-            }
-        }
-        else if (ResolvedData is scnWorkspotData_ExternalWorkspotResource externalWorkspotResource)
-        {
-            Descriptor = $"{externalWorkspotResource.DataId.Id.ToString()}";
-            return;
-        }
-        else if (ResolvedData is animAnimSetupEntry animSetupEntry)
-        {
-            Descriptor = $"{animSetupEntry.AnimSet.DepotPath.GetResolvedText()}";
-            return;
-        }
-        else if (ResolvedData is entAnimationControlBinding controlBinding)
-        {
-            Descriptor = $"{controlBinding.BindName.GetResolvedText()}";
-            return;
-        }
-        else if (ResolvedData is scnSceneWorkspotInstanceId workspotInstanceId)
-        {
-            Descriptor = $"{workspotInstanceId.Id}";
-            return;
-        }
-        else if (ResolvedData is scnWorkspotInstance workspotInstance)
-        {
-            Descriptor = $"{workspotInstance.OriginMarker.NodeRef.GetResolvedText()}";
-            return;
-        }
-        else if (ResolvedData is scnChoiceNodeOption choiceNodeOption)
-        {
-            Descriptor = $"{choiceNodeOption.Caption}";
-            return;
-        }
-        else if (ResolvedData is scnSectionNode sectionNode)
-        {
-            Descriptor = $"{sectionNode.NodeId.Id}";
-            return;
-        }
-        else if (ResolvedData is scnInteractionShapeParams shapeParams)
-        {
-            Descriptor = $"{shapeParams.Preset}";
-            return;
-        }
-        else if (ResolvedData is scnSceneWorkspotDataId workspotDataId)
-        {
-            Descriptor = $"{workspotDataId.Id}";
-            return;
-        }
-        else if (ResolvedData is scnNodeId id)
-        {
-            Descriptor = $"{id.Id}";
-            return;
-        }
-        else if (ResolvedData is scnPlayerActorDef playerActorDef)
-        {
-            Descriptor = $"{playerActorDef.PlayerName}";
-            return;
-        }
-        else if (ResolvedData is scnMarker sceneMarker)
-        {
-            Descriptor = sceneMarker.NodeRef.GetResolvedText();
-        }
-        else if (ResolvedData is scnlocLocStoreEmbeddedVariantDescriptorEntry locDescriptorEmbedded &&
-                 locDescriptorEmbedded.VpeIndex > 0)
-        {
-            Descriptor = locDescriptorEmbedded.VpeIndex.ToString();
-        }
-        else if (ResolvedData is scnlocLocStoreEmbeddedVariantPayloadEntry locPayloadEmbedded)
-        {
-            Descriptor = locPayloadEmbedded.VariantId.Ruid.ToString();
-        }
-        else if (ResolvedData is scnPropDef propDef)
-        {
-            Descriptor = $"{propDef.PropName}";
-            if (propDef.SpecPropRecordId.GetResolvedText() is string s && s != "")
-            {
-                Descriptor = $"{Descriptor} ID: {s}";
-            }
-
-            return;
-        }
-        else if (ResolvedData is scnSpawnDespawnEntityParams spawnDespawnParams)
-        {
-            Descriptor = $"{spawnDespawnParams.DynamicEntityUniqueName.GetResolvedText()}";
-            if (spawnDespawnParams.SpawnMarkerNodeRef.GetResolvedText() is string s && s != "")
-            {
-                Descriptor = $"{Descriptor} ID: {s}";
-            }
-
-            return;
-        }
-        else if (ResolvedData is scnNodeSymbol scnNodeSymbol)
-        {
-            Descriptor = $"NodeID: {scnNodeSymbol.NodeId.Id}";
-            return;
-        }
-        else if (ResolvedData is scnWorkspotSymbol scnWorkspotSymbol)
-        {
-            Descriptor = $"NodeID: {scnWorkspotSymbol.WsInstance.Id} (Instance {scnWorkspotSymbol.WsInstance.Id})";
-            return;
-        }
-        else if (ResolvedData is scnSceneEventSymbol sceneEventSymbol)
-        {
-            Descriptor = $"EditorEventId: {sceneEventSymbol.EditorEventId}";
-            return;
-        }
-        else if (ResolvedData is scnPerformerSymbol performerSymbol)
-        {
-            Descriptor = $"{performerSymbol.EntityRef.DynamicEntityUniqueName.GetResolvedText()}";
-            return;
-        }
-        else if (ResolvedData is gameEntityReference gameEntRef)
-        {
-            Descriptor = $"{gameEntRef.DynamicEntityUniqueName.GetResolvedText()}";
-            return;
-        }
-        else if (ResolvedData is scnLipsyncAnimSetSRRef lipsyncAnim)
-        {
-            if (lipsyncAnim.LipsyncAnimSet.DepotPath.GetResolvedText() is string animSetDepotPath &&
-                animSetDepotPath != "")
-            {
-                Descriptor = $"{animSetDepotPath}";
-            }
-            else if (lipsyncAnim.AsyncRefLipsyncAnimSet.DepotPath.GetResolvedText() is string asyncSetDepotPath &&
-                     asyncSetDepotPath != "")
-            {
-                Descriptor = $"{asyncSetDepotPath}";
-            }
-
-            return;
-        }
-        else if (ResolvedData is scnscreenplayDialogLine scnscreenplayDialogLine)
-        {
-            Descriptor = scnscreenplayDialogLine.FemaleLipsyncAnimationName.GetResolvedText() ?? "";
-            if (scnscreenplayDialogLine.MaleLipsyncAnimationName.GetResolvedText() is string s1 && s1 != "")
-            {
-                var separator = Value == "" ? "" : " | ";
-                Descriptor = $"{Descriptor}{separator}${s1}";
-            }
-        }
-        // animgraph - something is broken here. Why does the orange text go away? Why do I need the try/catch
-        // around the GetNodename?
-        else if (Data is CHandle<animAnimNode_Base> handle)
-        {
-            if (handle.Chunk is animAnimNode_Switch)
-            {
-                var inputNodes = handle.Chunk.GetProperty("InputNodes");
-                if (inputNodes is CArray<animPoseLink> animAry)
+                var nameIndex = 0;
+                for (var i = 0; i < csv.CompiledHeaders.Count; i++)
                 {
-                    var names = animAry
-                        .Select((animPoseLink) => GetNodeName(animPoseLink.Node) ?? "")
-                        .Where((name) => name != "")
-                        .ToArray();
-                    Descriptor = string.Join(", ", names);
-                    // Value = string.Join(", ", names);
-                    // IsValueExtrapolated = true;
+                    if (!((string)csv.CompiledHeaders[i]).Contains("name", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        continue;
+                    }
+
+                    nameIndex = i;
+                    break;
+                }
+
+                Descriptor = $"{csvAry[nameIndex]}";
+                if (Descriptor != "")
+                {
                     return;
                 }
-            }
-        }
-        else if (ResolvedData is IRedBufferPointer rbp && rbp.GetValue().Data is RedPackage pkg)
-        {
-            Descriptor = $"[{pkg.Chunks.Count}]";
-        }
-        else if (ResolvedData is IRedBufferPointer rbp2 && rbp2.GetValue().Data is CR2WList cl)
-        {
-            Descriptor = $"[{cl.Files.Count}]";
-        }
-        else if (ResolvedData is CKeyValuePair kvp)
-        {
-            Descriptor = kvp.Key;
-        }
-        else if (ResolvedData is questNodeDefinition qnd)
-        {
-            Descriptor = qnd.Id.ToString();
-            return;
-        }
-        else if (ResolvedData is scnSceneGraphNode sgn)
-        {
-            Descriptor = sgn.NodeId.Id.ToString();
-            return;
-        }
-        else if (ResolvedData is meshMeshMaterialBuffer matBuffer)
-        {
-            Descriptor = $"[{matBuffer.Materials?.Count ?? 0}]";
-            return;
-        }
-        else if (ResolvedData is worldCompiledEffectInfo info)
-        {
-            Descriptor = string.Join(", ", info.PlacementInfos);
-            return;
-        }
-        else if (Data is TweakDBID tdb)
-        {
-            //Descriptor = Locator.Current.GetService<TweakDBService>().GetString(tdb);
-            Descriptor = tdb.GetResolvedText();
-            return;
-        }
-        else if (Data is gamedataLocKeyWrapper locKey)
-        {
-            Descriptor = ((ulong)locKey).ToString();
-            //Value = Locator.Current.GetService<LocKeyService>().GetFemaleVariant(value);
-        }
-        else if (Data is IRedString str)
-        {
-            var s = str.GetString();
-            if (s is not null && s.StartsWith("LocKey#") && ulong.TryParse(s[7..], out var locKey2))
-            {
-                Descriptor = locKey2.ToString();
-            }
-        }
-        //if (ResolvedData is CMaterialInstance && Parent is not null)
-        //{
-        //    if (Parent.Parent is not null && Parent.Parent.Parent is not null && Parent.Parent.Data is CMesh mesh)
-        //    {
-        //        Descriptor = mesh.MaterialEntries[int.Parse(Name)].Name;
-        //    }
-        //}
-        else if (Data is Vector3 v3)
-        {
-            Descriptor = $"{v3.X}, {v3.Y}, {v3.Z}";
-        }
-        else if (Data is Vector4 v4)
-        {
-            Descriptor = $"{v4.X}, {v4.Y}, {v4.Z}, {v4.W}";
-        }
-        else if (Data is Quaternion q)
-        {
-            Descriptor = $"{q.I}, {q.J}, {q.K}, {q.R}";
-        }
 
-        // For local and external materials
-        if (ResolvedData is CMaterialInstance or CResourceAsyncReference<IMaterial> && NodeIdxInParent > -1
-            && GetRootModel().GetModelFromPath("materialEntries")?.ResolvedData is CArray<CMeshMaterialEntry>
-                materialEntries && materialEntries.Count > NodeIdxInParent)
-        {
-            var isLocalMaterial = ResolvedData is CMaterialInstance;
-            var entry = materialEntries[NodeIdxInParent];
+                break;
 
-            // If we immediately found the right material: use material name
-            if (entry.IsLocalInstance == isLocalMaterial && entry.Index == NodeIdxInParent)
+            // regular arrays
+            case IRedArray { Count: > 0 } ary:
             {
-                Descriptor = entry.Name.GetResolvedText();
+                Descriptor = $"[{ary.Count}]";
+                break;
+            }
+            case appearanceAppearancePart part:
+            {
+                Descriptor = part.Resource.DepotPath.GetResolvedText() ?? "";
+                if (Descriptor != "")
+                {
+                    return;
+                }
+
+                break;
+            }
+            case locVoLineEntry voLineEntry:
+            {
+                Descriptor = voLineEntry.StringId.ToString();
+                if (Descriptor != "")
+                {
+                    return;
+                }
+
+                break;
+            }
+            case animAnimEvent animEvent:
+            {
+                Descriptor = animEvent.EventName.GetResolvedText();
+                if (Descriptor != "")
+                {
+                    return;
+                }
+
+                break;
+            }
+            case locVoLengthEntry voLengthEntry:
+            {
+                Descriptor = voLengthEntry.StringId.ToString();
+                if (Descriptor != "")
+                {
+                    return;
+                }
+
+                break;
+            }
+            case animAnimSetEntry entry when entry.Animation?.GetValue() is animAnimation animation:
+            {
+                Descriptor = animation.GetProperty(nameof(Name))?.ToString() ?? "";
+
+                if (ulong.TryParse(Descriptor, out var result))
+                {
+                    Descriptor = ResourcePathPool.ResolveHash(result);
+                }
+
+                if (Descriptor != "")
+                {
+                    return;
+                }
+
+                break;
+            }
+            case scnWorkspotData_ExternalWorkspotResource externalWorkspotResource:
+                Descriptor = $"{externalWorkspotResource.DataId.Id.ToString()}";
+                return;
+            case animAnimSetupEntry animSetupEntry:
+                Descriptor = $"{animSetupEntry.AnimSet.DepotPath.GetResolvedText()}";
+                return;
+            case entAnimationControlBinding controlBinding:
+                Descriptor = $"{controlBinding.BindName.GetResolvedText()}";
+                return;
+            case scnSceneWorkspotInstanceId workspotInstanceId:
+                Descriptor = $"{workspotInstanceId.Id}";
+                return;
+            case scnWorkspotInstance workspotInstance:
+                Descriptor = $"{workspotInstance.OriginMarker.NodeRef.GetResolvedText()}";
+                return;
+            case scnChoiceNodeOption choiceNodeOption:
+                Descriptor = $"{choiceNodeOption.Caption}";
+                return;
+            case scnSectionNode sectionNode:
+                Descriptor = $"{sectionNode.NodeId.Id}";
+                return;
+            case scnInteractionShapeParams shapeParams:
+                Descriptor = $"{shapeParams.Preset}";
+                return;
+            case scnSceneWorkspotDataId workspotDataId:
+                Descriptor = $"{workspotDataId.Id}";
+                return;
+            case scnNodeId id:
+                Descriptor = $"{id.Id}";
+                return;
+            case scnPlayerActorDef playerActorDef:
+                Descriptor = $"{playerActorDef.PlayerName}";
+                return;
+            case scnMarker sceneMarker:
+                Descriptor = sceneMarker.NodeRef.GetResolvedText();
+                break;
+            case scnlocLocStoreEmbeddedVariantDescriptorEntry locDescriptorEmbedded when
+                locDescriptorEmbedded.VpeIndex > 0:
+                Descriptor = locDescriptorEmbedded.VpeIndex.ToString();
+                break;
+            case scnlocLocStoreEmbeddedVariantPayloadEntry locPayloadEmbedded:
+                Descriptor = locPayloadEmbedded.VariantId.Ruid.ToString();
+                break;
+            case scnPropDef propDef:
+            {
+                Descriptor = $"{propDef.PropName}";
+                if (propDef.SpecPropRecordId.GetResolvedText() is string s && s != "")
+                {
+                    Descriptor = $"{Descriptor} ID: {s}";
+                }
+
+                return;
+            }
+            case scnSpawnDespawnEntityParams spawnDespawnParams:
+            {
+                Descriptor = $"{spawnDespawnParams.DynamicEntityUniqueName.GetResolvedText()}";
+                if (spawnDespawnParams.SpawnMarkerNodeRef.GetResolvedText() is string s && s != "")
+                {
+                    Descriptor = $"{Descriptor} ID: {s}";
+                }
+
+                return;
+            }
+            case scnNodeSymbol scnNodeSymbol:
+                Descriptor = $"NodeID: {scnNodeSymbol.NodeId.Id}";
+                return;
+            case scnWorkspotSymbol scnWorkspotSymbol:
+                Descriptor = $"NodeID: {scnWorkspotSymbol.WsInstance.Id} (Instance {scnWorkspotSymbol.WsInstance.Id})";
+                return;
+            case scnSceneEventSymbol sceneEventSymbol:
+                Descriptor = $"EditorEventId: {sceneEventSymbol.EditorEventId}";
+                return;
+            case scnPerformerSymbol performerSymbol:
+                Descriptor = $"{performerSymbol.EntityRef.DynamicEntityUniqueName.GetResolvedText()}";
+                return;
+            case gameEntityReference gameEntRef:
+                Descriptor = $"{gameEntRef.DynamicEntityUniqueName.GetResolvedText()}";
+                return;
+            case scnLipsyncAnimSetSRRef lipsyncAnim:
+                Descriptor = StringHelper.StringifyOrNull(lipsyncAnim.LipsyncAnimSet.DepotPath)
+                             ?? StringHelper.StringifyOrNull(lipsyncAnim.AsyncRefLipsyncAnimSet.DepotPath) ?? "";
+                if (Descriptor != "")
+                {
+                    return;
+                }
+
+                break;
+
+            case scnscreenplayDialogLine scnscreenplayDialogLine:
+            {
+                Descriptor = scnscreenplayDialogLine.FemaleLipsyncAnimationName.GetResolvedText() ?? "";
+                if (StringHelper.StringifyOrNull(scnscreenplayDialogLine.MaleLipsyncAnimationName) is string s1)
+                {
+                    var separator = Value == "" ? "" : " | ";
+                    Descriptor = $"{Descriptor}{separator}${s1}";
+                }
+
+                break;
+            }
+            // animgraph - something is broken here. Why does the orange text go away? Why do I need the try/catch
+            // around the GetNodename?
+            // For local and external materials
+            case CMaterialInstance or CResourceAsyncReference<IMaterial> when NodeIdxInParent > -1
+                                                                              && GetRootModel().GetModelFromPath("materialEntries")
+                                                                                      ?.ResolvedData is CArray<CMeshMaterialEntry>
+                                                                                  materialEntries &&
+                                                                              materialEntries.Count > NodeIdxInParent:
+            {
+                var isLocalMaterial = ResolvedData is CMaterialInstance;
+                var entry = materialEntries[NodeIdxInParent];
+
+                // If we immediately found the right material: use material name
+                if (entry.IsLocalInstance == isLocalMaterial && entry.Index == NodeIdxInParent)
+                {
+                    Descriptor = entry.Name.GetResolvedText();
+                    if (Descriptor != null)
+                    {
+                        return;
+                    }
+                }
+
+                // Else: Iterate to find material name
+                entry = materialEntries
+                    .FirstOrDefault(e => e.Index == NodeIdxInParent && e.IsLocalInstance == isLocalMaterial);
+
+                // Will return null if no entry is found
+                Descriptor = entry?.Name.GetResolvedText();
+
                 if (Descriptor != null)
                 {
                     return;
                 }
+
+                break;
             }
-
-            // Else: Iterate to find material name
-            entry = materialEntries
-                .Where((e, idx) => e.Index == NodeIdxInParent && e.IsLocalInstance == isLocalMaterial)
-                .FirstOrDefault();
-
-            // Will return null if no entry is found
-            Descriptor = entry?.Name.GetResolvedText();
-
-            if (Descriptor != null)
+            case localizationPersistenceOnScreenEntry localizationPersistenceOnScreenEntry:
             {
-                return;
-            }
-        }
-        else if (ResolvedData is localizationPersistenceOnScreenEntry localizationPersistenceOnScreenEntry)
-        {
-            var desc = $"[{localizationPersistenceOnScreenEntry.PrimaryKey}]";
-            if (!string.IsNullOrEmpty(localizationPersistenceOnScreenEntry.SecondaryKey))
-            {
-                desc += $" {localizationPersistenceOnScreenEntry.SecondaryKey}";
-            }
+                var desc = $"[{localizationPersistenceOnScreenEntry.PrimaryKey}]";
+                if (!string.IsNullOrEmpty(localizationPersistenceOnScreenEntry.SecondaryKey))
+                {
+                    desc += $" {localizationPersistenceOnScreenEntry.SecondaryKey}";
+                }
 
-            Descriptor = desc;
-        }
-        else if (ResolvedData is entHardTransformBinding tBinding)
-        {
-            Descriptor = tBinding.BindName;
-        }
-        else if (ResolvedData is WorldTransform bind)
-        {
-            Descriptor =
-                $"Pos: (X: {(float)bind.Position.X:G9}, Y: {(float)bind.Position.Y:G9}, Z: {(float)bind.Position.Z:G9})";
-            Descriptor =
-                $"{Descriptor}, Orientation: ({bind.Orientation})";
-            return;
-        }
-        else if (ResolvedData is WorldPosition position)
-        {
-            Descriptor = $"{(float)position.X:G9}, {(float)position.Y:G9}, {(float)position.Z:G9}";
-            return;
-        }
-        else if (ResolvedData is inkTextureSlot texturesSlot)
-        {
-            var desc = texturesSlot.Texture.DepotPath.GetResolvedText();
-            if (!string.IsNullOrEmpty(desc))
-            {
                 Descriptor = desc;
+                break;
             }
-        }
-        else if (ResolvedData is worldInstancedMeshNode instancedMeshNode)
-        {
-            // If this isn't overwritten by debugName, put the mesh name instead
-            var desc = GetNameFrom(instancedMeshNode);
-            if (!string.IsNullOrEmpty(desc))
-            {
-                Descriptor = desc;
-            }
-        }
-        else if (ResolvedData is entEffectDesc { EffectName: var name })
-        {
-            Descriptor = name;
-            if (Descriptor is not null and not "")
-            {
+            case entHardTransformBinding tBinding:
+                Descriptor = tBinding.BindName;
+                break;
+            case WorldTransform bind:
+                Descriptor = StringHelper.Stringify(bind);
                 return;
-            }
-        }
-        else if (ResolvedData is senseVisibleObject senseVisibleObject)
-        {
-            Descriptor = senseVisibleObject.Description;
+            case WorldPosition position:
+                Descriptor = StringHelper.Stringify(position);
+                return;
+            case inkTextureSlot texturesSlot:
+            {
+                Descriptor = StringHelper.StringifyOrNull(texturesSlot.Texture.DepotPath);
+                if (Descriptor is not null)
+                {
+                    return;
+                }
 
-            if (Descriptor is not null and not "")
+                break;
+            }
+            case entEffectDesc { EffectName: var name }:
             {
+                Descriptor = name;
+                if (Descriptor is not null and not "")
+                {
+                    return;
+                }
+
+                break;
+            }
+            case senseVisibleObject senseVisibleObject:
+            {
+                Descriptor = senseVisibleObject.Description;
+
+                if (Descriptor is not null and not "")
+                {
+                    return;
+                }
+
+                break;
+            }
+            case FxResourceMapData mapData:
+            {
+                Descriptor = mapData.Key;
+                if (Descriptor is not null and not "")
+                {
+                    return;
+                }
+
+                break;
+            }
+            case CParticleEmitter particleEmitter:
+            {
+                Descriptor = particleEmitter.EditorName;
+                if (Descriptor is not null and not "")
+                {
+                    return;
+                }
+
+                break;
+            }
+            case rendGradientEntry rendGradientEntry:
+                Descriptor = $"{rendGradientEntry.Value}";
+                break;
+            case localizationPersistenceOnScreenEntries jsonRoot:
+            {
+                Descriptor = $"[{jsonRoot.Entries.Count}]";
                 return;
             }
-        }
-        else if (ResolvedData is FxResourceMapData mapData)
-        {
-            Descriptor = mapData.Key;
-            if (Descriptor is not null and not "")
+            case gameFxResource fxResource:
             {
+                Descriptor = StringHelper.StringifyOrNull(fxResource.Effect.DepotPath);
+                if (Descriptor is not null)
+                {
+                    return;
+                }
+
+                break;
+            }
+            case gameBinkVideoRecord videoRecord:
+            {
+                Descriptor = $"{videoRecord.BinkDuration}";
+                if (Descriptor is not "")
+                {
+                    return;
+                }
+
+                break;
+            }
+            case IRedBufferPointer rbp when rbp.GetValue().Data is RedPackage pkg:
+                Descriptor = $"[{pkg.Chunks.Count}]";
+                break;
+            case IRedBufferPointer rbp2 when rbp2.GetValue().Data is CR2WList cl:
+                Descriptor = $"[{cl.Files.Count}]";
+                break;
+            case CKeyValuePair kvp:
+                Descriptor = kvp.Key;
+                break;
+            case questNodeDefinition qnd:
+                Descriptor = qnd.Id.ToString();
                 return;
-            }
-        }
-        else if (ResolvedData is localizationPersistenceOnScreenEntries jsonRoot)
-        {
-            Descriptor = $"[{jsonRoot.Entries.Count}]";
-            if (Descriptor is not null and not "")
-            {
+            case questVarComparison_ConditionType qnd:
+                Descriptor = qnd.FactName;
                 return;
-            }
-        }
-        else if (ResolvedData is gameFxResource fxResource)
-        {
-            Descriptor = fxResource.Effect.DepotPath.GetResolvedText();
-            if (Descriptor is not null and not "")
-            {
+            case questVarVsVarComparison_ConditionType qnd:
+                Descriptor = StringHelper.Stringify([qnd.FactName1, qnd.FactName2]);
                 return;
-            }
-        }
-        else if (ResolvedData is gameBinkVideoRecord videoRecord)
-        {
-            Descriptor = $"{videoRecord.BinkDuration}";
-            if (Descriptor is not null and not "")
-            {
+            case scnSceneGraphNode sgn:
+                Descriptor = sgn.NodeId.Id.ToString();
                 return;
+            case meshMeshMaterialBuffer matBuffer:
+                // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract this can be null!
+                Descriptor = $"[{matBuffer.Materials?.Count ?? 0}]";
+                return;
+            case worldCompiledEffectInfo info:
+                Descriptor = string.Join(", ", info.PlacementInfos);
+                return;
+            case animAnimNode_Container nodeContainer:
+                Descriptor = $"[{nodeContainer.Nodes.Count}]";
+                return;
+            default:
+            {
+                // mesh: boneTransforms (in different coordinate spaces)
+                if (NodeIdxInParent > -1 &&
+                    Parent?.Name is "boneTransforms" or "aPoseLS" or "aPoseMS" &&
+                    GetRootModel().GetModelFromPath("boneNames")?.ResolvedData is CArray<CName> boneNames &&
+                    boneNames.Count > NodeIdxInParent)
+                {
+                    Descriptor = boneNames[NodeIdxInParent];
+                    break;
+                }
+
+                if (CalculateDescriptorFromData())
+                {
+                    return;
+                }
+
+                break;
             }
         }
-        // mesh: boneTransforms (in different coordinate spaces)
-        else if (NodeIdxInParent > -1 &&
-                 (Parent?.Name == "boneTransforms" || Parent?.Name == "aPoseLS" || Parent?.Name == "aPoseMS") &&
-                 GetRootModel().GetModelFromPath("boneNames")?.ResolvedData is CArray<CName> boneNames &&
-                 boneNames.Count > NodeIdxInParent)
-        {
-            Descriptor = boneNames[NodeIdxInParent];
-        }
-        else if (ResolvedData is not null)
-        {
-            if (Data is IBrowsableDictionary ibd)
-            {
-                var pns = ibd.GetPropertyNames();
-                Descriptor = $"[{pns.Count()}]";
-            }
-            else if (Data is IList list)
-            {
-                Descriptor = $"[{list.Count}]";
-            }
-            else if (Data is Dictionary<string, object> dict)
-            {
-                Descriptor = $"[{dict.Count}]";
-            }
-        }
-        
-        
+
+
         if (ResolvedData is RedBaseClass irc)
         {
-            foreach (var propName in s_DescriptorPropNames)
+            foreach (var propName in s_descriptorPropNames)
             {
                 var prop = GetPropertyByRedName(irc.GetType(), propName);
                 if (prop is null)
@@ -494,7 +502,7 @@ public partial class ChunkViewModel
         }
         else
         {
-            foreach (var propName in s_DescriptorPropNames)
+            foreach (var propName in s_descriptorPropNames)
             {
                 var prop = Data?.GetType().GetProperty(propName);
 
@@ -517,30 +525,11 @@ public partial class ChunkViewModel
         Descriptor ??= "";
     }
 
-    private static string GetNameFrom(worldNode? linkNode)
-    {
-        if (linkNode is null)
-        {
-            return "None";
-        }
-
-        if (linkNode.DebugName.GetResolvedText() is string s && s != "" && s != "None")
-        {
-            return s;
-        }
-
-        if (linkNode is worldInstancedMeshNode inst)
-        {
-            return inst.Mesh.DepotPath.GetResolvedText()?.Split("/").LastOrDefault() ?? "None";
-        }
-
-        return "None";
-    }
 
     /// <summary>
     /// Property names for descriptor field
     /// </summary>
-    private static readonly string[] s_DescriptorPropNames =
+    private static readonly string[] s_descriptorPropNames =
     [
         "name", // default property
         "partName", // ?
@@ -562,17 +551,21 @@ public partial class ChunkViewModel
         "className", // ?
         "actorName", // ?
         "sectorHash", // sectors
-        "propertyPath" // ?
+        "propertyPath", // ?
     ];
 
-    private static string CNameArrayToString(CArray<CName> ary)
-    {
-        string[] cnames = { };
-        foreach (var cName in ary)
-        {
-            cnames.Append(cName.ToString());
-        }
+    private static readonly string[] s_nonRenamableProperties =
+    [
+        "propertyPath",
+        "className",
+    ];
+    // For search&replace
 
-        return $"[{string.Join(",", cnames)}]";
-    }
+    private static readonly string[] s_replacementPropertyNames = s_descriptorPropNames
+        .Where((s) => !s_nonRenamableProperties.Contains(s))
+        .Concat<string>([
+            "depotPath",
+            "meshAppearance",
+        ]).ToArray();
+
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
@@ -47,6 +48,10 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         _appViewModel = appViewModel;
 
         _data = data;
+
+        IsSimpleViewEnabled = Parent.IsSimpleViewEnabled;
+
+        parent.PropertyChanged += RDTDataViewModel_PropertyChanged;
         
         if (SelectedChunk == null && Chunks.Count > 0)
         {
@@ -59,6 +64,16 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
         Nodes.Add(new ResourcePathWrapper(this, new ReferenceSocket(Chunks[0].RelativePath), _appViewModel, _chunkViewmodelFactory));
         _nodePaths.Add(Chunks[0].RelativePath);
+    }
+
+    private void RDTDataViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(RedDocumentViewModel.IsSimpleViewEnabled))
+        {
+            return;
+        }
+
+        IsSimpleViewEnabled = Parent.IsSimpleViewEnabled;
     }
 
     public RDTDataViewModel(string header, IRedType data, RedDocumentViewModel file, AppViewModel appViewModel,
@@ -97,6 +112,8 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     [ObservableProperty] private object? _selectedChunk;
 
     [ObservableProperty] private object? _selectedChunks;
+
+    [ObservableProperty] private bool _IsSimpleViewEnabled;
 
 
     [ObservableProperty] private ChunkViewModel? _rootChunk;

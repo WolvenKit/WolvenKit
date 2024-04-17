@@ -31,6 +31,7 @@ public interface ISettingsDto
     public bool ShowTweakDBIDAsHex { get; set; }
     public bool ShowReferenceGraph { get; set; }
     public EGameLanguage GameLanguage { get; set; }
+    public bool EnableNoobFilterByDefault { get; set; }
     public Dictionary<string, LaunchProfile>? LaunchProfiles { get; set; }
     public Dictionary<string, bool>? ScriptStatus { get; set; }
     public bool AnalyzeModArchives { get; set; }

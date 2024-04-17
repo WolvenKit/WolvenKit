@@ -17,7 +17,7 @@ namespace WolvenKit.Modkit.RED4.Animation
 {
     public class CompressedBuffer
     {
-        public static void ExportAsAnimationToModel(ref ModelRoot model, animAnimation animAnimDes, bool incRootMotion = true)
+        public static void ExportAsAnimationToModel(ref ModelRoot model, animAnimation animAnimDes, bool additiveAddRelative = true, bool incRootMotion = true)
         {
             if (animAnimDes.AnimBuffer.GetValue() is not animAnimationBufferCompressed blob)
             {
@@ -153,7 +153,8 @@ namespace WolvenKit.Modkit.RED4.Animation
             // -.-
             anim.Extras = SharpGLTF.IO.JsonContent.Parse(JsonSerializer.Serialize(animExtras, SerializationOptions()));
 
-            var exportAdditiveToBind = animAnimDes.AnimationType != animAnimationType.Normal;
+            // TODO: https://github.com/WolvenKit/WolvenKit/issues/1630 Scale handling review
+            var exportAdditiveToBind = additiveAddRelative && animAnimDes.AnimationType != animAnimationType.Normal;
 
             for (ushort i = 0; i < blob.NumJoints - blob.NumExtraJoints; i++)
             {

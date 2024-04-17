@@ -401,8 +401,8 @@ namespace WolvenKit.Modkit.RED4
             var quantTrans = new Vec4((max.X + min.X) / 2, (max.Y + min.Y) / 2, (max.Z + min.Z) / 2, 1);
             
 
-            RawArmature? oldRig = null;
-            RawArmature? newRig = null;
+            RawArmature? incomingJoints = null;
+            RawArmature? existingJoints = null;
             if (originalRig != null)
             {
 
@@ -418,18 +418,18 @@ namespace WolvenKit.Modkit.RED4
                     Array.Clear(mesh.boneindices, 0, mesh.boneindices.Length);
                 }
 
-                oldRig = MeshTools.GetOrphanRig(meshBlob);
+                incomingJoints = MeshTools.GetOrphanRig(meshBlob);
 
                 using var msr = new MemoryStream();
                 originalRig.Extract(msr);
-                newRig = RIG.ProcessRig(_parserService.ReadRed4File(msr));
+                existingJoints = RIG.ProcessRig(_parserService.ReadRed4File(msr));
             }
             else
             {
-                newRig = MeshTools.GetOrphanRig(meshBlob);
+                existingJoints = MeshTools.GetOrphanRig(meshBlob);
                 if (model.LogicalSkins.Count > 0 && model.LogicalSkins[0].JointsCount > 0)
                 {
-                    oldRig = new RawArmature
+                    incomingJoints = new RawArmature
                     {
                         BoneCount = model.LogicalSkins[0].JointsCount,
                         Names = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.Name).ToArray()
@@ -438,7 +438,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
 
-            MeshTools.UpdateMeshJoints(ref meshes, newRig, oldRig);
+            MeshTools.UpdateMeshJoints(ref meshes, existingJoints, incomingJoints);
 
             UpdateSkinningParamCloth(ref meshes, ref cr2w, args);
 
@@ -563,8 +563,18 @@ namespace WolvenKit.Modkit.RED4
                 normals = mesh.Primitives[0].GetVertices("NORMAL").AsVector3Array().ToList().AsParallel().Select(p => new Vec3(p.X, -p.Z, p.Y)).ToArray(),
                 tangents = mesh.Primitives[0].GetVertices("TANGENT").AsVector4Array().ToList().AsParallel().Select(p => new Vec4(p.X, -p.Z, p.Y, p.W)).ToArray(),
 
-                colors0 = accessors.Contains("COLOR_0") ? mesh.Primitives[0].GetVertices("COLOR_0").AsVector4Array().ToArray() : Array.Empty<Vec4>(),
-                colors1 = accessors.Contains("COLOR_1") ? mesh.Primitives[0].GetVertices("COLOR_1").AsVector4Array().ToArray() : Array.Empty<Vec4>(),
+                // Blender glTF omits alpha if possible
+                colors0 = accessors.Contains("COLOR_0")
+                            ? (mesh.Primitives[0].GetVertices("COLOR_0").Attribute.Dimensions == DimensionType.VEC4
+                                ? mesh.Primitives[0].GetVertices("COLOR_0").AsVector4Array().ToArray()
+                                : mesh.Primitives[0].GetVertices("COLOR_0").AsVector3Array().Select(vec3 => new Vec4(vec3, 1)).ToArray())
+                            : [],
+                colors1 = accessors.Contains("COLOR_1")
+                            ? (mesh.Primitives[0].GetVertices("COLOR_1").Attribute.Dimensions == DimensionType.VEC4
+                                ? mesh.Primitives[0].GetVertices("COLOR_1").AsVector4Array().ToArray()
+                                : mesh.Primitives[0].GetVertices("COLOR_1").AsVector3Array().Select(vec3 => new Vec4(vec3, 1)).ToArray())
+                            : [],
+
                 texCoords0 = accessors.Contains("TEXCOORD_0") ? mesh.Primitives[0].GetVertices("TEXCOORD_0").AsVector2Array().ToArray() : Array.Empty<Vec2>(),
                 texCoords1 = accessors.Contains("TEXCOORD_1") ? mesh.Primitives[0].GetVertices("TEXCOORD_1").AsVector2Array().ToArray() : Array.Empty<Vec2>(),
 

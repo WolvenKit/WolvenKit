@@ -37,7 +37,7 @@ namespace WolvenKit.Views.Shell
             DataContext = ViewModel;
 
             InitializeComponent();
-
+            
             this.WhenActivated(disposables =>
             {
                 Disposable.Create(dockingAdapter.SaveLayout).DisposeWith(disposables);

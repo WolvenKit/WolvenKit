@@ -136,10 +136,18 @@ namespace WolvenKit.Common.Model.Arguments
         /// <summary>
         /// Use object or node name as mesh name
         /// </summary>
-        [Category("Import Settings")]
-        [Display(Name = "Use Object Name as Submesh Name (Compatibility)")]
+        [Category("Compatibility Settings")]
+        [Display(Name = "Use Object Name as Submesh Name")]
         [Description("If checked, each submesh name will be overridden by the node name (e.g. Blender object) to match previous behavior.")]
         public bool OverrideMeshNameWithNodeName { get; set; } = true;
+
+        /// <summary>
+        /// Strip Bind Pose transform from additive animations
+        /// </summary>
+        [Category("Animation Settings")]
+        [Display(Name = "Strip Local Transform from Additives")]
+        [Description("Only uncheck if your additive animations don't include joint's Local Transform (export selection) or you're certain you know what you're doing.")]
+        public bool AdditiveStripLocalTransform { get; set; } = true;
 
         /// <summary>
         /// Should a Material.Json be imported?

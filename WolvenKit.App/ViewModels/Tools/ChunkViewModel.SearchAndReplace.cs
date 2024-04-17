@@ -22,6 +22,8 @@ public partial class ChunkViewModel : ObservableObject
 
     private static void IncrementReplacementCounter() => NumReplacedEntries += 1;
 
+
+
     /// <summary>
     ///  Entry point for search/replace
     /// </summary>
@@ -88,6 +90,7 @@ public partial class ChunkViewModel : ObservableObject
             || PropertyType.IsAssignableTo(typeof(IRedBitField))
             || PropertyType.IsAssignableTo(typeof(IRedCurvePoint))
             || PropertyType.IsAssignableTo(typeof(IRedMultiChannelCurve))
+            || PropertyType.IsAssignableTo(typeof(DataBuffer))
             || PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)))
         {
             return false;
@@ -325,7 +328,7 @@ public partial class ChunkViewModel : ObservableObject
                 return wasChanged;
             case RedBaseClass irc:
             {
-                foreach (var propName in s_DescriptorPropNames)
+                foreach (var propName in s_replacementPropertyNames)
                 {
                     var prop = RedReflection.GetPropertyByRedName(irc.GetType(), propName);
 
@@ -336,7 +339,7 @@ public partial class ChunkViewModel : ObservableObject
                         continue;
                     }
 
-                    string? newValue = propValue.ToString()?.Replace(search, replace, searchMode);
+                    var newValue = propValue.ToString()?.Replace(search, replace, searchMode);
                    
 
                     if (propValue.ToString() == newValue)

@@ -25,6 +25,7 @@ public class DocumentViewmodelFactory : IDocumentViewmodelFactory
     private readonly AppScriptService _scriptService;
     private readonly IHookService _hookService;
     private readonly INodeWrapperFactory _nodeWrapperFactory;
+    private readonly ISettingsManager _settingsManager;
 
 
     public DocumentViewmodelFactory(
@@ -39,7 +40,9 @@ public class DocumentViewmodelFactory : IDocumentViewmodelFactory
         IArchiveManager archiveManager,
         AppScriptService scriptService,
         IHookService hookService,
-        INodeWrapperFactory nodeWrapperFactory)
+        INodeWrapperFactory nodeWrapperFactory,
+        ISettingsManager settingsManager
+    )
     {
         _tabViewmodelFactory = tabViewmodelFactory;
         _paneViewModelFactory = paneViewModelFactory;
@@ -53,10 +56,14 @@ public class DocumentViewmodelFactory : IDocumentViewmodelFactory
         _scriptService = scriptService;
         _hookService = hookService;
         _nodeWrapperFactory = nodeWrapperFactory;
+        _settingsManager = settingsManager;
 
     }
-    public RedDocumentViewModel RedDocumentViewModel(CR2WFile file, string path, AppViewModel appViewModel, bool isReadOnly = false) 
-        => new(file, path, appViewModel, _tabViewmodelFactory, _chunkViewmodelFactory, _projectManager, _loggerService, _globals, _parserService, _watcherService, _archiveManager, _hookService, _nodeWrapperFactory, isReadOnly);
+
+    public RedDocumentViewModel RedDocumentViewModel(CR2WFile file, string path, AppViewModel appViewModel, bool isReadOnly = false)
+        => new(file, path, appViewModel, _tabViewmodelFactory, _chunkViewmodelFactory, _projectManager, _loggerService, _globals,
+            _parserService, _watcherService, _archiveManager, _hookService, _nodeWrapperFactory,
+            _settingsManager.IsNoobFilterDefaultEnabled(), isReadOnly);
 
     public WScriptDocumentViewModel WScriptDocumentViewModel(string path) => new(path, _scriptService);
 
