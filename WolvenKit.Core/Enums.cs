@@ -316,6 +316,7 @@ namespace WolvenKit.Common
         th_th,
         tr_tr,
         zh_cn,
-        zh_tw
+        zh_tw,
+        ua_ua
     }
 }
