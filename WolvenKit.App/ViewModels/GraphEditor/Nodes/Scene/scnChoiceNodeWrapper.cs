@@ -23,7 +23,7 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
 
         if (notable != null)
         {
-            Title = $"{notable.Name.GetResolvedText()} ({Data.GetType().Name[3..^4]}) [{UniqueId}]";
+            Title = $"[{UniqueId}] {notable.Name.GetResolvedText()} ({Data.GetType().Name[3..^4]})";
         }
     }
 

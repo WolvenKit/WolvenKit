@@ -8,7 +8,7 @@ public abstract class BaseSceneViewModel : NodeViewModel
 
     protected BaseSceneViewModel(scnSceneGraphNode scnSceneGraphNode) : base(scnSceneGraphNode)
     {
-        Title = $"{Data.GetType().Name[3..^4]} [{UniqueId}]";
+        Title = $"[{UniqueId}] {Data.GetType().Name[3..^4]}";
     }
 }
 

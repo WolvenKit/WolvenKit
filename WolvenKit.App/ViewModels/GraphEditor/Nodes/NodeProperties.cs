@@ -32,6 +32,22 @@ internal class NodeProperties
                 details["Value"] = setVarCasted?.Value.ToString() ?? "";
             }
         }
+        else if (node is questJournalNodeDefinition journalNodeCasted)
+        {
+            if (journalNodeCasted?.Type?.Chunk is questJournalQuestEntry_NodeType journalQuestEntryCasted)
+            {
+                if (journalQuestEntryCasted?.Path?.Chunk is gameJournalPath gameJournalPath)
+                {
+                    details["Path Class Name"] = gameJournalPath?.ClassName.ToString()!;
+                    details["Path File Entry Index"] = gameJournalPath?.FileEntryIndex.ToString()!;
+                    details["Path Real Path"] = gameJournalPath?.RealPath.ToString()!;
+                }
+
+                details["Send Notification"] = journalQuestEntryCasted?.SendNotification == true ? "True" : "False";
+                details["Track Quest"] = journalQuestEntryCasted?.TrackQuest == true ? "True" : "False";
+                details["Version"] = journalQuestEntryCasted?.Version.ToEnumString()!;
+            }
+        }
 
         return details;
     }
@@ -147,7 +163,7 @@ internal class NodeProperties
         return str;
     }
 
-    private static Dictionary<string, string> GetClassProperties(string logicalCondIndex, object obj)
+    /*private static Dictionary<string, string> GetClassProperties(string logicalCondIndex, object obj)
     {
         Dictionary<string, string> details = new();
 
@@ -181,7 +197,7 @@ internal class NodeProperties
         }
 
         return details;
-    }
+    }*/
 
     private static string GetNameFromClass(RedBaseClass? node)
     {
@@ -201,7 +217,7 @@ internal class NodeProperties
         return name;
     }
 
-    private static string AddSpacesToSentence(string text)
+    /*private static string AddSpacesToSentence(string text)
     {
         if (string.IsNullOrWhiteSpace(text))
         {
@@ -220,7 +236,7 @@ internal class NodeProperties
             newText.Append(text[i]);
         }
         return newText.ToString();
-    }
+    }*/
 
     private static string FormatNumber(CUInt32? number, bool three = false)
     {
