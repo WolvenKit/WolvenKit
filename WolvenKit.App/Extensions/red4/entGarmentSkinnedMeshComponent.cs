@@ -1,11 +1,14 @@
+using System.Collections.Generic;
+using System.Linq;
+using WolvenKit.RED4.Types;
 
-namespace WolvenKit.RED4.Types;
+namespace WolvenKit.App.Extensions.red4;
 
-public partial class entGarmentSkinnedMeshComponent
+public partial class UiExtensions 
 {
-    public override IEnumerable<string> GetHiddenFieldNames()
+    public static IEnumerable<string> GetHiddenFieldNames(this entGarmentSkinnedMeshComponent _)
     {
-        return base.GetHiddenFieldNames().Concat([
+        return GetHiddenFieldNames().Concat([
             "acceptDismemberment", 
             "autoHideDistance", 
             "isEnabled", 

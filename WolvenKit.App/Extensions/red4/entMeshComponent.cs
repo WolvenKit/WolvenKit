@@ -1,10 +1,14 @@
-namespace WolvenKit.RED4.Types;
+using System.Collections.Generic;
+using System.Linq;
+using WolvenKit.RED4.Types;
 
-public partial class entMeshComponent
+namespace WolvenKit.App.Extensions.red4;
+
+public partial class UiExtensions
 {
-    public override IEnumerable<string> GetHiddenFieldNames()
+    public static IEnumerable<string> GetHiddenFieldNames(this entMeshComponent _)
     {
-        return base.GetHiddenFieldNames().Concat([
+        return GetHiddenFieldNames().Concat([
             "autoHideDistance", 
             "isEnabled", 
             "isReplicable", 

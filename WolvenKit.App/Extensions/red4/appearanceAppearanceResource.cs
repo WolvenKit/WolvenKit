@@ -1,15 +1,19 @@
-namespace WolvenKit.RED4.Types;
+using System.Collections.Generic;
+using System.Linq;
+using WolvenKit.RED4.Types;
 
-public partial class appearanceAppearanceResource
+namespace WolvenKit.App.Extensions.red4;
+
+public partial class UiExtensions
 {
-    public override IEnumerable<string> GetHiddenIfDefaultFieldNames()
+    public static IEnumerable<string> GetHiddenIfDefaultFieldNames(this appearanceAppearanceResource _)
     {
-        return base.GetHiddenIfDefaultFieldNames().Concat(["censorshipMapping"]);
+        return GetHiddenIfDefaultFieldNames().Concat(["censorshipMapping"]);
     }
 
-    public override IEnumerable<string> GetHiddenFieldNames()
+    public static IEnumerable<string> GetHiddenFieldNames(this appearanceAppearanceResource _)
     {
-        return base.GetHiddenFieldNames().Concat([
+        return GetHiddenFieldNames().Concat([
                 "alternateAppearanceMapping",
                 "alternateAppearanceSettingName",
                 "alternateAppearanceSuffixes",

@@ -206,26 +206,6 @@ public partial class RedBaseClass : IRedClass, IRedCloneable, IEquatable<RedBase
 
     public List<string> GetPropertyNames() => new(_properties.Keys);
 
-    public virtual IEnumerable<string> GetHiddenFieldNames() => [
-        "cookingPlatform",
-        "topology",
-        "topologyData",
-        "topologyDataStride",
-        "topologyMetadata",
-        "topologyMetadataStride",
-        "version",
-        "vertexBufferSize"
-    ];
-
-    public virtual IEnumerable<string> GetHiddenIfDefaultFieldNames() => [];
-
-    public virtual bool IsReadonlyClass() => false; 
-
-    public virtual IEnumerable<string> GetReadonlyFieldNames() => [
-        "saveDateTime", "resourceVersion", "cookingPlatform", "renderBuffer"
-    ];
-
-
     #endregion Properties
 
     #region Dynamic Properties

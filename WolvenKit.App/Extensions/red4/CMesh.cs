@@ -1,11 +1,14 @@
+using System.Collections.Generic;
+using System.Linq;
+using WolvenKit.RED4.Types;
 
-namespace WolvenKit.RED4.Types;
+namespace WolvenKit.App.Extensions.red4;
 
-public partial class CMesh
+public partial class UiExtensions
 {
-    public override IEnumerable<string> GetHiddenIfDefaultFieldNames()
+    public static IEnumerable<string> GetHiddenIfDefaultFieldNames(this CMesh _)
     {
-        return base.GetHiddenIfDefaultFieldNames().Concat([
+        return GetHiddenIfDefaultFieldNames().Concat([
              "preloadExternalMaterials", 
             "preloadLocalMaterials",
             "preloadLocalMaterialInstances", 
@@ -14,9 +17,9 @@ public partial class CMesh
         ]);
     }
 
-    public override IEnumerable<string> GetHiddenFieldNames()
+    public static IEnumerable<string> GetHiddenFieldNames(this CMesh _)
     {
-        return base.GetHiddenFieldNames().Concat([
+        return GetHiddenFieldNames().Concat([
             "boundingBox", 
             "boneNames", 
             "boneVertexEpsilons", 
@@ -39,8 +42,8 @@ public partial class CMesh
         ]);
     }
 
-    public override IEnumerable<string> GetReadonlyFieldNames()
+    public static IEnumerable<string> GetReadonlyFieldNames(this CMesh _)
     {
-        return base.GetReadonlyFieldNames().Concat(["geometryHash", "consoleBias"]);
+        return GetReadonlyFieldNames().Concat(["geometryHash", "consoleBias"]);
     }
 }
