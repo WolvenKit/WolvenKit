@@ -163,42 +163,6 @@ internal class NodeProperties
         return str;
     }
 
-    /*private static Dictionary<string, string> GetClassProperties(string logicalCondIndex, object obj)
-    {
-        Dictionary<string, string> details = new();
-
-        foreach (var prop in obj.GetType().GetProperties())
-        {
-            var val = prop.GetValue(obj, null);
-            string valStr = "";
-
-            if (val is CName typeCName)
-            {
-                valStr = typeCName.ToString() ?? "";
-            }
-            else if (val is CString typeCString)
-            {
-                valStr = typeCString;
-            }
-            else if (val is CBool typeCBool)
-            {
-                valStr = typeCBool == true ? "True" : "False";
-            }
-            else if (val?.GetType() == typeof(CEnum))
-            {
-                valStr = "";
-            }
-            else if (val?.GetType()?.Name == "CArray`1")
-            {
-                valStr = "";
-            }
-
-            details[logicalCondIndex + prop.Name] = valStr;
-        }
-
-        return details;
-    }*/
-
     private static string GetNameFromClass(RedBaseClass? node)
     {
         string name = "";
@@ -216,27 +180,6 @@ internal class NodeProperties
 
         return name;
     }
-
-    /*private static string AddSpacesToSentence(string text)
-    {
-        if (string.IsNullOrWhiteSpace(text))
-        {
-            return "";
-        }
-
-        StringBuilder newText = new StringBuilder(text.Length * 2);
-        newText.Append(text[0]);
-        for (int i = 1; i < text.Length; i++)
-        {
-            if (char.IsUpper(text[i]) && text[i - 1] != ' ')
-            {
-                newText.Append(' ');
-            }
-
-            newText.Append(text[i]);
-        }
-        return newText.ToString();
-    }*/
 
     private static string FormatNumber(CUInt32? number, bool three = false)
     {
