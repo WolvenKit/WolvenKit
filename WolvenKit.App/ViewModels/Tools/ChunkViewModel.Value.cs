@@ -624,12 +624,20 @@ public partial class ChunkViewModel
             case entMeshComponent meshComponent:
             {
                 Value = StringHelper.Stringify(meshComponent.Mesh.DepotPath, true);
+                if (meshComponent.MeshAppearance.GetResolvedText() is string app and (not "default" or "") && Value != "")
+                {
+                    Value = $"{Value} ({app})";
+                }
                 IsValueExtrapolated = Value != "";
                 break;
             }
             case entSkinnedMeshComponent skinnedMeshComponent:
             {
                 Value = StringHelper.Stringify(skinnedMeshComponent.Mesh.DepotPath, true);
+                if (skinnedMeshComponent.MeshAppearance.GetResolvedText() is string app and (not "default" or "") && Value != "")
+                {
+                    Value = $"{Value} ({app})";
+                }
                 IsValueExtrapolated = Value != "";
                 break;
             }
