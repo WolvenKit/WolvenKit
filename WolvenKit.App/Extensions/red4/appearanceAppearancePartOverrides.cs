@@ -9,6 +9,6 @@ public partial class UiExtensions
     public static IEnumerable<string> GetHiddenFieldNames(this appearanceAppearancePartOverrides _)
     {
         // .app file: appearance definition: parts override - ArchiveXL will handle this
-        return UiExtensions.GetHiddenFieldNames().Concat(["partResource"]);
+        return GetHiddenFieldNames().Concat(["partResource"]);
     }
 }

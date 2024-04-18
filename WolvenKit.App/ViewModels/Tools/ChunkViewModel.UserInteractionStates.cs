@@ -29,7 +29,7 @@ public partial class ChunkViewModel
 
         if (Parent is not null && Parent.ResolvedData is RedBaseClass baseClass)
         {
-            IsReadOnly = baseClass.IsReadonlyClass() || baseClass.GetReadonlyFieldNames().Contains(Name);
+            IsReadOnly = UiExtensions.IsReadonlyClass(baseClass) || UiExtensions.GetReadonlyFieldNames(baseClass).Contains(Name);
         }
     }
 
@@ -81,14 +81,14 @@ public partial class ChunkViewModel
             return;
         }
 
-        if (baseClass.GetHiddenFieldNames().ToList().Contains(Name))
+        if (UiExtensions.GetHiddenFieldNames(baseClass).ToList().Contains(Name))
         {
             IsHiddenByNoobFilter = true;
             return;
         }
 
         // Some fields should be hidden if they are empty, or false 
-        if (baseClass.GetHiddenIfDefaultFieldNames().ToList().Contains(Name))
+        if (UiExtensions.GetHiddenIfDefaultFieldNames(baseClass).ToList().Contains(Name))
         {
             if ((IsArray && Properties.Count == 0) // empty array
             || (ResolvedData is CBool boolValue && boolValue == false) //false boolean

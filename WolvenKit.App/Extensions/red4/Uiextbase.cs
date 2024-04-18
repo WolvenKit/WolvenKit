@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Extensions.red4;
 
-public  static partial class UiExtensions
+public static partial class UiExtensions
 {
     public static IEnumerable<string> GetHiddenFieldNames() => [
         "cookingPlatform",
@@ -24,60 +24,58 @@ public  static partial class UiExtensions
     public static IEnumerable<string> GetReadonlyFieldNames() => [
         "saveDateTime", "resourceVersion", "cookingPlatform", "renderBuffer"
     ];
-}
-
-public partial class UiExtensions
-{
-    public static IEnumerable<string> GetHiddenFieldNames(this RedBaseClass c)
+    
+    public static IEnumerable<string> GetHiddenFieldNames(RedBaseClass c)
     {
-        try
+        return c switch
         {
-            dynamic d = c;
-            return d.GetHiddenFieldNames();
-        }
-        catch (System.Exception)
-        {
-            return GetHiddenFieldNames();
-        }
+            appearanceAppearanceDefinition a => a.GetHiddenFieldNames(),
+            appearanceAppearancePartOverrides a => a.GetHiddenFieldNames(),
+            appearanceAppearanceResource a => a.GetHiddenFieldNames(),
+            appearancePartComponentOverrides a => a.GetHiddenFieldNames(),
+            CMesh a => a.GetHiddenFieldNames(),
+            entEntityTemplate a => a.GetHiddenFieldNames(),
+            entGarmentSkinnedMeshComponent a => a.GetHiddenFieldNames(),
+            entMeshComponent a => a.GetHiddenFieldNames(),
+            entSkinnedMeshComponent a => a.GetHiddenFieldNames(),
+            inkTextureAtlas a => a.GetHiddenFieldNames(),
+            inkTextureSlot a => a.GetHiddenFieldNames(),
+            rendRenderMeshBlobHeader a => a.GetHiddenFieldNames(),
+            _ => GetHiddenFieldNames(),
+        };
     }
 
-    public static IEnumerable<string> GetHiddenIfDefaultFieldNames(this RedBaseClass c)
+    public static IEnumerable<string> GetHiddenIfDefaultFieldNames(RedBaseClass c)
     {
-        try
+        return c switch
         {
-            dynamic d = c;
-            return d.GetHiddenIfDefaultFieldNames();
-        }
-        catch (System.Exception)
-        {
-            return GetHiddenIfDefaultFieldNames();
-        }
+            appearanceAppearanceDefinition a => a.GetHiddenIfDefaultFieldNames(),
+            appearanceAppearanceResource a => a.GetHiddenIfDefaultFieldNames(),
+            CMesh a => a.GetHiddenIfDefaultFieldNames(),
+            _ => GetHiddenIfDefaultFieldNames(),
+        };
     }
 
-    public static bool IsReadonlyClass(this RedBaseClass c)
+    public static bool IsReadonlyClass(RedBaseClass c)
     {
-        try
+        return c switch
         {
-            dynamic d = c;
-            return d.IsReadonlyClass();
-        }
-        catch (System.Exception)
-        {
-            return IsReadonlyClass();
-        }
+            rendRenderTextureBlobMemoryLayout a => a.IsReadonlyClass(),
+            rendRenderTextureBlobMipMapInfo a => a.IsReadonlyClass(),
+            rendRenderTextureBlobPlacement a => a.IsReadonlyClass(),
+            rendRenderTextureBlobSizeInfo a => a.IsReadonlyClass(),
+            rendRenderTextureBlobTextureInfo a => a.IsReadonlyClass(),
+            _ => IsReadonlyClass(),
+        };
     }
 
-    public static IEnumerable<string> GetReadonlyFieldNames(this RedBaseClass c)
+    public static IEnumerable<string> GetReadonlyFieldNames(RedBaseClass c)
     {
-        try
+        return c switch
         {
-            dynamic d = c;
-            return d.GetReadonlyFieldNames();
-        }
-        catch (System.Exception)
-        {
-            return GetReadonlyFieldNames();
-        }
-        
+            CBitmapTexture a => a.GetReadonlyFieldNames(),
+            CMesh a => a.GetReadonlyFieldNames(),
+            _ => GetReadonlyFieldNames(),
+        };
     }
 }

@@ -8,12 +8,12 @@ public partial class UiExtensions
 {
     public static IEnumerable<string> GetHiddenIfDefaultFieldNames(this appearanceAppearanceDefinition c)
     {
-        return UiExtensions.GetHiddenIfDefaultFieldNames().Concat(["looseDependencies"]);
+        return GetHiddenIfDefaultFieldNames().Concat(["looseDependencies"]);
     }
 
     public static IEnumerable<string> GetHiddenFieldNames(this appearanceAppearanceDefinition c)
     {
-        return UiExtensions.GetHiddenFieldNames().Concat(
+        return GetHiddenFieldNames().Concat(
         [
             "censorFlags",
             "cookedDataPathOverride",
