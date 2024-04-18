@@ -30,25 +30,54 @@ public partial class UiExtensions
 {
     public static IEnumerable<string> GetHiddenFieldNames(this RedBaseClass c)
     {
-        dynamic d = c;
-        return d.GetHiddenFieldNames();
+        try
+        {
+            dynamic d = c;
+            return d.GetHiddenFieldNames();
+        }
+        catch (System.Exception)
+        {
+            return GetHiddenFieldNames();
+        }
     }
 
     public static IEnumerable<string> GetHiddenIfDefaultFieldNames(this RedBaseClass c)
     {
-        dynamic d = c;
-        return d.GetHiddenIfDefaultFieldNames();
+        try
+        {
+            dynamic d = c;
+            return d.GetHiddenIfDefaultFieldNames();
+        }
+        catch (System.Exception)
+        {
+            return GetHiddenIfDefaultFieldNames();
+        }
     }
 
     public static bool IsReadonlyClass(this RedBaseClass c)
     {
-        dynamic d = c;
-        return d.IsReadonlyClass();
+        try
+        {
+            dynamic d = c;
+            return d.IsReadonlyClass();
+        }
+        catch (System.Exception)
+        {
+            return IsReadonlyClass();
+        }
     }
 
     public static IEnumerable<string> GetReadonlyFieldNames(this RedBaseClass c)
     {
-        dynamic d = c;
-        return d.GetReadonlyFieldNames();
+        try
+        {
+            dynamic d = c;
+            return d.GetReadonlyFieldNames();
+        }
+        catch (System.Exception)
+        {
+            return GetReadonlyFieldNames();
+        }
+        
     }
 }
