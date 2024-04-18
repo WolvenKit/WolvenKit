@@ -638,7 +638,7 @@ public class RedClassConverter : CustomRedConverter<RedBaseClass>
             throw new JsonException();
         }
 
-        if (cls is DynamicBaseClass dbc)
+        if (cls is IDynamicClass dbc)
         {
             reader.Read();
 
@@ -756,7 +756,7 @@ public class RedClassConverter : CustomRedConverter<RedBaseClass>
 
         writer.WriteString("$type", RedReflection.GetRedTypeFromCSType(value.GetType()));
 
-        if (value is DynamicBaseClass dbc)
+        if (value is IDynamicClass dbc)
         {
             writer.WriteString("$className", dbc.ClassName);
         }
