@@ -19,7 +19,7 @@ public partial class ChunkViewModel
         Value = "";
 
         // nothing to calculate
-        if (ResolvedData is RedDummy)
+        if (ResolvedData is RedDummy || IsDefault)
         {
             return;
         }
@@ -623,33 +623,13 @@ public partial class ChunkViewModel
                 break;
             case entMeshComponent meshComponent:
             {
-                Value = "";
-                if (meshComponent.ParentTransform?.GetValue() is entHardTransformBinding parentTransformValue)
-                {
-                    Value = StringHelper.Stringify(parentTransformValue);
-                }
-
-                if (meshComponent.Mesh.DepotPath.GetResolvedText() is string dePathText)
-                {
-                    Value = Value.Length == 0 ? $"{dePathText}" : $" ({dePathText})";
-                }
-
+                Value = StringHelper.Stringify(meshComponent.Mesh.DepotPath, true);
                 IsValueExtrapolated = Value != "";
                 break;
             }
             case entSkinnedMeshComponent skinnedMeshComponent:
             {
-                Value = "";
-                if (skinnedMeshComponent.ParentTransform?.GetValue() is entHardTransformBinding parentTransformValue)
-                {
-                    Value = StringHelper.Stringify(parentTransformValue);
-                }
-
-                if (skinnedMeshComponent.Mesh.DepotPath.GetResolvedText() is string dePathText)
-                {
-                    Value = Value.Length == 0 ? $"{dePathText}" : $" ({dePathText})";
-                }
-
+                Value = StringHelper.Stringify(skinnedMeshComponent.Mesh.DepotPath, true);
                 IsValueExtrapolated = Value != "";
                 break;
             }
@@ -707,7 +687,7 @@ public partial class ChunkViewModel
                 break;
         }
 
-        if (string.IsNullOrEmpty(Value) && TVProperties is [ChunkViewModel child])
+        if (!IsDefault && string.IsNullOrEmpty(Value) && TVProperties is [ChunkViewModel child])
         {
             Value = child.Descriptor ?? child.Value;
             IsValueExtrapolated = !string.IsNullOrEmpty(Value);

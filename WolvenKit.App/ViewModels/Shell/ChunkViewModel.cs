@@ -2578,15 +2578,18 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         IsDefault = Data is RedDummy;
 
-        if (Parent is not null && Data is not RedDummy)
+        if (!IsDefault && Parent is not null && Data is not RedDummy &&
+            GetPropertyByRedName(Parent.ResolvedPropertyType, PropertyName) is { } epi)
         {
-            var epi = GetPropertyByRedName(Parent.ResolvedPropertyType, PropertyName);
-            if (epi is not null)
-            {
-                //IsDefault = IsDefault(Parent.ResolvedPropertyType, epi, Data);
-                IsDefault = epi.IsDefault(ResolvedData);
-            }
+            IsDefault = epi.IsDefault(ResolvedData);
         }
+
+        IsDefault = IsDefault || ResolvedData switch
+        {
+            entSkinnedMeshComponent skinnedMeshComponent => string.IsNullOrEmpty(skinnedMeshComponent.Mesh.DepotPath.GetResolvedText()),
+            entMeshComponent meshComponent => string.IsNullOrEmpty(meshComponent.Mesh.DepotPath.GetResolvedText()),
+            _ => IsDefault
+        };
     }
 
     // TODO: This is obsolete with NodeIdxInParent - isn't it?
