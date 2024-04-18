@@ -48,6 +48,93 @@ internal class NodeProperties
                 details["Version"] = journalQuestEntryCasted?.Version.ToEnumString()!;
             }
         }
+        else if (node is questUseWorkspotNodeDefinition useWorkspotNodeCasted)
+        {
+            details["Entity Reference"] = ParseGameEntityReference(useWorkspotNodeCasted?.EntityReference);
+
+            if (useWorkspotNodeCasted?.ParamsV1?.Chunk is scnUseSceneWorkspotParamsV1 useSceneWorkspotCasted)
+            {
+                details["Entry Id"] = useSceneWorkspotCasted?.EntryId?.Id.ToString()!;
+                details["Exit Entry Id"] = useSceneWorkspotCasted?.ExitEntryId?.Id.ToString()!;
+                details["Workspot Instance Id"] = useSceneWorkspotCasted?.WorkspotInstanceId?.Id.ToString()!;
+            }
+        }
+        else if (node is questSceneManagerNodeDefinition sceneManagerNodeCasted)
+        {
+            if (sceneManagerNodeCasted?.Type?.Chunk is questSetTier_NodeType setTierCasted)
+            {
+                details["Force Empty Hands"] = setTierCasted?.ForceEmptyHands == true ? "True" : "False";
+                details["Tier"] = setTierCasted?.Tier.ToEnumString()!;
+            }
+        }
+        else if (node is questTimeManagerNodeDefinition timeManagerNodeCasted)
+        {
+            if (timeManagerNodeCasted?.Type?.Chunk is questPauseTime_NodeType pauseTimeCasted)
+            {
+                details["Pause"] = pauseTimeCasted?.Pause == true ? "True" : "False";
+                details["Source"] = pauseTimeCasted?.Source.ToString()!;
+            }
+            if (timeManagerNodeCasted?.Type?.Chunk is questSetTime_NodeType setTimeCasted)
+            {
+                details["Hours"] = setTimeCasted?.Hours.ToString()!;
+                details["Minutes"] = setTimeCasted?.Minutes.ToString()!;
+                details["Seconds"] = setTimeCasted?.Seconds.ToString()!;
+                details["Source"] = setTimeCasted?.Source.ToString()!;
+            }
+        }
+        else if (node is questAudioNodeDefinition audioNodeCasted)
+        {
+            if (audioNodeCasted?.Type?.Chunk is questAudioMixNodeType audioMixCasted)
+            {
+                details["Mix Signpost"] = audioMixCasted?.MixSignpost.ToString()!;
+            }
+        }
+        else if (node is questEventManagerNodeDefinition eventManagerNodeCasted)
+        {
+            details["Component Name"] = eventManagerNodeCasted?.ComponentName.ToString()!;
+            details["Event"] = eventManagerNodeCasted?.Event?.Chunk?.GetType()?.Name!;
+            details["Is Object Player"] = eventManagerNodeCasted?.IsObjectPlayer == true ? "True" : "False";
+            details["Manager Name"] = eventManagerNodeCasted?.ManagerName.ToString()!;
+            details["Object Ref"] = ParseGameEntityReference(eventManagerNodeCasted?.ObjectRef);
+        }
+        else if (node is questEnvironmentManagerNodeDefinition envManagerNodeCasted)
+        {
+            if (envManagerNodeCasted?.Type?.Chunk is questPlayEnv_SetWeather playEnvCasted)
+            {
+                details["Blend Time"] = playEnvCasted?.BlendTime.ToString()!;
+                details["Priority"] = playEnvCasted?.Priority.ToString()!;
+                details["Reset"] = playEnvCasted?.Reset == true ? "True" : "False";
+                details["Source"] = playEnvCasted?.Source.ToString()!;
+                details["Weather ID"] = playEnvCasted?.WeatherID.ResolvedText!;
+            }
+        }
+        else if (node is questRenderFxManagerNodeDefinition renderFxManagerNodeCasted)
+        {
+            if (renderFxManagerNodeCasted?.Type?.Chunk is questSetFadeInOut_NodeType fadeInOutCasted)
+            {
+                details["Duration"] = fadeInOutCasted?.Duration.ToString()!;
+                details["FadeColor"] = fadeInOutCasted?.FadeColor.ToString()!;
+                details["Fade In"] = fadeInOutCasted?.FadeIn == true ? "True" : "False";
+            }
+        }
+        else if (node is questUIManagerNodeDefinition uiManagerNodeCasted)
+        {
+            if (uiManagerNodeCasted?.Type?.Chunk is questSetHUDEntryForcedVisibility_NodeType hudVisibilityCasted)
+            {
+                if (hudVisibilityCasted?.HudEntryName != null)
+                {
+                    for (int i = 0; i < hudVisibilityCasted?.HudEntryName.Count; i++)
+                    {
+                        details["Hud Entry Name #" + i] = hudVisibilityCasted?.HudEntryName[i].ToString()!;
+                    }
+                }
+
+                details["Hud Visibility Preset"] = hudVisibilityCasted?.HudVisibilityPreset.ResolvedText!;
+                details["Skip Animation"] = hudVisibilityCasted?.SkipAnimation == true ? "True" : "False";
+                details["Use Preset"] = hudVisibilityCasted?.UsePreset == true ? "True" : "False";
+                details["Visibility"] = hudVisibilityCasted?.Visibility.ToEnumString()!;
+            }
+        }
 
         return details;
     }
@@ -139,6 +226,19 @@ internal class NodeProperties
             details[logicalCondIndex + "Is Player Activator"] = condTriggerCasted?.IsPlayerActivator == true ? "True" : "False";
             details[logicalCondIndex + "Trigger Area Ref"] = condTriggerCasted?.TriggerAreaRef.GetResolvedText()!;
             details[logicalCondIndex + "Trigger Type"] = condTriggerCasted?.Type.ToEnumString()!;
+        }
+        else if (node is questSystemCondition condSystemCasted)
+        {
+            if (condSystemCasted?.Type?.Chunk is questCameraFocus_ConditionType nodeCameraFocusCondCasted)
+            {
+                details[logicalCondIndex + "Angle Tolerance"] = nodeCameraFocusCondCasted?.AngleTolerance.ToString()!;
+                details[logicalCondIndex + "Inverted"] = nodeCameraFocusCondCasted?.Inverted == true ? "True" : "False";
+                details[logicalCondIndex + "Object Ref"] = ParseGameEntityReference(nodeCameraFocusCondCasted?.ObjectRef);
+                details[logicalCondIndex + "On Screen Test"] = nodeCameraFocusCondCasted?.OnScreenTest == true ? "True" : "False";
+                details[logicalCondIndex + "Time Interval"] = nodeCameraFocusCondCasted?.TimeInterval.ToString()!;
+                details[logicalCondIndex + "Use Frustrum Check"] = nodeCameraFocusCondCasted?.UseFrustrumCheck == true ? "True" : "False";
+                details[logicalCondIndex + "Zoomed"] = nodeCameraFocusCondCasted?.Zoomed == true ? "True" : "False";
+            }
         }
 
         return details;
