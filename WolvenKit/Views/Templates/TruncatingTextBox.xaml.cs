@@ -35,6 +35,7 @@ public partial class TruncatingTextBox : UserControl
         if (EditTextBox is not null && !_editTextBoxChangeDetection)
         {
             EditTextBox.GotFocus += OnEditBoxFocusGained;
+            EditTextBox.KeyUp += OnEditBoxKeyUp;
             EditTextBox.LostFocus += OnFocusLost;
             _editTextBoxChangeDetection = true;
         }
@@ -46,6 +47,16 @@ public partial class TruncatingTextBox : UserControl
         }
 
         SizeChanged += TruncatingTextBox_SizeChanged;
+    }
+
+    private void OnEditBoxKeyUp(object sender, KeyEventArgs e)
+    {
+        if (sender is not TextBox editBox)
+        {
+            return;
+        }
+
+        SetCurrentValue(EditTextProperty, editBox.Text);
     }
 
     // ReSharper disable once InconsistentNaming
