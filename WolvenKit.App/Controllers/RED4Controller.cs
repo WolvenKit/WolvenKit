@@ -23,6 +23,7 @@ using WolvenKit.Core.Services;
 using WolvenKit.Helpers;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types.Pools;
 
 namespace WolvenKit.App.Controllers;
 
@@ -105,7 +106,12 @@ public class RED4Controller : ObservableObject, IGameController
 
                 foreach (var physMat in root.Unk1)
                 {
-                    _hashService.AddCustom(physMat.ToString().NotNull());
+                    if (!physMat.IsResolvable)
+                    {
+                        continue;
+                    }
+                    
+                    CNamePool.AddOrGetHash(physMat.GetResolvedText()!);
                 }
             }
         }
@@ -124,7 +130,12 @@ public class RED4Controller : ObservableObject, IGameController
 
                 foreach (var presetEntry in res.Presets)
                 {
-                    _hashService.AddCustom(presetEntry.NotNull().Name.ToString().NotNull());
+                    if (presetEntry is not { Name: { IsResolvable: true } name })
+                    {
+                        continue;
+                    }
+
+                    CNamePool.AddOrGetHash(name.GetResolvedText()!);
                 }
             }
         }

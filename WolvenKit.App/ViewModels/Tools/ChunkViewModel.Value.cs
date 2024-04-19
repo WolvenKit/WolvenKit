@@ -96,13 +96,8 @@ public partial class ChunkViewModel
         }
         else if (PropertyType.IsAssignableTo(typeof(IRedRef)) && Data is IRedRef rr)
         {
-            // if a path is resolved in the file, but is not yet added to the list of known hashes, add it
             var depotPath = rr.DepotPath;
-            if (!_hashService.Contains(depotPath) && !ResourcePath.IsNullOrEmpty(depotPath))
-            {
-                _hashService.AddCustom(depotPath.GetResolvedText() ?? "");
-            }
-
+            
             if (depotPath.IsResolvable)
             {
                 Value = depotPath.GetResolvedText().NotNull();

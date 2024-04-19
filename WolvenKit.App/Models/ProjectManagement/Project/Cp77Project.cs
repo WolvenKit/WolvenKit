@@ -3,23 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using WolvenKit.Common;
-using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
-using WolvenKit.RED4.Archive;
 
 namespace WolvenKit.App.Models.ProjectManagement.Project;
 
 public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
 {
-    private readonly IHashService _hashService;
-
-    public Cp77Project(string location, string name, string modName, IHashService hashService)
+    public Cp77Project(string location, string name, string modName)
     {
         Name = name;
         Location = location;
         ModName = modName;
-
-        _hashService= hashService;
     }
 
     public string Name { get; set; }
@@ -322,14 +316,14 @@ public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
 
     // Conversions
 
-    public FileSystemArchive AsArchive() => new(this, _hashService);
+    public FileSystemArchive AsArchive() => new(this);
 
 
     #region implements ICloneable
 
     public object Clone()
     {
-        Cp77Project clone = new(Location, Name, ModName, _hashService)
+        Cp77Project clone = new(Location, Name, ModName)
         {
             Author = Author,
             Email = Email,

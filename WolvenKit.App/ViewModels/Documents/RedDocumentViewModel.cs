@@ -47,6 +47,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
     private readonly IArchiveManager _archiveManager;
     private readonly IHookService _hookService;
     private readonly INodeWrapperFactory _nodeWrapperFactory;
+    private readonly IHashService _hashService;
 
     private readonly AppViewModel _appViewModel;
 
@@ -65,6 +66,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
         IArchiveManager archiveManager,
         IHookService hookService,
         INodeWrapperFactory nodeWrapperFactory,
+        IHashService hashService,
         bool isSimpleViewEnabled = false,
         bool isReadyOnly = false) : base(path)
     {
@@ -78,6 +80,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
         _archiveManager = archiveManager;
         _hookService = hookService;
         _nodeWrapperFactory = nodeWrapperFactory;
+        _hashService = hashService;
 
         _appViewModel = appViewModel;
         _embedHashSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
@@ -177,6 +180,8 @@ public partial class RedDocumentViewModel : DocumentViewModel
                     return;
                 }
 
+                SaveHashedValues(cr2w);
+
                 using var writer = new CR2WWriter(ms, Encoding.UTF8, true) { LoggerService = _loggerService };
                 writer.WriteFile(cr2w);
             }
@@ -198,6 +203,37 @@ public partial class RedDocumentViewModel : DocumentViewModel
         _loggerService.Success($"Saved file {FilePath}");
 
         await Task.CompletedTask;
+    }
+
+    private void SaveHashedValues(CR2WFile file)
+    {
+        if (_hashService is not HashServiceExt hashService)
+        {
+            return;
+        }
+        
+        foreach (var (path, value) in file.RootChunk.GetEnumerator())
+        {
+            if (value is IRedRef redRef && redRef.DepotPath != ResourcePath.Empty)
+            {
+                if (!redRef.DepotPath.TryGetResolvedText(out var refPath))
+                {
+                    continue;
+                }
+
+                hashService.AddResourcePath(refPath);
+            }
+
+            if (value is TweakDBID tweakDbId && tweakDbId != TweakDBID.Empty)
+            {
+                if (!tweakDbId.TryGetResolvedText(out var tweakName))
+                {
+                    continue;
+                }
+
+                hashService.AddTweakName(tweakName);
+            }
+        }
     }
 
     public override void SaveAs(object parameter) => throw new NotImplementedException();

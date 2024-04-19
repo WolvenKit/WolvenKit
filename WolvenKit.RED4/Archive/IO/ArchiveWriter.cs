@@ -99,7 +99,7 @@ public class ArchiveWriter
                 var sanitizedPath = ResourcePath.SanitizePath(relPath);
                 hash = FNV1A64HashAlgorithm.HashString(sanitizedPath);
 
-                if (!_hashService.Contains(hash, false) && !_hashService.GetMissingHashes().Contains(hash))
+                if (!TweakDBIDPool.IsNative(sanitizedPath))
                 {
                     customPaths.Add(sanitizedPath);
                 }
@@ -293,7 +293,6 @@ public class ArchiveWriter
             using var sha1 = SHA1.Create();
             var sha1hash = sha1.ComputeHash(fileStream); //TODO: this is only correct for files with no buffer
             var item = new FileEntry(
-                _hashService,
                 hash,
                 DateTime.Now,
                 (uint)flags,

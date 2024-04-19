@@ -119,6 +119,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _parser = parserService;
         _scriptService = scriptService;
 
+        if (_hashService is HashServiceExt hashServiceExt)
+        {
+            hashServiceExt.LoadGlobalCache();
+        }
+        
         _scriptService.SetAppViewModel(this);
 
         _progressService.PropertyChanged += ProgressService_PropertyChanged;
@@ -679,7 +684,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             var newProjectName = project.ProjectName.NotNull().Trim();
             var newModName = project.ModName.NotNull().Trim();
             var projectLocation = Path.Combine(project.ProjectPath.NotNull(), newProjectName, newProjectName + ".cpmodproj");
-            Cp77Project np = new(projectLocation, newProjectName, newModName, _hashService)
+            Cp77Project np = new(projectLocation, newProjectName, newModName)
             {
                 Author = project.Author,
                 Email = project.Email,
@@ -1176,12 +1181,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         if (OpenFileFromProject(path))
         {
             return;
-        }
-
-        // it should be resolved by this point, but check just in case
-        if (!_hashService.Contains(path) && !ResourcePath.IsNullOrEmpty(path))
-        {
-            _hashService.AddCustom(path.GetResolvedText().NotNull());
         }
 
         OpenFileFromHash(path);

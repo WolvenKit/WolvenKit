@@ -13,9 +13,6 @@ namespace WolvenKit.Common.Services
 {
     public class TweakDBService : ITweakDBService
     {
-        private const string s_tweakdbstr = "WolvenKit.Common.Resources.tweakdbstr.kark";
-        private const string s_userStrs = "userStrs.kark";
-
         private static readonly TweakDBStringHelper s_stringHelper = new();
         private static TweakDB s_tweakDb = new();
 
@@ -24,27 +21,6 @@ namespace WolvenKit.Common.Services
         public bool IsLoaded { get; set; }
         public event EventHandler? Loaded;
 
-        public TweakDBService()
-        {
-            var resourceStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(s_tweakdbstr);
-            ArgumentNullException.ThrowIfNull(resourceStream);
-
-            s_stringHelper.LoadFromStream(resourceStream);
-
-            var userStrsPath = Path.Combine(Path.GetDirectoryName(AppContext.BaseDirectory) ?? throw new InvalidOperationException(), s_userStrs);
-            if (File.Exists(userStrsPath))
-            {
-                s_stringHelper.Load(userStrsPath);
-            }
-
-            userStrsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit", s_userStrs);
-            if (File.Exists(userStrsPath))
-            {
-                s_stringHelper.Load(userStrsPath);
-            }
-
-            TweakDBIDPool.ResolveHashHandler = s_stringHelper.GetString;
-        }
 
         private void OnLoadDB() => Loaded?.Invoke(this, EventArgs.Empty);
 
