@@ -77,7 +77,7 @@ public partial class TruncatingTextBox : UserControl
     public string DisplayText
     {
         get => (string)GetValue(DisplayTextProperty);
-        set => SetValue(DisplayTextProperty, TruncateText(value));
+        set => SetValue(DisplayTextProperty, value);
     }
 
 
@@ -165,9 +165,8 @@ public partial class TruncatingTextBox : UserControl
             return;
         }
 
-        Console.WriteLine($"OnEditTextChanged to {e.NewValue}");
-        view.EditText = (string)e.NewValue;
-        view.DisplayText = view.TruncateText((string)e.NewValue);
+        view.EditText = (string)e.NewValue ?? "";
+        view.DisplayText = (string)e.NewValue ?? ""; // truncate is called in setter
     }
 
     private static void OnDisplayTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -183,7 +182,7 @@ public partial class TruncatingTextBox : UserControl
 
     // Recalculate the value of the textboxes
     private void TruncatingTextBox_SizeChanged(object sender, SizeChangedEventArgs e) =>
-        SetCurrentValue(DisplayTextProperty, TruncateText(EditText));
+        SetCurrentValue(DisplayTextProperty, EditText);
 
 
     private void OnFocusLost(object sender, RoutedEventArgs e)
@@ -199,8 +198,19 @@ public partial class TruncatingTextBox : UserControl
 
     private void OnFocusGained(object sender, RoutedEventArgs e)
     {
-        SetCurrentValue(HasFocusProperty, (bool)true);
-        EditTextBox.Focus();
+        switch (sender)
+        {
+            case TextBox { TemplatedParent: TruncatingTextBox parent }:
+                parent.SetCurrentValue(HasFocusProperty, true);
+                parent.EditTextBox.Focus();
+                break;
+            case TruncatingTextBox:
+                SetCurrentValue(HasFocusProperty, (bool)true);
+                EditTextBox.Focus();
+                break;
+            default:
+                break;
+        }
     }
 
     /// <summary>
@@ -208,10 +218,14 @@ public partial class TruncatingTextBox : UserControl
     /// </summary>
     private void OnEditBoxFocusGained(object sender, RoutedEventArgs e)
     {
-        EditText ??= "";
-
-        if (EditTextBox is null || DisplayTextBox is null || DisplayTextBox.CaretIndex == 0)
+        if (EditTextBox is null || DisplayTextBox is null || EditText is null)
         {
+            return;
+        }
+
+        if (DisplayTextBox.CaretIndex == 0)
+        {
+            EditTextBox.CaretIndex = EditText.Length;
             return;
         }
 
@@ -231,7 +245,6 @@ public partial class TruncatingTextBox : UserControl
             return;
         }
 
-        view.DisplayText = view.EditText;
         view.HasFocus = (bool)e.NewValue;
     }
 
