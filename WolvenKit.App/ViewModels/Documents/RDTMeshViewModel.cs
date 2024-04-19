@@ -603,133 +603,140 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 }
             }
 
-            if (component is entIPlacedComponent epc && depotPath != ResourcePath.Empty && depotPath.GetRedHash() != 0)
+            if (component is not entIPlacedComponent epc || depotPath == ResourcePath.Empty || depotPath.GetRedHash() == 0)
             {
-                var meshFile = Parent.GetFileFromDepotPathOrCache(depotPath);
+                continue;
+            }
 
-                if (meshFile == null || meshFile.RootChunk is not CMesh mesh)
+            var meshFile = Parent.GetFileFromDepotPathOrCache(depotPath);
+
+            if (meshFile == null || meshFile.RootChunk is not CMesh mesh)
+            {
+                Parent.GetLoggerService().Warning($"Couldn't find mesh file: {depotPath} / {depotPath.GetRedHash()}");
+                continue;
+            }
+
+            var matrix = ToSeparateMatrix(epc.LocalTransform);
+
+            string? bindName = null, slotName = null;
+            if ((epc.ParentTransform?.GetValue() ?? null) is entHardTransformBinding ehtb)
+            {
+                bindName = ehtb.BindName;
+                slotName = ehtb.SlotName;
+            }
+
+            matrix.Scale(ToScaleVector3D(scale));
+
+            var materials = new Dictionary<string, Material>();
+
+            var localList = mesh.LocalMaterialBuffer.RawData?.Buffer.Data as CR2WList ?? null;
+
+            foreach (var me in mesh.MaterialEntries)
+            {
+                var name = GetUniqueMaterialName(me.Name.ToString().NotNull(), mesh);
+                if (!me.IsLocalInstance)
                 {
-                    Parent.GetLoggerService().Warning($"Couldn't find mesh file: {depotPath} / {depotPath.GetRedHash()}");
+                    materials.Add(name, new Material(name));
                     continue;
                 }
 
-                var matrix = ToSeparateMatrix(epc.LocalTransform);
+                CMaterialInstance? inst = null;
 
-                string? bindName = null, slotName = null;
-                if ((epc.ParentTransform?.GetValue() ?? null) is entHardTransformBinding ehtb)
+                if (localList != null && localList.Files.Count > me.Index)
                 {
-                    bindName = ehtb.BindName;
-                    slotName = ehtb.SlotName;
+                    inst = (CMaterialInstance)localList.Files[me.Index].RootChunk;
+                }
+                else
+                {
+                    //foreach (var pme in data.PreloadLocalMaterialInstances)
+                    //{
+                    //inst = (CMaterialInstance)pme.GetValue();
+                    //}
+                    inst = (CMaterialInstance?)mesh.PreloadLocalMaterialInstances[me.Index]?.GetValue();
                 }
 
-                matrix.Scale(ToScaleVector3D(scale));
+                //CMaterialInstance bm = null;
+                //if (File.GetFileFromDepotPathOrCache(inst.BaseMaterial.DepotPath) is var file)
+                //{
+                //    bm = (CMaterialInstance)file.RootChunk;
+                //}
 
-                var materials = new Dictionary<string, Material>();
+                ArgumentNullException.ThrowIfNull(inst);
 
-                var localList = mesh.LocalMaterialBuffer.RawData?.Buffer.Data as CR2WList ?? null;
+                var material = new Material(name) { Instance = inst, };
 
-                foreach (var me in mesh.MaterialEntries)
+                foreach (var pair in inst.Values)
                 {
-                    var name = GetUniqueMaterialName(me.Name.ToString().NotNull(), mesh);
-                    if (!me.IsLocalInstance)
-                    {
-                        materials.Add(name, new Material(name));
-                        continue;
-                    }
+                    var k = pair.Key.ToString().NotNull();
+                    material.Values[k] = pair.Value;
+                }
 
-                    CMaterialInstance? inst = null;
+                materials[name] = material;
+            }
 
-                    if (localList != null && localList.Files.Count > me.Index)
+            var apps = new List<string>();
+            foreach (var handle in mesh.Appearances)
+            {
+                var app = handle.GetValue();
+                if (app is meshMeshAppearance mmapp)
+                {
+                    apps.Add(mmapp.Name.ToString().NotNull());
+                }
+            }
+
+            var appIndex = 0;
+            ArgumentNullException.ThrowIfNull(meshApp);
+            if (meshApp != "default" && apps.IndexOf(meshApp) is var index && index != -1)
+            {
+                appIndex = index;
+            }
+
+            var appMaterials = new List<Material>();
+
+            foreach (var handle in mesh.Appearances)
+            {
+                if (handle.GetValue() is not meshMeshAppearance mmapp
+                    || (mmapp.Name != meshApp // equality
+                        && !(meshApp == "default" && mesh.Appearances.IndexOf(handle) == 0) // default appearance
+                        // ArchiveXL dynamic variants
+                        && !(meshApp.Contains("{variant") && appIndex != mesh.Appearances.IndexOf(handle)))
+                   )
+                {
+                    continue;
+                }
+
+                foreach (var m in mmapp.ChunkMaterials)
+                {
+                    var name = GetUniqueMaterialName(m.ToString().NotNull(), mesh);
+                    if (materials.ContainsKey(name))
                     {
-                        inst = (CMaterialInstance)localList.Files[me.Index].RootChunk;
+                        appMaterials.Add(materials[name]);
                     }
                     else
                     {
-                        //foreach (var pme in data.PreloadLocalMaterialInstances)
-                        //{
-                        //inst = (CMaterialInstance)pme.GetValue();
-                        //}
-                        inst = (CMaterialInstance?)mesh.PreloadLocalMaterialInstances[me.Index]?.GetValue();
-                    }
-
-                    //CMaterialInstance bm = null;
-                    //if (File.GetFileFromDepotPathOrCache(inst.BaseMaterial.DepotPath) is var file)
-                    //{
-                    //    bm = (CMaterialInstance)file.RootChunk;
-                    //}
-
-                    ArgumentNullException.ThrowIfNull(inst);
-
-                    var material = new Material(name)
-                    {
-                        Instance = inst,
-                    };
-
-                    foreach (var pair in inst.Values)
-                    {
-                        var k = pair.Key.ToString().NotNull();
-                        material.Values[k] = pair.Value;
-                    }
-
-                    materials[name] = material;
-                }
-                var apps = new List<string>();
-                foreach (var handle in mesh.Appearances)
-                {
-                    var app = handle.GetValue();
-                    if (app is meshMeshAppearance mmapp)
-                    {
-                        apps.Add(mmapp.Name.ToString().NotNull());
+                        appMaterials.Add(new Material(name));
                     }
                 }
 
-                var appIndex = 0;
-                ArgumentNullException.ThrowIfNull(meshApp);
-                if (meshApp != "default" && apps.IndexOf(meshApp) is var index && index != -1)
-                {
-                    appIndex = index;
-                }
-
-                var appMaterials = new List<Material>();
-
-                foreach (var handle in mesh.Appearances)
-                {
-                    var app = handle.GetValue();
-                    if (app is meshMeshAppearance mmapp && (mmapp.Name == meshApp || meshApp == "default" && mesh.Appearances.IndexOf(handle) == 0))
-                    {
-                        foreach (var m in mmapp.ChunkMaterials)
-                        {
-                            var name = GetUniqueMaterialName(m.ToString().NotNull(), mesh);
-                            if (materials.ContainsKey(name))
-                            {
-                                appMaterials.Add(materials[name]);
-                            }
-                            else
-                            {
-                                appMaterials.Add(new Material(name));
-                            }
-                        }
-                        break;
-                    }
-                }
-
-                var model = new LoadableModel(epc.Name.ToString().NotNull().Replace(".", ""))
-                {
-                    MeshFile = meshFile,
-                    AppearanceIndex = appIndex,
-                    AppearanceName = meshApp,
-                    Matrix = matrix,
-                    Materials = appMaterials,
-                    IsEnabled = enabled,
-                    BindName = bindName,
-                    SlotName = slotName,
-                    ChunkMask = chunkMask,
-                    ChunkList = chunkList,
-                    EnabledChunks = enabledChunks,
-                    DepotPath = depotPath
-                };
-                appModels.Add(epc.Name.ToString().NotNull(), model);
+                break;
             }
+
+            var model = new LoadableModel(epc.Name.ToString().NotNull().Replace(".", ""))
+            {
+                MeshFile = meshFile,
+                AppearanceIndex = appIndex,
+                AppearanceName = meshApp,
+                Matrix = matrix,
+                Materials = appMaterials,
+                IsEnabled = enabled,
+                BindName = bindName,
+                SlotName = slotName,
+                ChunkMask = chunkMask,
+                ChunkList = chunkList,
+                EnabledChunks = enabledChunks,
+                DepotPath = depotPath
+            };
+            appModels.Add(epc.Name.ToString().NotNull(), model);
         }
 
         var list = new List<LoadableModel>();
