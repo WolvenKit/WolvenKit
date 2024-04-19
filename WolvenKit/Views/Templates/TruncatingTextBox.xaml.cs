@@ -208,9 +208,9 @@ public partial class TruncatingTextBox : UserControl
     /// </summary>
     private void OnEditBoxFocusGained(object sender, RoutedEventArgs e)
     {
-        EditTextBox.CaretIndex = EditText.Length;
+        EditText ??= "";
 
-        if (DisplayTextBox.CaretIndex == 0)
+        if (EditTextBox is null || DisplayTextBox is null || DisplayTextBox.CaretIndex == 0)
         {
             return;
         }
