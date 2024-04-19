@@ -563,6 +563,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             return null;
         }
 
+        if (chunks.Count == 0)
+        {
+            return [];
+        }
+
         var appModels = new Dictionary<string, LoadableModel>();
 
         foreach (var component in chunks)
@@ -3093,74 +3098,80 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         {
             foreach (var component in pkg.Chunks)
             {
-                if (component is entSlotComponent slotset)
+                switch (component)
                 {
-                    var slots = new Dictionary<string, string>();
-                    foreach (var slot in slotset.Slots)
+                    case entSlotComponent slotset:
                     {
-                        var name = slot.SlotName.ToString().NotNull();
-
-                        if (!slots.ContainsKey(name))
+                        var slots = new Dictionary<string, string>();
+                        foreach (var slot in slotset.Slots)
                         {
-                            slots.Add(name, slot.BoneName.ToString().NotNull());
-                        }
-                    }
+                            var name = slot.SlotName.ToString().NotNull();
 
-                    string? bindName = null, slotName = null;
-                    if (slotset.ParentTransform?.GetValue() is entHardTransformBinding ehtb)
-                    {
-                        bindName = ehtb.BindName;
-                        slotName = ehtb.SlotName;
-                    }
-
-                    var slotSetName = slotset.Name.ToString().NotNull();
-                    if (!_slotSets.ContainsKey(slotSetName))
-                    {
-                        _slotSets.Add(slotSetName, new SlotSet(slotSetName, bindName)
-                        {
-                            Matrix = ToSeparateMatrix(slotset.LocalTransform),
-                            Slots = slots,
-                            SlotName = slotName
-                        });
-                    }
-                }
-
-                if (component is entAnimatedComponent enc)
-                {
-                    var rigFile = Parent.GetFileFromDepotPathOrCache(enc.Rig.DepotPath);
-
-                    if (rigFile?.RootChunk is animRig rig)
-                    {
-                        var rigBones = new List<RigBone>();
-                        for (var i = 0; i < rig.BoneNames.Count; i++)
-                        {
-                            var rigBone = new RigBone(rig.BoneNames[i].ToString().NotNull())
+                            if (!slots.ContainsKey(name))
                             {
-                                Matrix = ToSeparateMatrix(rig.BoneTransforms[i].NotNull())
-                            };
-
-                            if (rig.BoneParentIndexes[i] != -1)
-                            {
-                                rigBones[rig.BoneParentIndexes[i]].AddChild(rigBone);
+                                slots.Add(name, slot.BoneName.ToString().NotNull());
                             }
-
-                            rigBones.Add(rigBone);
                         }
 
                         string? bindName = null, slotName = null;
-                        if ((enc.ParentTransform?.GetValue() ?? null) is entHardTransformBinding ehtb)
+                        if (slotset.ParentTransform?.GetValue() is entHardTransformBinding ehtb)
                         {
                             bindName = ehtb.BindName;
                             slotName = ehtb.SlotName;
                         }
 
-                        Rigs[enc.Name.ToString().NotNull()] = new Rig(enc.Name.ToString().NotNull())
+                        var slotSetName = slotset.Name.ToString().NotNull();
+                        if (!_slotSets.ContainsKey(slotSetName))
                         {
-                            Bones = rigBones,
-                            BindName = bindName,
-                            SlotName = slotName
-                        };
+                            _slotSets.Add(slotSetName,
+                                new SlotSet(slotSetName, bindName)
+                                {
+                                    Matrix = ToSeparateMatrix(slotset.LocalTransform), Slots = slots, SlotName = slotName
+                                });
+                        }
+
+                        break;
                     }
+                    case entAnimatedComponent enc:
+                    {
+                        var rigFile = Parent.GetFileFromDepotPathOrCache(enc.Rig.DepotPath);
+
+                        if (rigFile?.RootChunk is animRig rig)
+                        {
+                            var rigBones = new List<RigBone>();
+                            for (var i = 0; i < rig.BoneNames.Count; i++)
+                            {
+                                var rigBone = new RigBone(rig.BoneNames[i].ToString().NotNull())
+                                {
+                                    Matrix = ToSeparateMatrix(rig.BoneTransforms[i].NotNull())
+                                };
+
+                                if (rig.BoneParentIndexes[i] != -1)
+                                {
+                                    rigBones[rig.BoneParentIndexes[i]].AddChild(rigBone);
+                                }
+
+                                rigBones.Add(rigBone);
+                            }
+
+                            string? bindName = null, slotName = null;
+                            if ((enc.ParentTransform?.GetValue() ?? null) is entHardTransformBinding ehtb)
+                            {
+                                bindName = ehtb.BindName;
+                                slotName = ehtb.SlotName;
+                            }
+
+                            Rigs[enc.Name.ToString().NotNull()] = new Rig(enc.Name.ToString().NotNull())
+                            {
+                                Bones = rigBones, BindName = bindName, SlotName = slotName
+                            };
+                        }
+
+                        break;
+                    }
+
+                    default:
+                        break;
                 }
             }
 
@@ -3194,7 +3205,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                 var appFile = Parent.GetFileFromDepotPathOrCache(app.AppearanceResource.DepotPath);
 
-                if (appFile == null || appFile.RootChunk is not appearanceAppearanceResource aar)
+                if (appFile?.RootChunk is not appearanceAppearanceResource aar)
                 {
                     continue;
                 }
@@ -3205,11 +3216,19 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                     var appDef = (appearanceAppearanceDefinition)handle.GetValue().NotNull();
 
+                    // ArchiveXL: Dynamic variant support. Appearance names can be empty.
+                    if (app.AppearanceName.GetResolvedText() is "None" && app.Name.GetResolvedText() is not "None")
+                    {
+                        app.AppearanceName = app.Name;
+                    }
+                    
                     if (appDef.Name != app.AppearanceName || appDef.CompiledData.Data is not RedPackage appPkg)
                     {
                         continue;
                     }
 
+                    // TODO (mana): This needs to consider ArchiveXL dynamic stuff somehow, since naturally the wildcard-specific
+                    // mesh paths won't just be sitting in chunks for us to read. But I don't know how.
                     var a = new Appearance(app.Name.ToString().NotNull())
                     {
                         AppearanceName = app.AppearanceName,

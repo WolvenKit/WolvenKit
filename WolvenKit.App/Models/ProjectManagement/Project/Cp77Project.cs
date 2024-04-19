@@ -41,6 +41,9 @@ public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
     public GameType GameType => GameType.Cyberpunk2077;
 
 
+    /// <summary>
+    /// Returns all files inside <see cref="FileDirectory"/> 
+    /// </summary>
     public List<string> Files
     {
         get
@@ -55,6 +58,10 @@ public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
         }
     }
 
+
+    /// <summary>
+    /// Returns all files inside <see cref="ModDirectory"/> 
+    /// </summary>
     public List<string> ModFiles
     {
         get
@@ -69,6 +76,10 @@ public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
         }
     }
 
+
+    /// <summary>
+    /// Returns all files inside <see cref="RawDirectory"/> 
+    /// </summary>
     public List<string> RawFiles
     {
         get
@@ -83,6 +94,10 @@ public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
         }
     }
 
+
+    /// <summary>
+    /// Path to root level directory (where the .csproj file is)
+    /// </summary>
     public string ProjectDirectory
     {
         get
@@ -93,11 +108,9 @@ public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
     }
 
 
-
-
-
-
-
+    /// <summary>
+    /// Path to /source/raw
+    /// </summary>
     public string FileDirectory
     {
         get
@@ -117,6 +130,9 @@ public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
         }
     }
 
+    /// <summary>
+    /// Path to /source/archive
+    /// </summary>
     public string ModDirectory
     {
         get
@@ -136,6 +152,9 @@ public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
         }
     }
 
+    /// <summary>
+    /// Path to /_backups
+    /// </summary>
     public string BackupDirectory
     {
         get
@@ -150,6 +169,9 @@ public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
         }
     }
 
+    /// <summary>
+    /// Path to /source/raw
+    /// </summary>
     public string RawDirectory
     {
         get
@@ -170,6 +192,9 @@ public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
     }
 
 
+    /// <summary>
+    /// Path to /source/customSounds
+    /// </summary>
     public string SoundDirectory
     {
         get
@@ -184,6 +209,9 @@ public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
         }
     }
 
+    /// <summary>
+    /// Path to /source/resources
+    /// </summary>
     public string ResourcesDirectory
     {
         get
@@ -198,6 +226,10 @@ public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
         }
     }
 
+
+    /// <summary>
+    /// Path to /source/resources/r6/tweaks
+    /// </summary>
     public string ResourceTweakDirectory
     {
         get
@@ -212,6 +244,9 @@ public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
         }
     }
 
+    /// <summary>
+    /// Path to /source/resources/r6/scripts
+    /// </summary>
     public string ResourceScriptsDirectory
     {
         get
@@ -226,7 +261,9 @@ public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
         }
     }
 
-    // packed folders
+    /// <summary>
+    /// Path to /packed
+    /// </summary>
     public string PackedRootDirectory
     {
         get
@@ -241,6 +278,9 @@ public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
         }
     }
 
+    /// <summary>
+    /// Path to /packed/mods
+    /// </summary>
     public string PackedRedModDirectory
     {
         get
@@ -255,6 +295,10 @@ public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
         }
     }
 
+
+    /// <summary>
+    /// Path to /packed/archive/pc/mod or /packed/mods
+    /// </summary>
     public string GetPackedArchiveDirectory(bool isRedMod)
     {
         var dir = isRedMod ? Path.Combine(PackedRedModDirectory, "archives") : Path.Combine(PackedRootDirectory, "archive", "pc", "mod");
@@ -267,6 +311,9 @@ public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
         return dir;
     }
 
+    /// <summary>
+    /// Path to /packed/customSounds
+    /// </summary>
     public string PackedSoundsDirectory
     {
         get
@@ -281,6 +328,9 @@ public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
         }
     }
 
+    /// <summary>
+    /// Path to /packed/r6/tweaks
+    /// </summary>
     public string PackedTweakDirectory
     {
         get
