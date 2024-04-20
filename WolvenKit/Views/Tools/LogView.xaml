@@ -68,11 +68,17 @@
                             </Style>
                         </Grid.Style>
 
-                        <TextBlock
+                        <TextBox
                             Grid.Column="0"
+                            MinHeight="16"
+                            Padding="0"
+                            VerticalAlignment="Center"
+                            Background="Transparent"
+                            BorderThickness="0"
                             FontFamily="Consolas"
                             FontSize="12"
                             Foreground="{Binding TextColor}"
+                            IsReadOnly="True"
                             Text="{Binding Path=Message}"
                             TextWrapping="Wrap" />
 
