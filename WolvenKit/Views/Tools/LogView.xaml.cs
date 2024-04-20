@@ -98,7 +98,7 @@ namespace WolvenKit.Views.Tools
 
             if (_autoscroll)
             {
-                _scrollViewer?.ScrollToEnd();
+                _scrollViewer?.ScrollToBottom();
             }
         }
 
@@ -146,5 +146,7 @@ namespace WolvenKit.Views.Tools
             
             Clipboard.SetText($"```{tag}```");
         }
+
+        private void ScrollToBottom_OnClick(object sender, RoutedEventArgs e) => _scrollViewer?.ScrollToBottom();
     }
 }

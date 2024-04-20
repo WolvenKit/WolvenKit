@@ -48,7 +48,6 @@
                 <DataTemplate DataType="{x:Type tools1:LogEntry}">
                     <Grid HorizontalAlignment="Stretch">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
@@ -74,10 +73,11 @@
                             FontFamily="Consolas"
                             FontSize="12"
                             Foreground="{Binding TextColor}"
-                            Text="{Binding Path=Message}" />
+                            Text="{Binding Path=Message}"
+                            TextWrapping="Wrap" />
 
                         <TextBlock
-                            Grid.Column="2"
+                            Grid.Column="1"
                             Padding="0,0,5,0"
                             Visibility="{Binding Uri, Converter={StaticResource NullVisibilityConverter}}">
                             <Hyperlink
@@ -89,7 +89,7 @@
                         </TextBlock>
 
                         <Button
-                            Grid.Column="3"
+                            Grid.Column="2"
                             Padding="0,0,12,0"
                             VerticalAlignment="Top"
                             BorderThickness="1"
@@ -108,7 +108,10 @@
 
             <ItemsControl.Template>
                 <ControlTemplate>
-                    <ScrollViewer Background="#131313" Loaded="ScrollViewer_Loaded">
+                    <ScrollViewer
+                        Background="#131313"
+                        Loaded="ScrollViewer_Loaded"
+                        VerticalScrollBarVisibility="Disabled">
                         <ItemsPresenter />
                     </ScrollViewer>
                 </ControlTemplate>
@@ -144,6 +147,18 @@
                     Height="15"
                     Kind="Repeat" />
             </ToggleButton>
+
+            <Button
+                Padding="5"
+                BorderThickness="1"
+                Click="ScrollToBottom_OnClick"
+                Style="{StaticResource MahApps.Styles.Button.Chromeless}"
+                ToolTip="Scroll to bottom">
+                <iconPacks:MaterialDesign
+                    Width="15"
+                    Height="15"
+                    Kind="VerticalAlignBottom" />
+            </Button>
 
             <Button
                 Padding="5"

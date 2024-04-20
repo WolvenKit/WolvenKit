@@ -228,12 +228,17 @@ namespace WolvenKit
             }
             finally
             {
+                var isInner = false;
                 while (exception != null)
                 {
+                    if (isInner)
+                    {
+                        _logger.Error("--------- InnerException ---------");
+                    }
                     _logger.Error(exception);
-                    _logger.Error("-----------------------");
 
                     exception = exception.InnerException;
+                    isInner = true;
                 }
                 //Application.Current.Shutdown();
             }
