@@ -11,6 +11,8 @@
     xmlns:sfgrid="clr-namespace:Syncfusion.UI.Xaml.Grid;assembly=Syncfusion.SfGrid.WPF"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:tools="clr-namespace:WolvenKit.App.ViewModels.Tools;assembly=WolvenKit.App"
+    xmlns:tools1="clr-namespace:WolvenKit.Views.Tools"
+    x:Name="uc"
     d:DataContext="{d:DesignInstance Type=tools:LogViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -27,81 +29,129 @@
     </UserControl.Resources>
 
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
         <Grid.Resources>
-            <converters:LogColorConverter x:Key="Converter" />
-            <!--<Style TargetType="sfgrid:VirtualizingCellsControl" x:Key="CustomRowStyle">
-                <Setter Property="Foreground" Value="{Binding Path=Level, Converter={StaticResource Converter}}" />
-            </Style>-->
+            <converters:NullVisibilityConverter x:Key="NullVisibilityConverter" />
         </Grid.Resources>
 
-        <!--  <syncfusion:SfDataGrid x:Name="ListView"  -->
-        <!--  AutoGenerateColumns="False"  -->
-        <!--  ColumnSizer="AutoLastColumnFill"  -->
-        <!--  AllowResizingColumns="True"  -->
-        <!--  AllowFiltering="True"  -->
-        <!--  AllowEditing="False"  -->
-        <!--  AllowSorting="True"  -->
-        <!--  ItemsSource="{Binding LogEntries}"  -->
-        <!--  RowStyle="{StaticResource CustomRowStyle}"  -->
-        <!--  >  -->
-        <!--     <syncfusion:SfDataGrid.Columns> -->
-        <!--    -->
-        <!--         <syncfusion:GridTextColumn MappingName="Level" /> -->
-        <!--    -->
-        <!--         <syncfusion:GridTextColumn MappingName="Message" /> -->
-        <!--    -->
-        <!--     </syncfusion:SfDataGrid.Columns> -->
-        <!-- </syncfusion:SfDataGrid> -->
+        <ItemsControl Grid.Column="0" ItemsSource="{Binding ElementName=uc, Path=LogEntries}">
+            <ItemsControl.Resources>
+                <DataTemplate DataType="{x:Type tools1:LogEntry}">
+                    <Grid HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
 
-        <RichTextBox
-            x:Name="LogRichTextBox"
-            Margin="0"
-            Padding="0,4"
-            Background="#131313"
-            BorderThickness="0"
-            IsReadOnly="True"
-            VerticalScrollBarVisibility="Visible" />
+                        <Button
+                            Grid.Column="0"
+                            Padding="2,0,2,0"
+                            BorderThickness="1"
+                            Click="CopyLine_OnClick"
+                            Style="{StaticResource MahApps.Styles.Button.Chromeless}"
+                            Tag="{Binding Message}"
+                            ToolTip="Copy line">
+                            <iconPacks:Octicons
+                                Width="12"
+                                Height="12"
+                                Kind="Clippy" />
+                        </Button>
 
-        <hc:UniformSpacingPanel
-            Grid.Row="1"
-            Margin="0,5,5,5"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Bottom"
-            FlowDirection="RightToLeft"
-            Orientation="Horizontal"
-            Spacing="15"
-            Visibility="Visible">
-            <Button
+                        <TextBlock
+                            Grid.Column="1"
+                            FontFamily="Consolas"
+                            FontSize="12"
+                            Foreground="{Binding TextColor}"
+                            Text="{Binding Path=Message}" />
+
+                        <TextBlock
+                            Grid.Column="3"
+                            Padding="0,0,5,0"
+                            Visibility="{Binding Uri, Converter={StaticResource NullVisibilityConverter}}">
+                            <Hyperlink
+                                NavigateUri="{Binding Uri}"
+                                RequestNavigate="Hyperlink_OnRequestNavigate"
+                                ToolTip="{Binding Uri}">
+                                More Info
+                            </Hyperlink>
+                        </TextBlock>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.Resources>
+
+            <ItemsControl.Template>
+                <ControlTemplate>
+                    <ScrollViewer
+                        Background="#131313"
+                        CanContentScroll="True"
+                        Loaded="ScrollViewer_Loaded">
+                        <ItemsPresenter />
+                    </ScrollViewer>
+                </ControlTemplate>
+            </ItemsControl.Template>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel IsVirtualizing="True" VirtualizationMode="Recycling" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+
+        <StackPanel Grid.Column="1" Orientation="Vertical">
+            <ToggleButton
+                Padding="5"
                 BorderThickness="1"
-                Click="Button_Click"
-                Style="{StaticResource MahApps.Styles.Button.Chromeless}">
+                Checked="AutoScroll_OnChecked"
+                IsChecked="True"
+                Unchecked="AutoScroll_OnUnchecked">
+                <ToggleButton.Style>
+                    <Style BasedOn="{StaticResource MahApps.Styles.Button.Chromeless}" TargetType="{x:Type ToggleButton}">
+                        <Setter Property="Foreground" Value="Red" />
+                        <Setter Property="ToolTip" Value="Disable autoscroll" />
+                        <Style.Triggers>
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter Property="Foreground" Value="Gray" />
+                                <Setter Property="ToolTip" Value="Enable autoscroll" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ToggleButton.Style>
+                <iconPacks:Unicons
+                    Width="15"
+                    Height="15"
+                    Kind="Repeat" />
+            </ToggleButton>
+
+            <Button
+                Padding="5"
+                BorderThickness="1"
+                Click="OpenLogFolder_Click"
+                Style="{StaticResource MahApps.Styles.Button.Chromeless}"
+                ToolTip="Open log folder">
+                <iconPacks:PackIconCodicons
+                    Width="15"
+                    Height="15"
+                    Kind="FolderOpened" />
+            </Button>
+
+            <Button
+                Padding="5"
+                BorderThickness="1"
+                Click="ClearAll_Click"
+                Style="{StaticResource MahApps.Styles.Button.Chromeless}"
+                ToolTip="Clear log">
                 <iconPacks:PackIconCodicons
                     Width="15"
                     Height="15"
                     Kind="ClearAll" />
             </Button>
 
-            <Button
-                BorderThickness="1"
-                Click="Button_Click"
-                Style="{StaticResource MahApps.Styles.Button.Chromeless}"
-                Visibility="Collapsed">
-                <iconPacks:PackIconOcticons
-                    Width="15"
-                    Height="15"
-                    Kind="Clippy" />
-            </Button>
 
-            <Button
-                BorderThickness="1"
-                Click="Button_Click"
-                Style="{StaticResource MahApps.Styles.Button.Chromeless}"
-                Visibility="Collapsed">
-                <iconPacks:PackIconUnicons
-                    Width="15"
-                    Height="15"
-                    Kind="PaintTool" />
-            </Button>
-        </hc:UniformSpacingPanel>
+        </StackPanel>
     </Grid>
 </reactiveUi:ReactiveUserControl>

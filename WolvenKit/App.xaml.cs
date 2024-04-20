@@ -109,7 +109,9 @@ namespace WolvenKit
             Container = _host.Services;
             Container.UseMicrosoftDependencyResolver();
 
-            var path = Path.Combine(ISettingsManager.GetAppData(), "applog.txt");
+            MoveOldLogs();
+
+            var path = Path.Combine(ISettingsManager.GetLogsDir(), "applog.txt");
             var outputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj}{NewLine}{Exception}";
 
             Log.Logger = new LoggerConfiguration()
@@ -130,6 +132,17 @@ namespace WolvenKit
                         flushToDiskInterval: TimeSpan.FromMinutes(1)), // Write once per minute.
                     bufferSize: 1000)
                 .CreateLogger();
+        }
+
+        private void MoveOldLogs()
+        {
+            var newFolder = ISettingsManager.GetLogsDir();
+            foreach (var file in Directory.GetFiles(ISettingsManager.GetAppData(), "applog*.txt", SearchOption.TopDirectoryOnly))
+            {
+                var fileName = Path.GetFileName(file);
+                
+                File.Move(file, Path.Combine(newFolder, fileName));
+            }
         }
 
         //https://stackoverflow.com/a/46804709/16407587

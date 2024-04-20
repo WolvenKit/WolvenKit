@@ -43,6 +43,17 @@ public interface ISettingsManager : ISettingsDto, INotifyPropertyChanged
         return dir;
     }
 
+    public static string GetLogsDir()
+    {
+        var dir = Path.Combine(GetAppData(), "Logs");
+        if (!Directory.Exists(dir))
+        {
+            Directory.CreateDirectory(dir);
+        }
+
+        return dir;
+    }
+
     public static string GetManagerCacheDir()
     {
         var dir = Path.Combine(GetAppData(), "Config");
