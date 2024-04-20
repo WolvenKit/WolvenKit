@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using WolvenKit.App.Helpers.StringHelpers;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Helpers;
 
-public static class StringHelper
+public abstract partial class StringHelper
 {
     public static string Stringify(CArray<scnOutputSocket> scnOutputAry)
     {
@@ -135,6 +136,13 @@ public static class StringHelper
     public static string Stringify(animAnimNode_Base node, bool asValue = false) => StringHelperAnimNode.Stringify(node, asValue);
     public static string Stringify(redTagList tagList) => Stringify(tagList.Tags);
 
+    /// <summary>
+    /// Regular expression to match archiveXL wildcards in appearance names, such as *{variant}
+    /// Matches everything preceded by *{ followed by }$
+    /// </summary>
+    [GeneratedRegex(@"(?<=\*\{).*(?=\}$)")]
+    private static partial Regex s_archiveXLPropertyRegex();
+    
     public static string StringifyMeshAppearance(CResourceAsyncReference<CMesh> mesh, CName? meshAppearance)
     {
         var ret = mesh.DepotPath.GetResolvedText() ?? "";
@@ -143,7 +151,19 @@ public static class StringHelper
             return ret;
         }
 
-        return $"{ret} ({s})";
+        // The whole appearance name is an ArchiveXL dynamic variant
+        if (s_archiveXLPropertyRegex().Match(s) is { Success: true } m)
+        {
+            return ret + " {" + m.Groups[0].Value + "}";
+        }
+
+        // The appearance name contains dynamic variants
+        if (s.StartsWith('*'))
+        {
+            s = s.Replace("*", "");
+        }
+
+        return $"{ret} [ {s} ]";
     }
 
     public static string? GetNodeName(CWeakHandle<animAnimNode_Base> linkNode) => StringHelperAnimNode.GetNodeName(linkNode);
