@@ -44,14 +44,48 @@
                     <Grid HorizontalAlignment="Stretch">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
-                        <Button
+                        <Grid.Style>
+                            <Style TargetType="{x:Type Grid}">
+                                <Setter Property="Background" Value="Transparent" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <SolidColorBrush Opacity="0.10" Color="Gray" />
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
+
+                        <TextBlock
                             Grid.Column="0"
-                            Padding="2,0,2,0"
+                            FontFamily="Consolas"
+                            FontSize="12"
+                            Foreground="{Binding TextColor}"
+                            Text="{Binding Path=Message}" />
+
+                        <TextBlock
+                            Grid.Column="2"
+                            Padding="0,0,5,0"
+                            Visibility="{Binding Uri, Converter={StaticResource NullVisibilityConverter}}">
+                            <Hyperlink
+                                NavigateUri="{Binding Uri}"
+                                RequestNavigate="Hyperlink_OnRequestNavigate"
+                                ToolTip="{Binding Uri}">
+                                More Info
+                            </Hyperlink>
+                        </TextBlock>
+
+                        <Button
+                            Grid.Column="3"
+                            Padding="0,0,2,0"
                             BorderThickness="1"
                             Click="CopyLine_OnClick"
                             Style="{StaticResource MahApps.Styles.Button.Chromeless}"
@@ -62,25 +96,6 @@
                                 Height="12"
                                 Kind="Clippy" />
                         </Button>
-
-                        <TextBlock
-                            Grid.Column="1"
-                            FontFamily="Consolas"
-                            FontSize="12"
-                            Foreground="{Binding TextColor}"
-                            Text="{Binding Path=Message}" />
-
-                        <TextBlock
-                            Grid.Column="3"
-                            Padding="0,0,5,0"
-                            Visibility="{Binding Uri, Converter={StaticResource NullVisibilityConverter}}">
-                            <Hyperlink
-                                NavigateUri="{Binding Uri}"
-                                RequestNavigate="Hyperlink_OnRequestNavigate"
-                                ToolTip="{Binding Uri}">
-                                More Info
-                            </Hyperlink>
-                        </TextBlock>
                     </Grid>
                 </DataTemplate>
             </ItemsControl.Resources>
