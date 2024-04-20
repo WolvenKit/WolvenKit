@@ -38,7 +38,12 @@
             <converters:NullVisibilityConverter x:Key="NullVisibilityConverter" />
         </Grid.Resources>
 
-        <ItemsControl Grid.Column="0" ItemsSource="{Binding ElementName=uc, Path=LogEntries}">
+        <ItemsControl
+            Grid.Column="0"
+            ItemsSource="{Binding ElementName=uc, Path=LogEntries}"
+            ScrollViewer.CanContentScroll="True"
+            VirtualizingPanel.ScrollUnit="Pixel"
+            VirtualizingStackPanel.VirtualizationMode="Recycling">
             <ItemsControl.Resources>
                 <DataTemplate DataType="{x:Type tools1:LogEntry}">
                     <Grid HorizontalAlignment="Stretch">
@@ -86,6 +91,7 @@
                         <Button
                             Grid.Column="3"
                             Padding="0,0,12,0"
+                            VerticalAlignment="Top"
                             BorderThickness="1"
                             Click="CopyLine_OnClick"
                             Style="{StaticResource MahApps.Styles.Button.Chromeless}"
@@ -102,17 +108,14 @@
 
             <ItemsControl.Template>
                 <ControlTemplate>
-                    <ScrollViewer
-                        Background="#131313"
-                        CanContentScroll="True"
-                        Loaded="ScrollViewer_Loaded">
+                    <ScrollViewer Background="#131313" Loaded="ScrollViewer_Loaded">
                         <ItemsPresenter />
                     </ScrollViewer>
                 </ControlTemplate>
             </ItemsControl.Template>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <VirtualizingStackPanel IsVirtualizing="True" VirtualizationMode="Recycling" />
+                    <VirtualizingStackPanel />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>
