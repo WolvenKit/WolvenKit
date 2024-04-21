@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -136,12 +137,24 @@ namespace WolvenKit
 
         private void MoveOldLogs()
         {
-            var newFolder = ISettingsManager.GetLogsDir();
+            var logFolder = ISettingsManager.GetLogsDir();
+
+            var existingLogs = Directory.GetFiles(logFolder, "*.txt");
+            
             foreach (var file in Directory.GetFiles(ISettingsManager.GetAppData(), "applog*.txt", SearchOption.TopDirectoryOnly))
             {
                 var fileName = Path.GetFileName(file);
-                
-                File.Move(file, Path.Combine(newFolder, fileName));
+                var destFileName = Path.Combine(logFolder, fileName);
+
+                var rotatingIndex = 1;
+
+                while (existingLogs.Contains(destFileName))
+                {
+                    destFileName = Path.Combine(logFolder, $"{fileName.Replace(".txt", "")}_{rotatingIndex:D3}.txt");
+                    rotatingIndex++;
+                }
+
+                File.Move(file, destFileName);
             }
         }
 
