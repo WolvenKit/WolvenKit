@@ -1,4 +1,5 @@
 using System.Collections;
+using WolvenKit.RED4.Archive.Buffer;
 
 namespace WolvenKit.RED4.Types;
 
@@ -90,7 +91,7 @@ public partial class RedBaseClass
     public IEnumerable<(string propPath, IRedType value)> GetEnumerator(string rootName = "root")
     {
         var queue = new Queue<(RedBaseClass, string)>();
-        var visited = new List<RedBaseClass>();
+        var visited = new Dictionary<RedBaseClass, byte>(ReferenceEqualityComparer.Instance);
 
         foreach (var tuple in InternalFindType(this))
         {
@@ -104,7 +105,7 @@ public partial class RedBaseClass
             {
                 var (cls1, path) = queue.Dequeue();
 
-                if (visited.Contains(cls1))
+                if (!visited.TryAdd(cls1, 0))
                 {
                     continue;
                 }
@@ -118,8 +119,6 @@ public partial class RedBaseClass
                         yield return tuple;
                     }
                 }
-
-                visited.Add(cls1);
             }
         }
 
@@ -154,6 +153,14 @@ public partial class RedBaseClass
                 if (handle.GetValue() != null)
                 {
                     queue.Enqueue((handle.GetValue()!, propPath));
+                }
+            }
+
+            if (value is IRedBufferWrapper { Data: RedPackage redPackage })
+            {
+                for (var i = 0; i < redPackage.Chunks.Count; i++)
+                {
+                    queue.Enqueue((redPackage.Chunks[i], $"{propPath}:{i}"));
                 }
             }
         }
