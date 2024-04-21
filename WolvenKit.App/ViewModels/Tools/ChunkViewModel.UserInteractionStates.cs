@@ -25,7 +25,7 @@ public partial class ChunkViewModel
     // Properties (by name) that should never be changed by the user
     private static readonly List<string> s_globalReadonlyFields =
     [
-        "saveDateTime", "resourceVersion", "cookingPlatform", "renderBuffer"
+        "saveDateTime", "resourceVersion", "cookingPlatform", "renderBuffer", "commonCookData"
     ];
 
     // Fields (by parent class) that should be marked as read-only
