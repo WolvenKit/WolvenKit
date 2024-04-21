@@ -10,8 +10,8 @@ public partial class ChunkViewModel
 {
     // For view decoration, default values will be displayed in italic
     [ObservableProperty] private bool _isDisplayAsReadOnly;
-    
-    // Types that should never be changed by the user 
+
+    // Types that should never be changed by the user
     private static readonly List<Type> s_globalReadonlyTypes =
     [
         typeof(SerializationDeferredDataBuffer),
@@ -23,13 +23,13 @@ public partial class ChunkViewModel
     ];
 
     // Properties (by name) that should never be changed by the user
-    private static readonly List<string> s_globalReadonlyFields =
+    private static readonly List<string> s_globalDisplayAsReadonlyFields =
     [
         "saveDateTime", "resourceVersion", "cookingPlatform", "renderBuffer", "commonCookData"
     ];
 
     // Fields (by parent class) that should be marked as read-only
-    private static readonly Dictionary<Type, List<string>> s_readonlyFields = new()
+    private static readonly Dictionary<Type, List<string>> s_displayAsReadonlyFields = new()
     {
         { typeof(CBitmapTexture), ["width", "height"] }, // xbm
         { typeof(CMesh), ["geometryHash", "consoleBias"] }, // mesh
@@ -37,21 +37,27 @@ public partial class ChunkViewModel
 
     private void CalculateIsDisplayAsReadOnly()
     {
-        if (IsDisplayAsReadOnly)
+        if (IsDisplayAsReadOnly || IsReadOnly)
         {
             return;
         }
 
-        if (Parent?.IsDisplayAsReadOnly is true || s_globalReadonlyFields.Contains(Name) ||
-            s_globalReadonlyTypes.Contains(ResolvedData.GetType()))
+        if (s_globalReadonlyTypes.Contains(ResolvedData.GetType()) || Parent?.IsReadOnly is true ||
+            PropertyType.IsAssignableTo(typeof(DataBuffer)))
+        {
+            IsReadOnly = true;
+            return;
+        }
+
+        if (Parent?.IsDisplayAsReadOnly is true || s_globalDisplayAsReadonlyFields.Contains(Name))
         {
             IsDisplayAsReadOnly = true;
             return;
         }
 
-        if (Parent is not null && s_readonlyFields.TryGetValue(Parent.ResolvedData.GetType(), out var hiddenFields))
+        if (Parent is not null && s_displayAsReadonlyFields.TryGetValue(Parent.ResolvedData.GetType(), out var readonlyFields))
         {
-            IsDisplayAsReadOnly = hiddenFields.Contains(Name);
+            IsDisplayAsReadOnly = readonlyFields.Contains(Name);
         }
     }
 
@@ -86,7 +92,7 @@ public partial class ChunkViewModel
         }
 
         // DataBuffers should always be hidden
-        if (IsDisplayAsReadOnly || s_alwaysHiddenFields.Contains(Name) || PropertyType.IsAssignableTo(typeof(DataBuffer)))
+        if (IsReadOnly || IsDisplayAsReadOnly || s_alwaysHiddenFields.Contains(Name) || PropertyType.IsAssignableTo(typeof(DataBuffer)))
         {
             IsHiddenByNoobFilter = true;
             return;
