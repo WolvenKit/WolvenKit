@@ -1578,38 +1578,39 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         
         try
         {
-            if (Parent.Data is IRedBufferPointer db3 && db3.GetValue().Data is IRedArray dict)
+            switch (Parent.Data)
             {
-                if (indices.Count == 0)
+                case IRedBufferPointer db3 when db3.GetValue().Data is IRedArray dict:
                 {
-                    _loggerService.Warning("Please select something first");
-                }
-                else
-                {
-                    DeleteFullSelection(indices, dict);
-                }
-            }
-            else if (Parent.Data is IRedArray db4)
-            {
-                DeleteFullSelection(indices, db4);
-            }
-            else if (Parent.Data is IRedLegacySingleChannelCurve curve)
-            {
-                foreach (var index in indices.OrderByDescending(x => x))
-                {
-                    curve.RemoveAt(index);
-                }
+                    if (indices.Count == 0)
+                    {
+                        _loggerService.Warning("Please select something first");
+                    }
+                    else
+                    {
+                        DeleteFullSelection(indices, dict);
+                    }
 
-                Tab.Parent.SetIsDirty(true);
-                Parent.RecalculateProperties();
-            }
-            else if (Parent.Data is null)
-            {
-                _loggerService.Warning($"Parent.Data is null");
-            }
-            else
-            {
-                _loggerService.Warning($"Unsupported type : {Parent.Data.NotNull().GetType().Name}");
+                    break;
+                }
+                case IRedArray db4:
+                    DeleteFullSelection(indices, db4);
+                    break;
+                case IRedLegacySingleChannelCurve curve:
+                {
+                    foreach (var index in indices.OrderByDescending(x => x))
+                    {
+                        curve.RemoveAt(index);
+                    }
+
+                    break;
+                }
+                case null:
+                    _loggerService.Warning($"Parent.Data is null");
+                    return;
+                default:
+                    _loggerService.Warning($"Unsupported type : {Parent.Data.NotNull().GetType().Name}");
+                    return;
             }
         }
         catch (Exception ex)
@@ -1617,6 +1618,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             _loggerService.Warning($"Something went wrong while trying to delete the selection : {ex}");
         }
 
+        Tab.Parent.SetIsDirty(true);
+        Parent.RecalculateProperties();
+        
         Parent.ReindexChildren();
     }
 
