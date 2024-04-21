@@ -689,6 +689,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                         count += 1;
                     }
                 }
+                else if (Data is LocalizationString)
+                {
+                    // ignore
+                }
                 else if (ResolvedData is IRedString str)
                 {
                     var s = str.GetString();

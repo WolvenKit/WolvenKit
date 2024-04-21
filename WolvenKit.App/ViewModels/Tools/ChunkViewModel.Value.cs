@@ -43,7 +43,15 @@ public partial class ChunkViewModel
         }
         else if (PropertyType.IsAssignableTo(typeof(LocalizationString)) && Data is LocalizationString l)
         {
-            Value = l.Value is "" or null ? "null" : l.Value;
+            var value = l.Value;
+            if (!string.IsNullOrEmpty(value))
+            {
+                Value = value;
+                if (Value.StartsWith("LocKey#") && ulong.TryParse(Value[7..], out var _))
+                {
+                    Value = "";
+                }
+            }
         }
         else if (PropertyType.IsAssignableTo(typeof(IRedEnum)) && Data is IRedEnum e)
         {

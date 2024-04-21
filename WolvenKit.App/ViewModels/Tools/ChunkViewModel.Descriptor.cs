@@ -339,6 +339,24 @@ public partial class ChunkViewModel
                 Descriptor = desc;
                 break;
             }
+            case LocalizationString localizationString:
+            {
+                if (!string.IsNullOrEmpty(localizationString.Value) && 
+                    localizationString.Value.StartsWith("LocKey#") &&
+                    ulong.TryParse(localizationString.Value[7..], out var locKey) &&
+                    _locKeyService.GetEntry(locKey) is { } locEntry)
+                {
+                    var desc = $"[{locEntry.PrimaryKey}]";
+                    if (!string.IsNullOrEmpty(locEntry.SecondaryKey))
+                    {
+                        desc += $" {locEntry.SecondaryKey}";
+                    }
+
+                    Descriptor = desc;
+                }
+                
+                break;
+            }
             case entHardTransformBinding tBinding:
                 Descriptor = tBinding.BindName;
                 break;

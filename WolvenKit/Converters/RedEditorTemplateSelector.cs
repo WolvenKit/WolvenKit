@@ -31,6 +31,7 @@ namespace WolvenKit.Converters
         public DataTemplate RedVector4Editor { get; set; }
         public DataTemplate RedQuaternionEditor { get; set; }
         public DataTemplate RedWorldPositionEditor { get; set; }
+        public DataTemplate RedLocalizationStringEditor { get; set; }
         public DataTemplate RedArrayEditor { get; set; }
         public DataTemplate RedTypeViewer { get; set; }
         public DataTemplate NullTemplate { get; set; }
@@ -142,6 +143,10 @@ namespace WolvenKit.Converters
                 if (vm.PropertyType.IsAssignableTo(typeof(IRedCurvePoint)))
                 {
                     return RedCurvePointEditor;
+                }
+                if (vm.PropertyType.IsAssignableTo(typeof(LocalizationString)))
+                {
+                    return RedLocalizationStringEditor;
                 }
                 if (vm.HasChildren())
                 {
