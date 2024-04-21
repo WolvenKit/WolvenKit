@@ -348,9 +348,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
             {
                 childProp.RecalculateProperties();
             }
-
             chunkViewModel.RecalculateProperties();
-
         }
 
         DirtyChunks.Clear();

@@ -325,6 +325,8 @@ public partial class RedDocumentViewModel : DocumentViewModel
         {
             m.DirtyChunks.Add(chunkViewModel);
         }
+
+        SetIsDirty(m.DirtyChunks.Count > 0);
     }
 
 
