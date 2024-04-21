@@ -75,7 +75,6 @@ public partial class ChunkViewModel
 
     /// <summary>
     /// Should this property be hidden from the default view (because the user has toggled the noob filter)?
-    /// TODO: Not implemented yet
     /// </summary>
     private void CalculateConditionalHiding()
     {
@@ -87,7 +86,7 @@ public partial class ChunkViewModel
         }
 
         // DataBuffers should always be hidden
-        if (s_alwaysHiddenFields.Contains(Name) || PropertyType.IsAssignableTo(typeof(DataBuffer)))
+        if (IsDisplayAsReadOnly || s_alwaysHiddenFields.Contains(Name) || PropertyType.IsAssignableTo(typeof(DataBuffer)))
         {
             IsHiddenByNoobFilter = true;
             return;
