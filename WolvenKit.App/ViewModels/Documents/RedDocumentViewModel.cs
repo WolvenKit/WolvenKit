@@ -279,10 +279,11 @@ public partial class RedDocumentViewModel : DocumentViewModel
             var slot = atlas.Slots[0];
             if (slot != null)
             {
-                var file = GetFileFromDepotPath(slot.Texture.DepotPath);
-                if (file != null)
+                if (GetFileFromDepotPath(slot.Texture.DepotPath)?.RootChunk is CBitmapTexture tex)
                 {
-                    TabItemViewModels.Add(_documentTabViewmodelFactory.RDTInkTextureAtlasViewModel(atlas, (CBitmapTexture)file.RootChunk, this));
+                    var tab = _documentTabViewmodelFactory.RDTInkTextureAtlasViewModel(atlas, tex, this);
+                    tab.ChangeEvent += OnPartNameChanged;
+                    TabItemViewModels.Add(tab);
                 }
             }
         }
@@ -311,6 +312,18 @@ public partial class RedDocumentViewModel : DocumentViewModel
             TabItemViewModels.Add(new RDTGraphViewModel2(cls, this, _nodeWrapperFactory));
         }
     }
+
+    private void OnPartNameChanged(object sender, EventArgs e)
+    {
+        if (GetMainFile() is not RDTDataViewModel m || m.Chunks.Count == 0 || m.Chunks[0] is not { ResolvedData: inkTextureAtlas } cvm ||
+            cvm.TVProperties.Count == 0)
+        {
+            return;
+        }
+
+        m.DirtyChunk = cvm.TVProperties[0];
+    }
+
 
     public void PopulateItems()
     {
