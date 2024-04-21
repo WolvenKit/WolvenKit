@@ -1618,10 +1618,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             _loggerService.Warning($"Something went wrong while trying to delete the selection : {ex}");
         }
 
+        RecalculateProperties();
+        ReindexChildren();
         Tab.Parent.SetIsDirty(true);
-        Parent.RecalculateProperties();
-        
-        Parent.ReindexChildren();
     }
 
     private bool CanExportNodeData() => IsInArray && Parent?.Data is DataBuffer rb && Parent?.Parent?.Data is worldStreamingSector && rb.Data is worldNodeDataBuffer;   // TODO RelayCommand check notify
@@ -1945,30 +1944,35 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 return;
             }
 
-            if (ResolvedData is IRedArray)
+            switch (ResolvedData)
             {
-                if (!CreateArray())
-                {
+                case IRedArray when !CreateArray():
                     throw new Exception("Error while accessing or creating the array!");
-                }
-
-                var clone = copy;
-                if (clone is IRedType redtype)
+                case IRedArray:
                 {
-                    InsertChild(-1, redtype);
-                    RecalculateProperties();
-                }
-            }
-            else if (Parent != null && Parent.ResolvedData is IRedArray)
-            {
-                var clone = copy;
-                if (clone is IRedType redtype)
-                {
-                    Parent.InsertChild(Parent.GetIndexOf(this) + 1, redtype);
-                    Parent?.RecalculateProperties();
-                }
+                    var clone = copy;
+                    if (clone is IRedType redtype)
+                    {
+                        InsertChild(-1, redtype);
+                        RecalculateProperties();
+                    }
 
-                Parent?.RecalculateProperties();
+                    break;
+                }
+                default:
+                {
+                    if (Parent != null && Parent.ResolvedData is IRedArray)
+                    {
+                        var clone = copy;
+                        if (clone is IRedType redtype)
+                        {
+                            Parent.InsertChild(Parent.GetIndexOf(this) + 1, redtype);
+                            Parent?.RecalculateProperties();
+                        }
+                    }
+
+                    break;
+                }
             }
 
             Tab?.Parent.SetIsDirty(true);
