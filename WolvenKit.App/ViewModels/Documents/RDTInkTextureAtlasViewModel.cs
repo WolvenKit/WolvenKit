@@ -109,17 +109,22 @@ public partial class RDTInkTextureAtlasViewModel : RDTTextureViewModel
 
     private void OnSlotPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName != "PartName"
-            || sender is not InkTextureAtlasMapperViewModel sVm
-            || _atlas.Slots[0].Parts.FirstOrDefault(part => part.PartName == sVm.OriginalPartName) is not inkTextureAtlasMapper
-                mapper
-           )
+        if (e.PropertyName != "PartName" || sender is not InkTextureAtlasMapperViewModel sVm || _atlas.Slots.Count == 0)
         {
             return;
         }
 
-        mapper.PartName = sVm.PartName;
-        sVm.OriginalPartName = sVm.PartName;
+        var atlasSlotIdx = Array.FindIndex<inkTextureAtlasMapper>(_atlas.Slots[0].Parts.ToArray(), p => p.PartName == sVm.OriginalPartName);
+
+        // Change the slot name for all names
+        foreach (var slot in _atlas.Slots)
+        {
+            if (slot.Parts.Count > atlasSlotIdx && slot.Parts[atlasSlotIdx] is inkTextureAtlasMapper m)
+            {
+                m.PartName = sVm.PartName;
+                sVm.OriginalPartName = sVm.PartName;
+            }
+        }
 
         ChangeEvent?.Invoke(this, EventArgs.Empty);
     }

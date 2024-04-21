@@ -127,9 +127,9 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     public bool ShowReferenceGraph => _settingsManager.ShowReferenceGraph;
 
     /// <summary>
-    /// If this is not null, force all of its children to recalculate properties after tab switch
+    /// If this is not empty, force nodes and all of their children to recalculate properties after tab switch
     /// </summary>
-    public ChunkViewModel? DirtyChunk { get; set; }
+    public List<ChunkViewModel> DirtyChunks { get; set; } = [];
 
     public delegate void LayoutNodesDelegate();
 
@@ -305,7 +305,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     public override void OnSelected()
     {
-        RefreshDirtyChunk();
+        RefreshDirtyChunks();
         
         // if tweak file, deserialize from text
         // read tweakXL file
@@ -335,23 +335,26 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         //}
     }
 
-    private async void RefreshDirtyChunk()
+    private void RefreshDirtyChunks()
     {
-        if (DirtyChunk is null)
+        if (DirtyChunks.Count == 0)
         {
             return;
         }
 
-        foreach (var childProp in DirtyChunk.TVProperties)
+        foreach (var chunkViewModel in DirtyChunks)
         {
-            childProp.RecalculateProperties();
+            foreach (var childProp in chunkViewModel.TVProperties)
+            {
+                childProp.RecalculateProperties();
+            }
+
+            chunkViewModel.RecalculateProperties();
+
         }
 
-        DirtyChunk.RecalculateProperties();
-
-        await DirtyChunk.Refresh();
-
-        DirtyChunk = null;
+        DirtyChunks.Clear();
+        
     }
 
     public void ClearSelection()
