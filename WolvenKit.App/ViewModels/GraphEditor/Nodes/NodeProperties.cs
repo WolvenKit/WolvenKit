@@ -135,6 +135,19 @@ internal class NodeProperties
                 details["Visibility"] = hudVisibilityCasted?.Visibility.ToEnumString()!;
             }
         }
+        else if (node is questTeleportPuppetNodeDefinition teleportNodeCasted)
+        {
+            details["Entity Reference"] = ParseGameEntityReference(teleportNodeCasted?.EntityReference?.Chunk?.EntityReference);
+            details["Local Player"] = teleportNodeCasted?.EntityReference?.Chunk?.RefLocalPlayer == true ? "True" : "False";
+            details["Look At Action"] = teleportNodeCasted?.LookAtAction.ToEnumString()!;
+
+            details["Destination Offset"] = teleportNodeCasted?.Params?.Chunk?.DestinationOffset.ToString()!;
+            details["Destination Entity Reference"] = ParseGameEntityReference(teleportNodeCasted?.Params?.Chunk?.DestinationRef?.Chunk?.EntityReference);
+            details["Heal At Teleport"] = teleportNodeCasted?.Params?.Chunk?.HealAtTeleport == true ? "True" : "False";
+
+            details["Player Look At Offset"] = teleportNodeCasted?.PlayerLookAt?.Chunk?.Offset.ToString()!;
+            details["Player Look At Target"] = ParseGameEntityReference(teleportNodeCasted?.PlayerLookAt?.Chunk?.LookAtTarget);
+        }
 
         return details;
     }
