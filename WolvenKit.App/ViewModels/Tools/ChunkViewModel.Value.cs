@@ -125,6 +125,12 @@ public partial class ChunkViewModel
             return;
             
         }
+        else if (ResolvedData is inkTextureSlot inkTextureSlot)
+        {
+            Value = $"[{inkTextureSlot.Parts.Count}]";
+            IsValueExtrapolated = true;
+            return;
+        }
 
         // factory.csv
         else if (Parent is { Name: "compiledData" } && GetRootModel().Data is C2dArray &&
