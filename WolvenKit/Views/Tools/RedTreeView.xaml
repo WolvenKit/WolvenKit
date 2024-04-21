@@ -40,6 +40,9 @@
                     <DataTrigger Binding="{Binding IsReadOnly}" Value="True">
                         <Setter Property="Foreground" Value="{StaticResource WolvenKitTan50}" />
                     </DataTrigger>
+                    <DataTrigger Binding="{Binding IsDisplayAsReadOnly}" Value="True">
+                        <Setter Property="Foreground" Value="{StaticResource WolvenKitTan50}" />
+                    </DataTrigger>
                 </Style.Triggers>
             </Style>
 
@@ -55,6 +58,9 @@
                         <Setter Property="FontStyle" Value="Italic" />
                     </DataTrigger>
                     <DataTrigger Binding="{Binding IsReadOnly}" Value="True">
+                        <Setter Property="Foreground" Value="{StaticResource WolvenKitTan50}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsDisplayAsReadOnly}" Value="True">
                         <Setter Property="Foreground" Value="{StaticResource WolvenKitTan50}" />
                     </DataTrigger>
                     <DataTrigger Binding="{Binding IsValueExtrapolated, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
@@ -80,6 +86,10 @@
                                 <DataTrigger Binding="{Binding IsReadOnly}" Value="True">
                                     <Setter Property="Foreground" Value="{StaticResource WolvenKitTan50}" />
                                 </DataTrigger>
+                                <DataTrigger Binding="{Binding IsDisplayAsReadOnly}">
+                                    <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
+                                    <Setter Property="FontStyle" Value="Italic" />
+                                </DataTrigger>
                             </Style.Triggers>
                         </Style>
                         <Style x:Key="TextblockFormatter" TargetType="TextBlock">
@@ -89,6 +99,9 @@
                                     <Setter Property="FontStyle" Value="Italic" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding IsReadOnly}" Value="True">
+                                    <Setter Property="Foreground" Value="{StaticResource WolvenKitTan50}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsDisplayAsReadOnly}" Value="True">
                                     <Setter Property="Foreground" Value="{StaticResource WolvenKitTan50}" />
                                 </DataTrigger>
                             </Style.Triggers>

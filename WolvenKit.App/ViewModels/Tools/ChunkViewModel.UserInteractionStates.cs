@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.RED4.Types;
 
 // ReSharper disable once CheckNamespace
@@ -7,6 +8,9 @@ namespace WolvenKit.App.ViewModels.Shell;
 
 public partial class ChunkViewModel
 {
+    // For view decoration, default values will be displayed in italic
+    [ObservableProperty] private bool _isDisplayAsReadOnly;
+    
     // Types that should never be changed by the user 
     private static readonly List<Type> s_globalReadonlyTypes =
     [
@@ -31,21 +35,23 @@ public partial class ChunkViewModel
         { typeof(CMesh), ["geometryHash", "consoleBias"] }, // mesh
     };
 
-    private void CalculateIsReadOnly()
+    private void CalculateIsDisplayAsReadOnly()
     {
-        if (IsReadOnly)
+        if (IsDisplayAsReadOnly)
         {
             return;
         }
-        if (Parent?.IsReadOnly is true || s_globalReadonlyFields.Contains(Name) || s_globalReadonlyTypes.Contains(ResolvedData.GetType()))
+
+        if (Parent?.IsDisplayAsReadOnly is true || s_globalReadonlyFields.Contains(Name) ||
+            s_globalReadonlyTypes.Contains(ResolvedData.GetType()))
         {
-            IsReadOnly = true;
+            IsDisplayAsReadOnly = true;
             return;
         }
 
         if (Parent is not null && s_readonlyFields.TryGetValue(Parent.ResolvedData.GetType(), out var hiddenFields))
         {
-            IsReadOnly = hiddenFields.Contains(Name);
+            IsDisplayAsReadOnly = hiddenFields.Contains(Name);
         }
     }
 
@@ -57,7 +63,7 @@ public partial class ChunkViewModel
             return;
         }
 
-        CalculateIsReadOnly();
+        CalculateIsDisplayAsReadOnly();
         CalculateConditionalHiding();
     }
 
