@@ -1,28 +1,34 @@
 using System;
-using System.Linq;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Reactive.Linq;
 using System.Windows;
-using System.Windows.Documents;
+using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Threading;
+using System.Windows.Navigation;
 using DynamicData;
 using ReactiveUI;
 using Serilog.Events;
 using Splat;
 using WolvenKit.App;
-using WolvenKit.App.Helpers;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
+using WolvenKit.Helpers;
 
 namespace WolvenKit.Views.Tools
 {
+    public record LogEntry(string Message, Uri Uri, Brush TextColor);
+
     /// <summary>
     /// Interaction logic for LogView.xaml
     /// </summary>
     public partial class LogView
     {
-        private const uint s_logLen_cull_at = 1000;
-        private const int s_logLen_cull_to = 500;
+        private ScrollViewer _scrollViewer;
+        private bool _autoscroll = true;
+
+        public ObservableCollection<object> LogEntries { get; set; } = new();
         
         public LogView()
         {
@@ -32,16 +38,14 @@ namespace WolvenKit.Views.Tools
             DataContext = ViewModel;
 
             var sink = Locator.Current.GetService<MySink>();
-            var _ = sink.Connect()
-            .ObserveOn(RxApp.MainThreadScheduler)
-            .Bind(out var _)
-            .DisposeMany()
-            .Subscribe(OnNext);
-
-            var consolas = new FontFamily("Consolas");
-            LogRichTextBox.FontFamily = consolas;
-            LogRichTextBox.FontSize = 10;
+            _ = sink.Connect()
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Bind(out var _)
+                .DisposeMany()
+                .Subscribe(OnNext);
         }
+
+        private void ScrollViewer_Loaded(object sender, RoutedEventArgs e) => _scrollViewer = (ScrollViewer)sender;
 
         private void OnNext(IChangeSet<LogEvent> obj)
         {
@@ -75,45 +79,27 @@ namespace WolvenKit.Views.Tools
         private void AddLog(LogEvent item)
         {
             var level = ToLogtype(item.Level);
-
-#if !DEBUG
-            // don't log Debug on release build
-            if (level == Logtype.Debug)
+            if (item.Properties.TryGetValue(Core.Constants.IsSuccess, out var isSuccessObj) && isSuccessObj is ScalarValue { Value: true })
             {
-                return;
-            }
-#endif
-
-            if (item.Properties.TryGetValue(Core.Constants.IsSuccess, out var val) && val is ScalarValue { Value: true })
-            {
-                // ... 
                 level = Logtype.Success;
             }
 
-            var paragraph = new Paragraph()
-            {
-                LineHeight = 1
-            };
-            var run = new Run($"[{DateTime.Now}] [{level,-9}] {item.RenderMessage()}")
-            {
-                Foreground = GetBrushForLevel(level),
-                FontSize = 12,
-            };
-            paragraph.Inlines.Add(run);
+            var brush = GetBrushForLevel(level);
 
-            // cull after certain amount of blocks
-            if (LogRichTextBox.Document.Blocks.Count > s_logLen_cull_at)
+            var message = item.RenderMessage();
+            if (item.Properties.TryGetValue(Core.Constants.InfoCode, out var infoCodeObj) && infoCodeObj is ScalarValue { Value: int infoCode })
             {
-                var elementsToRemove = LogRichTextBox.Document.Blocks.Take(s_logLen_cull_to).ToList();
-                foreach (var element in elementsToRemove)
-                {
-                    LogRichTextBox.Document.Blocks.Remove(element);
-                }
-                
+                LogEntries.Add(new LogEntry($"[{item.Timestamp.LocalDateTime}] [{level,-9}] {message}", LogCodeHelper.GetUrl(infoCode), brush));
             }
-            LogRichTextBox.Document.Blocks.Add(paragraph);
+            else
+            {
+                LogEntries.Add(new LogEntry($"[{item.Timestamp.LocalDateTime}] [{level,-9}] {message}", null, brush));
+            }
 
-            DispatcherHelper.RunOnMainThread(() => LogRichTextBox.ScrollToEnd(), DispatcherPriority.Background);
+            if (_autoscroll)
+            {
+                _scrollViewer?.ScrollToBottom();
+            }
         }
 
         private static Logtype ToLogtype(LogEventLevel level) =>
@@ -139,6 +125,28 @@ namespace WolvenKit.Views.Tools
             _ => throw new ArgumentOutOfRangeException(nameof(level), level, null),
         };
 
-        private void Button_Click(object sender, RoutedEventArgs e) => LogRichTextBox.Document.Blocks.Clear();
+        private void ClearAll_Click(object sender, RoutedEventArgs e) => LogEntries.Clear();
+
+        private void OpenLogFolder_Click(object sender, RoutedEventArgs e) => 
+            Process.Start(new ProcessStartInfo(ISettingsManager.GetLogsDir()) { UseShellExecute = true });
+
+        private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e) => 
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri) { UseShellExecute = true });
+
+        private void AutoScroll_OnChecked(object sender, RoutedEventArgs e) => _autoscroll = true;
+
+        private void AutoScroll_OnUnchecked(object sender, RoutedEventArgs e) => _autoscroll = false;
+
+        private void CopyLine_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (sender is not Button { Tag: string tag })
+            {
+                return;
+            }
+            
+            Clipboard.SetText($"```{tag}```");
+        }
+
+        private void ScrollToBottom_OnClick(object sender, RoutedEventArgs e) => _scrollViewer?.ScrollToBottom();
     }
 }
