@@ -109,7 +109,8 @@ public partial class RDTInkTextureAtlasViewModel : RDTTextureViewModel
 
     private void OnSlotPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName != "PartName" || sender is not InkTextureAtlasMapperViewModel sVm || _atlas.Slots.Count == 0)
+        if (sender is not InkTextureAtlasMapperViewModel sVm || e.PropertyName != nameof(InkTextureAtlasMapperViewModel.PartName) ||
+            _atlas.Slots.Count == 0)
         {
             return;
         }
