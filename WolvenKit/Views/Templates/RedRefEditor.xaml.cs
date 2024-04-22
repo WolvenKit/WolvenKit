@@ -7,10 +7,13 @@ using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using Splat;
 using WolvenKit.App.Services;
+using WolvenKit.Converters;
 using WolvenKit.RED4.Types;
+using WolvenKit.Views.Templates;
 
 namespace WolvenKit.Views.Editors
 {
@@ -145,7 +148,7 @@ namespace WolvenKit.Views.Editors
             }
         }
 
-        
+       
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }

@@ -173,6 +173,7 @@
                 <ResourceDictionary Source="pack://application:,,,/Fluent;Component/Themes/Generic.xaml" />
 
                 <ResourceDictionary Source="pack://application:,,,/Resources/Styles/CustomHandyStyles.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Views/Templates/TruncatingTextBox.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <Style
