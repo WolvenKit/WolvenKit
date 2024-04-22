@@ -19,7 +19,7 @@ public partial class ChunkViewModel
         Value = "";
 
         // nothing to calculate
-        if (ResolvedData is RedDummy)
+        if (ResolvedData is RedDummy || IsDefault)
         {
             return;
         }
@@ -132,6 +132,12 @@ public partial class ChunkViewModel
             IsValueExtrapolated = true;
             return;
             
+        }
+        else if (ResolvedData is inkTextureSlot inkTextureSlot)
+        {
+            Value = $"[{inkTextureSlot.Parts.Count}]";
+            IsValueExtrapolated = true;
+            return;
         }
 
         // factory.csv
@@ -631,33 +637,21 @@ public partial class ChunkViewModel
                 break;
             case entMeshComponent meshComponent:
             {
-                Value = "";
-                if (meshComponent.ParentTransform?.GetValue() is entHardTransformBinding parentTransformValue)
+                Value = StringHelper.Stringify(meshComponent.Mesh.DepotPath, true);
+                if (meshComponent.MeshAppearance.GetResolvedText() is string app and (not "default" or "") && Value != "")
                 {
-                    Value = StringHelper.Stringify(parentTransformValue);
+                    Value = $"{Value} ({app})";
                 }
-
-                if (meshComponent.Mesh.DepotPath.GetResolvedText() is string dePathText)
-                {
-                    Value = Value.Length == 0 ? $"{dePathText}" : $" ({dePathText})";
-                }
-
                 IsValueExtrapolated = Value != "";
                 break;
             }
             case entSkinnedMeshComponent skinnedMeshComponent:
             {
-                Value = "";
-                if (skinnedMeshComponent.ParentTransform?.GetValue() is entHardTransformBinding parentTransformValue)
+                Value = StringHelper.Stringify(skinnedMeshComponent.Mesh.DepotPath, true);
+                if (skinnedMeshComponent.MeshAppearance.GetResolvedText() is string app and (not "default" or "") && Value != "")
                 {
-                    Value = StringHelper.Stringify(parentTransformValue);
+                    Value = $"{Value} ({app})";
                 }
-
-                if (skinnedMeshComponent.Mesh.DepotPath.GetResolvedText() is string dePathText)
-                {
-                    Value = Value.Length == 0 ? $"{dePathText}" : $" ({dePathText})";
-                }
-
                 IsValueExtrapolated = Value != "";
                 break;
             }
@@ -715,7 +709,7 @@ public partial class ChunkViewModel
                 break;
         }
 
-        if (string.IsNullOrEmpty(Value) && TVProperties is [ChunkViewModel child])
+        if (!IsDefault && string.IsNullOrEmpty(Value) && TVProperties is [ChunkViewModel child])
         {
             Value = child.Descriptor ?? child.Value;
             IsValueExtrapolated = !string.IsNullOrEmpty(Value);

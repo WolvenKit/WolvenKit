@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -294,6 +295,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private static readonly string s_archiveFolder =
         $"{Path.DirectorySeparatorChar}archive{Path.DirectorySeparatorChar}";
 
+
+    [GeneratedRegex(@".*\.\S+\.glb$")]
+    private static partial Regex TypedGlbRegex();
+    
+    
     /// <summary>
     /// Copies the path to an item in clipboard
     /// </summary>
@@ -319,9 +325,42 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             activeItemPath = FileModel.GetRelativeName(activeItemPath, ActiveProject.NotNull());
         }
 
-        if (switchToRaw && !gamefileOnly && activeItemPath.Contains(s_rawFolder))
+        if (switchToRaw)
         {
-            activeItemPath = activeItemPath.Replace(s_rawFolder, s_archiveFolder);
+            if (activeItemPath.Contains(s_rawFolder) || gamefileOnly)
+            {
+                activeItemPath = activeItemPath.Replace(s_rawFolder, s_archiveFolder);
+                // it's a .morphtarget.glb or .anims.glb or...
+                if (TypedGlbRegex().IsMatch(activeItemPath))
+                {
+                    activeItemPath = activeItemPath.Replace(".glb", "");
+                }
+                else if (activeItemPath.EndsWith(".glb"))
+                {
+                    activeItemPath = activeItemPath.Replace(".glb", ".mesh");
+                }
+                else if (activeItemPath.EndsWith(".json"))
+                {
+                    activeItemPath = activeItemPath.Replace(".json", "");
+                }
+            }
+            else if (activeItemPath.Contains(s_archiveFolder) && !gamefileOnly)
+            {
+                activeItemPath = activeItemPath.Replace(s_archiveFolder, s_rawFolder);
+
+                switch (Path.GetExtension(activeItemPath))
+                {
+                    case ".mesh":
+                        activeItemPath = activeItemPath.Replace(".mesh", ".glb");
+                        break;
+                    case ".morphtarget":
+                    case ".anims":
+                        activeItemPath = $"{activeItemPath}.glb";
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
 
         if (gamefileOnly && activeItemPath.Contains(s_archiveFolder))
@@ -338,12 +377,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         if (isAbsolute && !Path.Exists(activeItemPath))
         {
-            return;
+            activeItemPath = Path.GetDirectoryName(activeItemPath);
         }
 
         Clipboard.SetDataObject(activeItemPath);
     }
-    
+
     private bool CanCopyRelPath() => ActiveProject != null && SelectedItem != null;
 
     /// <summary>
@@ -949,6 +988,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// Passes key state changes from view down to ModifierViewStatesModel
     /// </summary>
     public void RefreshModifierStates() => ModifierViewStateService.RefreshModifierStates();
+   
 
     #endregion
 }

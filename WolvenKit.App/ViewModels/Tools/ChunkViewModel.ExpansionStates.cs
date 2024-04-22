@@ -91,6 +91,8 @@ public partial class ChunkViewModel : ObservableObject
 
                     break;
                 }
+                case localizationPersistenceOnScreenEntries when treeViewProperties.Count == 1:
+                case localizationPersistenceSubtitleEntries when treeViewProperties.Count == 1:
                 // .visualTags (.app file and nested under .ent.visualTagSchema)
                 case redTagList when treeViewProperties.Count == 1:
                     treeViewProperties[0].IsExpanded = isExpanded;

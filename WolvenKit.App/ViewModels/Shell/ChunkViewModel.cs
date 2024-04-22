@@ -1582,38 +1582,39 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         
         try
         {
-            if (Parent.Data is IRedBufferPointer db3 && db3.GetValue().Data is IRedArray dict)
+            switch (Parent.Data)
             {
-                if (indices.Count == 0)
+                case IRedBufferPointer db3 when db3.GetValue().Data is IRedArray dict:
                 {
-                    _loggerService.Warning("Please select something first");
-                }
-                else
-                {
-                    DeleteFullSelection(indices, dict);
-                }
-            }
-            else if (Parent.Data is IRedArray db4)
-            {
-                DeleteFullSelection(indices, db4);
-            }
-            else if (Parent.Data is IRedLegacySingleChannelCurve curve)
-            {
-                foreach (var index in indices.OrderByDescending(x => x))
-                {
-                    curve.RemoveAt(index);
-                }
+                    if (indices.Count == 0)
+                    {
+                        _loggerService.Warning("Please select something first");
+                    }
+                    else
+                    {
+                        DeleteFullSelection(indices, dict);
+                    }
 
-                Tab.Parent.SetIsDirty(true);
-                Parent.RecalculateProperties();
-            }
-            else if (Parent.Data is null)
-            {
-                _loggerService.Warning($"Parent.Data is null");
-            }
-            else
-            {
-                _loggerService.Warning($"Unsupported type : {Parent.Data.NotNull().GetType().Name}");
+                    break;
+                }
+                case IRedArray db4:
+                    DeleteFullSelection(indices, db4);
+                    break;
+                case IRedLegacySingleChannelCurve curve:
+                {
+                    foreach (var index in indices.OrderByDescending(x => x))
+                    {
+                        curve.RemoveAt(index);
+                    }
+
+                    break;
+                }
+                case null:
+                    _loggerService.Warning($"Parent.Data is null");
+                    return;
+                default:
+                    _loggerService.Warning($"Unsupported type : {Parent.Data.NotNull().GetType().Name}");
+                    return;
             }
         }
         catch (Exception ex)
@@ -1621,7 +1622,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             _loggerService.Warning($"Something went wrong while trying to delete the selection : {ex}");
         }
 
-        Parent.ReindexChildren();
+        RecalculateProperties();
+        ReindexChildren();
+        Tab.Parent.SetIsDirty(true);
     }
 
     private bool CanExportNodeData() => IsInArray && Parent?.Data is DataBuffer rb && Parent?.Parent?.Data is worldStreamingSector && rb.Data is worldNodeDataBuffer;   // TODO RelayCommand check notify
@@ -1945,30 +1948,35 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 return;
             }
 
-            if (ResolvedData is IRedArray)
+            switch (ResolvedData)
             {
-                if (!CreateArray())
-                {
+                case IRedArray when !CreateArray():
                     throw new Exception("Error while accessing or creating the array!");
-                }
-
-                var clone = copy;
-                if (clone is IRedType redtype)
+                case IRedArray:
                 {
-                    InsertChild(-1, redtype);
-                    RecalculateProperties();
-                }
-            }
-            else if (Parent != null && Parent.ResolvedData is IRedArray)
-            {
-                var clone = copy;
-                if (clone is IRedType redtype)
-                {
-                    Parent.InsertChild(Parent.GetIndexOf(this) + 1, redtype);
-                    Parent?.RecalculateProperties();
-                }
+                    var clone = copy;
+                    if (clone is IRedType redtype)
+                    {
+                        InsertChild(-1, redtype);
+                        RecalculateProperties();
+                    }
 
-                Parent?.RecalculateProperties();
+                    break;
+                }
+                default:
+                {
+                    if (Parent != null && Parent.ResolvedData is IRedArray)
+                    {
+                        var clone = copy;
+                        if (clone is IRedType redtype)
+                        {
+                            Parent.InsertChild(Parent.GetIndexOf(this) + 1, redtype);
+                            Parent?.RecalculateProperties();
+                        }
+                    }
+
+                    break;
+                }
             }
 
             Tab?.Parent.SetIsDirty(true);
@@ -2582,15 +2590,18 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         IsDefault = Data is RedDummy;
 
-        if (Parent is not null && Data is not RedDummy)
+        if (!IsDefault && Parent is not null && Data is not RedDummy &&
+            GetPropertyByRedName(Parent.ResolvedPropertyType, PropertyName) is { } epi)
         {
-            var epi = GetPropertyByRedName(Parent.ResolvedPropertyType, PropertyName);
-            if (epi is not null)
-            {
-                //IsDefault = IsDefault(Parent.ResolvedPropertyType, epi, Data);
-                IsDefault = epi.IsDefault(ResolvedData);
-            }
+            IsDefault = epi.IsDefault(ResolvedData);
         }
+
+        IsDefault = IsDefault || ResolvedData switch
+        {
+            entSkinnedMeshComponent skinnedMeshComponent => string.IsNullOrEmpty(skinnedMeshComponent.Mesh.DepotPath.GetResolvedText()),
+            entMeshComponent meshComponent => string.IsNullOrEmpty(meshComponent.Mesh.DepotPath.GetResolvedText()),
+            _ => IsDefault
+        };
     }
 
     // TODO: This is obsolete with NodeIdxInParent - isn't it?
