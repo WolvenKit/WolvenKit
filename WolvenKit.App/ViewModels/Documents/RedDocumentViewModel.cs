@@ -332,6 +332,14 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
     public void PopulateItems()
     {
+        foreach (var tab in TabItemViewModels)
+        {
+            if (tab is RDTInkTextureAtlasViewModel inkTextureTab)
+            {
+                inkTextureTab.ChangeEvent -= OnPartNameChanged;
+            }
+        }
+        
         TabItemViewModels.Clear();
 
         var root = _documentTabViewmodelFactory.RDTDataViewModel(Cr2wFile.RootChunk, this, _appViewModel, _chunkViewmodelFactory);
