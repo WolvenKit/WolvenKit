@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using WolvenKit.App.Extensions;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
 using WolvenKit.RED4.Types;
 
@@ -12,6 +13,8 @@ public class scnQuestNodeWrapper : BaseSceneViewModel<scnQuestNode>
         {
             //_castedData.QuestNode.PropertyChanged += QuestNodeOnPropertyChanged;
         }
+
+        Details.AddRange(NodeProperties.GetPropertiesFor(_castedData.QuestNode?.Chunk));
     }
 
     internal override void GenerateSockets()
