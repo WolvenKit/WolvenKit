@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
+using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
 
 // ReSharper disable once CheckNamespace
@@ -43,7 +44,7 @@ public partial class ChunkViewModel
         }
 
         if (s_globalReadonlyTypes.Contains(ResolvedData.GetType()) || Parent?.IsReadOnly is true ||
-            PropertyType.IsAssignableTo(typeof(DataBuffer)))
+            (!IsArray && PropertyType.IsAssignableTo(typeof(DataBuffer))))
         {
             IsReadOnly = true;
             return;
@@ -92,7 +93,8 @@ public partial class ChunkViewModel
         }
 
         // DataBuffers should always be hidden
-        if (IsReadOnly || IsDisplayAsReadOnly || s_alwaysHiddenFields.Contains(Name) || PropertyType.IsAssignableTo(typeof(DataBuffer)))
+        if (IsReadOnly || IsDisplayAsReadOnly || s_alwaysHiddenFields.Contains(Name) ||
+            (!IsArray && PropertyType.IsAssignableTo(typeof(DataBuffer))))
         {
             IsHiddenByNoobFilter = true;
             return;
