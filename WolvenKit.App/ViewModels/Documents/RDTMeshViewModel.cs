@@ -22,6 +22,7 @@ using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.App.PhysX;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
@@ -126,6 +127,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
     {
         _data = ent;
     }
+
+    public string? SelectedNodeIndex; 
 
     public void Load()
     {
@@ -944,13 +947,25 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         }
     }
 
+    public event EventHandler<string?>? OnSectorNodeSelected;
+
+    
     private void CommonMouseDownEvents(object modelHit, MouseButtonEventArgs mouseButtonEventArgs)
     {
-        if (mouseButtonEventArgs.LeftButton == MouseButtonState.Pressed && modelHit is SubmeshComponent { Parent: MeshComponent { Parent: MeshComponent mesh } })
+        if (mouseButtonEventArgs.LeftButton != MouseButtonState.Pressed || modelHit is not SubmeshComponent
+            {
+                Parent: MeshComponent { Parent: MeshComponent mesh }
+            })
         {
-            Parent.GetLoggerService().Info((mesh.WorldNodeIndex != null ? $"nodes[{mesh.WorldNodeIndex}] (Type: \"{mesh.WorldNodeType}\", nodeDataIndices: [{mesh.WorldNodeDataIndices}]) : " : "Mesh Name :") + mesh.Text);
+            return;
         }
 
+        Parent.GetLoggerService()
+            .Info((mesh.WorldNodeIndex != null
+                ? $"nodes[{mesh.WorldNodeIndex}] (Type: \"{mesh.WorldNodeType}\", nodeDataIndices: [{mesh.WorldNodeDataIndices}]) : "
+                : "Mesh Name :") + mesh.Text);
+
+        OnSectorNodeSelected?.Invoke(this, mesh.WorldNodeIndex);
     }
 
     #endregion
@@ -2672,6 +2687,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             element.Children.Add(group);
         }
         app.ModelGroup.Add(element);
+
+        SelectWorldNode();
         return element;
     }
 
@@ -2820,6 +2837,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         }
         IsRendered = true;
         RenderBlock(_data as worldStreamingBlock);
+        SelectWorldNode();
     }
 
     public void RenderBlock(worldStreamingBlock? data)
@@ -3350,34 +3368,33 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
     #endregion
 
 
+    public void SelectWorldNode()
+    {
+        if (SelectedNodeIndex is null)
+        {
+            return;
+        }
+
+        LoadableModel? findMeshChild(LoadableModel model)
+        {
+            if (model is LoadableModel loadableModel)
+            {
+                return loadableModel;
+            }
 
 
+            return null;
+        }
 
+        LoadableModel? selectedMesh = null;
+        foreach (var loadableModel in Models)
+        {
+            if (selectedMesh is not null)
+            {
+                continue;
+            }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            selectedMesh = findMeshChild(loadableModel);
+        }
+    }
 }

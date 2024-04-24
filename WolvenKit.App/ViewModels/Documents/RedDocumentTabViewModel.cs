@@ -20,10 +20,17 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
 
     private void RedDocumentTabViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(RDTDataViewModel.IsEmbeddedFile))
+        switch (e.PropertyName)
         {
-            DeleteEmbeddedFileCommand.NotifyCanExecuteChanged();
-            RenameEmbeddedFileCommand.NotifyCanExecuteChanged();
+            case nameof(RDTDataViewModel.IsEmbeddedFile):
+                DeleteEmbeddedFileCommand.NotifyCanExecuteChanged();
+                RenameEmbeddedFileCommand.NotifyCanExecuteChanged();
+                break;
+            case nameof(RDTDataViewModel.SelectedChunk):
+                OnSelected();
+                break;
+            default:
+                break;
         }
     }
 

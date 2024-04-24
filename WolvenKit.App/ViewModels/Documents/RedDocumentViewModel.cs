@@ -112,6 +112,17 @@ public partial class RedDocumentViewModel : DocumentViewModel
     partial void OnSelectedTabItemViewModelChanged(RedDocumentTabViewModel? value)
     {
         value?.OnSelected();
+
+        switch (value)
+        {
+            case RDTDataViewModel model when _selectedWorldNodeIndex != null &&
+                                             int.TryParse(_selectedWorldNodeIndex, out var worldNodeIndex):
+                model.AddToSelection(model.FindWorldNode(worldNodeIndex));
+                break;
+            case RDTMeshViewModel meshViewModel when _selectedWorldNodeIndex != null:
+                meshViewModel.SelectedNodeIndex = _selectedWorldNodeIndex;
+                break;
+        }
     }
 
     // assume files that don't exist are relative paths
@@ -279,10 +290,11 @@ public partial class RedDocumentViewModel : DocumentViewModel
             var slot = atlas.Slots[0];
             if (slot != null)
             {
-                var file = GetFileFromDepotPath(slot.Texture.DepotPath);
-                if (file != null)
+                if (GetFileFromDepotPath(slot.Texture.DepotPath)?.RootChunk is CBitmapTexture tex)
                 {
-                    TabItemViewModels.Add(_documentTabViewmodelFactory.RDTInkTextureAtlasViewModel(atlas, (CBitmapTexture)file.RootChunk, this));
+                    var tab = _documentTabViewmodelFactory.RDTInkTextureAtlasViewModel(atlas, tex, this);
+                    tab.ChangeEvent += OnPartNameChanged;
+                    TabItemViewModels.Add(tab);
                 }
             }
         }
@@ -300,7 +312,9 @@ public partial class RedDocumentViewModel : DocumentViewModel
         }
         if (cls is worldStreamingSector wss)
         {
-            TabItemViewModels.Add(_documentTabViewmodelFactory.RDTMeshViewModel(wss, this));
+            var tab = _documentTabViewmodelFactory.RDTMeshViewModel(wss, this);
+            tab.OnSectorNodeSelected += OnSectorNodeSelected;
+            TabItemViewModels.Add(tab);
         }
         if (cls is worldStreamingBlock wsb)
         {
@@ -312,13 +326,53 @@ public partial class RedDocumentViewModel : DocumentViewModel
         }
     }
 
+    private string? _selectedWorldNodeIndex;
+
+    private void OnSectorNodeSelected(object? sender, string? e) => _selectedWorldNodeIndex = e;
+
+    private void OnPartNameChanged(object sender, EventArgs e)
+    {
+        if (GetMainFile() is not RDTDataViewModel m || m.Chunks.Count == 0 || m.Chunks[0] is not { ResolvedData: inkTextureAtlas } cvm ||
+            cvm.Properties.FirstOrDefault((p) => p.Name == "slots") is not ChunkViewModel child)
+        {
+            return;
+        }
+
+        foreach (var chunkViewModel in child.Properties.Where(p => p.ResolvedData is inkTextureSlot).ToList())
+        {
+            m.DirtyChunks.Add(chunkViewModel);
+        }
+
+        SetIsDirty(m.DirtyChunks.Count > 0);
+    }
+
+
     public void PopulateItems()
     {
+        foreach (var tab in TabItemViewModels)
+        {
+            switch (tab)
+            {
+                case RDTInkTextureAtlasViewModel inkTextureTab:
+                    inkTextureTab.ChangeEvent -= OnPartNameChanged;
+                    break;
+                case RDTMeshViewModel meshTab:
+                    meshTab.OnSectorNodeSelected -= OnSectorNodeSelected;
+                    break;
+                case RDTDataViewModel dataViewModel:
+                    dataViewModel.OnSectorNodeSelected -= OnSectorNodeSelected;
+                    break;
+                default:
+                    break;
+            }
+        }
+
         TabItemViewModels.Clear();
 
         var root = _documentTabViewmodelFactory.RDTDataViewModel(Cr2wFile.RootChunk, this, _appViewModel, _chunkViewmodelFactory);
         root.FilePath = "(root)";
         TabItemViewModels.Add(root);
+        root.OnSectorNodeSelected += OnSectorNodeSelected;
         AddTabForRedType(Cr2wFile.RootChunk);
 
         foreach (var file in Cr2wFile.EmbeddedFiles)

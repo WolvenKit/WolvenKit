@@ -126,6 +126,11 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     public bool ShowReferenceGraph => _settingsManager.ShowReferenceGraph;
 
+    /// <summary>
+    /// If this is not empty, force nodes and all of their children to recalculate properties after tab switch
+    /// </summary>
+    public List<ChunkViewModel> DirtyChunks { get; set; } = [];
+
     public delegate void LayoutNodesDelegate();
 
     public LayoutNodesDelegate? LayoutNodes;
@@ -300,6 +305,13 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     public override void OnSelected()
     {
+        RefreshDirtyChunks();
+
+        if (SelectedChunk is ChunkViewModel { ResolvedData: worldNode } cvm)
+        {
+            OnSectorNodeSelected?.Invoke(this, $"{cvm.NodeIdxInParent}");
+        }
+        
         // if tweak file, deserialize from text
         // read tweakXL file
         // TODO fix TweakXLDocumentViewModel
@@ -326,6 +338,26 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         //        _loggerService.Error(ex);
         //    }
         //}
+    }
+
+    private void RefreshDirtyChunks()
+    {
+        if (DirtyChunks.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var chunkViewModel in DirtyChunks)
+        {
+            foreach (var childProp in chunkViewModel.TVProperties)
+            {
+                childProp.RecalculateProperties();
+            }
+            chunkViewModel.RecalculateProperties();
+        }
+
+        DirtyChunks.Clear();
+        
     }
 
     public void ClearSelection()
@@ -403,6 +435,40 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         }
     }
 
+
+    public event EventHandler<string>? OnSectorNodeSelected;
+
+    /// <summary>
+    /// For .streamingsector files, called when a mesh is selected in the other tab 
+    /// </summary>
+    /// <param name="selectedIndex"></param>
+    /// <returns></returns>
+    public ChunkViewModel? FindWorldNode(int selectedIndex)
+    {
+        var root = RootChunk;
+
+        if (root is null)
+        {
+            root = _chunks.FirstOrDefault();
+        }
+
+        if (root is not ChunkViewModel)
+        {
+            return null;
+        }
+
+        var worldNodeArray = root.Properties.FirstOrDefault(chunk =>
+            chunk is { IsArray: true, Name: "nodes", ResolvedData: CArray<CHandle<worldNode>> });
+        if (worldNodeArray is null)
+        {
+            return null;
+        }
+
+        root.IsExpanded = true;
+        worldNodeArray.IsExpanded = true;
+
+        return worldNodeArray?.GetChildNode(selectedIndex);
+    }
     
     #endregion
 }
