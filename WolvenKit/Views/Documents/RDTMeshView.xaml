@@ -40,6 +40,7 @@
             FXAALevel="High"
             ShowCoordinateSystem="True"
             UseDefaultGestures="False"
+            Loaded="Viewport3DX_Loaded"
             ZoomExtentsWhenLoaded="True">
             <hx:Viewport3DX.InputBindings>
                 <MouseBinding Command="hx:ViewportCommands.Rotate" Gesture="LeftClick" />
@@ -514,6 +515,10 @@
                         ColumnSizer="Auto"
                         HeaderText="WorldNodeIndex"
                         MappingName="WorldNodeIndex" />
+                    <syncfusion:TreeGridTextColumn
+                        ColumnSizer="Auto"
+                        HeaderText="NodeDataIndices"
+                        MappingName="WorldNodeDataIndices" />
                 </syncfusion:SfTreeGrid.Columns>
             </syncfusion:SfTreeGrid>
             <!--ItemsControl ItemsSource="{Binding SelectedAppearance.Models, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
