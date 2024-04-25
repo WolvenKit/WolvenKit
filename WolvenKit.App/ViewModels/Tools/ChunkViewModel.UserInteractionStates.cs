@@ -79,6 +79,26 @@ public partial class ChunkViewModel
         return IsHiddenByNoobFilter;
     }
 
+    private void ReCalculateConditionalHiding(bool considerChildren = false)
+    {
+        IsHiddenByNoobFilter = false;
+        CalculateConditionalHiding();
+
+        if (!considerChildren)
+        {
+            Tab?.Parent?.SetIsDirty(true);
+            return;
+        }
+
+        foreach (var chunkViewModel in TVProperties)
+        {
+            chunkViewModel.IsHiddenByNoobFilter = false;
+            chunkViewModel.CalculateConditionalHiding();
+        }
+
+        Tab?.Parent?.SetIsDirty(true);
+    }
+
     /// <summary>
     /// Should this property be hidden from the default view (because the user has toggled the noob filter)?
     /// </summary>

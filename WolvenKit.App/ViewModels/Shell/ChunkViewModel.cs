@@ -1551,6 +1551,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
             Tab.Parent.SetIsDirty(true);
             Parent.RecalculateProperties();
+            if (Tab.IsSimpleViewEnabled)
+            {
+                RecalculateProperties();
+            }
         }
         catch (Exception ex) { _loggerService.Error(ex); }
     }
