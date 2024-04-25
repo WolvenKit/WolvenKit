@@ -42,14 +42,14 @@ public partial class ChunkViewModel
             return;
         }
 
-        if (s_globalReadonlyTypes.Contains(ResolvedData.GetType()) || Parent?.IsReadOnly is true ||
-            PropertyType.IsAssignableTo(typeof(DataBuffer)))
+        if (s_globalReadonlyTypes.Contains(ResolvedData.GetType()) || Parent?.IsReadOnly is true)
         {
             IsReadOnly = true;
             return;
         }
 
-        if (Parent?.IsDisplayAsReadOnly is true || s_globalDisplayAsReadonlyFields.Contains(Name))
+        if (Parent?.IsDisplayAsReadOnly is true || s_globalDisplayAsReadonlyFields.Contains(Name) ||
+            PropertyType.IsAssignableTo(typeof(DataBuffer)))
         {
             IsDisplayAsReadOnly = true;
             return;
@@ -77,26 +77,6 @@ public partial class ChunkViewModel
     {
         CalculateConditionalHiding();
         return IsHiddenByNoobFilter;
-    }
-
-    private void ReCalculateConditionalHiding(bool considerChildren = false)
-    {
-        IsHiddenByNoobFilter = false;
-        CalculateConditionalHiding();
-
-        if (!considerChildren)
-        {
-            Tab?.Parent?.SetIsDirty(true);
-            return;
-        }
-
-        foreach (var chunkViewModel in TVProperties)
-        {
-            chunkViewModel.IsHiddenByNoobFilter = false;
-            chunkViewModel.CalculateConditionalHiding();
-        }
-
-        Tab?.Parent?.SetIsDirty(true);
     }
 
     /// <summary>
