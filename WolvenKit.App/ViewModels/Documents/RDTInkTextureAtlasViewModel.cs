@@ -4,12 +4,12 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Discord.Rest;
 using Microsoft.Win32;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
@@ -17,6 +17,8 @@ using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.Documents;
+
+public delegate void ChangeEventHandler(object sender, EventArgs e);
 
 public partial class RDTInkTextureAtlasViewModel : RDTTextureViewModel
 {
@@ -30,6 +32,8 @@ public partial class RDTInkTextureAtlasViewModel : RDTTextureViewModel
 
         Render = RenderAtlas;
     }
+
+    public event ChangeEventHandler? ChangeEvent;
 
     public void RenderAtlas()
     {
@@ -65,14 +69,10 @@ public partial class RDTInkTextureAtlasViewModel : RDTTextureViewModel
 
         using (var gfx = Graphics.FromImage(destBitmap))
         {
-            // this is doesn't account for premultipied alpha, so the opacity mask is still needed
+            // this is doesn't account for premultiplied alpha, so the opacity mask is still needed
             var matrix = new ColorMatrix(new float[][]
             {
-                    new float[] { 1, 0, 0, 0, 0},
-                    new float[] { 0, 1, 0, 0, 0},
-                    new float[] { 0, 0, 1, 0, 0},
-                    new float[] { 0, 0, 0, 1, 0},
-                    new float[] { 0, 0, 0, 0, 0},
+                [1, 0, 0, 0, 0], [0, 1, 0, 0, 0], [0, 0, 1, 0, 0], [0, 0, 0, 1, 0], [0, 0, 0, 0, 0],
             });
             //matrix.Matrix03 = 1F;
             //matrix.Matrix13 = TintColor.Alpha / 3F;
@@ -99,9 +99,35 @@ public partial class RDTInkTextureAtlasViewModel : RDTTextureViewModel
         var slot = _atlas.Slots[0].NotNull();
         foreach (var part in slot.Parts)
         {
-            OverlayItems.Add(new InkTextureAtlasMapperViewModel(part, xbm, slot.Texture.DepotPath.ToString().NotNull(), Parent.RelativePath, (BitmapSource)Image));
+            var slotViewModel = new InkTextureAtlasMapperViewModel(part, xbm, slot.Texture.DepotPath.ToString().NotNull(),
+                Parent.RelativePath, (BitmapSource)Image);
+            slotViewModel.PropertyChanged += OnSlotPropertyChanged;
+            OverlayItems.Add(slotViewModel);
+        }
+    }
+
+
+    private void OnSlotPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (sender is not InkTextureAtlasMapperViewModel sVm || e.PropertyName != nameof(InkTextureAtlasMapperViewModel.PartName) ||
+            _atlas.Slots.Count == 0)
+        {
+            return;
         }
 
+        var atlasSlotIdx = Array.FindIndex<inkTextureAtlasMapper>(_atlas.Slots[0].Parts.ToArray(), p => p.PartName == sVm.OriginalPartName);
+
+        // Change the slot name for all names
+        foreach (var slot in _atlas.Slots)
+        {
+            if (slot.Parts.Count > atlasSlotIdx && slot.Parts[atlasSlotIdx] is inkTextureAtlasMapper m)
+            {
+                m.PartName = sVm.PartName;
+                sVm.OriginalPartName = sVm.PartName;
+            }
+        }
+
+        ChangeEvent?.Invoke(this, EventArgs.Empty);
     }
 
     [ObservableProperty] private ObservableCollection<InkTextureAtlasMapperViewModel> _overlayItems = new();
@@ -114,6 +140,8 @@ public partial class RDTInkTextureAtlasViewModel : RDTTextureViewModel
     {
         [ObservableProperty]
         private string _partName;
+
+        public string OriginalPartName;
         
         [ObservableProperty]
         private string _depotPath;
@@ -150,13 +178,14 @@ public partial class RDTInkTextureAtlasViewModel : RDTTextureViewModel
         [Browsable(false)]
         //[ObservableProperty] 
         public string RedscriptExample => $@"let image = new inkImage();
-image.SetAtlasResource(r""{AtlasPath.Replace("\\", "\\\\")}"");
+image.SetAtlasResource(r""{AtlasPath.Replace("\\", @"\\")}"");
 image.SetTexturePart(n""{PartName}"");";
 
         public InkTextureAtlasMapperViewModel(inkTextureAtlasMapper itam, CBitmapTexture xbm, string path, string atlasPath, BitmapSource image)
         {
             Itam = itam;
             _partName = itam.PartName.ToString().NotNull();
+            OriginalPartName = _partName;
             _depotPath = path;
             _atlasPath = atlasPath;
             Left = Math.Round(itam.ClippingRectInUVCoords.Left * xbm.Width);
@@ -169,9 +198,9 @@ image.SetTexturePart(n""{PartName}"");";
             {
                 Image = new CroppedBitmap(image, new Int32Rect((int)Left, (int)Top, (int)Width, (int)Height));
             }
-            catch
+            catch (Exception)
             {
-
+                // do nothing
             }
         }
 
@@ -188,16 +217,18 @@ image.SetTexturePart(n""{PartName}"");";
             };
             saveFileDialog1.ShowDialog();
 
-            if (saveFileDialog1.FileName != "")
+            if (saveFileDialog1.FileName == "" || Image is not BitmapSource source)
             {
-
-                BitmapEncoder encoder = new PngBitmapEncoder();
-                encoder.Frames.Add(BitmapFrame.Create(Image as BitmapSource));
-
-                using var fileStream = new FileStream(saveFileDialog1.FileName, FileMode.Create);
-                encoder.Save(fileStream);
+                return;
             }
+
+            BitmapEncoder encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(source));
+
+            using var fileStream = new FileStream(saveFileDialog1.FileName, FileMode.Create);
+            encoder.Save(fileStream);
         }
 
     }
+
 }

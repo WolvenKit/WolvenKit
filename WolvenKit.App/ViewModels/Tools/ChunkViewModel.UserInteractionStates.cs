@@ -162,6 +162,7 @@ public partial class ChunkViewModel
                 "looseDependencies",
             ]
         },
+        { typeof(inkTextureAtlas), ["parts", "slices"] },
     };
 
 
@@ -185,7 +186,7 @@ public partial class ChunkViewModel
                 "opacityMicromaps", "quantizationOffset", "quantizationScale", "renderChunks"
             ]
         },
-        { typeof(inkTextureAtlas), ["activeTexture", "dynamicTexture", "parts", "slices", "texture"] },
+        { typeof(inkTextureAtlas), ["activeTexture", "dynamicTexture", "dynamicTextureSlot", "texture"] },
         { typeof(inkTextureSlot), ["slices"] },
         // .app file
         {
