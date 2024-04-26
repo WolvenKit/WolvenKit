@@ -229,6 +229,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             SetChildExpansionStates(IsExpanded);
         }
+
+        // expand / collapse nested elements. Why click twice.
+        if (!IsArray && (TVProperties.Count == 1 || TVProperties.Count(p => !p.IsHiddenByNoobFilter) == 1))
+        {
+            TVProperties[0].IsExpanded = IsExpanded;
+        }
     }
 
     partial void OnDataChanged(IRedType value)
@@ -1551,6 +1557,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
             Tab.Parent.SetIsDirty(true);
             Parent.RecalculateProperties();
+            if (Tab.IsSimpleViewEnabled)
+            {
+                RecalculateProperties();
+            }
         }
         catch (Exception ex) { _loggerService.Error(ex); }
     }

@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using CommunityToolkit.Mvvm.Input;
+using HandyControl.Tools.Extension;
 using Microsoft.Win32;
 using ReactiveUI;
 using Splat;
@@ -309,15 +310,16 @@ namespace WolvenKit.Views.Documents
                 };
                 saveFileDialog1.ShowDialog();
 
-                if (saveFileDialog1.FileName != "")
+                if (saveFileDialog1.FileName.IsNullOrEmpty())
                 {
-
-                    BitmapEncoder encoder = new TiffBitmapEncoder();
-                    encoder.Frames.Add(BitmapFrame.Create(bitmap));
-
-                    using var fileStream = new FileStream(saveFileDialog1.FileName, FileMode.Create);
-                    encoder.Save(fileStream);
+                    continue;
                 }
+
+                BitmapEncoder encoder = new TiffBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(bitmap));
+
+                using var fileStream = new FileStream(saveFileDialog1.FileName, FileMode.Create);
+                encoder.Save(fileStream);
             }
 
         }

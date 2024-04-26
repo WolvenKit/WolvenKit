@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
+using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
 
 // ReSharper disable once CheckNamespace
@@ -42,14 +43,14 @@ public partial class ChunkViewModel
             return;
         }
 
-        if (s_globalReadonlyTypes.Contains(ResolvedData.GetType()) || Parent?.IsReadOnly is true ||
-            PropertyType.IsAssignableTo(typeof(DataBuffer)))
+        if (s_globalReadonlyTypes.Contains(ResolvedData.GetType()) || Parent?.IsReadOnly is true)
         {
             IsReadOnly = true;
             return;
         }
 
-        if (Parent?.IsDisplayAsReadOnly is true || s_globalDisplayAsReadonlyFields.Contains(Name))
+        if (Parent?.IsDisplayAsReadOnly is true || s_globalDisplayAsReadonlyFields.Contains(Name) ||
+            PropertyType.IsAssignableTo(typeof(DataBuffer)))
         {
             IsDisplayAsReadOnly = true;
             return;
@@ -92,7 +93,8 @@ public partial class ChunkViewModel
         }
 
         // DataBuffers should always be hidden
-        if (IsReadOnly || IsDisplayAsReadOnly || s_alwaysHiddenFields.Contains(Name) || PropertyType.IsAssignableTo(typeof(DataBuffer)))
+        if (IsReadOnly || IsDisplayAsReadOnly || s_alwaysHiddenFields.Contains(Name) ||
+            (!IsArray && PropertyType.IsAssignableTo(typeof(DataBuffer))))
         {
             IsHiddenByNoobFilter = true;
             return;
@@ -160,6 +162,7 @@ public partial class ChunkViewModel
                 "looseDependencies",
             ]
         },
+        { typeof(inkTextureAtlas), ["parts", "slices"] },
     };
 
 
@@ -183,7 +186,7 @@ public partial class ChunkViewModel
                 "opacityMicromaps", "quantizationOffset", "quantizationScale", "renderChunks"
             ]
         },
-        { typeof(inkTextureAtlas), ["activeTexture", "dynamicTexture", "parts", "slices", "texture"] },
+        { typeof(inkTextureAtlas), ["activeTexture", "dynamicTexture", "dynamicTextureSlot", "texture"] },
         { typeof(inkTextureSlot), ["slices"] },
         // .app file
         {

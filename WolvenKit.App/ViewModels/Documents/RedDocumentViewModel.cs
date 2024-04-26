@@ -347,6 +347,23 @@ public partial class RedDocumentViewModel : DocumentViewModel
     }
 
 
+    private void OnPartNameChanged(object sender, EventArgs e)
+    {
+        if (GetMainFile() is not RDTDataViewModel m || m.Chunks.Count == 0 || m.Chunks[0] is not { ResolvedData: inkTextureAtlas } cvm ||
+            cvm.Properties.FirstOrDefault((p) => p.Name == "slots") is not ChunkViewModel child)
+        {
+            return;
+        }
+
+        foreach (var chunkViewModel in child.Properties.Where(p => p.ResolvedData is inkTextureSlot).ToList())
+        {
+            m.DirtyChunks.Add(chunkViewModel);
+        }
+
+        SetIsDirty(m.DirtyChunks.Count > 0);
+    }
+
+
     public void PopulateItems()
     {
         foreach (var tab in TabItemViewModels)

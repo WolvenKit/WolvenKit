@@ -3,10 +3,9 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     xmlns:local="clr-namespace:WolvenKit.Views.Editors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
-    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     d:DesignHeight="100"
     d:DesignWidth="400"
     KeyboardNavigation.TabNavigation="Local"
@@ -30,23 +29,23 @@
             VerticalAlignment="Center"
             Text="DepotPath" />
 
-        <templates:TruncatingTextBox
+        <local:TrimmingTextBox
             Grid.Row="0"
             Grid.Column="1"
-            KeyboardNavigation.TabIndex="1"
             helpers:TextBoxBehavior.TripleClickSelectAll="True"
-            EditText="{Binding DepotPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            KeyboardNavigation.TabIndex="1"
+            Text="{Binding DepotPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
         <TextBox
             x:Name="HashBox"
             Grid.Row="0"
             Grid.Column="2"
-            KeyboardNavigation.TabIndex="2"
             helpers:TextBoxBehavior.TripleClickSelectAll="True"
             Background="{StaticResource ContentBackgroundAlt}"
             BorderBrush="{StaticResource BorderAlt}"
             BorderThickness="1,0,0,0"
             DataObject.Pasting="HashBox_OnPasting"
             Foreground="#666666"
+            KeyboardNavigation.TabIndex="2"
             PreviewTextInput="HashBox_OnPreviewTextInput"
             Text="{Binding Hash, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
@@ -61,8 +60,8 @@
             Grid.Row="1"
             Grid.Column="1"
             Grid.ColumnSpan="2"
-            KeyboardNavigation.TabIndex="3"
             ItemsSource="{Binding EnumValues}"
+            KeyboardNavigation.TabIndex="3"
             SelectedItem="{Binding RedRef.Flags, Mode=OneWay}" />
     </Grid>
 </UserControl>
