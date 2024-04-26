@@ -70,7 +70,7 @@ jobs:
       - run: echo "PORTABLE=${{env.NAME}}-${{env.VERSION_APP}}.zip" >> $env:GITHUB_ENV
 
       # Publish app
-      - run: dotnet publish ./WolvenKit/WolvenKit.csproj -o ./publish/app/ -c Release --version-suffix "nightly.${{env.ISODATE}}" -p:InformationalVersion="${{env.VERSION_APP}}"
+      - run: dotnet publish ./WolvenKit/WolvenKit.csproj -o ./publish/app/ -c Release -p:ApplicationIcon=../WolvenKit/Resources/Media/Images/Icons/Application/TaskBarIcon_Nightly.ico --version-suffix "nightly.${{env.ISODATE}}" -p:InformationalVersion="${{env.VERSION_APP}}"
       - run: Compress-Archive -Path ./publish/app/* -DestinationPath ${{env.FINALOUT}}/${{env.PORTABLE}}
 
       ##########################################
