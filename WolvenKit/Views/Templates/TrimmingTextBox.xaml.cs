@@ -44,8 +44,6 @@ namespace WolvenKit.Views.Editors
         public TrimmingTextBox()
         {
             InitializeComponent();
-            
-            RealTextBox.TextChanged += RealTextBox_OnTextChanged;
         }
 
         private void FetchScrollViewer()
@@ -70,10 +68,10 @@ namespace WolvenKit.Views.Editors
 
         private void RealTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
         {
+            FetchScrollViewer();
+
             if (!RealTextBox.IsFocused)
             {
-                FetchScrollViewer();
-
                 _scrollViewer?.ScrollToRightEnd();
             }
         }

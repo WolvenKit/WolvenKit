@@ -13,7 +13,8 @@
         <TextBox
             x:Name="RealTextBox"
             ScrollViewer.CanContentScroll="False"
-            Text="{Binding ElementName=UserControl, Path=Text, Mode=TwoWay}" />
+            Text="{Binding ElementName=UserControl, Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            TextChanged="RealTextBox_OnTextChanged" />
         <Grid IsHitTestVisible="False">
             <Grid.ColumnDefinitions>
                 <!--  Adjust start width if needed  -->
@@ -25,7 +26,10 @@
                 <ColumnDefinition Width="15" />
             </Grid.ColumnDefinitions>
 
-            <Grid x:Name="StartTrimming" Grid.Column="0">
+            <Grid
+                x:Name="StartTrimming"
+                Grid.Column="0"
+                Visibility="Hidden">
                 <!--  Start of design stuff for front trimming (modify here)  -->
                 <Rectangle>
                     <Rectangle.Fill>
@@ -43,7 +47,10 @@
                 <!--  End of design stuff for front trimming  -->
             </Grid>
 
-            <Grid x:Name="EndTrimming" Grid.Column="2">
+            <Grid
+                x:Name="EndTrimming"
+                Grid.Column="2"
+                Visibility="Hidden">
                 <!--  Start of design stuff for end trimming (modify here)  -->
                 <Rectangle>
                     <Rectangle.Fill>
