@@ -43,14 +43,14 @@ public partial class ChunkViewModel
             return;
         }
 
-        if (s_globalReadonlyTypes.Contains(ResolvedData.GetType()) || Parent?.IsReadOnly is true ||
-            (!IsArray && PropertyType.IsAssignableTo(typeof(DataBuffer))))
+        if (s_globalReadonlyTypes.Contains(ResolvedData.GetType()) || Parent?.IsReadOnly is true)
         {
             IsReadOnly = true;
             return;
         }
 
-        if (Parent?.IsDisplayAsReadOnly is true || s_globalDisplayAsReadonlyFields.Contains(Name))
+        if (Parent?.IsDisplayAsReadOnly is true || s_globalDisplayAsReadonlyFields.Contains(Name) ||
+            PropertyType.IsAssignableTo(typeof(DataBuffer)))
         {
             IsDisplayAsReadOnly = true;
             return;
