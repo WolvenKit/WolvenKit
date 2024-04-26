@@ -113,6 +113,20 @@ public partial class ChunkViewModel : ObservableObject
                     chunkNames.ExpansionStateChangedFromParent = IsExpanded;
                     break;
 
+                // inkatlas
+                case CArrayBase<inkTextureSlot>:
+                    foreach (var childNode in treeViewProperties)
+                    {
+                        childNode.SetChildExpansionStatesInternal(isExpanded, _recursionLevel);
+                    }
+
+                    break;
+                case inkTextureSlot:
+                    IsExpanded = isExpanded;
+                    treeViewProperties.FirstOrDefault((child) => child.Name == "parts")
+                        ?.SetChildExpansionStatesInternal(isExpanded, _recursionLevel);
+                    break;
+
                 /*
                  * effect info
                  *     - placementInfos
