@@ -247,6 +247,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
     public bool CtrlKeyPressed { get; set; }
 
+    public bool ShiftKeyPressed { get; set; }
+
     #endregion
 
     #region commands
@@ -269,29 +271,33 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             Filter = "GLB files (*.glb)|*.glb|All files (*.*)|*.*"
         };
 
-        if (dlg.ShowDialog().GetValueOrDefault())
+        if (!dlg.ShowDialog().GetValueOrDefault())
         {
-            var outFile = new FileInfo(dlg.FileName);
-            // will only use archive files (for now)
-            var appearanceName = SelectedAppearance.AppearanceName.ToString().NotNull();
-            if (_modTools.ExportEntity(Parent.Cr2wFile, appearanceName, outFile))
-            {
-                Parent.GetLoggerService().Success($"Entity with appearance '{appearanceName}'exported: {dlg.FileName}");
-            }
-            else
-            {
-                Parent.GetLoggerService().Error($"Error exporting entity with appearance '{appearanceName}'");
-            }
+            return;
+        }
+
+        var outFile = new FileInfo(dlg.FileName);
+        // will only use archive files (for now)
+        var appearanceName = SelectedAppearance.AppearanceName.ToString().NotNull();
+        if (_modTools.ExportEntity(Parent.Cr2wFile, appearanceName, outFile))
+        {
+            Parent.GetLoggerService().Success($"Entity with appearance '{appearanceName}'exported: {dlg.FileName}");
+        }
+        else
+        {
+            Parent.GetLoggerService().Error($"Error exporting entity with appearance '{appearanceName}'");
         }
     }
 
     [RelayCommand]
     public void ExtractShaders()
     {
-        if (_settingsManager.CP77ExecutablePath is not null)
+        if (_settingsManager.CP77ExecutablePath is null)
         {
-            ShaderCacheReader.ExtractShaders(new FileInfo(_settingsManager.CP77ExecutablePath), ISettingsManager.GetTemp_OBJPath());
+            return;
         }
+
+        ShaderCacheReader.ExtractShaders(new FileInfo(_settingsManager.CP77ExecutablePath), ISettingsManager.GetTemp_OBJPath());
     }
 
     private bool _isCollisionRendered = true;
@@ -328,14 +334,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             }
         }
 
-        if (element is SubmeshComponent submesh)
+        if (element is not SubmeshComponent submesh || submesh.Text == null || !submesh.Text.StartsWith("collisionNode_"))
         {
-            if (submesh.Text != null && submesh.Text.StartsWith("collisionNode_"))
-            {
-                submesh.IsRendering = _isCollisionRendered;
-                return;
-            }
+            return;
         }
+
+        submesh.IsRendering = _isCollisionRendered;
     }
 
     #endregion
@@ -417,14 +421,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 foreach (var materialName in mmapp.ChunkMaterials)
                 {
                     var name = GetUniqueMaterialName(materialName.ToString().NotNull(), data);
-                    if (materials.ContainsKey(name))
-                    {
-                        appMaterials.Add(materials[name]);
-                    }
-                    else
-                    {
-                        appMaterials.Add(new Material(name));
-                    }
+                    appMaterials.Add(materials.TryGetValue(name, out var material) ? material : new Material(name));
+                    
                 }
 
                 var a = new Appearance(mmapp.Name.ToString().NotNull());
@@ -448,11 +446,13 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                 foreach (var m in model.Meshes)
                 {
-                    if (!a.LODLUT.ContainsKey(m.LOD))
+                    if (!a.LODLUT.TryGetValue(m.LOD, out var value))
                     {
-                        a.LODLUT[m.LOD] = new List<SubmeshComponent>();
+                        value = [];
+                        a.LODLUT[m.LOD] = value;
                     }
-                    a.LODLUT[m.LOD].Add(m);
+
+                    value.Add(m);
                 }
                 a.ModelGroup.AddRange(AddMeshesToRiggedGroups(a));
 
@@ -510,7 +510,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         return group;
     }
 
-    public List<Element3D> AddMeshesToRiggedGroups(Appearance app)
+    private List<Element3D> AddMeshesToRiggedGroups(Appearance app)
     {
         var groups = new Dictionary<string, GroupModel3D>();
         var modelGroups = new List<Element3D>();
@@ -536,21 +536,19 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 modelGroups.Add(group);
                 continue;
             }
-            if (_slotSets.ContainsKey(model.BindName))
-            {
-                if (model.SlotName != null && _slotSets[model.BindName].Slots.ContainsKey(model.SlotName))
-                {
-                    var slot = _slotSets[model.BindName].Slots[model.SlotName];
 
-                    if (groups.ContainsKey(_slotSets[model.BindName].BindName + ":" + slot))
-                    {
-                        groups[_slotSets[model.BindName].BindName + ":" + slot].Children.Add(group);
-                    }
+            if (_slotSets.TryGetValue(model.BindName, out var slotBind))
+            {
+                if (model.SlotName != null && slotBind.Slots.TryGetValue(model.SlotName, out var slot) &&
+                    groups.ContainsKey(slotBind.BindName + ":" + slot))
+                {
+                    groups[slotBind.BindName + ":" + slot].Children.Add(group);
+                    
                 }
             }
-            else if (groups.ContainsKey(model.BindName))
+            else if (groups.TryGetValue(model.BindName, out var modelBind))
             {
-                groups[model.BindName].Children.Add(group);
+                modelBind.Children.Add(group);
             }
             else
             {
@@ -560,175 +558,110 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         return modelGroups;
     }
 
-    private List<LoadableModel>? LoadMeshs(IList<RedBaseClass>? chunks)
+    private IEnumerable<LoadableModel> LoadPartsValues(appearanceAppearanceDefinition appDef)
     {
-        if (chunks == null)
+        if (appDef.PartsValues.Count is 0)
         {
-            return null;
+            return [];
+        }
+
+        List<LoadableModel> ret = [];
+        var appModels = new Dictionary<string, LoadableModel>();
+
+        foreach (var appDefPartsValue in appDef.PartsValues)
+        {
+            if (appDefPartsValue is not appearanceAppearancePart partValue ||
+                partValue.Resource.DepotPath.GetResolvedText() is not string path || path == "")
+            {
+                continue;
+            }
+
+            List<entIComponent> components = [];
+            try
+            {
+                var meshEntityFile = Parent.GetFileFromDepotPathOrCache(path);
+                if (meshEntityFile?.RootChunk is not entEntityTemplate entityTemplate)
+                {
+                    continue;
+                }
+
+                components.AddRange(entityTemplate.Components);
+            }
+            catch
+
+            {
+                Parent.GetLoggerService().Warning($"Failed to read partsValue from {path}");
+                continue;
+            }
+
+            foreach (var entityTemplateComponent in components)
+            {
+                if (entityTemplateComponent is not IRedMeshComponent irm || irm.Name.GetResolvedText() is not string s || s == "")
+                {
+                    continue;
+                }
+
+                ProcessComponents(entityTemplateComponent, appModels);
+                if (appModels.TryGetValue(s, out var model))
+                {
+                    ret.Add(model);
+                }
+            }
+        }
+
+        return ret;
+    }
+
+
+    private void LoadPartsOverrides(appearanceAppearanceDefinition appDef, List<LoadableModel> aModels)
+    {
+        if (appDef.PartsOverrides.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var partOverride in appDef.PartsOverrides)
+        {
+            if (partOverride.ComponentsOverrides.Count == 0)
+            {
+                continue;
+            }
+
+            var hasComponentOverride = partOverride.PartResource.DepotPath.GetResolvedText() is string and not "";
+
+            foreach (var compOverride in partOverride.ComponentsOverrides)
+            {
+                if (compOverride.ComponentName == CName.Empty)
+                {
+                    continue;
+                }
+
+                // Set ChunkMasks and appearance name from PartsOverride
+                foreach (var loadableModel in aModels.Where((m) => m.ComponentName == compOverride.ComponentName).ToList())
+                {
+                    loadableModel.ChunkMask = compOverride.ChunkMask;
+                    if (hasComponentOverride && compOverride.MeshAppearance != CName.Empty)
+                    {
+                        loadableModel.AppearanceName = compOverride.MeshAppearance;
+                    }
+                }
+            }
+        }
+    }
+
+
+    private List<LoadableModel> LoadMeshes(IList<RedBaseClass>? chunks)
+    {
+        if (chunks == null || chunks.Count == 0)
+        {
+            return [];
         }
 
         var appModels = new Dictionary<string, LoadableModel>();
 
         foreach (var component in chunks)
         {
-            var scale = new Vector3() { X = 1, Y = 1, Z = 1 };
-            var depotPath = ResourcePath.Empty;
-            var enabled = true;
-            var meshApp = "default";
-            var chunkMask = 18446744073709551615;
-            var chunkList = new List<bool>(new bool[64]);
-
-            if (component is entMeshComponent emc)
-            {
-                scale = emc.VisualScale;
-                enabled = emc.IsEnabled;
-            }
-
-            if (component is IRedMeshComponent mc)
-            {
-                depotPath = mc.Mesh.DepotPath;
-                meshApp = mc.MeshAppearance;
-                chunkMask = mc.ChunkMask;
-            }
-
-            var enabledChunks = new ObservableCollection<int>();
-
-            for (var i = 0; i < 64; i++)
-            {
-                chunkList[i] = (chunkMask & 1UL << i) > 0;
-                if (chunkList[i])
-                {
-                    enabledChunks.Add(i);
-                }
-            }
-
-            if (component is entIPlacedComponent epc && depotPath != ResourcePath.Empty && depotPath.GetRedHash() != 0)
-            {
-                var meshFile = Parent.GetFileFromDepotPathOrCache(depotPath);
-
-                if (meshFile == null || meshFile.RootChunk is not CMesh mesh)
-                {
-                    Parent.GetLoggerService().Warning($"Couldn't find mesh file: {depotPath} / {depotPath.GetRedHash()}");
-                    continue;
-                }
-
-                var matrix = ToSeparateMatrix(epc.LocalTransform);
-
-                string? bindName = null, slotName = null;
-                if ((epc.ParentTransform?.GetValue() ?? null) is entHardTransformBinding ehtb)
-                {
-                    bindName = ehtb.BindName;
-                    slotName = ehtb.SlotName;
-                }
-
-                matrix.Scale(ToScaleVector3D(scale));
-
-                var materials = new Dictionary<string, Material>();
-
-                var localList = mesh.LocalMaterialBuffer.RawData?.Buffer.Data as CR2WList ?? null;
-
-                foreach (var me in mesh.MaterialEntries)
-                {
-                    var name = GetUniqueMaterialName(me.Name.ToString().NotNull(), mesh);
-                    if (!me.IsLocalInstance)
-                    {
-                        materials.Add(name, new Material(name));
-                        continue;
-                    }
-
-                    CMaterialInstance? inst = null;
-
-                    if (localList != null && localList.Files.Count > me.Index)
-                    {
-                        inst = (CMaterialInstance)localList.Files[me.Index].RootChunk;
-                    }
-                    else
-                    {
-                        //foreach (var pme in data.PreloadLocalMaterialInstances)
-                        //{
-                        //inst = (CMaterialInstance)pme.GetValue();
-                        //}
-                        inst = (CMaterialInstance?)mesh.PreloadLocalMaterialInstances[me.Index]?.GetValue();
-                    }
-
-                    //CMaterialInstance bm = null;
-                    //if (File.GetFileFromDepotPathOrCache(inst.BaseMaterial.DepotPath) is var file)
-                    //{
-                    //    bm = (CMaterialInstance)file.RootChunk;
-                    //}
-
-                    ArgumentNullException.ThrowIfNull(inst);
-
-                    var material = new Material(name)
-                    {
-                        Instance = inst,
-                    };
-
-                    foreach (var pair in inst.Values)
-                    {
-                        var k = pair.Key.ToString().NotNull();
-                        material.Values[k] = pair.Value;
-                    }
-
-                    materials[name] = material;
-                }
-                var apps = new List<string>();
-                foreach (var handle in mesh.Appearances)
-                {
-                    var app = handle.GetValue();
-                    if (app is meshMeshAppearance mmapp)
-                    {
-                        apps.Add(mmapp.Name.ToString().NotNull());
-                    }
-                }
-
-                var appIndex = 0;
-                ArgumentNullException.ThrowIfNull(meshApp);
-                if (meshApp != "default" && apps.IndexOf(meshApp) is var index && index != -1)
-                {
-                    appIndex = index;
-                }
-
-                var appMaterials = new List<Material>();
-
-                foreach (var handle in mesh.Appearances)
-                {
-                    var app = handle.GetValue();
-                    if (app is meshMeshAppearance mmapp && (mmapp.Name == meshApp || meshApp == "default" && mesh.Appearances.IndexOf(handle) == 0))
-                    {
-                        foreach (var m in mmapp.ChunkMaterials)
-                        {
-                            var name = GetUniqueMaterialName(m.ToString().NotNull(), mesh);
-                            if (materials.ContainsKey(name))
-                            {
-                                appMaterials.Add(materials[name]);
-                            }
-                            else
-                            {
-                                appMaterials.Add(new Material(name));
-                            }
-                        }
-                        break;
-                    }
-                }
-
-                var model = new LoadableModel(epc.Name.ToString().NotNull().Replace(".", ""))
-                {
-                    MeshFile = meshFile,
-                    AppearanceIndex = appIndex,
-                    AppearanceName = meshApp,
-                    Matrix = matrix,
-                    Materials = appMaterials,
-                    IsEnabled = enabled,
-                    BindName = bindName,
-                    SlotName = slotName,
-                    ChunkMask = chunkMask,
-                    ChunkList = chunkList,
-                    EnabledChunks = enabledChunks,
-                    DepotPath = depotPath
-                };
-                appModels.Add(epc.Name.ToString().NotNull(), model);
-            }
+            ProcessComponents(component, appModels);
         }
 
         var list = new List<LoadableModel>();
@@ -738,114 +671,228 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             var matrix = new SeparateMatrix();
             //GetResolvedMatrix(model, ref matrix, appModels);
             model.Transform = new MatrixTransform3D(model.Matrix.ToMatrix3D());
-            if (model.Name.Contains("shadow") || model.Name.Contains("AppearanceProxyMesh") || model.Name.Contains("cutout") || model.Name == "")
+            if (model.Name.Contains("shadow") || model.Name.Contains("AppearanceProxyMesh") || model.Name.Contains("cutout") ||
+                model.Name == "")
             {
                 model.IsEnabled = false;
             }
+
             list.Add(model);
         }
 
         if (list.Count != 0)
         {
-            list.Sort((a, b) => a.Name.CompareTo(b.Name));
-            return list;
+            list.Sort((a, b) => string.Compare(a.Name, b.Name, StringComparison.Ordinal));
         }
 
-        return null;
+
+        return list;
     }
 
-    //public void AddToRigs(Dictionary<string, LoadableModel> models)
-    //{
-    //    SelectedAppearance.Nodes.Clear();
-    //    foreach (var (name, rig) in Rigs)
-    //    {
-    //        SelectedAppearance.Nodes.Add(rig);
-    //        rig.Models.Clear();
-    //        foreach (var rigbone in rig.Bones)
-    //        {
-    //            rigbone.Models.Clear();
-    //            SelectedAppearance.Nodes.Add(rigbone);
-    //        }
-    //    }
+    private void ProcessComponents(RedBaseClass component, Dictionary<string, LoadableModel> appModels)
+    {
+        var scale = new Vector3() { X = 1, Y = 1, Z = 1 };
+        var depotPath = ResourcePath.Empty;
+        var enabled = true;
+        var meshApp = "default";
+        var chunkMask = 18446744073709551615;
+        var chunkList = new List<bool>(new bool[64]);
 
-    //    foreach (var (name, model) in models)
-    //    {
-    //        SelectedAppearance.Nodes.Add(model);
-    //        if (model.BindName == null)
-    //        {
-    //            continue;
-    //        }
+        if (component is entMeshComponent emc)
+        {
+            scale = emc.VisualScale;
+            enabled = emc.IsEnabled;
+        }
 
-    //        if (models.ContainsKey(model.BindName))
-    //        {
-    //            models[model.BindName].AddModel(model);
-    //        }
-    //        else if (_slotSets.ContainsKey(model.BindName))
-    //        {
-    //            if (model.SlotName != null && _slotSets[model.BindName].Slots.ContainsKey(model.SlotName))
-    //            {
-    //                var slot = _slotSets[model.BindName].Slots[model.SlotName];
+        if (component is IRedMeshComponent mc)
+        {
+            depotPath = mc.Mesh.DepotPath;
+            meshApp = mc.MeshAppearance;
+            chunkMask = mc.ChunkMask;
+        }
 
-    //                if (Rigs.ContainsKey(_slotSets[model.BindName].BindName))
-    //                {
-    //                    var rigBone = Rigs[_slotSets[model.BindName].BindName].Bones.Where(x => x.Name == slot).FirstOrDefault(defaultValue: null);
+        var enabledChunks = new ObservableCollection<int>();
 
-    //                    rigBone?.AddModel(model);
-    //                }
-    //            }
-    //        }
-    //        else if (Rigs.ContainsKey(model.BindName))
-    //        {
-    //            Rigs[model.BindName].AddModel(model);
-    //        }
-    //        else
-    //        {
-    //            Rigs.First().Value.AddModel(model);
-    //        }
-    //    }
+        for (var i = 0; i < 64; i++)
+        {
+            chunkList[i] = (chunkMask & 1UL << i) > 0;
+            if (chunkList[i])
+            {
+                enabledChunks.Add(i);
+            }
+        }
 
-    //    // return root?
-    //}
+        if (component is entIPlacedComponent epc && depotPath != ResourcePath.Empty && depotPath.GetRedHash() != 0)
+        {
+            var meshFile = Parent.GetFileFromDepotPathOrCache(depotPath);
+
+            if (meshFile is not { RootChunk: CMesh mesh })
+            {
+                Parent.GetLoggerService().Warning($"Couldn't find mesh file: {depotPath} / {depotPath.GetRedHash()}");
+                return;
+            }
+
+            var matrix = ToSeparateMatrix(epc.LocalTransform);
+
+            string? bindName = null, slotName = null;
+            if ((epc.ParentTransform?.GetValue() ?? null) is entHardTransformBinding ehtb)
+            {
+                bindName = ehtb.BindName;
+                slotName = ehtb.SlotName;
+            }
+
+            matrix.Scale(ToScaleVector3D(scale));
+
+            var materials = new Dictionary<string, Material>();
+
+            var localList = mesh.LocalMaterialBuffer.RawData?.Buffer.Data as CR2WList ?? null;
+
+            foreach (var me in mesh.MaterialEntries)
+            {
+                var name = GetUniqueMaterialName(me.Name.ToString().NotNull(), mesh);
+                if (!me.IsLocalInstance)
+                {
+                    materials.Add(name, new Material(name));
+                    continue;
+                }
+
+                CMaterialInstance? inst = null;
+
+                if (localList != null && localList.Files.Count > me.Index)
+                {
+                    inst = (CMaterialInstance)localList.Files[me.Index].RootChunk;
+                }
+                else
+                {
+                    //foreach (var pme in data.PreloadLocalMaterialInstances)
+                    //{
+                    //inst = (CMaterialInstance)pme.GetValue();
+                    //}
+                    inst = (CMaterialInstance?)mesh.PreloadLocalMaterialInstances[me.Index]?.GetValue();
+                }
+
+                //CMaterialInstance bm = null;
+                //if (File.GetFileFromDepotPathOrCache(inst.BaseMaterial.DepotPath) is var file)
+                //{
+                //    bm = (CMaterialInstance)file.RootChunk;
+                //}
+
+                ArgumentNullException.ThrowIfNull(inst);
+
+                var material = new Material(name) { Instance = inst, };
+
+                foreach (var pair in inst.Values)
+                {
+                    var k = pair.Key.ToString().NotNull();
+                    material.Values[k] = pair.Value;
+                }
+
+                materials[name] = material;
+            }
+
+            var apps = new List<string>();
+            foreach (var handle in mesh.Appearances)
+            {
+                var app = handle.GetValue();
+                if (app is meshMeshAppearance mmapp)
+                {
+                    apps.Add(mmapp.Name.ToString().NotNull());
+                }
+            }
+
+            var appIndex = 0;
+            ArgumentNullException.ThrowIfNull(meshApp);
+            if (meshApp != "default" && apps.IndexOf(meshApp) is var index && index != -1)
+            {
+                appIndex = index;
+            }
+
+            var appMaterials = new List<Material>();
+
+            foreach (var handle in mesh.Appearances)
+            {
+                var app = handle.GetValue();
+                if (app is meshMeshAppearance mmapp &&
+                    (mmapp.Name == meshApp || meshApp == "default" && mesh.Appearances.IndexOf(handle) == 0))
+                {
+                    foreach (var m in mmapp.ChunkMaterials)
+                    {
+                        var name = GetUniqueMaterialName(m.ToString().NotNull(), mesh);
+                        if (materials.ContainsKey(name))
+                        {
+                            appMaterials.Add(materials[name]);
+                        }
+                        else
+                        {
+                            appMaterials.Add(new Material(name));
+                        }
+                    }
+
+                    break;
+                }
+            }
+
+            var model = new LoadableModel(epc.Name.ToString().NotNull().Replace(".", ""))
+            {
+                MeshFile = meshFile,
+                AppearanceIndex = appIndex,
+                AppearanceName = meshApp,
+                Matrix = matrix,
+                Materials = appMaterials,
+                IsEnabled = enabled,
+                BindName = bindName,
+                SlotName = slotName,
+                ChunkMask = chunkMask,
+                ChunkList = chunkList,
+                EnabledChunks = enabledChunks,
+                DepotPath = depotPath
+            };
+            appModels.Add(epc.Name.ToString().NotNull(), model);
+        }
+    }
 
     public void GetResolvedMatrix(IBindable bindable, ref SeparateMatrix matrix, Dictionary<string, LoadableModel> models)
     {
         matrix.Append(bindable.Matrix);
 
-        if (bindable.BindName != null)
+        if (bindable.BindName == null)
         {
-            if (bindable is LoadableModel)
+            return;
+        }
+
+        if (bindable is not LoadableModel)
+        {
+            if (Rigs.TryGetValue(bindable.BindName, out var value))
             {
-                if (models.ContainsKey(bindable.BindName))
+                GetResolvedMatrix(value, ref matrix, models);
+            }
+
+            return;
+        }
+
+        if (models.TryGetValue(bindable.BindName, out var boundModel))
+        {
+            GetResolvedMatrix(boundModel, ref matrix, models);
+        }
+        else if (_slotSets.TryGetValue(bindable.BindName, out var value))
+        {
+            if (bindable.SlotName != null && value.Slots.TryGetValue(bindable.SlotName, out var slot))
+            {
+                var bindname = value.BindName;
+                if (bindname is not null && Rigs.ContainsKey(bindname))
                 {
-                    GetResolvedMatrix(models[bindable.BindName], ref matrix, models);
-                }
-                else if (_slotSets.ContainsKey(bindable.BindName))
-                {
-                    if (bindable.SlotName != null && _slotSets[bindable.BindName].Slots.ContainsKey(bindable.SlotName))
+                    var rigBone = Rigs[bindname].Bones.Where(x => x.Name == slot).FirstOrDefault(defaultValue: null);
+
+                    while (rigBone != null)
                     {
-                        var slot = _slotSets[bindable.BindName].Slots[bindable.SlotName];
-
-                        var bindname = _slotSets[bindable.BindName].BindName;
-                        if (bindname is not null && Rigs.ContainsKey(bindname))
-                        {
-                            var rigBone = Rigs[bindname].Bones.Where(x => x.Name == slot).FirstOrDefault(defaultValue: null);
-
-                            while (rigBone != null)
-                            {
-                                matrix.AppendPost(rigBone.Matrix);
-                                rigBone = rigBone.Parent as RigBone;
-                            }
-                        }
+                        matrix.AppendPost(rigBone.Matrix);
+                        rigBone = rigBone.Parent as RigBone;
                     }
-
-                    // not sure this does anything anywhere
-                    GetResolvedMatrix(_slotSets[bindable.BindName], ref matrix, models);
                 }
             }
-            else if (Rigs.ContainsKey(bindable.BindName))
-            {
-                GetResolvedMatrix(Rigs[bindable.BindName], ref matrix, models);
-            }
+
+            // not sure this does anything anywhere
+            GetResolvedMatrix(value, ref matrix, models);
         }
     }
 
@@ -938,14 +985,16 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
     public void MouseDown3D(object sender, RoutedEventArgs e)
     {
-        if (e is MouseDown3DEventArgs args && args.HitTestResult != null)
+        if (e is not MouseDown3DEventArgs args || args.HitTestResult == null)
         {
-            var mouseButtonEventArgs = (MouseButtonEventArgs)args.OriginalInputEventArgs;
-            MouseDown3DSector(sender, args, mouseButtonEventArgs);
-            MouseDown3DBlock(sender, args, mouseButtonEventArgs);
-
-            CommonMouseDownEvents(args.HitTestResult.ModelHit, mouseButtonEventArgs);
+            return;
         }
+
+        var mouseButtonEventArgs = (MouseButtonEventArgs)args.OriginalInputEventArgs;
+        MouseDown3DSector(sender, args, mouseButtonEventArgs);
+        MouseDown3DBlock(sender, args, mouseButtonEventArgs);
+
+        CommonMouseDownEvents(args.HitTestResult.ModelHit, mouseButtonEventArgs);
     }
 
     public event EventHandler<string?>? OnSectorNodeSelected;
@@ -994,7 +1043,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
     {
         if (cMesh.RenderResourceBlob == null || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
         {
-            return new List<SubmeshComponent>();
+            return [];
         }
 
         using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
@@ -1217,75 +1266,78 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
     public PBRMaterial SetupPBRMaterial(string name, bool force = false)
     {
-        if (!Materials.ContainsKey(name) || force)
+        if (Materials.ContainsKey(name) && !force)
         {
-            PBRMaterial material;
-            if (Materials.ContainsKey(name))
+            return Materials[name];
+        }
+
+        PBRMaterial material;
+        if (Materials.TryGetValue(name, out var cachedMaterial))
+        {
+            material = cachedMaterial;
+        }
+        else
+        {
+            material = new PBRMaterial()
             {
-                material = Materials[name];
-            }
-            else
-            {
-                material = new PBRMaterial()
-                {
-                    EnableAutoTangent = true,
-                    RenderShadowMap = true,
-                    RenderEnvironmentMap = true,
-                    //EnableTessellation = true,
-                    //MaxDistanceTessellationFactor = 2,
-                    //MinDistanceTessellationFactor = 4
-                };
-                Materials[name] = material;
-            }
-            var filename_b = Path.Combine(ISettingsManager.GetTemp_OBJPath(), name + ".png");
-            var filename_bn = Path.Combine(ISettingsManager.GetTemp_OBJPath(), name + "_n.png");
-            var filename_rm = Path.Combine(ISettingsManager.GetTemp_OBJPath(), name + "_rm.png");
-            var filename_d = Path.Combine(ISettingsManager.GetTemp_OBJPath(), name + "_d.dds");
-            var filename_n = Path.Combine(ISettingsManager.GetTemp_OBJPath(), name + "_n.dds");
+                EnableAutoTangent = true, RenderShadowMap = true, RenderEnvironmentMap = true,
+                //EnableTessellation = true,
+                //MaxDistanceTessellationFactor = 2,
+                //MinDistanceTessellationFactor = 4
+            };
+            Materials[name] = material;
+        }
+
+        var filename_b = Path.Combine(ISettingsManager.GetTemp_OBJPath(), name + ".png");
+        var filename_bn = Path.Combine(ISettingsManager.GetTemp_OBJPath(), name + "_n.png");
+        var filename_rm = Path.Combine(ISettingsManager.GetTemp_OBJPath(), name + "_rm.png");
+        var filename_d = Path.Combine(ISettingsManager.GetTemp_OBJPath(), name + "_d.dds");
+        var filename_n = Path.Combine(ISettingsManager.GetTemp_OBJPath(), name + "_n.dds");
 
 
-            if (File.Exists(filename_d))
-            {
-                material.AlbedoMap = TextureModel.Create(filename_d);
-                material.AlbedoColor = new SharpDX.Color4(1.0f, 1.0f, 1.0f, 1.0f);
-            }
-            else if (File.Exists(filename_b))
-            {
-                material.AlbedoMap = TextureModel.Create(filename_b);
-                material.AlbedoColor = new SharpDX.Color4(1.0f, 1.0f, 1.0f, 1.0f);
-            }
-            else
-            {
-                material.AlbedoColor = new SharpDX.Color4(0.5f, 0.5f, 0.5f, 1f);
-            }
+        if (File.Exists(filename_d))
+        {
+            material.AlbedoMap = TextureModel.Create(filename_d);
+            material.AlbedoColor = new SharpDX.Color4(1.0f, 1.0f, 1.0f, 1.0f);
+        }
+        else if (File.Exists(filename_b))
+        {
+            material.AlbedoMap = TextureModel.Create(filename_b);
+            material.AlbedoColor = new SharpDX.Color4(1.0f, 1.0f, 1.0f, 1.0f);
+        }
+        else
+        {
+            material.AlbedoColor = new SharpDX.Color4(0.5f, 0.5f, 0.5f, 1f);
+        }
 
-            if (File.Exists(filename_n))
-            {
-                material.NormalMap = TextureModel.Create(filename_n);
-                material.RenderNormalMap = true;
-            }
-            else if (File.Exists(filename_bn))
-            {
-                material.NormalMap = TextureModel.Create(filename_bn);
-                material.RenderNormalMap = true;
-            }
+        if (File.Exists(filename_n))
+        {
+            material.NormalMap = TextureModel.Create(filename_n);
+            material.RenderNormalMap = true;
+        }
+        else if (File.Exists(filename_bn))
+        {
+            material.NormalMap = TextureModel.Create(filename_bn);
+            material.RenderNormalMap = true;
+        }
 
-            if (File.Exists(filename_rm))
-            {
-                material.RoughnessMetallicMap = TextureModel.Create(filename_rm);
-                material.RenderRoughnessMetallicMap = true;
-                material.RoughnessFactor = 1f;
-                material.MetallicFactor = 1f;
-            }
-            if (name.Contains("glass"))
-            {
-                material.AlbedoColor = new SharpDX.Color4(0.5f, 0.5f, 0.5f, 0.1f);
-            }
-            if (name == "decals")
-            {
-                //material.AlbedoColor = new SharpDX.Color4(0, 0, 0, 0.1f);
-                //material.DisplacementMap = material.AlbedoMap;
-            }
+        if (File.Exists(filename_rm))
+        {
+            material.RoughnessMetallicMap = TextureModel.Create(filename_rm);
+            material.RenderRoughnessMetallicMap = true;
+            material.RoughnessFactor = 1f;
+            material.MetallicFactor = 1f;
+        }
+
+        if (name.Contains("glass"))
+        {
+            material.AlbedoColor = new SharpDX.Color4(0.5f, 0.5f, 0.5f, 0.1f);
+        }
+
+        if (name == "decals")
+        {
+            //material.AlbedoColor = new SharpDX.Color4(0, 0, 0, 0.1f);
+            //material.DisplacementMap = material.AlbedoMap;
         }
         return Materials[name];
     }
@@ -1380,10 +1432,18 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         {
             foreach (var (_, material) in SelectedAppearance.RawMaterials)
             {
+                Parent.GetLoggerService().NotNull().Info($"Clearing material cache...");
                 ClearMaterial(material);
+            }
+
+            if (ShiftKeyPressed)
+            {
+                Parent.GetLoggerService().NotNull().Info($"All materials cleared!");
+                return;
             }
         }
 
+        
         Parallel.ForEachAsync(from entry in SelectedAppearance.RawMaterials orderby entry.Key ascending select entry, (material, cancellationToken) => LoadMaterial(material.Value)).ContinueWith((result) =>
         {
             Parent.GetLoggerService().NotNull().Info($"All materials loaded!");
@@ -1474,27 +1534,33 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 mat = null;
                 continue;
             }
-            
 
-            if (baseMaterialFile.RootChunk is CMaterialInstance cmi)
+
+            switch (baseMaterialFile.RootChunk)
             {
-                foreach (var pair in cmi.Values)
+                case CMaterialInstance cmi:
                 {
-                    var k = pair.Key.ToString().NotNull();
-
-                    if (!dictionary.ContainsKey(k))
+                    foreach (var pair in cmi.Values)
                     {
-                        dictionary.Add(k, pair.Value);
+                        var k = pair.Key.ToString().NotNull();
+
+                        if (!dictionary.ContainsKey(k))
+                        {
+                            dictionary.Add(k, pair.Value);
+                        }
                     }
+
+                    mat = cmi;
+                    break;
                 }
-                mat = cmi;
+                case CMaterialTemplate cmt:
+                    material.TemplateName = cmt.Name;
+                    mat = null;
+                    break;
+                default:
+                    break;
             }
-            else if ( baseMaterialFile.RootChunk is CMaterialTemplate cmt)
-            {
-                material.TemplateName = cmt.Name;
-                mat = null;
-            }
-           
+
         }
 
         // set numeric roughness, metalness etc. values from textures
@@ -1506,7 +1572,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         var filename_d = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_d.dds");
         var filename_n = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_n.dds");
 
-        if (dictionary.ContainsKey("MultilayerSetup") && dictionary.ContainsKey("MultilayerMask"))
+        if (dictionary.TryGetValue("MultilayerSetup", out var mlsetup) && dictionary.TryGetValue("MultilayerMask", out var mlmask))
         {
             var albedoExists = File.Exists(filename_b);
             var roughMetallicExists = File.Exists(filename_rm);
@@ -1517,26 +1583,26 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 goto DiffuseMaps;
             }
 
-            if (dictionary["MultilayerSetup"] is not CResourceReference<Multilayer_Setup> mlsRef)
+            if (mlsetup is not CResourceReference<Multilayer_Setup> mlsRef)
             {
                 goto DiffuseMaps;
             }
 
-            if (dictionary["MultilayerMask"] is not CResourceReference<Multilayer_Mask> mlmRef)
+            if (mlmask is not CResourceReference<Multilayer_Mask> mlmRef)
             {
                 goto DiffuseMaps;
             }
 
             var setupFile = Parent.GetFileFromDepotPathOrCache(mlsRef.DepotPath);
 
-            if (setupFile == null || setupFile.RootChunk is not Multilayer_Setup mls)
+            if (setupFile is not { RootChunk: Multilayer_Setup mls })
             {
                 goto DiffuseMaps;
             }
 
             var maskFile = Parent.GetFileFromDepotPathOrCache(mlmRef.DepotPath);
 
-            if (maskFile == null || maskFile.RootChunk is not Multilayer_Mask mlm)
+            if (maskFile is not { RootChunk: Multilayer_Mask mlm })
             {
                 goto DiffuseMaps;
             }
@@ -1748,7 +1814,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     stream.Dispose();
                 }
 
-            SkipLayer:
+                SkipLayer:
                 i++;
             }
 
@@ -1803,7 +1869,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             goto NormalMaps;
         }
 
-        if (dictionary.ContainsKey("DiffuseTexture") && dictionary["DiffuseTexture"] is CResourceReference<ITexture> crrd)
+        if (dictionary.TryGetValue("DiffuseTexture", out var diffuse) && diffuse is CResourceReference<ITexture> crrd)
         {
             var xbm = Parent.GetFileFromDepotPathOrCache(crrd.DepotPath);
 
@@ -1817,7 +1883,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             stream.Dispose();
         }
 
-        if (dictionary.ContainsKey("ParalaxTexture") && dictionary["ParalaxTexture"] is CResourceReference<ITexture> crrp)
+        if (dictionary.TryGetValue("ParalaxTexture", out var paralax) && paralax is CResourceReference<ITexture> crrp)
         {
             var xbm = Parent.GetFileFromDepotPathOrCache(crrp.DepotPath);
 
@@ -1831,7 +1897,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             stream.Dispose();
         }
 
-        if (dictionary.ContainsKey("BaseColor") && dictionary["BaseColor"] is CResourceReference<ITexture> crrbc)
+        if (dictionary.TryGetValue("BaseColor", out var baseColorTex) && baseColorTex is CResourceReference<ITexture> crrbc)
         {
             var xbm = Parent.GetFileFromDepotPathOrCache(crrbc.DepotPath);
 
@@ -1857,7 +1923,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             goto SkipNormals;
         }
 
-        if (dictionary.ContainsKey("NormalTexture") && dictionary["NormalTexture"] is CResourceReference<ITexture> crrn)
+        if (dictionary.TryGetValue("NormalTexture", out var normalTex) && normalTex is CResourceReference<ITexture> crrn)
         {
             var xbm = Parent.GetFileFromDepotPathOrCache(crrn.DepotPath);
 
@@ -1918,11 +1984,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             }
 
         }
-        else if (dictionary.ContainsKey("Normal") && dictionary["Normal"] is CResourceReference<ITexture> crrn2)
+        else if (dictionary.TryGetValue("Normal", out var normalTex2) && normalTex2 is CResourceReference<ITexture> crrn2)
         {
             var xbm = Parent.GetFileFromDepotPathOrCache(crrn2.DepotPath);
 
-            if (xbm is null || xbm.RootChunk is not ITexture it)
+            if (xbm?.RootChunk is not ITexture it)
             {
                 goto SkipNormals;
             }
@@ -1994,38 +2060,38 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
     {
         material.Values = dictionary;
 
-        if (dictionary.ContainsKey("Metalness") && dictionary["Metalness"] is CResourceReference<ITexture> metalTexture)
+        if (dictionary.TryGetValue("Metalness", out var metalness) && metalness is CResourceReference<ITexture> metalTexture)
         {
-            if (metalTexture.DepotPath == "base\\materials\\placeholder\\black.xbm")
+            if (metalTexture.DepotPath == @"base\materials\placeholder\black.xbm")
             {
                 material.Metalness = 0;
             }
-            else if (metalTexture.DepotPath == "base\\materials\\placeholder\\white.xbm")
+            else if (metalTexture.DepotPath == @"base\materials\placeholder\white.xbm")
             {
                 material.Metalness = 1;
             }
         }
 
-        if (dictionary.ContainsKey("MetalnessScale"))
+        if (dictionary.TryGetValue("MetalnessScale", out var metalnessScale))
         {
-            material.Metalness = (CFloat)dictionary["MetalnessScale"];
+            material.Metalness = (CFloat)metalnessScale;
         }
 
-        if (dictionary.ContainsKey("Roughness") && dictionary["Roughness"] is CResourceReference<ITexture> roughTexture)
+        if (dictionary.TryGetValue("Roughness", out var roughness) && roughness is CResourceReference<ITexture> roughTexture)
         {
-            if (roughTexture.DepotPath == "base\\materials\\placeholder\\black.xbm")
+            if (roughTexture.DepotPath == @"base\materials\placeholder\black.xbm")
             {
                 material.Roughness = 0;
             }
-            else if (roughTexture.DepotPath == "base\\materials\\placeholder\\white.xbm")
+            else if (roughTexture.DepotPath == @"base\materials\placeholder\white.xbm")
             {
                 material.Roughness = 1;
             }
         }
 
-        if (dictionary.ContainsKey("RoughnessScale"))
+        if (dictionary.TryGetValue("RoughnessScale", out var roughnessScale))
         {
-            material.Roughness = (CFloat)dictionary["RoughnessScale"];
+            material.Roughness = (CFloat)roughnessScale;
         }
     }
 
@@ -2746,25 +2812,30 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
     private void UpdateChildrenSubmesh(MeshComponent? mesh, Action<SubmeshComponent>? submeshUpdater)
     {
-        if (mesh != null)
+        if (mesh == null)
         {
-            foreach (var child in mesh.Children)
+            return;
+        }
+
+        foreach (var child in mesh.Children)
+        {
+            switch (child)
             {
-                if (child is MeshComponent childMesh)
-                {
+                case MeshComponent childMesh:
                     UpdateChildrenSubmesh(childMesh, submeshUpdater);
-                }
-                else if (child is SubmeshComponent childSubMesh)
+                    break;
+                case SubmeshComponent childSubMesh:
                 {
                     if (submeshUpdater != null)
                     {
                         submeshUpdater(childSubMesh);
                     }
+
+                    break;
                 }
-                else
-                {
+                default:
                     Parent.GetLoggerService().Warning("Child is a " + child.GetType());
-                }
+                    break;
             }
         }
     }
@@ -2799,20 +2870,24 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
     [RelayCommand]
     private void LoadSector(Sector sector)
     {
-        if (!sector.IsLoaded)
+        if (sector.IsLoaded)
         {
-            var sectorFile = Parent.GetFileFromDepotPathOrCache(sector.DepotPath);
-
-            if (sectorFile is not null && sectorFile.RootChunk is worldStreamingSector wss)
-            {
-                sector.Element = RenderSector(wss, Appearances[0]);
-                sector.Element.Name = sector.Name.Replace("-", "n");
-                sector.Element.Text = sector.Name;
-                sector.IsLoaded = true;
-                sector.ShowElements = true;
-                sector.Text.IsRendering = false;
-            }
+            return;
         }
+
+        var sectorFile = Parent.GetFileFromDepotPathOrCache(sector.DepotPath);
+
+        if (sectorFile?.RootChunk is not worldStreamingSector wss)
+        {
+            return;
+        }
+
+        sector.Element = RenderSector(wss, Appearances[0]);
+        sector.Element.Name = sector.Name.Replace("-", "n");
+        sector.Element.Text = sector.Name;
+        sector.IsLoaded = true;
+        sector.ShowElements = true;
+        sector.Text.IsRendering = false;
     }
 
     
@@ -2842,21 +2917,19 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
         foreach (var modelGroup in SelectedAppearance.ModelGroup)
         {
-            if (!modelGroup.IsRendering)
+            if (!modelGroup.IsRendering || modelGroup is not SectorGroup sectorGroup)
             {
                 continue;
             }
 
-            if (modelGroup is SectorGroup sectorGroup)
-            {
-                // TODO: Could check if ep1 is found, not sure though if the same filename could be in both folders...
+            // TODO: Could check if ep1 is found, not sure though if the same filename could be in both folders...
 
-                var path = (ResourcePath)$@"base\worlds\03_night_city\_compiled\default\ep1\{sectorGroup.Text}.streamingsector";
-                _gameController.GetController().AddToMod(path);
+            var path = (ResourcePath)$@"base\worlds\03_night_city\_compiled\default\ep1\{sectorGroup.Text}.streamingsector";
+            _gameController.GetController().AddToMod(path);
 
-                path = (ResourcePath)$@"base\worlds\03_night_city\_compiled\default\{sectorGroup.Text}.streamingsector";
-                _gameController.GetController().AddToMod(path);
-            }
+            path = (ResourcePath)$@"base\worlds\03_night_city\_compiled\default\{sectorGroup.Text}.streamingsector";
+            _gameController.GetController().AddToMod(path);
+
         }
     }
 
@@ -2963,112 +3036,111 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
         foreach (var desc in data.Descriptors)
         {
-            if (!SearchActive || SearchPoint.X < desc.StreamingBox.Max.X && SearchPoint.X > desc.StreamingBox.Min.X &&
-                SearchPoint.Y < desc.StreamingBox.Max.Y && SearchPoint.Y > desc.StreamingBox.Min.Y &&
-                SearchPoint.Z < desc.StreamingBox.Max.Z && SearchPoint.Z > desc.StreamingBox.Min.Z)
+            if (SearchActive && (!(SearchPoint.X < desc.StreamingBox.Max.X) || !(SearchPoint.X > desc.StreamingBox.Min.X) ||
+                                 !(SearchPoint.Y < desc.StreamingBox.Max.Y) || !(SearchPoint.Y > desc.StreamingBox.Min.Y) ||
+                                 !(SearchPoint.Z < desc.StreamingBox.Max.Z) || !(SearchPoint.Z > desc.StreamingBox.Min.Z)))
             {
-                var text = new BillboardText3D();
-                text.TextInfo.Add(
-                    new TextInfo(Path.GetFileNameWithoutExtension(desc.Data.DepotPath.ToString()),
+                continue;
+            }
+
+            var text = new BillboardText3D();
+            text.TextInfo.Add(
+                new TextInfo(Path.GetFileNameWithoutExtension(desc.Data.DepotPath.ToString()),
                     new SharpDX.Vector3((desc.StreamingBox.Max.X + desc.StreamingBox.Min.X) / 2, (desc.StreamingBox.Max.Z + desc.StreamingBox.Min.Z) / 2, -(desc.StreamingBox.Max.Y + desc.StreamingBox.Min.Y) / 2))
-                    {
-                        Foreground = SharpDX.Color.Red,
-                        Scale = 0.5f
-                    }
-                );
-
-                var bbText = new WKBillboardTextModel3D()
                 {
-                    Geometry = text,
-                    Name = Path.GetFileNameWithoutExtension(desc.Data.DepotPath.ToString().NotNull()).Replace("-", "n"),
-                    Text = Path.GetFileNameWithoutExtension(desc.Data.DepotPath.ToString().NotNull()),
-                };
-
-                if (desc.Category == Enums.worldStreamingSectorCategory.Exterior)
-                {
-                    //var mb = new MeshBuilder();
-
-                    //mb.AddBox(text.TextInfo[0].Origin,
-                    //    desc.StreamingBox.Max.X - desc.StreamingBox.Min.X,
-                    //    desc.StreamingBox.Max.Y - desc.StreamingBox.Min.Y,
-                    //    desc.StreamingBox.Max.Z - desc.StreamingBox.Min.Z);
-                    //mb.ComputeNormalsAndTangents(MeshFaces.Default);
-
-                    //var material = SetupPBRMaterial("DefaultMaterial");
-                    //material.AlbedoColor = new SharpDX.Color4(1f, 1f, 1f, 0.01f);
-
-                    //var mesh = new MeshGeometryModel3D()
-                    //{
-                    //    Geometry = mb.ToMeshGeometry3D(),
-                    //    Material = material,
-                    //    IsTransparent = true
-                    //};
-
-                    if (desc.Level == 0)
-                    {
-                        exterior_0.Children.Add(bbText);
-                        //exterior_0.Children.Add(mesh);
-                    }
-                    else if (desc.Level == 1)
-                    {
-                        exterior_1.Children.Add(bbText);
-                        //exterior_1.Children.Add(mesh);
-                    }
-                    else if (desc.Level == 2)
-                    {
-                        exterior_2.Children.Add(bbText);
-                        //exterior_2.Children.Add(mesh);
-                    }
-                    else if (desc.Level == 3)
-                    {
-                        exterior_3.Children.Add(bbText);
-                        //exterior_3.Children.Add(mesh);
-                    }
-                    else if (desc.Level == 4)
-                    {
-                        exterior_4.Children.Add(bbText);
-                        //exterior_4.Children.Add(mesh);
-                    }
-                    else if (desc.Level == 5)
-                    {
-                        exterior_5.Children.Add(bbText);
-                        //exterior_5.Children.Add(mesh);
-                    }
-                    else if (desc.Level == 6)
-                    {
-                        exterior_6.Children.Add(bbText);
-                        //exterior_6.Children.Add(mesh);
-                    }
-                    else
-                    {
-                        exterior.Children.Add(bbText);
-                        //exterior.Children.Add(mesh);
-                    }
-
-
+                    Foreground = SharpDX.Color.Red, Scale = 0.5f
                 }
-                else if (desc.Category == Enums.worldStreamingSectorCategory.Interior)
+            );
+
+            var bbText = new WKBillboardTextModel3D()
+            {
+                Geometry = text,
+                Name = Path.GetFileNameWithoutExtension(desc.Data.DepotPath.ToString().NotNull()).Replace("-", "n"),
+                Text = Path.GetFileNameWithoutExtension(desc.Data.DepotPath.ToString().NotNull()),
+            };
+
+            if (desc.Category == Enums.worldStreamingSectorCategory.Exterior)
+            {
+                //var mb = new MeshBuilder();
+
+                //mb.AddBox(text.TextInfo[0].Origin,
+                //    desc.StreamingBox.Max.X - desc.StreamingBox.Min.X,
+                //    desc.StreamingBox.Max.Y - desc.StreamingBox.Min.Y,
+                //    desc.StreamingBox.Max.Z - desc.StreamingBox.Min.Z);
+                //mb.ComputeNormalsAndTangents(MeshFaces.Default);
+
+                //var material = SetupPBRMaterial("DefaultMaterial");
+                //material.AlbedoColor = new SharpDX.Color4(1f, 1f, 1f, 0.01f);
+
+                //var mesh = new MeshGeometryModel3D()
+                //{
+                //    Geometry = mb.ToMeshGeometry3D(),
+                //    Material = material,
+                //    IsTransparent = true
+                //};
+
+                if (desc.Level == 0)
                 {
-                    interior.Children.Add(bbText);
+                    exterior_0.Children.Add(bbText);
+                    //exterior_0.Children.Add(mesh);
                 }
-                else if (desc.Category == Enums.worldStreamingSectorCategory.Quest)
+                else if (desc.Level == 1)
                 {
-                    quest.Children.Add(bbText);
+                    exterior_1.Children.Add(bbText);
+                    //exterior_1.Children.Add(mesh);
                 }
-                else if (desc.Category == Enums.worldStreamingSectorCategory.Navigation)
+                else if (desc.Level == 2)
                 {
-                    navigation.Children.Add(bbText);
+                    exterior_2.Children.Add(bbText);
+                    //exterior_2.Children.Add(mesh);
+                }
+                else if (desc.Level == 3)
+                {
+                    exterior_3.Children.Add(bbText);
+                    //exterior_3.Children.Add(mesh);
+                }
+                else if (desc.Level == 4)
+                {
+                    exterior_4.Children.Add(bbText);
+                    //exterior_4.Children.Add(mesh);
+                }
+                else if (desc.Level == 5)
+                {
+                    exterior_5.Children.Add(bbText);
+                    //exterior_5.Children.Add(mesh);
+                }
+                else if (desc.Level == 6)
+                {
+                    exterior_6.Children.Add(bbText);
+                    //exterior_6.Children.Add(mesh);
                 }
                 else
                 {
-                    other.Children.Add(bbText);
+                    exterior.Children.Add(bbText);
+                    //exterior.Children.Add(mesh);
                 }
-                sectors.Add(new Sector(Path.GetFileNameWithoutExtension(desc.Data.DepotPath.ToString().NotNull()), bbText)
-                {
-                    DepotPath = desc.Data.DepotPath,
-                    NumberOfHandles = desc.NumNodeRanges
-                });
             }
+            else if (desc.Category == Enums.worldStreamingSectorCategory.Interior)
+            {
+                interior.Children.Add(bbText);
+            }
+            else if (desc.Category == Enums.worldStreamingSectorCategory.Quest)
+            {
+                quest.Children.Add(bbText);
+            }
+            else if (desc.Category == Enums.worldStreamingSectorCategory.Navigation)
+            {
+                navigation.Children.Add(bbText);
+            }
+            else
+            {
+                other.Children.Add(bbText);
+            }
+
+            sectors.Add(new Sector(Path.GetFileNameWithoutExtension(desc.Data.DepotPath.ToString().NotNull()), bbText)
+            {
+                DepotPath = desc.Data.DepotPath, NumberOfHandles = desc.NumNodeRanges
+            });
         }
         Sectors = new List<Sector>(sectors.OrderBy(x => x.Name).ToList());
         texts.Children.Add(exterior);
@@ -3082,32 +3154,37 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
     private void MouseDown3DBlock(object sender, MouseDown3DEventArgs args, MouseButtonEventArgs mouseButtonEventArgs)
     {
-        if (Header == MeshViewHeaders.AllSectorPreview)
+        if (Header != MeshViewHeaders.AllSectorPreview || mouseButtonEventArgs.LeftButton != MouseButtonState.Pressed)
         {
-            if (mouseButtonEventArgs.LeftButton == MouseButtonState.Pressed)
+            return;
+        }
+
+        switch (args.HitTestResult.ModelHit)
+        {
+            case WKBillboardTextModel3D text:
             {
-                if (args.HitTestResult.ModelHit is WKBillboardTextModel3D text)
+                var sector = Sectors.FirstOrDefault(x => x.Text == text);
+                if (sector is not null)
                 {
-                    var sector = Sectors.Where(x => x.Text == text).FirstOrDefault();
-                    if (sector is not null)
+                    try
                     {
-                        try
-                        {
-                            LoadSector(sector);
-                        }
-                        catch (Exception ex)
-                        {
-                            Parent.GetLoggerService().Error(ex);
-                        }
+                        LoadSector(sector);
                     }
-                    args.Handled = true;
+                    catch (Exception ex)
+                    {
+                        Parent.GetLoggerService().Error(ex);
+                    }
                 }
-                if (args.HitTestResult.ModelHit is MeshComponent group)
-                {
-                    SelectedItem = group;
-                    args.Handled = true;
-                }
+
+                args.Handled = true;
+                break;
             }
+            case MeshComponent group:
+                SelectedItem = group;
+                args.Handled = true;
+                break;
+            default:
+                break;
         }
     }
 
@@ -3115,7 +3192,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
     #region meshpreviewentity
 
-   
+
 
     public void RenderEntitySolo()
     {
@@ -3129,11 +3206,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
     public GroupModel3DExt? RenderEntity(entEntityTemplate? ent, Appearance? appearance = null, string? appearanceName = null)
     {
-        if (ent == null)
-        {
-            return null;
-        }
-        if (ent.CompiledData.Data is not RedPackage pkg)
+        if (ent?.CompiledData.Data is not RedPackage pkg)
         {
             return null;
         }
@@ -3142,74 +3215,80 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         {
             foreach (var component in pkg.Chunks)
             {
-                if (component is entSlotComponent slotset)
+                switch (component)
                 {
-                    var slots = new Dictionary<string, string>();
-                    foreach (var slot in slotset.Slots)
+                    case entSlotComponent slotset:
                     {
-                        var name = slot.SlotName.ToString().NotNull();
-
-                        if (!slots.ContainsKey(name))
+                        var slots = new Dictionary<string, string>();
+                        foreach (var slot in slotset.Slots)
                         {
-                            slots.Add(name, slot.BoneName.ToString().NotNull());
-                        }
-                    }
+                            var name = slot.SlotName.ToString().NotNull();
 
-                    string? bindName = null, slotName = null;
-                    if (slotset.ParentTransform?.GetValue() is entHardTransformBinding ehtb)
-                    {
-                        bindName = ehtb.BindName;
-                        slotName = ehtb.SlotName;
-                    }
-
-                    var slotSetName = slotset.Name.ToString().NotNull();
-                    if (!_slotSets.ContainsKey(slotSetName))
-                    {
-                        _slotSets.Add(slotSetName, new SlotSet(slotSetName, bindName)
-                        {
-                            Matrix = ToSeparateMatrix(slotset.LocalTransform),
-                            Slots = slots,
-                            SlotName = slotName
-                        });
-                    }
-                }
-
-                if (component is entAnimatedComponent enc)
-                {
-                    var rigFile = Parent.GetFileFromDepotPathOrCache(enc.Rig.DepotPath);
-
-                    if (rigFile?.RootChunk is animRig rig)
-                    {
-                        var rigBones = new List<RigBone>();
-                        for (var i = 0; i < rig.BoneNames.Count; i++)
-                        {
-                            var rigBone = new RigBone(rig.BoneNames[i].ToString().NotNull())
+                            if (!slots.ContainsKey(name))
                             {
-                                Matrix = ToSeparateMatrix(rig.BoneTransforms[i].NotNull())
-                            };
-
-                            if (rig.BoneParentIndexes[i] != -1)
-                            {
-                                rigBones[rig.BoneParentIndexes[i]].AddChild(rigBone);
+                                slots.Add(name, slot.BoneName.ToString().NotNull());
                             }
-
-                            rigBones.Add(rigBone);
                         }
 
                         string? bindName = null, slotName = null;
-                        if ((enc.ParentTransform?.GetValue() ?? null) is entHardTransformBinding ehtb)
+                        if (slotset.ParentTransform?.GetValue() is entHardTransformBinding ehtb)
                         {
                             bindName = ehtb.BindName;
                             slotName = ehtb.SlotName;
                         }
 
-                        Rigs[enc.Name.ToString().NotNull()] = new Rig(enc.Name.ToString().NotNull())
+                        var slotSetName = slotset.Name.ToString().NotNull();
+                        if (!_slotSets.ContainsKey(slotSetName))
                         {
-                            Bones = rigBones,
-                            BindName = bindName,
-                            SlotName = slotName
-                        };
+                            _slotSets.Add(slotSetName,
+                                new SlotSet(slotSetName, bindName)
+                                {
+                                    Matrix = ToSeparateMatrix(slotset.LocalTransform), Slots = slots, SlotName = slotName
+                                });
+                        }
+
+                        break;
                     }
+                    case entAnimatedComponent enc:
+                    {
+                        var rigFile = Parent.GetFileFromDepotPathOrCache(enc.Rig.DepotPath);
+
+                        if (rigFile?.RootChunk is animRig rig)
+                        {
+                            var rigBones = new List<RigBone>();
+                            for (var i = 0; i < rig.BoneNames.Count; i++)
+                            {
+                                var rigBone = new RigBone(rig.BoneNames[i].ToString().NotNull())
+                                {
+                                    Matrix = ToSeparateMatrix(rig.BoneTransforms[i].NotNull())
+                                };
+
+                                if (rig.BoneParentIndexes[i] != -1)
+                                {
+                                    rigBones[rig.BoneParentIndexes[i]].AddChild(rigBone);
+                                }
+
+                                rigBones.Add(rigBone);
+                            }
+
+                            string? bindName = null, slotName = null;
+                            if ((enc.ParentTransform?.GetValue() ?? null) is entHardTransformBinding ehtb)
+                            {
+                                bindName = ehtb.BindName;
+                                slotName = ehtb.SlotName;
+                            }
+
+                            Rigs[enc.Name.ToString().NotNull()] = new Rig(enc.Name.ToString().NotNull())
+                            {
+                                Bones = rigBones, BindName = bindName, SlotName = slotName
+                            };
+                        }
+
+                        break;
+                    }
+
+                    default:
+                        break;
                 }
             }
 
@@ -3236,16 +3315,22 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             }
 
             var element = new GroupModel3DExt();
-
+     
             foreach (var app in appearances)
             {
                 ArgumentNullException.ThrowIfNull(app);
 
                 var appFile = Parent.GetFileFromDepotPathOrCache(app.AppearanceResource.DepotPath);
 
-                if (appFile == null || appFile.RootChunk is not appearanceAppearanceResource aar)
+                if (appFile is not { RootChunk: appearanceAppearanceResource aar })
                 {
                     continue;
+                }
+
+                // ArchiveXL dynamic variants will reuse name on empty appearance name 
+                if (app.AppearanceName == CName.Empty)
+                {
+                    app.AppearanceName = app.Name;
                 }
 
                 foreach (var handle in aar.Appearances)
@@ -3254,16 +3339,21 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                     var appDef = (appearanceAppearanceDefinition)handle.GetValue().NotNull();
 
+
                     if (appDef.Name != app.AppearanceName || appDef.CompiledData.Data is not RedPackage appPkg)
                     {
                         continue;
                     }
 
+                    var loadableModels = LoadMeshes(appPkg.Chunks);
+                    loadableModels.AddRange(LoadPartsValues(appDef));
+                    LoadPartsOverrides(appDef, loadableModels);
+                    
                     var a = new Appearance(app.Name.ToString().NotNull())
                     {
                         AppearanceName = app.AppearanceName,
                         Resource = app.AppearanceResource.DepotPath,
-                        Models = LoadMeshs(appPkg.Chunks).NotNull(),
+                        Models = loadableModels,
                     };
 
                     foreach (var model in a.Models)
@@ -3313,18 +3403,17 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     break;
                 }
             }
-            if (appearance == null)
+
+            if (appearance == null && Appearances.Count > 0)
             {
-                if (Appearances.Count > 0)
-                {
-                    SelectedAppearance = Appearances[0];
-                }
+                SelectedAppearance = Appearances[0];
             }
+            
             return element;
         }
         else
         {
-            var models = LoadMeshs(pkg.Chunks);
+            var models = LoadMeshes(pkg.Chunks);
 
             if (models == null)
             {
@@ -3381,10 +3470,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 a.ModelGroup.Add(group);
                 Appearances.Add(a);
                 SelectedAppearance = a;
-            }
-            else
-            {
-                //appearance.ModelGroup.Add(group);
             }
 
             var element = new GroupModel3DExt();

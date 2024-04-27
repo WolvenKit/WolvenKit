@@ -63,6 +63,7 @@
 	<PackageReference Include="HelixToolkit.SharpDX.Core.Wpf" />
     <PackageReference Include="AutomaticGraphLayout" />
     <PackageReference Include="Nodify" />
+    <PackageReference Include="Splat"/>
   </ItemGroup>
 
   <ItemGroup>

@@ -36,6 +36,9 @@ public class LoadableModel : IBindable, INode
 
     public INode? Parent { get; set; }
     public List<LoadableModel> Models { get; set; } = new();
+
+    public CName ComponentName { get; set; } = CName.Empty;
+
     public void AddModel(LoadableModel child)
     {
         child.Parent = this;

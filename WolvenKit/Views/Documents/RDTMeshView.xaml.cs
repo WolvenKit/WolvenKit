@@ -73,14 +73,40 @@ namespace WolvenKit.Views.Documents
         {
             base.OnKeyDown(e);
 
-            ViewModel.CtrlKeyPressed = true;
+            if (ViewModel is null)
+            {
+                return;
+            }
+
+            if (e.Key is Key.LeftCtrl or Key.RightCtrl)
+            {
+                ViewModel.CtrlKeyPressed = true;
+            }
+
+            if (e.Key is Key.LeftShift or Key.RightShift)
+            {
+                ViewModel.ShiftKeyPressed = true;
+            }
         }
 
         protected override void OnKeyUp(KeyEventArgs e)
         {
             base.OnKeyUp(e);
 
-            ViewModel.CtrlKeyPressed = false;
+            if (ViewModel is null)
+            {
+                return;
+            }
+
+            if (ViewModel.CtrlKeyPressed && e.Key is Key.LeftCtrl or Key.RightCtrl)
+            {
+                ViewModel.CtrlKeyPressed = false;
+            }
+
+            if (ViewModel.ShiftKeyPressed && e.Key is Key.LeftShift or Key.RightShift)
+            {
+                ViewModel.ShiftKeyPressed = false;
+            }
         }
 
         private void HxViewport_MouseDown3D(object sender, RoutedEventArgs e) => throw new System.NotImplementedException();

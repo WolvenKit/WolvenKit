@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Options;
 using WolvenKit.App.Factories;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
@@ -397,17 +398,24 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
     public CR2WFile? GetFileFromDepotPathOrCache(ResourcePath depotPath)
     {
+        if (depotPath.GetResolvedText() is not string path
+            || string.IsNullOrEmpty(path)
+            || ArchiveXlHelper.GetFirstExistingPath(path) is not string existingPath)
+        {
+            return null;
+        }
+        
         lock (Files)
         {
-            if (!Files.ContainsKey(depotPath))
+            if (!Files.ContainsKey(existingPath))
             {
-                var file = GetFileFromDepotPath(depotPath);
-                Files[depotPath] = file;
+                var file = GetFileFromDepotPath(existingPath);
+                Files[existingPath] = file;
             }
 
-            if (Files[depotPath] != null)
+            if (Files[existingPath] != null)
             {
-                foreach (var res in Files[depotPath]!.EmbeddedFiles)
+                foreach (var res in Files[existingPath]!.EmbeddedFiles)
                 {
                     if (!Files.ContainsKey(res.FileName))
                     {
@@ -420,7 +428,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
             }
         }
 
-        return Files[depotPath];
+        return Files[existingPath];
     }
 
     public void HandleEmbeddedFile(DialogViewModel? sender)
@@ -455,7 +463,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
     public CR2WFile? GetFileFromDepotPath(ResourcePath depotPath, bool original = false)
     {
-        if (depotPath == ResourcePath.Empty)
+        if (depotPath == ResourcePath.Empty || ArchiveXlHelper.GetFirstExistingPath(depotPath.GetResolvedText()) is not string existingPath)
         {
             return null;
         }
@@ -469,9 +477,9 @@ public partial class RedDocumentViewModel : DocumentViewModel
                 if (_projectManager.ActiveProject != null)
                 {
                     string? path = null;
-                    if (!string.IsNullOrEmpty(depotPath))
+                    if (!string.IsNullOrEmpty(existingPath))
                     {
-                        path = Path.Combine(_projectManager.ActiveProject.ModDirectory, depotPath.GetString().NotNull());
+                        path = Path.Combine(_projectManager.ActiveProject.ModDirectory, existingPath);
                     }
                     else
                     {
