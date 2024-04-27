@@ -380,7 +380,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             activeItemPath = Path.GetDirectoryName(activeItemPath);
         }
 
-        Clipboard.SetDataObject(activeItemPath);
+        if (activeItemPath is not null)
+        {
+            Clipboard.SetDataObject(activeItemPath);
+        }  
     }
 
     private bool CanCopyRelPath() => ActiveProject != null && SelectedItem != null;
@@ -532,7 +535,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         foreach (var hash in selectedItems)
         {
-            await Task.Run(() => controller.AddToMod(hash));
+            await Task.Run(() => controller.AddToMod(hash, ArchiveManagerScope.Everywhere));
             progress++;
             _progressService.Report(progress / (float)selectedItems.Count);
         }

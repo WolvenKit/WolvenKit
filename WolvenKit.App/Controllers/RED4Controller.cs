@@ -808,17 +808,29 @@ public class RED4Controller : ObservableObject, IGameController
 
     #endregion
 
-    public async Task<bool> AddFileToModModal(ulong hash)
+    /// <Inheritdoc />
+    public Task<bool> AddFileToModModal(ulong hash)
     {
-        var file = _archiveManager.Lookup(hash);
-        if (file.HasValue)
-        {
-            return await AddFileToModModal(file.Value);
-        }
-        return false;
+        var scope = _archiveManager.IsModBrowserActive ? ArchiveManagerScope.Mods : ArchiveManagerScope.Basegame;
+        return AddFileToModModal(hash, scope);
     }
 
-    public async Task<bool> AddFileToModModal(IGameFile file)
+    /// <Inheritdoc />
+    public async Task<bool> AddFileToModModal(ulong hash, ArchiveManagerScope searchScope)
+    {
+        var file = _archiveManager.Lookup(hash);
+        return file.HasValue && await AddFileToModModal(file.Value, searchScope);
+    }
+
+    /// <Inheritdoc />
+    public Task<bool> AddFileToModModal(IGameFile file)
+    {
+        var scope = _archiveManager.IsModBrowserActive ? ArchiveManagerScope.Mods : ArchiveManagerScope.Basegame;
+        return AddFileToModModal(file, scope);
+    }
+
+    /// <Inheritdoc />
+    public async Task<bool> AddFileToModModal(IGameFile file, ArchiveManagerScope searchScope)
     {
         if (_projectManager.ActiveProject is null)
         {
@@ -862,17 +874,29 @@ public class RED4Controller : ObservableObject, IGameController
         return true;
     }
 
+    /// <Inheritdoc />
     public bool AddToMod(ulong hash)
     {
-        var file = _archiveManager.Lookup(hash);
-        if (file.HasValue)
-        {
-            return AddToMod(file.Value);
-        }
-        return false;
+        var scope = _archiveManager.IsModBrowserActive ? ArchiveManagerScope.Mods : ArchiveManagerScope.Basegame;
+        return AddToMod(hash, scope);
     }
 
+    /// <Inheritdoc />
+    public bool AddToMod(ulong hash, ArchiveManagerScope searchScope)
+    {
+        var file = _archiveManager.Lookup(hash, searchScope);
+        return file.HasValue && AddToMod(file.Value, searchScope);
+    }
+
+    /// <Inheritdoc />
     public bool AddToMod(IGameFile file)
+    {
+        var scope = _archiveManager.IsModBrowserActive ? ArchiveManagerScope.Mods : ArchiveManagerScope.Basegame;
+        return AddToMod(file, scope);
+    }
+
+    /// <Inheritdoc />
+    public bool AddToMod(IGameFile file, ArchiveManagerScope searchScope)
     {
         if (_projectManager.ActiveProject is null)
         {
