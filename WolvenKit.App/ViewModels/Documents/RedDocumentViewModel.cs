@@ -396,11 +396,24 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
     public Dictionary<ResourcePath, CR2WFile?> Files { get; set; } = new();
 
-    public CR2WFile? GetFileFromDepotPathOrCache(ResourcePath depotPath)
+    public CR2WFile? GetFileFromDepotPathOrCache(ResourcePath depotPath, bool useDynamicResolution = false)
     {
-        if (depotPath.GetResolvedText() is not string path
-            || string.IsNullOrEmpty(path)
-            || ArchiveXlHelper.GetFirstExistingPath(path) is not string existingPath)
+        if (depotPath.GetResolvedText() is not string path || string.IsNullOrEmpty(path))
+        {
+            return null;
+        }
+
+        string? existingPath;
+        if (useDynamicResolution)
+        {
+            existingPath = ArchiveXlHelper.GetFirstExistingPath(path);
+        }
+        else
+        {
+            existingPath = depotPath.GetResolvedText();
+        }
+
+        if (string.IsNullOrEmpty(existingPath))
         {
             return null;
         }
@@ -409,7 +422,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
         {
             if (!Files.ContainsKey(existingPath))
             {
-                var file = GetFileFromDepotPath(existingPath);
+                var file = GetFileFromDepotPath(existingPath, false, useDynamicResolution);
                 Files[existingPath] = file;
             }
 
@@ -461,9 +474,24 @@ public partial class RedDocumentViewModel : DocumentViewModel
         }
     }
 
-    public CR2WFile? GetFileFromDepotPath(ResourcePath depotPath, bool original = false)
+    public CR2WFile? GetFileFromDepotPath(ResourcePath depotPath, bool original = false, bool doArchiveXlCheck = false)
     {
-        if (depotPath == ResourcePath.Empty || ArchiveXlHelper.GetFirstExistingPath(depotPath.GetResolvedText()) is not string existingPath)
+        if (depotPath == ResourcePath.Empty)
+        {
+            return null;
+        }
+
+        string? existingPath;
+        if (doArchiveXlCheck)
+        {
+            existingPath = ArchiveXlHelper.GetFirstExistingPath(depotPath.GetResolvedText());
+        }
+        else
+        {
+            existingPath = depotPath.GetResolvedText();
+        }
+
+        if (null == existingPath)
         {
             return null;
         }
