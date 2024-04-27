@@ -690,7 +690,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
             if (s_SearchByArchiveNameRegex().Match(query) is { Success: true } m)
             {
                 var archiveName = m.Groups[1].Value;
-                SetLeftSelectedItem($"{archiveName}.archive");
+                SetLeftSelectedItem($"{archiveName}");
             }
         }
         catch (AggregateException ae)
@@ -907,7 +907,8 @@ public partial class AssetBrowserViewModel : ToolViewModel
         };
 
 
-    [GeneratedRegex(@"archive:(.*)(?=.archive)")]
+    // will match anything between archive: and either (.archive, word:searchString, $)
+    [GeneratedRegex(@"archive:(.*?)(?=\.archive|\w+?:|$)")]
     private static partial Regex s_SearchByArchiveNameRegex();
     
     private void CyberEnhancedSearch()
@@ -955,7 +956,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
             return;
         }
 
-        LeftSelectedItem = LeftItems.ToList().FirstOrDefault((item) => item.Name == itemName || item.Name.Contains(itemName));
+        LeftSelectedItem = LeftItems.ToList().FirstOrDefault((item) => item.Name.Contains(itemName));
     }
     #endregion methods
 }
