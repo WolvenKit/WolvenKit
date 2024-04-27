@@ -348,7 +348,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         var text = "Long path support is disabled in your OS!" + Environment.NewLine +
                    "Please do so to ensure that WolvenKit works properly." + Environment.NewLine + Environment.NewLine +
-                   "For more informations:" + Environment.NewLine +
+                   "For more information:" + Environment.NewLine +
                    "https://wiki.redmodding.org/wolvenkit/help/faq/long-file-path-support";
 
         DispatcherHelper.RunOnMainThread(() => Interactions.ShowConfirmation((text, "Long path support", WMessageBoxImage.Warning, WMessageBoxButtons.Ok)));
@@ -444,8 +444,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
         catch (HttpRequestException ex)
         {
-            _loggerService.Error($"Failed to respond to url: {contentUrl}");
-            _loggerService.Error(ex);
+            _loggerService.Warning($"Failed update scripts from {contentUrl}");
+            _loggerService.Warning($"\t{ex.Message}");
             return;
         }
 
@@ -913,6 +913,47 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         //});
     }
 
+    private bool CanImportArchive(string inputDir) => ActiveProject is not null && !IsDialogShown;
+
+    [RelayCommand(CanExecute = nameof(CanImportArchive))]
+    private async Task<Task> ImportArchive(string? inputDir)
+    {
+        _watcherService.IsSuspended = true;
+        var vm = new OpenFileViewModel(_settingsManager, _projectManager, _loggerService)
+        {
+            Title = "Import .archive", Filter = "Archive files (*.archive)|*.archive"
+        };
+
+        var result = await vm.OpenFile();
+        _watcherService.IsSuspended = false;
+
+        if (result is null)
+        {
+            return Task.CompletedTask;
+        }
+
+        var assetBrowser = GetToolViewModel<AssetBrowserViewModel>();
+
+        if (!assetBrowser.IsVisible)
+        {
+            assetBrowser.IsVisible = true;
+        }
+
+        if (!assetBrowser.IsModBrowserActive())
+        {
+            assetBrowser.ToggleModBrowserCommand.Execute(null);
+        }
+        else
+        {
+            await assetBrowser.LoadAssetBrowserCommand.ExecuteAsync(null);
+        }
+
+        assetBrowser.SearchBarText = $"archive:{result}";
+        await assetBrowser.PerformSearch($"archive:{result}");
+
+        return Task.CompletedTask;
+    }
+
     private async Task OpenFromNewFile(NewFileViewModel? file)
     {
         CloseModalCommand.Execute(null);
@@ -1227,7 +1268,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     public bool HasActiveProject() => ActiveProject is not null;
-
 
     [RelayCommand]
     private Task CleanAllAsync() => Task.Run(() => _gameControllerFactory.GetController().CleanAll());
