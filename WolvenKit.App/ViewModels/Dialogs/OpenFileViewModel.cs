@@ -18,12 +18,12 @@ public class OpenFileViewModel(
     {
         if (!projectManager.IsProjectLoaded)
         {
-            throw new WolvenKitException(3, "No project loaded");
+            throw new WolvenKitException(0x4003, "No project loaded");
         }
 
         if (settingsManager.ExtraModDirPath is null)
         {
-            throw new WolvenKitException(1, "No extra mod directory configured");
+            throw new WolvenKitException(0x4001, "No extra mod directory configured");
         }
 
         if (!Directory.Exists(settingsManager.ExtraModDirPath))

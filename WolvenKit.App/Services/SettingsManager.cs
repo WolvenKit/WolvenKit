@@ -291,7 +291,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     {
         if (CP77ExecutablePath is null)
         {
-            throw new WolvenKitException(2, "Your Cyberpunk game executable isn't set");
+            throw new WolvenKitException(0x4002, "Your Cyberpunk game executable isn't set");
         }
 
         var fi = new FileInfo(CP77ExecutablePath);
