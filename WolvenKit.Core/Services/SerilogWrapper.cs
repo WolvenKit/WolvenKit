@@ -30,7 +30,7 @@ namespace WolvenKit
 
         public void Error(Exception ex)
         {
-            if (ex is WolvenKitException { ErrorCode: >= 0 } wolvenKitException)
+            if (ex is WolvenKitException wolvenKitException)
             {
                 Error(wolvenKitException.ErrorCode, wolvenKitException);
             }
