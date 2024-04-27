@@ -34,6 +34,7 @@ public class questSceneNodeDefinitionWrapper : questSignalStoppingNodeDefinition
         if (_castedData.SceneFile.DepotPath != ResourcePath.Empty && _castedData.SceneFile.DepotPath.IsResolvable)
         {
             Details.Add("Filename", Path.GetFileName(_castedData.SceneFile.DepotPath.GetResolvedText())!);
+            Details.Add("Scene location", _castedData.SceneLocation.NodeRef.GetResolvedText()!);
         }
     }
 
