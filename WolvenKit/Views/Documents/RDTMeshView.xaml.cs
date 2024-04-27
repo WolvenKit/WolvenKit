@@ -169,5 +169,10 @@ namespace WolvenKit.Views.Documents
                 _currentNode = info;
             }
         }
+
+        private void Viewport3DX_Loaded(object sender, RoutedEventArgs e)
+        {
+            ViewModel?.SelectWorldNode();
+        }
     }
 }

@@ -112,6 +112,17 @@ public partial class RedDocumentViewModel : DocumentViewModel
     partial void OnSelectedTabItemViewModelChanged(RedDocumentTabViewModel? value)
     {
         value?.OnSelected();
+
+        switch (value)
+        {
+            case RDTDataViewModel model when _selectedWorldNodeIndex != null &&
+                                             int.TryParse(_selectedWorldNodeIndex, out var worldNodeIndex):
+                model.AddToSelection(model.FindWorldNode(worldNodeIndex));
+                break;
+            case RDTMeshViewModel meshViewModel when _selectedWorldNodeIndex != null:
+                meshViewModel.SelectedNodeIndex = _selectedWorldNodeIndex;
+                break;
+        }
     }
 
     // assume files that don't exist are relative paths
@@ -301,7 +312,9 @@ public partial class RedDocumentViewModel : DocumentViewModel
         }
         if (cls is worldStreamingSector wss)
         {
-            TabItemViewModels.Add(_documentTabViewmodelFactory.RDTMeshViewModel(wss, this));
+            var tab = _documentTabViewmodelFactory.RDTMeshViewModel(wss, this);
+            tab.OnSectorNodeSelected += OnSectorNodeSelected;
+            TabItemViewModels.Add(tab);
         }
         if (cls is worldStreamingBlock wsb)
         {
@@ -312,6 +325,10 @@ public partial class RedDocumentViewModel : DocumentViewModel
             TabItemViewModels.Add(new RDTGraphViewModel2(cls, this, _nodeWrapperFactory));
         }
     }
+
+    private string? _selectedWorldNodeIndex;
+
+    private void OnSectorNodeSelected(object? sender, string? e) => _selectedWorldNodeIndex = e;
 
     private void OnPartNameChanged(object sender, EventArgs e)
     {
@@ -334,17 +351,28 @@ public partial class RedDocumentViewModel : DocumentViewModel
     {
         foreach (var tab in TabItemViewModels)
         {
-            if (tab is RDTInkTextureAtlasViewModel inkTextureTab)
+            switch (tab)
             {
-                inkTextureTab.ChangeEvent -= OnPartNameChanged;
+                case RDTInkTextureAtlasViewModel inkTextureTab:
+                    inkTextureTab.ChangeEvent -= OnPartNameChanged;
+                    break;
+                case RDTMeshViewModel meshTab:
+                    meshTab.OnSectorNodeSelected -= OnSectorNodeSelected;
+                    break;
+                case RDTDataViewModel dataViewModel:
+                    dataViewModel.OnSectorNodeSelected -= OnSectorNodeSelected;
+                    break;
+                default:
+                    break;
             }
         }
-        
+
         TabItemViewModels.Clear();
 
         var root = _documentTabViewmodelFactory.RDTDataViewModel(Cr2wFile.RootChunk, this, _appViewModel, _chunkViewmodelFactory);
         root.FilePath = "(root)";
         TabItemViewModels.Add(root);
+        root.OnSectorNodeSelected += OnSectorNodeSelected;
         AddTabForRedType(Cr2wFile.RootChunk);
 
         foreach (var file in Cr2wFile.EmbeddedFiles)

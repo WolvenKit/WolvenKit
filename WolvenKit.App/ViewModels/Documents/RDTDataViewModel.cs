@@ -306,6 +306,11 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     public override void OnSelected()
     {
         RefreshDirtyChunks();
+
+        if (SelectedChunk is ChunkViewModel { ResolvedData: worldNode } cvm)
+        {
+            OnSectorNodeSelected?.Invoke(this, $"{cvm.NodeIdxInParent}");
+        }
         
         // if tweak file, deserialize from text
         // read tweakXL file
@@ -430,6 +435,40 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         }
     }
 
+
+    public event EventHandler<string>? OnSectorNodeSelected;
+
+    /// <summary>
+    /// For .streamingsector files, called when a mesh is selected in the other tab 
+    /// </summary>
+    /// <param name="selectedIndex"></param>
+    /// <returns></returns>
+    public ChunkViewModel? FindWorldNode(int selectedIndex)
+    {
+        var root = RootChunk;
+
+        if (root is null)
+        {
+            root = _chunks.FirstOrDefault();
+        }
+
+        if (root is not ChunkViewModel)
+        {
+            return null;
+        }
+
+        var worldNodeArray = root.Properties.FirstOrDefault(chunk =>
+            chunk is { IsArray: true, Name: "nodes", ResolvedData: CArray<CHandle<worldNode>> });
+        if (worldNodeArray is null)
+        {
+            return null;
+        }
+
+        root.IsExpanded = true;
+        worldNodeArray.IsExpanded = true;
+
+        return worldNodeArray?.GetChildNode(selectedIndex);
+    }
     
     #endregion
 }

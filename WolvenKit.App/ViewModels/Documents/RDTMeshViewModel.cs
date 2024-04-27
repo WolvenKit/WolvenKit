@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DynamicData.Kernel;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
 using Microsoft.Win32;
@@ -22,6 +23,7 @@ using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.App.PhysX;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
@@ -126,6 +128,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
     {
         _data = ent;
     }
+
+    public string? SelectedNodeIndex; 
 
     public void Load()
     {
@@ -944,13 +948,38 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         }
     }
 
+    public event EventHandler<string?>? OnSectorNodeSelected;
+
+    
     private void CommonMouseDownEvents(object modelHit, MouseButtonEventArgs mouseButtonEventArgs)
     {
-        if (mouseButtonEventArgs.LeftButton == MouseButtonState.Pressed && modelHit is SubmeshComponent { Parent: MeshComponent { Parent: MeshComponent mesh } })
+        if (mouseButtonEventArgs.LeftButton != MouseButtonState.Pressed || modelHit is not SubmeshComponent
+            {
+                Parent: MeshComponent { Parent: MeshComponent mesh }
+            })
         {
-            Parent.GetLoggerService().Info((mesh.WorldNodeIndex != null ? $"nodes[{mesh.WorldNodeIndex}] (Type: \"{mesh.WorldNodeType}\", nodeDataIndices: [{mesh.WorldNodeDataIndices}]) : " : "Mesh Name :") + mesh.Text);
+            return;
         }
 
+        List<string> loggerArgs = [];
+        if (!string.IsNullOrEmpty(mesh.WorldNodeIndex))
+        {
+            loggerArgs.Add($"nodes[{mesh.WorldNodeIndex}] (Type: \"{mesh.WorldNodeType}\", nodeDataIndices: [{mesh.WorldNodeDataIndices}]");
+        }
+
+        if (mesh.CollisionActorId != null)
+        {
+            loggerArgs.Add($"Collision Actor: [{mesh.CollisionActorId}]");
+        }
+
+        if (loggerArgs.Count == 0)
+        {
+            loggerArgs.Add("Mesh Name :");
+        }
+
+        Parent.GetLoggerService().Info(string.Join(", ", loggerArgs) + ") " + mesh.Text);
+
+        OnSectorNodeSelected?.Invoke(this, mesh.WorldNodeIndex);
     }
 
     #endregion
@@ -2109,6 +2138,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     DepotPath = irmn.Mesh.DepotPath
                 };
 
+                if (group.WorldNodeIndex == SelectedNodeIndex)
+                {
+                    SelectedItem = group;
+                }
+
                 var model = new LoadableModel(name)
                 {
                     MeshFile = Parent.Cr2wFile,
@@ -2285,6 +2319,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     Text = "collisionNode_" + wcn.SectorHash
                 };
 
+                if (mesh.WorldNodeIndex == SelectedNodeIndex)
+                {
+                    SelectedItem = mesh;
+                }
+                
                 var colliderMaterial = new PBRMaterial()
                 {
                     EnableAutoTangent = true,
@@ -2296,17 +2335,25 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     MetallicFactor = 0
                 };
 
-                foreach (var actor in cb.Actors)
+                for (var k = 0; k < cb.Actors.Count; k++)
                 {
+                    var actor = cb.Actors[k];
+                    
                     var actorGroup = new MeshComponent()
                     {
                         WorldNodeIndex = $"{handleIndex}",
                         WorldNodeType = typeStr,
                         WorldNodeDataIndices = indexStr,
                         Name = "actor_" + cb.Actors.IndexOf(actor),
-                        Text = "actor_" + cb.Actors.IndexOf(actor)
+                        Text = "actor_" + cb.Actors.IndexOf(actor),
+                        CollisionActorId = $"{k}"
                     };
 
+                    if (mesh.WorldNodeIndex == SelectedNodeIndex)
+                    {
+                        SelectedItem = mesh;
+                    }
+                    
                     foreach (var shape in actor.Shapes)
                     {
                         HelixToolkit.SharpDX.Core.MeshGeometry3D? geometry = null;
@@ -2537,8 +2584,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                     var group = new MeshComponent()
                     {
-                        Name = name,
-                        Text = name
+                        Name = name, Text = name, WorldNodeIndex = string.Empty, WorldNodeDataIndices = string.Empty
                     };
 
                     group.Children.Add(mesh);
@@ -2672,6 +2718,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             element.Children.Add(group);
         }
         app.ModelGroup.Add(element);
+
+        SelectWorldNode();
         return element;
     }
 
@@ -2820,6 +2868,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         }
         IsRendered = true;
         RenderBlock(_data as worldStreamingBlock);
+        SelectWorldNode();
     }
 
     public void RenderBlock(worldStreamingBlock? data)
@@ -3295,7 +3344,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 a = appearance;
             }
 
-            var group = new MeshComponent();
+            var group = new MeshComponent() { WorldNodeIndex = string.Empty, WorldNodeDataIndices = string.Empty, };
 
             foreach (var model in models)
             {
@@ -3349,35 +3398,76 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
     #endregion
 
+    private object? findMeshChild(object o)
+    {
+        switch (o)
+        {
+            case SectorGroup group:
+            {
+                foreach (var groupChild in group.Children)
+                {
+                    if (findMeshChild(groupChild) is { } result)
+                    {
+                        return result;
+                    }
+                }
 
+                break;
+            }
+            case LoadableModel loadableModel:
+                return loadableModel;
+            case MeshComponent comp:
+                if (comp.WorldNodeIndex == SelectedNodeIndex)
+                {
+                    return comp;
+                }
 
+                // foreach (var compChild in comp.Children)
+                // {
+                //     if (findMeshChild(compChild) is { } found)
+                //     {
+                //         return found;
+                //     }
+                // }
 
+                break;
+            default:
+                break;
+        }
 
+        return null;
+    }
+    public void SelectWorldNode()
+    {
+        if (SelectedNodeIndex is null)
+        {
+            return;
+        }
 
+        object? selectedMesh = null;
+        foreach (var loadableModel in Models)
+        {
+            if (selectedMesh is not null)
+            {
+                continue;
+            }
 
+            selectedMesh = findMeshChild(loadableModel);
+        }
 
+        foreach (var appearance in Appearances)
+        {
+            appearance.ModelGroup.AsList().ForEach((model) =>
+            {
+                if (selectedMesh is not null)
+                {
+                    return;
+                }
 
+                selectedMesh = findMeshChild(model);
+            });
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        SelectedItem = selectedMesh;
+    }
 }
