@@ -17,6 +17,7 @@ using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
@@ -878,49 +879,44 @@ public class RED4Controller : ObservableObject, IGameController
             return false;
         }
 
-        switch (_projectManager.ActiveProject.GameType)
+        if (_projectManager.ActiveProject.GameType is not GameType.Cyberpunk2077)
         {
-            case GameType.Cyberpunk2077:
+            throw new WolvenKitException(-1, "This doesn't seem to be a Cyberpunk project!");
+        }
+
+        var fileName = file.Name;
+        if (file.Name == file.Key.ToString() && file.GuessedExtension != null)
+        {
+            fileName += file.GuessedExtension;
+        }
+
+        FileInfo diskPathInfo = new(Path.Combine(_projectManager.ActiveProject.ModDirectory, fileName));
+        if (diskPathInfo.Directory == null)
+        {
+            return false;
+        }
+
+        if (File.Exists(diskPathInfo.FullName))
+        {
+            using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
+            file.Extract(fs);
+            _loggerService.Info($"Overwrote existing file with game file: {file.Name}");
+        }
+        else
+        {
+            Directory.CreateDirectory(diskPathInfo.Directory.FullName);
+            try
             {
-                var fileName = file.Name;
-                if (file.Name == file.Key.ToString() && file.GuessedExtension != null)
-                {
-                    fileName += file.GuessedExtension;
-                }
-
-                FileInfo diskPathInfo = new(Path.Combine(_projectManager.ActiveProject.ModDirectory, fileName));
-                if (diskPathInfo.Directory == null)
-                {
-                    break;
-                }
-
-                if (File.Exists(diskPathInfo.FullName))
-                {
-                    using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
-                    file.Extract(fs);
-                    _loggerService.Info($"Overwrote existing file with game file: {file.Name}");
-                }
-                else
-                {
-                    Directory.CreateDirectory(diskPathInfo.Directory.FullName);
-                    try
-                    {
-                        using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
-                        file.Extract(fs);
-                        _loggerService.Info($"Added game file to project: {file.Name}");
-                    }
-                    catch (Exception ex)
-                    {
-                        File.Delete(diskPathInfo.FullName);
-                        _loggerService.Error(ex);
-                    }
-
-                }
-
-                break;
+                using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
+                file.Extract(fs);
+                _loggerService.Info($"Added game file to project: {file.Name}");
             }
-            default:
-                throw new ArgumentOutOfRangeException();
+            catch (Exception ex)
+            {
+                File.Delete(diskPathInfo.FullName);
+                _loggerService.Error(ex);
+            }
+
         }
 
         return true;
