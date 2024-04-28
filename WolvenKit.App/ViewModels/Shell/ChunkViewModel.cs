@@ -2353,6 +2353,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         OnPropertyChanged(nameof(ResolvedData));
 
         Properties.Clear();
+        
+        // Let SFTreeView clear its items first else the ScrollBar calculations are of...
+        // Can't use NotificationSubscriptionMode.CollectionChanged neither since SF never attaches to the event...
+        // TVProperties also doesn't need to be Observable but doesn't matter really...
+        OnPropertyChanged(nameof(TVProperties));
 
         var isreadonly = IsReadOnly;
         if (Parent is not null)
