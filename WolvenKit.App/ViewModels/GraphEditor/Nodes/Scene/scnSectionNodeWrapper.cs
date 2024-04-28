@@ -5,7 +5,7 @@ namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 
 public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>
 {
-    public scnSectionNodeWrapper(scnSectionNode scnSectionNode) : base(scnSectionNode)
+    public scnSectionNodeWrapper(scnSectionNode scnSectionNode, scnSceneResource scnSceneResource) : base(scnSectionNode)
     {
         Details["Section Duration"] = scnSectionNode.SectionDuration.Stu.ToString() + "ms";
         Details["Ff Strategy"] = scnSectionNode.FfStrategy.ToEnumString();
@@ -26,6 +26,8 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>
             Details["#" + counter.ToString() + " " + eventClass?.Chunk?.StartTime.ToString() + "ms"] = evName;
             counter++;
         }
+
+        Title += NodeProperties.SetNameFromNotablePoints(scnSectionNode.NodeId.Id, scnSceneResource);
     }
 
     internal override void GenerateSockets()

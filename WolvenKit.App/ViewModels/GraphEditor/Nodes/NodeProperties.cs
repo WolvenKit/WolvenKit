@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Xml;
 using WolvenKit.App.Extensions;
 using WolvenKit.RED4.Types;
 
@@ -559,6 +561,20 @@ internal class NodeProperties
         }
 
         return details;
+    }
+
+    public static string SetNameFromNotablePoints(CUInt32 nodeID, scnSceneResource scnSceneResource)
+    {
+        var notable = scnSceneResource
+            .NotablePoints
+            .FirstOrDefault(x => x.NodeId.Id == nodeID);
+
+        if (notable != null)
+        {
+            return " - Notable: " + notable.Name.GetResolvedText()!;
+        }
+
+        return "";
     }
 
     private static string ParseGameEntityReference(gameEntityReference? entRef)
