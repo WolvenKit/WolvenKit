@@ -362,7 +362,7 @@ public partial class ChunkViewModel : ObservableObject
                         propInfo.SetValue(irc, (CName)newValue);
                         IncrementReplacementCounter();
                         wasChanged = true;
-                        break;
+                        continue;
                     }
                     
                     if (!propInfo.GetType().IsAssignableTo(prop.GetType()))
