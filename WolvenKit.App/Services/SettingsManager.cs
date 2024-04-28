@@ -10,6 +10,7 @@ using DynamicData.Binding;
 using WolvenKit.App.Models;
 using WolvenKit.Common;
 using WolvenKit.Core;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 
 namespace WolvenKit.App.Services;
@@ -288,7 +289,10 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     public void SetThemeAccent(Color color) => ThemeAccentString = color.ToString();
     public string GetRED4GameRootDir()
     {
-        ArgumentNullException.ThrowIfNull(CP77ExecutablePath);
+        if (CP77ExecutablePath is null)
+        {
+            throw new WolvenKitException(0x4002, "Your Cyberpunk game executable isn't set");
+        }
 
         var fi = new FileInfo(CP77ExecutablePath);
 
@@ -333,7 +337,6 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     public bool IsHealthy() => File.Exists(CP77ExecutablePath) && File.Exists(GetRED4OodleDll());
 
     public bool IsNoobFilterDefaultEnabled() => EnableNoobFilterByDefault;
-
 
     #endregion methods
 }

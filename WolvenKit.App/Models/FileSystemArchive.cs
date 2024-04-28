@@ -15,8 +15,6 @@ namespace WolvenKit.App.Models;
 
 public class FileSystemArchive : ICyberGameArchive
 {
-    private readonly IHashService _hashService;
-
     public string ArchiveAbsolutePath { get; set; }
     public string ArchiveRelativePath { get; set; }
     public Dictionary<ulong, IGameFile> Files => GetFiles();
@@ -54,7 +52,7 @@ public class FileSystemArchive : ICyberGameArchive
         var modDirectory = Project.ModDirectory;
         foreach (var filePath in Directory.EnumerateFiles(modDirectory, "*", SearchOption.AllDirectories))
         {
-            var tHash = FNV1A64HashAlgorithm.HashString(ResourcePath.SanitizePath(filePath[(modDirectory.Length + 1)..]));
+            var tHash = ResourcePath.CalculateHash(filePath[(modDirectory.Length + 1)..]);
             if (tHash == hash)
             {
                 path = filePath;
@@ -73,9 +71,9 @@ public class FileSystemArchive : ICyberGameArchive
         var modDirectory = Project.ModDirectory;
         foreach (var filePath in Directory.EnumerateFiles(modDirectory, "*", SearchOption.AllDirectories))
         {
-            var hash = FNV1A64HashAlgorithm.HashString(ResourcePath.SanitizePath(filePath[(modDirectory.Length + 1)..]));
+            var hash = ResourcePath.CalculateHash(filePath[(modDirectory.Length + 1)..]);
 
-            result.Add(hash, new FileEntry(_hashService)
+            result.Add(hash, new FileEntry
             {
                 Archive = this,
                 NameHash64 = hash
@@ -85,14 +83,12 @@ public class FileSystemArchive : ICyberGameArchive
         return result;
     }
 
-    public FileSystemArchive(Cp77Project project, IHashService hashService)
+    public FileSystemArchive(Cp77Project project)
     {
         if (string.IsNullOrEmpty(project.ModDirectory) || !Directory.Exists(project.ModDirectory))
         {
             throw new ArgumentException(nameof(project.ModDirectory));
         }
-
-        _hashService = hashService;
 
         Project = project;
 

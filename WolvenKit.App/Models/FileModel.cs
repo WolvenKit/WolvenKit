@@ -195,16 +195,15 @@ public class FileModel : ObservableObject
                 {
                     var regex = new Regex("^(\\d+)\\.");
                     var match = regex.Match(relpath);
-                    if (match.Success)
+                    if (match.Success && ulong.TryParse(match.Groups[1].Value, out var hash))
                     {
-                        return ulong.TryParse(match.Groups[1].Value, out var hash) ? hash : FNV1A64HashAlgorithm.HashString(ResourcePath.SanitizePath(relpath));
-
+                        return hash;
                     }
-                    return FNV1A64HashAlgorithm.HashString(ResourcePath.SanitizePath(relpath));
+                    return ResourcePath.CalculateHash(relpath);
                 }
             }
 
-            return FNV1A64HashAlgorithm.HashString(ResourcePath.SanitizePath(fullname));
+            return ResourcePath.CalculateHash(fullname);
         }
     }
 

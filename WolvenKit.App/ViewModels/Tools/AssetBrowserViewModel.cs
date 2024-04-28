@@ -224,6 +224,8 @@ public partial class AssetBrowserViewModel : ToolViewModel
     [ObservableProperty] 
     private string? _optionsSearchBarText;
 
+    [ObservableProperty] private bool? _isModBrowserEnabled;
+
     [ObservableProperty]
     private ObservableCollectionEx<IGameArchive> _addFromArchiveItems = new();
 
@@ -608,6 +610,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
         RightItems = new ObservableCollectionEx<IFileSystemViewModel>();
         _archiveManager.IsModBrowserActive = !_archiveManager.IsModBrowserActive;
+        IsModBrowserEnabled = _archiveManager.IsModBrowserActive;
     }
 
     [RelayCommand]
@@ -682,6 +685,13 @@ public partial class AssetBrowserViewModel : ToolViewModel
         try
         {
             await Task.Run(CyberEnhancedSearch);
+
+            // If the search includes an .archive file, let's select it
+            if (s_SearchByArchiveNameRegex().Match(query) is { Success: true } m)
+            {
+                var archiveName = m.Groups[1].Value;
+                SetLeftSelectedItem($"{archiveName}");
+            }
         }
         catch (AggregateException ae)
         {
@@ -896,6 +906,11 @@ public partial class AssetBrowserViewModel : ToolViewModel
             }
         };
 
+
+    // will match anything between archive: and either (.archive, word:searchString, $)
+    [GeneratedRegex(@"archive:(.*?)(?=\.archive|\w+?:|$)")]
+    private static partial Regex s_SearchByArchiveNameRegex();
+    
     private void CyberEnhancedSearch()
     {
         if (string.IsNullOrWhiteSpace(SearchBarText))
@@ -933,5 +948,15 @@ public partial class AssetBrowserViewModel : ToolViewModel
         RightItems.SuppressNotification = false;
     }
 
+
+    private void SetLeftSelectedItem(string itemName)
+    {
+        if (LeftItems is null || LeftItems.Count == 0)
+        {
+            return;
+        }
+
+        LeftSelectedItem = LeftItems.ToList().FirstOrDefault((item) => item.Name.Contains(itemName));
+    }
     #endregion methods
 }

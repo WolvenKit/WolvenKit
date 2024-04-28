@@ -207,6 +207,30 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
+                    x:Name="MenuItemImportArchive"
+                    Margin="2,1"
+                    Header="Import .archive"
+                    ToolTip="Import an .archive file for analysis">
+                    <MenuItem.Icon>
+                        <Grid Margin="6,0">
+                            <iconPacks:PackIconMaterial
+                                Padding="0,0,2,2"
+                                Foreground="{StaticResource WolvenKitTan}"
+                                Kind="OpenInApp"
+                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                            <iconPacks:PackIconForkAwesome
+                                Padding="6,6,-3,-3"
+                                Kind="Circle"
+                                Style="{StaticResource WolvenKitToolBarButtonIconEraser}" />
+                            <iconPacks:PackIconForkAwesome
+                                Padding="8,8,-1,-1"
+                                BorderBrush="Black"
+                                Kind="PlusCircle"
+                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                        </Grid>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
                     x:Name="MenuItemSave"
                     Margin="2,1"
                     Header="Save"

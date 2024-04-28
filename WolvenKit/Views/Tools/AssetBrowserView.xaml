@@ -92,6 +92,7 @@
                     <mah:ToggleSwitch
                         Grid.Column="2"
                         Command="{Binding ToggleModBrowserCommand}"
+                        IsOn="{Binding IsModBrowserEnabled}"
                         OffContent=""
                         OnContent=""
                         ToolTip="Toggle to browse installed mod archives" />

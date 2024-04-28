@@ -226,11 +226,6 @@ public partial class RedPackageWriter
         {
             if (Settings.ImportsAsHash)
             {
-                if (reff.DepotPath.IsResolvable)
-                {
-                    ImportHandler.AddPathHandler?.Invoke(reff.DepotPath!);
-                }
-                
                 refDesc.Add(new RedPackageImportHeader
                 {
                     offset = (uint)refData.Count + position,

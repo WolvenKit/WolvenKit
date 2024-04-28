@@ -13,7 +13,6 @@ namespace WolvenKit.App.Factories;
 public class DocumentViewmodelFactory : IDocumentViewmodelFactory
 {
     private readonly IDocumentTabViewmodelFactory _tabViewmodelFactory;
-    private readonly IPaneViewModelFactory _paneViewModelFactory;
     private readonly IChunkViewmodelFactory _chunkViewmodelFactory;
 
     private readonly IProjectManager _projectManager;
@@ -26,11 +25,11 @@ public class DocumentViewmodelFactory : IDocumentViewmodelFactory
     private readonly IHookService _hookService;
     private readonly INodeWrapperFactory _nodeWrapperFactory;
     private readonly ISettingsManager _settingsManager;
+    private readonly IHashService _hashService;
 
 
     public DocumentViewmodelFactory(
         IDocumentTabViewmodelFactory tabViewmodelFactory,
-        IPaneViewModelFactory paneViewModelFactory,
         IChunkViewmodelFactory chunkViewmodelFactory,
         IProjectManager projectManager,
         ILoggerService loggerService,
@@ -41,11 +40,11 @@ public class DocumentViewmodelFactory : IDocumentViewmodelFactory
         AppScriptService scriptService,
         IHookService hookService,
         INodeWrapperFactory nodeWrapperFactory,
-        ISettingsManager settingsManager
+        ISettingsManager settingsManager,
+        IHashService hashService
     )
     {
         _tabViewmodelFactory = tabViewmodelFactory;
-        _paneViewModelFactory = paneViewModelFactory;
         _chunkViewmodelFactory = chunkViewmodelFactory;
         _projectManager = projectManager;
         _loggerService = loggerService;
@@ -57,12 +56,12 @@ public class DocumentViewmodelFactory : IDocumentViewmodelFactory
         _hookService = hookService;
         _nodeWrapperFactory = nodeWrapperFactory;
         _settingsManager = settingsManager;
-
+        _hashService = hashService;
     }
 
     public RedDocumentViewModel RedDocumentViewModel(CR2WFile file, string path, AppViewModel appViewModel, bool isReadOnly = false)
         => new(file, path, appViewModel, _tabViewmodelFactory, _chunkViewmodelFactory, _projectManager, _loggerService, _globals,
-            _parserService, _watcherService, _archiveManager, _hookService, _nodeWrapperFactory,
+            _parserService, _watcherService, _archiveManager, _hookService, _nodeWrapperFactory, _hashService,
             _settingsManager.IsNoobFilterDefaultEnabled(), isReadOnly);
 
     public WScriptDocumentViewModel WScriptDocumentViewModel(string path) => new(path, _scriptService);

@@ -40,7 +40,7 @@ public partial class HashToolView : ReactiveUserControl<HashToolViewModel>
         CNameHash.SetCurrentValue(TextBox.TextProperty, cNameHash.ToString());
         CNameHashHex.SetCurrentValue(TextBox.TextProperty, $"0x{cNameHash:X16}");
 
-        var depotHash = FNV1A64HashAlgorithm.HashString(ResourcePath.SanitizePath(InputTextBox.Text));
+        var depotHash = ResourcePath.CalculateHash(InputTextBox.Text);
         DepotHash.SetCurrentValue(TextBox.TextProperty, depotHash.ToString());
         DepotHashHex.SetCurrentValue(TextBox.TextProperty, $"0x{depotHash:X16}");
 

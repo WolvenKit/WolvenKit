@@ -48,6 +48,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
     private readonly IArchiveManager _archiveManager;
     private readonly IHookService _hookService;
     private readonly INodeWrapperFactory _nodeWrapperFactory;
+    private readonly IHashService _hashService;
 
     private readonly AppViewModel _appViewModel;
 
@@ -66,6 +67,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
         IArchiveManager archiveManager,
         IHookService hookService,
         INodeWrapperFactory nodeWrapperFactory,
+        IHashService hashService,
         bool isSimpleViewEnabled = false,
         bool isReadyOnly = false) : base(path)
     {
@@ -79,6 +81,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
         _archiveManager = archiveManager;
         _hookService = hookService;
         _nodeWrapperFactory = nodeWrapperFactory;
+        _hashService = hashService;
 
         _appViewModel = appViewModel;
         _embedHashSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
@@ -112,18 +115,19 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
     partial void OnSelectedTabItemViewModelChanged(RedDocumentTabViewModel? value)
     {
-        value?.OnSelected();
-
+        // Communicate index of selected world node across tabs
         switch (value)
         {
-            case RDTDataViewModel model when _selectedWorldNodeIndex != null &&
-                                             int.TryParse(_selectedWorldNodeIndex, out var worldNodeIndex):
+            case RDTDataViewModel model:
+                int.TryParse(_selectedWorldNodeIndex, out var worldNodeIndex);                            
                 model.AddToSelection(model.FindWorldNode(worldNodeIndex));
                 break;
-            case RDTMeshViewModel meshViewModel when _selectedWorldNodeIndex != null:
+            case RDTMeshViewModel meshViewModel:
                 meshViewModel.SelectedNodeIndex = _selectedWorldNodeIndex;
                 break;
         }
+
+        value?.OnSelected();
     }
 
     // assume files that don't exist are relative paths
@@ -189,6 +193,8 @@ public partial class RedDocumentViewModel : DocumentViewModel
                     return;
                 }
 
+                SaveHashedValues(cr2w);
+
                 using var writer = new CR2WWriter(ms, Encoding.UTF8, true) { LoggerService = _loggerService };
                 writer.WriteFile(cr2w);
             }
@@ -210,6 +216,37 @@ public partial class RedDocumentViewModel : DocumentViewModel
         _loggerService.Success($"Saved file {FilePath}");
 
         await Task.CompletedTask;
+    }
+
+    private void SaveHashedValues(CR2WFile file)
+    {
+        if (_hashService is not HashServiceExt hashService)
+        {
+            return;
+        }
+        
+        foreach (var (path, value) in file.RootChunk.GetEnumerator())
+        {
+            if (value is IRedRef redRef && redRef.DepotPath != ResourcePath.Empty)
+            {
+                if (!redRef.DepotPath.TryGetResolvedText(out var refPath))
+                {
+                    continue;
+                }
+
+                hashService.AddResourcePath(refPath);
+            }
+
+            if (value is TweakDBID tweakDbId && tweakDbId != TweakDBID.Empty)
+            {
+                if (!tweakDbId.TryGetResolvedText(out var tweakName))
+                {
+                    continue;
+                }
+
+                hashService.AddTweakName(tweakName);
+            }
+        }
     }
 
     public override void SaveAs(object parameter) => throw new NotImplementedException();
@@ -396,11 +433,24 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
     public Dictionary<ResourcePath, CR2WFile?> Files { get; set; } = new();
 
-    public CR2WFile? GetFileFromDepotPathOrCache(ResourcePath depotPath)
+    public CR2WFile? GetFileFromDepotPathOrCache(ResourcePath depotPath, bool useDynamicResolution = false)
     {
-        if (depotPath.GetResolvedText() is not string path
-            || string.IsNullOrEmpty(path)
-            || ArchiveXlHelper.GetFirstExistingPath(path) is not string existingPath)
+        if (depotPath.GetResolvedText() is not string path || string.IsNullOrEmpty(path))
+        {
+            return null;
+        }
+
+        string? existingPath;
+        if (useDynamicResolution)
+        {
+            existingPath = ArchiveXlHelper.GetFirstExistingPath(path);
+        }
+        else
+        {
+            existingPath = depotPath.GetResolvedText();
+        }
+
+        if (string.IsNullOrEmpty(existingPath))
         {
             return null;
         }
@@ -409,7 +459,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
         {
             if (!Files.ContainsKey(existingPath))
             {
-                var file = GetFileFromDepotPath(existingPath);
+                var file = GetFileFromDepotPath(existingPath, false, useDynamicResolution);
                 Files[existingPath] = file;
             }
 
@@ -461,9 +511,24 @@ public partial class RedDocumentViewModel : DocumentViewModel
         }
     }
 
-    public CR2WFile? GetFileFromDepotPath(ResourcePath depotPath, bool original = false)
+    public CR2WFile? GetFileFromDepotPath(ResourcePath depotPath, bool original = false, bool doArchiveXlCheck = false)
     {
-        if (depotPath == ResourcePath.Empty || ArchiveXlHelper.GetFirstExistingPath(depotPath.GetResolvedText()) is not string existingPath)
+        if (depotPath == ResourcePath.Empty)
+        {
+            return null;
+        }
+
+        string? existingPath;
+        if (doArchiveXlCheck)
+        {
+            existingPath = ArchiveXlHelper.GetFirstExistingPath(depotPath.GetResolvedText());
+        }
+        else
+        {
+            existingPath = depotPath.GetResolvedText();
+        }
+
+        if (null == existingPath)
         {
             return null;
         }

@@ -163,7 +163,7 @@ public partial class ProjectManager : ObservableObject, IProjectManager
 
             obj.ModName ??= obj.Name;
 
-            Cp77Project project = new(path, obj.Name, obj.ModName, _hashService)
+            Cp77Project project = new(path, obj.Name, obj.ModName)
             {
                 Author = obj.Author,
                 Email = obj.Email,
@@ -171,21 +171,10 @@ public partial class ProjectManager : ObservableObject, IProjectManager
                 Version = obj.Version,
             };
 
-            if (_hashService is HashService hashService)
+            if (_hashService is HashServiceExt hashService)
             {
-                hashService.ClearProjectHashes();
-
-                var projectHashesFile = Path.Combine(project.ProjectDirectory, "project_hashes.txt");
-                if (File.Exists(projectHashesFile))
-                {
-                    var paths = await File.ReadAllLinesAsync(projectHashesFile);
-                    foreach (var p in paths)
-                    {
-                        hashService.AddProjectPath(p);
-                    }
-                }
+                hashService.LoadProjectCache(project);
             }
-
 
             // fix legacy folders
             MoveLegacyFolder(new DirectoryInfo(Path.Combine(project.FileDirectory, "tweaks")), project);
@@ -273,13 +262,9 @@ public partial class ProjectManager : ObservableObject, IProjectManager
             XmlSerializer ser = new(typeof(CP77Mod));
             ser.Serialize(fs, new CP77Mod(ActiveProject));
 
-            if (_hashService is HashService hashService)
+            if (_hashService is HashServiceExt hashService)
             {
-                var projectHashes = hashService.GetProjectHashes();
-                if (projectHashes.Count > 0)
-                {
-                    await File.WriteAllLinesAsync(Path.Combine(ActiveProject.ProjectDirectory, "project_hashes.txt"), projectHashes);
-                }
+                hashService.SaveProjectCache(ActiveProject);
             }
 
             await fs.FlushAsync();
@@ -312,13 +297,9 @@ public partial class ProjectManager : ObservableObject, IProjectManager
             XmlSerializer ser = new(typeof(CP77Mod));
             ser.Serialize(fs, new CP77Mod(ActiveProject));
 
-            if (_hashService is HashService hashService)
+            if (_hashService is HashServiceExt hashService)
             {
-                var projectHashes = hashService.GetProjectHashes();
-                if (projectHashes.Count > 0)
-                {
-                    File.WriteAllLines(Path.Combine(ActiveProject.ProjectDirectory, "project_hashes.txt"), projectHashes);
-                }
+                hashService.SaveProjectCache(ActiveProject);
             }
 
             fs.Flush();

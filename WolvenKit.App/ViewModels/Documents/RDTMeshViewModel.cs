@@ -249,6 +249,24 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
     public bool ShiftKeyPressed { get; set; }
 
+    // We need to hold a copy of the property to avoid exceptions while filtering 
+    public List<Element3D> SelectedModelGroup
+    {
+        get => SelectedAppearance?.ModelGroup.ToList() ?? [];
+        set
+        {
+            if (SelectedAppearance is null)
+            {
+                return;
+            }
+
+            var newElems = new SmartElement3DCollection();
+            value.ForEach(v => newElems.Add(v));
+            SelectedAppearance.ModelGroup = newElems;
+            OnPropertyChanged();
+        }
+    }
+
     #endregion
 
     #region commands
@@ -579,7 +597,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             List<entIComponent> components = [];
             try
             {
-                var meshEntityFile = Parent.GetFileFromDepotPathOrCache(path);
+                var meshEntityFile = Parent.GetFileFromDepotPathOrCache(path, true);
                 if (meshEntityFile?.RootChunk is not entEntityTemplate entityTemplate)
                 {
                     continue;
@@ -724,7 +742,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
         if (component is entIPlacedComponent epc && depotPath != ResourcePath.Empty && depotPath.GetRedHash() != 0)
         {
-            var meshFile = Parent.GetFileFromDepotPathOrCache(depotPath);
+            var meshFile = Parent.GetFileFromDepotPathOrCache(depotPath, true);
 
             if (meshFile is not { RootChunk: CMesh mesh })
             {
