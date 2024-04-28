@@ -115,18 +115,19 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
     partial void OnSelectedTabItemViewModelChanged(RedDocumentTabViewModel? value)
     {
-        value?.OnSelected();
-
+        // Communicate index of selected world node across tabs
         switch (value)
         {
-            case RDTDataViewModel model when _selectedWorldNodeIndex != null &&
-                                             int.TryParse(_selectedWorldNodeIndex, out var worldNodeIndex):
+            case RDTDataViewModel model:
+                int.TryParse(_selectedWorldNodeIndex, out var worldNodeIndex);                            
                 model.AddToSelection(model.FindWorldNode(worldNodeIndex));
                 break;
-            case RDTMeshViewModel meshViewModel when _selectedWorldNodeIndex != null:
+            case RDTMeshViewModel meshViewModel:
                 meshViewModel.SelectedNodeIndex = _selectedWorldNodeIndex;
                 break;
         }
+
+        value?.OnSelected();
     }
 
     // assume files that don't exist are relative paths

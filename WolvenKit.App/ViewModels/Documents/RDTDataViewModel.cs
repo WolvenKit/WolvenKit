@@ -443,8 +443,12 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     /// </summary>
     /// <param name="selectedIndex"></param>
     /// <returns></returns>
-    public ChunkViewModel? FindWorldNode(int selectedIndex)
+    public ChunkViewModel? FindWorldNode(int? selectedIndex)
     {
+        if (selectedIndex is not int idx)
+        {
+            return null;
+        }
         var root = RootChunk;
 
         if (root is null)
@@ -467,7 +471,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         root.IsExpanded = true;
         worldNodeArray.IsExpanded = true;
 
-        return worldNodeArray?.GetChildNode(selectedIndex);
+        return worldNodeArray?.GetChildNode(idx);
     }
     
     #endregion
