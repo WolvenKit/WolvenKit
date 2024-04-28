@@ -1021,6 +1021,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             loggerArgs.Add($"Collision Actor: [{mesh.CollisionActorId}]");
         }
 
+        if (modelHit is SubmeshComponent submesh && submesh.CollisionActorId != null)
+        {
+            loggerArgs.Add($"Collision Actor: [{submesh.CollisionActorId}]");
+        }
+
         if (loggerArgs.Count == 0)
         {
             loggerArgs.Add("Mesh Name :");
@@ -2539,7 +2544,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                                 }
 
                                 //mb.ComputeNormalsAndTangents(MeshFaces.Default);
-
+                                
                                 geometry = mb.ToMeshGeometry3D();
                             }
                         }
@@ -2562,7 +2567,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                             IsRendering = true,
                             Geometry = geometry,
                             Material = colliderMaterial,
-                            IsTransparent = true
+                            IsTransparent = true,
+                            CollisionActorId = $"{k}"
                         };
 
                         var shapeMatrix = new Matrix3D();
