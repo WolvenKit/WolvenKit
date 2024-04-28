@@ -110,4 +110,8 @@ public static class NodeRefPool
     //
     //    return s_poolReverse[value];
     //}
+    public static void SetNative(Dictionary<ulong, string> dict)
+    {
+        throw new NotImplementedException();
+    }
 }

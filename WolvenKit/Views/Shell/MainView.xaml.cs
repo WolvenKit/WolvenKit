@@ -14,8 +14,6 @@ using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common.Services;
 using WolvenKit.Views.Dialogs.Windows;
-using WolvenKit.Views.Exporters;
-using WolvenKit.Views.Importers;
 
 namespace WolvenKit.Views.Shell
 {
@@ -172,9 +170,9 @@ namespace WolvenKit.Views.Shell
                 ws.ForceStopTimer();
             }
             var hashService = Locator.Current.GetService<IHashService>();
-            if (hashService is HashService hs)
+            if (hashService is HashServiceExt hashServiceExt)
             {
-                hs.SaveUserHashes();
+                hashServiceExt.SaveGlobalCache();
             }
             var cruidService = Locator.Current.GetService<CRUIDService>();
             if (cruidService is { } cs)
