@@ -148,20 +148,26 @@ namespace WolvenKit.Views.Tools
                     viewModel => viewModel.RefreshCommand,
                     view => view.RefreshButton);
 
-                this.WhenAnyValue(x => x.ViewModel.BindGrid1, x => x.ViewModel.IsFlatModeEnabled)
-                    .Subscribe((_) =>
+                void RefreshViewModel()
+                {
+                    if (ViewModel?.IsFlatModeEnabled == true)
                     {
-                        if (ViewModel?.IsFlatModeEnabled == true)
-                        {
-                            SetCurrentValue(FlatItemSourceProperty, ViewModel?.BindGrid1);
-                        }
-                        else
-                        {
-                            BeforeDataSourceUpdate();
-                            SetCurrentValue(TreeItemSourceProperty, ViewModel?.BindGrid1);
-                            AfterDataSourceUpdate();
-                        }
-                    });
+                        SetCurrentValue(FlatItemSourceProperty, ViewModel?.BindGrid1);
+                    }
+                    else
+                    {
+                        BeforeDataSourceUpdate();
+                        SetCurrentValue(TreeItemSourceProperty, ViewModel?.BindGrid1);
+                        AfterDataSourceUpdate();
+                    }
+                }
+
+                // Pulling these two apart makes sure that the view grid isn't refreshed twice
+                // (node expansion states weren't ready on second time around)
+                this.WhenAnyValue(x => x.ViewModel.BindGrid1)
+                    .Subscribe((sender) => RefreshViewModel());
+                this.WhenAnyValue(x => x.ViewModel.IsFlatModeEnabled)
+                    .Subscribe((sender) => RefreshViewModel());
             });
         }
 
@@ -187,7 +193,7 @@ namespace WolvenKit.Views.Tools
             {
                 return;
             }
-            
+
             _selectedNodeState = ((FileModel)TreeGrid.SelectedItem)?.FullName;
             _nodeExpansionState = [];
             foreach (var node in TreeGrid.View.Nodes.RootNodes)
@@ -223,6 +229,7 @@ namespace WolvenKit.Views.Tools
             {
                 return;
             }
+
 
             TreeGrid.CollapseAllNodes();
             foreach (var node in TreeGrid.View.Nodes.RootNodes)
