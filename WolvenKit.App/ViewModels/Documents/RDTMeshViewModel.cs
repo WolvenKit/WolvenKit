@@ -249,6 +249,24 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
     public bool ShiftKeyPressed { get; set; }
 
+    // We need to hold a copy of the property to avoid exceptions while filtering 
+    public List<Element3D> SelectedModelGroup
+    {
+        get => SelectedAppearance?.ModelGroup.ToList() ?? [];
+        set
+        {
+            if (SelectedAppearance is null)
+            {
+                return;
+            }
+
+            var newElems = new SmartElement3DCollection();
+            value.ForEach(v => newElems.Add(v));
+            SelectedAppearance.ModelGroup = newElems;
+            OnPropertyChanged();
+        }
+    }
+
     #endregion
 
     #region commands
