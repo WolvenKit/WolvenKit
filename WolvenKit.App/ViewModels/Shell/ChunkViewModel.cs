@@ -251,6 +251,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
+        Parent.CalculateIsDefault();
+
         if (Tab is not null)
         {
             if (Parent.Data is IRedArray arr)
@@ -312,8 +314,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
         }
 
-        Parent.CalculateDescriptor();
-
         // For materials: Update display of other entry
         if (Parent.Data is CMeshMaterialEntry meshMaterialEntry)
         {
@@ -339,11 +339,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         else if (
             Parent.Data is CResourceAsyncReference<IMaterial>
             || Data is CResourceAsyncReference<IMaterial>
+            || Data is CResourceAsyncReference<CMesh>
         )
         {
             Parent.RecalculateProperties();
             CalculateDescriptor();
+            Parent.CalculateIsDefault();
             Parent.CalculateDescriptor();
+            Parent.CalculateValue();
         }
         else if (Data is CName && Parent.Data is IRedArray &&
                  Parent.Parent is

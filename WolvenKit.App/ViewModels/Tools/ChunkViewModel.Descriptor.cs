@@ -445,6 +445,17 @@ public partial class ChunkViewModel
 
                 break;
             }
+            case entMeshComponent meshComponent
+                when meshComponent.Name.GetResolvedText() is string name && name != "":
+            {
+                if (name == "Component")
+                {
+                    IsDefault = true;
+                }
+
+                Descriptor = name;
+                return;
+            }
             case IRedBufferPointer rbp when rbp.GetValue().Data is RedPackage pkg:
                 Descriptor = $"[{pkg.Chunks.Count}]";
                 break;
