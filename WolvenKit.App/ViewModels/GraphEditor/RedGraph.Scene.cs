@@ -168,11 +168,11 @@ public partial class RedGraph
         }
         else if (node is scnRewindableSectionNode rewindableSectionNode)
         {
-            nodeWrapper = new scnRewindableSectionNodeWrapper(rewindableSectionNode);
+            nodeWrapper = new scnRewindableSectionNodeWrapper(rewindableSectionNode, sceneResource);
         }
         else if (node is scnSectionNode sectionNode)
         {
-            nodeWrapper = new scnSectionNodeWrapper(sectionNode);
+            nodeWrapper = new scnSectionNodeWrapper(sectionNode, sceneResource);
         }
         else if (node is scnStartNode startNode)
         {

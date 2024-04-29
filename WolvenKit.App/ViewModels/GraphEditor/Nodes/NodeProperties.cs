@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Xml;
 using WolvenKit.App.Extensions;
 using WolvenKit.RED4.Types;
 
@@ -34,6 +33,8 @@ internal class NodeProperties
         }
         else if (node is questJournalNodeDefinition journalNodeCasted)
         {
+            details["Manager"] = GetNameFromClass(journalNodeCasted?.Type?.Chunk);
+
             if (journalNodeCasted?.Type?.Chunk is questJournalQuestEntry_NodeType journalQuestEntryCasted)
             {
                 if (journalQuestEntryCasted?.Path?.Chunk is gameJournalPath gameJournalPath)
@@ -47,6 +48,17 @@ internal class NodeProperties
                 details["Track Quest"] = journalQuestEntryCasted?.TrackQuest == true ? "True" : "False";
                 details["Version"] = journalQuestEntryCasted?.Version.ToEnumString()!;
             }
+            if (journalNodeCasted?.Type?.Chunk is questJournalEntry_NodeType journalEntryCasted)
+            {
+                if (journalEntryCasted?.Path?.Chunk is gameJournalPath gameJournalPath)
+                {
+                    details["Path Class Name"] = gameJournalPath?.ClassName.ToString()!;
+                    details["Path File Entry Index"] = gameJournalPath?.FileEntryIndex.ToString()!;
+                    details["Path Real Path"] = gameJournalPath?.RealPath.ToString()!;
+                }
+
+                details["Send Notification"] = journalEntryCasted?.SendNotification == true ? "True" : "False";
+            }
         }
         else if (node is questUseWorkspotNodeDefinition useWorkspotNodeCasted)
         {
@@ -58,17 +70,31 @@ internal class NodeProperties
                 details["Exit Entry Id"] = useSceneWorkspotCasted?.ExitEntryId?.Id.ToString()!;
                 details["Workspot Instance Id"] = useSceneWorkspotCasted?.WorkspotInstanceId?.Id.ToString()!;
             }
+            if (useWorkspotNodeCasted?.ParamsV1?.Chunk is questUseWorkspotParamsV1 useWorkspotCasted)
+            {
+                details["Entry Id"] = useWorkspotCasted?.EntryId?.Id.ToString()!;
+                details["Exit Entry Id"] = useWorkspotCasted?.ExitEntryId?.Id.ToString()!;
+                details["Workspot Instance Id"] = useWorkspotCasted?.WorkspotNode.GetResolvedText()!;
+            }
         }
         else if (node is questSceneManagerNodeDefinition sceneManagerNodeCasted)
         {
+            details["Manager"] = GetNameFromClass(sceneManagerNodeCasted?.Type?.Chunk);
+
             if (sceneManagerNodeCasted?.Type?.Chunk is questSetTier_NodeType setTierCasted)
             {
                 details["Force Empty Hands"] = setTierCasted?.ForceEmptyHands == true ? "True" : "False";
                 details["Tier"] = setTierCasted?.Tier.ToEnumString()!;
             }
+            if (sceneManagerNodeCasted?.Type?.Chunk is questCameraClippingPlane_NodeType cameraClippingCasted)
+            {
+                details["Preset"] = cameraClippingCasted?.Preset.ToEnumString()!;
+            }
         }
         else if (node is questTimeManagerNodeDefinition timeManagerNodeCasted)
         {
+            details["Manager"] = GetNameFromClass(timeManagerNodeCasted?.Type?.Chunk);
+
             if (timeManagerNodeCasted?.Type?.Chunk is questPauseTime_NodeType pauseTimeCasted)
             {
                 details["Pause"] = pauseTimeCasted?.Pause == true ? "True" : "False";
@@ -84,9 +110,73 @@ internal class NodeProperties
         }
         else if (node is questAudioNodeDefinition audioNodeCasted)
         {
+            details["Manager"] = GetNameFromClass(audioNodeCasted?.Type?.Chunk);
+
             if (audioNodeCasted?.Type?.Chunk is questAudioMixNodeType audioMixCasted)
             {
                 details["Mix Signpost"] = audioMixCasted?.MixSignpost.ToString()!;
+            }
+            if (audioNodeCasted?.Type?.Chunk is questAudioEventNodeType audioEventCasted)
+            {
+                details["Ambient Unique Name"] = audioEventCasted?.AmbientUniqueName.ToString()!;
+
+                var dynamicParams = "";
+                if (audioEventCasted?.DynamicParams != null)
+                {
+                    foreach (var p in audioEventCasted.DynamicParams)
+                    {
+                        dynamicParams += (dynamicParams != "" ? ", " : "") + p.ToString()!;
+                    }
+                }
+                details["Dynamic Params"] = dynamicParams;
+
+                details["Emitter"] = audioEventCasted?.Emitter.ToString()!;
+                details["Event"] = audioEventCasted?.Event.Event.GetResolvedText()!;
+
+                var events = "";
+                if (audioEventCasted?.Events != null)
+                {
+                    foreach (var p in audioEventCasted.Events)
+                    {
+                        events += (events != "" ? ", " : "") + p.Event.GetResolvedText()!;
+                    }
+                }
+                details["Events"] = events;
+
+                details["Is Music"] = audioEventCasted?.IsMusic == true ? "True" : "False";
+                details["Is Player"] = audioEventCasted?.IsPlayer == true ? "True" : "False";
+
+                var musicEvents = "";
+                if (audioEventCasted?.MusicEvents != null)
+                {
+                    foreach (var p in audioEventCasted.MusicEvents)
+                    {
+                        musicEvents += (musicEvents != "" ? ", " : "") + p.Event.GetResolvedText()!;
+                    }
+                }
+                details["Music Events"] = musicEvents;
+
+                details["Object Ref"] = ParseGameEntityReference(audioEventCasted?.ObjectRef);
+
+                var paramsStr = "";
+                if (audioEventCasted?.Params != null)
+                {
+                    foreach (var p in audioEventCasted.Params)
+                    {
+                        paramsStr += (paramsStr != "" ? ", " : "") + p.Name.ToString()!;
+                    }
+                }
+                details["Params"] = paramsStr;
+
+                var switches = "";
+                if (audioEventCasted?.Switches != null)
+                {
+                    foreach (var p in audioEventCasted.Switches)
+                    {
+                        switches += (switches != "" ? ", " : "") + p.Name.ToString()!;
+                    }
+                }
+                details["Switches"] = switches;
             }
         }
         else if (node is questEventManagerNodeDefinition eventManagerNodeCasted)
@@ -99,6 +189,8 @@ internal class NodeProperties
         }
         else if (node is questEnvironmentManagerNodeDefinition envManagerNodeCasted)
         {
+            details["Manager"] = GetNameFromClass(envManagerNodeCasted?.Type?.Chunk);
+
             if (envManagerNodeCasted?.Type?.Chunk is questPlayEnv_SetWeather playEnvCasted)
             {
                 details["Blend Time"] = playEnvCasted?.BlendTime.ToString()!;
@@ -110,6 +202,8 @@ internal class NodeProperties
         }
         else if (node is questRenderFxManagerNodeDefinition renderFxManagerNodeCasted)
         {
+            details["Manager"] = GetNameFromClass(renderFxManagerNodeCasted?.Type?.Chunk);
+
             if (renderFxManagerNodeCasted?.Type?.Chunk is questSetFadeInOut_NodeType fadeInOutCasted)
             {
                 details["Duration"] = fadeInOutCasted?.Duration.ToString()!;
@@ -119,6 +213,8 @@ internal class NodeProperties
         }
         else if (node is questUIManagerNodeDefinition uiManagerNodeCasted)
         {
+            details["Manager"] = GetNameFromClass(uiManagerNodeCasted?.Type?.Chunk);
+
             if (uiManagerNodeCasted?.Type?.Chunk is questSetHUDEntryForcedVisibility_NodeType hudVisibilityCasted)
             {
                 if (hudVisibilityCasted?.HudEntryName != null)
@@ -134,6 +230,13 @@ internal class NodeProperties
                 details["Use Preset"] = hudVisibilityCasted?.UsePreset == true ? "True" : "False";
                 details["Visibility"] = hudVisibilityCasted?.Visibility.ToEnumString()!;
             }
+            if (uiManagerNodeCasted?.Type?.Chunk is questSwitchNameplate_NodeType switchNameplateCasted)
+            {
+                details["Alternative Name"] = switchNameplateCasted?.AlternativeName == true ? "True" : "False";
+                details["Enable"] = switchNameplateCasted?.Enable == true ? "True" : "False";
+                details["Is Player"] = switchNameplateCasted?.IsPlayer == true ? "True" : "False";
+                details["Puppet Ref"] = ParseGameEntityReference(switchNameplateCasted?.PuppetRef);
+            }
         }
         else if (node is questTeleportPuppetNodeDefinition teleportNodeCasted)
         {
@@ -148,6 +251,168 @@ internal class NodeProperties
             details["Player Look At Offset"] = teleportNodeCasted?.PlayerLookAt?.Chunk?.Offset.ToString()!;
             details["Player Look At Target"] = ParseGameEntityReference(teleportNodeCasted?.PlayerLookAt?.Chunk?.LookAtTarget);
         }
+        else if (node is questWorldDataManagerNodeDefinition worldDataManagerCasted)
+        {
+            details["Manager"] = GetNameFromClass(worldDataManagerCasted?.Type?.Chunk);
+
+            if (worldDataManagerCasted?.Type?.Chunk is questShowWorldNode_NodeType showWorldNodeCasted)
+            {
+                details["Component Name"] = showWorldNodeCasted?.ComponentName.ToString()!;
+                details["Is Player"] = showWorldNodeCasted?.IsPlayer == true ? "True" : "False";
+                details["Object Ref"] = showWorldNodeCasted?.ObjectRef.GetResolvedText()!;
+                details["Show"] = showWorldNodeCasted?.Show == true ? "True" : "False";
+            }
+            if (worldDataManagerCasted?.Type?.Chunk is questTogglePrefabVariant_NodeType togglePrefabNodeCasted)
+            {
+                var paramsArr = togglePrefabNodeCasted?.Params;
+                //details["Params Count"] = paramsArr?.Count.ToString()!;
+
+                if (paramsArr != null)
+                {
+                    int counter = 1;
+                    foreach (var re in paramsArr)
+                    {
+                        details["#" + counter + " Prefab Node Ref"] = re.PrefabNodeRef.GetResolvedText()!;
+
+                        var variantStates = re.VariantStates;
+                        //details["#" + counter + " Variant States Count"] = variantStates?.Count.ToString()!;
+
+                        if (variantStates != null)
+                        {
+                            int counter2 = 1;
+                            foreach (var vs in variantStates)
+                            {
+                                details["#" + counter + " Variant State #" + counter2 + " Name"] = vs.Name.ToString()!;
+                                details["#" + counter + " Variant State #" + counter2 + " Show"] = vs.Show == true ? "True" : "False";
+
+                                counter2++;
+                            }
+                        }
+
+                        counter++;
+                    }
+                }
+            }
+            if (worldDataManagerCasted?.Type?.Chunk is questPrefetchStreaming_NodeTypeV2 prefetchStreamingNodeCasted)
+            {
+                details["Force Enable"] = prefetchStreamingNodeCasted?.ForceEnable == true ? "True" : "False";
+                details["Max Distance"] = prefetchStreamingNodeCasted?.MaxDistance.ToString()!;
+                details["Prefetch Position Ref"] = prefetchStreamingNodeCasted?.PrefetchPositionRef.GetResolvedText()!;
+                details["Use Streaming Occlusion"] = prefetchStreamingNodeCasted?.UseStreamingOcclusion == true ? "True" : "False";
+            }
+        }
+        else if (node is questSpawnManagerNodeDefinition spawnManagerCasted)
+        {
+            var actions = spawnManagerCasted.Actions;
+            //details["Actions"] = actions.Count.ToString();
+
+            int counter = 1;
+            foreach (var action in actions)
+            {
+                if (action?.Type?.Chunk is questScene_NodeType spwActionNodeCasted)
+                {
+                    details["#" + counter + " Action"] = spwActionNodeCasted.Action.ToEnumString()!;
+                    details["#" + counter + " Entity Reference"] = ParseGameEntityReference(spwActionNodeCasted.EntityReference);
+                }
+                if (action?.Type?.Chunk is questCommunityTemplate_NodeType spwCommunityTemplateNodeCasted)
+                {
+                    details["#" + counter + " Action"] = spwCommunityTemplateNodeCasted.Action.ToEnumString()!;
+                    details["#" + counter + " Community Entry Name"] = spwCommunityTemplateNodeCasted.CommunityEntryName.ToString()!;
+                    details["#" + counter + " Community Entry Phase Name"] = spwCommunityTemplateNodeCasted.CommunityEntryPhaseName.ToString()!;
+                    details["#" + counter + " Spawner Reference"] = spwCommunityTemplateNodeCasted.SpawnerReference.GetResolvedText()!;
+                }
+
+                counter++;
+            }
+        }
+        else if (node is questGameManagerNodeDefinition gameManagerCasted)
+        {
+            details["Manager"] = GetNameFromClass(gameManagerCasted?.Type?.Chunk);
+
+            if (gameManagerCasted?.Type?.Chunk is questGameplayRestrictions_NodeType gameplayRestrictionsNodeCasted)
+            {
+                details["Action"] = gameplayRestrictionsNodeCasted?.Action.ToEnumString()!;
+
+                var restr = gameplayRestrictionsNodeCasted?.RestrictionIDs;
+                //details["Restrictions"] = restr?.Count.ToString()!;
+
+                if (restr != null)
+                {
+                    int counter = 1;
+                    foreach (var re in restr)
+                    {
+                        details["#" + counter] = re.GetResolvedText()!;
+
+                        counter++;
+                    }
+                }
+            }
+            if (gameManagerCasted?.Type?.Chunk is questRumble_NodeType rumbleNodeCasted)
+            {
+                details["Is Player"] = rumbleNodeCasted?.IsPlayer == true ? "True" : "False";
+                details["Object Ref"] = ParseGameEntityReference(rumbleNodeCasted?.ObjectRef);
+                details["Rumble Event"] = rumbleNodeCasted?.RumbleEvent.ToString()!;
+            }
+        }
+        else if (node is questVoicesetManagerNodeDefinition voicesetManagerCasted)
+        {
+            details["Manager"] = GetNameFromClass(voicesetManagerCasted?.Type?.Chunk);
+
+            if (voicesetManagerCasted?.Type?.Chunk is questPlayVoiceset_NodeType playVoiceSetCasted)
+            {
+                var paramsArr = playVoiceSetCasted.Params;
+                //details["Actions"] = actions.Count.ToString();
+
+                int counter = 1;
+                foreach (var param in paramsArr)
+                {
+                    details["#" + counter + " Is Player"] = param.IsPlayer == true ? "True" : "False";
+                    details["#" + counter + " Override Visual Style"] = param.OverrideVisualStyle == true ? "True" : "False";
+                    details["#" + counter + " Override Voiceover Expression"] = param.OverrideVoiceoverExpression == true ? "True" : "False";
+                    details["#" + counter + " Overriding Visual Style"] = param.OverridingVisualStyle.ToEnumString();
+                    details["#" + counter + " Overriding Voiceover Context"] = param.OverridingVoiceoverContext.ToEnumString();
+                    details["#" + counter + " Overriding Voiceover Expression"] = param.OverridingVoiceoverExpression.ToEnumString();
+                    details["#" + counter + " Play Only Grunt"] = param.PlayOnlyGrunt == true ? "True" : "False";
+                    details["#" + counter + " Puppet Ref"] = ParseGameEntityReference(param?.PuppetRef);
+                    details["#" + counter + " Use Voiceset System"] = param?.UseVoicesetSystem == true ? "True" : "False";
+                    details["#" + counter + " Voiceset Name"] = param?.VoicesetName.ToString()!;
+
+                    counter++;
+                }
+            }
+        }
+        else if (node is questInteractiveObjectManagerNodeDefinition interactiveObjectManagerCasted)
+        {
+            details["Manager"] = GetNameFromClass(interactiveObjectManagerCasted?.Type?.Chunk);
+
+            if (interactiveObjectManagerCasted?.Type?.Chunk is questDeviceManager_NodeType deviceManagerCasted)
+            {
+                var paramsArr = deviceManagerCasted.Params;
+                //details["Actions"] = actions.Count.ToString();
+
+                int counter = 1;
+                foreach (var param in paramsArr)
+                {
+                    var actionProperties = "";
+                    if (param?.Chunk?.ActionProperties != null)
+                    {
+                        foreach (var p in param.Chunk.ActionProperties)
+                        {
+                            actionProperties += (actionProperties != "" ? ", " : "") + p.Name.ToString()!;
+                        }
+                    }
+                    details["#" + counter + " Action Properties"] = actionProperties;
+
+                    details["#" + counter + " Device Action"] = param?.Chunk?.DeviceAction.ToString()!;
+                    details["#" + counter + " Device Controller Class"] = param?.Chunk?.DeviceControllerClass.ToString()!;
+                    details["#" + counter + " Entity Ref"] = ParseGameEntityReference(param?.Chunk?.EntityRef);
+                    details["#" + counter + " Object Ref"] = param?.Chunk?.ObjectRef.GetResolvedText()!;
+                    details["#" + counter + " Slot Name"] = param?.Chunk?.SlotName.ToString()!;
+
+                    counter++;
+                }
+            }
+        }
 
         return details;
     }
@@ -160,6 +425,8 @@ internal class NodeProperties
 
         if (node is questTimeCondition condTimeCasted)
         {
+            details[logicalCondIndex + "Condition subtype"] = GetNameFromClass(condTimeCasted?.Type?.Chunk);
+
             string ConditionTimeTypeName = logicalCondIndex + "Time condition";
             string ConditionTimeValTypeName = logicalCondIndex + "Time";
 
@@ -199,6 +466,8 @@ internal class NodeProperties
         }
         else if (node is questFactsDBCondition condFactCasted)
         {
+            details[logicalCondIndex + "Condition subtype"] = GetNameFromClass(condFactCasted?.Type?.Chunk);
+
             if (condFactCasted?.Type?.Chunk is questVarComparison_ConditionType nodeVarCompCondCasted)
             {
                 details[logicalCondIndex + "Fact Name"] = nodeVarCompCondCasted?.FactName!;
@@ -226,11 +495,20 @@ internal class NodeProperties
         }
         else if (node is questCharacterCondition condCharacterCasted)
         {
+            details[logicalCondIndex + "Condition subtype"] = GetNameFromClass(condCharacterCasted?.Type?.Chunk);
+
             if (condCharacterCasted?.Type?.Chunk is questCharacterBodyType_CondtionType nodeCharBodyTypeCondCasted)
             {
                 details[logicalCondIndex + "Gender"] = nodeCharBodyTypeCondCasted?.Gender.ToString()!;
                 details[logicalCondIndex + "Object Ref"] = ParseGameEntityReference(nodeCharBodyTypeCondCasted?.ObjectRef);
                 details[logicalCondIndex + "Is Player"] = nodeCharBodyTypeCondCasted?.IsPlayer == true ? "True" : "False";
+            }
+            if (condCharacterCasted?.Type?.Chunk is questCharacterSpawned_ConditionType nodeCharSpawnedCondCasted)
+            {
+                details[logicalCondIndex + "Comparison Type"] = nodeCharSpawnedCondCasted?.ComparisonParams?.Chunk?.ComparisonType.ToEnumString()!;
+                details[logicalCondIndex + "Count"] = nodeCharSpawnedCondCasted?.ComparisonParams?.Chunk?.Count.ToString()!;
+                details[logicalCondIndex + "Entire Community"] = nodeCharSpawnedCondCasted?.ComparisonParams?.Chunk?.EntireCommunity == true ? "True" : "False";
+                details[logicalCondIndex + "Object Ref"] = ParseGameEntityReference(nodeCharSpawnedCondCasted?.ObjectRef);
             }
         }
         else if (node is questTriggerCondition condTriggerCasted)
@@ -242,6 +520,8 @@ internal class NodeProperties
         }
         else if (node is questSystemCondition condSystemCasted)
         {
+            details[logicalCondIndex + "Condition subtype"] = GetNameFromClass(condSystemCasted?.Type?.Chunk);
+
             if (condSystemCasted?.Type?.Chunk is questCameraFocus_ConditionType nodeCameraFocusCondCasted)
             {
                 details[logicalCondIndex + "Angle Tolerance"] = nodeCameraFocusCondCasted?.AngleTolerance.ToString()!;
@@ -253,8 +533,48 @@ internal class NodeProperties
                 details[logicalCondIndex + "Zoomed"] = nodeCameraFocusCondCasted?.Zoomed == true ? "True" : "False";
             }
         }
+        else if (node is questDistanceCondition condDistanceCasted)
+        {
+            details[logicalCondIndex + "Condition subtype"] = GetNameFromClass(condDistanceCasted?.Type?.Chunk);
+
+            if (condDistanceCasted?.Type?.Chunk is questDistanceComparison_ConditionType nodeDistanceComparisonCondCasted)
+            {
+                details[logicalCondIndex + "Comparison Type"] = nodeDistanceComparisonCondCasted?.ComparisonType.ToEnumString()!;
+                details[logicalCondIndex + "Entity Ref - Entity Reference"] = ParseGameEntityReference(nodeDistanceComparisonCondCasted?.DistanceDefinition1?.Chunk?.EntityRef?.Chunk?.EntityReference);
+                details[logicalCondIndex + "Entity Ref - Main Player Object"] = nodeDistanceComparisonCondCasted?.DistanceDefinition1?.Chunk?.EntityRef?.Chunk?.MainPlayerObject == true ? "True" : "False";
+                details[logicalCondIndex + "Entity Ref - Ref Local Player"] = nodeDistanceComparisonCondCasted?.DistanceDefinition1?.Chunk?.EntityRef?.Chunk?.RefLocalPlayer == true ? "True" : "False";
+                details[logicalCondIndex + "Node Ref 2"] = ParseGameEntityReference(nodeDistanceComparisonCondCasted?.DistanceDefinition1?.Chunk?.NodeRef2);
+                details[logicalCondIndex + "Distance Value"] = nodeDistanceComparisonCondCasted?.DistanceDefinition2?.Chunk?.DistanceValue.ToString()!;
+            }
+        }
+        else if (node is questSceneCondition condSceneCasted)
+        {
+            details[logicalCondIndex + "Condition subtype"] = GetNameFromClass(condSceneCasted?.Type?.Chunk);
+
+            if (condSceneCasted?.Type?.Chunk is questSectionNode_ConditionType nodeSectionCondCasted)
+            {
+                details[logicalCondIndex + "Scene File"] = nodeSectionCondCasted?.SceneFile.DepotPath.GetResolvedText()!;
+                details[logicalCondIndex + "Scene Version"] = nodeSectionCondCasted?.SceneVersion.ToEnumString()!;
+                details[logicalCondIndex + "Section Name"] = nodeSectionCondCasted?.SectionName.ToString()!;
+                details[logicalCondIndex + "Cond Type"] = nodeSectionCondCasted?.Type.ToEnumString()!;
+            }
+        }
 
         return details;
+    }
+
+    public static string SetNameFromNotablePoints(CUInt32 nodeID, scnSceneResource scnSceneResource)
+    {
+        var notable = scnSceneResource
+            .NotablePoints
+            .FirstOrDefault(x => x.NodeId.Id == nodeID);
+
+        if (notable != null)
+        {
+            return " - Notable: " + notable.Name.GetResolvedText()!;
+        }
+
+        return "";
     }
 
     private static string ParseGameEntityReference(gameEntityReference? entRef)
@@ -287,6 +607,7 @@ internal class NodeProperties
             name = name.Replace("quest", "");
             name = name.Replace("_ConditionType", "");
             name = name.Replace("NodeDefinition", "");
+            name = name.Replace("_NodeType", "");
 
             //name = AddSpacesToSentence(name);
         }

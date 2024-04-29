@@ -37,7 +37,7 @@
                         <ItemsControl ItemsSource="{Binding Details}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel MaxWidth="200" Orientation="Horizontal">
+                                    <StackPanel MaxWidth="1000" Orientation="Horizontal">
                                         <TextBlock
                                             Margin="0,0,4,0"
                                             Foreground="#999999"
