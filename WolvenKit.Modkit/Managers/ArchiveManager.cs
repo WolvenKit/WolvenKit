@@ -564,25 +564,29 @@ namespace WolvenKit.RED4.CR2W.Archive
                 .Cast<FileEntry>();
 
         /// <summary>
-        /// Checks if a file with the given hash exists in the archivemanager
+        /// Checks if a file with the given hash exists in the archiveManager
         /// </summary>
         /// <param name="hash"></param>
         /// <returns></returns>
         public bool ContainsFile(ulong hash) => Lookup(hash).HasValue;
 
-        /// <summary>
-        /// Look up a hash in the ArchiveManager
-        /// </summary>
-        /// <param name="hash"></param>
-        /// <returns></returns>
-        public override Optional<IGameFile> Lookup(ulong hash)
+        /// <inheritdoc />
+        public override Optional<IGameFile> Lookup(ulong hash) => Lookup(hash, ArchiveManagerScope.Everywhere);
+
+        /// <inheritdoc />
+        public override Optional<IGameFile> Lookup(ulong hash, ArchiveManagerScope searchScope)
         {
-            return IsModBrowserActive
-                ? Optional<IGameFile>.ToOptional(
-                    (from item in ModArchives.Items where item.Files.ContainsKey(hash) select item.Files[hash])
-                .FirstOrDefault())
-                : Optional<IGameFile>.ToOptional(
-                    (from item in Archives.Items where item.Files.ContainsKey(hash) select item.Files[hash])
+            var items = searchScope switch
+            {
+                ArchiveManagerScope.Basegame => Archives.Items,
+                ArchiveManagerScope.Mods => ModArchives.Items,
+                _ => Archives.Items.Concat(ModArchives.Items)
+            };
+
+            // TODO: Show dialogue if multiple archives are containing the file
+
+            return Optional<IGameFile>.ToOptional(
+                (from item in items where item.Files.ContainsKey(hash) select item.Files[hash])
                 .FirstOrDefault());
         }
 
