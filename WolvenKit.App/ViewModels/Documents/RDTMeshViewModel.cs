@@ -1044,6 +1044,13 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             loggerArgs.Add("Mesh Name :");
         }
 
+        if (CtrlKeyPressed)
+        {
+            CenterCameraToCoord(modelHit.Geometry.BoundsSphere.Center);
+            loggerArgs.Add("Mesh Name :");
+        }
+
+
         Parent.GetLoggerService().Info(string.Join(", ", loggerArgs) + ") " + mesh.Text);
 
         OnSectorNodeSelected?.Invoke(this, mesh.WorldNodeIndex);
