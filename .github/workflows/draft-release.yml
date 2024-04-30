@@ -17,16 +17,16 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 7.x
+          dotnet-version: 8.x
 
       - name: Publish with Dotnet
         run: dotnet publish ${{env.PROJC}} -o ./publish_cli_linux -r linux-x64 -c Release --no-self-contained
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: ${{env.ARTIFACT_CLI_LIN}}
           path: ./publish_cli_linux
@@ -40,18 +40,18 @@ jobs:
       NAME: WolvenKit
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 7.x
+          dotnet-version: 8.x
        
       ##########################################
       # VERSIONS
 
       # the CLI is versioned by its assemblyversion
       - name: Get console version
-        uses: naminodarie/get-net-sdk-project-versions-action@v1
+        uses: naminodarie/get-net-sdk-project-versions-action@v2
         id: get_version_cli
         with:
           proj-path: ${{env.PROJC}}
@@ -60,7 +60,7 @@ jobs:
       # only run on dispatch, otherwise the version is taken from the tag
       - name: Get app version
         if: ${{ !startsWith(github.ref, 'refs/tags/') }}
-        uses: naminodarie/get-net-sdk-project-versions-action@v1
+        uses: naminodarie/get-net-sdk-project-versions-action@v2
         id: get_version
         with:
           proj-path: ${{env.PROJ}}
@@ -86,7 +86,7 @@ jobs:
       ##########################################
       # Download artifacts to .\download
       - name: Download artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           path: download
 
@@ -106,7 +106,7 @@ jobs:
       # RELEASE
       - name: Release tag
         if: ${{ startsWith(github.ref, 'refs/tags/') }}
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           draft: true
           generate_release_notes: true
@@ -120,7 +120,7 @@ jobs:
       # dispatch release uses the version and not the ref
       - name: Release dispatch
         if: ${{ !startsWith(github.ref, 'refs/tags/') }}
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.VERSION_APP }}
           draft: true
@@ -139,11 +139,11 @@ jobs:
 
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 7.x
+          dotnet-version: 8.x
 
       # Pack and upload nugets for Types, Modkit and CLI
       - run: dotnet pack .\WolvenKit.RED4\WolvenKit.RED4.csproj
