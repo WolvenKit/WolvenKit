@@ -17,7 +17,7 @@ jobs:
     outputs:
       should_run: ${{ steps.should_run.outputs.should_run }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: main
 
@@ -39,7 +39,7 @@ jobs:
       ##########################################
       # SETUP
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: main
 
@@ -49,9 +49,9 @@ jobs:
           echo "SHA=$commit" >> $env:GITHUB_ENV
 
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 7.x
+          dotnet-version: 8.x
 
       - name: Get Date
         run: |
@@ -61,7 +61,7 @@ jobs:
       ##########################################
       # APP
       - name: Get version
-        uses: naminodarie/get-net-sdk-project-versions-action@v1.1.2
+        uses: naminodarie/get-net-sdk-project-versions-action@v2
         id: get_version
         with:
           proj-path: ./WolvenKit/WolvenKit.csproj
@@ -98,7 +98,7 @@ jobs:
 
       - name: Get console version
         if: ${{ env.HAS_CLI_COMMITS == 'true' }}
-        uses: naminodarie/get-net-sdk-project-versions-action@v1.1.2
+        uses: naminodarie/get-net-sdk-project-versions-action@v2
         id: get_version_cli
         with:
           proj-path: ./WolvenKit.CLI/WolvenKit.CLI.csproj
@@ -140,7 +140,7 @@ jobs:
 
       - name: Release dispatch
         id: release_dispatch
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.VERSION_APP }}
           generate_release_notes: false
