@@ -849,4 +849,23 @@ public class AppScriptFunctions : ScriptFunctions
 
         return JsonSerializer.Serialize((object)cacheEntry, new JsonSerializerOptions { IncludeFields = true, WriteIndented = true });
     }
+
+    /// <summary>
+    /// Creates a new instance of the given class, and returns it converted to a JSON string
+    /// </summary>
+    /// <param name="className">Name of the class</param>
+    /// <returns></returns>
+    public virtual object? CreateInstanceAsJSON(string className)
+    {
+        if (string.IsNullOrEmpty(className) == false)
+        {
+            var data = RedTypeManager.CreateRedType(className);
+            return RedJsonSerializer.Serialize(data);
+        }
+        else
+        {
+            _loggerService.Error("className cannot be null or empty");
+            return null;
+        }
+    }
 }
