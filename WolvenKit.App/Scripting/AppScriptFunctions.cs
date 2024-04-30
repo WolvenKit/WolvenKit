@@ -700,7 +700,7 @@ public class AppScriptFunctions : ScriptFunctions
     /// <summary>
     /// Check if file exists in the project Raw folder
     /// </summary>
-    /// <param name="filepath">hash value to be checked</param>
+    /// <param name="filepath">relative filepath to be checked</param>
     /// <returns></returns>
     public virtual bool FileExistsInRaw(string filepath)
     {
