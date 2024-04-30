@@ -698,6 +698,23 @@ public class AppScriptFunctions : ScriptFunctions
     }
 
     /// <summary>
+    /// Check if file exists in the project Raw folder
+    /// </summary>
+    /// <param name="filepath">hash value to be checked</param>
+    /// <returns></returns>
+    public virtual bool FileExistsInRaw(string filepath)
+    {
+        if (_projectManager.ActiveProject is not { } proj)
+        {
+            _loggerService.Error("No project loaded");
+            throw new Exception();
+        }
+
+        var file = new FileInfo(Path.Combine(proj.RawDirectory, filepath));
+        return file.Exists;
+    }
+
+    /// <summary>
     /// Displays a message box
     /// </summary>
     /// <param name="text">A string that specifies the text to display.</param>
