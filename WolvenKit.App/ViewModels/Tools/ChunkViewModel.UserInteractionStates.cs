@@ -148,7 +148,7 @@ public partial class ChunkViewModel
         {
             typeof(CMesh), [
                 "preloadExternalMaterials", "preloadLocalMaterials", "preloadLocalMaterialInstances", "preloadLocalMaterials",
-                "inplaceResources",
+                "inplaceResources", "localMaterialInstances"
             ]
         }, // .app file
         {
