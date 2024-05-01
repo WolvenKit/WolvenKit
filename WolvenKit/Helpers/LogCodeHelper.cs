@@ -9,9 +9,12 @@ public static class LogCodeHelper
     
     static LogCodeHelper()
     {
+        s_mapping.Add(0, "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/error-codes#what-to-do-with-an-error");
+        
         // 1: Core stuff
 
         // 2: Types stuff
+        s_mapping.Add(0x2000, "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/error-codes#id-0x2000-type-not-supported-8192");
 
         // 3: modKit stuff
 
@@ -20,7 +23,6 @@ public static class LogCodeHelper
         s_mapping.Add(0x4002, "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/settings#game-executable-.exe-path");
         s_mapping.Add(0x4003, "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/usage/wolvenkit-projects");
         
-        s_mapping.Add(9999, "https://wiki.redmodding.org/cyberpunk-2077-modding/for-mod-creators/3d-modelling/mesh-sculpting-techniques");
     }
 
     public static Uri GetUrl(int id)
