@@ -346,7 +346,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             CalculateDescriptor();
             Parent.CalculateIsDefault();
             Parent.CalculateDescriptor();
-            Parent.CalculateValue();
         }
         else if (Data is CName && Parent.Data is IRedArray &&
                  Parent.Parent is
@@ -373,6 +372,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         if (Parent.IsValueExtrapolated)
         {
             Parent.CalculateValue();
+        }
+
+        if (Parent.Parent?.IsValueExtrapolated is true)
+        {
+            Parent.Parent.CalculateValue();
         }
     }
 
