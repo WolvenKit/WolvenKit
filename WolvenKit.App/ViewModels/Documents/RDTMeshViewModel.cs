@@ -1039,10 +1039,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             loggerArgs.Add($"Collision Actor: [{mesh.CollisionActorId}]");
         }
 
-        if (modelHit is SubmeshComponent submesh && submesh.CollisionActorId != null)
-        {
-            loggerArgs.Add($"Collision Actor: [{submesh.CollisionActorId}]");
-        }
 
         if (loggerArgs.Count == 0)
         {
@@ -1050,6 +1046,19 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         }
 
         Parent.GetLoggerService().Info(string.Join(", ", loggerArgs) + ") " + mesh.Text);
+        
+        if (modelHit is SubmeshComponent submesh && CtrlKeyPressed)
+        {
+           var v = submesh.Geometry.BoundingSphere.Center;
+
+            CenterCameraToCoord(new WolvenKit.RED4.Types.Vector3()
+            {
+                X = v.X,
+                Y = v.Y,
+                Z = v.Z
+            });
+        }
+            loggerArgs.Add("Mesh Name :");
 
         OnSectorNodeSelected?.Invoke(this, mesh.WorldNodeIndex);
     }

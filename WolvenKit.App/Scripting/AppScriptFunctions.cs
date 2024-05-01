@@ -21,6 +21,7 @@ using WolvenKit.Common.Conversion;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.Scripting;
 using WolvenKit.RED4.Archive;
@@ -164,7 +165,7 @@ public class AppScriptFunctions : ScriptFunctions
         catch (Exception ex)
         {
             File.Delete(diskPathInfo.FullName);
-            _loggerService.Error(ex);
+            _loggerService.Error(ex.Message);
         }
     }
 
@@ -352,8 +353,7 @@ public class AppScriptFunctions : ScriptFunctions
             {
                 if (scriptSettingsObject[name] is not IList lstValue)
                 {
-                    _loggerService.Error($"Setting \"{name}\" needs to be a array of strings");
-                    throw new NotSupportedException();
+                    throw new WolvenKitException(0x2000, $"Setting \"{name}\" needs to be a array of strings");
                 }
 
                 var lst = new List<FileEntry>();
@@ -362,8 +362,7 @@ public class AppScriptFunctions : ScriptFunctions
                 {
                     if (entry is not string entryStr)
                     {
-                        _loggerService.Error($"Setting \"{name}\" needs to be a array of strings");
-                        throw new NotSupportedException();
+                        throw new WolvenKitException(0x2000, $"Setting \"{name}\" needs to be a array of strings");
                     }
 
                     ResourcePath resourcePath;
@@ -579,7 +578,7 @@ public class AppScriptFunctions : ScriptFunctions
 
         if (_archiveManager.ProjectArchive is not FileSystemArchive projectArchive)
         {
-            throw new Exception();
+            throw new WolvenKitException(0x4003, "No project loaded");
         }
 
         foreach (var (fileHash, file) in projectArchive.Files)
@@ -706,8 +705,7 @@ public class AppScriptFunctions : ScriptFunctions
     {
         if (_projectManager.ActiveProject is not { } proj)
         {
-            _loggerService.Error("No project loaded");
-            throw new Exception();
+            throw new WolvenKitException(0x4003, "No project loaded");
         }
 
         var file = new FileInfo(Path.Combine(proj.RawDirectory, filepath));
@@ -847,14 +845,12 @@ public class AppScriptFunctions : ScriptFunctions
     {
         if (!ulong.TryParse(sectorHashStr, out var sectorHash))
         {
-            _loggerService.Error($"\"{nameof(sectorHashStr)}\" needs to be a ulong");
-            throw new Exception();
+            throw new WolvenKitException(0x2000, "No project loaded");
         }
 
         if (!ulong.TryParse(entryHashStr, out var entryHash))
         {
-            _loggerService.Error($"\"{nameof(entryHashStr)}\" needs to be a ulong");
-            throw new Exception();
+            throw new WolvenKitException(0x2000, "No project loaded");
         }
 
         var cacheEntry = _geometryCacheService.GetEntry(sectorHash, entryHash);
