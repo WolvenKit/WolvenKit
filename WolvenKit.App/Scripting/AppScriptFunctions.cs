@@ -877,8 +877,7 @@ public class AppScriptFunctions : ScriptFunctions
         }
         else
         {
-            _loggerService.Error("className cannot be null or empty");
-            return null;
+            throw new WolvenKitException(0x2000, "className cannot be null or empty");
         }
     }
 }
