@@ -137,6 +137,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2b35cb0d33084482eee3dd8d18454821"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAppScriptFunctions.html#a2b35cb0d33084482eee3dd8d18454821">FileExists</a> (ulong hash)</td></tr>
 <tr class="memdesc:a2b35cb0d33084482eee3dd8d18454821"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if file exists in either the game archives or the project  <a href="classAppScriptFunctions.html#a2b35cb0d33084482eee3dd8d18454821">More...</a><br /></td></tr>
 <tr class="separator:a2b35cb0d33084482eee3dd8d18454821"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4cc4d7ce9b671ad19c76150349016c7"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAppScriptFunctions.html#aa4cc4d7ce9b671ad19c76150349016c7">FileExistsInRaw</a> (string filepath)</td></tr>
+<tr class="memdesc:aa4cc4d7ce9b671ad19c76150349016c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if file exists in the project Raw folder  <a href="classAppScriptFunctions.html#aa4cc4d7ce9b671ad19c76150349016c7">More...</a><br /></td></tr>
+<tr class="separator:aa4cc4d7ce9b671ad19c76150349016c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2b439af762f06c0067ed8c35b5d21909"><td class="memItemLeft" align="right" valign="top">virtual WMessageBoxResult&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAppScriptFunctions.html#a2b439af762f06c0067ed8c35b5d21909">ShowMessageBox</a> (string text, string caption, WMessageBoxImage image, WMessageBoxButtons buttons)</td></tr>
 <tr class="memdesc:a2b439af762f06c0067ed8c35b5d21909"><td class="mdescLeft">&#160;</td><td class="mdescRight">Displays a message box  <a href="classAppScriptFunctions.html#a2b439af762f06c0067ed8c35b5d21909">More...</a><br /></td></tr>
 <tr class="separator:a2b439af762f06c0067ed8c35b5d21909"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -158,6 +161,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a226121a37b386cd2563745b15a8fe48f"><td class="memItemLeft" align="right" valign="top">virtual ? string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAppScriptFunctions.html#a226121a37b386cd2563745b15a8fe48f">ExportGeometryCacheEntry</a> (string sectorHashStr, string entryHashStr)</td></tr>
 <tr class="memdesc:a226121a37b386cd2563745b15a8fe48f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Exports an geometry_cache entry  <a href="classAppScriptFunctions.html#a226121a37b386cd2563745b15a8fe48f">More...</a><br /></td></tr>
 <tr class="separator:a226121a37b386cd2563745b15a8fe48f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af54d766a3b49e506ea83ecdb92e838e8"><td class="memItemLeft" align="right" valign="top">virtual ? object&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAppScriptFunctions.html#af54d766a3b49e506ea83ecdb92e838e8">CreateInstanceAsJSON</a> (string className)</td></tr>
+<tr class="memdesc:af54d766a3b49e506ea83ecdb92e838e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new instance of the given class, and returns it converted to a JSON string  <a href="classAppScriptFunctions.html#af54d766a3b49e506ea83ecdb92e838e8">More...</a><br /></td></tr>
+<tr class="separator:af54d766a3b49e506ea83ecdb92e838e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6df9f2af2ff3e8ed682278cfba52515a"><td class="memItemLeft" align="right" valign="top">virtual ? ulong&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAppScriptFunctions.html#a6df9f2af2ff3e8ed682278cfba52515a">HashString</a> (string data, string method)</td></tr>
+<tr class="memdesc:a6df9f2af2ff3e8ed682278cfba52515a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the hashcode for a given string  <a href="classAppScriptFunctions.html#a6df9f2af2ff3e8ed682278cfba52515a">More...</a><br /></td></tr>
+<tr class="separator:a6df9f2af2ff3e8ed682278cfba52515a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classScriptFunctions"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classScriptFunctions')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classScriptFunctions.html">ScriptFunctions</a></td></tr>
 <tr class="memitem:a0baf0f2c0fe2a1cad481b1ce125c25f5 inherit pub_methods_classScriptFunctions"><td class="memItemLeft" align="right" valign="top">virtual IEnumerable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classScriptFunctions.html#a0baf0f2c0fe2a1cad481b1ce125c25f5">GetArchiveFiles</a> ()</td></tr>
 <tr class="memdesc:a0baf0f2c0fe2a1cad481b1ce125c25f5 inherit pub_methods_classScriptFunctions"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a list of the files available in the game archives Note to myself: Don't use IEnumerable&lt;T&gt;  <a href="classScriptFunctions.html#a0baf0f2c0fe2a1cad481b1ce125c25f5">More...</a><br /></td></tr>
@@ -199,6 +208,41 @@ Public Member Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>TODO </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="af54d766a3b49e506ea83ecdb92e838e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af54d766a3b49e506ea83ecdb92e838e8">&#9670;&nbsp;</a></span>CreateInstanceAsJSON()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual ? object AppScriptFunctions.CreateInstanceAsJSON </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>className</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates a new instance of the given class, and returns it converted to a JSON string </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">className</td><td>Name of the class</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
 <a id="a37f8400624ce33b87184e9cfd43b5490"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a37f8400624ce33b87184e9cfd43b5490">&#9670;&nbsp;</a></span>ExportFiles()</h2>
 
@@ -456,6 +500,41 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">hash</td><td>hash value to be checked</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
+<a id="aa4cc4d7ce9b671ad19c76150349016c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4cc4d7ce9b671ad19c76150349016c7">&#9670;&nbsp;</a></span>FileExistsInRaw()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool AppScriptFunctions.FileExistsInRaw </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>filepath</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Check if file exists in the project Raw folder </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filepath</td><td>relative filepath to be checked</td></tr>
   </table>
   </dd>
 </dl>
@@ -723,6 +802,52 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">folderType</td><td>string parameter folderType = "archive" or "raw"</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
+<a id="a6df9f2af2ff3e8ed682278cfba52515a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6df9f2af2ff3e8ed682278cfba52515a">&#9670;&nbsp;</a></span>HashString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual ? ulong AppScriptFunctions.HashString </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>method</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the hashcode for a given string </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>String to be hashed</td></tr>
+    <tr><td class="paramname">method</td><td>Hash method to use. Can be "fnv1a64" or "default" (Uses the String objects built in hash function)</td></tr>
   </table>
   </dd>
 </dl>

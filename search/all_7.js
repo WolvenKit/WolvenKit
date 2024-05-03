@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['opendocument_25',['OpenDocument',['../classAppScriptFunctions.html#a24f669973d03a7451348013b94b80e2e',1,'AppScriptFunctions.OpenDocument(string path)'],['../classAppScriptFunctions.html#a5943d53f39a302111a156f2a472f7e62',1,'AppScriptFunctions.OpenDocument(IGameFile gameFile)']]]
+  ['loadfromresources_25',['LoadFromResources',['../classAppScriptFunctions.html#aa49b8e34a85ca7490386055d2a3d593d',1,'AppScriptFunctions']]],
+  ['loadgamefilefromproject_26',['LoadGameFileFromProject',['../classAppScriptFunctions.html#a80d02289d49fcddb43a6ac26c392523b',1,'AppScriptFunctions']]],
+  ['loadrawjsonfromproject_27',['LoadRawJsonFromProject',['../classAppScriptFunctions.html#a2c8c114690df9c9cbe6564ca44be0956',1,'AppScriptFunctions']]]
 ];
