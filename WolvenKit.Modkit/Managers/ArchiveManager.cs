@@ -504,6 +504,7 @@ namespace WolvenKit.RED4.CR2W.Archive
             }
 
             files.Sort(string.CompareOrdinal);
+            files.Reverse();
 
             foreach (var file in files)
             {
