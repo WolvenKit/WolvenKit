@@ -877,8 +877,31 @@ public class AppScriptFunctions : ScriptFunctions
         }
         else
         {
-            _loggerService.Error("className cannot be null or empty");
-            return null;
+            throw new WolvenKitException(0x2000, "className cannot be null or empty");
+        }
+    }
+
+    /// <summary>
+    /// Returns the hashcode for a given string
+    /// </summary>
+    /// <param name="data">String to be hashed</param>
+    /// <param name="method">Hash method to use. Can be "fnv1a64" or "default" (Uses the String objects built in hash function)</param>
+    /// <returns></returns>
+    public virtual ulong? HashString(string data, string method)
+    {
+        if (string.IsNullOrEmpty(data) == false)
+        {
+            switch (method)
+            {
+                case "fnv1a64":
+                    return FNV1A64HashAlgorithm.HashString(data);
+                default:
+                    return (ulong)data.GetHashCode();
+            }
+        }
+        else
+        {
+            throw new WolvenKitException(0x2000, "String to be hashed cannot be null or empty");
         }
     }
 }
