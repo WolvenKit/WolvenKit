@@ -443,11 +443,11 @@ namespace WolvenKit.RED4.CR2W.Archive
                         _logger.Debug($"Skipping {archiveFile} during legacy loading.");
                     }
                 }
+
+                legacyFiles.Sort(string.CompareOrdinal);
             }
 
-            legacyFiles.Sort(string.CompareOrdinal);
-            legacyFiles.Reverse();
-
+            
             // load legacy mods in "modlist.txt"
             foreach (var file in legacyModTxtFiles)
             {
