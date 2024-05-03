@@ -433,23 +433,19 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
     public Dictionary<ResourcePath, CR2WFile?> Files { get; set; } = new();
 
-    public CR2WFile? GetFileFromDepotPathOrCache(ResourcePath depotPath, bool useDynamicResolution = false)
+    public CR2WFile? GetFileFromDepotPathOrCache(ResourcePath depotPath)
     {
-        if (depotPath.GetResolvedText() is not string path || string.IsNullOrEmpty(path))
+        if (depotPath == ResourcePath.Empty)
         {
             return null;
         }
 
-        string? existingPath;
-        if (useDynamicResolution)
+        var existingPath = depotPath.GetResolvedText();
+        if (existingPath?.StartsWith('*') is true)
         {
-            existingPath = ArchiveXlHelper.GetFirstExistingPath(path);
+            existingPath = ArchiveXlHelper.GetFirstExistingPath(existingPath);
         }
-        else
-        {
-            existingPath = depotPath.GetResolvedText();
-        }
-
+        
         if (string.IsNullOrEmpty(existingPath))
         {
             return null;
@@ -459,7 +455,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
         {
             if (!Files.ContainsKey(existingPath))
             {
-                var file = GetFileFromDepotPath(existingPath, false, useDynamicResolution);
+                var file = GetFileFromDepotPath(existingPath, false);
                 Files[existingPath] = file;
             }
 
@@ -511,21 +507,17 @@ public partial class RedDocumentViewModel : DocumentViewModel
         }
     }
 
-    public CR2WFile? GetFileFromDepotPath(ResourcePath depotPath, bool original = false, bool doArchiveXlCheck = false)
+    public CR2WFile? GetFileFromDepotPath(ResourcePath depotPath, bool original = false)
     {
         if (depotPath == ResourcePath.Empty)
         {
             return null;
         }
 
-        string? existingPath;
-        if (doArchiveXlCheck)
+        var existingPath = depotPath.GetResolvedText();
+        if (existingPath?.StartsWith('*') is true)
         {
-            existingPath = ArchiveXlHelper.GetFirstExistingPath(depotPath.GetResolvedText());
-        }
-        else
-        {
-            existingPath = depotPath.GetResolvedText();
+            existingPath = ArchiveXlHelper.GetFirstExistingPath(existingPath);
         }
 
         if (null == existingPath)
@@ -545,6 +537,11 @@ public partial class RedDocumentViewModel : DocumentViewModel
                     if (!string.IsNullOrEmpty(existingPath))
                     {
                         path = Path.Combine(_projectManager.ActiveProject.ModDirectory, existingPath);
+                        // If it's not a mod file, read from game files
+                        if (!File.Exists(path))
+                        {
+                            path = Path.Combine(_projectManager.ActiveProject.FileDirectory, existingPath);
+                        }
                     }
                     else
                     {
@@ -567,7 +564,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
             if (cr2wFile == null)
             {
                 var file = _archiveManager.Lookup(depotPath.GetRedHash());
-                if (file.HasValue && file.Value is FileEntry fe)
+                if (file is { HasValue: true, Value: FileEntry fe })
                 {
                     using var stream = new MemoryStream();
                     fe.Extract(stream);
