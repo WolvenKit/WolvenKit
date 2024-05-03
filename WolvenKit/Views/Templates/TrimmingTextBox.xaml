@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:WolvenKit.Views.Templates"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     x:Name="UserControl"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -13,6 +14,7 @@
         <TextBox
             x:Name="RealTextBox"
             ScrollViewer.CanContentScroll="False"
+            helpers:TextBoxBehavior.TripleClickSelectAll="True"
             Text="{Binding ElementName=UserControl, Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             TextChanged="RealTextBox_OnTextChanged" />
         <Grid IsHitTestVisible="False">
