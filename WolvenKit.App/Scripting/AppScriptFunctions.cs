@@ -153,6 +153,8 @@ public class AppScriptFunctions : ScriptFunctions
             return;
         }
 
+
+        SuspendFileWatcher(true);
         if (!File.Exists(diskPathInfo.FullName))
         {
             Directory.CreateDirectory(diskPathInfo.Directory.FullName);
@@ -167,6 +169,8 @@ public class AppScriptFunctions : ScriptFunctions
             File.Delete(diskPathInfo.FullName);
             _loggerService.Error(ex.Message);
         }
+
+        SuspendFileWatcher(false);
     }
 
     /// <summary>
