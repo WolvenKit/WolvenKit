@@ -77,12 +77,14 @@ internal class ArchiveXlHelper
     /// </summary>
     public static string? GetFirstExistingPath(string? depotPath)
     {
-        if (depotPath is null || ProjectManager?.ActiveProject?.ModDirectory is not string pathToArchiveFolder)
+        if (depotPath is null || ProjectManager?.ActiveProject?.ModDirectory is not string pathToArchiveFolder
+                              || ProjectManager?.ActiveProject?.FileDirectory is not string pathToGameFiles)
         {
             return null;
         }
 
-        return ResolveDynamicPaths(depotPath).FirstOrDefault((f) => File.Exists(Path.Combine(pathToArchiveFolder, f)));
+        return ResolveDynamicPaths(depotPath).FirstOrDefault((f) =>
+            File.Exists(Path.Combine(pathToArchiveFolder, f)) || File.Exists(Path.Combine(pathToGameFiles, f)));
     }
 
     /// <summary>
