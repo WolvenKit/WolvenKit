@@ -536,32 +536,23 @@ namespace WolvenKit.RED4.CR2W.Archive
         #endregion
 
         /// <summary>
-        /// Get files grouped by extension in all archives
+        /// Get files grouped by extension in all archives of current search scope
         /// </summary>
         /// <returns></returns>
         public override Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles() =>
-            IsModBrowserActive
-            ? ModArchives.Items
-              .SelectMany(_ => _.Files.Values)
-              .GroupBy(_ => _.Extension)
-              .ToDictionary(_ => _.Key, _ => _.Select(x => x))
-            : Archives.Items
+            (IsModBrowserActive ? ModArchives.Items : Archives.Items)
               .SelectMany(_ => _.Files.Values)
               .GroupBy(_ => _.Extension)
               .ToDictionary(_ => _.Key, _ => _.Select(x => x));
 
         /// <summary>
-        /// Get all files in all archives
+        /// Get all files in all archives of current search scope
         /// </summary>
         /// <returns></returns>
         public override IEnumerable<FileEntry> GetFiles() =>
-            IsModBrowserActive
-            ? ModArchives.Items
-                .SelectMany(_ => _.Files.Values)
-                .Cast<FileEntry>()
-            : Archives.Items
-                .SelectMany(_ => _.Files.Values)
-                .Cast<FileEntry>();
+            (IsModBrowserActive ? ModArchives.Items : Archives.Items)
+            .SelectMany(_ => _.Files.Values)
+            .Cast<FileEntry>();
 
         /// <summary>
         /// Checks if a file with the given hash exists in the archiveManager
