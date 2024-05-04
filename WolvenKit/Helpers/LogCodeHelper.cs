@@ -22,6 +22,10 @@ public static class LogCodeHelper
         s_mapping.Add(0x4001, "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/settings#additional-mod-directory");
         s_mapping.Add(0x4002, "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/settings#game-executable-.exe-path");
         s_mapping.Add(0x4003, "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/usage/wolvenkit-projects");
+
+        // 5: everything else
+        s_mapping.Add(0x5000, "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/error-codes#id-0x5000-invalid-settings");
+        s_mapping.Add(0x5001, "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/error-codes#id-0x5001-invalid-game-file-executable");
         
     }
 
