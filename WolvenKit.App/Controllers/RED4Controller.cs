@@ -435,7 +435,7 @@ public class RED4Controller : ObservableObject, IGameController
             return true;
         }
 
-        if (_settingsManager.GetRED4GameExecutablePath() is not string launchCommand || string.IsNullOrEmpty(launchCommand))
+        if (_settingsManager.GetRED4GameLaunchCommand() is not string launchCommand || string.IsNullOrEmpty(launchCommand))
         {
             throw new WolvenKitException(0x5001, "No game executable set");
         }
