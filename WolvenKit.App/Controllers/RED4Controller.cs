@@ -430,15 +430,29 @@ public class RED4Controller : ObservableObject, IGameController
         _progressService.IsIndeterminate = false;
 
         // launch game
-        if (options.LaunchGame)
+        if (!options.LaunchGame)
+        {
+            return true;
+        }
+
+        if (_settingsManager.GetRED4GameLaunchCommand() is not string launchCommand || string.IsNullOrEmpty(launchCommand))
+        {
+            throw new WolvenKitException(0x5001, "No game executable set");
+        }
+
+        try
         {
             Process.Start(new ProcessStartInfo
             {
-                FileName = _settingsManager.GetRED4GameLaunchCommand(),
+                FileName = launchCommand,
                 Arguments = options.GameArguments ?? "",
                 ErrorDialog = true,
                 UseShellExecute = true,
             });
+        }
+        catch (Exception)
+        {
+            throw new WolvenKitException(0x5002, "Failed to launch game executable");
         }
 
         return true;
