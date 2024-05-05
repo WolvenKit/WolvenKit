@@ -1039,18 +1039,30 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             loggerArgs.Add($"Collision Actor: [{mesh.CollisionActorId}]");
         }
 
+        if (modelHit is SubmeshComponent submesh && submesh.CollisionActorId != null)
+        {
+            loggerArgs.Add($"Collision Actor: [{submesh.CollisionActorId}]");
+        }
+
         if (loggerArgs.Count == 0)
         {
             loggerArgs.Add("Mesh Name :");
         }
-
-        if (CtrlKeyPressed)
-        {
-            CenterCameraToCoord(modelHit.Geometry.BoundsSphere.Center);
-            loggerArgs.Add("Mesh Name :");
+        
+        if (ShiftKeyPressed)
+        { 
+           // do something else
         }
 
-
+        if (modelHit is SubmeshComponent submesh2 && CtrlKeyPressed)
+        {
+            
+            //
+            var v = submesh2.BoundsSphereWithTransform.Center;
+            // centre the view on the selected submesh2          
+            Camera.LookAt(new System.Windows.Media.Media3D.Point3D(v.X, v.Y, v.Z), 100);
+            loggerArgs.Add($"Mesh Bounds Centre: {v.X}, {v.Y}, {v.Z}");
+        }
         Parent.GetLoggerService().Info(string.Join(", ", loggerArgs) + ") " + mesh.Text);
 
         OnSectorNodeSelected?.Invoke(this, mesh.WorldNodeIndex);
@@ -2587,7 +2599,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                             IsRendering = true,
                             Geometry = geometry,
                             Material = colliderMaterial,
-                            IsTransparent = true
+                            IsTransparent = true,
+                            CollisionActorId = $"{k}"
                         };
 
                         var shapeMatrix = new Matrix3D();
