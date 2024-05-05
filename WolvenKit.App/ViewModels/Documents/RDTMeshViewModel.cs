@@ -3364,7 +3364,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     var appDef = (appearanceAppearanceDefinition)handle.GetValue().NotNull();
 
 
-                    if (appDef.Name != app.AppearanceName || appDef.CompiledData.Data is not RedPackage appPkg)
+                    if (appDef.Name != app.AppearanceName || appDef.CompiledData?.Data is not RedPackage appPkg)
                     {
                         continue;
                     }
