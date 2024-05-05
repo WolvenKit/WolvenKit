@@ -973,6 +973,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         Parallel.ForEach(files, file => ReplacePathInFile(file, oldPath, newPath));
 
         _watcherService.IsSuspended = false;
+        
+        _mainViewModel.ReloadChangedFiles();
     }
 
     private void ReplacePathInFile(string filePath, ResourcePath oldPath, ResourcePath newPath)
