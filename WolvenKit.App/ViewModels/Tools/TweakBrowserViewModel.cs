@@ -324,8 +324,7 @@ public partial class TweakBrowserViewModel : ToolViewModel
     }
 
     private RelayCommand? convertToYAML;
-    public ICommand ConvertToYAML => convertToYAML ??= new RelayCommand(ExecuteConvertToYAML, CanExecuteConvertToYAML);
-    public bool CanExecuteConvertToYAML() => true; //Locator.Current.GetService<IProjectManager>().IsProjectLoaded;
+    public ICommand ConvertToYAML => convertToYAML ??= new RelayCommand(ExecuteConvertToYAML, () => true);
 
     private void ExecuteConvertToYAML()
     {
@@ -371,6 +370,17 @@ public partial class TweakBrowserViewModel : ToolViewModel
             throw;
         }
         
+    }
+
+    private RelayCommand? _copyName;
+    public ICommand CopyName => _copyName ??= new RelayCommand(ExecuteCopyName, () => true);
+
+    private void ExecuteCopyName()
+    {
+        if (SelectedRecordEntry?.DisplayName is string s && s != "")
+        {
+            Clipboard.SetDataObject(s);
+        }
     }
 
     #endregion

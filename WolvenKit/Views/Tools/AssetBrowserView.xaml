@@ -144,7 +144,7 @@
                             Margin="0"
                             AllowFiltering="True"
                             AllowSorting="True"
-                            AllowTriStateSorting="False"
+                            AllowTriStateSorting="True"
                             AutoExpandMode="RootNodesExpanded"
                             AutoGenerateColumns="False"
                             BorderThickness="0"
@@ -281,13 +281,14 @@
                                     <MenuItem
                                         x:Name="AddFromArchive"
                                         Header="Add selected from archive"
-                                        Visibility="{Binding Path=DataGrid.DataContext.ProjectLoaded, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                        ItemsSource="{Binding Path=DataGrid.DataContext.AddFromArchiveItems}">
+                                        ItemsSource="{Binding Path=DataGrid.DataContext.AddFromArchiveItems}"
+                                        Visibility="{Binding Path=DataGrid.DataContext.ProjectLoaded, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                                         <MenuItem.ItemContainerStyle>
-                                            <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource {x:Type MenuItem}}">
-                                                <Setter Property="Header" Value="{Binding Path=DataContext, RelativeSource={RelativeSource Self}, Converter={StaticResource IGameArchiveToMenuItemStringConverter}}"/>
-                                                <Setter Property="Command" Value="{Binding Path=DataContext.AddFromArchiveCommand, RelativeSource={RelativeSource AncestorType={x:Type syncfusion:SfDataGrid}}}" /> <!--Mode=FindAncestor, AncestorType={x:Type MenuItem}-->
-                                                <Setter Property="CommandParameter" Value="{Binding Path=DataContext, RelativeSource={RelativeSource Self}}"/>
+                                            <Style BasedOn="{StaticResource {x:Type MenuItem}}" TargetType="{x:Type MenuItem}">
+                                                <Setter Property="Header" Value="{Binding Path=DataContext, RelativeSource={RelativeSource Self}, Converter={StaticResource IGameArchiveToMenuItemStringConverter}}" />
+                                                <Setter Property="Command" Value="{Binding Path=DataContext.AddFromArchiveCommand, RelativeSource={RelativeSource AncestorType={x:Type syncfusion:SfDataGrid}}}" /> 
+                                                <!--  Mode=FindAncestor, AncestorType={x:Type MenuItem}  -->
+                                                <Setter Property="CommandParameter" Value="{Binding Path=DataContext, RelativeSource={RelativeSource Self}}" />
                                             </Style>
                                         </MenuItem.ItemContainerStyle>
                                     </MenuItem>
@@ -348,8 +349,7 @@
                                     MappingName="IsChecked">
                                     <syncfusion:GridCheckBoxColumn.HeaderTemplate>
                                         <DataTemplate>
-                                            <CheckBox Command="layout:SFDataGridCommands.CheckAndUnCheck"
-                                                      CommandParameter="{Binding ElementName=RightFileView}" />
+                                            <CheckBox Command="layout:SFDataGridCommands.CheckAndUnCheck" CommandParameter="{Binding ElementName=RightFileView}" />
                                         </DataTemplate>
                                     </syncfusion:GridCheckBoxColumn.HeaderTemplate>
                                 </syncfusion:GridCheckBoxColumn>

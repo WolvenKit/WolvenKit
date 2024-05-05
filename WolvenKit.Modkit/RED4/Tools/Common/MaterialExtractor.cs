@@ -167,7 +167,7 @@ public class MaterialExtractor
                 }
                 else
                 {
-                    (mergedMaterial, template) = MergeMaterialChain(result.File, childMaterial);
+                    (mergedMaterial, template) = MergeMaterialChain(result.IsEmbedded ? parentFile : result.File, childMaterial);
                 }
 
                 mergedMaterial.BaseMaterial = cMaterialInstance.BaseMaterial.DepotPath.GetResolvedText()!;

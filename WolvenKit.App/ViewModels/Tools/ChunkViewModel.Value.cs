@@ -19,7 +19,7 @@ public partial class ChunkViewModel
         Value = "";
 
         // nothing to calculate
-        if (ResolvedData is RedDummy || IsDefault)
+        if (ResolvedData is RedDummy)
         {
             return;
         }
@@ -637,6 +637,7 @@ public partial class ChunkViewModel
                 {
                     Value = $"{Value} ({app})";
                 }
+
                 IsValueExtrapolated = Value != "";
                 break;
             }
@@ -647,7 +648,8 @@ public partial class ChunkViewModel
                 {
                     Value = $"{Value} ({app})";
                 }
-                IsValueExtrapolated = Value != "";
+
+                IsValueExtrapolated = true;
                 break;
             }
             case locVoiceoverLengthMap lengthMap:

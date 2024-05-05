@@ -629,13 +629,13 @@
                 <!--  Overwrite Array/Buffer With Selection  -->
                 <MenuItem
                     Command="{Binding Path=PlacementTarget.Tag.ClearAndPasteSelectionCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Clear Array/Buffer and Paste Selection"
+                    Header="Overwrite Array/Buffer With Selection"
                     IsCheckable="False"
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowOverwriteArray, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
 
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="ContentPaste" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <iconPacks:PackIconMaterial Kind="ClipboardArrowDownOutline" Style="{StaticResource ContextMenuIconStyleMaterial}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -648,7 +648,7 @@
                     Visibility="{Binding Path=PlacementTarget.Tag.IsArray, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
 
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="ContentPaste" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <iconPacks:PackIconMaterial Kind="ContentCopy" Style="{StaticResource ContextMenuIconStyleMaterial}" />
                     </MenuItem.Icon>
                 </MenuItem>
 

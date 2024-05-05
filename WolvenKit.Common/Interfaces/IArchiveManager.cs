@@ -12,6 +12,14 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common
 {
+    // Target scope for archive manager
+    public enum ArchiveManagerScope
+    {
+        Basegame,
+        Mods,
+        Everywhere
+    }
+    
     /// <summary>
     /// Top-level game bundle/archive manager
     /// </summary>
@@ -49,7 +57,21 @@ namespace WolvenKit.Common
         void LoadFromFolder(DirectoryInfo archivedir);
 
         RedFileSystemModel? LookupDirectory(string fullpath, bool expandAll = false);
+
+        /// <summary>
+        /// Checks if a file with the given hash exists in the ArchiveManager's current scope.
+        /// </summary>
+        /// <param name="hash">Unique hash of the file</param>
+        /// <returns>An optional with the matching file</returns>
         public Optional<IGameFile> Lookup(ulong hash);
+
+        /// <summary>
+        /// Checks if a file with the given hash exists in the specified search scope.
+        /// </summary>
+        /// <param name="hash">Unique hash of the file</param>
+        /// <param name="searchScope">BaseGame, Mod or Everywhere</param>
+        /// <returns>An optional with the matching file</returns>
+        public Optional<IGameFile> Lookup(ulong hash, ArchiveManagerScope searchScope);
         public IGameFile? GetGameFile(ResourcePath path, bool includeMods = true, bool includeProject = true);
         public CR2WFile? GetCR2WFile(ResourcePath path, bool includeMods = true, bool includeProject = true);
 

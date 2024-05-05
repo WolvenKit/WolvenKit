@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using WolvenKit.App.Extensions;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
@@ -16,10 +17,12 @@ public class questSpawnManagerNodeDefinitionWrapper : questSignalStoppingNodeDef
             }
         }
 
-        if (actions.Count > 0)
+        /*if (actions.Count > 0)
         {
             Details.Add("Actions", string.Join(", ", actions));
-        }
+        }*/
+
+        Details.AddRange(NodeProperties.GetPropertiesFor(questSignalStoppingNodeDefinition));
     }
 
     internal override void CreateDefaultSockets()

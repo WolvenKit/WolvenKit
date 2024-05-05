@@ -443,11 +443,11 @@ namespace WolvenKit.RED4.CR2W.Archive
                         _logger.Debug($"Skipping {archiveFile} during legacy loading.");
                     }
                 }
+
+                legacyFiles.Sort(string.CompareOrdinal);
             }
 
-            legacyFiles.Sort(string.CompareOrdinal);
-            legacyFiles.Reverse();
-
+            
             // load legacy mods in "modlist.txt"
             foreach (var file in legacyModTxtFiles)
             {
@@ -504,7 +504,6 @@ namespace WolvenKit.RED4.CR2W.Archive
             }
 
             files.Sort(string.CompareOrdinal);
-            files.Reverse();
 
             foreach (var file in files)
             {
@@ -536,53 +535,48 @@ namespace WolvenKit.RED4.CR2W.Archive
         #endregion
 
         /// <summary>
-        /// Get files grouped by extension in all archives
+        /// Get files grouped by extension in all archives of current search scope
         /// </summary>
         /// <returns></returns>
         public override Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles() =>
-            IsModBrowserActive
-            ? ModArchives.Items
-              .SelectMany(_ => _.Files.Values)
-              .GroupBy(_ => _.Extension)
-              .ToDictionary(_ => _.Key, _ => _.Select(x => x))
-            : Archives.Items
+            (IsModBrowserActive ? ModArchives.Items : Archives.Items)
               .SelectMany(_ => _.Files.Values)
               .GroupBy(_ => _.Extension)
               .ToDictionary(_ => _.Key, _ => _.Select(x => x));
 
         /// <summary>
-        /// Get all files in all archives
+        /// Get all files in all archives of current search scope
         /// </summary>
         /// <returns></returns>
         public override IEnumerable<FileEntry> GetFiles() =>
-            IsModBrowserActive
-            ? ModArchives.Items
-                .SelectMany(_ => _.Files.Values)
-                .Cast<FileEntry>()
-            : Archives.Items
-                .SelectMany(_ => _.Files.Values)
-                .Cast<FileEntry>();
+            (IsModBrowserActive ? ModArchives.Items : Archives.Items)
+            .SelectMany(_ => _.Files.Values)
+            .Cast<FileEntry>();
 
         /// <summary>
-        /// Checks if a file with the given hash exists in the archivemanager
+        /// Checks if a file with the given hash exists in the archiveManager
         /// </summary>
         /// <param name="hash"></param>
         /// <returns></returns>
         public bool ContainsFile(ulong hash) => Lookup(hash).HasValue;
 
-        /// <summary>
-        /// Look up a hash in the ArchiveManager
-        /// </summary>
-        /// <param name="hash"></param>
-        /// <returns></returns>
-        public override Optional<IGameFile> Lookup(ulong hash)
+        /// <inheritdoc />
+        public override Optional<IGameFile> Lookup(ulong hash) => Lookup(hash, ArchiveManagerScope.Everywhere);
+
+        /// <inheritdoc />
+        public override Optional<IGameFile> Lookup(ulong hash, ArchiveManagerScope searchScope)
         {
-            return IsModBrowserActive
-                ? Optional<IGameFile>.ToOptional(
-                    (from item in ModArchives.Items where item.Files.ContainsKey(hash) select item.Files[hash])
-                .FirstOrDefault())
-                : Optional<IGameFile>.ToOptional(
-                    (from item in Archives.Items where item.Files.ContainsKey(hash) select item.Files[hash])
+            var items = searchScope switch
+            {
+                ArchiveManagerScope.Basegame => Archives.Items,
+                ArchiveManagerScope.Mods => ModArchives.Items,
+                _ => Archives.Items.Concat(ModArchives.Items)
+            };
+
+            // TODO: Show dialogue if multiple archives are containing the file
+
+            return Optional<IGameFile>.ToOptional(
+                (from item in items where item.Files.ContainsKey(hash) select item.Files[hash])
                 .FirstOrDefault());
         }
 

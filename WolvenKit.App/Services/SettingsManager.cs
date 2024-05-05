@@ -303,7 +303,8 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
 
     public string GetRED4GameExecutablePath() => CP77ExecutablePath.NotNull();
 
-    public string GetRED4GameLaunchCommand() => CP77LaunchCommand ?? "";
+    // If no launch command is set, use the executable path
+    public string GetRED4GameLaunchCommand() => CP77LaunchCommand ?? CP77ExecutablePath ?? "";
 
     public string GetRED4GameLaunchOptions() => CP77LaunchOptions ?? "";
 

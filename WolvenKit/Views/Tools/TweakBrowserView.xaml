@@ -14,6 +14,7 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     xmlns:tools="clr-namespace:WolvenKit.App.ViewModels.Tools;assembly=WolvenKit.App"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     d:DataContext="{d:DesignInstance Type=tools:TweakBrowserViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -105,7 +106,16 @@
                         SelectedItem="{Binding SelectedRecordEntry, Mode=TwoWay}">
                         <ListBox.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Command="{Binding ConvertToYAML}" Header="Add TweakXL Override" />
+                                <MenuItem Command="{Binding CopyName}" Header="Copy Tweak Name" Style="{StaticResource SyncfusionMenuItemStyle}">
+                                    <MenuItem.Icon>
+                                        <iconPacks:PackIconMaterial Kind="ContentCopy" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Command="{Binding ConvertToYAML}" Header="Add TweakXL Override" Style="{StaticResource SyncfusionMenuItemStyle}">
+                                    <MenuItem.Icon>
+                                        <iconPacks:PackIconMaterial Kind="ContentSaveEdit" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
                             </ContextMenu>
                         </ListBox.ContextMenu>
                         <ListBox.ItemTemplate>

@@ -597,7 +597,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             List<entIComponent> components = [];
             try
             {
-                var meshEntityFile = Parent.GetFileFromDepotPathOrCache(path, true);
+                var meshEntityFile = Parent.GetFileFromDepotPathOrCache(path);
                 if (meshEntityFile?.RootChunk is not entEntityTemplate entityTemplate)
                 {
                     continue;
@@ -742,7 +742,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
         if (component is entIPlacedComponent epc && depotPath != ResourcePath.Empty && depotPath.GetRedHash() != 0)
         {
-            var meshFile = Parent.GetFileFromDepotPathOrCache(depotPath, true);
+            var meshFile = Parent.GetFileFromDepotPathOrCache(depotPath);
 
             if (meshFile is not { RootChunk: CMesh mesh })
             {
@@ -1089,7 +1089,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     s_cameraAnimationTime);
                 }
             }
-
         }
 
         if (loggerArgs.Count == 0)
@@ -2613,7 +2612,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                                 }
 
                                 //mb.ComputeNormalsAndTangents(MeshFaces.Default);
-
+                                
                                 geometry = mb.ToMeshGeometry3D();
                             }
                         }

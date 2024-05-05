@@ -11,6 +11,7 @@ public class SubmeshComponent : MeshGeometryModel3D
     public uint LOD { get; set; }
     public string? AppearanceName { get; set; }
     public string? CollisionActorId { get; set; }
+    
     // fix endless printlns in debug mode slowing down the IDE 
     public string WorldNodeIndex = "";
     public string WorldNodeDataIndices = "";

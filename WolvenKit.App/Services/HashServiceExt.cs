@@ -131,6 +131,11 @@ public class HashServiceExt : HashService
 
         MigrateLegacyProjectCache(project);
 
+        foreach (var p in project.ModFiles.Where(AddResourcePath))
+        {
+            ResourcePathPool.AddOrGetHash(p);
+        }
+
         var customRefsFile = Path.Combine(project.ProjectDirectory, "custom_refs.txt");
         if (File.Exists(customRefsFile))
         {
