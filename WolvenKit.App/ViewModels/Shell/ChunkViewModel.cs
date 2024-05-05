@@ -362,12 +362,19 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             Parent.Parent?.CalculateValue();
         }
-        else if (Data is WorldPosition && Parent.Data is WorldTransform)
 
+        // Recalculate parent descriptor?
+        if (Parent is null)
+        {
+            return;
+        }
+
+
+        if ((Data is CName && s_descriptorPropNames.Contains(Name))
+            || (Data is WorldPosition && Parent.Data is WorldTransform))
         {
             Parent.CalculateDescriptor();
         }
-
 
         if (Parent.IsValueExtrapolated)
         {
