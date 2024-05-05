@@ -98,15 +98,18 @@ public partial class ChunkViewModel : ObservableObject
             return Task.CompletedTask;
         }
 
-        var isLocalInstance = ResolvedData is CArray<CMaterialInstance>;
+        var isLocalInstance = Parent?.ResolvedData is meshMeshMaterialBuffer || Name == "PreloadLocalMaterials";
 
         // Add the material definition
-        var lastIndex = array.FirstOrDefault((e) => e.IsLocalInstance == isLocalInstance)?.Index ?? -1;
+        var lastIndex = array.LastOrDefault((e) => e.IsLocalInstance == isLocalInstance)?.Index ?? -1;
         array.Add(new CMeshMaterialEntry { Name = newName, IsLocalInstance = isLocalInstance, Index = (CUInt16)lastIndex + 1 });
 
         switch (ResolvedData)
         {
             case CArray<CMaterialInstance> matInstances:
+                matInstances.Add(new CMaterialInstance()); 
+                break;
+            case CArray<IMaterial> matInstances:
                 matInstances.Add(new CMaterialInstance());
                 break;
             case CArray<CResourceAsyncReference<IMaterial>> externalMaterials:
