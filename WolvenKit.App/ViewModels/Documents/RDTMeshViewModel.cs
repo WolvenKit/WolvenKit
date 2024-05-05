@@ -1039,9 +1039,57 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             loggerArgs.Add($"Collision Actor: [{mesh.CollisionActorId}]");
         }
 
-        if (modelHit is SubmeshComponent submesh && submesh.CollisionActorId != null)
+        if (modelHit is SubmeshComponent submesh)
         {
-            loggerArgs.Add($"Collision Actor: [{submesh.CollisionActorId}]");
+            if (submesh.CollisionActorId != null)
+            {
+                loggerArgs.Add($"Collision Actor: [{submesh.CollisionActorId}]");
+            }
+
+            if (CtrlKeyPressed)
+            {
+
+                //
+                var v = submesh.BoundsSphereWithTransform.Center;
+                // centre the view on the selected submesh2          
+                Camera?.LookAt(new System.Windows.Media.Media3D.Point3D(v.X, v.Y, v.Z), 100);
+                loggerArgs.Add($"Mesh Bounds Centre: {v.X}, {v.Y}, {v.Z}");
+            }
+            
+            if (ShiftKeyPressed)
+            {
+                if (Camera != null )
+                {
+                    // Zoom to the selected submesh
+                    var v = submesh.BoundsWithTransform;
+
+                    // Calculate the center of the bbox
+                    SharpDX.Vector3 bboxCenter = new SharpDX.Vector3(v.Center.X, v.Center.Y, v.Center.Z);
+
+                    // Calculate the extent of the bbox along each axis
+                    SharpDX.Vector3 bboxExtent = v.Maximum - v.Minimum;
+
+                    // Calculate the maximum extent of the bbox
+                    float maxExtent = Math.Max(bboxExtent.X, Math.Max(bboxExtent.Y, bboxExtent.Z));
+
+                    // Calculate the distance from the camera to ensure the entire bbox is visible
+                    float distance = maxExtent / (float)Math.Tan(SharpDX.MathUtil.DegreesToRadians(45.0f) / 2); // Assuming 45 degree field of view
+
+                    SharpDX.Vector3 CameraPos = new SharpDX.Vector3((float)Camera.Position.X, (float)Camera.Position.Y, (float)Camera.Position.Z);
+
+                    // Calculate the new camera position and target
+                    SharpDX.Vector3 newPosition = bboxCenter + SharpDX.Vector3.Normalize(CameraPos - bboxCenter) * distance;
+                    SharpDX.Vector3 newDirection = SharpDX.Vector3.Normalize(bboxCenter - newPosition);
+                    
+
+                    Camera?.AnimateTo(
+                    new System.Windows.Media.Media3D.Point3D(newPosition.X, newPosition.Y, newPosition.Z),
+                    new Vector3D(newDirection.X, newDirection.Y, newDirection.Z),
+                    new Vector3D(0,1,0),
+                    s_cameraAnimationTime);
+                }
+            }
+
         }
 
         if (loggerArgs.Count == 0)
@@ -1049,20 +1097,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             loggerArgs.Add("Mesh Name :");
         }
         
-        if (ShiftKeyPressed)
-        { 
-           // do something else
-        }
+        
 
-        if (modelHit is SubmeshComponent submesh2 && CtrlKeyPressed)
-        {
-            
-            //
-            var v = submesh2.BoundsSphereWithTransform.Center;
-            // centre the view on the selected submesh2          
-            Camera.LookAt(new System.Windows.Media.Media3D.Point3D(v.X, v.Y, v.Z), 100);
-            loggerArgs.Add($"Mesh Bounds Centre: {v.X}, {v.Y}, {v.Z}");
-        }
+        
         Parent.GetLoggerService().Info(string.Join(", ", loggerArgs) + ") " + mesh.Text);
 
         OnSectorNodeSelected?.Invoke(this, mesh.WorldNodeIndex);
