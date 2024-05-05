@@ -303,6 +303,10 @@ public partial class ChunkViewModel
                 Value = voiceset.CombatVoSettingsName.GetResolvedText() ?? "";
                 IsValueExtrapolated = Value != "";
                 break;
+            case entTemplateAppearance entAppearance:
+                Value = StringHelper.Stringify(entAppearance.AppearanceResource.DepotPath);
+                IsValueExtrapolated = Value != "";
+                break;
             case entSoundListenerComponent listener when
                 listener.ParentTransform?.GetValue() is entHardTransformBinding tBinding:
                 Value = StringHelper.Stringify(tBinding);
