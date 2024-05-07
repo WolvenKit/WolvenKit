@@ -53,29 +53,32 @@ public partial class RedPackageReader : Red4Reader
 
                 var propRedType = RedReflection.GetRedTypeFromCSType(prop.Type, prop.Flags);
 
+                if (propRedType != redTypeName)
+                {
+                    if (TryReadValue(varName, redTypeName, compiledPropertyData, out value))
+                    {
+                        var args = new InvalidRTTIEventArgs(fullName, propRedType, redTypeName!, value);
+                        if (!HandleParsingError(args))
+                        {
+                            throw new InvalidRTTIException(fullName, propRedType, redTypeName!);
+                        }
+
+                        SetProperty(cls, prop.RedName, args.Value);
+                        continue;
+                    }
+                }
+
+                _reader.BaseStream.Position = dataStartPos;
+
                 if (TryReadValue(varName, propRedType, compiledPropertyData, out value))
                 {
                     SetProperty(cls, prop.RedName, value);
                     continue;
                 }
 
-                _reader.BaseStream.Position = dataStartPos;
-
                 if (propRedType == redTypeName)
                 {
                     LoggerService?.Warning($"Can't read data for \"{fullName}\" (\"{propRedType}\"). Skipping");
-                    continue;
-                }
-
-                if (TryReadValue(varName, redTypeName, compiledPropertyData, out value))
-                {
-                    var args = new InvalidRTTIEventArgs(fullName, propRedType, redTypeName!, value);
-                    if (!HandleParsingError(args))
-                    {
-                        throw new InvalidRTTIException(fullName, propRedType, redTypeName!);
-                    }
-
-                    SetProperty(cls, prop.RedName, args.Value);
                     continue;
                 }
 
