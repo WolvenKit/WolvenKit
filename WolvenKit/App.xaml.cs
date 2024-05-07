@@ -17,6 +17,7 @@ using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Helpers;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.Views.Dialogs.Windows;
 
@@ -154,7 +155,7 @@ namespace WolvenKit
                     rotatingIndex++;
                 }
 
-                File.Move(file, destFileName);
+                FileHelper.SafeMove(file, destFileName);
             }
         }
 
