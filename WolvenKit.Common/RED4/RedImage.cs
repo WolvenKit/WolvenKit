@@ -392,24 +392,24 @@ public partial class RedImage : IDisposable
         }
     }
 
-    private byte[] SaveToWICMemory(Guid wicCodec)
+    private byte[] SaveToWICMemory(Guid wicCodec, int imageIndex = 0)
     {
         byte[] buffer;
         if (_metadata.Format == DXGI_FORMAT.R8G8_UNORM)
         {
             var img = InternalScratchImage.Convert(DXGI_FORMAT.R8G8B8A8_UNORM, TEX_FILTER_FLAGS.FORCE_WIC, 0.5F);
-            buffer = SaveToMemory(img.SaveToWICMemory(0, WIC_FLAGS.NONE, wicCodec));
+            buffer = SaveToMemory(img.SaveToWICMemory(imageIndex, WIC_FLAGS.NONE, wicCodec));
             img.Dispose();
         }
         else
         {
-            buffer = SaveToMemory(InternalScratchImage.SaveToWICMemory(0, WIC_FLAGS.NONE, wicCodec));
+            buffer = SaveToMemory(InternalScratchImage.SaveToWICMemory(imageIndex, WIC_FLAGS.NONE, wicCodec));
         }
 
         return buffer;
     }
 
-    public byte[] GetPreview(bool flip)
+    public byte[] GetPreview(bool flip, int imageIndex = 0)
     {
         if (TexHelper.Instance.IsCompressed(_metadata.Format))
         {
@@ -444,7 +444,7 @@ public partial class RedImage : IDisposable
                 InternalScratchImage = InternalScratchImage.FlipRotate(TEX_FR_FLAGS.FLIP_VERTICAL);
             }
 
-            return SaveToWICMemory(TexHelper.Instance.GetWICCodec(WICCodecs.PNG));
+            return SaveToWICMemory(TexHelper.Instance.GetWICCodec(WICCodecs.PNG), imageIndex);
         }
     }
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
@@ -12,7 +13,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using WolvenKit.Core.Extensions;
-using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 
@@ -20,52 +20,88 @@ namespace WolvenKit.App.ViewModels.Documents;
 
 public delegate void ChangeEventHandler(object sender, EventArgs e);
 
-public partial class RDTInkTextureAtlasViewModel : RDTTextureViewModel
+public partial class RDTInkTextureAtlasViewModel : RedDocumentTabViewModel
 {
     private readonly inkTextureAtlas _atlas;
+    private int _currentSlot = -1;
 
-    public RDTInkTextureAtlasViewModel(inkTextureAtlas atlas, CBitmapTexture xbm, RedDocumentViewModel file, ILoggerService loggerService, Red4ParserService parserService) 
-        : base(xbm, file, loggerService, parserService)
+    [ObservableProperty] private ImageSource? _image;
+
+    [ObservableProperty] private ObservableCollection<InkTextureAtlasMapperViewModel> _overlayItems = new();
+
+    [ObservableProperty] private object? _selectedItem;
+
+    public RDTInkTextureAtlasViewModel(inkTextureAtlas atlas, RedDocumentViewModel file) 
+        : base(file, "Part Mapping")
     {
         _atlas = atlas;
-        Header = "Part Mapping";
 
-        Render = RenderAtlas;
+        RenderAtlas(0);
     }
 
     public event ChangeEventHandler? ChangeEvent;
 
-    public void RenderAtlas()
+    public List<string> GetUsedSlotNames()
     {
-        if (IsRendered)
+        var result = new List<string>();
+        for (var i = 0; i < _atlas.Slots.Count; i++)
+        {
+            if (_atlas.Slots[i].Texture.DepotPath != ResourcePath.Empty)
+            {
+                result.Add($"Slot {i}");
+            }
+        }
+        return result;
+    }
+
+    public void RenderAtlas(int index)
+    {
+        if (index is < 0 or > 2)
+        {
+            throw new IndexOutOfRangeException();
+        }
+
+        foreach (var overlayItem in OverlayItems)
+        {
+            overlayItem.PropertyChanged -= OnSlotPropertyChanged;
+        }
+        OverlayItems.Clear();
+
+        _currentSlot = index;
+
+        if (_atlas.Slots[index] is not { } slot || slot.Texture.DepotPath == ResourcePath.Empty)
         {
             return;
         }
 
-        SetupImage();
-
-        if (_data is not CBitmapTexture xbm)
-        {
-            return;
-        }
-        if (Image is not BitmapSource source)
+        var texture = Parent.GetFileFromDepotPath(slot.Texture.DepotPath);
+        if (texture is not { RootChunk: CBitmapTexture xbm })
         {
             return;
         }
 
-        Width = xbm.Width;
-        Height = xbm.Height;
+        var redImage = RedImage.FromXBM(xbm);
+
+        var bitmapImage = new BitmapImage();
+        bitmapImage.BeginInit();
+        bitmapImage.StreamSource = new MemoryStream(redImage.GetPreview(true));
+        bitmapImage.EndInit();
+
+        Image = bitmapImage;
+
+        var width = (float)xbm.Width;
+        var height = (float)xbm.Height;
 
         Bitmap sourceBitmap;
         using (var outStream = new MemoryStream())
         {
             BitmapEncoder enc = new TiffBitmapEncoder();
-            enc.Frames.Add(BitmapFrame.Create(source));
+            enc.Frames.Add(BitmapFrame.Create(bitmapImage));
             enc.Save(outStream);
             sourceBitmap = new Bitmap(outStream);
         }
 
-        var destBitmap = new Bitmap((int)Math.Round(Width), (int)Math.Round(Height), System.Drawing.Imaging.PixelFormat.Format64bppArgb);
+        var destBitmap = new Bitmap((int)Math.Round(width), (int)Math.Round(height), System.Drawing.Imaging.PixelFormat.Format64bppArgb);
 
         using (var gfx = Graphics.FromImage(destBitmap))
         {
@@ -85,7 +121,7 @@ public partial class RDTInkTextureAtlasViewModel : RDTTextureViewModel
 
             attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
 
-            gfx.DrawImage(sourceBitmap, new Rectangle(0, 0, (int)Width, (int)Height), 0, 0, Width, Height, GraphicsUnit.Pixel, attributes);
+            gfx.DrawImage(sourceBitmap, new Rectangle(0, 0, (int)width, (int)height), 0, 0, width, height, GraphicsUnit.Pixel, attributes);
         }
 
         sourceBitmap.Dispose();
@@ -96,7 +132,6 @@ public partial class RDTInkTextureAtlasViewModel : RDTTextureViewModel
             Int32Rect.Empty,
             BitmapSizeOptions.FromEmptyOptions());
 
-        var slot = _atlas.Slots[0].NotNull();
         foreach (var part in slot.Parts)
         {
             var slotViewModel = new InkTextureAtlasMapperViewModel(part, xbm, slot.Texture.DepotPath.ToString().NotNull(),
@@ -106,7 +141,6 @@ public partial class RDTInkTextureAtlasViewModel : RDTTextureViewModel
         }
     }
 
-
     private void OnSlotPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (sender is not InkTextureAtlasMapperViewModel sVm || e.PropertyName != nameof(InkTextureAtlasMapperViewModel.PartName) ||
@@ -115,12 +149,12 @@ public partial class RDTInkTextureAtlasViewModel : RDTTextureViewModel
             return;
         }
 
-        var atlasSlotIdx = Array.FindIndex<inkTextureAtlasMapper>(_atlas.Slots[0].Parts.ToArray(), p => p.PartName == sVm.OriginalPartName);
+        var atlasSlotIdx = Array.FindIndex<inkTextureAtlasMapper>(_atlas.Slots[_currentSlot].Parts.ToArray(), p => p.PartName == sVm.OriginalPartName);
 
         // Change the slot name for all names
         foreach (var slot in _atlas.Slots)
         {
-            if (slot.Parts.Count > atlasSlotIdx && slot.Parts[atlasSlotIdx] is inkTextureAtlasMapper m)
+            if (slot.Parts.Count > atlasSlotIdx && slot.Parts[atlasSlotIdx] is { } m)
             {
                 m.PartName = sVm.PartName;
                 sVm.OriginalPartName = sVm.PartName;
@@ -129,12 +163,6 @@ public partial class RDTInkTextureAtlasViewModel : RDTTextureViewModel
 
         ChangeEvent?.Invoke(this, EventArgs.Empty);
     }
-
-    [ObservableProperty] private ObservableCollection<InkTextureAtlasMapperViewModel> _overlayItems = new();
-
-    [ObservableProperty] private float _width;
-
-    [ObservableProperty] private float _height;
 
     public partial class InkTextureAtlasMapperViewModel : ObservableObject
     {
@@ -231,4 +259,5 @@ image.SetTexturePart(n""{PartName}"");";
 
     }
 
+    public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.W2rcBuffer;
 }

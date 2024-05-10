@@ -19,7 +19,6 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Helpers;
-using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
@@ -302,7 +301,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
         }
         if (cls is CTextureArray texa)
         {
-            TabItemViewModels.Add(_documentTabViewmodelFactory.RDTTextureViewModel(texa, this));
+            TabItemViewModels.Add(_documentTabViewmodelFactory.RDTLayeredPreviewViewModel(texa, this));
         }
         if (cls is CMesh mesh && mesh.RenderResourceBlob != null && mesh.RenderResourceBlob.GetValue() is rendRenderTextureBlobPC)
         {
@@ -310,31 +309,17 @@ public partial class RedDocumentViewModel : DocumentViewModel
         }
         if (cls is CReflectionProbeDataResource probe && probe.TextureData.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC)
         {
-            TabItemViewModels.Add(_documentTabViewmodelFactory.RDTTextureViewModel(probe, this));
+            TabItemViewModels.Add(_documentTabViewmodelFactory.RDTLayeredPreviewViewModel(probe, this));
         }
         if (cls is Multilayer_Mask mlmask)
         {
-            // maybe it makes more sense to put these all into one tab?
-            ModTools.ConvertMultilayerMaskToDdsStreams(mlmask, out var streams);
-            for (var i = 0; i < streams.Count; i++)
-            {
-                var tab = _documentTabViewmodelFactory.RDTTextureViewModel(streams[i], this);
-                tab.Header = $"MultiLayer {i}";
-                TabItemViewModels.Add(tab);
-            }
+            TabItemViewModels.Add(_documentTabViewmodelFactory.RDTLayeredPreviewViewModel(mlmask, this));
         }
         if (cls is inkTextureAtlas atlas)
         {
-            var slot = atlas.Slots[0];
-            if (slot != null)
-            {
-                if (GetFileFromDepotPath(slot.Texture.DepotPath)?.RootChunk is CBitmapTexture tex)
-                {
-                    var tab = _documentTabViewmodelFactory.RDTInkTextureAtlasViewModel(atlas, tex, this);
-                    tab.ChangeEvent += OnPartNameChanged;
-                    TabItemViewModels.Add(tab);
-                }
-            }
+            var tab = _documentTabViewmodelFactory.RDTInkTextureAtlasViewModel(atlas, this);
+            tab.ChangeEvent += OnPartNameChanged;
+            TabItemViewModels.Add(tab);
         }
         if (cls is inkWidgetLibraryResource library)
         {

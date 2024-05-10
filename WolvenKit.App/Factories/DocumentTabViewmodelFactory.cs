@@ -1,12 +1,9 @@
-﻿using System.IO;
-using WolvenKit.App.Controllers;
+﻿using WolvenKit.App.Controllers;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common.Interfaces;
-using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 
@@ -37,11 +34,11 @@ public class DocumentTabViewmodelFactory : IDocumentTabViewmodelFactory
         _geometryCacheService = geometryCacheService;
     }
 
-    public RDTInkTextureAtlasViewModel RDTInkTextureAtlasViewModel(inkTextureAtlas atlas, CBitmapTexture xbm, RedDocumentViewModel file)
-        => new(atlas, xbm, file, _loggerService, _parserService);
-
+    public RDTInkTextureAtlasViewModel RDTInkTextureAtlasViewModel(inkTextureAtlas atlas, RedDocumentViewModel file) => new(atlas, file);
     public RDTTextureViewModel RDTTextureViewModel(RedBaseClass data, RedDocumentViewModel file) => new(data, file, _loggerService, _parserService);
-    public RDTTextureViewModel RDTTextureViewModel(Stream stream, RedDocumentViewModel file) => new(stream, file, _loggerService, _parserService);
+    public RDTLayeredPreviewViewModel RDTLayeredPreviewViewModel(Multilayer_Mask multilayerMask, RedDocumentViewModel file) => new(multilayerMask, file);
+    public RDTLayeredPreviewViewModel RDTLayeredPreviewViewModel(CTextureArray textureArray, RedDocumentViewModel file) => new(textureArray, file);
+    public RDTLayeredPreviewViewModel RDTLayeredPreviewViewModel(CReflectionProbeDataResource textureArray, RedDocumentViewModel file) => new(textureArray, file);
 
     public RDTDataViewModel RDTDataViewModel(IRedType data, RedDocumentViewModel parent, AppViewModel appViewModel, IChunkViewmodelFactory chunkViewmodelFactory) 
         => new(data, parent, appViewModel, chunkViewmodelFactory, _settingsManager, _gameController);
