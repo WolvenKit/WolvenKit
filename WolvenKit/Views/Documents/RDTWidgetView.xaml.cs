@@ -84,31 +84,24 @@ namespace WolvenKit.Views.Documents
 
                 foreach (var item in ViewModel.library.LibraryItems)
                 {
-
-                    if (item.PackageData == null || item.PackageData.Data is not RedPackage pkg)
+                    inkWidgetLibraryItemInstance itemInstance;
+                    if (item.Package.Data is CR2WWrapper { File.RootChunk: inkWidgetLibraryItemInstance inst1 })
                     {
-                        if (item.Package.Data is not RedPackage pkg2)
-                        {
-                            return;
-                        }
-
-                        pkg = pkg2;
+                        itemInstance = inst1;
+                    }
+                    else if (item.PackageData is { Data: RedPackage { Chunks.Count: > 0 } pkg } && pkg.Chunks[0] is inkWidgetLibraryItemInstance inst2)
+                    {
+                        itemInstance = inst2;
+                    }
+                    else
+                    {
+                        Locator.Current.GetService<ILoggerService>().Warning($"LibraryItem {item.Name} did not contain any data and was skipped.");
+                        continue;
                     }
 
-                    if (pkg.Chunks.Count == 0)
+                    if (itemInstance.RootWidget.GetValue() is not inkWidget root)
                     {
-                        Locator.Current.GetService<ILoggerService>().Warning(String.Format("LibraryItem {0} did not contain any packageData and was skipped.", item.Name));
-                        continue; 
-                    }
-
-                    if (pkg.Chunks[0] is not inkWidgetLibraryItemInstance inst)
-                    {
-                        return;
-                    }
-
-                    if (inst.RootWidget.GetValue() is not inkWidget root)
-                    {
-                        return;
+                        continue;
                     }
 
                     stack.Children.Add(new TextBlock()
