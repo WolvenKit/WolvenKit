@@ -26,6 +26,7 @@ using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Core.Extensions;
@@ -969,11 +970,35 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         _watcherService.IsSuspended = true;
 
+        List<string> failedFiles = [];
+
+        var oldFilePath = oldPath.GetResolvedText() ?? "INVALID_FILEPATH";
+        
         var files = Directory.GetFiles(ActiveProject.ModDirectory, "*.*", SearchOption.AllDirectories);
-        Parallel.ForEach(files, file => ReplacePathInFile(file, oldPath, newPath));
+        Parallel.ForEach(files, file =>
+        {
+            if (file.EndsWith(oldFilePath))
+            {
+                return;
+            }
+
+            try
+            {
+                ReplacePathInFile(file, oldPath, newPath);
+            }
+            catch (Exception)
+            {
+                failedFiles.Add(file.RelativePath(ActiveProject.ModDirectory));
+            }
+        });
 
         _watcherService.IsSuspended = false;
-        
+
+        if (failedFiles.Count > 0)
+        {
+            _loggerService.Error($"Failed to auto-update references in the following files:");
+            failedFiles.ForEach((path) => _loggerService.Error($"  {path}"));
+        }
         _mainViewModel.ReloadChangedFiles();
     }
 
@@ -984,14 +1009,17 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        if (oldPath == newPath)
+        if (oldPath == newPath || oldPath.GetResolvedText() is not string oldPathStr ||
+            newPath.GetResolvedText() is not string newPathStr)
         {
             return;
         }
 
         CR2WFile? cr2w;
         var wasModified = false;
+        var isDirectory = Directory.Exists(Path.Join(ActiveProject?.ModDirectory, newPathStr));
 
+        
         using (var fs = File.Open(filePath, FileMode.Open))
         using (var cr = new CR2WReader(fs))
         {
@@ -1002,13 +1030,23 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
             foreach (var result in cr2w!.FindType(typeof(IRedRef)))
             {
-                if (result.Value is not IRedRef resourceReference || resourceReference.DepotPath != oldPath)
+                if (result.Value is not IRedRef resourceReference)
                 {
                     continue;
                 }
 
+                if ((!isDirectory && resourceReference.DepotPath != oldPath) ||
+                    !(resourceReference.DepotPath.GetResolvedText() is string oldDepotPath &&
+                      oldDepotPath.StartsWith(oldPathStr)))
+                {
+                    continue;
+                }
+
+                var newDepotPath = (ResourcePath)oldDepotPath.Replace(oldPathStr, newPathStr);
+                    
                 var parentPath = string.Join('.', result.Path.Split('.')[..^1]);
-                var newValue = (IRedRef)RedTypeManager.CreateRedType(resourceReference.RedType, newPath, resourceReference.Flags);
+
+                var newValue = (IRedRef)RedTypeManager.CreateRedType(resourceReference.RedType, newDepotPath, resourceReference.Flags);
 
                 if (result.Name.Contains(':'))
                 {
@@ -1024,7 +1062,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                         throw new Exception();
                     }
 
-                    // _loggerService.Debug($"Replaced \"{result.Path}\" in \"{filePath}\"");
+                    _loggerService.Debug($"Replaced \"{result.Path}\" in \"{filePath}\"");
                     arr[index] = newValue;
                 }
                 else
@@ -1035,7 +1073,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                         throw new Exception();
                     }
 
-                    // _loggerService.Debug($"Replaced \"{result.Path}\" in \"{filePath}\"");
+                    _loggerService.Debug($"Replaced \"{result.Path}\" in \"{filePath}\"");
                     cls.SetProperty(result.Name, newValue);
                 }
 
