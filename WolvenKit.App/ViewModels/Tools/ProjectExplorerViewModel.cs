@@ -745,8 +745,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         if (ActiveProject is { })
         {
-            var oldRelPath = FileModel.GetRelativeName(filename, ActiveProject);
-            var newRelPath = FileModel.GetRelativeName(newFilename, ActiveProject);
+            var oldRelPath = GetResourcePath(filename, ActiveProject);
+            var newRelPath = GetResourcePath(newFilename, ActiveProject);
             
             ReplacePathInProject(oldRelPath, newRelPath);
         }
@@ -961,9 +961,21 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private void SetupToolDefaults() =>
         ContentId = s_toolContentId; // Define a unique contentId for this toolwindow//BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow//bi.BeginInit();//bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");//bi.EndInit();//IconSource = bi;
 
+    private ResourcePath GetResourcePath(string fullPath, Cp77Project project)
+    {
+        var relPath = Path.GetRelativePath(project.ModDirectory, fullPath);
+        if (ulong.TryParse(Path.GetFileNameWithoutExtension(relPath), out var hash))
+        {
+            return hash;
+        }
+
+        return relPath;
+    }
+
     private void ReplacePathInProject(ResourcePath oldPath, ResourcePath newPath)
     {
-        if (ActiveProject is null)
+        if (oldPath == newPath ||
+            ActiveProject is null)
         {
             return;
         }
@@ -972,12 +984,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         List<string> failedFiles = [];
 
-        var oldFilePath = oldPath.GetResolvedText() ?? "INVALID_FILEPATH";
-        
         var files = Directory.GetFiles(ActiveProject.ModDirectory, "*.*", SearchOption.AllDirectories);
         Parallel.ForEach(files, file =>
         {
-            if (file.EndsWith(oldFilePath))
+            var hash = GetResourcePath(file, ActiveProject);
+            if (hash == newPath)
             {
                 return;
             }
@@ -1004,22 +1015,31 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private void ReplacePathInFile(string filePath, ResourcePath oldPath, ResourcePath newPath)
     {
-        if (!File.Exists(filePath))
+        if (oldPath == newPath || 
+            !File.Exists(filePath))
         {
             return;
         }
 
-        if (oldPath == newPath || oldPath.GetResolvedText() is not string oldPathStr ||
-            newPath.GetResolvedText() is not string newPathStr)
-        {
-            return;
-        }
+        var oldPathStr = oldPath.GetResolvedText();
+        var newPathStr = newPath.GetResolvedText();
 
         CR2WFile? cr2w;
         var wasModified = false;
-        var isDirectory = Directory.Exists(Path.Join(ActiveProject?.ModDirectory, newPathStr));
+        var isDirectory = newPathStr != null && Directory.Exists(Path.Join(ActiveProject?.ModDirectory, newPathStr));
+        if (isDirectory)
+        {
+            // Can't replace path if either is null
+            if (oldPathStr == null || newPathStr == null)
+            {
+                return;
+            }
 
-        
+            oldPathStr += ResourcePath.DirectorySeparatorChar;
+            newPathStr += ResourcePath.DirectorySeparatorChar;
+        }
+
+
         using (var fs = File.Open(filePath, FileMode.Open))
         using (var cr = new CR2WReader(fs))
         {
@@ -1030,19 +1050,49 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
             foreach (var result in cr2w!.FindType(typeof(IRedRef)))
             {
-                if (result.Value is not IRedRef resourceReference)
+                if (result.Value is not IRedRef resourceReference || resourceReference.DepotPath == ResourcePath.Empty)
                 {
                     continue;
                 }
 
-                if ((!isDirectory && resourceReference.DepotPath != oldPath) ||
-                    !(resourceReference.DepotPath.GetResolvedText() is string oldDepotPath &&
-                      oldDepotPath.StartsWith(oldPathStr)))
-                {
-                    continue;
-                }
+                var oldDepotPathStr = resourceReference.DepotPath.GetResolvedText();
 
-                var newDepotPath = (ResourcePath)oldDepotPath.Replace(oldPathStr, newPathStr);
+                ResourcePath newDepotPath;
+                if (isDirectory)
+                {
+                    if (oldDepotPathStr == null)
+                    {
+                        continue;
+                    }
+
+                    var isArchiveXL = oldDepotPathStr.StartsWith('*');
+                    if (isArchiveXL)
+                    {
+                        oldDepotPathStr = oldDepotPathStr[1..];
+                    }
+
+                    if (!oldDepotPathStr.StartsWith(oldPathStr!))
+                    {
+                        continue;
+                    }
+
+                    var newDepotPathStr = newPathStr! + oldDepotPathStr[oldPathStr!.Length..];
+                    if (isArchiveXL)
+                    {
+                        newDepotPathStr = "*" + newDepotPathStr;
+                    }
+
+                    newDepotPath = newDepotPathStr;
+                }
+                else
+                {
+                    if (resourceReference.DepotPath != oldPath)
+                    {
+                        continue;
+                    }
+
+                    newDepotPath = newPath;
+                }
                     
                 var parentPath = string.Join('.', result.Path.Split('.')[..^1]);
 
