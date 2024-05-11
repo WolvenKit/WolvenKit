@@ -35,7 +35,7 @@ public partial class RedBaseClass
 
     public (bool, IRedType?) GetFromXPath(string[] xPath)
     {
-        IRedType? result = null;
+        IRedType? result = this;
         var currentProps = _properties;
         foreach (var part in xPath)
         {
