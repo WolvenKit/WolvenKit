@@ -7,10 +7,12 @@ namespace WolvenKit.App.Factories;
 
 public interface IDocumentTabViewmodelFactory
 {
-    public RDTInkTextureAtlasViewModel RDTInkTextureAtlasViewModel(inkTextureAtlas atlas, CBitmapTexture xbm, RedDocumentViewModel file);
+    public RDTInkTextureAtlasViewModel RDTInkTextureAtlasViewModel(inkTextureAtlas atlas, RedDocumentViewModel file);
 
     public RDTTextureViewModel RDTTextureViewModel(RedBaseClass data, RedDocumentViewModel file);
-    public RDTTextureViewModel RDTTextureViewModel(Stream stream, RedDocumentViewModel file);
+    public RDTLayeredPreviewViewModel RDTLayeredPreviewViewModel(Multilayer_Mask multilayerMask, RedDocumentViewModel file);
+    public RDTLayeredPreviewViewModel RDTLayeredPreviewViewModel(CTextureArray textureArray, RedDocumentViewModel file);
+    public RDTLayeredPreviewViewModel RDTLayeredPreviewViewModel(CReflectionProbeDataResource textureArray, RedDocumentViewModel file);
 
     public RDTDataViewModel RDTDataViewModel(IRedType data, RedDocumentViewModel parent, AppViewModel appViewModel, IChunkViewmodelFactory chunkViewmodelFactory);
     public RDTDataViewModel RDTDataViewModel(string header, IRedType data, RedDocumentViewModel file, AppViewModel appViewModel, IChunkViewmodelFactory chunkViewmodelFactory);
