@@ -477,6 +477,9 @@ public partial class ChunkViewModel
             case scnSceneGraphNode sgn:
                 Descriptor = sgn.NodeId.Id.ToString();
                 return;
+            case Multilayer_Layer layer:
+                Descriptor = StringHelper.Stringify(layer.Material.DepotPath, true);
+                break;
             case meshMeshMaterialBuffer matBuffer:
                 // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract this can be null!
                 Descriptor = $"[{matBuffer.Materials?.Count ?? 0}]";

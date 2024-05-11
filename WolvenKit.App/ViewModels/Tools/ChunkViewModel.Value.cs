@@ -299,6 +299,10 @@ public partial class ChunkViewModel
                 }
 
                 return;
+            case Multilayer_Layer layer:
+                Value = layer.ColorScale;
+                IsValueExtrapolated = true;
+                break;
             case scnVoicesetComponent voiceset:
                 Value = voiceset.CombatVoSettingsName.GetResolvedText() ?? "";
                 IsValueExtrapolated = Value != "";
