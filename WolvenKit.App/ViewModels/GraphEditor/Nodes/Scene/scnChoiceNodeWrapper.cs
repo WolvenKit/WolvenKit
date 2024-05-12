@@ -17,14 +17,16 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
     {
         _sceneResource = scnSceneResource;
 
-        var notable = _sceneResource
+        /*var notable = _sceneResource
             .NotablePoints
             .FirstOrDefault(x => x.NodeId.Id == scnSceneGraphNode.NodeId.Id);
 
         if (notable != null)
         {
             Title = $"[{UniqueId}] {notable.Name.GetResolvedText()} ({Data.GetType().Name[3..^4]})";
-        }
+        }*/
+
+        Title += NodeProperties.SetNameFromNotablePoints(scnSceneGraphNode.NodeId.Id, scnSceneResource);
     }
 
     internal override void GenerateSockets()

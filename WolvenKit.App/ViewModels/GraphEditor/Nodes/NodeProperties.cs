@@ -593,6 +593,16 @@ internal class NodeProperties
             }
             details["Output Weights"] = outputWeights;
         }
+        else if (node is questEntityManagerNodeDefinition entityManagerCasted)
+        {
+            details["Manager"] = GetNameFromClass(entityManagerCasted?.Type?.Chunk);
+
+            if (entityManagerCasted?.Type?.Chunk is questEntityManagerToggleMirrorsArea_NodeType toggleMirrorNodeCasted)
+            {
+                details["Is In Mirrors Area"] = toggleMirrorNodeCasted?.IsInMirrorsArea == true ? "True" : "False";
+                details["Object Ref"] = ParseGameEntityReference(toggleMirrorNodeCasted?.ObjectRef);
+            }
+        }
 
         return details;
     }
@@ -762,7 +772,7 @@ internal class NodeProperties
             if (journalCasted?.Type?.Chunk is questJournalEntryState_ConditionType nodeJournalEntryStateCondCasted)
             {
                 details[logicalCondIndex + "Inverted"] = nodeJournalEntryStateCondCasted?.Inverted == true ? "True" : "False";
-                details.AddRange(ParseJournalPath(nodeJournalEntryStateCondCasted?.Path?.Chunk));
+                details.AddRange(ParseJournalPath(nodeJournalEntryStateCondCasted?.Path?.Chunk, logicalCondIndex));
                 details[logicalCondIndex + "State"] = nodeJournalEntryStateCondCasted?.State.ToEnumString()!;
             }
         }
@@ -841,12 +851,12 @@ internal class NodeProperties
         return outStr;
     }
 
-    private static Dictionary<string, string> ParseJournalPath(gameJournalPath? gameJournalPath)
+    private static Dictionary<string, string> ParseJournalPath(gameJournalPath? gameJournalPath, string possiblePrefix = "")
     {
         Dictionary<string, string> details = new();
-        details["Path Class Name"] = gameJournalPath?.ClassName.ToString()!;
-        details["Path File Entry Index"] = gameJournalPath?.FileEntryIndex.ToString()!;
-        details["Path Real Path"] = gameJournalPath?.RealPath.ToString()!;
+        details[possiblePrefix + "Path Class Name"] = gameJournalPath?.ClassName.ToString()!;
+        details[possiblePrefix + "Path File Entry Index"] = gameJournalPath?.FileEntryIndex.ToString()!;
+        details[possiblePrefix + "Path Real Path"] = gameJournalPath?.RealPath.ToString()!;
         return details;
     }
 
