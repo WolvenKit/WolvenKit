@@ -14,7 +14,6 @@ using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
-using Application = System.Windows.Application;
 
 namespace WolvenKit.App.ViewModels.Documents;
 
@@ -266,6 +265,11 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
                 var y = Math.Round(part.ClippingRectInUVCoords.Top * image.Metadata.Height);
                 var width = Math.Round(part.ClippingRectInUVCoords.Right * image.Metadata.Width) - x;
                 var height = Math.Round(part.ClippingRectInUVCoords.Bottom * image.Metadata.Height) - y;
+
+                if (width == 0 || height == 0)
+                {
+                    continue;
+                }
 
                 var partImage = await Task.Run(() => ImageDecoder.CreateBitmapImage(image.Crop((int)x, (int)y, (int)width, (int)height), false));
 

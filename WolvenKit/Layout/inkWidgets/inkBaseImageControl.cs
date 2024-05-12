@@ -3,11 +3,14 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using WolvenKit.App.Helpers;
+using WolvenKit.Helpers;
 using WolvenKit.RED4.Types;
 using WolvenKit.Views.Documents;
+using Application = System.Windows.Application;
 using Rect = System.Windows.Rect;
 using SizeF = System.Windows.Size;
 
@@ -177,7 +180,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 {
                     attributes.SetWrapMode(System.Drawing.Drawing2D.WrapMode.TileFlipXY);
 
-                    if (Rect.Top != 0)
+                    DrawNineSlicedImage(gfx, destBitmap, sourceBitmap, attributes);
+
+                    /*if (Rect.Top != 0)
                     {
                         if (Rect.Left != 0)
                         {
@@ -241,7 +246,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                             OriginalImageSize.Width - Rect.Right, OriginalImageSize.Height - Rect.Bottom, Rect.Right, Rect.Bottom,
                             GraphicsUnit.Pixel, attributes);
                         }
-                    }
+                    }*/
 
                     //        gfx.DrawImage(sourceBitmap, new Rectangle(
                     //            0, 0, Rect.Left, Rect.Top),
@@ -379,6 +384,65 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
             //SetCurrentValue(OpacityMaskProperty, Mask);
         }
+
+        private void DrawNineSlicedImage(Graphics graphics, Bitmap destImage, Bitmap sourceImage, ImageAttributes attributes)
+        {
+            var destSlices = GetRectangles(destImage);
+            var sourceSlices = GetRectangles(sourceImage);
+
+            graphics.DrawImage(sourceImage, destSlices.TopLeft, sourceSlices.TopLeft, GraphicsUnit.Pixel, attributes);
+            graphics.DrawImage(sourceImage, destSlices.TopCenter, sourceSlices.TopCenter, GraphicsUnit.Pixel, attributes);
+            graphics.DrawImage(sourceImage, destSlices.TopRight, sourceSlices.TopRight, GraphicsUnit.Pixel, attributes);
+
+            graphics.DrawImage(sourceImage, destSlices.Left, sourceSlices.Left, GraphicsUnit.Pixel, attributes);
+            graphics.DrawImage(sourceImage, destSlices.Center, sourceSlices.Center, GraphicsUnit.Pixel, attributes);
+            graphics.DrawImage(sourceImage, destSlices.Right, sourceSlices.Right, GraphicsUnit.Pixel, attributes);
+
+            graphics.DrawImage(sourceImage, destSlices.BottomLeft, sourceSlices.BottomLeft, GraphicsUnit.Pixel, attributes);
+            graphics.DrawImage(sourceImage, destSlices.BottomCenter, sourceSlices.BottomCenter, GraphicsUnit.Pixel, attributes);
+            graphics.DrawImage(sourceImage, destSlices.BottomRight, sourceSlices.BottomRight, GraphicsUnit.Pixel, attributes);
+
+            SliceRectangles GetRectangles(Bitmap image)
+            {
+                int leftX = 0;
+                int centerX = Rect.Left;
+                int rightX = image.Width - Rect.Right;
+
+                int topY = 0;
+                int centerY = Rect.Top;
+                int bottomY = image.Height - Rect.Bottom;
+
+                int topHeight = Rect.Top;
+                int centerHeight = image.Height - (Rect.Top + Rect.Bottom);
+                int bottomHeight = Rect.Bottom;
+
+                int leftWidth = Rect.Left;
+                int centerWidth = image.Width - (Rect.Left + Rect.Right);
+                int rightWidth = Rect.Right;
+
+                return new SliceRectangles(
+                    new Rectangle(leftX, topY, leftWidth, topHeight), 
+                    new Rectangle(centerX, topY, centerWidth, topHeight),
+                    new Rectangle(rightX, topY, rightWidth, topHeight),
+                    new Rectangle(leftX, centerY, leftWidth, centerHeight),
+                    new Rectangle(centerX, centerY, centerWidth, centerHeight),
+                    new Rectangle(rightX, centerY, rightWidth, centerHeight),
+                    new Rectangle(leftX, bottomY, leftWidth, bottomHeight),
+                    new Rectangle(centerX, bottomY, centerWidth, bottomHeight),
+                    new Rectangle(rightX, bottomY, rightWidth, bottomHeight));
+            }
+        }
+
+        private record SliceRectangles(
+            Rectangle TopLeft,
+            Rectangle TopCenter,
+            Rectangle TopRight,
+            Rectangle Left,
+            Rectangle Center,
+            Rectangle Right,
+            Rectangle BottomLeft,
+            Rectangle BottomCenter,
+            Rectangle BottomRight);
 
         public static TileMode ToTileMode(Enums.inkBrushTileType? tile)
         {
