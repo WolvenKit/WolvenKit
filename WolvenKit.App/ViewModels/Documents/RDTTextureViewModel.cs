@@ -1,14 +1,12 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
-using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.CR2W;
@@ -39,36 +37,30 @@ public partial class RDTTextureViewModel : RedDocumentTabViewModel
         _parserService = parserService;
 
         _data = data;
-        try
+
+        switch (_data)
         {
-            _redImage = RedImage.FromRedClass(data);
+            case CBitmapTexture:
+            case CCubeTexture:
+            {
+                try
+                {
+                    _redImage = RedImage.FromRedClass(data);
+                }
+                catch (Exception)
+                {
+                    _loggerService.Error("Error while loading an image");
+                }
+                break;
+            }
+            default:
+                throw new NotSupportedException();
         }
-        catch (Exception)
-        {
-            _loggerService.Error("Error while loading an image");
-        }
-
-        Render = SetupImage;
-    }
-
-    public RDTTextureViewModel(Stream stream, RedDocumentViewModel file,
-        ILoggerService loggerService,
-        Red4ParserService parserService) : base(file, "Texture Preview")
-    {
-        _loggerService = loggerService;
-        _parserService = parserService;
-
-        var buffer = new byte[stream.Length];
-        stream.Read(buffer, 0, buffer.Length);
-
-        _redImage = RedImage.LoadFromDDSMemory(buffer);
 
         Render = SetupImage;
     }
 
     [ObservableProperty] private ImageSource? _image;
-
-    [ObservableProperty] private object? _selectedItem;
 
     [ObservableProperty] private bool _isDragging;
 
@@ -144,20 +136,7 @@ public partial class RDTTextureViewModel : RedDocumentTabViewModel
         }
     }
 
-    public void UpdateFromImage()
-    {
-        if (_data is CBitmapTexture xbm && Image is not null)
-        {
-            xbm.Width = (uint)Image.Width;
-            xbm.Height = (uint)Image.Height;
-            if (Parent.GetMainFile() is RDTDataViewModel file)
-            {
-                file.Chunks[0].Properties.Where(x => x.Name is "Width" or "Height").ToList().ForEach(x => OnPropertyChanged("Data"));
-            }
-        }
-    }
-
-    private bool CanReplaceTexture() => !Parent.IsReadOnly;
+    private bool CanReplaceTexture() => !Parent.IsReadOnly && _data is CBitmapTexture;
 
     [RelayCommand(CanExecute = nameof(CanReplaceTexture))]
     private async Task ReplaceTexture()
@@ -298,7 +277,4 @@ public partial class RDTTextureViewModel : RedDocumentTabViewModel
     }
 
     public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.W2rcBuffer;
-
-
-
 }

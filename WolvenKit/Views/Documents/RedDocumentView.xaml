@@ -26,8 +26,16 @@
                 <docV:RDTDataView ViewModel="{Binding}" />
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type docVM:RDTInkTextureAtlasViewModel}">
+                <docV:RDTInkAtlasView DataContext="{Binding}" />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type docVM:RDTLayeredPreviewViewModel}">
+                <docV:RDTLayeredTextureView DataContext="{Binding}" />
+            </DataTemplate>
+
             <DataTemplate DataType="{x:Type docVM:RDTTextureViewModel}">
-                <docV:RDTTextureView ViewModel="{Binding}" />
+                <docV:RDTTextureView DataContext="{Binding}" />
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type docVM:RDTTextViewModel}">
@@ -68,7 +76,7 @@
             TabPanelBackground="#313131"
             Tag="{Binding}">
 
-            
+
             <syncfusion:TabControlExt.NewTabButtonTemplate>
                 <DataTemplate>
                     <Button
@@ -89,18 +97,18 @@
                     </Button>
                 </DataTemplate>
             </syncfusion:TabControlExt.NewTabButtonTemplate>
-            
-            
-            
+
+
+
             <syncfusion:TabControlExt.ItemTemplate>
                 <DataTemplate>
                     <Grid Margin="-5" Tag="{Binding}">
-                        
+
                         <TextBlock
                             Padding="5"
+                            Mouse.MouseDown="OnToggleNoobFilter"
                             Text="{Binding Header}"
-                            ToolTip="{Binding FilePath}"
-                            Mouse.MouseDown="OnToggleNoobFilter" />
+                            ToolTip="{Binding FilePath}" />
 
                         <Grid.ContextMenu>
                             <ContextMenu DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}">
@@ -139,7 +147,7 @@
                                 </MenuItem>
                             </ContextMenu>
                         </Grid.ContextMenu>
-                        
+
                     </Grid>
                 </DataTemplate>
             </syncfusion:TabControlExt.ItemTemplate>
