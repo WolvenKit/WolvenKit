@@ -52,12 +52,33 @@ public class MaterialExtractor
             TexturesList = _textureList
         };
 
-        var materialDict = new Dictionary<string, string>();
+        // collect dynamic chunks - unique material names
+        var dynamicChunks = cMesh.Appearances
+            .Select(app => app.GetValue())
+            .OfType<meshMeshAppearance>()
+            .SelectMany(cMeshAppearance => cMeshAppearance.ChunkMaterials)
+            .Where(chunkMaterial => (chunkMaterial.GetResolvedText() ?? "").Contains('@'))
+            .ToHashSet();
 
+        var materialDict = new Dictionary<string, string>();
+        var materialInstanceList = new Dictionary<string, bool>();
+
+        if (cMesh.ExternalMaterials.Count > 0 && cMesh.PreloadExternalMaterials.Count > 0)
+        {
+            _loggerService.Warning(
+                "You're using both ExternalMaterials and PreloadExternalMaterials in the same mesh. This is not supported.");
+        }
+
+        var externalMaterials = cMesh.ExternalMaterials.ToList();
+        var preloadExternalMaterials = cMesh.PreloadExternalMaterials.ToList();
+        var preloadLocalMaterials = cMesh.PreloadLocalMaterialInstances.ToList();
+        var localMaterials = (cMesh.LocalMaterialBuffer.Materials ?? []).ToList();
+
+        // Collect material entries. Consider ArchiveXL dynamic materials.
         foreach (var materialEntry in cMesh.MaterialEntries)
         {
-            var indexName = materialEntry.IsLocalInstance ? $"l_{materialEntry.Index}" : $"e_{materialEntry.Index}";
             var materialName = materialEntry.Name.GetResolvedText()!;
+            var indexName = materialEntry.IsLocalInstance ? $"l_{materialEntry.Index}" : $"e_{materialEntry.Index}";
 
             if (materialDict.TryGetValue(indexName, out var oldValue))
             {
@@ -68,29 +89,132 @@ public class MaterialExtractor
                 
                 continue;
             }
-            
-            materialDict.Add(indexName, materialName);
+
+            // Normal materials
+            if (!materialName.Contains('@'))
+            {
+                materialInstanceList[materialName] = materialEntry.IsLocalInstance;
+                continue;
+            }
+
+            /*
+             * dynamic materials. Jesus fuck.
+             */
+
+            var materialIndex = -1;
+
+            // Remove the original, and create a copy for every placeholder material
+            var localMaterial = cMesh.LocalMaterialBuffer.Materials!.ToList().ElementAtOrDefault(materialEntry.Index);
+            var preloadLocalMaterial = cMesh.PreloadLocalMaterialInstances.ToList().ElementAtOrDefault(materialEntry.Index);
+
+            CResourceAsyncReference<IMaterial>? externalMaterial = cMesh.ExternalMaterials.ElementAtOrDefault(materialEntry.Index);
+            CResourceReference<IMaterial>? preloadExternalMaterial = cMesh.PreloadExternalMaterials.ElementAtOrDefault(materialEntry.Index);
+
+            if (materialEntry.IsLocalInstance && localMaterial is not null && localMaterials.IndexOf(localMaterial) is var idx and >= 0)
+            {
+                materialIndex = idx;
+            }
+            else if (materialEntry.IsLocalInstance && preloadLocalMaterial is not null &&
+                     preloadLocalMaterials.IndexOf(preloadLocalMaterial) is var preIdx and >= 0)
+            {
+                materialIndex = preIdx;
+            }
+            else if (!materialEntry.IsLocalInstance && externalMaterial is { } external &&
+                     externalMaterials.IndexOf(external) is var extIdx and >= 0)
+            {
+                materialIndex = extIdx;
+            }
+            else if (!materialEntry.IsLocalInstance && preloadExternalMaterial is { } pExternal &&
+                     preloadExternalMaterials.IndexOf(pExternal) is var pExtIdx and >= 0)
+            {
+                materialIndex = pExtIdx;
+            }
+
+            if (materialIndex < 0)
+            {
+                throw new Exception("hi");
+            }
+
+            if (materialEntry.IsLocalInstance)
+            {
+                if (preloadLocalMaterials.Count > materialIndex)
+                {
+                    preloadLocalMaterials.RemoveAt(materialIndex);
+                }
+                else if (localMaterials.Count > materialIndex)
+                {
+                    localMaterials.RemoveAt(materialIndex);
+                }
+            }
+            else
+            {
+                if (preloadExternalMaterials.Count > materialIndex)
+                {
+                    preloadExternalMaterials.RemoveAt(materialIndex);
+                }
+                else if (externalMaterials.Count > materialIndex)
+                {
+                    externalMaterials.RemoveAt(materialIndex);
+                }
+            }
+
+            // dynamic materials
+            foreach (var dynamicMaterialName in dynamicChunks
+                         .Where(name => name.GetResolvedText()?.EndsWith(materialName) == true)
+                         .Select(dynamicName => dynamicName!.GetResolvedText()!))
+            {
+                materialInstanceList[dynamicMaterialName] = materialEntry.IsLocalInstance;
+                if (materialEntry.IsLocalInstance)
+                {
+                    if (localMaterial is not null)
+                    {
+                        localMaterials.Insert(materialIndex, (IMaterial)localMaterial.DeepCopy());
+                    }
+
+                    if (preloadLocalMaterial is not null)
+                    {
+                        preloadLocalMaterials.Insert(materialIndex, (CHandle<IMaterial>)preloadLocalMaterial.DeepCopy());
+                    }
+                }
+                else
+                {
+                    if (externalMaterial is { } notNull)
+                    {
+                        externalMaterials.Insert(materialIndex, notNull);
+                    }
+
+                    if (preloadExternalMaterial is { } preloadNotNull)
+                    {
+                        preloadExternalMaterials.Insert(materialIndex, preloadNotNull!);
+                    }
+                }
+            }
         }
 
-        for (var i = 0; i < cMesh.ExternalMaterials.Count; i++)
+        // Now, put them into the correct list
+        foreach (var (kvp, index) in materialInstanceList.Select((kvp, index) => (Value: kvp, Index: index)))
         {
-            TryFindMaterial(mainFile, cMesh.ExternalMaterials[i], out var result);
+            var indexName = kvp.Value ? $"l_{index}" : $"e_{index}";
+            materialDict[indexName] = kvp.Key;
+        }
 
-            var (mergedMaterial, template) = MergeMaterialChain(result.IsEmbedded ? mainFile : result.File!, (IMaterial)result.File!.RootChunk);
+        for (var i = 0; i < externalMaterials.Count; i++)
+        {
+            TryFindMaterial(mainFile, externalMaterials[i], out var result);
 
-            mergedMaterial.Name = materialDict[$"e_{i}"];
+            var (mergedMaterial, template) =
+                MergeMaterialChain(result.IsEmbedded ? mainFile : result.File!, (IMaterial)result.File!.RootChunk, materialDict[$"e_{i}"]);
 
             materialData.Materials.Add(mergedMaterial);
             materialData.MaterialTemplates.Add(template);
         }
 
-        for (var i = 0; i < cMesh.PreloadExternalMaterials.Count; i++)
+        for (var i = 0; i < preloadExternalMaterials.Count; i++)
         {
-            TryFindMaterial(mainFile, cMesh.PreloadExternalMaterials[i], out var result);
+            TryFindMaterial(mainFile, preloadExternalMaterials[i], out var result);
 
-            var (mergedMaterial, template) = MergeMaterialChain(result.IsEmbedded ? mainFile : result.File!, (IMaterial)result.File!.RootChunk);
-
-            mergedMaterial.Name = materialDict[$"e_{i}"];
+            var (mergedMaterial, template) =
+                MergeMaterialChain(result.IsEmbedded ? mainFile : result.File!, (IMaterial)result.File!.RootChunk, materialDict[$"e_{i}"]);
 
             materialData.Materials.Add(mergedMaterial);
             materialData.MaterialTemplates.Add(template);
@@ -98,32 +222,27 @@ public class MaterialExtractor
 
         if (cMesh.LocalMaterialBuffer is { Materials: not null })
         {
-            for (var i = 0; i < cMesh.LocalMaterialBuffer.Materials.Count; i++)
+            for (var i = 0; i < localMaterials.Count; i++)
             {
-                var (mergedMaterial, template) = MergeMaterialChain(mainFile, cMesh.LocalMaterialBuffer.Materials[i]);
-
-                mergedMaterial.Name = materialDict[$"l_{i}"];
+                var (mergedMaterial, template) = MergeMaterialChain(mainFile, localMaterials[i], materialDict[$"l_{i}"]);
 
                 materialData.Materials.Add(mergedMaterial);
                 materialData.MaterialTemplates.Add(template);
             }
         }
 
+        // TODO: Is this ever used?
         for (var i = 0; i < cMesh.LocalMaterialInstances.Count; i++)
         {
-            var (mergedMaterial, template) = MergeMaterialChain(mainFile, cMesh.LocalMaterialInstances[i].Chunk!);
-
-            mergedMaterial.Name = materialDict[$"l_{i}"];
+            var (mergedMaterial, template) = MergeMaterialChain(mainFile, cMesh.LocalMaterialInstances[i].Chunk!, materialDict[$"l_{i}"]);
 
             materialData.Materials.Add(mergedMaterial);
             materialData.MaterialTemplates.Add(template);
         }
 
-        for (var i = 0; i < cMesh.PreloadLocalMaterialInstances.Count; i++)
+        for (var i = 0; i < preloadLocalMaterials.Count; i++)
         {
-            var (mergedMaterial, template) = MergeMaterialChain(mainFile, cMesh.PreloadLocalMaterialInstances[i].Chunk!);
-
-            mergedMaterial.Name = materialDict[$"l_{i}"];
+            var (mergedMaterial, template) = MergeMaterialChain(mainFile, preloadLocalMaterials[i].Chunk!, materialDict[$"l_{i}"]);
 
             materialData.Materials.Add(mergedMaterial);
             materialData.MaterialTemplates.Add(template);
@@ -131,6 +250,9 @@ public class MaterialExtractor
 
         return materialData;
     }
+
+
+    private static readonly string MaterialWildcard = "{material}";
 
     private const string s_defaultMaterialPath =
         @"base\environment\architecture\common\int\int_nkt_jp_corridor_a\materials\debug_to_replace.mi";
@@ -140,12 +262,14 @@ public class MaterialExtractor
     private static readonly IMaterial s_defaultMaterialInstance =
         new CMaterialInstance() { BaseMaterial = new CResourceReference<IMaterial>(s_defaultMaterialPath) };
 
-    private static readonly IRedRef
-        s_defaultMaterialRef = new CResourceReference<CMaterialTemplate>((ResourcePath)s_defaultMaterialPath);
+    private const string s_defaultMlSetupPath =
+        @"base\weapons\firearms\handgun\militech_lexington\entities\meshes\textures\ml_w_handgun__militech_lexington__base1_01_debug_01.mlsetup";
 
-    private (RawMaterial mergedMaterial, RawMaterial template) MergeMaterialChain(CR2WFile parentFile, IMaterial material)
+    private (RawMaterial mergedMaterial, RawMaterial template) MergeMaterialChain(CR2WFile parentFile, IMaterial material,
+        string dynamicMaterialName)
     {
         RawMaterial mergedMaterial = null!, template = null!;
+        var materialName = dynamicMaterialName.Split('@').FirstOrDefault() ?? "";
 
         switch (material)
         {
@@ -157,21 +281,30 @@ public class MaterialExtractor
                 {
                     cMaterialInstance.BaseMaterial = new CResourceReference<IMaterial>(s_defaultMaterialPath);
                 }
+                // ArchiveXL dynamic material
+                else if (cMaterialInstance.BaseMaterial.DepotPath.GetResolvedText() is string depotPath && depotPath.StartsWith('*'))
+                {
+                    cMaterialInstance.BaseMaterial =
+                        new CResourceReference<IMaterial>(depotPath.Replace(MaterialWildcard, materialName)[1..]);
+                }
                 
                 var status = TryFindFile2(parentFile, cMaterialInstance.BaseMaterial, out var result);
                 if (status == FindFileResult.NoCR2W || status == FindFileResult.FileNotFound ||
                     result.File!.RootChunk is not IMaterial childMaterial)
                 {
                     // If there's anything wrong with the file, we're falling back to the default material 
-                    (mergedMaterial, template) = MergeMaterialChain(s_defaultMaterialFile, s_defaultMaterialInstance);
+                    (mergedMaterial, template) =
+                        MergeMaterialChain(s_defaultMaterialFile, s_defaultMaterialInstance, materialName);
                 }
                 else
                 {
-                    (mergedMaterial, template) = MergeMaterialChain(result.IsEmbedded ? parentFile : result.File, childMaterial);
+                    (mergedMaterial, template) = MergeMaterialChain(result.IsEmbedded ? parentFile : result.File, childMaterial,
+                        materialName);
                 }
 
                 mergedMaterial.BaseMaterial = cMaterialInstance.BaseMaterial.DepotPath.GetResolvedText()!;
                 mergedMaterial.EnableMask = (bool)template.EnableMask! && (bool)cMaterialInstance.EnableMask;
+                mergedMaterial.Name = materialName;
 
                 foreach (var pair in cMaterialInstance.Values)
                 {
@@ -181,11 +314,19 @@ public class MaterialExtractor
                         var key = pair.Key.GetResolvedText()!;
                         try
                         {
-                            mergedMaterial.Data![key] = ExtractResource(resourceReference);
+                            mergedMaterial.Data![key] = ExtractResource(resourceReference, materialName);
                         }
                         catch
                         {
-                            mergedMaterial.Data![key] = s_defaultMaterialPath;
+                            if (key == "MultilayerSetup")
+                            {
+                                ExtractResource(new CResourceReference<IMaterial>(s_defaultMlSetupPath), "");
+                                mergedMaterial.Data![key] = s_defaultMlSetupPath;
+                            }
+                            else
+                            {
+                                mergedMaterial.Data![key] = s_defaultMaterialPath;
+                            }
                         }
                     }
                     else
@@ -233,7 +374,7 @@ public class MaterialExtractor
 
                             if (value is IRedRef resourceReference && resourceReference.DepotPath != ResourcePath.Empty)
                             {
-                                value = ExtractResource(resourceReference);
+                                value = ExtractResource(resourceReference, materialName);
                             }
 
                             if (value is IRedType redValue)
@@ -259,8 +400,15 @@ public class MaterialExtractor
 
         throw new Exception("???");
 
-        string ExtractResource(IRedRef resourceReference)
+        string ExtractResource(IRedRef resourceReference, string dynamicMaterialName)
         {
+            if (dynamicMaterialName is not "" && resourceReference.DepotPath.GetResolvedText() is string depotPath &&
+                depotPath.StartsWith('*'))
+            {
+                resourceReference =
+                    new CResourceAsyncReference<IMaterial>(depotPath.Replace(MaterialWildcard, dynamicMaterialName)[1..]);
+            }
+            
             var status = TryFindFile2(parentFile, resourceReference, out var result);
             if (status == FindFileResult.NoCR2W)
             {
@@ -370,7 +518,7 @@ public class MaterialExtractor
 
             foreach (var import in imports)
             {
-                ExtractResource(new CResourceReference<CResource>(import.DepotPath, import.Flags));
+                ExtractResource(new CResourceReference<CResource>(import.DepotPath, import.Flags), "");
             }
         }
     }

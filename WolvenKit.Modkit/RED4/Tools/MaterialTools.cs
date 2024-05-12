@@ -29,8 +29,14 @@ namespace WolvenKit.Modkit.RED4
 
             var matData = new MaterialExtractor(this, _archiveManager, matRepo, exportArgs, _loggerService)
                 .GenerateMaterialData(cr2w);
-            matData.Appearances = info.appearances;
+            // ArchiveXL dynamic variants
+            matData.Appearances = new Dictionary<string, string[]>();
 
+            foreach (var matDataAppearance in info.appearances)
+            {
+                matData.Appearances.Add(matDataAppearance.Key, matDataAppearance.Value
+                    .Select((materialName) => materialName.Split('@').FirstOrDefault() ?? materialName).ToArray());
+            }
             return matData;
         }
 
