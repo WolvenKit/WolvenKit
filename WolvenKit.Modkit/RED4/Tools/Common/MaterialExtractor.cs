@@ -130,12 +130,7 @@ public class MaterialExtractor
             {
                 materialIndex = pExtIdx;
             }
-
-            if (materialIndex < 0)
-            {
-                throw new Exception("hi");
-            }
-
+            
             if (materialEntry.IsLocalInstance)
             {
                 if (preloadLocalMaterials.Count > materialIndex)
@@ -162,7 +157,7 @@ public class MaterialExtractor
             // dynamic materials
             foreach (var dynamicMaterialName in dynamicChunks
                          .Where(name => name.GetResolvedText()?.EndsWith(materialName) == true)
-                         .Select(dynamicName => dynamicName!.GetResolvedText()!))
+                         .Select(dynamicName => dynamicName.GetResolvedText()!))
             {
                 materialInstanceList[dynamicMaterialName] = materialEntry.IsLocalInstance;
                 if (materialEntry.IsLocalInstance)
@@ -186,7 +181,7 @@ public class MaterialExtractor
 
                     if (preloadExternalMaterial is { } preloadNotNull)
                     {
-                        preloadExternalMaterials.Insert(materialIndex, preloadNotNull!);
+                        preloadExternalMaterials.Insert(materialIndex, preloadNotNull);
                     }
                 }
             }
@@ -258,7 +253,7 @@ public class MaterialExtractor
     private (RawMaterial mergedMaterial, RawMaterial template) MergeMaterialChain(CR2WFile parentFile, IMaterial material,
         string dynamicMaterialName)
     {
-        RawMaterial mergedMaterial = null!, template = null!;
+        RawMaterial mergedMaterial, template;
         var materialName = dynamicMaterialName.Split('@').FirstOrDefault() ?? dynamicMaterialName;
 
         switch (material)
@@ -294,7 +289,7 @@ public class MaterialExtractor
                 }
 
                 mergedMaterial.BaseMaterial = cMaterialInstance.BaseMaterial.DepotPath.GetResolvedText()!;
-                mergedMaterial.EnableMask = (bool)template.EnableMask! && (bool)cMaterialInstance.EnableMask;
+                mergedMaterial.EnableMask = (bool)template.EnableMask! && cMaterialInstance.EnableMask;
                 mergedMaterial.Name = materialName;
                 mergedMaterial.Data ??= [];
 
@@ -359,30 +354,32 @@ public class MaterialExtractor
                 {
                     var refer = parameterHandle.Chunk!;
                     var parameterName = refer.ParameterName.GetResolvedText()!;
-                    if (usedParameterNames.Contains(parameterName))
+                    if (!usedParameterNames.Contains(parameterName))
                     {
-                        object? value = GetMaterialParameterValue(refer);
-                        try
-                        {
-                            if (value is IRedRef resourceReference)
-                            {
-                                value = ExtractResource(resourceReference, materialName);
-                            }
+                        continue;
+                    }
 
-                            if (value is IRedType redValue)
-                            {
-                                value = GetSerializableValue(redValue);
-                            }
-
-                            mergedMaterial.Data.Add(parameterName, value);
-                            template.Data.Add(parameterName, value);
-                        }
-                        catch (Exception ex)
+                    object? value = GetMaterialParameterValue(refer);
+                    try
+                    {
+                        if (value is IRedRef resourceReference)
                         {
-                            _loggerService.Warning(
-                                $"Skipped extraction of material parameter {refer.ParameterName.GetResolvedText()}");
-                            _loggerService.Warning($"\t{ex.Message}");
+                            value = ExtractResource(resourceReference, materialName);
                         }
+
+                        if (value is IRedType redValue)
+                        {
+                            value = GetSerializableValue(redValue);
+                        }
+
+                        mergedMaterial.Data.Add(parameterName, value);
+                        template.Data.Add(parameterName, value);
+                    }
+                    catch (Exception ex)
+                    {
+                        _loggerService.Warning(
+                            $"Skipped extraction of material parameter {refer.ParameterName.GetResolvedText()}");
+                        _loggerService.Warning($"\t{ex.Message}");
                     }
                 }
 
@@ -392,26 +389,22 @@ public class MaterialExtractor
 
         throw new Exception("???");
 
-        string ExtractResource(IRedRef resourceReference, string dynamicMaterialName)
+        string ExtractResource(IRedRef resourceReference, string escapedMaterialName)
         {
             if (resourceReference.DepotPath == ResourcePath.Empty)
             {
                 return "";
             }
-            
-            if (dynamicMaterialName is not "" && resourceReference.DepotPath.GetResolvedText() is string depotPath &&
+
+            if (escapedMaterialName is not "" && resourceReference.DepotPath.GetResolvedText() is string depotPath &&
                 depotPath.StartsWith('*'))
             {
                 resourceReference =
-                    new CResourceAsyncReference<IMaterial>(depotPath.Replace(s_materialWildcard, dynamicMaterialName)[1..]);
+                    new CResourceAsyncReference<IMaterial>(depotPath.Replace(s_materialWildcard, escapedMaterialName)[1..]);
             }
             
             var status = TryFindFile2(parentFile, resourceReference, out var result);
-            if (status == FindFileResult.NoCR2W)
-            {
-                throw new Exception($"Error while parsing the file: {resourceReference.DepotPath.GetResolvedText()}");
-            }
-            if (status == FindFileResult.FileNotFound)
+            if (status is FindFileResult.NoCR2W or FindFileResult.FileNotFound)
             {
                 throw new Exception($"Error while finding the file: {resourceReference.DepotPath.GetResolvedText()}");
             }
@@ -440,12 +433,6 @@ public class MaterialExtractor
 
                     _textureList.Add(relativePath);
                     break;
-                case CCubeTexture cCubeTexture:
-                    break;
-                case CTextureArray cTextureArray:
-                    break;
-                case CFoliageProfile cFoliageProfile:
-                    break;
                 case CGradient:
                     fullPath.Directory?.Create();
                     ExtractToJson(result.File, imports, fullPath.FullName, false);
@@ -470,10 +457,11 @@ public class MaterialExtractor
                     fullPath.Directory?.Create();
                     ExtractToJson(result.File, imports, fullPath.FullName, true);
                     break;
-                case CSkinProfile cSkinProfile:
-                    break;
-                case CTerrainSetup cTerrainSetup:
-                    break;
+                // case CCubeTexture cCubeTexture:
+                // case CTextureArray cTextureArray:
+                // case CFoliageProfile cFoliageProfile:
+                // case CSkinProfile cSkinProfile:
+                // case CTerrainSetup cTerrainSetup:
                 default:
                     break;
             }
@@ -523,18 +511,14 @@ public class MaterialExtractor
     private FindFileResult TryFindMaterial(CR2WFile parent, IRedRef resourceReference, out FindFileRecord result, bool excludeCustomArchives = false)
     {
         var status = TryFindFile2(parent, resourceReference, out result);
-        if (status == FindFileResult.NoCR2W)
-        {
-            throw new Exception($"Error while parsing the file: {resourceReference.DepotPath.GetResolvedText()}");
-        }
-        if (status == FindFileResult.FileNotFound)
+        if (status is FindFileResult.NoCR2W or FindFileResult.FileNotFound)
         {
             throw new Exception($"Error while finding the file: {resourceReference.DepotPath.GetResolvedText()}");
         }
 
-        if (result.File!.RootChunk is not IMaterial childMaterial)
+        if (result.File!.RootChunk is not IMaterial)
         {
-            throw new Exception("???");
+            throw new Exception("RootChunk is not a material");
         }
 
         return status;
@@ -594,7 +578,7 @@ public class MaterialExtractor
         return FindFileResult.NoError;
     }
 
-    private IRedType? GetMaterialParameterValue(CMaterialParameter materialParameter) =>
+    private static IRedType? GetMaterialParameterValue(CMaterialParameter materialParameter) =>
         materialParameter switch
         {
             CMaterialParameterColor col => col.Color,
@@ -607,7 +591,7 @@ public class MaterialExtractor
             CMaterialParameterMultilayerSetup muls => muls.Setup,
             CMaterialParameterScalar sca => sca.Scalar,
             CMaterialParameterSkinParameters ski => ski.SkinProfile,
-            CMaterialParameterStructBuffer str => null,
+            CMaterialParameterStructBuffer => null,
             CMaterialParameterTerrainSetup ter => ter.Setup,
             CMaterialParameterTexture tex => tex.Texture,
             CMaterialParameterTextureArray texa => texa.Texture,
@@ -629,7 +613,7 @@ public class MaterialExtractor
             CMaterialParameterMultilayerSetup muls => GetSerializableValue(muls.Setup),
             CMaterialParameterScalar sca => GetSerializableValue(sca.Scalar),
             CMaterialParameterSkinParameters ski => GetSerializableValue(ski.SkinProfile),
-            CMaterialParameterStructBuffer str => null,
+            CMaterialParameterStructBuffer => null,
             CMaterialParameterTerrainSetup ter => GetSerializableValue(ter.Setup),
             CMaterialParameterTexture tex => GetSerializableValue(tex.Texture),
             CMaterialParameterTextureArray texa => GetSerializableValue(texa.Texture),
@@ -638,7 +622,7 @@ public class MaterialExtractor
             _ => throw new NotImplementedException(materialParameter.GetType().Name)
         };
 
-    private object GetSerializableValue(IRedType value) =>
+    private static object GetSerializableValue(IRedType value) =>
         value switch
         {
             CColor col => new Dictionary<string, byte>
