@@ -1439,43 +1439,63 @@ namespace WolvenKit.Modkit.RED4.Tools
         /// <param name="exportGarmentSupport"></param>
         public static void WriteGarmentParametersToMesh(ref List<RawMeshContainer> meshes, CMesh cMesh, bool exportGarmentSupport = false)
         {
+            if (!exportGarmentSupport)
+            {
+                return;
+            }
             var garmentBlob = cMesh.Parameters.FirstOrDefault(x => x.Chunk is garmentMeshParamGarment);
-            if (garmentBlob != null && exportGarmentSupport)
+            var garmentSupportBlob = cMesh.Parameters.FirstOrDefault(x => x.Chunk is meshMeshParamGarmentSupport);
+
+            if (garmentBlob is null && garmentSupportBlob is null)
+            {
+                return;
+            }
+
+            CArray<garmentMeshParamGarmentChunkData> chunks = [];
+            if (garmentSupportBlob is not null)
+            {
+                var garmentBlobChunk = (garmentMeshParamGarment)garmentSupportBlob.Chunk.NotNull();
+                chunks = garmentBlobChunk.Chunks;
+            }
+            else if (garmentBlob is not null)
             {
                 var garmentBlobChunk = (garmentMeshParamGarment)garmentBlob.Chunk.NotNull();
+                chunks = garmentBlobChunk.Chunks;
+            }
 
-                for (var i = 0; i < garmentBlobChunk.Chunks.Count && i < meshes.Count; i++)
+            for (var i = 0; i < chunks.Count && i < meshes.Count; i++)
+            {
+                var mesh = meshes[i];
+                var chunk = chunks[i];
+
+                ArgumentNullException.ThrowIfNull(mesh.positions, nameof(mesh));
+
+                if (chunk.GarmentFlags is not { Buffer.MemSize: > 0 })
                 {
-                    var mesh = meshes[i];
-                    var chunk = garmentBlobChunk.Chunks[i];
+                    continue;
+                }
 
-                    ArgumentNullException.ThrowIfNull(mesh.positions, nameof(mesh));
+                meshes[i].garmentSupportWeight = new Vec4[mesh.positions.Length];
+                meshes[i].garmentSupportCap = new Vec4[mesh.positions.Length];
 
-                    if (chunk.GarmentFlags is { Buffer.MemSize: > 0 })
+                var stream = new MemoryStream(chunk.GarmentFlags.Buffer.GetBytes());
+                var br = new BinaryReader(stream);
+                stream.Seek(0, SeekOrigin.Begin);
+
+                for (var e = 0; e < mesh.positions.Length; e++)
+                {
+                    if (mesh.garmentSupportWeight != null)
                     {
-                        meshes[i].garmentSupportWeight = new Vec4[mesh.positions.Length];
-                        meshes[i].garmentSupportCap = new Vec4[mesh.positions.Length];
-
-                        var stream = new MemoryStream(chunk.GarmentFlags.Buffer.GetBytes());
-                        var br = new BinaryReader(stream);
-                        stream.Seek(0, SeekOrigin.Begin);
-
-                        for (var e = 0; e < mesh.positions.Length; e++)
-                        {
-                            if (mesh.garmentSupportWeight != null)
-                            {
-                                mesh.garmentSupportWeight[e] = PrepareGarmentVertexWeight(br.ReadByte());
-                            }
-
-                            if (mesh.garmentSupportCap != null)
-                            {
-                                mesh.garmentSupportCap[e] = PrepareGarmentVertexCap(br.ReadByte());
-                            }
-
-                            br.ReadByte();
-                            br.ReadByte();
-                        }
+                        mesh.garmentSupportWeight[e] = PrepareGarmentVertexWeight(br.ReadByte());
                     }
+
+                    if (mesh.garmentSupportCap != null)
+                    {
+                        mesh.garmentSupportCap[e] = PrepareGarmentVertexCap(br.ReadByte());
+                    }
+
+                    br.ReadByte();
+                    br.ReadByte();
                 }
             }
         }
