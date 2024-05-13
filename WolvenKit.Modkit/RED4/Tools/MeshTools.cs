@@ -854,8 +854,10 @@ namespace WolvenKit.Modkit.RED4.Tools
                     node = parent.CreateNode(name);
                     mes = model.CreateMesh(name);
                 }
-                var prim = mes.CreatePrimitive();
                 ArgumentNullException.ThrowIfNull(mesh.materialNames, nameof(mesh.materialNames));
+
+                var prim = mes.CreatePrimitive();
+                
                 if (materials != null && materials.ContainsKey(mesh.materialNames[0]))
                 {
                     prim.Material = materials[mesh.materialNames[0]];
@@ -993,15 +995,17 @@ namespace WolvenKit.Modkit.RED4.Tools
                     node.Skin = skin;
                 }
 
+                var materialNames = mesh.materialNames.Select((name) => name.Split('@').FirstOrDefault() ?? name).ToArray();
+                
                 if (mesh.garmentMorph.Length > 0)
                 {
                     string[] arr = { "GarmentSupport" };
-                    var obj = new { mesh.materialNames, targetNames = arr };
+                    var obj = new { materialNames, targetNames = arr };
                     mes.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
                 }
                 else
                 {
-                    var obj = new { mesh.materialNames };
+                    var obj = new { materialNames };
                     mes.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
                 }
                 if (mesh.garmentMorph.Length > 0)
