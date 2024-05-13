@@ -8,6 +8,7 @@ using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Modkit.Resources;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
@@ -252,24 +253,13 @@ public class MaterialExtractor
     }
 
 
-    private static readonly string MaterialWildcard = "{material}";
-
-    private const string s_defaultMaterialPath =
-        @"base\environment\architecture\common\int\int_nkt_jp_corridor_a\materials\debug_to_replace.mi";
-
-    private static readonly CR2WFile s_defaultMaterialFile = new() { MetaData = { FileName = s_defaultMaterialPath } };
-
-    private static readonly IMaterial s_defaultMaterialInstance =
-        new CMaterialInstance() { BaseMaterial = new CResourceReference<IMaterial>(s_defaultMaterialPath) };
-
-    private const string s_defaultMlSetupPath =
-        @"base\weapons\firearms\handgun\militech_lexington\entities\meshes\textures\ml_w_handgun__militech_lexington__base1_01_debug_01.mlsetup";
+    private const string s_materialWildcard = "{material}";
 
     private (RawMaterial mergedMaterial, RawMaterial template) MergeMaterialChain(CR2WFile parentFile, IMaterial material,
         string dynamicMaterialName)
     {
         RawMaterial mergedMaterial = null!, template = null!;
-        var materialName = dynamicMaterialName.Split('@').FirstOrDefault() ?? "";
+        var materialName = dynamicMaterialName.Split('@').FirstOrDefault() ?? dynamicMaterialName;
 
         switch (material)
         {
@@ -279,22 +269,23 @@ public class MaterialExtractor
                 // fall back to default material
                 if (cMaterialInstance.BaseMaterial.DepotPath == ResourcePath.Empty)
                 {
-                    cMaterialInstance.BaseMaterial = new CResourceReference<IMaterial>(s_defaultMaterialPath);
+                    cMaterialInstance.BaseMaterial = new CResourceReference<IMaterial>(DefaultMaterials.DefaultMiPath);
                 }
                 // ArchiveXL dynamic material
                 else if (cMaterialInstance.BaseMaterial.DepotPath.GetResolvedText() is string depotPath && depotPath.StartsWith('*'))
                 {
+                    // replace {material} with dynamic material name and cut off leading *
                     cMaterialInstance.BaseMaterial =
-                        new CResourceReference<IMaterial>(depotPath.Replace(MaterialWildcard, materialName)[1..]);
+                        new CResourceReference<IMaterial>(depotPath.Replace(s_materialWildcard, materialName)[1..]);
                 }
                 
                 var status = TryFindFile2(parentFile, cMaterialInstance.BaseMaterial, out var result);
-                if (status == FindFileResult.NoCR2W || status == FindFileResult.FileNotFound ||
-                    result.File!.RootChunk is not IMaterial childMaterial)
+                if (status is FindFileResult.NoCR2W or FindFileResult.FileNotFound || result.File!.RootChunk is not IMaterial childMaterial)
                 {
                     // If there's anything wrong with the file, we're falling back to the default material 
                     (mergedMaterial, template) =
-                        MergeMaterialChain(s_defaultMaterialFile, s_defaultMaterialInstance, materialName);
+                        MergeMaterialChain(DefaultMaterials.DefaultMaterialTemplateFile, DefaultMaterials.DefaultMaterialInstance,
+                            materialName);
                 }
                 else
                 {
@@ -305,34 +296,37 @@ public class MaterialExtractor
                 mergedMaterial.BaseMaterial = cMaterialInstance.BaseMaterial.DepotPath.GetResolvedText()!;
                 mergedMaterial.EnableMask = (bool)template.EnableMask! && (bool)cMaterialInstance.EnableMask;
                 mergedMaterial.Name = materialName;
+                mergedMaterial.Data ??= [];
 
                 foreach (var pair in cMaterialInstance.Values)
                 {
+                    var key = pair.Key.GetResolvedText()!;
+
+                    if (pair.Value is not IRedRef resourceReference)
+                    {
+                        mergedMaterial.Data[key] = GetSerializableValue(pair.Value);
+                        continue;
+                    }
+
                     // could compare if it differs but meh
-                    if (pair.Value is IRedRef resourceReference && resourceReference.DepotPath != ResourcePath.Empty)
+                    try
                     {
-                        var key = pair.Key.GetResolvedText()!;
-                        try
+                        mergedMaterial.Data[key] = ExtractResource(resourceReference, materialName);
+                    }
+                    catch
+                    {
+                        // If we ran into an exception when parsing a key/value pair, fall back to default values
+                        if (Enum.TryParse<MaterialResourcePathKey>(key, out var enumValue))
                         {
-                            mergedMaterial.Data![key] = ExtractResource(resourceReference, materialName);
+                            ExtractResource(DefaultMaterials.GetResourceReference(enumValue), "");
+                            mergedMaterial.Data![key] = DefaultMaterials.FilePaths[enumValue];
                         }
-                        catch
+                        else
                         {
-                            if (key == "MultilayerSetup")
-                            {
-                                ExtractResource(new CResourceReference<IMaterial>(s_defaultMlSetupPath), "");
-                                mergedMaterial.Data![key] = s_defaultMlSetupPath;
-                            }
-                            else
-                            {
-                                mergedMaterial.Data![key] = s_defaultMaterialPath;
-                            }
+                            mergedMaterial.Data![key] = "";
                         }
                     }
-                    else
-                    {
-                        mergedMaterial.Data![pair.Key.GetResolvedText()!] = GetSerializableValue(pair.Value);
-                    }
+                    
                 }
 
                 return (mergedMaterial, template);
@@ -342,7 +336,7 @@ public class MaterialExtractor
                 var fileName = (parentFile.MetaData.FileName ?? string.Empty).ToLower().Replace("none", "");
                 if (fileName == string.Empty)
                 {
-                    fileName = s_defaultMaterialPath;
+                    fileName = DefaultMaterials.DefaultMiPath;
                 }
 
                 mergedMaterial = new RawMaterial
@@ -357,22 +351,20 @@ public class MaterialExtractor
                     EnableMask = cMaterialTemplate.CanBeMasked
                 };
 
-                var usedParameterNames = new List<string>();
-                foreach (var usedParameter in cMaterialTemplate.UsedParameters[2])
-                {
-                    usedParameterNames.Add(usedParameter.Name.GetResolvedText()!);
-                }
+                var usedParameterNames = cMaterialTemplate.UsedParameters[2]
+                    .Select(usedParameter => usedParameter.Name.GetResolvedText() ?? "INVALID_PARAMETER")
+                    .ToList();
 
                 foreach (var parameterHandle in cMaterialTemplate.Parameters[2].NotNull())
                 {
                     var refer = parameterHandle.Chunk!;
-                    if (usedParameterNames.Contains(refer.ParameterName.GetResolvedText()!))
+                    var parameterName = refer.ParameterName.GetResolvedText()!;
+                    if (usedParameterNames.Contains(parameterName))
                     {
+                        object? value = GetMaterialParameterValue(refer);
                         try
                         {
-                            object? value = GetMaterialParameterValue(refer);
-
-                            if (value is IRedRef resourceReference && resourceReference.DepotPath != ResourcePath.Empty)
+                            if (value is IRedRef resourceReference)
                             {
                                 value = ExtractResource(resourceReference, materialName);
                             }
@@ -382,8 +374,8 @@ public class MaterialExtractor
                                 value = GetSerializableValue(redValue);
                             }
 
-                            mergedMaterial.Data.Add(refer.ParameterName.GetResolvedText()!, value);
-                            template.Data.Add(refer.ParameterName.GetResolvedText()!, value);
+                            mergedMaterial.Data.Add(parameterName, value);
+                            template.Data.Add(parameterName, value);
                         }
                         catch (Exception ex)
                         {
@@ -402,11 +394,16 @@ public class MaterialExtractor
 
         string ExtractResource(IRedRef resourceReference, string dynamicMaterialName)
         {
+            if (resourceReference.DepotPath == ResourcePath.Empty)
+            {
+                return "";
+            }
+            
             if (dynamicMaterialName is not "" && resourceReference.DepotPath.GetResolvedText() is string depotPath &&
                 depotPath.StartsWith('*'))
             {
                 resourceReference =
-                    new CResourceAsyncReference<IMaterial>(depotPath.Replace(MaterialWildcard, dynamicMaterialName)[1..]);
+                    new CResourceAsyncReference<IMaterial>(depotPath.Replace(s_materialWildcard, dynamicMaterialName)[1..]);
             }
             
             var status = TryFindFile2(parentFile, resourceReference, out var result);
@@ -660,6 +657,7 @@ public class MaterialExtractor
                 { nameof(vec.Z), vec.Z },
                 { nameof(vec.W), vec.W },
             },
+            IRedResourceReference rRef when rRef.DepotPath == ResourcePath.Empty => "",
             IRedResourceReference { DepotPath.IsResolvable: true } rRef => rRef.DepotPath.GetResolvedText()!,
             IRedResourceReference rRef => rRef.DepotPath,
             _ => throw new NotImplementedException(value.GetType().Name)

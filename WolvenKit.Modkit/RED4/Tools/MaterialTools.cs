@@ -51,7 +51,7 @@ namespace WolvenKit.Modkit.RED4
                 matData.MaterialTemplates.ForEach(m => consMatData.MaterialTemplates.Add(m));
                 foreach (var app in matData.Appearances)
                 {
-                    consMatData.Appearances.TryAdd(app.Key, app.Value);
+                    consMatData.Appearances.TryAdd(app.Key.Split('@').FirstOrDefault() ?? app.Key, app.Value);
                 }
             }
 
@@ -61,6 +61,9 @@ namespace WolvenKit.Modkit.RED4
 
         }
 
+        /// <summary>
+        /// Used during mesh export via Export Tool, writes material to json
+        /// </summary>
         private void ParseMaterials(CR2WFile cr2w, FileInfo outfile, string matRepo, MeshesInfo info, EUncookExtension eUncookExtension = EUncookExtension.dds)
         {
             var matData = SetupMaterial(cr2w, matRepo, info, eUncookExtension);
