@@ -160,7 +160,7 @@ public partial class RedGraph
         }
         else if (node is scnQuestNode questNode)
         {
-            nodeWrapper = new scnQuestNodeWrapper(questNode);
+            nodeWrapper = new scnQuestNodeWrapper(questNode, sceneResource);
         }
         else if (node is scnRandomizerNode randomizerNode)
         {

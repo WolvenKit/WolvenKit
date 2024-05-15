@@ -1,4 +1,5 @@
-﻿using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
+﻿using WolvenKit.App.Extensions;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
@@ -7,6 +8,17 @@ public class scnRandomizerNodeWrapper : BaseSceneViewModel<scnRandomizerNode>, I
 {
     public scnRandomizerNodeWrapper(scnRandomizerNode scnRandomizerNode) : base(scnRandomizerNode)
     {
+        Details["Mode"] = scnRandomizerNode?.Mode.ToEnumString()!;
+
+        var outputWeights = "";
+        if (scnRandomizerNode?.Weights != null)
+        {
+            foreach (var p in scnRandomizerNode.Weights)
+            {
+                outputWeights += (outputWeights != "" ? ", " : "") + p.ToString();
+            }
+        }
+        Details["Output Weights"] = outputWeights;
     }
 
     internal override void GenerateSockets()

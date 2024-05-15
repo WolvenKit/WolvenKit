@@ -1,4 +1,5 @@
 ﻿using System;
+using WolvenKit.App.Extensions;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
 using WolvenKit.RED4.Types;
 
@@ -8,8 +9,10 @@ public class questRandomizerNodeDefinitionWrapper : questDisableableNodeDefiniti
 {
     public questRandomizerNodeDefinitionWrapper(questRandomizerNodeDefinition questRandomizerNodeDefinition) : base(questRandomizerNodeDefinition)
     {
-        Title = $"{Title} [{questRandomizerNodeDefinition.Id}]";
-        Details.Add("Type", questRandomizerNodeDefinition.Mode.ToEnumString());
+        //Title = $"{Title} [{questRandomizerNodeDefinition.Id}]";
+        //Details.Add("Type", questRandomizerNodeDefinition.Mode.ToEnumString());
+
+        Details.AddRange(NodeProperties.GetPropertiesFor(questRandomizerNodeDefinition));
     }
 
     internal override void GenerateSockets()
