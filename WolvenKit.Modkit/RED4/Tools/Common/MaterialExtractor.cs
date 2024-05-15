@@ -248,7 +248,6 @@ public class MaterialExtractor
     }
 
 
-    private const string s_materialWildcard = "{material}";
 
     private (RawMaterial mergedMaterial, RawMaterial template) MergeMaterialChain(CR2WFile parentFile, IMaterial material,
         string dynamicMaterialName)
@@ -260,19 +259,9 @@ public class MaterialExtractor
         {
             case CMaterialInstance cMaterialInstance:
             {
-                // If material is empty, invalid, or if it's using a "none" material (for file validation), 
-                // fall back to default material
-                if (cMaterialInstance.BaseMaterial.DepotPath == ResourcePath.Empty)
-                {
-                    cMaterialInstance.BaseMaterial = new CResourceReference<IMaterial>(DefaultMaterials.DefaultMiPath);
-                }
-                // ArchiveXL dynamic material
-                else if (cMaterialInstance.BaseMaterial.DepotPath.GetResolvedText() is string depotPath && depotPath.StartsWith('*'))
-                {
-                    // replace {material} with dynamic material name and cut off leading *
-                    cMaterialInstance.BaseMaterial =
-                        new CResourceReference<IMaterial>(depotPath.Replace(s_materialWildcard, materialName)[1..]);
-                }
+                // This method handles both ArchiveXL dynamic substitution and replaces empty material with default.mi
+                cMaterialInstance.BaseMaterial =
+                    ArchiveXlHelper.ResolveBaseMaterial(cMaterialInstance.BaseMaterial, dynamicMaterialName);
                 
                 var status = TryFindFile2(parentFile, cMaterialInstance.BaseMaterial, out var result);
                 if (status is FindFileResult.NoCR2W or FindFileResult.FileNotFound || result.File!.RootChunk is not IMaterial childMaterial)
@@ -396,13 +385,9 @@ public class MaterialExtractor
                 return "";
             }
 
-            if (escapedMaterialName is not "" && resourceReference.DepotPath.GetResolvedText() is string depotPath &&
-                depotPath.StartsWith('*'))
-            {
-                resourceReference =
-                    new CResourceAsyncReference<IMaterial>(depotPath.Replace(s_materialWildcard, escapedMaterialName)[1..]);
-            }
+            resourceReference = ArchiveXlHelper.ResolvePotentiallyDynamicDepotPath(resourceReference, escapedMaterialName);
             
+
             var status = TryFindFile2(parentFile, resourceReference, out var result);
             if (status is FindFileResult.NoCR2W or FindFileResult.FileNotFound)
             {
@@ -511,7 +496,12 @@ public class MaterialExtractor
     private FindFileResult TryFindMaterial(CR2WFile parent, IRedRef resourceReference, out FindFileRecord result, bool excludeCustomArchives = false)
     {
         var status = TryFindFile2(parent, resourceReference, out result);
-        if (status is FindFileResult.NoCR2W or FindFileResult.FileNotFound)
+        if (status == FindFileResult.NoCR2W)
+        {
+            throw new Exception($"Error while parsing the file: {resourceReference.DepotPath.GetResolvedText()}");
+        }
+
+        if (status == FindFileResult.FileNotFound)
         {
             throw new Exception($"Error while finding the file: {resourceReference.DepotPath.GetResolvedText()}");
         }
