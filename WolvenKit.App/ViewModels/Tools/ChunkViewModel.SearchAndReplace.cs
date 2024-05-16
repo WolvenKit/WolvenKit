@@ -208,13 +208,14 @@ public partial class ChunkViewModel : ObservableObject
             case meshMeshMaterialBuffer: 
                 return false;
             case CName cname:
-                if (cname.GetResolvedText() is (null or "" or "None"))
+                if (string.IsNullOrEmpty(cname.GetResolvedText()))
                 {
                     return false;
                 }
 
-                replaced = (cname.GetResolvedText() ?? "").Replace(search, replace, searchMode);
-                if (replaced == (cname.GetResolvedText() ?? ""))
+                var resolved = cname.GetResolvedText()!;
+                replaced = resolved.Replace(search, replace, searchMode);
+                if (replaced == resolved)
                 {
                     return false;
                 }
@@ -224,8 +225,9 @@ public partial class ChunkViewModel : ObservableObject
                 return true;
             case IRedArray redArray:
                 wasChanged = false;
-                foreach (var o in redArray)
+                for (var i = 0; i < redArray.Count; i++)
                 {
+                    var o = redArray[i];
                     switch (o)
                     {
                         case IRedBaseHandle handle when handle.GetValue() is IRedType handleValue &&
@@ -240,6 +242,7 @@ public partial class ChunkViewModel : ObservableObject
                         case IRedType redType:
                             if (SearchAndReplaceInObjectProperties(search, replace, searchMode, redType, out var newType))
                             {
+                                redArray[i] = newType;
                                 wasChanged = true;
                             } 
                             break;
