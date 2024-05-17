@@ -35,7 +35,7 @@ public partial class RedBaseClass
 
     public (bool, IRedType?) GetFromXPath(string[] xPath)
     {
-        IRedType? result = null;
+        IRedType? result = this;
         var currentProps = _properties;
         foreach (var part in xPath)
         {
@@ -45,6 +45,13 @@ public partial class RedBaseClass
             }
 
             var arrPath = part.Split(':');
+
+            if (arrPath.Length != 2 || !int.TryParse(arrPath[1], out var index))
+            {
+                index = -1;
+            }
+
+
             if (currentProps.ContainsKey(arrPath[0]))
             {
                 result = currentProps[arrPath[0]];
@@ -53,7 +60,7 @@ public partial class RedBaseClass
 
                 if (result is IList lst)
                 {
-                    if (arrPath.Length == 2 && int.TryParse(arrPath[1], out var index))
+                    if (index >= 0)
                     {
                         if (index >= lst.Count)
                         {
@@ -63,7 +70,7 @@ public partial class RedBaseClass
                         result = (IRedType?)lst[index];
                     }
                 }
-
+                
                 if (result is RedBaseClass subCls)
                 {
                     currentProps = subCls._properties;
@@ -75,6 +82,19 @@ public partial class RedBaseClass
                     currentProps = cCls?._properties;
                 }
 
+                if (result is IRedBufferWrapper { Data: RedPackage redPackage })
+                {
+                    if (index >= 0)
+                    {
+                        if (index >= redPackage.Chunks.Count)
+                        {
+                            return (false, null);
+                        }
+
+                        result = redPackage.Chunks[index];
+                    }
+                }
+                
                 continue;
             }
 
