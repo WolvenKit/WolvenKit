@@ -23,10 +23,10 @@ public class ArchiveXlHelper
 
         if (!baseMaterialPath.StartsWith('*'))
         {
-            return new CResourceAsyncReference<IMaterial>(baseMaterialPath.Replace(s_materialWildcard, substitutionValue)[1..]);
+            return resourceReference;
         }
 
-        return resourceReference;
+        return new CResourceAsyncReference<IMaterial>(baseMaterialPath.Replace(s_materialWildcard, substitutionValue)[1..]);
     }
 
     /// <summary>
@@ -44,12 +44,13 @@ public class ArchiveXlHelper
             return new CResourceReference<IMaterial>(DefaultMaterials.DefaultMiPath);
         }
 
-        if (baseMaterialPath.StartsWith('*'))
+        if (!baseMaterialPath.StartsWith('*'))
         {
-            // replace {material} with dynamic material name and cut off leading *
-            return new CResourceReference<IMaterial>(baseMaterialPath.Replace(s_materialWildcard, substitutionValue)[1..]);
+            return baseMaterial;
         }
 
-        return baseMaterial;
+        // replace {material} with dynamic material name and cut off leading *
+        return new CResourceReference<IMaterial>(baseMaterialPath.Replace(s_materialWildcard, substitutionValue)[1..]);
+
     }
 }
