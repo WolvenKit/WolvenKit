@@ -389,7 +389,11 @@ public class MaterialExtractor
             
 
             var status = TryFindFile2(parentFile, resourceReference, out var result);
-            if (status is FindFileResult.NoCR2W or FindFileResult.FileNotFound)
+            if (status == FindFileResult.NoCR2W)
+            {
+                throw new Exception($"Error while parsing the file: {resourceReference.DepotPath.GetResolvedText()}");
+            }
+            if (status == FindFileResult.FileNotFound)
             {
                 throw new Exception($"Error while finding the file: {resourceReference.DepotPath.GetResolvedText()}");
             }
