@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -14,6 +15,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using DynamicData.Binding;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
@@ -24,12 +26,17 @@ using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.Archive.IO;
+using WolvenKit.RED4.Types;
+using EFileReadErrorCodes = WolvenKit.RED4.Archive.IO.EFileReadErrorCodes;
 
 namespace WolvenKit.App.ViewModels.Tools;
 
@@ -736,7 +743,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             // Swallow error
         }
 
-
+        if (ActiveProject is { })
+        {
+            var oldRelPath = GetResourcePath(filename, ActiveProject);
+            var newRelPath = GetResourcePath(newFilename, ActiveProject);
+            
+            ReplacePathInProject(oldRelPath, newRelPath);
+        }
     }
 
     #endregion general commands
@@ -947,6 +960,187 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     private void SetupToolDefaults() =>
         ContentId = s_toolContentId; // Define a unique contentId for this toolwindow//BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow//bi.BeginInit();//bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");//bi.EndInit();//IconSource = bi;
+
+    private ResourcePath GetResourcePath(string fullPath, Cp77Project project)
+    {
+        var relPath = Path.GetRelativePath(project.ModDirectory, fullPath);
+        if (ulong.TryParse(Path.GetFileNameWithoutExtension(relPath), out var hash))
+        {
+            return hash;
+        }
+
+        return relPath;
+    }
+
+    private void ReplacePathInProject(ResourcePath oldPath, ResourcePath newPath)
+    {
+        if (oldPath == newPath ||
+            ActiveProject is null)
+        {
+            return;
+        }
+
+        _watcherService.IsSuspended = true;
+
+        List<string> failedFiles = [];
+
+        var files = Directory.GetFiles(ActiveProject.ModDirectory, "*.*", SearchOption.AllDirectories);
+        Parallel.ForEach(files, file =>
+        {
+            var hash = GetResourcePath(file, ActiveProject);
+            if (hash == newPath)
+            {
+                return;
+            }
+
+            try
+            {
+                ReplacePathInFile(file, oldPath, newPath);
+            }
+            catch (Exception)
+            {
+                failedFiles.Add(file.RelativePath(ActiveProject.ModDirectory));
+            }
+        });
+
+        _watcherService.IsSuspended = false;
+
+        if (failedFiles.Count > 0)
+        {
+            _loggerService.Error($"Failed to auto-update references in the following files:");
+            failedFiles.ForEach((path) => _loggerService.Error($"  {path}"));
+        }
+        _mainViewModel.ReloadChangedFiles();
+    }
+
+    private void ReplacePathInFile(string filePath, ResourcePath oldPath, ResourcePath newPath)
+    {
+        if (oldPath == newPath || 
+            !File.Exists(filePath))
+        {
+            return;
+        }
+
+        var oldPathStr = oldPath.GetResolvedText();
+        var newPathStr = newPath.GetResolvedText();
+
+        CR2WFile? cr2w;
+        var wasModified = false;
+        var isDirectory = newPathStr != null && Directory.Exists(Path.Join(ActiveProject?.ModDirectory, newPathStr));
+        if (isDirectory)
+        {
+            // Can't replace path if either is null
+            if (oldPathStr == null || newPathStr == null)
+            {
+                return;
+            }
+
+            oldPathStr += ResourcePath.DirectorySeparatorChar;
+            newPathStr += ResourcePath.DirectorySeparatorChar;
+        }
+
+
+        using (var fs = File.Open(filePath, FileMode.Open))
+        using (var cr = new CR2WReader(fs))
+        {
+            if (cr.ReadFile(out cr2w) != EFileReadErrorCodes.NoError)
+            {
+                return;
+            }
+
+            foreach (var result in cr2w!.FindType(typeof(IRedRef)))
+            {
+                if (result.Value is not IRedRef resourceReference || resourceReference.DepotPath == ResourcePath.Empty)
+                {
+                    continue;
+                }
+
+                var oldDepotPathStr = resourceReference.DepotPath.GetResolvedText();
+
+                ResourcePath newDepotPath;
+                if (isDirectory)
+                {
+                    if (oldDepotPathStr == null)
+                    {
+                        continue;
+                    }
+
+                    var isArchiveXL = oldDepotPathStr.StartsWith('*');
+                    if (isArchiveXL)
+                    {
+                        oldDepotPathStr = oldDepotPathStr[1..];
+                    }
+
+                    if (!oldDepotPathStr.StartsWith(oldPathStr!))
+                    {
+                        continue;
+                    }
+
+                    var newDepotPathStr = newPathStr! + oldDepotPathStr[oldPathStr!.Length..];
+                    if (isArchiveXL)
+                    {
+                        newDepotPathStr = "*" + newDepotPathStr;
+                    }
+
+                    newDepotPath = newDepotPathStr;
+                }
+                else
+                {
+                    if (resourceReference.DepotPath != oldPath)
+                    {
+                        continue;
+                    }
+
+                    newDepotPath = newPath;
+                }
+                    
+                var parentPath = string.Join('.', result.Path.Split('.')[..^1]);
+
+                var newValue = (IRedRef)RedTypeManager.CreateRedType(resourceReference.RedType, newDepotPath, resourceReference.Flags);
+
+                if (result.Name.Contains(':'))
+                {
+                    var parts = result.Name.Split(':');
+                    if (parts.Length != 2 || !int.TryParse(parts[1], out var index))
+                    {
+                        throw new Exception();
+                    }
+
+                    var parentArray = cr2w.GetFromXPath(string.Join('.', parentPath, parts[0]));
+                    if (!parentArray.Item1 || parentArray.Item2 is not IList arr)
+                    {
+                        throw new Exception();
+                    }
+
+                    _loggerService.Debug($"Replaced \"{result.Path}\" in \"{filePath}\"");
+                    arr[index] = newValue;
+                }
+                else
+                {
+                    var parentClass = cr2w.GetFromXPath(parentPath);
+                    if (!parentClass.Item1 || parentClass.Item2 is not RedBaseClass cls)
+                    {
+                        throw new Exception();
+                    }
+
+                    _loggerService.Debug($"Replaced \"{result.Path}\" in \"{filePath}\"");
+                    cls.SetProperty(result.Name, newValue);
+                }
+
+                wasModified = true;
+            }
+        }
+
+        if (!wasModified)
+        {
+            return;
+        }
+
+        using var fs2 = File.Open(filePath, FileMode.Create);
+        using var cw = new CR2WWriter(fs2);
+
+        cw.WriteFile(cr2w);
+    }
 
     #endregion Methods
 

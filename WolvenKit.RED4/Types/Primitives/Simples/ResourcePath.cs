@@ -10,6 +10,8 @@ namespace WolvenKit.RED4.Types;
 [DebuggerDisplay("{GetResolvedText()}", Type = "ResourcePath")]
 public readonly struct ResourcePath : IRedString, IRedPrimitive<string>, IEquatable<ResourcePath>, IComparable<ResourcePath>, IComparable
 {
+    public static readonly char DirectorySeparatorChar = '\\';
+
     public static ResourcePath Empty = 0;
 
     private readonly ulong _hash;
@@ -123,9 +125,9 @@ public readonly struct ResourcePath : IRedString, IRedPrimitive<string>, IEquata
 
             if (text[i] == '\\' || text[i] == '/')
             {
-                if (strResult[strResult.Length - 1] != '\\')
+                if (strResult[^1] != DirectorySeparatorChar)
                 {
-                    strResult.Append('\\');
+                    strResult.Append(DirectorySeparatorChar);
                 }
                 continue;
             }
