@@ -8,6 +8,7 @@ using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Modkit.Resources;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
@@ -52,12 +53,33 @@ public class MaterialExtractor
             TexturesList = _textureList
         };
 
-        var materialDict = new Dictionary<string, string>();
+        // collect dynamic chunks - unique material names
+        var dynamicChunks = cMesh.Appearances
+            .Select(app => app.GetValue())
+            .OfType<meshMeshAppearance>()
+            .SelectMany(cMeshAppearance => cMeshAppearance.ChunkMaterials)
+            .Where(chunkMaterial => (chunkMaterial.GetResolvedText() ?? "").Contains('@'))
+            .ToHashSet();
 
+        var materialDict = new Dictionary<string, string>();
+        var materialInstanceList = new Dictionary<string, bool>();
+
+        if (cMesh.ExternalMaterials.Count > 0 && cMesh.PreloadExternalMaterials.Count > 0)
+        {
+            _loggerService.Warning(
+                "You're using both ExternalMaterials and PreloadExternalMaterials in the same mesh. This is not supported.");
+        }
+
+        var externalMaterials = cMesh.ExternalMaterials.ToList();
+        var preloadExternalMaterials = cMesh.PreloadExternalMaterials.ToList();
+        var preloadLocalMaterials = cMesh.PreloadLocalMaterialInstances.ToList();
+        var localMaterials = (cMesh.LocalMaterialBuffer.Materials ?? []).ToList();
+
+        // Collect material entries. Consider ArchiveXL dynamic materials.
         foreach (var materialEntry in cMesh.MaterialEntries)
         {
-            var indexName = materialEntry.IsLocalInstance ? $"l_{materialEntry.Index}" : $"e_{materialEntry.Index}";
             var materialName = materialEntry.Name.GetResolvedText()!;
+            var indexName = materialEntry.IsLocalInstance ? $"l_{materialEntry.Index}" : $"e_{materialEntry.Index}";
 
             if (materialDict.TryGetValue(indexName, out var oldValue))
             {
@@ -68,29 +90,127 @@ public class MaterialExtractor
                 
                 continue;
             }
+
+            // Normal materials
+            if (!materialName.Contains('@'))
+            {
+                materialInstanceList[materialName] = materialEntry.IsLocalInstance;
+                continue;
+            }
+
+            /*
+             * dynamic materials. Jesus fuck.
+             */
+
+            var materialIndex = -1;
+
+            // Remove the original, and create a copy for every placeholder material
+            var localMaterial = cMesh.LocalMaterialBuffer.Materials!.ToList().ElementAtOrDefault(materialEntry.Index);
+            var preloadLocalMaterial = cMesh.PreloadLocalMaterialInstances.ToList().ElementAtOrDefault(materialEntry.Index);
+
+            CResourceAsyncReference<IMaterial>? externalMaterial = cMesh.ExternalMaterials.ElementAtOrDefault(materialEntry.Index);
+            CResourceReference<IMaterial>? preloadExternalMaterial = cMesh.PreloadExternalMaterials.ElementAtOrDefault(materialEntry.Index);
+
+            if (materialEntry.IsLocalInstance && localMaterial is not null && localMaterials.IndexOf(localMaterial) is var idx and >= 0)
+            {
+                materialIndex = idx;
+            }
+            else if (materialEntry.IsLocalInstance && preloadLocalMaterial is not null &&
+                     preloadLocalMaterials.IndexOf(preloadLocalMaterial) is var preIdx and >= 0)
+            {
+                materialIndex = preIdx;
+            }
+            else if (!materialEntry.IsLocalInstance && externalMaterial is { } external &&
+                     externalMaterials.IndexOf(external) is var extIdx and >= 0)
+            {
+                materialIndex = extIdx;
+            }
+            else if (!materialEntry.IsLocalInstance && preloadExternalMaterial is { } pExternal &&
+                     preloadExternalMaterials.IndexOf(pExternal) is var pExtIdx and >= 0)
+            {
+                materialIndex = pExtIdx;
+            }
             
-            materialDict.Add(indexName, materialName);
+            if (materialEntry.IsLocalInstance)
+            {
+                if (preloadLocalMaterials.Count > materialIndex)
+                {
+                    preloadLocalMaterials.RemoveAt(materialIndex);
+                }
+                else if (localMaterials.Count > materialIndex)
+                {
+                    localMaterials.RemoveAt(materialIndex);
+                }
+            }
+            else
+            {
+                if (preloadExternalMaterials.Count > materialIndex)
+                {
+                    preloadExternalMaterials.RemoveAt(materialIndex);
+                }
+                else if (externalMaterials.Count > materialIndex)
+                {
+                    externalMaterials.RemoveAt(materialIndex);
+                }
+            }
+
+            // dynamic materials
+            foreach (var dynamicMaterialName in dynamicChunks
+                         .Where(name => name.GetResolvedText()?.EndsWith(materialName) == true)
+                         .Select(dynamicName => dynamicName.GetResolvedText()!))
+            {
+                materialInstanceList[dynamicMaterialName] = materialEntry.IsLocalInstance;
+                if (materialEntry.IsLocalInstance)
+                {
+                    if (localMaterial is not null)
+                    {
+                        localMaterials.Insert(materialIndex, (IMaterial)localMaterial.DeepCopy());
+                    }
+
+                    if (preloadLocalMaterial is not null)
+                    {
+                        preloadLocalMaterials.Insert(materialIndex, (CHandle<IMaterial>)preloadLocalMaterial.DeepCopy());
+                    }
+                }
+                else
+                {
+                    if (externalMaterial is { } notNull)
+                    {
+                        externalMaterials.Insert(materialIndex, notNull);
+                    }
+
+                    if (preloadExternalMaterial is { } preloadNotNull)
+                    {
+                        preloadExternalMaterials.Insert(materialIndex, preloadNotNull);
+                    }
+                }
+            }
         }
 
-        for (var i = 0; i < cMesh.ExternalMaterials.Count; i++)
+        // Now, put them into the correct list
+        foreach (var (kvp, index) in materialInstanceList.Select((kvp, index) => (Value: kvp, Index: index)))
         {
-            TryFindMaterial(mainFile, cMesh.ExternalMaterials[i], out var result);
+            var indexName = kvp.Value ? $"l_{index}" : $"e_{index}";
+            materialDict[indexName] = kvp.Key;
+        }
 
-            var (mergedMaterial, template) = MergeMaterialChain(result.IsEmbedded ? mainFile : result.File!, (IMaterial)result.File!.RootChunk);
+        for (var i = 0; i < externalMaterials.Count; i++)
+        {
+            TryFindMaterial(mainFile, externalMaterials[i], out var result);
 
-            mergedMaterial.Name = materialDict[$"e_{i}"];
+            var (mergedMaterial, template) =
+                MergeMaterialChain(result.IsEmbedded ? mainFile : result.File!, (IMaterial)result.File!.RootChunk, materialDict[$"e_{i}"]);
 
             materialData.Materials.Add(mergedMaterial);
             materialData.MaterialTemplates.Add(template);
         }
 
-        for (var i = 0; i < cMesh.PreloadExternalMaterials.Count; i++)
+        for (var i = 0; i < preloadExternalMaterials.Count; i++)
         {
-            TryFindMaterial(mainFile, cMesh.PreloadExternalMaterials[i], out var result);
+            TryFindMaterial(mainFile, preloadExternalMaterials[i], out var result);
 
-            var (mergedMaterial, template) = MergeMaterialChain(result.IsEmbedded ? mainFile : result.File!, (IMaterial)result.File!.RootChunk);
-
-            mergedMaterial.Name = materialDict[$"e_{i}"];
+            var (mergedMaterial, template) =
+                MergeMaterialChain(result.IsEmbedded ? mainFile : result.File!, (IMaterial)result.File!.RootChunk, materialDict[$"e_{i}"]);
 
             materialData.Materials.Add(mergedMaterial);
             materialData.MaterialTemplates.Add(template);
@@ -98,32 +218,27 @@ public class MaterialExtractor
 
         if (cMesh.LocalMaterialBuffer is { Materials: not null })
         {
-            for (var i = 0; i < cMesh.LocalMaterialBuffer.Materials.Count; i++)
+            for (var i = 0; i < localMaterials.Count; i++)
             {
-                var (mergedMaterial, template) = MergeMaterialChain(mainFile, cMesh.LocalMaterialBuffer.Materials[i]);
-
-                mergedMaterial.Name = materialDict[$"l_{i}"];
+                var (mergedMaterial, template) = MergeMaterialChain(mainFile, localMaterials[i], materialDict[$"l_{i}"]);
 
                 materialData.Materials.Add(mergedMaterial);
                 materialData.MaterialTemplates.Add(template);
             }
         }
 
+        // TODO: Is this ever used?
         for (var i = 0; i < cMesh.LocalMaterialInstances.Count; i++)
         {
-            var (mergedMaterial, template) = MergeMaterialChain(mainFile, cMesh.LocalMaterialInstances[i].Chunk!);
-
-            mergedMaterial.Name = materialDict[$"l_{i}"];
+            var (mergedMaterial, template) = MergeMaterialChain(mainFile, cMesh.LocalMaterialInstances[i].Chunk!, materialDict[$"l_{i}"]);
 
             materialData.Materials.Add(mergedMaterial);
             materialData.MaterialTemplates.Add(template);
         }
 
-        for (var i = 0; i < cMesh.PreloadLocalMaterialInstances.Count; i++)
+        for (var i = 0; i < preloadLocalMaterials.Count; i++)
         {
-            var (mergedMaterial, template) = MergeMaterialChain(mainFile, cMesh.PreloadLocalMaterialInstances[i].Chunk!);
-
-            mergedMaterial.Name = materialDict[$"l_{i}"];
+            var (mergedMaterial, template) = MergeMaterialChain(mainFile, preloadLocalMaterials[i].Chunk!, materialDict[$"l_{i}"]);
 
             materialData.Materials.Add(mergedMaterial);
             materialData.MaterialTemplates.Add(template);
@@ -132,66 +247,70 @@ public class MaterialExtractor
         return materialData;
     }
 
-    private const string s_defaultMaterialPath =
-        @"base\environment\architecture\common\int\int_nkt_jp_corridor_a\materials\debug_to_replace.mi";
 
-    private static readonly CR2WFile s_defaultMaterialFile = new() { MetaData = { FileName = s_defaultMaterialPath } };
 
-    private static readonly IMaterial s_defaultMaterialInstance =
-        new CMaterialInstance() { BaseMaterial = new CResourceReference<IMaterial>(s_defaultMaterialPath) };
-
-    private static readonly IRedRef
-        s_defaultMaterialRef = new CResourceReference<CMaterialTemplate>((ResourcePath)s_defaultMaterialPath);
-
-    private (RawMaterial mergedMaterial, RawMaterial template) MergeMaterialChain(CR2WFile parentFile, IMaterial material)
+    private (RawMaterial mergedMaterial, RawMaterial template) MergeMaterialChain(CR2WFile parentFile, IMaterial material,
+        string dynamicMaterialName)
     {
-        RawMaterial mergedMaterial = null!, template = null!;
+        RawMaterial mergedMaterial, template;
+        var materialName = dynamicMaterialName.Split('@').FirstOrDefault() ?? dynamicMaterialName;
 
         switch (material)
         {
             case CMaterialInstance cMaterialInstance:
             {
-                // If material is empty, invalid, or if it's using a "none" material (for file validation), 
-                // fall back to default material
-                if (cMaterialInstance.BaseMaterial.DepotPath == ResourcePath.Empty)
-                {
-                    cMaterialInstance.BaseMaterial = new CResourceReference<IMaterial>(s_defaultMaterialPath);
-                }
+                // This method handles both ArchiveXL dynamic substitution and replaces empty material with default.mi
+                cMaterialInstance.BaseMaterial =
+                    ArchiveXlHelper.ResolveBaseMaterial(cMaterialInstance.BaseMaterial, dynamicMaterialName);
                 
                 var status = TryFindFile2(parentFile, cMaterialInstance.BaseMaterial, out var result);
-                if (status == FindFileResult.NoCR2W || status == FindFileResult.FileNotFound ||
-                    result.File!.RootChunk is not IMaterial childMaterial)
+                if (status is FindFileResult.NoCR2W or FindFileResult.FileNotFound || result.File!.RootChunk is not IMaterial childMaterial)
                 {
                     // If there's anything wrong with the file, we're falling back to the default material 
-                    (mergedMaterial, template) = MergeMaterialChain(s_defaultMaterialFile, s_defaultMaterialInstance);
+                    (mergedMaterial, template) =
+                        MergeMaterialChain(DefaultMaterials.DefaultMaterialTemplateFile, DefaultMaterials.DefaultMaterialInstance,
+                            materialName);
                 }
                 else
                 {
-                    (mergedMaterial, template) = MergeMaterialChain(result.IsEmbedded ? parentFile : result.File, childMaterial);
+                    (mergedMaterial, template) = MergeMaterialChain(result.IsEmbedded ? parentFile : result.File, childMaterial,
+                        materialName);
                 }
 
                 mergedMaterial.BaseMaterial = cMaterialInstance.BaseMaterial.DepotPath.GetResolvedText()!;
-                mergedMaterial.EnableMask = (bool)template.EnableMask! && (bool)cMaterialInstance.EnableMask;
+                mergedMaterial.EnableMask = (bool)template.EnableMask! && cMaterialInstance.EnableMask;
+                mergedMaterial.Name = materialName;
+                mergedMaterial.Data ??= [];
 
                 foreach (var pair in cMaterialInstance.Values)
                 {
+                    var key = pair.Key.GetResolvedText()!;
+
+                    if (pair.Value is not IRedRef resourceReference)
+                    {
+                        mergedMaterial.Data[key] = GetSerializableValue(pair.Value);
+                        continue;
+                    }
+
                     // could compare if it differs but meh
-                    if (pair.Value is IRedRef resourceReference && resourceReference.DepotPath != ResourcePath.Empty)
+                    try
                     {
-                        var key = pair.Key.GetResolvedText()!;
-                        try
+                        mergedMaterial.Data[key] = ExtractResource(resourceReference, materialName);
+                    }
+                    catch
+                    {
+                        // If we ran into an exception when parsing a key/value pair, fall back to default values
+                        if (Enum.TryParse<MaterialResourcePathKey>(key, out var enumValue))
                         {
-                            mergedMaterial.Data![key] = ExtractResource(resourceReference);
+                            ExtractResource(DefaultMaterials.GetResourceReference(enumValue), "");
+                            mergedMaterial.Data![key] = DefaultMaterials.FilePaths[enumValue];
                         }
-                        catch
+                        else
                         {
-                            mergedMaterial.Data![key] = s_defaultMaterialPath;
+                            mergedMaterial.Data![key] = "";
                         }
                     }
-                    else
-                    {
-                        mergedMaterial.Data![pair.Key.GetResolvedText()!] = GetSerializableValue(pair.Value);
-                    }
+                    
                 }
 
                 return (mergedMaterial, template);
@@ -201,7 +320,7 @@ public class MaterialExtractor
                 var fileName = (parentFile.MetaData.FileName ?? string.Empty).ToLower().Replace("none", "");
                 if (fileName == string.Empty)
                 {
-                    fileName = s_defaultMaterialPath;
+                    fileName = DefaultMaterials.DefaultMiPath;
                 }
 
                 mergedMaterial = new RawMaterial
@@ -216,40 +335,40 @@ public class MaterialExtractor
                     EnableMask = cMaterialTemplate.CanBeMasked
                 };
 
-                var usedParameterNames = new List<string>();
-                foreach (var usedParameter in cMaterialTemplate.UsedParameters[2])
-                {
-                    usedParameterNames.Add(usedParameter.Name.GetResolvedText()!);
-                }
+                var usedParameterNames = cMaterialTemplate.UsedParameters[2]
+                    .Select(usedParameter => usedParameter.Name.GetResolvedText() ?? "INVALID_PARAMETER")
+                    .ToList();
 
                 foreach (var parameterHandle in cMaterialTemplate.Parameters[2].NotNull())
                 {
                     var refer = parameterHandle.Chunk!;
-                    if (usedParameterNames.Contains(refer.ParameterName.GetResolvedText()!))
+                    var parameterName = refer.ParameterName.GetResolvedText()!;
+                    if (!usedParameterNames.Contains(parameterName))
                     {
-                        try
+                        continue;
+                    }
+
+                    object? value = GetMaterialParameterValue(refer);
+                    try
+                    {
+                        if (value is IRedRef resourceReference)
                         {
-                            object? value = GetMaterialParameterValue(refer);
-
-                            if (value is IRedRef resourceReference && resourceReference.DepotPath != ResourcePath.Empty)
-                            {
-                                value = ExtractResource(resourceReference);
-                            }
-
-                            if (value is IRedType redValue)
-                            {
-                                value = GetSerializableValue(redValue);
-                            }
-
-                            mergedMaterial.Data.Add(refer.ParameterName.GetResolvedText()!, value);
-                            template.Data.Add(refer.ParameterName.GetResolvedText()!, value);
+                            value = ExtractResource(resourceReference, materialName);
                         }
-                        catch (Exception ex)
+
+                        if (value is IRedType redValue)
                         {
-                            _loggerService.Warning(
-                                $"Skipped extraction of material parameter {refer.ParameterName.GetResolvedText()}");
-                            _loggerService.Warning($"\t{ex.Message}");
+                            value = GetSerializableValue(redValue);
                         }
+
+                        mergedMaterial.Data.Add(parameterName, value);
+                        template.Data.Add(parameterName, value);
+                    }
+                    catch (Exception ex)
+                    {
+                        _loggerService.Warning(
+                            $"Skipped extraction of material parameter {refer.ParameterName.GetResolvedText()}");
+                        _loggerService.Warning($"\t{ex.Message}");
                     }
                 }
 
@@ -259,8 +378,16 @@ public class MaterialExtractor
 
         throw new Exception("???");
 
-        string ExtractResource(IRedRef resourceReference)
+        string ExtractResource(IRedRef resourceReference, string escapedMaterialName)
         {
+            if (resourceReference.DepotPath == ResourcePath.Empty)
+            {
+                return "";
+            }
+
+            resourceReference = ArchiveXlHelper.ResolvePotentiallyDynamicDepotPath(resourceReference, escapedMaterialName);
+            
+
             var status = TryFindFile2(parentFile, resourceReference, out var result);
             if (status == FindFileResult.NoCR2W)
             {
@@ -295,12 +422,6 @@ public class MaterialExtractor
 
                     _textureList.Add(relativePath);
                     break;
-                case CCubeTexture cCubeTexture:
-                    break;
-                case CTextureArray cTextureArray:
-                    break;
-                case CFoliageProfile cFoliageProfile:
-                    break;
                 case CGradient:
                     fullPath.Directory?.Create();
                     ExtractToJson(result.File, imports, fullPath.FullName, false);
@@ -325,10 +446,11 @@ public class MaterialExtractor
                     fullPath.Directory?.Create();
                     ExtractToJson(result.File, imports, fullPath.FullName, true);
                     break;
-                case CSkinProfile cSkinProfile:
-                    break;
-                case CTerrainSetup cTerrainSetup:
-                    break;
+                // case CCubeTexture cCubeTexture:
+                // case CTextureArray cTextureArray:
+                // case CFoliageProfile cFoliageProfile:
+                // case CSkinProfile cSkinProfile:
+                // case CTerrainSetup cTerrainSetup:
                 default:
                     break;
             }
@@ -370,7 +492,7 @@ public class MaterialExtractor
 
             foreach (var import in imports)
             {
-                ExtractResource(new CResourceReference<CResource>(import.DepotPath, import.Flags));
+                ExtractResource(new CResourceReference<CResource>(import.DepotPath, import.Flags), "");
             }
         }
     }
@@ -382,14 +504,15 @@ public class MaterialExtractor
         {
             throw new Exception($"Error while parsing the file: {resourceReference.DepotPath.GetResolvedText()}");
         }
+
         if (status == FindFileResult.FileNotFound)
         {
             throw new Exception($"Error while finding the file: {resourceReference.DepotPath.GetResolvedText()}");
         }
 
-        if (result.File!.RootChunk is not IMaterial childMaterial)
+        if (result.File!.RootChunk is not IMaterial)
         {
-            throw new Exception("???");
+            throw new Exception("RootChunk is not a material");
         }
 
         return status;
@@ -449,7 +572,7 @@ public class MaterialExtractor
         return FindFileResult.NoError;
     }
 
-    private IRedType? GetMaterialParameterValue(CMaterialParameter materialParameter) =>
+    private static IRedType? GetMaterialParameterValue(CMaterialParameter materialParameter) =>
         materialParameter switch
         {
             CMaterialParameterColor col => col.Color,
@@ -462,7 +585,7 @@ public class MaterialExtractor
             CMaterialParameterMultilayerSetup muls => muls.Setup,
             CMaterialParameterScalar sca => sca.Scalar,
             CMaterialParameterSkinParameters ski => ski.SkinProfile,
-            CMaterialParameterStructBuffer str => null,
+            CMaterialParameterStructBuffer => null,
             CMaterialParameterTerrainSetup ter => ter.Setup,
             CMaterialParameterTexture tex => tex.Texture,
             CMaterialParameterTextureArray texa => texa.Texture,
@@ -484,7 +607,7 @@ public class MaterialExtractor
             CMaterialParameterMultilayerSetup muls => GetSerializableValue(muls.Setup),
             CMaterialParameterScalar sca => GetSerializableValue(sca.Scalar),
             CMaterialParameterSkinParameters ski => GetSerializableValue(ski.SkinProfile),
-            CMaterialParameterStructBuffer str => null,
+            CMaterialParameterStructBuffer => null,
             CMaterialParameterTerrainSetup ter => GetSerializableValue(ter.Setup),
             CMaterialParameterTexture tex => GetSerializableValue(tex.Texture),
             CMaterialParameterTextureArray texa => GetSerializableValue(texa.Texture),
@@ -493,7 +616,7 @@ public class MaterialExtractor
             _ => throw new NotImplementedException(materialParameter.GetType().Name)
         };
 
-    private object GetSerializableValue(IRedType value) =>
+    private static object GetSerializableValue(IRedType value) =>
         value switch
         {
             CColor col => new Dictionary<string, byte>
@@ -512,6 +635,7 @@ public class MaterialExtractor
                 { nameof(vec.Z), vec.Z },
                 { nameof(vec.W), vec.W },
             },
+            IRedResourceReference rRef when rRef.DepotPath == ResourcePath.Empty => "",
             IRedResourceReference { DepotPath.IsResolvable: true } rRef => rRef.DepotPath.GetResolvedText()!,
             IRedResourceReference rRef => rRef.DepotPath,
             _ => throw new NotImplementedException(value.GetType().Name)

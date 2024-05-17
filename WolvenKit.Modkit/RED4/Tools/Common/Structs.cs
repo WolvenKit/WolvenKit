@@ -214,6 +214,9 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
         public bool? EnableMask { get; set; }
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public Dictionary<string, object?>? Data { get; set; }
+
+        // Will this break anything? Sure handy for debugging
+        public override string ToString() => $"{BaseMaterial} (${Name})";
     }
 
     public class MaterialValueWrapper
