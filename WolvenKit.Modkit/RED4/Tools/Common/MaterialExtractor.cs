@@ -188,9 +188,22 @@ public class MaterialExtractor
         }
 
         // Now, put them into the correct list
+        var externalIndex = -1;
+        var localIndex = -1;
         foreach (var (kvp, index) in materialInstanceList.Select((kvp, index) => (Value: kvp, Index: index)))
         {
-            var indexName = kvp.Value ? $"l_{index}" : $"e_{index}";
+            var indexName = "";
+            if (kvp.Value)
+            {
+                localIndex += 1;
+                indexName = $"l_{localIndex}";
+            }
+            else
+            {
+                externalIndex += 1;
+                indexName = $"e_{externalIndex}";
+            }
+
             materialDict[indexName] = kvp.Key;
         }
 
