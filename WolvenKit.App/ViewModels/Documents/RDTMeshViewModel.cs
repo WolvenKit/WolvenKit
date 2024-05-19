@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DynamicData;
 using DynamicData.Kernel;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
@@ -164,7 +165,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         {
             Parent.GetLoggerService().Error(ex);
         }
-
+        
         if (_data is CMesh)
         {
             RenderMesh();
@@ -379,6 +380,30 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         var materials = new Dictionary<string, Material>();
 
         var localList = data.LocalMaterialBuffer.RawData?.Buffer.Data as CR2WList ?? null;
+
+        // If there are no local materials defined that we can use to render the mesh, generate one
+        if (data.MaterialEntries.Count == 0 || data.MaterialEntries.All((entry) => !entry.IsLocalInstance))
+        {
+            data.MaterialEntries.Add(new CMeshMaterialEntry() { Name = (CName)"default (generated)", Index = 0, IsLocalInstance = true });
+            var material = new CMaterialInstance()
+            {
+                BaseMaterial = new CResourceReference<RED4.Types.IMaterial>(@"engine\materials\metal_base.remt")
+            };
+            material.Values.Add(new CKeyValuePair("BaseColor", (ResourcePath)@"base\surfaces\materials\default\debug_d.xbm"));
+            data.PreloadLocalMaterialInstances.Add(material);
+        }
+
+        if (data.Appearances.Count == 0)
+        {
+            var app = new meshMeshAppearance();
+
+            for (var i = 0; i < 21; i++)
+            {
+                app.ChunkMaterials.Add((CName)"default (generated)");
+            }
+
+            data.Appearances.Add(new CHandle<meshMeshAppearance>(app));
+        }
         
         foreach (var me in data.MaterialEntries)
         {
