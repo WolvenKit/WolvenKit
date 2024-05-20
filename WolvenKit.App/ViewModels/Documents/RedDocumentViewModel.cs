@@ -10,6 +10,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Options;
 using WolvenKit.App.Factories;
 using WolvenKit.App.Helpers;
+using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
@@ -166,6 +167,8 @@ public partial class RedDocumentViewModel : DocumentViewModel
     #endregion
 
     #region methods
+
+    public Cp77Project? GetActiveProject() => _projectManager.ActiveProject;
 
     public ILoggerService GetLoggerService() => _loggerService;
 
