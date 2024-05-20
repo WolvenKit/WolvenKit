@@ -1309,7 +1309,21 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     }
 
 
-    private bool CanDeleteUnusedMaterials() => ResolvedData is CMesh;
+    private bool CanClearMaterials() => ResolvedData is CMesh && IsShiftKeyPressed;
+
+    [RelayCommand(CanExecute = nameof(CanClearMaterials))]
+    private void ClearMaterials()
+    {
+        if (ResolvedData is not CMesh mesh)
+        {
+            return;
+        }
+
+        mesh.Appearances.Clear();
+        DeleteUnusedMaterials();
+    }
+
+    private bool CanDeleteUnusedMaterials() => ResolvedData is CMesh && !IsShiftKeyPressed;
 
     [RelayCommand(CanExecute = nameof(CanDeleteUnusedMaterials))]
     private void DeleteUnusedMaterials()

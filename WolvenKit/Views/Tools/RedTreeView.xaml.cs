@@ -142,7 +142,6 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            var test = Locator.Current.GetService<AppViewModel>();
             var tt = Locator.Current.GetService<AppViewModel>();
 
             if (tt.ActiveDocument is not RedDocumentViewModel { SelectedTabItemViewModel: RDTDataViewModel rdtd })
@@ -373,10 +372,7 @@ namespace WolvenKit.Views.Tools
 
         private void OnKeystateChanged(object sender, KeyEventArgs e) => _modifierViewStateSvc.OnKeystateChanged(e);
 
-        private void OnContextMenuOpened(object sender, ContextMenuEventArgs e)
-        {
-            _modifierViewStateSvc.RefreshModifierStates();
-        }
+        private void OnContextMenuOpened(object sender, ContextMenuEventArgs e) => _modifierViewStateSvc.RefreshModifierStates();
 
         private void OnDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -385,7 +381,14 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
+            // If the current chunk is not expanded, collapse all of its siblings
+            if (!chunk.IsExpanded && chunk.Parent is ChunkViewModel parent)
+            {
+                chunk = parent;
+            }
+            
             var expansionState = chunk.IsExpanded;
+            
             var expansionStates = chunk.GetAllProperties().Select((child) => child.IsExpanded).ToList();
             chunk.SetChildExpansionStates(!expansionStates.Contains(true));
 
