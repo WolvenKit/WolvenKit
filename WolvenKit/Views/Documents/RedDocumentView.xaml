@@ -132,6 +132,20 @@
                                     </MenuItem.Icon>
                                 </MenuItem>
                                 <MenuItem
+                                    Command="{Binding PlacementTarget.Tag.ExtractEmbeddedFileCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                    Header="Extract Embedded File"
+                                    Visibility="{Binding Path=PlacementTarget.Tag.IsEmbeddedFile, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <MenuItem.Icon>
+                                        <iconPacks:PackIconCodicons
+                                            Width="13"
+                                            Height="13"
+                                            Padding="0,0,0,0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Kind="Save" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem
                                     Command="{Binding PlacementTarget.Tag.DeleteEmbeddedFileCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                                     Header="Delete Embedded File"
                                     Visibility="{Binding Path=PlacementTarget.Tag.IsEmbeddedFile, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
