@@ -165,9 +165,11 @@ namespace WolvenKit.Views.Tools
                 // Pulling these two apart makes sure that the view grid isn't refreshed twice
                 // (node expansion states weren't ready on second time around)
                 this.WhenAnyValue(x => x.ViewModel.BindGrid1)
-                    .Subscribe((sender) => RefreshViewModel());
+                    .Subscribe((sender) => RefreshViewModel())
+                    .DisposeWith(disposables);
                 this.WhenAnyValue(x => x.ViewModel.IsFlatModeEnabled)
-                    .Subscribe((sender) => RefreshViewModel());
+                    .Subscribe((sender) => RefreshViewModel())
+                    .DisposeWith(disposables);
             });
         }
 
