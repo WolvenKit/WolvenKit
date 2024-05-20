@@ -47,7 +47,7 @@ public partial class RDTGraphViewModel : RedDocumentTabViewModel
 
     public PendingConnectionViewModel? PendingConnection { get; private set; }
 
-    public void Load()
+    public override void Load()
     {
         if (_isLoaded)
         {
