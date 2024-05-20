@@ -15,7 +15,6 @@ public interface IDocumentViewModel : IDockElement
     public bool IsDirty
     {
         get;
-        protected set;
     }
     
     DateTime LastWriteTime { get; }

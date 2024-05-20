@@ -34,7 +34,7 @@ public abstract partial class DocumentViewModel : PaneViewModel, IDocumentViewMo
     public bool IsDirty
     {
         get => _isDirty;
-        set => SetProperty(ref _isDirty, value);
+        protected set => SetProperty(ref _isDirty, value);
     }
 
     private bool _isSimpleViewEnabled;
