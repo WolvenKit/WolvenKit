@@ -189,11 +189,18 @@ namespace WolvenKit.Views.Tools
 
         private void BeforeDataSourceUpdate()
         {
-            if (TreeGrid?.View == null || TreeGrid.View.Nodes.RootNodes.Count == 0)
+            if (_isRefreshing || TreeGrid?.View == null || TreeGrid.View.Nodes.RootNodes.Count == 0)
             {
                 return;
             }
 
+            _isRefreshing = true;
+
+            _refreshTimer = new System.Timers.Timer(500);
+            _refreshTimer.Elapsed += (s, e) => _isRefreshing = false;
+            _refreshTimer.AutoReset = false;
+            _refreshTimer.Start();
+            
             _selectedNodeState = ((FileModel)TreeGrid.SelectedItem)?.FullName;
             _nodeExpansionState = [];
             foreach (var node in TreeGrid.View.Nodes.RootNodes)
@@ -223,13 +230,15 @@ namespace WolvenKit.Views.Tools
             }
         }
 
+        private bool _isRefreshing = false;
+        private System.Timers.Timer _refreshTimer;
+        
         private void AfterDataSourceUpdate()
         {
             if (TreeGrid?.View == null || TreeGrid.View.Nodes.RootNodes.Count == 0 || _nodeExpansionState is null)
             {
                 return;
             }
-
 
             TreeGrid.CollapseAllNodes();
             foreach (var node in TreeGrid.View.Nodes.RootNodes)
@@ -239,33 +248,35 @@ namespace WolvenKit.Views.Tools
                     SetStates(node);
                 }
             }
-
+            
             _nodeExpansionState = null;
             _selectedNodeState = null;
 
+            return; 
+            
             void SetStates(TreeNode node)
             {
                 if (((FileModel)node.Item).FullName == _selectedNodeState)
                 {
                     TreeGrid.SetCurrentValue(SfGridBase.SelectedItemProperty, node.Item);
                 }
-
+            
                 if (!node.HasChildNodes)
                 {
                     return;
                 }
-
+            
                 var fullName = ((FileModel)node.Item).FullName;
                 if (!_nodeExpansionState.TryGetValue(fullName, out var value) || value)
                 {
                     TreeGrid.ExpandNode(node);
                 }
-
+            
                 if (ViewModel.ModifierViewStateService.IsShiftKeyPressed)
                 {
                     return;
                 }
-
+            
                 foreach (var childNode in node.ChildNodes)
                 {
                     SetStates(childNode);
