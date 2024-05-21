@@ -326,6 +326,7 @@
                         <ColumnDefinition Width="13" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
                     <others:FileIcon
@@ -335,6 +336,12 @@
                         Style="{StaticResource PE_FileIconStyle}" />
                     <TextBlock
                         x:Name="TemplateTextBlock"
+                        Grid.Column="1"
+                        Margin="5,0,0,2"
+                        VerticalAlignment="Center"
+                        Text="{Binding Path=Name}" />
+                    <TextBlock
+                        x:Name="FileSizeTextBlock"
                         Grid.Column="1"
                         Margin="5,0,0,2"
                         VerticalAlignment="Center"
@@ -832,6 +839,10 @@
                     Width="70"
                     HeaderText="Kind"
                     MappingName="Extension" />
+                <syncfusion:TreeGridTextColumn
+                    Width="70"
+                    HeaderText="Size"
+                    MappingName="FileSize" />
             </syncfusion:SfTreeGrid.Columns>
         </syncfusion:SfTreeGrid>
 
