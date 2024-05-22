@@ -37,7 +37,7 @@ public partial class scnAnimName : IRedAppendix
 
         var cnt = size / 2;
 
-        if (Type == Enums.scnAnimNameType.reference)
+        if (Type == Enums.scnAnimNameType.reference || Type == Enums.scnAnimNameType.container)
         {
             Unk2 = new CArray<CUInt16>();
             for (int i = 0; i < cnt; i++)
@@ -57,7 +57,7 @@ public partial class scnAnimName : IRedAppendix
 
     public void Write(Red4Writer writer)
     {
-        if (Type == Enums.scnAnimNameType.reference)
+        if (Type == Enums.scnAnimNameType.reference || Type == Enums.scnAnimNameType.container)
         {
             foreach (var val in Unk2)
             {
