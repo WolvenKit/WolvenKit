@@ -12,6 +12,7 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:tools="clr-namespace:WolvenKit.App.ViewModels.Tools;assembly=WolvenKit.App"
+    xmlns:data="clr-namespace:Syncfusion.Data;assembly=Syncfusion.Data.WPF"
     x:Name="uc"
     d:DataContext="{d:DesignInstance Type=tools:ProjectExplorerViewModel}"
     d:DesignHeight="450"
@@ -326,6 +327,7 @@
                         <ColumnDefinition Width="13" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
                     <others:FileIcon
@@ -335,6 +337,12 @@
                         Style="{StaticResource PE_FileIconStyle}" />
                     <TextBlock
                         x:Name="TemplateTextBlock"
+                        Grid.Column="1"
+                        Margin="5,0,0,2"
+                        VerticalAlignment="Center"
+                        Text="{Binding Path=Name}" />
+                    <TextBlock
+                        x:Name="FileSizeTextBlock"
                         Grid.Column="1"
                         Margin="5,0,0,2"
                         VerticalAlignment="Center"
@@ -771,7 +779,7 @@
             Margin="0,0,0,0"
             AllowEditing="False"
             AllowFiltering="True"
-            AllowResizingColumns="False"
+            AllowResizingColumns="True"
             AllowSorting="True"
             AutoExpandMode="AllNodesExpanded"
             AutoGenerateColumns="False"
@@ -798,7 +806,7 @@
             VirtualizingPanel.ScrollUnit="Pixel"
             VirtualizingPanel.VirtualizationMode="Recycling"
             Visibility="{Binding IsFlatModeEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
-
+            
             <syncfusion:SfTreeGrid.Resources>
                 <Style TargetType="syncfusion:TreeGridCell">
                     <Setter Property="BorderBrush" Value="Transparent" />
@@ -831,7 +839,13 @@
                 <syncfusion:TreeGridTextColumn
                     Width="70"
                     HeaderText="Kind"
+                    AllowResizing="False"
                     MappingName="Extension" />
+                <syncfusion:TreeGridTextColumn
+                    Width="70"
+                    AllowResizing="False"
+                    HeaderText="Size"
+                    MappingName="FileSize" />
             </syncfusion:SfTreeGrid.Columns>
         </syncfusion:SfTreeGrid>
 

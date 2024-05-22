@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
@@ -8,10 +10,12 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using HandyControl.Data;
 using ReactiveUI;
+using Syncfusion.Data;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.ScrollAxis;
 using Syncfusion.UI.Xaml.TreeGrid;
@@ -148,17 +152,25 @@ namespace WolvenKit.Views.Tools
                     viewModel => viewModel.RefreshCommand,
                     view => view.RefreshButton);
 
+                
                 void RefreshViewModel()
                 {
-                    if (ViewModel?.IsFlatModeEnabled == true)
+                    BeforeDataSourceUpdate();
+                    SetCurrentValue(TreeItemSourceProperty, ViewModel?.BindGrid1);
+                    AfterDataSourceUpdate();
+                }
+
+                void ChangeFlatMode(bool isActive)
+                {
+                    if (isActive)
                     {
+                        TreeGrid.SortComparers.Add(s_pathComparer);
                         SetCurrentValue(FlatItemSourceProperty, ViewModel?.BindGrid1);
                     }
                     else
                     {
-                        BeforeDataSourceUpdate();
-                        SetCurrentValue(TreeItemSourceProperty, ViewModel?.BindGrid1);
-                        AfterDataSourceUpdate();
+                        TreeGrid.SortComparers.Remove(s_pathComparer);
+                        RefreshViewModel();
                     }
                 }
 
@@ -168,7 +180,7 @@ namespace WolvenKit.Views.Tools
                     .Subscribe((sender) => RefreshViewModel())
                     .DisposeWith(disposables);
                 this.WhenAnyValue(x => x.ViewModel.IsFlatModeEnabled)
-                    .Subscribe((sender) => RefreshViewModel())
+                    .Subscribe(ChangeFlatMode)
                     .DisposeWith(disposables);
             });
         }
@@ -274,6 +286,9 @@ namespace WolvenKit.Views.Tools
                 }
             }
         }
+
+
+        private static readonly SortComparer s_pathComparer = new() { Comparer = new FilePathComparer(), PropertyName = "ResourcePath" };
 
         private void OnCellDoubleTapped(object _, TreeGridCellDoubleTappedEventArgs treeGridCellDoubleTappedEventArgs)
         {
@@ -769,7 +784,41 @@ namespace WolvenKit.Views.Tools
 
                 TreeGrid.ExpandNode(childNode);
             }
-            // SetChildExpansionStates(node);
         }
+    }
+
+
+    public class FilePathComparer : IComparer<object>, ISortDirection
+    {
+        public int Compare(string x, string y)
+        {
+            // Split the paths into parts
+            var xParts = x.Split(Path.DirectorySeparatorChar);
+            var yParts = y.Split(Path.DirectorySeparatorChar);
+
+            // Compare each part of the paths
+            for (var i = 0; i < Math.Min(xParts.Length, yParts.Length); i++)
+            {
+                var result = string.CompareOrdinal(xParts[i], yParts[i]);
+                if (result != 0)
+                {
+                    // If the parts are not equal, return the comparison result
+                    return result;
+                }
+            }
+
+            // If all parts are equal so far, the shorter path should come first
+            return xParts.Length.CompareTo(yParts.Length);
+        }
+
+        public int Compare(object x, object y)
+        {
+            return 0;
+        }
+
+
+        //Get or Set the SortDirection value
+
+        public ListSortDirection SortDirection { get; set; }
     }
 }
