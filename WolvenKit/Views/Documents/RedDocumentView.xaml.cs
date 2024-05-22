@@ -32,19 +32,14 @@ namespace WolvenKit.Views.Documents
 
         private void TabControl_OnSelectedItemChangedEvent(object sender, SelectedItemChangedEventArgs e)
         {
-            if (e.NewSelectedItem.DataContext is RDTMeshViewModel meshViewModel)
+            if (e?.NewSelectedItem?.DataContext is RedDocumentTabViewModel newTab)
             {
-                meshViewModel.Load();
+                newTab.Load();
             }
 
-            if (e.NewSelectedItem.DataContext is RDTGraphViewModel graphViewModel)
+            if (e?.OldSelectedItem?.DataContext is RedDocumentTabViewModel oldTab)
             {
-                graphViewModel.Load();
-            }
-
-            if (e.NewSelectedItem.DataContext is RDTGraphViewModel2 graphViewModel2)
-            {
-                graphViewModel2.Load();
+                oldTab.Unload();
             }
         }
 

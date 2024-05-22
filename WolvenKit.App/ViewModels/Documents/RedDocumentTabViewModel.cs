@@ -162,4 +162,14 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
     {
 
     }
+
+    // Do nothing, overwrite in inheriting classes
+    public virtual void Load()
+    {
+    }
+
+    // Do nothing, overwrite in inheriting classes
+    public virtual void Unload()
+    {
+    }
 }
