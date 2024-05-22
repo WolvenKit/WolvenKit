@@ -180,7 +180,7 @@ namespace WolvenKit.Views.Tools
                     .Subscribe((sender) => RefreshViewModel())
                     .DisposeWith(disposables);
                 this.WhenAnyValue(x => x.ViewModel.IsFlatModeEnabled)
-                    .Subscribe(ChangeFlatMode);
+                    .Subscribe(ChangeFlatMode)
                     .DisposeWith(disposables);
             });
         }
