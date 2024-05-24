@@ -371,7 +371,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
 
         if ((Data is CName && s_descriptorPropNames.Contains(Name))
-            || (Data is WorldPosition && Parent.Data is WorldTransform))
+            || (Data is WorldPosition && Parent.Data is WorldTransform)
+            || Parent.Data is CKeyValuePair
+            || Parent.Data is Multilayer_Layer
+           )
         {
             Parent.CalculateDescriptor();
         }
