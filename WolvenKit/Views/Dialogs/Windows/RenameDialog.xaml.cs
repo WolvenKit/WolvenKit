@@ -6,6 +6,8 @@ using System.Windows.Input;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App.ViewModels.Dialogs;
+using WolvenKit.RED4.Types;
+using Window = System.Windows.Window;
 
 namespace WolvenKit.Views.Dialogs.Windows
 {
@@ -28,17 +30,24 @@ namespace WolvenKit.Views.Dialogs.Windows
                     .DisposeWith(disposables);
 
 
-                if (!string.IsNullOrEmpty(TextBox.Text))
+                if (string.IsNullOrEmpty(TextBox.Text) || ViewModel?.Text is null)
                 {
-                    var fileNameStart = TextBox.Text.LastIndexOf(@"\");
-                    fileNameStart = (fileNameStart < 0) ? 0 : fileNameStart+1;
-
-                    var fileNameEnd = TextBox.Text.IndexOf(@".", fileNameStart);
-                    fileNameEnd = (fileNameEnd < 0) ? ViewModel.Text.Length - 1 : fileNameEnd;
-
-                    TextBox.Select(fileNameStart, fileNameEnd - fileNameStart);
-                    TextBox.Focus();
+                    return;
                 }
+
+                var fileNameStart = TextBox.Text.LastIndexOf(@"\", StringComparison.Ordinal);
+                fileNameStart = (fileNameStart < 0) ? 0 : fileNameStart + 1;
+
+                var fileNameEnd = TextBox.Text.IndexOf(@".", fileNameStart, StringComparison.Ordinal);
+                fileNameEnd = (fileNameEnd < 0) ? ViewModel.Text.Length - 1 : fileNameEnd;
+                // it's a folder
+                if (ViewModel.Text.EndsWith(ResourcePath.DirectorySeparatorChar) || !ViewModel.Text.Contains('.'))
+                {
+                    fileNameEnd += 1;
+                }
+
+                TextBox.Select(fileNameStart, fileNameEnd - fileNameStart);
+                TextBox.Focus();
 
             });
         }
