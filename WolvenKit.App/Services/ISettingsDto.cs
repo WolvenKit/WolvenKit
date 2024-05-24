@@ -39,4 +39,5 @@ public interface ISettingsDto
     public string? LastUsedProjectPath { get; set; }
     public int PinnedOrder { get; set; }
     public int RecentOrder { get; set; }
+    public bool ShowGraphEditorNodeProperties { get; set; }
 }
