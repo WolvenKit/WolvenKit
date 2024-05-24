@@ -758,10 +758,40 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanSaveAll))]
     private void SaveAll()
     {
-        foreach (var file in DockedViews.OfType<IDocumentViewModel>())
+        foreach (var file in DockedViews.OfType<IDocumentViewModel>().Where(f => f.IsDirty))
         {
             Save(file);
         }
+    }
+
+    public async Task<bool> AreDirtyFilesHandledBeforeLaunch()
+    {
+        var dirtyFiles = DockedViews.OfType<IDocumentViewModel>().Where(tab => tab.IsDirty).ToList();
+        if (dirtyFiles.Count == 0)
+        {
+            return true;
+        }
+
+        var response = await Interactions.ShowMessageBoxAsync(
+            "You have un-saved files. Save them before installing mod?",
+            "Save changes?",
+            WMessageBoxButtons.YesNoCancel);
+        switch (response)
+        {
+            case WMessageBoxResult.Cancel:
+                return false;
+            case WMessageBoxResult.No:
+            case WMessageBoxResult.Custom:
+            case WMessageBoxResult.None:
+                break;
+            case WMessageBoxResult.OK:
+            case WMessageBoxResult.Yes:
+            default:
+                SaveAll();
+                break;
+        }
+
+        return true;
     }
 
     private bool CanShowHomePage() => !IsDialogShown;
@@ -1273,6 +1303,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private async Task LaunchAsync(LaunchProfile profile)
     {
+        if (!await AreDirtyFilesHandledBeforeLaunch())
+        {
+            return;
+        }
         _watcherService.IsSuspended = true;
         await _gameControllerFactory.GetController().LaunchProject(profile);
         _watcherService.IsSuspended = false;

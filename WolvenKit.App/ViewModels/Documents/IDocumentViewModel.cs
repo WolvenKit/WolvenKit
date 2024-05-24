@@ -11,6 +11,12 @@ public interface IDocumentViewModel : IDockElement
     /// </summary>
     string FilePath { get; set; }
     bool IsReadOnly { get; set; }
+
+    public bool IsDirty
+    {
+        get;
+    }
+    
     DateTime LastWriteTime { get; }
 
     IAsyncRelayCommand<object> SaveCommand { get; }

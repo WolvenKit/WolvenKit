@@ -47,12 +47,24 @@ public class FileModel : ObservableObject
             {
                 _extension = Constants.RawDirectoryTop;
             }
+
+            FileSize = null;
         }
         else if (fileSystemInfo is FileInfo fileInfo)
         {
             IsDirectory = false;
             parentFullName = fileInfo.Directory.NotNull().FullName;
             _extension = fileInfo.Extension;
+            var kilobyte = (double)fileInfo.Length / 1024;
+            if (kilobyte > 1000)
+            {
+                FileSize = $"{kilobyte / 1024:F2} MB"; // Read the file size here
+            }
+            else
+            {
+                FileSize = $"{kilobyte :F2} KB"; // Read the file size here
+            }
+
         }
         else
         {
@@ -63,6 +75,8 @@ public class FileModel : ObservableObject
         ParentHash = GenerateKey(parentFullName, project);
         RelativePath = GetRelativeName(FullName, project);
     }
+
+    public string? FileSize { get; set; }
 
     #region properties
 
