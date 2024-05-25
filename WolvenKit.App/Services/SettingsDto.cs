@@ -43,6 +43,7 @@ public class SettingsDto : ISettingsDto
         LastUsedProjectPath = settings.LastUsedProjectPath;
         PinnedOrder = settings.PinnedOrder;
         RecentOrder = settings.RecentOrder;
+        ShowGraphEditorNodeProperties = settings.ShowGraphEditorNodeProperties;
         
         if (settings.SettingsVersion < 2)
         {
@@ -82,6 +83,7 @@ public class SettingsDto : ISettingsDto
     public string? LastUsedProjectPath { get; set; }
     public int PinnedOrder { get; set; }
     public int RecentOrder { get; set; }
+    public bool ShowGraphEditorNodeProperties { get; set; } = true;
 
     public SettingsManager ReconfigureSettingsManager(SettingsManager settingsManager)
     {
@@ -121,6 +123,7 @@ public class SettingsDto : ISettingsDto
         settingsManager.LastUsedProjectPath = LastUsedProjectPath;
         settingsManager.PinnedOrder = PinnedOrder;
         settingsManager.RecentOrder = RecentOrder;
+        settingsManager.ShowGraphEditorNodeProperties = ShowGraphEditorNodeProperties;
 
         return settingsManager;
     }

@@ -57,7 +57,8 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(ExtraModDirPath),
             nameof(LastUsedProjectPath),
             nameof(PinnedOrder),
-            nameof(RecentOrder)
+            nameof(RecentOrder),
+            nameof(ShowGraphEditorNodeProperties)
             )
           .Subscribe(_ =>
           {
@@ -234,6 +235,10 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [Display(Name = "Game language used for LocKeys", GroupName = "Display")] 
     [ObservableProperty]
     private EGameLanguage _gameLanguage;
+
+    [Display(Name = "Show Graph Editor Node Properties", GroupName = "Display")]
+    [ObservableProperty]
+    private bool _showGraphEditorNodeProperties = true;
 
     [ObservableProperty]
 #pragma warning disable CS0657 // Not a valid attribute location for this declaration

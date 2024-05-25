@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
+using Splat;
 using WolvenKit.App.Extensions;
+using WolvenKit.App.Services;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes;
@@ -14,6 +16,12 @@ internal class NodeProperties
         Dictionary<string, string> details = new();
 
         details["Type"] = GetNameFromClass(node);
+
+        var _settingsManager = Locator.Current.GetService<ISettingsManager>();
+        if (_settingsManager != null && !_settingsManager.ShowGraphEditorNodeProperties)
+        {
+            return details;
+        }
 
         if (node is questPauseConditionNodeDefinition pauseCondCasted)
         {
