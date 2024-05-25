@@ -1,35 +1,213 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
-using DynamicData;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.ProjectManagement.Project;
-using WolvenKit.Core.Extensions;
+using WolvenKit.Common;
+using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.App.Services;
+
+public class FileSystemModel : INotifyPropertyChanged
+{
+    public const string ProjectDirName = "<ProjectDir>";
+
+    private string _fileSizeStr = null!;
+    private long _fileSize;
+    
+    [Browsable(false)] public FileSystemModel? Parent { get; }
+
+    public string Name { get; }
+    [Browsable(false)] public string RawRelativePath { get; private set; }
+    [Display(Name = "Relative Path")] public string GameRelativePath { get; private set; } = null!;
+    [Display(Name = "System Path")] public string FullName { get; private set; } = null!;
+    
+    [Browsable(false)] public ulong Hash { get; private set; }
+    [Display(Name = "Hash")] public string HashStr { get; private set; } = "0";
+
+    [Browsable(false)]
+    public long FileSize
+    {
+        get => _fileSize;
+        private set => SetField(ref _fileSize, value);
+    }
+
+    [Display(Name = "File Size")]
+    public string FileSizeStr
+    {
+        get => _fileSizeStr;
+        private set => SetField(ref _fileSizeStr, value);
+    }
+
+    public string Extension { get; } = "default";
+
+    [Browsable(false)] public bool IsExpanded { get; set; }
+    [Browsable(false)] public DispatchedObservableCollection<FileSystemModel> Children { get; } = new();
+    [Browsable(false)] public bool IsDirectory { get; }
+
+    public FileSystemModel(FileSystemModel? parent, string name, string relativePath, bool isDirectory)
+    {
+        Parent = parent;
+        Name = name;
+        RawRelativePath = relativePath;
+        IsDirectory = isDirectory;
+
+        GetMetadata();
+
+        if (IsDirectory)
+        {
+            Extension = ECustomImageKeys.OpenDirImageKey.ToString();
+            if (relativePath.Equals("archive", StringComparison.CurrentCultureIgnoreCase))
+            {
+                Extension = Constants.ModDirectoryTop;
+            }
+            else if(relativePath.Equals("raw", StringComparison.CurrentCultureIgnoreCase))
+            {
+                Extension = Constants.RawDirectoryTop;
+            }
+            else if (relativePath.Equals("resources", StringComparison.CurrentCultureIgnoreCase))
+            {
+                Extension = Constants.ResourceDirectoryTop;
+            }
+            else if (Parent != null)
+            {
+                Extension = Parent.Extension;
+            }
+        }
+        else
+        {
+            Extension = Path.GetExtension(Name).TrimStart('.');
+
+            UpdateFileInfo();
+        }
+
+        Children.CollectionChanged += Children_OnCollectionChanged;
+    }
+
+    private void Children_OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        IsExpanded = Children.Count > 0;
+    }
+
+    public void UpdateFileInfo()
+    {
+        FileSize = new FileInfo(FullName).Length;
+        FileSizeStr = GetFileSizeStr(FileSize);
+    }
+
+    private void GetMetadata()
+    {
+        var hashParts = new List<string>();
+
+        var root = this;
+        var current = this;
+        while (current != null)
+        {
+            if (current.Parent?.Name != ProjectDirName && current.Name != ProjectDirName)
+            {
+                hashParts.Add(current.Name);
+            }
+
+            root = current;
+            current = current.Parent;
+        }
+        hashParts.Reverse();
+
+        GameRelativePath = string.Join(ResourcePath.DirectorySeparatorChar, hashParts);
+        FullName = Path.Combine(root.RawRelativePath, RawRelativePath);
+
+        if (Parent?.Extension == Constants.ModDirectoryTop)
+        {
+            if (Parent.RawRelativePath == "archive" && ulong.TryParse(Path.GetFileNameWithoutExtension(Name), out var hash))
+            {
+                Hash = hash;
+            }
+            else
+            {
+                Hash = ResourcePath.CalculateHash(GameRelativePath);
+            }
+
+            HashStr = Hash.ToString();
+        }
+    }
+
+    public static string GetFileSizeStr(long fileSize)
+    {
+        string[] sizes = ["B", "KB", "MB", "GB", "TB"];
+        double len = fileSize;
+        var order = 0;
+        while (len >= 1024 && order++ < sizes.Length - 1)
+        {
+            len /= 1024;
+        }
+
+        return string.Format(CultureInfo.InvariantCulture, "{0:0.##} {1}", len, sizes[order]);
+    }
+
+    #region INotifyPropertyChanged
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+    {
+        if (EqualityComparer<T>.Default.Equals(field, value))
+        {
+            return false;
+        }
+
+        field = value;
+        OnPropertyChanged(propertyName);
+        return true;
+    }
+
+    #endregion
+}
 
 /// <summary>
 /// This service watches certain locations in the game files and notifies changes
 /// </summary>
-public class WatcherService : ObservableObject, IWatcherService
+public partial class WatcherService : ObservableObject, IWatcherService
 {
     #region fields
 
-    private readonly SourceCache<FileModel, ulong> _files = new(_ => _.Hash);
-    public IObservableCache<FileModel, ulong> Files => _files;
+    private string _projectDirectory = string.Empty;
+    private FileSystemModel? _projectFileSystemModel;
 
-    private readonly IProjectManager _projectManager;
+    private FileSystemWatcher _modsWatcher;
 
-    private FileSystemWatcher? _modsWatcher;
+    private readonly object _refreshLock = new();
 
-    public FileModel? LastSelect { get; set; }
+    private Task? _updateTask;
+    private CancellationTokenSource _updateThreadCancellationTokenSource = new();
 
-    private readonly Timer _timer;
-    private const int s_waitTime = 100;
+    private readonly ManualResetEventSlim _eventStopper = new();
+
+    private readonly ConcurrentQueue<FileSystemEventArgs> _fileChanges = new();
+
+    private readonly ConcurrentDictionary<string, FileSystemModel> _fileLookup = new();
+
+    [ObservableProperty]
+    private DispatchedObservableCollection<FileSystemModel> _fileList = new();
+
+    [ObservableProperty]
+    private DispatchedObservableCollection<FileSystemModel> _fileTree = new();
 
     private readonly List<string> _ignoredExtensions = new()
     {
@@ -39,44 +217,11 @@ public class WatcherService : ObservableObject, IWatcherService
 
     #endregion
 
-    public WatcherService(IProjectManager projectManager)
+    public WatcherService()
     {
-        _projectManager = projectManager;
-        _projectManager.PropertyChanged += ProjectManager_PropertyChanged;
-
-        _timer = new Timer(OnTimer);
-    }
-
-    public void ForceStopTimer() => _timer.Change(-1, -1);
-
-    // HACK remove after e3 -S. Eberoth
-    private async void OnTimer(object? state)
-    {
-        _timer.Change(-1, -1);
-
-        await RefreshAsync(_projectManager.ActiveProject);
-    }
-
-    private void ProjectManager_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName ==  nameof(IProjectManager.IsProjectLoaded))
+        _modsWatcher = new FileSystemWatcher
         {
-            if (_projectManager.IsProjectLoaded)
-            {
-                WatchLocation(_projectManager.ActiveProject.NotNull().ProjectDirectory);
-                QueueRefresh();
-            }
-            else
-            {
-                UnwatchLocation();
-            }
-        }
-    }
-
-    private void WatchLocation(string location)
-    {
-        _modsWatcher = new FileSystemWatcher(location, "*")
-        {
+            Filter = "*",
             NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.Attributes | NotifyFilters.DirectoryName,
             IncludeSubdirectories = true
         };
@@ -84,228 +229,234 @@ public class WatcherService : ObservableObject, IWatcherService
         _modsWatcher.Changed += OnChanged;
         _modsWatcher.Deleted += OnChanged;
         _modsWatcher.Renamed += OnRenamed;
+    }
+
+    public void WatchProject(Cp77Project project)
+    {
+        _projectDirectory = project.FileDirectory;
+        _projectFileSystemModel = new FileSystemModel(null, FileSystemModel.ProjectDirName, _projectDirectory, true);
+
+        WatchLocation();
+        Refresh();
+    }
+
+    public void UnwatchProject(Cp77Project project) => UnwatchLocation();
+
+    private void WatchLocation()
+    {
+        _modsWatcher.Path = _projectDirectory;
         _modsWatcher.EnableRaisingEvents = true;
     }
 
     private void UnwatchLocation()
     {
-        if (_modsWatcher == null)
-        {
-            return;
-        }
-
         _modsWatcher.EnableRaisingEvents = false;
 
-        _modsWatcher.Created -= OnChanged;
-        _modsWatcher.Changed -= OnChanged;
-        _modsWatcher.Deleted -= OnChanged;
-        _modsWatcher.Renamed -= OnRenamed;
+        ForceStop();
+        Clear();
+    }
+
+    private void Update(CancellationToken cancellationToken)
+    {
+        while (true)
+        {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                break;
+            }
+
+            if (!_fileChanges.TryDequeue(out var e))
+            {
+                Thread.Sleep(100);
+                continue;
+            }
+
+            var extension = Path.GetExtension(e.Name);
+            if (!string.IsNullOrEmpty(extension) && _ignoredExtensions.Contains(extension.ToUpper()))
+            {
+                continue;
+            }
+
+            switch (e.ChangeType)
+            {
+                case WatcherChangeTypes.Created:
+                    Create(e);
+                    break;
+                case WatcherChangeTypes.Deleted:
+                    Delete(e);
+                    break;
+                case WatcherChangeTypes.Changed:
+                    Changed(e);
+                    break;
+                case WatcherChangeTypes.Renamed:
+                    throw new Exception();
+                case WatcherChangeTypes.All:
+                    throw new Exception();
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        void Create(FileSystemEventArgs e)
+        {
+            var projectPath = e.FullPath[(_projectDirectory.Length + 1)..];
+            var pathParts = projectPath.Split(Path.DirectorySeparatorChar);
+
+            var parent = _projectFileSystemModel;
+            for (var i = 0; i < pathParts.Length; i++)
+            {
+                var part = pathParts[i];
+
+                var tmpParentPath = Path.Combine(pathParts[..i]);
+                var tmpPath = Path.Combine(pathParts[..(i + 1)]);
+
+                if (!string.IsNullOrEmpty(tmpParentPath))
+                {
+                    parent = _fileLookup[tmpParentPath];
+                }
+
+                if (_fileLookup.TryGetValue(tmpPath, out var current))
+                {
+                    continue;
+                }
+
+                var isDirectory = true;
+                if (i == pathParts.Length - 1)
+                {
+                    var attr = File.GetAttributes(e.FullPath);
+                    isDirectory = attr.HasFlag(FileAttributes.Directory);
+                }
+
+                current = new FileSystemModel(parent, part, tmpPath, isDirectory);
+                if (!current.IsDirectory)
+                {
+                    FileList.Add(current);
+                }
+
+                if (_fileLookup.TryAdd(tmpPath, current))
+                {
+                    if (string.IsNullOrEmpty(tmpParentPath))
+                    {
+                        FileTree.Add(current);
+                    }
+
+                    if (parent != null && !parent.Children.Contains(current))
+                    {
+                        parent.Children.Add(current);
+                    }
+                }
+            }
+        }
+
+        void Changed(FileSystemEventArgs e)
+        {
+            if (string.IsNullOrEmpty(e.Name) || !_fileLookup.TryGetValue(e.Name, out var item))
+            {
+                throw new TodoException();
+            }
+
+            if (item.IsDirectory)
+            {
+                return;
+            }
+
+            item.UpdateFileInfo();
+        }
+
+        void Delete(FileSystemEventArgs e)
+        {
+            if (string.IsNullOrEmpty(e.Name))
+            {
+                throw new TodoException();
+            }
+
+            if (_fileLookup.TryRemove(e.Name, out var item))
+            {
+                FileTree.Remove(item);
+                FileList.Remove(item);
+
+                ClearChildren(item);
+
+                item.Parent?.Children.Remove(item);
+            }
+
+            void ClearChildren(FileSystemModel model)
+            {
+                foreach (var subModel in model.Children)
+                {
+                    ClearChildren(subModel);
+
+                    _fileLookup.Remove(subModel.RawRelativePath, out _);
+                    FileList.Remove(subModel);
+                }
+            }
+        }
+    }
+
+    public void Refresh()
+    {
+        lock (_refreshLock)
+        {
+            InternalRefresh();
+        }
+    }
+
+    private void Clear()
+    {
+        _fileChanges.Clear();
+        _fileLookup.Clear();
+        FileTree.Clear();
+        FileList.Clear();
+    }
+
+    private void InternalRefresh()
+    {
+        ForceStop();
+        Clear();
+
+        var allFiles = new DirectoryInfo(_projectDirectory).GetFileSystemInfos("*", SearchOption.AllDirectories);
+        foreach (var fileSystemInfo in allFiles)
+        {
+            var name = fileSystemInfo.FullName[(_projectDirectory.Length + 1)..];
+            _fileChanges.Enqueue(new FileSystemEventArgs(WatcherChangeTypes.Created, _projectDirectory, name));
+        }
+
+        _updateThreadCancellationTokenSource = new CancellationTokenSource();
+        _updateTask = Task.Factory.StartNew(() => Update(_updateThreadCancellationTokenSource.Token), _updateThreadCancellationTokenSource.Token);
+
+        _modsWatcher.EnableRaisingEvents = true;
+    }
+
+    public void ForceStop()
+    {
         _modsWatcher.EnableRaisingEvents = false;
 
-        //_files.Clear();
-    }
-
-    private bool _isSuspended;
-
-    public bool IsSuspended
-    {
-        get => _isSuspended;
-        set
+        if (_updateTask != null)
         {
-            _isSuspended = value;
-            if (!_isSuspended)
+            _updateThreadCancellationTokenSource.Cancel();
+            if (!_updateTask.Wait(1000))
             {
-                QueueRefresh();
+                throw new Exception();
             }
         }
     }
 
-    public void QueueRefresh() => _timer.Change(s_waitTime, -1);
-
-    /// <summary>
-    /// initial refresh
-    /// </summary>
-    public async Task RefreshAsync(Cp77Project? proj)
-    {
-        if (proj == null)
-        {
-            return;
-        }
-
-        await Task.Run(() => DetectProjectFiles(proj));
-    }
-
-    private bool _isRefreshing;
-
-    private void DetectProjectFiles(Cp77Project proj)
-    {
-        if (_isRefreshing)
-        {
-            return;
-        }
-        _isRefreshing = true;
-
-        var allFiles = new DirectoryInfo(proj.ProjectDirectory).GetFileSystemInfos("*", SearchOption.AllDirectories);
-
-        _files.Edit(innerList =>
-        {
-            innerList.Load(allFiles.Select(_ => new FileModel(_, proj)));
-        });
-
-        _isRefreshing = false;
-    }
-
-    public FileModel? GetFileModelFromHash(ulong hash)
-    {
-        var lookup = _files.Items.ToLookup(x => x.Hash);
-
-        return lookup[hash].FirstOrDefault();
-    }
-
-    private void OnChanged(object sender, FileSystemEventArgs e)
-    {
-        if (_projectManager.ActiveProject is null)
-        {
-            return;
-        }
-
-        if (IsSuspended)
-        {
-            return;
-        }
-
-        var extension = Path.GetExtension(e.Name);
-        if (!string.IsNullOrEmpty(extension) && _ignoredExtensions.Contains(extension.ToUpper()))
-        {
-            return;
-        }
-
-        switch (e.ChangeType)
-        {
-            case WatcherChangeTypes.Created:
-                break;
-            case WatcherChangeTypes.Deleted:
-                break;
-            case WatcherChangeTypes.Changed:
-                return;
-            case WatcherChangeTypes.Renamed:
-                break;
-            case WatcherChangeTypes.All:
-                return;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
-
-        _timer.Change(s_waitTime, -1);
-
-        /*switch (e.ChangeType)
-        {
-            case WatcherChangeTypes.Created:
-            {
-                try
-                {
-                    LastSelect = new FileModel(e.FullPath, _projectManager.ActiveProject);
-                    _files.AddOrUpdate(LastSelect);
-                }
-                catch (Exception)
-                {
-                    // reading too fast?
-                }
-                break;
-            }
-            case WatcherChangeTypes.Deleted:
-            {
-                var key = FileModel.GenerateKey(e.FullPath, _projectManager.ActiveProject);
-                _files.Edit(inner =>
-                {
-                    inner.RemoveKeys(GetChildrenKeysRecursive(key));
-                    inner.Remove(key);
-                });
-                break;
-            }
-            case WatcherChangeTypes.All:
-                break;
-            case WatcherChangeTypes.Changed:
-                break;
-            case WatcherChangeTypes.Renamed:
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }*/
-    }
-
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     private void OnRenamed(object sender, RenamedEventArgs e)
     {
-        if (_projectManager.ActiveProject is null)
+        var oldDirectory = e.OldFullPath;
+        if (e.OldName != null)
         {
-            return;
+            oldDirectory = e.OldFullPath[..e.OldFullPath.LastIndexOf(e.OldName, StringComparison.Ordinal)];
         }
+        OnChanged(sender, new FileSystemEventArgs(WatcherChangeTypes.Deleted, oldDirectory, e.OldName));
 
-        if (IsSuspended)
+        var directory = e.FullPath;
+        if (e.Name != null)
         {
-            return;
+            directory = e.FullPath[..e.FullPath.LastIndexOf(e.Name, StringComparison.Ordinal)];
         }
-
-        var extension = Path.GetExtension(e.Name);
-        if (!string.IsNullOrEmpty(extension) && _ignoredExtensions.Contains(extension.ToUpper()))
-        {
-            return;
-        }
-
-        switch (e.ChangeType)
-        {
-            case WatcherChangeTypes.Created:
-                break;
-            case WatcherChangeTypes.Deleted:
-                break;
-            case WatcherChangeTypes.Changed:
-                return;
-            case WatcherChangeTypes.Renamed:
-                break;
-            case WatcherChangeTypes.All:
-                return;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
-
-        _timer.Change(s_waitTime, -1);
-
-        /*var extension = Path.GetExtension(e.Name);
-        if (string.IsNullOrEmpty(extension))
-        {
-            return;
-        }
-
-        var newIsTempFile = extension.ToUpper().Equals(".TMP", StringComparison.Ordinal) || extension.ToUpper().Equals(".PDNSAVE", StringComparison.Ordinal);
-        switch (e.ChangeType)
-        {
-            case WatcherChangeTypes.Renamed:
-            {
-                var key = FileModel.GenerateKey(e.OldFullPath, _projectManager.ActiveProject);
-                _files.RemoveKey(key);
-
-                if (!newIsTempFile)
-                {
-                    _files.AddOrUpdate(new FileModel(e.FullPath, _projectManager.ActiveProject));
-                }
-                break;
-            }
-
-            case WatcherChangeTypes.Created:
-                break;
-            case WatcherChangeTypes.Deleted:
-                break;
-            case WatcherChangeTypes.Changed:
-                break;
-            case WatcherChangeTypes.All:
-                break;
-            default:
-                break;
-        }*/
+        OnChanged(sender, new FileSystemEventArgs(WatcherChangeTypes.Created, directory, e.Name));
     }
+
+    private void OnChanged(object sender, FileSystemEventArgs e) => _fileChanges.Enqueue(e);
 }

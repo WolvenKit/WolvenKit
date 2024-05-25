@@ -13,9 +13,6 @@ using System.Windows.Threading;
 using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DynamicData;
-using DynamicData.Binding;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
@@ -56,12 +53,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private readonly ILoggerService _loggerService;
     private readonly IProjectManager _projectManager;
-    private readonly IWatcherService _watcherService;
     private readonly IModTools _modTools;
     private readonly IProgressService<double> _progressService;
     private readonly IGameControllerFactory _gameController;
     private readonly AppViewModel _mainViewModel;
     public readonly IModifierViewStateService ModifierViewStateService;
+
+    private readonly WatcherService _projectWatcher;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
@@ -70,7 +68,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     
 
     private readonly ISettingsManager _settingsManager;
-    private readonly IObservableList<FileModel> _observableList;
 
     #endregion fields
 
@@ -78,7 +75,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         AppViewModel appViewModel,
         IProjectManager projectManager,
         ILoggerService loggerService,
-        IWatcherService watcherService,
         IProgressService<double> progressService,
         IModTools modTools,
         IGameControllerFactory gameController,
@@ -89,7 +85,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     {
         _projectManager = projectManager;
         _loggerService = loggerService;
-        _watcherService = watcherService;
         _modTools = modTools;
         _progressService = progressService;
         _gameController = gameController;
@@ -99,36 +94,44 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         _mainViewModel = appViewModel;
 
+        _projectWatcher = new WatcherService();
+
         SideInDockedMode = DockSide.Left;
 
         RegisterModifierStateAwareness();
         
         SetupToolDefaults();
 
-        _watcherService.Files
-            .Connect()
-            //.ObserveOn(RxApp.MainThreadScheduler)
-            .BindToObservableList(out _observableList)
-            .Subscribe(OnNext);
-
-        _projectManager.ActiveProjectChanged += ProjectManager_ActiveProjectChanged;
+        _projectManager.PropertyChanged += ProjectManager_OnPropertyChanged;
     }
 
-    private void ProjectManager_ActiveProjectChanged(object? sender, ActiveProjectChangedEventArgs e)
+    private void ProjectManager_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.Project is not null)
+        if (e.PropertyName == nameof(ProjectManager.ActiveProject))
         {
-            DispatcherHelper.RunOnMainThread(() => ActiveProject = e.Project, DispatcherPriority.ContextIdle);
+            if (ActiveProject != null)
+            {
+                _projectWatcher.UnwatchProject(ActiveProject);
+            }
+
+            DispatcherHelper.RunOnMainThread(() => ActiveProject = _projectManager.ActiveProject, DispatcherPriority.ContextIdle);
+
+            if (_projectManager.ActiveProject != null)
+            {
+                _projectWatcher.WatchProject(_projectManager.ActiveProject);
+            }
         }
     }
 
+    public DispatchedObservableCollection<FileSystemModel> FileTree => _projectWatcher.FileTree;
+    public DispatchedObservableCollection<FileSystemModel> FileList => _projectWatcher.FileList;
 
     /// <summary>
     /// Enable ConvertTo and ConvertFrom
     /// If the item is in the archive folder, it can be converted to json
     /// If the item is in the raw folder, it can be converted from json
     /// </summary>
-    partial void OnSelectedItemChanged(FileModel? value)
+    partial void OnSelectedItemChanged(FileSystemModel? value)
     {
         if (value is null)
         {
@@ -138,7 +141,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _mainViewModel.SelectFileCommand.SafeExecute(value);
 
         // toggle context menu buttons for all selected items
-        SelectedItems?.OfType<FileModel>().ToList().ForEach((selectedItem) =>
+        SelectedItems?.OfType<FileSystemModel>().ToList().ForEach((selectedItem) =>
         {
             ConvertToIsEnabled = IsInArchiveFolder(selectedItem);
             ConvertFromIsEnabled = IsInRawFolder(selectedItem);
@@ -148,19 +151,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         ConvertFromIsEnabled = IsInRawFolder(value);
     }
 
-    private void OnNext(IChangeSet<FileModel, ulong> obj) =>
-        DispatcherHelper.RunOnMainThread(() => BindGrid1 = new ObservableCollection<FileModel>(_observableList.Items),
-            DispatcherPriority.ContextIdle);
-
     #region properties
 
     public bool IsKeyUpEventAssigned { get; set; }
-
-    
-
-
-    [ObservableProperty]
-    private ObservableCollection<FileModel> _bindGrid1 = new();
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(RefreshCommand))]
@@ -191,7 +184,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [NotifyCanExecuteChangedFor(nameof(RenameFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(OpenInAssetBrowserCommand))]
     [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
-    private FileModel? _selectedItem;
+    private FileSystemModel? _selectedItem;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(DeleteFileCommand))]
@@ -205,8 +198,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     [ObservableProperty] private bool _convertToIsEnabled;
     [ObservableProperty] private bool _convertFromIsEnabled;
-
-    public FileModel? LastSelected => _watcherService.LastSelect;
 
     #endregion properties
 
@@ -231,7 +222,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     private bool CanRefresh() => ActiveProject != null;
     [RelayCommand(CanExecute = nameof(CanRefresh))]
-    private void Refresh() => _watcherService.QueueRefresh();
+    private void Refresh() => _projectWatcher.Refresh();
 
     /// <summary>
     /// Opens the currently selected folder in the tab
@@ -329,7 +320,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         activeItemPath = activeItemPath.Replace('/', Path.DirectorySeparatorChar);
         if (!isAbsolute)
         {
-            activeItemPath = FileModel.GetRelativeName(activeItemPath, ActiveProject.NotNull());
+            activeItemPath = ActiveProject!.GetRelativePath(activeItemPath);
         }
 
         if (switchToRaw)
@@ -481,7 +472,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             // add from AB
             foreach (var material in materials)
             {
-                var relPath = FileModel.GetRelativeName(material, ActiveProject.NotNull());
+                var relPath = ActiveProject!.GetRelativePath(material);
                 var hash = FNV1A64HashAlgorithm.HashString(relPath);
                 await Task.Run(() => _gameController.GetController().AddToMod(hash));
             }
@@ -508,7 +499,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         // Collect hashes of all selected items, we'll export them after
         HashSet<ulong> selectedItems = [];
 
-        foreach (var currentItem in (SelectedItems ?? []).Cast<FileModel>())
+        foreach (var currentItem in (SelectedItems ?? []).Cast<FileSystemModel>())
         {
             if (!currentItem.IsDirectory)
             {
@@ -518,7 +509,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
             var files = Directory.GetFiles(currentItem.FullName, "*", SearchOption.AllDirectories).ToList();
             foreach (var hash in files
-                         .Select(file => FileModel.GetRelativeName(file, ActiveProject.NotNull()))
+                         .Select(file => ActiveProject!.GetRelativePath(file))
                          .Select(FNV1A64HashAlgorithm.HashString))
             {
                 selectedItems.Add(hash);
@@ -529,9 +520,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         {
             selectedItems.Add(SelectedItem.Hash); // HashSet won't add duplicate items
         }
-
-        // Suspend file watcher, then export everything
-        _watcherService.IsSuspended = true;
 
         // Progress reporting
         var progress = 0;
@@ -549,9 +537,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         // OK, we're done
         _progressService.Completed();
-
-        // un-suspend watcher service again
-        _watcherService.IsSuspended = false;
     }
 
     /// <summary>
@@ -568,7 +553,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [RelayCommand(CanExecute = nameof(CanDeleteFile))]
     private void DeleteFile()
     {
-        var selected = SelectedItems.NotNull().OfType<FileModel>().ToList();
+        var selected = SelectedItems.NotNull().OfType<FileSystemModel>().ToList();
         var delete = Interactions.DeleteFiles(selected.Select(d => d.Name));
         if (!delete)
         {
@@ -606,7 +591,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     private bool CanOpenInFileExplorer() => ActiveProject != null;
     [RelayCommand(CanExecute = nameof(CanOpenInFileExplorer))]
-    private void OpenInFileExplorer(FileModel value)
+    private void OpenInFileExplorer(FileSystemModel value)
     {
         var model = value ?? SelectedItem;
         if (model is null)
@@ -625,7 +610,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     }
 
     [RelayCommand]
-    private async Task OpenFile(FileModel value)
+    private async Task OpenFile(FileSystemModel value)
     {
         var model = value ?? SelectedItem;
         if (model is null)
@@ -685,7 +670,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private bool CanCreateNewDirectory() => ActiveProject != null && SelectedItem?.IsDirectory == true;
 
     [RelayCommand(CanExecute = nameof(CanCreateNewDirectory))]
-    private void CreateNewDirectory(FileModel value)
+    private void CreateNewDirectory(FileSystemModel value)
     {
         var model = value ?? SelectedItem;
         if (model?.IsDirectory != true)
@@ -756,22 +741,20 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     #region red4
 
-    private bool IsInArchiveFolder(FileModel model) => ActiveProject is not null && model.FullName.Contains(ActiveProject.ModDirectory);
-    private bool IsInRawFolder(FileModel model) => ActiveProject is not null && model.FullName.Contains(ActiveProject.RawDirectory);
+    private bool IsInArchiveFolder(FileSystemModel model) => ActiveProject is not null && model.FullName.Contains(ActiveProject.ModDirectory);
+    private bool IsInRawFolder(FileSystemModel model) => ActiveProject is not null && model.FullName.Contains(ActiveProject.RawDirectory);
 
     private bool CanConvertTo() => SelectedItems != null && ActiveProject is not null;
     [RelayCommand(CanExecute = nameof(CanConvertTo))]
     private async Task ConvertToAsync()
     {
-        _watcherService.IsSuspended = true;
-        
         var progress = 0;
         _progressService.Report(0);
 
         List<string> files = new();
 
         // get all files
-        foreach (var item in SelectedItems.NotNull().OfType<FileModel>().Where(x => !IsInRawFolder(x)))
+        foreach (var item in SelectedItems.NotNull().OfType<FileSystemModel>().Where(x => !IsInRawFolder(x)))
         {
             if (item.IsDirectory)
             {
@@ -792,8 +775,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             _progressService.Report(progress / (float)files.Count);
         }
 
-        _watcherService.IsSuspended = false;
-
         _progressService.Completed();
     }
 
@@ -809,7 +790,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        var rawOutPath = Path.Combine(ActiveProject.NotNull().RawDirectory, FileModel.GetRelativeName(file, ActiveProject));
+        var rawOutPath = Path.Combine(ActiveProject.NotNull().RawDirectory, ActiveProject!.GetRelativePath(file));
         var outDirectoryPath = Path.GetDirectoryName(rawOutPath);
         if (outDirectoryPath != null)
         {
@@ -824,15 +805,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [RelayCommand(CanExecute = nameof(CanConvertFromJson))]
     private async Task ConvertFromAsync()
     {
-        _watcherService.IsSuspended = true;
-
         var progress = 0;
         _progressService.Report(0);
 
         List<string> files = new();
 
         // get all files
-        foreach (var item in SelectedItems.NotNull().OfType<FileModel>().Where(IsInRawFolder))
+        foreach (var item in SelectedItems.NotNull().OfType<FileSystemModel>().Where(IsInRawFolder))
         {
             if (item.IsDirectory)
             {
@@ -853,8 +832,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             _progressService.Report(progress / (float)files.Count);
         }
 
-        _watcherService.IsSuspended = false;
-
         _progressService.Completed();
     }
 
@@ -870,7 +847,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        var modPath = Path.Combine(ActiveProject.NotNull().ModDirectory, FileModel.GetRelativeName(file, ActiveProject));
+        var modPath = Path.Combine(ActiveProject.NotNull().ModDirectory, ActiveProject!.GetRelativePath(file));
         var outDirectoryPath = Path.GetDirectoryName(modPath);
         if (outDirectoryPath is null)
         {
@@ -896,7 +873,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _mainViewModel.GetToolViewModel<AssetBrowserViewModel>().ShowFile(SelectedItem.NotNull());
     }
 
-    private static string GetSecondExtension(FileModel model) => Path.GetExtension(Path.ChangeExtension(model.FullName, "").TrimEnd('.')).TrimStart('.');
+    private static string GetSecondExtension(FileSystemModel model) => Path.GetExtension(Path.ChangeExtension(model.FullName, "").TrimEnd('.')).TrimStart('.');
 
     private bool CanOpenInMlsb() =>
         ActiveProject != null
@@ -980,8 +957,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        _watcherService.IsSuspended = true;
-
         List<string> failedFiles = [];
 
         var files = Directory.GetFiles(ActiveProject.ModDirectory, "*.*", SearchOption.AllDirectories);
@@ -1002,8 +977,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 failedFiles.Add(file.RelativePath(ActiveProject.ModDirectory));
             }
         });
-
-        _watcherService.IsSuspended = false;
 
         if (failedFiles.Count > 0)
         {
@@ -1141,6 +1114,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         cw.WriteFile(cr2w);
     }
+
+    public void StopWatcher() => _projectWatcher.ForceStop();
 
     #endregion Methods
 

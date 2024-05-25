@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:data="clr-namespace:Syncfusion.Data;assembly=Syncfusion.Data.WPF"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
@@ -12,7 +13,6 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:tools="clr-namespace:WolvenKit.App.ViewModels.Tools;assembly=WolvenKit.App"
-    xmlns:data="clr-namespace:Syncfusion.Data;assembly=Syncfusion.Data.WPF"
     x:Name="uc"
     d:DataContext="{d:DesignInstance Type=tools:ProjectExplorerViewModel}"
     d:DesignHeight="450"
@@ -47,8 +47,8 @@
             <ContextMenu
                 x:Key="TreeGridContextMenu"
                 FontSize="11"
-                KeyUp="OnKeystateChanged"
-                KeyDown="OnKeystateChanged"
+                KeyDown="OnKeyStateChanged"
+                KeyUp="OnKeyStateChanged"
                 Style="{DynamicResource WPFContextMenuStyle}">
                 <MenuItem
                     Margin="0"
@@ -149,32 +149,42 @@
 
                 <Separator />
 
-                <!-- ======================================================================= -->
-                <!--                             Copy commands                               -->
-                <!-- ======================================================================= -->
+                <!--  =======================================================================  -->
+                <!--  Copy commands  -->
+                <!--  =======================================================================  -->
 
-                <MenuItem Command="{Binding CopyRelPathCommand}" Header="Copy relative path to game file"
-                          Visibility="{Binding Path=IsNoModifierPressed, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <MenuItem
+                    Command="{Binding CopyRelPathCommand}"
+                    Header="Copy relative path to game file"
+                    Visibility="{Binding Path=IsNoModifierPressed, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-                <MenuItem Command="{Binding CopyAbsPathToCurrentFileCommand}" Header="Copy absolute path"
-                          Visibility="{Binding Path=IsShiftKeyPressedOnly, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <MenuItem
+                    Command="{Binding CopyAbsPathToCurrentFileCommand}"
+                    Header="Copy absolute path"
+                    Visibility="{Binding Path=IsShiftKeyPressedOnly, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-                <MenuItem Command="{Binding CopyAbsPathToCurrentFolderCommand}" Header="Copy absolute path to containing folder"
-                          Visibility="{Binding Path=IsCtrlKeyPressedOnly, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <MenuItem
+                    Command="{Binding CopyAbsPathToCurrentFolderCommand}"
+                    Header="Copy absolute path to containing folder"
+                    Visibility="{Binding Path=IsCtrlKeyPressedOnly, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-                <MenuItem Command="{Binding CopyAbsPathToRawFolderCommand}" Header="Copy absolute path to raw folder"
-                          Visibility="{Binding Path=IsShowAbsolutePathToRawFolder, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <MenuItem
+                    Command="{Binding CopyAbsPathToRawFolderCommand}"
+                    Header="Copy absolute path to raw folder"
+                    Visibility="{Binding Path=IsShowAbsolutePathToRawFolder, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-                <MenuItem Command="{Binding CopyAbsPathToArchiveFolderCommand}" Header="Copy absolute path to archive folder"
-                          Visibility="{Binding Path=IsShowAbsolutePathToArchiveFolder, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <MenuItem
+                    Command="{Binding CopyAbsPathToArchiveFolderCommand}"
+                    Header="Copy absolute path to archive folder"
+                    Visibility="{Binding Path=IsShowAbsolutePathToArchiveFolder, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
 
-                <!-- ======================================================================= -->
-                <!--                            /Copy commands                               -->
-                <!-- ======================================================================= -->
+                <!--  =======================================================================  -->
+                <!--  /Copy commands  -->
+                <!--  =======================================================================  -->
 
 
-                <!-- Context menu: Open in Asset Browser -->
+                <!--  Context menu: Open in Asset Browser  -->
                 <MenuItem
                     Command="{Binding OpenInAssetBrowserCommand}"
                     Header="Open in Asset Browser"
@@ -189,7 +199,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!-- Context menu: Replace with original -->
+                <!--  Context menu: Replace with original  -->
                 <MenuItem
                     Command="{Binding OverwriteWithGameFileCommand}"
                     Header="Replace with original"
@@ -204,7 +214,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!-- Context menu: Add dependencies -->
+                <!--  Context menu: Add dependencies  -->
                 <MenuItem
                     Command="{Binding AddDependenciesCommand}"
                     Header="Add dependencies"
@@ -221,9 +231,9 @@
 
                 <Separator />
 
-                <!-- Context menu: Create new folder -->
+                <!--  Context menu: Create new folder  -->
                 <MenuItem
-                    Command="{Binding Path= CreateNewDirectoryCommand}"
+                    Command="{Binding Path=CreateNewDirectoryCommand}"
                     Header="Create new folder"
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
@@ -236,7 +246,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!-- Context menu: Open in Explorer -->
+                <!--  Context menu: Open in Explorer  -->
                 <MenuItem Command="{Binding OpenInFileExplorerCommand}" Header="Open in Windows Explorer">
                     <MenuItem.Icon>
                         <iconPacks:PackIconMaterial
@@ -348,13 +358,13 @@
                         VerticalAlignment="Center"
                         Text="{Binding Path=Name}" />
 
-                    <!-- Open in Windows Explorer - Open file - Delete --> 
+                    <!--  Open in Windows Explorer - Open file - Delete  -->
                     <StackPanel
                         Grid.Column="2"
                         Background="{StaticResource ContentBackground}"
                         Orientation="Horizontal">
 
-                        <!-- Open in Explorer -->
+                        <!--  Open in Explorer  -->
                         <helpers:TreeGridButton
                             BorderBrush="{StaticResource WolvenKitYellow}"
                             Command="{Binding ViewModel.OpenInFileExplorerCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ProjectExplorerView}}}"
@@ -372,7 +382,7 @@
                             </helpers:TreeGridButton.Content>
                         </helpers:TreeGridButton>
 
-                        <!-- Open File --> 
+                        <!--  Open File  -->
                         <helpers:TreeGridButton
                             BorderBrush="{StaticResource WolvenKitCyan}"
                             Command="{Binding ViewModel.OpenFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ProjectExplorerView}}}"
@@ -390,7 +400,7 @@
                             </helpers:TreeGridButton.Content>
                         </helpers:TreeGridButton>
 
-                        <!-- Delete -->
+                        <!--  Delete  -->
                         <helpers:TreeGridButton
                             syncfusion:FocusManagerHelper.FocusedElement="True"
                             BorderBrush="{StaticResource WolvenKitRed}"
@@ -721,7 +731,7 @@
             AutoExpandMode="AllNodesExpanded"
             AutoGenerateColumns="False"
             BorderThickness="0"
-            ChildPropertyName="ParentHash"
+            ChildPropertyName="Children"
             ColumnSizer="Star"
             ContextMenu="{StaticResource TreeGridContextMenu}"
             CurrentCellBorderBrush="White"
@@ -730,10 +740,7 @@
             FilterLevel="Extended"
             HeaderRowHeight="3"
             IsReadOnly="True"
-            ItemsSource="{Binding ElementName=uc, Path=TreeItemSource, Mode=OneWay}"
             LiveNodeUpdateMode="AllowDataShaping"
-            ParentPropertyName="Hash"
-            PreviewMouseDown="TreeGrid_MouseDown"
             RowDragDropTemplate="{StaticResource DragDropTemplate}"
             RowDropIndicatorMode="Line"
             RowHeight="19"
@@ -761,6 +768,10 @@
                     <Setter Property="Margin" Value="0,0,0,3" />
                 </Style>
             </syncfusion:SfTreeGrid.Resources>
+
+            <syncfusion:SfTreeGrid.SortColumnDescriptions>
+                <syncfusion:SortColumnDescription ColumnName="Name" SortDirection="Ascending" />
+            </syncfusion:SfTreeGrid.SortColumnDescriptions>
 
             <syncfusion:SfTreeGrid.Columns>
                 <syncfusion:TreeGridTextColumn
@@ -793,10 +804,8 @@
             FilterLevel="Extended"
             HeaderRowHeight="28"
             IsReadOnly="True"
-            ItemsSource="{Binding ElementName=uc, Path=FlatItemSource, Mode=OneWay}"
             LiveNodeUpdateMode="AllowDataShaping"
             ParentPropertyName="Hash"
-            PreviewMouseDown="TreeGrid_MouseDown"
             RowHeight="19"
             SelectedItem="{Binding SelectedItem}"
             SelectedItems="{Binding SelectedItems, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
@@ -806,7 +815,7 @@
             VirtualizingPanel.ScrollUnit="Pixel"
             VirtualizingPanel.VirtualizationMode="Recycling"
             Visibility="{Binding IsFlatModeEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
-            
+
             <syncfusion:SfTreeGrid.Resources>
                 <Style TargetType="syncfusion:TreeGridCell">
                     <Setter Property="BorderBrush" Value="Transparent" />
@@ -833,19 +842,19 @@
                     TextTrimming="CharacterEllipsis" />
                 <syncfusion:TreeGridTextColumn
                     HeaderText="Path"
-                    MappingName="RelativePath"
+                    MappingName="GameRelativePath"
                     ShowToolTip="True"
                     TextTrimming="CharacterEllipsis" />
                 <syncfusion:TreeGridTextColumn
                     Width="70"
-                    HeaderText="Kind"
                     AllowResizing="False"
+                    HeaderText="Kind"
                     MappingName="Extension" />
                 <syncfusion:TreeGridTextColumn
                     Width="70"
                     AllowResizing="False"
                     HeaderText="Size"
-                    MappingName="FileSize" />
+                    MappingName="FileSizeStr" />
             </syncfusion:SfTreeGrid.Columns>
         </syncfusion:SfTreeGrid>
 

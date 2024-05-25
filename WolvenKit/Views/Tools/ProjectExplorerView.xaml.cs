@@ -1,7 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -9,27 +9,18 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
-using CommunityToolkit.Mvvm.Input;
 using HandyControl.Data;
 using ReactiveUI;
 using Syncfusion.Data;
-using Syncfusion.UI.Xaml.Grid;
-using Syncfusion.UI.Xaml.ScrollAxis;
 using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Interaction;
-using WolvenKit.App.Models;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
-using Application = System.Windows.Application;
-using DataFormats = System.Windows.DataFormats;
-using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-using TreeNode = Syncfusion.UI.Xaml.TreeGrid.TreeNode;
 
 namespace WolvenKit.Views.Tools
 {
@@ -40,25 +31,27 @@ namespace WolvenKit.Views.Tools
     {
         /// <summary>Identifies the <see cref="TreeItemSource"/> dependency property.</summary>
         public static readonly DependencyProperty TreeItemSourceProperty =
-            DependencyProperty.Register(nameof(TreeItemSource), typeof(ObservableCollection<FileModel>),
+            DependencyProperty.Register(nameof(TreeItemSource), typeof(ObservableCollection<FileSystemModel>),
                 typeof(ProjectExplorerView), new PropertyMetadata(null));
 
-        public ObservableCollection<FileModel> TreeItemSource
+        public ObservableCollection<FileSystemModel> TreeItemSource
         {
-            get => (ObservableCollection<FileModel>)GetValue(TreeItemSourceProperty);
+            get => (ObservableCollection<FileSystemModel>)GetValue(TreeItemSourceProperty);
             set => SetValue(TreeItemSourceProperty, value);
         }
 
         public static readonly DependencyProperty FlatItemSourceProperty =
-            DependencyProperty.Register(nameof(FlatItemSource), typeof(ObservableCollection<FileModel>),
+            DependencyProperty.Register(nameof(FlatItemSource), typeof(ObservableCollection<FileSystemModel>),
                 typeof(ProjectExplorerView), new PropertyMetadata(null));
         
-        public ObservableCollection<FileModel> FlatItemSource
+        public ObservableCollection<FileSystemModel> FlatItemSource
         {
-            get => (ObservableCollection<FileModel>)GetValue(FlatItemSourceProperty);
+            get => (ObservableCollection<FileSystemModel>)GetValue(FlatItemSourceProperty);
             set => SetValue(FlatItemSourceProperty, value);
         }
 
+        private string _currentFolderQuery = "";
+        private bool _isDragging;
 
         #region Constructors
 
@@ -69,7 +62,6 @@ namespace WolvenKit.Views.Tools
             TreeGridFlat.ItemsSourceChanged += TreeGridFlat_ItemsSourceChanged;
             TreeGrid.RowDragDropController.DragStart += RowDragDropController_DragStart;
             TreeGrid.RowDragDropController.DragOver += RowDragDropController_DragOver;
-            TreeGrid.RowDragDropController.DragLeave += RowDragDropController_DragLeave;
             TreeGrid.RowDragDropController.Drop += RowDragDropController_Drop;
             TreeGrid.RowDragDropController.Dropped += RowDragDropController_Dropped;
             TreeGrid.RowDragDropController.CanAutoExpand = true;
@@ -77,6 +69,10 @@ namespace WolvenKit.Views.Tools
             TreeGrid.MouseDoubleClick += TreeGrid_DoubleClicked;
 
             tabControl.SelectedIndexChanged += tabControl_SelectedIndexChanged;
+
+            TreeGrid.SortComparers.Add(new() { Comparer = new FilePathComparer(), PropertyName = "Name" });
+            TreeGridFlat.SortComparers.Add(new() { Comparer = new FilePathComparer(), PropertyName = "GameRelativePath" });
+            TreeGridFlat.SortComparers.Add(new() { Comparer = new FileSizeComparer(), PropertyName = "FileSizeStr" });
 
             
 
@@ -152,35 +148,14 @@ namespace WolvenKit.Views.Tools
                     viewModel => viewModel.RefreshCommand,
                     view => view.RefreshButton);
 
-                
-                void RefreshViewModel()
-                {
-                    BeforeDataSourceUpdate();
-                    SetCurrentValue(TreeItemSourceProperty, ViewModel?.BindGrid1);
-                    AfterDataSourceUpdate();
-                }
-
-                void ChangeFlatMode(bool isActive)
-                {
-                    if (isActive)
-                    {
-                        TreeGrid.SortComparers.Add(s_pathComparer);
-                        SetCurrentValue(FlatItemSourceProperty, ViewModel?.BindGrid1);
-                    }
-                    else
-                    {
-                        TreeGrid.SortComparers.Remove(s_pathComparer);
-                        RefreshViewModel();
-                    }
-                }
-
-                // Pulling these two apart makes sure that the view grid isn't refreshed twice
-                // (node expansion states weren't ready on second time around)
-                this.WhenAnyValue(x => x.ViewModel.BindGrid1)
-                    .Subscribe((sender) => RefreshViewModel())
+                this.OneWayBind(ViewModel,
+                        viewModel => viewModel.FileTree,
+                        view => view.TreeGrid.ItemsSource)
                     .DisposeWith(disposables);
-                this.WhenAnyValue(x => x.ViewModel.IsFlatModeEnabled)
-                    .Subscribe(ChangeFlatMode)
+
+                this.OneWayBind(ViewModel,
+                        viewModel => viewModel.FileList,
+                        view => view.TreeGridFlat.ItemsSource)
                     .DisposeWith(disposables);
             });
         }
@@ -194,105 +169,13 @@ namespace WolvenKit.Views.Tools
 
             // register to KeyUp because KeyDown doesn't forward "F2"
             KeyUp += OnKeyUp;
-            KeyDown += OnKeystateChanged; 
+            KeyDown += OnKeyStateChanged; 
             ViewModel.IsKeyUpEventAssigned = true;
         }
 
-        private Dictionary<string, bool> _nodeExpansionState;
-        private string _selectedNodeState;
-
-        private void BeforeDataSourceUpdate()
-        {
-            if (TreeGrid?.View == null || TreeGrid.View.Nodes.RootNodes.Count == 0)
-            {
-                return;
-            }
-
-            _selectedNodeState = ((FileModel)TreeGrid.SelectedItem)?.FullName;
-            _nodeExpansionState = [];
-            foreach (var node in TreeGrid.View.Nodes.RootNodes)
-            {
-                if (((FileModel)node.Item).IsDirectory)
-                {
-                    GetStates(node);
-                }
-            }
-            
-            void GetStates(TreeNode node)
-            {
-                if (!node.HasChildNodes)
-                {
-                    return;
-                }
-
-                _nodeExpansionState.TryAdd(((FileModel)node.Item).FullName, node.IsExpanded);
-
-                foreach (var childNode in node.ChildNodes)
-                {
-                    if (((FileModel)childNode.Item).IsDirectory)
-                    {
-                        GetStates(childNode);
-                    }
-                }
-            }
-        }
-
-        private void AfterDataSourceUpdate()
-        {
-            if (TreeGrid?.View == null || TreeGrid.View.Nodes.RootNodes.Count == 0 || _nodeExpansionState is null)
-            {
-                return;
-            }
-
-
-            TreeGrid.CollapseAllNodes();
-            foreach (var node in TreeGrid.View.Nodes.RootNodes)
-            {
-                if (((FileModel)node.Item).IsDirectory)
-                {
-                    SetStates(node);
-                }
-            }
-
-            _nodeExpansionState = null;
-            _selectedNodeState = null;
-
-            void SetStates(TreeNode node)
-            {
-                if (((FileModel)node.Item).FullName == _selectedNodeState)
-                {
-                    TreeGrid.SetCurrentValue(SfGridBase.SelectedItemProperty, node.Item);
-                }
-
-                if (!node.HasChildNodes)
-                {
-                    return;
-                }
-
-                var fullName = ((FileModel)node.Item).FullName;
-                if (!_nodeExpansionState.TryGetValue(fullName, out var value) || value)
-                {
-                    TreeGrid.ExpandNode(node);
-                }
-
-                if (ViewModel.ModifierViewStateService.IsShiftKeyPressed)
-                {
-                    return;
-                }
-
-                foreach (var childNode in node.ChildNodes)
-                {
-                    SetStates(childNode);
-                }
-            }
-        }
-
-
-        private static readonly SortComparer s_pathComparer = new() { Comparer = new FilePathComparer(), PropertyName = "ResourcePath" };
-
         private void OnCellDoubleTapped(object _, TreeGridCellDoubleTappedEventArgs treeGridCellDoubleTappedEventArgs)
         {
-            if (treeGridCellDoubleTappedEventArgs.Node.Item is FileModel model)
+            if (treeGridCellDoubleTappedEventArgs.Node.Item is FileSystemModel model)
             {
                 ViewModel?.GetAppViewModel().OpenFileCommand.SafeExecute(model);
             }
@@ -301,7 +184,7 @@ namespace WolvenKit.Views.Tools
         /// <summary>
         /// Called from view on keyup/keydown event. Synchronises modifier state with ModifierViewStateModel.
         /// </summary>
-        private void OnKeystateChanged(object sender, KeyEventArgs e) => ViewModel?.RefreshModifierStates();
+        private void OnKeyStateChanged(object sender, KeyEventArgs e) => ViewModel?.RefreshModifierStates();
 
         /// <summary>
         /// Called from view on key down event. Handles search bar and rename/delete commands.
@@ -309,7 +192,7 @@ namespace WolvenKit.Views.Tools
         private void OnKeyUp(object sender, KeyEventArgs e)
         {
             // For context menu switching
-            OnKeystateChanged(sender, e);
+            OnKeyStateChanged(sender, e);
             
             if (PESearchBar.IsFocused)
             {
@@ -327,79 +210,38 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        private bool IsFirstTime { get; set; } = true;
-
         private void TreeGrid_ItemsSourceChanged(object sender, TreeGridItemsSourceChangedEventArgs e)
         {
-            if (ViewModel is null || TreeGrid?.View is null)
+            if (TreeGrid?.View is null)
             {
                 return;
             }
+
+            TreeGrid.View.NodeCollectionChanged += View_OnNodeCollectionChanged;
 
             TreeGrid.View.Filter = IsFileIn;
             TreeGrid.View.RefreshFilter();
-            if (IsFirstTime)
-            {
-                IsFirstTime = false;
-                return;
-            }
+        }
 
-            if (ViewModel?.LastSelected == null)
-            {
-                return;
-            }
-
-            TreeGrid.ExpandAllNodes();
-            var rowIndex = TreeGrid.ResolveToRowIndex(ViewModel?.LastSelected);
-            if (rowIndex <= -1)
-            {
-                return;
-            }
-
-            var q = TreeGrid.ResolveToRowIndex(rowIndex - 1);
-            var columnIndex = TreeGrid.ResolveToStartColumnIndex();
-            TreeGrid.ScrollInView(new RowColumnIndex(q, columnIndex));
-            TreeGrid.SelectRows(q, q);
-
+        private void View_OnNodeCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            
         }
 
         private void TreeGridFlat_ItemsSourceChanged(object sender, TreeGridItemsSourceChangedEventArgs e)
         {
-            if (ViewModel is null || TreeGridFlat?.View is null)
+            if (TreeGridFlat?.View is null)
             {
                 return;
             }
 
             TreeGridFlat.View.Filter = IsFileInFlat;
             TreeGridFlat.View.RefreshFilter();
-            if (IsFirstTime)
-            {
-                IsFirstTime = false;
-                return;
-            }
-
-            if (ViewModel?.LastSelected == null)
-            {
-                return;
-            }
-
-            var rowIndex = TreeGridFlat.ResolveToRowIndex(ViewModel?.LastSelected);
-            if (rowIndex <= -1)
-            {
-                return;
-            }
-
-            var q = TreeGridFlat.ResolveToRowIndex(rowIndex - 1);
-            var columnIndex = TreeGridFlat.ResolveToStartColumnIndex();
-            TreeGridFlat.ScrollInView(new RowColumnIndex(q, columnIndex));
-            TreeGridFlat.SelectRows(q, q);
-
-
         }
 
         private bool IsFileIn(object o)
         {
-            if (tabControl == null || o is not FileModel fm)
+            if (tabControl == null || o is not FileSystemModel fm)
             {
                 return false;
             }
@@ -412,15 +254,15 @@ namespace WolvenKit.Views.Tools
 
             return tabControl.SelectedIndex switch
             {
-                0 => fm.FullName.StartsWith(fm.Project.FileDirectory),
-                1 => fm.FullName.StartsWith(fm.Project.ModDirectory),
-                2 => fm.FullName.StartsWith(fm.Project.RawDirectory, StringComparison.CurrentCultureIgnoreCase),
-                3 => fm.FullName.StartsWith(fm.Project.ResourcesDirectory),
+                0 => true,
+                1 => fm.RawRelativePath.StartsWith("archive"),
+                2 => fm.RawRelativePath.StartsWith("raw", StringComparison.CurrentCultureIgnoreCase),
+                3 => fm.RawRelativePath.StartsWith("resources"),
                 _ => true
             };
         }
 
-        private bool IsFileInFlat(object o) => tabControl != null && o is FileModel fm && IsFileIn(o) && !fm.IsDirectory;
+        private bool IsFileInFlat(object o) => tabControl != null && o is FileSystemModel fm && IsFileIn(o) && !fm.IsDirectory;
 
         private void tabControl_SelectedIndexChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -441,24 +283,26 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-#pragma warning disable 1998
-
         #endregion Constructors
 
-        private void ExpandChildren()
+        private void ExpandChildren_OnClick(object sender, RoutedEventArgs e)
         {
-            if (ViewModel is null) return;
+            if (ViewModel is null)
+            {
+                return;
+            }
 
             var model = ViewModel.SelectedItem;
             var node = TreeGrid.View.Nodes.GetNode(model);
             TreeGrid.ExpandAllNodes(node);
         }
 
-        private void ExpandChildren_OnClick(object sender, RoutedEventArgs e) => ExpandChildren();
-
-        private void CollapseChildren()
+        private void CollapseChildren_OnClick(object sender, RoutedEventArgs e)
         {
-            if (ViewModel is null) return;
+            if (ViewModel is null)
+            {
+                return;
+            }
 
             var model = ViewModel.SelectedItem;
             var node = TreeGrid.View.Nodes.GetNode(model);
@@ -466,35 +310,27 @@ namespace WolvenKit.Views.Tools
             TreeGrid.ExpandNode(node);
         }
 
-        private void CollapseChildren_OnClick(object sender, RoutedEventArgs e) => CollapseChildren();
-
-        private void ExpandAll()
+        private void ExpandAll_OnClick(object sender, RoutedEventArgs e)
         {
             foreach (var viewNode in TreeGrid.View.Nodes)
             {
-                if (viewNode.Item is not FileModel || IsFileIn(viewNode.Item))
+                if (viewNode.Item is not FileSystemModel || IsFileIn(viewNode.Item))
                 {
                     TreeGrid.ExpandAllNodes(viewNode);
                 }
             }
         }
 
-        private void CollapseAll()
+        private void CollapseAll_OnClick(object sender, RoutedEventArgs e)
         {
             foreach (var viewNode in TreeGrid.View.Nodes)
             {
-                if (viewNode.Item is not FileModel || IsFileIn(viewNode.Item))
+                if (viewNode.Item is not FileSystemModel || IsFileIn(viewNode.Item))
                 {
                     TreeGrid.CollapseAllNodes(viewNode);
                 }
             }
         }
-
-        private void ExpandAll_OnClick(object sender, RoutedEventArgs e) => ExpandAll();
-
-        private void CollapseAll_OnClick(object sender, RoutedEventArgs e) => CollapseAll();
-
-        private string _currentFolderQuery = "";
 
         private void PESearchBar_OnSearchStarted(object sender, FunctionEventArgs<string> e)
         {
@@ -514,8 +350,6 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        private bool _isDragging = false;
-
         private void RowDragDropController_DragStart(object sender, TreeGridRowDragStartEventArgs e) =>
             _isDragging = true;
 
@@ -523,8 +357,8 @@ namespace WolvenKit.Views.Tools
         {
             if (!e.Data.GetDataPresent("Nodes") ||
                 e.Data.GetData("Nodes") is not ObservableCollection<TreeNode> treeNodes ||
-                treeNodes[0].Item is not FileModel sourceFile ||
-                e.TargetNode.Item is not FileModel targetFile)
+                treeNodes[0].Item is not FileSystemModel sourceFile ||
+                e.TargetNode.Item is not FileSystemModel targetFile)
             {
                 return;
             }
@@ -541,9 +375,6 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        private void RowDragDropController_DragLeave(object sender, TreeGridRowDragLeaveEventArgs e) =>
-            _isDragging = false;
-
         private async void RowDragDropController_Drop(object sender, TreeGridRowDropEventArgs e)
         {
             e.Handled = _isDragging; // which should be true at this point
@@ -553,7 +384,7 @@ namespace WolvenKit.Views.Tools
             {
                 if (e.Data.GetDataPresent(DataFormats.FileDrop))
                 {
-                    if (e.TargetNode.Item is not FileModel targetFile)
+                    if (e.TargetNode.Item is not FileSystemModel targetFile)
                     {
                         return;
                     }
@@ -571,7 +402,7 @@ namespace WolvenKit.Views.Tools
                 {
                     if (e.Data.GetData("Nodes") is not ObservableCollection<TreeNode> treeNodes
                         || treeNodes.Count == 0
-                        || e.TargetNode.Item is not FileModel targetFile)
+                        || e.TargetNode.Item is not FileSystemModel targetFile)
                     {
                         return;
                     }
@@ -585,7 +416,7 @@ namespace WolvenKit.Views.Tools
                     var files = new List<string>();
                     foreach (var node in treeNodes)
                     {
-                        if (node.Item is FileModel sourceFile)
+                        if (node.Item is FileSystemModel sourceFile)
                         {
                             files.Add(sourceFile.FullName);
                         }
@@ -605,10 +436,8 @@ namespace WolvenKit.Views.Tools
                 Console.WriteLine(error.Message);
             }
         }
-        private void RowDragDropController_Dropped(object sender, TreeGridRowDroppedEventArgs e)
-        {
-
-        }
+        private void RowDragDropController_Dropped(object sender, TreeGridRowDroppedEventArgs e) => 
+            _isDragging = false;
 
         /// <summary>
         ///  Since the previous implementation would sometimes fail silently and claim that perfectly viable files weren't found,
@@ -664,7 +493,7 @@ namespace WolvenKit.Views.Tools
             }
 
             var existingFiles = fileMap.Values.Where(File.Exists)
-                .Select(s => s.Replace(targetDirectory, "")).OrderBy(s => s).Distinct()
+                .Select(s => s.Replace(targetDirectory, "").TrimStart(Path.DirectorySeparatorChar)).OrderBy(s => s).Distinct()
                 .ToList();
 
             // If we have 0 - 10 files, we'll show one dialogue. Otherwise, we'll ask for each file individually.
@@ -739,10 +568,6 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        private void TreeGrid_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-        }
-
         /// <summary>
         /// Double-clicking on a node will toggle its child expansion states
         /// </summary>
@@ -754,7 +579,7 @@ namespace WolvenKit.Views.Tools
             var node = originalSource?.DataContext switch
             {
                 TreeNode n => n,
-                FileModel model => TreeGrid.View.Nodes.GetNode(model),
+                FileSystemModel model => TreeGrid.View.Nodes.GetNode(model),
                 _ => null
             };
 
@@ -785,40 +610,106 @@ namespace WolvenKit.Views.Tools
                 TreeGrid.ExpandNode(childNode);
             }
         }
-    }
 
-
-    public class FilePathComparer : IComparer<object>, ISortDirection
-    {
-        public int Compare(string x, string y)
+        private class FilePathComparer : IComparer<object>, ISortDirection
         {
-            // Split the paths into parts
-            var xParts = x.Split(Path.DirectorySeparatorChar);
-            var yParts = y.Split(Path.DirectorySeparatorChar);
-
-            // Compare each part of the paths
-            for (var i = 0; i < Math.Min(xParts.Length, yParts.Length); i++)
+            public int Compare(object x, object y)
             {
-                var result = string.CompareOrdinal(xParts[i], yParts[i]);
-                if (result != 0)
+                var item1 = x as FileSystemModel;
+                var item2 = y as FileSystemModel;
+                var c = 0;
+
+                if (item1 != null && item2 == null)
                 {
-                    // If the parts are not equal, return the comparison result
-                    return result;
+                    c = -1;
+                }
+                else if (item1 == null && item2 != null)
+                {
+                    c = 1;
+                }
+                else if (item1 != null && item2 != null)
+                {
+                    if (item1.IsDirectory && !item2.IsDirectory)
+                    {
+                        c = -1;
+                    }
+                    else if (!item1.IsDirectory && item2.IsDirectory)
+                    {
+                        c = 1;
+                    }
+                    else
+                    {
+                        c = CompareParts();
+                        if (c == 0)
+                        {
+                            c = string.CompareOrdinal(item1.GameRelativePath, item2.GameRelativePath);
+                        }
+                    }
+                }
+
+                if (SortDirection == ListSortDirection.Descending)
+                {
+                    c = -c;
+                }
+
+                return c;
+
+                int CompareParts()
+                {
+                    var item1Parts = item1.GameRelativePath.Split(Path.DirectorySeparatorChar);
+                    var item2Parts = item2.GameRelativePath.Split(Path.DirectorySeparatorChar);
+
+                    if (item1Parts.Length != item2Parts.Length)
+                    {
+                        return item1Parts.Length.CompareTo(item2Parts.Length);
+                    }
+
+                    for (var i = 0; i < Math.Min(item1Parts.Length, item2Parts.Length); i++)
+                    {
+                        var result = string.CompareOrdinal(item1Parts[i], item2Parts[i]);
+                        if (result != 0)
+                        {
+                            return result;
+                        }
+                    }
+
+                    return 0;
                 }
             }
 
-            // If all parts are equal so far, the shorter path should come first
-            return xParts.Length.CompareTo(yParts.Length);
+            public ListSortDirection SortDirection { get; set; }
         }
 
-        public int Compare(object x, object y)
+        private class FileSizeComparer : IComparer<object>, ISortDirection
         {
-            return 0;
+            public int Compare(object x, object y)
+            {
+                var item1 = x as FileSystemModel;
+                var item2 = y as FileSystemModel;
+                var c = 0;
+
+                if (item1 != null && item2 == null)
+                {
+                    c = -1;
+                }
+                else if (item1 == null && item2 != null)
+                {
+                    c = 1;
+                }
+                else if (item1 != null && item2 != null)
+                {
+                    c = item1.FileSize.CompareTo(item2.FileSize);
+                }
+
+                if (SortDirection == ListSortDirection.Descending)
+                {
+                    c = -c;
+                }
+
+                return c;
+            }
+
+            public ListSortDirection SortDirection { get; set; }
         }
-
-
-        //Get or Set the SortDirection value
-
-        public ListSortDirection SortDirection { get; set; }
     }
 }

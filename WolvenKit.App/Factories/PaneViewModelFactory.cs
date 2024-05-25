@@ -24,7 +24,6 @@ public class PaneViewModelFactory : IPaneViewModelFactory
 
     private readonly ILoggerService _loggerService;
     private readonly IProjectManager _projectManager;
-    private readonly IWatcherService _watcherService;
     private readonly IModTools _modTools;
     private readonly IProgressService<double> _progressService;
     private readonly IGameControllerFactory _gameController;
@@ -43,7 +42,6 @@ public class PaneViewModelFactory : IPaneViewModelFactory
     public PaneViewModelFactory(
         IProjectManager projectManager,
         ILoggerService loggerService,
-        IWatcherService watcherService,
         IProgressService<double> progressService,
         IModTools modTools,
         IGameControllerFactory gameController,
@@ -62,7 +60,6 @@ public class PaneViewModelFactory : IPaneViewModelFactory
     {
         _projectManager = projectManager;
         _loggerService = loggerService;
-        _watcherService = watcherService;
         _modTools = modTools;
         _progressService = progressService;
         _gameController = gameController;
@@ -81,18 +78,18 @@ public class PaneViewModelFactory : IPaneViewModelFactory
 
     public LogViewModel LogViewModel() => new(_loggerService);
     public ProjectExplorerViewModel ProjectExplorerViewModel(AppViewModel appViewModel)
-        => new(appViewModel, _projectManager, _loggerService, _watcherService, _progressService, _modTools,
+        => new(appViewModel, _projectManager, _loggerService, _progressService, _modTools,
             _gameController, _pluginService, _settingsManager, _modifierSvc);
     public PropertiesViewModel PropertiesViewModel()
         => _propertiesViewModel;
     public AssetBrowserViewModel AssetBrowserViewModel(AppViewModel appViewModel)
-        => new(appViewModel, _projectManager, _notificationService, _gameController, _archiveManager, _settingsManager, _progressService, _loggerService, _pluginService, _watcherService);
+        => new(appViewModel, _projectManager, _notificationService, _gameController, _archiveManager, _settingsManager, _progressService, _loggerService, _pluginService);
     public TweakBrowserViewModel TweakBrowserViewModel(AppViewModel appViewModel) 
         => new(appViewModel, _chunkViewmodelFactory, _settingsManager, _notificationService, _projectManager, _loggerService, _tweakDbService, _locKeyService);
-    public LocKeyBrowserViewModel LocKeyBrowserViewModel() => new(_projectManager, _loggerService, _watcherService, _progressService, _modTools, _gameController, _archiveManager, _locKeyService);
+    public LocKeyBrowserViewModel LocKeyBrowserViewModel() => new(_projectManager, _loggerService, _progressService, _modTools, _gameController, _archiveManager, _locKeyService);
     
-    public ImportViewModel ImportViewModel(AppViewModel appViewModel) => new(appViewModel, _archiveManager, _notificationService, _settingsManager, _loggerService, _watcherService, _projectManager, _progressService, _gameController, _parserService, _importExportHelper);
-    public ExportViewModel ExportViewModel(AppViewModel appViewModel) => new(appViewModel, _archiveManager, _notificationService, _settingsManager, _loggerService, _watcherService, _projectManager, _progressService, _importExportHelper);
+    public ImportViewModel ImportViewModel(AppViewModel appViewModel) => new(appViewModel, _archiveManager, _notificationService, _settingsManager, _loggerService, _projectManager, _progressService, _gameController, _parserService, _importExportHelper);
+    public ExportViewModel ExportViewModel(AppViewModel appViewModel) => new(appViewModel, _archiveManager, _notificationService, _settingsManager, _loggerService, _projectManager, _progressService, _importExportHelper);
 
     public HashToolViewModel HashToolViewModel() => new HashToolViewModel();
 }

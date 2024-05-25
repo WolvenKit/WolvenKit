@@ -44,7 +44,6 @@ public partial class RedDocumentViewModel : DocumentViewModel
     private readonly ILoggerService _loggerService;
     private readonly IOptions<Globals> _globals;
     private readonly Red4ParserService _parserService;
-    private readonly IWatcherService _watcherService;
     private readonly IArchiveManager _archiveManager;
     private readonly IHookService _hookService;
     private readonly INodeWrapperFactory _nodeWrapperFactory;
@@ -63,7 +62,6 @@ public partial class RedDocumentViewModel : DocumentViewModel
         ILoggerService loggerService,
         IOptions<Globals> globals,
         Red4ParserService parserService,
-        IWatcherService watcherService,
         IArchiveManager archiveManager,
         IHookService hookService,
         INodeWrapperFactory nodeWrapperFactory,
@@ -77,7 +75,6 @@ public partial class RedDocumentViewModel : DocumentViewModel
         _loggerService = loggerService;
         _globals = globals;
         _parserService = parserService;
-        _watcherService = watcherService;
         _archiveManager = archiveManager;
         _hookService = hookService;
         _nodeWrapperFactory = nodeWrapperFactory;
@@ -533,11 +530,12 @@ public partial class RedDocumentViewModel : DocumentViewModel
                     }
                     else
                     {
-                        var fm = _watcherService.GetFileModelFromHash(depotPath.GetRedHash());
+                        // TODO: Isn't reachable anyway currently, since non-resolvable depot paths are skipped...
+                        /*var fm = _watcherService.GetFileModelFromHash(depotPath.GetRedHash());
                         if (fm != null)
                         {
                             path = fm.FullName;
-                        }
+                        }*/
                     }
 
                     if (path != null && File.Exists(path))

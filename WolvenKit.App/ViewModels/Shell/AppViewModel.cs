@@ -68,7 +68,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly INotificationService _notificationService;
     private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
     private readonly IProgressService<double> _progressService;
-    private readonly IWatcherService _watcherService;
     private readonly IPluginService _pluginService;
     private readonly IArchiveManager _archiveManager;
     private readonly IHashService _hashService;
@@ -91,7 +90,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         INotificationService notificationService,
         IRecentlyUsedItemsService recentlyUsedItemsService,
         IProgressService<double> progressService,
-        IWatcherService watcherService,
         IPluginService pluginService,
         IArchiveManager archiveManager,
         IHashService hashService,
@@ -111,7 +109,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _notificationService = notificationService;
         _recentlyUsedItemsService = recentlyUsedItemsService;
         _progressService = progressService;
-        _watcherService = watcherService;
         _pluginService = pluginService;
         _archiveManager = archiveManager;
         _hashService = hashService;
@@ -326,7 +323,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         // open files
         if (Enum.TryParse<ERedExtension>(Path.GetExtension(filePath)[1..], out var _))
         {
-            _ = OpenFileAsync(FileModel.Create(filePath, ActiveProject.NotNull())); // TODO
+            _ = RequestFileOpen(filePath); // TODO
             return true;
         }
 
@@ -720,7 +717,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     [RelayCommand]
-    private void SelectFile(FileModel model) => GetToolViewModel<PropertiesViewModel>().ExecuteSelectFile(model);
+    private void SelectFile(FileSystemModel model)
+    {
+        GetToolViewModel<PropertiesViewModel>().ExecuteSelectFile(model);
+    }
 
     private bool CanSaveFile() => ActiveDocument is not null && !ActiveDocument.IsReadOnly;
     [RelayCommand(CanExecute = nameof(CanSaveFile))]
@@ -953,14 +953,12 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanImportArchive))]
     private async Task<Task> ImportArchive(string? inputDir)
     {
-        _watcherService.IsSuspended = true;
         var vm = new OpenFileViewModel(_settingsManager, _projectManager, _loggerService)
         {
             Title = "Import .archive", Filter = "Archive files (*.archive)|*.archive"
         };
 
         var result = await vm.OpenFile();
-        _watcherService.IsSuspended = false;
 
         if (result is null)
         {
@@ -997,11 +995,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             return;
         }
 
-        _watcherService.IsSuspended = true;
-
         await Task.Run(() => OpenFromNewFileTask(file)).ContinueWith(async (result) =>
         {
-            _watcherService.IsSuspended = false;
             if (file.FullPath is not null)
             {
                 await RequestFileOpen(file.FullPath);
@@ -1082,7 +1077,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     [RelayCommand]
-    public async Task OpenFileAsync(FileModel model)
+    public async Task OpenFileAsync(FileSystemModel model)
     {
         if (model.IsDirectory)
         {
@@ -1307,10 +1302,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             return;
         }
-        _watcherService.IsSuspended = true;
+
         await _gameControllerFactory.GetController().LaunchProject(profile);
-        _watcherService.IsSuspended = false;
-        _watcherService.QueueRefresh();
     }
 
     [RelayCommand]
@@ -1744,14 +1737,12 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 dlg.FileName = fileToSave.FilePath is not null ? Path.GetFileName(fileToSave.FilePath) : Path.GetFileName(fileToSave.ContentId);
                 dlg.InitialDirectory = Path.GetDirectoryName(fileToSave.FilePath);
             }
-            _watcherService.IsSuspended = true;
+
             if (dlg.ShowDialog().GetValueOrDefault())
             {
                 fileToSave.FilePath = dlg.FileName;
                 fileToSave.SaveCommand.SafeExecute();
             }
-            _watcherService.IsSuspended = false;
-            _watcherService.QueueRefresh();
         }
         else
         {
