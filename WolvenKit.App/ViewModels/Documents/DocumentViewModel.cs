@@ -37,6 +37,14 @@ public abstract partial class DocumentViewModel : PaneViewModel, IDocumentViewMo
         protected set => SetProperty(ref _isDirty, value);
     }
 
+    private bool _isSimpleViewEnabled;
+
+    public bool IsSimpleViewEnabled
+    {
+        get => _isSimpleViewEnabled;
+        set => SetProperty(ref _isSimpleViewEnabled, value);
+    }
+
     public bool IsInitialized() => _isInitialized;
 
     public void SetIsDirty(bool b)
@@ -56,6 +64,6 @@ public abstract partial class DocumentViewModel : PaneViewModel, IDocumentViewMo
     [RelayCommand]
     public abstract void SaveAs(object parameter);
 
-    
+
     public abstract bool Reload(bool force);
 }

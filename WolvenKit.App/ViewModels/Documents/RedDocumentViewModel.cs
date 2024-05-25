@@ -9,6 +9,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Options;
 using WolvenKit.App.Factories;
+using WolvenKit.App.Helpers;
+using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
@@ -18,7 +20,6 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Helpers;
-using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
@@ -47,6 +48,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
     private readonly IArchiveManager _archiveManager;
     private readonly IHookService _hookService;
     private readonly INodeWrapperFactory _nodeWrapperFactory;
+    private readonly IHashService _hashService;
 
     private readonly AppViewModel _appViewModel;
 
@@ -65,6 +67,8 @@ public partial class RedDocumentViewModel : DocumentViewModel
         IArchiveManager archiveManager,
         IHookService hookService,
         INodeWrapperFactory nodeWrapperFactory,
+        IHashService hashService,
+        bool isSimpleViewEnabled = false,
         bool isReadyOnly = false) : base(path)
     {
         _documentTabViewmodelFactory = documentTabViewmodelFactory;
@@ -77,6 +81,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
         _archiveManager = archiveManager;
         _hookService = hookService;
         _nodeWrapperFactory = nodeWrapperFactory;
+        _hashService = hashService;
 
         _appViewModel = appViewModel;
         _embedHashSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
@@ -93,6 +98,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
         Cr2wFile = file;
         IsReadOnly = isReadyOnly;
+        IsSimpleViewEnabled = isSimpleViewEnabled;
         _isInitialized = true;
         PopulateItems();
     }
@@ -109,6 +115,18 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
     partial void OnSelectedTabItemViewModelChanged(RedDocumentTabViewModel? value)
     {
+        // Communicate index of selected world node across tabs
+        switch (value)
+        {
+            case RDTDataViewModel model:
+                int.TryParse(_selectedWorldNodeIndex, out var worldNodeIndex);                            
+                model.AddToSelection(model.FindWorldNode(worldNodeIndex));
+                break;
+            case RDTMeshViewModel meshViewModel:
+                meshViewModel.SelectedNodeIndex = _selectedWorldNodeIndex;
+                break;
+        }
+
         value?.OnSelected();
     }
 
@@ -150,6 +168,8 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
     #region methods
 
+    public Cp77Project? GetActiveProject() => _projectManager.ActiveProject;
+
     public ILoggerService GetLoggerService() => _loggerService;
 
     public override async Task Save(object? parameter)
@@ -175,6 +195,8 @@ public partial class RedDocumentViewModel : DocumentViewModel
                     return;
                 }
 
+                SaveHashedValues(cr2w);
+
                 using var writer = new CR2WWriter(ms, Encoding.UTF8, true) { LoggerService = _loggerService };
                 writer.WriteFile(cr2w);
             }
@@ -196,6 +218,37 @@ public partial class RedDocumentViewModel : DocumentViewModel
         _loggerService.Success($"Saved file {FilePath}");
 
         await Task.CompletedTask;
+    }
+
+    private void SaveHashedValues(CR2WFile file)
+    {
+        if (_hashService is not HashServiceExt hashService)
+        {
+            return;
+        }
+        
+        foreach (var (path, value) in file.RootChunk.GetEnumerator())
+        {
+            if (value is IRedRef redRef && redRef.DepotPath != ResourcePath.Empty)
+            {
+                if (!redRef.DepotPath.TryGetResolvedText(out var refPath))
+                {
+                    continue;
+                }
+
+                hashService.AddResourcePath(refPath);
+            }
+
+            if (value is TweakDBID tweakDbId && tweakDbId != TweakDBID.Empty)
+            {
+                if (!tweakDbId.TryGetResolvedText(out var tweakName))
+                {
+                    continue;
+                }
+
+                hashService.AddTweakName(tweakName);
+            }
+        }
     }
 
     public override void SaveAs(object parameter) => throw new NotImplementedException();
@@ -251,7 +304,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
         }
         if (cls is CTextureArray texa)
         {
-            TabItemViewModels.Add(_documentTabViewmodelFactory.RDTTextureViewModel(texa, this));
+            TabItemViewModels.Add(_documentTabViewmodelFactory.RDTLayeredPreviewViewModel(texa, this));
         }
         if (cls is CMesh mesh && mesh.RenderResourceBlob != null && mesh.RenderResourceBlob.GetValue() is rendRenderTextureBlobPC)
         {
@@ -259,30 +312,17 @@ public partial class RedDocumentViewModel : DocumentViewModel
         }
         if (cls is CReflectionProbeDataResource probe && probe.TextureData.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC)
         {
-            TabItemViewModels.Add(_documentTabViewmodelFactory.RDTTextureViewModel(probe, this));
+            TabItemViewModels.Add(_documentTabViewmodelFactory.RDTLayeredPreviewViewModel(probe, this));
         }
         if (cls is Multilayer_Mask mlmask)
         {
-            // maybe it makes more sense to put these all into one tab?
-            ModTools.ConvertMultilayerMaskToDdsStreams(mlmask, out var streams);
-            for (var i = 0; i < streams.Count; i++)
-            {
-                var tab = _documentTabViewmodelFactory.RDTTextureViewModel(streams[i], this);
-                tab.Header = $"MultiLayer {i}";
-                TabItemViewModels.Add(tab);
-            }
+            TabItemViewModels.Add(_documentTabViewmodelFactory.RDTLayeredPreviewViewModel(mlmask, this));
         }
         if (cls is inkTextureAtlas atlas)
         {
-            var slot = atlas.Slots[0];
-            if (slot != null)
-            {
-                var file = GetFileFromDepotPath(slot.Texture.DepotPath);
-                if (file != null)
-                {
-                    TabItemViewModels.Add(_documentTabViewmodelFactory.RDTInkTextureAtlasViewModel(atlas, (CBitmapTexture)file.RootChunk, this));
-                }
-            }
+            var tab = _documentTabViewmodelFactory.RDTInkTextureAtlasViewModel(atlas, this);
+            tab.ChangeEvent += OnPartNameChanged;
+            TabItemViewModels.Add(tab);
         }
         if (cls is inkWidgetLibraryResource library)
         {
@@ -298,7 +338,9 @@ public partial class RedDocumentViewModel : DocumentViewModel
         }
         if (cls is worldStreamingSector wss)
         {
-            TabItemViewModels.Add(_documentTabViewmodelFactory.RDTMeshViewModel(wss, this));
+            var tab = _documentTabViewmodelFactory.RDTMeshViewModel(wss, this);
+            tab.OnSectorNodeSelected += OnSectorNodeSelected;
+            TabItemViewModels.Add(tab);
         }
         if (cls is worldStreamingBlock wsb)
         {
@@ -310,13 +352,53 @@ public partial class RedDocumentViewModel : DocumentViewModel
         }
     }
 
+    private string? _selectedWorldNodeIndex;
+
+    private void OnSectorNodeSelected(object? sender, string? e) => _selectedWorldNodeIndex = e;
+
+    private void OnPartNameChanged(object sender, EventArgs e)
+    {
+        if (GetMainFile() is not RDTDataViewModel m || m.Chunks.Count == 0 || m.Chunks[0] is not { ResolvedData: inkTextureAtlas } cvm ||
+            cvm.Properties.FirstOrDefault((p) => p.Name == "slots") is not ChunkViewModel child)
+        {
+            return;
+        }
+
+        foreach (var chunkViewModel in child.Properties.Where(p => p.ResolvedData is inkTextureSlot).ToList())
+        {
+            m.DirtyChunks.Add(chunkViewModel);
+        }
+
+        SetIsDirty(m.DirtyChunks.Count > 0);
+    }
+
+
     public void PopulateItems()
     {
+        foreach (var tab in TabItemViewModels)
+        {
+            switch (tab)
+            {
+                case RDTInkTextureAtlasViewModel inkTextureTab:
+                    inkTextureTab.ChangeEvent -= OnPartNameChanged;
+                    break;
+                case RDTMeshViewModel meshTab:
+                    meshTab.OnSectorNodeSelected -= OnSectorNodeSelected;
+                    break;
+                case RDTDataViewModel dataViewModel:
+                    dataViewModel.OnSectorNodeSelected -= OnSectorNodeSelected;
+                    break;
+                default:
+                    break;
+            }
+        }
+
         TabItemViewModels.Clear();
 
         var root = _documentTabViewmodelFactory.RDTDataViewModel(Cr2wFile.RootChunk, this, _appViewModel, _chunkViewmodelFactory);
         root.FilePath = "(root)";
         TabItemViewModels.Add(root);
+        root.OnSectorNodeSelected += OnSectorNodeSelected;
         AddTabForRedType(Cr2wFile.RootChunk);
 
         foreach (var file in Cr2wFile.EmbeddedFiles)
@@ -341,17 +423,33 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
     public CR2WFile? GetFileFromDepotPathOrCache(ResourcePath depotPath)
     {
+        if (depotPath == ResourcePath.Empty)
+        {
+            return null;
+        }
+
+        var existingPath = depotPath.GetResolvedText();
+        if (existingPath?.StartsWith('*') is true)
+        {
+            existingPath = ArchiveXlHelper.GetFirstExistingPath(existingPath);
+        }
+        
+        if (string.IsNullOrEmpty(existingPath))
+        {
+            return null;
+        }
+        
         lock (Files)
         {
-            if (!Files.ContainsKey(depotPath))
+            if (!Files.ContainsKey(existingPath))
             {
-                var file = GetFileFromDepotPath(depotPath);
-                Files[depotPath] = file;
+                var file = GetFileFromDepotPath(existingPath, false);
+                Files[existingPath] = file;
             }
 
-            if (Files[depotPath] != null)
+            if (Files[existingPath] != null)
             {
-                foreach (var res in Files[depotPath]!.EmbeddedFiles)
+                foreach (var res in Files[existingPath]!.EmbeddedFiles)
                 {
                     if (!Files.ContainsKey(res.FileName))
                     {
@@ -364,7 +462,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
             }
         }
 
-        return Files[depotPath];
+        return Files[existingPath];
     }
 
     public void HandleEmbeddedFile(DialogViewModel? sender)
@@ -404,6 +502,17 @@ public partial class RedDocumentViewModel : DocumentViewModel
             return null;
         }
 
+        var existingPath = depotPath.GetResolvedText();
+        if (existingPath?.StartsWith('*') is true)
+        {
+            existingPath = ArchiveXlHelper.GetFirstExistingPath(existingPath);
+        }
+
+        if (null == existingPath)
+        {
+            return null;
+        }
+
         try
         {
             CR2WFile? cr2wFile = null;
@@ -413,9 +522,14 @@ public partial class RedDocumentViewModel : DocumentViewModel
                 if (_projectManager.ActiveProject != null)
                 {
                     string? path = null;
-                    if (!string.IsNullOrEmpty(depotPath))
+                    if (!string.IsNullOrEmpty(existingPath))
                     {
-                        path = Path.Combine(_projectManager.ActiveProject.ModDirectory, depotPath.GetString().NotNull());
+                        path = Path.Combine(_projectManager.ActiveProject.ModDirectory, existingPath);
+                        // If it's not a mod file, read from game files
+                        if (!File.Exists(path))
+                        {
+                            path = Path.Combine(_projectManager.ActiveProject.FileDirectory, existingPath);
+                        }
                     }
                     else
                     {
@@ -438,7 +552,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
             if (cr2wFile == null)
             {
                 var file = _archiveManager.Lookup(depotPath.GetRedHash());
-                if (file.HasValue && file.Value is FileEntry fe)
+                if (file is { HasValue: true, Value: FileEntry fe })
                 {
                     using var stream = new MemoryStream();
                     fe.Extract(stream);

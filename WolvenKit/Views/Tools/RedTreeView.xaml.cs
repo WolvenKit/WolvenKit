@@ -1,23 +1,33 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Reactive;
+using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
 using CommunityToolkit.Mvvm.Input;
+using DynamicData.Kernel;
 using ReactiveUI;
 using Splat;
 using Syncfusion.UI.Xaml.TreeView;
-using Syncfusion.UI.Xaml.TreeView.Engine;
 using WolvenKit.App.Interaction;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Core.Services;
 using WolvenKit.RED4.Types;
+using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
+using Point = System.Windows.Point;
+using TreeViewItem = System.Windows.Controls.TreeViewItem;
 
 namespace WolvenKit.Views.Tools
 {
@@ -26,16 +36,60 @@ namespace WolvenKit.Views.Tools
     /// </summary>
     public partial class RedTreeView : UserControl
     {
+        private readonly IModifierViewStateService _modifierViewStateSvc;
+        private ILoggerService _loggerService;
+
         public RedTreeView()
         {
+            _modifierViewStateSvc = Locator.Current.GetService<IModifierViewStateService>();
+            _loggerService = Locator.Current.GetService<ILoggerService>(); 
+            
             InitializeComponent();
+
+            // Listen for the "UpdateFilteredItemsSource" message
+            MessageBus.Current.Listen<string>("Command")
+                .Where(x => x == "UpdateFilteredItemsSource")
+                .Subscribe(_ => UpdateFilteredItemsSource(ItemsSource));
+
+            _modifierViewStateSvc.ModifierStateChanged += OnModifierStateSvcChanged;
 
             TreeView.ApplyTemplate();
         }
 
-        public static readonly DependencyProperty ItemsSourceProperty =
-            DependencyProperty.Register(nameof(ItemsSource), typeof(object), typeof(RedTreeView));
+        public event PropertyChangedEventHandler PropertyChanged;
 
+        private void UpdateFilteredItemsSource(object value)
+        {
+            var collectionView = value switch
+            {
+                IEnumerable<ChunkViewModel> itemsSource => CollectionViewSource.GetDefaultView(itemsSource),
+                ICollectionView view => view,
+                _ => null
+            };
+
+            if (collectionView is not null)
+            {
+                collectionView.Filter = item => (item as ChunkViewModel)?.ExcludeFromSimpleView() != true;
+                SetCurrentValue(ItemsSourceProperty, collectionView);
+            }
+
+
+
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ItemsSource)));
+        }
+
+        public static readonly DependencyProperty ItemsSourceProperty =
+            DependencyProperty.Register(nameof(ItemsSource), typeof(object), typeof(RedTreeView),
+                new PropertyMetadata(null, OnItemsSourceChanged));
+
+        private static void OnItemsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is RedTreeView redTreeView)
+            {
+                redTreeView.UpdateFilteredItemsSource(e.NewValue);
+            }
+        }
+        
         public object ItemsSource
         {
             get => GetValue(ItemsSourceProperty);
@@ -61,31 +115,6 @@ namespace WolvenKit.Views.Tools
             set => SetValue(SelectedItemsProperty, value);
         }
 
-        /*
-
-                //
-                // Summary:
-                //     Identifies the Syncfusion.UI.Xaml.TreeView.SfTreeView.SelectedItems dependency
-                //     property.
-                public static readonly DependencyProperty SelectedItemsProperty =
-                    DependencyProperty.Register(nameof(SelectedItems), typeof(ObservableCollection<object>), typeof(RedTreeView));
-                //    , new PropertyMetadata(null, delegate (DependencyObject sender, DependencyPropertyChangedEventArgs args) {(sender as RedTreeView).OnPropertyChanged(args); }));
-
-                //
-                // Summary:
-                //     Gets or sets the selected items for selection.
-                //
-                // Value:
-                //     The collection of object that contains data item that are selected.
-                public ObservableCollection<object> SelectedItems
-                {
-                    get { return (ObservableCollection<object>)GetValue(SelectedItemsProperty); }
-                    set { SetValue(SelectedItemsProperty, value); }
-                }
-
-
-        */
-
         private void OnSelectionChanged(object sender, Syncfusion.UI.Xaml.TreeView.ItemSelectionChangedEventArgs e)
         {
             foreach (var removedItem in e.RemovedItems)
@@ -102,30 +131,30 @@ namespace WolvenKit.Views.Tools
                 {
                     selectable.IsSelected = true;
                 }
+
             }
         }
 
         public async void OnCollapsed(object sender, Syncfusion.UI.Xaml.TreeView.NodeExpandedCollapsedEventArgs e)
         {
-            if (e.Node.Level == 0 &&
-                e.Node.Content is ChunkViewModel cvm &&
-                cvm.ResolvedData is worldStreamingSector)
+            if (e.Node.Level != 0 || e.Node.Content is not ChunkViewModel { ResolvedData: worldStreamingSector })
             {
-                var test = Locator.Current.GetService<AppViewModel>();
-                var tt = Locator.Current.GetService<AppViewModel>();
-
-                if (tt.ActiveDocument is RedDocumentViewModel rr &&
-                    rr.SelectedTabItemViewModel is RDTDataViewModel rdtd)
-                {
-                    var chunk = rdtd.Chunks.First();
-                    try
-                    {
-                        await chunk.Refresh();
-                    }
-                    catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
-
-                }
+                return;
             }
+
+            var tt = Locator.Current.GetService<AppViewModel>();
+
+            if (tt.ActiveDocument is not RedDocumentViewModel { SelectedTabItemViewModel: RDTDataViewModel rdtd })
+            {
+                return;
+            }
+
+            var chunk = rdtd.Chunks.First();
+            try
+            {
+                await chunk.Refresh();
+            }
+            catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
         }
 
 
@@ -141,21 +170,17 @@ namespace WolvenKit.Views.Tools
             //    e.Cancel = true;
         }
 
-        public bool IsControlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
-
+        public bool IsControlBeingHeld => _modifierViewStateSvc.GetModifierState(ModifierKeys.Control);
 
         private bool IsAllowDrop(TreeViewItemDragOverEventArgs e)
         {
             if (e.DraggingNodes?[0].Content is not ChunkViewModel source ||
-                e.TargetNode?.Content is not ChunkViewModel target)
+                e.TargetNode?.Content is not ChunkViewModel target ||
+                source == target || target.Parent == null || target.Parent.IsReadOnly)
             {
                 return false;
             }
 
-            if (source == target || source.Data is null || target.Parent == null || target.Parent.IsReadOnly)
-            {
-                return false;
-            }
 
             switch (IsControlBeingHeld)
             {
@@ -192,10 +217,6 @@ namespace WolvenKit.Views.Tools
 
             e.DropPosition = IsAllowDrop(e) ? e.DropPosition : DropPosition.None;
 
-        }
-
-        private void DragDropInsertNode()
-        {
         }
 
         private async void SfTreeView_ItemDropping(object sender, TreeViewItemDroppingEventArgs e)
@@ -270,34 +291,41 @@ namespace WolvenKit.Views.Tools
 
         private void Copy_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (sender is Grid g && g.DataContext is ChunkViewModel cvm)
+            if (sender is not Grid g || g.DataContext is not ChunkViewModel cvm || cvm.Value == "null")
             {
-                if (cvm.Value != "null")
-                {
-                    e.CanExecute = true;
-                    e.Handled = true;
-                }
+                return;
             }
+
+            e.CanExecute = true;
+            e.Handled = true;
+
         }
 
         private void Copy_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            if (sender is Grid { DataContext: ChunkViewModel cvm })
+            if (sender is not Grid { DataContext: ChunkViewModel cvm })
             {
-                if (cvm.Data is TweakDBID tweakDbId)
-                {
-                    Clipboard.SetText(tweakDbId.IsResolvable ? tweakDbId.ResolvedText : ((ulong)tweakDbId).ToString("X16"));
-                    return;
-                }
-                
+                return;
+            }
+
+            if (cvm.Data is TweakDBID tweakDbId)
+            {
+                Clipboard.SetText(
+                    (tweakDbId.IsResolvable ? tweakDbId.ResolvedText : ((ulong)tweakDbId).ToString("X16")) ??
+                    string.Empty);
+                return;
+            }
+
+            if (cvm.Value != null)
+            {
                 Clipboard.SetText(cvm.Value);
             }
         }
 
-        public bool HasSelection => null != SelectedItem ||
-                                    (SelectedItems is ObservableCollection<ChunkViewModel> items && items.Any());
+        public bool CanOpenSearchAndReplaceDialog => SelectedItem is ChunkViewModel { Parent: not null };
 
-        [RelayCommand()]
+        // [RelayCommand(CanExecute = nameof(CanOpenSearchAndReplaceDialog))]
+        [RelayCommand]
         private void OpenSearchAndReplaceDialog()
         {
             if (SelectedItem is null && SelectedItems is null)
@@ -306,7 +334,8 @@ namespace WolvenKit.Views.Tools
             }
 
             var dialog = new SearchAndReplaceDialog();
-            if (dialog.ShowDialog() != true || SelectedItems is not ObservableCollection<object> selection)
+            var selectedChunkViewModels = GetSelectedChunks();
+            if (dialog.ShowDialog() != true || selectedChunkViewModels.Count == 0)
             {
                 return;
             }
@@ -315,17 +344,56 @@ namespace WolvenKit.Views.Tools
             var replaceText = dialog.ViewModel?.ReplaceText ?? "";
             var ignoreCase = dialog.ViewModel?.IgnoreCase ?? false;
 
-            selection.OfType<ChunkViewModel>().ToList()
-                .ForEach(chunkViewModel =>
-                {
-                    chunkViewModel.SearchAndReplace(searchText, replaceText, ignoreCase);
-                });
+            var results = selectedChunkViewModels
+                .Select(item => item.SearchAndReplace(searchText, replaceText, ignoreCase))
+                .ToList();
+
+            var numReplaced = results.Count(r => r == true);
+
+            var cvm = selectedChunkViewModels.FirstOrDefault();
+
+            if (numReplaced <= 0)
+            {
+                _loggerService.Info("Nothing to replace!");
+                return;
+            }
+
+            cvm?.Tab?.Parent.SetIsDirty(true);
+            _loggerService.Info($"Replaced {ChunkViewModel.NumReplacedEntries} occurrences of '{searchText}' with '{replaceText}'");
         }
 
-        //private void TreeView_QueryNodeSize(object sender, QueryNodeSizeEventArgs e)
-        //{
-        //    e.Height = e.Node.Content.();
-        //    e.Handled = true;
-        //}
+        /// <summary>
+        /// Gets all selected chunks. If none are selected / if selection is invalid, it will return an empty list.
+        /// </summary>
+        private List<ChunkViewModel> GetSelectedChunks() =>
+            SelectedItems is not ObservableCollection<object> selection ? [] : selection.OfType<ChunkViewModel>().ToList();
+
+        private void OnModifierStateSvcChanged() => GetSelectedChunks().ForEach((chunk) => chunk.RefreshContextMenuFlags());
+
+        private void OnKeystateChanged(object sender, KeyEventArgs e) => _modifierViewStateSvc.OnKeystateChanged(e);
+
+        private void OnContextMenuOpened(object sender, ContextMenuEventArgs e) => _modifierViewStateSvc.RefreshModifierStates();
+
+        private void OnDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (SelectedItem is not ChunkViewModel chunk)
+            {
+                return;
+            }
+
+            // If the current chunk is not expanded, collapse all of its siblings
+            if (!chunk.IsExpanded && chunk.Parent is ChunkViewModel parent)
+            {
+                chunk = parent;
+            }
+            
+            var expansionState = chunk.IsExpanded;
+            
+            var expansionStates = chunk.GetAllProperties().Select((child) => child.IsExpanded).ToList();
+            chunk.SetChildExpansionStates(!expansionStates.Contains(true));
+
+
+            chunk.IsExpanded = expansionState;
+        }
     }
 }

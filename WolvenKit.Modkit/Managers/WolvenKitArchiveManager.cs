@@ -139,6 +139,20 @@ namespace WolvenKit.Common.Model
             }
         }
 
+
+        /// <summary>
+        /// Look up a hash in the ArchiveManager
+        /// </summary>
+        /// <param name="hash">Numeric hash of item</param>
+        /// <param name="searchScope">Where to look for the file. "Everywhere" will prefer game files.</param>
+        /// <returns>An optional holding the matching file</returns>
+        public abstract Optional<IGameFile> Lookup(ulong hash, ArchiveManagerScope searchScope);
+
+        /// <summary>
+        /// Look up a hash in the ArchiveManager or ModBrowser, whichever is active right now
+        /// </summary>
+        /// <param name="hash">Numeric hash of item</param>
+        /// <returns>An optional holding the matching file</returns>
         public abstract Optional<IGameFile> Lookup(ulong hash);
 
         public abstract Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles();

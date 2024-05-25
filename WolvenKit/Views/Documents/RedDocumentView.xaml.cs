@@ -1,7 +1,10 @@
 using System.Windows.Input;
 using ReactiveUI;
+using Splat;
 using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.App.ViewModels.Documents;
+using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.Views.Shell;
 
 namespace WolvenKit.Views.Documents
 {
@@ -29,20 +32,32 @@ namespace WolvenKit.Views.Documents
 
         private void TabControl_OnSelectedItemChangedEvent(object sender, SelectedItemChangedEventArgs e)
         {
-            if (e.NewSelectedItem.DataContext is RDTMeshViewModel meshViewModel)
+            if (e?.NewSelectedItem?.DataContext is RedDocumentTabViewModel newTab)
             {
-                meshViewModel.Load();
+                newTab.Load();
             }
 
-            if (e.NewSelectedItem.DataContext is RDTGraphViewModel graphViewModel)
+            if (e?.OldSelectedItem?.DataContext is RedDocumentTabViewModel oldTab)
             {
-                graphViewModel.Load();
+                oldTab.Unload();
+            }
+        }
+
+        private void OnToggleNoobFilter(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount <= 1 || DataContext is not RedDocumentViewModel vm)
+            {
+                return;
             }
 
-            if (e.NewSelectedItem.DataContext is RDTGraphViewModel2 graphViewModel2)
-            {
-                graphViewModel2.Load();
-            }
+            vm.IsSimpleViewEnabled = !vm.IsSimpleViewEnabled;
+
+            // Send a message to update filtered items source
+            MessageBus.Current.SendMessage("UpdateFilteredItemsSource", "Command");
+
+
+            // var mainWindow = Locator.Current.GetService<AppViewModel>();
+            // mainWindow?.ReloadFile();
         }
     }
 }

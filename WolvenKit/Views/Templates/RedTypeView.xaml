@@ -19,8 +19,10 @@
     d:DesignWidth="800"
     x:TypeArguments="shell:ChunkViewModel"
     mc:Ignorable="d">
-    <Grid Background="{StaticResource ContentBackground}" IsSharedSizeScope="True"
-          KeyboardNavigation.TabNavigation="Contained">
+    <Grid
+        Background="{StaticResource ContentBackground}"
+        IsSharedSizeScope="True"
+        KeyboardNavigation.TabNavigation="Contained">
         <Grid.Resources>
             <sys:Double x:Key="RowHeight">26</sys:Double>
             <SolidColorBrush x:Key="RedTypeColor" Color="{StaticResource WolvenKitTanColor}" />
@@ -388,6 +390,11 @@
                         <editors:RedNodeRefEditor RedNodeRef="{Binding Data, Mode=TwoWay}" />
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedNodeRefEditor>
+                <converters:RedEditorTemplateSelector.RedLocalizationStringEditor>
+                    <DataTemplate>
+                        <editors:RedLocalizationStringEditor RedLocalizationString="{Binding Data, Mode=TwoWay}" />
+                    </DataTemplate>
+                </converters:RedEditorTemplateSelector.RedLocalizationStringEditor>
                 <converters:RedEditorTemplateSelector.HandleTemplateView>
                     <DataTemplate>
                         <TextBlock

@@ -17,12 +17,14 @@ using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Helpers;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types.Pools;
 
 namespace WolvenKit.App.Controllers;
 
@@ -105,7 +107,12 @@ public class RED4Controller : ObservableObject, IGameController
 
                 foreach (var physMat in root.Unk1)
                 {
-                    _hashService.AddCustom(physMat.ToString().NotNull());
+                    if (!physMat.IsResolvable)
+                    {
+                        continue;
+                    }
+                    
+                    CNamePool.AddOrGetHash(physMat.GetResolvedText()!);
                 }
             }
         }
@@ -124,7 +131,12 @@ public class RED4Controller : ObservableObject, IGameController
 
                 foreach (var presetEntry in res.Presets)
                 {
-                    _hashService.AddCustom(presetEntry.NotNull().Name.ToString().NotNull());
+                    if (presetEntry is not { Name: { IsResolvable: true } name })
+                    {
+                        continue;
+                    }
+
+                    CNamePool.AddOrGetHash(name.GetResolvedText()!);
                 }
             }
         }
@@ -418,15 +430,29 @@ public class RED4Controller : ObservableObject, IGameController
         _progressService.IsIndeterminate = false;
 
         // launch game
-        if (options.LaunchGame)
+        if (!options.LaunchGame)
+        {
+            return true;
+        }
+
+        if (_settingsManager.GetRED4GameLaunchCommand() is not string launchCommand || string.IsNullOrEmpty(launchCommand))
+        {
+            throw new WolvenKitException(0x5001, "No game executable set");
+        }
+
+        try
         {
             Process.Start(new ProcessStartInfo
             {
-                FileName = _settingsManager.GetRED4GameLaunchCommand(),
+                FileName = launchCommand,
                 Arguments = options.GameArguments ?? "",
                 ErrorDialog = true,
                 UseShellExecute = true,
             });
+        }
+        catch (Exception)
+        {
+            throw new WolvenKitException(0x5002, "Failed to launch game executable");
         }
 
         return true;
@@ -807,17 +833,29 @@ public class RED4Controller : ObservableObject, IGameController
 
     #endregion
 
-    public async Task<bool> AddFileToModModal(ulong hash)
+    /// <Inheritdoc />
+    public Task<bool> AddFileToModModal(ulong hash)
     {
-        var file = _archiveManager.Lookup(hash);
-        if (file.HasValue)
-        {
-            return await AddFileToModModal(file.Value);
-        }
-        return false;
+        var scope = _archiveManager.IsModBrowserActive ? ArchiveManagerScope.Mods : ArchiveManagerScope.Basegame;
+        return AddFileToModModal(hash, scope);
     }
 
-    public async Task<bool> AddFileToModModal(IGameFile file)
+    /// <Inheritdoc />
+    public async Task<bool> AddFileToModModal(ulong hash, ArchiveManagerScope searchScope)
+    {
+        var file = _archiveManager.Lookup(hash);
+        return file.HasValue && await AddFileToModModal(file.Value, searchScope);
+    }
+
+    /// <Inheritdoc />
+    public Task<bool> AddFileToModModal(IGameFile file)
+    {
+        var scope = _archiveManager.IsModBrowserActive ? ArchiveManagerScope.Mods : ArchiveManagerScope.Basegame;
+        return AddFileToModModal(file, scope);
+    }
+
+    /// <Inheritdoc />
+    public async Task<bool> AddFileToModModal(IGameFile file, ArchiveManagerScope searchScope)
     {
         if (_projectManager.ActiveProject is null)
         {
@@ -861,66 +899,73 @@ public class RED4Controller : ObservableObject, IGameController
         return true;
     }
 
+    /// <Inheritdoc />
     public bool AddToMod(ulong hash)
     {
-        var file = _archiveManager.Lookup(hash);
-        if (file.HasValue)
-        {
-            return AddToMod(file.Value);
-        }
-        return false;
+        var scope = _archiveManager.IsModBrowserActive ? ArchiveManagerScope.Mods : ArchiveManagerScope.Basegame;
+        return AddToMod(hash, scope);
     }
 
+    /// <Inheritdoc />
+    public bool AddToMod(ulong hash, ArchiveManagerScope searchScope)
+    {
+        var file = _archiveManager.Lookup(hash, searchScope);
+        return file.HasValue && AddToMod(file.Value, searchScope);
+    }
+
+    /// <Inheritdoc />
     public bool AddToMod(IGameFile file)
+    {
+        var scope = _archiveManager.IsModBrowserActive ? ArchiveManagerScope.Mods : ArchiveManagerScope.Basegame;
+        return AddToMod(file, scope);
+    }
+
+    /// <Inheritdoc />
+    public bool AddToMod(IGameFile file, ArchiveManagerScope searchScope)
     {
         if (_projectManager.ActiveProject is null)
         {
             return false;
         }
 
-        switch (_projectManager.ActiveProject.GameType)
+        if (_projectManager.ActiveProject.GameType is not GameType.Cyberpunk2077)
         {
-            case GameType.Cyberpunk2077:
+            throw new WolvenKitException(-1, "This doesn't seem to be a Cyberpunk project!");
+        }
+
+        var fileName = file.Name;
+        if (file.Name == file.Key.ToString() && file.GuessedExtension != null)
+        {
+            fileName += file.GuessedExtension;
+        }
+
+        FileInfo diskPathInfo = new(Path.Combine(_projectManager.ActiveProject.ModDirectory, fileName));
+        if (diskPathInfo.Directory == null)
+        {
+            return false;
+        }
+
+        if (File.Exists(diskPathInfo.FullName))
+        {
+            using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
+            file.Extract(fs);
+            _loggerService.Info($"Overwrote existing file with game file: {file.Name}");
+        }
+        else
+        {
+            Directory.CreateDirectory(diskPathInfo.Directory.FullName);
+            try
             {
-                var fileName = file.Name;
-                if (file.Name == file.Key.ToString() && file.GuessedExtension != null)
-                {
-                    fileName += file.GuessedExtension;
-                }
-
-                FileInfo diskPathInfo = new(Path.Combine(_projectManager.ActiveProject.ModDirectory, fileName));
-                if (diskPathInfo.Directory == null)
-                {
-                    break;
-                }
-
-                if (File.Exists(diskPathInfo.FullName))
-                {
-                    using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
-                    file.Extract(fs);
-                    _loggerService.Info($"Overwrote existing file with game file: {file.Name}");
-                }
-                else
-                {
-                    Directory.CreateDirectory(diskPathInfo.Directory.FullName);
-                    try
-                    {
-                        using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
-                        file.Extract(fs);
-                        _loggerService.Info($"Added game file to project: {file.Name}");
-                    }
-                    catch (Exception ex)
-                    {
-                        File.Delete(diskPathInfo.FullName);
-                        _loggerService.Error(ex);
-                    }
-
-                }
-
-                break;
+                using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
+                file.Extract(fs);
+                _loggerService.Info($"Added game file to project: {file.Name}");
             }
-            default:
-                throw new ArgumentOutOfRangeException();
+            catch (Exception ex)
+            {
+                File.Delete(diskPathInfo.FullName);
+                _loggerService.Error(ex);
+            }
+
         }
 
         return true;

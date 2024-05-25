@@ -31,6 +31,9 @@ namespace WolvenKit.Views.Tools
     {
         private string _currentFolderQuery = "";
 
+        // ReSharper disable once MemberCanBePrivate.Global - used in view model
+        public bool IsModBrowserEnabled { get; set; } = false;
+
         public AssetBrowserView()
         {
             InitializeComponent();
@@ -46,6 +49,11 @@ namespace WolvenKit.Views.Tools
                       viewModel => viewModel.SearchBarText,
                       view => view.FileSearchBar.Text)
                   .DisposeWith(disposables);
+
+                this.Bind(ViewModel,
+                        viewModel => viewModel.IsModBrowserEnabled,
+                        view => view.IsModBrowserEnabled)
+                    .DisposeWith(disposables);
 
                 // left navigation
                 this.OneWayBind(ViewModel,

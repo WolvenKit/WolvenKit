@@ -1,4 +1,5 @@
-﻿using WolvenKit.RED4.Types;
+﻿using WolvenKit.App.Extensions;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 
@@ -6,7 +7,8 @@ public class questEventManagerNodeDefinitionWrapper : questDisableableNodeDefini
 {
     public questEventManagerNodeDefinitionWrapper(questEventManagerNodeDefinition questDisableableNodeDefinition) : base(questDisableableNodeDefinition)
     {
-        Details.Add("Manager Name", questDisableableNodeDefinition.ManagerName);
+        //Details.Add("Manager Name", questDisableableNodeDefinition.ManagerName);
+        Details.AddRange(NodeProperties.GetPropertiesFor(questDisableableNodeDefinition));
     }
 
     internal override void CreateDefaultSockets()

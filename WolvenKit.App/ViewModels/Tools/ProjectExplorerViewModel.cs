@@ -1,18 +1,21 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
 using System.Windows.Threading;
 using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using DynamicData.Binding;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
@@ -23,12 +26,17 @@ using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.Archive.IO;
+using WolvenKit.RED4.Types;
+using EFileReadErrorCodes = WolvenKit.RED4.Archive.IO.EFileReadErrorCodes;
 
 namespace WolvenKit.App.ViewModels.Tools;
 
@@ -39,12 +47,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <summary>
     /// Identifies the <see ref="ContentId"/> of this tool window.
     /// </summary>
-    public const string ToolContentId = "ProjectExplorer_Tool";
+    private const string s_toolContentId = "ProjectExplorer_Tool";
 
     /// <summary>
     /// Identifies the caption string used for this tool window.
     /// </summary>
-    public const string ToolTitle = "Project Explorer";
+    private const string s_toolTitle = "Project Explorer";
 
     private readonly ILoggerService _loggerService;
     private readonly IProjectManager _projectManager;
@@ -53,10 +61,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private readonly IProgressService<double> _progressService;
     private readonly IGameControllerFactory _gameController;
     private readonly AppViewModel _mainViewModel;
+    public readonly IModifierViewStateService ModifierViewStateService;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
     private IPluginService _pluginService;
+    
+    
 
     private readonly ISettingsManager _settingsManager;
     private readonly IObservableList<FileModel> _observableList;
@@ -72,7 +83,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         IModTools modTools,
         IGameControllerFactory gameController,
         IPluginService pluginService,
-        ISettingsManager settingsManager) : base(ToolTitle)
+        ISettingsManager settingsManager,
+        IModifierViewStateService modifierSvc
+    ) : base(s_toolTitle)
     {
         _projectManager = projectManager;
         _loggerService = loggerService;
@@ -82,11 +95,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _gameController = gameController;
         _pluginService = pluginService;
         _settingsManager = settingsManager;
+        ModifierViewStateService = modifierSvc;
 
         _mainViewModel = appViewModel;
 
         SideInDockedMode = DockSide.Left;
 
+        RegisterModifierStateAwareness();
+        
         SetupToolDefaults();
 
         _watcherService.Files
@@ -102,72 +118,39 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     {
         if (e.Project is not null)
         {
-            DispatcherHelper.RunOnMainThread( () => 
-            {
-                ActiveProject = e.Project;
-            }, DispatcherPriority.ContextIdle);
+            DispatcherHelper.RunOnMainThread(() => ActiveProject = e.Project, DispatcherPriority.ContextIdle);
         }
     }
 
+
+    /// <summary>
+    /// Enable ConvertTo and ConvertFrom
+    /// If the item is in the archive folder, it can be converted to json
+    /// If the item is in the raw folder, it can be converted from json
+    /// </summary>
     partial void OnSelectedItemChanged(FileModel? value)
     {
-        if (value is not null)
+        if (value is null)
         {
-            _mainViewModel.SelectFileCommand.SafeExecute(value);
-                
-            // toggle context menu buttons
-            if (SelectedItems is not null && SelectedItems.Any())
-            {
-                var selected = SelectedItems.OfType<FileModel>().ToList();
-                // if all are in raw folder, then enable convertFrom
-                if (selected.All(x => IsInRawFolder(x)))
-                {
-                    ConvertToIsEnabled = false;
-                    ConvertFromIsEnabled = true;
-                }
-                // if all are in archive folder, then enable convertTo
-                else if (selected.All(x => IsInArchiveFolder(x)))
-                {
-                    ConvertToIsEnabled = true;
-                    ConvertFromIsEnabled = false;
-                }
-                // else disable both
-                else
-                {
-                    ConvertToIsEnabled = false;
-                    ConvertFromIsEnabled = false;
-                }
-            }
-            else if (value is not null)
-            {
-                if (IsInRawFolder(value))
-                {
-                    ConvertToIsEnabled = false;
-                    ConvertFromIsEnabled = true;
-                }
-                // if all are in archive folder, then enable convertTo
-                else if (IsInArchiveFolder(value))
-                {
-                    ConvertToIsEnabled = true;
-                    ConvertFromIsEnabled = false;
-                }
-                // else disable both
-                else
-                {
-                    ConvertToIsEnabled = false;
-                    ConvertFromIsEnabled = false;
-                }
-            }
+            return;
         }
+
+        _mainViewModel.SelectFileCommand.SafeExecute(value);
+
+        // toggle context menu buttons for all selected items
+        SelectedItems?.OfType<FileModel>().ToList().ForEach((selectedItem) =>
+        {
+            ConvertToIsEnabled = IsInArchiveFolder(selectedItem);
+            ConvertFromIsEnabled = IsInRawFolder(selectedItem);
+        });
+
+        ConvertToIsEnabled = IsInArchiveFolder(value);
+        ConvertFromIsEnabled = IsInRawFolder(value);
     }
 
-    private void OnNext(IChangeSet<FileModel, ulong> obj)
-    {
-        DispatcherHelper.RunOnMainThread(() =>
-        {
-            BindGrid1 = new ObservableCollection<FileModel>(_observableList.Items);
-        }, DispatcherPriority.ContextIdle);
-    }
+    private void OnNext(IChangeSet<FileModel, ulong> obj) =>
+        DispatcherHelper.RunOnMainThread(() => BindGrid1 = new ObservableCollection<FileModel>(_observableList.Items),
+            DispatcherPriority.ContextIdle);
 
     #region properties
 
@@ -187,6 +170,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [NotifyCanExecuteChangedFor(nameof(OverwriteWithGameFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(CutFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(DeleteFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CreateNewDirectoryCommand))]
     [NotifyCanExecuteChangedFor(nameof(OpenInFileExplorerCommand))]
     [NotifyCanExecuteChangedFor(nameof(PasteFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(RenameFileCommand))]
@@ -201,6 +185,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [NotifyCanExecuteChangedFor(nameof(CopyRelPathCommand))]
     [NotifyCanExecuteChangedFor(nameof(OverwriteWithGameFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(CutFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CreateNewDirectoryCommand))]
     [NotifyCanExecuteChangedFor(nameof(OpenInFileExplorerCommand))]
     [NotifyCanExecuteChangedFor(nameof(PasteFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(RenameFileCommand))]
@@ -281,31 +266,168 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [RelayCommand(CanExecute = nameof(CanCopyFile))]
     private void CopyFile() => Clipboard.SetDataObject(SelectedItem.NotNull().FullName);
 
-
-    public static bool IsShiftBeingHeld => Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
-    public static bool IsCtrlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+    /// <summary>
+    /// If neither control nor shift is being held, show "Copy relative path" context menu entry.
+    /// This will also return the relative path of the current game file if executed from raw folder view.
+    /// </summary>
+    [ObservableProperty]
+    private bool _isShowRelativePath;
 
     /// <summary>
-    /// Copies relative path of node (Or absolute path, if ctrl+shift key is held)
+    /// When holding Ctrl+Shift and right-clicking an archive item or folder, the context menu will show "Copy absolute path to raw folder".
     /// </summary>
-    private bool CanCopyRelPath() => ActiveProject != null && SelectedItem != null;
-    [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
-    private void CopyRelPath()
+    [ObservableProperty]
+    private bool _isShowAbsolutePathToRawFolder;
+
+    /// <summary>
+    /// When holding Ctrl+Shift and right-clicking an item in "ra", the context menu will show "Copy absolute path to archive folder".
+    /// </summary>
+    [ObservableProperty]
+    private bool _isShowAbsolutePathToArchiveFolder;
+
+    /// <summary>
+    /// When holding Shift, the context menu will show "Copy absolute path".
+    /// </summary>
+    [ObservableProperty]
+    private bool _isShowAbsolutePathToCurrentFile;
+
+    /// <summary>
+    /// When holding Control, the context menu will show "Copy absolute path to folder".
+    /// </summary>
+    [ObservableProperty]
+    private bool _isShowAbsolutePathToCurrentFolder;
+
+    private static readonly string s_rawFolder = $"{Path.DirectorySeparatorChar}raw{Path.DirectorySeparatorChar}";
+
+    private static readonly string s_archiveFolder =
+        $"{Path.DirectorySeparatorChar}archive{Path.DirectorySeparatorChar}";
+
+
+    [GeneratedRegex(@".*\.\S+\.glb$")]
+    private static partial Regex TypedGlbRegex();
+    
+    
+    /// <summary>
+    /// Copies the path to an item in clipboard
+    /// </summary>
+    /// <param name="isAbsolute"></param>
+    /// <param name="switchToRaw"></param>
+    /// <param name="gamefileOnly"></param>
+    /// <param name="cutOffFileName"></param>
+    private void CopyItemPathToClipboard(
+        bool isAbsolute = false,
+        bool switchToRaw = false,
+        bool gamefileOnly = false,
+        bool cutOffFileName = false)
     {
-        var absolutePath = SelectedItem.NotNull().FullName;
-        if ((IsShiftBeingHeld || IsCtrlBeingHeld) && Path.Exists(absolutePath))
+        var activeItemPath = SelectedItem.NotNull().FullName;
+        if (!Path.Exists(activeItemPath))
         {
-            absolutePath = absolutePath.Replace('/', Path.DirectorySeparatorChar);
-            if (IsCtrlBeingHeld)
-            {
-                absolutePath = Path.GetDirectoryName(absolutePath);
-            }
-            Clipboard.SetDataObject(absolutePath);
             return;
         }
 
-        Clipboard.SetDataObject(FileModel.GetRelativeName(absolutePath, ActiveProject.NotNull()));
+        activeItemPath = activeItemPath.Replace('/', Path.DirectorySeparatorChar);
+        if (!isAbsolute)
+        {
+            activeItemPath = FileModel.GetRelativeName(activeItemPath, ActiveProject.NotNull());
+        }
+
+        if (switchToRaw)
+        {
+            if (activeItemPath.Contains(s_rawFolder) || gamefileOnly)
+            {
+                activeItemPath = activeItemPath.Replace(s_rawFolder, s_archiveFolder);
+                // it's a .morphtarget.glb or .anims.glb or...
+                if (TypedGlbRegex().IsMatch(activeItemPath))
+                {
+                    activeItemPath = activeItemPath.Replace(".glb", "");
+                }
+                else if (activeItemPath.EndsWith(".glb"))
+                {
+                    activeItemPath = activeItemPath.Replace(".glb", ".mesh");
+                }
+                else if (activeItemPath.EndsWith(".json"))
+                {
+                    activeItemPath = activeItemPath.Replace(".json", "");
+                }
+            }
+            else if (activeItemPath.Contains(s_archiveFolder) && !gamefileOnly)
+            {
+                activeItemPath = activeItemPath.Replace(s_archiveFolder, s_rawFolder);
+
+                switch (Path.GetExtension(activeItemPath))
+                {
+                    case ".mesh":
+                        activeItemPath = activeItemPath.Replace(".mesh", ".glb");
+                        break;
+                    case ".morphtarget":
+                    case ".anims":
+                        activeItemPath = $"{activeItemPath}.glb";
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        if (gamefileOnly && activeItemPath.Contains(s_archiveFolder))
+        {
+            activeItemPath = activeItemPath.Replace(s_archiveFolder, s_rawFolder);
+            activeItemPath = Path.GetDirectoryName(activeItemPath) ?? activeItemPath;
+        }
+
+        if (cutOffFileName)
+        {
+            activeItemPath = Path.Combine(Path.GetDirectoryName(activeItemPath) ?? "",
+                Path.GetFileNameWithoutExtension(activeItemPath));
+        }
+
+        if (isAbsolute && !Path.Exists(activeItemPath))
+        {
+            activeItemPath = Path.GetDirectoryName(activeItemPath);
+        }
+
+        if (activeItemPath is not null)
+        {
+            Clipboard.SetDataObject(activeItemPath);
+        }  
     }
+
+    private bool CanCopyRelPath() => ActiveProject != null && SelectedItem != null;
+
+    /// <summary>
+    /// Copy relative path to game file. If the current file is under "raw", switch to "archive" and cut off extension.
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
+    private void CopyRelPath() => CopyItemPathToClipboard(false, false, true);
+
+    /// <summary>
+    /// Copy absolute path to current file. Don't change anything else.
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
+    private void CopyAbsPathToCurrentFile() => CopyItemPathToClipboard(true);
+
+    /// <summary>
+    /// Copy absolute path to current folder. If currently selected item _is_ a folder, don't cut off the file name.
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
+    private void CopyAbsPathToCurrentFolder() =>
+        CopyItemPathToClipboard(true, false, false,
+            SelectedItem?.FullName is not null && Directory.Exists(SelectedItem?.FullName));
+
+
+    /// <summary>
+    /// Ctrl+Shift with /archive/ file or folder selected: Copy absolute path to raw folder (convenience for quick switching)
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
+    private void CopyAbsPathToRawFolder() => CopyItemPathToClipboard(true, true, false);
+
+
+    /// <summary>
+    /// Ctrl+Shift with /raw/ file or folder selected: Copy absolute path to archive folder (convenience for quick switching)
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
+    private void CopyAbsPathToArchiveFolder() => CopyItemPathToClipboard(true, true, true);
 
 
     /// <summary>
@@ -315,45 +437,53 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [RelayCommand(CanExecute = nameof(CanAddDependencies))]
     private async Task AddDependencies()
     {
-        if (!SelectedItem.NotNull().IsDirectory)
+        if (SelectedItem.NotNull().IsDirectory)
         {
-            // parse xml
-            var filename = SelectedItem.FullName;
-            var serializer = new XmlSerializer(typeof(MaterialXmlModel));
+            await Task.CompletedTask;
+            return;
+        }
 
-            using Stream reader = new FileStream(filename, FileMode.Open);
-            // Call the Deserialize method to restore the object's state.
-            if (serializer.Deserialize(reader) is MaterialXmlModel model)
+        // parse xml
+        var filename = SelectedItem.FullName;
+        var serializer = new XmlSerializer(typeof(MaterialXmlModel));
+
+        await using Stream reader = new FileStream(filename, FileMode.Open);
+        // Call the Deserialize method to restore the object's state.
+        if (serializer.Deserialize(reader) is MaterialXmlModel model)
+        {
+            var materials = new List<string>();
+            if (model.Materials is not null)
             {
-                var materials = new List<string>();
-                if (model.Materials is not null)
+                foreach (var material in model.Materials)
                 {
-                    foreach (var material in model.Materials)
+                    if (material.Param is null)
                     {
-                        if (material.Param is not null)
+                        continue;
+                    }
+
+                    foreach (var param in material.Param)
+                    {
+                        if (string.IsNullOrEmpty(param.Value) || string.IsNullOrEmpty(param.Type) ||
+                            !param.Type.StartsWith("rRef:"))
                         {
-                            foreach (var param in material.Param)
-                            {
-                                if (!string.IsNullOrEmpty(param.Value) && !string.IsNullOrEmpty(param.Type) && param.Type.StartsWith("rRef:"))
-                                {
-                                    var path = param.Value;
-                                    if (!materials.Contains(path))
-                                    {
-                                        materials.Add(path);
-                                    }
-                                }
-                            }
+                            continue;
+                        }
+
+                        var path = param.Value;
+                        if (!materials.Contains(path))
+                        {
+                            materials.Add(path);
                         }
                     }
                 }
+            }
 
-                // add from AB
-                foreach (var material in materials)
-                {
-                    var relPath = FileModel.GetRelativeName(material, ActiveProject.NotNull());
-                    var hash = FNV1A64HashAlgorithm.HashString(relPath);
-                    await Task.Run(() => _gameController.GetController().AddToMod(hash));
-                }
+            // add from AB
+            foreach (var material in materials)
+            {
+                var relPath = FileModel.GetRelativeName(material, ActiveProject.NotNull());
+                var hash = FNV1A64HashAlgorithm.HashString(relPath);
+                await Task.Run(() => _gameController.GetController().AddToMod(hash));
             }
         }
 
@@ -363,8 +493,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <summary>
     /// Reimports the game file to replace the current one
     /// </summary>
-    private bool CanOverwriteWithGameFile() =>
-        ActiveProject != null && SelectedItem != null && !IsInRawFolder(SelectedItem);
+    private bool CanOverwriteWithGameFile() => ActiveProject != null && SelectedItem != null && !IsInRawFolder(SelectedItem);
 
     [RelayCommand(CanExecute = nameof(CanOverwriteWithGameFile))]
     private async Task OverwriteWithGameFile()
@@ -404,7 +533,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         // Suspend file watcher, then export everything
         _watcherService.IsSuspended = true;
 
-        // Progress nreporting
+        // Progress reporting
         var progress = 0;
         _progressService.Report(0);
 
@@ -413,7 +542,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         foreach (var hash in selectedItems)
         {
-            await Task.Run(() => controller.AddToMod(hash));
+            await Task.Run(() => controller.AddToMod(hash, ArchiveManagerScope.Everywhere));
             progress++;
             _progressService.Report(progress / (float)selectedItems.Count);
         }
@@ -433,14 +562,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private void CutFile() => throw new NotImplementedException();
 
     /// <summary>
-    /// Delets selected node.
+    /// Deletes selected node.
     /// </summary>
     private bool CanDeleteFile() => ActiveProject != null && SelectedItems != null;
     [RelayCommand(CanExecute = nameof(CanDeleteFile))]
-    public void DeleteFile()
+    private void DeleteFile()
     {
         var selected = SelectedItems.NotNull().OfType<FileModel>().ToList();
-        var delete = Interactions.DeleteFiles(selected.Select(_ => _.Name));
+        var delete = Interactions.DeleteFiles(selected.Select(d => d.Name));
         if (!delete)
         {
             return;
@@ -449,25 +578,25 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         // Delete from file structure
         foreach (var item in selected)
         {
-            var fullpath = item.FullName;
+            var fullPath = item.FullName;
             try
             {
                 if (item.IsDirectory)
                 {
-                    Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(fullpath
+                    Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(fullPath
                         , Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs
                         , Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
                 }
                 else
                 {
-                    Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(fullpath
+                    Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(fullPath
                         , Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs
                         , Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
                 }
             }
             catch (Exception)
             {
-                _loggerService.Error("Failed to delete " + fullpath + ".\r\n");
+                _loggerService.Error("Failed to delete " + fullPath + ".\r\n");
             }
         }
     }
@@ -553,6 +682,28 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     }
 
 
+    private bool CanCreateNewDirectory() => ActiveProject != null && SelectedItem?.IsDirectory == true;
+
+    [RelayCommand(CanExecute = nameof(CanCreateNewDirectory))]
+    private void CreateNewDirectory(FileModel value)
+    {
+        var model = value ?? SelectedItem;
+        if (model?.IsDirectory != true)
+        {
+            return;
+        }
+
+        var newFolderPath = Path.Combine(model.FullName, Interactions.AskForTextInput());
+
+        if (Directory.Exists(newFolderPath))
+        {
+            return;
+        }
+
+        Directory.CreateDirectory(newFolderPath);
+    }
+
+
     /// <summary>
     /// Renames selected node. Works for files and directories.
     /// </summary>
@@ -561,37 +712,44 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private void RenameFile()
     {
         var filename = SelectedItem.NotNull().FullName;
-        var newfilename = Interactions.Rename(filename);
+        var newFilename = Interactions.Rename(filename);
 
-        if (string.IsNullOrEmpty(newfilename))
+        if (string.IsNullOrEmpty(newFilename))
         {
             return;
         }
 
-        var newfullpath = Path.Combine(Path.GetDirectoryName(filename).NotNull(), newfilename);
+        var newFullPath = Path.Combine(Path.GetDirectoryName(filename).NotNull(), newFilename);
 
-        if (File.Exists(newfullpath))
+        if (File.Exists(newFullPath))
         {
             return;
         }
 
         try
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(newfullpath).NotNull());
+            Directory.CreateDirectory(Path.GetDirectoryName(newFullPath).NotNull());
             if (SelectedItem.IsDirectory)
             {
-                Directory.Move(filename, newfullpath);
+                Directory.Move(filename, newFullPath);
             }
             else
             {
-                File.Move(filename, newfullpath);
+                File.Move(filename, newFullPath);
             }
         }
         catch
         {
+            // Swallow error
         }
 
-
+        if (ActiveProject is { })
+        {
+            var oldRelPath = GetResourcePath(filename, ActiveProject);
+            var newRelPath = GetResourcePath(newFilename, ActiveProject);
+            
+            ReplacePathInProject(oldRelPath, newRelPath);
+        }
     }
 
     #endregion general commands
@@ -674,7 +832,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         List<string> files = new();
 
         // get all files
-        foreach (var item in SelectedItems.NotNull().OfType<FileModel>().Where(x => IsInRawFolder(x)))
+        foreach (var item in SelectedItems.NotNull().OfType<FileModel>().Where(IsInRawFolder))
         {
             if (item.IsDirectory)
             {
@@ -730,7 +888,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <summary>
     /// Opens selected node in asset browser.
     /// </summary>
-    private bool CanOpenInAssetBrowser() => ActiveProject != null && SelectedItem != null && !SelectedItem.IsDirectory;
+    private bool CanOpenInAssetBrowser() => ActiveProject != null && SelectedItem is { IsDirectory: false };
     [RelayCommand(CanExecute = nameof(CanOpenInAssetBrowser))]
     private void OpenInAssetBrowser()
     {
@@ -740,13 +898,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private static string GetSecondExtension(FileModel model) => Path.GetExtension(Path.ChangeExtension(model.FullName, "").TrimEnd('.')).TrimStart('.');
 
-    private bool CanOpenInMlsb()
-    {
-        return ActiveProject != null && SelectedItem != null && !SelectedItem.IsDirectory 
-            && IsInRawFolder(SelectedItem) && SelectedItem.Extension.ToLower().Equals(ETextConvertFormat.json.ToString(), StringComparison.Ordinal) 
-            && GetSecondExtension(SelectedItem).Equals(ERedExtension.mlsetup.ToString(), StringComparison.Ordinal)
-            && PluginService.IsInstalled(EPlugin.mlsetupbuilder);
-    }
+    private bool CanOpenInMlsb() =>
+        ActiveProject != null
+        && SelectedItem is { IsDirectory: false }
+        && IsInRawFolder(SelectedItem) && SelectedItem.Extension.ToLower()
+            .Equals(ETextConvertFormat.json.ToString(), StringComparison.Ordinal)
+        && GetSecondExtension(SelectedItem).Equals(ERedExtension.mlsetup.ToString(), StringComparison.Ordinal)
+        && PluginService.IsInstalled(EPlugin.mlsetupbuilder);
 
     [RelayCommand(CanExecute = nameof(CanOpenInMlsb))]
     private void OpenInMlsb()
@@ -755,22 +913,22 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         {
             if (!Directory.Exists(path))
             {
-                _loggerService.Error($"Mlsetupbuilder not found: {path}");
+                _loggerService.Error($"MlSetupBuilder not found: {path}");
                 return;
             }
 
             var firstFolder = Directory.GetDirectories(path).FirstOrDefault();
             if (firstFolder is null)
             {
-                _loggerService.Error($"Mlsetupbuilder not found: {path}");
+                _loggerService.Error($"MlSetupBuilder not found: {path}");
                 return;
             }
 
-            var exe = Path.Combine(firstFolder, "MlsetupBuilder.exe");
+            var exe = Path.Combine(firstFolder, "MlSetupBuilder.exe");
 
             if (!File.Exists(exe))
             {
-                _loggerService.Error($"Mlsetupbuilder exe not found: {exe}");
+                _loggerService.Error($"MlSetupBuilder.exe not found: {exe}");
                 return;
             }
 
@@ -800,8 +958,234 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <summary>
     /// Initialize Avalondock specific defaults that are specific to this tool window.
     /// </summary>
-    private void SetupToolDefaults() => ContentId = ToolContentId;           // Define a unique contentid for this toolwindow//BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow//bi.BeginInit();//bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");//bi.EndInit();//IconSource = bi;
+    private void SetupToolDefaults() =>
+        ContentId = s_toolContentId; // Define a unique contentId for this toolwindow//BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow//bi.BeginInit();//bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");//bi.EndInit();//IconSource = bi;
 
+    private ResourcePath GetResourcePath(string fullPath, Cp77Project project)
+    {
+        var relPath = Path.GetRelativePath(project.ModDirectory, fullPath);
+        if (ulong.TryParse(Path.GetFileNameWithoutExtension(relPath), out var hash))
+        {
+            return hash;
+        }
+
+        return relPath;
+    }
+
+    private void ReplacePathInProject(ResourcePath oldPath, ResourcePath newPath)
+    {
+        if (oldPath == newPath ||
+            ActiveProject is null)
+        {
+            return;
+        }
+
+        _watcherService.IsSuspended = true;
+
+        List<string> failedFiles = [];
+
+        var files = Directory.GetFiles(ActiveProject.ModDirectory, "*.*", SearchOption.AllDirectories);
+        Parallel.ForEach(files, file =>
+        {
+            var hash = GetResourcePath(file, ActiveProject);
+            if (hash == newPath)
+            {
+                return;
+            }
+
+            try
+            {
+                ReplacePathInFile(file, oldPath, newPath);
+            }
+            catch (Exception)
+            {
+                failedFiles.Add(file.RelativePath(ActiveProject.ModDirectory));
+            }
+        });
+
+        _watcherService.IsSuspended = false;
+
+        if (failedFiles.Count > 0)
+        {
+            _loggerService.Error($"Failed to auto-update references in the following files:");
+            failedFiles.ForEach((path) => _loggerService.Error($"  {path}"));
+        }
+        _mainViewModel.ReloadChangedFiles();
+    }
+
+    private void ReplacePathInFile(string filePath, ResourcePath oldPath, ResourcePath newPath)
+    {
+        if (oldPath == newPath || 
+            !File.Exists(filePath))
+        {
+            return;
+        }
+
+        var oldPathStr = oldPath.GetResolvedText();
+        var newPathStr = newPath.GetResolvedText();
+
+        CR2WFile? cr2w;
+        var wasModified = false;
+        var isDirectory = newPathStr != null && Directory.Exists(Path.Join(ActiveProject?.ModDirectory, newPathStr));
+        if (isDirectory)
+        {
+            // Can't replace path if either is null
+            if (oldPathStr == null || newPathStr == null)
+            {
+                return;
+            }
+
+            oldPathStr += ResourcePath.DirectorySeparatorChar;
+            newPathStr += ResourcePath.DirectorySeparatorChar;
+        }
+
+
+        using (var fs = File.Open(filePath, FileMode.Open))
+        using (var cr = new CR2WReader(fs))
+        {
+            if (cr.ReadFile(out cr2w) != EFileReadErrorCodes.NoError)
+            {
+                return;
+            }
+
+            foreach (var result in cr2w!.FindType(typeof(IRedRef)))
+            {
+                if (result.Value is not IRedRef resourceReference || resourceReference.DepotPath == ResourcePath.Empty)
+                {
+                    continue;
+                }
+
+                var oldDepotPathStr = resourceReference.DepotPath.GetResolvedText();
+
+                ResourcePath newDepotPath;
+                if (isDirectory)
+                {
+                    if (oldDepotPathStr == null)
+                    {
+                        continue;
+                    }
+
+                    var isArchiveXL = oldDepotPathStr.StartsWith('*');
+                    if (isArchiveXL)
+                    {
+                        oldDepotPathStr = oldDepotPathStr[1..];
+                    }
+
+                    if (!oldDepotPathStr.StartsWith(oldPathStr!))
+                    {
+                        continue;
+                    }
+
+                    var newDepotPathStr = newPathStr! + oldDepotPathStr[oldPathStr!.Length..];
+                    if (isArchiveXL)
+                    {
+                        newDepotPathStr = "*" + newDepotPathStr;
+                    }
+
+                    newDepotPath = newDepotPathStr;
+                }
+                else
+                {
+                    if (resourceReference.DepotPath != oldPath)
+                    {
+                        continue;
+                    }
+
+                    newDepotPath = newPath;
+                }
+                    
+                var parentPath = string.Join('.', result.Path.Split('.')[..^1]);
+
+                var newValue = (IRedRef)RedTypeManager.CreateRedType(resourceReference.RedType, newDepotPath, resourceReference.Flags);
+
+                if (result.Name.Contains(':'))
+                {
+                    var parts = result.Name.Split(':');
+                    if (parts.Length != 2 || !int.TryParse(parts[1], out var index))
+                    {
+                        throw new Exception();
+                    }
+
+                    var parentArray = cr2w.GetFromXPath(string.Join('.', parentPath, parts[0]));
+                    if (!parentArray.Item1 || parentArray.Item2 is not IList arr)
+                    {
+                        throw new Exception();
+                    }
+
+                    _loggerService.Debug($"Replaced \"{result.Path}\" in \"{filePath}\"");
+                    arr[index] = newValue;
+                }
+                else
+                {
+                    var parentClass = cr2w.GetFromXPath(parentPath);
+                    if (!parentClass.Item1 || parentClass.Item2 is not RedBaseClass cls)
+                    {
+                        throw new Exception();
+                    }
+
+                    _loggerService.Debug($"Replaced \"{result.Path}\" in \"{filePath}\"");
+                    cls.SetProperty(result.Name, newValue);
+                }
+
+                wasModified = true;
+            }
+        }
+
+        if (!wasModified)
+        {
+            return;
+        }
+
+        using var fs2 = File.Open(filePath, FileMode.Create);
+        using var cw = new CR2WWriter(fs2);
+
+        cw.WriteFile(cr2w);
+    }
 
     #endregion Methods
+
+    #region ModifierStateAwareness
+
+    // ####################################################################################
+    // Integrate with _modifierViewStatesModel to expose keys to view 
+    // ####################################################################################
+
+    public bool IsShiftKeyPressedOnly => ModifierViewStateService.IsShiftKeyPressedOnly;
+    public bool IsCtrlKeyPressedOnly => ModifierViewStateService.IsCtrlKeyPressedOnly;
+    public bool IsNoModifierPressed => ModifierViewStateService.IsNoModifierPressed;
+
+    /// <summary>
+    /// Called in constructor
+    /// </summary>
+    private void RegisterModifierStateAwareness()
+    {
+        ModifierViewStateService.ModifierStateChanged += OnModifierUpdateEvent;
+        ModifierViewStateService.PropertyChanged += OnModifierChanged;
+    }
+
+    /// <summary>
+    /// Reacts to ModifierViewStatesModel's emitted events
+    /// </summary>
+    private void OnModifierUpdateEvent()
+    {
+        IsShowAbsolutePathToRawFolder =
+            ModifierViewStateService.IsCtrlShiftOnlyPressed &&
+            SelectedItem?.FullName.Contains(s_archiveFolder) == true;
+
+        IsShowAbsolutePathToArchiveFolder =
+            ModifierViewStateService.IsCtrlShiftOnlyPressed && SelectedItem?.FullName.Contains(s_rawFolder) == true;
+    }
+
+    /// <summary>
+    /// Forward ModifierViewStateModel's PropertyChanged events to the view
+    /// </summary>
+    private void OnModifierChanged(object? sender, PropertyChangedEventArgs e) => OnPropertyChanged(e.PropertyName);
+
+    /// <summary>
+    /// Passes key state changes from view down to ModifierViewStatesModel
+    /// </summary>
+    public void RefreshModifierStates() => ModifierViewStateService.RefreshModifierStates();
+   
+
+    #endregion
 }

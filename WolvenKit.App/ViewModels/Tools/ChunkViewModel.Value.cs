@@ -6,7 +6,9 @@ using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types.Pools;
 
+// ReSharper disable once CheckNamespace
 namespace WolvenKit.App.ViewModels.Shell;
 
 public partial class ChunkViewModel
@@ -14,7 +16,7 @@ public partial class ChunkViewModel
     [MemberNotNull(nameof(Value))]
     public void CalculateValue()
     {
-        Value = Data is null ? "null" : "";
+        Value = "";
 
         // nothing to calculate
         if (ResolvedData is RedDummy)
@@ -28,7 +30,7 @@ public partial class ChunkViewModel
             if (!string.IsNullOrEmpty(value))
             {
                 Value = value;
-                if (Value.StartsWith("LocKey#") && ulong.TryParse(Value[7..], out var key))
+                if (Value.StartsWith("LocKey#") && ulong.TryParse(Value[7..], out var _))
                 {
                     Value = "";
                 }
@@ -41,18 +43,23 @@ public partial class ChunkViewModel
         }
         else if (PropertyType.IsAssignableTo(typeof(LocalizationString)) && Data is LocalizationString l)
         {
-            var value = l;
-            Value = value.Value is "" or null ? "null" : value.Value;
+            var value = l.Value;
+            if (!string.IsNullOrEmpty(value))
+            {
+                Value = value;
+                if (Value.StartsWith("LocKey#") && ulong.TryParse(Value[7..], out var _))
+                {
+                    Value = "";
+                }
+            }
         }
         else if (PropertyType.IsAssignableTo(typeof(IRedEnum)) && Data is IRedEnum e)
         {
-            var value = e;
-            Value = value.ToEnumString();
+            Value = e.ToEnumString();
         }
         else if (PropertyType.IsAssignableTo(typeof(IRedBitField)) && Data is IRedBitField f)
         {
-            var value = f;
-            Value = value.ToBitFieldString();
+            Value = f.ToBitFieldString();
         }
         else if (NodeIdxInParent > -1 && Parent?.Name == "referenceTracks" &&
                  GetRootModel().GetModelFromPath("trackNames")?.ResolvedData is CArray<CName> trackNames)
@@ -67,18 +74,15 @@ public partial class ChunkViewModel
         //}
         else if (PropertyType.IsAssignableTo(typeof(CBool)) && Data is CBool cb)
         {
-            var value = cb;
-            Value = value ? "True" : "False";
+            Value = cb ? "True" : "False";
         }
         else if (PropertyType.IsAssignableTo(typeof(CRUID)) && Data is CRUID cr)
         {
-            var value = cr;
-            Value = ((ulong)value).ToString();
+            Value = ((ulong)cr).ToString();
         }
         else if (PropertyType.IsAssignableTo(typeof(CUInt64)) && Data is CUInt64 uInt64)
         {
-            var value = uInt64;
-            Value = value != 0 ? ((NodeRef)(ulong)value).ToString() : ((ulong)value).ToString();
+            Value = uInt64 != 0 ? ((NodeRef)(ulong)uInt64).ToString() : ((ulong)uInt64).ToString();
         }
         else if (PropertyType.IsAssignableTo(typeof(gamedataLocKeyWrapper)))
         {
@@ -88,29 +92,20 @@ public partial class ChunkViewModel
         }
         else if (PropertyType.IsAssignableTo(typeof(IRedInteger)) && Data is IRedInteger i)
         {
-            var value = i;
-
-            Value = value.ToString(CultureInfo.CurrentCulture);
+            Value = i.ToString(CultureInfo.CurrentCulture);
         }
         else if (PropertyType.IsAssignableTo(typeof(FixedPoint)) && Data is FixedPoint fp)
         {
-            var value = fp;
-            Value = ((float)value).ToString("G9");
+            Value = ((float)fp).ToString("G9");
         }
         else if (PropertyType.IsAssignableTo(typeof(NodeRef)) && Data is NodeRef nr)
         {
-            var value = nr;
-            Value = value;
+            Value = nr;
         }
         else if (PropertyType.IsAssignableTo(typeof(IRedRef)) && Data is IRedRef rr)
         {
-            // if a path is resolved in the file, but is not yet added to the list of known hashes, add it
             var depotPath = rr.DepotPath;
-            if (!_hashService.Contains(depotPath) && !ResourcePath.IsNullOrEmpty(depotPath))
-            {
-                _hashService.AddCustom(depotPath.GetResolvedText() ?? "");
-            }
-
+            
             if (depotPath.IsResolvable)
             {
                 Value = depotPath.GetResolvedText().NotNull();
@@ -126,19 +121,18 @@ public partial class ChunkViewModel
         {
             Value = ibt.GetBrowsableValue();
         }
-        else if (ResolvedData is animPoseLink link)
+        else if (ResolvedData is animPoseLink link && StringHelper.GetNodeName(link.Node) is string s && s != "") 
         {
-            if (link.Node is not null)
-            {
-                var desc = GetNodeName(link.Node);
-
-                if (!string.IsNullOrEmpty(desc))
-                {
-                    Value = desc;
-                    IsValueExtrapolated = true;
-                    return;
-                }
-            }
+            Value = s;
+            IsValueExtrapolated = true;
+            return;
+            
+        }
+        else if (ResolvedData is inkTextureSlot inkTextureSlot)
+        {
+            Value = $"[{inkTextureSlot.Parts.Count}]";
+            IsValueExtrapolated = true;
+            return;
         }
 
         // factory.csv
@@ -149,14 +143,14 @@ public partial class ChunkViewModel
             Value = ary[1];
         }
         // i18n.json
-        else if (Data is localizationPersistenceOnScreenEntry i18n)
+        else if (Data is localizationPersistenceOnScreenEntry i18N)
         {
             IsValueExtrapolated = true;
             // fall back to male variant only if female variant is
-            Value = i18n.FemaleVariant;
-            if (Value == "" && i18n.MaleVariant != "")
+            Value = i18N.FemaleVariant;
+            if (Value == "" && i18N.MaleVariant != "")
             {
-                Value = i18n.MaleVariant;
+                Value = i18N.MaleVariant;
             }
         }
         // i18n.json
@@ -165,8 +159,7 @@ public partial class ChunkViewModel
             IsValueExtrapolated = true;
             Value = StringHelper.Stringify(sgn.OutputSockets);
         }
-
-
+        
         switch (ResolvedData)
         {
             case CKeyValuePair kvp:
@@ -174,14 +167,48 @@ public partial class ChunkViewModel
                 Value = kvp.Value switch
                 {
                     CName cname => cname.GetResolvedText() ?? "",
-                    CResourceReference<ITexture> reference => reference.DepotPath.GetResolvedText() ?? "",
+                    IRedRef reference => reference.DepotPath.GetResolvedText() ?? "",
                     _ => kvp.Value.ToString()
                 };
                 IsValueExtrapolated = true;
                 break;
+            // csv files: Some of them have a fallbackXYZname
+            case IRedArray { Count: > 0 } csvAry when Parent is { Name: "compiledData" } && GetRootModel().Data is C2dArray csv:
+
+                var nameIndex = 0;
+                for (var i = 0; i < csv.CompiledHeaders.Count; i++)
+                {
+                    var propertyName = ((string)csv.CompiledHeaders[i]).ToLower();
+                    if (!propertyName.Contains("name") && propertyName.Contains("fallback"))
+                    {
+                        continue;
+                    }
+
+                    nameIndex = i;
+                    break;
+                }
+
+                Value = $"{csvAry[nameIndex]}";
+                if (Value != "")
+                {
+                    IsValueExtrapolated = true;
+                    return;
+                }
+
+                break;
+            
             case meshMeshAppearance { ChunkMaterials: not null } appearance:
                 Value = string.Join(", ", appearance.ChunkMaterials);
                 Value = $"[{appearance.ChunkMaterials.Count}] {Value}";
+                IsValueExtrapolated = true;
+                break;
+            case CArray<CHandle<meshMeshAppearance>> appearanceArray:
+                Value = $"[ {string.Join(", ",
+                    appearanceArray.Select(e => (e.GetValue() as meshMeshAppearance)?.Name ?? "").Where((el) => el != ""))} ]";
+                IsValueExtrapolated = true;
+                break;
+            case CArray<CMeshMaterialEntry> materialDefinitions:
+                Value = $"[ {string.Join(", ", materialDefinitions.Select((m) => m.Name))} ]";
                 IsValueExtrapolated = true;
                 break;
             // Material instance (mesh): "[2] - engine\materials\multilayered.mt" (show #keyValuePairs)
@@ -201,6 +228,14 @@ public partial class ChunkViewModel
                 Value = $"{sceneWorkspotData.Id}";
                 IsValueExtrapolated = sceneWorkspotData.Id != 0;
                 break;
+            case worldNode worldNode:
+                Value = StringHelper.Stringify(worldNode, true);
+                IsValueExtrapolated = Value != "";
+                break;
+            case graphGraphNodeDefinition nodeDef:
+                Value = $"[{nodeDef.Sockets.Count}]";
+                IsValueExtrapolated = true;
+                return;
             case scnSceneWorkspotInstanceId sceneWorkspotInstance when sceneWorkspotInstance.Id != 0:
                 Value = $"{sceneWorkspotInstance.Id}";
                 IsValueExtrapolated = sceneWorkspotInstance.Id != 0;
@@ -221,6 +256,38 @@ public partial class ChunkViewModel
                 Value = $"{id.Id}";
                 IsValueExtrapolated = true;
                 break;
+            case questFactsDBCondition condition:
+                switch (condition.Type.GetValue())
+                {
+                    case questVarComparison_ConditionType type:
+                        Value = $"{type.ComparisonType.ToEnumString()}: {type.FactName}";
+                        break;
+                    case questVarVsVarComparison_ConditionType type:
+                        Value = $"{type.ComparisonType.ToEnumString()}: {StringHelper.Stringify([type.FactName1, type.FactName2])}";
+                        break;
+
+                    default:
+                        break;
+                }
+
+                IsValueExtrapolated = true;
+                break;
+            case graphGraphConnectionDefinition conn:
+                List<string> nameParts = [];
+                if (conn.Source.GetValue() is graphGraphSocketDefinition source)
+                {
+                    nameParts.Add($"[{source.Connections.Count}] {source.Name.GetResolvedText()}");
+                }
+
+                if (conn.Destination.GetValue() is graphGraphSocketDefinition dest)
+                {
+                    nameParts.Add($"[{dest.Connections.Count}] {dest.Name.GetResolvedText()}");
+                }
+
+                // If they're called "In" and "Out", we don't need to know
+                Value = string.Join(" -> ", nameParts).Replace(" In", "").Replace(" Out", "");
+                IsValueExtrapolated = true;
+                break;
 
             case scnCinematicAnimSetSRRef scnCineAnimRef:
                 Value = $"{scnCineAnimRef.AsyncAnimSet.DepotPath.GetResolvedText()}";
@@ -232,8 +299,16 @@ public partial class ChunkViewModel
                 }
 
                 return;
+            case Multilayer_Layer layer:
+                Value = layer.ColorScale;
+                IsValueExtrapolated = true;
+                break;
             case scnVoicesetComponent voiceset:
                 Value = voiceset.CombatVoSettingsName.GetResolvedText() ?? "";
+                IsValueExtrapolated = Value != "";
+                break;
+            case entTemplateAppearance entAppearance:
+                Value = StringHelper.Stringify(entAppearance.AppearanceResource.DepotPath);
                 IsValueExtrapolated = Value != "";
                 break;
             case entSoundListenerComponent listener when
@@ -241,9 +316,99 @@ public partial class ChunkViewModel
                 Value = StringHelper.Stringify(tBinding);
                 IsValueExtrapolated = Value != "";
                 break;
+            case entAnimationSetupExtensionComponent animSetupComp when
+                animSetupComp.ControlBinding.GetValue() is entAnimationControlBinding controlBinding:
+                Value = $"{controlBinding.BindName.GetResolvedText()}";
+                IsValueExtrapolated = Value != "";
+                break;
+            case entVisualControllerDependency controllerDep:
+                Value = $"{controllerDep.Mesh.DepotPath.GetResolvedText()}";
+                IsValueExtrapolated = Value != "";
+                break;
+            case IRedArray<CRUID> entry:
+                Value = StringHelper.Stringify(entry.Select(id => id.ToString()).ToArray());
+                IsValueExtrapolated = Value != "";
+                break;
+            case animLipsyncMappingSceneEntry entry:
+                Value = StringHelper.Stringify(entry.AnimSets, true);
+                IsValueExtrapolated = true;
+                break;
+            case locVoiceoverMap entry:
+                Value = $"[{entry.Entries.Count}]";
+                IsValueExtrapolated = true;
+                break;
+            case locVoLengthEntry entry:
+                Value = $"{entry.FemaleLength.ToString()}";
+                if (entry.MaleLength != 0)
+                {
+                    Value = $"Fem: {Value} | Masc: {entry.MaleLength.ToString()}";
+                }
+
+                IsValueExtrapolated = true;
+                break;
+            case locVoLineEntry voLineEntry:
+                Value = StringHelper.StringifyOrNull(voLineEntry.FemaleResPath.DepotPath, true)
+                        ?? StringHelper.StringifyOrNull(voLineEntry.MaleResPath.DepotPath, true)
+                        ?? "";
+                IsValueExtrapolated = Value != "";
+                break;
+            case CArray<CResourceAsyncReference<animAnimSet>> entry:
+                Value = StringHelper.Stringify(entry);
+                IsValueExtrapolated = true;
+                break;
+            case animAnimSetEntry entry when entry.Animation?.GetValue() is animAnimation animation:
+
+                Value = animation.GetProperty(nameof(Name))?.ToString() ?? "";
+                if (ulong.TryParse(Value, out var result))
+                {
+                    Value = $"{ResourcePathPool.ResolveHash(result)}";
+                }
+
+                IsValueExtrapolated = Value != "";
+
+                break;
+            case gameBinkVideoRecord videoRecord:
+                Value = ResourcePathPool.ResolveHash(videoRecord.ResourceHash);
+                IsValueExtrapolated = Value != "";
+                break;
+            case animAnimNode_Base animNodeBase:
+                Value = StringHelper.Stringify(animNodeBase);
+                IsValueExtrapolated = Value != "";
+                break;
+            case entVisualControllerComponent entVisualControllerComponent:
+                Value = $"{entVisualControllerComponent.ForcedLodDistance}";
+                if (entVisualControllerComponent.MeshProxy.DepotPath.GetResolvedText() is string meshProxyPath &&
+                    meshProxyPath != "")
+                {
+                    var separator = Value == "" ? "" : " | ";
+                    Value = $"{Value}{separator}{meshProxyPath}";
+                }
+
+                IsValueExtrapolated = Value != "";
+                break;
+            case entAnimatedComponent animComp:
+                if (animComp.FacialSetup.DepotPath.GetResolvedText() is string path)
+                {
+                    Value = path;
+                }
+                else if (animComp.Graph.DepotPath.GetResolvedText() is string graphPath)
+                {
+                    Value = graphPath;
+                }
+                else
+                {
+                    Value = $"{animComp.Rig.DepotPath.GetResolvedText()}";
+                }
+
+                IsValueExtrapolated = Value != "";
+                break;
             case entSlotComponent slotComponent when
                 slotComponent.ParentTransform?.GetValue() is entHardTransformBinding tBinding4:
                 Value = StringHelper.Stringify(tBinding4);
+                IsValueExtrapolated = Value != "";
+                break;
+            case entSkinningBinding entSkinningBinding:
+                Value = $"{entSkinningBinding.BindName.GetResolvedText()}";
                 IsValueExtrapolated = Value != "";
                 break;
             case gameaudioSoundComponent soundComponent:
@@ -286,12 +451,29 @@ public partial class ChunkViewModel
                 Value = StringHelper.Stringify(cNames);
                 IsValueExtrapolated = cNames.Count != 0;
                 break;
+            case CEvaluatorFloatConst floatConst:
+                Value = $"{floatConst.Value}";
+                break;
             case CArray<TweakDBID> tweakIds:
                 Value = StringHelper.Stringify(tweakIds);
                 IsValueExtrapolated = tweakIds.Count != 0;
                 break;
+            case CParticleEmitter particleEmitter:
+            {
+                Value = particleEmitter.Material.DepotPath.GetResolvedText() ?? "";
+                IsValueExtrapolated = Value != "";
+                break;
+            }
             case scnInterruptionScenarioId scenarioId:
                 Value = scenarioId.Id.ToString();
+                break;
+            case effectTrackItemParticles particlesEffect:
+                Value = particlesEffect.ParticleSystem.DepotPath.GetResolvedText() ?? "";
+                IsValueExtrapolated = Value != "";
+                break;
+            case effectTrackItemLoopMarker loopMarker:
+                Value = $"{loopMarker.TimeDuration}";
+                IsValueExtrapolated = Value != "";
                 break;
             case scnscreenplayItemId scnscreenplayItemId:
                 Value = scnscreenplayItemId.Id.ToString();
@@ -349,6 +531,35 @@ public partial class ChunkViewModel
                 Value = $"{StringHelper.Stringify(animNames.AnimationNames)}";
                 IsValueExtrapolated = true;
                 return;
+            case rendRenderTextureBlobMemoryLayout rendTexBlobLayout:
+                Value = $"rowPitch: {rendTexBlobLayout.RowPitch}, slicePitch: {rendTexBlobLayout.SlicePitch}";
+                IsValueExtrapolated = true;
+                break;
+            case rendRenderTextureBlobPlacement rendTexBlobPlacement:
+                Value = $"Offset: {rendTexBlobPlacement.Offset}, size: {rendTexBlobPlacement.Size}";
+                IsValueExtrapolated = true;
+                break;
+            case rendRenderTextureBlobMipMapInfo rendTexMipmapInfo:
+                Value = $"rowPitch: {rendTexMipmapInfo.Layout.RowPitch}, slicePitch: {rendTexMipmapInfo.Layout.SlicePitch}";
+                IsValueExtrapolated = true;
+                break;
+            case rendRenderTextureBlobTextureInfo rtbtInfo:
+                Value = $"sliceCount: {rtbtInfo.SliceCount}, MipCount: {rtbtInfo.MipCount}";
+                IsValueExtrapolated = true;
+                break;
+            case rendGradientEntry gradient:
+                Value = $"{StringHelper.Stringify(gradient.Color)}";
+                IsValueExtrapolated = true;
+                break;
+            case rendRenderTextureBlobSizeInfo rtbSizeInfo:
+                Value = $"{rtbSizeInfo.Width} x {rtbSizeInfo.Height}";
+                if (rtbSizeInfo.Depth != 1)
+                {
+                    Value = $"{Value} x {rtbSizeInfo.Depth}";
+                }
+
+                IsValueExtrapolated = true;
+                break;
             case scnInputSocketId socketId:
                 Value = $"{socketId.NodeId.Id}";
                 IsValueExtrapolated = socketId.NodeId.Id != 0;
@@ -423,21 +634,16 @@ public partial class ChunkViewModel
                 Value = $"{intComponent.DefinitionResource}";
                 IsValueExtrapolated = Value != "";
                 break;
-            case FxResourceMapData mapData when mapData.Resource is gameFxResource fxResourceValue:
+            case FxResourceMapData { Resource: gameFxResource fxResourceValue }:
                 Value = fxResourceValue.Effect.DepotPath.GetResolvedText();
                 IsValueExtrapolated = Value != "";
                 break;
             case entMeshComponent meshComponent:
             {
-                Value = "";
-                if (meshComponent.ParentTransform?.GetValue() is entHardTransformBinding parentTransformValue)
+                Value = StringHelper.Stringify(meshComponent.Mesh.DepotPath, true);
+                if (meshComponent.MeshAppearance.GetResolvedText() is string app and (not "default" or "") && Value != "")
                 {
-                    Value = StringHelper.Stringify(parentTransformValue);
-                }
-
-                if (meshComponent.Mesh.DepotPath.GetResolvedText() is string dePathText)
-                {
-                    Value = Value.Length == 0 ? $"{dePathText}" : $" ({dePathText})";
+                    Value = $"{Value} ({app})";
                 }
 
                 IsValueExtrapolated = Value != "";
@@ -445,20 +651,19 @@ public partial class ChunkViewModel
             }
             case entSkinnedMeshComponent skinnedMeshComponent:
             {
-                Value = "";
-                if (skinnedMeshComponent.ParentTransform?.GetValue() is entHardTransformBinding parentTransformValue)
+                Value = StringHelper.Stringify(skinnedMeshComponent.Mesh.DepotPath, true);
+                if (skinnedMeshComponent.MeshAppearance.GetResolvedText() is string app and (not "default" or "") && Value != "")
                 {
-                    Value = StringHelper.Stringify(parentTransformValue);
+                    Value = $"{Value} ({app})";
                 }
 
-                if (skinnedMeshComponent.Mesh.DepotPath.GetResolvedText() is string dePathText)
-                {
-                    Value = Value.Length == 0 ? $"{dePathText}" : $" ({dePathText})";
-                }
-
-                IsValueExtrapolated = Value != "";
+                IsValueExtrapolated = true;
                 break;
             }
+            case locVoiceoverLengthMap lengthMap:
+                Value = $"[{lengthMap.Entries.Count}]";
+                IsValueExtrapolated = Value != "";
+                break;
             case entDynamicActorRepellingComponent repComponent when
                 repComponent.ParentTransform?.GetValue() is entHardTransformBinding parentTransformValue:
                 Value = StringHelper.Stringify(parentTransformValue);
@@ -507,6 +712,12 @@ public partial class ChunkViewModel
                 break;
             default:
                 break;
+        }
+
+        if (!IsDefault && string.IsNullOrEmpty(Value) && TVProperties is [ChunkViewModel child])
+        {
+            Value = child.Descriptor ?? child.Value;
+            IsValueExtrapolated = !string.IsNullOrEmpty(Value);
         }
 
         // Make sure it's never null

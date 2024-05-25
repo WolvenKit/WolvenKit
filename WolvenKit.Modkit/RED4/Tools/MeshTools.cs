@@ -624,13 +624,13 @@ namespace WolvenKit.Modkit.RED4.Tools
 
         }
 
-        public static void UpdateMeshJoints(ref List<RawMeshContainer> meshes, RawArmature? newRig, RawArmature? oldRig, string fileName = "")
+        public static void UpdateMeshJoints(ref List<RawMeshContainer> meshes, RawArmature? existingJoints, RawArmature? incomingJoints, string fileName = "")
         {
             // updating mesh bone indices
-            if (newRig is { BoneCount: > 0 } && oldRig is { BoneCount: > 0 })
+            if (existingJoints is { BoneCount: > 0 } && incomingJoints is { BoneCount: > 0 })
             {
-                ArgumentNullException.ThrowIfNull(newRig.Names);
-                ArgumentNullException.ThrowIfNull(oldRig.Names);
+                ArgumentNullException.ThrowIfNull(existingJoints.Names);
+                ArgumentNullException.ThrowIfNull(incomingJoints.Names);
 
                 foreach (var mesh in meshes)
                 {
@@ -642,15 +642,15 @@ namespace WolvenKit.Modkit.RED4.Tools
                         for (var eye = 0; eye < mesh.weightCount; eye++)
                         {
 
-                            if (mesh.boneindices[e, eye] >= oldRig.BoneCount)// && meshes[i].weights[e, eye] == 0)
+                            if (mesh.boneindices[e, eye] >= incomingJoints.BoneCount)// && meshes[i].weights[e, eye] == 0)
                             {
                                 mesh.boneindices[e, eye] = 0;
                             }
 
                             var found = false;
-                            for (ushort r = 0; r < newRig.BoneCount; r++)
+                            for (ushort r = 0; r < existingJoints.BoneCount; r++)
                             {
-                                if (newRig.Names[r] == oldRig.Names[mesh.boneindices[e, eye]])
+                                if (existingJoints.Names[r] == incomingJoints.Names[mesh.boneindices[e, eye]])
                                 {
                                     mesh.boneindices[e, eye] = r;
                                     found = true;
@@ -659,7 +659,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                             }
                             if (!found)
                             {
-                                throw new Exception($"Bone: {oldRig.Names[mesh.boneindices[e, eye]]} not present in export Rig(s)/Import Mesh {(!fileName.Equals("") ? string.Format("({0})", fileName) : "")}");
+                                throw new Exception($"Bone: {incomingJoints.Names[mesh.boneindices[e, eye]]} not present in export Rig(s)/Import Mesh {(!fileName.Equals("") ? string.Format("({0})", fileName) : "")}");
                             }
                         }
                     }
@@ -854,8 +854,10 @@ namespace WolvenKit.Modkit.RED4.Tools
                     node = parent.CreateNode(name);
                     mes = model.CreateMesh(name);
                 }
-                var prim = mes.CreatePrimitive();
                 ArgumentNullException.ThrowIfNull(mesh.materialNames, nameof(mesh.materialNames));
+
+                var prim = mes.CreatePrimitive();
+                
                 if (materials != null && materials.ContainsKey(mesh.materialNames[0]))
                 {
                     prim.Material = materials[mesh.materialNames[0]];
@@ -993,15 +995,17 @@ namespace WolvenKit.Modkit.RED4.Tools
                     node.Skin = skin;
                 }
 
+                var materialNames = mesh.materialNames.Select((name) => name.Split('@').FirstOrDefault() ?? name).ToArray();
+                
                 if (mesh.garmentMorph.Length > 0)
                 {
                     string[] arr = { "GarmentSupport" };
-                    var obj = new { mesh.materialNames, targetNames = arr };
+                    var obj = new { materialNames, targetNames = arr };
                     mes.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
                 }
                 else
                 {
-                    var obj = new { mesh.materialNames };
+                    var obj = new { materialNames };
                     mes.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
                 }
                 if (mesh.garmentMorph.Length > 0)

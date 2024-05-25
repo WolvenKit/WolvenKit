@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using WolvenKit.App.Extensions;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
 using WolvenKit.RED4.Types;
 
@@ -6,12 +7,16 @@ namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 
 public class scnQuestNodeWrapper : BaseSceneViewModel<scnQuestNode>
 {
-    public scnQuestNodeWrapper(scnQuestNode scnSceneGraphNode) : base(scnSceneGraphNode)
+    public scnQuestNodeWrapper(scnQuestNode scnSceneGraphNode, scnSceneResource scnSceneResource) : base(scnSceneGraphNode)
     {
         if (_castedData.QuestNode != null)
         {
             //_castedData.QuestNode.PropertyChanged += QuestNodeOnPropertyChanged;
         }
+
+        Details.AddRange(NodeProperties.GetPropertiesFor(_castedData.QuestNode?.Chunk));
+
+        Title += NodeProperties.SetNameFromNotablePoints(scnSceneGraphNode.NodeId.Id, scnSceneResource);
     }
 
     internal override void GenerateSockets()

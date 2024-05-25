@@ -19,8 +19,41 @@
     BorderBrush="{StaticResource BorderAlt}"
     BorderThickness="1,0,1,1"
     mc:Ignorable="d">
-
+    
     <Grid>
+        <Grid.Resources>
+            <Style TargetType="ToolTip">
+                <Setter Property="Background" Value="Black" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+            </Style>
+            <DataTemplate x:Key="WorldNodeIndexToolTipTemplate">
+                <Grid>
+                    <TextBlock Text="WorldNodeIndex" HorizontalAlignment="Center" />
+                </Grid>
+            </DataTemplate>
+            <DataTemplate x:Key="WorldNodeDataIndicesToolTipTemplate">
+                <Grid>
+                    <TextBlock Text="WorldNodeDataIndices" HorizontalAlignment="Center" />
+                </Grid>
+            </DataTemplate>
+            <DataTemplate x:Key="HeaderIconTemplate_WorldNodeIdx">
+                <iconPacks:PackIconMaterial
+                    Width="13"
+                    Height="13"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Stretch"
+                    Kind="Web" />
+            </DataTemplate>
+            <DataTemplate x:Key="HeaderIconTemplate_WorldNodeDataIdx">
+                <iconPacks:PackIconMaterial
+                    Width="13"
+                    Height="13"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Stretch"
+                    Kind="ResistorNodes" />
+            </DataTemplate>
+        </Grid.Resources>
+        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="5" />
@@ -40,6 +73,7 @@
             FXAALevel="High"
             ShowCoordinateSystem="True"
             UseDefaultGestures="False"
+            Loaded="Viewport3DX_Loaded"
             ZoomExtentsWhenLoaded="True">
             <hx:Viewport3DX.InputBindings>
                 <MouseBinding Command="hx:ViewportCommands.Rotate" Gesture="LeftClick" />
@@ -448,7 +482,7 @@
                 CheckBoxMappingName="IsRendering"
                 ChildPropertyName="Children"
                 FilterLevel="Extended"
-                ItemsSource="{Binding SelectedAppearance.ModelGroup, Mode=TwoWay}"
+                ItemsSource="{Binding SelectedModelGroup, Mode=TwoWay}"
                 LiveNodeUpdateMode="AllowDataShaping"
                 NodeCheckStateChanged="SfTreeGrid_NodeCheckStateChanged"
                 RowHeaderWidth="300"
@@ -496,24 +530,36 @@
                         </syncfusion:TreeGridTemplateColumn.CellTemplate>
                     </syncfusion:TreeGridTemplateColumn-->
                     <syncfusion:TreeGridTextColumn
-                        ColumnSizer="Auto"
+                        ColumnSizer="SizeToCells"
                         HeaderText="Appearance"
                         MappingName="AppearanceName"
-                        MinimumWidth="100" />
+                        MinimumWidth="50" />
+                    <syncfusion:TreeGridTextColumn
+                        ColumnSizer="Auto"
+                        HeaderText="#"
+                        HeaderToolTipTemplate="{StaticResource WorldNodeIndexToolTipTemplate}"
+                        MinimumWidth="5"
+                        ShowHeaderToolTip="True"
+                        HeaderTemplate="{StaticResource HeaderIconTemplate_WorldNodeIdx}"
+                        MappingName="WorldNodeIndex" />
                     <syncfusion:TreeGridTextColumn
                         ColumnSizer="Auto"
                         HeaderText="Material"
                         MappingName="MaterialName"
-                        MinimumWidth="100" />
+                        MinimumWidth="20" />
+                    <syncfusion:TreeGridTextColumn
+                        ColumnSizer="Auto"
+                        HeaderText="#"
+                        ShowHeaderToolTip="True"
+                        HeaderToolTipTemplate="{StaticResource WorldNodeDataIndicesToolTipTemplate}"
+                        HeaderTemplate="{StaticResource HeaderIconTemplate_WorldNodeDataIdx}"
+                        MinimumWidth="5"
+                        MappingName="WorldNodeDataIndices" />
                     <syncfusion:TreeGridTextColumn
                         ColumnSizer="Auto"
                         HeaderText="DepotPath"
                         MappingName="DepotPath"
-                        MinimumWidth="100" />
-                    <syncfusion:TreeGridTextColumn
-                        ColumnSizer="Auto"
-                        HeaderText="WorldNodeIndex"
-                        MappingName="WorldNodeIndex" />
+                        MinimumWidth="30" />
                 </syncfusion:SfTreeGrid.Columns>
             </syncfusion:SfTreeGrid>
             <!--ItemsControl ItemsSource="{Binding SelectedAppearance.Models, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">

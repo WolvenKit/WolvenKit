@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using WolvenKit.App.Extensions;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
@@ -10,13 +11,18 @@ public class questSpawnManagerNodeDefinitionWrapper : questSignalStoppingNodeDef
         var actions = new List<string>();
         foreach (var action in questSignalStoppingNodeDefinition.Actions)
         {
-            actions.Add(action.Type.Chunk!.Action.ToEnumString());
+            if (action.Type?.Chunk != null)
+            {
+                actions.Add(action.Type.Chunk.Action.ToEnumString());
+            }
         }
 
-        if (actions.Count > 0)
+        /*if (actions.Count > 0)
         {
             Details.Add("Actions", string.Join(", ", actions));
-        }
+        }*/
+
+        Details.AddRange(NodeProperties.GetPropertiesFor(questSignalStoppingNodeDefinition));
     }
 
     internal override void CreateDefaultSockets()

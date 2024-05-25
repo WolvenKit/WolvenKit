@@ -20,6 +20,22 @@ public static class Interactions
         return await Task.FromResult(result);
     }
 
+    // wrappers
+    public static async Task<string> ShowInputBoxAsync(string originalName)
+    {
+        string result = "";
+        DispatcherHelper.RunOnMainThread(() => result = AskForTextInput());
+        return await Task.FromResult(result);
+    }
+
+    // wrappers
+    public static async Task<string> ShowRenameBoxAsync(string originalName)
+    {
+        string result = "";
+        DispatcherHelper.RunOnMainThread(() => result = Rename(originalName));
+        return await Task.FromResult(result);
+    }
+
 
 
     // classic popups
@@ -29,6 +45,8 @@ public static class Interactions
     public static Func<IEnumerable<string>, bool> DeleteFiles { get; set; } = _ => throw new NotImplementedException();
 
     public static Func<string, string> Rename { get; set; } = _ => throw new NotImplementedException();
+
+    public static Func<string> AskForTextInput { get; set; } = () => throw new NotImplementedException();
 
     //custom views
     public static Func<bool> ShowFirstTimeSetup { get; set; } = () => throw new NotImplementedException();

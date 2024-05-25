@@ -4,14 +4,15 @@ public abstract class ParsingErrorEventArgs : EventArgs { }
 
 public delegate bool ParsingErrorEventHandler(ParsingErrorEventArgs e);
 
+
 public class InvalidRTTIEventArgs : ParsingErrorEventArgs
 {
     public string PropertyName { get; }
-    public Type ExpectedType { get; }
-    public Type ActualType { get; }
+    public string ExpectedType { get; }
+    public string ActualType { get; }
     public IRedType? Value { get; set; }
 
-    public InvalidRTTIEventArgs(string propertyName, Type expectedType, Type actualType, IRedType? value)
+    public InvalidRTTIEventArgs(string propertyName, string expectedType, string actualType, IRedType? value)
     {
         PropertyName = propertyName;
         ExpectedType = expectedType;

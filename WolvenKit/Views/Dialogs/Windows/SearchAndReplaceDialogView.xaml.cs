@@ -1,5 +1,3 @@
-using System;
-using System.IO;
 using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Input;
@@ -11,6 +9,9 @@ namespace WolvenKit.Views.Dialogs.Windows
 {
     public partial class SearchAndReplaceDialog : IViewFor<SearchAndReplaceDialogViewModel>
     {
+        private static string s_lastSearch = "";
+        private static string s_lastReplace = "";
+        
         public SearchAndReplaceDialog()
         {
             InitializeComponent();
@@ -18,7 +19,8 @@ namespace WolvenKit.Views.Dialogs.Windows
             ViewModel = Locator.Current.GetService<SearchAndReplaceDialogViewModel>();
             DataContext = ViewModel;
 
-
+            LoadLastSelection();
+            
             this.WhenActivated(disposables =>
             {
                 this.Bind(ViewModel,
@@ -34,6 +36,10 @@ namespace WolvenKit.Views.Dialogs.Windows
                         x => x.IgnoreCase,
                         x => x.IgnoreCaseCheckBox.IsChecked)
                     .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        x => x.RememberValues,
+                        x => x.RememberValuesCheckBox.IsChecked)
+                    .DisposeWith(disposables);
             });
         }
 
@@ -46,6 +52,46 @@ namespace WolvenKit.Views.Dialogs.Windows
             return ShowDialog();
         }
 
+        private void LoadLastSelection()
+        {
+            if (ViewModel is null)
+            {
+                return;
+            }
+
+            if (s_lastSearch != "")
+            {
+                ViewModel.SearchText = s_lastSearch;
+                ViewModel.RememberValues = true;
+            }
+
+            if (s_lastReplace == "")
+            {
+                return;
+            }
+
+            ViewModel.ReplaceText = s_lastReplace;
+            ViewModel.RememberValues = true;
+        }
+
+        private void SaveLastSelection()
+        {
+            if (ViewModel is null)
+            {
+                return;
+            }
+
+            if (!ViewModel.RememberValues)
+            {
+                s_lastSearch = "";
+                s_lastReplace = "";
+                return;
+            }
+
+            s_lastSearch = ViewModel.SearchText;
+            s_lastReplace = ViewModel.ReplaceText;
+        }
+
         private void WizardPage_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key != Key.Enter)
@@ -53,9 +99,12 @@ namespace WolvenKit.Views.Dialogs.Windows
                 return;
             }
 
+            SaveLastSelection();
             e.Handled = true;
             DialogResult = true;
             Close();
         }
+
+        private void WizardControl_OnFinish(object sender, RoutedEventArgs e) => SaveLastSelection();
     }
 }

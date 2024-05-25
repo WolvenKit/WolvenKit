@@ -27,7 +27,7 @@
         </Grid.Resources>
 
 
-        <syncfusion:WizardControl CancelButtonCancelsWindow="True" FinishButtonClosesWindow="True">
+        <syncfusion:WizardControl CancelButtonCancelsWindow="True" FinishButtonClosesWindow="True" Finish="WizardControl_OnFinish">
             <syncfusion:WizardPage
                 BackVisibility="Collapsed"
                 CancelVisibility="Visible"
@@ -47,6 +47,7 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <Label Grid.Column="0" Content="Search:" HorizontalAlignment="Left"
@@ -62,6 +63,10 @@
                     <Label Grid.Row="2" Grid.Column="0" Content="Ignore case:" HorizontalAlignment="Left"
                            Background="#252525" BorderThickness="0" /> <!-- Label for the CheckBox -->
                     <CheckBox x:Name="IgnoreCaseCheckBox" Grid.Column="1" Grid.Row="2" KeyboardNavigation.TabIndex="3" /> <!-- CheckBox -->
+
+                    <Label Grid.Row="3" Grid.Column="0" Content="Remember:" HorizontalAlignment="Left"
+                           Background="#252525" BorderThickness="0" /> <!-- Label for the CheckBox -->
+                    <CheckBox x:Name="RememberValuesCheckBox" Grid.Column="1" Grid.Row="3" KeyboardNavigation.TabIndex="4" /> <!-- CheckBox -->
 
                 </Grid>
             </syncfusion:WizardPage>

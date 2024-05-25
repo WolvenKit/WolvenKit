@@ -444,11 +444,11 @@ namespace WolvenKit.RED4.CR2W.Archive
                         _logger.Debug($"Skipping {archiveFile} during legacy loading.");
                     }
                 }
+
+                legacyFiles.Sort(string.CompareOrdinal);
             }
 
-            legacyFiles.Sort(string.CompareOrdinal);
-            legacyFiles.Reverse();
-
+            
             // load legacy mods in "modlist.txt"
             foreach (var file in legacyModTxtFiles)
             {
@@ -505,7 +505,6 @@ namespace WolvenKit.RED4.CR2W.Archive
             }
 
             files.Sort(string.CompareOrdinal);
-            files.Reverse();
 
             foreach (var file in files)
             {
@@ -538,7 +537,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         #endregion
 
         /// <summary>
-        /// Get files grouped by extension in all archives
+        /// Get files grouped by extension in all archives of current search scope
         /// </summary>
         /// <returns></returns>
         public override Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles()
@@ -560,18 +559,17 @@ namespace WolvenKit.RED4.CR2W.Archive
         }
 
         /// <summary>
-        /// Checks if a file with the given hash exists in the archivemanager
+        /// Checks if a file with the given hash exists in the archiveManager
         /// </summary>
         /// <param name="hash"></param>
         /// <returns></returns>
         public bool ContainsFile(ulong hash) => Lookup(hash).HasValue;
 
-        /// <summary>
-        /// Look up a hash in the ArchiveManager
-        /// </summary>
-        /// <param name="hash"></param>
-        /// <returns></returns>
-        public override Optional<IGameFile> Lookup(ulong hash)
+        /// <inheritdoc />
+        public override Optional<IGameFile> Lookup(ulong hash) => Lookup(hash, ArchiveManagerScope.Everywhere);
+
+        /// <inheritdoc />
+        public override Optional<IGameFile> Lookup(ulong hash, ArchiveManagerScope searchScope)
         {
             // first check the ep1 archives
             foreach (var item in GetEp1Archives())

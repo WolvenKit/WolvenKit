@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
@@ -47,6 +48,10 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         _appViewModel = appViewModel;
 
         _data = data;
+
+        IsSimpleViewEnabled = Parent.IsSimpleViewEnabled;
+
+        parent.PropertyChanged += RDTDataViewModel_PropertyChanged;
         
         if (SelectedChunk == null && Chunks.Count > 0)
         {
@@ -59,6 +64,16 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
         Nodes.Add(new ResourcePathWrapper(this, new ReferenceSocket(Chunks[0].RelativePath), _appViewModel, _chunkViewmodelFactory));
         _nodePaths.Add(Chunks[0].RelativePath);
+    }
+
+    private void RDTDataViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(RedDocumentViewModel.IsSimpleViewEnabled))
+        {
+            return;
+        }
+
+        IsSimpleViewEnabled = Parent.IsSimpleViewEnabled;
     }
 
     public RDTDataViewModel(string header, IRedType data, RedDocumentViewModel file, AppViewModel appViewModel,
@@ -98,6 +113,8 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     [ObservableProperty] private object? _selectedChunks;
 
+    [ObservableProperty] private bool _IsSimpleViewEnabled;
+
 
     [ObservableProperty] private ChunkViewModel? _rootChunk;
 
@@ -108,6 +125,11 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     [ObservableProperty] private IRedRef? _selectedImport;
 
     public bool ShowReferenceGraph => _settingsManager.ShowReferenceGraph;
+
+    /// <summary>
+    /// If this is not empty, force nodes and all of their children to recalculate properties after tab switch
+    /// </summary>
+    public List<ChunkViewModel> DirtyChunks { get; set; } = [];
 
     public delegate void LayoutNodesDelegate();
 
@@ -283,6 +305,13 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     public override void OnSelected()
     {
+        RefreshDirtyChunks();
+
+        if (SelectedChunk is ChunkViewModel { ResolvedData: worldNode } cvm)
+        {
+            OnSectorNodeSelected?.Invoke(this, $"{cvm.NodeIdxInParent}");
+        }
+        
         // if tweak file, deserialize from text
         // read tweakXL file
         // TODO fix TweakXLDocumentViewModel
@@ -309,6 +338,26 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         //        _loggerService.Error(ex);
         //    }
         //}
+    }
+
+    private void RefreshDirtyChunks()
+    {
+        if (DirtyChunks.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var chunkViewModel in DirtyChunks)
+        {
+            foreach (var childProp in chunkViewModel.TVProperties)
+            {
+                childProp.RecalculateProperties();
+            }
+            chunkViewModel.RecalculateProperties();
+        }
+
+        DirtyChunks.Clear();
+        
     }
 
     public void ClearSelection()
@@ -386,6 +435,44 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         }
     }
 
+
+    public event EventHandler<string>? OnSectorNodeSelected;
+
+    /// <summary>
+    /// For .streamingsector files, called when a mesh is selected in the other tab 
+    /// </summary>
+    /// <param name="selectedIndex"></param>
+    /// <returns></returns>
+    public ChunkViewModel? FindWorldNode(int? selectedIndex)
+    {
+        if (selectedIndex is not int idx)
+        {
+            return null;
+        }
+        var root = RootChunk;
+
+        if (root is null)
+        {
+            root = _chunks.FirstOrDefault();
+        }
+
+        if (root is not ChunkViewModel)
+        {
+            return null;
+        }
+
+        var worldNodeArray = root.Properties.FirstOrDefault(chunk =>
+            chunk is { IsArray: true, Name: "nodes", ResolvedData: CArray<CHandle<worldNode>> });
+        if (worldNodeArray is null)
+        {
+            return null;
+        }
+
+        root.IsExpanded = true;
+        worldNodeArray.IsExpanded = true;
+
+        return worldNodeArray?.GetChildNode(idx);
+    }
     
     #endregion
 }

@@ -10,6 +10,7 @@
     xmlns:hx="http://helix-toolkit.org/wpf/SharpDX"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:others="clr-namespace:WolvenKit.Views.Others"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:tools="clr-namespace:WolvenKit.App.ViewModels.Tools;assembly=WolvenKit.App"
@@ -442,29 +443,7 @@
             </syncfusion:TabItemExt>
 
             <syncfusion:TabItemExt Header="Image" IsEnabled="{Binding IsImagePreviewVisible}">
-                <!--
-                    syncfusion:SfImageEditor
-                    x:Name="bold"
-                    Margin="0,0.5,0,0"
-                    BorderThickness="0" /
-                -->
-                <Border
-                    x:Name="ImagePreviewCanvas"
-                    Background="{StaticResource ContentBackground}"
-                    BorderThickness="1"
-                    ClipToBounds="True">
-                    <Grid x:Name="ImagePreview">
-                        <Image
-                            x:Name="ActualImage"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch"
-                            ClipToBounds="False"
-                            Opacity="1"
-                            RenderOptions.BitmapScalingMode="NearestNeighbor"
-                            Source="{Binding LoadedBitmapFrame}"
-                            Stretch="Uniform" />
-                    </Grid>
-                </Border>
+                <others:ImageCanvas x:Name="ImageCanvasItem" Source="{Binding LoadedBitmapFrame}" />
             </syncfusion:TabItemExt>
 
             <syncfusion:TabItemExt

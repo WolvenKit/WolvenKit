@@ -79,6 +79,11 @@ public partial class RibbonViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(CanStartTask))]
     private async Task LaunchProfileAsync()
     {
+        if (!await MainViewModel.AreDirtyFilesHandledBeforeLaunch())
+        {
+            return;
+        }
+            
         _settingsManager.LaunchProfiles ??= new();
 
         if (_settingsManager.LaunchProfiles.TryGetValue(LaunchProfileText, out var launchProfile))

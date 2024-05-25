@@ -1,0 +1,74 @@
+﻿<UserControl
+    x:Class="WolvenKit.Views.Editors.TrimmingTextBox"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WolvenKit.Views.Templates"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
+    x:Name="UserControl"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <Grid>
+        <TextBox
+            x:Name="RealTextBox"
+            ScrollViewer.CanContentScroll="False"
+            helpers:TextBoxBehavior.TripleClickSelectAll="True"
+            Text="{Binding ElementName=UserControl, Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            TextChanged="RealTextBox_OnTextChanged" />
+        <Grid IsHitTestVisible="False">
+            <Grid.ColumnDefinitions>
+                <!--  Adjust start width if needed  -->
+                <ColumnDefinition Width="15" />
+
+                <ColumnDefinition Width="*" />
+
+                <!--  Adjust end width if needed  -->
+                <ColumnDefinition Width="15" />
+            </Grid.ColumnDefinitions>
+
+            <Grid
+                x:Name="StartTrimming"
+                Grid.Column="0"
+                Visibility="Hidden">
+                <!--  Start of design stuff for front trimming (modify here)  -->
+                <Rectangle>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                            <GradientStop Offset="0.0" Color="Black" />
+                            <GradientStop Offset="1.0" Color="#292929" />
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+                <TextBox
+                    Padding="0,0,0,0"
+                    Background="Transparent"
+                    Foreground="White"
+                    Text="…" />
+                <!--  End of design stuff for front trimming  -->
+            </Grid>
+
+            <Grid
+                x:Name="EndTrimming"
+                Grid.Column="2"
+                Visibility="Hidden">
+                <!--  Start of design stuff for end trimming (modify here)  -->
+                <Rectangle>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                            <GradientStop Offset="0.0" Color="#292929" />
+                            <GradientStop Offset="1.0" Color="Black" />
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+                <TextBox
+                    Padding="2,0,0,0"
+                    Background="Transparent"
+                    Foreground="White"
+                    Text="…" />
+                <!--  End of design stuff for front trimming  -->
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -69,14 +69,21 @@ public partial class ResourcePathWrapper : ObservableObject, INode<ReferenceSock
     [RelayCommand(CanExecute = nameof(CanLoadRef))]
     private void LoadRef()
     {
-        var cr2w = DataViewModel.Parent.GetFileFromDepotPathOrCache(Socket.File);
-        if (cr2w != null && cr2w.RootChunk != null)
+        if (Socket.File.GetResolvedText() is not string path || ArchiveXlHelper.GetFirstExistingPath(path) is not string existingPath)
         {
-            var chunk = _chunkViewmodelFactory.ChunkViewModel(cr2w.RootChunk, Socket, _appViewModel);
-            chunk.Location = Location;
-            DataViewModel.Nodes.Remove(this);
-            DataViewModel.Nodes.Add(chunk);
-            DataViewModel.LookForReferences(chunk);
+            return;
         }
+
+        var cr2w = DataViewModel.Parent.GetFileFromDepotPathOrCache(existingPath);
+        if (cr2w is not { RootChunk: not null })
+        {
+            return;
+        }
+
+        var chunk = _chunkViewmodelFactory.ChunkViewModel(cr2w.RootChunk, Socket, _appViewModel);
+        chunk.Location = Location;
+        DataViewModel.Nodes.Remove(this);
+        DataViewModel.Nodes.Add(chunk);
+        DataViewModel.LookForReferences(chunk);
     }
 }

@@ -49,7 +49,7 @@ public partial class RDTGraphViewModel2 : RedDocumentTabViewModel
 
     public List<RedGraph> History { get; } = new();
 
-    public void Load()
+    public override void Load()
     {
         MainGraph.Dispose();
 

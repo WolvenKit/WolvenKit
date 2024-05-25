@@ -10,6 +10,7 @@ using DynamicData.Binding;
 using WolvenKit.App.Models;
 using WolvenKit.Common;
 using WolvenKit.Core;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 
 namespace WolvenKit.App.Services;
@@ -50,12 +51,14 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(ShowNodeRefAsHex),
             nameof(ShowTweakDBIDAsHex),
             nameof(ShowReferenceGraph),
+            nameof(EnableNoobFilterByDefault),
             nameof(GameLanguage),
             nameof(AnalyzeModArchives),
             nameof(ExtraModDirPath),
             nameof(LastUsedProjectPath),
             nameof(PinnedOrder),
-            nameof(RecentOrder)
+            nameof(RecentOrder),
+            nameof(ShowGraphEditorNodeProperties)
             )
           .Subscribe(_ =>
           {
@@ -198,6 +201,9 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [ObservableProperty]
     private uint _treeViewGroupSize = 100;
 
+    [Display(Name = "Default to simple mode", GroupName = "File Editor")] [ObservableProperty]
+    private bool _enableNoobFilterByDefault;
+
     [Display(Name = "Ignored Extensions (Open using System Editor. Syntax: .ext1|.ext2)", GroupName = "File Editor")]
     [ObservableProperty]
     private string? _treeViewIgnoredExtensions = "";
@@ -229,6 +235,10 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [Display(Name = "Game language used for LocKeys", GroupName = "Display")] 
     [ObservableProperty]
     private EGameLanguage _gameLanguage;
+
+    [Display(Name = "Show Graph Editor Node Properties", GroupName = "Display")]
+    [ObservableProperty]
+    private bool _showGraphEditorNodeProperties = true;
 
     [ObservableProperty]
 #pragma warning disable CS0657 // Not a valid attribute location for this declaration
@@ -284,7 +294,10 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     public void SetThemeAccent(Color color) => ThemeAccentString = color.ToString();
     public string GetRED4GameRootDir()
     {
-        ArgumentNullException.ThrowIfNull(CP77ExecutablePath);
+        if (CP77ExecutablePath is null)
+        {
+            throw new WolvenKitException(0x4002, "Your Cyberpunk game executable isn't set");
+        }
 
         var fi = new FileInfo(CP77ExecutablePath);
 
@@ -295,7 +308,8 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
 
     public string GetRED4GameExecutablePath() => CP77ExecutablePath.NotNull();
 
-    public string GetRED4GameLaunchCommand() => CP77LaunchCommand ?? "";
+    // If no launch command is set, use the executable path
+    public string GetRED4GameLaunchCommand() => CP77LaunchCommand ?? CP77ExecutablePath ?? "";
 
     public string GetRED4GameLaunchOptions() => CP77LaunchOptions ?? "";
 
@@ -327,6 +341,8 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             : Path.Combine(GetRED4GameRootDir(), "bin", "x64", Core.Constants.Oodle);
 
     public bool IsHealthy() => File.Exists(CP77ExecutablePath) && File.Exists(GetRED4OodleDll());
+
+    public bool IsNoobFilterDefaultEnabled() => EnableNoobFilterByDefault;
 
     #endregion methods
 }

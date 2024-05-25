@@ -4,14 +4,17 @@ using System.Runtime.InteropServices;
 namespace WolvenKit.Core;
 
 //https://stackoverflow.com/a/23623244
-internal static class NativeMethods
+public static class NativeMethods
 {
     [DllImport("kernel32.dll")]
-    public static extern IntPtr LoadLibrary(string dllToLoad);
+    internal static extern IntPtr LoadLibrary(string dllToLoad);
 
     [DllImport("kernel32.dll")]
-    public static extern IntPtr GetProcAddress(IntPtr hModule, string procedureName);
+    internal static extern IntPtr GetProcAddress(IntPtr hModule, string procedureName);
 
     [DllImport("kernel32.dll")]
-    public static extern bool FreeLibrary(IntPtr hModule);
+    internal static extern bool FreeLibrary(IntPtr hModule);
+
+    [DllImport("ntdll")]
+    public static extern byte RtlAreLongPathsEnabled();
 }

@@ -158,4 +158,22 @@ public class TweakDBStringHelper
 
         return null;
     }
+
+    public IEnumerable<KeyValuePair<ulong, string>> GetAll()
+    {
+        foreach (var kvp in _recordHashes)
+        {
+            yield return kvp;
+        }
+
+        foreach (var kvp in _flatHashes)
+        {
+            yield return kvp;
+        }
+
+        foreach (var kvp in _queryHashes)
+        {
+            yield return kvp;
+        }
+    }
 }

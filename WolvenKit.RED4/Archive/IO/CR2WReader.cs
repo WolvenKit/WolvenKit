@@ -48,11 +48,13 @@ public partial class CR2WReader : Red4Reader
 
         #endregion
 
+        var typeInfo = RedReflection.GetTypeInfo(cls);
+
         #region parse sequential variables
         while (true)
         {
-            var cvar = ReadVariable(cls);
-            if (!cvar)
+            var cVar = ReadVariable(cls, typeInfo);
+            if (!cVar)
             {
                 break;
             }
@@ -73,116 +75,148 @@ public partial class CR2WReader : Red4Reader
         }
     }
 
-    public bool ReadVariable(RedBaseClass cls)
+    public bool ReadVariable(RedBaseClass cls, ExtendedTypeInfo typeInfo)
     {
-        var nameId = _reader.ReadUInt16();
-        if (nameId == 0)
+        var varCName = ReadCName();
+        if (varCName == CName.Empty)
         {
             return false;
         }
-        var varName = GetStringValue(nameId);
+        var varName = varCName.GetResolvedText()!;
 
-        // Read Type
-        var typeId = _reader.ReadUInt16();
-        var typename = GetStringValue(typeId);
+        var redTypeName = ReadCName();
+        var size = _reader.ReadUInt32() - 4;
 
-        // Read Size
-        var sizePos = _reader.BaseStream.Position;
-        var size = _reader.ReadUInt32();
+        var dataStartPos = _reader.BaseStream.Position;
 
-        var propName = $"{RedReflection.GetRedTypeFromCSType(cls.GetType())}.{varName}";
-
-        var (type, flags) = RedReflection.GetCSTypeFromRedType(typename!);
-        var redTypeInfos = RedReflection.GetRedTypeInfos(typename!);
-
-        var typeInfo = RedReflection.GetTypeInfo(cls);
-
-        var prop = RedReflection.GetPropertyByRedName(cls.GetType(), varName!);
-        var (hasError, errorRedName) = CheckRedTypeInfos(ref redTypeInfos);
-        if (hasError)
-        {
-            if (prop == null)
-            {
-                LoggerService?.Warning($"Type \"{errorRedName}\" is not known! Non-RTTI property \"{propName}\" will be ignored");
-
-                _reader.BaseStream.Position = sizePos + size;
-                return true;
-            }
-
-            throw new Exception($"Type \"{errorRedName}\" is not known! RTTI property \"{propName}\"");
-        }
+        var fullName = $"{RedReflection.GetRedTypeFromCSType(cls.GetType())}.{varName}";
 
         IRedType? value;
-        
-        prop ??= cls.AddDynamicProperty(varName!, type);
 
-        if (prop.IsDynamic)
-        {
-            value = Read(redTypeInfos, size - 4);
-
-            cls.SetProperty(varName!, value);
-        }
-        else
+        var prop = RedReflection.GetPropertyByRedName(cls.GetType(), varName);
+        if (prop != null)
         {
             ArgumentNullException.ThrowIfNull(prop.RedName);
 
-            value = Read(redTypeInfos, size - 4);
+            var propRedType = RedReflection.GetRedTypeFromCSType(prop.Type, prop.Flags);
 
-            if (type != prop.Type)
+            if (propRedType != redTypeName)
             {
-                var args = new InvalidRTTIEventArgs(propName, prop.Type, type, value);
-                if (!HandleParsingError(args))
+                if (TryReadValue(redTypeName!, size, out value))
                 {
-                    throw new InvalidRTTIException(propName, prop.Type, type);
-                }
-                value = args.Value;
-            }
+                    var args = new InvalidRTTIEventArgs(fullName, propRedType, redTypeName, value);
+                    if (!HandleParsingError(args))
+                    {
+                        throw new InvalidRTTIException(fullName, propRedType, redTypeName);
+                    }
 
-            if (!typeInfo.SerializeDefault && !prop.SerializeDefault && prop.IsDefault(value))
-            {
-                var args = new InvalidDefaultValueEventArgs();
-                if (!HandleParsingError(args))
-                {
-                    throw new InvalidParsingException($"Invalid default val for: \"{propName}\"");
+                    SetProperty(cls, prop.RedName, args.Value);
+                    return true;
                 }
             }
 
-            cls.SetProperty(prop.RedName, value);
+            _reader.BaseStream.Position = dataStartPos;
+
+            if (TryReadValue(propRedType, size, out value))
+            {
+                if (!typeInfo.SerializeDefault && !prop.SerializeDefault && prop.IsDefault(value))
+                {
+                    var args = new InvalidDefaultValueEventArgs();
+                    if (!HandleParsingError(args))
+                    {
+                        throw new InvalidParsingException($"Invalid default val for: \"{fullName}\"");
+                    }
+                }
+
+                SetProperty(cls, prop.RedName, value);
+                return true;
+            }
+
+            _reader.BaseStream.Position = dataStartPos + size;
+
+            if (propRedType == redTypeName)
+            {
+                LoggerService?.Warning($"Can't read data for \"{fullName}\" (\"{propRedType}\"). Skipping");
+                return true;
+            }
+
+            LoggerService?.Warning($"Invalid RedType detected for \"{fullName}\". \"{redTypeName}\" instead of \"{propRedType}\". Skipping");
+            return true;
         }
 
+        // dynamic stuff
+        var redTypeInfos = RedReflection.GetRedTypeInfos(redTypeName!);
+        var (hasError, errorRedName) = CheckRedTypeInfos(ref redTypeInfos);
+        
+        if (hasError)
+        {
+            LoggerService?.Warning($"Type \"{errorRedName}\" is not known! Non-RTTI property \"{fullName}\" will be ignored");
+
+            _reader.BaseStream.Position = dataStartPos + size;
+            return true;
+        }
+
+        var (type, _) = RedReflection.GetCSTypeFromRedType(redTypeName!);
+        
+        cls.AddDynamicProperty(varName, type);
+        value = Read(redTypeInfos, size);
+        SetProperty(cls, varName, value);
+
+        return true;
+    }
+
+    private bool TryReadValue(string redTypeName, uint size, out IRedType? value)
+    {
+        try
+        {
+            var redTypeInfos = RedReflection.GetRedTypeInfos(redTypeName);
+            value = Read(redTypeInfos, size);
+
+            return true;
+        }
+        catch (Exception)
+        {
+            value = null;
+            return false;
+        }
+    }
+
+    private void SetProperty(RedBaseClass cls, string varName, IRedType? value)
+    {
+        cls.SetProperty(varName, value);
         PostProcess(value);
 
-        if (CollectData)
+        if (!CollectData)
         {
-            if (prop.Name.Contains("Fact") && !prop.Name.Contains("Factor"))
+            return;
+        }
+
+        if (varName.Contains("Fact", StringComparison.InvariantCultureIgnoreCase) && !varName.Contains("Factor", StringComparison.InvariantCultureIgnoreCase))
+        {
+            if (value is CString str1)
             {
-                if (value is CString str1)
-                {
-                    DataCollection.RawStringList.Remove(str1);
-                    DataCollection.RawFactStrings.Add(str1);
-                }
+                DataCollection.RawStringList.Remove(str1);
+                DataCollection.RawFactStrings.Add(str1);
+            }
 
-                if (value is CName { IsResolvable: true } str2)
-                {
-                    DataCollection.RawStringList.Remove(str2.GetResolvedText()!);
-                    DataCollection.RawFactStrings.Add(str2.GetResolvedText()!);
-                }
+            if (value is CName { IsResolvable: true } str2)
+            {
+                DataCollection.RawStringList.Remove(str2.GetResolvedText()!);
+                DataCollection.RawFactStrings.Add(str2.GetResolvedText()!);
+            }
 
-                if (value is CArray<CName> arr1)
+            if (value is CArray<CName> arr1)
+            {
+                foreach (var cName in arr1)
                 {
-                    foreach (var cName in arr1)
+                    if (cName.IsResolvable)
                     {
-                        if (cName.IsResolvable)
-                        {
-                            DataCollection.RawStringList.Remove(cName.GetResolvedText()!);
-                            DataCollection.RawFactStrings.Add(cName.GetResolvedText()!);
-                        }
+                        DataCollection.RawStringList.Remove(cName.GetResolvedText()!);
+                        DataCollection.RawFactStrings.Add(cName.GetResolvedText()!);
                     }
                 }
             }
         }
-
-        return true;
 
         void PostProcess(IRedType? internalValue)
         {

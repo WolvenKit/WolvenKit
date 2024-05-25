@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -16,6 +17,7 @@ using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Helpers;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.Views.Dialogs.Windows;
 
@@ -109,7 +111,9 @@ namespace WolvenKit
             Container = _host.Services;
             Container.UseMicrosoftDependencyResolver();
 
-            var path = Path.Combine(ISettingsManager.GetAppData(), "applog.txt");
+            MoveOldLogs();
+
+            var path = Path.Combine(ISettingsManager.GetLogsDir(), "applog.txt");
             var outputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj}{NewLine}{Exception}";
 
             Log.Logger = new LoggerConfiguration()
@@ -130,6 +134,29 @@ namespace WolvenKit
                         flushToDiskInterval: TimeSpan.FromMinutes(1)), // Write once per minute.
                     bufferSize: 1000)
                 .CreateLogger();
+        }
+
+        private void MoveOldLogs()
+        {
+            var logFolder = ISettingsManager.GetLogsDir();
+
+            var existingLogs = Directory.GetFiles(logFolder, "*.txt");
+            
+            foreach (var file in Directory.GetFiles(ISettingsManager.GetAppData(), "applog*.txt", SearchOption.TopDirectoryOnly))
+            {
+                var fileName = Path.GetFileName(file);
+                var destFileName = Path.Combine(logFolder, fileName);
+
+                var rotatingIndex = 1;
+
+                while (existingLogs.Contains(destFileName))
+                {
+                    destFileName = Path.Combine(logFolder, $"{fileName.Replace(".txt", "")}_{rotatingIndex:D3}.txt");
+                    rotatingIndex++;
+                }
+
+                FileHelper.SafeMove(file, destFileName);
+            }
         }
 
         //https://stackoverflow.com/a/46804709/16407587
@@ -215,7 +242,18 @@ namespace WolvenKit
             }
             finally
             {
-                _logger.Error(exception);
+                var isInner = false;
+                while (exception != null)
+                {
+                    if (isInner)
+                    {
+                        _logger.Error("--------- InnerException ---------");
+                    }
+                    _logger.Error(exception);
+
+                    exception = exception.InnerException;
+                    isInner = true;
+                }
                 //Application.Current.Shutdown();
             }
         }

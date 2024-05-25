@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
+using WolvenKit.Common.FNV1A;
 using WolvenKit.RED4.Types.Pools;
 
 namespace WolvenKit.RED4.Types;
@@ -9,6 +10,8 @@ namespace WolvenKit.RED4.Types;
 [DebuggerDisplay("{GetResolvedText()}", Type = "ResourcePath")]
 public readonly struct ResourcePath : IRedString, IRedPrimitive<string>, IEquatable<ResourcePath>, IComparable<ResourcePath>, IComparable
 {
+    public static readonly char DirectorySeparatorChar = '\\';
+
     public static ResourcePath Empty = 0;
 
     private readonly ulong _hash;
@@ -122,9 +125,9 @@ public readonly struct ResourcePath : IRedString, IRedPrimitive<string>, IEquata
 
             if (text[i] == '\\' || text[i] == '/')
             {
-                if (strResult[strResult.Length - 1] != '\\')
+                if (strResult[^1] != DirectorySeparatorChar)
                 {
-                    strResult.Append('\\');
+                    strResult.Append(DirectorySeparatorChar);
                 }
                 continue;
             }
@@ -133,6 +136,9 @@ public readonly struct ResourcePath : IRedString, IRedPrimitive<string>, IEquata
         }
         return strResult.ToString().ToLowerInvariant();
     }
+
+    public static ulong CalculateHash(string resourcePath) =>
+        FNV1A64HashAlgorithm.HashString(SanitizePath(resourcePath));
 
     public string? GetString() => this;
     public override string? ToString() => GetResolvedText();

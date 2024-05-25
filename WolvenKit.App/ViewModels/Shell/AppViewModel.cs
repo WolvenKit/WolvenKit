@@ -119,10 +119,15 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _parser = parserService;
         _scriptService = scriptService;
 
+        if (_hashService is HashServiceExt hashServiceExt)
+        {
+            hashServiceExt.LoadGlobalCache();
+        }
+        
         _scriptService.SetAppViewModel(this);
 
         _progressService.PropertyChanged += ProgressService_PropertyChanged;
-
+        
         UpdateTitle();
 
         ShowFirstTimeSetup();
@@ -234,6 +239,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         CheckForUpdatesCommand.SafeExecute(true);
         CheckForScriptUpdatesCommand.SafeExecute();
+        CheckForLongPathSupport();
     }
 
     public bool AddDockedPane(string paneString)
@@ -338,6 +344,21 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
     }
 
+    private void CheckForLongPathSupport()
+    {
+        if (Core.NativeMethods.RtlAreLongPathsEnabled() != 0)
+        {
+            return;
+        }
+
+        var text = "Long path support is disabled in your OS!" + Environment.NewLine +
+                   "Please do so to ensure that WolvenKit works properly." + Environment.NewLine + Environment.NewLine +
+                   "For more information:" + Environment.NewLine +
+                   "https://wiki.redmodding.org/wolvenkit/help/faq/long-file-path-support";
+
+        DispatcherHelper.RunOnMainThread(() => Interactions.ShowConfirmation((text, "Long path support", WMessageBoxImage.Warning, WMessageBoxButtons.Ok)));
+    }
+
     #endregion init
 
     #region commands
@@ -428,8 +449,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
         catch (HttpRequestException ex)
         {
-            _loggerService.Error($"Failed to respond to url: {contentUrl}");
-            _loggerService.Error(ex);
+            _loggerService.Warning($"Failed update scripts from {contentUrl}");
+            _loggerService.Warning($"\t{ex.Message}");
             return;
         }
 
@@ -663,7 +684,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             var newProjectName = project.ProjectName.NotNull().Trim();
             var newModName = project.ModName.NotNull().Trim();
             var projectLocation = Path.Combine(project.ProjectPath.NotNull(), newProjectName, newProjectName + ".cpmodproj");
-            Cp77Project np = new(projectLocation, newProjectName, newModName, _hashService)
+            Cp77Project np = new(projectLocation, newProjectName, newModName)
             {
                 Author = project.Author,
                 Email = project.Email,
@@ -707,7 +728,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private bool CanReloadFile() => ActiveDocument is not null;
     [RelayCommand(CanExecute = nameof(CanReloadFile))]
-    private void ReloadFile()
+    public void ReloadFile()
     {
         if (ActiveDocument == null)
         {
@@ -737,10 +758,40 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanSaveAll))]
     private void SaveAll()
     {
-        foreach (var file in DockedViews.OfType<IDocumentViewModel>())
+        foreach (var file in DockedViews.OfType<IDocumentViewModel>().Where(f => f.IsDirty))
         {
             Save(file);
         }
+    }
+
+    public async Task<bool> AreDirtyFilesHandledBeforeLaunch()
+    {
+        var dirtyFiles = DockedViews.OfType<IDocumentViewModel>().Where(tab => tab.IsDirty).ToList();
+        if (dirtyFiles.Count == 0)
+        {
+            return true;
+        }
+
+        var response = await Interactions.ShowMessageBoxAsync(
+            "You have un-saved files. Save them before installing mod?",
+            "Save changes?",
+            WMessageBoxButtons.YesNoCancel);
+        switch (response)
+        {
+            case WMessageBoxResult.Cancel:
+                return false;
+            case WMessageBoxResult.No:
+            case WMessageBoxResult.Custom:
+            case WMessageBoxResult.None:
+                break;
+            case WMessageBoxResult.OK:
+            case WMessageBoxResult.Yes:
+            default:
+                SaveAll();
+                break;
+        }
+
+        return true;
     }
 
     private bool CanShowHomePage() => !IsDialogShown;
@@ -897,6 +948,47 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         //});
     }
 
+    private bool CanImportArchive(string inputDir) => ActiveProject is not null && !IsDialogShown;
+
+    [RelayCommand(CanExecute = nameof(CanImportArchive))]
+    private async Task<Task> ImportArchive(string? inputDir)
+    {
+        _watcherService.IsSuspended = true;
+        var vm = new OpenFileViewModel(_settingsManager, _projectManager, _loggerService)
+        {
+            Title = "Import .archive", Filter = "Archive files (*.archive)|*.archive"
+        };
+
+        var result = await vm.OpenFile();
+        _watcherService.IsSuspended = false;
+
+        if (result is null)
+        {
+            return Task.CompletedTask;
+        }
+
+        var assetBrowser = GetToolViewModel<AssetBrowserViewModel>();
+
+        if (!assetBrowser.IsVisible)
+        {
+            assetBrowser.IsVisible = true;
+        }
+
+        if (!assetBrowser.IsModBrowserActive())
+        {
+            assetBrowser.ToggleModBrowserCommand.Execute(null);
+        }
+        else
+        {
+            await assetBrowser.LoadAssetBrowserCommand.ExecuteAsync(null);
+        }
+
+        assetBrowser.SearchBarText = $"archive:{result}";
+        await assetBrowser.PerformSearch($"archive:{result}");
+
+        return Task.CompletedTask;
+    }
+
     private async Task OpenFromNewFile(NewFileViewModel? file)
     {
         CloseModalCommand.Execute(null);
@@ -1038,6 +1130,15 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
     }
 
+    public bool ShowConfirmationDialog(string dialogMessage, string dialogTitle = "")
+    {
+        var result = Interactions.ShowConfirmation((dialogMessage, dialogTitle,
+            WMessageBoxImage.Question,
+            WMessageBoxButtons.YesNo));
+
+        return result == WMessageBoxResult.Yes;
+    }
+
     public void ReloadChangedFiles()
     {
         for (var i = DockedViews.Count - 1; i >= 0; i--)
@@ -1153,12 +1254,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             return;
         }
 
-        // it should be resolved by this point, but check just in case
-        if (!_hashService.Contains(path) && !ResourcePath.IsNullOrEmpty(path))
-        {
-            _hashService.AddCustom(path.GetResolvedText().NotNull());
-        }
-
         OpenFileFromHash(path);
     }
 
@@ -1203,12 +1298,15 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     public bool HasActiveProject() => ActiveProject is not null;
 
-
     [RelayCommand]
     private Task CleanAllAsync() => Task.Run(() => _gameControllerFactory.GetController().CleanAll());
 
     private async Task LaunchAsync(LaunchProfile profile)
     {
+        if (!await AreDirtyFilesHandledBeforeLaunch())
+        {
+            return;
+        }
         _watcherService.IsSuspended = true;
         await _gameControllerFactory.GetController().LaunchProject(profile);
         _watcherService.IsSuspended = false;

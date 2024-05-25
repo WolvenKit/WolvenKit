@@ -6,8 +6,6 @@ using WolvenKit.RED4.Types.Pools;
 namespace WolvenKit.RED4.Archive;
 public class FileEntry : ICyberGameFile
 {
-    private IHashService? _hashService;
-
     #region Constructors
 
     public FileEntry()
@@ -15,10 +13,7 @@ public class FileEntry : ICyberGameFile
 
     }
 
-    public FileEntry(IHashService hashService) => _hashService = hashService;
-
     public FileEntry(
-        IHashService hashService,
         ulong hash,
         DateTime datetime,
         uint flags,
@@ -28,8 +23,6 @@ public class FileEntry : ICyberGameFile
         uint resourceDependenciesEnd,
         byte[] sha1hash)
     {
-        _hashService = hashService;
-
         NameHash64 = hash;
         Timestamp = datetime;
         NumInlineBufferSegments = flags;
@@ -81,8 +74,6 @@ public class FileEntry : ICyberGameFile
 
         return ext;
     }
-
-    public void SetHashService(IHashService hashService) => _hashService = hashService;
 
 
     public void Extract(Stream output) => Extract(output, false);
