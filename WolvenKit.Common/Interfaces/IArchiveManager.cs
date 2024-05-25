@@ -55,8 +55,6 @@ namespace WolvenKit.Common
         public Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles();
         void LoadFromFolder(DirectoryInfo archivedir);
 
-        RedFileSystemModel? LookupDirectory(string fullpath, bool expandAll = false);
-
         /// <summary>
         /// Checks if a file with the given hash exists in the ArchiveManager's current scope.
         /// </summary>
