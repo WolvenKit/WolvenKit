@@ -79,11 +79,49 @@ public partial class ChunkViewModel : ObservableObject
             return Task.CompletedTask;
         }
 
+        var oldName = entry.Name;
         var newName = await Interactions.ShowInputBoxAsync(entry.Name.GetResolvedText() ?? "");
 
-        entry.Name = newName;
+        entry.Name = (CName)newName;
+
+        Tab?.Parent?.SetIsDirty(true);
+        
         materialEntries.RecalculateProperties();
         CalculateDescriptor();
+
+        // now rename the chunks
+
+        var appCvm = Parent?.Parent?.GetRootModel().GetModelFromPath("appearances");
+        if (appCvm?.ResolvedData is not CArray<CHandle<meshMeshAppearance>> appearances)
+        {
+            return Task.CompletedTask;
+        }
+
+        foreach (var appearanceHandle in appearances)
+        {
+            if (appearanceHandle.GetValue() is not meshMeshAppearance appearance)
+            {
+                continue;
+            }
+
+            for (var i = 0; i < appearance.ChunkMaterials.Count; i++)
+            {
+                if (appearance.ChunkMaterials[i] == oldName)
+                {
+                    appearance.ChunkMaterials[i] = (CName)newName;
+                }
+            }
+        }
+
+        foreach (var prop in appCvm.DisplayProperties)
+        {
+            prop.RecalculateProperties();
+            prop.CalculateValue();
+        }
+
+        appCvm.RecalculateProperties();
+        appCvm.CalculateValue();
+        
         return Task.CompletedTask;
     }
 
