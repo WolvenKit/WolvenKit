@@ -74,7 +74,8 @@ namespace WolvenKit.Views.Tools
             TreeGridFlat.SortComparers.Add(new() { Comparer = new FilePathComparer(), PropertyName = "GameRelativePath" });
             TreeGridFlat.SortComparers.Add(new() { Comparer = new FileSizeComparer(), PropertyName = "FileSizeStr" });
 
-            
+            TreeGrid.NodeCollapsed += TreeGrid_OnNodeCollapsed;
+            TreeGrid.NodeExpanded += TreeGrid_OnNodeExpanded;
 
             this.WhenActivated(disposables =>
             {
@@ -160,6 +161,38 @@ namespace WolvenKit.Views.Tools
             });
         }
 
+        private void TreeGrid_OnNodeExpanded(object sender, NodeExpandedEventArgs e)
+        {
+            if (ViewModel is null || e.Node.Item is not FileSystemModel fileSystemModel)
+            {
+                return;
+            }
+
+            ViewModel.ExpansionStateDictionary[fileSystemModel.RawRelativePath] = true;
+            foreach (var childNode in e.Node.ChildNodes)
+            {
+                if (childNode.Item is not FileSystemModel childFileSystemModel)
+                {
+                    continue;
+                }
+
+                if (ViewModel.GetExpansionState(childFileSystemModel.RawRelativePath))
+                {
+                    TreeGrid.ExpandNode(childNode);
+                }
+            }
+        }
+
+        private void TreeGrid_OnNodeCollapsed(object sender, NodeCollapsedEventArgs e)
+        {
+            if (ViewModel is null || e.Node.Item is not FileSystemModel fileSystemModel)
+            {
+                return;
+            }
+
+            ViewModel.ExpansionStateDictionary[fileSystemModel.RawRelativePath] = false;
+        }
+
         private void AddKeyUpEvent()
         {
             if (ViewModel is null || ViewModel.IsKeyUpEventAssigned)
@@ -173,10 +206,24 @@ namespace WolvenKit.Views.Tools
             ViewModel.IsKeyUpEventAssigned = true;
         }
 
-        private void OnCellDoubleTapped(object _, TreeGridCellDoubleTappedEventArgs treeGridCellDoubleTappedEventArgs)
+        private void OnCellDoubleTapped(object sender, TreeGridCellDoubleTappedEventArgs e)
         {
-            if (treeGridCellDoubleTappedEventArgs.Node.Item is FileSystemModel model)
+            if (e.Node.Item is FileSystemModel model)
             {
+                if (sender is SfTreeGrid { Name: nameof(TreeGrid) } && model.IsDirectory)
+                {
+                    if (e.Node.IsExpanded)
+                    {
+                        TreeGrid.CollapseNode(e.Node);
+                    }
+                    else
+                    {
+                        TreeGrid.ExpandNode(e.Node);
+                    }
+
+                    return;
+                }
+
                 ViewModel?.GetAppViewModel().OpenFileCommand.SafeExecute(model);
             }
         }
@@ -225,7 +272,39 @@ namespace WolvenKit.Views.Tools
 
         private void View_OnNodeCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            
+            if (ViewModel is null)
+            {
+                return;
+            }
+
+            if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null)
+            {
+                foreach (var item in e.NewItems)
+                {
+                    if (item is not TreeNode { Item: FileSystemModel { IsDirectory: true } fileSystemModel } treeNode)
+                    {
+                        continue;
+                    }
+
+                    if (ViewModel.GetExpansionState(fileSystemModel.RawRelativePath))
+                    {
+                        TreeGrid.ExpandNode(treeNode);
+                    }
+                }
+            }
+
+            if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems != null)
+            {
+                foreach (var item in e.OldItems)
+                {
+                    if (item is not TreeNode { Item: FileSystemModel { IsDirectory: true } fileSystemModel } treeNode)
+                    {
+                        continue;
+                    }
+
+                    ViewModel.ExpansionStateDictionary.Remove(fileSystemModel.RawRelativePath);
+                }
+            }
         }
 
         private void TreeGridFlat_ItemsSourceChanged(object sender, TreeGridItemsSourceChangedEventArgs e)

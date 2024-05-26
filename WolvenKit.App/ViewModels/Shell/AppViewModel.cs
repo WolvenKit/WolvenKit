@@ -1081,23 +1081,21 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     {
         if (model.IsDirectory)
         {
-            model.IsExpanded = !model.IsExpanded;
+            return;
         }
-        else if (!model.IsDirectory)
+
+        _progressService.IsIndeterminate = true;
+        try
         {
-            _progressService.IsIndeterminate = true;
-            try
-            {
-                await RequestFileOpen(model.FullName);
-            }
-            catch (Exception e)
-            {
-                _loggerService.Error(e.Message);
-            }
-            finally
-            {
-                _progressService.IsIndeterminate = false;
-            }
+            await RequestFileOpen(model.FullName);
+        }
+        catch (Exception e)
+        {
+            _loggerService.Error(e.Message);
+        }
+        finally
+        {
+            _progressService.IsIndeterminate = false;
         }
     }
 

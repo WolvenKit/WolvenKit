@@ -26,7 +26,7 @@ public class FileSystemModel : INotifyPropertyChanged
 
     private string _fileSizeStr = null!;
     private long _fileSize;
-    
+
     [Browsable(false)] public FileSystemModel? Parent { get; }
 
     public string Name { get; }
@@ -53,7 +53,6 @@ public class FileSystemModel : INotifyPropertyChanged
 
     public string Extension { get; } = "default";
 
-    [Browsable(false)] public bool IsExpanded { get; set; }
     [Browsable(false)] public DispatchedObservableCollection<FileSystemModel> Children { get; } = new();
     [Browsable(false)] public bool IsDirectory { get; }
 
@@ -92,13 +91,6 @@ public class FileSystemModel : INotifyPropertyChanged
 
             UpdateFileInfo();
         }
-
-        Children.CollectionChanged += Children_OnCollectionChanged;
-    }
-
-    private void Children_OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        IsExpanded = Children.Count > 0;
     }
 
     public void UpdateFileInfo()
@@ -160,10 +152,8 @@ public class FileSystemModel : INotifyPropertyChanged
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-    {
+    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null) => 
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
 
     protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
     {

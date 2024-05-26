@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -105,12 +106,24 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _projectManager.PropertyChanged += ProjectManager_OnPropertyChanged;
     }
 
+    public Dictionary<string, bool> ExpansionStateDictionary = new();
+
+    public bool GetExpansionState(string relPath)
+    {
+        if (ExpansionStateDictionary.TryGetValue(relPath, out var state))
+        {
+            return state;
+        }
+        return true;
+    }
+
     private void ProjectManager_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(ProjectManager.ActiveProject))
         {
             if (ActiveProject != null)
             {
+                File.WriteAllText(Path.Combine(ActiveProject.ProjectDirectory, "fileTreeState.json"), JsonSerializer.Serialize(ExpansionStateDictionary));
                 _projectWatcher.UnwatchProject(ActiveProject);
             }
 
@@ -118,6 +131,16 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
             if (_projectManager.ActiveProject != null)
             {
+                var statePath = Path.Combine(_projectManager.ActiveProject.ProjectDirectory, "fileTreeState.json");
+                if (File.Exists(statePath))
+                {
+                    ExpansionStateDictionary = JsonSerializer.Deserialize<Dictionary<string, bool>>(File.ReadAllText(statePath)) ?? new();
+                }
+                else
+                {
+                    ExpansionStateDictionary = new();
+                }
+
                 _projectWatcher.WatchProject(_projectManager.ActiveProject);
             }
         }
