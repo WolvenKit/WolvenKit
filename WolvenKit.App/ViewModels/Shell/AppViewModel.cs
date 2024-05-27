@@ -717,10 +717,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     [RelayCommand]
-    private void SelectFile(FileSystemModel model)
-    {
-        GetToolViewModel<PropertiesViewModel>().ExecuteSelectFile(model);
-    }
+    private void SelectFile(FileSystemModel model) => GetToolViewModel<PropertiesViewModel>().ExecuteSelectFile(model);
 
     private bool CanSaveFile() => ActiveDocument is not null && !ActiveDocument.IsReadOnly;
     [RelayCommand(CanExecute = nameof(CanSaveFile))]

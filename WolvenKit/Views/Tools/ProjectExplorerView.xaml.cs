@@ -15,8 +15,9 @@ using ReactiveUI;
 using Syncfusion.Data;
 using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.App.Extensions;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
-using WolvenKit.App.Services;
+using WolvenKit.App.Models;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Views.Dialogs;
@@ -66,16 +67,17 @@ namespace WolvenKit.Views.Tools
             TreeGrid.RowDragDropController.Dropped += RowDragDropController_Dropped;
             TreeGrid.RowDragDropController.CanAutoExpand = true;
 
-            TreeGrid.MouseDoubleClick += TreeGrid_DoubleClicked;
-
             tabControl.SelectedIndexChanged += tabControl_SelectedIndexChanged;
 
             TreeGrid.SortComparers.Add(new() { Comparer = new FilePathComparer(), PropertyName = "Name" });
             TreeGridFlat.SortComparers.Add(new() { Comparer = new FilePathComparer(), PropertyName = "GameRelativePath" });
             TreeGridFlat.SortComparers.Add(new() { Comparer = new FileSizeComparer(), PropertyName = "FileSizeStr" });
 
-            TreeGrid.NodeCollapsed += TreeGrid_OnNodeCollapsed;
+            TreeGrid.NodeExpanding += TreeGrid_OnNodeExpanding;
             TreeGrid.NodeExpanded += TreeGrid_OnNodeExpanded;
+            TreeGrid.NodeCollapsing += TreeGrid_OnNodeCollapsing;
+            TreeGrid.NodeCollapsed += TreeGrid_OnNodeCollapsed;
+            
 
             this.WhenActivated(disposables =>
             {
@@ -161,6 +163,27 @@ namespace WolvenKit.Views.Tools
             });
         }
 
+        private void TreeGrid_OnNodeExpanding(object sender, NodeExpandingEventArgs e)
+        {
+            if (ViewModel is null)
+            {
+                return;
+            }
+
+            if (!_automatic)
+            {
+                if (ViewModel.ModifierViewStateService.IsShiftKeyPressed)
+                {
+                    _automatic = true;
+
+                    TreeGrid.ExpandAllNodes(e.Node);
+
+                    _automatic = false;
+                    return;
+                }
+            }
+        }
+
         private void TreeGrid_OnNodeExpanded(object sender, NodeExpandedEventArgs e)
         {
             if (ViewModel is null || e.Node.Item is not FileSystemModel fileSystemModel)
@@ -169,16 +192,64 @@ namespace WolvenKit.Views.Tools
             }
 
             ViewModel.ExpansionStateDictionary[fileSystemModel.RawRelativePath] = true;
-            foreach (var childNode in e.Node.ChildNodes)
+        }
+
+        private bool _automatic;
+
+        private void TreeGrid_OnNodeCollapsing(object sender, NodeCollapsingEventArgs e)
+        {
+            if (ViewModel is null)
             {
-                if (childNode.Item is not FileSystemModel childFileSystemModel)
+                return;
+            }
+
+            if (!_automatic)
+            {
+                if (ViewModel.ModifierViewStateService.IsCtrlKeyPressed && e.Node.HasChildNodes)
                 {
-                    continue;
+                    _automatic = true;
+
+                    e.Cancel = true;
+
+                    var state = e.Node.ChildNodes[0].IsExpanded;
+                    foreach (var childNode in e.Node.ChildNodes)
+                    {
+                        if (ViewModel.ModifierViewStateService.IsShiftKeyPressed)
+                        {
+                            if (state)
+                            {
+                                TreeGrid.CollapseAllNodes(childNode);
+                            }
+                            else
+                            {
+                                TreeGrid.ExpandAllNodes(childNode);
+                            }
+                        }
+                        else
+                        {
+                            if (state)
+                            {
+                                TreeGrid.CollapseNode(childNode);
+                            }
+                            else
+                            {
+                                TreeGrid.ExpandNode(childNode);
+                            }
+                        }
+                    }
+
+                    _automatic = false;
+                    return;
                 }
 
-                if (ViewModel.GetExpansionState(childFileSystemModel.RawRelativePath))
+                if (ViewModel.ModifierViewStateService.IsShiftKeyPressed)
                 {
-                    TreeGrid.ExpandNode(childNode);
+                    _automatic = true;
+
+                    TreeGrid.CollapseAllNodes(e.Node);
+
+                    _automatic = false;
+                    return;
                 }
             }
         }
@@ -208,23 +279,29 @@ namespace WolvenKit.Views.Tools
 
         private void OnCellDoubleTapped(object sender, TreeGridCellDoubleTappedEventArgs e)
         {
-            if (e.Node.Item is FileSystemModel model)
+            if (e.Node.Item is not FileSystemModel model)
             {
-                if (sender is SfTreeGrid { Name: nameof(TreeGrid) } && model.IsDirectory)
-                {
-                    if (e.Node.IsExpanded)
-                    {
-                        TreeGrid.CollapseNode(e.Node);
-                    }
-                    else
-                    {
-                        TreeGrid.ExpandNode(e.Node);
-                    }
+                return;
+            }
 
-                    return;
-                }
-
+            if (!model.IsDirectory)
+            {
                 ViewModel?.GetAppViewModel().OpenFileCommand.SafeExecute(model);
+                return;
+            }
+
+            if (sender is not SfTreeGrid { Name: nameof(TreeGrid) })
+            {
+                return;
+            }
+
+            if (e.Node.IsExpanded)
+            {
+                TreeGrid.CollapseNode(e.Node);
+            }
+            else
+            {
+                TreeGrid.ExpandNode(e.Node);
             }
         }
 
@@ -644,49 +721,6 @@ namespace WolvenKit.Views.Tools
                 }
 
                 Directory.Delete(directory, true);
-            }
-        }
-
-        /// <summary>
-        /// Double-clicking on a node will toggle its child expansion states
-        /// </summary>
-        private void TreeGrid_DoubleClicked(object sender, MouseButtonEventArgs e)
-        {
-            // Get the node under the mouse cursor
-            var originalSource = e.OriginalSource as FrameworkElement;
-
-            var node = originalSource?.DataContext switch
-            {
-                TreeNode n => n,
-                FileSystemModel model => TreeGrid.View.Nodes.GetNode(model),
-                _ => null
-            };
-
-            if (node is null || node.ChildNodes.Count == 0 || !node.ChildNodes.Any((x) => x.HasChildNodes))
-            {
-                return;
-            }
-
-            // Get current expansion state from first nested child node. newExpansionStateOverride param takes precedence.
-            var actualExpansionState = node.ChildNodes
-                .FirstOrDefault((x) => x.HasChildNodes)?.IsExpanded ?? false;
-
-            e.Handled = true;
-            foreach (var childNode in node.ChildNodes)
-            {
-                if (actualExpansionState)
-                {
-                    TreeGrid.CollapseNode(childNode);
-                    continue;
-                }
-
-                // Disable collapsing of child nodes with Ctrl
-                if (ViewModel is { ModifierViewStateService.IsCtrlKeyPressed: false })
-                {
-                    TreeGrid.CollapseAllNodes(childNode);
-                }
-
-                TreeGrid.ExpandNode(childNode);
             }
         }
 

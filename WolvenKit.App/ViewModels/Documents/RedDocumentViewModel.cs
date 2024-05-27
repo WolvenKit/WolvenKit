@@ -530,12 +530,15 @@ public partial class RedDocumentViewModel : DocumentViewModel
                     }
                     else
                     {
-                        // TODO: Isn't reachable anyway currently, since non-resolvable depot paths are skipped...
-                        /*var fm = _watcherService.GetFileModelFromHash(depotPath.GetRedHash());
-                        if (fm != null)
+                        foreach (var file in Directory.GetFiles(_projectManager.ActiveProject.ModDirectory, "*", SearchOption.AllDirectories))
                         {
-                            path = fm.FullName;
-                        }*/
+                            var relativePath = _projectManager.ActiveProject.GetRelativePath(file);
+                            if (depotPath.GetRedHash() == ResourcePath.CalculateHash(relativePath))
+                            {
+                                path = file;
+                                break;
+                            }
+                        }
                     }
 
                     if (path != null && File.Exists(path))
