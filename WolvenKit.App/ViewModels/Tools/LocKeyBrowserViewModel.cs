@@ -33,7 +33,6 @@ public partial class LocKeyBrowserViewModel : ToolViewModel
 
     private readonly ILoggerService _loggerService;
     private readonly IProjectManager _projectManager;
-    private readonly IWatcherService _watcherService;
     private readonly IModTools _modTools;
     private readonly IProgressService<double> _progressService;
     private readonly IGameControllerFactory _gameController;
@@ -47,7 +46,6 @@ public partial class LocKeyBrowserViewModel : ToolViewModel
     public LocKeyBrowserViewModel(
         IProjectManager projectManager,
         ILoggerService loggerService,
-        IWatcherService watcherService,
         IProgressService<double> progressService,
         IModTools modTools,
         IGameControllerFactory gameController,
@@ -56,7 +54,6 @@ public partial class LocKeyBrowserViewModel : ToolViewModel
     {
         _projectManager = projectManager;
         _loggerService = loggerService;
-        _watcherService = watcherService;
         _modTools = modTools;
         _progressService = progressService;
         _gameController = gameController;

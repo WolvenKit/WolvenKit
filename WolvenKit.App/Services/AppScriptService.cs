@@ -33,7 +33,6 @@ public partial class AppScriptService : ScriptService
         IProjectManager projectManager, 
         IArchiveManager archiveManager,
         Red4ParserService red4ParserService,
-        IWatcherService watcherService,
         IModTools modTools,
         ImportExportHelper importExportHelper,
         IHookService hookService,
@@ -43,7 +42,7 @@ public partial class AppScriptService : ScriptService
         _settingsManager = settingsManager;
         _hookService = hookService;
 
-        _wkit = new AppScriptFunctions(_loggerService, projectManager, archiveManager, red4ParserService, watcherService, modTools, importExportHelper, gameController, geometryCacheService);
+        _wkit = new AppScriptFunctions(_loggerService, projectManager, archiveManager, red4ParserService, modTools, importExportHelper, gameController, geometryCacheService);
         _ui = new UiScriptFunctions(this);
         
         DefaultHostObject = new() { { "wkit", _wkit } };

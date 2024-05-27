@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Octokit;
@@ -40,10 +41,18 @@ public partial class StatusBarViewModel : ObservableObject
         LoadingString = "";
         _currentProject = "";
 
-        _projectManager.ActiveProjectChanged += ProjectManager_ActiveProjectChanged;
+        _projectManager.PropertyChanged += ProjectManager_OnPropertyChanged;
 
         _progressService.ProgressChanged += ProgressService_ProgressChanged;
         _progressService.PropertyChanged += ProgressService_PropertyChanged;
+    }
+
+    private void ProjectManager_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(ProjectManager.ActiveProject))
+        {
+            CurrentProject = _projectManager.ActiveProject != null ? _projectManager.ActiveProject.Name : s_noProjectLoaded;
+        }
     }
 
     private void ProgressService_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -82,11 +91,6 @@ public partial class StatusBarViewModel : ObservableObject
     private void ProgressService_ProgressChanged(object? sender, double e)
     {
         Progress = e * 100;
-    }
-
-    private void ProjectManager_ActiveProjectChanged(object? sender, ActiveProjectChangedEventArgs e)
-    {
-        CurrentProject = e.Project != null ? e.Project.Name : s_noProjectLoaded;
     }
 
 
