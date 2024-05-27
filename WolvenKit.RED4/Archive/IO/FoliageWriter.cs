@@ -16,20 +16,22 @@ public class FoliageWriter : Red4Writer
         parent.PopulationCount = (uint)buffer.Populations.Count;
         foreach (var population in buffer.Populations)
         {
-            _writer.Write(population.Unk1.X);
-            _writer.Write(population.Unk1.Y);
-            _writer.Write(population.Unk1.Z);
+            _writer.Write(population.Position.X);
+            _writer.Write(population.Position.Y);
+            _writer.Write(population.Position.Z);
         }
 
         foreach (var population in buffer.Populations)
         {
-            _writer.Write(population.Unk2);
+            _writer.Write(population.Scale);
         }
 
         foreach (var population in buffer.Populations)
         {
-            _writer.Write(population.Unk3.Unk1);
-            _writer.Write(population.Unk3.Unk2);
+            _writer.Write((Half)(float)population.Rotation.X);
+            _writer.Write((Half)(float)population.Rotation.Y);
+            _writer.Write((Half)(float)population.Rotation.Z);
+            _writer.Write((Half)(float)population.Rotation.W);
         }
 
         parent.BucketCount = (uint)buffer.Buckets.Count;
