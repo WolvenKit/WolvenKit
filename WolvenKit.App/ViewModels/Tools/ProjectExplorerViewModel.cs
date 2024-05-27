@@ -114,7 +114,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         {
             return state;
         }
-        return true;
+        return false;
     }
 
     private void ProjectManager_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
