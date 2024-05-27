@@ -11,10 +11,7 @@ public interface IProjectManager : INotifyPropertyChanged
 
     Cp77Project? ActiveProject { get; set; }
 
-    event EventHandler<ActiveProjectChangedEventArgs>? ActiveProjectChanged;
-
     Task<bool> SaveAsync();
 
     Task<Cp77Project?> LoadAsync(string location);
-
 }

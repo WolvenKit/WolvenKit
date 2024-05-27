@@ -40,7 +40,6 @@ namespace WolvenKit.App.Scripting;
 public class AppScriptFunctions : ScriptFunctions
 {
     private readonly IProjectManager _projectManager;
-    private readonly IWatcherService _watcherService;
     private readonly IModTools _modTools;
     private readonly ImportExportHelper _importExportHelper;
     private readonly IGameControllerFactory _gameController;
@@ -53,7 +52,6 @@ public class AppScriptFunctions : ScriptFunctions
         IProjectManager projectManager,
         IArchiveManager archiveManager,
         Red4ParserService parserService,
-        IWatcherService watcherService,
         IModTools modTools,
         ImportExportHelper importExportHelper,
         IGameControllerFactory gameController,
@@ -61,7 +59,6 @@ public class AppScriptFunctions : ScriptFunctions
         : base(loggerService, archiveManager, parserService)
     {
         _projectManager = projectManager;
-        _watcherService = watcherService;
         _modTools = modTools;
         _importExportHelper = importExportHelper;
         _gameController = gameController;
@@ -72,12 +69,10 @@ public class AppScriptFunctions : ScriptFunctions
     /// Turn on/off updates to the project tree, useful for when making lots of changes to the project structure.
     /// </summary>
     /// <param name="suspend">bool for if updates are suspended</param>
+    [Obsolete]
     public void SuspendFileWatcher(bool suspend)
     {
-        if (_watcherService != null && _watcherService.IsSuspended != suspend)
-        {
-            _watcherService.IsSuspended = suspend;
-        }
+        
     }
 
     /// <summary>

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Primitives;
 using WolvenKit.Common;
 using WolvenKit.Core.Extensions;
 
@@ -364,10 +366,44 @@ public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
         _ = ResourcesDirectory;
     }
 
+    public string GetRelativePath(string fullPath)
+    {
+        if (fullPath.Equals(FileDirectory, StringComparison.Ordinal))
+        {
+            return "";
+        }
+        // hack so that we get proper hashes
+        if (fullPath.Equals(ModDirectory, StringComparison.Ordinal))
+        {
+            return "wkitmoddir";
+        }
+        if (fullPath.Equals(RawDirectory, StringComparison.Ordinal))
+        {
+            return "wkitrawdir";
+        }
+        if (fullPath.Equals(PackedRootDirectory, StringComparison.Ordinal))
+        {
+            return "wkitpackeddir";
+        }
+
+        if (fullPath.StartsWith(ModDirectory, StringComparison.Ordinal))
+        {
+            return fullPath[(ModDirectory.Length + 1)..];
+        }
+        if (fullPath.StartsWith(RawDirectory, StringComparison.Ordinal))
+        {
+            var rel = fullPath[(RawDirectory.Length + 1)..];
+            return rel;
+        }
+
+        return fullPath.StartsWith(FileDirectory, StringComparison.Ordinal)
+            ? fullPath[(FileDirectory.Length + 1)..]
+            : fullPath.StartsWith(PackedRootDirectory, StringComparison.Ordinal) ? fullPath[(PackedRootDirectory.Length + 1)..] : fullPath;
+    }
+
     // Conversions
 
     public FileSystemArchive AsArchive() => new(this);
-
 
     #region implements ICloneable
 

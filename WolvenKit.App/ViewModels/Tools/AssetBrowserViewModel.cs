@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -70,7 +72,6 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private readonly IProgressService<double> _progressService;
     private readonly ILoggerService _loggerService;
     private readonly IPluginService _pluginService;
-    private readonly IWatcherService _watcherService;
     private readonly AppViewModel _appViewModel;
 
     private readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
@@ -91,8 +92,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         ISettingsManager settings,
         IProgressService<double> progressService,
         ILoggerService loggerService,
-        IPluginService pluginService,
-        IWatcherService watcherService) : base(ToolTitle)
+        IPluginService pluginService) : base(ToolTitle)
     {
         _projectManager = projectManager;
         _notificationService = notificationService;
@@ -101,7 +101,6 @@ public partial class AssetBrowserViewModel : ToolViewModel
         _settings = settings;
         _progressService = progressService;
         _pluginService = pluginService;
-        _watcherService = watcherService;
         _loggerService = loggerService;
         _appViewModel = appViewModel;
 
@@ -440,8 +439,6 @@ public partial class AssetBrowserViewModel : ToolViewModel
     [RelayCommand(CanExecute = nameof(CanAddToProject))]
     private async Task AddSelectedAsync()
     {
-        _watcherService.IsSuspended = true;
-
         // get all selected files
         List<IGameFile> filesToAdd = new();
         foreach (var o in RightItems.Where(x => x.IsChecked))
@@ -523,8 +520,6 @@ public partial class AssetBrowserViewModel : ToolViewModel
         }
 
         _loggerService.Success($"Added {finalFilesToAdd.Count} files to the project.");
-
-        _watcherService.IsSuspended = false;
     }
     private void GetFilesRecursive(RedFileSystemModel directory, List<IGameFile> files)
     {
@@ -569,12 +564,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         switch (RightSelectedItem)
         {
             case RedFileViewModel fileVm:
-                _watcherService.IsSuspended = true;
-
                 await _gameController.GetController().AddFileToModModal(fileVm.GetGameFile());
-
-                _watcherService.IsSuspended = false;
-                _watcherService.QueueRefresh();
                 break;
             case RedDirectoryViewModel dirVm:
                 MoveToFolder(dirVm);
@@ -651,7 +641,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     /// Navigates the Asset Browser to the existing file.
     /// </summary>
     /// <param name="file"></param>
-    public void ShowFile(FileModel file)
+    public void ShowFile(FileSystemModel file)
     {
         _archiveManager.Archives
             .Connect()

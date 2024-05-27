@@ -14,7 +14,6 @@ using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
-using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Modkit.RED4.Opus;
@@ -26,7 +25,6 @@ public partial class ExportViewModel : AbstractExportViewModel
 {
     private readonly AppViewModel _appViewModel;
     private readonly ILoggerService _loggerService;
-    private readonly IWatcherService _watcherService;
     private readonly IProjectManager _projectManager;
     private readonly IProgressService<double> _progressService;
     private readonly ImportExportHelper _importExportHelper;
@@ -37,14 +35,12 @@ public partial class ExportViewModel : AbstractExportViewModel
         INotificationService notificationService,
         ISettingsManager settingsManager,
         ILoggerService loggerService,
-        IWatcherService watcherService,
         IProjectManager projectManager,
         IProgressService<double> progressService,
         ImportExportHelper importExportHelper) : base(archiveManager, notificationService, settingsManager, "Export Tool", "Export Tool")
     {
         _appViewModel = appViewModel;
         _loggerService = loggerService;
-        _watcherService = watcherService;
         _projectManager = projectManager;
         _progressService = progressService;
         _importExportHelper = importExportHelper;
@@ -99,7 +95,6 @@ public partial class ExportViewModel : AbstractExportViewModel
         }
 
         IsProcessing = true;
-        _watcherService.IsSuspended = true;
         var progress = 0;
         _progressService.Report(0.1);
 
@@ -132,7 +127,6 @@ public partial class ExportViewModel : AbstractExportViewModel
 
         IsProcessing = false;
 
-        _watcherService.IsSuspended = false;
         _progressService.IsIndeterminate = false;
 
         if (sucessful > 0)

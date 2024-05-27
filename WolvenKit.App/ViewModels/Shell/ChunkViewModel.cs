@@ -3372,9 +3372,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         ArgumentNullException.ThrowIfNull(Tab);
-        var currentfile = FileModel.Create(Tab.Parent.FilePath, _appViewModel.ActiveProject.NotNull());
-
-        _appViewModel.SaveFileCommand.SafeExecute(currentfile);
+        _appViewModel.SaveFileCommand.SafeExecute();
 
         await Refresh();
 
