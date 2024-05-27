@@ -262,6 +262,52 @@ internal class NodeProperties
                 details["Text"] = progressBarCasted?.Text?.Value!;
                 details["Type"] = progressBarCasted?.Type.ToEnumString()!;
             }
+            if (uiManagerNodeCasted?.Type?.Chunk is questTutorial_NodeType tutorialCasted)
+            {
+                details["Sub Manager"] = GetNameFromClass(tutorialCasted?.Subtype?.Chunk);
+
+                if (tutorialCasted?.Subtype?.Chunk is questShowPopup_NodeSubType showPopupNodeCasted)
+                {
+                    details["Close At Input"] = showPopupNodeCasted?.CloseAtInput == true ? "True" : "False";
+                    details["Close Current Popup"] = showPopupNodeCasted?.CloseCurrentPopup == true ? "True" : "False";
+                    details["Hide In Menu"] = showPopupNodeCasted?.HideInMenu == true ? "True" : "False";
+                    details["Ignore Disabled Tutorials"] = showPopupNodeCasted?.IgnoreDisabledTutorials == true ? "True" : "False";
+                    details["Lock Player Movement"] = showPopupNodeCasted?.LockPlayerMovement == true ? "True" : "False";
+                    details["Margin"] = ParseMargin(showPopupNodeCasted?.Margin);
+                    details["Open"] = showPopupNodeCasted?.Open == true ? "True" : "False";
+                    details.AddRange(ParseJournalPath(showPopupNodeCasted?.Path?.Chunk));
+                    details["Pause Game"] = showPopupNodeCasted?.PauseGame == true ? "True" : "False";
+                    details["Position"] = showPopupNodeCasted?.Position.ToEnumString()!;
+                    details["Screen Mode"] = showPopupNodeCasted?.ScreenMode.ToEnumString()!;
+                    details["Video"] = showPopupNodeCasted?.Video.DepotPath.GetResolvedText()!;
+                    details["Video Type"] = showPopupNodeCasted?.VideoType.ToEnumString()!;
+                }
+                if (tutorialCasted?.Subtype?.Chunk is questShowBracket_NodeSubType showBracketNodeCasted)
+                {
+                    details["Anchor"] = showBracketNodeCasted?.Anchor.ToEnumString()!;
+                    details["Bracket ID"] = showBracketNodeCasted?.BracketID.ToString()!;
+                    details["Bracket Type"] = showBracketNodeCasted?.BracketType.ToEnumString()!;
+                    details["Ignore Disabled Tutorials"] = showBracketNodeCasted?.IgnoreDisabledTutorials == true ? "True" : "False";
+                    details["Offset"] = showBracketNodeCasted?.Offset.ToString()!;
+                    details["Size"] = showBracketNodeCasted?.Size.ToString()!;
+                    details["Visible"] = showBracketNodeCasted?.Visible == true ? "True" : "False";
+                    details["Visible On UI Layer"] = showBracketNodeCasted?.VisibleOnUILayer.ToEnumString()!;
+                }
+                if (tutorialCasted?.Subtype?.Chunk is questShowHighlight_NodeSubType showHighlightNodeCasted)
+                {
+                    details["Enable"] = showHighlightNodeCasted?.Enable == true ? "True" : "False";
+                    details["Entity Reference"] = ParseGameEntityReference(showHighlightNodeCasted?.EntityReference);
+                }
+                if (tutorialCasted?.Subtype?.Chunk is questShowOverlay_NodeSubType showOverlayNodeCasted)
+                {
+                    details["Hide On Input"] = showOverlayNodeCasted?.HideOnInput == true ? "True" : "False";
+                    details["Library Item Name"] = showOverlayNodeCasted?.LibraryItemName.ToString()!;
+                    details["Lock Player Movement"] = showOverlayNodeCasted?.LockPlayerMovement == true ? "True" : "False";
+                    details["Overlay Library"] = showOverlayNodeCasted?.OverlayLibrary.DepotPath.GetResolvedText()!;
+                    details["Pause Game"] = showOverlayNodeCasted?.PauseGame == true ? "True" : "False";
+                    details["Visible"] = showOverlayNodeCasted?.Visible == true ? "True" : "False";
+                }
+            }
         }
         else if (node is questTeleportPuppetNodeDefinition teleportNodeCasted)
         {
@@ -866,6 +912,19 @@ internal class NodeProperties
         details[possiblePrefix + "Path File Entry Index"] = gameJournalPath?.FileEntryIndex.ToString()!;
         details[possiblePrefix + "Path Real Path"] = gameJournalPath?.RealPath.ToString()!;
         return details;
+    }
+
+    private static string ParseMargin(inkMargin? margin)
+    {
+        string str = "-";
+        if (margin != null)
+        {
+            str = "Left: " + margin.Left + ", ";
+            str += "Top: " + margin.Top + ", ";
+            str += "Right: " + margin.Right + ", ";
+            str += "Bottom: " + margin.Bottom;
+        }
+        return str;
     }
 
     private static string FormatNumber(CUInt32? number, bool three = false)
