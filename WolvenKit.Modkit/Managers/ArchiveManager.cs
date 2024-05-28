@@ -8,7 +8,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Kernel;
 using WolvenKit.Common;
-using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
@@ -17,34 +16,20 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.CR2W.Archive
 {
-    public class ArchiveManager : ObservableObject, IArchiveManager
+    public partial class ArchiveManager : ObservableObject, IArchiveManager
     {
         #region Fields
 
-        public const string Version = "1.1";
-
         protected readonly IHashService _hashService;
-
         protected readonly Red4ParserService _wolvenkitFileService;
-
         protected readonly ILoggerService _logger;
 
-        private bool _isManagerLoading;
-        private bool _isManagerLoaded;
+        [ObservableProperty] private bool _isManagerLoading;
+        [ObservableProperty] private bool _isManagerLoaded;
 
         private static readonly List<string> s_loadOrder = new() { "memoryresident", "ep1", "basegame", "audio", "lang" };
 
         #endregion Fields
-
-        #region Properties
-
-        public RedFileSystemModel? RootNode { get; set; }
-
-        public List<RedFileSystemModel> ModRoots { get; set; } = new();
-
-        public IEnumerable<string>? Extensions { get; set; }
-
-        #endregion Properties
 
         #region Constructors
 
@@ -59,57 +44,13 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         #region properties
 
-        public bool IsManagerLoading
-        {
-            get => _isManagerLoading;
-            set => SetProperty(ref _isManagerLoading, value);
-        }
-
-        public bool IsManagerLoaded
-        {
-            get => _isManagerLoaded;
-            set => SetProperty(ref _isManagerLoaded, value);
-        }
-
         public SourceCache<IGameArchive, string> Archives { get; set; } = new(x => x.ArchiveAbsolutePath);
-
-        public IObservable<IChangeSet<IGameArchive, string>> ConnectArchives() => Archives.Connect();
-
-        public EArchiveType TypeName => EArchiveType.Archive;
 
         public IGameArchive? ProjectArchive { get; set; }
 
         #endregion properties
 
         #region methods
-
-        //[ProtoAfterDeserialization]
-        //public void AfterDeserializationCallback()
-        //{
-        //    foreach (var archive in Archives.Values)
-        //    {
-        //        var fileEntries = (archive as Archive).Index.FileEntries.Values;
-        //        foreach (var file in fileEntries)
-        //        {
-        //            file.Archive = archive;
-        //            archive.Files.Add(file.Key, file);
-        //            file.SetHashService(_hashService);
-        //        }
-        //        var deps = (archive as Archive).Index.Dependencies;
-        //        foreach (var d in deps)
-        //        {
-        //            d.SetHashService(_hashService);
-        //        }
-        //    }
-
-        //    Items.Edit(innerList =>
-        //    {
-        //        innerList.Clear();
-        //        innerList.AddOrUpdate(Archives.Values.SelectMany(_ => _.Files));
-        //    });
-
-        //    RebuildRootNode();
-        //}
 
         #region sorting
 
@@ -529,13 +470,6 @@ namespace WolvenKit.RED4.CR2W.Archive
 
             throw new NotSupportedException(nameof(searchScope));
         }
-
-        /// <summary>
-        /// Checks if a file with the given hash exists in the archiveManager
-        /// </summary>
-        /// <param name="hash"></param>
-        /// <returns></returns>
-        public bool ContainsFile(ulong hash) => Lookup(hash).HasValue;
 
         /// <inheritdoc />
         public Optional<IGameFile> Lookup(ulong hash) => Lookup(hash, ArchiveManagerScope.Everywhere);

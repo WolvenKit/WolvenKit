@@ -1,24 +1,14 @@
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using DynamicData;
 using DynamicData.Kernel;
-using WolvenKit.Common.Model;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common
 {
-    // Target scope for archive manager
-    public enum ArchiveManagerScope
-    {
-        Basegame,
-        Mods,
-        Everywhere
-    }
-    
     /// <summary>
     /// Top-level game bundle/archive manager
     /// </summary>
@@ -28,14 +18,7 @@ namespace WolvenKit.Common
 
         SourceCache<IGameArchive, string> Archives { get; set; }
 
-        RedFileSystemModel? RootNode { get; set; }
-
-        public List<RedFileSystemModel> ModRoots { get; }
-
         IGameArchive? ProjectArchive { get; set; }
-
-        IEnumerable<string>? Extensions { get; set; }
-        EArchiveType TypeName { get; }
 
         public bool IsManagerLoading { get; }
 
@@ -51,7 +34,7 @@ namespace WolvenKit.Common
 
         public Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles();
         public Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles(ArchiveManagerScope searchScope);
-        void LoadFromFolder(DirectoryInfo archivedir);
+        void LoadFromFolder(DirectoryInfo archivedir); // TODO
 
         /// <summary>
         /// Checks if a file with the given hash exists in the ArchiveManager's current scope.

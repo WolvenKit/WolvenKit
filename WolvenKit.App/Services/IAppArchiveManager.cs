@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using DynamicData;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
@@ -10,6 +11,10 @@ public interface IAppArchiveManager : IArchiveManager
     #region Properties
 
     bool IsModBrowserActive { get; set; }
+
+    RedFileSystemModel? RootNode { get; set; }
+
+    public List<RedFileSystemModel> ModRoots { get; }
 
     #endregion
 

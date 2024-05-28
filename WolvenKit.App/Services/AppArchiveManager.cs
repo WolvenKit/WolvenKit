@@ -30,9 +30,9 @@ public class AppArchiveManager : ArchiveManager, IAppArchiveManager
 
     public bool IsModBrowserActive { get; set; }
 
-    public IObservable<IChangeSet<RedFileSystemModel>> ConnectGameRoot() => _rootCache.Connect();
+    public RedFileSystemModel? RootNode { get; set; }
 
-    public IObservable<IChangeSet<RedFileSystemModel>> ConnectModRoot() => _modCache.Connect();
+    public List<RedFileSystemModel> ModRoots { get; set; } = new();
 
     #endregion
 
@@ -41,6 +41,12 @@ public class AppArchiveManager : ArchiveManager, IAppArchiveManager
         _rootCache = new SourceList<RedFileSystemModel>();
         _modCache = new SourceList<RedFileSystemModel>();
     }
+
+    #region Methods
+
+    public IObservable<IChangeSet<RedFileSystemModel>> ConnectGameRoot() => _rootCache.Connect();
+
+    public IObservable<IChangeSet<RedFileSystemModel>> ConnectModRoot() => _modCache.Connect();
 
     public override void LoadGameArchives(FileInfo executable)
     {
@@ -64,7 +70,7 @@ public class AppArchiveManager : ArchiveManager, IAppArchiveManager
 
     private void RebuildGameRoot(IHashService hashService)
     {
-        RootNode = new RedFileSystemModel(TypeName.ToString());
+        RootNode = new RedFileSystemModel(EArchiveType.Archive.ToString());
 
         var allFiles = GetGameArchives()
             .SelectMany(x => x.Files)
@@ -169,4 +175,6 @@ public class AppArchiveManager : ArchiveManager, IAppArchiveManager
 
     public override Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles() => 
         GetGroupedFiles(IsModBrowserActive ? ArchiveManagerScope.Mods : ArchiveManagerScope.Everywhere);
+
+    #endregion Methods
 }
