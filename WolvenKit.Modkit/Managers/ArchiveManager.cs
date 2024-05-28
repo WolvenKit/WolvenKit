@@ -141,7 +141,9 @@ namespace WolvenKit.RED4.CR2W.Archive
             var cnt = 0;
 
             var baseDir = Path.Combine(di.Parent.Parent.FullName, "archive", "pc", "content");
-            var baseFiles = Directory.GetFiles(baseDir, "*.archive").ToList();
+            var baseFiles = Directory.GetFiles(baseDir, "*.archive")
+                .Where(CheckFileName)
+                .ToList();
             baseFiles.Sort(CompareArchives);
 
             var totalCnt = baseFiles.Count;
@@ -149,7 +151,9 @@ namespace WolvenKit.RED4.CR2W.Archive
             var ep1Dir = Path.Combine(di.Parent.Parent.FullName, "archive", "pc", "ep1");
             if (Directory.Exists(ep1Dir))
             {
-                var ep1Files = Directory.GetFiles(ep1Dir, "*.archive").ToList();
+                var ep1Files = Directory.GetFiles(ep1Dir, "*.archive")
+                    .Where(CheckFileName)
+                    .ToList();
                 ep1Files.Sort(CompareArchives);
 
                 totalCnt += ep1Files.Count;
@@ -181,6 +185,25 @@ namespace WolvenKit.RED4.CR2W.Archive
 
             IsManagerLoading = false;
             IsManagerLoaded = true;
+        }
+
+        private bool CheckFileName(string filePath)
+        {
+            var fileName = Path.GetFileName(filePath);
+            var index = fileName.IndexOf('_');
+
+            var valid = false;
+            if (index != -1)
+            {
+                valid = s_loadOrder.Contains(fileName[..index]);
+            }
+
+            if (!valid)
+            {
+                _logger.Warning($"Non base archive in base folder found. Skip loading: {filePath}");
+            }
+
+            return valid;
         }
 
         /// <summary>
