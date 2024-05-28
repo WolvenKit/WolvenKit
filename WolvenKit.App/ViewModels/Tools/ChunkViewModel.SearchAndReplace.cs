@@ -329,21 +329,39 @@ public partial class ChunkViewModel : ObservableObject
                 }
 
                 return wasChanged;
+
+
+            case entMeshComponent meshComponent:
+            {
+                if (!SearchAndReplaceInReference(search, replace, searchMode, meshComponent.Mesh, out var newMesh)
+                    || newMesh is not CResourceAsyncReference<CMesh> meshRef)
+                {
+                    return false;
+                }
+
+                meshComponent.Mesh = meshRef;
+                return true;
+            }
             case RedBaseClass irc:
             {
                 foreach (var propName in s_replacementPropertyNames)
                 {
                     var prop = RedReflection.GetPropertyByRedName(irc.GetType(), propName);
-
-                    if (prop?.RedName is null
-                        || irc.GetProperty(prop.RedName.NotNull()) is not IRedType propValue
-                        || propValue.ToString() is null or "None" or "")
+                    if (prop?.RedName is null || irc.GetProperty(prop.RedName.NotNull()) is not IRedType propValue
+                                              || propValue.ToString() is null or "None" or "")
                     {
                         continue;
                     }
 
                     var newValue = propValue.ToString()?.Replace(search, replace, searchMode);
-                   
+
+                    if (propValue is IRedRef { DepotPath: var depotPath } reference
+                        && SearchAndReplaceInReference(search, replace, searchMode, reference, out var newRef2)
+                        && newRef2 is IRedRef { DepotPath: var depotPath2 } rr2)
+                    {
+                        newValue = depotPath2.GetResolvedText() ?? "";
+                        // TODO: This might require more attention
+                    }
 
                     if (propValue.ToString() == newValue)
                     {
@@ -367,7 +385,7 @@ public partial class ChunkViewModel : ObservableObject
                         wasChanged = true;
                         continue;
                     }
-                    
+
                     if (!propInfo.GetType().IsAssignableTo(prop.GetType()))
                     {
                         if (!propInfo.GetType().Name.StartsWith("Runtime"))

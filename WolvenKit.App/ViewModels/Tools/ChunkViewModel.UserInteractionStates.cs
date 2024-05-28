@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
@@ -118,13 +119,15 @@ public partial class ChunkViewModel
             return;
         }
 
-        if ((IsArray && Properties.Count == 0) // empty array
+        if ((IsArray && TVProperties.Count == 0) // empty array
+            || (TVProperties.Count == 1 && TVProperties.FirstOrDefault() is { IsArray: true, TVProperties.Count: 0 }) // empty array
             || (ResolvedData is CBool boolValue && boolValue == false) //false boolean
-            || (ResolvedData is CName cname && (cname.GetResolvedText() ?? "").ToLower().Replace("none", "") == "") // empty cname
+            || (ResolvedData is CName cname && cname == CName.Empty) // empty cname
            )
         {
             IsHiddenByNoobFilter = true;
         }
+
     }
 
     private static readonly List<string> s_alwaysHiddenFields = new()

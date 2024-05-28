@@ -598,6 +598,7 @@ public partial class ChunkViewModel
         .Concat<string>([
             "depotPath",
             "meshAppearance",
+            "mesh",
         ]).ToArray();
 
 }
