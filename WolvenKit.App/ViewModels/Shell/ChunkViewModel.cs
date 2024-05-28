@@ -1278,23 +1278,45 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         foreach (var component in arr)
         {
-            if (component is entMeshComponent c1)
+            if (component is entMeshComponent mesh &&
+                mesh.LODMode == Enums.entMeshComponentLODMode.Appearance &&
+                mesh.Mesh.DepotPath != ResourcePath.Empty)
             {
                 list.Add(new entVisualControllerDependency()
                 {
-                    AppearanceName = c1.MeshAppearance,
-                    ComponentName = c1.Name,
-                    Mesh = c1.Mesh
+                    AppearanceName = mesh.MeshAppearance,
+                    ComponentName = mesh.Name,
+                    Mesh = mesh.Mesh
                 });
             }
 
-            if (component is entSkinnedMeshComponent c2)
+            if (component is entSkinnedMeshComponent skinnedMesh &&
+                skinnedMesh.LODMode == Enums.entMeshComponentLODMode.Appearance &&
+                skinnedMesh.Mesh.DepotPath != ResourcePath.Empty)
             {
                 list.Add(new entVisualControllerDependency()
                 {
-                    AppearanceName = c2.MeshAppearance,
-                    ComponentName = c2.Name,
-                    Mesh = c2.Mesh
+                    AppearanceName = skinnedMesh.MeshAppearance,
+                    ComponentName = skinnedMesh.Name,
+                    Mesh = skinnedMesh.Mesh
+                });
+            }
+
+            if (component is entSkinnedClothComponent skinnedCloth &&
+                skinnedCloth.LODMode == Enums.entMeshComponentLODMode.Appearance)
+            {
+                list.Add(new entVisualControllerDependency()
+                {
+                    AppearanceName = skinnedCloth.MeshAppearance,
+                    ComponentName = skinnedCloth.Name,
+                    Mesh = skinnedCloth.GraphicsMesh
+                });
+
+                list.Add(new entVisualControllerDependency()
+                {
+                    AppearanceName = "default",
+                    ComponentName = skinnedCloth.Name,
+                    Mesh = skinnedCloth.PhysicalMesh
                 });
             }
 
@@ -3372,9 +3394,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         ArgumentNullException.ThrowIfNull(Tab);
-        var currentfile = FileModel.Create(Tab.Parent.FilePath, _appViewModel.ActiveProject.NotNull());
-
-        _appViewModel.SaveFileCommand.SafeExecute(currentfile);
+        _appViewModel.SaveFileCommand.SafeExecute();
 
         await Refresh();
 

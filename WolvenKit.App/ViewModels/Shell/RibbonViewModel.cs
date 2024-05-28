@@ -13,13 +13,11 @@ namespace WolvenKit.App.ViewModels.Shell;
 
 public partial class RibbonViewModel : ObservableObject
 {
-    private readonly IWatcherService _watcherService;
     private readonly ISettingsManager _settingsManager;
     private readonly ILoggerService _loggerService;
     private readonly IGameControllerFactory _gameControllerFactory;
 
     public RibbonViewModel(
-        IWatcherService watcherService,
         ISettingsManager settingsManager,
         ILoggerService loggerService,
         IGameControllerFactory gameControllerFactory,
@@ -29,7 +27,6 @@ public partial class RibbonViewModel : ObservableObject
         _settingsManager = settingsManager;
         _loggerService = loggerService;
         _gameControllerFactory = gameControllerFactory;
-        _watcherService = watcherService;
 
         MainViewModel = appViewModel;
         MainViewModel.PropertyChanged += MainViewModel_OnPropertyChanged;
@@ -88,9 +85,7 @@ public partial class RibbonViewModel : ObservableObject
 
         if (_settingsManager.LaunchProfiles.TryGetValue(LaunchProfileText, out var launchProfile))
         {
-            _watcherService.IsSuspended = true;
             await _gameControllerFactory.GetController().LaunchProject(launchProfile);
-            _watcherService.IsSuspended = false;
         }
         else
         {

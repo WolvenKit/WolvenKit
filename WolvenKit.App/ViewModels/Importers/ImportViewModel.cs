@@ -32,7 +32,6 @@ public partial class ImportViewModel : AbstractImportViewModel
 {
     private readonly AppViewModel _appViewModel;
     private readonly ILoggerService _loggerService;
-    private readonly IWatcherService _watcherService;
     private readonly IProjectManager _projectManager;
     private readonly IProgressService<double> _progressService;
     private readonly IGameControllerFactory _gameController;
@@ -45,7 +44,6 @@ public partial class ImportViewModel : AbstractImportViewModel
         INotificationService notificationService, 
         ISettingsManager settingsManager,
         ILoggerService loggerService,
-        IWatcherService watcherService,
         IProjectManager projectManager,
         IProgressService<double> progressService,
         IGameControllerFactory gameController,
@@ -54,7 +52,6 @@ public partial class ImportViewModel : AbstractImportViewModel
     {
         _appViewModel = appViewModel;
         _loggerService = loggerService;
-        _watcherService = watcherService;
         _projectManager = projectManager;
         _progressService = progressService;
         _gameController = gameController;
@@ -143,7 +140,6 @@ public partial class ImportViewModel : AbstractImportViewModel
         }
 
         IsProcessing = true;
-        _watcherService.IsSuspended = true;
         var progress = 0;
         _progressService.Report(0.1);
 
@@ -183,7 +179,6 @@ public partial class ImportViewModel : AbstractImportViewModel
 
         IsProcessing = false;
 
-        _watcherService.IsSuspended = false;
         _progressService.IsIndeterminate = false;
 
         if (sucessful > 0)

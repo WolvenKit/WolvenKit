@@ -41,27 +41,21 @@ public partial class ProjectManager : ObservableObject, IProjectManager
 
     #region properties
 
-    public event EventHandler<ActiveProjectChangedEventArgs>? ActiveProjectChanged;
-
     [ObservableProperty]
     private bool _isProjectLoaded;
 
     [ObservableProperty]
     private Cp77Project? _activeProject;
 
-    partial void OnActiveProjectChanged(Cp77Project? value)
+    partial void OnActiveProjectChanging(Cp77Project? value)
     {
-        if (value is not null)
+        IsProjectLoaded = false;
+        if (ActiveProject == null)
         {
-            if (IsProjectLoaded)
-            {
-                Save();
-            }
-
-            ActiveProjectChangedEventArgs args = new(value);
-            ActiveProjectChanged?.Invoke(this, args);
+            return;
         }
-       
+
+        Save();
     }
 
     #endregion
@@ -76,12 +70,6 @@ public partial class ProjectManager : ObservableObject, IProjectManager
 
     public async Task<Cp77Project?> LoadAsync(string location)
     {
-        if (IsProjectLoaded)
-        {
-            await SaveAsync();
-        }
-
-        IsProjectLoaded = false;
         await ReadFromLocationAsync(location).ContinueWith(x =>
         {
             if (x.IsCompletedSuccessfully)
@@ -315,11 +303,4 @@ public partial class ProjectManager : ObservableObject, IProjectManager
     }
 
     #endregion
-}
-
-public class ActiveProjectChangedEventArgs : EventArgs
-{
-    public Cp77Project Project { get; set; }
-
-    public ActiveProjectChangedEventArgs(Cp77Project project) => Project = project;
 }

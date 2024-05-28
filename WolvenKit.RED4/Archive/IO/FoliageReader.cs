@@ -1,4 +1,5 @@
-﻿using WolvenKit.RED4.Archive.Buffer;
+﻿using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Archive.IO;
@@ -28,7 +29,7 @@ public class FoliageReader : IBufferReader
         {
             data.Populations.Add(new Foliage_Class1
             {
-                Unk1 = new Vector3
+                Position = new Vector3
                 {
                     X = reader.ReadSingle(), 
                     Y = reader.ReadSingle(), 
@@ -39,15 +40,17 @@ public class FoliageReader : IBufferReader
 
         for (var i = 0; i < resource.PopulationCount; i++)
         {
-            data.Populations[i].Unk2 = reader.ReadSingle();
+            data.Populations[i].Scale = reader.ReadSingle();
         }
 
         for (var i = 0; i < resource.PopulationCount; i++)
         {
-            data.Populations[i].Unk3 = new Foliage_Class2
+            data.Populations[i].Rotation = new Vector4
             {
-                Unk1 = reader.ReadSingle(), 
-                Unk2 = reader.ReadSingle()
+                X = (float)reader.ReadHalf(), 
+                Y = (float)reader.ReadHalf(),
+                Z = (float)reader.ReadHalf(),
+                W = (float)reader.ReadHalf()
             };
         }
 

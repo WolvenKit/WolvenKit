@@ -19,7 +19,6 @@ public class DocumentViewmodelFactory : IDocumentViewmodelFactory
     private readonly ILoggerService _loggerService;
     private readonly IOptions<Globals> _globals;
     private readonly Red4ParserService _parserService;
-    private readonly IWatcherService _watcherService;
     private readonly IArchiveManager _archiveManager;
     private readonly AppScriptService _scriptService;
     private readonly IHookService _hookService;
@@ -35,7 +34,6 @@ public class DocumentViewmodelFactory : IDocumentViewmodelFactory
         ILoggerService loggerService,
         IOptions<Globals> globals,
         Red4ParserService parserService,
-        IWatcherService watcherService,
         IArchiveManager archiveManager,
         AppScriptService scriptService,
         IHookService hookService,
@@ -50,7 +48,6 @@ public class DocumentViewmodelFactory : IDocumentViewmodelFactory
         _loggerService = loggerService;
         _globals = globals;
         _parserService = parserService;
-        _watcherService = watcherService;
         _archiveManager = archiveManager;
         _scriptService = scriptService;
         _hookService = hookService;
@@ -61,7 +58,7 @@ public class DocumentViewmodelFactory : IDocumentViewmodelFactory
 
     public RedDocumentViewModel RedDocumentViewModel(CR2WFile file, string path, AppViewModel appViewModel, bool isReadOnly = false)
         => new(file, path, appViewModel, _tabViewmodelFactory, _chunkViewmodelFactory, _projectManager, _loggerService, _globals,
-            _parserService, _watcherService, _archiveManager, _hookService, _nodeWrapperFactory, _hashService,
+            _parserService, _archiveManager, _hookService, _nodeWrapperFactory, _hashService,
             _settingsManager.IsNoobFilterDefaultEnabled(), isReadOnly);
 
     public WScriptDocumentViewModel WScriptDocumentViewModel(string path) => new(path, _scriptService);

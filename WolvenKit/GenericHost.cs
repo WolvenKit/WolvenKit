@@ -83,7 +83,6 @@ namespace WolvenKit
                     services.AddTransient<ILocKeyService, LocKeyServiceExt>();                  // can this be transient?
                     services.AddSingleton<IRecentlyUsedItemsService, RecentlyUsedItemsService>();
                     services.AddSingleton<IProjectManager, ProjectManager>();
-                    services.AddSingleton<IWatcherService, WatcherService>();
                     services.AddTransient<GeometryCacheService>();
                     services.AddTransient<MeshTools>();
                     services.AddTransient<IModTools, ModTools>();

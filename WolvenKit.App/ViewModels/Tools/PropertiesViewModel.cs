@@ -103,7 +103,7 @@ public partial class PropertiesViewModel : ToolViewModel
     
     [ObservableProperty] private int _selectedIndex;
 
-    [ObservableProperty] private FileModel? _pE_SelectedItem;
+    [ObservableProperty] private FileSystemModel? _pE_SelectedItem;
 
     /// <summary>
     /// Selected Item from Asset Browser If Available.
@@ -146,7 +146,7 @@ public partial class PropertiesViewModel : ToolViewModel
     }
 
 
-    private bool CanOpenFile(FileModel model) => model != null;
+    private bool CanOpenFile(FileSystemModel model) => model != null;
 
     /// <summary>
     /// Called from Assetbrowser
@@ -213,7 +213,7 @@ public partial class PropertiesViewModel : ToolViewModel
     /// </summary>
     /// <param name="model"></param>
     /// <returns></returns>
-    public void ExecuteSelectFile(FileModel model)
+    public void ExecuteSelectFile(FileSystemModel model)
     {
         if (model == null)
         {

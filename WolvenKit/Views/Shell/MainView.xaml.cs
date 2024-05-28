@@ -12,6 +12,7 @@ using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common.Services;
 using WolvenKit.Views.Dialogs.Windows;
 
@@ -160,14 +161,15 @@ namespace WolvenKit.Views.Shell
             }
 
             dockingAdapter.SaveLayout();
+            var projectExplorer = Locator.Current.GetService<ProjectExplorerViewModel>();
+            if (projectExplorer is { } pe)
+            {
+                pe.StopWatcher();
+            }
             var projectManager = Locator.Current.GetService<IProjectManager>();
             if (projectManager is ProjectManager pm)
             {
                 await pm.SaveAsync();
-            }
-            if (Locator.Current.GetService<IWatcherService>() is WatcherService ws)
-            {
-                ws.ForceStopTimer();
             }
             var hashService = Locator.Current.GetService<IHashService>();
             if (hashService is HashServiceExt hashServiceExt)
