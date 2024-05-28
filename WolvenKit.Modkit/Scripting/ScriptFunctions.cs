@@ -40,6 +40,7 @@ public class ScriptFunctions
     /// <returns></returns>
     public virtual IEnumerable GetArchiveFiles()
     {
+        // NOTE: This gets all files from all archives (mod and game), make sure to only load the archives you need here!
         foreach (var archive in _archiveManager.Archives.Items)
         {
             foreach (var (key, file) in archive.Files)
@@ -156,6 +157,7 @@ public class ScriptFunctions
             return null;
         }
 
+        // NOTE: This gets all files from all archives (mod and game), make sure to only load the archives you need here!
         foreach (var archive in _archiveManager.Archives.Items)
         {
             if (archive.Files.TryGetValue(hash, out var fileEntry))
