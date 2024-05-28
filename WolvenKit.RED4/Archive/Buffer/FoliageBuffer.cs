@@ -12,15 +12,9 @@ public class FoliageBuffer : IParseableBuffer
 
 public class Foliage_Class1 : IRedClass
 {
-    public Vector3 Unk1 { get; set; }
-    public CFloat Unk2 { get; set; }
-    public Foliage_Class2 Unk3 { get; set; }
-}
-
-public class Foliage_Class2 : IRedClass
-{
-    public CFloat Unk1 { get; set; }
-    public CFloat Unk2 { get; set; }
+    public Vector3 Position { get; set; }
+    public CFloat Scale { get; set; }
+    public Vector4 Rotation { get; set; }
 }
 
 public class Foliage_BucketClass : IRedClass
