@@ -25,6 +25,7 @@ public class ExportableItemViewModel : ImportExportItemViewModel
         {
             ECookedFileFormat.opusinfo => new OpusExportArgs(),
             ECookedFileFormat.mesh => new MeshExportArgs(),
+            ECookedFileFormat.w2mesh => new MeshExportArgs(),
             ECookedFileFormat.xbm => new XbmExportArgs(),
             ECookedFileFormat.wem => new WemExportArgs(),
             ECookedFileFormat.csv => new CommonExportArgs(),
