@@ -1,10 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
-using WolvenKit.Core.Extensions;
-using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 
@@ -13,7 +10,6 @@ namespace WolvenKit.Common.Services
     public partial class LocKeyService : ObservableObject, ILocKeyService
     {
         private readonly Dictionary<EGameLanguage, Dictionary<ulong, localizationPersistenceOnScreenEntry>> _primaryKeys = new();
-        private readonly Dictionary<EGameLanguage, Dictionary<string, localizationPersistenceOnScreenEntry>> _secondaryKeys = new();
 
         private readonly Red4ParserService _parser;
         private readonly IArchiveManager _archive;
@@ -34,7 +30,6 @@ namespace WolvenKit.Common.Services
             var gameLanguageCode = Language.ToString().Replace('_', '-');
 
             _primaryKeys[language] = new Dictionary<ulong, localizationPersistenceOnScreenEntry>();
-            _secondaryKeys[language] = new Dictionary<string, localizationPersistenceOnScreenEntry>();
 
             var success = InternalLoadLanguage($@"base\localization\{gameLanguageCode}\onscreens\onscreens_final.json");
             InternalLoadLanguage($@"ep1\localization\{gameLanguageCode}\onscreens\onscreens_final.json");
@@ -58,7 +53,6 @@ namespace WolvenKit.Common.Services
                             foreach (var entry in os.Entries)
                             {
                                 _primaryKeys[language][entry.PrimaryKey] = entry;
-                                _secondaryKeys[language][entry.SecondaryKey] = entry;
                             }
 
                             return true;
@@ -77,7 +71,7 @@ namespace WolvenKit.Common.Services
             {
                 return new List<string>();
             }
-            return _secondaryKeys[Language].Keys.ToList();
+            return _primaryKeys[Language].Values.Select(x => x.SecondaryKey.GetString()).ToList();
         }
 
         public IEnumerable<localizationPersistenceOnScreenEntry> GetEntries()
@@ -86,7 +80,7 @@ namespace WolvenKit.Common.Services
             {
                 return new List<localizationPersistenceOnScreenEntry>();
             }
-            return _secondaryKeys[Language].Values;
+            return _primaryKeys[Language].Values;
         }
 
         public localizationPersistenceOnScreenEntry? GetEntry(ulong key)
@@ -96,14 +90,7 @@ namespace WolvenKit.Common.Services
                 return null;
             }
 
-            if (_primaryKeys.TryGetValue(Language, out var outerdict))
-            {
-                if (outerdict.TryGetValue(key, out var innerdict))
-                {
-                    return innerdict;
-                }
-            }
-            return null;
+            return _primaryKeys[Language].TryGetValue(key, out var value) ? value : null;
         }
 
         public localizationPersistenceOnScreenEntry? GetEntry(string key)
@@ -113,14 +100,7 @@ namespace WolvenKit.Common.Services
                 return null;
             }
 
-            if (_secondaryKeys.TryGetValue(Language, out var outerdict))
-            {
-                if (outerdict.TryGetValue(key, out var innerdict))
-                {
-                    return innerdict;
-                }
-            }
-            return null;
+            return _primaryKeys[Language].Values.FirstOrDefault(x => x.SecondaryKey == key);
         }
 
         public string? GetFemaleVariant(ulong key) => GetEntry(key)?.FemaleVariant;
