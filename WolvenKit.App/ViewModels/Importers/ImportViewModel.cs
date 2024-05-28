@@ -40,7 +40,7 @@ public partial class ImportViewModel : AbstractImportViewModel
 
     public ImportViewModel(
         AppViewModel appViewModel,
-        IArchiveManager archiveManager, 
+        IAppArchiveManager archiveManager, 
         INotificationService notificationService, 
         ISettingsManager settingsManager,
         ILoggerService loggerService,

@@ -16,7 +16,7 @@ namespace WolvenKit.App.ViewModels.Tools;
 
 public abstract partial class ImportExportViewModel : FloatingPaneViewModel
 {
-    protected readonly IArchiveManager _archiveManager;
+    protected readonly IAppArchiveManager _archiveManager;
     protected readonly INotificationService _notificationService;
     protected readonly ISettingsManager _settingsManager;
 
@@ -25,7 +25,7 @@ public abstract partial class ImportExportViewModel : FloatingPaneViewModel
 
     protected Task? _refreshtask;
 
-    protected ImportExportViewModel(IArchiveManager archiveManager, INotificationService notificationService, ISettingsManager settingsManager, string header, string contentId) : base(header, contentId)
+    protected ImportExportViewModel(IAppArchiveManager archiveManager, INotificationService notificationService, ISettingsManager settingsManager, string header, string contentId) : base(header, contentId)
     {
         _archiveManager = archiveManager;
         _notificationService = notificationService;
