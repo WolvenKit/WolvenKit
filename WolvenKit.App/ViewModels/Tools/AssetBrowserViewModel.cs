@@ -386,11 +386,15 @@ public partial class AssetBrowserViewModel : ToolViewModel
     public void UpdateSearchInArchives()
     {
         AddFromArchiveItems.Clear();
+        
         if (RightSelectedItem is RedFileViewModel file)
         {
             var key = file.GetGameFile().Key;
-            var archives = _archiveManager.Archives.Items.Where(_ => _.Files.ContainsKey(key))
-                    .Concat(_archiveManager.ModArchives.Items.Where(_ => _.Files.ContainsKey(key)));
+            var archives = _archiveManager
+                .Archives
+                .Items
+                .Where(_ => _.Files.ContainsKey(key));
+            
             foreach (var archive in archives)
             {
                 AddFromArchiveItems.Add(archive);
@@ -916,14 +920,10 @@ public partial class AssetBrowserViewModel : ToolViewModel
                 .Select(s_refinementsIntoMatchFunctions)
                 .ToArray();
 
-        var gameFilesOrMods =
-            _archiveManager.IsModBrowserActive
-            ? _archiveManager.ModArchives
-            : _archiveManager.Archives;
-
         var filesToSearch =
-            gameFilesOrMods
+            _archiveManager.Archives
                 .Items
+                .Where(x => !_archiveManager.IsModBrowserActive || x.Source == EArchiveSource.Mod)
                 .SelectMany(x => x.Files.Values)
                 .Where(file => searchAsSequentialRefinements.All(refinement => refinement.Match(file)))
                 .GroupBy(x => x.Key)

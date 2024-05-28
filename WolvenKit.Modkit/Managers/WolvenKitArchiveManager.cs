@@ -11,6 +11,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Model
@@ -22,9 +23,6 @@ namespace WolvenKit.Common.Model
         public abstract EArchiveType TypeName { get; }
 
         public abstract SourceCache<IGameArchive, string> Archives { get; set; }
-
-        public abstract SourceCache<IGameArchive, string> ModArchives { get; set; }
-
 
         public RedFileSystemModel? RootNode { get; set; }
 
@@ -66,7 +64,7 @@ namespace WolvenKit.Common.Model
         {
             RootNode = new RedFileSystemModel(TypeName.ToString());
 
-            var allFiles = Archives.Items
+            var allFiles = GetGameArchives()
                 .SelectMany(x => x.Files)
                 .GroupBy(x => x.Key)
                 .Select(x => x.First());
@@ -106,7 +104,7 @@ namespace WolvenKit.Common.Model
         {
             ModRoots.Clear();
 
-            foreach (var archive in ModArchives.Items)
+            foreach (var archive in GetModArchives())
             {
                 ArgumentNullException.ThrowIfNull(archive.ArchiveRelativePath);
 
@@ -157,11 +155,7 @@ namespace WolvenKit.Common.Model
         /// <returns>An optional holding the matching file</returns>
         public abstract Optional<IGameFile> Lookup(ulong hash);
 
-        public abstract RedFileSystemModel? LookupDirectory(string fullpath, bool expandAll = false);
-
         public abstract Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles();
-
-        public abstract IEnumerable<FileEntry> GetFiles();
 
         public abstract void LoadFromFolder(DirectoryInfo archivedir);
 
@@ -172,5 +166,9 @@ namespace WolvenKit.Common.Model
         public abstract IObservable<IChangeSet<RedFileSystemModel>> ConnectGameRoot();
 
         public abstract IObservable<IChangeSet<RedFileSystemModel>> ConnectModRoot();
+        public IEnumerable<IGameArchive> GetModArchives() => Archives.Items.Where(x => x.Source is EArchiveSource.Mod);
+        public IEnumerable<IGameArchive> GetBaseArchives() => Archives.Items.Where(x => x.Source is EArchiveSource.Base );
+        public IEnumerable<IGameArchive> GetEp1Archives() => Archives.Items.Where(x => x.Source is EArchiveSource.EP1);
+        public IEnumerable<IGameArchive> GetGameArchives() => Archives.Items.Where(x => x.Source is EArchiveSource.EP1 or EArchiveSource.Base);
     }
 }
