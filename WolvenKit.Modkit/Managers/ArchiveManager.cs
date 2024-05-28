@@ -571,34 +571,38 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <inheritdoc />
         public override Optional<IGameFile> Lookup(ulong hash, ArchiveManagerScope searchScope)
         {
-            // first check the ep1 archives
-            foreach (var item in GetEp1Archives())
+            if (searchScope is ArchiveManagerScope.Mods or ArchiveManagerScope.Everywhere)
             {
-                if (item.Files.TryGetValue(hash, out var value))
+                // first check the mod archives
+                foreach (var item in GetModArchives())
                 {
-                    return Optional<IGameFile>.ToOptional(value);
+                    if (item.Files.TryGetValue(hash, out var value))
+                    {
+                        return Optional<IGameFile>.ToOptional(value);
+                    }
                 }
             }
 
-            // then check the base archives
-            foreach (var item in GetBaseArchives())
+            if (searchScope is ArchiveManagerScope.Basegame or ArchiveManagerScope.Everywhere)
             {
-                if (item.Files.TryGetValue(hash, out var value))
+                // then check the ep1 archives
+                foreach (var item in GetEp1Archives())
                 {
-                    return Optional<IGameFile>.ToOptional(value);
+                    if (item.Files.TryGetValue(hash, out var value))
+                    {
+                        return Optional<IGameFile>.ToOptional(value);
+                    }
+                }
+
+                // then check the base archives
+                foreach (var item in GetBaseArchives())
+                {
+                    if (item.Files.TryGetValue(hash, out var value))
+                    {
+                        return Optional<IGameFile>.ToOptional(value);
+                    }
                 }
             }
-
-            // then check the mod archives
-            foreach (var item in GetModArchives())
-            {
-                if (item.Files.TryGetValue(hash, out var value))
-                {
-                    return Optional<IGameFile>.ToOptional(value);
-                }
-            }
-
-            // TODO what about Porject and Unknown?
 
             return Optional<IGameFile>.None;
         }
