@@ -6,7 +6,6 @@ using DynamicData;
 using DynamicData.Kernel;
 using WolvenKit.Common.Model;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 
