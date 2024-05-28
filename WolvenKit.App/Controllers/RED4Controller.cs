@@ -40,7 +40,7 @@ public class RED4Controller : ObservableObject, IGameController
     private readonly ISettingsManager _settingsManager;
     private readonly IHashService _hashService;
     private readonly IModTools _modTools;
-    private readonly IArchiveManager _archiveManager;
+    private readonly IAppArchiveManager _archiveManager;
     private readonly IProgressService<double> _progressService;
     private readonly IPluginService _pluginService;
     private readonly Red4ParserService _parserService;
@@ -56,7 +56,7 @@ public class RED4Controller : ObservableObject, IGameController
         ISettingsManager settingsManager,
         IHashService hashService,
         IModTools modTools,
-        IArchiveManager gameArchiveManager,
+        IAppArchiveManager gameArchiveManager,
         IProgressService<double> progressService,
         IPluginService pluginService,
         Red4ParserService parserService)

@@ -66,7 +66,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
     private readonly INotificationService _notificationService;
     private readonly IGameControllerFactory _gameController;
-    private readonly IArchiveManager _archiveManager;
+    private readonly IAppArchiveManager _archiveManager;
     private readonly ISettingsManager _settings;
     private readonly IProjectManager _projectManager;
     private readonly IProgressService<double> _progressService;
@@ -88,7 +88,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         IProjectManager projectManager,
         INotificationService notificationService,
         IGameControllerFactory gameController,
-        IArchiveManager archiveManager,
+        IAppArchiveManager archiveManager,
         ISettingsManager settings,
         IProgressService<double> progressService,
         ILoggerService loggerService,

@@ -79,7 +79,8 @@ namespace WolvenKit
                     services.AddTransient<INotificationService, NotificationService>();
                     services.AddSingleton<IProgressService<double>, ProgressService<double>>();
                     services.AddTransient<Red4ParserService>();
-                    services.AddSingleton<IArchiveManager, ArchiveManager>();
+                    services.AddSingleton<IAppArchiveManager, AppArchiveManager>();
+                    services.AddSingleton<IArchiveManager>(provider => provider.GetService<IAppArchiveManager>());
                     services.AddTransient<ILocKeyService, LocKeyServiceExt>();                  // can this be transient?
                     services.AddSingleton<IRecentlyUsedItemsService, RecentlyUsedItemsService>();
                     services.AddSingleton<IProjectManager, ProjectManager>();

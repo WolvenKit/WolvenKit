@@ -41,17 +41,16 @@ namespace WolvenKit.Common
 
         public bool IsManagerLoaded { get; }
 
-        bool IsModBrowserActive { get; set; }
-
         #endregion Properties
 
-        public void LoadGameArchives(FileInfo executable, bool rebuildtree = true);
+        public void LoadGameArchives(FileInfo executable);
         public void LoadArchive(string path, EArchiveSource source = EArchiveSource.Unknown);
         public void LoadModArchive(string filename, bool analyzeFiles = true);
         public void LoadModsArchives(FileInfo executable, bool analyzeFiles = true);
         public void LoadAdditionalModArchives(string archiveBasePath, bool analyzeFiles = true);
 
         public Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles();
+        public Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles(ArchiveManagerScope searchScope);
         void LoadFromFolder(DirectoryInfo archivedir);
 
         /// <summary>
@@ -71,8 +70,6 @@ namespace WolvenKit.Common
         public IGameFile? GetGameFile(ResourcePath path, bool includeMods = true, bool includeProject = true);
         public CR2WFile? GetCR2WFile(ResourcePath path, bool includeMods = true, bool includeProject = true);
 
-        public IObservable<IChangeSet<RedFileSystemModel>> ConnectGameRoot();
-        public IObservable<IChangeSet<RedFileSystemModel>> ConnectModRoot();
         IEnumerable<IGameArchive> GetModArchives();
     }
 }
