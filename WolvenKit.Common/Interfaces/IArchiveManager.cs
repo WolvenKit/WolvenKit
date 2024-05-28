@@ -34,7 +34,6 @@ namespace WolvenKit.Common
 
         public Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles();
         public Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles(ArchiveManagerScope searchScope);
-        void LoadFromFolder(DirectoryInfo archivedir); // TODO
 
         /// <summary>
         /// Checks if a file with the given hash exists in the ArchiveManager's current scope.

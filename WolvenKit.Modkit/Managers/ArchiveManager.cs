@@ -86,36 +86,6 @@ namespace WolvenKit.RED4.CR2W.Archive
         #region loading
 
         /// <summary>
-        /// Loads all archives from a folder
-        /// </summary>
-        /// <param name="archiveDir"></param>
-        public void LoadFromFolder(DirectoryInfo archiveDir)
-        {
-            if (!archiveDir.Exists)
-            {
-                return;
-            }
-
-            var redModFolder = archiveDir.Name.Contains(Path.DirectorySeparatorChar + "mods" + Path.DirectorySeparatorChar);
-
-            IsManagerLoading = true;
-
-            // TODO: this will still load things in sub-directories beyond "archive" for REDMod mods
-            var archiveFiles = Directory.GetFiles(archiveDir.FullName, "*.archive",
-                new EnumerationOptions { RecurseSubdirectories = redModFolder}).ToList();
-
-            archiveFiles.Sort(CompareArchives);
-
-            foreach (var file in archiveFiles)
-            {
-                LoadArchive(file);
-            }
-
-            IsManagerLoading = false;
-            IsManagerLoaded = true;
-        }
-
-        /// <summary>
         /// Load every non-mod bundle it can find in ..\..\content and ..\..\DLC
         /// </summary>
         /// <param name="executable"></param>
