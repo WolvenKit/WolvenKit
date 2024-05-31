@@ -176,10 +176,51 @@ namespace WolvenKit.Views.Tools
                 {
                     _automatic = true;
 
-                    TreeGrid.ExpandAllNodes(e.Node);
+                    ExpandAllNodes(e.Node);
 
                     _automatic = false;
                     return;
+                }
+            }
+        }
+
+        private void ExpandAllNodes(TreeNode node)
+        {
+            TreeGrid.ExpandAllNodes(node);
+            if (ViewModel != null)
+            {
+                RecursiveStateSave(node.ChildNodes);
+            }
+
+            void RecursiveStateSave(TreeNodes childNodes)
+            {
+                foreach (var childNode in childNodes)
+                {
+                    if (childNode.Item is FileSystemModel fileSystemModel)
+                    {
+                        ViewModel!.ExpansionStateDictionary[fileSystemModel.RawRelativePath] = true;
+                    }
+                    RecursiveStateSave(childNode.ChildNodes);
+                }
+            }
+        }
+
+        private void CollapseAllNodes(TreeNode node)
+        {
+            if (ViewModel != null)
+            {
+                RecursiveStateSave(node.ChildNodes);
+            }
+            TreeGrid.CollapseAllNodes(node);
+            void RecursiveStateSave(TreeNodes childNodes)
+            {
+                foreach (var childNode in childNodes)
+                {
+                    if (childNode.Item is FileSystemModel fileSystemModel)
+                    {
+                        ViewModel!.ExpansionStateDictionary[fileSystemModel.RawRelativePath] = false;
+                    }
+                    RecursiveStateSave(childNode.ChildNodes);
                 }
             }
         }
@@ -218,11 +259,11 @@ namespace WolvenKit.Views.Tools
                         {
                             if (state)
                             {
-                                TreeGrid.CollapseAllNodes(childNode);
+                                CollapseAllNodes(childNode);
                             }
                             else
                             {
-                                TreeGrid.ExpandAllNodes(childNode);
+                                ExpandAllNodes(childNode);
                             }
                         }
                         else
@@ -246,7 +287,7 @@ namespace WolvenKit.Views.Tools
                 {
                     _automatic = true;
 
-                    TreeGrid.CollapseAllNodes(e.Node);
+                    CollapseAllNodes(e.Node);
 
                     _automatic = false;
                     return;
@@ -450,7 +491,7 @@ namespace WolvenKit.Views.Tools
 
             var model = ViewModel.SelectedItem;
             var node = TreeGrid.View.Nodes.GetNode(model);
-            TreeGrid.ExpandAllNodes(node);
+            ExpandAllNodes(node);
         }
 
         private void CollapseChildren_OnClick(object sender, RoutedEventArgs e)
@@ -462,7 +503,7 @@ namespace WolvenKit.Views.Tools
 
             var model = ViewModel.SelectedItem;
             var node = TreeGrid.View.Nodes.GetNode(model);
-            TreeGrid.CollapseAllNodes(node);
+            CollapseAllNodes(node);
             TreeGrid.ExpandNode(node);
         }
 
@@ -472,7 +513,7 @@ namespace WolvenKit.Views.Tools
             {
                 if (viewNode.Item is not FileSystemModel || IsFileIn(viewNode.Item))
                 {
-                    TreeGrid.ExpandAllNodes(viewNode);
+                    ExpandAllNodes(viewNode);
                 }
             }
         }
@@ -483,7 +524,7 @@ namespace WolvenKit.Views.Tools
             {
                 if (viewNode.Item is not FileSystemModel || IsFileIn(viewNode.Item))
                 {
-                    TreeGrid.CollapseAllNodes(viewNode);
+                    CollapseAllNodes(viewNode);
                 }
             }
         }

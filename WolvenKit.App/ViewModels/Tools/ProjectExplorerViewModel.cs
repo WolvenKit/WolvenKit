@@ -95,7 +95,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         _mainViewModel = appViewModel;
 
-        _projectWatcher = new WatcherService();
+        _projectWatcher = new WatcherService(_loggerService);
 
         SideInDockedMode = DockSide.Left;
 
@@ -123,7 +123,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         {
             if (ActiveProject != null)
             {
-                File.WriteAllText(Path.Combine(ActiveProject.ProjectDirectory, "fileTreeState.json"), JsonSerializer.Serialize(ExpansionStateDictionary));
+                SaveFileTreeState(ActiveProject);
                 _projectWatcher.UnwatchProject(ActiveProject);
             }
 
@@ -131,16 +131,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
             if (_projectManager.ActiveProject != null)
             {
-                var statePath = Path.Combine(_projectManager.ActiveProject.ProjectDirectory, "fileTreeState.json");
-                if (File.Exists(statePath))
-                {
-                    ExpansionStateDictionary = JsonSerializer.Deserialize<Dictionary<string, bool>>(File.ReadAllText(statePath)) ?? new();
-                }
-                else
-                {
-                    ExpansionStateDictionary = new();
-                }
-
+                LoadFileTreeState(_projectManager.ActiveProject);
                 _projectWatcher.WatchProject(_projectManager.ActiveProject);
             }
         }
@@ -1137,6 +1128,31 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         cw.WriteFile(cr2w);
     }
+
+    private void LoadFileTreeState(Cp77Project project)
+    {
+        var statePath = Path.Combine(project.ProjectDirectory, "fileTreeState.json");
+        if (File.Exists(statePath))
+        {
+            ExpansionStateDictionary = JsonSerializer.Deserialize<Dictionary<string, bool>>(File.ReadAllText(statePath)) ?? new();
+        }
+        else
+        {
+            ExpansionStateDictionary = new();
+        }
+    }
+
+    public void SaveFileTreeState()
+    {
+        if (ActiveProject == null)
+        {
+            return;
+        }
+        SaveFileTreeState(ActiveProject);
+    }
+
+    private void SaveFileTreeState(Cp77Project project) =>
+        File.WriteAllText(Path.Combine(project.ProjectDirectory, "fileTreeState.json"), JsonSerializer.Serialize(ExpansionStateDictionary));
 
     public void StopWatcher() => _projectWatcher.ForceStop();
 
