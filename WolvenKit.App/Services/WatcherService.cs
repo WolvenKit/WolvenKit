@@ -5,8 +5,10 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using SharpDX.DirectWrite;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.App.Services;
@@ -18,6 +20,8 @@ public partial class WatcherService : ObservableObject, IWatcherService
 {
     #region fields
 
+    private readonly ILoggerService _loggerService;
+
     private string _projectDirectory = string.Empty;
     private FileSystemModel? _projectFileSystemModel;
 
@@ -28,9 +32,10 @@ public partial class WatcherService : ObservableObject, IWatcherService
     private Task? _updateTask;
     private CancellationTokenSource _updateThreadCancellationTokenSource = new();
 
-    private readonly ConcurrentQueue<FileSystemEventArgs> _fileChanges = new();
+    private readonly ConcurrentQueue<FileSystemEventArgsWrapper> _fileChanges = new();
 
     private readonly ConcurrentDictionary<string, FileSystemModel> _fileLookup = new();
+    private readonly ConcurrentDictionary<string, long> _removedFiles = new();
 
     [ObservableProperty]
     private DispatchedObservableCollection<FileSystemModel> _fileList = new();
@@ -46,8 +51,10 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
     #endregion
 
-    public WatcherService()
+    public WatcherService(ILoggerService loggerService)
     {
+        _loggerService = loggerService;
+
         _modsWatcher = new FileSystemWatcher
         {
             Filter = "*",
@@ -96,6 +103,8 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
             if (!_fileChanges.TryDequeue(out var e))
             {
+                _removedFiles.Clear();
+
                 Thread.Sleep(100);
                 continue;
             }
@@ -106,28 +115,70 @@ public partial class WatcherService : ObservableObject, IWatcherService
                 continue;
             }
 
-            switch (e.ChangeType)
+            try
             {
-                case WatcherChangeTypes.Created:
-                    Create(e);
-                    break;
-                case WatcherChangeTypes.Deleted:
-                    Delete(e);
-                    break;
-                case WatcherChangeTypes.Changed:
-                    Changed(e);
-                    break;
-                case WatcherChangeTypes.Renamed:
-                    throw new Exception();
-                case WatcherChangeTypes.All:
-                    throw new Exception();
-                default:
-                    throw new ArgumentOutOfRangeException();
+                switch (e.ChangeType)
+                {
+                    case WatcherChangeTypes.Created:
+                        Create(e);
+                        break;
+                    case WatcherChangeTypes.Deleted:
+                        Delete(e);
+                        break;
+                    case WatcherChangeTypes.Changed:
+                        Changed(e);
+                        break;
+                    case WatcherChangeTypes.Renamed:
+                        throw new Exception();
+                    case WatcherChangeTypes.All:
+                        throw new Exception();
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+            catch (Exception)
+            {
+                _loggerService.Error($"Something went wrong while changing a file in the project explorer...{Environment.NewLine}Please report this as bug");
             }
         }
 
-        void Create(FileSystemEventArgs e)
+        void Create(FileSystemEventArgsWrapper e)
         {
+            var timestamp = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+
+            // Check if delay has passed
+            if (e.Ticks > timestamp)
+            {
+                _fileChanges.Enqueue(e);
+                return;
+            }
+
+            if (_removedFiles.TryGetValue(e.FullPath, out var eventAddedAt))
+            {
+                // File got removed again before the create event was processed. Skip it
+                if (e.EventAddedAt < eventAddedAt)
+                {
+                    return;
+                }
+            }
+
+            // Create event was sent but file doesn't exist yet?!?! Don't know why. Just requeue with delay
+            if (!File.Exists(e.FullPath) && !Directory.Exists(e.FullPath))
+            {
+                e.Ticks = timestamp + 100;
+                e.RetryCount++;
+
+                _fileChanges.Enqueue(e);
+                return;
+            }
+
+            if (e.RetryCount > 5)
+            {
+                // If it still doesn't work after 5 retries... idk
+                _loggerService.Error($"Something went wrong while adding a file to the project explorer...{Environment.NewLine}Please report this as bug");
+                return;
+            }
+
             var projectPath = e.FullPath[(_projectDirectory.Length + 1)..];
             var pathParts = projectPath.Split(Path.DirectorySeparatorChar);
 
@@ -152,8 +203,15 @@ public partial class WatcherService : ObservableObject, IWatcherService
                 var isDirectory = true;
                 if (i == pathParts.Length - 1)
                 {
-                    var attr = File.GetAttributes(e.FullPath);
-                    isDirectory = attr.HasFlag(FileAttributes.Directory);
+                    try
+                    {
+                        var attr = File.GetAttributes(e.FullPath);
+                        isDirectory = attr.HasFlag(FileAttributes.Directory);
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
                 }
 
                 current = new FileSystemModel(parent, part, tmpPath, isDirectory);
@@ -177,7 +235,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
             }
         }
 
-        void Changed(FileSystemEventArgs e)
+        void Changed(FileSystemEventArgsWrapper e)
         {
             if (string.IsNullOrEmpty(e.Name) || !_fileLookup.TryGetValue(e.Name, out var item))
             {
@@ -192,7 +250,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
             item.UpdateFileInfo();
         }
 
-        void Delete(FileSystemEventArgs e)
+        void Delete(FileSystemEventArgsWrapper e)
         {
             if (string.IsNullOrEmpty(e.Name))
             {
@@ -208,6 +266,8 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
                 item.Parent?.Children.Remove(item);
             }
+
+            _removedFiles.TryAdd(e.FullPath, e.EventAddedAt);
 
             void ClearChildren(FileSystemModel model)
             {
@@ -247,7 +307,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
         foreach (var fileSystemInfo in allFiles)
         {
             var name = fileSystemInfo.FullName[(_projectDirectory.Length + 1)..];
-            _fileChanges.Enqueue(new FileSystemEventArgs(WatcherChangeTypes.Created, _projectDirectory, name));
+            _fileChanges.Enqueue(new FileSystemEventArgsWrapper(new FileSystemEventArgs(WatcherChangeTypes.Created, _projectDirectory, name)));
         }
 
         _updateThreadCancellationTokenSource = new CancellationTokenSource();
@@ -287,5 +347,24 @@ public partial class WatcherService : ObservableObject, IWatcherService
         OnChanged(sender, new FileSystemEventArgs(WatcherChangeTypes.Created, directory, e.Name));
     }
 
-    private void OnChanged(object sender, FileSystemEventArgs e) => _fileChanges.Enqueue(e);
+    private void OnChanged(object sender, FileSystemEventArgs e) => _fileChanges.Enqueue(new FileSystemEventArgsWrapper(e));
+
+    private class FileSystemEventArgsWrapper
+    {
+        private FileSystemEventArgs _args;
+
+        public FileSystemEventArgsWrapper(FileSystemEventArgs fileSystemEventArgs)
+        {
+            _args = fileSystemEventArgs;
+        }
+
+        public string? Name => _args.Name;
+        public string FullPath => _args.FullPath;
+        public WatcherChangeTypes ChangeType => _args.ChangeType;
+
+        public int RetryCount { get; set; }
+        public long Ticks { get; set; }
+
+        public long EventAddedAt { get; } = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+    }
 }

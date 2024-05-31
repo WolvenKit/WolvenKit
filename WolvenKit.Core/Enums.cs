@@ -132,6 +132,7 @@ namespace WolvenKit.Common
     {
         wem,
         mesh,
+        w2mesh,
         xbm,
         csv,
         //app,
