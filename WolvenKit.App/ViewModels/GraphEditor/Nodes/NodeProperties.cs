@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml;
 using Splat;
@@ -11,7 +12,7 @@ namespace WolvenKit.App.ViewModels.GraphEditor.Nodes;
 
 internal class NodeProperties
 {
-    public static Dictionary<string, string> GetPropertiesFor(questNodeDefinition? node)
+    public static Dictionary<string, string> GetPropertiesFor(questNodeDefinition? node, scnSceneResource? scnSceneResource = null)
     {
         Dictionary<string, string> details = new();
 
@@ -77,6 +78,7 @@ internal class NodeProperties
                 details["Entry Id"] = useSceneWorkspotCasted?.EntryId?.Id.ToString()!;
                 details["Exit Entry Id"] = useSceneWorkspotCasted?.ExitEntryId?.Id.ToString()!;
                 details["Workspot Instance Id"] = useSceneWorkspotCasted?.WorkspotInstanceId?.Id.ToString()!;
+                details["Workspot Name"] = GetWorkspotPath(useSceneWorkspotCasted?.WorkspotInstanceId?.Id, scnSceneResource);
             }
             else if (useWorkspotNodeCasted?.ParamsV1?.Chunk is questUseWorkspotParamsV1 useWorkspotCasted)
             {
@@ -252,7 +254,7 @@ internal class NodeProperties
                 details["Localized Message"] = warningMessageCasted?.LocalizedMessage?.Value!;
                 details["Message"] = warningMessageCasted?.Message.ToString()!;
                 details["Show"] = warningMessageCasted?.Show == true ? "True" : "False";
-                details["Type"] = warningMessageCasted?.Type.ToEnumString()!;
+                details["Message Type"] = warningMessageCasted?.Type.ToEnumString()!;
             }
             if (uiManagerNodeCasted?.Type?.Chunk is questProgressBar_NodeType progressBarCasted)
             {
@@ -260,7 +262,53 @@ internal class NodeProperties
                 details["Duration"] = progressBarCasted?.Duration.ToString()!;
                 details["Show"] = progressBarCasted?.Show == true ? "True" : "False";
                 details["Text"] = progressBarCasted?.Text?.Value!;
-                details["Type"] = progressBarCasted?.Type.ToEnumString()!;
+                details["Progress Bar Type"] = progressBarCasted?.Type.ToEnumString()!;
+            }
+            if (uiManagerNodeCasted?.Type?.Chunk is questTutorial_NodeType tutorialCasted)
+            {
+                details["Sub Manager"] = GetNameFromClass(tutorialCasted?.Subtype?.Chunk);
+
+                if (tutorialCasted?.Subtype?.Chunk is questShowPopup_NodeSubType showPopupNodeCasted)
+                {
+                    details["Close At Input"] = showPopupNodeCasted?.CloseAtInput == true ? "True" : "False";
+                    details["Close Current Popup"] = showPopupNodeCasted?.CloseCurrentPopup == true ? "True" : "False";
+                    details["Hide In Menu"] = showPopupNodeCasted?.HideInMenu == true ? "True" : "False";
+                    details["Ignore Disabled Tutorials"] = showPopupNodeCasted?.IgnoreDisabledTutorials == true ? "True" : "False";
+                    details["Lock Player Movement"] = showPopupNodeCasted?.LockPlayerMovement == true ? "True" : "False";
+                    details["Margin"] = ParseMargin(showPopupNodeCasted?.Margin);
+                    details["Open"] = showPopupNodeCasted?.Open == true ? "True" : "False";
+                    details.AddRange(ParseJournalPath(showPopupNodeCasted?.Path?.Chunk));
+                    details["Pause Game"] = showPopupNodeCasted?.PauseGame == true ? "True" : "False";
+                    details["Position"] = showPopupNodeCasted?.Position.ToEnumString()!;
+                    details["Screen Mode"] = showPopupNodeCasted?.ScreenMode.ToEnumString()!;
+                    details["Video"] = showPopupNodeCasted?.Video.DepotPath.GetResolvedText()!;
+                    details["Video Type"] = showPopupNodeCasted?.VideoType.ToEnumString()!;
+                }
+                if (tutorialCasted?.Subtype?.Chunk is questShowBracket_NodeSubType showBracketNodeCasted)
+                {
+                    details["Anchor"] = showBracketNodeCasted?.Anchor.ToEnumString()!;
+                    details["Bracket ID"] = showBracketNodeCasted?.BracketID.ToString()!;
+                    details["Bracket Type"] = showBracketNodeCasted?.BracketType.ToEnumString()!;
+                    details["Ignore Disabled Tutorials"] = showBracketNodeCasted?.IgnoreDisabledTutorials == true ? "True" : "False";
+                    details["Offset"] = showBracketNodeCasted?.Offset.ToString()!;
+                    details["Size"] = showBracketNodeCasted?.Size.ToString()!;
+                    details["Visible"] = showBracketNodeCasted?.Visible == true ? "True" : "False";
+                    details["Visible On UI Layer"] = showBracketNodeCasted?.VisibleOnUILayer.ToEnumString()!;
+                }
+                if (tutorialCasted?.Subtype?.Chunk is questShowHighlight_NodeSubType showHighlightNodeCasted)
+                {
+                    details["Enable"] = showHighlightNodeCasted?.Enable == true ? "True" : "False";
+                    details["Entity Reference"] = ParseGameEntityReference(showHighlightNodeCasted?.EntityReference);
+                }
+                if (tutorialCasted?.Subtype?.Chunk is questShowOverlay_NodeSubType showOverlayNodeCasted)
+                {
+                    details["Hide On Input"] = showOverlayNodeCasted?.HideOnInput == true ? "True" : "False";
+                    details["Library Item Name"] = showOverlayNodeCasted?.LibraryItemName.ToString()!;
+                    details["Lock Player Movement"] = showOverlayNodeCasted?.LockPlayerMovement == true ? "True" : "False";
+                    details["Overlay Library"] = showOverlayNodeCasted?.OverlayLibrary.DepotPath.GetResolvedText()!;
+                    details["Pause Game"] = showOverlayNodeCasted?.PauseGame == true ? "True" : "False";
+                    details["Visible"] = showOverlayNodeCasted?.Visible == true ? "True" : "False";
+                }
             }
         }
         else if (node is questTeleportPuppetNodeDefinition teleportNodeCasted)
@@ -486,6 +534,23 @@ internal class NodeProperties
                     details["Is Player"] = genitalsManagerNodeCasted?.IsPlayer == true ? "True" : "False";
                     details["Puppet Ref"] = ParseGameEntityReference(genitalsManagerNodeCasted?.PuppetRef);
                 }
+                if (charVisualsNodeCasted?.Subtype?.Chunk is questCharacterManagerVisuals_ChangeEntityAppearance appearanceManagerNodeCasted)
+                {
+                    var appearancesArr = appearanceManagerNodeCasted?.AppearanceEntries;
+
+                    if (appearancesArr != null)
+                    {
+                        int counter = 1;
+                        foreach (var appearance in appearancesArr)
+                        {
+                            details["#" + counter + " Appearance Name"] = appearance.AppearanceName.ToString()!;
+                            details["#" + counter + " Is Player"] = appearance.IsPlayer == true ? "True" : "False";
+                            details["#" + counter + " Puppet Ref"] = ParseGameEntityReference(appearance?.PuppetRef);
+
+                            counter++;
+                        }
+                    }
+                }
             }
             if (characterManagerCasted?.Type?.Chunk is questCharacterManagerCombat_NodeType charCombatNodeCasted)
             {
@@ -609,6 +674,16 @@ internal class NodeProperties
             {
                 details["Is In Mirrors Area"] = toggleMirrorNodeCasted?.IsInMirrorsArea == true ? "True" : "False";
                 details["Object Ref"] = ParseGameEntityReference(toggleMirrorNodeCasted?.ObjectRef);
+            }
+        }
+        else if (node is questMovePuppetNodeDefinition movePuppetManagerCasted)
+        {
+            details["Entity Reference"] = ParseGameEntityReference(movePuppetManagerCasted?.EntityReference);
+            details["Move Type"] = movePuppetManagerCasted?.MoveType.ToString()!;
+
+            if (movePuppetManagerCasted?.NodeParams?.Chunk is questMoveOnSplineParams splineParams)
+            {
+                details["Spline Node Ref"] = splineParams?.SplineNodeRef.GetResolvedText()!;
             }
         }
 
@@ -866,6 +941,53 @@ internal class NodeProperties
         details[possiblePrefix + "Path File Entry Index"] = gameJournalPath?.FileEntryIndex.ToString()!;
         details[possiblePrefix + "Path Real Path"] = gameJournalPath?.RealPath.ToString()!;
         return details;
+    }
+
+    private static string ParseMargin(inkMargin? margin)
+    {
+        string str = "-";
+        if (margin != null)
+        {
+            str = "Left: " + margin.Left + ", ";
+            str += "Top: " + margin.Top + ", ";
+            str += "Right: " + margin.Right + ", ";
+            str += "Bottom: " + margin.Bottom;
+        }
+        return str;
+    }
+
+    private static string GetWorkspotPath(CUInt32? workspotID, scnSceneResource? scnSceneResource)
+    {
+        string retVal = "";
+
+        if (scnSceneResource != null)
+        {
+            CUInt32 dataID = 0;
+
+            foreach (var workspotInstance in scnSceneResource.WorkspotInstances)
+            {
+                if (workspotInstance.WorkspotInstanceId.Id == workspotID)
+                {
+                    dataID = workspotInstance.DataId.Id;
+                }
+            }
+
+            if (dataID > 0)
+            {
+                foreach (var workspot in scnSceneResource.Workspots)
+                {
+                    if (workspot?.Chunk is scnWorkspotData_ExternalWorkspotResource workspotData)
+                    {
+                        if (workspotData.DataId.Id == dataID)
+                        {
+                            retVal = Path.GetFileName(workspotData.WorkspotResource.DepotPath.GetResolvedText()!);
+                        }
+                    }
+                }
+            }
+        }
+
+        return retVal;
     }
 
     private static string FormatNumber(CUInt32? number, bool three = false)

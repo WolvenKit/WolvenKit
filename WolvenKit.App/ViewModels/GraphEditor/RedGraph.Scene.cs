@@ -337,10 +337,17 @@ public partial class RedGraph
 
             var nvm = graph.WrapSceneNode(node);
 
-            nodeCache.Add(nvm.UniqueId, nvm);
-            graph.Nodes.Add(nvm);
+            if (!nodeCache.ContainsKey(nvm.UniqueId))
+            {
+                nodeCache.Add(nvm.UniqueId, nvm);
+                graph.Nodes.Add(nvm);
 
-            graph._currentSceneNodeId = Math.Max(graph._currentSceneNodeId, nvm.UniqueId);
+                graph._currentSceneNodeId = Math.Max(graph._currentSceneNodeId, nvm.UniqueId);
+            }
+            else
+            {
+                _loggerService?.Warning("Duplicate scene node ID: " + nvm.UniqueId.ToString());
+            }
         }
 
         foreach (var node in graph.Nodes)
@@ -364,7 +371,8 @@ public partial class RedGraph
 
                     if (destination.IsockStamp.Ordinal >= targetNode.Input.Count)
                     {
-
+                        _loggerService?.Warning($"Output isock ordinal ({destination.IsockStamp.Ordinal}) of node {sceneNode.UniqueId} is higher than node {targetNode.UniqueId} input max ordinal ({targetNode.Input.Count - 1}).");
+                        continue;
                     }
 
                     graph.Connections.Add(new SceneConnectionViewModel(outputConnector, targetNode.Input[destination.IsockStamp.Ordinal]));
