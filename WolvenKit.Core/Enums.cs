@@ -125,6 +125,14 @@ namespace WolvenKit.Common
         Shader,
     }
 
+    // Target scope for archive manager
+    public enum ArchiveManagerScope
+    {
+        Basegame,
+        Mods,
+        Everywhere
+    }
+
     /// <summary>
     /// Possible file extensions of cooked redengine files
     /// </summary>

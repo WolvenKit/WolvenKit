@@ -31,7 +31,7 @@ public partial class ExportViewModel : AbstractExportViewModel
 
     public ExportViewModel(
         AppViewModel appViewModel,
-        IArchiveManager archiveManager,
+        IAppArchiveManager archiveManager,
         INotificationService notificationService,
         ISettingsManager settingsManager,
         ILoggerService loggerService,

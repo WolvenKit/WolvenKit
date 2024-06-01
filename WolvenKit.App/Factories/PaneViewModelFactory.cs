@@ -30,7 +30,7 @@ public class PaneViewModelFactory : IPaneViewModelFactory
     private readonly IPluginService _pluginService;
     private readonly ISettingsManager _settingsManager;
     private readonly INotificationService _notificationService;
-    private readonly IArchiveManager _archiveManager;
+    private readonly IAppArchiveManager _archiveManager;
     private readonly Red4ParserService _parserService;
     private readonly ITweakDBService _tweakDbService;
     private readonly ILocKeyService _locKeyService;
@@ -48,7 +48,7 @@ public class PaneViewModelFactory : IPaneViewModelFactory
         IPluginService pluginService,
         ISettingsManager settingsManager,
         INotificationService notificationService,
-        IArchiveManager archiveManager,
+        IAppArchiveManager archiveManager,
         IChunkViewmodelFactory chunkViewmodelFactory,
         Red4ParserService parserService,
         ITweakDBService tweakDbService,
