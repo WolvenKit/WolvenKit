@@ -122,9 +122,10 @@ public partial class ChunkViewModel : ObservableObject
         // RecalculateProperties();
 
         // Now, replace in child properties
-        // ReSharper disable once LoopCanBeConvertedToQuery Not this time
-        foreach (var t in Properties)
+        // ReSharper disable once ForCanBeConvertedToForeach Not this time
+        for (var i = 0; i < Properties.Count; i++)
         {
+            var t = Properties[i];
             try
             {
                 wasChanged = t.SearchAndReplaceInProperties(search, replace, searchMode) || wasChanged;
@@ -133,6 +134,8 @@ public partial class ChunkViewModel : ObservableObject
             {
                 _loggerService.Debug($"Error when trying to set {t.Name}: {e.Message}");
             }
+
+            Properties[i] = t;
         }
 
         // CalculateValue();
@@ -155,7 +158,7 @@ public partial class ChunkViewModel : ObservableObject
     {
         var original = reference;
         outReference = reference;
-        if (reference.DepotPath.GetResolvedText() is not string depotPath)
+        if (reference.DepotPath.GetResolvedText() is not string depotPath || depotPath.Contains(replace))
         {
             return false;
         }
@@ -215,7 +218,7 @@ public partial class ChunkViewModel : ObservableObject
 
                 var resolved = cname.GetResolvedText()!;
                 replaced = resolved.Replace(search, replace, searchMode);
-                if (replaced == resolved)
+                if (replaced == resolved || resolved.Contains(replace))
                 {
                     return false;
                 }
@@ -252,9 +255,9 @@ public partial class ChunkViewModel : ObservableObject
                 }
 
                 return wasChanged;
-            case IRedString str:
-                replaced = (str.ToString() ?? "").Replace(search, replace, searchMode);
-                if (replaced == str.ToString())
+            case IRedString str when str.ToString() is string s && !string.IsNullOrEmpty(s):
+                replaced = s.Replace(search, replace, searchMode);
+                if (replaced == str.ToString() || s.Contains(replace))
                 {
                     return false;
                 }
