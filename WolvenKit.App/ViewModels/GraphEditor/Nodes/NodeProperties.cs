@@ -254,7 +254,7 @@ internal class NodeProperties
                 details["Localized Message"] = warningMessageCasted?.LocalizedMessage?.Value!;
                 details["Message"] = warningMessageCasted?.Message.ToString()!;
                 details["Show"] = warningMessageCasted?.Show == true ? "True" : "False";
-                details["Type"] = warningMessageCasted?.Type.ToEnumString()!;
+                details["Message Type"] = warningMessageCasted?.Type.ToEnumString()!;
             }
             if (uiManagerNodeCasted?.Type?.Chunk is questProgressBar_NodeType progressBarCasted)
             {
@@ -262,7 +262,7 @@ internal class NodeProperties
                 details["Duration"] = progressBarCasted?.Duration.ToString()!;
                 details["Show"] = progressBarCasted?.Show == true ? "True" : "False";
                 details["Text"] = progressBarCasted?.Text?.Value!;
-                details["Type"] = progressBarCasted?.Type.ToEnumString()!;
+                details["Progress Bar Type"] = progressBarCasted?.Type.ToEnumString()!;
             }
             if (uiManagerNodeCasted?.Type?.Chunk is questTutorial_NodeType tutorialCasted)
             {
