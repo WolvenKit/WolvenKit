@@ -1,25 +1,14 @@
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using DynamicData;
 using DynamicData.Kernel;
-using WolvenKit.Common.Model;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common
 {
-    // Target scope for archive manager
-    public enum ArchiveManagerScope
-    {
-        Basegame,
-        Mods,
-        Everywhere
-    }
-    
     /// <summary>
     /// Top-level game bundle/archive manager
     /// </summary>
@@ -29,31 +18,22 @@ namespace WolvenKit.Common
 
         SourceCache<IGameArchive, string> Archives { get; set; }
 
-        RedFileSystemModel? RootNode { get; set; }
-
-        public List<RedFileSystemModel> ModRoots { get; }
-
         IGameArchive? ProjectArchive { get; set; }
-
-        IEnumerable<string>? Extensions { get; set; }
-        EArchiveType TypeName { get; }
 
         public bool IsManagerLoading { get; }
 
         public bool IsManagerLoaded { get; }
 
-        bool IsModBrowserActive { get; set; }
-
         #endregion Properties
 
-        public void LoadGameArchives(FileInfo executable, bool rebuildtree = true);
+        public void LoadGameArchives(FileInfo executable);
         public void LoadArchive(string path, EArchiveSource source = EArchiveSource.Unknown);
         public void LoadModArchive(string filename, bool analyzeFiles = true);
         public void LoadModsArchives(FileInfo executable, bool analyzeFiles = true);
         public void LoadAdditionalModArchives(string archiveBasePath, bool analyzeFiles = true);
 
         public Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles();
-        void LoadFromFolder(DirectoryInfo archivedir);
+        public Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles(ArchiveManagerScope searchScope);
 
         /// <summary>
         /// Checks if a file with the given hash exists in the ArchiveManager's current scope.
@@ -72,8 +52,6 @@ namespace WolvenKit.Common
         public IGameFile? GetGameFile(ResourcePath path, bool includeMods = true, bool includeProject = true);
         public CR2WFile? GetCR2WFile(ResourcePath path, bool includeMods = true, bool includeProject = true);
 
-        public IObservable<IChangeSet<RedFileSystemModel>> ConnectGameRoot();
-        public IObservable<IChangeSet<RedFileSystemModel>> ConnectModRoot();
         IEnumerable<IGameArchive> GetModArchives();
     }
 }

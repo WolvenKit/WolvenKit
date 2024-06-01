@@ -26,7 +26,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
     private readonly ISettingsManager _settingsManager;
     private readonly IProjectManager _projectManager;
     private readonly IGameControllerFactory _gameController;
-    private readonly IArchiveManager _archiveManager;
+    private readonly IAppArchiveManager _archiveManager;
     private readonly ITweakDBService _tweakDbService;
     private readonly ILocKeyService _locKeyService;
     private readonly IModifierViewStateService _modifierViewStateService;
@@ -40,7 +40,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
         IProjectManager projectManager,
         IGameControllerFactory gameController,
         ISettingsManager settingsManager,
-        IArchiveManager archiveManager,
+        IAppArchiveManager archiveManager,
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
         IModifierViewStateService modifierViewStateService,

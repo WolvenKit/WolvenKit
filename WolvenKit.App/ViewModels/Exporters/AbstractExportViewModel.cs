@@ -7,7 +7,7 @@ namespace WolvenKit.App.ViewModels.Exporters;
 
 public abstract partial class AbstractExportViewModel : ImportExportViewModel
 {
-    protected AbstractExportViewModel(IArchiveManager archiveManager, INotificationService notificationService, ISettingsManager settingsManager, string header, string contentId)
+    protected AbstractExportViewModel(IAppArchiveManager archiveManager, INotificationService notificationService, ISettingsManager settingsManager, string header, string contentId)
         : base(archiveManager, notificationService, settingsManager, header, contentId)
     {
     }

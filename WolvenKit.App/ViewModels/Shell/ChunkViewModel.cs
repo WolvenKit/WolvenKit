@@ -55,7 +55,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     private readonly ISettingsManager _settingsManager;
     private readonly IProjectManager _projectManager;
     private readonly IGameControllerFactory _gameController;
-    private readonly IArchiveManager _archiveManager;
+    private readonly IAppArchiveManager _archiveManager;
     private readonly IHashService _hashService;
     private readonly AppViewModel _appViewModel;
     private readonly ITweakDBService _tweakDbService;
@@ -95,7 +95,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         IProjectManager projectManager,
         IGameControllerFactory gameController,
         ISettingsManager settingsManager,
-        IArchiveManager archiveManager,
+        IAppArchiveManager archiveManager,
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
         IModifierViewStateService modifierViewStateService,
@@ -155,7 +155,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         IProjectManager projectManager,
         IGameControllerFactory gameController,
         ISettingsManager settingsManager,
-        IArchiveManager archiveManager,
+        IAppArchiveManager archiveManager,
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
         IModifierViewStateService modifierViewStateService,
@@ -192,7 +192,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         IProjectManager projectManager,
         IGameControllerFactory gameController,
         ISettingsManager settingsManager,
-        IArchiveManager archiveManager,
+        IAppArchiveManager archiveManager,
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
         IModifierViewStateService modifierViewStateService,
