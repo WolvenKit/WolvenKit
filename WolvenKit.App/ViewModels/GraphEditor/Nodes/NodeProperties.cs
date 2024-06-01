@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml;
 using Splat;
@@ -11,7 +12,7 @@ namespace WolvenKit.App.ViewModels.GraphEditor.Nodes;
 
 internal class NodeProperties
 {
-    public static Dictionary<string, string> GetPropertiesFor(questNodeDefinition? node)
+    public static Dictionary<string, string> GetPropertiesFor(questNodeDefinition? node, scnSceneResource? scnSceneResource = null)
     {
         Dictionary<string, string> details = new();
 
@@ -77,6 +78,7 @@ internal class NodeProperties
                 details["Entry Id"] = useSceneWorkspotCasted?.EntryId?.Id.ToString()!;
                 details["Exit Entry Id"] = useSceneWorkspotCasted?.ExitEntryId?.Id.ToString()!;
                 details["Workspot Instance Id"] = useSceneWorkspotCasted?.WorkspotInstanceId?.Id.ToString()!;
+                details["Workspot Name"] = GetWorkspotPath(useSceneWorkspotCasted?.WorkspotInstanceId?.Id, scnSceneResource);
             }
             else if (useWorkspotNodeCasted?.ParamsV1?.Chunk is questUseWorkspotParamsV1 useWorkspotCasted)
             {
@@ -532,6 +534,23 @@ internal class NodeProperties
                     details["Is Player"] = genitalsManagerNodeCasted?.IsPlayer == true ? "True" : "False";
                     details["Puppet Ref"] = ParseGameEntityReference(genitalsManagerNodeCasted?.PuppetRef);
                 }
+                if (charVisualsNodeCasted?.Subtype?.Chunk is questCharacterManagerVisuals_ChangeEntityAppearance appearanceManagerNodeCasted)
+                {
+                    var appearancesArr = appearanceManagerNodeCasted?.AppearanceEntries;
+
+                    if (appearancesArr != null)
+                    {
+                        int counter = 1;
+                        foreach (var appearance in appearancesArr)
+                        {
+                            details["#" + counter + " Appearance Name"] = appearance.AppearanceName.ToString()!;
+                            details["#" + counter + " Is Player"] = appearance.IsPlayer == true ? "True" : "False";
+                            details["#" + counter + " Puppet Ref"] = ParseGameEntityReference(appearance?.PuppetRef);
+
+                            counter++;
+                        }
+                    }
+                }
             }
             if (characterManagerCasted?.Type?.Chunk is questCharacterManagerCombat_NodeType charCombatNodeCasted)
             {
@@ -655,6 +674,16 @@ internal class NodeProperties
             {
                 details["Is In Mirrors Area"] = toggleMirrorNodeCasted?.IsInMirrorsArea == true ? "True" : "False";
                 details["Object Ref"] = ParseGameEntityReference(toggleMirrorNodeCasted?.ObjectRef);
+            }
+        }
+        else if (node is questMovePuppetNodeDefinition movePuppetManagerCasted)
+        {
+            details["Entity Reference"] = ParseGameEntityReference(movePuppetManagerCasted?.EntityReference);
+            details["Move Type"] = movePuppetManagerCasted?.MoveType.ToString()!;
+
+            if (movePuppetManagerCasted?.NodeParams?.Chunk is questMoveOnSplineParams splineParams)
+            {
+                details["Spline Node Ref"] = splineParams?.SplineNodeRef.GetResolvedText()!;
             }
         }
 
@@ -925,6 +954,40 @@ internal class NodeProperties
             str += "Bottom: " + margin.Bottom;
         }
         return str;
+    }
+
+    private static string GetWorkspotPath(CUInt32? workspotID, scnSceneResource? scnSceneResource)
+    {
+        string retVal = "";
+
+        if (scnSceneResource != null)
+        {
+            CUInt32 dataID = 0;
+
+            foreach (var workspotInstance in scnSceneResource.WorkspotInstances)
+            {
+                if (workspotInstance.WorkspotInstanceId.Id == workspotID)
+                {
+                    dataID = workspotInstance.DataId.Id;
+                }
+            }
+
+            if (dataID > 0)
+            {
+                foreach (var workspot in scnSceneResource.Workspots)
+                {
+                    if (workspot?.Chunk is scnWorkspotData_ExternalWorkspotResource workspotData)
+                    {
+                        if (workspotData.DataId.Id == dataID)
+                        {
+                            retVal = Path.GetFileName(workspotData.WorkspotResource.DepotPath.GetResolvedText()!);
+                        }
+                    }
+                }
+            }
+        }
+
+        return retVal;
     }
 
     private static string FormatNumber(CUInt32? number, bool three = false)

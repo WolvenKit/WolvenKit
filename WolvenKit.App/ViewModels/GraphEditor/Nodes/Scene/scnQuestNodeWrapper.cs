@@ -14,7 +14,7 @@ public class scnQuestNodeWrapper : BaseSceneViewModel<scnQuestNode>
             //_castedData.QuestNode.PropertyChanged += QuestNodeOnPropertyChanged;
         }
 
-        Details.AddRange(NodeProperties.GetPropertiesFor(_castedData.QuestNode?.Chunk));
+        Details.AddRange(NodeProperties.GetPropertiesFor(_castedData.QuestNode?.Chunk, scnSceneResource));
 
         Title += NodeProperties.SetNameFromNotablePoints(scnSceneGraphNode.NodeId.Id, scnSceneResource);
     }

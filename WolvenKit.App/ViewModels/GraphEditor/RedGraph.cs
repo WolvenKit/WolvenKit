@@ -8,11 +8,14 @@ using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Core.Routing;
 using Microsoft.Msagl.Layout.Layered;
+using Splat;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.GraphEditor;
@@ -43,6 +46,8 @@ public partial class RedGraph : IDisposable
 
     public RedDocumentViewModel? DocumentViewModel { get; set; }
 
+    private static ILoggerService? _loggerService;
+
     static RedGraph()
     {
         GenerateQuestWrapperMap();
@@ -65,6 +70,8 @@ public partial class RedGraph : IDisposable
 
         ConnectCommand = new RelayCommand(Connect);
         DisconnectCommand = new RelayCommand<BaseConnectorViewModel>(Disconnect);
+
+        _loggerService = Locator.Current.GetService<ILoggerService>();
     }
 
     public void Connect()
