@@ -1380,42 +1380,102 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
+        IMaterial[] keepLocal = [];
+        CHandle<IMaterial>[] keepLocalPreload = [];
+        CResourceAsyncReference<IMaterial>[] keepExternal = [];
+        CResourceReference<IMaterial>[] keepExternalPreload = [];
 
-        var keepLocal = mesh.LocalMaterialBuffer.Materials
-            .Where((material, i) => localMatIdxList.Contains(i)).ToArray();
+        if (mesh.LocalMaterialBuffer?.Materials is not null && mesh.LocalMaterialBuffer.Materials.Count > 0)
+        {
+            keepLocal = mesh.LocalMaterialBuffer.Materials
+                .Where((material, i) => localMatIdxList.Contains(i)).ToArray();
+        }
 
-        var keepExternal = mesh.ExternalMaterials
-            .Where((material, i) => externalMatIdxList.Contains(i)).ToArray();
+        if (mesh.PreloadLocalMaterialInstances is not null && mesh.PreloadLocalMaterialInstances.Count > 0)
+        {
+            keepLocalPreload = mesh.PreloadLocalMaterialInstances
+                .Where((material, i) => localMatIdxList.Contains(i))
+                .ToArray();
+        }
+
+        if (mesh.ExternalMaterials is not null && mesh.ExternalMaterials.Count > 0)
+        {
+            keepExternal = mesh.ExternalMaterials
+                .Where((material, i) => externalMatIdxList.Contains(i)).ToArray();
+        }
+
+        if (mesh.PreloadExternalMaterials is not null && mesh.PreloadExternalMaterials.Count > 0)
+        {
+            keepExternalPreload = mesh.PreloadExternalMaterials
+                .Where((material, i) => externalMatIdxList.Contains(i)).ToArray();
+        }
 
         var usedMaterialDefinitions = mesh.MaterialEntries.Where(me =>
             (me.IsLocalInstance && localMatIdxList.Contains(me.Index)) ||
             (!me.IsLocalInstance && externalMatIdxList.Contains(me.Index))
         ).ToArray();
 
-
-        if (keepLocal.Length + keepExternal.Length != usedMaterialDefinitions.Length &&
+        if (keepLocal.Length + keepExternal.Length + keepLocalPreload.Length + keepExternalPreload.Length !=
+            usedMaterialDefinitions.Length &&
             !_appViewModel.ShowConfirmationDialog("Not all remaining materials match up. Continue? (You need to validate by hand)",
                 "Really delete materials?"))
         {
             return;
         }
 
-        mesh.LocalMaterialBuffer.Materials.Clear();
-        foreach (var t in keepLocal)
+        if (mesh.LocalMaterialBuffer?.Materials is not null)
         {
-            mesh.LocalMaterialBuffer.Materials.Add(t);
+            mesh.LocalMaterialBuffer.Materials.Clear();
+            foreach (var t in keepLocal)
+            {
+                mesh.LocalMaterialBuffer.Materials.Add(t);
+            }
         }
 
-        mesh.ExternalMaterials.Clear();
-        foreach (var t in keepExternal)
+        if (mesh.PreloadLocalMaterialInstances is not null)
         {
-            mesh.ExternalMaterials.Add(t);
+            mesh.PreloadLocalMaterialInstances.Clear();
+            foreach (var t in keepLocalPreload)
+            {
+                mesh.PreloadLocalMaterialInstances.Add(t);
+            }
         }
+
+        if (mesh.ExternalMaterials is not null)
+        {
+            mesh.ExternalMaterials.Clear();
+            foreach (var t in keepExternal)
+            {
+                mesh.ExternalMaterials.Add(t);
+            }    
+        }
+
+        if (mesh.PreloadExternalMaterials is not null)
+        {
+            mesh.PreloadExternalMaterials.Clear();
+            foreach (var t in keepExternalPreload)
+            {
+                mesh.PreloadExternalMaterials.Add(t);
+            }
+        }
+        
 
         mesh.MaterialEntries.Clear();
+        var localMaterialIdx = 0;
+        var externalMaterialIdx = 0;
         for (var i = 0; i < usedMaterialDefinitions.Length; i++)
         {
             var t = usedMaterialDefinitions[i];
+            if (t.IsLocalInstance)
+            {
+                t.Index = (CUInt16)localMaterialIdx;
+                localMaterialIdx += 1;
+            }
+            else
+            {
+                t.Index = (CUInt16)externalMaterialIdx;
+                externalMaterialIdx += 1;
+            }
             t.Index = (CUInt16)i;
             mesh.MaterialEntries.Add(t);
         }
