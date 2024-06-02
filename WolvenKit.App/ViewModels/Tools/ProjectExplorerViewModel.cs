@@ -720,7 +720,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         var newFullPath = Path.Combine(Path.GetDirectoryName(filename).NotNull(), newFilename);
 
-        if (File.Exists(newFullPath))
+        if (File.Exists(newFullPath) || filename == newFullPath)
         {
             return;
         }
