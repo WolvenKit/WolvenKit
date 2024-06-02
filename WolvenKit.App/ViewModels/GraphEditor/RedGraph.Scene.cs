@@ -346,7 +346,7 @@ public partial class RedGraph
             }
             else
             {
-                _loggerService?.Warning("Duplicate scene node ID: " + nvm.UniqueId.ToString());
+                _loggerService?.Warning("Duplicate node ID: " + nvm.UniqueId.ToString());
             }
         }
 

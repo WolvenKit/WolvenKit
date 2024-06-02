@@ -455,16 +455,20 @@ public partial class RedGraph
 
         var socketNodeLookup = new Dictionary<graphGraphSocketDefinition, QuestInputConnectorViewModel>();
 
+        List<int> tmpNodeIDDuplicate = new();
+
         var nodeCache = new Dictionary<uint, BaseQuestViewModel>();
         foreach (var nodeHandle in questGraph.Nodes)
         {
             ArgumentNullException.ThrowIfNull(nodeHandle.Chunk);
 
             var node = nodeHandle.Chunk;
+            var nodeID = 0;
 
             if (node is questNodeDefinition nodeDefinition)
             {
                 graph._currentQuestNodeId = Math.Max(graph._currentQuestNodeId, nodeDefinition.Id);
+                nodeID = nodeDefinition.Id;
             }
 
             var nvm = graph.WrapQuestNode(node, false);
@@ -476,6 +480,15 @@ public partial class RedGraph
             {
                 var questInputConnector = (QuestInputConnectorViewModel)inputConnector;
                 socketNodeLookup.Add(questInputConnector.Data, questInputConnector);
+            }
+
+            if (tmpNodeIDDuplicate.Contains(nodeID))
+            {
+                _loggerService?.Warning("Duplicate node ID: " + nodeID.ToString());
+            }
+            else
+            {
+                tmpNodeIDDuplicate.Add(nodeID);
             }
         }
 
