@@ -92,6 +92,7 @@ public partial class RedBaseClass
                         }
 
                         result = redPackage.Chunks[index];
+                        currentProps = ((RedBaseClass)result)._properties;
                     }
                 }
                 
