@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Nodify;
+using Octokit;
+using ReactiveUI;
 using Splat;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.GraphEditor;
@@ -37,8 +41,9 @@ public partial class GraphEditorView : UserControl
 
     private static void UpdateView(GraphEditorView view)
     {
-        view.Source.ArrangeNodes();
-        view.Editor.FitToScreen();
+        view.Source.Editor = view.Editor;
+        view.Source.GraphStateLoad();
+        //view.Editor.FitToScreen();
     }
 
     public RedGraph Source
@@ -80,6 +85,26 @@ public partial class GraphEditorView : UserControl
         InitializeComponent();
 
         _appViewModel = Locator.Current.GetService<AppViewModel>();
+
+        Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(
+            handler => Editor.ViewportUpdated += handler,
+            handler => Editor.ViewportUpdated -= handler)
+            .Throttle(TimeSpan.FromSeconds(1))
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(x =>
+            {
+                ViewportUpdated();
+            });
+    }
+
+    private void ViewportUpdated()
+    {
+        if (Source == null)
+        {
+            return;
+        }
+
+        Source.GraphStateSave();
     }
 
     private void ArrangeNodes()
@@ -91,6 +116,7 @@ public partial class GraphEditorView : UserControl
 
         UpdateLayout();
         Source.ArrangeNodes();
+        Source.GraphStateSave();
     }
 
     private void Editor_OnContextMenuOpening(object sender, ContextMenuEventArgs e)

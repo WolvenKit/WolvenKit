@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
@@ -8,6 +9,8 @@ using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Core.Routing;
 using Microsoft.Msagl.Layout.Layered;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using Splat;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
@@ -34,6 +37,8 @@ public partial class RedGraph : IDisposable
     private uint _currentSceneNodeId;
     private ushort _currentQuestNodeId;
 
+    private bool _allowGraphSave = false;
+
     public RedGraphType GraphType { get; } = RedGraphType.Invalid;
 
     public string Title { get; }
@@ -43,6 +48,9 @@ public partial class RedGraph : IDisposable
 
     public ICommand ConnectCommand { get; }
     public ICommand DisconnectCommand { get; }
+    public ICommand ItemsDragCompletedCommand { get; }
+
+    public Nodify.NodifyEditor? Editor { get; set; }
 
     public RedDocumentViewModel? DocumentViewModel { get; set; }
 
@@ -70,6 +78,7 @@ public partial class RedGraph : IDisposable
 
         ConnectCommand = new RelayCommand(Connect);
         DisconnectCommand = new RelayCommand<BaseConnectorViewModel>(Disconnect);
+        ItemsDragCompletedCommand = new RelayCommand(ItemsDragCompleted);
 
         _loggerService = Locator.Current.GetService<ILoggerService>();
     }
@@ -170,6 +179,8 @@ public partial class RedGraph : IDisposable
         {
             RemoveQuestNode(questNode);
         }
+
+        GraphStateSave();
     }
 
     public void RemoveNodes(IList<object> nodes)
@@ -235,6 +246,146 @@ public partial class RedGraph : IDisposable
             nvm.Location = new System.Windows.Point(
                 node.Center.X - graph.BoundingBox.Center.X - (nvm.Size.Width / 2) + xOffset,
                 node.Center.Y - graph.BoundingBox.Center.Y - (nvm.Size.Height / 2) + yOffset);
+        }
+    }
+
+    public void GraphStateLoad()
+    {
+        if (DocumentViewModel != null)
+        {
+            var proj = DocumentViewModel.GetActiveProject();
+            if (proj != null)
+            {
+                var statePath = Path.Combine(proj.ProjectDirectory, "GraphEditorStates", DocumentViewModel.RelativePath + ".json");
+                if (File.Exists(statePath))
+                {
+                    Dictionary<uint, System.Windows.Point> nodesLocs = new();
+
+                    var jsonData = JObject.Parse(File.ReadAllText(statePath));
+                    var nodesArray = jsonData.SelectTokens("Nodes.[*]");
+                    foreach (var node in nodesArray)
+                    {
+                        var nodeID = node.SelectToken("NodeID") as JValue;
+                        var nodeX = node.SelectToken("X") as JValue;
+                        var nodeY = node.SelectToken("Y") as JValue;
+
+                        if (nodeID != null &&  nodeX != null && nodeY != null)
+                        {
+                            nodesLocs.TryAdd(
+                                nodeID.ToObject<uint>(),
+                                new System.Windows.Point(
+                                    nodeX.ToObject<double>(),
+                                    nodeY.ToObject<double>()
+                                )
+                            );
+                        }
+                    }
+
+                    foreach (var node in Nodes)
+                    {
+                        uint nodeID = 0;
+                        if (node.Data is scnSceneGraphNode n)
+                        {
+                            nodeID = n.NodeId.Id;
+                        }
+                        if (node.Data is questNodeDefinition q)
+                        {
+                            nodeID = q.Id;
+                        }
+
+                        if (nodesLocs.ContainsKey(nodeID))
+                        {
+                            node.Location = nodesLocs[nodeID];
+                        }
+                    }
+
+                    if (Editor != null)
+                    {
+                        var editorX = jsonData.SelectToken("EditorX") as JValue;
+                        var editorY = jsonData.SelectToken("EditorY") as JValue;
+                        var editorZ = jsonData.SelectToken("EditorZ") as JValue;
+                        if (editorX != null && editorY != null && editorZ != null)
+                        {
+                            Editor.ViewportZoom = editorZ.ToObject<double>();
+                            Editor.ViewportLocation = new System.Windows.Point(editorX.ToObject<double>(), editorY.ToObject<double>());
+                        }
+                    }
+                }
+                else
+                {
+                    ArrangeNodes();
+                }
+            }
+            else
+            {
+                ArrangeNodes();
+            }
+        }
+        else
+        {
+            ArrangeNodes();
+        }
+
+        _allowGraphSave = true;
+    }
+
+    private void ItemsDragCompleted()
+    {
+        GraphStateSave();
+    }
+
+    public void GraphStateSave()
+    {
+        if (DocumentViewModel != null && _allowGraphSave)
+        {
+            var proj = DocumentViewModel.GetActiveProject();
+            if (proj != null)
+            {
+                var statePath = Path.Combine(proj.ProjectDirectory, "GraphEditorStates", DocumentViewModel.RelativePath + ".json");
+                var parentFolder = Path.GetDirectoryName(statePath);
+
+                if (parentFolder != null && !Directory.Exists(parentFolder))
+                {
+                    Directory.CreateDirectory(parentFolder);
+                }
+
+                if (File.Exists(statePath))
+                {
+                    File.Delete(statePath);
+                }
+
+                var jNodes = new JArray();
+                foreach (var node in Nodes)
+                {
+                    uint nodeID = 0;
+                    if (node.Data is scnSceneGraphNode n)
+                    {
+                        nodeID = n.NodeId.Id;
+                    }
+                    if (node.Data is questNodeDefinition q)
+                    {
+                        nodeID = q.Id;
+                    }
+
+                    JObject newPerfSet = new(
+                        new JProperty("NodeID", nodeID),
+                        new JProperty("X", node.Location.X),
+                        new JProperty("Y", node.Location.Y)
+                    );
+
+                    jNodes.Add(newPerfSet);
+                }
+                
+                var jRoot = new JObject
+                {
+                    new JProperty("EditorX", Editor != null ? Editor.ViewportLocation.X : 0),
+                    new JProperty("EditorY", Editor != null ? Editor.ViewportLocation.Y : 0),
+                    new JProperty("EditorZ", Editor != null ? Editor.ViewportZoom : 0),
+                    new JProperty("Nodes", jNodes)
+                };
+
+                File.WriteAllText(statePath, JsonConvert.SerializeObject(jRoot));
+            }
         }
     }
 
