@@ -53,5 +53,8 @@ namespace WolvenKit.Common
         public CR2WFile? GetCR2WFile(ResourcePath path, bool includeMods = true, bool includeProject = true);
 
         IEnumerable<IGameArchive> GetModArchives();
+        IEnumerable<IGameArchive> GetBaseArchives();
+        IEnumerable<IGameArchive> GetEp1Archives();
+        IEnumerable<IGameArchive> GetGameArchives();
     }
 }
