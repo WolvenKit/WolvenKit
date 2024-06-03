@@ -370,8 +370,7 @@ public class AppScriptFunctions : ScriptFunctions
                         resourcePath = entryStr;
                     }
 
-                    // NOTE this checks all archives, make sure to only load the archives you need here!
-                    var fileEntry = _archiveManager.Archives.Items
+                    var fileEntry = _archiveManager.GetGameArchives()
                         .SelectMany(x => x.Files.Values)
                         .Cast<FileEntry>()
                         .FirstOrDefault(x => x.NameHash64 == resourcePath);
