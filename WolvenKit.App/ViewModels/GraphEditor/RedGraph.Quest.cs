@@ -461,10 +461,12 @@ public partial class RedGraph
             ArgumentNullException.ThrowIfNull(nodeHandle.Chunk);
 
             var node = nodeHandle.Chunk;
+            var nodeID = 0;
 
             if (node is questNodeDefinition nodeDefinition)
             {
                 graph._currentQuestNodeId = Math.Max(graph._currentQuestNodeId, nodeDefinition.Id);
+                nodeID = nodeDefinition.Id;
             }
 
             var nvm = graph.WrapQuestNode(node, false);

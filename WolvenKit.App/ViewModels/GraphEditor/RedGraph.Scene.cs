@@ -346,7 +346,7 @@ public partial class RedGraph
             }
             else
             {
-                _loggerService?.Warning("Duplicate scene node ID: " + nvm.UniqueId.ToString());
+                _loggerService?.Warning("Duplicate node ID: " + nvm.UniqueId.ToString() + ". Some nodes may be missing in graph view. File: " + title);
             }
         }
 
@@ -371,7 +371,7 @@ public partial class RedGraph
 
                     if (destination.IsockStamp.Ordinal >= targetNode.Input.Count)
                     {
-                        _loggerService?.Warning($"Output isock ordinal ({destination.IsockStamp.Ordinal}) of node {sceneNode.UniqueId} is higher than node {targetNode.UniqueId} input max ordinal ({targetNode.Input.Count - 1}).");
+                        _loggerService?.Warning($"Output isock ordinal ({destination.IsockStamp.Ordinal}) of node {sceneNode.UniqueId} is higher than node {targetNode.UniqueId} input max ordinal ({targetNode.Input.Count - 1}). Some connections may be missing in graph view. File: " + title);
                         continue;
                     }
 
