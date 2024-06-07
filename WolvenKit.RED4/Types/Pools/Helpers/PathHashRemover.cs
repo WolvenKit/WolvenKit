@@ -6,6 +6,7 @@ internal readonly struct PathHashRemover : IDisposable
 {
     private readonly string _original;
     private readonly char[]? _buffer;
+    private readonly int _newLength;
 
     public PathHashRemover(string original)
     {
@@ -46,10 +47,13 @@ internal readonly struct PathHashRemover : IDisposable
             // Move the start index past the '#'
             startIndex += hashIndex + 1;
         }
+
+        _newLength = original.Count(x => x != '#');
+        ArrayPool<char>.Shared.Return(_buffer);
     }
 
-    public ReadOnlySpan<char> Span => _buffer != null ? _buffer.AsSpan() : _original.AsSpan();
-    public ReadOnlyMemory<char> Memory => _buffer?.AsMemory() ?? _original.AsMemory();
+    public ReadOnlySpan<char> Span => _buffer != null ? _buffer.AsSpan(0, _newLength) : _original.AsSpan();
+    public ReadOnlyMemory<char> Memory => _buffer?.AsMemory(0, _newLength) ?? _original.AsMemory();
 
     public void Dispose()
     {
