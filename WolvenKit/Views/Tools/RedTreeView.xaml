@@ -498,7 +498,7 @@
                 <!-- Clear all materials -->
                 <MenuItem
                     Command="{Binding Path=PlacementTarget.Tag.ClearMaterialsCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Clear all materials"
+                    Header="Clear appearances and materials (patch mesh)"
                     IsCheckable="False"
                     Style="{StaticResource SyncfusionMenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
