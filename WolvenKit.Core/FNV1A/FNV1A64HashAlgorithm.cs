@@ -85,15 +85,18 @@ namespace WolvenKit.Common.FNV1A
             return hash;
         }
 
-        public static ulong HashString(string value) => HashString(value, Encoding.ASCII, false, false);
+        public static ulong HashString(string value) => HashString(value, Encoding.ASCII);
 
-        public static ulong HashString(string value, Encoding encoding, bool nullEnded = false, bool useSignedBuffer = false)
+        public static ulong HashString(string value, Encoding encoding, bool nullEnded = false, bool useSignedBuffer = false) => 
+            HashString(value.AsSpan(), encoding, nullEnded, useSignedBuffer);
+
+        public static ulong HashString(ReadOnlySpan<char> value, Encoding encoding, bool nullEnded = false, bool useSignedBuffer = false)
         {
             var length = encoding.GetMaxByteCount(nullEnded ? value.Length + 1 : value.Length);
             var buffer = ArrayPool<byte>.Shared.Rent(length);
             try
             {
-                var encodedLength = encoding.GetBytes(value.AsSpan(), buffer.AsSpan());
+                var encodedLength = encoding.GetBytes(value, buffer.AsSpan());
 
                 if (nullEnded)
                 {
