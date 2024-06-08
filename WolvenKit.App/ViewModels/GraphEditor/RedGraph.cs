@@ -9,10 +9,9 @@ using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
 using Microsoft.Msagl.Core.Routing;
 using Microsoft.Msagl.Layout.Layered;
-using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Splat;
-using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
@@ -54,7 +53,7 @@ public partial class RedGraph : IDisposable
 
     public RedDocumentViewModel? DocumentViewModel { get; set; }
 
-    public int ParentNodeID { get; set; }
+    public string StateParents { get; set; } = "";
 
     private static ILoggerService? _loggerService;
 
@@ -229,7 +228,7 @@ public partial class RedGraph : IDisposable
         }
     }
 
-    public void ArrangeNodes(double xOffset = 0, double yOffset = 0)
+    public System.Windows.Rect ArrangeNodes(double xOffset = 0, double yOffset = 0)
     {
         var graph = new GeometryGraph();
         var msaglNodes = new Dictionary<uint, Node>();
@@ -259,23 +258,37 @@ public partial class RedGraph : IDisposable
         var layout = new LayeredLayout(graph, settings);
         layout.Run();
 
+        double maxX = 0;
+        double minX = 0;
+        double maxY = 0;
+        double minY = 0;
+
         foreach (var node in graph.Nodes)
         {
             var nvm = (NodeViewModel)node.UserData;
             nvm.Location = new System.Windows.Point(
                 node.Center.X - graph.BoundingBox.Center.X - (nvm.Size.Width / 2) + xOffset,
                 node.Center.Y - graph.BoundingBox.Center.Y - (nvm.Size.Height / 2) + yOffset);
+
+            maxX = Math.Max(maxX, nvm.Location.X + nvm.Size.Width);
+            minX = Math.Min(minX, nvm.Location.X);
+            maxY = Math.Max(maxY, nvm.Location.Y + nvm.Size.Height);
+            minY = Math.Min(minY, nvm.Location.Y);
         }
+
+        return new System.Windows.Rect(minX, minY, maxX - minX, maxY - minY);
     }
 
     public void GraphStateLoad()
     {
+        var loaded = false;
+
         if (DocumentViewModel != null)
         {
             var proj = DocumentViewModel.GetActiveProject();
             if (proj != null)
             {
-                var statePath = Path.Combine(proj.ProjectDirectory, "GraphEditorStates", DocumentViewModel.RelativePath + (ParentNodeID > 0 ? ("." + ParentNodeID) : "") + ".json");
+                var statePath = Path.Combine(proj.ProjectDirectory, "GraphEditorStates", DocumentViewModel.RelativePath + StateParents + ".json");
                 if (File.Exists(statePath))
                 {
                     Dictionary<uint, System.Windows.Point> nodesLocs = new();
@@ -329,23 +342,16 @@ public partial class RedGraph : IDisposable
                             Editor.ViewportLocation = new System.Windows.Point(editorX.ToObject<double>(), editorY.ToObject<double>());
                         }
                     }
+
+                    loaded = true;
                 }
-                else
-                {
-                    ArrangeNodes();
-                    Editor?.FitToScreen();
-                }
-            }
-            else
-            {
-                ArrangeNodes();
-                Editor?.FitToScreen();
             }
         }
-        else
+
+        if (!loaded)
         {
-            ArrangeNodes();
-            Editor?.FitToScreen();
+            var rect = ArrangeNodes();
+            Editor?.FitToScreen(rect);
         }
 
         _allowGraphSave = true;
@@ -363,7 +369,7 @@ public partial class RedGraph : IDisposable
             var proj = DocumentViewModel.GetActiveProject();
             if (proj != null)
             {
-                var statePath = Path.Combine(proj.ProjectDirectory, "GraphEditorStates", DocumentViewModel.RelativePath + (ParentNodeID > 0 ? ("." + ParentNodeID) : "") + ".json");
+                var statePath = Path.Combine(proj.ProjectDirectory, "GraphEditorStates", DocumentViewModel.RelativePath + StateParents + ".json");
                 var parentFolder = Path.GetDirectoryName(statePath);
 
                 if (parentFolder != null && !Directory.Exists(parentFolder))
