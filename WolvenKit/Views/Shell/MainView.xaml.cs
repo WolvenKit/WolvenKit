@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
+using System.Windows.Input;
 using AdonisUI.Controls;
 using ReactiveUI;
 using Splat;
@@ -14,6 +15,7 @@ using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Services;
 using WolvenKit.Views.Dialogs.Windows;
 
 namespace WolvenKit.Views.Shell
@@ -22,6 +24,7 @@ namespace WolvenKit.Views.Shell
 
     public partial class MainView : IViewFor<AppViewModel>
     {
+        private readonly IModifierViewStateService _modifierViewStateService;
         public AppViewModel ViewModel { get; set; }
 
         object IViewFor.ViewModel
@@ -30,8 +33,12 @@ namespace WolvenKit.Views.Shell
             set => ViewModel = (AppViewModel)value;
         }
 
-        public MainView(AppViewModel vm = null)
+        public MainView(
+            IModifierViewStateService modifierViewStateService,
+            AppViewModel vm = null
+        )
         {
+            _modifierViewStateService = modifierViewStateService;
             ViewModel = vm ?? Locator.Current.GetService<AppViewModel>();
             DataContext = ViewModel;
 
@@ -188,5 +195,7 @@ namespace WolvenKit.Views.Shell
         private void ChromelessWindow_Loaded(object sender, RoutedEventArgs e) { }
         // This is never called 
         private void ChromelessWindow_Closing(object sender, CancelEventArgs e) { }
+
+        private void OnKeyStateChanged(object sender, KeyEventArgs e) => _modifierViewStateService.OnKeystateChanged(e);
     }
 }
