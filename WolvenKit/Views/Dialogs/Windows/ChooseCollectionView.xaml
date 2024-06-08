@@ -90,7 +90,7 @@
                     <syncfusion:SfDataGrid.Columns>
                         <syncfusion:GridTextColumn
                             FilterRowCondition="Contains"
-                            HeaderText="Available"
+                            HeaderText="Selected"
                             MappingName="Name" />
                     </syncfusion:SfDataGrid.Columns>
 
