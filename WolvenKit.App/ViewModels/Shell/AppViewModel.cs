@@ -755,6 +755,12 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanSaveAll))]
     private void SaveAll()
     {
+        if (_projectManager.ActiveProject is null)
+        {
+            Interactions.ShowConfirmation((s_noProjectText, s_noProjectTitle, WMessageBoxImage.Warning, WMessageBoxButtons.Ok));
+            return;
+        }
+        
         foreach (var file in DockedViews.OfType<IDocumentViewModel>().Where(f => f.IsDirty))
         {
             Save(file);
@@ -1687,6 +1693,12 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         return null;
     }
 
+
+    private const string s_noProjectText = "You need to have a Wolvenkit project to save files. See the wiki for more detes:\n" +
+                                           "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/usage/wolvenkit-projects";
+
+    private const string s_noProjectTitle = "No Wolvenkit project";
+    
     /// <summary>
     /// Saves a document and resets the dirty flag.
     /// </summary>
@@ -1694,6 +1706,12 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     /// <param name="saveAsDialogRequested"></param>
     public void Save(IDocumentViewModel fileToSave, bool saveAsDialogRequested = false)
     {
+        if (_projectManager.ActiveProject is null)
+        {
+            Interactions.ShowConfirmation((s_noProjectText, s_noProjectTitle, WMessageBoxImage.Warning, WMessageBoxButtons.Ok));
+            return;
+        }
+
         if (fileToSave is RedDocumentViewModel && _projectManager.ActiveProject is null)
         {
             return;
@@ -1743,7 +1761,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             fileToSave.SaveCommand.SafeExecute();
         }
-
     }
 
     private bool IsInRawFolder(string path) => _projectManager.ActiveProject is not null && path.Contains(_projectManager.ActiveProject.RawDirectory);
