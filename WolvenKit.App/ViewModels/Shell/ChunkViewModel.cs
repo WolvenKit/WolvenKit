@@ -265,18 +265,21 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     Tab.Parent.SetIsDirty(true);
                     Parent.NotifyChain("Data");
                 }
+
+                if (Data is CName && Parent.Parent?.ResolvedData is meshMeshAppearance or redTagList or entVisualTagsSchema)
+                {
+                    Parent.Parent?.CalculateValue();
+                }
+
+                return;
             }
 
-            var parentData = Parent.Data;
-
-            if (Parent.Data is IRedBaseHandle handle)
+            var parentData = Parent.Data switch
             {
-                parentData = handle.GetValue();
-            }
-            else if (Parent.Data is CVariant cVariant)
-            {
-                parentData = cVariant.Value;
-            }
+                IRedBaseHandle handle => handle.GetValue(),
+                CVariant cVariant => cVariant.Value,
+                _ => Parent.Data
+            };
 
             if (parentData is RedBaseClass rbc)
             {
@@ -327,40 +330,19 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
             foreach (var key in keys)
             {
-                var list = GetRootModel().GetModelFromPath(key);
-                if (list is not null && list.Properties.Count > idx)
+                if (GetRootModel().GetModelFromPath(key) is not ChunkViewModel list || list.Properties.Count <= idx)
                 {
-                    list.Properties[idx].CalculateDescriptor();
-                    list.Properties[idx].CalculateValue();
+                    continue;
                 }
+
+                list.Properties[idx].CalculateDescriptor();
+                list.Properties[idx].CalculateValue();
             }
         }
         // if we were an external material instance without a descriptor because we haven't been unique, update all
-        else if (
-            Parent.Data is CResourceAsyncReference<IMaterial>
-            || Data is CResourceAsyncReference<IMaterial>
-            || Data is CResourceAsyncReference<CMesh>
-        )
+        else if (Data is CResourceAsyncReference<IMaterial> or CResourceAsyncReference<CMesh>)
         {
-            Parent.RecalculateProperties();
             CalculateDescriptor();
-            Parent.CalculateIsDefault();
-            Parent.CalculateDescriptor();
-        }
-        else if (Data is CName && Parent.Data is IRedArray &&
-                 Parent.Parent is
-                     {
-                         ResolvedData: meshMeshAppearance
-                     } or
-                     {
-                         ResolvedData: redTagList
-                     } or
-                     {
-                         ResolvedData: entVisualTagsSchema
-                     })
-
-        {
-            Parent.Parent?.CalculateValue();
         }
 
         // Recalculate parent descriptor?
@@ -369,14 +351,18 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
-
         if ((Data is CName && s_descriptorPropNames.Contains(Name))
+            || Data is CResourceAsyncReference<IMaterial>
+            || Data is CResourceAsyncReference<CMesh>
             || (Data is WorldPosition && Parent.Data is WorldTransform)
+            || Parent.Data is CResourceAsyncReference<IMaterial>
             || Parent.Data is CKeyValuePair
             || Parent.Data is Multilayer_Layer
+            || Parent.Data is CMeshMaterialEntry
            )
         {
             Parent.CalculateDescriptor();
+            Parent.CalculateIsDefault();
         }
 
         if (Parent.IsValueExtrapolated)
