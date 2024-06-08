@@ -14,14 +14,30 @@ public class FileSystemModel : INotifyPropertyChanged
 {
     public const string ProjectDirName = "<ProjectDir>";
 
-    private string _fileSizeStr = null!;
+    private string _name;
+    private string _gameRelativePath = null!;
     private long _fileSize;
+    private string _fileSizeStr = null!;
+    private string _extension = "default";
+
 
     [Browsable(false)] public FileSystemModel? Parent { get; }
 
-    public string Name { get; }
+    public string Name
+    {
+        get => _name;
+        private set => SetField(ref _name, value);
+    }
+
     [Browsable(false)] public string RawRelativePath { get; private set; }
-    [Display(Name = "Relative Path")] public string GameRelativePath { get; private set; } = null!;
+
+    [Display(Name = "Relative Path")]
+    public string GameRelativePath
+    {
+        get => _gameRelativePath;
+        private set => SetField(ref _gameRelativePath, value);
+    }
+
     [Display(Name = "System Path")] public string FullName { get; private set; } = null!;
 
     [Browsable(false)] public ulong Hash { get; private set; }
@@ -41,7 +57,11 @@ public class FileSystemModel : INotifyPropertyChanged
         private set => SetField(ref _fileSizeStr, value);
     }
 
-    public string Extension { get; } = "default";
+    public string Extension
+    {
+        get => _extension;
+        private set => SetField(ref _extension, value);
+    }
 
     [Browsable(false)] public DispatchedObservableCollection<FileSystemModel> Children { get; } = new();
     [Browsable(false)] public bool IsDirectory { get; }
@@ -49,37 +69,37 @@ public class FileSystemModel : INotifyPropertyChanged
     public FileSystemModel(FileSystemModel? parent, string name, string relativePath, bool isDirectory)
     {
         Parent = parent;
-        Name = name;
+        _name = name;
         RawRelativePath = relativePath;
         IsDirectory = isDirectory;
 
         GetMetadata();
+    }
 
-        if (IsDirectory)
+    public void Rename(string? newName = null, bool updateChildren = true)
+    {
+        if (Parent == null)
         {
-            Extension = ECustomImageKeys.OpenDirImageKey.ToString();
-            if (relativePath.Equals("archive", StringComparison.CurrentCultureIgnoreCase))
-            {
-                Extension = Constants.ModDirectoryTop;
-            }
-            else if (relativePath.Equals("raw", StringComparison.CurrentCultureIgnoreCase))
-            {
-                Extension = Constants.RawDirectoryTop;
-            }
-            else if (relativePath.Equals("resources", StringComparison.CurrentCultureIgnoreCase))
-            {
-                Extension = Constants.ResourceDirectoryTop;
-            }
-            else if (Parent != null)
-            {
-                Extension = Parent.Extension;
-            }
+            throw new Exception();
         }
-        else
-        {
-            Extension = Path.GetExtension(Name).TrimStart('.');
 
-            UpdateFileInfo();
+        if (newName != null)
+        {
+            Name = newName;
+        }
+
+        RawRelativePath = Path.Combine(Parent.RawRelativePath, Name);
+
+        GetMetadata();
+
+        if (!updateChildren)
+        {
+            return;
+        }
+
+        foreach (var child in Children)
+        {
+            child.Rename();
         }
     }
 
@@ -122,6 +142,33 @@ public class FileSystemModel : INotifyPropertyChanged
             }
 
             HashStr = Hash.ToString();
+        }
+
+        if (IsDirectory)
+        {
+            Extension = ECustomImageKeys.OpenDirImageKey.ToString();
+            if (RawRelativePath.Equals("archive", StringComparison.CurrentCultureIgnoreCase))
+            {
+                Extension = Constants.ModDirectoryTop;
+            }
+            else if (RawRelativePath.Equals("raw", StringComparison.CurrentCultureIgnoreCase))
+            {
+                Extension = Constants.RawDirectoryTop;
+            }
+            else if (RawRelativePath.Equals("resources", StringComparison.CurrentCultureIgnoreCase))
+            {
+                Extension = Constants.ResourceDirectoryTop;
+            }
+            else if (Parent != null)
+            {
+                Extension = Parent.Extension;
+            }
+        }
+        else
+        {
+            Extension = Path.GetExtension(Name).TrimStart('.');
+
+            UpdateFileInfo();
         }
     }
 

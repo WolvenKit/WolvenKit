@@ -455,8 +455,6 @@ public partial class RedGraph
 
         var socketNodeLookup = new Dictionary<graphGraphSocketDefinition, QuestInputConnectorViewModel>();
 
-        List<int> tmpNodeIDDuplicate = new();
-
         var nodeCache = new Dictionary<uint, BaseQuestViewModel>();
         foreach (var nodeHandle in questGraph.Nodes)
         {
@@ -480,15 +478,6 @@ public partial class RedGraph
             {
                 var questInputConnector = (QuestInputConnectorViewModel)inputConnector;
                 socketNodeLookup.Add(questInputConnector.Data, questInputConnector);
-            }
-
-            if (tmpNodeIDDuplicate.Contains(nodeID))
-            {
-                _loggerService?.Warning("Duplicate node ID: " + nodeID.ToString());
-            }
-            else
-            {
-                tmpNodeIDDuplicate.Add(nodeID);
             }
         }
 

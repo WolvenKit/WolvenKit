@@ -5,7 +5,6 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SharpDX.DirectWrite;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.Core.Interfaces;
@@ -129,7 +128,8 @@ public partial class WatcherService : ObservableObject, IWatcherService
                         Changed(e);
                         break;
                     case WatcherChangeTypes.Renamed:
-                        throw new Exception();
+                        Renamed(e);
+                        break;
                     case WatcherChangeTypes.All:
                         throw new Exception();
                     default:
@@ -180,8 +180,14 @@ public partial class WatcherService : ObservableObject, IWatcherService
             }
 
             var projectPath = e.FullPath[(_projectDirectory.Length + 1)..];
+            if (_fileLookup.ContainsKey(projectPath))
+            {
+                return;
+            }
+
             var pathParts = projectPath.Split(Path.DirectorySeparatorChar);
 
+            FileSystemModel? current = null;
             var parent = _projectFileSystemModel;
             for (var i = 0; i < pathParts.Length; i++)
             {
@@ -195,7 +201,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
                     parent = _fileLookup[tmpParentPath];
                 }
 
-                if (_fileLookup.TryGetValue(tmpPath, out var current))
+                if (_fileLookup.TryGetValue(tmpPath, out current))
                 {
                     continue;
                 }
@@ -203,15 +209,8 @@ public partial class WatcherService : ObservableObject, IWatcherService
                 var isDirectory = true;
                 if (i == pathParts.Length - 1)
                 {
-                    try
-                    {
-                        var attr = File.GetAttributes(e.FullPath);
-                        isDirectory = attr.HasFlag(FileAttributes.Directory);
-                    }
-                    catch (Exception)
-                    {
-                        throw;
-                    }
+                    var attr = File.GetAttributes(e.FullPath);
+                    isDirectory = attr.HasFlag(FileAttributes.Directory);
                 }
 
                 current = new FileSystemModel(parent, part, tmpPath, isDirectory);
@@ -233,13 +232,32 @@ public partial class WatcherService : ObservableObject, IWatcherService
                     }
                 }
             }
+
+            if (current is { IsDirectory: true })
+            {
+                var children = Directory.GetFileSystemEntries(current.FullName, "*", SearchOption.AllDirectories);
+                foreach (var child in children)
+                {
+                    var name = child[(_projectDirectory.Length + 1)..];
+                    if (!_fileLookup.ContainsKey(name))
+                    {
+                        _fileChanges.Enqueue(new FileSystemEventArgsWrapper(new FileSystemEventArgs(WatcherChangeTypes.Created, _projectDirectory, name)));
+                    }
+                }
+            }
         }
 
         void Changed(FileSystemEventArgsWrapper e)
         {
-            if (string.IsNullOrEmpty(e.Name) || !_fileLookup.TryGetValue(e.Name, out var item))
+            if (string.IsNullOrEmpty(e.Name))
             {
                 throw new TodoException();
+            }
+
+            if (!_fileLookup.TryGetValue(e.Name, out var item))
+            {
+                _loggerService.Error($"Something went wrong...{Environment.NewLine}Please report this as bug");
+                return;
             }
 
             if (item.IsDirectory)
@@ -248,6 +266,39 @@ public partial class WatcherService : ObservableObject, IWatcherService
             }
 
             item.UpdateFileInfo();
+        }
+
+        void Renamed(FileSystemEventArgsWrapper e)
+        {
+            if (e.Args is not RenamedEventArgs renamedEventArgs)
+            {
+                throw new Exception();
+            }
+
+            if (string.IsNullOrEmpty(renamedEventArgs.OldName) || string.IsNullOrEmpty(renamedEventArgs.Name))
+            {
+                throw new Exception();
+            }
+
+            foreach (var key in _fileLookup.Keys)
+            {
+                if (!key.StartsWith(renamedEventArgs.OldName))
+                {
+                    continue;
+                }
+
+                var newKey = renamedEventArgs.Name + key.Substring(renamedEventArgs.OldName.Length);
+                if (!_fileLookup.TryRemove(key, out var item) || !_fileLookup.TryAdd(newKey, item))
+                {
+                    throw new Exception();
+                }
+
+                if (key == renamedEventArgs.OldName)
+                {
+                    var newName = renamedEventArgs.Name.Split(Path.DirectorySeparatorChar)[^1];
+                    item.Rename(newName);
+                }
+            }
         }
 
         void Delete(FileSystemEventArgsWrapper e)
@@ -330,37 +381,22 @@ public partial class WatcherService : ObservableObject, IWatcherService
         }
     }
 
-    private void OnRenamed(object sender, RenamedEventArgs e)
-    {
-        var oldDirectory = e.OldFullPath;
-        if (e.OldName != null)
-        {
-            oldDirectory = e.OldFullPath[..e.OldFullPath.LastIndexOf(e.OldName, StringComparison.Ordinal)];
-        }
-        OnChanged(sender, new FileSystemEventArgs(WatcherChangeTypes.Deleted, oldDirectory, e.OldName));
-
-        var directory = e.FullPath;
-        if (e.Name != null)
-        {
-            directory = e.FullPath[..e.FullPath.LastIndexOf(e.Name, StringComparison.Ordinal)];
-        }
-        OnChanged(sender, new FileSystemEventArgs(WatcherChangeTypes.Created, directory, e.Name));
-    }
+    private void OnRenamed(object sender, RenamedEventArgs e) => _fileChanges.Enqueue(new FileSystemEventArgsWrapper(e));
 
     private void OnChanged(object sender, FileSystemEventArgs e) => _fileChanges.Enqueue(new FileSystemEventArgsWrapper(e));
 
     private class FileSystemEventArgsWrapper
     {
-        private FileSystemEventArgs _args;
-
         public FileSystemEventArgsWrapper(FileSystemEventArgs fileSystemEventArgs)
         {
-            _args = fileSystemEventArgs;
+            Args = fileSystemEventArgs;
         }
 
-        public string? Name => _args.Name;
-        public string FullPath => _args.FullPath;
-        public WatcherChangeTypes ChangeType => _args.ChangeType;
+        public FileSystemEventArgs Args { get; }
+
+        public string? Name => Args.Name;
+        public string FullPath => Args.FullPath;
+        public WatcherChangeTypes ChangeType => Args.ChangeType;
 
         public int RetryCount { get; set; }
         public long Ticks { get; set; }

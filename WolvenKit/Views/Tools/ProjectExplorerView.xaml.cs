@@ -452,11 +452,17 @@ namespace WolvenKit.Views.Tools
             return tabControl.SelectedIndex switch
             {
                 0 => true,
-                1 => fm.RawRelativePath.StartsWith("archive"),
-                2 => fm.RawRelativePath.StartsWith("raw", StringComparison.CurrentCultureIgnoreCase),
-                3 => fm.RawRelativePath.StartsWith("resources"),
+                1 => IsFileInInternal("archive"),
+                2 => IsFileInInternal("raw"),
+                3 => IsFileInInternal("resources"),
                 _ => true
             };
+
+            bool IsFileInInternal(string folder)
+            {
+                return fm.RawRelativePath == folder ||
+                       fm.RawRelativePath.StartsWith($"{folder}{Path.DirectorySeparatorChar}");
+            }
         }
 
         private bool IsFileInFlat(object o) => tabControl != null && o is FileSystemModel fm && IsFileIn(o) && !fm.IsDirectory;

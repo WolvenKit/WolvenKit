@@ -35,7 +35,7 @@ public static class RedJsonSerializer
                     NumberHandlingResolver
                 }
             },
-            Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+            Encoder = JavaScriptEncoder.Default,
             WriteIndented = true,
             MaxDepth = 2048,
             Converters =

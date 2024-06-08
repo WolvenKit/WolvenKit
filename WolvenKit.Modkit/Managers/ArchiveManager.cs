@@ -530,9 +530,7 @@ namespace WolvenKit.RED4.CR2W.Archive
             }
 
             // check if the file is in a base archive
-            var baseFile = Archives
-                .Items
-                .Where(x => x.Source == EArchiveSource.Base)
+            var baseFile = GetGameArchives()
                 .Select(x => x.Files)
                 .Where(x => x.ContainsKey(path))
                 .Select(x => x[path])
