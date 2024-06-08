@@ -8,6 +8,7 @@ using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 using WolvenKit.Views.GraphEditor;
 using Splat;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.Documents;
 /// <summary>
@@ -46,6 +47,15 @@ public partial class RDTGraphView2
             {
                 Locator.Current.GetService<ILoggerService>().Error("SubGraph is not defined!");
                 return;
+            }
+
+            if (Editor.SelectedNode.Data is questPhaseNodeDefinition ph)
+            {
+                if (!ph.PhaseResource.IsSet)
+                {
+                    subGraph.ParentNodeID = ph.Id;
+                    subGraph.DocumentViewModel = Editor.Source.DocumentViewModel;
+                }
             }
 
             ViewModel!.History.Add(subGraph);

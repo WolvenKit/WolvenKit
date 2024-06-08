@@ -54,6 +54,8 @@ public partial class RedGraph : IDisposable
 
     public RedDocumentViewModel? DocumentViewModel { get; set; }
 
+    public int ParentNodeID { get; set; }
+
     private static ILoggerService? _loggerService;
 
     static RedGraph()
@@ -202,6 +204,23 @@ public partial class RedGraph : IDisposable
         }
     }
 
+    public void CenterOnSelectedNodes(IList<object> nodes)
+    {
+        if (nodes.Count > 0 && Editor != null)
+        {
+            if (nodes[0] is not NodeViewModel nvm)
+            {
+                throw new Exception();
+            }
+
+            Editor.ViewportZoom = 1;
+            Editor.ViewportLocation = new System.Windows.Point(
+                nvm.Location.X - (Editor.ViewportSize.Width / 2) + (nvm.Size.Width / 2),
+                nvm.Location.Y - (Editor.ViewportSize.Height / 2) + (nvm.Size.Height / 2)
+            );
+        }
+    }
+
     public void RecalculateSockets(IGraphProvider nodeViewModel)
     {
         if (nodeViewModel is BaseQuestViewModel)
@@ -256,7 +275,7 @@ public partial class RedGraph : IDisposable
             var proj = DocumentViewModel.GetActiveProject();
             if (proj != null)
             {
-                var statePath = Path.Combine(proj.ProjectDirectory, "GraphEditorStates", DocumentViewModel.RelativePath + ".json");
+                var statePath = Path.Combine(proj.ProjectDirectory, "GraphEditorStates", DocumentViewModel.RelativePath + (ParentNodeID > 0 ? ("." + ParentNodeID) : "") + ".json");
                 if (File.Exists(statePath))
                 {
                     Dictionary<uint, System.Windows.Point> nodesLocs = new();
@@ -314,16 +333,19 @@ public partial class RedGraph : IDisposable
                 else
                 {
                     ArrangeNodes();
+                    Editor?.FitToScreen();
                 }
             }
             else
             {
                 ArrangeNodes();
+                Editor?.FitToScreen();
             }
         }
         else
         {
             ArrangeNodes();
+            Editor?.FitToScreen();
         }
 
         _allowGraphSave = true;
@@ -341,7 +363,7 @@ public partial class RedGraph : IDisposable
             var proj = DocumentViewModel.GetActiveProject();
             if (proj != null)
             {
-                var statePath = Path.Combine(proj.ProjectDirectory, "GraphEditorStates", DocumentViewModel.RelativePath + ".json");
+                var statePath = Path.Combine(proj.ProjectDirectory, "GraphEditorStates", DocumentViewModel.RelativePath + (ParentNodeID > 0 ? ("." + ParentNodeID) : "") + ".json");
                 var parentFolder = Path.GetDirectoryName(statePath);
 
                 if (parentFolder != null && !Directory.Exists(parentFolder))

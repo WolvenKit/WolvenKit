@@ -5,13 +5,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Nodify;
-using Octokit;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App.ViewModels.Dialogs;
@@ -117,6 +115,7 @@ public partial class GraphEditorView : UserControl
         UpdateLayout();
         Source.ArrangeNodes();
         Source.GraphStateSave();
+        Source.CenterOnSelectedNodes(SelectedNodes);
     }
 
     private void Editor_OnContextMenuOpening(object sender, ContextMenuEventArgs e)
