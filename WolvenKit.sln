@@ -27,10 +27,6 @@ Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "WolvenKit.Package", "Wolven
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.RED4", "WolvenKit.RED4\WolvenKit.RED4.csproj", "{E08242B7-AFCF-4868-9B8E-19BAC75ACF29}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{DA34AAA1-E3B6-417E-B0C6-DC61602A54F8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Core.Tests", "Tests\WolvenKit.Core.Tests\WolvenKit.Core.Tests.csproj", "{C37B714D-60DD-4119-AB33-2CA71A7FED56}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -83,12 +79,6 @@ Global
 		{E08242B7-AFCF-4868-9B8E-19BAC75ACF29}.Profile|x64.Build.0 = Debug|x64
 		{E08242B7-AFCF-4868-9B8E-19BAC75ACF29}.Release|x64.ActiveCfg = Release|x64
 		{E08242B7-AFCF-4868-9B8E-19BAC75ACF29}.Release|x64.Build.0 = Release|x64
-		{C37B714D-60DD-4119-AB33-2CA71A7FED56}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{C37B714D-60DD-4119-AB33-2CA71A7FED56}.Debug|x64.Build.0 = Debug|Any CPU
-		{C37B714D-60DD-4119-AB33-2CA71A7FED56}.Profile|x64.ActiveCfg = Debug|Any CPU
-		{C37B714D-60DD-4119-AB33-2CA71A7FED56}.Profile|x64.Build.0 = Debug|Any CPU
-		{C37B714D-60DD-4119-AB33-2CA71A7FED56}.Release|x64.ActiveCfg = Release|Any CPU
-		{C37B714D-60DD-4119-AB33-2CA71A7FED56}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -99,7 +89,6 @@ Global
 		{D019CB01-9948-418A-8C1C-DB66D38BFCDF} = {6BC8815E-BFF9-46A5-9535-0E89A765D75A}
 		{CEF1CF72-B8CF-4CBB-AA11-473438EDE3F3} = {825169A9-0548-4A0A-A1F1-B99BE7D0C23F}
 		{E08242B7-AFCF-4868-9B8E-19BAC75ACF29} = {6BC8815E-BFF9-46A5-9535-0E89A765D75A}
-		{C37B714D-60DD-4119-AB33-2CA71A7FED56} = {DA34AAA1-E3B6-417E-B0C6-DC61602A54F8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8DAAF993-E8B7-47A4-AB0E-C159CB499F45}
