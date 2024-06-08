@@ -232,16 +232,7 @@
 
                 <syncfusion:SfDataGrid.Columns>
 
-                    <syncfusion:GridCheckBoxColumn
-                        Width="50"
-                        HeaderText="#"
-                        MappingName="IsChecked">
-                        <syncfusion:GridCheckBoxColumn.HeaderTemplate>
-                            <DataTemplate>
-                                <CheckBox Command="layout:SFDataGridCommands.CheckAndUnCheck" CommandParameter="{Binding ElementName=ExportGrid}" />
-                            </DataTemplate>
-                        </syncfusion:GridCheckBoxColumn.HeaderTemplate>
-                    </syncfusion:GridCheckBoxColumn>
+                    <syncfusion:GridCheckBoxSelectorColumn Width="50" MappingName="SelectorColumn" />
 
                     <syncfusion:GridTextColumn
                         AllowFiltering="True"
@@ -249,10 +240,10 @@
                         FilterRowCondition="Contains"
                         FilterRowEditorType="TextBoxExt"
                         HeaderText="Name"
-                        ShowToolTip="True"
-                        ToolTipTemplate="{StaticResource TemplateToolTip}"
                         HorizontalHeaderContentAlignment="Left"
-                        MappingName="Name" />
+                        MappingName="Name"
+                        ShowToolTip="True"
+                        ToolTipTemplate="{StaticResource TemplateToolTip}" />
 
                     <syncfusion:GridTextColumn
                         AllowFiltering="False"
