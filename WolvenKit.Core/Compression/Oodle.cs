@@ -256,6 +256,27 @@ public static class Oodle
 
         return result;
     }
+    
+    public static unsafe long Decompress(byte* inputBuffer, long inputBufferSize, byte* outputBuffer, long outputBufferSize)
+    {
+        int result;
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            result = CompressionSettings.Get().UseOodle
+                ? OodleLib.OodleLZ_Decompress(inputBuffer, inputBufferSize, outputBuffer, outputBufferSize)
+                : KrakenNative.Decompress(inputBuffer, inputBufferSize, outputBuffer, outputBufferSize);
+        }
+        else
+        {
+            result = RuntimeInformation.IsOSPlatform(OSPlatform.OSX)
+                ? KrakenNative.Decompress(inputBuffer, inputBufferSize, outputBuffer, outputBufferSize)
+                : RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
+                    ? KrakenNative.Decompress(inputBuffer, inputBufferSize, outputBuffer, outputBufferSize)
+                    : throw new NotImplementedException();
+        }
+
+        return result;
+    }
 
     /// <summary>
     /// Decompresses and copies a segment of zsize bytes from a stream to another stream

@@ -63,10 +63,15 @@ public static class ResourcePathPool
         return hash;
     }
 
-    public static void SetNative(Dictionary<ulong, string> dict)
+    public static void SetNative(ConcurrentDictionary<ulong, string> dict)
     {
-        s_nativePoolReverse = new ConcurrentDictionary<ulong, string>(dict);
-        s_nativePool = new ConcurrentDictionary<string, ulong>(dict.ToDictionary(x => x.Value, x => x.Key));
+        s_nativePoolReverse = dict;
+        s_nativePool = new ConcurrentDictionary<string, ulong>();
+
+        foreach (var (key, value) in dict)
+        {
+            s_nativePool.GetOrAdd(value, key);
+        }
     }
 
     public delegate string? ExtResolveHash(ulong hash);
