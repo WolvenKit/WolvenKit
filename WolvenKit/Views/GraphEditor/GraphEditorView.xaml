@@ -25,7 +25,8 @@
             PendingConnection="{Binding ElementName=uc, Path=Source.PendingConnection}"
             SelectedItem="{Binding ElementName=uc, Path=SelectedNode}"
             SelectedItems="{Binding ElementName=uc, Path=SelectedNodes}"
-            ViewportLocation="{Binding ElementName=uc, Path=ViewportLocation}">
+            ViewportLocation="{Binding ElementName=uc, Path=ViewportLocation}"
+            ItemsDragCompletedCommand="{Binding ElementName=uc, Path=Source.ItemsDragCompletedCommand}">
             <nodify:NodifyEditor.Resources>
                 <DataTemplate x:Key="HeaderTemplate">
                     <TextBlock Margin="0" Text="{Binding}" />
