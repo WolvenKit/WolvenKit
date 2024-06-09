@@ -73,7 +73,7 @@ namespace WolvenKit.Views.Tools
 
             tabControl.SelectedIndexChanged += tabControl_SelectedIndexChanged;
 
-            TreeGrid.SortComparers.Add(new() { Comparer = new FilePathComparer(), PropertyName = "Name" });
+            TreeGrid.SortComparers.Add(new() { Comparer = new FilePathComparer(), PropertyName = "GameRelativePath" });
             TreeGridFlat.SortComparers.Add(new() { Comparer = new FilePathComparer(), PropertyName = "GameRelativePath" });
             TreeGridFlat.SortComparers.Add(new() { Comparer = new FileSizeComparer(), PropertyName = "FileSizeStr" });
 
