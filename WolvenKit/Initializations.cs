@@ -18,6 +18,7 @@ using Syncfusion.Themes.MaterialDark.WPF;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.Core.Helpers;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Views.Shell;
@@ -84,6 +85,9 @@ namespace WolvenKit
         {
             // Set service locator.
             var mainWindow = Locator.Current.GetService<IViewFor<AppViewModel>>();
+
+            GcHelper.CleanupMemory();
+            
             if (mainWindow is MainView window)
             {
                 window.Show();

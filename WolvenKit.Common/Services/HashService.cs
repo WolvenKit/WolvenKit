@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -10,6 +11,7 @@ using WolvenKit.Common.Model;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
+using WolvenKit.Core.Unmanaged;
 using WolvenKit.RED4.TweakDB.Helper;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Pools;
@@ -84,46 +86,82 @@ namespace WolvenKit.Common.Services
 
         private void Load()
         {
-            ReadHashes(DecompressEmbeddedFile(s_used));
-            ReadNodeRefs(DecompressEmbeddedFile(s_nodeRefs));
-            ReadTweakNames(DecompressEmbeddedFile(s_tweakDbStr));
+            var hashesMemory = DecompressEmbeddedFile(s_used);
+            ReadHashes(hashesMemory.GetStream());
+            
+            hashesMemory.Dispose();
+            
+            var nodeRefsMemory = DecompressEmbeddedFile(s_nodeRefs);
+            ReadNodeRefs(nodeRefsMemory.GetStream());
+            
+            nodeRefsMemory.Dispose();
+            
+            var tweakNamesMemory = DecompressEmbeddedFile(s_tweakDbStr);
+            ReadTweakNames(tweakNamesMemory.GetStream());
+            
+            tweakNamesMemory.Dispose();
+            
             LoadMissingHashes();
         }
-
-        private MemoryStream DecompressEmbeddedFile(string resourceName)
+        
+        private static unsafe UnmanagedMemory DecompressEmbeddedFile(string resourceName)
         {
             using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName).NotNull();
 
             // read KARK header
             var oodleCompression = stream.ReadStruct<uint>();
+            
             if (oodleCompression != Oodle.KARK)
             {
-                throw new DecompressionException($"Incorrect hash file.");
+                throw new DecompressionException("Incorrect hash file.");
             }
 
-            var outputsize = stream.ReadStruct<uint>();
+            var outputSize = stream.ReadStruct<uint>();
 
+            var compressedBufferLength = (int)(stream.Length - (sizeof(uint) * 2));
+            using var compressedBuffer = UnmanagedMemory.Allocate(compressedBufferLength);
+            var decompressedBuffer = UnmanagedMemory.Allocate((int) outputSize);
+            
             // read the rest of the stream
-            var outputbuffer = new byte[outputsize];
+            var read = stream.Read(compressedBuffer.GetSpan());
 
-            var inbuffer = stream.ToByteArray(true);
+            if (read != compressedBufferLength)
+                throw new InvalidOperationException("Read less bytes than expected!");
 
-            Oodle.Decompress(inbuffer, outputbuffer);
-
-            return new MemoryStream(outputbuffer);
+            Oodle.Decompress(
+                compressedBuffer.Pointer, compressedBuffer.Size,
+                decompressedBuffer.Pointer, decompressedBuffer.Size);
+            
+            return decompressedBuffer;
         }
 
-        private string[] ReadAllLines(Stream memoryStream)
+        private void ProcessLinesConcurrently(Stream memoryStream, Action<string> lineAction)
         {
-            using var sr = new StreamReader(memoryStream);
-            
-            var list = new List<string>();
-            while (sr.ReadLine() is { } line)
-            {
-                list.Add(line);
-            }
+            var collection = new BlockingCollection<string>();
 
-            return list.ToArray();
+            var readerTask = Task.Run(() =>
+            {
+                using var sr = new StreamReader(memoryStream);
+                
+                while (true)
+                {
+                    var nextLine = sr.ReadLine();
+
+                    if (nextLine == null)
+                        break;
+                    
+                    collection.Add(nextLine);
+                }
+                
+                collection.CompleteAdding();
+            });
+
+            Parallel.ForEach(collection.GetConsumingEnumerable(), new ParallelOptions
+            {
+                MaxDegreeOfParallelism = Environment.ProcessorCount - 2
+            }, lineAction);
+
+            readerTask.Wait();
         }
 
         private void LoadMissingHashes()
@@ -134,16 +172,18 @@ namespace WolvenKit.Common.Services
 
         private void ReadHashes(Stream memoryStream)
         {
-            var dict = new Dictionary<ulong, string>();
-            foreach (var line in ReadAllLines(memoryStream))
+            var dict = new ConcurrentDictionary<ulong, string>();
+            
+            ProcessLinesConcurrently(memoryStream, line =>
             {
-                dict.Add(ResourcePath.CalculateHash(line), line);
-            }
+                dict.GetOrAdd(ResourcePath.CalculateHash(line), line);
+            });
+            
             ResourcePathPool.SetNative(dict);
         }
 
         private void ReadNodeRefs(Stream memoryStream) => 
-            Parallel.ForEach(ReadAllLines(memoryStream), line => { NodeRefPool.AddOrGetHash(line); });
+            ProcessLinesConcurrently(memoryStream, line => NodeRefPool.AddOrGetHash(line));
 
         private void ReadTweakNames(Stream memoryStream)
         {
