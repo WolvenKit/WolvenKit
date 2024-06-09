@@ -273,11 +273,14 @@ namespace WolvenKit.Views.Tools
                 }
             }
 
-            if (vm.RightSelectedItems.Count == 1)
+            if (vm.RightSelectedItems.Count > 0)
             {
-                var propertiesViewModel = Locator.Current.GetService<PropertiesViewModel>();
+                if (vm.RightSelectedItems[^1] is not IFileSystemViewModel fileSystemViewModel)
+                {
+                    return;
+                }
 
-                propertiesViewModel.ExecuteSelectFile(vm.RightSelectedItem);
+                Locator.Current.GetService<PropertiesViewModel>()?.ExecuteSelectFile(fileSystemViewModel);
             }
 
             vm.UpdateSearchInArchives();

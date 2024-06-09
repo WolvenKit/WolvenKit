@@ -209,7 +209,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private IFileSystemViewModel? _rightSelectedItem;
 
     [ObservableProperty]
-    private ObservableCollection<object>? _rightSelectedItems = new();
+    private ObservableCollection<object> _rightSelectedItems = new();
 
     [ObservableProperty]
     private ObservableCollectionEx<IFileSystemViewModel> _rightItems = new();
