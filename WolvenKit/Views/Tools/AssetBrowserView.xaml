@@ -286,7 +286,7 @@
                                         <MenuItem.ItemContainerStyle>
                                             <Style BasedOn="{StaticResource {x:Type MenuItem}}" TargetType="{x:Type MenuItem}">
                                                 <Setter Property="Header" Value="{Binding Path=DataContext, RelativeSource={RelativeSource Self}, Converter={StaticResource IGameArchiveToMenuItemStringConverter}}" />
-                                                <Setter Property="Command" Value="{Binding Path=DataContext.AddFromArchiveCommand, RelativeSource={RelativeSource AncestorType={x:Type syncfusion:SfDataGrid}}}" /> 
+                                                <Setter Property="Command" Value="{Binding Path=DataContext.AddFromArchiveCommand, RelativeSource={RelativeSource AncestorType={x:Type syncfusion:SfDataGrid}}}" />
                                                 <!--  Mode=FindAncestor, AncestorType={x:Type MenuItem}  -->
                                                 <Setter Property="CommandParameter" Value="{Binding Path=DataContext, RelativeSource={RelativeSource Self}}" />
                                             </Style>
@@ -340,19 +340,7 @@
 
                             <syncfusion:SfDataGrid.Columns>
 
-                                <syncfusion:GridCheckBoxColumn
-                                    Width="32"
-                                    AllowEditing="False"
-                                    AllowFiltering="False"
-                                    AllowResizing="False"
-                                    HeaderText="#"
-                                    MappingName="IsChecked">
-                                    <syncfusion:GridCheckBoxColumn.HeaderTemplate>
-                                        <DataTemplate>
-                                            <CheckBox Command="layout:SFDataGridCommands.CheckAndUnCheck" CommandParameter="{Binding ElementName=RightFileView}" />
-                                        </DataTemplate>
-                                    </syncfusion:GridCheckBoxColumn.HeaderTemplate>
-                                </syncfusion:GridCheckBoxColumn>
+                                <syncfusion:GridCheckBoxSelectorColumn Width="32" MappingName="SelectorColumn" />
 
                                 <syncfusion:GridTemplateColumn
                                     Width="13"

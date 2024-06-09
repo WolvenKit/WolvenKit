@@ -174,7 +174,7 @@ public class AppArchiveManager : ArchiveManager, IAppArchiveManager
     }
 
     public override Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles() => 
-        GetGroupedFiles(IsModBrowserActive ? ArchiveManagerScope.Mods : ArchiveManagerScope.Everywhere);
+        GetGroupedFiles(IsModBrowserActive ? ArchiveManagerScope.Mods : ArchiveManagerScope.Basegame);
 
     #endregion Methods
 }

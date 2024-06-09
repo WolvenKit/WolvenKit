@@ -74,6 +74,10 @@ namespace WolvenKit.Views.Tools
                         viewModel => viewModel.RightSelectedItem,
                         view => view.RightFileView.SelectedItem)
                     .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        viewModel => viewModel.RightSelectedItems,
+                        view => view.RightFileView.SelectedItems)
+                    .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.FindUsesCommand,
                         view => view.RightContextMenuFindUsesMenuItem)
@@ -269,9 +273,15 @@ namespace WolvenKit.Views.Tools
                 }
             }
 
-            var propertiesViewModel = Locator.Current.GetService<PropertiesViewModel>();
+            if (vm.RightSelectedItems.Count > 0)
+            {
+                if (vm.RightSelectedItems[^1] is not IFileSystemViewModel fileSystemViewModel)
+                {
+                    return;
+                }
 
-            propertiesViewModel.ExecuteSelectFile(vm.RightSelectedItem);
+                Locator.Current.GetService<PropertiesViewModel>()?.ExecuteSelectFile(fileSystemViewModel);
+            }
 
             vm.UpdateSearchInArchives();
         }

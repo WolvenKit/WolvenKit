@@ -280,6 +280,12 @@ public partial class WatcherService : ObservableObject, IWatcherService
                 throw new Exception();
             }
 
+            if (Path.GetExtension(renamedEventArgs.OldName).Equals(".tmp", StringComparison.InvariantCultureIgnoreCase))
+            {
+                _fileChanges.Enqueue(new FileSystemEventArgsWrapper(new FileSystemEventArgs(WatcherChangeTypes.Created, _projectDirectory, renamedEventArgs.Name)));
+                return;
+            }
+
             foreach (var key in _fileLookup.Keys)
             {
                 if (!key.StartsWith(renamedEventArgs.OldName))

@@ -209,6 +209,9 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private IFileSystemViewModel? _rightSelectedItem;
 
     [ObservableProperty]
+    private ObservableCollection<object> _rightSelectedItems = new();
+
+    [ObservableProperty]
     private ObservableCollectionEx<IFileSystemViewModel> _rightItems = new();
 
     [ObservableProperty] 
@@ -444,13 +447,13 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private async Task AddSelectedAsync()
     {
         // get all selected files
-        List<IGameFile> filesToAdd = new();
+        Dictionary<ulong, IGameFile> filesToAdd = new();
         foreach (var o in RightItems.Where(x => x.IsChecked))
         {
             switch (o)
             {
                 case RedFileViewModel fileVm:
-                    filesToAdd.Add(fileVm.GetGameFile());
+                    filesToAdd.Add(fileVm.GetGameFile().Key, fileVm.GetGameFile());
                     break;
                 case RedDirectoryViewModel dirVm:
                     GetFilesRecursive(dirVm.GetModel(), filesToAdd);
@@ -461,25 +464,27 @@ public partial class AssetBrowserViewModel : ToolViewModel
         }
 
         // check against existing files
-        List<IGameFile> existingFiles = new();
-        if (_projectManager.ActiveProject is not null)
+        List<IGameFile> nonExistingFiles = new();
+        if (_archiveManager.ProjectArchive is not null)
         {
-            foreach (var gamefile in filesToAdd)
+            var projectHashes = _archiveManager.ProjectArchive.Files.Keys.ToList();
+            foreach (var (hash, file) in filesToAdd)
             {
-                FileInfo diskPathInfo = new(Path.Combine(_projectManager.ActiveProject.ModDirectory, gamefile.Name));
-                if (diskPathInfo.Exists)
+                if (!projectHashes.Contains(hash))
                 {
-                    existingFiles.Add(gamefile);
+                    nonExistingFiles.Add(file);
                 }
             }
         }
 
+        var existingFiles = filesToAdd.Count - nonExistingFiles.Count;
+
         // add files
-        List<IGameFile> finalFilesToAdd = new();
-        if (existingFiles.Count > 0)
+        List<IGameFile> finalFilesToAdd;
+        if (existingFiles > 0)
         {
             var response = await Interactions.ShowMessageBoxAsync(
-                $"{existingFiles.Count}/{filesToAdd.Count} Files exist in project. Overwrite existing files?",
+                $"{existingFiles}/{filesToAdd.Count} Files exist in project. Overwrite existing files?",
                 "Add selected files",
                 WMessageBoxButtons.YesNoCancel);
 
@@ -488,20 +493,14 @@ public partial class AssetBrowserViewModel : ToolViewModel
                 // Overwrite all
                 case WMessageBoxResult.Yes:
                 {
-                    finalFilesToAdd = filesToAdd;
+                    finalFilesToAdd = filesToAdd.Values.ToList();
                     break;
                 }
 
                 // Skip existing files
                 case WMessageBoxResult.No:
                 {
-                    foreach (var f in filesToAdd)
-                    {
-                        if (!existingFiles.Contains(f))
-                        {
-                            finalFilesToAdd.Add(f);
-                        }
-                    }
+                    finalFilesToAdd = nonExistingFiles;
                     break;
                 }
                 // Rest cancels
@@ -515,17 +514,13 @@ public partial class AssetBrowserViewModel : ToolViewModel
         }
         else
         {
-            finalFilesToAdd = filesToAdd;
+            finalFilesToAdd = filesToAdd.Values.ToList();
         }
 
-        foreach (var file in finalFilesToAdd)
-        {
-            await Task.Run(() => _gameController.GetController().AddToMod(file));
-        }
-
-        _loggerService.Success($"Added {finalFilesToAdd.Count} files to the project.");
+        InternalAddFiles(finalFilesToAdd);
     }
-    private void GetFilesRecursive(RedFileSystemModel directory, List<IGameFile> files)
+
+    private void GetFilesRecursive(RedFileSystemModel directory, Dictionary<ulong, IGameFile> files)
     {
         foreach (var (key, model) in directory.Directories)
         {
@@ -533,11 +528,28 @@ public partial class AssetBrowserViewModel : ToolViewModel
         }
         foreach (var file in directory.Files)
         {
-            if (!files.Contains(file))
-            {
-                files.Add(file);
-            }
+            files.TryAdd(file.Key, file);
         }
+    }
+
+    private async void InternalAddFiles(IList<IGameFile> files)
+    {
+        var progress = 0;
+
+        _progressService.IsIndeterminate = false;
+        _progressService.Report(0.1);
+
+        await Parallel.ForEachAsync(files, async (file, token) =>
+        {
+            await Task.Run(() => { _gameController.GetController().AddToMod(file); }, token);
+
+            Interlocked.Increment(ref progress);
+            _progressService.Report(progress / (float)files.Count);
+        });
+
+        _progressService.Completed();
+
+        _loggerService.Success($"Added {files.Count} files to the project.");
     }
 
     /// <summary>
