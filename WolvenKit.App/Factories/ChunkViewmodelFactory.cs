@@ -49,7 +49,7 @@ public class ChunkViewmodelFactory(
             parserService,
             cruidService,
             parent,
-            isReadOnly);
+            isReadOnly).SetInitialExpansionState();
 
     public ChunkViewModel ChunkViewModel(IRedType rootChunk, ReferenceSocket socket, AppViewModel appViewModel, bool isReadOnly = false) =>
         new ChunkViewModel(rootChunk, socket, appViewModel,
@@ -66,7 +66,7 @@ public class ChunkViewmodelFactory(
             modifierViewStateService,
             parserService,
             cruidService,
-            isReadOnly);
+            isReadOnly).SetInitialExpansionState();
 
     public ChunkViewModel ChunkViewModel(IRedType rootChunk, RDTDataViewModel tab, AppViewModel appViewModel, bool isReadOnly = false) =>
         new ChunkViewModel(rootChunk, tab, appViewModel,
@@ -83,5 +83,5 @@ public class ChunkViewmodelFactory(
             modifierViewStateService,
             parserService,
             cruidService,
-            isReadOnly);
+            isReadOnly).SetInitialExpansionState();
 }

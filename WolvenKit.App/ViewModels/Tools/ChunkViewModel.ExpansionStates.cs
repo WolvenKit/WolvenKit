@@ -25,6 +25,29 @@ public class CustomLoopException : Exception
 
 public partial class ChunkViewModel : ObservableObject
 {
+    /// <summary>
+    /// Called from ChunkViewmodelFactory after initializing the chunk. 
+    /// </summary>
+    public ChunkViewModel SetInitialExpansionState()
+    {
+        if (Parent is not null)
+        {
+            return this;
+        }
+
+        switch (Data)
+        {
+            // .mi file
+            case CMaterialInstance when TVProperties.FirstOrDefault(prop => prop.Name == "values") is ChunkViewModel valuesNode:
+                valuesNode.IsExpanded = true;
+                break;
+            default:
+                break;
+        }
+
+        return this;
+    }
+
     // Keep track of expansion state changes triggered by parent nodes. In that case, we want to swallow our own
     // ExpansionStateChanged event and not interact with our child nodes again.
 
