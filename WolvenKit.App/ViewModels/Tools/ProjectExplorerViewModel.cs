@@ -22,6 +22,7 @@ using WolvenKit.App.Models;
 using WolvenKit.App.Models.Docking;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
@@ -65,8 +66,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
     private IPluginService _pluginService;
-    
-    
 
     private readonly ISettingsManager _settingsManager;
 
@@ -103,6 +102,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         
         SetupToolDefaults();
 
+        ModifierViewStateService.RefreshModifierStates();
+
+        _mainViewModel.PropertyChanged += MainViewModel_OnPropertyChanged;
+
         _projectManager.PropertyChanged += ProjectManager_OnPropertyChanged;
     }
 
@@ -116,6 +119,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
         return false;
     }
+
+    /// <summary>
+    /// Set status of "scroll to open file" button, based on whether or not we have one opened
+    /// </summary>
+    private void MainViewModel_OnPropertyChanged(object? sender, PropertyChangedEventArgs e) =>
+        CanScrollToOpenFile = _mainViewModel.ActiveDocument is not null;
 
     private void ProjectManager_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
@@ -212,6 +221,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     [ObservableProperty] private bool _convertToIsEnabled;
     [ObservableProperty] private bool _convertFromIsEnabled;
+    [ObservableProperty] private bool _canScrollToOpenFile;
 
     #endregion properties
 
@@ -301,6 +311,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     [ObservableProperty]
     private bool _isShowAbsolutePathToCurrentFolder;
+
+    /// <summary>
+    /// Do we have an open file?
+    /// </summary>
+    [ObservableProperty] private bool _hasOpenFile;
 
     private static readonly string s_rawFolder = $"{Path.DirectorySeparatorChar}raw{Path.DirectorySeparatorChar}";
 
@@ -1164,7 +1179,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     // Integrate with _modifierViewStatesModel to expose keys to view 
     // ####################################################################################
 
+    public bool IsShiftKeyPressed => ModifierViewStateService.IsShiftKeyPressed;
     public bool IsShiftKeyPressedOnly => ModifierViewStateService.IsShiftKeyPressedOnly;
+    public bool IsCtrlKeyPressed => ModifierViewStateService.IsCtrlKeyPressed;
     public bool IsCtrlKeyPressedOnly => ModifierViewStateService.IsCtrlKeyPressedOnly;
     public bool IsNoModifierPressed => ModifierViewStateService.IsNoModifierPressed;
 
@@ -1188,6 +1205,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         IsShowAbsolutePathToArchiveFolder =
             ModifierViewStateService.IsCtrlShiftOnlyPressed && SelectedItem?.FullName.Contains(s_rawFolder) == true;
+
+        IsShowRelativePath = IsShowRelativePath || !(IsShowAbsolutePathToRawFolder || IsShowAbsolutePathToArchiveFolder);
     }
 
     /// <summary>
@@ -1199,7 +1218,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// Passes key state changes from view down to ModifierViewStatesModel
     /// </summary>
     public void RefreshModifierStates() => ModifierViewStateService.RefreshModifierStates();
-   
+
+    public IDocumentViewModel? GetActiveEditorFile() => _mainViewModel.ActiveDocument;
 
     #endregion
 }

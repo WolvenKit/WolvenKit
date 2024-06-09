@@ -13,15 +13,19 @@ using System.Windows.Input;
 using HandyControl.Data;
 using ReactiveUI;
 using Syncfusion.Data;
+using Syncfusion.UI.Xaml.Grid.ScrollAxis;
 using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
 using WolvenKit.App.ViewModels.Dialogs;
+using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Tools;
+using WolvenKit.Core.Services;
 using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
+using RowColumnIndex = Syncfusion.UI.Xaml.ScrollAxis.RowColumnIndex;
 
 namespace WolvenKit.Views.Tools
 {
@@ -350,6 +354,8 @@ namespace WolvenKit.Views.Tools
         /// Called from view on keyup/keydown event. Synchronises modifier state with ModifierViewStateModel.
         /// </summary>
         private void OnKeyStateChanged(object sender, KeyEventArgs e) => ViewModel?.RefreshModifierStates();
+
+        public void RefreshModifierStates(object sender, RoutedEventArgs routedEventArgs) => ViewModel?.RefreshModifierStates();
 
         /// <summary>
         /// Called from view on key down event. Handles search bar and rename/delete commands.
@@ -870,6 +876,25 @@ namespace WolvenKit.Views.Tools
             }
 
             public ListSortDirection SortDirection { get; set; }
+        }
+
+        private void ScrollToOpenFile_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel?.GetActiveEditorFile() is not IDocumentViewModel activeFile
+                || TreeGrid.View.Nodes.FirstOrDefault(node => node.Item is FileSystemModel model && model.FullName == activeFile.FilePath)
+                    is not TreeNode activeFileNode)
+            {
+                return;
+            }
+
+            TreeGrid.SetCurrentValue(Syncfusion.UI.Xaml.Grid.SfGridBase.SelectedItemProperty, activeFileNode);
+
+            ViewModel.SelectedItem = activeFileNode.Item as FileSystemModel;
+
+            var rowIndex = TreeGrid.ResolveToRowIndex(activeFileNode);
+            var columnIndex = TreeGrid.ResolveToStartColumnIndex();
+            TreeGrid.ScrollInView(new RowColumnIndex(rowIndex, columnIndex));
+            TreeGrid.View.MoveCurrentToPosition(rowIndex);
         }
     }
 }

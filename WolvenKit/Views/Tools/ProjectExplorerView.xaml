@@ -18,6 +18,7 @@
     d:DesignHeight="450"
     d:DesignWidth="400"
     x:TypeArguments="tools:ProjectExplorerViewModel"
+    ContextMenuOpening="RefreshModifierStates"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -506,6 +507,26 @@
                 </Setter>
             </Style>
 
+            <Style TargetType="{x:Type Button}" x:Key="HideOnShift" BasedOn="{StaticResource ButtonDefault}">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsShiftKeyPressed}" Value="False">
+                        <Setter Property="Visibility" Value="Visible" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsShiftKeyPressed}" Value="True">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="{x:Type Button}" x:Key="UnhideOnShift" BasedOn="{StaticResource ButtonDefault}">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsShiftKeyPressed}" Value="False">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsShiftKeyPressed}" Value="True">
+                        <Setter Property="Visibility" Value="Visible" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
         </ResourceDictionary>
 
     </UserControl.Resources>
@@ -641,6 +662,7 @@
                     <Button
                         Margin="3,0,0,0"
                         Click="ExpandAll_OnClick"
+                        Style="{StaticResource HideOnShift}"
                         ToolTip="Expand All">
                         <iconPacks:PackIconCodicons
                             Width="13"
@@ -650,6 +672,7 @@
                     <Button
                         Margin="3,0,0,0"
                         Click="CollapseAll_OnClick"
+                        Style="{StaticResource HideOnShift}"
                         ToolTip="Collapse All">
                         <iconPacks:PackIconCodicons
                             Width="13"
@@ -659,6 +682,7 @@
                     <Button
                         Margin="3,0,0,0"
                         Click="ExpandChildren_OnClick"
+                        Style="{StaticResource UnhideOnShift}"
                         ToolTip="Expand Children">
                         <iconPacks:PackIconBootstrapIcons
                             Width="13"
@@ -668,11 +692,22 @@
                     <Button
                         Margin="3,0,0,0"
                         Click="CollapseChildren_OnClick"
+                        Style="{StaticResource UnhideOnShift}"
                         ToolTip="Collapse Children">
                         <iconPacks:PackIconBootstrapIcons
                             Width="13"
                             Height="13"
                             Kind="ArrowsCollapse" />
+                    </Button>
+                    <Button
+                        Margin="3,0,0,0"
+                        Click="ScrollToOpenFile_OnClick"
+                        IsEnabled="{Binding CanScrollToOpenFile}"
+                        ToolTip="Scroll to open file">
+                        <iconPacks:Material
+                            Width="13"
+                            Height="13"
+                            Kind="Crosshairs" />
                     </Button>
                     <Button
                         x:Name="RefreshButton"

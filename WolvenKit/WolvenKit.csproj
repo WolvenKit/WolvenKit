@@ -114,6 +114,7 @@
     <Page Remove="NewFolder1\**" />
     <Page Remove="Resources\Styles\CustomBase\**" />
     <Page Remove="Resources\Styles\Custom\**" />
+    <Compile Remove="Converters\BooleanConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Views\Templates\RedFixedPointEditor.cs" />

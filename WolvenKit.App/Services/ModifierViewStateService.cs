@@ -99,12 +99,11 @@ public partial class ModifierViewStateService() : ObservableObject, IModifierVie
 
     public void OnKeystateChanged(KeyEventArgs? e)
     {
-        if (e?.Key is not (Key.RightCtrl or Key.LeftCtrl or Key.LeftShift or Key.RightShift or Key.LeftAlt
-            or Key.RightAlt))
+        if (e is null || !IModifierViewStateService.ModifierKeys.Contains(e.Key))
         {
             return;
         }
-
+        
         // If the key state hasn't changed, ignore the event
         if (_keyStates.TryGetValue(e.Key, out var value) && value == e.IsDown)
         {
