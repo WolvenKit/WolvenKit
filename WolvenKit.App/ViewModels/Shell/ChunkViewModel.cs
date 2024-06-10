@@ -1344,6 +1344,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
+        ConvertPreloadMaterials();
+
         // Collect material names from appearance chunk materials
         var appearanceNames = mesh.Appearances
             .Select((handle) => handle.GetValue() as meshMeshAppearance).Where((i) => i != null)
@@ -1377,25 +1379,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 .Where((material, i) => localMatIdxList.Contains(i)).ToArray();
         }
 
-        if (mesh.PreloadLocalMaterialInstances is not null && mesh.PreloadLocalMaterialInstances.Count > 0)
-        {
-            keepLocalPreload = mesh.PreloadLocalMaterialInstances
-                .Where((material, i) => localMatIdxList.Contains(i))
-                .ToArray();
-        }
-
         if (mesh.ExternalMaterials is not null && mesh.ExternalMaterials.Count > 0)
         {
             keepExternal = mesh.ExternalMaterials
                 .Where((material, i) => externalMatIdxList.Contains(i)).ToArray();
         }
-
-        if (mesh.PreloadExternalMaterials is not null && mesh.PreloadExternalMaterials.Count > 0)
-        {
-            keepExternalPreload = mesh.PreloadExternalMaterials
-                .Where((material, i) => externalMatIdxList.Contains(i)).ToArray();
-        }
-
+        
         var usedMaterialDefinitions = mesh.MaterialEntries.Where(me =>
             (me.IsLocalInstance && localMatIdxList.Contains(me.Index)) ||
             (!me.IsLocalInstance && externalMatIdxList.Contains(me.Index))
@@ -1418,15 +1407,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
         }
 
-        if (mesh.PreloadLocalMaterialInstances is not null)
-        {
-            mesh.PreloadLocalMaterialInstances.Clear();
-            foreach (var t in keepLocalPreload)
-            {
-                mesh.PreloadLocalMaterialInstances.Add(t);
-            }
-        }
-
         if (mesh.ExternalMaterials is not null)
         {
             mesh.ExternalMaterials.Clear();
@@ -1435,16 +1415,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 mesh.ExternalMaterials.Add(t);
             }    
         }
-
-        if (mesh.PreloadExternalMaterials is not null)
-        {
-            mesh.PreloadExternalMaterials.Clear();
-            foreach (var t in keepExternalPreload)
-            {
-                mesh.PreloadExternalMaterials.Add(t);
-            }
-        }
-        
 
         mesh.MaterialEntries.Clear();
         var localMaterialIdx = 0;
@@ -1467,8 +1437,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         RecalculateProperties();
-
         Tab?.Parent.SetIsDirty(true);
+
+        GetPropertyChild("materialEntries")?.RecalculateProperties();
+
+        GetPropertyChild("localMaterialBuffer")?.GetPropertyChild("materials")?.RecalculateProperties();
+        GetPropertyChild("localMaterialBuffer")?.RecalculateProperties();
+
+        GetPropertyChild("externalMaterials")?.RecalculateProperties();
 
         _loggerService.Info($"Deleted {numUnusedMaterials} unused materials.");
     }
@@ -1510,9 +1486,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             mesh.MaterialEntries.Add(material);
         }
 
-        var prop = TVProperties.FirstOrDefault(p => p.Name == "materialEntries");
-        prop?.RecalculateProperties();
-        prop?.CalculateDescriptor();
+        GetPropertyChild("materialEntries")?.RecalculateProperties();
     }
 
     private ChunkViewModel? GetPropertyChild(string propertyName) => TVProperties.FirstOrDefault(prop => prop.Name == propertyName);
@@ -1520,6 +1494,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     // Converts PreloadMaterials to regular local materials. We like them better, and this way,
     // we don't have to check all those arrays.
 
+
+    private bool CanConvertPreloadMaterial() => IsArray && ((IRedArray)ResolvedData).Count > 0 && Name.StartsWith("preload") &&
+                                                ResolvedData is CArray<CHandle<IMaterial>> or CArray<CResourceReference<IMaterial>>;
+
+    [RelayCommand(CanExecute = nameof(CanConvertPreloadMaterial))]
     private void ConvertPreloadMaterials()
     {
         if (ResolvedData is not CMesh mesh)
@@ -1547,6 +1526,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
             GetPropertyChild("preloadLocalMaterialInstances")?.RecalculateProperties();
             GetPropertyChild("localMaterialBuffer")?.GetPropertyChild("materials")?.RecalculateProperties();
+            GetPropertyChild("localMaterialBuffer")?.RecalculateProperties();
             Tab?.Parent.SetIsDirty(true);
         }
 
