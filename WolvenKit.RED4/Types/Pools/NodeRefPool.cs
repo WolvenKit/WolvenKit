@@ -48,7 +48,7 @@ public static class NodeRefPool
     
     private static void CacheAliases(string value)
     {
-        if (!value.Contains('#'))
+        if (value[0] != '$' || !value.Contains('#'))
             return;
 
         var nextAliasPos = value.IndexOf('#');
