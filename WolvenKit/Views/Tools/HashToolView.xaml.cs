@@ -44,7 +44,7 @@ public partial class HashToolView : ReactiveUserControl<HashToolViewModel>
         DepotHash.SetCurrentValue(TextBox.TextProperty, depotHash.ToString());
         DepotHashHex.SetCurrentValue(TextBox.TextProperty, $"0x{depotHash:X16}");
 
-        var nodeRefHash = FNV1A64HashAlgorithm.HashString(InputTextBox.Text.Replace("#", ""));
+        var nodeRefHash = FNV1A64HashAlgorithm.HashStringWithoutAliases(InputTextBox.Text);
         NodeRefHash.SetCurrentValue(TextBox.TextProperty, nodeRefHash.ToString());
         NodeRefHashHex.SetCurrentValue(TextBox.TextProperty, $"0x{nodeRefHash:X16}");
 

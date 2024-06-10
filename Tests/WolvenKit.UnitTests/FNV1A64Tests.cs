@@ -110,6 +110,7 @@ namespace WolvenKit.UnitTests
         [TestMethod]
         [DataRow("$/test/important/123/456")]
         [DataRow("$/test/important;#alias/123/456")]
+        [DataRow("$/test/important;#alias/123;#alias2/456;#alias3")]
         public void Hasher_Should_Handle_Semicolon(string source)
         {
             var hash = FNV1A64HashAlgorithm.HashStringWithoutAliases(source);
