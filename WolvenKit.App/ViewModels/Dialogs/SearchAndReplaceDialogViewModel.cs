@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace WolvenKit.App.ViewModels.Dialogs;
 
 /// <summary>
-/// A simple "search and replace" dialog.
+/// A simple "search and replace" dialog. Needs to register in GenericHost via AddTransient.
 /// </summary>
 public partial class SearchAndReplaceDialogViewModel() : ObservableObject
 {

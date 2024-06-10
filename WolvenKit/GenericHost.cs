@@ -127,6 +127,9 @@ namespace WolvenKit
                     services.AddTransient<SearchAndReplaceDialogViewModel>();
                     services.AddTransient<IViewFor<SearchAndReplaceDialogViewModel>, SearchAndReplaceDialog>();
 
+                    services.AddTransient<CreateMaterialsDialogViewModel>();
+                    services.AddTransient<IViewFor<CreateMaterialsDialogViewModel>, CreateMaterialsDialog>();
+
                     services.AddTransient<RenameDialogViewModel>();
                     services.AddTransient<IViewFor<RenameDialogViewModel>, RenameDialog>();
 
