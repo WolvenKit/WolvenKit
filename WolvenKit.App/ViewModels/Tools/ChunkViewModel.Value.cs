@@ -175,20 +175,19 @@ public partial class ChunkViewModel
             // csv files: Some of them have a fallbackXYZname
             case IRedArray { Count: > 0 } csvAry when Parent is { Name: "compiledData" } && GetRootModel().Data is C2dArray csv:
 
-                var nameIndex = 0;
+                var pathIndex = 0;
                 for (var i = 0; i < csv.CompiledHeaders.Count; i++)
                 {
                     var propertyName = ((string)csv.CompiledHeaders[i]).ToLower();
-                    if (!propertyName.Contains("name") && propertyName.Contains("fallback"))
+                    // ReSharper disable once InvertIf
+                    if (propertyName.Contains("path") && !propertyName.Contains("fallback"))
                     {
-                        continue;
+                        pathIndex = i;
+                        break;
                     }
-
-                    nameIndex = i;
-                    break;
                 }
 
-                Value = $"{csvAry[nameIndex]}";
+                Value = $"{csvAry[pathIndex]}";
                 if (Value != "")
                 {
                     IsValueExtrapolated = true;

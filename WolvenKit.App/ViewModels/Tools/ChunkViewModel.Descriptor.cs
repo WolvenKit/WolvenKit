@@ -114,13 +114,12 @@ public partial class ChunkViewModel
                 var nameIndex = 0;
                 for (var i = 0; i < csv.CompiledHeaders.Count; i++)
                 {
-                    if (!((string)csv.CompiledHeaders[i]).Contains("name", StringComparison.InvariantCultureIgnoreCase))
+                    // ReSharper disable once InvertIf
+                    if (((string)csv.CompiledHeaders[i]).Contains("name", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        continue;
+                        nameIndex = i;
+                        break;
                     }
-
-                    nameIndex = i;
-                    break;
                 }
 
                 Descriptor = $"{csvAry[nameIndex]}";
