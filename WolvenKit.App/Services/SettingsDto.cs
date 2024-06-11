@@ -46,6 +46,7 @@ public class SettingsDto : ISettingsDto
         ShowGraphEditorNodeProperties = settings.ShowGraphEditorNodeProperties;
         ModderName = settings.ModderName;
         ModderEmail = settings.ModderEmail;
+        RefactoringCheckboxDefaultValue = settings.RefactoringCheckboxDefaultValue;
         
         if (settings.SettingsVersion < 2)
         {
@@ -88,6 +89,7 @@ public class SettingsDto : ISettingsDto
     public bool ShowGraphEditorNodeProperties { get; set; } = true;
     public string? ModderName { get; set; }
     public string? ModderEmail { get; set; }
+    public bool RefactoringCheckboxDefaultValue { get; set; }
 
     public SettingsManager ReconfigureSettingsManager(SettingsManager settingsManager)
     {
@@ -130,6 +132,7 @@ public class SettingsDto : ISettingsDto
         settingsManager.ShowGraphEditorNodeProperties = ShowGraphEditorNodeProperties;
         settingsManager.ModderName = ModderName;
         settingsManager.ModderEmail = ModderEmail;
+        settingsManager.RefactoringCheckboxDefaultValue = RefactoringCheckboxDefaultValue;
 
         return settingsManager;
     }

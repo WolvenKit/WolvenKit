@@ -30,7 +30,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     public SettingsManager()
     {
         _assemblyVersion = CommonFunctions.GetAssemblyVersion(Constants.AssemblyName).ToString();
-
+        
         _ = this.WhenAnyPropertyChanged(
             nameof(ShowGuidedTour),
             nameof(MaterialRepositoryPath),
@@ -60,10 +60,12 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(RecentOrder),
             nameof(ShowGraphEditorNodeProperties),
             nameof(ModderName),
-            nameof(ModderEmail)
+            nameof(ModderEmail),
+            nameof(RefactoringCheckboxDefaultValue)
             )
           .Subscribe(_ =>
           {
+              
               if (_isLoaded)
               {
                   Save();
@@ -210,7 +212,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [ObservableProperty]
     private string? _treeViewIgnoredExtensions = "";
 
-    [Display(Name = "Show advanced Options", GroupName = "Import / Export")]
+    [Display(Name = "Import/Export: Show advanced Options", GroupName = "Interface")]
     [ObservableProperty]
     private bool _showAdvancedOptions;
 
@@ -257,6 +259,12 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [Display(Name = "Analyze mods", Description = "Check mod archives for file names and invalid files", GroupName = "Cyberpunk")] 
     [ObservableProperty]
     private bool _analyzeModArchives;
+
+    [Display(Name = "Update references on rename",
+        Description = "When renaming or moving a file or folder, should Wolvenkit try to update all references to it?",
+        GroupName = "Interface")]
+    [ObservableProperty]
+    private bool _refactoringCheckboxDefaultValue;
 
     [Display(Name = "Additional Mod directory", Description = "Path to an optional directory containing mod archives", GroupName = "Cyberpunk")]
     [ObservableProperty]
