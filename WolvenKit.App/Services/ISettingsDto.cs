@@ -40,4 +40,6 @@ public interface ISettingsDto
     public int PinnedOrder { get; set; }
     public int RecentOrder { get; set; }
     public bool ShowGraphEditorNodeProperties { get; set; }
+    public string? ModderName { get; set; }
+    public string? ModderEmail { get; set; }
 }

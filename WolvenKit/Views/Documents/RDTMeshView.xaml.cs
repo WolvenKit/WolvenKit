@@ -1,3 +1,4 @@
+using System;
 using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Controls;
@@ -5,6 +6,7 @@ using System.Windows.Input;
 using HelixToolkit.SharpDX.Core;
 using ReactiveUI;
 using Syncfusion.UI.Xaml.TreeGrid;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
 
 namespace WolvenKit.Views.Documents
@@ -201,4 +203,5 @@ namespace WolvenKit.Views.Documents
             ViewModel?.SelectWorldNode();
         }
     }
+    
 }
