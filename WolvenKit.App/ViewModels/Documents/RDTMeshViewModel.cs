@@ -29,6 +29,7 @@ using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Core.Services;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.Archive.Buffer;
@@ -45,9 +46,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
     private readonly ISettingsManager _settingsManager;
     private readonly IGameControllerFactory _gameController;
     private readonly ILoggerService _loggerService;
-    private readonly Red4ParserService _parserService;
     private readonly IModTools _modTools;
     private readonly GeometryCacheService _geometryCacheService;
+    private readonly IModifierViewStateService _modifierSvc;
 
     protected readonly RedBaseClass? _data;
 
@@ -66,19 +67,24 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         ISettingsManager settingsManager,
         IGameControllerFactory gameController,
         ILoggerService loggerService,
-        Red4ParserService parserService,
         IModTools modTools,
-        GeometryCacheService geometryCacheService) : base(parent, header)
+        GeometryCacheService geometryCacheService,
+        IModifierViewStateService modifierSvc
+    ) : base(parent, header)
     {
         _loggerService = loggerService;
-        _parserService = parserService;
         _settingsManager = settingsManager;
         _gameController = gameController;
         _modTools = modTools;
         _geometryCacheService = geometryCacheService;
+        _modifierSvc = modifierSvc;
+
+        _modifierSvc.ModifierStateChanged += ModifierStateChanged;
 
         Parent = parent;
     }
+
+    private void ModifierStateChanged() => IsCtrlKeyPressed = _modifierSvc.IsCtrlKeyPressed;
 
     // TODO refactor this into inherited viewmodels
 
@@ -86,10 +92,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         ISettingsManager settingsManager,
         IGameControllerFactory gameController,
         ILoggerService loggerService,
-        Red4ParserService parserService,
         IModTools modTools,
-        GeometryCacheService geometryCacheService) 
-        : this(file, MeshViewHeaders.MeshPreview, settingsManager, gameController, loggerService, parserService, modTools, geometryCacheService)
+        GeometryCacheService geometryCacheService,
+        IModifierViewStateService modifierSvc)
+        : this(file, MeshViewHeaders.MeshPreview, settingsManager, gameController, loggerService, modTools,
+            geometryCacheService, modifierSvc)
     {
         _data = data;
     }
@@ -98,10 +105,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         ISettingsManager settingsManager,
         IGameControllerFactory gameController,
         ILoggerService loggerService,
-        Red4ParserService parserService,
         IModTools modTools,
-        GeometryCacheService geometryCacheService) 
-        : this(file, MeshViewHeaders.SectorPreview, settingsManager, gameController, loggerService, parserService, modTools, geometryCacheService)
+        GeometryCacheService geometryCacheService,
+        IModifierViewStateService modifierSvc)
+        : this(file, MeshViewHeaders.SectorPreview, settingsManager, gameController, loggerService, modTools,
+            geometryCacheService, modifierSvc)
     {
         _data = data;
     }
@@ -110,10 +118,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         ISettingsManager settingsManager,
         IGameControllerFactory gameController,
         ILoggerService loggerService,
-        Red4ParserService parserService,
         IModTools modTools,
-        GeometryCacheService geometryCacheService) 
-        : this(file, MeshViewHeaders.AllSectorPreview, settingsManager, gameController, loggerService, parserService, modTools, geometryCacheService)
+        GeometryCacheService geometryCacheService,
+        IModifierViewStateService modifierSvc)
+        : this(file, MeshViewHeaders.AllSectorPreview, settingsManager, gameController, loggerService, modTools,
+            geometryCacheService, modifierSvc)
     {
         _data = data;
     }
@@ -122,15 +131,18 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         ISettingsManager settingsManager,
         IGameControllerFactory gameController,
         ILoggerService loggerService,
-        Red4ParserService parserService,
         IModTools modTools,
-        GeometryCacheService geometryCacheService) 
-        : this(file, MeshViewHeaders.EntityPreview, settingsManager, gameController, loggerService, parserService, modTools, geometryCacheService)
+        GeometryCacheService geometryCacheService,
+        IModifierViewStateService modifierSvc)
+        : this(file, MeshViewHeaders.EntityPreview, settingsManager, gameController, loggerService, modTools,
+            geometryCacheService, modifierSvc)
     {
         _data = ent;
     }
 
     public string? SelectedNodeIndex;
+    
+    
 
     public override void Load()
     {
@@ -269,6 +281,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
     [ObservableProperty] private List<Appearance> _appearances = new();
 
     [ObservableProperty] private Appearance? _selectedAppearance;
+
+    [ObservableProperty] private bool _isCtrlKeyPressed;
 
     public bool CtrlKeyPressed { get; set; }
 
@@ -1545,6 +1559,16 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         return materials;
     }
 
+    [RelayCommand]
+    public void CopyAppearanceName()
+    {
+        if (SelectedAppearance?.Name is not null)
+        {
+            Clipboard.SetText(SelectedAppearance.Name);
+        }
+    }
+
+    public bool IsAppearanceSelected => null != SelectedAppearance;
 
     public bool IsLoadingMaterials { get; set; }
 
