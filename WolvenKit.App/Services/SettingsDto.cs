@@ -44,6 +44,8 @@ public class SettingsDto : ISettingsDto
         PinnedOrder = settings.PinnedOrder;
         RecentOrder = settings.RecentOrder;
         ShowGraphEditorNodeProperties = settings.ShowGraphEditorNodeProperties;
+        ModderName = settings.ModderName;
+        ModderEmail = settings.ModderEmail;
         
         if (settings.SettingsVersion < 2)
         {
@@ -84,6 +86,8 @@ public class SettingsDto : ISettingsDto
     public int PinnedOrder { get; set; }
     public int RecentOrder { get; set; }
     public bool ShowGraphEditorNodeProperties { get; set; } = true;
+    public string? ModderName { get; set; }
+    public string? ModderEmail { get; set; }
 
     public SettingsManager ReconfigureSettingsManager(SettingsManager settingsManager)
     {
@@ -124,6 +128,8 @@ public class SettingsDto : ISettingsDto
         settingsManager.PinnedOrder = PinnedOrder;
         settingsManager.RecentOrder = RecentOrder;
         settingsManager.ShowGraphEditorNodeProperties = ShowGraphEditorNodeProperties;
+        settingsManager.ModderName = ModderName;
+        settingsManager.ModderEmail = ModderEmail;
 
         return settingsManager;
     }

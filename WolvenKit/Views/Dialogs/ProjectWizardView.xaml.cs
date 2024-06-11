@@ -3,6 +3,8 @@ using System.Reactive.Disposables;
 using System.Windows.Controls;
 using System.Windows.Input;
 using ReactiveUI;
+using Splat;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 
 namespace WolvenKit.Views.Dialogs
@@ -24,7 +26,7 @@ namespace WolvenKit.Views.Dialogs
             {
                 _syncModName = true;
                 _autoUpdate = false;
-
+                
                 //this.Bind(ViewModel,
                 //    vm => vm,
                 //    v => v.DataContext).DisposeWith(disposables);
@@ -80,7 +82,29 @@ namespace WolvenKit.Views.Dialogs
 
                 ProjectNameTextBox.VerifyData();
                 ModNameTextBox.VerifyData();
+
+                ReadDefaultValuesFromSettings();
+                VersionTextBox.SetCurrentValue(TextBox.TextProperty, "1.0.0");
             });
+        }
+
+        private void ReadDefaultValuesFromSettings()
+        {
+            var settings = Locator.Current.GetService<ISettingsManager>();
+            if (settings is null)
+            {
+                return;
+            }
+
+            if (settings.ModderName is not null)
+            {
+                AuthorTextBox.SetCurrentValue(TextBox.TextProperty, settings.ModderName);
+            }
+
+            if (settings.ModderEmail is not null)
+            {
+                EmailTextBox.SetCurrentValue(TextBox.TextProperty, settings.ModderEmail);
+            }
         }
 
         private HandyControl.Data.OperationResult<bool> VerifyProjectName(string str)

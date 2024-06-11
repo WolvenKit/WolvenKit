@@ -58,7 +58,9 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(LastUsedProjectPath),
             nameof(PinnedOrder),
             nameof(RecentOrder),
-            nameof(ShowGraphEditorNodeProperties)
+            nameof(ShowGraphEditorNodeProperties),
+            nameof(ModderName),
+            nameof(ModderEmail)
             )
           .Subscribe(_ =>
           {
@@ -259,6 +261,14 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [Display(Name = "Additional Mod directory", Description = "Path to an optional directory containing mod archives", GroupName = "Cyberpunk")]
     [ObservableProperty]
     private string? _extraModDirPath;
+
+    [Display(Name = "Your name", Description = "Will be used for project properties on creation", GroupName = "General")]
+    [ObservableProperty]
+    private string? _modderName;
+
+    [Display(Name = "Your e-Mail", Description = "Will be used for project properties on creation", GroupName = "General")]
+    [ObservableProperty]
+    private string? _modderEmail;
 
     [ObservableProperty]
 #pragma warning disable CS0657 // Not a valid attribute location for this declaration
