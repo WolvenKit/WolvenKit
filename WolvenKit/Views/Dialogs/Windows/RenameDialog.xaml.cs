@@ -6,6 +6,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.RED4.Types;
 using Window = System.Windows.Window;
@@ -15,11 +16,23 @@ namespace WolvenKit.Views.Dialogs.Windows
     public partial class RenameDialog : IViewFor<RenameDialogViewModel>
     {
         public bool ShowRefactorCheckbox { get; private set; }
-        private static bool s_lastShowRefactorCheckbox = true;
+        private static bool? s_lastShowRefactorCheckbox = null;
+
+        private static void SetDefaultValue()
+        {
+            if (s_lastShowRefactorCheckbox is not null)
+            {
+                return;
+            }
+
+            var settingsManager = Locator.Current.GetService<ISettingsManager>();
+            s_lastShowRefactorCheckbox = settingsManager?.RefactoringCheckboxDefaultValue ?? false;
+        } 
 
         public RenameDialog(bool showRefactorCheckbox = false)
         {
             InitializeComponent();
+            SetDefaultValue();
 
             ViewModel = Locator.Current.GetService<RenameDialogViewModel>();
             DataContext = ViewModel;
