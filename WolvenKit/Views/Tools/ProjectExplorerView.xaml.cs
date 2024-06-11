@@ -104,9 +104,9 @@ namespace WolvenKit.Views.Tools
                     return result == AdonisUI.Controls.MessageBoxResult.OK;
                 };
 
-                Interactions.Rename = input =>
+                Interactions.RenameAndRefactor = input =>
                     {
-                        var dialog = new RenameDialog();
+                        var dialog = new RenameDialog(true);
                         if (dialog.ViewModel is not null)
                         {
                             dialog.ViewModel.Text = input;
@@ -115,10 +115,10 @@ namespace WolvenKit.Views.Tools
                         if (dialog.ViewModel is not RenameDialogViewModel innerVm
                             || dialog.ShowDialog(Application.Current.MainWindow) != true)
                         {
-                            return "";
+                            return new Tuple<string, bool>("", false);
                         }
 
-                        return innerVm.Text;
+                        return new Tuple<string, bool>(innerVm.Text, innerVm.EnableRefactoring == true);
                     };
 
 

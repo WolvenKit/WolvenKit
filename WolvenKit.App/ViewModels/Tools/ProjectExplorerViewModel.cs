@@ -726,7 +726,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private void RenameFile()
     {
         var filename = SelectedItem.NotNull().FullName;
-        var newFilename = Interactions.Rename(filename);
+        var (newFilename, refactor) = Interactions.RenameAndRefactor(filename);
 
         if (string.IsNullOrEmpty(newFilename))
         {
@@ -757,13 +757,15 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             // Swallow error
         }
 
-        if (ActiveProject is { })
+        if (!refactor || ActiveProject is null)
         {
-            var oldRelPath = GetResourcePath(filename, ActiveProject);
-            var newRelPath = GetResourcePath(newFilename, ActiveProject);
-            
-            ReplacePathInProject(oldRelPath, newRelPath);
+            return;
         }
+
+        var oldRelPath = GetResourcePath(filename, ActiveProject);
+        var newRelPath = GetResourcePath(newFilename, ActiveProject);
+
+        ReplacePathInProject(oldRelPath, newRelPath);
     }
 
     #endregion general commands

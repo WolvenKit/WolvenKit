@@ -36,8 +36,17 @@
                 PageType="Exterior">
                 <StackPanel Orientation="Vertical">
                     <hc:TextBox x:Name="TextBox" Style="{StaticResource TextBoxExtend}" />
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Margin="2,6,5,0" Text="Update in project files?"
+                                   Visibility="{Binding ShowRefactoringCheckbox, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        <CheckBox
+                            x:Name="EnableRefactoringCheckbox"
+                            Margin="5,5,0,0"
+                            IsChecked="{Binding Path=EnableRefactoring, Mode=TwoWay}"
+                            ToolTip="Try updating references to this file? This will edit other files in your project."
+                            Visibility="{Binding ShowRefactoringCheckbox, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    </StackPanel>
                 </StackPanel>
-
 
             </syncfusion:WizardPage>
         </syncfusion:WizardControl>
