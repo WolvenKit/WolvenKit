@@ -212,7 +212,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [ObservableProperty]
     private string? _treeViewIgnoredExtensions = "";
 
-    [Display(Name = "Show advanced Options", GroupName = "Import / Export")]
+    [Display(Name = "Import/Export: Show advanced Options", GroupName = "Interface")]
     [ObservableProperty]
     private bool _showAdvancedOptions;
 
