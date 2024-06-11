@@ -266,6 +266,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     Parent.NotifyChain("Data");
                 }
 
+                Parent.CalculateDescriptor();
+                if (Parent.IsValueExtrapolated)
+                {
+                    Parent.CalculateValue();
+                }
+
                 if (Data is CName && Parent.Parent?.ResolvedData is meshMeshAppearance or redTagList or entVisualTagsSchema)
                 {
                     Parent.Parent?.CalculateValue();
@@ -359,6 +365,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             || Parent.Data is CKeyValuePair
             || Parent.Data is Multilayer_Layer
             || Parent.Data is CMeshMaterialEntry
+            || Parent.Data is CArray<CString>
            )
         {
             Parent.CalculateDescriptor();
