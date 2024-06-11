@@ -99,9 +99,8 @@ public partial class ModTools
         return UncookSingle(result!.Archive!, hash, di, args);
     }
 
-    /// the word "mod" between two word boundaries (e.g. path separators)
-    [GeneratedRegex("(?<=\\b)mod(?=\\b)")]
-    private static partial Regex ModSubfolderRegex();
+    private static readonly string s_modFolder = Path.DirectorySeparatorChar + "mod" + Path.DirectorySeparatorChar;
+    private static readonly string s_hotFolder = Path.DirectorySeparatorChar + "hot" + Path.DirectorySeparatorChar;
     
     /// <summary>
     /// Install a packed mod to the game directory.
@@ -119,7 +118,7 @@ public partial class ModTools
 
             if (file.FullName.EndsWith(".archive") && installToHot)
             {
-                relativePath = ModSubfolderRegex().Replace(relativePath, "hot");
+                relativePath = relativePath.Replace(s_modFolder, s_hotFolder);
             }
 
             var destinationPath = Path.Combine(gameRootDir.FullName, relativePath);
