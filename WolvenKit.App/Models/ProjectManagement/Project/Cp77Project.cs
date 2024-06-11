@@ -291,6 +291,23 @@ public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
         }
     }
 
+    /// <summary>
+    /// Path to /packed/mods
+    /// </summary>
+    public string PackedLegacyModDirectory
+    {
+        get
+        {
+            var dir = Path.Combine(PackedRootDirectory, "archive", "pc", "mod");
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+
+            return dir;
+        }
+    }
+
 
     /// <summary>
     /// Path to /packed/archive/pc/mod or /packed/mods

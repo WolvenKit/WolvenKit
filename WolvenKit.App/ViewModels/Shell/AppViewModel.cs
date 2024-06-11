@@ -1308,7 +1308,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     [RelayCommand]
-    private Task HotInstallModAsync() => Task.Run(() => _gameControllerFactory.GetController().PackProjectHot());
+    private Task HotInstallModAsync() => _gameControllerFactory.GetController().InstallProjectHot();
 
     [RelayCommand]
     private void LaunchOptions()

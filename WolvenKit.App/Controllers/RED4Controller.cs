@@ -176,9 +176,9 @@ public class RED4Controller : ObservableObject, IGameController
 
     #region Packing
 
-    public bool PackProjectHot()
+    public async Task<bool> InstallProjectHot()
     {
-        if (_projectManager.ActiveProject is null)
+        if (_projectManager.ActiveProject is not Cp77Project currentProject)
         {
             return false;
         }
@@ -198,18 +198,24 @@ public class RED4Controller : ObservableObject, IGameController
             _loggerService.Info($"Created hot directory at {hotdirectory}");
         }
 
-        // pack mod
-        var modfiles = Directory.GetFiles(_projectManager.ActiveProject.ModDirectory, "*", SearchOption.AllDirectories);
-        if (modfiles.Any())
+        var gameDirectoryInfo = new DirectoryInfo(_settingsManager.GetRED4GameRootDir());
+        var packedDirectoryInfo = new DirectoryInfo(currentProject.PackedRootDirectory);
+
+        if (!await PackProjectFiles(new LaunchProfile(), currentProject))
         {
-            if (!_modTools.Pack(new DirectoryInfo(_projectManager.ActiveProject.ModDirectory), new DirectoryInfo(hotdirectory), _projectManager.ActiveProject.ModName))
-            {
-                return false;
-            }
+            return false;
         }
-        
-        _loggerService.Success($"{_projectManager.ActiveProject.ModName} packed into {hotdirectory}");
-        _notificationService.Success($"{_projectManager.ActiveProject.ModName} packed into {hotdirectory}");
+
+        if (!_modTools.InstallFiles(packedDirectoryInfo, gameDirectoryInfo, true))
+        {
+            return false;
+        }
+
+        // Clean all residual files
+        CleanAll();
+
+        _loggerService.Success($"{currentProject.ModName} packed into {hotdirectory}");
+        _notificationService.Success($"{currentProject.ModName} packed into {hotdirectory}");
 
         return true;
     }
@@ -230,7 +236,7 @@ public class RED4Controller : ObservableObject, IGameController
             _notificationService.Error(errorMessage);
             return false;
         }
-
+        
         // perform cleanup
         if (!Cleanup(cp77Proj, new LaunchProfile() { CleanAll = true }, isPostBuild))
         {
@@ -326,7 +332,14 @@ public class RED4Controller : ObservableObject, IGameController
         }
         _loggerService.Info($"{cp77Proj.Name} files cleaned up.");
 
-        if (!await PackAndInstallProjectFiles(options, cp77Proj))
+        // Pack it up
+        if (!await PackProjectFiles(options, cp77Proj))
+        {
+            return false;
+        }
+
+        // Now install it
+        if (!await InstallProjectFiles(options, cp77Proj))
         {
             return false;
         }
@@ -367,7 +380,59 @@ public class RED4Controller : ObservableObject, IGameController
         return true;
     }
 
-    private async Task<bool> PackAndInstallProjectFiles(LaunchProfile options, Cp77Project cp77Proj)
+    private async Task<bool> InstallProjectFiles(LaunchProfile options, Cp77Project cp77Proj)
+    {
+        if (!options.Install)
+        {
+            _notificationService.Success($"{cp77Proj.Name} packed!");
+            return true;
+        }
+
+        // backup
+        if (options.CreateBackup)
+        {
+            if (!BackupMod(cp77Proj))
+            {
+                _progressService.IsIndeterminate = false;
+                _loggerService.Error("Creating backup failed, aborting.");
+                _notificationService.Error("Creating backup failed, aborting.");
+                return false;
+            }
+        }
+
+        // install files
+        if (options.Install)
+        {
+            if (!InstallMod(cp77Proj))
+            {
+                _progressService.IsIndeterminate = false;
+                _loggerService.Error("Installing mod failed, aborting.");
+                _notificationService.Error("Installing mod failed, aborting.");
+                return false;
+            }
+
+            _loggerService.Success($"{cp77Proj.Name} installed to {_settingsManager.GetRED4GameRootDir()}");
+            _notificationService.Success($"{cp77Proj.Name} installed!");
+        }
+
+        // deploy redmod
+        if (options.DeployWithRedmod)
+        {
+            if (!await DeployRedmod())
+            {
+                _progressService.IsIndeterminate = false;
+                _loggerService.Error("Redmod deploy failed, aborting.");
+                _notificationService.Error("Redmod deploy failed, aborting.");
+                return false;
+            }
+
+            _loggerService.Success($"{_projectManager.ActiveProject?.Name} Redmod deployed!");
+        }
+
+        return true;
+    }
+
+    private async Task<bool> PackProjectFiles(LaunchProfile options, Cp77Project cp77Proj)
     {
         // copy files to packed dir
         // pack archives
@@ -428,53 +493,6 @@ public class RED4Controller : ObservableObject, IGameController
 
             _loggerService.Info($"{cp77Proj.Name} redmod files packed into {cp77Proj.PackedRedModDirectory}");
         }
-
-        if (!options.Install)
-        {
-            _notificationService.Success($"{cp77Proj.Name} packed!");
-        }
-
-        // backup
-        if (options.CreateBackup)
-        {
-            if (!BackupMod(cp77Proj))
-            {
-                _progressService.IsIndeterminate = false;
-                _loggerService.Error("Creating backup failed, aborting.");
-                _notificationService.Error("Creating backup failed, aborting.");
-                return false;
-            }
-        }
-
-        // install files
-        if (options.Install)
-        {
-            if (!InstallMod(cp77Proj))
-            {
-                _progressService.IsIndeterminate = false;
-                _loggerService.Error("Installing mod failed, aborting.");
-                _notificationService.Error("Installing mod failed, aborting.");
-                return false;
-            }
-
-            _loggerService.Success($"{cp77Proj.Name} installed to {_settingsManager.GetRED4GameRootDir()}");
-            _notificationService.Success($"{cp77Proj.Name} installed!");
-        }
-
-        // deploy redmod
-        if (options.DeployWithRedmod)
-        {
-            if (!await DeployRedmod())
-            {
-                _progressService.IsIndeterminate = false;
-                _loggerService.Error("Redmod deploy failed, aborting.");
-                _notificationService.Error("Redmod deploy failed, aborting.");
-                return false;
-            }
-
-            _loggerService.Success($"{_projectManager.ActiveProject?.Name} Redmod deployed!");
-        }
-
         return true;
     }
 
