@@ -71,5 +71,5 @@ public interface IGameController
 
     Task<bool> LaunchProject(LaunchProfile profile);
     bool PackProjectHot();
-    bool CleanAll();
+    bool CleanAll(bool isPostBuild = false);
 }

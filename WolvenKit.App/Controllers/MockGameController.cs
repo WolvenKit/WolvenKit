@@ -26,5 +26,5 @@ public class MockGameController : IGameController
     public async Task HandleStartup() => await Task.CompletedTask;
     public Task<bool> LaunchProject(LaunchProfile profile) => throw new NotImplementedException();
     public bool PackProjectHot() => throw new NotImplementedException();
-    public bool CleanAll() => throw new NotImplementedException();
+    public bool CleanAll(bool isPostBuild = false) => throw new NotImplementedException();
 }
