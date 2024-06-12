@@ -1351,6 +1351,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
+        ConvertPreloadMaterials();
+
         // Collect material names from appearance chunk materials
         var appearanceNames = mesh.Appearances
             .Select((handle) => handle.GetValue() as meshMeshAppearance).Where((i) => i != null)
@@ -1384,25 +1386,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 .Where((material, i) => localMatIdxList.Contains(i)).ToArray();
         }
 
-        if (mesh.PreloadLocalMaterialInstances is not null && mesh.PreloadLocalMaterialInstances.Count > 0)
-        {
-            keepLocalPreload = mesh.PreloadLocalMaterialInstances
-                .Where((material, i) => localMatIdxList.Contains(i))
-                .ToArray();
-        }
-
         if (mesh.ExternalMaterials is not null && mesh.ExternalMaterials.Count > 0)
         {
             keepExternal = mesh.ExternalMaterials
                 .Where((material, i) => externalMatIdxList.Contains(i)).ToArray();
         }
-
-        if (mesh.PreloadExternalMaterials is not null && mesh.PreloadExternalMaterials.Count > 0)
-        {
-            keepExternalPreload = mesh.PreloadExternalMaterials
-                .Where((material, i) => externalMatIdxList.Contains(i)).ToArray();
-        }
-
+        
         var usedMaterialDefinitions = mesh.MaterialEntries.Where(me =>
             (me.IsLocalInstance && localMatIdxList.Contains(me.Index)) ||
             (!me.IsLocalInstance && externalMatIdxList.Contains(me.Index))
@@ -1425,15 +1414,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
         }
 
-        if (mesh.PreloadLocalMaterialInstances is not null)
-        {
-            mesh.PreloadLocalMaterialInstances.Clear();
-            foreach (var t in keepLocalPreload)
-            {
-                mesh.PreloadLocalMaterialInstances.Add(t);
-            }
-        }
-
         if (mesh.ExternalMaterials is not null)
         {
             mesh.ExternalMaterials.Clear();
@@ -1442,16 +1422,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 mesh.ExternalMaterials.Add(t);
             }    
         }
-
-        if (mesh.PreloadExternalMaterials is not null)
-        {
-            mesh.PreloadExternalMaterials.Clear();
-            foreach (var t in keepExternalPreload)
-            {
-                mesh.PreloadExternalMaterials.Add(t);
-            }
-        }
-        
 
         mesh.MaterialEntries.Clear();
         var localMaterialIdx = 0;
@@ -1474,13 +1444,160 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         RecalculateProperties();
-
         Tab?.Parent.SetIsDirty(true);
+
+        GetPropertyChild("materialEntries")?.RecalculateProperties();
+
+        GetPropertyChild("localMaterialBuffer")?.GetPropertyChild("materials")?.RecalculateProperties();
+        GetPropertyChild("localMaterialBuffer")?.RecalculateProperties();
+
+        GetPropertyChild("externalMaterials")?.RecalculateProperties();
 
         _loggerService.Info($"Deleted {numUnusedMaterials} unused materials.");
     }
 
+    public void GenerateMissingMaterials(string baseMaterial, bool isLocal, bool resolveSubstitutions)
+    {
+        GenerateMissingMaterialDefinitions(isLocal);
+        GenerateMissingMaterialInstances(baseMaterial, isLocal, resolveSubstitutions);
+    }
 
+    private void GenerateMissingMaterialDefinitions(bool isLocal)
+    {
+        if (ResolvedData is not CMesh mesh)
+        {
+            return;
+        }
+
+        var definedMaterialNames = mesh.MaterialEntries.Select(mat => mat.Name).ToList();
+
+        // Collect material names from appearance chunk materials
+        var undefinedMaterialNames = mesh.Appearances
+            .Select((handle) => handle.GetValue() as meshMeshAppearance).Where((i) => i != null)
+            .SelectMany(mA => mA!.ChunkMaterials.Select(chunkMaterial => chunkMaterial.GetResolvedText() ?? "").ToArray())
+            .Where((chunkMaterialName) => !definedMaterialNames.Contains(chunkMaterialName))
+            .ToHashSet().ToList();
+
+        if (undefinedMaterialNames.Count == 0)
+        {
+            return;
+        }
+
+        var matIdx = mesh.MaterialEntries.LastOrDefault(mat => mat.IsLocalInstance == isLocal)?.Index ?? -1;
+
+        // Create material definitions
+        foreach (var materialName in undefinedMaterialNames)
+        {
+            matIdx += 1;
+            var material = new CMeshMaterialEntry() { Name = materialName, Index = (CUInt16)matIdx, IsLocalInstance = isLocal };
+            mesh.MaterialEntries.Add(material);
+        }
+
+        GetPropertyChild("materialEntries")?.RecalculateProperties();
+    }
+
+    private ChunkViewModel? GetPropertyChild(string propertyName) => TVProperties.FirstOrDefault(prop => prop.Name == propertyName);
+
+    // Converts PreloadMaterials to regular local materials. We like them better, and this way,
+    // we don't have to check all those arrays.
+
+
+    private bool CanConvertPreloadMaterial() => IsArray && ((IRedArray)ResolvedData).Count > 0 && Name.StartsWith("preload") &&
+                                                ResolvedData is CArray<CHandle<IMaterial>> or CArray<CResourceReference<IMaterial>>;
+
+    [RelayCommand(CanExecute = nameof(CanConvertPreloadMaterial))]
+    private void ConvertPreloadMaterials()
+    {
+        if (ResolvedData is not CMesh mesh)
+        {
+            return;
+        }
+
+        // Make sure these are initialized
+        mesh.LocalMaterialBuffer ??= new meshMeshMaterialBuffer { Materials = [], };
+        mesh.LocalMaterialBuffer.Materials ??= [];
+
+        if (mesh.PreloadLocalMaterialInstances.Count > 0)
+        {
+            foreach (var matRef in mesh.PreloadLocalMaterialInstances)
+            {
+                if (matRef.GetValue() is not IMaterial mat)
+                {
+                    continue;
+                }
+
+                mesh.LocalMaterialBuffer.Materials.Add(mat);
+            }
+
+            mesh.PreloadLocalMaterialInstances.Clear();
+
+            GetPropertyChild("preloadLocalMaterialInstances")?.RecalculateProperties();
+            GetPropertyChild("localMaterialBuffer")?.GetPropertyChild("materials")?.RecalculateProperties();
+            GetPropertyChild("localMaterialBuffer")?.RecalculateProperties();
+            Tab?.Parent.SetIsDirty(true);
+        }
+
+        if (mesh.PreloadExternalMaterials.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var mat in mesh.PreloadExternalMaterials)
+        {
+            mesh.ExternalMaterials.Add(new CResourceAsyncReference<IMaterial>(mat.DepotPath));
+        }
+
+        mesh.PreloadExternalMaterials.Clear();
+
+        GetPropertyChild("preloadExternalMaterials")?.RecalculateProperties();
+        GetPropertyChild("externalMaterials")?.RecalculateProperties();
+
+        Tab?.Parent.SetIsDirty(true);
+    }
+
+    private void GenerateMissingMaterialInstances(string baseMaterial, bool isLocal, bool resolveSubstitutions)
+    {
+        if (ResolvedData is not CMesh mesh || mesh.MaterialEntries.Count == 0)
+        {
+            return;
+        }
+
+        ConvertPreloadMaterials();
+
+        var numDefinedMaterials = isLocal ? mesh.LocalMaterialBuffer.Materials.Count : mesh.ExternalMaterials.Count;
+
+        foreach (var mat in mesh.MaterialEntries
+                     .Where(entry => entry.IsLocalInstance == isLocal && entry.Index >= numDefinedMaterials))
+        {
+            var baseMaterialPath = resolveSubstitutions
+                ? baseMaterial.Replace(@"{material}", mat.Name)
+                : baseMaterial;
+
+            if (isLocal)
+            {
+                mesh.LocalMaterialBuffer?.Materials.Add(new CMaterialInstance()
+                {
+                    BaseMaterial = new CResourceReference<IMaterial>(baseMaterialPath)
+                });
+            }
+            else
+            {
+                mesh.ExternalMaterials.Add(new CResourceAsyncReference<IMaterial>(baseMaterialPath));
+            }
+        }
+
+        if (isLocal)
+        {
+            GetPropertyChild("localMaterialBuffer")?.GetPropertyChild("materials")?.RecalculateProperties();
+            GetPropertyChild("localMaterialBuffer")?.RecalculateProperties();
+        }
+        else
+        {
+            GetPropertyChild("externalMaterials")?.RecalculateProperties();
+        }
+    }
+
+    
     // Dynamic Properties
 
     private bool CanCreateDynamicProperty() => ResolvedData is IDynamicClass;   // TODO RelayCommand check notify

@@ -362,6 +362,31 @@ namespace WolvenKit.Views.Tools
             _loggerService.Info($"Replaced {ChunkViewModel.NumReplacedEntries} occurrences of '{searchText}' with '{replaceText}'");
         }
 
+
+        private bool CanGenerateMissingMaterials() => SelectedItem is ChunkViewModel
+        {
+            ResolvedData: CMesh,
+            Parent: null
+        };
+
+        [RelayCommand(CanExecute = nameof(CanGenerateMissingMaterials))]
+        private void OpenGenerateMaterialsDialog()
+        {
+            var dialog = new CreateMaterialsDialog();
+            if (GetRoot() is not ChunkViewModel cvm || dialog.ShowDialog() != true)
+            {
+                return;
+            }
+
+            var baseMaterial = dialog.ViewModel?.BaseMaterial ?? "";
+            var isLocal = dialog.ViewModel?.IsLocalMaterial ?? true;
+            var resolveSubstitutions = dialog.ViewModel?.ResolveSubstitutions ?? false;
+
+            cvm.GenerateMissingMaterials(baseMaterial, isLocal, resolveSubstitutions);
+
+            cvm?.Tab?.Parent.SetIsDirty(true);
+        }
+
         /// <summary>
         /// Gets all selected chunks. If none are selected / if selection is invalid, it will return an empty list.
         /// </summary>
@@ -394,6 +419,16 @@ namespace WolvenKit.Views.Tools
 
 
             chunk.IsExpanded = expansionState;
+        }
+
+        private ChunkViewModel GetRoot()
+        {
+            if (ItemsSource is not ListCollectionView selection)
+            {
+                return null;
+            }
+            
+            return selection.OfType<ChunkViewModel>().ToList().FirstOrDefault((cvm) => cvm.Parent is null);
         }
     }
 }

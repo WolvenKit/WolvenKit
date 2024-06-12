@@ -299,7 +299,7 @@
                         <iconPacks:PackIconMaterial Kind="DatabaseExportOutline" Style="{StaticResource ContextMenuIconStyleMaterial}" />
                     </MenuItem.Icon>
 
-                    <!-- Create new Twak XL Override -->
+                    <!-- Create new Tweak XL Override -->
                     <MenuItem
                         Command="{Binding Path=PlacementTarget.Tag.CreateTXLOverrideCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                         Header="Override Value"
@@ -307,14 +307,14 @@
                         Style="{StaticResource SyncfusionMenuItemStyle}" />
 
 
-                    <!-- Copy Twak XL Override -->
+                    <!-- Copy Tweak XL Override -->
                     <MenuItem
                         Command="{Binding Path=PlacementTarget.Tag.CopyTXLOverrideCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                         Header="Copy to Clipboard"
                         IsCheckable="False"
                         Visibility="{Binding Path=!PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                         Style="{StaticResource SyncfusionMenuItemStyle}" />
-                    <!-- Copy Twak XL Name (with shift key down) -->
+                    <!-- Copy Tweak XL Name (with shift key down) -->
                     <MenuItem
                         Command="{Binding Path=PlacementTarget.Tag.CopyTXLOverrideNameCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                         Header="Copy Name to Clipboard"
@@ -510,6 +510,42 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Kind="FormatClear" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <!-- For mesh root: Generate missing materials -->
+                <MenuItem
+                    Command="{Binding OpenGenerateMaterialsDialogCommand, Source={x:Reference redTreeView}}"
+                    Header="Generate missing materials"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial
+                            Width="13"
+                            Height="13"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="PlusBoxMultiple" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <!-- For Preload...: convert to local material -->
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.ConvertPreloadMaterialsCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Convert to local materials"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial
+                            Width="13"
+                            Height="13"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="AccountConvert" />
                     </MenuItem.Icon>
                 </MenuItem>
 
