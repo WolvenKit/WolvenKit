@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace WolvenKit.App.Models;
 public class LaunchProfile
@@ -68,9 +69,9 @@ public class LaunchProfile
             }
 
             _loadSpecificSave = value;
+            OnPropertyChanged(nameof(LoadSpecificSave));
         }
     }
-
 
     [Category("Game Launch")]
     [property: Browsable(false)]
@@ -105,10 +106,10 @@ public class LaunchProfile
         };
     }
 
-    public void SwitchPosition(LaunchProfile otherProfile)
-    {
-        var previousPos = Order;
-        Order = otherProfile.Order;
-        otherProfile.Order = previousPos;
-    }
+    public void SwitchPosition(LaunchProfile otherProfile) => (Order, otherProfile.Order) = (otherProfile.Order, Order);
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    protected virtual void OnPropertyChanged(string? propertyName = null) =>
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 }

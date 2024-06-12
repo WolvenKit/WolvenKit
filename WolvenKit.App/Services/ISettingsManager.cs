@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Windows.Controls;
 using System.Windows.Media;
 using WolvenKit.App.Models;
+using System.Windows.Media.Imaging;
+using DynamicData.Kernel;
 
 namespace WolvenKit.App.Services;
-
 
 public interface ISettingsManager : ISettingsDto, INotifyPropertyChanged
 {
@@ -138,6 +140,26 @@ public interface ISettingsManager : ISettingsDto, INotifyPropertyChanged
         Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
             "Saved Games", "CD Projekt Red", "Cyberpunk 2077");
+
+    public static List<SaveGame> GetSaveGames()
+    {
+        var saveDir = ISettingsManager.GetSaveDirectory();
+        if (!Directory.Exists(saveDir))
+        {
+            return [];
+        }
+
+        return Directory.GetDirectories(saveDir)
+            .Select(folder => new { Folder = folder, Save = Path.Combine(folder, "sav.dat") })
+            .Where(x => File.Exists(x.Save))
+            .Select(x => new SaveGame(
+                new DirectoryInfo(x.Folder).Name,
+                Path.Combine(x.Folder, "screenshot.png"),
+                x.Save,
+                new DirectoryInfo(x.Folder).LastWriteTime))
+            .OrderByDescending(x => x.LastModified)
+            .AsList();
+    }
 
     public static string? GetLastSaveName()
     {
