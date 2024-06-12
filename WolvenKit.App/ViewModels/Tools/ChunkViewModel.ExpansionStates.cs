@@ -40,6 +40,13 @@ public partial class ChunkViewModel : ObservableObject
             // .mi file
             case CMaterialInstance when TVProperties.FirstOrDefault(prop => prop.Name == "values") is ChunkViewModel valuesNode:
                 valuesNode.IsExpanded = true;
+                if (valuesNode.TVProperties.Count == 0 || _tab is null)
+                {
+                    break;
+                }
+
+                // Auto-select the single value
+                _tab.SetSelection(valuesNode.TVProperties[0]);
                 break;
             default:
                 break;
