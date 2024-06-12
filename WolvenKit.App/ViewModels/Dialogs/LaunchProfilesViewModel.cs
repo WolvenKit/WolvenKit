@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Reactive;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData.Kernel;
+using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
 using WolvenKit.App.Services;
 using WolvenKit.Core.Interfaces;
@@ -26,6 +28,11 @@ public partial class LaunchProfilesViewModel : DialogViewModel
 
         // populate profiles
         LaunchProfiles = new();
+
+        // Subscribe to PropertyChanged event
+        PropertyChanged += LaunchProfilesViewModel_PropertyChanged;
+
+        
         if (_settingsManager.GetLaunchProfiles() is not Dictionary<string, LaunchProfile> launchProfiles)
         {
             return;
@@ -33,7 +40,9 @@ public partial class LaunchProfilesViewModel : DialogViewModel
 
         foreach (var (key, value) in launchProfiles)
         {
-            LaunchProfiles.Add(new LaunchProfileViewModel(key, value));
+            var newProfile = new LaunchProfileViewModel(key, value);
+            newProfile.PropertyChanged += LaunchProfile_PropertyChanged;
+            LaunchProfiles.Add(newProfile);
         }
     }
 
@@ -87,15 +96,44 @@ public partial class LaunchProfilesViewModel : DialogViewModel
     [RelayCommand]
     private void DeleteItem()
     {
-        if (SelectedLaunchProfile != null)
+        if (SelectedLaunchProfile == null)
         {
-            LaunchProfiles.Remove(SelectedLaunchProfile);
+            return;
         }
+
+        SelectedLaunchProfile.PropertyChanged -= LaunchProfile_PropertyChanged;
+        LaunchProfiles.Remove(SelectedLaunchProfile);
     }
 
     [ObservableProperty] private ObservableCollection<LaunchProfileViewModel> _launchProfiles = new();
 
     [ObservableProperty] private LaunchProfileViewModel? _selectedLaunchProfile;
+
+    private void LaunchProfile_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(LaunchProfile.LoadSpecificSave) || sender is not LaunchProfile { LoadSpecificSave: true } lp)
+        {
+            return;
+        }
+
+        var savegameName = Interactions.ShowSelectSaveView();
+        lp.LoadSaveName = savegameName;
+    }
+
+    private void LaunchProfilesViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(LaunchProfiles))
+        {
+            return;
+        }
+
+        // Re-register listeners (if one was added)
+        foreach (var launchProfileViewModel in LaunchProfiles)
+        {
+            launchProfileViewModel.PropertyChanged -= LaunchProfile_PropertyChanged;
+            launchProfileViewModel.PropertyChanged += LaunchProfile_PropertyChanged;
+        }
+    }
 
     // Sort launch profiles by order for display, then write them back to the settings manager (is that even necessary?)
     private void SortLaunchProfiles()
@@ -107,7 +145,6 @@ public partial class LaunchProfilesViewModel : DialogViewModel
         LaunchProfiles =
             new ObservableCollection<LaunchProfileViewModel>(orderedProfiles.Select(kvp => new LaunchProfileViewModel(kvp.Key, kvp.Value)));
     }
-
 
     public string Title { get; set; }
 

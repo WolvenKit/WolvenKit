@@ -195,13 +195,6 @@ namespace WolvenKit.Views.Shell
 
         private void ReadGameFiles()
         {
-            // get save files
-            var saveDir = ISettingsManager.GetSaveDirectory();
-            if (!Directory.Exists(saveDir))
-            {
-                return;
-            }
-
             // clear
             foreach (var item in MenuItemLaunchGameSave.Items)
             {
@@ -213,27 +206,14 @@ namespace WolvenKit.Views.Shell
 
             MenuItemLaunchGameSave.Items.Clear();
 
-            var directories = Directory.GetDirectories(saveDir)
-                .Select(folder => new { Folder = folder, Save = Path.Combine(folder, "sav.dat") })
-                .Where(x => File.Exists(x.Save))
-                .Select(x => new
-                {
-                    DirName = new DirectoryInfo(x.Folder).Name,
-                    Screenshot = Path.Combine(x.Folder, "screenshot.png"),
-                    x.Save,
-                    LastModified = new DirectoryInfo(x.Folder).LastWriteTime
-                })
-                .OrderByDescending(x => x.LastModified);
-
-
             // populate items
-            foreach (var dir in directories)
+            foreach (var saveGame in ISettingsManager.GetSaveGames())
             {
                 var imageControl = new Image();
-                var bitmapImage = new BitmapImage(new Uri(dir.Screenshot, UriKind.RelativeOrAbsolute));
+                var bitmapImage = new BitmapImage(new Uri(saveGame.Screenshot, UriKind.RelativeOrAbsolute));
                 imageControl.Source = bitmapImage;
 
-                MenuItem item = new() { Header = dir.DirName, ToolTip = imageControl };
+                MenuItem item = new() { Header = saveGame.DirName, ToolTip = imageControl };
                 item.Click += LaunchSaveItem_Click;
                 MenuItemLaunchGameSave.Items.Add(item);
             }
