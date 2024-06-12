@@ -1762,9 +1762,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resources\launchprofiles.json">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\SyntaxHighlighting\JavaScript-DarkMode.xshd" />
     <EmbeddedResource Include="Resources\SyntaxHighlighting\YAML.xshd">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>

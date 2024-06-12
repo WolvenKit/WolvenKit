@@ -24,8 +24,6 @@ namespace WolvenKit.Views.Dialogs.Windows
             ViewModel = Locator.Current.GetService<LaunchProfilesViewModel>();
             DataContext = ViewModel;
 
-
-
             this.WhenActivated(disposables =>
             {
                 this.BindCommand(ViewModel, x => x.NewItemCommand, x => x.ToolbarNewItem)
@@ -33,12 +31,11 @@ namespace WolvenKit.Views.Dialogs.Windows
                 this.BindCommand(ViewModel, x => x.DuplicateItemCommand, x => x.ToolbarDuplicateItem)
                    .DisposeWith(disposables);
                 this.BindCommand(ViewModel, x => x.DeleteItemCommand, x => x.ToolbarDeleteItem)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel, x => x.PositionDownCommand, x => x.ToolbarDownItem)
                    .DisposeWith(disposables);
-
-                //Observable
-                //    .FromEventPattern(WizardControl, nameof(Syncfusion.Windows.Tools.Controls.WizardControl.Finish))
-                //    .Subscribe(_ => ViewModel.OkCommand.Execute().Subscribe())
-                //    .DisposeWith(disposables);
+                this.BindCommand(ViewModel, x => x.PositionUpCommand, x => x.ToolbarUpItem)
+                    .DisposeWith(disposables);
 
                 ProfilesListView.RowDragDropController.Dropped += OnRowDropped;
             });
@@ -71,36 +68,22 @@ namespace WolvenKit.Views.Dialogs.Windows
         //https://help.syncfusion.com/wpf/datagrid/drag-and-drop#reorder-the-source-collection-while-drag-and-drop-the-rows
         private void OnRowDropped(object sender, GridRowDroppedEventArgs e)
         {
-            if (e.DropPosition != DropPosition.None)
+            if (e.DropPosition == DropPosition.None
+                || ProfilesListView.DataContext is not LaunchProfilesViewModel model
+                || e.TargetRecord is not int targetPos)
             {
-                // Get Dragging records
-                var draggingRecords = e.Data.GetData("Records") as ObservableCollection<object>;
-
-                // Gets the TargetRecord from the underlying collection using record index of the TargetRecord (e.TargetRecord)
-                var model = ProfilesListView.DataContext as LaunchProfilesViewModel;
-                var targetRecord = model.LaunchProfiles[(int)e.TargetRecord];
-
-                // Use Batch update to avoid data operatons in SfDataGrid during records removing and inserting
-                ProfilesListView.BeginInit();
-
-                // Removes the dragging records from the underlying collection
-                foreach (var item in draggingRecords.Cast<LaunchProfileViewModel>())
-                {
-                    model.LaunchProfiles.Remove(item);
-                }
-
-                // Find the target record index after removing the records
-                var targetIndex = model.LaunchProfiles.IndexOf(targetRecord);
-                var insertionIndex = e.DropPosition == DropPosition.DropAbove ? targetIndex : targetIndex + 1;
-                insertionIndex = insertionIndex < 0 ? 0 : insertionIndex;
-
-                // Insert dragging records to the target position
-                for (var i = draggingRecords.Count - 1; i >= 0; i--)
-                {
-                    model.LaunchProfiles.Insert(insertionIndex, draggingRecords[i] as LaunchProfileViewModel);
-                }
-                ProfilesListView.EndInit();
+                return;
             }
+
+            // Get Dragging records
+            var draggingRecords = e.Data.GetData("Records") as ObservableCollection<object>;
+
+            // Use Batch update to avoid data operations in SfDataGrid during records removing and inserting
+            ProfilesListView.BeginInit();
+
+            model.UpdateLaunchProfileIndex(targetPos, draggingRecords?.Count ?? 0);
+
+            ProfilesListView.EndInit();
         }
     }
 }

@@ -4,40 +4,89 @@ using System.ComponentModel.DataAnnotations;
 namespace WolvenKit.App.Models;
 public class LaunchProfile
 {
-    [Category("General")]
+    [Category("Build and Install")]
     [Display(Name = "Create Backup")]
     public bool CreateBackup { get; set; }
 
-    [Category("Install")]
-    [Display(Name = "Install to Game")]
+    [Category("Build and Install")]
+    [Display(Name = "Install to Game directory")]
     public bool Install { get; set; }
+    
     // installsound files
     // install tweak files
     // install script files
 
-    [Category("Install")]
-    [Display(Name = "Clean packed directory before build?")]
+    [Category("Build and Install")]
+    [Display(Name = "Clean before build to prevent errors?")]
     public bool CleanAll { get; set; } = true;
 
-    [Category("Install")]
-    [Display(Name = "Clean packed directory after build?")]
+    [Category("Build and Install")]
+    [Display(Name = "Clean after build to save disk space?")]
     public bool CleanAllPostBuild { get; set; } = false;
 
-    [Category("REDmod")]
+    [Category("Bundle: REDmod")]
     [Display(Name = "Pack as REDmod")]
     public bool IsRedmod { get; set; }
 
-    [Category("REDmod")]
-    [Display(Name = "Deploy With REDmod")]
+    [Category("Bundle: REDmod")]
+    [Display(Name = "Deploy as REDmod")]
     public bool DeployWithRedmod { get; set; }
 
     [Category("Game Launch")]
-    [Display(Name = "Launch Game after Installing")]
+    [Display(Name = "Launch Game")]
     public bool LaunchGame { get; set; }
+
+    private bool _loadLastSave;
+    [Category("Game Launch")]
+    [Display(Name = "Load last savegame")]
+    public bool LoadLastSave
+    {
+        get => _loadLastSave;
+        set
+        {
+            if (value)
+            {
+                _loadSpecificSave = false;
+            }
+
+            _loadLastSave = value;
+        }
+    }
+
+    private bool _loadSpecificSave;
+
+    [Category("Game Launch")]
+    [Display(Name = "Load specific savegame")]
+    public bool LoadSpecificSave
+    {
+        get => _loadSpecificSave;
+        set
+        {
+            if (value)
+            {
+                _loadLastSave = false;
+            }
+
+            _loadSpecificSave = value;
+        }
+    }
+
+
+    [Category("Game Launch")]
+    [property: Browsable(false)]
+    [Display(Name = "Load last savegame: Which?")]
+    public string? LoadSaveName
+    {
+        get;
+        set;
+    }
 
     [Category("Game Launch")]
     [Display(Name = "Game Commandline Arguments")]
     public string? GameArguments { get; set; }
+
+
+    [property: Browsable(false)] public int? Order { get; set; }
 
 
     internal LaunchProfile Copy()
@@ -51,7 +100,15 @@ public class LaunchProfile
             IsRedmod = IsRedmod,
             DeployWithRedmod = DeployWithRedmod,
             LaunchGame = LaunchGame,
+            LoadLastSave = LoadLastSave,
             GameArguments = GameArguments
         };
+    }
+
+    public void SwitchPosition(LaunchProfile otherProfile)
+    {
+        var previousPos = Order;
+        Order = otherProfile.Order;
+        otherProfile.Order = previousPos;
     }
 }

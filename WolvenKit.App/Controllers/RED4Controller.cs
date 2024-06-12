@@ -362,12 +362,17 @@ public class RED4Controller : ObservableObject, IGameController
             throw new WolvenKitException(0x5001, "No game executable set");
         }
 
+        var arguments = options.GameArguments ?? "";
+        if (options.LoadLastSave && ISettingsManager.GetLastSaveName() is string lastSavegame)
+        {
+            arguments = $"{arguments} --save={lastSavegame}";
+        }
         try
         {
             Process.Start(new ProcessStartInfo
             {
                 FileName = launchCommand,
-                Arguments = options.GameArguments ?? "",
+                Arguments = arguments,
                 ErrorDialog = true,
                 UseShellExecute = true,
             });
