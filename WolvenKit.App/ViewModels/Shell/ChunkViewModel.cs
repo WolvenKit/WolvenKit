@@ -1475,6 +1475,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         var undefinedMaterialNames = mesh.Appearances
             .Select((handle) => handle.GetValue() as meshMeshAppearance).Where((i) => i != null)
             .SelectMany(mA => mA!.ChunkMaterials.Select(chunkMaterial => chunkMaterial.GetResolvedText() ?? "").ToArray())
+            .Select((materialName) => materialName.Contains('@') ? $"@{materialName.Split('@').Last()}" : materialName) // dynamic
             .Where((chunkMaterialName) => !definedMaterialNames.Contains(chunkMaterialName))
             .ToHashSet().ToList();
 
