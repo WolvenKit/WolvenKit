@@ -71,7 +71,7 @@ public partial class LaunchProfilesViewModel : DialogViewModel
     private void PositionDown()
     {
         if (SelectedLaunchProfile is null ||
-            LaunchProfiles.FirstOrDefault(p => p.Profile.Order == SelectedLaunchProfile.Profile.Order - 1) is not { } other)
+            LaunchProfiles.FirstOrDefault(p => p.Profile.Order == SelectedLaunchProfile.Profile.Order + 1) is not { } other)
         {
             return;
         }
@@ -86,7 +86,7 @@ public partial class LaunchProfilesViewModel : DialogViewModel
     private void PositionUp()
     {
         if (SelectedLaunchProfile is null ||
-            LaunchProfiles.FirstOrDefault(p => p.Profile.Order == SelectedLaunchProfile.Profile.Order + 1) is not { } other)
+            LaunchProfiles.FirstOrDefault(p => p.Profile.Order == SelectedLaunchProfile.Profile.Order - 1) is not { } other)
         {
             return;
         }
