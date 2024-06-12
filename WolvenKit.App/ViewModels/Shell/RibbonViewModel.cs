@@ -31,15 +31,36 @@ public partial class RibbonViewModel : ObservableObject
         MainViewModel = appViewModel;
         MainViewModel.PropertyChanged += MainViewModel_OnPropertyChanged;
 
+        _showRedmodInRibbon = settingsManager.ShowRedmodInRibbon;
+
+        _settingsManager.PropertyChanged += SettingsManager_PropertyChanged;
+
         _launchProfileText = "Launch Profiles";
-        _launchGameText = "Launch Game";
+        if (!string.IsNullOrEmpty(_settingsManager.LastLaunchProfile))
+        {
+            _launchProfileText = _settingsManager.LastLaunchProfile;
+        }
+    }
+
+    private void SettingsManager_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(ISettingsManager.ShowRedmodInRibbon))
+        {
+            return;
+        }
+
+        ShowRedmodInRibbon = _settingsManager.ShowRedmodInRibbon;
     }
 
     private void MainViewModel_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(MainViewModel.TaskStatus))
+        switch (e.PropertyName)
         {
-            LaunchProfileCommand.NotifyCanExecuteChanged();
+            case nameof(MainViewModel.TaskStatus):
+                LaunchProfileCommand.NotifyCanExecuteChanged();
+                break;
+            default:
+                break;
         }
     }
 
@@ -83,9 +104,10 @@ public partial class RibbonViewModel : ObservableObject
             
         _settingsManager.LaunchProfiles ??= new();
 
-        if (_settingsManager.LaunchProfiles.TryGetValue(LaunchProfileText, out var launchProfile))
+        if (LaunchProfileText is not null && _settingsManager.LaunchProfiles.TryGetValue(LaunchProfileText, out var launchProfile))
         {
             await _gameControllerFactory.GetController().LaunchProject(launchProfile);
+            _settingsManager.LastLaunchProfile = LaunchProfileText;
         }
         else
         {
@@ -94,8 +116,7 @@ public partial class RibbonViewModel : ObservableObject
     }
 
 
-    [ObservableProperty] private string _launchProfileText;
-
-    [ObservableProperty] private string _launchGameText;
+    [ObservableProperty] private string? _launchProfileText;
+    [ObservableProperty] private bool _showRedmodInRibbon;
 
 }

@@ -67,8 +67,6 @@ namespace WolvenKit.Views.Shell
 
                 // project
 
-
-
                 // pack
                 // pack redmod
                 this.BindCommand(ViewModel,
@@ -82,11 +80,11 @@ namespace WolvenKit.Views.Shell
                 // pack legacy mod
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.MainViewModel.PackModCommand,
-                        view => view.ToolbarPackProjectOldButton)
+                        view => view.ToolbarPackProjectLegacyButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.MainViewModel.PackInstallModCommand,
-                        view => view.ToolbarPackInstallOldButton)
+                        view => view.ToolbarPackInstallLegacyButton)
                     .DisposeWith(disposables);
 
                 // hotreload
@@ -106,7 +104,7 @@ namespace WolvenKit.Views.Shell
                        view => view.LaunchProfileButton)
                    .DisposeWith(disposables);
 
-                this.OneWayBind(ViewModel, vm => vm.LaunchProfileText,
+                this.Bind(ViewModel, vm => vm.LaunchProfileText,
                    view => view.LaunchProfileText.Text)
                    .DisposeWith(disposables);
 
@@ -115,14 +113,12 @@ namespace WolvenKit.Views.Shell
                     p => p is not null)
                     .DisposeWith(disposables);
 
-                // game launch
-                this.BindCommand(ViewModel,
-                    viewModel => viewModel.MainViewModel.LaunchGameCommand,
-                    view => view.MenuItemLaunchGame)
-                .DisposeWith(disposables);
-
-                MenuItemLaunchGameFromLastSave.Click += MenuItemLaunchGameFromLastSave_Click;
             });
+
+            if (ViewModel is not null && !string.IsNullOrEmpty(_settingsManager.LastLaunchProfile))
+            {
+                ViewModel.LaunchProfileText = _settingsManager.LastLaunchProfile;
+            }
 
             _settingsManager.WhenAnyValue(x => x.LaunchProfiles).Subscribe(_ => GetLaunchProfiles());
             
@@ -150,33 +146,24 @@ namespace WolvenKit.Views.Shell
             }
 
 
+            var launchProfiles = _settingsManager.GetLaunchProfiles();
             var count = 0;
-            foreach ((var name, var value) in _settingsManager.LaunchProfiles)
+            foreach (var (name, value) in launchProfiles)
             {
                 MenuItem item = new()
                 {
                     Header = name
                 };
 
-                // Create image element to set as icon on the menu element
-                //Image icon = new Image();
-                //BitmapImage bmImage = new BitmapImage();
-                //bmImage.BeginInit();
-                //bmImage.UriSource = new Uri(imagePath, UriKind.Absolute);
-                //bmImage.EndInit();
-                //icon.Source = bmImage;
-                //icon.MaxWidth = 25;
-                //item.Icon = icon;
-
-                item.Click += new RoutedEventHandler(LaunchMenu_MenuItem_Click);
+                item.Click += LaunchMenu_MenuItem_Click;
 
                 LaunchMenuMainItem.Items.Insert(count, item);
                 count++;
             }
 
-            if (_settingsManager.LaunchProfiles is not null || _settingsManager.LaunchProfiles.Count != 0)
+            if (ViewModel is not null && launchProfiles.Count != 0 && ViewModel.LaunchProfileText is null)
             {
-                ViewModel.LaunchProfileText = _settingsManager.LaunchProfiles.First().Key;
+                ViewModel.LaunchProfileText = launchProfiles.First().Key;
             }
 
             //_profilesLoaded = true;
@@ -184,110 +171,13 @@ namespace WolvenKit.Views.Shell
 
         private void LaunchMenu_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            if (e.Source is MenuItem item)
-            {
-                if (item.Header is string header)
-                {
-                    ViewModel.LaunchProfileText = header;
-                }
-            }
-        }
-
-        private void ReadGameFiles()
-        {
-            // clear
-            foreach (var item in MenuItemLaunchGameSave.Items)
-            {
-                if (item is MenuItem menuItem)
-                {
-                    menuItem.Click -= LaunchSaveItem_Click;
-                }
-            }
-
-            MenuItemLaunchGameSave.Items.Clear();
-
-            // populate items
-            foreach (var saveGame in ISettingsManager.GetSaveGames())
-            {
-                var imageControl = new Image();
-                var bitmapImage = new BitmapImage(new Uri(saveGame.Screenshot, UriKind.RelativeOrAbsolute));
-                imageControl.Source = bitmapImage;
-
-                MenuItem item = new() { Header = saveGame.DirName, ToolTip = imageControl };
-                item.Click += LaunchSaveItem_Click;
-                MenuItemLaunchGameSave.Items.Add(item);
-            }
-        }
-
-        private void MenuItem_SubmenuOpened(object o, RoutedEventArgs args)
-        {
-            // TODO: Hacky workaround, fix with https://github.com/WolvenKit/WolvenKit/issues/1486
-            if (_modifierViewStateService.IsShiftKeyPressed)
-            {
-                // launch game from last save
-                MenuItemLaunchGameFromLastSave.RaiseEvent(new RoutedEventArgs(MenuItem.ClickEvent));
-
-                // Close context menu again
-                MenuHeaderLaunchGame.ContextMenu?.SetCurrentValue(MenuItem.IsEnabledProperty, false);
-                return;
-            }
-
-            ReadGameFiles();
-        }
-
-        private void MenuItemLaunchGameFromLastSave_Click(object o, RoutedEventArgs _)
-        {
-            // prevent exceptions
-            if (MenuItemLaunchGameSave is null)
+            if (ViewModel is null || e.Source is not MenuItem { Header: string header })
             {
                 return;
             }
 
-            // if savegames not populated, populate savegames
-            if (MenuItemLaunchGameSave.Items.Count is 0)
-            {
-                ReadGameFiles();
-            }
-
-            // prevent exceptions some more
-            if (MenuItemLaunchGameSave.Items.Count is 0)
-            {
-                return;
-            }
-
-            MenuItem item = MenuItemLaunchGameSave.Items[0] as MenuItem;
-            if (item != null)
-            {
-                item.RaiseEvent(new RoutedEventArgs(MenuItem.ClickEvent));
-            }
-
-        }
-
-
-        private void LaunchSaveItem_Click(object sender, RoutedEventArgs e)
-        {
-            if (e.Source is not MenuItem { Header: string header })
-            {
-                return;
-            }
-
-            // -save=ManualSave-168 
-            try
-            {
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = _settingsManager.GetRED4GameLaunchCommand(),
-                    Arguments = $"{_settingsManager.GetRED4GameLaunchOptions()} -save={header}",
-                    ErrorDialog = true,
-                    UseShellExecute = true,
-                });
-            }
-            catch (Exception ex)
-            {
-                _loggerService.Error("Launch: error launching game! Please check your executable path in Settings.");
-                _loggerService.Info($"Launch: error debug info: {ex.Message}");
-            }
-
+            ViewModel.LaunchProfileText = header;
+            _settingsManager.LastLaunchProfile = header;
         }
     }
 }

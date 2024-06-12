@@ -255,10 +255,13 @@
                     </StackPanel>
                 </Button>
 
-                <Separator Margin="3" />
+                <Separator Margin="3" Visibility="{Binding ShowRedmodInRibbon, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                 <!--  Pack as REDmod  -->
-                <Button x:Name="ToolbarPackProjectButton" ToolTip="Pack as REDmod &amp; create mod package">
+                <Button
+                    x:Name="ToolbarPackProjectButton"
+                    Visibility="{Binding ShowRedmodInRibbon, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    ToolTip="Pack as REDmod &amp; create mod package">
                     <StackPanel Orientation="Horizontal">
                         <Grid>
                             <iconPacks:PackIconForkAwesome
@@ -271,7 +274,10 @@
                     </StackPanel>
                 </Button>
 
-                <Button x:Name="ToolbarPackInstallRedmodButton" ToolTip="Pack as REDmod &amp; install to game">
+                <Button
+                    x:Name="ToolbarPackInstallRedmodButton"
+                    Visibility="{Binding ShowRedmodInRibbon, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    ToolTip="Pack as REDmod &amp; install to game">
                     <StackPanel Orientation="Horizontal">
                         <Grid>
                             <iconPacks:PackIconForkAwesome
@@ -295,7 +301,7 @@
                 <Separator />
 
                 <!--  Pack as LegacyMod  -->
-                <Button x:Name="ToolbarPackProjectOldButton" ToolTip="Pack mod &amp; create mod package">
+                <Button x:Name="ToolbarPackProjectLegacyButton" ToolTip="Pack mod &amp; create mod package">
                     <StackPanel Orientation="Horizontal">
                         <Grid>
                             <iconPacks:PackIconForkAwesome
@@ -308,7 +314,7 @@
                     </StackPanel>
                 </Button>
 
-                <Button x:Name="ToolbarPackInstallOldButton" ToolTip="Pack mod &amp; install to game">
+                <Button x:Name="ToolbarPackInstallLegacyButton" ToolTip="Pack mod &amp; install to game">
                     <StackPanel Orientation="Horizontal">
                         <Grid>
                             <iconPacks:PackIconForkAwesome
@@ -373,66 +379,6 @@
                             </MenuItem.Icon>
                         </MenuItem>
 
-                    </MenuItem>
-                </Menu>
-
-                <Menu>
-                    <MenuItem
-                        x:Name="MenuHeaderLaunchGame" Header="Launch Game" SubmenuOpened="MenuItem_SubmenuOpened">
-                        <MenuItem.Icon>
-                            <iconPacks:PackIconCodicons
-                                Foreground="{StaticResource WolvenKitYellow}"
-                                Kind="Play"
-                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
-                        </MenuItem.Icon>
-
-                        <!--  launch game normally  -->
-                        <MenuItem
-                            x:Name="MenuItemLaunchGame"
-                            Margin="2,1"
-                            CommandParameter="0"
-                            Header="Launch game"
-                            ToolTip="Launch game normally">
-                            <MenuItem.Icon>
-                                <iconPacks:PackIconCodicons
-                                    Margin="6,0"
-                                    Foreground="{StaticResource WolvenKitYellow}"
-                                    Kind="Play"
-                                    Style="{StaticResource WolvenKitToolBarButtonIcon}" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-
-                        <!--  launch game and load last save  -->
-                        <MenuItem
-                            x:Name="MenuItemLaunchGameFromLastSave"
-                            Margin="2,1"
-                            CommandParameter="0"
-                            Header="Launch from last save"
-                            ToolTip="Launch game and load last save">
-                            <MenuItem.Icon>
-                                <iconPacks:PackIconCodicons
-                                    Margin="6,0"
-                                    Foreground="{StaticResource WolvenKitYellow}"
-                                    Kind="Play"
-                                    Style="{StaticResource WolvenKitToolBarButtonIcon}" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-
-                        <!--  launch game from save  -->
-                        <MenuItem
-                            x:Name="MenuItemLaunchGameSave"
-                            Margin="2,1"
-                            Header="Launch game from save..."
-                            ToolTip="Launch Game from savefile">
-                            <MenuItem.Icon>
-                                <iconPacks:PackIconCodicons
-                                    Margin="6,0"
-                                    Foreground="{StaticResource WolvenKitYellow}"
-                                    Kind="Save"
-                                    Style="{StaticResource WolvenKitToolBarButtonIcon}" />
-                            </MenuItem.Icon>
-                            <MenuItem />
-                        </MenuItem>
                     </MenuItem>
                 </Menu>
 
