@@ -47,6 +47,7 @@ public class SettingsDto : ISettingsDto
         ModderName = settings.ModderName;
         ModderEmail = settings.ModderEmail;
         RefactoringCheckboxDefaultValue = settings.RefactoringCheckboxDefaultValue;
+        UseDefaultLaunchProfiles = settings.UseDefaultLaunchProfiles;
         
         if (settings.SettingsVersion < 2)
         {
@@ -80,6 +81,8 @@ public class SettingsDto : ISettingsDto
     public bool ShowReferenceGraph { get; set; }
     public EGameLanguage GameLanguage { get; set; } = EGameLanguage.en_us;
     public Dictionary<string, LaunchProfile>? LaunchProfiles { get; set; }
+    public bool UseDefaultLaunchProfiles { get; set; } = true;
+    public bool RefactoringCheckboxDefaultValue { get; set; }
     public Dictionary<string, bool>? ScriptStatus { get; set; }
     public bool AnalyzeModArchives { get; set; } = true;
     public string? ExtraModDirPath { get; set; }
@@ -89,7 +92,6 @@ public class SettingsDto : ISettingsDto
     public bool ShowGraphEditorNodeProperties { get; set; } = true;
     public string? ModderName { get; set; }
     public string? ModderEmail { get; set; }
-    public bool RefactoringCheckboxDefaultValue { get; set; }
 
     public SettingsManager ReconfigureSettingsManager(SettingsManager settingsManager)
     {
@@ -133,6 +135,7 @@ public class SettingsDto : ISettingsDto
         settingsManager.ModderName = ModderName;
         settingsManager.ModderEmail = ModderEmail;
         settingsManager.RefactoringCheckboxDefaultValue = RefactoringCheckboxDefaultValue;
+        settingsManager.UseDefaultLaunchProfiles = UseDefaultLaunchProfiles;
 
         return settingsManager;
     }

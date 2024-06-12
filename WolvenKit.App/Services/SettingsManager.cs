@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Text.Json;
 using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData.Binding;
+using WolvenKit.App.Extensions;
 using WolvenKit.App.Models;
 using WolvenKit.Common;
 using WolvenKit.Core;
@@ -61,7 +64,8 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(ShowGraphEditorNodeProperties),
             nameof(ModderName),
             nameof(ModderEmail),
-            nameof(RefactoringCheckboxDefaultValue)
+            nameof(RefactoringCheckboxDefaultValue),
+            nameof(UseDefaultLaunchProfiles)
             )
           .Subscribe(_ =>
           {
@@ -83,7 +87,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             dto != null
             ? dto.ToSettingsManager()
             : new SettingsManager();
-
+        
         settings._isLoaded = true;
         return settings;
     }
@@ -141,11 +145,11 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
 
     #region properties
 
+#pragma warning disable CS0657 // Not a valid attribute location for this declaration for "Browsable"
+
     [Display(Name = "Settings Version", GroupName = "General")]
     [ObservableProperty]
-#pragma warning disable CS0657 // Not a valid attribute location for this declaration
     [property: Browsable(false)]
-#pragma warning restore CS0657 // Not a valid attribute location for this declaration
     private int _settingsVersion;
 
     [Display(Name = "Do not check for updates", GroupName = "General")]
@@ -182,15 +186,11 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     private bool _showFilePreview = true;
 
     [ObservableProperty]
-#pragma warning disable CS0657 // Not a valid attribute location for this declaration
     [property: Browsable(false)]
-#pragma warning restore CS0657 // Not a valid attribute location for this declaration
     private string? _reddbHash;
 
     [ObservableProperty]
-#pragma warning disable CS0657 // Not a valid attribute location for this declaration
     [property: Browsable(false)]
-#pragma warning restore CS0657 // Not a valid attribute location for this declaration
     private string? _installerHash;
 
     [Display(Name = "Depot Path", GroupName = "Cyberpunk")]
@@ -245,15 +245,11 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     private bool _showGraphEditorNodeProperties = true;
 
     [ObservableProperty]
-#pragma warning disable CS0657 // Not a valid attribute location for this declaration
     [property: Browsable(false)]
-#pragma warning restore CS0657 // Not a valid attribute location for this declaration
     private Dictionary<string, LaunchProfile>? _launchProfiles;
 
     [ObservableProperty]
-#pragma warning disable CS0657 // Not a valid attribute location for this declaration
     [property: Browsable(false)]
-#pragma warning restore CS0657 // Not a valid attribute location for this declaration
     private Dictionary<string, bool>? _scriptStatus;
 
     [Display(Name = "Analyze mods", Description = "Check mod archives for file names and invalid files", GroupName = "Cyberpunk")] 
@@ -265,6 +261,12 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
         GroupName = "Interface")]
     [ObservableProperty]
     private bool _refactoringCheckboxDefaultValue;
+
+    [Display(Name = "Include default profiles in list",
+        Description = "Should the 'Launch' menu bar show WolvenKit's default launch profiles, or just your custom ones?",
+        GroupName = "Interface")]
+    [ObservableProperty]
+    private bool _useDefaultLaunchProfiles;
 
     [Display(Name = "Additional Mod directory", Description = "Path to an optional directory containing mod archives", GroupName = "Cyberpunk")]
     [ObservableProperty]
@@ -279,23 +281,19 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     private string? _modderEmail;
 
     [ObservableProperty]
-#pragma warning disable CS0657 // Not a valid attribute location for this declaration
     [property: Browsable(false)]
-#pragma warning restore CS0657 // Not a valid attribute location for this declaration
     private string? _lastUsedProjectPath;
 
     [ObservableProperty]
-#pragma warning disable CS0657 // Not a valid attribute location for this declaration
     [property: Browsable(false)]
-#pragma warning restore CS0657 // Not a valid attribute location for this declaration
     private int _pinnedOrder;
 
     [ObservableProperty]
-#pragma warning disable CS0657 // Not a valid attribute location for this declaration
     [property: Browsable(false)]
-#pragma warning restore CS0657 // Not a valid attribute location for this declaration
     private int _recentOrder;
 
+
+#pragma warning restore CS0657 // Not a valid attribute location for this declaration
     #endregion properties
 
     #region methods
@@ -361,6 +359,58 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     public bool IsHealthy() => File.Exists(CP77ExecutablePath) && File.Exists(GetRED4OodleDll());
 
     public bool IsNoobFilterDefaultEnabled() => EnableNoobFilterByDefault;
+
+    private bool _isLaunchprofilesInitialized = false;
+
+    public Dictionary<string, LaunchProfile> GetLaunchProfiles()
+    {
+        if (_isLaunchprofilesInitialized && LaunchProfiles is not null)
+        {
+            return LaunchProfiles;
+        }
+
+        LaunchProfiles ??= [];
+
+        var idx = 0;
+        foreach (var kvp in LaunchProfiles.Where(kvp => kvp.Value.Order is null))
+        {
+            kvp.Value.Order = idx;
+            idx += 1;
+        }
+
+        var newLaunchProfiles = new Dictionary<string, LaunchProfile>();
+        newLaunchProfiles.AddRange(LaunchProfiles);
+
+        using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(@"WolvenKit.App.Resources.launchprofiles.json");
+        if (stream != null)
+        {
+            var defaultProfiles = JsonSerializer.Deserialize<Dictionary<string, LaunchProfile>>(stream,
+                options: new JsonSerializerOptions
+                {
+                    WriteIndented = true, DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+                }) ?? [];
+
+
+            // Don't overwrite existing profiles
+            foreach (var kvp in defaultProfiles.Where(kvp => !newLaunchProfiles.ContainsKey(kvp.Key)))
+            {
+                if (kvp.Value.Order is null)
+                {
+                    kvp.Value.Order = idx;
+                    idx += 1;
+                }
+
+                newLaunchProfiles.Add(kvp.Key, kvp.Value);
+            }
+        }
+
+        LaunchProfiles = newLaunchProfiles
+            .OrderBy(x => x.Value.Order)
+            .ToDictionary(x => x.Key, x => x.Value);
+        Save();
+
+        return LaunchProfiles;
+    }
 
     #endregion methods
 }

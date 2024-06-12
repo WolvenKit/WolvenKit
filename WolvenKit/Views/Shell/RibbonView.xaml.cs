@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using HandyControl.Tools.Extension;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App.Models;
@@ -129,20 +130,6 @@ namespace WolvenKit.Views.Shell
 
         private void GetLaunchProfiles()
         {
-            // add default profiles
-            if (_settingsManager.LaunchProfiles is null || _settingsManager.LaunchProfiles.Count == 0)
-            {
-                using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(@"WolvenKit.Resources.launchprofiles.json");
-                var defaultprofiles = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, LaunchProfile>>(stream, new System.Text.Json.JsonSerializerOptions()
-                {
-                    WriteIndented = true,
-                    DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
-                });
-
-                _settingsManager.LaunchProfiles = defaultprofiles;
-                _settingsManager.Save();
-            }
-
             // unsubscribe
             foreach (var obj in LaunchMenuMainItem.Items)
             {
@@ -209,9 +196,7 @@ namespace WolvenKit.Views.Shell
         private void ReadGameFiles()
         {
             // get save files
-            var saveDir = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-                "Saved Games", "CD Projekt Red", "Cyberpunk 2077");
+            var saveDir = ISettingsManager.GetSaveDirectory();
             if (!Directory.Exists(saveDir))
             {
                 return;
