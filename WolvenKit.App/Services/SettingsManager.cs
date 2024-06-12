@@ -65,7 +65,9 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(ModderName),
             nameof(ModderEmail),
             nameof(RefactoringCheckboxDefaultValue),
-            nameof(UseDefaultLaunchProfiles)
+            nameof(UseDefaultLaunchProfiles),
+            nameof(LastLaunchProfile),
+            nameof(ShowRedmodInRibbon)
             )
           .Subscribe(_ =>
           {
@@ -262,6 +264,12 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [ObservableProperty]
     private bool _refactoringCheckboxDefaultValue;
 
+    [Display(Name = "Show REDmod in Ribbon",
+        Description = "Display 'Pack as REDmod' and 'Install as REDMod' in the ribbon?",
+        GroupName = "Interface")]
+    [ObservableProperty]
+    private bool _showRedmodInRibbon;
+
     [Display(Name = "Include default profiles in list",
         Description = "Should the 'Launch' menu bar show WolvenKit's default launch profiles, or just your custom ones?",
         GroupName = "Interface")]
@@ -283,6 +291,9 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [ObservableProperty]
     [property: Browsable(false)]
     private string? _lastUsedProjectPath;
+
+    [ObservableProperty] [property: Browsable(false)]
+    private string? _lastLaunchProfile;
 
     [ObservableProperty]
     [property: Browsable(false)]
@@ -368,6 +379,8 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
         {
             return LaunchProfiles;
         }
+
+        _isLaunchprofilesInitialized = true;
 
         LaunchProfiles ??= [];
 

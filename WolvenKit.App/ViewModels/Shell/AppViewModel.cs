@@ -372,10 +372,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private bool CanStartTask() => TaskStatus == EStatus.Ready;
 
     [RelayCommand(CanExecute = nameof(CanStartTask))]
-    private async Task PackMod() => await LaunchAsync(new LaunchProfile() { CreateBackup = true });
+    private async Task PackMod() => await LaunchAsync(new LaunchProfile() { CreateZipFile = true });
 
     [RelayCommand(CanExecute = nameof(CanStartTask))]
-    private async Task PackRedMod() => await LaunchAsync(new LaunchProfile() { CreateBackup = true, IsRedmod = true });
+    private async Task PackRedMod() => await LaunchAsync(new LaunchProfile() { CreateZipFile = true, IsRedmod = true });
 
     [RelayCommand(CanExecute = nameof(CanStartTask))]
     private async Task PackInstallMod() => await LaunchAsync(new LaunchProfile() { Install = true });

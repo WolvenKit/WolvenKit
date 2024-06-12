@@ -6,8 +6,13 @@ namespace WolvenKit.App.Models;
 public class LaunchProfile
 {
     [Category("Build and Install")]
-    [Display(Name = "Create Backup")]
+    [Display(Name = "Create Backup of previous build")]
     public bool CreateBackup { get; set; }
+
+
+    [Category("Build and Install")]
+    [Display(Name = "Create zip file")]
+    public bool CreateZipFile { get; set; }
 
     [Category("Build and Install")]
     [Display(Name = "Install to Game directory")]

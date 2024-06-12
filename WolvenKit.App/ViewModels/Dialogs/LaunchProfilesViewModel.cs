@@ -44,6 +44,11 @@ public partial class LaunchProfilesViewModel : DialogViewModel
             newProfile.PropertyChanged += LaunchProfile_PropertyChanged;
             LaunchProfiles.Add(newProfile);
         }
+
+        if (_settingsManager.LastLaunchProfile is string profileName)
+        {
+            SelectedLaunchProfile = LaunchProfiles.FirstOrDefault(lp => lp.Name == profileName);
+        }
     }
 
     //private void LogExtended(Exception ex) => _loggerService.Error($"Message: {ex.Message}\nSource: {ex.Source}\nStackTrace: {ex.StackTrace}");

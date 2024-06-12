@@ -48,6 +48,8 @@ public class SettingsDto : ISettingsDto
         ModderEmail = settings.ModderEmail;
         RefactoringCheckboxDefaultValue = settings.RefactoringCheckboxDefaultValue;
         UseDefaultLaunchProfiles = settings.UseDefaultLaunchProfiles;
+        LastLaunchProfile = settings.LastLaunchProfile;
+        ShowRedmodInRibbon = settings.ShowRedmodInRibbon;
         
         if (settings.SettingsVersion < 2)
         {
@@ -87,6 +89,8 @@ public class SettingsDto : ISettingsDto
     public bool AnalyzeModArchives { get; set; } = true;
     public string? ExtraModDirPath { get; set; }
     public string? LastUsedProjectPath { get; set; }
+    public string? LastLaunchProfile { get; set; }
+    public bool ShowRedmodInRibbon { get; set; } = true;
     public int PinnedOrder { get; set; }
     public int RecentOrder { get; set; }
     public bool ShowGraphEditorNodeProperties { get; set; } = true;
@@ -136,6 +140,7 @@ public class SettingsDto : ISettingsDto
         settingsManager.ModderEmail = ModderEmail;
         settingsManager.RefactoringCheckboxDefaultValue = RefactoringCheckboxDefaultValue;
         settingsManager.UseDefaultLaunchProfiles = UseDefaultLaunchProfiles;
+        settingsManager.LastLaunchProfile = LastLaunchProfile;
 
         return settingsManager;
     }
