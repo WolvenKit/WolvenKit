@@ -16,8 +16,12 @@ public class LaunchProfile
     // install script files
 
     [Category("Install")]
-    [Display(Name = "Clean packed directory completely first")]
+    [Display(Name = "Clean packed directory before build?")]
     public bool CleanAll { get; set; } = true;
+
+    [Category("Install")]
+    [Display(Name = "Clean packed directory after build?")]
+    public bool CleanAllPostBuild { get; set; } = false;
 
     [Category("REDmod")]
     [Display(Name = "Pack as REDmod")]
@@ -42,6 +46,7 @@ public class LaunchProfile
         {
             CreateBackup = CreateBackup,
             CleanAll = CleanAll,
+            CleanAllPostBuild = CleanAllPostBuild,
             Install = Install,
             IsRedmod = IsRedmod,
             DeployWithRedmod = DeployWithRedmod,

@@ -25,6 +25,6 @@ public class MockGameController : IGameController
     public bool AddToMod(ulong hash) => throw new NotImplementedException();
     public async Task HandleStartup() => await Task.CompletedTask;
     public Task<bool> LaunchProject(LaunchProfile profile) => throw new NotImplementedException();
-    public bool PackProjectHot() => throw new NotImplementedException();
-    public bool CleanAll() => throw new NotImplementedException();
+    public Task<bool> InstallProjectHot() => throw new NotImplementedException();
+    public bool CleanAll(bool isPostBuild = false) => throw new NotImplementedException();
 }

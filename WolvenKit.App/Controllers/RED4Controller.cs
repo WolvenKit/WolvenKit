@@ -176,9 +176,9 @@ public class RED4Controller : ObservableObject, IGameController
 
     #region Packing
 
-    public bool PackProjectHot()
+    public async Task<bool> InstallProjectHot()
     {
-        if (_projectManager.ActiveProject is null)
+        if (_projectManager.ActiveProject is not Cp77Project currentProject)
         {
             return false;
         }
@@ -198,17 +198,24 @@ public class RED4Controller : ObservableObject, IGameController
             _loggerService.Info($"Created hot directory at {hotdirectory}");
         }
 
-        // pack mod
-        var modfiles = Directory.GetFiles(_projectManager.ActiveProject.ModDirectory, "*", SearchOption.AllDirectories);
-        if (modfiles.Any())
+        var gameDirectoryInfo = new DirectoryInfo(_settingsManager.GetRED4GameRootDir());
+        var packedDirectoryInfo = new DirectoryInfo(currentProject.PackedRootDirectory);
+
+        if (!await PackProjectFiles(new LaunchProfile(), currentProject))
         {
-            if (!_modTools.Pack(new DirectoryInfo(_projectManager.ActiveProject.ModDirectory), new DirectoryInfo(hotdirectory), _projectManager.ActiveProject.ModName))
-            {
-                return false;
-            }
+            return false;
         }
-        _loggerService.Success($"{_projectManager.ActiveProject.ModName} packed into {hotdirectory}");
-        _notificationService.Success($"{_projectManager.ActiveProject.ModName} packed into {hotdirectory}");
+
+        if (!_modTools.InstallFiles(packedDirectoryInfo, gameDirectoryInfo, true))
+        {
+            return false;
+        }
+
+        // Clean all residual files
+        CleanAll();
+
+        _loggerService.Success($"{currentProject.ModName} packed into {hotdirectory}");
+        _notificationService.Success($"{currentProject.ModName} packed into {hotdirectory}");
 
         return true;
     }
@@ -217,7 +224,7 @@ public class RED4Controller : ObservableObject, IGameController
     /// cleans the packed directory
     /// </summary>
     /// <returns></returns>
-    public bool CleanAll()
+    public bool CleanAll(bool isPostBuild = false)
     {
         _progressService.IsIndeterminate = true;
         // checks
@@ -229,12 +236,9 @@ public class RED4Controller : ObservableObject, IGameController
             _notificationService.Error(errorMessage);
             return false;
         }
-
+        
         // perform cleanup
-        if (!Cleanup(cp77Proj, new LaunchProfile()
-        {
-            CleanAll = true
-        }))
+        if (!Cleanup(cp77Proj, new LaunchProfile() { CleanAll = true }, isPostBuild))
         {
             var errorMessage = "An error occured during clean all. Some files may not be removed.";
             _progressService.IsIndeterminate = false;
@@ -269,15 +273,20 @@ public class RED4Controller : ObservableObject, IGameController
         };
     }
 
-    private static IEnumerable<string> GetScriptFiles(Cp77Project cp77Proj) 
-        => Directory.EnumerateFiles(cp77Proj.ResourceScriptsDirectory, "*.*", SearchOption.AllDirectories).Where(name => IsCDPRScript(name));
+    private static List<string> GetScriptFiles(Cp77Project cp77Proj)
+        => Directory.EnumerateFiles(cp77Proj.ResourceScriptsDirectory, "*.*", SearchOption.AllDirectories).Where(name => IsCDPRScript(name))
+            .ToList();
 
+    private static List<string> GetArchiveXlFiles(Cp77Project cp77Proj) =>
+        Directory.EnumerateFiles(cp77Proj.ResourcesDirectory, "*.xl", SearchOption.AllDirectories).ToList();
 
-    private static IEnumerable<string> GetArchiveXlFiles(Cp77Project cp77Proj) => Directory.EnumerateFiles(cp77Proj.ResourcesDirectory, "*.xl", SearchOption.AllDirectories);
-    private static IEnumerable<string> GetResourceFiles(Cp77Project cp77Proj) => Directory.EnumerateFiles(cp77Proj.ResourcesDirectory, "*.*", SearchOption.AllDirectories)
+    private static List<string> GetResourceFiles(Cp77Project cp77Proj) => Directory
+        .EnumerateFiles(cp77Proj.ResourcesDirectory, "*.*", SearchOption.AllDirectories)
         .Where(name => !IsSpecialExtension(name))
-        .Where(x => Path.GetFileName(x) != "info.json");
-    private static IEnumerable<string> GetTweakFiles(Cp77Project cp77Proj) => Directory.EnumerateFiles(cp77Proj.ResourcesDirectory, "*.tweak", SearchOption.AllDirectories);
+        .Where(x => Path.GetFileName(x) != "info.json").ToList();
+
+    private static List<string> GetTweakFiles(Cp77Project cp77Proj) =>
+        Directory.EnumerateFiles(cp77Proj.ResourcesDirectory, "*.tweak", SearchOption.AllDirectories).ToList();
 
     /// <summary>
     /// Pack mod with options
@@ -323,108 +332,21 @@ public class RED4Controller : ObservableObject, IGameController
         }
         _loggerService.Info($"{cp77Proj.Name} files cleaned up.");
 
-
-        // copy files to packed dir
-        // pack archives
-        var modfiles = Directory.EnumerateFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories);
-        if (modfiles.Any())
+        // Pack it up
+        if (!await PackProjectFiles(options, cp77Proj))
         {
-            if (!await Task.Run(() => PackArchives(cp77Proj, options)))
-            {
-                _progressService.IsIndeterminate = false;
-                _loggerService.Error("Packing archives failed, aborting.");
-                _notificationService.Error("Packing archives failed, aborting.");
-                return false;
-            }
-            _loggerService.Info($"{cp77Proj.Name} archives packed into {cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)}");
+            return false;
         }
 
-        // pack archiveXL files
-        var files = GetArchiveXlFiles(cp77Proj);
-        if (files.Any())
+        // Now install it
+        if (!await InstallProjectFiles(options, cp77Proj))
         {
-            if (!PackArchiveXlFiles(cp77Proj, files, options))
-            {
-                _progressService.IsIndeterminate = false;
-                _loggerService.Error("Packing archiveXL files failed, aborting.");
-                _notificationService.Error("Packing archiveXL files failed, aborting.");
-                return false;
-            }
-            _loggerService.Info($"{cp77Proj.Name} archiveXL files packed into {cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)}");
+            return false;
         }
 
-        // pack resources
-        files = GetResourceFiles(cp77Proj);
-        if (files.Any())
+        if (options.CleanAllPostBuild && !await Task.Run(() => Cleanup(cp77Proj, options, true)))
         {
-            if (!PackResources(cp77Proj, files))
-            {
-                _progressService.IsIndeterminate = false;
-                _loggerService.Error("Packing other resource files failed, aborting.");
-                _notificationService.Error("Packing other resource files failed, aborting.");
-                return false;
-            }
-            _loggerService.Info($"{cp77Proj.Name} resource files packed into {cp77Proj.PackedRootDirectory}");
-        }
-
-        // pack redmod files
-        if (options.IsRedmod)
-        {
-            if (!PackRedmodFiles(cp77Proj))
-            {
-                _progressService.IsIndeterminate = false;
-                _loggerService.Error("Packing redmod files failed, aborting.");
-                _notificationService.Error("Packing redmod files failed, aborting.");
-                return false;
-            }
-            _loggerService.Info($"{cp77Proj.Name} redmod files packed into {cp77Proj.PackedRedModDirectory}");
-        }
-
-        if (!options.Install)
-        {
-            _notificationService.Success($"{cp77Proj.Name} packed!");
-        }
-
-        // backup
-        if (options.CreateBackup)
-        {
-            if (!BackupMod(cp77Proj))
-            {
-                _progressService.IsIndeterminate = false;
-                _loggerService.Error("Creating backup failed, aborting.");
-                _notificationService.Error("Creating backup failed, aborting.");
-                return false;
-            }
-            
-        }
-
-
-        // install files
-        if (options.Install)
-        {
-            if (!InstallMod(cp77Proj))
-            {
-                _progressService.IsIndeterminate = false;
-                _loggerService.Error("Installing mod failed, aborting.");
-                _notificationService.Error("Installing mod failed, aborting.");
-                return false;
-            }
-            _loggerService.Success($"{cp77Proj.Name} installed to {_settingsManager.GetRED4GameRootDir()}");
-            _notificationService.Success($"{cp77Proj.Name} installed!");
-        }
-
-
-        // deploy redmod
-        if (options.DeployWithRedmod)
-        {
-            if (!await DeployRedmod())
-            {
-                _progressService.IsIndeterminate = false;
-                _loggerService.Error("Redmod deploy failed, aborting.");
-                _notificationService.Error("Redmod deploy failed, aborting.");
-                return false;
-            }
-            _loggerService.Success($"{_projectManager.ActiveProject.Name} Redmod deployed!");
+            _loggerService.Warning("Failed to clean your project after build. The next build might fail.");
         }
 
         _progressService.IsIndeterminate = false;
@@ -458,13 +380,129 @@ public class RED4Controller : ObservableObject, IGameController
         return true;
     }
 
-    private bool Cleanup(Cp77Project cp77Proj, LaunchProfile options)
+    private async Task<bool> InstallProjectFiles(LaunchProfile options, Cp77Project cp77Proj)
+    {
+        if (!options.Install)
+        {
+            _notificationService.Success($"{cp77Proj.Name} packed!");
+            return true;
+        }
+
+        // backup
+        if (options.CreateBackup)
+        {
+            if (!BackupMod(cp77Proj))
+            {
+                _progressService.IsIndeterminate = false;
+                _loggerService.Error("Creating backup failed, aborting.");
+                _notificationService.Error("Creating backup failed, aborting.");
+                return false;
+            }
+        }
+
+        // install files
+        if (options.Install)
+        {
+            if (!InstallMod(cp77Proj))
+            {
+                _progressService.IsIndeterminate = false;
+                _loggerService.Error("Installing mod failed, aborting.");
+                _notificationService.Error("Installing mod failed, aborting.");
+                return false;
+            }
+
+            _loggerService.Success($"{cp77Proj.Name} installed to {_settingsManager.GetRED4GameRootDir()}");
+            _notificationService.Success($"{cp77Proj.Name} installed!");
+        }
+
+        // deploy redmod
+        if (options.DeployWithRedmod)
+        {
+            if (!await DeployRedmod())
+            {
+                _progressService.IsIndeterminate = false;
+                _loggerService.Error("Redmod deploy failed, aborting.");
+                _notificationService.Error("Redmod deploy failed, aborting.");
+                return false;
+            }
+
+            _loggerService.Success($"{_projectManager.ActiveProject?.Name} Redmod deployed!");
+        }
+
+        return true;
+    }
+
+    private async Task<bool> PackProjectFiles(LaunchProfile options, Cp77Project cp77Proj)
+    {
+        // copy files to packed dir
+        // pack archives
+        var modfiles = Directory.EnumerateFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories);
+        if (modfiles.Any())
+        {
+            if (!await Task.Run(() => PackArchives(cp77Proj, options)))
+            {
+                _progressService.IsIndeterminate = false;
+                _loggerService.Error("Packing archives failed, aborting.");
+                _notificationService.Error("Packing archives failed, aborting.");
+                return false;
+            }
+
+            _loggerService.Info($"{cp77Proj.Name} archives packed into {cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)}");
+        }
+
+        // pack archiveXL files
+        var files = GetArchiveXlFiles(cp77Proj);
+        if (files.Any())
+        {
+            if (!PackArchiveXlFiles(cp77Proj, files, options))
+            {
+                _progressService.IsIndeterminate = false;
+                _loggerService.Error("Packing archiveXL files failed, aborting.");
+                _notificationService.Error("Packing archiveXL files failed, aborting.");
+                return false;
+            }
+
+            _loggerService.Info($"{cp77Proj.Name} archiveXL files packed into {cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)}");
+        }
+
+        // pack resources
+        files = GetResourceFiles(cp77Proj);
+        if (files.Any())
+        {
+            if (!PackResources(cp77Proj, files))
+            {
+                _progressService.IsIndeterminate = false;
+                _loggerService.Error("Packing other resource files failed, aborting.");
+                _notificationService.Error("Packing other resource files failed, aborting.");
+                return false;
+            }
+
+            _loggerService.Info($"{cp77Proj.Name} resource files packed into {cp77Proj.PackedRootDirectory}");
+        }
+
+        // pack redmod files
+        if (options.IsRedmod)
+        {
+            if (!PackRedmodFiles(cp77Proj))
+            {
+                _progressService.IsIndeterminate = false;
+                _loggerService.Error("Packing redmod files failed, aborting.");
+                _notificationService.Error("Packing redmod files failed, aborting.");
+                return false;
+            }
+
+            _loggerService.Info($"{cp77Proj.Name} redmod files packed into {cp77Proj.PackedRedModDirectory}");
+        }
+        return true;
+    }
+
+    private bool Cleanup(Cp77Project cp77Proj, LaunchProfile options, bool isPostBuild = false)
     {
         var result = false;
 
         //clean all nukes everything in the packed/ directory, not just directories covered by the commands after this block
         //When this option is chosen, no need to continue further.
-        if (options.CleanAll)
+        if (options.CleanAll || isPostBuild && options.CleanAllPostBuild)
         {
             result = true; //base condition -- if packed/ is already empty, then the command is 'successful'.
 

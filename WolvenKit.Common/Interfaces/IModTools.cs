@@ -11,7 +11,7 @@ namespace WolvenKit.Common.Interfaces
     public interface IModTools
     {
         public bool Pack(DirectoryInfo infolder, DirectoryInfo outpath, string? modname = null);
-
+        public bool InstallFiles(DirectoryInfo packedDirectory, DirectoryInfo gameDirectory, bool installToHot = false);
         public Task<bool> Import(RedRelativePath rawRelative, GlobalImportArgs args, DirectoryInfo? outDir = null);
         public Task<bool> ImportFolder(DirectoryInfo inDir, GlobalImportArgs args, DirectoryInfo? outDir = null);
 

@@ -70,6 +70,6 @@ public interface IGameController
     public Task HandleStartup();
 
     Task<bool> LaunchProject(LaunchProfile profile);
-    bool PackProjectHot();
-    bool CleanAll();
+    Task<bool> InstallProjectHot();
+    bool CleanAll(bool isPostBuild = false);
 }
