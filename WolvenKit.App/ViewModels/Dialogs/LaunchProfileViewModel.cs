@@ -42,7 +42,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
         private void OnProfilePropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName is not nameof(LaunchProfile.LoadSpecificSave))
+            if (e.PropertyName is not nameof(LaunchProfile.LoadSaveName))
             {
                 return;
             }

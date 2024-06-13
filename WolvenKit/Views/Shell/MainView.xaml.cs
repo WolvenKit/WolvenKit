@@ -65,13 +65,13 @@ namespace WolvenKit.Views.Shell
                     return true;
                 };
 
-                Interactions.ShowSelectSaveView = () =>
+                Interactions.ShowSelectSaveView = (string currentSaveGame) =>
                 {
-                    SaveGameSelectionDialog dialog = new();
+                    SaveGameSelectionDialog dialog = new(currentSaveGame);
 
                     if (dialog.ShowDialog(this) == true)
                     {
-                        return dialog.ViewModel?.SelectedSave;
+                        return dialog.ViewModel?.SelectedEntry?.DirName;
                     }
 
                     return null;
