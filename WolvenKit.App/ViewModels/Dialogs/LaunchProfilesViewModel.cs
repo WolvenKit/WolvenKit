@@ -28,10 +28,6 @@ public partial class LaunchProfilesViewModel : DialogViewModel
 
         // populate profiles
         LaunchProfiles = new();
-
-        // Subscribe to PropertyChanged event
-        PropertyChanged += LaunchProfilesViewModel_PropertyChanged;
-
         
         if (_settingsManager.GetLaunchProfiles() is not Dictionary<string, LaunchProfile> launchProfiles)
         {
@@ -41,7 +37,6 @@ public partial class LaunchProfilesViewModel : DialogViewModel
         foreach (var (key, value) in launchProfiles)
         {
             var newProfile = new LaunchProfileViewModel(key, value);
-            newProfile.PropertyChanged += LaunchProfile_PropertyChanged;
             LaunchProfiles.Add(newProfile);
         }
 
@@ -105,40 +100,12 @@ public partial class LaunchProfilesViewModel : DialogViewModel
         {
             return;
         }
-
-        SelectedLaunchProfile.PropertyChanged -= LaunchProfile_PropertyChanged;
         LaunchProfiles.Remove(SelectedLaunchProfile);
     }
 
     [ObservableProperty] private ObservableCollection<LaunchProfileViewModel> _launchProfiles = new();
 
     [ObservableProperty] private LaunchProfileViewModel? _selectedLaunchProfile;
-
-    private void LaunchProfile_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName != nameof(LaunchProfile.LoadSpecificSave) || sender is not LaunchProfile { LoadSpecificSave: true } lp)
-        {
-            return;
-        }
-
-        var savegameName = Interactions.ShowSelectSaveView();
-        lp.LoadSaveName = savegameName;
-    }
-
-    private void LaunchProfilesViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName != nameof(LaunchProfiles))
-        {
-            return;
-        }
-
-        // Re-register listeners (if one was added)
-        foreach (var launchProfileViewModel in LaunchProfiles)
-        {
-            launchProfileViewModel.PropertyChanged -= LaunchProfile_PropertyChanged;
-            launchProfileViewModel.PropertyChanged += LaunchProfile_PropertyChanged;
-        }
-    }
 
     // Sort launch profiles by order for display, then write them back to the settings manager (is that even necessary?)
     private void SortLaunchProfiles()
@@ -183,5 +150,15 @@ public partial class LaunchProfilesViewModel : DialogViewModel
 
         targetProfile.Profile.Order = newOffset;
         SortLaunchProfiles();
+    }
+
+    public void SetLaunchProfileSaveName(string saveName)
+    {
+        if (SelectedLaunchProfile is null)
+        {
+            return;
+        }
+
+        SelectedLaunchProfile.Profile.LoadSaveName = saveName;
     }
 }

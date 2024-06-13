@@ -192,12 +192,14 @@
                     </Grid>
 
                     <!--  PropertyGrid  -->
-                    <Grid Grid.Column="2" Margin="5">
+                    <Grid Grid.Column="1" Margin="5">
                         <syncfusion:PropertyGrid
                             x:Name="ProfilePropertyGrid"
                             AutoGeneratingPropertyGridItem="ProfilePropertyGrid_AutoGeneratingPropertyGridItem"
                             EnableGrouping="True"
-                            SelectedObject="{Binding SelectedLaunchProfile.Profile}" />
+                            EnableToolTip="True"
+                            SelectedObject="{Binding SelectedLaunchProfile.Profile}"
+                            SelectedPropertyItemChanged="PropertyGrid_SelectedPropertyItemChanged" />
                     </Grid>
 
                 </Grid>

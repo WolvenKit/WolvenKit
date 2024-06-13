@@ -115,6 +115,8 @@
     <Page Remove="Resources\Styles\CustomBase\**" />
     <Page Remove="Resources\Styles\Custom\**" />
     <Compile Remove="Converters\BooleanConverter.cs" />
+      <Compile Remove="GridVirtualizingCellsControl.xaml.cs"/>
+      <Page Remove="GridVirtualizingCellsControl.xaml"/>
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Views\Templates\RedFixedPointEditor.cs" />

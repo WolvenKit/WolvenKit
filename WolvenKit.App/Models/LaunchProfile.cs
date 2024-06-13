@@ -9,7 +9,6 @@ public class LaunchProfile
     [Display(Name = "Create Backup of previous build")]
     public bool CreateBackup { get; set; }
 
-
     [Category("Build and Install")]
     [Display(Name = "Create zip file")]
     public bool CreateZipFile { get; set; }
@@ -52,64 +51,37 @@ public class LaunchProfile
         {
             if (value)
             {
-                _loadSpecificSave = false;
+                LoadSaveName = null;
             }
 
             _loadLastSave = value;
         }
     }
 
-    private bool _loadSpecificSave;
-
+    private string? _loadSaveName;
     [Category("Game Launch")]
     [Display(Name = "Load specific savegame")]
-    public bool LoadSpecificSave
-    {
-        get => _loadSpecificSave;
-        set
-        {
-            if (value)
-            {
-                _loadLastSave = false;
-            }
-
-            _loadSpecificSave = value;
-            OnPropertyChanged(nameof(LoadSpecificSave));
-        }
-    }
-
-    [Category("Game Launch")]
-    [property: Browsable(false)]
-    [Display(Name = "Load last savegame: Which?")]
     public string? LoadSaveName
     {
-        get;
-        set;
+        get => _loadSaveName;
+        set
+        {
+            if (value is not null)
+            {
+                LoadLastSave = false;
+            }
+
+            _loadSaveName = value;
+        }
     }
 
     [Category("Game Launch")]
     [Display(Name = "Game Commandline Arguments")]
     public string? GameArguments { get; set; }
 
-
     [property: Browsable(false)] public int? Order { get; set; }
 
-
-    internal LaunchProfile Copy()
-    {
-        return new LaunchProfile()
-        {
-            CreateBackup = CreateBackup,
-            CleanAll = CleanAll,
-            CleanAllPostBuild = CleanAllPostBuild,
-            Install = Install,
-            IsRedmod = IsRedmod,
-            DeployWithRedmod = DeployWithRedmod,
-            LaunchGame = LaunchGame,
-            LoadLastSave = LoadLastSave,
-            GameArguments = GameArguments
-        };
-    }
+    internal LaunchProfile Copy() => (LaunchProfile)MemberwiseClone();
 
     public void SwitchPosition(LaunchProfile otherProfile) => (Order, otherProfile.Order) = (otherProfile.Order, Order);
 
