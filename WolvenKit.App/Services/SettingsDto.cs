@@ -90,7 +90,7 @@ public class SettingsDto : ISettingsDto
     public string? ExtraModDirPath { get; set; }
     public string? LastUsedProjectPath { get; set; }
     public string? LastLaunchProfile { get; set; }
-    public bool ShowRedmodInRibbon { get; set; } = true;
+    public bool ShowRedmodInRibbon { get; set; }
     public int PinnedOrder { get; set; }
     public int RecentOrder { get; set; }
     public bool ShowGraphEditorNodeProperties { get; set; } = true;
