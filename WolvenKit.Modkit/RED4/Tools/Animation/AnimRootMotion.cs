@@ -94,23 +94,50 @@ namespace WolvenKit.Modkit.RED4.Animation
             // NB. same as non-plane, but with only XY and Z=angle
             else if (motionEx is animPlaneUncompressedMotionExtraction pc)
             {
-                duration = pc.Duration;
+                var duration = pc.Duration;
                 numPositions = pc.Frames.Count;
                 numFrames = numPositions;
                 fps = (numFrames - 1f) / duration;
                 ft = 1f / fps;
-                if (numPositions > 0)
-                {
-                    if (!positions.ContainsKey(0))
-                    {
-                        positions.Add(0, new Dictionary<float, Vec3>());
-                    }
-                }
+
                 for (var i = 0; i < numFrames; i++)
                 {
                     var v = pc.Frames[i];
-                    positions[0].Add(ft * i, new Vec3(v.X, v.Z, -v.Y));
+
+                    var planeTranslation = TVectorGltf(new Vec3(v.X, v.Y, 0f));
+                    var yawRotation = RQuaternionGltf(RQuatFromAnglesDegree(0f, 0f, v.Z));
+
+                    translations[RootJointIndex].Add(ft * i, planeTranslation._);
+                    rotations[RootJointIndex].Add(ft * i, yawRotation._);
                 }
+
+                // Easier to avoid the angle recalc for now
+                // return RootMotionType.TranslationPlaneWithYawAllFrames;
+                return RootMotionType.TransformLinearSparseFrames;
+            }
+            // NB. same as Plane* but with XYZ + angle
+            else if (motionEx is animUncompressedMotionExtraction uc)
+            {
+                var duration = uc.Duration;
+                numFrames = uc.Frames.Count;
+                numPositions = numFrames;
+                fps = (numFrames - 1f) / duration;
+                ft = 1f / fps;
+
+                for (var i = 0; i < numFrames; i++)
+                {
+                    var v = uc.Frames[i];
+
+                    var fullTranslation = TVectorGltf(new Vec3(v.X, v.Y, v.Z));
+                    var yawRotation = RQuaternionGltf(RQuatFromAnglesDegree(0f, 0f, v.W));
+
+                    translations[RootJointIndex].Add(ft * i, fullTranslation._);
+                    rotations[RootJointIndex].Add(ft * i, yawRotation._);
+                }
+
+                // Easier to avoid the angle recalc for now
+                // return RootMotionType.TranslationWithYawAllFrames;
+                return RootMotionType.TransformLinearSparseFrames;
             }
             else if (motionEx is animSplineCompressedMotionExtraction sc)
             {
