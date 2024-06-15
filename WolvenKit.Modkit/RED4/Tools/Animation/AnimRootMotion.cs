@@ -229,6 +229,141 @@ namespace WolvenKit.Modkit.RED4.Animation
 
 #endregion export
 
+#region import
+        public static (RootMotionType rootMotionType, bool rootTransformsStripped) ExtractRootMotion(out animIMotionExtraction? rootMotion, ref readonly AnimationBufferData incomingAnimData, ref readonly animAnimation? oldAnimDesc, RootMotionType incomingType, string animName, ILoggerService _loggerService)
+        {
+            var rootTranslations = incomingAnimData.Translations.GetValueOrDefault(RootJointIndex, []);
+            var rootRotations = incomingAnimData.Rotations.GetValueOrDefault(RootJointIndex, []);
+
+            if (incomingType is RootMotionType.Unknown or RootMotionType.None)
+            {
+                if (rootTranslations.Count > 0 || rootRotations.Count > 0)
+                {
+                    _loggerService.Debug($"{animName}: Incoming Root Motion type is `{incomingType}` but there are transforms on `root` joint {RootJointIndex}. They will be treated as regular transforms.");
+                }
+
+                if (incomingType is RootMotionType.None)
+                {
+                    if (oldAnimDesc?.MotionExtraction?.Chunk is not null)
+                    {
+                        _loggerService.Info($"{animName}: Removing old Root Motion, none stored.");
+                    }
+
+                    rootMotion = null;
+                    return (RootMotionType.None, false);
+                }
+                else
+                {
+                    if (oldAnimDesc?.MotionExtraction?.Chunk is animIMotionExtraction oldRootMotion)
+                    {
+                        _loggerService.Info($"{animName}: Found existing Root Motion, keeping it.");
+
+                        rootMotion = (animIMotionExtraction)oldRootMotion.DeepCopy();
+                        return (RootMotionType.Unknown, false);
+                    }
+
+                    rootMotion = null;
+                    return (RootMotionType.Unknown, false);
+                }
+            }
+
+            if (rootTranslations.Count == 0 && rootRotations.Count == 0)
+            {
+                _loggerService.Error($"{animName}: Incoming Root Motion type is `{incomingType}` but there are no transforms to use on `root` joint {RootJointIndex}. Set type to {RootMotionType.None} if there is none, or {RootMotionType.Unknown} if you want to preserve a possibly existing one.");
+                throw new ArgumentNullOrEmptyException(nameof(incomingType), "No transforms to use for Root Motion");
+            }
+
+            // Actual Root Motion encodings, finally
+
+            switch (incomingType)
+            {
+                // TODO https://github.com/WolvenKit/WolvenKit/issues/1796
+                // For now converted to avoid angle calculation from rotation.
+                // case RootMotionType.TranslationWithYawAllFrames:
+                // case RootMotionType.TranslationPlaneWithYawAllFrames:
+                case RootMotionType.TransformLinearEveryFrame:
+                    if (rootTranslations.Count != incomingAnimData.FrameCount || rootRotations.Count != incomingAnimData.FrameCount)
+                    {
+                        _loggerService.Error($"{animName}: Root Motion: RM Keyframe Count T/R {rootTranslations.Count}/{rootRotations.Count} must match animation framecount {incomingAnimData.FrameCount} for `{incomingType}`! Ignoring.");
+                        throw new ArgumentOutOfRangeException(nameof(incomingAnimData), "Keyframe count doesn't match");
+                    }
+
+                    rootMotion = new animUncompressedAllAnglesMotionExtraction {
+                        Duration = incomingAnimData.Duration,
+                        Frames = [..
+                            rootTranslations.Zip(rootRotations).Select(_ =>
+                                new Transform {
+                                    Position = new Vec4(TRVectorZupLhs(_.First.Value), 1f),
+                                    Orientation = RQuaternionZupLhs(_.Second.Value),
+                                })],
+                    };
+
+                break;
+                case RootMotionType.TransformLinearSparseFrames:
+
+                    rootMotion = new animLinearCompressedMotionExtraction {
+                        Duration = incomingAnimData.Duration,
+                        PosTime = [.. rootTranslations.Select(_ => _.Key)],
+                        RotTime = [.. rootRotations.Select(_ => _.Key)],
+                        PosFrames = [.. rootTranslations.Select(_ => TRVectorZupLhs(_.Value))],
+                        RotFrames = [.. rootRotations.Select(_ => RQuaternionZupLhs(_.Value))],
+                    };
+
+                break;
+                case RootMotionType.TransformSplineSparseFrames:
+
+                    using (var translationsBuf = new MemoryStream())
+                    using (var rotationsBuf = new MemoryStream())
+                    using (var translationsBW = new BinaryWriter(translationsBuf))
+                    using (var rotationsBW = new BinaryWriter(rotationsBuf))
+                    {
+                        foreach (var (jointIdx, timeTranslations) in incomingAnimData.Translations)
+                        {
+                            foreach (var (timePercent, translation) in timeTranslations)
+                            {
+                                WriteTransform16byte(translationsBW, new(timePercent, jointIdx, TransformTypeId.Translation, (TVectorGltf(translation), null, null)));
+                            }
+                        }
+
+                        foreach (var (jointIdx, timeRotations) in incomingAnimData.Rotations)
+                        {
+                            foreach (var (timePercent, rotation) in timeRotations)
+                            {
+                                WriteTransform16byte(rotationsBW, new(timePercent, jointIdx, TransformTypeId.Rotation, (null, RQuaternionGltf(rotation), null)));
+                            }
+                        }
+
+                        rootMotion = new animSplineCompressedMotionExtraction {
+                            Duration = incomingAnimData.Duration,
+                            PosKeysData = [.. translationsBuf.ToArray()],
+                            RotKeysData = [.. rotationsBuf.ToArray()],
+                        };
+                    }
+
+                break;
+                case RootMotionType.TranslationWithYawAllFrames:
+                case RootMotionType.TranslationPlaneWithYawAllFrames:
+                case RootMotionType.Unknown:
+                case RootMotionType.None:
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(incomingType), "Should never get here, invalid incoming RM type");
+            }
+
+            if (incomingType is not RootMotionType.None or RootMotionType.Unknown)
+            {
+                _loggerService.Debug($"{animName}: Root Motion: Root Motion present, clearing regular transforms for root joint index {RootJointIndex}");
+
+                incomingAnimData.Translations.Remove(RootJointIndex);
+                incomingAnimData.Rotations.Remove(RootJointIndex);
+                incomingAnimData.Scales.Remove(RootJointIndex);
+
+                return (incomingType, true);
+            }
+
+            return (RootMotionType.Unknown, false);
+        }
+#endregion import
+
 #region helpers
 
         internal const ushort WsignMask = 0x8000;
