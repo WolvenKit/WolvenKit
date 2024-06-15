@@ -8,6 +8,17 @@ using Vec3 = System.Numerics.Vector3;
 
 namespace WolvenKit.Modkit.RED4.Animation
 {
+    internal enum RootMotionType
+    {
+        Unknown,
+        None,
+        TransformLinearSparseFrames,
+        TransformSplineSparseFrames,
+        TransformLinearEveryFrame,
+        TranslationPlaneWithYawAllFrames,
+        TranslationWithYawAllFrames,
+    }
+
     internal class ROOT_MOTION
     {
         private const ushort wSignMask = 0x8000;
