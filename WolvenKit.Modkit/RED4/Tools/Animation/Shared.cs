@@ -114,10 +114,10 @@ namespace WolvenKit.Modkit.RED4.Animation
     {
         // JSON stuffs..
         public const string SchemaType = "wkit.cp2077.gltf.anims";
-        public const uint SchemaVersion = 3;
+        public const uint SchemaVersion = 4;
 
         public static Func<Schema> CurrentSchema = () => new(SchemaType, SchemaVersion);
-        public static Func<AnimationExtrasForGltf, bool> IsSchemaVersionCompatible = (extras) =>
+        public static Func<AnimationExtrasForGltf, bool> IsCurrentSchema = (extras) =>
             extras.Schema.Type == SchemaType && extras.Schema.Version == SchemaVersion;
 
         public static Func<JsonSerializerOptions> SerializationOptions = () =>
@@ -127,35 +127,54 @@ namespace WolvenKit.Modkit.RED4.Animation
                 WriteIndented = true
             };
 
-        private static Func<JsonContent, ValidationResult> MigrateFromV2toV3 = (maybeExtras) =>
-        {
-            var oldExtras = JsonSerializer.Deserialize<Deprecated.AnimationExtrasForGltfV2>(maybeExtras.ToJson(), SerializationOptions());
+        private static Func<AnimationExtrasForGltfV3, AnimationExtrasForGltf> MigrateFromV3toV4 = (v3Extras) => {
+            return new(
+                new(SchemaType, 4),
+                v3Extras.AnimationType,
+                RootMotionType.Unknown.ToString(),
+                v3Extras.FrameClamping,
+                v3Extras.FrameClampingStartFrame,
+                v3Extras.FrameClampingEndFrame,
+                v3Extras.NumExtraJoints,
+                v3Extras.NumExtraTracks,
+                v3Extras.ConstTrackKeys,
+                v3Extras.TrackKeys,
+                v3Extras.FallbackFrameIndices,
+                v3Extras.OptimizationHints
+            );
+        };
+        private static Func<JsonContent, AnimationExtrasForGltf> MigrateJsonFromV3toV4 = (maybeExtras) =>
+            MigrateFromV3toV4(JsonSerializer.Deserialize<Deprecated.AnimationExtrasForGltfV3>(maybeExtras.ToJson(), SerializationOptions()));
 
-            return new Valid(new(
-                CurrentSchema(),
-                oldExtras.AnimationType,
-                oldExtras.FrameClamping,
-                oldExtras.FrameClampingStartFrame,
-                oldExtras.FrameClampingEndFrame,
-                oldExtras.NumExtraJoints,
-                oldExtras.NumeExtraTracks,
-                oldExtras.ConstTrackKeys,
-                oldExtras.TrackKeys,
-                oldExtras.FallbackFrameIndices,
+        private static Func<JsonContent, Deprecated.AnimationExtrasForGltfV3> MigrateJsonFromV2toV3 = (maybeExtras) =>
+        {
+            var v2Extras = JsonSerializer.Deserialize<Deprecated.AnimationExtrasForGltfV2>(maybeExtras.ToJson(), SerializationOptions());
+
+            return new(
+                new(SchemaType, 3),
+                v2Extras.AnimationType,
+                v2Extras.FrameClamping,
+                v2Extras.FrameClampingStartFrame,
+                v2Extras.FrameClampingEndFrame,
+                v2Extras.NumExtraJoints,
+                v2Extras.NumeExtraTracks,
+                v2Extras.ConstTrackKeys,
+                v2Extras.TrackKeys,
+                v2Extras.FallbackFrameIndices,
                 new(
                     false,
-                    oldExtras.PreferLosslessLinearRotationEncoding
-                        ? AnimationEncoding.Uncompressed
-                        : AnimationEncoding.QuaternionAsFixed3x16bit
+                    v2Extras.PreferLosslessLinearRotationEncoding
+                        ? AnimationCompression.Uncompressed
+                        : AnimationCompression.QuaternionAsFixed3x16bit
                 )
-            ));
+            );
         };
 
         public static Func<JsonContent, ValidationResult> TryMigrateAndValidate = (maybeExtras) =>
         {
             var extras = JsonSerializer.Deserialize<AnimationExtrasForGltf>(maybeExtras.ToJson(), SerializationOptions());
 
-            if (IsSchemaVersionCompatible(extras))
+            if (IsCurrentSchema(extras))
             {
                 return new Valid(extras);
             }
@@ -167,7 +186,8 @@ namespace WolvenKit.Modkit.RED4.Animation
 
             return extras.Schema.Version switch
             {
-                2 => MigrateFromV2toV3(maybeExtras),
+                3 => new Valid(MigrateJsonFromV3toV4(maybeExtras)),
+                2 => new Valid(MigrateFromV3toV4(MigrateJsonFromV2toV3(maybeExtras))),
                 _ => new Invalid($"No migration path for schema version {extras.Schema.Version} found.")
             };
         };
@@ -198,7 +218,7 @@ namespace WolvenKit.Modkit.RED4.Animation
         float Value
     );
 
-    internal enum AnimationEncoding
+    internal enum AnimationCompression
     {
         Uncompressed,
         QuaternionAsFixed3x16bit,
@@ -234,6 +254,7 @@ namespace WolvenKit.Modkit.RED4.Animation
     internal readonly record struct AnimationExtrasForGltf(
         Schema Schema,
         string AnimationType,
+        string RootMotionType,
         bool FrameClamping,
         short FrameClampingStartFrame,
         short FrameClampingEndFrame,
@@ -248,6 +269,19 @@ namespace WolvenKit.Modkit.RED4.Animation
     namespace Deprecated
     {
         // TODO: maybe explicit constructor for explicit defaults?
+        internal readonly record struct AnimationExtrasForGltfV3(
+            Schema Schema,
+            string AnimationType,
+            bool FrameClamping,
+            short FrameClampingStartFrame,
+            short FrameClampingEndFrame,
+            byte NumExtraJoints,
+            byte NumExtraTracks,
+            List<AnimConstTrackKeySerializable> ConstTrackKeys,
+            List<AnimTrackKeySerializable> TrackKeys,
+            List<ushort> FallbackFrameIndices,
+            AnimationOptimizationHints OptimizationHints
+        );
         internal readonly record struct AnimationExtrasForGltfV2(
             Schema Schema,
             string AnimationType,
