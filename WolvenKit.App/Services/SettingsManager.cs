@@ -270,7 +270,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [ObservableProperty]
     private bool _showRedmodInRibbon;
 
-    [Display(Name = "Include default profiles in list",
+    [Display(Name = "Append default launch profiles",
         Description = "Should the 'Launch' menu bar show WolvenKit's default launch profiles, or just your custom ones?",
         GroupName = "Interface")]
     [ObservableProperty]
