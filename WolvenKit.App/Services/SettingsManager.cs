@@ -183,7 +183,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [ObservableProperty]
     private string? _cP77LaunchOptions;
 
-    [Display(Name = "Show File Preview", GroupName = "Cyberpunk")]
+    [Display(Name = "Show File Preview", GroupName = "Interface")]
     [ObservableProperty]
     private bool _showFilePreview = true;
 
@@ -254,7 +254,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [property: Browsable(false)]
     private Dictionary<string, bool>? _scriptStatus;
 
-    [Display(Name = "Analyze mods", Description = "Check mod archives for file names and invalid files", GroupName = "Cyberpunk")] 
+    [Display(Name = "Analyze mods", Description = "Scan installed mods for file paths when opening mod browser", GroupName = "Cyberpunk")] 
     [ObservableProperty]
     private bool _analyzeModArchives;
 
