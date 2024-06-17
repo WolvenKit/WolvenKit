@@ -715,7 +715,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand]
     private void SelectFile(FileSystemModel model) => GetToolViewModel<PropertiesViewModel>().ExecuteSelectFile(model);
 
-    private bool CanSaveFile() => ActiveDocument is not null && !ActiveDocument.IsReadOnly;
+    private bool CanSaveFile() => ActiveDocument is not null;
     [RelayCommand(CanExecute = nameof(CanSaveFile))]
     private void SaveFile() => Save(ActiveDocument.NotNull());
 
@@ -745,7 +745,16 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     [RelayCommand(CanExecute = nameof(CanSaveFile))]
-    private void SaveAs() => Save(ActiveDocument.NotNull(), true);
+    private void SaveAs()
+    {
+        if (_projectManager.ActiveProject is null)
+        {
+            Interactions.ShowConfirmation((s_noProjectText, s_noProjectTitle, WMessageBoxImage.Warning, WMessageBoxButtons.Ok));
+            return;
+        }
+
+        Save(ActiveDocument.NotNull(), true);
+    }
 
     private bool CanSaveAll() => DockedViews.OfType<IDocumentViewModel>().Count() > 0;
     [RelayCommand(CanExecute = nameof(CanSaveAll))]
