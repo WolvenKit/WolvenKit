@@ -163,14 +163,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
     }
 
-    public class DockedViewVisibleChangedEventArgs
+    public class DockedViewVisibleChangedEventArgs(IDockElement element)
     {
-        public DockedViewVisibleChangedEventArgs(IDockElement element)
-        {
-            Element = element;
-        }
-
-        public IDockElement Element { get; }
+        public IDockElement Element { get; } = element;
     }
 
     public event EventHandler<DockedViewVisibleChangedEventArgs>? DockedViewVisibleChanged;
@@ -369,7 +364,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(PackInstallRunCommand))]
     [NotifyCanExecuteChangedFor(nameof(PackInstallRedModRunCommand))]
     private EStatus _taskStatus;
-    private bool CanStartTask() => TaskStatus == EStatus.Ready;
+
+    private bool CanStartTask() => TaskStatus == EStatus.Ready && ActiveProject is not null;
 
     [RelayCommand(CanExecute = nameof(CanStartTask))]
     private async Task PackMod() => await LaunchAsync(new LaunchProfile() { CreateZipFile = true });
