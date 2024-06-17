@@ -1,29 +1,14 @@
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Imaging;
-using HandyControl.Tools.Extension;
 using ReactiveUI;
 using Splat;
-using WolvenKit.App.Models;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
-using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
-
-enum LaunchGameProfile
-{
-    Directly,
-    FromLastSave,
-    FromSpecificSave,
-}
 
 namespace WolvenKit.Views.Shell
 {
@@ -31,8 +16,8 @@ namespace WolvenKit.Views.Shell
     {
         private readonly ISettingsManager _settingsManager;
         private readonly ILoggerService _loggerService;
-        private readonly IModifierViewStateService _modifierViewStateService;
 
+        public const string LaunchOptionsString = "Launch Options";
         
         public RibbonView()
         {
@@ -42,7 +27,6 @@ namespace WolvenKit.Views.Shell
 
             _settingsManager = Locator.Current.GetService<ISettingsManager>();
             _loggerService = Locator.Current.GetService<ILoggerService>();
-            _modifierViewStateService = Locator.Current.GetService<IModifierViewStateService>();
 
             this.WhenActivated(disposables =>
             {
@@ -77,6 +61,7 @@ namespace WolvenKit.Views.Shell
                         viewModel => viewModel.MainViewModel.PackInstallRedModCommand,
                         view => view.ToolbarPackInstallRedmodButton)
                     .DisposeWith(disposables);
+                
                 // pack legacy mod
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.MainViewModel.PackModCommand,
@@ -87,7 +72,7 @@ namespace WolvenKit.Views.Shell
                         view => view.ToolbarPackInstallLegacyButton)
                     .DisposeWith(disposables);
 
-                // hotreload
+                // HotReload
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.MainViewModel.HotInstallModCommand,
                         view => view.ToolbarHotInstallButton)
@@ -108,6 +93,7 @@ namespace WolvenKit.Views.Shell
                    view => view.LaunchProfileText.Text)
                    .DisposeWith(disposables);
 
+                // Active project: Disable/Enable buttons
                 this.OneWayBind(ViewModel, vm => vm.MainViewModel.ActiveProject,
                     view => view.LaunchMenu.IsEnabled,
                     p => p is not null)
@@ -124,19 +110,18 @@ namespace WolvenKit.Views.Shell
             
         }
 
+            
         private void GetLaunchProfiles()
         {
             // unsubscribe
             foreach (var obj in LaunchMenuMainItem.Items)
             {
-                if (obj is MenuItem menuitem && menuitem.Header is string menuitemHeader)
+                if (obj is not MenuItem { Header: string menuitemHeader } menuitem || menuitemHeader == LaunchOptionsString)
                 {
-                    if (menuitemHeader == "Launch Options")
-                    {
-                        continue;
-                    }
-                    menuitem.Click -= LaunchMenu_MenuItem_Click;
+                    continue;
                 }
+
+                menuitem.Click -= LaunchMenu_MenuItem_Click;
             }
             // delete all except for last two
             var cntToRemove = LaunchMenuMainItem.Items.Count - 2;

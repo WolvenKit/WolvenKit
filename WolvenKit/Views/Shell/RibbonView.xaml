@@ -7,6 +7,7 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
     xmlns:shell="clr-namespace:WolvenKit.App.ViewModels.Shell;assembly=WolvenKit.App"
+    xmlns:local="clr-namespace:WolvenKit.Views.Shell"
     x:TypeArguments="shell:RibbonViewModel">
 
     <!--  Resources  -->
@@ -222,7 +223,7 @@
                     </StackPanel>
                 </Button>
 
-                <Button x:Name="ToolbarSaveButton" ToolTip="Save File">
+                <Button x:Name="ToolbarSaveButton" ToolTip="Save Current File">
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconMaterial
                             Padding="0,1,0,1"
@@ -257,11 +258,11 @@
 
                 <Separator Margin="3" Visibility="{Binding ShowRedmodInRibbon, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-                <!--  Pack as REDmod  -->
+                <!-- Button: Pack as REDmod  -->
                 <Button
                     x:Name="ToolbarPackProjectButton"
                     Visibility="{Binding ShowRedmodInRibbon, Converter={StaticResource BooleanToVisibilityConverter}}"
-                    ToolTip="Pack as REDmod &amp; create mod package">
+                    ToolTip="Pack as zip file for Nexus upload, REDmod format">
                     <StackPanel Orientation="Horizontal">
                         <Grid>
                             <iconPacks:PackIconForkAwesome
@@ -270,14 +271,14 @@
                                 Kind="Archive"
                                 Style="{StaticResource WolvenKitToolBarButtonIcon}" />
                         </Grid>
-                        <TextBlock Padding="5,0,0,0" Text="Pack as REDmod" />
+                        <TextBlock Padding="5,0,0,0" Text="Create Zip (REDmod)" />
                     </StackPanel>
                 </Button>
 
-                <Button
-                    x:Name="ToolbarPackInstallRedmodButton"
-                    Visibility="{Binding ShowRedmodInRibbon, Converter={StaticResource BooleanToVisibilityConverter}}"
-                    ToolTip="Pack as REDmod &amp; install to game">
+                <!-- Button: Install as REDMod -->
+                <Button x:Name="ToolbarPackInstallRedmodButton"
+                        Visibility="{Binding ShowRedmodInRibbon, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        ToolTip="Pack as REDmod &amp; install to game. Not supported by HotReload.">
                     <StackPanel Orientation="Horizontal">
                         <Grid>
                             <iconPacks:PackIconForkAwesome
@@ -300,8 +301,8 @@
 
                 <Separator />
 
-                <!--  Pack as LegacyMod  -->
-                <Button x:Name="ToolbarPackProjectLegacyButton" ToolTip="Pack mod &amp; create mod package">
+                <!-- "Pack" button -->
+                <Button x:Name="ToolbarPackProjectLegacyButton" ToolTip="Pack as zip file for Nexus upload">
                     <StackPanel Orientation="Horizontal">
                         <Grid>
                             <iconPacks:PackIconForkAwesome
@@ -310,11 +311,12 @@
                                 Kind="Archive"
                                 Style="{StaticResource WolvenKitToolBarButtonIcon}" />
                         </Grid>
-                        <TextBlock Padding="5,0,0,0" Text="Pack Mod" />
+                        <TextBlock Padding="5,0,0,0" Text="Create Zip" />
                     </StackPanel>
                 </Button>
 
-                <Button x:Name="ToolbarPackInstallLegacyButton" ToolTip="Pack mod &amp; install to game">
+                <!-- Install button -->
+                <Button x:Name="ToolbarPackInstallLegacyButton" ToolTip="Install mod to game directory">
                     <StackPanel Orientation="Horizontal">
                         <Grid>
                             <iconPacks:PackIconForkAwesome
@@ -337,14 +339,15 @@
 
                 <Separator Margin="3" />
 
+                <!-- Launch Profiles - Added programmatically  -->
                 <Menu x:Name="LaunchMenu">
                     <MenuItem x:Name="LaunchMenuMainItem">
                         <MenuItem.Header>
                             <StackPanel Orientation="Horizontal">
-                                <Button
-                                    x:Name="LaunchProfileButton"
-                                    Margin="-2,-2,2,-2"
-                                    Style="{StaticResource ButtonChromelessStyle}">
+                                <Button x:Name="LaunchProfileButton"
+                                        ToolTip="Start from launch profile (configure in 'Launch Options')"
+                                        Margin="-2,-2,2,-2"
+                                        Style="{StaticResource ButtonChromelessStyle}">
                                     <StackPanel Orientation="Horizontal">
                                         <Grid>
                                             <iconPacks:PackIconForkAwesome
@@ -355,7 +358,6 @@
                                         </Grid>
                                         <TextBlock x:Name="LaunchProfileText" Padding="5,0,0,0" />
                                     </StackPanel>
-
                                 </Button>
                                 <Separator />
                                 <iconPacks:PackIconCodicons
@@ -370,7 +372,8 @@
 
                         <Separator />
 
-                        <MenuItem x:Name="LaunchOptionsMenuItem" Header="Launch Options">
+                        <!-- Launch Options -->
+                        <MenuItem x:Name="LaunchOptionsMenuItem" Header="{x:Static local:RibbonView.LaunchOptionsString}">
                             <MenuItem.Icon>
                                 <iconPacks:PackIconCodicons
                                     Padding="1"
@@ -384,8 +387,8 @@
 
                 <Separator Margin="3" />
 
-                <Button x:Name="ToolbarHotInstallButton" ToolTip="Pack archives &amp; install directly to hot directory">
-
+                <!-- Button: Hot Reload -->
+                <Button x:Name="ToolbarHotInstallButton" ToolTip="Install to Game Directory (HotReload Plugin required)">
                     <StackPanel Orientation="Horizontal">
                         <Grid>
                             <iconPacks:PackIconForkAwesome
@@ -393,7 +396,6 @@
                                 Foreground="#f44b56"
                                 Kind="Fire"
                                 Style="{StaticResource WolvenKitToolBarButtonIcon}" />
-
                         </Grid>
                         <TextBlock Padding="5,0,0,0" Text="Hot Reload" />
                     </StackPanel>
