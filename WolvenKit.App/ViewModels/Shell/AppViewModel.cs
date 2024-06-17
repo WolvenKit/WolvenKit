@@ -756,7 +756,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         Save(ActiveDocument.NotNull(), true);
     }
 
-    private bool CanSaveAll() => DockedViews.OfType<IDocumentViewModel>().Count() > 0;
+    private bool CanSaveAll() => CanSaveFile() || DockedViews.OfType<IDocumentViewModel>().Count() > 0;
     [RelayCommand(CanExecute = nameof(CanSaveAll))]
     private void SaveAll()
     {
@@ -1488,6 +1488,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(SaveFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(SaveAsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SaveAllCommand))]
     private IDocumentViewModel? _activeDocument;
 
     [ObservableProperty]
