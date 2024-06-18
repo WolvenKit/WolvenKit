@@ -270,8 +270,8 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [ObservableProperty]
     private bool _showRedmodInRibbon;
 
-    [Display(Name = "Append default launch profiles",
-        Description = "Should the 'Launch' menu bar show WolvenKit's default launch profiles, or just your custom ones?",
+    [Display(Name = "Include default launch profiles",
+        Description = "Should the 'Launch' menu button show WolvenKit's default launch profiles, or just your custom ones?",
         GroupName = "Interface")]
     [ObservableProperty]
     private bool _useDefaultLaunchProfiles;
@@ -360,7 +360,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             Directory.CreateDirectory(dir);
         }
 
-        return dir;
+        return dir; 
     }
 
     public string? GetRED4OodleDll() => string.IsNullOrEmpty(GetRED4GameRootDir())

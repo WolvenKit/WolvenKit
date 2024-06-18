@@ -9,7 +9,7 @@ public interface IDocumentViewModel : IDockElement
     /// <summary>
     /// Gets the current path of the file being managed in this document viewmodel.
     /// </summary>
-    string FilePath { get; set; }
+    string? FilePath { get; set; }
     bool IsReadOnly { get; set; }
 
     public bool IsDirty
