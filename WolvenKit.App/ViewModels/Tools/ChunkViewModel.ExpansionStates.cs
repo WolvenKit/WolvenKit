@@ -25,6 +25,43 @@ public class CustomLoopException : Exception
 
 public partial class ChunkViewModel : ObservableObject
 {
+    private ChunkViewModel? FindProperty(string propName) => Properties.FirstOrDefault(p => p.Name == propName);
+
+    private ChunkViewModel? FindTvProperty(string propName) => TVProperties.FirstOrDefault(p => p.Name == propName);
+
+    /// <summary>
+    /// Helper method to expand and select a child node.
+    /// </summary>
+    /// <param name="cvm">The node to expand</param>
+    /// <param name="selectChild">If parameter is set to false or cvm has no children, will select cvm. Otherwise, will select first child.</param>
+    /// <param name="expandOnlyChild">If cvm has only one child, it will be expanded as well.</param>
+    private void ExpandAndSelect(ChunkViewModel? cvm, bool selectChild = false, bool expandOnlyChild = false)
+    {
+        if (cvm is null)
+        {
+            return;
+        }
+
+        cvm.IsExpanded = true;
+
+        if (expandOnlyChild && cvm.TVProperties.Count == 1)
+        {
+            cvm.TVProperties[0].IsExpanded = true;
+        }
+
+        if (Tab is null)
+        {
+            return;
+        }
+
+        if (!selectChild || cvm.TVProperties.Count == 0)
+        {
+            Tab.SetSelection(cvm);
+            return;
+        }
+
+        Tab.SetSelection(cvm.TVProperties[0]);
+    }
     /// <summary>
     /// Called from ChunkViewmodelFactory after initializing the chunk. 
     /// </summary>
@@ -38,15 +75,45 @@ public partial class ChunkViewModel : ObservableObject
         switch (Data)
         {
             // .mi file
-            case CMaterialInstance when TVProperties.FirstOrDefault(prop => prop.Name == "values") is ChunkViewModel valuesNode:
-                valuesNode.IsExpanded = true;
-                if (valuesNode.TVProperties.Count == 0 || _tab is null)
+            case CMaterialInstance when FindTvProperty("values") is ChunkViewModel child:
+                ExpandAndSelect(child, true);
+                break;
+            // .app file
+            case appearanceAppearanceResource when FindTvProperty("appearances") is ChunkViewModel child:
+                ExpandAndSelect(child, false, true);
+                break;
+            // .ent file
+            case entEntityTemplate:
+                var appearances = FindTvProperty("appearances");
+                var components = FindTvProperty("components");
+                var nodeToExpand = (appearances?.TVProperties.Count ?? 0) == 0 ? components : appearances;
+                ExpandAndSelect(nodeToExpand, true, true);
+                break;
+            // .mesh file
+            case CMesh:
+                if (FindTvProperty("appearances") is { TVProperties.Count: > 0 } meshAppearances)
                 {
-                    break;
+                    meshAppearances.IsExpanded = true;
                 }
 
-                // Auto-select the single value
-                _tab.SetSelection(valuesNode.TVProperties[0]);
+                if (FindTvProperty("preloadLocalMaterialInstances") is { TVProperties.Count: > 0 } preloadMaterials)
+                {
+                    preloadMaterials.IsExpanded = true;
+                }
+
+                if (FindTvProperty("localMaterialBuffer")?.FindTvProperty("materials") is { TVProperties.Count: > 0 } materials)
+                {
+                    materials.IsExpanded = true;
+                }
+
+                break;
+            // .csv
+            case C2dArray when FindProperty("compiledData") is ChunkViewModel child:
+                ExpandAndSelect(child, true);
+                break;
+            // .json
+            case JsonResource when FindProperty("root") is ChunkViewModel child:
+                ExpandAndSelect(child, true);
                 break;
             default:
                 break;
