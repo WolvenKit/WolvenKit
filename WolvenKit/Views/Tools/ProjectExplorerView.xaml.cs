@@ -407,7 +407,7 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null)
+            if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems is not null)
             {
                 foreach (var item in e.NewItems)
                 {
@@ -416,24 +416,26 @@ namespace WolvenKit.Views.Tools
                         continue;
                     }
 
-                    if (ViewModel.GetExpansionState(fileSystemModel.RawRelativePath))
+                    if (ViewModel.GetExpansionStateOrNull(fileSystemModel.RawRelativePath) is true or null)
                     {
                         TreeGrid.ExpandNode(treeNode);
                     }
                 }
             }
 
-            if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems != null)
+            if (e.Action != NotifyCollectionChangedAction.Remove || e.OldItems == null)
             {
-                foreach (var item in e.OldItems)
-                {
-                    if (item is not TreeNode { Item: FileSystemModel { IsDirectory: true } fileSystemModel })
-                    {
-                        continue;
-                    }
+                return;
+            }
 
-                    ViewModel.ExpansionStateDictionary.Remove(fileSystemModel.RawRelativePath);
+            foreach (var item in e.OldItems)
+            {
+                if (item is not TreeNode { Item: FileSystemModel { IsDirectory: true } fileSystemModel })
+                {
+                    continue;
                 }
+
+                ViewModel.ExpansionStateDictionary.Remove(fileSystemModel.RawRelativePath);
             }
         }
 

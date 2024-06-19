@@ -1,40 +1,98 @@
 ﻿using System;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using System.Windows.Interop;
+using System.Windows;
+using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace WolvenKit.App.Services;
 
 public class AppIdleStateService
 {
-    private readonly Subject<EventArgs> _eventSubject5Seconds = new();
-    private readonly Subject<EventArgs> _eventSubject30Seconds = new();
-    private readonly Subject<EventArgs> _eventSubjectFiveMinutes = new();
+    private readonly DispatcherTimer _timerTenSeconds;
+    private readonly DispatcherTimer _timerThirtySeconds;
+    private readonly DispatcherTimer _timerOneMinute;
+    private readonly DispatcherTimer _timerFiveMinutes;
+
 
     public AppIdleStateService()
     {
-        _eventSubject30Seconds.Throttle(TimeSpan.FromSeconds(30)).Subscribe(e => ThreadIdleThirtySeconds?.Invoke(this, e));
-        _eventSubject5Seconds.Throttle(TimeSpan.FromMinutes(1)).Subscribe(e => ThreadIdleOneMinute?.Invoke(this, e));
-        _eventSubjectFiveMinutes.Throttle(TimeSpan.FromMinutes(5)).Subscribe(e => ThreadIdleFiveMinutes?.Invoke(this, e));
+        InputManager.Current.PreProcessInput += OnActivity;
 
-        ComponentDispatcher.ThreadIdle += ComponentDispatcher_ThreadIdle_5Seconds;
+        _timerTenSeconds = new DispatcherTimer(
+            TimeSpan.FromSeconds(10),
+            DispatcherPriority.ApplicationIdle,
+            (s, e) => ThreadIdleTenSeconds?.Invoke(this, e),
+            Application.Current.Dispatcher
+        );
+
+        _timerThirtySeconds = new DispatcherTimer(
+            TimeSpan.FromSeconds(30),
+            DispatcherPriority.ApplicationIdle,
+            (s, e) => ThreadIdleThirtySeconds?.Invoke(this, e),
+            Application.Current.Dispatcher
+        );
+
+        _timerOneMinute = new DispatcherTimer(
+            TimeSpan.FromMinutes(1),
+            DispatcherPriority.ApplicationIdle,
+            (s, e) => ThreadIdleOneMinute?.Invoke(this, e),
+            Application.Current.Dispatcher
+        );
+
+        _timerFiveMinutes = new DispatcherTimer(
+            TimeSpan.FromMinutes(5),
+            DispatcherPriority.ApplicationIdle,
+            (s, e) => ThreadIdleFiveMinutes?.Invoke(this, e),
+            Application.Current.Dispatcher
+        );
+
+        StartTimers();
+    }
+
+    private void StartTimers()
+    {
+        _timerTenSeconds.Start();
+        _timerThirtySeconds.Start();
+        _timerOneMinute.Start();
+        _timerFiveMinutes.Start();
+    }
+
+    private void StopTimers()
+    {
+        _timerTenSeconds.Stop();
+        _timerThirtySeconds.Stop();
+        _timerOneMinute.Stop();
+        _timerFiveMinutes.Stop();
+    }
+
+    private void OnActivity(object sender, PreProcessInputEventArgs e)
+    {
+        if (e.StagingItem?.Input is not MouseEventArgs or KeyboardEventArgs)
+        {
+            return;
+        }
+
+        StopTimers();
+        StartTimers();
     }
 
     /// <summary>
-    /// Debounced to fire only every five seconds
+    /// Will fire if the application is idle for ten consecutive seconds
     /// </summary>
-    public event EventHandler? ThreadIdleOneMinute;
+    public event EventHandler? ThreadIdleTenSeconds;
 
     /// <summary>
-    /// Debounced to fire only every five seconds
+    /// Will fire if the application is idle for thirty consecutive seconds
     /// </summary>
     public event EventHandler? ThreadIdleThirtySeconds;
 
     /// <summary>
-    /// Debounced to fire only every five minutes
+    /// Will fire if the application is idle for one consecutive minute
+    /// </summary>
+    public event EventHandler? ThreadIdleOneMinute;
+    
+    /// <summary>
+    /// Will fire if the application is idle for five consecutive minutes
     /// </summary>
     public event EventHandler? ThreadIdleFiveMinutes;
 
-
-    private void ComponentDispatcher_ThreadIdle_5Seconds(object? sender, EventArgs e) => _eventSubject5Seconds.OnNext(e);
 }

@@ -111,23 +111,22 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         SelectedTabIndex = ActiveProject?.ActiveTab ?? 0;
 
-        if (Locator.Current.GetService<AppIdleStateService>() is AppIdleStateService svc)
+        if (Locator.Current.GetService<AppIdleStateService>() is not AppIdleStateService svc)
         {
-            svc.ThreadIdleOneMinute += (_, _) => SaveFileTreeStateIfDirty();
+            return;
         }
+
+        svc.ThreadIdleTenSeconds += (_, _) => SaveProjectExplorerExpansionStateIfDirty();
+        svc.ThreadIdleTenSeconds += (_, _) => SaveProjectExplorerTabIfDirty();
+
     }
 
 
     public Dictionary<string, bool> ExpansionStateDictionary = new();
 
-    public bool GetExpansionState(string relPath)
-    {
-        if (ExpansionStateDictionary.TryGetValue(relPath, out var state))
-        {
-            return state;
-        }
-        return false;
-    }
+    public bool GetExpansionState(string relPath) => GetExpansionStateOrNull(relPath) ?? false;
+
+    public bool? GetExpansionStateOrNull(string relPath) => ExpansionStateDictionary.TryGetValue(relPath, out var state) ? state : null;
 
     /// <summary>
     /// Set status of "scroll to open file" button, based on whether or not we have one opened
@@ -148,7 +147,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         if (ActiveProject != null)
         {
             _hasUnsavedFileTreeChanges = true;
-            SaveFileTreeStateIfDirty(ActiveProject);
+            SaveProjectExplorerExpansionStateIfDirty();
             _projectWatcher.UnwatchProject(ActiveProject);
         }
 
@@ -333,6 +332,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         $"{Path.DirectorySeparatorChar}archive{Path.DirectorySeparatorChar}";
 
     private bool _hasUnsavedFileTreeChanges;
+
+    private bool _projectExplorerTabChanged;
 
 
     [GeneratedRegex(@".*\.\S+\.glb$")]
@@ -1165,9 +1166,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         cw.WriteFile(cr2W);
     }
 
+    private const string s_treestateFileName = "fileTreeState.json";
     private void LoadFileTreeState(Cp77Project project)
     {
-        var statePath = Path.Combine(project.ProjectDirectory, "fileTreeState.json");
+        var statePath = GetTreeStateFilePath(project);
         if (File.Exists(statePath))
         {
             _hasUnsavedFileTreeChanges = false;
@@ -1175,25 +1177,33 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
         else
         {
-            ExpansionStateDictionary = new();
+            ExpansionStateDictionary = [];
         }
     }
 
-    public void SaveFileTreeStateIfDirty()
+    public void SaveProjectExplorerTabIfDirty()
     {
-        if (ActiveProject != null)
-        {
-            SaveFileTreeStateIfDirty(ActiveProject);
-        }
-    }
-
-    private void SaveFileTreeStateIfDirty(Cp77Project project)
-    {
-        if (!_hasUnsavedFileTreeChanges)
+        if (!_projectExplorerTabChanged)
         {
             return;
         }
-        File.WriteAllText(Path.Combine(project.ProjectDirectory, "fileTreeState.json"), JsonSerializer.Serialize(ExpansionStateDictionary));
+
+        _projectManager.SaveAsync();
+        _projectExplorerTabChanged = false;
+    }
+
+    public void SaveProjectExplorerExpansionStateIfDirty() => SaveProjectExplorerExpansionStateIfDirty(ActiveProject);
+
+    private static string GetTreeStateFilePath(Cp77Project project) => Path.Combine(project.ProjectDirectory, s_treestateFileName);
+
+    private void SaveProjectExplorerExpansionStateIfDirty(Cp77Project? project)
+    {
+        if (project is null || !_hasUnsavedFileTreeChanges)
+        {
+            return;
+        }
+
+        File.WriteAllText(GetTreeStateFilePath(project), JsonSerializer.Serialize(ExpansionStateDictionary));
         _hasUnsavedFileTreeChanges = false;
     }
 
@@ -1207,6 +1217,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
 
         ActiveProject.ActiveTab = SelectedTabIndex;
+        _projectExplorerTabChanged = true;
     }
 
     #endregion Methods
@@ -1261,9 +1272,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     #endregion
 
-    public void SaveNodeExpansionState(string rawRelativePath, bool b)
+    public void SaveNodeExpansionState(string rawRelativePath, bool expansionState)
     {
-        ExpansionStateDictionary[rawRelativePath] = true;
+        ExpansionStateDictionary[rawRelativePath] = expansionState;
         _hasUnsavedFileTreeChanges = true;
     }
 }
