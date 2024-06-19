@@ -6,14 +6,6 @@
     "GameArguments": "",
     "DeployWithRedmod": false
   },
-  "Install as REDmod": {
-    "CreateBackup": false,
-    "Install": true,
-    "LaunchGame": false,
-    "GameArguments": "",
-    "DeployWithRedmod": true,
-    "IsRedmod" :  true
-  },
   "Launch Game Without Install": {
     "LaunchGame": true,
     "GameArguments": ""
@@ -32,5 +24,13 @@
     "LoadLastSave": true,
     "GameArguments": "",
     "DeployWithRedmod": false
+  },
+  "Install as REDmod": {
+    "CreateBackup": false,
+    "Install": true,
+    "LaunchGame": false,
+    "GameArguments": "",
+    "DeployWithRedmod": true,
+    "IsRedmod": true
   }
 }

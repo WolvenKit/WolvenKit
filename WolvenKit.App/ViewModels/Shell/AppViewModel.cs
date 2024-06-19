@@ -1955,8 +1955,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     public void SetLaunchProfiles(ObservableCollection<LaunchProfileViewModel> launchProfiles)
     {
-        _settingsManager.LaunchProfiles ??= new();
-
         _settingsManager.LaunchProfiles.Clear();
         var profiles = launchProfiles
             .Where(item => !_settingsManager.LaunchProfiles.ContainsKey(item.Name))

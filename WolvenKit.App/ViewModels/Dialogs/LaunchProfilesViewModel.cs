@@ -27,14 +27,7 @@ public partial class LaunchProfilesViewModel : DialogViewModel
         Title = "Rename";
 
         // populate profiles
-        LaunchProfiles = new();
-        
-        if (_settingsManager.GetLaunchProfiles() is not Dictionary<string, LaunchProfile> launchProfiles)
-        {
-            return;
-        }
-
-        foreach (var (key, value) in launchProfiles)
+        foreach (var (key, value) in _settingsManager.LaunchProfiles)
         {
             var newProfile = new LaunchProfileViewModel(key, value);
             LaunchProfiles.Add(newProfile);
@@ -103,7 +96,7 @@ public partial class LaunchProfilesViewModel : DialogViewModel
         LaunchProfiles.Remove(SelectedLaunchProfile);
     }
 
-    [ObservableProperty] private ObservableCollection<LaunchProfileViewModel> _launchProfiles = new();
+    [ObservableProperty] private ObservableCollection<LaunchProfileViewModel> _launchProfiles = [];
 
     [ObservableProperty] private LaunchProfileViewModel? _selectedLaunchProfile;
 

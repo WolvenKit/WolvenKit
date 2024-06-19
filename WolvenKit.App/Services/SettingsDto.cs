@@ -1,4 +1,8 @@
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text.Json;
+using WolvenKit.App.Extensions;
 using System.Xaml;
 using WolvenKit.App.Models;
 using WolvenKit.Common;
@@ -7,6 +11,11 @@ namespace WolvenKit.App.Services;
 
 public class SettingsDto : ISettingsDto
 {
+    /// <summary>
+    /// Current version of SettingsDTO.
+    /// </summary>
+    private const int s_currentSettingsVersion = 3;
+
     // Deserialize
     public SettingsDto()
     {
@@ -47,14 +56,10 @@ public class SettingsDto : ISettingsDto
         ModderName = settings.ModderName;
         ModderEmail = settings.ModderEmail;
         RefactoringCheckboxDefaultValue = settings.RefactoringCheckboxDefaultValue;
-        UseDefaultLaunchProfiles = settings.UseDefaultLaunchProfiles;
         LastLaunchProfile = settings.LastLaunchProfile;
         ShowRedmodInRibbon = settings.ShowRedmodInRibbon;
-        
-        if (settings.SettingsVersion < 2)
-        {
-            MigrateFromV1ToV2();
-        }
+
+        MigrateSettings(settings.SettingsVersion);
     }
 
     public int SettingsVersion { get; set; } = 2;
@@ -82,8 +87,7 @@ public class SettingsDto : ISettingsDto
     public bool ShowTweakDBIDAsHex { get; set; }
     public bool ShowReferenceGraph { get; set; }
     public EGameLanguage GameLanguage { get; set; } = EGameLanguage.en_us;
-    public Dictionary<string, LaunchProfile>? LaunchProfiles { get; set; }
-    public bool UseDefaultLaunchProfiles { get; set; } = true;
+    public Dictionary<string, LaunchProfile> LaunchProfiles { get; set; } = [];
     public bool RefactoringCheckboxDefaultValue { get; set; }
     public Dictionary<string, bool>? ScriptStatus { get; set; }
     public bool AnalyzeModArchives { get; set; } = true;
@@ -99,10 +103,7 @@ public class SettingsDto : ISettingsDto
 
     public SettingsManager ReconfigureSettingsManager(SettingsManager settingsManager)
     {
-        if (SettingsVersion < 2)
-        {
-            MigrateFromV1ToV2();
-        }
+        MigrateSettings(SettingsVersion);
 
         settingsManager.SettingsVersion = SettingsVersion;
 
@@ -139,7 +140,6 @@ public class SettingsDto : ISettingsDto
         settingsManager.ModderName = ModderName;
         settingsManager.ModderEmail = ModderEmail;
         settingsManager.RefactoringCheckboxDefaultValue = RefactoringCheckboxDefaultValue;
-        settingsManager.UseDefaultLaunchProfiles = UseDefaultLaunchProfiles;
         settingsManager.LastLaunchProfile = LastLaunchProfile;
 
         return settingsManager;
@@ -157,13 +157,69 @@ public class SettingsDto : ISettingsDto
     // Rather than create all kinds of new interfaces etc.,
     // always maintain the DTO as the current, and apply
     // all migrations in order for a controlled upgrade.
-    private void MigrateFromV1ToV2()
+    private void MigrateSettings(int fromVersion)
     {
-        if (!string.IsNullOrWhiteSpace(CP77ExecutablePath))
+        if (fromVersion == s_currentSettingsVersion)
+        {
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(CP77ExecutablePath))
         {
             CP77LaunchCommand = CP77ExecutablePath;
         }
 
-        SettingsVersion = 2;
+        if (fromVersion < 3)
+        {
+            UpdateLaunchProfilesV3();
+        }
+
+        SettingsVersion = s_currentSettingsVersion;
+    }
+
+    /// <summary>
+    /// Version 3: Launch profile changes
+    /// Profiles have an `order` field now, and new ones were added
+    /// </summary>
+    private void UpdateLaunchProfilesV3()
+    {
+        LaunchProfiles ??= [];
+
+        var idx = 0;
+        foreach (var kvp in LaunchProfiles.Where(kvp => kvp.Value.Order is null))
+        {
+            kvp.Value.Order = idx;
+            idx += 1;
+        }
+
+        var newLaunchProfiles = new Dictionary<string, LaunchProfile>();
+        newLaunchProfiles.AddRange(LaunchProfiles);
+
+        using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(@"WolvenKit.App.Resources.launchprofiles.json");
+        if (stream != null)
+        {
+            var defaultProfiles = JsonSerializer.Deserialize<Dictionary<string, LaunchProfile>>(stream,
+                options: new JsonSerializerOptions
+                {
+                    WriteIndented = true, DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+                }) ?? [];
+
+
+            // Don't overwrite existing profiles
+            foreach (var kvp in defaultProfiles.Where(kvp => !newLaunchProfiles.ContainsKey(kvp.Key)))
+            {
+                if (kvp.Value.Order is null)
+                {
+                    kvp.Value.Order = idx;
+                    idx += 1;
+                }
+
+                newLaunchProfiles.Add(kvp.Key, kvp.Value);
+            }
+        }
+
+        LaunchProfiles = newLaunchProfiles
+            .OrderBy(x => x.Value.Order)
+            .ToDictionary(x => x.Key, x => x.Value);
     }
 }

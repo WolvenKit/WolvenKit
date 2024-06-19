@@ -35,7 +35,6 @@ public partial class RibbonViewModel : ObservableObject
 
         _settingsManager.PropertyChanged += SettingsManager_PropertyChanged;
 
-        _launchProfileText = "Launch Profiles";
         if (!string.IsNullOrEmpty(_settingsManager.LastLaunchProfile))
         {
             _launchProfileText = _settingsManager.LastLaunchProfile;
