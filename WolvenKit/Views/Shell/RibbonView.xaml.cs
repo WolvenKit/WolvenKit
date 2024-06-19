@@ -123,17 +123,16 @@ namespace WolvenKit.Views.Shell
 
                 menuitem.Click -= LaunchMenu_MenuItem_Click;
             }
-            // delete all except for last two
+
+            // delete all except for last two (separator and "Launch options")
             var cntToRemove = LaunchMenuMainItem.Items.Count - 2;
             for (var i = 0; i < cntToRemove; i++)
             {
                 LaunchMenuMainItem.Items.RemoveAt(0);
             }
 
-
-            var launchProfiles = _settingsManager.GetLaunchProfiles();
             var count = 0;
-            foreach (var (name, value) in launchProfiles)
+            foreach (var (name, _) in _settingsManager.LaunchProfiles)
             {
                 MenuItem item = new()
                 {
@@ -146,12 +145,10 @@ namespace WolvenKit.Views.Shell
                 count++;
             }
 
-            if (ViewModel is not null && launchProfiles.Count != 0 && ViewModel.LaunchProfileText is null)
+            if (ViewModel is not null && ViewModel.LaunchProfileText is null && _settingsManager.LaunchProfiles.Count > 0)
             {
-                ViewModel.LaunchProfileText = launchProfiles.First().Key;
+                ViewModel.LaunchProfileText = _settingsManager.LaunchProfiles.First().Key;
             }
-
-            //_profilesLoaded = true;
         }
 
         private void LaunchMenu_MenuItem_Click(object sender, RoutedEventArgs e)

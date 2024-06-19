@@ -192,7 +192,4 @@ public interface ISettingsManager : ISettingsDto, INotifyPropertyChanged
     bool IsNoobFilterDefaultEnabled();
 
     bool ShowRedmodInRibbon { get; set; }
-
-
-    Dictionary<string, LaunchProfile> GetLaunchProfiles();
 }

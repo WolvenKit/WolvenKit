@@ -32,8 +32,7 @@ public interface ISettingsDto
     public bool ShowReferenceGraph { get; set; }
     public EGameLanguage GameLanguage { get; set; }
     public bool EnableNoobFilterByDefault { get; set; }
-    public Dictionary<string, LaunchProfile>? LaunchProfiles { get; set; }
-    public bool UseDefaultLaunchProfiles { get; set; }
+    public Dictionary<string, LaunchProfile> LaunchProfiles { get; set; }
     public Dictionary<string, bool>? ScriptStatus { get; set; }
     public bool AnalyzeModArchives { get; set; }
     public string? ExtraModDirPath { get; set; }

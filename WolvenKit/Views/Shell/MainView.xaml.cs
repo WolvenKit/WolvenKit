@@ -57,7 +57,7 @@ namespace WolvenKit.Views.Shell
                 {
                     LaunchProfilesView dialog = new();
 
-                    if (dialog.ShowDialog(this) == true)
+                    if (dialog.ViewModel is not null && dialog.ShowDialog(this) == true)
                     {
                         ViewModel.SetLaunchProfiles(dialog.ViewModel.LaunchProfiles);
                     }

@@ -65,7 +65,6 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(ModderName),
             nameof(ModderEmail),
             nameof(RefactoringCheckboxDefaultValue),
-            nameof(UseDefaultLaunchProfiles),
             nameof(LastLaunchProfile),
             nameof(ShowRedmodInRibbon)
             )
@@ -248,7 +247,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
 
     [ObservableProperty]
     [property: Browsable(false)]
-    private Dictionary<string, LaunchProfile>? _launchProfiles;
+    private Dictionary<string, LaunchProfile> _launchProfiles = [];
 
     [ObservableProperty]
     [property: Browsable(false)]
@@ -269,12 +268,6 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
         GroupName = "Interface")]
     [ObservableProperty]
     private bool _showRedmodInRibbon;
-
-    [Display(Name = "Include default launch profiles",
-        Description = "Should the 'Launch' menu button show WolvenKit's default launch profiles, or just your custom ones?",
-        GroupName = "Interface")]
-    [ObservableProperty]
-    private bool _useDefaultLaunchProfiles;
 
     [Display(Name = "Additional Mod directory", Description = "Path to an optional directory containing mod archives", GroupName = "Cyberpunk")]
     [ObservableProperty]
@@ -370,60 +363,6 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     public bool IsHealthy() => File.Exists(CP77ExecutablePath) && File.Exists(GetRED4OodleDll());
 
     public bool IsNoobFilterDefaultEnabled() => EnableNoobFilterByDefault;
-
-    private bool _isLaunchprofilesInitialized = false;
-
-    public Dictionary<string, LaunchProfile> GetLaunchProfiles()
-    {
-        if (_isLaunchprofilesInitialized && LaunchProfiles is not null)
-        {
-            return LaunchProfiles;
-        }
-
-        _isLaunchprofilesInitialized = true;
-
-        LaunchProfiles ??= [];
-
-        var idx = 0;
-        foreach (var kvp in LaunchProfiles.Where(kvp => kvp.Value.Order is null))
-        {
-            kvp.Value.Order = idx;
-            idx += 1;
-        }
-
-        var newLaunchProfiles = new Dictionary<string, LaunchProfile>();
-        newLaunchProfiles.AddRange(LaunchProfiles);
-
-        using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(@"WolvenKit.App.Resources.launchprofiles.json");
-        if (stream != null)
-        {
-            var defaultProfiles = JsonSerializer.Deserialize<Dictionary<string, LaunchProfile>>(stream,
-                options: new JsonSerializerOptions
-                {
-                    WriteIndented = true, DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
-                }) ?? [];
-
-
-            // Don't overwrite existing profiles
-            foreach (var kvp in defaultProfiles.Where(kvp => !newLaunchProfiles.ContainsKey(kvp.Key)))
-            {
-                if (kvp.Value.Order is null)
-                {
-                    kvp.Value.Order = idx;
-                    idx += 1;
-                }
-
-                newLaunchProfiles.Add(kvp.Key, kvp.Value);
-            }
-        }
-
-        LaunchProfiles = newLaunchProfiles
-            .OrderBy(x => x.Value.Order)
-            .ToDictionary(x => x.Key, x => x.Value);
-        Save();
-
-        return LaunchProfiles;
-    }
 
     #endregion methods
 }
