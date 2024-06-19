@@ -56,4 +56,7 @@ public static class Interactions
 
     public static Func<(IEnumerable<IDisplayable>?, IEnumerable<IDisplayable>?), IEnumerable<IDisplayable>> ShowCollectionView { get; set; } 
         = _ => throw new NotImplementedException();
+
+    public static Func<string?, string?> ShowSelectSaveView { get; set; } =
+        (string? currentSaveGame) => throw new NotImplementedException();
 }

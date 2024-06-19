@@ -1,0 +1,36 @@
+{
+  "Install": {
+    "CreateBackup": false,
+    "Install": true,
+    "LaunchGame": false,
+    "GameArguments": "",
+    "DeployWithRedmod": false
+  },
+  "Launch Game Without Install": {
+    "LaunchGame": true,
+    "GameArguments": ""
+  },
+  "Install and Launch": {
+    "CreateBackup": false,
+    "Install": true,
+    "LaunchGame": true,
+    "GameArguments": "",
+    "DeployWithRedmod": false
+  },
+  "Install, Launch, and Load Save": {
+    "CreateBackup": false,
+    "Install": true,
+    "LaunchGame": true,
+    "LoadLastSave": true,
+    "GameArguments": "",
+    "DeployWithRedmod": false
+  },
+  "Install as REDmod": {
+    "CreateBackup": false,
+    "Install": true,
+    "LaunchGame": false,
+    "GameArguments": "",
+    "DeployWithRedmod": true,
+    "IsRedmod": true
+  }
+}

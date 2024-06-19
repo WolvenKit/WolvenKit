@@ -51,8 +51,10 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
         IsSimpleViewEnabled = Parent.IsSimpleViewEnabled;
 
-        parent.PropertyChanged += RDTDataViewModel_PropertyChanged;
-        
+        Nodes.Add(new ResourcePathWrapper(this, new ReferenceSocket(Chunks[0].RelativePath), _appViewModel, _chunkViewmodelFactory));
+        _nodePaths.Add(Chunks[0].RelativePath);
+
+
         if (SelectedChunk == null && Chunks.Count > 0)
         {
             SelectedChunk = Chunks[0];
@@ -62,8 +64,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
             }
         }
 
-        Nodes.Add(new ResourcePathWrapper(this, new ReferenceSocket(Chunks[0].RelativePath), _appViewModel, _chunkViewmodelFactory));
-        _nodePaths.Add(Chunks[0].RelativePath);
+        parent.PropertyChanged += RDTDataViewModel_PropertyChanged;
     }
 
     private void RDTDataViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -410,6 +411,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     public void SetSelection(ChunkViewModel chunk)
     {
         ClearSelection();
+        chunk.IsSelected = true;
         SelectedChunk = chunk;
         if (SelectedChunks is IList lst)
         {

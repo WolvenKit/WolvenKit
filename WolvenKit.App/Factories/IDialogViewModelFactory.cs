@@ -4,7 +4,7 @@ namespace WolvenKit.App.Factories;
 
 public interface IDialogViewModelFactory
 {
-    public SoundModdingViewModel SoundModdingViewModel();
+    public SoundModdingViewModel? SoundModdingViewModel();
 
-    public NewFileViewModel NewFileViewModel();
+    public NewFileViewModel? NewFileViewModel();
 }

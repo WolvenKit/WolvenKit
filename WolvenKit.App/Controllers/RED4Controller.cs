@@ -322,6 +322,15 @@ public class RED4Controller : ObservableObject, IGameController
             //return false;
         }
 
+        // backup
+        if (options.CreateBackup && !CreateZipfile(cp77Proj, true))
+        {
+            _progressService.IsIndeterminate = false;
+            _loggerService.Error("Creating backup failed, aborting.");
+            _notificationService.Error("Creating backup failed, aborting.");
+            return false;
+        }
+        
         // cleanup
         if (!await Task.Run(() => Cleanup(cp77Proj, options)))
         {
@@ -330,13 +339,29 @@ public class RED4Controller : ObservableObject, IGameController
             _notificationService.Error("Cleanup failed, aborting.");
             return false;
         }
-        _loggerService.Info($"{cp77Proj.Name} files cleaned up.");
 
+        // CleanAll will return true when the options disable it, so check here  
+        if (options.CleanAll)
+        {
+            _loggerService.Info($"{cp77Proj.Name} files cleaned up.");
+        }
+
+        
         // Pack it up
         if (!await PackProjectFiles(options, cp77Proj))
         {
             return false;
         }
+
+        // backup
+        if (options.CreateZipFile && !CreateZipfile(cp77Proj, false))
+        {
+            _progressService.IsIndeterminate = false;
+            _loggerService.Error("Failed to bundle up your .archive, aborting.");
+            _notificationService.Error("Creating backup failed, aborting.");
+            return false;
+        }
+
 
         // Now install it
         if (!await InstallProjectFiles(options, cp77Proj))
@@ -362,12 +387,17 @@ public class RED4Controller : ObservableObject, IGameController
             throw new WolvenKitException(0x5001, "No game executable set");
         }
 
+        var arguments = options.GameArguments ?? "";
+        if (options.LoadLastSave && ISettingsManager.GetLastSaveName() is string lastSavegame)
+        {
+            arguments = $"{arguments} --save={lastSavegame}";
+        }
         try
         {
             Process.Start(new ProcessStartInfo
             {
                 FileName = launchCommand,
-                Arguments = options.GameArguments ?? "",
+                Arguments = arguments,
                 ErrorDialog = true,
                 UseShellExecute = true,
             });
@@ -388,32 +418,18 @@ public class RED4Controller : ObservableObject, IGameController
             return true;
         }
 
-        // backup
-        if (options.CreateBackup)
+        // install files: is always true (abort condition above)
+        if (!InstallMod(cp77Proj))
         {
-            if (!BackupMod(cp77Proj))
-            {
-                _progressService.IsIndeterminate = false;
-                _loggerService.Error("Creating backup failed, aborting.");
-                _notificationService.Error("Creating backup failed, aborting.");
-                return false;
-            }
+            _progressService.IsIndeterminate = false;
+            _loggerService.Error("Installing mod failed, aborting.");
+            _notificationService.Error("Installing mod failed, aborting.");
+            return false;
         }
 
-        // install files
-        if (options.Install)
-        {
-            if (!InstallMod(cp77Proj))
-            {
-                _progressService.IsIndeterminate = false;
-                _loggerService.Error("Installing mod failed, aborting.");
-                _notificationService.Error("Installing mod failed, aborting.");
-                return false;
-            }
+        _loggerService.Success($"{cp77Proj.Name} installed to {_settingsManager.GetRED4GameRootDir()}");
+        _notificationService.Success($"{cp77Proj.Name} installed!");
 
-            _loggerService.Success($"{cp77Proj.Name} installed to {_settingsManager.GetRED4GameRootDir()}");
-            _notificationService.Success($"{cp77Proj.Name} installed!");
-        }
 
         // deploy redmod
         if (options.DeployWithRedmod)
@@ -434,6 +450,11 @@ public class RED4Controller : ObservableObject, IGameController
 
     private async Task<bool> PackProjectFiles(LaunchProfile options, Cp77Project cp77Proj)
     {
+        if (options is { CreateZipFile: false, Install: false })
+        {
+            return true;
+        }
+        
         // copy files to packed dir
         // pack archives
         var modfiles = Directory.EnumerateFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories);
@@ -498,44 +519,29 @@ public class RED4Controller : ObservableObject, IGameController
 
     private bool Cleanup(Cp77Project cp77Proj, LaunchProfile options, bool isPostBuild = false)
     {
-        var result = false;
-
-        //clean all nukes everything in the packed/ directory, not just directories covered by the commands after this block
-        //When this option is chosen, no need to continue further.
-        if (options.CleanAll || isPostBuild && options.CleanAllPostBuild)
+        if (!options.CleanAll && !(isPostBuild && options.CleanAllPostBuild))
         {
-            result = true; //base condition -- if packed/ is already empty, then the command is 'successful'.
-
-            //top level directories
-            var dirs = Directory.GetDirectories(cp77Proj.PackedRootDirectory, "*", SearchOption.TopDirectoryOnly);
-            for (var i = 0; i < dirs.Count(); i++)
-            {
-                result = SafeDirectoryDelete(dirs[i], true);
-            }
-
-            //top level files
-            var files = Directory.GetFiles(cp77Proj.PackedRootDirectory, "*", SearchOption.TopDirectoryOnly);
-            for (var i = 0; i < files.Count(); i++)
-            {
-                result = SafeFileDelete(files[i]);
-            }
-            return result;
+            return true;
         }
 
-        // legacy
-        result = SafeDirectoryDelete(cp77Proj.GetPackedArchiveDirectory(!options.IsRedmod), true);
-        result = SafeDirectoryDelete(Path.Combine(cp77Proj.PackedRootDirectory, "archive"), true);
+        var result = true; //base condition -- if packed/ is already empty, then the command is 'successful'.
 
-        // tweakXL
-        result = SafeDirectoryDelete(cp77Proj.PackedTweakDirectory, true);
+        //top level directories
+        var dirs = Directory.GetDirectories(cp77Proj.PackedRootDirectory, "*", SearchOption.TopDirectoryOnly);
+        for (var i = 0; i < dirs.Count(); i++)
+        {
+            result = SafeDirectoryDelete(dirs[i], true);
+        }
 
-        // redmod
-        result = SafeFileDelete(Path.Combine(cp77Proj.PackedRedModDirectory, "info.json"));
-        result = SafeDirectoryDelete(cp77Proj.PackedSoundsDirectory, true);
-        result = SafeDirectoryDelete(cp77Proj.GetPackedArchiveDirectory(options.IsRedmod), true);
-        result = SafeDirectoryDelete(Path.Combine(cp77Proj.PackedRootDirectory, "mods"), true);
+        //top level files
+        var files = Directory.GetFiles(cp77Proj.PackedRootDirectory, "*", SearchOption.TopDirectoryOnly);
+        for (var i = 0; i < files.Count(); i++)
+        {
+            result = SafeFileDelete(files[i]);
+        }
 
         return result;
+       
     }
 
     private bool SafeDirectoryDelete(string path, bool recursive = true)
@@ -736,7 +742,7 @@ public class RED4Controller : ObservableObject, IGameController
         return true;
     }
 
-    private bool BackupMod(Cp77Project cp77Proj)
+    private bool CreateZipfile(Cp77Project cp77Proj, bool isBackup)
     {
         var zipPathRoot = new DirectoryInfo(cp77Proj.PackedRootDirectory).Parent?.FullName;
         if (zipPathRoot is null)
@@ -744,7 +750,8 @@ public class RED4Controller : ObservableObject, IGameController
             return false;
         }
 
-        var zipPath = Path.Combine(zipPathRoot, $"{cp77Proj.Name}.zip");
+        var suffix = isBackup ? "_previousBuild" : "";
+        var zipPath = Path.Combine(zipPathRoot, $"{cp77Proj.Name}{suffix}.zip");
         try
         {
             if (File.Exists(zipPath))

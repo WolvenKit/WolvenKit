@@ -57,12 +57,24 @@ namespace WolvenKit.Views.Shell
                 {
                     LaunchProfilesView dialog = new();
 
-                    if (dialog.ShowDialog(this) == true)
+                    if (dialog.ViewModel is not null && dialog.ShowDialog(this) == true)
                     {
                         ViewModel.SetLaunchProfiles(dialog.ViewModel.LaunchProfiles);
                     }
 
                     return true;
+                };
+
+                Interactions.ShowSelectSaveView = (string currentSaveGame) =>
+                {
+                    SaveGameSelectionDialog dialog = new(currentSaveGame);
+
+                    if (dialog.ShowDialog(this) == true)
+                    {
+                        return dialog.ViewModel?.SelectedEntry?.DirName;
+                    }
+
+                    return null;
                 };
 
                 Interactions.ShowMaterialRepositoryView = () =>

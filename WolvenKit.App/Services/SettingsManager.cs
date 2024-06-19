@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Text.Json;
 using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData.Binding;
+using WolvenKit.App.Extensions;
 using WolvenKit.App.Models;
 using WolvenKit.Common;
 using WolvenKit.Core;
@@ -61,7 +64,9 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(ShowGraphEditorNodeProperties),
             nameof(ModderName),
             nameof(ModderEmail),
-            nameof(RefactoringCheckboxDefaultValue)
+            nameof(RefactoringCheckboxDefaultValue),
+            nameof(LastLaunchProfile),
+            nameof(ShowRedmodInRibbon)
             )
           .Subscribe(_ =>
           {
@@ -83,7 +88,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             dto != null
             ? dto.ToSettingsManager()
             : new SettingsManager();
-
+        
         settings._isLoaded = true;
         return settings;
     }
@@ -141,11 +146,11 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
 
     #region properties
 
+#pragma warning disable CS0657 // Not a valid attribute location for this declaration for "Browsable"
+
     [Display(Name = "Settings Version", GroupName = "General")]
     [ObservableProperty]
-#pragma warning disable CS0657 // Not a valid attribute location for this declaration
     [property: Browsable(false)]
-#pragma warning restore CS0657 // Not a valid attribute location for this declaration
     private int _settingsVersion;
 
     [Display(Name = "Do not check for updates", GroupName = "General")]
@@ -177,20 +182,16 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [ObservableProperty]
     private string? _cP77LaunchOptions;
 
-    [Display(Name = "Show File Preview", GroupName = "Cyberpunk")]
+    [Display(Name = "Show File Preview", GroupName = "Interface")]
     [ObservableProperty]
     private bool _showFilePreview = true;
 
     [ObservableProperty]
-#pragma warning disable CS0657 // Not a valid attribute location for this declaration
     [property: Browsable(false)]
-#pragma warning restore CS0657 // Not a valid attribute location for this declaration
     private string? _reddbHash;
 
     [ObservableProperty]
-#pragma warning disable CS0657 // Not a valid attribute location for this declaration
     [property: Browsable(false)]
-#pragma warning restore CS0657 // Not a valid attribute location for this declaration
     private string? _installerHash;
 
     [Display(Name = "Depot Path", GroupName = "Cyberpunk")]
@@ -245,18 +246,14 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     private bool _showGraphEditorNodeProperties = true;
 
     [ObservableProperty]
-#pragma warning disable CS0657 // Not a valid attribute location for this declaration
     [property: Browsable(false)]
-#pragma warning restore CS0657 // Not a valid attribute location for this declaration
-    private Dictionary<string, LaunchProfile>? _launchProfiles;
+    private Dictionary<string, LaunchProfile> _launchProfiles = [];
 
     [ObservableProperty]
-#pragma warning disable CS0657 // Not a valid attribute location for this declaration
     [property: Browsable(false)]
-#pragma warning restore CS0657 // Not a valid attribute location for this declaration
     private Dictionary<string, bool>? _scriptStatus;
 
-    [Display(Name = "Analyze mods", Description = "Check mod archives for file names and invalid files", GroupName = "Cyberpunk")] 
+    [Display(Name = "Analyze mods", Description = "Scan installed mods for file paths when opening mod browser", GroupName = "Cyberpunk")] 
     [ObservableProperty]
     private bool _analyzeModArchives;
 
@@ -265,6 +262,12 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
         GroupName = "Interface")]
     [ObservableProperty]
     private bool _refactoringCheckboxDefaultValue;
+
+    [Display(Name = "Show REDmod in Ribbon",
+        Description = "Display 'Pack as REDmod' and 'Install as REDMod' in the ribbon?",
+        GroupName = "Interface")]
+    [ObservableProperty]
+    private bool _showRedmodInRibbon;
 
     [Display(Name = "Additional Mod directory", Description = "Path to an optional directory containing mod archives", GroupName = "Cyberpunk")]
     [ObservableProperty]
@@ -279,23 +282,22 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     private string? _modderEmail;
 
     [ObservableProperty]
-#pragma warning disable CS0657 // Not a valid attribute location for this declaration
     [property: Browsable(false)]
-#pragma warning restore CS0657 // Not a valid attribute location for this declaration
     private string? _lastUsedProjectPath;
 
+    [ObservableProperty] [property: Browsable(false)]
+    private string? _lastLaunchProfile;
+
     [ObservableProperty]
-#pragma warning disable CS0657 // Not a valid attribute location for this declaration
     [property: Browsable(false)]
-#pragma warning restore CS0657 // Not a valid attribute location for this declaration
     private int _pinnedOrder;
 
     [ObservableProperty]
-#pragma warning disable CS0657 // Not a valid attribute location for this declaration
     [property: Browsable(false)]
-#pragma warning restore CS0657 // Not a valid attribute location for this declaration
     private int _recentOrder;
 
+
+#pragma warning restore CS0657 // Not a valid attribute location for this declaration
     #endregion properties
 
     #region methods
@@ -351,7 +353,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             Directory.CreateDirectory(dir);
         }
 
-        return dir;
+        return dir; 
     }
 
     public string? GetRED4OodleDll() => string.IsNullOrEmpty(GetRED4GameRootDir())

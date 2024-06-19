@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -11,16 +10,13 @@ using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Documents.DocumentStructures;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using Semver;
-using SharpGLTF.Schema2;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Factories;
@@ -40,7 +36,6 @@ using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
 using WolvenKit.Common.Extensions;
-using WolvenKit.Common.Model.Database;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
@@ -163,14 +158,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
     }
 
-    public class DockedViewVisibleChangedEventArgs
+    public class DockedViewVisibleChangedEventArgs(IDockElement element)
     {
-        public DockedViewVisibleChangedEventArgs(IDockElement element)
-        {
-            Element = element;
-        }
-
-        public IDockElement Element { get; }
+        public IDockElement Element { get; } = element;
     }
 
     public event EventHandler<DockedViewVisibleChangedEventArgs>? DockedViewVisibleChanged;
@@ -335,9 +325,15 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private void ShowFirstTimeSetup()
     {
-        if (!_settingsManager.IsHealthy())
+        if (_settingsManager.IsHealthy())
         {
-            var setupWasOk = Interactions.ShowFirstTimeSetup();
+            return;
+        }
+
+        if (!Interactions.ShowFirstTimeSetup())
+        {
+            _loggerService.Debug(
+                "Setup failed. Please create a ticket under https://github.com/WolvenKit/WolvenKit/issues to help us solve this.");
         }
     }
 
@@ -369,13 +365,14 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(PackInstallRunCommand))]
     [NotifyCanExecuteChangedFor(nameof(PackInstallRedModRunCommand))]
     private EStatus _taskStatus;
-    private bool CanStartTask() => TaskStatus == EStatus.Ready;
+
+    private bool CanStartTask() => TaskStatus == EStatus.Ready && ActiveProject is not null;
 
     [RelayCommand(CanExecute = nameof(CanStartTask))]
-    private async Task PackMod() => await LaunchAsync(new LaunchProfile() { CreateBackup = true });
+    private async Task PackMod() => await LaunchAsync(new LaunchProfile() { CreateZipFile = true });
 
     [RelayCommand(CanExecute = nameof(CanStartTask))]
-    private async Task PackRedMod() => await LaunchAsync(new LaunchProfile() { CreateBackup = true, IsRedmod = true });
+    private async Task PackRedMod() => await LaunchAsync(new LaunchProfile() { CreateZipFile = true, IsRedmod = true });
 
     [RelayCommand(CanExecute = nameof(CanStartTask))]
     private async Task PackInstallMod() => await LaunchAsync(new LaunchProfile() { Install = true });
@@ -394,9 +391,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private async Task CheckForScriptUpdates()
     {
         // check remote version (no github API call)
-        HttpClient _client = new();
+        HttpClient client = new();
         var hashUrl = $@"https://wolvenkit.github.io/Wolvenkit-Resources/hash.txt";
-        var response = await _client.GetAsync(new Uri(hashUrl));
+        var response = await client.GetAsync(new Uri(hashUrl));
 
         try
         {
@@ -414,7 +411,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         FileInfo hashPath = new(Path.Combine("Resources", "scripthash.txt"));
         if (hashPath.Exists)
         {
-            localHash = File.ReadAllText(hashPath.FullName);
+            localHash = await File.ReadAllTextAsync(hashPath.FullName);
         }
 
         // check hash
@@ -439,7 +436,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         // download zipfile
         var contentUrl = $@"https://wolvenkit.github.io/Wolvenkit-Resources/scripts.zip";
-        response = await _client.GetAsync(new Uri(contentUrl));
+        response = await client.GetAsync(new Uri(contentUrl));
         try
         {
             response.EnsureSuccessStatusCode();
@@ -456,7 +453,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         ZipArchive zipArchive = new(zip);
         zipArchive.ExtractToDirectory(resourceDir.FullName, true);
 
-        File.WriteAllText(hashPath.FullName, remoteHash);
+        await File.WriteAllTextAsync(hashPath.FullName, remoteHash);
         _scriptService.RefreshUIScripts();
     }
 
@@ -492,13 +489,13 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
 
         SemVersion remoteVersion;
-        var githuburl = $@"https://github.com/{owner}/{name}/releases/latest";
+        var githubUrl = $@"https://github.com/{owner}/{name}/releases/latest";
         try
         {
-            HttpClient _client = new();
-            var response = await _client.GetAsync(new Uri(githuburl));
+            HttpClient client = new();
+            var response = await client.GetAsync(new Uri(githubUrl));
             response.EnsureSuccessStatusCode();
-            if (response?.RequestMessage?.RequestUri is null)
+            if (response.RequestMessage?.RequestUri is null)
             {
                 return;
             }
@@ -507,7 +504,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
         catch (HttpRequestException ex)
         {
-            _loggerService.Error($"Failed to respond to updater url: {githuburl}");
+            _loggerService.Error($"Failed to respond to updater url: {githubUrl}");
             _loggerService.Error(ex);
             return;
         }
@@ -574,7 +571,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             if (string.IsNullOrWhiteSpace(location) || !File.Exists(location))
             {
                 // file was moved or deleted
-                if (_recentlyUsedItemsService.Items.Items.Any(_ => _.Name == location))
+                if (_recentlyUsedItemsService.Items.Items.Any(x => x.Name == location))
                 {
                     // would you like to locate it?
                     //TODO
@@ -647,19 +644,15 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             //Log.Error(ex, "Failed to open file");
             _loggerService.Error(e);
         }
-
-        return;
     }
 
     [RelayCommand]
-    private async Task NewProject()
-    {
+    private async Task NewProject() =>
         //IsOverlayShown = false;
         await SetActiveDialog(new ProjectWizardViewModel(_settingsManager)
         {
             FileHandler = NewProject
         });
-    }
 
     private async Task NewProject(ProjectWizardViewModel? project)
     {
@@ -719,7 +712,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand]
     private void SelectFile(FileSystemModel model) => GetToolViewModel<PropertiesViewModel>().ExecuteSelectFile(model);
 
-    private bool CanSaveFile() => ActiveDocument is not null && !ActiveDocument.IsReadOnly;
+    private bool CanSaveFile() => ActiveDocument is not null;
     [RelayCommand(CanExecute = nameof(CanSaveFile))]
     private void SaveFile() => Save(ActiveDocument.NotNull());
 
@@ -749,9 +742,18 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     [RelayCommand(CanExecute = nameof(CanSaveFile))]
-    private void SaveAs() => Save(ActiveDocument.NotNull(), true);
+    private void SaveAs()
+    {
+        if (_projectManager.ActiveProject is null)
+        {
+            Interactions.ShowConfirmation((s_noProjectText, s_noProjectTitle, WMessageBoxImage.Warning, WMessageBoxButtons.Ok));
+            return;
+        }
 
-    private bool CanSaveAll() => DockedViews.OfType<IDocumentViewModel>().Count() > 0;
+        Save(ActiveDocument.NotNull(), true);
+    }
+
+    private bool CanSaveAll() => CanSaveFile() || DockedViews.OfType<IDocumentViewModel>().Any();
     [RelayCommand(CanExecute = nameof(CanSaveAll))]
     private void SaveAll()
     {
@@ -799,17 +801,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private bool CanShowHomePage() => !IsDialogShown;
     [RelayCommand(CanExecute = nameof(CanShowHomePage))]
-    private async Task ShowHomePage()
-    {
-        await ShowHomePage(EHomePage.Welcome);
-    }
+    private async Task ShowHomePage() => await ShowHomePage(EHomePage.Welcome);
 
     private bool CanShowSettings() => !IsDialogShown;
     [RelayCommand(CanExecute = nameof(CanShowSettings))]
-    private async Task ShowSettings()
-    {
-        await ShowHomePage(EHomePage.Settings);
-    }
+    private async Task ShowSettings() => await ShowHomePage(EHomePage.Settings);
 
     private bool CanShowProjectSettings() => !IsDialogShown && ActiveProject != null;
     [RelayCommand(CanExecute = nameof(CanShowProjectSettings))]
@@ -833,9 +829,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     [RelayCommand]
-    private void LaunchGame(string stridx)
+    private void LaunchGame(string strIdx)
     {
-        if (!int.TryParse(stridx, out var idx))
+        if (!int.TryParse(strIdx, out var idx))
         {
             return;
         }
@@ -849,7 +845,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                     Process.Start(new ProcessStartInfo
                     {
                         FileName = _settingsManager.GetRED4GameLaunchCommand(),
-                        Arguments = _settingsManager.GetRED4GameLaunchOptions() ?? "",
+                        Arguments = _settingsManager.GetRED4GameLaunchOptions(),
                         ErrorDialog = true,
                         UseShellExecute = true,
                     });
@@ -863,11 +859,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             case EGameLaunchCommand.SteamLaunch:
                 try
                 {
-                    var steamrunid = "steam://rungameid/1091500";
+                    var steamRunId = "steam://rungameid/1091500";
 
                     Process.Start(new ProcessStartInfo
                     {
-                        FileName = steamrunid,
+                        FileName = steamRunId,
                         ErrorDialog = true,
                         UseShellExecute = true
                     });
@@ -923,17 +919,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private bool CanShowPlugin() => !IsDialogShown;
     [RelayCommand(CanExecute = nameof(CanShowPlugin))]
-    private async Task ShowPlugin()
-    {
-        await ShowHomePage(EHomePage.Plugins);
-    }
+    private async Task ShowPlugin() => await ShowHomePage(EHomePage.Plugins);
 
     private bool CanShowModsView() => !IsDialogShown;
     [RelayCommand(CanExecute = nameof(CanShowModsView))]
-    private async Task ShowModsView()
-    {
-        await ShowHomePage(EHomePage.Mods);
-    }
+    private async Task ShowModsView() => await ShowHomePage(EHomePage.Mods);
 
     private bool CanNewFile(string inputDir) => ActiveProject is not null && !IsDialogShown;
     [RelayCommand(CanExecute = nameof(CanNewFile))]
@@ -998,7 +988,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             return;
         }
 
-        await Task.Run(() => OpenFromNewFileTask(file)).ContinueWith(async (result) =>
+        await Task.Run(() => OpenFromNewFileTask(file)).ContinueWith(async (_) =>
         {
             if (file.FullPath is not null)
             {
@@ -1031,7 +1021,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 {
                     await using var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream($"WolvenKit.App.Resources.{file.SelectedFile.Template}").NotNull();
                     stream = new FileStream(file.FullPath, FileMode.Create, FileAccess.Write);
-                    resource.CopyTo(stream);
+                    await resource.CopyToAsync(stream);
                 }
                 else
                 {
@@ -1049,7 +1039,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 {
                     await using var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream($"WolvenKit.App.Resources.{file.SelectedFile.Template}").NotNull();
                     stream = new FileStream(file.FullPath, FileMode.Create, FileAccess.Write);
-                    resource.CopyTo(stream);
+                    await resource.CopyToAsync(stream);
                 }
                 else
                 {
@@ -1061,13 +1051,13 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 var redType = file.SelectedFile.Name;
                 if (!string.IsNullOrEmpty(redType))
                 {
-                    CR2WFile cr2w = new()
+                    CR2WFile cr2W = new()
                     {
                         RootChunk = RedTypeManager.Create(redType)
                     };
                     stream = new FileStream(file.FullPath, FileMode.Create, FileAccess.Write);
                     using CR2WWriter writer = new(stream);
-                    writer.WriteFile(cr2w);
+                    writer.WriteFile(cr2W);
                 }
                 break;
             case EWolvenKitFile.WScript:
@@ -1076,7 +1066,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 break;
         }
 
-        stream?.Dispose();
+        if (stream is not null)
+        {
+            await stream.DisposeAsync();
+        }
     }
 
     [RelayCommand]
@@ -1161,7 +1154,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     [RelayCommand]
-    private async Task OpenRedFileAsync(FileEntry file)
+    private async Task OpenRedFileAsync(FileEntry? file)
     {
         if (file is not null)
         {
@@ -1237,12 +1230,14 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     {
         foreach (var file in DockedViews.OfType<IDocumentViewModel>())
         {
-            if (file.FilePath == path)
+            if (file.FilePath is null || file.FilePath != path)
             {
-                ActiveDocument = file;
-                UpdateTitle();
-                return;
+                continue;
             }
+
+            ActiveDocument = file;
+            UpdateTitle();
+            return;
         }
 
         if (OpenFileFromProject(path))
@@ -1255,40 +1250,47 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     public void OpenFileFromHash(ResourcePath hash)
     {
-        if (hash != 0)
+        if (hash == 0)
         {
-            _progressService.IsIndeterminate = true;
-            try
-            {
-                var file = _archiveManager.Lookup(hash);
-                if (file.HasValue && file.Value is FileEntry fe)
-                {
-                    using MemoryStream stream = new();
-                    fe.Extract(stream);
+            return;
+        }
 
-                    if (OpenStream(stream, fe.FileName, out var redfile))
-                    {
-                        var resourcePath = hash.GetResolvedText() ?? $"{Path.GetFileNameWithoutExtension(fe.FileName)}{fe.Extension}";
-                        var fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(redfile, resourcePath, this, true);
-                        if (!DockedViews.Contains(fileViewModel))
-                        {
-                            DockedViews.Add(fileViewModel);
-                        }
+        _progressService.IsIndeterminate = true;
 
-                        ActiveDocument = fileViewModel;
-                        UpdateTitle();
+        using MemoryStream stream = new();
+        try
+        {
+            var file = _archiveManager.Lookup(hash);
+            if (file is not { HasValue: true, Value: FileEntry fe })
+            {
+                return;
+            }
 
-                    }
-                }
-            }
-            catch (Exception e)
+            fe.Extract(stream);
+
+            if (!OpenStream(stream, fe.FileName, out var redfile))
             {
-                _loggerService.Error(e.Message);
+                return;
             }
-            finally
+
+            var resourcePath = hash.GetResolvedText() ?? $"{Path.GetFileNameWithoutExtension(fe.FileName)}{fe.Extension}";
+            var fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(redfile, resourcePath, this, true);
+            if (!DockedViews.Contains(fileViewModel))
             {
-                _progressService.IsIndeterminate = false;
+                DockedViews.Add(fileViewModel);
             }
+
+            ActiveDocument = fileViewModel;
+            UpdateTitle();
+        }
+        catch (Exception e)
+        {
+            _loggerService.Error(e.Message);
+        }
+        finally
+        {
+            _progressService.IsIndeterminate = false;
+            stream.Close();
         }
     }
 
@@ -1311,10 +1313,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private Task HotInstallModAsync() => _gameControllerFactory.GetController().InstallProjectHot();
 
     [RelayCommand]
-    private void LaunchOptions()
-    {
-        Interactions.ShowLaunchProfilesView();
-    }
+    private void LaunchOptions() => Interactions.ShowLaunchProfilesView();
 
     [RelayCommand]
     private void ShowTextureImporter()
@@ -1367,7 +1366,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
         else
         {
-            var newvm = typeof(T) switch
+            var newVm = typeof(T) switch
             {
                 Type t when t == typeof(LogViewModel) => (T)(_paneViewModelFactory.LogViewModel() as IDockElement),
                 Type t when t == typeof(ProjectExplorerViewModel) => (T)(_paneViewModelFactory.ProjectExplorerViewModel(this) as IDockElement),
@@ -1382,8 +1381,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 _ => throw new NotImplementedException(),
             };
 
-            DockedViews.Add(newvm);
-            return newvm;
+            DockedViews.Add(newVm);
+            return newVm;
         }
     }
 
@@ -1483,6 +1482,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(SaveFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(SaveAsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SaveAllCommand))]
     private IDocumentViewModel? _activeDocument;
 
     [ObservableProperty]
@@ -1502,6 +1502,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     #region methods
 
+    // TODO: Fix installer
+    /*
     private static (SemVersion?, string) GetInstallerPackage()
     {
         using var p = new Process();
@@ -1529,6 +1531,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
         return (semVersion, path);
     }
+    */
+    
     public void ShowHomePageSync(EHomePage page = EHomePage.Welcome)
     {
         var homePage = _pageViewModelFactory.HomePageViewModel(this);
@@ -1555,24 +1559,17 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         await Task.Run(OnAfterDialogRendered);
     }
 
-    private void OnAfterOverlayRendered()
-    {
-        DispatcherHelper.RunOnMainThread(() =>
+    private void OnAfterOverlayRendered() => DispatcherHelper.RunOnMainThread(() =>
         {
             IsOverlayShown = true;
             ShouldOverlayShow = true;
         }, DispatcherPriority.Render);
-    }
-    private void OnAfterDialogRendered()
-    {
-        DispatcherHelper.RunOnMainThread(() =>
+
+    private void OnAfterDialogRendered() => DispatcherHelper.RunOnMainThread(() =>
         {
             IsDialogShown = true;
             ShouldDialogShow = true;
         }, DispatcherPriority.Render);
-    }
-
-    private void LogExtended(Exception ex) => _loggerService.Error($"Message: {ex.Message}\nSource: {ex.Source}\nStackTrace: {ex.StackTrace}");
 
     [MemberNotNull(nameof(Title))]
     public void UpdateTitle()
@@ -1854,7 +1851,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 }
                 //case ".BNK":
                 // TODO SPLIT WEMS TO PLAYLIST FROM BNK
-                case "":
                 default:
                     return Task.Run(OpenRedengineFile);
             }
@@ -1864,7 +1860,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         void OpenRedengineFile()
         {
-            var trimmedExt = ext.TrimStart('.')?.ToUpper() ?? "";
+            var trimmedExt = ext.TrimStart('.').ToUpper();
             var type = EWolvenKitFile.Cr2w;
 
             var isRedEngineFile = Enum.GetNames<ERedExtension>().Any(x => x.ToUpper().Equals(trimmedExt, StringComparison.Ordinal)) || trimmedExt == "";
@@ -1887,23 +1883,27 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 isRedEngineFile = true;
             }
 
-            if (isRedEngineFile)
+            if (!isRedEngineFile)
             {
-                DispatcherHelper.RunOnMainThread(async () =>
-                {
-                    var document = await Open(fullpath, type);
-                    if (document is not null)
-                    {
-                        if (!DockedViews.Contains(document))
-                        {
-                            DockedViews.Add(document);
-                        }
-
-                        ActiveDocument = document;
-                        UpdateTitle();
-                    }
-                });
+                return;
             }
+
+            DispatcherHelper.RunOnMainThread(async () =>
+            {
+                var document = await Open(fullpath, type);
+                if (document is null)
+                {
+                    return;
+                }
+
+                if (!DockedViews.Contains(document))
+                {
+                    DockedViews.Add(document);
+                }
+
+                ActiveDocument = document;
+                UpdateTitle();
+            });
         }
 
         void OpenAudioFile()
@@ -1925,18 +1925,18 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             catch (Win32Exception)
             {
                 // eat this: no default app set for filetype
-                _loggerService.Error($"No default prgram set in Windows to open file extension {Path.GetExtension(fullpath)}");
+                _loggerService.Error($"No default program set in Windows to open file extension {Path.GetExtension(fullpath)}");
             }
         }
 
         void PolymorphExecute(string path, string extension)
         {
             File.WriteAllBytes(Path.GetTempPath() + "asd." + extension, new byte[] { 0x01 });
-            StringBuilder programname = new();
-            _ = NativeMethods.FindExecutable("asd." + extension, Path.GetTempPath(), programname);
-            if (programname.ToString().ToUpper().Contains(".EXE"))
+            StringBuilder programName = new();
+            _ = NativeMethods.FindExecutable("asd." + extension, Path.GetTempPath(), programName);
+            if (programName.ToString().ToUpper().Contains(".EXE"))
             {
-                Process.Start(programname.ToString(), path.ToEscapedPath());
+                Process.Start(programName.ToString(), path.ToEscapedPath());
             }
             else
             {
@@ -1955,20 +1955,12 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     public void SetLaunchProfiles(ObservableCollection<LaunchProfileViewModel> launchProfiles)
     {
-        _settingsManager.LaunchProfiles ??= new();
-
         _settingsManager.LaunchProfiles.Clear();
-        var _launchProfiles = new Dictionary<string, LaunchProfile>();
+        var profiles = launchProfiles
+            .Where(item => !_settingsManager.LaunchProfiles.ContainsKey(item.Name))
+            .ToDictionary(item => item.Name, item => item.Profile);
 
-        foreach (var item in launchProfiles)
-        {
-            if (!_settingsManager.LaunchProfiles.ContainsKey(item.Name))
-            {
-                _launchProfiles.Add(item.Name, item.Profile);
-            }
-        }
-
-        _settingsManager.LaunchProfiles = _launchProfiles;
+        _settingsManager.LaunchProfiles = profiles;
         _settingsManager.Save();
 
     }

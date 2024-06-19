@@ -215,12 +215,18 @@ public partial class ModsViewModel : PageViewModel
     [RelayCommand]
     private void LaunchGameFromLastSave()
     {
+        var launchSavegameArg = "";
+        if (ISettingsManager.GetLastSaveName() is string lastSavegame)
+        {
+            launchSavegameArg = $"-save={lastSavegame}";
+        }
+         
         try
         {
             Process.Start(new ProcessStartInfo
             {
                 FileName = _settings.GetRED4GameLaunchCommand(),
-                Arguments = $"{_settings.GetRED4GameLaunchOptions()} -modded",
+                Arguments = $"{_settings.GetRED4GameLaunchOptions()} -modded {launchSavegameArg}",
                 ErrorDialog = true,
             });
         }
