@@ -973,7 +973,7 @@ public class RED4Controller : ObservableObject, IGameController
             return false;
         }
 
-        if (_projectManager.ActiveProject.GameType is not GameType.Cyberpunk2077)
+        if (Cp77Project.GameType is not GameType.Cyberpunk2077)
         {
             throw new WolvenKitException(-1, "This doesn't seem to be a Cyberpunk project!");
         }

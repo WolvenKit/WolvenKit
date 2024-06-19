@@ -30,7 +30,7 @@ public sealed class Cp77Project(string location, string name, string modName) : 
 
     public string? Version { get; set; }
 
-    public GameType GameType => GameType.Cyberpunk2077;
+    public static GameType GameType => GameType.Cyberpunk2077;
 
 
     /// <summary>
