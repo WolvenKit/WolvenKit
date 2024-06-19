@@ -296,7 +296,6 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [property: Browsable(false)]
     private int _recentOrder;
 
-
 #pragma warning restore CS0657 // Not a valid attribute location for this declaration
     #endregion properties
 

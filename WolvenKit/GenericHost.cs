@@ -78,6 +78,7 @@ namespace WolvenKit
 
                     services.AddTransient<INotificationService, NotificationService>();
                     services.AddSingleton<IProgressService<double>, ProgressService<double>>();
+                    services.AddSingleton<AppIdleStateService>();
                     services.AddTransient<Red4ParserService>();
                     services.AddSingleton<IAppArchiveManager, AppArchiveManager>();
                     services.AddSingleton<IArchiveManager>(provider => provider.GetService<IAppArchiveManager>());

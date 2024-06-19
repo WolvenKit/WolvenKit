@@ -147,9 +147,7 @@ public class SettingsDto : ISettingsDto
 
     public SettingsManager ToSettingsManager()
     {
-        var config = new SettingsManager()
-        {
-        };
+        var config = new SettingsManager();
 
         return ReconfigureSettingsManager(config);
     }
@@ -183,8 +181,6 @@ public class SettingsDto : ISettingsDto
     /// </summary>
     private void UpdateLaunchProfilesV3()
     {
-        LaunchProfiles ??= [];
-
         var idx = 0;
         foreach (var kvp in LaunchProfiles.Where(kvp => kvp.Value.Order is null))
         {
