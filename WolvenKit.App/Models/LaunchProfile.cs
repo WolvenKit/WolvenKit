@@ -29,12 +29,18 @@ public class LaunchProfile
     [Display(Name = "Clean after build to save disk space?")]
     public bool CleanAllPostBuild { get; set; } = false;
 
+    /// <summary>
+    /// Pack as REDMod
+    /// </summary>
     [Category("Bundle: REDmod")]
     [Display(Name = "Pack as REDmod")]
     public bool IsRedmod { get; set; }
 
-    [Category("Bundle: REDmod")]
-    [Display(Name = "Deploy as REDmod")]
+    /// <summary>
+    /// Install as REDMod
+    /// </summary>
+    [Category("Install: REDmod")]
+    [Display(Name = "Install as REDmod")]
     public bool DeployWithRedmod { get; set; }
 
     [Category("Game Launch")]
