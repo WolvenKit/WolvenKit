@@ -9,21 +9,18 @@ using WolvenKit.Core.Extensions;
 
 namespace WolvenKit.App.Models.ProjectManagement.Project;
 
-public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
+public sealed class Cp77Project(string location, string name, string modName) : IEquatable<Cp77Project>, ICloneable
 {
-    public Cp77Project(string location, string name, string modName)
-    {
-        Name = name;
-        Location = location;
-        ModName = modName;
-    }
+    public string Name { get; set; } = name;
 
-    public string Name { get; set; }
+    /// <summary>
+    /// Location of active project (the folder containing the .cdproj file)
+    /// </summary>
+    public string Location { get; set; } = location;
 
-    public string Location { get; set; }
+    public string ModName { get; set; } = modName;
 
-    public string ModName { get; set; }
-
+    public int ActiveTab { get; set; } = 0;
 
     public string? Author { get; set; }
 
@@ -32,7 +29,6 @@ public sealed class Cp77Project : IEquatable<Cp77Project>, ICloneable
     public string? Description { get; set; }
 
     public string? Version { get; set; }
-
 
     public GameType GameType => GameType.Cyberpunk2077;
 

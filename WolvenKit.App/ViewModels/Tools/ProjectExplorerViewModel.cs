@@ -14,6 +14,7 @@ using System.Windows.Threading;
 using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
@@ -107,7 +108,15 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _mainViewModel.PropertyChanged += MainViewModel_OnPropertyChanged;
 
         _projectManager.PropertyChanged += ProjectManager_OnPropertyChanged;
+
+        SelectedTabIndex = ActiveProject?.ActiveTab ?? 0;
+
+        if (Locator.Current.GetService<AppIdleStateService>() is AppIdleStateService svc)
+        {
+            svc.ThreadIdleOneMinute += (_, _) => SaveFileTreeStateIfDirty();
+        }
     }
+
 
     public Dictionary<string, bool> ExpansionStateDictionary = new();
 
@@ -126,24 +135,33 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private void MainViewModel_OnPropertyChanged(object? sender, PropertyChangedEventArgs e) =>
         CanScrollToOpenFile = _mainViewModel.ActiveDocument is not null;
 
+    public event Action? OnProjectChanged;
+    
     private void ProjectManager_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(ProjectManager.ActiveProject))
+        if (e.PropertyName != nameof(ProjectManager.ActiveProject))
         {
-            if (ActiveProject != null)
-            {
-                SaveFileTreeState(ActiveProject);
-                _projectWatcher.UnwatchProject(ActiveProject);
-            }
-
-            DispatcherHelper.RunOnMainThread(() => ActiveProject = _projectManager.ActiveProject, DispatcherPriority.ContextIdle);
-
-            if (_projectManager.ActiveProject != null)
-            {
-                LoadFileTreeState(_projectManager.ActiveProject);
-                _projectWatcher.WatchProject(_projectManager.ActiveProject);
-            }
+            return;
         }
+
+        // Save changes in active project
+        if (ActiveProject != null)
+        {
+            _hasUnsavedFileTreeChanges = true;
+            SaveFileTreeStateIfDirty(ActiveProject);
+            _projectWatcher.UnwatchProject(ActiveProject);
+        }
+
+        DispatcherHelper.RunOnMainThread(() => ActiveProject = _projectManager.ActiveProject, DispatcherPriority.ContextIdle);
+        OnProjectChanged?.Invoke();
+
+        if (_projectManager.ActiveProject == null)
+        {
+            return;
+        }
+
+        LoadFileTreeState(_projectManager.ActiveProject);
+        _projectWatcher.WatchProject(_projectManager.ActiveProject);
     }
 
     public DispatchedObservableCollection<FileSystemModel> FileTree => _projectWatcher.FileTree;
@@ -248,31 +266,23 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [RelayCommand(CanExecute = nameof(CanRefresh))]
     private void Refresh() => _projectWatcher.Refresh();
 
+    public string GetActiveFolderPath() => SelectedTabIndex switch
+    {
+        0 => ActiveProject.NotNull().FileDirectory,
+        1 => ActiveProject.NotNull().ModDirectory,
+        2 => ActiveProject.NotNull().RawDirectory,
+        3 => ActiveProject.NotNull().ResourcesDirectory,
+        _ => ActiveProject.NotNull().Location
+    };
+
     /// <summary>
-    /// Opens the currently selected folder in the tab
+    /// Opens the currently active tab's root folder in Windows Explorer (the project root if shift key is pressed).
     /// </summary>
     private bool CanOpenRootFolder() => ActiveProject != null;
     [RelayCommand(CanExecute = nameof(CanOpenRootFolder))]
-    private void OpenRootFolder()
-    {
-        switch (SelectedTabIndex)
-        {
-            case 0:
-                Commonfunctions.ShowFolderInExplorer(ActiveProject.NotNull().FileDirectory);
-                break;
-            case 1:
-                Commonfunctions.ShowFolderInExplorer(ActiveProject.NotNull().ModDirectory);
-                break;
-            case 2:
-                Commonfunctions.ShowFolderInExplorer(ActiveProject.NotNull().RawDirectory);
-                break;
-            case 3:
-                Commonfunctions.ShowFolderInExplorer(ActiveProject.NotNull().ResourcesDirectory);
-                break;
-            default:
-                break;
-        }
-    }
+    private void OpenRootFolder() => Commonfunctions.ShowFolderInExplorer(
+        IsShiftKeyPressed ? ActiveProject.NotNull().Location : GetActiveFolderPath()
+    );
 
     /// <summary>
     /// Copies selected node to the clipboard.
@@ -321,6 +331,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private static readonly string s_archiveFolder =
         $"{Path.DirectorySeparatorChar}archive{Path.DirectorySeparatorChar}";
+
+    private bool _hasUnsavedFileTreeChanges;
 
 
     [GeneratedRegex(@".*\.\S+\.glb$")]
@@ -620,7 +632,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     private bool CanOpenInFileExplorer() => ActiveProject != null;
     [RelayCommand(CanExecute = nameof(CanOpenInFileExplorer))]
-    private void OpenInFileExplorer(FileSystemModel value)
+    private void OpenInFileExplorer(FileSystemModel? value)
     {
         var model = value ?? SelectedItem;
         if (model is null)
@@ -639,7 +651,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     }
 
     [RelayCommand]
-    private async Task OpenFile(FileSystemModel value)
+    private async Task OpenFile(FileSystemModel? value)
     {
         var model = value ?? SelectedItem;
         if (model is null)
@@ -688,7 +700,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             var ext = Path.GetExtension(path);
 
             yield return Path.Combine(dir, file + " - Copy" + ext);
-            for (var i = 2; ; i++)
+            for (var i = 2; i < 999; i++) // there shouldn't be more than 1k copies... hopefully
             {
                 yield return Path.Combine(dir, file + " - Copy " + i + ext);
             }
@@ -699,7 +711,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private bool CanCreateNewDirectory() => ActiveProject != null && SelectedItem?.IsDirectory == true;
 
     [RelayCommand(CanExecute = nameof(CanCreateNewDirectory))]
-    private void CreateNewDirectory(FileSystemModel value)
+    private void CreateNewDirectory(FileSystemModel? value)
     {
         var model = value ?? SelectedItem;
         if (model?.IsDirectory != true)
@@ -967,7 +979,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// Initialize Avalondock specific defaults that are specific to this tool window.
     /// </summary>
     private void SetupToolDefaults() =>
-        ContentId = s_toolContentId; // Define a unique contentId for this toolwindow//BitmapImage bi = new BitmapImage();  // Define an icon for this toolwindow//bi.BeginInit();//bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");//bi.EndInit();//IconSource = bi;
+        ContentId = s_toolContentId;
+    // Define a unique contentId for this toolwindow
+    //BitmapImage bi = new BitmapImage();
+    // Define an icon for this toolwindow
+    // bi.BeginInit();
+    // bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");
+    // bi.EndInit();
+    // IconSource = bi;
 
     private ResourcePath GetResourcePath(string fullPath, Cp77Project project)
     {
@@ -1028,7 +1047,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         var oldPathStr = oldPath.GetResolvedText();
         var newPathStr = newPath.GetResolvedText();
 
-        CR2WFile? cr2w;
+        CR2WFile? cr2W;
         var wasModified = false;
         var isDirectory = newPathStr != null && Directory.Exists(Path.Join(ActiveProject?.ModDirectory, newPathStr));
         if (isDirectory)
@@ -1047,12 +1066,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         using (var fs = File.Open(filePath, FileMode.Open))
         using (var cr = new CR2WReader(fs))
         {
-            if (cr.ReadFile(out cr2w) != EFileReadErrorCodes.NoError)
+            if (cr.ReadFile(out cr2W) != EFileReadErrorCodes.NoError)
             {
                 return;
             }
 
-            foreach (var result in cr2w!.FindType(typeof(IRedRef)))
+            foreach (var result in cr2W!.FindType(typeof(IRedRef)))
             {
                 if (result.Value is not IRedRef resourceReference || resourceReference.DepotPath == ResourcePath.Empty)
                 {
@@ -1110,7 +1129,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                         throw new Exception();
                     }
 
-                    var parentArray = cr2w.GetFromXPath(string.Join('.', parentPath, parts[0]));
+                    var parentArray = cr2W.GetFromXPath(string.Join('.', parentPath, parts[0]));
                     if (!parentArray.Item1 || parentArray.Item2 is not IList arr)
                     {
                         throw new Exception();
@@ -1121,7 +1140,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 }
                 else
                 {
-                    var parentClass = cr2w.GetFromXPath(parentPath);
+                    var parentClass = cr2W.GetFromXPath(parentPath);
                     if (!parentClass.Item1 || parentClass.Item2 is not RedBaseClass cls)
                     {
                         throw new Exception();
@@ -1143,7 +1162,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         using var fs2 = File.Open(filePath, FileMode.Create);
         using var cw = new CR2WWriter(fs2);
 
-        cw.WriteFile(cr2w);
+        cw.WriteFile(cr2W);
     }
 
     private void LoadFileTreeState(Cp77Project project)
@@ -1151,6 +1170,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         var statePath = Path.Combine(project.ProjectDirectory, "fileTreeState.json");
         if (File.Exists(statePath))
         {
+            _hasUnsavedFileTreeChanges = false;
             ExpansionStateDictionary = JsonSerializer.Deserialize<Dictionary<string, bool>>(File.ReadAllText(statePath)) ?? new();
         }
         else
@@ -1159,19 +1179,35 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
     }
 
-    public void SaveFileTreeState()
+    public void SaveFileTreeStateIfDirty()
     {
-        if (ActiveProject == null)
+        if (ActiveProject != null)
+        {
+            SaveFileTreeStateIfDirty(ActiveProject);
+        }
+    }
+
+    private void SaveFileTreeStateIfDirty(Cp77Project project)
+    {
+        if (!_hasUnsavedFileTreeChanges)
         {
             return;
         }
-        SaveFileTreeState(ActiveProject);
+        File.WriteAllText(Path.Combine(project.ProjectDirectory, "fileTreeState.json"), JsonSerializer.Serialize(ExpansionStateDictionary));
+        _hasUnsavedFileTreeChanges = false;
     }
 
-    private void SaveFileTreeState(Cp77Project project) =>
-        File.WriteAllText(Path.Combine(project.ProjectDirectory, "fileTreeState.json"), JsonSerializer.Serialize(ExpansionStateDictionary));
-
     public void StopWatcher() => _projectWatcher.ForceStop();
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(SelectedTabIndex) || ActiveProject is null)
+        {
+            return;
+        }
+
+        ActiveProject.ActiveTab = SelectedTabIndex;
+    }
 
     #endregion Methods
 
@@ -1224,4 +1260,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     public IDocumentViewModel? GetActiveEditorFile() => _mainViewModel.ActiveDocument;
 
     #endregion
+
+    public void SaveNodeExpansionState(string rawRelativePath, bool b)
+    {
+        ExpansionStateDictionary[rawRelativePath] = true;
+        _hasUnsavedFileTreeChanges = true;
+    }
 }
