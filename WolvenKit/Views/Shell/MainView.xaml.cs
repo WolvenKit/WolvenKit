@@ -182,21 +182,21 @@ namespace WolvenKit.Views.Shell
             dockingAdapter.SaveLayout();
             if (ViewModel?.GetToolViewModel<ProjectExplorerViewModel>() is { } pe)
             {
-                pe.SaveFileTreeStateIfDirty();
+                pe.SaveProjectExplorerTabIfDirty();
                 pe.StopWatcher();
             }
-            var projectManager = Locator.Current.GetService<IProjectManager>();
-            if (projectManager is ProjectManager pm)
+
+            if (Locator.Current.GetService<IProjectManager>() is ProjectManager pm)
             {
                 await pm.SaveAsync();
             }
-            var hashService = Locator.Current.GetService<IHashService>();
-            if (hashService is HashServiceExt hashServiceExt)
+
+            if (Locator.Current.GetService<IHashService>() is HashServiceExt hashServiceExt)
             {
                 hashServiceExt.SaveGlobalCache();
             }
-            var cruidService = Locator.Current.GetService<CRUIDService>();
-            if (cruidService is { } cs)
+
+            if (Locator.Current.GetService<CRUIDService>() is { } cs)
             {
                 cs.SaveUserCRUIDS();
             }

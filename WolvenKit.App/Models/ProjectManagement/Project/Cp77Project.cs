@@ -452,4 +452,5 @@ public sealed class Cp77Project(string location, string name, string modName) : 
     #endregion implements IEquatable
 
     public override string ToString() => Location;
+    
 }

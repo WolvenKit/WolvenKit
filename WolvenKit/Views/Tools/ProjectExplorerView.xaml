@@ -772,6 +772,8 @@
             CurrentCellBorderThickness="0"
             FilterLevel="Extended"
             HeaderRowHeight="3"
+            NodeExpanded="TreeGrid_OnNodeExpanded"
+            NodeCollapsed="TreeGrid_OnNodeCollapsed"
             IsReadOnly="True"
             LiveNodeUpdateMode="AllowDataShaping"
             RowDragDropTemplate="{StaticResource DragDropTemplate}"
