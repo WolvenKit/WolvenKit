@@ -1353,6 +1353,30 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         ConvertPreloadMaterials();
 
+        // Support auto-generated chunk material names (psiberx magic)
+        var appearances = mesh.Appearances.Select((handle) => handle.GetValue() as meshMeshAppearance).Where((i) => i != null).ToList();
+        if (appearances.Count > 0)
+        {
+            var firstChunkMaterials = appearances[0]!.ChunkMaterials;
+            var firstAppearanceName = appearances[0]!.Name.GetResolvedText() ?? "INVALID";
+            for (var i = 1; i < appearances.Count; i++)
+            {
+                var appearance = appearances[i];
+                if (appearance is null || appearance.ChunkMaterials.Count > 0)
+                {
+                    continue;
+                }
+
+                var appearanceName = appearance.Name.GetResolvedText() ?? "INVALID";
+                appearance.ChunkMaterials ??= [];
+                for (var j = 0; j < firstChunkMaterials.Count; j++)
+                {
+                    var newChunkMaterial = (firstChunkMaterials[j].GetResolvedText() ?? "").Replace(firstAppearanceName, appearanceName);
+                    appearance.ChunkMaterials.Insert(j, newChunkMaterial);
+                }
+            }
+        }
+
         // Collect material names from appearance chunk materials
         var appearanceNames = mesh.Appearances
             .Select((handle) => handle.GetValue() as meshMeshAppearance).Where((i) => i != null)
