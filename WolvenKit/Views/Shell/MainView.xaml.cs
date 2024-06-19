@@ -182,7 +182,7 @@ namespace WolvenKit.Views.Shell
             dockingAdapter.SaveLayout();
             if (ViewModel?.GetToolViewModel<ProjectExplorerViewModel>() is { } pe)
             {
-                pe.SaveFileTreeState();
+                pe.SaveFileTreeStateIfDirty();
                 pe.StopWatcher();
             }
             var projectManager = Locator.Current.GetService<IProjectManager>();
