@@ -309,8 +309,12 @@ public partial class AssetBrowserViewModel : ToolViewModel
                     .Subscribe()
                     .Dispose();
 
+                // This will go into an endless refresh loop if SuppressNotification is not set, which 
+                // prevents the task from completing. 
+                RightItems.SuppressNotification = true;
                 RightItems.Clear();
                 RightItems.AddRange(list);
+                RightItems.SuppressNotification = false;
             }
 
             await Task.CompletedTask;
