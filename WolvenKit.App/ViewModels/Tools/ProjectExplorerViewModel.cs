@@ -179,16 +179,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
 
         _mainViewModel.SelectFileCommand.SafeExecute(value);
-
-        // toggle context menu buttons for all selected items
-        SelectedItems?.OfType<FileSystemModel>().ToList().ForEach((selectedItem) =>
-        {
-            ConvertToIsEnabled = IsInArchiveFolder(selectedItem);
-            ConvertFromIsEnabled = IsInRawFolder(selectedItem);
-        });
-
-        ConvertToIsEnabled = IsInArchiveFolder(value);
-        ConvertFromIsEnabled = IsInRawFolder(value);
     }
 
     #region properties
@@ -224,6 +214,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [NotifyCanExecuteChangedFor(nameof(RenameFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(OpenInAssetBrowserCommand))]
     [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ConvertToCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ConvertFromCommand))]
     private FileSystemModel? _selectedItem;
 
     [ObservableProperty]
@@ -236,8 +228,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     [ObservableProperty] private int _selectedTabIndex;
 
-    [ObservableProperty] private bool _convertToIsEnabled;
-    [ObservableProperty] private bool _convertFromIsEnabled;
     [ObservableProperty] private bool _canScrollToOpenFile;
 
     #endregion properties
@@ -295,30 +285,55 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// This will also return the relative path of the current game file if executed from raw folder view.
     /// </summary>
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(CopyRelPathCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyAbsPathToRawFolderCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyAbsPathToArchiveFolderCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyAbsPathToCurrentFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyAbsPathToCurrentFolderCommand))]
     private bool _isShowRelativePath;
 
     /// <summary>
     /// When holding Ctrl+Shift and right-clicking an archive item or folder, the context menu will show "Copy absolute path to raw folder".
     /// </summary>
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(CopyRelPathCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyAbsPathToRawFolderCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyAbsPathToArchiveFolderCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyAbsPathToCurrentFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyAbsPathToCurrentFolderCommand))]
     private bool _isShowAbsolutePathToRawFolder;
 
     /// <summary>
-    /// When holding Ctrl+Shift and right-clicking an item in "ra", the context menu will show "Copy absolute path to archive folder".
+    /// When holding Ctrl+Shift and right-clicking an item in "raw", the context menu will show "Copy absolute path to archive folder".
     /// </summary>
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(CopyRelPathCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyAbsPathToRawFolderCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyAbsPathToArchiveFolderCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyAbsPathToCurrentFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyAbsPathToCurrentFolderCommand))]
     private bool _isShowAbsolutePathToArchiveFolder;
 
     /// <summary>
     /// When holding Shift, the context menu will show "Copy absolute path".
     /// </summary>
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(CopyRelPathCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyAbsPathToRawFolderCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyAbsPathToArchiveFolderCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyAbsPathToCurrentFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyAbsPathToCurrentFolderCommand))]
     private bool _isShowAbsolutePathToCurrentFile;
 
     /// <summary>
     /// When holding Control, the context menu will show "Copy absolute path to folder".
     /// </summary>
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(CopyRelPathCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyAbsPathToRawFolderCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyAbsPathToArchiveFolderCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyAbsPathToCurrentFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyAbsPathToCurrentFolderCommand))]
     private bool _isShowAbsolutePathToCurrentFolder;
 
     /// <summary>
@@ -426,7 +441,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }  
     }
 
-    private bool CanCopyRelPath() => ActiveProject != null && SelectedItem != null;
+    private bool CanCopyRelPath() => IsShowRelativePath;
 
     /// <summary>
     /// Copy relative path to game file. If the current file is under "raw", switch to "archive" and cut off extension.
@@ -434,32 +449,36 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
     private void CopyRelPath() => CopyItemPathToClipboard(false, false, true);
 
+    private bool CanCopyAbsPathToCurrentFile => IsShowAbsolutePathToCurrentFile;
     /// <summary>
     /// Copy absolute path to current file. Don't change anything else.
     /// </summary>
-    [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
+    [RelayCommand(CanExecute = nameof(CanCopyAbsPathToCurrentFile))]
     private void CopyAbsPathToCurrentFile() => CopyItemPathToClipboard(true);
 
+    private bool CanCopyAbsPathToCurrentFolder => IsShowAbsolutePathToCurrentFolder;
     /// <summary>
     /// Copy absolute path to current folder. If currently selected item _is_ a folder, don't cut off the file name.
     /// </summary>
-    [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
+    [RelayCommand(CanExecute = nameof(CanCopyAbsPathToCurrentFolder))]
     private void CopyAbsPathToCurrentFolder() =>
         CopyItemPathToClipboard(true, false, false,
             SelectedItem?.FullName is not null && Directory.Exists(SelectedItem?.FullName));
 
 
+    private bool CanCopyAbsPathToRawFolder => IsShowAbsolutePathToRawFolder;
     /// <summary>
     /// Ctrl+Shift with /archive/ file or folder selected: Copy absolute path to raw folder (convenience for quick switching)
     /// </summary>
-    [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
+    [RelayCommand(CanExecute = nameof(CanCopyAbsPathToRawFolder))]
     private void CopyAbsPathToRawFolder() => CopyItemPathToClipboard(true, true, false);
 
 
+    private bool CanCopyAbsPathToArchiveFolder => IsShowAbsolutePathToArchiveFolder;
     /// <summary>
     /// Ctrl+Shift with /raw/ file or folder selected: Copy absolute path to archive folder (convenience for quick switching)
     /// </summary>
-    [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
+    [RelayCommand(CanExecute = nameof(CanCopyAbsPathToArchiveFolder))]
     private void CopyAbsPathToArchiveFolder() => CopyItemPathToClipboard(true, true, true);
 
 
@@ -785,12 +804,16 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     #region red4
 
-    private bool IsInArchiveFolder(FileSystemModel model) => ActiveProject is not null && model.FullName.Contains(ActiveProject.ModDirectory);
-    private bool IsInRawFolder(FileSystemModel model) => ActiveProject is not null && model.FullName.Contains(ActiveProject.RawDirectory);
+    private bool IsInArchiveFolder(FileSystemModel? model) =>
+        ActiveProject is not null && model is not null && model.FullName.Contains(ActiveProject.ModDirectory);
 
-    private bool CanConvertTo() => SelectedItems != null && ActiveProject is not null;
+    private bool IsInRawFolder(FileSystemModel? model) =>
+        ActiveProject is not null && model is not null && model.FullName.Contains(ActiveProject.RawDirectory);
+
+    private bool CanConvertTo() => ActiveProject is not null && SelectedItems is not null &&
+                                   SelectedItems.All(x => x is FileSystemModel m && IsInArchiveFolder(m));
     [RelayCommand(CanExecute = nameof(CanConvertTo))]
-    private async Task ConvertToAsync()
+    private async Task ConvertTo()
     {
         var progress = 0;
         _progressService.Report(0);
@@ -813,7 +836,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         // convert files
         foreach (var file in files)
         {
-            await ConvertToJsonAsync(file);
+            await ConvertToJson(file);
 
             progress++;
             _progressService.Report(progress / (float)files.Count);
@@ -822,7 +845,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _progressService.Completed();
     }
 
-    private async Task ConvertToJsonAsync(string file)
+    private async Task ConvertToJson(string file)
     {
         if (!File.Exists(file))
         {
@@ -845,9 +868,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     }
 
 
-    private bool CanConvertFromJson() => SelectedItems != null && ActiveProject is not null;
+    private bool CanConvertFromJson() => ActiveProject is not null && SelectedItems is not null &&
+                                         SelectedItems.All(x => x is FileSystemModel m && IsInRawFolder(m));
     [RelayCommand(CanExecute = nameof(CanConvertFromJson))]
-    private async Task ConvertFromAsync()
+    private async Task ConvertFrom()
     {
         var progress = 0;
         _progressService.Report(0);
@@ -1248,14 +1272,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     private void OnModifierUpdateEvent()
     {
-        IsShowAbsolutePathToRawFolder =
-            ModifierViewStateService.IsCtrlShiftOnlyPressed &&
-            SelectedItem?.FullName.Contains(s_archiveFolder) == true;
+        IsShowAbsolutePathToRawFolder = ModifierViewStateService.IsCtrlShiftOnlyPressed && IsInArchiveFolder(SelectedItem);
+        IsShowAbsolutePathToArchiveFolder = ModifierViewStateService.IsCtrlShiftOnlyPressed && IsInRawFolder(SelectedItem);
 
-        IsShowAbsolutePathToArchiveFolder =
-            ModifierViewStateService.IsCtrlShiftOnlyPressed && SelectedItem?.FullName.Contains(s_rawFolder) == true;
+        IsShowAbsolutePathToCurrentFile = ModifierViewStateService.IsShiftKeyPressedOnly;
 
-        IsShowRelativePath = IsShowRelativePath || !(IsShowAbsolutePathToRawFolder || IsShowAbsolutePathToArchiveFolder);
+        IsShowAbsolutePathToCurrentFolder = ModifierViewStateService.IsCtrlKeyPressedOnly;
+
+        IsShowRelativePath = !ModifierViewStateService.IsShiftKeyPressedOnly && !ModifierViewStateService.IsCtrlKeyPressedOnly;
     }
 
     /// <summary>
