@@ -47,26 +47,24 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
+                    <!-- Search -->
                     <Label Grid.Column="0" Content="Search:" HorizontalAlignment="Left"
                            Background="#252525" BorderThickness="0" />
                     <TextBox x:Name="SearchTextBox" Grid.Column="1" Grid.Row="0" KeyboardNavigation.TabIndex="1"
                              helpers:TextBoxBehavior.FocusGainedSelectAll="True" />
 
+                    <!-- Replace -->
                     <Label Grid.Row="1" Grid.Column="0" Content="Replace:" HorizontalAlignment="Left"
                            Background="#252525" BorderThickness="0" />
                     <TextBox x:Name="ReplaceTextBox" Grid.Column="1" Grid.Row="1" KeyboardNavigation.TabIndex="2"
                              helpers:TextBoxBehavior.FocusGainedSelectAll="True" />
 
-                    <Label Grid.Row="2" Grid.Column="0" Content="Ignore case:" HorizontalAlignment="Left"
-                           Background="#252525" BorderThickness="0" /> <!-- Label for the CheckBox -->
-                    <CheckBox x:Name="IgnoreCaseCheckBox" Grid.Column="1" Grid.Row="2" KeyboardNavigation.TabIndex="3" /> <!-- CheckBox -->
-
-                    <Label Grid.Row="3" Grid.Column="0" Content="Remember:" HorizontalAlignment="Left"
-                           Background="#252525" BorderThickness="0" /> <!-- Label for the CheckBox -->
-                    <CheckBox x:Name="RememberValuesCheckBox" Grid.Column="1" Grid.Row="3" KeyboardNavigation.TabIndex="4" /> <!-- CheckBox -->
+                    <!-- Remember selection -->
+                    <Label Grid.Row="2" Grid.Column="0" Content="Remember:" HorizontalAlignment="Left"
+                           Background="#252525" BorderThickness="0" />
+                    <CheckBox x:Name="RememberValuesCheckBox" Grid.Column="1" Grid.Row="2" KeyboardNavigation.TabIndex="4" /> <!-- CheckBox -->
 
                 </Grid>
             </syncfusion:WizardPage>

@@ -33,10 +33,6 @@ namespace WolvenKit.Views.Dialogs.Windows
                         x => x.ReplaceTextBox.Text)
                     .DisposeWith(disposables);
                 this.Bind(ViewModel,
-                        x => x.IgnoreCase,
-                        x => x.IgnoreCaseCheckBox.IsChecked)
-                    .DisposeWith(disposables);
-                this.Bind(ViewModel,
                         x => x.RememberValues,
                         x => x.RememberValuesCheckBox.IsChecked)
                     .DisposeWith(disposables);
