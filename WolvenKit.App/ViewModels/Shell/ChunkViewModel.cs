@@ -1996,10 +1996,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         catch (Exception ex) { _loggerService.Error(ex); }
     }
 
-    public bool SearchAndReplace(string searchText, string replaceText, bool ignoreCase)
-    {
-        return SearchAndReplaceInProperties(searchText, replaceText, ignoreCase);
-    }
+    public bool SearchAndReplace(string searchText, string replaceText) => SearchAndReplaceInternal(searchText, replaceText);
 
     private bool CanCopyHandle() => Data is IRedBaseHandle;   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanCopyHandle))]
