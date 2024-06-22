@@ -50,7 +50,12 @@
     <SolidColorBrush x:Key="WolvenKitYellow50" Color="#7FFFEA0A" />
     <SolidColorBrush x:Key="WolvenKitYellowShadow50" Color="#7FABA108" />
     <SolidColorBrush x:Key="WolvenKitPurple50" Color="#7F5760B3" />
+    <SolidColorBrush x:Key="WolvenKitTan25" Color="#FFA7967D" />
     <SolidColorBrush x:Key="WolvenKitTan50" Color="#7FD0A467" />
+
+    <SolidColorBrush x:Key="ForegroundColor" Color="#EBEBEB" />
+    <SolidColorBrush x:Key="ForegroundColor_Grey1" Color="#ababab" />
+    <SolidColorBrush x:Key="ForegroundColor_Grey_Dark" Color="#969696" />
 
     <Style
         x:Key="WolvenKitTabControl"
