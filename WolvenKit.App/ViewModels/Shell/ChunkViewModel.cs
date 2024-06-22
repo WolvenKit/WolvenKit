@@ -1535,16 +1535,24 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     // we don't have to check all those arrays.
 
 
-    private bool CanConvertPreloadMaterial() => IsArray && ((IRedArray)ResolvedData).Count > 0 && Name.StartsWith("preload") &&
-                                                ResolvedData is CArray<CHandle<IMaterial>> or CArray<CResourceReference<IMaterial>>;
+    private bool CanConvertPreloadMaterial() => ResolvedData is CMesh mesh &&
+                                                ((mesh.PreloadLocalMaterialInstances?.Count ?? 0) > 0 ||
+                                                 (mesh.PreloadExternalMaterials?.Count ?? 0) > 0);
 
+
+    /// <summary>
+    /// Convert to local materials - if preloadLocalMaterialInstances or preloadExternalMaterials have entries, allow converting them
+    /// to the corresponding non-preload list
+    /// </summary>
     [RelayCommand(CanExecute = nameof(CanConvertPreloadMaterial))]
     private void ConvertPreloadMaterials()
     {
-        if (ResolvedData is not CMesh mesh)
+        var resolvedData = ResolvedData is CMesh ? ResolvedData : Parent?.ResolvedData;
+        if (resolvedData is not CMesh mesh)
         {
             return;
         }
+        
 
         // Make sure these are initialized
         mesh.LocalMaterialBuffer ??= new meshMeshMaterialBuffer { Materials = [], };
