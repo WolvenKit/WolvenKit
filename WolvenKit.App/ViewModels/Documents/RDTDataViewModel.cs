@@ -14,6 +14,7 @@ using WolvenKit.App.Models;
 using WolvenKit.App.Models.Nodify;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevels;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive;
@@ -49,7 +50,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
         _data = data;
 
-        IsSimpleViewEnabled = Parent.IsSimpleViewEnabled;
+        EditorDifficultyLevel = Parent.EditorDifficultyLevel;
 
         Nodes.Add(new ResourcePathWrapper(this, new ReferenceSocket(Chunks[0].RelativePath), _appViewModel, _chunkViewmodelFactory));
         _nodePaths.Add(Chunks[0].RelativePath);
@@ -106,12 +107,12 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     private void RDTDataViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName != nameof(RedDocumentViewModel.IsSimpleViewEnabled))
+        if (e.PropertyName != nameof(RedDocumentViewModel.EditorDifficultyLevel))
         {
             return;
         }
 
-        IsSimpleViewEnabled = Parent.IsSimpleViewEnabled;
+        EditorDifficultyLevel = Parent.EditorDifficultyLevel;
     }
 
     public RDTDataViewModel(string header, IRedType data, RedDocumentViewModel file, AppViewModel appViewModel,
@@ -142,7 +143,8 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         set => _chunks = value;
     }
 
-    public virtual ChunkViewModel GenerateChunks() => _chunkViewmodelFactory.ChunkViewModel(_data, this, _appViewModel);
+    public virtual ChunkViewModel GenerateChunks() =>
+        _chunkViewmodelFactory.ChunkViewModel(_data, this, _appViewModel, EditorDifficultyLevel);
 
     [ObservableProperty]
     private bool _isEmbeddedFile;
@@ -151,7 +153,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     [ObservableProperty] private object? _selectedChunks;
 
-    [ObservableProperty] private bool _IsSimpleViewEnabled;
+    [ObservableProperty] private EditorDifficultyLevel _editorDifficultyLevel;
 
 
     [ObservableProperty] private ChunkViewModel? _rootChunk;

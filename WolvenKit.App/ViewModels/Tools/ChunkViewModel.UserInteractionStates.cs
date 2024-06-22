@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
-using WolvenKit.RED4.Archive.Buffer;
+using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevels;
 using WolvenKit.RED4.Types;
 
 // ReSharper disable once CheckNamespace
@@ -54,16 +54,18 @@ public partial class ChunkViewModel
         },
     };
 
+
     private void CalculateIsDisplayAsReadOnly()
     {
         if (IsDisplayAsReadOnly || IsReadOnly)
         {
+            MarkAsReadOnly();
             return;
         }
 
         if (s_globalReadonlyTypes.Contains(ResolvedData.GetType()) || Parent?.IsReadOnly is true)
         {
-            IsReadOnly = true;
+            MarkAsReadOnly();
             return;
         }
 
@@ -95,7 +97,32 @@ public partial class ChunkViewModel
     public bool ExcludeFromSimpleView()
     {
         CalculateConditionalHiding();
-        return IsHiddenByNoobFilter;
+        return IsHiddenByEditorDifficultyLevel;
+    }
+
+
+    private void MarkAsReadOnly()
+    {
+        if (Tab?.EditorDifficultyLevel is EditorDifficultyLevel.Advanced)
+        {
+            IsDisplayAsReadOnly = true;
+        }
+        else
+        {
+            IsReadOnly = true;
+        }
+    }
+
+    private void MarkAsHidden(bool isHidden)
+    {
+        if (!isHidden || Tab?.EditorDifficultyLevel is EditorDifficultyLevel.Advanced)
+        {
+            IsHiddenByEditorDifficultyLevel = false;
+        }
+        else
+        {
+            IsHiddenByEditorDifficultyLevel = isHidden;
+        }
     }
 
     /// <summary>
@@ -104,9 +131,9 @@ public partial class ChunkViewModel
     private void CalculateConditionalHiding()
     {
         // If we're in simple view, hide all "unnecessary" properties from the user
-        if (Tab?.IsSimpleViewEnabled != true)
+        if (Tab?.EditorDifficultyLevel is EditorDifficultyLevel.Advanced)
         {
-            IsHiddenByNoobFilter = false;
+            MarkAsHidden(false);
             return;
         }
 
@@ -114,7 +141,7 @@ public partial class ChunkViewModel
         if (IsReadOnly || (IsDisplayAsReadOnly && Parent is null) || s_alwaysHiddenFields.Contains(Name) ||
             (!IsArray && PropertyType.IsAssignableTo(typeof(DataBuffer))))
         {
-            IsHiddenByNoobFilter = true;
+            MarkAsHidden(true);
             return;
         }
 
@@ -126,13 +153,13 @@ public partial class ChunkViewModel
         var parentType = Parent.ResolvedData.GetType();
         if (s_showReadonlyInEasyModeFields.TryGetValue(parentType, out var visibleFields) && visibleFields.Contains(Name))
         {
-            IsHiddenByNoobFilter = false;
+            MarkAsHidden(false);
             return;
         }
 
         if (IsDisplayAsReadOnly || (s_hiddenFields.TryGetValue(parentType, out var hiddenFields) && hiddenFields.Contains(Name)))
         {
-            IsHiddenByNoobFilter = true;
+            MarkAsHidden(true);
             return;
         }
 
@@ -149,13 +176,13 @@ public partial class ChunkViewModel
             || (ResolvedData is CName cname && cname == CName.Empty) // empty cname
            )
         {
-            IsHiddenByNoobFilter = true;
+            MarkAsHidden(true);
         }
 
     }
 
-    private static readonly List<string> s_alwaysHiddenFields = new()
-    {
+    private static readonly List<string> s_alwaysHiddenFields =
+    [
         "cookingPlatform",
         "topology",
         "topologyData",
@@ -164,7 +191,7 @@ public partial class ChunkViewModel
         "topologyMetadataStride",
         "version",
         "vertexBufferSize"
-    };
+    ];
 
 
     /// <summary>
@@ -279,4 +306,21 @@ public partial class ChunkViewModel
             ]
         },
     };
+
+    // For view visibility - if the noob filter is enabled, only show properties that the user wants to edit
+    [ObservableProperty] private bool _isHiddenByEditorDifficultyLevel;
+
+    // For view visibility - mode of editor
+    [ObservableProperty] private EditorDifficultyLevel _currentEditorDifficultyLevel;
+
+    public void SetEditorLevel(EditorDifficultyLevel level)
+    {
+        if (CurrentEditorDifficultyLevel == level)
+        {
+            return;
+        }
+
+        CurrentEditorDifficultyLevel = level;
+        Tab?.Parent.Reload(false);
+    }
 }

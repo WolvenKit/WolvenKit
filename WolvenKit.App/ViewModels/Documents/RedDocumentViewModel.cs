@@ -10,10 +10,12 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Options;
 using WolvenKit.App.Factories;
 using WolvenKit.App.Helpers;
+using WolvenKit.App.Interaction;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevels;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
@@ -66,7 +68,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
         IHookService hookService,
         INodeWrapperFactory nodeWrapperFactory,
         IHashService hashService,
-        bool isSimpleViewEnabled = false,
+        EditorDifficultyLevel editorMode,
         bool isReadyOnly = false) : base(path)
     {
         _documentTabViewmodelFactory = documentTabViewmodelFactory;
@@ -95,7 +97,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
         Cr2wFile = file;
         IsReadOnly = isReadyOnly;
-        IsSimpleViewEnabled = isSimpleViewEnabled;
+        EditorDifficultyLevel = editorMode;
         _isInitialized = true;
         PopulateItems();
     }
@@ -175,6 +177,12 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
     public override async Task Save(object? parameter)
     {
+        SaveSync(parameter);
+        await Task.CompletedTask;
+    }
+
+    public void SaveSync(object? parameter)
+    {
         var ms = new MemoryStream();
         var file = GetMainFile();
 
@@ -217,8 +225,6 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
         SetIsDirty(false);
         _loggerService.Success($"Saved file {FilePath}");
-
-        await Task.CompletedTask;
     }
 
     private void SaveHashedValues(CR2WFile file)
@@ -263,22 +269,35 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
         if (!force && IsDirty)
         {
-            return false;
+            var result = Interactions.ShowConfirmation((
+                $"The file {FilePath} has unsaved changes. Do you want to save it before reloading?",
+                "File Modified",
+                WMessageBoxImage.Question,
+                WMessageBoxButtons.YesNo));
+
+            if (result == WMessageBoxResult.No)
+            {
+                return false;
+            }
+
+            SaveSync(null);
+
         }
 
         using var fs = File.Open(FilePath, FileMode.Open);
-        if (_parserService.TryReadRed4File(fs, out var cr2wFile))
+        if (!_parserService.TryReadRed4File(fs, out var cr2wFile))
         {
-            Cr2wFile = cr2wFile;
-            PopulateItems();
-            
-            SetIsDirty(false);
-            LastWriteTime = File.GetLastWriteTime(FilePath);
-
-            return true;
+            return false;
         }
 
-        return false;
+        Cr2wFile = cr2wFile;
+        PopulateItems();
+
+        SetIsDirty(false);
+        LastWriteTime = File.GetLastWriteTime(FilePath);
+
+        return true;
+
     }
 
     public RedDocumentTabViewModel? GetMainFile()

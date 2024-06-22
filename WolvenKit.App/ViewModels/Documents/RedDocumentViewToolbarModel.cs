@@ -3,7 +3,9 @@ using System.ComponentModel;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Splat;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevels;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
@@ -15,21 +17,31 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     public RedDocumentViewToolbarModel()
     {
         RefreshMenuVisibility();
-        if (Locator.Current.GetService<IModifierViewStateService>() is IModifierViewStateService svc)
+        if (Locator.Current.GetService<ISettingsManager>() is ISettingsManager settingsSvc)
         {
-            _modifierViewStateService = svc;
-            svc.ModifierStateChanged += OnModifierChanged;
+            EditorLevel = settingsSvc.DefaultEditorDifficultyLevel;
         }
+        else
+        {
+            EditorLevel = EditorDifficultyLevel.Easy;
+        }
+
+        if (Locator.Current.GetService<IModifierViewStateService>() is not IModifierViewStateService svc)
+        {
+            return;
+        }
+
+        _modifierViewStateService = svc;
+        svc.ModifierStateChanged += OnModifierChanged;
     }
 
-    private void OnModifierChanged()
-    {
-        IsShiftkeyDown = _modifierViewStateService?.IsShiftKeyPressed ?? false;
-    }
 
-    private IModifierViewStateService? _modifierViewStateService;
+    private void OnModifierChanged() => IsShiftKeyDown = _modifierViewStateService?.IsShiftKeyPressed ?? false;
+
+    private readonly IModifierViewStateService? _modifierViewStateService;
 
     [ObservableProperty] private RedDocumentTabViewModel? _currentTab;
+    [ObservableProperty] private EditorDifficultyLevel _editorLevel;
 
     public ChunkViewModel? RootChunk { get; set; }
 
@@ -76,7 +88,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [ObservableProperty] private bool _isGenerateMaterialCommandEnabled;
     [ObservableProperty] private bool _isDeleteUnusedMaterialCommandEnabled;
 
-    [ObservableProperty] private bool _isShiftkeyDown;
+    [ObservableProperty] private bool _isShiftKeyDown;
 
 
     private void RefreshMeshMenuItems()
@@ -111,5 +123,18 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     {
         CurrentTab = value;
         RefreshMenuVisibility();
+    }
+
+    [ObservableProperty] private bool _isEasyEditor;
+    [ObservableProperty] private bool _isDefaultEditor;
+    [ObservableProperty] private bool _isAdvancedEditor;
+
+    public void SetEditorLevel(EditorDifficultyLevel level)
+    {
+        EditorLevel = level;
+        RootChunk?.SetEditorLevel(level);
+        IsEasyEditor = level == EditorDifficultyLevel.Easy;
+        IsDefaultEditor = level == EditorDifficultyLevel.Default;
+        IsAdvancedEditor = level == EditorDifficultyLevel.Advanced;
     }
 }

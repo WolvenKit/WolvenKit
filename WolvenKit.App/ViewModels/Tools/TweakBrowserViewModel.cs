@@ -20,6 +20,7 @@ using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevels;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
@@ -108,7 +109,9 @@ public partial class TweakBrowserViewModel : ToolViewModel
                 SelectedRecord.Clear();
                 if (SelectedRecordEntry != null && _tweakDB.IsLoaded)
                 {
-                    var vm = _chunkViewmodelFactory.ChunkViewModel(TweakDBService.GetRecord(SelectedRecordEntry.Item).NotNull(), SelectedRecordEntry.DisplayName, _appViewModel, null, true);
+                    var vm = _chunkViewmodelFactory.ChunkViewModel(
+                        TweakDBService.GetRecord(SelectedRecordEntry.Item).NotNull(), SelectedRecordEntry.DisplayName, _appViewModel,
+                        _settingsManager.DefaultEditorDifficultyLevel, null, true);
                     vm.IsExpanded = true;
                     SelectedRecord.Add(vm);
                 }
@@ -122,7 +125,8 @@ public partial class TweakBrowserViewModel : ToolViewModel
                 {
                     var flat = TweakDBService.GetFlat(SelectedFlatEntry.Item);
                     ArgumentNullException.ThrowIfNull(flat);
-                    SelectedFlat = _chunkViewmodelFactory.ChunkViewModel(flat, flat.GetType().Name, _appViewModel);
+                    SelectedFlat = _chunkViewmodelFactory.ChunkViewModel(flat, flat.GetType().Name, _appViewModel,
+                        _settingsManager.DefaultEditorDifficultyLevel);
                 }
                 else
                 {
@@ -142,7 +146,8 @@ public partial class TweakBrowserViewModel : ToolViewModel
                         arr.Add(query);
                     }
 
-                    SelectedQuery = _chunkViewmodelFactory.ChunkViewModel(arr, nameof(CArray<TweakDBID>), _appViewModel);
+                    SelectedQuery = _chunkViewmodelFactory.ChunkViewModel(arr, nameof(CArray<TweakDBID>), _appViewModel,
+                        _settingsManager.DefaultEditorDifficultyLevel);
                 }
                 else
                 {
@@ -159,7 +164,8 @@ public partial class TweakBrowserViewModel : ToolViewModel
                     var u = TweakDBService.GetGroupTag(SelectedGroupTagEntry.Item);
                     if (u is not null)
                     {
-                        SelectedGroupTag = _chunkViewmodelFactory.ChunkViewModel((CUInt8)u, nameof(CUInt8), _appViewModel);
+                        SelectedGroupTag = _chunkViewmodelFactory.ChunkViewModel((CUInt8)u, nameof(CUInt8), _appViewModel,
+                            _settingsManager.DefaultEditorDifficultyLevel);
                     }
                 }
                 else

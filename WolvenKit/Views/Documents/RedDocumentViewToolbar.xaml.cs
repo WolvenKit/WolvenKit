@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using System.Windows;
 using Microsoft.ClearScript;
@@ -6,6 +7,7 @@ using Splat;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevels;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.Views.Dialogs.Windows;
 
@@ -14,15 +16,15 @@ namespace WolvenKit.Views.Documents
     public partial class RedDocumentViewToolbar : ReactiveUserControl<RedDocumentViewToolbarModel>
     {
         private AppScriptService _appScriptService;
+        
+        
 
         public RedDocumentViewToolbar()
         {
             _appScriptService = Locator.Current.GetService<AppScriptService>();
             InitializeComponent();
 
-            var model = new RedDocumentViewToolbarModel();
-            model.CurrentTab = _currentTab;
-            DataContext = model;
+            DataContext = new RedDocumentViewToolbarModel { CurrentTab = _currentTab };
 
             this.WhenActivated(disposables =>
             {
@@ -81,5 +83,24 @@ namespace WolvenKit.Views.Documents
 
             cvm?.Tab?.Parent.SetIsDirty(true);
         }
+
+        public event EventHandler<EditorDifficultyLevel> EditorDifficultChanged;
+
+        private void OnEditorModeClick(EditorDifficultyLevel level)
+        {
+            if (ViewModel is null)
+            {
+                return;
+            }
+
+            ViewModel?.SetEditorLevel(level);
+            EditorDifficultChanged?.Invoke(this, level);
+        }
+
+        private void OnEditorModeClick_Easy(object sender, RoutedEventArgs e) => OnEditorModeClick(EditorDifficultyLevel.Easy);
+
+        private void OnEditorModeClick_Default(object sender, RoutedEventArgs e) => OnEditorModeClick(EditorDifficultyLevel.Default);
+
+        private void OnEditorModeClick_Advanced(object sender, RoutedEventArgs e) => OnEditorModeClick(EditorDifficultyLevel.Advanced);
     }
 }

@@ -16566,7 +16566,7 @@ public static partial class Enums
 		PhotoMode = 9,
 		MiniGameMenu = 10,
 		EndGameLoading = 11,
-		EditorMode = 12
+		EditorDifficultyLevel = 12
 	}
 
 	public enum inkStyleOverrideType : byte

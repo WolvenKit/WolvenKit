@@ -1,9 +1,9 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class inkEditorModeState : inkIStateMachineState
+	public partial class inkEditorDifficultyLevelState : inkIStateMachineState
 	{
-		public inkEditorModeState()
+		public inkEditorDifficultyLevelState()
 		{
 			PostConstruct();
 		}
