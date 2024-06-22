@@ -35,6 +35,23 @@ public partial class ChunkViewModel
     {
         { typeof(CBitmapTexture), ["width", "height"] }, // xbm
         { typeof(CMesh), ["geometryHash", "consoleBias"] }, // mesh
+        { typeof(rendRenderMeshBlobHeader), ["indexBufferSize", "renderLODs"] }, // mesh
+        { // mesh
+            typeof(rendChunk), [
+                "baseRenderMask", "lodMask", "materialId", "mergedRenderMask", "numIndices", "numVertices", "vertexFactory"
+            ]
+        },
+    };
+
+    // Fields (by parent class) that should be displayed in easy mode, even though readonly 
+    private static readonly Dictionary<Type, List<string>> s_showReadonlyInEasyModeFields = new()
+    {
+        { typeof(rendRenderMeshBlobHeader), ["indexBufferSize", "renderLODs"] }, // mesh
+        { // mesh
+            typeof(rendChunk), [
+                "baseRenderMask", "lodMask", "materialId", "mergedRenderMask", "numIndices", "numVertices", "vertexFactory"
+            ]
+        },
     };
 
     private void CalculateIsDisplayAsReadOnly()
@@ -94,7 +111,7 @@ public partial class ChunkViewModel
         }
 
         // DataBuffers should always be hidden
-        if (IsReadOnly || IsDisplayAsReadOnly || s_alwaysHiddenFields.Contains(Name) ||
+        if (IsReadOnly || (IsDisplayAsReadOnly && Parent is null) || s_alwaysHiddenFields.Contains(Name) ||
             (!IsArray && PropertyType.IsAssignableTo(typeof(DataBuffer))))
         {
             IsHiddenByNoobFilter = true;
@@ -106,14 +123,21 @@ public partial class ChunkViewModel
             return;
         }
 
-        if (s_hiddenFields.TryGetValue(Parent.ResolvedData.GetType(), out var hiddenFields) && hiddenFields.Contains(Name))
+        var parentType = Parent.ResolvedData.GetType();
+        if (s_showReadonlyInEasyModeFields.TryGetValue(parentType, out var visibleFields) && visibleFields.Contains(Name))
+        {
+            IsHiddenByNoobFilter = false;
+            return;
+        }
+
+        if (IsDisplayAsReadOnly || (s_hiddenFields.TryGetValue(parentType, out var hiddenFields) && hiddenFields.Contains(Name)))
         {
             IsHiddenByNoobFilter = true;
             return;
         }
 
         // Some fields should be hidden if they are empty, or false 
-        if (!s_hideIfHasDefaultValueFields.TryGetValue(Parent.ResolvedData.GetType(), out var hiddenArrayFields) ||
+        if (!s_hideIfHasDefaultValueFields.TryGetValue(parentType, out var hiddenArrayFields) ||
             !hiddenArrayFields.Contains(Name))
         {
             return;
@@ -166,6 +190,8 @@ public partial class ChunkViewModel
             ]
         },
         { typeof(inkTextureAtlas), ["parts", "slices"] },
+        { typeof(rendRenderMeshBlobHeader), ["speedTreeWind"] },
+        { typeof(rendChunk), ["baseRenderMask", "mergedRenderMask", "materialId"] },
     };
 
 
