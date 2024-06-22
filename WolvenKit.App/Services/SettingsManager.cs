@@ -11,6 +11,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData.Binding;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Models;
+using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevels;
 using WolvenKit.Common;
 using WolvenKit.Core;
 using WolvenKit.Core.Exceptions;
@@ -54,7 +55,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(ShowNodeRefAsHex),
             nameof(ShowTweakDBIDAsHex),
             nameof(ShowReferenceGraph),
-            nameof(EnableNoobFilterByDefault),
+            nameof(DefaultEditorDifficultyLevel),
             nameof(GameLanguage),
             nameof(AnalyzeModArchives),
             nameof(ExtraModDirPath),
@@ -207,7 +208,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     private uint _treeViewGroupSize = 100;
 
     [Display(Name = "Default to simple mode", GroupName = "File Editor")] [ObservableProperty]
-    private bool _enableNoobFilterByDefault;
+    private EditorDifficultyLevel _defaultEditorDifficultyLevel;
 
     [Display(Name = "Ignored Extensions (Open using System Editor. Syntax: .ext1|.ext2)", GroupName = "File Editor")]
     [ObservableProperty]
@@ -360,8 +361,6 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             : Path.Combine(GetRED4GameRootDir(), "bin", "x64", Core.Constants.Oodle);
 
     public bool IsHealthy() => File.Exists(CP77ExecutablePath) && File.Exists(GetRED4OodleDll());
-
-    public bool IsNoobFilterDefaultEnabled() => EnableNoobFilterByDefault;
 
     #endregion methods
 }

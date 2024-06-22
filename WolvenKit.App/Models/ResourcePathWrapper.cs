@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Splat;
 using WolvenKit.App.Factories;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models.Nodify;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevels;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
 
@@ -15,11 +18,13 @@ public partial class ResourcePathWrapper : ObservableObject, INode<ReferenceSock
 {
     private readonly AppViewModel _appViewModel;
     private readonly IChunkViewmodelFactory _chunkViewmodelFactory;
+    private readonly ISettingsManager? _settingsManager;
 
     public ResourcePathWrapper(RDTDataViewModel vm, ReferenceSocket socket, AppViewModel appViewModel, IChunkViewmodelFactory chunkViewmodelFactory)
     {
         _appViewModel = appViewModel;
         _chunkViewmodelFactory = chunkViewmodelFactory;
+        _settingsManager = Locator.Current.GetService<ISettingsManager>();
 
         DataViewModel = vm;
         _socket = socket;
@@ -80,7 +85,8 @@ public partial class ResourcePathWrapper : ObservableObject, INode<ReferenceSock
             return;
         }
 
-        var chunk = _chunkViewmodelFactory.ChunkViewModel(cr2w.RootChunk, Socket, _appViewModel);
+        var chunk = _chunkViewmodelFactory.ChunkViewModel(cr2w.RootChunk, Socket, _appViewModel,
+            _settingsManager?.DefaultEditorDifficultyLevel ?? EditorDifficultyLevel.Easy);
         chunk.Location = Location;
         DataViewModel.Nodes.Remove(this);
         DataViewModel.Nodes.Add(chunk);

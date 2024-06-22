@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using WolvenKit.App.Models;
+using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevels;
 using WolvenKit.Common;
 
 namespace WolvenKit.App.Services;
@@ -31,7 +32,7 @@ public interface ISettingsDto
     public bool ShowTweakDBIDAsHex { get; set; }
     public bool ShowReferenceGraph { get; set; }
     public EGameLanguage GameLanguage { get; set; }
-    public bool EnableNoobFilterByDefault { get; set; }
+    public EditorDifficultyLevel DefaultEditorDifficultyLevel { get; set; }
     public Dictionary<string, LaunchProfile> LaunchProfiles { get; set; }
     public Dictionary<string, bool>? ScriptStatus { get; set; }
     public bool AnalyzeModArchives { get; set; }

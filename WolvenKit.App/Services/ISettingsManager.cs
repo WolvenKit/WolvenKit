@@ -8,6 +8,7 @@ using System.Windows.Media;
 using WolvenKit.App.Models;
 using System.Windows.Media.Imaging;
 using DynamicData.Kernel;
+using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevels;
 
 namespace WolvenKit.App.Services;
 
@@ -185,11 +186,6 @@ public interface ISettingsManager : ISettingsDto, INotifyPropertyChanged
     string GetVersionNumber();
 
     string LastLaunchProfile { get; set; }
-
-    /// <summary>
-    /// For "simple" editor view: hides fields that the user shouldn't edit 
-    /// </summary>
-    bool IsNoobFilterDefaultEnabled();
 
     bool ShowRedmodInRibbon { get; set; }
 }

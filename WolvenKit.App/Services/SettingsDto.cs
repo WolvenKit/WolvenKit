@@ -5,6 +5,7 @@ using System.Text.Json;
 using WolvenKit.App.Extensions;
 using System.Xaml;
 using WolvenKit.App.Models;
+using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevels;
 using WolvenKit.Common;
 
 namespace WolvenKit.App.Services;
@@ -42,7 +43,7 @@ public class SettingsDto : ISettingsDto
         ShowResourcePathAsHex = settings.ShowResourcePathAsHex;
         ShowNodeRefAsHex = settings.ShowNodeRefAsHex;
         ShowTweakDBIDAsHex = settings.ShowTweakDBIDAsHex;
-        EnableNoobFilterByDefault = settings.EnableNoobFilterByDefault;
+        DefaultEditorDifficultyLevel = settings.DefaultEditorDifficultyLevel;
         ShowReferenceGraph = settings.ShowReferenceGraph;
         GameLanguage = settings.GameLanguage;
         LaunchProfiles = settings.LaunchProfiles;
@@ -82,8 +83,7 @@ public class SettingsDto : ISettingsDto
     public bool ShowCNameAsHex { get; set; }
     public bool ShowResourcePathAsHex { get; set; }
     public bool ShowNodeRefAsHex { get; set; }
-
-    public bool EnableNoobFilterByDefault { get; set; }
+    public EditorDifficultyLevel DefaultEditorDifficultyLevel { get; set; } = EditorDifficultyLevel.Easy;
     public bool ShowTweakDBIDAsHex { get; set; }
     public bool ShowReferenceGraph { get; set; }
     public EGameLanguage GameLanguage { get; set; } = EGameLanguage.en_us;
@@ -126,7 +126,7 @@ public class SettingsDto : ISettingsDto
         settingsManager.ShowResourcePathAsHex = ShowResourcePathAsHex;
         settingsManager.ShowNodeRefAsHex = ShowNodeRefAsHex;
         settingsManager.ShowTweakDBIDAsHex = ShowTweakDBIDAsHex;
-        settingsManager.EnableNoobFilterByDefault = EnableNoobFilterByDefault;
+        settingsManager.DefaultEditorDifficultyLevel = DefaultEditorDifficultyLevel;
         settingsManager.ShowReferenceGraph = ShowReferenceGraph;
         settingsManager.LaunchProfiles = LaunchProfiles;
         settingsManager.ScriptStatus = ScriptStatus;
