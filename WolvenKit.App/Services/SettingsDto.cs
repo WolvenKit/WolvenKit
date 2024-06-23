@@ -3,9 +3,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using WolvenKit.App.Extensions;
-using System.Xaml;
 using WolvenKit.App.Models;
-using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevels;
+using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common;
 
 namespace WolvenKit.App.Services;

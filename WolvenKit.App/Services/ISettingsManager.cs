@@ -8,7 +8,6 @@ using System.Windows.Media;
 using WolvenKit.App.Models;
 using System.Windows.Media.Imaging;
 using DynamicData.Kernel;
-using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevels;
 
 namespace WolvenKit.App.Services;
 

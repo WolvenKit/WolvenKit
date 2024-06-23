@@ -69,7 +69,7 @@ namespace WolvenKit.Views.Tools
 
             if (collectionView is not null)
             {
-                collectionView.Filter = item => (item as ChunkViewModel)?.ExcludeFromSimpleView() != true;
+                collectionView.Filter = item => (item as ChunkViewModel)?.IsHiddenByEditorDifficultyLevel != true;
                 SetCurrentValue(ItemsSourceProperty, collectionView);
             }
 

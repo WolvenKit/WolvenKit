@@ -7,7 +7,7 @@ using Splat;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
-using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevels;
+using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.Views.Dialogs.Windows;
 

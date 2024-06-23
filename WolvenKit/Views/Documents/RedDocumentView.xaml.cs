@@ -3,7 +3,7 @@ using System.Windows.Input;
 using ReactiveUI;
 using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.App.ViewModels.Documents;
-using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevels;
+using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 
 namespace WolvenKit.Views.Documents
 {
