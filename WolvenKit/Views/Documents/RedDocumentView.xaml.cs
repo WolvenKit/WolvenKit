@@ -36,6 +36,7 @@ namespace WolvenKit.Views.Documents
             }
 
             vm.EditorDifficultyLevel = level;
+            vm.Reload(false);
         }
 
         private void TabControl_OnSelectedItemChangedEvent(object sender, SelectedItemChangedEventArgs e)
