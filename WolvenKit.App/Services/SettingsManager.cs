@@ -207,7 +207,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [ObservableProperty]
     private uint _treeViewGroupSize = 100;
 
-    [Display(Name = "Default to simple mode", GroupName = "File Editor")] [ObservableProperty]
+    [Display(Name = "Editor default mode (recommended: Easy)", GroupName = "File Editor")] [ObservableProperty]
     private EditorDifficultyLevel _defaultEditorDifficultyLevel;
 
     [Display(Name = "Ignored Extensions (Open using System Editor. Syntax: .ext1|.ext2)", GroupName = "File Editor")]
