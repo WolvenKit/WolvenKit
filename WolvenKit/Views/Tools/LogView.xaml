@@ -28,7 +28,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid x:Name="LogViewGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
@@ -43,10 +43,12 @@
             ItemsSource="{Binding ElementName=uc, Path=LogEntries}"
             ScrollViewer.CanContentScroll="True"
             VirtualizingPanel.ScrollUnit="Pixel"
+            KeyUp="LogView_OnKeyUp"
             VirtualizingStackPanel.VirtualizationMode="Recycling">
             <ItemsControl.Resources>
                 <DataTemplate DataType="{x:Type tools1:LogEntry}">
                     <Grid HorizontalAlignment="Stretch">
+                        
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
@@ -97,7 +99,7 @@
                         <Button
                             Grid.Column="2"
                             Padding="0,0,12,0"
-                            VerticalAlignment="Top"
+                            VerticalAlignment="Bottom"
                             BorderThickness="1"
                             Click="CopyLine_OnClick"
                             Style="{StaticResource MahApps.Styles.Button.Chromeless}"
