@@ -44,6 +44,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [ObservableProperty] private EditorDifficultyLevel _editorLevel;
 
     public ChunkViewModel? RootChunk { get; set; }
+    public ChunkViewModel? SelectedChunk { get; set; }
 
     public string? FilePath => CurrentTab?.FilePath;
     public CR2WFile? Cr2WFile => CurrentTab?.Parent.Cr2wFile;
@@ -65,19 +66,37 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             _ => false,
         };
 
+
+        SelectedChunk = null;
+        RootChunk = null;
+        
         if (CurrentTab is RDTDataViewModel rtdViewModel)
         {
             RootChunk = rtdViewModel.GetRootChunk();
-        }
-        else
-        {
-            RootChunk = null;
+            rtdViewModel.PropertyChanged += OnRtdModelPropertyChanged;
+            if (rtdViewModel.SelectedChunk is ChunkViewModel cvm)
+            {
+                SelectedChunk = cvm;
+            }
         }
 
         if (ShowToolbar)
         {
             RefreshMeshMenuItems();
         }
+    }
+
+    private void OnRtdModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(RDTDataViewModel.SelectedChunk) || sender is not RDTDataViewModel dataViewModel)
+        {
+            return;
+        }
+
+        SelectedChunk = (ChunkViewModel?)dataViewModel.SelectedChunk;
+
+        IsRegenerateMaterialCommandEnabled = SelectedChunk is { Name: "components", Data: CArray<entIComponent> };
+        IsGenerateNewCruidCommandEnabled = SelectedChunk?.PropertyType == typeof(CRUID);
     }
 
     [ObservableProperty] private bool _isMesh;
@@ -87,6 +106,8 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [ObservableProperty] private bool _isConvertMaterialMenuEnabled;
     [ObservableProperty] private bool _isGenerateMaterialCommandEnabled;
     [ObservableProperty] private bool _isDeleteUnusedMaterialCommandEnabled;
+    [ObservableProperty] private bool _isRegenerateMaterialCommandEnabled;
+    [ObservableProperty] private bool _isGenerateNewCruidCommandEnabled;
 
     [ObservableProperty] private bool _isShiftKeyDown;
 
@@ -99,6 +120,8 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         IsMaterialMenuEnabled = false;
         IsGenerateMaterialCommandEnabled = false;
         IsDeleteUnusedMaterialCommandEnabled = false;
+        IsRegenerateMaterialCommandEnabled = false;
+        IsGenerateNewCruidCommandEnabled = false;
 
         if (CurrentTab is null)
         {
@@ -107,7 +130,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
         IsMesh = CurrentTab?.GetContentType() is RedDocumentItemType.Mesh;
         IsFileValidationMenuVisible = IsMesh || CurrentTab?.GetContentType() is RedDocumentItemType.App or RedDocumentItemType.Entity;
-
+        
         if (RootChunk?.ResolvedData is not CMesh mesh)
         {
             return;
@@ -116,6 +139,9 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         IsConvertMaterialMenuEnabled = mesh.PreloadExternalMaterials.Count > 0 || mesh.PreloadLocalMaterialInstances.Count > 0;
         IsGenerateMaterialCommandEnabled = mesh.Appearances.Count > 0;
         IsDeleteUnusedMaterialCommandEnabled = mesh.Appearances.Count > 0 || mesh.MaterialEntries.Count > 0;
+        
+        
+        
     }
 
     public void SetCurrentTab(RedDocumentTabViewModel value)
@@ -124,16 +150,10 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         RefreshMenuVisibility();
     }
 
-    [ObservableProperty] private bool _isEasyEditor;
-    [ObservableProperty] private bool _isDefaultEditor;
-    [ObservableProperty] private bool _isAdvancedEditor;
 
     public void SetEditorLevel(EditorDifficultyLevel level)
     {
         EditorLevel = level;
         RootChunk?.SetEditorLevel(level);
-        IsEasyEditor = level == EditorDifficultyLevel.Easy;
-        IsDefaultEditor = level == EditorDifficultyLevel.Default;
-        IsAdvancedEditor = level == EditorDifficultyLevel.Advanced;
     }
 }

@@ -67,6 +67,12 @@ namespace WolvenKit.Views.Documents
         private void OnClearAllMaterialsClick(object sender, RoutedEventArgs e) =>
             ViewModel?.RootChunk?.ClearMaterialsCommand.Execute(null);
 
+        private void OnRegenerateMaterialsClick(object sender, RoutedEventArgs e) =>
+            ViewModel?.SelectedChunk?.RegenerateAppearanceVisualControllerCommand.Execute(null);
+
+        private void OnGenerateNewCruidClick(object sender, RoutedEventArgs e) =>
+            ViewModel?.SelectedChunk?.GenerateCRUIDCommand.Execute(null);
+
         private void OnGenerateMissingMaterialsClick(object sender, RoutedEventArgs e)
         {
             var dialog = new CreateMaterialsDialog();

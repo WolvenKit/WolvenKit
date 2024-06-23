@@ -473,42 +473,6 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!-- For mesh root: Generate missing materials -->
-                <MenuItem
-                    Command="{Binding OpenGenerateMaterialsDialogCommand, Source={x:Reference redTreeView}}"
-                    Header="Generate missing materials"
-                    IsCheckable="False"
-                    Style="{StaticResource SyncfusionMenuItemStyle}"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="PlusBoxMultiple" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-                <!-- For Preload...: convert to local material -->
-                <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.ConvertPreloadMaterialsCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Convert to local materials"
-                    IsCheckable="False"
-                    Style="{StaticResource SyncfusionMenuItemStyle}"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="AccountConvert" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
                 <!-- Search & Replace -->
                 <MenuItem
                     Command="{Binding OpenSearchAndReplaceDialogCommand, Source={x:Reference redTreeView}}"
@@ -540,18 +504,6 @@
 
                     <MenuItem.Icon>
                         <iconPacks:PackIconMaterial Kind="Calculator" Style="{StaticResource ContextMenuIconStyleMaterial}" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-                <!-- Regenerate appearance dependencies -->
-                <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.RegenerateAppearanceVisualControllerCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Regenerate Appearance Dependencies"
-                    IsCheckable="False"
-                    Style="{StaticResource SyncfusionMenuItemStyle}"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="Refresh" Style="{StaticResource ContextMenuIconStyleMaterial}" />
                     </MenuItem.Icon>
                 </MenuItem>
 

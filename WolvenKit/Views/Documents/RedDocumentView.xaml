@@ -11,10 +11,10 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     d:DataContext="{d:DesignInstance Type={x:Type docVM:RedDocumentViewModel}}"
-    d:DesignHeight="450"
     d:DesignWidth="800"
     x:TypeArguments="docVM:RedDocumentViewModel"
     mc:Ignorable="d">
+
 
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
 
@@ -58,16 +58,20 @@
 
             <Style TargetType="{x:Type RowDefinition}" x:Key="MenuRowStyle">
                 <Setter Property="Height" Value="Auto" />
-
             </Style>
 
         </Grid.Resources>
 
-        <StackPanel Orientation="Vertical">
-            <docV:RedDocumentViewToolbar x:Name="RedDocumentViewToolbar" ViewModel="{Binding}" />
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <docV:RedDocumentViewToolbar Grid.Row="0" x:Name="RedDocumentViewToolbar" ViewModel="{Binding}" />
+            
         <syncfusion:TabControlExt
             x:Name="TabControl"
+            Grid.Row="1"
             Margin="-3,-2,-3,-3"
             Padding="0"
             AllowDragDrop="True"
@@ -75,6 +79,7 @@
             CloseButtonType="Hide"
             EnableLabelEdit="False"
             IsNewButtonEnabled="True"
+            Height="Auto"
             ItemsSource="{Binding TabItemViewModels, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
             SelectedIndex="{Binding SelectedIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             SelectedItem="{Binding SelectedTabItemViewModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -103,8 +108,6 @@
                     </Button>
                 </DataTemplate>
             </syncfusion:TabControlExt.NewTabButtonTemplate>
-
-
 
             <syncfusion:TabControlExt.ItemTemplate>
                 <DataTemplate>
@@ -172,26 +175,9 @@
                 </DataTemplate>
             </syncfusion:TabControlExt.ItemTemplate>
 
-            <!-- <syncfusion:TabControlExt.ContextMenu>
-                <ContextMenu DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}">
-                    <MenuItem Command="{Binding PlacementTarget.Tag.NewEmbeddedFileCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Header="New Embedded File">
-                        <MenuItem.Icon>
-                            <iconPacks:PackIconCodicons
-                                Width="13"
-                                Height="13"
-                                Padding="0,0,0,0"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Kind="Add" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                </ContextMenu>
-            </syncfusion:TabControlExt.ContextMenu>-->
-
         </syncfusion:TabControlExt>
-
-        </StackPanel>
 
     </Grid>
 
+    
 </reactiveUi:ReactiveUserControl>
