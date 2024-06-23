@@ -1,28 +1,38 @@
 using System;
 using System.ComponentModel;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.ClearScript;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Documents;
+using WolvenKit.App.ViewModels.Scripting;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
-using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.Modkit.Scripting;
 using WolvenKit.Views.Dialogs.Windows;
 
 namespace WolvenKit.Views.Documents
 {
     public partial class RedDocumentViewToolbar : ReactiveUserControl<RedDocumentViewToolbarModel>
     {
-        private AppScriptService _appScriptService;
+        private AppScriptService _scriptService;
+        private readonly ISettingsManager _settingsManager;
         
         
 
         public RedDocumentViewToolbar()
         {
-            _appScriptService = Locator.Current.GetService<AppScriptService>();
+            _scriptService = Locator.Current.GetService<AppScriptService>();
+            _settingsManager = Locator.Current.GetService<ISettingsManager>();
             InitializeComponent();
+
+            RegisterFileValidationScript();
 
             DataContext = new RedDocumentViewToolbarModel { CurrentTab = _currentTab };
 
@@ -39,6 +49,26 @@ namespace WolvenKit.Views.Documents
 
         private RedDocumentTabViewModel _currentTab;
 
+        private ScriptFileViewModel _fileValidationScript;
+
+        private void RegisterFileValidationScript()
+        {
+            _fileValidationScript = _scriptService.GetScripts(ISettingsManager.GetWScriptDir()).ToList()
+                .Where(s => s.Name == "run_FileValidation_on_active_tab")
+                .Select(s => new ScriptFileViewModel(_settingsManager, ScriptSource.User, s))
+                .FirstOrDefault();
+
+            _fileValidationScript ??= _scriptService.GetScripts(@"Resources\Scripts").ToList()
+                .Where(s => s.Name == "run_FileValidation_on_active_tab")
+                .Select(s => new ScriptFileViewModel(_settingsManager, ScriptSource.System, s))
+                .FirstOrDefault();
+
+            if (_fileValidationScript is null && ViewModel is not null)
+            {
+                ViewModel.IsFileValidationMenuVisible = false;
+            }
+        }
+
         public RedDocumentTabViewModel CurrentTab
         {
             get => _currentTab;
@@ -49,14 +79,20 @@ namespace WolvenKit.Views.Documents
             }
         }
 
-        private void RunFileValidation(object sender, RoutedEventArgs e)
+        private async Task RunFileValidation()
         {
-            if (ViewModel is { FilePath: string filePath, Cr2WFile: CR2WFile file })
+            if (_fileValidationScript is null || !File.Exists(_fileValidationScript.Path))
             {
-                // TODO this is not working yet
-                _appScriptService?.RunFileValidation(filePath, ref file);
+                return;
             }
+
+            var code = await File.ReadAllTextAsync(_fileValidationScript.Path);
+
+            await _scriptService.ExecuteAsync(code);
         }
+
+        private void OnFileValidationClick(object sender, RoutedEventArgs e) =>
+            Task.Run(async () => await RunFileValidation()).GetAwaiter().GetResult();
 
         private void OnConvertLocalMaterialsClick(object sender, RoutedEventArgs e) =>
             ViewModel?.RootChunk?.ConvertPreloadMaterialsCommand.Execute(null);
