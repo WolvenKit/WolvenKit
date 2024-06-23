@@ -8,7 +8,7 @@ using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.Services;
-using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevels;
+using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Core.Services;
 
 namespace WolvenKit.App.Factories;

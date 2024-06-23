@@ -8,7 +8,7 @@ using WolvenKit.App.Models.Nodify;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
-using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevels;
+using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
 

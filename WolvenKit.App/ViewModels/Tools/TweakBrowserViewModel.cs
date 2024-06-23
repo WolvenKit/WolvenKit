@@ -20,7 +20,6 @@ using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
-using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevels;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;

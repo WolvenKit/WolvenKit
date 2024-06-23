@@ -11,7 +11,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData.Binding;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Models;
-using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevels;
+using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common;
 using WolvenKit.Core;
 using WolvenKit.Core.Exceptions;

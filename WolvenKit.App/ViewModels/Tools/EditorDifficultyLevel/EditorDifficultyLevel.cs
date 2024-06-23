@@ -1,4 +1,4 @@
-﻿namespace WolvenKit.App.ViewModels.Tools.EditorDifficultyLevels;
+﻿namespace WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 
 public enum EditorDifficultyLevel
 {

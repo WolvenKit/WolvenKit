@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using WolvenKit.App.Models;
-using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevels;
+using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common;
 
 namespace WolvenKit.App.Services;

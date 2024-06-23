@@ -5,7 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Splat;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
-using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevels;
+using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
@@ -107,7 +107,6 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
         IsMesh = CurrentTab?.GetContentType() is RedDocumentItemType.Mesh;
         IsFileValidationMenuVisible = IsMesh || CurrentTab?.GetContentType() is RedDocumentItemType.App or RedDocumentItemType.Entity;
-
 
         if (RootChunk?.ResolvedData is not CMesh mesh)
         {
