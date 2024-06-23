@@ -85,7 +85,7 @@
             <MenuItem Header="File Validation"
                       Visibility="{ Binding  ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsFileValidationMenuVisible, Converter={ StaticResource BooleanToVisibilityConverter}}"
                       Style="{StaticResource WolvenKitToolBarItem}">
-                <MenuItem Header="Run FileValidation" Click="RunFileValidation" />
+                <MenuItem Header="Run FileValidation" Click="OnFileValidationClick" />
             </MenuItem>
 
             <!-- Mesh file: Materials menu -->
