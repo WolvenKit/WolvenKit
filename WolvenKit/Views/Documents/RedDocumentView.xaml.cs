@@ -2,6 +2,7 @@ using System;
 using System.Windows.Input;
 using ReactiveUI;
 using Syncfusion.Windows.Tools.Controls;
+using WolvenKit.App.Interaction;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 
@@ -36,6 +37,20 @@ namespace WolvenKit.Views.Documents
             }
 
             vm.EditorDifficultyLevel = level;
+
+
+            var result = Interactions.ShowConfirmation((
+                $"The file {vm.FilePath} has unsaved changes. Do you want to save it before reloading?",
+                "File Modified",
+                WMessageBoxImage.Question,
+                WMessageBoxButtons.YesNo));
+
+            if (result == WMessageBoxResult.No)
+            {
+                return;
+            }
+
+            
             vm.Reload(false);
         }
 

@@ -262,42 +262,13 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
     public override bool Reload(bool force)
     {
-        if (!File.Exists(FilePath))
+        if (!File.Exists(FilePath) || (!force && IsDirty))
         {
             return false;
         }
 
-        if (!force && IsDirty)
-        {
-            var result = Interactions.ShowConfirmation((
-                $"The file {FilePath} has unsaved changes. Do you want to save it before reloading?",
-                "File Modified",
-                WMessageBoxImage.Question,
-                WMessageBoxButtons.YesNo));
-
-            if (result == WMessageBoxResult.No)
-            {
-                return false;
-            }
-
-            SaveSync(null);
-
-        }
-
-        using var fs = File.Open(FilePath, FileMode.Open);
-        if (!_parserService.TryReadRed4File(fs, out var cr2wFile))
-        {
-            return false;
-        }
-
-        Cr2wFile = cr2wFile;
-        PopulateItems();
-
-        SetIsDirty(false);
-        LastWriteTime = File.GetLastWriteTime(FilePath);
-
+        SaveSync(null);
         return true;
-
     }
 
     public RedDocumentTabViewModel? GetMainFile()
