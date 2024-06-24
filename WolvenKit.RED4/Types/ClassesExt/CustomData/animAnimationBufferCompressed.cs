@@ -161,7 +161,7 @@ public partial class animAnimationBufferCompressed //: IRedAppendix
         }
     }
 
-    internal static Func<UInt16, float> DequantU16toF32 = (ui16) => (1f / 65535f) * ui16 * 2 - 1f;
+    internal static Func<UInt16, float> DequantU16toF32 = (ui16) => ((1f / 65535f) * ui16 * 2) - 1f;
     internal static Func<float, UInt16> QuantizeF32toU16 = (f32) => Convert.ToUInt16((f32 + 1) / 2 * (65535));
 
     public void ReadBuffer()
