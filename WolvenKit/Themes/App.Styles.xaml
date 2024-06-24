@@ -63,6 +63,10 @@
     <SolidColorBrush x:Key="ForegroundColor_Grey1" Color="#ababab" />
     <SolidColorBrush x:Key="ForegroundColor_Grey_Dark" Color="#969696" />
 
+    <!-- e.g. the hash box -->
+    <SolidColorBrush x:Key="ForegroundColor_Control_Secondary" Color="#666666" />
+    
+
     <SolidColorBrush x:Key="ForegroundColor_Cyan" Color="{StaticResource WolvenKitCyanColor}" />
     <SolidColorBrush x:Key="ForegroundColor_Yellow" Color="{StaticResource WolvenKitYellowColor}" />
     <SolidColorBrush x:Key="ForegroundColor_Red" Color="{StaticResource WolvenKitRedColor}" />
@@ -71,6 +75,7 @@
     <SolidColorBrush x:Key="BackgroundColor_Yellow" Color="{StaticResource WolvenKitYellowShadow50Color}" />
     <SolidColorBrush x:Key="BackgroundColor_Red" Color="{StaticResource WolvenKitRedShadow50Color}" />
 
+    <SolidColorBrush x:Key="BackgroundColor_Control" Color="#252525" />
     <SolidColorBrush x:Key="BackgroundColor_Frame_Active" Color="#313131" />
     <SolidColorBrush x:Key="BackgroundColor_Frame_Background" Color="#1F1F1F" />
 
