@@ -37,7 +37,7 @@ public partial class AppScriptService
         if (string.IsNullOrEmpty(filePath))
         {
             throw new ArgumentNullException(nameof(filePath));
-        }
+        }       
 
         var extStr = Path.GetExtension(filePath);
         if (extStr[0] == '.')
@@ -69,18 +69,19 @@ public partial class AppScriptService
             break;
         }
 
-        if (script != null)
+        if (script == null)
         {
-            var dto = new RedFileDto(cr2wFile);
-            dto.Header.ArchiveFileName = filePath;
+            return true;
+        }
 
-            var (success, json) = OnSaveExecute(script, extStr, RedJsonSerializer.Serialize(dto));
-            if (success == Enums.EBOOL.UNINITIALZED)
-            {
+        var dto = new RedFileDto(cr2wFile) { Header = { ArchiveFileName = filePath } };
+
+        var (success, json) = OnSaveExecute(script, extStr, RedJsonSerializer.Serialize(dto));
+        switch (success)
+        {
+            case Enums.EBOOL.UNINITIALZED:
                 return true;
-            }
-
-            if (success == Enums.EBOOL.TRUE)
+            case Enums.EBOOL.TRUE:
             {
                 if (!RedJsonSerializer.TryDeserialize(json, out RedFileDto? newDto) || newDto?.Data == null)
                 {
@@ -93,11 +94,13 @@ public partial class AppScriptService
                 return true;
             }
 
-            return false;
+            case Enums.EBOOL.FALSE:
+            default:
+                return false;
         }
-
-        return true;
     }
+
+    public void RunFileValidation(string filePath, ref CR2WFile cr2wFile) => OnSaveHook(filePath, ref cr2wFile);
 
     private (Enums.EBOOL, string) OnSaveExecute(ScriptFile scriptFile, string extStr, string json)
     {

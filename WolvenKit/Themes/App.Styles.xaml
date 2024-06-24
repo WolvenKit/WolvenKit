@@ -57,6 +57,11 @@
     <SolidColorBrush x:Key="ForegroundColor_Grey1" Color="#ababab" />
     <SolidColorBrush x:Key="ForegroundColor_Grey_Dark" Color="#969696" />
 
+    <SolidColorBrush x:Key="BackgroundColor_Frame_Active" Color="#313131" />
+    <SolidColorBrush x:Key="BackgroundColor_Frame_Background" Color="#1F1F1F" />
+
+    <SolidColorBrush x:Key="BackgroundColor_Button_Inactive" Color="#969696" />
+
     <Style
         x:Key="WolvenKitTabControl"
         BasedOn="{StaticResource SyncfusionDocumentTabControlExtStyle}"
