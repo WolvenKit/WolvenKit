@@ -64,7 +64,44 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
             }
         }
 
+        SetParentToolbarState();
+
         parent.PropertyChanged += RDTDataViewModel_PropertyChanged;
+    }
+
+    public ChunkViewModel? GetRootChunk() => Chunks.FirstOrDefault();
+
+    public override RedDocumentItemType GetContentType()
+    {
+        switch (GetRootChunk()?.ResolvedData)
+        {
+            case CMesh:
+                return RedDocumentItemType.Mesh;
+            case appearanceAppearanceResource:
+                return RedDocumentItemType.App;
+            case entEntityTemplate:
+                return RedDocumentItemType.Entity;
+            default:
+                return RedDocumentItemType.Other;
+        }
+    }
+
+    private void SetParentToolbarState()
+    {
+        if (Chunks[0] is not ChunkViewModel cvm)
+        {
+            return;
+        }
+
+        switch (cvm.ResolvedData)
+        {
+            case CMesh:
+            case appearanceAppearanceResource:
+                Parent.ShowToolbar = true;
+                break;
+            default:
+                break;
+        }
     }
 
     private void RDTDataViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)

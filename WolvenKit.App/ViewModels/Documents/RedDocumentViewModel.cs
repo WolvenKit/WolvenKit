@@ -124,6 +124,8 @@ public partial class RedDocumentViewModel : DocumentViewModel
                 break;
         }
 
+
+        ShowMenuToolbar = value?.FilePath.EndsWith(".mesh") == true;
         value?.OnSelected();
     }
 
@@ -141,6 +143,8 @@ public partial class RedDocumentViewModel : DocumentViewModel
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(NewEmbeddedFileCommand))]
     private string _extension;
+
+    [ObservableProperty] private bool _showMenuToolbar;
 
     #endregion
 

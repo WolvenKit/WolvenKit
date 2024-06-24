@@ -2,7 +2,6 @@
     x:Class="WolvenKit.Views.Documents.RedDocumentView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:converters="clr-namespace:WolvenKit.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:docV="clr-namespace:WolvenKit.Views.Documents"
     xmlns:docVM="clr-namespace:WolvenKit.App.ViewModels.Documents;assembly=WolvenKit.App"
@@ -11,7 +10,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     d:DataContext="{d:DesignInstance Type={x:Type docVM:RedDocumentViewModel}}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -58,7 +56,16 @@
                 <docV:RDTGraphView2 ViewModel="{Binding}" />
             </DataTemplate>
 
+            <Style TargetType="{x:Type RowDefinition}" x:Key="MenuRowStyle">
+                <Setter Property="Height" Value="Auto" />
+
+            </Style>
+
         </Grid.Resources>
+
+        <StackPanel Orientation="Vertical">
+            <docV:RedDocumentViewToolbar x:Name="RedDocumentViewToolbar" ViewModel="{Binding}" />
+        
         <syncfusion:TabControlExt
             x:Name="TabControl"
             Margin="-3,-2,-3,-3"
@@ -75,7 +82,6 @@
             Style="{StaticResource WolvenKitTabControl}"
             TabPanelBackground="#313131"
             Tag="{Binding}">
-
 
             <syncfusion:TabControlExt.NewTabButtonTemplate>
                 <DataTemplate>
@@ -184,6 +190,7 @@
 
         </syncfusion:TabControlExt>
 
+        </StackPanel>
 
     </Grid>
 

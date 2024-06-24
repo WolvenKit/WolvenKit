@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
@@ -9,6 +10,18 @@ using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.Documents;
+
+public enum RedDocumentItemType
+{
+    Mesh,
+    App,
+    Entity,
+    Texture,
+    MlMask,
+    MlSetup,
+    Sector,
+    Other,
+}
 
 public abstract partial class RedDocumentTabViewModel : ObservableObject
 {
@@ -37,6 +50,28 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
         }
     }
 
+    private static readonly Dictionary<string, RedDocumentItemType> s_fileExtensionsToTypes = new()
+    {
+        { ".mesh", RedDocumentItemType.Mesh },
+        { ".app", RedDocumentItemType.App },
+        { ".ent", RedDocumentItemType.Entity },
+        { ".xbm", RedDocumentItemType.Texture },
+        { ".mlmask", RedDocumentItemType.MlMask },
+        { ".mlsetup", RedDocumentItemType.MlSetup },
+        { ".sector", RedDocumentItemType.Sector },
+    };
+
+    public virtual RedDocumentItemType GetContentType()
+    {
+        var fileExtension = Path.GetExtension(FilePath);
+        if (s_fileExtensionsToTypes.TryGetValue(fileExtension, out var type))
+        {
+            return type;
+        }
+
+        return RedDocumentItemType.Other;
+    }
+
     public abstract ERedDocumentItemType DocumentItemType { get; }
     public string Header { get; set; }
     public string FilePath { get; set; }
@@ -44,7 +79,6 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
     [ObservableProperty] private RedDocumentViewModel _parent;
 
     [ObservableProperty] private bool _canClose;
-
 
     public static IRedType? CopiedChunk;
 
@@ -114,48 +148,41 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(CanRenameEmbeddedFile))]
     private void ExtractEmbeddedFile()
     {
-        if (this is RDTDataViewModel datavm)
+        if (this is not RDTDataViewModel datavm)
         {
-            CR2WEmbedded? embeddedFile = null;
-            foreach (var file in Parent.Cr2wFile.EmbeddedFiles)
-            {
-                if (ReferenceEquals(file.Content, datavm.GetData()))
-                {
-                    embeddedFile = (CR2WEmbedded)file;
-                    break;
-                }
-            }
-
-            if (embeddedFile != null)
-            {
-                var fileName = Path.GetFileName(embeddedFile.FileName.GetResolvedText()!);
-
-                var dlg = new SaveFileDialog
-                {
-                    FileName = fileName,
-                    Filter = "All files (*.*)|*.*"
-                };
-
-                if (Path.GetDirectoryName(Parent.FilePath) is { } parentPath && Directory.Exists(parentPath))
-                {
-                    dlg.InitialDirectory = parentPath;
-                }
-                else if (Parent.GetActiveProject() is {} project)
-                {
-                    dlg.InitialDirectory = project.ModDirectory;
-                }
-
-                if (!dlg.ShowDialog().GetValueOrDefault())
-                {
-                    return;
-                }
-
-                using var fs = File.Open(dlg.FileName, FileMode.OpenOrCreate);
-                using var cw = new CR2WWriter(fs);
-
-                cw.WriteFile(new CR2WFile { RootChunk = embeddedFile.Content });
-            }
+            return;
         }
+
+        var embeddedFile = Parent.Cr2wFile.EmbeddedFiles
+            .Where(file => ReferenceEquals(file.Content, datavm.GetData())).Cast<CR2WEmbedded>().FirstOrDefault();
+
+        if (embeddedFile == null)
+        {
+            return;
+        }
+
+        var fileName = Path.GetFileName(embeddedFile.FileName.GetResolvedText()!);
+
+        var dlg = new SaveFileDialog { FileName = fileName, Filter = "All files (*.*)|*.*" };
+
+        if (Path.GetDirectoryName(Parent.FilePath) is { } parentPath && Directory.Exists(parentPath))
+        {
+            dlg.InitialDirectory = parentPath;
+        }
+        else if (Parent.GetActiveProject() is { } project)
+        {
+            dlg.InitialDirectory = project.ModDirectory;
+        }
+
+        if (!dlg.ShowDialog().GetValueOrDefault())
+        {
+            return;
+        }
+
+        using var fs = File.Open(dlg.FileName, FileMode.OpenOrCreate);
+        using var cw = new CR2WWriter(fs);
+
+        cw.WriteFile(new CR2WFile { RootChunk = embeddedFile.Content });
     }
 
     public virtual void OnSelected()
