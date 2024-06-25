@@ -267,8 +267,21 @@ public partial class RedDocumentViewModel : DocumentViewModel
             return false;
         }
 
-        SaveSync(null);
+
+        using var fs = File.Open(FilePath, FileMode.Open);
+        if (!_parserService.TryReadRed4File(fs, out var cr2wFile))
+        {
+            return false;
+        }
+
+        Cr2wFile = cr2wFile;
+        PopulateItems();
+
+        SetIsDirty(false);
+        LastWriteTime = File.GetLastWriteTime(FilePath);
+
         return true;
+
     }
 
     public RedDocumentTabViewModel? GetMainFile()
