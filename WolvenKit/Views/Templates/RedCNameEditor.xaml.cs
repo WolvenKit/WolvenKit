@@ -23,14 +23,13 @@ namespace WolvenKit.Views.Editors
             InitializeComponent();
 
             _settingsManager = Locator.Current.GetService<ISettingsManager>();
-            RefreshValidity();
         }
 
         public bool IsValid { get; set; } = true;
 
         private void RefreshValidity()
         {
-            var newValidity = !_settingsManager.UseValidatingEditor ||
+            var newValidity = Text == "None" || _settingsManager?.UseValidatingEditor != true ||
                               (RedString.ToString() is string s && !s.EndsWith(s_space) && !s.StartsWith(s_space));
             if (IsValid == newValidity)
             {
@@ -52,22 +51,20 @@ namespace WolvenKit.Views.Editors
 
         private static void OnRedStringChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is RedCNameEditor view)
+            if (d is not RedCNameEditor view)
             {
-                view.OnPropertyChanged(nameof(Text));
-                view.OnPropertyChanged(nameof(Hash));
+                return;
             }
+
+            view.OnPropertyChanged(nameof(Text));
+            view.OnPropertyChanged(nameof(Hash));
         }
 
 
         public string Text
         {
             get => RedString;
-            set
-            {
-                SetValue(RedStringProperty, (CName)value);
-                RefreshValidity();
-            }
+            set => SetValue(RedStringProperty, (CName)value);
         }
 
         public string Hash
@@ -144,7 +141,15 @@ namespace WolvenKit.Views.Editors
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            if (propertyName == nameof(Text))
+            {
+                RefreshValidity();
+            }
+
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         private void OnTextboxFocusLost(object sender, RoutedEventArgs e) => RefreshValidity();
     }

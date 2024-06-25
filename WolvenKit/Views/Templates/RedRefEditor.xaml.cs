@@ -187,19 +187,20 @@ namespace WolvenKit.Views.Editors
 
         private void RefreshValidity(object sender, RoutedEventArgs e)
         {
-            if (!_settingsManager.UseValidatingEditor || RedRef.ToString() is not string filePath || filePath.Trim().IsNullOrEmpty())
+            if (_settingsManager?.UseValidatingEditor != true || RedRef.ToString() is not string filePath ||
+                filePath.Trim().IsNullOrEmpty())
             {
                 SetCurrentValue(ScopeProperty, FileScope.Unknown);
                 return;
             }
 
-            if (_archiveManager.GetGameFile(filePath, false, true) is not null)
+            if (_archiveManager?.GetGameFile(filePath, false, true) is not null)
             {
                 SetCurrentValue(ScopeProperty, FileScope.GameOrMod);
                 return;
             }
 
-            if (_archiveManager.GetGameFile(filePath, true, false) is not null)
+            if (_archiveManager?.GetGameFile(filePath, true, false) is not null)
             {
                 SetCurrentValue(ScopeProperty, FileScope.OtherMod);
                 return;
