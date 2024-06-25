@@ -142,6 +142,7 @@ public class SettingsDto : ISettingsDto
         settingsManager.ModderEmail = ModderEmail;
         settingsManager.RefactoringCheckboxDefaultValue = RefactoringCheckboxDefaultValue;
         settingsManager.LastLaunchProfile = LastLaunchProfile;
+        settingsManager.UseValidatingEditor = UseValidatingEditor;
 
         return settingsManager;
     }

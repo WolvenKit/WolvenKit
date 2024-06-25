@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using WolvenKit.Helpers;
 
 namespace WolvenKit.Views.Editors
@@ -31,10 +32,49 @@ namespace WolvenKit.Views.Editors
         /// </summary>
         [DefaultValue("")]
         [Localizability(LocalizationCategory.Text)]
+        public new Brush BorderBrush
+        {
+            get => (Brush)GetValue(BorderBrushProperty);
+            set => SetValue(BorderBrushProperty, value);
+        }
+
+        /// <summary>
+        /// The DependencyID for the BorderBrush property.
+        /// Default Value:      ""
+        /// </summary>
+        public static new readonly DependencyProperty BorderBrushProperty = DependencyProperty.Register(
+            nameof(BorderBrush), // Property name
+            typeof(Brush), // Property type
+            typeof(TrimmingTextBox), // Property owner
+            new FrameworkPropertyMetadata( // Property metadata
+                default(Brush)) // default value
+        );
+
+        /// <summary>
+        /// Contents of the TextBox.
+        /// </summary>
+        [DefaultValue("")]
+        [Localizability(LocalizationCategory.Text)]
         public string Text
         {
             get => (string)GetValue(TextProperty);
             set => SetValue(TextProperty, value);
+        }
+
+
+        public static readonly DependencyProperty TooltipProperty =
+            DependencyProperty.Register(
+                nameof(Tooltip), // Property name
+                typeof(string), // Property type
+                typeof(TrimmingTextBox), // Property owner
+                new FrameworkPropertyMetadata( // Property metadata
+                    string.Empty // default value
+                ));
+
+        public string Tooltip
+        {
+            get => (string)GetValue(TooltipProperty);
+            set => SetValue(TooltipProperty, value);
         }
 
         #endregion

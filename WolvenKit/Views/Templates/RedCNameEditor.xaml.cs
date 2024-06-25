@@ -145,5 +145,7 @@ namespace WolvenKit.Views.Editors
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        private void OnTextboxFocusLost(object sender, RoutedEventArgs e) => RefreshValidity();
     }
 }

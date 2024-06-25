@@ -11,20 +11,6 @@
     mc:Ignorable="d">
 
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedCNameEditor}}}">
-        <Grid.Resources>
-            <Style x:Key="ValidatingControlStyle" TargetType="{x:Type TextBox}">
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding Path=IsValid}" Value="False">
-                        <Setter Property="BorderBrush" Value="{DynamicResource Border}" />
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=IsValid}" Value="True">
-                        <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Yellow}" />
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-        </Grid.Resources>
-        
-        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="155" />
@@ -35,7 +21,8 @@
             Grid.Column="0"
             helpers:TextBoxBehavior.TripleClickSelectAll="True"
             Style="{StaticResource ValidatingControlStyle}"
-            Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+            LostFocus="OnTextboxFocusLost" />
         <TextBox
             x:Name="HashBox"
             Grid.Column="1"
