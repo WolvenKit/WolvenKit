@@ -99,13 +99,41 @@
 
     <Style x:Key="ValidatingControlStyle" TargetType="{x:Type TextBox}">
         <Style.Triggers>
-            <DataTrigger Binding="{Binding Path=IsValid}" Value="False">
-                <Setter Property="BorderBrush" Value="{DynamicResource BackgroundColor_Yellow}" />
-            </DataTrigger>
             <DataTrigger Binding="{Binding Path=IsValid}" Value="True">
                 <Setter Property="BorderBrush" Value="{StaticResource BorderAlt}" />
             </DataTrigger>
+            <DataTrigger Binding="{Binding Path=IsValid}" Value="False">
+                <Setter Property="BorderBrush" Value="{DynamicResource BackgroundColor_Yellow}" />
+            </DataTrigger>
         </Style.Triggers>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Border Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
+                        <ScrollViewer x:Name="PART_ContentHost" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsFocused}" Value="True" />
+                                <Condition Binding="{Binding Path=IsValid}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource BackgroundColor_Yellow}" />
+                            <Setter TargetName="border" Property="BorderThickness" Value="2" />
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver}" Value="True" />
+                                <Condition Binding="{Binding Path=IsValid}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource ForegroundColor_Yellow}" />
+                            <Setter TargetName="border" Property="BorderThickness" Value="2" />
+                        </MultiDataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        
     </Style>
 
     <Style x:Key="TextBoxTCSA" TargetType="{x:Type TextBox}">

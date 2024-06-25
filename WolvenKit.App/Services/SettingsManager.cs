@@ -272,7 +272,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     private bool _showRedmodInRibbon;
 
     [Display(Name = "Use validating editor?",
-        Description = "Editors validate themselves (or try to)?",
+        Description = "Editor fields validate themselves (or try to). Disable this if you run into editor performance issues.",
         GroupName = "Interface")]
     [ObservableProperty]
     private bool _useValidatingEditor;
