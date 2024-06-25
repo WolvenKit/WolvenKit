@@ -58,6 +58,7 @@ public class SettingsDto : ISettingsDto
         RefactoringCheckboxDefaultValue = settings.RefactoringCheckboxDefaultValue;
         LastLaunchProfile = settings.LastLaunchProfile;
         ShowRedmodInRibbon = settings.ShowRedmodInRibbon;
+        UseValidatingEditor = settings.UseValidatingEditor;
 
         MigrateSettings(settings.SettingsVersion);
     }
@@ -94,6 +95,7 @@ public class SettingsDto : ISettingsDto
     public string? LastUsedProjectPath { get; set; }
     public string? LastLaunchProfile { get; set; }
     public bool ShowRedmodInRibbon { get; set; }
+    public bool UseValidatingEditor { get; set; } = true;
     public int PinnedOrder { get; set; }
     public int RecentOrder { get; set; }
     public bool ShowGraphEditorNodeProperties { get; set; } = true;
@@ -140,6 +142,7 @@ public class SettingsDto : ISettingsDto
         settingsManager.ModderEmail = ModderEmail;
         settingsManager.RefactoringCheckboxDefaultValue = RefactoringCheckboxDefaultValue;
         settingsManager.LastLaunchProfile = LastLaunchProfile;
+        settingsManager.UseValidatingEditor = UseValidatingEditor;
 
         return settingsManager;
     }

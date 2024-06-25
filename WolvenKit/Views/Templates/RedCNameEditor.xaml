@@ -20,7 +20,9 @@
             x:Name="TextBox"
             Grid.Column="0"
             helpers:TextBoxBehavior.TripleClickSelectAll="True"
-            Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            Style="{StaticResource ValidatingControlStyle}"
+            Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+            LostFocus="OnTextboxFocusLost" />
         <TextBox
             x:Name="HashBox"
             Grid.Column="1"

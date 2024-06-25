@@ -3,17 +3,25 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
+using DynamicData.Kernel;
+using HandyControl.Tools.Extension;
 using Splat;
 using WolvenKit.App.Services;
-using WolvenKit.Converters;
+using WolvenKit.Common;
+using WolvenKit.Common.Extensions;
 using WolvenKit.RED4.Types;
-using WolvenKit.Views.Templates;
+
+public enum FileScope
+{
+    GameOrMod,
+    OtherMod,
+    NotFound,
+    Unknown
+}
 
 namespace WolvenKit.Views.Editors
 {
@@ -23,13 +31,16 @@ namespace WolvenKit.Views.Editors
     public partial class RedRefEditor : INotifyPropertyChanged
     {
         private readonly ISettingsManager _settingsManager;
+        private readonly IAppArchiveManager _archiveManager;
 
         public IEnumerable<InternalEnums.EImportFlags> EnumValues => Enum.GetValues(typeof(InternalEnums.EImportFlags)).Cast<InternalEnums.EImportFlags>();
+
 
         public RedRefEditor()
         {
             InitializeComponent();
             _settingsManager = Locator.Current.GetService<ISettingsManager>();
+            _archiveManager = Locator.Current.GetService<IAppArchiveManager>();
 
             FlagsComboBox.SelectionChanged += FlagsComboBox_OnSelectionChanged;
         }
@@ -45,10 +56,33 @@ namespace WolvenKit.Views.Editors
 
         private static void OnRedRefChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is RedRefEditor view && view.RedRef != null)
+            if (d is not RedRefEditor { RedRef: not null } view)
             {
-                view.OnPropertyChanged(nameof(DepotPath));
-                view.OnPropertyChanged(nameof(Hash));
+                return;
+            }
+
+            view.OnPropertyChanged(nameof(DepotPath));
+            view.OnPropertyChanged(nameof(Hash));
+        }
+
+        public FileScope Scope
+        {
+            get => (FileScope)GetValue(ScopeProperty);
+            set => SetValue(ScopeProperty, value);
+        }
+
+        public static readonly DependencyProperty ScopeProperty = DependencyProperty.Register(
+            nameof(Scope),
+            typeof(FileScope),
+            typeof(RedRefEditor),
+            new PropertyMetadata(default(FileScope), OnScopeChanged)
+        );
+
+        private static void OnScopeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is RedRefEditor { RedRef: not null } view)
+            {
+                view.OnPropertyChanged(nameof(Scope));
             }
         }
 
@@ -147,9 +181,31 @@ namespace WolvenKit.Views.Editors
                 }
             }
         }
-
        
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        private void RefreshValidity(object sender, RoutedEventArgs e)
+        {
+            if (!_settingsManager.UseValidatingEditor || RedRef.ToString() is not string filePath || filePath.Trim().IsNullOrEmpty())
+            {
+                SetCurrentValue(ScopeProperty, FileScope.Unknown);
+                return;
+            }
+
+            if (_archiveManager.GetGameFile(filePath, false, true) is not null)
+            {
+                SetCurrentValue(ScopeProperty, FileScope.GameOrMod);
+                return;
+            }
+
+            if (_archiveManager.GetGameFile(filePath, true, false) is not null)
+            {
+                SetCurrentValue(ScopeProperty, FileScope.OtherMod);
+                return;
+            }
+
+            SetCurrentValue(ScopeProperty, FileScope.NotFound);
+        }
     }
 }

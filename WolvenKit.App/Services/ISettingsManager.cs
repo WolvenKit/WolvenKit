@@ -187,4 +187,6 @@ public interface ISettingsManager : ISettingsDto, INotifyPropertyChanged
     string LastLaunchProfile { get; set; }
 
     bool ShowRedmodInRibbon { get; set; }
+
+    bool UseValidatingEditor { get; set; }
 }
