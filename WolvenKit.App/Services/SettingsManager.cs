@@ -67,7 +67,8 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(ModderEmail),
             nameof(RefactoringCheckboxDefaultValue),
             nameof(LastLaunchProfile),
-            nameof(ShowRedmodInRibbon)
+            nameof(ShowRedmodInRibbon),
+            nameof(UseValidatingEditor)
             )
           .Subscribe(_ =>
           {
@@ -269,6 +270,12 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
         GroupName = "Interface")]
     [ObservableProperty]
     private bool _showRedmodInRibbon;
+
+    [Display(Name = "Use validating editor?",
+        Description = "Editor fields validate themselves (or try to). Disable this if you run into editor performance issues.",
+        GroupName = "Interface")]
+    [ObservableProperty]
+    private bool _useValidatingEditor;
 
     [Display(Name = "Additional Mod directory", Description = "Path to an optional directory containing mod archives", GroupName = "Cyberpunk")]
     [ObservableProperty]

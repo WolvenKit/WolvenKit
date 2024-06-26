@@ -16,6 +16,8 @@ namespace WolvenKit.Views.Editors
     {
         private readonly ISettingsManager _settingsManager;
 
+        private const string s_space = " ";
+
         public RedCNameEditor()
         {
             InitializeComponent();
@@ -23,6 +25,22 @@ namespace WolvenKit.Views.Editors
             _settingsManager = Locator.Current.GetService<ISettingsManager>();
         }
 
+        public bool IsValid { get; set; } = true;
+
+        private void RefreshValidity()
+        {
+            var newValidity = Text == "None" || _settingsManager?.UseValidatingEditor != true ||
+                              (RedString.ToString() is string s && !s.EndsWith(s_space) && !s.StartsWith(s_space));
+            if (IsValid == newValidity)
+            {
+                return;
+            }
+
+            IsValid = newValidity;
+            OnPropertyChanged(nameof(IsValid));
+        }
+
+        
         public CName RedString
         {
             get => (CName)GetValue(RedStringProperty);
@@ -33,12 +51,15 @@ namespace WolvenKit.Views.Editors
 
         private static void OnRedStringChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is RedCNameEditor view)
+            if (d is not RedCNameEditor view)
             {
-                view.OnPropertyChanged(nameof(Text));
-                view.OnPropertyChanged(nameof(Hash));
+                return;
             }
+
+            view.OnPropertyChanged(nameof(Text));
+            view.OnPropertyChanged(nameof(Hash));
         }
+
 
         public string Text
         {
@@ -88,34 +109,48 @@ namespace WolvenKit.Views.Editors
 
         private void HashBox_OnPasting(object sender, DataObjectPastingEventArgs e)
         {
-            if (e.DataObject.GetDataPresent(typeof(string)))
+            if (!e.DataObject.GetDataPresent(typeof(string)))
             {
-                var text = (string)e.DataObject.GetData(typeof(string));
-                var full = HashBox.Text.Remove(HashBox.SelectionStart, HashBox.SelectionLength).Insert(HashBox.CaretIndex, text!);
+                e.CancelCommand();
+                return;
+            }
 
-                if (_settingsManager.ShowCNameAsHex)
+            var text = (string)e.DataObject.GetData(typeof(string))!;
+            if (_settingsManager.UseValidatingEditor)
+            {
+                text = text.Trim();
+            }
+
+            var full = HashBox.Text.Remove(HashBox.SelectionStart, HashBox.SelectionLength).Insert(HashBox.CaretIndex, text);
+
+            if (_settingsManager.ShowCNameAsHex)
+            {
+                if (!ulong.TryParse(full, NumberStyles.HexNumber, CultureInfo.CurrentCulture, out _))
                 {
-                    if (!ulong.TryParse(full, NumberStyles.HexNumber, CultureInfo.CurrentCulture, out _))
-                    {
-                        e.CancelCommand();
-                    }
-                }
-                else
-                {
-                    if (!ulong.TryParse(full, out _))
-                    {
-                        e.CancelCommand();
-                    }
+                    e.CancelCommand();
                 }
             }
             else
             {
-                e.CancelCommand();
+                if (!ulong.TryParse(full, out _))
+                {
+                    e.CancelCommand();
+                }
             }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            if (propertyName == nameof(Text))
+            {
+                RefreshValidity();
+            }
+
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void OnTextboxFocusLost(object sender, RoutedEventArgs e) => RefreshValidity();
     }
 }

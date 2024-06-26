@@ -7,7 +7,8 @@
     xmlns:sfskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
     xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
     xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
-    xmlns:syncfusion="http://schemas.syncfusion.com/wpf">
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:local="clr-namespace:WolvenKit.Views.Editors">
 
     <ResourceDictionary.MergedDictionaries>
         <sfskin:ResourceDictionaryProvider DictionaryName="Common" ThemeName="MaterialDark" />
@@ -63,6 +64,10 @@
     <SolidColorBrush x:Key="ForegroundColor_Grey1" Color="#ababab" />
     <SolidColorBrush x:Key="ForegroundColor_Grey_Dark" Color="#969696" />
 
+    <!-- e.g. the hash box -->
+    <SolidColorBrush x:Key="ForegroundColor_Control_Secondary" Color="#666666" />
+    
+
     <SolidColorBrush x:Key="ForegroundColor_Cyan" Color="{StaticResource WolvenKitCyanColor}" />
     <SolidColorBrush x:Key="ForegroundColor_Yellow" Color="{StaticResource WolvenKitYellowColor}" />
     <SolidColorBrush x:Key="ForegroundColor_Red" Color="{StaticResource WolvenKitRedColor}" />
@@ -71,6 +76,7 @@
     <SolidColorBrush x:Key="BackgroundColor_Yellow" Color="{StaticResource WolvenKitYellowShadow50Color}" />
     <SolidColorBrush x:Key="BackgroundColor_Red" Color="{StaticResource WolvenKitRedShadow50Color}" />
 
+    <SolidColorBrush x:Key="BackgroundColor_Control" Color="#252525" />
     <SolidColorBrush x:Key="BackgroundColor_Frame_Active" Color="#313131" />
     <SolidColorBrush x:Key="BackgroundColor_Frame_Background" Color="#1F1F1F" />
 
@@ -89,6 +95,45 @@
         <Setter Property="BorderThickness" Value="0" />
 
         <!--  Setter Property="TabPanelBackground" Value="#313131" /  -->
+    </Style>
+
+    <Style x:Key="ValidatingControlStyle" TargetType="{x:Type TextBox}">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Path=IsValid}" Value="True">
+                <Setter Property="BorderBrush" Value="{StaticResource BorderAlt}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=IsValid}" Value="False">
+                <Setter Property="BorderBrush" Value="{DynamicResource BackgroundColor_Yellow}" />
+            </DataTrigger>
+        </Style.Triggers>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Border Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
+                        <ScrollViewer x:Name="PART_ContentHost" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsFocused}" Value="True" />
+                                <Condition Binding="{Binding Path=IsValid}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource BackgroundColor_Yellow}" />
+                            <Setter TargetName="border" Property="BorderThickness" Value="2" />
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver}" Value="True" />
+                                <Condition Binding="{Binding Path=IsValid}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource ForegroundColor_Yellow}" />
+                            <Setter TargetName="border" Property="BorderThickness" Value="2" />
+                        </MultiDataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        
     </Style>
 
     <Style x:Key="TextBoxTCSA" TargetType="{x:Type TextBox}">

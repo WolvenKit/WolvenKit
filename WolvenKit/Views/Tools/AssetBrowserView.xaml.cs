@@ -323,5 +323,10 @@ namespace WolvenKit.Views.Tools
                 }
             }
         }
+
+        private void ScanModArchivesButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            ViewModel.ScanModArchives();
+        }
     }
 }

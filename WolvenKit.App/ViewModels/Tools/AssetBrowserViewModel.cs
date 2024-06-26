@@ -600,17 +600,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     {
         if (!_archiveManager.IsModBrowserActive)
         {
-            if (_settings.CP77ExecutablePath is null)
-            {
-                return;
-            }
-            _archiveManager.LoadModsArchives(new FileInfo(_settings.CP77ExecutablePath), _settings.AnalyzeModArchives);
-
-            if (Directory.Exists(_settings.ExtraModDirPath))
-            {
-                _archiveManager.LoadAdditionalModArchives(_settings.ExtraModDirPath, _settings.AnalyzeModArchives);
-            }
-
+            ScanModArchives(true);
             LeftItems = new ObservableCollection<RedFileSystemModel>(_archiveManager.ModRoots);
         }
         else
@@ -965,4 +955,20 @@ public partial class AssetBrowserViewModel : ToolViewModel
         LeftSelectedItem = LeftItems.ToList().FirstOrDefault((item) => item.Name.Contains(itemName));
     }
     #endregion methods
+
+    public void ScanModArchives(bool readScanFromSettings = false)
+    {
+        if (_settings.CP77ExecutablePath is null)
+        {
+            return;
+        }
+
+        var conductScan = !readScanFromSettings || _settings.AnalyzeModArchives;
+        _archiveManager.LoadModsArchives(new FileInfo(_settings.CP77ExecutablePath), conductScan);
+
+        if (Directory.Exists(_settings.ExtraModDirPath))
+        {
+            _archiveManager.LoadAdditionalModArchives(_settings.ExtraModDirPath, conductScan);
+        }
+    }
 }
