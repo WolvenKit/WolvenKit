@@ -21,6 +21,7 @@ public enum FileScope
     GameOrMod,
     OtherMod,
     NotFound,
+    NotFoundWarning,
     InvalidSubstitution,
     Unknown
 }
@@ -207,17 +208,28 @@ namespace WolvenKit.Views.Editors
                 return;
             }
 
-            if (ArchiveXlHelper.GetValuesForInvalidSubstitution(RedRef.DepotPath.GetResolvedText()) is string invalidSubstitutions)
+
+            if (ArchiveXlHelper.GetValuesForInvalidSubstitution(filePath) is string invalidSubstitutions)
             {
                 SetCurrentValue(ScopeProperty, FileScope.InvalidSubstitution);
                 SetCurrentValue(TextBoxToolTipProperty, invalidSubstitutions);
                 return;
             }
 
-            if (_archiveManager?.GetGameFile(filePath, false, true) is not null)
+
+            if (!ArchiveXlHelper.HasSubstitution(filePath) &&
+                _archiveManager?.GetGameFile(filePath, false, true) is not null)
             {
                 SetCurrentValue(ScopeProperty, FileScope.GameOrMod);
                 SetCurrentValue(TextBoxToolTipProperty, "Valid depot path (game or mod)");
+                return;
+            }
+
+            if (!ArchiveXlHelper.HasSubstitution(filePath) &&
+                App.Helpers.ArchiveXlHelper.GetFirstExistingPath(filePath) is null)
+            {
+                SetCurrentValue(ScopeProperty, FileScope.NotFoundWarning);
+                SetCurrentValue(TextBoxToolTipProperty, "Substitution couldn't be resolved (ignore this if everything works)");
                 return;
             }
 
@@ -227,6 +239,7 @@ namespace WolvenKit.Views.Editors
                 SetCurrentValue(TextBoxToolTipProperty, "Valid depot path (another mod)");
                 return;
             }
+            
 
             SetCurrentValue(ScopeProperty, FileScope.NotFound);
             SetCurrentValue(TextBoxToolTipProperty, "Invalid depot path (not found)");
