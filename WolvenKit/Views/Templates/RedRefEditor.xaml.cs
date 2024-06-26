@@ -199,8 +199,8 @@ namespace WolvenKit.Views.Editors
 
         private void RefreshValidityAndTooltip(object sender, RoutedEventArgs e)
         {
-            if (_settingsManager?.UseValidatingEditor != true || RedRef.DepotPath == ResourcePath.Empty ||
-                RedRef.ToString() is not string filePath ||
+            if (_settingsManager?.UseValidatingEditor != true || RedRef?.DepotPath == ResourcePath.Empty ||
+                RedRef?.ToString() is not string filePath ||
                 filePath.Trim().IsNullOrEmpty())
             {
                 SetCurrentValue(ScopeProperty, FileScope.Unknown);
