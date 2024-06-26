@@ -19,18 +19,18 @@ public partial class ArchiveXlHelper
     /// <returns>The resolved reference</returns>
     public static IRedRef ResolvePotentiallyDynamicDepotPath(IRedRef resourceReference, string substitutionValue)
     {
-        var baseMaterialPath = resourceReference.DepotPath.GetResolvedText();
-        if (baseMaterialPath is not string || string.IsNullOrEmpty(baseMaterialPath))
+        var depotPath = resourceReference.DepotPath.GetResolvedText();
+        if (depotPath is not string || string.IsNullOrEmpty(depotPath))
         {
             return new CResourceAsyncReference<IMaterial>(DefaultMaterials.DefaultMiPath);
         }
 
-        if (!baseMaterialPath.StartsWith('*'))
+        if (!depotPath.StartsWith('*'))
         {
             return resourceReference;
         }
 
-        return new CResourceAsyncReference<IMaterial>(baseMaterialPath.Replace(s_materialWildcard, substitutionValue)[1..]);
+        return new CResourceAsyncReference<IMaterial>(depotPath.Replace(s_materialWildcard, substitutionValue)[1..]);
     }
 
     /// <summary>
@@ -57,6 +57,8 @@ public partial class ArchiveXlHelper
         return new CResourceReference<IMaterial>(baseMaterialPath.Replace(s_materialWildcard, substitutionValue)[1..]);
 
     }
+    
+    
 
     private static readonly Dictionary<string, List<string>> s_substitutionMap =
         new()
@@ -65,12 +67,7 @@ public partial class ArchiveXlHelper
             { "feet", ["lifted", "flat", "high_heels", "flat_shoes"] }, //
             { "arms", ["base_arms", "mantis_blades", "monowire", "projectile_launch"] }, //
             { "gender", ["m", "w"] },
-            {
-                "body", [
-                    "base_body", "lush", "ebb", "ebbrb", "ebbprb", "ebbp", "ebbwtfbbq", "angel",
-                    "gymfiend", "atlas"
-                ]
-            },
+            { "body", ["base_body", "for a list check https://tinyurl.com/cyberpunk-body-mods"] },
         };
 
 
