@@ -81,7 +81,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
             case appearanceAppearanceResource:
                 return RedDocumentItemType.App;
             case entEntityTemplate:
-                return RedDocumentItemType.Entity;
+                return RedDocumentItemType.Ent;
             default:
                 return RedDocumentItemType.Other;
         }
