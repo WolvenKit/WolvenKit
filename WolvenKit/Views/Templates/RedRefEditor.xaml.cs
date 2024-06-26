@@ -13,6 +13,7 @@ using Splat;
 using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
+using WolvenKit.Modkit.Resources;
 using WolvenKit.RED4.Types;
 
 public enum FileScope
@@ -20,6 +21,7 @@ public enum FileScope
     GameOrMod,
     OtherMod,
     NotFound,
+    InvalidSubstitution,
     Unknown
 }
 
@@ -181,33 +183,53 @@ namespace WolvenKit.Views.Editors
                 }
             }
         }
-       
+
+        public static readonly DependencyProperty TextBoxToolTipProperty = DependencyProperty.Register(
+            nameof(TextBoxToolTip), typeof(string), typeof(RedRefEditor), new PropertyMetadata(default(string)));
+
+        public string TextBoxToolTip
+        {
+            get => TextBoxToolTip;
+            set => SetValue(TextBoxToolTipProperty, value);
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-        private void RefreshValidity(object sender, RoutedEventArgs e)
+        private void RefreshValidityAndTooltip(object sender, RoutedEventArgs e)
         {
             if (_settingsManager?.UseValidatingEditor != true || RedRef.DepotPath == ResourcePath.Empty ||
                 RedRef.ToString() is not string filePath ||
                 filePath.Trim().IsNullOrEmpty())
             {
                 SetCurrentValue(ScopeProperty, FileScope.Unknown);
+                SetCurrentValue(TextBoxToolTipProperty, "Not validating this resource path");
+                return;
+            }
+
+            if (ArchiveXlHelper.GetValuesForInvalidSubstitution(RedRef.DepotPath.GetResolvedText()) is string invalidSubstitutions)
+            {
+                SetCurrentValue(ScopeProperty, FileScope.InvalidSubstitution);
+                SetCurrentValue(TextBoxToolTipProperty, invalidSubstitutions);
                 return;
             }
 
             if (_archiveManager?.GetGameFile(filePath, false, true) is not null)
             {
                 SetCurrentValue(ScopeProperty, FileScope.GameOrMod);
+                SetCurrentValue(TextBoxToolTipProperty, "Valid depot path (game or mod)");
                 return;
             }
 
             if (_archiveManager?.GetGameFile(filePath, true, false) is not null)
             {
                 SetCurrentValue(ScopeProperty, FileScope.OtherMod);
+                SetCurrentValue(TextBoxToolTipProperty, "Valid depot path (another mod)");
                 return;
             }
 
             SetCurrentValue(ScopeProperty, FileScope.NotFound);
+            SetCurrentValue(TextBoxToolTipProperty, "Invalid depot path (not found)");
         }
     }
 }

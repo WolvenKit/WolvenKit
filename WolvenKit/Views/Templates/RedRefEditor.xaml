@@ -18,20 +18,19 @@
             <Style x:Key="ValidatingDepotPathStyle" TargetType="{x:Type local:TrimmingTextBox}">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Scope}" Value="{x:Static global:FileScope.GameOrMod}">
-                        <Setter Property="Tooltip" Value="File found in game or project files" />
-                        <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Cyan}" />
+                        <Setter Property="BorderBrush" Value="{StaticResource BorderAlt}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Scope}" Value="{x:Static global:FileScope.Unknown}">
+                        <Setter Property="BorderBrush" Value="{StaticResource BorderAlt}" />
                     </DataTrigger>
                     <DataTrigger Binding="{Binding Scope}" Value="{x:Static global:FileScope.OtherMod}">
-                        <Setter Property="Tooltip" Value="File found in other mods, project, or mod files" />
                         <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Yellow}" />
                     </DataTrigger>
                     <DataTrigger Binding="{Binding Scope}" Value="{x:Static global:FileScope.NotFound}">
-                        <Setter Property="Tooltip" Value="File not found in game, project, or mod files" />
                         <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Red}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Scope}" Value="{x:Static global:FileScope.Unknown}">
-                        <Setter Property="Tooltip" Value="What file???" />
-                        <Setter Property="BorderBrush" Value="{StaticResource BorderAlt}" />
+                    <DataTrigger Binding="{Binding Scope}" Value="{x:Static global:FileScope.InvalidSubstitution}">
+                        <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Red}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
@@ -59,7 +58,8 @@
             Grid.Column="1"
             helpers:TextBoxBehavior.TripleClickSelectAll="True"
             KeyboardNavigation.TabIndex="1"
-            LostFocus="RefreshValidity"
+            LostFocus="RefreshValidityAndTooltip"
+            Tooltip="{Binding Path=TextBoxToolTip}"
             Text="{Binding DepotPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
         <TextBox
             x:Name="HashBox"
