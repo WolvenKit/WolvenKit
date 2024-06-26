@@ -41,7 +41,7 @@ namespace WolvenKit.Views.Editors
             else if (ArchiveXlHelper.GetValuesForInvalidConditions(Text) is string invalidConditions)
             {
                 newValidity = false;
-                TextBoxToolTip = $"Invalid dynamic appearance condition! Valid checks are: {invalidConditions}";
+                TextBoxToolTip = $"Invalid dynamic appearance condition! {invalidConditions}";
             }
             else if (!s_validCharactersRegex().IsMatch(Text))
             {
