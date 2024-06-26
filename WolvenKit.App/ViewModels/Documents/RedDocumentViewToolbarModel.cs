@@ -57,10 +57,20 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         {
             RedDocumentItemType.Mesh
                 or RedDocumentItemType.App
-                or RedDocumentItemType.Entity => true,
-            RedDocumentItemType.Texture
-                or RedDocumentItemType.MlMask
-                or RedDocumentItemType.MlSetup
+                or RedDocumentItemType.Csv
+                or RedDocumentItemType.Mi
+                or RedDocumentItemType.Json
+                or RedDocumentItemType.Morphtarget
+                or RedDocumentItemType.Mltemplate
+                or RedDocumentItemType.Anims
+                or RedDocumentItemType.Workspot
+                or RedDocumentItemType.Inkatlas
+                or RedDocumentItemType.Questphase
+                or RedDocumentItemType.Scene
+                or RedDocumentItemType.Ent => true,
+            RedDocumentItemType.Xbm
+                or RedDocumentItemType.Mlmask
+                or RedDocumentItemType.Mlsetup
                 or RedDocumentItemType.Sector
                 or RedDocumentItemType.Other => false,
             _ => false,
@@ -129,7 +139,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         }
 
         IsMesh = CurrentTab?.GetContentType() is RedDocumentItemType.Mesh;
-        IsFileValidationMenuVisible = IsMesh || CurrentTab?.GetContentType() is RedDocumentItemType.App or RedDocumentItemType.Entity;
+        IsFileValidationMenuVisible = IsMesh || CurrentTab?.GetContentType() is RedDocumentItemType.App or RedDocumentItemType.Ent;
         
         if (RootChunk?.ResolvedData is not CMesh mesh)
         {

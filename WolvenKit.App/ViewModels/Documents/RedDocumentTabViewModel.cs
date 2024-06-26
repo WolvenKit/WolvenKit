@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,10 +16,20 @@ public enum RedDocumentItemType
 {
     Mesh,
     App,
-    Entity,
-    Texture,
-    MlMask,
-    MlSetup,
+    Ent,
+    Xbm,
+    Mlmask,
+    Mlsetup,
+    Morphtarget,
+    Mltemplate,
+    Anims,
+    Workspot,
+    Inkatlas,
+    Questphase,
+    Scene,
+    Mi,
+    Csv,
+    Json,
     Sector,
     Other,
 }
@@ -50,27 +61,8 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
         }
     }
 
-    private static readonly Dictionary<string, RedDocumentItemType> s_fileExtensionsToTypes = new()
-    {
-        { ".mesh", RedDocumentItemType.Mesh },
-        { ".app", RedDocumentItemType.App },
-        { ".ent", RedDocumentItemType.Entity },
-        { ".xbm", RedDocumentItemType.Texture },
-        { ".mlmask", RedDocumentItemType.MlMask },
-        { ".mlsetup", RedDocumentItemType.MlSetup },
-        { ".sector", RedDocumentItemType.Sector },
-    };
-
-    public virtual RedDocumentItemType GetContentType()
-    {
-        var fileExtension = Path.GetExtension(FilePath);
-        if (s_fileExtensionsToTypes.TryGetValue(fileExtension, out var type))
-        {
-            return type;
-        }
-
-        return RedDocumentItemType.Other;
-    }
+    public virtual RedDocumentItemType GetContentType() =>
+        Enum.TryParse(Path.GetExtension(FilePath), out RedDocumentItemType type) ? type : RedDocumentItemType.Other;
 
     public abstract ERedDocumentItemType DocumentItemType { get; }
     public string Header { get; set; }
