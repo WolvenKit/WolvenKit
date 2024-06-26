@@ -1,10 +1,12 @@
 using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 using Splat;
 using WolvenKit.App.Services;
+using WolvenKit.Modkit.Resources;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.Editors
@@ -21,26 +23,45 @@ namespace WolvenKit.Views.Editors
         public RedCNameEditor()
         {
             InitializeComponent();
-
             _settingsManager = Locator.Current.GetService<ISettingsManager>();
         }
 
         public bool IsValid { get; set; } = true;
 
-        private void RefreshValidity()
+        [GeneratedRegex(@"^[a-zA-Z0-9]+[a-zA-Z0-9\s@]*[a-zA-Z0-9]+$")]
+        private static partial Regex s_validCharactersRegex();
+
+        private void RecalculateValidityAndTooltip()
         {
-            var newValidity = Text == "None" || _settingsManager?.UseValidatingEditor != true ||
-                              (RedString.ToString() is string s && !s.EndsWith(s_space) && !s.StartsWith(s_space));
+            var newValidity = true;
+            if (Text == "None" || _settingsManager?.UseValidatingEditor != true)
+            {
+                TextBoxToolTip = "CName";
+            }
+            else if (ArchiveXlHelper.GetValuesForInvalidConditions(Text) is string invalidConditions)
+            {
+                newValidity = false;
+                TextBoxToolTip = $"Invalid dynamic appearance condition! Valid checks are: {invalidConditions}";
+            }
+            else if (!s_validCharactersRegex().IsMatch(Text))
+            {
+                TextBoxToolTip = $"'{Text}' contains invalid characters, or leading/trailing spaces! (Ignore this if everything works)";
+            }
+            else
+            {
+                TextBoxToolTip = "CName";
+            }
+            
             if (IsValid == newValidity)
             {
                 return;
             }
-
+            
             IsValid = newValidity;
             OnPropertyChanged(nameof(IsValid));
+            OnPropertyChanged(nameof(TextBoxToolTip));
         }
-
-        
+       
         public CName RedString
         {
             get => (CName)GetValue(RedStringProperty);
@@ -60,11 +81,19 @@ namespace WolvenKit.Views.Editors
             view.OnPropertyChanged(nameof(Hash));
         }
 
-
         public string Text
         {
             get => RedString;
             set => SetValue(RedStringProperty, (CName)value);
+        }
+
+        public static readonly DependencyProperty TextBoxToolTipProperty = DependencyProperty.Register(
+            nameof(TextBoxToolTip), typeof(string), typeof(RedCNameEditor), new PropertyMetadata(default(string)));
+
+        public string TextBoxToolTip
+        {
+            get => TextBoxToolTip;
+            set => SetValue(TextBoxToolTipProperty, value);
         }
 
         public string Hash
@@ -145,12 +174,12 @@ namespace WolvenKit.Views.Editors
         {
             if (propertyName == nameof(Text))
             {
-                RefreshValidity();
+                RecalculateValidityAndTooltip();
             }
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void OnTextboxFocusLost(object sender, RoutedEventArgs e) => RefreshValidity();
+        private void OnTextboxFocusLost(object sender, RoutedEventArgs e) => RecalculateValidityAndTooltip();
     }
 }

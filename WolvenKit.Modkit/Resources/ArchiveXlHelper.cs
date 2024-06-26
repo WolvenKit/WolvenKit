@@ -1,8 +1,12 @@
-﻿using WolvenKit.RED4.Types;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Modkit.Resources;
 
-public class ArchiveXlHelper
+public partial class ArchiveXlHelper
 {
     private const string s_materialWildcard = "{material}";
 
@@ -52,5 +56,92 @@ public class ArchiveXlHelper
         // replace {material} with dynamic material name and cut off leading *
         return new CResourceReference<IMaterial>(baseMaterialPath.Replace(s_materialWildcard, substitutionValue)[1..]);
 
+    }
+
+    private static readonly Dictionary<string, List<string>> s_substitutionMap =
+        new()
+        {
+            { "camera", ["fpp", "tpp"] }, //
+            { "feet", ["lifted", "flat", "high_heels", "flat_shoes"] }, //
+            { "arms", ["base_arms", "mantis_blades", "monowire", "projectile_launch"] }, //
+            { "gender", ["m", "w"] },
+            {
+                "body", [
+                    "base_body", "lush", "ebb", "ebbrb", "ebbprb", "ebbp", "ebbwtfbbq", "angel",
+                    "gymfiend", "atlas"
+                ]
+            },
+        };
+
+
+    [GeneratedRegex(@"(?<=\{)\w+(?=\})")]
+    private static partial Regex s_substitutionRegex();
+
+    public static bool HasSubstitution(string s) => s_substitutionRegex().IsMatch(s);
+
+    public static string? GetValuesForInvalidSubstitution(string? s)
+    {
+        if (s is null || !HasSubstitution(s))
+        {
+            return null;
+        }
+
+        if (!s.StartsWith('*'))
+        {
+            return "string must start with '*'";
+        }
+
+        List<string> invalidSubstitutions = [];
+
+        foreach (Match match in s_substitutionRegex().Matches(s))
+        {
+            if (s_substitutionMap.ContainsKey(match.Value))
+            {
+                continue;
+            }
+
+            invalidSubstitutions.Add(match.Value);
+        }
+
+        if (invalidSubstitutions.Count == 0)
+        {
+            return null;
+        }
+
+        return
+            $"Invalid substitutions used: [{string.Join(',', invalidSubstitutions)}]. Valid substitutions are: [{string.Join(',', s_substitutionMap.Keys)}] ";
+    }
+
+
+    [GeneratedRegex(@"(?<=&)\w+=\w+")]
+    private static partial Regex s_ConditionRegex();
+
+    public static bool HasInvalidCondition(string s) => s_ConditionRegex().IsMatch(s);
+
+    public static string? GetValuesForInvalidConditions(string? s)
+    {
+        if (s is null || !HasInvalidCondition(s))
+        {
+            return null;
+        }
+
+        StringBuilder result = new();
+
+        foreach (Match match in s_ConditionRegex().Matches(s))
+        {
+            var keyValue = match.Value.Split("=");
+            if (keyValue.Length != 2)
+            {
+                continue;
+            }
+
+            var (key, value) = (keyValue[0].Replace("&", ""), keyValue[1]);
+            if (s_substitutionMap.TryGetValue(key, out var values) && !values.Contains(value))
+            {
+                result.Append($"{key}: [ {string.Join(", ", values)} ]");
+            }
+        }
+
+        return result.Length == 0 ? null : result.ToString();
     }
 }
