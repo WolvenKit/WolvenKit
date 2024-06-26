@@ -122,7 +122,7 @@ public partial class ArchiveXlHelper
             return null;
         }
 
-        StringBuilder result = new();
+        List<string> result = [];
 
         foreach (Match match in s_ConditionRegex().Matches(s))
         {
@@ -133,12 +133,16 @@ public partial class ArchiveXlHelper
             }
 
             var (key, value) = (keyValue[0].Replace("&", ""), keyValue[1]);
-            if (s_substitutionMap.TryGetValue(key, out var values) && !values.Contains(value))
+            if (!s_substitutionMap.TryGetValue(key, out var values))
             {
-                result.Append($"{key}: [ {string.Join(", ", values)} ]");
+                result.Add($"Bad key '{key}' ([ {string.Join(", ", s_substitutionMap.Keys)} ])");
             }
+            else if (!values.Contains(value))
+            {
+                result.Add($"{key}: [ {string.Join(", ", values)} ]");
+            } 
         }
 
-        return result.Length == 0 ? null : result.ToString();
+        return result.Count == 0 ? null : string.Join(", ", result);
     }
 }
