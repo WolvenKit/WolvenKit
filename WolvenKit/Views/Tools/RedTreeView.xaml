@@ -31,17 +31,18 @@
             <Style x:Key="PropertyKeyStyle" TargetType="TextBlock">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="null">
-                        <Setter Property="Foreground" Value="{StaticResource Border}" />
+                        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
                     </DataTrigger>
                     <DataTrigger Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                        <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
+                        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
                         <Setter Property="FontStyle" Value="Italic" />
                     </DataTrigger>
                     <DataTrigger Binding="{Binding IsReadOnly}" Value="True">
                         <Setter Property="Foreground" Value="{StaticResource WolvenKitTan50}" />
+                        <Setter Property="FontStyle" Value="Italic" />
                     </DataTrigger>
                     <DataTrigger Binding="{Binding IsDisplayAsReadOnly}" Value="True">
-                        <Setter Property="Foreground" Value="{StaticResource WolvenKitTan50}" />
+                        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
@@ -51,20 +52,20 @@
             <Style x:Key="PropertyValueStyle" TargetType="TextBlock">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="null">
-                        <Setter Property="Foreground" Value="{StaticResource Border}" />
+                        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
                     </DataTrigger>
                     <DataTrigger Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                        <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
+                        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
                         <Setter Property="FontStyle" Value="Italic" />
                     </DataTrigger>
                     <DataTrigger Binding="{Binding IsReadOnly}" Value="True">
                         <Setter Property="Foreground" Value="{StaticResource WolvenKitTan50}" />
                     </DataTrigger>
                     <DataTrigger Binding="{Binding IsDisplayAsReadOnly}" Value="True">
-                        <Setter Property="Foreground" Value="{StaticResource WolvenKitTan50}" />
+                        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
                     </DataTrigger>
                     <DataTrigger Binding="{Binding IsValueExtrapolated, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                        <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
+                        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
@@ -80,29 +81,14 @@
                                     <Setter Property="Visibility" Value="Collapsed" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                    <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
+                                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
                                     <Setter Property="FontStyle" Value="Italic" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding IsReadOnly}" Value="True">
                                     <Setter Property="Foreground" Value="{StaticResource WolvenKitTan50}" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding IsDisplayAsReadOnly}">
-                                    <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
-                                    <Setter Property="FontStyle" Value="Italic" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                        <Style x:Key="TextblockFormatter" TargetType="TextBlock">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                    <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
-                                    <Setter Property="FontStyle" Value="Italic" />
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding IsReadOnly}" Value="True">
-                                    <Setter Property="Foreground" Value="{StaticResource WolvenKitTan50}" />
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding IsDisplayAsReadOnly}" Value="True">
-                                    <Setter Property="Foreground" Value="{StaticResource WolvenKitTan50}" />
+                                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -111,25 +97,17 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <!-- <Grid.Style> -->
-                    <!--     <Style TargetType="Grid"> -->
-                    <!--         <Style.Triggers> -->
-                    <!--             <DataTrigger Binding="{Binding IsHiddenByNoobFilter}" Value="True"> -->
-                    <!--                 <Setter Property="Visibility" Value="Collapsed" /> -->
-                    <!--             </DataTrigger> -->
-                    <!--         </Style.Triggers> -->
-                    <!--     </Style> -->
-                    <!-- </Grid.Style> -->
+                    <TextBlock
+                        Grid.Column="0"
+                        Width="Auto"
+                        Margin="0,0,0,2"
+                        Text="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                        Style="{StaticResource PropertyKeyStyle}" />
                     <TextBlock
                         Grid.Column="1"
                         Width="Auto"
                         Margin="0,0,0,2"
-                        Text="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <TextBlock
-                        Grid.Column="2"
-                        Width="Auto"
-                        Margin="0,0,0,2"
-                        Foreground="{StaticResource Border}"
+                        Foreground="{StaticResource ForegroundColor_Grey1}"
                         Style="{StaticResource ExpanderHider}"
                         Text="{Binding Type, StringFormat=' {0}'}" />
                 </Grid>
@@ -150,15 +128,33 @@
                         <Style TargetType="{x:Type TextBlock}">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                    <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
+                                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
                                     <Setter Property="FontStyle" Value="Italic" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsReadOnly, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                    <Setter Property="FontStyle" Value="Italic" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsDisplayAsReadOnly, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsReadOnly, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                    <Setter Property="FontStyle" Value="Italic" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsDisplayAsReadOnly, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
                         <Style TargetType="{x:Type iconPacks:PackIconCodicons}">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                    <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
+                                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsReadOnly, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                    <Setter Property="FontStyle" Value="Italic" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsDisplayAsReadOnly, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -476,78 +472,6 @@
                             Kind="Plus" />
                     </MenuItem.Icon>
                 </MenuItem>
-                
-                <!-- Delete unused materials -->
-                <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.DeleteUnusedMaterialsCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Delete unused materials"
-                    IsCheckable="False"
-                    Style="{StaticResource SyncfusionMenuItemStyle}"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="FormatClear" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-                <!-- Clear all materials -->
-                <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.ClearMaterialsCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Clear appearances and materials (patch mesh)"
-                    IsCheckable="False"
-                    Style="{StaticResource SyncfusionMenuItemStyle}"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="FormatClear" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-                <!-- For mesh root: Generate missing materials -->
-                <MenuItem
-                    Command="{Binding OpenGenerateMaterialsDialogCommand, Source={x:Reference redTreeView}}"
-                    Header="Generate missing materials"
-                    IsCheckable="False"
-                    Style="{StaticResource SyncfusionMenuItemStyle}"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="PlusBoxMultiple" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-                <!-- For Preload...: convert to local material -->
-                <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.ConvertPreloadMaterialsCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Convert to local materials"
-                    IsCheckable="False"
-                    Style="{StaticResource SyncfusionMenuItemStyle}"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="AccountConvert" />
-                    </MenuItem.Icon>
-                </MenuItem>
 
                 <!-- Search & Replace -->
                 <MenuItem
@@ -580,18 +504,6 @@
 
                     <MenuItem.Icon>
                         <iconPacks:PackIconMaterial Kind="Calculator" Style="{StaticResource ContextMenuIconStyleMaterial}" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-                <!-- Regenerate appearance dependencies -->
-                <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.RegenerateAppearanceVisualControllerCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Regenerate Appearance Dependencies"
-                    IsCheckable="False"
-                    Style="{StaticResource SyncfusionMenuItemStyle}"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="Refresh" Style="{StaticResource ContextMenuIconStyleMaterial}" />
                     </MenuItem.Icon>
                 </MenuItem>
 

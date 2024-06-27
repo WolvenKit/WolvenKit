@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
 using DynamicData;
@@ -148,5 +149,11 @@ namespace WolvenKit.Views.Tools
         }
 
         private void ScrollToBottom_OnClick(object sender, RoutedEventArgs e) => _scrollViewer?.ScrollToBottom();
+
+        private void LogView_OnKeyUp(object sender, KeyEventArgs e)
+        {
+            // TODO: Implement scrolling and copy
+        }
+
     }
 }

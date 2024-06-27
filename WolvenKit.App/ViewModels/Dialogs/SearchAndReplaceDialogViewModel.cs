@@ -22,10 +22,5 @@ public partial class SearchAndReplaceDialogViewModel() : ObservableObject
     /// <summary>
     ///Ignore case
     /// </summary>
-    [ObservableProperty] private bool _ignoreCase = false;
-
-    /// <summary>
-    ///Ignore case
-    /// </summary>
-    [ObservableProperty] private bool _rememberValues = false;
+    [ObservableProperty] private bool _rememberValues;
 }

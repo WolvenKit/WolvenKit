@@ -69,7 +69,7 @@ namespace WolvenKit.Views.Tools
 
             if (collectionView is not null)
             {
-                collectionView.Filter = item => (item as ChunkViewModel)?.ExcludeFromSimpleView() != true;
+                collectionView.Filter = item => (item as ChunkViewModel)?.IsHiddenByEditorDifficultyLevel != true;
                 SetCurrentValue(ItemsSourceProperty, collectionView);
             }
 
@@ -342,10 +342,9 @@ namespace WolvenKit.Views.Tools
 
             var searchText = dialog.ViewModel?.SearchText ?? "";
             var replaceText = dialog.ViewModel?.ReplaceText ?? "";
-            var ignoreCase = dialog.ViewModel?.IgnoreCase ?? false;
 
             var results = selectedChunkViewModels
-                .Select(item => item.SearchAndReplace(searchText, replaceText, ignoreCase))
+                .Select(item => item.SearchAndReplace(searchText, replaceText))
                 .ToList();
 
             var numReplaced = results.Count(r => r == true);

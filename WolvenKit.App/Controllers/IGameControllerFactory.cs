@@ -39,12 +39,12 @@ public class GameControllerFactory : IGameControllerFactory
     public IGameController GetController() =>
         _projectManager.ActiveProject == null
             ? _mockGameController
-            : _projectManager.ActiveProject.GameType switch
+            : Models.ProjectManagement.Project.Cp77Project.GameType switch
             {
                 //GameType.Witcher3 => _tw3Controller,
                 GameType.Cyberpunk2077 => _cp77Controller,
                 _ => throw new ArgumentOutOfRangeException(
-                    nameof(_projectManager.ActiveProject.GameType),
-                    _projectManager.ActiveProject.GameType, null)
+                    nameof(Models.ProjectManagement.Project.Cp77Project.GameType),
+                    Models.ProjectManagement.Project.Cp77Project.GameType, null)
             };
 }

@@ -3,8 +3,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using WolvenKit.App.Extensions;
-using System.Xaml;
 using WolvenKit.App.Models;
+using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common;
 
 namespace WolvenKit.App.Services;
@@ -42,7 +42,7 @@ public class SettingsDto : ISettingsDto
         ShowResourcePathAsHex = settings.ShowResourcePathAsHex;
         ShowNodeRefAsHex = settings.ShowNodeRefAsHex;
         ShowTweakDBIDAsHex = settings.ShowTweakDBIDAsHex;
-        EnableNoobFilterByDefault = settings.EnableNoobFilterByDefault;
+        DefaultEditorDifficultyLevel = settings.DefaultEditorDifficultyLevel;
         ShowReferenceGraph = settings.ShowReferenceGraph;
         GameLanguage = settings.GameLanguage;
         LaunchProfiles = settings.LaunchProfiles;
@@ -58,6 +58,7 @@ public class SettingsDto : ISettingsDto
         RefactoringCheckboxDefaultValue = settings.RefactoringCheckboxDefaultValue;
         LastLaunchProfile = settings.LastLaunchProfile;
         ShowRedmodInRibbon = settings.ShowRedmodInRibbon;
+        UseValidatingEditor = settings.UseValidatingEditor;
 
         MigrateSettings(settings.SettingsVersion);
     }
@@ -82,8 +83,7 @@ public class SettingsDto : ISettingsDto
     public bool ShowCNameAsHex { get; set; }
     public bool ShowResourcePathAsHex { get; set; }
     public bool ShowNodeRefAsHex { get; set; }
-
-    public bool EnableNoobFilterByDefault { get; set; }
+    public EditorDifficultyLevel DefaultEditorDifficultyLevel { get; set; } = EditorDifficultyLevel.Easy;
     public bool ShowTweakDBIDAsHex { get; set; }
     public bool ShowReferenceGraph { get; set; }
     public EGameLanguage GameLanguage { get; set; } = EGameLanguage.en_us;
@@ -95,6 +95,7 @@ public class SettingsDto : ISettingsDto
     public string? LastUsedProjectPath { get; set; }
     public string? LastLaunchProfile { get; set; }
     public bool ShowRedmodInRibbon { get; set; }
+    public bool UseValidatingEditor { get; set; } = true;
     public int PinnedOrder { get; set; }
     public int RecentOrder { get; set; }
     public bool ShowGraphEditorNodeProperties { get; set; } = true;
@@ -126,7 +127,7 @@ public class SettingsDto : ISettingsDto
         settingsManager.ShowResourcePathAsHex = ShowResourcePathAsHex;
         settingsManager.ShowNodeRefAsHex = ShowNodeRefAsHex;
         settingsManager.ShowTweakDBIDAsHex = ShowTweakDBIDAsHex;
-        settingsManager.EnableNoobFilterByDefault = EnableNoobFilterByDefault;
+        settingsManager.DefaultEditorDifficultyLevel = DefaultEditorDifficultyLevel;
         settingsManager.ShowReferenceGraph = ShowReferenceGraph;
         settingsManager.LaunchProfiles = LaunchProfiles;
         settingsManager.ScriptStatus = ScriptStatus;
@@ -141,15 +142,14 @@ public class SettingsDto : ISettingsDto
         settingsManager.ModderEmail = ModderEmail;
         settingsManager.RefactoringCheckboxDefaultValue = RefactoringCheckboxDefaultValue;
         settingsManager.LastLaunchProfile = LastLaunchProfile;
+        settingsManager.UseValidatingEditor = UseValidatingEditor;
 
         return settingsManager;
     }
 
     public SettingsManager ToSettingsManager()
     {
-        var config = new SettingsManager()
-        {
-        };
+        var config = new SettingsManager();
 
         return ReconfigureSettingsManager(config);
     }
@@ -183,8 +183,6 @@ public class SettingsDto : ISettingsDto
     /// </summary>
     private void UpdateLaunchProfilesV3()
     {
-        LaunchProfiles ??= [];
-
         var idx = 0;
         foreach (var kvp in LaunchProfiles.Where(kvp => kvp.Value.Order is null))
         {

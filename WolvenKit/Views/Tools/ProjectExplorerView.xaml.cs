@@ -13,16 +13,13 @@ using System.Windows.Input;
 using HandyControl.Data;
 using ReactiveUI;
 using Syncfusion.Data;
-using Syncfusion.UI.Xaml.Grid.ScrollAxis;
 using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.App.Extensions;
-using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Tools;
-using WolvenKit.Core.Services;
 using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
 using RowColumnIndex = Syncfusion.UI.Xaml.ScrollAxis.RowColumnIndex;
@@ -88,8 +85,9 @@ namespace WolvenKit.Views.Tools
                 if (DataContext is ProjectExplorerViewModel vm)
                 {
                     SetCurrentValue(ViewModelProperty, vm);
+                    vm.OnProjectChanged += ResetTreeGrids;
                 }
-
+                
                 AddKeyUpEvent();
 
                 Interactions.DeleteFiles = _ =>
@@ -167,25 +165,36 @@ namespace WolvenKit.Views.Tools
             });
         }
 
-        private void TreeGrid_OnNodeExpanding(object sender, NodeExpandingEventArgs e)
+        // Run inside Dispatcher to avoid exception on startup
+        private void ResetTreeGrids() => Dispatcher.Invoke(() =>
         {
-            if (ViewModel is null)
+            if (TreeGridFlat.View is not null)
+            {
+                TreeGridFlat.ClearFilters();
+                TreeGridFlat.ClearSelections(false);
+            }
+
+            if (TreeGrid.View is null)
             {
                 return;
             }
 
-            if (!_automatic)
+            TreeGrid.ClearFilters();
+            TreeGrid.ClearSelections(false);
+        });
+
+        private void TreeGrid_OnNodeExpanding(object sender, NodeExpandingEventArgs e)
+        {
+            if (ViewModel is null || _automatic || !ViewModel.ModifierViewStateService.IsShiftKeyPressed)
             {
-                if (ViewModel.ModifierViewStateService.IsShiftKeyPressed)
-                {
-                    _automatic = true;
-
-                    ExpandAllNodes(e.Node);
-
-                    _automatic = false;
-                    return;
-                }
+                return;
             }
+
+            _automatic = true;
+
+            ExpandAllNodes(e.Node);
+
+            _automatic = false;
         }
 
         private void ExpandAllNodes(TreeNode node)
@@ -236,67 +245,64 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            ViewModel.ExpansionStateDictionary[fileSystemModel.RawRelativePath] = true;
+            ViewModel.SaveNodeExpansionState(fileSystemModel.RawRelativePath, true);
         }
 
         private bool _automatic;
 
         private void TreeGrid_OnNodeCollapsing(object sender, NodeCollapsingEventArgs e)
         {
-            if (ViewModel is null)
+            if (ViewModel is null || _automatic)
             {
                 return;
             }
 
-            if (!_automatic)
+            if (ViewModel.ModifierViewStateService.IsCtrlKeyPressed && e.Node.HasChildNodes)
             {
-                if (ViewModel.ModifierViewStateService.IsCtrlKeyPressed && e.Node.HasChildNodes)
+                _automatic = true;
+                e.Cancel = true;
+
+                var state = e.Node.ChildNodes[0].IsExpanded;
+                foreach (var childNode in e.Node.ChildNodes)
                 {
-                    _automatic = true;
-
-                    e.Cancel = true;
-
-                    var state = e.Node.ChildNodes[0].IsExpanded;
-                    foreach (var childNode in e.Node.ChildNodes)
+                    if (ViewModel.ModifierViewStateService.IsShiftKeyPressed)
                     {
-                        if (ViewModel.ModifierViewStateService.IsShiftKeyPressed)
+                        if (state)
                         {
-                            if (state)
-                            {
-                                CollapseAllNodes(childNode);
-                            }
-                            else
-                            {
-                                ExpandAllNodes(childNode);
-                            }
+                            CollapseAllNodes(childNode);
                         }
                         else
                         {
-                            if (state)
-                            {
-                                TreeGrid.CollapseNode(childNode);
-                            }
-                            else
-                            {
-                                TreeGrid.ExpandNode(childNode);
-                            }
+                            ExpandAllNodes(childNode);
                         }
                     }
-
-                    _automatic = false;
-                    return;
+                    else
+                    {
+                        if (state)
+                        {
+                            TreeGrid.CollapseNode(childNode);
+                        }
+                        else
+                        {
+                            TreeGrid.ExpandNode(childNode);
+                        }
+                    }
                 }
 
-                if (ViewModel.ModifierViewStateService.IsShiftKeyPressed)
-                {
-                    _automatic = true;
-
-                    CollapseAllNodes(e.Node);
-
-                    _automatic = false;
-                    return;
-                }
+                _automatic = false;
+                return;
             }
+
+            if (!ViewModel.ModifierViewStateService.IsShiftKeyPressed)
+            {
+                return;
+            }
+
+            _automatic = true;
+
+            CollapseAllNodes(e.Node);
+
+            _automatic = false;
         }
 
         private void TreeGrid_OnNodeCollapsed(object sender, NodeCollapsedEventArgs e)
@@ -306,7 +312,7 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            ViewModel.ExpansionStateDictionary[fileSystemModel.RawRelativePath] = false;
+            ViewModel.SaveNodeExpansionState(fileSystemModel.RawRelativePath, false);
         }
 
         private void AddKeyUpEvent()
@@ -401,7 +407,7 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null)
+            if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems is not null)
             {
                 foreach (var item in e.NewItems)
                 {
@@ -410,24 +416,26 @@ namespace WolvenKit.Views.Tools
                         continue;
                     }
 
-                    if (ViewModel.GetExpansionState(fileSystemModel.RawRelativePath))
+                    if (ViewModel.GetExpansionStateOrNull(fileSystemModel.RawRelativePath) is true or null)
                     {
                         TreeGrid.ExpandNode(treeNode);
                     }
                 }
             }
 
-            if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems != null)
+            if (e.Action != NotifyCollectionChangedAction.Remove || e.OldItems == null)
             {
-                foreach (var item in e.OldItems)
-                {
-                    if (item is not TreeNode { Item: FileSystemModel { IsDirectory: true } fileSystemModel } treeNode)
-                    {
-                        continue;
-                    }
+                return;
+            }
 
-                    ViewModel.ExpansionStateDictionary.Remove(fileSystemModel.RawRelativePath);
+            foreach (var item in e.OldItems)
+            {
+                if (item is not TreeNode { Item: FileSystemModel { IsDirectory: true } fileSystemModel })
+                {
+                    continue;
                 }
+
+                ViewModel.ExpansionStateDictionary.Remove(fileSystemModel.RawRelativePath);
             }
         }
 
@@ -793,22 +801,25 @@ namespace WolvenKit.Views.Tools
                 {
                     c = 1;
                 }
-                else if (item1 != null && item2 != null)
+                else if (item1 != null)
                 {
-                    if (item1.IsDirectory && !item2.IsDirectory)
+                    switch (item1.IsDirectory)
                     {
-                        c = -1;
-                    }
-                    else if (!item1.IsDirectory && item2.IsDirectory)
-                    {
-                        c = 1;
-                    }
-                    else
-                    {
-                        c = CompareParts();
-                        if (c == 0)
+                        case true when !item2.IsDirectory:
+                            c = -1;
+                            break;
+                        case false when item2.IsDirectory:
+                            c = 1;
+                            break;
+                        default:
                         {
-                            c = string.CompareOrdinal(item1.GameRelativePath, item2.GameRelativePath);
+                            c = CompareParts();
+                            if (c == 0)
+                            {
+                                c = string.CompareOrdinal(item1.GameRelativePath, item2.GameRelativePath);
+                            }
+
+                            break;
                         }
                     }
                 }
@@ -862,7 +873,7 @@ namespace WolvenKit.Views.Tools
                 {
                     c = 1;
                 }
-                else if (item1 != null && item2 != null)
+                else if (item1 != null)
                 {
                     c = item1.FileSize.CompareTo(item2.FileSize);
                 }

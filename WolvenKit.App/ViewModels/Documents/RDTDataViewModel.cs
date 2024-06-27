@@ -14,6 +14,7 @@ using WolvenKit.App.Models;
 using WolvenKit.App.Models.Nodify;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive;
@@ -49,7 +50,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
         _data = data;
 
-        IsSimpleViewEnabled = Parent.IsSimpleViewEnabled;
+        EditorDifficultyLevel = Parent.EditorDifficultyLevel;
 
         Nodes.Add(new ResourcePathWrapper(this, new ReferenceSocket(Chunks[0].RelativePath), _appViewModel, _chunkViewmodelFactory));
         _nodePaths.Add(Chunks[0].RelativePath);
@@ -64,17 +65,54 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
             }
         }
 
+        SetParentToolbarState();
+
         parent.PropertyChanged += RDTDataViewModel_PropertyChanged;
     }
 
-    private void RDTDataViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    public ChunkViewModel? GetRootChunk() => Chunks.FirstOrDefault();
+
+    public override RedDocumentItemType GetContentType()
     {
-        if (e.PropertyName != nameof(RedDocumentViewModel.IsSimpleViewEnabled))
+        switch (GetRootChunk()?.ResolvedData)
+        {
+            case CMesh:
+                return RedDocumentItemType.Mesh;
+            case appearanceAppearanceResource:
+                return RedDocumentItemType.App;
+            case entEntityTemplate:
+                return RedDocumentItemType.Ent;
+            default:
+                return RedDocumentItemType.Other;
+        }
+    }
+
+    private void SetParentToolbarState()
+    {
+        if (Chunks[0] is not ChunkViewModel cvm)
         {
             return;
         }
 
-        IsSimpleViewEnabled = Parent.IsSimpleViewEnabled;
+        switch (cvm.ResolvedData)
+        {
+            case CMesh:
+            case appearanceAppearanceResource:
+                Parent.ShowToolbar = true;
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void RDTDataViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(RedDocumentViewModel.EditorDifficultyLevel))
+        {
+            return;
+        }
+
+        EditorDifficultyLevel = Parent.EditorDifficultyLevel;
     }
 
     public RDTDataViewModel(string header, IRedType data, RedDocumentViewModel file, AppViewModel appViewModel,
@@ -105,7 +143,8 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         set => _chunks = value;
     }
 
-    public virtual ChunkViewModel GenerateChunks() => _chunkViewmodelFactory.ChunkViewModel(_data, this, _appViewModel);
+    public virtual ChunkViewModel GenerateChunks() =>
+        _chunkViewmodelFactory.ChunkViewModel(_data, this, _appViewModel, EditorDifficultyLevel);
 
     [ObservableProperty]
     private bool _isEmbeddedFile;
@@ -114,7 +153,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     [ObservableProperty] private object? _selectedChunks;
 
-    [ObservableProperty] private bool _IsSimpleViewEnabled;
+    [ObservableProperty] private EditorDifficultyLevel _editorDifficultyLevel;
 
 
     [ObservableProperty] private ChunkViewModel? _rootChunk;

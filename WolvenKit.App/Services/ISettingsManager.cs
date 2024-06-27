@@ -186,10 +186,7 @@ public interface ISettingsManager : ISettingsDto, INotifyPropertyChanged
 
     string LastLaunchProfile { get; set; }
 
-    /// <summary>
-    /// For "simple" editor view: hides fields that the user shouldn't edit 
-    /// </summary>
-    bool IsNoobFilterDefaultEnabled();
-
     bool ShowRedmodInRibbon { get; set; }
+
+    bool UseValidatingEditor { get; set; }
 }

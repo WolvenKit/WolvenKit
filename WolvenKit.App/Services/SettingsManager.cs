@@ -11,6 +11,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData.Binding;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Models;
+using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common;
 using WolvenKit.Core;
 using WolvenKit.Core.Exceptions;
@@ -54,7 +55,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(ShowNodeRefAsHex),
             nameof(ShowTweakDBIDAsHex),
             nameof(ShowReferenceGraph),
-            nameof(EnableNoobFilterByDefault),
+            nameof(DefaultEditorDifficultyLevel),
             nameof(GameLanguage),
             nameof(AnalyzeModArchives),
             nameof(ExtraModDirPath),
@@ -66,7 +67,8 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(ModderEmail),
             nameof(RefactoringCheckboxDefaultValue),
             nameof(LastLaunchProfile),
-            nameof(ShowRedmodInRibbon)
+            nameof(ShowRedmodInRibbon),
+            nameof(UseValidatingEditor)
             )
           .Subscribe(_ =>
           {
@@ -206,8 +208,8 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [ObservableProperty]
     private uint _treeViewGroupSize = 100;
 
-    [Display(Name = "Default to simple mode", GroupName = "File Editor")] [ObservableProperty]
-    private bool _enableNoobFilterByDefault;
+    [Display(Name = "Editor default mode (recommended: Easy)", GroupName = "File Editor")] [ObservableProperty]
+    private EditorDifficultyLevel _defaultEditorDifficultyLevel;
 
     [Display(Name = "Ignored Extensions (Open using System Editor. Syntax: .ext1|.ext2)", GroupName = "File Editor")]
     [ObservableProperty]
@@ -269,6 +271,12 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [ObservableProperty]
     private bool _showRedmodInRibbon;
 
+    [Display(Name = "Use validating editor?",
+        Description = "Editor fields validate themselves (or try to). Disable this if you run into editor performance issues.",
+        GroupName = "Interface")]
+    [ObservableProperty]
+    private bool _useValidatingEditor;
+
     [Display(Name = "Additional Mod directory", Description = "Path to an optional directory containing mod archives", GroupName = "Cyberpunk")]
     [ObservableProperty]
     private string? _extraModDirPath;
@@ -295,7 +303,6 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [ObservableProperty]
     [property: Browsable(false)]
     private int _recentOrder;
-
 
 #pragma warning restore CS0657 // Not a valid attribute location for this declaration
     #endregion properties
@@ -361,8 +368,6 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             : Path.Combine(GetRED4GameRootDir(), "bin", "x64", Core.Constants.Oodle);
 
     public bool IsHealthy() => File.Exists(CP77ExecutablePath) && File.Exists(GetRED4OodleDll());
-
-    public bool IsNoobFilterDefaultEnabled() => EnableNoobFilterByDefault;
 
     #endregion methods
 }

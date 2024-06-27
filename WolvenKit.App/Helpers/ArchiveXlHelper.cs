@@ -12,13 +12,14 @@ namespace WolvenKit.App.Helpers;
 /// This class will resolve ArchiveXL dynamic variant depot paths.
 /// They start with an asterisk (*) and contain substitution wildcards (<see cref="s_keysAndValues"/>).  
 /// </summary>
-internal class ArchiveXlHelper
+public static partial class ArchiveXlHelper
 {
     private static readonly Dictionary<string, string[]> s_keysAndValues = new()
     {
         { "{camera}", ["fpp", "tpp"] },
         { "{feet}", ["lifted", "flat", "high_heels", "flat_shoes"] },
         { "{gender}", ["m", "w"] },
+        { "arms", ["base_arms", "mantis_blades", "monowire", "projectile_launch"] }, //
         { "{body}", ["base_body"] },
     };
 

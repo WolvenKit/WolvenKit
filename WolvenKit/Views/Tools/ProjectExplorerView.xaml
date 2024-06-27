@@ -68,7 +68,7 @@
                     x:Name="ConvertToJsonMenuItem"
                     Command="{Binding ConvertToCommand}"
                     Header="Convert to JSON"
-                    Visibility="{Binding Path=ConvertToIsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
                         <Grid>
                             <iconPacks:PackIconCodicons
@@ -85,7 +85,7 @@
                     x:Name="ConvertFromJsonMenuItem"
                     Command="{Binding ConvertFromCommand}"
                     Header="Convert from JSON"
-                    Visibility="{Binding Path=ConvertFromIsEnabled, UpdateSourceTrigger=PropertyChanged, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
                         <Grid>
                             <iconPacks:PackIconCodicons
@@ -157,27 +157,27 @@
                 <MenuItem
                     Command="{Binding CopyRelPathCommand}"
                     Header="Copy relative path to game file"
-                    Visibility="{Binding Path=IsNoModifierPressed, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                 <MenuItem
                     Command="{Binding CopyAbsPathToCurrentFileCommand}"
                     Header="Copy absolute path"
-                    Visibility="{Binding Path=IsShiftKeyPressedOnly, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                 <MenuItem
                     Command="{Binding CopyAbsPathToCurrentFolderCommand}"
                     Header="Copy absolute path to containing folder"
-                    Visibility="{Binding Path=IsCtrlKeyPressedOnly, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                 <MenuItem
                     Command="{Binding CopyAbsPathToRawFolderCommand}"
                     Header="Copy absolute path to raw folder"
-                    Visibility="{Binding Path=IsShowAbsolutePathToRawFolder, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                 <MenuItem
                     Command="{Binding CopyAbsPathToArchiveFolderCommand}"
                     Header="Copy absolute path to archive folder"
-                    Visibility="{Binding Path=IsShowAbsolutePathToArchiveFolder, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
 
                 <!--  =======================================================================  -->
@@ -772,6 +772,8 @@
             CurrentCellBorderThickness="0"
             FilterLevel="Extended"
             HeaderRowHeight="3"
+            NodeExpanded="TreeGrid_OnNodeExpanded"
+            NodeCollapsed="TreeGrid_OnNodeCollapsed"
             IsReadOnly="True"
             LiveNodeUpdateMode="AllowDataShaping"
             RowDragDropTemplate="{StaticResource DragDropTemplate}"

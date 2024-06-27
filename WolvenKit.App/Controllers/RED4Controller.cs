@@ -364,7 +364,7 @@ public class RED4Controller : ObservableObject, IGameController
 
 
         // Now install it
-        if (!await InstallProjectFiles(options, cp77Proj))
+        if (options.Install && !await InstallProjectFiles(options, cp77Proj))
         {
             return false;
         }
@@ -387,11 +387,18 @@ public class RED4Controller : ObservableObject, IGameController
             throw new WolvenKitException(0x5001, "No game executable set");
         }
 
-        var arguments = options.GameArguments ?? "";
+
+        var arguments = $"{_settingsManager.GetRED4GameLaunchOptions()} {options.GameArguments ?? ""}";
+        
         if (options.LoadLastSave && ISettingsManager.GetLastSaveName() is string lastSavegame)
         {
-            arguments = $"{arguments} --save={lastSavegame}";
+            arguments = $"{arguments} -save={lastSavegame}";
         }
+        else if (options.LoadSaveName is string savegame)
+        {
+            arguments = $"{arguments} -save={savegame}";
+        }
+        
         try
         {
             Process.Start(new ProcessStartInfo
@@ -419,7 +426,7 @@ public class RED4Controller : ObservableObject, IGameController
         }
 
         // install files: is always true (abort condition above)
-        if (!InstallMod(cp77Proj))
+        if (!options.DeployWithRedmod && !InstallMod(cp77Proj))
         {
             _progressService.IsIndeterminate = false;
             _loggerService.Error("Installing mod failed, aborting.");
@@ -430,20 +437,21 @@ public class RED4Controller : ObservableObject, IGameController
         _loggerService.Success($"{cp77Proj.Name} installed to {_settingsManager.GetRED4GameRootDir()}");
         _notificationService.Success($"{cp77Proj.Name} installed!");
 
-
         // deploy redmod
-        if (options.DeployWithRedmod)
+        if (!options.DeployWithRedmod)
         {
-            if (!await DeployRedmod())
-            {
-                _progressService.IsIndeterminate = false;
-                _loggerService.Error("Redmod deploy failed, aborting.");
-                _notificationService.Error("Redmod deploy failed, aborting.");
-                return false;
-            }
-
-            _loggerService.Success($"{_projectManager.ActiveProject?.Name} Redmod deployed!");
+            return true;
         }
+
+        if (!await DeployRedmod())
+        {
+            _progressService.IsIndeterminate = false;
+            _loggerService.Error("Redmod deploy failed, aborting.");
+            _notificationService.Error("Redmod deploy failed, aborting.");
+            return false;
+        }
+
+        _loggerService.Success($"{_projectManager.ActiveProject?.Name} Redmod deployed!");
 
         return true;
     }
@@ -473,7 +481,7 @@ public class RED4Controller : ObservableObject, IGameController
 
         // pack archiveXL files
         var files = GetArchiveXlFiles(cp77Proj);
-        if (files.Any())
+        if (files.Count != 0)
         {
             if (!PackArchiveXlFiles(cp77Proj, files, options))
             {
@@ -488,7 +496,7 @@ public class RED4Controller : ObservableObject, IGameController
 
         // pack resources
         files = GetResourceFiles(cp77Proj);
-        if (files.Any())
+        if (files.Count != 0)
         {
             if (!PackResources(cp77Proj, files))
             {
@@ -502,18 +510,20 @@ public class RED4Controller : ObservableObject, IGameController
         }
 
         // pack redmod files
-        if (options.IsRedmod)
+        if (!options.DeployWithRedmod)
         {
-            if (!PackRedmodFiles(cp77Proj))
-            {
-                _progressService.IsIndeterminate = false;
-                _loggerService.Error("Packing redmod files failed, aborting.");
-                _notificationService.Error("Packing redmod files failed, aborting.");
-                return false;
-            }
-
-            _loggerService.Info($"{cp77Proj.Name} redmod files packed into {cp77Proj.PackedRedModDirectory}");
+            return true;
         }
+
+        if (!PackRedmodFiles(cp77Proj))
+        {
+            _progressService.IsIndeterminate = false;
+            _loggerService.Error("Packing redmod files failed, aborting.");
+            _notificationService.Error("Packing redmod files failed, aborting.");
+            return false;
+        }
+
+        _loggerService.Info($"{cp77Proj.Name} redmod files packed into {cp77Proj.PackedRedModDirectory}");
         return true;
     }
 
@@ -973,7 +983,7 @@ public class RED4Controller : ObservableObject, IGameController
             return false;
         }
 
-        if (_projectManager.ActiveProject.GameType is not GameType.Cyberpunk2077)
+        if (Cp77Project.GameType is not GameType.Cyberpunk2077)
         {
             throw new WolvenKitException(-1, "This doesn't seem to be a Cyberpunk project!");
         }

@@ -8,6 +8,7 @@ using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Core.Services;
 
 namespace WolvenKit.App.Factories;
@@ -32,8 +33,8 @@ public class ChunkViewmodelFactory(
     CRUIDService cruidService)
     : IChunkViewmodelFactory, IFactory<ChunkViewModel>
 {
-    public ChunkViewModel ChunkViewModel(IRedType rootChunk, string name, AppViewModel appViewModel, ChunkViewModel? parent = null,
-        bool isReadOnly = false) =>
+    public ChunkViewModel ChunkViewModel(IRedType rootChunk, string name, AppViewModel appViewModel,
+        EditorDifficultyLevel editorDifficultyLevel, ChunkViewModel? parent = null, bool isReadOnly = false) =>
         new ChunkViewModel(rootChunk, name, appViewModel,
             this,
             tabViewmodelFactory,
@@ -48,10 +49,12 @@ public class ChunkViewmodelFactory(
             modifierViewStateService,
             parserService,
             cruidService,
+            editorDifficultyLevel,
             parent,
             isReadOnly).SetInitialExpansionState();
 
-    public ChunkViewModel ChunkViewModel(IRedType rootChunk, ReferenceSocket socket, AppViewModel appViewModel, bool isReadOnly = false) =>
+    public ChunkViewModel ChunkViewModel(IRedType rootChunk, ReferenceSocket socket, AppViewModel appViewModel,
+        EditorDifficultyLevel editorDifficultyLevel, bool isReadOnly = false) =>
         new ChunkViewModel(rootChunk, socket, appViewModel,
             this,
             tabViewmodelFactory,
@@ -66,9 +69,11 @@ public class ChunkViewmodelFactory(
             modifierViewStateService,
             parserService,
             cruidService,
+            editorDifficultyLevel,
             isReadOnly).SetInitialExpansionState();
 
-    public ChunkViewModel ChunkViewModel(IRedType rootChunk, RDTDataViewModel tab, AppViewModel appViewModel, bool isReadOnly = false) =>
+    public ChunkViewModel ChunkViewModel(IRedType rootChunk, RDTDataViewModel tab, AppViewModel appViewModel,
+        EditorDifficultyLevel editorDifficultyLevel, bool isReadOnly = false) =>
         new ChunkViewModel(rootChunk, tab, appViewModel,
             this,
             tabViewmodelFactory,
@@ -83,5 +88,6 @@ public class ChunkViewmodelFactory(
             modifierViewStateService,
             parserService,
             cruidService,
+            editorDifficultyLevel, 
             isReadOnly).SetInitialExpansionState();
 }

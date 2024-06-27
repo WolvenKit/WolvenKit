@@ -118,14 +118,6 @@ jobs:
         if: ${{ env.HAS_CLI_COMMITS == 'true' }}
         run: Compress-Archive -Path ./publish/console/* -DestinationPath ${{env.FINALOUT}}/${{env.CONSOLE}}
 
-      # Pack and upload prerelease nugets
-      - name: pack cli
-        if: ${{ env.HAS_CLI_COMMITS == 'true' }}
-        run: dotnet pack ./WolvenKit.CLI/WolvenKit.CLI.csproj --version-suffix "nightly.${{env.ISODATE}}"
-      - name: push nuget
-        continue-on-error: true
-        if: ${{ env.HAS_CLI_COMMITS == 'true' }}
-        run: dotnet nuget push .\WolvenKit.CLI\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
       
       ##########################################
       # INSTALLER

@@ -1,10 +1,10 @@
+using System;
 using System.Windows.Input;
 using ReactiveUI;
-using Splat;
 using Syncfusion.Windows.Tools.Controls;
+using WolvenKit.App.Interaction;
 using WolvenKit.App.ViewModels.Documents;
-using WolvenKit.App.ViewModels.Shell;
-using WolvenKit.Views.Shell;
+using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 
 namespace WolvenKit.Views.Documents
 {
@@ -15,26 +15,59 @@ namespace WolvenKit.Views.Documents
             InitializeComponent();
 
             TabControl.SelectedItemChangedEvent += TabControl_OnSelectedItemChangedEvent;
+            RedDocumentViewToolbar.EditorDifficultChanged += OnEditorDifficultyChanged;
 
             this.WhenActivated(disposables =>
             {
-                if (DataContext is RedDocumentViewModel vm)
+                if (DataContext is not RedDocumentViewModel vm)
                 {
-                    SetCurrentValue(ViewModelProperty, vm);
+                    return;
                 }
+
+                SetCurrentValue(ViewModelProperty, vm);
+                RedDocumentViewToolbar.CurrentTab = vm.SelectedTabItemViewModel;
             });
         }
 
-        protected override void OnKeyDown(KeyEventArgs e)
+        private void OnEditorDifficultyChanged(object sender, EditorDifficultyLevel level)
         {
-            base.OnKeyDown(e);
+            if (DataContext is not RedDocumentViewModel vm)
+            {
+                return;
+            }
+
+            if (vm.IsDirty)
+            {
+                var result = Interactions.ShowConfirmation((
+                    $"The file {vm.FilePath} has unsaved changes. Do you want to save it before reloading?",
+                    "File Modified",
+                    WMessageBoxImage.Question,
+                    WMessageBoxButtons.YesNo));
+
+                if (result == WMessageBoxResult.No)
+                {
+                    return;
+                }
+
+                vm.SaveSync(null);
+            }
+
+            vm.EditorDifficultyLevel = level;
+            
+            vm.Reload(false);
         }
 
         private void TabControl_OnSelectedItemChangedEvent(object sender, SelectedItemChangedEventArgs e)
         {
+            
             if (e?.NewSelectedItem?.DataContext is RedDocumentTabViewModel newTab)
             {
+                RedDocumentViewToolbar.CurrentTab = newTab;
                 newTab.Load();
+            }
+            else
+            {
+                RedDocumentViewToolbar.CurrentTab = null;
             }
 
             if (e?.OldSelectedItem?.DataContext is RedDocumentTabViewModel oldTab)
@@ -50,10 +83,19 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            vm.IsSimpleViewEnabled = !vm.IsSimpleViewEnabled;
 
+            var newEditorLevel = vm.EditorDifficultyLevel switch
+            {
+                EditorDifficultyLevel.Easy => EditorDifficultyLevel.Default,
+                EditorDifficultyLevel.Default => EditorDifficultyLevel.Advanced,
+                EditorDifficultyLevel.Advanced => EditorDifficultyLevel.Easy,
+                _ => throw new ArgumentOutOfRangeException()
+            };
+
+            OnEditorDifficultyChanged(this, newEditorLevel);
+            
             // Send a message to update filtered items source
-            MessageBus.Current.SendMessage("UpdateFilteredItemsSource", "Command");
+            // MessageBus.Current.SendMessage("UpdateFilteredItemsSource", "Command");
 
 
             // var mainWindow = Locator.Current.GetService<AppViewModel>();

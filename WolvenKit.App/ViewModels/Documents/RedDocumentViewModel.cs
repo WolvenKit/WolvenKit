@@ -10,10 +10,12 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Options;
 using WolvenKit.App.Factories;
 using WolvenKit.App.Helpers;
+using WolvenKit.App.Interaction;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
@@ -66,7 +68,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
         IHookService hookService,
         INodeWrapperFactory nodeWrapperFactory,
         IHashService hashService,
-        bool isSimpleViewEnabled = false,
+        EditorDifficultyLevel editorMode,
         bool isReadyOnly = false) : base(path)
     {
         _documentTabViewmodelFactory = documentTabViewmodelFactory;
@@ -95,7 +97,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
         Cr2wFile = file;
         IsReadOnly = isReadyOnly;
-        IsSimpleViewEnabled = isSimpleViewEnabled;
+        EditorDifficultyLevel = editorMode;
         _isInitialized = true;
         PopulateItems();
     }
@@ -124,6 +126,8 @@ public partial class RedDocumentViewModel : DocumentViewModel
                 break;
         }
 
+
+        ShowMenuToolbar = value?.FilePath.EndsWith(".mesh") == true;
         value?.OnSelected();
     }
 
@@ -141,6 +145,8 @@ public partial class RedDocumentViewModel : DocumentViewModel
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(NewEmbeddedFileCommand))]
     private string _extension;
+
+    [ObservableProperty] private bool _showMenuToolbar;
 
     #endregion
 
@@ -170,6 +176,12 @@ public partial class RedDocumentViewModel : DocumentViewModel
     public ILoggerService GetLoggerService() => _loggerService;
 
     public override async Task Save(object? parameter)
+    {
+        SaveSync(parameter);
+        await Task.CompletedTask;
+    }
+
+    public void SaveSync(object? parameter)
     {
         var ms = new MemoryStream();
         var file = GetMainFile();
@@ -213,8 +225,6 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
         SetIsDirty(false);
         _loggerService.Success($"Saved file {FilePath}");
-
-        await Task.CompletedTask;
     }
 
     private void SaveHashedValues(CR2WFile file)
@@ -252,29 +262,26 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
     public override bool Reload(bool force)
     {
-        if (!File.Exists(FilePath))
+        if (!File.Exists(FilePath) || (!force && IsDirty))
         {
             return false;
         }
 
-        if (!force && IsDirty)
-        {
-            return false;
-        }
 
         using var fs = File.Open(FilePath, FileMode.Open);
-        if (_parserService.TryReadRed4File(fs, out var cr2wFile))
+        if (!_parserService.TryReadRed4File(fs, out var cr2wFile))
         {
-            Cr2wFile = cr2wFile;
-            PopulateItems();
-            
-            SetIsDirty(false);
-            LastWriteTime = File.GetLastWriteTime(FilePath);
-
-            return true;
+            return false;
         }
 
-        return false;
+        Cr2wFile = cr2wFile;
+        PopulateItems();
+
+        SetIsDirty(false);
+        LastWriteTime = File.GetLastWriteTime(FilePath);
+
+        return true;
+
     }
 
     public RedDocumentTabViewModel? GetMainFile()

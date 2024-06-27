@@ -6,12 +6,38 @@
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     xmlns:local="clr-namespace:WolvenKit.Views.Editors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:global="clr-namespace:"
     d:DesignHeight="100"
     d:DesignWidth="400"
     KeyboardNavigation.TabNavigation="Local"
     mc:Ignorable="d">
 
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedRefEditor}}}">
+        <Grid.Resources>
+
+            <Style x:Key="ValidatingDepotPathStyle" TargetType="{x:Type local:TrimmingTextBox}">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Scope}" Value="{x:Static global:FileScope.GameOrMod}">
+                        <Setter Property="BorderBrush" Value="{StaticResource BorderAlt}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Scope}" Value="{x:Static global:FileScope.Unknown}">
+                        <Setter Property="BorderBrush" Value="{StaticResource BorderAlt}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Scope}" Value="{x:Static global:FileScope.OtherMod}">
+                        <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Yellow}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Scope}" Value="{x:Static global:FileScope.NotFoundWarning}">
+                        <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Yellow}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Scope}" Value="{x:Static global:FileScope.NotFound}">
+                        <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Red}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Scope}" Value="{x:Static global:FileScope.InvalidSubstitution}">
+                        <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Red}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="27" />
             <RowDefinition Height="27" />
@@ -30,10 +56,13 @@
             Text="DepotPath" />
 
         <local:TrimmingTextBox
+            Style="{StaticResource ValidatingDepotPathStyle}"
             Grid.Row="0"
             Grid.Column="1"
             helpers:TextBoxBehavior.TripleClickSelectAll="True"
             KeyboardNavigation.TabIndex="1"
+            LostFocus="RefreshValidityAndTooltip"
+            Tooltip="{Binding Path=TextBoxToolTip}"
             Text="{Binding DepotPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
         <TextBox
             x:Name="HashBox"

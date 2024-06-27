@@ -8,6 +8,10 @@
     <Platforms>x64</Platforms>
   </PropertyGroup>
 
+	<PropertyGroup>
+		<DebugType>pdbonly</DebugType>
+	</PropertyGroup>
+
    <PropertyGroup>
       <PackageId>WolvenKit.RED4</PackageId>
       <Product>WolvenKit.RED4</Product>
