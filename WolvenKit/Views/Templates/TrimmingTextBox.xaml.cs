@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using WolvenKit.Helpers;
 
@@ -106,7 +107,14 @@ namespace WolvenKit.Views.Editors
             EndTrimming.SetCurrentValue(VisibilityProperty, Math.Abs(_scrollViewer.ScrollableWidth - _scrollViewer.HorizontalOffset) > 1 ? Visibility.Visible : Visibility.Hidden);
         }
 
+        public event EventHandler OnChange;
         private void RealTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            RefreshScrollViewer();
+            OnChange?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void RefreshScrollViewer()
         {
             FetchScrollViewer();
 
@@ -115,5 +123,16 @@ namespace WolvenKit.Views.Editors
                 _scrollViewer?.ScrollToRightEnd();
             }
         }
+
+        public event EventHandler OnPaste;
+
+        private void RealTextBox_OnPasting(object sender, DataObjectPastingEventArgs e)
+        {
+            RefreshScrollViewer();
+            OnPaste?.Invoke(this, EventArgs.Empty);
+        }
+
+        public new event EventHandler OnKeyUp;
+        private void RealTextBox_OnKeyUp(object sender, KeyEventArgs e) => OnKeyUp?.Invoke(sender, e);
     }
 }
