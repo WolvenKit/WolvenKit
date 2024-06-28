@@ -225,7 +225,7 @@ namespace WolvenKit.Views.Editors
                 return;
             }
 
-            if (!ArchiveXlHelper.HasSubstitution(filePath) &&
+            if (ArchiveXlHelper.HasSubstitution(filePath) &&
                 App.Helpers.ArchiveXlHelper.GetFirstExistingPath(filePath) is null)
             {
                 SetCurrentValue(ScopeProperty, FileScope.NotFoundWarning);
