@@ -107,7 +107,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     private void RDTDataViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName != nameof(RedDocumentViewModel.EditorDifficultyLevel))
+        if (e.PropertyName != nameof(RedDocumentViewModel.EditorDifficultyLevel) || EditorDifficultyLevel == Parent.EditorDifficultyLevel)
         {
             return;
         }
