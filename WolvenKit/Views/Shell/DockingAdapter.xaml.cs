@@ -133,11 +133,27 @@ namespace WolvenKit.Views.Shell
                 return;
             }
 
-            if (!LoadLayout(projectLayout, "project"))
+            try
             {
-                _logger.Error("Error while loading the project layout. Restoring default layout");
-                LoadDefaultLayout();
+                if (!LoadLayout(projectLayout, "project"))
+                {
+                    _logger.Error("Error while loading the project layout. Restoring default layout");
+                    LoadDefaultLayout();
+                }
             }
+            catch
+            {
+                _logger.Error("Project layout seems to have gotten corrupted. Wolvenkit will now try to delete it...");
+                _logger.Error("If that does not work, close Wolvenkit and delete or rename the following files:");
+                _logger.Error("(This will reset your settings)");
+                _logger.Error(projectLayout);
+                _logger.Error(Path.Combine(ISettingsManager.GetAppData(), "DockStates.xml"));
+                _logger.Error(Path.Combine(ISettingsManager.GetAppData(), "config.json"));
+
+
+                File.Delete(projectLayout);
+            }
+            
         }
 
         public void LoadDefaultLayout()
