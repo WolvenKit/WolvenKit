@@ -62,6 +62,8 @@
             helpers:TextBoxBehavior.TripleClickSelectAll="True"
             KeyboardNavigation.TabIndex="1"
             LostFocus="RefreshValidityAndTooltip"
+            OnPaste="TrimmingTextbox_OnTextUpdate"
+            OnKeyUp="TrimmingTextbox_OnKeyUp"
             Tooltip="{Binding Path=TextBoxToolTip}"
             Text="{Binding DepotPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
         <TextBox

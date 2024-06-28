@@ -200,22 +200,20 @@ namespace WolvenKit.Views.Editors
         private void RefreshValidityAndTooltip(object sender, RoutedEventArgs e)
         {
             if (_settingsManager?.UseValidatingEditor != true || RedRef?.DepotPath == ResourcePath.Empty ||
-                RedRef?.ToString() is not string filePath ||
-                filePath.Trim().IsNullOrEmpty())
+                RedRef?.ToString() is not string filePath || filePath.Trim().IsNullOrEmpty())
             {
                 SetCurrentValue(ScopeProperty, FileScope.Unknown);
                 SetCurrentValue(TextBoxToolTipProperty, "Not validating this resource path");
                 return;
             }
 
-
-            if (ArchiveXlHelper.GetValuesForInvalidSubstitution(filePath) is string invalidSubstitutions)
+            if (ArchiveXlHelper.HasSubstitution(filePath) &&
+                ArchiveXlHelper.GetValuesForInvalidSubstitution(filePath) is string invalidSubstitutions)
             {
                 SetCurrentValue(ScopeProperty, FileScope.InvalidSubstitution);
                 SetCurrentValue(TextBoxToolTipProperty, invalidSubstitutions);
                 return;
             }
-
 
             if (!ArchiveXlHelper.HasSubstitution(filePath) &&
                 _archiveManager?.GetGameFile(filePath, false, true) is not null)
@@ -243,6 +241,19 @@ namespace WolvenKit.Views.Editors
 
             SetCurrentValue(ScopeProperty, FileScope.NotFound);
             SetCurrentValue(TextBoxToolTipProperty, "Invalid depot path (not found)");
+        }
+
+        public void TrimmingTextbox_OnTextUpdate(object sender, EventArgs e) =>
+            RefreshValidityAndTooltip(sender, new RoutedEventArgs());
+
+        public void TrimmingTextbox_OnKeyUp(object sender, EventArgs e)
+        {
+            if (e is not KeyEventArgs { Key: Key.Enter or Key.Tab })
+            {
+                return;
+            }
+
+            RefreshValidityAndTooltip(sender, new RoutedEventArgs());
         }
     }
 }

@@ -18,7 +18,9 @@
                 ScrollViewer.CanContentScroll="False"
                 helpers:TextBoxBehavior.TripleClickSelectAll="True"
                 Text="{Binding ElementName=UserControl, Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                TextChanged="RealTextBox_OnTextChanged">
+                TextChanged="RealTextBox_OnTextChanged"
+                KeyUp="RealTextBox_OnKeyUp"
+                DataObject.Pasting="RealTextBox_OnPasting">
             </TextBox>
         </Border>
         <Grid IsHitTestVisible="False">
