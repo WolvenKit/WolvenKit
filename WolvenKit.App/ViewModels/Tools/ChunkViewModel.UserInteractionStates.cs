@@ -34,7 +34,7 @@ public partial class ChunkViewModel
     {
         _currentEditorDifficultyLevel = level;
         DifficultyLevelFieldInformation = EditorDifficultyLevelFieldFactory.GetInstance(level);
-        Tab?.Parent.Reload(false);
+        RecalculateProperties();
     }
 
     private EditorDifficultyLevelInformation DifficultyLevelFieldInformation { get; set; }
