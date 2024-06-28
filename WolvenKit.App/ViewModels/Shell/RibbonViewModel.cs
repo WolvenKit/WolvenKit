@@ -31,7 +31,7 @@ public partial class RibbonViewModel : ObservableObject
         MainViewModel = appViewModel;
         MainViewModel.PropertyChanged += MainViewModel_OnPropertyChanged;
 
-        _showRedmodInRibbon = settingsManager.ShowRedmodInRibbon;
+        ShowRedmodInRibbon = settingsManager.ShowRedmodInRibbon;
 
         _settingsManager.PropertyChanged += SettingsManager_PropertyChanged;
 

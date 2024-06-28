@@ -109,6 +109,8 @@ public partial class AssetBrowserViewModel : ToolViewModel
         State = DockState.Dock;
         SideInDockedMode = DockSide.Tabbed;
 
+        IsModBrowserEnabled = false; 
+        
         archiveManager.ConnectGameRoot()
             .Bind(out _boundRootNodes)
             .Subscribe(OnNext);
@@ -226,7 +228,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     [ObservableProperty] 
     private string? _optionsSearchBarText;
 
-    [ObservableProperty] private bool? _isModBrowserEnabled;
+    [ObservableProperty] private bool _isModBrowserEnabled;
 
     [ObservableProperty]
     private ObservableCollectionEx<IGameArchive> _addFromArchiveItems = new();
