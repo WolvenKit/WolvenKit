@@ -624,6 +624,32 @@ namespace WolvenKit.Modkit.RED4.Tools
 
         }
 
+        public static (int numLodLevels, int numSubmeshesPerLod) GetLodInfo(CMesh mesh)
+        {
+            var numLodLevels = 1;
+
+            var numSubmeshesPerLod = mesh.Appearances
+                .Where((app) => app.GetValue() is meshMeshAppearance)
+                .Select((app) => ((meshMeshAppearance)app.GetValue()!).ChunkMaterials.Count)
+                .Max();
+
+            if (mesh.RenderResourceBlob.Chunk is rendRenderMeshBlob blob)
+            {
+                numLodLevels = blob.Header.RenderChunkInfos.Count;
+            }
+
+            if (mesh.LodLevelInfo.Count > 1)
+            {
+                numSubmeshesPerLod = (int)mesh.LodLevelInfo[1];
+            }
+            else if (numLodLevels > 1 && mesh.LodLevelInfo.Count % numLodLevels == 0)
+            {
+                numSubmeshesPerLod = mesh.LodLevelInfo.Count / numLodLevels;
+            }
+
+            return (numLodLevels, numSubmeshesPerLod);
+        }
+
         public static void UpdateMeshJoints(ref List<RawMeshContainer> meshes, RawArmature? existingJoints, RawArmature? incomingJoints, string fileName = "")
         {
             // updating mesh bone indices
