@@ -125,6 +125,52 @@ public partial class ChunkViewModel : ObservableObject
         return Task.CompletedTask;
     }
 
+
+    [RelayCommand]
+    private void ScrollToMaterial()
+    {
+        if (GetRootModel() is not { ResolvedData: CMesh mesh } rootModel || Tab is null)
+        {
+            return;
+        }
+
+        if (mesh.PreloadExternalMaterials.Count > 0 || mesh.PreloadLocalMaterialInstances.Count > 0)
+        {
+            rootModel.ConvertPreloadMaterials();
+        }
+
+        if (ResolvedData is CName data && Parent?.Name == "chunkMaterials" &&
+            data.GetResolvedText() is string materialName &&
+            GetRootModel().FindPropertyNode("materialEntries") is
+                { ResolvedData: CArray<CMeshMaterialEntry> ary } materialEntries)
+        {
+            if (ary.FirstOrDefault(e => e.Name == materialName) is not CMeshMaterialEntry matDef)
+            {
+                return;
+            }
+
+            var mat = FindMaterialDefinition(matDef.IsLocalInstance, matDef.Name, matDef.Index);
+            mat?.ScrollToMaterial();
+            return;
+        }
+
+        if (ResolvedData is not CMeshMaterialEntry entry)
+        {
+            return;
+        }
+
+        if (entry.IsLocalInstance && FindLocalMaterial(entry.Index) is ChunkViewModel localMaterial)
+        {
+            Tab.ScrollToNode(localMaterial);
+            return;
+        }
+
+        if (!entry.IsLocalInstance && FindExternalMaterial(entry.Index) is ChunkViewModel externalMaterial)
+        {
+            Tab.ScrollToNode(externalMaterial);
+        }
+    }
+
     [RelayCommand]
     private async Task<Task> AddMaterialAndDefinition()
     {

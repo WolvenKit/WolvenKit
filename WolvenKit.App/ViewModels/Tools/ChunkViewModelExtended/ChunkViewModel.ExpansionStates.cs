@@ -25,10 +25,34 @@ public class CustomLoopException : Exception
 
 public partial class ChunkViewModel : ObservableObject
 {
-    private ChunkViewModel? FindProperty(string propName) => Properties.FirstOrDefault(p => p.Name == propName);
+    private ChunkViewModel? FindPropertyNode(string propName)
+    {
+        var ret = Properties.FirstOrDefault(p => p.Name == propName);
+        if (ret is not null && ret.TVProperties.Count == 1 && ret.TVProperties.FirstOrDefault()?.ResolvedData is RedDummy)
+        {
+            ret.RecalculateProperties();
+        }
 
-    private ChunkViewModel? FindTvProperty(string propName) => TVProperties.FirstOrDefault(p => p.Name == propName);
+        return ret;
+    }
 
+    private ChunkViewModel? FindTvPropertyChild(string propName)
+    {
+        var ret = TVProperties.FirstOrDefault(p => p.Name == propName);
+        if (ret is not null && ret.TVProperties.Count == 1 && ret.TVProperties.FirstOrDefault()?.ResolvedData is RedDummy)
+        {
+            ret.RecalculateProperties();
+        }
+
+        return ret;
+    }
+
+    private bool FindTvPropertyChild(string propName, out ChunkViewModel? property)
+    {
+        property = TVProperties.FirstOrDefault(p => p.Name == propName);
+        return property != null;
+    }
+    
     /// <summary>
     /// Helper method to expand and select a child node.
     /// </summary>
@@ -75,44 +99,44 @@ public partial class ChunkViewModel : ObservableObject
         switch (Data)
         {
             // .mi file
-            case CMaterialInstance when FindTvProperty("values") is ChunkViewModel child:
+            case CMaterialInstance when FindTvPropertyChild("values") is ChunkViewModel child:
                 ExpandAndSelect(child, true);
                 break;
             // .app file
-            case appearanceAppearanceResource when FindTvProperty("appearances") is ChunkViewModel child:
+            case appearanceAppearanceResource when FindTvPropertyChild("appearances") is ChunkViewModel child:
                 ExpandAndSelect(child, false, true);
                 break;
             // .ent file
             case entEntityTemplate:
-                var appearances = FindTvProperty("appearances");
-                var components = FindTvProperty("components");
+                var appearances = FindTvPropertyChild("appearances");
+                var components = FindTvPropertyChild("components");
                 var nodeToExpand = (appearances?.TVProperties.Count ?? 0) == 0 ? components : appearances;
                 ExpandAndSelect(nodeToExpand, true, true);
                 break;
             // .mesh file
             case CMesh:
-                if (FindTvProperty("appearances") is { TVProperties.Count: > 0 } meshAppearances)
+                if (FindTvPropertyChild("appearances") is { TVProperties.Count: > 0 } meshAppearances)
                 {
                     meshAppearances.IsExpanded = true;
                 }
 
-                if (FindTvProperty("preloadLocalMaterialInstances") is { TVProperties.Count: > 0 } preloadMaterials)
+                if (FindTvPropertyChild("preloadLocalMaterialInstances") is { TVProperties.Count: > 0 } preloadMaterials)
                 {
                     preloadMaterials.IsExpanded = true;
                 }
 
-                if (FindTvProperty("localMaterialBuffer")?.FindTvProperty("materials") is { TVProperties.Count: > 0 } materials)
+                if (FindTvPropertyChild("localMaterialBuffer")?.FindTvPropertyChild("materials") is { TVProperties.Count: > 0 } materials)
                 {
                     materials.IsExpanded = true;
                 }
 
                 break;
             // .csv
-            case C2dArray when FindProperty("compiledData") is ChunkViewModel child:
+            case C2dArray when FindPropertyNode("compiledData") is ChunkViewModel child:
                 ExpandAndSelect(child, true);
                 break;
             // .json
-            case JsonResource when FindProperty("root") is ChunkViewModel child:
+            case JsonResource when FindPropertyNode("root") is ChunkViewModel child:
                 ExpandAndSelect(child, true);
                 break;
             default:
