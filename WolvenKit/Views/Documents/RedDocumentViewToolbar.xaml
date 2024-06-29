@@ -112,6 +112,11 @@
                 <MenuItem Header="Clear all materials"
                           Visibility="{ Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsShiftKeyDown, Converter={ StaticResource BooleanToVisibilityConverter}}"
                           Click="OnClearAllMaterialsClick" />
+
+                <!-- Shift: "Clear all Materials" -->
+                <MenuItem Header="Scroll to material"
+                          IsEnabled="{Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsScrollToMaterialCommandEnabled}"
+                          Click="OnScrollToMaterialClick" />
             </MenuItem>
 
             <!-- Ent file: Appearances menu -->

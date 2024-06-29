@@ -144,5 +144,8 @@ namespace WolvenKit.Views.Documents
         private void OnEditorModeClick_Default(object sender, RoutedEventArgs e) => OnEditorModeClick(EditorDifficultyLevel.Default);
 
         private void OnEditorModeClick_Advanced(object sender, RoutedEventArgs e) => OnEditorModeClick(EditorDifficultyLevel.Advanced);
+
+        private void OnScrollToMaterialClick(object sender, RoutedEventArgs e) =>
+            ViewModel?.SelectedChunk?.ScrollToMaterialCommand.Execute(null);
     }
 }

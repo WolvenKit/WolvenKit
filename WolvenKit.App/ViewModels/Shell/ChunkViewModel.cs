@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -223,7 +224,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             return;
         }
-
+        
         var (numLodLevels, numSubmeshesPerLod) = MeshTools.GetLodInfo(cMesh);
 
         var lodSuffix = "";
@@ -704,18 +705,18 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public bool IsInArray => Parent is not null && Parent.IsArray;
 
-    public bool DisplayAsArrayElement => IsInArray && Name == DisplayName;
-
+    // Used in view
     public bool ShowScrollToMaterial => ResolvedData is CMeshMaterialEntry || (ResolvedData is CName && Parent?.Name == "chunkMaterials");
 
+    // Used in view
     public bool HasValue => !IsValueExtrapolated && Value is not null && Value != "" && Value.ToLower() != "none";
 
     public bool IsArray =>(PropertyType.IsAssignableTo(typeof(IRedArray)) ||
                 ResolvedPropertyType is not null && ResolvedPropertyType.IsAssignableTo(typeof(IList)) ||
                 ResolvedPropertyType is not null && ResolvedPropertyType.IsAssignableTo(typeof(CR2WList)) ||
                 ResolvedPropertyType is not null && ResolvedPropertyType.IsAssignableTo(typeof(RedPackage)));
-
-
+    
+    
     public int PropertyCount
     {
         get
@@ -861,30 +862,23 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             var width = 0;
             if (Parent is not null)
             {
-                //if (Parent.ResolvedData is IRedArray ary)
-                //{
-                //    width += 20;
-                //}
-                if (Parent.PropertyCount <= 10)
+                if (IsInArray && Parent.Name == "chunkMaterials")
                 {
-                    width += 16;
+                    return 90;
                 }
-                else if (Parent.PropertyCount <= 100)
+
+                width += Parent.PropertyCount switch
                 {
-                    width += 21;
-                }
-                else if (Parent.PropertyCount <= 1000)
-                {
-                    width += 26;
-                }
-                else if (Parent.PropertyCount <= 10000)
-                {
-                    width += 31;
-                }
-                else
-                {
-                    width += 36;
-                }
+                    //if (Parent.ResolvedData is IRedArray ary)
+                    //{
+                    //    width += 20;
+                    //}
+                    <= 10 => 16,
+                    <= 100 => 21,
+                    <= 1000 => 26,
+                    <= 10000 => 31,
+                    _ => 36
+                };
             }
             if (PropertyType.IsAssignableTo(typeof(IRedArray)))
             {
