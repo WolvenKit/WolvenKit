@@ -795,8 +795,8 @@ internal class NodeProperties
             if (condCharacterCasted?.Type?.Chunk is questCharacterSpawned_ConditionType nodeCharSpawnedCondCasted)
             {
                 details[logicalCondIndex + "Comparison Type"] = nodeCharSpawnedCondCasted?.ComparisonParams?.Chunk?.ComparisonType.ToEnumString()!;
-                details[logicalCondIndex + "Count"] = nodeCharSpawnedCondCasted?.ComparisonParams?.Chunk?.Count.ToString()!;
-                details[logicalCondIndex + "Entire Community"] = nodeCharSpawnedCondCasted?.ComparisonParams?.Chunk?.EntireCommunity == true ? "True" : "False";
+                details[logicalCondIndex + "Comparison Count"] = nodeCharSpawnedCondCasted?.ComparisonParams?.Chunk?.Count.ToString()!;
+                details[logicalCondIndex + "Comparison Entire Community"] = nodeCharSpawnedCondCasted?.ComparisonParams?.Chunk?.EntireCommunity == true ? "True" : "False";
                 details[logicalCondIndex + "Object Ref"] = ParseGameEntityReference(nodeCharSpawnedCondCasted?.ObjectRef);
             }
         }
@@ -890,6 +890,17 @@ internal class NodeProperties
             if (entRef.Reference != 0)
             {
                 str = entRef.Reference.GetResolvedText()!;
+            }
+
+            if (entRef.Names.Count > 0)
+            {
+                string names = "";
+                foreach (var name in entRef.Names)
+                {
+                    names += (names == "" ? "" : ", ") + name;
+                }
+
+                str += " [" + names + "]";
             }
         }
 
