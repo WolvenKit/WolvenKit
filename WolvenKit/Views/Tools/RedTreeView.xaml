@@ -529,6 +529,16 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.ScrollToMaterialCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Select material"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=!PlacementTarget.Tag.ShowScrollToMaterial, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="ArrowRight" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                    </MenuItem.Icon>
+                </MenuItem>
 
                 <!-- #########################################################
                     ╔═╗┌─┐┌─┐┬ ┬ ┬ ╔═╗┌─┐┌─┐┌┬┐┌─┐

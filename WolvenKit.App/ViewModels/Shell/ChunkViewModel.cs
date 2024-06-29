@@ -706,6 +706,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public bool DisplayAsArrayElement => IsInArray && Name == DisplayName;
 
+    public bool ShowScrollToMaterial => ResolvedData is CMeshMaterialEntry || (ResolvedData is CName && Parent?.Name == "chunkMaterials");
+
     public bool HasValue => !IsValueExtrapolated && Value is not null && Value != "" && Value.ToLower() != "none";
 
     public bool IsArray =>(PropertyType.IsAssignableTo(typeof(IRedArray)) ||
@@ -849,6 +851,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
+    /// <summary>
+    /// Used for view display
+    /// </summary>
     public int ArrayIndexWidth
     {
         get
@@ -2650,6 +2655,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
+        CalculateDisplayName();
+        
         _propertiesLoaded = true;
         OnPropertyChanged(nameof(ResolvedData));
 
