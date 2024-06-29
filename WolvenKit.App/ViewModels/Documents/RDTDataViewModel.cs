@@ -65,8 +65,6 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
             }
         }
 
-        SetParentToolbarState();
-
         parent.PropertyChanged += RDTDataViewModel_PropertyChanged;
     }
 
@@ -84,24 +82,6 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
                 return RedDocumentItemType.Ent;
             default:
                 return RedDocumentItemType.Other;
-        }
-    }
-
-    private void SetParentToolbarState()
-    {
-        if (Chunks[0] is not ChunkViewModel cvm)
-        {
-            return;
-        }
-
-        switch (cvm.ResolvedData)
-        {
-            case CMesh:
-            case appearanceAppearanceResource:
-                Parent.ShowToolbar = true;
-                break;
-            default:
-                break;
         }
     }
 
@@ -154,7 +134,6 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     [ObservableProperty] private object? _selectedChunks;
 
     [ObservableProperty] private EditorDifficultyLevel _editorDifficultyLevel;
-
 
     [ObservableProperty] private ChunkViewModel? _rootChunk;
 
@@ -475,8 +454,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
             SelectedChunk = chunkViewModel;
         }
     }
-
-
+    
     public event EventHandler<string>? OnSectorNodeSelected;
 
     /// <summary>
@@ -516,4 +494,26 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     }
     
     #endregion
+
+    private void ExpandParentNodes(ChunkViewModel cvm)
+    {
+        if (cvm.Parent is null)
+        {
+            return;
+        }
+
+        cvm.Parent.IsExpanded = true;
+        ExpandParentNodes(cvm.Parent);
+    }
+
+    public void ScrollToNode(ChunkViewModel? selectedNode)
+    {
+        if (selectedNode is null)
+        {
+            return;
+        }
+
+        ExpandParentNodes(selectedNode);
+        SetSelection(selectedNode);
+    }
 }
