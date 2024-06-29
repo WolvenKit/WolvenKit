@@ -117,6 +117,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [ObservableProperty] private bool _isGenerateMaterialCommandEnabled;
     [ObservableProperty] private bool _isDeleteUnusedMaterialCommandEnabled;
     [ObservableProperty] private bool _isRegenerateMaterialCommandEnabled;
+    [ObservableProperty] private bool _isScrollToMaterialCommandEnabled;
     [ObservableProperty] private bool _isGenerateNewCruidCommandEnabled;
 
     [ObservableProperty] private bool _isShiftKeyDown;
@@ -131,13 +132,14 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         IsGenerateMaterialCommandEnabled = false;
         IsDeleteUnusedMaterialCommandEnabled = false;
         IsRegenerateMaterialCommandEnabled = false;
+        IsScrollToMaterialCommandEnabled = false;
         IsGenerateNewCruidCommandEnabled = false;
 
         if (CurrentTab is null)
         {
             return;
         }
-
+        
         IsMesh = CurrentTab?.GetContentType() is RedDocumentItemType.Mesh;
         IsFileValidationMenuVisible = IsMesh || CurrentTab?.GetContentType() is RedDocumentItemType.App or RedDocumentItemType.Ent;
         
@@ -149,9 +151,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         IsConvertMaterialMenuEnabled = mesh.PreloadExternalMaterials.Count > 0 || mesh.PreloadLocalMaterialInstances.Count > 0;
         IsGenerateMaterialCommandEnabled = mesh.Appearances.Count > 0;
         IsDeleteUnusedMaterialCommandEnabled = mesh.Appearances.Count > 0 || mesh.MaterialEntries.Count > 0;
-        
-        
-        
+        IsScrollToMaterialCommandEnabled = SelectedChunk?.ShowScrollToMaterial == true;
     }
 
     public void SetCurrentTab(RedDocumentTabViewModel value)

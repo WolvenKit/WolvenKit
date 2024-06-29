@@ -37,10 +37,6 @@
                         <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
                         <Setter Property="FontStyle" Value="Italic" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding DisplayAsArrayElement}" Value="True">
-                        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
-                        <Setter Property="FontStyle" Value="Italic" />
-                    </DataTrigger>
                     <DataTrigger Binding="{Binding IsReadOnly}" Value="True">
                         <Setter Property="Foreground" Value="{StaticResource WolvenKitTan50}" />
                         <Setter Property="FontStyle" Value="Italic" />
@@ -135,9 +131,6 @@
                                     <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
                                     <Setter Property="FontStyle" Value="Italic" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding DisplayAsArrayElement}" Value="True">
-                                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
-                                </DataTrigger>
                                 <DataTrigger Binding="{Binding IsReadOnly, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
                                     <Setter Property="FontStyle" Value="Italic" />
                                 </DataTrigger>
@@ -155,9 +148,6 @@
                         <Style TargetType="{x:Type iconPacks:PackIconCodicons}">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding DisplayAsArrayElement}" Value="True">
                                     <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding IsReadOnly, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
@@ -263,7 +253,7 @@
                     <DataTrigger Binding="{Binding Level}" Value="10">
                         <Setter Property="Width" Value="100" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding DisplayAsArrayElement}" Value="True">
+                    <DataTrigger Binding="{Binding IsInArray}" Value="True">
                         <Setter Property="Width" Value="{Binding ArrayIndexWidth}" />
                     </DataTrigger>
                     <DataTrigger Binding="{Binding DisplayName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
