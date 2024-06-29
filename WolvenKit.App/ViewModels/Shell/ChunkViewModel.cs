@@ -28,6 +28,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
+using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
@@ -126,6 +127,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         _data = data;
         Parent = parent;
         _propertyName = name;
+        _displayName = name;
         IsReadOnly = isReadOnly;
 
         _currentEditorDifficultyLevel = editorLevel;
@@ -147,6 +149,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             });
         }
 
+        CalculateDisplayName();
+        
         CalculateValue();
         CalculateDescriptor();
         CalculateIsDefault();
@@ -179,15 +183,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         RelativePath = _tab.Parent.RelativePath;
         IsExpanded = true;
         
-        //Data = export;
-        //if (!PropertiesLoaded)
-        //{
-        //CalculateProperties();
-        //}
-        //TVProperties.AddRange(Properties);
-        //this.RaisePropertyChanged("Data");
-
-        //this.WhenAnyValue(x => x.Data).Skip(1).Subscribe((x) => Tab?.Parent.SetIsDirty(true));
     }
 
     public ChunkViewModel(IRedType export, ReferenceSocket socket, AppViewModel appViewModel,
@@ -217,6 +212,28 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         socket.Node = this;
         RelativePath = socket.File;
     }
+
+    /// <summary>
+    /// Some nodes should have a different display name, for example chunkmaterials. 
+    /// </summary>
+    private void CalculateDisplayName()
+    {
+        if (Parent?.DisplayName is not "chunkMaterials" || Parent?.ResolvedData is not CArray<CName> chunkMaterials ||
+            GetRootModel().ResolvedData is not CMesh cMesh)
+        {
+            return;
+        }
+
+        var (numLodLevels, numSubmeshesPerLod) = MeshTools.GetLodInfo(cMesh);
+
+        var lodSuffix = "";
+        if (numLodLevels > 1 && numSubmeshesPerLod != chunkMaterials.Count && int.TryParse(Name, out var index))
+        {
+            lodSuffix = $"_LOD{numSubmeshesPerLod % index}";
+        }
+
+        DisplayName = $"submesh_{Name.PadLeft(2, '0')}{lodSuffix}";
+    }
     
     partial void OnIsSelectedChanged(bool value)
     {
@@ -236,12 +253,26 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         if (_modifierViewStateService.GetModifierState(ModifierKeys.Shift))
         {
             SetChildExpansionStates(IsExpanded);
+            return;
         }
 
         // expand / collapse nested elements. Why click twice.
         if (!IsArray && (TVProperties.Count == 1 || TVProperties.Count(p => !p.IsHiddenByEditorDifficultyLevel) == 1))
         {
             TVProperties[0].IsExpanded = IsExpanded;
+            return;
+        }
+
+        // Some special cases should be auto-expanded, e.g. if the parent only has one "interesting" property
+        if (!IsExpanded)
+        {
+            return;
+        }
+
+        // expand / collapse "special" children, e.g. if the parent holds no properties we care for
+        if (ResolvedData is meshMeshAppearance && TVProperties.FirstOrDefault() is { Name: "chunkMaterials" } tvPropChild)
+        {
+            tvPropChild.IsExpanded = IsExpanded;
         }
     }
 
@@ -453,6 +484,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     [ObservableProperty] private bool _isHandled;
 
     [ObservableProperty] private string _propertyName;
+
+    [ObservableProperty] private string _displayName;
 
     [ObservableProperty] private ReferenceSocket? _socket;
 
@@ -670,6 +703,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     public bool TypesDiffer => PropertyType != ResolvedPropertyType;
 
     public bool IsInArray => Parent is not null && Parent.IsArray;
+
+    public bool DisplayAsArrayElement => IsInArray && Name == DisplayName;
 
     public bool HasValue => !IsValueExtrapolated && Value is not null && Value != "" && Value.ToLower() != "none";
 
