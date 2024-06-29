@@ -632,21 +632,26 @@ namespace WolvenKit.Modkit.RED4.Tools
                 .Where((app) => app.GetValue() is meshMeshAppearance)
                 .Select((app) => ((meshMeshAppearance)app.GetValue()!).ChunkMaterials.Count)
                 .Max();
-
-            if (mesh.RenderResourceBlob.Chunk is rendRenderMeshBlob blob)
+            try
             {
-                numLodLevels = blob.Header.RenderChunkInfos.Count;
-            }
+                if (mesh.RenderResourceBlob.Chunk is rendRenderMeshBlob blob)
+                {
+                    var lodCounts = blob.Header.RenderChunkInfos
+                        .GroupBy(info => info.LodMask)
+                        .ToDictionary(group => group.Key, group => group.Count());
 
-            if (mesh.LodLevelInfo.Count > 1)
-            {
-                numSubmeshesPerLod = (int)mesh.LodLevelInfo[1];
-            }
-            else if (numLodLevels > 1 && mesh.LodLevelInfo.Count % numLodLevels == 0)
-            {
-                numSubmeshesPerLod = mesh.LodLevelInfo.Count / numLodLevels;
-            }
+                    if (lodCounts.Keys.FirstOrDefault() is var key)
+                    {
+                        numSubmeshesPerLod = lodCounts[key];
+                    }
 
+                    numLodLevels = blob.Header.RenderChunkInfos.GroupBy(info => info.LodMask).Count();
+                }
+            }
+            catch
+            {
+                // do nothing
+            }
             return (numLodLevels, numSubmeshesPerLod);
         }
 
