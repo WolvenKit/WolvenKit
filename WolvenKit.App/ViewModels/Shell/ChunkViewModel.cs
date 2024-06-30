@@ -417,15 +417,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
-        if ((Data is CName && s_descriptorPropNames.Contains(Name))
-            || Data is CResourceAsyncReference<IMaterial>
-            || Data is CResourceAsyncReference<CMesh>
-            || (Data is WorldPosition && Parent.Data is WorldTransform)
-            || Parent.Data is CResourceAsyncReference<IMaterial>
-            || Parent.Data is CKeyValuePair
-            || Parent.Data is Multilayer_Layer
-            || Parent.Data is CMeshMaterialEntry
-            || Parent.Data is CArray<CString>
+        if ((s_descriptorPropNames.Contains(Name))
+            || ResolvedData is IRedResourceAsyncReference
+            || ResolvedData is IRedResourceReference
+            || (ResolvedData is WorldPosition && Parent.ResolvedData is WorldTransform)
+            || Parent.ResolvedData is IRedResourceAsyncReference
+            || Parent.ResolvedData is CKeyValuePair
+            || Parent.ResolvedData is Multilayer_Layer
+            || Parent.ResolvedData is CMeshMaterialEntry
+            || Parent.ResolvedData is IRedArray
            )
         {
             Parent.CalculateDescriptor();
