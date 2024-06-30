@@ -7,7 +7,6 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text.Json;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -1833,59 +1832,53 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         try
         {
-            Tab.SelectedChunk = Parent;
-            if (Parent.Data is IRedArray ary)
+            switch (Parent.Data)
             {
-                var childIdx = int.Parse(Name);
-                if (childIdx < ary.Count)
+                case IRedArray ary:
                 {
-                    ary.RemoveAt(childIdx);
+                    var childIdx = int.Parse(Name);
+                    if (childIdx < ary.Count)
+                    {
+                        ary.RemoveAt(childIdx);
+                    }
+                    else
+                    {
+                        _loggerService.Error("Something went wrong here. Please reload the file (Hotkey: Ctrl+R)");
+                    }
+
+                    break;
                 }
-                else
+                case IRedLegacySingleChannelCurve curve:
                 {
-                    _loggerService.Error("Something went wrong here. Please reload the file (Hotkey: Ctrl+R)");
+                    curve.Remove((IRedCurvePoint)Data);
+                    if (curve.Count == 0)
+                    {
+                        //Parent.ResolvedData = null;
+                        //Parent.Data = null; // TODO ???
+                    }
+
+                    break;
                 }
-            }
-            else if (Parent.Data is IRedLegacySingleChannelCurve curve)
-            {
-                curve.Remove((IRedCurvePoint)Data);
-                if (curve.Count == 0)
-                {
-                    //Parent.ResolvedData = null;
-                    //Parent.Data = null; // TODO ???
-                }
-            }
-            else if (Parent.Data is IRedBufferPointer db && db.GetValue().Data is RedPackage pkg)
-            {
-                if (!pkg.Chunks.Remove((RedBaseClass)Data))
-                {
+                case IRedBufferPointer db when db.GetValue().Data is RedPackage pkg && !pkg.Chunks.Remove((RedBaseClass)Data):
                     _loggerService.Error("Unable to delete chunk");
                     return;
-                }
-            }
-            else if (Parent.Data is IRedBufferPointer db2 && db2.GetValue().Data is CR2WList list)
-            {
-                list.Files.RemoveAll(x => x.RootChunk == Data);
-            }
-            else if (Parent.Data is IRedBufferPointer db3 && db3.GetValue().Data is worldNodeDataBuffer dict)
-            {
-                dict.Remove((worldNodeData)Data);
-                //dict.RemoveAt(((worldNodeData)Data).NodeIndex);
-            }
-            else
-            {
-                _loggerService.Error("Unknown collection - unable to delete chunk");
-                return;
+                case IRedBufferPointer db2 when db2.GetValue().Data is CR2WList list:
+                    list.Files.RemoveAll(x => x.RootChunk == Data);
+                    break;
+                case IRedBufferPointer db3 when db3.GetValue().Data is worldNodeDataBuffer dict:
+                    dict.Remove((worldNodeData)Data);
+                    //dict.RemoveAt(((worldNodeData)Data).NodeIndex);
+                    break;
+                default:
+                    _loggerService.Error("Unknown collection - unable to delete chunk");
+                    return;
             }
 
-            Tab.Parent.SetIsDirty(true);
             Parent.RecalculateProperties();
-            if (Tab.EditorDifficultyLevel != EditorDifficultyLevel.Advanced)
-            {
-                RecalculateProperties();
-            }
+            Tab.SetSelection(Parent);
+            Tab.Parent.SetIsDirty(true);
         }
-        catch (Exception ex) { _loggerService.Error(ex); }
+        catch (Exception ex) { _loggerService.Error(ex); }        
     }
 
     private bool CanImportWorldNodeData() => Data is worldNodeData && PropertyCount > 0;   // TODO RelayCommand check notify
@@ -1901,10 +1894,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         ArgumentNullException.ThrowIfNull(Parent);
         ArgumentNullException.ThrowIfNull(Tab);
-        //var selection = Parent.DisplayProperties
-        //                .Where(_ => _.IsSelected)
-        //                .Select(_ => _.Data)
-        //                .ToList();
         
         var ts = Parent.DisplayProperties
             .Where(_ => _.IsSelected)
@@ -1955,8 +1944,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             _loggerService.Warning($"Something went wrong while trying to delete the selection : {ex}");
         }
 
-        RecalculateProperties();
-        ReindexChildren();
+        Parent.RecalculateProperties();
+        Tab.SetSelection(Parent);
         Tab.Parent.SetIsDirty(true);
     }
 
@@ -2436,9 +2425,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
-        for (var i = 0; i < this.Properties.Count; i++)
+        for (var i = 0; i < Properties.Count; i++)
         {
             Properties[i].NodeIdxInParent = i;
+            Properties[i].CalculateDisplayName();
         }
     }
     
@@ -3378,6 +3368,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         //_resolvedDataCache = null;
         CalculateProperties();
         CalculateDescriptor();
+
+        if (IsArray)
+        {
+            ReindexChildren();
+        }
 
         OnPropertyChanged("Data");
 

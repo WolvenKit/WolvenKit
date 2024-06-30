@@ -637,7 +637,7 @@ public partial class ChunkViewModel
                 Value = fxResourceValue.Effect.DepotPath.GetResolvedText();
                 IsValueExtrapolated = Value != "";
                 break;
-            case entMeshComponent meshComponent:
+            case IRedMeshComponent meshComponent:
             {
                 Value = StringHelper.Stringify(meshComponent.Mesh.DepotPath, true);
                 if (meshComponent.MeshAppearance.GetResolvedText() is string app and (not "default" or "") && Value != "")
@@ -646,17 +646,6 @@ public partial class ChunkViewModel
                 }
 
                 IsValueExtrapolated = Value != "";
-                break;
-            }
-            case entSkinnedMeshComponent skinnedMeshComponent:
-            {
-                Value = StringHelper.Stringify(skinnedMeshComponent.Mesh.DepotPath, true);
-                if (skinnedMeshComponent.MeshAppearance.GetResolvedText() is string app and (not "default" or "") && Value != "")
-                {
-                    Value = $"{Value} ({app})";
-                }
-
-                IsValueExtrapolated = true;
                 break;
             }
             case locVoiceoverLengthMap lengthMap:
