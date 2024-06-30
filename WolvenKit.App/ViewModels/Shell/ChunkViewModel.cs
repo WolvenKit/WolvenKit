@@ -724,6 +724,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public bool IsInArray => Parent is not null && Parent.IsArray;
 
+    // Used in view for conditional colouring
+    public bool DisplayAsArrayItem => IsInArray && Name != DisplayName;
+
     // Used in view
     public bool ShowScrollToMaterial => ResolvedData is CMeshMaterialEntry || (ResolvedData is CName && Parent?.Name == "chunkMaterials");
 
