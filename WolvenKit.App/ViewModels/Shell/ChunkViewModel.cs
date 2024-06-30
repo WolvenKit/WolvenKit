@@ -150,12 +150,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             });
         }
 
-        CalculateDisplayName();
-        
         CalculateValue();
         CalculateDescriptor();
         CalculateIsDefault();
         CalculateUserInteractionStates();
+
+        CalculateDisplayName();
+
     }
 
     public ChunkViewModel(IRedType data, RDTDataViewModel tab, AppViewModel appViewModel,
@@ -228,9 +229,17 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         var (numLodLevels, numSubmeshesPerLod) = MeshTools.GetLodInfo(cMesh);
 
         var lodSuffix = "";
+        var lodIndex = 1;
         if (numLodLevels > 1 && numSubmeshesPerLod != chunkMaterials.Count && int.TryParse(Name, out var index))
         {
-            lodSuffix = $"_LOD{numSubmeshesPerLod % index}";
+            index -= numSubmeshesPerLod;
+            while (index >= 0)
+            {
+                lodIndex += 1;
+                index -= numSubmeshesPerLod;
+            }
+
+            lodSuffix = $"_LOD{lodIndex}";
         }
 
         DisplayName = $"submesh_{Name.PadLeft(2, '0')}{lodSuffix}";
@@ -271,10 +280,21 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         // expand / collapse "special" children, e.g. if the parent holds no properties we care for
-        if (ResolvedData is meshMeshAppearance && TVProperties.FirstOrDefault() is { Name: "chunkMaterials" } tvPropChild)
+        if (ResolvedData is not meshMeshAppearance || TVProperties.FirstOrDefault() is not { Name: "chunkMaterials" } tvPropChild)
         {
-            tvPropChild.IsExpanded = IsExpanded;
+            return;
         }
+
+        if (tvPropChild.TVProperties.Count == 1 && tvPropChild.TVProperties.FirstOrDefault()?.ResolvedData is RedDummy)
+        {
+            tvPropChild.RecalculateProperties();
+            foreach (var chunkViewModel in tvPropChild.TVProperties)
+            {
+                chunkViewModel.RecalculateProperties();
+            }
+        }
+
+        tvPropChild.IsExpanded = IsExpanded;
     }
 
     partial void OnDataChanged(IRedType value)
@@ -397,15 +417,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
-        if ((Data is CName && s_descriptorPropNames.Contains(Name))
-            || Data is CResourceAsyncReference<IMaterial>
-            || Data is CResourceAsyncReference<CMesh>
-            || (Data is WorldPosition && Parent.Data is WorldTransform)
-            || Parent.Data is CResourceAsyncReference<IMaterial>
-            || Parent.Data is CKeyValuePair
-            || Parent.Data is Multilayer_Layer
-            || Parent.Data is CMeshMaterialEntry
-            || Parent.Data is CArray<CString>
+        if ((s_descriptorPropNames.Contains(Name))
+            || ResolvedData is IRedResourceAsyncReference
+            || ResolvedData is IRedResourceReference
+            || (ResolvedData is WorldPosition && Parent.ResolvedData is WorldTransform)
+            || Parent.ResolvedData is IRedResourceAsyncReference
+            || Parent.ResolvedData is CKeyValuePair
+            || Parent.ResolvedData is Multilayer_Layer
+            || Parent.ResolvedData is CMeshMaterialEntry
+            || Parent.ResolvedData is IRedArray
            )
         {
             Parent.CalculateDescriptor();
@@ -864,7 +884,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             {
                 if (IsInArray && Parent.Name == "chunkMaterials")
                 {
-                    return 90;
+                    return 100;
                 }
 
                 width += Parent.PropertyCount switch
