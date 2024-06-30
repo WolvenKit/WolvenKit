@@ -154,7 +154,6 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     public LayoutNodesDelegate? LayoutNodes;
 
-
     #endregion
 
     #region commands

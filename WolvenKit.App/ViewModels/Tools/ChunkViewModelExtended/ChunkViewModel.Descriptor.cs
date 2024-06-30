@@ -444,7 +444,7 @@ public partial class ChunkViewModel
 
                 break;
             }
-            case entMeshComponent meshComponent
+            case IRedMeshComponent meshComponent
                 when meshComponent.Name.GetResolvedText() is string name && name != "":
             {
                 if (name == "Component")

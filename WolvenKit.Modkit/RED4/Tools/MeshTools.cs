@@ -621,7 +621,6 @@ namespace WolvenKit.Modkit.RED4.Tools
             }
 
             return ret.ToArray();
-
         }
 
         public static (int numLodLevels, int numSubmeshesPerLod) GetLodInfo(CMesh mesh)
