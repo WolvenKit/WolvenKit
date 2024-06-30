@@ -447,11 +447,7 @@ public partial class ChunkViewModel
             case entMeshComponent meshComponent
                 when meshComponent.Name.GetResolvedText() is string name && name != "":
             {
-                if (name == "Component")
-                {
-                    IsDefault = true;
-                }
-
+                IsDefault = name == "Component";
                 Descriptor = name;
                 return;
             }

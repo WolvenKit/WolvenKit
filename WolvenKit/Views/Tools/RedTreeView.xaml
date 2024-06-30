@@ -37,7 +37,7 @@
                         <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
                         <Setter Property="FontStyle" Value="Italic" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding IsInArray, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                    <DataTrigger Binding="{Binding DisplayAsArrayItem, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
                         <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
                     </DataTrigger>
                     <DataTrigger Binding="{Binding IsReadOnly}" Value="True">

@@ -644,7 +644,6 @@ public partial class ChunkViewModel
                 {
                     Value = $"{Value} ({app})";
                 }
-
                 IsValueExtrapolated = Value != "";
                 break;
             }
