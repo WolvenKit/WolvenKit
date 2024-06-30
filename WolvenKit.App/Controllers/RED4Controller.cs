@@ -44,6 +44,7 @@ public class RED4Controller : ObservableObject, IGameController
     private readonly IProgressService<double> _progressService;
     private readonly IPluginService _pluginService;
     private readonly Red4ParserService _parserService;
+    private readonly IModifierViewStateService _modifierService;
 
     private bool _initialized = false;
 
@@ -59,6 +60,7 @@ public class RED4Controller : ObservableObject, IGameController
         IAppArchiveManager gameArchiveManager,
         IProgressService<double> progressService,
         IPluginService pluginService,
+        IModifierViewStateService modifierService,
         Red4ParserService parserService)
     {
         _notificationService = notificationService;
@@ -70,6 +72,7 @@ public class RED4Controller : ObservableObject, IGameController
         _archiveManager = gameArchiveManager;
         _progressService = progressService;
         _pluginService = pluginService;
+        _modifierService = modifierService;
         _parserService = parserService;
     }
 
@@ -352,7 +355,7 @@ public class RED4Controller : ObservableObject, IGameController
         {
             return false;
         }
-
+        
         // backup
         if (options.CreateZipFile && !CreateZipfile(cp77Proj, false))
         {
@@ -389,12 +392,16 @@ public class RED4Controller : ObservableObject, IGameController
 
 
         var arguments = $"{_settingsManager.GetRED4GameLaunchOptions()} {options.GameArguments ?? ""}";
-        
-        if (options.LoadLastSave && ISettingsManager.GetLastSaveName() is string lastSavegame)
+
+
+        _modifierService.RefreshModifierStates();
+
+        // Shift prevents save game load (CET doesn't initialize
+        if (!_modifierService.IsShiftKeyPressed && options.LoadLastSave && ISettingsManager.GetLastSaveName() is string lastSavegame)
         {
             arguments = $"{arguments} -save={lastSavegame}";
         }
-        else if (options.LoadSaveName is string savegame)
+        else if (!_modifierService.IsShiftKeyPressed && options.LoadSaveName is string savegame)
         {
             arguments = $"{arguments} -save={savegame}";
         }
