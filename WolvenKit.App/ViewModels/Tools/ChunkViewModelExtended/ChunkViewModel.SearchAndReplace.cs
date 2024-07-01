@@ -335,12 +335,20 @@ public partial class ChunkViewModel : ObservableObject
                 return wasChanged;
 
 
-            case entMeshComponent meshComponent:
+            case IRedMeshComponent meshComponent:
             {
+                var meshRet = false;
+                if (SearchAndReplaceInObjectProperties(search, replace, meshComponent.MeshAppearance, out var newAppearance) &&
+                    newAppearance is CName cname)
+                {
+                    meshRet = true;
+                    meshComponent.MeshAppearance = cname;
+                }
+
                 if (!SearchAndReplaceInReference(search, replace, meshComponent.Mesh, out var newMesh)
                     || newMesh is not CResourceAsyncReference<CMesh> meshRef)
                 {
-                    return false;
+                    return meshRet;
                 }
 
                 meshComponent.Mesh = meshRef;
