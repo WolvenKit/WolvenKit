@@ -102,6 +102,10 @@ public partial class ChunkViewModel : ObservableObject
             case CMaterialInstance when FindTvPropertyChild("values") is ChunkViewModel child:
                 ExpandAndSelect(child, true);
                 break;
+            // .mlsetup file
+            case Multilayer_Setup when FindTvPropertyChild("layers") is ChunkViewModel child:
+                ExpandAndSelect(child, true);
+                break;
             // .app file
             case appearanceAppearanceResource when FindTvPropertyChild("appearances") is ChunkViewModel child:
                 ExpandAndSelect(child, false, true);
