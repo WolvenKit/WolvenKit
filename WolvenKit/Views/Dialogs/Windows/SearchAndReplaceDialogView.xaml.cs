@@ -36,6 +36,11 @@ namespace WolvenKit.Views.Dialogs.Windows
                         x => x.RememberValues,
                         x => x.RememberValuesCheckBox.IsChecked)
                     .DisposeWith(disposables);
+
+                if (ViewModel.ReplaceText != "")
+                {
+                    ReplaceTextBox.Focus();
+                }
             });
         }
 
