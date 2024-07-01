@@ -300,6 +300,11 @@ public partial class ChunkViewModel
                 return;
             case Multilayer_Layer layer:
                 Value = layer.ColorScale;
+                if (layer.Microblend.DepotPath.GetResolvedText() is string microblend && !string.IsNullOrEmpty(microblend) &&
+                    microblend != "base\\surfaces\\microblends\\default.xbm")
+                {
+                    Value = $"{Value}, {microblend.Split('\\').Last()}";
+                }                
                 IsValueExtrapolated = true;
                 break;
             case scnVoicesetComponent voiceset:
