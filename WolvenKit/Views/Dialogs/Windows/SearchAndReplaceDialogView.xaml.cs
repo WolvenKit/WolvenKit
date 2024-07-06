@@ -93,6 +93,7 @@ namespace WolvenKit.Views.Dialogs.Windows
             s_lastReplace = ViewModel.ReplaceText;
         }
 
+        
         private void WizardPage_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key != Key.Enter)
@@ -107,5 +108,7 @@ namespace WolvenKit.Views.Dialogs.Windows
         }
 
         private void WizardControl_OnFinish(object sender, RoutedEventArgs e) => SaveLastSelection();
+
+        private void SwapFieldsButton_OnClick(object sender, RoutedEventArgs e) => ViewModel?.SwapFields();
     }
 }
