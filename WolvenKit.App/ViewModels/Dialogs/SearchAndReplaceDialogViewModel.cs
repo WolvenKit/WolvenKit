@@ -23,4 +23,6 @@ public partial class SearchAndReplaceDialogViewModel() : ObservableObject
     ///Ignore case
     /// </summary>
     [ObservableProperty] private bool _rememberValues;
+
+    public void SwapFields() => (SearchText, ReplaceText) = (ReplaceText, SearchText);
 }
