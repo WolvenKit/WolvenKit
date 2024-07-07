@@ -93,6 +93,7 @@ namespace WolvenKit
                     services.AddTransient<IGameControllerFactory, GameControllerFactory>();
                     services.AddSingleton<IPluginService, PluginService>();
                     services.AddSingleton<IModifierViewStateService, ModifierViewStateService>();
+                    services.AddSingleton<IWatcherService, WatcherService>();
 
                     // factories
                     services.AddTransient<IPageViewModelFactory, PageViewModelFactory>();

@@ -6,11 +6,13 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Core.Services;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 
@@ -23,6 +25,7 @@ public class AppArchiveManager : ArchiveManager, IAppArchiveManager
     private readonly SourceList<RedFileSystemModel> _rootCache;
 
     private readonly SourceList<RedFileSystemModel> _modCache;
+    private readonly ISettingsManager _settingsService;
 
     #endregion Fields
 
@@ -36,10 +39,12 @@ public class AppArchiveManager : ArchiveManager, IAppArchiveManager
 
     #endregion
 
-    public AppArchiveManager(IHashService hashService, Red4ParserService wolvenkitFileService, ILoggerService logger) : base(hashService, wolvenkitFileService, logger)
+    public AppArchiveManager(IHashService hashService, Red4ParserService wolvenkitFileService, ILoggerService logger,
+        IProgressService<double> progress) : base(hashService, wolvenkitFileService, logger, progress)
     {
         _rootCache = new SourceList<RedFileSystemModel>();
         _modCache = new SourceList<RedFileSystemModel>();
+        _settingsService = Locator.Current.GetService<ISettingsManager>()!;
     }
 
     #region Methods
@@ -108,24 +113,62 @@ public class AppArchiveManager : ArchiveManager, IAppArchiveManager
         });
     }
 
+    private string? GetGameDir() =>
+        _settingsService?.GetRED4GameExecutablePath() is string executablePath && !string.IsNullOrEmpty(executablePath) &&
+        Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(executablePath))) is string gameDir
+            ? gameDir
+            : null;
+
     public override void LoadModsArchives(FileInfo executable, bool analyzeFiles = true)
     {
+        _progressService.IsIndeterminate = true;
+        
         base.LoadModsArchives(executable, analyzeFiles);
+        var gameDir = GetGameDir();
 
-        RebuildModRoot();
+        foreach (var iGameArchive in Archives.Items)
+        {
+            if (gameDir != null && iGameArchive.ArchiveAbsolutePath.StartsWith(gameDir))
+            {
+                iGameArchive.ArchiveRelativePath = iGameArchive.ArchiveAbsolutePath.Replace(gameDir, "");
+            }
+
+            foreach (var redFileSystemModel in ModRoots.Where(redFileSystemModel =>
+                         iGameArchive.ArchiveAbsolutePath.StartsWith(redFileSystemModel.FullName)))
+            {
+                iGameArchive.ArchiveRelativePath = iGameArchive.ArchiveAbsolutePath.Replace(redFileSystemModel.FullName, "");
+            }
+        }
+
+        try
+        {
+            RebuildModRoot();
+        }
+        catch (ArgumentNullException err)
+        {
+            _logger.Error(err.Message);
+        }
 
         _modCache.Edit(innerCache =>
         {
             innerCache.Clear();
             innerCache.Add(ModRoots);
         });
+
     }
 
     public override void LoadAdditionalModArchives(string archiveBasePath, bool analyzeFiles = true)
     {
         base.LoadAdditionalModArchives(archiveBasePath, analyzeFiles);
 
-        RebuildModRoot();
+        try
+        {
+            RebuildModRoot();
+        }
+        catch (ArgumentNullException err)
+        {
+            _logger.Error(err.Message);
+        }
 
         _modCache.Edit(innerCache =>
         {
@@ -138,9 +181,17 @@ public class AppArchiveManager : ArchiveManager, IAppArchiveManager
     {
         ModRoots.Clear();
 
+        _progressService.IsIndeterminate = true;
+
+        var progress = -1;
+        var numTotalArchives = (float)GetModArchives().Count();
+        
         foreach (var archive in GetModArchives())
         {
-            ArgumentNullException.ThrowIfNull(archive.ArchiveRelativePath);
+            progress++;
+            _progressService.Report(progress / numTotalArchives);
+            ArgumentNullException.ThrowIfNull(archive.ArchiveRelativePath,
+                $"{nameof(archive.ArchiveRelativePath)}, archive name: ${archive.Name}");
 
             var modroot = new RedFileSystemModel(archive.ArchiveRelativePath);
 
@@ -171,6 +222,8 @@ public class AppArchiveManager : ArchiveManager, IAppArchiveManager
 
             ModRoots.Add(modroot);
         }
+
+        _progressService.Completed();
     }
 
     public override Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles() => 

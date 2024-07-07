@@ -95,7 +95,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         _mainViewModel = appViewModel;
 
-        _projectWatcher = new WatcherService(_loggerService);
+        _projectWatcher = (WatcherService)Locator.Current.GetService<IWatcherService>()!;
 
         SideInDockedMode = DockSide.Left;
 
@@ -739,7 +739,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        var newFolderPath = Path.Combine(model.FullName, Interactions.AskForTextInput());
+        var newFolderPath = Path.Combine(model.FullName, Interactions.AskForTextInput("Directory name"));
 
         if (Directory.Exists(newFolderPath))
         {
