@@ -133,43 +133,63 @@ public partial class ChunkViewModel : ObservableObject
     public async Task<HashSet<ResourcePath>> GetMaterialDependenciesOutsideOfProject()
     {
         HashSet<ResourcePath> ret = [];
-        if (GetRootModel() is not { ResolvedData: CMesh mesh } rootModel || Tab is null)
-        {
-            return ret;
-        }
-
-        if (mesh.PreloadExternalMaterials.Count > 0 || mesh.PreloadLocalMaterialInstances.Count > 0)
-        {
-            rootModel.ConvertPreloadMaterials();
-        }
-
         _modifierViewStateService.RefreshModifierStates();
-        var includeBasegameFiles = _modifierViewStateService.IsShiftKeyPressed;
 
-        foreach (var externalMaterial in mesh.ExternalMaterials)
+        switch (GetRootModel().ResolvedData)
         {
-            await Task.Run(() => AddRefPath(externalMaterial.DepotPath));
-        }
-
-        foreach (var localMaterial in (mesh.LocalMaterialBuffer?.Materials ?? []).OfType<CMaterialInstance>())
-        {
-            await Task.Run(() => AddRefPath(localMaterial.BaseMaterial.DepotPath));
-            foreach (var value in localMaterial.Values)
-            {
-                switch (value.Value)
+            case CMaterialInstance mi:
+                foreach (var value in (mi.Values ?? []).OfType<CKeyValuePair>())
                 {
-                    case IRedResourceReference rRef:
-                        AddRefPath(rRef.DepotPath);
-                        break;
-                    case IRedResourceAsyncReference raRef:
-                        AddRefPath(raRef.DepotPath);
-                        break;
-                    default:
-                        break;
+                    switch (value.Value)
+                    {
+                        case IRedResourceReference rRef:
+                            AddRefPath(rRef.DepotPath);
+                            break;
+                        case IRedResourceAsyncReference raRef:
+                            AddRefPath(raRef.DepotPath);
+                            break;
+                        default:
+                            break;
+                    }
                 }
-            }
-        }
 
+                break;
+            case CMesh mesh:
+                if (mesh.PreloadExternalMaterials.Count > 0 || mesh.PreloadLocalMaterialInstances.Count > 0)
+                {
+                    GetRootModel().ConvertPreloadMaterials();
+                }
+
+                foreach (var externalMaterial in mesh.ExternalMaterials)
+                {
+                    await Task.Run(() => AddRefPath(externalMaterial.DepotPath));
+                }
+
+                foreach (var localMaterial in (mesh.LocalMaterialBuffer?.Materials ?? []).OfType<CMaterialInstance>())
+                {
+                    await Task.Run(() => AddRefPath(localMaterial.BaseMaterial.DepotPath));
+                    foreach (var value in localMaterial.Values)
+                    {
+                        switch (value.Value)
+                        {
+                            case IRedResourceReference rRef:
+                                AddRefPath(rRef.DepotPath);
+                                break;
+                            case IRedResourceAsyncReference raRef:
+                                AddRefPath(raRef.DepotPath);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+
+                break;
+            default:
+                break;
+        }
+        
+       
         return ret;
 
         void AddRefPath(ResourcePath refPath)
@@ -193,7 +213,8 @@ public partial class ChunkViewModel : ObservableObject
             }
 
             // base game file: Only add those if shift is down
-            if (includeBasegameFiles && _archiveManager.Lookup(refPathHash, ArchiveManagerScope.Basegame).HasValue)
+            if (_modifierViewStateService.IsShiftKeyPressed
+                && _archiveManager.Lookup(refPathHash, ArchiveManagerScope.Basegame).HasValue)
             {
                 ret.Add(refPath);
             }

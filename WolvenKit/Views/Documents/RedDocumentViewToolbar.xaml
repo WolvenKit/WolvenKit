@@ -119,18 +119,6 @@
                           IsEnabled="{Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsScrollToMaterialCommandEnabled, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                           Click="OnScrollToMaterialClick" />
 
-
-                <!-- Shift: "Clear all Materials" -->
-                <MenuItem Header="Add dependencies to mod"
-                          ToolTip="Will run 'delete unused materials' first"
-                          Visibility="{ Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsShiftKeyDown, Converter={ StaticResource BoolInvertConverter}}"
-                          Click="OnAddDependenciesClick" />
-
-                <!-- Shift: "Clear all Materials" -->
-                <MenuItem Header="Add dependencies to mod (include basegame files)"
-                          ToolTip="Will run 'delete unused materials' first"
-                          Visibility="{ Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsShiftKeyDown, Converter={ StaticResource BooleanToVisibilityConverter}}"
-                          Click="OnAddDependenciesClick" />
             </MenuItem>
 
             <!-- Ent file: Appearances menu -->
@@ -149,6 +137,19 @@
                       Style="{StaticResource WolvenKitToolBarItem}"
                       Click="OnGenerateNewCruidClick">
             </MenuItem>
+
+
+            <!-- Shift: "Clear all Materials" -->
+            <MenuItem Header="Add dependencies to mod"
+                      ToolTip="Will run 'delete unused materials' first"
+                      Visibility="{ Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsAddDependenciesCommandEnabled, Converter={ StaticResource BoolInvertConverter}}"
+                      Click="OnAddDependenciesClick" />
+
+            <!-- Shift: "Clear all Materials" -->
+            <MenuItem Header="Add dependencies to mod (include basegame files)"
+                      ToolTip="Will run 'delete unused materials' first"
+                      Visibility="{ Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsAddDependenciesCommandEnabledAndShiftKeyDown, Converter={ StaticResource BooleanToVisibilityConverter}}"
+                      Click="OnAddDependenciesClick" />
             
             
         </Menu>
