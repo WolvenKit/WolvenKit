@@ -140,13 +140,13 @@
 
 
             <!-- Shift: "Clear all Materials" -->
-            <MenuItem Header="Add dependencies to mod"
+            <MenuItem Header="Add material dependencies"
                       ToolTip="Will run 'delete unused materials' first"
                       Visibility="{ Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsAddDependenciesCommandEnabled, Converter={ StaticResource BoolInvertConverter}}"
                       Click="OnAddDependenciesClick" />
 
             <!-- Shift: "Clear all Materials" -->
-            <MenuItem Header="Add dependencies to mod (include basegame files)"
+            <MenuItem Header="Add material dependencies (include basegame files)"
                       ToolTip="Will run 'delete unused materials' first"
                       Visibility="{ Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsAddDependenciesCommandEnabledAndShiftKeyDown, Converter={ StaticResource BooleanToVisibilityConverter}}"
                       Click="OnAddDependenciesClick" />
