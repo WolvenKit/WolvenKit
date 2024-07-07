@@ -222,6 +222,10 @@ namespace WolvenKit.Views.Documents
         private static async Task SearchAndReplaceInChildNodes(ChunkViewModel cvm, Dictionary<string, string> pathReplacements,
             params string[] propertyPaths)
         {
+            if (pathReplacements.Count == 0)
+            {
+                return;
+            }
             var isDirty = false;
             var childNodes = new List<ChunkViewModel>();
             var dirtyNodes = new HashSet<ChunkViewModel>();
