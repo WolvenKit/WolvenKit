@@ -400,7 +400,6 @@ public partial class RedDocumentViewModel : DocumentViewModel
         TabItemViewModels.Clear();
 
         var root = _documentTabViewmodelFactory.RDTDataViewModel(Cr2wFile.RootChunk, this, _appViewModel, _chunkViewmodelFactory);
-        root.FilePath = "(root)";
         TabItemViewModels.Add(root);
         root.OnSectorNodeSelected += OnSectorNodeSelected;
         AddTabForRedType(Cr2wFile.RootChunk);

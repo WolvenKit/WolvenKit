@@ -113,15 +113,29 @@
                           Visibility="{ Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsShiftKeyDown, Converter={ StaticResource BooleanToVisibilityConverter}}"
                           Click="OnClearAllMaterialsClick" />
 
+
                 <!-- Shift: "Clear all Materials" -->
                 <MenuItem Header="Scroll to material"
-                          IsEnabled="{Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsScrollToMaterialCommandEnabled}"
+                          IsEnabled="{Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsScrollToMaterialCommandEnabled, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                           Click="OnScrollToMaterialClick" />
+
+
+                <!-- Shift: "Clear all Materials" -->
+                <MenuItem Header="Add dependencies to mod"
+                          ToolTip="Will run 'delete unused materials' first"
+                          Visibility="{ Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsShiftKeyDown, Converter={ StaticResource BoolInvertConverter}}"
+                          Click="OnAddDependenciesClick" />
+
+                <!-- Shift: "Clear all Materials" -->
+                <MenuItem Header="Add dependencies to mod (include basegame files)"
+                          ToolTip="Will run 'delete unused materials' first"
+                          Visibility="{ Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsShiftKeyDown, Converter={ StaticResource BooleanToVisibilityConverter}}"
+                          Click="OnAddDependenciesClick" />
             </MenuItem>
 
             <!-- Ent file: Appearances menu -->
             <MenuItem Header="Appearances"
-                      Visibility="{ Binding  ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsRegenerateMaterialCommandEnabled, Converter={ StaticResource BooleanToVisibilityConverter}}"
+                      Visibility="{ Binding  ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsRegenerateMaterialCommandEnabled, UpdateSourceTrigger=PropertyChanged, Converter={ StaticResource BooleanToVisibilityConverter}}"
                       Style="{StaticResource WolvenKitToolBarItem}">
 
                 <!-- Convert preload materials -->
@@ -131,7 +145,7 @@
 
             <!--CRUIDs -->
             <MenuItem Header="Generate CRUID"
-                      Visibility="{ Binding  ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsGenerateNewCruidCommandEnabled, Converter={ StaticResource BooleanToVisibilityConverter}}"
+                      Visibility="{ Binding  ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsGenerateNewCruidCommandEnabled, UpdateSourceTrigger=PropertyChanged, Converter={ StaticResource BooleanToVisibilityConverter}}"
                       Style="{StaticResource WolvenKitToolBarItem}"
                       Click="OnGenerateNewCruidClick">
             </MenuItem>
