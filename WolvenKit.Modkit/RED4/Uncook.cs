@@ -68,9 +68,15 @@ namespace WolvenKit.Modkit.RED4
             if (archive.Files[hash] is FileEntry entry)
             {
                 var relFileFullName = entry.FileName;
-                if (string.IsNullOrEmpty(Path.GetExtension(relFileFullName)))
+                var extension = Path.GetExtension(relFileFullName);
+
+                if (string.IsNullOrEmpty(extension))
                 {
                     relFileFullName += ".bin";
+                }
+                else if (extension == ".bin" && !string.IsNullOrEmpty(entry.GuessedExtension))
+                {
+                    relFileFullName = Path.ChangeExtension(relFileFullName, entry.GuessedExtension);
                 }
 
                 var mainFileInfo = new FileInfo(Path.Combine(outDir.FullName, $"{relFileFullName.Replace('\\', Path.DirectorySeparatorChar)}"));
