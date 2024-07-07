@@ -1466,7 +1466,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         if (numUnusedMaterials == 0)
         {
-            _loggerService.Info("No unused materials in current mesh. Yay!");
+            _loggerService.Info("No unused materials in current mesh.");
             return;
         }
 
@@ -2056,6 +2056,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         catch (Exception ex) { _loggerService.Error(ex); }
     }
 
+    public Task<bool> SearchAndReplaceAsync(string searchText, string replaceText) =>
+        Task.FromResult(SearchAndReplaceInternal(searchText, replaceText));
     public bool SearchAndReplace(string searchText, string replaceText) => SearchAndReplaceInternal(searchText, replaceText);
 
     private bool CanCopyHandle() => Data is IRedBaseHandle;   // TODO RelayCommand check notify

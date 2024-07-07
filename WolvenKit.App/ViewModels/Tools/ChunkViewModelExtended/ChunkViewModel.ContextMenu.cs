@@ -1,9 +1,11 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
-using WolvenKit.App.ViewModels.Dialogs;
+using WolvenKit.Common;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.Shell;
@@ -80,7 +82,7 @@ public partial class ChunkViewModel : ObservableObject
         }
 
         var oldName = entry.Name;
-        var newName = await Interactions.ShowInputBoxAsync(entry.Name.GetResolvedText() ?? "");
+        var newName = await Interactions.ShowInputBoxAsync("Rename material", entry.Name.GetResolvedText() ?? "");
 
         entry.Name = (CName)newName;
 
@@ -125,6 +127,78 @@ public partial class ChunkViewModel : ObservableObject
         return Task.CompletedTask;
     }
 
+    /// <summary>
+    /// Called from RedDocumentViewToolbar: returns all material dependencies in an array for adding them to the current project
+    /// </summary>
+    public async Task<HashSet<ResourcePath>> GetMaterialDependenciesOutsideOfProject()
+    {
+        HashSet<ResourcePath> ret = [];
+        if (GetRootModel() is not { ResolvedData: CMesh mesh } rootModel || Tab is null)
+        {
+            return ret;
+        }
+
+        if (mesh.PreloadExternalMaterials.Count > 0 || mesh.PreloadLocalMaterialInstances.Count > 0)
+        {
+            rootModel.ConvertPreloadMaterials();
+        }
+
+        _modifierViewStateService.RefreshModifierStates();
+        var includeBasegameFiles = _modifierViewStateService.IsShiftKeyPressed;
+
+        foreach (var externalMaterial in mesh.ExternalMaterials)
+        {
+            await Task.Run(() => AddRefPath(externalMaterial.DepotPath));
+        }
+
+        foreach (var localMaterial in (mesh.LocalMaterialBuffer?.Materials ?? []).OfType<CMaterialInstance>())
+        {
+            await Task.Run(() => AddRefPath(localMaterial.BaseMaterial.DepotPath));
+            foreach (var value in localMaterial.Values)
+            {
+                switch (value.Value)
+                {
+                    case IRedResourceReference rRef:
+                        AddRefPath(rRef.DepotPath);
+                        break;
+                    case IRedResourceAsyncReference raRef:
+                        AddRefPath(raRef.DepotPath);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        return ret;
+
+        void AddRefPath(ResourcePath refPath)
+        {
+            var refPathHash = HashHelper.CalculateDepotPathHash(refPath);
+            // empty depot path
+            if (refPathHash is 0)
+            {
+                return;
+            }
+
+            if (_projectManager.ActiveProject?.Files is not null && _projectManager.ActiveProject.Files.Contains(refPath!))
+            {
+                return;
+            }
+
+            if (_archiveManager.Lookup(refPathHash, ArchiveManagerScope.Mods).HasValue)
+            {
+                ret.Add(refPath);
+                return;
+            }
+
+            // base game file: Only add those if shift is down
+            if (includeBasegameFiles && _archiveManager.Lookup(refPathHash, ArchiveManagerScope.Basegame).HasValue)
+            {
+                ret.Add(refPath);
+            }
+        }
+    }
 
     [RelayCommand]
     private void ScrollToMaterial()
@@ -174,7 +248,7 @@ public partial class ChunkViewModel : ObservableObject
     [RelayCommand]
     private async Task<Task> AddMaterialAndDefinition()
     {
-        var newName = await Interactions.ShowInputBoxAsync("");
+        var newName = await Interactions.ShowInputBoxAsync("New material name", "");
 
         var materialEntries = Parent?.GetRootModel().GetModelFromPath("materialEntries");
         if (materialEntries?.ResolvedData is not CArray<CMeshMaterialEntry> array)
