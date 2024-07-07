@@ -17,6 +17,7 @@ using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.RED4.Types;
 using WolvenKit.Views.Dialogs.Windows;
 
 namespace WolvenKit.Views.Documents
@@ -158,71 +159,79 @@ namespace WolvenKit.Views.Documents
         private void OnScrollToMaterialClick(object sender, RoutedEventArgs e) =>
             ViewModel?.SelectedChunk?.ScrollToMaterialCommand.Execute(null);
 
-        private async void OnAddDependenciesClick(object sender, RoutedEventArgs e)
+        private string GetTextureDirForDependencies(bool useTextureSubfolder)
         {
-            if (_projectManager.ActiveProject is null || ViewModel?.RootChunk is not ChunkViewModel cvm)
+            if (_projectManager.ActiveProject?.ModDirectory is string modDir
+                && ViewModel?.FilePath?.RelativePath(new DirectoryInfo(modDir)) is string activeFilePath
+                && Path.GetDirectoryName(activeFilePath) is string dirName && !string.IsNullOrEmpty(dirName))
             {
-                return;
+                if (useTextureSubfolder)
+                {
+                    return Path.Combine(dirName, "textures");
+                }
+
+                return dirName;
             }
 
+            var destFolder = Interactions.AskForTextInput("Target folder for dependencies");
+
+            if (destFolder is not null)
+            {
+                return destFolder;
+            }
+
+            var projectName = _projectManager.ActiveProject?.Name ?? "yourProject";
+            var subfolder = _settingsManager.ModderName ?? "YourName";
+            return Path.Join(subfolder, projectName, "dependencies");
+        }
+
+        private async Task AddDependenciesToMesh(ChunkViewModel cvm)
+        {
             cvm.DeleteUnusedMaterialsCommand.Execute(null);
-
-            string destFolder;
-            if (ViewModel.FilePath?.RelativePath(new DirectoryInfo(_projectManager.ActiveProject.ModDirectory)) is string
-                    activeFilePath && Path.GetDirectoryName(activeFilePath) is string dirName && !string.IsNullOrEmpty(dirName))
-            {
-                destFolder = Path.Combine(dirName, "textures");
-            }
-            else
-            {
-                destFolder = Interactions.AskForTextInput("Target folder for dependencies");
-
-                if (destFolder is null)
-                {
-                    var subfolder = _settingsManager.ModderName ?? "YourName";
-                    destFolder = Path.Join(subfolder, _projectManager.ActiveProject.Name, "dependencies");
-                }
-            }
-
-            if (!_archiveManager.GetModArchives().Any())
-            {
-                if (_settingsManager.CP77ExecutablePath is null)
-                {
-                    throw new WolvenKitException(0x5001, "No game executable set");
-                }
-
-                _loggerService.Info("Loading mod archives, this may take a moment...");
-                await Task.Run(() =>
-                {
-                    _archiveManager.LoadModsArchives(new FileInfo(_settingsManager.CP77ExecutablePath), true);
-                    if (_settingsManager.ExtraModDirPath is string extraModDir && !string.IsNullOrEmpty(extraModDir))
-                    {
-                        _archiveManager.LoadAdditionalModArchives(extraModDir, true);
-                    }
-                });
-
-                _loggerService.Info("... Done!");
-            }
-
-            _projectWatcher.UnwatchProject(_projectManager.ActiveProject);
+            await LoadModArchives();
 
             var materialDependencies = await cvm.GetMaterialDependenciesOutsideOfProject();
+
+            var destFolder = GetTextureDirForDependencies(true);
+
+            _projectWatcher.UnwatchProject(_projectManager.ActiveProject!);
 
             // Use search and replace to fix file paths
             var pathReplacements = await ProjectResourceHelper.AddDependenciesToProjectPathAsync(destFolder, materialDependencies);
 
+            await SearchAndReplaceInChildNodes(cvm, pathReplacements, "localMaterialBuffers.materials", "externalMaterials");
+        }
+
+        private async Task AddDependenciesToMi(ChunkViewModel cvm)
+        {
+            await LoadModArchives();
+
+            var materialDependencies = await cvm.GetMaterialDependenciesOutsideOfProject();
+
+            var destFolder = GetTextureDirForDependencies(false);
+
+            _projectWatcher.UnwatchProject(_projectManager.ActiveProject!);
+
+            // Use search and replace to fix file paths
+            var pathReplacements = await ProjectResourceHelper.AddDependenciesToProjectPathAsync(destFolder, materialDependencies);
+
+            await SearchAndReplaceInChildNodes(cvm, pathReplacements, "values");
+        }
+
+
+        private static async Task SearchAndReplaceInChildNodes(ChunkViewModel cvm, Dictionary<string, string> pathReplacements,
+            params string[] propertyPaths)
+        {
             var isDirty = false;
             var childNodes = new List<ChunkViewModel>();
             var dirtyNodes = new HashSet<ChunkViewModel>();
 
-            if (cvm.GetModelFromPath("localMaterialBuffer.materials") is ChunkViewModel child)
+            foreach (var propertyPath in propertyPaths)
             {
-                childNodes.AddRange(child.TVProperties);
-            }
-
-            if (cvm.GetModelFromPath("externalMaterials") is ChunkViewModel external)
-            {
-                childNodes.AddRange(external.TVProperties);
+                if (cvm.GetModelFromPath(propertyPath) is ChunkViewModel child)
+                {
+                    childNodes.AddRange(child.TVProperties);
+                }
             }
 
             foreach (var childNode in childNodes)
@@ -248,9 +257,54 @@ namespace WolvenKit.Views.Documents
             {
                 cvm.Tab.Parent.SetIsDirty(true);
             }
+        }
+
+        private async Task LoadModArchives()
+        {
+            if (!_archiveManager.GetModArchives().Any())
+            {
+                if (_settingsManager.CP77ExecutablePath is null)
+                {
+                    throw new WolvenKitException(0x5001, "No game executable set");
+                }
+
+                _loggerService.Info("Loading mod archives, this may take a moment...");
+                await Task.Run(() =>
+                {
+                    _archiveManager.LoadModsArchives(new FileInfo(_settingsManager.CP77ExecutablePath), true);
+                    if (_settingsManager.ExtraModDirPath is string extraModDir && !string.IsNullOrEmpty(extraModDir))
+                    {
+                        _archiveManager.LoadAdditionalModArchives(extraModDir, true);
+                    }
+                });
+
+                _loggerService.Info("... Done!");
+            }
+        }
+
+
+        private async void OnAddDependenciesClick(object sender, RoutedEventArgs e)
+        {
+            if (_projectManager.ActiveProject is null || ViewModel?.RootChunk is not ChunkViewModel cvm)
+            {
+                return;
+            }
+
+            switch (cvm.ResolvedData)
+            {
+                case CMesh:
+                    await AddDependenciesToMesh(cvm);
+                    break;
+                case CMaterialInstance:
+                    await AddDependenciesToMi(cvm);
+                    break;
+                default:
+                    break;
+            }
 
             _projectWatcher.Refresh();
             _projectWatcher.WatchProject(_projectManager.ActiveProject);
         }
+
     }
 }

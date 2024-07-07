@@ -119,6 +119,10 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [ObservableProperty] private bool _isRegenerateMaterialCommandEnabled;
     [ObservableProperty] private bool _isScrollToMaterialCommandEnabled;
     [ObservableProperty] private bool _isGenerateNewCruidCommandEnabled;
+    [ObservableProperty] private bool _isAddAppearancesCommandEnabled;
+
+    [ObservableProperty] private bool _isAddDependenciesCommandEnabled;
+    [ObservableProperty] private bool _isAddDependenciesCommandEnabledAndShiftKeyDown;
 
     [ObservableProperty] private bool _isShiftKeyDown;
 
@@ -141,6 +145,13 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         }
         
         IsMesh = CurrentTab?.GetContentType() is RedDocumentItemType.Mesh;
+        IsAddAppearancesCommandEnabled = CurrentTab?.GetContentType() is RedDocumentItemType.Mesh;
+
+        var enableDependencyCommand = IsAddAppearancesCommandEnabled || CurrentTab?.GetContentType() is RedDocumentItemType.Mi;
+
+        IsAddDependenciesCommandEnabled = enableDependencyCommand && !IsShiftKeyDown;
+        IsAddDependenciesCommandEnabledAndShiftKeyDown = enableDependencyCommand && IsShiftKeyDown;
+        
         IsFileValidationMenuVisible = IsMesh || CurrentTab?.GetContentType() is RedDocumentItemType.App or RedDocumentItemType.Ent;
         
         if (RootChunk?.ResolvedData is not CMesh mesh)
