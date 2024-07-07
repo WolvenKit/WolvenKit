@@ -43,6 +43,21 @@ namespace WolvenKit.Common
         public Optional<IGameFile> Lookup(ulong hash);
 
         /// <summary>
+        /// Checks if a file with the given resourcePath exists in the specified search scope.
+        /// </summary>
+        /// <param name="path">ResourcePath</param>
+        /// <param name="searchScope">BaseGame, Mod or Everywhere</param>
+        /// <returns>An optional with the matching file</returns>
+        public Optional<IGameFile> Lookup(ResourcePath path, ArchiveManagerScope searchScope);
+
+        /// <summary>
+        /// Checks if a file with the given resourcePath exists in the ArchiveManager's current scope.
+        /// </summary>
+        /// <param name="path">ResourcePath</param>
+        /// <returns>An optional with the matching file</returns>
+        public Optional<IGameFile> Lookup(ResourcePath path);
+
+        /// <summary>
         /// Checks if a file with the given hash exists in the specified search scope.
         /// </summary>
         /// <param name="hash">Unique hash of the file</param>
