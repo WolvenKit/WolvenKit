@@ -120,9 +120,9 @@ namespace WolvenKit.Views.Tools
                     };
 
 
-                Interactions.AskForTextInput = () =>
+                Interactions.AskForTextInput = title =>
                 {
-                    var dialog = new InputDialogView();
+                    var dialog = new InputDialogView() { Title = title };
 
                     if (dialog.ViewModel is not InputDialogViewModel innerVm
                         || dialog.ShowDialog(Application.Current.MainWindow) != true)
