@@ -147,6 +147,8 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         IsMesh = CurrentTab?.GetContentType() is RedDocumentItemType.Mesh;
         IsAddAppearancesCommandEnabled = CurrentTab?.GetContentType() is RedDocumentItemType.Mesh;
 
+        _modifierViewStateService?.RefreshModifierStates();
+        
         var enableDependencyCommand = IsAddAppearancesCommandEnabled || CurrentTab?.GetContentType() is RedDocumentItemType.Mi;
 
         IsAddDependenciesCommandEnabled = enableDependencyCommand && !IsShiftKeyDown;
