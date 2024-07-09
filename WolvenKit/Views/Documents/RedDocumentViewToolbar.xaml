@@ -142,7 +142,7 @@
             <!-- Shift: "Clear all Materials" -->
             <MenuItem Header="Add material dependencies"
                       ToolTip="Will run 'delete unused materials' first"
-                      Visibility="{ Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsAddDependenciesCommandEnabled, Converter={ StaticResource BoolInvertConverter}}"
+                      Visibility="{ Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsAddDependenciesCommandEnabled, Converter={ StaticResource BooleanToVisibilityConverter}}"
                       Click="OnAddDependenciesClick" />
 
             <!-- Shift: "Clear all Materials" -->
