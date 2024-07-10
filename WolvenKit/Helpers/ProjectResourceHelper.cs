@@ -1,19 +1,18 @@
-﻿using System.Collections.Generic;
+﻿#nullable enable
+
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Splat;
 using WolvenKit.App.Controllers;
+using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.Common;
-using WolvenKit.Common.Interfaces;
-using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.Core.Services;
-using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 
-namespace WolvenKit.App.Helpers;
+namespace WolvenKit.Helpers;
 
 public static class ProjectResourceHelper
 {
@@ -25,33 +24,18 @@ public static class ProjectResourceHelper
 
     private static ILoggerService? s_loggerService;
     private static ILoggerService? GetLoggerService() => s_loggerService ??= Locator.Current.GetService<ILoggerService>();
-
-    private static IWatcherService? s_projectWatcher;
-
-    private static WatcherService? GetProjectWatcher()
-    {
-        s_projectWatcher ??= Locator.Current.GetService<IWatcherService>();
-        return (WatcherService?)s_projectWatcher;
-    }
-
-    private static RED4Controller? s_red4Controller;
-
     private static RED4Controller GetRed4Controller()
     {
-        s_red4Controller ??= new RED4Controller(
-            GetLoggerService()!,
-            Locator.Current.GetService<INotificationService>()!,
-            Locator.Current.GetService<IProjectManager>()!,
-            Locator.Current.GetService<ISettingsManager>()!,
-            Locator.Current.GetService<IHashService>()!,
-            Locator.Current.GetService<IModTools>()!,
-            Locator.Current.GetService<IAppArchiveManager>()!,
-            Locator.Current.GetService<IProgressService<double>>()!,
-            Locator.Current.GetService<IPluginService>()!,
-            Locator.Current.GetService<IModifierViewStateService>()!,
-            Locator.Current.GetService<Red4ParserService>()!
-        );
-        return s_red4Controller;
+        if (GameControllerFactory.GetInstance() is GameControllerFactory factory)
+        {
+            return factory.GetRed4Controller();
+        }
+
+        return GameControllerFactory.CreateInstance(
+            GetProjectManager()!,
+            Locator.Current.GetService<RED4Controller>()!,
+            Locator.Current.GetService<MockGameController>()!
+        ).GetRed4Controller();
     }
 
     private static string GetUniqueSubfolderPath(IEnumerable<string> allFilePaths, string currentFilePath)
@@ -89,8 +73,6 @@ public static class ProjectResourceHelper
             return pathReplacements;
         }
 
-        GetProjectWatcher()?.UnwatchProject(currentProject);
-
         var archiveRoot = currentProject.ModDirectory;
         var absoluteTargetFolder = Path.Combine(archiveRoot, destFolderRelativePath);
 
@@ -108,26 +90,48 @@ public static class ProjectResourceHelper
 
         List<string> filesNotFound = [];
 
+        Dictionary<string, string> pathsAndDestinations = new(); 
+
         foreach (var path in allFilePaths)
+        {
+            var uniqueSubfolderPath = "";
+
+            if (fileGroups.TryGetValue(path, out var groups) && groups.Count <= 2)
+            {
+                uniqueSubfolderPath = Path.PathSeparator + GetUniqueSubfolderPath(allFilePaths, groups.First().GetResolvedText() ?? "");
+            }
+
+            pathsAndDestinations[path] = $"{destFolderRelativePath}{uniqueSubfolderPath}";
+        }
+
+        //AddFileToProjectFolder(archiveRoot, path, Path.Combine(destFolderRelativePath, uniqueSubfolderPath), pathReplacements);
+
+        List<string> existingFiles = pathsAndDestinations.Where(kvp =>
+        {
+            var fileName = Path.GetFileName(kvp.Key);
+            var absolutePath = Path.Combine(archiveRoot, kvp.Value);
+            return File.Exists(Path.Combine(absolutePath, fileName));
+        }).Select((kvp) => kvp.Value).ToList();
+
+        var overwriteFiles = existingFiles.Count == 0 || Interactions.ShowConfirmation((
+            "The following files already exist in the project. Do you want to overwrite them?",
+            "Files Already Exist",
+            WMessageBoxImage.Question,
+            WMessageBoxButtons.YesNo)) is WMessageBoxResult.Yes;
+
+
+        foreach (var kvp in pathsAndDestinations)
         {
             try
             {
-                if (!fileGroups.TryGetValue(path, out var groups) || groups.Count < 2)
-                {
-                    AddFileToProjectFolder(archiveRoot, path, destFolderRelativePath, pathReplacements);
-                    continue;
-                }
-
-                var uniqueSubfolderPath = GetUniqueSubfolderPath(allFilePaths, groups.First().GetResolvedText() ?? "");
-                AddFileToProjectFolder(archiveRoot, path, Path.Combine(destFolderRelativePath, uniqueSubfolderPath), pathReplacements);
+                AddFileToProjectFolder(archiveRoot, kvp.Key, kvp.Value, pathReplacements, overwriteFiles);
             }
             catch (FileNotFoundException e)
             {
                 filesNotFound.Add(e.Message);
             }
         }
-
-        GetProjectWatcher()?.WatchProject(currentProject);
+      
         if (GetLoggerService() is not ILoggerService svc || filesNotFound.Count <= 0)
         {
             return pathReplacements;
@@ -141,13 +145,14 @@ public static class ProjectResourceHelper
 
 
     private static void AddFileToProjectFolder(string projectRoot, ResourcePath resourcePath, ResourcePath targetResourcePath,
-        Dictionary<string, string> pathReplacements)
+        Dictionary<string, string> pathReplacements, bool overwriteFiles)
     {
-        if (resourcePath.GetResolvedText() is not string sourceRelativePath || string.IsNullOrEmpty(sourceRelativePath))
+        if (resourcePath.GetResolvedText() is not string sourceRelativePath
+            || string.IsNullOrEmpty(sourceRelativePath))
         {
             return;
         }
-
+        
         var refPathHash = HashHelper.CalculateDepotPathHash(resourcePath);
 
         // we can't add it
@@ -186,18 +191,24 @@ public static class ProjectResourceHelper
         var sourceAbsolutePath = Path.Combine(projectRoot, sourceRelativePath);
         var targetAbsoluteFile = Path.Combine(targetAbsolutePath, Path.GetFileName(sourceRelativePath));
 
-        // pop it into our map
-        pathReplacements.TryAdd(sourceRelativePath, Path.Combine(targetRelativePath, Path.GetFileName(sourceRelativePath)));
+        if (File.Exists(targetAbsoluteFile))
+        {
+            if (!overwriteFiles)
+            {
+                return;
+            }
 
+            File.Delete(targetAbsoluteFile);
+        }
+
+        
         if (!Directory.Exists(targetAbsolutePath))
         {
             Directory.CreateDirectory(targetAbsolutePath);
         }
 
-        if (File.Exists(targetAbsoluteFile))
-        {
-            File.Delete(targetAbsoluteFile);
-        }
+        // pop it into our map
+        pathReplacements.TryAdd(sourceRelativePath, Path.Combine(targetRelativePath, Path.GetFileName(sourceRelativePath)));
 
         File.Move(sourceAbsolutePath, targetAbsoluteFile, true);
     }

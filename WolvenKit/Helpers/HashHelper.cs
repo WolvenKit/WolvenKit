@@ -1,7 +1,9 @@
-﻿using WolvenKit.Common.FNV1A;
+﻿#nullable enable
+using WolvenKit.Common.FNV1A;
 using WolvenKit.RED4.Types;
 
-namespace WolvenKit.Modkit.Resources;
+namespace WolvenKit.Helpers;
+
 internal static class HashHelper
 {
     /// <summary>
@@ -17,6 +19,4 @@ internal static class HashHelper
     /// <param name="resourcePath"></param>
     /// <returns></returns>
     public static ulong CalculateDepotPathHash(ResourcePath resourcePath) => CalculateDepotPathHash(resourcePath.GetResolvedText());
-
-
 }

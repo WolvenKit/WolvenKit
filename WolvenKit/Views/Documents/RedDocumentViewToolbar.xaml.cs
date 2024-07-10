@@ -17,6 +17,7 @@ using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Helpers;
 using WolvenKit.RED4.Types;
 using WolvenKit.Views.Dialogs.Windows;
 
@@ -197,10 +198,15 @@ namespace WolvenKit.Views.Documents
             _projectWatcher.UnwatchProject(_projectManager.ActiveProject!);
 
             // Use search and replace to fix file paths
-            var pathReplacements = await ProjectResourceHelper.AddDependenciesToProjectPathAsync(destFolder, materialDependencies);
+            var pathReplacements = await ProjectResourceHelper.AddDependenciesToProjectPathAsync(
+                destFolder, materialDependencies
+            );
 
             await SearchAndReplaceInChildNodes(cvm, pathReplacements, "localMaterialBuffers.materials", "externalMaterials");
+
+            _projectWatcher.WatchProject(_projectManager.ActiveProject!);
         }
+        
 
         private async Task AddDependenciesToMi(ChunkViewModel cvm)
         {
@@ -216,6 +222,8 @@ namespace WolvenKit.Views.Documents
             var pathReplacements = await ProjectResourceHelper.AddDependenciesToProjectPathAsync(destFolder, materialDependencies);
 
             await SearchAndReplaceInChildNodes(cvm, pathReplacements, "values");
+
+            _projectWatcher.WatchProject(_projectManager.ActiveProject!);
         }
 
 

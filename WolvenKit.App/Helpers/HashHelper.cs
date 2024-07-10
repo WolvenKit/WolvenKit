@@ -1,8 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using WolvenKit.Common.FNV1A;
+﻿using WolvenKit.Common.FNV1A;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Helpers;
