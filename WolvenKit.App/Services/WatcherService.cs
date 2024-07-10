@@ -5,7 +5,6 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Splat;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.Core.Interfaces;
@@ -50,10 +49,6 @@ public partial class WatcherService : ObservableObject, IWatcherService
     ];
 
     #endregion
-
-    public WatcherService() : this(Locator.Current.GetService<ILoggerService>())
-    {
-    }
 
     public WatcherService(ILoggerService? loggerService)
     {

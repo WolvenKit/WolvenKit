@@ -18,14 +18,19 @@ using WolvenKit.RED4.CR2W.Archive;
 
 namespace WolvenKit.App.Services;
 
-public class AppArchiveManager : ArchiveManager, IAppArchiveManager
+public class AppArchiveManager(
+    IHashService hashService,
+    Red4ParserService wolvenkitFileService,
+    ILoggerService logger,
+    IProgressService<double> progress,
+    ISettingsManager settings)
+    : ArchiveManager(hashService, wolvenkitFileService, logger, progress), IAppArchiveManager
 {
     #region Fields
 
-    private readonly SourceList<RedFileSystemModel> _rootCache;
+    private readonly SourceList<RedFileSystemModel> _rootCache = new();
 
-    private readonly SourceList<RedFileSystemModel> _modCache;
-    private readonly ISettingsManager _settingsService;
+    private readonly SourceList<RedFileSystemModel> _modCache = new();
 
     #endregion Fields
 
@@ -38,14 +43,6 @@ public class AppArchiveManager : ArchiveManager, IAppArchiveManager
     public List<RedFileSystemModel> ModRoots { get; set; } = new();
 
     #endregion
-
-    public AppArchiveManager(IHashService hashService, Red4ParserService wolvenkitFileService, ILoggerService logger,
-        IProgressService<double> progress) : base(hashService, wolvenkitFileService, logger, progress)
-    {
-        _rootCache = new SourceList<RedFileSystemModel>();
-        _modCache = new SourceList<RedFileSystemModel>();
-        _settingsService = Locator.Current.GetService<ISettingsManager>()!;
-    }
 
     #region Methods
 
@@ -114,7 +111,7 @@ public class AppArchiveManager : ArchiveManager, IAppArchiveManager
     }
 
     private string? GetGameDir() =>
-        _settingsService?.GetRED4GameExecutablePath() is string executablePath && !string.IsNullOrEmpty(executablePath) &&
+        settings?.GetRED4GameExecutablePath() is string executablePath && !string.IsNullOrEmpty(executablePath) &&
         Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(executablePath))) is string gameDir
             ? gameDir
             : null;

@@ -95,7 +95,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         _mainViewModel = appViewModel;
 
-        _projectWatcher = (WatcherService)Locator.Current.GetService<IWatcherService>()!;
+        _projectWatcher = new WatcherService(_loggerService);
 
         SideInDockedMode = DockSide.Left;
 

@@ -19,8 +19,7 @@ public class GameControllerFactory : IGameControllerFactory
     private readonly MockGameController _mockGameController;
     private readonly IProjectManager _projectManager;
 
-
-
+    private static GameControllerFactory? Instance;  
     public GameControllerFactory(
         IProjectManager projectManager,
         //Tw3Controller tw3Controller,
@@ -32,7 +31,18 @@ public class GameControllerFactory : IGameControllerFactory
         _cp77Controller = cp77Controller;
         _projectManager = projectManager;
         _mockGameController = mockGameController;
+
+        Instance ??= this;
     }
+
+    public static GameControllerFactory? GetInstance() => Instance;
+
+    public static GameControllerFactory CreateInstance(
+        IProjectManager projectManager,
+        RED4Controller cp77Controller,
+        MockGameController mockGameController
+    ) => new GameControllerFactory(projectManager, cp77Controller, mockGameController);
+    
 
     public RED4Controller GetRed4Controller() => _cp77Controller;
 

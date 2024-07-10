@@ -7,12 +7,12 @@ using System.Text.Json;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Kernel;
-using WolvenKit.App.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
+using WolvenKit.Modkit.Resources;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 
