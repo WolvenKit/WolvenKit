@@ -155,7 +155,7 @@ namespace WolvenKit.Modkit.RED4.Opus
                         modDictionary.Add(pakIdx, modStream);
                     }
                             
-                    info.WriteOpusToPak(new MemoryStream(File.ReadAllBytes(name)), modDictionary[pakIdx], id, new MemoryStream(File.ReadAllBytes(name.Replace("opus", "wav"))));
+                    info.WriteOpusToPak(new MemoryStream(File.ReadAllBytes(name)), ref modDictionary[pakIdx], id, new MemoryStream(File.ReadAllBytes(name.Replace("opus", "wav"))));
                 }
             }
 
