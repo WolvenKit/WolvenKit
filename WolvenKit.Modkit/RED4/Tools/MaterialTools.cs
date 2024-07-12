@@ -354,7 +354,7 @@ namespace WolvenKit.Modkit.RED4
                     return (null, resultDict, cMaterialInstance.EnableMask);
                 }
 
-                var file = LoadFile(path.ToString().NotNull());
+                var file = LoadFile(path.GetResolvedText().NotNull());
                 if (file.RootChunk is not CMaterialInstance mi)
                 {
                     throw new Exception("Invalid .mi file");
@@ -365,7 +365,7 @@ namespace WolvenKit.Modkit.RED4
             }
             baseMaterials.Reverse();
 
-            var spath = path.ToString().NotNull();
+            var spath = path.GetResolvedText().NotNull();
             CMaterialTemplate mt;
             if (mts.TryGetValue(spath, out var mt1))
             {

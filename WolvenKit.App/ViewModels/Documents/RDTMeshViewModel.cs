@@ -1501,8 +1501,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         return appMaterials;
     }
 
-    private string GetUniqueMaterialName(string name, CMesh mesh) => mesh.InplaceResources.Count > 0 
-        ? Path.GetFileNameWithoutExtension(mesh.InplaceResources[0].DepotPath.ToString().NotNull()) 
+    private string GetUniqueMaterialName(string name, CMesh mesh) => mesh.InplaceResources.Count > 0
+        ? Path.GetFileNameWithoutExtension(mesh.InplaceResources[0].DepotPath.GetResolvedText().NotNull()) 
         : name;
 
     private Dictionary<string, Material> GetMaterialsFromMesh(CMesh mesh)
@@ -3199,7 +3199,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
             var text = new BillboardText3D();
             text.TextInfo.Add(
-                new TextInfo(Path.GetFileNameWithoutExtension(desc.Data.DepotPath.ToString()),
+                new TextInfo(Path.GetFileNameWithoutExtension(desc.Data.DepotPath.GetResolvedText()),
                     new SharpDX.Vector3((desc.StreamingBox.Max.X + desc.StreamingBox.Min.X) / 2, (desc.StreamingBox.Max.Z + desc.StreamingBox.Min.Z) / 2, -(desc.StreamingBox.Max.Y + desc.StreamingBox.Min.Y) / 2))
                 {
                     Foreground = SharpDX.Color.Red, Scale = 0.5f
@@ -3209,8 +3209,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             var bbText = new WKBillboardTextModel3D()
             {
                 Geometry = text,
-                Name = Path.GetFileNameWithoutExtension(desc.Data.DepotPath.ToString().NotNull()).Replace("-", "n"),
-                Text = Path.GetFileNameWithoutExtension(desc.Data.DepotPath.ToString().NotNull()),
+                Name = Path.GetFileNameWithoutExtension(desc.Data.DepotPath.GetResolvedText().NotNull()).Replace("-", "n"),
+                Text = Path.GetFileNameWithoutExtension(desc.Data.DepotPath.GetResolvedText().NotNull()),
             };
 
             if (desc.Category == Enums.worldStreamingSectorCategory.Exterior)
@@ -3291,7 +3291,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 other.Children.Add(bbText);
             }
 
-            sectors.Add(new Sector(Path.GetFileNameWithoutExtension(desc.Data.DepotPath.ToString().NotNull()), bbText)
+            sectors.Add(new Sector(Path.GetFileNameWithoutExtension(desc.Data.DepotPath.GetResolvedText().NotNull()), bbText)
             {
                 DepotPath = desc.Data.DepotPath, NumberOfHandles = desc.NumNodeRanges
             });

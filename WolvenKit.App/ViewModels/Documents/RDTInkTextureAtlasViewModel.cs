@@ -134,7 +134,7 @@ public partial class RDTInkTextureAtlasViewModel : RedDocumentTabViewModel
 
         foreach (var part in slot.Parts)
         {
-            var slotViewModel = new InkTextureAtlasMapperViewModel(part, xbm, slot.Texture.DepotPath.ToString().NotNull(),
+            var slotViewModel = new InkTextureAtlasMapperViewModel(part, xbm, slot.Texture.DepotPath.GetResolvedText().NotNull(),
                 Parent.RelativePath, (BitmapSource)Image);
             slotViewModel.PropertyChanged += OnSlotPropertyChanged;
             OverlayItems.Add(slotViewModel);
