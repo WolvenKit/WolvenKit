@@ -142,5 +142,5 @@ public readonly struct ResourcePath : IRedString, IRedPrimitive<string>, IEquata
 
     public string? GetString() => this;
     public override string? ToString() => GetResolvedText();
-    public static bool IsNullOrEmpty([NotNullWhen(false)] ResourcePath path) => path == ResourcePath.Empty ? true : string.IsNullOrEmpty(path.ToString());
+    public static bool IsNullOrEmpty([NotNullWhen(false)] ResourcePath path) => path == ResourcePath.Empty ? true : string.IsNullOrEmpty(path.GetResolvedText());
 }

@@ -62,7 +62,7 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
 
             foreach (var f in library.ExternalDependenciesForInternalItems)
             {
-                var itemPath = f.DepotPath.ToString().NotNull();
+                var itemPath = f.DepotPath.GetResolvedText().NotNull();
                 if (Path.GetExtension(itemPath) == ".inkatlas")
                 {
                     tasks.Add(LoadInkAtlasAsync(itemPath));

@@ -263,7 +263,8 @@ namespace WolvenKit.Modkit.RED4.Serialization.yaml
                         }
                         case CResourceAsyncReference<CResource> cres:
                         {
-                            emitter.WriteProperty(nameof(CResourceAsyncReference<CResource>.DepotPath), cres.DepotPath.ToString().NotNull());
+                            emitter.WriteProperty(nameof(CResourceAsyncReference<CResource>.DepotPath),
+                                cres.DepotPath.GetResolvedText().NotNull());
                             break;
                         }
 

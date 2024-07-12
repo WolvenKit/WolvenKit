@@ -162,7 +162,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     private Task OpenImport(ICR2WImport input)
     {
         var depotpath = input.DepotPath;
-        var key = FNV1A64HashAlgorithm.HashString(depotpath.ToString().NotNull());
+        var key = FNV1A64HashAlgorithm.HashString(depotpath.GetResolvedText().NotNull());
 
         return _gameController.GetController().AddFileToModModal(key);
     }

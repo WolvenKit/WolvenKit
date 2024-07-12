@@ -279,7 +279,7 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
 
         if (raRef.IsSet)
         {
-            emitter.Emit(new Scalar(raRef.DepotPath.ToString().NotNull()));
+            emitter.Emit(new Scalar(raRef.DepotPath.GetResolvedText().NotNull()));
         }
         else
         {
