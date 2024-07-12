@@ -200,7 +200,7 @@ namespace WolvenKit.Views.Editors
         private void RefreshValidityAndTooltip(object sender, RoutedEventArgs e)
         {
             if (_settingsManager?.UseValidatingEditor != true || RedRef?.DepotPath == ResourcePath.Empty ||
-                RedRef?.ToString() is not string filePath || filePath.Trim().IsNullOrEmpty())
+                RedRef?.DepotPath.GetResolvedText() is not string filePath || filePath.Trim().IsNullOrEmpty())
             {
                 SetCurrentValue(ScopeProperty, FileScope.Unknown);
                 SetCurrentValue(TextBoxToolTipProperty, "Not validating this resource path");
@@ -215,7 +215,7 @@ namespace WolvenKit.Views.Editors
                 return;
             }
 
-            if (!ArchiveXlHelper.HasSubstitution(filePath) && _archiveManager?.GetGameFile(filePath, false, true) is not null)
+            if (!ArchiveXlHelper.HasSubstitution(filePath) && _archiveManager?.GetGameFile(RedRef.DepotPath, false, true) is not null)
             {
                 SetCurrentValue(ScopeProperty, FileScope.GameOrMod);
                 SetCurrentValue(TextBoxToolTipProperty, "Valid depot path (game or same mod)");
@@ -230,7 +230,7 @@ namespace WolvenKit.Views.Editors
                 return;
             }
 
-            if (_archiveManager?.Lookup(filePath, ArchiveManagerScope.Mods).HasValue is true)
+            if (_archiveManager?.Lookup(RedRef.DepotPath, ArchiveManagerScope.Mods).HasValue is true)
             {
                 SetCurrentValue(ScopeProperty, FileScope.OtherMod);
                 SetCurrentValue(TextBoxToolTipProperty, "Valid depot path (another mod)");

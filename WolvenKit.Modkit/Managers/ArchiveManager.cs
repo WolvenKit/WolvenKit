@@ -537,8 +537,7 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         public IGameFile? GetGameFile(ResourcePath path, bool includeMods = true, bool includeProject = true)
         {
-            var filePath = (path.GetResolvedText() ?? "").Split(" ").FirstOrDefault() ?? "";
-            var fileHash = ResourcePath.CalculateHash(filePath);
+            var filePath = path.GetResolvedText() ?? "";
             
             // check if the file is in the project archive
             if (includeProject && ProjectArchive != null && ProjectArchive.Files.TryGetValue(path, out var projectFile))
@@ -546,11 +545,7 @@ namespace WolvenKit.RED4.CR2W.Archive
                 return projectFile;
             }
 
-            // check if the file is in the project archive - use hashing algorithm
-            if (includeProject && ProjectArchive != null && ProjectArchive.Files.TryGetValue(fileHash, out var projectFile2))
-            {
-                return projectFile2;
-            }
+            var fileHash = ResourcePath.CalculateHash(filePath);
 
             // check if the file is in a mod archive
             if (includeMods)
