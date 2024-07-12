@@ -537,10 +537,19 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         public IGameFile? GetGameFile(ResourcePath path, bool includeMods = true, bool includeProject = true)
         {
+            var filePath = (path.GetResolvedText() ?? "").Split(" ").FirstOrDefault() ?? "";
+            var fileHash = ResourcePath.CalculateHash(filePath);
+            
             // check if the file is in the project archive
             if (includeProject && ProjectArchive != null && ProjectArchive.Files.TryGetValue(path, out var projectFile))
             {
                 return projectFile;
+            }
+
+            // check if the file is in the project archive - use hashing algorithm
+            if (includeProject && ProjectArchive != null && ProjectArchive.Files.TryGetValue(fileHash, out var projectFile2))
+            {
+                return projectFile2;
             }
 
             // check if the file is in a mod archive
@@ -548,8 +557,8 @@ namespace WolvenKit.RED4.CR2W.Archive
             {
                 var modFile = GetModArchives()
                     .Select(x => x.Files)
-                    .Where(x => x.ContainsKey(path))
-                    .Select(x => x[path])
+                    .Where(x => x.ContainsKey(path) || x.ContainsKey(fileHash))
+                    .Select(x => x[path] ?? x[fileHash])
                     .FirstOrDefault();
 
                 if (modFile != null)
@@ -561,8 +570,8 @@ namespace WolvenKit.RED4.CR2W.Archive
             // check if the file is in a base archive
             var baseFile = GetGameArchives()
                 .Select(x => x.Files)
-                .Where(x => x.ContainsKey(path))
-                .Select(x => x[path])
+                .Where(x => x.ContainsKey(path) || x.ContainsKey(fileHash))
+                .Select(x => x[path] ?? x[fileHash])
                 .FirstOrDefault();
 
             if (baseFile != null)
