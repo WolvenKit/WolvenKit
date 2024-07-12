@@ -106,6 +106,14 @@ public partial class ChunkViewModel : ObservableObject
             case Multilayer_Setup when FindTvPropertyChild("layers") is ChunkViewModel child:
                 ExpandAndSelect(child, true);
                 break;
+            // .inkatlas
+            case inkTextureAtlas when FindTvPropertyChild("slots") is ChunkViewModel child:
+                ExpandAndSelect(child, true);
+                if (child.FindTvPropertyChild("0") is ChunkViewModel grandChild)
+                {
+                    ExpandAndSelect(grandChild, true);
+                }
+                break;
             // .app file
             case appearanceAppearanceResource when FindTvPropertyChild("appearances") is ChunkViewModel child:
                 ExpandAndSelect(child, false, true);

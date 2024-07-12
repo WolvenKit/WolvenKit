@@ -215,11 +215,10 @@ namespace WolvenKit.Views.Editors
                 return;
             }
 
-            if (!ArchiveXlHelper.HasSubstitution(filePath) &&
-                _archiveManager?.GetGameFile(filePath, false, true) is not null)
+            if (!ArchiveXlHelper.HasSubstitution(filePath) && _archiveManager?.GetGameFile(filePath, false, true) is not null)
             {
                 SetCurrentValue(ScopeProperty, FileScope.GameOrMod);
-                SetCurrentValue(TextBoxToolTipProperty, "Valid depot path (game or mod)");
+                SetCurrentValue(TextBoxToolTipProperty, "Valid depot path (game or same mod)");
                 return;
             }
 
@@ -231,7 +230,7 @@ namespace WolvenKit.Views.Editors
                 return;
             }
 
-            if (_archiveManager?.GetGameFile(filePath, true, false) is not null)
+            if (_archiveManager?.Lookup(filePath, ArchiveManagerScope.Mods).HasValue is true)
             {
                 SetCurrentValue(ScopeProperty, FileScope.OtherMod);
                 SetCurrentValue(TextBoxToolTipProperty, "Valid depot path (another mod)");
