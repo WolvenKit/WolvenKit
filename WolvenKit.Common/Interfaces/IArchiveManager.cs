@@ -32,6 +32,8 @@ namespace WolvenKit.Common
         public void LoadModsArchives(FileInfo executable, bool analyzeFiles = true);
         public void LoadAdditionalModArchives(string archiveBasePath, bool analyzeFiles = true);
 
+        public string[] GetIgnoredArchiveNames();
+
         public Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles();
         public Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles(ArchiveManagerScope searchScope);
 

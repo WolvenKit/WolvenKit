@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         protected readonly Red4ParserService _wolvenkitFileService = wolvenkitFileService;
         protected readonly ILoggerService _logger = logger;
         protected readonly IProgressService<double> _progressService = progress;
-
+        
         [ObservableProperty] private bool _isManagerLoading;
         [ObservableProperty] private bool _isManagerLoaded;
 
@@ -44,6 +44,8 @@ namespace WolvenKit.RED4.CR2W.Archive
         public SourceCache<IGameArchive, string> Archives { get; set; } = new(x => x.ArchiveAbsolutePath);
 
         public IGameArchive? ProjectArchive { get; set; }
+
+        public virtual string[] GetIgnoredArchiveNames() => [];
 
         #endregion properties
 
@@ -221,7 +223,7 @@ namespace WolvenKit.RED4.CR2W.Archive
 
             archive.Source = EArchiveSource.Mod;
 
-            if (analyzeFiles)
+            if (analyzeFiles && !GetIgnoredArchiveNames().Contains(archive.Name.Replace(".archive", "")))
             {
                 var importError = false;
                 foreach (var (_, gameFile) in archive.Files)
