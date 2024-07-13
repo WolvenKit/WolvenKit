@@ -11,24 +11,27 @@ public static class TypeHelper
 {
     private static Assembly? s_red4Assembly;
 
-    // Fine-tune these as we learn what works or doesn't work
-    private static readonly List<Type> s_entityInstanceDataTypes =
-    [
-        typeof(entIPlacedComponent),
-        typeof(entEntity),
-    ];
 
-    public static IEnumerable<TypeEntry> GetEntityInstanceDataTypes()
+    // If the assembly is null, return an empty list. Should never happen, but better safe than sorry.
+    private static Assembly? GetTypeAssembly()
     {
         s_red4Assembly ??= AppDomain.CurrentDomain.GetAssemblies()
             .FirstOrDefault(a => (a.FullName ?? "").StartsWith("WolvenKit.RED4,"));
+        return s_red4Assembly;
+    }
 
-        // If the assembly is null, return an empty list
-        return s_red4Assembly?.GetTypes()
+    // Fine-tune these as we learn what works or doesn't work
+    private static readonly List<Type> s_entityInstanceDataTypes =
+    [
+        typeof(entIComponent),
+        typeof(entEntity),
+    ];
+
+    public static IEnumerable<TypeEntry> GetEntityInstanceDataTypes() =>
+        GetTypeAssembly()?.GetTypes()
             .Where(t => t is { IsPublic: true, Namespace: "WolvenKit.RED4.Types" })
             .Where(t => s_entityInstanceDataTypes.Any(type => type.IsAssignableFrom(t)))
             .Select(type => new TypeEntry(type.Name, "", type)) ?? [];
-    }
 
     public static List<TypeEntry> GetCKeyValueEntryTypes() =>
     [
