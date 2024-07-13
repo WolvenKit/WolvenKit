@@ -17,6 +17,7 @@ using Microsoft.Win32;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Factories;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.Nodify;
@@ -25,6 +26,7 @@ using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
@@ -920,20 +922,19 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             {
                 return "root";
             }
-            else
-            {
-                var xpath = Parent.XPath;
-                if (IsInArray)
-                {
-                    xpath += $"[{Name}]";
-                }
-                else if (Name != "")
-                {
-                    xpath += "." + Name;
-                }
 
-                return xpath;
+            var xpath = Parent.XPath;
+            if (IsInArray)
+            {
+                xpath += $"[{Name}]";
             }
+            else if (Name != "")
+            {
+                xpath += "." + Name;
+            }
+
+            return xpath;
+           
         }
     }
 
@@ -1201,26 +1202,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     var type = arr.InnerType;
                     if (type == typeof(CKeyValuePair))
                     {
-                        types = new List<TypeEntry>
-                        {
-                            new("Color", "Color description", typeof(CColor)),
-                            new("CpuNameU64", "", typeof(CName)),
-                            new("Cube", "Reference to cube xbm", typeof(CResourceReference<ITexture>)),
-                            new("DynamicTexture", "Reference to dtex file", typeof(CResourceReference<ITexture>)),
-                            new("FoliageParameters", "Reference to fp file", typeof(CResourceReference<CFoliageProfile>)),
-                            new("Gradient", "Reference to gradient file", typeof(CResourceReference<CGradient>)),
-                            new("HairParameters", "Reference to hp file", typeof(CResourceReference<CHairProfile>)),
-                            new("MultilayerMask", "Reference to mlmask file", typeof(CResourceReference<Multilayer_Mask>)),
-                            new("MultilayerSetup", "Reference to mlsetup file", typeof(CResourceReference<Multilayer_Setup>)),
-                            new("Scalar", "", typeof(CFloat)),
-                            new("SkinParameters", "Reference to sp file", typeof(CResourceReference<CSkinProfile>)),
-                            //new("StructBuffer", "", null), // still not sure what this does
-                            new("TerrainSetup", "Reference to terrainsetup file", typeof(CResourceReference<CTerrainSetup>)),
-                            new("Texture", "Reference to xbm file", typeof(CResourceReference<ITexture>)),
-                            new("TextureArray", "Reference to texarray file", typeof(CResourceReference<ITexture>)),
-                            new("Vector", "", typeof(Vector4)),
-                        };
-
+                        types = TypeHelper.GetCKeyValueEntryTypes();
                         await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
                         {
                             DialogHandler = HandleCKeyValuePair
@@ -1767,17 +1749,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     private async Task AddItemToCompiledData()
     {
         ArgumentNullException.ThrowIfNull(ResolvedPropertyType);
-        if (Data == null)
+        if (Data is RedDummy)
         {
             Data = RedTypeManager.CreateRedType(ResolvedPropertyType);
             if (Data is IRedBufferPointer ptr)
             {
-                ptr.SetValue(new RedBuffer()
+                ptr.SetValue(new RedBuffer
                 {
-                    Data = new RedPackage()
-                    {
-                        Chunks = new List<RedBaseClass>()
-                    }
+                    Data = new RedPackage { Chunks = new List<RedBaseClass>() }
                 });
             }
 
@@ -1808,13 +1787,25 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 RecalculateProperties(worldNodeDataBuffer);
                 return;
             }
-            if (db.GetValue().Data is RedPackage pkg)
+
+            if (Parent?.ResolvedData is entEntityInstanceData)
+            {
+                types.AddRange(TypeHelper.GetEntityInstanceDataTypes());
+            }
+            else if (db.GetValue().Data is RedPackage pkg)
             {
                 types = pkg.Chunks
                     .Select(x => new TypeEntry(x.GetType().Name, "", x.GetType()))
                     .DistinctBy(x => x.Name)
                     .ToList();
             }
+
+            if (types.Count == 0)
+            {
+                throw new WolvenKitException(0x5002,
+                    $"You can't create new items for {Data.RedType} yet. Please create a ticket and tell us what you need here.");
+            }
+
             await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
             {
                 DialogHandler = HandleChunk
@@ -2177,12 +2168,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             innerType = pArr.InnerType;
         }
 
-        if (innerType == null)
-        {
-            return false;
-        }
-
-        return CheckTypeCompatibility(innerType, RedDocumentTabViewModel.CopiedChunk.GetType()) != TypeCompability.None;
+        return innerType != null &&
+               CheckTypeCompatibility(innerType, RedDocumentTabViewModel.CopiedChunk.GetType()) != TypeCompability.None;
     } // TODO RelayCommand check notify
 
 
@@ -2513,12 +2500,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             innerType = pArr.InnerType;
         }
 
-        if (innerType == null)
-        {
-            return false;
-        }
-
-        return RedDocumentTabViewModel.CopiedChunks.All(chunk => CheckTypeCompatibility(innerType, chunk.GetType()) != TypeCompability.None);
+        return innerType != null &&
+               RedDocumentTabViewModel.CopiedChunks.All(c => CheckTypeCompatibility(innerType, c.GetType()) != TypeCompability.None);
     } // TODO RelayCommand check notify
 
 
@@ -2981,11 +2964,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public void MoveChild(int index, ChunkViewModel item)
     {
-        if (item.Parent == null)
-        {
-            return;
-        }
-        if (Tab == null)
+        if (item.Parent == null || Tab == null)
         {
             return;
         }
@@ -3380,7 +3359,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             ReindexChildren();
         }
 
-        OnPropertyChanged("Data");
+        OnPropertyChanged(nameof(Data));
 
         IsExpanded = expand;
 
@@ -3389,8 +3368,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
-        var prop = Properties.FirstOrDefault(p => p.Data != null && p.Data.GetHashCode() == selectChild.GetHashCode());
-        if (prop == null)
+        if (Properties.FirstOrDefault(p => p.Data is not RedDummy && p.Data.GetHashCode() == selectChild.GetHashCode()) is not
+            ChunkViewModel prop)
         {
             return;
         }
@@ -3464,29 +3443,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         OnPropertyChanged(property);
         Parent?.NotifyChain(property);
-    }
-
-    private ObservableCollection<ISelectableTreeViewItemModel>? SplitProperties(ObservableCollection<ChunkViewModel> locations, int nSize = 100)
-    {
-        if (locations == null)
-        {
-            return null;
-        }
-
-        if (locations.Count < nSize)
-        {
-            return new ObservableCollection<ISelectableTreeViewItemModel>(locations);
-        }
-
-        var list = new ObservableCollection<ISelectableTreeViewItemModel>();
-
-        for (var i = 0; i < locations.Count; i += nSize)
-        {
-            var size = Math.Min(nSize, locations.Count - i);
-            list.Add(new GroupedChunkViewModel($"[{i}-{i + size - 1}]", locations.Skip(i).Take(size)));
-        }
-
-        return list;
     }
 
     public bool MightHaveChildren() => HasChildren() || IsArray;
@@ -3893,38 +3849,31 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     private (Vec4, Quat) GetPosRot(Prop line)
     {
-        var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos)).NotNull();
+        var posAndRot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos)).NotNull();
 
-        ArgumentNullException.ThrowIfNull(posandrot.x);
-        ArgumentNullException.ThrowIfNull(posandrot.y);
-        ArgumentNullException.ThrowIfNull(posandrot.z);
-        ArgumentNullException.ThrowIfNull(posandrot.w);
-        ArgumentNullException.ThrowIfNull(posandrot.yaw);
-        ArgumentNullException.ThrowIfNull(posandrot.pitch);
-        ArgumentNullException.ThrowIfNull(posandrot.roll);
+        ArgumentNullException.ThrowIfNull(posAndRot);
+        ArgumentNullException.ThrowIfNull(posAndRot.x);
+        ArgumentNullException.ThrowIfNull(posAndRot.y);
+        ArgumentNullException.ThrowIfNull(posAndRot.z);
+        ArgumentNullException.ThrowIfNull(posAndRot.w);
+        ArgumentNullException.ThrowIfNull(posAndRot.yaw);
+        ArgumentNullException.ThrowIfNull(posAndRot.pitch);
+        ArgumentNullException.ThrowIfNull(posAndRot.roll);
 
-        var v =
-            posandrot == null
-            ? new Vec4()
-            : new Vec4()
-            {
-                X = float.Parse(posandrot.x),
-                Y = float.Parse(posandrot.y),
-                Z = float.Parse(posandrot.z),
-                W = float.Parse(posandrot.w)
+        // it really can't be null anymore
+        var v = new Vec4
+        {
+            X = float.Parse(posAndRot.x), Y = float.Parse(posAndRot.y), Z = float.Parse(posAndRot.z), W = float.Parse(posAndRot.w)
             };
 
-        var euler =
-            posandrot == null
-            ? new Vec3()
-            : new Vec3()
-            {
-                X = (float)(Math.PI / 180) * float.Parse(posandrot.yaw),
-                Y = (float)(Math.PI / 180) * float.Parse(posandrot.pitch),
-                Z = (float)(Math.PI / 180) * float.Parse(posandrot.roll)
+        var euler = new Vec3
+        {
+            X = (float)(Math.PI / 180) * float.Parse(posAndRot.yaw),
+            Y = (float)(Math.PI / 180) * float.Parse(posAndRot.pitch),
+            Z = (float)(Math.PI / 180) * float.Parse(posAndRot.roll)
             };
-        var q = line.isunreal ? FixRotation2(euler) :
-            FixRotation(euler);
+
+        var q = line.isunreal ? FixRotation2(euler) : FixRotation(euler);
 
         return (v, q);
     }
@@ -4166,12 +4115,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     private void AddMesh(string tr, Prop line, bool updatecoords = true, Vec4 pos = default, Quat rot = default)
     {
-        if (Parent?.Parent?.Data is not worldStreamingSector wss)
-        {
-            return;
-        }
-        var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
-        if (current == null)
+        if (Parent?.Parent?.Data is not worldStreamingSector wss ||
+            RedJsonSerializer.Deserialize<worldNodeData>(tr) is not worldNodeData current)
         {
             return;
         }
