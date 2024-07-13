@@ -602,7 +602,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     {
         if (!_archiveManager.IsModBrowserActive)
         {
-            ScanModArchives(true);
+            ScanModArchives(_settings.AnalyzeModArchives);
             LeftItems = new ObservableCollection<RedFileSystemModel>(_archiveManager.ModRoots);
         }
         else
@@ -958,19 +958,19 @@ public partial class AssetBrowserViewModel : ToolViewModel
     }
     #endregion methods
 
-    public void ScanModArchives(bool readScanFromSettings = false)
+    // On initialization, scanArchives is read from the settings. On scan button click, we always want to scan.
+    public void ScanModArchives(bool scanArchives)
     {
         if (_settings.CP77ExecutablePath is null)
         {
             return;
         }
 
-        var conductScan = !readScanFromSettings || _settings.AnalyzeModArchives;
-        _archiveManager.LoadModsArchives(new FileInfo(_settings.CP77ExecutablePath), conductScan);
+        _archiveManager.LoadModsArchives(new FileInfo(_settings.CP77ExecutablePath), scanArchives);
 
         if (Directory.Exists(_settings.ExtraModDirPath))
         {
-            _archiveManager.LoadAdditionalModArchives(_settings.ExtraModDirPath, conductScan);
+            _archiveManager.LoadAdditionalModArchives(_settings.ExtraModDirPath, scanArchives);
         }
     }
 }

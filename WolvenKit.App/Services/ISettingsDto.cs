@@ -43,5 +43,6 @@ public interface ISettingsDto
     public bool ShowGraphEditorNodeProperties { get; set; }
     public string? ModderName { get; set; }
     public string? ModderEmail { get; set; }
+    public string ArchiveNamesExcludeFromScan { get; set; }
     public bool RefactoringCheckboxDefaultValue { get; set; }
 }

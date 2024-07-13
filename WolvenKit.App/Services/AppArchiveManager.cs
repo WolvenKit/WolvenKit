@@ -32,6 +32,12 @@ public class AppArchiveManager(
 
     private readonly SourceList<RedFileSystemModel> _modCache = new();
 
+    private readonly string[] _ignoredArchives =
+        settings.ArchiveNamesExcludeFromScan.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+    public override string[] GetIgnoredArchiveNames() => _ignoredArchives;
+    
+
     #endregion Fields
 
     #region Properties

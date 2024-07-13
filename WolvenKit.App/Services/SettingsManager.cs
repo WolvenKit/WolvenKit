@@ -277,6 +277,12 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [ObservableProperty]
     private bool _useValidatingEditor;
 
+    [Display(Name = "Exclude archives from scan by name (comma separated)",
+        Description = "Exclude archives from scan if you know that they'll lead to exceptions (only the base name)",
+        GroupName = "Interface")]
+    [ObservableProperty]
+    private string _archiveNamesExcludeFromScan = "basegame_AMM_Props";
+
     [Display(Name = "Additional Mod directory", Description = "Path to an optional directory containing mod archives", GroupName = "Cyberpunk")]
     [ObservableProperty]
     private string? _extraModDirPath;
