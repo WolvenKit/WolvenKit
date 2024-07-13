@@ -111,7 +111,11 @@ public partial class ChunkViewModel : ObservableObject
                 ExpandAndSelect(child, true);
                 if (child.FindTvPropertyChild("0") is ChunkViewModel grandChild)
                 {
-                    ExpandAndSelect(grandChild, true);
+                    grandChild.IsExpanded = true;
+                    if (grandChild.FindTvPropertyChild("parts") is ChunkViewModel parts)
+                    {
+                        parts.IsExpanded = true;
+                    }
                 }
                 break;
             // .app file
