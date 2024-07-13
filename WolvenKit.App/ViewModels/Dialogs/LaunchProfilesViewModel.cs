@@ -1,13 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Reactive;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DynamicData.Kernel;
-using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
 using WolvenKit.App.Services;
 using WolvenKit.Core.Interfaces;
@@ -33,6 +28,22 @@ public partial class LaunchProfilesViewModel : DialogViewModel
             LaunchProfiles.Add(newProfile);
         }
 
+        // Order them
+        var withOrder = LaunchProfiles.Where(p => p.Profile.Order.HasValue).OrderBy(p => p.Profile.Order).ToArray();
+        var withoutOrder = LaunchProfiles.Where(p => !p.Profile.Order.HasValue).OrderBy(p => p.Name).ToArray();
+
+        var allProfiles = withOrder.Concat(withoutOrder).ToArray();
+
+        var order = 0;
+        foreach (var profile in allProfiles)
+        {
+            profile.Profile.Order = order++;
+        }
+
+        LaunchProfiles = new ObservableCollection<LaunchProfileViewModel>(allProfiles);
+
+        SortLaunchProfiles();
+        
         if (_settingsManager.LastLaunchProfile is string profileName)
         {
             SelectedLaunchProfile = LaunchProfiles.FirstOrDefault(lp => lp.Name == profileName);
@@ -53,19 +64,21 @@ public partial class LaunchProfilesViewModel : DialogViewModel
         }
     }
 
-    private bool CanPositionDown() => SelectedLaunchProfile is { Profile.Order: > 0 };
+    private bool CanPositionDown() => (SelectedLaunchProfile?.Profile.Order ?? -1) < LaunchProfiles.Count();
 
     [RelayCommand(CanExecute = nameof(CanPositionDown))]
     private void PositionDown()
     {
         if (SelectedLaunchProfile is null ||
-            LaunchProfiles.FirstOrDefault(p => p.Profile.Order == SelectedLaunchProfile.Profile.Order + 1) is not { } other)
+            LaunchProfiles.LastOrDefault(p => p.Profile.Order == SelectedLaunchProfile.Profile.Order + 1) is not { } other)
         {
             return;
         }
 
+        IsUpdating?.Invoke(this, true);
         SelectedLaunchProfile.Profile.SwitchPosition(other.Profile);
         SortLaunchProfiles();
+        IsUpdating?.Invoke(this, false);
     }
 
     private bool CanPositionUp() => SelectedLaunchProfile != null && SelectedLaunchProfile.Profile.Order < LaunchProfiles.Count - 1;
@@ -79,8 +92,10 @@ public partial class LaunchProfilesViewModel : DialogViewModel
             return;
         }
 
+        IsUpdating?.Invoke(this, true);
         SelectedLaunchProfile.Profile.SwitchPosition(other.Profile);
         SortLaunchProfiles();
+        IsUpdating?.Invoke(this, false);
     }
 
     public LaunchProfileViewModel? GetLaunchProfile(string name) => LaunchProfiles.FirstOrDefault(x => x.Name == name);
@@ -100,48 +115,67 @@ public partial class LaunchProfilesViewModel : DialogViewModel
 
     [ObservableProperty] private LaunchProfileViewModel? _selectedLaunchProfile;
 
+    public event EventHandler<bool>? IsUpdating; 
+    
     // Sort launch profiles by order for display, then write them back to the settings manager (is that even necessary?)
     private void SortLaunchProfiles()
     {
+        var orderedIndex = SelectedLaunchProfile?.Profile.Order;
         var orderedProfiles = LaunchProfiles.OrderBy(x => x.Profile.Order)
             .ToDictionary(x => x.Name, x => x.Profile);
 
         _settingsManager.LaunchProfiles = orderedProfiles;
-        LaunchProfiles =
-            new ObservableCollection<LaunchProfileViewModel>(orderedProfiles.Select(kvp => new LaunchProfileViewModel(kvp.Key, kvp.Value)));
+        LaunchProfiles = new ObservableCollection<LaunchProfileViewModel>(orderedProfiles
+            .Select(kvp => new LaunchProfileViewModel(kvp.Key, kvp.Value)));
+
+        SelectedLaunchProfile = LaunchProfiles.FirstOrDefault((lp) => lp.Profile.Order == orderedIndex);
     }
 
     public string Title { get; set; }
 
-    public void UpdateLaunchProfileIndex(int targetPos, int offset)
+    /// <summary>
+    /// Updates launch profile index on drag&drop
+    /// </summary>
+    /// <param name="sourceProfile">source profile to update</param>
+    /// <param name="targetPos">Position of target record</param>
+    /// <param name="offset">1 or -1, depending on if the record should come before or after it</param>
+    public void UpdateLaunchProfileIndex(LaunchProfile sourceProfile, int targetPos, int offset)
     {
-        var targetProfile = GetLaunchProfile(targetPos);
-        if (targetProfile is null || offset == 0
-                                  || (offset < 0 && targetProfile.Profile.Order - offset < 0)
-                                  || (offset > 0 && targetProfile.Profile.Order + offset > LaunchProfiles.Count - 1)
-           )
+        if (GetLaunchProfile(targetPos) is not LaunchProfileViewModel targetProfile)
         {
             return;
         }
 
-        var newOffset = targetProfile.Profile.Order + offset;
+        // Prevent out-of-bounds
+        var orgPos = Math.Max(Math.Min(sourceProfile.Order ?? 0, 0), LaunchProfiles.Count - 1);
+        var newPos = (targetProfile.Profile.Order ?? 0) + offset;
+        newPos = Math.Max(Math.Min(newPos, 0), LaunchProfiles.Count - 1);
 
-        foreach (var lp in LaunchProfiles.Where((x) => x.Name != targetProfile.Name))
+        if (orgPos == newPos)
         {
-            switch (offset)
-            {
-                case > 0 when lp.Profile.Order >= newOffset:
-                    lp.Profile.Order -= 1;
-                    break;
-                case < 0 when lp.Profile.Order <= newOffset:
-                    lp.Profile.Order += 1;
-                    break;
-                default:
-                    break;
-            }
+            return;
         }
 
-        targetProfile.Profile.Order = newOffset;
+        // Adjust the order of other profiles affected by this change
+        foreach (var pr in LaunchProfiles.Where(p =>
+                     p.Profile.Order < Math.Min(orgPos, newPos) || p.Profile.Order > Math.Max(orgPos, newPos)))
+        {
+            if (pr.Profile.Equals(sourceProfile))
+            {
+                pr.Profile.Order = newPos;
+            }
+            else if (sourceProfile.Order < newPos)
+            {
+                // Move profiles between the source and target one position up
+                pr.Profile.Order--;
+            }
+            else if (sourceProfile.Order > newPos)
+            {
+                // Move profiles between the source and target one position down
+                pr.Profile.Order++;
+            }
+        }
+        
         SortLaunchProfiles();
     }
 
