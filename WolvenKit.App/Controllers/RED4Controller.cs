@@ -399,13 +399,18 @@ public class RED4Controller : ObservableObject, IGameController
         // Shift prevents save game load (CET doesn't initialize
         if (!_modifierService.IsShiftKeyPressed && options.LoadLastSave && ISettingsManager.GetLastSaveName() is string lastSavegame)
         {
-            arguments = $"{arguments} -save={lastSavegame}";
+            arguments = $"{arguments} -save={lastSavegame}";            
         }
         else if (!_modifierService.IsShiftKeyPressed && options.LoadSaveName is string savegame)
         {
             arguments = $"{arguments} -save={savegame}";
         }
-        
+
+        // -save can come from the launch options, or from the user settings 
+        if (arguments.Contains("-save"))
+        {
+            _loggerService.Warning("Warning: Loading a save via start-up options may break CET entity spawn!");
+        }
         try
         {
             Process.Start(new ProcessStartInfo
