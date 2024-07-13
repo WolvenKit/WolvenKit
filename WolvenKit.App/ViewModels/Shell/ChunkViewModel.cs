@@ -2955,7 +2955,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             entSkinnedMeshComponent skinnedMeshComponent => string.IsNullOrEmpty(skinnedMeshComponent.Mesh.DepotPath.GetResolvedText()),
             entMeshComponent meshComponent => string.IsNullOrEmpty(meshComponent.Mesh.DepotPath.GetResolvedText()),
-            Multilayer_Layer layer => ((int)layer.Opacity) == 0,
+            Multilayer_Layer layer => ((float)layer.Opacity) == 0.0,
             _ => IsDefault
         };
     }
