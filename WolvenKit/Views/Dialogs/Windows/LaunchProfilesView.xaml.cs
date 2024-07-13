@@ -44,9 +44,28 @@ namespace WolvenKit.Views.Dialogs.Windows
                 this.BindCommand(ViewModel, x => x.PositionUpCommand, x => x.ToolbarUpItem)
                     .DisposeWith(disposables);
 
+                if (ViewModel is not null)
+                {
+                    ViewModel.IsUpdating += OnInternalUpdate;
+                }
+
+
                 ProfilesListView.RowDragDropController.Dropped += OnRowDropped;
             });
 
+        }
+
+        private void OnInternalUpdate(object sender, bool isUpdating)
+        {
+            if (isUpdating)
+            {
+                // Use Batch update to avoid data operations in SfDataGrid during records removing and inserting
+                ProfilesListView.BeginInit();
+            }
+            else
+            {
+                ProfilesListView.EndInit();
+            }
         }
 
 
@@ -86,12 +105,43 @@ namespace WolvenKit.Views.Dialogs.Windows
             // Get Dragging records
             var draggingRecords = e.Data.GetData("Records") as ObservableCollection<object>;
 
-            // Use Batch update to avoid data operations in SfDataGrid during records removing and inserting
-            ProfilesListView.BeginInit();
+            var offset = 1;
 
-            model.UpdateLaunchProfileIndex(targetPos, draggingRecords?.Count ?? 0);
+            // Handle offset from drop position
+            if (e.DropPosition == DropPosition.DropBelow)
+            {
+                offset = 1;
+            }
+            else if (e.DropPosition == DropPosition.DropAbove)
+            {
+                offset = -1;
+            }
 
-            ProfilesListView.EndInit();
+            // Handle out-of-bounds
+            if (offset == 1 && targetPos >= (ViewModel?.LaunchProfiles.Count ?? 99))
+            {
+                offset = -1;
+            }
+
+            if (offset == -1 && targetPos == 0)
+            {
+                offset = 1;
+            }
+
+            OnInternalUpdate(null, true);
+
+            foreach (var draggingRecord in draggingRecords)
+            {
+                if (draggingRecord is not LaunchProfile profile)
+                {
+                    continue;
+                }
+
+                model.UpdateLaunchProfileIndex(profile, targetPos, offset);
+            }
+
+
+            OnInternalUpdate(null, false);
         }
 
         private string _savegameDisplayName;
