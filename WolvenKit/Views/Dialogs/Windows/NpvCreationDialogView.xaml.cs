@@ -1,11 +1,12 @@
-using System.Collections.Generic;
-using System.Linq;
+using System;
 using System.Reactive.Disposables;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 
 namespace WolvenKit.Views.Dialogs.Windows;
@@ -17,11 +18,14 @@ public partial class NpvCreationDialogView : IViewFor<NpvCreationDialogViewModel
 {
     object IViewFor.ViewModel { get => ViewModel; set => ViewModel = (NpvCreationDialogViewModel)value; }
 
+    private readonly INpvCreationService _npvCreationService;
 
     public NpvCreationDialogView()
     {
         InitializeComponent();
 
+        _npvCreationService = Locator.Current.GetService<INpvCreationService>();
+        
         ViewModel = new NpvCreationDialogViewModel();
         DataContext = ViewModel;
 
@@ -47,13 +51,35 @@ public partial class NpvCreationDialogView : IViewFor<NpvCreationDialogViewModel
                     x => x.Ears,
                     x => x.Combobox_Ears.SelectedIndex)
                 .DisposeWith(disposables);
+            this.Bind(ViewModel,
+                    x => x.BodyGender,
+                    x => x.Combobox_BodyGender.SelectedItem)
+                .DisposeWith(disposables);
+            this.Bind(ViewModel,
+                    x => x.DestFolderPath,
+                    x => x.TextBox_FilePath.Text)
+                .DisposeWith(disposables);
+
+            Combobox_BodyGender.SelectionChanged += RefreshSaveButtonState;
+            TextBox_FilePath.LostFocus += RefreshSaveButtonState;
         });
     }
 
-    public bool? ShowDialog(Window owner)
+    protected override void OnDeactivated(EventArgs e)
+    {
+        Combobox_BodyGender.SelectionChanged -= RefreshSaveButtonState;
+        TextBox_FilePath.LostFocus -= RefreshSaveButtonState;
+        base.OnDeactivated(e);
+    }
+
+
+    private void RefreshSaveButtonState(object sender, RoutedEventArgs e) => ViewModel?.RefreshVisibility();
+
+
+    public bool ShowDialog(Window owner)
     {
         Owner = owner;
-        return ShowDialog();
+        return ShowDialog() ?? false;
     }
 
     public NpvCreationDialogViewModel ViewModel { get; set; }
@@ -67,7 +93,7 @@ public partial class NpvCreationDialogView : IViewFor<NpvCreationDialogViewModel
 
     private void OnCancelButtonClick(object sender, RoutedEventArgs e)
     {
-        DialogResult = false;
+        DialogResult = null;
         Close();
     }
 
@@ -91,5 +117,6 @@ public partial class NpvCreationDialogView : IViewFor<NpvCreationDialogViewModel
     {
         DialogResult = true;
         Close();
+        _npvCreationService.CreateNpv(ViewModel!);
     }
 }

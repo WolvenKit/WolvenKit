@@ -5,9 +5,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
-    xmlns:validators="clr-namespace:WolvenKit.Views.Validators"
+    xmlns:viewModels="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
     Title="Configure your NPV"
-    d:DesignHeight="460" Height="460"
+    d:DesignHeight="540" Height="540"
     d:DesignWidth="650" Width="650"
     Background="{StaticResource ContentBackgroundAlt3}"
     FocusManager.FocusedElement="{Binding ElementName=TextBox}"
@@ -48,6 +48,13 @@
             <Setter Property="Margin" Value="10,0,0,0" />
             <Setter Property="Padding" Value="12,0" />
         </Style>
+        <ObjectDataProvider MethodName="GetValues"
+                            ObjectType="{x:Type system:Enum}"
+                            x:Key="NpvBodyGenderProvider">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="viewModels:NpvBodyGender" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
     </Window.Resources>
 
     <Grid Margin="20">
@@ -105,15 +112,7 @@
                 <Label>Target folder</Label>
             </Border>
             <Border Grid.Row="0" Grid.Column="1" Margin="0 10 0 5">
-                <TextBox Name="TextBox_FilePath">
-                    <TextBox.Text>
-                        <Binding Path="DestFolderPath" UpdateSourceTrigger="PropertyChanged">
-                            <Binding.ValidationRules>
-                                <validators:FilePathValidationRule />
-                            </Binding.ValidationRules>
-                        </Binding>
-                    </TextBox.Text>
-                </TextBox>
+                <TextBox Name="TextBox_FilePath" />
             </Border>
 
             <!-- Body Gender -->
@@ -121,9 +120,8 @@
                 <Label>Body Gender</Label>
             </Border>
             <Border Grid.Row="1" Grid.Column="1" Margin="0 5 0 0" Width="200" HorizontalAlignment="Left">
-                <ListBox x:Name="MenuListBox" SelectedIndex="0">
-                    <ListBoxItem>Female</ListBoxItem>
-                    <ListBoxItem>Male</ListBoxItem>
+                <ListBox x:Name="Combobox_BodyGender"
+                         ItemsSource="{Binding Source={StaticResource NpvBodyGenderProvider}}">
                 </ListBox>
             </Border>
 

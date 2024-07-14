@@ -144,12 +144,8 @@ namespace WolvenKit.Views.Shell
                     var dialog = new ScriptSettingsWindow(settings);
                     return dialog.ShowDialog() == true;
                 };
-
-                Interactions.ShowNpvCreationDialogue = () =>
-                {
-                    NpvCreationDialogView dialog = new();
-                    return dialog.ShowDialog(this) ?? false;
-                };
+                
+                Interactions.ShowNpvCreationDialogue = () => new NpvCreationDialogView().ShowDialog(this);
 
                 this.Bind(ViewModel,
                     vm => vm.ActiveDocument,

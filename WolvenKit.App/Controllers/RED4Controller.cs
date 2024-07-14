@@ -979,28 +979,28 @@ public class RED4Controller : ObservableObject, IGameController
     }
 
     /// <Inheritdoc />
-    public bool AddToMod(ulong hash)
+    public bool AddToMod(ulong hash, string? fileExtension = null)
     {
         var scope = _archiveManager.IsModBrowserActive ? ArchiveManagerScope.Mods : ArchiveManagerScope.Basegame;
-        return AddToMod(hash, scope);
+        return AddToMod(hash, scope, fileExtension);
     }
 
     /// <Inheritdoc />
-    public bool AddToMod(ulong hash, ArchiveManagerScope searchScope)
+    public bool AddToMod(ulong hash, ArchiveManagerScope searchScope, string? fileExtension = null)
     {
         var file = _archiveManager.Lookup(hash, searchScope);
-        return file.HasValue && AddToMod(file.Value, searchScope);
+        return file.HasValue && AddToMod(file.Value, searchScope, fileExtension);
     }
 
     /// <Inheritdoc />
-    public bool AddToMod(IGameFile file)
+    public bool AddToMod(IGameFile file, string? fileExtension = null)
     {
         var scope = _archiveManager.IsModBrowserActive ? ArchiveManagerScope.Mods : ArchiveManagerScope.Basegame;
-        return AddToMod(file, scope);
+        return AddToMod(file, scope, fileExtension);
     }
 
     /// <Inheritdoc />
-    public bool AddToMod(IGameFile file, ArchiveManagerScope searchScope)
+    public bool AddToMod(IGameFile file, ArchiveManagerScope searchScope, string? fileExtension = null)
     {
         if (_projectManager.ActiveProject is null)
         {
@@ -1029,23 +1029,23 @@ public class RED4Controller : ObservableObject, IGameController
             using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
             file.Extract(fs);
             _loggerService.Info($"Overwrote existing file with game file: {file.Name}");
+            return true;
         }
-        else
-        {
-            Directory.CreateDirectory(diskPathInfo.Directory.FullName);
-            try
-            {
-                using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
-                file.Extract(fs);
-                _loggerService.Info($"Added game file to project: {file.Name}");
-            }
-            catch (Exception ex)
-            {
-                File.Delete(diskPathInfo.FullName);
-                _loggerService.Error(ex);
-            }
 
+        Directory.CreateDirectory(diskPathInfo.Directory.FullName);
+        try
+        {
+            using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
+            file.Extract(fs);
+            _loggerService.Info($"Added game file to project: {file.Name}");
         }
+        catch (Exception ex)
+        {
+            File.Delete(diskPathInfo.FullName);
+            _loggerService.Error(ex);
+            return false;
+        }
+
 
         return true;
     }

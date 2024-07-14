@@ -19,10 +19,10 @@ public class MockGameController : IGameController
     public Task<bool> AddFileToModModalAsync(ulong hash, ArchiveManagerScope searchScope) =>
         throw new NotImplementedException();
 
-    public bool AddToMod(ulong hash, ArchiveManagerScope searchScope) => throw new NotImplementedException();
+    public bool AddToMod(ulong hash, ArchiveManagerScope searchScope, string? fileExtension) => throw new NotImplementedException();
 
-    public bool AddToMod(IGameFile file, ArchiveManagerScope searchScope) => throw new NotImplementedException();
-    public bool AddToMod(ulong hash) => throw new NotImplementedException();
+    public bool AddToMod(IGameFile file, ArchiveManagerScope searchScope, string? fileExtension) => throw new NotImplementedException();
+    public bool AddToMod(ulong hash, string? fileExtension) => throw new NotImplementedException();
     public async Task HandleStartup() => await Task.CompletedTask;
     public Task<bool> LaunchProjectAsync(LaunchProfile profile) => throw new NotImplementedException();
     public Task<bool> InstallProjectHotAsync() => throw new NotImplementedException();
