@@ -222,37 +222,40 @@ namespace WolvenKit.RED4.CR2W.Archive
             }
 
             archive.Source = EArchiveSource.Mod;
+            Archives.AddOrUpdate(archive);
 
-            if (analyzeFiles && !GetIgnoredArchiveNames().Contains(archive.Name.Replace(".archive", "")))
+            if (!analyzeFiles || GetIgnoredArchiveNames().Contains(archive.Name.Replace(".archive", "")))
             {
-                var importError = false;
-                foreach (var (_, gameFile) in archive.Files)
-                {
-                    try
-                    {
-                        using var ms = new MemoryStream();
-                        archive.ExtractFile(gameFile, ms);
+                return;
+            }
 
-                        if (_wolvenkitFileService.TryReadRed4FileHeaders(ms, out var info))
-                        {
-                            info.GetImports();
-                        }
-                    }
-                    catch (Exception)
+            var importError = false;
+            foreach (var (_, gameFile) in archive.Files)
+            {
+                try
+                {
+                    using var ms = new MemoryStream();
+                    archive.ExtractFile(gameFile, ms);
+
+                    if (_wolvenkitFileService.TryReadRed4FileHeaders(ms, out var info))
                     {
-                        importError = true;
-                        _logger.Debug($"Error while loading the following mod file: {gameFile.FileName}");
+                        info.GetImports();
                     }
                 }
-                archive.ReleaseFileHandle();
-
-                if (importError)
+                catch (Exception)
                 {
-                    _logger.Warning($"Error while loading the following mod archive: {filename}");
+                    importError = true;
+                    _logger.Debug($"Error while loading the following mod file: {gameFile.FileName}");
                 }
             }
 
-            Archives.AddOrUpdate(archive);
+            archive.ReleaseFileHandle();
+
+            if (importError)
+            {
+                _logger.Warning($"Error while loading the following mod archive: {filename}");
+                _logger.Warning("  You can exclude it from analysis in the settings under 'Exclude archives from scan by name'");
+            }
         }
 
         /// <summary>

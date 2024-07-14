@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
@@ -16,7 +17,7 @@ namespace WolvenKit.App.ViewModels.Documents;
 
 public partial class RDTGraphViewModel : RedDocumentTabViewModel
 {
-    private bool _isLoaded;
+    [ObservableProperty] private bool _isLoaded;
 
     public RDTGraphViewModel(IRedType data, RedDocumentViewModel file) : base(file, "Graph Editor")
     {
@@ -49,7 +50,7 @@ public partial class RDTGraphViewModel : RedDocumentTabViewModel
 
     public override void Load()
     {
-        if (_isLoaded)
+        if (IsLoaded)
         {
             return;
         }
@@ -65,7 +66,7 @@ public partial class RDTGraphViewModel : RedDocumentTabViewModel
             RenderNodes(ssr.SceneGraph.Chunk.NotNull().Graph);
         }
 
-        _isLoaded = true;
+        IsLoaded = true;
     }
    
     public GeometryGraph RenderNodes(CArray<CHandle<scnSceneGraphNode>> nodes)

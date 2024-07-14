@@ -10,6 +10,7 @@ using WolvenKit.App.ViewModels.Documents;
 namespace WolvenKit.Views.Documents
 {
     /// <summary>
+    /// Tree view for RDTData
     /// Interaction logic for RDTDataView.xaml
     /// </summary>
     public partial class RDTDataView : ReactiveUserControl<RDTDataViewModel>

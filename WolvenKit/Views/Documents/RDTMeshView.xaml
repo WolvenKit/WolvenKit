@@ -11,6 +11,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:others="clr-namespace:WolvenKit.Views.Others"
     Margin="0"
     d:DataContext="{d:DesignInstance Type={x:Type documents:RDTMeshViewModel}}"
     d:DesignHeight="450"
@@ -61,8 +62,8 @@
         </Grid.ColumnDefinitions>
         <syncfusion:SfGridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
 
-
         <hx:Viewport3DX
+            Grid.Column="0"
             Name="hxViewport"
             BackgroundColor="#121212"
             Camera="{Binding Camera}"
@@ -74,7 +75,9 @@
             ShowCoordinateSystem="True"
             UseDefaultGestures="False"
             Loaded="Viewport3DX_Loaded"
-            ZoomExtentsWhenLoaded="True">
+            ZoomExtentsWhenLoaded="True"
+            IsEnabled="{Binding IsLoaded}">
+            
             <hx:Viewport3DX.InputBindings>
                 <MouseBinding Command="hx:ViewportCommands.Rotate" Gesture="LeftClick" />
                 <MouseBinding Command="hx:ViewportCommands.Pan" Gesture="MiddleClick" />
@@ -102,6 +105,8 @@
             </hx:Viewport3DX.ContextMenu>
         </hx:Viewport3DX>
 
+        <others:LoadingTextControl Grid.Column="0" VisibilityFlag="{Binding IsLoaded}" Small="True" />
+
         <StackPanel
             HorizontalAlignment="Stretch"
             VerticalAlignment="Top"
@@ -128,6 +133,7 @@
             <StackPanel
                 Width="Auto"
                 Grid.IsSharedSizeScope="True"
+                IsEnabled="{Binding IsLoaded}"
                 Orientation="Vertical">
                 <Grid>
                     <Grid.ColumnDefinitions>

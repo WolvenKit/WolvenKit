@@ -12,6 +12,7 @@
     xmlns:nodify="https://miroiu.github.io/nodify"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:others="clr-namespace:WolvenKit.Views.Others"
     d:DataContext="{d:DesignInstance Type={x:Type documents:RDTGraphViewModel}}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -45,6 +46,7 @@
             ItemsSource="{Binding Nodes}"
             PendingConnection="{Binding PendingConnection}"
             SelectedItems="{Binding SelectedNodes}"
+            IsEnabled="{Binding IsLoaded}"
             ViewportLocation="{Binding Location}">
             <editors:AutomaticNodifyEditor.ContextMenu>
                 <ContextMenu>
@@ -361,6 +363,8 @@
             </editors:AutomaticNodifyEditor.ItemContainerStyle>
         </editors:AutomaticNodifyEditor>
 
+        <others:LoadingTextControl VisibilityFlag="{Binding IsLoaded}" />
+        
         <!--  Grid Splitter  -->
         <!--syncfusion:SfGridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
 

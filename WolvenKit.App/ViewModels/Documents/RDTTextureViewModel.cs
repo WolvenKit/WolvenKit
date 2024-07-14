@@ -24,10 +24,9 @@ public partial class RDTTextureViewModel : RedDocumentTabViewModel
     protected readonly RedBaseClass? _data;
 
     protected readonly RedImage? _redImage;
-
+    
     public delegate void RenderDelegate();
     public RenderDelegate Render;
-    public bool IsRendered;
 
     public RDTTextureViewModel(RedBaseClass data, RedDocumentViewModel file,
         ILoggerService loggerService,
@@ -63,6 +62,7 @@ public partial class RDTTextureViewModel : RedDocumentTabViewModel
     [ObservableProperty] private ImageSource? _image;
 
     [ObservableProperty] private bool _isDragging;
+    [ObservableProperty] public bool _isRendered;
 
     public override void OnSelected() => Render.Invoke();
 
