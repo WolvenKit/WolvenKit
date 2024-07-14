@@ -1,0 +1,193 @@
+<Window
+    x:Class="WolvenKit.Views.Dialogs.Windows.NpvCreationDialogView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    xmlns:validators="clr-namespace:WolvenKit.Views.Validators"
+    Title="Configure your NPV"
+    d:DesignHeight="460" Height="460"
+    d:DesignWidth="650" Width="650"
+    Background="{StaticResource ContentBackgroundAlt3}"
+    FocusManager.FocusedElement="{Binding ElementName=TextBox}"
+    KeyDown="OnKeyDown"
+    WindowStartupLocation="CenterScreen" d:DataContext="{d:DesignInstance }">
+
+    <Window.Resources>
+        <x:Array Type="system:String" x:Key="SharedListBoxItems">
+            <system:String>01</system:String>
+            <system:String>02</system:String>
+            <system:String>03</system:String>
+            <system:String>04</system:String>
+            <system:String>05</system:String>
+            <system:String>06</system:String>
+            <system:String>07</system:String>
+            <system:String>08</system:String>
+            <system:String>09</system:String>
+            <system:String>10</system:String>
+            <system:String>11</system:String>
+            <system:String>12</system:String>
+            <system:String>13</system:String>
+            <system:String>14</system:String>
+            <system:String>15</system:String>
+            <system:String>16</system:String>
+            <system:String>17</system:String>
+            <system:String>18</system:String>
+            <system:String>19</system:String>
+            <system:String>20</system:String>
+            <system:String>21</system:String>
+            <system:String>22</system:String>
+        </x:Array>
+
+        <Style x:Key="LinkStyle" TargetType="Hyperlink">
+            <Setter Property="Foreground" Value="{StaticResource WolvenKitCyan}" />
+        </Style>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="Margin" Value="10,0,0,0" />
+            <Setter Property="Padding" Value="12,0" />
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+
+        <!-- Body Gender -->
+        <Border Grid.Row="0" Name="DescriptionText">
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                <TextBlock Text="Configure your NPV" FontSize="20" Padding="0 0 0 5" />
+                <TextBlock Height="25" Text="Enter the exact values from character creation." Padding="0 5 0 0 " />
+                <TextBlock>
+                    <Hyperlink
+                        Style="{StaticResource LinkStyle}"
+                        NavigateUri="https://www.nexusmods.com/cyberpunk2077/mods/3850"
+                        RequestNavigate="Hyperlink_RequestNavigate">
+                        Click here
+                    </Hyperlink>
+                    <Run Text="to open AppearanceChangeUnlocker on Nexus" />
+                </TextBlock>
+                <TextBlock>
+                    <Hyperlink
+                        Style="{StaticResource LinkStyle}"
+                        NavigateUri="https://wiki.redmodding.org/cyberpunk-2077-modding/modding-guides/npcs/npv-v-as-custom-npc"
+                        RequestNavigate="Hyperlink_RequestNavigate">
+                        Click here
+                    </Hyperlink>
+                    <Run Text="to open the wiki tutorial page" />
+                </TextBlock>
+            </StackPanel>
+        </Border>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="400" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="55" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="40" />
+            </Grid.RowDefinitions>
+
+            <!-- Destination file path -->
+            <Border Grid.Row="0" Grid.Column="0" Margin="0 10 0 10">
+                <Label>Target folder</Label>
+            </Border>
+            <Border Grid.Row="0" Grid.Column="1" Margin="0 10 0 5">
+                <TextBox Name="TextBox_FilePath">
+                    <TextBox.Text>
+                        <Binding Path="DestFolderPath" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <validators:FilePathValidationRule />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+            </Border>
+
+            <!-- Body Gender -->
+            <Border Grid.Row="1" Grid.Column="0" Margin="0 0 0 10">
+                <Label>Body Gender</Label>
+            </Border>
+            <Border Grid.Row="1" Grid.Column="1" Margin="0 5 0 0" Width="200" HorizontalAlignment="Left">
+                <ListBox x:Name="MenuListBox" SelectedIndex="0">
+                    <ListBoxItem>Female</ListBoxItem>
+                    <ListBoxItem>Male</ListBoxItem>
+                </ListBox>
+            </Border>
+
+            <!-- Eyes -->
+            <Border Grid.Row="2" Grid.Column="0" Margin="0 0 0 10">
+                <Label>Eyes</Label>
+            </Border>
+            <Border Grid.Row="2" Grid.Column="1" Margin="5" Width="200" HorizontalAlignment="Left">
+                <ComboBox Name="Combobox_Eyes" ItemsSource="{StaticResource SharedListBoxItems}" SelectedIndex="0" />
+            </Border>
+
+            <!-- Nose -->
+            <Border Grid.Row="3" Grid.Column="0" Margin="0 0 0 10">
+                <Label>Nose</Label>
+            </Border>
+            <Border Grid.Row="3" Grid.Column="1" Margin="5" Width="200" HorizontalAlignment="Left">
+                <ComboBox Name="Combobox_Nose" ItemsSource="{StaticResource SharedListBoxItems}" SelectedIndex="0" />
+            </Border>
+
+            <!-- Mouth -->
+            <Border Grid.Row="4" Grid.Column="0" Margin="0 0 0 10">
+                <Label>Mouth</Label>
+            </Border>
+            <Border Grid.Row="4" Grid.Column="1" Margin="5" Width="200" HorizontalAlignment="Left">
+                <ComboBox Name="Combobox_Mouth" ItemsSource="{StaticResource SharedListBoxItems}" SelectedIndex="0" />
+            </Border>
+
+            <!-- Jaw -->
+            <Border Grid.Row="5" Grid.Column="0" Margin="0 0 0 10">
+                <Label>Jaw</Label>
+            </Border>
+            <Border Grid.Row="5" Grid.Column="1" Margin="5" Width="200" HorizontalAlignment="Left">
+                <ComboBox Name="Combobox_Jaw" ItemsSource="{StaticResource SharedListBoxItems}" SelectedIndex="0" />
+            </Border>
+
+            <!-- Ears -->
+            <Border Grid.Row="6" Grid.Column="0" Margin="0 0 0 10">
+                <Label>Ears</Label>
+            </Border>
+            <Border Grid.Row="6" Grid.Column="1" Margin="5" Width="200" HorizontalAlignment="Left">
+                <ComboBox Name="Combobox_Ears" ItemsSource="{StaticResource SharedListBoxItems}" SelectedIndex="0" />
+            </Border>
+        </Grid>
+
+        <!-- Bottom Row -->
+        <Grid Grid.Row="2" Grid.ColumnSpan="2" Height="28" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="OkButton" Grid.Column="2"
+                    Style="{StaticResource ButtonStyle}"
+                    Background="{StaticResource WolvenKitRed}"
+                    IsEnabled="{Binding CanSave}"
+                    Click="OnOkButtonClick"
+                    Content="Save" />
+            <Button x:Name="CancelButton"
+                    Grid.Column="3"
+                    Style="{StaticResource ButtonStyle}"
+                    Click="OnCancelButtonClick"
+                    Content="Cancel" />
+        </Grid>
+    </Grid>
+</Window>

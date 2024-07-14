@@ -1,6 +1,8 @@
+using System.ComponentModel;
 using System.Reactive.Disposables;
 using ReactiveUI;
 using WolvenKit.App.ViewModels.Dialogs;
+using WolvenKit.Common.Model;
 
 namespace WolvenKit.Views.Dialogs
 {
@@ -12,7 +14,6 @@ namespace WolvenKit.Views.Dialogs
         public NewFileView()
         {
             InitializeComponent();
-
 
             this.WhenActivated(disposables =>
             {
@@ -29,10 +30,15 @@ namespace WolvenKit.Views.Dialogs
                     vm => vm.SelectedCategory.Files,
                     v => v.DataGrid.ItemsSource)
                     .DisposeWith(disposables);
+                
                 this.Bind(ViewModel,
                     vm => vm.SelectedFile,
                     v => v.DataGrid.SelectedItem)
                     .DisposeWith(disposables);
+
+                // Subscribe to the PropertyChanged event of the ViewModel
+                ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+                disposables.Add(Disposable.Create(() => ViewModel.PropertyChanged -= ViewModel_PropertyChanged));
 
                 this.Bind(ViewModel,
                     vm => vm.FileName,
@@ -46,6 +52,21 @@ namespace WolvenKit.Views.Dialogs
                     .DisposeWith(disposables);
             });
 
+        }
+
+        private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            // If SelectedCategory has only one item, let's select it
+            if (e.PropertyName != nameof(ViewModel.SelectedCategory)
+                || ViewModel?.SelectedCategory is not FileCategoryModel category
+                || category.Files is null
+                || category.Files.Count != 1)
+            {
+                return;
+            }
+
+            // Set the SelectedFile to the single item in the DataGrid
+            ViewModel.SelectedFile = category.Files[0];
         }
     }
 }

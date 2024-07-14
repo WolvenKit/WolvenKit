@@ -1324,11 +1324,25 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         await Task.Run(() => OpenFromNewFileAsync(file)).ContinueWith(async (_) =>
         {
-            if (file.FullPath is not null)
+            if (file.FullPath is not null && File.Exists(file.FullPath))
             {
                 await Task.Run(() => RequestFileOpen(file.FullPath));
             }
         });
+    }
+
+    private void RunComplexNewFileAction(NewFileViewModel file)
+    {
+        if (file.SelectedFile?.Type is null)
+        {
+            return;
+        }
+
+        // ArchiveXL stuff not implemented yet
+        if (file.SelectedFile?.Type is EWolvenKitFile.Complex_NPV)
+        {
+            Interactions.ShowNpvCreationDialogue();
+        }
     }
 
     private static async Task OpenFromNewFileAsync(NewFileViewModel file)
@@ -1390,6 +1404,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                     writer.WriteFile(cr2W);
                 }
                 break;
+            // These should be handled by ComplexAction
+            case EWolvenKitFile.Complex_NPV:
+            case EWolvenKitFile.Complex_XL_Control:
+            case EWolvenKitFile.Complex_XL_Item:
+            // Where's this handled?
             case EWolvenKitFile.WScript:
                 throw new NotImplementedException();
             default:
@@ -1457,7 +1476,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         return result == WMessageBoxResult.Yes;
     }
-
+    
     public void ReloadChangedFiles()
     {
         for (var i = DockedViews.Count - 1; i >= 0; i--)
@@ -2025,6 +2044,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             case EWolvenKitFile.ArchiveXl:
             case EWolvenKitFile.RedScript:
             case EWolvenKitFile.CETLua:
+            case EWolvenKitFile.Complex_NPV:
+            case EWolvenKitFile.Complex_XL_Control:
+            case EWolvenKitFile.Complex_XL_Item:
             default:
                 break;
         }
