@@ -11,6 +11,7 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:types="clr-namespace:WolvenKit.RED4.Types;assembly=WolvenKit.RED4.Types"
+    xmlns:others="clr-namespace:WolvenKit.Views.Others"
     Margin="0"
     d:DataContext="{d:DesignInstance Type={x:Type documents:RDTWidgetViewModel}}"
     d:DesignHeight="450"
@@ -58,7 +59,15 @@
                 Background="{StaticResource ContentBackground}"
                 BorderThickness="1"
                 ClipToBounds="True">
-                <Canvas x:Name="WidgetPreview" RenderTransformOrigin="0.5,0.5" />
+                <Grid>
+                    <Canvas
+                        x:Name="WidgetPreview"
+                        RenderTransformOrigin="0.5,0.5"
+                        Visibility="{Binding IsLoaded, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                    <others:LoadingTextControl Grid.Column="0" VisibilityFlag="{Binding IsLoaded}" Small="True" />
+                </Grid>
+                
             </Border>
         </Border>
 
@@ -277,7 +286,8 @@
                         Text="Export inkWidget as XML" />
                 </StackPanel>
                 <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
-                <ItemsControl x:Name="WidgetExportButtons">
+                <ItemsControl x:Name="WidgetExportButtons"
+                              IsEnabled="{ Binding IsLoaded }">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Vertical" />
@@ -311,16 +321,19 @@
                 Margin="5,5,5,0"
                 Padding="7,2"
                 Click="Button_Click"
-                Content="Regenerate inkTextWidgets" />
+                Content="Regenerate inkTextWidgets"
+                IsEnabled="{ Binding IsLoaded }" />
             <Button
                 Margin="5,5,5,0"
                 Padding="7,2"
                 Click="SaveAsImage"
+                IsEnabled="{ Binding IsLoaded }"
                 Content="Save as Images" />
             <Button
                 Margin="5,5,5,0"
                 Padding="7,2"
                 Click="ClearAndReload"
+                IsEnabled="{ Binding IsLoaded }"
                 Content="Clear cache" />
 
         </StackPanel>

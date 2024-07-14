@@ -59,7 +59,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
     private const double s_cameraUpDirectionFactor = 0.7;
     private const int s_cameraAnimationTime = 400;
 
-    private bool _isLoaded;
 
     #region ctor
 
@@ -146,7 +145,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
     public override void Load()
     {
-        if (_isLoaded)
+        if (IsLoaded)
         {
             return;
         }
@@ -215,7 +214,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             RenderEntitySolo();
         }
 
-        _isLoaded = true;
+        IsLoaded = true;
     }
 
     public override void Unload()
@@ -283,6 +282,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
     [ObservableProperty] private Appearance? _selectedAppearance;
 
     [ObservableProperty] private bool _isCtrlKeyPressed;
+
+    [ObservableProperty] private bool _isLoaded;
 
     public bool CtrlKeyPressed { get; set; }
 

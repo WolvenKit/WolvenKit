@@ -21,10 +21,11 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
 {
     public inkWidgetLibraryResource library;
 
-
-
     public RDTWidgetViewModel(inkWidgetLibraryResource data, RedDocumentViewModel file) : base(file, "Widget Preview") => library = data;
 
+
+    [ObservableProperty] public bool _isLoaded;
+    
     [ObservableProperty] private Dictionary<object, inkTextWidget> _textWidgets = new();
 
     [ObservableProperty] private List<string> _styleStates = new();
@@ -53,6 +54,7 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
 
     public async Task LoadResources()
     {
+        IsLoaded = false; 
         await Task.Run(async () =>
         {
             var tasks = new List<Task>
@@ -79,6 +81,8 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
 
             await Task.WhenAll(tasks);
         });
+
+        IsLoaded = true; 
     }
 
     public Task LoadAnimations()

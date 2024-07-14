@@ -10,20 +10,24 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Border
-        Padding="0"
-        Background="{StaticResource ContentBackground}"
-        BorderThickness="1"
-        ClipToBounds="True">
-        <Border.ContextMenu>
-            <ContextMenu>
-                <MenuItem Click="ResetZoomPan" Header="Reset Zoom/Pan" />
-                <MenuItem Click="SaveImage" Header="Save Image" />
-                <MenuItem Command="{Binding ReplaceTextureCommand}" Header="Replace Texture" />
-                <MenuItem Command="{Binding SaveAsCubeCommand}" Header="Save as cube" />
-                <MenuItem Command="{Binding LoadFromCubeCommand}" Header="Load from cube" />
-            </ContextMenu>
-        </Border.ContextMenu>
-        <others:ImageCanvas x:Name="ImageCanvasItem" Source="{Binding Image}" />
-    </Border>
+    <StackPanel Orientation="Vertical" Background="{StaticResource ContentBackground}">
+        <Border
+            Padding="0"
+            BorderThickness="1"
+            ClipToBounds="True"
+            Visibility="{Binding IsRendered, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Border.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Click="ResetZoomPan" Header="Reset Zoom/Pan" />
+                    <MenuItem Click="SaveImage" Header="Save Image" />
+                    <MenuItem Command="{Binding ReplaceTextureCommand}" Header="Replace Texture" />
+                    <MenuItem Command="{Binding SaveAsCubeCommand}" Header="Save as cube" />
+                    <MenuItem Command="{Binding LoadFromCubeCommand}" Header="Load from cube" />
+                </ContextMenu>
+            </Border.ContextMenu>
+            <others:ImageCanvas x:Name="ImageCanvasItem" Source="{Binding Image}" />
+        </Border>
+
+        <others:LoadingTextControl VisibilityFlag="{Binding IsRendered}" />
+    </StackPanel>
 </UserControl>

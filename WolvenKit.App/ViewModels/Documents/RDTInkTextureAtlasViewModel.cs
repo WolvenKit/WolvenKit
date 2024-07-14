@@ -25,6 +25,8 @@ public partial class RDTInkTextureAtlasViewModel : RedDocumentTabViewModel
     private readonly inkTextureAtlas _atlas;
     private int _currentSlot = -1;
 
+    [ObservableProperty] public bool _isLoaded;
+    
     [ObservableProperty] private ImageSource? _image;
 
     [ObservableProperty] private ObservableCollection<InkTextureAtlasMapperViewModel> _overlayItems = new();
@@ -56,6 +58,7 @@ public partial class RDTInkTextureAtlasViewModel : RedDocumentTabViewModel
 
     public void RenderAtlas(int index)
     {
+        IsLoaded = false; 
         if (index is < 0 or > 2)
         {
             throw new IndexOutOfRangeException();
@@ -71,12 +74,14 @@ public partial class RDTInkTextureAtlasViewModel : RedDocumentTabViewModel
 
         if (_atlas.Slots[index] is not { } slot || slot.Texture.DepotPath == ResourcePath.Empty)
         {
+            IsLoaded = true; 
             return;
         }
 
         var texture = Parent.GetFileFromDepotPath(slot.Texture.DepotPath);
         if (texture is not { RootChunk: CBitmapTexture xbm })
         {
+            IsLoaded = true; 
             return;
         }
 
@@ -139,6 +144,8 @@ public partial class RDTInkTextureAtlasViewModel : RedDocumentTabViewModel
             slotViewModel.PropertyChanged += OnSlotPropertyChanged;
             OverlayItems.Add(slotViewModel);
         }
+
+        IsLoaded = true; 
     }
 
     private void OnSlotPropertyChanged(object? sender, PropertyChangedEventArgs e)
