@@ -88,6 +88,15 @@
                     </Hyperlink>
                     <Run Text="to open the wiki tutorial page" />
                 </TextBlock>
+                <TextBlock>
+                    <Hyperlink
+                        Style="{StaticResource LinkStyle}"
+                        NavigateUri="https://noraleedoes.neocities.org/npv/npv_part_picker"
+                        RequestNavigate="Hyperlink_RequestNavigate">
+                        Click here
+                    </Hyperlink>
+                    <Run Text="to open Nora's NPV part picker" />
+                </TextBlock>
             </StackPanel>
         </Border>
 
