@@ -146,6 +146,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         
         IsMesh = CurrentTab?.GetContentType() is RedDocumentItemType.Mesh;
         IsAddAppearancesCommandEnabled = CurrentTab?.GetContentType() is RedDocumentItemType.Mesh;
+        IsMaterialMenuEnabled = CurrentTab?.GetContentType() is RedDocumentItemType.Mesh or RedDocumentItemType.Mi;
 
         _modifierViewStateService?.RefreshModifierStates();
         

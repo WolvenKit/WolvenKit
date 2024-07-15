@@ -931,7 +931,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         var filesToSearch =
             _archiveManager.Archives
                 .Items
-                .Where(x => !_archiveManager.IsModBrowserActive || x.Source == EArchiveSource.Mod)
+                .Where(x => _archiveManager.IsModBrowserActive == (x.Source == EArchiveSource.Mod))
                 .SelectMany(x => x.Files.Values)
                 .Where(file => searchAsSequentialRefinements.All(refinement => refinement.Match(file)))
                 .GroupBy(x => x.Key)

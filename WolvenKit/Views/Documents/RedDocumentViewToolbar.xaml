@@ -41,6 +41,53 @@
                 <Setter Property="Background" Value="{StaticResource BackgroundColor_Cyan}" />
             </Style>
 
+            <!-- Menu item style -->
+            <Style x:Key="ShowInMeshWithShiftKeyStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitToolBarItem}">
+                <Setter Property="Height" Value="22" />
+                <Setter Property="Padding" Value="2 6 0 6" />
+                <Setter Property="Margin" Value="2 0" />
+                <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Frame_Background}" />
+                <Style.Triggers>
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding Path=IsShiftKeyDown}" Value="True" />
+                            <Condition Binding="{Binding Path=IsMesh}" Value="True" />
+                        </MultiDataTrigger.Conditions>
+                        <Setter Property="Visibility" Value="Visible" />
+                    </MultiDataTrigger>
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding Path=IsMesh}" Value="True" />
+                            <Condition Binding="{Binding Path=IsShiftKeyDown}" Value="False" />
+                        </MultiDataTrigger.Conditions>
+                        <Setter Property="Visibility" Value="Collapsed" />
+                    </MultiDataTrigger>
+                </Style.Triggers>
+            </Style>
+            <Style x:Key="ShowInMeshWithShiftKeyUpStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitToolBarItem}">
+                <Setter Property="Height" Value="22" />
+                <Setter Property="Padding" Value="2 6 0 6" />
+                <Setter Property="Margin" Value="2 0" />
+                <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Frame_Background}" />
+                <Style.Triggers>
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding Path=IsMesh}" Value="True" />
+                            <Condition Binding="{Binding Path=IsShiftKeyDown}" Value="False" />
+                        </MultiDataTrigger.Conditions>
+                        <Setter Property="Visibility" Value="Visible" />
+                    </MultiDataTrigger>
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding Path=IsMesh}" Value="True" />
+                            <Condition Binding="{Binding Path=IsShiftKeyDown}" Value="True" />
+                        </MultiDataTrigger.Conditions>
+                        <Setter Property="Visibility" Value="Collapsed" />
+                    </MultiDataTrigger>
+                </Style.Triggers>
+            </Style>
+
+
             <Style x:Key="EditorModeDisplayStyle_Yellow" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource EditorModeDisplayStyle}">
                 <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Yellow}" />
                 <Setter Property="Background" Value="{StaticResource BackgroundColor_Yellow}" />
@@ -49,6 +96,7 @@
                 <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Red}" />
                 <Setter Property="Background" Value="{StaticResource BackgroundColor_Red}" />
             </Style>
+
 
             <Style x:Key="EditorModeParentDisplayStyle" TargetType="{x:Type MenuItem}">
                 <Setter Property="Opacity" Value="50" />
@@ -70,6 +118,7 @@
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
+
         </Grid.Resources>
 
         <Menu x:Name="MenuBar" Style="{StaticResource MenuStyle}">
@@ -90,7 +139,7 @@
 
             <!-- Mesh file: Materials menu -->
             <MenuItem Header="Materials"
-                      Visibility="{ Binding  ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsMesh, Converter={ StaticResource BooleanToVisibilityConverter}}"
+                      Visibility="{ Binding  ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsMaterialMenuEnabled, Converter={ StaticResource BooleanToVisibilityConverter}}"
                       Style="{StaticResource WolvenKitToolBarItem}">
 
                 <!-- Convert preload materials -->
@@ -105,12 +154,12 @@
 
                 <!-- No shift: "Delete unused Materials" -->
                 <MenuItem Header="Delete unused materials"
-                          Visibility="{ Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsShiftKeyDown, Converter={ StaticResource BoolInvertConverter}}"
+                          Style="{StaticResource ShowInMeshWithShiftKeyStyle}"
                           Click="OnDeleteUnusedMaterialsClick" />
 
                 <!-- Shift: "Clear all Materials" -->
                 <MenuItem Header="Clear all materials"
-                          Visibility="{ Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsShiftKeyDown, Converter={ StaticResource BooleanToVisibilityConverter}}"
+                          Style="{StaticResource ShowInMeshWithShiftKeyUpStyle}"
                           Click="OnClearAllMaterialsClick" />
 
 
@@ -118,6 +167,18 @@
                 <MenuItem Header="Scroll to material"
                           IsEnabled="{Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsScrollToMaterialCommandEnabled, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                           Click="OnScrollToMaterialClick" />
+
+                <!-- Shift: "Clear all Materials" -->
+                <MenuItem Header="Add material dependencies"
+                          ToolTip="Will run 'delete unused materials' first"
+                          Visibility="{ Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsAddDependenciesCommandEnabled, Converter={ StaticResource BooleanToVisibilityConverter}}"
+                          Click="OnAddDependenciesClick" />
+
+                <!-- Shift: "Clear all Materials" -->
+                <MenuItem Header="Add material dependencies (include basegame files)"
+                          ToolTip="Will run 'delete unused materials' first"
+                          Visibility="{ Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsAddDependenciesCommandEnabledAndShiftKeyDown, Converter={ StaticResource BooleanToVisibilityConverter}}"
+                          Click="OnAddDependenciesClick" />
 
             </MenuItem>
 
@@ -137,19 +198,6 @@
                       Style="{StaticResource WolvenKitToolBarItem}"
                       Click="OnGenerateNewCruidClick">
             </MenuItem>
-
-
-            <!-- Shift: "Clear all Materials" -->
-            <MenuItem Header="Add material dependencies"
-                      ToolTip="Will run 'delete unused materials' first"
-                      Visibility="{ Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsAddDependenciesCommandEnabled, Converter={ StaticResource BooleanToVisibilityConverter}}"
-                      Click="OnAddDependenciesClick" />
-
-            <!-- Shift: "Clear all Materials" -->
-            <MenuItem Header="Add material dependencies (include basegame files)"
-                      ToolTip="Will run 'delete unused materials' first"
-                      Visibility="{ Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsAddDependenciesCommandEnabledAndShiftKeyDown, Converter={ StaticResource BooleanToVisibilityConverter}}"
-                      Click="OnAddDependenciesClick" />
             
             
         </Menu>
