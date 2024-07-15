@@ -43,7 +43,7 @@
 
             <!-- Menu item style -->
             <Style x:Key="ShowInMeshWithShiftKeyStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitToolBarItem}">
-                <Setter Property="Height" Value="22" />
+                <Setter Property="Height" Value="25" />
                 <Setter Property="Padding" Value="2 6 0 6" />
                 <Setter Property="Margin" Value="2 0" />
                 <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Frame_Background}" />
@@ -65,7 +65,7 @@
                 </Style.Triggers>
             </Style>
             <Style x:Key="ShowInMeshWithShiftKeyUpStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitToolBarItem}">
-                <Setter Property="Height" Value="22" />
+                <Setter Property="Height" Value="25" />
                 <Setter Property="Padding" Value="2 6 0 6" />
                 <Setter Property="Margin" Value="2 0" />
                 <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Frame_Background}" />
@@ -154,12 +154,12 @@
 
                 <!-- No shift: "Delete unused Materials" -->
                 <MenuItem Header="Delete unused materials"
-                          Style="{StaticResource ShowInMeshWithShiftKeyStyle}"
+                          Style="{StaticResource ShowInMeshWithShiftKeyUpStyle}"
                           Click="OnDeleteUnusedMaterialsClick" />
 
                 <!-- Shift: "Clear all Materials" -->
                 <MenuItem Header="Clear all materials"
-                          Style="{StaticResource ShowInMeshWithShiftKeyUpStyle}"
+                          Style="{StaticResource ShowInMeshWithShiftKeyStyle}"
                           Click="OnClearAllMaterialsClick" />
 
 
