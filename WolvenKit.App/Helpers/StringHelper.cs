@@ -145,7 +145,7 @@ public abstract partial class StringHelper
     
     public static string StringifyMeshAppearance(CResourceAsyncReference<CMesh> mesh, CName? meshAppearance)
     {
-        var ret = mesh.DepotPath.GetResolvedText() ?? "";
+        var ret = Stringify(mesh.DepotPath);
         if (meshAppearance?.GetResolvedText() is not string s || s == "" || s == "default")
         {
             return ret;
