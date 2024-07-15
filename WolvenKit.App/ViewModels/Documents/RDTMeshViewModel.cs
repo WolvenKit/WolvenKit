@@ -211,7 +211,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         {
             PanelVisibility.ShowExportEntity = true;
 
-            RenderEntitySolo();
+            try
+            {
+                RenderEntitySolo();
+            }
+            catch (Exception e)
+            {
+                _loggerService.Error($"Failed to render entity. Please open a ticket: \n${e}");
+            }
         }
 
         IsLoaded = true;
@@ -811,133 +818,135 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             }
         }
 
-        if (component is entIPlacedComponent epc && depotPath != ResourcePath.Empty && depotPath.GetRedHash() != 0)
+        if (component is not entIPlacedComponent epc || depotPath == ResourcePath.Empty || depotPath.GetRedHash() == 0)
         {
-            var meshFile = Parent.GetFileFromDepotPathOrCache(depotPath);
-
-            if (meshFile is not { RootChunk: CMesh mesh })
-            {
-                Parent.GetLoggerService().Warning($"Couldn't find mesh file: {depotPath} / {depotPath.GetRedHash()}");
-                return;
-            }
-
-            var matrix = ToSeparateMatrix(epc.LocalTransform);
-
-            string? bindName = null, slotName = null;
-            if ((epc.ParentTransform?.GetValue() ?? null) is entHardTransformBinding ehtb)
-            {
-                bindName = ehtb.BindName;
-                slotName = ehtb.SlotName;
-            }
-
-            matrix.Scale(ToScaleVector3D(scale));
-
-            var materials = new Dictionary<string, Material>();
-
-            var localList = mesh.LocalMaterialBuffer.RawData?.Buffer.Data as CR2WList ?? null;
-
-            foreach (var me in mesh.MaterialEntries)
-            {
-                var name = GetUniqueMaterialName(me.Name.ToString().NotNull(), mesh);
-                if (!me.IsLocalInstance)
-                {
-                    materials.Add(name, new Material(name));
-                    continue;
-                }
-
-                CMaterialInstance? inst = null;
-
-                if (localList != null && localList.Files.Count > me.Index)
-                {
-                    inst = (CMaterialInstance)localList.Files[me.Index].RootChunk;
-                }
-                else
-                {
-                    //foreach (var pme in data.PreloadLocalMaterialInstances)
-                    //{
-                    //inst = (CMaterialInstance)pme.GetValue();
-                    //}
-                    inst = (CMaterialInstance?)mesh.PreloadLocalMaterialInstances[me.Index]?.GetValue();
-                }
-
-                //CMaterialInstance bm = null;
-                //if (File.GetFileFromDepotPathOrCache(inst.BaseMaterial.DepotPath) is var file)
-                //{
-                //    bm = (CMaterialInstance)file.RootChunk;
-                //}
-
-                ArgumentNullException.ThrowIfNull(inst);
-
-                var material = new Material(name) { Instance = inst, };
-
-                foreach (var pair in inst.Values)
-                {
-                    var k = pair.Key.ToString().NotNull();
-                    material.Values[k] = pair.Value;
-                }
-
-                materials[name] = material;
-            }
-
-            var apps = new List<string>();
-            foreach (var handle in mesh.Appearances)
-            {
-                var app = handle.GetValue();
-                if (app is meshMeshAppearance mmapp)
-                {
-                    apps.Add(mmapp.Name.ToString().NotNull());
-                }
-            }
-
-            var appIndex = 0;
-            ArgumentNullException.ThrowIfNull(meshApp);
-            if (meshApp != "default" && apps.IndexOf(meshApp) is var index && index != -1)
-            {
-                appIndex = index;
-            }
-
-            var appMaterials = new List<Material>();
-
-            foreach (var handle in mesh.Appearances)
-            {
-                var app = handle.GetValue();
-                if (app is meshMeshAppearance mmapp &&
-                    (mmapp.Name == meshApp || meshApp == "default" && mesh.Appearances.IndexOf(handle) == 0))
-                {
-                    foreach (var m in mmapp.ChunkMaterials)
-                    {
-                        var name = GetUniqueMaterialName(m.ToString().NotNull(), mesh);
-                        if (materials.ContainsKey(name))
-                        {
-                            appMaterials.Add(materials[name]);
-                        }
-                        else
-                        {
-                            appMaterials.Add(new Material(name));
-                        }
-                    }
-
-                    break;
-                }
-            }
-
-            var model = new LoadableModel(epc.Name.ToString().NotNull().Replace(".", ""))
-            {
-                MeshFile = meshFile,
-                AppearanceIndex = appIndex,
-                AppearanceName = meshApp,
-                Matrix = matrix,
-                Materials = appMaterials,
-                IsEnabled = enabled,
-                BindName = bindName,
-                SlotName = slotName,
-                ChunkMask = chunkMask,
-                ChunkList = chunkList,
-                EnabledChunks = enabledChunks,
-                DepotPath = depotPath
-            };
-            appModels.Add(epc.Name.ToString().NotNull(), model);
+            return;
         }
+
+        var meshFile = Parent.GetFileFromDepotPathOrCache(depotPath);
+
+        if (meshFile is not { RootChunk: CMesh mesh })
+        {
+            Parent.GetLoggerService().Warning($"Couldn't find mesh file: {depotPath} / {depotPath.GetRedHash()}");
+            return;
+        }
+
+        var matrix = ToSeparateMatrix(epc.LocalTransform);
+
+        string? bindName = null, slotName = null;
+        if ((epc.ParentTransform?.GetValue() ?? null) is entHardTransformBinding ehtb)
+        {
+            bindName = ehtb.BindName;
+            slotName = ehtb.SlotName;
+        }
+
+        matrix.Scale(ToScaleVector3D(scale));
+
+        var materials = new Dictionary<string, Material>();
+
+        var localList = mesh.LocalMaterialBuffer.RawData?.Buffer.Data as CR2WList ?? null;
+
+        foreach (var me in mesh.MaterialEntries)
+        {
+            var name = GetUniqueMaterialName(me.Name.ToString().NotNull(), mesh);
+            if (!me.IsLocalInstance)
+            {
+                materials.Add(name, new Material(name));
+                continue;
+            }
+
+            CMaterialInstance? inst = null;
+
+            if (localList != null && localList.Files.Count > me.Index)
+            {
+                inst = (CMaterialInstance)localList.Files[me.Index].RootChunk;
+            }
+            else
+            {
+                //foreach (var pme in data.PreloadLocalMaterialInstances)
+                //{
+                //inst = (CMaterialInstance)pme.GetValue();
+                //}
+                inst = (CMaterialInstance?)mesh.PreloadLocalMaterialInstances[me.Index]?.GetValue();
+            }
+
+            //CMaterialInstance bm = null;
+            //if (File.GetFileFromDepotPathOrCache(inst.BaseMaterial.DepotPath) is var file)
+            //{
+            //    bm = (CMaterialInstance)file.RootChunk;
+            //}
+
+            ArgumentNullException.ThrowIfNull(inst);
+
+            var material = new Material(name) { Instance = inst, };
+
+            foreach (var pair in inst.Values)
+            {
+                var k = pair.Key.ToString().NotNull();
+                material.Values[k] = pair.Value;
+            }
+
+            materials[name] = material;
+        }
+
+        var apps = new List<string>();
+        foreach (var handle in mesh.Appearances)
+        {
+            var app = handle.GetValue();
+            if (app is meshMeshAppearance mmapp)
+            {
+                apps.Add(mmapp.Name.ToString().NotNull());
+            }
+        }
+
+        var appIndex = 0;
+        ArgumentNullException.ThrowIfNull(meshApp);
+        if (meshApp != "default" && apps.IndexOf(meshApp) is var index && index != -1)
+        {
+            appIndex = index;
+        }
+
+        var appMaterials = new List<Material>();
+
+        foreach (var handle in mesh.Appearances)
+        {
+            var app = handle.GetValue();
+            if (app is meshMeshAppearance mmapp &&
+                (mmapp.Name == meshApp || meshApp == "default" && mesh.Appearances.IndexOf(handle) == 0))
+            {
+                foreach (var m in mmapp.ChunkMaterials)
+                {
+                    var name = GetUniqueMaterialName(m.ToString().NotNull(), mesh);
+                    if (materials.ContainsKey(name))
+                    {
+                        appMaterials.Add(materials[name]);
+                    }
+                    else
+                    {
+                        appMaterials.Add(new Material(name));
+                    }
+                }
+
+                break;
+            }
+        }
+
+        var model = new LoadableModel(epc.Name.ToString().NotNull().Replace(".", ""))
+        {
+            MeshFile = meshFile,
+            AppearanceIndex = appIndex,
+            AppearanceName = meshApp,
+            Matrix = matrix,
+            Materials = appMaterials,
+            IsEnabled = enabled,
+            BindName = bindName,
+            SlotName = slotName,
+            ChunkMask = chunkMask,
+            ChunkList = chunkList,
+            EnabledChunks = enabledChunks,
+            DepotPath = depotPath
+        };
+        appModels.Add(epc.Name.ToString().NotNull(), model);
     }
 
     public void GetResolvedMatrix(IBindable bindable, ref SeparateMatrix matrix, Dictionary<string, LoadableModel> models)
@@ -3356,7 +3365,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             return;
         }
         IsRendered = true;
-        RenderEntity(_data as entEntityTemplate);
+        try
+        {
+            RenderEntity(_data as entEntityTemplate);
+        }
+        catch (Exception e)
+        {
+            _loggerService.Error($"Failed to render entity. Please open a ticket: \n${e}");
+        }
     }
 
     public GroupModel3DExt? RenderEntity(entEntityTemplate? ent, Appearance? appearance = null, string? appearanceName = null)
