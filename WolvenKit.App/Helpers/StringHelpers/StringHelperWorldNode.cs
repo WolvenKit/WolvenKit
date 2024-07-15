@@ -12,9 +12,9 @@ internal static class StringHelperWorldNode
             return "";
         }
 
-        if (stringifyValue)
+        if (stringifyValue && StringifyValue(worldNode) is string value)
         {
-            return StringifyValue(worldNode);
+            return value;
         }
 
         if (worldNode.DebugName != CName.Empty)
@@ -35,6 +35,7 @@ internal static class StringHelperWorldNode
     private static string StringifyValue(worldNode? worldNode) => worldNode switch
     {
         worldMeshNode node => $"{PrintMesh(node.Mesh, node.MeshAppearance)}",
+        worldInstancedMeshNode node => $"{PrintMesh(node.Mesh, node.MeshAppearance)}",
         worldBendedMeshNode node => $"{PrintMesh(node.Mesh, node.MeshAppearance)}",
         worldTerrainMeshNode node => $"{PrintMesh(node.MeshRef, null)}",
         worldStaticOccluderMeshNode node => $"${node.OccluderType.ToEnumString()} {node.Mesh.DepotPath.GetResolvedText()}",
