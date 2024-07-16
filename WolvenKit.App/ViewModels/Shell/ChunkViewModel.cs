@@ -1824,17 +1824,18 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         ArgumentNullException.ThrowIfNull(Tab);
         ArgumentNullException.ThrowIfNull(Data);
-
+        int newSelectionIndex = -1;
         try
         {
             switch (Parent.Data)
             {
                 case IRedArray ary:
                 {
-                    var childIdx = int.Parse(Name);
+                    var childIdx = NodeIdxInParent;
                     if (childIdx < ary.Count)
                     {
                         ary.RemoveAt(childIdx);
+                        newSelectionIndex = childIdx;
                     }
                     else
                     {
@@ -1869,8 +1870,16 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     return;
             }
 
+            
             Parent.RecalculateProperties();
-            Tab.SetSelection(Parent);
+            if (newSelectionIndex >= 0 && newSelectionIndex < Parent.TVProperties.Count + 1)
+            {
+                Tab.SetSelection(Parent.TVProperties[newSelectionIndex - 1]);
+            }
+            else
+            {
+                Tab.SetSelection(Parent.TVProperties.LastOrDefault() ?? Parent);
+            }
             Tab.Parent.SetIsDirty(true);
         }
         catch (Exception ex) { _loggerService.Error(ex); }        
@@ -1940,7 +1949,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         Parent.RecalculateProperties();
-        Tab.SetSelection(Parent);
+        if (Parent.TVProperties.Count >= indices.First())
+        {
+            Tab.SetSelection(Parent.TVProperties[indices.First()]);
+        }
+        else
+        {
+            Tab.SetSelection(Parent.TVProperties.LastOrDefault() ?? Parent);
+        }
         Tab.Parent.SetIsDirty(true);
     }
 
