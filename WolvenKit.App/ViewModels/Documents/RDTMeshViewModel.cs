@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -310,7 +311,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             var newElems = new SmartElement3DCollection();
             value.ForEach(v => newElems.Add(v));
             SelectedAppearance.ModelGroup = newElems;
-            OnPropertyChanged();
+            OnPropertyChanged(new PropertyChangedEventArgs(nameof(SelectedModelGroup)));
         }
     }
 
@@ -343,7 +344,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
         var outFile = new FileInfo(dlg.FileName);
         // will only use archive files (for now)
-        var appearanceName = SelectedAppearance.AppearanceName.ToString().NotNull();
+        var appearanceName = SelectedAppearance.AppearanceName.NotNull();
         if (_modTools.ExportEntity(Parent.Cr2wFile, appearanceName, outFile))
         {
             Parent.GetLoggerService().Success($"Entity with appearance '{appearanceName}'exported: {dlg.FileName}");
@@ -539,6 +540,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                 model.Meshes = MakeMesh(data, ulong.MaxValue, model.AppearanceIndex);
 
+                var materialIndex = 0;
                 foreach (var m in model.Meshes)
                 {
                     if (!a.LODLUT.TryGetValue(m.LOD, out var value))
@@ -547,6 +549,13 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                         a.LODLUT[m.LOD] = value;
                     }
 
+                    // Ensure materialIndex is within the bounds of a.RawMaterials.Keys
+                    if (materialIndex >= a.RawMaterials.Keys.Count)
+                        materialIndex = 0; // Or handle this scenario as appropriate for your application
+
+                    var materialKey = a.RawMaterials.Keys.ElementAt(materialIndex);
+                    m.MaterialName ??= materialKey;
+                    
                     value.Add(m);
                 }
                 a.ModelGroup.AddRange(AddMeshesToRiggedGroups(a));
@@ -1593,9 +1602,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         IsLoadingMaterials = true;
         if (CtrlKeyPressed)
         {
+            Parent.GetLoggerService().NotNull().Info($"Clearing material cache...");
             foreach (var (_, material) in SelectedAppearance.RawMaterials)
             {
-                Parent.GetLoggerService().NotNull().Info($"Clearing material cache...");
                 ClearMaterial(material);
             }
 

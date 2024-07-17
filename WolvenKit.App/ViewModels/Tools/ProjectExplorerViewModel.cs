@@ -32,6 +32,7 @@ using WolvenKit.Common.Interfaces;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
+using WolvenKit.Helpers;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
@@ -749,40 +750,88 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         Directory.CreateDirectory(newFolderPath);
     }
 
+   
 
     /// <summary>
     /// Renames selected node. Works for files and directories.
     /// </summary>
     private bool CanRenameFile() => ActiveProject != null && SelectedItem != null;
     [RelayCommand(CanExecute = nameof(CanRenameFile))]
-    private void RenameFile()
+    private async Task RenameFile()
     {
-        var filename = SelectedItem.NotNull().FullName;
-        var (newFilename, refactor) = Interactions.RenameAndRefactor(filename);
+        if (_projectManager.ActiveProject is null || SelectedItem?.FullName is not string filePath)
+        {
+            return;
+        }
+
+        var (prefix, relativePath) = _projectManager.ActiveProject.SplitFilePath(filePath);
+
+        if (filePath.StartsWith(_projectManager.ActiveProject.ModDirectory))
+        {
+            prefix = _projectManager.ActiveProject.ModDirectory;
+            relativePath = filePath[(prefix.Length + 1)..];
+        }
+
+        var (newFilename, refactor) = Interactions.RenameAndRefactor(relativePath);
 
         if (string.IsNullOrEmpty(newFilename))
         {
             return;
         }
 
-        var newFullPath = Path.Combine(Path.GetDirectoryName(filename).NotNull(), newFilename);
+        var newFullPath = Path.Combine(prefix, newFilename);
 
-        if (File.Exists(newFullPath) || filename == newFullPath)
+        if (filePath == newFullPath)
         {
             return;
         }
 
+        if (File.Exists(newFullPath))
+        {
+            var response = await Interactions.ShowMessageBoxAsync($"Do you want to overwrite the existing file {relativePath}?",
+                "File already exists!");
+            if (response is not (WMessageBoxResult.OK or WMessageBoxResult.Yes))
+            {
+                return;
+            }
+
+            File.Delete(newFullPath);
+        }
+        
         try
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(newFullPath).NotNull());
-            if (SelectedItem.IsDirectory)
+            if (!SelectedItem.IsDirectory)
             {
-                Directory.Move(filename, newFullPath);
+                var parentDir = Path.GetDirectoryName(newFullPath);
+
+                if (!Directory.Exists(parentDir) && parentDir is not null)
+                {
+                    Directory.CreateDirectory(parentDir);
+                }
+
+                if (File.Exists(newFullPath))
+                {
+                    File.Delete(newFullPath);
+                }
+
+                File.Move(filePath, newFullPath);
+               
             }
             else
             {
-                File.Move(filename, newFullPath);
+                var overwriteFiles = true;
+                if (Directory.Exists(filePath))
+                {
+                    var response = await Interactions.ShowMessageBoxAsync(
+                        $"Directory {relativePath} already exists. Do you want to overwrite existing files?", "Directory already exists!");
+                    overwriteFiles = response is (WMessageBoxResult.OK or WMessageBoxResult.Yes);
+                }
+
+                FileHelper.MoveRecursively(filePath, newFullPath, overwriteFiles, _loggerService);
             }
+
+            _loggerService.Info($"Moved {relativePath} to {newFilename}");
+          
         }
         catch
         {
@@ -794,8 +843,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        var oldRelPath = GetResourcePath(filename, ActiveProject);
-        var newRelPath = GetResourcePath(newFilename, ActiveProject);
+        var oldRelPath = ActiveProject.GetResourcePath(filePath);
+        var newRelPath = ActiveProject.GetResourcePath(newFullPath);
 
         ReplacePathInProject(oldRelPath, newRelPath);
     }
@@ -1013,17 +1062,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     // bi.EndInit();
     // IconSource = bi;
 
-    private ResourcePath GetResourcePath(string fullPath, Cp77Project project)
-    {
-        var relPath = Path.GetRelativePath(project.ModDirectory, fullPath);
-        if (ulong.TryParse(Path.GetFileNameWithoutExtension(relPath), out var hash))
-        {
-            return hash;
-        }
-
-        return relPath;
-    }
-
     private void ReplacePathInProject(ResourcePath oldPath, ResourcePath newPath)
     {
         if (oldPath == newPath ||
@@ -1037,7 +1075,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         var files = Directory.GetFiles(ActiveProject.ModDirectory, "*.*", SearchOption.AllDirectories);
         Parallel.ForEach(files, file =>
         {
-            var hash = GetResourcePath(file, ActiveProject);
+            var hash = ActiveProject.GetResourcePath(file);
             if (hash == newPath)
             {
                 return;
