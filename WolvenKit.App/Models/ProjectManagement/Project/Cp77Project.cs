@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Primitives;
+using System.Threading.Tasks;
 using WolvenKit.Common;
 using WolvenKit.Core.Extensions;
+using WolvenKit.Core.Interfaces;
+using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.Archive.IO;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Models.ProjectManagement.Project;
 
@@ -379,39 +382,80 @@ public sealed class Cp77Project(string location, string name, string modName) : 
         _ = ResourcesDirectory;
     }
 
-    public string GetRelativePath(string fullPath)
+    public (string, string) SplitFilePath(string fullPath) => (GetPrefixPath(fullPath), GetRelativePath(fullPath));
+
+    public string GetPrefixPath(string fullPath)
     {
-        if (fullPath.Equals(FileDirectory, StringComparison.Ordinal))
+        if (fullPath.StartsWith(ModDirectory, StringComparison.Ordinal))
+        {
+            return ModDirectory;
+        }
+
+        if (fullPath.StartsWith(RawDirectory, StringComparison.Ordinal))
+        {
+            return RawDirectory;
+        }
+
+        if (fullPath.StartsWith(ResourcesDirectory, StringComparison.Ordinal))
+        {
+            return ResourcesDirectory;
+        }
+
+        if (fullPath.StartsWith(PackedRootDirectory, StringComparison.Ordinal))
+        {
+            return PackedRootDirectory;
+        }
+
+        if (fullPath.StartsWith(FileDirectory, StringComparison.Ordinal))
+        {
+            return FileDirectory;
+        }
+
+        return "";
+    }
+
+    public string GetAbsolutePath(string fullPath)
+    {
+        var (prefix, relativePath) = SplitFilePath(fullPath);
+        prefix = prefix.Replace(ProjectDirectory, "");
+
+        if (prefix != "")
+        {
+            return Path.Join(ProjectDirectory, prefix, relativePath);
+        }
+
+        return Path.Join(ModDirectory, relativePath);
+    }
+
+    public string GetRelativePath(string absolutePath)
+    {
+        if (absolutePath.Equals(FileDirectory, StringComparison.Ordinal))
         {
             return "";
         }
+
         // hack so that we get proper hashes
-        if (fullPath.Equals(ModDirectory, StringComparison.Ordinal))
+        if (absolutePath.Equals(ModDirectory, StringComparison.Ordinal))
         {
             return "wkitmoddir";
         }
-        if (fullPath.Equals(RawDirectory, StringComparison.Ordinal))
+
+        if (absolutePath.Equals(RawDirectory, StringComparison.Ordinal))
         {
             return "wkitrawdir";
         }
-        if (fullPath.Equals(PackedRootDirectory, StringComparison.Ordinal))
+
+        if (absolutePath.Equals(PackedRootDirectory, StringComparison.Ordinal))
         {
             return "wkitpackeddir";
         }
 
-        if (fullPath.StartsWith(ModDirectory, StringComparison.Ordinal))
+        if (GetPrefixPath(absolutePath) is not string prefixPath || prefixPath == "")
         {
-            return fullPath[(ModDirectory.Length + 1)..];
-        }
-        if (fullPath.StartsWith(RawDirectory, StringComparison.Ordinal))
-        {
-            var rel = fullPath[(RawDirectory.Length + 1)..];
-            return rel;
+            return absolutePath;
         }
 
-        return fullPath.StartsWith(FileDirectory, StringComparison.Ordinal)
-            ? fullPath[(FileDirectory.Length + 1)..]
-            : fullPath.StartsWith(PackedRootDirectory, StringComparison.Ordinal) ? fullPath[(PackedRootDirectory.Length + 1)..] : fullPath;
+        return absolutePath[(prefixPath.Length + 1)..];
     }
 
     // Conversions
@@ -422,12 +466,7 @@ public sealed class Cp77Project(string location, string name, string modName) : 
 
     public object Clone()
     {
-        Cp77Project clone = new(Location, Name, ModName)
-        {
-            Author = Author,
-            Email = Email,
-            Version = Version
-        };
+        Cp77Project clone = new(Location, Name, ModName) { Author = Author, Email = Email, Version = Version };
         return clone;
     }
 
@@ -435,22 +474,110 @@ public sealed class Cp77Project(string location, string name, string modName) : 
 
     #region implements IEquatable
 
-    public bool Equals(Cp77Project? other) => other is not null && (ReferenceEquals(this, other) || string.Equals(Location, other.Location));
+    public bool Equals(Cp77Project? other) =>
+        other is not null && (ReferenceEquals(this, other) || string.Equals(Location, other.Location));
 
-    public override bool Equals(object? obj) => obj is not null && (ReferenceEquals(this, obj) || obj.GetType() == GetType() && Equals((Cp77Project)obj));
+    public override bool Equals(object? obj) =>
+        obj is not null && (ReferenceEquals(this, obj) || obj.GetType() == GetType() && Equals((Cp77Project)obj));
 
     public override int GetHashCode() => Location != null ? Location.GetHashCode() : 0;
+
     public ModInfo GetInfo()
     {
-        ModInfo modInfo = new(ModName, Version ?? "1.0")
-        {
-            Description = Description,
-        };
+        ModInfo modInfo = new(ModName, Version ?? "1.0") { Description = Description, };
         return modInfo;
     }
 
     #endregion implements IEquatable
 
     public override string ToString() => Location;
-    
+
+    public ResourcePath GetResourcePath(string fullPath)
+    {
+        var relPath = GetRelativePath(fullPath);
+        if (ulong.TryParse(Path.GetFileNameWithoutExtension(relPath), out var hash))
+        {
+            return hash;
+        }
+
+        return relPath;
+    }
+
+    public async Task<Dictionary<string, List<string>>> GetAllReferences()
+    {
+        Dictionary<string, List<string>> references = new();
+
+        await Task.Run(() =>
+        {
+            Parallel.ForEach(ModFiles, filePath =>
+            {
+                CR2WFile? cr2WFile;
+                List<string> resourcePaths = [];
+
+                using (var fs = File.Open(GetAbsolutePath(filePath), FileMode.Open))
+                using (var cr = new CR2WReader(fs))
+                {
+                    if (cr.ReadFile(out cr2WFile) != WolvenKit.RED4.Archive.IO.EFileReadErrorCodes.NoError || cr2WFile is null)
+                    {
+                        return;
+                    }
+
+                    foreach (var result in cr2WFile.FindType(typeof(IRedRef)))
+                    {
+                        if (result.Value is not IRedRef resourceReference || resourceReference.DepotPath == ResourcePath.Empty)
+                        {
+                            continue;
+                        }
+
+                        var refResource = resourceReference.DepotPath.GetResolvedText();
+                        if (string.IsNullOrEmpty(refResource))
+                        {
+                            continue;
+                        }
+
+                        resourcePaths.Add(refResource);
+                    }
+                }
+
+                if (resourcePaths.Count <= 0)
+                {
+                    return;
+                }
+
+                lock (references)
+                {
+                    references.Add(filePath, resourcePaths);
+                }
+            });
+        });
+        return references;
+    }
+
+    public async Task<Task> ScanForBrokenReferencePathsAsync(IArchiveManager archiveManager,
+        ILoggerService loggerService)
+    {
+        var references = await GetAllReferences();
+        return Task.Run(() =>
+        {
+            Parallel.ForEach(references, kvp =>
+            {
+                var pathsNotFound = kvp.Value
+                    .Where(filePath => !ModFiles.Contains(filePath) && archiveManager.GetGameFile(filePath, true, true) is null).ToList();
+
+                if (pathsNotFound.Count == 0)
+                {
+                    return;
+                }
+
+                loggerService.Info($"{pathsNotFound.Count} Potentially broken references in {kvp.Key}:");
+                foreach (var s in pathsNotFound)
+                {
+                    loggerService.Info($"   {s}");
+                }
+            });
+
+            loggerService.Warning("This feature is experimental!");
+        });
+    }
 }
+    
