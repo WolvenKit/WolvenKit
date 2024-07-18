@@ -195,6 +195,10 @@ public partial class ImportViewModel : AbstractImportViewModel
             var failedItemsErrorString = $"The following items failed:\n{string.Join("\n", failedItems)}";
             _notificationService.Error(failedItemsErrorString); //notify once only 
             _loggerService.Error(failedItemsErrorString);
+            if (failedItems.Any(s => s.EndsWith(".mesh")))
+            {
+                _loggerService.Error("You can try exporting them without material or garment support, or use the experimental exporter.");
+            }
         }
 
         _progressService.Completed();
