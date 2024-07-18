@@ -39,6 +39,7 @@
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageVersion Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.3233" />
     <PackageVersion Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.77" />
+    <PackageVersion Include="Moq" Version="4.20.70"/>
     <PackageVersion Include="MSTest.TestAdapter" Version="3.1.1" />
     <PackageVersion Include="MSTest.TestFramework" Version="3.1.1" />
     <PackageVersion Include="NAudio" Version="2.1.0" />
@@ -87,6 +88,7 @@
     <PackageVersion Include="System.Reflection.Metadata" Version="8.0.0" />
     <PackageVersion Include="System.Reflection.MetadataLoadContext" Version="8.0.0" />
     <PackageVersion Include="WpfAnalyzers" Version="4.1.1" />
+    <PackageVersion Include="xunit" Version="2.9.0"/>
     <PackageVersion Include="YamlDotNet" Version="15.1.0" />
     <PackageVersion Include="coverlet.collector" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>
