@@ -42,6 +42,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
+using WolvenKit.Helpers;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
@@ -824,7 +825,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         return ActiveProject!.ScanForBrokenReferencePathsAsync(_archiveManager, _loggerService);
     }
 
-    ScriptFileViewModel? _fileValidationScript;
+    readonly ScriptFileViewModel? _fileValidationScript;
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private async Task RunFileValidationOnProject()
@@ -835,7 +836,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
 
         var result = Interactions.ShowConfirmation((
-            $"This will analyse {ActiveProject!.Files.Count} files. This will freeze Wolvenkit and can take a long time. Do you want to proceed?",
+            $"This will analyse {ActiveProject!.Files.Count} files. This can take up to several minutes. Do you want to proceed?",
             "Really run file validation?",
             WMessageBoxImage.Question,
             WMessageBoxButtons.YesNo));
@@ -847,7 +848,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         var code = await File.ReadAllTextAsync(_fileValidationScript.Path);
 
-        _loggerService.Info($"Running file validation on {ActiveProject!.Files.Count} files. Please wait...");
         if (_archiveManager.ProjectArchive is not FileSystemArchive projArchive)
         {
             return;
@@ -860,9 +860,30 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 continue;
             }
 
+            _loggerService.Info($"Scanning {ActiveProject.GetRelativePath(file.FileName)}");
             ActiveDocument = fileViewModel;
             await _scriptService.ExecuteAsync(code);
         }
+
+        // This should never happen, but better safe than sorry
+        if (FileHelper.GetMostRecentlyChangedFile(Path.Combine(ISettingsManager.GetAppData(), "Logs"), "*.txt") is not FileInfo fI)
+        {
+            _loggerService.Info("Done.");
+            return;
+        }
+
+        _loggerService.Info($"Done. The most recent log file is {fI.FullName}.");
+
+        try
+        {
+            Process.Start(new ProcessStartInfo(fI.FullName) { UseShellExecute = true });
+        }
+        catch (Exception ex)
+        {
+            _loggerService.Error($"Failed to open log file: {ex.Message}");
+        }
+        
+        
     }
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]

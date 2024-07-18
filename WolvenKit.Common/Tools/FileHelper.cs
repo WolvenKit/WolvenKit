@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Helpers;
@@ -119,4 +120,15 @@ public class FileHelper
             logger?.Error(e);
         }
     }
+
+    public static FileInfo? GetMostRecentlyChangedFile(string directoryPath, string searchPattern)
+    {
+        if (!Directory.Exists(directoryPath))
+        {
+            return null;
+        }
+
+        return new DirectoryInfo(directoryPath).GetFiles(searchPattern).MaxBy(f => f.LastWriteTime);
+    }
+    
 }

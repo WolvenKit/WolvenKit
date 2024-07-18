@@ -330,6 +330,7 @@
                             Style="{StaticResource WolvenKitToolBarButtonIcon}" />
                     </MenuItem.Icon>
                 </MenuItem>
+                <Separator />
                 <!-- <MenuItem -->
                 <!--     x:Name="ToolbarProjectScanFilepathsButton" -->
                 <!--     Margin="2,1" -->
