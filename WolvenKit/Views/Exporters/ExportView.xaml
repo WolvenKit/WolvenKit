@@ -101,7 +101,7 @@
                     BorderThickness="1"
                     Command="{Binding RefreshCommand}"
                     Style="{DynamicResource ButtonCustom}"
-                    ToolTip="Reload all files">
+                    ToolTip="Refresh all files">
 
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconCodicons
@@ -122,7 +122,10 @@
                 </Button>
 
                 <Separator />
-
+                <TextBlock
+                    Margin="3 6 3 0"
+                    FontSize="14"
+                    Text="Settings:" />
                 <!--  ImportSettingsCommand  -->
                 <Button
                     Padding="4"
@@ -134,10 +137,13 @@
                     FontSize="12"
                     Style="{DynamicResource ButtonCustom}"
                     ToolTip="Reset import settings on selected files">
-                    <TextBlock
-                        Margin="1"
-                        FontSize="14"
-                        Text="Reset Settings" />
+                    <iconPacks:PackIconMaterial
+                        Width="13"
+                        Height="13"
+                        Margin="2"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Kind="Broom" />
                 </Button>
 
                 <!--  CopyArgumentsTemplateToCommand  -->
@@ -151,23 +157,13 @@
                     FontSize="12"
                     Style="{DynamicResource ButtonCustom}"
                     ToolTip="Copy export settings from selected file">
-
-                    <StackPanel Orientation="Horizontal">
-
-                        <iconPacks:PackIconForkAwesome
-                            Width="13"
-                            Height="13"
-                            Margin="2"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="FilesOutline" />
-
-                        <TextBlock
-                            Margin="1"
-                            FontSize="14"
-                            Text="Copy Settings" />
-
-                    </StackPanel>
+                    <iconPacks:PackIconMaterial
+                        Width="13"
+                        Height="13"
+                        Margin="2"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Kind="ContentCopy" />
                 </Button>
 
                 <!--  PasteArgumentsTemplateToCommand  -->
@@ -181,21 +177,15 @@
                     FontSize="12"
                     Style="{DynamicResource ButtonCustom}"
                     ToolTip="Paste export settings to all selected files">
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconForkAwesome
-                            Width="13"
-                            Height="13"
-                            Margin="2"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="FilesOutline" />
-                        <TextBlock
-                            Margin="1"
-                            FontSize="14"
-                            Text="Paste Settings" />
-                    </StackPanel>
-                </Button>
+                    <iconPacks:PackIconMaterial
+                        Width="13"
+                        Height="13"
+                        Margin="2"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Kind="ContentPaste" />
 
+                </Button>
             </StackPanel>
         </Grid>
 
