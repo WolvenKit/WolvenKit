@@ -120,6 +120,13 @@
 
                 <Separator />
 
+
+                <Separator />
+                <TextBlock
+                    Margin="3 6 3 0"
+                    FontSize="14"
+                    Text="Settings:" />
+                
                 <!--  ImportSettingsCommand  -->
                 <Button
                     Padding="4"
@@ -131,10 +138,13 @@
                     FontSize="12"
                     Style="{DynamicResource ButtonCustom}"
                     ToolTip="Load import settings from vanilla">
-                    <TextBlock
-                        Margin="1"
-                        FontSize="14"
-                        Text="Load Settings" />
+                    <iconPacks:PackIconForkAwesome
+                        Width="13"
+                        Height="13"
+                        Margin="2"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Kind="Upload" />
                 </Button>
 
                 <!--  DefaultSettingsCommand  -->
@@ -147,11 +157,14 @@
                     Command="{Binding DefaultSettingsCommand}"
                     FontSize="12"
                     Style="{DynamicResource ButtonCustom}"
-                    ToolTip="Set import settings from filename">
-                    <TextBlock
-                        Margin="1"
-                        FontSize="14"
-                        Text="Default Settings" />
+                    ToolTip="Reset">
+                    <iconPacks:PackIconForkAwesome
+                        Width="13"
+                        Height="13"
+                        Margin="2"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Kind="Recycle" />
                 </Button>
 
                 <!--  CopyArgumentsTemplateToCommand  -->
@@ -168,18 +181,13 @@
 
                     <StackPanel Orientation="Horizontal">
 
-                        <iconPacks:PackIconForkAwesome
+                        <iconPacks:PackIconMaterial
                             Width="13"
                             Height="13"
                             Margin="2"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Kind="FilesOutline" />
-
-                        <TextBlock
-                            Margin="1"
-                            FontSize="14"
-                            Text="Copy Settings" />
+                            Kind="ContentCopy" />
 
                     </StackPanel>
                 </Button>
@@ -195,19 +203,13 @@
                     FontSize="12"
                     Style="{DynamicResource ButtonCustom}"
                     ToolTip="Paste import settings to all selected files">
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconForkAwesome
-                            Width="13"
-                            Height="13"
-                            Margin="2"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="FilesOutline" />
-                        <TextBlock
-                            Margin="1"
-                            FontSize="14"
-                            Text="Paste Settings" />
-                    </StackPanel>
+                    <iconPacks:PackIconMaterial
+                        Width="13"
+                        Height="13"
+                        Margin="2"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Kind="ContentPaste" />
                 </Button>
 
             </StackPanel>

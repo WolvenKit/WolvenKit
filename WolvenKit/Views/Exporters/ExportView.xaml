@@ -137,13 +137,13 @@
                     FontSize="12"
                     Style="{DynamicResource ButtonCustom}"
                     ToolTip="Reset import settings on selected files">
-                    <iconPacks:PackIconMaterial
+                    <iconPacks:PackIconForkAwesome
                         Width="13"
                         Height="13"
                         Margin="2"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        Kind="Broom" />
+                        Kind="Recycle" />
                 </Button>
 
                 <!--  CopyArgumentsTemplateToCommand  -->
