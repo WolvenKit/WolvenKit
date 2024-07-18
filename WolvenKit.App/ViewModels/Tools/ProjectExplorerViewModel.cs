@@ -772,14 +772,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             relativePath = filePath[(prefix.Length + 1)..];
         }
 
-        var (newFilename, refactor) = Interactions.RenameAndRefactor(relativePath);
+        var (newRelativePath, refactor) = Interactions.RenameAndRefactor(relativePath);
 
-        if (string.IsNullOrEmpty(newFilename))
+        if (string.IsNullOrEmpty(newRelativePath))
         {
             return;
         }
 
-        var newFullPath = Path.Combine(prefix, newFilename);
+        var newFullPath = Path.Combine(prefix, newRelativePath);
 
         if (filePath == newFullPath)
         {
@@ -823,14 +823,15 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 if (Directory.Exists(filePath))
                 {
                     var response = await Interactions.ShowMessageBoxAsync(
-                        $"Directory {relativePath} already exists. Do you want to overwrite existing files?", "Directory already exists!");
+                        $"Directory {newRelativePath} already exists. Do you want to overwrite existing files?",
+                        "Directory already exists!");
                     overwriteFiles = response is (WMessageBoxResult.OK or WMessageBoxResult.Yes);
                 }
 
                 FileHelper.MoveRecursively(filePath, newFullPath, overwriteFiles, _loggerService);
             }
 
-            _loggerService.Info($"Moved {relativePath} to {newFilename}");
+            _loggerService.Info($"Moved {relativePath} to {newRelativePath}");
           
         }
         catch
