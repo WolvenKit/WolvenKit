@@ -1869,12 +1869,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     _loggerService.Error("Unknown collection - unable to delete chunk");
                     return;
             }
-
             
             Parent.RecalculateProperties();
-            if (newSelectionIndex >= 0 && newSelectionIndex < Parent.TVProperties.Count + 1)
+            newSelectionIndex = Math.Min(newSelectionIndex, Parent.TVProperties.Count) - 1;
+            newSelectionIndex = Math.Max(0, newSelectionIndex);
+            if (Parent.TVProperties.Count > 0 && newSelectionIndex > 0 && newSelectionIndex < Parent.TVProperties.Count)
             {
-                Tab.SetSelection(Parent.TVProperties[newSelectionIndex - 1]);
+                Tab.SetSelection(Parent.TVProperties[newSelectionIndex]);
             }
             else
             {
@@ -1949,9 +1950,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         Parent.RecalculateProperties();
-        if (Parent.TVProperties.Count > 0)
+        var newSelectionIndex = Math.Min(indices.First(), Parent.TVProperties.Count) - 1;
+        newSelectionIndex = Math.Max(0, newSelectionIndex);
+        if (Parent.TVProperties.Count > 0 && newSelectionIndex > 0 && newSelectionIndex < Parent.TVProperties.Count)
         {
-            Tab.SetSelection(Parent.TVProperties[Math.Min(indices.First(), Parent.TVProperties.Count) - 1]);
+            Tab.SetSelection(Parent.TVProperties[newSelectionIndex]);
         }
         else
         {
