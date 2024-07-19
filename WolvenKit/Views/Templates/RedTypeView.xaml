@@ -26,7 +26,6 @@
         <Grid.Resources>
             <sys:Double x:Key="RowHeight">26</sys:Double>
             <SolidColorBrush x:Key="RedTypeColor" Color="{StaticResource WolvenKitTanColor}" />
-
             <Style x:Key="ArrayNameColumnWidth" TargetType="ColumnDefinition">
                 <Setter Property="Width" Value="218" />
                 <Style.Triggers>
@@ -35,6 +34,17 @@
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
+            <Style x:Key="HiddenByEditorModeStyle" TargetType="Grid">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Path=IsHiddenByEditorDifficultyLevel}" Value="False">
+                        <Setter Property="Visibility" Value="Visible" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=IsHiddenByEditorDifficultyLevel}" Value="True">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+            
             <DataTemplate x:Key="AddHandleButton" DataType="{x:Type shell:ChunkViewModel}">
                 <Button
                     Height="12"
@@ -588,6 +598,7 @@
                 <!--  ="{Binding Properties}"  -->
                 <Border
                     x:Name="TopLine"
+                    Visibility="{Binding IsHiddenByEditorDifficultyLevel, Converter={StaticResource InvertBooleanConverter}}"
                     MinHeight="27"
                     BorderBrush="{StaticResource BorderAlt}"
                     BorderThickness="0,1,0,0">
@@ -801,7 +812,8 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="TreeViewItem">
-                                <Grid IsEnabled="{Binding IsReadOnly, Converter={StaticResource InvertBooleanConverter}}">
+                                <Grid IsEnabled="{Binding IsReadOnly, Converter={StaticResource InvertBooleanConverter}}"
+                                      Style="{StaticResource HiddenByEditorModeStyle}">
                                     <Grid>
                                         <ContentPresenter ContentSource="Header" />
                                     </Grid>
