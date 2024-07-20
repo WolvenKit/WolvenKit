@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Interaction;
+using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Core.Interfaces;
@@ -57,7 +58,6 @@ public static class ProjectResourceHelper
         // Fallback, should not happen
         return Path.GetDirectoryName(currentFilePath) ?? "";
     }
-
 
     public static Task<Dictionary<string, string>> AddDependenciesToProjectPathAsync(string destFolderRelativePath,
         HashSet<ResourcePath> resourcePaths) =>

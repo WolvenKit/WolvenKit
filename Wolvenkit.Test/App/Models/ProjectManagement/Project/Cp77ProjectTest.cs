@@ -21,11 +21,11 @@ public class Cp77ProjectTest
     [InlineData(@"source\raw\base\file.xbm", null)]
     [InlineData(@"source\resources\file.yaml", null)]
     [InlineData(@"this\dir\does\not\exist\file.yaml", @"this\dir\does\not\exist\file.yaml")]
-    public void GetResourcePathTest(string relativePath, string? expectedDepotPath)
+    public void GetResourcePathFromRootTest(string relativePath, string? expectedDepotPath)
     {
-        // var absolutePath = Path.Join(testProject.FileDirectory, relativePath);
-        // var depotPath = testProject.GetResourcePath(absolutePath);
-        // Assert.Equal(expectedDepotPath ?? relativePath, depotPath.GetResolvedText());
+        var absolutePath = Path.Join(testProject.FileDirectory, relativePath);
+        var depotPath = testProject.GetResourcePathFromRoot(absolutePath);
+        Assert.Equal(expectedDepotPath ?? relativePath, depotPath.GetResolvedText());
     }
 
     [Theory]
@@ -39,11 +39,10 @@ public class Cp77ProjectTest
         var absolutePath = Path.Join(testProject.FileDirectory, relativePath);
         var absolutePrefix = Path.Join(testProject.FileDirectory, expectedPrefix);
 
-        // var (prefix, rel) = testProject.SplitFilePath(absolutePath);
-        // Assert.Equal(absolutePrefix, prefix);
-        // Assert.Equal(expectedRelativePath, rel);
+        var (prefix, rel) = testProject.SplitFilePath(absolutePath);
+        Assert.Equal(expectedRelativePath, rel);
 
         Assert.Equal(expectedRelativePath, testProject.GetRelativePath(absolutePath));
-        // Assert.Equal(absolutePrefix, testProject.GetPrefixPath(absolutePath));
+        Assert.Equal(absolutePrefix, testProject.GetPrefixPath(absolutePath));
     }
 }

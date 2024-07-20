@@ -1949,9 +1949,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         Parent.RecalculateProperties();
-        if (Parent.TVProperties.Count >= indices.First())
+        if (Parent.TVProperties.Count > 0)
         {
-            Tab.SetSelection(Parent.TVProperties[indices.First()]);
+            Tab.SetSelection(Parent.TVProperties[Math.Min(indices.First(), Parent.TVProperties.Count) - 1]);
         }
         else
         {

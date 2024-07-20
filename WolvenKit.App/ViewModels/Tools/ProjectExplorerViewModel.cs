@@ -843,8 +843,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        var oldRelPath = ActiveProject.GetResourcePath(filePath);
-        var newRelPath = ActiveProject.GetResourcePath(newFullPath);
+        var oldRelPath = ActiveProject.GetResourcePathFromRoot(filePath);
+        var newRelPath = ActiveProject.GetResourcePathFromRoot(newFullPath);
 
         ReplacePathInProject(oldRelPath, newRelPath);
     }
@@ -1075,7 +1075,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         var files = Directory.GetFiles(ActiveProject.ModDirectory, "*.*", SearchOption.AllDirectories);
         Parallel.ForEach(files, file =>
         {
-            var hash = ActiveProject.GetResourcePath(file);
+            var hash = ActiveProject.GetResourcePathFromRoot(file);
             if (hash == newPath)
             {
                 return;

@@ -47,6 +47,7 @@ public sealed class Cp77Project(string location, string name, string modName) : 
             {
                 Directory.CreateDirectory(FileDirectory);
             }
+
             return Directory.EnumerateFiles(FileDirectory, "*", SearchOption.AllDirectories)
                 .Select(file => file[(FileDirectory.Length + 1)..])
                 .ToList();
@@ -65,6 +66,7 @@ public sealed class Cp77Project(string location, string name, string modName) : 
             {
                 Directory.CreateDirectory(ModDirectory);
             }
+
             return Directory.EnumerateFiles(ModDirectory, "*", SearchOption.AllDirectories)
                 .Select(file => file[(ModDirectory.Length + 1)..])
                 .ToList();
@@ -83,6 +85,7 @@ public sealed class Cp77Project(string location, string name, string modName) : 
             {
                 Directory.CreateDirectory(RawDirectory);
             }
+
             return Directory.EnumerateFiles(RawDirectory, "*", SearchOption.AllDirectories)
                 .Select(file => file[(RawDirectory.Length + 1)..])
                 .ToList();
@@ -115,6 +118,7 @@ public sealed class Cp77Project(string location, string name, string modName) : 
             {
                 return oldDir;
             }
+
             var dir = Path.Combine(ProjectDirectory, "source");
             if (!Directory.Exists(dir))
             {
@@ -137,6 +141,7 @@ public sealed class Cp77Project(string location, string name, string modName) : 
             {
                 return oldDir;
             }
+
             var dir = Path.Combine(FileDirectory, "archive");
             if (!Directory.Exists(dir))
             {
@@ -176,6 +181,7 @@ public sealed class Cp77Project(string location, string name, string modName) : 
             {
                 return oldDir;
             }
+
             var dir = Path.Combine(FileDirectory, "raw");
             if (!Directory.Exists(dir))
             {
@@ -384,29 +390,29 @@ public sealed class Cp77Project(string location, string name, string modName) : 
 
     public (string, string) SplitFilePath(string fullPath) => (GetPrefixPath(fullPath), GetRelativePath(fullPath));
 
-    public string GetPrefixPath(string fullPath)
+    public string GetPrefixPath(string absolutePath)
     {
-        if (fullPath.StartsWith(ModDirectory, StringComparison.Ordinal))
+        if (absolutePath.StartsWith(ModDirectory, StringComparison.Ordinal))
         {
             return ModDirectory;
         }
 
-        if (fullPath.StartsWith(RawDirectory, StringComparison.Ordinal))
+        if (absolutePath.StartsWith(RawDirectory, StringComparison.Ordinal))
         {
             return RawDirectory;
         }
 
-        if (fullPath.StartsWith(ResourcesDirectory, StringComparison.Ordinal))
-        {
-            return ResourcesDirectory;
-        }
-
-        if (fullPath.StartsWith(PackedRootDirectory, StringComparison.Ordinal))
+        if (absolutePath.StartsWith(PackedRootDirectory, StringComparison.Ordinal))
         {
             return PackedRootDirectory;
         }
 
-        if (fullPath.StartsWith(FileDirectory, StringComparison.Ordinal))
+        if (absolutePath.StartsWith(ResourcesDirectory, StringComparison.Ordinal))
+        {
+            return ResourcesDirectory;
+        }
+
+        if (absolutePath.StartsWith(FileDirectory, StringComparison.Ordinal))
         {
             return FileDirectory;
         }
@@ -424,7 +430,7 @@ public sealed class Cp77Project(string location, string name, string modName) : 
             return Path.Join(ProjectDirectory, prefix, relativePath);
         }
 
-        return Path.Join(ModDirectory, relativePath);
+        return Path.Join(prefix, relativePath);
     }
 
     public string GetRelativePath(string absolutePath)
@@ -450,13 +456,15 @@ public sealed class Cp77Project(string location, string name, string modName) : 
             return "wkitpackeddir";
         }
 
-        if (GetPrefixPath(absolutePath) is not string prefixPath || prefixPath == "")
+        if (GetPrefixPath(absolutePath) is string s && s != "")
         {
-            return absolutePath;
+            return absolutePath[(s.Length + 1)..];
         }
 
-        return absolutePath[(prefixPath.Length + 1)..];
+        return absolutePath;
     }
+
+
 
     // Conversions
 
@@ -492,8 +500,26 @@ public sealed class Cp77Project(string location, string name, string modName) : 
 
     public override string ToString() => Location;
 
-    public ResourcePath GetResourcePath(string fullPath)
+    public ResourcePath GetResourcePathFromRoot(string fullPath)
     {
+        var relPath = GetRelativePath(fullPath);
+        if (ulong.TryParse(Path.GetFileNameWithoutExtension(relPath), out var hash))
+        {
+            return hash;
+        }
+
+        return relPath;
+    }
+
+    public ResourcePath GetRelativeResourcePath(string fullPath)
+    {
+        var ret = new ResourcePath();
+        if (!fullPath.StartsWith(ModDirectory, StringComparison.Ordinal))
+        {
+            return ret;
+        }
+
+
         var relPath = GetRelativePath(fullPath);
         if (ulong.TryParse(Path.GetFileNameWithoutExtension(relPath), out var hash))
         {
