@@ -14,6 +14,7 @@ using System.Windows.Threading;
 using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.ClearScript.Util.Web;
 using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
@@ -1204,13 +1205,27 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 else
                 {
                     var parentClass = cr2W.GetFromXPath(parentPath);
-                    if (!parentClass.Item1 || parentClass.Item2 is not RedBaseClass cls)
+
+                    if (!parentClass.Item1)
                     {
                         throw new Exception();
                     }
 
+                    switch (parentClass.Item2)
+                    {
+                        case null:
+                            throw new Exception();
+                        case RedBaseClass cls:
+                            cls.SetProperty(result.Name, newValue);
+                            break;
+                        case CKeyValuePair kvp:
+                            kvp.Value = newValue;
+                            break;
+                        default:
+                            throw new NotImplementedException($"Can't replace in property type {parentClass.Item2?.GetType().Name}");
+                    }
+
                     _loggerService.Debug($"Replaced \"{result.Path}\" in \"{filePath}\"");
-                    cls.SetProperty(result.Name, newValue);
                 }
 
                 wasModified = true;
