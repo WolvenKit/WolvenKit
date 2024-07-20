@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -32,6 +33,7 @@ using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Exporters;
 using WolvenKit.App.ViewModels.HomePage;
 using WolvenKit.App.ViewModels.Importers;
+using WolvenKit.App.ViewModels.Scripting;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
@@ -90,8 +92,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         IHashService hashService,
         ITweakDBService tweakDBService,
         Red4ParserService parserService,
-        AppScriptService scriptService
-    )
+        AppScriptService scriptService)
     {
         _documentViewmodelFactory = documentViewmodelFactory;
         _paneViewModelFactory = paneViewModelFactory;
@@ -110,6 +111,12 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _tweakDBService = tweakDBService;
         _parser = parserService;
         _scriptService = scriptService;
+
+        _fileValidationScript = _scriptService.GetScripts(ISettingsManager.GetWScriptDir()).ToList()
+            .Where(s => s.Name == "run_FileValidation_on_active_tab")
+            .Select(s => new ScriptFileViewModel(_settingsManager, ScriptSource.User, s))
+            .FirstOrDefault();
+        ;
 
         if (_hashService is HashServiceExt hashServiceExt)
         {
@@ -807,8 +814,82 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanShowSettings))]
     private async Task ShowSettings() => await ShowHomePage(EHomePage.Settings);
 
-    private bool CanShowProjectSettings() => !IsDialogShown && ActiveProject != null;
-    [RelayCommand(CanExecute = nameof(CanShowProjectSettings))]
+    private bool CanShowProjectActions() => !IsDialogShown && ActiveProject is not null;
+
+    [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
+    private Task ScanForBrokenReferencePaths()
+    {
+        _loggerService.Info($"Scanning {ActiveProject!.Files.Count} files. Please wait...");
+        _progressService.IsIndeterminate = true;
+        return ActiveProject!.ScanForBrokenReferencePathsAsync(_archiveManager, _loggerService);
+    }
+
+    ScriptFileViewModel? _fileValidationScript;
+
+    [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
+    private async Task RunFileValidationOnProject()
+    {
+        if (_fileValidationScript is null || !File.Exists(_fileValidationScript.Path))
+        {
+            return;
+        }
+
+        var result = Interactions.ShowConfirmation((
+            $"This will analyse {ActiveProject!.Files.Count} files. This will freeze Wolvenkit and can take a long time. Do you want to proceed?",
+            "Really run file validation?",
+            WMessageBoxImage.Question,
+            WMessageBoxButtons.YesNo));
+
+        if (result != WMessageBoxResult.Yes)
+        {
+            return;
+        }
+
+        var code = await File.ReadAllTextAsync(_fileValidationScript.Path);
+
+        _loggerService.Info($"Running file validation on {ActiveProject!.Files.Count} files. Please wait...");
+        if (_archiveManager.ProjectArchive is not FileSystemArchive projArchive)
+        {
+            return;
+        }
+
+        foreach (var (hash, file) in projArchive.Files)
+        {
+            if (GetRedFile(file) is not { } fileViewModel)
+            {
+                continue;
+            }
+
+            ActiveDocument = fileViewModel;
+            await _scriptService.ExecuteAsync(code);
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
+    private async Task DeleteUnusedFiles()
+    {
+        _loggerService.Info($"Scanning {ActiveProject!.Files.Count} files. Please wait...");
+        var allReferencePaths = await ActiveProject!.GetAllReferences();
+        var referencesHashSet = new HashSet<string>(allReferencePaths.SelectMany((r) => r.Value));
+
+        var unusedFiles =
+            ActiveProject!.ModFiles.Where(f => !referencesHashSet.Contains(ActiveProject.GetRelativePath(f))).ToList();
+        if (unusedFiles.Count == 0)
+        {
+            _loggerService.Info("No unused files in project. Yay!");
+            return;
+        }
+
+        _loggerService.Info($"The following {unusedFiles.Count} files don't seem to be used by anything:");
+        foreach (var unusedFile in unusedFiles)
+        {
+            _loggerService.Info($"  {unusedFile}");
+        }
+
+        _loggerService.Warning("This is an experimental feature! Please double-check via JSON search before deleting anything!");
+    }
+
+    [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private async Task ShowProjectSettings()
     {
         CloseModalCommand.Execute(null);
@@ -1200,30 +1281,43 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         foreach (var (hash, file) in projArchive.Files)
         {
-            if (path != hash)
+            if (path != hash || GetRedFile(file) is not { } fileViewModel)
             {
                 continue;
             }
 
-            using MemoryStream stream = new();
-            file.Extract(stream);
-
-            if (OpenStream(stream, file.FileName, out var redfile))
+            if (!DockedViews.Contains(fileViewModel))
             {
-                var fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(redfile, Path.Combine(projArchive.Project.ModDirectory, file.FileName), this, false);
-                if (!DockedViews.Contains(fileViewModel))
-                {
-                    DockedViews.Add(fileViewModel);
-                }
-
-                ActiveDocument = fileViewModel;
-                UpdateTitle();
-
-                return true;
+                DockedViews.Add(fileViewModel);
             }
+
+            ActiveDocument = fileViewModel;
+            UpdateTitle();
+
+            return true;
+
         }
 
         return false;
+    }
+
+    private RedDocumentViewModel? GetRedFile(IGameFile file)
+    {
+        if (_archiveManager.ProjectArchive is not FileSystemArchive projArchive)
+        {
+            return null;
+        }
+
+        using MemoryStream stream = new();
+        file.Extract(stream);
+
+        if (OpenStream(stream, file.FileName, out var redfile))
+        {
+            return _documentViewmodelFactory.RedDocumentViewModel(redfile, Path.Combine(projArchive.Project.ModDirectory, file.FileName),
+                this, false);
+        }
+
+        return null;
     }
 
     public void OpenFileFromDepotPath(ResourcePath path)
