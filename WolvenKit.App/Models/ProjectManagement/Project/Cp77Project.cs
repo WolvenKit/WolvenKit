@@ -425,9 +425,14 @@ public sealed class Cp77Project(string location, string name, string modName) : 
         var (prefix, relativePath) = SplitFilePath(fullPath);
         prefix = prefix.Replace(ProjectDirectory, "");
 
+        if (relativePath == fullPath)
+        {
+            return Path.Join(ModDirectory, prefix, relativePath);
+        }
+
         if (prefix != "")
         {
-            return Path.Join(ProjectDirectory, prefix, relativePath);
+            return Path.Join(FileDirectory, prefix, relativePath);
         }
 
         return Path.Join(prefix, relativePath);
@@ -579,31 +584,30 @@ public sealed class Cp77Project(string location, string name, string modName) : 
         return references;
     }
 
-    public async Task<Task> ScanForBrokenReferencePathsAsync(IArchiveManager archiveManager,
+    public async Task<Dictionary<string, List<string>>> ScanForBrokenReferencePathsAsync(IArchiveManager archiveManager,
         ILoggerService loggerService)
     {
         var references = await GetAllReferences();
-        return Task.Run(() =>
+        Dictionary<string, List<string>> brokenReferences = new();
+
+        await Task.Run(() =>
         {
-            Parallel.ForEach(references, kvp =>
+            Parallel.ForEach(references, (kvp, state) =>
             {
                 var pathsNotFound = kvp.Value
-                    .Where(filePath => !ModFiles.Contains(filePath) && archiveManager.GetGameFile(filePath, true, true) is null).ToList();
+                    .Where(filePath => !ModFiles.Contains(filePath) && archiveManager.GetGameFile(filePath, true, true) is null)
+                    .ToList();
 
-                if (pathsNotFound.Count == 0)
+                if (pathsNotFound.Count > 0)
                 {
-                    return;
-                }
-
-                loggerService.Info($"{pathsNotFound.Count} Potentially broken references in {kvp.Key}:");
-                foreach (var s in pathsNotFound)
-                {
-                    loggerService.Info($"   {s}");
+                    lock (brokenReferences)
+                    {
+                        brokenReferences.Add(kvp.Key, pathsNotFound);
+                    }
                 }
             });
-
-            loggerService.Warning("This feature is experimental!");
         });
+        return brokenReferences;
     }
 }
     

@@ -102,6 +102,25 @@ namespace WolvenKit.Views.Tools
                     return result == AdonisUI.Controls.MessageBoxResult.OK;
                 };
 
+                Interactions.ShowDeleteFilesList = (args) =>
+                {
+                    var dialog = new DeleteFilesListDialogView(args.Item1, args.Item2);
+
+                    if (dialog.ShowDialog(Application.Current.MainWindow) != true ||
+                        dialog.ViewModel is not DeleteFilesListDialogViewModel viewModel)
+                    {
+                        return [];
+                    }
+
+                    return viewModel.Files;
+                };
+
+                Interactions.ShowBrokenReferencesList = (args) =>
+                {
+                    var dialog = new ShowBrokenReferencesDialogView(args.Item1, args.Item2);
+                    return dialog.ShowDialog(Application.Current.MainWindow) == true;
+                };
+                    
                 Interactions.RenameAndRefactor = input =>
                     {
                         var dialog = new RenameDialog(true);

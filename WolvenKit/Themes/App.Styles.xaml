@@ -97,7 +97,7 @@
         <!--  Setter Property="TabPanelBackground" Value="#313131" /  -->
     </Style>
 
-    <Style x:Key="ValidatingControlStyle" TargetType="{x:Type TextBox}">
+    <Style x:Key="ValidatingControlStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
         <Style.Triggers>
             <DataTrigger Binding="{Binding Path=IsValid}" Value="True">
                 <Setter Property="BorderBrush" Value="{StaticResource BorderAlt}" />
@@ -136,9 +136,10 @@
         
     </Style>
 
-    <Style x:Key="TextBoxTCSA" TargetType="{x:Type TextBox}">
+    <Style x:Key="TextBoxTCSA" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
         <Setter Property="helpers:TextBoxBehavior.TripleClickSelectAll" Value="True" />
     </Style>
+
 
     <DrawingBrush
         x:Key="CloudDrawingBrushMain"
