@@ -44,7 +44,7 @@
             FinishText="Close">
             <syncfusion:WizardPage
                 BackVisibility="Collapsed"
-                CancelVisibility="Visible"
+                CancelVisibility="Collapsed"
                 FinishVisibility="Visible"
                 HelpVisibility="Collapsed"
                 NextVisibility="Collapsed"
@@ -64,7 +64,7 @@
 
                     <StackPanel Grid.Row="0" Orientation="Vertical">
                         <TextBlock Style="{StaticResource TextBlockHeaderStyle}">This feature is experimental!</TextBlock>
-                        <TextBlock Text="{Binding FilesCount, StringFormat='The following {0} files seem to hold broken references:'}" />
+                        <TextBlock Text="{Binding ReferencesCount, StringFormat='The following {0} files seem to hold broken references:'}" />
                     </StackPanel>
 
                     <StackPanel Grid.Row="1" Orientation="Vertical">
@@ -75,7 +75,7 @@
                             TextWrapping="Wrap"
                             VerticalScrollBarVisibility="Auto"
                             VerticalAlignment="Top"
-                            Text="{Binding Files, Converter={StaticResource ListToStringConverter}}" />
+                            Text="{Binding References, Converter={StaticResource ListToStringConverter}}" />
                     </StackPanel>
                 </Grid>
             </syncfusion:WizardPage>

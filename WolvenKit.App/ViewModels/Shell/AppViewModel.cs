@@ -824,7 +824,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     {
         _loggerService.Info($"Scanning {ActiveProject!.Files.Count} files. Please wait...");
         _progressService.IsIndeterminate = true;
-        var brokenReferences = await ActiveProject!.ScanForBrokenReferencePathsAsync(_archiveManager, _loggerService);
+        var brokenReferences = await ActiveProject!.ScanForBrokenReferencePathsAsync(_archiveManager, _loggerService, _progressService);
 
         if (brokenReferences.Keys.Count == 0)
         {
@@ -899,8 +899,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private async Task FindUnusedFiles()
     {
         _loggerService.Info($"Scanning {ActiveProject!.Files.Count(f => f.StartsWith("archive"))} files. Please wait...");
-        _progressService.IsIndeterminate = true;
-        var allReferencePaths = await ActiveProject!.GetAllReferences();
+
+        var allReferencePaths = await ActiveProject!.GetAllReferences(_progressService);
         var referencesHashSet = new HashSet<string>(allReferencePaths.SelectMany((r) => r.Value));
 
         var unusedFiles =

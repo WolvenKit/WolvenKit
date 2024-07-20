@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using WolvenKit.Common;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Core.Services;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
@@ -534,9 +536,14 @@ public sealed class Cp77Project(string location, string name, string modName) : 
         return relPath;
     }
 
-    public async Task<Dictionary<string, List<string>>> GetAllReferences()
+    public async Task<Dictionary<string, List<string>>> GetAllReferences(IProgressService<double>? progressService)
     {
         Dictionary<string, List<string>> references = new();
+       
+        progressService?.Report(0);
+        var totalFiles = ModFiles.Count;
+        var processedFiles = 0;
+        var progressIncrement = totalFiles > 0 ? 100.0 / totalFiles : 100;
 
         await Task.Run(() =>
         {
@@ -579,17 +586,27 @@ public sealed class Cp77Project(string location, string name, string modName) : 
                 {
                     references.Add(filePath, resourcePaths);
                 }
+                
+                // Update progress
+                var currentProgress = Interlocked.Increment(ref processedFiles) * progressIncrement;
+                progressService?.Report(currentProgress);
             });
         });
         return references;
     }
 
     public async Task<Dictionary<string, List<string>>> ScanForBrokenReferencePathsAsync(IArchiveManager archiveManager,
-        ILoggerService loggerService)
+        ILoggerService loggerService, IProgressService<double> progressService)
     {
-        var references = await GetAllReferences();
+        var references = await GetAllReferences(progressService);
         Dictionary<string, List<string>> brokenReferences = new();
 
+        progressService.IsIndeterminate = true;
+        progressService.Report(0);
+        var totalFiles = ModFiles.Count;
+        var processedFiles = 0;
+        var progressIncrement = totalFiles > 0 ? 100.0 / totalFiles : 100;
+        
         await Task.Run(() =>
         {
             Parallel.ForEach(references, (kvp, state) =>
@@ -605,8 +622,13 @@ public sealed class Cp77Project(string location, string name, string modName) : 
                         brokenReferences.Add(kvp.Key, pathsNotFound);
                     }
                 }
+                
+                // Update progress
+                var currentProgress = Interlocked.Increment(ref processedFiles) * progressIncrement;
+                progressService?.Report(currentProgress);
             });
         });
+        progressService?.Completed();
         return brokenReferences;
     }
 }

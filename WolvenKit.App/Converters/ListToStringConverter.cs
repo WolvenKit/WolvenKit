@@ -22,7 +22,7 @@ public class ListToStringConverter : IValueConverter
         }
 
         return dict
-            .SelectMany(kv => new[] { kv.Key }.Concat(kv.Value.Select(entry => $"  {entry}")))
+            .SelectMany(kv => new[] { $"{Environment.NewLine}{kv.Key}" }.Concat(kv.Value.Select(entry => $"      {entry}")))
             .Aggregate(new StringBuilder(), (sb, s) => sb.AppendLine(s))
             .ToString();
     }
@@ -43,7 +43,7 @@ public class ListToStringConverter : IValueConverter
 
         foreach (var line in ret)
         {
-            if (!line.StartsWith("  ")) // This is a key
+            if (!line.StartsWith("    ")) // This is a key
             {
                 currentKey = line;
                 if (!dict.ContainsKey(currentKey))
