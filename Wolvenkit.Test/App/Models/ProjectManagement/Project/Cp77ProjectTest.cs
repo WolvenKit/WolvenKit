@@ -32,7 +32,7 @@ public class Cp77ProjectTest
     [InlineData(@"archive\base\file.xbm", @"base\file.xbm", @"archive")]
     [InlineData(@"customSounds\file.mp3", @"customSounds\file.mp3", @"")]
     [InlineData(@"raw\base\file.xbm", @"base\file.xbm", @"raw")]
-    [InlineData(@"resources\file.yaml", @"resources\file.yaml", "")]
+    [InlineData(@"resources\file.yaml", @"file.yaml", "resources")]
     [InlineData(@"invalid\file.yaml", @"invalid\file.yaml", "")]
     public void SplitPathTest(string relativePath, string expectedRelativePath, string expectedPrefix)
     {
