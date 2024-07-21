@@ -47,6 +47,11 @@ public static class Interactions
     public static Func<string, string> Rename { get; set; } = _ => throw new NotImplementedException();
     public static Func<string, Tuple<string, bool>> RenameAndRefactor { get; set; } = _ => throw new NotImplementedException();
 
+    public static Func<(string, List<string>), List<string>> ShowDeleteFilesList { get; set; } = _ => throw new NotImplementedException();
+
+    public static Func<(string, Dictionary<string, List<string>>), bool> ShowBrokenReferencesList { get; set; } =
+        _ => throw new NotImplementedException();
+
     public static Func<string, string> AskForTextInput { get; set; } = _ => throw new NotImplementedException();
 
     //custom views

@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
       <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <IsPackable>false</IsPackable>
     <Platforms>x64</Platforms>
+    <TargetFrameworks>net8.0-windows7.0</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -101,6 +101,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Moq" />
     <PackageReference Include="MSTest.TestAdapter" />
     <PackageReference Include="MSTest.TestFramework" />
     <PackageReference Include="coverlet.collector">
@@ -108,9 +109,11 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="System.Reflection.Metadata" />
+    <PackageReference Include="xunit" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\WolvenKit.App\WolvenKit.App.csproj" />
     <ProjectReference Include="..\..\WolvenKit.Core\WolvenKit.Core.csproj" />
       <ProjectReference Include="..\..\WolvenKit.Common\WolvenKit.Common.csproj" />
   </ItemGroup>

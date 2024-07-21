@@ -331,28 +331,28 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator />
-                <!-- <MenuItem -->
-                <!--     x:Name="ToolbarProjectScanFilepathsButton" -->
-                <!--     Margin="2,1" -->
-                <!--     Header="Scan project for broken file references"> -->
-                <!--     <MenuItem.Icon> -->
-                <!--         <iconPacks:PackIconCodicons -->
-                <!--             Margin="6,0" -->
-                <!--             Kind="Search" -->
-                <!--             Style="{StaticResource WolvenKitToolBarButtonIcon}" /> -->
-                <!--     </MenuItem.Icon> -->
-                <!-- </MenuItem> -->
-                <!-- <MenuItem -->
-                <!--     x:Name="ToolbarProjectDeleteUnusedFilesButton" -->
-                <!--     Margin="2,1" -->
-                <!--     Header="Find unused files in project"> -->
-                <!--     <MenuItem.Icon> -->
-                <!--         <iconPacks:PackIconCodicons -->
-                <!--             Margin="6,0" -->
-                <!--             Kind="Trash" -->
-                <!--             Style="{StaticResource WolvenKitToolBarButtonIcon}" /> -->
-                <!--     </MenuItem.Icon> -->
-                <!-- </MenuItem> -->
+                <MenuItem
+                    x:Name="ToolbarProjectScanFilepathsButton"
+                    Margin="2,1"
+                    Header="Scan project for broken file references">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconCodicons
+                            Margin="6,0"
+                            Kind="Search"
+                            Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    x:Name="ToolbarProjectFindUnusedFilesButton"
+                    Margin="2,1"
+                    Header="Find and delete unused project files">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconCodicons
+                            Margin="6,0"
+                            Kind="Trash"
+                            Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem
                     x:Name="ToolbarProjectRunFileValidationButton"
                     Margin="2,1"

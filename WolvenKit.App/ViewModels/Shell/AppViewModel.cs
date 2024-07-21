@@ -18,6 +18,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using Semver;
+using Microsoft.VisualBasic.FileIO; 
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Factories;
@@ -48,6 +49,7 @@ using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
+using FileSystem = Microsoft.VisualBasic.FileIO.FileSystem;
 using NativeMethods = WolvenKit.App.Helpers.NativeMethods;
 
 namespace WolvenKit.App.ViewModels.Shell;
@@ -818,11 +820,18 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private bool CanShowProjectActions() => !IsDialogShown && ActiveProject is not null;
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
-    private Task ScanForBrokenReferencePaths()
+    private async Task ScanForBrokenReferencePaths()
     {
         _loggerService.Info($"Scanning {ActiveProject!.Files.Count} files. Please wait...");
         _progressService.IsIndeterminate = true;
-        return ActiveProject!.ScanForBrokenReferencePathsAsync(_archiveManager, _loggerService);
+        var brokenReferences = await ActiveProject!.ScanForBrokenReferencePathsAsync(_archiveManager, _loggerService, _progressService);
+
+        if (brokenReferences.Keys.Count == 0)
+        {
+            return;
+        }
+
+        Interactions.ShowBrokenReferencesList(("Broken references", brokenReferences));
     }
 
     readonly ScriptFileViewModel? _fileValidationScript;
@@ -887,27 +896,51 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
-    private async Task DeleteUnusedFiles()
+    private async Task FindUnusedFiles()
     {
-        _loggerService.Info($"Scanning {ActiveProject!.Files.Count} files. Please wait...");
-        var allReferencePaths = await ActiveProject!.GetAllReferences();
+        _loggerService.Info($"Scanning {ActiveProject!.Files.Count(f => f.StartsWith("archive"))} files. Please wait...");
+
+        var allReferencePaths = await ActiveProject!.GetAllReferences(_progressService);
         var referencesHashSet = new HashSet<string>(allReferencePaths.SelectMany((r) => r.Value));
 
         var unusedFiles =
             ActiveProject!.ModFiles.Where(f => !referencesHashSet.Contains(ActiveProject.GetRelativePath(f))).ToList();
         if (unusedFiles.Count == 0)
         {
-            _loggerService.Info("No unused files in project. Yay!");
+            _notificationService.ShowNotification("No un-used files in project", ENotificationType.Success, ENotificationCategory.App);
             return;
         }
 
-        _loggerService.Info($"The following {unusedFiles.Count} files don't seem to be used by anything:");
-        foreach (var unusedFile in unusedFiles)
+        _progressService.Completed();
+        if (Interactions.ShowDeleteFilesList(("Delete un-used files?", unusedFiles)) is not { } deleteFiles || deleteFiles.Count == 0)
         {
-            _loggerService.Info($"  {unusedFile}");
+            return;
         }
 
-        _loggerService.Warning("This is an experimental feature! Please double-check via JSON search before deleting anything!");
+        List<string> failedDeletions = [];
+        foreach (var filePath in deleteFiles)
+        {
+            try
+            {
+                FileSystem.DeleteFile(ActiveProject.GetAbsolutePath(filePath), UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+            }
+            catch
+            {
+                failedDeletions.Add(filePath);
+            }
+        }
+
+        if (failedDeletions.Count == 0)
+        {
+            _loggerService.Info($"Deleted {deleteFiles.Count} files.");
+            return;
+        }
+
+        _loggerService.Warning($"Deleted {deleteFiles.Count - failedDeletions.Count} files. The following files failed to delete:");
+        foreach (var failedDeletion in failedDeletions)
+        {
+            _loggerService.Warning($"  {failedDeletion}");
+        }
     }
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]

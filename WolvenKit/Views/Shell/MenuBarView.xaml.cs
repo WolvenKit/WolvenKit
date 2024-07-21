@@ -76,14 +76,14 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                     viewModel => viewModel.MainViewModel.ShowProjectSettingsCommand,
                     view => view.ToolbarProjectSettingsButton)
                 .DisposeWith(disposables);
-            // this.BindCommand(ViewModel,
-            //         viewModel => viewModel.MainViewModel.ScanForBrokenReferencePathsCommand,
-            //         view => view.ToolbarProjectScanFilepathsButton)
-            //     .DisposeWith(disposables);
-            // this.BindCommand(ViewModel,
-            //         viewModel => viewModel.MainViewModel.DeleteUnusedFilesCommand,
-            //         view => view.ToolbarProjectDeleteUnusedFilesButton)
-            //     .DisposeWith(disposables);
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.ScanForBrokenReferencePathsCommand,
+                    view => view.ToolbarProjectScanFilepathsButton)
+                .DisposeWith(disposables);
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.FindUnusedFilesCommand,
+                    view => view.ToolbarProjectFindUnusedFilesButton)
+                .DisposeWith(disposables);
             this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.RunFileValidationOnProjectCommand,
                     view => view.ToolbarProjectRunFileValidationButton)
