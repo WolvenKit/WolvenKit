@@ -4,15 +4,19 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
 
-public partial class DeleteFilesListDialogViewModel : DialogViewModel
+public partial class DeleteOrMoveFilesListDialogViewModel : DialogViewModel
 {
     [ObservableProperty] private List<string> _files;
     [ObservableProperty] private string _title;
+    [ObservableProperty] private bool _hasFiles;
     public int FilesCount => Files.Count;
+    
+    public string? MoveToPath { get; set; }
 
-    public DeleteFilesListDialogViewModel(string title, List<string> files)
+    public DeleteOrMoveFilesListDialogViewModel(string title, List<string> files)
     {
         Files = files;
         Title = title;
+        HasFiles = Files.Count > 0;
     }
 }

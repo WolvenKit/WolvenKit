@@ -123,10 +123,11 @@ public partial class ChunkViewModel : ObservableObject
                 ExpandAndSelect(child, false, true);
                 break;
             // .ent file
-            case entEntityTemplate:
+            case entEntityTemplate template:
+                
                 var appearances = FindTvPropertyChild("appearances");
                 var components = FindTvPropertyChild("components");
-                var nodeToExpand = (appearances?.TVProperties.Count ?? 0) == 0 ? components : appearances;
+                var nodeToExpand = template.Appearances.Count == 0 ? components : appearances;
                 ExpandAndSelect(nodeToExpand, true, true);
                 break;
             // .mesh file
