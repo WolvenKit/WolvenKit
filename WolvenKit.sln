@@ -27,8 +27,6 @@ Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "WolvenKit.Package", "Wolven
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.RED4", "WolvenKit.RED4\WolvenKit.RED4.csproj", "{E08242B7-AFCF-4868-9B8E-19BAC75ACF29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wolvenkit.Test", "Wolvenkit.Test\Wolvenkit.Test.csproj", "{75926965-1BCA-4D10-A569-0E13A3CA77DB}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -81,12 +79,6 @@ Global
 		{E08242B7-AFCF-4868-9B8E-19BAC75ACF29}.Profile|x64.Build.0 = Debug|x64
 		{E08242B7-AFCF-4868-9B8E-19BAC75ACF29}.Release|x64.ActiveCfg = Release|x64
 		{E08242B7-AFCF-4868-9B8E-19BAC75ACF29}.Release|x64.Build.0 = Release|x64
-		{75926965-1BCA-4D10-A569-0E13A3CA77DB}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{75926965-1BCA-4D10-A569-0E13A3CA77DB}.Debug|x64.Build.0 = Debug|Any CPU
-		{75926965-1BCA-4D10-A569-0E13A3CA77DB}.Profile|x64.ActiveCfg = Debug|Any CPU
-		{75926965-1BCA-4D10-A569-0E13A3CA77DB}.Profile|x64.Build.0 = Debug|Any CPU
-		{75926965-1BCA-4D10-A569-0E13A3CA77DB}.Release|x64.ActiveCfg = Release|Any CPU
-		{75926965-1BCA-4D10-A569-0E13A3CA77DB}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
