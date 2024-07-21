@@ -908,6 +908,13 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
     }
 
+    // These files should not be considered for unused file detection (they're addressed by archiveXL)
+    private static readonly string[] s_excludeUnusedExtensions = [
+        ".csv",
+        ".json",
+        ".inkatlas"
+    ];
+    
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private async Task FindUnusedFiles()
     {
@@ -919,6 +926,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         var potentiallyUnusedFiles = ActiveProject!.ModFiles
             .Where(f => !referencesHashSet.Contains(ActiveProject.GetRelativePath(f))) // they're used
             .Where(f => !_archiveManager.Lookup(f, ArchiveManagerScope.Basegame).HasValue) // they overwrite basegame files
+            .Where(f => !s_excludeUnusedExtensions.Contains(Path.GetExtension(f))) // TODO: check against .xl files
             .ToList();
 
         if (potentiallyUnusedFiles.Count == 0)

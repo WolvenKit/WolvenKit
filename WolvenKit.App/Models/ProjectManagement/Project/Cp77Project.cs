@@ -560,31 +560,45 @@ public sealed class Cp77Project(string location, string name, string modName) : 
                     {
                         return;
                     }
-
-                    foreach (var result in cr2WFile.FindType(typeof(IRedRef)))
+                    
+                    // check if it's a factory
+                    if (cr2WFile.RootChunk is C2dArray { CompiledData: CArray<CArray<CString>> data })
                     {
-                        if (result.Value is not IRedRef resourceReference || resourceReference.DepotPath == ResourcePath.Empty)
-                        {
-                            continue;
-                        }
-
-                        var refResource = resourceReference.DepotPath.GetResolvedText();
-                        if (string.IsNullOrEmpty(refResource))
-                        {
-                            continue;
-                        }
-
-                        // Deal with ArchiveXL substitution
-                        if (refResource.StartsWith(ArchiveXlHelper.ArchiveXLSubstitutionPrefix))
-                        {
-                            resourcePaths.AddRange(ArchiveXlHelper.ResolveDynamicPaths(refResource));
-                        }
-                        else
-                        {
-                            resourcePaths.Add(refResource);
-                        }
-
+                        // Grab the second string from CompiledData, if it's a depotPath
+                        resourcePaths.AddRange(data
+                            .Where(c => c.Count == 3).Select(cStrings => cStrings[1])
+                            .Where(potentialDepotPath => potentialDepotPath.GetString().Contains(Path.DirectorySeparatorChar))
+                            .Select(potentialDepotPath => (string)potentialDepotPath));
                     }
+                    else
+                    {
+                        
+                        foreach (var result in cr2WFile.FindType(typeof(IRedRef)))
+                        {
+                            if (result.Value is not IRedRef resourceReference || resourceReference.DepotPath == ResourcePath.Empty)
+                            {
+                                continue;
+                            }
+
+                            var refResource = resourceReference.DepotPath.GetResolvedText();
+                            if (string.IsNullOrEmpty(refResource))
+                            {
+                                continue;
+                            }
+
+                            // Deal with ArchiveXL substitution
+                            if (refResource.StartsWith(ArchiveXlHelper.ArchiveXLSubstitutionPrefix))
+                            {
+                                resourcePaths.AddRange(ArchiveXlHelper.ResolveDynamicPaths(refResource));
+                            }
+                            else
+                            {
+                                resourcePaths.Add(refResource);
+                            }
+
+                        }
+                    }
+                    
                 }
 
                 if (resourcePaths.Count <= 0)
