@@ -75,6 +75,7 @@
                             TextWrapping="Wrap"
                             VerticalScrollBarVisibility="Auto"
                             VerticalAlignment="Top"
+                            VerticalContentAlignment="Top"
                             Text="{Binding References, Converter={StaticResource ListToStringConverter}}" />
                     </StackPanel>
                 </Grid>

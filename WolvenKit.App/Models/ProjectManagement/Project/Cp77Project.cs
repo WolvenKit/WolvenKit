@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using WolvenKit.App.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
@@ -573,7 +574,16 @@ public sealed class Cp77Project(string location, string name, string modName) : 
                             continue;
                         }
 
-                        resourcePaths.Add(refResource);
+                        // Deal with ArchiveXL substitution
+                        if (refResource.StartsWith(ArchiveXlHelper.ArchiveXLSubstitutionPrefix))
+                        {
+                            resourcePaths.AddRange(ArchiveXlHelper.ResolveDynamicPaths(refResource));
+                        }
+                        else
+                        {
+                            resourcePaths.Add(refResource);
+                        }
+
                     }
                 }
 
@@ -582,9 +592,24 @@ public sealed class Cp77Project(string location, string name, string modName) : 
                     return;
                 }
 
+                // Resolve dynamic substitutions
+                var updatedResourcePaths = new List<string>();
+                foreach (var path in resourcePaths)
+                {
+                    if (path.StartsWith(ArchiveXlHelper.ArchiveXLSubstitutionPrefix))
+                    {
+                        var resolvedPaths = ArchiveXlHelper.ResolveDynamicPaths(path);
+                        updatedResourcePaths.AddRange(resolvedPaths);
+                    }
+                    else
+                    {
+                        updatedResourcePaths.Add(path);
+                    }
+                }
+                
                 lock (references)
                 {
-                    references.Add(filePath, resourcePaths);
+                    references.Add(filePath, updatedResourcePaths);
                 }
                 
                 // Update progress
