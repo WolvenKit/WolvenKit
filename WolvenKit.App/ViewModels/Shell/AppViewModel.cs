@@ -921,6 +921,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _loggerService.Info($"Scanning {ActiveProject!.ModFiles.Count} files. Please wait...");
 
         var allReferencePaths = await ActiveProject!.GetAllReferences(_progressService);
+        _loggerService.Info($"Scanning {ActiveProject!.Files.Count(f => f.StartsWith("archive"))} files. Please wait...");
+        
         var referencesHashSet = new HashSet<string>(allReferencePaths.SelectMany((r) => r.Value));
 
         var potentiallyUnusedFiles = ActiveProject!.ModFiles
@@ -945,15 +947,16 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             Interactions.ShowDeleteOrMoveFilesList(("Delete or move un-used files?", potentiallyUnusedFiles, ActiveProject));
         if (deleteFiles.Count == 0)
         {
+            _notificationService.ShowNotification("No un-used files in project", ENotificationType.Success, ENotificationCategory.App);
             return;
         }
 
-        if (relativeDestPath is not null)
+        _progressService.Completed();
+        if (Interactions.ShowDeleteFilesList(("Delete un-used files?", unusedFiles)) is not { } deleteFiles || deleteFiles.Count == 0)
         {
-            await MoveFiles(deleteFiles, relativeDestPath);
             return;
         }
-        
+
         List<string> failedDeletions = [];
         foreach (var filePath in deleteFiles)
         {
