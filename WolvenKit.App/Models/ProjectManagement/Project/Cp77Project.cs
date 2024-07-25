@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using WolvenKit.App.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
@@ -559,22 +560,45 @@ public sealed class Cp77Project(string location, string name, string modName) : 
                     {
                         return;
                     }
-
-                    foreach (var result in cr2WFile.FindType(typeof(IRedRef)))
+                    
+                    // check if it's a factory
+                    if (cr2WFile.RootChunk is C2dArray { CompiledData: CArray<CArray<CString>> data })
                     {
-                        if (result.Value is not IRedRef resourceReference || resourceReference.DepotPath == ResourcePath.Empty)
-                        {
-                            continue;
-                        }
-
-                        var refResource = resourceReference.DepotPath.GetResolvedText();
-                        if (string.IsNullOrEmpty(refResource))
-                        {
-                            continue;
-                        }
-
-                        resourcePaths.Add(refResource);
+                        // Grab the second string from CompiledData, if it's a depotPath
+                        resourcePaths.AddRange(data
+                            .Where(c => c.Count == 3).Select(cStrings => cStrings[1])
+                            .Where(potentialDepotPath => potentialDepotPath.GetString().Contains(Path.DirectorySeparatorChar))
+                            .Select(potentialDepotPath => (string)potentialDepotPath));
                     }
+                    else
+                    {
+                        
+                        foreach (var result in cr2WFile.FindType(typeof(IRedRef)))
+                        {
+                            if (result.Value is not IRedRef resourceReference || resourceReference.DepotPath == ResourcePath.Empty)
+                            {
+                                continue;
+                            }
+
+                            var refResource = resourceReference.DepotPath.GetResolvedText();
+                            if (string.IsNullOrEmpty(refResource))
+                            {
+                                continue;
+                            }
+
+                            // Deal with ArchiveXL substitution
+                            if (refResource.StartsWith(ArchiveXlHelper.ArchiveXLSubstitutionPrefix))
+                            {
+                                resourcePaths.AddRange(ArchiveXlHelper.ResolveDynamicPaths(refResource));
+                            }
+                            else
+                            {
+                                resourcePaths.Add(refResource);
+                            }
+
+                        }
+                    }
+                    
                 }
 
                 // It's a csv file - those can hold references as strings
@@ -596,9 +620,24 @@ public sealed class Cp77Project(string location, string name, string modName) : 
                     return;
                 }
 
+                // Resolve dynamic substitutions
+                var updatedResourcePaths = new List<string>();
+                foreach (var path in resourcePaths)
+                {
+                    if (path.StartsWith(ArchiveXlHelper.ArchiveXLSubstitutionPrefix))
+                    {
+                        var resolvedPaths = ArchiveXlHelper.ResolveDynamicPaths(path);
+                        updatedResourcePaths.AddRange(resolvedPaths);
+                    }
+                    else
+                    {
+                        updatedResourcePaths.Add(path);
+                    }
+                }
+                
                 lock (references)
                 {
-                    references.Add(filePath, resourcePaths);
+                    references.Add(filePath, updatedResourcePaths);
                 }
                 
                 // Update progress

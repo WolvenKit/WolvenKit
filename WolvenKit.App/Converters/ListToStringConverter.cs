@@ -59,6 +59,6 @@ public class ListToStringConverter : IValueConverter
         }
 
 
-        return dict.Keys.Count > 0 ? dict : ret;
+        return dict.Any(kv => kv.Value.Any()) ? dict : ret;
     }
 }

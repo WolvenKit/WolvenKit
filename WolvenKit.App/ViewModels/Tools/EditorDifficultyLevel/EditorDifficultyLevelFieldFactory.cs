@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.Common.Extensions;
 using WolvenKit.RED4.Types;
 
 // ReSharper disable InconsistentNaming

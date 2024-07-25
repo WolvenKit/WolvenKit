@@ -102,17 +102,17 @@ namespace WolvenKit.Views.Tools
                     return result == AdonisUI.Controls.MessageBoxResult.OK;
                 };
 
-                Interactions.ShowDeleteFilesList = (args) =>
+                Interactions.ShowDeleteOrMoveFilesList = (args) =>
                 {
-                    var dialog = new DeleteFilesListDialogView(args.Item1, args.Item2);
+                    var dialog = new DeleteOrMoveFilesListDialogView(args.Item1, args.Item2, args.Item3);
 
                     if (dialog.ShowDialog(Application.Current.MainWindow) != true ||
-                        dialog.ViewModel is not DeleteFilesListDialogViewModel viewModel)
+                        dialog.ViewModel is not DeleteOrMoveFilesListDialogViewModel viewModel)
                     {
-                        return [];
+                        return ([], null);
                     }
 
-                    return viewModel.Files;
+                    return (viewModel.Files, viewModel.MoveToPath);
                 };
 
                 Interactions.ShowBrokenReferencesList = (args) =>
@@ -144,6 +144,19 @@ namespace WolvenKit.Views.Tools
                     var dialog = new InputDialogView() { Title = title };
 
                     if (dialog.ViewModel is not InputDialogViewModel innerVm
+                        || dialog.ShowDialog(Application.Current.MainWindow) != true)
+                    {
+                        return "";
+                    }
+
+                    return innerVm.Text;
+                };
+
+                Interactions.AskForFolderPathInput = (args) =>
+                {
+                    var dialog = new FolderPathInputDialogView(args.Item2, args.Item1);
+
+                    if (dialog.ViewModel is not FolderPathInputDialogViewModel innerVm
                         || dialog.ShowDialog(Application.Current.MainWindow) != true)
                     {
                         return "";

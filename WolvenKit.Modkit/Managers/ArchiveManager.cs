@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Kernel;
 using WolvenKit.Common;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
@@ -467,23 +468,35 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <returns></returns>
         public Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles(ArchiveManagerScope searchScope)
         {
-            if (searchScope is ArchiveManagerScope.Mods)
+            Dictionary<string, IEnumerable<IGameFile>> ret = [];
+            
+            // project files
+            if (searchScope is (ArchiveManagerScope.LocalProject or ArchiveManagerScope.Everywhere) && ProjectArchive is not null)
             {
-                return GetModArchives()
+                ret.MergeRange(ProjectArchive.Files.Values
+                    .GroupBy(gameFile => gameFile.Extension)
+                    .ToDictionary(gameFiles => gameFiles.Key, gameFiles => gameFiles.Select(x => x))); 
+            }
+            
+            // base game files
+            if (searchScope is ArchiveManagerScope.Basegame or ArchiveManagerScope.Everywhere or ArchiveManagerScope.BasegameAndMods)
+            {
+                ret.MergeRange(GetGameArchives()
                     .SelectMany(archive => archive.Files.Values)
                     .GroupBy(gameFile => gameFile.Extension)
-                    .ToDictionary(gameFiles => gameFiles.Key, gameFiles => gameFiles.Select(x => x));
+                    .ToDictionary(gameFiles => gameFiles.Key, gameFiles => gameFiles.Select(x => x)));
             }
-
-            if (searchScope is ArchiveManagerScope.Basegame)
+            
+            // mods
+            if (searchScope is ArchiveManagerScope.Mods or ArchiveManagerScope.BasegameAndMods or ArchiveManagerScope.Everywhere)
             {
-                return GetGameArchives()
+                ret.MergeRange(  GetModArchives()
                     .SelectMany(archive => archive.Files.Values)
                     .GroupBy(gameFile => gameFile.Extension)
-                    .ToDictionary(gameFiles => gameFiles.Key, gameFiles => gameFiles.Select(x => x));
+                    .ToDictionary(gameFiles => gameFiles.Key, gameFiles => gameFiles.Select(x => x)));
             }
 
-            throw new NotSupportedException(nameof(searchScope));
+            return ret;
         }
 
 
@@ -502,7 +515,17 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <inheritdoc />
         public Optional<IGameFile> Lookup(ulong hash, ArchiveManagerScope searchScope)
         {
-            if (searchScope is ArchiveManagerScope.Mods or ArchiveManagerScope.Everywhere)
+            
+            // Check project archive
+            if (searchScope is ArchiveManagerScope.LocalProject or ArchiveManagerScope.Everywhere && ProjectArchive is not null)
+            {
+                if (ProjectArchive.Files.TryGetValue(hash, out var value))
+                {
+                    return Optional<IGameFile>.ToOptional(value);
+                }
+            }
+            
+            if (searchScope is ArchiveManagerScope.Mods or ArchiveManagerScope.BasegameAndMods or ArchiveManagerScope.Everywhere)
             {
                 // first check the mod archives
                 foreach (var item in GetModArchives())
@@ -514,7 +537,7 @@ namespace WolvenKit.RED4.CR2W.Archive
                 }
             }
 
-            if (searchScope is not (ArchiveManagerScope.Basegame or ArchiveManagerScope.Everywhere))
+            if (searchScope is not (ArchiveManagerScope.Basegame or ArchiveManagerScope.BasegameAndMods or ArchiveManagerScope.Everywhere))
             {
                 return Optional<IGameFile>.None;
             }

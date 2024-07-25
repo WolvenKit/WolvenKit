@@ -893,37 +893,64 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
     }
 
-    public static string[] s_ignoreForUnusedFiles = [".csv", ".json", ".inkatlas"];
+    private async Task MoveFiles(List<string> filePaths, string destinationPath)
+    {
+        if (ActiveProject is null)
+        {
+            _loggerService.Warning("Can't do this without a project!");
+        }
+
+        foreach (var absolutePath in filePaths)
+        {
+            await ProjectResourceHelper.MoveAndRefactor(ActiveProject!, absolutePath, destinationPath, false);
+        }
+    }
+
+    // These files should not be considered for unused file detection (they're addressed by archiveXL)
+    private static readonly string[] s_excludeUnusedExtensions =
+    [
+        ".csv",
+        ".json",
+        ".inkatlas"
+    ];
     
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private async Task FindUnusedFiles()
     {
-        _loggerService.Info($"Scanning {ActiveProject!.Files.Count(f => f.StartsWith("archive"))} files. Please wait...");
+        _loggerService.Info($"Scanning {ActiveProject!.ModFiles.Count} files. Please wait...");
 
         var allReferencePaths = await ActiveProject!.GetAllReferences(_progressService);
+        _loggerService.Info($"Scanning {ActiveProject!.Files.Count(f => f.StartsWith("archive"))} files. Please wait...");
+        
         var referencesHashSet = new HashSet<string>(allReferencePaths.SelectMany((r) => r.Value));
 
-        var unusedFiles =
-            ActiveProject!.ModFiles.Where(filePath =>
-            {
-                var refPath = ActiveProject.GetRelativePath(filePath);
-                return !referencesHashSet.Contains(refPath)
-                       && !allReferencePaths.Values.Any(r => r.Contains(refPath)
-                                                             && !s_ignoreForUnusedFiles.Contains(Path.GetExtension(refPath))
-                       );
-            }).ToList();
-        if (unusedFiles.Count == 0)
+        var potentiallyUnusedFiles = ActiveProject!.ModFiles
+            .Where(f => !referencesHashSet.Contains(ActiveProject.GetRelativePath(f))) // they're used
+            .Where(f => !_archiveManager.Lookup(f, ArchiveManagerScope.Basegame).HasValue) // they overwrite basegame files
+            .Where(f => !s_excludeUnusedExtensions.Contains(Path.GetExtension(f))) // TODO: check against .xl files
+            .ToList();
+
+        if (potentiallyUnusedFiles.Count == 0)
         {
             _notificationService.ShowNotification("No un-used files in project", ENotificationType.Success, ENotificationCategory.App);
             return;
         }
 
+        // Filter out files by type
+
+        // potentiallyUnusedFiles.Where(f => _archiveManager.Lookup(f, ArchiveManagerScope.LocalProject).)
+
+
         _progressService.Completed();
-        if (Interactions.ShowDeleteFilesList(("Delete un-used files?", unusedFiles)) is not { } deleteFiles || deleteFiles.Count == 0)
+        (var deleteFiles, var relativeDestPath) =
+            Interactions.ShowDeleteOrMoveFilesList(("Delete or move un-used files?", potentiallyUnusedFiles, ActiveProject));
+
+        if (deleteFiles.Count == 0)
         {
+            _notificationService.ShowNotification("No un-used files in project", ENotificationType.Success, ENotificationCategory.App);
             return;
         }
-
+        
         List<string> failedDeletions = [];
         foreach (var filePath in deleteFiles)
         {
