@@ -641,7 +641,7 @@ public sealed partial class Cp77Project(string location, string name, string mod
             });
 
             // Get file paths from resource files. Yes, with a regex - parsing them would be way more effort
-            Parallel.ForEach(Files.Where(f => f.EndsWith(".xl") || f.EndsWith(".yaml")), filePath =>
+            Parallel.ForEach(Files.Where(f => f.EndsWith(".xl") || f.EndsWith(".yaml") || f.EndsWith(".lua")), filePath =>
             {
                 var absolutePath = Path.Combine(FileDirectory, filePath);
                 if (!File.Exists(absolutePath))
@@ -651,8 +651,11 @@ public sealed partial class Cp77Project(string location, string name, string mod
 
                 var fileContent = File.ReadAllText(absolutePath);
 
-                var regex = ArchiveXlFilePathsRegex();
-                var refs = regex.Matches(fileContent).Where(m => m.Success).Select(m => m.Value).ToList();
+                // Get anything with double or single slashes, then replace double slashes
+                var refs = ResourceFilePathsRegex().Matches(fileContent).Where(m => m.Success)
+                    .Select(m => m.Value.Replace(@"\\", @"\"))
+                    .ToList();
+                
                 if (refs.Count <= 0)
                 {
                     return;
@@ -660,7 +663,10 @@ public sealed partial class Cp77Project(string location, string name, string mod
 
                 lock (references)
                 {
-                    references.Add(filePath, refs);
+                    if (!references.TryAdd(filePath, refs))
+                    {
+                        references[filePath].AddRange(refs);
+                    }
                 }
             });
         });
@@ -706,7 +712,7 @@ public sealed partial class Cp77Project(string location, string name, string mod
         return brokenReferences;
     }
 
-    [GeneratedRegex(@"(\w+\\)+\w+\.\w+")]
-    private static partial Regex ArchiveXlFilePathsRegex();
+    [GeneratedRegex(@"((\w+\\\\?)+\w+\.\w+)")]
+    private static partial Regex ResourceFilePathsRegex();
 }
     

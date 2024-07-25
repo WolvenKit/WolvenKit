@@ -922,6 +922,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         var potentiallyUnusedFiles = ActiveProject!.ModFiles
             .Where(f => !referencesHashSet.Contains(ActiveProject.GetRelativePath(f))) // they're used
             .Where(f => !_archiveManager.Lookup(f, ArchiveManagerScope.Basegame).HasValue) // they overwrite basegame files
+            .Where(f => !ActiveProject.GetRelativePath(f)
+                .StartsWith(@"base\characters\appearances\main_npc\npv")) // npv apps
             .ToList();
 
         if (potentiallyUnusedFiles.Count == 0)
