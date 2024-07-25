@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using ReactiveUI;
 using Syncfusion.Windows.Controls.RichTextBoxAdv;
@@ -33,7 +35,21 @@ public partial class DeleteOrMoveFilesListDialogView : IViewFor<DeleteOrMoveFile
 
     private void WizardPage_PreviewKeyDown(object sender, KeyEventArgs e)
     {
-        if (e.Key is not (Key.Enter or Key.Escape) || ViewModel is not DeleteOrMoveFilesListDialogViewModel vm)
+        if (ContentTextBox.Focus() && ContentTextBox.GetBindingExpression(TextBox.TextProperty) is BindingExpression be)
+        {
+            if (e.Key is Key.Z && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+            {
+                be?.UpdateTarget();
+            }
+            else if (e.Key is Key.Enter)
+            {
+                be?.UpdateSource();
+            }
+
+            return;
+        }
+
+        if (e.Key is not (Key.Enter or Key.Escape) || ViewModel is not DeleteOrMoveFilesListDialogViewModel vm || ContentTextBox.Focus())
         {
             return;
         }
