@@ -577,6 +577,20 @@ public sealed class Cp77Project(string location, string name, string modName) : 
                     }
                 }
 
+                // It's a csv file - those can hold references as strings
+                if (cr2WFile.RootChunk is C2dArray ary && ary.CompiledData is CArray<CArray<CString>> compData)
+                {
+                    foreach (var cStrings in compData)
+                    {
+                        if (cStrings.Count != 2 || cStrings[1].ToString() is not string s || !s.Contains(Path.DirectorySeparatorChar))
+                        {
+                            continue;
+                        }
+
+                        resourcePaths.Add(s);
+                    }
+                }
+
                 if (resourcePaths.Count <= 0)
                 {
                     return;

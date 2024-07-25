@@ -822,7 +822,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private async Task ScanForBrokenReferencePaths()
     {
-        _loggerService.Info($"Scanning {ActiveProject!.Files.Count} files. Please wait...");
+        _loggerService.Info($"Scanning {ActiveProject!.ModFiles.Count} files. Please wait...");
         _progressService.IsIndeterminate = true;
         var brokenReferences = await ActiveProject!.ScanForBrokenReferencePathsAsync(_archiveManager, _loggerService, _progressService);
 
@@ -891,10 +891,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             _loggerService.Error($"Failed to open log file: {ex.Message}");
         }
-        
-        
     }
 
+    public static string[] s_ignoreForUnusedFiles = [".csv", ".json", ".inkatlas"];
+    
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private async Task FindUnusedFiles()
     {
@@ -904,7 +904,14 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         var referencesHashSet = new HashSet<string>(allReferencePaths.SelectMany((r) => r.Value));
 
         var unusedFiles =
-            ActiveProject!.ModFiles.Where(f => !referencesHashSet.Contains(ActiveProject.GetRelativePath(f))).ToList();
+            ActiveProject!.ModFiles.Where(filePath =>
+            {
+                var refPath = ActiveProject.GetRelativePath(filePath);
+                return !referencesHashSet.Contains(refPath)
+                       && !allReferencePaths.Values.Any(r => r.Contains(refPath)
+                                                             && !s_ignoreForUnusedFiles.Contains(Path.GetExtension(refPath))
+                       );
+            }).ToList();
         if (unusedFiles.Count == 0)
         {
             _notificationService.ShowNotification("No un-used files in project", ENotificationType.Success, ENotificationCategory.App);
