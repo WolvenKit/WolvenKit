@@ -832,7 +832,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 ENotificationCategory.App);
             return;
         }
-
+        
         Interactions.ShowBrokenReferencesList(("Broken references", brokenReferences));
     }
 
@@ -950,7 +950,14 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             try
             {
-                FileSystem.DeleteFile(ActiveProject.GetAbsolutePath(filePath), UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                var absolutePath = ActiveProject.GetAbsolutePath(filePath);
+                FileSystem.DeleteFile(absolutePath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+
+                while (Path.GetDirectoryName(absolutePath) is string parentDir && !Directory.EnumerateFileSystemEntries(parentDir).Any())
+                {
+                    Directory.Delete(parentDir);
+                    absolutePath = parentDir;
+                }
             }
             catch
             {

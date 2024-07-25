@@ -104,7 +104,8 @@ namespace WolvenKit.Views.Tools
 
                 Interactions.ShowDeleteOrMoveFilesList = (args) =>
                 {
-                    var dialog = new DeleteOrMoveFilesListDialogView(args.Item1, args.Item2, args.Item3);
+                    var list = args.Item2.Order(new FilePathStringComparer());
+                    var dialog = new DeleteOrMoveFilesListDialogView(args.Item1, list.ToList(), args.Item3);
 
                     if (dialog.ShowDialog(Application.Current.MainWindow) != true ||
                         dialog.ViewModel is not DeleteOrMoveFilesListDialogViewModel viewModel)
@@ -117,6 +118,7 @@ namespace WolvenKit.Views.Tools
 
                 Interactions.ShowBrokenReferencesList = (args) =>
                 {
+                    var comparer = new FilePathComparer();
                     var dialog = new ShowBrokenReferencesDialogView(args.Item1, args.Item2);
                     return dialog.ShowDialog(Application.Current.MainWindow) == true;
                 };
@@ -817,7 +819,7 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        private class FilePathComparer : IComparer<object>, ISortDirection
+        public class FilePathComparer : IComparer<object>, ISortDirection
         {
             public int Compare(object x, object y)
             {
@@ -872,6 +874,76 @@ namespace WolvenKit.Views.Tools
                     {
                         return item1Parts.Length.CompareTo(item2Parts.Length);
                     }
+
+                    for (var i = 0; i < Math.Min(item1Parts.Length, item2Parts.Length); i++)
+                    {
+                        var result = string.CompareOrdinal(item1Parts[i], item2Parts[i]);
+                        if (result != 0)
+                        {
+                            return result;
+                        }
+                    }
+
+                    return 0;
+                }
+            }
+
+            public ListSortDirection SortDirection { get; set; }
+        }
+
+        public class FilePathStringComparer : IComparer<string>, ISortDirection
+        {
+            public int Compare(string item1, string item2)
+            {
+                var c = 0;
+
+                if (item1 == item2)
+                {
+                    return 0;
+                }
+
+                if (item1 != null && item2 == null)
+                {
+                    c = -1;
+                }
+                else if (item1 == null)
+                {
+                    c = 1;
+                }
+                else
+                {
+                    switch (Directory.Exists(item1))
+                    {
+                        case true when !Directory.Exists(item2):
+                            c = -1;
+                            break;
+                        case false when Directory.Exists(item2):
+                            c = 1;
+                            break;
+                        default:
+                        {
+                            c = CompareParts();
+                            if (c == 0)
+                            {
+                                c = string.CompareOrdinal(item1, item2);
+                            }
+
+                            break;
+                        }
+                    }
+                }
+
+                if (SortDirection == ListSortDirection.Descending)
+                {
+                    c = -c;
+                }
+
+                return c;
+
+                int CompareParts()
+                {
+                    var item1Parts = item1.Split(Path.DirectorySeparatorChar);
+                    var item2Parts = item2.Split(Path.DirectorySeparatorChar);
 
                     for (var i = 0; i < Math.Min(item1Parts.Length, item2Parts.Length); i++)
                     {

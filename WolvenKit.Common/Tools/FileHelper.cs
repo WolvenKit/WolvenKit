@@ -74,6 +74,18 @@ public class FileHelper
     {
         try
         {
+            if (!Directory.EnumerateFiles(sourceDir).Any())
+            {
+                if (Directory.Exists(destinationDir))
+                {
+                    Directory.Delete(sourceDir);
+                    return;
+                }
+
+                Directory.Move(sourceDir, destinationDir);
+                return;
+            } 
+            
             // Ensure the destination directory exists
             if (!Directory.Exists(destinationDir))
             {

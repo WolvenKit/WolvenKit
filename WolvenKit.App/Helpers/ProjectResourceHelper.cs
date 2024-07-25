@@ -299,7 +299,7 @@ public static class ProjectResourceHelper
                 overwriteFiles = response is WMessageBoxResult.OK or WMessageBoxResult.Yes;
             }
 
-            FileHelper.MoveRecursively(sourceRelPath, destRelPath, overwriteFiles, GetLoggerService());
+            FileHelper.MoveRecursively(sourceAbsPath, destAbsPath, overwriteFiles, GetLoggerService());
 
             GetLoggerService()?.Info($"Moved {sourceRelPath}{Path.DirectorySeparatorChar}* to {destRelPath}");
         }
