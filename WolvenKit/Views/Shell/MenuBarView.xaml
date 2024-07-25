@@ -345,11 +345,11 @@
                 <MenuItem
                     x:Name="ToolbarProjectFindUnusedFilesButton"
                     Margin="2,1"
-                    Header="Find and delete unused project files">
+                    Header="Scan for unused project files">
                     <MenuItem.Icon>
                         <iconPacks:PackIconCodicons
                             Margin="6,0"
-                            Kind="Trash"
+                            Kind="Search"
                             Style="{StaticResource WolvenKitToolBarButtonIcon}" />
                     </MenuItem.Icon>
                 </MenuItem>

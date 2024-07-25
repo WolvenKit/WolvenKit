@@ -828,6 +828,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         if (brokenReferences.Keys.Count == 0)
         {
+            _notificationService.ShowNotification("No broken references in project... that we can find", ENotificationType.Success,
+                ENotificationCategory.App);
             return;
         }
 
