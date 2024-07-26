@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using WolvenKit.App.Helpers;
@@ -9,13 +10,14 @@ using WolvenKit.Common;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
+using WolvenKit.Modkit.RED4.Serialization;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Models.ProjectManagement.Project;
 
-public sealed class Cp77Project(string location, string name, string modName) : IEquatable<Cp77Project>, ICloneable
+public sealed partial class Cp77Project(string location, string name, string modName) : IEquatable<Cp77Project>, ICloneable
 {
     public string Name { get; set; } = name;
 
@@ -540,7 +542,7 @@ public sealed class Cp77Project(string location, string name, string modName) : 
     public async Task<Dictionary<string, List<string>>> GetAllReferences(IProgressService<double>? progressService)
     {
         Dictionary<string, List<string>> references = new();
-       
+
         progressService?.Report(0);
         var totalFiles = ModFiles.Count;
         var processedFiles = 0;
@@ -556,7 +558,7 @@ public sealed class Cp77Project(string location, string name, string modName) : 
                 using (var fs = File.Open(GetAbsolutePath(filePath), FileMode.Open))
                 using (var cr = new CR2WReader(fs))
                 {
-                    if (cr.ReadFile(out cr2WFile) != WolvenKit.RED4.Archive.IO.EFileReadErrorCodes.NoError || cr2WFile is null)
+                    if (cr.ReadFile(out cr2WFile) != RED4.Archive.IO.EFileReadErrorCodes.NoError || cr2WFile is null)
                     {
                         return;
                     }
@@ -565,14 +567,14 @@ public sealed class Cp77Project(string location, string name, string modName) : 
                     if (cr2WFile.RootChunk is C2dArray { CompiledData: CArray<CArray<CString>> data })
                     {
                         // Grab the second string from CompiledData, if it's a depotPath
-                        resourcePaths.AddRange(data
+                        var filePaths = data
                             .Where(c => c.Count == 3).Select(cStrings => cStrings[1])
                             .Where(potentialDepotPath => potentialDepotPath.GetString().Contains(Path.DirectorySeparatorChar))
-                            .Select(potentialDepotPath => (string)potentialDepotPath));
+                            .Select(potentialDepotPath => (string)potentialDepotPath).ToList();
+                        resourcePaths.AddRange(filePaths);
                     }
                     else
                     {
-                        
                         foreach (var result in cr2WFile.FindType(typeof(IRedRef)))
                         {
                             if (result.Value is not IRedRef resourceReference || resourceReference.DepotPath == ResourcePath.Empty)
@@ -595,10 +597,17 @@ public sealed class Cp77Project(string location, string name, string modName) : 
                             {
                                 resourcePaths.Add(refResource);
                             }
+                        }
 
+                        foreach (var cr2WImport in cr2WFile.Info.Imports)
+                        {
+                            if (cr2WImport.DepotPath != ResourcePath.Empty && cr2WImport.DepotPath.GetResolvedText() is string s &&
+                                !resourcePaths.Contains(s))
+                            {
+                                resourcePaths.Add(s);
+                            }
                         }
                     }
-                    
                 }
 
                 if (resourcePaths.Count <= 0)
@@ -630,9 +639,41 @@ public sealed class Cp77Project(string location, string name, string modName) : 
                 var currentProgress = Interlocked.Increment(ref processedFiles) * progressIncrement;
                 progressService?.Report(currentProgress);
             });
+
+            // Get file paths from resource files. Yes, with a regex - parsing them would be way more effort
+            Parallel.ForEach(Files.Where(f => f.EndsWith(".xl") || f.EndsWith(".yaml") || f.EndsWith(".lua")), filePath =>
+            {
+                var absolutePath = Path.Combine(FileDirectory, filePath);
+                if (!File.Exists(absolutePath))
+                {
+                    return;
+                }
+
+                var fileContent = File.ReadAllText(absolutePath);
+
+                // Get anything with double or single slashes, then replace double slashes
+                var refs = ResourceFilePathsRegex().Matches(fileContent).Where(m => m.Success)
+                    .Select(m => m.Value.Replace(@"\\", @"\"))
+                    .ToList();
+                
+                if (refs.Count <= 0)
+                {
+                    return;
+                }
+
+                lock (references)
+                {
+                    if (!references.TryAdd(filePath, refs))
+                    {
+                        references[filePath].AddRange(refs);
+                    }
+                }
+            });
         });
         return references;
     }
+    
+    
 
     public async Task<Dictionary<string, List<string>>> ScanForBrokenReferencePathsAsync(IArchiveManager archiveManager,
         ILoggerService loggerService, IProgressService<double> progressService)
@@ -670,5 +711,8 @@ public sealed class Cp77Project(string location, string name, string modName) : 
         progressService?.Completed();
         return brokenReferences;
     }
+
+    [GeneratedRegex(@"((\w+\\\\?)+\w+\.\w+)")]
+    private static partial Regex ResourceFilePathsRegex();
 }
     

@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Data;
 
 namespace Wolvenkit.App.Converters;
 
-public class ListToStringConverter : IValueConverter
+public partial class ListToStringConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
@@ -22,9 +23,11 @@ public class ListToStringConverter : IValueConverter
         }
 
         return dict
-            .SelectMany(kv => new[] { $"{Environment.NewLine}{kv.Key}" }.Concat(kv.Value.Select(entry => $"      {entry}")))
+            .SelectMany(kv =>
+                new[] { $"{Environment.NewLine}{kv.Key}" }.Concat(new HashSet<string>(kv.Value).Select(entry => $"      {entry}")))
             .Aggregate(new StringBuilder(), (sb, s) => sb.AppendLine(s))
-            .ToString();
+            .ToString()
+            .TrimStart();
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
@@ -35,7 +38,9 @@ public class ListToStringConverter : IValueConverter
             return ret;
         }
 
-        ret = str.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();
+        ret = MultipleEmptyLines().Replace(str, Environment.NewLine)
+            .Split(new[] { Environment.NewLine }, StringSplitOptions.None)
+            .ToList();
 
         // Check if it's a dictionary
         var dict = new Dictionary<string, List<string>>();
@@ -61,4 +66,7 @@ public class ListToStringConverter : IValueConverter
 
         return dict.Any(kv => kv.Value.Any()) ? dict : ret;
     }
+
+    [GeneratedRegex(@"[\r\n]{2,}")]
+    private static partial Regex MultipleEmptyLines();
 }

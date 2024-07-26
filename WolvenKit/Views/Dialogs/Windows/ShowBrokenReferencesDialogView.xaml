@@ -68,15 +68,18 @@
                     </StackPanel>
 
                     <StackPanel Grid.Row="1" Orientation="Vertical">
-                        <TextBox
-                            Height="300"
-                            Width="Auto"
-                            AcceptsReturn="True"
-                            TextWrapping="Wrap"
-                            VerticalScrollBarVisibility="Auto"
-                            VerticalAlignment="Top"
-                            VerticalContentAlignment="Top"
-                            Text="{Binding References, Converter={StaticResource ListToStringConverter}}" />
+                        <TextBox x:Name="ContentTextBox"
+                                 Background="{StaticResource BackgroundColor_Frame_Background}"
+                                 Height="Auto"
+                                 Width="Auto"
+                                 MinHeight="100"
+                                 MaxHeight="400"
+                                 AcceptsReturn="True"
+                                 TextWrapping="WrapWithOverflow"
+                                 VerticalScrollBarVisibility="Auto"
+                                 VerticalAlignment="Top"
+                                 VerticalContentAlignment="Top"
+                                 Text="{Binding References, Converter={StaticResource ListToStringConverter}, Mode=TwoWay}" />
                     </StackPanel>
                 </Grid>
             </syncfusion:WizardPage>
