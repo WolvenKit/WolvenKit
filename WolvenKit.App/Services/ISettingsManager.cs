@@ -189,4 +189,6 @@ public interface ISettingsManager : ISettingsDto, INotifyPropertyChanged
     bool ShowRedmodInRibbon { get; set; }
 
     bool UseValidatingEditor { get; set; }
+
+    bool ReopenLastProject { get; set; }
 }

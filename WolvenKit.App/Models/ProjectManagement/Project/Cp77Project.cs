@@ -19,6 +19,8 @@ namespace WolvenKit.App.Models.ProjectManagement.Project;
 
 public sealed partial class Cp77Project(string location, string name, string modName) : IEquatable<Cp77Project>, ICloneable
 {
+    public const string ProjectFileExtension = ".cpmodproj";
+    
     public string Name { get; set; } = name;
 
     /// <summary>
