@@ -122,6 +122,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             .Where(s => s.Name == "run_FileValidation_on_active_tab")
             .Select(s => new ScriptFileViewModel(_settingsManager, ScriptSource.User, s))
             .FirstOrDefault();
+
+        _entSpawnerImportScript = _scriptService.GetScripts(ISettingsManager.GetWScriptDir()).ToList()
+            .Where(s => s.Name == "run_object_spawner_on_active_tab")
+            .Select(s => new ScriptFileViewModel(_settingsManager, ScriptSource.User, s))
+            .FirstOrDefault();
         
         if (_hashService is HashServiceExt hashServiceExt)
         {
@@ -341,7 +346,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 invalidFilePaths.Add($"  not supported: {filePath}");
             }
         }
-        
+
+
         if (projectPathToOpen is not null)
         {
             _ = OpenProjectAsync(projectPathToOpen);
@@ -867,61 +873,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         Interactions.ShowBrokenReferencesList(("Broken references", brokenReferences));
     }
 
-    private readonly ScriptFileViewModel? _fileValidationScript;
-
-    [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
-    private async Task RunFileValidationOnProject()
-    {
-        if (_fileValidationScript is null || !File.Exists(_fileValidationScript.Path) ||
-            _archiveManager.ProjectArchive is not FileSystemArchive projArchive)
-        {
-            return;
-        }
-
-        var result = Interactions.ShowConfirmation((
-            $"This will analyse {ActiveProject!.Files.Count} files. This can take up to several minutes. Do you want to proceed?",
-            "Really run file validation?",
-            WMessageBoxImage.Question,
-            WMessageBoxButtons.YesNo));
-
-        if (result != WMessageBoxResult.Yes)
-        {
-            return;
-        }
-
-        var code = await File.ReadAllTextAsync(_fileValidationScript.Path);
-
-        foreach (var (_, file) in projArchive.Files)
-        {
-            if (GetRedFile(file) is not { } fileViewModel)
-            {
-                continue;
-            }
-
-            _loggerService.Info($"Scanning {ActiveProject.GetRelativePath(file.FileName)}");
-            ActiveDocument = fileViewModel;
-            await _scriptService.ExecuteAsync(code);
-        }
-
-        // This should never happen, but better safe than sorry
-        if (FileHelper.GetMostRecentlyChangedFile(Path.Combine(ISettingsManager.GetAppData(), "Logs"), "*.txt") is not FileInfo fI)
-        {
-            _loggerService.Info("Done.");
-            return;
-        }
-
-        _loggerService.Info($"Done. The most recent log file is {fI.FullName}.");
-
-        try
-        {
-            Process.Start(new ProcessStartInfo(fI.FullName) { UseShellExecute = true });
-        }
-        catch (Exception ex)
-        {
-            _loggerService.Error($"Failed to open log file: {ex.Message}");
-        }
-    }
-    
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private async Task FindUnusedFiles()
     {
@@ -1665,6 +1616,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(NewFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(ShowLogCommand))]
     [NotifyCanExecuteChangedFor(nameof(ShowProjectExplorerCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ImportFromEntitySpawnerCommand))]
+    [NotifyCanExecuteChangedFor(nameof(RunFileValidationOnProjectCommand))]
     [NotifyCanExecuteChangedFor(nameof(ShowPropertiesCommand))]
     private Cp77Project? _activeProject;
 
@@ -1937,16 +1890,19 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private bool IsInRawFolder(string path) => _projectManager.ActiveProject is not null && path.Contains(_projectManager.ActiveProject.RawDirectory);
     private bool IsInResourceFolder(string path) => _projectManager.ActiveProject is not null && path.Contains(_projectManager.ActiveProject.ResourcesDirectory);
 
-    public Task RequestFileOpen(string fullpath)
+    /// <param name="fullpath">Absolute path of the file</param>
+    /// <param name="ignoreIgnoredExtension">Sometimes, we need to open files for internal script use. Set this flag to true for this case.</param>
+    /// <exception cref="InvalidFileTypeException"></exception>
+    public Task RequestFileOpen(string fullpath, bool ignoreIgnoredExtension = false)
     {
         var ext = Path.GetExtension(fullpath).ToLower();
-
+        
         // everything in ignoredExtensions is delegated to the System viewer
         var delimiter = "|";
         //string[] ignoredExtensions = _settingsManager.TreeViewIgnoredExtensions.ToLower().Split(delimiter);
         //bool isAnIgnoredExtension = Array.Exists(ignoredExtensions, extension => extension.Equals(ext));
         var isAnIgnoredExtension = (_settingsManager.TreeViewIgnoredExtensions ?? "").Split(delimiter).Any(entry => entry.ToLower().Trim().Equals(ext));
-        if (isAnIgnoredExtension)
+        if (isAnIgnoredExtension && !ignoreIgnoredExtension)
         {
             ShellExecute();
         }
@@ -1996,11 +1952,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 case ".tweak":
                     ShellExecute();
                     break;
-
                 // double file formats
                 case ".csv":
                 case ".json":
-                    return (IsInRawFolder(fullpath) || IsInResourceFolder(fullpath) ) ? Task.Run(ShellExecute) : Task.Run(OpenRedengineFile);
+                    return IsInRawFolder(fullpath) || IsInResourceFolder(fullpath) ? Task.Run(ShellExecute) : Task.Run(OpenRedengineFile);
 
                 // VIDEO
                 case ".bk2":
