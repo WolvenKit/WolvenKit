@@ -1116,4 +1116,22 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         ExpansionStateDictionary[rawRelativePath] = expansionState;
         _hasUnsavedFileTreeChanges = true;
     }
+
+    public void SuspendFileWatcher()
+    {
+        if (ActiveProject is Cp77Project project)
+        {
+            _projectWatcher.UnwatchProject(project);
+            _projectWatcher.ForceStop();
+        }
+    }
+
+    public void ResumeFileWatcher()
+    {
+        if (ActiveProject is Cp77Project project)
+        {
+            _projectWatcher.WatchProject(project);
+            _projectWatcher.Refresh();
+        }
+    }
 }
