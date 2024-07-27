@@ -6,6 +6,16 @@ using WolvenKit.App.Interaction;
 using WolvenKit.App.ViewModels.Shell;
 
 namespace WolvenKit.Views.Shell;
+
+public static class WikiLinks
+{
+    public const string CyberpunkBlenderAddon = "https://github.com/WolvenKit/Cyberpunk-Blender-add-on";
+    public const string WolvenKitSetupGuide = "https://wiki.redmodding.org/wolvenkit/getting-started/setup";
+    public const string WolvenKitCreatingAModGuide = "https://wiki.redmodding.org/wolvenkit/getting-started/creating-a-mod";
+    public const string DiscordInvitation = "https://discord.gg/Epkq79kd96";
+    public const string AboutWolvenKit = "https://wiki.redmodding.org/wolvenkit/about";
+}
+
 /// <summary>
 /// Interaction logic for MenuBarView.xaml
 /// </summary>
@@ -195,25 +205,25 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
             this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
                     view => view.MenuItemCyberpunkBlenderAddonLink,
-                    viewModel => viewModel.MainViewModel.CyberpunkBlenderAddonLink);
+                    viewModel => WikiLinks.CyberpunkBlenderAddon);
 
             // Help
             this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
                     view => view.MenuItemWolvenKitSetupLink,
-                    viewModel => viewModel.MainViewModel.WolvenKitSetupLink);
+                    viewModel => WikiLinks.WolvenKitSetupGuide);
             this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
                     view => view.MenuItemWolvenKitCreatingAModLink,
-                    viewModel => viewModel.MainViewModel.WolvenKitCreatingAModLink);
+                    viewModel => WikiLinks.WolvenKitCreatingAModGuide);
             this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
                     view => view.MenuItemDiscordInvitationLink,
-                    viewModel => viewModel.MainViewModel.DiscordInvitationLink);
+                    viewModel => WikiLinks.DiscordInvitation);
             this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
                     view => view.MenuItemAboutWolvenKitLink,
-                    viewModel => viewModel.MainViewModel.AboutWolvenKitLink);
+                    viewModel => WikiLinks.AboutWolvenKit);
 
             // visibility
             this.Bind(ViewModel,

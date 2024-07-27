@@ -119,8 +119,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             .Where(s => s.Name == "run_FileValidation_on_active_tab")
             .Select(s => new ScriptFileViewModel(_settingsManager, ScriptSource.User, s))
             .FirstOrDefault();
-        ;
-
+        
         if (_hashService is HashServiceExt hashServiceExt)
         {
             hashServiceExt.LoadGlobalCache();
@@ -153,19 +152,22 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             }
         }
 
-        if (e.NewItems != null)
+        if (e.NewItems == null)
         {
-            foreach (var item in e.NewItems)
-            {
-                if (item is not IDockElement dockElement)
-                {
-                    continue;
-                }
-
-                DockedViewVisibleChanged?.Invoke(sender, new DockedViewVisibleChangedEventArgs(dockElement));
-                dockElement.PropertyChanged += DockedView_OnPropertyChanged;
-            }
+            return;
         }
+
+        foreach (var item in e.NewItems)
+        {
+            if (item is not IDockElement dockElement)
+            {
+                continue;
+            }
+
+            DockedViewVisibleChanged?.Invoke(sender, new DockedViewVisibleChangedEventArgs(dockElement));
+            dockElement.PropertyChanged += DockedView_OnPropertyChanged;
+        }
+        
     }
 
     public class DockedViewVisibleChangedEventArgs(IDockElement element)
@@ -177,37 +179,37 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private void DockedView_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == "IsVisible")
+        if (e.PropertyName != "IsVisible" || sender is not IDockElement dockElement)
         {
-            if (sender is not IDockElement dockElement)
-            {
-                return;
-            }
-
-            DockedViewVisibleChanged?.Invoke(sender, new DockedViewVisibleChangedEventArgs(dockElement));
+            return;
         }
+
+        DockedViewVisibleChanged?.Invoke(sender, new DockedViewVisibleChangedEventArgs(dockElement));
     }
 
     private void ProgressService_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(IProgressService<double>.Status))
+        if (e.PropertyName != nameof(IProgressService<double>.Status))
         {
-            DispatcherHelper.RunOnMainThread(() =>
-            {
-                TaskStatus = _progressService.Status;
-                switch (TaskStatus)
-                {
-                    case EStatus.Running:
-                        Status = EAppStatus.Busy;
-                        break;
-                    case EStatus.Ready:
-                        Status = EAppStatus.Ready;
-                        break;
-                    default:
-                        break;
-                }
-            }, DispatcherPriority.ContextIdle);
+            return;
         }
+
+        DispatcherHelper.RunOnMainThread(() =>
+        {
+            TaskStatus = _progressService.Status;
+            switch (TaskStatus)
+            {
+                case EStatus.Running:
+                    Status = EAppStatus.Busy;
+                    break;
+                case EStatus.Ready:
+                    Status = EAppStatus.Ready;
+                    break;
+                default:
+                    break;
+            }
+        }, DispatcherPriority.ContextIdle);
+        
     }
 
     #region init
@@ -229,7 +231,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
 
         _pluginService.Init();
-        if (!TryLoadingArguments())
+        if (!OpenFileFromLaunchArgs())
         {
             ShowHomePageSync();
         }    
@@ -241,61 +243,63 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     public bool AddDockedPane(string paneString)
     {
-        if (Enum.TryParse<EDockedViews>(paneString, out var pane))
+        if (!Enum.TryParse<EDockedViews>(paneString, out var pane))
         {
-            switch (pane)
+            return false;
+        }
+
+        switch (pane)
+        {
+            case EDockedViews.LogViewModel:
+                DockedViews.Add(_paneViewModelFactory.LogViewModel());
+                return true;
+            case EDockedViews.ProjectExplorerViewModel:
+                DockedViews.Add(_paneViewModelFactory.ProjectExplorerViewModel(this));
+                return true;
+            case EDockedViews.PropertiesViewModel:
+                DockedViews.Add(_paneViewModelFactory.PropertiesViewModel());
+                return true;
+            case EDockedViews.AssetBrowserViewModel:
+                DockedViews.Add(_paneViewModelFactory.AssetBrowserViewModel(this));
+                return true;
+            case EDockedViews.TweakBrowserViewModel:
+                DockedViews.Add(_paneViewModelFactory.TweakBrowserViewModel(this));
+                return true;
+            case EDockedViews.LocKeyBrowserViewModel:
+                DockedViews.Add(_paneViewModelFactory.LocKeyBrowserViewModel());
+                return true;
+            case EDockedViews.ImportViewModel:
             {
-                case EDockedViews.LogViewModel:
-                    DockedViews.Add(_paneViewModelFactory.LogViewModel());
-                    return true;
-                case EDockedViews.ProjectExplorerViewModel:
-                    DockedViews.Add(_paneViewModelFactory.ProjectExplorerViewModel(this));
-                    return true;
-                case EDockedViews.PropertiesViewModel:
-                    DockedViews.Add(_paneViewModelFactory.PropertiesViewModel());
-                    return true;
-                case EDockedViews.AssetBrowserViewModel:
-                    DockedViews.Add(_paneViewModelFactory.AssetBrowserViewModel(this));
-                    return true;
-                case EDockedViews.TweakBrowserViewModel:
-                    DockedViews.Add(_paneViewModelFactory.TweakBrowserViewModel(this));
-                    return true;
-                case EDockedViews.LocKeyBrowserViewModel:
-                    DockedViews.Add(_paneViewModelFactory.LocKeyBrowserViewModel());
-                    return true;
-                case EDockedViews.ImportViewModel:
-                {
-                    var vm = _paneViewModelFactory.ImportViewModel(this);
-                    vm.State = DockState.Dock;
-                    vm.SideInDockedMode = DockSide.Right;
-                    DockedViews.Add(vm);
-                    return true;
-                }
-                case EDockedViews.ExportViewModel:
-                {
-                    var vm = _paneViewModelFactory.ExportViewModel(this);
-                    vm.State = DockState.Dock;
-                    vm.SideInDockedMode = DockSide.Right;
-                    DockedViews.Add(vm);
-                    return true;
-                }
-                case EDockedViews.HashToolViewModel:
-                {
-                    var vm = _paneViewModelFactory.HashToolViewModel();
-                    vm.State = DockState.Dock;
-                    vm.SideInDockedMode = DockSide.Right;
-                    DockedViews.Add(vm);
-                    return true;
-                }
-                default:
-                    break;
+                var vm = _paneViewModelFactory.ImportViewModel(this);
+                vm.State = DockState.Dock;
+                vm.SideInDockedMode = DockSide.Right;
+                DockedViews.Add(vm);
+                return true;
             }
+            case EDockedViews.ExportViewModel:
+            {
+                var vm = _paneViewModelFactory.ExportViewModel(this);
+                vm.State = DockState.Dock;
+                vm.SideInDockedMode = DockSide.Right;
+                DockedViews.Add(vm);
+                return true;
+            }
+            case EDockedViews.HashToolViewModel:
+            {
+                var vm = _paneViewModelFactory.HashToolViewModel();
+                vm.State = DockState.Dock;
+                vm.SideInDockedMode = DockSide.Right;
+                DockedViews.Add(vm);
+                return true;
+            }
+            default:
+                break;
         }
 
         return false;
     }
 
-    private bool TryLoadingArguments()
+    private bool OpenFileFromLaunchArgs()
     {
         var args = Environment.GetCommandLineArgs();
 
@@ -347,7 +351,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
     }
 
-    private void CheckForLongPathSupport()
+    private static void CheckForLongPathSupport()
     {
         if (Core.NativeMethods.RtlAreLongPathsEnabled() != 0)
         {
@@ -728,7 +732,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private bool CanReloadFile() => ActiveDocument is not null;
     [RelayCommand(CanExecute = nameof(CanReloadFile))]
-    public void ReloadFile()
+    private void ReloadFile()
     {
         if (ActiveDocument == null)
         {
@@ -817,7 +821,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanShowSettings))]
     private async Task ShowSettings() => await ShowHomePage(EHomePage.Settings);
 
-    private bool CanShowProjectActions() => !IsDialogShown && ActiveProject is not null;
+    private bool CanShowProjectActions() =>
+        !IsDialogShown && ActiveProject is not null && Status != EAppStatus.Busy && Status is (EAppStatus.Loaded or EAppStatus.Ready);
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private async Task ScanForBrokenReferencePaths()
@@ -836,12 +841,13 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         Interactions.ShowBrokenReferencesList(("Broken references", brokenReferences));
     }
 
-    readonly ScriptFileViewModel? _fileValidationScript;
+    private readonly ScriptFileViewModel? _fileValidationScript;
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private async Task RunFileValidationOnProject()
     {
-        if (_fileValidationScript is null || !File.Exists(_fileValidationScript.Path))
+        if (_fileValidationScript is null || !File.Exists(_fileValidationScript.Path) ||
+            _archiveManager.ProjectArchive is not FileSystemArchive projArchive)
         {
             return;
         }
@@ -859,12 +865,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         var code = await File.ReadAllTextAsync(_fileValidationScript.Path);
 
-        if (_archiveManager.ProjectArchive is not FileSystemArchive projArchive)
-        {
-            return;
-        }
-
-        foreach (var (hash, file) in projArchive.Files)
+        foreach (var (_, file) in projArchive.Files)
         {
             if (GetRedFile(file) is not { } fileViewModel)
             {
@@ -894,20 +895,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             _loggerService.Error($"Failed to open log file: {ex.Message}");
         }
     }
-
-    private async Task MoveFiles(List<string> filePaths, string destinationPath)
-    {
-        if (ActiveProject is null)
-        {
-            _loggerService.Warning("Can't do this without a project!");
-        }
-
-        foreach (var absolutePath in filePaths)
-        {
-            await ProjectResourceHelper.MoveAndRefactor(ActiveProject!, absolutePath, destinationPath, false);
-        }
-    }
-
     
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private async Task FindUnusedFiles()
@@ -938,7 +925,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
 
         _progressService.Completed();
-        (var deleteFiles, var relativeDestPath) =
+        var (deleteFiles, _) =
             Interactions.ShowDeleteOrMoveFilesList(("Delete or move un-used files?", potentiallyUnusedFiles, ActiveProject));
 
         if (deleteFiles.Count == 0)
@@ -993,7 +980,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [ObservableProperty]
     private int? _selectedGameCommandIdx;
 
-    public record GameLaunchCommand(string Name, EGameLaunchCommand Command);
     public enum EGameLaunchCommand
     {
         Launch,
@@ -1071,7 +1057,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         //};
     }
 
-    public async Task OpenSoundModdingView(SoundModdingViewModel? file)
+    private async Task OpenSoundModdingView(SoundModdingViewModel? file)
     {
         CloseModalCommand.Execute(null);
         if (file == null)
@@ -1101,8 +1087,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanNewFile))]
     private async Task NewFile(string? inputDir)
     {
-        var vm = _dialogViewModelFactory.NewFileViewModel();
-        if (vm != null)
+        if (_dialogViewModelFactory.NewFileViewModel() is NewFileViewModel vm)
         {
             vm.FileHandler = OpenFromNewFile;
             await SetActiveDialog(vm);
@@ -1123,9 +1108,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             Title = "Import .archive", Filter = "Archive files (*.archive)|*.archive"
         };
 
-        var result = await vm.OpenFile();
-
-        if (result is null)
+        if (await vm.OpenFile() is not string result)
         {
             return Task.CompletedTask;
         }
@@ -1171,11 +1154,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private static async Task OpenFromNewFileTask(NewFileViewModel file)
     {
-        if (file.SelectedFile is null)
-        {
-            return;
-        }
-        if (file.FullPath is null)
+        if (file.SelectedFile is null || file.FullPath is null)
         {
             return;
         }
@@ -1304,23 +1283,21 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     {
         for (var i = DockedViews.Count - 1; i >= 0; i--)
         {
-            if (DockedViews[i] is not IDocumentViewModel documentViewModel)
+            if (DockedViews[i] is not IDocumentViewModel documentViewModel || !File.Exists(documentViewModel.FilePath) ||
+                File.GetLastWriteTime(documentViewModel.FilePath) <= documentViewModel.LastWriteTime)
             {
                 continue;
             }
 
-            if (File.Exists(documentViewModel.FilePath) &&
-                File.GetLastWriteTime(documentViewModel.FilePath) > documentViewModel.LastWriteTime)
-            {
-                var result = Interactions.ShowConfirmation(($"The file {documentViewModel.FilePath} has been modified externally. Do you want to reload it?",
-                    "File Modified",
-                    WMessageBoxImage.Question,
-                    WMessageBoxButtons.YesNo));
+            var result = Interactions.ShowConfirmation((
+                $"The file {documentViewModel.FilePath} has been modified externally. Do you want to reload it?",
+                "File Modified",
+                WMessageBoxImage.Question,
+                WMessageBoxButtons.YesNo));
 
-                if (result == WMessageBoxResult.Yes)
-                {
-                    documentViewModel.Reload(true);
-                }
+            if (result == WMessageBoxResult.Yes)
+            {
+                documentViewModel.Reload(true);
             }
         }
     }
@@ -1328,44 +1305,42 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand]
     private async Task OpenRedFileAsync(FileEntry? file)
     {
-        if (file is not null)
+        if (file is null)
         {
-            _progressService.IsIndeterminate = true;
-            try
-            {
-                await using MemoryStream stream = new();
-                await file.ExtractAsync(stream);
-                if (OpenStream(stream, file.FileName, out var redfile))
-                {
-                    var fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(redfile, file.FileName, this, file.Archive is not FileSystemArchive);
-                    if (!DockedViews.Contains(fileViewModel))
-                    {
-                        DockedViews.Add(fileViewModel);
-                    }
+            return;
+        }
 
-                    ActiveDocument = fileViewModel;
-                    UpdateTitle();
+        _progressService.IsIndeterminate = true;
+        try
+        {
+            await using MemoryStream stream = new();
+            await file.ExtractAsync(stream);
+            if (OpenStream(stream, file.FileName, out var redfile))
+            {
+                var fileViewModel =
+                    _documentViewmodelFactory.RedDocumentViewModel(redfile, file.FileName, this, file.Archive is not FileSystemArchive);
+                if (!DockedViews.Contains(fileViewModel))
+                {
+                    DockedViews.Add(fileViewModel);
                 }
+
+                ActiveDocument = fileViewModel;
+                UpdateTitle();
             }
-            catch (Exception e)
-            {
-                _loggerService.Error(e.Message);
-            }
-            finally
-            {
-                _progressService.IsIndeterminate = false;
-            }
+        }
+        catch (Exception e)
+        {
+            _loggerService.Error(e.Message);
+        }
+        finally
+        {
+            _progressService.IsIndeterminate = false;
         }
     }
 
-    public bool OpenFileFromProject(ResourcePath path)
+    private bool OpenFileFromProject(ResourcePath path)
     {
-        if (path == 0)
-        {
-            return false;
-        }
-
-        if (_archiveManager.ProjectArchive is not FileSystemArchive projArchive)
+        if (path == 0 || _archiveManager.ProjectArchive is not FileSystemArchive projArchive)
         {
             return false;
         }
@@ -1433,7 +1408,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         OpenFileFromHash(path);
     }
 
-    public void OpenFileFromHash(ResourcePath hash)
+    private void OpenFileFromHash(ResourcePath hash)
     {
         if (hash == 0)
         {
@@ -1524,12 +1499,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         DockedViews.Add(vm);
     }
 
-    public string CyberpunkBlenderAddonLink = "https://github.com/WolvenKit/Cyberpunk-Blender-add-on";
-    public string WolvenKitSetupLink = "https://wiki.redmodding.org/wolvenkit/getting-started/setup";
-    public string WolvenKitCreatingAModLink = "https://wiki.redmodding.org/wolvenkit/getting-started/creating-a-mod";
-    public string DiscordInvitationLink = "https://discord.gg/Epkq79kd96";
-    public string AboutWolvenKitLink = "https://wiki.redmodding.org/wolvenkit/about";
-
 
     [RelayCommand]
     private void OpenExternalLink(string link)
@@ -1549,26 +1518,25 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             return result;
         }
-        else
+
+        var newVm = typeof(T) switch
         {
-            var newVm = typeof(T) switch
-            {
-                Type t when t == typeof(LogViewModel) => (T)(_paneViewModelFactory.LogViewModel() as IDockElement),
-                Type t when t == typeof(ProjectExplorerViewModel) => (T)(_paneViewModelFactory.ProjectExplorerViewModel(this) as IDockElement),
-                Type t when t == typeof(PropertiesViewModel) => (T)(_paneViewModelFactory.PropertiesViewModel() as IDockElement),
-                Type t when t == typeof(AssetBrowserViewModel) => (T)(_paneViewModelFactory.AssetBrowserViewModel(this) as IDockElement),
-                Type t when t == typeof(TweakBrowserViewModel) => (T)(_paneViewModelFactory.TweakBrowserViewModel(this) as IDockElement),
-                Type t when t == typeof(LocKeyBrowserViewModel) => (T)(_paneViewModelFactory.LocKeyBrowserViewModel() as IDockElement),
+            Type t when t == typeof(LogViewModel) => (T)(_paneViewModelFactory.LogViewModel() as IDockElement),
+            Type t when t == typeof(ProjectExplorerViewModel) => (T)(_paneViewModelFactory.ProjectExplorerViewModel(this) as IDockElement),
+            Type t when t == typeof(PropertiesViewModel) => (T)(_paneViewModelFactory.PropertiesViewModel() as IDockElement),
+            Type t when t == typeof(AssetBrowserViewModel) => (T)(_paneViewModelFactory.AssetBrowserViewModel(this) as IDockElement),
+            Type t when t == typeof(TweakBrowserViewModel) => (T)(_paneViewModelFactory.TweakBrowserViewModel(this) as IDockElement),
+            Type t when t == typeof(LocKeyBrowserViewModel) => (T)(_paneViewModelFactory.LocKeyBrowserViewModel() as IDockElement),
 
-                Type t when t == typeof(ImportViewModel) => (T)(_paneViewModelFactory.LogViewModel() as IDockElement),
-                Type t when t == typeof(ExportViewModel) => (T)(_paneViewModelFactory.LogViewModel() as IDockElement),
+            Type t when t == typeof(ImportViewModel) => (T)(_paneViewModelFactory.LogViewModel() as IDockElement),
+            Type t when t == typeof(ExportViewModel) => (T)(_paneViewModelFactory.LogViewModel() as IDockElement),
 
-                _ => throw new NotImplementedException(),
-            };
+            _ => throw new NotImplementedException(),
+        };
 
-            DockedViews.Add(newVm);
-            return newVm;
-        }
+        DockedViews.Add(newVm);
+        return newVm;
+      
     }
 
 
@@ -1717,8 +1685,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         return (semVersion, path);
     }
     */
-    
-    public void ShowHomePageSync(EHomePage page = EHomePage.Welcome)
+
+    private void ShowHomePageSync(EHomePage page = EHomePage.Welcome)
     {
         var homePage = _pageViewModelFactory.HomePageViewModel(this);
         homePage.SelectedIndex = (int)page;
@@ -1886,7 +1854,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     /// </summary>
     /// <param name="fileToSave"></param>
     /// <param name="saveAsDialogRequested"></param>
-    public void Save(IDocumentViewModel fileToSave, bool saveAsDialogRequested = false)
+    private void Save(IDocumentViewModel fileToSave, bool saveAsDialogRequested = false)
     {
         if (_projectManager.ActiveProject is null)
         {
@@ -1904,12 +1872,12 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             {
                 RedDocumentViewModel red =>
                     saveAsDialogRequested ||
-                    red.FilePath == null ||
+                    string.IsNullOrEmpty(red.FilePath) ||
                     !Directory.Exists(Path.GetDirectoryName(Path.Combine(_projectManager.ActiveProject!.ModDirectory, red.RelativePath)))
                 ,
                 WScriptDocumentViewModel wScript =>
                     saveAsDialogRequested ||
-                    wScript.FilePath == null ||
+                    string.IsNullOrEmpty(wScript.FilePath) ||
                     !Directory.Exists(ISettingsManager.GetWScriptDir()),
                 _ => false,
             };
@@ -2075,8 +2043,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
             DispatcherHelper.RunOnMainThread(async () =>
             {
-                var document = await Open(fullpath, type);
-                if (document is null)
+                if (await Open(fullpath, type) is not IDocumentViewModel document)
                 {
                     return;
                 }
