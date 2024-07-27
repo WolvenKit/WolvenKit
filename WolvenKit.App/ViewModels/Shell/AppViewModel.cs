@@ -398,6 +398,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(PackInstallModCommand))]
     [NotifyCanExecuteChangedFor(nameof(PackInstallRunCommand))]
     [NotifyCanExecuteChangedFor(nameof(PackInstallRedModRunCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ScanForBrokenReferencePathsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(FindUnusedFilesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ImportFromEntitySpawnerCommand))]
+    [NotifyCanExecuteChangedFor(nameof(RunFileValidationOnProjectCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CheckForScriptUpdatesCommand))]
     private EStatus _taskStatus;
 
     private bool CanStartTask() => TaskStatus == EStatus.Ready && ActiveProject is not null;
