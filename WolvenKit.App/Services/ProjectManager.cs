@@ -72,33 +72,24 @@ public partial class ProjectManager : ObservableObject, IProjectManager
     {
         await ReadFromLocationAsync(location).ContinueWith(x =>
         {
-            if (x.IsCompletedSuccessfully)
+            if (x is not { IsCompletedSuccessfully: true, Result: not null })
             {
-                if (x.Result == null)
-                {
+                return;
+            }
 
-                }
-                else
-                {
-                    ActiveProject = x.Result;
-                    _archiveManager.ProjectArchive = x.Result.AsArchive();
-                    IsProjectLoaded = true;
+            ActiveProject = x.Result;
+            _archiveManager.ProjectArchive = x.Result.AsArchive();
+            IsProjectLoaded = true;
 
-                    var recentItem = _recentlyUsedItemsService.Items.Items.FirstOrDefault(item => item.Name == location);
-                    if (recentItem == null)
-                    {
-                        recentItem = new RecentlyUsedItemModel(location, DateTime.Now, DateTime.Now);
-                        _recentlyUsedItemsService.AddItem(recentItem);
-                    }
-                    else
-                    {
-                        recentItem.LastOpened = DateTime.Now;
-                    }
-                }
+            var recentItem = _recentlyUsedItemsService.Items.Items.FirstOrDefault(item => item.Name == location);
+            if (recentItem == null)
+            {
+                recentItem = new RecentlyUsedItemModel(location, DateTime.Now, DateTime.Now);
+                _recentlyUsedItemsService.AddItem(recentItem);
             }
             else
             {
-
+                recentItem.LastOpened = DateTime.Now;
             }
         });
 

@@ -68,7 +68,8 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(RefactoringCheckboxDefaultValue),
             nameof(LastLaunchProfile),
             nameof(ShowRedmodInRibbon),
-            nameof(UseValidatingEditor)
+            nameof(UseValidatingEditor),
+            nameof(ReopenLastProject)
             )
           .Subscribe(_ =>
           {
@@ -276,6 +277,12 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
         GroupName = "Interface")]
     [ObservableProperty]
     private bool _useValidatingEditor;
+
+    [Display(Name = "Open last project on launch?",
+        Description = "Will re-open the last project",
+        GroupName = "Interface")]
+    [ObservableProperty]
+    private bool _reopenLastProject;
 
     [Display(Name = "Exclude archives from scan by name (comma separated)",
         Description = "Exclude archives from scan if you know that they'll lead to exceptions (only the base name)",

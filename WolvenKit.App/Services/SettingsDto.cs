@@ -59,6 +59,7 @@ public class SettingsDto : ISettingsDto
         LastLaunchProfile = settings.LastLaunchProfile;
         ShowRedmodInRibbon = settings.ShowRedmodInRibbon;
         UseValidatingEditor = settings.UseValidatingEditor;
+        ReopenLastProject = settings.ReopenLastProject;
         ArchiveNamesExcludeFromScan = settings.ArchiveNamesExcludeFromScan;
 
         MigrateSettings(settings.SettingsVersion);
@@ -97,6 +98,7 @@ public class SettingsDto : ISettingsDto
     public string? LastLaunchProfile { get; set; }
     public bool ShowRedmodInRibbon { get; set; }
     public bool UseValidatingEditor { get; set; } = true;
+    public bool ReopenLastProject { get; set; }
     public int PinnedOrder { get; set; }
     public int RecentOrder { get; set; }
     public bool ShowGraphEditorNodeProperties { get; set; } = true;
