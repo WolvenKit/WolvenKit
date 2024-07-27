@@ -301,40 +301,60 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private bool OpenFileFromLaunchArgs()
     {
-        var args = Environment.GetCommandLineArgs();
+        var args = Environment.GetCommandLineArgs().Skip(1).ToArray();
 
-        if (args.Length != 2)
+        var ret = false;
+        string? projectPathToOpen = null;
+
+        // Will be overwritten if the launch args contain a project path
+        if (args.Contains("-reopenProject") && _settingsManager.LastUsedProjectPath is string projectPath)
         {
-            return false;
+            projectPathToOpen = projectPath;
         }
 
-        var filePath = args[1];
+        List<string> invalidFilePaths = new();
 
-        if (!File.Exists(filePath))
+        foreach (var filePath in args.Where(f => !string.IsNullOrEmpty(Path.GetExtension(f))))
         {
-            var message = $"Sorry, '{filePath}' could not be found";
-            _loggerService.Error(message);
-            MessageBox.Show(message);
-            return false;
+            if (!File.Exists(filePath))
+            {
+                invalidFilePaths.Add($"  not found:     {filePath}");
+                continue;
+            }
+
+            if (Path.GetExtension(filePath) == Cp77Project.ProjectFileExtension)
+            {
+                projectPathToOpen = filePath;
+            }
+
+            // open files
+            if (Enum.TryParse<ERedExtension>(Path.GetExtension(filePath)[1..], out var _))
+            {
+                _ = RequestFileOpen(filePath); // TODO
+                ret = true;
+            }
+            else
+            {
+                invalidFilePaths.Add($"  not supported: {filePath}");
+            }
+        }
+        
+        if (projectPathToOpen is not null)
+        {
+            _ = OpenProjectAsync(projectPathToOpen);
+            ret = true;
         }
 
-        if (Path.GetExtension(filePath) == ".cpmodproj")
+        if (invalidFilePaths.Count <= 0)
         {
-            _ = OpenProjectAsync(filePath);
-            return true;
+            return ret;
         }
 
-        // open files
-        if (Enum.TryParse<ERedExtension>(Path.GetExtension(filePath)[1..], out var _))
-        {
-            _ = RequestFileOpen(filePath); // TODO
-            return true;
-        }
+        var message = $"Not all file paths from the command line could be processed:\n\t{string.Join("\n\t", invalidFilePaths)}";
+        _loggerService.Error(message);
+        MessageBox.Show(message);
 
-        var message2 = $"Sorry, {Path.GetExtension(filePath)} files aren't supported by WolvenKit";
-        _loggerService.Error(message2);
-        MessageBox.Show(message2);
-        return false;
+        return ret;
     }
 
     private void ShowFirstTimeSetup()
@@ -569,16 +589,18 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand]
     private async Task OpenProjectAsync(string location)
     {
-        // switch from one active project to another
-
-        if (_projectManager.ActiveProject is not null && !string.IsNullOrEmpty(location))
+        if (string.IsNullOrEmpty(location))
         {
-            if (_projectManager.ActiveProject.Location == location)
-            {
-                return;
-            }
+            return;
         }
 
+        if (_projectManager.ActiveProject?.Location == location)
+        {
+            CloseModal();
+            return;
+        }
+
+        // switch from one active project to another
         try
         {
 
@@ -630,27 +652,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             }
 
             CloseModalCommand.SafeExecute(null);
-
-            var p = await _projectManager.LoadAsync(location);
-            if (p is null)
-            {
-                return;
-            }
-            ActiveProject = p;
-
-            // If the assets can't be found, stop here and notify the user in the log
-            if (!File.Exists(_settingsManager.CP77ExecutablePath))
-            {
-                UpdateTitle();
-                _loggerService.Warning($"Cyberpunk 2077 executable path is not set. Asset browser disabled.");
-                return;
-            }
-
-            await _gameControllerFactory.GetController().HandleStartup().ContinueWith(_ =>
-            {
-                UpdateTitle();
-                _notificationService.Success($"Project {Path.GetFileNameWithoutExtension(location)} loaded!");
-            }, TaskContinuationOptions.OnlyOnRanToCompletion);
+            await LoadProjectFromPath(location);
         }
         catch (Exception e)
         {
@@ -658,6 +660,34 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             //Log.Error(ex, "Failed to open file");
             _loggerService.Error(e);
         }
+    }
+
+    public event EventHandler? OnInitialProjectLoaded;
+
+    private async Task LoadProjectFromPath(string location)
+    {
+        var p = await _projectManager.LoadAsync(location);
+        if (p is null)
+        {
+            return;
+        }
+
+        ActiveProject = p;
+
+        // If the assets can't be found, stop here and notify the user in the log
+        if (!File.Exists(_settingsManager.CP77ExecutablePath))
+        {
+            UpdateTitle();
+            _loggerService.Warning($"Cyberpunk 2077 executable path is not set. Asset browser disabled.");
+            return;
+        }
+
+        await _gameControllerFactory.GetController().HandleStartup().ContinueWith(_ =>
+        {
+            UpdateTitle();
+            _notificationService.Success($"Project {Path.GetFileNameWithoutExtension(location)} loaded!");
+            OnInitialProjectLoaded?.Invoke(this, EventArgs.Empty);
+        }, TaskContinuationOptions.OnlyOnRanToCompletion);
     }
 
     [RelayCommand]
@@ -687,7 +717,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             var newProjectName = project.ProjectName.NotNull().Trim();
             var newModName = project.ModName.NotNull().Trim();
-            var projectLocation = Path.Combine(project.ProjectPath.NotNull(), newProjectName, newProjectName + ".cpmodproj");
+            var projectLocation = Path.Combine(project.ProjectPath.NotNull(), newProjectName, newProjectName,
+                Cp77Project.ProjectFileExtension);
             Cp77Project np = new(projectLocation, newProjectName, newModName)
             {
                 Author = project.Author,
@@ -701,20 +732,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             await _projectManager.SaveAsync();
             np.CreateDefaultDirectories();
 
-            await _projectManager.LoadAsync(projectLocation);
-
-            DispatcherHelper.RunOnMainThread(() => ActiveProject = _projectManager.ActiveProject);
-
-            // If the assets can't be found, stop here and notify the user in the log
-            if (!File.Exists(_settingsManager.CP77ExecutablePath))
-            {
-                _loggerService.Warning($"Cyberpunk 2077 executable path is not set. Asset browser disabled.");
-            }
-            else
-            {
-                await _gameControllerFactory.GetController().HandleStartup();
-                _notificationService.Success("Project " + project.ProjectName + " loaded!");
-            }
+            await LoadProjectFromPath(projectLocation);
         }
         catch (Exception ex)
         {
@@ -822,7 +840,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private async Task ShowSettings() => await ShowHomePage(EHomePage.Settings);
 
     private bool CanShowProjectActions() =>
-        !IsDialogShown && ActiveProject is not null && Status != EAppStatus.Busy && Status is (EAppStatus.Loaded or EAppStatus.Ready);
+        !IsDialogShown && ActiveProject is not null && Status != EAppStatus.Busy && Status is EAppStatus.Ready;
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private async Task ScanForBrokenReferencePaths()
@@ -1559,16 +1577,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand]
     private void CloseModal()
     {
-        if (IsDialogShown)
-        {
-            ShouldDialogShow = false;
-        }
-
-        if (IsOverlayShown)
-        {
-            ShouldOverlayShow = false;
-        }
+        CloseDialog();
+        CloseOverlay();
     }
+
+    
     public void FinishedClosingModal()
     {
         if (!ShouldDialogShow)
