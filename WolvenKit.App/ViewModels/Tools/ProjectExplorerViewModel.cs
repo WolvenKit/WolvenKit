@@ -113,6 +113,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         SelectedTabIndex = ActiveProject?.ActiveTab ?? 0;
 
+        _mainViewModel.OnInitialProjectLoaded += (_, _) => RefreshProjectData();
+
         if (Locator.Current.GetService<AppIdleStateService>() is not AppIdleStateService svc)
         {
             return;
@@ -120,7 +122,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         svc.ThreadIdleTenSeconds += (_, _) => SaveProjectExplorerExpansionStateIfDirty();
         svc.ThreadIdleTenSeconds += (_, _) => SaveProjectExplorerTabIfDirty();
-
     }
 
 
@@ -145,6 +146,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
+        RefreshProjectData();
+    }
+
+    // When opening projects from launch args, change detection for dependent objects isn't working yet. 
+    private void RefreshProjectData()
+    {
         // Save changes in active project
         if (ActiveProject != null)
         {

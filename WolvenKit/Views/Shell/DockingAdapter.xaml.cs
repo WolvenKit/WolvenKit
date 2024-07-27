@@ -51,7 +51,12 @@ namespace WolvenKit.Views.Shell
             InitializeComponent();
             G_Dock = this;
 
-            _viewModel = DataContext as AppViewModel;
+            _viewModel = DataContext as AppViewModel ?? Locator.Current.GetService<AppViewModel>();
+
+            if (_viewModel is not null)
+            {
+                _viewModel.OnInitialProjectLoaded += (_, _) => LoadLayoutFromProject();
+            }
         }
 
         public static DockingAdapter G_Dock;
@@ -154,7 +159,6 @@ namespace WolvenKit.Views.Shell
 
                 File.Delete(projectLayout);
             }
-            
         }
 
         public void LoadDefaultLayout()

@@ -46,6 +46,7 @@ public static class Interactions
     public static Func<IEnumerable<string>, bool> DeleteFiles { get; set; } = _ => throw new NotImplementedException();
 
     public static Func<string, string> Rename { get; set; } = _ => throw new NotImplementedException();
+
     public static Func<string, Tuple<string, bool>> RenameAndRefactor { get; set; } = _ => throw new NotImplementedException();
 
     public static Func<(string, List<string>, Cp77Project), (List<string>, string? moveToPath)> ShowDeleteOrMoveFilesList { get; set; } =
