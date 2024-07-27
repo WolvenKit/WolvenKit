@@ -60,6 +60,7 @@ public abstract partial class DocumentViewModel : PaneViewModel, IDocumentViewMo
     [RelayCommand]
     public abstract void SaveAs(object parameter);
 
-
     public abstract bool Reload(bool force);
+
+
 }

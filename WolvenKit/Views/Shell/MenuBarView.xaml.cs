@@ -90,6 +90,10 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                     view => view.ToolbarProjectRunFileValidationButton)
                 .DisposeWith(disposables);
             this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.ImportFromEntitySpawnerCommand,
+                    view => view.ToolbarImportEntitySpawnerButton)
+                .DisposeWith(disposables);
+            this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.OpenLogsCommand,
                     view => view.ToolbarOpenLogsButton)
                 .DisposeWith(disposables);
