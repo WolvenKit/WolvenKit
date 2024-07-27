@@ -43,7 +43,7 @@ public static class TypeHelper
         new TypeEntry("Gradient", "Reference to gradient file", typeof(CResourceReference<CGradient>)),
         new TypeEntry("Vector", "", typeof(Vector4)),
         new TypeEntry("Cube", "Reference to cube xbm", typeof(CResourceReference<ITexture>)),
-        new TypeEntry("CpuNameU64", "", typeof(CName)),
+        new TypeEntry("CpuNameU64", "For all params in dynamic materials' @context", typeof(CName)),
         new TypeEntry("FoliageParameters", "Reference to fp file", typeof(CResourceReference<CFoliageProfile>)),
         new TypeEntry("HairParameters", "Reference to hp file", typeof(CResourceReference<CHairProfile>)),
         new TypeEntry("SkinParameters", "Reference to sp file", typeof(CResourceReference<CSkinProfile>)),
