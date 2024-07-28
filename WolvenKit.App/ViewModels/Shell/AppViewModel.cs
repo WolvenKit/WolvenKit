@@ -1314,6 +1314,36 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         return;
     }
 
+    private bool CanAddAxlFiles() => ActiveProject is not null && !IsDialogShown;
+
+    [RelayCommand(CanExecute = nameof(CanAddAxlFiles))]
+    private async Task<Task> AddAxlControlFiles()
+    {
+        _watcherService.Suspend();
+
+        var vm = new AxlControlFilesDialogViewModel(_projectManager, _loggerService);
+        await SetActiveDialog(vm);
+
+        var result = vm.CreateControlFiles();
+        _watcherService.Resume();
+
+        return Task.CompletedTask;
+    }
+
+    [RelayCommand(CanExecute = nameof(CanAddAxlFiles))]
+    private async Task<Task> AddAxlItemFiles()
+    {
+        _watcherService.Suspend();
+
+        var vm = new AxlItemFilesDialogViewModel(_projectManager, _loggerService);
+        await SetActiveDialog(vm);
+
+        var result = vm.CreateItemFiles();
+        _watcherService.Resume();
+
+        return Task.CompletedTask;
+    }
+
     [RelayCommand(CanExecute = nameof(CanAddArchiveXlFiles))]
     private void AddArchiveXlItemFiles() => AddArchiveXlFiles(true);
 
