@@ -297,7 +297,7 @@
                             Style="{StaticResource ExplanationStyle}"
                             Grid.Row="3"
                             Grid.Column="1"
-                            Text="Select a specific item type (supports filtering)" />
+                            Text="Select a specific item type (e.g. if you need specific footstep sounds)" />
 
 
                         <!-- EqEx Type -->
