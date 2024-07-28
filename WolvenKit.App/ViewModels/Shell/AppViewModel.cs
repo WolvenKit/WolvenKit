@@ -604,9 +604,20 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand]
     private async Task OpenProjectAsync(string location)
     {
+        // "Open Project" button was pushed
         if (string.IsNullOrEmpty(location))
         {
-            return;
+            var dlg = new OpenFileDialog
+            {
+                Multiselect = false, Title = "Locate the WolvenKit project", Filter = "Cyberpunk 2077 Project|*.cpmodproj"
+            };
+
+            if (dlg.ShowDialog() != true || dlg.FileName is not string result || string.IsNullOrEmpty(result))
+            {
+                return;
+            }
+
+            location = result;
         }
 
         if (_projectManager.ActiveProject?.Location == location)
