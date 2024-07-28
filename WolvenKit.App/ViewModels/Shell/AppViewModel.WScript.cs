@@ -63,9 +63,15 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private async Task RunFileValidationOnProject()
     {
-        if (_fileValidationScript is null || !File.Exists(_fileValidationScript.Path) ||
-            _archiveManager.ProjectArchive is not FileSystemArchive projArchive)
+        if (_fileValidationScript is null || !File.Exists(_fileValidationScript.Path))
         {
+            _loggerService.Error("You need to update your Wolvenkit Scripts to use this. Please restart the application.");
+            return;
+        }
+
+        if (_archiveManager.ProjectArchive is not FileSystemArchive projArchive)
+        {
+            _loggerService.Error("You need an active project to use this.");
             return;
         }
 
@@ -133,8 +139,15 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanImportEntitySpawner))]
     private async Task ImportFromEntitySpawner()
     {
-        if (_entSpawnerImportScript is null || !File.Exists(_entSpawnerImportScript.Path) || ActiveProject is null)
+        if (_entSpawnerImportScript is null || !File.Exists(_entSpawnerImportScript.Path))
         {
+            _loggerService.Error("You need to update your Wolvenkit Scripts to use this. Please restart the application.");
+            return;
+        }
+
+        if (_archiveManager.ProjectArchive is not FileSystemArchive projArchive)
+        {
+            _loggerService.Error("You need an active project to use this.");
             return;
         }
 
@@ -160,7 +173,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         }
 
         // Move it to the project - wscript can only deal with relative paths
-        var destPath = Path.Combine(ActiveProject.RawDirectory, Path.GetFileName(filePath));
+        var destPath = Path.Combine(ActiveProject!.RawDirectory, Path.GetFileName(filePath));
 
         if (File.Exists(destPath))
         {
@@ -187,7 +200,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         ActiveDocument = null;
         try
         {
-            File.Delete(filePath);
+            File.Delete(destPath);
         }
         catch
         {
