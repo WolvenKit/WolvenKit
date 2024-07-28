@@ -24,7 +24,10 @@ public partial class NewFileViewModel : DialogViewModel
     private readonly IProjectManager _projectManager;
     private readonly ISettingsManager _settingsManager;
 
-    public NewFileViewModel(IProjectManager projectManager, ISettingsManager settingsManager)
+    public NewFileViewModel(
+        IProjectManager projectManager,
+        ISettingsManager settingsManager
+    )
     {
         _projectManager = projectManager;
         _settingsManager = settingsManager;

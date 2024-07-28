@@ -8,12 +8,16 @@
     xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
     xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    xmlns:local="clr-namespace:WolvenKit.Views.Editors">
+    xmlns:local="clr-namespace:WolvenKit.Views.Editors"
+    xmlns:hc="https://handyorg.github.io/handycontrol">
 
     <ResourceDictionary.MergedDictionaries>
         <sfskin:ResourceDictionaryProvider DictionaryName="Common" ThemeName="MaterialDark" />
         <sfskin:ResourceDictionaryProvider DictionaryName="Brushes" ThemeName="MaterialDark" />
         <ResourceDictionary Source="/Syncfusion.Themes.MaterialDark.WPF;component/DockingManager/DockingManager.xaml" />
+        <ResourceDictionary Source="/Syncfusion.Themes.MaterialDark.WPF;component/comboboxadv/comboboxadv.xaml" />
+        
+        
     </ResourceDictionary.MergedDictionaries>
 
     <SolidColorBrush x:Key="CustomSliderForegroundBrush" Color="#FF1E91EA" />
