@@ -15,6 +15,12 @@ public static class LogCodeHelper
 
         // 2: Types stuff
         s_mapping.Add(0x2000, "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/error-codes#id-0x2000-type-not-supported-8192");
+        s_mapping.Add(0x2001,
+            "https://wiki.redmodding.org/cyberpunk-2077-modding/modding-guides/textures-and-luts/images-importing-editing-exporting#invalid-color-space");
+        s_mapping.Add(0x2002,
+            "https://wiki.redmodding.org/cyberpunk-2077-modding/modding-guides/textures-and-luts/images-importing-editing-exporting#must-have-dimensions-in-powers-of-2");
+        s_mapping.Add(0x2003,
+            "https://wiki.redmodding.org/cyberpunk-2077-modding/modding-guides/textures-and-luts/images-importing-editing-exporting#all-images-must-be-the-same-size");
 
         // 3: modKit stuff
 
