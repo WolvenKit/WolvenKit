@@ -25,6 +25,7 @@ namespace WolvenKit.Common
         ArchiveXl,
         WScript,
         RedScript,
+        Other,
         CETLua
     }
 

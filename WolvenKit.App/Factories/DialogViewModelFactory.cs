@@ -5,23 +5,13 @@ using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.App.Factories;
 
-public class DialogViewModelFactory : IDialogViewModelFactory
+public class DialogViewModelFactory(
+    IProjectManager projectManager,
+    ILoggerService loggerService,
+    INotificationService notificationService,
+    ISettingsManager settingsManager
+) : IDialogViewModelFactory
 {
-    private readonly ILoggerService _loggerService;
-    private readonly IProjectManager _projectManager;
-    private readonly INotificationService _notificationService;
-
-    public DialogViewModelFactory(
-        IProjectManager projectManager,
-        ILoggerService loggerService,
-        INotificationService notificationService
-        )
-    {
-        _projectManager = projectManager;
-        _loggerService = loggerService;
-        _notificationService = notificationService;
-
-    }
-    public SoundModdingViewModel SoundModdingViewModel() => new(_notificationService, _loggerService, _projectManager);
-    public NewFileViewModel NewFileViewModel() => new(_projectManager);
+    public SoundModdingViewModel SoundModdingViewModel() => new(notificationService, loggerService, projectManager);
+    public NewFileViewModel NewFileViewModel() => new(projectManager, settingsManager);
 }
