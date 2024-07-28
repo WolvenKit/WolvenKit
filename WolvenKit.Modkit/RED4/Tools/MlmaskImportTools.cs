@@ -5,6 +5,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
+using WolvenKit.Common.Exceptions;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.CR2W;
@@ -56,6 +58,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 textures.Add(white);
             }
 
+            (uint imageDimensionX, uint imageDimensionY) = (0, 0);
             foreach (var f in files)
             {
                 if (!File.Exists(f))
@@ -63,7 +66,16 @@ namespace WolvenKit.Modkit.RED4.MLMask
                     throw new FileNotFoundException($"Line{{lineIdx}}: \"{f}\" Make sure the file path is valid and exists (paths are specified line by line in ascending layer order in masklist)");
                 }
 
-                var image = RedImage.LoadFromFile(f);
+                RedImage? image = null;
+                try
+                {
+                    image = RedImage.LoadFromFile(f);
+                }
+                catch (WolvenKitException e)
+                {
+                    throw new WolvenKitException(0x2001, $"{e.Message} (.mlmask images need to be in color space black and white)");
+                }
+
                 if (image == null)
                 {
                     _logger.Error($"\"{f}\" could not be loaded!");
@@ -76,48 +88,35 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 }
 
                 // Bitset arithmetic to check that both width and height is a power of 2
-                if (
-                        ((image.Metadata.Width - 1) & image.Metadata.Width) == 0 &&
-                        ((image.Metadata.Height - 1) & image.Metadata.Height) == 0
+                if (!(((image.Metadata.Width - 1) & image.Metadata.Width) == 0 &&
+                      ((image.Metadata.Height - 1) & image.Metadata.Height) == 0)
                    )
                 {
-                    //if (header.dwMipMapCount > 1)
-                    //    throw new Exception($"Texture {f}: Mipmaps={header.dwMipMapCount}, mimap count must be equal to 1");
-
-                    //if ((ms.Length - headerLength) != (header.dwWidth * header.dwHeight))
-                    //    throw new Exception("Not R8_UNORM 8bpp image format or more than 1mipmaps or rowstride is not equal to width or its a dx10 dds(unsupported)");
-
-                    using var ms = new MemoryStream(image.SaveToDDSMemory());
-                    using var br = new BinaryReader(ms);
-                    ms.Seek(s_headerLength, SeekOrigin.Begin);
-                    var bytes = br.ReadBytes(image.Metadata.Width * image.Metadata.Height);
-
-                    //var whiteCheck = true;
-                    //for (var i = 0; i < bytes.Length; i++)
-                    //{
-                    //    if (bytes[i] != 255)
-                    //    {
-                    //        whiteCheck = false;
-                    //        break;
-                    //    }
-                    //}
-                    //if (whiteCheck)
-                    //{
-                    //    throw new Exception("No need to provide the 1st/any blank white mask layer, tool will generate 1st blank white layer automatically");
-                    //}
-
-                    var tex = new RawTexContainer
-                    {
-                        Width = (uint)image.Metadata.Width,
-                        Height = (uint)image.Metadata.Height,
-                        Pixels = bytes
-                    };
-                    textures.Add(tex);
+                    throw new WolvenKitException(0x2002,
+                        $"Texture {f}: width={image.Metadata.Width},height={image.Metadata.Height} must have dimensions in powers of 2");
                 }
-                else
+
+                using var ms = new MemoryStream(image.SaveToDDSMemory());
+                using var br = new BinaryReader(ms);
+                ms.Seek(s_headerLength, SeekOrigin.Begin);
+                var bytes = br.ReadBytes(image.Metadata.Width * image.Metadata.Height);
+
+                // #1865: check the the image dimensions are the same for all pngs
+                var imageWidth = (uint)image.Metadata.Width;
+                var imageHeight = (uint)image.Metadata.Height;
+
+                if (imageDimensionX == 0)
                 {
-                    throw new Exception($"Texture {f}: width={image.Metadata.Width},height={image.Metadata.Height} must have dimensions in powers of 2");
+                    imageDimensionX = imageWidth;
+                    imageDimensionY = imageHeight;
                 }
+                else if (imageDimensionX != imageWidth || imageDimensionY != imageHeight)
+                {
+                    throw new WolvenKitException(0x2003, $"Texture {f} should be of size {imageDimensionX}x{imageDimensionY}");
+                }
+
+                var tex = new RawTexContainer { Width = imageWidth, Height = imageHeight, Pixels = bytes };
+                textures.Add(tex);
             }
             _mlmask.Layers = textures.ToArray();
             #endregion

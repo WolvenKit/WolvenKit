@@ -7,6 +7,7 @@ using SharpDX.Direct3D11;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
@@ -146,16 +147,19 @@ public partial class RedImage : IDisposable
             }
         }
 
-        if (s_device.DeviceRemovedReason != 0)
+        if (s_device.DeviceRemovedReason == 0)
         {
-            LoggerService?.Warning($"Error while getting GPU instance. Reason: {s_device.DeviceRemovedReason}");
-            LoggerService?.Warning("Fallback to software compression. Please try restarting WolvenKit to fix this issue.");
-            s_device.Dispose();
-            s_device = null;
-
-            // Don't try again until WolvenKit is restarted
-            s_deviceNotSupported = true;
+            return s_device;
         }
+
+        LoggerService?.Warning($"Error while getting GPU instance. Reason: {s_device.DeviceRemovedReason}");
+        LoggerService?.Warning("Falling back to software compression.");
+        LoggerService?.Warning("To fix this, restart WolvenKit. If that doesn't help, update or clean install your GPU driver.");
+        s_device.Dispose();
+        s_device = null;
+
+        // Don't try again until WolvenKit is restarted
+        s_deviceNotSupported = true;
 
         return s_device;
     }
@@ -166,12 +170,7 @@ public partial class RedImage : IDisposable
     {
         var fileName = Path.GetFileName(filePath);
         var extension = Path.GetExtension(filePath);
-        if (string.IsNullOrEmpty(extension))
-        {
-            LoggerService?.Error($"[RedImage] \"{fileName}\" has no extension!");
-            return null;
-        }
-
+        
         try
         {
             switch (extension.ToUpper())
@@ -190,17 +189,19 @@ public partial class RedImage : IDisposable
                     return LoadFromDDSFile(filePath);
                 case ".CUBE":
                     return CreateFromLutCube(File.ReadAllLines(filePath));
+                case "":
+                    LoggerService?.Error($"[RedImage] \"{fileName}\" has no extension!");
+                    return null;
                 default:
                 {
-                    LoggerService?.Error($"[RedImage] \"{fileName}\" has an unsupported extension!");
+                    LoggerService?.Error($"[RedImage] Extension {extension} from \"{fileName}\" is not supported!");
                     return null;
                 }
             }
         }
         catch (Exception)
         {
-            LoggerService?.Error($"[RedImage] \"{fileName}\" contains invalid data!");
-            return null;
+            throw new WolvenKitException(0x2001, $"[RedImage] \"{fileName}\" contains invalid data or has an invalid color space!");
         }
     }
 
