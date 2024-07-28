@@ -14,7 +14,6 @@
 				<Description>A blank tweak file</Description>
 				<Extension>yaml</Extension>
 				<Type>TweakXl</Type>
-				<Template></Template>
 			</AddFileModel>
 		</Files>
 	</FileCategoryModel>
@@ -26,10 +25,32 @@
 				<Description>A blank .xl file</Description>
 				<Extension>archive.xl</Extension>
 				<Type>ArchiveXl</Type>
-				<Template></Template>
+			</AddFileModel>
+			<AddFileModel>
+				  <Name>ArchiveXL control files</Name>
+				  <Description>.xl, .csv, .yaml</Description>
+				  <Extension>control.xl</Extension>
+				  <Type>ArchiveXl</Type>
+			</AddFileModel>
+			<AddFileModel>
+				<Name>All necessary files for a new equipment item</Name>
+				<Description>root.ent, mesh.ent, .app, .mesh and texture folder</Description>
+				<Extension>item.xl</Extension>
+				<Type>ArchiveXl</Type>
 			</AddFileModel>
 		</Files>
 	</FileCategoryModel>
+	  <FileCategoryModel>
+		  <Name>Other</Name>
+		  <Files>
+			  <AddFileModel>
+				  <Name>Inkatlas with texture</Name>
+				  <Description>.inkatlas and .xbm</Description>
+				  <Extension>.inkatlas.xbm</Extension>
+				  <Type>Other</Type>
+			  </AddFileModel>
+		  </Files>
+	  </FileCategoryModel>
 	<FileCategoryModel>
 		<Name>Scripts</Name>
 		<Files>
@@ -38,14 +59,12 @@
 				<Description>A blank .reds file</Description>
 				<Extension>reds</Extension>
 				<Type>RedScript</Type>
-				<Template></Template>
 			</AddFileModel>
 			<AddFileModel>
 				<Name>Cyber Engine Tweaks</Name>
 				<Description>A blank .lua file</Description>
 				<Extension>lua</Extension>
 				<Type>CETLua</Type>
-				<Template></Template>
 			</AddFileModel>
 		</Files>
 	</FileCategoryModel>	  

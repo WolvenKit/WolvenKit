@@ -1349,6 +1349,36 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
     }
 
+    private bool CanAddAxlFiles() => ActiveProject is not null && !IsDialogShown;
+
+    [RelayCommand(CanExecute = nameof(CanAddAxlFiles))]
+    private async Task<Task> AddAxlControlFiles()
+    {
+        _watcherService.Suspend();
+
+        var vm = new AxlControlFilesDialogViewModel(_projectManager, _loggerService);
+        await SetActiveDialog(vm);
+
+        var result = vm.CreateControlFiles();
+        _watcherService.Resume();
+
+        return Task.CompletedTask;
+    }
+
+    [RelayCommand(CanExecute = nameof(CanAddAxlFiles))]
+    private async Task<Task> AddAxlItemFiles()
+    {
+        _watcherService.Suspend();
+
+        var vm = new AxlItemFilesDialogViewModel(_projectManager, _loggerService);
+        await SetActiveDialog(vm);
+
+        var result = vm.CreateItemFiles();
+        _watcherService.Resume();
+
+        return Task.CompletedTask;
+    }
+
     private async Task OpenFromNewFile(NewFileViewModel? file)
     {
         CloseModalCommand.Execute(null);
@@ -1426,6 +1456,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 }
                 break;
             case EWolvenKitFile.WScript:
+            case EWolvenKitFile.Other:
                 throw new NotImplementedException();
             default:
                 break;
@@ -2065,6 +2096,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             case EWolvenKitFile.ArchiveXl:
             case EWolvenKitFile.RedScript:
             case EWolvenKitFile.CETLua:
+            case EWolvenKitFile.Other:
             default:
                 break;
         }

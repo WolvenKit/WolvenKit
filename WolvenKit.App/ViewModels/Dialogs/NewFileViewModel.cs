@@ -23,12 +23,14 @@ public partial class NewFileViewModel : DialogViewModel
     public delegate Task ReturnHandler(NewFileViewModel? file);
     public ReturnHandler? FileHandler;
     private readonly IProjectManager _projectManager;
+    private readonly ISettingsManager _settingsManager;
     private readonly ILoggerService _loggerService;
 
-    public NewFileViewModel(IProjectManager projectManager, ILoggerService loggerService)
+    public NewFileViewModel(IProjectManager projectManager, ISettingsManager settingsManager, ILoggerService loggerService)
     {
         _projectManager = projectManager;
         _loggerService = loggerService;
+        _settingsManager = settingsManager;
 
         Title = "Create new file";
 
@@ -126,29 +128,58 @@ public partial class NewFileViewModel : DialogViewModel
 
     [ObservableProperty] private string? _whyNotCreate;
 
+    private string GetTweakDir()
+    {
+        var tweakDir = Path.Combine(_projectManager.ActiveProject!.ResourcesDirectory, "r6", "tweaks");
+        if (string.IsNullOrEmpty(_settingsManager.ModderName))
+        {
+            return tweakDir;
+        }
+
+        return Path.Combine(tweakDir, _settingsManager.ModderName);
+    }
+
+    private string GetScriptDir()
+    {
+        var scriptDir = Path.Combine(_projectManager.ActiveProject!.ResourcesDirectory, "r6", "scripts");
+        if (string.IsNullOrEmpty(_settingsManager.ModderName))
+        {
+            return scriptDir;
+        }
+
+        return Path.Combine(scriptDir, _settingsManager.ModderName);
+    }
+
+    private string GetCetDir()
+    {
+        var cetPluginDir = Path.Combine(_projectManager.ActiveProject!.ResourcesDirectory, "bin", "x64", "plugins", "cyber_engine_tweaks",
+            "mods");
+        if (string.IsNullOrEmpty(_projectManager.ActiveProject.ModName))
+        {
+            return cetPluginDir;
+        }
+
+        return Path.Combine(cetPluginDir, _projectManager.ActiveProject.ModName);
+    }
+
     private string GetDefaultDir(EWolvenKitFile type)
     {
         ArgumentNullException.ThrowIfNull(_projectManager.ActiveProject);
 
-
         return type switch
         {
-            EWolvenKitFile.TweakXl => _projectManager.ActiveProject.ResourcesDirectory,
+            EWolvenKitFile.TweakXl => GetTweakDir(),
             EWolvenKitFile.Cr2w => _projectManager.ActiveProject.ModDirectory,
             EWolvenKitFile.ArchiveXl => _projectManager.ActiveProject.ResourcesDirectory,
-            EWolvenKitFile.RedScript => _projectManager.ActiveProject.ResourcesDirectory,
-            EWolvenKitFile.CETLua => _projectManager.ActiveProject.ResourcesDirectory,
+            EWolvenKitFile.RedScript => GetScriptDir(),
+            EWolvenKitFile.CETLua => GetCetDir(),
             EWolvenKitFile.WScript => throw new NotImplementedException(),
+            EWolvenKitFile.Other => throw new NotImplementedException(),
             _ => throw new ArgumentOutOfRangeException(nameof(type)),
         };
-
-
     }
 
-    private bool CanExecuteOk()
-    {
-        return !IsCreating && FileName is not null && !string.IsNullOrEmpty(FileName) && !File.Exists(FullPath);
-    }
+    private bool CanExecuteOk() => !IsCreating && FileName is not null && !string.IsNullOrEmpty(FileName) && !File.Exists(FullPath);
 
     [RelayCommand(CanExecute = nameof(CanExecuteOk))]
     private void Ok()
