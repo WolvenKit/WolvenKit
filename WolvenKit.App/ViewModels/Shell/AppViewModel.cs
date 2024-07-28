@@ -1349,36 +1349,30 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
     }
 
-    private bool CanAddAxlFiles() => ActiveProject is not null && !IsDialogShown;
+    [RelayCommand(CanExecute = nameof(CanAddArchiveXlFiles))]
+    private void AddArchiveXlItemFiles() => AddArchiveXlFiles(true);
 
-    [RelayCommand(CanExecute = nameof(CanAddAxlFiles))]
-    private async Task<Task> AddAxlControlFiles()
+    private bool CanAddArchiveXlFiles() => ActiveProject is not null && !IsDialogShown;
+
+    [RelayCommand(CanExecute = nameof(CanAddArchiveXlFiles))]
+    private void AddArchiveXlFiles(bool createItemFiles = false)
     {
+        if (ActiveProject is null)
+        {
+            throw new WolvenKitException(0x4003, "No project loaded");
+        }
+
+        var item = Interactions.ShowArchiveXlFilesView(!createItemFiles);
+        if (item is null)
+        {
+            return;
+        }
+
         _watcherService.Suspend();
-
-        var vm = new AxlControlFilesDialogViewModel(_projectManager, _loggerService);
-        await SetActiveDialog(vm);
-
-        var result = vm.CreateControlFiles();
+        ArchiveXlItemFactory.CreateEquipmentItem(ActiveProject, item);
         _watcherService.Resume();
-
-        return Task.CompletedTask;
     }
-
-    [RelayCommand(CanExecute = nameof(CanAddAxlFiles))]
-    private async Task<Task> AddAxlItemFiles()
-    {
-        _watcherService.Suspend();
-
-        var vm = new AxlItemFilesDialogViewModel(_projectManager, _loggerService);
-        await SetActiveDialog(vm);
-
-        var result = vm.CreateItemFiles();
-        _watcherService.Resume();
-
-        return Task.CompletedTask;
-    }
-
+    
     private async Task OpenFromNewFile(NewFileViewModel? file)
     {
         CloseModalCommand.Execute(null);
@@ -1867,6 +1861,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(NewFileCommand))]
     //[NotifyCanExecuteChangedFor(nameof(CloseModalCommand))]
     [NotifyCanExecuteChangedFor(nameof(CloseDialogCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddArchiveXlFilesCommand))]
     private bool _isDialogShown;
 
     [ObservableProperty]
@@ -1895,6 +1890,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(NewPhotoModeFilesCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateMinimalQuestFilesCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateInkatlasCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddArchiveXlFilesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddArchiveXlItemFilesCommand))]
     private Cp77Project? _activeProject;
 
     [ObservableProperty]

@@ -25,10 +25,7 @@ public static partial class ArchiveXlHelper
     private static ILoggerService? LoggerService => s_loggerService ??= Locator.Current.GetService<ILoggerService>();
 
     private static IProjectManager? s_projectManager;
-
-    private static IProjectManager? ProjectManager =>
-        s_projectManager ??= Locator.Current.GetService<IProjectManager>();
-
+    private static IProjectManager? ProjectManager => s_projectManager ??= Locator.Current.GetService<IProjectManager>();
 
     private static readonly Dictionary<string, string[]> s_keysAndValues = new()
     {
@@ -414,4 +411,219 @@ public static partial class ArchiveXlHelper
 
     [GeneratedRegex(@"(\{[^}]+\})")]
     private static partial Regex PlaceholderSplitPattern();
+    /// <summary>
+    /// Equipment slots and their potential sub-slots
+    /// </summary>
+    public static Dictionary<EquipmentItemSlot, List<EquipmentItemSubSlot>> EquipmentSlotsAndSubtypes = new()
+    {
+        {
+            EquipmentItemSlot.Head, [
+                EquipmentItemSubSlot.None,
+                EquipmentItemSubSlot.HelmetHair,
+                EquipmentItemSubSlot.Hat,
+                EquipmentItemSubSlot.Cap,
+                EquipmentItemSubSlot.Scarf,
+                EquipmentItemSubSlot.ScarfHair,
+                EquipmentItemSubSlot.Balaclava,
+            ]
+        },
+        {
+            EquipmentItemSlot.Face, [
+                EquipmentItemSubSlot.Glasses,
+                EquipmentItemSubSlot.Mask,
+                EquipmentItemSubSlot.Visor,
+                EquipmentItemSubSlot.Tech,
+            ]
+        },
+        {
+            EquipmentItemSlot.Torso_Inner, [
+                EquipmentItemSubSlot.FormalShirt,
+                EquipmentItemSubSlot.Shirt,
+                EquipmentItemSubSlot.TankTop,
+                EquipmentItemSubSlot.TightJumpsuit,
+                EquipmentItemSubSlot.TShirt,
+                EquipmentItemSubSlot.Undershirt,
+            ]
+        },
+        {
+            EquipmentItemSlot.Torso_Outer, [
+                EquipmentItemSubSlot.Coat,
+                EquipmentItemSubSlot.Dress,
+                EquipmentItemSubSlot.FormalJacket,
+                EquipmentItemSubSlot.Jacket,
+                EquipmentItemSubSlot.Jumpsuit,
+                EquipmentItemSubSlot.LooseShirt,
+                EquipmentItemSubSlot.Vest,
+            ]
+        },
+        {
+            EquipmentItemSlot.Legs, [
+                EquipmentItemSubSlot.FormalPants,
+                EquipmentItemSubSlot.Pants,
+                EquipmentItemSubSlot.Shorts,
+                EquipmentItemSubSlot.Skirt,
+            ]
+        },
+        {
+            EquipmentItemSlot.Feet, [
+                EquipmentItemSubSlot.Boots,
+                EquipmentItemSubSlot.CasualShoes,
+                EquipmentItemSubSlot.FormalShoes
+            ]
+        },
+        { EquipmentItemSlot.Outfit, [] },
+    };
+}
+
+public enum EquipmentItemSlot
+{
+    None,
+    Head,
+    Face,
+    Torso_Inner,
+    Torso_Outer,
+    Legs,
+    Feet,
+    Outfit
+}
+
+// ReSharper disable InconsistentNaming
+public enum ArchiveXlHidingTags
+{
+    hide_F1,
+    hide_T1,
+    hide_T2,
+    hide_L1,
+    hide_S1,
+    hide_T1part,
+    hide_Hair,
+    hide_Genitals,
+    hide_Head,
+    hide_Torso,
+    hide_LowerAbdomen,
+    hide_UpperAbdomen,
+    hide_CollarBone,
+    hide_Arms,
+    hide_Thighs,
+    hide_Calves,
+    hide_Ankles,
+    hide_Feet,
+    hide_Legs,
+}
+
+// ReSharper disable InconsistentNaming
+public enum GarmentSupportTags
+{
+    None,
+    PlayerBodyPart,
+    Tight,
+    Normal,
+    Large,
+    XLarge,
+}
+
+public enum EquipmentItemSubSlot
+{
+    None,
+
+    // Head items
+    HelmetHair,
+    Hat,
+    Cap,
+    Scarf,
+    ScarfHair,
+    Balaclava,
+
+    // Face items
+    Glasses,
+    Mask,
+    Visor,
+    Tech,
+
+    // T2
+    Coat,
+    Dress,
+    FormalJacket,
+    Jacket,
+    Jumpsuit,
+    LooseShirt,
+    Vest,
+
+    // T1
+    FormalShirt,
+    Shirt,
+    TankTop,
+    TightJumpsuit,
+    TShirt,
+    Undershirt,
+
+    // Legs
+    FormalPants,
+    Pants,
+    Shorts,
+    Skirt,
+
+    // Feet
+    Boots,
+    CasualShoes,
+    FormalShoes
+}
+
+public enum EquipmentExSlot
+{
+    None,
+    Head,
+    Balaclava,
+    Mask,
+    Glasses,
+    Eyes,
+    EyeLeft,
+    EyeRight,
+    Wreath,
+    EarLeft,
+    EarRight,
+    Neckwear,
+    NecklaceTight,
+    NecklaceShort,
+    NecklaceLong,
+    TorsoUnder,
+    TorsoInner,
+    TorsoMiddle,
+    TorsoOuter,
+    TorsoAux,
+    Back,
+    ShoulderLeft,
+    ShoulderRight,
+    ElbowLeft,
+    ElbowRight,
+    WristLeft,
+    WristRight,
+    Hands,
+    HandLeft,
+    HandRight,
+    FingersLeft,
+    FingersRight,
+    FingernailsLeft,
+    FingernailsRight,
+    Waist,
+    LegsInner,
+    LegsMiddle,
+    LegsOuter,
+    ThighLeft,
+    ThighRight,
+    KneeLeft,
+    KneeRight,
+    AnkleLeft,
+    AnkleRight,
+    Feet,
+    ToesLeft,
+    ToesRight,
+    ToenailsLeft,
+    ToenailsRight,
+    BodyUnder,
+    BodyInner,
+    BodyMiddle,
+    BodyOuter,
+    HandPropLeft,
+    HandPropRight,
 }

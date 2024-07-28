@@ -26,7 +26,11 @@ public partial class NewFileViewModel : DialogViewModel
     private readonly ISettingsManager _settingsManager;
     private readonly ILoggerService _loggerService;
 
-    public NewFileViewModel(IProjectManager projectManager, ISettingsManager settingsManager, ILoggerService loggerService)
+    public NewFileViewModel(
+        IProjectManager projectManager,
+        ISettingsManager settingsManager,
+        ILoggerService loggerService
+    )
     {
         _projectManager = projectManager;
         _loggerService = loggerService;

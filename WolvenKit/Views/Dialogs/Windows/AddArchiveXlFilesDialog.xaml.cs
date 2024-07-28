@@ -1,0 +1,160 @@
+using System;
+using System.IO;
+using System.Reactive.Disposables;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Input;
+using ReactiveUI;
+using Splat;
+using WolvenKit.App.Helpers;
+using WolvenKit.App.ViewModels.Dialogs;
+using WolvenKit.Core.Exceptions;
+
+namespace WolvenKit.Views.Dialogs.Windows
+{
+    public partial class AddArchiveXlFilesDialog : IViewFor<AddArchiveXlFilesDialogViewModel>
+    {
+        public AddArchiveXlFilesDialog(bool isControlFiles)
+        {
+            InitializeComponent();
+
+            ViewModel = new AddArchiveXlFilesDialogViewModel(isControlFiles);
+            DataContext = ViewModel;
+
+            Owner = Application.Current.MainWindow;
+
+            this.WhenActivated(disposables =>
+            {
+                this.Bind(ViewModel,
+                        x => x.DepotPath,
+                        x => x.DepotPathTextBox.Text)
+                    .DisposeWith(disposables);
+
+                this.Bind(ViewModel,
+                        x => x.ItemName,
+                        x => x.ItemNameTextBox.Text)
+                    .DisposeWith(disposables);
+
+                ItemSubtypeControl.SetCurrentValue(IsEnabledProperty, false);
+                EquipmentExControl.SetCurrentValue(IsEnabledProperty, false);
+            });
+        }
+
+        public AddArchiveXlFilesDialogViewModel ViewModel { get; set; }
+        object IViewFor.ViewModel { get => ViewModel; set => ViewModel = (AddArchiveXlFilesDialogViewModel)value; }
+
+        public bool? ShowDialog(Window owner)
+        {
+            Owner = owner;
+            return ShowDialog();
+        }
+
+        private void DepotPath_OnKeyUp(object sender, KeyEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ItemName_OnKeyUp(object sender, KeyEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void ItemType_OnChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ViewModel is null || sender is not ComboBox { SelectedItem: EquipmentItemSlot slot })
+            {
+                ItemSubtypeControl.SetCurrentValue(IsEnabledProperty, false);
+                EquipmentExControl.SetCurrentValue(IsEnabledProperty, false);
+                return;
+            }
+
+            ItemSubtypeControl.SetCurrentValue(IsEnabledProperty, slot != EquipmentItemSlot.None);
+            EquipmentExControl.SetCurrentValue(IsEnabledProperty, slot != EquipmentItemSlot.None);
+
+            ViewModel.SetItemSlot(slot);
+        }
+
+        // Custom filter implementation as klepped from https://stackoverflow.com/a/48211059, thank you Oceans
+        private void ComboBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            var combobox = (ComboBox)sender;
+            if (combobox.Template.FindName("PART_EditableTextBox", combobox) is not TextBox ctb
+                || Keyboard.Modifiers.HasFlag(ModifierKeys.Shift)
+                || Keyboard.Modifiers.HasFlag(ModifierKeys.Control)
+                || Keyboard.Modifiers.HasFlag(ModifierKeys.Alt))
+            {
+                return;
+            }
+
+            var caretPos = ctb.CaretIndex;
+            combobox.IsDropDownOpen = true;
+
+            var itemsViewOriginal = (CollectionView)CollectionViewSource.GetDefaultView(combobox.Items);
+
+            itemsViewOriginal.Filter = o =>
+                string.IsNullOrEmpty(combobox.Text) || o.ToString()?.StartsWith(combobox.Text, true, null) == true;
+
+            itemsViewOriginal.Refresh();
+            ctb.CaretIndex = caretPos;
+        }
+
+        private void Combobox_FocusGained(object sender, RoutedEventArgs e) =>
+            ((ComboBox)sender).SetCurrentValue(ComboBox.IsDropDownOpenProperty, true);
+
+        private void Combobox_OnClick(object sender, RoutedEventArgs e)
+        {
+            var combobox = (ComboBox)sender;
+            combobox.SetCurrentValue(ComboBox.IsDropDownOpenProperty, !combobox.IsDropDownOpen);
+        }
+
+        private void GarmentSupportTag_OnChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is not ComboBox comboBox || ViewModel is not AddArchiveXlFilesDialogViewModel model)
+            {
+                return;
+            }
+
+            if (comboBox.SelectedItem is null || !Enum.TryParse<GarmentSupportTags>(comboBox.SelectedItem.ToString(), out var tag))
+            {
+                model.GarmentSupportTag = GarmentSupportTags.None;
+                return;
+            }
+
+            model.GarmentSupportTag = tag;
+        }
+
+        private void EquipmentExSlot_OnChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is not ComboBox comboBox || ViewModel is not AddArchiveXlFilesDialogViewModel model)
+            {
+                return;
+            }
+
+            if (comboBox.SelectedItem is null || !Enum.TryParse<EquipmentExSlot>(comboBox.SelectedItem.ToString(), out var tag))
+            {
+                model.EqExSlot = EquipmentExSlot.None;
+                return;
+            }
+
+            model.EqExSlot = tag;
+        }
+
+        private void SubSlot_OnChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is not ComboBox comboBox || ViewModel is not AddArchiveXlFilesDialogViewModel model)
+            {
+                return;
+            }
+
+            if (comboBox.SelectedItem is null || !Enum.TryParse<EquipmentItemSubSlot>(comboBox.SelectedItem.ToString(), out var tag))
+            {
+                model.SubSlot = EquipmentItemSubSlot.None;
+                return;
+            }
+
+            model.SubSlot = tag;
+        }
+    }
+}
