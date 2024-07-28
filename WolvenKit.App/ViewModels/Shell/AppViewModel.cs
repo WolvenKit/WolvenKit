@@ -409,7 +409,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(PackInstallRedModRunCommand))]
     [NotifyCanExecuteChangedFor(nameof(ScanForBrokenReferencePathsCommand))]
     [NotifyCanExecuteChangedFor(nameof(FindUnusedFilesCommand))]
-    // [NotifyCanExecuteChangedFor(nameof(ImportFromEntitySpawnerCommand))] TODO: put this back when the other branch is merged
+    [NotifyCanExecuteChangedFor(nameof(ImportFromEntitySpawnerCommand))]
     [NotifyCanExecuteChangedFor(nameof(RunFileValidationOnProjectCommand))]
     [NotifyCanExecuteChangedFor(nameof(CheckForScriptUpdatesCommand))]
     private EStatus _taskStatus;
