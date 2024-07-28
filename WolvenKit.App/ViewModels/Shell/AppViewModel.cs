@@ -333,6 +333,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             if (Path.GetExtension(filePath) == Cp77Project.ProjectFileExtension)
             {
                 projectPathToOpen = filePath;
+                continue;
             }
 
             // open files
