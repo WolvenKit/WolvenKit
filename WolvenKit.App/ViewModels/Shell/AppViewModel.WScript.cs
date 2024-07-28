@@ -125,7 +125,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
     private string? GetEntspawnerRelativePath()
     {
-        if (_settingsManager?.GetRED4GameRootDir() is not string gameDir)
+        if (SettingsManager.GetRED4GameRootDir() is not string gameDir)
         {
             return null;
         }

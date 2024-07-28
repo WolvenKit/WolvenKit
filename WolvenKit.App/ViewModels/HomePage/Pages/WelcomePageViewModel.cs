@@ -122,7 +122,7 @@ public partial class WelcomePageViewModel : PageViewModel
     [RelayCommand]
     private void DeleteProject(string s)
     {
-        _mainViewModel.DeleteProjectCommand.Execute(s);
+        _mainViewModel.DeleteProjectFromRecentCommand.Execute(s);
     }
 
     [RelayCommand]

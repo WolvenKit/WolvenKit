@@ -40,10 +40,10 @@ using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
-using WolvenKit.Helpers;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
@@ -64,7 +64,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly ILoggerService _loggerService;
     private readonly IProjectManager _projectManager;
     private readonly IGameControllerFactory _gameControllerFactory;
-    private readonly ISettingsManager _settingsManager;
     private readonly INotificationService _notificationService;
     private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
     private readonly IProgressService<double> _progressService;
@@ -75,6 +74,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly Red4ParserService _parser;
     private readonly AppScriptService _scriptService;
     private readonly IWatcherService _watcherService;
+
+    // expose to view
+    public ISettingsManager SettingsManager { get; init; }
 
     /// <summary>
     /// Class constructor
@@ -106,7 +108,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _projectManager = projectManager;
         _loggerService = loggerService;
         _gameControllerFactory = gameControllerFactory;
-        _settingsManager = settingsManager;
+        SettingsManager = settingsManager;
         _notificationService = notificationService;
         _recentlyUsedItemsService = recentlyUsedItemsService;
         _progressService = progressService;
@@ -120,12 +122,12 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         _fileValidationScript = _scriptService.GetScripts(ISettingsManager.GetWScriptDir()).ToList()
             .Where(s => s.Name == "run_FileValidation_on_active_tab")
-            .Select(s => new ScriptFileViewModel(_settingsManager, ScriptSource.User, s))
+            .Select(s => new ScriptFileViewModel(SettingsManager, ScriptSource.User, s))
             .FirstOrDefault();
 
         _entSpawnerImportScript = _scriptService.GetScripts(ISettingsManager.GetWScriptDir()).ToList()
             .Where(s => s.Name == "run_object_spawner_on_active_tab")
-            .Select(s => new ScriptFileViewModel(_settingsManager, ScriptSource.User, s))
+            .Select(s => new ScriptFileViewModel(SettingsManager, ScriptSource.User, s))
             .FirstOrDefault();
         
         if (_hashService is HashServiceExt hashServiceExt)
@@ -233,9 +235,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private void HandleActivation()
     {
         var thisVersion = Core.CommonFunctions.GetAssemblyVersion(Constants.AssemblyName);
-        if (thisVersion.ToString().Contains("nightly") && _settingsManager.UpdateChannel != EUpdateChannel.Nightly)
+        if (thisVersion.ToString().Contains("nightly") && SettingsManager.UpdateChannel != EUpdateChannel.Nightly)
         {
-            _settingsManager.UpdateChannel = EUpdateChannel.Nightly;
+            SettingsManager.UpdateChannel = EUpdateChannel.Nightly;
         }
 
         _pluginService.Init();
@@ -315,7 +317,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         string? projectPathToOpen = null;
 
         // Will be overwritten if the launch args contain a project path
-        if (args.Contains("-reopenProject") && _settingsManager.LastUsedProjectPath is string projectPath)
+        if (args.Contains("-reopenProject") && SettingsManager.LastUsedProjectPath is string projectPath)
         {
             projectPathToOpen = projectPath;
         }
@@ -369,7 +371,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private void ShowFirstTimeSetup()
     {
-        if (_settingsManager.IsHealthy())
+        if (SettingsManager.IsHealthy())
         {
             return;
         }
@@ -517,7 +519,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         if (checkForCheckForUpdates)
         {
-            if (_settingsManager.SkipUpdateCheck)
+            if (SettingsManager.SkipUpdateCheck)
             {
                 return;
             }
@@ -527,7 +529,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         // get remote version without GitHub API calls
         var owner = "WolvenKit";
         var name = "WolvenKit";
-        switch (_settingsManager.UpdateChannel)
+        switch (SettingsManager.UpdateChannel)
         {
             case EUpdateChannel.Nightly:
                 name = "WolvenKit-nightly-releases";
@@ -573,7 +575,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             // old style update
             // TODO use inno
             var url = $"https://github.com/{owner}/{name}/releases/latest";
-            var res = await Interactions.ShowMessageBoxAsync($"Update available: {remoteVersion}\nYou are on the {_settingsManager.UpdateChannel} release channel.\n\nVisit {url} ?", name, WMessageBoxButtons.OkCancel);
+            var res = await Interactions.ShowMessageBoxAsync(
+                $"Update available: {remoteVersion}\nYou are on the {SettingsManager.UpdateChannel} release channel.\n\nVisit {url} ?",
+                name, WMessageBoxButtons.OkCancel);
             if (res == WMessageBoxResult.OK)
             {
                 Process.Start("explorer", url);
@@ -583,7 +587,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     [RelayCommand]
-    private void DeleteProject(string parameter)
+    private void DeleteProjectFromRecent(string parameter)
     {
         try
         {
@@ -605,7 +609,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private async Task OpenProjectAsync(string location)
     {
         // "Open Project" button was pushed
-        if (string.IsNullOrEmpty(location))
+        if (string.IsNullOrWhiteSpace(location))
         {
             var dlg = new OpenFileDialog
             {
@@ -626,65 +630,41 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             return;
         }
 
-        // switch from one active project to another
-        try
+        if (File.Exists(location))
         {
-
-            if (string.IsNullOrWhiteSpace(location) || !File.Exists(location))
-            {
-                // file was moved or deleted
-                if (_recentlyUsedItemsService.Items.Items.Any(x => x.Name == location))
-                {
-                    // would you like to locate it?
-                    //TODO
-                    //location = await ProjectHelpers.LocateMissingProjectAsync(location);
-                    //location = "";
-                    //if (string.IsNullOrEmpty(location))
-                    {
-                        // user canceled locating a project
-                        DeleteProject(location);
-                        return;
-                    }
-                }
-                // open an existing project
-                else
-                {
-                    var dlg = new OpenFileDialog
-                    {
-                        Multiselect = false,
-                        Title = "Locate the WolvenKit project",
-                        Filter = "Cyberpunk 2077 Project|*.cpmodproj"
-                    };
-
-                    if (dlg.ShowDialog() != true)
-                    {
-                        return;
-                    }
-
-                    var result = dlg.FileName;
-                    if (string.IsNullOrEmpty(result))
-                    {
-                        return;
-                    }
-
-                    location = result;
-                }
-            }
-
-            // one last check
-            if (!File.Exists(location))
-            {
-                return;
-            }
-
-            CloseModalCommand.SafeExecute(null);
+            CloseModal();
             await LoadProjectFromPath(location);
+            return;
         }
-        catch (Exception e)
+
+        // file was moved or deleted
+        if (_recentlyUsedItemsService.Items.Items.All(x => x.Name != location))
         {
-            // TODO: Are we intentionally swallowing this?
-            //Log.Error(ex, "Failed to open file");
-            _loggerService.Error(e);
+            throw new WolvenKitException(0x5002,
+                "Failed to load project. Please open a github issue and attach a zip so that we can fix it!");
+        }
+
+        // would you like to locate it?
+
+        var res = Interactions.ShowConfirmation(("Do you want to locate your missing project?", "Project file missing",
+            WMessageBoxImage.Question, WMessageBoxButtons.YesNo));
+
+        if (res is (WMessageBoxResult.OK or WMessageBoxResult.Yes))
+        {
+            var dlg = new OpenFileDialog
+            {
+                Multiselect = false, Title = "Locate the WolvenKit project", Filter = "Cyberpunk 2077 Project|*.cpmodproj"
+            };
+
+            dlg.ShowDialog();
+
+            location = dlg.FileName;
+        }
+
+        // user canceled locating a project
+        if (!File.Exists(location))
+        {
+            DeleteProjectFromRecent(location);
         }
     }
 
@@ -701,7 +681,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         ActiveProject = p;
 
         // If the assets can't be found, stop here and notify the user in the log
-        if (!File.Exists(_settingsManager.CP77ExecutablePath))
+        if (!File.Exists(SettingsManager.CP77ExecutablePath))
         {
             UpdateTitle();
             _loggerService.Warning($"Cyberpunk 2077 executable path is not set. Asset browser disabled.");
@@ -719,7 +699,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand]
     private async Task NewProject() =>
         //IsOverlayShown = false;
-        await SetActiveDialog(new ProjectWizardViewModel(_settingsManager)
+        await SetActiveDialog(new ProjectWizardViewModel(SettingsManager)
         {
             FileHandler = NewProject
         });
@@ -991,8 +971,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 {
                     Process.Start(new ProcessStartInfo
                     {
-                        FileName = _settingsManager.GetRED4GameLaunchCommand(),
-                        Arguments = _settingsManager.GetRED4GameLaunchOptions(),
+                        FileName = SettingsManager.GetRED4GameLaunchCommand(),
+                        Arguments = SettingsManager.GetRED4GameLaunchOptions(),
                         ErrorDialog = true,
                         UseShellExecute = true,
                     });
@@ -1061,7 +1041,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private async Task ShowScriptManager()
     {
         CloseModalCommand.Execute(null);
-        await SetActiveDialog(new ScriptManagerViewModel(this, _scriptService, _settingsManager, _loggerService));
+        await SetActiveDialog(new ScriptManagerViewModel(this, _scriptService, SettingsManager, _loggerService));
     }
 
     private bool CanShowPlugin() => !IsDialogShown;
@@ -1092,7 +1072,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanImportArchive))]
     private async Task<Task> ImportArchive(string? inputDir)
     {
-        var vm = new OpenFileViewModel(_settingsManager, _projectManager, _loggerService)
+        var vm = new OpenFileViewModel(SettingsManager, _projectManager, _loggerService)
         {
             Title = "Import .archive", Filter = "Archive files (*.archive)|*.archive"
         };
@@ -1769,10 +1749,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             return;
         }
 
-        var dbPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb_ep1.bin");
+        var dbPath = Path.Combine(SettingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb_ep1.bin");
         if (!File.Exists(dbPath))
         {
-            dbPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin");
+            dbPath = Path.Combine(SettingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin");
         }
 
         await _tweakDBService.LoadDB(dbPath);
@@ -1913,7 +1893,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         var delimiter = "|";
         //string[] ignoredExtensions = _settingsManager.TreeViewIgnoredExtensions.ToLower().Split(delimiter);
         //bool isAnIgnoredExtension = Array.Exists(ignoredExtensions, extension => extension.Equals(ext));
-        var isAnIgnoredExtension = (_settingsManager.TreeViewIgnoredExtensions ?? "").Split(delimiter).Any(entry => entry.ToLower().Trim().Equals(ext));
+        var isAnIgnoredExtension = (SettingsManager.TreeViewIgnoredExtensions ?? "").Split(delimiter)
+            .Any(entry => entry.ToLower().Trim().Equals(ext));
         if (isAnIgnoredExtension && !ignoreIgnoredExtension)
         {
             ShellExecute();
@@ -2095,13 +2076,13 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     public void SetLaunchProfiles(ObservableCollection<LaunchProfileViewModel> launchProfiles)
     {
-        _settingsManager.LaunchProfiles.Clear();
+        SettingsManager.LaunchProfiles.Clear();
         var profiles = launchProfiles
-            .Where(item => !_settingsManager.LaunchProfiles.ContainsKey(item.Name))
+            .Where(item => !SettingsManager.LaunchProfiles.ContainsKey(item.Name))
             .ToDictionary(item => item.Name, item => item.Profile);
 
-        _settingsManager.LaunchProfiles = profiles;
-        _settingsManager.Save();
+        SettingsManager.LaunchProfiles = profiles;
+        SettingsManager.Save();
 
     }
 
