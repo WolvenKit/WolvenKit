@@ -75,12 +75,15 @@
                 <Style x:Key="LabelStyleRow2" TargetType="TextBlock" BasedOn="{StaticResource LabelStyle}">
                     <Setter Property="Margin" Value="5,0,0,4" />
                 </Style>
+                <Style x:Key="TextboxStyle" TargetType="TextBox" BasedOn="{StaticResource TextBoxExtendBaseStyle}">
+                    <Setter Property="Margin" Value="5,15,0,4" />
+                </Style>
                 <Style x:Key="ComboboxStyle" TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
 
                     <Setter Property="Margin" Value="5,15,0,4" />
                     <Setter Property="Padding" Value="5, 7" />
                     <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
-                    <Setter Property="Background" Value="{StaticResource ControlBackgroundColor}" />
+                    <Setter Property="Background" Value="{StaticResource BackgroundColor_Frame_Background}" />
                     <Setter Property="BorderThickness" Value="1" />
                 </Style>
                 <Style x:Key="TextBoxWithControlValidatorsStyle" TargetType="TextBox" BasedOn="{StaticResource TextBoxExtendBaseStyle}">
@@ -204,8 +207,20 @@
                             DefaultText="Will be used to generate file names and internal properties."
                             SecondaryText="Will be used to generate your control file names."
                             UseSecondaryText="{Binding CreateFactory}"
+                            Style="{StaticResource TextboxStyle}"
+                            KeyUp="ItemName_OnKeyUp" />
+                        <TextBlock
+                            Visibility="{Binding CreateFactory, Converter={StaticResource InvertBooleanConverter}}"
+                            Style="{StaticResource ExplanationStyle}"
                             Grid.Row="3"
-                            Grid.Column="1" />
+                            Grid.Column="1"
+                            Text="This will be used to generate your item's spawn code and internal names." />
+                        <TextBlock
+                            Visibility="{Binding CreateFactory, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Style="{StaticResource ExplanationStyle}"
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            Text="Will be used for naming your resource files" />
 
 
                         <!-- Depot path -->
@@ -217,22 +232,14 @@
                         <hc:TextBox x:Name="DepotPathTextBox"
                                     Grid.Row="4"
                                     Grid.Column="1"
-                                    Style="{StaticResource TextBoxWithControlValidatorsStyle }"
-                                    KeyUp="DepotPath_OnKeyUp">
-                            <TextBox.Text>
-                                <Binding Path="DepotPath" UpdateSourceTrigger="PropertyChanged">
-                                    <Binding.ValidationRules>
-                                        <validators:DepotPathValidationRule />
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
-                        </hc:TextBox>
+                                    Style="{StaticResource TextboxStyle }"
+                                    KeyUp="DepotPath_OnKeyUp" />
 
-                        <controls:ValidationTextBlock
-                            BoundControl="{Binding ElementName=DepotPathTextBox}"
-                            DefaultText="Your custom subfolder in your project. Directories will be created if they don't exist."
+                        <TextBlock
+                            Style="{StaticResource ExplanationStyle}"
                             Grid.Row="5"
-                            Grid.Column="1" />
+                            Grid.Column="1"
+                            Text="Destination path for your files in your project. Directories will be created if they don't exist." />
 
                     </Grid>
 
