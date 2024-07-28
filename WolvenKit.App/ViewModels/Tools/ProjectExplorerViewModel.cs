@@ -63,8 +63,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private readonly IGameControllerFactory _gameController;
     private readonly AppViewModel _mainViewModel;
     public readonly IModifierViewStateService ModifierViewStateService;
-
-    private readonly WatcherService _projectWatcher;
+    private readonly IWatcherService _projectWatcher;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
@@ -97,7 +96,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         _mainViewModel = appViewModel;
 
-        _projectWatcher = new WatcherService(_loggerService);
+        _projectWatcher = Locator.Current.GetService<IWatcherService>()!;
 
         SideInDockedMode = DockSide.Left;
 
@@ -159,17 +158,22 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             SaveProjectExplorerExpansionStateIfDirty();
             _projectWatcher.UnwatchProject(ActiveProject);
         }
-
-        DispatcherHelper.RunOnMainThread(() => ActiveProject = _projectManager.ActiveProject, DispatcherPriority.ContextIdle);
+        
         OnProjectChanged?.Invoke();
 
-        if (_projectManager.ActiveProject == null)
+        DispatcherHelper.RunOnMainThread(() =>
         {
-            return;
-        }
+            ActiveProject = _projectManager.ActiveProject;
+            if (ActiveProject is not null)
+            {
+                LoadFileTreeState(ActiveProject);
+                _projectWatcher.WatchProject(ActiveProject);
+            }
 
-        LoadFileTreeState(_projectManager.ActiveProject);
-        _projectWatcher.WatchProject(_projectManager.ActiveProject);
+            OnProjectChanged?.Invoke();
+        }, DispatcherPriority.ContextIdle);
+
+
     }
 
     public DispatchedObservableCollection<FileSystemModel> FileTree => _projectWatcher.FileTree;

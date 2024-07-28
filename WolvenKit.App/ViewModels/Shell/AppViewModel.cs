@@ -74,6 +74,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly ITweakDBService _tweakDBService;
     private readonly Red4ParserService _parser;
     private readonly AppScriptService _scriptService;
+    private readonly IWatcherService _watcherService;
 
     /// <summary>
     /// Class constructor
@@ -95,6 +96,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         IHashService hashService,
         ITweakDBService tweakDBService,
         Red4ParserService parserService,
+        IWatcherService watcherService,
         AppScriptService scriptService)
     {
         _documentViewmodelFactory = documentViewmodelFactory;
@@ -113,6 +115,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _hashService = hashService;
         _tweakDBService = tweakDBService;
         _parser = parserService;
+        _watcherService = watcherService;
         _scriptService = scriptService;
 
         _fileValidationScript = _scriptService.GetScripts(ISettingsManager.GetWScriptDir()).ToList()

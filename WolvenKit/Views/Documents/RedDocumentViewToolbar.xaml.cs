@@ -32,7 +32,6 @@ namespace WolvenKit.Views.Documents
         private readonly WatcherService _projectWatcher;
         private readonly IAppArchiveManager _archiveManager;
         
-        
 
         public RedDocumentViewToolbar()
         {
@@ -48,7 +47,7 @@ namespace WolvenKit.Views.Documents
 
             DataContext = new RedDocumentViewToolbarModel { CurrentTab = _currentTab };
 
-            this.WhenActivated(disposables =>
+            this.WhenActivated(_ =>
             {
                 if (DataContext is not RedDocumentViewToolbarModel vm)
                 {
@@ -135,7 +134,7 @@ namespace WolvenKit.Views.Documents
 
             cvm.GenerateMissingMaterials(baseMaterial, isLocal, resolveSubstitutions);
 
-            cvm?.Tab?.Parent.SetIsDirty(true);
+            cvm.Tab?.Parent.SetIsDirty(true);
         }
 
         public event EventHandler<EditorDifficultyLevel> EditorDifficultChanged;
@@ -194,9 +193,6 @@ namespace WolvenKit.Views.Documents
             var materialDependencies = await cvm.GetMaterialDependenciesOutsideOfProject();
 
             var destFolder = GetTextureDirForDependencies(true);
-
-            _projectWatcher.UnwatchProject(_projectManager.ActiveProject!);
-
             // Use search and replace to fix file paths
             var pathReplacements = await ProjectResourceHelper.AddDependenciesToProjectPathAsync(
                 destFolder, materialDependencies
@@ -204,7 +200,6 @@ namespace WolvenKit.Views.Documents
 
             await SearchAndReplaceInChildNodes(cvm, pathReplacements, "localMaterialBuffers.materials", "externalMaterials");
 
-            _projectWatcher.WatchProject(_projectManager.ActiveProject!);
         }
         
 
@@ -216,14 +211,10 @@ namespace WolvenKit.Views.Documents
 
             var destFolder = GetTextureDirForDependencies(false);
 
-            _projectWatcher.UnwatchProject(_projectManager.ActiveProject!);
-
             // Use search and replace to fix file paths
             var pathReplacements = await ProjectResourceHelper.AddDependenciesToProjectPathAsync(destFolder, materialDependencies);
 
             await SearchAndReplaceInChildNodes(cvm, pathReplacements, "values");
-
-            _projectWatcher.WatchProject(_projectManager.ActiveProject!);
         }
 
 
@@ -302,6 +293,8 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
+            _projectWatcher.Suspend();
+
             switch (cvm.ResolvedData)
             {
                 case CMesh:
@@ -315,7 +308,7 @@ namespace WolvenKit.Views.Documents
             }
 
             _projectWatcher.Refresh();
-            _projectWatcher.WatchProject(_projectManager.ActiveProject);
+            _projectWatcher.Resume();
         }
 
     }

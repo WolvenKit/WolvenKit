@@ -75,7 +75,9 @@ public partial class WatcherService : ObservableObject, IWatcherService
         Refresh();
     }
 
-    public void UnwatchProject(Cp77Project project) => UnwatchLocation();
+    public void Resume() => _modsWatcher.EnableRaisingEvents = true;
+
+    public void UnwatchProject(Cp77Project? project) => UnwatchLocation();
 
     private void WatchLocation()
     {
@@ -393,6 +395,8 @@ public partial class WatcherService : ObservableObject, IWatcherService
             }
         }
     }
+
+    public void Suspend() => _modsWatcher.EnableRaisingEvents = false;
 
     private void OnRenamed(object sender, RenamedEventArgs e) => _fileChanges.Enqueue(new FileSystemEventArgsWrapper(e));
 
