@@ -221,20 +221,16 @@ public static class ProjectResourceHelper
     }
 
 
-    public static async Task MoveAndRefactor(Cp77Project activeProject, string sourcePath, string destPath, bool refactor)
+    public static async Task MoveAndRefactor(Cp77Project activeProject, string sourcePath, string destPath, string absoluteFolderPrefix,
+        bool refactor)
     {
         var sourceRelPath = sourcePath;
-        var absoluteFolderPrefix = "";
         var destRelPath = destPath;
 
         // Make sure that we can deal with both absolute and relative paths
         if (Path.IsPathRooted(sourceRelPath))
         {
-            (sourceRelPath, absoluteFolderPrefix) = activeProject.SplitFilePath(sourcePath);
-        }
-        else
-        {
-            absoluteFolderPrefix = activeProject.ModDirectory;
+            (_, sourceRelPath) = activeProject.SplitFilePath(sourcePath);
         }
 
         if (Path.IsPathRooted(destRelPath))
