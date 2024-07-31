@@ -104,7 +104,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         
         SetupToolDefaults();
 
-        ModifierViewStateService.RefreshModifierStates();
+        RefreshModifierStates();
 
         _mainViewModel.PropertyChanged += MainViewModel_OnPropertyChanged;
 
@@ -776,7 +776,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        var (_, relativePath) = _projectManager.ActiveProject.SplitFilePath(absolutePath);
+        var (prefixPath, relativePath) = _projectManager.ActiveProject.SplitFilePath(absolutePath);
 
         if (absolutePath.StartsWith(_projectManager.ActiveProject.ModDirectory))
         {
@@ -790,7 +790,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        await ProjectResourceHelper.MoveAndRefactor(_projectManager.ActiveProject, relativePath, newRelativePath, refactor);
+        await ProjectResourceHelper.MoveAndRefactor(_projectManager.ActiveProject, relativePath, newRelativePath, prefixPath, refactor);
         _mainViewModel.ReloadChangedFiles();
     }
 
@@ -1109,7 +1109,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <summary>
     /// Passes key state changes from view down to ModifierViewStatesModel
     /// </summary>
-    public void RefreshModifierStates() => ModifierViewStateService.RefreshModifierStates();
+    public void RefreshModifierStates() => DispatcherHelper.RunOnMainThread(() => ModifierViewStateService.RefreshModifierStates());
 
     public IDocumentViewModel? GetActiveEditorFile() => _mainViewModel.ActiveDocument;
 
