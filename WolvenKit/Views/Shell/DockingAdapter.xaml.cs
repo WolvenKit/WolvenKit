@@ -128,7 +128,7 @@ namespace WolvenKit.Views.Shell
 
         private void LoadLayoutFromProject()
         {
-            if (_viewModel?.ActiveProject is null || _viewModel.Status != EAppStatus.Loaded)
+            if (_viewModel?.ActiveProject is null)
             {
                 return;
             }
