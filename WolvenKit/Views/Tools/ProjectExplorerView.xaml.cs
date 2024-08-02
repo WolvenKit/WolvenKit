@@ -79,7 +79,7 @@ namespace WolvenKit.Views.Tools
             TreeGrid.NodeCollapsing += TreeGrid_OnNodeCollapsing;
             TreeGrid.NodeCollapsed += TreeGrid_OnNodeCollapsed;
             
-
+            
             this.WhenActivated(disposables =>
             {
                 if (DataContext is ProjectExplorerViewModel vm)
@@ -179,7 +179,11 @@ namespace WolvenKit.Views.Tools
                     .Subscribe(p => OnCellDoubleTapped(p.Sender, p.EventArgs as TreeGridCellDoubleTappedEventArgs))
                     .DisposeWith(disposables);
 
-
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.ToggleFlatModeCommand,
+                        view => view.ToggleFlatModeButton)
+                    .DisposeWith(disposables);
+                
                 this.BindCommand(ViewModel,
                     viewModel => viewModel.OpenRootFolderCommand,
                     view => view.OpenFolderButton);
@@ -196,7 +200,29 @@ namespace WolvenKit.Views.Tools
                         viewModel => viewModel.FileList,
                         view => view.TreeGridFlat.ItemsSource)
                     .DisposeWith(disposables);
+
+                ViewModel.OnToggleFlatMode += OnToggleFlatMode;
             });
+        }
+
+        // Not sure why the property binding broke, but it did. This fixes it.
+        private void OnToggleFlatMode(object sender, EventArgs e)
+        {
+            if (sender is not ProjectExplorerViewModel model)
+            {
+                return;
+            }
+
+            if (model.IsFlatModeEnabled)
+            {
+                TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+                TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+            }
+            else
+            {
+                TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+                TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+            }
         }
 
         // Run inside Dispatcher to avoid exception on startup
