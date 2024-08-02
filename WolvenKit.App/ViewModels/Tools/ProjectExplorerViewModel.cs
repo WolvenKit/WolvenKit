@@ -104,7 +104,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         
         SetupToolDefaults();
 
-        ModifierViewStateService.RefreshModifierStates();
+        RefreshModifierStates();
 
         _mainViewModel.PropertyChanged += MainViewModel_OnPropertyChanged;
 
@@ -133,8 +133,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <summary>
     /// Set status of "scroll to open file" button, based on whether or not we have one opened
     /// </summary>
-    private void MainViewModel_OnPropertyChanged(object? sender, PropertyChangedEventArgs e) =>
+    private void MainViewModel_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
         CanScrollToOpenFile = _mainViewModel.ActiveDocument is not null;
+    }
 
     public event Action? OnProjectChanged;
     
@@ -186,6 +188,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     partial void OnSelectedItemChanged(FileSystemModel? value)
     {
+        CanScrollToOpenFile = value is not null;
         if (value is null)
         {
             return;
@@ -208,6 +211,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [NotifyCanExecuteChangedFor(nameof(DeleteFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(CreateNewDirectoryCommand))]
     [NotifyCanExecuteChangedFor(nameof(OpenInFileExplorerCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ToggleFlatModeCommand))]
     [NotifyCanExecuteChangedFor(nameof(PasteFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(RenameFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(ConvertToCommand))]
@@ -776,7 +780,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        var (_, relativePath) = _projectManager.ActiveProject.SplitFilePath(absolutePath);
+        var (prefixPath, relativePath) = _projectManager.ActiveProject.SplitFilePath(absolutePath);
 
         if (absolutePath.StartsWith(_projectManager.ActiveProject.ModDirectory))
         {
@@ -790,7 +794,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        await ProjectResourceHelper.MoveAndRefactor(_projectManager.ActiveProject, relativePath, newRelativePath, refactor);
+        await ProjectResourceHelper.MoveAndRefactor(_projectManager.ActiveProject, relativePath, newRelativePath, prefixPath, refactor);
         _mainViewModel.ReloadChangedFiles();
     }
 
@@ -989,6 +993,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     #endregion
 
+    public event EventHandler? OnToggleFlatMode;
+
+    [RelayCommand(CanExecute = nameof(CanOpenInFileExplorer))]
+    private void ToggleFlatMode() => OnToggleFlatMode?.Invoke(this, EventArgs.Empty);
+
     #endregion commands
 
     #region Methods
@@ -1109,7 +1118,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <summary>
     /// Passes key state changes from view down to ModifierViewStatesModel
     /// </summary>
-    public void RefreshModifierStates() => ModifierViewStateService.RefreshModifierStates();
+    public void RefreshModifierStates() => DispatcherHelper.RunOnMainThread(() => ModifierViewStateService.RefreshModifierStates());
 
     public IDocumentViewModel? GetActiveEditorFile() => _mainViewModel.ActiveDocument;
 

@@ -300,7 +300,23 @@ namespace WolvenKit.RED4.CR2W.Archive
                 legacyFiles.AddRange(Directory.GetFiles(legacyModPath, "*.archive", SearchOption.TopDirectoryOnly));
             }
 
-            // parse REDmods
+            // load all archive files in redmod folders, recursively, we don't care if the install is valid
+            foreach (var folder in Directory.GetDirectories(redModBasePath))
+            {
+                var redModArchivesDir = Path.Combine(redModBasePath, folder, "archives");
+                if (!Directory.Exists(redModArchivesDir))
+                {
+                    continue;
+                }
+
+                var modArchives = Directory.GetFiles(redModArchivesDir, "*.archive", SearchOption.AllDirectories).ToList();
+                modArchives.Sort(string.CompareOrdinal);
+                modArchives.Reverse();
+
+                redModFiles.AddRange(modArchives);
+            }
+
+            // now check if they're valid
             if (File.Exists(redModModsJson))
             {
                 var modsJson = File.Open(redModModsJson, FileMode.Open);
@@ -311,33 +327,21 @@ namespace WolvenKit.RED4.CR2W.Archive
                 foreach (var mod in modsArr.Where(mod => mod.GetProperty("enabled").GetBoolean()))
                 {
                     var folder = mod.GetProperty("folder").GetString().NotNull();
-                    var redModArchivesDir = Path.Combine(redModBasePath, folder, "archives");
 
                     if (!mod.GetProperty("deployed").GetBoolean())
                     {
                         enabledButNotDeployed.Add(folder);
                     }
 
-                    if (!Directory.Exists(folder))
+                    if (!Directory.Exists(Path.Combine(redModBasePath, folder)))
                     {
                         enabledButDontExist.Add($"mods/{folder}");
-                        continue;
                     }
-
-                    if (!Directory.Exists(redModArchivesDir))
-                    {
-                        continue;
-                    }
-
-                    var modArchives = Directory.GetFiles(redModArchivesDir, "*.archive", SearchOption.TopDirectoryOnly).ToList();
-                    modArchives.Sort(string.CompareOrdinal);
-                    modArchives.Reverse();
-
-                    redModFiles.AddRange(modArchives);
                 }
 
                 modsJson.Close();
             }
+
 
             // parse legacy mod txt
             if (File.Exists(legacyModlistTxt))

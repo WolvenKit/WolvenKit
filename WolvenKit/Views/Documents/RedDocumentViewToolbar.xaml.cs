@@ -103,7 +103,9 @@ namespace WolvenKit.Views.Documents
         }
 
         private void OnFileValidationClick(object sender, RoutedEventArgs e) =>
-            Task.Run(async () => await RunFileValidation()).GetAwaiter().GetResult();
+            // This needs to be inside the DispatcherHelper, or the UI button will make everything explode
+            DispatcherHelper.RunOnMainThread(() => Task.Run(async () => await RunFileValidation()).GetAwaiter().GetResult());
+
 
         private void OnConvertLocalMaterialsClick(object sender, RoutedEventArgs e) =>
             ViewModel?.RootChunk?.ConvertPreloadMaterialsCommand.Execute(null);

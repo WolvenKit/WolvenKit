@@ -14,7 +14,6 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:tools="clr-namespace:WolvenKit.App.ViewModels.Tools;assembly=WolvenKit.App"
     x:Name="uc"
-    d:DataContext="{d:DesignInstance Type=tools:ProjectExplorerViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="400"
     x:TypeArguments="tools:ProjectExplorerViewModel"
@@ -702,7 +701,6 @@
                     <Button
                         Margin="3,0,0,0"
                         Click="ScrollToOpenFile_OnClick"
-                        IsEnabled="{Binding CanScrollToOpenFile}"
                         ToolTip="Scroll to open file">
                         <iconPacks:Material
                             Width="13"
@@ -731,6 +729,7 @@
                     </Button>
 
                     <ToggleButton
+                        x:Name="ToggleFlatModeButton"
                         Margin="3,0,0,0"
                         hc:VisualElement.HighlightBackground="{StaticResource WolvenKitRed}"
                         IsChecked="{Binding IsFlatModeEnabled}"
