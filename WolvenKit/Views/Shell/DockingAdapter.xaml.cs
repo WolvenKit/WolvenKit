@@ -55,7 +55,7 @@ namespace WolvenKit.Views.Shell
 
             if (_viewModel is not null)
             {
-                _viewModel.OnInitialProjectLoaded += (_, _) => LoadLayoutFromProject();
+                _viewModel.OnAppLoaded += (_, _) => LoadLayoutFromProject();
             }
         }
 
