@@ -226,11 +226,16 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     partial void OnStatusChanged(EAppStatus? value)
     {
-        if (value == EAppStatus.Loaded)
+        if (value != EAppStatus.Loaded)
         {
-            HandleActivation();
+            return;
         }
+
+        OnAppLoaded?.Invoke(this, EventArgs.Empty);
+        HandleActivation();
     }
+
+    public event EventHandler? OnAppLoaded;
 
     private void HandleActivation()
     {
