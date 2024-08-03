@@ -191,4 +191,6 @@ public interface ISettingsManager : ISettingsDto, INotifyPropertyChanged
     bool UseValidatingEditor { get; set; }
 
     bool ReopenLastProject { get; set; }
+
+    bool ShowVerboseLogOutput { get; set; }
 }

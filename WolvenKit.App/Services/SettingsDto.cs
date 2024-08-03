@@ -60,6 +60,7 @@ public class SettingsDto : ISettingsDto
         ShowRedmodInRibbon = settings.ShowRedmodInRibbon;
         UseValidatingEditor = settings.UseValidatingEditor;
         ReopenLastProject = settings.ReopenLastProject;
+        ShowVerboseLogOutput = settings.ShowVerboseLogOutput;
         ArchiveNamesExcludeFromScan = settings.ArchiveNamesExcludeFromScan;
 
         MigrateSettings(settings.SettingsVersion);
@@ -99,6 +100,7 @@ public class SettingsDto : ISettingsDto
     public bool ShowRedmodInRibbon { get; set; }
     public bool UseValidatingEditor { get; set; } = true;
     public bool ReopenLastProject { get; set; }
+    public bool ShowVerboseLogOutput { get; set; }
     public int PinnedOrder { get; set; }
     public int RecentOrder { get; set; }
     public bool ShowGraphEditorNodeProperties { get; set; } = true;

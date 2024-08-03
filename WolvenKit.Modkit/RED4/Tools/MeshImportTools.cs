@@ -527,13 +527,18 @@ namespace WolvenKit.Modkit.RED4
         // Maintaining compatibility but need to review if we really want to support empties via nodes
         private RawMeshContainer GltfMeshToRawContainer(Node node, GltfImportArgs args)
         {
-            if (node.Mesh == null)
+            if (node.Mesh != null)
             {
-                _loggerService.Warning($"Node {node.Name} has no mesh, creating empty mesh (this is probably wrong.)");
-                return CreateEmptyMesh(node.Name);
+                return GltfMeshToRawContainer(node.Mesh, args);
             }
 
-            return GltfMeshToRawContainer(node.Mesh, args);
+            if (args.ShowVerboseLogOutput)
+            {
+                _loggerService.Warning($"Node {node.Name} has no mesh, creating empty mesh (this is probably wrong.)");
+            }
+
+            return CreateEmptyMesh(node.Name);
+
         }
 
         private RawMeshContainer GltfMeshToRawContainer(Mesh mesh, GltfImportArgs args)
@@ -987,7 +992,6 @@ namespace WolvenKit.Modkit.RED4
                     if (idx < mesh.name.Length - 1)
                     {
                         var lod = Convert.ToUInt32(mesh.name.Substring(idx + 4, 1));
-                        lod = args.ReplaceLod && lod == 0 ? 8 : lod;
                         meshesInfo.LODLvl[i] = lod;
                     }
                 }
@@ -1440,8 +1444,6 @@ namespace WolvenKit.Modkit.RED4
                             throw new Exception("Invalid Geometry/sub mesh name: " + name + " , Character after \"LOD_\" should be 1 or 2 or 4 or 8, Representing the Level of Detail (LOD) of the submesh.");
                         }
 
-                        lod = args.ReplaceLod && lod == 0 ? 8 : lod;
-
                         if (lod is not 1 and not 2 and not 4 and not 8)
                         {
                             throw new Exception("Invalid Geometry/sub mesh name: " + name + " , Character after \"LOD_\"  should be 1 or 2 or 4 or 8, Representing the Level of Detail (LOD) of the submesh.");
@@ -1476,16 +1478,10 @@ namespace WolvenKit.Modkit.RED4
                     var idx = mesh.name.IndexOf("LOD_", StringComparison.Ordinal);
                     if (idx < mesh.name.Length - 1)
                     {
-                        if (!uint.TryParse(mesh.name.AsSpan(idx + 4, 1), out var lod))
+                        if (!uint.TryParse(mesh.name.AsSpan(idx + 4, 1), out var lod) || lod is not 1 and not 2 and not 4 and not 8)
                         {
-                            throw new Exception("Invalid Geometry/sub mesh name: " + mesh.name + " , Character after \"LOD_\" should be 1 or 2 or 4 or 8, Representing the Level of Detail (LOD) of the submesh.");
-                        }
-                        
-                        lod = args.ReplaceLod && lod == 0 ? 8 : lod;
-
-                        if (lod is not 1 and not 2 and not 4 and not 8)
-                        {
-                            throw new Exception("Invalid Geometry/sub mesh name: " + mesh.name + " , Character after \"LOD_\"  should be 1 or 2 or 4 or 8, Representing the Level of Detail (LOD) of the submesh.");
+                            throw new Exception(
+                                $"Invalid submesh name: {mesh.name}, Character after \"LOD_\" should be 1 or 2 or 4 or 8 to indicate submesh Level of Detail");
                         }
 
                         lodLvl[i] = lod;
