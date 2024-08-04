@@ -121,6 +121,16 @@
     <Compile Remove="Converters\BooleanConverter.cs" />
       <Compile Remove="GridVirtualizingCellsControl.xaml.cs"/>
       <Page Remove="GridVirtualizingCellsControl.xaml"/>
+    <Page Update="Views\Controls\ValidationTextBlock.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <XamlRuntime>Wpf</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\ValidationRules.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <XamlRuntime>Wpf</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Views\Templates\RedFixedPointEditor.cs" />

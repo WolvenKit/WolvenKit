@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.IO;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using Splat;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Core.Exceptions;
+using WolvenKit.ViewModels.Validators;
 
 namespace WolvenKit.Views.Dialogs.Windows
 {
@@ -51,16 +53,67 @@ namespace WolvenKit.Views.Dialogs.Windows
             return ShowDialog();
         }
 
+
+        private readonly DepotPathValidationRule _depotPathValidationRule = DepotPathValidationRule.Instance;
         private void DepotPath_OnKeyUp(object sender, KeyEventArgs e)
         {
-            throw new NotImplementedException();
+            if (DepotPathTextBox.GetBindingExpression(TextBox.TextProperty) is not BindingExpression bind)
+            {
+                return;
+            }
+
+            var result = _depotPathValidationRule.Validate(DepotPathTextBox.Text, CultureInfo.CurrentCulture);
+            if (!result.IsValid)
+            {
+                Validation.MarkInvalid(bind,
+                    new ValidationError(_depotPathValidationRule, bind, result.ErrorContent, null));
+            }
+            else
+            {
+                Validation.ClearInvalid(bind);
+            }
+
+            SetButtonStatesFromControlValidity(); 
         }
 
+        private readonly ItemNameValidationRule _itemRule = new();
         private void ItemName_OnKeyUp(object sender, KeyEventArgs e)
         {
-            throw new NotImplementedException();
+            var bindingExpression = ItemNameTextBox.GetBindingExpression(TextBox.TextProperty);
+            if (bindingExpression == null)
+            {
+                return;
+            }
+
+            var validationResult = _itemRule.Validate(ItemNameTextBox.Text, CultureInfo.CurrentCulture);
+            if (!validationResult.IsValid)
+            {
+                Validation.MarkInvalid(bindingExpression,
+                    new ValidationError(_itemRule, bindingExpression, validationResult.ErrorContent, null));
+            }
+            else
+            {
+                Validation.ClearInvalid(bindingExpression);
+            }
+
+            SetButtonStatesFromControlValidity(); 
         }
 
+        private static bool HasValidationError(Control control) =>
+            control.GetBindingExpression(TextBox.TextProperty) is not null && Validation.GetHasError(control);
+
+        private void SetButtonStatesFromControlValidity()
+        {
+            if (ViewModel is null)
+            {
+                return;
+            }
+
+            ViewModel.IsValid = !HasValidationError(ItemNameTextBox) &&
+                                !HasValidationError(DepotPathTextBox);
+        }
+
+        // Enable/Disable subtype and EqEx type based on selected item type
         private void ItemType_OnChanged(object sender, SelectionChangedEventArgs e)
         {
             if (ViewModel is null || sender is not ComboBox { SelectedItem: EquipmentItemSlot slot })
@@ -76,7 +129,7 @@ namespace WolvenKit.Views.Dialogs.Windows
             ViewModel.SetItemSlot(slot);
         }
 
-        // Custom filter implementation as klepped from https://stackoverflow.com/a/48211059, thank you Oceans
+        // Custom filter implementation as klepped from https://stackoverflow.com/a/48211059, thanks Oceans
         private void ComboBox_KeyUp(object sender, KeyEventArgs e)
         {
             var combobox = (ComboBox)sender;
