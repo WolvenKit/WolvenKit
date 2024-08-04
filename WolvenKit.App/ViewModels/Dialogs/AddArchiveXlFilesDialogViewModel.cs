@@ -29,7 +29,11 @@ public partial class AddArchiveXlFilesDialogViewModel() : DialogViewModel
     [ObservableProperty] private bool? _forceHair;
     [ObservableProperty] private bool? _isHeadItem;
 
+    // enable/disable the subType and EquipmentEx slot dropdowns
     [ObservableProperty] private bool? _hasSlot;
+
+    // for validation: disables/enables the button
+    [ObservableProperty] private bool? _isValid;
 
     // Dropdown selection options
     [ObservableProperty] private List<EquipmentItemSubSlot>? _equipmentItemSubSlots;
@@ -61,6 +65,8 @@ public partial class AddArchiveXlFilesDialogViewModel() : DialogViewModel
         IsHeadItem = false;
         HideInFpp = false;
         ForceHair = false;
+
+        IsValid = false;
         HasSlot = false;
     }
 
@@ -76,8 +82,17 @@ public partial class AddArchiveXlFilesDialogViewModel() : DialogViewModel
     public void SetItemSlot(EquipmentItemSlot slot)
     {
         Slot = slot;
-        EquipmentItemSubSlots = ArchiveXlHelper.EquipmentSlotsAndSubtypes[slot];
-        IsHeadItem = slot == EquipmentItemSlot.Head;
         HasSlot = slot != EquipmentItemSlot.None;
+        IsHeadItem = slot == EquipmentItemSlot.Head;
+
+        if (HasSlot == true)
+        {
+            EquipmentItemSubSlots = ArchiveXlHelper.EquipmentSlotsAndSubtypes[slot];
+            return;
+        }
+
+        SubSlot = EquipmentItemSubSlot.None;
+        EqExSlot = EquipmentExSlot.None;
+        IsValid = false;
     }
 }
