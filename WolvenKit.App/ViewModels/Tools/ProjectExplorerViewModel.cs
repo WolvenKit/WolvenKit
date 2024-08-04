@@ -138,6 +138,17 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         CanScrollToOpenFile = _mainViewModel.ActiveDocument is not null;
     }
 
+    private bool _loading;
+
+    public bool Loading
+    {
+        get => _loading;
+        set
+        {
+            _loading = value;
+            OnPropertyChanged(new PropertyChangedEventArgs(nameof(_loading)));
+        }
+    }
     public event Action? OnProjectChanged;
     
     private void ProjectManager_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
