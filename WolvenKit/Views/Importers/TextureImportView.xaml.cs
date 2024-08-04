@@ -66,79 +66,69 @@ public partial class ImportView : ReactiveUserControl<ImportViewModel>
             return;
         }
 
-        if (ImportGrid.SelectedItem is ImportExportItemViewModel selectedImport && Enum.TryParse(selectedImport.Extension.TrimStart('.'), out ERawFileFormat rawExtension) && rawExtension == ERawFileFormat.re)
+        if (ImportGrid.SelectedItem is not ImportExportItemViewModel selectedImport ||
+            !Enum.TryParse(selectedImport.Extension.TrimStart('.'), out ERawFileFormat rawExtension) || rawExtension != ERawFileFormat.re)
         {
-            
-            var animsets = Directory.GetFiles(mod.ModDirectory, "*.anims", SearchOption.AllDirectories);
-            var depotPaths = animsets.Select(x => x[(mod.ModDirectory.Length + 1)..]);
-
-            // UI actions
-            AddSettingsRe.SetCurrentValue(VisibilityProperty, Visibility.Visible);
-            AnimsetComboBox.SetCurrentValue(ItemsControl.ItemsSourceProperty, depotPaths);
-
-            // set defaults if no change in selection
-            if (selectedImport.Properties is ReImportArgs args)
-            {
-                if (AnimsetComboBox.SelectedItem is not string selectedItem)
-                {
-                    return;
-                }
-                if (string.IsNullOrEmpty(selectedItem))
-                {
-                    return;
-                }
-
-                args.Animset = selectedItem;
-
-                if (AnimNameComboBox.SelectedItem is not string selectedName)
-                {
-                    return;
-                }
-                if (string.IsNullOrEmpty(selectedName))
-                {
-                    return;
-                }
-
-                args.AnimationToRename = selectedName;
-            }
-
+            return;
         }
+
+        var animsets = Directory.GetFiles(mod.ModDirectory, "*.anims", SearchOption.AllDirectories);
+        var depotPaths = animsets.Select(x => x[(mod.ModDirectory.Length + 1)..]);
+
+        // UI actions
+        AddSettingsRe.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+        AnimsetComboBox.SetCurrentValue(ItemsControl.ItemsSourceProperty, depotPaths);
+
+        // set defaults if no change in selection
+        if (selectedImport.Properties is not ReImportArgs args)
+        {
+            return;
+        }
+
+        if (AnimsetComboBox.SelectedItem is not string selectedItem || string.IsNullOrEmpty(selectedItem))
+        {
+            return;
+        }
+
+        args.Animset = selectedItem;
+
+        if (AnimNameComboBox.SelectedItem is not string selectedName || string.IsNullOrEmpty(selectedName))
+        {
+            return;
+        }
+
+        args.AnimationToRename = selectedName;
     }
 
     // TODO refactor this and move to ViewModel
     private void AnimsetComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
     {
         var mod = Locator.Current.GetService<IProjectManager>().NotNull().ActiveProject;
-        if (mod is null)
+        if (mod is null ||
+            ImportGrid.SelectedItem is not ImportableItemViewModel { Properties: ReImportArgs args } ||
+            AnimsetComboBox.SelectedItem is not string selectedItem)
         {
             return;
         }
 
-        if (ImportGrid.SelectedItem is ImportableItemViewModel selectedImport && selectedImport.Properties is ReImportArgs args)
+        args.Animset = selectedItem;
+
+        // parse animset and populate the animnameBox
+        var path = Path.Combine(mod.ModDirectory, selectedItem);
+        if (!File.Exists(path))
         {
-            if (AnimsetComboBox.SelectedItem is not string selectedItem)
-            {
-                return;
-            }
-
-            args.Animset = selectedItem;
-
-            // parse animset and populate the animnameBox
-            var path = Path.Combine(mod.ModDirectory, selectedItem);
-            if (File.Exists(path))
-            {
-                using var fs = new FileStream(path, FileMode.Open);
-                var parser = Locator.Current.GetService<Red4ParserService>();
-                if (parser.TryReadRed4File(fs, out var originalFile))
-                {
-                    if (originalFile.RootChunk is animAnimSet animset)
-                    {
-                        var animnames = animset.Animations.Select(x => x.Chunk.Animation.Chunk.Name.ToString());
-                        AnimNameComboBox.SetCurrentValue(System.Windows.Controls.ItemsControl.ItemsSourceProperty, animnames);
-                    }
-                }
-            }
+            return;
         }
+
+        using var fs = new FileStream(path, FileMode.Open);
+        var parser = Locator.Current.GetService<Red4ParserService>();
+        if (!parser.TryReadRed4File(fs, out var originalFile) || originalFile.RootChunk is not animAnimSet animset)
+        {
+            return;
+        }
+
+        var animnames = animset.Animations.Select(x => x.Chunk.Animation.Chunk.Name.ToString());
+        AnimNameComboBox.SetCurrentValue(System.Windows.Controls.ItemsControl.ItemsSourceProperty, animnames);
     }
 
     // TODO refactor this and move to ViewModel

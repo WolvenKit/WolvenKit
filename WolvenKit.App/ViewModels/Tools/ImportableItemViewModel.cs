@@ -2,8 +2,6 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using DynamicData.Kernel;
-using WolvenKit.App.Models;
 using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
@@ -161,15 +159,7 @@ public class ImportableItemViewModel : ImportExportItemViewModel
             return false;
         }
 
-        args = new XbmImportArgs()
-        {
-            TextureGroup = setup.Group,
-            IsGamma = setup.IsGamma,
-            RawFormat = setup.RawFormat,
-            Compression = setup.Compression,
-            GenerateMipMaps = blob.Header.TextureInfo.MipCount > 1,
-            IsStreamable = setup.IsStreamable,
-        };
+        args = new XbmImportArgs(setup, blob.Header.TextureInfo.MipCount > 1);
         return true;
 
     }

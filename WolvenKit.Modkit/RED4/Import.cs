@@ -361,19 +361,7 @@ namespace WolvenKit.Modkit.RED4
                     return false;
                 }
 
-                args = new XbmImportArgs
-                {
-                    //AllowTextureDowngrade = xbm.Setup.AllowTextureDowngrade,
-                    //AlphaToCoverageThreshold = xbm.Setup.AlphaToCoverageThreshold,
-                    Compression = Enum.Parse<ETextureCompression>(xbm.Setup.Compression.ToString()),
-                    GenerateMipMaps = xbm.Setup.HasMipchain,
-                    IsGamma = xbm.Setup.IsGamma,
-                    //IsStreamable = xbm.Setup.IsStreamable,
-                    //PlatformMipBiasConsole = xbm.Setup.PlatformMipBiasConsole,
-                    //PlatformMipBiasPC = xbm.Setup.PlatformMipBiasPC,
-                    RawFormat = Enum.Parse<ETextureRawFormat>(xbm.Setup.RawFormat.ToString()),
-                    TextureGroup = xbm.Setup.Group
-                };
+                args = new XbmImportArgs(xbm.Setup);
             }
 
             var extension = Path.GetExtension(infilePath);

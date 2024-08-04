@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model.Arguments;
 using System.Text.RegularExpressions;
+using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.App.ViewModels.Tools;
 
@@ -21,8 +22,14 @@ public abstract partial class ImportExportItemViewModel : ObservableObject, ISel
         Properties.PropertyChanged += Properties_PropertyChanged;
     }
 
-    private void Properties_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) =>
+    private void Properties_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(XbmImportArgs.TextureGroup) && Properties is XbmImportArgs xbmImportArgs)
+        {
+            Properties = CommonFunctions.TextureSetupFromTextureGroup(xbmImportArgs.TextureGroup);
+        }
         PropertiesDisplay = Properties.ToString();
+    }
 
     public string BaseFile { get; set; }
 

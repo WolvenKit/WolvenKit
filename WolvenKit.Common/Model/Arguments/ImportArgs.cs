@@ -8,6 +8,8 @@ using DynamicData;
 using Microsoft.Extensions.Logging;
 using SharpGLTF.Validation;
 using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.Types;
 using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.Common.Model.Arguments
@@ -90,7 +92,7 @@ namespace WolvenKit.Common.Model.Arguments
         public bool PremultiplyAlpha { get; set; } = false;
 
         [Category("Image Color Settings")]
-        [Display(Name = "SRGB (ISGamma)")]
+        [Display(Name = "SRGB (IsGamma)")]
         [Description("Should the file be handled as a SRGB file, or is this a data texture (e.g. a normal map)?")]
         public bool IsGamma { get; set; } = false;
 
@@ -98,6 +100,29 @@ namespace WolvenKit.Common.Model.Arguments
         {
             Keep = false;
             GenerateMipMaps = true;
+        }
+
+        public XbmImportArgs(GpuWrapApieTextureGroup texGroup)
+        {
+            Keep = false;
+            GenerateMipMaps = true;
+            _textureGroup = texGroup;
+            IsGamma = _textureGroup is GpuWrapApieTextureGroup.TEXG_Generic_Color
+                or GpuWrapApieTextureGroup.TEXG_Multilayer_Color
+                or GpuWrapApieTextureGroup.TEXG_Generic_UI;
+        }
+
+        public XbmImportArgs(STextureGroupSetup xbmSetup) : this(xbmSetup, xbmSetup.HasMipchain)
+        {
+        }
+
+        public XbmImportArgs(STextureGroupSetup xbmSetup, bool generateMipMaps)
+        {
+            Compression = Enum.Parse<ETextureCompression>(xbmSetup.Compression.ToString());
+            GenerateMipMaps = generateMipMaps;
+            IsGamma = xbmSetup.IsGamma;
+            RawFormat = Enum.Parse<ETextureRawFormat>(xbmSetup.RawFormat.ToString());
+            _textureGroup = xbmSetup.Group;
         }
 
         /// <summary>

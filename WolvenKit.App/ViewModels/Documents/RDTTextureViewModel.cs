@@ -185,19 +185,7 @@ public partial class RDTTextureViewModel : RedDocumentTabViewModel
             }
         }
 
-        var xbmImportArgs = new XbmImportArgs
-        {
-            RawFormat = Enum.Parse<ETextureRawFormat>(bitmap.Setup.RawFormat.ToString()),
-            Compression = Enum.Parse<ETextureCompression>(bitmap.Setup.Compression.ToString()),
-            GenerateMipMaps = bitmap.Setup.HasMipchain,
-            IsGamma = bitmap.Setup.IsGamma,
-            TextureGroup = bitmap.Setup.Group,
-            //IsStreamable = bitmap.Setup.IsStreamable,
-            //PlatformMipBiasPC = bitmap.Setup.PlatformMipBiasPC,
-            //PlatformMipBiasConsole = bitmap.Setup.PlatformMipBiasConsole,
-            //AllowTextureDowngrade = bitmap.Setup.AllowTextureDowngrade,
-            //AlphaToCoverageThreshold = bitmap.Setup.AlphaToCoverageThreshold
-        };
+        var xbmImportArgs = new XbmImportArgs(bitmap.Setup);
 
         // import raw texture to xbm
         var newxbm = newImage.SaveToXBM(xbmImportArgs, true);
