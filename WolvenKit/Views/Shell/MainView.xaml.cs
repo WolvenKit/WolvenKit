@@ -73,7 +73,6 @@ namespace WolvenKit.Views.Shell
                     return true;
                 };
 
-
                 Interactions.ShowArchiveXlFilesView = isControlFiles =>
                 {
                     AddArchiveXlFilesDialog dialog = new(isControlFiles);

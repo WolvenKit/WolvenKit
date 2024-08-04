@@ -4,9 +4,21 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:validators="clr-namespace:WolvenKit.ViewModels.Validators"
+    xmlns:controls="clr-namespace:WolvenKit.Views.Controls"
     Title="Add Archive XL files"
     SizeToContent="WidthAndHeight"
     WindowStartupLocation="CenterOwner">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/WolvenKit;component/Themes/ValidationRules.xaml" />
+                <hc:ThemeResources />
+                <hc:Theme />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
 
     <Grid
         Margin="5,5,2,5"
@@ -63,17 +75,46 @@
                 <Style x:Key="LabelStyleRow2" TargetType="TextBlock" BasedOn="{StaticResource LabelStyle}">
                     <Setter Property="Margin" Value="5,0,0,4" />
                 </Style>
-                <Style x:Key="TextboxStyle" TargetType="TextBox" BasedOn="{StaticResource TextBoxExtendBaseStyle}">
-                    <Setter Property="Margin" Value="5,15,0,4" />
-                </Style>
                 <Style x:Key="ComboboxStyle" TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
 
                     <Setter Property="Margin" Value="5,15,0,4" />
                     <Setter Property="Padding" Value="5, 7" />
                     <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
-                    <Setter Property="Background" Value="{StaticResource BackgroundColor_Frame_Background}" />
+                    <Setter Property="Background" Value="{StaticResource ControlBackgroundColor}" />
                     <Setter Property="BorderThickness" Value="1" />
                 </Style>
+                <Style x:Key="TextBoxWithControlValidatorsStyle" TargetType="TextBox" BasedOn="{StaticResource TextBoxExtendBaseStyle}">
+                    <Setter Property="Margin" Value="5,15,0,4" />
+                    <Style.Triggers>
+                        <Trigger Property="Validation.HasError" Value="true">
+                            <Setter Property="BorderBrush" Value="DarkRed" />
+                            <Setter Property="Background" Value="{StaticResource WolvenKitRedShadow25}" />
+                            <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}" />
+                        </Trigger>
+                        <Trigger Property="Validation.HasError" Value="false">
+                            <Setter Property="BorderBrush" Value="{StaticResource ForegroundColor_Grey1}" />
+                            <Setter Property="Background" Value="{StaticResource ControlBackgroundColor}" />
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsFocused" Value="True" />
+                                <Condition Property="Validation.HasError" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="BorderBrush" Value="Red" />
+                            <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}" />
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True" />
+                                <Condition Property="Validation.HasError" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="BorderBrush" Value="Red" />
+                            <Setter Property="Background" Value="{StaticResource WolvenKitRedShadow25}" />
+                            <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}" />
+                        </MultiTrigger>
+                    </Style.Triggers>
+                </Style>
+
             </ResourceDictionary>
         </Grid.Resources>
 
@@ -83,6 +124,7 @@
                 BackVisibility="Collapsed"
                 CancelVisibility="Visible"
                 FinishVisibility="Visible"
+                FinishEnabled="{Binding IsValid}"
                 HelpVisibility="Visible"
                 NextVisibility="Collapsed"
                 PageType="Exterior"
@@ -136,6 +178,7 @@
                             Grid.Column="1"
                             Text="Where do you want to equip your item?" />
 
+                        <!-- Item name -->
                         <!-- We also need this to create a factory, since we need to generate a subfolder -->
                         <TextBlock Text="Item Name"
                                    Style="{StaticResource LabelStyle}"
@@ -145,21 +188,27 @@
                             x:Name="ItemNameTextBox"
                             Grid.Row="2"
                             Grid.Column="1"
-                            Style="{StaticResource TextboxStyle}"
-                            KeyUp="ItemName_OnKeyUp" />
-                        <TextBlock
-                            Visibility="{Binding CreateFactory, Converter={StaticResource InvertBooleanConverter}}"
-                            Style="{StaticResource ExplanationStyle}"
-                            Grid.Row="3"
-                            Grid.Column="1"
-                            Text="This will be used to generate your item's spawn code and internal names." />
-                        <TextBlock
-                            Visibility="{Binding CreateFactory, Converter={StaticResource BooleanToVisibilityConverter}}"
-                            Style="{StaticResource ExplanationStyle}"
-                            Grid.Row="3"
-                            Grid.Column="1"
-                            Text="Will be used for naming your resource files" />
+                            Style="{StaticResource TextBoxWithControlValidatorsStyle}"
+                            KeyUp="ItemName_OnKeyUp">
+                            <TextBox.Text>
+                                <Binding Path="ItemName" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <validators:ItemNameValidationRule />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </hc:TextBox>
 
+                        <controls:ValidationTextBlock
+                            BoundControl="{Binding ElementName=ItemNameTextBox}"
+                            DefaultText="Will be used to generate file names and internal properties."
+                            SecondaryText="Will be used to generate your control file names."
+                            UseSecondaryText="{Binding CreateFactory}"
+                            Grid.Row="3"
+                            Grid.Column="1" />
+
+
+                        <!-- Depot path -->
                         <TextBlock Text="Depot Path"
                                    Style="{StaticResource LabelStyle}"
                                    Grid.Row="4"
@@ -168,14 +217,22 @@
                         <hc:TextBox x:Name="DepotPathTextBox"
                                     Grid.Row="4"
                                     Grid.Column="1"
-                                    Style="{StaticResource TextboxStyle }"
-                                    KeyUp="DepotPath_OnKeyUp" />
+                                    Style="{StaticResource TextBoxWithControlValidatorsStyle }"
+                                    KeyUp="DepotPath_OnKeyUp">
+                            <TextBox.Text>
+                                <Binding Path="DepotPath" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <validators:DepotPathValidationRule />
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </hc:TextBox>
 
-                        <TextBlock
-                            Style="{StaticResource ExplanationStyle}"
+                        <controls:ValidationTextBlock
+                            BoundControl="{Binding ElementName=DepotPathTextBox}"
+                            DefaultText="Your custom subfolder in your project. Directories will be created if they don't exist."
                             Grid.Row="5"
-                            Grid.Column="1"
-                            Text="Destination path for your files in your project. Directories will be created if they don't exist." />
+                            Grid.Column="1" />
 
                     </Grid>
 
