@@ -69,7 +69,8 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(LastLaunchProfile),
             nameof(ShowRedmodInRibbon),
             nameof(UseValidatingEditor),
-            nameof(ReopenLastProject)
+            nameof(ReopenLastProject),
+            nameof(ShowVerboseLogOutput)
             )
           .Subscribe(_ =>
           {
@@ -283,6 +284,12 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
         GroupName = "Interface")]
     [ObservableProperty]
     private bool _reopenLastProject;
+
+    [Display(Name = "Show verbose log output",
+        Description = "Will give you all the information",
+        GroupName = "Interface")]
+    [ObservableProperty]
+    private bool _showVerboseLogOutput;
 
     [Display(Name = "Exclude archives from scan by name (comma separated)",
         Description = "Exclude archives from scan if you know that they'll lead to exceptions (only the base name)",

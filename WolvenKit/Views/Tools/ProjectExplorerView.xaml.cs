@@ -228,6 +228,10 @@ namespace WolvenKit.Views.Tools
         // Run inside Dispatcher to avoid exception on startup
         private void ResetTreeGrids() => Dispatcher.Invoke(() =>
         {
+            // Hide loading text
+            LoadingText.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+
+            // now handle the grids
             if (TreeGridFlat.View is not null)
             {
                 TreeGridFlat.ClearFilters();

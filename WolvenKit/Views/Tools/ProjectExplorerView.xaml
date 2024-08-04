@@ -892,5 +892,17 @@
             </syncfusion:SfTreeGrid.Columns>
         </syncfusion:SfTreeGrid>
 
+        <!-- Loading text, visibility is controlled from xaml.cs -->
+        <TextBlock
+            x:Name="LoadingText"
+            Grid.Row="2"
+            Text="Loading..."
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="30"
+            Foreground="Gray"
+            Background="Transparent"
+            Opacity="0.8"
+            Grid.RowSpan="2" />
     </Grid>
 </reactiveUi:ReactiveUserControl>

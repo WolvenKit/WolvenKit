@@ -14,6 +14,7 @@ using WolvenKit.Helpers;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.IO;
+using YamlDotNet.Serialization;
 using EFileReadErrorCodes = WolvenKit.RED4.Archive.IO.EFileReadErrorCodes;
 
 namespace WolvenKit.App.Helpers;
@@ -188,7 +189,7 @@ public class ImportExportHelper
             return await Import(outDir!, rawRelative);
         }
 
-        return await _modTools.Import(rawRelative, args, outDir);
+        return await _modTools.Import(rawRelative, args, outDir, _settingsManager.ShowVerboseLogOutput);
         //_hookService.OnPostImport(ref cr2wFile, ref args);
     }
 }

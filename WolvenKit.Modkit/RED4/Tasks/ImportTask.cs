@@ -68,48 +68,43 @@ public partial class ConsoleFunctions
 
         switch (path)
         {
+            case DirectoryInfo directory:
+                var result = await _modTools.ImportFolder(directory, settings, outDirectory);
+                return result ? ERROR_GENERAL_ERROR : 0;
             case FileInfo file:
                 var rawRelative = new RedRelativePath(file.Directory.NotNull(), file.GetRelativePath(file.Directory));
                 // check if the file can be directly imported
                 // if not, rebuild the single file
-                if (!Enum.TryParse(rawRelative.Extension, true, out ERawFileFormat extAsEnum))
-                {
-                    // buffers can not be rebuilt on their own
-                    if (!settings.Get<CommonImportArgs>().Keep)
-                    {
-                        return ERROR_GENERAL_ERROR;
-                    }
 
-                    // outdir needs to be the parent dir of the redfile to rebuild !! (user needs to take care of that)
-                    if (_modTools.RebuildBuffer(rawRelative, outDirectory.NotNull()))
-                    {
-                        _loggerService.Success($"Successfully imported {path} to {outDirectory.FullName}");
-                        return 0;
-                    }
-                    else
-                    {
-                        _loggerService.Error($"Failed to import {path}");
-                        return ERROR_GENERAL_ERROR;
-                    }
-                }
-                // the raw file can be imported directly
-                else
+                if (Enum.TryParse(rawRelative.Extension, true, out ERawFileFormat extAsEnum))
                 {
-
+                    // the raw file can be imported directly
                     if (await _modTools.Import(rawRelative, settings, outDirectory))
                     {
                         _loggerService.Success($"Successfully imported {path}");
                         return 0;
                     }
-                    else
-                    {
-                        _loggerService.Error($"Failed to import {path}");
-                        return ERROR_GENERAL_ERROR;
-                    }
+
+                    _loggerService.Error($"Failed to import {path}");
+                    return ERROR_GENERAL_ERROR;
                 }
-            case DirectoryInfo directory:
-                var result = await _modTools.ImportFolder(directory, settings, outDirectory);
-                return result ? ERROR_GENERAL_ERROR : 0;
+
+                // buffers can not be rebuilt on their own
+                if (!settings.Get<CommonImportArgs>().Keep)
+                {
+                    return ERROR_GENERAL_ERROR;
+                }
+
+                // outdir needs to be the parent dir of the redfile to rebuild !! (user needs to take care of that)
+                if (_modTools.RebuildBuffer(rawRelative, outDirectory.NotNull()))
+                {
+                    _loggerService.Success($"Successfully imported {path} to {outDirectory.FullName}");
+                    return 0;
+                }
+
+                _loggerService.Error($"Failed to import {path}");
+                return ERROR_GENERAL_ERROR;
+
             default:
                 _loggerService.Error("Not a valid file or directory name.");
                 return ERROR_BAD_ARGUMENTS;
