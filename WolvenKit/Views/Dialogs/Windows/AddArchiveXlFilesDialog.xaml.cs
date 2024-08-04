@@ -129,7 +129,7 @@ namespace WolvenKit.Views.Dialogs.Windows
             ViewModel.SetItemSlot(slot);
         }
 
-        // Custom filter implementation as klepped from https://stackoverflow.com/a/48211059, thank you Oceans
+        // Custom filter implementation as klepped from https://stackoverflow.com/a/48211059, thanks Oceans
         private void ComboBox_KeyUp(object sender, KeyEventArgs e)
         {
             var combobox = (ComboBox)sender;
