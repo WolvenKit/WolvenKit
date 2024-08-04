@@ -189,7 +189,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private void DockedView_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName != "IsVisible" || sender is not IDockElement dockElement)
+        if (e.PropertyName != nameof(IDockElement.IsVisible) || sender is not IDockElement dockElement)
         {
             return;
         }
@@ -356,7 +356,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
 
 
-        if (projectPathToOpen is not null)
+        if (projectPathToOpen is not null && File.Exists(projectPathToOpen))
         {
             _ = OpenProjectAsync(projectPathToOpen);
             ret = true;
@@ -728,8 +728,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             var newProjectName = project.ProjectName.NotNull().Trim();
             var newModName = project.ModName.NotNull().Trim();
-            var projectLocation = Path.Combine(project.ProjectPath.NotNull(), newProjectName, newProjectName,
-                Cp77Project.ProjectFileExtension);
+            var projectLocation = Path.Combine(project.ProjectPath.NotNull(), newProjectName,
+                $"{newProjectName}{Cp77Project.ProjectFileExtension}"
+            );
+            
             Cp77Project np = new(projectLocation, newProjectName, newModName)
             {
                 Author = project.Author,

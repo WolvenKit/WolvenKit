@@ -1074,6 +1074,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
+        if (e.PropertyName == nameof(State) && State == DockState.Hidden)
+        {
+            IsVisible = false;
+        }
+        
         if (e.PropertyName != nameof(SelectedTabIndex) || ActiveProject is null)
         {
             return;

@@ -50,6 +50,7 @@ public class SettingsDto : ISettingsDto
         AnalyzeModArchives = settings.AnalyzeModArchives;
         ExtraModDirPath = settings.ExtraModDirPath;
         LastUsedProjectPath = settings.LastUsedProjectPath;
+        DefaultProjectPath = settings.DefaultProjectPath;
         PinnedOrder = settings.PinnedOrder;
         RecentOrder = settings.RecentOrder;
         ShowGraphEditorNodeProperties = settings.ShowGraphEditorNodeProperties;
@@ -96,6 +97,7 @@ public class SettingsDto : ISettingsDto
     public bool AnalyzeModArchives { get; set; } = false;
     public string? ExtraModDirPath { get; set; }
     public string? LastUsedProjectPath { get; set; }
+    public string? DefaultProjectPath { get; set; }
     public string? LastLaunchProfile { get; set; }
     public bool ShowRedmodInRibbon { get; set; }
     public bool UseValidatingEditor { get; set; } = true;

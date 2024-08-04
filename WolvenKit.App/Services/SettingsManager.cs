@@ -60,6 +60,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(AnalyzeModArchives),
             nameof(ExtraModDirPath),
             nameof(LastUsedProjectPath),
+            nameof(DefaultProjectPath),
             nameof(PinnedOrder),
             nameof(RecentOrder),
             nameof(ShowGraphEditorNodeProperties),
@@ -300,6 +301,10 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [Display(Name = "Additional Mod directory", Description = "Path to an optional directory containing mod archives", GroupName = "Cyberpunk")]
     [ObservableProperty]
     private string? _extraModDirPath;
+
+    [Display(Name = "Default project path", Description = "Path to the directory where you store your mods", GroupName = "General")]
+    [ObservableProperty]
+    private string? _defaultProjectPath;
 
     [Display(Name = "Your name", Description = "Will be used for project properties on creation", GroupName = "General")]
     [ObservableProperty]
