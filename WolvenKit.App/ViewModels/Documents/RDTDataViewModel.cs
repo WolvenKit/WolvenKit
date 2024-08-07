@@ -434,6 +434,10 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         {
             lst.Add(chunk);
         }
+
+        // clear IsSelected property again, because it'll be "stuck" otherwise 
+        chunk.IsSelected = false;
+        
     }
 
     public void SetSelection(List<ChunkViewModel> chunks)
