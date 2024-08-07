@@ -183,28 +183,63 @@
                 Padding="12,0"
                 Header="File">
                 <MenuItem
-                    x:Name="MenuItemNewFile"
-                    Margin="2,1"
-                    Header="New File"
-                    ToolTip="New File">
-                    <MenuItem.Icon>
-                        <Grid Margin="6,0">
-                            <iconPacks:PackIconMaterial
-                                Padding="0,0,2,2"
-                                Foreground="{StaticResource WolvenKitYellow}"
-                                Kind="File"
-                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
-                            <iconPacks:PackIconForkAwesome
-                                Padding="6,6,-3,-3"
-                                Kind="Circle"
-                                Style="{StaticResource WolvenKitToolBarButtonIconEraser}" />
-                            <iconPacks:PackIconForkAwesome
-                                Padding="8,8,-1,-1"
-                                BorderBrush="Black"
-                                Kind="PlusCircle"
-                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
-                        </Grid>
-                    </MenuItem.Icon>
+                    Margin="1,0"
+                    Padding="12,0"
+                    Header="New...">
+                    <MenuItem
+                        x:Name="MenuItemNewFile"
+                        Margin="2,1"
+                        Header="New File"
+                        ToolTip="New File">
+                        <MenuItem.Icon>
+                            <Grid Margin="6,0">
+                                <iconPacks:PackIconMaterial
+                                    Padding="0,0,2,2"
+                                    Foreground="{StaticResource WolvenKitYellow}"
+                                    Kind="File"
+                                    Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                                <iconPacks:PackIconForkAwesome
+                                    Padding="6,6,-3,-3"
+                                    Kind="Circle"
+                                    Style="{StaticResource WolvenKitToolBarButtonIconEraser}" />
+                                <iconPacks:PackIconForkAwesome
+                                    Padding="8,8,-1,-1"
+                                    BorderBrush="Black"
+                                    Kind="PlusCircle"
+                                    Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                            </Grid>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem
+                        x:Name="MenuItemAddAxlControlFiles"
+                        Margin="2,1"
+                        Header="ArchiveXL control files"
+                        ToolTip="Adds a .factory, a .csv, a .yaml and an .archive.xl">
+                        <MenuItem.Icon>
+                            <Grid Margin="6,0">
+                                <iconPacks:PackIconMaterial
+                                    Padding="0,0,2,2"
+                                    Foreground="{StaticResource WolvenKitTan}"
+                                    Kind="GamepadDown"
+                                    Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                            </Grid>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem
+                        x:Name="MenuItemAddAxlItemFiles"
+                        Margin="2,1"
+                        Header="ArchiveXL item"
+                        ToolTip="Adds all necessary files for a new ArchiveXL item">
+                        <MenuItem.Icon>
+                            <Grid Margin="6,0">
+                                <iconPacks:PackIconMaterial
+                                    Padding="0,0,2,2"
+                                    Foreground="{StaticResource WolvenKitTan}"
+                                    Kind="TshirtCrew"
+                                    Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                            </Grid>
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
                 <MenuItem
                     x:Name="Import"

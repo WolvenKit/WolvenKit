@@ -1,0 +1,7 @@
+﻿<!-- File: WolvenKit/Themes/ValidationRules.xaml -->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:validators="clr-namespace:WolvenKit.ViewModels.Validators">
+    <validators:ItemNameValidationRule x:Key="ItemNameValidationRule" />
+    <validators:DepotPathValidationRule x:Key="DepotPathValidationRule" />
+</ResourceDictionary>
