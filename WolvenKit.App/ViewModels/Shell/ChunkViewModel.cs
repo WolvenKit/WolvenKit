@@ -2026,10 +2026,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     private void OpenChunk()
     {
         ArgumentNullException.ThrowIfNull(Tab);
-        if (Data is RedBaseClass cls)
+        if (Data is not RedBaseClass cls)
         {
-            Tab.Parent.TabItemViewModels.Add(_tabViewmodelFactory.RDTDataViewModel(cls, Tab.Parent, _appViewModel, _chunkViewmodelFactory));
+            return;
         }
+
+        var redDocumentTabViewModel = _tabViewmodelFactory.RDTDataViewModel(cls, Tab.Parent, _appViewModel, _chunkViewmodelFactory);
+        Tab.Parent.TabItemViewModels.Add(redDocumentTabViewModel);
     }
 
     private bool CanRenameProperty() => Parent is not null && Parent.ResolvedData is IDynamicClass;   // TODO RelayCommand check notify

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
@@ -80,8 +81,10 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
                 return RedDocumentItemType.App;
             case entEntityTemplate:
                 return RedDocumentItemType.Ent;
+            case CMaterialInstance:
+                return RedDocumentItemType.Mi;
             default:
-                return RedDocumentItemType.Other;
+                return Enum.TryParse(Path.GetExtension(FilePath), out RedDocumentItemType type) ? type : RedDocumentItemType.Other;
         }
     }
 
