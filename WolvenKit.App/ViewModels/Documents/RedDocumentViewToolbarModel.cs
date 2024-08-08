@@ -155,7 +155,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         IsAddDependenciesCommandEnabled = enableDependencyCommand && !IsShiftKeyDown;
         IsAddDependenciesCommandEnabledAndShiftKeyDown = enableDependencyCommand && IsShiftKeyDown;
         
-        IsFileValidationMenuVisible = IsMesh || CurrentTab?.GetContentType() is RedDocumentItemType.App or RedDocumentItemType.Ent;
+        IsFileValidationMenuVisible = IsMesh || CurrentTab?.GetContentType() is RedDocumentItemType.App or RedDocumentItemType.Ent or RedDocumentItemType.Mi;
         
         if (RootChunk?.ResolvedData is not CMesh mesh)
         {
