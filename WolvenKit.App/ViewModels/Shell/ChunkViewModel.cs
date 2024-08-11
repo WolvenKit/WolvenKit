@@ -10,6 +10,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData.Binding;
@@ -877,6 +878,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
+    private static readonly Typeface Arial = new Typeface("Arial");
+    
     /// <summary>
     /// Used for view display
     /// </summary>
@@ -885,26 +888,36 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         get
         {
             var width = 0;
+            if (IsInArray)
+            {
+                var formattedText = new FormattedText(
+                    DisplayName,
+                    System.Globalization.CultureInfo.CurrentCulture,
+                    FlowDirection.LeftToRight,
+                    Arial,
+                    12,
+                    Brushes.Black,
+                    pixelsPerDip: 96D);
+
+                width = (int)formattedText.Width;
+            }
+
+            width = Math.Min(width, DisplayName.Length);
+
             if (Parent is not null)
             {
-                if (IsInArray && Parent.Name == "chunkMaterials")
-                {
-                    return 100;
-                }
+                var parentWidthText = new FormattedText(
+                    new string('0', Parent.PropertyCount.ToString().Length + 1),
+                    System.Globalization.CultureInfo.CurrentCulture,
+                    FlowDirection.LeftToRight,
+                    Arial,
+                    12,
+                    Brushes.Black,
+                    pixelsPerDip: 96D);
 
-                width += Parent.PropertyCount switch
-                {
-                    //if (Parent.ResolvedData is IRedArray ary)
-                    //{
-                    //    width += 20;
-                    //}
-                    <= 10 => 16,
-                    <= 100 => 21,
-                    <= 1000 => 26,
-                    <= 10000 => 31,
-                    _ => 36
-                };
+                width = Math.Max(width, (int)parentWidthText.Width);
             }
+            
             if (PropertyType.IsAssignableTo(typeof(IRedArray)))
             {
                 width += 20;
