@@ -1370,6 +1370,37 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
+    private bool CanDeleteEmptySubmeshes() => ResolvedData is CMesh;
+
+    [RelayCommand(CanExecute = nameof(CanDeleteEmptySubmeshes))]
+    private void DeleteEmptySubmeshes()
+    {
+        if (ResolvedData is not CMesh mesh || mesh.Appearances.Count == 0 ||
+            mesh.RenderResourceBlob.GetValue() is not rendRenderMeshBlob blob)
+        {
+            return;
+        }
+
+        // Find out how many chunk meshes we have 
+        var numSubmeshes = blob.Header.RenderChunkInfos.Count;
+        var wasDeleted = false;
+        foreach (var meshAppearance in mesh.Appearances)
+        {
+            if (meshAppearance.GetValue() is not meshMeshAppearance appearance || appearance.ChunkMaterials.Count <= numSubmeshes)
+            {
+                continue;
+            }
+
+            appearance.ChunkMaterials = new CArray<CName>(appearance.ChunkMaterials.Where((_, i) => i < numSubmeshes).ToList());
+            wasDeleted = true;
+        }
+
+        if (wasDeleted)
+        {
+            DeleteUnusedMaterials();
+        }
+    }
+
 
     private bool CanClearMaterials() => ResolvedData is CMesh && IsShiftKeyPressed;
 

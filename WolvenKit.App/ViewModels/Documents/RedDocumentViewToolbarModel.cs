@@ -113,6 +113,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [ObservableProperty] private bool _isFileValidationMenuVisible;
 
     [ObservableProperty] private bool _isMaterialMenuEnabled;
+    [ObservableProperty] private bool _isCleanupMenuEnabled;
     [ObservableProperty] private bool _isConvertMaterialMenuEnabled;
     [ObservableProperty] private bool _isGenerateMaterialCommandEnabled;
     [ObservableProperty] private bool _isDeleteUnusedMaterialCommandEnabled;
@@ -133,6 +134,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         IsFileValidationMenuVisible = false;
         IsConvertMaterialMenuEnabled = false;
         IsMaterialMenuEnabled = false;
+        IsCleanupMenuEnabled = false;
         IsGenerateMaterialCommandEnabled = false;
         IsDeleteUnusedMaterialCommandEnabled = false;
         IsRegenerateMaterialCommandEnabled = false;
