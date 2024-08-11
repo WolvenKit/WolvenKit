@@ -895,7 +895,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     System.Globalization.CultureInfo.CurrentCulture,
                     FlowDirection.LeftToRight,
                     Arial,
-                    12,
+                    13,
                     Brushes.Black,
                     pixelsPerDip: 96D);
 
