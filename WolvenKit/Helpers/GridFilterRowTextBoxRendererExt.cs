@@ -1,8 +1,11 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
 using Syncfusion.Data;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.Grid.RowFilter;
 using System.Windows.Controls;
+using Syncfusion.UI.Xaml.Grid.Helpers;
 
 namespace WolvenKit.Helpers;
 
@@ -21,14 +24,33 @@ public class GridFilterRowTextBoxRendererExt : GridFilterRowTextBoxRenderer
             return;
         }
 
-        var filterPredicates = this.GetFilterPredicates(GetControlValue());
-        foreach (var filterPredicate in filterPredicates)
-        {
-            filterPredicate.FilterBehavior = FilterBehavior.StringTyped;
-        }
+        var filterPredicates = GetFilterPredicates(filterValue);
+        var filterText = filterValue is string s ? s : GetFilterText(filterPredicates);
 
-        var filterText = this.GetFilterText(filterPredicates);
         ApplyFilters(filterPredicates, filterText);
+            
         IsValueChanged = false;
     }
+
+    protected new List<FilterPredicate> GetFilterPredicates(object o)
+    {
+        if (FilterRowCell.DataColumn.GridColumn is null || o is not string filterValue)
+        {
+            return null;
+        }
+
+        return filterValue.Split(' ')
+            .Select(filterString => new FilterPredicate()
+            {
+                FilterBehavior = FilterBehavior.StringTyped,
+                FilterMode = ColumnFilter.Value,
+                FilterType = FilterType.Contains,
+                FilterValue = filterString,
+                IsCaseSensitive = false,
+                PredicateType = PredicateType.And
+            })
+            .ToList();
+    }
+
 }
+    
