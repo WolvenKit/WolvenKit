@@ -258,31 +258,38 @@ public partial class AssetBrowserViewModel : ToolViewModel
         SearchBarText += $" {value}:";
     }
 
+    private async void InstallWolvenkitResources()
+    {
+        _loggerService.Warning("Wolvenkit-Resources plugin is not installed and is needed for this functionality.");
+
+        var response = await Interactions.ShowMessageBoxAsync(
+            "Wolvenkit-Resources plugin is not installed and is needed for this functionality. Would you like to install it now?",
+            "Wolvenkit-Resources not found");
+        switch (response)
+        {
+            case WMessageBoxResult.OK:
+            case WMessageBoxResult.Yes:
+            {
+                await _appViewModel.ShowHomePage(EHomePage.Plugins);
+                break;
+            }
+
+            case WMessageBoxResult.None:
+            case WMessageBoxResult.Cancel:
+            case WMessageBoxResult.No:
+            case WMessageBoxResult.Custom:
+            default:
+                break;
+        }
+    }
+
+    
     [RelayCommand]
     private async Task FindUsing()
     {
         if (!_pluginService.IsInstalled(EPlugin.wolvenkit_resources))
         {
-            _loggerService.Warning("Wolvenkit-Resources plugin is not installed and is needed for this functionality.");
-
-            var response = await Interactions.ShowMessageBoxAsync("Wolvenkit-Resources plugin is not installed and is needed for this functionality. Would you like to install it now?", "Wolvenkit-Resources not found");
-            switch (response)
-            {
-                case WMessageBoxResult.OK:
-                case WMessageBoxResult.Yes:
-                {
-                    await _appViewModel.ShowHomePage(EHomePage.Plugins);
-                    break;
-                }
-
-                case WMessageBoxResult.None:
-                case WMessageBoxResult.Cancel:
-                case WMessageBoxResult.No:
-                case WMessageBoxResult.Custom:
-                default:
-                    break;
-            }
-
+            InstallWolvenkitResources();
             return;
         }
 
@@ -290,33 +297,44 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
         await Task.Run(async () =>
         {
-            using RedDBContext db = new();
-
-            if (RightSelectedItem is RedFileViewModel file && db.Files is not null)
+            try
             {
-                var hash = file.GetGameFile().Key;
+                await using RedDBContext db = new();
 
-                var usedBy = await db.Files.Include("Uses")
-                    .Where(x => x.Uses != null && x.Uses.Any(y => y.Hash == hash))
-                    .Select(x => x.Hash)
-                    .ToListAsync();
+                if (RightSelectedItem is RedFileViewModel file && db.Files is not null)
+                {
+                    var hash = file.GetGameFile().Key;
 
-                //add all found items to
-                _archiveManager.Archives
-                    .Connect()
-                    .TransformMany(x => x.Files.Values, y => y.Key)
-                    .Filter(x => usedBy.Contains(x.Key))
-                    .Transform(x => new RedFileViewModel(x))
-                    .Bind(out var list)
-                    .Subscribe()
-                    .Dispose();
+                    var usedBy = await db.Files.Include("Uses")
+                        .Where(x => x.Uses != null && x.Uses.Any(y => y.Hash == hash))
+                        .Select(x => x.Hash)
+                        .ToListAsync();
 
-                // This will go into an endless refresh loop if SuppressNotification is not set, which 
-                // prevents the task from completing. 
-                RightItems.SuppressNotification = true;
-                RightItems.Clear();
-                RightItems.AddRange(list);
-                RightItems.SuppressNotification = false;
+                    //add all found items to
+                    _archiveManager.Archives
+                        .Connect()
+                        .TransformMany(x => x.Files.Values, y => y.Key)
+                        .Filter(x => usedBy.Contains(x.Key))
+                        .Transform(x => new RedFileViewModel(x))
+                        .Bind(out var list)
+                        .Subscribe()
+                        .Dispose();
+
+                    // This will go into an endless refresh loop if SuppressNotification is not set, which 
+                    // prevents the task from completing. 
+                    RightItems.SuppressNotification = true;
+                    RightItems.Clear();
+                    RightItems.AddRange(list);
+                    RightItems.SuppressNotification = false;
+                }
+            }
+            catch
+            {
+                _progressService.IsIndeterminate = false;
+                _loggerService.Error("Something went wrong when searching for uses. It is possible that your WolvenkitResourcesPlugin");
+                _loggerService.Error("  has become corrupted. Try reinstalling it. If that doesn't resolve the problem, please ");
+                _loggerService.Error("  create a ticket under https://github.com/WolvenKit/WolvenKit/issues/ with the following:");
+                throw;
             }
 
             await Task.CompletedTask;
