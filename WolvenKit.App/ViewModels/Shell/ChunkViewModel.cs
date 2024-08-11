@@ -902,7 +902,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 width = (int)formattedText.Width;
             }
 
-            // width = Math.Min(width, DisplayName.Length * 8);
+            width = Math.Min(width, DisplayName.Length);
 
             if (Parent is not null)
             {
