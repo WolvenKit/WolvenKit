@@ -39,12 +39,6 @@
                         </Grid>
                     </DataTemplate>
 
-
-                    <!--<DataTemplate DataType="{x:Type toolvm:ImportExportViewModel}">
-                        <Grid>
-                            <tools:ImportExportView />
-                        </Grid>
-                    </DataTemplate>-->
                     <DataTemplate DataType="{x:Type importvms:ImportViewModel}">
                         <Grid>
                             <importers:ImportView />

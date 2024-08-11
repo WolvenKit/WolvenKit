@@ -1,6 +1,8 @@
 ﻿using System.Windows;
 using Syncfusion.Data;
+using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.Grid.RowFilter;
+using System.Windows.Controls;
 
 namespace WolvenKit.Helpers;
 
@@ -12,7 +14,6 @@ public class GridFilterRowTextBoxRendererExt : GridFilterRowTextBoxRenderer
 
         ProcessSingleFilter(GetControlValue());
     }
-
     public override void ProcessSingleFilter(object filterValue)
     {
         if (FilterRowCell.DataColumn.GridColumn == null)
