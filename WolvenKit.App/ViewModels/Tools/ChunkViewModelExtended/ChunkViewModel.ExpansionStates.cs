@@ -137,9 +137,13 @@ public partial class ChunkViewModel : ObservableObject
                     meshAppearances.IsExpanded = true;
                 }
 
-                if (FindTvPropertyChild("preloadLocalMaterialInstances") is { TVProperties.Count: > 0 } preloadMaterials)
+                if (FindTvPropertyChild("preloadLocalMaterialInstances") is { TVProperties.Count: > 0 and > 0 } preloadMaterials)
                 {
                     preloadMaterials.IsExpanded = true;
+                }
+                else if (FindTvPropertyChild("externalMaterials") is { TVProperties.Count: > 0 } externalMaterials)
+                {
+                    externalMaterials.IsExpanded = true;
                 }
 
                 if (FindTvPropertyChild("localMaterialBuffer")?.FindTvPropertyChild("materials") is { TVProperties.Count: > 0 } materials)
