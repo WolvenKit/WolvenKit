@@ -187,8 +187,8 @@
                       Visibility="{ Binding  ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsRegenerateMaterialCommandEnabled, UpdateSourceTrigger=PropertyChanged, Converter={ StaticResource BooleanToVisibilityConverter}}"
                       Style="{StaticResource WolvenKitToolBarItem}">
 
-                <!-- Convert preload materials -->
-                <MenuItem Header="Regenerate materials" Click="OnRegenerateMaterialsClick" />
+                <!-- Regenerate controllers -->
+                <MenuItem Header="Regenerate visual controllers" Click="OnRegenerateControllersClick" />
 
             </MenuItem>
 

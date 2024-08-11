@@ -117,7 +117,7 @@ namespace WolvenKit.Views.Documents
         private void OnClearAllMaterialsClick(object sender, RoutedEventArgs e) =>
             ViewModel?.RootChunk?.ClearMaterialsCommand.Execute(null);
 
-        private void OnRegenerateMaterialsClick(object sender, RoutedEventArgs e) =>
+        private void OnRegenerateControllersClick(object sender, RoutedEventArgs e) =>
             ViewModel?.SelectedChunk?.RegenerateAppearanceVisualControllerCommand.Execute(null);
 
         private void OnGenerateNewCruidClick(object sender, RoutedEventArgs e) =>
