@@ -902,7 +902,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 width = (int)formattedText.Width;
             }
 
-            width = Math.Min(width, DisplayName.Length);
+            width = Math.Max(width, DisplayName.Length);
 
             if (Parent is not null)
             {
@@ -916,11 +916,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     pixelsPerDip: 96D);
 
                 width = Math.Max(width, (int)parentWidthText.Width);
-            }
-            
-            if (PropertyType.IsAssignableTo(typeof(IRedArray)))
-            {
-                width += 20;
             }
 
             return width;
