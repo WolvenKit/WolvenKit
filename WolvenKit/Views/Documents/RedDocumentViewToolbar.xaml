@@ -142,15 +142,39 @@
                       Visibility="{ Binding  ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsMaterialMenuEnabled, Converter={ StaticResource BooleanToVisibilityConverter}}"
                       Style="{StaticResource WolvenKitToolBarItem}">
 
-                <!-- Convert preload materials -->
-                <MenuItem Header="Convert preload materials to local"
-                          IsEnabled="{Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsConvertMaterialMenuEnabled}"
-                          Click="OnConvertLocalMaterialsClick" />
-
                 <!-- Generate missing materials -->
                 <MenuItem Header="Generate missing material entries"
                           IsEnabled="{Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsGenerateMaterialCommandEnabled}"
                           Click="OnGenerateMissingMaterialsClick" />
+
+                <!-- Scroll to material -->
+                <MenuItem Header="Scroll to material"
+                          IsEnabled="{Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsScrollToMaterialCommandEnabled, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                          Click="OnScrollToMaterialClick" />
+
+                <!-- Shift: "Add material dependencies" -->
+                <MenuItem Header="Add material dependencies"
+                          ToolTip="Will run 'delete unused materials' first"
+                          Visibility="{ Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsAddDependenciesCommandEnabled, Converter={ StaticResource BooleanToVisibilityConverter}}"
+                          Click="OnAddDependenciesClick" />
+
+                <!-- Shift: "Add material dependencies (include basegame files)" -->
+                <MenuItem Header="Add material dependencies (include basegame files)"
+                          ToolTip="Will run 'delete unused materials' first"
+                          Visibility="{ Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsAddDependenciesCommandEnabledAndShiftKeyDown, Converter={ StaticResource BooleanToVisibilityConverter}}"
+                          Click="OnAddDependenciesClick" />
+
+            </MenuItem>
+
+            <!-- Mesh file: Clean up menu -->
+            <MenuItem Header="Clean up"
+                      Visibility="{ Binding  ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsMesh, Converter={ StaticResource BooleanToVisibilityConverter}}"
+                      Style="{StaticResource WolvenKitToolBarItem}">
+
+                <!-- Convert preload materials -->
+                <MenuItem Header="Convert preload materials to local"
+                          IsEnabled="{Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsConvertMaterialMenuEnabled}"
+                          Click="OnConvertLocalMaterialsClick" />
 
                 <!-- No shift: "Delete unused Materials" -->
                 <MenuItem Header="Delete unused materials"
@@ -162,29 +186,15 @@
                           Style="{StaticResource ShowInMeshWithShiftKeyStyle}"
                           Click="OnClearAllMaterialsClick" />
 
-
-                <!-- Shift: "Clear all Materials" -->
-                <MenuItem Header="Scroll to material"
-                          IsEnabled="{Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsScrollToMaterialCommandEnabled, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                          Click="OnScrollToMaterialClick" />
-
-                <!-- Shift: "Clear all Materials" -->
-                <MenuItem Header="Add material dependencies"
-                          ToolTip="Will run 'delete unused materials' first"
-                          Visibility="{ Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsAddDependenciesCommandEnabled, Converter={ StaticResource BooleanToVisibilityConverter}}"
-                          Click="OnAddDependenciesClick" />
-
-                <!-- Shift: "Clear all Materials" -->
-                <MenuItem Header="Add material dependencies (include basegame files)"
-                          ToolTip="Will run 'delete unused materials' first"
-                          Visibility="{ Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsAddDependenciesCommandEnabledAndShiftKeyDown, Converter={ StaticResource BooleanToVisibilityConverter}}"
-                          Click="OnAddDependenciesClick" />
-
+                <!-- No shift: "Delete empty submeshes" -->
+                <MenuItem Header="Delete empty submeshes"
+                          Style="{StaticResource ShowInMeshWithShiftKeyUpStyle}"
+                          Click="OnDeleteEmptySubmeshesClick" />
             </MenuItem>
-
+            
             <!-- Ent file: Appearances menu -->
             <MenuItem Header="Appearances"
-                      Visibility="{ Binding  ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsRegenerateMaterialCommandEnabled, UpdateSourceTrigger=PropertyChanged, Converter={ StaticResource BooleanToVisibilityConverter}}"
+                      Visibility="{ Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsRegenerateMaterialCommandEnabled, UpdateSourceTrigger=PropertyChanged, Converter={ StaticResource BooleanToVisibilityConverter}}"
                       Style="{StaticResource WolvenKitToolBarItem}">
 
                 <!-- Regenerate controllers -->

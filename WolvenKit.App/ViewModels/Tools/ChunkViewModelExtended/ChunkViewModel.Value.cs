@@ -712,6 +712,12 @@ public partial class ChunkViewModel
             IsValueExtrapolated = !string.IsNullOrEmpty(Value);
         }
 
+        if (Parent is not null && Parent.IsValueExtrapolated)
+        {
+            Parent.CalculateValue();
+        }
+            
+
         // Make sure it's never null
         Value ??= "null";
     }

@@ -117,6 +117,9 @@ namespace WolvenKit.Views.Documents
         private void OnClearAllMaterialsClick(object sender, RoutedEventArgs e) =>
             ViewModel?.RootChunk?.ClearMaterialsCommand.Execute(null);
 
+        private void OnDeleteEmptySubmeshesClick(object sender, RoutedEventArgs e) =>
+            ViewModel?.RootChunk?.DeleteEmptySubmeshesCommand.Execute(null);
+
         private void OnRegenerateControllersClick(object sender, RoutedEventArgs e) =>
             ViewModel?.SelectedChunk?.RegenerateAppearanceVisualControllerCommand.Execute(null);
 
