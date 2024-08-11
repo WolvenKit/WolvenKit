@@ -895,14 +895,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     System.Globalization.CultureInfo.CurrentCulture,
                     FlowDirection.LeftToRight,
                     Arial,
-                    12,
+                    13,
                     Brushes.Black,
                     pixelsPerDip: 96D);
 
                 width = (int)formattedText.Width;
             }
 
-            width = Math.Min(width, DisplayName.Length);
+            // width = Math.Min(width, DisplayName.Length * 8);
 
             if (Parent is not null)
             {
