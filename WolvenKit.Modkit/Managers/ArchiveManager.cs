@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         [ObservableProperty] private bool _isManagerLoading;
         [ObservableProperty] private bool _isManagerLoaded;
 
-        private static readonly List<string> s_loadOrder = new() { "memoryresident", "ep1", "basegame", "audio", "lang" };
+        private static readonly List<string> s_loadOrder = ["memoryresident", "ep1", "basegame", "audio", "lang"];
 
         #endregion Fields
 
@@ -300,20 +300,23 @@ namespace WolvenKit.RED4.CR2W.Archive
                 legacyFiles.AddRange(Directory.GetFiles(legacyModPath, "*.archive", SearchOption.TopDirectoryOnly));
             }
 
-            // load all archive files in redmod folders, recursively, we don't care if the install is valid
-            foreach (var folder in Directory.GetDirectories(redModBasePath))
+            if (Directory.Exists(redModBasePath))
             {
-                var redModArchivesDir = Path.Combine(redModBasePath, folder, "archives");
-                if (!Directory.Exists(redModArchivesDir))
+                // load all archive files in redmod folders, recursively, we don't care if the installation is valid
+                foreach (var folder in Directory.GetDirectories(redModBasePath))
                 {
-                    continue;
+                    var redModArchivesDir = Path.Combine(redModBasePath, folder, "archives");
+                    if (!Directory.Exists(redModArchivesDir))
+                    {
+                        continue;
+                    }
+
+                    var modArchives = Directory.GetFiles(redModArchivesDir, "*.archive", SearchOption.AllDirectories).ToList();
+                    modArchives.Sort(string.CompareOrdinal);
+                    modArchives.Reverse();
+
+                    redModFiles.AddRange(modArchives);
                 }
-
-                var modArchives = Directory.GetFiles(redModArchivesDir, "*.archive", SearchOption.AllDirectories).ToList();
-                modArchives.Sort(string.CompareOrdinal);
-                modArchives.Reverse();
-
-                redModFiles.AddRange(modArchives);
             }
 
             // now check if they're valid
@@ -418,11 +421,7 @@ namespace WolvenKit.RED4.CR2W.Archive
 
             IsManagerLoading = true;
 
-            var files = new List<string>();
-            foreach (var archiveFile in Directory.GetFiles(archiveBasePath, "*.archive", SearchOption.AllDirectories))
-            {
-                files.Add(archiveFile);
-            }
+            var files = Directory.GetFiles(archiveBasePath, "*.archive", SearchOption.AllDirectories).ToList();
 
             if (files.Count == 0)
             {
