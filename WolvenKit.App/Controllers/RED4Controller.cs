@@ -522,7 +522,7 @@ public class RED4Controller : ObservableObject, IGameController
         }
 
         // pack redmod files
-        if (!options.DeployWithRedmod)
+        if (!options.DeployWithRedmod && !(options is { CreateZipFile: true, IsRedmod: true }))
         {
             return true;
         }
@@ -670,7 +670,7 @@ public class RED4Controller : ObservableObject, IGameController
 
         // tweaks
         var files = GetTweakFiles(cp77Proj);
-        if (files.Any())
+        if (files.Count != 0)
         {
             foreach (var file in files)
             {
@@ -691,24 +691,27 @@ public class RED4Controller : ObservableObject, IGameController
 
         // scripts
         files = GetScriptFiles(cp77Proj);
-        if (files.Any())
+        if (files.Count == 0)
         {
-            foreach (var file in files)
-            {
-                var fileName = Path.GetFileName(file);
-                var fileRelativeDir = Path.GetRelativePath(cp77Proj.ResourcesDirectory, Path.GetDirectoryName(file).NotNull());
-                var fileOutputDir = Path.Combine(cp77Proj.PackedRedModDirectory, fileRelativeDir);
-                var fileOutputPath = Path.Combine(fileOutputDir, fileName);
-                if (!Directory.Exists(fileOutputDir))
-                {
-                    Directory.CreateDirectory(fileOutputDir);
-                }
-
-                // copy files, with overwriting
-                File.Copy(file, fileOutputPath, true);
-            }
-            _loggerService.Info($"{cp77Proj.Name} redmod script files packed into {cp77Proj.PackedRedModDirectory}");
+            return true;
         }
+
+        foreach (var file in files)
+        {
+            var fileName = Path.GetFileName(file);
+            var fileRelativeDir = Path.GetRelativePath(cp77Proj.ResourcesDirectory, Path.GetDirectoryName(file).NotNull());
+            var fileOutputDir = Path.Combine(cp77Proj.PackedRedModDirectory, fileRelativeDir);
+            var fileOutputPath = Path.Combine(fileOutputDir, fileName);
+            if (!Directory.Exists(fileOutputDir))
+            {
+                Directory.CreateDirectory(fileOutputDir);
+            }
+
+            // copy files, with overwriting
+            File.Copy(file, fileOutputPath, true);
+        }
+
+        _loggerService.Info($"{cp77Proj.Name} redmod script files packed into {cp77Proj.PackedRedModDirectory}");
 
         return true;
     }
