@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.Json;
@@ -8,13 +9,13 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Converters;
 using WolvenKit.App.Services;
-using WolvenKit.Common;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 
-namespace WolvenKit.App.ViewModels.Tools;
+namespace WolvenKit.App.ViewModels.Exporters;
 
-public abstract partial class ImportExportViewModel : FloatingPaneViewModel
+public abstract partial class AbstractImportExportViewModel : FloatingPaneViewModel
 {
     protected readonly IAppArchiveManager _archiveManager;
     protected readonly INotificationService _notificationService;
@@ -25,7 +26,8 @@ public abstract partial class ImportExportViewModel : FloatingPaneViewModel
 
     protected Task? _refreshtask;
 
-    protected ImportExportViewModel(IAppArchiveManager archiveManager, INotificationService notificationService, ISettingsManager settingsManager, string header, string contentId) : base(header, contentId)
+    protected AbstractImportExportViewModel(IAppArchiveManager archiveManager, INotificationService notificationService,
+        ISettingsManager settingsManager, string header, string contentId) : base(header, contentId)
     {
         _archiveManager = archiveManager;
         _notificationService = notificationService;
@@ -33,15 +35,8 @@ public abstract partial class ImportExportViewModel : FloatingPaneViewModel
 
         _jsonSerializerSettings = new()
         {
-            Converters =
-            {
-                new JsonFileEntryConverter(_archiveManager),
-                new JsonArchiveConverter()
-            },
-            WriteIndented = true
+            Converters = { new JsonFileEntryConverter(_archiveManager), new JsonArchiveConverter() }, WriteIndented = true
         };
-
-        
     }
 
     [ObservableProperty] private ImportExportItemViewModel? _selectedObject;
@@ -50,15 +45,18 @@ public abstract partial class ImportExportViewModel : FloatingPaneViewModel
 
     [ObservableProperty] private bool _isProcessing;
 
+    public List<string> VisibleItemPaths { get; set; } = new();
+
+
     #region commands
 
-    [RelayCommand(CanExecute = nameof(IsAnyFile))]  // TODO NotifyCanExecuteChangedFor
+    [RelayCommand(CanExecute = nameof(IsAnyFile))] // TODO NotifyCanExecuteChangedFor
     public async Task ProcessAll() => await ExecuteProcessBulk(true);
 
-    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]  // TODO NotifyCanExecuteChangedFor
+    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))] // TODO NotifyCanExecuteChangedFor
     public async Task ProcessSelected() => await ExecuteProcessBulk();
 
-    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]  // TODO NotifyCanExecuteChangedFor
+    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))] // TODO NotifyCanExecuteChangedFor
     private void CopyArgumentsTemplateTo()
     {
         if (SelectedObject?.Properties is not ImportExportArgs args)
@@ -69,7 +67,7 @@ public abstract partial class ImportExportViewModel : FloatingPaneViewModel
         _currentSettings = (SerializeArgs(args), args.GetType());
     }
 
-    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))]  // TODO NotifyCanExecuteChangedFor
+    [RelayCommand(CanExecute = nameof(IsAnyFileSelected))] // TODO NotifyCanExecuteChangedFor
     private void PasteArgumentsTemplateTo()
     {
         var (settings, type) = _currentSettings;
@@ -106,7 +104,6 @@ public abstract partial class ImportExportViewModel : FloatingPaneViewModel
     [RelayCommand]
     private void ToggleAdvancedOptions() => _settingsManager.ShowAdvancedOptions = !_settingsManager.ShowAdvancedOptions;
 
-
     #endregion
 
     #region Methods
@@ -133,5 +130,18 @@ public abstract partial class ImportExportViewModel : FloatingPaneViewModel
 
     protected abstract Task LoadFilesAsync();
 
-    #endregion
+    protected async void ImportExportViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        // Restart refresh if we gained focus and aren't currently doing that
+        if (!IsActive || e.PropertyName != nameof(IsActive) || _refreshtask?.IsCompleted == false)
+        {
+            return;
+        }
+
+        _refreshtask = LoadFilesAsync();
+        await _refreshtask;
+    }
+
+    #endregion    
 }
+

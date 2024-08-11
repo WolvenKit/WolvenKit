@@ -30,6 +30,7 @@ public partial class ImportView : ReactiveUserControl<ImportViewModel>
         InitializeComponent();
 
         ImportGrid.FilterRowCellRenderers.Add("TextBoxExt", new GridFilterRowTextBoxRendererExt());
+        ImportGrid.FilterChanged += Datagrid_FilterChanged;
 
         this.WhenActivated(disposables =>
         {
@@ -52,9 +53,20 @@ public partial class ImportView : ReactiveUserControl<ImportViewModel>
                    x => x.SelectedObject,
                    x => x.ImportGrid.SelectedItem)
                .DisposeWith(disposables);
-
         });
+    }
 
+    private void Datagrid_FilterChanged(object sender, GridFilterEventArgs e)
+    {
+        if (sender is not SfDataGrid grid || ViewModel is null)
+        {
+            return;
+        }
+
+        ViewModel.VisibleItemPaths = grid.View.Records
+            .Select(record => record.Data).OfType<ImportExportItemViewModel>()
+            .Select(m => m.BaseFile)
+            .ToList();
     }
 
     // TODO refactor this and move to ViewModel
@@ -158,7 +170,7 @@ public partial class ImportView : ReactiveUserControl<ImportViewModel>
                 break;
         }
 
-        if (ViewModel.SelectedObject?.Properties is XbmImportArgs { })
+        if (ViewModel?.SelectedObject?.Properties is XbmImportArgs { })
         {
             if (e.DisplayName == "Use existing file")
             {
@@ -171,17 +183,21 @@ public partial class ImportView : ReactiveUserControl<ImportViewModel>
         // we need the callback function
         // we need the propertyname
         // we need the type of the arguments
-        if (e.OriginalSource is PropertyItem { } propertyItem && sender is PropertyGrid pg && pg.SelectedObject is ImportArgs args)
+        if (e.OriginalSource is not PropertyItem propertyItem || sender is not PropertyGrid pg ||
+            pg.SelectedObject is not ImportArgs args)
         {
-            switch (propertyItem.DisplayName)
-            {
-                case nameof(GltfImportArgs.Rig):
-                case nameof(GltfImportArgs.BaseMesh):
-                    propertyItem.Editor = new CustomCollectionEditor(ViewModel.InitCollectionEditor, new CallbackArguments(args, propertyItem.DisplayName));
-                    break;
-                default:
-                    break;
-            }
+            return;
+        }
+
+        switch (propertyItem.DisplayName)
+        {
+            case nameof(GltfImportArgs.Rig):
+            case nameof(GltfImportArgs.BaseMesh) when ViewModel is not null:
+                propertyItem.Editor = new CustomCollectionEditor(ViewModel!.InitCollectionEditor,
+                    new CallbackArguments(args, propertyItem.DisplayName));
+                break;
+            default:
+                break;
         }
     }
 
@@ -212,5 +228,6 @@ public partial class ImportView : ReactiveUserControl<ImportViewModel>
         // toggle additional options
         ShowSettings();
     }
+    
 
 }

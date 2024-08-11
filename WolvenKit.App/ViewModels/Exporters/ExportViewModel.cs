@@ -21,7 +21,7 @@ using WolvenKit.RED4.Archive;
 
 namespace WolvenKit.App.ViewModels.Exporters;
 
-public partial class ExportViewModel : AbstractExportViewModel
+public partial class ExportViewModel : AbstractImportExportViewModel
 {
     private readonly AppViewModel _appViewModel;
     private readonly ILoggerService _loggerService;
@@ -45,24 +45,7 @@ public partial class ExportViewModel : AbstractExportViewModel
         _progressService = progressService;
         _importExportHelper = importExportHelper;
 
-        PropertyChanged += ExportViewModel_PropertyChanged;
-    }
-
-
-
-    private async void ExportViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(IsActive))
-        {
-            if (IsActive)
-            {
-                if (_refreshtask is null || (_refreshtask is not null && _refreshtask.IsCompleted))
-                {
-                    _refreshtask = LoadFilesAsync();
-                    await _refreshtask;
-                }
-            }
-        }
+        PropertyChanged += ImportExportViewModel_PropertyChanged;
     }
 
     #region Commands
@@ -105,7 +88,8 @@ public partial class ExportViewModel : AbstractExportViewModel
         var failedItems = new List<string>();
 
         var toBeExported = Items
-            .Where(_ => all || _.IsChecked)
+            .Where(importExportItem => all || importExportItem.IsChecked)
+            .Where(importExportItem => VisibleItemPaths.Contains(importExportItem.BaseFile))
             .Cast<ExportableItemViewModel>()
             .ToList();
         total = toBeExported.Count;

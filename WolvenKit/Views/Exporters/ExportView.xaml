@@ -218,6 +218,9 @@
                     <DataTemplate x:Key="TemplateToolTip">
                         <TextBlock Text="{Binding Path=FullPath}" />
                     </DataTemplate>
+                    <DataTemplate x:Key="FileNameTemplate">
+                        <TextBlock Text="{Binding Path=Name}" />
+                    </DataTemplate>
                 </syncfusion:SfDataGrid.Resources>
 
                 <syncfusion:SfDataGrid.Columns>
@@ -231,8 +234,10 @@
                         FilterRowEditorType="TextBoxExt"
                         HeaderText="Name"
                         HorizontalHeaderContentAlignment="Left"
-                        MappingName="Name"
-                        ShowToolTip="True"
+                        MappingName="BaseFile"
+                        TextAlignment="Right"
+                        TextWrapping="NoWrap"
+                        CellTemplate="{StaticResource FileNameTemplate}"
                         ToolTipTemplate="{StaticResource TemplateToolTip}" />
 
                     <syncfusion:GridTextColumn
