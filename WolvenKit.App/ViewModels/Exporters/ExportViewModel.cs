@@ -88,8 +88,8 @@ public partial class ExportViewModel : AbstractImportExportViewModel
         var failedItems = new List<string>();
 
         var toBeExported = Items
-            .Where(importExportItem => all || importExportItem.IsChecked)
-            .Where(importExportItem => VisibleItemPaths.Contains(importExportItem.BaseFile))
+            .Where(importExportItem => importExportItem.IsChecked ||
+                                       (all && (VisibleItemPaths.Count == 0 || VisibleItemPaths.Contains(importExportItem.BaseFile))))
             .Cast<ExportableItemViewModel>()
             .ToList();
         total = toBeExported.Count;

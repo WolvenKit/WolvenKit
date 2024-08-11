@@ -237,6 +237,7 @@
                         MappingName="BaseFile"
                         TextAlignment="Right"
                         TextWrapping="NoWrap"
+                        ShowToolTip="True"
                         CellTemplate="{StaticResource FileNameTemplate}"
                         ToolTipTemplate="{StaticResource TemplateToolTip}" />
 

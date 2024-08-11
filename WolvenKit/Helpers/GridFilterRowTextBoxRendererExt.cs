@@ -25,7 +25,7 @@ public class GridFilterRowTextBoxRendererExt : GridFilterRowTextBoxRenderer
         }
 
         var filterPredicates = GetFilterPredicates(filterValue);
-        var filterText = filterValue is string s ? s : GetFilterText(filterPredicates);
+        var filterText = filterValue is string s && s.Contains(' ') ? s : GetFilterText(filterPredicates);
 
         ApplyFilters(filterPredicates, filterText);
             
@@ -39,7 +39,9 @@ public class GridFilterRowTextBoxRendererExt : GridFilterRowTextBoxRenderer
             return null;
         }
 
-        return filterValue.Split(' ')
+        var strings = filterValue.Split(' ');
+
+        return strings
             .Select(filterString => new FilterPredicate()
             {
                 FilterBehavior = FilterBehavior.StringTyped,
@@ -47,7 +49,7 @@ public class GridFilterRowTextBoxRendererExt : GridFilterRowTextBoxRenderer
                 FilterType = FilterType.Contains,
                 FilterValue = filterString,
                 IsCaseSensitive = false,
-                PredicateType = PredicateType.And
+                PredicateType = strings.Length > 1 ? PredicateType.And : PredicateType.OrElse
             })
             .ToList();
     }

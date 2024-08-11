@@ -135,8 +135,8 @@ public partial class ImportViewModel : AbstractImportExportViewModel
         var failedItems = new List<string>();
 
         var toBeImported = Items
-            .Where(x => all || x.IsChecked)
-            .Where(x => VisibleItemPaths.Contains(x.BaseFile))
+            .Where(importExportItem => importExportItem.IsChecked ||
+                                       (all && (VisibleItemPaths.Count == 0 || VisibleItemPaths.Contains(importExportItem.BaseFile))))
             .Where(x => !x.Extension.Equals(ERawFileFormat.wav.ToString()))
             .Cast<ImportableItemViewModel>()
             .ToList();
@@ -157,7 +157,9 @@ public partial class ImportViewModel : AbstractImportExportViewModel
             _progressService.Report(progress / (float)total);
         }
 
-        await ImportWavs(Items.Where(_ => all || _.IsChecked)
+        await ImportWavs(Items.Where(importExportItem => importExportItem.IsChecked ||
+                                                         (all && (VisibleItemPaths.Count == 0 ||
+                                                                  VisibleItemPaths.Contains(importExportItem.BaseFile))))
             .Where(x => x.Extension.Equals(ERawFileFormat.wav.ToString()))
             .Select(x => x.BaseFile)
             .ToList()
