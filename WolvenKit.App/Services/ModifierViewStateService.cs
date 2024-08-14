@@ -118,16 +118,17 @@ public partial class ModifierViewStateService() : ObservableObject, IModifierVie
         IsNoModifierPressed = !IsShiftBeingHeld && !IsCtrlBeingHeld && !IsAltBeingHeld;
 
         IsCtrlKeyPressed = IsCtrlBeingHeld;
+        IsShiftKeyPressed = IsShiftBeingHeld;
+        IsAltKeyPressed = IsAltBeingHeld;
+        
         IsCtrlKeyPressedOnly = IsCtrlBeingHeld && !IsShiftBeingHeld && !IsAltBeingHeld;
         _keyStates[Key.LeftCtrl] = IsCtrlBeingHeld;
         _keyStates[Key.RightCtrl] = IsCtrlBeingHeld;
 
-        IsShiftKeyPressed = IsShiftBeingHeld;
         IsShiftKeyPressedOnly = IsShiftBeingHeld && !IsCtrlBeingHeld && !IsAltBeingHeld;
         _keyStates[Key.LeftShift] = IsShiftBeingHeld;
         _keyStates[Key.RightShift] = IsShiftBeingHeld;
 
-        IsAltKeyPressed = IsAltBeingHeld;
         IsAltKeyPressedOnly = IsAltBeingHeld && !IsCtrlBeingHeld && !IsShiftBeingHeld;
         _keyStates[Key.LeftAlt] = IsAltBeingHeld;
         _keyStates[Key.RightAlt] = IsAltBeingHeld;

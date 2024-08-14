@@ -626,6 +626,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         // OK, we're done
         _progressService.Completed();
+
+        _mainViewModel.ReloadChangedFiles();
     }
 
     /// <summary>
@@ -1123,7 +1125,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         IsShowAbsolutePathToCurrentFolder = ModifierViewStateService.IsCtrlKeyPressedOnly;
 
-        IsShowRelativePath = !ModifierViewStateService.IsShiftKeyPressedOnly && !ModifierViewStateService.IsCtrlKeyPressedOnly;
+        IsShowRelativePath = ModifierViewStateService is { IsShiftKeyPressedOnly: false, IsCtrlKeyPressedOnly: false } &&
+                             !(IsCtrlKeyPressed && IsShiftKeyPressed);
     }
 
     /// <summary>
