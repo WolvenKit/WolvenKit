@@ -1389,6 +1389,37 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
+        List<rendChunk> filteredRenderChunkInfos = new();
+        List<CUInt8> filteredRenderChunks = new();
+
+        for (var i = 0; i < blob.Header.RenderChunkInfos.Count; i++)
+        {
+            var renderChunkInfo = blob.Header.RenderChunkInfos[i];
+            // <4 vertices: an "invisible" mesh that we want to get rid of
+            if (renderChunkInfo.NumVertices <= 3)
+            {
+                continue;
+            }
+
+            filteredRenderChunkInfos.Add(renderChunkInfo);
+            if (blob.Header.RenderChunks.Count > i)
+            {
+                filteredRenderChunks.Add(blob.Header.RenderChunks[i]);
+            }
+        }
+
+        blob.Header.RenderChunkInfos = [];
+        blob.Header.RenderChunks = [];
+
+        foreach (var renderChunkInfo in filteredRenderChunkInfos)
+        {
+            blob.Header.RenderChunkInfos.Add(renderChunkInfo);
+        }
+
+        foreach (var renderChunkInfo in filteredRenderChunks)
+        {
+            blob.Header.RenderChunks.Add(renderChunkInfo);
+        }
         // Find out how many chunk meshes we have 
         var numSubmeshes = blob.Header.RenderChunkInfos.Count;
         var wasDeleted = false;
@@ -1399,7 +1430,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 continue;
             }
 
-            appearance.ChunkMaterials = new CArray<CName>(appearance.ChunkMaterials.Where((_, i) => i < numSubmeshes).ToList());
+            var newMaterials = appearance.ChunkMaterials.Where((_, i) => i < numSubmeshes).ToList();
+            appearance.ChunkMaterials = new CArray<CName>();
+            foreach (var t in newMaterials)
+            {
+                appearance.ChunkMaterials.Add(t);
+            }
             wasDeleted = true;
         }
 
@@ -2484,6 +2520,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             Properties[i].NodeIdxInParent = i;
             Properties[i].CalculateDisplayName();
         }
+
+        Parent?.GetPropertyChild("localMaterialBuffer")?.GetPropertyChild("materials")?.RecalculateProperties();
     }
     
     private bool CanCopySelection() => IsInArray && Parent is not null;   // TODO RelayCommand check notify
