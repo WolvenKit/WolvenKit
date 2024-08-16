@@ -58,7 +58,7 @@
 
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" MinWidth="450" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
@@ -70,7 +70,7 @@
                 AutoGenerateColumns="False"
                 CellDoubleTapped="ScriptsTreeGrid_OnCellDoubleTapped"
                 ChildPropertyName="Files"
-                ColumnSizer="Auto"
+                ColumnSizer="Star"
                 ItemsSource="{Binding Scripts}"
                 ItemsSourceChanged="ScriptsTreeGrid_OnItemsSourceChanged"
                 NavigationMode="Row"
