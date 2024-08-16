@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using WolvenKit.App.Services;
 using WolvenKit.Common;
@@ -14,7 +15,7 @@ using WolvenKit.Helpers;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.IO;
-using YamlDotNet.Serialization;
+using WolvenKit.RED4.Types;
 using EFileReadErrorCodes = WolvenKit.RED4.Archive.IO.EFileReadErrorCodes;
 
 namespace WolvenKit.App.Helpers;
@@ -27,6 +28,7 @@ public class ImportExportHelper
     private readonly IPluginService _pluginService;
     private readonly IModTools _modTools;
     private readonly IHookService _hookService;
+    
 
     public ImportExportHelper(
         ILoggerService loggerService,
@@ -169,6 +171,87 @@ public class ImportExportHelper
 
     #endregion RedMod
 
+    private async Task<bool> ExportMaterialsFromMesh(FileInfo cr2WFile)
+    {
+        await using var fs1 = File.Open(cr2WFile.FullName, FileMode.Open);
+        using var cr1 = new CR2WReader(fs1);
+
+        if (cr1.ReadFile(out var f1) != EFileReadErrorCodes.NoError)
+        {
+            throw new Exception();
+        }
+
+        if (f1?.RootChunk is not MorphTargetMesh morphTargetMesh ||
+            morphTargetMesh.BaseMesh.DepotPath.GetResolvedText() is not string relativeDestPath)
+        {
+            return false;
+        }
+
+        var outpath = Path.GetDirectoryName(cr2WFile.FullName)?.Replace(
+            ProjectResourceHelper.ArchiveSubdirWithSlashes,
+            ProjectResourceHelper.RawSubdirWithSlashes
+        );
+
+        if (outpath is null)
+        {
+            return false;
+        }
+
+        var pathToArchive = Path.Join(outpath.Split(ProjectResourceHelper.RawSubdirWithSlashes).First(), "archive");
+        var pathToRaw = Path.Join(outpath.Split(ProjectResourceHelper.RawSubdirWithSlashes).First(), "raw");
+
+        var materialMeshPath = Path.Join(pathToArchive, relativeDestPath);
+
+        var rawDestPath = $"{pathToRaw.Replace(".mesh", ".Material")}.json";
+
+        if (File.Exists(rawDestPath))
+        {
+            _loggerService.Info($"Not overwriting {rawDestPath.Replace(pathToArchive, "")}");
+            return true;
+        }
+
+        if (!File.Exists(materialMeshPath))
+        {
+            ProjectResourceHelper.AddFileToProjectFolder(morphTargetMesh.BaseMesh.DepotPath, null, true);
+        }
+
+        if (!File.Exists(materialMeshPath))
+        {
+            return false;
+        }
+
+
+        if (!File.Exists(rawDestPath))
+        {
+            var meshArgs = new MeshExportArgs()
+            {
+                withMaterials = true, MaterialUncookExtension = EUncookExtension.png, MaterialRepo = outpath,
+            };
+
+            await using var fs = File.Open(materialMeshPath, FileMode.Open);
+            using var cr = new CR2WReader(fs);
+
+            if (cr.ReadFile(out var cr2w) != EFileReadErrorCodes.NoError)
+            {
+                throw new Exception();
+            }
+
+            if (!Directory.Exists(outpath))
+            {
+                Directory.CreateDirectory(outpath);
+            }
+
+            var exportPath = cr2WFile.FullName.Replace(ProjectResourceHelper.ArchiveSubdirWithSlashes,
+                ProjectResourceHelper.RawSubdirWithSlashes);
+            if (!_modTools.ExportMaterials(cr2w!, new FileInfo(exportPath), meshArgs))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public async Task<bool> Export(FileInfo cr2wFile, GlobalExportArgs args, DirectoryInfo basedir, DirectoryInfo? rawoutdir = null, ECookedFileFormat[]? forcebuffers = null) =>
         await Task.Run(async () =>
         {
@@ -178,7 +261,23 @@ public class ImportExportHelper
                 return await Export(basedir, cr2wFile, rawoutdir!, args.Get<MeshExportArgs>());
             }
 
-            return _modTools.Export(cr2wFile, args, basedir, rawoutdir, forcebuffers);
+            if (!_modTools.Export(cr2wFile, args, basedir, rawoutdir, forcebuffers))
+            {
+                return false;
+            }
+
+            if (args.Get<MorphTargetExportArgs>() is not { ExportTextures: true } morphtargetArgs)
+            {
+                return true;
+            }
+
+            if (!await ExportMaterialsFromMesh(cr2wFile))
+            {
+                _loggerService.Error("Material export failed");
+            }
+
+            return true;
+
         });
 
     public async Task<bool> Import(RedRelativePath rawRelative, GlobalImportArgs args, DirectoryInfo? outDir = null)

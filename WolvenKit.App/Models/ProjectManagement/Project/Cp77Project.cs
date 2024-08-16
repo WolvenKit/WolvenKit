@@ -523,24 +523,6 @@ public sealed partial class Cp77Project(string location, string name, string mod
         return relPath;
     }
 
-    public ResourcePath GetRelativeResourcePath(string fullPath)
-    {
-        var ret = new ResourcePath();
-        if (!fullPath.StartsWith(ModDirectory, StringComparison.Ordinal))
-        {
-            return ret;
-        }
-
-
-        var relPath = GetRelativePath(fullPath);
-        if (ulong.TryParse(Path.GetFileNameWithoutExtension(relPath), out var hash))
-        {
-            return hash;
-        }
-
-        return relPath;
-    }
-
     public async Task<Dictionary<string, List<string>>> GetAllReferences(IProgressService<double>? progressService)
     {
         Dictionary<string, List<string>> references = new();

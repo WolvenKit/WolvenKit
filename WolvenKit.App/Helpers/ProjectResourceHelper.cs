@@ -17,13 +17,17 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.Helpers;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
+using WolvenKit.RED4.CR2W.JSON;
 using WolvenKit.RED4.Types;
-using EFileReadErrorCodes = WolvenKit.Common.EFileReadErrorCodes;
+using static WolvenKit.Common.EFileReadErrorCodes;
 
 namespace WolvenKit.App.Helpers;
 
 public static class ProjectResourceHelper
 {
+    public static readonly string ArchiveSubdirWithSlashes = $"{Path.DirectorySeparatorChar}archive{Path.DirectorySeparatorChar}";
+    public static readonly string RawSubdirWithSlashes = $"{Path.DirectorySeparatorChar}raw{Path.DirectorySeparatorChar}";
+    
     private static IProjectManager? s_projectManager;
     private static IProjectManager? GetProjectManager() => s_projectManager ??= Locator.Current.GetService<IProjectManager>();
 
@@ -70,6 +74,12 @@ public static class ProjectResourceHelper
         HashSet<ResourcePath> resourcePaths) =>
         Task.Run(() => AddDependenciesToProjectPath(destFolderRelativePath, resourcePaths));
 
+    /// <summary>
+    /// Builds a dictionary of relative paths and project-relative destination paths
+    /// </summary>
+    /// <param name="destFolderRelativePath"></param>
+    /// <param name="resourcePaths"></param>
+    /// <returns></returns>
     public static Dictionary<string, string> AddDependenciesToProjectPath(string destFolderRelativePath,
         HashSet<ResourcePath> resourcePaths)
     {
@@ -131,7 +141,7 @@ public static class ProjectResourceHelper
         {
             try
             {
-                AddFileToProjectFolder(archiveRoot, kvp.Key, kvp.Value, pathReplacements, overwriteFiles);
+                AddFileToProjectFolder(kvp.Key, kvp.Value, pathReplacements, overwriteFiles);
             }
             catch (FileNotFoundException e)
             {
@@ -150,16 +160,38 @@ public static class ProjectResourceHelper
         return pathReplacements;
     }
 
-
-    private static void AddFileToProjectFolder(string projectRoot, ResourcePath resourcePath, ResourcePath targetResourcePath,
+    public static void AddFileToProjectFolder(ResourcePath resourcePath, ResourcePath targetResourcePath,
         Dictionary<string, string> pathReplacements, bool overwriteFiles)
     {
         if (resourcePath.GetResolvedText() is not string sourceRelativePath
-            || string.IsNullOrEmpty(sourceRelativePath))
+            || string.IsNullOrEmpty(sourceRelativePath)
+            || targetResourcePath.GetResolvedText() is not string targetRelativePath
+            || string.IsNullOrEmpty(targetRelativePath))
         {
             return;
         }
-        
+
+        AddFileToProjectFolder(resourcePath, targetResourcePath, overwriteFiles);
+
+        // pop it into our map
+        pathReplacements.TryAdd(sourceRelativePath, Path.Combine(targetRelativePath, Path.GetFileName(sourceRelativePath)));
+    }
+
+    public static void AddFileToProjectFolder(ResourcePath resourcePath, ResourcePath? targetResourcePath, bool overwriteFiles)
+    {
+        targetResourcePath ??= resourcePath;
+
+        // we don't know where to put it
+        if (((ResourcePath)targetResourcePath!).GetResolvedText() is not string targetRelativePath ||
+            string.IsNullOrEmpty(targetRelativePath) ||
+            resourcePath.GetResolvedText() is not string sourceRelativePath
+            || string.IsNullOrEmpty(sourceRelativePath)
+            || GetProjectManager()?.ActiveProject?.ModDirectory is not string archivePath
+           )
+        {
+            return;
+        }
+
         var refPathHash = HashHelper.CalculateDepotPathHash(resourcePath);
 
         // we can't add it
@@ -169,11 +201,9 @@ public static class ProjectResourceHelper
             return;
         }
 
-        // we don't know where to put it
-        if (targetResourcePath.GetResolvedText() is not string targetRelativePath || string.IsNullOrEmpty(targetRelativePath))
-        {
-            return;
-        }
+        var targetAbsolutePath = Path.Combine(archivePath, targetRelativePath);
+        var sourceAbsolutePath = Path.Combine(archivePath, sourceRelativePath);
+        var targetAbsoluteFile = Path.Combine(targetAbsolutePath, Path.GetFileName(sourceRelativePath));
 
         // We already have this file
         if (GetProjectManager()?.ActiveProject?.Files.Contains(resourcePath!) == true)
@@ -194,9 +224,6 @@ public static class ProjectResourceHelper
             throw new FileNotFoundException(targetRelativePath);
         }
 
-        var targetAbsolutePath = Path.Combine(projectRoot, targetRelativePath);
-        var sourceAbsolutePath = Path.Combine(projectRoot, sourceRelativePath);
-        var targetAbsoluteFile = Path.Combine(targetAbsolutePath, Path.GetFileName(sourceRelativePath));
 
         if (File.Exists(targetAbsoluteFile))
         {
@@ -208,14 +235,11 @@ public static class ProjectResourceHelper
             File.Delete(targetAbsoluteFile);
         }
 
-        
+
         if (!Directory.Exists(targetAbsolutePath))
         {
             Directory.CreateDirectory(targetAbsolutePath);
         }
-
-        // pop it into our map
-        pathReplacements.TryAdd(sourceRelativePath, Path.Combine(targetRelativePath, Path.GetFileName(sourceRelativePath)));
 
         File.Move(sourceAbsolutePath, targetAbsoluteFile, true);
     }
@@ -383,7 +407,7 @@ public static class ProjectResourceHelper
         using (var fs = File.Open(filePath, FileMode.Open))
         using (var cr = new CR2WReader(fs))
         {
-            if (cr.ReadFile(out cr2W) != (RED4.Archive.IO.EFileReadErrorCodes)EFileReadErrorCodes.NoError)
+            if (cr.ReadFile(out cr2W) != (RED4.Archive.IO.EFileReadErrorCodes)NoError)
             {
                 return;
             }
