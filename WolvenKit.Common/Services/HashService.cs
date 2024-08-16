@@ -27,7 +27,7 @@ namespace WolvenKit.Common.Services
         private const string s_tweakDbStr = "WolvenKit.Common.Resources.tweakdbstr.kark";
         private const string s_missing = "WolvenKit.Common.Resources.missinghashes.json";
 
-        private static readonly int _maxDoP = (Environment.ProcessorCount - 2) > 1 ? Environment.ProcessorCount : 1;
+        private static readonly int _maxDoP = Environment.ProcessorCount > 2 ? (Environment.ProcessorCount - 2) : 1;
 
         private readonly Dictionary<ulong, SAsciiString> _hashes = new();
 
