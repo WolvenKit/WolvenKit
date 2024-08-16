@@ -542,7 +542,7 @@ public sealed partial class Cp77Project(string location, string name, string mod
         return relPath;
     }
 
-    public Task<IDictionary<string, List<string>>> GetAllReferences(IProgressService<double> progressService,
+     public Task<IDictionary<string, List<string>>> GetAllReferences(IProgressService<double> progressService,
         ILoggerService loggerService) => GetAllReferences(progressService, loggerService, new List<string>());
 
     public async Task<IDictionary<string, List<string>>> GetAllReferences(IProgressService<double> progressService,
@@ -693,7 +693,6 @@ public sealed partial class Cp77Project(string location, string name, string mod
         // Order entries by file name
         return references.OrderBy(obj => obj.Key).ToDictionary(obj => obj.Key, obj => obj.Value);
     }
-
 
     public Task<IDictionary<string, List<string>>> ScanForBrokenReferencePathsAsync(IArchiveManager archiveManager,
         ILoggerService loggerService, IProgressService<double> progressService) =>

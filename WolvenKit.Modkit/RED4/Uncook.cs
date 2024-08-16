@@ -907,6 +907,11 @@ namespace WolvenKit.Modkit.RED4
 
             var meshesInfo = MeshTools.GetMeshesinfo(rendblob, cMesh);
 
+            if (Path.GetDirectoryName(outfile.FullName) is string parentDir && !Directory.Exists(parentDir))
+            {
+                Directory.CreateDirectory(parentDir);
+            }
+
             ParseMaterials(cr2w, outfile, meshExportArgs.MaterialRepo, meshesInfo, meshExportArgs.MaterialUncookExtension);
 
             return true;

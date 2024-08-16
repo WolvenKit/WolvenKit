@@ -165,7 +165,8 @@ public partial class ExportViewModel : AbstractImportExportViewModel
             return false;
         }
 
-        return await _importExportHelper.Export(fi, settings, new DirectoryInfo(projectArchive.Project.ModDirectory), new DirectoryInfo(projectArchive.Project.RawDirectory));
+        return await _importExportHelper.Export(fi, settings, new DirectoryInfo(projectArchive.Project.ModDirectory),
+            new DirectoryInfo(projectArchive.Project.RawDirectory));
     }
 
     protected override async Task LoadFilesAsync()
