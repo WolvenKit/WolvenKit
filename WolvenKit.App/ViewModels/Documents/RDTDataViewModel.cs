@@ -56,7 +56,8 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         Nodes.Add(new ResourcePathWrapper(this, new ReferenceSocket(Chunks[0].RelativePath), _appViewModel, _chunkViewmodelFactory));
         _nodePaths.Add(Chunks[0].RelativePath);
 
-
+        SubscribeToChunkPropertyChanges();
+        
         if (SelectedChunk == null && Chunks.Count > 0)
         {
             SelectedChunk = Chunks[0];
@@ -67,6 +68,31 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         }
 
         parent.PropertyChanged += RDTDataViewModel_PropertyChanged;
+    }
+
+    private void SubscribeToChunkPropertyChanges()
+    {
+        if (GetRootChunk() is not ChunkViewModel cvm || cvm.ResolvedData is not inkTextureAtlas ||
+            cvm.GetPropertyChild("slots", "0") is not ChunkViewModel firstSlot || firstSlot.ResolvedData is not inkTextureSlot slot ||
+            slot.Texture.DepotPath != ResourcePath.Empty)
+        {
+            return;
+        }
+
+        firstSlot.PropertyChanged += WaitForTexturePath;
+    }
+
+    public event EventHandler? OnReloadRequired;
+
+    private void WaitForTexturePath(object? sender, PropertyChangedEventArgs evt)
+    {
+        if (sender is not ChunkViewModel cvm || evt.PropertyName != nameof(cvm.Value) || string.IsNullOrEmpty(cvm.Value))
+        {
+            return;
+        }
+
+        cvm.PropertyChanged -= WaitForTexturePath;
+        OnReloadRequired?.Invoke(this, EventArgs.Empty);
     }
 
     public ChunkViewModel? GetRootChunk() => Chunks.FirstOrDefault();
