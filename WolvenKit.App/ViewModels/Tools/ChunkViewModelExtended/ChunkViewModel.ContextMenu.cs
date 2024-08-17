@@ -10,7 +10,7 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.Shell;
 
-public partial class ChunkViewModel : ObservableObject
+public partial class ChunkViewModel
 {
     #region properties
 

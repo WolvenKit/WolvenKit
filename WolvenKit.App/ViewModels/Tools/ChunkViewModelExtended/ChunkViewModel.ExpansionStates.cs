@@ -23,7 +23,7 @@ public class CustomLoopException : Exception
     }
 }
 
-public partial class ChunkViewModel : ObservableObject
+public partial class ChunkViewModel
 {
     private ChunkViewModel? FindPropertyNode(string propName)
     {
