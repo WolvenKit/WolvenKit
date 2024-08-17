@@ -22,6 +22,7 @@ public partial class ChunkViewModel : ObservableObject
     [ObservableProperty] private bool _shouldShowPasteIntoArray;
 
     [ObservableProperty] private bool _shouldShowOverwriteArray;
+    [ObservableProperty] private bool _shouldShowPasteOverwrite;
 
     [ObservableProperty] private bool _isMaterial;
 
@@ -42,8 +43,9 @@ public partial class ChunkViewModel : ObservableObject
     /// </summary>
     public void RefreshContextMenuFlags()
     {
-        ShouldShowPasteIntoArray = ShouldShowArrayOps && !IsShiftKeyPressedOnly;
-        ShouldShowOverwriteArray = ShouldShowArrayOps && IsShiftKeyPressedOnly;
+        ShouldShowPasteOverwrite = ShouldShowArrayOps && IsShiftKeyPressedOnly && Tab?.SelectedChunk is not null;
+        ShouldShowOverwriteArray = ShouldShowArrayOps && IsCtrlKeyPressed && !ShouldShowPasteOverwrite;
+        ShouldShowPasteIntoArray = ShouldShowArrayOps && !ShouldShowPasteOverwrite && !ShouldShowOverwriteArray;
 
         IsMaterial = ResolvedData is CMaterialInstance or CResourceAsyncReference<IMaterial>;
 

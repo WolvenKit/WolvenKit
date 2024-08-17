@@ -618,6 +618,19 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <!--  Overwrite Selection With Pasted -->
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.OverwriteSelectionWithPasteCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Overwrite Current With Copied Selection"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowPasteOverwrite, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="ClipboardArrowDownOutline" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
                 <!-- Copy Array Contents  -->
                 <MenuItem
                     Command="{Binding Path=PlacementTarget.Tag.CopyArrayContentsCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
