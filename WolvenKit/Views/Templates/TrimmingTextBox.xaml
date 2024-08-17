@@ -7,11 +7,13 @@
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     x:Name="UserControl"
     d:DesignHeight="450"
-    BorderBrush="{Binding ElementName=UserControl, Path=BorderBrush}"
     d:DesignWidth="800"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    BorderBrush="{Binding ElementName=UserControl, Path=BorderBrush}"
+    Background="{Binding ElementName=UserControl, Path=Background}">
     <Grid>
-        <Border BorderBrush="{Binding ElementName=UserControl, Path=BorderBrush}" BorderThickness="1">
+        <Border BorderBrush="{Binding ElementName=UserControl, Path=BorderBrush}" BorderThickness="1"
+                Background="{Binding ElementName=UserControl, Path=Background}">
             <TextBox
                 x:Name="RealTextBox"
                 ToolTip="{Binding ElementName=UserControl, Path=Tooltip}"
@@ -20,25 +22,17 @@
                 Text="{Binding ElementName=UserControl, Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 TextChanged="RealTextBox_OnTextChanged"
                 KeyUp="RealTextBox_OnKeyUp"
+                Background="{Binding ElementName=UserControl, Path=Background, UpdateSourceTrigger=PropertyChanged}"
                 DataObject.Pasting="RealTextBox_OnPasting">
             </TextBox>
         </Border>
         <Grid IsHitTestVisible="False">
             <Grid.ColumnDefinitions>
-                <!--  Adjust start width if needed  -->
                 <ColumnDefinition Width="15" />
-
                 <ColumnDefinition Width="*" />
-
-                <!--  Adjust end width if needed  -->
                 <ColumnDefinition Width="15" />
             </Grid.ColumnDefinitions>
-
-            <Grid
-                x:Name="StartTrimming"
-                Grid.Column="0"
-                Visibility="Hidden">
-                <!--  Start of design stuff for front trimming (modify here)  -->
+            <Grid x:Name="StartTrimming" Grid.Column="0" Visibility="Hidden">
                 <Rectangle>
                     <Rectangle.Fill>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
@@ -47,19 +41,9 @@
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
-                <TextBox
-                    Padding="0,0,0,0"
-                    Background="Transparent"
-                    Foreground="White"
-                    Text="…" />
-                <!--  End of design stuff for front trimming  -->
+                <TextBox Padding="0,0,0,0" Background="Transparent" Foreground="White" Text="…" />
             </Grid>
-
-            <Grid
-                x:Name="EndTrimming"
-                Grid.Column="2"
-                Visibility="Hidden">
-                <!--  Start of design stuff for end trimming (modify here)  -->
+            <Grid x:Name="EndTrimming" Grid.Column="2" Visibility="Hidden">
                 <Rectangle>
                     <Rectangle.Fill>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
@@ -68,12 +52,7 @@
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
-                <TextBox
-                    Padding="2,0,0,0"
-                    Background="Transparent"
-                    Foreground="White"
-                    Text="…" />
-                <!--  End of design stuff for front trimming  -->
+                <TextBox Padding="2,0,0,0" Background="Transparent" Foreground="White" Text="…" />
             </Grid>
         </Grid>
     </Grid>

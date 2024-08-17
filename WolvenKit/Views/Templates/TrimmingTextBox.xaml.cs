@@ -8,52 +8,29 @@ using WolvenKit.Helpers;
 
 namespace WolvenKit.Views.Editors
 {
-    /// <summary>
-    /// Interaktionslogik für TrimmingTextBox.xaml
-    /// </summary>
     public partial class TrimmingTextBox : UserControl
     {
-        #region Public Properties
-
-        /// <summary>
-        /// The DependencyID for the Text property.
-        /// Default Value:      ""
-        /// </summary>
         public static readonly DependencyProperty TextProperty =
             DependencyProperty.Register(
-                nameof(Text), // Property name
-                typeof(string), // Property type
-                typeof(TrimmingTextBox), // Property owner
-                new FrameworkPropertyMetadata( // Property metadata
-                    string.Empty // default value
-                ));
+                nameof(Text),
+                typeof(string),
+                typeof(TrimmingTextBox),
+                new FrameworkPropertyMetadata(string.Empty));
 
-        /// <summary>
-        /// Contents of the TextBox.
-        /// </summary>
-        [DefaultValue("")]
-        [Localizability(LocalizationCategory.Text)]
-        public new Brush BorderBrush
-        {
-            get => (Brush)GetValue(BorderBrushProperty);
-            set => SetValue(BorderBrushProperty, value);
-        }
+        public static new readonly DependencyProperty BackgroundProperty =
+            DependencyProperty.Register(
+                nameof(Background),
+                typeof(Brush),
+                typeof(TrimmingTextBox),
+                new FrameworkPropertyMetadata(default(Brush)));
 
-        /// <summary>
-        /// The DependencyID for the BorderBrush property.
-        /// Default Value:      ""
-        /// </summary>
-        public static new readonly DependencyProperty BorderBrushProperty = DependencyProperty.Register(
-            nameof(BorderBrush), // Property name
-            typeof(Brush), // Property type
-            typeof(TrimmingTextBox), // Property owner
-            new FrameworkPropertyMetadata( // Property metadata
-                default(Brush)) // default value
-        );
+        public static readonly DependencyProperty TooltipProperty =
+            DependencyProperty.Register(
+                nameof(Tooltip),
+                typeof(string),
+                typeof(TrimmingTextBox),
+                new FrameworkPropertyMetadata(string.Empty));
 
-        /// <summary>
-        /// Contents of the TextBox.
-        /// </summary>
         [DefaultValue("")]
         [Localizability(LocalizationCategory.Text)]
         public string Text
@@ -62,23 +39,27 @@ namespace WolvenKit.Views.Editors
             set => SetValue(TextProperty, value);
         }
 
+        [DefaultValue("")]
+        [Localizability(LocalizationCategory.Text)]
+        public new Brush BorderBrush
+        {
+            get => (Brush)GetValue(BorderBrushProperty);
+            set => SetValue(BorderBrushProperty, value);
+        }
 
-        public static readonly DependencyProperty TooltipProperty =
-            DependencyProperty.Register(
-                nameof(Tooltip), // Property name
-                typeof(string), // Property type
-                typeof(TrimmingTextBox), // Property owner
-                new FrameworkPropertyMetadata( // Property metadata
-                    string.Empty // default value
-                ));
+        [DefaultValue("")]
+        [Localizability(LocalizationCategory.Text)]
+        public new Brush Background
+        {
+            get => (Brush)GetValue(BackgroundProperty);
+            set => SetValue(BackgroundProperty, value);
+        }
 
         public string Tooltip
         {
             get => (string)GetValue(TooltipProperty);
             set => SetValue(TooltipProperty, value);
         }
-
-        #endregion
 
         private ScrollViewer _scrollViewer;
 
