@@ -10,19 +10,46 @@
     d:DesignWidth="400"
     mc:Ignorable="d">
 
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <Style x:Key="CNameStyle" BasedOn="{StaticResource WolvenkitTextBoxStyle}" TargetType="TextBox">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsValid}" Value="True">
+                        <!-- <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Frame_Active}" /> -->
+                        <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding HasWarning}" Value="True">
+                        <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Yellow}" />
+                        <Setter Property="Background" Value="{StaticResource BackgroundColor_Yellow_Dark}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding HasError}" Value="True">
+                        <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Red}" />
+                        <Setter Property="Background" Value="{StaticResource BackgroundColor_Red_Dark}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+        </ResourceDictionary>
+
+    </UserControl.Resources>
+
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedCNameEditor}}}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="155" />
         </Grid.ColumnDefinitions>
 
+        <Grid.Resources>
+        </Grid.Resources>
+
         <TextBox
             x:Name="TextBox"
             Grid.Column="0"
             helpers:TextBoxBehavior.TripleClickSelectAll="True"
-            Style="{StaticResource ValidatingControlStyle}"
+            Style="{StaticResource CNameStyle}"
             Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
             ToolTip="{Binding TextBoxToolTip, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+            helpers:TextBoxBehavior.IsValid="{Binding IsValid}"
             LostFocus="OnTextboxFocusLost" />
         <TextBox
             x:Name="HashBox"

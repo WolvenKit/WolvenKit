@@ -25,15 +25,19 @@
                     </DataTrigger>
                     <DataTrigger Binding="{Binding Scope}" Value="{x:Static global:FileScope.OtherMod}">
                         <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Yellow}" />
+                        <Setter Property="Background" Value="{StaticResource BackgroundColor_Yellow_Dark}" />
                     </DataTrigger>
                     <DataTrigger Binding="{Binding Scope}" Value="{x:Static global:FileScope.NotFoundWarning}">
                         <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Yellow}" />
+                        <Setter Property="Background" Value="{StaticResource BackgroundColor_Yellow_Dark}" />
                     </DataTrigger>
                     <DataTrigger Binding="{Binding Scope}" Value="{x:Static global:FileScope.NotFound}">
                         <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Red}" />
+                        <Setter Property="Background" Value="{StaticResource BackgroundColor_Red_Dark}" />
                     </DataTrigger>
                     <DataTrigger Binding="{Binding Scope}" Value="{x:Static global:FileScope.InvalidSubstitution}">
                         <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Red}" />
+                        <Setter Property="Background" Value="{StaticResource BackgroundColor_Red_Dark}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>

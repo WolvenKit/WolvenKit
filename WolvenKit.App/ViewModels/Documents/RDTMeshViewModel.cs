@@ -38,6 +38,7 @@ using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
+using IMaterial = WolvenKit.RED4.Types.IMaterial;
 using Material = WolvenKit.App.Models.Material;
 
 namespace WolvenKit.App.ViewModels.Documents;
@@ -489,10 +490,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             {
                 continue;
             }
-            
-            // TODO [mana] throwIfNull? Not rather print a warning and go on?
-            // ArgumentNullException.ThrowIfNull(inst);
-            
+          
             var material = new Material(name)
             {
                 Instance = inst,
@@ -802,6 +800,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         return list;
     }
 
+    private Material defaultMaterial = new("default")
+    {
+        Instance = new CMaterialInstance() { BaseMaterial = new CResourceReference<IMaterial>(@"engine\materials\metal_base.remt") }
+    };
+
     private void ProcessComponents(RedBaseClass component, Dictionary<string, LoadableModel> appModels)
     {
         var scale = new Vector3() { X = 1, Y = 1, Z = 1 };
@@ -906,6 +909,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             materials[name] = material;
         }
 
+        if (materials.Count == 0)
+        {
+            materials.Add("default", defaultMaterial);
+        }
         var apps = new List<string>();
         foreach (var handle in mesh.Appearances)
         {
@@ -914,6 +921,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             {
                 apps.Add(mmapp.Name.ToString().NotNull());
             }
+        }
+
+        if (apps.Count == 0)
+        {
+            apps.Add("default");
         }
 
         var appIndex = 0;
@@ -948,6 +960,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             }
         }
 
+        if (appMaterials.Count == 0)
+        {
+            appMaterials.Add(defaultMaterial);
+        }
         var model = new LoadableModel(epc.Name.ToString().NotNull().Replace(".", ""))
         {
             MeshFile = meshFile,
@@ -3527,7 +3543,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                     var appDef = (appearanceAppearanceDefinition)handle.GetValue().NotNull();
 
-
                     if (appDef.Name != app.AppearanceName || appDef.CompiledData?.Data is not RedPackage appPkg)
                     {
                         continue;
@@ -3565,11 +3580,13 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                         foreach (var m in model.Meshes)
                         {
-                            if (!a.LODLUT.ContainsKey(m.LOD))
+                            if (!a.LODLUT.TryGetValue(m.LOD, out var value))
                             {
-                                a.LODLUT[m.LOD] = new List<SubmeshComponent>();
+                                value = new List<SubmeshComponent>();
+                                a.LODLUT[m.LOD] = value;
                             }
-                            a.LODLUT[m.LOD].Add(m);
+
+                            value.Add(m);
                         }
                     }
 
@@ -3599,43 +3616,24 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             
             return element;
         }
-        else
-        {
+
+        // ent.appearances.Count == null
             var models = LoadMeshes(pkg.Chunks);
 
-            if (models == null)
+            if (models.Count == 0)
             {
                 return null;
             }
 
-            Appearance a;
-            if (appearance == null)
-            {
-                a = new Appearance("Default")
-                {
-                    Models = models
-                };
-            }
-            else
-            {
-                a = appearance;
-            }
+            var meshApp = appearance ?? new Appearance("Default") { Models = models };
 
-            var group = new MeshComponent() { WorldNodeIndex = string.Empty, WorldNodeDataIndices = string.Empty, };
+            var cGroup = new MeshComponent() { WorldNodeIndex = string.Empty, WorldNodeDataIndices = string.Empty, };
 
             foreach (var model in models)
             {
-                //if (models.FirstOrDefault(x => x.Name == model.BindName) is var parentModel && parentModel != null)
-                //{
-                //    parentModel.AddModel(model);
-                //}
-                //else
-                //{
-                //    a.BindableModels.Add(model);
-                //}
                 foreach (var material in model.Materials)
                 {
-                    a.RawMaterials[material.Name] = material;
+                    meshApp.RawMaterials[material.Name] = material;
                 }
                 if (model.MeshFile?.RootChunk is CMesh mesh)
                 {
@@ -3644,29 +3642,31 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                 foreach (var m in model.Meshes)
                 {
-                    group.Children.Add(m);
-                    if (!a.LODLUT.ContainsKey(m.LOD))
+                    cGroup.Children.Add(m);
+                    if (!meshApp.LODLUT.ContainsKey(m.LOD))
                     {
-                        a.LODLUT[m.LOD] = new List<SubmeshComponent>();
+                        meshApp.LODLUT[m.LOD] = new List<SubmeshComponent>();
                     }
-                    a.LODLUT[m.LOD].Add(m);
+
+                    meshApp.LODLUT[m.LOD].Add(m);
                 }
             }
 
             if (appearance == null)
             {
-                a.ModelGroup.Add(group);
-                Appearances.Add(a);
-                SelectedAppearance = a;
+                meshApp.ModelGroup.Add(cGroup);
+                Appearances.Add(meshApp);
+                SelectedAppearance = meshApp;
             }
 
-            var element = new GroupModel3DExt();
-            foreach (var model in a.ModelGroup)
+            var el = new GroupModel3DExt();
+            foreach (var model in meshApp.ModelGroup)
             {
-                element.Children.Add(model);
+                el.Children.Add(model);
             }
-            return element;
-        }
+
+            return el;
+        
     }
 
     #endregion

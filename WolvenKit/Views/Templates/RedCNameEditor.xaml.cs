@@ -26,39 +26,54 @@ namespace WolvenKit.Views.Editors
             _settingsManager = Locator.Current.GetService<ISettingsManager>();
         }
 
-        public bool IsValid { get; set; } = true;
+        public bool IsValid { get; set; } = false;
+        public bool HasWarning { get; set; } = false;
+        public bool HasError { get; set; } = false;
 
-        [GeneratedRegex(@"^[a-zA-Z0-9]+[a-zA-Z0-9\s@]*[a-zA-Z0-9]+$")]
+        [GeneratedRegex(@"^[a-zA-Z0-9_]+[a-zA-Z0-9_\s@]*[a-zA-Z0-9_]+$")]
         private static partial Regex s_validCharactersRegex();
 
         private void RecalculateValidityAndTooltip()
         {
-            var newValidity = true;
+            var hasWarning = false;
+            var hasError = false;
+            
             if (Text == "None" || _settingsManager?.UseValidatingEditor != true)
             {
                 TextBoxToolTip = "CName";
             }
             else if (ArchiveXlHelper.GetValuesForInvalidConditions(Text) is string invalidConditions)
             {
-                newValidity = false;
+                hasError = true;
                 TextBoxToolTip = $"Invalid dynamic appearance condition! {invalidConditions}";
             }
             else if (!s_validCharactersRegex().IsMatch(Text))
             {
+                hasWarning = true;
                 TextBoxToolTip = $"'{Text}' contains invalid characters, or leading/trailing spaces! (Ignore this if everything works)";
             }
             else
             {
                 TextBoxToolTip = "CName";
             }
-            
-            if (IsValid == newValidity)
+
+            if (hasWarning != HasWarning)
             {
-                return;
+                HasWarning = hasWarning;
+                OnPropertyChanged(nameof(HasWarning));
             }
-            
-            IsValid = newValidity;
-            OnPropertyChanged(nameof(IsValid));
+
+            if (hasError != HasError)
+            {
+                HasError = hasError;
+                OnPropertyChanged(nameof(HasError));
+            }
+
+            if (hasError || hasWarning != IsValid)
+            {
+                IsValid = hasError || hasWarning;
+                OnPropertyChanged(nameof(IsValid));
+            }
             OnPropertyChanged(nameof(TextBoxToolTip));
         }
        
