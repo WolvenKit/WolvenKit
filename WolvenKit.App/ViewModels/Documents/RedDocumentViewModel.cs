@@ -120,6 +120,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
             case RDTDataViewModel model:
                 int.TryParse(_selectedWorldNodeIndex, out var worldNodeIndex);                            
                 model.AddToSelection(model.FindWorldNode(worldNodeIndex));
+                model.OnReloadRequired += OnReloadTabs;
                 break;
             case RDTMeshViewModel meshViewModel:
                 meshViewModel.SelectedNodeIndex = _selectedWorldNodeIndex;
@@ -129,6 +130,11 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
         ShowMenuToolbar = value?.FilePath.EndsWith(".mesh") == true;
         value?.OnSelected();
+    }
+
+    private void OnReloadTabs(object? sender, EventArgs e)
+    {
+        PopulateItems(true);
     }
 
     // assume files that don't exist are relative paths
@@ -377,7 +383,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
     }
 
 
-    public void PopulateItems()
+    public void PopulateItems(bool keepRootTab = false)
     {
         foreach (var tab in TabItemViewModels)
         {
@@ -389,7 +395,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
                 case RDTMeshViewModel meshTab:
                     meshTab.OnSectorNodeSelected -= OnSectorNodeSelected;
                     break;
-                case RDTDataViewModel dataViewModel:
+                case RDTDataViewModel dataViewModel when !keepRootTab:
                     dataViewModel.OnSectorNodeSelected -= OnSectorNodeSelected;
                     break;
                 default:
@@ -397,11 +403,20 @@ public partial class RedDocumentViewModel : DocumentViewModel
             }
         }
 
+        RDTDataViewModel rootTab;
+        if (keepRootTab)
+        {
+            rootTab = TabItemViewModels.OfType<RDTDataViewModel>().First();
+        }
+        else
+        {
+            rootTab = _documentTabViewmodelFactory.RDTDataViewModel(Cr2wFile.RootChunk, this, _appViewModel, _chunkViewmodelFactory);
+            rootTab.OnSectorNodeSelected += OnSectorNodeSelected;
+        }
+        
         TabItemViewModels.Clear();
 
-        var root = _documentTabViewmodelFactory.RDTDataViewModel(Cr2wFile.RootChunk, this, _appViewModel, _chunkViewmodelFactory);
-        TabItemViewModels.Add(root);
-        root.OnSectorNodeSelected += OnSectorNodeSelected;
+        TabItemViewModels.Add(rootTab);
         AddTabForRedType(Cr2wFile.RootChunk);
 
         foreach (var file in Cr2wFile.EmbeddedFiles)

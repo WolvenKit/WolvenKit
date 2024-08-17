@@ -1626,7 +1626,20 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         GetPropertyChild("materialEntries")?.RecalculateProperties();
     }
 
-    private ChunkViewModel? GetPropertyChild(string propertyName) => TVProperties.FirstOrDefault(prop => prop.Name == propertyName);
+    public ChunkViewModel? GetPropertyChild(params string[] propertyNames)
+    {
+        if (propertyNames.Length == 0)
+        {
+            return this;
+        }
+
+        if (TVProperties.FirstOrDefault(prop => prop.Name == propertyNames[0]) is not ChunkViewModel cvm)
+        {
+            return null;
+        }
+
+        return cvm.GetPropertyChild(propertyNames.Skip(1).ToArray());
+    }
 
     // Converts PreloadMaterials to regular local materials. We like them better, and this way,
     // we don't have to check all those arrays.
