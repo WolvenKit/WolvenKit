@@ -826,19 +826,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private static readonly Typeface s_arial = new("Arial");
-
-    /// <summary>
-    /// Creates a formatted text object 
-    /// </summary>
-    private static int GetTextWidth(string text, int fontSize = 13) =>
-        Convert.ToInt32(new FormattedText(text,
-            System.Globalization.CultureInfo.CurrentCulture,
-            FlowDirection.LeftToRight,
-            s_arial,
-            fontSize,
-            Brushes.Black,
-            pixelsPerDip: 96D).Width);
 
 
     /// <summary>
@@ -848,14 +835,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         get
         {
-            var width = IsInArray ? GetTextWidth(DisplayName) : DisplayName.Length;
+            var width = IsInArray ? UIHelper.GetTextWidth(DisplayName) : DisplayName.Length;
 
             if (Parent is null)
             {
                 return width;
             }
 
-            return Math.Max(width, GetTextWidth(new string('0', Parent.PropertyCount.ToString().Length + 1)));
+            return Math.Max(width, UIHelper.GetTextWidth(new string('0', Parent.PropertyCount.ToString().Length + 1)));
         }
     }
 
@@ -2337,7 +2324,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     private void DuplicateInParent(int index = -1)
     {
-        if (Parent is null || Data is null)
+        if (Parent is null)
         {
             return;
         }
