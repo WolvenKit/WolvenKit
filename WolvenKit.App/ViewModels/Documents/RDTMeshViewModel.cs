@@ -176,52 +176,53 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 FarPlaneDistance = 1E+8,
                 LookDirection = new Vector3D(1f, -1f, -1f)
             };
+
+            switch (_data)
+            {
+                case CMesh:
+                    RenderMesh();
+                    break;
+                case worldStreamingSector:
+                {
+                    PanelVisibility.ShowSelectionPanel = true;
+                    PanelVisibility.ShowToggleCollision = true;
+                    var app = new Appearance(Path.GetFileNameWithoutExtension(Parent.ContentId).Replace("-", "_"));
+
+                    Appearances.Add(app);
+                    SelectedAppearance = app;
+
+                    RenderSectorSolo();
+                    break;
+                }
+                case worldStreamingBlock:
+                    PanelVisibility.ShowSearchPanel = true;
+                    PanelVisibility.ShowToggleCollision = true;
+                    PanelVisibility.ShowAddSectors = true;
+
+                    RenderBlockSolo();
+                    break;
+                case entEntityTemplate:
+                    PanelVisibility.ShowExportEntity = true;
+
+                    try
+                    {
+                        RenderEntitySolo();
+                    }
+                    catch (Exception e)
+                    {
+                        _loggerService.Error($"Failed to render entity. Please open a ticket: \n${e}");
+                    }
+
+                    break;
+                default:
+                    break;
+            }
+
         }
         catch (Exception ex)
         {
             Parent.GetLoggerService().Error(ex);
         }
-        
-        if (_data is CMesh)
-        {
-            RenderMesh();
-        }
-
-        if (_data is worldStreamingSector)
-        {
-            PanelVisibility.ShowSelectionPanel = true;
-            PanelVisibility.ShowToggleCollision = true;
-            var app = new Appearance(Path.GetFileNameWithoutExtension(Parent.ContentId).Replace("-", "_"));
-
-            Appearances.Add(app);
-            SelectedAppearance = app;
-
-            RenderSectorSolo();
-        }
-
-        if (_data is worldStreamingBlock)
-        {
-            PanelVisibility.ShowSearchPanel = true;
-            PanelVisibility.ShowToggleCollision = true;
-            PanelVisibility.ShowAddSectors = true;
-
-            RenderBlockSolo();
-        }
-
-        if (_data is entEntityTemplate)
-        {
-            PanelVisibility.ShowExportEntity = true;
-
-            try
-            {
-                RenderEntitySolo();
-            }
-            catch (Exception e)
-            {
-                _loggerService.Error($"Failed to render entity. Please open a ticket: \n${e}");
-            }
-        }
-
         IsLoaded = true;
     }
 
@@ -509,59 +510,66 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         var appIndex = 0;
         foreach (var handle in data.Appearances)
         {
-            var app = handle.GetValue();
-            if (app is meshMeshAppearance mmapp)
+            if (handle.GetValue() is not meshMeshAppearance mmapp)
             {
-                var appMaterials = new List<Material>();
+                appIndex++;
+                continue;
+            }
 
-                foreach (var materialName in mmapp.ChunkMaterials)
+            var appMaterials = new List<Material>();
+
+            foreach (var materialName in mmapp.ChunkMaterials)
+            {
+                var name = GetUniqueMaterialName(materialName.ToString().NotNull(), data);
+                appMaterials.Add(materials.TryGetValue(name, out var material) ? material : new Material(name));
+            }
+
+            var appearance = new Appearance(mmapp.Name.ToString().NotNull());
+
+            var model = new LoadableModel(Path.GetFileNameWithoutExtension(Parent.ContentId).Replace("-", "_").Replace(".", "_"))
+            {
+                MeshFile = Parent.Cr2wFile,
+                AppearanceIndex = appIndex,
+                AppearanceName = mmapp.Name,
+                Materials = appMaterials,
+                IsEnabled = true
+            };
+            appearance.Models.Add(model);
+            appearance.BindableModels.Add(model);
+            foreach (var material in materials.Values)
+            {
+                appearance.RawMaterials[material.Name] = material;
+            }
+
+            model.Meshes = MakeMesh(data, ulong.MaxValue, model.AppearanceIndex);
+
+            var materialIndex = 0;
+            foreach (var m in model.Meshes)
+            {
+                if (!appearance.LODLUT.TryGetValue(m.LOD, out var value))
                 {
-                    var name = GetUniqueMaterialName(materialName.ToString().NotNull(), data);
-                    appMaterials.Add(materials.TryGetValue(name, out var material) ? material : new Material(name));
-                    
+                    value = [];
+                    appearance.LODLUT[m.LOD] = value;
                 }
 
-                var a = new Appearance(mmapp.Name.ToString().NotNull());
-
-                var model = new LoadableModel(Path.GetFileNameWithoutExtension(Parent.ContentId).Replace("-", "_").Replace(".", "_"))
+                // Ensure materialIndex is within the bounds of a.RawMaterials.Keys
+                if (materialIndex >= appearance.RawMaterials.Keys.Count)
                 {
-                    MeshFile = Parent.Cr2wFile,
-                    AppearanceIndex = appIndex,
-                    AppearanceName = mmapp.Name,
-                    Materials = appMaterials,
-                    IsEnabled = true
-                };
-                a.Models.Add(model);
-                a.BindableModels.Add(model);
-                foreach (var material in model.Materials)
-                {
-                    a.RawMaterials[material.Name] = material;
+                    materialIndex = 0; // Or handle this scenario as appropriate for your application
                 }
 
-                model.Meshes = MakeMesh(data, ulong.MaxValue, model.AppearanceIndex);
-
-                var materialIndex = 0;
-                foreach (var m in model.Meshes)
+                if (appearance.RawMaterials.Keys.Count > 0)
                 {
-                    if (!a.LODLUT.TryGetValue(m.LOD, out var value))
-                    {
-                        value = [];
-                        a.LODLUT[m.LOD] = value;
-                    }
-
-                    // Ensure materialIndex is within the bounds of a.RawMaterials.Keys
-                    if (materialIndex >= a.RawMaterials.Keys.Count)
-                        materialIndex = 0; // Or handle this scenario as appropriate for your application
-
-                    var materialKey = a.RawMaterials.Keys.ElementAt(materialIndex);
+                    var materialKey = appearance.RawMaterials.Keys.ElementAt(materialIndex);
                     m.MaterialName ??= materialKey;
-                    
+
                     value.Add(m);
                 }
-                a.ModelGroup.AddRange(AddMeshesToRiggedGroups(a));
-
-                Appearances.Add(a);
             }
+
+            appearance.ModelGroup.AddRange(AddMeshesToRiggedGroups(appearance));
+
+            Appearances.Add(appearance);
             appIndex++;
         }
 
