@@ -69,14 +69,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     private readonly CRUIDService _cruidService;
     private readonly IModifierViewStateService _modifierViewStateService;
 
-    private static readonly List<string> s_hiddenProperties = new() 
-    { 
-        "meshMeshMaterialBuffer.rawDataHeaders", 
-        "meshMeshMaterialBuffer.rawData", 
-        "entEntityTemplate.compiledData", 
+    private static readonly List<string> s_hiddenProperties =
+    [
+        "meshMeshMaterialBuffer.rawDataHeaders",
+        "meshMeshMaterialBuffer.rawData",
+        "entEntityTemplate.compiledData",
         "appearanceAppearanceDefinition.compiledData",
         "inkWidgetLibraryItem.packageData"
-    };
+    ];
 
     private bool _propertiesLoaded;
 
@@ -390,10 +390,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         if (Parent.Data is CMeshMaterialEntry meshMaterialEntry)
         {
             string[] keys =
-            {
+            [
                 "localMaterialBuffer.materials", "preloadLocalMaterialInstances", "externalMaterials",
-                "preloadExternalMaterials",
-            };
+                "preloadExternalMaterials"
+            ];
 
             ushort idx = meshMaterialEntry.Index;
 
@@ -453,12 +453,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     #region Properties
 
-    public ObservableCollectionExtended<ChunkViewModel> SelfList { get; set; } = new();
+    public ObservableCollectionExtended<ChunkViewModel> SelfList { get; set; } = [];
 
-    public ObservableCollectionExtended<ChunkViewModel> TempList { get; set; } = new();
+    public ObservableCollectionExtended<ChunkViewModel> TempList { get; set; } = [];
 
     // Full list of properties
-    public ObservableCollectionExtended<ChunkViewModel> Properties { get; } = new();
+    public ObservableCollectionExtended<ChunkViewModel> Properties { get; } = [];
 
     // Tree view properties (for the panel on the left)
     public ObservableCollectionExtended<ChunkViewModel> TVProperties => _propertiesLoaded ? Properties : TempList;
@@ -875,13 +875,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     private TweakXL GetTXL()
     {
         var recordName = Name;
-        IRedType? tdbEntry = null;
+        IRedType? tdbEntry;
 
         var txl = new TweakXL();
 
         switch (Parent?.Data)
         {
-            case gamedataTweakDBRecord tweakDBRecord:
+            case gamedataTweakDBRecord:
                 recordName = $"{Parent.Name}.{Name}";
                 break;
             case TweakDBID tweakDBID:
@@ -1263,8 +1263,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
-        List<rendChunk> filteredRenderChunkInfos = new();
-        List<CUInt8> filteredRenderChunks = new();
+        List<rendChunk> filteredRenderChunkInfos = [];
+        List<CUInt8> filteredRenderChunks = [];
 
         for (var i = 0; i < blob.Header.RenderChunkInfos.Count; i++)
         {
@@ -1305,7 +1305,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
 
             var newMaterials = appearance.ChunkMaterials.Where((_, i) => i < numSubmeshes).ToList();
-            appearance.ChunkMaterials = new CArray<CName>();
+            appearance.ChunkMaterials = [];
             foreach (var t in newMaterials)
             {
                 appearance.ChunkMaterials.Add(t);
@@ -1695,7 +1695,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             {
                 ptr.SetValue(new RedBuffer
                 {
-                    Data = new RedPackage { Chunks = new List<RedBaseClass>() }
+                    Data = new RedPackage { Chunks = [] }
                 });
             }
 
@@ -1704,13 +1704,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             if (Parent?.Data is worldStreamingSector)
             {
-                db2.Buffer = RedBuffer.CreateBuffer(0, new byte[] { 0 });
+                db2.Buffer = RedBuffer.CreateBuffer(0, [0]);
                 db2.Data = new worldNodeDataBuffer();
             }
 
             if (Name == "rawData")
             {
-                db2.Buffer = RedBuffer.CreateBuffer(0, new byte[] { 0 });
+                db2.Buffer = RedBuffer.CreateBuffer(0, [0]);
                 db2.Data = new CR2WList();
             }
         }
@@ -1763,7 +1763,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         ArgumentNullException.ThrowIfNull(Tab);
         ArgumentNullException.ThrowIfNull(Data);
-        int newSelectionIndex = -1;
+        var newSelectionIndex = -1;
         try
         {
             switch (Parent.Data)
@@ -1844,7 +1844,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             .Select(m => m)
             .ToList();
 
-        List<int> indices = ts.Select(m => m.NodeIdxInParent).ToList();
+        var indices = ts.Select(m => m.NodeIdxInParent).ToList();
         
         try
         {
@@ -2260,7 +2260,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private bool CanDeleteAll() => !IsReadOnly && (IsArray && PropertyCount > 0 || IsInArray && Parent is not null && Parent.PropertyCount > 0);   // TODO RelayCommand check notify
+    private bool CanDeleteAll() =>
+        !IsReadOnly &&
+        ((IsArray && PropertyCount > 0) || (IsInArray && Parent is not null && Parent.PropertyCount > 0)); // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanDeleteAll))]
     private void DeleteAll()
     {
@@ -2338,7 +2340,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     [RelayCommand(CanExecute = nameof(CanDuplicateChunk))]
     private void DuplicateAsNewChunk()
     {
-        if (Parent is null) return;
+        if (Parent is null)
+        {
+            return;
+        }
 
         DuplicateChunk();
 
@@ -2441,11 +2446,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         //Tab.SelectedChunk = Parent;
     }
 
-    private bool CanCopyArrayContents()
-    {
-        return Properties.Count > 0 && !Properties[0].IsArray;
-    }
-    
+    private bool CanCopyArrayContents() => Properties.Count > 0 && !Properties[0].IsArray;
+
     private bool CanPasteSelection()
     {
         if (RedDocumentTabViewModel.CopiedChunks.Count == 0)
@@ -2520,11 +2522,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         try
         {
             var index = insertAtIndex >= 0 ? insertAtIndex : Parent.GetIndexOf(this) + 1;
-            
-            for (var i = 0; i < RedDocumentTabViewModel.CopiedChunks.Count; i++)
-            {
-                var e = RedDocumentTabViewModel.CopiedChunks[i];
 
+            foreach (var e in RedDocumentTabViewModel.CopiedChunks)
+            {
                 if (ResolvedData is IRedBufferPointer db)
                 {
                     if (db.GetValue().Data is RedPackage pkg)
@@ -2604,11 +2604,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         string? desc = null;
         if (linkNode.GetValue() is not null && linkNode.GetValue()?.GetType() is { Name: not null } t)
         {
-            desc = t.Name.Split("_")?.LastOrDefault();
+            desc = t.Name.Split("_").LastOrDefault();
         }
         else if (linkNode.InnerType is { Name: not null })
         {
-            desc = linkNode.InnerType.Name?.Split("_")?.LastOrDefault();
+            desc = linkNode.InnerType.Name?.Split("_").LastOrDefault();
         }
 
         return desc;
@@ -3021,7 +3021,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         if (iraType.IsGenericType)
         {
             var arrayType = iraType.GetGenericTypeDefinition();
-            if (arrayType == typeof(CArray<>) || arrayType == typeof(CStatic<>) && ira.Count < ira.MaxSize)
+            if (arrayType == typeof(CArray<>) || (arrayType == typeof(CStatic<>) && ira.Count < ira.MaxSize))
             {
                 if (index == -1 || index > ira.Count)
                 {
@@ -3289,7 +3289,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 ResolvedData is worldCompiledEffectPlacementInfo info:
 
                 var effectsIndex = infoArray
-                    .OrderBy(mat => Int32.Parse(mat.PlacementTagIndex.ToString()))
+                    .OrderBy(mat => int.Parse(mat.PlacementTagIndex.ToString()))
                     .Select(mat => mat.PlacementTagIndex)
                     .Last();
                 SetDataIndexProperty(effectsIndex + 1);
@@ -3301,7 +3301,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             {
                 var materialIndex = materialDefinitionArray
                     .Where(mat => mat.IsLocalInstance.Equals(materialDefinition.IsLocalInstance))
-                    .OrderBy(mat => Int32.Parse(mat.Index.ToString()))
+                    .OrderBy(mat => int.Parse(mat.Index.ToString()))
                     .Select(mat => mat.Index)
                     .Last();
 
@@ -3420,103 +3420,105 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     public void HandlePointer(DialogViewModel? sender)
     {
         _appViewModel.CloseDialogCommand.Execute(null);
-        if (sender is TypeSelectorDialogViewModel { SelectedEntry: TypeEntry { UserData: Type selectedType } selectedEntry })
-        {
-            var instance = RedTypeManager.Create(selectedType);
-            if (instance is DynamicBaseClass dbc)
-            {
-                dbc.ClassName = selectedEntry.Name;
-            }
-            var data = RedTypeManager.CreateRedType(PropertyType);
-            if (data is IRedBaseHandle handle)
-            {
-                handle.SetValue(instance);
-                Data = data;
-
-                if (Parent?.ResolvedData is RedBaseClass rbc)
-                {
-                    rbc.SetProperty(PropertyName, Data);
-                }
-                PropertyCount = -1;
-                // might not be needed
-                CalculateDescriptor();
-                _propertiesLoaded = false;
-                CalculateProperties();
-                OnPropertyChanged(nameof(Data));
-                Tab?.Parent.SetIsDirty(true);
-            }
-        }
-        else
+        if (sender is not TypeSelectorDialogViewModel { SelectedEntry: { UserData: Type selectedType } selectedEntry })
         {
             _loggerService.Error("Could not create handle");
-        } 
+            return;
+        }
+
+        var instance = RedTypeManager.Create(selectedType);
+        if (instance is DynamicBaseClass dbc)
+        {
+            dbc.ClassName = selectedEntry.Name;
+        }
+
+        if (RedTypeManager.CreateRedType(PropertyType) is not IRedType data || data is not IRedBaseHandle handle)
+        {
+            _loggerService.Error("Could not create handle");
+            return;
+        }
+
+        handle.SetValue(instance);
+        Data = data;
+
+        if (Parent?.ResolvedData is RedBaseClass rbc)
+        {
+            rbc.SetProperty(PropertyName, Data);
+        }
+
+        PropertyCount = -1;
+        // might not be needed
+        CalculateDescriptor();
+        _propertiesLoaded = false;
+        CalculateProperties();
+        OnPropertyChanged(nameof(Data));
+        Tab?.Parent.SetIsDirty(true);
     }
 
     public void HandleCKeyValuePair(DialogViewModel? sender)
     {
         _appViewModel.CloseDialogCommand.Execute(null);
-        if (sender is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType })
+        if (sender is not TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType } ||
+            Activator.CreateInstance(selectedType) is not IRedType t)
         {
-            if (Activator.CreateInstance(selectedType) is IRedType t)
-            {
-                var instance = new CKeyValuePair(CName.Empty, t);
-                InsertChild(-1, instance);
-            }
+            return;
         }
+
+        var instance = new CKeyValuePair(CName.Empty, t);
+        InsertChild(-1, instance);
     }
 
     public void HandleChunk(DialogViewModel? sender)
     {
         _appViewModel.CloseDialogCommand.Execute(null);
-        if (sender is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType })
+        if (sender is not TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType })
         {
-            var instance = RedTypeManager.CreateRedType(selectedType);
-            if (!InsertChild(-1, instance))
-            {
-                _loggerService.Error("Unable to insert child");
-            }
+            return;
+        }
+
+        if (!InsertChild(-1, RedTypeManager.CreateRedType(selectedType)))
+        {
+            _loggerService.Error("Unable to insert child");
         }
     }
 
     public void HandleChunkPointer(DialogViewModel? sender)
     {
         _appViewModel.CloseDialogCommand.Execute(null);
-        if (sender is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType } && Data is IRedArray arr)
+        if (sender is not TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType } ||
+            Data is not IRedArray arr ||
+            RedTypeManager.CreateRedType(arr.InnerType) is not IRedBaseHandle handle
+           )
         {
-            var newItem = RedTypeManager.CreateRedType(arr.InnerType);
-            if (newItem is IRedBaseHandle handle)
-            {
-                var instance = RedTypeManager.Create(selectedType);
-                handle.SetValue(instance);
-                if (!InsertChild(-1, newItem))
-                {
-                    _loggerService.Error("Unable to insert child");
-                }
-            }
+            return;
+        }
+
+        var instance = RedTypeManager.Create(selectedType);
+        handle.SetValue(instance);
+        if (!InsertChild(-1, handle))
+        {
+            _loggerService.Error("Unable to insert child");
         }
     }
 
     public void ClearChildren()
     {
-        if (ResolvedData is IRedArray ary)
+        switch (ResolvedData)
         {
-            ary.Clear();
-        }
-        else if (ResolvedData is IRedLegacySingleChannelCurve curve)
-        {
-            curve.Clear();
-        }
-        else if (ResolvedData is IRedBufferPointer db && db.GetValue().Data is RedPackage pkg)
-        {
-            pkg.Chunks.Clear();
-        }
-        else if (ResolvedData is IRedBufferPointer db2 && db2.GetValue().Data is CR2WList list)
-        {
-            list.Files.Clear();
-        }
-        else
-        {
-            return;
+            case IRedArray ary:
+                ary.Clear();
+                break;
+            case IRedLegacySingleChannelCurve curve:
+                curve.Clear();
+                break;
+            case IRedBufferPointer db when db.GetValue().Data is RedPackage pkg:
+                pkg.Chunks.Clear();
+                break;
+            case IRedBufferPointer db2 when db2.GetValue().Data is CR2WList list:
+                list.Files.Clear();
+                break;
+            default:
+                return;
         }
         IsDeleteReady = false;
         Tab?.Parent.SetIsDirty(true);
@@ -3535,16 +3537,18 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             RestoreDirectory = true
         };
 
-        if (openFileDialog.ShowDialog() == true)
+        if (openFileDialog.ShowDialog() != true)
         {
-            try
-            {
-                return AddFromJSON(openFileDialog, updatecoords);
-            }
-            catch (Exception ex)
-            {
-                _loggerService.Error(ex);
-            }
+            return Task.FromResult(false);
+        }
+
+        try
+        {
+            return AddFromJSON(openFileDialog, updatecoords);
+        }
+        catch (Exception ex)
+        {
+            _loggerService.Error(ex);
         }
         return Task.FromResult(false);
     }
@@ -3555,37 +3559,38 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         var tr = RedJsonSerializer.Serialize(Data);
         var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
+        if (current is null)
+        {
+            _loggerService.Error("Could not read file");
+            return false;
+        }
         //deepcopy of Data but not really
 
-        var text = File.ReadAllText(openFileDialog.FileName);
-        if (string.IsNullOrEmpty(text) || current is null)
+        var text = await File.ReadAllTextAsync(openFileDialog.FileName);
+        if (string.IsNullOrEmpty(text))
         {
             _loggerService.Error("Could not read file");
             return false;
         }
 
-        if (RedJsonSerializer.TryDeserialize<JsonAMM>(text, out var json0) &&
-           json0 is not null && json0.props is not null && json0.props.Count > 0)
+        if (RedJsonSerializer.TryDeserialize<JsonAMM>(text, out var json0) && json0?.props is { Count: > 0 })
         {
             AddFromAMM(json0.props, tr, updatecoords);
         }
-        else if (RedJsonSerializer.TryDeserialize<JsonAMM2>(text, out var json1) &&
-           json1 is not null && json1.childs is not null && json1.childs.Count > 0)
+        else if (RedJsonSerializer.TryDeserialize<JsonAMM2>(text, out var json1) && json1?.childs is { Count: > 0 })
         {
             AddFromAMM2(json1, tr, updatecoords);
         }
-        else if (RedJsonSerializer.TryDeserialize<List<List<object>>>(text, out var json2) &&
-           json2 is not null)
+        else if (RedJsonSerializer.TryDeserialize<List<List<object>>>(text, out var json2) && json2 is not null)
         {
             AddFromUnreal(json2, tr, updatecoords);
         }
         else if (RedJsonSerializer.TryDeserialize<List<JsonObjectSpawner>>(text, out var json3) &&
-           json3 is not null && json3.First() is not null && json3.First().pos is not null)
+                 json3?.FirstOrDefault()?.pos is not null)
         {
             AddFromObjectSpawner(json3, tr, updatecoords);
         }
-        else if (RedJsonSerializer.TryDeserialize<List<worldNodeData>>(text, out var json4) &&
-           json4 is not null)
+        else if (RedJsonSerializer.TryDeserialize<List<worldNodeData>>(text, out var json4) && json4 is not null)
         {
             if (Parent?.Data is DataBuffer { Buffer.Data: IRedArray ira } && json4.Count == ira.Count)
             {
@@ -3622,7 +3627,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         try
         {
-            Stream myStream;
             var saveFileDialog = new SaveFileDialog
             {
                 Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*",
@@ -3631,23 +3635,23 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 RestoreDirectory = true
             };
 
-            if (saveFileDialog.ShowDialog() == true)
+            if (saveFileDialog.ShowDialog() != true)
             {
-                if ((myStream = saveFileDialog.OpenFile()) is not null)
-                {
-                    var json = RedJsonSerializer.Serialize(irt);
-                    if (!string.IsNullOrEmpty(json))
-                    {
-                        myStream.Write(json.ToCharArray().Select(c => (byte)c).ToArray());
-                        myStream.Close();
+                return;
+            }
 
-                        _loggerService.Success($"{irt.GetType().Name} written to: {saveFileDialog.FileName}");
-                    }
-                }
-                else
-                {
-                    _loggerService.Error($"Could not open file: {saveFileDialog.FileName}");
-                }
+            Stream myStream;
+            if ((myStream = saveFileDialog.OpenFile()) is not null && RedJsonSerializer.Serialize(irt) is string json &&
+                !string.IsNullOrEmpty(json))
+            {
+                myStream.Write(json.ToCharArray().Select(c => (byte)c).ToArray());
+                myStream.Close();
+
+                _loggerService.Success($"{irt.GetType().Name} written to: {saveFileDialog.FileName}");
+            }
+            else
+            {
+                _loggerService.Error($"Could not open file: {saveFileDialog.FileName}");
             }
         }
         catch (Exception ex)
@@ -3730,19 +3734,19 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     #region utils
 
-    private static Vec4 GetCenter(List<Vec4> poslist)
+    private static Vec4 GetCenter(List<Vec4> posList)
     {
         //minX + (maxX - minX)/2 == (maxX + minX)/2;
-        var (minX, maxX) = (poslist.Select(v => v.X).Min(), poslist.Select(v => v.X).Max());
+        var (minX, maxX) = (posList.Select(v => v.X).Min(), posList.Select(v => v.X).Max());
         var cX = (maxX + minX) / 2;
 
-        var (minY, maxY) = (poslist.Select(v => v.Y).Min(), poslist.Select(v => v.Y).Max());
+        var (minY, maxY) = (posList.Select(v => v.Y).Min(), posList.Select(v => v.Y).Max());
         var cY = (maxY + minY) / 2;
 
-        var (minZ, maxZ) = (poslist.Select(v => v.Z).Min(), poslist.Select(v => v.Z).Max());
+        var (minZ, maxZ) = (posList.Select(v => v.Z).Min(), posList.Select(v => v.Z).Max());
         var cZ = (maxZ + minZ) / 2;
 
-        var (minW, maxW) = (poslist.Select(v => v.W).Min(), poslist.Select(v => v.W).Max());
+        var (minW, maxW) = (posList.Select(v => v.W).Min(), posList.Select(v => v.W).Max());
         var cW = (maxW + minW) / 2;
 
         return new Vec4(cX, cY, cZ, cW);
@@ -3750,7 +3754,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     private static Vec4 GetCenter(List<List<object>> json)
     {
-        var poslist =
+        var posList =
             json.Select(j =>
             new Vec3
             {
@@ -3767,13 +3771,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             ).ToList();
 
         //minX + (maxX - minX)/2 == (maxX + minX)/2;
-        var (minX, maxX) = (poslist.Select(v => v.X).Min(), poslist.Select(v => v.X).Max());
+        var (minX, maxX) = (posList.Select(v => v.X).Min(), posList.Select(v => v.X).Max());
         var cX = (maxX + minX) / 2;
 
-        var (minY, maxY) = (poslist.Select(v => v.Y).Min(), poslist.Select(v => v.Y).Max());
+        var (minY, maxY) = (posList.Select(v => v.Y).Min(), posList.Select(v => v.Y).Max());
         var cY = (maxY + minY) / 2;
 
-        var (minZ, maxZ) = (poslist.Select(v => v.Z).Min(), poslist.Select(v => v.Z).Max());
+        var (minZ, maxZ) = (posList.Select(v => v.Z).Min(), posList.Select(v => v.Z).Max());
         var cZ = (maxZ + minZ) / 2;
 
         return new Vec4(cX, cY, cZ, 1);
@@ -3781,38 +3785,36 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     //private static Vec4 GetPos(Prop line)
     //{
-    //    var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
+    //    var posAndRot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
     //    return new Vec4()
     //    {
-    //        X = float.Parse(posandrot.x),
-    //        Y = float.Parse(posandrot.y),
-    //        Z = float.Parse(posandrot.z),
-    //        W = float.Parse(posandrot.w)
+    //        X = float.Parse(posAndRot.x),
+    //        Y = float.Parse(posAndRot.y),
+    //        Z = float.Parse(posAndRot.z),
+    //        W = float.Parse(posAndRot.w)
     //    };
     //}
 
     private static List<Vec4> GetPos(List<Prop> props)
     {
-        var poslist = new List<Vec4>();
+        var posList = new List<Vec4>();
         foreach (var line in props)
         {
-            var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos)).NotNull();
+            var posAndRot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos)).NotNull();
 
-            ArgumentNullException.ThrowIfNull(posandrot.x);
-            ArgumentNullException.ThrowIfNull(posandrot.y);
-            ArgumentNullException.ThrowIfNull(posandrot.z);
-            ArgumentNullException.ThrowIfNull(posandrot.w);
+            ArgumentNullException.ThrowIfNull(posAndRot.x);
+            ArgumentNullException.ThrowIfNull(posAndRot.y);
+            ArgumentNullException.ThrowIfNull(posAndRot.z);
+            ArgumentNullException.ThrowIfNull(posAndRot.w);
 
             var v = new Vec4
             {
-                X = float.Parse(posandrot.x),
-                Y = float.Parse(posandrot.y),
-                Z = float.Parse(posandrot.z),
-                W = float.Parse(posandrot.w)
+                X = float.Parse(posAndRot.x), Y = float.Parse(posAndRot.y), Z = float.Parse(posAndRot.z), W = float.Parse(posAndRot.w)
             };
-            poslist.Add(v);
+            posList.Add(v);
         }
-        return poslist;
+
+        return posList;
     }
 
     private (Vec4, Quat) GetPosRot(Prop line)
@@ -3848,74 +3850,74 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     //private (List<Vec4>, List<Quat>) GetPosRot(List<Prop> props)
     //{
-    //    var poslist = new List<Vec4>();
-    //    var rotlist = new List<Quat>();
+    //    var posList = new List<Vec4>();
+    //    var rotList = new List<Quat>();
 
     //    foreach (var line in props)
     //    {
-    //        var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
+    //        var posAndRot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
     //        var v = new Vec4()
     //        {
-    //            X = float.Parse(posandrot.x),
-    //            Y = float.Parse(posandrot.y),
-    //            Z = float.Parse(posandrot.z),
-    //            W = float.Parse(posandrot.w)
+    //            X = float.Parse(posAndRot.x),
+    //            Y = float.Parse(posAndRot.y),
+    //            Z = float.Parse(posAndRot.z),
+    //            W = float.Parse(posAndRot.w)
     //        };
-    //        poslist.Add(v);
+    //        posList.Add(v);
 
     //        var euler = new Vec3()
     //        {
-    //            X = (float)(Math.PI / 180) * float.Parse(posandrot.yaw),
-    //            Y = (float)(Math.PI / 180) * float.Parse(posandrot.pitch),
-    //            Z = (float)(Math.PI / 180) * float.Parse(posandrot.roll)
+    //            X = (float)(Math.PI / 180) * float.Parse(posAndRot.yaw),
+    //            Y = (float)(Math.PI / 180) * float.Parse(posAndRot.pitch),
+    //            Z = (float)(Math.PI / 180) * float.Parse(posAndRot.roll)
     //        };
     //        var q = FixRotation(euler);
 
-    //        rotlist.Add(q);
+    //        rotList.Add(q);
     //    }
-    //    return (poslist, rotlist);
+    //    return (posList, rotList);
     //}
 
     //private (List<Vec4>, List<Quat>, List<string>) GetPosRotApp(List<Prop> props)
     //{
-    //    var poslist = new List<Vec4>();
-    //    var rotlist = new List<Quat>();
-    //    var applist = new List<string>();
+    //    var posList = new List<Vec4>();
+    //    var rotList = new List<Quat>();
+    //    var appList = new List<string>();
 
     //    foreach (var line in props)
     //    {
-    //        var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
+    //        var posAndRot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
     //        var v = new Vec4()
     //        {
-    //            X = float.Parse(posandrot.x),
-    //            Y = float.Parse(posandrot.y),
-    //            Z = float.Parse(posandrot.z),
-    //            W = float.Parse(posandrot.w)
+    //            X = float.Parse(posAndRot.x),
+    //            Y = float.Parse(posAndRot.y),
+    //            Z = float.Parse(posAndRot.z),
+    //            W = float.Parse(posAndRot.w)
     //        };
-    //        poslist.Add(v);
+    //        posList.Add(v);
 
     //        var euler = new Vec3()
     //        {
-    //            X = (float)(Math.PI / 180) * float.Parse(posandrot.yaw),
-    //            Y = (float)(Math.PI / 180) * float.Parse(posandrot.pitch),
-    //            Z = (float)(Math.PI / 180) * float.Parse(posandrot.roll)
+    //            X = (float)(Math.PI / 180) * float.Parse(posAndRot.yaw),
+    //            Y = (float)(Math.PI / 180) * float.Parse(posAndRot.pitch),
+    //            Z = (float)(Math.PI / 180) * float.Parse(posAndRot.roll)
     //        };
 
     //        var q = FixRotation(euler);
 
     //        // (q.Y, q.Z) = (-q.Z, -q.Y);
-    //        rotlist.Add(q);
+    //        rotList.Add(q);
 
-    //        applist.Add(line.app);
+    //        appList.Add(line.app);
     //    }
-    //    return (poslist, rotlist, applist);
+    //    return (posList, rotList, appList);
     //}
 
     private (List<Vec4>, List<Quat>, List<string>) GetPosRotApp(List<Child> props)
     {
-        var poslist = new List<Vec4>();
-        var rotlist = new List<Quat>();
-        var applist = new List<string>();
+        var posList = new List<Vec4>();
+        var rotList = new List<Quat>();
+        var appList = new List<string>();
 
         foreach (var line in props)
         {
@@ -3928,7 +3930,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 Z = pos.z,
                 W = pos.w
             };
-            poslist.Add(v);
+            posList.Add(v);
 
             var euler = new Vec3
             {
@@ -3939,19 +3941,20 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
             var q = FixRotation(euler);
 
-            rotlist.Add(q);
+            rotList.Add(q);
 
             if (line.app != null)
             {
                 var app = line.app == "" ? "default" : line.app;
-                applist.Add(app);
+                appList.Add(app);
             }
             else
             {
-                applist.Add("default");
+                appList.Add("default");
             }
         }
-        return (poslist, rotlist, applist);
+
+        return (posList, rotList, appList);
     }
 
     private static string PutQuotes(string w)
@@ -4005,80 +4008,63 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         return pos;
     }
 
-    private static List<Vec4> UpdateCoords(List<Vec4> poslist, Vec4 center)
+    private static List<Vec4> UpdateCoords(List<Vec4> posList, Vec4 center)
     {
-        for (var i = 0; i < poslist.Count; i++)
+        for (var i = 0; i < posList.Count; i++)
         {
-            var pos = poslist[i];
+            var pos = posList[i];
             pos.X -= center.X;
             pos.Y -= center.Y;
             pos.Z -= center.Z;
             //pos.W -= center.W;
-            poslist[i] = pos;
+            posList[i] = pos;
         }
-        return poslist;
+
+        return posList;
     }
 
-    //private void AddToData(string tr, Prop line, string ff = "", bool updatecoords = true)
-    //{
-    //    if (Parent.Parent is not null &&
-    //        Parent.Parent.Data is not null &&
-    //        Parent.Parent.Data is worldStreamingSector)
-    //    {
-    //        //loads the mesh when found and scaled
-    //        if (GetScale(line) == Vec3.One)
-    //        {
-    //            AddEntity(tr, line, updatecoords);
-    //        }
-    //        else if (ff != "")
-    //        {
-    //            AddMesh(tr, line, updatecoords);
-    //        }
-    //    }
-    //}
 
     private void AddEntity(string tr, Prop line, bool updatecoords = true, bool visible = true)
     {
-        if (line.template_path is not null && Parent?.Parent?.Data is worldStreamingSector wss)
+        if (string.IsNullOrEmpty(line.template_path) || Parent?.Parent?.Data is not worldStreamingSector wss)
         {
-            //var wss = (worldStreamingSector)Parent.Parent.Data;
-            var current = RedJsonSerializer.Deserialize<worldNodeData>(tr).NotNull();
-
-            var wen = new worldEntityNode();
-            var wenh = new CHandle<worldNode>(wen);
-            var index = wss.Nodes.Count;
-
-            //gotta figure out colliders
-            wen.IsVisibleInGame = visible;
-            wen.EntityTemplate = new CResourceAsyncReference<entEntityTemplate>(line.template_path);
-            wen.AppearanceName = string.IsNullOrEmpty(line.app) ? "default" : line.app;
-            wen.DebugName = Path.GetFileNameWithoutExtension(line.template_path) + "_" + index;
-
-            current.QuestPrefabRefHash = Convert.ToUInt64(current.GetHashCode()); // Add hash to make object interactible and persistent
-
-            if (line.isdoor is bool and true)
-            {
-                var eeid = new entEntityInstanceData();
-                var eeidh = new CHandle<entEntityInstanceData>(eeid);
-
-                wen.InstanceData = eeidh;
-                eeid.Buffer = new DataBuffer();
-
-                var pk = new RedPackage();
-                var dc = new DoorController();
-                pk.Chunks = new List<RedBaseClass>();
-
-                dc.PersistentState = new DoorControllerPS
-                {
-                    IsInteractive = true
-                };
-                pk.Chunks.Add(dc);
-                eeid.Buffer.Data = pk;
-            }
-
-            ((IRedArray)wss.Nodes).Insert(index, wenh);
-            SetCoords(current, index, line, updatecoords);
+            return;
         }
+
+        //var wss = (worldStreamingSector)Parent.Parent.Data;
+        var current = RedJsonSerializer.Deserialize<worldNodeData>(tr).NotNull();
+
+        var wen = new worldEntityNode();
+        var wenh = new CHandle<worldNode>(wen);
+        var index = wss.Nodes.Count;
+
+        //gotta figure out colliders
+        wen.IsVisibleInGame = visible;
+        wen.EntityTemplate = new CResourceAsyncReference<entEntityTemplate>(line.template_path);
+        wen.AppearanceName = string.IsNullOrEmpty(line.app) ? "default" : line.app;
+        wen.DebugName = Path.GetFileNameWithoutExtension(line.template_path) + "_" + index;
+
+        current.QuestPrefabRefHash = Convert.ToUInt64(current.GetHashCode()); // Add hash to make object interactible and persistent
+
+        if (line.isdoor is bool and true)
+        {
+            var eeid = new entEntityInstanceData();
+            var eeidh = new CHandle<entEntityInstanceData>(eeid);
+
+            wen.InstanceData = eeidh;
+            eeid.Buffer = new DataBuffer();
+
+            var pk = new RedPackage();
+            var dc = new DoorController();
+            pk.Chunks = [];
+
+            dc.PersistentState = new DoorControllerPS { IsInteractive = true };
+            pk.Chunks.Add(dc);
+            eeid.Buffer.Data = pk;
+        }
+
+        ((IRedArray)wss.Nodes).Insert(index, wenh);
+        SetCoords(current, index, line, updatecoords);
     }
 
     private void AddMesh(string tr, Prop line, bool updatecoords = true, Vec4 pos = default, Quat rot = default)
@@ -4155,23 +4141,24 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             if (!db0.Lookup.ContainsKey(current.NodeIndex))
             {
-                db0.Lookup[current.NodeIndex] = new();
+                db0.Lookup[current.NodeIndex] = [];
             }
             db0.Lookup[current.NodeIndex].Add(current);
         }
 
-        if (Parent?.Data is DataBuffer { Buffer.Data: IRedType irt })
+        if (Parent?.Data is not DataBuffer { Buffer.Data: IRedType irt } || irt is not IRedArray ira ||
+            !ira.InnerType.IsAssignableTo(current.GetType()))
         {
-            if (irt is IRedArray ira && ira.InnerType.IsAssignableTo(current.GetType()))
-            {
-                var indexx = Parent.GetIndexOf(this) + 1;
-                if (indexx == -1 || indexx > ira.Count)
-                {
-                    indexx = ira.Count;
-                }
-                ira.Insert(indexx, current);
-            }
+            return;
         }
+
+        var index = Parent.GetIndexOf(this) + 1;
+        if (index == -1 || index > ira.Count)
+        {
+            index = ira.Count;
+        }
+
+        ira.Insert(index, current);
     }
 
     private List<Child> GetLines(JsonAMM2 json)
@@ -4201,12 +4188,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             app = c.app
         };
         props.Add(v);
-        if (c.childs is not null)
+
+        if (c.childs is null)
         {
-            foreach (var cc in c.childs)
-            {
-                GetLines(cc, props);
-            }
+            return;
+        }
+
+        foreach (var cc in c.childs)
+        {
+            GetLines(cc, props);
         }
     }
 
@@ -4244,91 +4234,84 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             foreach (var line in props)
             {
                 if (updatecoords)
-                { line.center = center; }
+                {
+                    line.center = center;
+                }
+
                 var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
 
                 var scale = GetScale(line);
-                var door = line.isdoor is bool and true;
 
-                if (scale != Vec3.One)
-                {
-                    var path = line.template_path;
-                    var sp = Path.GetFileName(path);
-                    var spm = Path.ChangeExtension(sp, ".mesh");
-
-                    //find ent
-                    var foundents = entList.Where(x => x.FileName.Contains(sp)).Select(f => f).ToList();
-
-                    if (foundents.Any() && foundents.Last() is FileEntry foundent)
-                    {
-                        using var stream = new MemoryStream();
-                        foundent.Extract(stream);
-                        using var reader = new BinaryReader(stream);
-                        var cr2wFile = _parserService.ReadRed4File(reader);
-
-                        //open ent
-                        if (cr2wFile is not null &&
-                            cr2wFile.RootChunk is entEntityTemplate rc &&
-                            rc.CompiledData.Data is RedPackage data)
-                        {
-                            var meshes = data.Chunks.Where(x => x is entMeshComponent)
-                                .Select(x => (entMeshComponent)x).ToList();
-
-                            for (var i1 = 0; i1 < meshes.Count; i1++)
-                            {
-                                var mesh = meshes[i1];
-                                var (p, r) = GetPosRot(line);
-
-                                var t = mesh.LocalTransform.Position;
-                                var mp = new Vec4(t.X, t.Y, t.Z, 1);
-
-                                var np = p + mp;
-                                var nrq = r * mesh.LocalTransform.Orientation;
-
-                                var newline = new Prop
-                                {
-                                    name = line.name + "_" + i1,
-                                    app = line.app == "" ? "default" : line.app,
-                                    template_path = mesh.Mesh.DepotPath.GetResolvedText() ?? "",
-                                    scale = line.scale
-                                };
-
-                                AddMesh(tr, newline, updatecoords, np, nrq);
-                            }
-                        }
-                        else
-                        {
-                            var foundmesh = meshList.Where(x => x.FileName.Contains(spm)).Select(f => f.FileName).ToList();
-                            if (foundmesh.Count > 0)
-                            {
-                                line.template_path = foundmesh.Last();
-                                AddMesh(tr, line, updatecoords);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        var foundmesh = meshList.Where(x => x.FileName.Contains(spm)).Select(f => f.FileName).ToList();
-                        if (foundmesh.Count > 0)
-                        {
-                            line.template_path = foundmesh.Last();
-                            AddMesh(tr, line, updatecoords);
-                        }
-                        else
-                        {
-                            //those ents will not be scaled properly
-                            //if they load anything at all
-                            AddEntity(tr, line, updatecoords);
-                        }
-                    }
-                }
-                else
+                if (scale == Vec3.One)
                 {
                     AddEntity(tr, line, updatecoords);
+                    continue;
+                }
+
+                var path = line.template_path;
+                var sp = Path.GetFileName(path);
+                var spm = Path.ChangeExtension(sp, ".mesh");
+
+                //if we don't have an ent: those will not be scaled properly, if they load anything at all
+                if (entList.Where(x => x.FileName.Contains(sp)).Select(f => f).LastOrDefault() is not FileEntry foundEnt)
+                {
+                    var mesh = meshList.Where(x => x.FileName.Contains(spm)).Select(f => f.FileName).FirstOrDefault();
+                    if (mesh is not null)
+                    {
+                        line.template_path = mesh;
+                    }
+
+                    AddEntity(tr, line, updatecoords);
+                    continue;
+                }
+
+                using var stream = new MemoryStream();
+                foundEnt.Extract(stream);
+                using var reader = new BinaryReader(stream);
+                var cr2wFile = _parserService.ReadRed4File(reader);
+
+                if (cr2wFile?.RootChunk is not entEntityTemplate rc || rc.CompiledData.Data is not RedPackage data)
+                {
+                    var found = meshList.Where(x => x.FileName.Contains(spm)).Select(f => f.FileName).LastOrDefault();
+                    if (found is not null)
+                    {
+                        line.template_path = found;
+                        AddMesh(tr, line, updatecoords);
+                    }
+
+                    continue;
+                }
+
+                //open ent
+                var meshes = data.Chunks.OfType<entMeshComponent>().ToList();
+
+                for (var i1 = 0; i1 < meshes.Count; i1++)
+                {
+                    var mesh = meshes[i1];
+                    var (p, r) = GetPosRot(line);
+
+                    var t = mesh.LocalTransform.Position;
+                    var mp = new Vec4(t.X, t.Y, t.Z, 1);
+
+                    var np = p + mp;
+                    var nrq = r * mesh.LocalTransform.Orientation;
+
+                    var newline = new Prop
+                    {
+                        name = line.name + "_" + i1,
+                        app = line.app == "" ? "default" : line.app,
+                        template_path = mesh.Mesh.DepotPath.GetResolvedText() ?? "",
+                        scale = line.scale
+                    };
+
+                    AddMesh(tr, newline, updatecoords, np, nrq);
                 }
             }
         }
-        catch (Exception ex) { _loggerService.Error(ex); }
+        catch (Exception ex)
+        {
+            _loggerService.Error(ex);
+        }
     }
 
     private void AddFromAMM2(JsonAMM2 json, string tr, bool updatecoords = true)
@@ -4336,9 +4319,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         var center = updatecoords ? GetCenter(json) : new Vec4();
         var props = GetLines(json);
 
-        foreach (var c in props)
+        foreach (var line in props.Select(Prop.FromChild))
         {
-            var line = Prop.FromChild(c);
             if (updatecoords)
             {
                 line.center = center;
@@ -4352,10 +4334,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         var center = updatecoords ? GetCenter(json) : new Vec4();
         ArgumentNullException.ThrowIfNull(_projectManager.ActiveProject);
 
-        foreach (var o in json)
+        foreach (var line in json.Select(o => Prop.FromObjectList(o, _projectManager.ActiveProject)))
         {
-            var line = Prop.FromObjectList(o, _projectManager.ActiveProject);
-
             if (updatecoords)
             {
                 line.center = center;
@@ -4370,10 +4350,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         var v = json.Select(x =>
         {
             ArgumentNullException.ThrowIfNull(x.pos);
-
             return new Vec4(x.pos.x, x.pos.y, x.pos.z, x.pos.w);
         }).ToList();
-
 
         var center = updatecoords ? GetCenter(v) : new Vec4();
 
@@ -4420,9 +4398,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public static void CreateFromYawPitchRoll(Quaternion r, out float yaw, out float pitch, out float roll)
     {
-        yaw = MathF.Atan2(2.0f * (r.J * r.R + r.I * r.K), 1.0f - 2.0f * (r.I * r.I + r.J * r.J));
-        pitch = MathF.Asin(2.0f * (r.I * r.R - r.J * r.K));
-        roll = MathF.Atan2(2.0f * (r.I * r.J + r.K * r.R), 1.0f - 2.0f * (r.I * r.I + r.K * r.K));
+        yaw = MathF.Atan2(2.0f * ((r.J * r.R) + (r.I * r.K)), 1.0f - (2.0f * ((r.I * r.I) + (r.J * r.J))));
+        pitch = MathF.Asin(2.0f * ((r.I * r.R) - (r.J * r.K)));
+        roll = MathF.Atan2(2.0f * ((r.I * r.J) + (r.K * r.R)), 1.0f - (2.0f * ((r.I * r.I) + (r.K * r.K))));
     }
 
     #endregion
