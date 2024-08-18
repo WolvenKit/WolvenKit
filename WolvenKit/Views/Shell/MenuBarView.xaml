@@ -410,7 +410,8 @@
                     x:Name="MenuItemPackRedmod"
                     Margin="2,1"
                     Header="Pack as REDmod"
-                    ToolTip="Pack as REDmod and create zip file">
+                    ToolTip="Pack as REDmod and create zip file"
+                    Visibility="{Binding EnableRedmodCommands, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
                         <Grid Margin="6,0">
                             <iconPacks:PackIconForkAwesome
@@ -453,7 +454,8 @@
                     x:Name="MenuItemPackInstallRedmodProject"
                     Margin="2,1"
                     Header="Install as REDmod"
-                    ToolTip="Pack as REDmod &amp; install to game">
+                    ToolTip="Pack as REDmod &amp; install to game"
+                    Visibility="{Binding EnableRedmodCommands, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
                         <Grid Margin="6,0">
                             <iconPacks:PackIconForkAwesome
@@ -493,7 +495,8 @@
                 <MenuItem
                     x:Name="ToolbarPackInstallRedmodLaunchButton"
                     Margin="2,1"
-                    Header="Install as REDmod &amp; Launch Game">
+                    Header="Install as REDmod &amp; Launch Game"
+                    Visibility="{Binding EnableRedmodCommands, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
                         <iconPacks:PackIconCodicons
                             Margin="6,0"

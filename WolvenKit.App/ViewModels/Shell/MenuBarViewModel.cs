@@ -1,4 +1,4 @@
-using System;
+using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Helpers;
@@ -34,9 +34,14 @@ public partial class MenuBarViewModel : ObservableObject
     {
         MainViewModel = appViewModel;
         SettingsManager = settingsManager;
+        EnableRedmodCommands = settingsManager.ShowRedmodInRibbon;
         
         MainViewModel.DockedViewVisibleChanged += MainViewModel_OnDockedViewVisibleChanged;
+        SettingsManager.PropertyChanged += SettingsManager_PropertyChanged;
     }
+
+    private void SettingsManager_PropertyChanged(object? sender, PropertyChangedEventArgs e) =>
+        EnableRedmodCommands = SettingsManager.ShowRedmodInRibbon;
 
     private void MainViewModel_OnDockedViewVisibleChanged(object? sender, AppViewModel.DockedViewVisibleChangedEventArgs e)
     {
@@ -74,6 +79,9 @@ public partial class MenuBarViewModel : ObservableObject
 
     [ObservableProperty]
     private bool _projectExplorerCheckbox;
+
+    [ObservableProperty] private bool _enableRedmodCommands;
+    
     partial void OnProjectExplorerCheckboxChanged(bool value)
     {
         if (_automaticUpdate)
