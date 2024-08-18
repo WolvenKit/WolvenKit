@@ -194,11 +194,17 @@
             
             <!-- Ent file: Appearances menu -->
             <MenuItem Header="Appearances"
-                      Visibility="{ Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsRegenerateMaterialCommandEnabled, UpdateSourceTrigger=PropertyChanged, Converter={ StaticResource BooleanToVisibilityConverter}}"
+                      Visibility="{ Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsShowAppearancesMenuEnabled, UpdateSourceTrigger=PropertyChanged, Converter={ StaticResource BooleanToVisibilityConverter}}"
                       Style="{StaticResource WolvenKitToolBarItem}">
 
                 <!-- Regenerate controllers -->
-                <MenuItem Header="Regenerate visual controllers" Click="OnRegenerateControllersClick" />
+                <MenuItem
+                    Header="Regenerate visual controllers" Click="OnRegenerateControllersClick"
+                    Visibility="{ Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsRegenerateMaterialCommandEnabled, UpdateSourceTrigger=PropertyChanged, Converter={ StaticResource BooleanToVisibilityConverter}}" />
+
+                <!-- Regenerate controllers -->
+                <MenuItem Header="Change chunk view by component" Click="OnChangeChunkMasksClick"
+                          Visibility="{ Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsAppFile, UpdateSourceTrigger=PropertyChanged, Converter={ StaticResource BooleanToVisibilityConverter}}" />
 
             </MenuItem>
 

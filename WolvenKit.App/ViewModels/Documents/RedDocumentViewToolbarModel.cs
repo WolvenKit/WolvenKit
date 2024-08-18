@@ -110,21 +110,37 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     }
 
     [ObservableProperty] private bool _isMesh;
+    [ObservableProperty] private bool _isAppFile;
     [ObservableProperty] private bool _isFileValidationMenuVisible;
 
+    /*
+     * Materials
+     */
     [ObservableProperty] private bool _isMaterialMenuEnabled;
-    [ObservableProperty] private bool _isCleanupMenuEnabled;
-    [ObservableProperty] private bool _isConvertMaterialMenuEnabled;
+
     [ObservableProperty] private bool _isGenerateMaterialCommandEnabled;
     [ObservableProperty] private bool _isDeleteUnusedMaterialCommandEnabled;
     [ObservableProperty] private bool _isRegenerateMaterialCommandEnabled;
     [ObservableProperty] private bool _isScrollToMaterialCommandEnabled;
+
+    /*
+     * Cleanup
+     */
+    [ObservableProperty] private bool _isCleanupMenuEnabled;
+    [ObservableProperty] private bool _isConvertMaterialMenuEnabled;
+    
     [ObservableProperty] private bool _isGenerateNewCruidCommandEnabled;
     [ObservableProperty] private bool _isAddAppearancesCommandEnabled;
 
     [ObservableProperty] private bool _isAddDependenciesCommandEnabled;
     [ObservableProperty] private bool _isAddDependenciesCommandEnabledAndShiftKeyDown;
 
+    /*
+     * Appearances
+     */
+    [ObservableProperty] private bool _isShowAppearancesMenuEnabled;
+    
+    
     [ObservableProperty] private bool _isShiftKeyDown;
 
 
@@ -147,8 +163,11 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         }
         
         IsMesh = CurrentTab?.GetContentType() is RedDocumentItemType.Mesh;
+        IsAppFile = CurrentTab?.GetContentType() is RedDocumentItemType.App;
         IsAddAppearancesCommandEnabled = CurrentTab?.GetContentType() is RedDocumentItemType.Mesh;
+        
         IsMaterialMenuEnabled = CurrentTab?.GetContentType() is RedDocumentItemType.Mesh or RedDocumentItemType.Mi;
+        IsShowAppearancesMenuEnabled = IsRegenerateMaterialCommandEnabled || IsAppFile;
 
         _modifierViewStateService?.RefreshModifierStates();
         
