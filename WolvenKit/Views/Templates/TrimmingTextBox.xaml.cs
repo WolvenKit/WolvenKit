@@ -22,7 +22,8 @@ namespace WolvenKit.Views.Editors
                 nameof(Background),
                 typeof(Brush),
                 typeof(TrimmingTextBox),
-                new FrameworkPropertyMetadata(default(Brush)));
+                new FrameworkPropertyMetadata(
+                    Application.Current.FindResource("BackgroundColor_Control") as Brush)); // Use resource as default value
 
         public static readonly DependencyProperty TooltipProperty =
             DependencyProperty.Register(
