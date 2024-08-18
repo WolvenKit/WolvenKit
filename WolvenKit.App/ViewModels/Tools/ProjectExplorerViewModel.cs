@@ -749,10 +749,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             var file = Path.GetFileNameWithoutExtension(path);
             var ext = Path.GetExtension(path);
 
-            yield return Path.Combine(dir, file + " - Copy" + ext);
+            yield return Path.Combine(dir, file + "_copy" + ext);
             for (var i = 2; i < 999; i++) // there shouldn't be more than 1k copies... hopefully
             {
-                yield return Path.Combine(dir, file + " - Copy " + i + ext);
+                yield return Path.Combine(dir, file + "_copy_" + i + ext);
             }
         }
     }
