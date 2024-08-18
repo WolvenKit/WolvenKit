@@ -642,7 +642,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         {
             var group = GroupFromModel(model);
 
-            if (model.BindName == null)
+            if (model.BindName is null || model.SlotName is null or "None")
             {
                 modelGroups.Add(group);
                 continue;
@@ -809,6 +809,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
     {
         var scale = new Vector3() { X = 1, Y = 1, Z = 1 };
         var depotPath = ResourcePath.Empty;
+        var componentName = "";
         var enabled = true;
         var meshApp = "default";
         var chunkMask = 18446744073709551615;
@@ -825,6 +826,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             depotPath = mc.Mesh.DepotPath;
             meshApp = mc.MeshAppearance;
             chunkMask = mc.ChunkMask;
+            componentName = mc.Name;
         }
 
         var enabledChunks = new ObservableCollection<int>();
@@ -946,9 +948,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 foreach (var m in mmapp.ChunkMaterials)
                 {
                     var name = GetUniqueMaterialName(m.ToString().NotNull(), mesh);
-                    if (materials.ContainsKey(name))
+                    if (materials.TryGetValue(name, out var material))
                     {
-                        appMaterials.Add(materials[name]);
+                        appMaterials.Add(material);
                     }
                     else
                     {
@@ -964,8 +966,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         {
             appMaterials.Add(defaultMaterial);
         }
+
         var model = new LoadableModel(epc.Name.ToString().NotNull().Replace(".", ""))
         {
+            ComponentName = (CName)(componentName ?? ""),
             MeshFile = meshFile,
             AppearanceIndex = appIndex,
             AppearanceName = meshApp,
@@ -3519,15 +3523,22 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             }
 
             var element = new GroupModel3DExt();
-     
+
+            var idx = -1;
             foreach (var app in appearances)
             {
-                ArgumentNullException.ThrowIfNull(app);
+                idx++;
+                if (app is null)
+                {
+                    _loggerService.Error($"appearance {idx} is null! Skipping...");
+                    continue;
+                }
 
                 var appFile = Parent.GetFileFromDepotPathOrCache(app.AppearanceResource.DepotPath);
 
                 if (appFile is not { RootChunk: appearanceAppearanceResource aar })
                 {
+                    _loggerService.Error($"Failed to laod appearance {idx} from {app.AppearanceResource.DepotPath}");
                     continue;
                 }
 
@@ -3537,17 +3548,20 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     app.AppearanceName = app.Name;
                 }
 
-                foreach (var handle in aar.Appearances)
+                var appearanceDefs = aar.Appearances
+                    .Where((handle) => handle?.GetValue() is appearanceAppearanceDefinition)
+                    .Select((handle) => (appearanceAppearanceDefinition)handle.GetValue()!)
+                    .ToDictionary(value => value.Name.GetResolvedText() ?? "");
+
+                if (!appearanceDefs.TryGetValue(app.AppearanceName.GetResolvedText() ?? "invalid name", out var appDef) ||
+                    appDef.CompiledData?.Data is not RedPackage appPkg)
                 {
-                    ArgumentNullException.ThrowIfNull(handle);
+                    _loggerService.Error(
+                        $"No valid appearance with the name {app.AppearanceName} found in {app.AppearanceResource.DepotPath}");
+                    continue;
+                }
 
-                    var appDef = (appearanceAppearanceDefinition)handle.GetValue().NotNull();
-
-                    if (appDef.Name != app.AppearanceName || appDef.CompiledData?.Data is not RedPackage appPkg)
-                    {
-                        continue;
-                    }
-
+                {
                     var loadableModels = LoadMeshes(appPkg.Chunks);
                     loadableModels.AddRange(LoadPartsValues(appDef));
                     LoadPartsOverrides(appDef, loadableModels);
@@ -3590,7 +3604,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                         }
                     }
 
-
                     if (appearance == null)
                     {
                         a.ModelGroup.AddRange(AddMeshesToRiggedGroups(a));
@@ -3605,9 +3618,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                             element.Children.Add(model);
                         }
                     }
-                    break;
                 }
+
             }
+
 
             if (appearance == null && Appearances.Count > 0)
             {
@@ -3617,55 +3631,56 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             return element;
         }
 
-        // ent.appearances.Count == null
-            var models = LoadMeshes(pkg.Chunks);
+        // ent.appearances.Count == null => it's not a root entity
+        var models = LoadMeshes(pkg.Chunks);
 
-            if (models.Count == 0)
+        if (models.Count == 0)
+        {
+            return null;
+        }
+
+        var meshApp = appearance ?? new Appearance("Default") { Models = models };
+
+        var cGroup = new MeshComponent() { WorldNodeIndex = string.Empty, WorldNodeDataIndices = string.Empty, };
+
+        foreach (var model in models)
+        {
+            foreach (var material in model.Materials)
             {
-                return null;
+                meshApp.RawMaterials[material.Name] = material;
             }
 
-            var meshApp = appearance ?? new Appearance("Default") { Models = models };
-
-            var cGroup = new MeshComponent() { WorldNodeIndex = string.Empty, WorldNodeDataIndices = string.Empty, };
-
-            foreach (var model in models)
+            if (model.MeshFile?.RootChunk is CMesh mesh)
             {
-                foreach (var material in model.Materials)
+                model.Meshes = MakeMesh(mesh, model.ChunkMask, model.AppearanceIndex);
+            }
+
+            foreach (var m in model.Meshes)
+            {
+                cGroup.Children.Add(m);
+                if (!meshApp.LODLUT.ContainsKey(m.LOD))
                 {
-                    meshApp.RawMaterials[material.Name] = material;
-                }
-                if (model.MeshFile?.RootChunk is CMesh mesh)
-                {
-                    model.Meshes = MakeMesh(mesh, model.ChunkMask, model.AppearanceIndex);
+                    meshApp.LODLUT[m.LOD] = new List<SubmeshComponent>();
                 }
 
-                foreach (var m in model.Meshes)
-                {
-                    cGroup.Children.Add(m);
-                    if (!meshApp.LODLUT.ContainsKey(m.LOD))
-                    {
-                        meshApp.LODLUT[m.LOD] = new List<SubmeshComponent>();
-                    }
-
-                    meshApp.LODLUT[m.LOD].Add(m);
-                }
+                meshApp.LODLUT[m.LOD].Add(m);
             }
+        }
 
-            if (appearance == null)
-            {
-                meshApp.ModelGroup.Add(cGroup);
-                Appearances.Add(meshApp);
-                SelectedAppearance = meshApp;
-            }
+        if (appearance == null)
+        {
+            meshApp.ModelGroup.Add(cGroup);
+            Appearances.Add(meshApp);
+            SelectedAppearance = meshApp;
+        }
 
-            var el = new GroupModel3DExt();
-            foreach (var model in meshApp.ModelGroup)
-            {
-                el.Children.Add(model);
-            }
+        var el = new GroupModel3DExt();
+        foreach (var model in meshApp.ModelGroup)
+        {
+            el.Children.Add(model);
+        }
 
-            return el;
+        return el;
         
     }
 
