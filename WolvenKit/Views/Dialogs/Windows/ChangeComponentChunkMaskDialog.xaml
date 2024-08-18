@@ -7,7 +7,7 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
-    Title="Generate missing materials"
+    Title="Change component chunk mask"
     SizeToContent="WidthAndHeight"
     FocusManager.FocusedElement="{Binding ElementName=BaseMaterialBox}"
     WindowStartupLocation="CenterScreen">
