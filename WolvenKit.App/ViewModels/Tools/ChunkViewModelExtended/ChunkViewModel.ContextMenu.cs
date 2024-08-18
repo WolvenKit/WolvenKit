@@ -306,6 +306,38 @@ public partial class ChunkViewModel
         return Task.CompletedTask;
     }
 
+    public void ReplaceComponentChunkMasks(string componentName, CUInt64 chunkMask)
+    {
+        if (ResolvedData is not appearanceAppearanceResource appearanceResource || appearanceResource.Appearances.Count == 0)
+        {
+            return;
+        }
+
+        var appearances = appearanceResource.Appearances.Where((handle) => handle.GetValue() is appearanceAppearanceDefinition)
+            .Select(handle => (appearanceAppearanceDefinition)handle.GetValue()!)
+            .Where(appDef => appDef.Components.Count > 0);
+
+        var hasChanges = false;
+        foreach (var appDef in appearances)
+        {
+            var component = appDef.Components.FirstOrDefault(comp => comp.Name == componentName);
+            if (component is null || component is not IRedMeshComponent meshComponent)
+            {
+                continue;
+            }
+
+            meshComponent.ChunkMask = chunkMask;
+            GetPropertyChild("appearances", appDef.Name.GetResolvedText() ?? "", "components", componentName)?.RecalculateProperties();
+            hasChanges = true;
+        }
+
+        if (!hasChanges)
+        {
+            return;
+        }
+
+        Tab?.Parent.SetIsDirty(true);
+    }
     #endregion
 
 

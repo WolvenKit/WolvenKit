@@ -101,6 +101,17 @@
         <!--  Setter Property="TabPanelBackground" Value="#313131" /  -->
     </Style>
 
+
+    <!-- 
+        Global style for nested syncfusion combobox, e.g. in ChunkMask editor.
+        Doesn't work for base dropdown background yet 
+     -->
+    <Style
+        TargetType="{x:Type syncfusion:ComboBoxAdv}"
+        BasedOn="{StaticResource {x:Type syncfusion:ComboBoxAdv}}">
+        <Setter Property="Background" Value="#252525" />
+    </Style>
+    
     <!-- Give all textboxes the same background -->
     <Style
         x:Key="WolvenkitTextBoxStyle"

@@ -17,7 +17,6 @@ using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.Helpers;
 using WolvenKit.RED4.Types;
 using WolvenKit.Views.Dialogs.Windows;
 
@@ -208,7 +207,6 @@ namespace WolvenKit.Views.Documents
 
         }
         
-
         private async Task AddDependenciesToMi(ChunkViewModel cvm)
         {
             await LoadModArchives();
@@ -222,7 +220,6 @@ namespace WolvenKit.Views.Documents
 
             await SearchAndReplaceInChildNodes(cvm, pathReplacements, "values");
         }
-
 
         private static async Task SearchAndReplaceInChildNodes(ChunkViewModel cvm, Dictionary<string, string> pathReplacements,
             params string[] propertyPaths)
@@ -291,7 +288,6 @@ namespace WolvenKit.Views.Documents
             }
         }
 
-
         private async void OnAddDependenciesClick(object sender, RoutedEventArgs e)
         {
             if (_projectManager.ActiveProject is null || ViewModel?.RootChunk is not ChunkViewModel cvm)
@@ -317,5 +313,22 @@ namespace WolvenKit.Views.Documents
             _projectWatcher.Resume();
         }
 
+        private void OnChangeChunkMasksClick(object sender, RoutedEventArgs e)
+        {
+            var dialog = new ChangeComponentChunkMaskDialog();
+            if (ViewModel?.RootChunk is not ChunkViewModel cvm || dialog.ShowDialog() != true)
+            {
+                return;
+            }
+
+            if (string.IsNullOrEmpty(dialog.ViewModel?.ComponentName))
+            {
+                return;
+            }
+
+            var chunkMask = (CUInt64)dialog.ViewModel?.ChunkMask;
+
+            cvm.ReplaceComponentChunkMasks(dialog.ViewModel?.ComponentName!, chunkMask);
+        }
     }
 }
