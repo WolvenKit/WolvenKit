@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.ClearScript.JavaScript;
 using Splat;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
@@ -45,6 +49,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
     public ChunkViewModel? RootChunk { get; set; }
     public ChunkViewModel? SelectedChunk { get; set; }
+    public List<ChunkViewModel> SelectedChunks { get; } = new();
 
     public string? FilePath => CurrentTab?.FilePath;
     public CR2WFile? Cr2WFile => CurrentTab?.Parent.Cr2wFile;
@@ -98,15 +103,19 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
     private void OnRtdModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName != nameof(RDTDataViewModel.SelectedChunk) || sender is not RDTDataViewModel dataViewModel)
+        if (e.PropertyName is not (nameof(RDTDataViewModel.SelectedChunk) or nameof(RDTDataViewModel.SelectedChunks)) ||
+            sender is not RDTDataViewModel dataViewModel)
         {
             return;
         }
-
         SelectedChunk = (ChunkViewModel?)dataViewModel.SelectedChunk;
+        SelectedChunks.Clear();
+        if (dataViewModel.SelectedChunks is IList list)
+        {
+            SelectedChunks.AddRange(list.OfType<ChunkViewModel>());
+        }
 
-        IsRegenerateMaterialCommandEnabled = SelectedChunk is { Name: "components", Data: CArray<entIComponent> };
-        IsGenerateNewCruidCommandEnabled = SelectedChunk?.PropertyType == typeof(CRUID);
+        RefreshMeshMenuItems();
     }
 
     [ObservableProperty] private bool _isMesh;
@@ -131,6 +140,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     
     [ObservableProperty] private bool _isGenerateNewCruidCommandEnabled;
     [ObservableProperty] private bool _isAddAppearancesCommandEnabled;
+    [ObservableProperty] private bool _isMaterialDefinition;
 
     [ObservableProperty] private bool _isAddDependenciesCommandEnabled;
     [ObservableProperty] private bool _isAddDependenciesCommandEnabledAndShiftKeyDown;
@@ -156,11 +166,19 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         IsRegenerateMaterialCommandEnabled = false;
         IsScrollToMaterialCommandEnabled = false;
         IsGenerateNewCruidCommandEnabled = false;
+        IsMaterialDefinition = false;
 
         if (CurrentTab is null)
         {
             return;
         }
+
+
+        IsRegenerateMaterialCommandEnabled = SelectedChunk is { Name: "components", Data: CArray<entIComponent> };
+
+        IsGenerateNewCruidCommandEnabled = SelectedChunk?.PropertyType == typeof(CRUID);
+        IsMaterialDefinition = SelectedChunk?.IsMaterialDefinition() == true;
+
         
         IsMesh = CurrentTab?.GetContentType() is RedDocumentItemType.Mesh;
         IsAppFile = CurrentTab?.GetContentType() is RedDocumentItemType.App;
@@ -187,6 +205,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         IsGenerateMaterialCommandEnabled = mesh.Appearances.Count > 0;
         IsDeleteUnusedMaterialCommandEnabled = mesh.Appearances.Count > 0 || mesh.MaterialEntries.Count > 0;
         IsScrollToMaterialCommandEnabled = SelectedChunk?.ShowScrollToMaterial == true;
+        IsMaterialDefinition = SelectedChunk?.IsMaterialDefinition() == true;
     }
 
     public void SetCurrentTab(RedDocumentTabViewModel value)

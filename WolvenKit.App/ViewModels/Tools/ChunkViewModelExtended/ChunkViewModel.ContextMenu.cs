@@ -45,7 +45,7 @@ public partial class ChunkViewModel
     {
         ShouldShowPasteOverwrite = ShouldShowArrayOps && IsShiftKeyPressedOnly && Tab?.SelectedChunk is not null;
         ShouldShowOverwriteArray = ShouldShowArrayOps && IsCtrlKeyPressed && !ShouldShowPasteOverwrite;
-        ShouldShowPasteIntoArray = ShouldShowArrayOps && !ShouldShowPasteOverwrite && !ShouldShowOverwriteArray;
+        ShouldShowPasteIntoArray = ShouldShowArrayOps && !(ShouldShowPasteOverwrite || ShouldShowOverwriteArray);
 
         IsMaterial = ResolvedData is CMaterialInstance or CResourceAsyncReference<IMaterial>;
 
@@ -60,6 +60,23 @@ public partial class ChunkViewModel
 
 
     #region methods
+
+    public bool IsMaterialDefinition()
+    {
+        return ResolvedData is CArray<CMeshMaterialEntry> || Parent?.ResolvedData is CArray<CMeshMaterialEntry>;
+    }
+
+    [RelayCommand(CanExecute = nameof(IsMaterialDefinition))]
+    private void ToggleMaterialDefinitionIsExternal()
+    {
+        if (ResolvedData is not CMeshMaterialEntry entry)
+        {
+            return;
+        }
+
+        entry.IsLocalInstance = !entry.IsLocalInstance;
+        RecalculateProperties();
+    }
 
     [RelayCommand]
     private async Task<Task> RenameMaterial()

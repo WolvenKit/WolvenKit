@@ -2581,7 +2581,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     
     private bool CanPasteSelection()
     {
-        if (RedDocumentTabViewModel.CopiedChunks.Count == 0)
+        if (RedDocumentTabViewModel.CopiedChunks.Count == 0 ||
+            (ResolvedData is not IRedArray && Parent is not { ResolvedData: IRedArray }))
         {
             return false;
         }
@@ -2596,8 +2597,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             innerType = pArr.InnerType;
         }
 
-        return innerType != null &&
-               RedDocumentTabViewModel.CopiedChunks.All(c => CheckTypeCompatibility(innerType, c.GetType()) != TypeCompability.None);
+        return RedDocumentTabViewModel.CopiedChunks.All(c => CheckTypeCompatibility(innerType!, c.GetType()) != TypeCompability.None);
     } // TODO RelayCommand check notify
 
 
@@ -2632,11 +2632,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             DeleteSelection();
         }
 
-        PasteSelection(insertAtIndex);
+        PasteSelectionInternal(insertAtIndex);
     }
     
     [RelayCommand(CanExecute = nameof(CanPasteSelection))]
-    private void PasteSelection(int insertAtIndex = -1)
+    private void PasteSelection() => PasteSelectionInternal(-1);
+
+
+    private void PasteSelectionInternal(int insertAtIndex = -1)
     {
         ArgumentNullException.ThrowIfNull(Parent);
 
@@ -2666,6 +2669,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                         {
                             index = pkg.Chunks.Count;
                         }
+
                         pkg.Chunks.Insert(index, (RedBaseClass)e);
                     }
                     else if (db.GetValue().Data is CR2WList list)
@@ -2675,12 +2679,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                             index = list.Files.Count;
                         }
 
-                        list.Files.Insert(index, new CR2WFile()
-                        {
-                            RootChunk = (RedBaseClass)e
-                        });
+                        list.Files.Insert(index, new CR2WFile() { RootChunk = (RedBaseClass)e });
                     }
                 }
+
                 if (PropertyType.IsAssignableTo(typeof(IRedArray)))
                 {
                     if (InsertChild(-1, e))
@@ -2688,6 +2690,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                         //RDTDataViewModel.CopiedChunk = null;
                     }
                 }
+
                 if (Parent.ResolvedData is IRedBufferPointer)
                 {
                     if (Parent.InsertChild(index, e))
@@ -2695,7 +2698,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                         //RDTDataViewModel.CopiedChunk = null;
                     }
                 }
-                
+
                 if (Parent.PropertyType.IsAssignableTo(typeof(IRedArray)))
                 {
                     if (Parent.InsertChild(index, e))

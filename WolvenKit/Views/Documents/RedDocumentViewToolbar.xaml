@@ -152,6 +152,11 @@
                           IsEnabled="{Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsScrollToMaterialCommandEnabled, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                           Click="OnScrollToMaterialClick" />
 
+                <!-- Scroll to material -->
+                <MenuItem Header="Toggle 'IsLocalInstance'"
+                          IsEnabled="{Binding ElementName=RedDocumentViewToolbarControl, Path=DataContext.IsMaterialDefinition, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                          Click="OnToggleLocalInstanceClick" />
+
                 <!-- Shift: "Add material dependencies" -->
                 <MenuItem Header="Add material dependencies"
                           ToolTip="Will run 'delete unused materials' first"

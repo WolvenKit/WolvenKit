@@ -288,6 +288,21 @@ namespace WolvenKit.Views.Documents
             }
         }
 
+        private void OnToggleLocalInstanceClick(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel?.SelectedChunks is null)
+            {
+                return;
+            }
+
+            foreach (var chunk in ViewModel.SelectedChunks)
+            {
+                chunk.ToggleMaterialDefinitionIsExternalCommand.Execute(null);
+            }
+
+            ViewModel.SelectedChunks.LastOrDefault()?.Parent?.RecalculateProperties();
+        }
+        
         private async void OnAddDependenciesClick(object sender, RoutedEventArgs e)
         {
             if (_projectManager.ActiveProject is null || ViewModel?.RootChunk is not ChunkViewModel cvm)
