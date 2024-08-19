@@ -83,13 +83,16 @@ public partial class ChunkViewModel
             case RedDummy:
                 return;
 
-            case worldNodeData sst when Tab is RDTDataViewModel dvm &&
+            case worldCompiledNodeInstanceSetupInfo sst when Tab is RDTDataViewModel dvm &&
                                         dvm.Chunks[0].Data is worldStreamingSector wss && sst.NodeIndex < wss.Nodes.Count:
                 Descriptor = $"[{sst.NodeIndex}] {StringHelper.Stringify(wss.Nodes[sst.NodeIndex].Chunk)}";
                 return;
             case worldStreamingSectorDescriptor wssd:
                 Descriptor = (wssd.Data.DepotPath.GetResolvedText() ?? "")
                     .Replace(@"base\worlds\03_night_city\_compiled\default\", "").Replace(".streamingsector", "");
+                break;
+            case worldGlobalNodeID wgni:
+                Descriptor = wgni.Hash;
                 break;
             case worldNode worldNode when StringHelper.Stringify(worldNode) is string s && s != "":
                 Descriptor = s;

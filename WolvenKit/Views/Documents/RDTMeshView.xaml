@@ -228,7 +228,7 @@
                         <TextBlock
                             Margin="5,0,0,0"
                             Foreground="{StaticResource WolvenKitTan}"
-                            Text="worldNodeData" />
+                            Text="worldCompiledNodeInstanceSetupInfo" />
                         <TextBlock Margin="3,0,0,0" Text="{Binding CurrentSelection.WorldNodeIndex, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                         <TextBlock Margin="3,0,0,0" Text="{Binding CurrentSelection.Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>

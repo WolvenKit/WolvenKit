@@ -10,9 +10,9 @@ public class ParseableBufferConverter : CustomRedConverter<IParseableBuffer>
 {
     public override IParseableBuffer? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        if (typeToConvert == typeof(worldNodeDataBuffer))
+        if (typeToConvert == typeof(worldCompiledNodeInstanceSetupInfoBuffer))
         {
-            return JsonSerializer.Deserialize<worldNodeDataBuffer>(ref reader, options);
+            return JsonSerializer.Deserialize<worldCompiledNodeInstanceSetupInfoBuffer>(ref reader, options);
         }
 
         if (typeToConvert == typeof(RedPackage))
@@ -53,7 +53,7 @@ public class ParseableBufferConverter : CustomRedConverter<IParseableBuffer>
 
     public override void Write(Utf8JsonWriter writer, IParseableBuffer value, JsonSerializerOptions options)
     {
-        if (value is worldNodeDataBuffer wndb)
+        if (value is worldCompiledNodeInstanceSetupInfoBuffer wndb)
         {
             JsonSerializer.Serialize(writer, wndb, options);
             return;

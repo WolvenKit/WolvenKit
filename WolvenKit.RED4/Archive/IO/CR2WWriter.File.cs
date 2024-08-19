@@ -347,10 +347,10 @@ public partial class CR2WWriter
             buffer.SetBytes(newData);
         }
 
-        if (buffer.Data is worldNodeDataBuffer ssb)
+        if (buffer.Data is worldCompiledNodeInstanceSetupInfoBuffer ssb)
         {
             using var ms = new MemoryStream();
-            using var transformWriter = new worldNodeDataWriter(ms);
+            using var transformWriter = new WorldCompiledNodeInstanceSetupInfoBufferWriter(ms);
 
             transformWriter.WriteBuffer(ssb);
 

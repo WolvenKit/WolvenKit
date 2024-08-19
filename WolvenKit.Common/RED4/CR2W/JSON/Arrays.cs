@@ -17,7 +17,7 @@ public class ArrayConverterFactory : JsonConverterFactory
 
     public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {
-        if (typeToConvert == typeof(worldNodeDataBuffer))
+        if (typeToConvert == typeof(worldCompiledNodeInstanceSetupInfoBuffer))
         {
             return _cArrayConverter;
         }
