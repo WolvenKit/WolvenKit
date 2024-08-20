@@ -3757,7 +3757,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             var saveFileDialog = new SaveFileDialog
             {
                 Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*",
-                FilterIndex = 2,
+                FilterIndex = 1,
                 FileName = Type + ".json",
                 RestoreDirectory = true
             };
