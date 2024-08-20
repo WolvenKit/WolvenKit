@@ -499,7 +499,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// Ctrl+Shift with /archive/ file or folder selected: Copy absolute path to raw folder (convenience for quick switching)
     /// </summary>
     [RelayCommand(CanExecute = nameof(CanCopyAbsPathToRawFolder))]
-    private void CopyAbsPathToRawFolder() => CopyItemPathToClipboard(true, true, false);
+    private void CopyAbsPathToRawFolder() => CopyItemPathToClipboard(true, true, false, true);
 
 
     private bool CanCopyAbsPathToArchiveFolder => IsShowAbsolutePathToArchiveFolder;

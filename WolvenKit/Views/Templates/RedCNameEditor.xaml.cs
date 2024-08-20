@@ -30,8 +30,11 @@ namespace WolvenKit.Views.Editors
         public bool HasWarning { get; set; } = false;
         public bool HasError { get; set; } = false;
 
-        [GeneratedRegex(@"^[a-zA-Z0-9_]+[a-zA-Z0-9_\s@]*[a-zA-Z0-9_]+$")]
+        [GeneratedRegex(@"^[a-zA-Z0-9_]+[a-zA-Z0-9_\s@\&\=]*[a-zA-Z0-9_]+$")]
         private static partial Regex s_validCharactersRegex();
+
+        [GeneratedRegex(@"^\*\{[a-z_-]+\.?[a-z0-9-_]+\}$")]
+        private static partial Regex s_dynamicVariantRegex();
 
         private void RecalculateValidityAndTooltip()
         {
@@ -47,7 +50,7 @@ namespace WolvenKit.Views.Editors
                 hasError = true;
                 TextBoxToolTip = $"Invalid dynamic appearance condition! {invalidConditions}";
             }
-            else if (!s_validCharactersRegex().IsMatch(Text))
+            else if (!s_validCharactersRegex().IsMatch(Text) && !s_dynamicVariantRegex().IsMatch(Text))
             {
                 hasWarning = true;
                 TextBoxToolTip = $"'{Text}' contains invalid characters, or leading/trailing spaces! (Ignore this if everything works)";
