@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DynamicData;
 using DynamicData.Binding;
 using Microsoft.Win32;
 using WolvenKit.App.Controllers;
@@ -44,6 +46,7 @@ using static WolvenKit.RED4.Types.RedReflection;
 using CKeyValuePair = WolvenKit.RED4.Types.CKeyValuePair;
 using IRedArray = WolvenKit.RED4.Types.IRedArray;
 using IRedString = WolvenKit.RED4.Types.IRedString;
+using ISerializable = WolvenKit.RED4.Types.ISerializable;
 using Mat4 = System.Numerics.Matrix4x4;
 using Quat = System.Numerics.Quaternion;
 using Vec3 = System.Numerics.Vector3;
@@ -1354,6 +1357,48 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             vc.AppearanceDependency = list;
             RecalculateProperties();
         }
+    }
+
+    //  
+    [GeneratedRegex(@"^[-=_]+$")]
+    private static partial Regex PlaceholderRegex();
+
+    private bool CanDeleteDuplicateEntries() => ResolvedData is JsonResource;
+
+    [RelayCommand(CanExecute = nameof(CanDeleteDuplicateEntries))]
+    private void DeleteDuplicateEntries()
+    {
+        if (ResolvedData is not JsonResource { Root: IRedHandle<ISerializable> handle }
+            || handle.GetValue() is not localizationPersistenceOnScreenEntries entries
+            || entries.Entries.Count == 0)
+        {
+            return;
+        }
+
+        HashSet<CString> seen = [];
+        var uniqueEntries = entries.Entries.Where(entry => PlaceholderRegex().IsMatch(entry.SecondaryKey) || seen.Add(entry.SecondaryKey))
+            .ToList();
+
+        var numDuplicates = entries.Entries.Count - uniqueEntries.Count;
+        if (numDuplicates == 0)
+        {
+            _loggerService.Info($"No duplicate entries in file");
+            return;
+        }
+
+        entries.Entries.Clear();
+        foreach (var entry in uniqueEntries)
+        {
+            entries.Entries.Add(entry);
+        }
+
+        GetPropertyChild("root", "entries")?.RecalculateProperties();
+        GetPropertyChild("root")?.RecalculateProperties();
+
+        RecalculateProperties();
+        Tab?.Parent.SetIsDirty(true);
+
+        _loggerService.Info($"Deleted {numDuplicates} duplicate entries");
     }
 
     private bool CanDeleteEmptySubmeshes() => ResolvedData is CMesh;

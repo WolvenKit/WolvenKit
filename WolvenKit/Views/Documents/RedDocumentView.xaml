@@ -67,7 +67,7 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <docV:RedDocumentViewToolbar Grid.Row="0" x:Name="RedDocumentViewToolbar" ViewModel="{Binding}" />
+        <docV:RedDocumentViewMenuBar Grid.Row="0" x:Name="RedDocumentViewToolbar" ViewModel="{Binding}" />
             
         <syncfusion:TabControlExt
             x:Name="TabControl"

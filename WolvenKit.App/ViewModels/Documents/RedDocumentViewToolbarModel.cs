@@ -20,7 +20,6 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 {
     public RedDocumentViewToolbarModel()
     {
-        RefreshMenuVisibility();
         if (Locator.Current.GetService<ISettingsManager>() is ISettingsManager settingsSvc)
         {
             EditorLevel = settingsSvc.DefaultEditorDifficultyLevel;
@@ -37,8 +36,9 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
         _modifierViewStateService = svc;
         svc.ModifierStateChanged += OnModifierChanged;
-    }
 
+        RefreshMenuVisibility(true);
+    }
 
     private void OnModifierChanged() => IsShiftKeyDown = _modifierViewStateService?.IsShiftKeyPressed ?? false;
 
@@ -56,9 +56,17 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
     [ObservableProperty] private bool _showToolbar;
 
-    public void RefreshMenuVisibility()
+    [ObservableProperty] private RedDocumentItemType _contentType;
+
+    public void RefreshMenuVisibility(bool forceRefreshContentType = false)
     {
-        ShowToolbar = CurrentTab?.GetContentType() switch
+        if (forceRefreshContentType)
+        {
+            ContentType = RedDocumentItemType.Other;
+        }
+
+        ContentType = CurrentTab?.GetContentType() ?? RedDocumentItemType.None;
+        ShowToolbar = ContentType switch
         {
             RedDocumentItemType.Mesh
                 or RedDocumentItemType.App
@@ -77,10 +85,10 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
                 or RedDocumentItemType.Mlmask
                 or RedDocumentItemType.Mlsetup
                 or RedDocumentItemType.Sector
+                or RedDocumentItemType.None
                 or RedDocumentItemType.Other => false,
             _ => false,
         };
-
 
         SelectedChunk = null;
         RootChunk = null;
@@ -95,15 +103,13 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             }
         }
 
-        if (ShowToolbar)
-        {
-            RefreshMeshMenuItems();
-        }
+        RefreshMeshMenuItems();
     }
 
     private void OnRtdModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName is not (nameof(RDTDataViewModel.SelectedChunk) or nameof(RDTDataViewModel.SelectedChunks)) ||
+        if (e.PropertyName is not (nameof(RDTDataViewModel.SelectedChunk) or nameof(RDTDataViewModel.SelectedChunks)
+                or nameof(RDTDataViewModel.FilePath)) ||
             sender is not RDTDataViewModel dataViewModel)
         {
             return;
@@ -117,15 +123,9 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
         RefreshMeshMenuItems();
     }
-
-    [ObservableProperty] private bool _isMesh;
-    [ObservableProperty] private bool _isAppFile;
+    
     [ObservableProperty] private bool _isFileValidationMenuVisible;
 
-    /*
-     * Materials
-     */
-    [ObservableProperty] private bool _isMaterialMenuEnabled;
 
     [ObservableProperty] private bool _isGenerateMaterialCommandEnabled;
     [ObservableProperty] private bool _isDeleteUnusedMaterialCommandEnabled;
@@ -135,32 +135,21 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     /*
      * Cleanup
      */
-    [ObservableProperty] private bool _isCleanupMenuEnabled;
     [ObservableProperty] private bool _isConvertMaterialMenuEnabled;
     
     [ObservableProperty] private bool _isGenerateNewCruidCommandEnabled;
-    [ObservableProperty] private bool _isAddAppearancesCommandEnabled;
     [ObservableProperty] private bool _isMaterialDefinition;
 
     [ObservableProperty] private bool _isAddDependenciesCommandEnabled;
     [ObservableProperty] private bool _isAddDependenciesCommandEnabledAndShiftKeyDown;
-
-    /*
-     * Appearances
-     */
-    [ObservableProperty] private bool _isShowAppearancesMenuEnabled;
-    
     
     [ObservableProperty] private bool _isShiftKeyDown;
 
 
     private void RefreshMeshMenuItems()
     {
-        IsMesh = false;
         IsFileValidationMenuVisible = false;
         IsConvertMaterialMenuEnabled = false;
-        IsMaterialMenuEnabled = false;
-        IsCleanupMenuEnabled = false;
         IsGenerateMaterialCommandEnabled = false;
         IsDeleteUnusedMaterialCommandEnabled = false;
         IsRegenerateMaterialCommandEnabled = false;
@@ -168,28 +157,20 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         IsGenerateNewCruidCommandEnabled = false;
         IsMaterialDefinition = false;
 
-        if (CurrentTab is null)
+        if (!ShowToolbar || CurrentTab is null)
         {
             return;
         }
-
 
         IsRegenerateMaterialCommandEnabled = SelectedChunk is { Name: "components", Data: CArray<entIComponent> };
 
         IsGenerateNewCruidCommandEnabled = SelectedChunk?.PropertyType == typeof(CRUID);
         IsMaterialDefinition = SelectedChunk?.IsMaterialDefinition() == true;
 
-        
-        IsMesh = CurrentTab?.GetContentType() is RedDocumentItemType.Mesh;
-        IsAppFile = CurrentTab?.GetContentType() is RedDocumentItemType.App;
-        IsAddAppearancesCommandEnabled = CurrentTab?.GetContentType() is RedDocumentItemType.Mesh;
-        
-        IsMaterialMenuEnabled = CurrentTab?.GetContentType() is RedDocumentItemType.Mesh or RedDocumentItemType.Mi;
-        IsShowAppearancesMenuEnabled = IsRegenerateMaterialCommandEnabled || IsAppFile;
-
         _modifierViewStateService?.RefreshModifierStates();
-        
-        var enableDependencyCommand = IsAddAppearancesCommandEnabled || CurrentTab?.GetContentType() is RedDocumentItemType.Mi;
+
+        var enableDependencyCommand = CurrentTab?.GetContentType() is RedDocumentItemType.Mesh ||
+                                      CurrentTab?.GetContentType() is RedDocumentItemType.Mi;
 
         IsAddDependenciesCommandEnabled = enableDependencyCommand && !IsShiftKeyDown;
         IsAddDependenciesCommandEnabledAndShiftKeyDown = enableDependencyCommand && IsShiftKeyDown;

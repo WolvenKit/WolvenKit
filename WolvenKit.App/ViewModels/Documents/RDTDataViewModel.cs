@@ -97,22 +97,14 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     public ChunkViewModel? GetRootChunk() => Chunks.FirstOrDefault();
 
-    public override RedDocumentItemType GetContentType()
-    {
-        switch (GetRootChunk()?.ResolvedData)
+    public override RedDocumentItemType GetContentType() => GetRootChunk()?.ResolvedData switch
         {
-            case CMesh:
-                return RedDocumentItemType.Mesh;
-            case appearanceAppearanceResource:
-                return RedDocumentItemType.App;
-            case entEntityTemplate:
-                return RedDocumentItemType.Ent;
-            case CMaterialInstance:
-                return RedDocumentItemType.Mi;
-            default:
-                return Enum.TryParse(Path.GetExtension(FilePath), out RedDocumentItemType type) ? type : RedDocumentItemType.Other;
-        }
-    }
+            CMesh => RedDocumentItemType.Mesh,
+            appearanceAppearanceResource => RedDocumentItemType.App,
+            entEntityTemplate => RedDocumentItemType.Ent,
+            CMaterialInstance => RedDocumentItemType.Mi,
+            _ => base.GetContentType()
+        };
 
     private void RDTDataViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
