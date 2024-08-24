@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using ReactiveUI;
@@ -22,17 +24,17 @@ using WolvenKit.Views.Dialogs.Windows;
 
 namespace WolvenKit.Views.Documents
 {
-    public partial class RedDocumentViewToolbar : ReactiveUserControl<RedDocumentViewToolbarModel>
+    public partial class RedDocumentViewMenuBar : ReactiveUserControl<RedDocumentViewToolbarModel>
     {
-        private AppScriptService _scriptService;
+        private readonly AppScriptService _scriptService;
         private readonly ISettingsManager _settingsManager;
         private readonly IProjectManager _projectManager;
         private readonly ILoggerService _loggerService;
         private readonly WatcherService _projectWatcher;
         private readonly IAppArchiveManager _archiveManager;
-        
 
-        public RedDocumentViewToolbar()
+
+        public RedDocumentViewMenuBar()
         {
             _scriptService = Locator.Current.GetService<AppScriptService>();
             _settingsManager = Locator.Current.GetService<ISettingsManager>();
@@ -41,10 +43,11 @@ namespace WolvenKit.Views.Documents
             _projectWatcher = (WatcherService)Locator.Current.GetService<IWatcherService>();
             _archiveManager = Locator.Current.GetService<IAppArchiveManager>();
             InitializeComponent();
-
+            
             RegisterFileValidationScript();
 
             DataContext = new RedDocumentViewToolbarModel { CurrentTab = _currentTab };
+            ViewModel = DataContext as RedDocumentViewToolbarModel;
 
             this.WhenActivated(_ =>
             {
@@ -53,9 +56,10 @@ namespace WolvenKit.Views.Documents
                     return;
                 }
 
-                vm.RefreshMenuVisibility();
+                vm.RefreshMenuVisibility(true);
             });
         }
+
 
         private RedDocumentTabViewModel _currentTab;
 
@@ -90,6 +94,7 @@ namespace WolvenKit.Views.Documents
             }
         }
 
+        
         private async Task RunFileValidation()
         {
             if (_fileValidationScript is null || !File.Exists(_fileValidationScript.Path))
@@ -106,7 +111,6 @@ namespace WolvenKit.Views.Documents
             // This needs to be inside the DispatcherHelper, or the UI button will make everything explode
             DispatcherHelper.RunOnMainThread(() => Task.Run(async () => await RunFileValidation()).GetAwaiter().GetResult());
 
-
         private void OnConvertLocalMaterialsClick(object sender, RoutedEventArgs e) =>
             ViewModel?.RootChunk?.ConvertPreloadMaterialsCommand.Execute(null);
 
@@ -118,6 +122,9 @@ namespace WolvenKit.Views.Documents
 
         private void OnDeleteEmptySubmeshesClick(object sender, RoutedEventArgs e) =>
             ViewModel?.RootChunk?.DeleteEmptySubmeshesCommand.Execute(null);
+
+        private void OnDeleteDuplicateEntriesClick(object sender, RoutedEventArgs e) =>
+            ViewModel?.RootChunk?.DeleteDuplicateEntriesCommand.Execute(null);
 
         private void OnRegenerateControllersClick(object sender, RoutedEventArgs e) =>
             ViewModel?.SelectedChunk?.RegenerateAppearanceVisualControllerCommand.Execute(null);
@@ -336,14 +343,14 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            if (string.IsNullOrEmpty(dialog.ViewModel?.ComponentName))
+            if (dialog.ViewModel is null || string.IsNullOrEmpty(dialog.ViewModel.ComponentName))
             {
                 return;
             }
 
-            var chunkMask = (CUInt64)dialog.ViewModel?.ChunkMask;
+            var chunkMask = (CUInt64)dialog.ViewModel.ChunkMask;
 
-            cvm.ReplaceComponentChunkMasks(dialog.ViewModel?.ComponentName!, chunkMask);
+            cvm.ReplaceComponentChunkMasks(dialog.ViewModel.ComponentName!, chunkMask);
         }
     }
 }
