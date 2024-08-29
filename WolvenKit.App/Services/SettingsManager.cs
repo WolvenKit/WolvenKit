@@ -244,7 +244,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
 
     [Display(Name = "Game language used for LocKeys", GroupName = "Display")] 
     [ObservableProperty]
-    private EGameLanguage _gameLanguage;
+    private EGameLanguage _gameLanguage = EGameLanguage.en_us;
 
     [Display(Name = "Show Graph Editor Node Properties", GroupName = "Display")]
     [ObservableProperty]
