@@ -33,7 +33,7 @@ namespace WolvenKit.Views.Editors
         [GeneratedRegex(@"^[a-zA-Z0-9_]+[a-zA-Z0-9_\s@\&\=]*[a-zA-Z0-9_]+$")]
         private static partial Regex s_validCharactersRegex();
 
-        [GeneratedRegex(@"^\*\{[a-z_-]+\.?[a-z0-9-_]+\}$")]
+        [GeneratedRegex(@"^\*[a-z_-]*\{[a-z_-]+\.?[a-z0-9-_]+[a-z_-]*\}$")]
         private static partial Regex s_dynamicVariantRegex();
 
         private void RecalculateValidityAndTooltip()
