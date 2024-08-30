@@ -240,7 +240,9 @@ public partial class ChunkViewModel
         }
     }
 
-    [RelayCommand]
+    private bool CanScrollToMaterial() => GetRootModel().ShowScrollToMaterial;
+
+    [RelayCommand(CanExecute = nameof(CanScrollToMaterial))]
     private void ScrollToMaterial()
     {
         if (GetRootModel() is not { ResolvedData: CMesh mesh } rootModel || Tab is null)
