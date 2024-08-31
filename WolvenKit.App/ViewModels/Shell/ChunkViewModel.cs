@@ -189,7 +189,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         _tab = tab;
         RelativePath = _tab.Parent.RelativePath;
         IsExpanded = true;
-        
     }
 
     public ChunkViewModel(IRedType export, ReferenceSocket socket, AppViewModel appViewModel,
@@ -225,7 +224,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     /// </summary>
     private void CalculateDisplayName()
     {
-        if (Parent?.DisplayName is not "chunkMaterials" || Parent?.ResolvedData is not CArray<CName> chunkMaterials ||
+        if (!IsInArray || Parent is null)
+        {
+            return;
+        }
+
+        if (Parent.DisplayName is not "chunkMaterials" || Parent.ResolvedData is not CArray<CName> chunkMaterials ||
             GetRootModel().ResolvedData is not CMesh cMesh)
         {
             return;
@@ -308,7 +312,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         CalculateDescriptor();
         CalculateIsDefault();
 
-        // Certain properties should not be editable by or visible to the user
+        // Certain properties should not be editable by or visible to the user, based on current editor mode
         CalculateUserInteractionStates();
 
         if (Parent is null)
@@ -415,7 +419,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             CalculateDescriptor();
         }
 
-        // Recalculate parent descriptor?
+        // Recalculate parent / grandparent descriptor? (For extrapolated descriptions/values based on child content)
         if (Parent is null)
         {
             return;
@@ -910,7 +914,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 return width;
             }
 
-            return Math.Max(width, UIHelper.GetTextWidth(new string('0', Parent.PropertyCount.ToString().Length + 1)));
+            return Math.Max(width, UIHelper.GetTextWidth(new string('0', Parent.PropertyCount.ToString().Length)));
         }
     }
 
@@ -2822,193 +2826,194 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             isreadonly = Parent.IsReadOnly;
         }
+        
         var obj = Data;
-        if (obj is IRedBaseHandle handle)
+
+        switch (obj)
         {
-            obj = handle.GetValue();
-        }
-        if (obj is CVariant v)
-        {
-            obj = v.Value;
-        }
-        if (obj is TweakDBID tdb)
-        {
-            obj = TweakDBService.GetFlat(tdb);
-            if (obj is not null)
-            {
-                Properties.Add(_chunkViewmodelFactory.ChunkViewModel(obj, nameof(TweakDBID), _appViewModel,
-                    _settingsManager.DefaultEditorDifficultyLevel, this, true));
-                OnPropertyChanged(nameof(TVProperties));
+            case IRedRef:
+                // ignore
                 return;
-            }
-            else
+            case IRedBaseHandle handle:
+                obj = handle.GetValue();
+                break;
+            case CVariant v:
+                obj = v.Value;
+                break;
+            case TweakDBID tdb:
             {
+                obj = TweakDBService.GetFlat(tdb);
+                if (obj is not null)
+                {
+                    Properties.Add(_chunkViewmodelFactory.ChunkViewModel(obj, nameof(TweakDBID), _appViewModel,
+                        _settingsManager.DefaultEditorDifficultyLevel, this, true));
+                    OnPropertyChanged(nameof(TVProperties));
+                    return;
+                } 
                 obj = TweakDBService.GetRecord(tdb);
+                isreadonly = true;
+                break;
             }
-            isreadonly = true;
-            //var record = Locator.Current.GetService<TweakDBService>().GetRecord(tdb);
-            //if (record is not null)
-            //{
-            //    Properties.Add(new ChunkViewModel(record, this, "record"));
-            //}
-        }
-        else if (obj is IRedString str)
-        {
-            var s = str.GetString();
-            if (s is not null && s.StartsWith("LocKey#") && ulong.TryParse(s[7..], out var locKey))
+            case IRedString str:
             {
+                var s = str.GetString();
+                if (s is not null && s.StartsWith("LocKey#") && ulong.TryParse(s[7..], out var locKey))
+                {
+                    obj = _locKeyService.GetEntry(locKey);
+                    isreadonly = true;
+                }
+
+                break;
+            }
+            case gamedataLocKeyWrapper locKey:
                 obj = _locKeyService.GetEntry(locKey);
                 isreadonly = true;
-            }
-        }
-        else if (obj is gamedataLocKeyWrapper locKey)
-        {
-            obj = _locKeyService.GetEntry(locKey);
-            isreadonly = true;
+                break;
+            default:
+                break;
         }
 
-        if (obj is IRedArray ary)
+        switch (obj)
         {
-            for (var i = 0; i < PropertyCount; i++)
+            case IRedArray ary:
             {
-                if (ary[i] is IRedType t)
+                for (var i = 0; i < PropertyCount; i++)
                 {
-                    Properties.Add(_chunkViewmodelFactory.ChunkViewModel(t, i.ToString(), _appViewModel, _currentEditorDifficultyLevel,
-                        this,
-                        isreadonly));
+                    if (ary[i] is not IRedType t)
+                    {
+                        continue;
+                    }
+
+                    Properties.Add(_chunkViewmodelFactory.ChunkViewModel(
+                        t, i.ToString(), _appViewModel, _currentEditorDifficultyLevel, this, isreadonly
+                    ));
                 }
+
+                break;
             }
-        }
-        else if (obj is IRedRef)
-        {
-            // ignore
-        }
-        else if (obj is CKeyValuePair kvp)
-        {
-            for (var i = 0; i < PropertyCount; i++)
+            case CKeyValuePair kvp:
             {
-                if (i == 0)
+                for (var i = 0; i < PropertyCount; i++)
                 {
-                    Properties.Add(_chunkViewmodelFactory.ChunkViewModel(kvp.Key, "Key", _appViewModel, _currentEditorDifficultyLevel, this,
-                        isreadonly));
+                    var name = i == 0 ? "Key" : "Value";
+                    var data = i == 0 ? kvp.Key : kvp.Value;
+                    Properties.Add(_chunkViewmodelFactory.ChunkViewModel(
+                        data, name, _appViewModel, _currentEditorDifficultyLevel, this, isreadonly
+                    ));
                 }
-                else
-                {
-                    Properties.Add(_chunkViewmodelFactory.ChunkViewModel(kvp.Value, "Value", _appViewModel, _currentEditorDifficultyLevel,
-                        this, isreadonly));
-                }
+
+                break;
             }
-        }
-        else if (obj is RedBaseClass redClass)
-        {
-            var pis = GetTypeInfo(redClass).PropertyInfos.Sort((a, b) => a.Name.CompareTo(b.Name));
-
-            var dps = redClass.GetDynamicPropertyNames();
-            dps.Sort();
-
-            foreach (var propertyInfo in pis)
+            case RedBaseClass redClass:
             {
-                if (s_hiddenProperties.Contains(obj.GetType().Name + "." + propertyInfo.RedName))
-                {
-                    continue;
-                }
+                var pis = GetTypeInfo(redClass).PropertyInfos.Sort((a, b) => string.Compare(a.Name, b.Name, StringComparison.Ordinal));
 
-                var name = !string.IsNullOrEmpty(propertyInfo.RedName) ? propertyInfo.RedName : propertyInfo.Name;
-                ArgumentNullException.ThrowIfNull(name);
+                var dps = redClass.GetDynamicPropertyNames();
+                dps.Sort();
 
-                var t = redClass.GetProperty(name);
+                foreach (var propertyInfo in pis)
+                {
+                    if (s_hiddenProperties.Contains(obj.GetType().Name + "." + propertyInfo.RedName))
+                    {
+                        continue;
+                    }
 
-                if (t is null)
-                {
-                    //_loggerService.Warning($"Property is null: {name}");
-                    Properties.Add(_chunkViewmodelFactory.ChunkViewModel(new RedDummy(), propertyInfo.RedName.NotNull(), _appViewModel,
-                        _currentEditorDifficultyLevel, this, isreadonly));
-                }
-                else
-                {
+                    var name = !string.IsNullOrEmpty(propertyInfo.RedName) ? propertyInfo.RedName : propertyInfo.Name;
+                    ArgumentNullException.ThrowIfNull(name);
+
+                    var t = redClass.GetProperty(name) ?? new RedDummy();
+                    
                     Properties.Add(_chunkViewmodelFactory.ChunkViewModel(t, propertyInfo.RedName.NotNull(), _appViewModel,
                         _currentEditorDifficultyLevel, this, isreadonly));
                 }
-            }
 
-            foreach (var dp in dps)
-            {
-                ArgumentNullException.ThrowIfNull(dp);
-                Properties.Add(_chunkViewmodelFactory.ChunkViewModel(redClass.GetProperty(dp).NotNull(), dp, _appViewModel,
-                    _currentEditorDifficultyLevel, this, isreadonly));
+                foreach (var dp in dps)
+                {
+                    ArgumentNullException.ThrowIfNull(dp);
+                    Properties.Add(_chunkViewmodelFactory.ChunkViewModel(redClass.GetProperty(dp).NotNull(), dp, _appViewModel,
+                        _currentEditorDifficultyLevel, this, isreadonly));
+                }
+
+                break;
             }
-        }
-        else if (obj is SerializationDeferredDataBuffer sddb)
-        {
-            if (sddb.Data is RedPackage p4)
+            case SerializationDeferredDataBuffer { Data: RedPackage p4 }:
             {
                 for (var i = 0; i < PropertyCount; i++)
                 {
                     Properties.Add(_chunkViewmodelFactory.ChunkViewModel(p4.Chunks[i], nameof(RedPackage), _appViewModel,
                         _currentEditorDifficultyLevel, this, isreadonly));
                 }
+
+                break;
             }
-            else if (sddb.Data is not null)
+            case SerializationDeferredDataBuffer sddb:
             {
-                var pis = sddb.Data.GetType().GetProperties(s_defaultLookup);
-                foreach (var pi in pis)
+                if (sddb.Data is not null)
                 {
-                    var value = pi.GetValue(sddb.Data);
-                    if (value is IRedType irt)
+                    var pis = sddb.Data.GetType().GetProperties(s_defaultLookup);
+                    foreach (var pi in pis)
                     {
-                        Properties.Add(_chunkViewmodelFactory.ChunkViewModel(irt, pi.Name, _appViewModel, _currentEditorDifficultyLevel,
-                            this, isreadonly));
+                        var value = pi.GetValue(sddb.Data);
+                        if (value is IRedType irt)
+                        {
+                            Properties.Add(_chunkViewmodelFactory.ChunkViewModel(irt, pi.Name, _appViewModel, _currentEditorDifficultyLevel,
+                                this, isreadonly));
+                        }
                     }
                 }
+
+                break;
             }
-        }
-        else if (obj is SharedDataBuffer sdb)
-        {
-            if (sdb.Data is RedPackage p42)
+            case SharedDataBuffer { Data: RedPackage p42 }:
             {
                 for (var i = 0; i < PropertyCount; i++)
                 {
-                    Properties.Add(_chunkViewmodelFactory.ChunkViewModel(p42.Chunks[i], p42.Chunks[i].GetType().Name, _appViewModel,
+                    Properties.Add(_chunkViewmodelFactory.ChunkViewModel(p42.Chunks[i], i.ToString(), _appViewModel,
                         _currentEditorDifficultyLevel, this, isreadonly));
                 }
-            }
 
-            if (sdb.Data is IParseableBuffer ipb)
+                break;
+            }
+            case SharedDataBuffer { Data: IParseableBuffer ipb }:
             {
                 Properties.Add(_chunkViewmodelFactory.ChunkViewModel(ipb.Data.NotNull(), ipb.Data.GetType().Name, _appViewModel,
                     _currentEditorDifficultyLevel, this, isreadonly));
+                break;
             }
-        }
-        else if (obj is DataBuffer db)
-        {
-            if (db.Data is RedPackage p43)
+            case DataBuffer { Data: RedPackage p43 }:
             {
                 for (var i = 0; i < PropertyCount; i++)
                 {
-                    Properties.Add(_chunkViewmodelFactory.ChunkViewModel(p43.Chunks[i], p43.Chunks[i].GetType().Name, _appViewModel,
+                    Properties.Add(_chunkViewmodelFactory.ChunkViewModel(p43.Chunks[i], i.ToString(), _appViewModel,
                         _currentEditorDifficultyLevel, this, isreadonly));
                 }
+
+                break;
             }
-            else if (db.Data is CR2WList cl)
+            case DataBuffer { Data: CR2WList cl }:
             {
                 for (var i = 0; i < PropertyCount; i++)
                 {
-                    Properties.Add(_chunkViewmodelFactory.ChunkViewModel(cl.Files[i].RootChunk, cl.Files[i].RootChunk.GetType().Name,
+                    Properties.Add(_chunkViewmodelFactory.ChunkViewModel(cl.Files[i].RootChunk, i.ToString(),
                         _appViewModel, _currentEditorDifficultyLevel, this, isreadonly));
                 }
+
+                break;
             }
-            else if (db.Data is IList list)
+            case DataBuffer { Data: IList list }:
             {
-                foreach (var thing in list)
+                foreach (var thing in list.OfType<IRedType>())
                 {
-                    if (thing is IRedType redType)
-                    {
-                        Properties.Add(_chunkViewmodelFactory.ChunkViewModel(redType, redType.GetType().Name, _appViewModel,
-                            _currentEditorDifficultyLevel, this, isreadonly));
-                    }
+                    var child = _chunkViewmodelFactory.ChunkViewModel(thing, Properties.Count.ToString(), _appViewModel,
+                        _currentEditorDifficultyLevel, this, isreadonly);
+                    Properties.Add(child);
                 }
+
+                break;
             }
-            else if (db.Data is not null)
+            case DataBuffer { Data: null }:
+                break;
+            case DataBuffer db:
             {
                 var pis = db.Data.GetType().GetProperties(s_defaultLookup);
                 foreach (var pi in pis)
@@ -3020,64 +3025,81 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                             _settingsManager.DefaultEditorDifficultyLevel, this, isreadonly));
                     }
                 }
+
+                break;
             }
-        }
-        //else if (Data is TweakXLFile)
-        // fallback for non-RTTI data
-        else if (Data is not null)
-        {
-            if (Data is IBrowsableDictionary ibd)
+            // fallback for non-RTTI data
+            default:
             {
-                var pns = ibd.GetPropertyNames();
-                foreach (var name in pns)
+                switch (Data)
                 {
-                    if (ibd.GetPropertyValue(name) is IRedType t)
+                    case IBrowsableDictionary ibd:
                     {
-                        Properties.Add(_chunkViewmodelFactory.ChunkViewModel(t, name, _appViewModel, _currentEditorDifficultyLevel, this,
-                            isreadonly));
+                        var pns = ibd.GetPropertyNames();
+                        foreach (var name in pns)
+                        {
+                            if (ibd.GetPropertyValue(name) is IRedType t)
+                            {
+                                Properties.Add(_chunkViewmodelFactory.ChunkViewModel(t, name, _appViewModel, _currentEditorDifficultyLevel,
+                                    this,
+                                    isreadonly));
+                            }
+                        }
+
+                        break;
                     }
-                }
-            }
-            else if (Data is IList list)
-            {
-                foreach (var thing in list)
-                {
-                    Properties.Add(_chunkViewmodelFactory.ChunkViewModel((IRedType)thing, "Element", _appViewModel,
-                        _currentEditorDifficultyLevel, this, isreadonly));
-                }
-            }
-            else if (Data is Dictionary<string, object> dict)
-            {
-                foreach (var (name, thing) in dict)
-                {
-                    Properties.Add(_chunkViewmodelFactory.ChunkViewModel((IRedType)thing, name, _appViewModel,
-                        _currentEditorDifficultyLevel,
-                        this, isreadonly));
-                }
-            }
-            else
-            {
-                var pis = Data.GetType().GetProperties(s_defaultLookup);
-                foreach (var pi in pis)
-                {
-                    var value = Data is not null ? pi.GetValue(Data) : null;
-                    if (value is IRedType irt)
+                    case IList list:
                     {
-                        Properties.Add(_chunkViewmodelFactory.ChunkViewModel(irt, pi.Name, _appViewModel, _currentEditorDifficultyLevel,
-                            this, isreadonly));
+                        foreach (var thing in list)
+                        {
+                            Properties.Add(_chunkViewmodelFactory.ChunkViewModel((IRedType)thing, "Element", _appViewModel,
+                                _currentEditorDifficultyLevel, this, isreadonly));
+                        }
+
+                        break;
+                    }
+                    case Dictionary<string, object> dict:
+                    {
+                        foreach (var (name, thing) in dict)
+                        {
+                            Properties.Add(_chunkViewmodelFactory.ChunkViewModel((IRedType)thing, name, _appViewModel,
+                                _currentEditorDifficultyLevel,
+                                this, isreadonly));
+                        }
+
+                        break;
+                    }
+                    default:
+                    {
+                        var pis = Data.GetType().GetProperties(s_defaultLookup);
+                        foreach (var pi in pis)
+                        {
+                            var value = Data is not null ? pi.GetValue(Data) : null;
+                            if (value is IRedType irt)
+                            {
+                                Properties.Add(_chunkViewmodelFactory.ChunkViewModel(irt, pi.Name, _appViewModel,
+                                    _currentEditorDifficultyLevel,
+                                    this, isreadonly));
+                            }
+                        }
+
+                        if (Data is worldNodeData sst && Tab is { } dvm && dvm.Chunks[0].Data is worldStreamingSector wss &&
+                            sst.NodeIndex < wss.Nodes.Count)
+                        {
+                            try
+                            {
+                                Properties.Add(_chunkViewmodelFactory.ChunkViewModel(wss.Nodes[sst.NodeIndex].NotNull(), "Node",
+                                    _appViewModel,
+                                    _currentEditorDifficultyLevel, this, isreadonly));
+                            }
+                            catch (Exception ex) { _loggerService.Error(ex); }
+                        }
+
+                        break;
                     }
                 }
 
-                if (Data is worldNodeData sst && Tab is { } dvm && dvm.Chunks[0].Data is worldStreamingSector wss &&
-                    sst.NodeIndex < wss.Nodes.Count)
-                {
-                    try
-                    {
-                        Properties.Add(_chunkViewmodelFactory.ChunkViewModel(wss.Nodes[sst.NodeIndex].NotNull(), "Node", _appViewModel,
-                            _currentEditorDifficultyLevel, this, isreadonly));
-                    }
-                    catch (Exception ex) { _loggerService.Error(ex); }
-                }
+                break;
             }
         }
         OnPropertyChanged(nameof(TVProperties));
