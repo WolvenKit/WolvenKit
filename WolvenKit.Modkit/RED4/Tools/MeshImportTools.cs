@@ -554,7 +554,7 @@ namespace WolvenKit.Modkit.RED4
 
             var node = parenting[0];
 
-            if (mesh.Name != node.Name)
+            if (mesh.Name != node.Name && args.ShowVerboseLogOutput)
             {
                 _loggerService.Warning($"Mesh name `{mesh.Name}` does not match parent node name `{node.Name}`. Using {(args.OverrideMeshNameWithNodeName ? "NODE" : "MESH")} name.");
             }
