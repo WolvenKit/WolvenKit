@@ -914,7 +914,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 return width;
             }
 
-            return Math.Max(width, UIHelper.GetTextWidth(new string('0', Parent.PropertyCount.ToString().Length)));
+            return Math.Max(width, UIHelper.GetTextWidth(new string('0', Math.Max(2, Parent.PropertyCount.ToString().Length))));
         }
     }
 
