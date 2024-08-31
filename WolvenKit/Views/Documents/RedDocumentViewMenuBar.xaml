@@ -8,6 +8,7 @@
                                 xmlns:reactiveUi="http://reactiveui.net"
                                 xmlns:documents="clr-namespace:WolvenKit.App.ViewModels.Documents;assembly=WolvenKit.App"
                                 xmlns:converters="clr-namespace:WolvenKit.Converters"
+                                xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                                 mc:Ignorable="d"
                                 d:DesignHeight="30" d:DesignWidth="800">
 
@@ -29,8 +30,6 @@
             <Style x:Key="WolvenKitToolBarItem" TargetType="{x:Type MenuItem}">
                 <Setter Property="Margin" Value="3 4 3 0" />
                 <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
-                <Setter Property="Visibility"
-                        Value="{Binding RelativeSource={RelativeSource Self}, Converter={StaticResource HasMenuChildrenVisibilityConverter}}" />
                 
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}}" Value="False">
@@ -40,8 +39,13 @@
                 </Style.Triggers>
             </Style>
 
+            <Style x:Key="WolvenKitToolBarItemWithChildren" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitToolBarItem}">
+                <Setter Property="Visibility"
+                        Value="{Binding RelativeSource={RelativeSource Self}, Converter={StaticResource HasMenuChildrenVisibilityConverter}}" />
+            </Style>
+
             <!-- Editor Modes & Toggle -->
-            <Style x:Key="EditorModeDisplayStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitToolBarItem}">
+            <Style x:Key="EditorModeDisplayStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitToolBarItemWithChildren}">
                 <Setter Property="Margin" Value="0" />
                 <Setter Property="Padding" Value="8" />
                 <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Cyan}" />
@@ -49,7 +53,7 @@
             </Style>
 
             <!-- Menu Item Style (in dropdown) -->
-            <Style x:Key="WolvenKitNestedMenuItem" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitToolBarItem}">
+            <Style x:Key="WolvenKitNestedMenuItem" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitToolBarItemWithChildren}">
                 <Setter Property="Height" Value="25" />
                 <Setter Property="Padding" Value="2 6 0 6" />
                 <Setter Property="Margin" Value="2 0" />
@@ -89,7 +93,7 @@
             </Style>
 
             <!-- toolbar button: mesh -->
-            <Style x:Key="ToolbarItemInMeshFileStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitToolBarItem}">
+            <Style x:Key="ToolbarItemInMeshFileStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitToolBarItemWithChildren}">
                 <Setter Property="Visibility" Value="Collapsed" />
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
@@ -100,7 +104,7 @@
             </Style>
 
             <!-- toolbar button: mesh -->
-            <Style x:Key="ToolbarItemInMeshOrAppFileStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitToolBarItem}">
+            <Style x:Key="ToolbarItemInMeshOrAppFileStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitToolBarItemWithChildren}">
                 <Setter Property="Visibility" Value="Collapsed" />
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
@@ -115,7 +119,7 @@
             </Style>
 
             <!-- toolbar button: cleanup (mesh or json) -->
-            <Style x:Key="CleanupMenuVisibilityStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitToolBarItem}">
+            <Style x:Key="CleanupMenuVisibilityStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitToolBarItemWithChildren}">
                 <Setter Property="Visibility" Value="Collapsed" />
                 <Style.Triggers>
                     <DataTrigger
@@ -200,8 +204,8 @@
                     </MultiDataTrigger>
                 </Style.Triggers>
             </Style>
-            
-            <Style x:Key="ShowInMeshWithShiftKeyUpStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitToolBarItem}">
+
+            <Style x:Key="ShowInMeshWithShiftKeyUpStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitToolBarItemWithChildren}">
                 <Setter Property="Height" Value="25" />
                 <Setter Property="Padding" Value="2 6 0 6" />
                 <Setter Property="Margin" Value="2 0" />
@@ -270,7 +274,17 @@
 
             <!-- Run file validation -->
             <MenuItem Header="File Validation" Style="{StaticResource WolvenKitToolBarItem}">
-                <MenuItem Header="Run FileValidation" Click="OnFileValidationClick" />
+                <MenuItem Header="Run" Click="OnFileValidationClick">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconCodicons
+                            Width="13"
+                            Height="13"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="Play" />
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
 
             <!-- Mesh file: Materials menu -->
@@ -356,7 +370,7 @@
             <!--CRUIDs -->
             <MenuItem Header="Generate CRUID"
                       Visibility="{Binding Path=IsGenerateNewCruidCommandEnabled, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
-                      Style="{StaticResource WolvenKitToolBarItem}"
+                      Style="{StaticResource WolvenKitToolBarItemWithChildren}"
                       Click="OnGenerateNewCruidClick">
             </MenuItem>
             

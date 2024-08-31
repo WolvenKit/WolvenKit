@@ -94,22 +94,46 @@ namespace WolvenKit.Views.Documents
             }
         }
 
-        
+        private bool _isRunning;
+
         private async Task RunFileValidation()
         {
             if (_fileValidationScript is null || !File.Exists(_fileValidationScript.Path))
             {
+                throw new WolvenKitException(0x5002, "File validation script not found! Please contact the devs!");
+            }
+
+            if (_isRunning)
+            {
                 return;
             }
 
-            var code = await File.ReadAllTextAsync(_fileValidationScript.Path);
+            _isRunning = true;
+            try
+            {
+                var code = await File.ReadAllTextAsync(_fileValidationScript.Path);
 
-            await _scriptService.ExecuteAsync(code);
+                await _scriptService.ExecuteAsync(code);
+                _loggerService.Success("File validation complete!");
+            }
+            catch
+            {
+                // error will be a WolvenkitException
+            }
+            finally
+            {
+                _isRunning = false;
+            }
+            
         }
 
-        private void OnFileValidationClick(object sender, RoutedEventArgs e) =>
+        private void OnFileValidationClick(object sender, RoutedEventArgs e)
+        {
+            _loggerService.Info("Running file validation, please wait. The UI will be unresponsive.");
+            
             // This needs to be inside the DispatcherHelper, or the UI button will make everything explode
             DispatcherHelper.RunOnMainThread(() => Task.Run(async () => await RunFileValidation()).GetAwaiter().GetResult());
+        }
 
         private void OnConvertLocalMaterialsClick(object sender, RoutedEventArgs e) =>
             ViewModel?.RootChunk?.ConvertPreloadMaterialsCommand.Execute(null);
