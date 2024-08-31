@@ -85,7 +85,7 @@ namespace WolvenKit.Views.Tools
                 if (DataContext is ProjectExplorerViewModel vm)
                 {
                     SetCurrentValue(ViewModelProperty, vm);
-                    vm.OnProjectChanged += ResetTreeGrids;
+                    vm.OnProjectChanged += ResetUiElements;
                 }
                 
                 AddKeyUpEvent();
@@ -226,11 +226,15 @@ namespace WolvenKit.Views.Tools
         }
 
         // Run inside Dispatcher to avoid exception on startup
-        private void ResetTreeGrids() => Dispatcher.Invoke(() =>
+        private void ResetUiElements() => Dispatcher.Invoke(() =>
         {
             // Hide loading text
             LoadingText.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
 
+            _currentFolderQuery = "";
+            // Set search bar to empty if it wasn't 
+            PESearchBar?.SetCurrentValue(System.Windows.Controls.TextBox.TextProperty, "");
+            
             // now handle the grids
             if (TreeGridFlat.View is not null)
             {
@@ -238,13 +242,11 @@ namespace WolvenKit.Views.Tools
                 TreeGridFlat.ClearSelections(false);
             }
 
-            if (TreeGrid.View is null)
+            if (TreeGrid.View is not null)
             {
-                return;
+                TreeGrid.ClearFilters();
+                TreeGrid.ClearSelections(false);
             }
-
-            TreeGrid.ClearFilters();
-            TreeGrid.ClearSelections(false);
         });
 
         private void TreeGrid_OnNodeExpanding(object sender, NodeExpandingEventArgs e)
