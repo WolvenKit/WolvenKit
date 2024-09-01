@@ -883,7 +883,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             {
                 inst = (CMaterialInstance)localList.Files[me.Index].RootChunk;
             }
-            else
+            else if (mesh.PreloadLocalMaterialInstances.Count > me.Index)
             {
                 //foreach (var pme in data.PreloadLocalMaterialInstances)
                 //{
@@ -897,8 +897,12 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             //{
             //    bm = (CMaterialInstance)file.RootChunk;
             //}
-
-            ArgumentNullException.ThrowIfNull(inst);
+            if (inst is null)
+            {
+                _loggerService.Error($"Failed to load material {name}! Check your mesh materials!");
+                materials[name] = defaultMaterial;
+                continue;
+            }
 
             var material = new Material(name) { Instance = inst, };
 

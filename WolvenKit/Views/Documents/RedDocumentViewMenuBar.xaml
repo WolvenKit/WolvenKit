@@ -45,7 +45,7 @@
             </Style>
 
             <!-- Editor Modes & Toggle -->
-            <Style x:Key="EditorModeDisplayStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitToolBarItemWithChildren}">
+            <Style x:Key="EditorModeDisplayStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitToolBarItem}">
                 <Setter Property="Margin" Value="0" />
                 <Setter Property="Padding" Value="8" />
                 <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Cyan}" />
@@ -265,7 +265,6 @@
 
         <Menu x:Name="MenuBar" Style="{StaticResource MenuStyle}">
 
-            <!-- Run file validation -->
             <MenuItem Style="{StaticResource EditorModeParentDisplayStyle}">
                 <MenuItem Header="Easy" Click="OnEditorModeClick_Easy" Style="{StaticResource EditorModeDisplayStyle}" />
                 <MenuItem Header="Default" Click="OnEditorModeClick_Default" Style="{StaticResource EditorModeDisplayStyle_Yellow}" />
