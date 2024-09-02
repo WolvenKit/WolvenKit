@@ -240,7 +240,7 @@ public partial class ChunkViewModel
         }
     }
 
-    private bool CanScrollToMaterial() => GetRootModel().ShowScrollToMaterial;
+    private bool CanScrollToMaterial() => ShowScrollToMaterial || GetRootModel().ShowScrollToMaterial;
 
     [RelayCommand(CanExecute = nameof(CanScrollToMaterial))]
     private void ScrollToMaterial()

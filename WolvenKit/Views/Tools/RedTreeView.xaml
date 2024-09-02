@@ -510,6 +510,26 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+
+                <!-- Mesh only -->
+                <!-- Scroll to material -->
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.ScrollToMaterialCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Scroll to material"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial
+                            Width="13"
+                            Height="13"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="ArrowRight" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
                 <!-- Generate CRUID -->
                 <MenuItem
                     Command="{Binding Path=PlacementTarget.Tag.GenerateCRUIDCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
@@ -519,17 +539,6 @@
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
                         <iconPacks:PackIconMaterial Kind="Dice3Outline" Style="{StaticResource ContextMenuIconStyleMaterial}" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-                <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.ScrollToMaterialCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Select material"
-                    IsCheckable="False"
-                    Style="{StaticResource SyncfusionMenuItemStyle}"
-                    Visibility="{Binding Path=!PlacementTarget.Tag.ShowScrollToMaterial, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="ArrowRight" Style="{StaticResource ContextMenuIconStyleMaterial}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
