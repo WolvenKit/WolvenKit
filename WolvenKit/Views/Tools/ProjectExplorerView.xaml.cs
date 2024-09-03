@@ -122,23 +122,14 @@ namespace WolvenKit.Views.Tools
                     var dialog = new ShowBrokenReferencesDialogView(args.Item1, args.Item2);
                     return dialog.ShowDialog(Application.Current.MainWindow) == true;
                 };
-                    
+
                 Interactions.RenameAndRefactor = input =>
-                    {
-                        var dialog = new RenameDialog(true);
-                        if (dialog.ViewModel is not null)
-                        {
-                            dialog.ViewModel.Text = input;
-                        }
+                {
+                    var result = ShowRenameDialog(input);
+                    return new Tuple<string, bool>(result.Text, result.EnableRefactoring);
+                };
 
-                        if (dialog.ViewModel is not RenameDialogViewModel innerVm
-                            || dialog.ShowDialog(Application.Current.MainWindow) != true)
-                        {
-                            return new Tuple<string, bool>("", false);
-                        }
-
-                        return new Tuple<string, bool>(innerVm.Text, innerVm.EnableRefactoring == true);
-                    };
+                Interactions.Rename = input => ShowRenameDialog(input).Text;
 
 
                 Interactions.AskForTextInput = title =>
@@ -167,7 +158,6 @@ namespace WolvenKit.Views.Tools
                     return innerVm.Text;
                 };
                
-
                 //EventBindings
                 Observable
                     .FromEventPattern(TreeGrid, nameof(TreeGrid.CellDoubleTapped))
@@ -202,7 +192,25 @@ namespace WolvenKit.Views.Tools
                     .DisposeWith(disposables);
 
                 ViewModel.OnToggleFlatMode += OnToggleFlatMode;
+
             });
+        }
+
+        private static (string Text, bool EnableRefactoring) ShowRenameDialog(string input)
+        {
+            var dialog = new RenameDialog(true);
+            if (dialog.ViewModel is not null)
+            {
+                dialog.ViewModel.Text = input;
+            }
+
+            if (dialog.ViewModel is not RenameDialogViewModel innerVm
+                || dialog.ShowDialog(Application.Current.MainWindow) != true)
+            {
+                return (string.Empty, false);
+            }
+
+            return (innerVm.Text, innerVm.EnableRefactoring == true);
         }
 
         // Not sure why the property binding broke, but it did. This fixes it.
