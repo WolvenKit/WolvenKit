@@ -877,7 +877,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     {
         _loggerService.Info($"Scanning {ActiveProject!.ModFiles.Count} files. Please wait...");
 
-        var allReferencePaths = await ActiveProject!.GetAllReferences(_progressService);
+        var allReferencePaths = await ActiveProject!.GetAllReferences(_progressService, _loggerService);
         _loggerService.Info($"Scanning {ActiveProject!.Files.Count(f => f.StartsWith("archive"))} files. Please wait...");
         
         var referencesHashSet = new HashSet<string>(allReferencePaths.SelectMany((r) => r.Value));

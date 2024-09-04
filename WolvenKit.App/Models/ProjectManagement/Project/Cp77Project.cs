@@ -541,7 +541,8 @@ public sealed partial class Cp77Project(string location, string name, string mod
         return relPath;
     }
 
-    public async Task<Dictionary<string, List<string>>> GetAllReferences(IProgressService<double>? progressService)
+    public async Task<Dictionary<string, List<string>>> GetAllReferences(IProgressService<double> progressService,
+        ILoggerService loggerService)
     {
         Dictionary<string, List<string>> references = new();
 
@@ -554,87 +555,94 @@ public sealed partial class Cp77Project(string location, string name, string mod
         {
             Parallel.ForEach(ModFiles, filePath =>
             {
-                CR2WFile? cr2WFile;
-                List<string> resourcePaths = [];
-
-                using (var fs = File.Open(GetAbsolutePath(filePath), FileMode.Open))
-                using (var cr = new CR2WReader(fs))
+                try
                 {
-                    if (cr.ReadFile(out cr2WFile) != RED4.Archive.IO.EFileReadErrorCodes.NoError || cr2WFile is null)
+                    CR2WFile? cr2WFile;
+                    List<string> resourcePaths = [];
+
+                    using (var fs = File.Open(GetAbsolutePath(filePath), FileMode.Open))
+                    using (var cr = new CR2WReader(fs))
+                    {
+                        if (cr.ReadFile(out cr2WFile) != RED4.Archive.IO.EFileReadErrorCodes.NoError || cr2WFile is null)
+                        {
+                            return;
+                        }
+
+                        // check if it's a factory
+                        if (cr2WFile.RootChunk is C2dArray { CompiledData: CArray<CArray<CString>> data })
+                        {
+                            // Grab the second string from CompiledData, if it's a depotPath
+                            var filePaths = data
+                                .Where(c => c.Count == 3).Select(cStrings => cStrings[1])
+                                .Where(potentialDepotPath => potentialDepotPath.GetString().Contains(Path.DirectorySeparatorChar))
+                                .Select(potentialDepotPath => (string)potentialDepotPath).ToList();
+                            resourcePaths.AddRange(filePaths);
+                        }
+                        else
+                        {
+                            foreach (var result in cr2WFile.FindType(typeof(IRedRef)))
+                            {
+                                if (result.Value is not IRedRef resourceReference || resourceReference.DepotPath == ResourcePath.Empty)
+                                {
+                                    continue;
+                                }
+
+                                var refResource = resourceReference.DepotPath.GetResolvedText();
+                                if (string.IsNullOrEmpty(refResource))
+                                {
+                                    continue;
+                                }
+
+                                // Deal with ArchiveXL substitution
+                                if (refResource.StartsWith(ArchiveXlHelper.ArchiveXLSubstitutionPrefix))
+                                {
+                                    resourcePaths.AddRange(ArchiveXlHelper.ResolveDynamicPaths(refResource));
+                                }
+                                else
+                                {
+                                    resourcePaths.Add(refResource);
+                                }
+                            }
+
+                            foreach (var cr2WImport in cr2WFile.Info.Imports)
+                            {
+                                if (cr2WImport.DepotPath != ResourcePath.Empty && cr2WImport.DepotPath.GetResolvedText() is string s &&
+                                    !resourcePaths.Contains(s))
+                                {
+                                    resourcePaths.Add(s);
+                                }
+                            }
+                        }
+                    }
+
+                    if (resourcePaths.Count <= 0)
                     {
                         return;
                     }
-                    
-                    // check if it's a factory
-                    if (cr2WFile.RootChunk is C2dArray { CompiledData: CArray<CArray<CString>> data })
+
+                    // Resolve dynamic substitutions
+                    var updatedResourcePaths = new List<string>();
+                    foreach (var path in resourcePaths)
                     {
-                        // Grab the second string from CompiledData, if it's a depotPath
-                        var filePaths = data
-                            .Where(c => c.Count == 3).Select(cStrings => cStrings[1])
-                            .Where(potentialDepotPath => potentialDepotPath.GetString().Contains(Path.DirectorySeparatorChar))
-                            .Select(potentialDepotPath => (string)potentialDepotPath).ToList();
-                        resourcePaths.AddRange(filePaths);
-                    }
-                    else
-                    {
-                        foreach (var result in cr2WFile.FindType(typeof(IRedRef)))
+                        if (path.StartsWith(ArchiveXlHelper.ArchiveXLSubstitutionPrefix))
                         {
-                            if (result.Value is not IRedRef resourceReference || resourceReference.DepotPath == ResourcePath.Empty)
-                            {
-                                continue;
-                            }
-
-                            var refResource = resourceReference.DepotPath.GetResolvedText();
-                            if (string.IsNullOrEmpty(refResource))
-                            {
-                                continue;
-                            }
-
-                            // Deal with ArchiveXL substitution
-                            if (refResource.StartsWith(ArchiveXlHelper.ArchiveXLSubstitutionPrefix))
-                            {
-                                resourcePaths.AddRange(ArchiveXlHelper.ResolveDynamicPaths(refResource));
-                            }
-                            else
-                            {
-                                resourcePaths.Add(refResource);
-                            }
+                            var resolvedPaths = ArchiveXlHelper.ResolveDynamicPaths(path);
+                            updatedResourcePaths.AddRange(resolvedPaths);
                         }
-
-                        foreach (var cr2WImport in cr2WFile.Info.Imports)
+                        else
                         {
-                            if (cr2WImport.DepotPath != ResourcePath.Empty && cr2WImport.DepotPath.GetResolvedText() is string s &&
-                                !resourcePaths.Contains(s))
-                            {
-                                resourcePaths.Add(s);
-                            }
+                            updatedResourcePaths.Add(path);
                         }
                     }
-                }
 
-                if (resourcePaths.Count <= 0)
-                {
-                    return;
-                }
-
-                // Resolve dynamic substitutions
-                var updatedResourcePaths = new List<string>();
-                foreach (var path in resourcePaths)
-                {
-                    if (path.StartsWith(ArchiveXlHelper.ArchiveXLSubstitutionPrefix))
+                    lock (references)
                     {
-                        var resolvedPaths = ArchiveXlHelper.ResolveDynamicPaths(path);
-                        updatedResourcePaths.AddRange(resolvedPaths);
-                    }
-                    else
-                    {
-                        updatedResourcePaths.Add(path);
+                        references.Add(filePath, updatedResourcePaths);
                     }
                 }
-                
-                lock (references)
+                catch
                 {
-                    references.Add(filePath, updatedResourcePaths);
+                    loggerService.Error($"Failed to read {filePath}. Results will be incomplete!");
                 }
                 
                 // Update progress
@@ -680,7 +688,7 @@ public sealed partial class Cp77Project(string location, string name, string mod
     public async Task<Dictionary<string, List<string>>> ScanForBrokenReferencePathsAsync(IArchiveManager archiveManager,
         ILoggerService loggerService, IProgressService<double> progressService)
     {
-        var references = await GetAllReferences(progressService);
+        var references = await GetAllReferences(progressService, loggerService);
         Dictionary<string, List<string>> brokenReferences = new();
 
         progressService.IsIndeterminate = true;
