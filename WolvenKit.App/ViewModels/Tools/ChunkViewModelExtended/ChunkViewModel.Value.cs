@@ -256,7 +256,7 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = true;
                 break;
             case questFactsDBCondition condition:
-                switch (condition.Type.GetValue())
+                switch (condition.Type?.GetValue())
                 {
                     case questVarComparison_ConditionType type:
                         Value = $"{type.ComparisonType.ToEnumString()}: {type.FactName}";
