@@ -477,9 +477,21 @@ public class RED4Controller : ObservableObject, IGameController
         
         // copy files to packed dir
         // pack archives
-        var modfiles = Directory.EnumerateFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories);
+        var modfiles = Directory.EnumerateFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories).ToList();
         if (modfiles.Any())
         {
+            var invalidFiles = modfiles
+                .Select(f => Path.GetRelativePath(cp77Proj.ModDirectory, f))
+                .Where(f => f.Any(char.IsUpper) || f.Any(char.IsWhiteSpace)).ToList();
+            if (invalidFiles.Count != 0)
+            {
+                _loggerService.Error("Capital letters and/or whitespaces found (this may cause issues):");
+                foreach (var filePath in invalidFiles)
+                {
+                    _loggerService.Error($"\t {filePath}");
+                }
+            }
+            
             if (!await Task.Run(() => PackArchives(cp77Proj, options)))
             {
                 _progressService.IsIndeterminate = false;
