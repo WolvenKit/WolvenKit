@@ -627,6 +627,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         var modelGroups = new List<Element3D>();
         foreach (var (name, rig) in Rigs)
         {
+            if (name is "deformations" or "root")
+            {
+                continue;
+            }
             var group = new GroupModel3DExt()
             {
                 Name = $"{rig.Name}",
