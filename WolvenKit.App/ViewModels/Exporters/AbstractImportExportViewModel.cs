@@ -98,6 +98,7 @@ public abstract partial class AbstractImportExportViewModel : FloatingPaneViewMo
         {
             _refreshtask = LoadFilesAsync();
             await _refreshtask;
+            OnRefresh?.Invoke(this, EventArgs.Empty);
         }
     }
 
@@ -129,6 +130,8 @@ public abstract partial class AbstractImportExportViewModel : FloatingPaneViewMo
     protected abstract Task ExecuteProcessBulk(bool all = false);
 
     protected abstract Task LoadFilesAsync();
+
+    public event EventHandler? OnRefresh;
 
     protected async void ImportExportViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
