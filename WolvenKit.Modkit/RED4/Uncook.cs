@@ -508,7 +508,7 @@ namespace WolvenKit.Modkit.RED4
 
         public bool IsUncooked(string? depotPath, string destName, string relPath)
         {
-            if (depotPath is not null &&
+            if (!string.IsNullOrEmpty(depotPath) &&
                 destName.StartsWith(depotPath) &&
                 !_uncookedLookup.TryAdd(relPath, 0))
             {

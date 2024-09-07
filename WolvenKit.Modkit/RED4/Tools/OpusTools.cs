@@ -10,9 +10,9 @@ namespace WolvenKit.Modkit.RED4.Opus
 {
     public class OpusTools
     {
-        public static OpusInfo? GetOpusInfo(IArchiveManager archiveManager, bool useMod)
+        public static OpusInfo? GetOpusInfo(IArchiveManager archiveManager, bool useProject)
         {
-            var opusInfo = archiveManager.GetGameFile(@"base\sound\soundbanks\sfx_container.opusinfo", false, useMod);
+            var opusInfo = archiveManager.GetGameFile(@"base\sound\soundbanks\sfx_container.opusinfo", false, useProject);
             if (opusInfo == null)
             {
                 return null;
@@ -23,23 +23,23 @@ namespace WolvenKit.Modkit.RED4.Opus
             return new OpusInfo(infoStream);
         }
 
-        public static bool ExportOpusUsingHash(IArchiveManager archiveManager, List<uint> ids, bool useMod, DirectoryInfo rawOutDir)
+        public static bool ExportOpusUsingHash(IArchiveManager archiveManager, List<uint> ids, bool useProject, DirectoryInfo rawOutDir)
         {
-            var info = GetOpusInfo(archiveManager, useMod);
+            var info = GetOpusInfo(archiveManager, useProject);
             if (info != null)
             {
-                return ExportOpusUsingHash(info, archiveManager, ids, useMod, rawOutDir);
+                return ExportOpusUsingHash(info, archiveManager, ids, useProject, rawOutDir);
             }
             return false;
         }
 
-        public static bool ExportOpusUsingHash(OpusInfo info, IArchiveManager archiveManager, List<uint> ids, bool useMod, DirectoryInfo rawOutDir)
+        public static bool ExportOpusUsingHash(OpusInfo info, IArchiveManager archiveManager, List<uint> ids, bool useProject, DirectoryInfo rawOutDir)
         {
             for (uint i = 0; i < info.OpusCount; i++)
             {
                 if (ids.Contains(info.OpusHashes[i]))
                 {
-                    var opusPak = archiveManager.GetGameFile(@$"base\sound\soundbanks\sfx_container_{info.PackIndices[i]}.opuspak", false, false);
+                    var opusPak = archiveManager.GetGameFile(@$"base\sound\soundbanks\sfx_container_{info.PackIndices[i]}.opuspak", false, useProject);
                     if (opusPak == null)
                     {
                         continue;
