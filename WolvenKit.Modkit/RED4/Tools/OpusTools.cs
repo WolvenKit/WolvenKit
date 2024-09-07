@@ -26,11 +26,15 @@ namespace WolvenKit.Modkit.RED4.Opus
         public static bool ExportOpusUsingHash(IArchiveManager archiveManager, List<uint> ids, bool useMod, DirectoryInfo rawOutDir)
         {
             var info = GetOpusInfo(archiveManager, useMod);
-            if (info == null)
+            if (info != null)
             {
-                return false; 
+                return ExportOpusUsingHash(info, archiveManager, ids, useMod, rawOutDir);
             }
-            
+            return false;
+        }
+
+        public static bool ExportOpusUsingHash(OpusInfo info, IArchiveManager archiveManager, List<uint> ids, bool useMod, DirectoryInfo rawOutDir)
+        {
             for (uint i = 0; i < info.OpusCount; i++)
             {
                 if (ids.Contains(info.OpusHashes[i]))
@@ -40,10 +44,10 @@ namespace WolvenKit.Modkit.RED4.Opus
                     {
                         continue;
                     }
-                    
+
                     var ms = new MemoryStream();
                     opusPak.Extract(ms);
-                    
+
                     info.WriteOpusFromPak(ms, rawOutDir, i);
                 }
             }
@@ -154,7 +158,7 @@ namespace WolvenKit.Modkit.RED4.Opus
 
                         modDictionary.Add(pakIdx, modStream);
                     }
-                            
+
                     modDictionary[pakIdx] = info.WriteOpusToPak(new MemoryStream(File.ReadAllBytes(name)), modDictionary[pakIdx], id, new MemoryStream(File.ReadAllBytes(name.Replace("opus", "wav"))));
                 }
             }
@@ -171,7 +175,7 @@ namespace WolvenKit.Modkit.RED4.Opus
 
                 writeInfo = true;
             }
-            
+
             if (writeInfo)
             {
                 info.WriteOpusInfo(new DirectoryInfo(Path.Combine(modOutDir.FullName, "base\\sound\\soundbanks")));
