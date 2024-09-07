@@ -770,8 +770,9 @@ namespace WolvenKit.Modkit.RED4
 
             if (opusExportArgs.ExportAll)
             {
+                _loggerService.Warning("Exporting all sounds from OpusPaks, this may take a while!");
                 // NOTE: Hijacked the progress service here because it takes a while
-                foreach (var progress in OpusTools.ExportAllOpus(opusinfo, _archiveManager, opusExportArgs.UseProject, rawOutDir))
+                foreach (var progress in OpusTools.ExportAllOpus(opusinfo, _archiveManager, opusExportArgs.UseMod, opusExportArgs.UseProject, rawOutDir))
                 {
                     _progressService.Report(progress);
                 }
@@ -783,7 +784,7 @@ namespace WolvenKit.Modkit.RED4
                 return true;
             }
 
-            return OpusTools.ExportOpusUsingHash(opusinfo, _archiveManager, opusExportArgs.SelectedForExport, opusExportArgs.UseProject, rawOutDir);
+            return OpusTools.ExportOpusUsingHash(opusinfo, _archiveManager, opusExportArgs.SelectedForExport, opusExportArgs.UseMod, opusExportArgs.UseProject, rawOutDir);
         }
 
         private string SerializeMainFile(Stream redstream)

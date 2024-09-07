@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using DynamicData.Kernel;
 using WolvenKit.Common;
-using WolvenKit.Common.FNV1A;
 
 namespace WolvenKit.Modkit.RED4.Opus
 {
@@ -25,7 +22,7 @@ namespace WolvenKit.Modkit.RED4.Opus
             return new OpusInfo(infoStream);
         }
 
-        public static IEnumerable<double> ExportAllOpus(OpusInfo info, IArchiveManager archiveManager, bool useProject, DirectoryInfo rawOutDir)
+        public static IEnumerable<double> ExportAllOpus(OpusInfo info, IArchiveManager archiveManager, bool useMod, bool useProject, DirectoryInfo rawOutDir)
         {
             var maxPak = info.PackIndices.Last();
             double progress;
@@ -34,7 +31,7 @@ namespace WolvenKit.Modkit.RED4.Opus
             {
                 progress = (i + 1) / (double)maxPak;
 
-                var opusPak = archiveManager.GetGameFile(@$"base\sound\soundbanks\sfx_container_{i}.opuspak", false, useProject);
+                var opusPak = archiveManager.GetGameFile(@$"base\sound\soundbanks\sfx_container_{i}.opuspak", useMod, useProject);
                 if (opusPak != null)
                 {
                     var ms = new MemoryStream();
@@ -46,13 +43,13 @@ namespace WolvenKit.Modkit.RED4.Opus
             }
         }
 
-        public static bool ExportOpusUsingHash(OpusInfo info, IArchiveManager archiveManager, List<uint> ids, bool useProject, DirectoryInfo rawOutDir)
+        public static bool ExportOpusUsingHash(OpusInfo info, IArchiveManager archiveManager, List<uint> ids, bool useMod, bool useProject, DirectoryInfo rawOutDir)
         {
             for (uint i = 0; i < info.OpusCount; i++)
             {
                 if (ids.Contains(info.OpusHashes[i]))
                 {
-                    var opusPak = archiveManager.GetGameFile(@$"base\sound\soundbanks\sfx_container_{info.PackIndices[i]}.opuspak", false, useProject);
+                    var opusPak = archiveManager.GetGameFile(@$"base\sound\soundbanks\sfx_container_{info.PackIndices[i]}.opuspak", useMod, useProject);
                     if (opusPak == null)
                     {
                         continue;

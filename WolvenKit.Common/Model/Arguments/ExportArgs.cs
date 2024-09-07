@@ -65,7 +65,11 @@ namespace WolvenKit.Common.Model.Arguments
         [Display(Name = "Dump all information inside OpusInfo to a JSON.")]
         public bool DumpAllToJson { get; set; }
 
-        public override string ToString() => $"Wem Files | Use Modified OpusInfo :  {UseProject} | Selected :  {SelectedForExport.Count}";
+        [Browsable(false)]
+        [Description("Required for CLI uncooking.")]
+        public bool UseMod { get; set; }
+
+        public override string ToString() => $"Use Modified OpusInfo: {UseProject} | Selected: {SelectedForExport.Count}";
     }
 
     /// <summary>

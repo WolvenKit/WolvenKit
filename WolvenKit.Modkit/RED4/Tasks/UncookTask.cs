@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using WolvenKit.Common;
@@ -23,6 +24,9 @@ public record UncookTaskOptions
     public string? meshExportMaterialRepo { get; init; }
     public bool? meshExportLodFilter { get; init; }
     public bool? meshExportExperimentalMergedExport { get; init; }
+    public bool? opusDumpJson { get; init; }
+    public List<uint>? opusHashes { get; set; }
+    public bool? opusExportAll { get; set; }
 }
 
 public partial class ConsoleFunctions
@@ -151,6 +155,11 @@ public partial class ConsoleFunctions
 
         exportArgs.Get<GeneralExportArgs>().MaterialRepositoryPath = string.IsNullOrEmpty(options.meshExportMaterialRepo) ? outDir.FullName : options.meshExportMaterialRepo;
         exportArgs.Get<MeshExportArgs>().MaterialRepo = string.IsNullOrEmpty(options.meshExportMaterialRepo) ? outDir.FullName : options.meshExportMaterialRepo;
+
+        exportArgs.Get<OpusExportArgs>().UseMod = true;
+        exportArgs.Get<OpusExportArgs>().SelectedForExport = options.opusHashes ?? [];
+        exportArgs.Get<OpusExportArgs>().ExportAll = options.opusExportAll ?? false;
+        exportArgs.Get<OpusExportArgs>().DumpAllToJson = options.opusDumpJson ?? false;
 
         var result = 0;
         foreach (var gameArchive in _archiveManager.Archives.Items)
