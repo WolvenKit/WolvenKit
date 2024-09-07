@@ -113,32 +113,36 @@ public static class ProjectResourceHelper
 
         //AddFileToProjectFolder(archiveRoot, path, Path.Combine(destFolderRelativePath, uniqueSubfolderPath), pathReplacements);
 
-        List<string> existingFiles = pathsAndDestinations.Where(kvp =>
+
+        DispatcherHelper.RunOnMainThread(() =>
         {
-            var fileName = Path.GetFileName(kvp.Key);
-            var absolutePath = Path.Combine(archiveRoot, kvp.Value);
-            return File.Exists(Path.Combine(absolutePath, fileName));
-        }).Select((kvp) => kvp.Value).ToList();
-
-        var overwriteFiles = existingFiles.Count == 0 || Interactions.ShowConfirmation((
-            "The following files already exist in the project. Do you want to overwrite them?",
-            "Files Already Exist",
-            WMessageBoxImage.Question,
-            WMessageBoxButtons.YesNo)) is WMessageBoxResult.Yes;
-
-
-        foreach (var kvp in pathsAndDestinations)
-        {
-            try
+            List<string> existingFiles = pathsAndDestinations.Where(kvp =>
             {
-                AddFileToProjectFolder(archiveRoot, kvp.Key, kvp.Value, pathReplacements, overwriteFiles);
-            }
-            catch (FileNotFoundException e)
+                var fileName = Path.GetFileName(kvp.Key);
+                var absolutePath = Path.Combine(archiveRoot, kvp.Value);
+                return File.Exists(Path.Combine(absolutePath, fileName)) && !Directory.Exists(Path.Combine(absolutePath, fileName));
+            }).Select((kvp) => kvp.Key).ToList();
+
+            var overwriteFiles = existingFiles.Count == 0 || Interactions.ShowConfirmation((
+                $"The following files already exist in the project. Do you want to overwrite them?\n{string.Join('\n', existingFiles)}",
+                "Files Already Exist",
+                WMessageBoxImage.Question,
+                WMessageBoxButtons.YesNo)) is WMessageBoxResult.Yes;
+
+
+            foreach (var kvp in pathsAndDestinations)
             {
-                filesNotFound.Add(e.Message);
+                try
+                {
+                    AddFileToProjectFolder(archiveRoot, kvp.Key, kvp.Value, pathReplacements, overwriteFiles);
+                }
+                catch (FileNotFoundException e)
+                {
+                    filesNotFound.Add(e.Message);
+                }
             }
-        }
-      
+        });
+
         if (GetLoggerService() is not ILoggerService svc || filesNotFound.Count <= 0)
         {
             return pathReplacements;
