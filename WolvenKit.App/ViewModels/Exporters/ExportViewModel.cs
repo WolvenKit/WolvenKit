@@ -233,7 +233,7 @@ public partial class ExportViewModel : AbstractImportExportViewModel
         }
 
 
-        var info = OpusTools.GetOpusInfo(_archiveManager, opusExportArgs.UseMod);
+        var info = OpusTools.GetOpusInfo(_archiveManager, opusExportArgs.UseProject);
         if (info == null)
         {
             return;
