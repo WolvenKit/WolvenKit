@@ -43,8 +43,9 @@ public partial class ChunkViewModel
     /// </summary>
     public void RefreshContextMenuFlags()
     {
-        ShouldShowPasteOverwrite = ShouldShowArrayOps && IsShiftKeyPressedOnly && Tab?.SelectedChunk is not null;
-        ShouldShowOverwriteArray = ShouldShowArrayOps && IsCtrlKeyPressed && !ShouldShowPasteOverwrite;
+        ShouldShowPasteOverwrite = IsInArray && IsShiftKeyPressedOnly && Tab?.SelectedChunk is not null;
+        ShouldShowOverwriteArray =
+            ShouldShowArrayOps && ((IsArray && IsShiftKeyPressed) || (IsCtrlKeyPressed && !ShouldShowPasteOverwrite));
         ShouldShowPasteIntoArray = ShouldShowArrayOps && !(ShouldShowPasteOverwrite || ShouldShowOverwriteArray);
 
         IsMaterial = ResolvedData is CMaterialInstance or CResourceAsyncReference<IMaterial>;
