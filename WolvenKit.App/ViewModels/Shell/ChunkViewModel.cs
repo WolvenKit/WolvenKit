@@ -2068,13 +2068,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         Parent.RecalculateProperties();
         var newSelectionIndex = Math.Min(indices.First(), Parent.TVProperties.Count) - 1;
         newSelectionIndex = Math.Max(0, newSelectionIndex);
-        if (Parent.TVProperties.Count > 0 && newSelectionIndex > 0 && newSelectionIndex < Parent.TVProperties.Count)
+        newSelectionIndex = Math.Min(newSelectionIndex, Parent.TVProperties.Count - 1);
+        if (newSelectionIndex >= 0)
         {
             Tab.SetSelection(Parent.TVProperties[newSelectionIndex]);
-        }
-        else
-        {
-            Tab.SetSelection(Parent.TVProperties.LastOrDefault() ?? Parent);
         }
         Tab.Parent.SetIsDirty(true);
     }

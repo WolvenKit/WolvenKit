@@ -169,8 +169,8 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
         _modifierViewStateService?.RefreshModifierStates();
 
-        var enableDependencyCommand = CurrentTab?.GetContentType() is RedDocumentItemType.Mesh ||
-                                      CurrentTab?.GetContentType() is RedDocumentItemType.Mi;
+        var enableDependencyCommand =
+            CurrentTab?.GetContentType() is RedDocumentItemType.Mesh or RedDocumentItemType.Mi or RedDocumentItemType.Mlsetup;
 
         IsAddDependenciesCommandEnabled = enableDependencyCommand && !IsShiftKeyDown;
         IsAddDependenciesCommandEnabledAndShiftKeyDown = enableDependencyCommand && IsShiftKeyDown;
