@@ -87,7 +87,8 @@
                 <Style.Triggers>
                     <DataTrigger
                         Binding="{Binding  Path=ContentType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Static documents:RedDocumentItemType.Mi}">
-                        <Setter Property="Visibility" Value="Visible" />
+                        <Setter Property="Visibility"
+                                Value="{Binding RelativeSource={RelativeSource Self}, Converter={StaticResource HasMenuChildrenVisibilityConverter}}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
@@ -98,8 +99,10 @@
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
                                  Value="{x:Static documents:RedDocumentItemType.Mesh}">
-                        <Setter Property="Visibility" Value="Visible" />
+                        <Setter Property="Visibility"
+                                Value="{Binding RelativeSource={RelativeSource Self}, Converter={StaticResource HasMenuChildrenVisibilityConverter}}" />
                     </DataTrigger>
+                    
                 </Style.Triggers>
             </Style>
 
@@ -109,11 +112,13 @@
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
                                  Value="{x:Static documents:RedDocumentItemType.Mesh}">
-                        <Setter Property="Visibility" Value="Visible" />
+                        <Setter Property="Visibility"
+                                Value="{Binding RelativeSource={RelativeSource Self}, Converter={StaticResource HasMenuChildrenVisibilityConverter}}" />
                     </DataTrigger>
                     <DataTrigger Binding="{Binding Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
                                  Value="{x:Static documents:RedDocumentItemType.App}">
-                        <Setter Property="Visibility" Value="Visible" />
+                        <Setter Property="Visibility"
+                                Value="{Binding RelativeSource={RelativeSource Self}, Converter={StaticResource HasMenuChildrenVisibilityConverter}}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
@@ -125,12 +130,14 @@
                     <DataTrigger
                         Binding="{Binding  Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
                         Value="{x:Static documents:RedDocumentItemType.Mesh}">
-                        <Setter Property="Visibility" Value="Visible" />
+                        <Setter Property="Visibility"
+                                Value="{Binding RelativeSource={RelativeSource Self}, Converter={StaticResource HasMenuChildrenVisibilityConverter}}" />
                     </DataTrigger>
                     <DataTrigger
                         Binding="{Binding  Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
                         Value="{x:Static documents:RedDocumentItemType.Json}">
-                        <Setter Property="Visibility" Value="Visible" />
+                        <Setter Property="Visibility"
+                                Value="{Binding RelativeSource={RelativeSource Self}, Converter={StaticResource HasMenuChildrenVisibilityConverter}}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>

@@ -73,8 +73,8 @@ public class EditorDifficultyLevelInformation
     {
         {
             typeof(CMesh), [
-                "preloadExternalMaterials", "preloadLocalMaterials", "preloadLocalMaterialInstances", "preloadLocalMaterials",
-                "inplaceResources", "localMaterialInstances"
+                "preloadExternalMaterials", "preloadLocalMaterials", "preloadLocalMaterialInstances", "inplaceResources",
+                "localMaterialInstances"
             ]
         },
     };

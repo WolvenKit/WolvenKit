@@ -87,7 +87,7 @@ public partial class ChunkViewModel
             return Task.CompletedTask;
         }
 
-        var materialEntries = Parent?.Parent?.GetRootModel().GetModelFromPath("materialEntries");
+        var materialEntries = Parent?.Parent?.GetRootModel().GetPropertyFromPath("materialEntries");
 
         if (materialEntries?.ResolvedData is not CArray<CMeshMaterialEntry> array)
         {
@@ -113,7 +113,7 @@ public partial class ChunkViewModel
 
         // now rename the chunks
 
-        var appCvm = Parent?.Parent?.GetRootModel().GetModelFromPath("appearances");
+        var appCvm = Parent?.Parent?.GetRootModel().GetPropertyFromPath("appearances");
         if (appCvm?.ResolvedData is not CArray<CHandle<meshMeshAppearance>> appearances)
         {
             return Task.CompletedTask;
@@ -258,7 +258,7 @@ public partial class ChunkViewModel
 
         if (ResolvedData is CName data && Parent?.Name == "chunkMaterials" &&
             data.GetResolvedText() is string materialName &&
-            GetRootModel().FindPropertyNode("materialEntries") is
+            GetRootModel().GetPropertyFromPath("materialEntries") is
                 { ResolvedData: CArray<CMeshMaterialEntry> ary } materialEntries)
         {
             if (ary.FirstOrDefault(e => e.Name == materialName) is not CMeshMaterialEntry matDef)
@@ -293,13 +293,13 @@ public partial class ChunkViewModel
     {
         var newName = await Interactions.ShowInputBoxAsync("New material name", "");
 
-        var materialEntries = Parent?.GetRootModel().GetModelFromPath("materialEntries");
+        var materialEntries = Parent?.GetRootModel().GetPropertyFromPath("materialEntries");
         if (materialEntries?.ResolvedData is not CArray<CMeshMaterialEntry> array)
         {
             return Task.CompletedTask;
         }
 
-        var isLocalInstance = Parent?.ResolvedData is meshMeshMaterialBuffer || Name == "PreloadLocalMaterials";
+        var isLocalInstance = Parent?.ResolvedData is meshMeshMaterialBuffer || Name == PreloadMaterialPath;
 
         // Add the material definition
         var lastIndex = array.LastOrDefault((e) => e.IsLocalInstance == isLocalInstance)?.Index ?? -1;

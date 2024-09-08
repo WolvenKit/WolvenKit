@@ -70,78 +70,86 @@ public static class ProjectResourceHelper
         HashSet<ResourcePath> resourcePaths) =>
         Task.Run(() => AddDependenciesToProjectPath(destFolderRelativePath, resourcePaths));
 
-    public static Dictionary<string, string> AddDependenciesToProjectPath(string destFolderRelativePath,
+    public static async Task<Dictionary<string, string>> AddDependenciesToProjectPath(string destFolderRelativePath,
         HashSet<ResourcePath> resourcePaths)
     {
         Dictionary<string, string> pathReplacements = new();
-
-        if (resourcePaths.Count == 0 || GetProjectManager()?.ActiveProject is not { } currentProject)
-        {
-            return pathReplacements;
-        }
-
-        var archiveRoot = currentProject.ModDirectory;
-        var absoluteTargetFolder = Path.Combine(archiveRoot, destFolderRelativePath);
-
-        if (!Directory.Exists(absoluteTargetFolder))
-        {
-            Directory.CreateDirectory(absoluteTargetFolder);
-        }
-
-        // Group files by their names to identify collisions
-        var fileGroups = resourcePaths.GroupBy(r => Path.GetFileName(r.GetResolvedText() ?? "INVALID")).ToDictionary(
-            group => group.Key,
-            group => group.ToList()
-        );
-        var allFilePaths = resourcePaths.Select(r => r.GetResolvedText() ?? "").ToArray();
-
         List<string> filesNotFound = [];
 
-        Dictionary<string, string> pathsAndDestinations = new(); 
-
-        foreach (var path in allFilePaths)
-        {
-            var uniqueSubfolderPath = "";
-
-            if (fileGroups.TryGetValue(path, out var groups) && groups.Count <= 2)
-            {
-                uniqueSubfolderPath = Path.PathSeparator + GetUniqueSubfolderPath(allFilePaths, groups.First().GetResolvedText() ?? "");
-            }
-
-            pathsAndDestinations[path] = $"{destFolderRelativePath}{uniqueSubfolderPath}";
-        }
-
-        //AddFileToProjectFolder(archiveRoot, path, Path.Combine(destFolderRelativePath, uniqueSubfolderPath), pathReplacements);
-
+        var tcs = new TaskCompletionSource();
 
         DispatcherHelper.RunOnMainThread(() =>
         {
-            List<string> existingFiles = pathsAndDestinations.Where(kvp =>
+            try
             {
-                var fileName = Path.GetFileName(kvp.Key);
-                var absolutePath = Path.Combine(archiveRoot, kvp.Value);
-                return File.Exists(Path.Combine(absolutePath, fileName)) && !Directory.Exists(Path.Combine(absolutePath, fileName));
-            }).Select((kvp) => kvp.Key).ToList();
-
-            var overwriteFiles = existingFiles.Count == 0 || Interactions.ShowConfirmation((
-                $"The following files already exist in the project. Do you want to overwrite them?\n{string.Join('\n', existingFiles)}",
-                "Files Already Exist",
-                WMessageBoxImage.Question,
-                WMessageBoxButtons.YesNo)) is WMessageBoxResult.Yes;
-
-
-            foreach (var kvp in pathsAndDestinations)
-            {
-                try
+                if (resourcePaths.Count == 0 || GetProjectManager()?.ActiveProject is not { } currentProject)
                 {
-                    AddFileToProjectFolder(archiveRoot, kvp.Key, kvp.Value, pathReplacements, overwriteFiles);
+                    tcs.SetResult();
+                    return;
                 }
-                catch (FileNotFoundException e)
+
+                var archiveRoot = currentProject.ModDirectory;
+                var absoluteTargetFolder = Path.Combine(archiveRoot, destFolderRelativePath);
+
+                if (!Directory.Exists(absoluteTargetFolder))
                 {
-                    filesNotFound.Add(e.Message);
+                    Directory.CreateDirectory(absoluteTargetFolder);
+                }
+
+                // Group files by their names to identify collisions
+                var fileGroups = resourcePaths.GroupBy(r => Path.GetFileName(r.GetResolvedText() ?? "INVALID")).ToDictionary(
+                    group => group.Key,
+                    group => group.ToList()
+                );
+                var allFilePaths = resourcePaths.Select(r => r.GetResolvedText() ?? "").ToArray();
+
+                Dictionary<string, string> pathsAndDestinations = new();
+
+                foreach (var path in allFilePaths)
+                {
+                    var uniqueSubfolderPath = "";
+
+                    if (fileGroups.TryGetValue(path, out var groups) && groups.Count <= 2)
+                    {
+                        uniqueSubfolderPath = Path.PathSeparator +
+                                              GetUniqueSubfolderPath(allFilePaths, groups.First().GetResolvedText() ?? "");
+                    }
+
+                    pathsAndDestinations[path] = $"{destFolderRelativePath}{uniqueSubfolderPath}";
+                }
+
+                List<string> existingFiles = pathsAndDestinations.Where(kvp =>
+                {
+                    var fileName = Path.GetFileName(kvp.Key);
+                    var absolutePath = Path.Combine(archiveRoot, kvp.Value);
+                    return File.Exists(Path.Combine(absolutePath, fileName)) && !Directory.Exists(Path.Combine(absolutePath, fileName));
+                }).Select((kvp) => kvp.Key).ToList();
+
+                var overwriteFiles = existingFiles.Count == 0 || Interactions.ShowConfirmation((
+                    $"The following files already exist in the project. Do you want to overwrite them?\n{string.Join('\n', existingFiles)}",
+                    "Files Already Exist",
+                    WMessageBoxImage.Question,
+                    WMessageBoxButtons.YesNo)) is WMessageBoxResult.Yes;
+
+                foreach (var kvp in pathsAndDestinations)
+                {
+                    try
+                    {
+                        AddFileToProjectFolder(archiveRoot, kvp.Key, kvp.Value, pathReplacements, overwriteFiles);
+                    }
+                    catch (FileNotFoundException e)
+                    {
+                        filesNotFound.Add(e.Message);
+                    }
                 }
             }
+            finally
+            {
+                tcs.SetResult();
+            }
         });
+
+        await tcs.Task;
 
         if (GetLoggerService() is not ILoggerService svc || filesNotFound.Count <= 0)
         {
