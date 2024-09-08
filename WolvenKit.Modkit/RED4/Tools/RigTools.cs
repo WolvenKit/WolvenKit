@@ -105,26 +105,25 @@ namespace WolvenKit.Modkit.RED4.RigFile
                     rig.AposeLSTrans = aRig.APoseLS.Select(p => new Vec3(p.Translation.X, p.Translation.Z, -p.Translation.Y)).ToArray();
                     rig.AposeLSRot = aRig.APoseLS.Select(p => new Quat(p.Rotation.I, p.Rotation.K, -p.Rotation.J, p.Rotation.R)).ToArray();
                     rig.AposeLSScale = aRig.APoseLS.Select(p => new Vec3(p.Scale.X, p.Scale.Y, p.Scale.Z)).ToArray();
-                }
-            }
-            Rig.MeshInverseBinding = new Mat44[Rig.BoneCount];
-            if(Rig.AposeLSExits)
-            {
-                for(int i = 0; i < Rig.BoneCount; i++)
-                {
-                    var mat = Mat44.CreateScale(Rig.AposeLSScale[i]) * Mat44.CreateFromQuaternion(Rig.AposeLSRot[i]) * Mat44.CreateTranslation(Rig.AposeLSTrans[i]);
-                    Rig.MeshInverseBinding[i] = (Mat44)SkinnedTransform.CalculateInverseBinding(new Matrix4x4Double(Mat44.Identity), new Matrix4x4Double(mat));
-                }
-            }
-            else
-            {
-                for (int i = 0; i < Rig.BoneCount; i++)
-                {
-                    var mat = Mat44.CreateScale(Rig.LocalScale[i]) * Mat44.CreateFromQuaternion(Rig.LocalRot[i]) * Mat44.CreateTranslation(Rig.LocalPosn[i]);
-                    Rig.MeshInverseBinding[i] = (Mat44)SkinnedTransform.CalculateInverseBinding(new Matrix4x4Double(Mat44.Identity), new Matrix4x4Double(mat));
+                    
+                    rig.MeshInverseBinding = new Mat44[rig.BoneCount];
+                    for(int i = 0; i < rig.BoneCount; i++)
+                    {
+                        var mat = Mat44.CreateScale(rig.AposeLSScale[i]) * Mat44.CreateFromQuaternion(rig.AposeLSRot[i]) * Mat44.CreateTranslation(rig.AposeLSTrans[i]);
+                        rig.MeshInverseBinding[i] = (Mat44)SkinnedTransform.CalculateInverseBinding(new Matrix4x4Double(Mat44.Identity), new Matrix4x4Double(mat));
+                    }
                 }
             }
 
+            if(!rig.AposeLSExits)
+            {
+                rig.MeshInverseBinding = new Mat44[rig.BoneCount];
+                for (int i = 0; i < rig.BoneCount; i++)
+                {
+                    var mat = Mat44.CreateScale(rig.LocalScale[i]) * Mat44.CreateFromQuaternion(rig.LocalRot[i]) * Mat44.CreateTranslation(rig.LocalPosn[i]);
+                    rig.MeshInverseBinding[i] = (Mat44)SkinnedTransform.CalculateInverseBinding(new Matrix4x4Double(Mat44.Identity), new Matrix4x4Double(mat));
+                }
+            }
             var baseTendencyBoneNames = new string[] { "Root", "Hips", "Spine", "LeftUpLeg", "RightUpLeg", "Spine1", "LeftLeg", "RightLeg", "Spine2", "LeftFoot", "RightFoot", "Spine3",
                 "LeftShoulder", "RightShoulder", "Neck", "LeftArm", "RightArm", "Neck1", "LeftForeArm", "RightForeArm", "Head" };
             rig.baseTendencyCount = 0;

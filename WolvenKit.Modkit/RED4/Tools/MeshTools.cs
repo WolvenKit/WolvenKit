@@ -1056,7 +1056,7 @@ namespace WolvenKit.Modkit.RED4.Tools
             }
         }
 
-        public static ModelRoot RawMeshesToGLTF(List<RawMeshContainer> meshes, RawArmature? rig, bool mergeMeshes = false, bool withMaterials = false)
+        public static ModelRoot RawMeshesToGLTF(List<RawMeshContainer> meshes, RawArmature? rig, bool mergeMeshes = false, bool useAposeRig = true, bool withMaterials = false)
         {
             var model = ModelRoot.CreateModel();
             model.Extras = SharpGLTF.IO.JsonContent.Serialize(new { ExperimentalMergedMeshes = mergeMeshes });
@@ -1065,7 +1065,7 @@ namespace WolvenKit.Modkit.RED4.Tools
             if (rig is { BoneCount: > 0 })
             {
                 skin = model.CreateSkin();
-                var actualJointNodesOnly = RIG.ExportNodes(ref model, rig, useAposeRig).Values.ToArray();
+                var nodesRig = RIG.ExportNodes(ref model, rig, useAposeRig).Values.ToArray();
 
                 if (rig.MeshInverseBinding != null)
                 {
@@ -1076,22 +1076,13 @@ namespace WolvenKit.Modkit.RED4.Tools
                         values[i].Item1 = nodesRig[i];
                         values[i].Item2 = rig.MeshInverseBinding[i];
                     }
-                    if (actualJointNodesOnly.Length == 1)
-                    {
-                        skin.BindJoints(actualJointNodesOnly[0].VisualParent.WorldMatrix, actualJointNodesOnly);
-                        skin.BindJoints(values);
-                    }
-                    else
-                    {
-                        skin.BindJoints(values);
-                    }
+                    skin.BindJoints(values);
                 }
                 else
                 {
-                    if (actualJointNodesOnly.Length == 1)
+                    if (nodesRig.Length == 1)
                     {
-                        skin.BindJoints(actualJointNodesOnly[0].VisualParent.WorldMatrix, nodesRig);
-                        skin.BindJoints(values);
+                        skin.BindJoints(nodesRig[0].VisualParent.WorldMatrix, nodesRig);
                     }
                     else
                     {
@@ -1167,33 +1158,34 @@ namespace WolvenKit.Modkit.RED4.Tools
             var model = scene.ToGltf2();
             return model;
         }
-        public static RawArmature GetOrphanRig(CMesh meshBlob, bool includeBindings = false)
+        public static RawArmature? GetOrphanRig(CMesh meshBlob, bool includeBindings = false)
         {
-            var rendmeshblob = meshBlob.RenderResourceBlob.Chunk as rendRenderMeshBlob;
-
-            static Mat44 CMatrixToMat44(CMatrix cmat)
+            if (meshBlob.RenderResourceBlob.Chunk is rendRenderMeshBlob rendMeshBlob)
             {
-                var mat44 = new Mat44(cmat.X.X, cmat.X.Z, -cmat.X.Y, cmat.X.W,
-                                      cmat.Z.X, cmat.Z.Z, -cmat.Z.Y, cmat.Z.W,
-                                      -cmat.Y.X, -cmat.Y.Z, cmat.Y.Y, cmat.Y.W,
-                                      cmat.W.X, cmat.W.Z, -cmat.W.Y, cmat.W.W);
-                return mat44;
-            }
+                static Mat44 CMatrixToMat44(CMatrix cmat)
+                {
+                    var mat44 = new Mat44(cmat.X.X, cmat.X.Z, -cmat.X.Y, cmat.X.W,
+                                          cmat.Z.X, cmat.Z.Z, -cmat.Z.Y, cmat.Z.W,
+                                          -cmat.Y.X, -cmat.Y.Z, cmat.Y.Y, cmat.Y.W,
+                                          cmat.W.X, cmat.W.Z, -cmat.W.Y, cmat.W.W);
+                    return mat44;
+                }
 
-            if (rendmeshblob.Header.BonePositions.Count != 0)
-            {
                 if (rendMeshBlob.Header.BonePositions.Count != 0)
                 {
-                    BoneCount = boneCount,
-                    LocalPosn = rendmeshblob.Header.BonePositions.Select(p => new Vec3(p.X, p.Z, -p.Y)).ToArray(),
-                    LocalRot = Enumerable.Repeat(System.Numerics.Quaternion.Identity, boneCount).ToArray(),
-                    LocalScale = Enumerable.Repeat(Vec3.One, boneCount).ToArray(),
-                    Parent = Enumerable.Repeat<short>(-1, boneCount).ToArray(),
-                    Names = meshBlob.BoneNames.Select(x => x.GetResolvedText().NotNull()).ToArray(),
-                    MeshInverseBinding = includeBindings ? meshBlob.BoneRigMatrices.Select(_ => CMatrixToMat44(_)).ToArray() : null
-                };
-
-                return Rig;
+                    var boneCount = rendMeshBlob.Header.BonePositions.Count;
+                    var rig = new RawArmature
+                    {
+                        BoneCount = boneCount,
+                        LocalPosn = rendMeshBlob.Header.BonePositions.Select(p => new Vec3(p.X, p.Z, -p.Y)).ToArray(),
+                        LocalRot = Enumerable.Repeat(System.Numerics.Quaternion.Identity, boneCount).ToArray(),
+                        LocalScale = Enumerable.Repeat(Vec3.One, boneCount).ToArray(),
+                        Parent = Enumerable.Repeat<short>(-1, boneCount).ToArray(),
+                        Names = meshBlob.BoneNames.Select(x => x.GetResolvedText().NotNull()).ToArray(),
+                        MeshInverseBinding = includeBindings ? meshBlob.BoneRigMatrices.Select(_ => CMatrixToMat44(_)).ToArray() : null
+                    };
+                    return rig;
+                }
             }
             return null;
         }
