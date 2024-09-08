@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using DynamicData.Kernel;
+using SharpGLTF.Schema2;
+using System.Text;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
@@ -12,6 +14,7 @@ using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Helpers;
 using WolvenKit.Modkit.Extensions;
 using WolvenKit.Modkit.RED4.MLMask;
+using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
@@ -415,6 +418,28 @@ namespace WolvenKit.Modkit.RED4
             return true;
         }
 
+        private bool ImportRig(FileInfo inGltfFile, Stream rigStream, GltfImportArgs args)
+        {
+            var cr2w = _parserService.ReadRed4File(rigStream);
+
+            if (cr2w is not { RootChunk: animRig })
+            {
+                return false;
+            }
+
+            var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(args.ValidationMode));
+            RIG.ImportRig(ref cr2w, model);
+
+            var ms = new MemoryStream();
+            using var writer = new CR2WWriter(ms, Encoding.UTF8, true) { LoggerService = _loggerService };
+            writer.WriteFile(cr2w);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            rigStream.SetLength(0);
+            ms.CopyTo(rigStream);
+
+            return true;
+        }
         private bool ImportGltf(RedRelativePath rawRelative, DirectoryInfo outDir, GltfImportArgs args)
         {
             var maybeType = TypeFromFileExt(rawRelative.Name);
@@ -539,6 +564,7 @@ namespace WolvenKit.Modkit.RED4
             {
                 GltfImportAsFormat.MeshWithRig => ($".mesh", args.ImportFormat),
                 GltfImportAsFormat.Anims => ($".anims", GltfImportAsFormat.Anims),
+                GltfImportAsFormat.Rig => ($".rig", GltfImportAsFormat.Rig),
                 _ => ($".{args.ImportFormat.ToString().ToLower()}", args.ImportFormat)
             };
         }

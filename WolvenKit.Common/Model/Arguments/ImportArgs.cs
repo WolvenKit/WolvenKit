@@ -172,6 +172,13 @@ namespace WolvenKit.Common.Model.Arguments
         public bool ImportGarmentSupport { get; set; } = true;
 
         /// <summary>
+        /// Imports Inverse Binding data from GLB.
+        /// </summary>
+        [Category("Import Settings")]
+        [Display(Name = "Import Inverse Binding")]
+        [Description("Imports Inverse Binding data from mesh only")]
+        public bool ImportInverseBindingOnly { get; set; } = true;
+        /// <summary>
         /// Use object or node name as mesh name
         /// </summary>
         [Category("Compatibility Settings")]

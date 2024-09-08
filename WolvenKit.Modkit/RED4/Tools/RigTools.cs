@@ -1,18 +1,69 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DynamicData;
+using Microsoft.ClearScript.JavaScript;
 using SharpGLTF.Schema2;
+using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 using Quat = System.Numerics.Quaternion;
 using Vec3 = System.Numerics.Vector3;
+using Vec4 = System.Numerics.Vector4;
 
 namespace WolvenKit.Modkit.RED4.RigFile
 {
     public class RIG
     {
+        public static bool ImportRig(ref CR2WFile cr2w, ModelRoot model)
+        {
+            var armature = model.LogicalSkins.First();
+            var joints = Enumerable.Range(0, armature.JointsCount).Select(_ => armature.GetJoint(_).Joint).ToList();
+
+            Dictionary<string,short> jointNames = new Dictionary<string,short>();
+            jointNames[joints.First().VisualParent.Name] = -1;
+
+            foreach (short x in Enumerable.Range(0, joints.Count))
+            {
+                jointNames[joints[x].Name] = x;
+            }
+
+            var rawRig = new RawArmature
+            {
+                BoneCount = joints.Count,
+                Names = joints.Select(_ => _.Name).ToArray(),
+                Parent = joints.Select(_ => jointNames[_.VisualParent.Name]).ToArray(),
+                LocalPosn = joints.Select(p => new Vec3(p.LocalTransform.Translation.X, -p.LocalTransform.Translation.Z, p.LocalTransform.Translation.Y)).ToArray(),
+                LocalRot = joints.Select(p => new Quat(p.LocalTransform.Rotation.X, -p.LocalTransform.Rotation.Z, p.LocalTransform.Rotation.Y, p.LocalTransform.Rotation.W)).ToArray(),
+                LocalScale = joints.Select(p => new Vec3(p.LocalTransform.Scale.X, p.LocalTransform.Scale.Y, p.LocalTransform.Scale.Z)).ToArray()
+            };
+
+            if(cr2w.RootChunk is not animRig rig)
+            {
+                return false;
+            }
+            rig.BoneNames.Clear();
+            rig.BoneParentIndexes.Clear();
+            rig.BoneTransforms.Clear();
+
+
+            foreach (var x in Enumerable.Range(0,rawRig.BoneCount))
+            {
+                rig.BoneNames.Add((CName)rawRig.Names[x]);
+                rig.BoneParentIndexes.Add((CInt16)rawRig.Parent[x]);
+                
+                var qsT = new QsTransform();
+                
+                qsT.Translation = new Vec4(rawRig.LocalPosn[x],1);
+                qsT.Scale = new Vec4(rawRig.LocalScale[x], 1);
+                qsT.Rotation = rawRig.LocalRot[x];
+                rig.BoneTransforms.Add(qsT);
+            }
+
+            return true;
+        }
         public static RawArmature? ProcessRig(CR2WFile? cr2w)
         {
             if (cr2w is not { RootChunk: animRig animRig })
