@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Splat;
 using WolvenKit.App.Controllers;
@@ -70,96 +71,106 @@ public static class ProjectResourceHelper
         HashSet<ResourcePath> resourcePaths) =>
         Task.Run(() => AddDependenciesToProjectPath(destFolderRelativePath, resourcePaths));
 
+    private static readonly SemaphoreSlim semaphore = new(1, 1);
+
     public static async Task<Dictionary<string, string>> AddDependenciesToProjectPath(string destFolderRelativePath,
         HashSet<ResourcePath> resourcePaths)
     {
-        Dictionary<string, string> pathReplacements = new();
-        List<string> filesNotFound = [];
-
-        var tcs = new TaskCompletionSource();
-
-        DispatcherHelper.RunOnMainThread(() =>
+        await semaphore.WaitAsync();
+        try
         {
-            try
+            Dictionary<string, string> pathReplacements = new();
+            List<string> filesNotFound = [];
+
+            var tcs = new TaskCompletionSource();
+
+            DispatcherHelper.RunOnMainThread(() =>
             {
-                if (resourcePaths.Count == 0 || GetProjectManager()?.ActiveProject is not { } currentProject)
+                try
+                {
+                    if (resourcePaths.Count == 0 || GetProjectManager()?.ActiveProject is not { } currentProject)
+                    {
+                        tcs.SetResult();
+                        return;
+                    }
+
+                    var archiveRoot = currentProject.ModDirectory;
+                    var absoluteTargetFolder = Path.Combine(archiveRoot, destFolderRelativePath);
+
+                    if (!Directory.Exists(absoluteTargetFolder))
+                    {
+                        Directory.CreateDirectory(absoluteTargetFolder);
+                    }
+
+                    // Group files by their names to identify collisions
+                    var fileGroups = resourcePaths.GroupBy(r => Path.GetFileName(r.GetResolvedText() ?? "INVALID")).ToDictionary(
+                        group => group.Key,
+                        group => group.ToList()
+                    );
+                    var allFilePaths = resourcePaths.Select(r => r.GetResolvedText() ?? "").ToArray();
+
+                    Dictionary<string, string> pathsAndDestinations = new();
+
+                    foreach (var path in allFilePaths)
+                    {
+                        var uniqueSubfolderPath = "";
+
+                        if (fileGroups.TryGetValue(path, out var groups) && groups.Count <= 2)
+                        {
+                            uniqueSubfolderPath = Path.PathSeparator +
+                                                  GetUniqueSubfolderPath(allFilePaths, groups.First().GetResolvedText() ?? "");
+                        }
+
+                        pathsAndDestinations[path] = $"{destFolderRelativePath}{uniqueSubfolderPath}";
+                    }
+
+                    List<string> existingFiles = pathsAndDestinations.Where(kvp =>
+                    {
+                        var fileName = Path.GetFileName(kvp.Key);
+                        var absolutePath = Path.Combine(archiveRoot, kvp.Value);
+                        return File.Exists(Path.Combine(absolutePath, fileName)) && !Directory.Exists(Path.Combine(absolutePath, fileName));
+                    }).Select((kvp) => kvp.Key).ToList();
+
+                    var overwriteFiles = existingFiles.Count == 0 || Interactions.ShowConfirmation((
+                        $"The following files already exist in the project. Do you want to overwrite them?\n{string.Join('\n', existingFiles)}",
+                        "Files Already Exist",
+                        WMessageBoxImage.Question,
+                        WMessageBoxButtons.YesNo)) is WMessageBoxResult.Yes;
+
+                    foreach (var kvp in pathsAndDestinations)
+                    {
+                        try
+                        {
+                            AddFileToProjectFolder(archiveRoot, kvp.Key, kvp.Value, pathReplacements, overwriteFiles);
+                        }
+                        catch (FileNotFoundException e)
+                        {
+                            filesNotFound.Add(e.Message);
+                        }
+                    }
+                }
+                finally
                 {
                     tcs.SetResult();
-                    return;
                 }
+            });
 
-                var archiveRoot = currentProject.ModDirectory;
-                var absoluteTargetFolder = Path.Combine(archiveRoot, destFolderRelativePath);
+            await tcs.Task;
 
-                if (!Directory.Exists(absoluteTargetFolder))
-                {
-                    Directory.CreateDirectory(absoluteTargetFolder);
-                }
-
-                // Group files by their names to identify collisions
-                var fileGroups = resourcePaths.GroupBy(r => Path.GetFileName(r.GetResolvedText() ?? "INVALID")).ToDictionary(
-                    group => group.Key,
-                    group => group.ToList()
-                );
-                var allFilePaths = resourcePaths.Select(r => r.GetResolvedText() ?? "").ToArray();
-
-                Dictionary<string, string> pathsAndDestinations = new();
-
-                foreach (var path in allFilePaths)
-                {
-                    var uniqueSubfolderPath = "";
-
-                    if (fileGroups.TryGetValue(path, out var groups) && groups.Count <= 2)
-                    {
-                        uniqueSubfolderPath = Path.PathSeparator +
-                                              GetUniqueSubfolderPath(allFilePaths, groups.First().GetResolvedText() ?? "");
-                    }
-
-                    pathsAndDestinations[path] = $"{destFolderRelativePath}{uniqueSubfolderPath}";
-                }
-
-                List<string> existingFiles = pathsAndDestinations.Where(kvp =>
-                {
-                    var fileName = Path.GetFileName(kvp.Key);
-                    var absolutePath = Path.Combine(archiveRoot, kvp.Value);
-                    return File.Exists(Path.Combine(absolutePath, fileName)) && !Directory.Exists(Path.Combine(absolutePath, fileName));
-                }).Select((kvp) => kvp.Key).ToList();
-
-                var overwriteFiles = existingFiles.Count == 0 || Interactions.ShowConfirmation((
-                    $"The following files already exist in the project. Do you want to overwrite them?\n{string.Join('\n', existingFiles)}",
-                    "Files Already Exist",
-                    WMessageBoxImage.Question,
-                    WMessageBoxButtons.YesNo)) is WMessageBoxResult.Yes;
-
-                foreach (var kvp in pathsAndDestinations)
-                {
-                    try
-                    {
-                        AddFileToProjectFolder(archiveRoot, kvp.Key, kvp.Value, pathReplacements, overwriteFiles);
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        filesNotFound.Add(e.Message);
-                    }
-                }
-            }
-            finally
+            if (GetLoggerService() is not ILoggerService svc || filesNotFound.Count <= 0)
             {
-                tcs.SetResult();
+                return pathReplacements;
             }
-        });
 
-        await tcs.Task;
+            svc.Warning("The following files could not be found. You can try switching to the Mod Browser and analyzing your archives:");
+            svc.Warning(string.Join('\n', filesNotFound));
 
-        if (GetLoggerService() is not ILoggerService svc || filesNotFound.Count <= 0)
-        {
             return pathReplacements;
         }
-
-        svc.Warning("The following files could not be found. You can try switching to the Mod Browser and analyzing your archives:");
-        svc.Warning(string.Join('\n', filesNotFound));
-
-        return pathReplacements;
+        finally
+        {
+            semaphore.Release();
+        }
     }
 
 
