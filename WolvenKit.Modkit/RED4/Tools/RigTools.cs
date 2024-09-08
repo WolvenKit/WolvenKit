@@ -4,14 +4,16 @@ using System.Linq;
 using DynamicData;
 using Microsoft.ClearScript.JavaScript;
 using SharpGLTF.Schema2;
-using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Core.Extensions;
+using SharpGLTF.Transforms;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
+using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Core.Extensions;
 using Quat = System.Numerics.Quaternion;
 using Vec3 = System.Numerics.Vector3;
 using Vec4 = System.Numerics.Vector4;
+using Mat44 = System.Numerics.Matrix4x4;
 
 namespace WolvenKit.Modkit.RED4.RigFile
 {
@@ -103,6 +105,23 @@ namespace WolvenKit.Modkit.RED4.RigFile
                     rig.AposeLSTrans = aRig.APoseLS.Select(p => new Vec3(p.Translation.X, p.Translation.Z, -p.Translation.Y)).ToArray();
                     rig.AposeLSRot = aRig.APoseLS.Select(p => new Quat(p.Rotation.I, p.Rotation.K, -p.Rotation.J, p.Rotation.R)).ToArray();
                     rig.AposeLSScale = aRig.APoseLS.Select(p => new Vec3(p.Scale.X, p.Scale.Y, p.Scale.Z)).ToArray();
+                }
+            }
+            Rig.MeshInverseBinding = new Mat44[Rig.BoneCount];
+            if(Rig.AposeLSExits)
+            {
+                for(int i = 0; i < Rig.BoneCount; i++)
+                {
+                    var mat = Mat44.CreateScale(Rig.AposeLSScale[i]) * Mat44.CreateFromQuaternion(Rig.AposeLSRot[i]) * Mat44.CreateTranslation(Rig.AposeLSTrans[i]);
+                    Rig.MeshInverseBinding[i] = (Mat44)SkinnedTransform.CalculateInverseBinding(new Matrix4x4Double(Mat44.Identity), new Matrix4x4Double(mat));
+                }
+            }
+            else
+            {
+                for (int i = 0; i < Rig.BoneCount; i++)
+                {
+                    var mat = Mat44.CreateScale(Rig.LocalScale[i]) * Mat44.CreateFromQuaternion(Rig.LocalRot[i]) * Mat44.CreateTranslation(Rig.LocalPosn[i]);
+                    Rig.MeshInverseBinding[i] = (Mat44)SkinnedTransform.CalculateInverseBinding(new Matrix4x4Double(Mat44.Identity), new Matrix4x4Double(mat));
                 }
             }
 
@@ -226,7 +245,7 @@ namespace WolvenKit.Modkit.RED4.RigFile
 
             return combinedRig;
         }
-        public static Dictionary<int, Node> ExportNodes(ref ModelRoot model, RawArmature srcBones)
+        public static Dictionary<int, Node> ExportNodes(ref ModelRoot model, RawArmature srcBones, bool useApose = true)
         {
             ArgumentNullException.ThrowIfNull(srcBones.Parent);
             ArgumentNullException.ThrowIfNull(srcBones.Names);
@@ -248,7 +267,7 @@ namespace WolvenKit.Modkit.RED4.RigFile
                 if (srcBones.Parent[i] > -1)
                 {
                     var bone = bonesMapping[srcBones.Parent[i]].CreateNode(srcBones.Names[i]);
-                    if (srcBones.AposeLSExits)
+                    if (srcBones.AposeLSExits && useApose)
                     {
                         var s = new Vec3(srcBones.AposeLSScale![i].X, srcBones.AposeLSScale[i].Y, srcBones.AposeLSScale[i].Z);
                         var r = new Quat(srcBones.AposeLSRot![i].X, srcBones.AposeLSRot[i].Y, srcBones.AposeLSRot[i].Z, srcBones.AposeLSRot[i].W);
@@ -269,7 +288,7 @@ namespace WolvenKit.Modkit.RED4.RigFile
                 else
                 {
                     var root = armature.CreateNode(srcBones.Names[i]);
-                    if (srcBones.AposeLSExits)
+                    if (srcBones.AposeLSExits && useApose)
                     {
                         var s = new Vec3(srcBones.AposeLSScale![i].X, srcBones.AposeLSScale[i].Y, srcBones.AposeLSScale[i].Z);
                         var r = new Quat(srcBones.AposeLSRot![i].X, srcBones.AposeLSRot[i].Y, srcBones.AposeLSRot[i].Z, srcBones.AposeLSRot[i].W);

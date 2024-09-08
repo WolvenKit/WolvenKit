@@ -8,6 +8,7 @@ using SharpGLTF.Materials;
 using SharpGLTF.Scenes;
 using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
+using SharpGLTF.Transforms;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
@@ -16,10 +17,12 @@ using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
+
 using static WolvenKit.RED4.Types.Enums;
 using Vec2 = System.Numerics.Vector2;
 using Vec3 = System.Numerics.Vector3;
 using Vec4 = System.Numerics.Vector4;
+using Mat44 = System.Numerics.Matrix4x4;
 
 namespace WolvenKit.Modkit.RED4.Tools
 {
@@ -795,40 +798,40 @@ namespace WolvenKit.Modkit.RED4.Tools
 
                 if (mesh.weightCount > 0)
                 {
-                    //if (skin != null)
-                    //{
-                    for (var i = 0; i < mesh.positions.Length; i++)
-                    {
-                        bw.Write(mesh.boneindices[i, 0]);
-                        bw.Write(mesh.boneindices[i, 1]);
-                        bw.Write(mesh.boneindices[i, 2]);
-                        bw.Write(mesh.boneindices[i, 3]);
-                    }
-                    for (var i = 0; i < mesh.positions.Length; i++)
-                    {
-                        bw.Write(mesh.weights[i, 0]);
-                        bw.Write(mesh.weights[i, 1]);
-                        bw.Write(mesh.weights[i, 2]);
-                        bw.Write(mesh.weights[i, 3]);
-                    }
-                    if (mesh.weightCount > 4)
+                    if (skin != null)
                     {
                         for (var i = 0; i < mesh.positions.Length; i++)
                         {
-                            bw.Write(mesh.boneindices[i, 4]);
-                            bw.Write(mesh.boneindices[i, 5]);
-                            bw.Write(mesh.boneindices[i, 6]);
-                            bw.Write(mesh.boneindices[i, 7]);
+                            bw.Write(mesh.boneindices[i, 0]);
+                            bw.Write(mesh.boneindices[i, 1]);
+                            bw.Write(mesh.boneindices[i, 2]);
+                            bw.Write(mesh.boneindices[i, 3]);
                         }
                         for (var i = 0; i < mesh.positions.Length; i++)
                         {
-                            bw.Write(mesh.weights[i, 4]);
-                            bw.Write(mesh.weights[i, 5]);
-                            bw.Write(mesh.weights[i, 6]);
-                            bw.Write(mesh.weights[i, 7]);
+                            bw.Write(mesh.weights[i, 0]);
+                            bw.Write(mesh.weights[i, 1]);
+                            bw.Write(mesh.weights[i, 2]);
+                            bw.Write(mesh.weights[i, 3]);
+                        }
+                        if (mesh.weightCount > 4)
+                        {
+                            for (var i = 0; i < mesh.positions.Length; i++)
+                            {
+                                bw.Write(mesh.boneindices[i, 4]);
+                                bw.Write(mesh.boneindices[i, 5]);
+                                bw.Write(mesh.boneindices[i, 6]);
+                                bw.Write(mesh.boneindices[i, 7]);
+                            }
+                            for (var i = 0; i < mesh.positions.Length; i++)
+                            {
+                                bw.Write(mesh.weights[i, 4]);
+                                bw.Write(mesh.weights[i, 5]);
+                                bw.Write(mesh.weights[i, 6]);
+                                bw.Write(mesh.weights[i, 7]);
+                            }
                         }
                     }
-                    //}
                 }
                 for (var i = 0; i < mesh.indices.Length; i += 3)
                 {
@@ -977,8 +980,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                 }
                 if (mesh.weightCount > 0)
                 {
-                    //if (skin != null)
-                    //{
+                    if (skin != null)
                     {
                         var acc = model.CreateAccessor();
                         var buff = model.UseBufferView(buffer, buffViewOffset, mesh.positions.Length * 8);
@@ -1063,18 +1065,40 @@ namespace WolvenKit.Modkit.RED4.Tools
             if (rig is { BoneCount: > 0 })
             {
                 skin = model.CreateSkin();
+                var actualJointNodesOnly = RIG.ExportNodes(ref model, rig, useAposeRig).Values.ToArray();
 
-                var actualJointNodesOnly = RIG.ExportNodes(ref model, rig).Values.ToArray();
-
-                if (actualJointNodesOnly.Length == 1)
+                if (rig.MeshInverseBinding != null)
                 {
-                    var parentArmature = actualJointNodesOnly[0].VisualParent;
-                    skin.BindJoints(parentArmature.WorldMatrix, actualJointNodesOnly);
+                    (Node, Mat44)[] values = new (Node, Mat44)[rig.BoneCount];
+
+                    for (int i = 0; i < rig.BoneCount; i++)
+                    {
+                        values[i].Item1 = nodesRig[i];
+                        values[i].Item2 = rig.MeshInverseBinding[i];
+                    }
+                    if (actualJointNodesOnly.Length == 1)
+                    {
+                        skin.BindJoints(actualJointNodesOnly[0].VisualParent.WorldMatrix, actualJointNodesOnly);
+                        skin.BindJoints(values);
+                    }
+                    else
+                    {
+                        skin.BindJoints(values);
+                    }
                 }
                 else
                 {
-                    skin.BindJoints(actualJointNodesOnly);
+                    if (actualJointNodesOnly.Length == 1)
+                    {
+                        skin.BindJoints(actualJointNodesOnly[0].VisualParent.WorldMatrix, nodesRig);
+                        skin.BindJoints(values);
+                    }
+                    else
+                    {
+                        skin.BindJoints(nodesRig);
+                    }
                 }
+
             }
 
             Dictionary<string, Material>? materials = null;
@@ -1143,26 +1167,34 @@ namespace WolvenKit.Modkit.RED4.Tools
             var model = scene.ToGltf2();
             return model;
         }
-        public static RawArmature? GetOrphanRig(CMesh meshBlob)
+        public static RawArmature GetOrphanRig(CMesh meshBlob, bool includeBindings = false)
         {
-            if (meshBlob.RenderResourceBlob.Chunk is rendRenderMeshBlob rendMeshBlob)
+            var rendmeshblob = meshBlob.RenderResourceBlob.Chunk as rendRenderMeshBlob;
+
+            static Mat44 CMatrixToMat44(CMatrix cmat)
+            {
+                var mat44 = new Mat44(cmat.X.X, cmat.X.Z, -cmat.X.Y, cmat.X.W,
+                                      cmat.Z.X, cmat.Z.Z, -cmat.Z.Y, cmat.Z.W,
+                                      -cmat.Y.X, -cmat.Y.Z, cmat.Y.Y, cmat.Y.W,
+                                      cmat.W.X, cmat.W.Z, -cmat.W.Y, cmat.W.W);
+                return mat44;
+            }
+
+            if (rendmeshblob.Header.BonePositions.Count != 0)
             {
                 if (rendMeshBlob.Header.BonePositions.Count != 0)
                 {
-                    var boneCount = rendMeshBlob.Header.BonePositions.Count;
-                    var rig = new RawArmature
-                    {
-                        BoneCount = boneCount,
-                        LocalPosn = rendMeshBlob.Header.BonePositions.Select(p => new Vec3(p.X, p.Z, -p.Y)).ToArray(),
-                        LocalRot = Enumerable.Repeat(System.Numerics.Quaternion.Identity, boneCount).ToArray(),
-                        LocalScale = Enumerable.Repeat(Vec3.One, boneCount).ToArray(),
-                        Parent = Enumerable.Repeat<short>(-1, boneCount).ToArray(),
-                        Names = meshBlob.BoneNames.Select(x => x.GetResolvedText().NotNull()).ToArray()
-                    };
-                    return rig;
-                }
-            }
+                    BoneCount = boneCount,
+                    LocalPosn = rendmeshblob.Header.BonePositions.Select(p => new Vec3(p.X, p.Z, -p.Y)).ToArray(),
+                    LocalRot = Enumerable.Repeat(System.Numerics.Quaternion.Identity, boneCount).ToArray(),
+                    LocalScale = Enumerable.Repeat(Vec3.One, boneCount).ToArray(),
+                    Parent = Enumerable.Repeat<short>(-1, boneCount).ToArray(),
+                    Names = meshBlob.BoneNames.Select(x => x.GetResolvedText().NotNull()).ToArray(),
+                    MeshInverseBinding = includeBindings ? meshBlob.BoneRigMatrices.Select(_ => CMatrixToMat44(_)).ToArray() : null
+                };
 
+                return Rig;
+            }
             return null;
         }
 
