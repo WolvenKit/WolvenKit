@@ -798,40 +798,40 @@ namespace WolvenKit.Modkit.RED4.Tools
 
                 if (mesh.weightCount > 0)
                 {
-                    if (skin != null)
+                    //if (skin != null)
+                    //{
+                    for (var i = 0; i < mesh.positions.Length; i++)
+                    {
+                        bw.Write(mesh.boneindices[i, 0]);
+                        bw.Write(mesh.boneindices[i, 1]);
+                        bw.Write(mesh.boneindices[i, 2]);
+                        bw.Write(mesh.boneindices[i, 3]);
+                    }
+                    for (var i = 0; i < mesh.positions.Length; i++)
+                    {
+                        bw.Write(mesh.weights[i, 0]);
+                        bw.Write(mesh.weights[i, 1]);
+                        bw.Write(mesh.weights[i, 2]);
+                        bw.Write(mesh.weights[i, 3]);
+                    }
+                    if (mesh.weightCount > 4)
                     {
                         for (var i = 0; i < mesh.positions.Length; i++)
                         {
-                            bw.Write(mesh.boneindices[i, 0]);
-                            bw.Write(mesh.boneindices[i, 1]);
-                            bw.Write(mesh.boneindices[i, 2]);
-                            bw.Write(mesh.boneindices[i, 3]);
+                            bw.Write(mesh.boneindices[i, 4]);
+                            bw.Write(mesh.boneindices[i, 5]);
+                            bw.Write(mesh.boneindices[i, 6]);
+                            bw.Write(mesh.boneindices[i, 7]);
                         }
                         for (var i = 0; i < mesh.positions.Length; i++)
                         {
-                            bw.Write(mesh.weights[i, 0]);
-                            bw.Write(mesh.weights[i, 1]);
-                            bw.Write(mesh.weights[i, 2]);
-                            bw.Write(mesh.weights[i, 3]);
-                        }
-                        if (mesh.weightCount > 4)
-                        {
-                            for (var i = 0; i < mesh.positions.Length; i++)
-                            {
-                                bw.Write(mesh.boneindices[i, 4]);
-                                bw.Write(mesh.boneindices[i, 5]);
-                                bw.Write(mesh.boneindices[i, 6]);
-                                bw.Write(mesh.boneindices[i, 7]);
-                            }
-                            for (var i = 0; i < mesh.positions.Length; i++)
-                            {
-                                bw.Write(mesh.weights[i, 4]);
-                                bw.Write(mesh.weights[i, 5]);
-                                bw.Write(mesh.weights[i, 6]);
-                                bw.Write(mesh.weights[i, 7]);
-                            }
+                            bw.Write(mesh.weights[i, 4]);
+                            bw.Write(mesh.weights[i, 5]);
+                            bw.Write(mesh.weights[i, 6]);
+                            bw.Write(mesh.weights[i, 7]);
                         }
                     }
+                    //}
                 }
                 for (var i = 0; i < mesh.indices.Length; i += 3)
                 {
@@ -980,7 +980,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                 }
                 if (mesh.weightCount > 0)
                 {
-                    if (skin != null)
+                    //if (skin != null)
                     {
                         var acc = model.CreateAccessor();
                         var buff = model.UseBufferView(buffer, buffViewOffset, mesh.positions.Length * 8);
