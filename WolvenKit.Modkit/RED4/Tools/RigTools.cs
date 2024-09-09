@@ -107,9 +107,14 @@ namespace WolvenKit.Modkit.RED4.RigFile
                     rig.AposeLSScale = aRig.APoseLS.Select(p => new Vec3(p.Scale.X, p.Scale.Y, p.Scale.Z)).ToArray();
                     
                     rig.MeshInverseBinding = new Mat44[rig.BoneCount];
-                    for(int i = 0; i < rig.BoneCount; i++)
+
+                    var temp = ModelRoot.CreateModel();
+                    Skin temp1 = temp.CreateSkin();
+                    var nodesRig = RIG.ExportNodes(ref temp, rig, true).Values.ToArray();
+
+                    for (int i = 0; i < rig.BoneCount; i++)
                     {
-                        var mat = Mat44.CreateScale(rig.AposeLSScale[i]) * Mat44.CreateFromQuaternion(rig.AposeLSRot[i]) * Mat44.CreateTranslation(rig.AposeLSTrans[i]);
+                        var mat = nodesRig[i].WorldMatrix;
                         rig.MeshInverseBinding[i] = (Mat44)SkinnedTransform.CalculateInverseBinding(new Matrix4x4Double(Mat44.Identity), new Matrix4x4Double(mat));
                     }
                 }
@@ -118,9 +123,14 @@ namespace WolvenKit.Modkit.RED4.RigFile
             if(!rig.AposeLSExits)
             {
                 rig.MeshInverseBinding = new Mat44[rig.BoneCount];
+
+                var temp = ModelRoot.CreateModel();
+                Skin temp1 = temp.CreateSkin();
+                var nodesRig = RIG.ExportNodes(ref temp, rig, true).Values.ToArray();
+
                 for (int i = 0; i < rig.BoneCount; i++)
                 {
-                    var mat = Mat44.CreateScale(rig.LocalScale[i]) * Mat44.CreateFromQuaternion(rig.LocalRot[i]) * Mat44.CreateTranslation(rig.LocalPosn[i]);
+                    var mat = nodesRig[i].WorldMatrix;
                     rig.MeshInverseBinding[i] = (Mat44)SkinnedTransform.CalculateInverseBinding(new Matrix4x4Double(Mat44.Identity), new Matrix4x4Double(mat));
                 }
             }
