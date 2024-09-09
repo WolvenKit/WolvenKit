@@ -905,7 +905,7 @@ namespace WolvenKit.Modkit.RED4
                 ParseMaterials(cr2w, outfile, meshExportArgs.MaterialRepo, meshesinfo, meshExportArgs.MaterialUncookExtension);
             }
 
-            var model = MeshTools.RawMeshesToGLTF(expMeshes, Rig);
+            var model = MeshTools.RawMeshesToGLTF(expMeshes, Rig,false, meshExportArgs.useAposeRig);
 
             if (WolvenTesting.IsTesting)
             {
