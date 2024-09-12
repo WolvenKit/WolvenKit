@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using WolvenKit.Common;
-using WolvenKit.Common.FNV1A;
 
 namespace WolvenKit.Modkit.RED4.Opus
 {
@@ -23,23 +22,34 @@ namespace WolvenKit.Modkit.RED4.Opus
             return new OpusInfo(infoStream);
         }
 
-        public static bool ExportOpusUsingHash(IArchiveManager archiveManager, List<uint> ids, bool useProject, DirectoryInfo rawOutDir)
+        public static IEnumerable<double> ExportAllOpus(OpusInfo info, IArchiveManager archiveManager, bool useMod, bool useProject, DirectoryInfo rawOutDir)
         {
-            var info = GetOpusInfo(archiveManager, useProject);
-            if (info != null)
+            var maxPak = info.PackIndices.Last();
+            double progress;
+
+            for (var i = 0; i < maxPak; i++) // This could be parallel but it eats into RAM
             {
-                return ExportOpusUsingHash(info, archiveManager, ids, useProject, rawOutDir);
+                progress = (i + 1) / (double)maxPak;
+
+                var opusPak = archiveManager.GetGameFile(@$"base\sound\soundbanks\sfx_container_{i}.opuspak", useMod, useProject);
+                if (opusPak != null)
+                {
+                    var ms = new MemoryStream();
+                    opusPak.Extract(ms);
+                    info.WriteAllOpusFromPak(i, ms, rawOutDir);
+                }
+
+                yield return progress;
             }
-            return false;
         }
 
-        public static bool ExportOpusUsingHash(OpusInfo info, IArchiveManager archiveManager, List<uint> ids, bool useProject, DirectoryInfo rawOutDir)
+        public static bool ExportOpusUsingHash(OpusInfo info, IArchiveManager archiveManager, List<uint> ids, bool useMod, bool useProject, DirectoryInfo rawOutDir)
         {
             for (uint i = 0; i < info.OpusCount; i++)
             {
                 if (ids.Contains(info.OpusHashes[i]))
                 {
-                    var opusPak = archiveManager.GetGameFile(@$"base\sound\soundbanks\sfx_container_{info.PackIndices[i]}.opuspak", false, useProject);
+                    var opusPak = archiveManager.GetGameFile(@$"base\sound\soundbanks\sfx_container_{info.PackIndices[i]}.opuspak", useMod, useProject);
                     if (opusPak == null)
                     {
                         continue;

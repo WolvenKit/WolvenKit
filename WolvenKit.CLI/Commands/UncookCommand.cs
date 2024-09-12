@@ -1,7 +1,9 @@
 using System.CommandLine;
 using System.CommandLine.NamingConventionBinder;
 using System.IO;
+using System.Linq;
 using CP77Tools.Tasks;
+using DynamicData.Kernel;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WolvenKit.CLI;
@@ -44,6 +46,8 @@ internal class UncookCommand : CommandBase
         AddOption(new Option<string>(new[] { "--mesh-export-material-repo" }, "Location of the material repo, if not specified, it uses the outpath."));
         AddOption(new Option<bool>(new[] { "--mesh-export-lod-filter" }, "Filter out lod models."));
         AddOption(new Option<bool>(new[] { "--mesh-export-experimental-merged-export" }, "[EXPERIMENTAL] Merged mesh export. (Only supports Default or WithMaterials, re-import not supported)"));
+        AddOption(new Option<bool>(new[] { "--opus-dump-json" }, "Dump .opusinfo file as JSON."));
+        AddOption(new Option<string>(new[] { "--opus-hashes" }, "Comma-separated list of hashes to export from .opusinfo."));
 
         SetInternalHandler(CommandHandler.Create(Action));
     }
@@ -51,9 +55,10 @@ internal class UncookCommand : CommandBase
     private record UncookArguments : UncookTaskOptions
     {
         public FileSystemInfo[] path { get; init; }
-        public new string outpath { get; set; }
-        public new string gamepath { get; set; }
-        public new string raw { get; set; }
+        public new string outpath { get; init; }
+        public new string gamepath { get; init; }
+        public new string raw { get; init; }
+        public new string opusHashes { get; init; }
     }
 
     private int Action(UncookArguments args, IHost host)
@@ -71,6 +76,23 @@ internal class UncookCommand : CommandBase
         options.outpath = string.IsNullOrEmpty(args.outpath) ? null : new DirectoryInfo(args.outpath);
         options.gamepath = string.IsNullOrEmpty(args.gamepath) ? null : new DirectoryInfo(args.gamepath);
         options.raw = string.IsNullOrEmpty(args.raw) ? null : new DirectoryInfo(args.raw);
+
+        if (string.IsNullOrEmpty(args.opusHashes))
+        {
+            options.opusHashes = null;
+        }
+        else
+        {
+            var split = args.opusHashes.Split(",");
+            if (split.Length == 1 && split[0] == "*")
+            {
+                options.opusExportAll = true;
+            }
+            else
+            {
+                options.opusHashes = split.Select((hash, i) => uint.Parse(hash)).AsList();
+            }
+        }
 
         var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
         return consoleFunctions.UncookTask(args.path, options);

@@ -768,12 +768,23 @@ namespace WolvenKit.Modkit.RED4
                 File.WriteAllText(Path.Combine(rawOutDir.FullName, relPath + ".json"), JsonConvert.SerializeObject(opusinfo));
             }
 
+            if (opusExportArgs.ExportAll)
+            {
+                _loggerService.Warning("Exporting all sounds from OpusPaks, this may take a while!");
+                // NOTE: Hijacked the progress service here because it takes a while
+                foreach (var progress in OpusTools.ExportAllOpus(opusinfo, _archiveManager, opusExportArgs.UseMod, opusExportArgs.UseProject, rawOutDir))
+                {
+                    _progressService.Report(progress);
+                }
+                return true;
+            }
+
             if (opusExportArgs.SelectedForExport.Count == 0)
             {
                 return true;
             }
 
-            return OpusTools.ExportOpusUsingHash(opusinfo, _archiveManager, opusExportArgs.SelectedForExport, opusExportArgs.UseMod, rawOutDir);
+            return OpusTools.ExportOpusUsingHash(opusinfo, _archiveManager, opusExportArgs.SelectedForExport, opusExportArgs.UseMod, opusExportArgs.UseProject, rawOutDir);
         }
 
         private string SerializeMainFile(Stream redstream)
