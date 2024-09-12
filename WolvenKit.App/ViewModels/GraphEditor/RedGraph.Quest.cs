@@ -289,7 +289,7 @@ public partial class RedGraph
             return null;
         }
 
-        if (dataViewModel.Chunks[0].GetModelFromPath("graph.nodes") is not { } nodes)
+        if (dataViewModel.Chunks[0].GetPropertyFromPath("graph.nodes") is not { } nodes)
         {
             return null;
         }

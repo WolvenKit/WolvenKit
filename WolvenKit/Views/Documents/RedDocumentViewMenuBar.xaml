@@ -87,33 +87,26 @@
                 <Style.Triggers>
                     <DataTrigger
                         Binding="{Binding  Path=ContentType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Static documents:RedDocumentItemType.Mi}">
-                        <Setter Property="Visibility" Value="Visible" />
+                        <Setter Property="Visibility"
+                                Value="{Binding RelativeSource={RelativeSource Self}, Converter={StaticResource HasMenuChildrenVisibilityConverter}}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
 
-            <!-- toolbar button: mesh -->
-            <Style x:Key="ToolbarItemInMeshFileStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitToolBarItemWithChildren}">
-                <Setter Property="Visibility" Value="Collapsed" />
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
-                                 Value="{x:Static documents:RedDocumentItemType.Mesh}">
-                        <Setter Property="Visibility" Value="Visible" />
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-
+      
             <!-- toolbar button: mesh -->
             <Style x:Key="ToolbarItemInMeshOrAppFileStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitToolBarItemWithChildren}">
                 <Setter Property="Visibility" Value="Collapsed" />
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
                                  Value="{x:Static documents:RedDocumentItemType.Mesh}">
-                        <Setter Property="Visibility" Value="Visible" />
+                        <Setter Property="Visibility"
+                                Value="{Binding RelativeSource={RelativeSource Self}, Converter={StaticResource HasMenuChildrenVisibilityConverter}}" />
                     </DataTrigger>
                     <DataTrigger Binding="{Binding Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
                                  Value="{x:Static documents:RedDocumentItemType.App}">
-                        <Setter Property="Visibility" Value="Visible" />
+                        <Setter Property="Visibility"
+                                Value="{Binding RelativeSource={RelativeSource Self}, Converter={StaticResource HasMenuChildrenVisibilityConverter}}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
@@ -123,12 +116,12 @@
                 <Setter Property="Visibility" Value="Collapsed" />
                 <Style.Triggers>
                     <DataTrigger
-                        Binding="{Binding  Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
+                        Binding="{Binding Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
                         Value="{x:Static documents:RedDocumentItemType.Mesh}">
                         <Setter Property="Visibility" Value="Visible" />
                     </DataTrigger>
                     <DataTrigger
-                        Binding="{Binding  Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
+                        Binding="{Binding Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
                         Value="{x:Static documents:RedDocumentItemType.Json}">
                         <Setter Property="Visibility" Value="Visible" />
                     </DataTrigger>
@@ -136,11 +129,16 @@
             </Style>
 
             <!-- toolbar button: (mesh or mi) -->
-            <Style x:Key="ToolbarItemInMaterialFileStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource ToolbarItemInMeshFileStyle}">
+            <Style x:Key="ToolbarItemInMaterialFileStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitToolBarItemWithChildren}">
                 <Style.Triggers>
                     <DataTrigger
                         Binding="{Binding  Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
                         Value="{x:Static documents:RedDocumentItemType.Mi}">
+                        <Setter Property="Visibility" Value="Visible" />
+                    </DataTrigger>
+                    <DataTrigger
+                        Binding="{Binding Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
+                        Value="{x:Static documents:RedDocumentItemType.Mesh}">
                         <Setter Property="Visibility" Value="Visible" />
                     </DataTrigger>
                 </Style.Triggers>
@@ -272,7 +270,9 @@
             </MenuItem>
 
             <!-- Run file validation -->
-            <MenuItem Header="File Validation" Style="{StaticResource WolvenKitToolBarItem}">
+            <MenuItem Header="File Validation"
+                      Style="{StaticResource WolvenKitToolBarItem}"
+                      Visibility="{Binding IsFileValidationMenuVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <MenuItem Header="Run" Click="OnFileValidationClick">
                     <MenuItem.Icon>
                         <iconPacks:PackIconCodicons

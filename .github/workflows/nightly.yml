@@ -35,7 +35,6 @@ jobs:
     runs-on: windows-2022
 
     steps:
-
       ##########################################
       # SETUP
       - name: checkout
@@ -70,13 +69,13 @@ jobs:
       - run: echo "PORTABLE=${{env.NAME}}-${{env.VERSION_APP}}.zip" >> $env:GITHUB_ENV
 
       # Publish app
-      - run: dotnet publish ./WolvenKit/WolvenKit.csproj -o ./publish/app/ -c Release -p:ApplicationIcon=../WolvenKit/Resources/Media/Images/Icons/Application/TaskBarIcon_Nightly.ico --version-suffix "nightly.${{env.ISODATE}}" -p:InformationalVersion="${{env.VERSION_APP}}"
+      - run: dotnet publish ./WolvenKit/WolvenKit.csproj -o ./publish/app/ -c Release -p:ApplicationIcon=../WolvenKit/Resources/Media/Images/Icons/Application/TaskBarIcon_Nightly.ico --version-suffix "nightly.${{env.ISODATE}}" -p:InformationalVersion="${{env.VERSION_APP}}" -p:DebugType=None -p:DebugSymbols=false
       - run: Compress-Archive -Path ./publish/app/* -DestinationPath ${{env.FINALOUT}}/${{env.PORTABLE}}
 
       ##########################################
       # CONSOLE
 
-       # tag main commit
+      # tag main commit
       - name: Create Tag
         id: tag_version
         uses: rfuzzo/github-tag-action@7b0316b3fb8aa236fdc20bee0614ea6ef99f4bf1
@@ -113,12 +112,11 @@ jobs:
       # Publish console
       - name: publish console
         if: ${{ env.HAS_CLI_COMMITS == 'true' }}
-        run: dotnet publish ./WolvenKit.CLI/WolvenKit.CLI.csproj -o ./publish/console/ -c Release --version-suffix "nightly.${{env.ISODATE}}"
+        run: dotnet publish ./WolvenKit.CLI/WolvenKit.CLI.csproj -o ./publish/console/ -c Release --version-suffix "nightly.${{env.ISODATE}}" -p:DebugType=None -p:DebugSymbols=false
       - name: zip console
         if: ${{ env.HAS_CLI_COMMITS == 'true' }}
         run: Compress-Archive -Path ./publish/console/* -DestinationPath ${{env.FINALOUT}}/${{env.CONSOLE}}
 
-      
       ##########################################
       # INSTALLER
 
@@ -127,8 +125,6 @@ jobs:
 
       ##########################################
       # RELEASE
-
-     
 
       - name: Release dispatch
         id: release_dispatch
@@ -142,5 +138,3 @@ jobs:
           repository: WolvenKit/WolvenKit-nightly-releases
           token: ${{ secrets.RELEASE_TOKEN }}
           body: "This is a beta release so you may encounter bugs. Please report them.\n${{ steps.tag_version.outputs.changelog }}"
-          
-    

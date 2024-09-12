@@ -62,7 +62,7 @@ public partial class ChunkViewModel
             Value = f.ToBitFieldString();
         }
         else if (NodeIdxInParent > -1 && Parent?.Name == "referenceTracks" &&
-                 GetRootModel().GetModelFromPath("trackNames")?.ResolvedData is CArray<CName> trackNames)
+                 GetRootModel().GetPropertyFromPath("trackNames")?.ResolvedData is CArray<CName> trackNames)
         {
             Value = trackNames[NodeIdxInParent].GetResolvedText();
             IsValueExtrapolated = true;
@@ -692,7 +692,7 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = true;
                 break;
             case physicsRagdollBodyInfo when
-                NodeIdxInParent > -1 && GetRootModel().GetModelFromPath("ragdollNames")?.ResolvedData is
+                NodeIdxInParent > -1 && GetRootModel().GetPropertyFromPath("ragdollNames")?.ResolvedData is
                     CArray<physicsRagdollBodyNames> ragdollNames:
                 var rN = ragdollNames[NodeIdxInParent];
                 Value = $"{rN.ParentAnimName.GetResolvedText() ?? ""} -> {rN.ChildAnimName.GetResolvedText() ?? ""}";

@@ -201,12 +201,21 @@ namespace WolvenKit.Views.Documents
                 && ViewModel?.FilePath?.RelativePath(new DirectoryInfo(modDir)) is string activeFilePath
                 && Path.GetDirectoryName(activeFilePath) is string dirName && !string.IsNullOrEmpty(dirName))
             {
-                if (useTextureSubfolder)
+                // we're in a .mi file
+                if (!useTextureSubfolder)
+                {
+                    return dirName;
+                }
+
+                if (_currentTab?.FilePath is not string filePath || Directory.GetFiles(Path.Combine(filePath, ".."), "*.mesh").Length <= 1)
                 {
                     return Path.Combine(dirName, "textures");
                 }
 
-                return dirName;
+                // if the folder contains more than one .mesh file, add a subdirectory inside "textures"
+                var fileName = Path.GetFileName(_currentTab.FilePath.Split('.').FirstOrDefault() ?? "").Replace(' ', '_').ToLower();
+                return Path.Combine(dirName, "textures", fileName);
+
             }
 
             var destFolder = Interactions.AskForTextInput("Target folder for dependencies");
@@ -234,7 +243,9 @@ namespace WolvenKit.Views.Documents
                 destFolder, materialDependencies
             );
 
-            await SearchAndReplaceInChildNodes(cvm, pathReplacements, "localMaterialBuffers.materials", "externalMaterials");
+            await SearchAndReplaceInChildNodes(cvm, pathReplacements,
+                ChunkViewModel.LocalMaterialBufferPath,
+                ChunkViewModel.ExternalMaterialPath);
 
         }
         
@@ -265,7 +276,7 @@ namespace WolvenKit.Views.Documents
 
             foreach (var propertyPath in propertyPaths)
             {
-                if (cvm.GetModelFromPath(propertyPath) is ChunkViewModel child)
+                if (cvm.GetPropertyFromPath(propertyPath) is ChunkViewModel child)
                 {
                     childNodes.AddRange(child.TVProperties);
                 }

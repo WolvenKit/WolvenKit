@@ -169,8 +169,8 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
         _modifierViewStateService?.RefreshModifierStates();
 
-        var enableDependencyCommand = CurrentTab?.GetContentType() is RedDocumentItemType.Mesh ||
-                                      CurrentTab?.GetContentType() is RedDocumentItemType.Mi;
+        var enableDependencyCommand =
+            CurrentTab?.GetContentType() is RedDocumentItemType.Mesh or RedDocumentItemType.Mi or RedDocumentItemType.Mlsetup;
 
         IsAddDependenciesCommandEnabled = enableDependencyCommand && !IsShiftKeyDown;
         IsAddDependenciesCommandEnabledAndShiftKeyDown = enableDependencyCommand && IsShiftKeyDown;
@@ -186,7 +186,6 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         IsGenerateMaterialCommandEnabled = mesh.Appearances.Count > 0;
         IsDeleteUnusedMaterialCommandEnabled = mesh.Appearances.Count > 0 || mesh.MaterialEntries.Count > 0;
         IsScrollToMaterialCommandEnabled = SelectedChunk?.ShowScrollToMaterial == true;
-        IsMaterialDefinition = SelectedChunk?.IsMaterialDefinition() == true;
     }
 
     public void SetCurrentTab(RedDocumentTabViewModel value)
