@@ -180,6 +180,17 @@ public class EditorDifficultyLevelInformation
                 "overrideMeshNavigationImpact", "objectTypeID", "renderSceneLayerMask", "visibilityAnimationParam"
             ]
         },
+        // Right now, these are only used as spacers in app and ent files. Until that changes, we don't really need any properties
+        // except for "name".
+        {
+            typeof(entDebug_MeshComponent), [
+                "autoHideDistance", "castLocalShadow", "castRayTracedGlobalShadows", "castRayTracedLocalShadows", "castShadows",
+                "castLocalShadows", "chunkMask", "filterName", "forceLODLevel", "forcedLodDistance", "id", "isEnabled",
+                "isReplicable", "LODMode", "localTransform", "mesh", "meshAppearance", "motionBlurScale", "navigationImpact",
+                "numInstances", "order", "overrideMeshNavigationImpact", "objectTypeID", "order", "overrideMeshNavigationImpact",
+                "parentTransform", "renderingScene", "renderSceneLayerMask", "renderingPlane", "visualScale"
+            ]
+        },
     };
 
     #endregion

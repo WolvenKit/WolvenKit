@@ -24,6 +24,9 @@ public partial class ChunkViewModel
     [ObservableProperty] private bool _shouldShowOverwriteArray;
     [ObservableProperty] private bool _shouldShowPasteOverwrite;
 
+    [ObservableProperty] private bool _isInArrayWithShiftKeyDown;
+    [ObservableProperty] private bool _isInArrayWithShiftKeyUp;
+
     [ObservableProperty] private bool _isMaterial;
 
     [ObservableProperty] private bool _isMaterialArray;
@@ -57,6 +60,9 @@ public partial class ChunkViewModel
             ResolvedData is worldCompiledEffectPlacementInfo or CMeshMaterialEntry;
 
         ShouldShowDuplicate = !ShouldShowDuplicateAsNew && IsInArray;
+
+        IsInArrayWithShiftKeyUp = IsInArray && !IsShiftKeyPressed;
+        IsInArrayWithShiftKeyDown = IsInArray && IsShiftKeyPressed;
     }
 
 

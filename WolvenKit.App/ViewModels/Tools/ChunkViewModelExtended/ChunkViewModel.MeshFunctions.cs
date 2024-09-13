@@ -1,12 +1,5 @@
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Linq;
-using WolvenKit.App.Helpers;
-using WolvenKit.App.Models;
-using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
-using WolvenKit.RED4.Types.Pools;
 
 // ReSharper disable once CheckNamespace
 namespace WolvenKit.App.ViewModels.Shell;

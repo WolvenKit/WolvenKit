@@ -2009,20 +2009,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     [RelayCommand(CanExecute = nameof(CanImportWorldNodeData))]   // TODO RelayCommand check notify
     private Task ImportWorldNodeDataWithoutCoordsAsync() => ImportWorldNodeDataTask(false);
 
-    private bool CanDeleteSelection() => IsInArray && Tab is not null && Parent is not null;   // TODO RelayCommand check notify
-    [RelayCommand(CanExecute = nameof(CanDeleteSelection))]
-    private void DeleteSelection()
+    private void DeleteNodesInParent(List<ChunkViewModel> nodes)
     {
         ArgumentNullException.ThrowIfNull(Parent);
         ArgumentNullException.ThrowIfNull(Tab);
-        
-        var ts = Parent.DisplayProperties
-            .Where(_ => _.IsSelected)
-            .Select(_ => _)
-            .ToList();
 
-        List<int> indices = ts.Select(_ => _.NodeIdxInParent).ToList();
-        
+        var indices = nodes.Select(_ => _.NodeIdxInParent).ToList();
+
         try
         {
             switch (Parent.Data)
@@ -2073,9 +2066,35 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             Tab.SetSelection(Parent.TVProperties[newSelectionIndex]);
         }
+
         Tab.Parent.SetIsDirty(true);
     }
+    
+    private bool CanDeleteSelection() => IsInArray && Tab is not null && Parent is not null;   // TODO RelayCommand check notify
+    [RelayCommand(CanExecute = nameof(CanDeleteSelection))]
+    private void DeleteSelection()
+    {
+        ArgumentNullException.ThrowIfNull(Parent);
+        ArgumentNullException.ThrowIfNull(Tab);
 
+        DeleteNodesInParent(Parent.DisplayProperties
+            .Where(_ => _.IsSelected)
+            .Select(_ => _)
+            .ToList());
+    }
+
+    [RelayCommand(CanExecute = nameof(CanDeleteSelection))]
+    private void DeleteAllButSelection()
+    {
+        ArgumentNullException.ThrowIfNull(Parent);
+        ArgumentNullException.ThrowIfNull(Tab);
+
+        DeleteNodesInParent(Parent.DisplayProperties
+            .Where(_ => !_.IsSelected)
+            .Select(_ => _)
+            .ToList());
+    }
+    
     private bool CanExportNodeData() =>
         IsInArray && Parent?.Data is DataBuffer rb && Parent?.Parent?.Data is worldStreamingSector &&
         rb.Data is worldNodeDataBuffer; // TODO RelayCommand check notify

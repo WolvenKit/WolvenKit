@@ -82,35 +82,6 @@
                 </Style.Triggers>
             </Style>
 
-            <!-- menu item: Mesh or Mi -->
-            <Style x:Key="MenuItemInMaterialFileStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource MenuItemInMeshFileStyle}">
-                <Style.Triggers>
-                    <DataTrigger
-                        Binding="{Binding  Path=ContentType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Static documents:RedDocumentItemType.Mi}">
-                        <Setter Property="Visibility"
-                                Value="{Binding RelativeSource={RelativeSource Self}, Converter={StaticResource HasMenuChildrenVisibilityConverter}}" />
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-
-      
-            <!-- toolbar button: mesh -->
-            <Style x:Key="ToolbarItemInMeshOrAppFileStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitToolBarItemWithChildren}">
-                <Setter Property="Visibility" Value="Collapsed" />
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
-                                 Value="{x:Static documents:RedDocumentItemType.Mesh}">
-                        <Setter Property="Visibility"
-                                Value="{Binding RelativeSource={RelativeSource Self}, Converter={StaticResource HasMenuChildrenVisibilityConverter}}" />
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
-                                 Value="{x:Static documents:RedDocumentItemType.App}">
-                        <Setter Property="Visibility"
-                                Value="{Binding RelativeSource={RelativeSource Self}, Converter={StaticResource HasMenuChildrenVisibilityConverter}}" />
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-
             <!-- toolbar button: cleanup (mesh or json) -->
             <Style x:Key="CleanupMenuVisibilityStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitToolBarItemWithChildren}">
                 <Setter Property="Visibility" Value="Collapsed" />
@@ -130,6 +101,7 @@
 
             <!-- toolbar button: (mesh or mi) -->
             <Style x:Key="ToolbarItemInMaterialFileStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitToolBarItemWithChildren}">
+                <Setter Property="Visibility" Value="Collapsed" />
                 <Style.Triggers>
                     <DataTrigger
                         Binding="{Binding  Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
@@ -139,6 +111,18 @@
                     <DataTrigger
                         Binding="{Binding Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
                         Value="{x:Static documents:RedDocumentItemType.Mesh}">
+                        <Setter Property="Visibility" Value="Visible" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <!-- toolbar button: (mesh or mi) -->
+            <Style x:Key="ToolbarItemInAppFileStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitToolBarItemWithChildren}">
+                <Setter Property="Visibility" Value="Collapsed" />
+                <Style.Triggers>
+                    <DataTrigger
+                        Binding="{Binding  Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
+                        Value="{x:Static documents:RedDocumentItemType.App}">
                         <Setter Property="Visibility" Value="Visible" />
                     </DataTrigger>
                 </Style.Triggers>
@@ -159,20 +143,6 @@
             <Style x:Key="MenuItemInAppFileStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitNestedMenuItem}">
                 <Setter Property="Visibility" Value="Collapsed" />
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding  Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
-                                 Value="{x:Static documents:RedDocumentItemType.App}">
-                        <Setter Property="Visibility" Value="Visible" />
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-
-            <!-- menu item: .mesh or .app -->
-            <Style x:Key="MenuItemInMeshOrAppFileStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitNestedMenuItem}">
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding  Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
-                                 Value="{x:Static documents:RedDocumentItemType.Mesh}">
-                        <Setter Property="Visibility" Value="Visible" />
-                    </DataTrigger>
                     <DataTrigger Binding="{Binding  Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
                                  Value="{x:Static documents:RedDocumentItemType.App}">
                         <Setter Property="Visibility" Value="Visible" />
@@ -291,7 +261,7 @@
 
                 <!-- Generate missing materials -->
                 <MenuItem Header="Generate missing material entries"
-                          IsEnabled="{Binding Path=IsGenerateMaterialCommandEnabled}"
+                          IsEnabled="{Binding Path=IsGenerateMissingMaterialCommandEnabled}"
                           Click="OnGenerateMissingMaterialsClick" />
 
                 <!-- Scroll to material -->
@@ -308,12 +278,14 @@
                 <MenuItem Header="Add material dependencies"
                           ToolTip="Will run 'delete unused materials' first"
                           Visibility="{ Binding  Path=IsAddDependenciesCommandEnabled, Converter={ StaticResource BooleanToVisibilityConverter}}"
+                          Style="{StaticResource ShowInMeshWithShiftKeyUpStyle}"
                           Click="OnAddDependenciesClick" />
 
                 <!-- Shift: "Add material dependencies (include basegame files)" -->
                 <MenuItem Header="Add material dependencies (include basegame files)"
                           ToolTip="Will run 'delete unused materials' first"
-                          Visibility="{ Binding  Path=IsAddDependenciesCommandEnabledAndShiftKeyDown, Converter={ StaticResource BooleanToVisibilityConverter}}"
+                          Visibility="{ Binding  Path=IsAddDependenciesCommandEnabled, Converter={ StaticResource BooleanToVisibilityConverter}}"
+                          Style="{StaticResource ShowInMeshWithShiftKeyStyle}"
                           Click="OnAddDependenciesClick" />
 
             </MenuItem>
@@ -353,13 +325,13 @@
             </MenuItem>
             
             <!-- Ent file: Appearances menu -->
-            <MenuItem Header="Appearances"
-                      Style="{StaticResource ToolbarItemInMeshOrAppFileStyle}">
+            <MenuItem Header="Appearances" Style="{StaticResource ToolbarItemInAppFileStyle}">
+                <!-- Visibility="{Binding RelativeSource={RelativeSource Self}, Converter={StaticResource HasMenuChildrenVisibilityConverter}}"> -->
 
                 <!-- Regenerate controllers -->
                 <MenuItem
                     Header="Regenerate visual controllers" Click="OnRegenerateControllersClick"
-                    Visibility="{ Binding  Path=IsRegenerateMaterialCommandEnabled, Mode=OneWay, Converter={ StaticResource BooleanToVisibilityConverter}}" />
+                    IsEnabled="{ Binding  Path=IsRegenerateVisualControllersCommandEnabled }" />
 
                 <!-- Regenerate controllers -->
                 <MenuItem Header="Change chunk view by component" Click="OnChangeChunkMasksClick" Style="{StaticResource MenuItemInAppFileStyle}" />

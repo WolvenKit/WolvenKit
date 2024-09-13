@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Microsoft.ClearScript.JavaScript;
 using Splat;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
@@ -47,9 +44,9 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [ObservableProperty] private RedDocumentTabViewModel? _currentTab;
     [ObservableProperty] private EditorDifficultyLevel _editorLevel;
 
-    public ChunkViewModel? RootChunk { get; set; }
-    public ChunkViewModel? SelectedChunk { get; set; }
-    public List<ChunkViewModel> SelectedChunks { get; } = new();
+    public ChunkViewModel? RootChunk { get; private set; }
+    [ObservableProperty] private ChunkViewModel? _selectedChunk;
+    public List<ChunkViewModel> SelectedChunks { get; } = [];
 
     public string? FilePath => CurrentTab?.FilePath;
     public CR2WFile? Cr2WFile => CurrentTab?.Parent.Cr2wFile;
@@ -126,22 +123,16 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     
     [ObservableProperty] private bool _isFileValidationMenuVisible;
 
-
-    [ObservableProperty] private bool _isGenerateMaterialCommandEnabled;
-    [ObservableProperty] private bool _isDeleteUnusedMaterialCommandEnabled;
-    [ObservableProperty] private bool _isRegenerateMaterialCommandEnabled;
+    [ObservableProperty] private bool _isMaterialDefinition;
     [ObservableProperty] private bool _isScrollToMaterialCommandEnabled;
-
-    /*
-     * Cleanup
-     */
     [ObservableProperty] private bool _isConvertMaterialMenuEnabled;
+    [ObservableProperty] private bool _isDeleteUnusedMaterialCommandEnabled;
     
     [ObservableProperty] private bool _isGenerateNewCruidCommandEnabled;
-    [ObservableProperty] private bool _isMaterialDefinition;
 
     [ObservableProperty] private bool _isAddDependenciesCommandEnabled;
-    [ObservableProperty] private bool _isAddDependenciesCommandEnabledAndShiftKeyDown;
+    [ObservableProperty] private bool _isGenerateMissingMaterialCommandEnabled;
+    [ObservableProperty] private bool _isRegenerateVisualControllersCommandEnabled;
     
     [ObservableProperty] private bool _isShiftKeyDown;
 
@@ -150,19 +141,21 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     {
         IsFileValidationMenuVisible = false;
         IsConvertMaterialMenuEnabled = false;
-        IsGenerateMaterialCommandEnabled = false;
+        IsGenerateMissingMaterialCommandEnabled = false;
         IsDeleteUnusedMaterialCommandEnabled = false;
-        IsRegenerateMaterialCommandEnabled = false;
+        IsRegenerateVisualControllersCommandEnabled = false;
         IsScrollToMaterialCommandEnabled = false;
         IsGenerateNewCruidCommandEnabled = false;
         IsMaterialDefinition = false;
+
+        IsShiftKeyDown = _modifierViewStateService?.IsShiftKeyPressed ?? false;
 
         if (!ShowToolbar || CurrentTab is null)
         {
             return;
         }
 
-        IsRegenerateMaterialCommandEnabled = SelectedChunk is { Name: "components", Data: CArray<entIComponent> };
+        IsRegenerateVisualControllersCommandEnabled = SelectedChunk is { Name: "components", Data: CArray<entIComponent> };
 
         IsGenerateNewCruidCommandEnabled = SelectedChunk?.PropertyType == typeof(CRUID);
         IsMaterialDefinition = SelectedChunk?.IsMaterialDefinition() == true;
@@ -172,8 +165,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         var enableDependencyCommand =
             CurrentTab?.GetContentType() is RedDocumentItemType.Mesh or RedDocumentItemType.Mi or RedDocumentItemType.Mlsetup;
 
-        IsAddDependenciesCommandEnabled = enableDependencyCommand && !IsShiftKeyDown;
-        IsAddDependenciesCommandEnabledAndShiftKeyDown = enableDependencyCommand && IsShiftKeyDown;
+        IsAddDependenciesCommandEnabled = enableDependencyCommand;
 
         IsFileValidationMenuVisible = true;
         
@@ -183,7 +175,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         }
 
         IsConvertMaterialMenuEnabled = mesh.PreloadExternalMaterials.Count > 0 || mesh.PreloadLocalMaterialInstances.Count > 0;
-        IsGenerateMaterialCommandEnabled = mesh.Appearances.Count > 0;
+        IsGenerateMissingMaterialCommandEnabled = mesh.Appearances.Count > 0;
         IsDeleteUnusedMaterialCommandEnabled = mesh.Appearances.Count > 0 || mesh.MaterialEntries.Count > 0;
         IsScrollToMaterialCommandEnabled = SelectedChunk?.ShowScrollToMaterial == true;
     }
