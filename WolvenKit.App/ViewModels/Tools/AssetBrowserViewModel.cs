@@ -883,7 +883,9 @@ public partial class AssetBrowserViewModel : ToolViewModel
                 case ArchivePathRefinement archivePathRefinement:
                     return new CyberSearch
                     {
-                        Match = (candidate) => candidate.GetArchive().ArchiveRelativePath.Contains(archivePathRefinement.ArchivePath, StringComparison.CurrentCultureIgnoreCase)
+                        Match = (candidate) =>
+                            candidate.GetArchive().ArchiveRelativePath is string s && !string.IsNullOrEmpty(s) &&
+                            s.Contains(archivePathRefinement.ArchivePath ?? "", StringComparison.CurrentCultureIgnoreCase)
                     };
 
                 case VerbatimRefinement verbatimRefinement:

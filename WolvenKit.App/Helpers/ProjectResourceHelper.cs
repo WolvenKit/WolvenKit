@@ -73,9 +73,14 @@ public static class ProjectResourceHelper
 
     private static readonly SemaphoreSlim semaphore = new(1, 1);
 
-    public static async Task<Dictionary<string, string>> AddDependenciesToProjectPath(string destFolderRelativePath,
+    private static async Task<Dictionary<string, string>> AddDependenciesToProjectPath(string destFolderRelativePath,
         HashSet<ResourcePath> resourcePaths)
     {
+        if (resourcePaths.Count == 0)
+        {
+            return [];
+        }
+        
         await semaphore.WaitAsync();
         try
         {
@@ -269,7 +274,7 @@ public static class ProjectResourceHelper
             destAbsPath = Path.Join(destAbsPath, Path.GetFileName(sourceRelPath));
         }
 
-        if (sourceRelPath == destRelPath)
+        if (sourceRelPath == destRelPath || sourceRelPath.Contains(destRelPath))
         {
             return;
         }

@@ -277,15 +277,15 @@
                 <!-- Shift: "Add material dependencies" -->
                 <MenuItem Header="Add material dependencies"
                           ToolTip="Will run 'delete unused materials' first"
-                          Visibility="{ Binding  Path=IsAddDependenciesCommandEnabled, Converter={ StaticResource BooleanToVisibilityConverter}}"
                           Style="{StaticResource ShowInMeshWithShiftKeyUpStyle}"
+                          Visibility="{ Binding  Path=IsAddDependenciesCommandEnabled, Converter={ StaticResource BooleanToVisibilityConverter}}"
                           Click="OnAddDependenciesClick" />
 
                 <!-- Shift: "Add material dependencies (include basegame files)" -->
                 <MenuItem Header="Add material dependencies (include basegame files)"
                           ToolTip="Will run 'delete unused materials' first"
-                          Visibility="{ Binding  Path=IsAddDependenciesCommandEnabled, Converter={ StaticResource BooleanToVisibilityConverter}}"
                           Style="{StaticResource ShowInMeshWithShiftKeyStyle}"
+                          Visibility="{ Binding  Path=IsAddDependenciesCommandEnabled, Converter={ StaticResource BooleanToVisibilityConverter}}"
                           Click="OnAddDependenciesClick" />
 
             </MenuItem>
