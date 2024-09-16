@@ -74,4 +74,8 @@
     <Resource Include="Resources\WolvenKitFileDefinitions.xml" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <NoWarn>$(NoWarn);IDE0010</NoWarn>
+  </PropertyGroup>
+
 </Project>
