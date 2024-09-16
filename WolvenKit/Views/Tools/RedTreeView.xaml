@@ -475,7 +475,7 @@
                 <!-- Mesh: Material only -->
                 <!-- Toggle IsMasked -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.ToggleIsMaskedCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Command="{Binding Path=PlacementTarget.Tag.ToggleEnableMaskedCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Toggle 'EnableMask'"
                     IsCheckable="False"
                     Style="{StaticResource SyncfusionMenuItemStyle}"
@@ -1033,6 +1033,8 @@
         VirtualizingPanel.IsVirtualizing="True"
         VirtualizingPanel.ScrollUnit="Pixel"
         VirtualizingPanel.VirtualizationMode="Recycling"
+        ItemContextMenuOpening="TreeView_OnItemContextMenuOpening"
+        ContextMenuOpening="TreeView_OnContextMenuOpening"
         Visibility="Visible">
         <!--
             LoadOnDemandCommand="{Binding OnDemandLoadingCommand}"
