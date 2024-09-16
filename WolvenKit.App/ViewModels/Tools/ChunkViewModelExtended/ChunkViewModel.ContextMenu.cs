@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Helpers;
@@ -14,9 +15,10 @@ public partial class ChunkViewModel
 {
     #region properties
 
-    /// <summary>
-    /// If shift is not being held, show "Duplicate Selection"
-    /// </summary>
+    [ObservableProperty] private bool _isShiftKeyPressed;
+    [ObservableProperty] private bool _isCtrlKeyPressed;
+    [ObservableProperty] private bool _isAltKeyPressed;
+    
     [ObservableProperty] private bool _shouldShowDuplicate;
 
     [ObservableProperty] private bool _shouldShowPasteIntoArray;
@@ -33,40 +35,39 @@ public partial class ChunkViewModel
     [ObservableProperty] private bool _shouldShowCreateMatDef;
     [ObservableProperty] private bool _shouldShowCreateExternalMatDef;
 
-    private bool IsShiftKeyPressed => _modifierViewStateService.IsShiftKeyPressed;
-    private bool IsShiftKeyPressedOnly => _modifierViewStateService.IsShiftKeyPressedOnly;
-    private bool IsCtrlKeyPressed => _modifierViewStateService.IsCtrlKeyPressed;
-
     [ObservableProperty] private bool _shouldShowDuplicateAsNew;
 
     #endregion
 
-    /// <summary>
-    /// Triggered externally from RedTreeView, since binding to the listener ourselves will cause an event avalanche
-    /// </summary>
-    public void RefreshContextMenuFlags()
+    #region methods
+
+    private void OnModifierChanged(object? sender, KeyEventArgs e) => RefreshContextMenuFlags();
+
+    private void RefreshContextMenuFlags()
     {
-        ShouldShowPasteOverwrite = IsInArray && IsShiftKeyPressedOnly && Tab?.SelectedChunk is not null;
+        IsShiftKeyPressed = _modifierViewStateService.IsShiftKeyPressed;
+        IsCtrlKeyPressed = _modifierViewStateService.IsCtrlKeyPressed;
+        IsAltKeyPressed = _modifierViewStateService.IsAltKeyPressed;
+
+        ShouldShowPasteOverwrite = IsInArray && _modifierViewStateService.IsShiftKeyPressedOnly && Tab?.SelectedChunk is not null;
         ShouldShowOverwriteArray =
-            ShouldShowArrayOps && ((IsArray && IsShiftKeyPressed) || (IsCtrlKeyPressed && !ShouldShowPasteOverwrite));
+            ShouldShowArrayOps && ((IsArray && _modifierViewStateService.IsShiftKeyPressed) ||
+                                   (_modifierViewStateService.IsCtrlKeyPressed && !ShouldShowPasteOverwrite));
         ShouldShowPasteIntoArray = ShouldShowArrayOps && !(ShouldShowPasteOverwrite || ShouldShowOverwriteArray);
 
         IsMaterial = ResolvedData is CMaterialInstance or CResourceAsyncReference<IMaterial>;
 
         IsMaterialArray = ResolvedData is CArray<IMaterial> or CArray<CResourceAsyncReference<IMaterial>>;
-   
+
         ShouldShowDuplicateAsNew =
-            IsInArray && !IsShiftKeyPressedOnly &&
+            IsInArray && !_modifierViewStateService.IsShiftKeyPressedOnly &&
             ResolvedData is worldCompiledEffectPlacementInfo or CMeshMaterialEntry;
 
         ShouldShowDuplicate = !ShouldShowDuplicateAsNew && IsInArray;
 
-        IsInArrayWithShiftKeyUp = IsInArray && !IsShiftKeyPressed;
-        IsInArrayWithShiftKeyDown = IsInArray && IsShiftKeyPressed;
+        IsInArrayWithShiftKeyUp = IsInArray && !_modifierViewStateService.IsShiftKeyPressed;
+        IsInArrayWithShiftKeyDown = IsInArray && _modifierViewStateService.IsShiftKeyPressed;
     }
-
-
-    #region methods
 
     public bool IsMaterialDefinition()
     {
@@ -159,7 +160,6 @@ public partial class ChunkViewModel
     public async Task<HashSet<ResourcePath>> GetMaterialDependenciesOutsideOfProject()
     {
         HashSet<ResourcePath> ret = [];
-        _modifierViewStateService.RefreshModifierStates();
 
         switch (GetRootModel().ResolvedData)
         {
@@ -293,6 +293,34 @@ public partial class ChunkViewModel
             Tab.ScrollToNode(externalMaterial);
         }
     }
+
+    private bool CanToggleMask() => IsMaterialArray || IsMaterial;
+
+    [RelayCommand(CanExecute = nameof(CanToggleMask))]
+    private void ToggleEnableMasked()
+    {
+        switch (ResolvedData)
+        {
+            case CMaterialInstance material:
+                material.EnableMask = !material.EnableMask;
+                break;
+            case CArray<CMeshMaterialEntry>:
+            {
+                foreach (var property in TVProperties.Where(p => p.ResolvedData is CMaterialInstance))
+                {
+                    property.ToggleEnableMaskedCommand.Execute(null);
+                }
+
+                break;
+            }
+            default:
+                return;
+        }
+
+        RecalculateProperties();
+        Tab?.Parent.SetIsDirty(true);
+    }
+
 
     [RelayCommand]
     private async Task<Task> AddMaterialAndDefinition()

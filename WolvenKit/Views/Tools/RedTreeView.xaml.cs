@@ -51,8 +51,6 @@ namespace WolvenKit.Views.Tools
                 .Where(x => x == "UpdateFilteredItemsSource")
                 .Subscribe(_ => UpdateFilteredItemsSource(ItemsSource));
 
-            _modifierViewStateSvc.ModifierStateChanged += OnModifierStateSvcChanged;
-
             TreeView.ApplyTemplate();
         }
 
@@ -170,7 +168,7 @@ namespace WolvenKit.Views.Tools
             //    e.Cancel = true;
         }
 
-        public bool IsControlBeingHeld => _modifierViewStateSvc.GetModifierState(ModifierKeys.Control);
+        public bool IsControlBeingHeld => _modifierViewStateSvc.IsCtrlKeyPressed;
 
         private bool IsAllowDrop(TreeViewItemDragOverEventArgs e)
         {
@@ -391,12 +389,6 @@ namespace WolvenKit.Views.Tools
         /// </summary>
         private List<ChunkViewModel> GetSelectedChunks() =>
             SelectedItems is not ObservableCollection<object> selection ? [] : selection.OfType<ChunkViewModel>().ToList();
-
-        private void OnModifierStateSvcChanged() => GetSelectedChunks().ForEach((chunk) => chunk.RefreshContextMenuFlags());
-
-        private void OnKeystateChanged(object sender, KeyEventArgs e) => _modifierViewStateSvc.OnKeystateChanged(e);
-
-        private void OnContextMenuOpened(object sender, ContextMenuEventArgs e) => _modifierViewStateSvc.RefreshModifierStates();
 
         private void OnDoubleClick(object sender, MouseButtonEventArgs e)
         {

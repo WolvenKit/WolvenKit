@@ -12,7 +12,6 @@
     xmlns:treeViewEngine="clr-namespace:Syncfusion.UI.Xaml.TreeView.Engine;assembly=Syncfusion.SfTreeView.WPF"
     x:Name="redTreeView"
     d:DesignHeight="450"
-    ContextMenuOpening="OnContextMenuOpened"
     d:DesignWidth="800"
     mc:Ignorable="d">
     <UserControl.Resources>
@@ -266,8 +265,6 @@
 
             <ContextMenu x:Key="TreeViewContextMenu"
                          Name="TreeViewContextMenu"
-                         KeyUp="OnKeystateChanged"
-                         KeyDown="OnKeystateChanged"
                          DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}">
                
                 <ContextMenu.Resources>
@@ -472,6 +469,25 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Kind="Plus" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <!-- Mesh: Material only -->
+                <!-- Toggle IsMasked -->
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.ToggleIsMaskedCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Toggle 'EnableMask'"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial
+                            Width="13"
+                            Height="13"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="ToggleSwitch" />
                     </MenuItem.Icon>
                 </MenuItem>
 

@@ -142,6 +142,7 @@ public static class ProjectResourceHelper
                         WMessageBoxImage.Question,
                         WMessageBoxButtons.YesNo)) is WMessageBoxResult.Yes;
 
+                    List<string> filesToRemove = [];
                     foreach (var kvp in pathsAndDestinations)
                     {
                         try
@@ -151,7 +152,14 @@ public static class ProjectResourceHelper
                         catch (FileNotFoundException e)
                         {
                             filesNotFound.Add(e.Message);
+                            filesToRemove.Add(kvp.Key);
                         }
+                    }
+
+                    foreach (var relPath in filesToRemove)
+                    {
+                        pathsAndDestinations.Remove(relPath);
+                        pathReplacements.Remove(relPath);
                     }
                 }
                 finally
@@ -242,10 +250,10 @@ public static class ProjectResourceHelper
             Directory.CreateDirectory(targetAbsolutePath);
         }
 
+        File.Move(sourceAbsolutePath, targetAbsoluteFile, true);
+
         // pop it into our map
         pathReplacements.TryAdd(sourceRelativePath, Path.Combine(targetRelativePath, Path.GetFileName(sourceRelativePath)));
-
-        File.Move(sourceAbsolutePath, targetAbsoluteFile, true);
     }
 
 

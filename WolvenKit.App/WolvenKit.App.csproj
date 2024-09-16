@@ -56,6 +56,7 @@
   </ItemGroup>
 
   <ItemGroup>
+      <PackageReference Include="MouseKeyHook"/>
 	<PackageReference Include="Octokit" />
     <PackageReference Include="CommunityToolkit.Mvvm" />
 	<PackageReference Include="Discord.Net" />
@@ -72,5 +73,9 @@
   <ItemGroup>
     <Resource Include="Resources\WolvenKitFileDefinitions.xml" />
   </ItemGroup>
+
+  <PropertyGroup>
+    <NoWarn>$(NoWarn);IDE0010</NoWarn>
+  </PropertyGroup>
 
 </Project>

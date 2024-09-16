@@ -1,11 +1,13 @@
+#nullable enable
+
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Forms;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App;
@@ -19,6 +21,7 @@ using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Core.Services;
 using WolvenKit.RED4.Types;
 using WolvenKit.Views.Dialogs.Windows;
 
@@ -32,22 +35,27 @@ namespace WolvenKit.Views.Documents
         private readonly ILoggerService _loggerService;
         private readonly WatcherService _projectWatcher;
         private readonly IAppArchiveManager _archiveManager;
+        private readonly IModifierViewStateService _modifierStateService;
 
 
         public RedDocumentViewMenuBar()
         {
-            _scriptService = Locator.Current.GetService<AppScriptService>();
-            _settingsManager = Locator.Current.GetService<ISettingsManager>();
-            _projectManager = Locator.Current.GetService<IProjectManager>();
-            _loggerService = Locator.Current.GetService<ILoggerService>();
-            _projectWatcher = (WatcherService)Locator.Current.GetService<IWatcherService>();
-            _archiveManager = Locator.Current.GetService<IAppArchiveManager>();
+            _scriptService = Locator.Current.GetService<AppScriptService>()!;
+            _settingsManager = Locator.Current.GetService<ISettingsManager>()!;
+            _projectManager = Locator.Current.GetService<IProjectManager>()!;
+            _loggerService = Locator.Current.GetService<ILoggerService>()!;
+            _projectWatcher = (WatcherService)Locator.Current.GetService<IWatcherService>()!;
+            _archiveManager = Locator.Current.GetService<IAppArchiveManager>()!;
+            _modifierStateService = Locator.Current.GetService<IModifierViewStateService>()!;
+            
             InitializeComponent();
             
             RegisterFileValidationScript();
 
             DataContext = new RedDocumentViewToolbarModel { CurrentTab = _currentTab };
             ViewModel = DataContext as RedDocumentViewToolbarModel;
+
+            _modifierStateService.ModifierStateChanged += OnModifierStateChanged;
 
             this.WhenActivated(_ =>
             {
@@ -57,13 +65,15 @@ namespace WolvenKit.Views.Documents
                 }
 
                 vm.RefreshMenuVisibility(true);
+                vm.OnAddDependencies += OnAddDependencies;
             });
         }
 
+        private void OnModifierStateChanged(object? sender, KeyEventArgs keyEventArgs) => RefreshChildMenuItems();
 
-        private RedDocumentTabViewModel _currentTab;
+        private RedDocumentTabViewModel? _currentTab;
 
-        private ScriptFileViewModel _fileValidationScript;
+        private ScriptFileViewModel? _fileValidationScript;
 
         private void RegisterFileValidationScript()
         {
@@ -83,7 +93,7 @@ namespace WolvenKit.Views.Documents
             }
         }
 
-        public RedDocumentTabViewModel CurrentTab
+        public RedDocumentTabViewModel? CurrentTab
         {
             get => _currentTab;
             set
@@ -127,7 +137,12 @@ namespace WolvenKit.Views.Documents
             
         }
 
-        private void OnFileValidationClick(object sender, RoutedEventArgs e)
+
+        private ChunkViewModel? SelectedChunk => ViewModel?.SelectedChunk;
+
+        private ChunkViewModel? RootChunk => ViewModel?.RootChunk;
+
+        private void OnFileValidationClick(object _, RoutedEventArgs e)
         {
             _loggerService.Info("Running file validation, please wait. The UI will be unresponsive.");
             
@@ -135,28 +150,9 @@ namespace WolvenKit.Views.Documents
             DispatcherHelper.RunOnMainThread(() => Task.Run(async () => await RunFileValidation()).GetAwaiter().GetResult());
         }
 
-        private void OnConvertLocalMaterialsClick(object sender, RoutedEventArgs e) =>
-            ViewModel?.RootChunk?.ConvertPreloadMaterialsCommand.Execute(null);
+        private void OnConvertLocalMaterialsClick(object _, RoutedEventArgs e) => RootChunk?.ConvertPreloadMaterialsCommand.Execute(null);
 
-        private void OnDeleteUnusedMaterialsClick(object sender, RoutedEventArgs e) =>
-            ViewModel?.RootChunk?.DeleteUnusedMaterialsCommand.Execute(null);
-
-        private void OnClearAllMaterialsClick(object sender, RoutedEventArgs e) =>
-            ViewModel?.RootChunk?.ClearMaterialsCommand.Execute(null);
-
-        private void OnDeleteEmptySubmeshesClick(object sender, RoutedEventArgs e) =>
-            ViewModel?.RootChunk?.DeleteEmptySubmeshesCommand.Execute(null);
-
-        private void OnDeleteDuplicateEntriesClick(object sender, RoutedEventArgs e) =>
-            ViewModel?.RootChunk?.DeleteDuplicateEntriesCommand.Execute(null);
-
-        private void OnRegenerateControllersClick(object sender, RoutedEventArgs e) =>
-            ViewModel?.SelectedChunk?.RegenerateAppearanceVisualControllerCommand.Execute(null);
-
-        private void OnGenerateNewCruidClick(object sender, RoutedEventArgs e) =>
-            ViewModel?.SelectedChunk?.GenerateCRUIDCommand.Execute(null);
-
-        private void OnGenerateMissingMaterialsClick(object sender, RoutedEventArgs e)
+        private void OnGenerateMissingMaterialsClick(object _, RoutedEventArgs e)
         {
             var dialog = new CreateMaterialsDialog();
             if (ViewModel?.RootChunk is not ChunkViewModel cvm || dialog.ShowDialog() != true)
@@ -173,7 +169,7 @@ namespace WolvenKit.Views.Documents
             cvm.Tab?.Parent.SetIsDirty(true);
         }
 
-        public event EventHandler<EditorDifficultyLevel> EditorDifficultChanged;
+        public event EventHandler<EditorDifficultyLevel>? EditorDifficultChanged;
 
         private void OnEditorModeClick(EditorDifficultyLevel level)
         {
@@ -186,14 +182,11 @@ namespace WolvenKit.Views.Documents
             EditorDifficultChanged?.Invoke(this, level);
         }
 
-        private void OnEditorModeClick_Easy(object sender, RoutedEventArgs e) => OnEditorModeClick(EditorDifficultyLevel.Easy);
+        private void OnEditorModeClick_Easy(object _, RoutedEventArgs e) => OnEditorModeClick(EditorDifficultyLevel.Easy);
 
-        private void OnEditorModeClick_Default(object sender, RoutedEventArgs e) => OnEditorModeClick(EditorDifficultyLevel.Default);
+        private void OnEditorModeClick_Default(object _, RoutedEventArgs e) => OnEditorModeClick(EditorDifficultyLevel.Default);
 
-        private void OnEditorModeClick_Advanced(object sender, RoutedEventArgs e) => OnEditorModeClick(EditorDifficultyLevel.Advanced);
-
-        private void OnScrollToMaterialClick(object sender, RoutedEventArgs e) =>
-            ViewModel?.SelectedChunk?.ScrollToMaterialCommand.Execute(null);
+        private void OnEditorModeClick_Advanced(object _, RoutedEventArgs e) => OnEditorModeClick(EditorDifficultyLevel.Advanced);
 
         private string GetTextureDirForDependencies(bool useTextureSubfolder)
         {
@@ -330,22 +323,7 @@ namespace WolvenKit.Views.Documents
             }
         }
 
-        private void OnToggleLocalInstanceClick(object sender, RoutedEventArgs e)
-        {
-            if (ViewModel?.SelectedChunks is null)
-            {
-                return;
-            }
-
-            foreach (var chunk in ViewModel.SelectedChunks)
-            {
-                chunk.ToggleMaterialDefinitionIsExternalCommand.Execute(null);
-            }
-
-            ViewModel.SelectedChunks.LastOrDefault()?.Parent?.RecalculateProperties();
-        }
-        
-        private async void OnAddDependenciesClick(object sender, RoutedEventArgs e)
+        private async void OnAddDependencies(object? _, EventArgs eventArgs)
         {
             if (_projectManager.ActiveProject is null || ViewModel?.RootChunk is not ChunkViewModel cvm)
             {
@@ -370,7 +348,7 @@ namespace WolvenKit.Views.Documents
             _projectWatcher.Resume();
         }
 
-        private void OnChangeChunkMasksClick(object sender, RoutedEventArgs e)
+        private void OnChangeChunkMasksClick(object _, RoutedEventArgs e)
         {
             var dialog = new ChangeComponentChunkMaskDialog();
             if (ViewModel?.RootChunk is not ChunkViewModel cvm || dialog.ShowDialog() != true)
@@ -386,6 +364,36 @@ namespace WolvenKit.Views.Documents
             var chunkMask = (CUInt64)dialog.ViewModel.ChunkMask;
 
             cvm.ReplaceComponentChunkMasks(dialog.ViewModel.ComponentName!, chunkMask);
+        }
+
+        private MenuItem? openMenu;
+
+        private void RefreshChildMenuItems()
+        {
+            if (openMenu is null)
+            {
+                return;
+            }
+
+            foreach (var item in openMenu.Items.OfType<MenuItem>())
+            {
+                // Force the submenu items to re-evaluate their bindings
+                var bindingExpression = item.GetBindingExpression(MenuItem.VisibilityProperty);
+                bindingExpression?.UpdateTarget();
+            }
+        }
+
+        private void OnMenuClosed(object sender, RoutedEventArgs e) => openMenu = null;
+
+        // Refresh nested menu visibility bindings
+        private void OnMenuOpened(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem parentMenuItem)
+            {
+                openMenu = parentMenuItem;
+            }
+
+            RefreshChildMenuItems();
         }
     }
 }
