@@ -15,7 +15,10 @@ public partial class ChunkViewModel
 {
     #region properties
 
+    [NotifyCanExecuteChangedFor(nameof(DuplicateChunkCommand))]
+    [NotifyCanExecuteChangedFor(nameof(DuplicateAsNewChunkCommand))]
     [ObservableProperty] private bool _isShiftKeyPressed;
+    
     [ObservableProperty] private bool _isCtrlKeyPressed;
     [ObservableProperty] private bool _isAltKeyPressed;
     
@@ -43,16 +46,15 @@ public partial class ChunkViewModel
 
     private void OnModifierChanged(object? sender, KeyEventArgs e) => RefreshContextMenuFlags();
 
-    private void RefreshContextMenuFlags()
+    public void RefreshContextMenuFlags()
     {
         IsShiftKeyPressed = _modifierViewStateService.IsShiftKeyPressed;
         IsCtrlKeyPressed = _modifierViewStateService.IsCtrlKeyPressed;
         IsAltKeyPressed = _modifierViewStateService.IsAltKeyPressed;
 
         ShouldShowPasteOverwrite = IsInArray && _modifierViewStateService.IsShiftKeyPressedOnly && Tab?.SelectedChunk is not null;
-        ShouldShowOverwriteArray =
-            ShouldShowArrayOps && ((IsArray && _modifierViewStateService.IsShiftKeyPressed) ||
-                                   (_modifierViewStateService.IsCtrlKeyPressed && !ShouldShowPasteOverwrite));
+        ShouldShowOverwriteArray = ShouldShowArrayOps && ((IsArray && IsShiftKeyPressed) ||
+                                                          (IsCtrlKeyPressed && !ShouldShowPasteOverwrite));
         ShouldShowPasteIntoArray = ShouldShowArrayOps && !(ShouldShowPasteOverwrite || ShouldShowOverwriteArray);
 
         IsMaterial = ResolvedData is CMaterialInstance or CResourceAsyncReference<IMaterial>;
@@ -60,13 +62,15 @@ public partial class ChunkViewModel
         IsMaterialArray = ResolvedData is CArray<IMaterial> or CArray<CResourceAsyncReference<IMaterial>>;
 
         ShouldShowDuplicateAsNew =
-            IsInArray && !_modifierViewStateService.IsShiftKeyPressedOnly &&
+            IsInArray && !IsShiftKeyPressed &&
             ResolvedData is worldCompiledEffectPlacementInfo or CMeshMaterialEntry;
 
         ShouldShowDuplicate = !ShouldShowDuplicateAsNew && IsInArray;
 
-        IsInArrayWithShiftKeyUp = IsInArray && !_modifierViewStateService.IsShiftKeyPressed;
-        IsInArrayWithShiftKeyDown = IsInArray && _modifierViewStateService.IsShiftKeyPressed;
+        IsInArrayWithShiftKeyUp = IsInArray && !IsShiftKeyPressed;
+        IsInArrayWithShiftKeyDown = IsInArray && IsShiftKeyPressed;
+
+        ToggleEnableMaskedCommand.NotifyCanExecuteChanged();
     }
 
     public bool IsMaterialDefinition()
@@ -239,7 +243,7 @@ public partial class ChunkViewModel
             }
 
             // base game file: Only add those if shift is down
-            if (_modifierViewStateService.IsShiftKeyPressed
+            if (IsShiftKeyPressed
                 && _archiveManager.Lookup(refPathHash, ArchiveManagerScope.Basegame).HasValue)
             {
                 ret.Add(refPath);

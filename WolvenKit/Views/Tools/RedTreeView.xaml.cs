@@ -421,5 +421,21 @@ namespace WolvenKit.Views.Tools
             
             return selection.OfType<ChunkViewModel>().ToList().FirstOrDefault((cvm) => cvm.Parent is null);
         }
+
+        private void TreeView_OnItemContextMenuOpening(object sender, ItemContextMenuOpeningEventArgs e)
+        {
+            if (SelectedItem is ChunkViewModel cvm)
+            {
+                cvm.RefreshContextMenuFlags();
+            }
+        }
+
+        private void TreeView_OnContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            if (SelectedItem is ChunkViewModel cvm)
+            {
+                cvm.RefreshContextMenuFlags();
+            }
+        }
     }
 }

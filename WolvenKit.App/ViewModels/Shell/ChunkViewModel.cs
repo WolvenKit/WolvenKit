@@ -2551,6 +2551,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         Parent.CalculateDescriptor();
         Parent.CalculateValue();
         Parent.ReindexChildren();
+
+        IsExpanded = false;
     }
 
     [RelayCommand(CanExecute = nameof(CanDuplicateChunk))]
@@ -2656,14 +2658,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             _loggerService.Error($"Something went wrong while trying to copy the selection : {ex}");
         }
-        //Tab.SelectedChunk = Parent;
+
+        RefreshContextMenuFlags();
     }
 
-    private bool CanCopyArrayContents()
-    {
-        return Properties.Count > 0 && !Properties[0].IsArray;
-    }
-    
+
     private bool CanPasteSelection()
     {
         if (RedDocumentTabViewModel.CopiedChunks.Count == 0 ||
@@ -2685,6 +2684,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         return RedDocumentTabViewModel.CopiedChunks.All(c => CheckTypeCompatibility(innerType!, c.GetType()) != TypeCompability.None);
     } // TODO RelayCommand check notify
 
+    private bool CanCopyArrayContents() => Properties.Count > 0 && !Properties[0].IsArray;
 
     [RelayCommand(CanExecute = nameof(CanCopyArrayContents))]
     private void CopyArrayContents()
@@ -3577,6 +3577,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         OnPropertyChanged(nameof(Data));
 
         IsExpanded = expand;
+
+        if (IsSelected)
+        {
+            RefreshContextMenuFlags();
+        }
 
         if (!expand || selectChild is null)
         {
