@@ -46,7 +46,6 @@ internal class UncookCommand : CommandBase
         AddOption(new Option<string>(new[] { "--mesh-export-material-repo" }, "Location of the material repo, if not specified, it uses the outpath."));
         AddOption(new Option<bool>(new[] { "--mesh-export-lod-filter" }, "Filter out lod models."));
         AddOption(new Option<bool>(new[] { "--mesh-export-experimental-merged-export" }, "[EXPERIMENTAL] Merged mesh export. (Only supports Default or WithMaterials, re-import not supported)"));
-        AddOption(new Option<bool>(new[] { "--opus-dump-json" }, "Dump .opusinfo file as JSON."));
         AddOption(new Option<string>(new[] { "--opus-hashes" }, "Comma-separated list of hashes to export from .opusinfo."));
 
         SetInternalHandler(CommandHandler.Create(Action));
