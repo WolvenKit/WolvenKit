@@ -24,7 +24,6 @@ public record UncookTaskOptions
     public string? meshExportMaterialRepo { get; init; }
     public bool? meshExportLodFilter { get; init; }
     public bool? meshExportExperimentalMergedExport { get; init; }
-    public bool? opusDumpJson { get; init; }
     public List<uint>? opusHashes { get; set; }
     public bool? opusExportAll { get; set; }
 }
@@ -159,7 +158,6 @@ public partial class ConsoleFunctions
         exportArgs.Get<OpusExportArgs>().UseMod = true;
         exportArgs.Get<OpusExportArgs>().SelectedForExport = options.opusHashes ?? [];
         exportArgs.Get<OpusExportArgs>().ExportAll = options.opusExportAll ?? false;
-        exportArgs.Get<OpusExportArgs>().DumpAllToJson = options.opusDumpJson ?? false;
 
         var result = 0;
         foreach (var gameArchive in _archiveManager.Archives.Items)
