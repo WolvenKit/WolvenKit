@@ -398,7 +398,6 @@ namespace WolvenKit.Views.Tools
 
             // register to KeyUp because KeyDown doesn't forward "F2"
             KeyUp += OnKeyUp;
-            KeyDown += OnKeyStateChanged; 
             ViewModel.IsKeyUpEventAssigned = true;
         }
 
@@ -431,20 +430,10 @@ namespace WolvenKit.Views.Tools
         }
 
         /// <summary>
-        /// Called from view on keyup/keydown event. Synchronises modifier state with ModifierViewStateModel.
-        /// </summary>
-        private void OnKeyStateChanged(object sender, KeyEventArgs e) => ViewModel?.RefreshModifierStates();
-
-        public void RefreshModifierStates(object sender, RoutedEventArgs routedEventArgs) => ViewModel?.RefreshModifierStates();
-
-        /// <summary>
         /// Called from view on key down event. Handles search bar and rename/delete commands.
         /// </summary>
         private void OnKeyUp(object sender, KeyEventArgs e)
         {
-            // For context menu switching
-            OnKeyStateChanged(sender, e);
-            
             if (PESearchBar.IsFocused)
             {
                 return;
@@ -736,7 +725,7 @@ namespace WolvenKit.Views.Tools
         /// </summary>
         private async Task ProcessFileAction(IReadOnlyList<string> sourceFiles, string targetDirectory)
         {
-            var isCopy = ViewModel?.ModifierViewStateService.GetModifierState(ModifierKeys.Control) == true;
+            var isCopy = ViewModel?.ModifierViewStateService.IsCtrlKeyPressed == true;
 
             // Abort if a directory is dragged on itself or its parent
             if (!isCopy && sourceFiles.Count == 1 &&

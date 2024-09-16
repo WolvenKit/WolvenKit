@@ -39,6 +39,7 @@ using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 using IMaterial = WolvenKit.RED4.Types.IMaterial;
+using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 using Material = WolvenKit.App.Models.Material;
 
 namespace WolvenKit.App.ViewModels.Documents;
@@ -85,7 +86,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         Parent = parent;
     }
 
-    private void ModifierStateChanged() => IsCtrlKeyPressed = _modifierSvc.IsCtrlKeyPressed;
+    private void ModifierStateChanged(object? sender, KeyEventArgs keyEventArgs) => IsCtrlKeyPressed = _modifierSvc.IsCtrlKeyPressed;
 
     // TODO refactor this into inherited viewmodels
 

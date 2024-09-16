@@ -207,7 +207,5 @@ namespace WolvenKit.Views.Shell
         private void ChromelessWindow_Loaded(object sender, RoutedEventArgs e) { }
         // This is never called 
         private void ChromelessWindow_Closing(object sender, CancelEventArgs e) { }
-
-        private void OnKeyStateChanged(object sender, KeyEventArgs e) => _modifierViewStateService.OnKeystateChanged(e);
     }
 }

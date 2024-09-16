@@ -1105,8 +1105,15 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             await assetBrowser.LoadAssetBrowserCommand.ExecuteAsync(null);
         }
 
-        assetBrowser.SearchBarText = $"archive:{result}";
-        await assetBrowser.PerformSearch($"archive:{result}");
+        if (assetBrowser.RightItems.FirstOrDefault(f => f.FullName.Contains(result)) is FileSystemViewModel mod)
+        {
+            assetBrowser.ShowFile(new FileSystemModel(null, result, mod.FullName, true));
+        }
+        else
+        {
+            assetBrowser.SearchBarText = $"archive:{result}";
+            await assetBrowser.PerformSearch($"archive:{result}");
+        }
 
         return Task.CompletedTask;
     }

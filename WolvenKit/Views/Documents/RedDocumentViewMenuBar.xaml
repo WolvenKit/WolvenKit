@@ -152,49 +152,12 @@
 
             <!-- ============================================================== -->
 
-            <Style x:Key="ShowInMeshWithShiftKeyStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitNestedMenuItem}">
+            <Style x:Key="ShowInMeshFileStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitNestedMenuItem}">
+                <Setter Property="Visibility" Value="Collapsed" />
                 <Style.Triggers>
-                    <MultiDataTrigger>
-                        <MultiDataTrigger.Conditions>
-                            <Condition Binding="{Binding Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
-                                       Value="{x:Static documents:RedDocumentItemType.Mesh}" />
-                            <Condition Binding="{Binding Path=IsShiftKeyDown}" Value="True" />
-                        </MultiDataTrigger.Conditions>
+                    <DataTrigger Binding="{Binding Path=ContentType}" Value="{x:Static documents:RedDocumentItemType.Mesh}">
                         <Setter Property="Visibility" Value="Visible" />
-                    </MultiDataTrigger>
-                    <MultiDataTrigger>
-                        <MultiDataTrigger.Conditions>
-                            <Condition Binding="{Binding Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
-                                       Value="{x:Static documents:RedDocumentItemType.Mesh}" />
-                            <Condition Binding="{Binding Path=IsShiftKeyDown}" Value="False" />
-                        </MultiDataTrigger.Conditions>
-                        <Setter Property="Visibility" Value="Collapsed" />
-                    </MultiDataTrigger>
-                </Style.Triggers>
-            </Style>
-
-            <Style x:Key="ShowInMeshWithShiftKeyUpStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitToolBarItemWithChildren}">
-                <Setter Property="Height" Value="25" />
-                <Setter Property="Padding" Value="2 6 0 6" />
-                <Setter Property="Margin" Value="2 0" />
-                <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Frame_Background}" />
-                <Style.Triggers>
-                    <MultiDataTrigger>
-                        <MultiDataTrigger.Conditions>
-                            <Condition Binding="{Binding Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
-                                       Value="{x:Static documents:RedDocumentItemType.Mesh}" />
-                            <Condition Binding="{Binding Path=IsShiftKeyDown}" Value="False" />
-                        </MultiDataTrigger.Conditions>
-                        <Setter Property="Visibility" Value="Visible" />
-                    </MultiDataTrigger>
-                    <MultiDataTrigger>
-                        <MultiDataTrigger.Conditions>
-                            <Condition Binding="{Binding Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
-                                       Value="{x:Static documents:RedDocumentItemType.Mesh}" />
-                            <Condition Binding="{Binding Path=IsShiftKeyDown}" Value="True" />
-                        </MultiDataTrigger.Conditions>
-                        <Setter Property="Visibility" Value="Collapsed" />
-                    </MultiDataTrigger>
+                    </DataTrigger>
                 </Style.Triggers>
             </Style>
 
@@ -261,77 +224,86 @@
 
                 <!-- Generate missing materials -->
                 <MenuItem Header="Generate missing material entries"
-                          IsEnabled="{Binding Path=IsGenerateMissingMaterialCommandEnabled}"
+                          Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                          Command="{Binding Path=GenerateMissingMaterialsCommand}"
                           Click="OnGenerateMissingMaterialsClick" />
 
                 <!-- Scroll to material -->
                 <MenuItem Header="Scroll to material"
-                          IsEnabled="{Binding  Path=IsScrollToMaterialCommandEnabled, Mode=OneWay}"
-                          Click="OnScrollToMaterialClick" />
+                          Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                          Command="{Binding Path=ScrollToMaterialCommand}" />
 
-                <!-- Scroll to material -->
+                <!-- Toggle 'EnableMask' material property -->
+                <MenuItem Header="Toggle 'EnableMask'"
+                          Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                          Command="{Binding Path=ToggleEnableMaskCommand}" />
+
+                <!-- Toggle 'isLocalInstance' -->
                 <MenuItem Header="Toggle 'IsLocalInstance'"
                           IsEnabled="{Binding  Path=IsMaterialDefinition, Mode=OneWay}"
-                          Click="OnToggleLocalInstanceClick" />
+                          Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                          Command="{Binding Path=ToggleLocalInstanceCommand}" />
 
                 <!-- Shift: "Add material dependencies" -->
                 <MenuItem Header="Add material dependencies"
                           ToolTip="Will run 'delete unused materials' first"
-                          Style="{StaticResource ShowInMeshWithShiftKeyUpStyle}"
-                          Visibility="{ Binding  Path=IsAddDependenciesCommandEnabled, Converter={ StaticResource BooleanToVisibilityConverter}}"
-                          Click="OnAddDependenciesClick" />
+                          Style="{StaticResource ShowInMeshFileStyle}"
+                          Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                          Command="{Binding Path=AddDependenciesCommand}" />
 
                 <!-- Shift: "Add material dependencies (include basegame files)" -->
                 <MenuItem Header="Add material dependencies (include basegame files)"
                           ToolTip="Will run 'delete unused materials' first"
-                          Style="{StaticResource ShowInMeshWithShiftKeyStyle}"
-                          Visibility="{ Binding  Path=IsAddDependenciesCommandEnabled, Converter={ StaticResource BooleanToVisibilityConverter}}"
-                          Click="OnAddDependenciesClick" />
+                          Style="{StaticResource ShowInMeshFileStyle}"
+                          Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                          Command="{Binding Path=AddDependenciesFullCommand}" />
 
             </MenuItem>
 
-            <!-- Mesh file: Clean up menu -->
-            <MenuItem Header="Clean up" Style="{StaticResource CleanupMenuVisibilityStyle}">
+            <!-- "Clean up" menu (.mesh / .json) -->
+            <MenuItem Header="Clean up" Style="{StaticResource CleanupMenuVisibilityStyle}" SubmenuOpened="OnMenuOpened" SubmenuClosed="OnMenuClosed">
 
                 <!-- Convert preload materials -->
                 <MenuItem Header="Convert preload materials to local"
                           Style="{StaticResource MenuItemInMeshFileStyle}"
-                          IsEnabled="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}}"
+                          Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                           Click="OnConvertLocalMaterialsClick" />
 
                 <!-- No shift: "Delete unused Materials" -->
                 <MenuItem Header="Delete unused materials"
-                          Style="{StaticResource ShowInMeshWithShiftKeyUpStyle}"
-                          IsEnabled="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}}"
-                          Click="OnDeleteUnusedMaterialsClick" />
+                          Style="{StaticResource WolvenKitNestedMenuItem}"
+                          Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                          DataContext="{Binding SelectedChunk}"
+                          Command="{Binding Path=DeleteUnusedMaterialsCommand}" />
 
                 <!-- Shift: "Clear all Materials" -->
                 <MenuItem Header="Clear all materials"
-                          Style="{StaticResource ShowInMeshWithShiftKeyStyle}"
-                          IsEnabled="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}}"
-                          Click="OnClearAllMaterialsClick" />
+                          Style="{StaticResource WolvenKitNestedMenuItem}"
+                          Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                          Command="{Binding Path=ClearMaterialsCommand}" />
 
-                <!-- No shift: "Delete empty submeshes" -->
+                <!-- "Delete empty submeshes" -->
                 <MenuItem Header="Delete empty submeshes"
-                          Style="{StaticResource ShowInMeshWithShiftKeyUpStyle}"
-                          IsEnabled="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}}"
-                          Click="OnDeleteEmptySubmeshesClick" />
+                          Style="{StaticResource ShowInMeshFileStyle}"
+                          Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                          Command="{Binding Path=DeleteEmptySubmeshesCommand}" />
 
                 <!-- JSON: Delete duplicate entries -->
                 <MenuItem Header="Delete duplicate entries"
                           Style="{StaticResource MenuItemInJsonFileStyle}"
-                          IsEnabled="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}}"
-                          Click="OnDeleteDuplicateEntriesClick" />
+                          Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                          Command="{Binding Path=DeleteDuplicateEntriesCommand}" />
             </MenuItem>
             
             <!-- Ent file: Appearances menu -->
             <MenuItem Header="Appearances" Style="{StaticResource ToolbarItemInAppFileStyle}">
-                <!-- Visibility="{Binding RelativeSource={RelativeSource Self}, Converter={StaticResource HasMenuChildrenVisibilityConverter}}"> -->
 
                 <!-- Regenerate controllers -->
                 <MenuItem
-                    Header="Regenerate visual controllers" Click="OnRegenerateControllersClick"
-                    IsEnabled="{ Binding  Path=IsRegenerateVisualControllersCommandEnabled }" />
+                    Header="Regenerate visual controllers"
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Style="{StaticResource WolvenKitToolBarItem}"
+                    Command="{Binding Path= RegenerateVisualControllersCommand}" />
 
                 <!-- Regenerate controllers -->
                 <MenuItem Header="Change chunk view by component" Click="OnChangeChunkMasksClick" Style="{StaticResource MenuItemInAppFileStyle}" />
@@ -340,9 +312,9 @@
 
             <!--CRUIDs -->
             <MenuItem Header="Generate CRUID"
-                      Visibility="{Binding Path=IsGenerateNewCruidCommandEnabled, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
-                      Style="{StaticResource WolvenKitToolBarItemWithChildren}"
-                      Click="OnGenerateNewCruidClick">
+                      Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                      Style="{StaticResource WolvenKitToolBarItem}"
+                      Command="{Binding Path= GenerateNewCruidCommand}">
             </MenuItem>
             
             

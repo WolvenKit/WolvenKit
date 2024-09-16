@@ -9,12 +9,11 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Threading;
 using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.ClearScript.Util.Web;
 using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
@@ -27,18 +26,13 @@ using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common;
-using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
-using WolvenKit.Helpers;
 using WolvenKit.RED4.Archive;
-using WolvenKit.RED4.Archive.CR2W;
-using WolvenKit.RED4.Archive.IO;
-using WolvenKit.RED4.Types;
-using EFileReadErrorCodes = WolvenKit.RED4.Archive.IO.EFileReadErrorCodes;
+using Clipboard = System.Windows.Clipboard;
 
 namespace WolvenKit.App.ViewModels.Tools;
 
@@ -100,12 +94,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         SideInDockedMode = DockSide.Left;
 
-        RegisterModifierStateAwareness();
+        IsShowRelativePath = true;
+        ModifierViewStateService.ModifierStateChanged += OnModifierUpdateEvent;
         
         SetupToolDefaults();
-
-        RefreshModifierStates();
-
+        
         _mainViewModel.PropertyChanged += MainViewModel_OnPropertyChanged;
 
         _projectManager.PropertyChanged += ProjectManager_OnPropertyChanged;
@@ -1105,18 +1098,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     public bool IsNoModifierPressed => ModifierViewStateService.IsNoModifierPressed;
 
     /// <summary>
-    /// Called in constructor
-    /// </summary>
-    private void RegisterModifierStateAwareness()
-    {
-        ModifierViewStateService.ModifierStateChanged += OnModifierUpdateEvent;
-        ModifierViewStateService.PropertyChanged += OnModifierChanged;
-    }
-
-    /// <summary>
     /// Reacts to ModifierViewStatesModel's emitted events
     /// </summary>
-    private void OnModifierUpdateEvent()
+    private void OnModifierUpdateEvent(object? sender, KeyEventArgs keyEventArgs)
     {
         IsShowAbsolutePathToRawFolder = ModifierViewStateService.IsCtrlShiftOnlyPressed && IsInArchiveFolder(SelectedItem);
         IsShowAbsolutePathToArchiveFolder = ModifierViewStateService.IsCtrlShiftOnlyPressed && IsInRawFolder(SelectedItem);
@@ -1125,19 +1109,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         IsShowAbsolutePathToCurrentFolder = ModifierViewStateService.IsCtrlKeyPressedOnly;
 
-        IsShowRelativePath = ModifierViewStateService is { IsShiftKeyPressedOnly: false, IsCtrlKeyPressedOnly: false } &&
-                             !(IsCtrlKeyPressed && IsShiftKeyPressed);
+        IsShowRelativePath = !(IsShowAbsolutePathToRawFolder || IsShowAbsolutePathToArchiveFolder ||
+                               IsShowAbsolutePathToCurrentFile || IsShowAbsolutePathToCurrentFolder) ||
+                             Services.ModifierViewStateService.IsNoModifierBeingHeld;
     }
-
-    /// <summary>
-    /// Forward ModifierViewStateModel's PropertyChanged events to the view
-    /// </summary>
-    private void OnModifierChanged(object? sender, PropertyChangedEventArgs e) => OnPropertyChanged(e.PropertyName);
-
-    /// <summary>
-    /// Passes key state changes from view down to ModifierViewStatesModel
-    /// </summary>
-    public void RefreshModifierStates() => DispatcherHelper.RunOnMainThread(() => ModifierViewStateService.RefreshModifierStates());
 
     public IDocumentViewModel? GetActiveEditorFile() => _mainViewModel.ActiveDocument;
 

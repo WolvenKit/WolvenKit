@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+using System.Windows.Forms;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
-using WolvenKit.Core.Interfaces;
+using Gma.System.MouseKeyHook;
 using WolvenKit.Core.Services;
 
 namespace WolvenKit.App.Services;
@@ -20,73 +19,158 @@ namespace WolvenKit.App.Services;
 /// _modifierViewStates.ModifierStateChanged += OnModifierStateChanged;
 /// </code>
 /// </example>
-public partial class ModifierViewStateService() : ObservableObject, IModifierViewStateService
+public partial class ModifierViewStateService : ObservableObject, IModifierViewStateService
 {
-    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
-    {
-        base.OnPropertyChanged(e);
+    private readonly IKeyboardMouseEvents _globalHook;
 
-        ModifierStateChanged?.Invoke();
+    public ModifierViewStateService()
+    {
+        _globalHook = Hook.GlobalEvents();
+        _globalHook.KeyDown += OnGlobalKeyDown;
+        _globalHook.KeyUp += OnGlobalKeyUp;
     }
 
-    public event Action? ModifierStateChanged;
+    private void OnGlobalKeyUp(object? sender, System.Windows.Forms.KeyEventArgs e)
+    {
+        switch (e.KeyCode)
+        {
+            case Keys.LShiftKey or Keys.RShiftKey or Keys.Shift or Keys.ShiftKey:
+                if (!IsShiftKeyPressed)
+                {
+                    return;
+                }
+
+                IsShiftKeyPressed = false;
+                break;
+            case Keys.LControlKey or Keys.RControlKey or Keys.ControlKey or Keys.Control:
+                if (!IsCtrlKeyPressed)
+                {
+                    return;
+                }
+
+                IsCtrlKeyPressed = false;
+                break;
+            case Keys.Alt:
+                if (!IsAltKeyPressed)
+                {
+                    return;
+                }
+
+                IsAltKeyPressed = false;
+                break;
+            default:
+                return;
+        }
+
+        IsShiftKeyPressedOnly = IsShiftKeyPressed && !IsCtrlKeyPressed && !IsAltKeyPressed;
+        IsAltKeyPressedOnly = IsAltKeyPressed && !IsCtrlKeyPressed && !IsShiftKeyPressed;
+        IsCtrlShiftOnlyPressed = IsShiftKeyPressed && IsCtrlKeyPressed && !IsAltKeyPressed;
+        IsCtrlAltOnlyPressed = IsShiftKeyPressed && !IsCtrlKeyPressed && IsAltKeyPressed;
+        IsAltShiftOnlyPressed = IsShiftKeyPressed && IsCtrlKeyPressed && !IsAltKeyPressed;
+
+        ModifierStateChanged?.Invoke(this, e);
+    }
+
+    private void OnGlobalKeyDown(object? sender, System.Windows.Forms.KeyEventArgs e)
+    {
+        switch (e.KeyCode)
+        {
+            case Keys.LShiftKey or Keys.RShiftKey or Keys.Shift or Keys.ShiftKey:
+                if (IsShiftKeyPressed)
+                {
+                    return;
+                }
+
+                IsShiftKeyPressed = true;
+                break;
+            case Keys.LControlKey or Keys.RControlKey or Keys.ControlKey or Keys.Control:
+                if (IsCtrlKeyPressed)
+                {
+                    return;
+                }
+
+                IsCtrlKeyPressed = true;
+                break;
+            case Keys.Alt:
+                if (IsAltKeyPressed)
+                {
+                    return;
+                }
+
+                IsAltKeyPressed = true;
+                break;
+            default:
+                return;
+        }
+
+        IsShiftKeyPressedOnly = IsShiftKeyPressed && !IsCtrlKeyPressed && !IsAltKeyPressed;
+        IsAltKeyPressedOnly = IsAltKeyPressed && !IsCtrlKeyPressed && !IsShiftKeyPressed;
+        IsCtrlShiftOnlyPressed = IsShiftKeyPressed && IsCtrlKeyPressed && !IsAltKeyPressed;
+        IsCtrlAltOnlyPressed = IsShiftKeyPressed && !IsCtrlKeyPressed && IsAltKeyPressed;
+        IsAltShiftOnlyPressed = IsShiftKeyPressed && IsCtrlKeyPressed && !IsAltKeyPressed;
+
+        ModifierStateChanged?.Invoke(this, e);
+    }
+
+
+    public event EventHandler<System.Windows.Forms.KeyEventArgs>? ModifierStateChanged; 
 
     /// <summary>
-    /// Use for view state binding as observable. From the model, please use GetKeyState(Modifiers.None) instead.
+    /// Use for view state binding as observable.  To query as-Is from Model, use <see cref="IsNoModifierBeingHeld"/> 
     /// </summary>
     [ObservableProperty]    
     private bool _isNoModifierPressed = true;
 
     /// <summary>
-    /// Use for view state binding as observable. From the model, please use GetKeyState(Modifiers.Shift) instead.
+    /// Use for view state binding as observable. To query as-Is from Model, use <see cref="IsShiftBeingHeld"/> 
     /// </summary>
     [ObservableProperty]
     private bool _isShiftKeyPressed;
 
     /// <summary>
-    /// Use for view state binding as observable. From the model, please use GetKeyState(Modifiers.Shift, true) instead.
+    /// Use for view state binding as observable. To query as-Is from Model, use <see cref="IsShiftBeingHeld"/> 
     /// </summary>
     [ObservableProperty]
     private bool _isShiftKeyPressedOnly;
 
     /// <summary>
-    /// Use for view state binding as observable. From the model, please use GetKeyState twice, or call RefreshKeyStates first.
+    /// Use for view state binding as observable. To query as-Is from Model, use <see cref="IsShiftBeingHeld"/> and <see cref="IsCtrlBeingHeld"/>
     /// </summary>
     [ObservableProperty]
     private bool _isCtrlShiftOnlyPressed;
 
     /// <summary>
-    /// Use for view state binding as observable. From the model, please use GetKeyState twice, or call RefreshKeyStates first.
+    /// Use for view state binding as observable. To query as-Is from Model, use <see cref="IsShiftBeingHeld"/> and <see cref="IsAltBeingHeld"/>
     /// </summary>
     [ObservableProperty]
     private bool _isAltShiftOnlyPressed;
 
     /// <summary>
-    /// Use for view state binding as observable. From the model, please use GetKeyState twice, or call RefreshKeyStates first.
+    /// Use for view state binding as observable. To query as-Is from Model, use <see cref="IsAltBeingHeld"/> and <see cref="IsCtrlBeingHeld"/>
     /// </summary>
     [ObservableProperty]
     private bool _isCtrlAltOnlyPressed;
 
     /// <summary>
-    /// Use for view state binding as observable. From the model, please use GetKeyState(Modifiers.Alt) instead.
+    /// Use for view state binding as observable. To query as-Is from Model, use <see cref="IsAltBeingHeld"/>
     /// </summary>
     [ObservableProperty]
     private bool _isAltKeyPressed;
 
     /// <summary>
-    /// Use for view state binding as observable. From the model, please use GetKeyState(Modifiers.Alt, true) instead.
+    /// Use for view state binding as observable. To query as-Is from Model, use <see cref="IsAltBeingHeld"/>
     /// </summary>
     [ObservableProperty]
     private bool _isAltKeyPressedOnly;
 
     /// <summary>
-    /// Use for view state binding as observable. From the model, please use GetKeyState(Modifiers.Ctrl) instead.
+    /// Use for view state binding as observable. To query as-Is from Model, use <see cref="IsCtrlBeingHeld"/>
     /// </summary>
     [ObservableProperty]
     private bool _isCtrlKeyPressed;
 
     /// <summary>
-    /// Use for view state binding as observable. From the model, please use GetKeyState(Modifiers.Ctrl, true) instead.
+    /// Use for view state binding as observable. To query as-Is from Model, use <see cref="IsCtrlBeingHeld"/>
     /// </summary>
     [ObservableProperty]
     private bool _isCtrlKeyPressedOnly;
@@ -94,73 +178,6 @@ public partial class ModifierViewStateService() : ObservableObject, IModifierVie
     private static bool IsShiftBeingHeld => Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
     private static bool IsCtrlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
     private static bool IsAltBeingHeld => Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt);
-
-    private readonly Dictionary<Key, bool> _keyStates = [];
-
-    public void OnKeystateChanged(KeyEventArgs? e)
-    {
-        if (e is null || !IModifierViewStateService.ModifierKeys.Contains(e.Key))
-        {
-            return;
-        }
-        
-        // If the key state hasn't changed, ignore the event
-        if (_keyStates.TryGetValue(e.Key, out var value) && value == e.IsDown)
-        {
-            return;
-        }
-
-        RefreshModifierStates();
-    }
-
-    public void RefreshModifierStates(bool skipUpdate = false)
-    {
-        IsNoModifierPressed = !IsShiftBeingHeld && !IsCtrlBeingHeld && !IsAltBeingHeld;
-
-        IsCtrlKeyPressed = IsCtrlBeingHeld;
-        IsShiftKeyPressed = IsShiftBeingHeld;
-        IsAltKeyPressed = IsAltBeingHeld;
-        
-        IsCtrlKeyPressedOnly = IsCtrlBeingHeld && !IsShiftBeingHeld && !IsAltBeingHeld;
-        _keyStates[Key.LeftCtrl] = IsCtrlBeingHeld;
-        _keyStates[Key.RightCtrl] = IsCtrlBeingHeld;
-
-        IsShiftKeyPressedOnly = IsShiftBeingHeld && !IsCtrlBeingHeld && !IsAltBeingHeld;
-        _keyStates[Key.LeftShift] = IsShiftBeingHeld;
-        _keyStates[Key.RightShift] = IsShiftBeingHeld;
-
-        IsAltKeyPressedOnly = IsAltBeingHeld && !IsCtrlBeingHeld && !IsShiftBeingHeld;
-        _keyStates[Key.LeftAlt] = IsAltBeingHeld;
-        _keyStates[Key.RightAlt] = IsAltBeingHeld;
-
-        IsCtrlShiftOnlyPressed = IsShiftBeingHeld && IsCtrlBeingHeld && !IsAltBeingHeld;
-        IsCtrlAltOnlyPressed = IsShiftBeingHeld && !IsCtrlBeingHeld && IsAltBeingHeld;
-        IsAltShiftOnlyPressed = IsShiftBeingHeld && IsCtrlBeingHeld && !IsAltBeingHeld;
-
-        if (skipUpdate)
-        {
-            return;
-        }
-
-        ModifierStateChanged?.Invoke();
-    }
-
-    /// <summary>
-    /// In model, bind to this rather than the observable properties, as it'll refresh the internal states
-    /// </summary>
-    public bool GetModifierState(ModifierKeys key, bool noOtherModifiersPressed = false)
-    {
-        RefreshModifierStates(true);
-        return key switch
-        {
-            ModifierKeys.Alt => noOtherModifiersPressed ? IsAltKeyPressed : IsAltKeyPressedOnly,
-            ModifierKeys.Shift => noOtherModifiersPressed ? IsShiftKeyPressed : IsShiftKeyPressedOnly,
-            ModifierKeys.Control => noOtherModifiersPressed ? IsCtrlKeyPressed : IsCtrlKeyPressedOnly,
-            ModifierKeys.None => IsNoModifierPressed,
-            ModifierKeys.Windows => false,
-            _ => false
-        };
-    }
-
-    
+    public static bool IsNoModifierBeingHeld => !IsShiftBeingHeld && !IsCtrlBeingHeld && !IsAltBeingHeld;
+   
 }

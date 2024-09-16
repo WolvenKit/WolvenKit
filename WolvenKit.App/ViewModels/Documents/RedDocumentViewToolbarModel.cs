@@ -1,8 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Forms;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Splat;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
@@ -33,11 +36,12 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
         _modifierViewStateService = svc;
         svc.ModifierStateChanged += OnModifierChanged;
+        svc.PropertyChanged += (_, args) => OnPropertyChanged(args.PropertyName); 
 
         RefreshMenuVisibility(true);
     }
 
-    private void OnModifierChanged() => IsShiftKeyDown = _modifierViewStateService?.IsShiftKeyPressed ?? false;
+    private void OnModifierChanged(object? _, KeyEventArgs e) => IsShiftKeyDown = _modifierViewStateService?.IsShiftKeyPressed ?? false;
 
     private readonly IModifierViewStateService? _modifierViewStateService;
 
@@ -45,15 +49,13 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [ObservableProperty] private EditorDifficultyLevel _editorLevel;
 
     public ChunkViewModel? RootChunk { get; private set; }
-    [ObservableProperty] private ChunkViewModel? _selectedChunk;
-    public List<ChunkViewModel> SelectedChunks { get; } = [];
 
     public string? FilePath => CurrentTab?.FilePath;
     public CR2WFile? Cr2WFile => CurrentTab?.Parent.Cr2wFile;
 
     [ObservableProperty] private bool _showToolbar;
 
-    [ObservableProperty] private RedDocumentItemType _contentType;
+    [ObservableProperty] private bool _isMesh;
 
     public void RefreshMenuVisibility(bool forceRefreshContentType = false)
     {
@@ -89,6 +91,8 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
         SelectedChunk = null;
         RootChunk = null;
+
+        IsMesh = ContentType is RedDocumentItemType.Mesh;
         
         if (CurrentTab is RDTDataViewModel rtdViewModel)
         {
@@ -111,6 +115,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         {
             return;
         }
+
         SelectedChunk = (ChunkViewModel?)dataViewModel.SelectedChunk;
         SelectedChunks.Clear();
         if (dataViewModel.SelectedChunks is IList list)
@@ -119,34 +124,47 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         }
 
         RefreshMeshMenuItems();
+
+        SelectedChunk ??= RootChunk;
     }
+
+
+    [NotifyCanExecuteChangedFor(nameof(DeleteEmptySubmeshesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(DeleteDuplicateEntriesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(RegenerateVisibleControllersCommand))]
+    [NotifyCanExecuteChangedFor(nameof(DeleteUnusedMaterialsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(GenerateMissingMaterialsCommand))]
+    [ObservableProperty]
+    private RedDocumentItemType _contentType;
     
     [ObservableProperty] private bool _isFileValidationMenuVisible;
 
-    [ObservableProperty] private bool _isMaterialDefinition;
-    [ObservableProperty] private bool _isScrollToMaterialCommandEnabled;
     [ObservableProperty] private bool _isConvertMaterialMenuEnabled;
-    [ObservableProperty] private bool _isDeleteUnusedMaterialCommandEnabled;
-    
-    [ObservableProperty] private bool _isGenerateNewCruidCommandEnabled;
 
-    [ObservableProperty] private bool _isAddDependenciesCommandEnabled;
-    [ObservableProperty] private bool _isGenerateMissingMaterialCommandEnabled;
-    [ObservableProperty] private bool _isRegenerateVisualControllersCommandEnabled;
-    
+    [NotifyCanExecuteChangedFor(nameof(AddDependenciesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddDependenciesFullCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ClearMaterialsCommand))]
     [ObservableProperty] private bool _isShiftKeyDown;
 
+    [NotifyCanExecuteChangedFor(nameof(AddDependenciesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddDependenciesFullCommand))]
+    [NotifyCanExecuteChangedFor(nameof(GenerateNewCruidCommand))]
+    [NotifyCanExecuteChangedFor(nameof(RegenerateVisibleControllersCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ClearMaterialsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ToggleEnableMaskCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ScrollToMaterialCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ToggleLocalInstanceCommand))]
+    [NotifyCanExecuteChangedFor(nameof(DeleteDuplicateEntriesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(DeleteUnusedMaterialsCommand))]
+    [ObservableProperty]
+    private ChunkViewModel? _selectedChunk;
+
+    private List<ChunkViewModel> SelectedChunks { get; } = [];
 
     private void RefreshMeshMenuItems()
     {
         IsFileValidationMenuVisible = false;
         IsConvertMaterialMenuEnabled = false;
-        IsGenerateMissingMaterialCommandEnabled = false;
-        IsDeleteUnusedMaterialCommandEnabled = false;
-        IsRegenerateVisualControllersCommandEnabled = false;
-        IsScrollToMaterialCommandEnabled = false;
-        IsGenerateNewCruidCommandEnabled = false;
-        IsMaterialDefinition = false;
 
         IsShiftKeyDown = _modifierViewStateService?.IsShiftKeyPressed ?? false;
 
@@ -154,18 +172,6 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         {
             return;
         }
-
-        IsRegenerateVisualControllersCommandEnabled = SelectedChunk is { Name: "components", Data: CArray<entIComponent> };
-
-        IsGenerateNewCruidCommandEnabled = SelectedChunk?.PropertyType == typeof(CRUID);
-        IsMaterialDefinition = SelectedChunk?.IsMaterialDefinition() == true;
-
-        _modifierViewStateService?.RefreshModifierStates();
-
-        var enableDependencyCommand =
-            CurrentTab?.GetContentType() is RedDocumentItemType.Mesh or RedDocumentItemType.Mi or RedDocumentItemType.Mlsetup;
-
-        IsAddDependenciesCommandEnabled = enableDependencyCommand;
 
         IsFileValidationMenuVisible = true;
         
@@ -175,21 +181,97 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         }
 
         IsConvertMaterialMenuEnabled = mesh.PreloadExternalMaterials.Count > 0 || mesh.PreloadLocalMaterialInstances.Count > 0;
-        IsGenerateMissingMaterialCommandEnabled = mesh.Appearances.Count > 0;
-        IsDeleteUnusedMaterialCommandEnabled = mesh.Appearances.Count > 0 || mesh.MaterialEntries.Count > 0;
-        IsScrollToMaterialCommandEnabled = SelectedChunk?.ShowScrollToMaterial == true;
     }
 
-    public void SetCurrentTab(RedDocumentTabViewModel value)
+    public void SetCurrentTab(RedDocumentTabViewModel? value)
     {
         CurrentTab = value;
         RefreshMenuVisibility();
     }
-
 
     public void SetEditorLevel(EditorDifficultyLevel level)
     {
         EditorLevel = level;
         RootChunk?.SetEditorLevel(level);
     }
+
+    private bool HasDependencies() => ContentType is RedDocumentItemType.Mesh or RedDocumentItemType.Mi or RedDocumentItemType.Mlsetup;
+
+    public event EventHandler? OnAddDependencies;
+
+    #region commands
+
+    private bool CanAddDependencies() => HasDependencies() && !IsShiftKeyDown;
+
+    [RelayCommand(CanExecute = nameof(CanAddDependencies))]
+    private void AddDependencies() => OnAddDependencies?.Invoke(this, EventArgs.Empty);
+
+    private bool CanAddDependenciesFull() => HasDependencies() && IsShiftKeyDown;
+
+    [RelayCommand(CanExecute = nameof(CanAddDependenciesFull))]
+    private void AddDependenciesFull() => OnAddDependencies?.Invoke(this, EventArgs.Empty);
+
+    private bool CanGenerateNewCruid() => SelectedChunk?.PropertyType == typeof(CRUID);
+
+    [RelayCommand(CanExecute = nameof(CanGenerateNewCruid))]
+    private void GenerateNewCruid() => SelectedChunk?.GenerateCRUIDCommand.Execute(null);
+
+    private bool CanRegenerateVisibleControllers() => SelectedChunk is { Name: "components", Data: CArray<entIComponent> };
+
+    [RelayCommand(CanExecute = nameof(CanRegenerateVisibleControllers))]
+    private void RegenerateVisibleControllers() => SelectedChunk?.RegenerateVisualControllerCommand.Execute(null);
+
+    private bool CanDeleteDuplicateEntries() => ContentType is RedDocumentItemType.Json;
+
+    [RelayCommand(CanExecute = nameof(CanDeleteDuplicateEntries))]
+    private void DeleteDuplicateEntries() => SelectedChunk?.DeleteDuplicateEntriesCommand.Execute(null);
+
+    private bool CanDeleteEmptySubmeshes() => ContentType is RedDocumentItemType.Mesh;
+
+    [RelayCommand(CanExecute = nameof(CanDeleteEmptySubmeshes))]
+    private void DeleteEmptySubmeshes() => SelectedChunk?.DeleteEmptySubmeshesCommand.Execute(null);
+
+    private bool CanScrollToMaterial() => SelectedChunk?.ShowScrollToMaterial == true;
+
+    [RelayCommand(CanExecute = nameof(CanScrollToMaterial))]
+    private void ScrollToMaterial() => SelectedChunk?.ScrollToMaterialCommand.Execute(null);
+
+    private bool CanToggleEnableMask() => SelectedChunk?.ResolvedData is CMaterialInstance or CArray<IMaterial>;
+
+    [RelayCommand(CanExecute = nameof(CanToggleEnableMask))]
+    private void ToggleEnableMask() => SelectedChunk?.ToggleEnableMaskedCommand.Execute(null);
+
+
+    private bool CanClearAppearances() => SelectedChunk?.CanClearMaterials() == true;
+
+    private bool HasMeshAppearances() => RootChunk?.ResolvedData is CMesh mesh && mesh.Appearances.Count > 0;
+
+    [RelayCommand(CanExecute = nameof(CanClearAppearances))]
+    private void ClearMaterials() => SelectedChunk?.ClearMaterialsCommand.Execute(null);
+
+    public bool IsMaterialDefinition() => SelectedChunk?.IsMaterialDefinition() == true;
+
+    [RelayCommand(CanExecute = nameof(IsMaterialDefinition))]
+    private void ToggleLocalInstance()
+    {
+        foreach (var chunk in SelectedChunks)
+        {
+            chunk.ToggleMaterialDefinitionIsExternalCommand.Execute(null);
+        }
+
+        SelectedChunks.LastOrDefault()?.Parent?.RecalculateProperties();
+    }
+
+    private bool CanDeleteUnusedMaterials() => RootChunk?.ResolvedData is CMesh mesh && mesh.MaterialEntries.Count > 0;
+
+    [RelayCommand(CanExecute = nameof(CanDeleteUnusedMaterials))]
+    private void DeleteUnusedMaterials() => SelectedChunk?.DeleteUnusedMaterialsCommand.Execute(null);
+
+    [RelayCommand(CanExecute = nameof(HasMeshAppearances))]
+    private void GenerateMissingMaterials()
+    {
+        // Do nothing, we just need the command for the hook. Logic will trigger from view's OnClick
+    }
+
+    #endregion
 }

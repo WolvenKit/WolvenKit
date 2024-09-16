@@ -390,11 +390,7 @@ public class RED4Controller : ObservableObject, IGameController
             throw new WolvenKitException(0x5001, "No game executable set");
         }
 
-
         var arguments = $"{_settingsManager.GetRED4GameLaunchOptions()} {options.GameArguments ?? ""}";
-
-
-        _modifierService.RefreshModifierStates();
 
         // Shift prevents save game load (CET doesn't initialize
         if (!_modifierService.IsShiftKeyPressed && options.LoadLastSave && ISettingsManager.GetLastSaveName() is string lastSavegame)
