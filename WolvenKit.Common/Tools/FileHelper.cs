@@ -72,6 +72,10 @@ public class FileHelper
 
     public static void MoveRecursively(string sourceDir, string destinationDir, bool overwrite, ILoggerService? logger = null)
     {
+        if (Path.GetDirectoryName(destinationDir) == sourceDir)
+        {
+            return;
+        }
         try
         {
             if (!Directory.EnumerateFiles(sourceDir).Any())

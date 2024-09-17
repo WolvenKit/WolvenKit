@@ -265,7 +265,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     private bool CanDeleteUnusedMaterials() => RootChunk?.ResolvedData is CMesh mesh && mesh.MaterialEntries.Count > 0;
 
     [RelayCommand(CanExecute = nameof(CanDeleteUnusedMaterials))]
-    private void DeleteUnusedMaterials() => SelectedChunk?.DeleteUnusedMaterialsCommand.Execute(null);
+    private void DeleteUnusedMaterials() => RootChunk?.DeleteUnusedMaterialsCommand.Execute(null);
 
     [RelayCommand(CanExecute = nameof(HasMeshAppearances))]
     private void GenerateMissingMaterials()

@@ -265,7 +265,8 @@
 
             <ContextMenu x:Key="TreeViewContextMenu"
                          Name="TreeViewContextMenu"
-                         DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}">
+                         DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}"
+                         Opened="TreeViewContextMenu_OnOpened">
                
                 <ContextMenu.Resources>
                     <Style TargetType="MenuItem">
@@ -1033,8 +1034,6 @@
         VirtualizingPanel.IsVirtualizing="True"
         VirtualizingPanel.ScrollUnit="Pixel"
         VirtualizingPanel.VirtualizationMode="Recycling"
-        ItemContextMenuOpening="TreeView_OnItemContextMenuOpening"
-        ContextMenuOpening="TreeView_OnContextMenuOpening"
         Visibility="Visible">
         <!--
             LoadOnDemandCommand="{Binding OnDemandLoadingCommand}"

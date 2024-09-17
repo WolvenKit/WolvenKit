@@ -408,7 +408,6 @@ namespace WolvenKit.Views.Tools
             var expansionStates = chunk.GetAllProperties().Select((child) => child.IsExpanded).ToList();
             chunk.SetChildExpansionStates(!expansionStates.Contains(true));
 
-
             chunk.IsExpanded = expansionState;
         }
 
@@ -422,15 +421,7 @@ namespace WolvenKit.Views.Tools
             return selection.OfType<ChunkViewModel>().ToList().FirstOrDefault((cvm) => cvm.Parent is null);
         }
 
-        private void TreeView_OnItemContextMenuOpening(object sender, ItemContextMenuOpeningEventArgs e)
-        {
-            if (SelectedItem is ChunkViewModel cvm)
-            {
-                cvm.RefreshContextMenuFlags();
-            }
-        }
-
-        private void TreeView_OnContextMenuOpening(object sender, ContextMenuEventArgs e)
+        private void TreeViewContextMenu_OnOpened(object sender, RoutedEventArgs e)
         {
             if (SelectedItem is ChunkViewModel cvm)
             {
