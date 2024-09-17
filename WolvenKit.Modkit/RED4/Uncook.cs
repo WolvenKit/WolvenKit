@@ -105,7 +105,16 @@ namespace WolvenKit.Modkit.RED4
                 {
                     try
                     {
-                        var jsonOutput = SerializeMainFile(cr2WStream);
+                        string jsonOutput;
+                        if (extension == ".opusinfo")
+                        {
+                            jsonOutput = SerializeOpus(cr2WStream);
+                        }
+                        else
+                        {
+                            jsonOutput = SerializeMainFile(cr2WStream);
+                        }
+
                         var outpath = Path.Combine(outDir.FullName, $"{relFileFullName.Replace('\\', Path.DirectorySeparatorChar)}.json");
                         File.WriteAllText(outpath, jsonOutput);
                         return true;
@@ -785,6 +794,13 @@ namespace WolvenKit.Modkit.RED4
             }
 
             return OpusTools.ExportOpusUsingHash(opusinfo, _archiveManager, opusExportArgs.SelectedForExport, opusExportArgs.UseMod, opusExportArgs.UseProject, rawOutDir);
+        }
+
+
+        private static string SerializeOpus(Stream stream)
+        {
+            var opusinfo = new OpusInfo(stream);
+            return JsonConvert.SerializeObject(opusinfo);
         }
 
         private string SerializeMainFile(Stream redstream)

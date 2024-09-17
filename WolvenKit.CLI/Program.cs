@@ -4,6 +4,7 @@ using System.CommandLine.Builder;
 using System.CommandLine.Hosting;
 using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using CP77Tools.Commands;
 using CP77Tools.Tasks;
@@ -29,7 +30,7 @@ internal class Program
             return ConsoleFunctions.ERROR_GENERAL_ERROR;
         }
 
-        if (Core.NativeMethods.RtlAreLongPathsEnabled() == 0)
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Core.NativeMethods.RtlAreLongPathsEnabled() == 0)
         {
             // TODO: Use logger for that. Tried it as middleware but doesn't get called at all then -.-
             var text = "Long path support is disabled in your OS!" + Environment.NewLine +
