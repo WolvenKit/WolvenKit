@@ -35,7 +35,7 @@
                 <DataTemplate x:Key="DetailedHeaderTemplate">
                     <StackPanel Orientation="Vertical">
                         <TextBlock Margin="0" Text="{Binding Title}" />
-                        <ItemsControl ItemsSource="{Binding Details}">
+                        <ItemsControl ItemsSource="{Binding Details}" Visibility="{Binding Visible}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel MaxWidth="1000" Orientation="Horizontal">

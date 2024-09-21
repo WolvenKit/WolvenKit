@@ -1,4 +1,5 @@
-﻿using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
+﻿using WolvenKit.App.Extensions;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
@@ -7,6 +8,7 @@ public class questSwitchNodeDefinitionWrapper : questDisableableNodeDefinitionWr
 {
     public questSwitchNodeDefinitionWrapper(questSwitchNodeDefinition questSwitchNodeDefinition) : base(questSwitchNodeDefinition)
     {
+        Details.AddRange(NodeProperties.GetPropertiesFor(questSwitchNodeDefinition));
     }
 
     internal override void CreateDefaultSockets()

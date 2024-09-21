@@ -17,6 +17,7 @@ using WolvenKit.App.ViewModels.GraphEditor;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 using WolvenKit.App.ViewModels.Shell;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace WolvenKit.Views.GraphEditor;
 /// <summary>
@@ -277,6 +278,9 @@ public partial class GraphEditorView : UserControl
             node.ContextMenu.Items.Add(CreateMenuItem("Add Scene To Project", () => sceneNode.AddSceneToProject()));
             node.ContextMenu.Items.Add(new Separator());
         }
+
+        node.ContextMenu.Items.Add(CreateMenuItem("Toggle details", () => nvm.ToggleDetails()));
+        node.ContextMenu.Items.Add(new Separator());
 
         node.ContextMenu.Items.Add(CreateMenuItem("Remove Node", () => Source.RemoveNode(nvm)));
 

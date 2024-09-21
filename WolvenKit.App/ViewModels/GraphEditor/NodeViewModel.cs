@@ -20,6 +20,7 @@ public abstract partial class NodeViewModel : ObservableObject, IDisposable
 
     public string Title { get; protected set; } = null!;
     public Dictionary<string, string> Details { get; } = new();
+    public Visibility Visible { get; set; } = Visibility.Visible;
 
     public ObservableCollection<InputConnectorViewModel> Input { get; } = new();
     public ObservableCollection<OutputConnectorViewModel> Output { get; } = new();
@@ -42,6 +43,20 @@ public abstract partial class NodeViewModel : ObservableObject, IDisposable
     }
 
     internal abstract void GenerateSockets();
+
+    public void ToggleDetails()
+    {
+        if (Visible == Visibility.Visible)
+        {
+            Visible = Visibility.Collapsed;
+        }
+        else
+        {
+            Visible = Visibility.Visible;
+        }
+
+        OnPropertyChanged(nameof(Visible));
+    }
 
 
     #region IDisposable

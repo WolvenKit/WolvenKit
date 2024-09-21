@@ -34,6 +34,7 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>
     {
         Input.Clear();
         Input.Add(new SceneInputConnectorViewModel("In", "In", UniqueId, 0));
+        Input.Add(new SceneInputConnectorViewModel("CutDestination", "CutDestination", UniqueId, 1));
 
         Output.Clear();
         for (var i = 0; i < _castedData.OutputSockets.Count; i++)
