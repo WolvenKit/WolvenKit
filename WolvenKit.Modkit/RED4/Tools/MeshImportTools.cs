@@ -297,6 +297,9 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
+            // https://github.com/WolvenKit/WolvenKit/issues/1870
+            rendBlob.Header.OpacityMicromaps.Clear();
+            
             var originalRig = args.Rig?.FirstOrDefault();
 
             if (File.Exists(Path.ChangeExtension(inGltfFile.FullName, ".Material.json")) && (args.ImportMaterialOnly || args.ImportMaterials))
