@@ -86,7 +86,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         Parent = parent;
     }
 
-    private void ModifierStateChanged(object? sender, KeyEventArgs keyEventArgs) => IsCtrlKeyPressed = _modifierSvc.IsCtrlKeyPressed;
+    private void ModifierStateChanged(object? _, Key k) => IsCtrlKeyPressed = _modifierSvc.IsCtrlKeyPressed;
 
     // TODO refactor this into inherited viewmodels
 

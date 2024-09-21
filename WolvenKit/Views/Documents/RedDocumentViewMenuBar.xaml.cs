@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms;
+using System.Windows.Input;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App;
@@ -69,7 +69,7 @@ namespace WolvenKit.Views.Documents
             });
         }
 
-        private void OnModifierStateChanged(object? sender, KeyEventArgs keyEventArgs) => RefreshChildMenuItems();
+        private void OnModifierStateChanged(object? _, Key k) => RefreshChildMenuItems();
 
         private RedDocumentTabViewModel? _currentTab;
 

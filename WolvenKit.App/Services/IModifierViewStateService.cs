@@ -33,5 +33,8 @@ public interface IModifierViewStateService: INotifyPropertyChanged
     public abstract bool IsCtrlShiftOnlyPressed { get; }
     public abstract bool IsCtrlAltOnlyPressed { get; }
     public abstract bool IsAltShiftOnlyPressed { get; }
-    public abstract event EventHandler<System.Windows.Forms.KeyEventArgs>? ModifierStateChanged;
+    public abstract event EventHandler<Key>? ModifierStateChanged;
+
+    void OnKeyUp(object sender, Key e);
+    void OnKeyDown(object sender, Key e);
 }
