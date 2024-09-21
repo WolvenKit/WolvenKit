@@ -168,7 +168,6 @@ namespace WolvenKit.Views.Tools
             //    e.Cancel = true;
         }
 
-
         public bool IsControlBeingHeld
         {
             get => (bool)GetValue(IsControlBeingHeldProperty);
