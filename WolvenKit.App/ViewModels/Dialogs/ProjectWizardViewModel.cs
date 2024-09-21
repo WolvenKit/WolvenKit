@@ -34,8 +34,19 @@ public partial class ProjectWizardViewModel : DialogViewModel
 
         _projectType = new ObservableCollection<string> { "Cyberpunk 2077" };
 
+        string? lastProjectPath;
+        if (_settingsManager.LastUsedProjectPath is not null &&
+            Path.GetDirectoryName(Path.GetDirectoryName(_settingsManager.LastUsedProjectPath)) is string s &&
+            Directory.Exists(s))
+        {
+            lastProjectPath = s;
+        }
+        else
+        {
+            lastProjectPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        }
         // project path
-        _projectPath = _settingsManager.LastUsedProjectPath ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        _projectPath = _settingsManager.DefaultProjectPath ?? lastProjectPath;
     }
 
     #endregion Constructors

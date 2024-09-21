@@ -44,6 +44,7 @@ public class RED4Controller : ObservableObject, IGameController
     private readonly IProgressService<double> _progressService;
     private readonly IPluginService _pluginService;
     private readonly Red4ParserService _parserService;
+    private readonly IModifierViewStateService _modifierService;
 
     private bool _initialized = false;
 
@@ -59,6 +60,7 @@ public class RED4Controller : ObservableObject, IGameController
         IAppArchiveManager gameArchiveManager,
         IProgressService<double> progressService,
         IPluginService pluginService,
+        IModifierViewStateService modifierService,
         Red4ParserService parserService)
     {
         _notificationService = notificationService;
@@ -70,6 +72,7 @@ public class RED4Controller : ObservableObject, IGameController
         _archiveManager = gameArchiveManager;
         _progressService = progressService;
         _pluginService = pluginService;
+        _modifierService = modifierService;
         _parserService = parserService;
     }
 
@@ -189,19 +192,19 @@ public class RED4Controller : ObservableObject, IGameController
             _notificationService.Error("The Red Hot Tools plugin is not installed and is needed for this functionality.\nYou can install the plugin from the WolvenKit settings,");
         }
 
-        var hotdirectory = Path.Combine(_settingsManager.GetRED4GameRootDir(), "archive", "pc", "hot");
+        var hotDirectory = Path.Combine(_settingsManager.GetRED4GameRootDir(), "archive", "pc", "hot");
 
         // create hot directory
-        if (!Directory.Exists(hotdirectory))
+        if (!Directory.Exists(hotDirectory))
         {
-            Directory.CreateDirectory(hotdirectory);
-            _loggerService.Info($"Created hot directory at {hotdirectory}");
+            Directory.CreateDirectory(hotDirectory);
+            _loggerService.Info($"Created hot directory at {hotDirectory}");
         }
 
         var gameDirectoryInfo = new DirectoryInfo(_settingsManager.GetRED4GameRootDir());
         var packedDirectoryInfo = new DirectoryInfo(currentProject.PackedRootDirectory);
 
-        if (!await PackProjectFiles(new LaunchProfile(), currentProject))
+        if (!await PackProjectFiles(new LaunchProfile { Install = true }, currentProject))
         {
             return false;
         }
@@ -210,12 +213,12 @@ public class RED4Controller : ObservableObject, IGameController
         {
             return false;
         }
-
+        
         // Clean all residual files
         CleanAll();
 
-        _loggerService.Success($"{currentProject.ModName} packed into {hotdirectory}");
-        _notificationService.Success($"{currentProject.ModName} packed into {hotdirectory}");
+        _loggerService.Success($"{currentProject.ModName} packed into {hotDirectory}");
+        _notificationService.Success($"{currentProject.ModName} packed into {hotDirectory}");
 
         return true;
     }
@@ -352,7 +355,7 @@ public class RED4Controller : ObservableObject, IGameController
         {
             return false;
         }
-
+        
         // backup
         if (options.CreateZipFile && !CreateZipfile(cp77Proj, false))
         {
@@ -387,18 +390,23 @@ public class RED4Controller : ObservableObject, IGameController
             throw new WolvenKitException(0x5001, "No game executable set");
         }
 
-
         var arguments = $"{_settingsManager.GetRED4GameLaunchOptions()} {options.GameArguments ?? ""}";
-        
-        if (options.LoadLastSave && ISettingsManager.GetLastSaveName() is string lastSavegame)
+
+        // Shift prevents save game load (CET doesn't initialize
+        if (!_modifierService.IsShiftKeyPressed && options.LoadLastSave && ISettingsManager.GetLastSaveName() is string lastSavegame)
         {
-            arguments = $"{arguments} -save={lastSavegame}";
+            arguments = $"{arguments} -save={lastSavegame}";            
         }
-        else if (options.LoadSaveName is string savegame)
+        else if (!_modifierService.IsShiftKeyPressed && options.LoadSaveName is string savegame)
         {
             arguments = $"{arguments} -save={savegame}";
         }
-        
+
+        // -save can come from the launch options, or from the user settings 
+        if (arguments.Contains("-save"))
+        {
+            _loggerService.Warning("Warning: Loading a save via start-up options may break CET entity spawn!");
+        }
         try
         {
             Process.Start(new ProcessStartInfo
@@ -465,9 +473,21 @@ public class RED4Controller : ObservableObject, IGameController
         
         // copy files to packed dir
         // pack archives
-        var modfiles = Directory.EnumerateFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories);
+        var modfiles = Directory.EnumerateFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories).ToList();
         if (modfiles.Any())
         {
+            var invalidFiles = modfiles
+                .Select(f => Path.GetRelativePath(cp77Proj.ModDirectory, f))
+                .Where(f => f.Any(char.IsUpper) || f.Any(char.IsWhiteSpace)).ToList();
+            if (invalidFiles.Count != 0)
+            {
+                _loggerService.Error("Capital letters and/or whitespaces found (this may cause issues):");
+                foreach (var filePath in invalidFiles)
+                {
+                    _loggerService.Error($"\t {filePath}");
+                }
+            }
+            
             if (!await Task.Run(() => PackArchives(cp77Proj, options)))
             {
                 _progressService.IsIndeterminate = false;
@@ -510,7 +530,7 @@ public class RED4Controller : ObservableObject, IGameController
         }
 
         // pack redmod files
-        if (!options.DeployWithRedmod)
+        if (!options.DeployWithRedmod && !(options is { CreateZipFile: true, IsRedmod: true }))
         {
             return true;
         }
@@ -658,7 +678,7 @@ public class RED4Controller : ObservableObject, IGameController
 
         // tweaks
         var files = GetTweakFiles(cp77Proj);
-        if (files.Any())
+        if (files.Count != 0)
         {
             foreach (var file in files)
             {
@@ -679,24 +699,27 @@ public class RED4Controller : ObservableObject, IGameController
 
         // scripts
         files = GetScriptFiles(cp77Proj);
-        if (files.Any())
+        if (files.Count == 0)
         {
-            foreach (var file in files)
-            {
-                var fileName = Path.GetFileName(file);
-                var fileRelativeDir = Path.GetRelativePath(cp77Proj.ResourcesDirectory, Path.GetDirectoryName(file).NotNull());
-                var fileOutputDir = Path.Combine(cp77Proj.PackedRedModDirectory, fileRelativeDir);
-                var fileOutputPath = Path.Combine(fileOutputDir, fileName);
-                if (!Directory.Exists(fileOutputDir))
-                {
-                    Directory.CreateDirectory(fileOutputDir);
-                }
-
-                // copy files, with overwriting
-                File.Copy(file, fileOutputPath, true);
-            }
-            _loggerService.Info($"{cp77Proj.Name} redmod script files packed into {cp77Proj.PackedRedModDirectory}");
+            return true;
         }
+
+        foreach (var file in files)
+        {
+            var fileName = Path.GetFileName(file);
+            var fileRelativeDir = Path.GetRelativePath(cp77Proj.ResourcesDirectory, Path.GetDirectoryName(file).NotNull());
+            var fileOutputDir = Path.Combine(cp77Proj.PackedRedModDirectory, fileRelativeDir);
+            var fileOutputPath = Path.Combine(fileOutputDir, fileName);
+            if (!Directory.Exists(fileOutputDir))
+            {
+                Directory.CreateDirectory(fileOutputDir);
+            }
+
+            // copy files, with overwriting
+            File.Copy(file, fileOutputPath, true);
+        }
+
+        _loggerService.Info($"{cp77Proj.Name} redmod script files packed into {cp77Proj.PackedRedModDirectory}");
 
         return true;
     }

@@ -45,11 +45,8 @@ public static class CommonFunctions
     /// <exception cref="ArgumentException"></exception>
     public static XbmImportArgs TextureSetupFromTextureGroup(GpuWrapApieTextureGroup textureGroup)
     {
-        var outSetup = new XbmImportArgs
-        {
-            TextureGroup = textureGroup,
-            IsGamma = textureGroup is GpuWrapApieTextureGroup.TEXG_Generic_Color or GpuWrapApieTextureGroup.TEXG_Multilayer_Color or GpuWrapApieTextureGroup.TEXG_Generic_UI
-        };
+        var outSetup = new XbmImportArgs(textureGroup);
+        
 
         switch (textureGroup)
         {

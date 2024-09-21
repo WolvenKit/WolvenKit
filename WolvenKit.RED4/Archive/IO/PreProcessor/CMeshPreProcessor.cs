@@ -165,7 +165,7 @@ public class CMeshPreProcessor : IPreProcessor
         void CheckMaterialProperties(CMaterialInstance material, string materialName)
         {
             // TODO: Make null-proof and use, or delete :D
-            var shaderName = material.BaseMaterial.DepotPath.ToString();
+            var shaderName = material.BaseMaterial.DepotPath.GetResolvedText();
             // We could have a dictionary like
             // {
             //    "metal_base.remt": {

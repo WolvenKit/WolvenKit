@@ -126,7 +126,7 @@
                         Style="{StaticResource ButtonDefault}"
                         ToolTip="Scan installed archives for unresolved depot paths"
                         Visibility="{Binding IsModBrowserEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <iconPacks:PackIconCodicons Kind="Search" />
+                        <iconPacks:PackIconMaterial Kind="CrosshairsQuestion" />
                     </Button>
                 </Grid>
 

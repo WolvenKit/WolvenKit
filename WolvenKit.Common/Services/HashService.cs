@@ -27,6 +27,8 @@ namespace WolvenKit.Common.Services
         private const string s_tweakDbStr = "WolvenKit.Common.Resources.tweakdbstr.kark";
         private const string s_missing = "WolvenKit.Common.Resources.missinghashes.json";
 
+        private static readonly int _maxDoP = Environment.ProcessorCount > 2 ? (Environment.ProcessorCount - 2) : 1;
+
         private readonly Dictionary<ulong, SAsciiString> _hashes = new();
 
         private Dictionary<ulong, string> _missing = new();
@@ -158,7 +160,7 @@ namespace WolvenKit.Common.Services
 
             Parallel.ForEach(collection.GetConsumingEnumerable(), new ParallelOptions
             {
-                MaxDegreeOfParallelism = Environment.ProcessorCount - 2
+                MaxDegreeOfParallelism = _maxDoP,
             }, lineAction);
 
             readerTask.Wait();

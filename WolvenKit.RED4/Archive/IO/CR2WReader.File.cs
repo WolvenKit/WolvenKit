@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using WolvenKit.Core.Extensions;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
@@ -12,7 +13,7 @@ public partial class CR2WReader
     private CR2WFile _cr2wFile => (CR2WFile)_outputFile;
     private bool _parseBuffer;
 
-    public EFileReadErrorCodes ReadFileInfo(out CR2WFileInfo? info)
+    public EFileReadErrorCodes ReadFileInfo(out CR2WFileInfo? info, ILoggerService? logger = null)
     {
         var id = BaseStream.ReadStruct<uint>();
         if (id != CR2WFile.MAGIC)
@@ -60,7 +61,7 @@ public partial class CR2WReader
 
         foreach (var importInfo in info.ImportInfo)
         {
-            var import = ReadImport(importInfo, info.StringDict);
+            var import = ReadImport(importInfo, info.StringDict, logger);
 
             info.Imports.Add(import);
             _importsList.Add(import);
@@ -185,12 +186,17 @@ public partial class CR2WReader
 
     private CName ReadName(CR2WNameInfo info, Dictionary<uint, string> stringDict) => !stringDict.ContainsKey(info.offset) ? throw new TodoException() : stringDict[info.offset];
 
-    private CR2WImport ReadImport(CR2WImportInfo info, IDictionary<uint, string> stringDict)
+    private CR2WImport ReadImport(CR2WImportInfo info, IDictionary<uint, string> stringDict, ILoggerService? logger = null)
     {
+        if (!stringDict.TryGetValue(info.offset, out var depotPath))
+        {
+            logger?.Error($"Failed to read info for {info.className} (no offset ${info.offset} in list)");
+        }
+        
         var ret = new CR2WImport
         {
             ClassName = _namesList[info.className]!,
-            DepotPath = stringDict[info.offset],
+            DepotPath = depotPath ?? string.Empty,
             Flags = (InternalEnums.EImportFlags)info.flags
         };
 

@@ -60,6 +60,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(AnalyzeModArchives),
             nameof(ExtraModDirPath),
             nameof(LastUsedProjectPath),
+            nameof(DefaultProjectPath),
             nameof(PinnedOrder),
             nameof(RecentOrder),
             nameof(ShowGraphEditorNodeProperties),
@@ -68,7 +69,9 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(RefactoringCheckboxDefaultValue),
             nameof(LastLaunchProfile),
             nameof(ShowRedmodInRibbon),
-            nameof(UseValidatingEditor)
+            nameof(UseValidatingEditor),
+            nameof(ReopenLastProject),
+            nameof(ShowVerboseLogOutput)
             )
           .Subscribe(_ =>
           {
@@ -241,7 +244,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
 
     [Display(Name = "Game language used for LocKeys", GroupName = "Display")] 
     [ObservableProperty]
-    private EGameLanguage _gameLanguage;
+    private EGameLanguage _gameLanguage = EGameLanguage.en_us;
 
     [Display(Name = "Show Graph Editor Node Properties", GroupName = "Display")]
     [ObservableProperty]
@@ -277,9 +280,31 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [ObservableProperty]
     private bool _useValidatingEditor;
 
+    [Display(Name = "Open last project on launch?",
+        Description = "Will re-open the last project",
+        GroupName = "Interface")]
+    [ObservableProperty]
+    private bool _reopenLastProject;
+
+    [Display(Name = "Show verbose log output",
+        Description = "Will give you all the information",
+        GroupName = "Interface")]
+    [ObservableProperty]
+    private bool _showVerboseLogOutput;
+
+    [Display(Name = "Exclude archives from scan by name (comma separated)",
+        Description = "Exclude archives from scan if you know that they'll lead to exceptions (only the base name)",
+        GroupName = "Interface")]
+    [ObservableProperty]
+    private string _archiveNamesExcludeFromScan = "basegame_AMM_Props";
+
     [Display(Name = "Additional Mod directory", Description = "Path to an optional directory containing mod archives", GroupName = "Cyberpunk")]
     [ObservableProperty]
     private string? _extraModDirPath;
+
+    [Display(Name = "Default project path", Description = "Path to the directory where you store your mods", GroupName = "General")]
+    [ObservableProperty]
+    private string? _defaultProjectPath;
 
     [Display(Name = "Your name", Description = "Will be used for project properties on creation", GroupName = "General")]
     [ObservableProperty]

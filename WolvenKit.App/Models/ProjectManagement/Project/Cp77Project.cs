@@ -2,15 +2,25 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Primitives;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
+using WolvenKit.App.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Core.Extensions;
+using WolvenKit.Core.Interfaces;
+using WolvenKit.Core.Services;
+using WolvenKit.Modkit.RED4.Serialization;
+using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.Archive.IO;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Models.ProjectManagement.Project;
 
-public sealed class Cp77Project(string location, string name, string modName) : IEquatable<Cp77Project>, ICloneable
+public sealed partial class Cp77Project(string location, string name, string modName) : IEquatable<Cp77Project>, ICloneable
 {
+    public const string ProjectFileExtension = ".cpmodproj";
+    
     public string Name { get; set; } = name;
 
     /// <summary>
@@ -44,6 +54,7 @@ public sealed class Cp77Project(string location, string name, string modName) : 
             {
                 Directory.CreateDirectory(FileDirectory);
             }
+
             return Directory.EnumerateFiles(FileDirectory, "*", SearchOption.AllDirectories)
                 .Select(file => file[(FileDirectory.Length + 1)..])
                 .ToList();
@@ -62,6 +73,7 @@ public sealed class Cp77Project(string location, string name, string modName) : 
             {
                 Directory.CreateDirectory(ModDirectory);
             }
+
             return Directory.EnumerateFiles(ModDirectory, "*", SearchOption.AllDirectories)
                 .Select(file => file[(ModDirectory.Length + 1)..])
                 .ToList();
@@ -80,6 +92,7 @@ public sealed class Cp77Project(string location, string name, string modName) : 
             {
                 Directory.CreateDirectory(RawDirectory);
             }
+
             return Directory.EnumerateFiles(RawDirectory, "*", SearchOption.AllDirectories)
                 .Select(file => file[(RawDirectory.Length + 1)..])
                 .ToList();
@@ -112,6 +125,7 @@ public sealed class Cp77Project(string location, string name, string modName) : 
             {
                 return oldDir;
             }
+
             var dir = Path.Combine(ProjectDirectory, "source");
             if (!Directory.Exists(dir))
             {
@@ -134,6 +148,7 @@ public sealed class Cp77Project(string location, string name, string modName) : 
             {
                 return oldDir;
             }
+
             var dir = Path.Combine(FileDirectory, "archive");
             if (!Directory.Exists(dir))
             {
@@ -173,6 +188,7 @@ public sealed class Cp77Project(string location, string name, string modName) : 
             {
                 return oldDir;
             }
+
             var dir = Path.Combine(FileDirectory, "raw");
             if (!Directory.Exists(dir))
             {
@@ -379,40 +395,88 @@ public sealed class Cp77Project(string location, string name, string modName) : 
         _ = ResourcesDirectory;
     }
 
-    public string GetRelativePath(string fullPath)
+    public (string, string) SplitFilePath(string fullPath) => (GetPrefixPath(fullPath), GetRelativePath(fullPath));
+
+    public string GetPrefixPath(string absolutePath)
     {
-        if (fullPath.Equals(FileDirectory, StringComparison.Ordinal))
+        if (absolutePath.StartsWith(ModDirectory, StringComparison.Ordinal))
+        {
+            return ModDirectory;
+        }
+
+        if (absolutePath.StartsWith(RawDirectory, StringComparison.Ordinal))
+        {
+            return RawDirectory;
+        }
+
+        if (absolutePath.StartsWith(PackedRootDirectory, StringComparison.Ordinal))
+        {
+            return PackedRootDirectory;
+        }
+
+        if (absolutePath.StartsWith(ResourcesDirectory, StringComparison.Ordinal))
+        {
+            return ResourcesDirectory;
+        }
+
+        if (absolutePath.StartsWith(FileDirectory, StringComparison.Ordinal))
+        {
+            return FileDirectory;
+        }
+
+        return "";
+    }
+
+    public string GetAbsolutePath(string fullPath)
+    {
+        var (prefix, relativePath) = SplitFilePath(fullPath);
+        prefix = prefix.Replace(ProjectDirectory, "");
+
+        if (relativePath == fullPath)
+        {
+            return Path.Join(ModDirectory, prefix, relativePath);
+        }
+
+        if (prefix != "")
+        {
+            return Path.Join(FileDirectory, prefix, relativePath);
+        }
+
+        return Path.Join(prefix, relativePath);
+    }
+
+    public string GetRelativePath(string absolutePath)
+    {
+        if (absolutePath.Equals(FileDirectory, StringComparison.Ordinal))
         {
             return "";
         }
+
         // hack so that we get proper hashes
-        if (fullPath.Equals(ModDirectory, StringComparison.Ordinal))
+        if (absolutePath.Equals(ModDirectory, StringComparison.Ordinal))
         {
             return "wkitmoddir";
         }
-        if (fullPath.Equals(RawDirectory, StringComparison.Ordinal))
+
+        if (absolutePath.Equals(RawDirectory, StringComparison.Ordinal))
         {
             return "wkitrawdir";
         }
-        if (fullPath.Equals(PackedRootDirectory, StringComparison.Ordinal))
+
+        if (absolutePath.Equals(PackedRootDirectory, StringComparison.Ordinal))
         {
             return "wkitpackeddir";
         }
 
-        if (fullPath.StartsWith(ModDirectory, StringComparison.Ordinal))
+        if (GetPrefixPath(absolutePath) is string s && s != "")
         {
-            return fullPath[(ModDirectory.Length + 1)..];
-        }
-        if (fullPath.StartsWith(RawDirectory, StringComparison.Ordinal))
-        {
-            var rel = fullPath[(RawDirectory.Length + 1)..];
-            return rel;
+            return absolutePath[(s.Length + 1)..];
         }
 
-        return fullPath.StartsWith(FileDirectory, StringComparison.Ordinal)
-            ? fullPath[(FileDirectory.Length + 1)..]
-            : fullPath.StartsWith(PackedRootDirectory, StringComparison.Ordinal) ? fullPath[(PackedRootDirectory.Length + 1)..] : fullPath;
+        return absolutePath;
     }
+
+
 
     // Conversions
 
@@ -422,12 +486,7 @@ public sealed class Cp77Project(string location, string name, string modName) : 
 
     public object Clone()
     {
-        Cp77Project clone = new(Location, Name, ModName)
-        {
-            Author = Author,
-            Email = Email,
-            Version = Version
-        };
+        Cp77Project clone = new(Location, Name, ModName) { Author = Author, Email = Email, Version = Version };
         return clone;
     }
 
@@ -435,22 +494,235 @@ public sealed class Cp77Project(string location, string name, string modName) : 
 
     #region implements IEquatable
 
-    public bool Equals(Cp77Project? other) => other is not null && (ReferenceEquals(this, other) || string.Equals(Location, other.Location));
+    public bool Equals(Cp77Project? other) =>
+        other is not null && (ReferenceEquals(this, other) || string.Equals(Location, other.Location));
 
-    public override bool Equals(object? obj) => obj is not null && (ReferenceEquals(this, obj) || obj.GetType() == GetType() && Equals((Cp77Project)obj));
+    public override bool Equals(object? obj) =>
+        obj is not null && (ReferenceEquals(this, obj) || obj.GetType() == GetType() && Equals((Cp77Project)obj));
 
     public override int GetHashCode() => Location != null ? Location.GetHashCode() : 0;
+
     public ModInfo GetInfo()
     {
-        ModInfo modInfo = new(ModName, Version ?? "1.0")
-        {
-            Description = Description,
-        };
+        ModInfo modInfo = new(ModName, Version ?? "1.0") { Description = Description, };
         return modInfo;
     }
 
     #endregion implements IEquatable
 
     public override string ToString() => Location;
+
+    public ResourcePath GetResourcePathFromRoot(string fullPath)
+    {
+        var relPath = GetRelativePath(fullPath);
+        if (ulong.TryParse(Path.GetFileNameWithoutExtension(relPath), out var hash))
+        {
+            return hash;
+        }
+
+        return relPath;
+    }
+
+    public ResourcePath GetRelativeResourcePath(string fullPath)
+    {
+        var ret = new ResourcePath();
+        if (!fullPath.StartsWith(ModDirectory, StringComparison.Ordinal))
+        {
+            return ret;
+        }
+
+
+        var relPath = GetRelativePath(fullPath);
+        if (ulong.TryParse(Path.GetFileNameWithoutExtension(relPath), out var hash))
+        {
+            return hash;
+        }
+
+        return relPath;
+    }
+
+    public async Task<Dictionary<string, List<string>>> GetAllReferences(IProgressService<double> progressService,
+        ILoggerService loggerService)
+    {
+        Dictionary<string, List<string>> references = new();
+
+        progressService?.Report(0);
+        var totalFiles = ModFiles.Count;
+        var processedFiles = 0;
+        var progressIncrement = totalFiles > 0 ? 100.0 / totalFiles : 100;
+
+        await Task.Run(() =>
+        {
+            Parallel.ForEach(ModFiles, filePath =>
+            {
+                try
+                {
+                    CR2WFile? cr2WFile;
+                    List<string> resourcePaths = [];
+
+                    using (var fs = File.Open(GetAbsolutePath(filePath), FileMode.Open))
+                    using (var cr = new CR2WReader(fs))
+                    {
+                        if (cr.ReadFile(out cr2WFile) != RED4.Archive.IO.EFileReadErrorCodes.NoError || cr2WFile is null)
+                        {
+                            return;
+                        }
+
+                        // check if it's a factory
+                        if (cr2WFile.RootChunk is C2dArray { CompiledData: CArray<CArray<CString>> data })
+                        {
+                            // Grab the second string from CompiledData, if it's a depotPath
+                            var filePaths = data
+                                .Where(c => c.Count == 3).Select(cStrings => cStrings[1])
+                                .Where(potentialDepotPath => potentialDepotPath.GetString().Contains(Path.DirectorySeparatorChar))
+                                .Select(potentialDepotPath => (string)potentialDepotPath).ToList();
+                            resourcePaths.AddRange(filePaths);
+                        }
+                        else
+                        {
+                            foreach (var result in cr2WFile.FindType(typeof(IRedRef)))
+                            {
+                                if (result.Value is not IRedRef resourceReference || resourceReference.DepotPath == ResourcePath.Empty)
+                                {
+                                    continue;
+                                }
+
+                                var refResource = resourceReference.DepotPath.GetResolvedText();
+                                if (string.IsNullOrEmpty(refResource))
+                                {
+                                    continue;
+                                }
+
+                                // Deal with ArchiveXL substitution
+                                if (refResource.StartsWith(ArchiveXlHelper.ArchiveXLSubstitutionPrefix))
+                                {
+                                    resourcePaths.AddRange(ArchiveXlHelper.ResolveDynamicPaths(refResource));
+                                }
+                                else
+                                {
+                                    resourcePaths.Add(refResource);
+                                }
+                            }
+
+                            foreach (var cr2WImport in cr2WFile.Info.Imports)
+                            {
+                                if (cr2WImport.DepotPath != ResourcePath.Empty && cr2WImport.DepotPath.GetResolvedText() is string s &&
+                                    !resourcePaths.Contains(s))
+                                {
+                                    resourcePaths.Add(s);
+                                }
+                            }
+                        }
+                    }
+
+                    if (resourcePaths.Count <= 0)
+                    {
+                        return;
+                    }
+
+                    // Resolve dynamic substitutions
+                    var updatedResourcePaths = new List<string>();
+                    foreach (var path in resourcePaths)
+                    {
+                        if (path.StartsWith(ArchiveXlHelper.ArchiveXLSubstitutionPrefix))
+                        {
+                            var resolvedPaths = ArchiveXlHelper.ResolveDynamicPaths(path);
+                            updatedResourcePaths.AddRange(resolvedPaths);
+                        }
+                        else
+                        {
+                            updatedResourcePaths.Add(path);
+                        }
+                    }
+
+                    lock (references)
+                    {
+                        references.Add(filePath, updatedResourcePaths);
+                    }
+                }
+                catch
+                {
+                    loggerService.Error($"Failed to read {filePath}. Results will be incomplete!");
+                }
+                
+                // Update progress
+                var currentProgress = Interlocked.Increment(ref processedFiles) * progressIncrement;
+                progressService?.Report(currentProgress);
+            });
+
+            // Get file paths from resource files. Yes, with a regex - parsing them would be way more effort
+            Parallel.ForEach(Files.Where(f => f.EndsWith(".xl") || f.EndsWith(".yaml") || f.EndsWith(".lua")), filePath =>
+            {
+                var absolutePath = Path.Combine(FileDirectory, filePath);
+                if (!File.Exists(absolutePath))
+                {
+                    return;
+                }
+
+                var fileContent = File.ReadAllText(absolutePath);
+
+                // Get anything with double or single slashes, then replace double slashes
+                var refs = ResourceFilePathsRegex().Matches(fileContent).Where(m => m.Success)
+                    .Select(m => m.Value.Replace(@"\\", @"\"))
+                    .ToList();
+                
+                if (refs.Count <= 0)
+                {
+                    return;
+                }
+
+                lock (references)
+                {
+                    if (!references.TryAdd(filePath, refs))
+                    {
+                        references[filePath].AddRange(refs);
+                    }
+                }
+            });
+        });
+        return references;
+    }
     
+    
+
+    public async Task<Dictionary<string, List<string>>> ScanForBrokenReferencePathsAsync(IArchiveManager archiveManager,
+        ILoggerService loggerService, IProgressService<double> progressService)
+    {
+        var references = await GetAllReferences(progressService, loggerService);
+        Dictionary<string, List<string>> brokenReferences = new();
+
+        progressService.IsIndeterminate = true;
+        progressService.Report(0);
+        var totalFiles = ModFiles.Count;
+        var processedFiles = 0;
+        var progressIncrement = totalFiles > 0 ? 100.0 / totalFiles : 100;
+        
+        await Task.Run(() =>
+        {
+            Parallel.ForEach(references, (kvp, state) =>
+            {
+                var pathsNotFound = kvp.Value
+                    .Where(filePath => !ModFiles.Contains(filePath) && archiveManager.GetGameFile(filePath, true, true) is null)
+                    .ToList();
+
+                if (pathsNotFound.Count > 0)
+                {
+                    lock (brokenReferences)
+                    {
+                        brokenReferences.Add(kvp.Key, pathsNotFound);
+                    }
+                }
+                
+                // Update progress
+                var currentProgress = Interlocked.Increment(ref processedFiles) * progressIncrement;
+                progressService?.Report(currentProgress);
+            });
+        });
+        progressService?.Completed();
+        return brokenReferences;
+    }
+
+    [GeneratedRegex(@"((\w+\\\\?)+\w+\.\w+)")]
+    private static partial Regex ResourceFilePathsRegex();
 }
+    

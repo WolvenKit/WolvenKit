@@ -23,13 +23,15 @@ public partial class ProjectManager : ObservableObject, IProjectManager
     private readonly ILoggerService _loggerService;
     private readonly IHashService _hashService;
     private readonly IArchiveManager _archiveManager;
+    private readonly ISettingsManager _settingsManager;
 
     public ProjectManager(
         IRecentlyUsedItemsService recentlyUsedItemsService,
         INotificationService notificationService,
         ILoggerService loggerService,
         IHashService hashService,
-        IArchiveManager archiveManager
+        IArchiveManager archiveManager,
+        ISettingsManager settingsManager
     )
     {
         _recentlyUsedItemsService = recentlyUsedItemsService;
@@ -37,6 +39,7 @@ public partial class ProjectManager : ObservableObject, IProjectManager
         _loggerService = loggerService;
         _hashService = hashService;
         _archiveManager = archiveManager;
+        _settingsManager = settingsManager;
     }
 
     #region properties
@@ -72,34 +75,29 @@ public partial class ProjectManager : ObservableObject, IProjectManager
     {
         await ReadFromLocationAsync(location).ContinueWith(x =>
         {
-            if (x.IsCompletedSuccessfully)
+            if (x is not { IsCompletedSuccessfully: true, Result: not null })
             {
-                if (x.Result == null)
-                {
+                return;
+            }
 
-                }
-                else
-                {
-                    ActiveProject = x.Result;
-                    _archiveManager.ProjectArchive = x.Result.AsArchive();
-                    IsProjectLoaded = true;
+         
+            ActiveProject = x.Result;
+            _archiveManager.ProjectArchive = x.Result.AsArchive();
+            IsProjectLoaded = true;
 
-                    var recentItem = _recentlyUsedItemsService.Items.Items.FirstOrDefault(item => item.Name == location);
-                    if (recentItem == null)
-                    {
-                        recentItem = new RecentlyUsedItemModel(location, DateTime.Now, DateTime.Now);
-                        _recentlyUsedItemsService.AddItem(recentItem);
-                    }
-                    else
-                    {
-                        recentItem.LastOpened = DateTime.Now;
-                    }
-                }
+            var recentItem = _recentlyUsedItemsService.Items.Items.FirstOrDefault(item => item.Name == location);
+            if (recentItem == null)
+            {
+                recentItem = new RecentlyUsedItemModel(location, DateTime.Now, DateTime.Now);
+                _recentlyUsedItemsService.AddItem(recentItem);
             }
             else
             {
-
+                recentItem.LastOpened = DateTime.Now;
             }
+
+            _settingsManager.LastUsedProjectPath = x.Result.Location;
+
         });
 
 
@@ -118,7 +116,7 @@ public partial class ProjectManager : ObservableObject, IProjectManager
 
             var project = fi.Extension switch
             {
-                ".cpmodproj" => await Load(location),
+                Cp77Project.ProjectFileExtension => await Load(location),
                 _ => null
             };
 

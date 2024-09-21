@@ -10,11 +10,17 @@ namespace WolvenKit.App.ViewModels.Shell;
 
 public partial class ChunkViewModel
 {
-    // For view decoration, default values will be displayed in italic
+    /// <summary>
+    /// For view decoration, default values will be displayed in italic. They're not actually read-only, though.
+    /// Fields are defined in <see cref="EditorDifficultyLevelFieldFactory"/>.
+    /// </summary>
     [ObservableProperty] private bool _isDisplayAsReadOnly;
 
 
-    // For view visibility - if the noob filter is enabled, only show properties that the user wants to edit
+    /// <summary>
+    /// For view visibility - if the noob filter is enabled, only show properties that the user wants to edit.
+    /// Fields are defined in <see cref="EditorDifficultyLevelFieldFactory"/>.
+    /// </summary>
     [ObservableProperty] private bool _isHiddenByEditorDifficultyLevel;
 
     private void CalculateUserInteractionStates()
@@ -34,7 +40,7 @@ public partial class ChunkViewModel
     {
         _currentEditorDifficultyLevel = level;
         DifficultyLevelFieldInformation = EditorDifficultyLevelFieldFactory.GetInstance(level);
-        Tab?.Parent.Reload(false);
+        RecalculateProperties();
     }
 
     private EditorDifficultyLevelInformation DifficultyLevelFieldInformation { get; set; }

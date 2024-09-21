@@ -36,7 +36,9 @@
 
     <Color x:Key="WolvenKitCyanShadow50Color">#7F4D8C9A</Color>
     <Color x:Key="WolvenKitRedShadow50Color">#7F951C2D</Color>
+    <Color x:Key="WolvenKitRedShadow25Color">#7F520e17</Color>
     <Color x:Key="WolvenKitYellowShadow50Color">#7FABA108</Color>
+    <Color x:Key="WolvenKitYellowShadow25Color">#7F403c09</Color>
     
     
 
@@ -74,7 +76,9 @@
 
     <SolidColorBrush x:Key="BackgroundColor_Cyan" Color="{StaticResource WolvenKitCyanShadow50Color}" />
     <SolidColorBrush x:Key="BackgroundColor_Yellow" Color="{StaticResource WolvenKitYellowShadow50Color}" />
+    <SolidColorBrush x:Key="BackgroundColor_Yellow_Dark" Color="{StaticResource WolvenKitYellowShadow25Color}" />
     <SolidColorBrush x:Key="BackgroundColor_Red" Color="{StaticResource WolvenKitRedShadow50Color}" />
+    <SolidColorBrush x:Key="BackgroundColor_Red_Dark" Color="{StaticResource WolvenKitRedShadow25Color}" />
 
     <SolidColorBrush x:Key="BackgroundColor_Control" Color="#252525" />
     <SolidColorBrush x:Key="BackgroundColor_Frame_Active" Color="#313131" />
@@ -97,10 +101,30 @@
         <!--  Setter Property="TabPanelBackground" Value="#313131" /  -->
     </Style>
 
-    <Style x:Key="ValidatingControlStyle" TargetType="{x:Type TextBox}">
+
+    <!-- 
+        Global style for nested syncfusion combobox, e.g. in ChunkMask editor.
+        Doesn't work for base dropdown background yet 
+     -->
+    <Style
+        TargetType="{x:Type syncfusion:ComboBoxAdv}"
+        BasedOn="{StaticResource {x:Type syncfusion:ComboBoxAdv}}">
+        <Setter Property="Background" Value="#252525" />
+    </Style>
+    
+    <!-- Give all textboxes the same background -->
+    <Style
+        x:Key="WolvenkitTextBoxStyle"
+        BasedOn="{StaticResource {x:Type TextBox}}"
+        TargetType="{x:Type TextBox}">
+        <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
+        <Setter Property="BorderBrush" Value="{StaticResource ContentBackgroundAlt3}" />
+    </Style>
+
+    <Style x:Key="ValidatingControlStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource WolvenkitTextBoxStyle}">
         <Style.Triggers>
             <DataTrigger Binding="{Binding Path=IsValid}" Value="True">
-                <Setter Property="BorderBrush" Value="{StaticResource BorderAlt}" />
+                <Setter Property="BorderBrush" Value="{StaticResource ContentBackgroundAlt3}" />
             </DataTrigger>
             <DataTrigger Binding="{Binding Path=IsValid}" Value="False">
                 <Setter Property="BorderBrush" Value="{DynamicResource BackgroundColor_Yellow}" />
@@ -109,7 +133,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TextBox}">
-                    <Border Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1">
+                    <Border Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" Background="{StaticResource ContentBackgroundAlt2}">
                         <ScrollViewer x:Name="PART_ContentHost" />
                     </Border>
                     <ControlTemplate.Triggers>
@@ -133,12 +157,13 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        
+        <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
     </Style>
 
-    <Style x:Key="TextBoxTCSA" TargetType="{x:Type TextBox}">
+    <Style x:Key="TextBoxTCSA" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
         <Setter Property="helpers:TextBoxBehavior.TripleClickSelectAll" Value="True" />
     </Style>
+
 
     <DrawingBrush
         x:Key="CloudDrawingBrushMain"

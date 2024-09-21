@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
@@ -55,7 +56,8 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         Nodes.Add(new ResourcePathWrapper(this, new ReferenceSocket(Chunks[0].RelativePath), _appViewModel, _chunkViewmodelFactory));
         _nodePaths.Add(Chunks[0].RelativePath);
 
-
+        SubscribeToChunkPropertyChanges();
+        
         if (SelectedChunk == null && Chunks.Count > 0)
         {
             SelectedChunk = Chunks[0];
@@ -65,49 +67,48 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
             }
         }
 
-        SetParentToolbarState();
-
         parent.PropertyChanged += RDTDataViewModel_PropertyChanged;
     }
 
-    public ChunkViewModel? GetRootChunk() => Chunks.FirstOrDefault();
-
-    public override RedDocumentItemType GetContentType()
+    private void SubscribeToChunkPropertyChanges()
     {
-        switch (GetRootChunk()?.ResolvedData)
-        {
-            case CMesh:
-                return RedDocumentItemType.Mesh;
-            case appearanceAppearanceResource:
-                return RedDocumentItemType.App;
-            case entEntityTemplate:
-                return RedDocumentItemType.Ent;
-            default:
-                return RedDocumentItemType.Other;
-        }
-    }
-
-    private void SetParentToolbarState()
-    {
-        if (Chunks[0] is not ChunkViewModel cvm)
+        if (GetRootChunk() is not ChunkViewModel cvm || cvm.ResolvedData is not inkTextureAtlas ||
+            cvm.GetPropertyChild("slots", "0") is not ChunkViewModel firstSlot || firstSlot.ResolvedData is not inkTextureSlot slot ||
+            slot.Texture.DepotPath != ResourcePath.Empty)
         {
             return;
         }
 
-        switch (cvm.ResolvedData)
-        {
-            case CMesh:
-            case appearanceAppearanceResource:
-                Parent.ShowToolbar = true;
-                break;
-            default:
-                break;
-        }
+        firstSlot.PropertyChanged += WaitForTexturePath;
     }
+
+    public event EventHandler? OnReloadRequired;
+
+    private void WaitForTexturePath(object? sender, PropertyChangedEventArgs evt)
+    {
+        if (sender is not ChunkViewModel cvm || evt.PropertyName != nameof(cvm.Value) || string.IsNullOrEmpty(cvm.Value))
+        {
+            return;
+        }
+
+        cvm.PropertyChanged -= WaitForTexturePath;
+        OnReloadRequired?.Invoke(this, EventArgs.Empty);
+    }
+
+    public ChunkViewModel? GetRootChunk() => Chunks.FirstOrDefault();
+
+    public override RedDocumentItemType GetContentType() => GetRootChunk()?.ResolvedData switch
+        {
+            CMesh => RedDocumentItemType.Mesh,
+            appearanceAppearanceResource => RedDocumentItemType.App,
+            entEntityTemplate => RedDocumentItemType.Ent,
+            CMaterialInstance => RedDocumentItemType.Mi,
+            _ => base.GetContentType()
+        };
 
     private void RDTDataViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName != nameof(RedDocumentViewModel.EditorDifficultyLevel))
+        if (e.PropertyName != nameof(RedDocumentViewModel.EditorDifficultyLevel) || EditorDifficultyLevel == Parent.EditorDifficultyLevel)
         {
             return;
         }
@@ -155,7 +156,6 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     [ObservableProperty] private EditorDifficultyLevel _editorDifficultyLevel;
 
-
     [ObservableProperty] private ChunkViewModel? _rootChunk;
 
     [ObservableProperty] private ObservableCollection<object> _nodes = new();
@@ -175,7 +175,6 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     public LayoutNodesDelegate? LayoutNodes;
 
-
     #endregion
 
     #region commands
@@ -184,7 +183,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     private Task OpenImport(ICR2WImport input)
     {
         var depotpath = input.DepotPath;
-        var key = FNV1A64HashAlgorithm.HashString(depotpath.ToString().NotNull());
+        var key = FNV1A64HashAlgorithm.HashString(depotpath.GetResolvedText().NotNull());
 
         return _gameController.GetController().AddFileToModModal(key);
     }
@@ -456,6 +455,10 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         {
             lst.Add(chunk);
         }
+
+        // clear IsSelected property again, because it'll be "stuck" otherwise 
+        chunk.IsSelected = false;
+        
     }
 
     public void SetSelection(List<ChunkViewModel> chunks)
@@ -475,8 +478,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
             SelectedChunk = chunkViewModel;
         }
     }
-
-
+    
     public event EventHandler<string>? OnSectorNodeSelected;
 
     /// <summary>
@@ -516,4 +518,26 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     }
     
     #endregion
+
+    private void ExpandParentNodes(ChunkViewModel cvm)
+    {
+        if (cvm.Parent is null)
+        {
+            return;
+        }
+
+        cvm.Parent.IsExpanded = true;
+        ExpandParentNodes(cvm.Parent);
+    }
+
+    public void ScrollToNode(ChunkViewModel? selectedNode)
+    {
+        if (selectedNode is null)
+        {
+            return;
+        }
+
+        ExpandParentNodes(selectedNode);
+        SetSelection(selectedNode);
+    }
 }

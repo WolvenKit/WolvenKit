@@ -306,27 +306,14 @@ namespace WolvenKit.Views.Tools
 
         private void FileSearchBar_SearchStarted(object sender, FunctionEventArgs<string> e) => ViewModel?.PerformSearch(e.Info);
 
-        private void LeftNavigation_RequestTreeItems(object sender, TreeGridRequestTreeItemsEventArgs args)
-        {
-            if (args.ParentItem == null)
+        private void LeftNavigation_RequestTreeItems(object sender, TreeGridRequestTreeItemsEventArgs args) =>
+            args.ChildItems = args.ParentItem switch
             {
-                args.ChildItems = ViewModel.LeftItems;
-            }
+                null => ViewModel?.LeftItems,
+                RedFileSystemModel childFolders => childFolders.Directories.Values.OrderBy(x => x.Name).ToList(),
+                _ => args.ChildItems
+            };
 
-            else
-            {
-                var childFolders = args.ParentItem as RedFileSystemModel;
-
-                if (childFolders is not null)
-                {
-                    args.ChildItems = childFolders.Directories.Values.OrderBy(x => x.Name).ToList();
-                }
-            }
-        }
-
-        private void ScanModArchivesButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            ViewModel.ScanModArchives();
-        }
+        private void ScanModArchivesButton_OnClick(object sender, RoutedEventArgs e) => ViewModel?.ScanModArchives(true);
     }
 }

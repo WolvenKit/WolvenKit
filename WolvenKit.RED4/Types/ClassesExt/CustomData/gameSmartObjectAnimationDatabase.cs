@@ -165,8 +165,6 @@ public partial class gameSmartObjectAnimationDatabase : IRedCustomData
             foreach (var app2 in app1.Unk2)
             {
                 writer.BaseWriter.WriteVLQInt32(app2.Unk2.Count);
-                writer.Write(app2.Unk1);
-
                 foreach (var box in app2.Unk2)
                 {
                     WriteBox(box);
@@ -260,14 +258,6 @@ public class gameSmartObjectAnimationDatabase_App1 : RedBaseClass
 
 public class gameSmartObjectAnimationDatabase_App2 : RedBaseClass
 {
-    [RED("unk1")]
-    [REDProperty(IsIgnored = true)]
-    public CUInt32 Unk1
-    {
-        get => GetPropertyValue<CUInt32>();
-        set => SetPropertyValue<CUInt32>(value);
-    }
-
     [RED("unk2")]
     [REDProperty(IsIgnored = true)]
     public CArray<Box> Unk2

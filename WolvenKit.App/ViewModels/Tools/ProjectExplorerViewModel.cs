@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Threading;
 using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -26,17 +26,13 @@ using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common;
-using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.Archive;
-using WolvenKit.RED4.Archive.CR2W;
-using WolvenKit.RED4.Archive.IO;
-using WolvenKit.RED4.Types;
-using EFileReadErrorCodes = WolvenKit.RED4.Archive.IO.EFileReadErrorCodes;
+using Clipboard = System.Windows.Clipboard;
 
 namespace WolvenKit.App.ViewModels.Tools;
 
@@ -61,8 +57,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private readonly IGameControllerFactory _gameController;
     private readonly AppViewModel _mainViewModel;
     public readonly IModifierViewStateService ModifierViewStateService;
-
-    private readonly WatcherService _projectWatcher;
+    private readonly IWatcherService _projectWatcher;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
@@ -95,21 +90,22 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         _mainViewModel = appViewModel;
 
-        _projectWatcher = new WatcherService(_loggerService);
+        _projectWatcher = Locator.Current.GetService<IWatcherService>()!;
 
         SideInDockedMode = DockSide.Left;
 
-        RegisterModifierStateAwareness();
+        IsShowRelativePath = true;
+        ModifierViewStateService.ModifierStateChanged += OnModifierUpdateEvent;
         
         SetupToolDefaults();
-
-        ModifierViewStateService.RefreshModifierStates();
-
+        
         _mainViewModel.PropertyChanged += MainViewModel_OnPropertyChanged;
 
         _projectManager.PropertyChanged += ProjectManager_OnPropertyChanged;
 
         SelectedTabIndex = ActiveProject?.ActiveTab ?? 0;
+
+        _mainViewModel.OnInitialProjectLoaded += (_, _) => RefreshProjectData();
 
         if (Locator.Current.GetService<AppIdleStateService>() is not AppIdleStateService svc)
         {
@@ -118,7 +114,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         svc.ThreadIdleTenSeconds += (_, _) => SaveProjectExplorerExpansionStateIfDirty();
         svc.ThreadIdleTenSeconds += (_, _) => SaveProjectExplorerTabIfDirty();
-
     }
 
 
@@ -131,9 +126,22 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <summary>
     /// Set status of "scroll to open file" button, based on whether or not we have one opened
     /// </summary>
-    private void MainViewModel_OnPropertyChanged(object? sender, PropertyChangedEventArgs e) =>
+    private void MainViewModel_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
         CanScrollToOpenFile = _mainViewModel.ActiveDocument is not null;
+    }
 
+    private bool _loading;
+
+    public bool Loading
+    {
+        get => _loading;
+        set
+        {
+            _loading = value;
+            OnPropertyChanged(new PropertyChangedEventArgs(nameof(_loading)));
+        }
+    }
     public event Action? OnProjectChanged;
     
     private void ProjectManager_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -143,6 +151,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
+        RefreshProjectData();
+    }
+
+    // When opening projects from launch args, change detection for dependent objects isn't working yet. 
+    private void RefreshProjectData()
+    {
         // Save changes in active project
         if (ActiveProject != null)
         {
@@ -150,17 +164,22 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             SaveProjectExplorerExpansionStateIfDirty();
             _projectWatcher.UnwatchProject(ActiveProject);
         }
-
-        DispatcherHelper.RunOnMainThread(() => ActiveProject = _projectManager.ActiveProject, DispatcherPriority.ContextIdle);
+        
         OnProjectChanged?.Invoke();
 
-        if (_projectManager.ActiveProject == null)
+        DispatcherHelper.RunOnMainThread(() =>
         {
-            return;
-        }
+            ActiveProject = _projectManager.ActiveProject;
+            if (ActiveProject is not null)
+            {
+                LoadFileTreeState(ActiveProject);
+                _projectWatcher.WatchProject(ActiveProject);
+            }
 
-        LoadFileTreeState(_projectManager.ActiveProject);
-        _projectWatcher.WatchProject(_projectManager.ActiveProject);
+            OnProjectChanged?.Invoke();
+        }, DispatcherPriority.ContextIdle);
+
+
     }
 
     public DispatchedObservableCollection<FileSystemModel> FileTree => _projectWatcher.FileTree;
@@ -173,6 +192,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     partial void OnSelectedItemChanged(FileSystemModel? value)
     {
+        CanScrollToOpenFile = value is not null;
         if (value is null)
         {
             return;
@@ -195,6 +215,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [NotifyCanExecuteChangedFor(nameof(DeleteFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(CreateNewDirectoryCommand))]
     [NotifyCanExecuteChangedFor(nameof(OpenInFileExplorerCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ToggleFlatModeCommand))]
     [NotifyCanExecuteChangedFor(nameof(PasteFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(RenameFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(ConvertToCommand))]
@@ -471,7 +492,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// Ctrl+Shift with /archive/ file or folder selected: Copy absolute path to raw folder (convenience for quick switching)
     /// </summary>
     [RelayCommand(CanExecute = nameof(CanCopyAbsPathToRawFolder))]
-    private void CopyAbsPathToRawFolder() => CopyItemPathToClipboard(true, true, false);
+    private void CopyAbsPathToRawFolder() => CopyItemPathToClipboard(true, true, false, true);
 
 
     private bool CanCopyAbsPathToArchiveFolder => IsShowAbsolutePathToArchiveFolder;
@@ -591,13 +612,15 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         foreach (var hash in selectedItems)
         {
-            await Task.Run(() => controller.AddToMod(hash, ArchiveManagerScope.Everywhere));
+            await Task.Run(() => controller.AddToMod(hash, ArchiveManagerScope.Basegame));
             progress++;
             _progressService.Report(progress / (float)selectedItems.Count);
         }
 
         // OK, we're done
         _progressService.Completed();
+
+        _mainViewModel.ReloadChangedFiles();
     }
 
     /// <summary>
@@ -719,10 +742,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             var file = Path.GetFileNameWithoutExtension(path);
             var ext = Path.GetExtension(path);
 
-            yield return Path.Combine(dir, file + " - Copy" + ext);
+            yield return Path.Combine(dir, file + "_copy" + ext);
             for (var i = 2; i < 999; i++) // there shouldn't be more than 1k copies... hopefully
             {
-                yield return Path.Combine(dir, file + " - Copy " + i + ext);
+                yield return Path.Combine(dir, file + "_copy_" + i + ext);
             }
         }
     }
@@ -739,7 +762,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        var newFolderPath = Path.Combine(model.FullName, Interactions.AskForTextInput());
+        var newFolderPath = Path.Combine(model.FullName, Interactions.AskForTextInput("Directory name"));
 
         if (Directory.Exists(newFolderPath))
         {
@@ -749,56 +772,38 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         Directory.CreateDirectory(newFolderPath);
     }
 
+   
 
     /// <summary>
     /// Renames selected node. Works for files and directories.
     /// </summary>
     private bool CanRenameFile() => ActiveProject != null && SelectedItem != null;
     [RelayCommand(CanExecute = nameof(CanRenameFile))]
-    private void RenameFile()
+    private async Task RenameFile()
     {
-        var filename = SelectedItem.NotNull().FullName;
-        var (newFilename, refactor) = Interactions.RenameAndRefactor(filename);
-
-        if (string.IsNullOrEmpty(newFilename))
+        if (_projectManager.ActiveProject is null || SelectedItem?.FullName is not string absolutePath)
         {
             return;
         }
 
-        var newFullPath = Path.Combine(Path.GetDirectoryName(filename).NotNull(), newFilename);
+        var (prefixPath, relativePath) = _projectManager.ActiveProject.SplitFilePath(absolutePath);
 
-        if (File.Exists(newFullPath) || filename == newFullPath)
+        if (absolutePath.StartsWith(_projectManager.ActiveProject.ModDirectory))
+        {
+            relativePath = absolutePath[(_projectManager.ActiveProject.ModDirectory.Length + 1)..];
+        }
+
+        var (newRelativePath, refactor) = Interactions.RenameAndRefactor(relativePath);
+
+        if (string.IsNullOrEmpty(newRelativePath))
         {
             return;
         }
 
-        try
-        {
-            Directory.CreateDirectory(Path.GetDirectoryName(newFullPath).NotNull());
-            if (SelectedItem.IsDirectory)
-            {
-                Directory.Move(filename, newFullPath);
-            }
-            else
-            {
-                File.Move(filename, newFullPath);
-            }
-        }
-        catch
-        {
-            // Swallow error
-        }
-
-        if (!refactor || ActiveProject is null)
-        {
-            return;
-        }
-
-        var oldRelPath = GetResourcePath(filename, ActiveProject);
-        var newRelPath = GetResourcePath(newFilename, ActiveProject);
-
-        ReplacePathInProject(oldRelPath, newRelPath);
+        await ProjectResourceHelper.MoveAndRefactor(_projectManager.ActiveProject, relativePath, newRelativePath, prefixPath, refactor);
+        _mainViewModel.ReloadChangedFiles();
     }
+
 
     #endregion general commands
 
@@ -994,6 +999,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     #endregion
 
+    public event EventHandler? OnToggleFlatMode;
+
+    [RelayCommand(CanExecute = nameof(CanOpenInFileExplorer))]
+    private void ToggleFlatMode() => OnToggleFlatMode?.Invoke(this, EventArgs.Empty);
+
     #endregion commands
 
     #region Methods
@@ -1013,182 +1023,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     // bi.EndInit();
     // IconSource = bi;
 
-    private ResourcePath GetResourcePath(string fullPath, Cp77Project project)
-    {
-        var relPath = Path.GetRelativePath(project.ModDirectory, fullPath);
-        if (ulong.TryParse(Path.GetFileNameWithoutExtension(relPath), out var hash))
-        {
-            return hash;
-        }
-
-        return relPath;
-    }
-
-    private void ReplacePathInProject(ResourcePath oldPath, ResourcePath newPath)
-    {
-        if (oldPath == newPath ||
-            ActiveProject is null)
-        {
-            return;
-        }
-
-        List<string> failedFiles = [];
-
-        var files = Directory.GetFiles(ActiveProject.ModDirectory, "*.*", SearchOption.AllDirectories);
-        Parallel.ForEach(files, file =>
-        {
-            var hash = GetResourcePath(file, ActiveProject);
-            if (hash == newPath)
-            {
-                return;
-            }
-
-            try
-            {
-                ReplacePathInFile(file, oldPath, newPath);
-            }
-            catch (Exception)
-            {
-                failedFiles.Add(file.RelativePath(ActiveProject.ModDirectory));
-            }
-        });
-
-        if (failedFiles.Count > 0)
-        {
-            _loggerService.Error($"Failed to auto-update references in the following files:");
-            failedFiles.ForEach((path) => _loggerService.Error($"  {path}"));
-        }
-        _mainViewModel.ReloadChangedFiles();
-    }
-
-    private void ReplacePathInFile(string filePath, ResourcePath oldPath, ResourcePath newPath)
-    {
-        if (oldPath == newPath || 
-            !File.Exists(filePath))
-        {
-            return;
-        }
-
-        var oldPathStr = oldPath.GetResolvedText();
-        var newPathStr = newPath.GetResolvedText();
-
-        CR2WFile? cr2W;
-        var wasModified = false;
-        var isDirectory = newPathStr != null && Directory.Exists(Path.Join(ActiveProject?.ModDirectory, newPathStr));
-        if (isDirectory)
-        {
-            // Can't replace path if either is null
-            if (oldPathStr == null || newPathStr == null)
-            {
-                return;
-            }
-
-            oldPathStr += ResourcePath.DirectorySeparatorChar;
-            newPathStr += ResourcePath.DirectorySeparatorChar;
-        }
-
-
-        using (var fs = File.Open(filePath, FileMode.Open))
-        using (var cr = new CR2WReader(fs))
-        {
-            if (cr.ReadFile(out cr2W) != EFileReadErrorCodes.NoError)
-            {
-                return;
-            }
-
-            foreach (var result in cr2W!.FindType(typeof(IRedRef)))
-            {
-                if (result.Value is not IRedRef resourceReference || resourceReference.DepotPath == ResourcePath.Empty)
-                {
-                    continue;
-                }
-
-                var oldDepotPathStr = resourceReference.DepotPath.GetResolvedText();
-
-                ResourcePath newDepotPath;
-                if (isDirectory)
-                {
-                    if (oldDepotPathStr == null)
-                    {
-                        continue;
-                    }
-
-                    var isArchiveXL = oldDepotPathStr.StartsWith('*');
-                    if (isArchiveXL)
-                    {
-                        oldDepotPathStr = oldDepotPathStr[1..];
-                    }
-
-                    if (!oldDepotPathStr.StartsWith(oldPathStr!))
-                    {
-                        continue;
-                    }
-
-                    var newDepotPathStr = newPathStr! + oldDepotPathStr[oldPathStr!.Length..];
-                    if (isArchiveXL)
-                    {
-                        newDepotPathStr = "*" + newDepotPathStr;
-                    }
-
-                    newDepotPath = newDepotPathStr;
-                }
-                else
-                {
-                    if (resourceReference.DepotPath != oldPath)
-                    {
-                        continue;
-                    }
-
-                    newDepotPath = newPath;
-                }
-                    
-                var parentPath = string.Join('.', result.Path.Split('.')[..^1]);
-
-                var newValue = (IRedRef)RedTypeManager.CreateRedType(resourceReference.RedType, newDepotPath, resourceReference.Flags);
-
-                if (result.Name.Contains(':'))
-                {
-                    var parts = result.Name.Split(':');
-                    if (parts.Length != 2 || !int.TryParse(parts[1], out var index))
-                    {
-                        throw new Exception();
-                    }
-
-                    var parentArray = cr2W.GetFromXPath(string.Join('.', parentPath, parts[0]));
-                    if (!parentArray.Item1 || parentArray.Item2 is not IList arr)
-                    {
-                        throw new Exception();
-                    }
-
-                    _loggerService.Debug($"Replaced \"{result.Path}\" in \"{filePath}\"");
-                    arr[index] = newValue;
-                }
-                else
-                {
-                    var parentClass = cr2W.GetFromXPath(parentPath);
-                    if (!parentClass.Item1 || parentClass.Item2 is not RedBaseClass cls)
-                    {
-                        throw new Exception();
-                    }
-
-                    _loggerService.Debug($"Replaced \"{result.Path}\" in \"{filePath}\"");
-                    cls.SetProperty(result.Name, newValue);
-                }
-
-                wasModified = true;
-            }
-        }
-
-        if (!wasModified)
-        {
-            return;
-        }
-
-        using var fs2 = File.Open(filePath, FileMode.Create);
-        using var cw = new CR2WWriter(fs2);
-
-        cw.WriteFile(cr2W);
-    }
 
     private const string s_treestateFileName = "fileTreeState.json";
     private void LoadFileTreeState(Cp77Project project)
@@ -1235,6 +1069,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
+        if (e.PropertyName == nameof(State) && State == DockState.Hidden)
+        {
+            IsVisible = false;
+        }
+        
         if (e.PropertyName != nameof(SelectedTabIndex) || ActiveProject is null)
         {
             return;
@@ -1259,18 +1098,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     public bool IsNoModifierPressed => ModifierViewStateService.IsNoModifierPressed;
 
     /// <summary>
-    /// Called in constructor
-    /// </summary>
-    private void RegisterModifierStateAwareness()
-    {
-        ModifierViewStateService.ModifierStateChanged += OnModifierUpdateEvent;
-        ModifierViewStateService.PropertyChanged += OnModifierChanged;
-    }
-
-    /// <summary>
     /// Reacts to ModifierViewStatesModel's emitted events
     /// </summary>
-    private void OnModifierUpdateEvent()
+    private void OnModifierUpdateEvent(object? sender, KeyEventArgs keyEventArgs)
     {
         IsShowAbsolutePathToRawFolder = ModifierViewStateService.IsCtrlShiftOnlyPressed && IsInArchiveFolder(SelectedItem);
         IsShowAbsolutePathToArchiveFolder = ModifierViewStateService.IsCtrlShiftOnlyPressed && IsInRawFolder(SelectedItem);
@@ -1279,18 +1109,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         IsShowAbsolutePathToCurrentFolder = ModifierViewStateService.IsCtrlKeyPressedOnly;
 
-        IsShowRelativePath = !ModifierViewStateService.IsShiftKeyPressedOnly && !ModifierViewStateService.IsCtrlKeyPressedOnly;
+        IsShowRelativePath = !(IsShowAbsolutePathToRawFolder || IsShowAbsolutePathToArchiveFolder ||
+                               IsShowAbsolutePathToCurrentFile || IsShowAbsolutePathToCurrentFolder) ||
+                             Services.ModifierViewStateService.IsNoModifierBeingHeld;
     }
-
-    /// <summary>
-    /// Forward ModifierViewStateModel's PropertyChanged events to the view
-    /// </summary>
-    private void OnModifierChanged(object? sender, PropertyChangedEventArgs e) => OnPropertyChanged(e.PropertyName);
-
-    /// <summary>
-    /// Passes key state changes from view down to ModifierViewStatesModel
-    /// </summary>
-    public void RefreshModifierStates() => ModifierViewStateService.RefreshModifierStates();
 
     public IDocumentViewModel? GetActiveEditorFile() => _mainViewModel.ActiveDocument;
 
@@ -1300,5 +1122,23 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     {
         ExpansionStateDictionary[rawRelativePath] = expansionState;
         _hasUnsavedFileTreeChanges = true;
+    }
+
+    public void SuspendFileWatcher()
+    {
+        if (ActiveProject is Cp77Project project)
+        {
+            _projectWatcher.UnwatchProject(project);
+            _projectWatcher.ForceStop();
+        }
+    }
+
+    public void ResumeFileWatcher()
+    {
+        if (ActiveProject is Cp77Project project)
+        {
+            _projectWatcher.WatchProject(project);
+            _projectWatcher.Refresh();
+        }
     }
 }

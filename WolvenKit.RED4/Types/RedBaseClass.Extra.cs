@@ -184,6 +184,11 @@ public partial class RedBaseClass
                     queue.Enqueue((redPackage.Chunks[i], $"{propPath}:{i}"));
                 }
             }
+
+            if (value is CKeyValuePair cKeyValuePair)
+            {
+                yield return ($"{propPath}.Value", cKeyValuePair.Value);
+            }
         }
     }
 

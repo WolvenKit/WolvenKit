@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Reactive.Disposables;
 using ReactiveUI;
 using Syncfusion.UI.Xaml.Grid;
@@ -20,6 +21,7 @@ public partial class ExportView : ReactiveUserControl<ExportViewModel>
         InitializeComponent();
 
         ExportGrid.FilterRowCellRenderers.Add("TextBoxExt", new GridFilterRowTextBoxRendererExt());
+        ExportGrid.FilterChanged += Datagrid_FilterChanged;
 
         this.WhenActivated(disposables =>
         {
@@ -27,6 +29,8 @@ public partial class ExportView : ReactiveUserControl<ExportViewModel>
             {
                 SetCurrentValue(ViewModelProperty, viewModel);
             }
+
+            ViewModel.OnRefresh += RefreshFilter;
 
             this.OneWayBind(ViewModel,
                     x => x.SelectedObject.Properties,
@@ -43,8 +47,21 @@ public partial class ExportView : ReactiveUserControl<ExportViewModel>
                    x => x.ExportGrid.SelectedItem)
                .DisposeWith(disposables);
         });
+    }
 
 
+    private void RefreshFilter(object sender, EventArgs e) => Datagrid_FilterChanged(ExportGrid, null);
+    private void Datagrid_FilterChanged(object sender, GridFilterEventArgs e)
+    {
+        if (sender is not SfDataGrid grid || ViewModel is null)
+        {
+            return;
+        }
+
+        ViewModel.VisibleItemPaths = grid.View.Records
+            .Select(record => record.Data).OfType<ImportExportItemViewModel>()
+            .Select(m => m.BaseFile)
+            .ToList();
     }
 
     private void OverlayPropertyGrid_AutoGeneratingPropertyGridItem(object sender, AutoGeneratingPropertyGridItemEventArgs e)
@@ -63,19 +80,24 @@ public partial class ExportView : ReactiveUserControl<ExportViewModel>
         // we need the callback function
         // we need the propertyname
         // we need the type of the arguments
-        if (e.OriginalSource is PropertyItem { } propertyItem && sender is PropertyGrid pg && pg.SelectedObject is ExportArgs args)
+        if (ViewModel is null ||
+            e.OriginalSource is not PropertyItem propertyItem ||
+            sender is not PropertyGrid { SelectedObject: ExportArgs args })
         {
-            switch (propertyItem.DisplayName)
-            {
-                case nameof(MeshExportArgs.Rig):
-                case nameof(MeshExportArgs.MultiMeshMeshes):
-                case nameof(MeshExportArgs.MultiMeshRigs):
-                case nameof(OpusExportArgs.SelectedForExport):
-                    propertyItem.Editor = new CustomCollectionEditor(ViewModel.InitCollectionEditor, new CallbackArguments(args, propertyItem.DisplayName));
-                    break;
-                default:
-                    break;
-            }
+            return;
+        }
+
+        switch (propertyItem.DisplayName)
+        {
+            case nameof(MeshExportArgs.Rig):
+            case nameof(MeshExportArgs.MultiMeshMeshes):
+            case nameof(MeshExportArgs.MultiMeshRigs):
+            case nameof(OpusExportArgs.SelectedForExport):
+                propertyItem.Editor = new CustomCollectionEditor(ViewModel.InitCollectionEditor,
+                    new CallbackArguments(args, propertyItem.DisplayName));
+                break;
+            default:
+                break;
         }
     }
 
@@ -103,6 +125,5 @@ public partial class ExportView : ReactiveUserControl<ExportViewModel>
         ViewModel?.PasteArgumentsTemplateToCommand.NotifyCanExecuteChanged();
         ViewModel?.ImportSettingsCommand.NotifyCanExecuteChanged();
     }
-
 }
 

@@ -199,7 +199,7 @@ public class ArchiveWriter
 
             try
             {
-                readStatus = reader.ReadFileInfo(out info);
+                readStatus = reader.ReadFileInfo(out info, _loggerService);
             }
             catch (Exception e)
             {

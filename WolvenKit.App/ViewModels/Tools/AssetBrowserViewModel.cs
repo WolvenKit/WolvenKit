@@ -109,6 +109,8 @@ public partial class AssetBrowserViewModel : ToolViewModel
         State = DockState.Dock;
         SideInDockedMode = DockSide.Tabbed;
 
+        IsModBrowserEnabled = false; 
+        
         archiveManager.ConnectGameRoot()
             .Bind(out _boundRootNodes)
             .Subscribe(OnNext);
@@ -226,7 +228,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     [ObservableProperty] 
     private string? _optionsSearchBarText;
 
-    [ObservableProperty] private bool? _isModBrowserEnabled;
+    [ObservableProperty] private bool _isModBrowserEnabled;
 
     [ObservableProperty]
     private ObservableCollectionEx<IGameArchive> _addFromArchiveItems = new();
@@ -256,31 +258,38 @@ public partial class AssetBrowserViewModel : ToolViewModel
         SearchBarText += $" {value}:";
     }
 
+    private async void InstallWolvenkitResources()
+    {
+        _loggerService.Warning("Wolvenkit-Resources plugin is not installed and is needed for this functionality.");
+
+        var response = await Interactions.ShowMessageBoxAsync(
+            "Wolvenkit-Resources plugin is not installed and is needed for this functionality. Would you like to install it now?",
+            "Wolvenkit-Resources not found");
+        switch (response)
+        {
+            case WMessageBoxResult.OK:
+            case WMessageBoxResult.Yes:
+            {
+                await _appViewModel.ShowHomePage(EHomePage.Plugins);
+                break;
+            }
+
+            case WMessageBoxResult.None:
+            case WMessageBoxResult.Cancel:
+            case WMessageBoxResult.No:
+            case WMessageBoxResult.Custom:
+            default:
+                break;
+        }
+    }
+
+    
     [RelayCommand]
     private async Task FindUsing()
     {
         if (!_pluginService.IsInstalled(EPlugin.wolvenkit_resources))
         {
-            _loggerService.Warning("Wolvenkit-Resources plugin is not installed and is needed for this functionality.");
-
-            var response = await Interactions.ShowMessageBoxAsync("Wolvenkit-Resources plugin is not installed and is needed for this functionality. Would you like to install it now?", "Wolvenkit-Resources not found");
-            switch (response)
-            {
-                case WMessageBoxResult.OK:
-                case WMessageBoxResult.Yes:
-                {
-                    await _appViewModel.ShowHomePage(EHomePage.Plugins);
-                    break;
-                }
-
-                case WMessageBoxResult.None:
-                case WMessageBoxResult.Cancel:
-                case WMessageBoxResult.No:
-                case WMessageBoxResult.Custom:
-                default:
-                    break;
-            }
-
+            InstallWolvenkitResources();
             return;
         }
 
@@ -288,33 +297,44 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
         await Task.Run(async () =>
         {
-            using RedDBContext db = new();
-
-            if (RightSelectedItem is RedFileViewModel file && db.Files is not null)
+            try
             {
-                var hash = file.GetGameFile().Key;
+                await using RedDBContext db = new();
 
-                var usedBy = await db.Files.Include("Uses")
-                    .Where(x => x.Uses != null && x.Uses.Any(y => y.Hash == hash))
-                    .Select(x => x.Hash)
-                    .ToListAsync();
+                if (RightSelectedItem is RedFileViewModel file && db.Files is not null)
+                {
+                    var hash = file.GetGameFile().Key;
 
-                //add all found items to
-                _archiveManager.Archives
-                    .Connect()
-                    .TransformMany(x => x.Files.Values, y => y.Key)
-                    .Filter(x => usedBy.Contains(x.Key))
-                    .Transform(x => new RedFileViewModel(x))
-                    .Bind(out var list)
-                    .Subscribe()
-                    .Dispose();
+                    var usedBy = await db.Files.Include("Uses")
+                        .Where(x => x.Uses != null && x.Uses.Any(y => y.Hash == hash))
+                        .Select(x => x.Hash)
+                        .ToListAsync();
 
-                // This will go into an endless refresh loop if SuppressNotification is not set, which 
-                // prevents the task from completing. 
-                RightItems.SuppressNotification = true;
-                RightItems.Clear();
-                RightItems.AddRange(list);
-                RightItems.SuppressNotification = false;
+                    //add all found items to
+                    _archiveManager.Archives
+                        .Connect()
+                        .TransformMany(x => x.Files.Values, y => y.Key)
+                        .Filter(x => usedBy.Contains(x.Key))
+                        .Transform(x => new RedFileViewModel(x))
+                        .Bind(out var list)
+                        .Subscribe()
+                        .Dispose();
+
+                    // This will go into an endless refresh loop if SuppressNotification is not set, which 
+                    // prevents the task from completing. 
+                    RightItems.SuppressNotification = true;
+                    RightItems.Clear();
+                    RightItems.AddRange(list);
+                    RightItems.SuppressNotification = false;
+                }
+            }
+            catch
+            {
+                _progressService.IsIndeterminate = false;
+                _loggerService.Error("Something went wrong when searching for uses. It is possible that your WolvenkitResourcesPlugin");
+                _loggerService.Error("  has become corrupted. Try reinstalling it. If that doesn't resolve the problem, please ");
+                _loggerService.Error("  create a ticket under https://github.com/WolvenKit/WolvenKit/issues/ with the following:");
+                throw;
             }
 
             await Task.CompletedTask;
@@ -600,7 +620,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     {
         if (!_archiveManager.IsModBrowserActive)
         {
-            ScanModArchives(true);
+            ScanModArchives(_settings.AnalyzeModArchives);
             LeftItems = new ObservableCollection<RedFileSystemModel>(_archiveManager.ModRoots);
         }
         else
@@ -863,7 +883,9 @@ public partial class AssetBrowserViewModel : ToolViewModel
                 case ArchivePathRefinement archivePathRefinement:
                     return new CyberSearch
                     {
-                        Match = (candidate) => candidate.GetArchive().ArchiveRelativePath.Contains(archivePathRefinement.ArchivePath, StringComparison.CurrentCultureIgnoreCase)
+                        Match = (candidate) =>
+                            candidate.GetArchive().ArchiveRelativePath is string s && !string.IsNullOrEmpty(s) &&
+                            s.Contains(archivePathRefinement.ArchivePath ?? "", StringComparison.CurrentCultureIgnoreCase)
                     };
 
                 case VerbatimRefinement verbatimRefinement:
@@ -929,7 +951,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         var filesToSearch =
             _archiveManager.Archives
                 .Items
-                .Where(x => !_archiveManager.IsModBrowserActive || x.Source == EArchiveSource.Mod)
+                .Where(x => _archiveManager.IsModBrowserActive == (x.Source == EArchiveSource.Mod))
                 .SelectMany(x => x.Files.Values)
                 .Where(file => searchAsSequentialRefinements.All(refinement => refinement.Match(file)))
                 .GroupBy(x => x.Key)
@@ -956,19 +978,19 @@ public partial class AssetBrowserViewModel : ToolViewModel
     }
     #endregion methods
 
-    public void ScanModArchives(bool readScanFromSettings = false)
+    // On initialization, scanArchives is read from the settings. On scan button click, we always want to scan.
+    public void ScanModArchives(bool scanArchives)
     {
         if (_settings.CP77ExecutablePath is null)
         {
             return;
         }
 
-        var conductScan = !readScanFromSettings || _settings.AnalyzeModArchives;
-        _archiveManager.LoadModsArchives(new FileInfo(_settings.CP77ExecutablePath), conductScan);
+        _archiveManager.LoadModsArchives(new FileInfo(_settings.CP77ExecutablePath), scanArchives);
 
         if (Directory.Exists(_settings.ExtraModDirPath))
         {
-            _archiveManager.LoadAdditionalModArchives(_settings.ExtraModDirPath, conductScan);
+            _archiveManager.LoadAdditionalModArchives(_settings.ExtraModDirPath, scanArchives);
         }
     }
 }

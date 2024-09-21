@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WolvenKit.App.Helpers;
+using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.ViewModels.Dialogs;
 
 namespace WolvenKit.App.Interaction;
@@ -21,10 +22,10 @@ public static class Interactions
     }
 
     // wrappers
-    public static async Task<string> ShowInputBoxAsync(string originalName)
+    public static async Task<string> ShowInputBoxAsync(string title, string originalName)
     {
         string result = "";
-        DispatcherHelper.RunOnMainThread(() => result = AskForTextInput());
+        DispatcherHelper.RunOnMainThread(() => result = AskForTextInput(""));
         return await Task.FromResult(result);
     }
 
@@ -45,9 +46,18 @@ public static class Interactions
     public static Func<IEnumerable<string>, bool> DeleteFiles { get; set; } = _ => throw new NotImplementedException();
 
     public static Func<string, string> Rename { get; set; } = _ => throw new NotImplementedException();
+
     public static Func<string, Tuple<string, bool>> RenameAndRefactor { get; set; } = _ => throw new NotImplementedException();
 
-    public static Func<string> AskForTextInput { get; set; } = () => throw new NotImplementedException();
+    public static Func<(string, List<string>, Cp77Project), (List<string>, string? moveToPath)> ShowDeleteOrMoveFilesList { get; set; } =
+        _ => throw new NotImplementedException();
+
+    public static Func<(string, Dictionary<string, List<string>>), bool> ShowBrokenReferencesList { get; set; } =
+        _ => throw new NotImplementedException();
+
+    public static Func<string, string> AskForTextInput { get; set; } = _ => throw new NotImplementedException();
+
+    public static Func<(string, Cp77Project), string> AskForFolderPathInput { get; set; } = _ => throw new NotImplementedException();
 
     //custom views
     public static Func<bool> ShowFirstTimeSetup { get; set; } = () => throw new NotImplementedException();

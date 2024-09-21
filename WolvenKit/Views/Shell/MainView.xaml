@@ -28,8 +28,6 @@
     SizeToContent="Manual"
     TitleTextAlignment="Right"
     UseLayoutRounding="True"
-    KeyDown="OnKeyStateChanged"
-    KeyUp="OnKeyStateChanged"
     UseNativeChrome="True">
     <!--  TextBlock Text="{Binding Title}" FontSize="{Binding TitileFontSize}" VerticalAlignment="Center" Margin="10,0,0,0" Opacity="{Binding Opacity, ElementName=ModalOverlay}"/  -->
 

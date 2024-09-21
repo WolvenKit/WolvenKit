@@ -19,9 +19,6 @@ public interface IModifierViewStateService: INotifyPropertyChanged
         Key.LeftAlt,
         Key.RightAlt
     ];
-    public abstract void RefreshModifierStates(bool skipUpdate = false);
-    public abstract bool GetModifierState(ModifierKeys key, bool noOtherModifiersPressed = false);
-    void OnKeystateChanged(KeyEventArgs? e);
 
     public abstract bool IsShiftKeyPressed { get; }
     public abstract bool IsShiftKeyPressedOnly { get; }
@@ -36,6 +33,5 @@ public interface IModifierViewStateService: INotifyPropertyChanged
     public abstract bool IsCtrlShiftOnlyPressed { get; }
     public abstract bool IsCtrlAltOnlyPressed { get; }
     public abstract bool IsAltShiftOnlyPressed { get; }
-
-    public abstract event Action? ModifierStateChanged;
+    public abstract event EventHandler<System.Windows.Forms.KeyEventArgs>? ModifierStateChanged;
 }

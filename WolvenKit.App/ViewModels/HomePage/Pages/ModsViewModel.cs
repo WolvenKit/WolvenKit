@@ -213,31 +213,6 @@ public partial class ModsViewModel : PageViewModel
     }
     
     [RelayCommand]
-    private void LaunchGameFromLastSave()
-    {
-        var launchSavegameArg = "";
-        if (ISettingsManager.GetLastSaveName() is string lastSavegame)
-        {
-            launchSavegameArg = $"-save={lastSavegame}";
-        }
-         
-        try
-        {
-            Process.Start(new ProcessStartInfo
-            {
-                FileName = _settings.GetRED4GameLaunchCommand(),
-                Arguments = $"{_settings.GetRED4GameLaunchOptions()} -modded {launchSavegameArg}",
-                ErrorDialog = true,
-            });
-        }
-        catch (Exception ex)
-        {
-            _logger.Error("Launch: error launching game! Please check your executable path in Settings.");
-            _logger.Info($"Launch: error debug info: {ex.Message}");
-        }
-    }
-
-    [RelayCommand]
     private void Remove()
     {
         if (SelectedMod is null)

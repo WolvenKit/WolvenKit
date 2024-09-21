@@ -13,13 +13,13 @@ public readonly struct CResourceAsyncReference<T> : IRedResourceAsyncReference<T
     public CResourceAsyncReference()
     {
         _depotPath = ResourcePath.Empty;
-        _flags = InternalEnums.EImportFlags.Default;
+        _flags = InternalEnums.EImportFlags.Soft;
     }
 
     public CResourceAsyncReference(ResourcePath depotPath)
     {
         _depotPath = depotPath;
-        _flags = InternalEnums.EImportFlags.Default;
+        _flags = InternalEnums.EImportFlags.Soft;
     }
 
     public CResourceAsyncReference(ResourcePath depotPath, InternalEnums.EImportFlags flags)

@@ -18,7 +18,7 @@ jobs:
           dotnet-version: 8.x
 
       - name: Publish with Dotnet
-        run: dotnet publish .\WolvenKit\WolvenKit.csproj -o .\publish -c Release
+        run: dotnet publish .\WolvenKit\WolvenKit.csproj -o .\publish -c Release -p:DebugType=None -p:DebugSymbols=false
 
       - uses: actions/upload-artifact@v4
         with:
@@ -39,4 +39,4 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore ./WolvenKit.CLI/WolvenKit.CLI.csproj
       - name: Build
-        run: dotnet build ./WolvenKit.CLI/WolvenKit.CLI.csproj --no-restore
+        run: dotnet build ./WolvenKit.CLI/WolvenKit.CLI.csproj --no-restore  -p:DebugType=None -p:DebugSymbols=false

@@ -79,13 +79,13 @@ namespace WolvenKit.Views.Tools
             TreeGrid.NodeCollapsing += TreeGrid_OnNodeCollapsing;
             TreeGrid.NodeCollapsed += TreeGrid_OnNodeCollapsed;
             
-
+            
             this.WhenActivated(disposables =>
             {
                 if (DataContext is ProjectExplorerViewModel vm)
                 {
                     SetCurrentValue(ViewModelProperty, vm);
-                    vm.OnProjectChanged += ResetTreeGrids;
+                    vm.OnProjectChanged += ResetUiElements;
                 }
                 
                 AddKeyUpEvent();
@@ -102,27 +102,39 @@ namespace WolvenKit.Views.Tools
                     return result == AdonisUI.Controls.MessageBoxResult.OK;
                 };
 
-                Interactions.RenameAndRefactor = input =>
-                    {
-                        var dialog = new RenameDialog(true);
-                        if (dialog.ViewModel is not null)
-                        {
-                            dialog.ViewModel.Text = input;
-                        }
-
-                        if (dialog.ViewModel is not RenameDialogViewModel innerVm
-                            || dialog.ShowDialog(Application.Current.MainWindow) != true)
-                        {
-                            return new Tuple<string, bool>("", false);
-                        }
-
-                        return new Tuple<string, bool>(innerVm.Text, innerVm.EnableRefactoring == true);
-                    };
-
-
-                Interactions.AskForTextInput = () =>
+                Interactions.ShowDeleteOrMoveFilesList = (args) =>
                 {
-                    var dialog = new InputDialogView();
+                    var list = args.Item2.Order(new FilePathStringComparer());
+                    var dialog = new DeleteOrMoveFilesListDialogView(args.Item1, list.ToList(), args.Item3);
+
+                    if (dialog.ShowDialog(Application.Current.MainWindow) != true ||
+                        dialog.ViewModel is not DeleteOrMoveFilesListDialogViewModel viewModel)
+                    {
+                        return ([], null);
+                    }
+
+                    return (viewModel.Files, viewModel.MoveToPath);
+                };
+
+                Interactions.ShowBrokenReferencesList = (args) =>
+                {
+                    var comparer = new FilePathComparer();
+                    var dialog = new ShowBrokenReferencesDialogView(args.Item1, args.Item2);
+                    return dialog.ShowDialog(Application.Current.MainWindow) == true;
+                };
+
+                Interactions.RenameAndRefactor = input =>
+                {
+                    var result = ShowRenameDialog(input);
+                    return new Tuple<string, bool>(result.Text, result.EnableRefactoring);
+                };
+
+                Interactions.Rename = input => ShowRenameDialog(input).Text;
+
+
+                Interactions.AskForTextInput = title =>
+                {
+                    var dialog = new InputDialogView() { Title = title };
 
                     if (dialog.ViewModel is not InputDialogViewModel innerVm
                         || dialog.ShowDialog(Application.Current.MainWindow) != true)
@@ -132,8 +144,20 @@ namespace WolvenKit.Views.Tools
 
                     return innerVm.Text;
                 };
-               
 
+                Interactions.AskForFolderPathInput = (args) =>
+                {
+                    var dialog = new FolderPathInputDialogView(args.Item2, args.Item1);
+
+                    if (dialog.ViewModel is not FolderPathInputDialogViewModel innerVm
+                        || dialog.ShowDialog(Application.Current.MainWindow) != true)
+                    {
+                        return "";
+                    }
+
+                    return innerVm.Text;
+                };
+               
                 //EventBindings
                 Observable
                     .FromEventPattern(TreeGrid, nameof(TreeGrid.CellDoubleTapped))
@@ -145,7 +169,11 @@ namespace WolvenKit.Views.Tools
                     .Subscribe(p => OnCellDoubleTapped(p.Sender, p.EventArgs as TreeGridCellDoubleTappedEventArgs))
                     .DisposeWith(disposables);
 
-
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.ToggleFlatModeCommand,
+                        view => view.ToggleFlatModeButton)
+                    .DisposeWith(disposables);
+                
                 this.BindCommand(ViewModel,
                     viewModel => viewModel.OpenRootFolderCommand,
                     view => view.OpenFolderButton);
@@ -162,25 +190,71 @@ namespace WolvenKit.Views.Tools
                         viewModel => viewModel.FileList,
                         view => view.TreeGridFlat.ItemsSource)
                     .DisposeWith(disposables);
+
+                ViewModel.OnToggleFlatMode += OnToggleFlatMode;
+
             });
         }
 
-        // Run inside Dispatcher to avoid exception on startup
-        private void ResetTreeGrids() => Dispatcher.Invoke(() =>
+        private static (string Text, bool EnableRefactoring) ShowRenameDialog(string input)
         {
+            var dialog = new RenameDialog(true);
+            if (dialog.ViewModel is not null)
+            {
+                dialog.ViewModel.Text = input;
+            }
+
+            if (dialog.ViewModel is not RenameDialogViewModel innerVm
+                || dialog.ShowDialog(Application.Current.MainWindow) != true)
+            {
+                return (string.Empty, false);
+            }
+
+            return (innerVm.Text, innerVm.EnableRefactoring == true);
+        }
+
+        // Not sure why the property binding broke, but it did. This fixes it.
+        private void OnToggleFlatMode(object sender, EventArgs e)
+        {
+            if (sender is not ProjectExplorerViewModel model)
+            {
+                return;
+            }
+
+            if (model.IsFlatModeEnabled)
+            {
+                TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+                TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+            }
+            else
+            {
+                TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+                TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+            }
+        }
+
+        // Run inside Dispatcher to avoid exception on startup
+        private void ResetUiElements() => Dispatcher.Invoke(() =>
+        {
+            // Hide loading text
+            LoadingText.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+
+            _currentFolderQuery = "";
+            // Set search bar to empty if it wasn't 
+            PESearchBar?.SetCurrentValue(System.Windows.Controls.TextBox.TextProperty, "");
+            
+            // now handle the grids
             if (TreeGridFlat.View is not null)
             {
                 TreeGridFlat.ClearFilters();
                 TreeGridFlat.ClearSelections(false);
             }
 
-            if (TreeGrid.View is null)
+            if (TreeGrid.View is not null)
             {
-                return;
+                TreeGrid.ClearFilters();
+                TreeGrid.ClearSelections(false);
             }
-
-            TreeGrid.ClearFilters();
-            TreeGrid.ClearSelections(false);
         });
 
         private void TreeGrid_OnNodeExpanding(object sender, NodeExpandingEventArgs e)
@@ -324,7 +398,6 @@ namespace WolvenKit.Views.Tools
 
             // register to KeyUp because KeyDown doesn't forward "F2"
             KeyUp += OnKeyUp;
-            KeyDown += OnKeyStateChanged; 
             ViewModel.IsKeyUpEventAssigned = true;
         }
 
@@ -357,20 +430,10 @@ namespace WolvenKit.Views.Tools
         }
 
         /// <summary>
-        /// Called from view on keyup/keydown event. Synchronises modifier state with ModifierViewStateModel.
-        /// </summary>
-        private void OnKeyStateChanged(object sender, KeyEventArgs e) => ViewModel?.RefreshModifierStates();
-
-        public void RefreshModifierStates(object sender, RoutedEventArgs routedEventArgs) => ViewModel?.RefreshModifierStates();
-
-        /// <summary>
         /// Called from view on key down event. Handles search bar and rename/delete commands.
         /// </summary>
         private void OnKeyUp(object sender, KeyEventArgs e)
         {
-            // For context menu switching
-            OnKeyStateChanged(sender, e);
-            
             if (PESearchBar.IsFocused)
             {
                 return;
@@ -662,7 +725,7 @@ namespace WolvenKit.Views.Tools
         /// </summary>
         private async Task ProcessFileAction(IReadOnlyList<string> sourceFiles, string targetDirectory)
         {
-            var isCopy = ViewModel?.ModifierViewStateService.GetModifierState(ModifierKeys.Control) == true;
+            var isCopy = ViewModel?.ModifierViewStateService.IsCtrlKeyPressed == true;
 
             // Abort if a directory is dragged on itself or its parent
             if (!isCopy && sourceFiles.Count == 1 &&
@@ -785,7 +848,7 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        private class FilePathComparer : IComparer<object>, ISortDirection
+        public class FilePathComparer : IComparer<object>, ISortDirection
         {
             public int Compare(object x, object y)
             {
@@ -840,6 +903,76 @@ namespace WolvenKit.Views.Tools
                     {
                         return item1Parts.Length.CompareTo(item2Parts.Length);
                     }
+
+                    for (var i = 0; i < Math.Min(item1Parts.Length, item2Parts.Length); i++)
+                    {
+                        var result = string.CompareOrdinal(item1Parts[i], item2Parts[i]);
+                        if (result != 0)
+                        {
+                            return result;
+                        }
+                    }
+
+                    return 0;
+                }
+            }
+
+            public ListSortDirection SortDirection { get; set; }
+        }
+
+        public class FilePathStringComparer : IComparer<string>, ISortDirection
+        {
+            public int Compare(string item1, string item2)
+            {
+                var c = 0;
+
+                if (item1 == item2)
+                {
+                    return 0;
+                }
+
+                if (item1 != null && item2 == null)
+                {
+                    c = -1;
+                }
+                else if (item1 == null)
+                {
+                    c = 1;
+                }
+                else
+                {
+                    switch (Directory.Exists(item1))
+                    {
+                        case true when !Directory.Exists(item2):
+                            c = -1;
+                            break;
+                        case false when Directory.Exists(item2):
+                            c = 1;
+                            break;
+                        default:
+                        {
+                            c = CompareParts();
+                            if (c == 0)
+                            {
+                                c = string.CompareOrdinal(item1, item2);
+                            }
+
+                            break;
+                        }
+                    }
+                }
+
+                if (SortDirection == ListSortDirection.Descending)
+                {
+                    c = -c;
+                }
+
+                return c;
+
+                int CompareParts()
+                {
+                    var item1Parts = item1.Split(Path.DirectorySeparatorChar);
+                    var item2Parts = item2.Split(Path.DirectorySeparatorChar);
 
                     for (var i = 0; i < Math.Min(item1Parts.Length, item2Parts.Length); i++)
                     {

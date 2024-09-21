@@ -1,10 +1,11 @@
+using System.Collections.Generic;
 using System.ComponentModel;
-using System.Reactive;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
+using WolvenKit.App.Models;
 using WolvenKit.App.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
@@ -31,7 +32,7 @@ public partial class RibbonViewModel : ObservableObject
         MainViewModel = appViewModel;
         MainViewModel.PropertyChanged += MainViewModel_OnPropertyChanged;
 
-        _showRedmodInRibbon = settingsManager.ShowRedmodInRibbon;
+        ShowRedmodInRibbon = settingsManager.ShowRedmodInRibbon;
 
         _settingsManager.PropertyChanged += SettingsManager_PropertyChanged;
 
@@ -100,8 +101,8 @@ public partial class RibbonViewModel : ObservableObject
         {
             return;
         }
-            
-        _settingsManager.LaunchProfiles ??= new();
+
+        _settingsManager.LaunchProfiles ??= new Dictionary<string, LaunchProfile>();
 
         if (LaunchProfileText is not null && _settingsManager.LaunchProfiles.TryGetValue(LaunchProfileText, out var launchProfile))
         {

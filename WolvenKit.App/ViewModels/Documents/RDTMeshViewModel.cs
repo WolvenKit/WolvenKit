@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -37,6 +38,8 @@ using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
+using IMaterial = WolvenKit.RED4.Types.IMaterial;
+using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 using Material = WolvenKit.App.Models.Material;
 
 namespace WolvenKit.App.ViewModels.Documents;
@@ -59,7 +62,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
     private const double s_cameraUpDirectionFactor = 0.7;
     private const int s_cameraAnimationTime = 400;
 
-    private bool _isLoaded;
 
     #region ctor
 
@@ -84,7 +86,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         Parent = parent;
     }
 
-    private void ModifierStateChanged() => IsCtrlKeyPressed = _modifierSvc.IsCtrlKeyPressed;
+    private void ModifierStateChanged(object? sender, KeyEventArgs keyEventArgs) => IsCtrlKeyPressed = _modifierSvc.IsCtrlKeyPressed;
 
     // TODO refactor this into inherited viewmodels
 
@@ -146,7 +148,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
     public override void Load()
     {
-        if (_isLoaded)
+        if (IsLoaded)
         {
             return;
         }
@@ -176,46 +178,54 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 FarPlaneDistance = 1E+8,
                 LookDirection = new Vector3D(1f, -1f, -1f)
             };
+
+            switch (_data)
+            {
+                case CMesh:
+                    RenderMesh();
+                    break;
+                case worldStreamingSector:
+                {
+                    PanelVisibility.ShowSelectionPanel = true;
+                    PanelVisibility.ShowToggleCollision = true;
+                    var app = new Appearance(Path.GetFileNameWithoutExtension(Parent.ContentId).Replace("-", "_"));
+
+                    Appearances.Add(app);
+                    SelectedAppearance = app;
+
+                    RenderSectorSolo();
+                    break;
+                }
+                case worldStreamingBlock:
+                    PanelVisibility.ShowSearchPanel = true;
+                    PanelVisibility.ShowToggleCollision = true;
+                    PanelVisibility.ShowAddSectors = true;
+
+                    RenderBlockSolo();
+                    break;
+                case entEntityTemplate:
+                    PanelVisibility.ShowExportEntity = true;
+
+                    try
+                    {
+                        RenderEntitySolo();
+                    }
+                    catch (Exception e)
+                    {
+                        _loggerService.Error($"Failed to render entity. Please open a ticket: \n${e}");
+                    }
+
+                    break;
+                default:
+                    break;
+            }
+
         }
         catch (Exception ex)
         {
             Parent.GetLoggerService().Error(ex);
         }
-        
-        if (_data is CMesh)
-        {
-            RenderMesh();
-        }
-
-        if (_data is worldStreamingSector)
-        {
-            PanelVisibility.ShowSelectionPanel = true;
-            PanelVisibility.ShowToggleCollision = true;
-            var app = new Appearance(Path.GetFileNameWithoutExtension(Parent.ContentId).Replace("-", "_"));
-
-            Appearances.Add(app);
-            SelectedAppearance = app;
-
-            RenderSectorSolo();
-        }
-
-        if (_data is worldStreamingBlock)
-        {
-            PanelVisibility.ShowSearchPanel = true;
-            PanelVisibility.ShowToggleCollision = true;
-            PanelVisibility.ShowAddSectors = true;
-
-            RenderBlockSolo();
-        }
-
-        if (_data is entEntityTemplate)
-        {
-            PanelVisibility.ShowExportEntity = true;
-
-            RenderEntitySolo();
-        }
-
-        _isLoaded = true;
+        IsLoaded = true;
     }
 
     public override void Unload()
@@ -284,6 +294,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
     [ObservableProperty] private bool _isCtrlKeyPressed;
 
+    [ObservableProperty] private bool _isLoaded;
+
     public bool CtrlKeyPressed { get; set; }
 
     public bool ShiftKeyPressed { get; set; }
@@ -302,7 +314,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             var newElems = new SmartElement3DCollection();
             value.ForEach(v => newElems.Add(v));
             SelectedAppearance.ModelGroup = newElems;
-            OnPropertyChanged();
+            OnPropertyChanged(new PropertyChangedEventArgs(nameof(SelectedModelGroup)));
         }
     }
 
@@ -335,7 +347,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
         var outFile = new FileInfo(dlg.FileName);
         // will only use archive files (for now)
-        var appearanceName = SelectedAppearance.AppearanceName.ToString().NotNull();
+        var appearanceName = SelectedAppearance.AppearanceName.NotNull();
         if (_modTools.ExportEntity(Parent.Cr2wFile, appearanceName, outFile))
         {
             Parent.GetLoggerService().Success($"Entity with appearance '{appearanceName}'exported: {dlg.FileName}");
@@ -479,10 +491,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             {
                 continue;
             }
-            
-            // TODO [mana] throwIfNull? Not rather print a warning and go on?
-            // ArgumentNullException.ThrowIfNull(inst);
-            
+          
             var material = new Material(name)
             {
                 Instance = inst,
@@ -500,51 +509,66 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         var appIndex = 0;
         foreach (var handle in data.Appearances)
         {
-            var app = handle.GetValue();
-            if (app is meshMeshAppearance mmapp)
+            if (handle.GetValue() is not meshMeshAppearance mmapp)
             {
-                var appMaterials = new List<Material>();
+                appIndex++;
+                continue;
+            }
 
-                foreach (var materialName in mmapp.ChunkMaterials)
+            var appMaterials = new List<Material>();
+
+            foreach (var materialName in mmapp.ChunkMaterials)
+            {
+                var name = GetUniqueMaterialName(materialName.ToString().NotNull(), data);
+                appMaterials.Add(materials.TryGetValue(name, out var material) ? material : new Material(name));
+            }
+
+            var appearance = new Appearance(mmapp.Name.ToString().NotNull());
+
+            var model = new LoadableModel(Path.GetFileNameWithoutExtension(Parent.ContentId).Replace("-", "_").Replace(".", "_"))
+            {
+                MeshFile = Parent.Cr2wFile,
+                AppearanceIndex = appIndex,
+                AppearanceName = mmapp.Name,
+                Materials = appMaterials,
+                IsEnabled = true
+            };
+            appearance.Models.Add(model);
+            appearance.BindableModels.Add(model);
+            foreach (var material in materials.Values)
+            {
+                appearance.RawMaterials[material.Name] = material;
+            }
+
+            model.Meshes = MakeMesh(data, ulong.MaxValue, model.AppearanceIndex);
+
+            var materialIndex = 0;
+            foreach (var m in model.Meshes)
+            {
+                if (!appearance.LODLUT.TryGetValue(m.LOD, out var value))
                 {
-                    var name = GetUniqueMaterialName(materialName.ToString().NotNull(), data);
-                    appMaterials.Add(materials.TryGetValue(name, out var material) ? material : new Material(name));
-                    
+                    value = [];
+                    appearance.LODLUT[m.LOD] = value;
                 }
 
-                var a = new Appearance(mmapp.Name.ToString().NotNull());
-
-                var model = new LoadableModel(Path.GetFileNameWithoutExtension(Parent.ContentId).Replace("-", "_").Replace(".", "_"))
+                // Ensure materialIndex is within the bounds of a.RawMaterials.Keys
+                if (materialIndex >= appearance.RawMaterials.Keys.Count)
                 {
-                    MeshFile = Parent.Cr2wFile,
-                    AppearanceIndex = appIndex,
-                    AppearanceName = mmapp.Name,
-                    Materials = appMaterials,
-                    IsEnabled = true
-                };
-                a.Models.Add(model);
-                a.BindableModels.Add(model);
-                foreach (var material in model.Materials)
-                {
-                    a.RawMaterials[material.Name] = material;
+                    materialIndex = 0; // Or handle this scenario as appropriate for your application
                 }
 
-                model.Meshes = MakeMesh(data, ulong.MaxValue, model.AppearanceIndex);
-
-                foreach (var m in model.Meshes)
+                if (appearance.RawMaterials.Keys.Count > 0)
                 {
-                    if (!a.LODLUT.TryGetValue(m.LOD, out var value))
-                    {
-                        value = [];
-                        a.LODLUT[m.LOD] = value;
-                    }
+                    var materialKey = appearance.RawMaterials.Keys.ElementAt(materialIndex);
+                    m.MaterialName ??= materialKey;
 
                     value.Add(m);
                 }
-                a.ModelGroup.AddRange(AddMeshesToRiggedGroups(a));
-
-                Appearances.Add(a);
             }
+
+            appearance.ModelGroup.AddRange(AddMeshesToRiggedGroups(appearance));
+
+            Appearances.Add(appearance);
             appIndex++;
         }
 
@@ -604,6 +628,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         var modelGroups = new List<Element3D>();
         foreach (var (name, rig) in Rigs)
         {
+            if (name is "deformations" or "root")
+            {
+                continue;
+            }
             var group = new GroupModel3DExt()
             {
                 Name = $"{rig.Name}",
@@ -619,7 +647,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         {
             var group = GroupFromModel(model);
 
-            if (model.BindName == null)
+            if (model.BindName is null || model.SlotName is null or "None")
             {
                 modelGroups.Add(group);
                 continue;
@@ -777,10 +805,16 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         return list;
     }
 
+    private Material defaultMaterial = new("default")
+    {
+        Instance = new CMaterialInstance() { BaseMaterial = new CResourceReference<IMaterial>(@"engine\materials\metal_base.remt") }
+    };
+
     private void ProcessComponents(RedBaseClass component, Dictionary<string, LoadableModel> appModels)
     {
         var scale = new Vector3() { X = 1, Y = 1, Z = 1 };
         var depotPath = ResourcePath.Empty;
+        var componentName = "";
         var enabled = true;
         var meshApp = "default";
         var chunkMask = 18446744073709551615;
@@ -797,6 +831,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             depotPath = mc.Mesh.DepotPath;
             meshApp = mc.MeshAppearance;
             chunkMask = mc.ChunkMask;
+            componentName = mc.Name;
         }
 
         var enabledChunks = new ObservableCollection<int>();
@@ -810,133 +845,154 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             }
         }
 
-        if (component is entIPlacedComponent epc && depotPath != ResourcePath.Empty && depotPath.GetRedHash() != 0)
+        if (component is not entIPlacedComponent epc || depotPath == ResourcePath.Empty || depotPath.GetRedHash() == 0)
         {
-            var meshFile = Parent.GetFileFromDepotPathOrCache(depotPath);
-
-            if (meshFile is not { RootChunk: CMesh mesh })
-            {
-                Parent.GetLoggerService().Warning($"Couldn't find mesh file: {depotPath} / {depotPath.GetRedHash()}");
-                return;
-            }
-
-            var matrix = ToSeparateMatrix(epc.LocalTransform);
-
-            string? bindName = null, slotName = null;
-            if ((epc.ParentTransform?.GetValue() ?? null) is entHardTransformBinding ehtb)
-            {
-                bindName = ehtb.BindName;
-                slotName = ehtb.SlotName;
-            }
-
-            matrix.Scale(ToScaleVector3D(scale));
-
-            var materials = new Dictionary<string, Material>();
-
-            var localList = mesh.LocalMaterialBuffer.RawData?.Buffer.Data as CR2WList ?? null;
-
-            foreach (var me in mesh.MaterialEntries)
-            {
-                var name = GetUniqueMaterialName(me.Name.ToString().NotNull(), mesh);
-                if (!me.IsLocalInstance)
-                {
-                    materials.Add(name, new Material(name));
-                    continue;
-                }
-
-                CMaterialInstance? inst = null;
-
-                if (localList != null && localList.Files.Count > me.Index)
-                {
-                    inst = (CMaterialInstance)localList.Files[me.Index].RootChunk;
-                }
-                else
-                {
-                    //foreach (var pme in data.PreloadLocalMaterialInstances)
-                    //{
-                    //inst = (CMaterialInstance)pme.GetValue();
-                    //}
-                    inst = (CMaterialInstance?)mesh.PreloadLocalMaterialInstances[me.Index]?.GetValue();
-                }
-
-                //CMaterialInstance bm = null;
-                //if (File.GetFileFromDepotPathOrCache(inst.BaseMaterial.DepotPath) is var file)
-                //{
-                //    bm = (CMaterialInstance)file.RootChunk;
-                //}
-
-                ArgumentNullException.ThrowIfNull(inst);
-
-                var material = new Material(name) { Instance = inst, };
-
-                foreach (var pair in inst.Values)
-                {
-                    var k = pair.Key.ToString().NotNull();
-                    material.Values[k] = pair.Value;
-                }
-
-                materials[name] = material;
-            }
-
-            var apps = new List<string>();
-            foreach (var handle in mesh.Appearances)
-            {
-                var app = handle.GetValue();
-                if (app is meshMeshAppearance mmapp)
-                {
-                    apps.Add(mmapp.Name.ToString().NotNull());
-                }
-            }
-
-            var appIndex = 0;
-            ArgumentNullException.ThrowIfNull(meshApp);
-            if (meshApp != "default" && apps.IndexOf(meshApp) is var index && index != -1)
-            {
-                appIndex = index;
-            }
-
-            var appMaterials = new List<Material>();
-
-            foreach (var handle in mesh.Appearances)
-            {
-                var app = handle.GetValue();
-                if (app is meshMeshAppearance mmapp &&
-                    (mmapp.Name == meshApp || meshApp == "default" && mesh.Appearances.IndexOf(handle) == 0))
-                {
-                    foreach (var m in mmapp.ChunkMaterials)
-                    {
-                        var name = GetUniqueMaterialName(m.ToString().NotNull(), mesh);
-                        if (materials.ContainsKey(name))
-                        {
-                            appMaterials.Add(materials[name]);
-                        }
-                        else
-                        {
-                            appMaterials.Add(new Material(name));
-                        }
-                    }
-
-                    break;
-                }
-            }
-
-            var model = new LoadableModel(epc.Name.ToString().NotNull().Replace(".", ""))
-            {
-                MeshFile = meshFile,
-                AppearanceIndex = appIndex,
-                AppearanceName = meshApp,
-                Matrix = matrix,
-                Materials = appMaterials,
-                IsEnabled = enabled,
-                BindName = bindName,
-                SlotName = slotName,
-                ChunkMask = chunkMask,
-                ChunkList = chunkList,
-                EnabledChunks = enabledChunks,
-                DepotPath = depotPath
-            };
-            appModels.Add(epc.Name.ToString().NotNull(), model);
+            return;
         }
+
+        var meshFile = Parent.GetFileFromDepotPathOrCache(depotPath);
+
+        if (meshFile is not { RootChunk: CMesh mesh })
+        {
+            Parent.GetLoggerService().Warning($"Couldn't find mesh file: {depotPath} / {depotPath.GetRedHash()}");
+            return;
+        }
+
+        var matrix = ToSeparateMatrix(epc.LocalTransform);
+
+        string? bindName = null, slotName = null;
+        if ((epc.ParentTransform?.GetValue() ?? null) is entHardTransformBinding ehtb)
+        {
+            bindName = ehtb.BindName;
+            slotName = ehtb.SlotName;
+        }
+
+        matrix.Scale(ToScaleVector3D(scale));
+
+        var materials = new Dictionary<string, Material>();
+
+        var localList = mesh.LocalMaterialBuffer.RawData?.Buffer.Data as CR2WList ?? null;
+
+        foreach (var me in mesh.MaterialEntries)
+        {
+            var name = GetUniqueMaterialName(me.Name.ToString().NotNull(), mesh);
+            if (!me.IsLocalInstance)
+            {
+                materials.Add(name, new Material(name));
+                continue;
+            }
+
+            CMaterialInstance? inst = null;
+
+            if (localList != null && localList.Files.Count > me.Index)
+            {
+                inst = (CMaterialInstance)localList.Files[me.Index].RootChunk;
+            }
+            else if (mesh.PreloadLocalMaterialInstances.Count > me.Index)
+            {
+                //foreach (var pme in data.PreloadLocalMaterialInstances)
+                //{
+                //inst = (CMaterialInstance)pme.GetValue();
+                //}
+                inst = (CMaterialInstance?)mesh.PreloadLocalMaterialInstances[me.Index]?.GetValue();
+            }
+
+            //CMaterialInstance bm = null;
+            //if (File.GetFileFromDepotPathOrCache(inst.BaseMaterial.DepotPath) is var file)
+            //{
+            //    bm = (CMaterialInstance)file.RootChunk;
+            //}
+            if (inst is null)
+            {
+                _loggerService.Error($"Failed to load material {name}! Check your mesh materials!");
+                materials[name] = defaultMaterial;
+                continue;
+            }
+
+            var material = new Material(name) { Instance = inst, };
+
+            foreach (var pair in inst.Values)
+            {
+                var k = pair.Key.ToString().NotNull();
+                material.Values[k] = pair.Value;
+            }
+
+            materials[name] = material;
+        }
+
+        if (materials.Count == 0)
+        {
+            materials.Add("default", defaultMaterial);
+        }
+        var apps = new List<string>();
+        foreach (var handle in mesh.Appearances)
+        {
+            var app = handle.GetValue();
+            if (app is meshMeshAppearance mmapp)
+            {
+                apps.Add(mmapp.Name.ToString().NotNull());
+            }
+        }
+
+        if (apps.Count == 0)
+        {
+            apps.Add("default");
+        }
+
+        var appIndex = 0;
+        ArgumentNullException.ThrowIfNull(meshApp);
+        if (meshApp != "default" && apps.IndexOf(meshApp) is var index && index != -1)
+        {
+            appIndex = index;
+        }
+
+        var appMaterials = new List<Material>();
+
+        foreach (var handle in mesh.Appearances)
+        {
+            var app = handle.GetValue();
+            if (app is meshMeshAppearance mmapp &&
+                (mmapp.Name == meshApp || meshApp == "default" && mesh.Appearances.IndexOf(handle) == 0))
+            {
+                foreach (var m in mmapp.ChunkMaterials)
+                {
+                    var name = GetUniqueMaterialName(m.ToString().NotNull(), mesh);
+                    if (materials.TryGetValue(name, out var material))
+                    {
+                        appMaterials.Add(material);
+                    }
+                    else
+                    {
+                        appMaterials.Add(new Material(name));
+                    }
+                }
+
+                break;
+            }
+        }
+
+        if (appMaterials.Count == 0)
+        {
+            appMaterials.Add(defaultMaterial);
+        }
+
+        var model = new LoadableModel(epc.Name.ToString().NotNull().Replace(".", ""))
+        {
+            ComponentName = (CName)(componentName ?? ""),
+            MeshFile = meshFile,
+            AppearanceIndex = appIndex,
+            AppearanceName = meshApp,
+            Matrix = matrix,
+            Materials = appMaterials,
+            IsEnabled = enabled,
+            BindName = bindName,
+            SlotName = slotName,
+            ChunkMask = chunkMask,
+            ChunkList = chunkList,
+            EnabledChunks = enabledChunks,
+            DepotPath = depotPath
+        };
+        appModels.Add(epc.Name.ToString().NotNull(), model);
     }
 
     public void GetResolvedMatrix(IBindable bindable, ref SeparateMatrix matrix, Dictionary<string, LoadableModel> models)
@@ -1501,8 +1557,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         return appMaterials;
     }
 
-    private string GetUniqueMaterialName(string name, CMesh mesh) => mesh.InplaceResources.Count > 0 
-        ? Path.GetFileNameWithoutExtension(mesh.InplaceResources[0].DepotPath.ToString().NotNull()) 
+    private string GetUniqueMaterialName(string name, CMesh mesh) => mesh.InplaceResources.Count > 0
+        ? Path.GetFileNameWithoutExtension(mesh.InplaceResources[0].DepotPath.GetResolvedText().NotNull()) 
         : name;
 
     private Dictionary<string, Material> GetMaterialsFromMesh(CMesh mesh)
@@ -1583,9 +1639,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         IsLoadingMaterials = true;
         if (CtrlKeyPressed)
         {
+            Parent.GetLoggerService().NotNull().Info($"Clearing material cache...");
             foreach (var (_, material) in SelectedAppearance.RawMaterials)
             {
-                Parent.GetLoggerService().NotNull().Info($"Clearing material cache...");
                 ClearMaterial(material);
             }
 
@@ -3199,7 +3255,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
             var text = new BillboardText3D();
             text.TextInfo.Add(
-                new TextInfo(Path.GetFileNameWithoutExtension(desc.Data.DepotPath.ToString()),
+                new TextInfo(Path.GetFileNameWithoutExtension(desc.Data.DepotPath.GetResolvedText()),
                     new SharpDX.Vector3((desc.StreamingBox.Max.X + desc.StreamingBox.Min.X) / 2, (desc.StreamingBox.Max.Z + desc.StreamingBox.Min.Z) / 2, -(desc.StreamingBox.Max.Y + desc.StreamingBox.Min.Y) / 2))
                 {
                     Foreground = SharpDX.Color.Red, Scale = 0.5f
@@ -3209,8 +3265,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             var bbText = new WKBillboardTextModel3D()
             {
                 Geometry = text,
-                Name = Path.GetFileNameWithoutExtension(desc.Data.DepotPath.ToString().NotNull()).Replace("-", "n"),
-                Text = Path.GetFileNameWithoutExtension(desc.Data.DepotPath.ToString().NotNull()),
+                Name = Path.GetFileNameWithoutExtension(desc.Data.DepotPath.GetResolvedText().NotNull()).Replace("-", "n"),
+                Text = Path.GetFileNameWithoutExtension(desc.Data.DepotPath.GetResolvedText().NotNull()),
             };
 
             if (desc.Category == Enums.worldStreamingSectorCategory.Exterior)
@@ -3291,7 +3347,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 other.Children.Add(bbText);
             }
 
-            sectors.Add(new Sector(Path.GetFileNameWithoutExtension(desc.Data.DepotPath.ToString().NotNull()), bbText)
+            sectors.Add(new Sector(Path.GetFileNameWithoutExtension(desc.Data.DepotPath.GetResolvedText().NotNull()), bbText)
             {
                 DepotPath = desc.Data.DepotPath, NumberOfHandles = desc.NumNodeRanges
             });
@@ -3355,7 +3411,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             return;
         }
         IsRendered = true;
-        RenderEntity(_data as entEntityTemplate);
+        try
+        {
+            RenderEntity(_data as entEntityTemplate);
+        }
+        catch (Exception e)
+        {
+            _loggerService.Error($"Failed to render entity. Please open a ticket: \n${e}");
+        }
     }
 
     public GroupModel3DExt? RenderEntity(entEntityTemplate? ent, Appearance? appearance = null, string? appearanceName = null)
@@ -3469,15 +3532,22 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             }
 
             var element = new GroupModel3DExt();
-     
+
+            var idx = -1;
             foreach (var app in appearances)
             {
-                ArgumentNullException.ThrowIfNull(app);
+                idx++;
+                if (app is null)
+                {
+                    _loggerService.Error($"appearance {idx} is null! Skipping...");
+                    continue;
+                }
 
                 var appFile = Parent.GetFileFromDepotPathOrCache(app.AppearanceResource.DepotPath);
 
                 if (appFile is not { RootChunk: appearanceAppearanceResource aar })
                 {
+                    _loggerService.Error($"Failed to laod appearance {idx} from {app.AppearanceResource.DepotPath}");
                     continue;
                 }
 
@@ -3487,18 +3557,20 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     app.AppearanceName = app.Name;
                 }
 
-                foreach (var handle in aar.Appearances)
+                var appearanceDefs = aar.Appearances
+                    .Where((handle) => handle?.GetValue() is appearanceAppearanceDefinition)
+                    .Select((handle) => (appearanceAppearanceDefinition)handle.GetValue()!)
+                    .ToDictionary(value => value.Name.GetResolvedText() ?? "");
+
+                if (!appearanceDefs.TryGetValue(app.AppearanceName.GetResolvedText() ?? "invalid name", out var appDef) ||
+                    appDef.CompiledData?.Data is not RedPackage appPkg)
                 {
-                    ArgumentNullException.ThrowIfNull(handle);
+                    _loggerService.Error(
+                        $"No valid appearance with the name {app.AppearanceName} found in {app.AppearanceResource.DepotPath}");
+                    continue;
+                }
 
-                    var appDef = (appearanceAppearanceDefinition)handle.GetValue().NotNull();
-
-
-                    if (appDef.Name != app.AppearanceName || appDef.CompiledData?.Data is not RedPackage appPkg)
-                    {
-                        continue;
-                    }
-
+                {
                     var loadableModels = LoadMeshes(appPkg.Chunks);
                     loadableModels.AddRange(LoadPartsValues(appDef));
                     LoadPartsOverrides(appDef, loadableModels);
@@ -3531,14 +3603,15 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                         foreach (var m in model.Meshes)
                         {
-                            if (!a.LODLUT.ContainsKey(m.LOD))
+                            if (!a.LODLUT.TryGetValue(m.LOD, out var value))
                             {
-                                a.LODLUT[m.LOD] = new List<SubmeshComponent>();
+                                value = new List<SubmeshComponent>();
+                                a.LODLUT[m.LOD] = value;
                             }
-                            a.LODLUT[m.LOD].Add(m);
+
+                            value.Add(m);
                         }
                     }
-
 
                     if (appearance == null)
                     {
@@ -3554,9 +3627,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                             element.Children.Add(model);
                         }
                     }
-                    break;
                 }
+
             }
+
 
             if (appearance == null && Appearances.Count > 0)
             {
@@ -3565,74 +3639,58 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             
             return element;
         }
-        else
+
+        // ent.appearances.Count == null => it's not a root entity
+        var models = LoadMeshes(pkg.Chunks);
+
+        if (models.Count == 0)
         {
-            var models = LoadMeshes(pkg.Chunks);
-
-            if (models == null)
-            {
-                return null;
-            }
-
-            Appearance a;
-            if (appearance == null)
-            {
-                a = new Appearance("Default")
-                {
-                    Models = models
-                };
-            }
-            else
-            {
-                a = appearance;
-            }
-
-            var group = new MeshComponent() { WorldNodeIndex = string.Empty, WorldNodeDataIndices = string.Empty, };
-
-            foreach (var model in models)
-            {
-                //if (models.FirstOrDefault(x => x.Name == model.BindName) is var parentModel && parentModel != null)
-                //{
-                //    parentModel.AddModel(model);
-                //}
-                //else
-                //{
-                //    a.BindableModels.Add(model);
-                //}
-                foreach (var material in model.Materials)
-                {
-                    a.RawMaterials[material.Name] = material;
-                }
-                if (model.MeshFile?.RootChunk is CMesh mesh)
-                {
-                    model.Meshes = MakeMesh(mesh, model.ChunkMask, model.AppearanceIndex);
-                }
-
-                foreach (var m in model.Meshes)
-                {
-                    group.Children.Add(m);
-                    if (!a.LODLUT.ContainsKey(m.LOD))
-                    {
-                        a.LODLUT[m.LOD] = new List<SubmeshComponent>();
-                    }
-                    a.LODLUT[m.LOD].Add(m);
-                }
-            }
-
-            if (appearance == null)
-            {
-                a.ModelGroup.Add(group);
-                Appearances.Add(a);
-                SelectedAppearance = a;
-            }
-
-            var element = new GroupModel3DExt();
-            foreach (var model in a.ModelGroup)
-            {
-                element.Children.Add(model);
-            }
-            return element;
+            return null;
         }
+
+        var meshApp = appearance ?? new Appearance("Default") { Models = models };
+
+        var cGroup = new MeshComponent() { WorldNodeIndex = string.Empty, WorldNodeDataIndices = string.Empty, };
+
+        foreach (var model in models)
+        {
+            foreach (var material in model.Materials)
+            {
+                meshApp.RawMaterials[material.Name] = material;
+            }
+
+            if (model.MeshFile?.RootChunk is CMesh mesh)
+            {
+                model.Meshes = MakeMesh(mesh, model.ChunkMask, model.AppearanceIndex);
+            }
+
+            foreach (var m in model.Meshes)
+            {
+                cGroup.Children.Add(m);
+                if (!meshApp.LODLUT.ContainsKey(m.LOD))
+                {
+                    meshApp.LODLUT[m.LOD] = new List<SubmeshComponent>();
+                }
+
+                meshApp.LODLUT[m.LOD].Add(m);
+            }
+        }
+
+        if (appearance == null)
+        {
+            meshApp.ModelGroup.Add(cGroup);
+            Appearances.Add(meshApp);
+            SelectedAppearance = meshApp;
+        }
+
+        var el = new GroupModel3DExt();
+        foreach (var model in meshApp.ModelGroup)
+        {
+            el.Children.Add(model);
+        }
+
+        return el;
+        
     }
 
     #endregion

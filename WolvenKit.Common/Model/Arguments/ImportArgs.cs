@@ -5,8 +5,11 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using DynamicData;
+using Microsoft.Extensions.Logging;
 using SharpGLTF.Validation;
 using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.Types;
 using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.Common.Model.Arguments
@@ -56,35 +59,70 @@ namespace WolvenKit.Common.Model.Arguments
         private GpuWrapApieTextureGroup _textureGroup = GpuWrapApieTextureGroup.TEXG_Generic_Color;
 
         [Category("General Import Settings")]
-        [Description("Select the texture group of the imported item")]
-        public GpuWrapApieTextureGroup TextureGroup { get => _textureGroup; set => SetProperty(ref _textureGroup, value); }
-        [Category("General Import Settings")]
-        [Description("If true, the file will be handled as a SRGB file")]
-        public bool IsGamma { get; set; } = false;
-
+        [Display(Name = "Texture Group")]
+        [Description("Select the texture group of the imported item, e.g. TEXG_Generic_Color or TEXG_Generic_Normal")]
+        public GpuWrapApieTextureGroup TextureGroup
+        {
+            get => _textureGroup;
+            set => SetProperty(ref _textureGroup, value);
+        }
+   
         [Category("Image Import Settings")]
+        [Display(Name = "Raw Format")]
         public ETextureRawFormat RawFormat { get; set; } = ETextureRawFormat.TRF_TrueColor;
 
         [Category("Image Import Settings")]
+        [Display(Name = "Compression (TCM_None to disable)")]
+        [Description("Compression algorithm to use on texture. TCM_None will import without compression")]
         public ETextureCompression Compression { get; set; }
 
         [Category("Image Import Settings")]
-        [Description("If true, mipMaps will be generated")]
+        [Display(Name = "Generate mipMaps")]
+        [Description("mipMaps are a sequence of images in various levels of resolution")]
         public bool GenerateMipMaps { get; set; } = true;
 
         [Category("Image Import Settings")]
+        [Display(Name = "Is Streamable")]
+        [Description("Set this to true for in-game assets, and to false for fonts, UI elements, LUTs etc")]
         public bool IsStreamable { get; set; } = true;
 
-
-
-        [Category("Image Import Settings")]
-        [Description("PremultiplyAlpha")]
+        [Category("Image Color Settings")]
+        [Display(Name = "Transparency from alpha channel")]
+        [Description("Create transparency from alpha channel? (Will be ignored unless you set IsMasked property of MaterialInstance)")]
         public bool PremultiplyAlpha { get; set; } = false;
+
+        [Category("Image Color Settings")]
+        [Display(Name = "SRGB (IsGamma)")]
+        [Description("Should the file be handled as a SRGB file, or is this a data texture (e.g. a normal map)?")]
+        public bool IsGamma { get; set; } = false;
 
         public XbmImportArgs()
         {
             Keep = false;
             GenerateMipMaps = true;
+        }
+
+        public XbmImportArgs(GpuWrapApieTextureGroup texGroup)
+        {
+            Keep = false;
+            GenerateMipMaps = true;
+            _textureGroup = texGroup;
+            IsGamma = _textureGroup is GpuWrapApieTextureGroup.TEXG_Generic_Color
+                or GpuWrapApieTextureGroup.TEXG_Multilayer_Color
+                or GpuWrapApieTextureGroup.TEXG_Generic_UI;
+        }
+
+        public XbmImportArgs(STextureGroupSetup xbmSetup) : this(xbmSetup, xbmSetup.HasMipchain)
+        {
+        }
+
+        public XbmImportArgs(STextureGroupSetup xbmSetup, bool generateMipMaps)
+        {
+            Compression = Enum.Parse<ETextureCompression>(xbmSetup.Compression.ToString());
+            GenerateMipMaps = generateMipMaps;
+            IsGamma = xbmSetup.IsGamma;
+            RawFormat = Enum.Parse<ETextureRawFormat>(xbmSetup.RawFormat.ToString());
+            _textureGroup = xbmSetup.Group;
         }
 
         /// <summary>
@@ -98,17 +136,17 @@ namespace WolvenKit.Common.Model.Arguments
 
             if (PremultiplyAlpha)
             {
-                stringArgs.Add("premultiplyAlpha: true");
+                stringArgs.Add("transparency \u2713");
             }
 
             if (IsGamma)
             {
-                stringArgs.Add("isGamma: true");
+                stringArgs.Add("SRGB \u2713");
             }
 
             if (GenerateMipMaps)
             {
-                stringArgs.Add("mipMaps: true");
+                stringArgs.Add("mipMaps \u2713");
             }
 
             stringArgs.Add($"Compression: {Compression.ToString()}");
@@ -129,8 +167,8 @@ namespace WolvenKit.Common.Model.Arguments
         /// Imports garment support data from GLB.
         /// </summary>
         [Category("Import Settings")]
-        [Display(Name = "Import Garment Support (Experimental)")]
-        [Description("If checked the Garment Support data will be imported from the mesh")]
+        [Display(Name = "Import Garment Support")]
+        [Description("Import Garment Support data from mesh?")]
         public bool ImportGarmentSupport { get; set; } = true;
 
         /// <summary>
@@ -140,6 +178,12 @@ namespace WolvenKit.Common.Model.Arguments
         [Display(Name = "Use Object Name as Submesh Name")]
         [Description("If checked, each submesh name will be overridden by the node name (e.g. Blender object) to match previous behavior.")]
         public bool OverrideMeshNameWithNodeName { get; set; } = true;
+
+        /// <summary>
+        /// Log level output
+        /// </summary>
+        [property: Browsable(false)]
+        public bool ShowVerboseLogOutput { get; set; } = false;
 
         /// <summary>
         /// Strip Bind Pose transform from additive animations
@@ -153,23 +197,23 @@ namespace WolvenKit.Common.Model.Arguments
         /// Should a Material.Json be imported?
         /// </summary>
         [Category("Import Settings")]
-        [Display(Name = "Import with Material.Json")]
-        [Description("If selected materials will be updated from a Material.json file.")]
+        [Display(Name = "Import Material.Json")]
+        [Description("Mesh materials will be overwritten from the Material.json file.")]
         public bool ImportMaterials { get; set; } = false;
 
         /// <summary>
         /// Should only materials be imported and no mesh data be changed?
         /// </summary>
         [Category("Import Settings")]
-        [Display(Name = "Import Material.Json Only")]
-        [Description("If selected only materials will be updated from a Material.json file. Mesh geometry will remain unchanged.")]
+        [Display(Name = "Only Material.Json Only")]
+        [Description("Will not import mesh geometry, but only read the Material.json file.")]
         public bool ImportMaterialOnly { get; set; } = false;
 
         /// <summary>
         /// Validation type for the selected GLB/GLTF.
         /// </summary>
         [Category("Import Settings")]
-        [Display(Name = "GLTF Validation Checks")]
+        [Display(Name = "GLTF Validation")]
         [Description("Optional validation check for glb/glTF files")]
         public ValidationMode ValidationMode { get; set; } = ValidationMode.Skip;
 
@@ -184,42 +228,25 @@ namespace WolvenKit.Common.Model.Arguments
         /// Fills empty sub meshes with dummy data
         /// </summary>
         [Category("Import Settings")]
-        [Display(Name = "Preserve Submesh Order (experimental)")]
-        [Description("If selected empty submesh slots will be filled with placeholder data. This preserves the original submesh-material index.")]
+        [Display(Name = "Preserve Submesh Order")]
+        [Description("Empty submesh slots will be filled with placeholder data, preserving the original submesh-material order.")]
         public bool FillEmpty { get; set; } = false;
 
         /// <summary>
         /// Selected Rig for Mesh WithRig Export. ALWAYS USE THE FIRST ENTRY IN THE LIST.
         /// </summary>
         [Category("Import Settings")]
-        [Display(Name = "Select base mesh (experimental)")]
-        [Description("Select a base mesh to import on.")]
-        public List<FileEntry> BaseMesh { get; set; } = new();
-
-        /// <summary>
-        /// Uses a selected mesh from archives as base mesh for import instead of mod project archive directory mesh
-        /// </summary>
-        [Category("Import Settings")]
-        [Display(Name = "Use selected base mesh (experimental)")]
-        [Description("If checked the specified mesh file will be used for importing.")]
-        public bool SelectBase { get; set; } = false;
-
-        /// <summary>
-        /// Assigns found LOD0 submeshes to LOD8 to allow import of certain meshes that handle LOD0 as LOD8.
-        /// </summary>
-        [Category("Import Settings")]
-        [Display(Name = "Contains LOD8 named LOD0")]
-        [Description("If checked the included LOD0 submesh will be handled as LOD8")]
-        public bool ReplaceLod { get; set; } = false;
+        [Display(Name = "Import into base mesh (experimental)")]
+        [Description("Select a base mesh to import into (e.g. Netrunner suit)")]
+        public List<FileEntry> BaseMesh { get; set; } = [];
 
         /// <summary>
         /// Selected Rig for Mesh WithRig Export. ALWAYS USE THE FIRST ENTRY IN THE LIST.
         /// </summary>
         [Category("WithRig Settings")]
         [Display(Name = "Select rig (experimental)")]
-        [Description("Select a rig to import within the mesh.")]
+        [Description("Select a rig to import within the mesh. Will always use the first entry in the list")]
         public List<FileEntry> Rig { get; set; } = new();
-
 
         /// <summary>
         /// UNKNOWN
@@ -230,7 +257,7 @@ namespace WolvenKit.Common.Model.Arguments
         public bool KeepRig { get; set; } = false;
 
         /// <summary>
-        /// String Override to display info in datagrid.
+        /// String Override to display info in data grid.
         /// </summary>
         /// <returns>String</returns>
         public override string ToString()
@@ -257,7 +284,7 @@ namespace WolvenKit.Common.Model.Arguments
 
             if (ImportMaterials)
             {
-                stringParts.Add("material: true");
+                stringParts.Add("material \u2713");
             }
             else if (ImportMaterialOnly)
             {
@@ -266,7 +293,7 @@ namespace WolvenKit.Common.Model.Arguments
 
             if (ImportGarmentSupport)
             {
-                stringParts.Add("garmentSupport: true");
+                stringParts.Add("garmentSupport \u2713");
             }
 
             return string.Join(" | ", stringParts);
@@ -289,7 +316,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// String Override to display info in datagrid.
         /// </summary>
         /// <returns>String</returns>
-        public override string ToString() => "MLMASK";
+        public override string ToString() => "mlmask";
     }
 
     /// <summary>

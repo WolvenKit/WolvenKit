@@ -50,6 +50,7 @@ public class SettingsDto : ISettingsDto
         AnalyzeModArchives = settings.AnalyzeModArchives;
         ExtraModDirPath = settings.ExtraModDirPath;
         LastUsedProjectPath = settings.LastUsedProjectPath;
+        DefaultProjectPath = settings.DefaultProjectPath;
         PinnedOrder = settings.PinnedOrder;
         RecentOrder = settings.RecentOrder;
         ShowGraphEditorNodeProperties = settings.ShowGraphEditorNodeProperties;
@@ -59,6 +60,9 @@ public class SettingsDto : ISettingsDto
         LastLaunchProfile = settings.LastLaunchProfile;
         ShowRedmodInRibbon = settings.ShowRedmodInRibbon;
         UseValidatingEditor = settings.UseValidatingEditor;
+        ReopenLastProject = settings.ReopenLastProject;
+        ShowVerboseLogOutput = settings.ShowVerboseLogOutput;
+        ArchiveNamesExcludeFromScan = settings.ArchiveNamesExcludeFromScan;
 
         MigrateSettings(settings.SettingsVersion);
     }
@@ -90,17 +94,21 @@ public class SettingsDto : ISettingsDto
     public Dictionary<string, LaunchProfile> LaunchProfiles { get; set; } = [];
     public bool RefactoringCheckboxDefaultValue { get; set; }
     public Dictionary<string, bool>? ScriptStatus { get; set; }
-    public bool AnalyzeModArchives { get; set; } = true;
+    public bool AnalyzeModArchives { get; set; } = false;
     public string? ExtraModDirPath { get; set; }
     public string? LastUsedProjectPath { get; set; }
+    public string? DefaultProjectPath { get; set; }
     public string? LastLaunchProfile { get; set; }
     public bool ShowRedmodInRibbon { get; set; }
     public bool UseValidatingEditor { get; set; } = true;
+    public bool ReopenLastProject { get; set; }
+    public bool ShowVerboseLogOutput { get; set; }
     public int PinnedOrder { get; set; }
     public int RecentOrder { get; set; }
     public bool ShowGraphEditorNodeProperties { get; set; } = true;
     public string? ModderName { get; set; }
     public string? ModderEmail { get; set; }
+    public string ArchiveNamesExcludeFromScan { get; set; } = "basegame_AMM_Props";
 
     public SettingsManager ReconfigureSettingsManager(SettingsManager settingsManager)
     {
@@ -143,6 +151,7 @@ public class SettingsDto : ISettingsDto
         settingsManager.RefactoringCheckboxDefaultValue = RefactoringCheckboxDefaultValue;
         settingsManager.LastLaunchProfile = LastLaunchProfile;
         settingsManager.UseValidatingEditor = UseValidatingEditor;
+        settingsManager.ArchiveNamesExcludeFromScan = ArchiveNamesExcludeFromScan;
 
         return settingsManager;
     }

@@ -100,7 +100,7 @@ public partial class AppScriptService
         }
     }
 
-    public void RunFileValidation(string filePath, ref CR2WFile cr2wFile) => OnSaveHook(filePath, ref cr2wFile);
+    public bool RunFileValidation(string filePath, ref CR2WFile cr2wFile) => OnSaveHook(filePath, ref cr2wFile);
 
     private (Enums.EBOOL, string) OnSaveExecute(ScriptFile scriptFile, string extStr, string json)
     {

@@ -62,7 +62,7 @@ public partial class ChunkViewModel
             Value = f.ToBitFieldString();
         }
         else if (NodeIdxInParent > -1 && Parent?.Name == "referenceTracks" &&
-                 GetRootModel().GetModelFromPath("trackNames")?.ResolvedData is CArray<CName> trackNames)
+                 GetRootModel().GetPropertyFromPath("trackNames")?.ResolvedData is CArray<CName> trackNames)
         {
             Value = trackNames[NodeIdxInParent].GetResolvedText();
             IsValueExtrapolated = true;
@@ -256,7 +256,7 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = true;
                 break;
             case questFactsDBCondition condition:
-                switch (condition.Type.GetValue())
+                switch (condition.Type?.GetValue())
                 {
                     case questVarComparison_ConditionType type:
                         Value = $"{type.ComparisonType.ToEnumString()}: {type.FactName}";
@@ -300,6 +300,11 @@ public partial class ChunkViewModel
                 return;
             case Multilayer_Layer layer:
                 Value = layer.ColorScale;
+                if (layer.Microblend.DepotPath.GetResolvedText() is string microblend && !string.IsNullOrEmpty(microblend) &&
+                    microblend != "base\\surfaces\\microblends\\default.xbm")
+                {
+                    Value = $"{Value}, {microblend.Split('\\').Last()}";
+                }                
                 IsValueExtrapolated = true;
                 break;
             case scnVoicesetComponent voiceset:
@@ -637,26 +642,14 @@ public partial class ChunkViewModel
                 Value = fxResourceValue.Effect.DepotPath.GetResolvedText();
                 IsValueExtrapolated = Value != "";
                 break;
-            case entMeshComponent meshComponent:
+            case IRedMeshComponent meshComponent:
             {
                 Value = StringHelper.Stringify(meshComponent.Mesh.DepotPath, true);
                 if (meshComponent.MeshAppearance.GetResolvedText() is string app and (not "default" or "") && Value != "")
                 {
                     Value = $"{Value} ({app})";
                 }
-
                 IsValueExtrapolated = Value != "";
-                break;
-            }
-            case entSkinnedMeshComponent skinnedMeshComponent:
-            {
-                Value = StringHelper.Stringify(skinnedMeshComponent.Mesh.DepotPath, true);
-                if (skinnedMeshComponent.MeshAppearance.GetResolvedText() is string app and (not "default" or "") && Value != "")
-                {
-                    Value = $"{Value} ({app})";
-                }
-
-                IsValueExtrapolated = true;
                 break;
             }
             case locVoiceoverLengthMap lengthMap:
@@ -699,7 +692,7 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = true;
                 break;
             case physicsRagdollBodyInfo when
-                NodeIdxInParent > -1 && GetRootModel().GetModelFromPath("ragdollNames")?.ResolvedData is
+                NodeIdxInParent > -1 && GetRootModel().GetPropertyFromPath("ragdollNames")?.ResolvedData is
                     CArray<physicsRagdollBodyNames> ragdollNames:
                 var rN = ragdollNames[NodeIdxInParent];
                 Value = $"{rN.ParentAnimName.GetResolvedText() ?? ""} -> {rN.ChildAnimName.GetResolvedText() ?? ""}";
@@ -718,6 +711,12 @@ public partial class ChunkViewModel
             Value = child.Descriptor ?? child.Value;
             IsValueExtrapolated = !string.IsNullOrEmpty(Value);
         }
+
+        if (Parent is not null && Parent.IsValueExtrapolated)
+        {
+            Parent.CalculateValue();
+        }
+            
 
         // Make sure it's never null
         Value ??= "null";

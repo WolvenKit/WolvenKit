@@ -28,7 +28,7 @@ using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.App.ViewModels.Importers;
 
-public partial class ImportViewModel : AbstractImportViewModel
+public partial class ImportViewModel : AbstractImportExportViewModel
 {
     private readonly AppViewModel _appViewModel;
     private readonly ILoggerService _loggerService;
@@ -58,22 +58,7 @@ public partial class ImportViewModel : AbstractImportViewModel
         _parserService = parserService;
         _importExportHelper = importExportHelper;
 
-        PropertyChanged += ExportViewModel_PropertyChanged;
-    }
-
-    private async void ExportViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(IsActive))
-        {
-            if (IsActive)
-            {
-                if (_refreshtask is null || (_refreshtask is not null && _refreshtask.IsCompleted))
-                {
-                    _refreshtask = LoadFilesAsync();
-                    await _refreshtask;
-                }
-            }
-        }
+        PropertyChanged += ImportExportViewModel_PropertyChanged;
     }
 
     #region Commands
@@ -150,7 +135,8 @@ public partial class ImportViewModel : AbstractImportViewModel
         var failedItems = new List<string>();
 
         var toBeImported = Items
-            .Where(_ => all || _.IsChecked)
+            .Where(importExportItem => importExportItem.IsChecked ||
+                                       (all && (VisibleItemPaths.Count == 0 || VisibleItemPaths.Contains(importExportItem.BaseFile))))
             .Where(x => !x.Extension.Equals(ERawFileFormat.wav.ToString()))
             .Cast<ImportableItemViewModel>()
             .ToList();
@@ -171,7 +157,9 @@ public partial class ImportViewModel : AbstractImportViewModel
             _progressService.Report(progress / (float)total);
         }
 
-        await ImportWavs(Items.Where(_ => all || _.IsChecked)
+        await ImportWavs(Items.Where(importExportItem => importExportItem.IsChecked ||
+                                                         (all && (VisibleItemPaths.Count == 0 ||
+                                                                  VisibleItemPaths.Contains(importExportItem.BaseFile))))
             .Where(x => x.Extension.Equals(ERawFileFormat.wav.ToString()))
             .Select(x => x.BaseFile)
             .ToList()
@@ -195,6 +183,10 @@ public partial class ImportViewModel : AbstractImportViewModel
             var failedItemsErrorString = $"The following items failed:\n{string.Join("\n", failedItems)}";
             _notificationService.Error(failedItemsErrorString); //notify once only 
             _loggerService.Error(failedItemsErrorString);
+            if (failedItems.Any(s => s.EndsWith(".mesh")))
+            {
+                _loggerService.Error("You can try exporting them without material or garment support, or use the experimental exporter.");
+            }
         }
 
         _progressService.Completed();
@@ -359,14 +351,10 @@ public partial class ImportViewModel : AbstractImportViewModel
                 break;
         }
 
-        List<IDisplayable> selectedItems = new();
-        if (selectedEntries is not null)
-        {
-            selectedItems = selectedEntries
-                .Select(_ => new CollectionItemViewModel<FileEntry>(_))
-                .Cast<IDisplayable>()
-                .ToList();
-        }
+        List<IDisplayable> selectedItems = selectedEntries
+            .Select(_ => new CollectionItemViewModel<FileEntry>(_))
+            .Cast<IDisplayable>()
+            .ToList();
 
         var availableItems = _archiveManager
             .GetGroupedFiles()[$".{fetchExtension}"]
@@ -383,35 +371,32 @@ public partial class ImportViewModel : AbstractImportViewModel
         }
 
         var result = Interactions.ShowCollectionView(a);
-        if (result is not null)
+        switch (args.PropertyName)
         {
-            switch (args.PropertyName)
-            {
-                case nameof(GltfImportArgs.Rig):
-                    var rig = result.Cast<CollectionItemViewModel<FileEntry>>().Select(x => x.Model).FirstOrDefault();
-                    if (rig is not null)
-                    {
-                        gltfImportArgs.Rig = new List<FileEntry>() { rig };
-                        _notificationService.Success($"Selected Rigs were added to WithRig arguments.");
-                    }
+            case nameof(GltfImportArgs.Rig):
+                var rig = result.Cast<CollectionItemViewModel<FileEntry>>().Select(x => x.Model).FirstOrDefault();
+                if (rig is not null)
+                {
+                    gltfImportArgs.Rig = new List<FileEntry>() { rig };
+                    _notificationService.Success($"Selected Rigs were added to WithRig arguments.");
+                }
 
-                    gltfImportArgs.ImportFormat = GltfImportAsFormat.MeshWithRig;
-                    break;
+                gltfImportArgs.ImportFormat = GltfImportAsFormat.MeshWithRig;
+                break;
 
-                case nameof(GltfImportArgs.BaseMesh):
-                    var mesh = result.Cast<CollectionItemViewModel<FileEntry>>().Select(x => x.Model).FirstOrDefault();
-                    if (mesh is not null)
-                    {
-                        gltfImportArgs.BaseMesh = new List<FileEntry>() { };
-                        _notificationService.Success($"Selected Mesh was added to Mesh arguments.");
-                    }
+            case nameof(GltfImportArgs.BaseMesh):
+                var mesh = result.Cast<CollectionItemViewModel<FileEntry>>().Select(x => x.Model).FirstOrDefault();
+                if (mesh is not null)
+                {
+                    gltfImportArgs.BaseMesh = new List<FileEntry>() { };
+                    _notificationService.Success($"Selected Mesh was added to Mesh arguments.");
+                }
 
-                    gltfImportArgs.ImportFormat = GltfImportAsFormat.Mesh;
-                    break;
+                gltfImportArgs.ImportFormat = GltfImportAsFormat.Mesh;
+                break;
 
-                default:
-                    break;
-            }
+            default:
+                break;
         }
     }
 

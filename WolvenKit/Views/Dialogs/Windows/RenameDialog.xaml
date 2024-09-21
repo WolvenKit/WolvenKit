@@ -7,6 +7,7 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     Title="Rename"
     SizeToContent="WidthAndHeight"
+    MinWidth="500"
     WindowStartupLocation="CenterOwner">
 
     <Grid
@@ -36,7 +37,7 @@
                 PageType="Exterior">
                 <StackPanel Orientation="Vertical">
                     <hc:TextBox x:Name="TextBox" Style="{StaticResource TextBoxExtend}" />
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBlock Margin="2,6,5,0" Text="Update in project files?"
                                    Visibility="{Binding ShowRefactoringCheckbox, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         <CheckBox

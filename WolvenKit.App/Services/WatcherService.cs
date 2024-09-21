@@ -19,7 +19,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
 {
     #region fields
 
-    private readonly ILoggerService _loggerService;
+    private readonly ILoggerService? _loggerService;
 
     private string _projectDirectory = string.Empty;
     private FileSystemModel? _projectFileSystemModel;
@@ -50,7 +50,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
     #endregion
 
-    public WatcherService(ILoggerService loggerService)
+    public WatcherService(ILoggerService? loggerService)
     {
         _loggerService = loggerService;
 
@@ -75,7 +75,9 @@ public partial class WatcherService : ObservableObject, IWatcherService
         Refresh();
     }
 
-    public void UnwatchProject(Cp77Project project) => UnwatchLocation();
+    public void Resume() => _modsWatcher.EnableRaisingEvents = true;
+
+    public void UnwatchProject(Cp77Project? project) => UnwatchLocation();
 
     private void WatchLocation()
     {
@@ -138,7 +140,10 @@ public partial class WatcherService : ObservableObject, IWatcherService
             }
             catch (Exception)
             {
-                _loggerService.Error($"Something went wrong while changing a file in the project explorer...{Environment.NewLine}Please report this as bug");
+                if (!(e.Name ?? "").Contains("_tmp"))
+                {
+                    _loggerService?.Error($"Project Explorer: something went wrong while changing {e.Name}. You can try a manual refresh.");
+                }
             }
         }
 
@@ -172,10 +177,10 @@ public partial class WatcherService : ObservableObject, IWatcherService
                 return;
             }
 
-            if (e.RetryCount > 5)
+            if (e.RetryCount > 10)
             {
-                // If it still doesn't work after 5 retries... idk
-                _loggerService.Error($"Something went wrong while adding a file to the project explorer...{Environment.NewLine}Please report this as bug");
+                // If it still doesn't work after 10 retries... idk
+                _loggerService?.Error($"Failed adding {e.Name} to the project explorer...{Environment.NewLine}Please report this as bug");
                 return;
             }
 
@@ -219,30 +224,35 @@ public partial class WatcherService : ObservableObject, IWatcherService
                     FileList.Add(current);
                 }
 
-                if (_fileLookup.TryAdd(tmpPath, current))
+                if (!_fileLookup.TryAdd(tmpPath, current))
                 {
-                    if (string.IsNullOrEmpty(tmpParentPath))
-                    {
-                        FileTree.Add(current);
-                    }
+                    continue;
+                }
 
-                    if (parent != null && !parent.Children.Contains(current))
-                    {
-                        parent.Children.Add(current);
-                    }
+                if (string.IsNullOrEmpty(tmpParentPath))
+                {
+                    FileTree.Add(current);
+                }
+
+                if (parent != null && !parent.Children.Contains(current))
+                {
+                    parent.Children.Add(current);
                 }
             }
 
-            if (current is { IsDirectory: true })
+            if (current is not { IsDirectory: true })
             {
-                var children = Directory.GetFileSystemEntries(current.FullName, "*", SearchOption.AllDirectories);
-                foreach (var child in children)
+                return;
+            }
+
+            var children = Directory.GetFileSystemEntries(current.FullName, "*", SearchOption.AllDirectories);
+            foreach (var child in children)
+            {
+                var name = child[(_projectDirectory.Length + 1)..];
+                if (!_fileLookup.ContainsKey(name))
                 {
-                    var name = child[(_projectDirectory.Length + 1)..];
-                    if (!_fileLookup.ContainsKey(name))
-                    {
-                        _fileChanges.Enqueue(new FileSystemEventArgsWrapper(new FileSystemEventArgs(WatcherChangeTypes.Created, _projectDirectory, name)));
-                    }
+                    _fileChanges.Enqueue(
+                        new FileSystemEventArgsWrapper(new FileSystemEventArgs(WatcherChangeTypes.Created, _projectDirectory, name)));
                 }
             }
         }
@@ -256,7 +266,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
             if (!_fileLookup.TryGetValue(e.Name, out var item))
             {
-                _loggerService.Error($"Something went wrong...{Environment.NewLine}Please report this as bug");
+                _loggerService?.Error($"Failed to refresh file {e.Name}{Environment.NewLine}Try a manual refresh of the project explorer.");
                 return;
             }
 
@@ -299,11 +309,13 @@ public partial class WatcherService : ObservableObject, IWatcherService
                     throw new Exception();
                 }
 
-                if (key == renamedEventArgs.OldName)
+                if (key != renamedEventArgs.OldName)
                 {
-                    var newName = renamedEventArgs.Name.Split(Path.DirectorySeparatorChar)[^1];
-                    item.Rename(newName);
+                    continue;
                 }
+
+                var newName = renamedEventArgs.Name.Split(Path.DirectorySeparatorChar)[^1];
+                item.Rename(newName);
             }
         }
 
@@ -386,6 +398,8 @@ public partial class WatcherService : ObservableObject, IWatcherService
             }
         }
     }
+
+    public void Suspend() => _modsWatcher.EnableRaisingEvents = false;
 
     private void OnRenamed(object sender, RenamedEventArgs e) => _fileChanges.Enqueue(new FileSystemEventArgsWrapper(e));
 

@@ -621,7 +621,37 @@ namespace WolvenKit.Modkit.RED4.Tools
             }
 
             return ret.ToArray();
+        }
 
+        public static (int numLodLevels, int numSubmeshesPerLod) GetLodInfo(CMesh mesh)
+        {
+            var numLodLevels = 1;
+
+            var numSubmeshesPerLod = mesh.Appearances
+                .Where((app) => app.GetValue() is meshMeshAppearance)
+                .Select((app) => ((meshMeshAppearance)app.GetValue()!).ChunkMaterials.Count)
+                .Max();
+            try
+            {
+                if (mesh.RenderResourceBlob.Chunk is rendRenderMeshBlob blob)
+                {
+                    var lodCounts = blob.Header.RenderChunkInfos
+                        .GroupBy(info => info.LodMask)
+                        .ToDictionary(group => group.Key, group => group.Count());
+
+                    if (lodCounts.Keys.FirstOrDefault() is var key)
+                    {
+                        numSubmeshesPerLod = lodCounts[key];
+                    }
+
+                    numLodLevels = blob.Header.RenderChunkInfos.GroupBy(info => info.LodMask).Count();
+                }
+            }
+            catch
+            {
+                // do nothing
+            }
+            return (numLodLevels, numSubmeshesPerLod);
         }
 
         public static void UpdateMeshJoints(ref List<RawMeshContainer> meshes, RawArmature? existingJoints, RawArmature? incomingJoints, string fileName = "")

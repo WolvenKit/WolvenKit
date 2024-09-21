@@ -30,6 +30,7 @@ public partial class ImportView : ReactiveUserControl<ImportViewModel>
         InitializeComponent();
 
         ImportGrid.FilterRowCellRenderers.Add("TextBoxExt", new GridFilterRowTextBoxRendererExt());
+        ImportGrid.FilterChanged += Datagrid_FilterChanged;
 
         this.WhenActivated(disposables =>
         {
@@ -37,6 +38,8 @@ public partial class ImportView : ReactiveUserControl<ImportViewModel>
             {
                 SetCurrentValue(ViewModelProperty, viewModel);
             }
+
+            ViewModel.OnRefresh += RefreshFilter;
 
             this.OneWayBind(ViewModel,
                     x => x.SelectedObject.Properties,
@@ -52,9 +55,22 @@ public partial class ImportView : ReactiveUserControl<ImportViewModel>
                    x => x.SelectedObject,
                    x => x.ImportGrid.SelectedItem)
                .DisposeWith(disposables);
-
         });
+    }
 
+    private void RefreshFilter(object sender, EventArgs e) => Datagrid_FilterChanged(ImportGrid, null);
+
+    private void Datagrid_FilterChanged(object sender, GridFilterEventArgs e)
+    {
+        if (sender is not SfDataGrid grid || ViewModel is null)
+        {
+            return;
+        }
+
+        ViewModel.VisibleItemPaths = grid.View.Records
+            .Select(record => record.Data).OfType<ImportExportItemViewModel>()
+            .Select(m => m.BaseFile)
+            .ToList();
     }
 
     // TODO refactor this and move to ViewModel
@@ -66,79 +82,69 @@ public partial class ImportView : ReactiveUserControl<ImportViewModel>
             return;
         }
 
-        if (ImportGrid.SelectedItem is ImportExportItemViewModel selectedImport && Enum.TryParse(selectedImport.Extension.TrimStart('.'), out ERawFileFormat rawExtension) && rawExtension == ERawFileFormat.re)
+        if (ImportGrid.SelectedItem is not ImportExportItemViewModel selectedImport ||
+            !Enum.TryParse(selectedImport.Extension.TrimStart('.'), out ERawFileFormat rawExtension) || rawExtension != ERawFileFormat.re)
         {
-            
-            var animsets = Directory.GetFiles(mod.ModDirectory, "*.anims", SearchOption.AllDirectories);
-            var depotPaths = animsets.Select(x => x[(mod.ModDirectory.Length + 1)..]);
-
-            // UI actions
-            AddSettingsRe.SetCurrentValue(VisibilityProperty, Visibility.Visible);
-            AnimsetComboBox.SetCurrentValue(ItemsControl.ItemsSourceProperty, depotPaths);
-
-            // set defaults if no change in selection
-            if (selectedImport.Properties is ReImportArgs args)
-            {
-                if (AnimsetComboBox.SelectedItem is not string selectedItem)
-                {
-                    return;
-                }
-                if (string.IsNullOrEmpty(selectedItem))
-                {
-                    return;
-                }
-
-                args.Animset = selectedItem;
-
-                if (AnimNameComboBox.SelectedItem is not string selectedName)
-                {
-                    return;
-                }
-                if (string.IsNullOrEmpty(selectedName))
-                {
-                    return;
-                }
-
-                args.AnimationToRename = selectedName;
-            }
-
+            return;
         }
+
+        var animsets = Directory.GetFiles(mod.ModDirectory, "*.anims", SearchOption.AllDirectories);
+        var depotPaths = animsets.Select(x => x[(mod.ModDirectory.Length + 1)..]);
+
+        // UI actions
+        AddSettingsRe.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+        AnimsetComboBox.SetCurrentValue(ItemsControl.ItemsSourceProperty, depotPaths);
+
+        // set defaults if no change in selection
+        if (selectedImport.Properties is not ReImportArgs args)
+        {
+            return;
+        }
+
+        if (AnimsetComboBox.SelectedItem is not string selectedItem || string.IsNullOrEmpty(selectedItem))
+        {
+            return;
+        }
+
+        args.Animset = selectedItem;
+
+        if (AnimNameComboBox.SelectedItem is not string selectedName || string.IsNullOrEmpty(selectedName))
+        {
+            return;
+        }
+
+        args.AnimationToRename = selectedName;
     }
 
     // TODO refactor this and move to ViewModel
     private void AnimsetComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
     {
         var mod = Locator.Current.GetService<IProjectManager>().NotNull().ActiveProject;
-        if (mod is null)
+        if (mod is null ||
+            ImportGrid.SelectedItem is not ImportableItemViewModel { Properties: ReImportArgs args } ||
+            AnimsetComboBox.SelectedItem is not string selectedItem)
         {
             return;
         }
 
-        if (ImportGrid.SelectedItem is ImportableItemViewModel selectedImport && selectedImport.Properties is ReImportArgs args)
+        args.Animset = selectedItem;
+
+        // parse animset and populate the animnameBox
+        var path = Path.Combine(mod.ModDirectory, selectedItem);
+        if (!File.Exists(path))
         {
-            if (AnimsetComboBox.SelectedItem is not string selectedItem)
-            {
-                return;
-            }
-
-            args.Animset = selectedItem;
-
-            // parse animset and populate the animnameBox
-            var path = Path.Combine(mod.ModDirectory, selectedItem);
-            if (File.Exists(path))
-            {
-                using var fs = new FileStream(path, FileMode.Open);
-                var parser = Locator.Current.GetService<Red4ParserService>();
-                if (parser.TryReadRed4File(fs, out var originalFile))
-                {
-                    if (originalFile.RootChunk is animAnimSet animset)
-                    {
-                        var animnames = animset.Animations.Select(x => x.Chunk.Animation.Chunk.Name.ToString());
-                        AnimNameComboBox.SetCurrentValue(System.Windows.Controls.ItemsControl.ItemsSourceProperty, animnames);
-                    }
-                }
-            }
+            return;
         }
+
+        using var fs = new FileStream(path, FileMode.Open);
+        var parser = Locator.Current.GetService<Red4ParserService>();
+        if (!parser.TryReadRed4File(fs, out var originalFile) || originalFile.RootChunk is not animAnimSet animset)
+        {
+            return;
+        }
+
+        var animnames = animset.Animations.Select(x => x.Chunk.Animation.Chunk.Name.ToString());
+        AnimNameComboBox.SetCurrentValue(System.Windows.Controls.ItemsControl.ItemsSourceProperty, animnames);
     }
 
     // TODO refactor this and move to ViewModel
@@ -168,7 +174,7 @@ public partial class ImportView : ReactiveUserControl<ImportViewModel>
                 break;
         }
 
-        if (ViewModel.SelectedObject?.Properties is XbmImportArgs { })
+        if (ViewModel?.SelectedObject?.Properties is XbmImportArgs { })
         {
             if (e.DisplayName == "Use existing file")
             {
@@ -181,17 +187,21 @@ public partial class ImportView : ReactiveUserControl<ImportViewModel>
         // we need the callback function
         // we need the propertyname
         // we need the type of the arguments
-        if (e.OriginalSource is PropertyItem { } propertyItem && sender is PropertyGrid pg && pg.SelectedObject is ImportArgs args)
+        if (e.OriginalSource is not PropertyItem propertyItem || sender is not PropertyGrid pg ||
+            pg.SelectedObject is not ImportArgs args)
         {
-            switch (propertyItem.DisplayName)
-            {
-                case nameof(GltfImportArgs.Rig):
-                case nameof(GltfImportArgs.BaseMesh):
-                    propertyItem.Editor = new CustomCollectionEditor(ViewModel.InitCollectionEditor, new CallbackArguments(args, propertyItem.DisplayName));
-                    break;
-                default:
-                    break;
-            }
+            return;
+        }
+
+        switch (propertyItem.DisplayName)
+        {
+            case nameof(GltfImportArgs.Rig):
+            case nameof(GltfImportArgs.BaseMesh) when ViewModel is not null:
+                propertyItem.Editor = new CustomCollectionEditor(ViewModel!.InitCollectionEditor,
+                    new CallbackArguments(args, propertyItem.DisplayName));
+                break;
+            default:
+                break;
         }
     }
 
@@ -222,5 +232,6 @@ public partial class ImportView : ReactiveUserControl<ImportViewModel>
         // toggle additional options
         ShowSettings();
     }
+    
 
 }

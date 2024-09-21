@@ -200,49 +200,67 @@ namespace WolvenKit.Views.Editors
         private void RefreshValidityAndTooltip(object sender, RoutedEventArgs e)
         {
             if (_settingsManager?.UseValidatingEditor != true || RedRef?.DepotPath == ResourcePath.Empty ||
-                RedRef?.ToString() is not string filePath ||
-                filePath.Trim().IsNullOrEmpty())
+                RedRef?.DepotPath.GetResolvedText() is not string filePath || filePath.Trim().IsNullOrEmpty())
             {
                 SetCurrentValue(ScopeProperty, FileScope.Unknown);
                 SetCurrentValue(TextBoxToolTipProperty, "Not validating this resource path");
                 return;
             }
 
-
-            if (ArchiveXlHelper.GetValuesForInvalidSubstitution(filePath) is string invalidSubstitutions)
+            if (ArchiveXlHelper.HasSubstitution(filePath) &&
+                ArchiveXlHelper.GetValuesForInvalidSubstitution(filePath) is string invalidSubstitutions)
             {
                 SetCurrentValue(ScopeProperty, FileScope.InvalidSubstitution);
                 SetCurrentValue(TextBoxToolTipProperty, invalidSubstitutions);
                 return;
             }
 
-
-            if (!ArchiveXlHelper.HasSubstitution(filePath) &&
-                _archiveManager?.GetGameFile(filePath, false, true) is not null)
+            if (!ArchiveXlHelper.HasSubstitution(filePath) && _archiveManager?.GetGameFile(RedRef.DepotPath, false, true) is not null)
             {
                 SetCurrentValue(ScopeProperty, FileScope.GameOrMod);
-                SetCurrentValue(TextBoxToolTipProperty, "Valid depot path (game or mod)");
+                SetCurrentValue(TextBoxToolTipProperty, "Valid depot path (game or same mod)");
                 return;
             }
 
-            if (!ArchiveXlHelper.HasSubstitution(filePath) &&
-                App.Helpers.ArchiveXlHelper.GetFirstExistingPath(filePath) is null)
+            if (ArchiveXlHelper.HasSubstitution(filePath))
             {
-                SetCurrentValue(ScopeProperty, FileScope.NotFoundWarning);
-                SetCurrentValue(TextBoxToolTipProperty, "Substitution couldn't be resolved (ignore this if everything works)");
-                return;
-            }
+                if (App.Helpers.ArchiveXlHelper.GetFirstExistingPath(filePath) is not string s)
+                {
+                    SetCurrentValue(ScopeProperty, FileScope.NotFoundWarning);
+                    SetCurrentValue(TextBoxToolTipProperty, "Substitution couldn't be resolved (ignore this if everything works)");
+                    return;
+                }
 
-            if (_archiveManager?.GetGameFile(filePath, true, false) is not null)
-            {
-                SetCurrentValue(ScopeProperty, FileScope.OtherMod);
-                SetCurrentValue(TextBoxToolTipProperty, "Valid depot path (another mod)");
-                return;
+                if (_archiveManager?.GetGameFile(s, false, true) is not null)
+                {
+                    SetCurrentValue(ScopeProperty, FileScope.GameOrMod);
+                    SetCurrentValue(TextBoxToolTipProperty, "Valid depot path (game or same mod)");
+                    return;
+                }
+
+                if (_archiveManager?.Lookup(s, ArchiveManagerScope.Mods).HasValue is true)
+                {
+                    SetCurrentValue(ScopeProperty, FileScope.OtherMod);
+                    SetCurrentValue(TextBoxToolTipProperty, "Valid depot path (another mod)");
+                    return;
+                }
             }
-            
 
             SetCurrentValue(ScopeProperty, FileScope.NotFound);
             SetCurrentValue(TextBoxToolTipProperty, "Invalid depot path (not found)");
+        }
+
+        public void TrimmingTextbox_OnTextUpdate(object sender, EventArgs e) =>
+            RefreshValidityAndTooltip(sender, new RoutedEventArgs());
+
+        public void TrimmingTextbox_OnKeyUp(object sender, EventArgs e)
+        {
+            if (e is not KeyEventArgs { Key: Key.Enter or Key.Tab })
+            {
+                return;
+            }
+
+            RefreshValidityAndTooltip(sender, new RoutedEventArgs());
         }
     }
 }

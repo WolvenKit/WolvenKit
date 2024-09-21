@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -26,39 +27,83 @@ namespace WolvenKit.Views.Editors
             _settingsManager = Locator.Current.GetService<ISettingsManager>();
         }
 
-        public bool IsValid { get; set; } = true;
+        public bool IsValid { get; set; } = false;
+        public bool HasWarning { get; set; } = false;
+        public bool HasError { get; set; } = false;
 
-        [GeneratedRegex(@"^[a-zA-Z0-9]+[a-zA-Z0-9\s@]*[a-zA-Z0-9]+$")]
+
+        /// <summary>
+        /// A valid cname. Contains letters, numbers, underscores, @, &, =, and spaces. Must not start or end with a space.
+        /// </summary>
+        [GeneratedRegex(@"^[a-zA-Z0-9_]+[a-zA-Z0-9_\s@\&\=]*[a-zA-Z0-9_]+$")]
         private static partial Regex s_validCharactersRegex();
+
+        /// <summary>
+        /// For "placeholder" or separator strings.
+        /// Starts with at least two of -_=, is then followed by any text with optional spaces and -_= at the end.
+        /// </summary>
+        /// <example>
+        /// ======= clothes ========
+        /// ----- blah outfit ------
+        /// </example>
+        [GeneratedRegex(@"^[-=_]{2,}\s?[a-zA-Z0-9-=_]*\s?[-=_]*")]
+        private static partial Regex s_placeholderRegex();
+
+        /// <summary>
+        /// A cname with dynamic variants. Like <see cref="s_validCharactersRegex"/>, but also includes substitutions: {}
+        /// </summary>
+        [GeneratedRegex(@"^\*[a-z_-]*\{[a-z_-]+\.?[a-z0-9-_]+[a-z_-]*\}$")]
+        private static partial Regex s_dynamicVariantRegex();
+
+        // keep them all in a list for iterating
+        private static readonly Regex[] s_regularExpressions =
+        [
+            s_validCharactersRegex(),
+            s_placeholderRegex(),
+            s_dynamicVariantRegex()
+        ]; 
 
         private void RecalculateValidityAndTooltip()
         {
-            var newValidity = true;
+            var hasWarning = false;
+            var hasError = false;
+            
             if (Text == "None" || _settingsManager?.UseValidatingEditor != true)
             {
                 TextBoxToolTip = "CName";
             }
             else if (ArchiveXlHelper.GetValuesForInvalidConditions(Text) is string invalidConditions)
             {
-                newValidity = false;
+                hasError = true;
                 TextBoxToolTip = $"Invalid dynamic appearance condition! {invalidConditions}";
             }
-            else if (!s_validCharactersRegex().IsMatch(Text))
+            else if (!s_regularExpressions.Any(r => r.IsMatch(Text)))
             {
+                hasWarning = true;
                 TextBoxToolTip = $"'{Text}' contains invalid characters, or leading/trailing spaces! (Ignore this if everything works)";
             }
             else
             {
                 TextBoxToolTip = "CName";
             }
-            
-            if (IsValid == newValidity)
+
+            if (hasWarning != HasWarning)
             {
-                return;
+                HasWarning = hasWarning;
+                OnPropertyChanged(nameof(HasWarning));
             }
-            
-            IsValid = newValidity;
-            OnPropertyChanged(nameof(IsValid));
+
+            if (hasError != HasError)
+            {
+                HasError = hasError;
+                OnPropertyChanged(nameof(HasError));
+            }
+
+            if (hasError || hasWarning != IsValid)
+            {
+                IsValid = hasError || hasWarning;
+                OnPropertyChanged(nameof(IsValid));
+            }
             OnPropertyChanged(nameof(TextBoxToolTip));
         }
        

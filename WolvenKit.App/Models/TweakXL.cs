@@ -277,9 +277,10 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
             emitter.Emit(new Scalar(property));
         }
 
-        if (raRef.IsSet)
+        // Need an explicit check, otherwise e.g. Character.q305_6th_street_mb will throw exceptions
+        if (raRef.IsSet && raRef.DepotPath.GetResolvedText() is string str)
         {
-            emitter.Emit(new Scalar(raRef.DepotPath.ToString().NotNull()));
+            emitter.Emit(new Scalar(str).NotNull());
         }
         else
         {

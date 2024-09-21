@@ -14,6 +14,7 @@ using System.Xml;
 using ReactiveUI;
 using Splat;
 using Syncfusion.Windows.Tools.Controls;
+using WolvenKit.App;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models.Docking;
@@ -50,7 +51,12 @@ namespace WolvenKit.Views.Shell
             InitializeComponent();
             G_Dock = this;
 
-            _viewModel = DataContext as AppViewModel;
+            _viewModel = DataContext as AppViewModel ?? Locator.Current.GetService<AppViewModel>();
+
+            if (_viewModel is not null)
+            {
+                _viewModel.OnAppLoaded += (_, _) => LoadLayoutFromProject();
+            }
         }
 
         public static DockingAdapter G_Dock;
@@ -133,10 +139,25 @@ namespace WolvenKit.Views.Shell
                 return;
             }
 
-            if (!LoadLayout(projectLayout, "project"))
+            try
             {
-                _logger.Error("Error while loading the project layout. Restoring default layout");
-                LoadDefaultLayout();
+                if (!LoadLayout(projectLayout, "project"))
+                {
+                    _logger.Error("Error while loading the project layout. Restoring default layout");
+                    LoadDefaultLayout();
+                }
+            }
+            catch
+            {
+                _logger.Error("Project layout seems to have gotten corrupted. Wolvenkit will now try to delete it...");
+                _logger.Error("If that does not work, close Wolvenkit and delete or rename the following files:");
+                _logger.Error("(This will reset your settings)");
+                _logger.Error(projectLayout);
+                _logger.Error(Path.Combine(ISettingsManager.GetAppData(), "DockStates.xml"));
+                _logger.Error(Path.Combine(ISettingsManager.GetAppData(), "config.json"));
+
+
+                File.Delete(projectLayout);
             }
         }
 
@@ -206,33 +227,24 @@ namespace WolvenKit.Views.Shell
                         throw new Exception($"Can't unload {PART_DockingManager.Children[i].Name}");
                     }
 
-                    if (!newDockedWindows.Contains(contentControl.Name))
+                    if (newDockedWindows.Contains(contentControl.Name))
                     {
-                        appViewModel.DockedViews.Remove(dockElement);
-                        PART_DockingManager.Children.Remove(contentControl);
+                        continue;
                     }
+
+                    appViewModel.DockedViews.Remove(dockElement);
+                    PART_DockingManager.Children.Remove(contentControl);
                 }
 
-                foreach (var dockingParam in dockingParamsList)
+                // Check if the panel already exists. If not, try creating it via AddDockedPane.
+                foreach (var dockingParam in dockingParamsList
+                             .Where(dockingParam =>
+                                 PART_DockingManager.Children.OfType<FrameworkElement>().All(child => child.Name != dockingParam.Name))
+                             .Where(dockingParam => !appViewModel.AddDockedPane(dockingParam.Name)))
                 {
-                    var found = false;
-                    foreach (FrameworkElement child in PART_DockingManager.Children)
-                    {
-                        if (child.Name == dockingParam.Name)
-                        {
-                            found = true;
-                        }
-                    }
-
-                    if (!found)
-                    {
-                        if (!appViewModel.AddDockedPane(dockingParam.Name))
-                        {
-                            _logger.Warning($"ViewModel for \"{dockingParam.Name}\" could not be found!");
-                        }
-                    }
+                    _logger.Warning($"ViewModel for \"{dockingParam.Name}\" could not be found!");
                 }
-
+                
                 reader.Close();
                 reader = XmlReader.Create(filePath);
 
@@ -342,13 +354,13 @@ namespace WolvenKit.Views.Shell
             // update the vms
             foreach (FrameworkElement frameworkElement in PART_DockingManager.Children)
             {
-                if (frameworkElement is ContentControl contentControl)
+                if (frameworkElement is not ContentControl { Content: PaneViewModel vm } contentControl)
                 {
-                    if (contentControl.Content is PaneViewModel vm)
-                    {
-                        vm.State = DockingManager.GetState(contentControl).ToDockState();
-                    }
+                    continue;
                 }
+
+                vm.State = DockingManager.GetState(contentControl).ToDockState();
+                
             }
 
             _viewModel ??= DataContext as AppViewModel;
@@ -383,32 +395,30 @@ namespace WolvenKit.Views.Shell
 
             if (e.NewValue is ContentControl content)
             {
-                if (content.Content is IDockElement dockElement && !dockElement.IsActive)
+                if (content.Content is IDockElement { IsActive: false } dockElement)
                 {
                     dockElement.IsActive = true;
                 }
 
                 var propertiesViewModel = Locator.Current.GetService<PropertiesViewModel>();
-                if (content.Content is ProjectExplorerViewModel pevm)
+                if (content.Content is ProjectExplorerViewModel { SelectedItem: not null } pevm)
                 {
                     //propertiesViewModel.SetToNullAndResetVisibility();
                     propertiesViewModel.PE_FileInfoVisible = true;
                     propertiesViewModel.AB_FileInfoVisible = false;
-                    //propertiesViewModel.PE_SelectedItem = pevm.SelectedItem;
                     propertiesViewModel.ExecuteSelectFile(pevm.SelectedItem);
                 }
-                else if (content.Content is AssetBrowserViewModel abvm)
+                else if (content.Content is AssetBrowserViewModel { RightSelectedItem: not null } abvm)
                 {
                     //propertiesViewModel.SetToNullAndResetVisibility();
                     propertiesViewModel.AB_FileInfoVisible = true;
                     propertiesViewModel.PE_FileInfoVisible = false;
-                    //propertiesViewModel.AB_SelectedItem = abvm.RightSelectedItem;
                     propertiesViewModel.ExecuteSelectFile(abvm.RightSelectedItem);
                 }
 
-                if (content.Content != null)
+                if (content.Content is string s)
                 {
-                    DiscordHelper.SetDiscordRPCStatus(content.Content as string, _logger);
+                    DiscordHelper.SetDiscordRPCStatus(s, _logger);
                 }
 
                 //if (((IDockElement)content.Content).State == DockState.Document)
@@ -421,6 +431,7 @@ namespace WolvenKit.Views.Shell
                 }
                 catch (Exception)
                 {
+                    // Don't activate it
                 }
 
             }
@@ -499,16 +510,8 @@ namespace WolvenKit.Views.Shell
             _stateChanged = false;
         }
 
-        private void OnMainWindowClosing(object sender, CancelEventArgs e)
-        {
-            foreach (Window win in Application.Current.Windows)
-            {
-                if (win is NativeFloatWindow)
-                {
-                    win.Close();
-                }
-            }
-        }
+        private static void OnMainWindowClosing(object sender, CancelEventArgs e) => Application.Current.Windows.OfType<NativeFloatWindow>()
+            .ToList().ForEach(win => win.Close());
 
         private static void OnActiveDocumentChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
@@ -519,12 +522,7 @@ namespace WolvenKit.Views.Shell
 
             foreach (FrameworkElement element in adapter.PART_DockingManager.Children)
             {
-                if (element is not ContentControl control)
-                {
-                    continue;
-                }
-
-                if (control.Content != args.NewValue)
+                if (element is not ContentControl control || control.Content != args.NewValue)
                 {
                     continue;
                 }
@@ -545,53 +543,57 @@ namespace WolvenKit.Views.Shell
         /// <param name="e"></param>
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
-            if (e.Property.Name == "ItemsSource")
+            if (e.Property.Name != "ItemsSource")
             {
-                if (e.OldValue != null)
-                {
-                    var oldcollection = e.OldValue as INotifyCollectionChanged;
-                    oldcollection.CollectionChanged -= CollectionChanged;
-
-                    //unsubscribe?
-                }
-
-                if (e.NewValue != null)
-                {
-                    ((DocumentContainer)PART_DockingManager.DocContainer).SetCurrentValue(DocumentContainer.AddTabDocumentAtLastProperty, true);
-
-                    var newcollection = e.NewValue as INotifyCollectionChanged;
-
-                    foreach (var item in (IList)e.NewValue)
-                    {
-                        if (item is IDockElement dockElement)
-                        {
-                            // use normal events here?
-                            dockElement.ObservableForProperty(x => x.State)
-                                .ObserveOn(RxApp.MainThreadScheduler)
-                                .Subscribe(OnStateUpdated);
-
-                            // add control
-                            var control = new ContentControl()
-                            {
-                                Content = item
-                            };
-                            DockingManager.SetHeader(control, dockElement.Header);
-                            DockingManager.SetSideInDockedMode(control, (Syncfusion.Windows.Tools.Controls.DockSide)(int)dockElement.SideInDockedMode);
-                            DockingManager.SetState(control, dockElement.State.ToSfDockState());
-                            if (dockElement.State != DockState.Document)
-                            {
-                                control.Name = dockElement.GetType().Name;
-                            }
-
-                            DockingManager.SetCanSerialize(control, dockElement.CanSerialize);
-
-                            PART_DockingManager.Children.Add(control);
-                        }
-                    }
-
-                    newcollection.CollectionChanged += CollectionChanged;
-                }
+                base.OnPropertyChanged(e);
+                return;
             }
+
+            if (e.OldValue is INotifyCollectionChanged oldCollection)
+            {
+                oldCollection.CollectionChanged -= CollectionChanged;
+
+                //unsubscribe?
+            }
+
+            if (e.NewValue is not INotifyCollectionChanged newCollection)
+            {
+                base.OnPropertyChanged(e);
+                return;
+            }
+
+            ((DocumentContainer)PART_DockingManager.DocContainer).SetCurrentValue(DocumentContainer.AddTabDocumentAtLastProperty, true);
+
+            foreach (var item in (IList)newCollection)
+            {
+                if (item is not IDockElement dockElement)
+                {
+                    continue;
+                }
+
+                // use normal events here?
+                dockElement.ObservableForProperty(x => x.State)
+                    .ObserveOn(RxApp.MainThreadScheduler)
+                    .Subscribe(OnStateUpdated);
+
+                // add control
+                var control = new ContentControl() { Content = item };
+                DockingManager.SetHeader(control, dockElement.Header);
+                DockingManager.SetSideInDockedMode(control,
+                    (Syncfusion.Windows.Tools.Controls.DockSide)(int)dockElement.SideInDockedMode);
+                DockingManager.SetState(control, dockElement.State.ToSfDockState());
+                if (dockElement.State != DockState.Document)
+                {
+                    control.Name = dockElement.GetType().Name;
+                }
+
+                DockingManager.SetCanSerialize(control, dockElement.CanSerialize);
+
+                PART_DockingManager.Children.Add(control);
+            }
+
+            newCollection.CollectionChanged += CollectionChanged;
+   
             base.OnPropertyChanged(e);
         }
 
@@ -614,59 +616,58 @@ namespace WolvenKit.Views.Shell
                     PART_DockingManager.Children.Remove(control);
 
                     // set active document to null
-                    if (control.Content is IDocumentViewModel document)
+                    if (control?.Content is IDocumentViewModel document && ActiveDocument == document)
                     {
-                        if (ActiveDocument == document)
-                        {
-                            SetCurrentValue(ActiveDocumentProperty, null);
-                        }
+                        SetCurrentValue(ActiveDocumentProperty, null);
                     }
-
+                    
                     // unsubscribe ?
                 }
             }
 
-            // add windows
-            if (e.NewItems != null)
+            if (e.NewItems == null)
             {
-                foreach (var item in e.NewItems)
+                return;
+            }
+
+            // add windows
+
+            foreach (var item in e.NewItems)
+            {
+                if (item is not IDockElement element)
                 {
-                    if (item is IDockElement element)
-                    {
-                        // use normal events here?
-                        element.ObservableForProperty(x => x.Header)
-                            .ObserveOn(RxApp.MainThreadScheduler)
-                            .Subscribe(OnHeaderChanged);
-                        element.ObservableForProperty(x => x.State)
-                            .ObserveOn(RxApp.MainThreadScheduler)
-                            .Subscribe(OnStateUpdated);
-
-                        // add control
-                        var control = new ContentControl()
-                        {
-                            Content = element
-                        };
-
-                        // floating windows need size and positioning
-                        if (item is FloatingPaneViewModel vm)
-                        {
-                            DockingManager.SetDesiredHeightInFloatingMode(control, vm.Height);
-                            DockingManager.SetDesiredWidthInFloatingMode(control, vm.Width);
-                            DockingManager.SetFloatingWindowRect(control, new Rect(400, 400, vm.Width, vm.Height));
-                        }
-
-                        DockingManager.SetHeader(control, element.Header);
-                        DockingManager.SetState(control, element.State.ToSfDockState());
-                        if (element.State != DockState.Document)
-                        {
-                            control.Name = element.GetType().Name;
-                        }
-
-                        DockingManager.SetCanSerialize(control, element.CanSerialize);
-
-                        PART_DockingManager.Children.Add(control);
-                    }
+                    continue;
                 }
+
+                // use normal events here?
+                element.ObservableForProperty(x => x.Header)
+                    .ObserveOn(RxApp.MainThreadScheduler)
+                    .Subscribe(OnHeaderChanged);
+                element.ObservableForProperty(x => x.State)
+                    .ObserveOn(RxApp.MainThreadScheduler)
+                    .Subscribe(OnStateUpdated);
+
+                // add control
+                var control = new ContentControl() { Content = element };
+
+                // floating windows need size and positioning
+                if (item is FloatingPaneViewModel vm)
+                {
+                    DockingManager.SetDesiredHeightInFloatingMode(control, vm.Height);
+                    DockingManager.SetDesiredWidthInFloatingMode(control, vm.Width);
+                    DockingManager.SetFloatingWindowRect(control, new Rect(400, 400, vm.Width, vm.Height));
+                }
+
+                DockingManager.SetHeader(control, element.Header);
+                DockingManager.SetState(control, element.State.ToSfDockState());
+                if (element.State != DockState.Document)
+                {
+                    control.Name = element.GetType().Name;
+                }
+
+                DockingManager.SetCanSerialize(control, element.CanSerialize);
+
+                PART_DockingManager.Children.Add(control);
             }
         }
 

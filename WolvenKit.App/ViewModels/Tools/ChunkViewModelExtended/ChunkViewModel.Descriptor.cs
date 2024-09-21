@@ -295,7 +295,7 @@ public partial class ChunkViewModel
             // around the GetNodename?
             // For local and external materials
             case CMaterialInstance or CResourceAsyncReference<IMaterial> when NodeIdxInParent > -1
-                                                                              && GetRootModel().GetModelFromPath("materialEntries")
+                                                                              && GetRootModel().GetPropertyFromPath("materialEntries")
                                                                                       ?.ResolvedData is CArray<CMeshMaterialEntry>
                                                                                   materialEntries &&
                                                                               materialEntries.Count > NodeIdxInParent:
@@ -444,14 +444,10 @@ public partial class ChunkViewModel
 
                 break;
             }
-            case entMeshComponent meshComponent
+            case IRedMeshComponent meshComponent
                 when meshComponent.Name.GetResolvedText() is string name && name != "":
             {
-                if (name == "Component")
-                {
-                    IsDefault = true;
-                }
-
+                IsDefault = name == "Component";
                 Descriptor = name;
                 return;
             }
@@ -494,7 +490,7 @@ public partial class ChunkViewModel
                 // mesh: boneTransforms (in different coordinate spaces)
                 if (NodeIdxInParent > -1 &&
                     Parent?.Name is "boneTransforms" or "aPoseLS" or "aPoseMS" &&
-                    GetRootModel().GetModelFromPath("boneNames")?.ResolvedData is CArray<CName> boneNames &&
+                    GetRootModel().GetPropertyFromPath("boneNames")?.ResolvedData is CArray<CName> boneNames &&
                     boneNames.Count > NodeIdxInParent)
                 {
                     Descriptor = boneNames[NodeIdxInParent];

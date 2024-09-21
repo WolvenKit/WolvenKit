@@ -32,6 +32,8 @@ namespace WolvenKit.Common
         public void LoadModsArchives(FileInfo executable, bool analyzeFiles = true);
         public void LoadAdditionalModArchives(string archiveBasePath, bool analyzeFiles = true);
 
+        public string[] GetIgnoredArchiveNames();
+
         public Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles();
         public Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles(ArchiveManagerScope searchScope);
 
@@ -41,6 +43,21 @@ namespace WolvenKit.Common
         /// <param name="hash">Unique hash of the file</param>
         /// <returns>An optional with the matching file</returns>
         public Optional<IGameFile> Lookup(ulong hash);
+
+        /// <summary>
+        /// Checks if a file with the given resourcePath exists in the specified search scope.
+        /// </summary>
+        /// <param name="path">ResourcePath</param>
+        /// <param name="searchScope">BaseGame, Mod or Everywhere</param>
+        /// <returns>An optional with the matching file</returns>
+        public Optional<IGameFile> Lookup(ResourcePath path, ArchiveManagerScope searchScope);
+
+        /// <summary>
+        /// Checks if a file with the given resourcePath exists in the ArchiveManager's current scope.
+        /// </summary>
+        /// <param name="path">ResourcePath</param>
+        /// <returns>An optional with the matching file</returns>
+        public Optional<IGameFile> Lookup(ResourcePath path);
 
         /// <summary>
         /// Checks if a file with the given hash exists in the specified search scope.
