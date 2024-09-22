@@ -24,6 +24,7 @@ using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Layout;
 using DockState = WolvenKit.App.Models.Docking.DockState;
 
@@ -40,6 +41,7 @@ namespace WolvenKit.Views.Shell
 
         private AppViewModel _viewModel;
         private Window _mainWindow;
+        private IModifierViewStateService _modifierViewStateService;
         private bool _stateChanged;
 
         private readonly bool _debuggingLayouts = false;
@@ -47,6 +49,7 @@ namespace WolvenKit.Views.Shell
         public DockingAdapter()
         {
             _logger = Locator.Current.GetService<ILoggerService>();
+            _modifierViewStateService = Locator.Current.GetService<IModifierViewStateService>();
 
             InitializeComponent();
             G_Dock = this;
@@ -488,11 +491,13 @@ namespace WolvenKit.Views.Shell
         private void DockingAdapterOnLoaded(object sender, RoutedEventArgs e)
         {
             _mainWindow = Window.GetWindow(this);
-            if (_mainWindow != null)
+            if (_mainWindow == null)
             {
-                _mainWindow.Deactivated += OnMainWindowDeactivated;
-                _mainWindow.Closing += OnMainWindowClosing;
+                return;
             }
+
+            _mainWindow.Deactivated += OnMainWindowDeactivated;
+            _mainWindow.Closing += OnMainWindowClosing;
         }
 
         private void OnMainWindowDeactivated(object sender, EventArgs e)

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Forms;
+using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Splat;
@@ -41,7 +41,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         RefreshMenuVisibility(true);
     }
 
-    private void OnModifierChanged(object? _, KeyEventArgs e) => IsShiftKeyDown = _modifierViewStateService?.IsShiftKeyPressed ?? false;
+    private void OnModifierChanged(object? _, Key e) => IsShiftKeyDown = _modifierViewStateService?.IsShiftKeyPressed ?? false;
 
     private readonly IModifierViewStateService? _modifierViewStateService;
 

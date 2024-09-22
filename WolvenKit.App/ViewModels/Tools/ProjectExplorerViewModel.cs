@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.Windows.Input;
 using System.Windows.Threading;
 using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -56,7 +56,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private readonly IProgressService<double> _progressService;
     private readonly IGameControllerFactory _gameController;
     private readonly AppViewModel _mainViewModel;
-    public readonly IModifierViewStateService ModifierViewStateService;
+    public readonly IModifierViewStateService ModifierStateService;
     private readonly IWatcherService _projectWatcher;
 
     [ObservableProperty]
@@ -86,7 +86,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _gameController = gameController;
         _pluginService = pluginService;
         _settingsManager = settingsManager;
-        ModifierViewStateService = modifierSvc;
+        ModifierStateService = modifierSvc;
 
         _mainViewModel = appViewModel;
 
@@ -95,7 +95,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         SideInDockedMode = DockSide.Left;
 
         IsShowRelativePath = true;
-        ModifierViewStateService.ModifierStateChanged += OnModifierUpdateEvent;
+        ModifierStateService.ModifierStateChanged += OnModifierUpdateEvent;
         
         SetupToolDefaults();
         
@@ -1091,23 +1091,19 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     // Integrate with _modifierViewStatesModel to expose keys to view 
     // ####################################################################################
 
-    public bool IsShiftKeyPressed => ModifierViewStateService.IsShiftKeyPressed;
-    public bool IsShiftKeyPressedOnly => ModifierViewStateService.IsShiftKeyPressedOnly;
-    public bool IsCtrlKeyPressed => ModifierViewStateService.IsCtrlKeyPressed;
-    public bool IsCtrlKeyPressedOnly => ModifierViewStateService.IsCtrlKeyPressedOnly;
-    public bool IsNoModifierPressed => ModifierViewStateService.IsNoModifierPressed;
+    public bool IsShiftKeyPressed => ModifierViewStateService.IsShiftBeingHeld;
 
     /// <summary>
     /// Reacts to ModifierViewStatesModel's emitted events
     /// </summary>
-    private void OnModifierUpdateEvent(object? sender, KeyEventArgs keyEventArgs)
+    private void OnModifierUpdateEvent(object? sender, Key _)
     {
-        IsShowAbsolutePathToRawFolder = ModifierViewStateService.IsCtrlShiftOnlyPressed && IsInArchiveFolder(SelectedItem);
-        IsShowAbsolutePathToArchiveFolder = ModifierViewStateService.IsCtrlShiftOnlyPressed && IsInRawFolder(SelectedItem);
+        IsShowAbsolutePathToRawFolder = ModifierStateService.IsCtrlShiftOnlyPressed && IsInArchiveFolder(SelectedItem);
+        IsShowAbsolutePathToArchiveFolder = ModifierStateService.IsCtrlShiftOnlyPressed && IsInRawFolder(SelectedItem);
 
-        IsShowAbsolutePathToCurrentFile = ModifierViewStateService.IsShiftKeyPressedOnly;
+        IsShowAbsolutePathToCurrentFile = ModifierStateService.IsShiftKeyPressedOnly;
 
-        IsShowAbsolutePathToCurrentFolder = ModifierViewStateService.IsCtrlKeyPressedOnly;
+        IsShowAbsolutePathToCurrentFolder = ModifierStateService.IsCtrlKeyPressedOnly;
 
         IsShowRelativePath = !(IsShowAbsolutePathToRawFolder || IsShowAbsolutePathToArchiveFolder ||
                                IsShowAbsolutePathToCurrentFile || IsShowAbsolutePathToCurrentFolder) ||

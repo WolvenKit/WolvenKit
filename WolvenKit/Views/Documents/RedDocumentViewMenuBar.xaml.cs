@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms;
+using System.Windows.Input;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App;
@@ -69,7 +69,7 @@ namespace WolvenKit.Views.Documents
             });
         }
 
-        private void OnModifierStateChanged(object? sender, KeyEventArgs keyEventArgs) => RefreshChildMenuItems();
+        private void OnModifierStateChanged(object? _, Key k) => RefreshChildMenuItems();
 
         private RedDocumentTabViewModel? _currentTab;
 
@@ -223,12 +223,17 @@ namespace WolvenKit.Views.Documents
             return Path.Join(subfolder, projectName, "dependencies");
         }
 
-        private async Task AddDependenciesToMesh(ChunkViewModel cvm)
+        private async Task AddDependenciesToMesh(ChunkViewModel _)
         {
-            cvm.DeleteUnusedMaterialsCommand.Execute(null);
+            if (RootChunk is not { ResolvedData: CMesh } rootChunk)
+            {
+                return;
+            }
+
+            rootChunk.DeleteUnusedMaterialsCommand.Execute(null);
             await LoadModArchives();
 
-            var materialDependencies = await cvm.GetMaterialDependenciesOutsideOfProject();
+            var materialDependencies = await rootChunk.GetMaterialDependenciesOutsideOfProject();
 
             var destFolder = GetTextureDirForDependencies(true);
             // Use search and replace to fix file paths
@@ -236,7 +241,7 @@ namespace WolvenKit.Views.Documents
                 destFolder, materialDependencies
             );
 
-            await SearchAndReplaceInChildNodes(cvm, pathReplacements,
+            await SearchAndReplaceInChildNodes(rootChunk, pathReplacements,
                 ChunkViewModel.LocalMaterialBufferPath,
                 ChunkViewModel.ExternalMaterialPath);
 

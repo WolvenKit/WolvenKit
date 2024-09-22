@@ -168,7 +168,14 @@ namespace WolvenKit.Views.Tools
             //    e.Cancel = true;
         }
 
-        public bool IsControlBeingHeld => _modifierViewStateSvc.IsCtrlKeyPressed;
+        public bool IsControlBeingHeld
+        {
+            get => (bool)GetValue(IsControlBeingHeldProperty);
+            set => SetValue(IsControlBeingHeldProperty, value);
+        }
+
+        public static readonly DependencyProperty IsControlBeingHeldProperty =
+            DependencyProperty.Register(nameof(IsControlBeingHeld), typeof(bool), typeof(RedTreeView));
 
         private bool IsAllowDrop(TreeViewItemDragOverEventArgs e)
         {

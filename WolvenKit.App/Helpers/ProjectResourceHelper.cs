@@ -271,22 +271,17 @@ public static class ProjectResourceHelper
 
         if (Path.IsPathRooted(destRelPath))
         {
-            destRelPath = activeProject.GetRelativePath(sourcePath);
+            (_, destRelPath) = activeProject.SplitFilePath(destPath);
         }
 
         // If we're given a directory here, make sure that we have a file path
         var destAbsPath = Path.Join(absoluteFolderPrefix, destRelPath);
-        if (Directory.Exists(destAbsPath))
-        {
-            destRelPath = Path.Join(destRelPath, Path.GetFileName(sourceRelPath));
-            destAbsPath = Path.Join(destAbsPath, Path.GetFileName(sourceRelPath));
-        }
 
-        if (sourceRelPath == destRelPath || sourceRelPath.Contains(destRelPath))
+        // don't copy a directory on itself
+        if (sourceRelPath == destRelPath)
         {
             return;
         }
-
 
         var sourceAbsPath = Path.Join(absoluteFolderPrefix, sourceRelPath);
         var sourceIsDirectory = Directory.Exists(sourceAbsPath);

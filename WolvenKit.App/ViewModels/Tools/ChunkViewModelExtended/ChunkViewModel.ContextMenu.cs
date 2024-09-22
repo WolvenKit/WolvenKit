@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Helpers;
@@ -44,7 +44,7 @@ public partial class ChunkViewModel
 
     #region methods
 
-    private void OnModifierChanged(object? sender, KeyEventArgs e) => RefreshContextMenuFlags();
+    private void OnModifierChanged(object? _, Key k) => RefreshContextMenuFlags();
 
     public void RefreshContextMenuFlags()
     {
