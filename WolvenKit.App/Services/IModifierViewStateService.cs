@@ -37,4 +37,7 @@ public interface IModifierViewStateService: INotifyPropertyChanged
 
     void OnKeyUp(object sender, Key e);
     void OnKeyDown(object sender, Key e);
+
+    void Suspend();
+    void Resume();
 }

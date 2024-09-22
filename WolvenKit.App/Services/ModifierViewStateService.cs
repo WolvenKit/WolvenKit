@@ -57,7 +57,7 @@ public partial class ModifierViewStateService : ObservableObject, IModifierViewS
 
     private static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
     {
-        if (nCode < 0)
+        if (nCode < 0 || IsSuspended)
         {
             return CallNextHookEx(s_hookId, nCode, wParam, lParam);
         }
@@ -78,6 +78,8 @@ public partial class ModifierViewStateService : ObservableObject, IModifierViewS
         return CallNextHookEx(s_hookId, nCode, wParam, lParam);
     }
 
+    private static bool IsSuspended;
+    
     private static void OnKeyDownStatic(Key key) => Instance?.OnKeyDown(null, key);
 
     private static void OnKeyUpStatic(Key key) => Instance?.OnKeyUp(null, key);
@@ -170,6 +172,10 @@ public partial class ModifierViewStateService : ObservableObject, IModifierViewS
 
         ModifierStateChanged?.Invoke(this, key);
     }
+
+    public void Suspend() => IsSuspended = true;
+
+    public void Resume() =>  IsSuspended = false;
 
 
     public event EventHandler<Key>? ModifierStateChanged; 

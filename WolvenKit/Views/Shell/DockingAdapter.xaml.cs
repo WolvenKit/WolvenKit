@@ -496,8 +496,10 @@ namespace WolvenKit.Views.Shell
                 return;
             }
 
+            _mainWindow.Activated += OnMainWindowActivated;
             _mainWindow.Deactivated += OnMainWindowDeactivated;
             _mainWindow.Closing += OnMainWindowClosing;
+            
         }
 
         private void OnMainWindowDeactivated(object sender, EventArgs e)
@@ -512,8 +514,12 @@ namespace WolvenKit.Views.Shell
                     }
                 }
             }
+
+            _modifierViewStateService.Suspend();
             _stateChanged = false;
         }
+
+        private void OnMainWindowActivated(object sender, EventArgs e) => _modifierViewStateService.Resume();
 
         private static void OnMainWindowClosing(object sender, CancelEventArgs e) => Application.Current.Windows.OfType<NativeFloatWindow>()
             .ToList().ForEach(win => win.Close());
