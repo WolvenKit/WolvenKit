@@ -255,6 +255,22 @@ public partial class ChunkViewModel
                 Value = $"{id.Id}";
                 IsValueExtrapolated = true;
                 break;
+            case CArray<entSlot> entSlots:
+                var entSlotDescriptors = entSlots
+                    .Select(slotsOption => slotsOption.SlotName.GetResolvedText() ?? "")
+                    .Where(e => !string.IsNullOrEmpty(e))
+                    .ToList();
+                Value = $"{string.Join(", ", entSlotDescriptors)}";
+                IsValueExtrapolated = true;
+                break;
+            case CArray<gameAnimParamSlotsOption> slotsOptions:
+                var childDescriptors = slotsOptions
+                    .Select(slotsOption => slotsOption.SlotID.GetResolvedText() ?? "")
+                    .Where(e => !string.IsNullOrEmpty(e))
+                    .ToList();
+                Value = $"{string.Join(", ", childDescriptors)}";
+                IsValueExtrapolated = true;
+                break;
             case questFactsDBCondition condition:
                 switch (condition.Type?.GetValue())
                 {

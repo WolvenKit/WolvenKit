@@ -213,6 +213,9 @@ public partial class ChunkViewModel
             case scnSectionNode sectionNode:
                 Descriptor = $"{sectionNode.NodeId.Id}";
                 return;
+            case gameAnimParamSlotsOption slotsOption:
+                Descriptor = $"{slotsOption.SlotID.GetResolvedText()}";
+                return;
             case scnInteractionShapeParams shapeParams:
                 Descriptor = $"{shapeParams.Preset}";
                 return;
