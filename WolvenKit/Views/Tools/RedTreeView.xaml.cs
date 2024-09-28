@@ -235,7 +235,8 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            var targetIndex = target.Parent.Properties.IndexOf(target);
+            var indexOffset = e.DropPosition == DropPosition.DropBelow ? 1 : 0;
+            var targetIndex = target.Parent.Properties.IndexOf(target) + indexOffset;
 
             foreach (var node in e.DraggingNodes.Where(node => node.Content is ChunkViewModel))
             {
@@ -246,21 +247,15 @@ namespace WolvenKit.Views.Tools
                     if (await Interactions.ShowMessageBoxAsync($"Duplicate {source.Data.GetType().Name} here?",
                             "Duplicate Confirmation", WMessageBoxButtons.YesNo) == WMessageBoxResult.Yes)
                     {
-                        target.Parent.InsertChild(
-                            target.Parent.Properties.IndexOf(target) +
-                            (e.DropPosition == DropPosition.DropBelow ? 1 : 0), (IRedType)irc.DeepCopy());
+                        target.Parent.InsertChild(targetIndex, (IRedType)irc.DeepCopy());
                     }
                 }
                 else
                 {
                     Debug.WriteLine("Moved a node to " + targetIndex);
-                    target.Parent.MoveChild(
-                        targetIndex + (e.DropPosition == DropPosition.DropBelow ? 1 : 0),
-                        source);
-                    targetIndex += 1;
+                    target.Parent.MoveChild(targetIndex, source);
                 }
             }
-
 
             e.Handled = true;
         }
