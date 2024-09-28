@@ -142,14 +142,20 @@ public partial class ScriptManagerView : ReactiveUserControl<ScriptManagerViewMo
     {
         var version = "";
         var author = "";
+        var description = "";
+        var usage = "";
 
         if (e.AddedItems.Count > 0 && e.AddedItems[0] is TreeGridRowInfo { RowData: ScriptFileViewModel scriptFile })
         {
             version = scriptFile.Version;
             author = scriptFile.Author;
+            description = scriptFile.Description;
+            usage = scriptFile.Usage;
         }
 
         VersionLabel.SetCurrentValue(ContentProperty, version);
         AuthorLabel.SetCurrentValue(ContentProperty, author);
+        DescriptionLabel.SetCurrentValue(ContentProperty, description);
+        UsageLabel.SetCurrentValue(ContentProperty, usage);
     }
 }
