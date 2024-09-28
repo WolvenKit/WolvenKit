@@ -327,6 +327,26 @@ public partial class ChunkViewModel
                 Value = voiceset.CombatVoSettingsName.GetResolvedText() ?? "";
                 IsValueExtrapolated = Value != "";
                 break;
+            case CMaterialParameterTexture cTexPar:
+                Value = cTexPar.Texture.DepotPath.GetResolvedText() ?? "";
+                IsValueExtrapolated = Value != "";
+                break;
+            case CMaterialParameterScalar cNumPar:
+                Value = $"{cNumPar.Min}..{cNumPar.Max}";
+                IsValueExtrapolated = Value != "";
+                break;
+            case CMaterialParameterVector cVecPar:
+                Value = StringHelper.Stringify(cVecPar.Vector);
+                IsValueExtrapolated = Value != "";
+                break;
+            case CMaterialParameterColor cColorPar:
+                Value = StringHelper.Stringify(cColorPar.Color);
+                IsValueExtrapolated = Value != "";
+                break;
+            case CMaterialParameterInfo cInfoPar:
+                Value = cInfoPar.Type.ToString();
+                IsValueExtrapolated = Value != "";
+                break;
             case entTemplateAppearance entAppearance:
                 Value = StringHelper.Stringify(entAppearance.AppearanceResource.DepotPath);
                 IsValueExtrapolated = Value != "";
