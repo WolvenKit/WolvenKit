@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
+using Splat;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Models;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
@@ -11,18 +12,21 @@ namespace WolvenKit.App.Services;
 
 public class SettingsDto : ISettingsDto
 {
+    private readonly ISettingsManager? _settingsManager;
+
     /// <summary>
     /// Current version of SettingsDTO.
     /// </summary>
-    private const int s_currentSettingsVersion = 3;
+    private const int s_currentSettingsVersion = 4;
+
+    public bool IsDirty;
 
     // Deserialize
-    public SettingsDto()
-    {
-    }
+    public SettingsDto() => MigrateSettings();
 
     public SettingsDto(SettingsManager settings)
     {
+        _settingsManager = settings; 
         SkipUpdateCheck = settings.SkipUpdateCheck;
         UpdateChannel = settings.UpdateChannel;
         ShowGuidedTour = settings.ShowGuidedTour;
@@ -63,8 +67,9 @@ public class SettingsDto : ISettingsDto
         ReopenLastProject = settings.ReopenLastProject;
         ShowVerboseLogOutput = settings.ShowVerboseLogOutput;
         ArchiveNamesExcludeFromScan = settings.ArchiveNamesExcludeFromScan;
+        SettingsVersion = settings.SettingsVersion;
 
-        MigrateSettings(settings.SettingsVersion);
+        MigrateSettings();
     }
 
     public int SettingsVersion { get; set; } = 2;
@@ -94,7 +99,7 @@ public class SettingsDto : ISettingsDto
     public Dictionary<string, LaunchProfile> LaunchProfiles { get; set; } = [];
     public bool RefactoringCheckboxDefaultValue { get; set; }
     public Dictionary<string, bool>? ScriptStatus { get; set; }
-    public bool AnalyzeModArchives { get; set; } = false;
+    public bool AnalyzeModArchives { get; set; }
     public string? ExtraModDirPath { get; set; }
     public string? LastUsedProjectPath { get; set; }
     public string? DefaultProjectPath { get; set; }
@@ -112,7 +117,7 @@ public class SettingsDto : ISettingsDto
 
     public SettingsManager ReconfigureSettingsManager(SettingsManager settingsManager)
     {
-        MigrateSettings(SettingsVersion);
+        MigrateSettings();
 
         settingsManager.SettingsVersion = SettingsVersion;
 
@@ -166,9 +171,9 @@ public class SettingsDto : ISettingsDto
     // Rather than create all kinds of new interfaces etc.,
     // always maintain the DTO as the current, and apply
     // all migrations in order for a controlled upgrade.
-    private void MigrateSettings(int fromVersion)
+    private void MigrateSettings()
     {
-        if (fromVersion == s_currentSettingsVersion)
+        if (SettingsVersion == s_currentSettingsVersion)
         {
             return;
         }
@@ -178,12 +183,27 @@ public class SettingsDto : ISettingsDto
             CP77LaunchCommand = CP77ExecutablePath;
         }
 
-        if (fromVersion < 3)
+        if (SettingsVersion < 3)
         {
             UpdateLaunchProfilesV3();
+            SettingsVersion = 3;
+        }
+
+        if (SettingsVersion < 4)
+        {
+            ScriptStatus ??= [];
+            var scriptKeys = ScriptStatus.Keys.Where((key) => key.Contains("hook_global.wscript")).ToList();
+            foreach (var scriptKey in scriptKeys)
+            {
+                ScriptStatus[scriptKey] = false;
+            }
+
+            SettingsVersion = 4;
         }
 
         SettingsVersion = s_currentSettingsVersion;
+
+        IsDirty = true;
     }
 
     /// <summary>

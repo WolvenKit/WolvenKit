@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
-using System.Linq;
-using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData.Binding;
-using WolvenKit.App.Extensions;
 using WolvenKit.App.Models;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common;
@@ -27,6 +25,12 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     private bool _isLoaded;
 
     private readonly string _assemblyVersion;
+
+
+    private static readonly JsonSerializerOptions s_options = new()
+    {
+        WriteIndented = true, DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+    };
 
     /// <summary>
     /// Default constructor.
@@ -95,6 +99,11 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             : new SettingsManager();
         
         settings._isLoaded = true;
+
+        if (dto?.IsDirty == true)
+        {
+            settings.Save();
+        }
         return settings;
     }
 
@@ -105,12 +114,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             return;
         }
 
-        var options = new JsonSerializerOptions
-        {
-            WriteIndented = true,
-            DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
-        };
-        var json = JsonSerializer.Serialize(new SettingsDto(this), options);
+        var json = JsonSerializer.Serialize(new SettingsDto(this), s_options);
         File.WriteAllText(GetConfigurationPath(), json);
         // _loggerService.Info("Settings saved.");
     }
@@ -124,27 +128,22 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
 
     private static SettingsDto? LoadFromFile()
     {
+        if (!File.Exists(GetConfigurationPath()))
+        {
+            return null;
+        }
         try
         {
-            if (File.Exists(GetConfigurationPath()))
-            {
-                var options = new JsonSerializerOptions
-                {
-                    WriteIndented = true,
-                    DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
-                };
-                var jsonString = File.ReadAllText(GetConfigurationPath());
-                var dto = JsonSerializer.Deserialize<SettingsDto>(jsonString, options);
+            var jsonString = File.ReadAllText(GetConfigurationPath());
+            var dto = JsonSerializer.Deserialize<SettingsDto>(jsonString, s_options);
 
-                return dto;
-            }
+            return dto;
         }
         catch (Exception)
         {
             return null;
         }
 
-        return null;
     }
 
     #endregion lifecycle
