@@ -1074,13 +1074,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             IsVisible = false;
         }
         
-        if (e.PropertyName != nameof(SelectedTabIndex) || ActiveProject is null)
+        if (e.PropertyName == nameof(SelectedTabIndex) && ActiveProject is not null)
         {
-            return;
+            ActiveProject.ActiveTab = SelectedTabIndex;
+            _projectExplorerTabChanged = true;
         }
 
-        ActiveProject.ActiveTab = SelectedTabIndex;
-        _projectExplorerTabChanged = true;
+        base.OnPropertyChanged(e);
     }
 
     #endregion Methods
