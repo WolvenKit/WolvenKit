@@ -126,38 +126,64 @@
                 Grid.Column="1"
                 BorderBrush="#373737"
                 BorderThickness="1">
-                <Grid
-                    MinWidth="250"
-                    Background="{StaticResource ContentBackground}"
-                    IsSharedSizeScope="True">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" SharedSizeGroup="Label" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
+                <ScrollViewer HorizontalScrollBarVisibility="Visible">
+                    <Grid
+                        MinWidth="250"
+                        Background="{StaticResource ContentBackground}"
+                        IsSharedSizeScope="True">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" SharedSizeGroup="Label" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
 
-                    <Label
-                        Grid.Row="0"
-                        Grid.Column="0"
-                        Content="Version: " />
-                    <Label
-                        x:Name="VersionLabel"
-                        Grid.Row="0"
-                        Grid.Column="1" />
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            HorizontalContentAlignment="Right"
+                            Content="Version: " />
+                        <Label
+                            x:Name="VersionLabel"
+                            Grid.Row="0"
+                            Grid.Column="1" />
 
-                    <Label
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        Content="Author: " />
-                    <Label
-                        x:Name="AuthorLabel"
-                        Grid.Row="1"
-                        Grid.Column="1" />
-                </Grid>
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            HorizontalContentAlignment="Right"
+                            Content="Author: " />
+                        <Label
+                            x:Name="AuthorLabel"
+                            Grid.Row="1"
+                            Grid.Column="1" />
+
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            HorizontalContentAlignment="Right"
+                            Content="Description: " />
+                        <Label
+                            x:Name="DescriptionLabel"
+                            Grid.Row="2"
+                            Grid.Column="1" />
+
+                        <Label
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            HorizontalContentAlignment="Right"
+                            Content="Usage: " />
+                        <Label
+                            x:Name="UsageLabel"
+                            Grid.Row="3"
+                            Grid.Column="1" />
+                    </Grid>
+                </ScrollViewer>
             </Border>
         </Grid>
 

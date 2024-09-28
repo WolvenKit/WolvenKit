@@ -10,6 +10,8 @@ public class ScriptFileViewModel : ScriptViewModel
 
     public string? Version => _scriptFile.Version;
     public string? Author => _scriptFile.Author;
+    public string? Description => _scriptFile.Description;
+    public string? Usage => _scriptFile.Usage;
 
     public override bool CanExecute => Type == ScriptType.General;
     public override bool CanDelete => Source == ScriptSource.User;
