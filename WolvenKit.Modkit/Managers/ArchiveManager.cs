@@ -205,15 +205,15 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// </summary>
         /// <param name="absoluteFilepath"> absolute path of file to process </param>
         /// <param name="analyzeFiles"></param>
-        public void LoadModArchive(string absoluteFilepath, bool analyzeFiles = true)
+        /// <param name="forceRescan"></param>
+        public void LoadModArchive(string absoluteFilepath, bool analyzeFiles = true, bool forceRescan = false)
         {
-            var archiveName = Path.GetFileName(absoluteFilepath).Replace(".archive", "");
-
-            if (Archives.Lookup(absoluteFilepath).HasValue && !analyzeFiles)
+            if (!forceRescan && Archives.Lookup(absoluteFilepath).HasValue)
             {
                 return;
             }
 
+            var archiveName = Path.GetFileName(absoluteFilepath).Replace(".archive", "");
             var archive = _wolvenkitFileService.ReadRed4Archive(absoluteFilepath, _hashService);
 
             if (archive == null)

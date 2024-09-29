@@ -331,7 +331,7 @@ namespace WolvenKit.Views.Tools
             }
             else if (vm.SearchBarText is string s && ArchiveSearchRegex().Match(s) is { Success: true } match)
             {
-                vm.ScanModArchives(true, match.Value);
+                vm.ScanModArchives(true, match.Value.Trim());
             }
             else
             {
