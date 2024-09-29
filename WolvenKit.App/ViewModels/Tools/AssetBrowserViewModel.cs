@@ -602,7 +602,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     [RelayCommand]
     private async Task OpenFileSystemItem()
     {
-        if (!ProjectLoaded)
+        if (!ProjectLoaded || ModifierViewStateService.IsShiftBeingHeld)
         {
             OpenFileOnly();
             return;
