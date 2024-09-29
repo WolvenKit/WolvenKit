@@ -201,31 +201,31 @@ namespace WolvenKit.RED4.CR2W.Archive
         }
 
         /// <summary>
-        /// Load a single mod bundle
+        /// Load a single mod bundle and optionally analyze its content.
         /// </summary>
-        /// <param name="filename">
-        /// file to process
-        /// </param>
+        /// <param name="absoluteFilepath"> absolute path of file to process </param>
         /// <param name="analyzeFiles"></param>
-        public void LoadModArchive(string filename, bool analyzeFiles = true)
+        public void LoadModArchive(string absoluteFilepath, bool analyzeFiles = true)
         {
-            if (Archives.Lookup(filename).HasValue)
+            var archiveName = Path.GetFileName(absoluteFilepath).Replace(".archive", "");
+
+            if (Archives.Lookup(absoluteFilepath).HasValue && !analyzeFiles)
             {
                 return;
             }
 
-            var archive = _wolvenkitFileService.ReadRed4Archive(filename, _hashService);
+            var archive = _wolvenkitFileService.ReadRed4Archive(absoluteFilepath, _hashService);
 
             if (archive == null)
             {
-                _logger.Warning($"Unable to load mod archive: {filename}");
+                _logger.Warning($"Unable to load mod archive: {archiveName}");
                 return;
             }
 
             archive.Source = EArchiveSource.Mod;
             Archives.AddOrUpdate(archive);
 
-            if (!analyzeFiles || GetIgnoredArchiveNames().Contains(archive.Name.Replace(".archive", "")))
+            if (!analyzeFiles)
             {
                 return;
             }
@@ -254,7 +254,7 @@ namespace WolvenKit.RED4.CR2W.Archive
 
             if (importError)
             {
-                _logger.Warning($"Error while loading the following mod archive: {filename}");
+                _logger.Warning($"Error while loading the following mod archive: {archiveName}");
                 _logger.Warning("  You can exclude it from analysis in the settings under 'Exclude archives from scan by name'");
             }
         }
@@ -262,7 +262,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <summary>
         /// Loads bundles from specified mods and dlc folder
         /// </summary>
-        public virtual void LoadModsArchives(FileInfo executable, bool analyzeFiles = true)
+        public virtual void LoadModArchives(FileInfo executable, bool analyzeFiles = true)
         {
             var di = executable.Directory;
             if (di?.Parent?.Parent is null)
@@ -294,6 +294,7 @@ namespace WolvenKit.RED4.CR2W.Archive
 
             var enabledButNotDeployed = new List<string>();
             var enabledButDontExist = new List<string>();
+
 
             if (Directory.Exists(legacyModPath))
             {

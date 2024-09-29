@@ -127,6 +127,11 @@ public partial class AssetBrowserViewModel : ToolViewModel
         CheckView();
     }
 
+    private string[] IgnoredArchives =>
+        _settings.ArchiveNamesExcludeFromScan.Split(",", StringSplitOptions.RemoveEmptyEntries)
+            .Select(archiveName => archiveName.Replace(".archive", "")).ToArray();
+
+    
     private void OnNext(IChangeSet<RedFileSystemModel> obj) => 
         DispatcherHelper.RunOnMainThread(() => LeftItems = new ObservableCollection<RedFileSystemModel>(_boundRootNodes), DispatcherPriority.ContextIdle);
 
@@ -413,19 +418,21 @@ public partial class AssetBrowserViewModel : ToolViewModel
     public void UpdateSearchInArchives()
     {
         AddFromArchiveItems.Clear();
-        
-        if (RightSelectedItem is RedFileViewModel file)
+
+        if (RightSelectedItem is not RedFileViewModel file)
         {
-            var key = file.GetGameFile().Key;
-            var archives = _archiveManager
-                .Archives
-                .Items
-                .Where(_ => _.Files.ContainsKey(key));
-            
-            foreach (var archive in archives)
-            {
-                AddFromArchiveItems.Add(archive);
-            }
+            return;
+        }
+
+        var key = file.GetGameFile().Key;
+        var archives = _archiveManager
+            .Archives
+            .Items
+            .Where(_ => _.Files.ContainsKey(key));
+
+        foreach (var archive in archives)
+        {
+            AddFromArchiveItems.Add(archive);
         }
     }
 
@@ -976,21 +983,66 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
         LeftSelectedItem = LeftItems.ToList().FirstOrDefault((item) => item.Name.Contains(itemName));
     }
+
+    public async void Refresh()
+    {
+        if (LeftSelectedItem is RedFileSystemModel left)
+        {
+            LeftSelectedItem = null;
+            LeftSelectedItem = left;
+            return;
+        }
+
+        if (SearchBarText is not null)
+        {
+            await PerformSearch(SearchBarText);
+        }
+    }
     #endregion methods
 
     // On initialization, scanArchives is read from the settings. On scan button click, we always want to scan.
-    public void ScanModArchives(bool scanArchives)
+    public void ScanModArchives(bool scanArchives, string? archiveName = null)
     {
         if (_settings.CP77ExecutablePath is null)
         {
             return;
         }
 
-        _archiveManager.LoadModsArchives(new FileInfo(_settings.CP77ExecutablePath), scanArchives);
+        if (archiveName is not null && scanArchives)
+        {
+            if (IgnoredArchives.Contains(archiveName.Replace(".archive", "")))
+            {
+                return;
+            }
 
-        if (Directory.Exists(_settings.ExtraModDirPath))
+            // find the correct archive
+            foreach (var gameArchive in _archiveManager.GetModArchives()
+                         .Where(archive => archive.Name.Contains(archiveName, StringComparison.OrdinalIgnoreCase)))
+            {
+                _archiveManager.LoadModArchive(gameArchive.ArchiveAbsolutePath, true);
+            }
+        }
+        else
+        {
+            _archiveManager.LoadModArchives(new FileInfo(_settings.CP77ExecutablePath), scanArchives);
+        }
+
+        if (!Directory.Exists(_settings.ExtraModDirPath))
+        {
+            return;
+        }
+
+        if (archiveName is not null && scanArchives)
+        {
+            foreach (var fullPath in Directory.GetFiles(_settings.ExtraModDirPath, archiveName, SearchOption.AllDirectories))
+            {
+                _archiveManager.LoadModArchive(fullPath, true);
+            }
+        }
+        else
         {
             _archiveManager.LoadAdditionalModArchives(_settings.ExtraModDirPath, scanArchives);
         }
+
     }
 }

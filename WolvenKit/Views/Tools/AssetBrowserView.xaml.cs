@@ -314,6 +314,31 @@ namespace WolvenKit.Views.Tools
                 _ => args.ChildItems
             };
 
-        private void ScanModArchivesButton_OnClick(object sender, RoutedEventArgs e) => ViewModel?.ScanModArchives(true);
+
+        [GeneratedRegex(@"(?<=archive:)([^><|&]+)")]
+        private static partial Regex ArchiveSearchRegex();
+
+        private void ScanModArchivesButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is not AssetBrowserViewModel vm)
+            {
+                return;
+            }
+
+            if (vm.LeftSelectedItem is RedFileSystemModel fs && fs.Name.EndsWith(".archive", StringComparison.OrdinalIgnoreCase))
+            {
+                vm.ScanModArchives(true, fs.Name);
+            }
+            else if (vm.SearchBarText is string s && ArchiveSearchRegex().Match(s) is { Success: true } match)
+            {
+                vm.ScanModArchives(true, match.Value);
+            }
+            else
+            {
+                vm.ScanModArchives(true, null);
+            }
+
+            vm.Refresh();
+        }
     }
 }
