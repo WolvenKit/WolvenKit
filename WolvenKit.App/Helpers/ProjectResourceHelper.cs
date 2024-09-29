@@ -187,6 +187,32 @@ public static class ProjectResourceHelper
     }
 
 
+    public static void AddToProject(ResourcePath resourcePath)
+    {
+        if (resourcePath.GetResolvedText() is not string sourceRelativePath
+            || string.IsNullOrEmpty(sourceRelativePath))
+        {
+            return;
+        }
+
+        var refPathHash = HashHelper.CalculateDepotPathHash(resourcePath);
+        // we can't add it
+        if (refPathHash is 0 || GetArchiveManager() is not IArchiveManager archiveManager ||
+            GetRed4Controller() is not RED4Controller controller)
+        {
+            return;
+        }
+
+        if (archiveManager.Lookup(refPathHash, ArchiveManagerScope.Basegame) is { HasValue: true } basegameFile)
+        {
+            controller.AddToMod(basegameFile.Value, ArchiveManagerScope.Basegame);
+        }
+        else if (archiveManager.Lookup(refPathHash, ArchiveManagerScope.Mods) is { HasValue: true } modFile)
+        {
+            controller.AddToMod(modFile.Value, ArchiveManagerScope.Mods);
+        }
+    }
+    
     private static void AddFileToProjectFolder(string projectRoot, ResourcePath resourcePath, ResourcePath targetResourcePath,
         Dictionary<string, string> pathReplacements, bool overwriteFiles)
     {
@@ -526,4 +552,5 @@ public static class ProjectResourceHelper
 
         cw.WriteFile(cr2W);
     }
+
 }
