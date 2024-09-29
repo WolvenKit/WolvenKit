@@ -21,7 +21,9 @@ using WolvenKit.Common.Conversion;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Common.Services;
 using WolvenKit.Core.Exceptions;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.Scripting;
 using WolvenKit.RED4.Archive;
@@ -72,7 +74,7 @@ public class AppScriptFunctions : ScriptFunctions
     [Obsolete]
     public void SuspendFileWatcher(bool suspend)
     {
-        
+
     }
 
     /// <summary>
@@ -209,7 +211,7 @@ public class AppScriptFunctions : ScriptFunctions
             using var ms = new MemoryStream();
             gameFile.Extract(ms);
             ms.Position = 0;
-            
+
             using var cr = new CR2WReader(ms);
 
             if (cr.ReadFile(out var cr2wFile) != EFileReadErrorCodes.NoError)
@@ -706,6 +708,94 @@ public class AppScriptFunctions : ScriptFunctions
         var file = new FileInfo(Path.Combine(proj.RawDirectory, filepath));
         return file.Exists;
     }
+
+    #region TweakDB
+
+    /// <summary>
+    /// Loads all records as TweakDBID paths.
+    /// </summary>
+    /// <returns></returns>
+    public virtual IEnumerable GetRecords() => ConvertTDBToPath(TweakDBService.GetRecords());
+
+    /// <summary>
+    /// Loads all flats as TweakDBID paths.
+    /// </summary>
+    /// <returns></returns>
+    public virtual IEnumerable GetFlats() => ConvertTDBToPath(TweakDBService.GetFlats());
+
+    /// <summary>
+    /// Loads all queries as TweakDBID paths.
+    /// </summary>
+    /// <returns></returns>
+    public virtual IEnumerable GetQueries() => ConvertTDBToPath(TweakDBService.GetQueries());
+
+    /// <summary>
+    /// Loads all group tags as TweakDBID paths.
+    /// </summary>
+    /// <returns></returns>
+    public virtual IEnumerable GetGroupTags() => ConvertTDBToPath(TweakDBService.GetGroupTags());
+
+    /// <summary>
+    /// Loads a record by its TweakDBID path.
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns>record as a JSON string, null when not found</returns>
+    public virtual string? GetRecord(string path) => ConvertTDBToJson(TweakDBService.GetRecord(path));
+
+    /// <summary>
+    /// Loads a flat by its TweakDBID path.
+    /// </summary>
+    /// <returns>flat as a JSON string, null when not found</returns>
+    public virtual string? GetFlat(string path) => ConvertTDBToJson(TweakDBService.GetFlat(path));
+
+    /// <summary>
+    /// Loads flats of a query by its TweakDBID path.
+    /// </summary>
+    /// <returns>a list of flats as TweakDBID paths, empty when not found</returns>
+    public virtual IEnumerable GetQuery(string path) => ConvertTDBToPath(TweakDBService.GetQuery(path));
+
+    /// <summary>
+    /// Loads a group tag by its TweakDBID path.
+    /// </summary>
+    /// <returns>flat as a JSON string, null when not found</returns>
+    public virtual byte? GetGroupTag(string path) => TweakDBService.GetGroupTag(path);
+
+    /// <summary>
+    /// Whether TweakDBID path exists as a flat or a record?
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    public virtual bool HasTDBID(string path) => TweakDBService.Exists(path);
+
+    /// <summary>
+    /// Tries to get TweakDBID path from its hash.
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns>path of the hash, null when undefined</returns>
+    public virtual string? GetTDBIDPath(ulong key) => TweakDBService.GetStringFromKey(key);
+
+    private List<string> ConvertTDBToPath(List<TweakDBID>? ids)
+    {
+        if (ids == null)
+        {
+            return [];
+        }
+        return ids.Select(id => id.ResolvedText)
+                  .NotNull()
+                  .Cast<string>()
+                  .ToList();
+    }
+
+    private string? ConvertTDBToJson(object? tdb)
+    {
+        if (tdb == null)
+        {
+            return null;
+        }
+        return RedJsonSerializer.Serialize(tdb);
+    }
+
+    #endregion
 
     /// <summary>
     /// Displays a message box
