@@ -29,6 +29,11 @@
     </UserControl.Resources>
 
     <Grid x:Name="LogViewGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
@@ -38,7 +43,91 @@
             <converters:NullVisibilityConverter x:Key="NullVisibilityConverter" />
         </Grid.Resources>
 
+        <Grid x:Name="ScriptShortcutGrid"
+              Grid.Row="0"
+              Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" MinWidth="240" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Button
+                x:Name="UpdateButton"
+                Grid.Column="0"
+                Margin="0,0,4,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                ToolTip="Update scripts"
+                Command="{Binding UpdateScriptsCommand}">
+                <iconPacks:PackIconMaterial
+                    Foreground="White"
+                    Kind="Refresh" />
+            </Button>
+
+            <ComboBox
+                x:Name="ScriptFileComboBox"
+                Grid.Column="1"
+                Margin="0,0,4,4"
+                ToolTip="Select script"
+                IsEditable="False"
+                IsReadOnly="True"
+                ItemsSource="{Binding ScriptFiles.View}"
+                SelectedItem="{Binding SelectedScriptFile}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Vertical"
+                                    ToolTip="{Binding HoverInfo}">
+                            <TextBlock Text="{Binding Name}" />
+                            <TextBlock x:Name="Info"
+                                       Text="{Binding SelectInfo}" />
+                        </StackPanel>
+
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ComboBoxItem}}"
+                                         Value="{x:Null}">
+                                <Setter TargetName="Info"
+                                        Property="Visibility"
+                                        Value="Collapsed" />
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+                
+                <ComboBox.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.HeaderTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="White"
+                                        BorderThickness="0,0,0,1"
+                                        Padding="15,0,0,7">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Text="{Binding Name}"
+                                                   FontSize="14" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </GroupStyle.HeaderTemplate>
+                    </GroupStyle>
+                </ComboBox.GroupStyle>
+            </ComboBox>
+
+            <Button
+                x:Name="RunButton"
+                Grid.Column="2"
+                Margin="0,0,4,0"
+                VerticalAlignment="Top"
+                ToolTip="Reload and run"
+                Command="{Binding RunScriptCommand}"
+                IsEnabled="{Binding CanRunScript}">
+                <iconPacks:PackIconMaterial
+                    Foreground="Green"
+                    Kind="Play" />
+            </Button>
+        </Grid>
+
         <ItemsControl
+            Grid.Row="1"
             Grid.Column="0"
             ItemsSource="{Binding ElementName=uc, Path=LogEntries}"
             ScrollViewer.CanContentScroll="True"
@@ -48,7 +137,7 @@
             <ItemsControl.Resources>
                 <DataTemplate DataType="{x:Type tools1:LogEntry}">
                     <Grid HorizontalAlignment="Stretch">
-                        
+
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
@@ -131,7 +220,10 @@
             </ItemsControl.ItemsPanel>
         </ItemsControl>
 
-        <StackPanel Grid.Column="1" Orientation="Vertical">
+        <StackPanel
+            Grid.Row="1"
+            Grid.Column="1"
+            Orientation="Vertical">
             <ToggleButton
                 Padding="5"
                 BorderThickness="1"

@@ -5,12 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
-using Splat;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Scripting;
 using WolvenKit.App.ViewModels.Shell;
-using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.Scripting;
 
@@ -25,29 +23,19 @@ public partial class ScriptManagerViewModel : DialogViewModel
     private readonly ISettingsManager _settingsManager;
     private readonly ILoggerService _loggerService;
 
-    
+
     public ScriptManagerViewModel(AppViewModel appViewModel, AppScriptService scriptService, ISettingsManager settingsManager, ILoggerService loggerService)
     {
         _appViewModel = appViewModel;
         _scriptService = scriptService;
         _settingsManager = settingsManager;
         _loggerService = loggerService;
-        
-        
 
         GetScriptFiles();
     }
 
     public ObservableCollection<ScriptViewModel> Scripts { get; } = new();
 
-    private ProjectExplorerViewModel? _projectExplorerViewModel = null;
-
-    private ProjectExplorerViewModel? GetProjectExplorerViewModel()
-    {
-        _projectExplorerViewModel ??= Locator.Current.GetService<ProjectExplorerViewModel>();
-        return _projectExplorerViewModel;
-    }
-    
     public void AddScript(string fileName, ScriptType type)
     {
         if (string.IsNullOrEmpty(fileName))
@@ -187,9 +175,7 @@ public partial class ScriptManagerViewModel : DialogViewModel
 
     public async Task RunFile(ScriptFileViewModel scriptFile)
     {
-        GetProjectExplorerViewModel()?.SuspendFileWatcher();
         await _scriptService.ExecuteAsync(scriptFile.ScriptFile);
-        GetProjectExplorerViewModel()?.ResumeFileWatcher();
     }
 
     public async Task DeleteFile(ScriptFileViewModel scriptFile)

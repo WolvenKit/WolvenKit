@@ -1,27 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
-using SharpDX.DirectWrite;
 using WolvenKit.App.Extensions;
-using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.Docking;
 using WolvenKit.App.Services;
 using WolvenKit.Common;
-using WolvenKit.Common.DDS;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
@@ -46,7 +38,8 @@ public partial class PropertiesViewModel : ToolViewModel
     public const string ToolTitle = "File Information";
 
     public enum TexturePreviewExtensions { xbm, envprobe, mesh, cubemap, xcube, texarray };
-    public enum MeshPreviewExtensions { mesh, ent, w2mesh, physicalscene };
+
+    public enum MeshPreviewExtensions { mesh, ent, w2mesh, physicalscene, morphtarget };
     public enum AudioPreviewExtensions { wem };
 
     public EffectsManager EffectsManager { get; }
@@ -200,6 +193,9 @@ public partial class PropertiesViewModel : ToolViewModel
                 {
                     PreviewStream(stream, model.FullName);
                 }
+                else if (cr2w.RootChunk is MorphTargetMesh mt && mt.BaseMesh.DepotPath.GetResolvedText() is string meshPath)
+                {
+                } 
             }
             if (cr2w != null)
             {
@@ -312,34 +308,30 @@ public partial class PropertiesViewModel : ToolViewModel
 
     private void PreviewCr2wFile(CR2WFile cr2w)
     {
-        if (cr2w.RootChunk is CMesh cmesh)
+        if (cr2w.RootChunk is CMesh or MorphTargetMesh)
         {
-            LoadModel(cmesh);
+            LoadModel(cr2w.RootChunk);
         }
 
         if (cr2w.RootChunk is CBitmapTexture cbt &&
-            cbt.RenderTextureResource.RenderResourceBlobPC != null &&
-            cbt.RenderTextureResource.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC)
+            cbt.RenderTextureResource.RenderResourceBlobPC?.GetValue() is rendRenderTextureBlobPC)
         {
             SetupImage(cbt);
         }
 
         if (cr2w.RootChunk is CCubeTexture cct &&
-            cct.RenderTextureResource.RenderResourceBlobPC != null &&
-            cct.RenderTextureResource.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC)
+            cct.RenderTextureResource.RenderResourceBlobPC?.GetValue() is rendRenderTextureBlobPC)
         {
             SetupImage(cct);
         }
 
         if (cr2w.RootChunk is CTextureArray cta &&
-            cta.RenderTextureResource.RenderResourceBlobPC != null &&
-            cta.RenderTextureResource.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC)
+            cta.RenderTextureResource.RenderResourceBlobPC?.GetValue() is rendRenderTextureBlobPC)
         {
             SetupImage(cta);
         }
 
-        if (cr2w.RootChunk is CMesh cm && cm.RenderResourceBlob != null &&
-            cm.RenderResourceBlob.GetValue() is rendRenderTextureBlobPC)
+        if (cr2w.RootChunk is CMesh cm && cm.RenderResourceBlob?.GetValue() is rendRenderTextureBlobPC)
         {
             SetupImage(cm);
         }
@@ -434,18 +426,19 @@ public partial class PropertiesViewModel : ToolViewModel
         }
     }
 
-    public List<SubmeshComponent> MakePreviewMesh(RedBaseClass cls, ulong chunkMask = ulong.MaxValue)
+    private List<SubmeshComponent> MakePreviewMesh(RedBaseClass cls, ulong chunkMask = ulong.MaxValue)
     {
-        rendRenderMeshBlob? rendblob = null;
-
-        if (cls is CMesh cMesh && cMesh.RenderResourceBlob != null && cMesh.RenderResourceBlob.Chunk is rendRenderMeshBlob blob)
+        var rendblob = cls switch
         {
-            rendblob = blob;
-        }
+            CMesh { RenderResourceBlob.Chunk: rendRenderMeshBlob blob } => blob,
+            MorphTargetMesh mt when mt.Blob.Chunk is rendRenderMorphTargetMeshBlob mtBlob &&
+                                    mtBlob.BaseBlob.Chunk is rendRenderMeshBlob blob2 => blob2,
+            _ => null
+        };
 
         if (rendblob == null)
         {
-            return new List<SubmeshComponent>();
+            return [];
         }
 
         using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());

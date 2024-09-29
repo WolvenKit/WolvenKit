@@ -24,13 +24,13 @@ namespace WolvenKit.Views.Tools
     /// <summary>
     /// Interaction logic for LogView.xaml
     /// </summary>
-    public partial class LogView
+    public partial class LogView : ReactiveUserControl<LogViewModel>
     {
         private ScrollViewer _scrollViewer;
         private bool _autoscroll = true;
 
-        public ObservableCollection<object> LogEntries { get; set; } = new();
-        
+        public ObservableCollection<LogEntry> LogEntries { get; set; } = new();
+
         public LogView()
         {
             InitializeComponent();
@@ -128,10 +128,10 @@ namespace WolvenKit.Views.Tools
 
         private void ClearAll_Click(object sender, RoutedEventArgs e) => LogEntries.Clear();
 
-        private void OpenLogFolder_Click(object sender, RoutedEventArgs e) => 
+        private void OpenLogFolder_Click(object sender, RoutedEventArgs e) =>
             Process.Start(new ProcessStartInfo(ISettingsManager.GetLogsDir()) { UseShellExecute = true });
 
-        private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e) => 
+        private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e) =>
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri) { UseShellExecute = true });
 
         private void AutoScroll_OnChecked(object sender, RoutedEventArgs e) => _autoscroll = true;
@@ -144,7 +144,7 @@ namespace WolvenKit.Views.Tools
             {
                 return;
             }
-            
+
             Clipboard.SetText($"```{tag}```");
         }
 
