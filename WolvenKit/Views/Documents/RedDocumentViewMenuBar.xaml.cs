@@ -121,9 +121,7 @@ namespace WolvenKit.Views.Documents
             _isRunning = true;
             try
             {
-                var code = await File.ReadAllTextAsync(_fileValidationScript.Path);
-
-                await _scriptService.ExecuteAsync(code);
+                await _scriptService.ExecuteAsync(_fileValidationScript.ScriptFile);
                 _loggerService.Success("File validation complete!");
             }
             catch

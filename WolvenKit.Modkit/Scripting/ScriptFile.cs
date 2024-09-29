@@ -1,10 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Modkit.Scripting;
+
+public class SettingsDictionary : Dictionary<string, SettingsEntry>
+{
+    public SettingsDictionary() { }
+    public SettingsDictionary(Dictionary<string, SettingsEntry> dictionary) : base(dictionary) { }
+
+    public string ToJson()
+    {
+        var dict = new Dictionary<string, object?>();
+        foreach (var (_,entry) in this)
+        {
+            dict.Add(entry.Name, entry.Value);
+        }
+        return JsonSerializer.Serialize(dict);
+    }
+}
+
+public class SettingsEntry(string name, Type type, object? value)
+{
+    public string Name { get; init; } = name;
+    public Type Type { get; init; } = type;
+    public object? Value { get; set; } = value;
+}
 
 public partial class ScriptFile
 {
@@ -24,8 +49,10 @@ public partial class ScriptFile
     public string? Author { get; private set; }
     public string? Description { get; private set; }
     public string? Usage { get; private set; }
+    public SettingsDictionary Settings { get; } = new();
 
-    public string Content { get; private set; } = string.Empty;
+    public string[] Lines { get; private set; } = [];
+    public string Content => string.Join(Environment.NewLine, Lines);
 
     private DateTime _lastModified = DateTime.MinValue;
 
@@ -41,12 +68,15 @@ public partial class ScriptFile
         var blockType = BlockType.None;
         var blockLines = new List<string>();
 
-        foreach (var line in File.ReadAllLines(Path))
+        Lines = File.ReadAllLines(Path);
+        for (var i = 0; i < Lines.Length; i++)
         {
+            var line = Lines[i];
+
             if (!line.StartsWith("//"))
             {
                 SaveBlock();
-                break;
+                continue;
             }
 
             var match = InfoHeaderRegex().Match(line);
@@ -88,7 +118,8 @@ public partial class ScriptFile
                         blockType = BlockType.Usage;
                         break;
 
-                    default:
+                    case "setting":
+                        ParseSetting(match.Groups[2].Value);
                         break;
                 }
             }
@@ -104,8 +135,6 @@ public partial class ScriptFile
             loggerService?.Error($"Could not load \"{Path}\". Field \"hook_extension\" is not set");
             return false;
         }
-
-        Content = File.ReadAllText(Path);
 
         return true;
 
@@ -135,9 +164,98 @@ public partial class ScriptFile
             blockLines.Clear();
             blockType = BlockType.None;
         }
+
+        void ParseSetting(string line)
+        {
+            var parts = line.Split(':');
+
+            if (parts.Length < 2)
+            {
+                loggerService?.Warning($"Invalid setting definition: \"{line}\". Should be: \"name:type(:default)\"");
+                return;
+            }
+
+            var name = parts[0].Trim();
+            if (Settings.ContainsKey(name))
+            {
+                loggerService?.Warning($"A setting with the name \"{name}\" has already be defined");
+                return;
+            }
+
+            var typeStr = parts[1].Trim();
+
+            SettingsEntry? entry = null;
+            switch (typeStr)
+            {
+                case "int":
+                {
+                    var defaultValue = default(int);
+                    if (parts.Length > 2)
+                    {
+                        if (!int.TryParse(parts[2].Trim(), out defaultValue))
+                        {
+                            loggerService?.Warning($"Invalid default value for setting \"{name}\". Should be an integer");
+                            return;
+                        }
+                    }
+
+                    entry = new SettingsEntry(name, typeof(int), defaultValue);
+                    break;
+                }
+
+                case "double":
+                {
+                    var defaultValue = default(double);
+                    if (parts.Length > 2)
+                    {
+                        if (!double.TryParse(parts[2].Trim(), CultureInfo.InvariantCulture, out defaultValue))
+                        {
+                            loggerService?.Warning($"Invalid default value for setting \"{name}\". Should be a double");
+                            return;
+                        }
+                    }
+
+                    entry = new SettingsEntry(name, typeof(double), defaultValue);
+                    break;
+                }
+
+                case "string":
+                {
+                    var defaultValue = default(string);
+                    if (parts.Length > 2)
+                    {
+                        defaultValue = parts[2].Trim();
+                    }
+
+                    entry = new SettingsEntry(name, typeof(string), defaultValue);
+                    break;
+                }
+
+                case "bool":
+                {
+                    var defaultValue = default(bool);
+                    if (parts.Length > 2)
+                    {
+                        if (!bool.TryParse(parts[2].Trim(), out defaultValue))
+                        {
+                            loggerService?.Warning($"Invalid default value for setting \"{name}\". Should be a bool");
+                            return;
+                        }
+                    }
+
+                    entry = new SettingsEntry(name, typeof(bool), defaultValue);
+                    break;
+                }
+            }
+
+            if (entry != null)
+            {
+                Settings[name] = entry;
+            }
+        }
     }
 
-    [GeneratedRegex("^// @([^\\s]+)\\s?([^\\s]*)$")]
+    [GeneratedRegex("^//\\s*@([^\\s]+)\\s*(.*)$")]
     private static partial Regex InfoHeaderRegex();
 
     private enum BlockType

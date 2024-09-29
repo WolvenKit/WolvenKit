@@ -8,6 +8,7 @@ using WolvenKit.App.Controllers;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Scripting;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
@@ -62,10 +63,34 @@ public partial class AppScriptService : ScriptService
         return _projectExplorerViewModel;
     }
 
-    public async Task ExecuteAsync(string code)
+    public async Task ExecuteAsync(ScriptFile scriptFile, bool showSettingsDialog = true)
     {
+        if (showSettingsDialog && scriptFile.Settings.Count > 0 && _wkit.AppViewModel != null)
+        {
+            await _wkit.AppViewModel.SetActiveDialog(new ScriptSettingsDialogViewModel(scriptFile)
+            {
+                DialogHandler = ExecuteAsyncWithSettings
+            });
+        }
+        else
+        {
+            GetProjectExplorerViewModel()?.SuspendFileWatcher();
+            await ExecuteAsync(scriptFile, DefaultHostObject);
+            GetProjectExplorerViewModel()?.ResumeFileWatcher();
+        }
+    }
+
+    private async void ExecuteAsyncWithSettings(DialogViewModel? sender)
+    {
+        _wkit.AppViewModel!.CloseDialogCommand.Execute(null);
+
+        if (sender is not ScriptSettingsDialogViewModel vm)
+        {
+            return;
+        }
+
         GetProjectExplorerViewModel()?.SuspendFileWatcher();
-        await ExecuteAsync(code, DefaultHostObject);
+        await ExecuteAsync(vm.ScriptFile, DefaultHostObject);
         GetProjectExplorerViewModel()?.ResumeFileWatcher();
     }
 

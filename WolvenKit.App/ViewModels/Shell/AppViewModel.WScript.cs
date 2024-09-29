@@ -1,57 +1,16 @@
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.IO.Compression;
-using System.Linq;
-using System.Net.Http;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
-using Semver;
-using Microsoft.VisualBasic.FileIO;
-using WolvenKit.App.Controllers;
-using WolvenKit.App.Extensions;
-using WolvenKit.App.Factories;
-using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
-using WolvenKit.App.Models.Docking;
-using WolvenKit.App.Models.ProjectManagement;
-using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
-using WolvenKit.App.ViewModels.Dialogs;
-using WolvenKit.App.ViewModels.Documents;
-using WolvenKit.App.ViewModels.Exporters;
-using WolvenKit.App.ViewModels.HomePage;
-using WolvenKit.App.ViewModels.Importers;
 using WolvenKit.App.ViewModels.Scripting;
-using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
-using WolvenKit.Common.Exceptions;
-using WolvenKit.Common.Extensions;
-using WolvenKit.Common.Services;
-using WolvenKit.Core.Extensions;
-using WolvenKit.Core.Interfaces;
-using WolvenKit.Core.Services;
 using WolvenKit.Helpers;
-using WolvenKit.RED4.Archive;
-using WolvenKit.RED4.Archive.CR2W;
-using WolvenKit.RED4.Archive.IO;
-using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.Types;
-using FileSystem = Microsoft.VisualBasic.FileIO.FileSystem;
-using NativeMethods = WolvenKit.App.Helpers.NativeMethods;
 
 namespace WolvenKit.App.ViewModels.Shell;
 
@@ -86,8 +45,6 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             return;
         }
 
-        var code = await File.ReadAllTextAsync(_fileValidationScript.Path);
-
         foreach (var (_, file) in projArchive.Files)
         {
             if (GetRedFile(file) is not { } fileViewModel)
@@ -97,7 +54,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
             _loggerService.Info($"Scanning {ActiveProject.GetRelativePath(file.FileName)}");
             ActiveDocument = fileViewModel;
-            await _scriptService.ExecuteAsync(code);
+            await _scriptService.ExecuteAsync(_fileValidationScript.ScriptFile);
         }
 
         // This should never happen, but better safe than sorry
@@ -194,9 +151,8 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         File.Copy(filePath, destPath);
 
         ActiveDocument = await Open(destPath, EWolvenKitFile.WScript);
-        var code = await File.ReadAllTextAsync(_entSpawnerImportScript.Path);
 
-        await _scriptService.ExecuteAsync(code);
+        await _scriptService.ExecuteAsync(_entSpawnerImportScript.ScriptFile);
 
         ActiveDocument = null;
         try
