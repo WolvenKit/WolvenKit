@@ -127,6 +127,11 @@ public partial class AssetBrowserViewModel : ToolViewModel
         CheckView();
     }
 
+    private string[] IgnoredArchives =>
+        _settings.ArchiveNamesExcludeFromScan.Split(",", StringSplitOptions.RemoveEmptyEntries)
+            .Select(archiveName => archiveName.Replace(".archive", "")).ToArray();
+
+    
     private void OnNext(IChangeSet<RedFileSystemModel> obj) => 
         DispatcherHelper.RunOnMainThread(() => LeftItems = new ObservableCollection<RedFileSystemModel>(_boundRootNodes), DispatcherPriority.ContextIdle);
 
@@ -413,19 +418,21 @@ public partial class AssetBrowserViewModel : ToolViewModel
     public void UpdateSearchInArchives()
     {
         AddFromArchiveItems.Clear();
-        
-        if (RightSelectedItem is RedFileViewModel file)
+
+        if (RightSelectedItem is not RedFileViewModel file)
         {
-            var key = file.GetGameFile().Key;
-            var archives = _archiveManager
-                .Archives
-                .Items
-                .Where(_ => _.Files.ContainsKey(key));
-            
-            foreach (var archive in archives)
-            {
-                AddFromArchiveItems.Add(archive);
-            }
+            return;
+        }
+
+        var key = file.GetGameFile().Key;
+        var archives = _archiveManager
+            .Archives
+            .Items
+            .Where(_ => _.Files.ContainsKey(key));
+
+        foreach (var archive in archives)
+        {
+            AddFromArchiveItems.Add(archive);
         }
     }
 
@@ -976,17 +983,70 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
         LeftSelectedItem = LeftItems.ToList().FirstOrDefault((item) => item.Name.Contains(itemName));
     }
+
+    public async void Refresh()
+    {
+        if (LeftSelectedItem is RedFileSystemModel left)
+        {
+            LeftSelectedItem = null;
+            SetLeftSelectedItem(left.FullName);
+        }
+
+        if (SearchBarText is not null)
+        {
+            await PerformSearch(SearchBarText);
+        }
+    }
     #endregion methods
 
     // On initialization, scanArchives is read from the settings. On scan button click, we always want to scan.
-    public void ScanModArchives(bool scanArchives)
+    public void ScanModArchives(bool scanArchives, string? archiveName = null)
     {
         if (_settings.CP77ExecutablePath is null)
         {
             return;
         }
 
-        _archiveManager.LoadModsArchives(new FileInfo(_settings.CP77ExecutablePath), scanArchives);
+        if (archiveName is null)
+        {
+            _archiveManager.LoadModArchives(new FileInfo(_settings.CP77ExecutablePath), scanArchives);
+
+            if (Directory.Exists(_settings.ExtraModDirPath))
+            {
+                _archiveManager.LoadAdditionalModArchives(_settings.ExtraModDirPath, scanArchives);
+            }
+
+            return;
+        }
+
+        List<string> archivesToScan = [];
+
+        var ignoredArchives = _settings.ArchiveNamesExcludeFromScan.Split(",", StringSplitOptions.RemoveEmptyEntries)
+            .Select(name => name.Replace(".archive", "")).ToArray();
+
+        archivesToScan.AddRange(_archiveManager.GetModArchives()
+            .Where(archive => archive.Name.Contains(archiveName, StringComparison.OrdinalIgnoreCase))
+            .Select(gameArchive => gameArchive.ArchiveAbsolutePath)
+            .Where((absolutePath) => !ignoredArchives.Contains(Path.GetFileName(absolutePath).Replace(".archive", ""))));
+
+        if (Directory.Exists(_settings.ExtraModDirPath))
+        {
+            archivesToScan.AddRange(Directory.GetFiles(_settings.ExtraModDirPath, archiveName, SearchOption.AllDirectories)
+                .Where((absolutePath) => !ignoredArchives.Contains(Path.GetFileName(absolutePath).Replace(".archive", ""))));
+        }
+
+        if (archivesToScan.Count > 0)
+        {
+            foreach (var absoluteFilepath in archivesToScan)
+            {
+                _archiveManager.LoadModArchive(absoluteFilepath, scanArchives, !scanArchives);
+            }
+
+            return;
+        }
+
+        // If no archives match the filter, scan all archives.
+        _archiveManager.LoadModArchives(new FileInfo(_settings.CP77ExecutablePath), scanArchives);
 
         if (Directory.Exists(_settings.ExtraModDirPath))
         {

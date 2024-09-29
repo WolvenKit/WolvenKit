@@ -317,7 +317,7 @@ namespace WolvenKit.Views.Documents
                 _loggerService.Info("Loading mod archives, this may take a moment...");
                 await Task.Run(() =>
                 {
-                    _archiveManager.LoadModsArchives(new FileInfo(_settingsManager.CP77ExecutablePath), true);
+                    _archiveManager.LoadModArchives(new FileInfo(_settingsManager.CP77ExecutablePath), true);
                     if (_settingsManager.ExtraModDirPath is string extraModDir && !string.IsNullOrEmpty(extraModDir))
                     {
                         _archiveManager.LoadAdditionalModArchives(extraModDir, true);
