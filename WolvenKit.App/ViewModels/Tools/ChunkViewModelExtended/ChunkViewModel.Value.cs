@@ -4,7 +4,9 @@ using System.Globalization;
 using System.Linq;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
+using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Pools;
 
@@ -226,6 +228,11 @@ public partial class ChunkViewModel
             case scnSceneWorkspotDataId sceneWorkspotData when sceneWorkspotData.Id != 0:
                 Value = $"{sceneWorkspotData.Id}";
                 IsValueExtrapolated = sceneWorkspotData.Id != 0;
+                break;
+            case worldNodeData sst when Parent?.Parent?.ResolvedData is worldStreamingSector wss && sst.NodeIndex < wss.Nodes.Count:
+                var node = wss.Nodes[sst.NodeIndex].Chunk;
+                Value = node?.GetType().Name ?? "";
+                IsValueExtrapolated = Value != "";
                 break;
             case worldNode worldNode:
                 Value = StringHelper.Stringify(worldNode, true);

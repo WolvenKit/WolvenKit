@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData.Binding;
 using WolvenKit.RED4.Types;
@@ -152,6 +153,27 @@ public partial class ChunkViewModel
             case JsonResource when GetPropertyFromPath("root") is ChunkViewModel child:
                 ExpandAndSelect(child, true);
                 break;
+            // streamingsector
+            case worldStreamingSector:
+                // will run into stack overflow due to race conditions if we do this straight away. Let's wait a bit!
+                var newThread = new Thread(() =>
+                {
+                    Thread.Sleep(10);
+                    if (GetPropertyFromPath("nodes") is ChunkViewModel nodes)
+                    {
+                        nodes.CalculateProperties();
+                        nodes.IsExpanded = true;
+                    }
+
+                    Thread.Sleep(10);
+                    if (GetPropertyFromPath("nodeData") is ChunkViewModel data)
+                    {
+                        ExpandAndSelect(data, true);
+                    }
+                });
+
+                newThread.Start();
+                break;  
             default:
                 break;
         }

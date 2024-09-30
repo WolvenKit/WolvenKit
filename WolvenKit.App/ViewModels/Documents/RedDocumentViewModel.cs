@@ -118,8 +118,11 @@ public partial class RedDocumentViewModel : DocumentViewModel
         switch (value)
         {
             case RDTDataViewModel model:
-                int.TryParse(_selectedWorldNodeIndex, out var worldNodeIndex);                            
-                model.AddToSelection(model.FindWorldNode(worldNodeIndex));
+                if (_selectedWorldNodeIndex is not null)
+                {
+                    int.TryParse(_selectedWorldNodeIndex, out var worldNodeIndex);
+                    model.AddToSelection(model.FindWorldNode(worldNodeIndex));
+                }
                 model.OnReloadRequired += OnReloadTabs;
                 break;
             case RDTMeshViewModel meshViewModel:

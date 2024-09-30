@@ -3127,9 +3127,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                         {
                             try
                             {
-                                Properties.Add(_chunkViewmodelFactory.ChunkViewModel(wss.Nodes[sst.NodeIndex].NotNull(), "Node",
+                                var nodeChunk = _chunkViewmodelFactory.ChunkViewModel(wss.Nodes[sst.NodeIndex].NotNull(), "Node",
                                     _appViewModel,
-                                    _currentEditorDifficultyLevel, this, isreadonly));
+                                    _currentEditorDifficultyLevel, this, isreadonly);
+                                nodeChunk.CalculateProperties();
+                                Properties.Add(nodeChunk);
                             }
                             catch (Exception ex) { _loggerService.Error(ex); }
                         }
