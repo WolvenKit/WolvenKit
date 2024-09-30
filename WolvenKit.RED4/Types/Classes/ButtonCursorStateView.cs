@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Types
 		public ButtonCursorStateView()
 		{
 			HoverStateName = "Hover";
-			PressStateName = "Hover";
+			PressStateName = "Press";
 			DefaultStateName = "Default";
 
 			PostConstruct();

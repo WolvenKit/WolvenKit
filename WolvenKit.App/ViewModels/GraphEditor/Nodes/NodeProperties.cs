@@ -527,129 +527,145 @@ internal class NodeProperties
             {
                 details["Sub Manager"] = GetNameFromClass(charVisualsNodeCasted?.Subtype?.Chunk);
 
-                if (charVisualsNodeCasted?.Subtype?.Chunk is questCharacterManagerVisuals_GenitalsManager genitalsManagerNodeCasted)
+                switch (charVisualsNodeCasted?.Subtype?.Chunk)
                 {
-                    details["Body Group Name"] = genitalsManagerNodeCasted?.BodyGroupName.ToString()!;
-                    details["Enable"] = genitalsManagerNodeCasted?.Enable == true ? "True" : "False";
-                    details["Is Player"] = genitalsManagerNodeCasted?.IsPlayer == true ? "True" : "False";
-                    details["Puppet Ref"] = ParseGameEntityReference(genitalsManagerNodeCasted?.PuppetRef);
-                }
-                if (charVisualsNodeCasted?.Subtype?.Chunk is questCharacterManagerVisuals_ChangeEntityAppearance appearanceManagerNodeCasted)
-                {
-                    var appearancesArr = appearanceManagerNodeCasted?.AppearanceEntries;
-
-                    if (appearancesArr != null)
+                    case questCharacterManagerVisuals_GenitalsManager genitalsManagerNodeCasted:
+                        details["Body Group Name"] = genitalsManagerNodeCasted?.BodyGroupName.ToString()!;
+                        details["Enable"] = genitalsManagerNodeCasted?.Enable == true ? "True" : "False";
+                        details["Is Player"] = genitalsManagerNodeCasted?.IsPlayer == true ? "True" : "False";
+                        details["Puppet Ref"] = ParseGameEntityReference(genitalsManagerNodeCasted?.PuppetRef);
+                        break;
+                    case questCharacterManagerVisuals_ChangeEntityAppearance appearanceManagerNodeCasted:
                     {
-                        int counter = 1;
-                        foreach (var appearance in appearancesArr)
-                        {
-                            details["#" + counter + " Appearance Name"] = appearance.AppearanceName.ToString()!;
-                            details["#" + counter + " Is Player"] = appearance.IsPlayer == true ? "True" : "False";
-                            details["#" + counter + " Puppet Ref"] = ParseGameEntityReference(appearance?.PuppetRef);
+                        var appearancesArr = appearanceManagerNodeCasted?.AppearanceEntries;
 
-                            counter++;
+                        if (appearancesArr != null)
+                        {
+                            var counter = 1;
+                            foreach (var appearance in appearancesArr)
+                            {
+                                details["#" + counter + " Appearance Name"] = appearance.AppearanceName.ToString()!;
+                                details["#" + counter + " Is Player"] = appearance.IsPlayer == true ? "True" : "False";
+                                details["#" + counter + " Puppet Ref"] = ParseGameEntityReference(appearance.PuppetRef);
+
+                                counter++;
+                            }
                         }
+
+                        break;
                     }
                 }
             }
-            if (characterManagerCasted?.Type?.Chunk is questCharacterManagerCombat_NodeType charCombatNodeCasted)
-            {
-                details["Sub Manager"] = GetNameFromClass(charCombatNodeCasted?.Subtype?.Chunk);
 
-                if (charCombatNodeCasted?.Subtype?.Chunk is questCharacterManagerCombat_EquipWeapon equipWpnNodeCasted)
-                {
-                    details["Equip"] = equipWpnNodeCasted?.Equip == true ? "True" : "False";
-                    details["Equip Last Weapon"] = equipWpnNodeCasted?.EquipLastWeapon == true ? "True" : "False";
-                    details["Force First Equip"] = equipWpnNodeCasted?.ForceFirstEquip == true ? "True" : "False";
-                    details["Ignore State Machine"] = equipWpnNodeCasted?.IgnoreStateMachine == true ? "True" : "False";
-                    details["Instant"] = equipWpnNodeCasted?.Instant == true ? "True" : "False";
-                    details["Slot ID"] = equipWpnNodeCasted?.SlotID.GetResolvedText()!;
-                    details["Weapon ID"] = equipWpnNodeCasted?.WeaponID.GetResolvedText()!;
-                }
+            if (characterManagerCasted?.Type?.Chunk is not questCharacterManagerCombat_NodeType charCombatNodeCasted)
+            {
+                return details;
+            }
+
+            details["Sub Manager"] = GetNameFromClass(charCombatNodeCasted?.Subtype?.Chunk);
+
+            if (charCombatNodeCasted?.Subtype?.Chunk is questCharacterManagerCombat_EquipWeapon equipWpnNodeCasted)
+            {
+                details["Equip"] = equipWpnNodeCasted?.Equip == true ? "True" : "False";
+                details["Equip Last Weapon"] = equipWpnNodeCasted?.EquipLastWeapon == true ? "True" : "False";
+                details["Force First Equip"] = equipWpnNodeCasted?.ForceFirstEquip == true ? "True" : "False";
+                details["Ignore State Machine"] = equipWpnNodeCasted?.IgnoreStateMachine == true ? "True" : "False";
+                details["Instant"] = equipWpnNodeCasted?.Instant == true ? "True" : "False";
+                details["Slot ID"] = equipWpnNodeCasted?.SlotID.GetResolvedText()!;
+                details["Weapon ID"] = equipWpnNodeCasted?.WeaponID.GetResolvedText()!;
             }
         }
         else if (node is questItemManagerNodeDefinition itemManagerCasted)
         {
             details["Manager"] = GetNameFromClass(itemManagerCasted?.Type?.Chunk);
 
-            if (itemManagerCasted?.Type?.Chunk is questAddRemoveItem_NodeType itemAddRemoveNodeCasted)
+            if (itemManagerCasted?.Type?.Chunk is not questAddRemoveItem_NodeType itemAddRemoveNodeCasted)
             {
-                var paramsArr = itemAddRemoveNodeCasted.Params;
-                //details["Actions"] = actions.Count.ToString();
+                return details;
+            }
 
-                int counter = 1;
-                foreach (var param in paramsArr)
+            var paramsArr = itemAddRemoveNodeCasted.Params;
+            //details["Actions"] = actions.Count.ToString();
+
+            int counter = 1;
+            foreach (var param in paramsArr)
+            {
+                details["#" + counter + " Entity Ref"] = GetNameFromUniversalRef(param?.Chunk?.EntityRef?.Chunk);
+                details["#" + counter + " Flag Item Added Callback As Silent"] =
+                    param?.Chunk?.FlagItemAddedCallbackAsSilent == true ? "True" : "False";
+                details["#" + counter + " Is Player"] = param?.Chunk?.IsPlayer == true ? "True" : "False";
+                details["#" + counter + " Item ID"] = param?.Chunk?.ItemID.GetResolvedText()!;
+
+                var itemToIgnore = "";
+                if (param?.Chunk?.ItemIDsToIgnoreOnRemove != null)
                 {
-                    details["#" + counter + " Entity Ref"] = GetNameFromUniversalRef(param?.Chunk?.EntityRef?.Chunk);
-                    details["#" + counter + " Flag Item Added Callback As Silent"] = param?.Chunk?.FlagItemAddedCallbackAsSilent == true ? "True" : "False";
-                    details["#" + counter + " Is Player"] = param?.Chunk?.IsPlayer == true ? "True" : "False";
-                    details["#" + counter + " Item ID"] = param?.Chunk?.ItemID.GetResolvedText()!;
-
-                    var itemToIgnore = "";
-                    if (param?.Chunk?.ItemIDsToIgnoreOnRemove != null)
+                    foreach (var p in param.Chunk.ItemIDsToIgnoreOnRemove)
                     {
-                        foreach (var p in param.Chunk.ItemIDsToIgnoreOnRemove)
-                        {
-                            itemToIgnore += (itemToIgnore != "" ? ", " : "") + p.GetResolvedText()!;
-                        }
+                        itemToIgnore += (itemToIgnore != "" ? ", " : "") + p.GetResolvedText()!;
                     }
-                    details["#" + counter + " Item IDs To Ignore On Remove"] = itemToIgnore;
-
-                    details["#" + counter + " Node Type"] = param?.Chunk?.NodeType.ToEnumString()!;
-                    details["#" + counter + " Object Ref"] = ParseGameEntityReference(param?.Chunk?.ObjectRef);
-                    details["#" + counter + " Quantity"] = param?.Chunk?.Quantity.ToString()!;
-                    details["#" + counter + " Remove All Quantity"] = param?.Chunk?.RemoveAllQuantity == true ? "True" : "False";
-                    details["#" + counter + " Send Notification"] = param?.Chunk?.SendNotification == true ? "True" : "False";
-
-                    var tagsToIgnore = "";
-                    if (param?.Chunk?.TagsToIgnoreOnRemove != null)
-                    {
-                        foreach (var p in param.Chunk.TagsToIgnoreOnRemove)
-                        {
-                            tagsToIgnore += (tagsToIgnore != "" ? ", " : "") + p.ToString();
-                        }
-                    }
-                    details["#" + counter + " Tags To Ignore On Remove"] = tagsToIgnore;
-
-                    details["#" + counter + " Tag To Remove"] = param?.Chunk?.TagToRemove.ToString()!;
-
-                    counter++;
                 }
+
+                details["#" + counter + " Item IDs To Ignore On Remove"] = itemToIgnore;
+
+                details["#" + counter + " Node Type"] = param?.Chunk?.NodeType.ToEnumString()!;
+                details["#" + counter + " Object Ref"] = ParseGameEntityReference(param?.Chunk?.ObjectRef);
+                details["#" + counter + " Quantity"] = param?.Chunk?.Quantity.ToString()!;
+                details["#" + counter + " Remove All Quantity"] = param?.Chunk?.RemoveAllQuantity == true ? "True" : "False";
+                details["#" + counter + " Send Notification"] = param?.Chunk?.SendNotification == true ? "True" : "False";
+
+                var tagsToIgnore = "";
+                if (param?.Chunk?.TagsToIgnoreOnRemove != null)
+                {
+                    foreach (var p in param.Chunk.TagsToIgnoreOnRemove)
+                    {
+                        tagsToIgnore += (tagsToIgnore != "" ? ", " : "") + p.ToString();
+                    }
+                }
+
+                details["#" + counter + " Tags To Ignore On Remove"] = tagsToIgnore;
+
+                details["#" + counter + " Tag To Remove"] = param?.Chunk?.TagToRemove.ToString()!;
+
+                counter++;
             }
         }
         else if (node is questCrowdManagerNodeDefinition crowdManagerCasted)
         {
             details["Manager"] = GetNameFromClass(crowdManagerCasted?.Type?.Chunk);
 
-            if (crowdManagerCasted?.Type?.Chunk is questCrowdManagerNodeType_ControlCrowd controlCrowdNodeCasted)
+            if (crowdManagerCasted?.Type?.Chunk is not questCrowdManagerNodeType_ControlCrowd controlCrowdNodeCasted)
             {
-                details["Action"] = controlCrowdNodeCasted?.Action.ToEnumString()!;
-                details["Debug Source"] = controlCrowdNodeCasted?.DebugSource.ToString()!;
-                details["Distant Crowd Only"] = controlCrowdNodeCasted?.DistantCrowdOnly == true ? "True" : "False";
+                return details;
             }
+
+            details["Action"] = controlCrowdNodeCasted?.Action.ToEnumString()!;
+            details["Debug Source"] = controlCrowdNodeCasted?.DebugSource.ToString()!;
+            details["Distant Crowd Only"] = controlCrowdNodeCasted?.DistantCrowdOnly == true ? "True" : "False";
         }
         else if (node is questFXManagerNodeDefinition fxManagerCasted)
         {
             details["Manager"] = GetNameFromClass(fxManagerCasted?.Type?.Chunk);
 
-            if (fxManagerCasted?.Type?.Chunk is questPlayFX_NodeType playFxNodeCasted)
+            if (fxManagerCasted?.Type?.Chunk is not questPlayFX_NodeType playFxNodeCasted)
             {
-                var paramsArr = playFxNodeCasted.Params;
-                //details["Actions"] = actions.Count.ToString();
+                return details;
+            }
 
-                int counter = 1;
-                foreach (var param in paramsArr)
-                {
-                    details["#" + counter + " Effect Instance Name"] = param?.EffectInstanceName.ToString()!;
-                    details["#" + counter + " Effect Name"] = param?.EffectName.ToString()!;
-                    details["#" + counter + " Is Player"] = param?.IsPlayer == true ? "True" : "False";
-                    details["#" + counter + " Object Ref"] = ParseGameEntityReference(param?.ObjectRef);
-                    details["#" + counter + " Play"] = param?.Play == true ? "True" : "False";
-                    details["#" + counter + " Save"] = param?.Save == true ? "True" : "False";
-                    details["#" + counter + " Sequence Shift"] = param?.SequenceShift.ToString()!;
+            var paramsArr = playFxNodeCasted.Params;
+            //details["Actions"] = actions.Count.ToString();
 
-                    counter++;
-                }
+            int counter = 1;
+            foreach (var param in paramsArr)
+            {
+                details["#" + counter + " Effect Instance Name"] = param?.EffectInstanceName.ToString()!;
+                details["#" + counter + " Effect Name"] = param?.EffectName.ToString()!;
+                details["#" + counter + " Is Player"] = param?.IsPlayer == true ? "True" : "False";
+                details["#" + counter + " Object Ref"] = ParseGameEntityReference(param?.ObjectRef);
+                details["#" + counter + " Play"] = param?.Play == true ? "True" : "False";
+                details["#" + counter + " Save"] = param?.Save == true ? "True" : "False";
+                details["#" + counter + " Sequence Shift"] = param?.SequenceShift.ToString()!;
+
+                counter++;
             }
         }
         else if (node is questRandomizerNodeDefinition randomizerCasted)
@@ -670,11 +686,13 @@ internal class NodeProperties
         {
             details["Manager"] = GetNameFromClass(entityManagerCasted?.Type?.Chunk);
 
-            if (entityManagerCasted?.Type?.Chunk is questEntityManagerToggleMirrorsArea_NodeType toggleMirrorNodeCasted)
+            if (entityManagerCasted?.Type?.Chunk is not questEntityManagerToggleMirrorsArea_NodeType toggleMirrorNodeCasted)
             {
-                details["Is In Mirrors Area"] = toggleMirrorNodeCasted?.IsInMirrorsArea == true ? "True" : "False";
-                details["Object Ref"] = ParseGameEntityReference(toggleMirrorNodeCasted?.ObjectRef);
+                return details;
             }
+
+            details["Is In Mirrors Area"] = toggleMirrorNodeCasted?.IsInMirrorsArea == true ? "True" : "False";
+            details["Object Ref"] = ParseGameEntityReference(toggleMirrorNodeCasted?.ObjectRef);
         }
         else if (node is questMovePuppetNodeDefinition movePuppetManagerCasted)
         {

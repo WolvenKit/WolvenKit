@@ -38,11 +38,6 @@ public partial class ConsoleFunctions
             return ERROR_BAD_ARGUMENTS;
         }
 
-        if (options.outpath == null)
-        {
-            _loggerService.Error("Please fill in an output path.");
-            return ERROR_BAD_ARGUMENTS;
-        }
 
         if (options.meshExportType != null && string.IsNullOrEmpty(options.meshExportMaterialRepo) && options.outpath is null)
         {
@@ -50,7 +45,13 @@ public partial class ConsoleFunctions
             return ERROR_INVALID_COMMAND_LINE;
         }
 
-        if (options.gamepath != null && options.gamepath.Exists)
+        if (options.outpath == null)
+        {
+            _loggerService.Error("Please fill in an output path.");
+            return ERROR_BAD_ARGUMENTS;
+        }
+
+        if (options.gamepath is { Exists: true })
         {
             var exePath = new FileInfo(Path.Combine(options.gamepath.ToString(), "bin", "x64", "Cyberpunk2077.exe"));
             _archiveManager.LoadGameArchives(exePath);

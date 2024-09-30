@@ -45,7 +45,7 @@ namespace WolvenKit
 
             // load oodle
             var settingsManager = Locator.Current.GetService<ISettingsManager>();
-            if (settingsManager.IsHealthy() && !Oodle.Load(settingsManager?.GetRED4OodleDll()))
+            if (settingsManager?.IsHealthy() == true && !Oodle.Load(settingsManager.GetRED4OodleDll()))
             {
                 throw new FileNotFoundException($"{Core.Constants.Oodle} not found.");
             }
