@@ -38,17 +38,16 @@ public partial class ConsoleFunctions
             return ERROR_BAD_ARGUMENTS;
         }
 
-
-        if (options.meshExportType != null && string.IsNullOrEmpty(options.meshExportMaterialRepo) && options.outpath is null)
-        {
-            _loggerService.Error("When using --mesh-export-type, the --outpath or the --mesh-export-material-repo must be specified.");
-            return ERROR_INVALID_COMMAND_LINE;
-        }
-
         if (options.outpath == null)
         {
             _loggerService.Error("Please fill in an output path.");
             return ERROR_BAD_ARGUMENTS;
+        }
+
+        if (options.meshExportType != null && string.IsNullOrEmpty(options.meshExportMaterialRepo))
+        {
+            _loggerService.Error("When using --mesh-export-type, the --outpath or the --mesh-export-material-repo must be specified.");
+            return ERROR_INVALID_COMMAND_LINE;
         }
 
         if (options.gamepath is { Exists: true })

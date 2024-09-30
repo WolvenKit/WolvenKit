@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Types
 		public ButtonCursorStateView()
 		{
 			HoverStateName = "Hover";
-			PressStateName = "Press";
+			PressStateName = "Hover"; // CDPR typo
 			DefaultStateName = "Default";
 
 			PostConstruct();

@@ -78,7 +78,7 @@ public partial class SoundModdingViewModel : DialogViewModel
             return;
         }
 
-        var path = Path.Combine(Environment.CurrentDirectory, "Resources", "soundEvents.json");
+        var path = Path.Combine(_projectManager.ActiveProject.ResourcesDirectory, "info.json");
         if (!File.Exists(path))
         {
             return;
