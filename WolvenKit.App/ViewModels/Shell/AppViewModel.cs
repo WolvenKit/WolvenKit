@@ -1836,13 +1836,16 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     /// <param name="saveAsDialogRequested"></param>
     private void Save(IDocumentViewModel fileToSave, bool saveAsDialogRequested = false)
     {
-        if (_projectManager.ActiveProject is null)
+        var isWscript = fileToSave is WScriptDocumentViewModel;
+
+        // Do not allow saving of anything that's not wscript without a project. Bad user!
+        if (_projectManager.ActiveProject is null && !isWscript)
         {
             Interactions.ShowConfirmation((s_noProjectText, s_noProjectTitle, WMessageBoxImage.Warning, WMessageBoxButtons.Ok));
             return;
         }
 
-        if (fileToSave is RedDocumentViewModel && _projectManager.ActiveProject is null)
+        if (fileToSave is RedDocumentViewModel && _projectManager.ActiveProject is null && !isWscript)
         {
             return;
         }
