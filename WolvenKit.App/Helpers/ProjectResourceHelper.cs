@@ -335,6 +335,13 @@ public static class ProjectResourceHelper
             }
 
             File.Move(sourceAbsPath, destAbsPath);
+
+            var sourceInRaw = sourceAbsPath.Replace("archive", "raw");
+            if (sourceInRaw != sourceAbsPath && File.Exists(sourceInRaw))
+            {
+                File.Move(sourceInRaw, destAbsPath.Replace("archive", "raw"), true);
+            }
+            
             return;
         }
 
@@ -344,7 +351,7 @@ public static class ProjectResourceHelper
 
         try
         {
-            if (Directory.Exists(destRelPath) && Directory.EnumerateFiles(destRelPath).Any())
+            if (Directory.Exists(destAbsPath) && Directory.EnumerateFiles(destAbsPath).Any())
             {
                 var response = await Interactions.ShowMessageBoxAsync(
                     $"Directory {destRelPath} already exists and is not empty. Do you want to overwrite existing files?",
@@ -353,6 +360,12 @@ public static class ProjectResourceHelper
             }
 
             FileHelper.MoveRecursively(sourceAbsPath, destAbsPath, overwriteFiles, GetLoggerService());
+
+            var sourceInRaw = sourceAbsPath.Replace("archive", "raw");
+            if (sourceInRaw != sourceAbsPath && Directory.Exists(sourceInRaw))
+            {
+                FileHelper.MoveRecursively(sourceInRaw, destAbsPath.Replace("archive", "raw"), overwriteFiles, GetLoggerService());
+            }
 
             GetLoggerService()?.Info($"Moved {sourceRelPath}{Path.DirectorySeparatorChar}* to {destRelPath}");
         }
