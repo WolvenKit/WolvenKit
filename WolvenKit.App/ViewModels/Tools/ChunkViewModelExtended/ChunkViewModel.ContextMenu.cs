@@ -44,7 +44,7 @@ public partial class ChunkViewModel
 
     #region methods
 
-    private void OnModifierChanged(object? _, Key k) => RefreshContextMenuFlags();
+    private void OnModifierChanged() => RefreshContextMenuFlags();
 
     public void RefreshContextMenuFlags()
     {

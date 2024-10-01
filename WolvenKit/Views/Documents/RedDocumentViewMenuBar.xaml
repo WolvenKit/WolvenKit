@@ -10,6 +10,8 @@
                                 xmlns:converters="clr-namespace:WolvenKit.Converters"
                                 xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                                 mc:Ignorable="d"
+                                KeyDown="OnKeystateChanged"
+                                KeyUp="OnKeystateChanged"
                                 d:DesignHeight="30" d:DesignWidth="800">
 
     <Grid>
@@ -194,7 +196,7 @@
 
         </Grid.Resources>
 
-        <Menu x:Name="MenuBar" Style="{StaticResource MenuStyle}">
+        <Menu x:Name="MenuBar" Style="{StaticResource MenuStyle}" KeyDown="OnKeystateChanged" KeyUp="OnKeystateChanged">
 
             <MenuItem Style="{StaticResource EditorModeParentDisplayStyle}">
                 <MenuItem Header="Easy" Click="OnEditorModeClick_Easy" Style="{StaticResource EditorModeDisplayStyle}" />

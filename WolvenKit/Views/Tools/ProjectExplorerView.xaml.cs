@@ -9,6 +9,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using HandyControl.Data;
 using ReactiveUI;
@@ -1040,5 +1041,10 @@ namespace WolvenKit.Views.Tools
             TreeGrid.ScrollInView(new RowColumnIndex(rowIndex, columnIndex));
             TreeGrid.View.MoveCurrentToPosition(rowIndex);
         }
+
+        private void OnKeyStateChanged(object sender, KeyEventArgs e) => ViewModel?.ModifierStateService.OnKeystateChanged(e);
+
+        private void RefreshModifierStates(object sender, ContextMenuEventArgs e) =>
+            ViewModel?.ModifierStateService.RefreshModifierStates();
     }
 }

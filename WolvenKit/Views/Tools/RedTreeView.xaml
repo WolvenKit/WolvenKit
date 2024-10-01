@@ -266,7 +266,9 @@
             <ContextMenu x:Key="TreeViewContextMenu"
                          Name="TreeViewContextMenu"
                          DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}"
-                         Opened="TreeViewContextMenu_OnOpened">
+                         Opened="TreeViewContextMenu_OnOpened"
+                         KeyUp="TreeViewContextMenu_OnKeyChanged"
+                         KeyDown="TreeViewContextMenu_OnKeyChanged">
                
                 <ContextMenu.Resources>
                     <Style TargetType="MenuItem">

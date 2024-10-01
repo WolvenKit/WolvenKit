@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows.Input;
+using System.Windows.Forms;
 using System.Windows.Threading;
 using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -64,6 +64,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private IPluginService _pluginService;
 
     private readonly ISettingsManager _settingsManager;
+    private readonly IArchiveManager _archiveManager;
 
     #endregion fields
 
@@ -76,7 +77,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         IGameControllerFactory gameController,
         IPluginService pluginService,
         ISettingsManager settingsManager,
-        IModifierViewStateService modifierSvc
+        IModifierViewStateService modifierSvc,
+        IArchiveManager archiveManager
     ) : base(s_toolTitle)
     {
         _projectManager = projectManager;
@@ -86,6 +88,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _gameController = gameController;
         _pluginService = pluginService;
         _settingsManager = settingsManager;
+        _archiveManager = archiveManager;
         ModifierStateService = modifierSvc;
 
         _mainViewModel = appViewModel;
@@ -566,7 +569,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <summary>
     /// Reimports the game file to replace the current one
     /// </summary>
-    private bool CanOverwriteWithGameFile() => ActiveProject != null && SelectedItem != null && !IsInRawFolder(SelectedItem);
+    private bool CanOverwriteWithGameFile() => ActiveProject != null
+                                               && SelectedItem != null
+                                               && !IsInRawFolder(SelectedItem)
+                                               && _archiveManager.Lookup(SelectedItem.GameRelativePath, ArchiveManagerScope.Basegame)
+                                                   .HasValue;
 
     [RelayCommand(CanExecute = nameof(CanOverwriteWithGameFile))]
     private async Task OverwriteWithGameFile()
@@ -1090,7 +1097,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <summary>
     /// Reacts to ModifierViewStatesModel's emitted events
     /// </summary>
-    private void OnModifierUpdateEvent(object? sender, Key _)
+    private void OnModifierUpdateEvent()
     {
         IsShowAbsolutePathToRawFolder = ModifierStateService.IsCtrlShiftOnlyPressed && IsInArchiveFolder(SelectedItem);
         IsShowAbsolutePathToArchiveFolder = ModifierStateService.IsCtrlShiftOnlyPressed && IsInRawFolder(SelectedItem);
@@ -1101,7 +1108,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         IsShowRelativePath = !(IsShowAbsolutePathToRawFolder || IsShowAbsolutePathToArchiveFolder ||
                                IsShowAbsolutePathToCurrentFile || IsShowAbsolutePathToCurrentFolder) ||
-                             Services.ModifierViewStateService.IsNoModifierBeingHeld;
+                             ModifierViewStateService.IsNoModifierBeingHeld;
     }
 
     public IDocumentViewModel? GetActiveEditorFile() => _mainViewModel.ActiveDocument;

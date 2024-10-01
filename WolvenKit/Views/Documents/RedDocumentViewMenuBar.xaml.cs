@@ -69,7 +69,7 @@ namespace WolvenKit.Views.Documents
             });
         }
 
-        private void OnModifierStateChanged(object? _, Key k) => RefreshChildMenuItems();
+        private void OnModifierStateChanged() => RefreshChildMenuItems();
 
         private RedDocumentTabViewModel? _currentTab;
 
@@ -400,5 +400,7 @@ namespace WolvenKit.Views.Documents
 
             RefreshChildMenuItems();
         }
+
+        private void OnKeystateChanged(object sender, KeyEventArgs e) => _modifierStateService.OnKeystateChanged(e);
     }
 }

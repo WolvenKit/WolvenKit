@@ -430,5 +430,7 @@ namespace WolvenKit.Views.Tools
                 cvm.RefreshContextMenuFlags();
             }
         }
+
+        private void TreeViewContextMenu_OnKeyChanged(object sender, KeyEventArgs e) => _modifierViewStateSvc.OnKeystateChanged(e);
     }
 }

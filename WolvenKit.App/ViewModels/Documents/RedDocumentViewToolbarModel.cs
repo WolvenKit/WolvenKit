@@ -41,7 +41,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         RefreshMenuVisibility(true);
     }
 
-    private void OnModifierChanged(object? _, Key e) => IsShiftKeyDown = _modifierViewStateService?.IsShiftKeyPressed ?? false;
+    private void OnModifierChanged() => IsShiftKeyDown = _modifierViewStateService?.IsShiftKeyPressed ?? false;
 
     private readonly IModifierViewStateService? _modifierViewStateService;
 

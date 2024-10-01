@@ -16,6 +16,7 @@
     d:DesignHeight="450"
     d:DesignWidth="400"
     x:TypeArguments="tools:ProjectExplorerViewModel"
+    ContextMenuOpening="RefreshModifierStates"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -45,6 +46,8 @@
             <ContextMenu
                 x:Key="TreeGridContextMenu"
                 FontSize="11"
+                KeyDown="OnKeyStateChanged"
+                KeyUp="OnKeyStateChanged"
                 Style="{DynamicResource WPFContextMenuStyle}">
                 <MenuItem
                     Margin="0"
@@ -862,6 +865,13 @@
                 </Style>
             </syncfusion:SfTreeGrid.Resources>
 
+            <syncfusion:SfTreeGrid.SortColumnDescriptions>
+                <syncfusion:SortColumnDescription ColumnName="Name" SortDirection="Ascending" />
+                <syncfusion:SortColumnDescription ColumnName="GameRelativePath" SortDirection="Ascending" />
+                <syncfusion:SortColumnDescription ColumnName="Extension" SortDirection="Ascending" />
+                <syncfusion:SortColumnDescription ColumnName="FileSizeStr" SortDirection="Ascending" />
+            </syncfusion:SfTreeGrid.SortColumnDescriptions>
+            
             <syncfusion:SfTreeGrid.Columns>
                 <syncfusion:TreeGridTextColumn
                     Width="220"
@@ -873,16 +883,19 @@
                 <syncfusion:TreeGridTextColumn
                     HeaderText="Path"
                     MappingName="GameRelativePath"
+                    ImmediateUpdateColumnFilter="True"
                     ShowToolTip="True"
                     TextTrimming="CharacterEllipsis" />
                 <syncfusion:TreeGridTextColumn
                     Width="70"
                     AllowResizing="False"
+                    ImmediateUpdateColumnFilter="True"
                     HeaderText="Kind"
                     MappingName="Extension" />
                 <syncfusion:TreeGridTextColumn
                     Width="70"
                     AllowResizing="False"
+                    ImmediateUpdateColumnFilter="True"
                     HeaderText="Size"
                     MappingName="FileSizeStr" />
             </syncfusion:SfTreeGrid.Columns>
