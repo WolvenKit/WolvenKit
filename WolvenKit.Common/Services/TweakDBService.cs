@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Reflection;
 using System.Threading.Tasks;
 using WolvenKit.Common.Model;
 using WolvenKit.RED4.TweakDB;
@@ -53,6 +52,7 @@ namespace WolvenKit.Common.Services
         public static bool Exists(TweakDBID key) => s_tweakDb.Flats.Exists(key) || s_tweakDb.Records.Exists(key);
 
         public string? GetString(ulong key) => s_stringHelper.GetString(key);
+        public static string? GetStringFromKey(ulong key) => s_stringHelper.GetString(key);
 
         public static IRedType? GetFlat(TweakDBID tdb) => s_tweakDb.Flats.GetValue((ulong)tdb);
         public static List<TweakDBID>? GetQuery(TweakDBID tdb) => s_tweakDb.Queries.GetQuery((ulong)tdb);
@@ -76,7 +76,7 @@ namespace WolvenKit.Common.Services
                 return true;
             }
 
-            type = null; 
+            type = null;
             return false;
         }
 
