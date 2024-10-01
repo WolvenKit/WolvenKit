@@ -3272,7 +3272,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         if (iraType.IsGenericType)
         {
             var arrayType = iraType.GetGenericTypeDefinition();
-            if ((arrayType == typeof(CArray<>) || arrayType == typeof(CStatic<>)) && ira.Count < ira.MaxSize)
+            if (arrayType == typeof(CArray<>) || (arrayType == typeof(CStatic<>) && ira.Count < ira.MaxSize))
             {
                 if (index == -1 || index > ira.Count)
                 {
