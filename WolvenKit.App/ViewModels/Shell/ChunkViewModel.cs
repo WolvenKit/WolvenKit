@@ -3272,7 +3272,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         if (iraType.IsGenericType)
         {
             var arrayType = iraType.GetGenericTypeDefinition();
-            if (arrayType == typeof(CArray<>) || arrayType == typeof(CStatic<>) && ira.Count < ira.MaxSize)
+            if ((arrayType == typeof(CArray<>) || arrayType == typeof(CStatic<>)) && ira.Count < ira.MaxSize)
             {
                 if (index == -1 || index > ira.Count)
                 {
@@ -4434,7 +4434,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             if (irt is IRedArray ira && ira.InnerType.IsAssignableTo(current.GetType()))
             {
                 var indexx = Parent.GetIndexOf(this) + 1;
-                if (indexx == -1 || indexx > ira.Count)
+                if (indexx > ira.Count)
                 {
                     indexx = ira.Count;
                 }
