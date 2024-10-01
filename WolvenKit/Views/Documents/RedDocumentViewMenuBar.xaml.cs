@@ -402,5 +402,7 @@ namespace WolvenKit.Views.Documents
         }
 
         private void OnKeystateChanged(object sender, KeyEventArgs e) => _modifierStateService.OnKeystateChanged(e);
+
+        private void RefreshModifierStates(object sender, ContextMenuEventArgs e) => _modifierStateService.RefreshModifierStates();
     }
 }

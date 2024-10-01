@@ -196,7 +196,10 @@
 
         </Grid.Resources>
 
-        <Menu x:Name="MenuBar" Style="{StaticResource MenuStyle}" KeyDown="OnKeystateChanged" KeyUp="OnKeystateChanged">
+        <Menu x:Name="MenuBar" Style="{StaticResource MenuStyle}"
+              KeyDown="OnKeystateChanged"
+              KeyUp="OnKeystateChanged"
+              ContextMenuOpening="RefreshModifierStates">
 
             <MenuItem Style="{StaticResource EditorModeParentDisplayStyle}">
                 <MenuItem Header="Easy" Click="OnEditorModeClick_Easy" Style="{StaticResource EditorModeDisplayStyle}" />

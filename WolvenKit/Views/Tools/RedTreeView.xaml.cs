@@ -425,6 +425,7 @@ namespace WolvenKit.Views.Tools
 
         private void TreeViewContextMenu_OnOpened(object sender, RoutedEventArgs e)
         {
+            _modifierViewStateSvc.RefreshModifierStates();
             if (SelectedItem is ChunkViewModel cvm)
             {
                 cvm.RefreshContextMenuFlags();
