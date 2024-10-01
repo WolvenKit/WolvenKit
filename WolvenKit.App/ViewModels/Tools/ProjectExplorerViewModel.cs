@@ -291,7 +291,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private bool CanOpenRootFolder() => ActiveProject != null;
     [RelayCommand(CanExecute = nameof(CanOpenRootFolder))]
     private void OpenRootFolder() => Commonfunctions.ShowFolderInExplorer(
-        IsShiftKeyPressed ? ActiveProject.NotNull().Location : GetActiveFolderPath()
+        ActiveProject is not null && ModifierViewStateService.IsShiftBeingHeld ? ActiveProject.ProjectDirectory : GetActiveFolderPath()
     );
 
     /// <summary>
@@ -1086,12 +1086,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     #endregion Methods
 
     #region ModifierStateAwareness
-
-    // ####################################################################################
-    // Integrate with _modifierViewStatesModel to expose keys to view 
-    // ####################################################################################
-
-    public bool IsShiftKeyPressed => ModifierViewStateService.IsShiftBeingHeld;
 
     /// <summary>
     /// Reacts to ModifierViewStatesModel's emitted events
