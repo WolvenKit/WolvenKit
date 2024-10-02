@@ -17,6 +17,8 @@
     d:DesignWidth="400"
     x:TypeArguments="tools:ProjectExplorerViewModel"
     ContextMenuOpening="RefreshModifierStates"
+    KeyDown="OnKeyStateChanged"
+    KeyUp="OnKeyStateChanged"
     mc:Ignorable="d">
 
     <UserControl.Resources>
