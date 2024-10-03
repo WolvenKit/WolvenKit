@@ -438,9 +438,11 @@
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="#22FFFFFF" />
+                <Setter Property="Foreground" Value="{StaticResource CustomSliderHighlightBrush}" />
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
                 <Setter Property="Background" Value="#44FFFFFF" />
+                <Setter Property="Foreground" Value="{StaticResource CustomSliderHighlightBrush}" />
             </Trigger>
         </Style.Triggers>
         <Setter Property="BorderThickness" Value="0" />
