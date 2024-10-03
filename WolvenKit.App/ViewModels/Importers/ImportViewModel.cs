@@ -291,7 +291,7 @@ public partial class ImportViewModel : AbstractImportExportViewModel
     private static bool CanImport(string filePath)
     {
         var fileExtension = Path.GetExtension(filePath).TrimStart('.');
-        if (!Enum.TryParse<ERawFileFormat>(fileExtension, out var _))
+        if (!Enum.TryParse<ERawFileFormat>(fileExtension.ToLower(), out var _))
         {
             return false;
         }
