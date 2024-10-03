@@ -272,6 +272,8 @@ public partial class TweakBrowserViewModel : ToolViewModel
 
     private void Refresh()
     {
+        SelectedRecordEntry = null;
+        
         Records.Refresh();
         OnPropertyChanged(nameof(Records));
         OnPropertyChanged(nameof(RecordsHeader));
@@ -284,6 +286,11 @@ public partial class TweakBrowserViewModel : ToolViewModel
 
         GroupTags.Refresh();
         OnPropertyChanged(nameof(GroupTagsHeader));
+
+        if (Records.OfType<TweakEntry>().Count() == 1)
+        {
+            SelectedRecordEntry = Records.OfType<TweakEntry>().First();
+        }
     }
 
     private bool Filter(object obj)
