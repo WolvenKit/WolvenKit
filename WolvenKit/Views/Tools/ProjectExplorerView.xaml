@@ -832,6 +832,7 @@
             BorderThickness="0"
             ColumnSizer="Star"
             ContextMenu="{StaticResource TreeGridContextMenu}"
+            ContextMenuOpening="RefreshModifierStates"
             CurrentCellBorderBrush="White"
             CurrentCellBorderThickness="0"
             ExpandStateMappingName="IsExpanded"

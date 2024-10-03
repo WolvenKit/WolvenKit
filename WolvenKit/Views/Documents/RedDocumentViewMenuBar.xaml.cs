@@ -144,9 +144,26 @@ namespace WolvenKit.Views.Documents
 
         private void OnFileValidationClick(object _, RoutedEventArgs e)
         {
-            _loggerService.Info("Running file validation, please wait. The UI will be unresponsive.");
+            // in .app or root entity: warn with >5 appearances, because this can take a while 
+            if (ViewModel?.RootChunk is ChunkViewModel cvm
+                && ((cvm.ResolvedData is appearanceAppearanceResource app && app.Appearances.Count > 5) ||
+                    (cvm.ResolvedData is entEntityTemplate ent && ent.Appearances.Count > 5)))
+            {
+                var result = Interactions.ShowConfirmation((
+                    "Run file validation now? (Wolvenkit will be unresponsive)",
+                    "Wolvenkit may be unresponsive",
+                    WMessageBoxImage.Question,
+                    WMessageBoxButtons.YesNo));
+                if (result != WMessageBoxResult.Yes)
+                {
+                    return;
+                }
+            }
+           
             
             // This needs to be inside the DispatcherHelper, or the UI button will make everything explode
+            DispatcherHelper.RunOnMainThread(
+                () => _loggerService.Info("Running file validation, please wait. The UI will be unresponsive."));
             DispatcherHelper.RunOnMainThread(() => Task.Run(async () => await RunFileValidation()).GetAwaiter().GetResult());
         }
 
@@ -371,31 +388,31 @@ namespace WolvenKit.Views.Documents
             cvm.ReplaceComponentChunkMasks(dialog.ViewModel.ComponentName!, chunkMask);
         }
 
-        private MenuItem? openMenu;
+        private MenuItem? _openMenu;
 
         private void RefreshChildMenuItems()
         {
-            if (openMenu is null)
+            if (_openMenu is null)
             {
                 return;
             }
 
-            foreach (var item in openMenu.Items.OfType<MenuItem>())
+            foreach (var item in _openMenu.Items.OfType<MenuItem>())
             {
                 // Force the submenu items to re-evaluate their bindings
-                var bindingExpression = item.GetBindingExpression(MenuItem.VisibilityProperty);
+                var bindingExpression = item.GetBindingExpression(VisibilityProperty);
                 bindingExpression?.UpdateTarget();
             }
         }
 
-        private void OnMenuClosed(object sender, RoutedEventArgs e) => openMenu = null;
+        private void OnMenuClosed(object sender, RoutedEventArgs e) => _openMenu = null;
 
         // Refresh nested menu visibility bindings
         private void OnMenuOpened(object sender, RoutedEventArgs e)
         {
             if (sender is MenuItem parentMenuItem)
             {
-                openMenu = parentMenuItem;
+                _openMenu = parentMenuItem;
             }
 
             RefreshChildMenuItems();

@@ -210,22 +210,25 @@
             <!-- Run file validation -->
             <MenuItem Header="File Validation"
                       Style="{StaticResource WolvenKitToolBarItem}"
-                      Visibility="{Binding IsFileValidationMenuVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <MenuItem Header="Run" Click="OnFileValidationClick">
-                    <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="Play" />
-                    </MenuItem.Icon>
-                </MenuItem>
+                      Visibility="{Binding IsFileValidationMenuVisible, 
+                      Converter={StaticResource BooleanToVisibilityConverter}}"
+                      Click="OnFileValidationClick">
+                <MenuItem.Icon>
+                    <iconPacks:PackIconCodicons
+                        Width="13"
+                        Height="13"
+                        Padding="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Kind="Play" />
+                </MenuItem.Icon>
             </MenuItem>
 
             <!-- Mesh file: Materials menu -->
-            <MenuItem Header="Materials" Style="{StaticResource ToolbarItemInMaterialFileStyle}">
+            <MenuItem Header="Materials"
+                      Style="{StaticResource ToolbarItemInMaterialFileStyle}"
+                      SubmenuOpened="OnMenuOpened"
+                      SubmenuClosed="OnMenuClosed">
 
                 <!-- Generate missing materials -->
                 <MenuItem Header="Generate missing material entries"
@@ -266,7 +269,10 @@
             </MenuItem>
 
             <!-- "Clean up" menu (.mesh / .json) -->
-            <MenuItem Header="Clean up" Style="{StaticResource CleanupMenuVisibilityStyle}" SubmenuOpened="OnMenuOpened" SubmenuClosed="OnMenuClosed">
+            <MenuItem Header="Clean up"
+                      Style="{StaticResource CleanupMenuVisibilityStyle}"
+                      SubmenuOpened="OnMenuOpened"
+                      SubmenuClosed="OnMenuClosed">
 
                 <!-- Convert preload materials -->
                 <MenuItem Header="Convert preload materials to local"
