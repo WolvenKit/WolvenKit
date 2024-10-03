@@ -13,8 +13,8 @@
     x:Name="redTreeView"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    KeyDown="TreeViewContextMenu_OnKeyChanged"
-    KeyUp="TreeViewContextMenu_OnKeyChanged"
+    KeyDown="TreeView_OnKeyChanged"
+    KeyUp="TreeView_OnKeyChanged"
     mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -269,6 +269,7 @@
                          Name="TreeViewContextMenu"
                          DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}"
                          Opened="TreeViewContextMenu_OnOpened"
+                         Closed="TreeViewContextMenu_OnClosed"
                          KeyUp="TreeViewContextMenu_OnKeyChanged"
                          KeyDown="TreeViewContextMenu_OnKeyChanged">
                

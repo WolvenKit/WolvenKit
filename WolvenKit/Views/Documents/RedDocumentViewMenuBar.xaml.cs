@@ -415,11 +415,26 @@ namespace WolvenKit.Views.Documents
                 _openMenu = parentMenuItem;
             }
 
+            _modifierStateService.RefreshModifierStates();
             RefreshChildMenuItems();
         }
 
-        private void OnKeystateChanged(object sender, KeyEventArgs e) => _modifierStateService.OnKeystateChanged(e);
+        // do not fire duplicate events... is this necessary? Somewhere we have a performance hog :/
+        private void OnMainKeystateChanged(object sender, KeyEventArgs e)
+        {
+            if (_openMenu is null)
+            {
+                _modifierStateService.OnKeystateChanged(e);
+            }
+        }
 
-        private void RefreshModifierStates(object sender, ContextMenuEventArgs e) => _modifierStateService.RefreshModifierStates();
+        private void OnKeystateChanged(object sender, KeyEventArgs e)
+        {
+            if (_openMenu is not null)
+            {
+                _modifierStateService.OnKeystateChanged(e);
+            }
+        }
+
     }
 }

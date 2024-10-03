@@ -1046,5 +1046,9 @@ namespace WolvenKit.Views.Tools
 
         private void RefreshModifierStates(object sender, ContextMenuEventArgs e) =>
             ViewModel?.ModifierStateService.RefreshModifierStates();
+
+        private void ContextMenuStateChanged(object sender, ContextMenuEventArgs e)
+        {
+        }
     }
 }

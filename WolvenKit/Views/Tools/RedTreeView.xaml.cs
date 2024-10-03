@@ -425,6 +425,7 @@ namespace WolvenKit.Views.Tools
 
         private void TreeViewContextMenu_OnOpened(object sender, RoutedEventArgs e)
         {
+            _isContextMenuOpen = true;
             _modifierViewStateSvc.RefreshModifierStates();
             if (SelectedItem is ChunkViewModel cvm)
             {
@@ -432,6 +433,22 @@ namespace WolvenKit.Views.Tools
             }
         }
 
+        private void TreeViewContextMenu_OnClosed(object sender, RoutedEventArgs e)
+        {
+            _isContextMenuOpen = false;
+            _modifierViewStateSvc.RefreshModifierStates();
+        }
+
         private void TreeViewContextMenu_OnKeyChanged(object sender, KeyEventArgs e) => _modifierViewStateSvc.OnKeystateChanged(e);
+
+        private bool _isContextMenuOpen;
+
+        private void TreeView_OnKeyChanged(object sender, KeyEventArgs e)
+        {
+            if (!_isContextMenuOpen)
+            {
+                _modifierViewStateSvc.OnKeystateChanged(e);
+            }
+        }
     }
 }
