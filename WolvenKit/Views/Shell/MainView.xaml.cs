@@ -16,6 +16,7 @@ using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Services;
+using WolvenKit.ViewModels;
 using WolvenKit.Views.Dialogs.Windows;
 
 namespace WolvenKit.Views.Shell
@@ -131,15 +132,18 @@ namespace WolvenKit.Views.Shell
             var image = input.Item3;
             var buttons = input.Item4;
 
-            MessageBoxModel messageBox = new()
+            KeyboardEnabledMessageBoxWindow messageBox = new()
             {
-                Text = text,
-                Caption = caption,
-                Icon = GetAdonisImage(image),
-                Buttons = GetAdonisButtons(buttons)
+                DataContext = new MessageBoxModel
+                {
+                    Text = text, Caption = caption, Icon = GetAdonisImage(image), Buttons = GetAdonisButtons(buttons)
+                }
             };
 
-            return (WMessageBoxResult)AdonisUI.Controls.MessageBox.Show(Application.Current.MainWindow, messageBox);
+            messageBox.ShowDialog();
+
+            return messageBox.DialogResult == true ? WMessageBoxResult.OK : WMessageBoxResult.Cancel;
+
 
             // local methods
             AdonisUI.Controls.MessageBoxImage GetAdonisImage(WMessageBoxImage image) => (AdonisUI.Controls.MessageBoxImage)image;
