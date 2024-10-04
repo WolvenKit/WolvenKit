@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
-using CommunityToolkit.Mvvm.ComponentModel;
+using System.Windows;
 using DynamicData.Binding;
 using WolvenKit.RED4.Types;
 
@@ -158,18 +158,26 @@ public partial class ChunkViewModel
                 // will run into stack overflow due to race conditions if we do this straight away. Let's wait a bit!
                 var newThread = new Thread(() =>
                 {
-                    Thread.Sleep(10);
                     if (GetPropertyFromPath("nodes") is ChunkViewModel nodes)
                     {
-                        nodes.CalculateProperties();
-                        nodes.IsExpanded = true;
+                        Thread.Sleep(10);
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            nodes.CalculateProperties();
+                            nodes.IsExpanded = true;
+                        });
                     }
 
-                    Thread.Sleep(10);
-                    if (GetPropertyFromPath("nodeData") is ChunkViewModel data)
+                    if (GetPropertyFromPath("nodeData") is not ChunkViewModel data)
                     {
-                        ExpandAndSelect(data, true);
+                        return;
                     }
+
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        Thread.Sleep(10);
+                        ExpandAndSelect(data, true);
+                    });
                 });
 
                 newThread.Start();
@@ -200,7 +208,14 @@ public partial class ChunkViewModel
             return;
         }
 
-        SetChildExpansionStatesInternal(isExpanded, skipRecursion ? 99 : -1);
+        try
+        {
+            SetChildExpansionStatesInternal(isExpanded, skipRecursion ? 99 : -1);
+        }
+        catch
+        {
+            // Don't set expansion states. Sometimes, this can cause threaded exception
+        }
     }
 
     /// <summary>
