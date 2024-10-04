@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using System.Windows;
-using System.Windows.Input;
 using AdonisUI.Controls;
 using ReactiveUI;
 using Splat;
@@ -16,7 +14,6 @@ using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Services;
-using WolvenKit.ViewModels;
 using WolvenKit.Views.Dialogs.Windows;
 
 namespace WolvenKit.Views.Shell
@@ -129,17 +126,13 @@ namespace WolvenKit.Views.Shell
             var image = input.Item3;
             var buttons = input.Item4;
 
-            KeyboardEnabledMessageBoxWindow messageBox = new()
+            MessageBoxModel messageBox = new()
             {
-                DataContext = new MessageBoxModel
-                {
-                    Text = text, Caption = caption, Icon = GetAdonisImage(image), Buttons = GetAdonisButtons(buttons)
-                }
+                Text = text, Caption = caption, Icon = GetAdonisImage(image), Buttons = GetAdonisButtons(buttons)
             };
 
-            messageBox.ShowDialog();
+            return (WMessageBoxResult)AdonisUI.Controls.MessageBox.Show(Application.Current.MainWindow, messageBox);
 
-            return messageBox.DialogResult == true ? WMessageBoxResult.OK : WMessageBoxResult.Cancel;
 
 
             // local methods
