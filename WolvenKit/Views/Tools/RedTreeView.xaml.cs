@@ -439,7 +439,19 @@ namespace WolvenKit.Views.Tools
             _modifierViewStateSvc.RefreshModifierStates();
         }
 
-        private void TreeViewContextMenu_OnKeyChanged(object sender, KeyEventArgs e) => _modifierViewStateSvc.OnKeystateChanged(e);
+        private void TreeViewContextMenu_OnKeyChanged(object sender, KeyEventArgs e)
+        {
+            if (_isContextMenuOpen)
+            {
+                return;
+            }
+
+            _modifierViewStateSvc.OnKeystateChanged(e);
+            if (SelectedItem is ChunkViewModel cvm)
+            {
+                cvm.RefreshContextMenuFlags();
+            }
+        }
 
         private bool _isContextMenuOpen;
 
