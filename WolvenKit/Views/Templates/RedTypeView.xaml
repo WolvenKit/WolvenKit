@@ -225,7 +225,7 @@
                         Command="{Binding DeleteItemCommand}"
                         ToolTip="Delete Element">
                         <Button.Style>
-                            <Style BasedOn="{StaticResource ButtonCustom}" TargetType="Button">
+                            <Style BasedOn="{StaticResource ButtonCustom}" TargetType="{x:Type Button}">
                                 <Setter Property="Visibility" Value="Collapsed" />
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsChecked, ElementName=DeleteButton}" Value="True">
@@ -305,7 +305,7 @@
                         Command="{Binding DeleteAllCommand}"
                         ToolTip="Delete All">
                         <Button.Style>
-                            <Style BasedOn="{StaticResource ButtonCustom}" TargetType="Button">
+                            <Style BasedOn="{StaticResource ButtonCustom}" TargetType="{x:Type Button}">
                                 <Setter Property="Visibility" Value="Collapsed" />
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsChecked, ElementName=DeleteButton}" Value="True">

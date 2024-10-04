@@ -40,7 +40,7 @@
             VerticalAlignment="Top"
             Orientation="Horizontal">
             <StackPanel.Resources>
-                <Style BasedOn="{StaticResource ButtonDefault}" TargetType="Button">
+                <Style BasedOn="{StaticResource ButtonDefault}" TargetType="{x:Type Button}">
                     <Setter Property="BorderThickness" Value="0" />
                     <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt}" />
                     <Setter Property="Padding" Value="15,0" />
