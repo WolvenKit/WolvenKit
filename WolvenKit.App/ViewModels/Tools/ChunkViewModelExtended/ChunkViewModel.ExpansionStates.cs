@@ -173,10 +173,10 @@ public partial class ChunkViewModel
                         return;
                     }
 
+                    Thread.Sleep(40);
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        Thread.Sleep(10);
-                        ExpandAndSelect(data, true);
+                        ExpandAndSelect(data, Tab?.SelectedChunk is not ChunkViewModel);
                     });
                 });
 
