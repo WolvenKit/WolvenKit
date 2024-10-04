@@ -49,10 +49,7 @@ namespace WolvenKit.Views.Shell
             {
                 Disposable.Create(dockingAdapter.SaveLayout).DisposeWith(disposables);
 
-                Interactions.ShowConfirmation = input =>
-                {
-                    return ShowConfirmation(input);
-                };
+                Interactions.ShowConfirmation = ShowConfirmation;
 
                 Interactions.ShowLaunchProfilesView = () =>
                 {
@@ -146,11 +143,11 @@ namespace WolvenKit.Views.Shell
 
 
             // local methods
-            AdonisUI.Controls.MessageBoxImage GetAdonisImage(WMessageBoxImage image) => (AdonisUI.Controls.MessageBoxImage)image;
+            AdonisUI.Controls.MessageBoxImage GetAdonisImage(WMessageBoxImage imageParam) => (AdonisUI.Controls.MessageBoxImage)imageParam;
 
-            IEnumerable<IMessageBoxButtonModel> GetAdonisButtons(WMessageBoxButtons buttons)
+            IEnumerable<IMessageBoxButtonModel> GetAdonisButtons(WMessageBoxButtons buttonsParam)
             {
-                return buttons switch
+                return buttonsParam switch
                 {
                     WMessageBoxButtons.Ok => new IMessageBoxButtonModel[1] { MessageBoxButtons.Ok() },
                     WMessageBoxButtons.OkCancel => MessageBoxButtons.OkCancel(),

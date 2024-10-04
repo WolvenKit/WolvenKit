@@ -32,12 +32,13 @@
   </PropertyGroup>
 	
   <PropertyGroup>
-	  <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-	  <NoWarn>$(NoWarn);SA1652</NoWarn>
-	  <NoWarn>$(NoWarn);CA1416</NoWarn>
-	  <NoWarn>$(NoWarn);SYSLIB0001</NoWarn>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>$(NoWarn);SA1652</NoWarn>
+    <NoWarn>$(NoWarn);CA1416</NoWarn>
+    <NoWarn>$(NoWarn);SYSLIB0001</NoWarn>
     <NoWarn>$(NoWarn);IDE0010</NoWarn>
-	  <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <NoWarn>$(NoWarn);IDE0072</NoWarn>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
 
 
