@@ -1716,22 +1716,21 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
         
-
         // Make sure these are initialized
         mesh.LocalMaterialBuffer ??= new meshMeshMaterialBuffer { Materials = [], };
         mesh.LocalMaterialBuffer.Materials ??= [];
 
+        CArray<IMaterial> localMaterials = [];
+        foreach (var iMaterial in mesh.LocalMaterialBuffer.Materials)
+        {
+            localMaterials.Add(iMaterial);
+        }
+
         if (mesh.PreloadLocalMaterialInstances.Count > 0)
         {
-            foreach (var matRef in mesh.PreloadLocalMaterialInstances)
-            {
-                if (matRef.GetValue() is not IMaterial mat)
-                {
-                    continue;
-                }
+            localMaterials.AddRange(mesh.PreloadLocalMaterialInstances.Select(h => h.Chunk).OfType<IMaterial>());
 
-                mesh.LocalMaterialBuffer.Materials.Add(mat);
-            }
+            mesh.LocalMaterialBuffer.Materials = localMaterials;
 
             mesh.PreloadLocalMaterialInstances.Clear();
 
@@ -1746,11 +1745,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
+        CArray<CResourceAsyncReference<IMaterial>> externalMaterials = [];
         foreach (var mat in mesh.PreloadExternalMaterials)
         {
-            mesh.ExternalMaterials.Add(new CResourceAsyncReference<IMaterial>(mat.DepotPath));
+            externalMaterials.Add(new CResourceAsyncReference<IMaterial>(mat.DepotPath));
         }
 
+        mesh.ExternalMaterials = externalMaterials;
         mesh.PreloadExternalMaterials.Clear();
 
         GetPropertyChild("preloadExternalMaterials")?.RecalculateProperties();
