@@ -18,6 +18,7 @@ using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Scripting;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
+using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Interfaces;
@@ -245,6 +246,25 @@ namespace WolvenKit.Views.Documents
             await LoadModArchives();
 
             var materialDependencies = await rootChunk.GetMaterialDependenciesOutsideOfProject();
+            var isShiftKeyDown = ModifierViewStateService.IsShiftBeingHeld;
+
+            // Filter files: Ignore base game files unless shift key is pressed
+            materialDependencies = materialDependencies
+                .Where(refPathHash =>
+                    {
+                        var hasBasegameFile = _archiveManager.Lookup(refPathHash, ArchiveManagerScope.Basegame) is { HasValue: true };
+                        var hasModFile = _archiveManager.Lookup(refPathHash, ArchiveManagerScope.Mods) is { HasValue: true };
+                        // Only files from mods. Filter out anything that overwrites basegame files.
+                        if (!isShiftKeyDown)
+                        {
+                            return hasModFile && !hasBasegameFile;
+                        }
+
+                        return hasModFile || hasBasegameFile;
+                    }
+                )
+                .ToHashSet();
+            
 
             var destFolder = GetTextureDirForDependencies(true);
             // Use search and replace to fix file paths
@@ -328,10 +348,13 @@ namespace WolvenKit.Views.Documents
                 _loggerService.Info("Loading mod archives, this may take a moment...");
                 await Task.Run(() =>
                 {
-                    _archiveManager.LoadModArchives(new FileInfo(_settingsManager.CP77ExecutablePath), true);
+                    var ignoredArchives = _settingsManager.ArchiveNamesExcludeFromScan.Split(",").Select(m => m.Replace(".archive", ""))
+                        .ToArray();
+                    _archiveManager.LoadModArchives(new FileInfo(_settingsManager.CP77ExecutablePath), true, ignoredArchives);
+                    
                     if (_settingsManager.ExtraModDirPath is string extraModDir && !string.IsNullOrEmpty(extraModDir))
                     {
-                        _archiveManager.LoadAdditionalModArchives(extraModDir, true);
+                        _archiveManager.LoadAdditionalModArchives(extraModDir, true, ignoredArchives);
                     }
                 });
 

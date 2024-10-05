@@ -123,11 +123,13 @@ public class AppArchiveManager(
             ? gameDir
             : null;
 
-    public override void LoadModArchives(FileInfo executable, bool analyzeFiles = true)
+    public override void LoadModArchives(FileInfo executable, bool analyzeFiles = true, string[]? ignoredFiles = null)
     {
         _progressService.IsIndeterminate = true;
 
-        base.LoadModArchives(executable, analyzeFiles);
+        ignoredFiles ??= [];
+
+        base.LoadModArchives(executable, analyzeFiles, ignoredFiles);
         var gameDir = GetGameDir();
 
         foreach (var iGameArchive in Archives.Items)
@@ -161,9 +163,9 @@ public class AppArchiveManager(
 
     }
 
-    public override void LoadAdditionalModArchives(string archiveBasePath, bool analyzeFiles = true)
+    public override void LoadAdditionalModArchives(string archiveBasePath, bool analyzeFiles = true, string[]? ignoredFiles = null)
     {
-        base.LoadAdditionalModArchives(archiveBasePath, analyzeFiles);
+        base.LoadAdditionalModArchives(archiveBasePath, analyzeFiles, ignoredFiles);
 
         try
         {

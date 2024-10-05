@@ -1007,23 +1007,24 @@ public partial class AssetBrowserViewModel : ToolViewModel
             return;
         }
 
+
+        var ignoredArchives = _settings.ArchiveNamesExcludeFromScan.Split(",", StringSplitOptions.RemoveEmptyEntries)
+            .Select(name => name.Replace(".archive", "")).ToArray();
+
+        
         if (archiveName is null)
         {
-            _archiveManager.LoadModArchives(new FileInfo(_settings.CP77ExecutablePath), scanArchives);
+            _archiveManager.LoadModArchives(new FileInfo(_settings.CP77ExecutablePath), scanArchives, ignoredArchives);
 
             if (Directory.Exists(_settings.ExtraModDirPath))
             {
-                _archiveManager.LoadAdditionalModArchives(_settings.ExtraModDirPath, scanArchives);
+                _archiveManager.LoadAdditionalModArchives(_settings.ExtraModDirPath, scanArchives, ignoredArchives);
             }
 
             return;
         }
 
         List<string> archivesToScan = [];
-
-        var ignoredArchives = _settings.ArchiveNamesExcludeFromScan.Split(",", StringSplitOptions.RemoveEmptyEntries)
-            .Select(name => name.Replace(".archive", "")).ToArray();
-
         archivesToScan.AddRange(_archiveManager.GetModArchives()
             .Where(archive => archive.Name.Contains(archiveName, StringComparison.OrdinalIgnoreCase))
             .Select(gameArchive => gameArchive.ArchiveAbsolutePath)
@@ -1046,7 +1047,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         }
 
         // If no archives match the filter, scan all archives.
-        _archiveManager.LoadModArchives(new FileInfo(_settings.CP77ExecutablePath), scanArchives);
+        _archiveManager.LoadModArchives(new FileInfo(_settings.CP77ExecutablePath), scanArchives, ignoredArchives);
 
         if (Directory.Exists(_settings.ExtraModDirPath))
         {

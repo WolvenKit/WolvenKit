@@ -262,7 +262,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <summary>
         /// Loads bundles from specified mods and dlc folder
         /// </summary>
-        public virtual void LoadModArchives(FileInfo executable, bool analyzeFiles = true)
+        public virtual void LoadModArchives(FileInfo executable, bool analyzeFiles = true, string[]? ignoredArchives = null)
         {
             var di = executable.Directory;
             if (di?.Parent?.Parent is null)
@@ -274,6 +274,8 @@ namespace WolvenKit.RED4.CR2W.Archive
                 return;
             }
 
+            ignoredArchives ??= [];
+            
             IsManagerLoading = true;
             _progressService.IsIndeterminate = true;
 
@@ -393,14 +395,14 @@ namespace WolvenKit.RED4.CR2W.Archive
             var progress = 0;
 
             _progressService.IsIndeterminate = false;
-            foreach (var file in redModFiles)
+            foreach (var file in redModFiles.Where(f => !ignoredArchives.Contains(Path.GetFileName(f).Replace(".archive", ""))))
             {
                 LoadModArchive(file, analyzeFiles);
                 progress += 1;
                 _progressService.Report(progress / (float)numTotalEntries);
-            } 
+            }
 
-            foreach (var file in legacyFiles)
+            foreach (var file in legacyFiles.Where(f => !ignoredArchives.Contains(Path.GetFileName(f).Replace(".archive", ""))))
             {
                 LoadModArchive(file, analyzeFiles);
                 progress += 1;
@@ -413,7 +415,7 @@ namespace WolvenKit.RED4.CR2W.Archive
             IsManagerLoaded = true;
         }
 
-        public virtual void LoadAdditionalModArchives(string archiveBasePath, bool analyzeFiles = true)
+        public virtual void LoadAdditionalModArchives(string archiveBasePath, bool analyzeFiles = true, string[]? ignoredArchives = null)
         {
             if (!Directory.Exists(archiveBasePath))
             {
@@ -421,8 +423,10 @@ namespace WolvenKit.RED4.CR2W.Archive
             }
 
             IsManagerLoading = true;
+            ignoredArchives ??= [];
 
-            var files = Directory.GetFiles(archiveBasePath, "*.archive", SearchOption.AllDirectories).ToList();
+            var files = Directory.GetFiles(archiveBasePath, "*.archive", SearchOption.AllDirectories)
+                .ToList();
 
             if (files.Count == 0)
             {
@@ -436,10 +440,18 @@ namespace WolvenKit.RED4.CR2W.Archive
 
             foreach (var file in files)
             {
+                var fileName = Path.GetFileName(file).Replace(".archive", "");
+                if (ignoredArchives.Contains(fileName))
+                {
+                    _logger.Info($"{fileName} ignored via settings, skipping...");
+                    continue;
+                }
                 LoadModArchive(file, analyzeFiles);
                 progress += 1;
                 _progressService.Report(progress / totalFiles);
             }
+
+            files = files.Where(f => !ignoredArchives.Contains(Path.GetFileName(f).Replace(".archive", ""))).ToList();
 
             // set relative paths
             foreach (var archive in Archives.Items)

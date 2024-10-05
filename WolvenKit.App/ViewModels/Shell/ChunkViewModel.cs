@@ -4498,7 +4498,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             var am = _archiveManager;
             var sm = _settingsManager;
-            am.LoadModArchives(new FileInfo(sm.CP77ExecutablePath.NotNull()), sm.AnalyzeModArchives);
+            am.LoadModArchives(new FileInfo(sm.CP77ExecutablePath.NotNull()), sm.AnalyzeModArchives,
+                sm.ArchiveNamesExcludeFromScan.Split(",").Select(s => s.Replace(".archive", "")).ToArray());
+            
             var af = am.GetGroupedFiles();
 
             var tempbool = am.IsModBrowserActive;
