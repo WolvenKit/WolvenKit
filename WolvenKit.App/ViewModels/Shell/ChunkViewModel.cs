@@ -1710,28 +1710,27 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     [RelayCommand(CanExecute = nameof(CanConvertPreloadMaterial))]
     private void ConvertPreloadMaterials()
     {
-        var resolvedData = ResolvedData is CMesh ? ResolvedData : Parent?.ResolvedData;
+        var resolvedData = ResolvedData is CMesh ? ResolvedData : GetRootModel().ResolvedData;
         if (resolvedData is not CMesh mesh)
         {
             return;
         }
         
-
         // Make sure these are initialized
         mesh.LocalMaterialBuffer ??= new meshMeshMaterialBuffer { Materials = [], };
         mesh.LocalMaterialBuffer.Materials ??= [];
 
+        CArray<IMaterial> localMaterials = [];
+        foreach (var iMaterial in mesh.LocalMaterialBuffer.Materials)
+        {
+            localMaterials.Add(iMaterial);
+        }
+
         if (mesh.PreloadLocalMaterialInstances.Count > 0)
         {
-            foreach (var matRef in mesh.PreloadLocalMaterialInstances)
-            {
-                if (matRef.GetValue() is not IMaterial mat)
-                {
-                    continue;
-                }
+            localMaterials.AddRange(mesh.PreloadLocalMaterialInstances.Select(h => h.Chunk).OfType<IMaterial>());
 
-                mesh.LocalMaterialBuffer.Materials.Add(mat);
-            }
+            mesh.LocalMaterialBuffer.Materials = localMaterials;
 
             mesh.PreloadLocalMaterialInstances.Clear();
 
@@ -1746,16 +1745,18 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
+        CArray<CResourceAsyncReference<IMaterial>> externalMaterials = [];
         foreach (var mat in mesh.PreloadExternalMaterials)
         {
-            mesh.ExternalMaterials.Add(new CResourceAsyncReference<IMaterial>(mat.DepotPath));
+            externalMaterials.Add(new CResourceAsyncReference<IMaterial>(mat.DepotPath));
         }
 
+        mesh.ExternalMaterials = externalMaterials;
         mesh.PreloadExternalMaterials.Clear();
 
         GetPropertyChild("preloadExternalMaterials")?.RecalculateProperties();
         GetPropertyChild("externalMaterials")?.RecalculateProperties();
-
+        
         Tab?.Parent.SetIsDirty(true);
     }
 
@@ -2228,34 +2229,34 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
         }
         catch (Exception ex) { _loggerService.Error(ex); }
-
     }
+
+    protected bool IsHandle() =>
+        PropertyType.IsAssignableTo(typeof(IRedBaseHandle)) ||
+        PropertyType.GetGenericTypeDefinition() == typeof(CHandle<>) ||
+        PropertyType.GetGenericTypeDefinition() == typeof(CWeakHandle<>);
 
     private bool CanPasteHandle()
     {
-        if (RedDocumentTabViewModel.CopiedChunk is IRedBaseHandle sourceHandle)
+        if (RedDocumentTabViewModel.CopiedChunk is not IRedBaseHandle || Parent is { Data: worldNodeData })
         {
-            if (Parent is { Data: worldNodeData })
-            {
-                return false;
-            }
-
-            return PropertyType.IsAssignableTo(typeof(IRedBaseHandle));
+            return false;
         }
 
-        return false;
+        return RedDocumentTabViewModel.CopiedChunk is IRedBaseHandle && IsHandle();
     } // TODO RelayCommand check notify
+    
     [RelayCommand(CanExecute = nameof(CanPasteHandle))]
     private void PasteHandle()
     {
-        if (RedDocumentTabViewModel.CopiedChunk is null)
+        if (RedDocumentTabViewModel.CopiedChunk is not IRedBaseHandle sourceHandle)
         {
             return;
         }
 
-        if (RedDocumentTabViewModel.CopiedChunk is IRedBaseHandle sourceHandle)
+        switch (Data)
         {
-            if (Data is IRedBaseHandle destinationHandle)
+            case IRedBaseHandle destinationHandle:
             {
                 if (destinationHandle.InnerType.IsAssignableFrom(sourceHandle.GetValue().NotNull().GetType()))
                 {
@@ -2263,8 +2264,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     RecalculateProperties(destinationHandle);
                     RedDocumentTabViewModel.CopiedChunk = null;
                 }
+
+                break;
             }
-            else if (Data is RedDummy || Data is null)
+            case RedDummy:
+            case null:
             {
                 if (PropertyType.GetGenericTypeDefinition() == typeof(CHandle<>))
                 {
@@ -2278,6 +2282,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     RecalculateProperties(Data);
                     RedDocumentTabViewModel.CopiedChunk = null;
                 }
+
+                break;
             }
         }
     }

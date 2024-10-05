@@ -37,7 +37,6 @@ namespace WolvenKit.Views.Documents
         private readonly IAppArchiveManager _archiveManager;
         private readonly IModifierViewStateService _modifierStateService;
 
-
         public RedDocumentViewMenuBar()
         {
             _scriptService = Locator.Current.GetService<AppScriptService>()!;
@@ -86,11 +85,6 @@ namespace WolvenKit.Views.Documents
                 .Where(s => s.Name == "run_FileValidation_on_active_tab")
                 .Select(s => new ScriptFileViewModel(_settingsManager, ScriptSource.System, s))
                 .FirstOrDefault();
-
-            if (_fileValidationScript is null && ViewModel is not null)
-            {
-                ViewModel.IsFileValidationMenuVisible = false;
-            }
         }
 
         public RedDocumentTabViewModel? CurrentTab
@@ -397,12 +391,15 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
+            ViewModel?.RefreshMenuVisibility();
+            
             foreach (var item in _openMenu.Items.OfType<MenuItem>())
             {
                 // Force the submenu items to re-evaluate their bindings
                 var bindingExpression = item.GetBindingExpression(VisibilityProperty);
                 bindingExpression?.UpdateTarget();
             }
+            
         }
 
         private void OnMenuClosed(object sender, RoutedEventArgs e) => _openMenu = null;
