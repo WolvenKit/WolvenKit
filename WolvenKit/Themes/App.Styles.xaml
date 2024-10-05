@@ -63,8 +63,10 @@
     <SolidColorBrush x:Key="WolvenKitTan50" Color="#7FD0A467" />
 
     <SolidColorBrush x:Key="ForegroundColor" Color="#EBEBEB" />
+    <SolidColorBrush x:Key="ForegroundColor_Grey_Light" Color="#cacaca" />
     <SolidColorBrush x:Key="ForegroundColor_Grey1" Color="#ababab" />
     <SolidColorBrush x:Key="ForegroundColor_Grey_Dark" Color="#969696" />
+    <SolidColorBrush x:Key="ForegroundColor_Grey_Inactive" Color="#555555" />
 
     <!-- e.g. the hash box -->
     <SolidColorBrush x:Key="ForegroundColor_Control_Secondary" Color="#666666" />
@@ -119,6 +121,35 @@
         TargetType="{x:Type TextBox}">
         <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
         <Setter Property="BorderBrush" Value="{StaticResource ContentBackgroundAlt3}" />
+    </Style>
+
+    <!-- Menu Bar Entry Style -->
+    <Style x:Key="WolvenKitToolBarItem" TargetType="{x:Type MenuItem}">
+        <Setter Property="Margin" Value="3 4 3 0" />
+        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
+        <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}}" Value="False">
+                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Inactive}" />
+                <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}}" Value="False">
+                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Inactive}" />
+                <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=IsFocused, RelativeSource={RelativeSource Self}}" Value="False">
+                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Light}" />
+                <Setter Property="Background" Value="{StaticResource BackgroundColor_Frame_Active}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}" Value="False">
+                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Light}" />
+                <Setter Property="Background" Value="{StaticResource BackgroundColor_Frame_Active}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=IsPressed, RelativeSource={RelativeSource Self}}" Value="False">
+                <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
+                <Setter Property="Background" Value="{StaticResource BackgroundColor_Frame_Background}" />
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 
     <Style x:Key="ValidatingControlStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource WolvenkitTextBoxStyle}">

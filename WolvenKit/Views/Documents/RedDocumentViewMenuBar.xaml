@@ -19,31 +19,13 @@
         <Grid.Resources>
 
             <converters:HasMenuChildrenVisibilityConverter x:Key="HasMenuChildrenVisibilityConverter" />
-
+            
             <!-- styles the whole menu bar -->
             <Style x:Key="MenuStyle" TargetType="{x:Type Menu}">
                 <Setter Property="Height" Value="25" />
                 <Setter Property="Margin" Value="0" />
                 <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
                 <Setter Property="Background" Value="{StaticResource BackgroundColor_Frame_Background}" />
-            </Style>
-
-            <!-- Menu Bar Entry Style -->
-            <Style x:Key="WolvenKitToolBarItem" TargetType="{x:Type MenuItem}">
-                <Setter Property="Margin" Value="3 4 3 0" />
-                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
-                
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}}" Value="False">
-                        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
-                        <Setter Property="Background" Value="{StaticResource BackgroundColor_Button_Inactive}" />
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-
-            <Style x:Key="WolvenKitToolBarItemWithChildren" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitToolBarItem}">
-                <Setter Property="Visibility"
-                        Value="{Binding RelativeSource={RelativeSource Self}, Converter={StaticResource HasMenuChildrenVisibilityConverter}}" />
             </Style>
 
             <!-- Editor Modes & Toggle -->
@@ -54,8 +36,13 @@
                 <Setter Property="Background" Value="{StaticResource BackgroundColor_Cyan}" />
             </Style>
 
+            <Style x:Key="WolvenKitToolBarItemWithChildren" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitToolBarItem}">
+                <Setter Property="Visibility"
+                        Value="{Binding RelativeSource={RelativeSource Self}, Converter={StaticResource HasMenuChildrenVisibilityConverter}}" />
+            </Style>
+
             <!-- Menu Item Style (in dropdown) -->
-            <Style x:Key="WolvenKitNestedMenuItem" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitToolBarItemWithChildren}">
+            <Style x:Key="WolvenKitNestedMenuItemStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitToolBarItem}">
                 <Setter Property="Height" Value="25" />
                 <Setter Property="Padding" Value="2 6 0 6" />
                 <Setter Property="Margin" Value="2 0" />
@@ -68,13 +55,12 @@
                 </Style.Triggers>
             </Style>
 
-
             <!-- ============================================================== -->
             <!-- Visibility by file type -->
             <!-- ============================================================== -->
 
             <!-- menu item: Mesh -->
-            <Style x:Key="MenuItemInMeshFileStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitNestedMenuItem}">
+            <Style x:Key="MenuItemInMeshFileStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitNestedMenuItemStyle}">
                 <Setter Property="Visibility" Value="Collapsed" />
                 <Style.Triggers>
                     <DataTrigger
@@ -131,7 +117,7 @@
             </Style>
 
             <!-- menu item: JSON -->
-            <Style x:Key="MenuItemInJsonFileStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitNestedMenuItem}">
+            <Style x:Key="MenuItemInJsonFileStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitNestedMenuItemStyle}">
                 <Setter Property="Visibility" Value="Collapsed" />
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
@@ -142,7 +128,7 @@
             </Style>
 
             <!-- menu item: .app -->
-            <Style x:Key="MenuItemInAppFileStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitNestedMenuItem}">
+            <Style x:Key="MenuItemInAppFileStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitNestedMenuItemStyle}">
                 <Setter Property="Visibility" Value="Collapsed" />
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding  Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
@@ -154,7 +140,7 @@
 
             <!-- ============================================================== -->
 
-            <Style x:Key="ShowInMeshFileStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitNestedMenuItem}">
+            <Style x:Key="ShowInMeshFileStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitNestedMenuItemStyle}">
                 <Setter Property="Visibility" Value="Collapsed" />
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Path=ContentType}" Value="{x:Static documents:RedDocumentItemType.Mesh}">
@@ -211,8 +197,6 @@
             <!-- Run file validation -->
             <MenuItem Header="File Validation"
                       Style="{StaticResource WolvenKitToolBarItem}"
-                      Visibility="{Binding IsFileValidationMenuVisible, 
-                      Converter={StaticResource BooleanToVisibilityConverter}}"
                       Click="OnFileValidationClick">
                 <MenuItem.Icon>
                     <iconPacks:PackIconCodicons
@@ -279,18 +263,17 @@
                 <MenuItem Header="Convert preload materials to local"
                           Style="{StaticResource MenuItemInMeshFileStyle}"
                           Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
-                          Click="OnConvertLocalMaterialsClick" />
+                          Command="{Binding Path=ConvertPreloadMaterialsCommand}" />
 
                 <!-- No shift: "Delete unused Materials" -->
                 <MenuItem Header="Delete unused materials"
-                          Style="{StaticResource WolvenKitNestedMenuItem}"
+                          Style="{StaticResource WolvenKitNestedMenuItemStyle}"
                           Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
-                          DataContext="{Binding SelectedChunk}"
                           Command="{Binding Path=DeleteUnusedMaterialsCommand}" />
 
                 <!-- Shift: "Clear all Materials" -->
                 <MenuItem Header="Clear all materials"
-                          Style="{StaticResource WolvenKitNestedMenuItem}"
+                          Style="{StaticResource WolvenKitNestedMenuItemStyle}"
                           Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                           Command="{Binding Path=ClearMaterialsCommand}" />
 

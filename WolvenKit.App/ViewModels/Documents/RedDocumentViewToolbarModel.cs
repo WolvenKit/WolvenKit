@@ -126,6 +126,8 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         RefreshMeshMenuItems();
 
         SelectedChunk ??= RootChunk;
+
+        isEmptySubmeshesDeleted = false;
     }
 
 
@@ -137,10 +139,6 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [ObservableProperty]
     private RedDocumentItemType _contentType;
     
-    [ObservableProperty] private bool _isFileValidationMenuVisible;
-
-    [ObservableProperty] private bool _isConvertMaterialMenuEnabled;
-
     [NotifyCanExecuteChangedFor(nameof(AddDependenciesCommand))]
     [NotifyCanExecuteChangedFor(nameof(AddDependenciesFullCommand))]
     [NotifyCanExecuteChangedFor(nameof(ClearMaterialsCommand))]
@@ -156,6 +154,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(ToggleLocalInstanceCommand))]
     [NotifyCanExecuteChangedFor(nameof(DeleteDuplicateEntriesCommand))]
     [NotifyCanExecuteChangedFor(nameof(DeleteUnusedMaterialsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ConvertPreloadMaterialsCommand))]
     [ObservableProperty]
     private ChunkViewModel? _selectedChunk;
 
@@ -163,8 +162,6 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
     private void RefreshMeshMenuItems()
     {
-        IsFileValidationMenuVisible = false;
-        IsConvertMaterialMenuEnabled = false;
 
         IsShiftKeyDown = _modifierViewStateService?.IsShiftKeyPressed ?? false;
 
@@ -173,14 +170,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             return;
         }
 
-        IsFileValidationMenuVisible = true;
-        
-        if (RootChunk?.ResolvedData is not CMesh mesh)
-        {
-            return;
-        }
-
-        IsConvertMaterialMenuEnabled = mesh.PreloadExternalMaterials.Count > 0 || mesh.PreloadLocalMaterialInstances.Count > 0;
+        ConvertPreloadMaterialsCommand.NotifyCanExecuteChanged();
     }
 
     public void SetCurrentTab(RedDocumentTabViewModel? value)
@@ -224,12 +214,17 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     private bool CanDeleteDuplicateEntries() => ContentType is RedDocumentItemType.Json;
 
     [RelayCommand(CanExecute = nameof(CanDeleteDuplicateEntries))]
-    private void DeleteDuplicateEntries() => SelectedChunk?.DeleteDuplicateEntriesCommand.Execute(null);
+    private void DeleteDuplicateEntries() => RootChunk?.DeleteDuplicateEntriesCommand.Execute(null);
 
-    private bool CanDeleteEmptySubmeshes() => ContentType is RedDocumentItemType.Mesh;
+    private bool isEmptySubmeshesDeleted = false;
+    private bool CanDeleteEmptySubmeshes() => ContentType is RedDocumentItemType.Mesh && !isEmptySubmeshesDeleted;
 
     [RelayCommand(CanExecute = nameof(CanDeleteEmptySubmeshes))]
-    private void DeleteEmptySubmeshes() => SelectedChunk?.DeleteEmptySubmeshesCommand.Execute(null);
+    private void DeleteEmptySubmeshes()
+    {
+        isEmptySubmeshesDeleted = true;
+        RootChunk?.DeleteEmptySubmeshesCommand.Execute(null);
+    }
 
     private bool CanScrollToMaterial() => SelectedChunk?.ShowScrollToMaterial == true;
 
@@ -241,8 +236,13 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [RelayCommand(CanExecute = nameof(CanToggleEnableMask))]
     private void ToggleEnableMask() => SelectedChunk?.ToggleEnableMaskedCommand.Execute(null);
 
+    private bool CanConvertPreloadMaterials() => RootChunk?.ResolvedData is CMesh mesh &&
+                                                 (mesh.PreloadExternalMaterials.Count > 0 || mesh.PreloadLocalMaterialInstances.Count > 0);
 
-    private bool CanClearAppearances() => SelectedChunk?.CanClearMaterials() == true;
+    [RelayCommand(CanExecute = nameof(CanConvertPreloadMaterials))]
+    private void ConvertPreloadMaterials() => RootChunk?.ConvertPreloadMaterialsCommand.Execute(null);
+
+    private bool CanClearAppearances() => RootChunk?.CanClearMaterials() == true;
 
     private bool HasMeshAppearances() => RootChunk?.ResolvedData is CMesh mesh && mesh.Appearances.Count > 0;
 

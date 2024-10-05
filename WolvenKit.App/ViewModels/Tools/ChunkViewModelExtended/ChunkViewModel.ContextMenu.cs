@@ -71,6 +71,9 @@ public partial class ChunkViewModel
         IsInArrayWithShiftKeyDown = IsInArray && IsShiftKeyPressed;
 
         ToggleEnableMaskedCommand.NotifyCanExecuteChanged();
+        ConvertPreloadMaterialsCommand.NotifyCanExecuteChanged();
+        DeleteUnusedMaterialsCommand.NotifyCanExecuteChanged();
+        ClearMaterialsCommand.NotifyCanExecuteChanged();
     }
 
     public bool IsMaterialDefinition()
