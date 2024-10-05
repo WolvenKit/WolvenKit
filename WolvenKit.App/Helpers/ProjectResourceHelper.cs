@@ -126,8 +126,13 @@ public static class ProjectResourceHelper
                                                   GetUniqueSubfolderPath(allFilePaths, groups.First().GetResolvedText() ?? "");
                         }
 
-                        pathsAndDestinations[path] = $"{destFolderRelativePath}{uniqueSubfolderPath}";
+                        var targetPath = $"{destFolderRelativePath}{uniqueSubfolderPath}";
+                        if (targetPath != path)
+                        {
+                            pathsAndDestinations[path] = targetPath;
+                        }
                     }
+
 
                     List<string> existingFiles = pathsAndDestinations.Where(kvp =>
                     {
