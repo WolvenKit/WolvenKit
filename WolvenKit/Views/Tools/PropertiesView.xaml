@@ -1,53 +1,44 @@
 <reactiveUi:ReactiveUserControl
     x:Class="WolvenKit.Views.Tools.PropertiesView"
+    x:TypeArguments="tools:PropertiesViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:conv="clr-namespace:WolvenKit.App.Converters;assembly=WolvenKit.App"
-    xmlns:converters2="clr-namespace:WolvenKit.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:ei="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:hx="http://helix-toolkit.org/wpf/SharpDX"
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:others="clr-namespace:WolvenKit.Views.Others"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:tools="clr-namespace:WolvenKit.App.ViewModels.Tools;assembly=WolvenKit.App"
     xmlns:tools1="clr-namespace:WolvenKit.Views.Tools"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=tools:PropertiesViewModel}"
-    d:DesignHeight="450"
     d:DesignWidth="800"
-    x:TypeArguments="tools:PropertiesViewModel"
-    FontSize="10"
-    mc:Ignorable="d">
-
-
-
+    d:DesignHeight="450"
+    FontSize="10">
     <Grid>
-
         <Grid.Resources>
             <ResourceDictionary>
-                <ResourceDictionary.MergedDictionaries>
-                    <hc:ThemeResources RequestedTheme="Dark" />
-                    <hc:Theme />
-                </ResourceDictionary.MergedDictionaries>
-                <converters2:ValueConverterGroup x:Key="DateTimeVisi">
-                    <hc:Object2StringConverter />
-                    <hc:String2VisibilityConverter />
-                </converters2:ValueConverterGroup>
+                <Style
+                    x:Key="WolvenKitTabItemStyle"
+                    BasedOn="{StaticResource SyncfusionTabItemExtStyle}"
+                    TargetType="{x:Type syncfusion:TabItemExt}">
+                    <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
+                    <Setter Property="Height" Value="{DynamicResource WolvenKitTabHeight}" />
+                </Style>
 
-                <conv:StringPathToItemStringConverter x:Key="PathConverter" />
+                <!-- region PreviewSlider -->
 
-
-
-                <!--  region PreviewSlider  -->
-
-                <Style x:Key="PreviewSliderRepeatButtonHorizontalStyle" TargetType="RepeatButton">
-                    <Setter Property="OverridesDefaultStyle" Value="true" />
+                <Style
+                    x:Key="PreviewSliderRepeatButtonHorizontalStyle"
+                    TargetType="RepeatButton">
                     <Setter Property="Background" Value="Transparent" />
                     <Setter Property="Focusable" Value="false" />
                     <Setter Property="IsTabStop" Value="false" />
+                    <Setter Property="OverridesDefaultStyle" Value="true" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="RepeatButton">
@@ -55,18 +46,23 @@
                                     Width="{TemplateBinding Width}"
                                     Height="{TemplateBinding Height}"
                                     Background="Transparent">
-                                    <Rectangle Height="2" Fill="{TemplateBinding Background}" />
+                                    <Rectangle
+                                        Height="2"
+                                        Fill="{TemplateBinding Background}" />
                                 </Border>
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
                 </Style>
 
-                <Style x:Key="PreviewSliderRepeatButtonVerticalStyle" TargetType="RepeatButton">
-                    <Setter Property="OverridesDefaultStyle" Value="true" />
+                <Style
+                    x:Key="PreviewSliderRepeatButtonVerticalStyle"
+                    TargetType="RepeatButton">
                     <Setter Property="Background" Value="Transparent" />
                     <Setter Property="Focusable" Value="false" />
                     <Setter Property="IsTabStop" Value="false" />
+                    <Setter Property="OverridesDefaultStyle" Value="true" />
+
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="RepeatButton">
@@ -74,14 +70,18 @@
                                     Width="{TemplateBinding Width}"
                                     Height="{TemplateBinding Height}"
                                     Background="Transparent">
-                                    <Rectangle Width="2" Fill="{TemplateBinding Background}" />
+                                    <Rectangle
+                                        Width="2"
+                                        Fill="{TemplateBinding Background}" />
                                 </Border>
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
                 </Style>
 
-                <ControlTemplate x:Key="PreviewSliderThumb" TargetType="Thumb">
+                <ControlTemplate
+                    x:Key="PreviewSliderThumb"
+                    TargetType="Thumb">
                     <Border
                         Name="BorderDot"
                         Width="18"
@@ -108,6 +108,7 @@
                                 </BeginStoryboard>
                             </EventTrigger.Actions>
                         </EventTrigger>
+
                         <EventTrigger RoutedEvent="PreviewMouseLeftButtonUp">
                             <EventTrigger.Actions>
                                 <BeginStoryboard>
@@ -124,7 +125,9 @@
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
 
-                <ControlTemplate x:Key="PreviewSliderHorizontal" TargetType="hc:PreviewSlider">
+                <ControlTemplate
+                    x:Key="PreviewSliderHorizontal"
+                    TargetType="hc:PreviewSlider">
                     <hc:SimplePanel>
                         <Border
                             x:Name="TrackBackground"
@@ -132,16 +135,23 @@
                             Margin="9,0"
                             VerticalAlignment="center"
                             Background="{TemplateBinding Background}" />
-                        <Track x:Name="PART_Track" Margin="9,0">
+
+                        <Track
+                            x:Name="PART_Track"
+                            Margin="9,0">
                             <Track.DecreaseRepeatButton>
                                 <RepeatButton
                                     Background="{DynamicResource PrimaryBrush}"
-                                    Command="{x:Static Slider.DecreaseLarge}"
-                                    Style="{StaticResource PreviewSliderRepeatButtonHorizontalStyle}" />
+                                    Style="{StaticResource PreviewSliderRepeatButtonHorizontalStyle}"
+                                    Command="{x:Static Slider.DecreaseLarge}" />
                             </Track.DecreaseRepeatButton>
+
                             <Track.IncreaseRepeatButton>
-                                <RepeatButton Command="{x:Static Slider.IncreaseLarge}" Style="{StaticResource PreviewSliderRepeatButtonHorizontalStyle}" />
+                                <RepeatButton
+                                    Style="{StaticResource PreviewSliderRepeatButtonHorizontalStyle}"
+                                    Command="{x:Static Slider.IncreaseLarge}" />
                             </Track.IncreaseRepeatButton>
+
                             <Track.Thumb>
                                 <Thumb
                                     x:Name="PART_Thumb"
@@ -157,7 +167,9 @@
                     </hc:SimplePanel>
                 </ControlTemplate>
 
-                <ControlTemplate x:Key="PreviewSliderVertical" TargetType="hc:PreviewSlider">
+                <ControlTemplate
+                    x:Key="PreviewSliderVertical"
+                    TargetType="hc:PreviewSlider">
                     <hc:SimplePanel>
                         <Border
                             x:Name="TrackBackground"
@@ -165,16 +177,23 @@
                             Margin="0,9"
                             HorizontalAlignment="center"
                             Background="{TemplateBinding Background}" />
-                        <Track x:Name="PART_Track" Margin="0,9">
+
+                        <Track
+                            x:Name="PART_Track"
+                            Margin="0,9">
                             <Track.DecreaseRepeatButton>
                                 <RepeatButton
                                     Background="{DynamicResource PrimaryBrush}"
-                                    Command="{x:Static Slider.DecreaseLarge}"
-                                    Style="{StaticResource PreviewSliderRepeatButtonVerticalStyle}" />
+                                    Style="{StaticResource PreviewSliderRepeatButtonVerticalStyle}"
+                                    Command="{x:Static Slider.DecreaseLarge}" />
                             </Track.DecreaseRepeatButton>
+
                             <Track.IncreaseRepeatButton>
-                                <RepeatButton Command="{x:Static Slider.IncreaseLarge}" Style="{StaticResource PreviewSliderRepeatButtonVerticalStyle}" />
+                                <RepeatButton
+                                    Style="{StaticResource PreviewSliderRepeatButtonVerticalStyle}"
+                                    Command="{x:Static Slider.IncreaseLarge}" />
                             </Track.IncreaseRepeatButton>
+
                             <Track.Thumb>
                                 <Thumb
                                     x:Name="PART_Thumb"
@@ -190,60 +209,48 @@
                     </hc:SimplePanel>
                 </ControlTemplate>
 
-                <Style x:Key="PreviewSliderBaseStyle" TargetType="hc:PreviewSlider">
-                    <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false" />
-                    <Setter Property="IsMoveToPointEnabled" Value="True" />
-                    <Setter Property="Background" Value="{DynamicResource SecondaryRegionBrush}" />
-                    <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
-                    <Setter Property="Template" Value="{StaticResource PreviewSliderHorizontal}" />
-                    <Style.Triggers>
-                        <Trigger Property="Orientation" Value="Vertical">
-                            <Setter Property="Template" Value="{StaticResource PreviewSliderVertical}" />
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Opacity" Value=".4" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-
-                <!--  endregion  -->
+                <!-- endregion -->
             </ResourceDictionary>
         </Grid.Resources>
+
         <syncfusion:TabControlExt
             Margin="0"
             Padding="0"
+            Style="{StaticResource WolvenKitTabControl}"
             AllowDragDrop="False"
-            BorderThickness="0"
             CloseButtonType="Hide"
             CloseTabOnMiddleClick="False"
             EnableLabelEdit="False"
             SelectedIndex="{Binding SelectedIndex}"
             ShowTabItemContextMenu="False"
-            ShowTabListContextMenu="False"
-            Style="{StaticResource WolvenKitTabControl}">
-
-            <syncfusion:TabItemExt Header="Properties">
-
-                <Grid>
+            ShowTabListContextMenu="False">
+            <syncfusion:TabItemExt
+                Style="{StaticResource WolvenKitTabItemStyle}"
+                Header="Properties">
+                <Grid ScrollViewer.HorizontalScrollBarVisibility="Auto">
                     <Grid.Resources>
-                        <Style BasedOn="{StaticResource MahApps.Styles.CheckBox.DataGrid.Win10}" TargetType="CheckBox">
+                        <Style
+                            BasedOn="{StaticResource MahApps.Styles.CheckBox.DataGrid.Win10}"
+                            TargetType="CheckBox">
                             <Setter Property="HorizontalAlignment" Value="Left" />
                         </Style>
 
                         <Style TargetType="TextBox">
-                            <Setter Property="Margin" Value="5,0,0,0" />
+                            <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginTinyLeft}" />
                         </Style>
                     </Grid.Resources>
 
                     <syncfusion:PropertyGrid
                         x:Name="PEPropGrid"
-                        AutoGeneratingPropertyGridItem="PropertyGrid_OnAutoGeneratingPropertyGridItem"
                         BorderThickness="0"
+                        Visibility="{Binding PE_FileInfoVisible,
+                                             Converter={StaticResource ToggleVisibilityConverter}}"
+                        AutoGeneratingPropertyGridItem="PropertyGrid_OnAutoGeneratingPropertyGridItem"
+                        PropertyNameColumnDefinition="{DynamicResource WolvenKitPropertyColumnWidth}"
                         ButtonPanelVisibility="Collapsed"
-                        PropertyNameColumnDefinition="150"
                         SearchBoxVisibility="Collapsed"
-                        SelectedObject="{Binding PE_SelectedItem, Mode=OneWay}"
-                        Visibility="{Binding PE_FileInfoVisible, Converter={StaticResource ToggleVisibilityConverter}}" />
+                        SelectedObject="{Binding PE_SelectedItem,
+                                                 Mode=OneWay}" />
 
                     <!--StackPanel Orientation="Vertical" Background="{StaticResource ContentBackground}" Opacity="1">
                         <StackPanel.Resources>
@@ -316,18 +323,28 @@
                     <syncfusion:PropertyGrid
                         x:Name="ABPropGrid"
                         Margin="0"
-                        AutoGeneratingPropertyGridItem="PropertyGrid_OnAutoGeneratingPropertyGridItem"
                         BorderThickness="0"
+                        Visibility="{Binding AB_FileInfoVisible,
+                                             Converter={StaticResource ToggleVisibilityConverter}}"
+                        AutoGeneratingPropertyGridItem="PropertyGrid_OnAutoGeneratingPropertyGridItem"
+                        PropertyNameColumnDefinition="{DynamicResource WolvenKitPropertyColumnWidth}"
                         ButtonPanelVisibility="Collapsed"
-                        PropertyNameColumnDefinition="150"
                         SearchBoxVisibility="Collapsed"
-                        SelectedObject="{Binding AB_SelectedItem, Mode=OneWay}"
-                        Visibility="{Binding AB_FileInfoVisible, Converter={StaticResource ToggleVisibilityConverter}}" />
+                        SelectedObject="{Binding AB_SelectedItem,
+                                                 Mode=OneWay}" />
                 </Grid>
             </syncfusion:TabItemExt>
-            <syncfusion:TabItemExt Header="Mesh" IsEnabled="{Binding IsMeshPreviewVisible}">
-                <Grid Name="RootGrid" Height="auto">
-                    <Border Name="ViewportBorder" Background="{StaticResource ContentBackground}">
+
+            <syncfusion:TabItemExt
+                Style="{StaticResource WolvenKitTabItemStyle}"
+                IsEnabled="{Binding IsMeshPreviewVisible}"
+                Header="Mesh">
+                <Grid
+                    Name="RootGrid"
+                    Height="Auto">
+                    <Border
+                        Name="ViewportBorder"
+                        Background="{StaticResource ContentBackground}">
                         <hx:Viewport3DX
                             Name="hxViewport"
                             BackgroundColor="#121212"
@@ -340,23 +357,49 @@
                             UseDefaultGestures="False"
                             ZoomExtentsWhenLoaded="True">
                             <hx:Viewport3DX.InputBindings>
-                                <MouseBinding Command="hx:ViewportCommands.Rotate" Gesture="LeftClick" />
-                                <MouseBinding Command="hx:ViewportCommands.Pan" Gesture="MiddleClick" />
-                                <MouseBinding Command="hx:ViewportCommands.Rotate" Gesture="Shift+MiddleClick" />
+                                <MouseBinding
+                                    Command="hx:ViewportCommands.Rotate"
+                                    Gesture="LeftClick" />
+                                <MouseBinding
+                                    Command="hx:ViewportCommands.Pan"
+                                    Gesture="MiddleClick" />
+                                <MouseBinding
+                                    Command="hx:ViewportCommands.Rotate"
+                                    Gesture="Shift+MiddleClick" />
                             </hx:Viewport3DX.InputBindings>
-                            <hx:DirectionalLight3D Direction="0, -1, 0" Color="White" />
-                            <hx:DirectionalLight3D Direction="0, 0, 1" Color="White" />
-                            <hx:DirectionalLight3D Direction="0, 0, -1" Color="White" />
-                            <hx:DirectionalLight3D Direction="1, 0, 0" Color="White" />
-                            <hx:DirectionalLight3D Direction="-1, 0, 0" Color="White" />
+
+                            <hx:DirectionalLight3D
+                                Direction="0, -1, 0"
+                                Color="White" />
+                            <hx:DirectionalLight3D
+                                Direction="0, 0, 1"
+                                Color="White" />
+                            <hx:DirectionalLight3D
+                                Direction="0, 0, -1"
+                                Color="White" />
+                            <hx:DirectionalLight3D
+                                Direction="1, 0, 0"
+                                Color="White" />
+                            <hx:DirectionalLight3D
+                                Direction="-1, 0, 0"
+                                Color="White" />
+
                             <hx:DynamicReflectionMap3D>
-                                <hx:ItemsModel3D x:Name="hxContentVisual" ItemsSource="{Binding ModelGroup}" />
+                                <hx:ItemsModel3D
+                                    x:Name="hxContentVisual"
+                                    ItemsSource="{Binding ModelGroup}" />
                             </hx:DynamicReflectionMap3D>
+
                             <hx:Viewport3DX.ContextMenu>
-                                <ContextMenu>
-                                    <MenuItem Click="ReloadModels" Header="Zoom to extents">
+                                <ContextMenu Style="{StaticResource WPFContextMenuStyle}">
+                                    <MenuItem
+                                        Click="ReloadModels"
+                                        Header="Zoom to extents">
                                         <MenuItem.Icon>
-                                            <iconPacks:PackIconCodicons Margin="5,0,0,0" Kind="ZoomOut" />
+                                            <templates:IconBox
+                                                IconPack="Material"
+                                                Kind="MagnifyExpand"
+                                                Size="{DynamicResource WolvenKitIconNano}" />
                                         </MenuItem.Icon>
                                     </MenuItem>
                                 </ContextMenu>
@@ -368,12 +411,11 @@
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Top"
                         Orientation="Vertical">
-
                         <Expander
-                            Header="Assimp info"
-                            IsExpanded="False"
                             Style="{StaticResource BaseStyle}"
-                            Visibility="Collapsed">
+                            Visibility="Collapsed"
+                            Header="Assimp info"
+                            IsExpanded="False">
                             <TextBlock
                                 Name="FileFormatsTextBlock"
                                 Margin="10,5,10,0"
@@ -382,33 +424,44 @@
                         </Expander>
                     </StackPanel>
 
-                    <syncfusion:DropDownButton
+                    <syncfusion:DropDownButtonAdv
                         HorizontalAlignment="Right"
                         VerticalAlignment="Top"
+                        FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                        IconWidth="{DynamicResource WolvenKitIcon}"
+                        IconHeight="{DynamicResource WolvenKitIcon}"
                         Label="Options">
-                        <syncfusion:DropDownButton.IconTemplate>
+                        <syncfusion:DropDownButtonAdv.Style>
+                            <Style
+                                BasedOn="{StaticResource SyncfusionDropDownButtonAdvStyle}"
+                                TargetType="{x:Type syncfusion:DropDownButtonAdv}">
+                                <Setter Property="Background" Value="Transparent" />
+                            </Style>
+                        </syncfusion:DropDownButtonAdv.Style>
+
+                        <syncfusion:DropDownButtonAdv.IconTemplate>
                             <DataTemplate>
-                                <iconPacks:PackIconRemixIcon
-                                    Width="12"
+                                <iconPacks:PackIconMaterial
+                                    Kind="Cog"
+                                    Width="{DynamicResource WolvenKitIconMicro}"
+                                    Height="{DynamicResource WolvenKitIconMicro}"
                                     HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Kind="Settings2Fill" />
+                                    VerticalAlignment="Center" />
                             </DataTemplate>
-                        </syncfusion:DropDownButton.IconTemplate>
+                        </syncfusion:DropDownButtonAdv.IconTemplate>
+
                         <Border
-                            Margin="5"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
                             HorizontalAlignment="Right"
-                            VerticalAlignment="Bottom"
-                            Background="Black"
-                            BorderBrush="Black"
-                            BorderThickness="2"
+                            VerticalAlignment="Center"
                             Visibility="Visible">
-                            <StackPanel Margin="10,5" Orientation="Vertical">
+                            <StackPanel
+                                Margin="{DynamicResource WolvenKitMarginTiny}"
+                                Orientation="Vertical">
                                 <CheckBox
                                     Name="ShowWireframeCheckBox"
-                                    Margin="0,0,0,0"
                                     HorizontalAlignment="Left"
-                                    Content=" Show wireframe"
+                                    Content="Show wireframe"
                                     IsChecked="{Binding ShowWireFrame}" />
                                 <!--
                                     CheckBox
@@ -433,22 +486,32 @@
                                 -->
                             </StackPanel>
                         </Border>
-                    </syncfusion:DropDownButton>
+                    </syncfusion:DropDownButtonAdv>
                 </Grid>
             </syncfusion:TabItemExt>
 
-            <syncfusion:TabItemExt Header="Audio" IsEnabled="{Binding IsAudioPreviewVisible}">
+            <syncfusion:TabItemExt
+                Style="{StaticResource WolvenKitTabItemStyle}"
+                IsEnabled="{Binding IsAudioPreviewVisible}"
+                Header="Audio">
                 <tools1:AudioPlayerView x:Name="AudioPlayer" />
             </syncfusion:TabItemExt>
 
-            <syncfusion:TabItemExt Header="Image" IsEnabled="{Binding IsImagePreviewVisible}">
-                <others:ImageCanvas x:Name="ImageCanvasItem" Source="{Binding LoadedBitmapFrame}" />
+            <syncfusion:TabItemExt
+                Style="{StaticResource WolvenKitTabItemStyle}"
+                IsEnabled="{Binding IsImagePreviewVisible}"
+                Header="Image">
+                <others:ImageCanvas
+                    x:Name="ImageCanvasItem"
+                    Source="{Binding LoadedBitmapFrame}" />
             </syncfusion:TabItemExt>
 
             <syncfusion:TabItemExt
                 x:Name="testme"
-                Header="Video Preview"
-                Visibility="{Binding IsVideoPreviewVisible, Converter={StaticResource ToggleVisibilityConverter}}" />
+                Style="{StaticResource WolvenKitTabItemStyle}"
+                Visibility="{Binding IsVideoPreviewVisible,
+                                     Converter={StaticResource ToggleVisibilityConverter}}"
+                Header="Video Preview" />
         </syncfusion:TabControlExt>
     </Grid>
 </reactiveUi:ReactiveUserControl>

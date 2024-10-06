@@ -10,7 +10,6 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Options;
 using WolvenKit.App.Factories;
 using WolvenKit.App.Helpers;
-using WolvenKit.App.Interaction;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
@@ -197,14 +196,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
         try
         {
-            // if we're in a text view, use a normal StreamWriter, else use the CR2W one
-            if (file is RDTTextViewModel textViewModel)
-            {
-                using var tw = new StreamWriter(ms, null, -1, true);
-                var text = textViewModel.Text;
-                tw.Write(text);
-            }
-            else if (file is not null && Cr2wFile != null)
+            if (file is not null && Cr2wFile != null)
             {
                 var cr2w = Cr2wFile;
                 if (_hookService is AppHookService appHookService && !appHookService.OnSave(FilePath, ref cr2w))
@@ -242,7 +234,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
         {
             return;
         }
-        
+
         foreach (var (path, value) in file.RootChunk.GetEnumerator())
         {
             if (value is IRedRef redRef && redRef.DepotPath != ResourcePath.Empty)
@@ -295,11 +287,6 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
     public RedDocumentTabViewModel? GetMainFile()
     {
-        if (SelectedTabItemViewModel is RDTTextViewModel textVM)
-        {
-            return textVM;
-        }
-
         return TabItemViewModels
             .OfType<RDTDataViewModel>()
             .FirstOrDefault(x => x.DocumentItemType == ERedDocumentItemType.MainFile);
@@ -309,7 +296,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
     {
         if (cls is CBitmapTexture xbm)
         {
-            TabItemViewModels.Add(_documentTabViewmodelFactory. RDTTextureViewModel(xbm, this));
+            TabItemViewModels.Add(_documentTabViewmodelFactory.RDTTextureViewModel(xbm, this));
         }
         if (cls is CCubeTexture cube)
         {
@@ -416,7 +403,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
             rootTab = _documentTabViewmodelFactory.RDTDataViewModel(Cr2wFile.RootChunk, this, _appViewModel, _chunkViewmodelFactory);
             rootTab.OnSectorNodeSelected += OnSectorNodeSelected;
         }
-        
+
         TabItemViewModels.Clear();
 
         TabItemViewModels.Add(rootTab);
@@ -454,12 +441,12 @@ public partial class RedDocumentViewModel : DocumentViewModel
         {
             existingPath = ArchiveXlHelper.GetFirstExistingPath(existingPath);
         }
-        
+
         if (string.IsNullOrEmpty(existingPath))
         {
             return null;
         }
-        
+
         lock (Files)
         {
             if (!Files.ContainsKey(existingPath))

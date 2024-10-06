@@ -25,6 +25,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.App.Helpers;
@@ -55,6 +56,12 @@ public static class ProcessHelper
             }
         };
         return RunProcess(process, commands);
+    }
+
+    public static void Restart(Application app)
+    {
+        Process.Start(Process.GetCurrentProcess().MainModule!.FileName);
+        app.Shutdown();
     }
 
     /// <summary>

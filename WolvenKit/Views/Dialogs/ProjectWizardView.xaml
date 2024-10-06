@@ -6,16 +6,15 @@
     xmlns:av="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dialogs="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
     xmlns:hc="https://handyorg.github.io/handycontrol"
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     mc:Ignorable="av"
-    Width="400"
+    Width="{DynamicResource WolvenKitDialogWidthSmall}"
     Background="{StaticResource ContentBackgroundAlt3}"
     BorderBrush="{x:Null}"
     Tag="Project Wizard">
-
-    <Grid Margin="20,20">
+    <Grid Margin="{DynamicResource WolvenKitMarginSmall}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -29,20 +28,23 @@
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="50" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
         <StackPanel
+            Grid.Row="0"
+            Grid.Column="0"
             Grid.ColumnSpan="2"
+            HorizontalAlignment="Center"
             Orientation="Horizontal">
             <Image
-                Height="40"
-                Margin="0,-7,8,7"
+                Height="{DynamicResource WolvenKitDialogSammySize}"
                 Source="pack://application:,,,/Resources/Media/Images/Application/Sammy_Home.png" />
+
             <TextBlock
-                Margin="0,0,0,15"
+                Margin="{DynamicResource WolvenKitMarginLeft}"
                 VerticalAlignment="Center"
-                FontSize="16"
+                FontSize="{DynamicResource WolvenKitFontMedium}"
                 FontWeight="Bold"
                 Text="Create a new Cyberpunk 2077 Project" />
         </StackPanel>
@@ -52,11 +54,10 @@
             Grid.Row="1"
             Grid.Column="0"
             Grid.ColumnSpan="2"
-            Margin="0,0,0,10"
+            Margin="{DynamicResource WolvenKitMarginVertical}"
             hc:InfoElement.Necessary="True"
             hc:InfoElement.Title="Project Name"
             hc:InfoElement.TitlePlacement="Top"
-            hc:InfoElement.TitleWidth="120"
             Text="{Binding ProjectName,
                            Mode=TwoWay,
                            UpdateSourceTrigger=PropertyChanged,
@@ -65,17 +66,14 @@
             TextChanged="ProjectNameTextBox_OnTextChanged"
             Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" />
 
-
         <hc:TextBox
             x:Name="ProjectPathTextBox"
             Grid.Row="2"
             Grid.Column="0"
-            Margin="0,5,5,10"
-            VerticalAlignment="Top"
+            Margin="{DynamicResource WolvenKitMarginBottom}"
             hc:InfoElement.Necessary="True"
             hc:InfoElement.Title="Creation Location"
             hc:InfoElement.TitlePlacement="Top"
-            hc:InfoElement.TitleWidth="120"
             Text="{Binding ProjectPath,
                            Mode=TwoWay,
                            UpdateSourceTrigger=PropertyChanged,
@@ -83,28 +81,20 @@
                            ValidatesOnNotifyDataErrors=True}"
             Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" />
 
-        <!-- Button position in preview is plain wrong. Don't fix. -->
         <Button
             x:Name="ProjectPathButton"
             Grid.Row="2"
             Grid.Column="1"
-            Margin="0,32,0,10"
-            HorizontalAlignment="Stretch"
+            Margin="{DynamicResource WolvenKitMarginLeftBottom}"
+            VerticalAlignment="Bottom"
             BorderBrush="{DynamicResource BorderBrush}"
             BorderThickness="1"
             Style="{DynamicResource WPFFlatButtonStyle}">
-
-            <iconPacks:PackIconCodicons
-                Grid.Row="0"
+            <templates:IconBox
+                IconPack="Codicons"
                 Kind="FolderOpened"
-                Width="15"
-                Height="15"
-                Margin="0,0,0,0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                Spin="False"
-                SpinAutoReverse="False" />
+                Margin="{DynamicResource WolvenKitMarginTiny}"
+                Size="{DynamicResource WolvenKitIconTiny}" />
         </Button>
 
         <hc:TextBox
@@ -112,7 +102,7 @@
             Grid.Row="3"
             Grid.Column="0"
             Grid.ColumnSpan="2"
-            Margin="0,0,0,10"
+            Margin="{DynamicResource WolvenKitMarginBottom}"
             hc:InfoElement.Necessary="True"
             hc:InfoElement.Title="Mod Name (Used as RedMod Name / Archive Name)"
             hc:InfoElement.TitlePlacement="Top"
@@ -130,64 +120,61 @@
             Grid.Row="4"
             Grid.Column="0"
             Grid.ColumnSpan="2"
-            Margin="0,5,0,0"
+            Margin="{DynamicResource WolvenKitMarginBottom}"
             hc:InfoElement.Title="Author Name"
-            hc:InfoElement.TitlePlacement="Top"
-            hc:InfoElement.TitleWidth="120" />
+            hc:InfoElement.TitlePlacement="Top" />
 
         <hc:TextBox
             x:Name="EmailTextBox"
             Grid.Row="5"
             Grid.Column="0"
             Grid.ColumnSpan="2"
-            Margin="0,5,0,0"
+            Margin="{DynamicResource WolvenKitMarginBottom}"
             hc:InfoElement.Title="Email"
-            hc:InfoElement.TitlePlacement="Top"
-            hc:InfoElement.TitleWidth="120" />
+            hc:InfoElement.TitlePlacement="Top" />
 
         <hc:TextBox
             x:Name="VersionTextBox"
             Grid.Row="6"
             Grid.Column="0"
             Grid.ColumnSpan="2"
-            Margin="0,5,0,0"
+            Margin="{DynamicResource WolvenKitMarginBottom}"
             hc:InfoElement.Title="Version"
-            hc:InfoElement.TitlePlacement="Top"
-            hc:InfoElement.TitleWidth="120" />
+            hc:InfoElement.TitlePlacement="Top" />
 
         <Grid
             Grid.Row="7"
             Grid.Column="0"
-            Grid.ColumnSpan="2"
-            Height="28"
-            Margin="0,15,0,0">
+            Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
+
             <TextBlock
                 Grid.Column="1"
                 VerticalAlignment="Center"
                 Foreground="{StaticResource WolvenKitRed}"
                 Text="{Binding WhyNotCreate}" />
+
             <Button
                 x:Name="OkButton"
                 Grid.Column="2"
-                Margin="10,0,0,0"
-                Padding="12,0"
+                Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                Padding="{DynamicResource WolvenKitMarginSmall}"
                 HorizontalAlignment="Right"
                 Background="{StaticResource WolvenKitRed}"
                 Content="Create" />
+
             <Button
                 x:Name="CancelButton"
                 Grid.Column="3"
-                Margin="10,0,0,0"
-                Padding="12,0"
+                Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                Padding="{DynamicResource WolvenKitMarginSmall}"
                 HorizontalAlignment="Right"
                 Content="Cancel" />
         </Grid>
-
     </Grid>
 </reactiveUi:ReactiveUserControl>

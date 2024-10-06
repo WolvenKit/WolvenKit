@@ -6,20 +6,26 @@
     xmlns:local="clr-namespace:WolvenKit.Views.Templates"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type={x:Type local:BitfieldTemplateView}}"
-    d:DesignHeight="100"
     d:DesignWidth="400"
-    mc:Ignorable="d">
-
+    d:DesignHeight="64">
     <Grid>
         <syncfusion:ComboBoxAdv
             Name="comboboxadv"
-            AllowMultiSelect="True"
+            Padding="{DynamicResource WolvenKitMarginTiny}"
             Background="#252525"
             BorderThickness="0"
-            DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BitfieldTemplateView}}}"
-            ItemsSource="{Binding BindingCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            SelectedItems="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            AllowMultiSelect="True"
+            DataContext="{Binding Mode=OneWay,
+                                  RelativeSource={RelativeSource FindAncestor,
+                                                                 AncestorType={x:Type local:BitfieldTemplateView}}}"
+            ItemsSource="{Binding BindingCollection,
+                                  Mode=TwoWay,
+                                  UpdateSourceTrigger=PropertyChanged}"
+            SelectedItems="{Binding SelectedItems,
+                                    Mode=TwoWay,
+                                    UpdateSourceTrigger=PropertyChanged}"
             SelectedValueDelimiter=", " />
     </Grid>
 </UserControl>

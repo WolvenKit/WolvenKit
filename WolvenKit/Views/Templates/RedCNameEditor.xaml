@@ -6,63 +6,86 @@
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     xmlns:local="clr-namespace:WolvenKit.Views.Editors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="100"
+    mc:Ignorable="d"
     d:DesignWidth="400"
-    mc:Ignorable="d">
-
+    d:DesignHeight="100">
     <UserControl.Resources>
         <ResourceDictionary>
-            <Style x:Key="CNameStyle" BasedOn="{StaticResource WolvenkitTextBoxStyle}" TargetType="TextBox">
+            <Style
+                x:Key="CNameStyle"
+                TargetType="TextBox">
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding IsValid}" Value="True">
+                    <DataTrigger
+                        Binding="{Binding IsValid}"
+                        Value="True">
                         <!-- <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Frame_Active}" /> -->
                         <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding HasWarning}" Value="True">
-                        <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Yellow}" />
+
+                    <DataTrigger
+                        Binding="{Binding HasWarning}"
+                        Value="True">
+                        <!--<Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Yellow}" />-->
                         <Setter Property="Background" Value="{StaticResource BackgroundColor_Yellow_Dark}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding HasError}" Value="True">
-                        <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Red}" />
+
+                    <DataTrigger
+                        Binding="{Binding HasError}"
+                        Value="True">
+                        <!--<Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Red}" />-->
                         <Setter Property="Background" Value="{StaticResource BackgroundColor_Red_Dark}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
-
         </ResourceDictionary>
-
     </UserControl.Resources>
 
-    <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedCNameEditor}}}">
+    <Grid
+        Margin="0"
+        DataContext="{Binding RelativeSource={RelativeSource FindAncestor,
+                                                             AncestorType={x:Type local:RedCNameEditor}}}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="155" />
+            <ColumnDefinition Width="{DynamicResource WolvenKitRedEditorHashWidth}" />
         </Grid.ColumnDefinitions>
-
-        <Grid.Resources>
-        </Grid.Resources>
 
         <TextBox
             x:Name="TextBox"
             Grid.Column="0"
-            helpers:TextBoxBehavior.TripleClickSelectAll="True"
+            Margin="0"
+            Padding="{DynamicResource WolvenKitMarginTinyHorizontal}"
+            VerticalContentAlignment="Center"
+            BorderThickness="0"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
             Style="{StaticResource CNameStyle}"
-            Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-            ToolTip="{Binding TextBoxToolTip, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+            helpers:TextBoxBehavior.TripleClickSelectAll="True"
             helpers:TextBoxBehavior.IsValid="{Binding IsValid}"
+            Text="{Binding Text,
+                           UpdateSourceTrigger=PropertyChanged,
+                           Mode=TwoWay}"
+            ToolTip="{Binding TextBoxToolTip,
+                              UpdateSourceTrigger=PropertyChanged,
+                              Mode=TwoWay}"
             GotFocus="OnTextboxFocusGained"
-            KeyDown="OnTextboxKeyDown" 
+            KeyDown="OnTextboxKeyDown"
             LostFocus="OnTextboxFocusLost" />
+
         <TextBox
             x:Name="HashBox"
             Grid.Column="1"
-            helpers:TextBoxBehavior.TripleClickSelectAll="True"
+            Margin="0"
+            Padding="{DynamicResource WolvenKitMarginTinyHorizontal}"
+            VerticalContentAlignment="Center"
             Background="{StaticResource ContentBackgroundAlt}"
             BorderBrush="{StaticResource BorderAlt}"
             BorderThickness="1,0,0,0"
-            DataObject.Pasting="HashBox_OnPasting"
             Foreground="#666666"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+            helpers:TextBoxBehavior.TripleClickSelectAll="True"
             PreviewTextInput="HashBox_OnPreviewTextInput"
-            Text="{Binding Hash, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            DataObject.Pasting="HashBox_OnPasting"
+            Text="{Binding Hash,
+                           UpdateSourceTrigger=PropertyChanged,
+                           Mode=TwoWay}" />
     </Grid>
 </UserControl>

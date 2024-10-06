@@ -6,18 +6,15 @@
     xmlns:local="clr-namespace:WolvenKit.Views.Editors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    d:DesignHeight="100"
+    mc:Ignorable="d"
     d:DesignWidth="400"
-    mc:Ignorable="d">
-
+    d:DesignHeight="64">
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedVectorColorEditor}}}">
-
         <syncfusion:ColorPickerPalette
-            Padding="3,-4,0,0"
+            Margin="{DynamicResource WolvenKitMarginTiny}"
             syncfusion:FocusManagerHelper.FocusedElement="True"
             GenerateThemeVariants="False"
             SelectedCommand="{Binding SelectedVectorColorCommand}"
             Color="{Binding Color}" />
-
     </Grid>
 </UserControl>

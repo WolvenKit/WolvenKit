@@ -7,48 +7,72 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:tools="clr-namespace:WolvenKit.Views.Tools"
     xmlns:types="clr-namespace:WolvenKit.RED4.Types;assembly=WolvenKit.RED4"
-    x:Name="uc"
+    mc:Ignorable="d"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    mc:Ignorable="d">
+    x:Name="uc">
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedCurvePointEditor}}}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="20" />
-            <ColumnDefinition Width="80" />
-            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" SharedSizeGroup="TextBox" />
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
+
         <TextBlock
             Grid.Column="0"
+            Margin="{DynamicResource WolvenKitMarginTiny}"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
             Text="X" />
-        <TextBox Grid.Column="1" Text="{Binding PointText}" />
+
+        <TextBox
+            Grid.Column="1"
+            HorizontalContentAlignment="Right"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+            Text="{Binding PointText}" />
+
         <TextBlock
             Grid.Column="2"
+            Margin="{DynamicResource WolvenKitMarginTiny}"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
             Text="Y" />
-        <ContentPresenter Grid.Column="3" Content="{Binding Value, Mode=TwoWay}">
+
+        <ContentPresenter
+            Grid.Column="3"
+            Content="{Binding Value,
+                              Mode=TwoWay}">
             <ContentPresenter.Resources>
                 <DataTemplate DataType="{x:Type types:CFloat}">
                     <local:RedFloatEditor RedNumber="{Binding ElementName=uc, Path=Value, Mode=TwoWay}" />
                 </DataTemplate>
+
                 <DataTemplate DataType="{x:Type types:HDRColor}">
                     <tools:RedColorPicker
-                        DataContext="{Binding ElementName=uc, Path=DataContext}"
-                        RedHDRColor="{Binding ElementName=uc, Path=Value, Mode=TwoWay}"
+                        DataContext="{Binding ElementName=uc,
+                                              Path=DataContext}"
+                        RedHDRColor="{Binding ElementName=uc,
+                                              Path=Value,
+                                              Mode=TwoWay}"
                         ShowAlpha="False" />
                 </DataTemplate>
+
                 <DataTemplate DataType="{x:Type types:Vector2}">
-                    <local:RedVector2Editor X="{Binding X}" Y="{Binding Y}" />
+                    <local:RedVector2Editor
+                        X="{Binding X}"
+                        Y="{Binding Y}" />
                 </DataTemplate>
+
                 <DataTemplate DataType="{x:Type types:Vector3}">
                     <local:RedVector3Editor
                         X="{Binding X}"
                         Y="{Binding Y}"
                         Z="{Binding Z}" />
                 </DataTemplate>
+
                 <DataTemplate DataType="{x:Type types:Vector4}">
                     <local:RedVector4Editor
                         W="{Binding W}"

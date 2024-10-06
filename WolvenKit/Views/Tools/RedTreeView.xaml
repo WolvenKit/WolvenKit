@@ -5,93 +5,151 @@
     xmlns:converters="clr-namespace:WolvenKit.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:local="clr-namespace:WolvenKit.Views.Tools"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:shell="clr-namespace:WolvenKit.App.ViewModels.Shell;assembly=WolvenKit.App"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:treeViewEngine="clr-namespace:Syncfusion.UI.Xaml.TreeView.Engine;assembly=Syncfusion.SfTreeView.WPF"
-    x:Name="redTreeView"
-    d:DesignHeight="450"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    mc:Ignorable="d"
     d:DesignWidth="800"
+    d:DesignHeight="450"
+    x:Name="redTreeView"
     KeyDown="TreeView_OnKeyChanged"
-    KeyUp="TreeView_OnKeyChanged"
-    mc:Ignorable="d">
+    KeyUp="TreeView_OnKeyChanged">
     <UserControl.Resources>
         <ResourceDictionary>
-
             <!-- StackPanel: empty value style -->
-            <Style TargetType="StackPanel" x:Key="VisibleOnEmptyValueStyle">
+            <Style
+                x:Key="VisibleOnEmptyValueStyle"
+                TargetType="StackPanel">
                 <Setter Property="Visibility" Value="Collapsed" />
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="">
+                    <DataTrigger
+                        Binding="{Binding Value,
+                                          Mode=OneWay,
+                                          UpdateSourceTrigger=PropertyChanged}"
+                        Value="">
                         <Setter Property="Visibility" Value="Visible" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding IsValueExtrapolated, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                    <DataTrigger
+                        Binding="{Binding IsValueExtrapolated,
+                                          Mode=OneWay,
+                                          UpdateSourceTrigger=PropertyChanged}"
+                        Value="True">
                         <Setter Property="Visibility" Value="Visible" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
 
             <!-- PropertyKeyStyle for TextBlock -->
-            <Style x:Key="PropertyKeyStyle" TargetType="TextBlock">
+            <Style
+                x:Key="PropertyKeyStyle"
+                TargetType="TextBlock">
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="null">
+                    <DataTrigger
+                        Binding="{Binding Value,
+                                          Mode=OneWay,
+                                          UpdateSourceTrigger=PropertyChanged}"
+                        Value="null">
                         <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
+                    <DataTrigger
+                        Binding="{Binding IsDefault,
+                                          Mode=OneWay,
+                                          UpdateSourceTrigger=PropertyChanged}"
+                        Value="True">
                         <Setter Property="FontStyle" Value="Italic" />
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding DisplayAsArrayItem, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
                         <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding IsReadOnly}" Value="True">
+                    <DataTrigger
+                        Binding="{Binding DisplayAsArrayItem,
+                                          Mode=OneWay,
+                                          UpdateSourceTrigger=PropertyChanged}"
+                        Value="True">
+                        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
+                    </DataTrigger>
+                    <DataTrigger
+                        Binding="{Binding IsReadOnly}"
+                        Value="True">
+                        <Setter Property="FontStyle" Value="Italic" />
                         <Setter Property="Foreground" Value="{StaticResource WolvenKitTan50}" />
-                        <Setter Property="FontStyle" Value="Italic" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding IsDisplayAsReadOnly}" Value="True">
+                    <DataTrigger
+                        Binding="{Binding IsDisplayAsReadOnly}"
+                        Value="True">
                         <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
 
-            <!-- Text block --> 
-            <Style x:Key="PropertyValueStyle" TargetType="TextBlock">
+            <!-- Text block -->
+            <Style
+                x:Key="PropertyValueStyle"
+                TargetType="TextBlock">
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="null">
+                    <DataTrigger
+                        Binding="{Binding Value,
+                                          Mode=OneWay,
+                                          UpdateSourceTrigger=PropertyChanged}"
+                        Value="null">
                         <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
+                    <DataTrigger
+                        Binding="{Binding IsDefault,
+                                          Mode=OneWay,
+                                          UpdateSourceTrigger=PropertyChanged}"
+                        Value="True">
                         <Setter Property="FontStyle" Value="Italic" />
+                        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding IsReadOnly}" Value="True">
+                    <DataTrigger
+                        Binding="{Binding IsReadOnly}"
+                        Value="True">
                         <Setter Property="Foreground" Value="{StaticResource WolvenKitTan50}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding IsDisplayAsReadOnly}" Value="True">
+                    <DataTrigger
+                        Binding="{Binding IsDisplayAsReadOnly}"
+                        Value="True">
                         <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding IsValueExtrapolated, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                    <DataTrigger
+                        Binding="{Binding IsValueExtrapolated,
+                                          Mode=OneWay,
+                                          UpdateSourceTrigger=PropertyChanged}"
+                        Value="True">
                         <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
 
-            <!-- Property name --> 
-            <DataTemplate x:Key="PropertyNameTemplate" DataType="{x:Type shell:ChunkViewModel}">
+            <!-- Property name -->
+            <DataTemplate
+                x:Key="PropertyNameTemplate"
+                DataType="{x:Type shell:ChunkViewModel}">
                 <Grid>
                     <Grid.Resources>
-                        <Style x:Key="ExpanderHider" TargetType="TextBlock">
+                        <Style
+                            x:Key="ExpanderHider"
+                            TargetType="TextBlock">
                             <Setter Property="Visibility" Value="Collapsed" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TreeViewItem}}}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding IsMouseOver,
+                                                      RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TreeViewItem}}}"
+                                    Value="True">
                                     <Setter Property="Visibility" Value="Collapsed" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
+                                <DataTrigger
+                                    Binding="{Binding IsDefault,
+                                                      Mode=OneWay,
+                                                      UpdateSourceTrigger=PropertyChanged}"
+                                    Value="True">
                                     <Setter Property="FontStyle" Value="Italic" />
+                                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding IsReadOnly}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding IsReadOnly}"
+                                    Value="True">
                                     <Setter Property="Foreground" Value="{StaticResource WolvenKitTan50}" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding IsDisplayAsReadOnly}">
@@ -104,90 +162,129 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
+
                     <TextBlock
                         Grid.Column="0"
-                        Width="Auto"
-                        Margin="0,0,0,2"
-                        Text="{Binding DisplayName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                        Style="{StaticResource PropertyKeyStyle}" />
+                        Style="{StaticResource PropertyKeyStyle}"
+                        Text="{Binding DisplayName,
+                                       Mode=OneWay,
+                                       UpdateSourceTrigger=PropertyChanged}" />
+
                     <TextBlock
                         Grid.Column="1"
-                        Width="Auto"
-                        Margin="0,0,0,2"
+                        Margin="{DynamicResource WolvenKitMarginTinyRight}"
+                        VerticalAlignment="Center"
                         Foreground="{StaticResource ForegroundColor_Grey1}"
                         Style="{StaticResource ExpanderHider}"
-                        Text="{Binding Type, StringFormat=' {0}'}" />
+                        Text="{Binding Type,
+                                       StringFormat=' {0}'}" />
                 </Grid>
             </DataTemplate>
 
-
             <!-- GroupedPropertyNameTemplate for GroupedChunkViewModel -->
-            <DataTemplate x:Key="GroupedPropertyNameTemplate" DataType="{x:Type shell:GroupedChunkViewModel}">
+            <DataTemplate
+                x:Key="GroupedPropertyNameTemplate"
+                DataType="{x:Type shell:GroupedChunkViewModel}">
                 <Grid>
                     <TextBlock
                         Width="Auto"
-                        Margin="0,0,0,2"
+                        VerticalAlignment="Center"
                         Text="{Binding DisplayName}" />
                 </Grid>
             </DataTemplate>
 
             <!-- PropertyValueTemplate for ChunkViewModel -->
-            <DataTemplate x:Key="PropertyValueTemplate" DataType="{x:Type shell:ChunkViewModel}">
+            <DataTemplate
+                x:Key="PropertyValueTemplate"
+                DataType="{x:Type shell:ChunkViewModel}">
                 <Grid>
                     <Grid.Resources>
                         <Style TargetType="{x:Type TextBlock}">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding IsDefault,
+                                                      Mode=OneWay,
+                                                      UpdateSourceTrigger=PropertyChanged}"
+                                    Value="True">
+                                    <Setter Property="FontStyle" Value="Italic" />
                                     <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding IsReadOnly,
+                                                      Mode=OneWay,
+                                                      UpdateSourceTrigger=PropertyChanged}"
+                                    Value="True">
                                     <Setter Property="FontStyle" Value="Italic" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding IsReadOnly, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                    <Setter Property="FontStyle" Value="Italic" />
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding IsDisplayAsReadOnly, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding IsDisplayAsReadOnly,
+                                                      Mode=OneWay,
+                                                      UpdateSourceTrigger=PropertyChanged}"
+                                    Value="True">
                                     <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding IsReadOnly, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding IsReadOnly,
+                                                      Mode=OneWay,
+                                                      UpdateSourceTrigger=PropertyChanged}"
+                                    Value="True">
                                     <Setter Property="FontStyle" Value="Italic" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding IsDisplayAsReadOnly, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding IsDisplayAsReadOnly,
+                                                      Mode=OneWay,
+                                                      UpdateSourceTrigger=PropertyChanged}"
+                                    Value="True">
                                     <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
                         <Style TargetType="{x:Type iconPacks:PackIconCodicons}">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding IsDefault,
+                                                      Mode=OneWay,
+                                                      UpdateSourceTrigger=PropertyChanged}"
+                                    Value="True">
                                     <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding IsReadOnly, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding IsReadOnly,
+                                                      Mode=OneWay,
+                                                      UpdateSourceTrigger=PropertyChanged}"
+                                    Value="True">
                                     <Setter Property="FontStyle" Value="Italic" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding IsDisplayAsReadOnly, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding IsDisplayAsReadOnly,
+                                                      Mode=OneWay,
+                                                      UpdateSourceTrigger=PropertyChanged}"
+                                    Value="True">
                                     <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </Grid.Resources>
+
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="20" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitRedTreeIconColumnWidth}" />
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
+
                     <iconPacks:PackIconCodicons
-                        Width="15"
-                        Height="15"
-                        Margin="0,0,6,0"
+                        Kind="{Binding Extension}"
+                        Width="{DynamicResource WolvenKitIconMicro}"
+                        Height="{DynamicResource WolvenKitIconMicro}"
                         HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Kind="{Binding Extension}" />
+                        VerticalAlignment="Center" />
+
                     <StackPanel
-                        Style="{StaticResource VisibleOnEmptyValueStyle}"
                         Name="PropertyTypeDescriptor"
                         Grid.Column="1"
-                        Margin="0,0,4,0"
+                        Margin="{DynamicResource WolvenKitMarginTinyRight}"
+                        Style="{StaticResource VisibleOnEmptyValueStyle}"
                         Orientation="Horizontal">
-                        
                         <TextBlock
                             Name="PropertyType"
                             Foreground="{StaticResource WolvenKitTan}"
@@ -197,696 +294,987 @@
                             <StackPanel.Style>
                                 <Style TargetType="StackPanel">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding TypesDiffer, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                        <DataTrigger
+                                            Binding="{Binding TypesDiffer,
+                                                              Mode=OneWay,
+                                                              UpdateSourceTrigger=PropertyChanged}"
+                                            Value="False">
                                             <Setter Property="Visibility" Value="Collapsed" />
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </StackPanel.Style>
+
                             <iconPacks:PackIconCodicons
-                                Height="7"
-                                VerticalAlignment="Center"
-                                Kind="ArrowRight" />
-                            <TextBlock Foreground="{StaticResource WolvenKitTan}" Text="{Binding ResolvedType, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                                Kind="ArrowRight"
+                                Height="{DynamicResource WolvenKitIconNano}"
+                                Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
+                                VerticalAlignment="Center" />
+
+                            <TextBlock
+                                Foreground="{StaticResource WolvenKitTan}"
+                                Text="{Binding ResolvedType,
+                                               Mode=OneWay,
+                                               UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                     </StackPanel>
+
                     <StackPanel
                         Grid.Column="2"
-                        Margin="0,0,4,0"
+                        Margin="{DynamicResource WolvenKitMarginTinyRight}"
                         Orientation="Horizontal">
                         <TextBlock
                             Name="PropertyDescriptor"
-                            Margin="0,0,4,2"
+                            Margin="{DynamicResource WolvenKitMarginTinyRight}"
                             Style="{StaticResource PropertyKeyStyle}"
-                            Text="{Binding Descriptor, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                            Text="{Binding Descriptor,
+                                           Mode=OneWay,
+                                           UpdateSourceTrigger=PropertyChanged}"
                             TextTrimming="CharacterEllipsis" />
+
                         <TextBlock
                             Name="PropertyValue"
-                            Margin="0,0,0,2"
                             Style="{StaticResource PropertyValueStyle}"
-                            Text="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                            Text="{Binding Value,
+                                           Mode=OneWay,
+                                           UpdateSourceTrigger=PropertyChanged}"
                             TextTrimming="CharacterEllipsis" />
                     </StackPanel>
                 </Grid>
             </DataTemplate>
 
             <!-- ArrayNameColumnWidth for ColumnDefinition -->
-            <Style x:Key="ArrayNameColumnWidth" TargetType="ColumnDefinition">
-                <Setter Property="Width" Value="218" />
+            <Style
+                x:Key="ArrayNameColumnWidth"
+                TargetType="ColumnDefinition">
+                <Setter Property="Width" Value="{DynamicResource WolvenKitRedTreeArrayColumnWidthLvl0}" />
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding Level}" Value="1">
-                        <Setter Property="Width" Value="200" />
+                    <DataTrigger
+                        Binding="{Binding Level}"
+                        Value="1">
+                        <Setter Property="Width" Value="{DynamicResource WolvenKitRedTreeArrayColumnWidthLvl1}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Level}" Value="2">
-                        <Setter Property="Width" Value="180" />
+                    <DataTrigger
+                        Binding="{Binding Level}"
+                        Value="2">
+                        <Setter Property="Width" Value="{DynamicResource WolvenKitRedTreeArrayColumnWidthLvl2}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Level}" Value="3">
-                        <Setter Property="Width" Value="160" />
+                    <DataTrigger
+                        Binding="{Binding Level}"
+                        Value="3">
+                        <Setter Property="Width" Value="{DynamicResource WolvenKitRedTreeArrayColumnWidthLvl3}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Level}" Value="4">
-                        <Setter Property="Width" Value="140" />
+                    <DataTrigger
+                        Binding="{Binding Level}"
+                        Value="4">
+                        <Setter Property="Width" Value="{DynamicResource WolvenKitRedTreeArrayColumnWidthLvl4}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Level}" Value="5">
-                        <Setter Property="Width" Value="120" />
+                    <DataTrigger
+                        Binding="{Binding Level}"
+                        Value="5">
+                        <Setter Property="Width" Value="{DynamicResource WolvenKitRedTreeArrayColumnWidthLvl5}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Level}" Value="6">
-                        <Setter Property="Width" Value="100" />
+                    <DataTrigger
+                        Binding="{Binding Level}"
+                        Value="6">
+                        <Setter Property="Width" Value="{DynamicResource WolvenKitRedTreeArrayColumnWidthLvl6}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Level}" Value="7">
-                        <Setter Property="Width" Value="100" />
+                    <DataTrigger
+                        Binding="{Binding Level}"
+                        Value="7">
+                        <Setter Property="Width" Value="{DynamicResource WolvenKitRedTreeArrayColumnWidthLvl6}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Level}" Value="8">
-                        <Setter Property="Width" Value="100" />
+                    <DataTrigger
+                        Binding="{Binding Level}"
+                        Value="8">
+                        <Setter Property="Width" Value="{DynamicResource WolvenKitRedTreeArrayColumnWidthLvl6}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Level}" Value="9">
-                        <Setter Property="Width" Value="100" />
+                    <DataTrigger
+                        Binding="{Binding Level}"
+                        Value="9">
+                        <Setter Property="Width" Value="{DynamicResource WolvenKitRedTreeArrayColumnWidthLvl6}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Level}" Value="10">
-                        <Setter Property="Width" Value="100" />
+                    <DataTrigger
+                        Binding="{Binding Level}"
+                        Value="10">
+                        <Setter Property="Width" Value="{DynamicResource WolvenKitRedTreeArrayColumnWidthLvl6}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding IsInArray}" Value="True">
+                    <DataTrigger
+                        Binding="{Binding IsInArray}"
+                        Value="True">
                         <Setter Property="Width" Value="{Binding ArrayIndexWidth}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding DisplayName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                    <DataTrigger
+                        Binding="{Binding DisplayName,
+                                          Mode=OneWay,
+                                          UpdateSourceTrigger=PropertyChanged}"
+                        Value="{x:Null}">
                         <Setter Property="Width" Value="0" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
 
             <!-- Context menu -->
-            <ContextMenu x:Key="TreeViewContextMenu"
-                         Name="TreeViewContextMenu"
-                         DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}"
-                         Opened="TreeViewContextMenu_OnOpened"
-                         Closed="TreeViewContextMenu_OnClosed"
-                         KeyUp="TreeViewContextMenu_OnKeyChanged"
-                         KeyDown="TreeViewContextMenu_OnKeyChanged">
-               
+            <ContextMenu
+                x:Key="TreeViewContextMenu"
+                Name="TreeViewContextMenu"
+                Style="{StaticResource WPFContextMenuStyle}"
+                DataContext="{Binding Path=PlacementTarget,
+                                      RelativeSource={RelativeSource Self}}"
+                Opened="TreeViewContextMenu_OnOpened"
+                Closed="TreeViewContextMenu_OnClosed"
+                KeyUp="TreeViewContextMenu_OnKeyChanged"
+                KeyDown="TreeViewContextMenu_OnKeyChanged">
                 <ContextMenu.Resources>
-                    <Style TargetType="MenuItem" BasedOn="{StaticResource WolvenKitToolBarItem}">
-                        <Setter Property="Margin" Value="3 4" />
-                        <Style.Triggers>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Visibility" Value="Collapsed" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
+                    <Style
+                        BasedOn="{StaticResource WPFMenuItemStyle}"
+                        TargetType="MenuItem" />
                 </ContextMenu.Resources>
-
 
                 <!-- TweakXL -->
 
-                <!-- #########################################################
-                    ╔╦╗┬ ┬┌─┐┌─┐┬┌─═╗ ╦╦  
-                     ║ │││├┤ ├─┤├┴┐╔╩╦╝║  
-                     ╩ └┴┘└─┘┴ ┴┴ ┴╩ ╚═╩═╝
-                ######################################################### -->
+                <!--
+                    #########################################################
+                    ╔╦╗┬ ┬┌─┐┌─┐┬┌─═╗ ╦╦
+                    ║ │││├┤ ├─┤├┴┐╔╩╦╝║
+                    ╩ └┴┘└─┘┴ ┴┴ ┴╩ ╚═╩═╝
+                    #########################################################
+                -->
                 <MenuItem
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowTweakXLMenu,
+                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                     Header="TweakXL"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowTweakXLMenu, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="DatabaseExportOutline" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="DatabaseExportOutline"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
 
                     <!-- Create new Tweak XL Override -->
                     <MenuItem
-                        Command="{Binding Path=PlacementTarget.Tag.CreateTXLOverrideCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                        Command="{Binding Path=PlacementTarget.Tag.CreateTXLOverrideCommand,
+                                          RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                         Header="Override Value"
-                        IsCheckable="False" />
-
+                        IsCheckable="False">
+                        <MenuItem.Icon>
+                            <templates:IconBox
+                                IconPack="Empty"
+                                Margin="{DynamicResource WolvenKitMarginTiny}"
+                                Size="{DynamicResource WolvenKitIconMilli}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
 
                     <!-- Copy Tweak XL Override -->
                     <MenuItem
-                        Command="{Binding Path=PlacementTarget.Tag.CopyTXLOverrideCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                        Visibility="{Binding Path=!PlacementTarget.Tag.IsShiftKeyPressed,
+                                             RelativeSource={RelativeSource Self},
+                                             Mode=OneWay,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Command="{Binding Path=PlacementTarget.Tag.CopyTXLOverrideCommand,
+                                          RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                         Header="Copy to Clipboard"
-                        IsCheckable="False"
-                        Visibility="{Binding Path=!PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        IsCheckable="False">
+                        <MenuItem.Icon>
+                            <templates:IconBox
+                                IconPack="Material"
+                                Kind="ContentCopy"
+                                Margin="{DynamicResource WolvenKitMarginTiny}"
+                                Size="{DynamicResource WolvenKitIconMilli}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
                     <!-- Copy Tweak XL Name (with shift key down) -->
                     <MenuItem
-                        Command="{Binding Path=PlacementTarget.Tag.CopyTXLOverrideNameCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                        Visibility="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed,
+                                             RelativeSource={RelativeSource Self},
+                                             Mode=OneWay,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Command="{Binding Path=PlacementTarget.Tag.CopyTXLOverrideNameCommand,
+                                          RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                         Header="Copy Name to Clipboard"
-                        IsCheckable="False"
-                        Visibility="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        IsCheckable="False">
+                        <MenuItem.Icon>
+                            <templates:IconBox
+                                IconPack="Material"
+                                Kind="ContentCopy"
+                                Margin="{DynamicResource WolvenKitMarginTiny}"
+                                Size="{DynamicResource WolvenKitIconMilli}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
 
                 <!-- Create Item In Buffer -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.AddItemToCompiledDataCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Path=PlacementTarget.Tag.AddItemToCompiledDataCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Create Item In Buffer"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="ContentDuplicate" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="PlusBoxOutline"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <!-- Save Buffer To Disk -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.SaveBufferToDiskCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Path=PlacementTarget.Tag.SaveBufferToDiskCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Save Buffer To Disk"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="ContentSave" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <!-- Old icon Material#ContentSave -->
+                        <templates:IconBox
+                            IconPack="Codicons"
+                            Kind="Save"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}"
+                            Foreground="{StaticResource WolvenKitCyan}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <!-- Load Buffer From Disk -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.LoadBufferFromDiskCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Path=PlacementTarget.Tag.LoadBufferFromDiskCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Load Buffer From Disk"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="FolderOpen" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="FolderOpen"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <!-- Open in New Tab -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.OpenChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Path=PlacementTarget.Tag.OpenChunkCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Open in New Tab"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons Kind="References" Style="{StaticResource ContextMenuIconStyleCodicons}" />
+                        <!-- Old icon Codicons#References -->
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="TabPlus"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}"
+                            Foreground="{StaticResource WolvenKitCyan}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!-- #########################################################
-                    ╦ ╦┌┬┐┬┬  
-                    ║ ║ │ ││  
+                <!--
+                    #########################################################
+                    ╦ ╦┌┬┐┬┬
+                    ║ ║ │ ││
                     ╚═╝ ┴ ┴┴─┘
-                ######################################################### -->
+                    #########################################################
+                -->
 
                 <Separator />
 
-                <!-- Duplicate-->
+                <!-- Duplicate -->
                 <MenuItem
-                    Command="{Binding DuplicateSelectionCommand, Source={x:Reference redTreeView}}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowDuplicate,
+                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding DuplicateSelectionCommand,
+                                      Source={x:Reference redTreeView}}"
                     Header="Duplicate in Array/Buffer (append after selection)"
-                    IsCheckable="False"
-                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowDuplicate, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Style="{StaticResource ContextMenuIconStyleMaterial}" Kind="ContentDuplicate" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ContentDuplicate"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!-- Duplicate-->
+                <!-- Duplicate InPlace -->
                 <MenuItem
-                    Command="{Binding DuplicateSelectionInPlaceCommand, Source={x:Reference redTreeView}}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowDuplicateInplace,
+                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding DuplicateSelectionInPlaceCommand,
+                                      Source={x:Reference redTreeView}}"
                     Header="Duplicate in Array/Buffer"
-                    IsCheckable="False"
-                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowDuplicateInplace, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Style="{StaticResource ContextMenuIconStyleMaterial}" Kind="ContentDuplicate" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ContentDuplicate"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <!-- Duplicate As New Chunk -->
                 <MenuItem
-
-                    Command="{Binding DuplicateSelectionAsNewCommand, Source={x:Reference redTreeView}}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowDuplicateAsNew,
+                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding DuplicateSelectionAsNewCommand,
+                                      Source={x:Reference redTreeView}}"
                     Header="Duplicate as new Item(s)"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowDuplicateAsNew, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="ContentDuplicate" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ContentDuplicate"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <!-- Rename Class -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.RenameDynamicClassCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowDynamicClassOperations,
+                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Path=PlacementTarget.Tag.RenameDynamicClassCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Rename Class"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowDynamicClassOperations, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="Text" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Pencil"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <!-- Rename Property -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.RenamePropertyCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowDynamicPropertyOperations,
+                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Path=PlacementTarget.Tag.RenamePropertyCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Rename Property"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowDynamicPropertyOperations, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="Text" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Pencil"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <!-- Mesh only -->
                 <!-- Rename Material -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.RenameMaterialCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.IsMaterial,
+                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Path=PlacementTarget.Tag.RenameMaterialCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Rename Material"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=PlacementTarget.Tag.IsMaterial, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="RenameBox" />
+                        <!-- Old icon Material#RenameBox -->
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Pencil"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <!-- Mesh only -->
                 <!-- Add material and definition -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.AddMaterialAndDefinitionCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.IsMaterialArray,
+                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Path=PlacementTarget.Tag.AddMaterialAndDefinitionCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Add material and definition"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=PlacementTarget.Tag.IsMaterialArray, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="Plus" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Plus"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <!-- Mesh: Material only -->
                 <!-- Toggle IsMasked -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.ToggleEnableMaskedCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Path=PlacementTarget.Tag.ToggleEnableMaskedCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Toggle 'EnableMask'"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="ToggleSwitch" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ToggleSwitchOutline"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <!-- Search & Replace -->
                 <MenuItem
-                    Command="{Binding OpenSearchAndReplaceDialogCommand, Source={x:Reference redTreeView}}"
+                    Visibility="{Binding Path=HasSelection,
+                                         Source={x:Reference redTreeView},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding OpenSearchAndReplaceDialogCommand,
+                                      Source={x:Reference redTreeView}}"
                     Header="Search and Replace in Selection"
-                    IsCheckable="False"
-                    Visibility="{Binding Path=HasSelection, Source={x:Reference redTreeView}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="FindReplace" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="FindReplace"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!--  
-                For arrays of indexables: Renumber Indices of child nodes, starting at 0
-                Useful if you paste a bunch of material definitions from multiple sources 
+                <!--
+                    For arrays of indexables: Renumber Indices of child nodes, starting at 0
+                    Useful if you paste a bunch of material definitions from multiple sources
                 -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.ReindexChildDataIndexPropertiesCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowRenumberArrayIndexProperties,
+                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Path=PlacementTarget.Tag.ReindexChildDataIndexPropertiesCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Recalculate child index properties"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowRenumberArrayIndexProperties, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
-
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="Calculator" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Calculator"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
-
 
                 <!-- Mesh only -->
                 <!-- Scroll to material -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.ScrollToMaterialCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Path=PlacementTarget.Tag.ScrollToMaterialCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Scroll to material"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="ArrowRight" />
+                        <!-- Old icon Material#ArrowRight -->
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="EyeOutline"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <!-- Generate CRUID -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.GenerateCRUIDCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Path=PlacementTarget.Tag.GenerateCRUIDCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Generate new CRUID"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="Dice3Outline" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Dice3Outline"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!-- #########################################################
+                <!--
+                    #########################################################
                     ╔═╗┌─┐┌─┐┬ ┬ ┬ ╔═╗┌─┐┌─┐┌┬┐┌─┐
-                    ║  │ │├─┘└┬┘┌┼─╠═╝├─┤└─┐ │ ├┤ 
-                    ╚═╝└─┘┴   ┴ └┘ ╩  ┴ ┴└─┘ ┴ └─┘ 
-                ######################################################### -->
+                    ║  │ │├─┘└┬┘┌┼─╠═╝├─┤└─┐ │ ├┤
+                    ╚═╝└─┘┴   ┴ └┘ ╩  ┴ ┴└─┘ ┴ └─┘
+                    #########################################################
+                -->
                 <Separator />
-
 
                 <!-- Copy Value (Ctrl+C) -->
                 <MenuItem
+                    Visibility="{Binding Path=PlacementTarget.Tag.HasValue,
+                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="ApplicationCommands.Copy"
                     CommandParameter="{Binding}"
                     CommandTarget="{Binding}"
                     Header="Copy Value to Clipboard"
-                    IsCheckable="False"
-                    Visibility="{Binding Path=PlacementTarget.Tag.HasValue, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons Kind="Copy" Style="{StaticResource ContextMenuIconStyleCodicons}" />
+                        <!-- Old icon Codicons#Copy -->
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ContentCopy"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <!-- Copy Handle -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.CopyHandleCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowHandleOperations,
+                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Path=PlacementTarget.Tag.CopyHandleCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Copy Handle"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowHandleOperations, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="ContentCopy" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ContentCopy"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <!-- Copy -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.CopyChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.IsInArray,
+                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Path=PlacementTarget.Tag.CopyChunkCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Copy From Array/Buffer"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="ContentCopy" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ContentCopy"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <!-- Copy Selection -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.CopySelectionCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.IsInArray,
+                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Path=PlacementTarget.Tag.CopySelectionCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Copy Selection From Array/Buffer"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
-
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="ContentCopy" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ContentCopy"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!--  Paste Selection To Array/Buffer  -->
+                <!-- Paste Selection To Array/Buffer -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.PasteSelectionCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowPasteIntoArray,
+                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Path=PlacementTarget.Tag.PasteSelectionCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Paste Selection To Array/Buffer"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowPasteIntoArray, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    IsCheckable="False">
 
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="ContentPaste" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ContentPaste"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!--  Overwrite Array/Buffer With Selection  -->
+                <!-- Overwrite Array/Buffer With Selection -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.ClearAndPasteSelectionCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowOverwriteArray,
+                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Path=PlacementTarget.Tag.ClearAndPasteSelectionCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Overwrite Array/Buffer With Selection"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowOverwriteArray, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
-
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="ClipboardArrowDownOutline" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ClipboardArrowDownOutline"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!--  Overwrite Selection With Pasted -->
+                <!-- Overwrite Selection With Pasted -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.OverwriteSelectionWithPasteCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowPasteOverwrite,
+                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Path=PlacementTarget.Tag.OverwriteSelectionWithPasteCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Overwrite Current With Copied Selection"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowPasteOverwrite, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
-
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="ClipboardArrowDownOutline" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ClipboardArrowDownOutline"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!-- Copy Array Contents  -->
+                <!-- Copy Array Contents -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.CopyArrayContentsCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.IsArray,
+                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Path=PlacementTarget.Tag.CopyArrayContentsCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Copy Array Contents"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=PlacementTarget.Tag.IsArray, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
-
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="ContentCopy" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ContentCopy"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!--  Paste Handle  -->
+                <!-- Paste Handle -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.PasteHandleCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Path=PlacementTarget.Tag.PasteHandleCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Paste Handle"
-                    IsCheckable="False"
-
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="ContentPaste" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ContentPaste"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!--  Paste Into Array/Buffer  -->
+                <!-- Paste Into Array/Buffer -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.PasteChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Path=PlacementTarget.Tag.PasteChunkCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Paste Into Array/Buffer"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="ContentPaste" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ContentPaste"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!--  Clear Array/Buffer and Paste  -->
+                <!-- Clear Array/Buffer and Paste -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.ClearAndPasteChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowOverwriteArray,
+                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Path=PlacementTarget.Tag.ClearAndPasteChunkCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Clear Array/Buffer and Paste"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowOverwriteArray, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
-
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="ContentPaste" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ContentPaste"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <Separator />
 
-                <!-- #########################################################
-                        ╔╦╗┌─┐┬  ┌─┐┌┬┐┌─┐  ┌─┐┌─┐┌─┐┬─┐┌─┐┌┬┐┬┌─┐┌┐┌┌─┐
-                         ║║├┤ │  ├┤  │ ├┤   │ │├─┘├┤ ├┬┘├─┤ │ ││ ││││└─┐
-                        ═╩╝└─┘┴─┘└─┘ ┴ └─┘  └─┘┴  └─┘┴└─┴ ┴ ┴ ┴└─┘┘└┘└─┘                   
-                #########################################################0 -->
+                <!--
+                    #########################################################
+                    ╔╦╗┌─┐┬  ┌─┐┌┬┐┌─┐  ┌─┐┌─┐┌─┐┬─┐┌─┐┌┬┐┬┌─┐┌┐┌┌─┐
+                    ║║├┤ │  ├┤  │ ├┤   │ │├─┘├┤ ├┬┘├─┤ │ ││ ││││└─┐
+                    ═╩╝└─┘┴─┘└─┘ ┴ └─┘  └─┘┴  └─┘┴└─┴ ┴ ┴ ┴└─┘┘└┘└─┘
+                    #########################################################0
+                -->
 
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.DeletePropertyCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowDynamicPropertyOperations,
+                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Path=PlacementTarget.Tag.DeletePropertyCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Delete Property"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowDynamicPropertyOperations, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons
-                            Width="13"
-                            Height="13"
-                            Padding="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="Remove" />
+                        <!-- Old icon Codicons#Remove -->
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Delete"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}"
+                            Foreground="{StaticResource WolvenKitRed}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <!-- Delete item -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.DeleteItemCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.IsInArray,
+                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Path=PlacementTarget.Tag.DeleteItemCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Delete Item in Array/Buffer"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons Kind="Remove" Style="{StaticResource ContextMenuIconStyleCodicons}" />
+                        <!-- Old icon Codicons#Remove -->
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Delete"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}"
+                            Foreground="{StaticResource WolvenKitRed}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <!-- Delete Selection -->
                 <MenuItem
-                    Command="{Binding Path=DeleteSelectionCommand, Source={x:Reference redTreeView}}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.IsInArrayWithShiftKeyUp,
+                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Path=DeleteSelectionCommand,
+                                      Source={x:Reference redTreeView}}"
                     Header="Delete Selection in Array/Buffer"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=PlacementTarget.Tag.IsInArrayWithShiftKeyUp, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons Kind="Remove" Style="{StaticResource ContextMenuIconStyleCodicons}" />
+                        <!-- Old icon Codicons#Remove -->
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Delete"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}"
+                            Foreground="{StaticResource WolvenKitRed}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <!-- Delete Everything But Selection -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.DeleteAllButSelectionCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.IsInArrayWithShiftKeyDown,
+                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Path=PlacementTarget.Tag.DeleteAllButSelectionCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Delete All but Selection in Array/Buffer"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=PlacementTarget.Tag.IsInArrayWithShiftKeyDown, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons Kind="Remove" Style="{StaticResource ContextMenuIconStyleCodicons}" />
+                        <!-- Old icon Codicons#Remove -->
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Delete"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}"
+                            Foreground="{StaticResource WolvenKitRed}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <!-- Delete All -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.DeleteAllCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.IsArray,
+                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Path=PlacementTarget.Tag.DeleteAllCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Delete All Items in Array/Buffer"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=PlacementTarget.Tag.IsArray, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
-
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="NotificationClearAll" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <!-- Old icon Material#NotificationClearAll -->
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="DeleteSweep"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}"
+                            Foreground="{StaticResource WolvenKitRed}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <!-- Reset Object -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.ResetObjectCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Visibility="{Binding Path=!PlacementTarget.Tag.IsArray,
+                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Path=PlacementTarget.Tag.ResetObjectCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Reset Object"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=!PlacementTarget.Tag.IsArray, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="Delete" Style="{StaticResource ContextMenuIconStyleMaterial}" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Delete"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}"
+                            Foreground="{StaticResource WolvenKitRed}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
-
                 <Separator />
-                <!-- #####################################################
-                        ╦┌┬┐┌─┐┌─┐┬─┐┌┬┐  ╔═╗─┐ ┬┌─┐┌─┐┬─┐┌┬┐
-                        ║│││├─┘│ │├┬┘ │   ║╣ ┌┴┬┘├─┘│ │├┬┘ │ 
-                        ╩┴ ┴┴  └─┘┴└─ ┴   ╚═╝┴ └─┴  └─┘┴└─ ┴               
-                #########################################################0 -->
+
+                <!--
+                    #####################################################
+                    ╦┌┬┐┌─┐┌─┐┬─┐┌┬┐  ╔═╗─┐ ┬┌─┐┌─┐┬─┐┌┬┐
+                    ║│││├─┘│ │├┬┘ │   ║╣ ┌┴┬┘├─┘│ │├┬┘ │
+                    ╩┴ ┴┴  └─┘┴└─ ┴   ╚═╝┴ └─┴  └─┘┴└─ ┴
+                    #########################################################0
+                -->
 
                 <!-- Export Chunk (to JSON) -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.ExportChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Command="{Binding Path=PlacementTarget.Tag.ExportChunkCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Export to JSON"
                     IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons Kind="Json" Style="{StaticResource ContextMenuIconStyleCodicons}" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="CodeJson"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <!-- Export World Node Data -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.ExportNodeDataCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowExportNodeData,
+                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Path=PlacementTarget.Tag.ExportNodeDataCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Export NodeData to JSON"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowExportNodeData, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons Kind="Json" Style="{StaticResource ContextMenuIconStyleCodicons}" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="CodeJson"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <!-- Import World Node Data -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.ImportWorldNodeDataCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowWorldNodeDataImport,
+                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Path=PlacementTarget.Tag.ImportWorldNodeDataCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Import from JSON to worldStreamingSector"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowWorldNodeDataImport, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons Kind="Json" Style="{StaticResource ContextMenuIconStyleCodicons}" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="CodeJson"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <!-- Import from JSON -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.ImportWorldNodeDataWithoutCoordsCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowWorldNodeDataImport,
+                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Path=PlacementTarget.Tag.ImportWorldNodeDataWithoutCoordsCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Import from JSON (no coords update)"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowWorldNodeDataImport, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons Kind="Json" Style="{StaticResource ContextMenuIconStyleCodicons}" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="CodeJson"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <!-- Add To Project -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.AddToProjectCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding Path=PlacementTarget.Tag.AddToProjectCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Add to project"
-                    IsCheckable="False"
-                    
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    IsCheckable="False">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconVaadinIcons Kind="ArrowCircleUp" Foreground="{StaticResource WolvenKitYellow}" />
+                        <templates:IconBox
+                            IconPack="Vaadin"
+                            Kind="ArrowCircleLeft"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}"
+                            Foreground="{StaticResource WolvenKitYellow}" />
                     </MenuItem.Icon>
                 </MenuItem>
-
-
             </ContextMenu>
 
             <!-- Converter for the right-hand properties that decides which partial to render -->
-            <converters:TreeViewItemTemplateSelector x:Key="itemTemplateSelector" x:Name="itemTemplateSelector">
+            <converters:TreeViewItemTemplateSelector
+                x:Key="itemTemplateSelector"
+                x:Name="itemTemplateSelector">
                 <converters:TreeViewItemTemplateSelector.GroupedTemplate>
                     <DataTemplate>
-                        <Grid Background="Transparent" Tag="{Binding}">
+                        <Grid
+                            HorizontalAlignment="Left"
+                            Background="Transparent"
+                            Tag="{Binding}">
                             <ContentPresenter
                                 Width="Auto"
                                 HorizontalAlignment="Stretch"
@@ -895,9 +1283,11 @@
                         </Grid>
                     </DataTemplate>
                 </converters:TreeViewItemTemplateSelector.GroupedTemplate>
+
                 <converters:TreeViewItemTemplateSelector.PropertyTemplate>
                     <DataTemplate DataType="{x:Type shell:ChunkViewModel}">
                         <Grid
+                            HorizontalAlignment="Left"
                             Background="Transparent"
                             ContextMenu="{StaticResource TreeViewContextMenu}"
                             Tag="{Binding}"
@@ -928,9 +1318,11 @@
                         </Grid>
                     </DataTemplate>
                 </converters:TreeViewItemTemplateSelector.PropertyTemplate>
+
                 <converters:TreeViewItemTemplateSelector.ArrayTemplate>
                     <DataTemplate>
                         <Grid
+                            HorizontalAlignment="Left"
                             Background="Transparent"
                             ContextMenu="{StaticResource TreeViewContextMenu}"
                             Tag="{Binding}"
@@ -955,9 +1347,11 @@
                         </Grid>
                     </DataTemplate>
                 </converters:TreeViewItemTemplateSelector.ArrayTemplate>
+
                 <converters:TreeViewItemTemplateSelector.HandleTemplate>
                     <DataTemplate>
                         <Grid
+                            HorizontalAlignment="Left"
                             Background="Transparent"
                             ContextMenu="{StaticResource TreeViewContextMenu}"
                             Tag="{Binding}"
@@ -968,12 +1362,14 @@
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
+
                             <ContentPresenter
                                 Grid.Column="0"
                                 Width="Auto"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Center"
                                 ContentTemplate="{StaticResource PropertyNameTemplate}" />
+
                             <ContentPresenter
                                 Grid.Column="1"
                                 Width="Auto"
@@ -983,9 +1379,11 @@
                         </Grid>
                     </DataTemplate>
                 </converters:TreeViewItemTemplateSelector.HandleTemplate>
+
                 <converters:TreeViewItemTemplateSelector.RefTemplate>
                     <DataTemplate>
                         <Grid
+                            HorizontalAlignment="Left"
                             Background="Transparent"
                             ContextMenu="{StaticResource TreeViewContextMenu}"
                             Tag="{Binding}"
@@ -996,130 +1394,154 @@
                                 <ColumnDefinition Width="Auto" MinWidth="20" />
                                 <ColumnDefinition Width="Auto" MinWidth="20" />
                             </Grid.ColumnDefinitions>
+
                             <ContentPresenter
                                 Grid.Column="0"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Center"
                                 ContentTemplate="{StaticResource PropertyNameTemplate}" />
+
                             <!--iconPacks:PackIconCodicons Kind="References" Height="14" Grid.Column="1"
                                     Width="14" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="0,0,6,0" />
                                 <TextBlock Text="{Binding Value}" Grid.Column="2" /-->
+
                             <ContentPresenter
                                 Grid.Column="1"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Center"
                                 ContentTemplate="{StaticResource PropertyValueTemplate}" />
+
                             <Button
                                 Grid.Column="2"
-                                Margin="5,0,0,0"
+                                Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                                 Background="Transparent"
-                                Command="{Binding OpenRefCommand}"
                                 Style="{StaticResource ButtonCustom}"
+                                Command="{Binding OpenRefCommand}"
                                 ToolTip="Open in new tab">
-                                <iconPacks:PackIconVaadinIcons
-                                    Padding="2"
-                                    VerticalAlignment="Center"
-                                    Foreground="{StaticResource WolvenKitCyan}"
-                                    Kind="ArrowCircleUp"
-                                    RotationAngle="45" />
+                                <!-- Old icon Vaadin#ArrowCircleUp#45deg -->
+                                <iconPacks:PackIconMaterial
+                                    Kind="TabPlus"
+                                    Width="{DynamicResource WolvenKitIconMilli}"
+                                    Height="{DynamicResource WolvenKitIconMilli}"
+                                    Margin="{DynamicResource WolvenKitMarginTinyRight}"
+                                    Foreground="{StaticResource WolvenKitCyan}" />
                             </Button>
+
                             <Button
                                 Grid.Column="3"
-                                Margin="5,0,0,0"
+                                Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                                 Background="Transparent"
-                                Command="{Binding AddRefCommand}"
                                 Style="{StaticResource ButtonCustom}"
+                                Command="{Binding AddRefCommand}"
                                 ToolTip="Add File to Mod">
                                 <iconPacks:PackIconVaadinIcons
-                                    Padding="2"
-                                    VerticalAlignment="Center"
-                                    Foreground="{StaticResource WolvenKitYellow}"
-                                    Kind="ArrowCircleLeft" />
+                                    Kind="ArrowCircleLeft"
+                                    Width="{DynamicResource WolvenKitIconMilli}"
+                                    Height="{DynamicResource WolvenKitIconMilli}"
+                                    Foreground="{StaticResource WolvenKitYellow}" />
                             </Button>
                         </Grid>
                     </DataTemplate>
                 </converters:TreeViewItemTemplateSelector.RefTemplate>
             </converters:TreeViewItemTemplateSelector>
-
         </ResourceDictionary>
     </UserControl.Resources>
 
     <syncfusion:SfTreeView
         x:Name="TreeView"
+        Margin="-1"
+        Background="{StaticResource ContentBackground}"
+        BorderThickness="0"
+        Visibility="Visible"
         AllowDragging="True"
         AllowEditing="False"
         AutoExpandMode="RootNodes"
-        Background="{StaticResource ContentBackground}"
-        BorderThickness="0"
+        ItemHeight="{DynamicResource WolvenKitTreeRowHeight}"
         ItemDragOver="SfTreeView_ItemDragOver"
         ItemDragStarting="SfTreeView_ItemDragStarting"
         ItemDropped="SfTreeView_ItemDropped"
         ItemDropping="SfTreeView_ItemDropping"
         ItemTemplateSelector="{StaticResource itemTemplateSelector}"
-        ItemsSource="{Binding ElementName=redTreeView, Path=ItemsSource, Mode=TwoWay}"
+        ItemsSource="{Binding ElementName=redTreeView,
+                              Path=ItemsSource,
+                              Mode=TwoWay}"
         NodeCollapsed="OnCollapsed"
         NodeExpanded="OnExpanded"
-        SelectedItem="{Binding ElementName=redTreeView, Path=SelectedItem, Mode=TwoWay}"
-        SelectedItems="{Binding ElementName=redTreeView, Path=SelectedItems, Mode=TwoWay}"
+        SelectedItem="{Binding ElementName=redTreeView,
+                               Path=SelectedItem,
+                               Mode=TwoWay}"
+        SelectedItems="{Binding ElementName=redTreeView,
+                                Path=SelectedItems,
+                                Mode=TwoWay}"
         SelectionChanged="OnSelectionChanged"
         MouseDoubleClick="OnDoubleClick"
         SelectionMode="Extended"
         ShowLines="True"
         VirtualizingPanel.IsVirtualizing="True"
         VirtualizingPanel.ScrollUnit="Pixel"
-        VirtualizingPanel.VirtualizationMode="Recycling"
-        Visibility="Visible">
+        VirtualizingPanel.VirtualizationMode="Recycling">
         <!--
             LoadOnDemandCommand="{Binding OnDemandLoadingCommand}"
             QueryNodeSize="TreeView_QueryNodeSize"
         -->
-        <syncfusion:SfTreeView.Resources>
-        </syncfusion:SfTreeView.Resources>
+        <syncfusion:SfTreeView.Resources />
+
         <syncfusion:SfTreeView.DragPreviewTemplate>
             <DataTemplate DataType="{x:Type syncfusion:TreeViewDragInfo}">
-                <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="1">
+                <Border
+                    BorderBrush="{StaticResource BorderAlt}"
+                    BorderThickness="1">
                     <Grid Background="{StaticResource ContentBackgroundAlt2}">
                         <Grid.RowDefinitions>
                             <RowDefinition />
                             <RowDefinition />
                         </Grid.RowDefinitions>
+
                         <TextBlock
                             Grid.Row="0"
-                            Margin="5,2,5,0"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
                             VerticalAlignment="Center"
-                            Text="Duplicate item to this index (release control to move)"
-                            Visibility="{Binding Data[0].Content.IsCtrlKeyPressed, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                            Visibility="{Binding Data[0].Content.IsCtrlKeyPressed,
+                                                 Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Text="Duplicate item to this index (release control to move)" />
+
                         <TextBlock
                             Grid.Row="0"
-                            Margin="5,2,5,0"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
                             VerticalAlignment="Center"
-                            Text="Move item to this index (hold control to duplicate)"
-                            Visibility="{Binding Data[0].Content.IsCtrlKeyPressed, Converter={StaticResource InvertBooleanVisibilityConverter}}" />
-                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                            Visibility="{Binding Data[0].Content.IsCtrlKeyPressed,
+                                                 Converter={StaticResource InvertBooleanVisibilityConverter}}"
+                            Text="Move item to this index (hold control to duplicate)" />
+
+                        <StackPanel
+                            Grid.Row="1"
+                            Orientation="Horizontal">
                             <TextBlock
-                                Margin="5,0,5,2"
+                                Margin="{DynamicResource WolvenKitMarginTiny}"
                                 VerticalAlignment="Center"
                                 Foreground="{StaticResource WolvenKitTan}"
                                 Text="{Binding Data[0].Content.Type}" />
+
                             <TextBlock
-                                Margin="0,0,5,2"
+                                Margin="{DynamicResource WolvenKitMarginTiny}"
                                 VerticalAlignment="Center"
                                 Text="{Binding Data[0].Content.Descriptor}" />
-
                         </StackPanel>
                     </Grid>
                 </Border>
             </DataTemplate>
         </syncfusion:SfTreeView.DragPreviewTemplate>
+
         <syncfusion:SfTreeView.HierarchyPropertyDescriptors>
             <treeViewEngine:HierarchyPropertyDescriptor
+                TargetType="{x:Type shell:ChunkViewModel}"
                 ChildPropertyName="TVProperties"
-                IsExpandedPropertyName="IsExpanded"
-                TargetType="{x:Type shell:ChunkViewModel}" />
+                IsExpandedPropertyName="IsExpanded" />
+
             <treeViewEngine:HierarchyPropertyDescriptor
+                TargetType="{x:Type shell:GroupedChunkViewModel}"
                 ChildPropertyName="TVProperties"
-                IsExpandedPropertyName="IsExpanded"
-                TargetType="{x:Type shell:GroupedChunkViewModel}" />
+                IsExpandedPropertyName="IsExpanded" />
         </syncfusion:SfTreeView.HierarchyPropertyDescriptors>
     </syncfusion:SfTreeView>
 </UserControl>

@@ -3,7 +3,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns:hc="https://handyorg.github.io/handycontrol">
-
     <ControlTemplate
         x:Key="TextBoxExtendLeftTemplateCustom"
         TargetType="hc:TextBox">
@@ -26,6 +25,7 @@
                     <ColumnDefinition Width="{Binding Path=(hc:InfoElement.TitleWidth), RelativeSource={RelativeSource TemplatedParent}}" />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
+
                 <DockPanel
                     Margin="0,7,6,7"
                     VerticalAlignment="{Binding Path=(hc:TitleElement.VerticalAlignment),
@@ -41,6 +41,7 @@
                         TextTrimming="CharacterEllipsis"
                         TextWrapping="NoWrap" />
                 </DockPanel>
+
                 <Border
                     x:Name="border"
                     Grid.Column="1"
@@ -50,6 +51,7 @@
                     CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius),
                                            RelativeSource={RelativeSource TemplatedParent}}"
                     SnapsToDevicePixels="True" />
+
                 <TextBlock
                     x:Name="Placeholder"
                     Grid.Column="1"
@@ -72,6 +74,7 @@
                     VerticalScrollBarVisibility="Hidden" />
             </Grid>
         </hc:Badge>
+
         <ControlTemplate.Triggers>
             <Trigger Property="IsEnabled" Value="false">
                 <Setter TargetName="PART_ContentHost" Property="Opacity" Value="0.4" />
@@ -86,6 +89,7 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
+
     <Style
         x:Key="TextBoxExtendBaseStyleCustom"
         BasedOn="{StaticResource TextBoxBaseStyle}"
@@ -99,6 +103,7 @@
         <Setter Property="hc:InfoElement.ContentHeight" Value="{x:Static system:Double.NaN}" />
         <Setter Property="hc:InfoElement.MinContentHeight" Value="{StaticResource DefaultControlHeight}" />
     </Style>
+
     <Style
         x:Key="TextBoxExtendCustom"
         BasedOn="{StaticResource TextBoxExtendBaseStyleCustom}"

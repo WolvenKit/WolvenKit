@@ -11,10 +11,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using SharpDX.Win32;
 using WolvenKit.App.Factories;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
@@ -53,6 +51,7 @@ public partial class TweakBrowserViewModel : ToolViewModel
 
     public string Extension { get; set; } = "tweak";
 
+    [ObservableProperty] private bool _isLoading = true;
 
     [ObservableProperty] private string _searchText = string.Empty;
     [ObservableProperty] private bool _showNonResolvableEntries;
@@ -70,7 +69,7 @@ public partial class TweakBrowserViewModel : ToolViewModel
 
     public TweakBrowserViewModel(
         AppViewModel appViewModel,
-        IChunkViewmodelFactory chunkViewmodelFactory, 
+        IChunkViewmodelFactory chunkViewmodelFactory,
         ISettingsManager settingsManager,
         INotificationService notificationService,
         IProjectManager projectManager,
@@ -184,8 +183,6 @@ public partial class TweakBrowserViewModel : ToolViewModel
 
     #region Properties
 
-    [ObservableProperty] private Visibility _loadVisibility = Visibility.Visible;
-
     [ObservableProperty] private ICollectionView _records = new CollectionView(new List<object>());
     [ObservableProperty] private ICollectionView _flats = new CollectionView(new List<object>());
     [ObservableProperty] private ICollectionView _queries = new CollectionView(new List<object>());
@@ -258,7 +255,7 @@ public partial class TweakBrowserViewModel : ToolViewModel
 
             Refresh();
 
-            LoadVisibility = Visibility.Collapsed;
+            IsLoading = false;
             _notificationService.Success($"Tweak Browser is initialized");
         });
 
@@ -273,7 +270,7 @@ public partial class TweakBrowserViewModel : ToolViewModel
     private void Refresh()
     {
         SelectedRecordEntry = null;
-        
+
         Records.Refresh();
         OnPropertyChanged(nameof(Records));
         OnPropertyChanged(nameof(RecordsHeader));
@@ -381,7 +378,7 @@ public partial class TweakBrowserViewModel : ToolViewModel
             _loggerService.Error($"Failed to create TweakXL yaml. Error: {ex}");
             throw;
         }
-        
+
     }
 
     private RelayCommand? _copyName;
@@ -431,7 +428,7 @@ public partial class TweakBrowserViewModel : ToolViewModel
                     IsInlineRecord = s_inlineRegex.IsMatch(Item.ResolvedText);
                 }
 
-                if( TweakDBService.TryGetType(Item, out var type))
+                if (TweakDBService.TryGetType(Item, out var type))
                 {
                     RecordTypeName = type.Name[8..^7];
                 }

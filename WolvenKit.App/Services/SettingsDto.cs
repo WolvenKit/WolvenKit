@@ -73,6 +73,7 @@ public class SettingsDto : ISettingsDto
         ModderEmail = settings.ModderEmail;
 
         // Interface
+        UiScale = settings.UiScale;
         ShowFilePreview = settings.ShowFilePreview;
         ShowAdvancedOptions = settings.ShowAdvancedOptions;
         RefactoringCheckboxDefaultValue = settings.RefactoringCheckboxDefaultValue;
@@ -144,6 +145,8 @@ public class SettingsDto : ISettingsDto
 
     #region Interface
 
+    // Default to 0 to automatically scale on first launch
+    public int UiScale { get; set; }
     public bool ShowFilePreview { get; set; }
     public bool ShowAdvancedOptions { get; set; }
     public bool RefactoringCheckboxDefaultValue { get; set; }
@@ -205,6 +208,7 @@ public class SettingsDto : ISettingsDto
         settingsManager.ModderEmail = ModderEmail;
 
         // Interface
+        settingsManager.UiScale = UiScale;
         settingsManager.ShowFilePreview = ShowFilePreview;
         settingsManager.ShowAdvancedOptions = ShowAdvancedOptions;
         settingsManager.RefactoringCheckboxDefaultValue = RefactoringCheckboxDefaultValue;

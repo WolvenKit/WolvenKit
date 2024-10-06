@@ -5,71 +5,121 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:WolvenKit.Views.Editors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:syncfusion="http://schemas.syncfusion.com/wpf" 
-    d:DesignHeight="100"
-    d:DesignWidth="400"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     mc:Ignorable="d"
+    d:DesignWidth="400"
+    d:DesignHeight="64"
     KeyboardNavigation.TabNavigation="Contained">
-    
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedVector4Editor}}}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="{DynamicResource WolvenKitRedEditorComponentWidth}" />
             <ColumnDefinition />
-            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="{DynamicResource WolvenKitRedEditorComponentWidth}" />
             <ColumnDefinition />
-            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="{DynamicResource WolvenKitRedEditorComponentWidth}" />
             <ColumnDefinition />
-            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="{DynamicResource WolvenKitRedEditorComponentWidth}" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <!-- X -->
+        <Border
+            Grid.Column="0"
+            BorderBrush="{StaticResource BorderAlt}"
+            BorderThickness="0,0,1,0" />
         <TextBlock
             Grid.Column="0"
+            Margin="{DynamicResource WolvenKitMarginTiny}"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
             Text="X" />
         <syncfusion:DoubleTextBox
-            KeyboardNavigation.TabIndex="1"
             Grid.Column="1"
+            Padding="{DynamicResource WolvenKitMarginTinyLeft}"
+            VerticalAlignment="Stretch"
+            VerticalContentAlignment="Center"
+            Background="{StaticResource ContentBackgroundAlt}"
+            BorderThickness="0"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+            KeyboardNavigation.TabIndex="1"
             NumberDecimalDigits="4"
-            Value="{Binding XValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            Value="{Binding XValue,
+                            Mode=TwoWay,
+                            UpdateSourceTrigger=PropertyChanged}" />
 
-        <!-- Y -->
+        <Border
+            Grid.Column="2"
+            BorderBrush="{StaticResource BorderAlt}"
+            BorderThickness="1,0,1,0" />
         <TextBlock
             Grid.Column="2"
+            Margin="{DynamicResource WolvenKitMarginTiny}"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
             Text="Y" />
         <syncfusion:DoubleTextBox
-            KeyboardNavigation.TabIndex="2"
             Grid.Column="3"
+            Padding="{DynamicResource WolvenKitMarginTinyLeft}"
+            VerticalAlignment="Stretch"
+            VerticalContentAlignment="Center"
+            Background="{StaticResource ContentBackgroundAlt}"
+            BorderThickness="0"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+            KeyboardNavigation.TabIndex="2"
             NumberDecimalDigits="4"
-            Value="{Binding YValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            Value="{Binding YValue,
+                            Mode=TwoWay,
+                            UpdateSourceTrigger=PropertyChanged}" />
 
-        <!-- Z -->
+        <Border
+            Grid.Column="4"
+            BorderBrush="{StaticResource BorderAlt}"
+            BorderThickness="1,0,1,0" />
         <TextBlock
             Grid.Column="4"
+            Margin="{DynamicResource WolvenKitMarginTiny}"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
             Text="Z" />
         <syncfusion:DoubleTextBox
-            KeyboardNavigation.TabIndex="3"
             Grid.Column="5"
+            Padding="{DynamicResource WolvenKitMarginTinyLeft}"
+            VerticalAlignment="Stretch"
+            VerticalContentAlignment="Center"
+            Background="{StaticResource ContentBackgroundAlt}"
+            BorderThickness="0"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+            KeyboardNavigation.TabIndex="3"
             NumberDecimalDigits="4"
-            Value="{Binding ZValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            Value="{Binding ZValue,
+                            Mode=TwoWay,
+                            UpdateSourceTrigger=PropertyChanged}" />
 
-        <!-- W -->
+        <Border
+            Grid.Column="6"
+            BorderBrush="{StaticResource BorderAlt}"
+            BorderThickness="1,0,1,0" />
         <TextBlock
             Grid.Column="6"
+            Margin="{DynamicResource WolvenKitMarginTiny}"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
             Text="W" />
         <syncfusion:DoubleTextBox
-            KeyboardNavigation.TabIndex="4"
             Grid.Column="7"
+            Padding="{DynamicResource WolvenKitMarginTinyLeft}"
+            VerticalAlignment="Stretch"
+            VerticalContentAlignment="Center"
+            Background="{StaticResource ContentBackgroundAlt}"
+            BorderThickness="0"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+            KeyboardNavigation.TabIndex="4"
             NumberDecimalDigits="4"
-            Value="{Binding WValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
+            Value="{Binding WValue,
+                            Mode=TwoWay,
+                            UpdateSourceTrigger=PropertyChanged}" />
     </Grid>
 </UserControl>

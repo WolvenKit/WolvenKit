@@ -11,34 +11,33 @@
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=shell:StatusBarViewModel}"
     d:DesignWidth="800">
-
     <Grid MouseLeftButtonDown="StatusBar_MouseLeftButtonDown">
-
         <Grid.RowDefinitions>
-            <RowDefinition Height="1" />
-            <RowDefinition Height="25" />
+            <RowDefinition Height="{DynamicResource WolvenKitStatusBarRowHeight}" />
         </Grid.RowDefinitions>
 
         <StatusBar
-            Grid.Row="1"
+            VerticalAlignment="Bottom"
             Background="{Binding BarColor}">
-
             <StatusBarItem
+                Margin="{DynamicResource WolvenKitMarginSmallLeft}"
                 HorizontalAlignment="Left"
                 Background="Transparent">
                 <TextBlock
-                    Margin="6,0,0,4"
+                    FontSize="{DynamicResource WolvenKitFontBody}"
                     Text="{Binding Status}" />
             </StatusBarItem>
 
             <StatusBarItem
+                Margin="{DynamicResource WolvenKitMarginSmallLeft}"
                 HorizontalAlignment="Left"
                 Background="Transparent">
                 <syncfusion:SfLinearProgressBar
                     x:Name="StatusBarProgressBar"
-                    Width="200"
-                    Height="16"
-                    Margin="6,0,0,2"
+                    Width="{DynamicResource WolvenKitStatusBarProgressBarWidth}"
+                    Height="{DynamicResource WolvenKitStatusBarProgressBarHeight}"
+                    Margin="{DynamicResource WolvenKitMarginTinyVertical}"
+                    VerticalAlignment="Center"
                     ProgressColor="{StaticResource WolvenKitRed}"
                     TrackColor="#131313" />
             </StatusBarItem>
@@ -48,7 +47,7 @@
                 Background="Transparent"
                 ToolTip="Current Project and Version Number">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Margin="0,0,10,0">
+                    <TextBlock FontSize="{DynamicResource WolvenKitFontBody}">
                         <TextBlock.Text>
                             <MultiBinding StringFormat="{}{0} | WolvenKit {1}">
                                 <Binding Path="CurrentProject" />

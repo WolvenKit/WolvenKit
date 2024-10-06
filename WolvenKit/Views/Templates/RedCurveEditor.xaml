@@ -6,17 +6,29 @@
     xmlns:local="clr-namespace:WolvenKit.Views.Editors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    d:DesignHeight="100"
-    d:DesignWidth="400"
-    mc:Ignorable="d">
-
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    mc:Ignorable="d"
+    d:DesignWidth="240"
+    d:DesignHeight="48">
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedCurveEditor}}}">
-
         <Button
             x:Name="CurveEditorButton"
+            Margin="{DynamicResource WolvenKitMarginTinyVertical}"
             syncfusion:FocusManagerHelper.FocusedElement="True"
-            Click="CurveEditorButton_OnClick"
-            Content="Open Curve Editor" />
+            Click="CurveEditorButton_OnClick">
+            <StackPanel Orientation="Horizontal">
+                <templates:IconBox
+                    IconPack="Material"
+                    Kind="ChartBellCurve"
+                    Margin="0"
+                    Size="{DynamicResource WolvenKitIconMicro}"
+                    Foreground="{StaticResource WolvenKitCyan}" />
 
+                <TextBlock
+                    Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                    VerticalAlignment="Center"
+                    Text="Open Curve Editor" />
+            </StackPanel>
+        </Button>
     </Grid>
 </UserControl>

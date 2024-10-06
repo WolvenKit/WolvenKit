@@ -41,6 +41,7 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
     {
         _parent = parent;
         FilePath = parent.FilePath;
+        RelativeFilePath = parent.RelativePath;
         Header = header;
 
         PropertyChanged += RedDocumentTabViewModel_PropertyChanged;
@@ -75,11 +76,12 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
         Enum.TryParse(GetFilePathExtensionString(), true, out RedDocumentItemType type)
             ? type
             : RedDocumentItemType.Other;
-    
+
 
     public abstract ERedDocumentItemType DocumentItemType { get; }
     public string Header { get; set; }
     public string FilePath { get; set; }
+    public string RelativeFilePath { get; }
 
     [ObservableProperty] private RedDocumentViewModel _parent;
 
@@ -216,6 +218,6 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
     public virtual void OnSearchChanged()
     {
     }
-    
-    
+
+
 }
