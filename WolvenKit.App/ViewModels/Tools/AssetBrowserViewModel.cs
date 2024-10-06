@@ -1045,7 +1045,12 @@ public partial class AssetBrowserViewModel : ToolViewModel
         }
     }
 
-    public void RefreshModifierStates() => IsShiftKeyDown = ModifierViewStateService.IsShiftBeingHeld;
+    // Force re-trigger
+    public void RefreshModifierStates()
+    {
+        IsShiftKeyDown = false;
+        IsShiftKeyDown = ModifierViewStateService.IsShiftBeingHeld;
+    }
 
     #endregion methods
 
