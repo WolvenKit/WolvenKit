@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    x:Name="uc"
     d:DesignHeight="450"
     d:DesignWidth="800"
     x:TypeArguments="dialogs:ScriptSettingsDialogViewModel"
@@ -18,10 +19,22 @@
                 <RowDefinition Height="40" />
             </Grid.RowDefinitions>
 
+            <Grid.Resources>
+                <Style BasedOn="{StaticResource {x:Type syncfusion:DoubleTextBox}}" TargetType="syncfusion:DoubleTextBox">
+                    <Setter Property="Culture" Value="en-us" />
+                </Style>
+            </Grid.Resources>
+
             <syncfusion:PropertyGrid
                 Name="SettingsGrid"
-                Width="300"
-                Height="400" />
+                Width="600"
+                Height="400"
+                AutoGeneratingPropertyGridItem="SettingsGrid_OnAutoGeneratingPropertyGridItem"
+                ButtonPanelVisibility="Hidden"
+                DescriptionPanelVisibility="Visible"
+                PropertyExpandMode="NestedMode"
+                SearchBoxVisibility="Hidden"
+                SortDirection="{x:Null}" />
 
             <StackPanel
                 Grid.Row="1"

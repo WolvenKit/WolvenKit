@@ -28,6 +28,7 @@ public class SettingsEntry(string name, Type type, object? value)
 {
     public string Name { get; init; } = name;
     public Type Type { get; init; } = type;
+    public Type InnerType => Type.GenericTypeArguments[0];
     public object? Value { get; set; } = value;
 }
 
@@ -203,6 +204,31 @@ public partial class ScriptFile
                     break;
                 }
 
+                case "int[]":
+                {
+                    var defaultValue = new List<int>();
+                    if (parts.Length > 2)
+                    {
+                        var values = parts[2].Split(',');
+                        var array = new List<int>();
+                        foreach (var strVal in values)
+                        {
+                            if (!int.TryParse(strVal.Trim(), out var val))
+                            {
+                                loggerService?.Warning($"Invalid default value for setting \"{name}\". Should be an integer array");
+                                return;
+                            }
+
+                            array.Add(val);
+                        }
+
+                        defaultValue = array;
+                    }
+
+                    entry = new SettingsEntry(name, typeof(List<int>), defaultValue);
+                    break;
+                }
+
                 case "double":
                 {
                     var defaultValue = default(double);
@@ -219,15 +245,112 @@ public partial class ScriptFile
                     break;
                 }
 
+                case "double[]":
+                {
+                    var defaultValue = new List<double>();
+                    if (parts.Length > 2)
+                    {
+                        var values = parts[2].Split(',');
+                        var array = new List<double>();
+                        foreach (var strVal in values)
+                        {
+                            if (!double.TryParse(strVal.Trim(), CultureInfo.InvariantCulture, out var val))
+                            {
+                                loggerService?.Warning($"Invalid default value for setting \"{name}\". Should be an integer array");
+                                return;
+                            }
+
+                            array.Add(val);
+                        }
+
+                        defaultValue = array;
+                    }
+
+                    entry = new SettingsEntry(name, typeof(List<double>), defaultValue);
+                    break;
+                }
+
                 case "string":
                 {
-                    var defaultValue = default(string);
+                    var defaultValue = string.Empty;
                     if (parts.Length > 2)
                     {
                         defaultValue = parts[2].Trim();
                     }
 
                     entry = new SettingsEntry(name, typeof(string), defaultValue);
+                    break;
+                }
+
+                case "string[]":
+                {
+                    var defaultValue = new List<string>();
+                    if (parts.Length > 2)
+                    {
+                        var array = new List<string>();
+
+                        var tmpStr = "";
+                        var newVal = false;
+                        var escape = false;
+                        for (var i = 0; i < parts[2].Length; i++)
+                        {
+                            var c = parts[2][i];
+
+                            if (escape)
+                            {
+                                if (c == '"')
+                                {
+                                    tmpStr += c;
+                                }
+                                else
+                                {
+                                    tmpStr += $"\\{c}";
+                                }
+
+                                escape = false;
+                                continue;
+                            }
+
+                            if (c == '\\')
+                            {
+                                escape = true;
+                                continue;
+                            }
+
+                            if (c == '"')
+                            {
+                                if (!newVal)
+                                {
+                                    newVal = true;
+                                }
+                                else
+                                {
+                                    array.Add(tmpStr);
+                                    tmpStr = "";
+
+                                    newVal = false;
+                                }
+
+                                continue;
+                            }
+
+                            if (!newVal)
+                            {
+                                if (c != ',')
+                                {
+                                    loggerService?.Warning($"Invalid default value for setting \"{name}\"");
+                                    return;
+                                }
+                                continue;
+                            }
+
+                            tmpStr += c;
+                        }
+
+                        defaultValue = array;
+                    }
+
+                    entry = new SettingsEntry(name, typeof(List<string>), defaultValue);
                     break;
                 }
 
@@ -244,6 +367,31 @@ public partial class ScriptFile
                     }
 
                     entry = new SettingsEntry(name, typeof(bool), defaultValue);
+                    break;
+                }
+
+                case "bool[]":
+                {
+                    var defaultValue = new List<bool>();
+                    if (parts.Length > 2)
+                    {
+                        var values = parts[2].Split(',');
+                        var array = new List<bool>();
+                        foreach (var strVal in values)
+                        {
+                            if (!bool.TryParse(strVal.Trim(), out var val))
+                            {
+                                loggerService?.Warning($"Invalid default value for setting \"{name}\". Should be an integer array");
+                                return;
+                            }
+
+                            array.Add(val);
+                        }
+
+                        defaultValue = array;
+                    }
+
+                    entry = new SettingsEntry(name, typeof(List<bool>), defaultValue);
                     break;
                 }
             }

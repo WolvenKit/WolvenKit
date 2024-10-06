@@ -29,11 +29,11 @@ public partial class ScriptSettingsDialogViewModel : DialogViewModel
 
     public class SettingsTypeDescriptor : ICustomTypeDescriptor
     {
-        internal Dictionary<string, SettingsEntry> _settings;
+        public Dictionary<string, SettingsEntry> Settings;
 
         public SettingsTypeDescriptor(Dictionary<string, SettingsEntry> settingsPreset)
         {
-            _settings = settingsPreset;
+            Settings = settingsPreset;
         }
 
         public AttributeCollection GetAttributes() => TypeDescriptor.GetAttributes(this, true);
@@ -57,7 +57,7 @@ public partial class ScriptSettingsDialogViewModel : DialogViewModel
         public PropertyDescriptorCollection GetProperties()
         {
             var modelProperties = new List<SettingsPropertyDescriptor>();
-            foreach (var (_, entry) in _settings)
+            foreach (var (_, entry) in Settings)
             {
                 modelProperties.Add(new SettingsPropertyDescriptor(this, entry.Name, entry.Type, []));
             }
@@ -88,13 +88,13 @@ public partial class ScriptSettingsDialogViewModel : DialogViewModel
 
         public override bool CanResetValue(object component) => true;
 
-        public override object? GetValue(object? component) => _typeDescriptor._settings[Name].Value;
+        public override object? GetValue(object? component) => _typeDescriptor.Settings[Name].Value;
 
         public override void ResetValue(object component)
         {
         }
 
-        public override void SetValue(object? component, object? value) => _typeDescriptor._settings[Name].Value = value;
+        public override void SetValue(object? component, object? value) => _typeDescriptor.Settings[Name].Value = value;
 
         public override bool ShouldSerializeValue(object component) => false;
     }
