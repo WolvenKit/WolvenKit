@@ -9,6 +9,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
+using System.Reactive.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,9 +17,10 @@ using System.Windows;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DynamicData.Binding;
+using Microsoft.VisualBasic.FileIO;
 using Microsoft.Win32;
 using Semver;
-using Microsoft.VisualBasic.FileIO; 
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Factories;
@@ -51,6 +53,8 @@ using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 using FileSystem = Microsoft.VisualBasic.FileIO.FileSystem;
 using NativeMethods = WolvenKit.App.Helpers.NativeMethods;
+using Rect = System.Windows.Rect;
+using Thickness = System.Windows.Thickness;
 
 namespace WolvenKit.App.ViewModels.Shell;
 
@@ -129,16 +133,19 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             .Where(s => s.Name == "run_object_spawner_on_active_tab")
             .Select(s => new ScriptFileViewModel(SettingsManager, ScriptSource.User, s))
             .FirstOrDefault();
-        
+
         if (_hashService is HashServiceExt hashServiceExt)
         {
             hashServiceExt.LoadGlobalCache();
         }
-        
+
         _scriptService.SetAppViewModel(this);
 
         _progressService.PropertyChanged += ProgressService_PropertyChanged;
-        
+
+        SettingsManager.WhenPropertyChanged(settings => settings.UiScale)
+            .Subscribe(settings => OnUiScaleChanged());
+
         UpdateTitle();
 
         ShowFirstTimeSetup();
@@ -177,7 +184,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             DockedViewVisibleChanged?.Invoke(sender, new DockedViewVisibleChangedEventArgs(dockElement));
             dockElement.PropertyChanged += DockedView_OnPropertyChanged;
         }
-        
+
     }
 
     public class DockedViewVisibleChangedEventArgs(IDockElement element)
@@ -219,7 +226,12 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                     break;
             }
         }, DispatcherPriority.ContextIdle);
-        
+
+    }
+
+    private void OnUiScaleChanged()
+    {
+        UpdateScalesResource();
     }
 
     #region init
@@ -249,7 +261,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         if (!OpenFileFromLaunchArgs())
         {
             ShowHomePageSync();
-        }    
+        }
 
         CheckForUpdatesCommand.SafeExecute(true);
         CheckForScriptUpdatesCommand.SafeExecute();
@@ -618,7 +630,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             var dlg = new OpenFileDialog
             {
-                Multiselect = false, Title = "Locate the WolvenKit project", Filter = "Cyberpunk 2077 Project|*.cpmodproj"
+                Multiselect = false,
+                Title = "Locate the WolvenKit project",
+                Filter = "Cyberpunk 2077 Project|*.cpmodproj"
             };
 
             if (dlg.ShowDialog() != true || dlg.FileName is not string result || string.IsNullOrEmpty(result))
@@ -658,7 +672,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             var dlg = new OpenFileDialog
             {
-                Multiselect = false, Title = "Locate the WolvenKit project", Filter = "Cyberpunk 2077 Project|*.cpmodproj"
+                Multiselect = false,
+                Title = "Locate the WolvenKit project",
+                Filter = "Cyberpunk 2077 Project|*.cpmodproj"
             };
 
             dlg.ShowDialog();
@@ -731,7 +747,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             var projectLocation = Path.Combine(project.ProjectPath.NotNull(), newProjectName,
                 $"{newProjectName}{Cp77Project.ProjectFileExtension}"
             );
-            
+
             Cp77Project np = new(projectLocation, newProjectName, newModName)
             {
                 Author = project.Author,
@@ -782,7 +798,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 return;
             }
         }
-        
+
         ActiveDocument.Reload(true);
     }
 
@@ -807,7 +823,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             Interactions.ShowConfirmation((s_noProjectText, s_noProjectTitle, WMessageBoxImage.Warning, WMessageBoxButtons.Ok));
             return;
         }
-        
+
         foreach (var file in DockedViews.OfType<IDocumentViewModel>().Where(f => f.IsDirty))
         {
             Save(file);
@@ -868,7 +884,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 ENotificationCategory.App);
             return;
         }
-        
+
         Interactions.ShowBrokenReferencesList(("Broken references", brokenReferences));
     }
 
@@ -879,7 +895,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         var allReferencePaths = await ActiveProject!.GetAllReferences(_progressService, _loggerService);
         _loggerService.Info($"Scanning {ActiveProject!.Files.Count(f => f.StartsWith("archive"))} files. Please wait...");
-        
+
         var referencesHashSet = new HashSet<string>(allReferencePaths.SelectMany((r) => r.Value));
 
         var potentiallyUnusedFiles = ActiveProject!.ModFiles
@@ -909,7 +925,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             _notificationService.ShowNotification("No un-used files in project", ENotificationType.Success, ENotificationCategory.App);
             return;
         }
-        
+
         List<string> failedDeletions = [];
         foreach (var filePath in deleteFiles)
         {
@@ -1081,7 +1097,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     {
         var vm = new OpenFileViewModel(SettingsManager, _projectManager, _loggerService)
         {
-            Title = "Import .archive", Filter = "Archive files (*.archive)|*.archive"
+            Title = "Import .archive",
+            Filter = "Archive files (*.archive)|*.archive"
         };
 
         if (await vm.OpenFile() is not string result)
@@ -1180,7 +1197,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                     stream = File.Create(file.FullPath);
                 }
                 break;
-            }  
+            }
             case EWolvenKitFile.Cr2w:
                 var redType = file.SelectedFile.Name;
                 if (!string.IsNullOrEmpty(redType))
@@ -1519,7 +1536,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         DockedViews.Add(newVm);
         return newVm;
-      
+
     }
 
 
@@ -1546,7 +1563,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         CloseOverlay();
     }
 
-    
+
     public void FinishedClosingModal()
     {
         if (!ShouldDialogShow)
@@ -1607,7 +1624,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [ObservableProperty]
     private ObservableObject? _activeOverlay;
 
-    [ObservableProperty] 
+    [ObservableProperty]
     private DialogViewModel? _activeDialog;
 
     [ObservableProperty]
@@ -1630,6 +1647,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(SaveAllCommand))]
     private ObservableCollection<IDockElement> _dockedViews = new();
+
+    private double _uiScalePercentage => (double)SettingsManager.UiScale / 100.0;
 
     #endregion properties
 
@@ -1828,7 +1847,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                                            "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/usage/wolvenkit-projects";
 
     private const string s_noProjectTitle = "No Wolvenkit project";
-    
+
     /// <summary>
     /// Saves a document and resets the dirty flag.
     /// </summary>
@@ -1905,7 +1924,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     public Task RequestFileOpen(string fullpath, bool ignoreIgnoredExtension = false)
     {
         var ext = Path.GetExtension(fullpath).ToLower();
-        
+
         // everything in ignoredExtensions is delegated to the System viewer
         var delimiter = "|";
         //string[] ignoredExtensions = _settingsManager.TreeViewIgnoredExtensions.ToLower().Split(delimiter);
@@ -2101,6 +2120,134 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         SettingsManager.LaunchProfiles = profiles;
         SettingsManager.Save();
 
+    }
+
+    private void UpdateScalesResource()
+    {
+        var resources = Application.Current.Resources;
+
+        // Fonts
+        resources["WolvenKitAltTitleFontSize"] = 10 * _uiScalePercentage;
+        resources["WolvenKitSubTitleFontSize"] = 12 * _uiScalePercentage;
+        resources["WolvenKitBodyFontSize"] = 14 * _uiScalePercentage;
+        resources["WolvenKitMediumFontSize"] = 16 * _uiScalePercentage;
+        resources["WolvenKitTitleFontSize"] = 18 * _uiScalePercentage;
+        resources["WolvenKitHeaderFontSize"] = 20 * _uiScalePercentage;
+        resources["WolvenKitHugeFontSize"] = 24 * _uiScalePercentage;
+
+        // Icons
+        resources["WolvenKitMicroIconSize"] = 12 * _uiScalePercentage;
+        resources["WolvenKitTinyIconSize"] = 16 * _uiScalePercentage;
+        resources["WolvenKitSmallIconSize"] = 18 * _uiScalePercentage;
+        resources["WolvenKitIconSize"] = 20 * _uiScalePercentage;
+        resources["WolvenKitBigIconSize"] = 26 * _uiScalePercentage;
+        resources["WolvenKitHugeIconSize"] = 36 * _uiScalePercentage;
+
+        // Layouts
+        resources["WolvenKitMargin"] = new Thickness(15).Mul(_uiScalePercentage);
+        resources["WolvenKitMarginLeft"] = new Thickness(15, 0, 0, 0).Mul(_uiScalePercentage);
+        resources["WolvenKitMarginBottom"] = new Thickness(0, 0, 0, 15).Mul(_uiScalePercentage);
+        resources["WolvenKitMarginHorizontal"] = new Thickness(15, 0, 15, 0).Mul(_uiScalePercentage);
+        resources["WolvenKitMarginVertical"] = new Thickness(0, 15, 0, 15).Mul(_uiScalePercentage);
+
+        resources["WolvenKitMarginSmall"] = new Thickness(8).Mul(_uiScalePercentage);
+        resources["WolvenKitMarginSmallLeft"] = new Thickness(8, 0, 0, 0).Mul(_uiScalePercentage);
+        resources["WolvenKitMarginSmallBottom"] = new Thickness(0, 0, 0, 8).Mul(_uiScalePercentage);
+        resources["WolvenKitMarginSmallHorizontal"] = new Thickness(8, 0, 8, 0).Mul(_uiScalePercentage);
+        resources["WolvenKitMarginSmallVertical"] = new Thickness(0, 8, 0, 8).Mul(_uiScalePercentage);
+
+        resources["WolvenKitMarginTiny"] = new Thickness(4).Mul(_uiScalePercentage);
+        resources["WolvenKitMarginTinyRight"] = new Thickness(0, 0, 4, 0).Mul(_uiScalePercentage);
+        resources["WolvenKitMarginTinyBottom"] = new Thickness(0, 0, 0, 4).Mul(_uiScalePercentage);
+        resources["WolvenKitMarginTinyHorizontal"] = new Thickness(4, 0, 4, 0).Mul(_uiScalePercentage);
+        resources["WolvenKitMarginTinyVertical"] = new Thickness(0, 4, 0, 4).Mul(_uiScalePercentage);
+
+        resources["WolvenKitSmallRadius"] = new CornerRadius(5).Mul(_uiScalePercentage);
+        resources["WolvenKitRadius"] = new CornerRadius(10).Mul(_uiScalePercentage);
+
+        resources["WolvenKitColumnTiny"] = new GridLength(5).Mul(_uiScalePercentage);
+
+        resources["WolvenKitRowText"] = new GridLength(20).Mul(_uiScalePercentage);
+
+        // Views
+        resources["WolvenKitDividerHeight"] = 45 * _uiScalePercentage;
+        resources["WolvenKitTreeGridColumnIconWidth"] = new GridLength(13).Mul(_uiScalePercentage);
+        resources["WolvenKitTreeGridIconHeight"] = 13 * _uiScalePercentage;
+        resources["WolvenKitTreeGridRowHeight"] = 19 * _uiScalePercentage;
+        resources["WolvenKitTreeGridCheckboxWidth"] = 32 * _uiScalePercentage;
+
+        // HomePageView
+        resources["WolvenKitHomeSideBarWidth"] = (200 * _uiScalePercentage).ToString();
+        resources["WolvenKitHomeSideBarLength"] = new GridLength(200).Mul(_uiScalePercentage);
+        resources["WolvenKitHomeButtonWidth"] = 160 * _uiScalePercentage;
+        resources["WolvenKitHomeButtonHeight"] = 44 * _uiScalePercentage;
+        resources["WolvenKitHomeVersionMargin"] = new Thickness(6).Mul(_uiScalePercentage);
+
+        resources["WolvenKitHomeSharedHeaderWidth"] = 140 * _uiScalePercentage;
+        resources["WolvenKitHomeSharedButtonHeight"] = 40 * _uiScalePercentage;
+        resources["WolvenKitHomeSharedPaddingLeft"] = new Thickness(10, 0, 0, 0).Mul(_uiScalePercentage);
+
+        // WelcomePageView
+        resources["WolvenKitWelcomeRightLength"] = new GridLength(380).Mul(_uiScalePercentage);
+        resources["WolvenKitWelcomeOrderWidth"] = 140 * _uiScalePercentage;
+        resources["WolvenKitWelcomeCardSammyWidth"] = new GridLength(70).Mul(_uiScalePercentage);
+        resources["WolvenKitWelcomeCardSammyHeight"] = 70 * _uiScalePercentage;
+        resources["WolvenKitWelcomeCardSammyClipHeight"] = 50 * _uiScalePercentage;
+        resources["WolvenKitWelcomeTogglePadding"] = new Thickness(10, 5, 10, 5).Mul(_uiScalePercentage);
+
+        resources["WolvenKitWelcomeButtonWidth"] = 250 * _uiScalePercentage;
+        resources["WolvenKitWelcomeButtonHeight"] = 100 * _uiScalePercentage;
+        resources["WolvenKitWelcomeButtonMargin"] = new Thickness(0, 0, 0, 8).Mul(_uiScalePercentage);
+        resources["WolvenKitWelcomeButtonPadding"] = new Thickness(25, 0, 25, 0).Mul(_uiScalePercentage);
+        resources["WolvenKitWelcomeStackHeight"] = 70 * _uiScalePercentage;
+        resources["WolvenKitWelcomeStackMargin"] = new Thickness(0, 4, 50, 0).Mul(_uiScalePercentage);
+        resources["WolvenKitWelcomeSocialButtonHeight"] = 50 * _uiScalePercentage;
+
+        // SettingsPageView
+        resources["WolvenKitSettingsGridLabelWidth"] = new GridLength(200).Mul(_uiScalePercentage);
+
+        // PluginsToolView
+        resources["WolvenKitPluginsToolIconButtonSize"] = 50 * _uiScalePercentage;
+        resources["WolvenKitPluginsToolButtonWidth"] = 110 * _uiScalePercentage;
+        resources["WolvenKitPluginsToolButtonHeight"] = 20 * _uiScalePercentage;
+        resources["WolvenKitPluginsToolProgressBarHeight"] = 10 * _uiScalePercentage;
+
+        // LogView
+        resources["WolvenKitLogMargin"] = new Thickness(5).Mul(_uiScalePercentage);
+        resources["WolvenKitLogScriptMinWidth"] = 240 * _uiScalePercentage;
+        resources["WolvenKitLogLineMinHeight"] = 16 * _uiScalePercentage;
+
+        // BackStageView
+        resources["WolvenKitBackStageBgMargin"] = new Thickness(5, 55, 5, 5).Mul(_uiScalePercentage);
+
+        // DockingAdapter
+        resources["WolvenKitDockingAdapterViewport"] = new Rect(0, 0, 90, 90).Mul(_uiScalePercentage);
+        resources["WolvenKitDockingAdapterSammy"] = new Rect(0, 0, 70, 80).Mul(_uiScalePercentage);
+
+        // MenuBarView
+        resources["WolvenKitMenuBarItemMarginHorizontal"] = new Thickness(4, 2, 4, 2).Mul(_uiScalePercentage);
+
+        // RibbonView
+        resources["WolvenKitRibbonToolBarHeight"] = 28 * _uiScalePercentage;
+
+        // StatusBarView
+        resources["WolvenKitStatusBarRowHeight"] = new GridLength(25).Mul(_uiScalePercentage);
+        resources["WolvenKitStatusBarProgressBarWidth"] = 200 * _uiScalePercentage;
+        resources["WolvenKitStatusBarProgressBarHeight"] = 16 * _uiScalePercentage;
+
+        // AudioPlayerView
+        resources["WolvenKitAudioPlayerVisualizationWidth"] = 200 * _uiScalePercentage;
+
+        // LocKeyBrowserView
+        resources["WolvenKitLocKeyBrowserKeyLength"] = new GridLength(110).Mul(_uiScalePercentage);
+    }
+
+    private double ComputeScaleFromResolution(double height)
+    {
+        var scale = height / 1080.0;
+
+        scale = Math.Clamp(scale, 0.50, 4.0);
+        return scale;
     }
 
     #endregion methods

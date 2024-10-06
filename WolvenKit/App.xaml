@@ -126,6 +126,7 @@
                 <!--  Resource Dictionaries  -->
                 <ResourceDictionary Source="pack://application:,,,/WolvenKit;Component/Themes/App.Icons.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/WolvenKit;Component/Themes/App.Styles.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/WolvenKit;Component/Themes/App.Scales.xaml" />
 
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Dark.Crimson.xaml" />
 
