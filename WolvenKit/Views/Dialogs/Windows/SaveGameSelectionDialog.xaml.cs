@@ -1,12 +1,10 @@
-using System.Reactive.Disposables;
-using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Input;
 using ReactiveUI;
 using Splat;
 using Syncfusion.UI.Xaml.Grid;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Helpers;
+using Application = System.Windows.Application;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using Window = System.Windows.Window;
 
@@ -44,8 +42,7 @@ namespace WolvenKit.Views.Dialogs.Windows
             {
                 return;
             }
-
-            e.Height = 70;
+            e.Height = (double)Application.Current.Resources["WolvenKitSaveGameSelectionRowHeight"];
             e.Handled = true;
         }
 

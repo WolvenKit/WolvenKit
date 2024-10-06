@@ -1,0 +1,194 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+    xmlns:sfskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
+    xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
+    xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:System="clr-namespace:System;assembly=netstandard">
+
+    <!-- Fonts -->
+    <System:Double x:Key="WolvenKitAltTitleFontSize">10</System:Double>
+    <System:Double x:Key="WolvenKitSubTitleFontSize">12</System:Double>
+    <System:Double x:Key="WolvenKitBodyFontSize">14</System:Double>
+    <System:Double x:Key="WolvenKitMediumFontSize">16</System:Double>
+    <System:Double x:Key="WolvenKitTitleFontSize">18</System:Double>
+    <System:Double x:Key="WolvenKitHeaderFontSize">20</System:Double>
+    <System:Double x:Key="WolvenKitHugeFontSize">24</System:Double>
+
+    <!-- Icons -->
+    <System:Double x:Key="WolvenKitPicoIconSize">8</System:Double>
+    <System:Double x:Key="WolvenKitNanoIconSize">10</System:Double>
+    <System:Double x:Key="WolvenKitMicroIconSize">12</System:Double>
+    <System:Double x:Key="WolvenKitTinyIconSize">16</System:Double>
+    <System:Double x:Key="WolvenKitSmallIconSize">18</System:Double>
+    <System:Double x:Key="WolvenKitIconSize">20</System:Double>
+    <System:Double x:Key="WolvenKitBigIconSize">26</System:Double>
+    <System:Double x:Key="WolvenKitHugeIconSize">36</System:Double>
+
+    <!-- Layouts -->
+    <Thickness x:Key="WolvenKitMargin">15</Thickness>
+    <Thickness x:Key="WolvenKitMarginLeft">15,0,0,0</Thickness>
+    <Thickness x:Key="WolvenKitMarginRight">0,0,15,0</Thickness>
+    <Thickness x:Key="WolvenKitMarginBottom">0,0,0,15</Thickness>
+    <Thickness x:Key="WolvenKitMarginHorizontal">15,0</Thickness>
+    <Thickness x:Key="WolvenKitMarginVertical">0,15</Thickness>
+
+    <Thickness x:Key="WolvenKitMarginSmall">8</Thickness>
+    <Thickness x:Key="WolvenKitMarginSmallLeft">8,0,0,0</Thickness>
+    <Thickness x:Key="WolvenKitMarginSmallRight">0,0,8,0</Thickness>
+    <Thickness x:Key="WolvenKitMarginSmallBottom">0,0,0,8</Thickness>
+    <Thickness x:Key="WolvenKitMarginSmallHorizontal">8,0</Thickness>
+    <Thickness x:Key="WolvenKitMarginSmallVertical">0,8</Thickness>
+
+    <Thickness x:Key="WolvenKitMarginTiny">4</Thickness>
+    <Thickness x:Key="WolvenKitMarginTinyLeft">4,0,0,0</Thickness>
+    <Thickness x:Key="WolvenKitMarginTinyRight">0,0,4,0</Thickness>
+    <Thickness x:Key="WolvenKitMarginTinyBottom">0,0,0,4</Thickness>
+    <Thickness x:Key="WolvenKitMarginTinyHorizontal">4,0</Thickness>
+    <Thickness x:Key="WolvenKitMarginTinyVertical">0,4</Thickness>
+    <Thickness x:Key="WolvenKitMarginTinyHeader">4,4,4,0</Thickness>
+    <Thickness x:Key="WolvenKitMarginTinyFooter">4,0,4,4</Thickness>
+    
+    <Thickness x:Key="WolvenKitMarginMicroHorizontal">2,0</Thickness>
+
+    <CornerRadius x:Key="WolvenKitSmallRadius">5</CornerRadius>
+    <CornerRadius x:Key="WolvenKitRadius">10</CornerRadius>
+
+    <GridLength x:Key="WolvenKitColumnTiny">5</GridLength>
+
+    <GridLength x:Key="WolvenKitRowText">20</GridLength>
+
+    <!-- Views -->
+    <System:Double x:Key="WolvenKitDividerHeight">45</System:Double>
+
+    <System:Double x:Key="WolvenKitDataGridRowHeight">24</System:Double>
+
+    <GridLength    x:Key="WolvenKitTreeGridColumnIconWidth">13</GridLength>
+    <System:Double x:Key="WolvenKitTreeGridIconHeight">13</System:Double>
+    <System:Double x:Key="WolvenKitTreeGridRowHeight">20</System:Double>
+    <System:Double x:Key="WolvenKitTreeGridCheckboxWidth">32</System:Double>
+    
+    <System:Double x:Key="WolvenKitTreeRowHeight">20</System:Double>
+
+    <System:Double x:Key="WolvenKitTabHeight">25</System:Double>
+
+    <GridLength    x:Key="WolvenKitPropertyColumnWidth">100</GridLength>
+
+    <GridLength    x:Key="WolvenKitContextMenuColumnIconWidth">13</GridLength>
+
+    <System:Double x:Key="WolvenKitDragDropTooltipWidth">250</System:Double>
+
+    <System:Double x:Key="WolvenKitWizardNavBarMinHeight">44</System:Double>
+
+    <System:Double x:Key="WolvenKitFieldHeight">120</System:Double>
+    
+    <System:Double x:Key="WolvenKitButtonHeight">32</System:Double>
+
+    <!-- HomePageView -->
+    <System:String x:Key="WolvenKitHomeSideBarWidth">200</System:String>
+    <GridLength    x:Key="WolvenKitHomeSideBarLength">200</GridLength>
+    <System:Double x:Key="WolvenKitHomeButtonWidth">160</System:Double>
+    <System:Double x:Key="WolvenKitHomeButtonHeight">44</System:Double>
+    <Thickness     x:Key="WolvenKitHomeVersionMargin">6</Thickness>
+
+    <System:Double x:Key="WolvenKitHomeSharedHeaderWidth">140</System:Double>
+    <System:Double x:Key="WolvenKitHomeSharedButtonHeight">40</System:Double>
+    <Thickness     x:Key="WolvenKitHomeSharedPaddingLeft">10,0,0,0</Thickness>
+
+    <!-- WelcomePageView -->
+    <GridLength    x:Key="WolvenKitWelcomeRightLength">380</GridLength>
+    <System:Double x:Key="WolvenKitWelcomeOrderWidth">140</System:Double>
+    <GridLength    x:Key="WolvenKitWelcomeCardSammyWidth">70</GridLength>
+    <System:Double x:Key="WolvenKitWelcomeCardSammyHeight">70</System:Double>
+    <System:Double x:Key="WolvenKitWelcomeCardSammyClipHeight">50</System:Double>
+    <Thickness     x:Key="WolvenKitWelcomeTogglePadding">10,5</Thickness>
+
+    <System:Double x:Key="WolvenKitWelcomeButtonWidth">250</System:Double>
+    <System:Double x:Key="WolvenKitWelcomeButtonHeight">100</System:Double>
+    <Thickness     x:Key="WolvenKitWelcomeButtonMargin">0,0,0,8</Thickness>
+    <Thickness     x:Key="WolvenKitWelcomeButtonPadding">25,0,25,0</Thickness>
+    <System:Double x:Key="WolvenKitWelcomeStackHeight">70</System:Double>
+    <Thickness     x:Key="WolvenKitWelcomeStackMargin">0,4,50,0</Thickness>
+    <System:Double x:Key="WolvenKitWelcomeSocialButtonHeight">50</System:Double>
+
+    <!-- SettingsPageView -->
+    <GridLength    x:Key="WolvenKitSettingsGridLabelWidth">200</GridLength>
+
+    <!-- PluginsToolView -->
+    <System:Double x:Key="WolvenKitPluginsToolIconButtonSize">50</System:Double>
+    <System:Double x:Key="WolvenKitPluginsToolButtonWidth">110</System:Double>
+    <System:Double x:Key="WolvenKitPluginsToolButtonHeight">20</System:Double>
+    <System:Double x:Key="WolvenKitPluginsToolProgressBarHeight">10</System:Double>
+
+    <!-- LogView -->
+    <System:Double x:Key="WolvenKitLogScriptMinWidth">240</System:Double>
+    <System:Double x:Key="WolvenKitLogLineMinHeight">16</System:Double>
+
+    <!-- BackStageView -->
+    <Thickness x:Key="WolvenKitBackStageBgMargin">5,55,5,5</Thickness>
+
+    <!-- DockingAdapter -->
+    <Rect x:Key="WolvenKitDockingAdapterViewport">0,0,90,90</Rect>
+    <Rect x:Key="WolvenKitDockingAdapterSammy">0,0,70,80</Rect>
+
+    <!-- MenuBarView -->
+    <Thickness x:Key="WolvenKitMenuBarItemMarginHorizontal">4,2</Thickness>
+
+    <!-- StatusBarView -->
+    <GridLength    x:Key="WolvenKitStatusBarRowHeight">25</GridLength>
+    <System:Double x:Key="WolvenKitStatusBarProgressBarWidth">200</System:Double>
+    <System:Double x:Key="WolvenKitStatusBarProgressBarHeight">16</System:Double>
+
+    <!-- AudioPlayerView -->
+    <System:Double x:Key="WolvenKitAudioPlayerVisualizationWidth">200</System:Double>
+
+    <!-- LocKeyBrowserView -->
+    <GridLength x:Key="WolvenKitLocKeyBrowserKeyLength">110</GridLength>
+
+    <!-- PropertiesView -->
+    <System:Double x:Key="WolvenKitPropertiesButtonHeight">24</System:Double>
+
+    <!-- TweakBrowserView -->
+    <GridLength x:Key="WolvenKitTweakBrowserTabColumnWidth">300</GridLength>
+    
+    <!-- RedTreeView -->
+    <GridLength    x:Key="WolvenKitRedTreeIconColumnWidth">20</GridLength>
+    <GridLength    x:Key="WolvenKitRedTreeArrayColumnWidthLvl0">218</GridLength>
+    <GridLength    x:Key="WolvenKitRedTreeArrayColumnWidthLvl1">200</GridLength>
+    <GridLength    x:Key="WolvenKitRedTreeArrayColumnWidthLvl2">180</GridLength>
+    <GridLength    x:Key="WolvenKitRedTreeArrayColumnWidthLvl3">160</GridLength>
+    <GridLength    x:Key="WolvenKitRedTreeArrayColumnWidthLvl4">140</GridLength>
+    <GridLength    x:Key="WolvenKitRedTreeArrayColumnWidthLvl5">120</GridLength>
+    <GridLength    x:Key="WolvenKitRedTreeArrayColumnWidthLvl6">100</GridLength>
+
+    <!-- DialogView -->
+    <System:Double x:Key="WolvenKitDialogWidthSmall">480</System:Double>
+    <System:Double x:Key="WolvenKitDialogHeightSmall">190</System:Double>
+    <System:Double x:Key="WolvenKitDialogWidth">640</System:Double>
+    <System:Double x:Key="WolvenKitDialogHeight">320</System:Double>
+    <System:Double x:Key="WolvenKitDialogWidthMedium">800</System:Double>
+    <System:Double x:Key="WolvenKitDialogHeightMedium">600</System:Double>
+    <System:Double x:Key="WolvenKitDialogWidthLarge">1024</System:Double>
+    <System:Double x:Key="WolvenKitDialogHeightLarge">768</System:Double>
+    <GridLength    x:Key="WolvenKitDialogLabelColumnWidth">112</GridLength>
+    <GridLength    x:Key="WolvenKitDialogLabelColumnWidthMedium">140</GridLength>
+    
+    <!-- FirstSetupView -->
+    <System:Double x:Key="WolvenKitFirstSetupWidth">720</System:Double>
+    <System:Double x:Key="WolvenKitFirstSetupHeight">278</System:Double>
+
+    <!-- MaterialsRepositoryDialog -->
+    <System:Double x:Key="WolvenKitMaterialsRepositoryHeight">354</System:Double>
+    <System:Double x:Key="WolvenKitMaterialsRepositoryButtonWidth">180</System:Double>
+    <System:Double x:Key="WolvenKitMaterialsRepositoryComboBoxWidth">80</System:Double>
+
+    <!-- SaveGameSelectionDialog -->
+    <System:Double x:Key="WolvenKitSaveGameSelectionColumnWidth">160</System:Double>
+    <System:Double x:Key="WolvenKitSaveGameSelectionRowHeight">64</System:Double>
+    <System:Double x:Key="WolvenKitSaveGameSelectionImageWidth">100</System:Double>
+    <System:Double x:Key="WolvenKitSaveGameSelectionImageHeight">56</System:Double>
+</ResourceDictionary>

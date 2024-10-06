@@ -6,17 +6,15 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
-    Title="{Binding Title, RelativeSource={RelativeSource Self}}"
+    Title="{Binding Title}"
     SizeToContent="WidthAndHeight"
+    MinWidth="{DynamicResource WolvenKitDialogWidthSmall}"
     FocusManager.FocusedElement="{Binding ElementName=TextBox}"
     WindowStartupLocation="CenterScreen">
-
     <Grid
-        Margin="5,5,2,5"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch"
         hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
-
         <Grid.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
@@ -26,8 +24,9 @@
             </ResourceDictionary>
         </Grid.Resources>
 
-
-        <syncfusion:WizardControl CancelButtonCancelsWindow="True" FinishButtonClosesWindow="True">
+        <syncfusion:WizardControl
+            CancelButtonCancelsWindow="True"
+            FinishButtonClosesWindow="True">
             <syncfusion:WizardPage
                 BackVisibility="Collapsed"
                 CancelVisibility="Visible"
@@ -36,23 +35,20 @@
                 NextVisibility="Collapsed"
                 PreviewKeyDown="WizardPage_PreviewKeyDown"
                 PageType="Exterior">
-                <Grid
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="600" />
-                    </Grid.ColumnDefinitions>
+                <Grid Margin="{DynamicResource WolvenKitMarginTiny}">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="25" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-
-                    <TextBox x:Name="TextBox" KeyUp="Textbox_OnKeyUp" Style="{StaticResource ValidatingControlStyle}" />
-
+                    
+                    <TextBox
+                        x:Name="TextBox"
+                        KeyUp="Textbox_OnKeyUp"
+                        Padding="{DynamicResource WolvenKitMarginTiny}"
+                        FontSize="{DynamicResource WolvenKitBodyFontSize}"
+                        VerticalContentAlignment="Center"
+                        Style="{StaticResource ValidatingControlStyle}" />
                 </Grid>
             </syncfusion:WizardPage>
         </syncfusion:WizardControl>
-
     </Grid>
-
-
 </Window>

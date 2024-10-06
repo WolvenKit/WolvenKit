@@ -62,8 +62,7 @@
                         Grid.Row="0"
                         Grid.RowSpan="2"
                         Grid.Column="0"
-                        Margin="5,5,5,15"
-                        VerticalAlignment="Stretch"
+                        Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         ColorState="{Binding ElementName=rcp, Path=ColorState, Mode=TwoWay}" />
                     <DockPanel
                         Grid.Row="0"

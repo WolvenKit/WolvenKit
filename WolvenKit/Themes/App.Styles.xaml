@@ -26,6 +26,8 @@
 
     <Color x:Key="WolvenKitRedColor">#DF2935</Color>
     <Color x:Key="WolvenKitRedShadowColor">#951C2D</Color>
+    <Color x:Key="WolvenKitGreenColor">#28DE55</Color>
+    <Color x:Key="WolvenKitGreenShadowColor">#1C9435</Color>
     <Color x:Key="WolvenKitCyanColor">#52F1FF</Color>
     <Color x:Key="WolvenKitCyanShadowColor">#4D8C9A</Color>
     <Color x:Key="WolvenKitYellowColor">#FFEA0A</Color>
@@ -33,7 +35,6 @@
     <Color x:Key="WolvenKitPurpleColor">#5760B3</Color>
     <Color x:Key="WolvenKitDarkPinkColor">#AA336A</Color>
     <Color x:Key="WolvenKitTanColor">#D0A467</Color>
-    <Color x:Key="WolvenKitGreenColor">#3ae07d</Color>
 
     <Color x:Key="WolvenKitCyanShadow50Color">#7F4D8C9A</Color>
     <Color x:Key="WolvenKitRedShadow50Color">#7F951C2D</Color>
@@ -45,6 +46,8 @@
 
     <SolidColorBrush x:Key="WolvenKitRed" Color="{StaticResource WolvenKitRedColor}" />
     <SolidColorBrush x:Key="WolvenKitRedShadow" Color="{StaticResource WolvenKitRedShadowColor}" />
+    <SolidColorBrush x:Key="WolvenKitGreen" Color="{StaticResource WolvenKitGreenColor}" />
+    <SolidColorBrush x:Key="WolvenKitGreenShadow" Color="{StaticResource WolvenKitGreenShadowColor}" />
     <SolidColorBrush x:Key="WolvenKitCyan" Color="{StaticResource WolvenKitCyanColor}" />
     <SolidColorBrush x:Key="WolvenKitCyanShadow" Color="{StaticResource WolvenKitCyanShadowColor}" />
     <SolidColorBrush x:Key="WolvenKitYellow" Color="{StaticResource WolvenKitYellowColor}" />
@@ -52,7 +55,6 @@
     <SolidColorBrush x:Key="WolvenKitPurple" Color="{StaticResource WolvenKitPurpleColor}" />
     <SolidColorBrush x:Key="WolvenKitDarkPink" Color="{StaticResource WolvenKitDarkPinkColor}" />
     <SolidColorBrush x:Key="WolvenKitTan" Color="{StaticResource WolvenKitTanColor}" />
-    <SolidColorBrush x:Key="WolvenKitGreen" Color="{StaticResource WolvenKitGreenColor}" />
 
     <SolidColorBrush x:Key="WolvenKitRed50" Color="#7FDF2935" />
     <SolidColorBrush x:Key="WolvenKitRedShadow50" Color="{StaticResource WolvenKitRedShadow50Color}" />
