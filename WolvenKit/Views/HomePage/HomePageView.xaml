@@ -35,7 +35,7 @@
 
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition x:Name="HomePageSideBar" Width="200" />
+                <ColumnDefinition x:Name="HomePageSideBar" Width="{DynamicResource WolvenKitHomeSideBarLength}" />
                 <ColumnDefinition x:Name="HomePageContent" Width="5*" />
             </Grid.ColumnDefinitions>
         </Grid>
@@ -61,8 +61,8 @@
                                     BorderThickness="3,0,0,0">
                                     <ContentPresenter
                                         x:Name="ContentSite"
-                                        Width="160"
-                                        Height="44"
+                                        Width="{DynamicResource WolvenKitHomeButtonWidth}"
+                                        Height="{DynamicResource WolvenKitHomeButtonHeight}"
                                         Margin="8,0,0,0"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
@@ -170,15 +170,15 @@
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconCodicons
-                            Width="20"
-                            Height="20"
+                            Width="{DynamicResource WolvenKitIconSize}"
+                            Height="{DynamicResource WolvenKitIconSize}"
                             VerticalAlignment="Center"
                             Foreground="White"
                             Kind="Home" />
                         <TextBlock
-                            Margin="8,0,0,0"
+                            Margin="{DynamicResource WolvenKitMarginSmallLeft}"
                             VerticalAlignment="Center"
-                            FontSize="16"
+                            FontSize="{DynamicResource WolvenKitMediumFontSize}"
                             Text="Welcome" />
                     </StackPanel>
                 </TabItem.Header>
@@ -191,15 +191,15 @@
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconCodicons
-                            Width="20"
-                            Height="20"
+                            Width="{DynamicResource WolvenKitIconSize}"
+                            Height="{DynamicResource WolvenKitIconSize}"
                             VerticalAlignment="Center"
                             Foreground="White"
                             Kind="Package" />
                         <TextBlock
-                            Margin="8,0,0,0"
+                            Margin="{DynamicResource WolvenKitMarginSmallLeft}"
                             VerticalAlignment="Center"
-                            FontSize="16"
+                            FontSize="{DynamicResource WolvenKitMediumFontSize}"
                             Text="Mod Manager" />
                     </StackPanel>
                 </TabItem.Header>
@@ -212,15 +212,15 @@
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconCodicons
-                            Width="20"
-                            Height="20"
+                            Width="{DynamicResource WolvenKitIconSize}"
+                            Height="{DynamicResource WolvenKitIconSize}"
                             VerticalAlignment="Center"
                             Foreground="White"
                             Kind="Extensions" />
                         <TextBlock
-                            Margin="8,0,0,0"
+                            Margin="{DynamicResource WolvenKitMarginSmallLeft}"
                             VerticalAlignment="Center"
-                            FontSize="16"
+                            FontSize="{DynamicResource WolvenKitMediumFontSize}"
                             Text="Plugins" />
                     </StackPanel>
                 </TabItem.Header>
@@ -233,15 +233,15 @@
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconCodicons
-                            Width="20"
-                            Height="20"
+                            Width="{DynamicResource WolvenKitIconSize}"
+                            Height="{DynamicResource WolvenKitIconSize}"
                             VerticalAlignment="Center"
                             Foreground="White"
                             Kind="Settings" />
                         <TextBlock
-                            Margin="8,0,0,0"
+                            Margin="{DynamicResource WolvenKitMarginSmallLeft}"
                             VerticalAlignment="Center"
-                            FontSize="16"
+                            FontSize="{DynamicResource WolvenKitMediumFontSize}"
                             Text="Settings" />
                     </StackPanel>
                 </TabItem.Header>
@@ -254,7 +254,6 @@
 
         <!--  Bottom Left Sidebar Grid  -->
         <Grid
-            Width="200"
             HorizontalAlignment="Left"
             VerticalAlignment="Bottom">
             <Grid.RowDefinitions>
@@ -278,15 +277,17 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBlock
-                        Width="130"
+                        Width="{DynamicResource WolvenKitHomeButtonWidth}"
+                        Padding="{DynamicResource WolvenKitMarginLeft}"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        FontSize="14"
+                        FontSize="{DynamicResource WolvenKitBodyFontSize}"
                         Text="Continue to editor" />
+                    
                     <iconPacks:PackIconCodicons
                         Grid.Column="1"
-                        Width="26"
-                        Height="26"
+                        Width="{DynamicResource WolvenKitBigIconSize}"
+                        Height="{DynamicResource WolvenKitBigIconSize}"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
                         Kind="ArrowRight" />
@@ -296,20 +297,20 @@
             <!--  Left Bottom Version Number  -->
             <StackPanel
                 Grid.Row="1"
-                Margin="6"
+                Margin="{DynamicResource WolvenKitHomeVersionMargin}"
                 HorizontalAlignment="Left"
                 Orientation="Horizontal">
                 <TextBlock
-                    Margin="5"
+                    Margin="{DynamicResource WolvenKitHomeVersionMargin}"
                     VerticalAlignment="Center"
                     FlowDirection="LeftToRight"
-                    FontSize="14"
+                    FontSize="{DynamicResource WolvenKitBodyFontSize}"
                     Foreground="{StaticResource WolvenKitRed}"
                     IsEnabled="False"
                     Text="{Binding VersionNumber}" />
                 <iconPacks:PackIconCodicons
-                    Width="20"
-                    Height="20"
+                    Width="{DynamicResource WolvenKitIconSize}"
+                    Height="{DynamicResource WolvenKitIconSize}"
                     VerticalAlignment="Center"
                     Foreground="{StaticResource WolvenKitRed}"
                     Kind="Versions" />

@@ -10,28 +10,25 @@
     xmlns:others="clr-namespace:WolvenKit.Views.Others"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     Title="Select Items"
-    Width="800"
-    Height="600"
-    d:DesignHeight="600"
+    MinWidth="{DynamicResource WolvenKitDialogWidthLarge}"
+    MinHeight="{DynamicResource WolvenKitDialogHeightMedium}"
     d:DesignWidth="800"
+    d:DesignHeight="600"
     Background="{StaticResource ContentBackgroundAlt3}"
     mc:Ignorable="d">
-
     <syncfusion:WizardControl
         x:Name="WizardControl"
         CancelButtonCancelsWindow="True"
         CancelEnabled="True"
         FinishButtonClosesWindow="True">
-
         <syncfusion:WizardPage
             BackVisibility="Collapsed"
             HelpVisibility="Collapsed"
             NextVisibility="Collapsed"
             PageType="Exterior">
-
             <Grid>
-
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition Width="Auto" />
@@ -41,68 +38,68 @@
                 <!--  AVAILABLE FILES  -->
                 <syncfusion:SfDataGrid
                     x:Name="AvailableDataGrid"
-                    Margin="5"
+                    Margin="{DynamicResource WolvenKitMarginTiny}"
                     AllowFiltering="True"
                     AllowSorting="True"
                     AutoGenerateColumns="False"
-                    ColumnSizer="AutoLastColumnFill"
+                    ColumnSizer="Star"
+                    RowHeight="{DynamicResource WolvenKitDataGridRowHeight}"
                     FilterRowPosition="FixedTop"
                     IsReadOnly="True"
                     SelectionMode="Extended">
-
                     <syncfusion:SfDataGrid.Columns>
                         <syncfusion:GridTextColumn
                             FilterRowCondition="Contains"
                             HeaderText="Available"
                             MappingName="Name" />
                     </syncfusion:SfDataGrid.Columns>
-
                 </syncfusion:SfDataGrid>
 
                 <!--  BUTTONS  -->
                 <StackPanel
                     Grid.Column="1"
-                    Margin="5"
+                    Margin="{DynamicResource WolvenKitMarginTiny}"
                     VerticalAlignment="Center">
                     <Button
                         x:Name="AddButton"
-                        Margin="0,5,0,5"
-                        Content=" &gt; " />
+                        Margin="{DynamicResource WolvenKitMarginTinyVertical}">
+                        <templates:IconTemplateView
+                            IconPack="Material"
+                            Kind="ChevronRight"
+                            Size="{DynamicResource WolvenKitMicroIconSize}" />
+                    </Button>
+
                     <Button
                         x:Name="RemoveButton"
-                        Margin="0,5,0,5"
-                        Content=" &lt; " />
+                        Margin="{DynamicResource WolvenKitMarginTinyVertical}">
+                        <templates:IconTemplateView
+                            IconPack="Material"
+                            Kind="ChevronLeft"
+                            Size="{DynamicResource WolvenKitMicroIconSize}" />
+                    </Button>
                 </StackPanel>
 
                 <!--  SELECTED FILES  -->
                 <syncfusion:SfDataGrid
                     x:Name="SelectedDataGrid"
                     Grid.Column="2"
-                    Margin="5"
+                    Margin="{DynamicResource WolvenKitMarginTiny}"
                     AllowFiltering="True"
                     AllowSorting="True"
                     AutoGenerateColumns="False"
-                    ColumnSizer="AutoLastColumnFill"
+                    ColumnSizer="Star"
+                    RowHeight="{DynamicResource WolvenKitDataGridRowHeight}"
                     FilterRowPosition="FixedTop"
                     IsReadOnly="True"
                     SelectionMode="Extended">
-
                     <syncfusion:SfDataGrid.Columns>
                         <syncfusion:GridTextColumn
                             FilterRowCondition="Contains"
                             HeaderText="Selected"
                             MappingName="Name" />
                     </syncfusion:SfDataGrid.Columns>
-
                 </syncfusion:SfDataGrid>
-
             </Grid>
-
-
         </syncfusion:WizardPage>
-
     </syncfusion:WizardControl>
-
-
-
 </Window>
