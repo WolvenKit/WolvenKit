@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive;
@@ -57,7 +56,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         Limit,
     }
 
-    public const int SEARCH_LIMIT = 1000;
+    public const int SearchLimit = 1000;
 
 
     #endregion constants
@@ -73,12 +72,12 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private readonly ILoggerService _loggerService;
     private readonly IPluginService _pluginService;
     private readonly AppViewModel _appViewModel;
+    private readonly IModifierViewStateService _modifierViewSvc;
 
     private readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
 
-    private bool _manuallyLoading = false;
-
-
+    private bool _manuallyLoading;
+    
     #endregion fields
 
     #region ctor
@@ -92,7 +91,8 @@ public partial class AssetBrowserViewModel : ToolViewModel
         ISettingsManager settings,
         IProgressService<double> progressService,
         ILoggerService loggerService,
-        IPluginService pluginService) : base(ToolTitle)
+        IPluginService pluginService,
+        IModifierViewStateService viewSvc) : base(ToolTitle)
     {
         _projectManager = projectManager;
         _notificationService = notificationService;
@@ -103,7 +103,8 @@ public partial class AssetBrowserViewModel : ToolViewModel
         _pluginService = pluginService;
         _loggerService = loggerService;
         _appViewModel = appViewModel;
-
+        _modifierViewSvc = viewSvc;
+        
         ContentId = ToolContentId;
 
         State = DockState.Dock;
@@ -141,7 +142,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         LoadVisibility = _archiveManager.IsManagerLoaded ? Visibility.Collapsed : Visibility.Visible;
 
         ShouldShowExecutablePathWarning = ArchiveDirNotFound;
-        ShouldShowLoadButton = !_manuallyLoading && !_archiveManager.IsManagerLoaded && !_archiveManager.IsManagerLoading;
+        ShouldShowLoadButton = !_manuallyLoading && _archiveManager is { IsManagerLoaded: false, IsManagerLoading: false };
     }
 
     // if the game exe path changes
@@ -175,8 +176,6 @@ public partial class AssetBrowserViewModel : ToolViewModel
             _archiveManager.PropertyChanged -= ArchiveManager_PropertyChanged;
         }
     }
-
-    
 
     #endregion ctor
 
@@ -238,6 +237,12 @@ public partial class AssetBrowserViewModel : ToolViewModel
     [ObservableProperty]
     private ObservableCollectionEx<IGameArchive> _addFromArchiveItems = new();
 
+
+    [NotifyCanExecuteChangedFor(nameof(CopyRelPathCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyRelPathFileNameCommand))]
+    [ObservableProperty]
+    private bool _isShiftKeyDown;
+
     #endregion properties
 
     #region commands
@@ -252,16 +257,10 @@ public partial class AssetBrowserViewModel : ToolViewModel
     }
 
     [RelayCommand]
-    private async Task OpenWolvenKitSettings()
-    {
-        await _appViewModel.ShowHomePage(EHomePage.Settings);
-    }
+    private async Task OpenWolvenKitSettings() => await _appViewModel.ShowHomePage(EHomePage.Settings);
 
     [RelayCommand]
-    private void AddSearchKey(string value)
-    {
-        SearchBarText += $" {value}:";
-    }
+    private void AddSearchKey(string value) => SearchBarText += $" {value}:";
 
     private async void InstallWolvenkitResources()
     {
@@ -428,7 +427,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         var archives = _archiveManager
             .Archives
             .Items
-            .Where(_ => _.Files.ContainsKey(key));
+            .Where(archive => archive.Files.ContainsKey(key));
 
         foreach (var archive in archives)
         {
@@ -553,7 +552,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
     private void GetFilesRecursive(RedFileSystemModel directory, Dictionary<ulong, IGameFile> files)
     {
-        foreach (var (key, model) in directory.Directories)
+        foreach (var (_, model) in directory.Directories)
         {
             GetFilesRecursive(model, files);
         }
@@ -641,29 +640,47 @@ public partial class AssetBrowserViewModel : ToolViewModel
     }
 
     [RelayCommand]
-    private void TogglePreview()
-    {
-        PreviewWidth = PreviewWidth.GridUnitType != GridUnitType.Pixel
+    private void TogglePreview() => PreviewWidth = PreviewWidth.GridUnitType != GridUnitType.Pixel
             ? new GridLength(0, GridUnitType.Pixel)
             : new GridLength(1, GridUnitType.Star);
-    }
 
     /// <summary>
     /// Copies relative path of node.
     /// </summary>
-    private bool CanCopyRelPath() => RightSelectedItem != null; // _projectManager.ActiveProject != null && RightSelectedItem != null;
+    private bool CanCopyRelPath() =>
+        RightSelectedItem != null && !IsShiftKeyDown; // _projectManager.ActiveProject != null && RightSelectedItem != null;
     [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
     private void CopyRelPath() => Clipboard.SetDataObject(RightSelectedItem.NotNull().FullName);
+
+    /// <summary>
+    /// Copies only file name of node.
+    /// </summary>
+    private bool CanCopyRelPathFileName() => RightSelectedItem != null && IsShiftKeyDown;
+
+    [RelayCommand(CanExecute = nameof(CanCopyRelPathFileName))]
+    private void CopyRelPathFileName()
+    {
+        var fileName = Path.GetFileName(RightSelectedItem.NotNull().FullName);
+        if (ModifierViewStateService.IsCtrlBeingHeld)
+        {
+            fileName = fileName.Replace(Path.GetExtension(fileName), "");
+        }
+
+        Clipboard.SetDataObject(fileName);
+    }
 
     private bool CanAddFromArchive() => RightSelectedItem is RedFileViewModel;
     [RelayCommand(CanExecute = nameof(CanAddFromArchive))]
     private void AddFromArchive(IGameArchive archive)
     {
-        if (archive is ICyberGameArchive cyberArchive && RightSelectedItem is RedFileViewModel fileVm)
+        if (archive is not ICyberGameArchive cyberArchive || RightSelectedItem is not RedFileViewModel fileVm)
         {
-            var realGameFile = cyberArchive.Files.First(_ => _.Value.Name == fileVm.GetGameFile().Name).Value; // must use "Value" here to force the exact archive
-            _gameController.GetController().AddFileToModModal(realGameFile); 
+            return;
         }
+
+        // must use "Value" here to force the exact archive
+        var realGameFile = cyberArchive.Files.First(_ => _.Value.Name == fileVm.GetGameFile().Name).Value;
+        _gameController.GetController().AddFileToModModal(realGameFile);
     }
 
     #endregion commands
@@ -727,13 +744,18 @@ public partial class AssetBrowserViewModel : ToolViewModel
                 if (e is RegexMatchTimeoutException rex)
                 {
                     // C# heredoc pls
-                    _loggerService.Error($@"Search took too long! Try to simplify or use refinements? Careful with !. Error: {rex.Message}");
+                    _loggerService.Error(
+                        $@"Search took too long! Try to simplify or use refinements? Careful with !. Error: {rex.Message}");
                 }
                 else
                 {
                     _loggerService.Error($"Search error: {e.Message}");
                 }
             }
+        }
+        catch (Exception ex)
+        {
+            _loggerService.Error($"Search error: {ex.Message}");
         }
 
         _progressService.IsIndeterminate = false;
@@ -742,8 +764,8 @@ public partial class AssetBrowserViewModel : ToolViewModel
     // Asset search impl
 
     // Safer regexps
-    private static readonly RegexOptions RegexpOpts = RegexOptions.Compiled | RegexOptions.IgnoreCase;
-    private static readonly TimeSpan RegexpSafetyTimeout = TimeSpan.FromSeconds(60);
+    private const RegexOptions s_regexpOpts = RegexOptions.Compiled | RegexOptions.IgnoreCase;
+    private static readonly TimeSpan s_regexpSafetyTimeout = TimeSpan.FromSeconds(60);
 
     private enum TermType
     {
@@ -755,50 +777,68 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private readonly record struct Term(TermType Type, string Pattern, string NegationPattern);
 
     // Refinement types
-    private interface SearchRefinement { }
-    private readonly record struct PatternRefinement(Term[] Terms) : SearchRefinement;
-    private readonly record struct HashRefinement(ulong Hash) : SearchRefinement;
-    private readonly record struct RegexRefinement(Regex Regex) : SearchRefinement;
-    private readonly record struct ArchivePathRefinement(string ArchivePath) : SearchRefinement;
-    private readonly record struct VerbatimRefinement(string Verbatim) : SearchRefinement;
+    private interface ISearchRefinement
+    {
+    }
+
+    private readonly record struct PatternRefinement(Term[] Terms) : ISearchRefinement;
+
+    private readonly record struct HashRefinement(ulong Hash) : ISearchRefinement;
+
+    private readonly record struct RegexRefinement(Regex Regex) : ISearchRefinement;
+
+    private readonly record struct ArchivePathRefinement(string ArchivePath) : ISearchRefinement;
+
+    private readonly record struct VerbatimRefinement(string Verbatim) : ISearchRefinement;
+
+    private readonly record struct UsingRefinement(string FilePath) : ISearchRefinement;
+
+    private readonly record struct UsedByRefinement(string FilePath) : ISearchRefinement;
 
     // Refinement type matchers
-    private static readonly Regex RefinementSeparator = new("\\s+>\\s+", RegexpOpts, RegexpSafetyTimeout);
-    private static readonly Regex IsHashRefinement = new("^h(?:ash)?:(?<numbers>\\d+)$", RegexpOpts, RegexpSafetyTimeout);
-    private static readonly Regex IsRegexRefinement = new("^r(?:egexp?)?:(?<pattern>.*)$", RegexpOpts, RegexpSafetyTimeout);
-    private static readonly Regex IsArchivePathRefinement = new Regex("^a(?:rchive)?:(?<archivepath>.*)$", RegexpOpts, RegexpSafetyTimeout);
-    private static readonly Regex IsVerbatimRefinement = new("^(?:@:?|path:)(?<verbatim>.*)$", RegexpOpts, RegexpSafetyTimeout);
+    private static readonly Regex s_refinementSeparator = new("\\s+>\\s+", s_regexpOpts, s_regexpSafetyTimeout);
+    private static readonly Regex s_isHashRefinement = new("^h(?:ash)?:(?<numbers>\\d+)$", s_regexpOpts, s_regexpSafetyTimeout);
+    private static readonly Regex s_isRegexRefinement = new("^r(?:egexp?)?:(?<pattern>.*)$", s_regexpOpts, s_regexpSafetyTimeout);
 
-    private readonly record struct CyberSearch(Func<IGameFile, bool> Match, SearchRefinement SourceRefinement);
+    private static readonly Regex s_isArchivePathRefinement = new("^a(?:rchive)?:(?<archivepath>.*)$", s_regexpOpts, s_regexpSafetyTimeout);
+    private static readonly Regex s_isUsingRefinement = new("^u(?:sing)?:(?<filepath>.*)$", s_regexpOpts, s_regexpSafetyTimeout);
+    private static readonly Regex s_isUsedByRefinement = new("^u(?:sed_by)?:(?<filepath>.*)$", s_regexpOpts, s_regexpSafetyTimeout);
+
+    private static readonly Regex s_isVerbatimRefinement = new("^(?:@:?|path:)(?<verbatim>.*)$", s_regexpOpts, s_regexpSafetyTimeout);
+
+    private readonly record struct CyberSearch(Func<IGameFile, bool> Match, ISearchRefinement SourceRefinement);
 
     // Term to refinement pattern conversion regexps
 
-    private static readonly Regex Whitespace = new("\\s+", RegexpOpts, RegexpSafetyTimeout);
-    private static readonly Regex PathSeparator = new("(^|\\G|\\w)(?:\\\\|/)(\\w+|$)", RegexpOpts, RegexpSafetyTimeout);
-    private static readonly string PathNormalized = "$1\\\\$2";
-    private static readonly Regex ExtensionDot = new("(^|\\G|\\||\\w)\\.(?<term>\\w+?)", RegexpOpts, RegexpSafetyTimeout);
-    private static readonly string ExtensionDotEscaped = "$1\\.${term}";
-    private static readonly Regex Or = new("\\|", RegexpOpts, RegexpSafetyTimeout);
-    private static readonly Regex Negation = new("^(?'Open'\\(\\?:)*\\!(?<term>.+?)(?'Close-Open'\\))*$", RegexpOpts, RegexpSafetyTimeout);
-    private static readonly Regex SquashExtraWilds = new("((\\(\\?:)?\\.\\*\\??\\)?){2,}", RegexpOpts, RegexpSafetyTimeout);
+    private static readonly Regex s_whitespace = new("\\s+", s_regexpOpts, s_regexpSafetyTimeout);
+    private static readonly Regex s_pathSeparator = new("(^|\\G|\\w)(?:\\\\|/)(\\w+|$)", s_regexpOpts, s_regexpSafetyTimeout);
+    private static readonly string s_pathNormalized = "$1\\\\$2";
+    private static readonly Regex s_extensionDot = new("(^|\\G|\\||\\w)\\.(?<term>\\w+?)", s_regexpOpts, s_regexpSafetyTimeout);
+    private static readonly string s_extensionDotEscaped = "$1\\.${term}";
+    private static readonly Regex s_or = new("\\|", s_regexpOpts, s_regexpSafetyTimeout);
 
-    private static readonly Func<Term, Term> NormalizePathSeparators =
-        (term) =>
+    private static readonly Regex s_negation = new("^(?'Open'\\(\\?:)*\\!(?<term>.+?)(?'Close-Open'\\))*$", s_regexpOpts,
+        s_regexpSafetyTimeout);
+
+    private static readonly Regex s_squashExtraWilds = new("((\\(\\?:)?\\.\\*\\??\\)?){2,}", s_regexpOpts, s_regexpSafetyTimeout);
+
+    private static readonly Func<Term, Term> s_normalizePathSeparators =
+        term =>
             term with
             {
-                Pattern = PathSeparator.Replace(term.Pattern, PathNormalized)
+                Pattern = s_pathSeparator.Replace(term.Pattern, s_pathNormalized)
             };
 
-    private static readonly Func<Term, Term> PreserveExtensionDotMatch =
-        (term) =>
+    private static readonly Func<Term, Term> s_preserveExtensionDotMatch =
+        term =>
             term with
             {
-                Pattern = ExtensionDot.Replace(term.Pattern, ExtensionDotEscaped)
+                Pattern = s_extensionDot.Replace(term.Pattern, s_extensionDotEscaped)
             };
 
-    private static readonly Func<Term, Term> LimitOrToOneTermOnly =
-        (term) =>
-            Or.IsMatch(term.Pattern)
+    private static readonly Func<Term, Term> s_limitOrToOneTermOnly =
+        term =>
+            s_or.IsMatch(term.Pattern)
                 ? term with
                 {
                     Pattern = $"(?:{term.Pattern})"
@@ -808,43 +848,57 @@ public partial class AssetBrowserViewModel : ToolViewModel
     // Negative regexps are extremely fraught even when not synthesized,
     // so instead we simply fail on a negative match (with the corresponding
     // positive match so that we know the refinement is otherwise satisfied).
-    private static readonly Func<Term, Term> AllowExcludingTerm = (term) =>
-        !Negation.IsMatch(term.Pattern)
+    private static readonly Func<Term, Term> s_allowExcludingTerm = term =>
+        !s_negation.IsMatch(term.Pattern)
             ? term with { Type = TermType.Include }
             : term with
             {
                 Type = TermType.Exclude,
-                Pattern = Negation.Replace(term.Pattern, "(?:${term})"),
-                NegationPattern = Negation.Replace(term.Pattern, "")
+                Pattern = s_negation.Replace(term.Pattern, "(?:${term})"),
+                NegationPattern = s_negation.Replace(term.Pattern, "")
             };
 
 
     // Pipeline
 
-    private static readonly Func<string, SearchRefinement> s_intoTypedRefinements = (refinementString) =>
+    private static readonly Func<string, ISearchRefinement> s_intoTypedRefinements = refinementString =>
     {
-        var hashMatch = IsHashRefinement.Match(refinementString).Groups["numbers"].Value;
+        var hashMatch = s_isHashRefinement.Match(refinementString).Groups["numbers"].Value;
 
         if (!string.IsNullOrEmpty(hashMatch))
         {
             return new HashRefinement { Hash = ulong.Parse(hashMatch) };
         }
 
-        var regexMatch = IsRegexRefinement.Match(refinementString).Groups["pattern"].Value;
+        var regexMatch = s_isRegexRefinement.Match(refinementString).Groups["pattern"].Value;
 
         if (!string.IsNullOrEmpty(regexMatch))
         {
-            return new RegexRefinement { Regex = new Regex(regexMatch, RegexpOpts, RegexpSafetyTimeout) };
+            return new RegexRefinement { Regex = new Regex(regexMatch, s_regexpOpts, s_regexpSafetyTimeout) };
         }
 
-        var archivePathMatch = IsArchivePathRefinement.Match(refinementString).Groups["archivepath"].Value;
+        var archivePathMatch = s_isArchivePathRefinement.Match(refinementString).Groups["archivepath"].Value;
 
         if (!string.IsNullOrEmpty(archivePathMatch))
         {
             return new ArchivePathRefinement { ArchivePath = archivePathMatch };
         }
 
-        var verbatimMatch = IsVerbatimRefinement.Match(refinementString).Groups["verbatim"].Value;
+        var usingPathMatch = s_isUsingRefinement.Match(refinementString).Groups["archivepath"].Value;
+
+        if (!string.IsNullOrEmpty(archivePathMatch))
+        {
+            return new UsingRefinement() { FilePath = usingPathMatch };
+        }
+
+        var usedByPathMatch = s_isUsedByRefinement.Match(refinementString).Groups["archivepath"].Value;
+
+        if (!string.IsNullOrEmpty(archivePathMatch))
+        {
+            return new UsedByRefinement() { FilePath = usingPathMatch };
+        }
+
+        var verbatimMatch = s_isVerbatimRefinement.Match(refinementString).Groups["verbatim"].Value;
 
         return !string.IsNullOrEmpty(verbatimMatch)
             ? new VerbatimRefinement
@@ -853,44 +907,44 @@ public partial class AssetBrowserViewModel : ToolViewModel
             }
             : new PatternRefinement
             {
-                Terms = Whitespace
+                Terms = s_whitespace
                 .Split(refinementString)
                 .Select(term => new Term
                 {
                     Type = TermType.Unknown,
                     Pattern = term
                 })
-                .Select(NormalizePathSeparators)
-                .Select(PreserveExtensionDotMatch)
-                .Select(LimitOrToOneTermOnly)
-                .Select(AllowExcludingTerm)
+                .Select(s_normalizePathSeparators)
+                .Select(s_preserveExtensionDotMatch)
+                .Select(s_limitOrToOneTermOnly)
+                .Select(s_allowExcludingTerm)
                 .ToArray()
             };
     };
 
 
-    private static readonly Func<SearchRefinement, CyberSearch> s_refinementsIntoMatchFunctions =
-        (searchRefinement) =>
+    private static readonly Func<ISearchRefinement, CyberSearch> s_refinementsIntoMatchFunctions =
+        searchRefinement =>
         {
             switch (searchRefinement)
             {
                 case HashRefinement hashRefinement:
                     return new CyberSearch
                     {
-                        Match = (candidate) => candidate.Key == hashRefinement.Hash,
+                        Match = candidate => candidate.Key == hashRefinement.Hash,
                         SourceRefinement = hashRefinement,
                     };
 
                 case RegexRefinement regexRefinement:
                     return new CyberSearch
                     {
-                        Match = (candidate) => regexRefinement.Regex.IsMatch(candidate.Name)
+                        Match = candidate => regexRefinement.Regex.IsMatch(candidate.Name)
                     };
 
                 case ArchivePathRefinement archivePathRefinement:
                     return new CyberSearch
                     {
-                        Match = (candidate) =>
+                        Match = candidate =>
                             candidate.GetArchive().ArchiveRelativePath is string s && !string.IsNullOrEmpty(s) &&
                             s.Contains(archivePathRefinement.ArchivePath ?? "", StringComparison.CurrentCultureIgnoreCase)
                     };
@@ -898,7 +952,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
                 case VerbatimRefinement verbatimRefinement:
                     return new CyberSearch
                     {
-                        Match = (candidate) => candidate.Name.Contains(verbatimRefinement.Verbatim)
+                        Match = candidate => candidate.Name.Contains(verbatimRefinement.Verbatim)
                     };
 
                 case PatternRefinement patternRefinement:
@@ -909,23 +963,23 @@ public partial class AssetBrowserViewModel : ToolViewModel
                         $"^.*?{string.Join(".*?", patternRefinement.Terms.Select(term => term.Pattern))}.*$";
 
                     var pattern =
-                        SquashExtraWilds.Replace(patternWithMaybeExtraWilds, ".*?");
+                        s_squashExtraWilds.Replace(patternWithMaybeExtraWilds, ".*?");
 
                     var exclusionPatternWithMaybeExtraWilds =
                         $"^.*?{string.Join(".*?", patternRefinement.Terms.Select(term => term.NegationPattern ?? term.Pattern))}.*$";
 
                     var patternWithoutExcludedTerms =
-                        SquashExtraWilds.Replace(exclusionPatternWithMaybeExtraWilds, ".*?");
+                        s_squashExtraWilds.Replace(exclusionPatternWithMaybeExtraWilds, ".*?");
 
                     return new CyberSearch
                     {
                         Match =
                             searchContainsExclusion
-                            ? (IGameFile candidate) =>
-                                !Regex.IsMatch(candidate.Name, pattern, RegexpOpts, RegexpSafetyTimeout) &&
-                                Regex.IsMatch(candidate.Name, patternWithoutExcludedTerms, RegexpOpts, RegexpSafetyTimeout)
-                            : (IGameFile candidate) =>
-                                Regex.IsMatch(candidate.Name, pattern, RegexpOpts, RegexpSafetyTimeout),
+                                ? candidate =>
+                                    !Regex.IsMatch(candidate.Name, pattern, s_regexpOpts, s_regexpSafetyTimeout) &&
+                                    Regex.IsMatch(candidate.Name, patternWithoutExcludedTerms, s_regexpOpts, s_regexpSafetyTimeout)
+                                : candidate =>
+                                    Regex.IsMatch(candidate.Name, pattern, s_regexpOpts, s_regexpSafetyTimeout),
 
                         SourceRefinement = patternRefinement
                     };
@@ -949,7 +1003,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         }
 
         var searchAsSequentialRefinements =
-            RefinementSeparator
+            s_refinementSeparator
                 .Split(SearchBarText)
                 .Select(s_intoTypedRefinements)
                 .Select(s_refinementsIntoMatchFunctions)
@@ -974,15 +1028,8 @@ public partial class AssetBrowserViewModel : ToolViewModel
     }
 
 
-    private void SetLeftSelectedItem(string itemName)
-    {
-        if (LeftItems is null || LeftItems.Count == 0)
-        {
-            return;
-        }
-
-        LeftSelectedItem = LeftItems.ToList().FirstOrDefault((item) => item.Name.Contains(itemName));
-    }
+    private void SetLeftSelectedItem(string itemName) =>
+        LeftSelectedItem = LeftItems.ToList().FirstOrDefault(item => item.Name.Contains(itemName));
 
     public async void Refresh()
     {
@@ -997,6 +1044,9 @@ public partial class AssetBrowserViewModel : ToolViewModel
             await PerformSearch(SearchBarText);
         }
     }
+
+    public void RefreshModifierStates() => IsShiftKeyDown = ModifierViewStateService.IsShiftBeingHeld;
+
     #endregion methods
 
     // On initialization, scanArchives is read from the settings. On scan button click, we always want to scan.
@@ -1028,12 +1078,12 @@ public partial class AssetBrowserViewModel : ToolViewModel
         archivesToScan.AddRange(_archiveManager.GetModArchives()
             .Where(archive => archive.Name.Contains(archiveName, StringComparison.OrdinalIgnoreCase))
             .Select(gameArchive => gameArchive.ArchiveAbsolutePath)
-            .Where((absolutePath) => !ignoredArchives.Contains(Path.GetFileName(absolutePath).Replace(".archive", ""))));
+            .Where(absolutePath => !ignoredArchives.Contains(Path.GetFileName(absolutePath).Replace(".archive", ""))));
 
         if (Directory.Exists(_settings.ExtraModDirPath))
         {
             archivesToScan.AddRange(Directory.GetFiles(_settings.ExtraModDirPath, archiveName, SearchOption.AllDirectories)
-                .Where((absolutePath) => !ignoredArchives.Contains(Path.GetFileName(absolutePath).Replace(".archive", ""))));
+                .Where(absolutePath => !ignoredArchives.Contains(Path.GetFileName(absolutePath).Replace(".archive", ""))));
         }
 
         if (archivesToScan.Count > 0)

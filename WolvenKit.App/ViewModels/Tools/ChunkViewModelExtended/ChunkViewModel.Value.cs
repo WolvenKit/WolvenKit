@@ -434,19 +434,23 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = Value != "";
                 break;
             case entAnimatedComponent animComp:
-                if (animComp.FacialSetup.DepotPath.GetResolvedText() is string path)
+                List<string> values = [];
+                if (animComp.FacialSetup.DepotPath != ResourcePath.Empty)
                 {
-                    Value = path;
-                }
-                else if (animComp.Graph.DepotPath.GetResolvedText() is string graphPath)
-                {
-                    Value = graphPath;
-                }
-                else
-                {
-                    Value = $"{animComp.Rig.DepotPath.GetResolvedText()}";
+                    values.Add(StringHelper.Stringify(animComp.FacialSetup.DepotPath, true));
                 }
 
+                if (animComp.Graph.DepotPath != ResourcePath.Empty)
+                {
+                    values.Add(StringHelper.Stringify(animComp.Graph.DepotPath, true));
+                }
+
+                if (animComp.Rig.DepotPath != ResourcePath.Empty)
+                {
+                    values.Add(StringHelper.Stringify(animComp.Rig.DepotPath, true));
+                }
+
+                Value = string.Join(", ", values);
                 IsValueExtrapolated = Value != "";
                 break;
             case entSlotComponent slotComponent when
