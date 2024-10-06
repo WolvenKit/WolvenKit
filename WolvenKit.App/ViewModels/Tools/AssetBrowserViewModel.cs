@@ -31,6 +31,7 @@ using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.Archive;
+using Task = System.Threading.Tasks.Task;
 
 namespace WolvenKit.App.ViewModels.Tools;
 
@@ -449,6 +450,10 @@ public partial class AssetBrowserViewModel : ToolViewModel
             return;
         }
 
+
+        LeftSelectedItem = null;
+        CancelPendingSearch();
+
         var fullPath = "";
         var parentDir = LeftItems.ElementAt(0);
         parentDir.IsExpanded = true;
@@ -718,6 +723,10 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
     }
 
+    private CancellationTokenSource? _cancellationTokenSource;
+
+    private void CancelPendingSearch() => _cancellationTokenSource?.Cancel();
+
     /// <summary>
     /// Filters all game files by given keys or regex pattern
     /// </summary>
@@ -726,10 +735,19 @@ public partial class AssetBrowserViewModel : ToolViewModel
     {
         _progressService.IsIndeterminate = true;
 
+        LeftSelectedItem = null;
+        CancelPendingSearch();
+
+        _cancellationTokenSource = new CancellationTokenSource();
+        var cancellationToken = _cancellationTokenSource.Token;
+
+        List<RedFileViewModel> foundFiles = [];
+
         try
         {
-            await Task.Run(CyberEnhancedSearch);
-
+            foundFiles.AddRange(await Task.Run(CyberEnhancedSearchAsync, cancellationToken));
+            ;
+            
             // If the search includes an .archive file, let's select it
             if (s_SearchByArchiveNameRegex().Match(query) is { Success: true } m)
             {
@@ -753,10 +771,26 @@ public partial class AssetBrowserViewModel : ToolViewModel
                 }
             }
         }
+        catch (OperationCanceledException)
+        {
+            _loggerService.Info("Search was canceled");
+        }
         catch (Exception ex)
         {
             _loggerService.Error($"Search error: {ex.Message}");
         }
+        finally
+        {
+            _cancellationTokenSource = null;
+        }
+
+
+        RightItems.SuppressNotification = true;
+        RightItems.Clear();
+
+        RightItems.AddRange(foundFiles);
+
+        RightItems.SuppressNotification = false;
 
         _progressService.IsIndeterminate = false;
     }
@@ -1025,6 +1059,34 @@ public partial class AssetBrowserViewModel : ToolViewModel
         RightItems.Clear();
         RightItems.AddRange(filesToSearch);
         RightItems.SuppressNotification = false;
+    }
+
+    private IEnumerable<RedFileViewModel> CyberEnhancedSearchAsync()
+    {
+        if (string.IsNullOrWhiteSpace(SearchBarText))
+        {
+            RightItems.Clear();
+            return [];
+        }
+
+        var searchAsSequentialRefinements =
+            s_refinementSeparator
+                .Split(SearchBarText)
+                .Select(s_intoTypedRefinements)
+                .Select(s_refinementsIntoMatchFunctions)
+                .ToArray();
+
+        var filesToSearch =
+            _archiveManager.Archives
+                .Items
+                .Where(x => _archiveManager.IsModBrowserActive == (x.Source == EArchiveSource.Mod))
+                .SelectMany(x => x.Files.Values)
+                .Where(file => searchAsSequentialRefinements.All(refinement => refinement.Match(file)))
+                .GroupBy(x => x.Key)
+                .Select(x => x.First())
+                .Select(matchingFile => new RedFileViewModel(matchingFile));
+
+        return filesToSearch;
     }
 
 
