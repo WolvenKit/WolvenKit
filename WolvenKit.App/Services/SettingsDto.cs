@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
-using Splat;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Models;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
@@ -26,94 +25,135 @@ public class SettingsDto : ISettingsDto
 
     public SettingsDto(SettingsManager settings)
     {
-        _settingsManager = settings; 
-        SkipUpdateCheck = settings.SkipUpdateCheck;
-        UpdateChannel = settings.UpdateChannel;
-        ShowGuidedTour = settings.ShowGuidedTour;
-        ThemeAccentString = settings.ThemeAccentString;
+        _settingsManager = settings;
+
+        SettingsVersion = settings.SettingsVersion;
+
+        ReddbHash = settings.ReddbHash;
+        InstallerHash = settings.InstallerHash;
+
+        LaunchProfiles = settings.LaunchProfiles;
+        ScriptStatus = settings.ScriptStatus;
+        LastUsedProjectPath = settings.LastUsedProjectPath;
+        LastLaunchProfile = settings.LastLaunchProfile;
+
+        PinnedOrder = settings.PinnedOrder;
+        RecentOrder = settings.RecentOrder;
+
+        // Cyberpunk
         CP77ExecutablePath = settings.CP77ExecutablePath;
         CP77LaunchCommand = settings.CP77LaunchCommand;
         CP77LaunchOptions = settings.CP77LaunchOptions;
-        ShowFilePreview = settings.ShowFilePreview;
-        ReddbHash = settings.ReddbHash;
-        InstallerHash = settings.InstallerHash;
         MaterialRepositoryPath = settings.MaterialRepositoryPath;
-        TreeViewGroups = settings.TreeViewGroups;
-        TreeViewGroupSize = settings.TreeViewGroupSize;
-        TreeViewIgnoredExtensions = settings.TreeViewIgnoredExtensions;
-        ShowAdvancedOptions = settings.ShowAdvancedOptions;
+        AnalyzeModArchives = settings.AnalyzeModArchives;
+        ExtraModDirPath = settings.ExtraModDirPath;
+
+        // Display
         ShowCNameAsHex = settings.ShowCNameAsHex;
         ShowResourcePathAsHex = settings.ShowResourcePathAsHex;
         ShowNodeRefAsHex = settings.ShowNodeRefAsHex;
         ShowTweakDBIDAsHex = settings.ShowTweakDBIDAsHex;
-        DefaultEditorDifficultyLevel = settings.DefaultEditorDifficultyLevel;
         ShowReferenceGraph = settings.ShowReferenceGraph;
         GameLanguage = settings.GameLanguage;
-        LaunchProfiles = settings.LaunchProfiles;
-        ScriptStatus = settings.ScriptStatus;
-        AnalyzeModArchives = settings.AnalyzeModArchives;
-        ExtraModDirPath = settings.ExtraModDirPath;
-        LastUsedProjectPath = settings.LastUsedProjectPath;
-        DefaultProjectPath = settings.DefaultProjectPath;
-        PinnedOrder = settings.PinnedOrder;
-        RecentOrder = settings.RecentOrder;
         ShowGraphEditorNodeProperties = settings.ShowGraphEditorNodeProperties;
+
+        // File Editor
+        TreeViewGroups = settings.TreeViewGroups;
+        TreeViewGroupSize = settings.TreeViewGroupSize;
+        DefaultEditorDifficultyLevel = settings.DefaultEditorDifficultyLevel;
+        TreeViewIgnoredExtensions = settings.TreeViewIgnoredExtensions;
+
+        // General
+        SkipUpdateCheck = settings.SkipUpdateCheck;
+        UpdateChannel = settings.UpdateChannel;
+        ShowGuidedTour = settings.ShowGuidedTour;
+        ThemeAccentString = settings.ThemeAccentString;
+        DefaultProjectPath = settings.DefaultProjectPath;
         ModderName = settings.ModderName;
         ModderEmail = settings.ModderEmail;
+
+        // Interface
+        ShowFilePreview = settings.ShowFilePreview;
+        ShowAdvancedOptions = settings.ShowAdvancedOptions;
         RefactoringCheckboxDefaultValue = settings.RefactoringCheckboxDefaultValue;
-        LastLaunchProfile = settings.LastLaunchProfile;
         ShowRedmodInRibbon = settings.ShowRedmodInRibbon;
         UseValidatingEditor = settings.UseValidatingEditor;
         ReopenLastProject = settings.ReopenLastProject;
         ShowVerboseLogOutput = settings.ShowVerboseLogOutput;
         ArchiveNamesExcludeFromScan = settings.ArchiveNamesExcludeFromScan;
-        SettingsVersion = settings.SettingsVersion;
 
         MigrateSettings();
     }
 
     public int SettingsVersion { get; set; } = 2;
 
+    public string? ReddbHash { get; set; }
+    public string? InstallerHash { get; set; }
+
+    public Dictionary<string, LaunchProfile> LaunchProfiles { get; set; } = [];
+    public Dictionary<string, bool>? ScriptStatus { get; set; }
+    public string? LastUsedProjectPath { get; set; }
+    public string? LastLaunchProfile { get; set; }
+
+    public int PinnedOrder { get; set; }
+    public int RecentOrder { get; set; }
+
+    #region Cyberpunk
+
+    public string? CP77ExecutablePath { get; set; }
+    public string? CP77LaunchCommand { get; set; }
+    public string? CP77LaunchOptions { get; set; }
+    public string? MaterialRepositoryPath { get; set; }
+    public bool AnalyzeModArchives { get; set; }
+    public string? ExtraModDirPath { get; set; }
+
+    #endregion
+
+    #region Display
+
+    public bool ShowCNameAsHex { get; set; }
+    public bool ShowResourcePathAsHex { get; set; }
+    public bool ShowNodeRefAsHex { get; set; }
+    public bool ShowTweakDBIDAsHex { get; set; }
+    public bool ShowReferenceGraph { get; set; }
+    public EGameLanguage GameLanguage { get; set; } = EGameLanguage.en_us;
+    public bool ShowGraphEditorNodeProperties { get; set; } = true;
+
+    #endregion
+
+    #region FileEditor
+
+    public bool TreeViewGroups { get; set; }
+    public uint TreeViewGroupSize { get; set; }
+    public EditorDifficultyLevel DefaultEditorDifficultyLevel { get; set; } = EditorDifficultyLevel.Easy;
+    public string? TreeViewIgnoredExtensions { get; set; } = "";
+
+    #endregion
+
+    #region General
+
     public bool SkipUpdateCheck { get; set; }
     public EUpdateChannel UpdateChannel { get; set; }
     public bool ShowGuidedTour { get; set; }
     public string? ThemeAccentString { get; set; }
-    public string? CP77ExecutablePath { get; set; }
-    public string? CP77LaunchCommand { get; set; }
-    public string? CP77LaunchOptions { get; set; }
-    public bool ShowFilePreview { get; set; }
-    public string? ReddbHash { get; set; }
-    public string? InstallerHash { get; set; }
-    public string? MaterialRepositoryPath { get; set; }
-    public bool TreeViewGroups { get; set; }
-    public uint TreeViewGroupSize { get; set; }
-    public string? TreeViewIgnoredExtensions { get; set; } = "";
-    public bool ShowAdvancedOptions { get; set; }
-    public bool ShowCNameAsHex { get; set; }
-    public bool ShowResourcePathAsHex { get; set; }
-    public bool ShowNodeRefAsHex { get; set; }
-    public EditorDifficultyLevel DefaultEditorDifficultyLevel { get; set; } = EditorDifficultyLevel.Easy;
-    public bool ShowTweakDBIDAsHex { get; set; }
-    public bool ShowReferenceGraph { get; set; }
-    public EGameLanguage GameLanguage { get; set; } = EGameLanguage.en_us;
-    public Dictionary<string, LaunchProfile> LaunchProfiles { get; set; } = [];
-    public bool RefactoringCheckboxDefaultValue { get; set; }
-    public Dictionary<string, bool>? ScriptStatus { get; set; }
-    public bool AnalyzeModArchives { get; set; }
-    public string? ExtraModDirPath { get; set; }
-    public string? LastUsedProjectPath { get; set; }
     public string? DefaultProjectPath { get; set; }
-    public string? LastLaunchProfile { get; set; }
+    public string? ModderName { get; set; }
+    public string? ModderEmail { get; set; }
+
+    #endregion
+
+    #region Interface
+
+    public bool ShowFilePreview { get; set; }
+    public bool ShowAdvancedOptions { get; set; }
+    public bool RefactoringCheckboxDefaultValue { get; set; }
     public bool ShowRedmodInRibbon { get; set; }
     public bool UseValidatingEditor { get; set; } = true;
     public bool ReopenLastProject { get; set; }
     public bool ShowVerboseLogOutput { get; set; }
-    public int PinnedOrder { get; set; }
-    public int RecentOrder { get; set; }
-    public bool ShowGraphEditorNodeProperties { get; set; } = true;
-    public string? ModderName { get; set; }
-    public string? ModderEmail { get; set; }
     public string ArchiveNamesExcludeFromScan { get; set; } = "basegame_AMM_Props";
+
+    #endregion
 
     public SettingsManager ReconfigureSettingsManager(SettingsManager settingsManager)
     {
@@ -121,41 +161,57 @@ public class SettingsDto : ISettingsDto
 
         settingsManager.SettingsVersion = SettingsVersion;
 
-        settingsManager.SkipUpdateCheck = SkipUpdateCheck;
-        settingsManager.UpdateChannel = UpdateChannel;
-        settingsManager.ShowGuidedTour = ShowGuidedTour;
-        settingsManager.ThemeAccentString = ThemeAccentString;
+        settingsManager.ReddbHash = ReddbHash;
+        settingsManager.InstallerHash = InstallerHash;
+
+        settingsManager.LaunchProfiles = LaunchProfiles;
+        settingsManager.ScriptStatus = ScriptStatus;
+        settingsManager.LastUsedProjectPath = LastUsedProjectPath;
+        settingsManager.LastLaunchProfile = LastLaunchProfile;
+
+        settingsManager.PinnedOrder = PinnedOrder;
+        settingsManager.RecentOrder = RecentOrder;
+
+        // Cyberpunk
         settingsManager.CP77ExecutablePath = CP77ExecutablePath;
         settingsManager.CP77LaunchCommand = CP77LaunchCommand;
         settingsManager.CP77LaunchOptions = CP77LaunchOptions;
-        settingsManager.ShowFilePreview = ShowFilePreview;
-        settingsManager.ReddbHash = ReddbHash;
-        settingsManager.InstallerHash = InstallerHash;
         settingsManager.MaterialRepositoryPath = MaterialRepositoryPath;
-        settingsManager.TreeViewGroups = TreeViewGroups;
-        settingsManager.TreeViewGroupSize = TreeViewGroupSize;
-        settingsManager.TreeViewIgnoredExtensions = TreeViewIgnoredExtensions;
-        settingsManager.ShowAdvancedOptions = ShowAdvancedOptions;
+        settingsManager.AnalyzeModArchives = AnalyzeModArchives;
+        settingsManager.ExtraModDirPath = ExtraModDirPath;
+
+        // Display
         settingsManager.ShowCNameAsHex = ShowCNameAsHex;
         settingsManager.ShowResourcePathAsHex = ShowResourcePathAsHex;
         settingsManager.ShowNodeRefAsHex = ShowNodeRefAsHex;
         settingsManager.ShowTweakDBIDAsHex = ShowTweakDBIDAsHex;
-        settingsManager.DefaultEditorDifficultyLevel = DefaultEditorDifficultyLevel;
         settingsManager.ShowReferenceGraph = ShowReferenceGraph;
-        settingsManager.LaunchProfiles = LaunchProfiles;
-        settingsManager.ScriptStatus = ScriptStatus;
         settingsManager.GameLanguage = GameLanguage;
-        settingsManager.AnalyzeModArchives = AnalyzeModArchives;
-        settingsManager.ExtraModDirPath = ExtraModDirPath;
-        settingsManager.LastUsedProjectPath = LastUsedProjectPath;
-        settingsManager.PinnedOrder = PinnedOrder;
-        settingsManager.RecentOrder = RecentOrder;
         settingsManager.ShowGraphEditorNodeProperties = ShowGraphEditorNodeProperties;
+
+        // File Editor
+        settingsManager.TreeViewGroups = TreeViewGroups;
+        settingsManager.TreeViewGroupSize = TreeViewGroupSize;
+        settingsManager.DefaultEditorDifficultyLevel = DefaultEditorDifficultyLevel;
+        settingsManager.TreeViewIgnoredExtensions = TreeViewIgnoredExtensions;
+
+        // General
+        settingsManager.SkipUpdateCheck = SkipUpdateCheck;
+        settingsManager.UpdateChannel = UpdateChannel;
+        settingsManager.ShowGuidedTour = ShowGuidedTour;
+        settingsManager.ThemeAccentString = ThemeAccentString;
+        settingsManager.DefaultProjectPath = DefaultProjectPath;
         settingsManager.ModderName = ModderName;
         settingsManager.ModderEmail = ModderEmail;
+
+        // Interface
+        settingsManager.ShowFilePreview = ShowFilePreview;
+        settingsManager.ShowAdvancedOptions = ShowAdvancedOptions;
         settingsManager.RefactoringCheckboxDefaultValue = RefactoringCheckboxDefaultValue;
-        settingsManager.LastLaunchProfile = LastLaunchProfile;
+        settingsManager.ShowRedmodInRibbon = ShowRedmodInRibbon;
         settingsManager.UseValidatingEditor = UseValidatingEditor;
+        settingsManager.ReopenLastProject = ReopenLastProject;
+        settingsManager.ShowVerboseLogOutput = ShowVerboseLogOutput;
         settingsManager.ArchiveNamesExcludeFromScan = ArchiveNamesExcludeFromScan;
 
         return settingsManager;
@@ -228,7 +284,8 @@ public class SettingsDto : ISettingsDto
             var defaultProfiles = JsonSerializer.Deserialize<Dictionary<string, LaunchProfile>>(stream,
                 options: new JsonSerializerOptions
                 {
-                    WriteIndented = true, DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+                    WriteIndented = true,
+                    DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
                 }) ?? [];
 
 
