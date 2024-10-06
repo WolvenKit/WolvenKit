@@ -1,5 +1,3 @@
-﻿using WolvenKit.Common.Model.Arguments;
+﻿namespace WolvenKit.App.ViewModels.Exporters;
 
-namespace WolvenKit.App.ViewModels.Exporters;
-
-public record class CallbackArguments(ImportExportArgs Arg, string PropertyName);
+public record class CallbackArguments(object Arg, string PropertyName);

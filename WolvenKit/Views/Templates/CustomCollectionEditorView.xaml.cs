@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using WolvenKit.App.ViewModels.Exporters;
@@ -30,7 +29,14 @@ namespace WolvenKit.Controls
             set => SetValue(ListProperty, value);
         }
         public static readonly DependencyProperty ListProperty = DependencyProperty.Register(
-            nameof(List), typeof(IList), typeof(CustomCollectionEditorView), new PropertyMetadata(null));
+            nameof(List), typeof(IList), typeof(CustomCollectionEditorView), new PropertyMetadata(null, OnListChanged));
+
+        private static void OnListChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var view = (CustomCollectionEditorView)d;
+
+            view.SetText();
+        }
 
         public string Text
         {
@@ -50,9 +56,10 @@ namespace WolvenKit.Controls
 
         private void SetText()
         {
+            var text = "Null";
             if (List is not null)
             {
-                var text = $"[{List.Count}]";
+                text = $"[{List.Count}] ";
                 if (List.Count == 1)
                 {
                     text += $"{List[0]}";
@@ -61,9 +68,8 @@ namespace WolvenKit.Controls
                 {
                     text += $"{List[0]}, ...";
                 }
-
-                SetCurrentValue(TextProperty, text);
             }
+            SetCurrentValue(TextProperty, text);
         }
     }
 }
