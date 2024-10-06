@@ -5,7 +5,6 @@ using Splat;
 using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.App.Services;
 using WolvenKit.Controls;
-using WolvenKit.Converters;
 using WolvenKit.ViewModels;
 using static WolvenKit.Converters.PropertyGridEditors;
 
@@ -33,7 +32,7 @@ namespace WolvenKit.Views.HomePage.Pages
                 .DisposeWith(disposables);
 
                 this.BindCommand(ViewModel,
-                      viewModel => viewModel.SaveCloseCommand,
+                      viewModel => viewModel.MainViewModel.CloseModalCommand,
                       view => view.SaveCloseButton)
                 .DisposeWith(disposables);
             });
