@@ -9,7 +9,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Services;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.Helpers;
 using WolvenKit.Modkit.Scripting;
 
 namespace WolvenKit.App.ViewModels.Documents;
@@ -17,10 +16,12 @@ namespace WolvenKit.App.ViewModels.Documents;
 public partial class WScriptDocumentViewModel : DocumentViewModel
 {
     private readonly AppScriptService _scriptService;
+    private readonly ILoggerService _loggerService;
 
-    public WScriptDocumentViewModel(string path, AppScriptService scriptService) : base(path)
+    public WScriptDocumentViewModel(string path, AppScriptService scriptService, ILoggerService loggerService) : base(path)
     {
         _scriptService = scriptService;
+        _loggerService = loggerService;
 
         Extension = "wscript";
 
@@ -67,7 +68,13 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
 
     private bool CanRun() => !_scriptService.IsRunning;
     [RelayCommand(CanExecute = nameof(CanRun))]
-    private async Task Run() => await _scriptService.ExecuteAsync(Text);
+    private async Task Run()
+    {
+        var scriptFile = new ScriptFile(FilePath);
+        scriptFile.Reload(_loggerService);
+
+        await _scriptService.ExecuteAsync(scriptFile);
+    }
 
     private bool CanStop() => _scriptService.IsRunning;
     [RelayCommand(CanExecute = nameof(CanStop))]

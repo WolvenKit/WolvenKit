@@ -99,7 +99,7 @@ public partial class LogViewModel : ToolViewModel
             return;
         }
         scriptFile.Reload(_loggerService);
-        await _scriptService.ExecuteAsync(scriptFile.Code);
+        await _scriptService.ExecuteAsync(scriptFile.ScriptFile);
     }
 
 

@@ -7,14 +7,15 @@ namespace WolvenKit.App.ViewModels.Scripting;
 public class ScriptFileViewModel : ScriptViewModel
 {
     private readonly ISettingsManager _settingsManager;
-    private readonly ScriptFile _scriptFile;
 
-    public string? Version => _scriptFile.Version;
-    public string? Author => _scriptFile.Author;
-    public string? Description => _scriptFile.Description;
-    public string? Usage => _scriptFile.Usage;
+    public ScriptFile ScriptFile { get; }
 
-    public string Code => _scriptFile.Content;
+    public string? Version => ScriptFile.Version;
+    public string? Author => ScriptFile.Author;
+    public string? Description => ScriptFile.Description;
+    public string? Usage => ScriptFile.Usage;
+
+    public string Code => ScriptFile.Content;
 
     public string SelectInfo
     {
@@ -60,9 +61,9 @@ public class ScriptFileViewModel : ScriptViewModel
 
     public ScriptFileViewModel(ISettingsManager settingsManager, ScriptSource source, ScriptFile scriptFile) : base(scriptFile.Name, scriptFile.Path, scriptFile.Type, source)
     {
-        _scriptFile = scriptFile;
         _settingsManager = settingsManager;
-
+        ScriptFile = scriptFile;
+        
         if (!_settingsManager.ScriptStatus!.TryGetValue(Path, out _enabled))
         {
             _enabled = true;
@@ -71,7 +72,7 @@ public class ScriptFileViewModel : ScriptViewModel
 
     public bool Reload(ILoggerService? loggerService)
     {
-        return _scriptFile.Reload(loggerService);
+        return ScriptFile.Reload(loggerService);
     }
 
     #region INotifyPropertyChanged

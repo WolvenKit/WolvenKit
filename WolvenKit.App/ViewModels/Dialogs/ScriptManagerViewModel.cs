@@ -175,13 +175,7 @@ public partial class ScriptManagerViewModel : DialogViewModel
 
     public async Task RunFile(ScriptFileViewModel scriptFile)
     {
-        if (!File.Exists(scriptFile.Path))
-        {
-            return;
-        }
-        var code = File.ReadAllText(scriptFile.Path);
-
-        await _scriptService.ExecuteAsync(code);
+        await _scriptService.ExecuteAsync(scriptFile.ScriptFile);
     }
 
     public async Task DeleteFile(ScriptFileViewModel scriptFile)

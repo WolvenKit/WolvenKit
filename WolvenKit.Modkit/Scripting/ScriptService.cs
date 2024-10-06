@@ -27,7 +27,7 @@ public partial class ScriptService : ObservableObject
 
     public ScriptService(ILoggerService loggerService) => _loggerService = loggerService;
 
-    public async Task ExecuteAsync(string code, Dictionary<string, object>? hostObjects = null, List<string>? searchPaths = null)
+    public async Task ExecuteAsync(ScriptFile scriptFile, Dictionary<string, object>? hostObjects = null, List<string>? searchPaths = null)
     {
         if (_mainEngine != null)
         {
@@ -40,10 +40,11 @@ public partial class ScriptService : ObservableObject
         var sw = Stopwatch.StartNew();
 
         _mainEngine = GetScriptEngine(hostObjects, searchPaths);
+        _mainEngine.Script["settings"] = scriptFile.Settings.ToJson();
 
         try
         {
-            await Task.Run(() => _mainEngine.Execute(new DocumentInfo { Category = ModuleCategory.Standard }, code));
+            await Task.Run(() => _mainEngine.Execute(new DocumentInfo { Category = ModuleCategory.Standard }, scriptFile.Content));
         }
         catch (ScriptEngineException ex1)
         {

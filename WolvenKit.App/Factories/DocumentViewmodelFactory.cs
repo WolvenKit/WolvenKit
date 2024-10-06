@@ -61,7 +61,7 @@ public class DocumentViewmodelFactory : IDocumentViewmodelFactory
             _parserService, _archiveManager, _hookService, _nodeWrapperFactory, _hashService,
             _settingsManager.DefaultEditorDifficultyLevel, isReadOnly);
 
-    public WScriptDocumentViewModel WScriptDocumentViewModel(string path) => new(path, _scriptService);
+    public WScriptDocumentViewModel WScriptDocumentViewModel(string path) => new(path, _scriptService, _loggerService);
 
     public TweakXLDocumentViewModel TweakXLDocumentViewModel(string path) => new(path);
 }
