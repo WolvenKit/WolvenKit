@@ -613,12 +613,7 @@ namespace WolvenKit.RED4.CR2W.Archive
                 .Select(x => x[path] ?? x[fileHash])
                 .FirstOrDefault();
 
-            if (baseFile != null)
-            {
-                return baseFile;
-            }
-
-            return null;
+            return baseFile; // this can be null
         }
 
         public CR2WFile? GetCR2WFile(ResourcePath path, bool includeMods = true, bool includeProject = true)

@@ -219,13 +219,6 @@ namespace WolvenKit.Views.Editors
                 return;
             }
 
-            if (!ArchiveXlHelper.HasSubstitution(filePath) && _archiveManager?.GetGameFile(RedRef.DepotPath, false, true) is not null)
-            {
-                SetCurrentValue(ScopeProperty, FileScope.GameOrMod);
-                SetCurrentValue(TextBoxToolTipProperty, "Valid depot path (game or same mod)");
-                return;
-            }
-
             if (ArchiveXlHelper.HasSubstitution(filePath))
             {
                 if (App.Helpers.ArchiveXlHelper.GetFirstExistingPath(filePath) is not string s)
@@ -235,19 +228,21 @@ namespace WolvenKit.Views.Editors
                     return;
                 }
 
-                if (_archiveManager?.GetGameFile(s, false, true) is not null)
-                {
-                    SetCurrentValue(ScopeProperty, FileScope.GameOrMod);
-                    SetCurrentValue(TextBoxToolTipProperty, "Valid depot path (game or same mod)");
-                    return;
-                }
+                filePath = s;
+            }
 
-                if (_archiveManager?.Lookup(s, ArchiveManagerScope.Mods).HasValue is true)
-                {
-                    SetCurrentValue(ScopeProperty, FileScope.OtherMod);
-                    SetCurrentValue(TextBoxToolTipProperty, "Valid depot path (another mod)");
-                    return;
-                }
+            if (_archiveManager?.GetGameFile(RedRef.DepotPath, false, true) is not null)
+            {
+                SetCurrentValue(ScopeProperty, FileScope.GameOrMod);
+                SetCurrentValue(TextBoxToolTipProperty, "Valid depot path (game or same mod)");
+                return;
+            }
+
+            if (_archiveManager?.GetGameFile(RedRef.DepotPath, true, false) is not null)
+            {
+                SetCurrentValue(ScopeProperty, FileScope.OtherMod);
+                SetCurrentValue(TextBoxToolTipProperty, "Valid depot path (another mod)");
+                return;
             }
 
             SetCurrentValue(ScopeProperty, FileScope.NotFound);
