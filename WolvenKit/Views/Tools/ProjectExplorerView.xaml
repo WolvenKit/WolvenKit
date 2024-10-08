@@ -16,7 +16,8 @@
     d:DesignHeight="450"
     d:DesignWidth="400"
     x:TypeArguments="tools:ProjectExplorerViewModel"
-    ContextMenuOpening="RefreshModifierStates"
+    ContextMenuOpening="OnContextMenuOpen"
+    ContextMenuClosing="OnContextMenuClose"
     KeyDown="OnKeyStateChanged"
     KeyUp="OnKeyStateChanged"
     mc:Ignorable="d">
@@ -48,8 +49,10 @@
             <ContextMenu
                 x:Key="TreeGridContextMenu"
                 FontSize="11"
-                KeyDown="OnKeyStateChanged"
-                KeyUp="OnKeyStateChanged"
+                ContextMenuOpening="OnContextMenuOpen"
+                ContextMenuClosing="OnContextMenuClose"
+                KeyDown="ContextMenu_OnKeyStateChanged"
+                KeyUp="ContextMenu_OnKeyStateChanged"
                 Style="{DynamicResource WPFContextMenuStyle}">
                 <MenuItem
                     Margin="0"
@@ -832,8 +835,8 @@
             BorderThickness="0"
             ColumnSizer="Star"
             ContextMenu="{StaticResource TreeGridContextMenu}"
-            ContextMenuOpening="ContextMenuStateChanged"
-            ContextMenuClosing="ContextMenuStateChanged"
+            ContextMenuOpening="OnContextMenuOpen"
+            ContextMenuClosing="OnContextMenuClose"
             CurrentCellBorderBrush="White"
             CurrentCellBorderThickness="0"
             ExpandStateMappingName="IsExpanded"

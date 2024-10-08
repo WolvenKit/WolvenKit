@@ -572,8 +572,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private bool CanOverwriteWithGameFile() => ActiveProject != null
                                                && SelectedItem != null
                                                && !IsInRawFolder(SelectedItem)
-                                               && _archiveManager.Lookup(SelectedItem.GameRelativePath, ArchiveManagerScope.Basegame)
-                                                   .HasValue;
+                                               && (SelectedItem.GameRelativePath.StartsWith("base") ||
+                                                   SelectedItem.GameRelativePath.StartsWith("ep1"));
 
     [RelayCommand(CanExecute = nameof(CanOverwriteWithGameFile))]
     private async Task OverwriteWithGameFile()
