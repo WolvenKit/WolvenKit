@@ -699,6 +699,17 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = Value != "";
                 break;
             }
+            case entMorphTargetSkinnedMeshComponent morphtargetComponent:
+            {
+                Value = StringHelper.Stringify(morphtargetComponent.MorphResource.DepotPath, true);
+                if (morphtargetComponent.MeshAppearance.GetResolvedText() is string app and (not "default" or "") && Value != "")
+                {
+                    Value = $"{Value} ({app})";
+                }
+
+                IsValueExtrapolated = Value != "";
+                break;
+            }
             case locVoiceoverLengthMap lengthMap:
                 Value = $"[{lengthMap.Entries.Count}]";
                 IsValueExtrapolated = Value != "";
