@@ -17,6 +17,10 @@ public partial class ChunkViewModel
 
     [NotifyCanExecuteChangedFor(nameof(DuplicateChunkCommand))]
     [NotifyCanExecuteChangedFor(nameof(DuplicateAsNewChunkCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ToggleEnableMaskedCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ConvertPreloadMaterialsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(DeleteUnusedMaterialsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ClearMaterialsCommand))]
     [ObservableProperty] private bool _isShiftKeyPressed;
     
     [ObservableProperty] private bool _isCtrlKeyPressed;
@@ -69,11 +73,6 @@ public partial class ChunkViewModel
 
         IsInArrayWithShiftKeyUp = IsInArray && !IsShiftKeyPressed;
         IsInArrayWithShiftKeyDown = IsInArray && IsShiftKeyPressed;
-
-        ToggleEnableMaskedCommand.NotifyCanExecuteChanged();
-        ConvertPreloadMaterialsCommand.NotifyCanExecuteChanged();
-        DeleteUnusedMaterialsCommand.NotifyCanExecuteChanged();
-        ClearMaterialsCommand.NotifyCanExecuteChanged();
     }
 
     public bool IsMaterialDefinition()
