@@ -18,6 +18,7 @@ using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Tools;
@@ -260,7 +261,7 @@ namespace WolvenKit.Views.Tools
 
         private void TreeGrid_OnNodeExpanding(object sender, NodeExpandingEventArgs e)
         {
-            if (ViewModel is null || _automatic || !ViewModel.ModifierStateService.IsShiftKeyPressed)
+            if (ViewModel is null || _automatic || ModifierViewStateService.IsShiftBeingHeld)
             {
                 return;
             }
@@ -332,7 +333,7 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            if (ViewModel.ModifierStateService.IsCtrlKeyPressed && e.Node.HasChildNodes)
+            if (ModifierViewStateService.IsCtrlBeingHeld && e.Node.HasChildNodes)
             {
                 _automatic = true;
                 e.Cancel = true;
@@ -340,7 +341,7 @@ namespace WolvenKit.Views.Tools
                 var state = e.Node.ChildNodes[0].IsExpanded;
                 foreach (var childNode in e.Node.ChildNodes)
                 {
-                    if (ViewModel.ModifierStateService.IsShiftKeyPressed)
+                    if (ModifierViewStateService.IsShiftBeingHeld)
                     {
                         if (state)
                         {
@@ -368,7 +369,7 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            if (!ViewModel.ModifierStateService.IsShiftKeyPressed)
+            if (!ModifierViewStateService.IsShiftBeingHeld)
             {
                 return;
             }
