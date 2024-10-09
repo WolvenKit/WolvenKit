@@ -17,9 +17,6 @@
     d:DesignWidth="400"
     x:TypeArguments="tools:ProjectExplorerViewModel"
     ContextMenuOpening="OnContextMenuOpen"
-    ContextMenuClosing="OnContextMenuClose"
-    KeyDown="OnKeyStateChanged"
-    KeyUp="OnKeyStateChanged"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -50,7 +47,6 @@
                 x:Key="TreeGridContextMenu"
                 FontSize="11"
                 ContextMenuOpening="OnContextMenuOpen"
-                ContextMenuClosing="OnContextMenuClose"
                 KeyDown="ContextMenu_OnKeyStateChanged"
                 KeyUp="ContextMenu_OnKeyStateChanged"
                 Style="{DynamicResource WPFContextMenuStyle}">
@@ -836,7 +832,6 @@
             ColumnSizer="Star"
             ContextMenu="{StaticResource TreeGridContextMenu}"
             ContextMenuOpening="OnContextMenuOpen"
-            ContextMenuClosing="OnContextMenuClose"
             CurrentCellBorderBrush="White"
             CurrentCellBorderThickness="0"
             ExpandStateMappingName="IsExpanded"

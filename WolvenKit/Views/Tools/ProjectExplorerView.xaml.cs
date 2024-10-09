@@ -1042,33 +1042,17 @@ namespace WolvenKit.Views.Tools
             TreeGrid.View.MoveCurrentToPosition(rowIndex);
         }
 
-        private bool _isContextMenuOpen;
-
-        private void OnKeyStateChanged(object sender, KeyEventArgs e)
-        {
-            if (!_isContextMenuOpen)
-            {
-                ViewModel?.ModifierStateService.OnKeystateChanged(e);
-            }
-        }
 
         private void ContextMenu_OnKeyStateChanged(object sender, KeyEventArgs e)
         {
-            if (_isContextMenuOpen)
-            {
                 ViewModel?.ModifierStateService.OnKeystateChanged(e);
-            }
-        }
+                ViewModel?.ModifierStateService.RefreshModifierStates();
 
-        private void RefreshModifierStates(object sender, ContextMenuEventArgs e) =>
-            ViewModel?.ModifierStateService.RefreshModifierStates();
+        }
 
         private void OnContextMenuOpen(object sender, ContextMenuEventArgs e)
         {
-            _isContextMenuOpen = true;
             ViewModel?.ModifierStateService.RefreshModifierStates();
         }
-
-        private void OnContextMenuClose(object sender, ContextMenuEventArgs e) => _isContextMenuOpen = false;
     }
 }
