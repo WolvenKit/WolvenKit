@@ -247,7 +247,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     private bool HasMeshAppearances() => RootChunk?.ResolvedData is CMesh mesh && mesh.Appearances.Count > 0;
 
     [RelayCommand(CanExecute = nameof(CanClearAppearances))]
-    private void ClearMaterials() => SelectedChunk?.ClearMaterialsCommand.Execute(null);
+    private void ClearMaterials() => RootChunk?.ClearMaterialsCommand.Execute(null);
 
     public bool IsMaterialDefinition() => SelectedChunk?.IsMaterialDefinition() == true;
 
