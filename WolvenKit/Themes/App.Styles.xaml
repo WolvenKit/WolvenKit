@@ -87,6 +87,7 @@
     <SolidColorBrush x:Key="BackgroundColor_Frame_Background" Color="#1F1F1F" />
 
     <SolidColorBrush x:Key="BackgroundColor_Button_Inactive" Color="#969696" />
+    <SolidColorBrush x:Key="BackgroundColor_Button_Active" Color="#313131" />
 
     <Style
         x:Key="WolvenKitTabControl"

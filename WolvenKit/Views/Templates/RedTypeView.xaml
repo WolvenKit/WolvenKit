@@ -36,10 +36,17 @@
             </Style>
             <Style x:Key="HiddenByEditorModeStyle" TargetType="Grid">
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding Path=IsHiddenByEditorDifficultyLevel}" Value="False">
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding IsHiddenByEditorDifficultyLevel}" Value="False" />
+                            <Condition Binding="{Binding IsHiddenBySearch}" Value="False" />
+                        </MultiDataTrigger.Conditions>
                         <Setter Property="Visibility" Value="Visible" />
-                    </DataTrigger>
+                    </MultiDataTrigger>
                     <DataTrigger Binding="{Binding Path=IsHiddenByEditorDifficultyLevel}" Value="True">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=IsHiddenBySearch}" Value="True">
                         <Setter Property="Visibility" Value="Collapsed" />
                     </DataTrigger>
                 </Style.Triggers>

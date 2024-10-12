@@ -165,6 +165,8 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     [ObservableProperty] private IRedRef? _selectedImport;
 
+    [ObservableProperty] private string? _currentSearch;
+
     public bool ShowReferenceGraph => _settingsManager.ShowReferenceGraph;
 
     /// <summary>
@@ -175,6 +177,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     public delegate void LayoutNodesDelegate();
 
     public LayoutNodesDelegate? LayoutNodes;
+    
 
     #endregion
 
@@ -549,5 +552,15 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         {
             GetRootChunk()?.OnMaterialNameChange(args.OldValue, args.NewValue);
         }
+    }
+
+    public void OnSearchChanged(string searchBoxText)
+    {
+        foreach (var chunkViewModel in Chunks)
+        {
+            chunkViewModel.SetVisibilityStatusBySearchString(searchBoxText);
+        }
+
+        CurrentSearch = searchBoxText;
     }
 }

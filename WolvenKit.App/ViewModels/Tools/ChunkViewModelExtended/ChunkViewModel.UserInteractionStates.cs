@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.RED4.Types;
 
@@ -22,6 +23,12 @@ public partial class ChunkViewModel
     /// Fields are defined in <see cref="EditorDifficultyLevelFieldFactory"/>.
     /// </summary>
     [ObservableProperty] private bool _isHiddenByEditorDifficultyLevel;
+
+    /// <summary>
+    /// For view visibility - if the noob filter is enabled, only show properties that the user wants to edit.
+    /// Fields are defined in <see cref="EditorDifficultyLevelFieldFactory"/>.
+    /// </summary>
+    [ObservableProperty] private bool _isHiddenBySearch;
 
     private void CalculateUserInteractionStates()
     {
@@ -44,4 +51,23 @@ public partial class ChunkViewModel
     }
 
     private EditorDifficultyLevelInformation DifficultyLevelFieldInformation { get; set; }
+
+    public void SetVisibilityStatusBySearchString(string searchBoxText)
+    {
+        foreach (var chunkViewModel in TVProperties)
+        {
+            chunkViewModel.SetVisibilityStatusBySearchString(searchBoxText);
+        }
+
+        if (TVProperties.Any(c => c is { IsHiddenBySearch: false }))
+        {
+            IsHiddenBySearch = false;
+            return;
+        }
+
+        IsHiddenBySearch = !(string.IsNullOrEmpty(searchBoxText)
+                             || Value?.Contains(searchBoxText, StringComparison.Ordinal) == true
+                             || Descriptor?.Contains(searchBoxText, StringComparison.Ordinal) == true
+                             || StringHelper.StringifyRedType(ResolvedData).Contains(searchBoxText, StringComparison.Ordinal));
+    }
 }

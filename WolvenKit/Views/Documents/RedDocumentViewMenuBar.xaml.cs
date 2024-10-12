@@ -457,5 +457,42 @@ namespace WolvenKit.Views.Documents
             }
         }
 
+        private void SearchBox_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            Console.WriteLine(e.Key);
+            switch (e.Key)
+            {
+                case Key.Enter:
+                    SearchBox_OnSubmit(this, e);
+                    return;
+                case Key.Escape:
+                case Key.Back when ModifierViewStateService.IsShiftBeingHeld:
+                case Key.Delete when ModifierViewStateService.IsShiftBeingHeld:
+                    SearchBox_OnClear(this, e);
+                    return;
+                default:
+                    return;
+            }
+        }
+
+        private void SearchBox_OnSubmit(object sender, RoutedEventArgs e) => ViewModel?.OnSearchChanged(SearchBox?.Text ?? "");
+
+        private void SearchBox_OnClear(object sender, RoutedEventArgs e)
+        {
+            SearchBox?.Clear();
+            SearchBox_OnSubmit(this, e);
+        }
+
+        private void SearchBox_OnClick(object sender, MouseButtonEventArgs e)
+        {
+            if (ModifierViewStateService.IsShiftBeingHeld)
+            {
+                SearchBox?.SelectAll();
+            }
+            else if (ModifierViewStateService.IsCtrlBeingHeld)
+            {
+                SearchBox_OnClear(this, e);
+            }
+        }
     }
 }

@@ -16,13 +16,18 @@
 
     <Grid>
 
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        
         <Grid.Resources>
 
             <converters:HasMenuChildrenVisibilityConverter x:Key="HasMenuChildrenVisibilityConverter" />
             
             <!-- styles the whole menu bar -->
             <Style x:Key="MenuStyle" TargetType="{x:Type Menu}">
-                <Setter Property="Height" Value="25" />
+                <Setter Property="Height" Value="29" />
                 <Setter Property="Margin" Value="0" />
                 <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
                 <Setter Property="Background" Value="{StaticResource BackgroundColor_Frame_Background}" />
@@ -319,5 +324,69 @@
             
             
         </Menu>
+
+
+        <TextBox Grid.Column="1"
+                 Width="200"
+                 Margin="5,0,0,0"
+                 VerticalAlignment="Center"
+                 HorizontalAlignment="Right"
+                 PreviewKeyDown="SearchBox_OnKeyDown"
+                 MouseDown="SearchBox_OnClick"
+                 BorderBrush="{StaticResource BackgroundColor_Frame_Background}"
+                 BorderThickness="0"
+                 x:Name="SearchBox">
+            <TextBox.Style>
+                <Style TargetType="TextBox">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TextBox">
+                                <Grid>
+                                    <Border x:Name="Border"
+                                            Background="{StaticResource BackgroundColor_Control}"
+                                            BorderThickness="0" />
+                                    <ScrollViewer x:Name="PART_ContentHost"
+                                                  Margin="2" />
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                        <Button x:Name="ClearButton"
+                                                Width="16"
+                                                Height="16"
+                                                Margin="0,0,4,0"
+                                                Visibility="{Binding Text.IsEmpty, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource InvertBooleanVisibilityConverter}}"
+                                                Click="SearchBox_OnClear">
+                                            <iconPacks:PackIconCodicons
+                                                Padding="1"
+                                                VerticalAlignment="Center"
+                                                Kind="Close" />
+                                        </Button>
+                                        <Button x:Name="SearchButton"
+                                                Width="16"
+                                                Height="16"
+                                                Margin="0,0,4,0"
+                                                Click="SearchBox_OnSubmit">
+                                            <Button.Style>
+                                                <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Text.Length, RelativeSource={RelativeSource AncestorType=TextBox}}"
+                                                                     Value="0">
+                                                            <Setter Property="IsEnabled" Value="False" />
+                                                            <Setter Property="Background" Value="{StaticResource BackgroundColor_Frame_Active }" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                            <iconPacks:PackIconCodicons
+                                                Padding="1"
+                                                VerticalAlignment="Center"
+                                                Kind="Search" />
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
     </Grid>
 </reactiveUi:ReactiveUserControl>

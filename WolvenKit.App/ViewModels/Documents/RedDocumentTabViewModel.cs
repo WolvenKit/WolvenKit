@@ -57,6 +57,9 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
             case nameof(RDTDataViewModel.SelectedChunk):
                 OnSelected();
                 break;
+            case nameof(RDTDataViewModel.CurrentSearch):
+                OnSearchChanged();
+                break;
             default:
                 break;
         }
@@ -90,27 +93,29 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(CanDeleteEmbeddedFile))]
     private void DeleteEmbeddedFile()
     {
-        if (this is RDTDataViewModel datavm)
+        if (this is not RDTDataViewModel datavm)
         {
-            
-            for (var i = 0; i < Parent.Cr2wFile.EmbeddedFiles.Count; i++)
+            return;
+        }
+
+        for (var i = 0; i < Parent.Cr2wFile.EmbeddedFiles.Count; i++)
+        {
+            var file = Parent.Cr2wFile.EmbeddedFiles[i];
+            if (file.Content == datavm.GetData())
             {
-                var file = Parent.Cr2wFile.EmbeddedFiles[i];
-                if (file.Content == datavm.GetData())
-                {
-                    Parent.Cr2wFile.EmbeddedFiles.Remove(file);
-                    break;
-                }
+                Parent.Cr2wFile.EmbeddedFiles.Remove(file);
+                break;
             }
-            for (var i = 0; i < Parent.TabItemViewModels.Count; i++)
+        }
+
+        for (var i = 0; i < Parent.TabItemViewModels.Count; i++)
+        {
+            var vm = Parent.TabItemViewModels[i];
+            if (vm == this)
             {
-                var vm = Parent.TabItemViewModels[i];
-                if (vm == this)
-                {
-                    Parent.TabItemViewModels.Remove(this);
-                    Parent.SetIsDirty(true);
-                    break;
-                }
+                Parent.TabItemViewModels.Remove(this);
+                Parent.SetIsDirty(true);
+                break;
             }
         }
     }
@@ -119,31 +124,36 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(CanRenameEmbeddedFile))]
     private void RenameEmbeddedFile()
     {
-        if (this is RDTDataViewModel datavm)
+        if (this is not RDTDataViewModel datavm)
         {
-            CR2WEmbedded? embeddedFile = null;
-            for (var i = 0; i < Parent.Cr2wFile.EmbeddedFiles.Count; i++)
-            {
-                var file = Parent.Cr2wFile.EmbeddedFiles[i];
-                if (file.Content == datavm.GetData())
-                {
-                    embeddedFile = (CR2WEmbedded)file;
-                }
-            }
-            if (embeddedFile != null)
-            {
-                var newfilename = Interactions.Rename(embeddedFile.FileName.GetResolvedText()!);
+            return;
+        }
 
-                if (string.IsNullOrEmpty(newfilename))
-                {
-                    return;
-                }
-
-                datavm.FilePath = newfilename;
-                embeddedFile.FileName = newfilename;
-                Parent.SetIsDirty(true);
+        CR2WEmbedded? embeddedFile = null;
+        for (var i = 0; i < Parent.Cr2wFile.EmbeddedFiles.Count; i++)
+        {
+            var file = Parent.Cr2wFile.EmbeddedFiles[i];
+            if (file.Content == datavm.GetData())
+            {
+                embeddedFile = (CR2WEmbedded)file;
             }
         }
+
+        if (embeddedFile == null)
+        {
+            return;
+        }
+
+        var newfilename = Interactions.Rename(embeddedFile.FileName.GetResolvedText()!);
+
+        if (string.IsNullOrEmpty(newfilename))
+        {
+            return;
+        }
+
+        datavm.FilePath = newfilename;
+        embeddedFile.FileName = newfilename;
+        Parent.SetIsDirty(true);
     }
 
     private bool CanExtractEmbeddedFile() => this is RDTDataViewModel data && data.IsEmbeddedFile;
@@ -201,4 +211,11 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
     public virtual void Unload()
     {
     }
+
+    // Do nothing, overwrite in inheriting classes
+    public virtual void OnSearchChanged()
+    {
+    }
+    
+    
 }

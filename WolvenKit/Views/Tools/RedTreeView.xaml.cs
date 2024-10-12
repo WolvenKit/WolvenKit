@@ -46,12 +46,35 @@ namespace WolvenKit.Views.Tools
             
             InitializeComponent();
 
+            DataContextChanged += OnDataContextChanged;
+
             // Listen for the "UpdateFilteredItemsSource" message
             MessageBus.Current.Listen<string>("Command")
                 .Where(x => x == "UpdateFilteredItemsSource")
                 .Subscribe(_ => UpdateFilteredItemsSource(ItemsSource));
 
             TreeView.ApplyTemplate();
+        }
+
+        private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (e.OldValue is INotifyPropertyChanged oldViewModel)
+            {
+                oldViewModel.PropertyChanged -= OnViewModelPropertyChanged;
+            }
+
+            if (e.NewValue is INotifyPropertyChanged newViewModel)
+            {
+                newViewModel.PropertyChanged += OnViewModelPropertyChanged;
+            }
+        }
+
+        private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (sender is RDTDataViewModel dtm && e.PropertyName == nameof(dtm.CurrentSearch))
+            {
+                UpdateFilteredItemsSource(dtm.Chunks);
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -67,11 +90,11 @@ namespace WolvenKit.Views.Tools
 
             if (collectionView is not null)
             {
-                collectionView.Filter = item => (item as ChunkViewModel)?.IsHiddenByEditorDifficultyLevel != true;
+                collectionView.Filter = item =>
+                    (item as ChunkViewModel)?.IsHiddenByEditorDifficultyLevel != true &&
+                    (item as ChunkViewModel)?.IsHiddenBySearch != true;
                 SetCurrentValue(ItemsSourceProperty, collectionView);
             }
-
-
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ItemsSource)));
         }
