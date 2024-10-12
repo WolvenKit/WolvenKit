@@ -217,6 +217,15 @@ public partial class ChunkViewModel
                 }
 
                 break;
+            case Multilayer_Setup mlsetup:
+
+                foreach (var layer in mlsetup.Layers)
+                {
+                    await Task.Run(() => AddRefPath(layer.Material.DepotPath));
+                    await Task.Run(() => AddRefPath(layer.Microblend.DepotPath));
+                }
+
+                break;
             default:
                 break;
         }

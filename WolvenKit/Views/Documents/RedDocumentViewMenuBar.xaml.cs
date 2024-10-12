@@ -277,8 +277,8 @@ namespace WolvenKit.Views.Documents
                 ChunkViewModel.ExternalMaterialPath);
 
         }
-        
-        private async Task AddDependenciesToMi(ChunkViewModel cvm)
+
+        private async Task AddDependenciesToMiOrMlSetup(ChunkViewModel cvm)
         {
             await LoadModArchives();
 
@@ -377,7 +377,8 @@ namespace WolvenKit.Views.Documents
                     await AddDependenciesToMesh(cvm);
                     break;
                 case CMaterialInstance:
-                    await AddDependenciesToMi(cvm);
+                case Multilayer_Setup:
+                    await AddDependenciesToMiOrMlSetup(cvm);
                     break;
                 default:
                     break;

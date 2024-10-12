@@ -97,6 +97,11 @@
                         <Setter Property="Visibility" Value="Visible" />
                     </DataTrigger>
                     <DataTrigger
+                        Binding="{Binding  Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
+                        Value="{x:Static documents:RedDocumentItemType.Mlsetup}">
+                        <Setter Property="Visibility" Value="Visible" />
+                    </DataTrigger>
+                    <DataTrigger
                         Binding="{Binding Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
                         Value="{x:Static documents:RedDocumentItemType.Mesh}">
                         <Setter Property="Visibility" Value="Visible" />
