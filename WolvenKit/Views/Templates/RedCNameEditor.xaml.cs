@@ -1,12 +1,15 @@
+using System;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Splat;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Events;
 using WolvenKit.Modkit.Resources;
 using WolvenKit.RED4.Types;
 
@@ -30,6 +33,8 @@ namespace WolvenKit.Views.Editors
         public bool IsValid { get; set; } = false;
         public bool HasWarning { get; set; } = false;
         public bool HasError { get; set; } = false;
+
+        private string LastValue { get; set; } = "";
 
 
         /// <summary>
@@ -225,6 +230,21 @@ namespace WolvenKit.Views.Editors
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void OnTextboxFocusLost(object sender, RoutedEventArgs e) => RecalculateValidityAndTooltip();
+        public static readonly RoutedEvent ValueChangedEvent = EventManager.RegisterRoutedEvent(
+            nameof(ValueChanged), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(RedCNameEditor));
+
+        public event RoutedEventHandler ValueChanged
+        {
+            add => AddHandler(ValueChangedEvent, value);
+            remove => RemoveHandler(ValueChangedEvent, value);
+        }
+
+        private void OnTextboxFocusLost(object sender, RoutedEventArgs e)
+        {
+            RecalculateValidityAndTooltip();
+            RaiseEvent(new ValueChangedEventArgs(ValueChangedEvent, LastValue, RedString));
+        }
+
+        private void OnTextboxFocusGained(object sender, RoutedEventArgs e) => LastValue = RedString;
     }
 }

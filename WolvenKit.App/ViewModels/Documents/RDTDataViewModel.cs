@@ -14,6 +14,7 @@ using WolvenKit.App.Factories;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.Nodify;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Events;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common.FNV1A;
@@ -539,5 +540,14 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
         ExpandParentNodes(selectedNode);
         SetSelection(selectedNode);
+    }
+
+    // A material was renamed
+    public void OnCNameValueChanged(ValueChangedEventArgs args)
+    {
+        if (args.RedType == typeof(CMeshMaterialEntry))
+        {
+            GetRootChunk()?.OnMaterialNameChange(args.OldValue, args.NewValue);
+        }
     }
 }

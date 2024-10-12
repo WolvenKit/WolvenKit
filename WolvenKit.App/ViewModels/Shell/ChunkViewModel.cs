@@ -4714,4 +4714,44 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         HandleToClass,
         ClassToHandle
     }
+
+    public void OnMaterialNameChange(string argsOldValue, string argsNewValue)
+    {
+        if (ResolvedData is not CMesh mesh || GetPropertyChild("appearances") is not ChunkViewModel appearances)
+        {
+            return;
+        }
+
+        foreach (var appearanceNode in appearances.TVProperties)
+        {
+            var wasChanged = false;
+            if (appearanceNode.ResolvedData is not meshMeshAppearance app)
+            {
+                continue;
+            }
+
+            CArray<CName> chunkMaterials = [];
+            foreach (var appChunkMaterial in app.ChunkMaterials)
+            {
+                if (appChunkMaterial == argsOldValue)
+                {
+                    chunkMaterials.Add(argsNewValue);
+                    wasChanged = true;
+                }
+                else
+                {
+                    chunkMaterials.Add(appChunkMaterial);
+                }
+            }
+
+            if (!wasChanged)
+            {
+                continue;
+            }
+
+            app.ChunkMaterials = chunkMaterials;
+            appearanceNode.RecalculateProperties();
+            Tab?.Parent.SetIsDirty(true);
+        }
+    }
 }
