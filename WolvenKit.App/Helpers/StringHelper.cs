@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using WolvenKit.App.Helpers.StringHelpers;
@@ -16,22 +17,35 @@ public abstract partial class StringHelper
         }
 
         var nodeIds = scnOutputAry.Select(
-            (scnOutput) => Stringify(
-                scnOutput.Destinations.Select((dest) => dest.NodeId.Id.ToString() ?? "")
+            scnOutput => Stringify(
+                scnOutput.Destinations.Select(dest => dest.NodeId.Id.ToString())
                     .Where(s => s != "").ToArray()
             )
         ).ToArray();
         return Stringify(nodeIds);
     }
 
-    public static string Stringify(Vector4 vector4)
+    public static string Stringify(Vector4 vec, bool defaultIsOne = false)
     {
-        if (vector4.X == 0 && vector4.Y == 0 && vector4.Z == 0)
+        var val = defaultIsOne ? 1 : 0;
+        if (EqualsFloat(vec.X, val) && EqualsFloat(vec.Y, val) && EqualsFloat(vec.Z, val) && EqualsFloat(vec.W, 1))
         {
             return "";
         }
 
-        return $"{vector4.X}, {vector4.Y}, {vector4.Z}, {vector4.W}";
+        return $"{vec.X}, {vec.Y}, {vec.Z}, {vec.W}";
+    }
+
+
+    private static string Stringify(Quaternion quat, bool defaultIsOne = false)
+    {
+        var val = defaultIsOne ? 1 : 0;
+        if (EqualsFloat(quat.I, val) && EqualsFloat(quat.J, val) && EqualsFloat(quat.K, val) && EqualsFloat(quat.R, 1))
+        {
+            return "";
+        }
+
+        return $"{quat.I}, {quat.J}, {quat.K}, {quat.R}";
     }
 
     public static string Stringify(ICollection<TweakDBID> tweakDbIdCollection)
@@ -84,8 +98,8 @@ public abstract partial class StringHelper
         }
 
         var paths = animSets
-            .Select((animRef) => animRef.DepotPath.GetResolvedText() ?? "")
-            .Where((text) => text != "")
+            .Select(animRef => animRef.DepotPath.GetResolvedText() ?? "")
+            .Where(text => text != "")
             .Select(text => !getFilenameOnly ? text : text.Split('\\').LastOrDefault() ?? text)
             .ToList();
         return $"[ {string.Join(", ", paths)} ]";
@@ -167,4 +181,35 @@ public abstract partial class StringHelper
     }
 
     public static string? GetNodeName(CWeakHandle<animAnimNode_Base> linkNode) => StringHelperAnimNode.GetNodeName(linkNode);
+
+
+    // rotation, scale, translation
+    public static string Stringify(QsTransform qsTransform)
+    {
+        var rotation = Stringify(qsTransform.Rotation);
+        var scale = Stringify(qsTransform.Scale, true);
+        var translation = Stringify(qsTransform.Translation, true);
+
+        List<string> values = [];
+
+        if (rotation != "")
+        {
+            values.Add($"rot({rotation})");
+        }
+
+        if (scale != "")
+        {
+            values.Add($"scale({scale})");
+        }
+
+        if (translation != "")
+        {
+            values.Add($"translation({translation})");
+        }
+
+        return string.Join(", ", values);
+    }
+
+    private static bool EqualsFloat(float a, float b) => Math.Abs(a - b) < float.Epsilon;
+
 }

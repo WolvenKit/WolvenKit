@@ -505,6 +505,10 @@ public partial class ChunkViewModel
             case CEvaluatorFloatConst floatConst:
                 Value = $"{floatConst.Value}";
                 break;
+            case QsTransform transform:
+                Value = StringHelper.Stringify(transform);
+                IsValueExtrapolated = Value != "";
+                break;
             case CArray<TweakDBID> tweakIds:
                 Value = StringHelper.Stringify(tweakIds);
                 IsValueExtrapolated = tweakIds.Count != 0;
