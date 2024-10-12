@@ -51,6 +51,7 @@
             ToolTip="{Binding TextBoxToolTip, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
             helpers:TextBoxBehavior.IsValid="{Binding IsValid}"
             GotFocus="OnTextboxFocusGained"
+            KeyDown="OnTextboxKeyDown" 
             LostFocus="OnTextboxFocusLost" />
         <TextBox
             x:Name="HashBox"

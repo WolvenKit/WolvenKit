@@ -246,5 +246,13 @@ namespace WolvenKit.Views.Editors
         }
 
         private void OnTextboxFocusGained(object sender, RoutedEventArgs e) => LastValue = RedString;
+
+        private void OnTextboxKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                OnTextboxFocusLost(sender, e);
+            }
+        }
     }
 }
