@@ -174,6 +174,8 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     /// </summary>
     public List<ChunkViewModel> DirtyChunks { get; set; } = [];
 
+    public bool HasActiveSearch { get; set; }
+
     public delegate void LayoutNodesDelegate();
 
     public LayoutNodesDelegate? LayoutNodes;
@@ -556,6 +558,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     public void OnSearchChanged(string searchBoxText)
     {
+        HasActiveSearch = !string.IsNullOrEmpty(searchBoxText);
         foreach (var chunkViewModel in Chunks)
         {
             chunkViewModel.SetVisibilityStatusBySearchString(searchBoxText);

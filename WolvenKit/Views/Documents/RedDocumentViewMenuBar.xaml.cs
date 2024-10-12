@@ -459,7 +459,6 @@ namespace WolvenKit.Views.Documents
 
         private void SearchBox_OnKeyDown(object sender, KeyEventArgs e)
         {
-            Console.WriteLine(e.Key);
             switch (e.Key)
             {
                 case Key.Enter:

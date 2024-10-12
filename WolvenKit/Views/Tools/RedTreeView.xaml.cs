@@ -385,6 +385,15 @@ namespace WolvenKit.Views.Tools
         }
 
 
+        [RelayCommand]
+        private void DeleteSelection()
+        {
+            foreach (var chunkViewModel in GetSelectedChunks())
+            {
+                chunkViewModel.DeleteItemCommand.Execute(null);
+            }
+        }
+        
         private bool CanGenerateMissingMaterials() => SelectedItem is ChunkViewModel
         {
             ResolvedData: CMesh,

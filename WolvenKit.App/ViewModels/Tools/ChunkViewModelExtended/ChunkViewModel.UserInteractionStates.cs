@@ -54,20 +54,44 @@ public partial class ChunkViewModel
 
     public void SetVisibilityStatusBySearchString(string searchBoxText)
     {
+        if (ResolvedData is RedDummy || TVProperties.Count == 0)
+        {
+            CalculateProperties();
+        }
+        
         foreach (var chunkViewModel in TVProperties)
         {
             chunkViewModel.SetVisibilityStatusBySearchString(searchBoxText);
         }
 
-        if (TVProperties.Any(c => c is { IsHiddenBySearch: false }))
+        if (IsHiddenByEditorDifficultyLevel || Parent is null)
         {
             IsHiddenBySearch = false;
             return;
         }
 
-        IsHiddenBySearch = !(string.IsNullOrEmpty(searchBoxText)
-                             || Value?.Contains(searchBoxText, StringComparison.Ordinal) == true
+        if (TVProperties.Any(c => c is { IsHiddenBySearch: false }))
+        {
+            IsHiddenBySearch = false;
+            IsExpanded = !string.IsNullOrEmpty(searchBoxText);
+            return;
+        }
+
+        if (string.IsNullOrEmpty(searchBoxText))
+        {
+            IsHiddenBySearch = false;
+            IsExpanded = Parent is not null;
+            return;
+        }
+
+        IsHiddenBySearch = !(Value?.Contains(searchBoxText, StringComparison.Ordinal) == true
                              || Descriptor?.Contains(searchBoxText, StringComparison.Ordinal) == true
                              || StringHelper.StringifyRedType(ResolvedData).Contains(searchBoxText, StringComparison.Ordinal));
+
+        if (IsHiddenBySearch)
+        {
+            IsExpanded = false;
+        }
+
     }
 }
