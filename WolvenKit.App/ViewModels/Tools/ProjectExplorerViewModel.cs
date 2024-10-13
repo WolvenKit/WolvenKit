@@ -361,6 +361,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private bool _isShowAbsolutePathToCurrentFolder;
 
     /// <summary>
+    /// When holding Control, the context menu will show "Copy absolute path to folder".
+    /// </summary>
+    [ObservableProperty] private bool _isShiftKeyPressed;
+
+    /// <summary>
     /// Do we have an open file?
     /// </summary>
     [ObservableProperty] private bool _hasOpenFile;
@@ -1109,6 +1114,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         IsShowRelativePath = !(IsShowAbsolutePathToRawFolder || IsShowAbsolutePathToArchiveFolder ||
                                IsShowAbsolutePathToCurrentFile || IsShowAbsolutePathToCurrentFolder) ||
                              ModifierViewStateService.IsNoModifierBeingHeld;
+
+        IsShiftKeyPressed = ModifierViewStateService.IsShiftBeingHeld;
     }
 
     public IDocumentViewModel? GetActiveEditorFile() => _mainViewModel.ActiveDocument;
