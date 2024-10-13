@@ -122,7 +122,6 @@ public class AppArchiveManager(
         Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(executablePath))) is string gameDir
             ? gameDir
             : null;
-
     public override void LoadModArchives(FileInfo executable, bool analyzeFiles = true, string[]? ignoredFiles = null)
     {
         _progressService.IsIndeterminate = true;

@@ -106,9 +106,11 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
     private void OnRtdModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName is not (nameof(RDTDataViewModel.SelectedChunk) or nameof(RDTDataViewModel.SelectedChunks)
-                or nameof(RDTDataViewModel.FilePath)) ||
-            sender is not RDTDataViewModel dataViewModel)
+        if (sender is not RDTDataViewModel dataViewModel || e.PropertyName is not
+                (nameof(RDTDataViewModel.SelectedChunk)
+                or nameof(RDTDataViewModel.SelectedChunks)
+                or nameof(RDTDataViewModel.FilePath))
+           )
         {
             return;
         }

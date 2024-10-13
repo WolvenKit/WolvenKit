@@ -247,9 +247,9 @@ namespace WolvenKit.Views.Documents
                 rootChunk.DeleteUnusedMaterialsCommand.Execute(true);
             }
 
-            await LoadModArchives();
+            await LoadAndAnalyzeModArchives();
 
-            var materialDependencies = await rootChunk.GetMaterialDependenciesOutsideOfProject();
+            var materialDependencies = await rootChunk.GetMaterialRefsFromFile();
             var isShiftKeyDown = ModifierViewStateService.IsShiftBeingHeld;
 
             // Filter files: Ignore base game files unless shift key is pressed
@@ -336,20 +336,27 @@ namespace WolvenKit.Views.Documents
             }
         }
 
-        private async Task LoadModArchives()
+        private async Task LoadAndAnalyzeModArchives()
         {
-            if (!_archiveManager.GetModArchives().Any())
+            if (!_archiveManager.GetModArchives().Any() && _archiveManager.IsInitialized)
             {
                 return;
-            }
+            } 
+            
 
             if (_settingsManager.CP77ExecutablePath is null)
             {
-                throw new WolvenKitException(0x5001, "No game executable set");
+                throw new WolvenKitException(0x5001, "Can't add dependencies without a game executable path in the settings");
             }
 
-            _loggerService.Info("Loading mod archives, this may take a moment...");
-            await Task.Run(() =>
+            if (!_archiveManager.IsInitialized)
+            {
+                _loggerService.Info("Loading mod archives... this can take a moment. Wolvenkit will be unresponsive.");
+                _archiveManager.Initialize(new FileInfo(_settingsManager.CP77ExecutablePath));
+            }
+
+            _loggerService.Info("Reading mod archive file table, this may take a moment...");
+            await Task.Run(() => 
             {
                 var ignoredArchives = _settingsManager.ArchiveNamesExcludeFromScan.Split(",").Select(m => m.Replace(".archive", ""))
                     .ToArray();
@@ -359,9 +366,9 @@ namespace WolvenKit.Views.Documents
                 {
                     _archiveManager.LoadAdditionalModArchives(extraModDir, true, ignoredArchives);
                 }
-            });
 
-            _loggerService.Info("... Done!");
+                _loggerService.Info("... Done!");
+            });
         }
 
         private async void OnAddDependencies(object? _, EventArgs eventArgs)
