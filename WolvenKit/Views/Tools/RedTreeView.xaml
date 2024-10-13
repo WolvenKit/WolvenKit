@@ -1037,6 +1037,7 @@
         ItemTemplateSelector="{StaticResource itemTemplateSelector}"
         ItemsSource="{Binding ElementName=redTreeView, Path=ItemsSource, Mode=TwoWay}"
         NodeCollapsed="OnCollapsed"
+        NodeExpanded="OnExpanded"
         SelectedItem="{Binding ElementName=redTreeView, Path=SelectedItem, Mode=TwoWay}"
         SelectedItems="{Binding ElementName=redTreeView, Path=SelectedItems, Mode=TwoWay}"
         SelectionChanged="OnSelectionChanged"

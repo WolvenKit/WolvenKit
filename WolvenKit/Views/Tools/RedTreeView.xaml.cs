@@ -156,9 +156,30 @@ namespace WolvenKit.Views.Tools
             }
         }
 
+
+        private void OnExpanded(object sender, NodeExpandedCollapsedEventArgs e)
+        {
+            if (!ModifierViewStateService.IsShiftBeingHeld || e.Node.Content is not ChunkViewModel chunk)
+            {
+                return;
+            }
+
+            chunk.SetChildExpansionStates(true);
+        }
+        
         public async void OnCollapsed(object sender, Syncfusion.UI.Xaml.TreeView.NodeExpandedCollapsedEventArgs e)
         {
-            if (e.Node.Level != 0 || e.Node.Content is not ChunkViewModel { ResolvedData: worldStreamingSector })
+            if (e.Node.Content is not ChunkViewModel cvm)
+            {
+                return;
+            }
+
+            if (ModifierViewStateService.IsShiftBeingHeld)
+            {
+                cvm.SetChildExpansionStates(false);
+            }
+
+            if (e.Node.Level != 0 || cvm.ResolvedData is not worldStreamingSector)
             {
                 return;
             }
@@ -490,5 +511,6 @@ namespace WolvenKit.Views.Tools
                 _modifierViewStateSvc.OnKeystateChanged(e);
             }
         }
+
     }
 }

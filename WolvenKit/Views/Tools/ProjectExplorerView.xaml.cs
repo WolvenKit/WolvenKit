@@ -1024,14 +1024,34 @@ namespace WolvenKit.Views.Tools
             public ListSortDirection SortDirection { get; set; }
         }
 
+        private static TreeNode GetTreeNode(string filePath, TreeNode node)
+        {
+            if (node.Item is FileSystemModel model && model.FullName == filePath)
+            {
+                return node;
+            }
+
+            return node.ChildNodes.Aggregate<TreeNode, TreeNode>(null,
+                (current, nodeChildNode) => current ?? GetTreeNode(filePath, nodeChildNode));
+        }
+
         private void ScrollToOpenFile_OnClick(object sender, RoutedEventArgs e)
         {
-            if (ViewModel?.GetActiveEditorFile() is not IDocumentViewModel activeFile
-                || TreeGrid.View.Nodes.FirstOrDefault(node => node.Item is FileSystemModel model && model.FullName == activeFile.FilePath)
-                    is not TreeNode activeFileNode)
+            if (ViewModel?.GetActiveEditorFile() is not IDocumentViewModel activeFile)
             {
                 return;
             }
+
+            var activeFileNode =
+                TreeGrid.View.Nodes.FirstOrDefault(node => node.Item is FileSystemModel model && model.FullName == activeFile.FilePath);
+            activeFileNode ??= GetTreeNode(activeFile.FilePath, TreeGrid.View.Nodes.FirstOrDefault());
+
+            if (activeFileNode is null)
+            {
+                return;
+            }
+
+            ExpandParent(activeFileNode);
 
             TreeGrid.SetCurrentValue(Syncfusion.UI.Xaml.Grid.SfGridBase.SelectedItemProperty, activeFileNode);
 
@@ -1043,17 +1063,33 @@ namespace WolvenKit.Views.Tools
             TreeGrid.View.MoveCurrentToPosition(rowIndex);
         }
 
+        private void ExpandParent(TreeNode activeFileNode)
+        {
+            if (activeFileNode.ParentNode is null)
+            {
+                TreeGrid?.ExpandNode(activeFileNode);
+                return;
+            }
+
+            ExpandParent(activeFileNode.ParentNode);
+            TreeGrid?.ExpandNode(activeFileNode.ParentNode);
+        }
+
 
         private void ContextMenu_OnKeyStateChanged(object sender, KeyEventArgs e)
         {
-                ViewModel?.ModifierStateService.OnKeystateChanged(e);
-                ViewModel?.ModifierStateService.RefreshModifierStates();
-
+            ViewModel?.ModifierStateService.OnKeystateChanged(e);
+            ViewModel?.ModifierStateService.RefreshModifierStates();
         }
 
         private void OnContextMenuOpen(object sender, ContextMenuEventArgs e)
         {
             ViewModel?.ModifierStateService.RefreshModifierStates();
+        }
+
+        private void Main_OnKeystateChanged(object sender, KeyEventArgs e)
+        {
+            ViewModel?.ModifierStateService.OnKeystateChanged(e);
         }
     }
 }
