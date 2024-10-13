@@ -1523,7 +1523,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     public bool CanDeleteUnusedMaterials() => !IsShiftKeyPressed && GetRootModel().ResolvedData is CMesh;
 
     [RelayCommand(CanExecute = nameof(CanDeleteUnusedMaterials))]
-    private void DeleteUnusedMaterials()
+    private void DeleteUnusedMaterials(bool suppressLogOutput = false)
     {
         if (GetRootModel() is not { ResolvedData: CMesh mesh } rootChunk)
         {
@@ -1552,7 +1552,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         var numUnusedMaterials = mesh.MaterialEntries.Count - (localMatIdxList.Count + externalMatIdxList.Count);
 
-        if (numUnusedMaterials == 0)
+        if (!suppressLogOutput && numUnusedMaterials == 0)
         {
             _loggerService.Info("No unused materials in current mesh.");
             return;
@@ -1636,7 +1636,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         rootChunk.GetPropertyChild("externalMaterials")?.RecalculateProperties();
 
-        _loggerService.Info($"Deleted {numUnusedMaterials} unused materials.");
+        if (numUnusedMaterials > 0)
+        {
+            _loggerService.Info($"Deleted {numUnusedMaterials} unused materials.");
+        }
+        
     }
 
     public void GenerateMissingMaterials(string baseMaterial, bool isLocal, bool resolveSubstitutions)

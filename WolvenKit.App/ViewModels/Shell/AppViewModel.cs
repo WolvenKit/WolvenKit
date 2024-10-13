@@ -143,7 +143,41 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         ShowFirstTimeSetup();
 
+        ClearMaterialCache();
+
         DockedViews.CollectionChanged += DockedViews_OnCollectionChanged;
+    }
+
+    private void ClearMaterialCache()
+    {
+        if (!Directory.Exists(ISettingsManager.GetTemp_OBJPath()))
+        {
+            return;
+        }
+
+        var files = Directory.GetFiles(ISettingsManager.GetTemp_OBJPath());
+        List<string> failedToDelete = [];
+        foreach (var file in files)
+        {
+            try
+            {
+                File.Delete(file);
+            }
+            catch
+            {
+                failedToDelete.Add(file);
+            }
+        }
+
+        if (!failedToDelete.Any())
+        {
+            return;
+        }
+
+        _loggerService.Error("Failed to delete parts of the texture cache!");
+        _loggerService.Error("This can indicate broken files or textures. To fix this, close Wolvenkit and delete the following files:");
+        var filenames = string.Join("\n\t", failedToDelete);
+        _loggerService.Error($"\t{filenames}");
     }
 
     private void DockedViews_OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)

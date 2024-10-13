@@ -55,7 +55,6 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
     [ObservableProperty] private bool _showToolbar;
 
-    [ObservableProperty] private bool _isMesh;
 
     public void RefreshMenuVisibility(bool forceRefreshContentType = false)
     {
@@ -91,8 +90,6 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
         SelectedChunk = null;
         RootChunk = null;
-
-        IsMesh = ContentType is RedDocumentItemType.Mesh;
         
         if (CurrentTab is RDTDataViewModel rtdViewModel)
         {
@@ -109,9 +106,11 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
     private void OnRtdModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName is not (nameof(RDTDataViewModel.SelectedChunk) or nameof(RDTDataViewModel.SelectedChunks)
-                or nameof(RDTDataViewModel.FilePath)) ||
-            sender is not RDTDataViewModel dataViewModel)
+        if (sender is not RDTDataViewModel dataViewModel || e.PropertyName is not
+                (nameof(RDTDataViewModel.SelectedChunk)
+                or nameof(RDTDataViewModel.SelectedChunks)
+                or nameof(RDTDataViewModel.FilePath))
+           )
         {
             return;
         }
@@ -265,7 +264,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     private bool CanDeleteUnusedMaterials() => RootChunk?.ResolvedData is CMesh mesh && mesh.MaterialEntries.Count > 0;
 
     [RelayCommand(CanExecute = nameof(CanDeleteUnusedMaterials))]
-    private void DeleteUnusedMaterials() => RootChunk?.DeleteUnusedMaterialsCommand.Execute(null);
+    private void DeleteUnusedMaterials() => RootChunk?.DeleteUnusedMaterialsCommand.Execute(false);
 
     [RelayCommand(CanExecute = nameof(HasMeshAppearances))]
     private void GenerateMissingMaterials()

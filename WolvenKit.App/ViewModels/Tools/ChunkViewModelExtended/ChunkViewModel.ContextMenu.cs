@@ -163,7 +163,7 @@ public partial class ChunkViewModel
     /// <summary>
     /// Called from RedDocumentViewToolbar: returns all material dependencies in an array for adding them to the current project
     /// </summary>
-    public async Task<HashSet<ResourcePath>> GetMaterialDependenciesOutsideOfProject()
+    public async Task<HashSet<ResourcePath>> GetMaterialRefsFromFile()
     {
         HashSet<ResourcePath> ret = [];
 
@@ -175,14 +175,22 @@ public partial class ChunkViewModel
                     switch (value.Value)
                     {
                         case IRedResourceReference rRef:
-                            AddRefPath(rRef.DepotPath);
+                            ret.Add(rRef.DepotPath);
                             break;
                         case IRedResourceAsyncReference raRef:
-                            AddRefPath(raRef.DepotPath);
+                            ret.Add(raRef.DepotPath);
                             break;
                         default:
                             break;
                     }
+                }
+
+                break;
+            case Multilayer_Setup mlsetup:
+                foreach (var layer in mlsetup.Layers)
+                {
+                    ret.Add(layer.Material.DepotPath);
+                    ret.Add(layer.Microblend.DepotPath);
                 }
 
                 break;
@@ -194,21 +202,21 @@ public partial class ChunkViewModel
 
                 foreach (var externalMaterial in mesh.ExternalMaterials)
                 {
-                    await Task.Run(() => AddRefPath(externalMaterial.DepotPath));
+                    await Task.Run(() => ret.Add(externalMaterial.DepotPath));
                 }
 
                 foreach (var localMaterial in (mesh.LocalMaterialBuffer?.Materials ?? []).OfType<CMaterialInstance>())
                 {
-                    await Task.Run(() => AddRefPath(localMaterial.BaseMaterial.DepotPath));
+                    ret.Add(localMaterial.BaseMaterial.DepotPath);
                     foreach (var value in localMaterial.Values)
                     {
                         switch (value.Value)
                         {
                             case IRedResourceReference rRef:
-                                AddRefPath(rRef.DepotPath);
+                                ret.Add(rRef.DepotPath);
                                 break;
                             case IRedResourceAsyncReference raRef:
-                                AddRefPath(raRef.DepotPath);
+                                ret.Add(raRef.DepotPath);
                                 break;
                             default:
                                 break;
@@ -217,49 +225,15 @@ public partial class ChunkViewModel
                 }
 
                 break;
-            case Multilayer_Setup mlsetup:
-
-                foreach (var layer in mlsetup.Layers)
-                {
-                    await Task.Run(() => AddRefPath(layer.Material.DepotPath));
-                    await Task.Run(() => AddRefPath(layer.Microblend.DepotPath));
-                }
-
-                break;
             default:
                 break;
         }
-        
-       
-        return ret;
 
-        void AddRefPath(ResourcePath refPath)
+        if (_projectManager.ActiveProject?.Files is not null)
         {
-            var refPathHash = HashHelper.CalculateDepotPathHash(refPath);
-            // empty depot path
-            if (refPathHash is 0)
-            {
-                return;
-            }
-
-            if (_projectManager.ActiveProject?.Files is not null && _projectManager.ActiveProject.Files.Contains(refPath!))
-            {
-                return;
-            }
-
-            if (_archiveManager.Lookup(refPathHash, ArchiveManagerScope.Mods).HasValue)
-            {
-                ret.Add(refPath);
-                return;
-            }
-
-            // base game file: Only add those if shift is down
-            if (IsShiftKeyPressed
-                && _archiveManager.Lookup(refPathHash, ArchiveManagerScope.Basegame).HasValue)
-            {
-                ret.Add(refPath);
-            }
+            ret = ret.Where(p => !_projectManager.ActiveProject.Files.Contains(p!)).ToHashSet();
         }
+        return ret;
     }
 
     private bool CanScrollToMaterial() => ShowScrollToMaterial || GetRootModel().ShowScrollToMaterial;

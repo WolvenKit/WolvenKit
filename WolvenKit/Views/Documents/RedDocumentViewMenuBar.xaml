@@ -9,9 +9,8 @@
                                 xmlns:documents="clr-namespace:WolvenKit.App.ViewModels.Documents;assembly=WolvenKit.App"
                                 xmlns:converters="clr-namespace:WolvenKit.Converters"
                                 xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                                xmlns:hc="https://handyorg.github.io/handycontrol"
                                 mc:Ignorable="d"
-                                KeyDown="OnMainKeystateChanged"
-                                KeyUp="OnMainKeystateChanged"
                                 d:DesignHeight="30" d:DesignWidth="800">
 
     <Grid>
@@ -109,6 +108,11 @@
                     <DataTrigger
                         Binding="{Binding Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
                         Value="{x:Static documents:RedDocumentItemType.Mesh}">
+                        <Setter Property="Visibility" Value="Visible" />
+                    </DataTrigger>
+                    <DataTrigger
+                        Binding="{Binding Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
+                        Value="{x:Static documents:RedDocumentItemType.Mlsetup}">
                         <Setter Property="Visibility" Value="Visible" />
                     </DataTrigger>
                 </Style.Triggers>
@@ -211,10 +215,11 @@
                 <MenuItem.Icon>
                     <iconPacks:PackIconCodicons
                         Width="13"
-                        Height="13"
-                        Padding="0,0,0,0"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
+                        Height="14"
+                        Padding="0,0,0,5"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
                         Kind="Play" />
                 </MenuItem.Icon>
             </MenuItem>
@@ -325,68 +330,23 @@
             
         </Menu>
 
-
-        <TextBox Grid.Column="1"
-                 Width="200"
-                 Margin="5,0,0,0"
-                 VerticalAlignment="Center"
-                 HorizontalAlignment="Right"
-                 PreviewKeyDown="SearchBox_OnKeyDown"
-                 MouseDown="SearchBox_OnClick"
-                 BorderBrush="{StaticResource BackgroundColor_Frame_Background}"
-                 BorderThickness="0"
-                 x:Name="SearchBox">
-            <TextBox.Style>
-                <Style TargetType="TextBox">
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="TextBox">
-                                <Grid>
-                                    <Border x:Name="Border"
-                                            Background="{StaticResource BackgroundColor_Control}"
-                                            BorderThickness="0" />
-                                    <ScrollViewer x:Name="PART_ContentHost"
-                                                  Margin="2" />
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                                        <Button x:Name="ClearButton"
-                                                Width="16"
-                                                Height="16"
-                                                Margin="0,0,4,0"
-                                                Visibility="{Binding Text.IsEmpty, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource InvertBooleanVisibilityConverter}}"
-                                                Click="SearchBox_OnClear">
-                                            <iconPacks:PackIconCodicons
-                                                Padding="1"
-                                                VerticalAlignment="Center"
-                                                Kind="Close" />
-                                        </Button>
-                                        <Button x:Name="SearchButton"
-                                                Width="16"
-                                                Height="16"
-                                                Margin="0,0,4,0"
-                                                Click="SearchBox_OnSubmit">
-                                            <Button.Style>
-                                                <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Text.Length, RelativeSource={RelativeSource AncestorType=TextBox}}"
-                                                                     Value="0">
-                                                            <Setter Property="IsEnabled" Value="False" />
-                                                            <Setter Property="Background" Value="{StaticResource BackgroundColor_Frame_Active }" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Button.Style>
-                                            <iconPacks:PackIconCodicons
-                                                Padding="1"
-                                                VerticalAlignment="Center"
-                                                Kind="Search" />
-                                        </Button>
-                                    </StackPanel>
-                                </Grid>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </TextBox.Style>
-        </TextBox>
+        <hc:SearchBar
+            x:Name="SearchBar"
+            Grid.Column="1"
+            Width="200"
+            Height="20"
+            Margin="3"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Right"
+            hc:InfoElement.Necessary="True"
+            hc:InfoElement.Placeholder="Search"
+            Background="Transparent"
+            BorderBrush="{StaticResource MahApps.Brushes.Gray.SemiTransparent}"
+            BorderThickness="0,0,0,0"
+            FlowDirection="LeftToRight"
+            SearchStarted="SearchBar_OnSubmit"
+            ShowClearButton="True"
+            Style="{StaticResource SearchBarExtendBaseStyle}" />
+            
     </Grid>
 </reactiveUi:ReactiveUserControl>

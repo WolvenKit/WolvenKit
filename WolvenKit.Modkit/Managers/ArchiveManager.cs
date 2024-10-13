@@ -85,6 +85,29 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         #region loading
 
+        public bool IsInitialized { get; private set; }
+
+        public virtual void Initialize(FileInfo executable, bool scanArchives = false)
+        {
+            if (IsInitialized)
+            {
+                return;
+            }
+
+            if (!GetGameArchives().Any())
+            {
+                LoadGameArchives(executable);
+            }
+
+            if (!GetModArchives().Any())
+            {
+                LoadModArchives(executable, scanArchives);
+            }
+
+            IsInitialized = true;
+        }
+        
+        
         /// <summary>
         /// Load every non-mod bundle it can find in ..\..\content and ..\..\DLC
         /// </summary>
