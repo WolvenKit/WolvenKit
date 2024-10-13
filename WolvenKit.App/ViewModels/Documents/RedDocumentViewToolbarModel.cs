@@ -55,7 +55,6 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
     [ObservableProperty] private bool _showToolbar;
 
-    [ObservableProperty] private bool _isMesh;
 
     public void RefreshMenuVisibility(bool forceRefreshContentType = false)
     {
@@ -91,8 +90,6 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
         SelectedChunk = null;
         RootChunk = null;
-
-        IsMesh = ContentType is RedDocumentItemType.Mesh;
         
         if (CurrentTab is RDTDataViewModel rtdViewModel)
         {
