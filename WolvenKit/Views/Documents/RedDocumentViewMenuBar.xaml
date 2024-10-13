@@ -334,19 +334,17 @@
             x:Name="SearchBar"
             Grid.Column="1"
             Width="200"
-            Height="20"
+            Height="16"
             Margin="3"
             VerticalAlignment="Center"
             HorizontalAlignment="Right"
             hc:InfoElement.Necessary="True"
             hc:InfoElement.Placeholder="Search"
-            Background="Transparent"
-            BorderBrush="{StaticResource MahApps.Brushes.Gray.SemiTransparent}"
             BorderThickness="0,0,0,0"
             FlowDirection="LeftToRight"
             SearchStarted="SearchBar_OnSubmit"
             ShowClearButton="True"
-            Style="{StaticResource SearchBarExtendBaseStyle}" />
+            Style="{StaticResource SearchBarStyle}" />
             
     </Grid>
 </reactiveUi:ReactiveUserControl>

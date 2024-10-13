@@ -565,5 +565,10 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         }
 
         CurrentSearch = searchBoxText;
+
+        if (string.IsNullOrEmpty(searchBoxText) && SelectedChunk is ChunkViewModel selectedChunk)
+        {
+            ScrollToNode(selectedChunk);
+        }
     }
 }
