@@ -204,10 +204,11 @@
                 <MenuItem.Icon>
                     <iconPacks:PackIconCodicons
                         Width="13"
-                        Height="13"
-                        Padding="0,0,0,0"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
+                        Height="14"
+                        Padding="0,0,0,5"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
                         Kind="Play" />
                 </MenuItem.Icon>
             </MenuItem>
