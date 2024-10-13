@@ -235,14 +235,18 @@ namespace WolvenKit.Views.Documents
             return Path.Join(subfolder, projectName, "dependencies");
         }
 
-        private async Task AddDependenciesToMesh(ChunkViewModel _)
+        private async Task AddDependenciesToFile(ChunkViewModel _)
         {
-            if (RootChunk is not { ResolvedData: CMesh } rootChunk)
+            if (RootChunk is not ChunkViewModel rootChunk)
             {
                 return;
             }
 
-            rootChunk.DeleteUnusedMaterialsCommand.Execute(null);
+            if (RootChunk.ResolvedData is CMesh)
+            {
+                rootChunk.DeleteUnusedMaterialsCommand.Execute(true);
+            }
+
             await LoadModArchives();
 
             var materialDependencies = await rootChunk.GetMaterialDependenciesOutsideOfProject();
@@ -272,24 +276,21 @@ namespace WolvenKit.Views.Documents
                 destFolder, materialDependencies
             );
 
-            await SearchAndReplaceInChildNodes(rootChunk, pathReplacements,
-                ChunkViewModel.LocalMaterialBufferPath,
-                ChunkViewModel.ExternalMaterialPath);
-
-        }
-        
-        private async Task AddDependenciesToMi(ChunkViewModel cvm)
-        {
-            await LoadModArchives();
-
-            var materialDependencies = await cvm.GetMaterialDependenciesOutsideOfProject();
-
-            var destFolder = GetTextureDirForDependencies(false);
-
-            // Use search and replace to fix file paths
-            var pathReplacements = await ProjectResourceHelper.AddDependenciesToProjectPathAsync(destFolder, materialDependencies);
-
-            await SearchAndReplaceInChildNodes(cvm, pathReplacements, "values");
+            switch (rootChunk.ResolvedData)
+            {
+                case CMaterialInstance:
+                    await SearchAndReplaceInChildNodes(rootChunk, pathReplacements, "values");
+                    break;
+                case Multilayer_Setup:
+                    await SearchAndReplaceInChildNodes(rootChunk, pathReplacements, "layers");
+                    break;
+                case CMesh:
+                    await SearchAndReplaceInChildNodes(rootChunk, pathReplacements, ChunkViewModel.LocalMaterialBufferPath,
+                        ChunkViewModel.ExternalMaterialPath);
+                    break;
+                default:
+                    break;
+            }
         }
 
         private static async Task SearchAndReplaceInChildNodes(ChunkViewModel cvm, Dictionary<string, string> pathReplacements,
@@ -311,7 +312,8 @@ namespace WolvenKit.Views.Documents
                 }
             }
 
-            foreach (var childNode in childNodes)
+            // await replacements
+            await Task.WhenAll(childNodes.Select(async childNode =>
             {
                 foreach (var (oldPath, newPath) in pathReplacements)
                 {
@@ -323,12 +325,10 @@ namespace WolvenKit.Views.Documents
                     dirtyNodes.Add(childNode);
                     isDirty = true;
                 }
-            }
+            }));
 
-            foreach (var node in dirtyNodes)
-            {
-                await node.Refresh();
-            }
+            // Wait for dirty nodes to refresh themselves
+            await Task.WhenAll(dirtyNodes.Select(node => node.Refresh()));
 
             if (isDirty && cvm.Tab?.Parent is not null)
             {
@@ -340,26 +340,28 @@ namespace WolvenKit.Views.Documents
         {
             if (!_archiveManager.GetModArchives().Any())
             {
-                if (_settingsManager.CP77ExecutablePath is null)
-                {
-                    throw new WolvenKitException(0x5001, "No game executable set");
-                }
-
-                _loggerService.Info("Loading mod archives, this may take a moment...");
-                await Task.Run(() =>
-                {
-                    var ignoredArchives = _settingsManager.ArchiveNamesExcludeFromScan.Split(",").Select(m => m.Replace(".archive", ""))
-                        .ToArray();
-                    _archiveManager.LoadModArchives(new FileInfo(_settingsManager.CP77ExecutablePath), true, ignoredArchives);
-                    
-                    if (_settingsManager.ExtraModDirPath is string extraModDir && !string.IsNullOrEmpty(extraModDir))
-                    {
-                        _archiveManager.LoadAdditionalModArchives(extraModDir, true, ignoredArchives);
-                    }
-                });
-
-                _loggerService.Info("... Done!");
+                return;
             }
+
+            if (_settingsManager.CP77ExecutablePath is null)
+            {
+                throw new WolvenKitException(0x5001, "No game executable set");
+            }
+
+            _loggerService.Info("Loading mod archives, this may take a moment...");
+            await Task.Run(() =>
+            {
+                var ignoredArchives = _settingsManager.ArchiveNamesExcludeFromScan.Split(",").Select(m => m.Replace(".archive", ""))
+                    .ToArray();
+                _archiveManager.LoadModArchives(new FileInfo(_settingsManager.CP77ExecutablePath), true, ignoredArchives);
+
+                if (_settingsManager.ExtraModDirPath is string extraModDir && !string.IsNullOrEmpty(extraModDir))
+                {
+                    _archiveManager.LoadAdditionalModArchives(extraModDir, true, ignoredArchives);
+                }
+            });
+
+            _loggerService.Info("... Done!");
         }
 
         private async void OnAddDependencies(object? _, EventArgs eventArgs)
@@ -371,20 +373,15 @@ namespace WolvenKit.Views.Documents
 
             _projectWatcher.Suspend();
 
-            switch (cvm.ResolvedData)
-            {
-                case CMesh:
-                    await AddDependenciesToMesh(cvm);
-                    break;
-                case CMaterialInstance:
-                    await AddDependenciesToMi(cvm);
-                    break;
-                default:
-                    break;
-            }
+            await AddDependenciesToFile(cvm);
 
-            _projectWatcher.Refresh();
-            _projectWatcher.Resume();
+            // Project browser will throw an error if we do it immediately - so let's not
+            await Task.Run(async () =>
+            {
+                await Task.Delay(100);
+                _projectWatcher.Refresh();
+                _projectWatcher.Resume();
+            });
         }
 
         private void OnChangeChunkMasksClick(object _, RoutedEventArgs e)
@@ -439,22 +436,6 @@ namespace WolvenKit.Views.Documents
             RefreshChildMenuItems();
         }
 
-        // do not fire duplicate events... is this necessary? Somewhere we have a performance hog :/
-        private void OnMainKeystateChanged(object sender, KeyEventArgs e)
-        {
-            if (_openMenu is null)
-            {
-                _modifierStateService.OnKeystateChanged(e);
-            }
-        }
-
-        private void OnKeystateChanged(object sender, KeyEventArgs e)
-        {
-            if (_openMenu is not null)
-            {
-                _modifierStateService.OnKeystateChanged(e);
-            }
-        }
-
+        private void OnKeystateChanged(object sender, KeyEventArgs e) => _modifierStateService.OnKeystateChanged(e);
     }
 }

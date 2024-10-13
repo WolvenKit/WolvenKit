@@ -261,7 +261,7 @@ namespace WolvenKit.Views.Tools
 
         private void TreeGrid_OnNodeExpanding(object sender, NodeExpandingEventArgs e)
         {
-            if (ViewModel is null || _automatic || ModifierViewStateService.IsShiftBeingHeld)
+            if (ViewModel is null || _automatic || !ModifierViewStateService.IsCtrlBeingHeld)
             {
                 return;
             }

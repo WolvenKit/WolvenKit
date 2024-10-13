@@ -10,8 +10,6 @@
                                 xmlns:converters="clr-namespace:WolvenKit.Converters"
                                 xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                                 mc:Ignorable="d"
-                                KeyDown="OnMainKeystateChanged"
-                                KeyUp="OnMainKeystateChanged"
                                 d:DesignHeight="30" d:DesignWidth="800">
 
     <Grid>
