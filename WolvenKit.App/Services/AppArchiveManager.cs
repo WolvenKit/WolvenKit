@@ -128,7 +128,7 @@ public class AppArchiveManager(
 
         ignoredFiles ??= [];
 
-        base.LoadModArchives(executable, analyzeFiles, ignoredFiles);
+        base.LoadModArchives(executable, analyzeFiles, [.. ignoredFiles]);
         var gameDir = GetGameDir();
 
         foreach (var iGameArchive in Archives.Items)
