@@ -464,6 +464,9 @@ public partial class ChunkViewModel
             case questNodeDefinition qnd:
                 Descriptor = qnd.Id.ToString();
                 return;
+            case AIbehaviorTreeNodeDefinition nd:
+                Descriptor = nd.ToString();
+                return;
             case questVarComparison_ConditionType qnd:
                 Descriptor = qnd.FactName;
                 return;

@@ -4,8 +4,8 @@ using System.Windows.Input;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App.ViewModels.GraphEditor;
-using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
-using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
+using WolvenKit.App.ViewModels.GraphEditor.Quests.Nodes;
+using WolvenKit.App.ViewModels.GraphEditor.Scenes.Nodes;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
 using WolvenKit.Views.GraphEditor;
@@ -40,30 +40,39 @@ public partial class RDTGraphView2
 
     private void HandleSubGraph()
     {
+        // TODO ldlework - we should probably move most of this to IGraphProvider.GetGraph..
         if (Editor.SelectedNode is IGraphProvider provider)
         {
-            var subGraph = provider.Graph;
+            var subGraph = provider.GetGraph();
+
             if (subGraph == null)
             {
                 Locator.Current.GetService<ILoggerService>().Error("SubGraph is not defined!");
                 return;
             }
 
+            // TODO ldlework - this should be part of the strategy
             if (Editor.SelectedNode.Data is questPhaseNodeDefinition ph)
             {
                 if (!ph.PhaseResource.IsSet)
                 {
+                    // TODO ldlework - this should be part of the strategy or BlueGraph
+                    // the subgraph state parents can be st during subgraph generation
                     subGraph.StateParents = Editor.Source.StateParents + "." + ph.Id;
-                    subGraph.DocumentViewModel = Editor.Source.DocumentViewModel;
+                    // this is obviated by the passing down of the graph context
+                    subGraph.DocumentViewModel = Editor.Source.Context.DocumentViewModel;
                 }
             }
 
+            // TODO ldlework - this can be handled by the nodes if we can get the
+            // view model and editor to them
             ViewModel!.History.Add(subGraph);
             Editor.SetCurrentValue(GraphEditorView.SourceProperty, subGraph);
 
             BuildBreadcrumb();
         }
 
+        // TODO ldlework - this isn't scalable, we need to delegate to the nodes
         if (Editor.SelectedNode is questInputNodeDefinitionWrapper or questOutputNodeDefinitionWrapper)
         {
             if (ViewModel!.History.Count > 1)

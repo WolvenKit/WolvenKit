@@ -1,4 +1,4 @@
-﻿using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
+﻿using WolvenKit.App.ViewModels.GraphEditor.Quests.Nodes;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Factories;

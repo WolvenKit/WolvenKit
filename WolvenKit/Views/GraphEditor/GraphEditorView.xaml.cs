@@ -14,8 +14,8 @@ using ReactiveUI;
 using Splat;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.GraphEditor;
-using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
-using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
+using WolvenKit.App.ViewModels.GraphEditor.Quests.Nodes;
+using WolvenKit.App.ViewModels.GraphEditor.Scenes.Nodes;
 using WolvenKit.App.ViewModels.Shell;
 
 namespace WolvenKit.Views.GraphEditor;
@@ -40,8 +40,14 @@ public partial class GraphEditorView : UserControl
     private static void UpdateView(GraphEditorView view)
     {
         view.Source.Editor = view.Editor;
-        view.Source.GraphStateLoad();
-        //view.Editor.FitToScreen();
+
+        if (view.Source.GraphStateLoad())
+        {
+            return;
+        }
+
+        view.ArrangeNodes();
+        view.Editor.FitToScreen();
     }
 
     public RedGraph Source
@@ -101,7 +107,6 @@ public partial class GraphEditorView : UserControl
         {
             return;
         }
-
         Source.GraphStateSave();
     }
 
@@ -114,8 +119,8 @@ public partial class GraphEditorView : UserControl
 
         UpdateLayout();
         Source.ArrangeNodes();
-        Source.GraphStateSave();
         Source.CenterOnSelectedNodes(SelectedNodes);
+        Source.GraphStateSave();
     }
 
     private void Editor_OnContextMenuOpening(object sender, ContextMenuEventArgs e)
@@ -128,104 +133,43 @@ public partial class GraphEditorView : UserControl
         nodifyEditor.ContextMenu ??= new ContextMenu();
         nodifyEditor.ContextMenu.Items.Clear();
 
-        if (Source.GraphType == RedGraphType.Scene)
+        var nodeTypes = Source.GetNodeTypes();
+        var types = nodeTypes
+            .Select(x => new TypeEntry(Source.CleanTypeName(x.Name), "", x))
+            .OrderBy(x => x.Name)
+            .ToList();
+
+        var addMenu = new MenuItem { Header = "Add ..." };
+
+        addMenu.Items.Add(CreateMenuItem("Open Dialog ...", async () =>
         {
-            var nodeTypes = Source.GetSceneNodeTypes();
-            var types = nodeTypes
-                .Select(x => new TypeEntry(GetCleanTypeName(x.Name), "", x))
-                .OrderBy(x => x.Name)
-                .ToList();
-
-            var addMenu = new MenuItem { Header = "Add ..." };
-
-            addMenu.Items.Add(CreateMenuItem("Open Dialog ...", async () =>
+            await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
             {
-                await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
+                DialogHandler = model =>
                 {
-                    DialogHandler = model =>
+                    _appViewModel.CloseDialogCommand.Execute(null);
+                    if (model is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType })
                     {
-                        _appViewModel.CloseDialogCommand.Execute(null);
-                        if (model is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType })
-                        {
-                            Source.CreateSceneNode(selectedType, ViewportLocation);
-                        }
+                        Source.CreateNode(selectedType, ViewportLocation);
                     }
-                });
-            }));
+                }
+            });
+        }));
 
-            addMenu.Items.Add(new Separator());
+        addMenu.Items.Add(new Separator());
 
-            foreach (var nodeType in nodeTypes)
-            {
-                addMenu.Items.Add(CreateMenuItem(GetCleanTypeName(nodeType.Name), () => Source.CreateSceneNode(nodeType, ViewportLocation)));
-            }
-
-            nodifyEditor.ContextMenu.Items.Add(addMenu);
+        foreach (var nodeType in nodeTypes)
+        {
+            addMenu.Items.Add(CreateMenuItem(Source.CleanTypeName(nodeType.Name), () => Source.CreateNode(nodeType, ViewportLocation)));
         }
 
-        if (Source.GraphType == RedGraphType.Quest)
-        {
-            var nodeTypes = Source.GetQuestNodeTypes();
-            var types = nodeTypes
-                .Select(x => new TypeEntry(GetCleanTypeName(x.Name), "", x))
-                .OrderBy(x => x.Name)
-                .ToList();
-
-            var addMenu = new MenuItem { Header = "Add..." };
-
-            addMenu.Items.Add(CreateMenuItem("Open Dialog ...", async () =>
-            {
-                await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
-                {
-                    DialogHandler = model =>
-                    {
-                        _appViewModel.CloseDialogCommand.Execute(null);
-                        if (model is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType })
-                        {
-                            Source.CreateQuestNode(selectedType, ViewportLocation);
-                        }
-                    }
-                });
-            }));
-
-            addMenu.Items.Add(new Separator());
-
-            foreach (var nodeType in nodeTypes)
-            {
-                addMenu.Items.Add(CreateMenuItem(GetCleanTypeName(nodeType.Name), () => Source.CreateQuestNode(nodeType, ViewportLocation)));
-            }
-
-            nodifyEditor.ContextMenu.Items.Add(addMenu);
-        }
+        nodifyEditor.ContextMenu.Items.Add(addMenu);
 
         nodifyEditor.ContextMenu.Items.Add(CreateMenuItem("Arrange Items", ArrangeNodes));
 
         nodifyEditor.ContextMenu.SetCurrentValue(ContextMenu.IsOpenProperty, true);
 
         e.Handled = true;
-    }
-
-    private string GetCleanTypeName(string typeName)
-    {
-        if (typeName.StartsWith("quest"))
-        {
-            typeName = typeName[5..];
-        }
-        else if (typeName.StartsWith("scn"))
-        {
-            typeName = typeName[3..];
-        }
-
-        if (typeName.EndsWith("NodeDefinition"))
-        {
-            typeName = typeName[..^14];
-        }
-        else if (typeName.EndsWith("Node"))
-        {
-            typeName = typeName[..^4];
-        }
-
-        return typeName;
     }
 
     private void Node_ContextMenuOpening(object sender, ContextMenuEventArgs e)
@@ -266,16 +210,15 @@ public partial class GraphEditorView : UserControl
             node.ContextMenu.Items.Add(new Separator());
         }
 
-        if (node.DataContext is IGraphProvider graphProvider)
-        {
-            node.ContextMenu.Items.Add(CreateMenuItem("Recalculate sockets", () => Source.RecalculateSockets(graphProvider)));
-            node.ContextMenu.Items.Add(new Separator());
-        }
-
         if (node.DataContext is questSceneNodeDefinitionWrapper sceneNode)
         {
             node.ContextMenu.Items.Add(CreateMenuItem("Add Scene To Project", () => sceneNode.AddSceneToProject()));
             node.ContextMenu.Items.Add(new Separator());
+        }
+
+        if (node.DataContext is IContextMenuProvider menuProvider)
+        {
+            menuProvider.OnContextMenu(node.ContextMenu, this);
         }
 
         node.ContextMenu.Items.Add(CreateMenuItem("Remove Node", () => Source.RemoveNode(nvm)));

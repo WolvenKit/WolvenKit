@@ -1,4 +1,5 @@
 ﻿using WolvenKit.App.Controllers;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes.Behavior.Internal;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 using WolvenKit.Common;
 using WolvenKit.RED4.Types;
@@ -21,4 +22,7 @@ public class NodeWrapperFactory : INodeWrapperFactory
 
     public questSceneNodeDefinitionWrapper QuestSceneNodeDefinitionWrapper(questSceneNodeDefinition nodeDefinition) =>
         new(nodeDefinition, _gameController, _archiveManager);
+
+    public BaseSubtreeBehaviorViewModel BehaviorSubtreeNodeDefinitionWrapper(AIbehaviorSubtreeDefinition nodeDefinition) =>
+        new(nodeDefinition, this, _archiveManager);
 }

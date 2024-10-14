@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
+using WolvenKit.App.ViewModels.GraphEditor.Scenes.Nodes;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.GraphEditor;
