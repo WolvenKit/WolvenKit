@@ -1,12 +1,7 @@
 using System;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Net.NetworkInformation;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 using System.Xml;
 using ICSharpCode.AvalonEdit.Highlighting;
@@ -19,8 +14,6 @@ using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Core.Helpers;
-using WolvenKit.Core.Interfaces;
-using WolvenKit.Functionality.Helpers;
 using WolvenKit.Views.Shell;
 
 namespace WolvenKit
@@ -35,20 +28,7 @@ namespace WolvenKit
             var settingsManager = Locator.Current.GetService<ISettingsManager>();
 
             HandyControl.Themes.ThemeManager.Current.SetCurrentValue(HandyControl.Themes.ThemeManager.ApplicationThemeProperty, HandyControl.Themes.ApplicationTheme.Dark);
-            //var themeResources = new HandyControl.Themes.ThemeResources { AccentColor = HandyControl.Tools.ResourceHelper.GetResource<Brush>("MahApps.Brushes.Accent3") };
-            var themeSettings = new MaterialDarkThemeSettings
-            {
-                PrimaryBackground = new SolidColorBrush(settingsManager.GetThemeAccent()),
-                BodyFontSize = 11,
-                HeaderFontSize = 14,
-                SubHeaderFontSize = 13,
-                TitleFontSize = 13,
-                SubTitleFontSize = 12,
-                BodyAltFontSize = 11,
-                FontFamily = new FontFamily("Segoe UI")
-            };
-            SfSkinManager.RegisterThemeSettings("MaterialDark", themeSettings);
-            SfSkinManager.ApplyStylesOnApplication = true;
+            RegisterTheme(settingsManager);
         }
 
         public static void InitializeSyntaxHighlighting()
@@ -81,13 +61,13 @@ namespace WolvenKit
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(v_23_2_6);
         }
 
-        public static /*async Task*/ void InitializeShell(ISettingsManager settings)
+        public static void InitializeShell(ISettingsManager settingsManager)
         {
             // Set service locator.
             var mainWindow = Locator.Current.GetService<IViewFor<AppViewModel>>();
 
             GcHelper.CleanupMemory();
-            
+
             if (mainWindow is MainView window)
             {
                 window.Show();
@@ -95,26 +75,44 @@ namespace WolvenKit
 
             if (WolvenDBG.EnableTheming)
             {
-                ThemeInnerInit(settings);
+                RegisterTheme(settingsManager);
             }
         }
 
-        private static void ThemeInnerInit(ISettingsManager settings)
+        private static void RegisterTheme(ISettingsManager settingsManager)
         {
-            var themeSettings = new MaterialDarkThemeSettings
-            {
-                PrimaryBackground = new SolidColorBrush(settings.GetThemeAccent()),
-                BodyFontSize = 11,
-                HeaderFontSize = 14,
-                SubHeaderFontSize = 13,
-                TitleFontSize = 13,
-                SubTitleFontSize = 12,
-                BodyAltFontSize = 11,
-                FontFamily = new FontFamily("Segoe UI")
-            };
+            var themeSettings = BuildTheme(settingsManager);
 
             SfSkinManager.RegisterThemeSettings("MaterialDark", themeSettings);
-            //  SfSkinManager.SetTheme(StaticReferences.GlobalShell, new FluentTheme() { ThemeName = "MaterialDark", ShowAcrylicBackground = true });
+            SfSkinManager.ApplyStylesOnApplication = true;
+        }
+
+        public static void UpdateTheme(ISettingsManager settingsManager)
+        {
+            // NOTE: trick SfSkinManager to unregister current ThemeSettings.
+            var theme = SfSkinManager.GetTheme(Application.Current.MainWindow);
+
+            theme.ThemeName = "";
+            var themeSettings = BuildTheme(settingsManager);
+
+            SfSkinManager.RegisterThemeSettings("MaterialDark", themeSettings);
+            SfSkinManager.ApplyStylesOnApplication = true;
+            SfSkinManager.SetTheme(Application.Current.MainWindow, new Theme("MaterialDark"));
+        }
+
+        private static IThemeSetting BuildTheme(ISettingsManager settingsManager)
+        {
+            return new MaterialDarkThemeSettings
+            {
+                PrimaryBackground = new SolidColorBrush(settingsManager.GetThemeAccent()),
+                BodyFontSize = 11 * settingsManager.UiScalePercentage,
+                HeaderFontSize = 14 * settingsManager.UiScalePercentage,
+                SubHeaderFontSize = 13 * settingsManager.UiScalePercentage,
+                TitleFontSize = 13 * settingsManager.UiScalePercentage,
+                SubTitleFontSize = 12 * settingsManager.UiScalePercentage,
+                BodyAltFontSize = 11 * settingsManager.UiScalePercentage,
+                FontFamily = new FontFamily("Segoe UI")
+            };
         }
     }
 }

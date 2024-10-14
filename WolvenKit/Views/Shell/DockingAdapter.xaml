@@ -90,19 +90,20 @@
                                 RenderOptions.CachingHint="Cache"
                                 Stretch="Uniform"
                                 TileMode="Tile"
-                                Viewport="0,0,90,90"
+                                Viewport="{DynamicResource WolvenKitDockingAdapterViewport}"
                                 ViewportUnits="Absolute">
                                 <DrawingBrush.Drawing>
                                     <DrawingGroup>
                                         <GeometryDrawing Brush="{StaticResource ContentBackground}">
                                             <GeometryDrawing.Geometry>
                                                 <GeometryGroup>
-                                                    <RectangleGeometry Rect="0,0,90,90" />
+                                                    <RectangleGeometry Rect="{DynamicResource WolvenKitDockingAdapterViewport}" />
                                                 </GeometryGroup>
                                             </GeometryDrawing.Geometry>
                                         </GeometryDrawing>
                                         <DrawingGroup Opacity="0.02">
-                                            <ImageDrawing ImageSource="pack://application:,,,/Resources/Media/Images/Application/Sammy_Grayscale.png" Rect="0,0,70,80" />
+                                            <ImageDrawing ImageSource="pack://application:,,,/Resources/Media/Images/Application/Sammy_Grayscale.png"
+                                                          Rect="{DynamicResource WolvenKitDockingAdapterSammy}" />
                                         </DrawingGroup>
                                     </DrawingGroup>
                                 </DrawingBrush.Drawing>
@@ -132,7 +133,7 @@
                     <Setter Property="TabItemBackgroundSelected" Value="#373737" />
                     <Setter Property="ElementBorderThickness" Value="1" />
                     <Setter Property="TabPanelBackground" Value="{StaticResource ContentBackground}" />
-                    <Setter Property="TabPanelBorderThickness" Value="0,0,0,0" />
+                    <Setter Property="TabPanelBorderThickness" Value="0" />
                     <Setter Property="TabPanelBorderBrush" Value="{StaticResource ContentBackground}" />
                     <Setter Property="TabItemsForeground" Value="#ffffff" />
                     <Setter Property="TabItemForegroundSelected" Value="#ffffff" />
@@ -141,9 +142,9 @@
                     <Setter Property="HeaderForeground" Value="#ffffff" />
                     <Setter Property="HeaderForegroundSelected" Value="#ffffff" />
                     <Setter Property="HeaderMouseOverBackground" Value="#1f1f1f" />
-                    <Setter Property="HeaderBorderThickness" Value="0,0,0,0" />
-                    <Setter Property="TabItemBorderThickness" Value="0,0,0,0" />
-                    <Setter Property="TabItemsBorderThicknessSelected" Value="0,0,0,0" />
+                    <Setter Property="HeaderBorderThickness" Value="0" />
+                    <Setter Property="TabItemBorderThickness" Value="0" />
+                    <Setter Property="TabItemsBorderThicknessSelected" Value="0" />
                     <Setter Property="Margin" Value="0" />
                     <Setter Property="EnableMouseHoverBackground" Value="False" />
                     <Setter Property="SplitterBackground" Value="{StaticResource ContentBackgroundAlt2}" />
@@ -387,7 +388,7 @@
                                             <Condition Binding="{Binding Path=(tools_controls:DockedElementTabbedHost.HostedElement).(tools_controls:DockingManager.State), RelativeSource={RelativeSource Self}}" Value="Float" />
                                             <Condition Binding="{Binding Path=IsMultiHostsContainer, RelativeSource={RelativeSource AncestorType={x:Type tools_controls:NativeFloatWindow}}}" Value="False" />
                                         </MultiDataTrigger.Conditions>
-                                        <Setter TargetName="BorderWrap" Property="BorderThickness" Value="0,0,0,0" />
+                                        <Setter TargetName="BorderWrap" Property="BorderThickness" Value="0" />
                                     </MultiDataTrigger>
                                     <MultiDataTrigger>
                                         <MultiDataTrigger.Conditions>
@@ -395,7 +396,7 @@
                                             <Condition Binding="{Binding Path=(tools_controls:DockedElementTabbedHost.HostedElement).(tools_controls:DockingManager.State), RelativeSource={RelativeSource Self}}" Value="Float" />
                                             <Condition Binding="{Binding Path=IsMultiHostsContainer, RelativeSource={RelativeSource AncestorType={x:Type tools_controls:IWindow}}}" Value="False" />
                                         </MultiDataTrigger.Conditions>
-                                        <Setter TargetName="BorderWrap" Property="BorderThickness" Value="0,0,0,0" />
+                                        <Setter TargetName="BorderWrap" Property="BorderThickness" Value="0" />
                                     </MultiDataTrigger>
                                     <Trigger Property="Tag" Value="DocumentContainer">
                                         <Setter TargetName="BorderWrap" Property="BorderThickness" Value="0" />

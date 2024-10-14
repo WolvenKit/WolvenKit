@@ -11,27 +11,27 @@
     d:DesignWidth="800"
     x:TypeArguments="tools:HashToolViewModel"
     mc:Ignorable="d">
-    <Grid Margin="6,0" Background="{StaticResource ContentBackground}">
+    <Grid Background="{StaticResource ContentBackground}">
         <TabControl>
             <TabItem Header="Calculate">
-                <Grid>
+                <Grid Margin="{DynamicResource WolvenKitMarginSmall}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitColumnTiny}" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitColumnTiny}" />
                         <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitColumnTiny}" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="20" />
-                        <RowDefinition Height="20" />
-                        <RowDefinition Height="20" />
-                        <RowDefinition Height="20" />
-                        <RowDefinition Height="20" />
-                        <RowDefinition Height="20" />
+                        <RowDefinition Height="{DynamicResource WolvenKitRowText}" />
+                        <RowDefinition Height="{DynamicResource WolvenKitRowText}" />
+                        <RowDefinition Height="{DynamicResource WolvenKitRowText}" />
+                        <RowDefinition Height="{DynamicResource WolvenKitRowText}" />
+                        <RowDefinition Height="{DynamicResource WolvenKitRowText}" />
+                        <RowDefinition Height="{DynamicResource WolvenKitRowText}" />
                     </Grid.RowDefinitions>
 
                     <TextBlock
@@ -174,20 +174,21 @@
                         Grid.Column="6" />
                 </Grid>
             </TabItem>
+            
             <TabItem Header="LookUp">
-                <Grid>
+                <Grid Margin="{DynamicResource WolvenKitMarginSmall}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitColumnTiny}" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="20" />
-                        <RowDefinition Height="20" />
-                        <RowDefinition Height="20" />
-                        <RowDefinition Height="20" />
-                        <RowDefinition Height="20" />
+                        <RowDefinition Height="{DynamicResource WolvenKitRowText}" />
+                        <RowDefinition Height="{DynamicResource WolvenKitRowText}" />
+                        <RowDefinition Height="{DynamicResource WolvenKitRowText}" />
+                        <RowDefinition Height="{DynamicResource WolvenKitRowText}" />
+                        <RowDefinition Height="{DynamicResource WolvenKitRowText}" />
                     </Grid.RowDefinitions>
 
                     <TextBlock

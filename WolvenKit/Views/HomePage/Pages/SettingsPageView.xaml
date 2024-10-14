@@ -34,7 +34,6 @@
 
         <StackPanel
             Grid.Row="0"
-            Height="85"
             Margin="25,0,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
@@ -43,58 +42,57 @@
                 <Style BasedOn="{StaticResource ButtonDefault}" TargetType="{x:Type Button}">
                     <Setter Property="BorderThickness" Value="0" />
                     <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt}" />
-                    <Setter Property="Padding" Value="15,0" />
+                    <Setter Property="Padding" Value="{DynamicResource WolvenKitMarginHorizontal}" />
                 </Style>
             </StackPanel.Resources>
 
             <TextBlock
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                FontSize="20"
+                MinWidth="{DynamicResource WolvenKitHomeSharedHeaderWidth}"
+                FontSize="{DynamicResource WolvenKitHeaderFontSize}"
                 Foreground="White"
                 Text="Settings" />
             <hc:Divider
-                Height="45"
-                Margin="15"
+                Height="{DynamicResource WolvenKitDividerHeight}"
+                Margin="{DynamicResource WolvenKitMargin}"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Orientation="Vertical" />
 
             <Button
                 x:Name="CheckForUpdatesButton"
-                Height="40"
-                Margin="15"
+                Height="{DynamicResource WolvenKitHomeSharedButtonHeight}"
+                Margin="{DynamicResource WolvenKitMargin}"
                 CommandParameter="{StaticResource FalseValue}">
                 <StackPanel Orientation="Horizontal">
                     <iconPacks:PackIconMaterial
-                        Width="20"
-                        Height="20"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
+                        Width="{DynamicResource WolvenKitIconSize}"
+                        Height="{DynamicResource WolvenKitIconSize}"
                         Foreground="{StaticResource WolvenKitPurple}"
                         Kind="Sync" />
                     <TextBlock
-                        Padding="10,0,0,0"
-                        FontSize="14"
+                        Padding="{DynamicResource WolvenKitHomeSharedPaddingLeft}"
+                        FontSize="{DynamicResource WolvenKitBodyFontSize}"
                         Text="Check for updates" />
                 </StackPanel>
             </Button>
 
             <Button
                 x:Name="SaveCloseButton"
-                Height="40"
-                Margin="0">
+                Height="{DynamicResource WolvenKitHomeSharedButtonHeight}"
+                Margin="{DynamicResource WolvenKitMargin}">
                 <StackPanel Orientation="Horizontal">
                     <iconPacks:PackIconMaterial
-                        Width="20"
-                        Height="20"
+                        Width="{DynamicResource WolvenKitIconSize}"
+                        Height="{DynamicResource WolvenKitIconSize}"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
                         Foreground="{StaticResource WolvenKitCyan}"
                         Kind="ContentSave" />
                     <TextBlock
-                        Padding="10,0,0,0"
-                        FontSize="14"
+                        Padding="{DynamicResource WolvenKitHomeSharedPaddingLeft}"
+                        FontSize="{DynamicResource WolvenKitBodyFontSize}"
                         Text="Save &amp; Close" />
                 </StackPanel>
             </Button>
@@ -106,7 +104,7 @@
             -->
 
             <!--Button x:Name="ExitRestart" Click="ExitRestart_Click" Margin="15" Height="40">
-                <TextBlock Text="Exit and restart" FontSize="14"/>
+                <TextBlock Text="Exit and restart" FontSize="{DynamicResource WolvenKitBodyFontSize}"/>
             </Button-->
 
         </StackPanel>
@@ -116,11 +114,12 @@
             Grid.Row="1"
             Margin="25,0,25,25"
             AutoGeneratingPropertyGridItem="SettingsPropertygrid_OnAutoGeneratingPropertyGridItem"
+            UpdateSourceMode="ReturnOrLostFocus"
             BorderThickness="0"
             ButtonPanelVisibility="Collapsed"
             CategoryForeground="{StaticResource WolvenKitRed}"
             EnableGrouping="True"
-            PropertyNameColumnDefinition="200"
+            PropertyNameColumnDefinition="{DynamicResource WolvenKitSettingsGridLabelWidth}"
             SearchBoxVisibility="Collapsed">
             <!--syncfusion:PropertyGrid.Resources>
             <Style TargetType="{x:Type propertygrid:PropertyViewItem}" BasedOn="{StaticResource SyncfusionPropertyViewItemStyle}">
