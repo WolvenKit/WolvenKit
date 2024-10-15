@@ -2240,9 +2240,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     }
 
     protected bool IsHandle() =>
-        PropertyType.IsAssignableTo(typeof(IRedBaseHandle)) ||
+        PropertyType.IsAssignableTo(typeof(IRedBaseHandle)) && (
         PropertyType.GetGenericTypeDefinition() == typeof(CHandle<>) ||
-        PropertyType.GetGenericTypeDefinition() == typeof(CWeakHandle<>);
+        PropertyType.GetGenericTypeDefinition() == typeof(CWeakHandle<>));
 
     private bool CanPasteHandle()
     {
@@ -2251,7 +2251,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return false;
         }
 
-        return RedDocumentTabViewModel.CopiedChunk is IRedBaseHandle && IsHandle();
+        return IsHandle();
     } // TODO RelayCommand check notify
     
     [RelayCommand(CanExecute = nameof(CanPasteHandle))]
