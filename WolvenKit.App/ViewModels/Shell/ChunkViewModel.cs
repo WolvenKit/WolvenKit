@@ -4721,7 +4721,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public void OnMaterialNameChange(string argsOldValue, string argsNewValue)
     {
-        if (ResolvedData is not CMesh mesh || GetPropertyChild("appearances") is not ChunkViewModel appearances)
+        if (ResolvedData is not CMesh mesh || GetPropertyChild("appearances") is not ChunkViewModel appearances ||
+            GetPropertyChild("materialEntries") is not { ResolvedData: CArray<CMeshMaterialEntry> materials })
+        {
+            return;
+        }
+
+        var materialsWithOldName = materials.Count(x => x.Name == argsOldValue);
+        var materialsWithNewName = materials.Count(x => x.Name == argsNewValue);
+        if (materialsWithOldName > 1 || materialsWithNewName > 0)
         {
             return;
         }
