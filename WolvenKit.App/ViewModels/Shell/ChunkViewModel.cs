@@ -2032,8 +2032,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         ArgumentNullException.ThrowIfNull(Parent);
         ArgumentNullException.ThrowIfNull(Tab);
 
-        var indices = nodes.Select(_ => _.NodeIdxInParent).ToList();
+        if (nodes.Count == 0) // Exception was seen in the wild, better catch this
+        {
+            return;
+        }
 
+        var indices = nodes.Select(_ => _.NodeIdxInParent).ToList();
+        
         try
         {
             switch (Parent.Data)
@@ -4725,7 +4730,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public void OnMaterialNameChange(string argsOldValue, string argsNewValue)
     {
-        if (ResolvedData is not CMesh mesh || GetPropertyChild("appearances") is not ChunkViewModel appearances)
+        if (ResolvedData is not CMesh mesh || GetPropertyChild("appearances") is not ChunkViewModel appearances ||
+            GetPropertyChild("materialEntries") is not { ResolvedData: CArray<CMeshMaterialEntry> materials })
+        {
+            return;
+        }
+
+        var materialsWithOldName = materials.Count(x => x.Name == argsOldValue);
+        var materialsWithNewName = materials.Count(x => x.Name == argsNewValue);
+        if (materialsWithOldName > 1 || materialsWithNewName > 0)
         {
             return;
         }
