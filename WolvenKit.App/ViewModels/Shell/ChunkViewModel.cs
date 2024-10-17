@@ -2028,7 +2028,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         ArgumentNullException.ThrowIfNull(Parent);
         ArgumentNullException.ThrowIfNull(Tab);
 
-        if (!nodes.Any()) // Exception was seen in the wild, better catch this
+        if (nodes.Count == 0) // Exception was seen in the wild, better catch this
         {
             return;
         }
