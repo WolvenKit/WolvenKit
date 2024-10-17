@@ -2028,8 +2028,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         ArgumentNullException.ThrowIfNull(Parent);
         ArgumentNullException.ThrowIfNull(Tab);
 
-        var indices = nodes.Select(_ => _.NodeIdxInParent).ToList();
+        if (!nodes.Any()) // Exception was seen in the wild, better catch this
+        {
+            return;
+        }
 
+        var indices = nodes.Select(_ => _.NodeIdxInParent).ToList();
+        
         try
         {
             switch (Parent.Data)
