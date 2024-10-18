@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:tools="clr-namespace:WolvenKit.App.ViewModels.Tools;assembly=WolvenKit.App"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     d:DesignHeight="450"
     d:DesignWidth="800"
     x:TypeArguments="tools:AudioPlayerViewModel"
@@ -17,23 +18,20 @@
         Height="auto"
         BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
         BorderThickness="1">
-
         <Grid Margin="5" VerticalAlignment="Stretch">
-
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="70" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <!--  Title  -->
             <StackPanel
                 Grid.Row="0"
-                Margin="10,10,10,10"
+                Margin="{DynamicResource WolvenKitMargin}"
+                HorizontalAlignment="Center"
                 Orientation="Horizontal">
-
                 <TextBlock FontWeight="Bold" Text="{Binding FileName}" />
-
             </StackPanel>
 
             <!--  Waveform  -->
@@ -42,6 +40,7 @@
             <!--  Buttons  -->
             <StackPanel
                 Grid.Row="3"
+                Margin="{DynamicResource WolvenKitMarginVertical}"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Orientation="Horizontal">
@@ -58,59 +57,55 @@
                 <Button
                     x:Name="PlayButton"
                     Margin="0"
+                    Padding="0"
+                    Height="Auto"
                     Background="Transparent"
                     BorderBrush="Transparent"
-                    Command="{Binding PlayCommand}"
-                    Effect="{StaticResource MahApps.DropShadowEffect.Menu}">
-                    <iconPacks:PackIconMaterial
-                        Padding="0,1,0,1"
-                        Foreground="DarkGreen"
+                    Command="{Binding PlayCommand}">
+                    <templates:IconTemplateView
+                        IconPack="Material" 
                         Kind="Play"
-                         />
+                        Size="{DynamicResource WolvenKitTinyIconSize}"
+                        Foreground="{StaticResource WolvenKitGreen}" />
                 </Button>
-
 
                 <Button
                     x:Name="PauseButton"
                     Margin="0"
+                    Padding="0"
+                    Height="Auto"
                     Background="Transparent"
                     BorderBrush="Transparent"
-                    Command="{Binding PauseCommand}"
-                    Effect="{StaticResource MahApps.DropShadowEffect.Menu}">
-                    <iconPacks:PackIconMaterial
-                        Padding="0,1,0,1"
-                        Foreground="Cyan"
+                    Command="{Binding PauseCommand}">
+                    <templates:IconTemplateView
+                        IconPack="Material" 
                         Kind="Pause"
-                         />
+                        Size="{DynamicResource WolvenKitTinyIconSize}"
+                        Foreground="{StaticResource WolvenKitCyan}" />
                 </Button>
 
                 <Button
                     x:Name="StopButton"
                     Margin="0"
+                    Padding="0"
+                    Height="Auto"
                     Background="Transparent"
                     BorderBrush="Transparent"
-                    Command="{Binding StopCommand}"
-                    Effect="{StaticResource MahApps.DropShadowEffect.Menu}">
-
-                    <iconPacks:PackIconMaterial
-                        Padding="0,1,0,1"
-                        Foreground="Maroon"
+                    Command="{Binding StopCommand}">
+                    <templates:IconTemplateView
+                        IconPack="Material" 
                         Kind="Stop"
-                        />
+                        Size="{DynamicResource WolvenKitTinyIconSize}"
+                        Foreground="{StaticResource WolvenKitRed}" />
                 </Button>
 
                 <ComboBox
-                    Width="200"
+                    Width="{DynamicResource WolvenKitAudioPlayerVisualizationWidth}"
+                    Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                     DisplayMemberPath="Name"
                     ItemsSource="{Binding Visualizations}"
                     SelectedItem="{Binding SelectedVisualization, Mode=TwoWay}" />
-
-
             </StackPanel>
-
-
-
-
         </Grid>
     </Border>
 </reactiveUi:ReactiveUserControl>

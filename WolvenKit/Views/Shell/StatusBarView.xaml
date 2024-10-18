@@ -15,44 +15,42 @@
     x:TypeArguments="shell:StatusBarViewModel"
     mc:Ignorable="d">
 
-
     <Grid MouseLeftButtonDown="StatusBar_MouseLeftButtonDown">
-        <!--<Grid.Resources>
-            <ResourceDictionary>
-                <ResourceDictionary.MergedDictionaries>
-                    <hc:ThemeResources RequestedTheme="Dark" />
-                    <hc:Theme />
-                </ResourceDictionary.MergedDictionaries>
-            </ResourceDictionary>
-        </Grid.Resources>-->
         <Grid.RowDefinitions>
-            <RowDefinition Height="1" />
-            <RowDefinition Height="25" />
+            <RowDefinition Height="{DynamicResource WolvenKitStatusBarRowHeight}" />
         </Grid.RowDefinitions>
 
-        <Fluent:StatusBar Grid.Row="1" Background="{Binding BarColor}">
-
-            <Fluent:StatusBarItem Title="Status" HorizontalAlignment="Left">
-                <TextBlock Margin="6,0,0,4" Text="{Binding Status}" />
+        <Fluent:StatusBar 
+            Background="{Binding BarColor}"
+            VerticalAlignment="Bottom">
+            <Fluent:StatusBarItem
+                Title="Status"
+                Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                HorizontalAlignment="Left">
+                <TextBlock FontSize="{DynamicResource WolvenKitBodyFontSize}"
+                           Text="{Binding Status}" />
             </Fluent:StatusBarItem>
 
-            <Fluent:StatusBarItem HorizontalAlignment="Left">
+            <Fluent:StatusBarItem
+                Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                HorizontalAlignment="Left">
                 <syncfusion:SfLinearProgressBar
                     x:Name="StatusBarProgressBar"
-                    Width="200"
-                    Height="16"
-                    Margin="6,0,0,2"
+                    Width="{DynamicResource WolvenKitStatusBarProgressBarWidth}"
+                    Height="{DynamicResource WolvenKitStatusBarProgressBarHeight}"
+                    Margin="{DynamicResource WolvenKitMarginTinyVertical}"
+                    VerticalAlignment="Center"
                     ProgressColor="{StaticResource WolvenKitRed}"
                     TrackColor="#131313" />
             </Fluent:StatusBarItem>
 
             <Fluent:StatusBarItem
-                Title="Current Project and Version Number"
                 HorizontalAlignment="Right"
+                Title="Current Project and Version Number"
                 ToolTip="Current Project and Version Number"
                 Value="Displays Current Project and Version Number">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Margin="0,0,-10,0">
+                    <TextBlock FontSize="{DynamicResource WolvenKitBodyFontSize}">
                         <TextBlock.Text>
                             <MultiBinding StringFormat="{}{0} | WolvenKit {1}">
                                 <Binding Path="CurrentProject" />

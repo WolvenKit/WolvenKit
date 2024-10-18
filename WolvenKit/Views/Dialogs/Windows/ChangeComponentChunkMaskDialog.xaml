@@ -9,15 +9,14 @@
     xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
     Title="Change component chunk mask"
     SizeToContent="WidthAndHeight"
+    MinWidth="{DynamicResource WolvenKitDialogWidthSmall}"
+    MinHeight="{DynamicResource WolvenKitDialogHeightSmall}"
     FocusManager.FocusedElement="{Binding ElementName=BaseMaterialBox}"
     WindowStartupLocation="CenterScreen">
-
     <Grid
-        Margin="5,5,2,5"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch"
         hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
-
         <Grid.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
@@ -27,7 +26,10 @@
             </ResourceDictionary>
         </Grid.Resources>
 
-        <syncfusion:WizardControl CancelButtonCancelsWindow="True" FinishButtonClosesWindow="True" Finish="WizardControl_OnFinish">
+        <syncfusion:WizardControl
+            CancelButtonCancelsWindow="True"
+            FinishButtonClosesWindow="True"
+            Finish="WizardControl_OnFinish">
             <syncfusion:WizardPage
                 BackVisibility="Collapsed"
                 CancelVisibility="Visible"
@@ -40,36 +42,49 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="150" />
-                        <ColumnDefinition Width="500" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
+                    
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <Label Grid.Column="0" Content="Component name:" HorizontalAlignment="Left"
-                           Background="#252525" BorderThickness="0" />
-                    <TextBox x:Name="ComponentNameBox" Grid.Column="1" Grid.Row="0" KeyboardNavigation.TabIndex="1"
-                             helpers:TextBoxBehavior.FocusGainedSelectAll="True" />
+                    <Label 
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Content="Component name:"
+                        Margin="{DynamicResource WolvenKitMarginTinyBottom}"
+                        HorizontalAlignment="Left"
+                        Background="#252525"
+                        BorderThickness="0" />
+                    
+                    <TextBox 
+                        x:Name="ComponentNameBox"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Margin="{DynamicResource WolvenKitMarginTinyBottom}"
+                        KeyboardNavigation.TabIndex="1"
+                        helpers:TextBoxBehavior.FocusGainedSelectAll="True" />
 
-                    <Label Content="Chunkmask" HorizontalAlignment="Left"
-                           Grid.Row="1" Grid.Column="0"
-                           Background="#252525" BorderThickness="0" /> <!-- Label for the ChunkMaskEditor -->
+                    <Label
+                        Content="Chunkmask"
+                        HorizontalAlignment="Left"
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Background="#252525"
+                        BorderThickness="0" />
+
                     <editors:RedChunkMaskEditor
                         x:Name="ChunkmaskEditor"
-                        Grid.Column="1" Grid.Row="1" KeyboardNavigation.TabIndex="2"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        KeyboardNavigation.TabIndex="2"
                         RedNumber="{Binding ChunkMask, Mode=TwoWay}"
-                        PropertyChanged="On_Chunkmask_Changed" /> <!-- ChunkMaskEditor -->
-
-
+                        PropertyChanged="On_Chunkmask_Changed" />
                 </Grid>
             </syncfusion:WizardPage>
         </syncfusion:WizardControl>
-
     </Grid>
-
-
 </Window>
