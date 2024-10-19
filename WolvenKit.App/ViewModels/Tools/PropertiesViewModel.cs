@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -29,6 +30,7 @@ public partial class PropertiesViewModel : ToolViewModel
 
     private readonly ILoggerService _loggerService;
     private readonly ISettingsManager _settingsManager;
+    private readonly IArchiveManager _archiveManager;
     private readonly IProjectManager _projectManager;
     private readonly MeshTools _meshTools;
     private readonly IModTools _modTools;
@@ -37,7 +39,7 @@ public partial class PropertiesViewModel : ToolViewModel
     public const string ToolContentId = "Properties_Tool";
     public const string ToolTitle = "File Information";
 
-    public enum TexturePreviewExtensions { xbm, envprobe, mesh, cubemap, xcube, texarray };
+    public enum TexturePreviewExtensions { xbm, envprobe, mesh, cubemap, xcube, texarray, inkatlas };
 
     public enum MeshPreviewExtensions { mesh, ent, w2mesh, physicalscene, morphtarget };
     public enum AudioPreviewExtensions { wem };
@@ -62,6 +64,7 @@ public partial class PropertiesViewModel : ToolViewModel
     /// <param name="meshTools"></param>
     public PropertiesViewModel(
         IProjectManager projectManager,
+        IArchiveManager archiveManager,
         ILoggerService loggerService,
         ISettingsManager settingsManager,
         MeshTools meshTools,
@@ -72,6 +75,7 @@ public partial class PropertiesViewModel : ToolViewModel
         _settingsManager = settingsManager;
         _projectManager = projectManager;
         _loggerService = loggerService;
+        _archiveManager = archiveManager;
         _meshTools = meshTools;
         _modTools = modTools;
         _parser = parserService;
@@ -138,9 +142,6 @@ public partial class PropertiesViewModel : ToolViewModel
         AudioObject = obj;
     }
 
-
-    private bool CanOpenFile(FileSystemModel model) => model != null;
-
     /// <summary>
     /// Called from Assetbrowser
     /// </summary>
@@ -148,12 +149,8 @@ public partial class PropertiesViewModel : ToolViewModel
     /// <returns></returns>
     public void ExecuteSelectFile(IFileSystemViewModel model)
     {
-        if (model == null)
-        {
-            return;
-        }
-
-        if (State is DockState.AutoHidden or DockState.Hidden)
+        if (State is DockState.AutoHidden or DockState.Hidden || !_settingsManager.ShowFilePreview ||
+            model is not RedFileViewModel selectedItem)
         {
             return;
         }
@@ -168,39 +165,29 @@ public partial class PropertiesViewModel : ToolViewModel
         IsImagePreviewVisible = false;
         IsVideoPreviewVisible = false;
 
-        if (!_settingsManager.ShowFilePreview)
-        {
-            return;
-        }
-
-        if (model is not RedFileViewModel selectedItem)
-        {
-            return;
-        }
-
         var extension = model.DisplayExtension;
 
-        if (Enum.TryParse<TexturePreviewExtensions>(extension, true, out _) ||
-            Enum.TryParse<MeshPreviewExtensions>(extension, true, out _) ||
-            Enum.TryParse<AudioPreviewExtensions>(extension, true, out _))
+        if (!Enum.TryParse<TexturePreviewExtensions>(extension, true, out _) &&
+            !Enum.TryParse<MeshPreviewExtensions>(extension, true, out _) &&
+            !Enum.TryParse<AudioPreviewExtensions>(extension, true, out _))
         {
-            CR2WFile? cr2w = null;
-            using (var stream = new MemoryStream())
+            return;
+        }
+
+        CR2WFile? cr2W = null;
+        using (var stream = new MemoryStream())
+        {
+            var selectedGameFile = selectedItem.GetGameFile();
+            selectedGameFile.Extract(stream);
+            if (!_parser.TryReadRed4File(stream, out cr2W))
             {
-                var selectedGameFile = selectedItem.GetGameFile();
-                selectedGameFile.Extract(stream);
-                if (!_parser.TryReadRed4File(stream, out cr2w))
-                {
-                    PreviewStream(stream, model.FullName);
-                }
-                else if (cr2w.RootChunk is MorphTargetMesh mt && mt.BaseMesh.DepotPath.GetResolvedText() is string meshPath)
-                {
-                } 
+                PreviewAudioStream(stream, model.FullName);
             }
-            if (cr2w != null)
-            {
-                PreviewCr2wFile(cr2w);
-            }
+        }
+
+        if (cr2W != null)
+        {
+            PreviewCr2wFile(cr2W);
         }
     }
 
@@ -211,12 +198,7 @@ public partial class PropertiesViewModel : ToolViewModel
     /// <returns></returns>
     public void ExecuteSelectFile(FileSystemModel model)
     {
-        if (model == null)
-        {
-            return;
-        }
-
-        if (State is DockState.AutoHidden or DockState.Hidden)
+        if (State is DockState.AutoHidden or DockState.Hidden || !_settingsManager.ShowFilePreview || model.IsDirectory)
         {
             return;
         }
@@ -231,35 +213,37 @@ public partial class PropertiesViewModel : ToolViewModel
         IsImagePreviewVisible = false;
         IsVideoPreviewVisible = false;
 
-        if (!_settingsManager.ShowFilePreview)
-        {
-            return;
-        }
-
-        if (model.IsDirectory)
-        {
-            return;
-        }
-
         var extension = Path.GetExtension(model.FullName).TrimStart('.');
 
-        if (Enum.TryParse<TexturePreviewExtensions>(extension, true, out _) ||
-            Enum.TryParse<MeshPreviewExtensions>(extension, true, out _) ||
-            Enum.TryParse<AudioPreviewExtensions>(extension, true, out _) ||
-            Enum.TryParse<EUncookExtension>(extension, true, out _))
+        if (!Enum.TryParse<TexturePreviewExtensions>(extension, true, out _) &&
+            !Enum.TryParse<MeshPreviewExtensions>(extension, true, out _) &&
+            !Enum.TryParse<AudioPreviewExtensions>(extension, true, out _) &&
+            !Enum.TryParse<EUncookExtension>(extension, true, out _))
         {
-            CR2WFile? cr2w = null;
-            using (var stream = new FileStream(model.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096, FileOptions.SequentialScan))
+            return;
+        }
+
+        CR2WFile? cr2WFile;
+        using (var stream = new MemoryStream())
+        {
+            // TODO: This fails for .inkatlas files
+            if (!_parser.TryReadRed4File(stream, out cr2WFile))
             {
-                if (!_parser.TryReadRed4File(stream, out cr2w))
-                {
-                    PreviewPhysicalFile(model.FullName);
-                }
+                PreviewPhysicalFile(model.FullName);
             }
-            if (cr2w != null)
+            else if (extension == "inkatlas" && cr2WFile.RootChunk is inkTextureAtlas atlas &&
+                     atlas.Slots.FirstOrDefault() is inkTextureSlot slot && slot.Texture.DepotPath != ResourcePath.Empty &&
+                     _archiveManager.GetGameFile(slot.Texture.DepotPath) is { } gameFile)
             {
-                PreviewCr2wFile(cr2w);
+                using var stream2 = new MemoryStream();
+                gameFile.Extract(stream2);
+                _parser.TryReadRed4File(stream2, out cr2WFile);
             }
+        }
+
+        if (cr2WFile != null)
+        {
+            PreviewCr2wFile(cr2WFile);
         }
     }
 
@@ -269,7 +253,7 @@ public partial class PropertiesViewModel : ToolViewModel
     /// <param name="stream"></param>
     /// <param name="filename"></param>
     /// <returns></returns>
-    private void PreviewStream(Stream stream, string filename)
+    private void PreviewAudioStream(Stream stream, string filename)
     {
         var extension = Path.GetExtension(filename).TrimStart('.');
         stream.Seek(0, SeekOrigin.Begin);
