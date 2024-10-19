@@ -223,10 +223,11 @@ public partial class PropertiesViewModel : ToolViewModel
             return;
         }
 
-        CR2WFile? cr2WFile;
-        using (var stream = new MemoryStream())
+        CR2WFile? cr2WFile = null;
+        // TODO: This fails for .inkatlas files
+        using (var stream = new FileStream(model.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096,
+                   FileOptions.SequentialScan))
         {
-            // TODO: This fails for .inkatlas files
             if (!_parser.TryReadRed4File(stream, out cr2WFile))
             {
                 PreviewPhysicalFile(model.FullName);
@@ -240,7 +241,6 @@ public partial class PropertiesViewModel : ToolViewModel
                 _parser.TryReadRed4File(stream2, out cr2WFile);
             }
         }
-
         if (cr2WFile != null)
         {
             PreviewCr2wFile(cr2WFile);
@@ -270,7 +270,6 @@ public partial class PropertiesViewModel : ToolViewModel
     /// <summary>
     /// Internal
     /// </summary>
-    /// <param name="stream"></param>
     /// <param name="filename"></param>
     /// <returns></returns>
     private void PreviewPhysicalFile(string filename)
@@ -292,38 +291,32 @@ public partial class PropertiesViewModel : ToolViewModel
 
     private void PreviewCr2wFile(CR2WFile cr2w)
     {
-        if (cr2w.RootChunk is CMesh or MorphTargetMesh)
+        switch (cr2w.RootChunk)
         {
-            LoadModel(cr2w.RootChunk);
-        }
-
-        if (cr2w.RootChunk is CBitmapTexture cbt &&
-            cbt.RenderTextureResource.RenderResourceBlobPC?.GetValue() is rendRenderTextureBlobPC)
-        {
-            SetupImage(cbt);
-        }
-
-        if (cr2w.RootChunk is CCubeTexture cct &&
-            cct.RenderTextureResource.RenderResourceBlobPC?.GetValue() is rendRenderTextureBlobPC)
-        {
-            SetupImage(cct);
-        }
-
-        if (cr2w.RootChunk is CTextureArray cta &&
-            cta.RenderTextureResource.RenderResourceBlobPC?.GetValue() is rendRenderTextureBlobPC)
-        {
-            SetupImage(cta);
-        }
-
-        if (cr2w.RootChunk is CMesh cm && cm.RenderResourceBlob?.GetValue() is rendRenderTextureBlobPC)
-        {
-            SetupImage(cm);
-        }
-
-        if (cr2w.RootChunk is CReflectionProbeDataResource crpdr &&
-            crpdr.TextureData.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC)
-        {
-            SetupImage(crpdr);
+            case CMesh cm when cm.RenderResourceBlob?.GetValue() is rendRenderTextureBlobPC:
+                SetupImage(cm);
+                break;
+            case CMesh or MorphTargetMesh:
+                LoadModel(cr2w.RootChunk);
+                break;
+            case CBitmapTexture cbt when
+                cbt.RenderTextureResource.RenderResourceBlobPC?.GetValue() is rendRenderTextureBlobPC:
+                SetupImage(cbt);
+                break;
+            case CCubeTexture cct when
+                cct.RenderTextureResource.RenderResourceBlobPC?.GetValue() is rendRenderTextureBlobPC:
+                SetupImage(cct);
+                break;
+            case CTextureArray cta when
+                cta.RenderTextureResource.RenderResourceBlobPC?.GetValue() is rendRenderTextureBlobPC:
+                SetupImage(cta);
+                break;
+            case CReflectionProbeDataResource crpdr when
+                crpdr.TextureData.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC:
+                SetupImage(crpdr);
+                break;
+            default:
+                break;
         }
     }
 
