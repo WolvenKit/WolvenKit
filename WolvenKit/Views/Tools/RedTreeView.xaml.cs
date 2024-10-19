@@ -409,9 +409,24 @@ namespace WolvenKit.Views.Tools
         [RelayCommand]
         private void DeleteSelection()
         {
-            foreach (var chunkViewModel in GetSelectedChunks())
+            if (ItemsSource is not ICollectionView collectionView)
             {
-                chunkViewModel.DeleteItemCommand.Execute(null);
+                return;
+            }
+
+            using (collectionView.DeferRefresh())
+            {
+                foreach (var chunkSiblings in GetSelectedChunks()
+                             .GroupBy(chunk => chunk.Parent)
+                             .Select(group => group.ToList()))
+                {
+                    if (chunkSiblings.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    chunkSiblings.First().DeleteNodesInParent(chunkSiblings);
+                }
             }
         }
         

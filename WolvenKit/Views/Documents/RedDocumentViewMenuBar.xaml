@@ -343,6 +343,7 @@
             BorderThickness="0,0,0,0"
             FlowDirection="LeftToRight"
             SearchStarted="SearchBar_OnSubmit"
+            TextChanged="SearchBar_OnTextChanged"
             ShowClearButton="True"
             Style="{StaticResource SearchBarStyle}" />
             

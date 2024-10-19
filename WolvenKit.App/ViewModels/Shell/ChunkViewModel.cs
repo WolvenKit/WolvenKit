@@ -2027,7 +2027,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     [RelayCommand(CanExecute = nameof(CanAddToProject))]
     private Task AddToProject() => AddToProjectTask();
 
-    private void DeleteNodesInParent(List<ChunkViewModel> nodes)
+    public void DeleteNodesInParent(List<ChunkViewModel> nodes)
     {
         ArgumentNullException.ThrowIfNull(Parent);
         ArgumentNullException.ThrowIfNull(Tab);

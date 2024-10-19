@@ -34,24 +34,20 @@
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
+            <!-- Do not hide anything by style if it's hidden by search - we'll be filtering the item collection -->
             <Style x:Key="HiddenByEditorModeStyle" TargetType="Grid">
                 <Style.Triggers>
                     <MultiDataTrigger>
                         <MultiDataTrigger.Conditions>
                             <Condition Binding="{Binding IsHiddenByEditorDifficultyLevel}" Value="False" />
-                            <Condition Binding="{Binding IsHiddenBySearch}" Value="False" />
                         </MultiDataTrigger.Conditions>
                         <Setter Property="Visibility" Value="Visible" />
                     </MultiDataTrigger>
                     <DataTrigger Binding="{Binding Path=IsHiddenByEditorDifficultyLevel}" Value="True">
                         <Setter Property="Visibility" Value="Collapsed" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Path=IsHiddenBySearch}" Value="True">
-                        <Setter Property="Visibility" Value="Collapsed" />
-                    </DataTrigger>
                 </Style.Triggers>
             </Style>
-            
             <DataTemplate x:Key="AddHandleButton" DataType="{x:Type shell:ChunkViewModel}">
                 <Button
                     Height="12"

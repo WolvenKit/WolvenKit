@@ -481,5 +481,13 @@ namespace WolvenKit.Views.Documents
                 SearchBar_OnClear(this, e);
             }
         }
+
+        private void SearchBar_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (SearchBar?.Text == "")
+            {
+                SearchBar_OnClear(this, e);
+            }
+        }
     }
 }
