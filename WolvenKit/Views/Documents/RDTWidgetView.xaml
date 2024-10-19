@@ -12,6 +12,7 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:types="clr-namespace:WolvenKit.RED4.Types;assembly=WolvenKit.RED4.Types"
     xmlns:others="clr-namespace:WolvenKit.Views.Others"
+    xmlns:converters="clr-namespace:WolvenKit.Converters"
     Margin="0"
     d:DataContext="{d:DesignInstance Type={x:Type documents:RDTWidgetViewModel}}"
     d:DesignHeight="450"
@@ -24,15 +25,16 @@
     <Grid>
         <Grid.Resources>
             <ResourceDictionary>
-                <!--<ResourceDictionary.MergedDictionaries>
-                    <hc:ThemeResources RequestedTheme="Dark" />
-                    <hc:Theme />
-                </ResourceDictionary.MergedDictionaries>-->
-
-                <!--ResourceDictionary.MergedDictionaries>
-                    <ResourceDictionary Source="pack://application:,,,/AdonisUI;component/ColorSchemes/Dark.xaml" />
-                    <ResourceDictionary Source="pack://application:,,,/AdonisUI.ClassicTheme;component/Resources.xaml" />
-                </ResourceDictionary.MergedDictionaries-->
+                <Style x:Key="CanvasEdgeModeStyle" TargetType="Canvas">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsPixelGridSnappingEnabled}" Value="True">
+                            <Setter Property="RenderOptions.EdgeMode" Value="Aliased" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsPixelGridSnappingEnabled}" Value="False">
+                            <Setter Property="RenderOptions.EdgeMode" Value="Unspecified" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
             </ResourceDictionary>
         </Grid.Resources>
         <Grid.ColumnDefinitions>
@@ -63,7 +65,9 @@
                     <Canvas
                         x:Name="WidgetPreview"
                         RenderTransformOrigin="0.5,0.5"
-                        Visibility="{Binding IsLoaded, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        Visibility="{Binding IsLoaded, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Style="{StaticResource CanvasEdgeModeStyle}"
+                        RenderOptions.EdgeMode="Unspecified" />
 
                     <others:LoadingTextControl Grid.Column="0" VisibilityFlag="{Binding IsLoaded}" Small="True" />
                 </Grid>
@@ -335,6 +339,22 @@
                 Click="ClearAndReload"
                 IsEnabled="{ Binding IsLoaded }"
                 Content="Clear cache" />
+            <Button
+                Margin="5,5,5,0"
+                Padding="7,2"
+                Click="TogglePixelGrid"
+                IsEnabled="{Binding IsLoaded}">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                        <Setter Property="Content" Value="Grid Snap Off" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsPixelGridSnappingEnabled}" Value="True">
+                                <Setter Property="Content" Value="Grid Snap On" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
 
         </StackPanel>
         <TextBlock
