@@ -70,9 +70,9 @@
             hc:InfoElement.Title="Creation Location"
             hc:InfoElement.TitlePlacement="Top"
             hc:InfoElement.TitleWidth="120"
-            IsReadOnly="True"
             VerifyFunc="VerifyFolder" />
 
+        <!-- Button position in preview is plain wrong. Don't fix. -->
         <Button
             x:Name="ProjectPathButton"
             Grid.Row="2"
