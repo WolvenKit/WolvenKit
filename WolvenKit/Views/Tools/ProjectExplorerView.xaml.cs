@@ -766,7 +766,7 @@ namespace WolvenKit.Views.Tools
                     if (targetFile == sourceFile && isCopy)
                     {
                         var directoryName = Path.GetFileName(Path.GetDirectoryName(sourceFile)) ?? "INVALID";
-                        relativePath = relativePath.Replace(directoryName, $"{directoryName} - Copy");
+                        relativePath = relativePath.Replace(directoryName, $"{directoryName}_copy");
                         targetFile = Path.Combine(targetDirectory, relativePath);
                     }
 
@@ -815,7 +815,7 @@ namespace WolvenKit.Views.Tools
                     }
 
                     var filenameWithoutExtension = Path.GetFileNameWithoutExtension(targetFile);
-                    targetFile = targetFile.Replace(filenameWithoutExtension, $"{filenameWithoutExtension} - Copy");
+                    targetFile = targetFile.Replace(filenameWithoutExtension, $"{filenameWithoutExtension}_copy");
                 }
 
                 var containingDirectory = Path.GetDirectoryName(targetFile) ?? "";
