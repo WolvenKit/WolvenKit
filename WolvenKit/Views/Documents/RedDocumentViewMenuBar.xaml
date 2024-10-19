@@ -95,6 +95,18 @@
             <Style x:Key="ToolbarItemInMaterialFileStyle" TargetType="{x:Type MenuItem}" BasedOn="{StaticResource WolvenKitToolBarItemWithChildren}">
                 <Setter Property="Visibility" Value="Collapsed" />
                 <Style.Triggers>
+                    <DataTrigger Binding="{Binding Path=HasItems, RelativeSource={RelativeSource Self}}" Value="True">
+                        <Setter Property="Icon">
+                            <Setter.Value>
+                                <iconPacks:PackIconMaterial Kind="ChevronDown" Width="8" Height="7" Margin="6, 2, 0, 0" />
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="FlowDirection">
+                            <Setter.Value>
+                                <FlowDirection>RightToLeft</FlowDirection>
+                            </Setter.Value>
+                        </Setter>
+                    </DataTrigger>
                     <DataTrigger
                         Binding="{Binding  Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
                         Value="{x:Static documents:RedDocumentItemType.Mi}">
@@ -202,26 +214,16 @@
               ContextMenuOpening="OnMenuOpened"
               ContextMenuClosing="OnMenuClosed">
 
-            <MenuItem Style="{StaticResource EditorModeParentDisplayStyle}">
+            <MenuItem Style="{StaticResource EditorModeParentDisplayStyle}"
+                      FlowDirection="RightToLeft"
+                      Padding="0, 5, 2, 2">
+                <MenuItem.Icon>
+                    <iconPacks:PackIconMaterial Kind="ChevronDown" Width="8" Height="7"
+                                                Margin="6, 2, 0, 0" />
+                </MenuItem.Icon>
                 <MenuItem Header="Easy" Click="OnEditorModeClick_Easy" Style="{StaticResource EditorModeDisplayStyle}" />
                 <MenuItem Header="Default" Click="OnEditorModeClick_Default" Style="{StaticResource EditorModeDisplayStyle_Yellow}" />
                 <MenuItem Header="Advanced" Click="OnEditorModeClick_Advanced" Style="{StaticResource EditorModeDisplayStyle_Red}" />
-            </MenuItem>
-
-            <!-- Run file validation -->
-            <MenuItem Header="File Validation"
-                      Style="{StaticResource WolvenKitToolBarItem}"
-                      Click="OnFileValidationClick">
-                <MenuItem.Icon>
-                    <iconPacks:PackIconCodicons
-                        Width="13"
-                        Height="14"
-                        Padding="0,0,0,5"
-                        Margin="0,0,0,0"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Top"
-                        Kind="Play" />
-                </MenuItem.Icon>
             </MenuItem>
 
             <!-- Mesh file: Materials menu -->
@@ -325,6 +327,24 @@
                       Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                       Style="{StaticResource WolvenKitToolBarItem}"
                       Command="{Binding Path= GenerateNewCruidCommand}">
+            </MenuItem>
+
+            <!-- Run file validation -->
+            <MenuItem Header="File Validation"
+                      Style="{StaticResource WolvenKitToolBarItem}"
+                      Click="OnFileValidationClick"
+                      Padding="0, 1, 2, 2">
+                <MenuItem.Icon>
+                    <iconPacks:PackIconMaterial
+                        Width="13"
+                        Height="16"
+                        Padding="0,2,0,5"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Foreground="{StaticResource WolvenKitGreen}"
+                        Kind="Play" />
+                </MenuItem.Icon>
             </MenuItem>
             
             
