@@ -224,7 +224,6 @@ public partial class PropertiesViewModel : ToolViewModel
         }
 
         CR2WFile? cr2WFile = null;
-        // TODO: This fails for .inkatlas files
         using (var stream = new FileStream(model.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096,
                    FileOptions.SequentialScan))
         {
