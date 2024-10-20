@@ -50,6 +50,7 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" MinWidth="240" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <Button
@@ -119,10 +120,24 @@
                 VerticalAlignment="Top"
                 ToolTip="Reload and run"
                 Command="{Binding RunScriptCommand}"
-                IsEnabled="{Binding CanRunScript}">
+                IsEnabled="{Binding CanRunScript}"
+                Visibility="{Binding IsRunningScript, Converter={StaticResource InvertBooleanVisibilityConverter}}">
                 <iconPacks:PackIconMaterial
                     Foreground="Green"
                     Kind="Play" />
+            </Button>
+
+            <Button
+                x:Name="StopButton"
+                Grid.Column="3"
+                Margin="0,0,4,0"
+                VerticalAlignment="Top"
+                ToolTip="Stop running script"
+                Command="{Binding StopScriptCommand}"
+                Visibility="{Binding IsRunningScript, Converter={StaticResource BooleanVisibilityConverter}}">
+                <iconPacks:PackIconMaterial
+                    Foreground="{StaticResource WolvenKitRed}"
+                    Kind="Stop" />
             </Button>
         </Grid>
 
