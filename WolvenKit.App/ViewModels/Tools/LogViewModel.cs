@@ -47,6 +47,9 @@ public partial class LogViewModel : ToolViewModel
     [NotifyPropertyChangedFor(nameof(CanRunScript))]
     private ScriptFileViewModel? _selectedScriptFile;
 
+    [ObservableProperty]
+    private bool _isRunningScript;
+
     public bool CanRunScript => SelectedScriptFile != null;
 
     [ObservableProperty]
@@ -88,7 +91,7 @@ public partial class LogViewModel : ToolViewModel
     [RelayCommand]
     private async Task RunScript()
     {
-        if (!CanRunScript)
+        if (!CanRunScript || IsRunningScript)
         {
             return;
         }
@@ -99,7 +102,20 @@ public partial class LogViewModel : ToolViewModel
             return;
         }
         scriptFile.Reload(_loggerService);
+        IsRunningScript = true;
         await _scriptService.ExecuteAsync(scriptFile.Code);
+        IsRunningScript = false;
+    }
+
+    [RelayCommand]
+    private void StopScript()
+    {
+        if (!IsRunningScript)
+        {
+            return;
+        }
+        _scriptService.Stop();
+        IsRunningScript = false;
     }
 
 
