@@ -21,6 +21,8 @@ public static class LogCodeHelper
             "https://wiki.redmodding.org/cyberpunk-2077-modding/modding-guides/textures-and-luts/images-importing-editing-exporting#must-have-dimensions-in-powers-of-2");
         s_mapping.Add(0x2003,
             "https://wiki.redmodding.org/cyberpunk-2077-modding/modding-guides/textures-and-luts/images-importing-editing-exporting#all-images-must-be-the-same-size");
+        s_mapping.Add(0x2004, // morphtarget: no chunks
+            "https://wiki.redmodding.org/cyberpunk-2077-modding/modding-guides/npcs/a-new-head-for-v#step-6-optional-disabling-the-character-creator");
 
         // 3: modKit stuff
 
