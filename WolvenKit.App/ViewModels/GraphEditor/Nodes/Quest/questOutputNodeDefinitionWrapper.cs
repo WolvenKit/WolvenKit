@@ -7,6 +7,7 @@ public class questOutputNodeDefinitionWrapper : questIONodeDefinitionWrapper<que
 {
     public questOutputNodeDefinitionWrapper(questOutputNodeDefinition questOutputNodeDefinition) : base(questOutputNodeDefinition)
     {
+        Details.Add("Type", questOutputNodeDefinition.Type.ToEnumString());
     }
 
     internal override void GenerateSockets()
