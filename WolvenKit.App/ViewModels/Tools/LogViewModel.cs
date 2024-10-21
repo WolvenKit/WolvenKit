@@ -39,6 +39,8 @@ public partial class LogViewModel : ToolViewModel
 
     // private readonly ReadOnlyObservableCollection<LogEntry> _logEntries;
     // public ReadOnlyObservableCollection<LogEntry> LogEntries => _logEntries;
+    [ObservableProperty]
+    private bool[] _filterByLevel = { true, true, true, true, true };
 
     private readonly ObservableCollection<ScriptFileViewModel> _scriptFiles = new();
     public CollectionViewSource ScriptFiles { get; } = new();
@@ -80,6 +82,27 @@ public partial class LogViewModel : ToolViewModel
         //     .ObserveOn(RxApp.MainThreadScheduler)
         //     .Bind(out _logEntries)
         //     .Subscribe(OnNext);
+    }
+
+    [RelayCommand]
+    private void ToggleFilterLevel(string index)
+    {
+        if (!int.TryParse(index, out var level))
+        {
+            level = -1;
+        }
+        if (level < 0 || level >= FilterByLevel.Length)
+        {
+            return;
+        }
+        var copy = (bool[])FilterByLevel.Clone();
+
+        copy[level] = !copy[level];
+        if (copy.All(value => !value))
+        {
+            return;
+        }
+        FilterByLevel = copy;
     }
 
     [RelayCommand]
