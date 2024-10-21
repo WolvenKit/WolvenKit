@@ -315,7 +315,7 @@
                     <ScrollViewer
                         Background="#131313"
                         Loaded="ScrollViewer_Loaded"
-                        VerticalScrollBarVisibility="Disabled">
+                        PreviewKeyDown="ScrollViewer_OnKeyDown">
                         <ItemsPresenter />
                     </ScrollViewer>
                 </ControlTemplate>

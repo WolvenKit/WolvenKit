@@ -204,5 +204,16 @@ namespace WolvenKit.Views.Tools
             // TODO: Implement scrolling and copy
         }
 
+        private void ScrollViewer_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.PageUp)
+            {
+                _scrollViewer?.PageUp();
+            }
+            else if (e.Key == Key.PageDown)
+            {
+                _scrollViewer?.PageDown();
+            }
+        }
     }
 }
