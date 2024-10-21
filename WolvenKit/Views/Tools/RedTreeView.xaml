@@ -746,7 +746,7 @@
 
                 <!-- Delete Selection -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.DeleteSelectionCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Command="{Binding Path=DeleteSelectionCommand, Source={x:Reference redTreeView}}"
                     Header="Delete Selection in Array/Buffer"
                     IsCheckable="False"
                     

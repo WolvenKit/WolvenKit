@@ -1996,15 +1996,19 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
             
             Parent.RecalculateProperties();
-            newSelectionIndex = Math.Min(newSelectionIndex, Parent.TVProperties.Count) - 1;
-            newSelectionIndex = Math.Max(0, newSelectionIndex);
-            if (Parent.TVProperties.Count > 0 && newSelectionIndex > 0 && newSelectionIndex < Parent.TVProperties.Count)
+
+            if (!Tab.HasActiveSearch)
             {
-                Tab.SetSelection(Parent.TVProperties[newSelectionIndex]);
-            }
-            else
-            {
-                Tab.SetSelection(Parent.TVProperties.LastOrDefault() ?? Parent);
+                newSelectionIndex = Math.Min(newSelectionIndex, Parent.TVProperties.Count) - 1;
+                newSelectionIndex = Math.Max(0, newSelectionIndex);
+                if (Parent.TVProperties.Count > 0 && newSelectionIndex > 0 && newSelectionIndex < Parent.TVProperties.Count)
+                {
+                    Tab.SetSelection(Parent.TVProperties[newSelectionIndex]);
+                }
+                else
+                {
+                    Tab.SetSelection(Parent.TVProperties.LastOrDefault() ?? Parent);
+                }
             }
             Tab.Parent.SetIsDirty(true);
         }
@@ -2023,7 +2027,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     [RelayCommand(CanExecute = nameof(CanAddToProject))]
     private Task AddToProject() => AddToProjectTask();
 
-    private void DeleteNodesInParent(List<ChunkViewModel> nodes)
+    public void DeleteNodesInParent(List<ChunkViewModel> nodes)
     {
         ArgumentNullException.ThrowIfNull(Parent);
         ArgumentNullException.ThrowIfNull(Tab);
