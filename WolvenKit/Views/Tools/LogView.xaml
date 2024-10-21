@@ -43,93 +43,200 @@
             <converters:NullVisibilityConverter x:Key="NullVisibilityConverter" />
         </Grid.Resources>
 
-        <Grid x:Name="ScriptShortcutGrid"
-              Grid.Row="0"
-              Grid.Column="0">
+        <Grid
+            x:Name="LogViewHeader"
+            Grid.Row="0"
+            Grid.Column="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" MinWidth="240" />
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Button
-                x:Name="UpdateButton"
+            <Grid.Resources>
+                <Style x:Key="LogLevelButtonStyle"
+                       TargetType="{x:Type Button}"
+                       BasedOn="{StaticResource WPFButtonStyle}">
+                    <Setter Property="Focusable" Value="False" />
+                    <Setter Property="Margin" Value="0,0,4,0" />
+                    <Setter Property="Padding" Value="6" />
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="0" />
+
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#10FFFFFF" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Resources>
+
+            <StackPanel
+                x:Name="LogLevelFilter"
                 Grid.Column="0"
-                Margin="0,0,4,0"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                ToolTip="Update scripts"
-                Command="{Binding UpdateScriptsCommand}">
-                <iconPacks:PackIconMaterial
-                    Foreground="White"
-                    Kind="Refresh" />
-            </Button>
+                Margin="4,0,0,0"
+                Orientation="Horizontal"
+                VerticalAlignment="Center">
+                <Button
+                    x:Name="FilterErrorButton"
+                    Style="{StaticResource LogLevelButtonStyle}"
+                    Command="{Binding ToggleFilterLevelCommand}"
+                    CommandParameter="0"
+                    ToolTip="Error">
+                    <iconPacks:PackIconMaterial
+                        Kind="AlphaEBox"
+                        Foreground="{StaticResource WolvenKitRed}" />
+                </Button>
 
-            <ComboBox
-                x:Name="ScriptFileComboBox"
-                Grid.Column="1"
-                Margin="0,0,4,4"
-                ToolTip="Select script"
-                IsEditable="False"
-                IsReadOnly="True"
-                ItemsSource="{Binding ScriptFiles.View}"
-                SelectedItem="{Binding SelectedScriptFile}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Vertical"
-                                    ToolTip="{Binding HoverInfo}">
-                            <TextBlock Text="{Binding Name}" />
-                            <TextBlock x:Name="Info"
-                                       Text="{Binding SelectInfo}" />
-                        </StackPanel>
+                <Button
+                    x:Name="FilterWarningButton"
+                    Style="{StaticResource LogLevelButtonStyle}"
+                    Command="{Binding ToggleFilterLevelCommand}"
+                    CommandParameter="1"
+                    ToolTip="Warning">
+                    <iconPacks:PackIconMaterial
+                        Kind="AlphaWBox"
+                        Foreground="{StaticResource WolvenKitYellow}" />
+                </Button>
 
-                        <DataTemplate.Triggers>
-                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ComboBoxItem}}"
-                                         Value="{x:Null}">
-                                <Setter TargetName="Info"
-                                        Property="Visibility"
-                                        Value="Collapsed" />
-                            </DataTrigger>
-                        </DataTemplate.Triggers>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-                
-                <ComboBox.GroupStyle>
-                    <GroupStyle>
-                        <GroupStyle.HeaderTemplate>
-                            <DataTemplate>
-                                <Border BorderBrush="White"
-                                        BorderThickness="0,0,0,1"
-                                        Padding="15,0,0,7">
-                                    <StackPanel Orientation="Vertical">
-                                        <TextBlock Text="{Binding Name}"
-                                                   FontSize="14" />
-                                    </StackPanel>
-                                </Border>
-                            </DataTemplate>
-                        </GroupStyle.HeaderTemplate>
-                    </GroupStyle>
-                </ComboBox.GroupStyle>
-            </ComboBox>
+                <Button
+                    x:Name="FilterSuccessButton"
+                    Style="{StaticResource LogLevelButtonStyle}"
+                    Command="{Binding ToggleFilterLevelCommand}"
+                    CommandParameter="2"
+                    ToolTip="Success">
+                    <iconPacks:PackIconMaterial
+                        Kind="AlphaSBox"
+                        Foreground="{StaticResource WolvenKitGreen}" />
+                </Button>
 
-            <Button
-                x:Name="RunButton"
+                <Button
+                    x:Name="FilterInfoButton"
+                    Style="{StaticResource LogLevelButtonStyle}"
+                    Command="{Binding ToggleFilterLevelCommand}"
+                    CommandParameter="3"
+                    ToolTip="Normal / Important">
+                    <iconPacks:PackIconMaterial
+                        Kind="AlphaIBox"
+                        Foreground="White" />
+                </Button>
+
+                <Button
+                    Margin="0"
+                    x:Name="FilterDebugButton"
+                    Style="{StaticResource LogLevelButtonStyle}"
+                    Command="{Binding ToggleFilterLevelCommand}"
+                    CommandParameter="4"
+                    ToolTip="Debug">
+                    <iconPacks:PackIconMaterial
+                        Kind="AlphaDBox"
+                        Foreground="{StaticResource WolvenKitPurple}" />
+                </Button>
+            </StackPanel>
+            
+            <Grid
+                x:Name="ScriptShortcutGrid"
                 Grid.Column="2"
-                Margin="0,0,4,0"
-                VerticalAlignment="Top"
-                ToolTip="Reload and run"
-                Command="{Binding RunScriptCommand}"
-                IsEnabled="{Binding CanRunScript}">
-                <iconPacks:PackIconMaterial
-                    Foreground="Green"
-                    Kind="Play" />
-            </Button>
+                HorizontalAlignment="Right">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" MinWidth="240" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Button
+                    x:Name="UpdateButton"
+                    Grid.Column="0"
+                    Margin="0,0,4,0"
+                    VerticalAlignment="Top"
+                    ToolTip="Update scripts"
+                    Command="{Binding UpdateScriptsCommand}">
+                    <iconPacks:PackIconMaterial
+                        Foreground="White"
+                        Kind="Refresh" />
+                </Button>
+
+                <ComboBox
+                    x:Name="ScriptFileComboBox"
+                    Grid.Column="1"
+                    Margin="0,0,4,4"
+                    ToolTip="Select script"
+                    IsEditable="False"
+                    IsReadOnly="True"
+                    ItemsSource="{Binding ScriptFiles.View}"
+                    SelectedItem="{Binding SelectedScriptFile}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical"
+                                        ToolTip="{Binding HoverInfo}">
+                                <TextBlock Text="{Binding Name}" />
+                                <TextBlock x:Name="Info"
+                                           Text="{Binding SelectInfo}" />
+                            </StackPanel>
+
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ComboBoxItem}}"
+                                             Value="{x:Null}">
+                                    <Setter TargetName="Info"
+                                            Property="Visibility"
+                                            Value="Collapsed" />
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+
+                    <ComboBox.GroupStyle>
+                        <GroupStyle>
+                            <GroupStyle.HeaderTemplate>
+                                <DataTemplate>
+                                    <Border BorderBrush="White"
+                                            BorderThickness="0,0,0,1"
+                                            Padding="15,0,0,7">
+                                        <StackPanel Orientation="Vertical">
+                                            <TextBlock Text="{Binding Name}"
+                                                       FontSize="14" />
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </GroupStyle.HeaderTemplate>
+                        </GroupStyle>
+                    </ComboBox.GroupStyle>
+                </ComboBox>
+
+                <Button
+                    x:Name="RunButton"
+                    Grid.Column="2"
+                    Margin="0,0,4,0"
+                    VerticalAlignment="Top"
+                    ToolTip="Reload and run"
+                    Command="{Binding RunScriptCommand}"
+                    IsEnabled="{Binding CanRunScript}"
+                    Visibility="{Binding IsRunningScript, Converter={StaticResource InvertBooleanVisibilityConverter}}">
+                    <iconPacks:PackIconMaterial
+                        Foreground="Green"
+                        Kind="Play" />
+                </Button>
+
+                <Button
+                    x:Name="StopButton"
+                    Grid.Column="3"
+                    Margin="0,0,4,0"
+                    VerticalAlignment="Top"
+                    ToolTip="Stop running script"
+                    Command="{Binding StopScriptCommand}"
+                    Visibility="{Binding IsRunningScript, Converter={StaticResource BooleanVisibilityConverter}}">
+                    <iconPacks:PackIconMaterial
+                        Foreground="{StaticResource WolvenKitRed}"
+                        Kind="Stop" />
+                </Button>
+            </Grid>
         </Grid>
 
         <ItemsControl
             Grid.Row="1"
             Grid.Column="0"
-            ItemsSource="{Binding ElementName=uc, Path=LogEntries}"
+            ItemsSource="{Binding ElementName=uc, Path=FilteredLogEntries}"
             ScrollViewer.CanContentScroll="True"
             VirtualizingPanel.ScrollUnit="Pixel"
             KeyUp="LogView_OnKeyUp"
@@ -208,7 +315,7 @@
                     <ScrollViewer
                         Background="#131313"
                         Loaded="ScrollViewer_Loaded"
-                        VerticalScrollBarVisibility="Disabled">
+                        PreviewKeyDown="ScrollViewer_OnKeyDown">
                         <ItemsPresenter />
                     </ScrollViewer>
                 </ControlTemplate>
