@@ -7,6 +7,7 @@
     xmlns:exporters="clr-namespace:WolvenKit.Views.Exporters"
     xmlns:exportvms="clr-namespace:WolvenKit.App.ViewModels.Exporters;assembly=WolvenKit.App"
     xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:importers="clr-namespace:WolvenKit.Views.Importers"
     xmlns:importvms="clr-namespace:WolvenKit.App.ViewModels.Importers;assembly=WolvenKit.App"
@@ -126,6 +127,7 @@
                 <!--  Resource Dictionaries  -->
                 <ResourceDictionary Source="pack://application:,,,/WolvenKit;Component/Themes/App.Icons.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/WolvenKit;Component/Themes/App.Styles.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/WolvenKit;Component/Themes/App.Scales.xaml" />
 
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Dark.Crimson.xaml" />
 
@@ -202,6 +204,12 @@
 
             <SolidColorBrush x:Key="AccentColorBrush" Color="Black" />
 
+            <Style
+                TargetType="{x:Type syncfusion:WizardNavigationArea}" 
+                BasedOn="{StaticResource SyncfusionWizardNavigationAreaStyle}">
+                <Setter Property="MinHeight" Value="{DynamicResource WolvenKitWizardNavBarMinHeight}" />
+                <Setter Property="Padding" Value="{DynamicResource WolvenKitMarginSmallVertical}" />
+            </Style>
         </ResourceDictionary>
 
     </Application.Resources>

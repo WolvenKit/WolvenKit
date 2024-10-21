@@ -76,6 +76,8 @@ public interface ISettingsDto
     // public bool ReopenLastProject { get; set; }
     // public bool ShowVerboseLogOutput { get; set; }
     public string ArchiveNamesExcludeFromScan { get; set; }
+    public int UiScale { get; set; }
+    public double UiScalePercentage => (double)UiScale / 100.0;
 
     #endregion
 

@@ -13,7 +13,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Name="PercentageThing" Width="4*" />
             <ColumnDefinition Width="200*" />
-            <ColumnDefinition Width="380" />
+            <ColumnDefinition Width="{DynamicResource WolvenKitWelcomeRightLength}" />
             <ColumnDefinition x:Name="PercentageThingHalf" Width="1*" />
             <ColumnDefinition Width="3*" />
         </Grid.ColumnDefinitions>
@@ -25,7 +25,6 @@
 
         <Grid.Resources>
             <ResourceDictionary>
-
                 <Style
                     x:Key="WelcomeButton"
                     BasedOn="{StaticResource ButtonDefault}"
@@ -37,6 +36,7 @@
                         </Trigger>
                     </Style.Triggers>
                 </Style>
+                
                 <Style x:Key="CardViewItemStyle" TargetType="{x:Type syncfusion:CardViewItem}">
                     <Setter Property="Width" Value="Auto" />
                     <Setter Property="Margin" Value="0,0,0,10" />
@@ -106,15 +106,15 @@
                                                         </Style>
                                                     </Grid.Resources>
                                                     <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="70" />
+                                                        <ColumnDefinition Width="{DynamicResource WolvenKitWelcomeCardSammyWidth}" />
                                                         <ColumnDefinition Width="*" />
                                                     </Grid.ColumnDefinitions>
                                                     <Border
-                                                        Height="70"
+                                                        Height="{DynamicResource WolvenKitWelcomeCardSammyHeight}"
                                                         CornerRadius="3"
                                                         Style="{StaticResource ProjectIconBackground}">
                                                         <Image
-                                                            Width="50"
+                                                            Width="{DynamicResource WolvenKitWelcomeCardSammyClipHeight}"
                                                             HorizontalAlignment="Center"
                                                             VerticalAlignment="Center"
                                                             RenderOptions.BitmapScalingMode="HighQuality"
@@ -125,7 +125,7 @@
                                                         Margin="10,5,0,8"
                                                         VerticalAlignment="Center">
                                                         <TextBlock
-                                                            FontSize="16"
+                                                            FontSize="{DynamicResource WolvenKitMediumFontSize}"
                                                             FontWeight="Bold"
                                                             Foreground="White"
                                                             Text="{Binding Path=SafeName}"
@@ -133,11 +133,12 @@
                                                         <TextBlock
                                                             Margin="0,1,0,2"
                                                             HorizontalAlignment="Left"
-                                                            FontSize="12"
+                                                            FontSize="{DynamicResource WolvenKitSubTitleFontSize}"
                                                             Foreground="#999999"
                                                             Text="{Binding Path=ProjectPath}"
                                                             TextTrimming="CharacterEllipsis" />
-                                                        <TextBlock FontSize="10" Text="{Binding CreationDate}" />
+                                                        <TextBlock FontSize="{DynamicResource WolvenKitAltTitleFontSize}"
+                                                                   Text="{Binding CreationDate}" />
                                                     </StackPanel>
                                                 </Grid>
                                             </Border>
@@ -151,7 +152,7 @@
                                         Orientation="Vertical">
 
                                         <ToggleButton
-                                            Padding="10,5"
+                                            Padding="{DynamicResource WolvenKitWelcomeTogglePadding}"
                                             IsChecked="{Binding IsPinned, Mode=TwoWay}"
                                             Style="{StaticResource ToggleButtonCustom}"
                                             ToolTip="Pin project">
@@ -165,11 +166,11 @@
                                                     </Style.Triggers>
                                                 </Style>
                                             </ToggleButton.Resources>
-                                            <iconPacks:PackIconCodicons Width="16" />
+                                            <iconPacks:PackIconCodicons Width="{DynamicResource WolvenKitTinyIconSize}" />
                                         </ToggleButton>
 
                                         <Button
-                                            Padding="10,5"
+                                            Padding="{DynamicResource WolvenKitWelcomeTogglePadding}"
                                             Command="{Binding ElementName=topGrid, Path=DataContext.OpenInExplorerCommand}"
                                             CommandParameter="{Binding ProjectPath}"
                                             Style="{StaticResource ButtonCustom}"
@@ -184,12 +185,13 @@
                                                     </Style.Triggers>
                                                 </Style>
                                             </Button.Resources>
-                                            <iconPacks:PackIconCodicons Width="16" Kind="FolderOpened" />
+                                            <iconPacks:PackIconCodicons Width="{DynamicResource WolvenKitTinyIconSize}"
+                                                                        Kind="FolderOpened" />
                                         </Button>
 
                                         <Button
                                             x:Name="RUIDeleteProjectButton"
-                                            Padding="10,5"
+                                            Padding="{DynamicResource WolvenKitWelcomeTogglePadding}"
                                             Command="{Binding ElementName=topGrid, Path=DataContext.DeleteProjectCommand}"
                                             CommandParameter="{Binding ProjectPath}"
                                             Style="{StaticResource ButtonCustom}"
@@ -204,7 +206,8 @@
                                                     </Style.Triggers>
                                                 </Style>
                                             </Button.Resources>
-                                            <iconPacks:PackIconCodicons Width="14" Kind="ChromeClose" />
+                                            <iconPacks:PackIconCodicons Width="{DynamicResource WolvenKitTinyIconSize}"
+                                                                        Kind="ChromeClose" />
                                         </Button>
                                     </StackPanel>
                                 </Grid>
@@ -237,7 +240,9 @@
             </Grid.RowDefinitions>
 
             <!--  Pinned Projects  -->
-            <Grid Grid.Row="0" Visibility="{Binding ShowPinned, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid Grid.Row="0"
+                  Margin="{DynamicResource WolvenKitMarginBottom}"
+                  Visibility="{Binding ShowPinned, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
@@ -251,8 +256,8 @@
                         Orientation="Horizontal">
                         <Border Width="{Binding ActualWidth, ElementName=PercentageThingHalf}" />
                         <iconPacks:PackIconCodicons
-                            Width="18"
-                            Height="18"
+                            Width="{DynamicResource WolvenKitSmallIconSize}"
+                            Height="{DynamicResource WolvenKitSmallIconSize}"
                             VerticalAlignment="Center"
                             Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                             Kind="StarFull"
@@ -261,18 +266,18 @@
 
                         <TextBlock
                             x:Name="PinnedProjectTour"
-                            Margin="8,0,0,0"
-                            FontSize="24"
+                            Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                            FontSize="{DynamicResource WolvenKitTitleFontSize}"
                             Text="Pinned Projects" />
                     </StackPanel>
                     <StackPanel
                         Margin="9,0,0,20"
                         HorizontalAlignment="Right"
                         Orientation="Horizontal">
-                        <TextBox x:Name="PinnedFilter" Width="140" />
+                        <TextBox x:Name="PinnedFilter" Width="{DynamicResource WolvenKitWelcomeOrderWidth}" />
                         <ComboBox
                             x:Name="PinnedOrder"
-                            Width="140"
+                            Width="{DynamicResource WolvenKitWelcomeOrderWidth}"
                             DisplayMemberPath="Key"
                             ItemsSource="{Binding SortMode, Mode=OneWay}"
                             SelectedValuePath="Value" />
@@ -316,8 +321,8 @@
                         Orientation="Horizontal">
                         <Border Width="{Binding ActualWidth, ElementName=PercentageThingHalf}" />
                         <iconPacks:PackIconCodicons
-                            Width="18"
-                            Height="18"
+                            Width="{DynamicResource WolvenKitSmallIconSize}"
+                            Height="{DynamicResource WolvenKitSmallIconSize}"
                             VerticalAlignment="Center"
                             Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                             Kind="GoToFile"
@@ -326,18 +331,18 @@
 
                         <TextBlock
                             x:Name="RecentProjectTour"
-                            Margin="8,0,0,0"
-                            FontSize="24"
+                            Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                            FontSize="{DynamicResource WolvenKitTitleFontSize}"
                             Text="Recent Projects" />
                     </StackPanel>
                     <StackPanel
                         Margin="9,0,0,20"
                         HorizontalAlignment="Right"
                         Orientation="Horizontal">
-                        <TextBox x:Name="RecentFilter" Width="140" />
+                        <TextBox x:Name="RecentFilter" Width="{DynamicResource WolvenKitWelcomeOrderWidth}" />
                         <ComboBox
                             x:Name="RecentOrder"
-                            Width="140"
+                            Width="{DynamicResource WolvenKitWelcomeOrderWidth}"
                             DisplayMemberPath="Key"
                             ItemsSource="{Binding SortMode, Mode=OneWay}"
                             SelectedValuePath="Value" />
@@ -371,39 +376,39 @@
         <Grid Grid.Row="1" Grid.Column="2">
             <Grid>
                 <Border
-                    Margin="0,0,0,0"
+                    Margin="0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top">
                     <StackPanel>
                         <Button
                             x:Name="NewProjectButton"
-                            Height="100"
-                            Margin="0,0,0,4"
+                            Height="{DynamicResource WolvenKitWelcomeButtonHeight}"
+                            Margin="{DynamicResource WolvenKitWelcomeButtonMargin}"
+                            Padding="{DynamicResource WolvenKitWelcomeButtonPadding}"
                             HorizontalAlignment="Stretch"
                             BorderThickness="0"
                             Style="{StaticResource WelcomeButton}">
                             <Grid>
-                                <StackPanel Height="70">
+                                <StackPanel Height="{DynamicResource WolvenKitWelcomeStackHeight}"
+                                            Margin="{DynamicResource WolvenKitWelcomeStackMargin}">
                                     <TextBlock
-                                        Width="250"
-                                        Margin="0,0,50,0"
+                                        Width="{DynamicResource WolvenKitWelcomeButtonWidth}"
                                         HorizontalAlignment="Center"
-                                        FontSize="20"
+                                        FontSize="{DynamicResource WolvenKitHeaderFontSize}"
                                         Text="Create a new project" />
 
                                     <TextBlock
-                                        Width="250"
-                                        Margin="0,4,50,0"
+                                        Width="{DynamicResource WolvenKitWelcomeButtonWidth}"
                                         HorizontalAlignment="Center"
-                                        FontSize="12"
+                                        FontSize="{DynamicResource WolvenKitSubTitleFontSize}"
                                         Foreground="Gray"
                                         Text="Get started with WolvenKit by creating a new mod project"
                                         TextWrapping="Wrap" />
                                 </StackPanel>
                                 <iconPacks:PackIconCodicons
-                                    Width="36"
-                                    Height="36"
-                                    Margin="0,0,0,0"
+                                    Width="{DynamicResource WolvenKitHugeIconSize}"
+                                    Height="{DynamicResource WolvenKitHugeIconSize}"
+                                    Margin="0"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Center"
                                     Kind="Add" />
@@ -412,33 +417,33 @@
 
                         <Button
                             x:Name="OpenProjectButton"
-                            Height="100"
-                            Margin="0,4"
+                            Height="{DynamicResource WolvenKitWelcomeButtonHeight}"
+                            Margin="{DynamicResource WolvenKitWelcomeButtonMargin}"
+                            Padding="{DynamicResource WolvenKitWelcomeButtonPadding}"
                             HorizontalAlignment="Stretch"
                             BorderThickness="0"
                             Style="{StaticResource WelcomeButton}">
-                            <Grid Width="300">
-                                <StackPanel Height="70">
+                            <Grid>
+                                <StackPanel Height="{DynamicResource WolvenKitWelcomeStackHeight}"
+                                            Margin="{DynamicResource WolvenKitWelcomeStackMargin}">
                                     <TextBlock
-                                        Width="250"
-                                        Margin="0,0,50,0"
+                                        Width="{DynamicResource WolvenKitWelcomeButtonWidth}"
                                         HorizontalAlignment="Center"
-                                        FontSize="20"
+                                        FontSize="{DynamicResource WolvenKitHeaderFontSize}"
                                         Text="Open a project" />
 
                                     <TextBlock
-                                        Width="250"
-                                        Margin="0,4,50,0"
+                                        Width="{DynamicResource WolvenKitWelcomeButtonWidth}"
                                         HorizontalAlignment="Center"
-                                        FontSize="12"
+                                        FontSize="{DynamicResource WolvenKitSubTitleFontSize}"
                                         Foreground="Gray"
                                         Text="Open an existing .modproj file"
                                         TextWrapping="Wrap" />
                                 </StackPanel>
                                 <iconPacks:PackIconCodicons
-                                    Width="36"
-                                    Height="36"
-                                    Margin="0,0,0,0"
+                                    Width="{DynamicResource WolvenKitHugeIconSize}"
+                                    Height="{DynamicResource WolvenKitHugeIconSize}"
+                                    Margin="0"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Center"
                                     Kind="GoToFile" />
@@ -447,34 +452,33 @@
 
                         <Button
                             x:Name="ContinueWithoutProjectButton"
-                            Width="350"
-                            Height="100"
-                            Margin="0,4,0,0"
+                            Height="{DynamicResource WolvenKitWelcomeButtonHeight}"
+                            Margin="{DynamicResource WolvenKitWelcomeButtonMargin}"
+                            Padding="{DynamicResource WolvenKitWelcomeButtonPadding}"
                             HorizontalAlignment="Stretch"
                             BorderThickness="0"
                             Style="{StaticResource WelcomeButton}">
-                            <Grid Width="300">
-                                <StackPanel Height="70">
+                            <Grid>
+                                <StackPanel Height="{DynamicResource WolvenKitWelcomeStackHeight}"
+                                            Margin="{DynamicResource WolvenKitWelcomeStackMargin}">
                                     <TextBlock
-                                        Width="250"
-                                        Margin="0,0,50,0"
+                                        Width="{DynamicResource WolvenKitWelcomeButtonWidth}"
                                         HorizontalAlignment="Center"
-                                        FontSize="20"
+                                        FontSize="{DynamicResource WolvenKitHeaderFontSize}"
                                         Text="Continue to editor" />
 
                                     <TextBlock
-                                        Width="250"
-                                        Margin="0,4,50,0"
+                                        Width="{DynamicResource WolvenKitWelcomeButtonWidth}"
                                         HorizontalAlignment="Center"
-                                        FontSize="12"
+                                        FontSize="{DynamicResource WolvenKitSubTitleFontSize}"
                                         Foreground="Gray"
                                         Text="Access the WolvenKit Editor"
                                         TextWrapping="Wrap" />
                                 </StackPanel>
                                 <iconPacks:PackIconCodicons
-                                    Width="36"
-                                    Height="36"
-                                    Margin="0,0,0,0"
+                                    Width="{DynamicResource WolvenKitHugeIconSize}"
+                                    Height="{DynamicResource WolvenKitHugeIconSize}"
+                                    Margin="0"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Center"
                                     Kind="ArrowRight" />
@@ -490,8 +494,8 @@
                             Orientation="Horizontal">
                             <StackPanel Orientation="Horizontal">
                                 <iconPacks:PackIconBoxIcons
-                                    Width="18"
-                                    Height="18"
+                                    Width="{DynamicResource WolvenKitSmallIconSize}"
+                                    Height="{DynamicResource WolvenKitSmallIconSize}"
                                     VerticalAlignment="Center"
                                     Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                     Kind="RegularNetworkChart"
@@ -502,7 +506,7 @@
                                     Margin="8,0"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
-                                    FontSize="24"
+                                    FontSize="{DynamicResource WolvenKitTitleFontSize}"
                                     Text="Socials" />
                             </StackPanel>
                         </StackPanel>
@@ -517,7 +521,7 @@
 
                             <Button
                                 x:Name="DiscordLinkButton"
-                                Height="50"
+                                Height="{DynamicResource WolvenKitWelcomeSocialButtonHeight}"
                                 Margin="0,0,4,0"
                                 HorizontalAlignment="Stretch"
                                 BorderThickness="0"
@@ -525,8 +529,8 @@
 
                                 <StackPanel Orientation="Horizontal">
                                     <iconPacks:PackIconBoxIcons
-                                        Width="16"
-                                        Height="16"
+                                        Width="{DynamicResource WolvenKitSmallIconSize}"
+                                        Height="{DynamicResource WolvenKitSmallIconSize}"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
                                         Kind="LogosDiscord" />
@@ -534,7 +538,7 @@
                                         Margin="7,0,0,0"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
-                                        FontSize="16"
+                                        FontSize="{DynamicResource WolvenKitMediumFontSize}"
                                         Text="Discord" />
                                 </StackPanel>
                             </Button>
@@ -542,7 +546,7 @@
                             <Button
                                 x:Name="YoutubeLinkButton"
                                 Grid.Column="1"
-                                Height="50"
+                                Height="{DynamicResource WolvenKitWelcomeSocialButtonHeight}"
                                 Margin="4,0,0,0"
                                 HorizontalAlignment="Stretch"
                                 BorderThickness="0"
@@ -550,8 +554,8 @@
 
                                 <StackPanel Orientation="Horizontal">
                                     <iconPacks:PackIconBoxIcons
-                                        Width="18"
-                                        Height="18"
+                                        Width="{DynamicResource WolvenKitSmallIconSize}"
+                                        Height="{DynamicResource WolvenKitSmallIconSize}"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
                                         Kind="LogosYoutube" />
@@ -559,7 +563,7 @@
                                         Margin="7,0,0,0"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
-                                        FontSize="16"
+                                        FontSize="{DynamicResource WolvenKitMediumFontSize}"
                                         Text="YouTube" />
                                 </StackPanel>
                             </Button>
@@ -570,8 +574,8 @@
                             FlowDirection="LeftToRight"
                             Orientation="Horizontal">
                             <iconPacks:PackIconBoxIcons
-                                Width="18"
-                                Height="18"
+                                Width="{DynamicResource WolvenKitSmallIconSize}"
+                                Height="{DynamicResource WolvenKitSmallIconSize}"
                                 VerticalAlignment="Center"
                                 Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
                                 Kind="RegularDonateHeart" />
@@ -579,7 +583,7 @@
                                 Margin="10,0,0,0"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
-                                FontSize="24"
+                                FontSize="{DynamicResource WolvenKitTitleFontSize}"
                                 Text="Support Us" />
                         </StackPanel>
 
@@ -591,15 +595,15 @@
                             </Grid.ColumnDefinitions>
                             <Button
                                 x:Name="OpenCollectiveLinkButton"
-                                Height="50"
+                                Height="{DynamicResource WolvenKitWelcomeSocialButtonHeight}"
                                 Margin="0,0,4,0"
                                 HorizontalAlignment="Stretch"
                                 BorderThickness="0"
                                 Style="{StaticResource WelcomeButton}">
                                 <StackPanel Orientation="Horizontal">
                                     <iconPacks:PackIconBoxIcons
-                                        Width="16"
-                                        Height="16"
+                                        Width="{DynamicResource WolvenKitSmallIconSize}"
+                                        Height="{DynamicResource WolvenKitSmallIconSize}"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
                                         Kind="SolidDonateHeart" />
@@ -607,7 +611,7 @@
                                         Margin="7,0,0,0"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
-                                        FontSize="16"
+                                        FontSize="{DynamicResource WolvenKitMediumFontSize}"
                                         Text="Open Collective" />
                                 </StackPanel>
                             </Button>
@@ -615,15 +619,15 @@
                             <Button
                                 x:Name="PatreonLinkButton"
                                 Grid.Column="1"
-                                Height="50"
+                                Height="{DynamicResource WolvenKitWelcomeSocialButtonHeight}"
                                 Margin="4,0,0,0"
                                 HorizontalAlignment="Stretch"
                                 BorderThickness="0"
                                 Style="{StaticResource WelcomeButton}">
                                 <StackPanel Orientation="Horizontal">
                                     <iconPacks:PackIconBoxIcons
-                                        Width="16"
-                                        Height="16"
+                                        Width="{DynamicResource WolvenKitSmallIconSize}"
+                                        Height="{DynamicResource WolvenKitSmallIconSize}"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
                                         Kind="LogosPatreon" />
@@ -631,7 +635,7 @@
                                         Margin="7,0,0,0"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
-                                        FontSize="16"
+                                        FontSize="{DynamicResource WolvenKitMediumFontSize}"
                                         Text="Patreon" />
                                 </StackPanel>
                             </Button>

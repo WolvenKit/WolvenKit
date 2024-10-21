@@ -7,17 +7,17 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     Title="Replace in Selection"
+    MinWidth="{DynamicResource WolvenKitDialogWidthSmall}"
+    MinHeight="{DynamicResource WolvenKitDialogHeightSmall}"
     SizeToContent="WidthAndHeight"
     FocusManager.FocusedElement="{Binding ElementName=SearchTextBox}"
     WindowStartupLocation="CenterScreen">
-
     <Grid
-        Margin="5,5,2,5"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch"
         hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
-
         <Grid.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
@@ -27,8 +27,10 @@
             </ResourceDictionary>
         </Grid.Resources>
 
-
-        <syncfusion:WizardControl CancelButtonCancelsWindow="True" FinishButtonClosesWindow="True" Finish="WizardControl_OnFinish">
+        <syncfusion:WizardControl
+            CancelButtonCancelsWindow="True"
+            FinishButtonClosesWindow="True"
+            Finish="WizardControl_OnFinish">
             <syncfusion:WizardPage
                 BackVisibility="Collapsed"
                 CancelVisibility="Visible"
@@ -38,57 +40,77 @@
                 PreviewKeyDown="WizardPage_PreviewKeyDown"
                 PageType="Exterior">
                 <Grid
+                    Margin="{DynamicResource WolvenKitMarginTiny}"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100" />
-                        <ColumnDefinition Width="500" />
-                        <ColumnDefinition Width="40" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitPropertyColumnWidth}" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
+
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="{DynamicResource WolvenKitColumnTiny}" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="{DynamicResource WolvenKitColumnTiny}" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <!-- Search -->
-                    <Label Grid.Column="0" Content="Search:" HorizontalAlignment="Left"
-                           Background="#252525" BorderThickness="0" />
-                    <TextBox x:Name="SearchTextBox" Grid.Column="1" Grid.Row="0" KeyboardNavigation.TabIndex="1"
-                             helpers:TextBoxBehavior.FocusGainedSelectAll="True" />
+                    <TextBlock
+                        Grid.Column="0"
+                        Text="Search:"
+                        VerticalAlignment="Center" />
 
+                    <TextBox
+                        x:Name="SearchTextBox"
+                        Grid.Column="1"
+                        KeyboardNavigation.TabIndex="1"
+                        helpers:TextBoxBehavior.FocusGainedSelectAll="True" />
 
                     <Button
+                        Grid.RowSpan="3"
                         Grid.Column="2"
-                        Margin="5,0,0,0"
+                        Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         Background="Transparent"
                         Click="SwapFieldsButton_OnClick"
                         Style="{StaticResource ButtonCustom}"
-                        ToolTip="Open in new tab">
-                        <iconPacks:PackIconCodicons
-                            Padding="2"
-                            VerticalAlignment="Center"
-                            Kind="ArrowSwap"
-                            RotationAngle="45" />
+                        ToolTip="Swap search and replace fields">
+                        <templates:IconTemplateView
+                            IconPack="Material"
+                            Kind="SwapVertical"
+                            Size="{DynamicResource WolvenKitTinyIconSize}" />
                     </Button>
-                    
 
                     <!-- Replace -->
-                    <Label Grid.Row="1" Grid.Column="0" Content="Replace:" HorizontalAlignment="Left"
-                           Background="#252525" BorderThickness="0" />
-                    <TextBox x:Name="ReplaceTextBox" Grid.Column="1" Grid.Row="1" KeyboardNavigation.TabIndex="2"
-                             helpers:TextBoxBehavior.FocusGainedSelectAll="True" />
+                    <TextBlock
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Text="Replace:"
+                        VerticalAlignment="Center" />
+
+                    <TextBox
+                        x:Name="ReplaceTextBox"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        KeyboardNavigation.TabIndex="2"
+                        helpers:TextBoxBehavior.FocusGainedSelectAll="True" />
 
                     <!-- Remember selection -->
-                    <Label Grid.Row="2" Grid.Column="0" Content="Remember:" HorizontalAlignment="Left"
-                           Background="#252525" BorderThickness="0" />
-                    <CheckBox x:Name="RememberValuesCheckBox" Grid.Column="1" Grid.Row="2" KeyboardNavigation.TabIndex="4" /> <!-- CheckBox -->
-
+                    <TextBlock
+                        Grid.Row="4"
+                        Grid.Column="0"
+                        Text="Remember:"
+                        VerticalAlignment="Center" />
+                    
+                    <CheckBox
+                        x:Name="RememberValuesCheckBox"
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        KeyboardNavigation.TabIndex="4" />
                 </Grid>
             </syncfusion:WizardPage>
         </syncfusion:WizardControl>
-
     </Grid>
-
-
 </Window>

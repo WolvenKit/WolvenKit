@@ -22,7 +22,6 @@
 
         <!--  Header  -->
         <StackPanel
-            Height="85"
             Margin="25,0,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
@@ -31,33 +30,36 @@
                 <Style BasedOn="{StaticResource ButtonDefault}" TargetType="{x:Type Button}">
                     <Setter Property="BorderThickness" Value="0" />
                     <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt}" />
-                    <Setter Property="Padding" Value="15,0" />
+                    <Setter Property="Padding" Value="{DynamicResource WolvenKitMarginHorizontal}" />
                 </Style>
             </StackPanel.Resources>
 
             <TextBlock
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center "
-                FontSize="20"
+                VerticalAlignment="Center"
+                MinWidth="{DynamicResource WolvenKitHomeSharedHeaderWidth}"
+                FontSize="{DynamicResource WolvenKitHeaderFontSize}"
                 Text="Plugins" />
             <hc:Divider
-                Height="45"
-                Margin="15"
+                Height="{DynamicResource WolvenKitDividerHeight}"
+                Margin="{DynamicResource WolvenKitMargin}"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Orientation="Vertical" />
 
             <Button
                 x:Name="CheckButton"
-                Height="40"
-                Margin="15">
+                Height="{DynamicResource WolvenKitHomeSharedButtonHeight}"
+                Margin="{DynamicResource WolvenKitMargin}">
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconMaterial
-                            Width="20"
-                            Height="20"
+                            Width="{DynamicResource WolvenKitIconSize}"
+                            Height="{DynamicResource WolvenKitIconSize}"
                             Foreground="{StaticResource WolvenKitPurple}"
                             Kind="Sync" />
-                        <TextBlock Padding="10,0,0,0" FontSize="14" Text="Check for updates" />
+                        <TextBlock Padding="{DynamicResource WolvenKitHomeSharedPaddingLeft}"
+                                   FontSize="{DynamicResource WolvenKitBodyFontSize}"
+                                   Text="Check for updates" />
                     </StackPanel>
             </Button>
 
@@ -88,29 +90,28 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
-
                             <StackPanel
                                 Grid.Column="0"
                                 VerticalAlignment="Center">
                                 <TextBlock
-                                    FontSize="16"
+                                    FontSize="{DynamicResource WolvenKitMediumFontSize}"
                                     FontWeight="Bold"
                                     Foreground="White"
                                     Text="{Binding Name}" />
                                 <TextBlock
-                                    FontSize="12"
+                                    FontSize="{DynamicResource WolvenKitSubTitleFontSize}"
                                     Foreground="Gray"
                                     Text="{Binding Description}" />
                                 <TextBlock
-                                    FontSize="12"
+                                    FontSize="{DynamicResource WolvenKitSubTitleFontSize}"
                                     Foreground="White"
                                     Text="{Binding Version}" />
                             </StackPanel>
 
                             <Button
                                 Grid.Column="1"
-                                Width="50"
-                                Height="50"
+                                Width="{DynamicResource WolvenKitPluginsToolIconButtonSize}"
+                                Height="{DynamicResource WolvenKitPluginsToolIconButtonSize}"
                                 Margin="0"
                                 Padding="1"
                                 Background="Transparent"
@@ -118,46 +119,46 @@
                                 Command="{Binding InstallCommand}"
                                 Visibility="{Binding IsNotInstalled, Converter={StaticResource boolToVisibilityConverter}}">
                                 <iconPacks:PackIconMaterial
-                                    Width="30"
-                                    Height="30"
+                                    Width="{DynamicResource WolvenKitHugeIconSize}"
+                                    Height="{DynamicResource WolvenKitHugeIconSize}"
                                     Foreground="{StaticResource WolvenKitCyan}"
                                     Kind="Download" />
                             </Button>
                             <Button
                                 Grid.Column="1"
-                                Width="50"
-                                Height="50"
+                                Width="{DynamicResource WolvenKitPluginsToolIconButtonSize}"
+                                Height="{DynamicResource WolvenKitPluginsToolIconButtonSize}"
                                 Margin="0"
                                 Padding="1"
                                 Background="Transparent"
                                 BorderBrush="Transparent"
                                 Visibility="{Binding IsOpenEnabled, Converter={StaticResource boolToVisibilityConverter}}">
                                 <iconPacks:PackIconMaterial
-                                    Width="30"
-                                    Height="30"
+                                    Width="{DynamicResource WolvenKitHugeIconSize}"
+                                    Height="{DynamicResource WolvenKitHugeIconSize}"
                                     Foreground="{StaticResource WolvenKitPurple}"
                                     Kind="Check" />
                             </Button>
 
                             <StackPanel Grid.Column="2" Margin="5">
                                 <Button
-                                    Width="110"
-                                    Height="20"
+                                    Width="{DynamicResource WolvenKitPluginsToolButtonWidth}"
+                                    Height="{DynamicResource WolvenKitPluginsToolButtonHeight}"
                                     Margin="1"
                                     Padding="1"
                                     Command="{Binding InstallCommand}"
                                     Content="{Binding Label}" />
                                 <Button
-                                    Width="110"
-                                    Height="20"
+                                    Width="{DynamicResource WolvenKitPluginsToolButtonWidth}"
+                                    Height="{DynamicResource WolvenKitPluginsToolButtonHeight}"
                                     Margin="1"
                                     Padding="1"
                                     Command="{Binding OpenCommand}"
                                     Content="Open"
                                     IsEnabled="{Binding IsOpenEnabled}" />
                                 <Button
-                                    Width="110"
-                                    Height="20"
+                                    Width="{DynamicResource WolvenKitPluginsToolButtonWidth}"
+                                    Height="{DynamicResource WolvenKitPluginsToolButtonHeight}"
                                     Margin="1"
                                     Padding="1"
                                     Command="{Binding RemoveCommand}"
@@ -169,7 +170,7 @@
                         <Grid Grid.Row="1">
                             <syncfusion:SfLinearProgressBar
                                 x:Name="PluginProgressBar"
-                                Height="10"
+                                Height="{DynamicResource WolvenKitPluginsToolProgressBarHeight}"
                                 IsIndeterminate="{Binding IsIndeterminate}"
                                 Progress="{Binding Progress}"
                                 Visibility="{Binding IsBusy, Converter={StaticResource boolToVisibilityConverter}}" />

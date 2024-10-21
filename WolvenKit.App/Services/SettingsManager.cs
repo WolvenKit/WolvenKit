@@ -80,6 +80,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(ModderEmail),
 
             // Interface
+            nameof(UiScale),
             nameof(ShowFilePreview),
             nameof(ShowAdvancedOptions),
             nameof(RefactoringCheckboxDefaultValue),
@@ -312,6 +313,24 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     #endregion
 
     #region Interface
+
+    private int _uiScale = 100;
+
+    [Display(Name = "Scale UI (%)",
+        Description = "Resize fonts/icons to improve interface for your screen resolution.",
+        GroupName = "Interface")]
+    public int UiScale
+    {
+        get => _uiScale;
+        set
+        {
+            if (value < 50 || value > 900)
+            {
+                value = 100;
+            }
+            SetProperty(ref _uiScale, value);
+        }
+    }
 
     [Display(Name = "Show File Preview", GroupName = "Interface")]
     [ObservableProperty]

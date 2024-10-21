@@ -58,7 +58,6 @@
     </syncfusion:ChromelessWindow.InputBindings>
 
     <Grid>
-
         <Border Margin="-6,-4,-6,-8" IsHitTestVisible="False">
             <Grid>
                 <Rectangle
@@ -115,7 +114,6 @@
         <!--  Border Name="WindowMask" CornerRadius="0" Background="Black" BorderThickness="1" /  -->
 
         <Grid Background="{DynamicResource ContentBackgroundAlt2}">
-
             <Grid.Resources>
                 <converters:ActiveDocumentConverter x:Key="ActiveDocumentConverter" />
             </Grid.Resources>
@@ -365,7 +363,7 @@
                             <Border Background="{StaticResource ContentBackgroundAlt2}" CornerRadius="8" />
                             <TextBlock
                                 Margin="20,10"
-                                FontSize="16"
+                                FontSize="{DynamicResource WolvenKitMediumFontSize}"
                                 Text="Loading..." />
                             <ContentControl Content="{Binding ActiveDialog}" />
                             <Border
@@ -379,7 +377,7 @@
 
             </Grid>
 
-            <shell:RibbonView Grid.Row="0" Margin="0,0,0,0" />
+            <shell:RibbonView Grid.Row="0" Margin="0" />
 
             <shell:DockingAdapter
                 x:Name="dockingAdapter"
@@ -387,8 +385,7 @@
                 Margin="5,2,5,0"
                 Background="{StaticResource ContentBackground}" />
 
-            <shell:StatusBarView Grid.Row="2" Margin="0,0,0,0" />
-
+            <shell:StatusBarView Grid.Row="2" Margin="0" />
         </Grid>
 
     </Grid>

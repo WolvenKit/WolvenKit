@@ -27,7 +27,6 @@
 
         <!--  Header  -->
         <StackPanel
-            Height="85"
             Margin="25,0,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
@@ -36,26 +35,107 @@
                 <Style BasedOn="{StaticResource ButtonDefault}" TargetType="{x:Type Button}">
                     <Setter Property="BorderThickness" Value="0" />
                     <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt}" />
-                    <Setter Property="Padding" Value="15,0" />
+                    <Setter Property="Padding" Value="{DynamicResource WolvenKitMarginHorizontal}" />
                 </Style>
             </StackPanel.Resources>
 
             <TextBlock
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center "
-                FontSize="20"
+                MinWidth="{DynamicResource WolvenKitHomeSharedHeaderWidth}"
+                FontSize="{DynamicResource WolvenKitHeaderFontSize}"
                 Text="Mod Manager" />
             <hc:Divider
-                Height="45"
-                Margin="15"
+                Height="{DynamicResource WolvenKitDividerHeight}"
+                Margin="{DynamicResource WolvenKitMargin}"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Orientation="Vertical" />
+            
+            <Button
+                x:Name="ButtonRefresh"
+                Height="{DynamicResource WolvenKitHomeSharedButtonHeight}"
+                Margin="{DynamicResource WolvenKitMargin}"
+                Command="{Binding RefreshCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial
+                        Width="{DynamicResource WolvenKitIconSize}"
+                        Height="{DynamicResource WolvenKitIconSize}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Foreground="{StaticResource WolvenKitPurple}"
+                        Kind="Refresh" />
+                    <TextBlock
+                        Padding="{DynamicResource WolvenKitHomeSharedPaddingLeft}"
+                        FontSize="{DynamicResource WolvenKitBodyFontSize}"
+                        Text="Refresh" />
+                </StackPanel>
+            </Button>
+
+            <Button
+                x:Name="ButtonDeploy"
+                Height="{DynamicResource WolvenKitHomeSharedButtonHeight}"
+                Margin="{DynamicResource WolvenKitMargin}"
+                Command="{Binding DeployCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconCodicons
+                        Width="{DynamicResource WolvenKitIconSize}"
+                        Height="{DynamicResource WolvenKitIconSize}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Foreground="{StaticResource WolvenKitRed}"
+                        Kind="DesktopDownload" />
+                    <TextBlock
+                        Padding="{DynamicResource WolvenKitHomeSharedPaddingLeft}"
+                        FontSize="{DynamicResource WolvenKitBodyFontSize}"
+                        Text="Deploy" />
+                </StackPanel>
+            </Button>
+
+            <Button
+                x:Name="ButtonLaunchGame"
+                Height="{DynamicResource WolvenKitHomeSharedButtonHeight}"
+                Margin="{DynamicResource WolvenKitMargin}"
+                Command="{Binding LaunchGameCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconCodicons
+                        Width="{DynamicResource WolvenKitIconSize}"
+                        Height="{DynamicResource WolvenKitIconSize}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Foreground="{StaticResource WolvenKitYellow}"
+                        Kind="DebugStart" />
+                    <TextBlock
+                        Padding="{DynamicResource WolvenKitHomeSharedPaddingLeft}"
+                        FontSize="{DynamicResource WolvenKitBodyFontSize}"
+                        Text="Launch game" />
+                </StackPanel>
+            </Button>
+
+            <Button
+                x:Name="ButtonOpenModFolder"
+                Height="{DynamicResource WolvenKitHomeSharedButtonHeight}"
+                Margin="{DynamicResource WolvenKitMargin}"
+                Command="{Binding OpenModFolderCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconCodicons
+                        Width="{DynamicResource WolvenKitIconSize}"
+                        Height="{DynamicResource WolvenKitIconSize}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Foreground="{StaticResource WolvenKitTan}"
+                        Kind="FolderOpened" />
+                    <TextBlock
+                        Padding="{DynamicResource WolvenKitHomeSharedPaddingLeft}"
+                        FontSize="{DynamicResource WolvenKitBodyFontSize}"
+                        Text="Open Mods Folder" />
+                </StackPanel>
+            </Button>
+
         </StackPanel>
 
         <!--  Main grid  -->
         <Grid Grid.Row="2">
-
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
@@ -65,109 +145,14 @@
             <Grid Grid.Row="0" Margin="25,0,25,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-
-
-                <syncfusion:RibbonButton
-                    x:Name="ButtonRefresh"
-                    Grid.Column="0"
-                    Margin="0"
-                    Command="{Binding RefreshCommand}"
-                    IconStretch="Fill"
-                    IconType="Icon"
-                    Label="Refresh"
-                    SizeForm="Small">
-                    <syncfusion:RibbonButton.IconTemplate>
-                        <DataTemplate>
-                            <iconPacks:PackIconCodicons
-                                Width="auto"
-                                Height="auto"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Stretch"
-                                Foreground="{StaticResource WolvenKitPurple}"
-                                Kind="Refresh" />
-                        </DataTemplate>
-                    </syncfusion:RibbonButton.IconTemplate>
-                </syncfusion:RibbonButton>
-
-                <syncfusion:RibbonButton
-                    x:Name="ButtonDeploy"
-                    Grid.Column="2"
-                    Margin="5"
-                    Command="{Binding DeployCommand}"
-                    IconStretch="Fill"
-                    IconType="Icon"
-                    Label="Deploy"
-                    SizeForm="Small">
-                    <syncfusion:RibbonButton.IconTemplate>
-                        <DataTemplate>
-                            <iconPacks:PackIconCodicons
-                                Width="auto"
-                                Height="auto"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Stretch"
-                                Foreground="{StaticResource WolvenKitRed}"
-                                Kind="DesktopDownload" />
-                        </DataTemplate>
-                    </syncfusion:RibbonButton.IconTemplate>
-                </syncfusion:RibbonButton>
-
-                <syncfusion:RibbonButton
-                    x:Name="ButtonLaunchGame"
-                    Grid.Column="3"
-                    Margin="5"
-                    Command="{Binding LaunchGameCommand}"
-                    IconStretch="Fill"
-                    IconType="Icon"
-                    Label="Launch Game"
-                    SizeForm="Small">
-                    <syncfusion:RibbonButton.IconTemplate>
-                        <DataTemplate>
-                            <iconPacks:PackIconCodicons
-                                Width="auto"
-                                Height="auto"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Stretch"
-                                Foreground="{StaticResource WolvenKitYellow}"
-                                Kind="DebugStart" />
-                        </DataTemplate>
-                    </syncfusion:RibbonButton.IconTemplate>
-                </syncfusion:RibbonButton>
 
                 <syncfusion:RibbonCheckBox
                     x:Name="CheckBoxForce"
-                    Grid.Column="1"
+                    Grid.Column="0"
                     Margin="5"
-                    Content="Force Redeploy"
+                    Content="Force re-deploy"
                     IsChecked="{Binding IsForceEnabled}" />
-
-                <syncfusion:RibbonButton
-                    x:Name="ButtonOpenModFolder"
-                    Grid.Column="5"
-                    Margin="0"
-                    Command="{Binding OpenModFolderCommand}"
-                    IconStretch="Fill"
-                    IconType="Icon"
-                    Label="Open Mods Folder"
-                    SizeForm="Small">
-                    <syncfusion:RibbonButton.IconTemplate>
-                        <DataTemplate>
-                            <iconPacks:PackIconCodicons
-                                Width="auto"
-                                Height="auto"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Stretch"
-                                Foreground="{StaticResource WolvenKitTan}"
-                                Kind="FolderOpened" />
-                        </DataTemplate>
-                    </syncfusion:RibbonButton.IconTemplate>
-                </syncfusion:RibbonButton>
-
             </Grid>
 
             <!--  DataGrid  -->
@@ -189,7 +174,6 @@
                 SelectionMode="Extended">
 
                 <syncfusion:SfDataGrid.Columns>
-
                     <syncfusion:GridTextColumn
                         AllowEditing="False"
                         HeaderText="#"
@@ -221,7 +205,6 @@
                         </DataTemplate>
                     </syncfusion:GridTemplateColumn.CellTemplate>
                 </syncfusion:GridTemplateColumn>-->
-
                 </syncfusion:SfDataGrid.Columns>
 
                 <syncfusion:SfDataGrid.RecordContextMenu>
@@ -232,9 +215,7 @@
                             Header="Remove Mod" />
                     </ContextMenu>
                 </syncfusion:SfDataGrid.RecordContextMenu>
-
             </syncfusion:SfDataGrid>
-
         </Grid>
 
         <!--  Overlay  -->
@@ -243,7 +224,6 @@
             Grid.Row="2"
             Background="{StaticResource ContentBackground}"
             Visibility="{Binding IsProcessing, Converter={StaticResource boolToVisibilityConverter}}">
-
             <Grid.RowDefinitions>
                 <RowDefinition Height="2*" />
                 <RowDefinition Height="2*" />
@@ -251,42 +231,40 @@
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0">
-
                 <StackPanel VerticalAlignment="Center" Visibility="{Binding IsNotFinished, Converter={StaticResource boolToVisibilityConverter}}">
                     <syncfusion:SfBusyIndicator AnimationType="Gear" ViewboxHeight="100" ViewboxWidth="100">
                         <syncfusion:SfBusyIndicator.HeaderTemplate>
                             <DataTemplate>
                                 <TextBlock Text="REDMod mods are being deployed..."
                                        TextAlignment="Center"
-                                       FontSize="20" />
+                                       FontSize="{DynamicResource WolvenKitHeaderFontSize}" />
                             </DataTemplate>
                         </syncfusion:SfBusyIndicator.HeaderTemplate>
                     </syncfusion:SfBusyIndicator>
-
                 </StackPanel>
 
                 <StackPanel VerticalAlignment="Center" Visibility="{Binding IsFinished, Converter={StaticResource boolToVisibilityConverter}}" d:Visibility="Visible">
                     <TextBlock
-                        Margin="0,0,0,0"
+                        Margin="0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        FontSize="20"
+                        FontSize="{DynamicResource WolvenKitHeaderFontSize}"
                         Text="{Binding ConfirmText}" />
                     <Button
-                        Height="40"
+                        Height="{DynamicResource WolvenKitHomeSharedButtonHeight}"
                         Margin="0,40,0,0"
                         Command="{Binding ToggleLogCommand}">
-                        <TextBlock FontSize="14" Text="Show Log" />
+                        <TextBlock FontSize="{DynamicResource WolvenKitBodyFontSize}"
+                                   Text="Show Log" />
                     </Button>
                     <Button
-                        Height="40"
+                        Height="{DynamicResource WolvenKitHomeSharedButtonHeight}"
                         Margin="0,20,0,0"
                         Command="{Binding ConfirmCommand}">
-                        <TextBlock FontSize="14" Text="Close" />
+                        <TextBlock FontSize="{DynamicResource WolvenKitBodyFontSize}"
+                                   Text="Close" />
                     </Button>
                 </StackPanel>
-
-
             </Grid>
 
             <syncfusion:SfStepProgressBar
@@ -302,11 +280,13 @@
                         <Setter Property="Content" Value="{Binding Text}" />
                     </Style>
                 </syncfusion:SfStepProgressBar.ItemContainerStyle>
+                
                 <syncfusion:SfStepProgressBar.SecondaryContentTemplate>
                     <DataTemplate>
                         <TextBlock Text=""/>
                     </DataTemplate>
                 </syncfusion:SfStepProgressBar.SecondaryContentTemplate>
+                
                 <syncfusion:StepViewItem Content="Initialization" />
                 <syncfusion:StepViewItem Content="Script Compilation" />
                 <syncfusion:StepViewItem Content="TweakDB Compilation" />
@@ -322,9 +302,6 @@
                 Background="{StaticResource ContentBackgroundAlt3}"
                 Text="{Binding LogText}"
                 VerticalScrollBarVisibility="Auto"/>
-
         </Grid>
-
-
     </Grid>
 </reactiveUi:ReactiveUserControl>

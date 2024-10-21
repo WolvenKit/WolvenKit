@@ -55,19 +55,26 @@ public static class UIHelper
     //}
 
     private static readonly Typeface s_arial = new("Arial");
+    private static readonly Typeface s_segoeUi = new("Segoe UI");
 
     /// <summary>
-    /// Creates a formatted text object and returns the width (in Arial)
+    /// Creates a formatted text object and returns the width.
     /// </summary>
-    public static int GetTextWidth(string text, int fontSize = 13) =>
-        Convert.ToInt32(new FormattedText(text,
+    /// <param name="text">Text to compute the width for</param>
+    /// <param name="fontSize">Font size to compute the width for, default 13.0</param>
+    /// <param name="font">Font to compute the width for, default "Segoe UI"</param>
+    /// <returns>Computed width as DIP</returns>
+    public static int GetTextWidth(string text, double fontSize = 13, Typeface? font = null)
+    {
+        font ??= s_segoeUi;
+        return Convert.ToInt32(new FormattedText(text,
             System.Globalization.CultureInfo.CurrentCulture,
             FlowDirection.LeftToRight,
-            s_arial,
+            font,
             fontSize,
             Brushes.Black,
             pixelsPerDip: 96D).Width);
-
+    }
 
     #endregion Methods
 }
