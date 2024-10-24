@@ -1,5 +1,6 @@
 using System;
 using WolvenKit.App.Controllers;
+using WolvenKit.App.ViewModels.GraphEditor.Interfaces;
 using WolvenKit.App.ViewModels.GraphEditor.Quests.Nodes;
 using WolvenKit.App.ViewModels.GraphEditor.Quests.Nodes.Internal;
 using WolvenKit.Common;
@@ -12,14 +13,19 @@ public class QuestGraphFactory(
     RedGraphFactory graphFactory,
     IArchiveManager archiveManager,
     IGameControllerFactory gameController,
-    ILoggerService log)
+    ILoggerService log) : IGraphFactory
 {
-    public RedGraph Create(string title, questQuestPhaseResource resource, GraphContext context)
+    public RedGraph? Create(string title, IRedType resource, GraphContext context)
     {
+        if (resource is not questQuestPhaseResource quest)
+        {
+            return null;
+        }
+
         var data = new GraphData(title, context);
         return new RedGraph(
             data,
-            new QuestGraphService(data, resource, this, log),
+            new QuestGraphService(data, quest, this, log),
             log);
     }
 

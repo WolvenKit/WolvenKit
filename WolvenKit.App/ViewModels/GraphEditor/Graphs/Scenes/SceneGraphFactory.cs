@@ -1,4 +1,5 @@
 using System.Linq;
+using WolvenKit.App.ViewModels.GraphEditor.Interfaces;
 using WolvenKit.App.ViewModels.GraphEditor.Scenes.Nodes;
 using WolvenKit.App.ViewModels.GraphEditor.Scenes.Nodes.Internal;
 using WolvenKit.Core.Interfaces;
@@ -6,14 +7,19 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Scenes;
 
-public class SceneGraphFactory(ILoggerService log)
+
+public class SceneGraphFactory(ILoggerService log) : IGraphFactory
 {
-    public RedGraph Create(string title, scnSceneResource resource, GraphContext context)
+    public RedGraph? Create(string title, IRedType resource, GraphContext context)
     {
+        if (resource is not scnSceneResource scene)
+        {
+            return null;
+        }
         var data = new GraphData(title, context);
         return new RedGraph(
             data,
-            new SceneGraphService(data, resource, this, log),
+            new SceneGraphService(data, scene, this, log),
             log
         );
     }

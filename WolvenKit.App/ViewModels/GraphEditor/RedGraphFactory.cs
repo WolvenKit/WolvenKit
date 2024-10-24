@@ -1,23 +1,26 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using WolvenKit.App.ViewModels.GraphEditor.Interfaces;
 using WolvenKit.App.ViewModels.GraphEditor.Null;
-using WolvenKit.App.ViewModels.GraphEditor.Quests;
-using WolvenKit.App.ViewModels.GraphEditor.Scenes;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.GraphEditor;
 
-public class RedGraphFactory(
-    Lazy<QuestGraphFactory> questFactory,
-    Lazy<SceneGraphFactory> sceneFactory,
-    NullGraphFactory nullFactory)
+public class RedGraphFactory(IEnumerable<Lazy<IGraphFactory>> factories, NullGraphFactory nullFactory)
 {
     public RedGraph Create(string title, IRedType data, GraphContext context)
     {
-        return data switch
+        foreach (var factory in factories.Select(lazy => lazy.Value))
         {
-            questQuestPhaseResource resource => questFactory.Value.Create(title, resource, context),
-            scnSceneResource resource => sceneFactory.Value.Create(title, resource, context),
-            _ => nullFactory.Create(title, context),
-        };
+            var graph = factory.Create(title, data, context);
+
+            if (graph != null)
+            {
+                return graph;
+            }
+        }
+
+        return nullFactory.Create(title, context);
     }
 }

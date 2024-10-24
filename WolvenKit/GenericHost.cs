@@ -15,6 +15,7 @@ using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Exporters;
 using WolvenKit.App.ViewModels.GraphEditor;
+using WolvenKit.App.ViewModels.GraphEditor.Interfaces;
 using WolvenKit.App.ViewModels.GraphEditor.Null;
 using WolvenKit.App.ViewModels.GraphEditor.Quests;
 using WolvenKit.App.ViewModels.GraphEditor.Scenes;
@@ -103,8 +104,8 @@ namespace WolvenKit
                     services.AddTransient<IDocumentTabViewmodelFactory, DocumentTabViewmodelFactory>();
                     services.AddTransient<IChunkViewmodelFactory, ChunkViewmodelFactory>();             // IDocumentTabViewmodelFactory
                     services.AddTransient<IPaneViewModelFactory, PaneViewModelFactory>();               // IChunkViewmodelFactory
-                    services.AddLazyTransient<QuestGraphFactory>();
-                    services.AddLazyTransient<SceneGraphFactory>();
+                    services.AddLazyTransient<IGraphFactory, QuestGraphFactory>();
+                    services.AddLazyTransient<IGraphFactory, SceneGraphFactory>();
                     services.AddTransient<NullGraphFactory>();
                     services.AddTransient<RedGraphFactory>();
                     services.AddTransient<IDocumentViewmodelFactory, DocumentViewmodelFactory>();       //IDocumentTabViewmodelFactory, IPaneViewModelFactory, IChunkViewmodelFactory
