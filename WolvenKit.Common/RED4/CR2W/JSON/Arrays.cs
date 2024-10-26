@@ -71,6 +71,8 @@ public class CArrayConverter : CustomRedConverter<IRedArray>
 
         var arr = (IRedArray)RedTypeManager.CreateRedType(typeToConvert);
 
+        var converter = options.GetConverter(arr.InnerType) as ICustomRedConverter;
+
         while (reader.Read())
         {
             if (reader.TokenType == JsonTokenType.EndArray)
@@ -79,7 +81,17 @@ public class CArrayConverter : CustomRedConverter<IRedArray>
             }
 
             object? val;
-            if (options.GetConverter(arr.InnerType) is ICustomRedConverter converter)
+
+            if (arr.InnerType == typeof(worldCompiledNodeInstanceSetupInfo) && RedJsonSerializer.IsOlderThen("0.0.10"))
+            {
+                var tmp = (worldNodeData?) JsonSerializer.Deserialize(ref reader, typeof(worldNodeData), options);
+                if (tmp == null)
+                {
+                    throw new JsonException();
+                }
+                val = worldCompiledNodeInstanceSetupInfo.FromWorldNodeData(tmp);
+            } 
+            else if (converter != null)
             {
                 val = converter.ReadRedType(ref reader, arr.InnerType, options);
             }

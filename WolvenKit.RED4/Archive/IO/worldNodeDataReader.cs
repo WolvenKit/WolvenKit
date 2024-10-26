@@ -17,43 +17,42 @@ public class worldNodeDataReader : Red4Reader, IBufferReader
 
         while (_reader.BaseStream.Position < _reader.BaseStream.Length)
         {
-            // some of this stuff could be worldNodeEditorData
-            var t = new worldNodeData();
+            var t = new worldCompiledNodeInstanceSetupInfo();
 
-            t.Position.X = _reader.ReadSingle();
-            t.Position.Y = _reader.ReadSingle();
-            t.Position.Z = _reader.ReadSingle();
-            t.Position.W = _reader.ReadSingle();
+            t.Transform.Position.X = _reader.ReadSingle();
+            t.Transform.Position.Y = _reader.ReadSingle();
+            t.Transform.Position.Z = _reader.ReadSingle();
+            t.Transform.Position.W = _reader.ReadSingle();
 
-            t.Orientation.I = _reader.ReadSingle();
-            t.Orientation.J = _reader.ReadSingle();
-            t.Orientation.K = _reader.ReadSingle();
-            t.Orientation.R = _reader.ReadSingle();
+            t.Transform.Orientation.I = _reader.ReadSingle();
+            t.Transform.Orientation.J = _reader.ReadSingle();
+            t.Transform.Orientation.K = _reader.ReadSingle();
+            t.Transform.Orientation.R = _reader.ReadSingle();
 
             t.Scale.X = _reader.ReadSingle();
             t.Scale.Y = _reader.ReadSingle();
             t.Scale.Z = _reader.ReadSingle();
 
-            t.Pivot.X = _reader.ReadSingle();
-            t.Pivot.Y = _reader.ReadSingle();
-            t.Pivot.Z = _reader.ReadSingle();
+            t.SecondaryRefPointPosition.X = _reader.ReadSingle();
+            t.SecondaryRefPointPosition.Y = _reader.ReadSingle();
+            t.SecondaryRefPointPosition.Z = _reader.ReadSingle();
 
-            t.Bounds.Min.X = _reader.ReadSingle();
-            t.Bounds.Min.Y = _reader.ReadSingle();
-            t.Bounds.Min.Z = _reader.ReadSingle();
+            t.StreamingRefPoint.X = _reader.ReadSingle();
+            t.StreamingRefPoint.Y = _reader.ReadSingle();
+            t.StreamingRefPoint.Z = _reader.ReadSingle();
 
-            t.Bounds.Max.X = _reader.ReadSingle();
-            t.Bounds.Max.Y = _reader.ReadSingle();
-            t.Bounds.Max.Z = _reader.ReadSingle();
+            t.Uk08.X = _reader.ReadSingle();
+            t.Uk08.Y = _reader.ReadSingle();
+            t.Uk08.Z = _reader.ReadSingle();
 
             t.Id = _reader.ReadUInt64();
 
-            t.QuestPrefabRefHash = _reader.ReadUInt64();
-            t.UkHash1 = _reader.ReadUInt64();
+            t.GlobalNodeId.Hash = _reader.ReadUInt64();
+            t.Uk09 = _reader.ReadUInt64();
             t.CookedPrefabData = new CResourceReference<worldCookedPrefabData>(_reader.ReadUInt64());
 
-            t.MaxStreamingDistance = _reader.ReadSingle();
-            t.UkFloat1 = _reader.ReadSingle();
+            t.SecondaryRefPointDistance = _reader.ReadSingle();
+            t.StreamingDistance = _reader.ReadSingle();
 
             t.NodeIndex = _reader.ReadUInt16();
 
