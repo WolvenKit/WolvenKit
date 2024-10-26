@@ -31,6 +31,7 @@ using NAudio.Wave;
 using NAudio.Lame;
 using WolvenKit.RED4.Archive.CR2W;
 using Newtonsoft.Json;
+using WolvenKit.Modkit.Exceptions;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -1052,10 +1053,28 @@ namespace WolvenKit.Modkit.RED4
                     _loggerService.Error("Depot path is not set: Choose a Depot location within Settings for generating materials.");
                     return false;
                 }
-                ParseMaterials(cr2w, outfile, meshExportArgs.MaterialRepo, meshesinfo, eUncookExtension);
+
+                try
+                {
+                    ParseMaterials(cr2w, outfile, meshExportArgs.MaterialRepo, meshesinfo, eUncookExtension);
+                }
+                catch
+                {
+                    _loggerService.Error(
+                        $"Failed to export materials from {cr2w.MetaData.FileName}. You can disable this in the settings.");
+                }
             }
 
-            return MeshTools.ExportMesh(cr2w, outfile, meshExportArgs, vmode);
+            try
+            {
+                return MeshTools.ExportMesh(cr2w, outfile, meshExportArgs, vmode);
+            }
+            catch (ExportException e)
+            {
+                _loggerService.Error($"Error when exporting {cr2w.MetaData.FileName}: ${e.Message}");
+                return false;
+            }
+ 
         }
 
         private bool HandleMesh(CR2WFile cr2wFile, FileInfo cr2wFileName, MeshExportArgs meshargs)

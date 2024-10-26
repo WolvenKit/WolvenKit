@@ -11,6 +11,7 @@ using SharpGLTF.Validation;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
+using WolvenKit.Modkit.Exceptions;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.Archive.CR2W;
@@ -32,8 +33,16 @@ namespace WolvenKit.Modkit.RED4.Tools
         public static bool ExportMesh(CR2WFile cr2W, FileInfo outfile, MeshExportArgs meshExportArgs,
             ValidationMode vMode = ValidationMode.TryFix)
         {
-            var model = GetModel(cr2W, meshExportArgs.LodFilter, mergeMeshes: meshExportArgs.ExperimentalMergedExport,
-                exportGarmentSupport: meshExportArgs.ExportGarmentSupport);
+            ModelRoot? model = null;
+            try
+            {
+                model = GetModel(cr2W, meshExportArgs.LodFilter, mergeMeshes: meshExportArgs.ExperimentalMergedExport,
+                    exportGarmentSupport: meshExportArgs.ExportGarmentSupport);
+            }
+            catch (ArgumentNullException)
+            {
+            }
+            
 
             if (model == null)
             {
@@ -1481,43 +1490,52 @@ namespace WolvenKit.Modkit.RED4.Tools
         /// <param name="exportGarmentSupport"></param>
         public static void WriteGarmentParametersToMesh(ref List<RawMeshContainer> meshes, CMesh cMesh, bool exportGarmentSupport = false)
         {
-            var garmentBlob = cMesh.Parameters.FirstOrDefault(x => x.Chunk is garmentMeshParamGarment);
-            if (garmentBlob != null && exportGarmentSupport)
+            if (!exportGarmentSupport ||
+                cMesh.Parameters.FirstOrDefault(x => x.Chunk is garmentMeshParamGarment) is not CHandle<meshMeshParameter> garmentBlob)
             {
-                var garmentBlobChunk = (garmentMeshParamGarment)garmentBlob.Chunk.NotNull();
+                return;
+            }
 
-                for (var i = 0; i < garmentBlobChunk.Chunks.Count && i < meshes.Count; i++)
+            var garmentBlobChunk = (garmentMeshParamGarment)garmentBlob.Chunk.NotNull();
+
+            for (var i = 0; i < garmentBlobChunk.Chunks.Count && i < meshes.Count; i++)
+            {
+                var mesh = meshes[i];
+                var chunk = garmentBlobChunk.Chunks[i];
+
+                if (mesh.positions is null)
                 {
-                    var mesh = meshes[i];
-                    var chunk = garmentBlobChunk.Chunks[i];
+                    throw new ExportException("Invalid garment support (disable it in the export tool's settings panel to export without)");
+                }
 
-                    ArgumentNullException.ThrowIfNull(mesh.positions, nameof(mesh));
+                ArgumentNullException.ThrowIfNull(mesh.positions, nameof(mesh));
 
-                    if (chunk.GarmentFlags is { Buffer.MemSize: > 0 })
+                if (chunk.GarmentFlags is not { Buffer.MemSize: > 0 })
+                {
+                    continue;
+                }
+
+                meshes[i].garmentSupportWeight = new Vec4[mesh.positions.Length];
+                meshes[i].garmentSupportCap = new Vec4[mesh.positions.Length];
+
+                var stream = new MemoryStream(chunk.GarmentFlags.Buffer.GetBytes());
+                var br = new BinaryReader(stream);
+                stream.Seek(0, SeekOrigin.Begin);
+
+                for (var e = 0; e < mesh.positions.Length; e++)
+                {
+                    if (mesh.garmentSupportWeight != null)
                     {
-                        meshes[i].garmentSupportWeight = new Vec4[mesh.positions.Length];
-                        meshes[i].garmentSupportCap = new Vec4[mesh.positions.Length];
-
-                        var stream = new MemoryStream(chunk.GarmentFlags.Buffer.GetBytes());
-                        var br = new BinaryReader(stream);
-                        stream.Seek(0, SeekOrigin.Begin);
-
-                        for (var e = 0; e < mesh.positions.Length; e++)
-                        {
-                            if (mesh.garmentSupportWeight != null)
-                            {
-                                mesh.garmentSupportWeight[e] = PrepareGarmentVertexWeight(br.ReadByte());
-                            }
-
-                            if (mesh.garmentSupportCap != null)
-                            {
-                                mesh.garmentSupportCap[e] = PrepareGarmentVertexCap(br.ReadByte());
-                            }
-
-                            br.ReadByte();
-                            br.ReadByte();
-                        }
+                        mesh.garmentSupportWeight[e] = PrepareGarmentVertexWeight(br.ReadByte());
                     }
+
+                    if (mesh.garmentSupportCap != null)
+                    {
+                        mesh.garmentSupportCap[e] = PrepareGarmentVertexCap(br.ReadByte());
+                    }
+
+                    br.ReadByte();
+                    br.ReadByte();
                 }
             }
         }
