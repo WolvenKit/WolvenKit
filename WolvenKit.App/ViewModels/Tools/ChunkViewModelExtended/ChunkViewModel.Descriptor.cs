@@ -82,7 +82,7 @@ public partial class ChunkViewModel
             case null:
             case RedDummy:
                 return;
-            case worldNodeData sst when Parent?.Parent?.ResolvedData is worldStreamingSector wss && sst.NodeIndex < wss.Nodes.Count:
+            case worldCompiledNodeInstanceSetupInfo sst when Parent?.Parent?.ResolvedData is worldStreamingSector wss && sst.NodeIndex < wss.Nodes.Count:
                 Descriptor = $"[{sst.NodeIndex}] {StringHelper.Stringify(wss.Nodes[sst.NodeIndex].Chunk)}";
                 return;
             case worldStreamingSectorDescriptor wssd:

@@ -2490,8 +2490,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                         var matrix = new Matrix3D();
                         matrix.Scale(ToScaleVector3D(transforms[0].Scale));
-                        matrix.Rotate(ToQuaternion(transforms[0].Orientation));
-                        matrix.Translate(ToVector3D(transforms[0].Position));
+                        matrix.Rotate(ToQuaternion(transforms[0].Transform.Orientation));
+                        matrix.Translate(ToVector3D(transforms[0].Transform.Position));
 
                         var wtbMatrix = new Matrix3D();
                         if (wtbTransforms[(int)(wimn.WorldTransformsBuffer.StartIndex + i)] is worldNodeTransform wte)
@@ -2544,8 +2544,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                         var matrix = new Matrix3D();
                         matrix.Scale(ToScaleVector3D(transforms[0].Scale));
-                        matrix.Rotate(ToQuaternion(transforms[0].Orientation));
-                        matrix.Translate(ToVector3D(transforms[0].Position));
+                        matrix.Rotate(ToQuaternion(transforms[0].Transform.Orientation));
+                        matrix.Translate(ToVector3D(transforms[0].Transform.Position));
 
                         var citbMatrix = new Matrix3D();
                         var transform = citbTransforms[(int)(widmn.CookedInstanceTransforms.StartIndex + i)].NotNull();
@@ -2587,8 +2587,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                         var matrix = new Matrix3D();
                         matrix.Scale(ToScaleVector3D(transform.Scale));
-                        matrix.Rotate(ToQuaternion(transform.Orientation));
-                        matrix.Translate(ToVector3D(transform.Position));
+                        matrix.Rotate(ToQuaternion(transform.Transform.Orientation));
+                        matrix.Translate(ToVector3D(transform.Transform.Position));
 
                         if (irmn is worldBendedMeshNode wbmn)
                         {
@@ -2915,10 +2915,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                             var q = new System.Numerics.Quaternion()
                             {
-                                W = transforms[0].Orientation.R,
-                                X = transforms[0].Orientation.I,
-                                Y = transforms[0].Orientation.J,
-                                Z = transforms[0].Orientation.K
+                                W = transforms[0].Transform.Orientation.R,
+                                X = transforms[0].Transform.Orientation.I,
+                                Y = transforms[0].Transform.Orientation.J,
+                                Z = transforms[0].Transform.Orientation.K
                             };
 
                             //q = Shell.ChunkViewModel.FixRotation(q);
@@ -2927,7 +2927,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                             var matrix = new Matrix3D();
                             matrix.Scale(ToScaleVector3D(transforms[0].Scale));
                             matrix.Rotate(qq);
-                            matrix.Translate(ToVector3D(transforms[0].Position));
+                            matrix.Translate(ToVector3D(transforms[0].Transform.Position));
 
                             entity.Transform = new MatrixTransform3D(matrix);
 
@@ -2993,8 +2993,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                 var matrix = new Matrix3D();
                 matrix.Scale(ToScaleVector3D(transforms[0].Scale));
-                matrix.Rotate(ToQuaternion(transforms[0].Orientation));
-                matrix.Translate(ToVector3D(transforms[0].Position));
+                matrix.Rotate(ToQuaternion(transforms[0].Transform.Orientation));
+                matrix.Translate(ToVector3D(transforms[0].Transform.Position));
 
                 var group = new MeshComponent()
                 {
