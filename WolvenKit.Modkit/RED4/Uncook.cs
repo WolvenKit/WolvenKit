@@ -1141,7 +1141,10 @@ namespace WolvenKit.Modkit.RED4
 
             var modelsAndRigsCombinedToExport = MeshTools.RawMeshesToGLTF(meshesToExport, rigsCombinedToExport, withMaterials: meshExportArgs.withMaterials);
 
-            SaveMaterials(outfile, materialDataToExport);
+            if (materialDataToExport.Count > 0)
+            {
+                SaveMaterials(outfile, materialDataToExport);
+            }
             SaveMeshes(outfile, modelsAndRigsCombinedToExport);
 
             _loggerService.Info($"Mesh export completed, {meshesToExport.Count} meshes, {materialDataToExport.Count} materials, {rigsCombinedToExport.Names?.Length ?? 0} bones");
