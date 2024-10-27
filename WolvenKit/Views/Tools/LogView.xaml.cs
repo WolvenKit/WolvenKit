@@ -141,6 +141,10 @@ namespace WolvenKit.Views.Tools
             {
                 LogEntries.Add(new LogEntry(level, $"[{item.Timestamp.LocalDateTime}] [{level,-9}] {message}", LogCodeHelper.GetUrl(infoCode), brush));
             }
+            else
+            {
+                LogEntries.Add(new LogEntry(level, $"[{item.Timestamp.LocalDateTime}] [{level,-9}] {message}", null, brush));
+            }
 
             if (_autoscroll)
             {
