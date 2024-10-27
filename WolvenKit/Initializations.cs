@@ -77,8 +77,9 @@ namespace WolvenKit
         public static void InitializeLicenses()
         {
             //const string v_20_4_0 = "MTAyOTE5MEAzMjMwMmUzNDJlMzBIUHZua0RGUW5HZmIxekNYR1ZFY2lOOFFQSVBQam1sbWkxSXJLa3NWN1hFPQ==";
-            const string v_23_2_6 = "Mjk2MTEyNUAzMjMzMmUzMDJlMzBDN1VPNTlPRExWZERrWGR5SzFXS1lSa2NPNlZ2YXByVGN0eGlqZ3hDVDd3PQ==";
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(v_23_2_6);
+            //const string v_23_2_6 = "Mjk2MTEyNUAzMjMzMmUzMDJlMzBDN1VPNTlPRExWZERrWGR5SzFXS1lSa2NPNlZ2YXByVGN0eGlqZ3hDVDd3PQ==";
+            const string v_27_1_48 = "Ngo9BigBOggjHTQxAR8/V1NDaF5cWWtCf1JpRnxbf1x0ZFJMZFhbQHBPMyBoS35RckRjW3hed3BRQmZcVUZ/";
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(v_27_1_48);
         }
 
         public static /*async Task*/ void InitializeShell(ISettingsManager settings)
