@@ -35,3 +35,8 @@ jobs:
     - name: CLI
       continue-on-error: true
       run: dotnet nuget push .\WolvenKit.CLI\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+
+    - run: dotnet pack .\WolvenKit.CLI\WolvenKit.Common.csproj
+    - name: Common
+      continue-on-error: true
+      run: dotnet nuget push .\WolvenKit.Common\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
