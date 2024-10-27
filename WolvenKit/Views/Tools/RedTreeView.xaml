@@ -389,10 +389,9 @@
 
                 <!-- Duplicate-->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.DuplicateChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Command="{Binding DuplicateSelectionCommand, Source={x:Reference redTreeView}}"
                     Header="Duplicate Item(s) in Array/Buffer"
                     IsCheckable="False"
-                    
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowDuplicate, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
                         <iconPacks:PackIconMaterial Style="{StaticResource ContextMenuIconStyleMaterial}" Kind="ContentDuplicate" />
@@ -401,7 +400,8 @@
 
                 <!-- Duplicate As New Chunk -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.DuplicateAsNewChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+
+                    Command="{Binding DuplicateSelectionAsNewCommand, Source={x:Reference redTreeView}}"
                     Header="Duplicate as new Item(s)"
                     IsCheckable="False"
                     

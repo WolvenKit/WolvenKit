@@ -176,6 +176,8 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     public bool HasActiveSearch { get; set; }
 
+    public int NumSelectedItems => SelectedChunks is ObservableCollection<object> obs ? obs.Count : 0;
+
     public delegate void LayoutNodesDelegate();
 
     public LayoutNodesDelegate? LayoutNodes;

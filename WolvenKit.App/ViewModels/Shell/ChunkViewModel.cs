@@ -529,7 +529,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public bool ShouldShowExportNodeData => Parent is not null && Parent.Data is DataBuffer rb && rb.Data is worldNodeDataBuffer;
 
-    public bool ShouldShowTweakXLMenu => Data is gamedataTweakDBRecord || Data is TweakDBID || Parent?.Data is gamedataTweakDBRecord || Parent?.Data is TweakDBID;
+    public bool ShouldShowTweakXLMenu => (Tab?.NumSelectedItems ?? 1) == 1 && (Data is gamedataTweakDBRecord || Data is TweakDBID ||
+                                                                               Parent?.Data is gamedataTweakDBRecord ||
+                                                                               Parent?.Data is TweakDBID);
 
     public bool ShouldShowHandleOperations => PropertyType.IsAssignableTo(typeof(IRedBaseHandle)) && !IsArray;
 
@@ -753,12 +755,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     public bool ShowScrollToMaterial => ResolvedData is CMeshMaterialEntry || (ResolvedData is CName && Parent?.Name == "chunkMaterials");
 
     // Used in view
-    public bool HasValue => !IsValueExtrapolated && Value is not null && Value != "" && Value.ToLower() != "none";
+    public bool HasValue => !IsValueExtrapolated && !string.IsNullOrEmpty(Value) && Value!.ToLower() != "none";
 
-    public bool IsArray => (PropertyType.IsAssignableTo(typeof(IRedArray)) ||
-                            ResolvedPropertyType is not null && ResolvedPropertyType.IsAssignableTo(typeof(IList)) ||
-                            ResolvedPropertyType is not null && ResolvedPropertyType.IsAssignableTo(typeof(CR2WList)) ||
-                            ResolvedPropertyType is not null && ResolvedPropertyType.IsAssignableTo(typeof(RedPackage)));
+    public bool IsArray => PropertyType.IsAssignableTo(typeof(IRedArray)) ||
+                           (ResolvedPropertyType is not null && (
+                               ResolvedPropertyType.IsAssignableTo(typeof(IList))
+                               || ResolvedPropertyType.IsAssignableTo(typeof(CR2WList))
+                               || ResolvedPropertyType.IsAssignableTo(typeof(RedPackage))));
     
     
     public int PropertyCount
@@ -2500,11 +2503,23 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private void DuplicateInParent(int index = -1)
+
+    public Task DuplicateChunkAsync()
     {
-        if (Parent is null || Data is null)
+        DuplicateChunk();
+        return Task.CompletedTask;
+    }
+    
+    private bool CanDuplicateChunk() => IsInArray && Parent is not null; // TODO RelayCommand check notify
+
+    [RelayCommand(CanExecute = nameof(CanDuplicateChunk))]
+    private void DuplicateChunk() => DuplicateChunk(-1);
+
+    private ChunkViewModel? DuplicateChunk(int index)
+    {
+        if (Parent is null || Data is RedDummy)
         {
-            return;
+            return null;
         }
 
         IsSelected = false;
@@ -2527,7 +2542,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         // Unless shift key is pressed, we want to regenerate CRUIDs
         if (IsShiftKeyPressed || Parent.GetChildNode(index) is not ChunkViewModel newSibling)
         {
-            return;
+            return null;
         }
 
         newSibling.RecalculateProperties();
@@ -2538,82 +2553,41 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 newSiblingProperty.GenerateCRUIDCommand.Execute(null);
             }
         }
-       
-    }
-
-    private bool CanDuplicateChunk() => IsInArray && Parent is not null; // TODO RelayCommand check notify
-
-    [RelayCommand(CanExecute = nameof(CanDuplicateChunk))]
-    private void DuplicateChunk()
-    {
-        if (Parent is null || Tab is not { SelectedChunks: IList lst })
-        {
-            return;
-        }
-
-        // get selected nodes and order them by node index
-        var fullSelection = Parent.TVProperties
-            .Where(lst.Contains)
-            .OrderBy(x => x.NodeIdxInParent)
-            .ToList();
-
-        Tab.ClearSelection();
-        
-        if (fullSelection.Count > 0)
-        {
-            var index = fullSelection[^1].NodeIdxInParent + 1;
-            foreach (var i in fullSelection)
-            {
-                i.DuplicateInParent(index++);
-            }
-        }
-        else
-        {
-            // Duplicates the item which is clicked on, even if its not selected
-            DuplicateInParent();
-        }
 
         Parent.CalculateDescriptor();
         Parent.CalculateValue();
         Parent.ReindexChildren();
 
         IsExpanded = false;
+
+        return newSibling;
     }
 
+    public Task DuplicateChunkAsNewAsync()
+    {
+        DuplicateAsNewChunk();
+        return Task.CompletedTask;
+    }
+
+    
     [RelayCommand(CanExecute = nameof(CanDuplicateChunk))]
     private void DuplicateAsNewChunk()
     {
-        if (Parent is null) return;
-
-        DuplicateChunk();
+        if (Parent is null || DuplicateChunk(Parent.Properties.Count) is not ChunkViewModel newChunk)
+        {
+            return;
+        }
 
         try
         {
-            // Recalculate properties for all selected nodes 
-            if (Tab is not { SelectedChunks: IList lst })
-            {
-                Parent.GetChildNode(NodeIdxInParent + 1)?.AdjustPropertiesAfterPasteAsNewItem();
-                return;
-            }
-
+            IsSelected = false;
+            newChunk.AdjustPropertiesAfterPasteAsNewItem();
+            newChunk.IsSelected = true;
             Parent.RecalculateProperties();
-
-            var selectedChunks = lst.OfType<ChunkViewModel>()
-                .OrderBy(g => g.NodeIdxInParent)
-                .GroupBy(x => x.NodeIdxInParent)
-                .Select(g => g.First())
-                .ToList();
-
-            foreach (var i in selectedChunks)
-            {
-                i.AdjustPropertiesAfterPasteAsNewItem();
-                i.IsSelected = true;
-                Parent.RecalculateProperties();
-            }
         }
         catch (Exception ex)
         {
-            _loggerService.Error($"Failed to recalculate properties after duplicating entries: {ex}");
+            _loggerService.Error($"Failed to recalculate properties after duplicating an entry: {ex}");
         }
     }
 

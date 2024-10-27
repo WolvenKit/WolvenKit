@@ -5,6 +5,8 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -152,8 +154,10 @@ namespace WolvenKit.Views.Tools
                 {
                     selectable.IsSelected = true;
                 }
-
             }
+
+            RefreshContextMenuFlags();
+            RefreshCommandStatus();
         }
 
 
@@ -366,6 +370,38 @@ namespace WolvenKit.Views.Tools
             }
         }
 
+        #region commands
+
+        private void RefreshCommandStatus()
+        {
+            DuplicateSelectionCommand.NotifyCanExecuteChanged();
+        }
+
+
+        [RelayCommand]
+        private async Task DuplicateSelection()
+        {
+            var chunks = GetSelectedChunks();
+
+            for (var i = 0; i < chunks.Count; i++)
+            {
+                var cvm = chunks[i];
+                cvm.NodeIdxInParent += i;
+                await cvm.DuplicateChunkAsync();
+            }
+        }
+
+        [RelayCommand]
+        private async Task DuplicateSelectionAsNew()
+        {
+            var chunks = GetSelectedChunks();
+
+            foreach (var cvm in chunks)
+            {
+                await cvm.DuplicateChunkAsNewAsync();
+            }
+        }
+
         public bool CanOpenSearchAndReplaceDialog => SelectedItem is ChunkViewModel { Parent: not null };
 
         // [RelayCommand(CanExecute = nameof(CanOpenSearchAndReplaceDialog))]
@@ -454,6 +490,8 @@ namespace WolvenKit.Views.Tools
             cvm?.Tab?.Parent.SetIsDirty(true);
         }
 
+        #endregion
+
         /// <summary>
         /// Gets all selected chunks. If none are selected / if selection is invalid, it will return an empty list.
         /// </summary>
@@ -491,14 +529,22 @@ namespace WolvenKit.Views.Tools
             return selection.OfType<ChunkViewModel>().ToList().FirstOrDefault((cvm) => cvm.Parent is null);
         }
 
+        private void RefreshContextMenuFlags(bool oneItemOnly = false)
+        {
+            var selectedChunks = GetSelectedChunks();
+            if (selectedChunks.Count == 0 || (oneItemOnly && selectedChunks.Count != 1)) { return; }
+
+            foreach (var cvm in selectedChunks)
+            {
+                cvm.RefreshContextMenuFlags();
+            }
+        }
+
         private void TreeViewContextMenu_OnOpened(object sender, RoutedEventArgs e)
         {
             _isContextMenuOpen = true;
             _modifierViewStateSvc.RefreshModifierStates();
-            if (SelectedItem is ChunkViewModel cvm && GetSelectedChunks().Count == 1)
-            {
-                cvm.RefreshContextMenuFlags();
-            }
+            RefreshContextMenuFlags(true);
         }
 
         private void TreeViewContextMenu_OnClosed(object sender, RoutedEventArgs e) => _isContextMenuOpen = false;
@@ -511,10 +557,7 @@ namespace WolvenKit.Views.Tools
             }
 
             _modifierViewStateSvc.OnKeystateChanged(e);
-            if (SelectedItem is ChunkViewModel cvm)
-            {
-                cvm.RefreshContextMenuFlags();
-            }
+            RefreshContextMenuFlags();
         }
 
         private bool _isContextMenuOpen;
