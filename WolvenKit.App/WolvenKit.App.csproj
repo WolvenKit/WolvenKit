@@ -23,10 +23,20 @@
     <None Remove="ViewModels\Shared\**" />
     <Page Remove="ViewModels\Others\**" />
     <Page Remove="ViewModels\Shared\**" />
+    <Compile Remove="ViewModels\GraphEditor\Strategies\Behaviors\BehaviorGraphStrategy.cs" />
+    <Compile Remove="ViewModels\GraphEditor\Strategies\Quests\QuestGraphStrategy.cs" />
+    <Compile Remove="ViewModels\GraphEditor\Strategies\Scenes\SceneGraphStrategy.cs" />
+    <Compile Remove="ViewModels\GraphEditor\Factories\GraphStrategyFactory.cs" />
+    <Compile Remove="ViewModels\GraphEditor\Factories\GraphFactory.cs" />
+    <Compile Remove="ViewModels\GraphEditor\Factories\NodeViewFactory.cs" />
+    <Compile Remove="ViewModels\GraphEditor\Interfaces\IConnectionFactory.cs" />
+    <Compile Remove="ViewModels\GraphEditor\Interfaces\IGraphStrategy.cs" />
+    <Compile Remove="ViewModels\GraphEditor\Graph.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="Controllers\Tw3Controller.cs" />
+    <Compile Remove="Factories\NodeWrapperFactory.cs" />
     <Compile Remove="Models\ProjectManagement\Project\Tw3Project.cs" />
     <Compile Remove="Models\CsvCommonFunctions.cs" />
     <Compile Remove="Models\CsvMaps.cs" />
@@ -34,6 +44,9 @@
     <Compile Remove="Models\ImportModel.cs" />
     <Compile Remove="Models\IWolvenkitView.cs" />
     <Compile Remove="ViewModels\Documents\IDocumentViewModel_old.cs" />
+    <Compile Remove="ViewModels\GraphEditor\RedGraph.Behavior.cs" />
+    <Compile Remove="ViewModels\GraphEditor\RedGraph.Quest.cs" />
+    <Compile Remove="ViewModels\GraphEditor\RedGraph.Scene.cs" />
     <Compile Remove="ViewModels\HomePage\Pages\RecentlyUsedItemsViewModel.cs" />
   </ItemGroup>
 

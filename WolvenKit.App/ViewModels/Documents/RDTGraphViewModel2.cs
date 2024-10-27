@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
-using WolvenKit.App.Factories;
 using WolvenKit.App.ViewModels.GraphEditor;
 using WolvenKit.RED4.Types;
 
@@ -10,23 +8,29 @@ namespace WolvenKit.App.ViewModels.Documents;
 
 public partial class RDTGraphViewModel2 : RedDocumentTabViewModel
 {
-    private readonly INodeWrapperFactory _nodeWrapperFactory;
+    private readonly RedGraphFactory _graphFactory;
 
     protected readonly IRedType _data;
 
     [ObservableProperty]
-    private RedGraph _mainGraph;
+    private RedGraph? _mainGraph;
 
-    public RDTGraphViewModel2(IRedType data, RedDocumentViewModel file, INodeWrapperFactory nodeWrapperFactory) : base(file, "Graph View")
+    public RDTGraphViewModel2(IRedType data, RedDocumentViewModel file, RedGraphFactory graphFactory) : base(file, "Graph View")
     {
-        _nodeWrapperFactory = nodeWrapperFactory;
+        _graphFactory = graphFactory;
 
         _data = data;
-        _mainGraph = new RedGraph("ERROR", new RedDummy());
+
+        _mainGraph = null;
     }
 
     protected override void OnPropertyChanging(PropertyChangingEventArgs e)
     {
+        if (MainGraph is null)
+        {
+            return;
+        }
+
         if (e.PropertyName == nameof(MainGraph))
         {
             History.Clear();
@@ -37,6 +41,11 @@ public partial class RDTGraphViewModel2 : RedDocumentTabViewModel
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
+        if (MainGraph is null)
+        {
+            return;
+        }
+
         if (e.PropertyName == nameof(MainGraph))
         {
             History.Add(MainGraph);
@@ -51,36 +60,12 @@ public partial class RDTGraphViewModel2 : RedDocumentTabViewModel
 
     public override void Load()
     {
-        MainGraph.Dispose();
+        this.
+        MainGraph?.Dispose();
 
-        RedGraph? mainGraph = null;
+        var context = new GraphContext(this, Parent);
 
-        try
-        {
-            if (_data is graphGraphResource questResource)
-            {
-                if (questResource.Graph.Chunk is { } questGraph)
-                {
-                    mainGraph = RedGraph.GenerateQuestGraph(Parent.Header, questGraph, _nodeWrapperFactory);
-                }
-            }
-
-            if (_data is scnSceneResource sceneResource)
-            {
-                mainGraph = RedGraph.GenerateSceneGraph(Parent.Header, sceneResource);
-            }
-        }
-        catch (Exception)
-        {
-            throw;
-        }
-
-        if (mainGraph == null)
-        {
-            mainGraph = new RedGraph("ERROR", new RedDummy());
-        }
-        mainGraph.DocumentViewModel = Parent;
-
-        MainGraph = mainGraph;
+        MainGraph = _graphFactory.Create(Parent.Header, _data, context);
     }
 }
+

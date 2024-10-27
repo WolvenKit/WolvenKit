@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
+using WolvenKit.App.ViewModels.GraphEditor;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
@@ -22,7 +23,7 @@ public class DocumentViewmodelFactory : IDocumentViewmodelFactory
     private readonly IArchiveManager _archiveManager;
     private readonly AppScriptService _scriptService;
     private readonly IHookService _hookService;
-    private readonly INodeWrapperFactory _nodeWrapperFactory;
+    private readonly RedGraphFactory _graphFactory;
     private readonly ISettingsManager _settingsManager;
     private readonly IHashService _hashService;
 
@@ -37,7 +38,7 @@ public class DocumentViewmodelFactory : IDocumentViewmodelFactory
         IArchiveManager archiveManager,
         AppScriptService scriptService,
         IHookService hookService,
-        INodeWrapperFactory nodeWrapperFactory,
+        RedGraphFactory graphFactory,
         ISettingsManager settingsManager,
         IHashService hashService
     )
@@ -51,14 +52,14 @@ public class DocumentViewmodelFactory : IDocumentViewmodelFactory
         _archiveManager = archiveManager;
         _scriptService = scriptService;
         _hookService = hookService;
-        _nodeWrapperFactory = nodeWrapperFactory;
+        _graphFactory = graphFactory;
         _settingsManager = settingsManager;
         _hashService = hashService;
     }
 
     public RedDocumentViewModel RedDocumentViewModel(CR2WFile file, string path, AppViewModel appViewModel, bool isReadOnly = false)
         => new(file, path, appViewModel, _tabViewmodelFactory, _chunkViewmodelFactory, _projectManager, _loggerService, _globals,
-            _parserService, _archiveManager, _hookService, _nodeWrapperFactory, _hashService,
+            _parserService, _archiveManager, _hookService, _graphFactory, _hashService,
             _settingsManager.DefaultEditorDifficultyLevel, isReadOnly);
 
     public WScriptDocumentViewModel WScriptDocumentViewModel(string path) => new(path, _scriptService);

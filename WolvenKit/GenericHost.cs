@@ -14,6 +14,11 @@ using WolvenKit.App.Models.ProjectManagement;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Exporters;
+using WolvenKit.App.ViewModels.GraphEditor;
+using WolvenKit.App.ViewModels.GraphEditor.Interfaces;
+using WolvenKit.App.ViewModels.GraphEditor.Null;
+using WolvenKit.App.ViewModels.GraphEditor.Quests;
+using WolvenKit.App.ViewModels.GraphEditor.Scenes;
 using WolvenKit.App.ViewModels.HomePage;
 using WolvenKit.App.ViewModels.HomePage.Pages;
 using WolvenKit.App.ViewModels.Importers;
@@ -26,9 +31,7 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Tools;
-using WolvenKit.Modkit.Scripting;
 using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Services;
 using WolvenKit.ViewModels;
 using WolvenKit.Views.Dialogs;
@@ -64,7 +67,7 @@ namespace WolvenKit
                 .ConfigureServices((hostContext, services) =>
                 {
                     // services
-                    services.AddSingleton(typeof(ISettingsManager), SettingsManager.Load());    
+                    services.AddSingleton(typeof(ISettingsManager), SettingsManager.Load());
                     services.AddSingleton<IHashService, HashServiceExt>();                      // can this be transient?
                     services.AddSingleton<CRUIDService>();                                      // can this be transient?
                     services.AddSingleton<MySink>();                                            // can this be transient?
@@ -101,7 +104,10 @@ namespace WolvenKit
                     services.AddTransient<IDocumentTabViewmodelFactory, DocumentTabViewmodelFactory>();
                     services.AddTransient<IChunkViewmodelFactory, ChunkViewmodelFactory>();             // IDocumentTabViewmodelFactory
                     services.AddTransient<IPaneViewModelFactory, PaneViewModelFactory>();               // IChunkViewmodelFactory
-                    services.AddTransient<INodeWrapperFactory, NodeWrapperFactory>();
+                    services.AddLazyTransient<IGraphFactory, QuestGraphFactory>();
+                    services.AddLazyTransient<IGraphFactory, SceneGraphFactory>();
+                    services.AddTransient<NullGraphFactory>();
+                    services.AddTransient<RedGraphFactory>();
                     services.AddTransient<IDocumentViewmodelFactory, DocumentViewmodelFactory>();       //IDocumentTabViewmodelFactory, IPaneViewModelFactory, IChunkViewmodelFactory
 
                     // register views
