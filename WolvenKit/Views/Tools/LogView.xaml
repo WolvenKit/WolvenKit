@@ -54,9 +54,10 @@
             </Grid.ColumnDefinitions>
 
             <Grid.Resources>
-                <Style x:Key="LogLevelButtonStyle"
-                       TargetType="{x:Type Button}"
-                       BasedOn="{StaticResource WPFButtonStyle}">
+                <Style
+                    x:Key="LogLevelButtonStyle"
+                    BasedOn="{StaticResource WPFButtonStyle}"
+                    TargetType="{x:Type Button}">
                     <Setter Property="Focusable" Value="False" />
                     <Setter Property="Margin" Value="0,0,4,0" />
                     <Setter Property="Padding" Value="6" />
@@ -75,65 +76,55 @@
                 x:Name="LogLevelFilter"
                 Grid.Column="0"
                 Margin="4,0,0,0"
-                Orientation="Horizontal"
-                VerticalAlignment="Center">
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
                 <Button
                     x:Name="FilterErrorButton"
-                    Style="{StaticResource LogLevelButtonStyle}"
                     Command="{Binding ToggleFilterLevelCommand}"
                     CommandParameter="0"
+                    Style="{StaticResource LogLevelButtonStyle}"
                     ToolTip="Error">
-                    <iconPacks:PackIconMaterial
-                        Kind="AlphaEBox"
-                        Foreground="{StaticResource WolvenKitRed}" />
+                    <iconPacks:PackIconMaterial Foreground="{StaticResource WolvenKitRed}" Kind="AlphaEBox" />
                 </Button>
 
                 <Button
                     x:Name="FilterWarningButton"
-                    Style="{StaticResource LogLevelButtonStyle}"
                     Command="{Binding ToggleFilterLevelCommand}"
                     CommandParameter="1"
+                    Style="{StaticResource LogLevelButtonStyle}"
                     ToolTip="Warning">
-                    <iconPacks:PackIconMaterial
-                        Kind="AlphaWBox"
-                        Foreground="{StaticResource WolvenKitYellow}" />
+                    <iconPacks:PackIconMaterial Foreground="{StaticResource WolvenKitYellow}" Kind="AlphaWBox" />
                 </Button>
 
                 <Button
                     x:Name="FilterSuccessButton"
-                    Style="{StaticResource LogLevelButtonStyle}"
                     Command="{Binding ToggleFilterLevelCommand}"
                     CommandParameter="2"
+                    Style="{StaticResource LogLevelButtonStyle}"
                     ToolTip="Success">
-                    <iconPacks:PackIconMaterial
-                        Kind="AlphaSBox"
-                        Foreground="{StaticResource WolvenKitGreen}" />
+                    <iconPacks:PackIconMaterial Foreground="{StaticResource WolvenKitGreen}" Kind="AlphaSBox" />
                 </Button>
 
                 <Button
                     x:Name="FilterInfoButton"
-                    Style="{StaticResource LogLevelButtonStyle}"
                     Command="{Binding ToggleFilterLevelCommand}"
                     CommandParameter="3"
+                    Style="{StaticResource LogLevelButtonStyle}"
                     ToolTip="Normal / Important">
-                    <iconPacks:PackIconMaterial
-                        Kind="AlphaIBox"
-                        Foreground="White" />
+                    <iconPacks:PackIconMaterial Foreground="White" Kind="AlphaIBox" />
                 </Button>
 
                 <Button
-                    Margin="0"
                     x:Name="FilterDebugButton"
-                    Style="{StaticResource LogLevelButtonStyle}"
+                    Margin="0"
                     Command="{Binding ToggleFilterLevelCommand}"
                     CommandParameter="4"
+                    Style="{StaticResource LogLevelButtonStyle}"
                     ToolTip="Debug">
-                    <iconPacks:PackIconMaterial
-                        Kind="AlphaDBox"
-                        Foreground="{StaticResource WolvenKitPurple}" />
+                    <iconPacks:PackIconMaterial Foreground="{StaticResource WolvenKitPurple}" Kind="AlphaDBox" />
                 </Button>
             </StackPanel>
-            
+
             <Grid
                 x:Name="ScriptShortcutGrid"
                 Grid.Column="2"
@@ -150,37 +141,30 @@
                     Grid.Column="0"
                     Margin="0,0,4,0"
                     VerticalAlignment="Top"
-                    ToolTip="Update scripts"
-                    Command="{Binding UpdateScriptsCommand}">
-                    <iconPacks:PackIconMaterial
-                        Foreground="White"
-                        Kind="Refresh" />
+                    Command="{Binding UpdateScriptsCommand}"
+                    ToolTip="Update scripts">
+                    <iconPacks:PackIconMaterial Foreground="White" Kind="Refresh" />
                 </Button>
 
                 <ComboBox
                     x:Name="ScriptFileComboBox"
                     Grid.Column="1"
                     Margin="0,0,4,4"
-                    ToolTip="Select script"
                     IsEditable="False"
                     IsReadOnly="True"
                     ItemsSource="{Binding ScriptFiles.View}"
-                    SelectedItem="{Binding SelectedScriptFile}">
+                    SelectedItem="{Binding SelectedScriptFile}"
+                    ToolTip="Select script">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Vertical"
-                                        ToolTip="{Binding HoverInfo}">
+                            <StackPanel Orientation="Vertical" ToolTip="{Binding HoverInfo}">
                                 <TextBlock Text="{Binding Name}" />
-                                <TextBlock x:Name="Info"
-                                           Text="{Binding SelectInfo}" />
+                                <TextBlock x:Name="Info" Text="{Binding SelectInfo}" />
                             </StackPanel>
 
                             <DataTemplate.Triggers>
-                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ComboBoxItem}}"
-                                             Value="{x:Null}">
-                                    <Setter TargetName="Info"
-                                            Property="Visibility"
-                                            Value="Collapsed" />
+                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ComboBoxItem}}" Value="{x:Null}">
+                                    <Setter TargetName="Info" Property="Visibility" Value="Collapsed" />
                                 </DataTrigger>
                             </DataTemplate.Triggers>
                         </DataTemplate>
@@ -190,12 +174,12 @@
                         <GroupStyle>
                             <GroupStyle.HeaderTemplate>
                                 <DataTemplate>
-                                    <Border BorderBrush="White"
-                                            BorderThickness="0,0,0,1"
-                                            Padding="15,0,0,7">
+                                    <Border
+                                        Padding="15,0,0,7"
+                                        BorderBrush="White"
+                                        BorderThickness="0,0,0,1">
                                         <StackPanel Orientation="Vertical">
-                                            <TextBlock Text="{Binding Name}"
-                                                       FontSize="14" />
+                                            <TextBlock FontSize="14" Text="{Binding Name}" />
                                         </StackPanel>
                                     </Border>
                                 </DataTemplate>
@@ -209,13 +193,11 @@
                     Grid.Column="2"
                     Margin="0,0,4,0"
                     VerticalAlignment="Top"
-                    ToolTip="Reload and run"
                     Command="{Binding RunScriptCommand}"
                     IsEnabled="{Binding CanRunScript}"
+                    ToolTip="Reload and run"
                     Visibility="{Binding IsRunningScript, Converter={StaticResource InvertBooleanVisibilityConverter}}">
-                    <iconPacks:PackIconMaterial
-                        Foreground="Green"
-                        Kind="Play" />
+                    <iconPacks:PackIconMaterial Foreground="Green" Kind="Play" />
                 </Button>
 
                 <Button
@@ -223,12 +205,10 @@
                     Grid.Column="3"
                     Margin="0,0,4,0"
                     VerticalAlignment="Top"
-                    ToolTip="Stop running script"
                     Command="{Binding StopScriptCommand}"
+                    ToolTip="Stop running script"
                     Visibility="{Binding IsRunningScript, Converter={StaticResource BooleanVisibilityConverter}}">
-                    <iconPacks:PackIconMaterial
-                        Foreground="{StaticResource WolvenKitRed}"
-                        Kind="Stop" />
+                    <iconPacks:PackIconMaterial Foreground="{StaticResource WolvenKitRed}" Kind="Stop" />
                 </Button>
             </Grid>
         </Grid>
@@ -237,9 +217,9 @@
             Grid.Row="1"
             Grid.Column="0"
             ItemsSource="{Binding ElementName=uc, Path=FilteredLogEntries}"
+            KeyUp="LogView_OnKeyUp"
             ScrollViewer.CanContentScroll="True"
             VirtualizingPanel.ScrollUnit="Pixel"
-            KeyUp="LogView_OnKeyUp"
             VirtualizingStackPanel.VirtualizationMode="Recycling">
             <ItemsControl.Resources>
                 <DataTemplate DataType="{x:Type tools1:LogEntry}">
@@ -304,7 +284,7 @@
                             <iconPacks:Octicons
                                 Width="12"
                                 Height="12"
-                                Kind="Clippy" />
+                                Kind="Paperclip" />
                         </Button>
                     </Grid>
                 </DataTemplate>
