@@ -18,6 +18,8 @@
     mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
+
+            <!-- StackPanel: empty value style -->
             <Style TargetType="StackPanel" x:Key="VisibleOnEmptyValueStyle">
                 <Setter Property="Visibility" Value="Collapsed" />
                 <Style.Triggers>
@@ -29,6 +31,8 @@
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
+
+            <!-- PropertyKeyStyle for TextBlock -->
             <Style x:Key="PropertyKeyStyle" TargetType="TextBlock">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="null">
@@ -116,6 +120,8 @@
                 </Grid>
             </DataTemplate>
 
+
+            <!-- GroupedPropertyNameTemplate for GroupedChunkViewModel -->
             <DataTemplate x:Key="GroupedPropertyNameTemplate" DataType="{x:Type shell:GroupedChunkViewModel}">
                 <Grid>
                     <TextBlock
@@ -125,6 +131,7 @@
                 </Grid>
             </DataTemplate>
 
+            <!-- PropertyValueTemplate for ChunkViewModel -->
             <DataTemplate x:Key="PropertyValueTemplate" DataType="{x:Type shell:ChunkViewModel}">
                 <Grid>
                     <Grid.Resources>
@@ -223,6 +230,7 @@
                 </Grid>
             </DataTemplate>
 
+            <!-- ArrayNameColumnWidth for ColumnDefinition -->
             <Style x:Key="ArrayNameColumnWidth" TargetType="ColumnDefinition">
                 <Setter Property="Width" Value="218" />
                 <Style.Triggers>
@@ -265,6 +273,7 @@
                 </Style.Triggers>
             </Style>
 
+            <!-- Context menu -->
             <ContextMenu x:Key="TreeViewContextMenu"
                          Name="TreeViewContextMenu"
                          DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}"
@@ -862,6 +871,7 @@
 
             </ContextMenu>
 
+            <!-- Converter for the right-hand properties that decides which partial to render -->
             <converters:TreeViewItemTemplateSelector x:Key="itemTemplateSelector" x:Name="itemTemplateSelector">
                 <converters:TreeViewItemTemplateSelector.GroupedTemplate>
                     <DataTemplate>
