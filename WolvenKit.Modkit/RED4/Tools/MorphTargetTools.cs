@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
@@ -640,7 +641,7 @@ namespace WolvenKit.Modkit.RED4
                 }
 
                 var obj = new { targetNames = names }; // anonymous variable/obj
-                mes.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
+                mes.Extras = JsonSerializer.Serialize(obj);
 
                 for (var i = 0; i < expTargets.Count; i++)
                 {
