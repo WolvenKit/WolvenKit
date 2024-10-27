@@ -352,7 +352,7 @@
                 <iconPacks:Unicons
                     Width="15"
                     Height="15"
-                    Kind="Repeat" />
+                    Kind="RepeatLine" />
             </ToggleButton>
 
             <Button

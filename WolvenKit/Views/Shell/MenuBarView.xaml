@@ -206,9 +206,7 @@
                         </Grid>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem
-                    x:Name="Import"
-                    Header="Import">
+                <MenuItem x:Name="Import" Header="Import">
                     <MenuItem
                         x:Name="MenuItemImportArchive"
                         Margin="2,1"
@@ -233,9 +231,10 @@
                             </Grid>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem x:Name="ToolbarImportEntitySpawnerButton"
-                              Margin="2,1"
-                              Header="Import entity spawner .json">
+                    <MenuItem
+                        x:Name="ToolbarImportEntitySpawnerButton"
+                        Margin="2,1"
+                        Header="Import entity spawner .json">
                         <MenuItem.Icon>
                             <iconPacks:PackIconMaterial
                                 Margin="6,0"
@@ -288,7 +287,7 @@
                             Style="{StaticResource WolvenKitToolBarButtonIcon}" />
                     </MenuItem.Icon>
                 </MenuItem>
-                
+
             </MenuItem>
 
             <!--  Project  -->
@@ -676,7 +675,7 @@
                             Margin="6,0"
                             Padding="0,1,0,1"
                             Foreground="{StaticResource WolvenKitPurple}"
-                            Kind="JavaScript" />
+                            Kind="JavaScriptLine" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -691,7 +690,7 @@
                             Margin="6,0"
                             Padding="0,1,0,1"
                             Foreground="{StaticResource WolvenKitYellow}"
-                            Kind="Import" />
+                            Kind="ImportLine" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
@@ -703,7 +702,7 @@
                             Margin="6,0"
                             Padding="0,1,0,1"
                             Foreground="{StaticResource WolvenKitYellow}"
-                            Kind="Export" />
+                            Kind="ExportLine" />
                     </MenuItem.Icon>
                 </MenuItem>
 

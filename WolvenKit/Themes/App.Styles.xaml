@@ -3,12 +3,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:local="clr-namespace:WolvenKit.Views.Editors"
     xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:sfskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
     xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
     xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
-    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    xmlns:local="clr-namespace:WolvenKit.Views.Editors">
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf">
 
     <ResourceDictionary.MergedDictionaries>
         <sfskin:ResourceDictionaryProvider DictionaryName="Common" ThemeName="MaterialDark" />
@@ -40,8 +40,8 @@
     <Color x:Key="WolvenKitRedShadow25Color">#7F520e17</Color>
     <Color x:Key="WolvenKitYellowShadow50Color">#7FABA108</Color>
     <Color x:Key="WolvenKitYellowShadow25Color">#7F403c09</Color>
-    
-    
+
+
 
     <SolidColorBrush x:Key="WolvenKitRed" Color="{StaticResource WolvenKitRedColor}" />
     <SolidColorBrush x:Key="WolvenKitRedShadow" Color="{StaticResource WolvenKitRedShadowColor}" />
@@ -70,9 +70,9 @@
     <SolidColorBrush x:Key="ForegroundColor_Grey_Dark" Color="#969696" />
     <SolidColorBrush x:Key="ForegroundColor_Grey_Inactive" Color="#555555" />
 
-    <!-- e.g. the hash box -->
+    <!--  e.g. the hash box  -->
     <SolidColorBrush x:Key="ForegroundColor_Control_Secondary" Color="#666666" />
-    
+
 
     <SolidColorBrush x:Key="ForegroundColor_Cyan" Color="{StaticResource WolvenKitCyanColor}" />
     <SolidColorBrush x:Key="ForegroundColor_Yellow" Color="{StaticResource WolvenKitYellowColor}" />
@@ -106,17 +106,15 @@
     </Style>
 
 
-    <!-- 
+    <!--
         Global style for nested syncfusion combobox, e.g. in ChunkMask editor.
-        Doesn't work for base dropdown background yet 
-     -->
-    <Style
-        TargetType="{x:Type syncfusion:ComboBoxAdv}"
-        BasedOn="{StaticResource {x:Type syncfusion:ComboBoxAdv}}">
+        Doesn't work for base dropdown background yet
+    -->
+    <Style BasedOn="{StaticResource {x:Type syncfusion:ComboBoxAdv}}" TargetType="{x:Type syncfusion:ComboBoxAdv}">
         <Setter Property="Background" Value="#252525" />
     </Style>
-    
-    <!-- Give all textboxes the same background -->
+
+    <!--  Give all textboxes the same background  -->
     <Style
         x:Key="WolvenkitTextBoxStyle"
         BasedOn="{StaticResource {x:Type TextBox}}"
@@ -125,10 +123,10 @@
         <Setter Property="BorderBrush" Value="{StaticResource ContentBackgroundAlt3}" />
     </Style>
 
-    <!-- Menu Bar Entry Style -->
+    <!--  Menu Bar Entry Style  -->
     <Style x:Key="WolvenKitToolBarItem" TargetType="{x:Type MenuItem}">
-        <Setter Property="Margin" Value="3 4 3 0" />
-        <Setter Property="Padding" Value="0, 1, 2, 2" />
+        <Setter Property="Margin" Value="3,4,3,0" />
+        <Setter Property="Padding" Value="0,1,2,2" />
         <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
         <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
         <Style.Triggers>
@@ -155,7 +153,10 @@
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="ValidatingControlStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource WolvenkitTextBoxStyle}">
+    <Style
+        x:Key="ValidatingControlStyle"
+        BasedOn="{StaticResource WolvenkitTextBoxStyle}"
+        TargetType="{x:Type TextBox}">
         <Style.Triggers>
             <DataTrigger Binding="{Binding Path=IsValid}" Value="True">
                 <Setter Property="BorderBrush" Value="{StaticResource ContentBackgroundAlt3}" />
@@ -167,7 +168,11 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TextBox}">
-                    <Border Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" Background="{StaticResource ContentBackgroundAlt2}">
+                    <Border
+                        Name="border"
+                        Background="{StaticResource ContentBackgroundAlt2}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="1">
                         <ScrollViewer x:Name="PART_ContentHost" />
                     </Border>
                     <ControlTemplate.Triggers>
@@ -194,7 +199,10 @@
         <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
     </Style>
 
-    <Style x:Key="TextBoxTCSA" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+    <Style
+        x:Key="TextBoxTCSA"
+        BasedOn="{StaticResource {x:Type TextBox}}"
+        TargetType="{x:Type TextBox}">
         <Setter Property="helpers:TextBoxBehavior.TripleClickSelectAll" Value="True" />
     </Style>
 
