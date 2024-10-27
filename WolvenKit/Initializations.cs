@@ -114,7 +114,6 @@ namespace WolvenKit
             };
 
             SfSkinManager.RegisterThemeSettings("MaterialDark", themeSettings);
-            //  SfSkinManager.SetTheme(StaticReferences.GlobalShell, new FluentTheme() { ThemeName = "MaterialDark", ShowAcrylicBackground = true });
         }
     }
 }

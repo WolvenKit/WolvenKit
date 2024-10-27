@@ -164,8 +164,6 @@
 
                 <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/CardView/CardView.xaml" />
 
-                <ResourceDictionary Source="pack://application:,,,/Fluent;Component/Themes/Generic.xaml" />
-
                 <ResourceDictionary Source="pack://application:,,,/Resources/Styles/CustomHandyStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
 

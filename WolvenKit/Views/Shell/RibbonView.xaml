@@ -3,11 +3,11 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:local="clr-namespace:WolvenKit.Views.Shell"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
     xmlns:shell="clr-namespace:WolvenKit.App.ViewModels.Shell;assembly=WolvenKit.App"
-    xmlns:local="clr-namespace:WolvenKit.Views.Shell"
     x:TypeArguments="shell:RibbonViewModel">
 
     <!--  Resources  -->
@@ -258,11 +258,11 @@
 
                 <Separator Margin="3" Visibility="{Binding ShowRedmodInRibbon, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-                <!-- Button: Pack as REDmod  -->
+                <!--  Button: Pack as REDmod  -->
                 <Button
                     x:Name="ToolbarPackProjectButton"
-                    Visibility="{Binding ShowRedmodInRibbon, Converter={StaticResource BooleanToVisibilityConverter}}"
-                    ToolTip="Pack as zip file for Nexus upload, REDmod format">
+                    ToolTip="Pack as zip file for Nexus upload, REDmod format"
+                    Visibility="{Binding ShowRedmodInRibbon, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <StackPanel Orientation="Horizontal">
                         <Grid>
                             <iconPacks:PackIconForkAwesome
@@ -275,10 +275,11 @@
                     </StackPanel>
                 </Button>
 
-                <!-- Button: Install as REDMod -->
-                <Button x:Name="ToolbarPackInstallRedmodButton"
-                        Visibility="{Binding ShowRedmodInRibbon, Converter={StaticResource BooleanToVisibilityConverter}}"
-                        ToolTip="Pack as REDmod &amp; install to game. Not supported by HotReload.">
+                <!--  Button: Install as REDMod  -->
+                <Button
+                    x:Name="ToolbarPackInstallRedmodButton"
+                    ToolTip="Pack as REDmod &amp; install to game. Not supported by HotReload."
+                    Visibility="{Binding ShowRedmodInRibbon, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <StackPanel Orientation="Horizontal">
                         <Grid>
                             <iconPacks:PackIconForkAwesome
@@ -301,7 +302,7 @@
 
                 <Separator />
 
-                <!-- "Pack" button -->
+                <!--  "Pack" button  -->
                 <Button x:Name="ToolbarPackProjectLegacyButton" ToolTip="Pack as zip file for Nexus upload">
                     <StackPanel Orientation="Horizontal">
                         <Grid>
@@ -315,7 +316,7 @@
                     </StackPanel>
                 </Button>
 
-                <!-- Install button -->
+                <!--  Install button  -->
                 <Button x:Name="ToolbarPackInstallLegacyButton" ToolTip="Install mod to game directory">
                     <StackPanel Orientation="Horizontal">
                         <Grid>
@@ -339,15 +340,16 @@
 
                 <Separator Margin="3" />
 
-                <!-- Launch Profiles - Added programmatically  -->
+                <!--  Launch Profiles - Added programmatically  -->
                 <Menu x:Name="LaunchMenu">
                     <MenuItem x:Name="LaunchMenuMainItem">
                         <MenuItem.Header>
                             <StackPanel Orientation="Horizontal">
-                                <Button x:Name="LaunchProfileButton"
-                                        ToolTip="Start from launch profile (configure in 'Launch Options')"
-                                        Margin="-2,-2,2,-2"
-                                        Style="{StaticResource ButtonChromelessStyle}">
+                                <Button
+                                    x:Name="LaunchProfileButton"
+                                    Margin="-2,-2,2,-2"
+                                    Style="{StaticResource ButtonChromelessStyle}"
+                                    ToolTip="Start from launch profile (configure in 'Launch Options')">
                                     <StackPanel Orientation="Horizontal">
                                         <Grid>
                                             <iconPacks:PackIconForkAwesome
@@ -372,7 +374,7 @@
 
                         <Separator />
 
-                        <!-- Launch Options -->
+                        <!--  Launch Options  -->
                         <MenuItem x:Name="LaunchOptionsMenuItem" Header="{x:Static local:RibbonView.LaunchOptionsString}">
                             <MenuItem.Icon>
                                 <iconPacks:PackIconCodicons
@@ -387,7 +389,7 @@
 
                 <Separator Margin="3" />
 
-                <!-- Button: Hot Reload -->
+                <!--  Button: Hot Reload  -->
                 <Button x:Name="ToolbarHotInstallButton" ToolTip="Install to Game Directory (HotReload Plugin required)">
                     <StackPanel Orientation="Horizontal">
                         <Grid>

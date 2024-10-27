@@ -8,10 +8,18 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     d:DataContext="{d:DesignInstance Type=homepage:PluginsToolViewModel}"
     x:TypeArguments="homepage:PluginsToolViewModel"
     mc:Ignorable="d">
+
+    <!--  Resources  -->
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <shared:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
 
     <Grid>
 
@@ -51,14 +59,17 @@
                 x:Name="CheckButton"
                 Height="40"
                 Margin="15">
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconMaterial
-                            Width="20"
-                            Height="20"
-                            Foreground="{StaticResource WolvenKitPurple}"
-                            Kind="Sync" />
-                        <TextBlock Padding="10,0,0,0" FontSize="14" Text="Check for updates" />
-                    </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial
+                        Width="20"
+                        Height="20"
+                        Foreground="{StaticResource WolvenKitPurple}"
+                        Kind="Sync" />
+                    <TextBlock
+                        Padding="10,0,0,0"
+                        FontSize="14"
+                        Text="Check for updates" />
+                </StackPanel>
             </Button>
 
         </StackPanel>
@@ -89,9 +100,7 @@
                             </Grid.ColumnDefinitions>
 
 
-                            <StackPanel
-                                Grid.Column="0"
-                                VerticalAlignment="Center">
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
                                 <TextBlock
                                     FontSize="16"
                                     FontWeight="Bold"
@@ -116,7 +125,7 @@
                                 Background="Transparent"
                                 BorderBrush="Transparent"
                                 Command="{Binding InstallCommand}"
-                                Visibility="{Binding IsNotInstalled, Converter={StaticResource boolToVisibilityConverter}}">
+                                Visibility="{Binding IsNotInstalled, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <iconPacks:PackIconMaterial
                                     Width="30"
                                     Height="30"
@@ -131,7 +140,7 @@
                                 Padding="1"
                                 Background="Transparent"
                                 BorderBrush="Transparent"
-                                Visibility="{Binding IsOpenEnabled, Converter={StaticResource boolToVisibilityConverter}}">
+                                Visibility="{Binding IsOpenEnabled, Converter={StaticResource BoolToVisibilityConverter}}">
                                 <iconPacks:PackIconMaterial
                                     Width="30"
                                     Height="30"
@@ -172,7 +181,7 @@
                                 Height="10"
                                 IsIndeterminate="{Binding IsIndeterminate}"
                                 Progress="{Binding Progress}"
-                                Visibility="{Binding IsBusy, Converter={StaticResource boolToVisibilityConverter}}" />
+                                Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}" />
                         </Grid>
                     </Grid>
                 </DataTemplate>

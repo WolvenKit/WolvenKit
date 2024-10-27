@@ -22,7 +22,7 @@
         BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
         BorderThickness="1">
 
-        <Grid Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
+        <Grid Background="{DynamicResource MahApps.Brushes.Accent3}">
 
             <Grid.Resources>
                 <ResourceDictionary>
@@ -51,7 +51,7 @@
                 <Menu
                     Margin="50,0,0,0"
                     HorizontalAlignment="Left"
-                    Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
+                    Background="{DynamicResource MahApps.Brushes.Accent3}">
                     <MenuItem Header="File" />
                     <MenuItem Header="Edit" />
                     <MenuItem Header="View" />
@@ -69,7 +69,7 @@
 
             <Grid Margin="3,33,3,3">
 
-                <hc:TabControl Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" ShowCloseButton="True">
+                <hc:TabControl Background="{DynamicResource MahApps.Brushes.Accent3}" ShowCloseButton="True">
                     <hc:TabItem Header="wat">
                         <Grid>
                             <Grid.Resources>
