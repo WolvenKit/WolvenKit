@@ -47,7 +47,7 @@
                     FlowDirection="LeftToRight"
                     IsRealTime="True"
                     KeyUp="TextBox_KeyEnterUpdate"
-                    ShowClearButton="False"
+                    hc:InfoElement.ShowClearButton="False"
                     Style="{StaticResource SearchBarPlus}"
                     Text="{Binding SearchText}" />
                 <Expander Grid.Row="1" Header="Filter...">

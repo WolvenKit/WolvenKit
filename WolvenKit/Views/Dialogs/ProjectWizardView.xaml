@@ -56,8 +56,9 @@
             hc:InfoElement.Title="Project Name"
             hc:InfoElement.TitlePlacement="Top"
             hc:InfoElement.TitleWidth="120"
+            Text="{Binding ProjectName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}"
             TextChanged="ProjectNameTextBox_OnTextChanged"
-            VerifyFunc="VerifyProjectName" />
+            Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" />
 
 
         <hc:TextBox
@@ -70,9 +71,10 @@
             hc:InfoElement.Title="Creation Location"
             hc:InfoElement.TitlePlacement="Top"
             hc:InfoElement.TitleWidth="120"
-            VerifyFunc="VerifyFolder" />
+            Text="{Binding ProjectPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}"
+            Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" />
 
-        <!-- Button position in preview is plain wrong. Don't fix. -->
+        <!--  Button position in preview is plain wrong. Don't fix.  -->
         <Button
             x:Name="ProjectPathButton"
             Grid.Row="2"
@@ -106,8 +108,9 @@
             hc:InfoElement.Title="Mod Name (Used as RedMod Name / Archive Name)"
             hc:InfoElement.TitlePlacement="Top"
             hc:InfoElement.TitleWidth="120"
+            Text="{Binding ModName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}"
             TextChanged="ModNameTextBox_OnTextChanged"
-            VerifyFunc="VerifyModName" />
+            Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" />
 
         <hc:TextBox
             x:Name="AuthorTextBox"

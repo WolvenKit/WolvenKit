@@ -43,7 +43,7 @@
             FlowDirection="LeftToRight"
             IsRealTime="True"
             KeyUp="TextBox_KeyEnterUpdate"
-            ShowClearButton="True"
+            hc:InfoElement.ShowClearButton="True"
             Style="{StaticResource SearchBarPlus}"
             Text="{Binding SearchText}" />
 

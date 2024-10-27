@@ -42,8 +42,8 @@
             VerticalAlignment="Center"
             hc:InfoElement.Necessary="True"
             Style="{StaticResource TextBoxExtendCustom}"
-            Text="{Binding Text}"
-            VerifyFunc="VerifyFile" />
+            Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}"
+            Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" />
         <Popup
             x:Name="notification"
             Width="{Binding ActualWidth, ElementName=filePathTextBox}"

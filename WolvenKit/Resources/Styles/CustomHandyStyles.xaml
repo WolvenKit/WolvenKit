@@ -253,7 +253,7 @@
                                 <hc:SearchBar
                                     x:Name="PART_SearchBar"
                                     IsRealTime="True"
-                                    ShowClearButton="True"
+                                    hc:InfoElement.ShowClearButton="True"
                                     Style="{StaticResource SearchBarPlus}" />
                             </DockPanel>
                             <hc:PropertyItemsControl
@@ -281,5 +281,4 @@
         TargetType="TextBox" />
 
     <Style BasedOn="{StaticResource TextBoxPlusBaseStyle}" TargetType="hc:TextBox" />
-    <Style BasedOn="{StaticResource TextBoxPlusBaseStyle}" TargetType="hc:MaskedTextBox" />
 </ResourceDictionary>

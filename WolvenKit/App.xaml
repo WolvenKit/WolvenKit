@@ -200,6 +200,22 @@
 
             <SolidColorBrush x:Key="AccentColorBrush" Color="Black" />
 
+            <ControlTemplate x:Key="ValidationErrorTemplate">
+                <StackPanel>
+                    <AdornedElementPlaceholder x:Name="textBox" />
+                    <TextBlock
+                        x:Name="ValidationText"
+                        MaxWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}"
+                        Margin="150,0,60,0"
+                        Padding="4"
+                        Background="DarkRed"
+                        FontSize="12"
+                        Text="{Binding ElementName=textBox, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"
+                        TextAlignment="Center"
+                        TextWrapping="Wrap"
+                        Visibility="Visible" />
+                </StackPanel>
+            </ControlTemplate>
         </ResourceDictionary>
 
     </Application.Resources>

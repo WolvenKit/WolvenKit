@@ -654,7 +654,7 @@
                     BorderThickness="0,0,0,0"
                     FlowDirection="LeftToRight"
                     SearchStarted="PESearchBar_OnSearchStarted"
-                    ShowClearButton="True"
+                    hc:InfoElement.ShowClearButton="True"
                     Style="{StaticResource SearchBarExtendBaseStyle}" />
                 <StackPanel
                     Grid.Column="1"
@@ -875,7 +875,7 @@
                 <syncfusion:SortColumnDescription ColumnName="Extension" SortDirection="Ascending" />
                 <syncfusion:SortColumnDescription ColumnName="FileSizeStr" SortDirection="Ascending" />
             </syncfusion:SfTreeGrid.SortColumnDescriptions>
-            
+
             <syncfusion:SfTreeGrid.Columns>
                 <syncfusion:TreeGridTextColumn
                     Width="220"

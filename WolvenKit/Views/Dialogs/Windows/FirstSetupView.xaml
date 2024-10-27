@@ -54,8 +54,9 @@
                                 hc:InfoElement.TitlePlacement="Left"
                                 hc:InfoElement.TitleWidth="150"
                                 Style="{StaticResource TextBoxExtendCustom}"
+                                Text="{Binding CP77ExePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}"
                                 TextChanged="Field_TextChanged"
-                                VerifyFunc="VerifyFile" />
+                                Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" />
                             <Button
                                 x:Name="cp77ExeButton"
                                 Grid.Column="1"
@@ -104,8 +105,9 @@
                                 hc:InfoElement.TitlePlacement="Left"
                                 hc:InfoElement.TitleWidth="150"
                                 Style="{StaticResource TextBoxExtend}"
+                                Text="{Binding MaterialDepotPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}"
                                 TextChanged="Field_TextChanged"
-                                VerifyFunc="VerifyFolder"
+                                Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}"
                                 Visibility="Visible" />
                             <Button
                                 x:Name="matdepotButton"
