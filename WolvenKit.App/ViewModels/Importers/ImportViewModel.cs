@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Helpers;
@@ -139,7 +140,7 @@ public partial class ImportViewModel : AbstractImportExportViewModel
         total = toBeImported.Count;
         await Parallel.ForEachAsync(toBeImported, async (item, cancellationToken) =>
         {
-            _appViewModel.SaveFile(item.BaseFile);
+            await Application.Current.Dispatcher.InvokeAsync(() => _appViewModel.SaveFile(item.BaseFile));
             if (await ImportSingleAsync(item, projectArchive))
             {
                 Interlocked.Increment(ref successful);
