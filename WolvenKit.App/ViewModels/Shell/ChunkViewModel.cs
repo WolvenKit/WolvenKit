@@ -629,8 +629,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
+    // Used by RedTreeView.xaml
     public int Level => Parent == null ? 0 : Parent.Level + 1;
 
+    // Used by RedEditorTemplateSelector
     public int DetailsLevel => IsSelected || Parent == null ? 0 : Parent.DetailsLevel + 1;
 
     public Type PropertyType
@@ -638,25 +640,28 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         get
         {
             var type = Data?.GetType() ?? typeof(RedDummy);
-            if (Parent is not null)
+            if (Parent is null)
             {
-                //var parent = Parent.Data;
-                var parentType = Parent.ResolvedPropertyType;
-                // handles aren't the true parent type of these props, so need to get that
-                //if (Parent.Data is IRedBaseHandle handle && handle is not null)
-                //{
-                //    parent = handle.GetValue();
-                //    parentType = handle.GetValue().GetType();
-                //}
-                var propInfo = GetPropertyByRedName(parentType, PropertyName) ?? null;
-                if (propInfo is not null)
-                {
-                    if (type == typeof(RedDummy) || type == propInfo.Type)
-                    {
-                        _flags = propInfo.Flags;
-                        type = propInfo.Type;
-                    }
-                }
+                return type;
+            }
+
+            //var parent = Parent.Data;
+            var parentType = Parent.ResolvedPropertyType;
+            // handles aren't the true parent type of these props, so need to get that
+            //if (Parent.Data is IRedBaseHandle handle && handle is not null)
+            //{
+            //    parent = handle.GetValue();
+            //    parentType = handle.GetValue().GetType();
+            //}
+            if ((GetPropertyByRedName(parentType, PropertyName) ?? null) is not ExtendedPropertyInfo propInfo)
+            {
+                return type;
+            }
+
+            if (type == typeof(RedDummy) || type == propInfo.Type)
+            {
+                _flags = propInfo.Flags;
+                type = propInfo.Type;
             }
 
             return type;
@@ -667,59 +672,34 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         get
         {
-            if (Data is IRedBaseHandle handle)
+            switch (Data)
             {
-                return handle.GetValue()?.GetType() ?? handle.InnerType;
-            }
-
-            if (Data is CVariant v)
-            {
-                return v.Value?.GetType() ?? null;
-            }
-
-            if (Data is TweakDBID tdb)
-            {
-                if (TweakDBService.TryGetType(tdb, out var type))
-                {
+                case IRedBaseHandle handle:
+                    return handle.GetValue()?.GetType() ?? handle.InnerType;
+                case CVariant v:
+                    return v.Value?.GetType() ?? null;
+                case TweakDBID tdb when TweakDBService.TryGetType(tdb, out var type):
                     return type;
-                }
-            }
-
-            if (Data is ITweakXLItem iti)
-            {
-                if (TweakDBService.TryGetType(iti.ID, out var type))
-                {
+                case ITweakXLItem iti when TweakDBService.TryGetType(iti.ID, out var type):
                     return type;
-                }
-            }
-
-            if (Data is IRedString str)
-            {
-                var s = str.GetString();
-                if (s is not null && s.StartsWith("LocKey#") && ulong.TryParse(s[7..], out var _))
+                case IRedString str:
                 {
+                    var s = str.GetString();
+                    if (s is not null && s.StartsWith("LocKey#") && ulong.TryParse(s[7..], out var _))
+                    {
+                        return typeof(localizationPersistenceOnScreenEntry);
+                    }
+
+                    break;
+                }
+                case DataBuffer { Data: not null } db:
+                    return db.Data.GetType();
+                case SharedDataBuffer { Data: not null } sdb:
+                    return sdb.Data.GetType();
+                case SerializationDeferredDataBuffer { Data: not null } sddb:
+                    return sddb.Data.GetType();
+                case gamedataLocKeyWrapper:
                     return typeof(localizationPersistenceOnScreenEntry);
-                }
-            }
-
-            if (Data is DataBuffer db && db.Data is not null)
-            {
-                return db.Data.GetType();
-            }
-
-            if (Data is SharedDataBuffer sdb && sdb.Data is not null)
-            {
-                return sdb.Data.GetType();
-            }
-
-            if (Data is SerializationDeferredDataBuffer sddb && sddb.Data is not null)
-            {
-                return sddb.Data.GetType();
-            }
-
-            if (Data is gamedataLocKeyWrapper)
-            {
-                return typeof(localizationPersistenceOnScreenEntry);
             }
 
             //if (Data is IBrowsableType ibt && ibt.GetBrowsableType() is var browsableType && browsableType is not null)
@@ -768,131 +748,133 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         get
         {
-            if (_propertyCountCache == -1)
+            if (_propertyCountCache != -1)
             {
-                var count = 0;
-                if (ResolvedData is IRedArray ary)
+                return _propertyCountCache;
+            }
+
+            var count = 0;
+            if (ResolvedData is IRedArray ary)
+            {
+                count += ary.Count;
+            }
+            else if (ResolvedData is IRedRef)
+            {
+                // ignore
+            }
+            else if (ResolvedData is CKeyValuePair)
+            {
+                count += 2;
+            }
+            //else if (ResolvedData is inkWidgetReference)
+            //{
+            //    count += 1; // TODO
+            //}
+            else if (Data is TweakDBID tdb)
+            {
+                // not actual
+                if (TweakDBService.Exists(tdb))
                 {
-                    count += ary.Count;
+                    count += 1;
                 }
-                else if (ResolvedData is IRedRef)
-                {
-                    // ignore
-                }
-                else if (ResolvedData is CKeyValuePair)
-                {
-                    count += 2;
-                }
-                //else if (ResolvedData is inkWidgetReference)
-                //{
-                //    count += 1; // TODO
-                //}
-                else if (Data is TweakDBID tdb)
-                {
-                    // not actual
-                    if (TweakDBService.Exists(tdb))
-                    {
-                        count += 1;
-                    }
-                }
-                else if (Data is LocalizationString)
-                {
-                    // ignore
-                }
-                else if (ResolvedData is IRedString str)
-                {
-                    var s = str.GetString();
-                    if (s is not null && s.StartsWith("LocKey#") && ulong.TryParse(s[7..], out var locKey))
-                    {
-                        // not actual
-                        count += 1;
-                    }
-                }
-                else if (ResolvedData is gamedataLocKeyWrapper locKey)
+            }
+            else if (Data is LocalizationString)
+            {
+                // ignore
+            }
+            else if (ResolvedData is IRedString str)
+            {
+                var s = str.GetString();
+                if (s is not null && s.StartsWith("LocKey#") && ulong.TryParse(s[7..], out var locKey))
                 {
                     // not actual
                     count += 1;
                 }
-                else if (ResolvedData is RedBaseClass redClass)
-                {
-                    var pis = GetTypeInfo(redClass).PropertyInfos;
-                    count += pis.Count;
-
-                    var dps = redClass.GetDynamicPropertyNames();
-                    count += dps.Count;
-                }
-                else if (ResolvedData is SerializationDeferredDataBuffer sddb)
-                {
-                    if (sddb.Data is RedPackage p4)
-                    {
-                        count += p4.Chunks.Count;
-                    }
-                    else if (sddb.Data is not null)
-                    {
-                        count += sddb.Data.GetType().GetProperties(s_defaultLookup).Count();
-                    }
-                }
-                else if (ResolvedData is SharedDataBuffer sdb)
-                {
-                    if (sdb.Data is RedPackage p42)
-                    {
-                        count += p42.Chunks.Count;
-                    }
-
-                    if (sdb.Data is not null)
-                    {
-                        count += 1; // needs refinement?
-                    }
-                }
-                else if (ResolvedData is DataBuffer db)
-                {
-                    if (db.Data is RedPackage p43)
-                    {
-                        count += p43.Chunks.Count;
-                    }
-                    else if (db.Data is CR2WList cl)
-                    {
-                        count += cl.Files.Count;
-                    }
-                    else if (db.Data is IList list)
-                    {
-                        count += list.Count;
-                    }
-                    else if (db.Data is not null)
-                    {
-                        count += 1; // needs refinement?
-                    }
-                }
-                else if (ResolvedData is not null)
-                {
-                    if (Data is IBrowsableDictionary ibd)
-                    {
-                        var pns = ibd.GetPropertyNames();
-                        count += pns.Count();
-                    }
-                    else if (Data is IList list)
-                    {
-                        count += list.Count;
-                    }
-                    else if (Data is Dictionary<string, object> dict)
-                    {
-                        count += dict.Count;
-                    }
-                    else if (Data is not null)
-                    {
-                        var pis = Data.GetType().GetProperties(s_defaultLookup);
-                        count += pis.Length;
-                    }
-
-                    if (Data is worldNodeData)
-                    {
-                        count += 1;
-                    }
-                }
-
-                _propertyCountCache = count;
-                //this.RaisePropertyChanged("PropertyCount");
             }
+            else if (ResolvedData is gamedataLocKeyWrapper locKey)
+            {
+                // not actual
+                count += 1;
+            }
+            else if (ResolvedData is RedBaseClass redClass)
+            {
+                var pis = GetTypeInfo(redClass).PropertyInfos;
+                count += pis.Count;
+
+                var dps = redClass.GetDynamicPropertyNames();
+                count += dps.Count;
+            }
+            else if (ResolvedData is SerializationDeferredDataBuffer sddb)
+            {
+                if (sddb.Data is RedPackage p4)
+                {
+                    count += p4.Chunks.Count;
+                }
+                else if (sddb.Data is not null)
+                {
+                    count += sddb.Data.GetType().GetProperties(s_defaultLookup).Count();
+                }
+            }
+            else if (ResolvedData is SharedDataBuffer sdb)
+            {
+                if (sdb.Data is RedPackage p42)
+                {
+                    count += p42.Chunks.Count;
+                }
+
+                if (sdb.Data is not null)
+                {
+                    count += 1; // needs refinement?
+                }
+            }
+            else if (ResolvedData is DataBuffer db)
+            {
+                if (db.Data is RedPackage p43)
+                {
+                    count += p43.Chunks.Count;
+                }
+                else if (db.Data is CR2WList cl)
+                {
+                    count += cl.Files.Count;
+                }
+                else if (db.Data is IList list)
+                {
+                    count += list.Count;
+                }
+                else if (db.Data is not null)
+                {
+                    count += 1; // needs refinement?
+                }
+            }
+            else if (ResolvedData is not null)
+            {
+                if (Data is IBrowsableDictionary ibd)
+                {
+                    var pns = ibd.GetPropertyNames();
+                    count += pns.Count();
+                }
+                else if (Data is IList list)
+                {
+                    count += list.Count;
+                }
+                else if (Data is Dictionary<string, object> dict)
+                {
+                    count += dict.Count;
+                }
+                else if (Data is not null)
+                {
+                    var pis = Data.GetType().GetProperties(s_defaultLookup);
+                    count += pis.Length;
+                }
+
+                if (Data is worldNodeData)
+                {
+                    count += 1;
+                }
+            }
+
+            _propertyCountCache = count;
+            //this.RaisePropertyChanged("PropertyCount");
 
             return _propertyCountCache;
         }
@@ -1276,7 +1258,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
-        if (Data is null)
+        if (Data is RedDummy)
         {
             if (PropertyType == typeof(DataBuffer))
             {
@@ -2071,8 +2053,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
                     break;
                 }
-                case null:
-                    _loggerService.Warning($"Parent.Data is null");
+                case RedDummy:
+                    _loggerService.Warning($"Parent.Data is RedDummy");
                     return;
                 default:
                     _loggerService.Warning($"Unsupported type : {Parent.Data.NotNull().GetType().Name}");
@@ -2522,7 +2504,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return null;
         }
 
-        IsSelected = false;
+        Tab?.RemoveFromSelection(this);
 
         if (index == -1)
         {
@@ -2580,9 +2562,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         try
         {
-            IsSelected = false;
+            Tab?.RemoveFromSelection(this);
             newChunk.AdjustPropertiesAfterPasteAsNewItem();
-            newChunk.IsSelected = true;
+
+            Tab?.AddToSelection(newChunk);
             Parent.RecalculateProperties();
         }
         catch (Exception ex)
@@ -2644,9 +2627,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     AddToCopiedChunks(i);
                 }
             }
-            else if (Parent.Data is null)
+            else if (Parent.Data is RedDummy)
             {
-                _loggerService.Warning($"Parent.Data is null");
+                _loggerService.Warning($"Parent.Data is RedDummy");
             }
             else
             {
