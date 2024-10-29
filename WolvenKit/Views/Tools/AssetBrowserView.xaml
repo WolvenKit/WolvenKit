@@ -118,7 +118,7 @@
                         hc:InfoElement.Placeholder="Search all game or mod files, e.g. game !quest judy .ent|.app|.mesh"
                         FlowDirection="LeftToRight"
                         SearchStarted="FileSearchBar_SearchStarted"
-                        ShowClearButton="False"
+                        ShowClearButton="True"
                         Style="{StaticResource SearchBarPlus}" />
 
                     <Button

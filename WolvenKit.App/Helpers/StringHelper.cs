@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using WolvenKit.App.Helpers.StringHelpers;
 using WolvenKit.RED4.Types;
@@ -212,4 +213,19 @@ public abstract partial class StringHelper
 
     private static bool EqualsFloat(float a, float b) => Math.Abs(a - b) < float.Epsilon;
 
+    public static string StringifyRedType(IRedType? redType)
+    {
+        if (redType is null)
+        {
+            return "";
+        }
+
+        // Get the method that matches the IRedType parameter
+        if (typeof(StringHelper).GetMethod("Stringify", [redType.GetType()]) is not MethodInfo methodInfo)
+        {
+            return "";
+        }
+
+        return (string?)methodInfo.Invoke(null, [redType]) ?? "";
+    }
 }
