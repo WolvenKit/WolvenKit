@@ -268,33 +268,66 @@ public class ImportExportHelper
         return false;
     }
 
-    public async Task<bool> Export(FileInfo cr2wFile, GlobalExportArgs args, DirectoryInfo basedir, DirectoryInfo? rawoutdir = null, ECookedFileFormat[]? forcebuffers = null) =>
+    public async Task<bool> Export(FileInfo cr2WFile, GlobalExportArgs args, DirectoryInfo basedir, DirectoryInfo? rawoutdir = null,
+        ECookedFileFormat[]? forcebuffers = null) =>
         await Task.Run(async () =>
         {
-            _hookService.OnExport(ref cr2wFile, ref args);
+            _hookService.OnExport(ref cr2WFile, ref args);
             if (args.Get<MeshExportArgs>().MeshExporter == MeshExporterType.REDmod)
             {
-                return await Export(basedir, cr2wFile, rawoutdir!, args.Get<MeshExportArgs>());
+                return await Export(basedir, cr2WFile, rawoutdir!, args.Get<MeshExportArgs>());
             }
 
-            if (!_modTools.Export(cr2wFile, args, basedir, rawoutdir, forcebuffers))
+            if (args.Get<MorphTargetExportArgs>() is { ExportTextures: true } morphtargetArgs &&
+                await ReadMeshInfo(cr2WFile, morphtargetArgs) && morphtargetArgs.ExportMeshRelativePath is not null)
+            {
+                var absolutePath = Path.Join(basedir.FullName, morphtargetArgs.ExportMeshRelativePath);
+
+                if (!File.Exists(absolutePath))
+                {
+                    ProjectResourceHelper.AddToProject(absolutePath);
+                    morphtargetArgs.DeleteMeshFileAfterExport = true;
+                }
+            }
+
+            if (!_modTools.Export(cr2WFile, args, basedir, rawoutdir, forcebuffers))
             {
                 return false;
             }
 
-            if (args.Get<MorphTargetExportArgs>() is not { ExportTextures: true } morphtargetArgs)
-            {
-                return true;
-            }
-
-            if (!await ExportMaterialsFromMesh(cr2wFile))
+            if (!await ExportMaterialsFromMesh(cr2WFile))
             {
                 _loggerService.Error("Material export failed");
             }
+            
 
             return true;
 
         });
+
+    private async Task<bool> ReadMeshInfo(FileInfo cr2WFile, MorphTargetExportArgs morphtargetArgs)
+    {
+        morphtargetArgs.ExportTextures = false;
+
+        await using var fs1 = File.Open(cr2WFile.FullName, FileMode.Open);
+        using var cr1 = new CR2WReader(fs1);
+
+        if (cr1.ReadFile(out var f1) != EFileReadErrorCodes.NoError)
+        {
+            _loggerService.Error($"Failed to parse file {Path.GetFileName(cr2WFile.FullName)}, no material export");
+            return false;
+        }
+
+        if (f1?.RootChunk is not MorphTargetMesh morphTargetMesh ||
+            morphTargetMesh.BaseMesh.DepotPath.GetResolvedText() is not string relativeDestPath)
+        {
+            _loggerService.Error($"No mesh file path given in {Path.GetFileName(cr2WFile.FullName)}, no material export");
+            return false;
+        }
+
+        morphtargetArgs.ExportMeshRelativePath = relativeDestPath;
+        return true;
+    }
 
     public async Task<bool> Import(RedRelativePath rawRelative, GlobalImportArgs args, DirectoryInfo? outDir = null)
     {
