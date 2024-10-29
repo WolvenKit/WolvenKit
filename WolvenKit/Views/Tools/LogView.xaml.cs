@@ -1,6 +1,8 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -8,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
 using DynamicData;
+using HandyControl.Tools.Extension;
 using ReactiveUI;
 using Serilog.Events;
 using Splat;
@@ -19,7 +22,7 @@ using WolvenKit.Helpers;
 
 namespace WolvenKit.Views.Tools
 {
-    public record LogEntry(string Message, Uri Uri, Brush TextColor);
+    public record LogEntry(Logtype Level, string Message, Uri Uri, Brush TextColor);
 
     /// <summary>
     /// Interaction logic for LogView.xaml
@@ -30,6 +33,7 @@ namespace WolvenKit.Views.Tools
         private bool _autoscroll = true;
 
         public ObservableCollection<LogEntry> LogEntries { get; set; } = new();
+        public ObservableCollection<LogEntry> FilteredLogEntries { get; set; } = new();
 
         public LogView()
         {
@@ -38,12 +42,57 @@ namespace WolvenKit.Views.Tools
             ViewModel = Locator.Current.GetService<LogViewModel>();
             DataContext = ViewModel;
 
+            LogEntries.CollectionChanged += LogEntries_CollectionChanged;
+
             var sink = Locator.Current.GetService<MySink>();
             _ = sink.Connect()
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out var _)
                 .DisposeMany()
                 .Subscribe(OnNext);
+
+            this.WhenActivated(disposables =>
+            {
+                this.OneWayBind(ViewModel, vm => vm.FilterByLevel, v => v.FilterErrorButton.Opacity, level => level[0] ? 1.0 : 0.33)
+                    .DisposeWith(disposables);
+                this.OneWayBind(ViewModel, vm => vm.FilterByLevel, v => v.FilterWarningButton.Opacity, level => level[1] ? 1.0 : 0.33)
+                    .DisposeWith(disposables);
+                this.OneWayBind(ViewModel, vm => vm.FilterByLevel, v => v.FilterSuccessButton.Opacity, level => level[2] ? 1.0 : 0.33)
+                    .DisposeWith(disposables);
+                this.OneWayBind(ViewModel, vm => vm.FilterByLevel, v => v.FilterInfoButton.Opacity, level => level[3] ? 1.0 : 0.33)
+                    .DisposeWith(disposables);
+                this.OneWayBind(ViewModel, vm => vm.FilterByLevel, v => v.FilterDebugButton.Opacity, level => level[4] ? 1.0 : 0.33)
+                    .DisposeWith(disposables);
+                this.WhenAnyValue(v => v.ViewModel.FilterByLevel)
+                    .Subscribe(_ => LogEntries_CollectionChanged(null, null))
+                    .DisposeWith(disposables);
+            });
+        }
+
+        private void LogEntries_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            var filtered = LogEntries.Where(log =>
+            {
+                switch (log.Level)
+                {
+                    case Logtype.Error:
+                        return ViewModel.FilterByLevel[0];
+                    case Logtype.Warning:
+                        return ViewModel.FilterByLevel[1];
+                    case Logtype.Success:
+                        return ViewModel.FilterByLevel[2];
+                    case Logtype.Normal:
+                    case Logtype.Important:
+                        return ViewModel.FilterByLevel[3];
+                    case Logtype.Debug:
+                        return ViewModel.FilterByLevel[4];
+                    default:
+                        return true;
+                }
+            });
+
+            FilteredLogEntries.Clear();
+            FilteredLogEntries.AddRange(filtered);
         }
 
         private void ScrollViewer_Loaded(object sender, RoutedEventArgs e) => _scrollViewer = (ScrollViewer)sender;
@@ -90,11 +139,11 @@ namespace WolvenKit.Views.Tools
             var message = item.RenderMessage();
             if (item.Properties.TryGetValue(Core.Constants.InfoCode, out var infoCodeObj) && infoCodeObj is ScalarValue { Value: int infoCode })
             {
-                LogEntries.Add(new LogEntry($"[{item.Timestamp.LocalDateTime}] [{level,-9}] {message}", LogCodeHelper.GetUrl(infoCode), brush));
+                LogEntries.Add(new LogEntry(level, $"[{item.Timestamp.LocalDateTime}] [{level,-9}] {message}", LogCodeHelper.GetUrl(infoCode), brush));
             }
             else
             {
-                LogEntries.Add(new LogEntry($"[{item.Timestamp.LocalDateTime}] [{level,-9}] {message}", null, brush));
+                LogEntries.Add(new LogEntry(level, $"[{item.Timestamp.LocalDateTime}] [{level,-9}] {message}", null, brush));
             }
 
             if (_autoscroll)
@@ -121,7 +170,7 @@ namespace WolvenKit.Views.Tools
             Logtype.Error => (Brush)Application.Current.FindResource("WolvenKitRed"),
             Logtype.Warning => (Brush)Application.Current.FindResource("WolvenKitYellow"),
             Logtype.Debug => (Brush)Application.Current.FindResource("WolvenKitPurple"),
-            Logtype.Success => Brushes.Green,
+            Logtype.Success => (Brush)Application.Current.FindResource("WolvenKitGreen"),
 
             _ => throw new ArgumentOutOfRangeException(nameof(level), level, null),
         };
@@ -155,5 +204,16 @@ namespace WolvenKit.Views.Tools
             // TODO: Implement scrolling and copy
         }
 
+        private void ScrollViewer_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.PageUp)
+            {
+                _scrollViewer?.PageUp();
+            }
+            else if (e.Key == Key.PageDown)
+            {
+                _scrollViewer?.PageDown();
+            }
+        }
     }
 }

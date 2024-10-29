@@ -160,7 +160,23 @@ public class ImportableItemViewModel : ImportExportItemViewModel
         }
 
         args = new XbmImportArgs(setup, blob.Header.TextureInfo.MipCount > 1);
+        args.PremultiplyAlpha = CheckForAlphaMask(fileName);
         return true;
 
+    }
+
+    private static bool CheckForAlphaMask(string fileName)
+    {
+        try
+        {
+            using var image = System.Drawing.Image.FromFile(fileName);
+            return image.PixelFormat is System.Drawing.Imaging.PixelFormat.Format32bppArgb
+                or System.Drawing.Imaging.PixelFormat.Format32bppPArgb
+                or System.Drawing.Imaging.PixelFormat.Format64bppArgb or System.Drawing.Imaging.PixelFormat.Format64bppPArgb;
+        }
+        catch
+        {
+            return false;
+        }
     }
 }
