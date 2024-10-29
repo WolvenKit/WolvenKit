@@ -83,6 +83,10 @@ namespace WolvenKit.Common.Model.Arguments
         // Export textures?
         private bool _exportTextures = false;
 
+        [Browsable(false)] public string? ExportMeshRelativePath { get; set; }
+
+        [Browsable(false)] public bool DeleteMeshFileAfterExport { get; set; }
+
         /// <summary>
         /// Binary Export Bool, Decides between GLB and GLTF
         /// </summary>
