@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using SharpDX.DXGI;
 using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
@@ -9,6 +10,7 @@ using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Helpers;
@@ -178,7 +180,7 @@ public class ImportExportHelper
 
         if (cr1.ReadFile(out var f1) != EFileReadErrorCodes.NoError)
         {
-            throw new Exception();
+            throw new Exception("Failed to parse file");
         }
 
         if (f1?.RootChunk is not MorphTargetMesh morphTargetMesh ||
@@ -197,32 +199,33 @@ public class ImportExportHelper
             return false;
         }
 
-        var pathToArchive = Path.Join(outpath.Split(ProjectResourceHelper.RawSubdirWithSlashes).First(), "archive");
-        var pathToRaw = Path.Join(outpath.Split(ProjectResourceHelper.RawSubdirWithSlashes).First(), "raw");
+        var pathToProject = outpath.Split(ProjectResourceHelper.SourceSubdirWithSlashes).First();
+        var pathToArchive = Path.Join(pathToProject, "source", "archive");
 
         var materialMeshPath = Path.Join(pathToArchive, relativeDestPath);
 
-        var rawDestPath = $"{pathToRaw.Replace(".mesh", ".Material")}.json";
+        var rawDestPath =
+            $"{ProjectResourceHelper.SwitchArchiveRaw(cr2WFile.FullName.Replace(".morphtarget", ".morphtarget.Material"))}.json";
 
         if (File.Exists(rawDestPath))
         {
-            _loggerService.Info($"Not overwriting {rawDestPath.Replace(pathToArchive, "")}");
-            return true;
+            File.Delete(rawDestPath);
         }
 
-        if (!File.Exists(materialMeshPath))
+        var meshWasAdded = false;
+        try
         {
-            ProjectResourceHelper.AddFileToProjectFolder(morphTargetMesh.BaseMesh.DepotPath, null, true);
-        }
+            if (!File.Exists(materialMeshPath))
+            {
+                ProjectResourceHelper.AddToProject(relativeDestPath);
+                meshWasAdded = true;
+            }
 
-        if (!File.Exists(materialMeshPath))
-        {
-            return false;
-        }
+            if (!File.Exists(materialMeshPath))
+            {
+                throw new WolvenKitException(-1, $"Failed to add ${relativeDestPath} to project");
+            }
 
-
-        if (!File.Exists(rawDestPath))
-        {
             var meshArgs = new MeshExportArgs()
             {
                 withMaterials = true, MaterialUncookExtension = EUncookExtension.png, MaterialRepo = outpath,
@@ -231,9 +234,9 @@ public class ImportExportHelper
             await using var fs = File.Open(materialMeshPath, FileMode.Open);
             using var cr = new CR2WReader(fs);
 
-            if (cr.ReadFile(out var cr2w) != EFileReadErrorCodes.NoError)
+            if (cr.ReadFile(out var cr2W) != EFileReadErrorCodes.NoError)
             {
-                throw new Exception();
+                throw new WolvenKitException(-1, $"Failed to extract {relativeDestPath}");
             }
 
             if (!Directory.Exists(outpath))
@@ -241,15 +244,28 @@ public class ImportExportHelper
                 Directory.CreateDirectory(outpath);
             }
 
-            var exportPath = cr2WFile.FullName.Replace(ProjectResourceHelper.ArchiveSubdirWithSlashes,
-                ProjectResourceHelper.RawSubdirWithSlashes);
-            if (!_modTools.ExportMaterials(cr2w!, new FileInfo(exportPath), meshArgs))
+            if (!_modTools.ExportMaterials(cr2W!, new FileInfo(rawDestPath.Replace("Material.", "")), meshArgs))
             {
-                return false;
+                throw new WolvenKitException(-1, "Failed to export materials to file");
+            }
+
+            return true;
+
+        }
+        catch (Exception e)
+        {
+            _loggerService.Error(e.Message);
+        }
+        finally
+        {
+            // clean up after ourselves: don't leave the mesh in the project
+            if (meshWasAdded && File.Exists(materialMeshPath))
+            {
+                File.Delete(materialMeshPath);
             }
         }
 
-        return true;
+        return false;
     }
 
     public async Task<bool> Export(FileInfo cr2wFile, GlobalExportArgs args, DirectoryInfo basedir, DirectoryInfo? rawoutdir = null, ECookedFileFormat[]? forcebuffers = null) =>

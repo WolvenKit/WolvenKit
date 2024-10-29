@@ -25,6 +25,10 @@ namespace WolvenKit.App.Helpers;
 
 public static class ProjectResourceHelper
 {
+    public static readonly string SourceSubdirWithSlashes = $"{Path.DirectorySeparatorChar}source{Path.DirectorySeparatorChar}";
+    public static readonly string ArchiveSubdirWithSlashes = $"{Path.DirectorySeparatorChar}archive{Path.DirectorySeparatorChar}";
+    public static readonly string RawSubdirWithSlashes = $"{Path.DirectorySeparatorChar}raw{Path.DirectorySeparatorChar}";
+    
     private static IProjectManager? s_projectManager;
     private static IProjectManager? GetProjectManager() => s_projectManager ??= Locator.Current.GetService<IProjectManager>();
 
@@ -45,6 +49,16 @@ public static class ProjectResourceHelper
             Locator.Current.GetService<RED4Controller>()!,
             Locator.Current.GetService<MockGameController>()!
         ).GetRed4Controller();
+    }
+
+    public static string SwitchArchiveRaw(string filePath)
+    {
+        if (filePath.Contains(ArchiveSubdirWithSlashes))
+        {
+            return filePath.Replace(ArchiveSubdirWithSlashes, RawSubdirWithSlashes);
+        }
+
+        return filePath.Replace(RawSubdirWithSlashes, ArchiveSubdirWithSlashes);
     }
 
     private static string GetUniqueSubfolderPath(IEnumerable<string> allFilePaths, string currentFilePath)
@@ -219,13 +233,15 @@ public static class ProjectResourceHelper
     }
     
     private static void AddFileToProjectFolder(string projectRoot, ResourcePath resourcePath, ResourcePath targetResourcePath,
-        Dictionary<string, string> pathReplacements, bool overwriteFiles)
+        Dictionary<string, string>? pathReplacements, bool overwriteFiles = true)
     {
         if (resourcePath.GetResolvedText() is not string sourceRelativePath
             || string.IsNullOrEmpty(sourceRelativePath))
         {
             return;
         }
+
+        pathReplacements ??= [];
         
         var refPathHash = HashHelper.CalculateDepotPathHash(resourcePath);
 
