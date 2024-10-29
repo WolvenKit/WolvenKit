@@ -28,9 +28,9 @@ namespace WolvenKit.Common
 
         public void LoadGameArchives(FileInfo executable);
         public void LoadArchive(string path, EArchiveSource source = EArchiveSource.Unknown);
-        public void LoadModArchive(string filename, bool analyzeFiles = true);
-        public void LoadModsArchives(FileInfo executable, bool analyzeFiles = true);
-        public void LoadAdditionalModArchives(string archiveBasePath, bool analyzeFiles = true);
+        public void LoadModArchive(string filename, bool analyzeFiles = true, bool forceResdcan = false);
+        public void LoadModArchives(FileInfo executable, bool analyzeFiles = true, string[]? ignoredArchives = null);
+        public void LoadAdditionalModArchives(string archiveBasePath, bool analyzeFiles = true, string[]? ignoredArchives = null);
 
         public string[] GetIgnoredArchiveNames();
 
@@ -69,6 +69,9 @@ namespace WolvenKit.Common
         public IGameFile? GetGameFile(ResourcePath path, bool includeMods = true, bool includeProject = true);
         public CR2WFile? GetCR2WFile(ResourcePath path, bool includeMods = true, bool includeProject = true);
 
+        public bool IsInitialized { get; }
+        public void Initialize(FileInfo executable, bool scanArchives = false);
+        
         IEnumerable<IGameArchive> GetModArchives();
         IEnumerable<IGameArchive> GetBaseArchives();
         IEnumerable<IGameArchive> GetEp1Archives();

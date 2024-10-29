@@ -83,7 +83,7 @@ public partial class PluginViewModel : ObservableObject
             case EPluginStatus.Latest:
                 IsOpenEnabled = true;
                 IsNotInstalled = false;
-                Label = "Repair";
+                Label = "Reinstall";
                 break;
             case EPluginStatus.Installed:
                 break;

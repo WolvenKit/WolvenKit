@@ -140,7 +140,10 @@ public partial class WatcherService : ObservableObject, IWatcherService
             }
             catch (Exception)
             {
-                _loggerService?.Error($"Project Explorer: something went wrong while changing {e.Name}. You can try a manual refresh.");
+                if (!(e.Name ?? "").Contains("_tmp"))
+                {
+                    _loggerService?.Error($"Project Explorer: something went wrong while changing {e.Name}. You can try a manual refresh.");
+                }
             }
         }
 

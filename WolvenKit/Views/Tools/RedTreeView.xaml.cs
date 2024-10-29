@@ -51,8 +51,6 @@ namespace WolvenKit.Views.Tools
                 .Where(x => x == "UpdateFilteredItemsSource")
                 .Subscribe(_ => UpdateFilteredItemsSource(ItemsSource));
 
-            _modifierViewStateSvc.ModifierStateChanged += OnModifierStateSvcChanged;
-
             TreeView.ApplyTemplate();
         }
 
@@ -135,9 +133,30 @@ namespace WolvenKit.Views.Tools
             }
         }
 
+
+        private void OnExpanded(object sender, NodeExpandedCollapsedEventArgs e)
+        {
+            if (!ModifierViewStateService.IsShiftBeingHeld || e.Node.Content is not ChunkViewModel chunk)
+            {
+                return;
+            }
+
+            chunk.SetChildExpansionStates(true);
+        }
+        
         public async void OnCollapsed(object sender, Syncfusion.UI.Xaml.TreeView.NodeExpandedCollapsedEventArgs e)
         {
-            if (e.Node.Level != 0 || e.Node.Content is not ChunkViewModel { ResolvedData: worldStreamingSector })
+            if (e.Node.Content is not ChunkViewModel cvm)
+            {
+                return;
+            }
+
+            if (ModifierViewStateService.IsShiftBeingHeld)
+            {
+                cvm.SetChildExpansionStates(false);
+            }
+
+            if (e.Node.Level != 0 || cvm.ResolvedData is not worldStreamingSector)
             {
                 return;
             }
@@ -170,7 +189,14 @@ namespace WolvenKit.Views.Tools
             //    e.Cancel = true;
         }
 
-        public bool IsControlBeingHeld => _modifierViewStateSvc.GetModifierState(ModifierKeys.Control);
+        public bool IsControlBeingHeld
+        {
+            get => (bool)GetValue(IsControlBeingHeldProperty);
+            set => SetValue(IsControlBeingHeldProperty, value);
+        }
+
+        public static readonly DependencyProperty IsControlBeingHeldProperty =
+            DependencyProperty.Register(nameof(IsControlBeingHeld), typeof(bool), typeof(RedTreeView));
 
         private bool IsAllowDrop(TreeViewItemDragOverEventArgs e)
         {
@@ -230,7 +256,8 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            var targetIndex = target.Parent.Properties.IndexOf(target);
+            var indexOffset = e.DropPosition == DropPosition.DropBelow ? 1 : 0;
+            var targetIndex = target.Parent.Properties.IndexOf(target) + indexOffset;
 
             foreach (var node in e.DraggingNodes.Where(node => node.Content is ChunkViewModel))
             {
@@ -241,21 +268,15 @@ namespace WolvenKit.Views.Tools
                     if (await Interactions.ShowMessageBoxAsync($"Duplicate {source.Data.GetType().Name} here?",
                             "Duplicate Confirmation", WMessageBoxButtons.YesNo) == WMessageBoxResult.Yes)
                     {
-                        target.Parent.InsertChild(
-                            target.Parent.Properties.IndexOf(target) +
-                            (e.DropPosition == DropPosition.DropBelow ? 1 : 0), (IRedType)irc.DeepCopy());
+                        target.Parent.InsertChild(targetIndex, (IRedType)irc.DeepCopy());
                     }
                 }
                 else
                 {
                     Debug.WriteLine("Moved a node to " + targetIndex);
-                    target.Parent.MoveChild(
-                        targetIndex + (e.DropPosition == DropPosition.DropBelow ? 1 : 0),
-                        source);
-                    targetIndex += 1;
+                    target.Parent.MoveChild(targetIndex, source);
                 }
             }
-
 
             e.Handled = true;
         }
@@ -392,12 +413,6 @@ namespace WolvenKit.Views.Tools
         private List<ChunkViewModel> GetSelectedChunks() =>
             SelectedItems is not ObservableCollection<object> selection ? [] : selection.OfType<ChunkViewModel>().ToList();
 
-        private void OnModifierStateSvcChanged() => GetSelectedChunks().ForEach((chunk) => chunk.RefreshContextMenuFlags());
-
-        private void OnKeystateChanged(object sender, KeyEventArgs e) => _modifierViewStateSvc.OnKeystateChanged(e);
-
-        private void OnContextMenuOpened(object sender, ContextMenuEventArgs e) => _modifierViewStateSvc.RefreshModifierStates();
-
         private void OnDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (SelectedItem is not ChunkViewModel chunk)
@@ -416,7 +431,6 @@ namespace WolvenKit.Views.Tools
             var expansionStates = chunk.GetAllProperties().Select((child) => child.IsExpanded).ToList();
             chunk.SetChildExpansionStates(!expansionStates.Contains(true));
 
-
             chunk.IsExpanded = expansionState;
         }
 
@@ -429,5 +443,42 @@ namespace WolvenKit.Views.Tools
             
             return selection.OfType<ChunkViewModel>().ToList().FirstOrDefault((cvm) => cvm.Parent is null);
         }
+
+        private void TreeViewContextMenu_OnOpened(object sender, RoutedEventArgs e)
+        {
+            _isContextMenuOpen = true;
+            _modifierViewStateSvc.RefreshModifierStates();
+            if (SelectedItem is ChunkViewModel cvm && GetSelectedChunks().Count == 1)
+            {
+                cvm.RefreshContextMenuFlags();
+            }
+        }
+
+        private void TreeViewContextMenu_OnClosed(object sender, RoutedEventArgs e) => _isContextMenuOpen = false;
+
+        private void TreeViewContextMenu_OnKeyChanged(object sender, KeyEventArgs e)
+        {
+            if (!_isContextMenuOpen)
+            {
+                return;
+            }
+
+            _modifierViewStateSvc.OnKeystateChanged(e);
+            if (SelectedItem is ChunkViewModel cvm)
+            {
+                cvm.RefreshContextMenuFlags();
+            }
+        }
+
+        private bool _isContextMenuOpen;
+
+        private void TreeView_OnKeyChanged(object sender, KeyEventArgs e)
+        {
+            if (!_isContextMenuOpen)
+            {
+                _modifierViewStateSvc.OnKeystateChanged(e);
+            }
+        }
+
     }
 }

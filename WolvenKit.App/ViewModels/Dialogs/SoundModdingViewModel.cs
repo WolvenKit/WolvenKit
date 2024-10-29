@@ -78,26 +78,28 @@ public partial class SoundModdingViewModel : DialogViewModel
             return;
         }
 
-        var path = Path.Combine(Environment.CurrentDirectory, "Resources", "soundEvents.json");
-        path = Path.Combine(_projectManager.ActiveProject.ResourcesDirectory, "info.json");
-        if (File.Exists(path))
+        var path = Path.Combine(_projectManager.ActiveProject.ResourcesDirectory, "info.json");
+        if (!File.Exists(path))
         {
-            try
+            return;
+        }
+
+        try
+        {
+            _info = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText(path), _options).NotNull();
+            foreach (var e in _info.CustomSounds)
             {
-                _info = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText(path), _options).NotNull();
-                foreach (var e in _info.CustomSounds)
-                {
-                    CustomEvents.Add(e);
-                }
-                if (CustomEvents.Count > 0)
-                {
-                    SelectedObject = CustomEvents.First();
-                }
+                CustomEvents.Add(e);
             }
-            catch (Exception e)
+
+            if (CustomEvents.Count > 0)
             {
-                _logger.Error(e);
+                SelectedObject = CustomEvents.First();
             }
+        }
+        catch (Exception e)
+        {
+            _logger.Error(e);
         }
     }
 

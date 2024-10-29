@@ -143,7 +143,41 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         ShowFirstTimeSetup();
 
+        ClearMaterialCache();
+
         DockedViews.CollectionChanged += DockedViews_OnCollectionChanged;
+    }
+
+    private void ClearMaterialCache()
+    {
+        if (!Directory.Exists(ISettingsManager.GetTemp_OBJPath()))
+        {
+            return;
+        }
+
+        var files = Directory.GetFiles(ISettingsManager.GetTemp_OBJPath());
+        List<string> failedToDelete = [];
+        foreach (var file in files)
+        {
+            try
+            {
+                File.Delete(file);
+            }
+            catch
+            {
+                failedToDelete.Add(file);
+            }
+        }
+
+        if (!failedToDelete.Any())
+        {
+            return;
+        }
+
+        _loggerService.Error("Failed to delete parts of the texture cache!");
+        _loggerService.Error("This can indicate broken files or textures. To fix this, close Wolvenkit and delete the following files:");
+        var filenames = string.Join("\n\t", failedToDelete);
+        _loggerService.Error($"\t{filenames}");
     }
 
     private void DockedViews_OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -877,7 +911,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     {
         _loggerService.Info($"Scanning {ActiveProject!.ModFiles.Count} files. Please wait...");
 
-        var allReferencePaths = await ActiveProject!.GetAllReferences(_progressService);
+        var allReferencePaths = await ActiveProject!.GetAllReferences(_progressService, _loggerService);
         _loggerService.Info($"Scanning {ActiveProject!.Files.Count(f => f.StartsWith("archive"))} files. Please wait...");
         
         var referencesHashSet = new HashSet<string>(allReferencePaths.SelectMany((r) => r.Value));
@@ -1105,8 +1139,15 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             await assetBrowser.LoadAssetBrowserCommand.ExecuteAsync(null);
         }
 
-        assetBrowser.SearchBarText = $"archive:{result}";
-        await assetBrowser.PerformSearch($"archive:{result}");
+        if (assetBrowser.RightItems.FirstOrDefault(f => f.FullName.Contains(result)) is FileSystemViewModel mod)
+        {
+            assetBrowser.ShowFile(new FileSystemModel(null, result, mod.FullName, true));
+        }
+        else
+        {
+            assetBrowser.SearchBarText = $"archive:{result}";
+            await assetBrowser.PerformSearch($"archive:{result}");
+        }
 
         return Task.CompletedTask;
     }
@@ -1829,13 +1870,16 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     /// <param name="saveAsDialogRequested"></param>
     private void Save(IDocumentViewModel fileToSave, bool saveAsDialogRequested = false)
     {
-        if (_projectManager.ActiveProject is null)
+        var isWscript = fileToSave is WScriptDocumentViewModel;
+
+        // Do not allow saving of anything that's not wscript without a project. Bad user!
+        if (_projectManager.ActiveProject is null && !isWscript)
         {
             Interactions.ShowConfirmation((s_noProjectText, s_noProjectTitle, WMessageBoxImage.Warning, WMessageBoxButtons.Ok));
             return;
         }
 
-        if (fileToSave is RedDocumentViewModel && _projectManager.ActiveProject is null)
+        if (fileToSave is RedDocumentViewModel && _projectManager.ActiveProject is null && !isWscript)
         {
             return;
         }

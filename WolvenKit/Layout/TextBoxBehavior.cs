@@ -73,5 +73,22 @@ namespace WolvenKit.Functionality.Helpers
 
         public static bool GetFocusGainedSelectAll(DependencyObject element) =>
             (bool)element.GetValue(FocusGainedSelectAllProperty);
+
+        public static readonly DependencyProperty IsValidProperty =
+            DependencyProperty.RegisterAttached(
+                "IsValid",
+                typeof(bool),
+                typeof(TextBoxBehavior),
+                new PropertyMetadata(true));
+
+        public static bool GetIsValid(DependencyObject obj)
+        {
+            return (bool)obj.GetValue(IsValidProperty);
+        }
+
+        public static void SetIsValid(DependencyObject obj, bool value)
+        {
+            obj.SetValue(IsValidProperty, value);
+        }
     }
 }

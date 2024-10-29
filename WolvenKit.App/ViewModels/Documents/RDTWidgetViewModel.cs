@@ -50,7 +50,7 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
 
     [ObservableProperty] private bool _isDragging;
 
-
+    [ObservableProperty] private bool _isPixelGridSnappingEnabled;
 
     public async Task LoadResources()
     {

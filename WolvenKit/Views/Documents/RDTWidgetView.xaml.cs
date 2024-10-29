@@ -145,8 +145,6 @@ namespace WolvenKit.Views.Documents
         private void SetupWidgetPreview()
         {
             var group = new TransformGroup();
-
-
             var xform = new ScaleTransform();
             //xform.ScaleY = -1;
             group.Children.Add(xform);
@@ -322,6 +320,16 @@ namespace WolvenKit.Views.Documents
             InkCache.Resources.Clear();
 
             Load();
+        }
+
+        private void TogglePixelGrid(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel is null)
+            {
+                return;
+            }
+
+            ViewModel.IsPixelGridSnappingEnabled = !ViewModel.IsPixelGridSnappingEnabled;
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

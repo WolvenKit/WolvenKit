@@ -1,35 +1,35 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-      <Platforms>x64</Platforms>
-      <OutputType>Exe</OutputType>
-      <TargetFramework>net8.0</TargetFramework>
-      <VersionPrefix>8.14.1</VersionPrefix>
-      <VersionSuffix>$(VersionSuffix)</VersionSuffix>
-	  <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <Platforms>x64</Platforms>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <VersionPrefix>8.15.1</VersionPrefix>
+    <VersionSuffix>$(VersionSuffix)</VersionSuffix>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 
-      <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-      <StartupObject>WolvenKit.CLI.Program</StartupObject>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <StartupObject>WolvenKit.CLI.Program</StartupObject>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
   </PropertyGroup>
 
-    <PropertyGroup>
-        <Title>WolvenKit.CLI</Title>
-        <PackAsTool>true</PackAsTool>
-        <ToolCommandName>cp77tools</ToolCommandName>
-        <PackageOutputPath>./nupkg</PackageOutputPath>
-        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-        <PackageId>WolvenKit.CLI</PackageId>
-        <Company>WolvenKit</Company>
-        <Product>WolvenKit.CLI</Product>
-        <Description>Command line modding tool for Cyberpunk 2077.</Description>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageProjectUrl>https://github.com/WolvenKit/WolvenKit</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/WolvenKit/WolvenKit</RepositoryUrl>
-        <RepositoryType>git</RepositoryType>
-        <PackageTags>wolvenkit, cyberpunk2077</PackageTags>
-        <ApplicationManifest>app.manifest</ApplicationManifest>
-    </PropertyGroup>
+  <PropertyGroup>
+    <Title>WolvenKit.CLI</Title>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>cp77tools</ToolCommandName>
+    <PackageOutputPath>./nupkg</PackageOutputPath>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageId>WolvenKit.CLI</PackageId>
+    <Company>WolvenKit</Company>
+    <Product>WolvenKit.CLI</Product>
+    <Description>Command line modding tool for Cyberpunk 2077.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/WolvenKit/WolvenKit</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/WolvenKit/WolvenKit</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>wolvenkit, cyberpunk2077</PackageTags>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
 
   <ItemGroup>
     <None Remove="appsettings.json" />
@@ -51,7 +51,6 @@
     <PackageReference Include="System.CommandLine.Hosting" />
 
   </ItemGroup>
-
 
 
   <ItemGroup>

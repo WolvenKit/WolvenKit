@@ -526,23 +526,14 @@ namespace WolvenKit.Modkit.RED4
 
         }
 
-        private static (string, GltfImportAsFormat) GetImportExtensionAndFormat(GltfImportArgs args,
-            Optional<string> maybeType)
-        {
-            // Anything but .mesh should have a value
-            if (!maybeType.HasValue)
-            {
-                return ($".mesh", args.ImportFormat);
-            }
-           
-            return args.ImportFormat switch
+        private static (string, GltfImportAsFormat) GetImportExtensionAndFormat(GltfImportArgs args, Optional<string> maybeType) =>
+            args.ImportFormat switch
             {
                 GltfImportAsFormat.MeshWithRig => ($".mesh", args.ImportFormat),
                 GltfImportAsFormat.Anims => ($".anims", GltfImportAsFormat.Anims),
-                _ => ($".{args.ImportFormat.ToString().ToLower()}", args.ImportFormat)
+                _ => (maybeType.HasValue ? maybeType.Value : ".mesh", args.ImportFormat), 
             };
-        }
-            
+
 
 #pragma warning disable IDE0072 // Add missing cases
         private static ECookedFileFormat FromRawExtension(ERawFileFormat rawextension) =>

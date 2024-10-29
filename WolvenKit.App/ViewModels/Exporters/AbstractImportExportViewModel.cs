@@ -51,10 +51,10 @@ public abstract partial class AbstractImportExportViewModel : FloatingPaneViewMo
     #region commands
 
     [RelayCommand(CanExecute = nameof(IsAnyFile))] // TODO NotifyCanExecuteChangedFor
-    public async Task ProcessAll() => await ExecuteProcessBulk(true);
+    private async Task ProcessAll() => await Task.Run(() => ExecuteProcessBulk(true));
 
     [RelayCommand(CanExecute = nameof(IsAnyFileSelected))] // TODO NotifyCanExecuteChangedFor
-    public async Task ProcessSelected() => await ExecuteProcessBulk();
+    private async Task ProcessSelected() => await Task.Run(() => ExecuteProcessBulk());
 
     [RelayCommand(CanExecute = nameof(IsAnyFileSelected))] // TODO NotifyCanExecuteChangedFor
     private void CopyArgumentsTemplateTo()
@@ -98,6 +98,7 @@ public abstract partial class AbstractImportExportViewModel : FloatingPaneViewMo
         {
             _refreshtask = LoadFilesAsync();
             await _refreshtask;
+            OnRefresh?.Invoke(this, EventArgs.Empty);
         }
     }
 
@@ -114,21 +115,24 @@ public abstract partial class AbstractImportExportViewModel : FloatingPaneViewMo
 
     private JsonObject SerializeArgs(ImportExportArgs args)
     {
-        if (JsonSerializer.SerializeToNode(args, args.GetType(), _jsonSerializerSettings) is JsonObject node)
+        if (JsonSerializer.SerializeToNode(args, args.GetType(), _jsonSerializerSettings) is not JsonObject node)
         {
-            node.Remove("Changing");
-            node.Remove("Changed");
-            node.Remove("ThrownExceptions");
-
-            return node;
+            throw new ArgumentNullException();
         }
 
-        throw new ArgumentNullException();
+        node.Remove("Changing");
+        node.Remove("Changed");
+        node.Remove("ThrownExceptions");
+
+        return node;
+
     }
 
     protected abstract Task ExecuteProcessBulk(bool all = false);
 
     protected abstract Task LoadFilesAsync();
+
+    public event EventHandler? OnRefresh;
 
     protected async void ImportExportViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {

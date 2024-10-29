@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
@@ -118,14 +120,15 @@ namespace WolvenKit.Modkit.RED4
 
             uint numTargets = rendMorphBlob.Header.NumTargets;
 
-            if (numTargets < 1)
+            if (numTargets == 0)
             {
-                var helpMessage =
-                    morphBlob.Targets.Count > 0
-                        ? $"There are {morphBlob.Targets.Count} targets, but `blob.header.numTargets` is 0. This was probably done intentionally to disable morphing, but you MAY be able to make this a valid .morphtarget by setting `numTargets` to the actual number of targets."
-                        : $"`numTargets` is 0 and there are no `targets` defined, this doesn't look like a valid .morphtarget";
+                if (morphBlob.Targets.Count == 0)
+                {
+                    throw new ArgumentOutOfRangeException("blob.header.numTargets", rendMorphBlob.Header.NumTargets,
+                        "`numTargets` is 0 and there are no `targets` defined, this doesn't look like a valid .morphtarget");
+                }
 
-                throw new ArgumentOutOfRangeException("blob.header.numTargets", rendMorphBlob.Header.NumTargets, helpMessage);
+                numTargets = (uint)morphBlob.Targets.Count;
             }
 
             var numVertexDiffsInEachChunk = new uint[numTargets, subMeshC];

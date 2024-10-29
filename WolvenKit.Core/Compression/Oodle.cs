@@ -394,8 +394,7 @@ public static class Oodle
     /// <returns></returns>
     public static int GetCompressedBufferSizeNeeded(int count)
     {
-        var n = (((count + 0x3ffff + ((uint)((count + 0x3ffff) >> 0x3f) & 0x3ffff))
-                 >> 0x12) * 0x112) + count;
+        var n = (((count + 0x3ffff + ((uint)((count + 0x3ffff) >> 0x1f) & 0x3ffff)) >> 0x12) * 0x112) + count;
         //var n  = OodleNative.GetCompressedBufferSizeNeeded((long)count);
         return (int)n;
     }
@@ -483,12 +482,9 @@ public static class Oodle
                 {
                     var programName = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey + item)?.GetValue("DisplayName");
                     var installLocation = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey + item)?.GetValue("InstallLocation");
-                    if (programName?.ToString() is string n && installLocation?.ToString() is string l)
+                    if (programName?.ToString() is string n && installLocation?.ToString() is string l && n.Contains(gameName))
                     {
-                        if (n.Contains(gameName) || n.Contains(gameName))
-                        {
-                            exePath = Directory.GetFiles(l, exeName, SearchOption.AllDirectories).First();
-                        }
+                        exePath = Directory.GetFiles(l, exeName, SearchOption.AllDirectories).First();
                     }
 
                     strDelegate(exePath);

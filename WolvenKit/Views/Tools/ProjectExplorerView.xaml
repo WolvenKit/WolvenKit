@@ -3,7 +3,6 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:data="clr-namespace:Syncfusion.Data;assembly=Syncfusion.Data.WPF"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
@@ -17,7 +16,9 @@
     d:DesignHeight="450"
     d:DesignWidth="400"
     x:TypeArguments="tools:ProjectExplorerViewModel"
-    ContextMenuOpening="RefreshModifierStates"
+    ContextMenuOpening="OnContextMenuOpen"
+    KeyDown="Main_OnKeystateChanged"
+    KeyUp="Main_OnKeystateChanged"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -47,8 +48,9 @@
             <ContextMenu
                 x:Key="TreeGridContextMenu"
                 FontSize="11"
-                KeyDown="OnKeyStateChanged"
-                KeyUp="OnKeyStateChanged"
+                ContextMenuOpening="OnContextMenuOpen"
+                KeyDown="ContextMenu_OnKeyStateChanged"
+                KeyUp="ContextMenu_OnKeyStateChanged"
                 Style="{DynamicResource WPFContextMenuStyle}">
                 <MenuItem
                     Margin="0"
@@ -682,6 +684,7 @@
                         Margin="3,0,0,0"
                         Click="ExpandChildren_OnClick"
                         Style="{StaticResource UnhideOnShift}"
+                        IsEnabled="{Binding HasSelectedItem}"
                         ToolTip="Expand Children">
                         <iconPacks:PackIconBootstrapIcons
                             Width="13"
@@ -692,6 +695,7 @@
                         Margin="3,0,0,0"
                         Click="CollapseChildren_OnClick"
                         Style="{StaticResource UnhideOnShift}"
+                        IsEnabled="{Binding HasSelectedItem}"
                         ToolTip="Collapse Children">
                         <iconPacks:PackIconBootstrapIcons
                             Width="13"
@@ -700,6 +704,7 @@
                     </Button>
                     <Button
                         Margin="3,0,0,0"
+                        IsEnabled="{Binding CanScrollToOpenFile}"
                         Click="ScrollToOpenFile_OnClick"
                         ToolTip="Scroll to open file">
                         <iconPacks:Material
@@ -831,6 +836,7 @@
             BorderThickness="0"
             ColumnSizer="Star"
             ContextMenu="{StaticResource TreeGridContextMenu}"
+            ContextMenuOpening="OnContextMenuOpen"
             CurrentCellBorderBrush="White"
             CurrentCellBorderThickness="0"
             ExpandStateMappingName="IsExpanded"
@@ -866,6 +872,13 @@
                 </Style>
             </syncfusion:SfTreeGrid.Resources>
 
+            <syncfusion:SfTreeGrid.SortColumnDescriptions>
+                <syncfusion:SortColumnDescription ColumnName="Name" SortDirection="Ascending" />
+                <syncfusion:SortColumnDescription ColumnName="GameRelativePath" SortDirection="Ascending" />
+                <syncfusion:SortColumnDescription ColumnName="Extension" SortDirection="Ascending" />
+                <syncfusion:SortColumnDescription ColumnName="FileSizeStr" SortDirection="Ascending" />
+            </syncfusion:SfTreeGrid.SortColumnDescriptions>
+            
             <syncfusion:SfTreeGrid.Columns>
                 <syncfusion:TreeGridTextColumn
                     Width="220"
@@ -877,16 +890,19 @@
                 <syncfusion:TreeGridTextColumn
                     HeaderText="Path"
                     MappingName="GameRelativePath"
+                    ImmediateUpdateColumnFilter="True"
                     ShowToolTip="True"
                     TextTrimming="CharacterEllipsis" />
                 <syncfusion:TreeGridTextColumn
                     Width="70"
                     AllowResizing="False"
+                    ImmediateUpdateColumnFilter="True"
                     HeaderText="Kind"
                     MappingName="Extension" />
                 <syncfusion:TreeGridTextColumn
                     Width="70"
                     AllowResizing="False"
+                    ImmediateUpdateColumnFilter="True"
                     HeaderText="Size"
                     MappingName="FileSizeStr" />
             </syncfusion:SfTreeGrid.Columns>

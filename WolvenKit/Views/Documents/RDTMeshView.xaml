@@ -325,7 +325,7 @@
                         IsEnabled="{Binding IsLoadingMaterials, Converter={StaticResource InvertBooleanConverter}}"
                         ToolTip="May take a while - watch log for completion (Hold Ctrl to clear cache)">
                         <Button.Style>
-                            <Style BasedOn="{StaticResource ButtonDefault}" TargetType="Button">
+                            <Style BasedOn="{StaticResource ButtonDefault}" TargetType="{x:Type Button}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsCtrlKeyPressed}" Value="True">
                                         <Setter Property="Content" Value="Clear Cache and regenerate" />

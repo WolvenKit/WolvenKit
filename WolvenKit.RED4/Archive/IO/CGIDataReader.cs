@@ -32,7 +32,7 @@ public class CGIDataReader : Red4Reader, IBufferReader
         var numTetr = _reader.ReadUInt32();
         data.Uk4 = _reader.ReadUInt32();
         data.Uk5 = _reader.ReadUInt32();
-        data.Uk5 = _reader.ReadUInt32();
+        data.Uk6 = _reader.ReadUInt32();
 
         data.Bounds.Min.X = _reader.ReadSingle();
         data.Bounds.Min.Y = _reader.ReadSingle();

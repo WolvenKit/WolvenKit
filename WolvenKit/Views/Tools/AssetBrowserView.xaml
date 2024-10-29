@@ -17,7 +17,9 @@
     d:DataContext="{d:DesignInstance Type=tools:AssetBrowserViewModel}"
     x:TypeArguments="tools:AssetBrowserViewModel"
     BorderBrush="Transparent"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    KeyDown="AssetBrowser_OnKeyChange"
+    KeyUp="AssetBrowser_OnKeyChange">
 
 
     <Grid>
@@ -283,7 +285,11 @@
                             SelectionMode="Extended">
 
                             <syncfusion:SfDataGrid.RecordContextMenu>
-                                <ContextMenu>
+                                <ContextMenu
+                                    Opened="ContextMenu_OnOpened"
+                                    Closed="ContextMenu_OnClosed"
+                                    KeyDown="ContextMenu_OnKeyChange"
+                                    KeyUp="ContextMenu_OnKeyChange">
                                     <ContextMenu.Resources>
                                         <converters:IGameArchiveToMenuItemStringConverter x:Key="IGameArchiveToMenuItemStringConverter" />
                                     </ContextMenu.Resources>
@@ -331,11 +337,52 @@
                                             Header="Preview BK2" />
                                     </MenuItem>-->
                                     <Separator />
-                                    <MenuItem x:Name="RightContextMenuFindUsesMenuItem" Header="Find used files" />
-                                    <MenuItem x:Name="RightContextMenuFindUsingMenuItem" Header="Find files using this" />
-                                    <MenuItem x:Name="RightContextMenuBrowseToFolder" Header="Browse to asset folder" />
+                                    <MenuItem x:Name="RightContextMenuFindUsesMenuItem" Header="Find used files">
+                                        <MenuItem.Icon>
+                                            <iconPacks:PackIconMaterial
+                                                Padding="2"
+                                                VerticalAlignment="Center"
+                                                Kind="TableSearch" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem x:Name="RightContextMenuFindUsingMenuItem" Header="Find files using this">
+                                        <MenuItem.Icon>
+                                            <iconPacks:PackIconMaterial
+                                                Padding="2"
+                                                VerticalAlignment="Center"
+                                                Kind="StoreSearchOutline" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
                                     <Separator />
-                                    <MenuItem x:Name="RightContextMenuCopyPathMenuItem" Header="Copy Relative Path" />
+                                    <MenuItem x:Name="RightContextMenuBrowseToFolder" Header="Browse to asset folder">
+                                        <MenuItem.Icon>
+                                            <iconPacks:PackIconMaterial
+                                                Padding="2"
+                                                VerticalAlignment="Center"
+                                                Kind="FolderOpen" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <Separator />
+                                    <MenuItem x:Name="RightContextMenuCopyPathMenuItem"
+                                              Header="Copy Relative Path"
+                                              Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <MenuItem.Icon>
+                                            <iconPacks:PackIconVaadinIcons
+                                                Padding="2"
+                                                VerticalAlignment="Center"
+                                                Kind="Copy" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem x:Name="RightContextMenuCopyNameMenuItem"
+                                              Header="Copy File Name"
+                                              Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <MenuItem.Icon>
+                                            <iconPacks:PackIconVaadinIcons
+                                                Padding="2"
+                                                VerticalAlignment="Center"
+                                                Kind="CopyOutline" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
                                 </ContextMenu>
                             </syncfusion:SfDataGrid.RecordContextMenu>
 

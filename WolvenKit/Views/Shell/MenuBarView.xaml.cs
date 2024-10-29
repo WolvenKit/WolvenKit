@@ -14,7 +14,6 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
 {
     private AppViewModel _mainViewModel;
 
-
     //public static MaterialsRepositoryDialog MaterialsRepositoryDia { get; set; }
 
     public MenuBarView()
@@ -251,8 +250,5 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
 
     private void SetLayoutToDefault(object sender, RoutedEventArgs e) => DockingAdapter.G_Dock.LoadDefaultLayout();
     private void SaveLayoutToProject(object sender, RoutedEventArgs e) => DockingAdapter.G_Dock.SaveLayout();
-    private void GenerateMaterialRepoButton_Click(object sender, RoutedEventArgs e)
-    {
-        Interactions.ShowMaterialRepositoryView();
-    }
+    private void GenerateMaterialRepoButton_Click(object sender, RoutedEventArgs e) => Interactions.ShowMaterialRepositoryView();
 }

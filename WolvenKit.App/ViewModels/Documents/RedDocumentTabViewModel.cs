@@ -32,6 +32,7 @@ public enum RedDocumentItemType
     Json,
     Sector,
     Other,
+    None,
 }
 
 public abstract partial class RedDocumentTabViewModel : ObservableObject
@@ -61,8 +62,17 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
         }
     }
 
+    private string GetFilePathExtensionString()
+    {
+        var extension = Path.GetExtension(FilePath);
+        return extension.StartsWith('.') ? extension[1..] : extension;
+    }
+
     public virtual RedDocumentItemType GetContentType() =>
-        Enum.TryParse(Path.GetExtension(FilePath), out RedDocumentItemType type) ? type : RedDocumentItemType.Other;
+        Enum.TryParse(GetFilePathExtensionString(), true, out RedDocumentItemType type)
+            ? type
+            : RedDocumentItemType.Other;
+    
 
     public abstract ERedDocumentItemType DocumentItemType { get; }
     public string Header { get; set; }

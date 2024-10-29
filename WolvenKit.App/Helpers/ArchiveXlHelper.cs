@@ -56,6 +56,12 @@ public static partial class ArchiveXlHelper
         var end = depotPath.IndexOf('}');
         var key = depotPath.Substring(start, end - start + 1);
 
+        // TODO: We need to parse the yaml for this
+        if (key.Contains("variant"))
+        {
+            return [depotPath];
+        }
+        
         // If the key is not in the dictionary, throw an exception
         if (!s_keysAndValues.TryGetValue(key, out var substitutionList))
         {

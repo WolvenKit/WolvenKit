@@ -225,7 +225,7 @@
                         Command="{Binding DeleteItemCommand}"
                         ToolTip="Delete Element">
                         <Button.Style>
-                            <Style BasedOn="{StaticResource ButtonCustom}" TargetType="Button">
+                            <Style BasedOn="{StaticResource ButtonCustom}" TargetType="{x:Type Button}">
                                 <Setter Property="Visibility" Value="Collapsed" />
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsChecked, ElementName=DeleteButton}" Value="True">
@@ -305,7 +305,7 @@
                         Command="{Binding DeleteAllCommand}"
                         ToolTip="Delete All">
                         <Button.Style>
-                            <Style BasedOn="{StaticResource ButtonCustom}" TargetType="Button">
+                            <Style BasedOn="{StaticResource ButtonCustom}" TargetType="{x:Type Button}">
                                 <Setter Property="Visibility" Value="Collapsed" />
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsChecked, ElementName=DeleteButton}" Value="True">
@@ -340,7 +340,13 @@
                 </converters:RedEditorTemplateSelector.RedStringEditor>
                 <converters:RedEditorTemplateSelector.RedCNameEditor>
                     <DataTemplate>
-                        <editors:RedCNameEditor RedString="{Binding Data, Mode=TwoWay}" />
+                        <editors:RedCNameEditor RedString="{Binding Data, Mode=TwoWay}">
+                            <editors:RedCNameEditor.Style>
+                                <Style TargetType="editors:RedCNameEditor">
+                                    <EventSetter Event="ValueChanged" Handler="RedCNameEditor_ValueChanged" />
+                                </Style>
+                            </editors:RedCNameEditor.Style>
+                        </editors:RedCNameEditor>
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedCNameEditor>
                 <converters:RedEditorTemplateSelector.RedTweakEditor>

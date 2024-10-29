@@ -7,64 +7,63 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.x
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
 
-    - name: Publish with Dotnet
-      run: dotnet publish .\WolvenKit\WolvenKit.csproj -o .\publish -c Release
+      - name: Publish with Dotnet
+        run: dotnet publish .\WolvenKit\WolvenKit.csproj -o .\publish -c Release  -p:DebugType=None -p:DebugSymbols=false
 
-    - name: create installer
-      run: ISCC /O".\outinstaller" .\Installers\installer.iss
+      - name: create installer
+        run: ISCC /O".\outinstaller" .\Installers\installer.iss
 
-    - uses: actions/upload-artifact@v4
-      with:
-        name: wolvenkit-installer
-        path: .\outinstaller
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wolvenkit-installer
+          path: .\outinstaller
 
-    - uses: actions/upload-artifact@v4
-      with:
-        name: wolvenkit-desktop
-        path: .\publish
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wolvenkit-desktop
+          path: .\publish
 
   console-win:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.x
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
 
-    - name: Publish with Dotnet
-      run: dotnet publish ./WolvenKit.CLI/WolvenKit.CLI.csproj -o ./publish_cli -r win-x64 -c Release --no-self-contained
+      - name: Publish with Dotnet
+        run: dotnet publish ./WolvenKit.CLI/WolvenKit.CLI.csproj -o ./publish_cli -r win-x64 -c Release --no-self-contained -p:DebugType=None -p:DebugSymbols=false
 
-    - uses: actions/upload-artifact@v4
-      with:
-        name: wolvenkit-cli
-        path: ./publish_cli
-
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wolvenkit-cli
+          path: ./publish_cli
 
   console-linux:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.x
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
 
-    - name: Publish with Dotnet
-      run: dotnet publish ./WolvenKit.CLI/WolvenKit.CLI.csproj -o ./publish_cli_linux -r linux-x64 -c Release --no-self-contained
+      - name: Publish with Dotnet
+        run: dotnet publish ./WolvenKit.CLI/WolvenKit.CLI.csproj -o ./publish_cli_linux -r linux-x64 -c Release --no-self-contained -p:DebugType=None -p:DebugSymbols=false
 
-    - uses: actions/upload-artifact@v4
-      with:
-        name: wolvenkit-cli-linux
-        path: ./publish_cli_linux
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wolvenkit-cli-linux
+          path: ./publish_cli_linux

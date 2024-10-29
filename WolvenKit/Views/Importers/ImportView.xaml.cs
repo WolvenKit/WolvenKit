@@ -39,6 +39,8 @@ public partial class ImportView : ReactiveUserControl<ImportViewModel>
                 SetCurrentValue(ViewModelProperty, viewModel);
             }
 
+            ViewModel.OnRefresh += RefreshFilter;
+
             this.OneWayBind(ViewModel,
                     x => x.SelectedObject.Properties,
                     x => x.OverlayPropertyGrid.SelectedObject)
@@ -55,6 +57,8 @@ public partial class ImportView : ReactiveUserControl<ImportViewModel>
                .DisposeWith(disposables);
         });
     }
+
+    private void RefreshFilter(object sender, EventArgs e) => Datagrid_FilterChanged(ImportGrid, null);
 
     private void Datagrid_FilterChanged(object sender, GridFilterEventArgs e)
     {

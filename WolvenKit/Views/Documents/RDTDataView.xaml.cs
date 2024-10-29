@@ -6,6 +6,8 @@ using ReactiveUI;
 using Splat;
 using WolvenKit.App;
 using WolvenKit.App.ViewModels.Documents;
+using WolvenKit.App.ViewModels.Events;
+using WolvenKit.Views.Editors;
 
 namespace WolvenKit.Views.Documents
 {
@@ -123,5 +125,15 @@ namespace WolvenKit.Views.Documents
 
 
         private void AutolayoutNodes_MenuItem(object sender, RoutedEventArgs e) => Editor.LayoutNodes();
+
+        private void RedTypeView_OnValueChanged(object sender, EventArgs e)
+        {
+            if (sender is not RedCNameEditor || e is not ValueChangedEventArgs args)
+            {
+                return;
+            }
+
+            ViewModel?.OnCNameValueChanged(args);
+        }
     }
 }

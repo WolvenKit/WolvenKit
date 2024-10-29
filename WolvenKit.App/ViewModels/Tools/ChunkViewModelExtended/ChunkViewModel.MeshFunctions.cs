@@ -1,23 +1,21 @@
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Linq;
-using WolvenKit.App.Helpers;
-using WolvenKit.App.Models;
-using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
-using WolvenKit.RED4.Types.Pools;
 
 // ReSharper disable once CheckNamespace
 namespace WolvenKit.App.ViewModels.Shell;
 
 public partial class ChunkViewModel
 {
-    public ChunkViewModel? FindMaterialDefinition(bool isLocal, CName? name, int? index)
+    public const string LocalMaterialBufferPath = "localMaterialBuffer.materials";
+    public const string ExternalMaterialPath = "externalMaterials";
+    public const string PreloadMaterialPath = "preloadLocalMaterials";
+    public const string MaterialEntryDefinitionPath = "materialEntries";
+
+    private ChunkViewModel? FindMaterialDefinition(bool isLocal, CName? name, int? index)
     {
         if ((name is null && index is null)
             || GetRootModel() is not { ResolvedData: CMesh cmesh } rootModel
-            || rootModel.FindPropertyNode("materialEntries") is not ChunkViewModel entries)
+            || rootModel.GetPropertyFromPath(MaterialEntryDefinitionPath) is not ChunkViewModel entries)
         {
             return null;
         }
@@ -29,14 +27,14 @@ public partial class ChunkViewModel
             && (index == null || entry.Index == index));
     }
 
-    public ChunkViewModel? FindLocalMaterial(int index)
+    private ChunkViewModel? FindLocalMaterial(int index)
     {
         if (GetRootModel() is not { ResolvedData: CMesh } rootModel)
         {
             return null;
         }
 
-        if (rootModel.FindPropertyNode("localMaterialBuffer")?.FindPropertyNode("materials") is not ChunkViewModel entries)
+        if (rootModel.GetPropertyFromPath(LocalMaterialBufferPath) is not ChunkViewModel entries)
         {
             return null;
         }
@@ -44,14 +42,14 @@ public partial class ChunkViewModel
         return entries.TVProperties.ElementAtOrDefault(index);
     }
 
-    public ChunkViewModel? FindExternalMaterial(int index)
+    private ChunkViewModel? FindExternalMaterial(int index)
     {
         if (GetRootModel() is not { ResolvedData: CMesh } rootModel)
         {
             return null;
         }
 
-        if (rootModel.FindPropertyNode("externalMaterials") is not ChunkViewModel entries)
+        if (rootModel.GetPropertyFromPath("externalMaterials") is not ChunkViewModel entries)
         {
             return null;
         }

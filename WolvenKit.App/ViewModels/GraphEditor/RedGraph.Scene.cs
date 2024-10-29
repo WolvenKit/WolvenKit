@@ -53,7 +53,7 @@ public partial class RedGraph
         sceneGraphNode.NodeId.Id = ++_currentSceneNodeId;
         sceneGraphNode.OutputSockets.Add(new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 0, Ordinal = 0 } });
 
-        if (sceneGraphNode is scnChoiceNode)
+        if (sceneGraphNode is scnChoiceNode choiceNode)
         {
             ((scnSceneResource)_data).NotablePoints.Add(new scnNotablePoint
             {
@@ -62,6 +62,16 @@ public partial class RedGraph
                     Id = sceneGraphNode.NodeId.Id
                 }
             });
+
+            choiceNode.OutputSockets =
+            [
+                new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 1, Ordinal = 0 } },
+                new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 2, Ordinal = 0 } },
+                new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 3, Ordinal = 0 } },
+                new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 4, Ordinal = 0 } },
+                new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 5, Ordinal = 0 } },
+                new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 6, Ordinal = 0 } }
+            ];
         }
 
         if (sceneGraphNode is scnQuestNode questNode)
@@ -300,7 +310,7 @@ public partial class RedGraph
             return null;
         }
 
-        if (dataViewModel.Chunks[0].GetModelFromPath("sceneGraph.graph") is not { } nodes)
+        if (dataViewModel.Chunks[0].GetPropertyFromPath("sceneGraph.graph") is not { } nodes)
         {
             return null;
         }

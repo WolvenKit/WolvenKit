@@ -11,6 +11,7 @@ using SharpGLTF.Validation;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
+using WolvenKit.Modkit.Exceptions;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.Archive.CR2W;
@@ -29,9 +30,19 @@ namespace WolvenKit.Modkit.RED4.Tools
 
         public MeshTools(Red4ParserService red4ParserService) => _red4ParserService = red4ParserService;
 
-        public static bool ExportMesh(CR2WFile cr2w, FileInfo outfile, MeshExportArgs meshExportArgs, ValidationMode vMode = ValidationMode.TryFix)
+        public static bool ExportMesh(CR2WFile cr2W, FileInfo outfile, MeshExportArgs meshExportArgs,
+            ValidationMode vMode = ValidationMode.TryFix)
         {
-            var model = GetModel(cr2w, meshExportArgs.LodFilter, mergeMeshes: meshExportArgs.ExperimentalMergedExport, exportGarmentSupport: meshExportArgs.ExportGarmentSupport);
+            ModelRoot? model = null;
+            try
+            {
+                model = GetModel(cr2W, meshExportArgs.LodFilter, mergeMeshes: meshExportArgs.ExperimentalMergedExport,
+                    exportGarmentSupport: meshExportArgs.ExportGarmentSupport);
+            }
+            catch (ArgumentNullException)
+            {
+            }
+            
 
             if (model == null)
             {
@@ -56,9 +67,10 @@ namespace WolvenKit.Modkit.RED4.Tools
             return true;
         }
 
-        public static ModelRoot? GetModel(CR2WFile cr2w, bool lodFilter = true, bool includeRig = true, ulong chunkMask = ulong.MaxValue, bool mergeMeshes = false, bool exportGarmentSupport = false)
+        public static ModelRoot? GetModel(CR2WFile cr2W, bool lodFilter = true, bool includeRig = true, ulong chunkMask = ulong.MaxValue,
+            bool mergeMeshes = false, bool exportGarmentSupport = false)
         {
-            if (cr2w.RootChunk is not CMesh { RenderResourceBlob.Chunk: rendRenderMeshBlob rendBlob } cMesh)
+            if (cr2W.RootChunk is not CMesh { RenderResourceBlob.Chunk: rendRenderMeshBlob rendBlob } cMesh)
             {
                 return null;
             }
@@ -78,7 +90,7 @@ namespace WolvenKit.Modkit.RED4.Tools
 
             if (includeRig)
             {
-                UpdateSkinningParamCloth(ref expMeshes, cr2w);
+                UpdateSkinningParamCloth(ref expMeshes, cr2W);
             }
 
             WriteGarmentParametersToMesh(ref expMeshes, cMesh, exportGarmentSupport);
@@ -88,9 +100,10 @@ namespace WolvenKit.Modkit.RED4.Tools
             return model;
         }
 
-        public static void AddMeshToModel(CR2WFile cr2w, ModelRoot model, Skin skin, IVisualNodeContainer node, bool lodFilter = true, ulong chunkMask = ulong.MaxValue, Dictionary<string, Material>? materials = null)
+        public static void AddMeshToModel(CR2WFile cr2W, ModelRoot model, Skin skin, IVisualNodeContainer node, bool lodFilter = true,
+            ulong chunkMask = ulong.MaxValue, Dictionary<string, Material>? materials = null)
         {
-            if (cr2w.RootChunk is not CMesh { RenderResourceBlob.Chunk: rendRenderMeshBlob rendBlob } cMesh)
+            if (cr2W.RootChunk is not CMesh { RenderResourceBlob.Chunk: rendRenderMeshBlob rendBlob } cMesh)
             {
                 return;
             }
@@ -136,13 +149,14 @@ namespace WolvenKit.Modkit.RED4.Tools
 
         public bool ExportMeshWithoutRig(Stream meshStream, FileInfo outfile, bool lodFilter = true, bool isGLBinary = true, ValidationMode vMode = ValidationMode.TryFix)
         {
-            var cr2w = _red4ParserService.ReadRed4File(meshStream);
-            return cr2w != null && ExportMeshWithoutRig(cr2w, outfile, lodFilter, isGLBinary, vMode);
+            var cr2W = _red4ParserService.ReadRed4File(meshStream);
+            return cr2W != null && ExportMeshWithoutRig(cr2W, outfile, lodFilter, isGLBinary, vMode);
         }
 
-        public static bool ExportMeshWithoutRig(CR2WFile cr2w, FileInfo outfile, bool lodFilter = true, bool isGLBinary = true, ValidationMode vMode = ValidationMode.TryFix)
+        public static bool ExportMeshWithoutRig(CR2WFile cr2W, FileInfo outfile, bool lodFilter = true, bool isGLBinary = true,
+            ValidationMode vMode = ValidationMode.TryFix)
         {
-            var model = GetModel(cr2w, lodFilter, false);
+            var model = GetModel(cr2W, lodFilter, false);
 
             if (model == null)
             {
@@ -172,9 +186,9 @@ namespace WolvenKit.Modkit.RED4.Tools
 
             foreach (var meshStream in meshStreamS)
             {
-                var cr2w = _red4ParserService.ReadRed4File(meshStream);
+                var cr2W = _red4ParserService.ReadRed4File(meshStream);
 
-                if (cr2w is not { RootChunk: CMesh { RenderResourceBlob.Chunk: rendRenderMeshBlob rendBlob } cMesh })
+                if (cr2W is not { RootChunk: CMesh { RenderResourceBlob.Chunk: rendRenderMeshBlob rendBlob } cMesh })
                 {
                     continue;
                 }
@@ -397,8 +411,8 @@ namespace WolvenKit.Modkit.RED4.Tools
                     meshContainer.positions[i] = new Vec3(x, z, -y);
                 }
 
-                // getting uvcoordinates0 from half floats
-                meshContainer.texCoords0 = Array.Empty<Vec2>();
+                // getting uv coordinates0 from half floats
+                meshContainer.texCoords0 = [];
                 if (info.tex0Offsets[index] != 0)
                 {
                     meshContainer.texCoords0 = new Vec2[info.vertCounts[index]];
@@ -410,7 +424,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                 }
 
                 // getting float normals from 10bits
-                meshContainer.normals = Array.Empty<Vec3>();
+                meshContainer.normals = [];
                 if (info.normalOffsets[index] != 0)
                 {
                     meshContainer.normals = new Vec3[info.vertCounts[index]];
@@ -434,7 +448,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                 }
 
                 // getting float tangents from 10bits
-                meshContainer.tangents = Array.Empty<Vec4>();
+                meshContainer.tangents = [];
                 if (info.tangentOffsets[index] != 0)
                 {
                     meshContainer.tangents = new Vec4[info.vertCounts[index]];
@@ -458,8 +472,8 @@ namespace WolvenKit.Modkit.RED4.Tools
                     }
                 }
 
-                // getting uvcoordinates1 from half floats
-                meshContainer.texCoords1 = Array.Empty<Vec2>();
+                // getting uv coordinates1 from half floats
+                meshContainer.texCoords1 = [];
                 if (info.tex1Offsets[index] != 0)
                 {
                     meshContainer.texCoords1 = new Vec2[info.vertCounts[index]];
@@ -481,7 +495,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                 }
 
                 // getting colors from Byte
-                meshContainer.colors0 = Array.Empty<Vec4>();
+                meshContainer.colors0 = [];
                 if (info.colorOffsets[index] != 0)
                 {
                     meshContainer.colors0 = new Vec4[info.vertCounts[index]];
@@ -535,7 +549,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                 }
 
                 // getting garment morphs
-                meshContainer.garmentMorph = Array.Empty<Vec3>();
+                meshContainer.garmentMorph = [];
                 if (info.garmentSupportExists[index])
                 {
                     meshContainer.garmentMorph = new Vec3[info.vertCounts[index]];
@@ -587,7 +601,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                     meshContainer.materialNames[e] = d[index];
                 }
 
-                meshContainer.colors1 = Array.Empty<Vec4>();
+                meshContainer.colors1 = [];
                 expMeshes.Add(meshContainer);
             }
             RemoveDoubleFaces(ref expMeshes);
@@ -689,7 +703,8 @@ namespace WolvenKit.Modkit.RED4.Tools
                             }
                             if (!found)
                             {
-                                throw new Exception($"Bone: {incomingJoints.Names[mesh.boneindices[e, eye]]} not present in export Rig(s)/Import Mesh {(!fileName.Equals("") ? string.Format("({0})", fileName) : "")}");
+                                throw new Exception(
+                                    $"Bone: {incomingJoints.Names[mesh.boneindices[e, eye]]} not present in export Rig(s)/Import Mesh {(!fileName.Equals("") ? $"({fileName})" : "")}");
                             }
                         }
                     }
@@ -936,27 +951,22 @@ namespace WolvenKit.Modkit.RED4.Tools
                     buffViewOffset += mesh.colors1.Length * 16;
                 }
 
-                if (mesh.garmentSupportWeight != null)
+                if (mesh.garmentSupportWeight is { Length: > 0 })
                 {
-                    if (mesh.garmentSupportWeight.Length > 0)
-                    {
-                        var acc = model.CreateAccessor();
-                        var buff = model.UseBufferView(buffer, buffViewOffset, mesh.garmentSupportWeight.Length * 16);
-                        acc.SetData(buff, 0, mesh.garmentSupportWeight.Length, DimensionType.VEC4, EncodingType.FLOAT, false);
-                        prim.SetVertexAccessor("_GARMENTSUPPORTWEIGHT", acc);
-                        buffViewOffset += mesh.garmentSupportWeight.Length * 16;
-                    }
+                    var acc = model.CreateAccessor();
+                    var buff = model.UseBufferView(buffer, buffViewOffset, mesh.garmentSupportWeight.Length * 16);
+                    acc.SetData(buff, 0, mesh.garmentSupportWeight.Length, DimensionType.VEC4, EncodingType.FLOAT, false);
+                    prim.SetVertexAccessor("_GARMENTSUPPORTWEIGHT", acc);
+                    buffViewOffset += mesh.garmentSupportWeight.Length * 16;
                 }
-                if (mesh.garmentSupportCap != null)
+
+                if (mesh.garmentSupportCap is { Length: > 0 })
                 {
-                    if (mesh.garmentSupportCap.Length > 0)
-                    {
-                        var acc = model.CreateAccessor();
-                        var buff = model.UseBufferView(buffer, buffViewOffset, mesh.garmentSupportCap.Length * 16);
-                        acc.SetData(buff, 0, mesh.garmentSupportCap.Length, DimensionType.VEC4, EncodingType.FLOAT, false);
-                        prim.SetVertexAccessor("_GARMENTSUPPORTCAP", acc);
-                        buffViewOffset += mesh.garmentSupportCap.Length * 16;
-                    }
+                    var acc = model.CreateAccessor();
+                    var buff = model.UseBufferView(buffer, buffViewOffset, mesh.garmentSupportCap.Length * 16);
+                    acc.SetData(buff, 0, mesh.garmentSupportCap.Length, DimensionType.VEC4, EncodingType.FLOAT, false);
+                    prim.SetVertexAccessor("_GARMENTSUPPORTCAP", acc);
+                    buffViewOffset += mesh.garmentSupportCap.Length * 16;
                 }
 
                 if (mesh.texCoords0.Length > 0)
@@ -1029,7 +1039,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                 
                 if (mesh.garmentMorph.Length > 0)
                 {
-                    string[] arr = { "GarmentSupport" };
+                    string[] arr = ["GarmentSupport"];
                     var obj = new { materialNames, targetNames = arr };
                     mes.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
                 }
@@ -1174,12 +1184,18 @@ namespace WolvenKit.Modkit.RED4.Tools
                 var rig = new RawArmature
                 {
                     BoneCount = boneCount,
-                    LocalPosn = Enumerable.Range(0, boneCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.LocalTransform.Translation).ToArray(),
-                    LocalRot = Enumerable.Range(0, boneCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.LocalTransform.Rotation).ToArray(),
-                    LocalScale = Enumerable.Range(0, boneCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.LocalTransform.Scale).ToArray(),
+                    LocalPosn =
+                        Enumerable.Range(0, boneCount).Select(i => model.LogicalSkins[0].GetJoint(i).Joint.LocalTransform.Translation)
+                            .ToArray(),
+                    LocalRot =
+                        Enumerable.Range(0, boneCount).Select(i => model.LogicalSkins[0].GetJoint(i).Joint.LocalTransform.Rotation)
+                            .ToArray(),
+                    LocalScale = Enumerable.Range(0, boneCount).Select(i => model.LogicalSkins[0].GetJoint(i).Joint.LocalTransform.Scale)
+                        .ToArray(),
                     Parent = Enumerable.Repeat<short>(-1, boneCount).ToArray(),
                     //Parent       = Enumerable.Range(0, boneCount).Select(_ => (short)model.LogicalSkins[0].GetJoint(_).Joint.VisualParent.LogicalIndex).ToArray(),
-                    Names = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.Name).ToArray()
+                    Names = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(i => model.LogicalSkins[0].GetJoint(i).Joint.Name)
+                        .ToArray()
                 };
                 return rig;
             }
@@ -1242,9 +1258,9 @@ namespace WolvenKit.Modkit.RED4.Tools
             }
         }
 
-        public static void UpdateSkinningParamCloth(ref List<RawMeshContainer> meshes, CR2WFile cr2w)
+        public static void UpdateSkinningParamCloth(ref List<RawMeshContainer> meshes, CR2WFile cr2W)
         {
-            var clothBLob = ((CMesh)cr2w.RootChunk).Parameters.FirstOrDefault(x => x.Chunk is meshMeshParamCloth);
+            var clothBLob = ((CMesh)cr2W.RootChunk).Parameters.FirstOrDefault(x => x.Chunk is meshMeshParamCloth);
             if (clothBLob != null)
             {
                 var blob = (meshMeshParamCloth)clothBLob.Chunk.NotNull();
@@ -1262,7 +1278,8 @@ namespace WolvenKit.Modkit.RED4.Tools
                     {
                         mesh.weightCount = 4;
                     }
-                    if (chunk.SkinIndicesExt is { Buffer.MemSize: > 0 } && chunk.SkinWeightsExt is { Buffer.MemSize: > 0 })
+
+                    if (chunk is { SkinIndicesExt: { Buffer.MemSize: > 0 }, SkinWeightsExt.Buffer.MemSize: > 0 })
                     {
                         mesh.weightCount += 4;
                     }
@@ -1345,7 +1362,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                 }
             }
 
-            var clothGraphicalBLob = ((CMesh)cr2w.RootChunk).Parameters.FirstOrDefault(x =>
+            var clothGraphicalBLob = ((CMesh)cr2W.RootChunk).Parameters.FirstOrDefault(x =>
             {
                 ArgumentNullException.ThrowIfNull(x);
                 return x.Chunk is meshMeshParamCloth_Graphical;
@@ -1473,43 +1490,52 @@ namespace WolvenKit.Modkit.RED4.Tools
         /// <param name="exportGarmentSupport"></param>
         public static void WriteGarmentParametersToMesh(ref List<RawMeshContainer> meshes, CMesh cMesh, bool exportGarmentSupport = false)
         {
-            var garmentBlob = cMesh.Parameters.FirstOrDefault(x => x.Chunk is garmentMeshParamGarment);
-            if (garmentBlob != null && exportGarmentSupport)
+            if (!exportGarmentSupport ||
+                cMesh.Parameters.FirstOrDefault(x => x.Chunk is garmentMeshParamGarment) is not CHandle<meshMeshParameter> garmentBlob)
             {
-                var garmentBlobChunk = (garmentMeshParamGarment)garmentBlob.Chunk.NotNull();
+                return;
+            }
 
-                for (var i = 0; i < garmentBlobChunk.Chunks.Count && i < meshes.Count; i++)
+            var garmentBlobChunk = (garmentMeshParamGarment)garmentBlob.Chunk.NotNull();
+
+            for (var i = 0; i < garmentBlobChunk.Chunks.Count && i < meshes.Count; i++)
+            {
+                var mesh = meshes[i];
+                var chunk = garmentBlobChunk.Chunks[i];
+
+                if (mesh.positions is null)
                 {
-                    var mesh = meshes[i];
-                    var chunk = garmentBlobChunk.Chunks[i];
+                    throw new ExportException("Invalid garment support (disable it in the export tool's settings panel to export without)");
+                }
 
-                    ArgumentNullException.ThrowIfNull(mesh.positions, nameof(mesh));
+                ArgumentNullException.ThrowIfNull(mesh.positions, nameof(mesh));
 
-                    if (chunk.GarmentFlags is { Buffer.MemSize: > 0 })
+                if (chunk.GarmentFlags is not { Buffer.MemSize: > 0 })
+                {
+                    continue;
+                }
+
+                meshes[i].garmentSupportWeight = new Vec4[mesh.positions.Length];
+                meshes[i].garmentSupportCap = new Vec4[mesh.positions.Length];
+
+                var stream = new MemoryStream(chunk.GarmentFlags.Buffer.GetBytes());
+                var br = new BinaryReader(stream);
+                stream.Seek(0, SeekOrigin.Begin);
+
+                for (var e = 0; e < mesh.positions.Length; e++)
+                {
+                    if (mesh.garmentSupportWeight != null)
                     {
-                        meshes[i].garmentSupportWeight = new Vec4[mesh.positions.Length];
-                        meshes[i].garmentSupportCap = new Vec4[mesh.positions.Length];
-
-                        var stream = new MemoryStream(chunk.GarmentFlags.Buffer.GetBytes());
-                        var br = new BinaryReader(stream);
-                        stream.Seek(0, SeekOrigin.Begin);
-
-                        for (var e = 0; e < mesh.positions.Length; e++)
-                        {
-                            if (mesh.garmentSupportWeight != null)
-                            {
-                                mesh.garmentSupportWeight[e] = PrepareGarmentVertexWeight(br.ReadByte());
-                            }
-
-                            if (mesh.garmentSupportCap != null)
-                            {
-                                mesh.garmentSupportCap[e] = PrepareGarmentVertexCap(br.ReadByte());
-                            }
-
-                            br.ReadByte();
-                            br.ReadByte();
-                        }
+                        mesh.garmentSupportWeight[e] = PrepareGarmentVertexWeight(br.ReadByte());
                     }
+
+                    if (mesh.garmentSupportCap != null)
+                    {
+                        mesh.garmentSupportCap[e] = PrepareGarmentVertexCap(br.ReadByte());
+                    }
+
+                    br.ReadByte();
+                    br.ReadByte();
                 }
             }
         }

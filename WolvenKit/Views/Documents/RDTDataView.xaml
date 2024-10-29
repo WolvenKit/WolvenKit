@@ -98,7 +98,8 @@
             x:Name="CustomPG"
             Grid.Column="2"
             DataContext="{Binding SelectedChunk}"
-            ViewModel="{Binding SelectedChunk}" />
+            ViewModel="{Binding SelectedChunk}"
+            ValueChanged="RedTypeView_OnValueChanged" />
         <!--
             ViewModel="{Binding}"
         -->

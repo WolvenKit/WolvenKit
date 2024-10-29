@@ -82,12 +82,12 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
             }
         }
 
-        Options.Add("OnExit");
-        Options.Add("Reminder?");
-        Options.Add("Reminder?");
-        Options.Add("Reminder?");
-        Options.Add("Reminder?");
-        Options.Add("OnEnter");
+        Options.Add("AnyOption");
+        Options.Add("Immediate");
+        Options.Add("CancelFwd");
+        Options.Add("NoOption");
+        Options.Add("WhenDisplayed");
+        Options.Add("Reminder");
     }
 
     public void AddChoice()
@@ -97,8 +97,13 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
         // VariantId is 4 higher then LocstringId, doesn't seem important
         var cruid = (CRUID)random.NextCRUID();
 
-        // needs to be 256 higher, if lower the previous text is used, if higher nothing is shown...
-        var id = _sceneResource.ScreenplayStore.Options[^1].ItemId.Id + 256;
+        // first id is always 2, don't know why
+        var id = (CUInt32)2;
+        if (_sceneResource.ScreenplayStore.Options.Count > 0)
+        {
+            // needs to be 256 higher, if lower the previous text is used, if higher nothing is shown...
+            id = _sceneResource.ScreenplayStore.Options[^1].ItemId.Id + 256;
+        }
 
         _sceneResource.LocStore.VpEntries.Add(new scnlocLocStoreEmbeddedVariantPayloadEntry
         {

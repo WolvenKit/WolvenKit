@@ -40,6 +40,10 @@ namespace WolvenKit.App.Services
                 if (cr2wFile?.RootChunk is physicsGeometryCache pgc)
                 {
                     var totalEntryIndex = 0;
+                    if (pgc.BufferTableSectors == null)
+                    {
+                        throw new ArgumentNullException();
+                    }
                     for (var sectorIndex = 0; sectorIndex < pgc.BufferTableSectors.Count; sectorIndex++)
                     {
                         if (pgc.SectorEntries == null || pgc.SectorEntries.Count <= sectorIndex || pgc.SectorEntries[sectorIndex] == null)
@@ -53,7 +57,7 @@ namespace WolvenKit.App.Services
                             _entries[sectorHash] = new();
                         }
 
-                        if (pgc.BufferTableSectors == null || pgc.BufferTableSectors.Count <= sectorIndex || pgc.BufferTableSectors[sectorIndex] == null)
+                        if (pgc.BufferTableSectors.Count <= sectorIndex || pgc.BufferTableSectors[sectorIndex] == null)
                         {
                             throw new ArgumentNullException();
                         }

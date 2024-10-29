@@ -51,7 +51,15 @@ public partial class ScriptService : ObservableObject
         }
         catch (Exception ex2)
         {
-            _loggerService?.Error(ex2);
+            if (ex2.Message == "Script execution interrupted by host" ||
+                ex2.Message == "Script execution was interrupted")
+            {
+                _loggerService?.Info("User interrupted execution of script");
+            }
+            else
+            {
+                _loggerService?.Error(ex2);
+            }
         }
 
         if (_mainEngine != null)
