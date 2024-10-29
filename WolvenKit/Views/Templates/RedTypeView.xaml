@@ -434,6 +434,13 @@
                         <editors:RedBoolEditor RedBool="{Binding Data, Mode=TwoWay}" />
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedBoolEditor>
+                <converters:RedEditorTemplateSelector.RedVector2Editor>
+                    <DataTemplate>
+                        <editors:RedVector2Editor
+                            X="{Binding Data.X, Mode=TwoWay}"
+                            Y="{Binding Data.Y, Mode=TwoWay}" />
+                    </DataTemplate>
+                </converters:RedEditorTemplateSelector.RedVector2Editor>
                 <converters:RedEditorTemplateSelector.RedVector3Editor>
                     <DataTemplate>
                         <editors:RedVector3Editor
