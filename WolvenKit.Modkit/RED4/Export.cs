@@ -116,13 +116,21 @@ namespace WolvenKit.Modkit.RED4
 
             // Now clean up mesh files (if necessary)
             File.Delete(absoluteMeshPath);
-            if (Path.GetDirectoryName(absoluteMeshPath) is string parentDir && Directory.Exists(parentDir) &&
-                Directory.GetFiles(parentDir).Length == 0)
-            {
-                Directory.Delete(parentDir);
-            }
+            DeleteEmptyParentDir(absoluteMeshPath);
 
             return true;
         }
-    } 
+
+        private static void DeleteEmptyParentDir(string fileOrDirectoryName)
+        {
+            if (Path.GetDirectoryName(fileOrDirectoryName) is not string parentDir || !Directory.Exists(parentDir) ||
+                Directory.GetFiles(parentDir).Length > 0)
+            {
+                return;
+            }
+
+            Directory.Delete(parentDir);
+            DeleteEmptyParentDir(parentDir);
+        }
+    }
 }
