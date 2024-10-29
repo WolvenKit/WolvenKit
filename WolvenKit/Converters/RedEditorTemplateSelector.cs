@@ -27,6 +27,7 @@ namespace WolvenKit.Converters
         public DataTemplate EnumTemplateView { get; set; }
         public DataTemplate ColorPickerPalette { get; set; }
         public DataTemplate RedBoolEditor { get; set; }
+        public DataTemplate RedVector2Editor { get; set; }
         public DataTemplate RedVector3Editor { get; set; }
         public DataTemplate RedVector4Editor { get; set; }
         public DataTemplate RedQuaternionEditor { get; set; }
@@ -74,6 +75,10 @@ namespace WolvenKit.Converters
                 if (vm.PropertyType.IsAssignableTo(typeof(FixedPoint)))
                 {
                     return RedFixedPointEditor;
+                }
+                if (vm.PropertyType.IsAssignableTo(typeof(Vector2)))
+                {
+                    return RedVector2Editor;
                 }
                 if (vm.PropertyType.IsAssignableTo(typeof(Vector3)))
                 {
