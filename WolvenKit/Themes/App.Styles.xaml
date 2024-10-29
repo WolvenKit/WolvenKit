@@ -36,6 +36,7 @@
     <Color x:Key="WolvenKitGreenColor">#3ae07d</Color>
 
     <Color x:Key="WolvenKitCyanShadow50Color">#7F4D8C9A</Color>
+    <Color x:Key="WolvenKitCyanShadow25Color">#203a40</Color>
     <Color x:Key="WolvenKitRedShadow50Color">#7F951C2D</Color>
     <Color x:Key="WolvenKitRedShadow25Color">#7F520e17</Color>
     <Color x:Key="WolvenKitYellowShadow50Color">#7FABA108</Color>
@@ -58,6 +59,7 @@
     <SolidColorBrush x:Key="WolvenKitRedShadow50" Color="{StaticResource WolvenKitRedShadow50Color}" />
     <SolidColorBrush x:Key="WolvenKitCyan50" Color="#7F52F1FF" />
     <SolidColorBrush x:Key="WolvenKitCyanShadow50" Color="{StaticResource WolvenKitCyanShadow50Color}" />
+    <SolidColorBrush x:Key="WolvenKitCyanShadow25" Color="{StaticResource WolvenKitCyanShadow25Color}" />
     <SolidColorBrush x:Key="WolvenKitYellow50" Color="#7FFFEA0A" />
     <SolidColorBrush x:Key="WolvenKitYellowShadow50" Color="{StaticResource WolvenKitYellowShadow50Color}" />
     <SolidColorBrush x:Key="WolvenKitPurple50" Color="#7F5760B3" />

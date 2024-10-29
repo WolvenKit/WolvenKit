@@ -12,6 +12,7 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:types="clr-namespace:WolvenKit.RED4.Types;assembly=WolvenKit.RED4.Types"
     xmlns:others="clr-namespace:WolvenKit.Views.Others"
+    xmlns:converters="clr-namespace:WolvenKit.Converters"
     Margin="0"
     d:DataContext="{d:DesignInstance Type={x:Type documents:RDTWidgetViewModel}}"
     d:DesignHeight="450"
@@ -24,15 +25,26 @@
     <Grid>
         <Grid.Resources>
             <ResourceDictionary>
-                <!--<ResourceDictionary.MergedDictionaries>
-                    <hc:ThemeResources RequestedTheme="Dark" />
-                    <hc:Theme />
-                </ResourceDictionary.MergedDictionaries>-->
-
-                <!--ResourceDictionary.MergedDictionaries>
-                    <ResourceDictionary Source="pack://application:,,,/AdonisUI;component/ColorSchemes/Dark.xaml" />
-                    <ResourceDictionary Source="pack://application:,,,/AdonisUI.ClassicTheme;component/Resources.xaml" />
-                </ResourceDictionary.MergedDictionaries-->
+                <DrawingBrush x:Key="GridPatternBrush" TileMode="Tile" Viewport="-10,-10,40,40" ViewportUnits="Absolute">
+                    <DrawingBrush.Drawing>
+                        <GeometryDrawing>
+                            <GeometryDrawing.Geometry>
+                                <RectangleGeometry Rect="0,0,50,50" />
+                            </GeometryDrawing.Geometry>
+                            <GeometryDrawing.Pen>
+                                <Pen Brush="{StaticResource WolvenKitCyanShadow25}" Thickness="1" />
+                            </GeometryDrawing.Pen>
+                        </GeometryDrawing>
+                    </DrawingBrush.Drawing>
+                </DrawingBrush>
+                <Style x:Key="WidgetPreviewCanvasStyle" TargetType="Canvas">
+                    <Setter Property="Background" Value="{StaticResource GridPatternBrush}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsPixelGridSnappingEnabled}" Value="False">
+                            <Setter Property="Background" Value="{StaticResource ContentBackground}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
             </ResourceDictionary>
         </Grid.Resources>
         <Grid.ColumnDefinitions>
@@ -46,7 +58,6 @@
         <Border
             Grid.Column="0"
             Padding="0"
-            Background="{StaticResource ContentBackground}"
             BorderThickness="1"
             ClipToBounds="True">
             <Border.ContextMenu>
@@ -62,12 +73,13 @@
                 <Grid>
                     <Canvas
                         x:Name="WidgetPreview"
+                        Style="{ StaticResource WidgetPreviewCanvasStyle }"
                         RenderTransformOrigin="0.5,0.5"
-                        Visibility="{Binding IsLoaded, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        Visibility="{Binding IsPixelGridSnappingEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        RenderOptions.EdgeMode="Unspecified" />
 
                     <others:LoadingTextControl Grid.Column="0" VisibilityFlag="{Binding IsLoaded}" Small="True" />
                 </Grid>
-                
             </Border>
         </Border>
 
@@ -316,7 +328,10 @@
                 </ItemsControl>
             </StackPanel>
         </ScrollViewer>
-        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top">
+        <StackPanel
+            Grid.Column="0"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top">
             <Button
                 Margin="5,5,5,0"
                 Padding="7,2"
@@ -335,13 +350,34 @@
                 Click="ClearAndReload"
                 IsEnabled="{ Binding IsLoaded }"
                 Content="Clear cache" />
+            <Button
+                Margin="5,5,5,0"
+                Padding="7,2"
+                Click="TogglePixelGrid"
+                IsEnabled="{Binding IsLoaded}"
+                Content="Toggle Grid">
+            </Button>
 
         </StackPanel>
-        <TextBlock
-            x:Name="ZoomText"
+
+        <StackPanel
+            Grid.Column="0"
             Margin="4,4"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Bottom"
-            Text="100%" />
+            Orientation="Horizontal"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top">
+            <TextBlock
+                Margin="4,4"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                FontWeight="Bold"
+                Text="Zoom:" />
+            <TextBlock
+                x:Name="ZoomText"
+                Margin="0,4"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Text="100%" />
+        </StackPanel>
     </Grid>
 </reactiveUi:ReactiveUserControl>
