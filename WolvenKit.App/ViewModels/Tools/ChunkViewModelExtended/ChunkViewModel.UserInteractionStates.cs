@@ -84,9 +84,9 @@ public partial class ChunkViewModel
             return;
         }
 
-        IsHiddenBySearch = !(Value?.Contains(searchBoxText, StringComparison.Ordinal) == true
-                             || Descriptor?.Contains(searchBoxText, StringComparison.Ordinal) == true
-                             || StringHelper.StringifyRedType(ResolvedData).Contains(searchBoxText, StringComparison.Ordinal));
+        IsHiddenBySearch = !(Value?.Contains(searchBoxText, StringComparison.OrdinalIgnoreCase) == true
+                             || Descriptor?.Contains(searchBoxText, StringComparison.OrdinalIgnoreCase) == true
+                             || StringHelper.StringifyRedType(ResolvedData).Contains(searchBoxText, StringComparison.OrdinalIgnoreCase));
 
         if (IsHiddenBySearch)
         {
