@@ -98,7 +98,7 @@
                                 Foreground="{StaticResource WolvenKitYellow}" />
                         </MenuItem.Icon>
                     </MenuItem>
-
+                    <!-- AppViewModel.AddArchiveXlFilesCommand -->
                     <MenuItem
                         x:Name="MenuItemAddAxlControlFiles"
                         Margin="2,1"

@@ -5,7 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models.ProjectManagement.Project;
 
-namespace WolvenKit.App.Factories;
+namespace WolvenKit.App.Services;
 
 public class ArchiveXlItem
 {
@@ -25,9 +25,13 @@ public class ArchiveXlItem
     public List<ArchiveXlHidingTags> HidingTags { get; set; } = new();
 }
 
-public static class ArchiveXlItemFactory
+public class ArchiveXlItemService
 {
-    public static void CreateEquipmentItem(Cp77Project activeProject, ArchiveXlItem itemData)
+    public ArchiveXlItemService()
+    {
+    }
+
+    public void CreateEquipmentItem(Cp77Project activeProject, ArchiveXlItem itemData)
     {
         CreateDirectory(activeProject, itemData);
         AddMeshEntity(activeProject, itemData);
@@ -52,22 +56,22 @@ public static class ArchiveXlItemFactory
         }
     }
 
-    private static void AddMeshEntity(Cp77Project activeProject, ArchiveXlItem itemData)
+    private void AddMeshEntity(Cp77Project activeProject, ArchiveXlItem itemData)
     {
         // Grab default files from 
     }
 
-    private static void AddRootEntity(Cp77Project activeProject, ArchiveXlItem itemData)
+    private void AddRootEntity(Cp77Project activeProject, ArchiveXlItem itemData)
     {
         // Grab default files from 
     }
 
-    private static void AddAppFile(Cp77Project activeProject, ArchiveXlItem itemData)
+    private void AddAppFile(Cp77Project activeProject, ArchiveXlItem itemData)
     {
         // Grab default files from 
     }
 
-    private static void WriteYamlToDisk(Cp77Project activeProject, ArchiveXlItem itemData)
+    private void WriteYamlToDisk(Cp77Project activeProject, ArchiveXlItem itemData)
     {
         // If we have more than one .yaml file under resources, create a new one, otherwise append
     }

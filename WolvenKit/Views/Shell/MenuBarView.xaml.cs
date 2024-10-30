@@ -55,7 +55,7 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                     view => view.MenuItemImportArchive)
                 .DisposeWith(disposables);
             this.BindCommand(ViewModel,
-                    viewModel => viewModel.MainViewModel.AddArchiveXlFilesCommand,
+                    viewModel => viewModel.MainViewModel.AddAxlControlFilesCommand,
                     view => view.MenuItemAddAxlControlFiles)
                 .DisposeWith(disposables);
             this.BindCommand(ViewModel,
