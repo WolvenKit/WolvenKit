@@ -70,6 +70,7 @@ namespace WolvenKit
                     services.AddSingleton<MySink>();                                            // can this be transient?
                     services.AddSingleton<ILoggerService, SerilogWrapper>();                    // can this be transient?
                     services.AddSingleton<ITweakDBService, TweakDBService>();
+                    services.AddSingleton<ArchiveXlItemService>();
 
                     // scripting
                     services.AddSingleton<IHookService, AppHookService>();

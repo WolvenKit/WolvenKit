@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using WolvenKit.App.Factories;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 
 namespace WolvenKit.App.Interaction;
@@ -62,6 +64,8 @@ public static class Interactions
     //custom views
     public static Func<bool> ShowFirstTimeSetup { get; set; } = () => throw new NotImplementedException();
     public static Func<bool> ShowLaunchProfilesView { get; set; } = () => throw new NotImplementedException();
+
+    public static Func<bool, ArchiveXlItem?> ShowArchiveXlFilesView { get; set; } = _ => throw new NotImplementedException();
     public static Func<bool> ShowMaterialRepositoryView { get; set; } = () => throw new NotImplementedException();
 
     public static Func<(IEnumerable<IDisplayable>?, IEnumerable<IDisplayable>?), IEnumerable<IDisplayable>> ShowCollectionView { get; set; } 

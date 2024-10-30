@@ -14,7 +14,6 @@
 				<Description>A blank tweak file</Description>
 				<Extension>yaml</Extension>
 				<Type>TweakXl</Type>
-				<Template></Template>
 			</AddFileModel>
 		</Files>
 	</FileCategoryModel>
@@ -26,7 +25,6 @@
 				<Description>A blank .xl file</Description>
 				<Extension>archive.xl</Extension>
 				<Type>ArchiveXl</Type>
-				<Template></Template>
 			</AddFileModel>
 		</Files>
 	</FileCategoryModel>
@@ -38,14 +36,12 @@
 				<Description>A blank .reds file</Description>
 				<Extension>reds</Extension>
 				<Type>RedScript</Type>
-				<Template></Template>
 			</AddFileModel>
 			<AddFileModel>
 				<Name>Cyber Engine Tweaks</Name>
 				<Description>A blank .lua file</Description>
 				<Extension>lua</Extension>
 				<Type>CETLua</Type>
-				<Template></Template>
 			</AddFileModel>
 		</Files>
 	</FileCategoryModel>	  

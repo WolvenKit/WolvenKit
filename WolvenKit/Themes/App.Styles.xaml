@@ -8,15 +8,19 @@
     xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
     xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    xmlns:hc="https://handyorg.github.io/handycontrol"
-    xmlns:local="clr-namespace:WolvenKit.Views.Editors">
+    xmlns:local="clr-namespace:WolvenKit.Views.Editors"
+    xmlns:hc="https://handyorg.github.io/handycontrol">
 
     <ResourceDictionary.MergedDictionaries>
         <sfskin:ResourceDictionaryProvider DictionaryName="Common" ThemeName="MaterialDark" />
         <sfskin:ResourceDictionaryProvider DictionaryName="Brushes" ThemeName="MaterialDark" />
         <ResourceDictionary Source="/Syncfusion.Themes.MaterialDark.WPF;component/DockingManager/DockingManager.xaml" />
+        <ResourceDictionary Source="/Syncfusion.Themes.MaterialDark.WPF;component/comboboxadv/comboboxadv.xaml" />
+               
         <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/basic/colors/dark.xaml" />
         <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
+        <ResourceDictionary Source="/Syncfusion.Themes.MaterialDark.WPF;component/comboboxadv/comboboxadv.xaml" />   
+        
     </ResourceDictionary.MergedDictionaries>
 
     <SolidColorBrush x:Key="CustomSliderForegroundBrush" Color="#FF1E91EA" />
@@ -28,6 +32,7 @@
     <SolidColorBrush x:Key="WolvenKitSammyBlack" Color="#292929" />
 
     <Color x:Key="WolvenKitRedColor">#DF2935</Color>
+    <Color x:Key="WolvenKitRedPaleColor">#f57d85</Color>
     <Color x:Key="WolvenKitRedShadowColor">#951C2D</Color>
     <Color x:Key="WolvenKitCyanColor">#52F1FF</Color>
     <Color x:Key="WolvenKitCyanShadowColor">#4D8C9A</Color>
@@ -44,11 +49,14 @@
     <Color x:Key="WolvenKitRedShadow25Color">#7F520e17</Color>
     <Color x:Key="WolvenKitYellowShadow50Color">#7FABA108</Color>
     <Color x:Key="WolvenKitYellowShadow25Color">#7F403c09</Color>
-    
+
+     <Color x:Key="WolvenkitControlBackgroundColor">#1F1F1F</Color>
+   
     
 
     <SolidColorBrush x:Key="WolvenKitRed" Color="{StaticResource WolvenKitRedColor}" />
     <SolidColorBrush x:Key="WolvenKitRedShadow" Color="{StaticResource WolvenKitRedShadowColor}" />
+    <SolidColorBrush x:Key="WolvenKitRedPale" Color="{StaticResource WolvenKitRedPaleColor}" />
     <SolidColorBrush x:Key="WolvenKitCyan" Color="{StaticResource WolvenKitCyanColor}" />
     <SolidColorBrush x:Key="WolvenKitCyanShadow" Color="{StaticResource WolvenKitCyanShadowColor}" />
     <SolidColorBrush x:Key="WolvenKitYellow" Color="{StaticResource WolvenKitYellowColor}" />
@@ -60,6 +68,7 @@
 
     <SolidColorBrush x:Key="WolvenKitRed50" Color="#7FDF2935" />
     <SolidColorBrush x:Key="WolvenKitRedShadow50" Color="{StaticResource WolvenKitRedShadow50Color}" />
+    <SolidColorBrush x:Key="WolvenKitRedShadow25" Color="{StaticResource WolvenKitRedShadow25Color}" />
     <SolidColorBrush x:Key="WolvenKitCyan50" Color="#7F52F1FF" />
     <SolidColorBrush x:Key="WolvenKitCyanShadow50" Color="{StaticResource WolvenKitCyanShadow50Color}" />
     <SolidColorBrush x:Key="WolvenKitCyanShadow25" Color="{StaticResource WolvenKitCyanShadow25Color}" />
@@ -69,6 +78,7 @@
     <SolidColorBrush x:Key="WolvenKitTan25" Color="#FFA7967D" />
     <SolidColorBrush x:Key="WolvenKitTan50" Color="#7FD0A467" />
 
+    <SolidColorBrush x:Key="ControlBackgroundColor" Color="{StaticResource WolvenkitControlBackgroundColor}" />
     <SolidColorBrush x:Key="ForegroundColor" Color="#EBEBEB" />
     <SolidColorBrush x:Key="ForegroundColor_Grey_Light" Color="#cacaca" />
     <SolidColorBrush x:Key="ForegroundColor_Grey1" Color="#ababab" />
@@ -82,6 +92,7 @@
     <SolidColorBrush x:Key="ForegroundColor_Cyan" Color="{StaticResource WolvenKitCyanColor}" />
     <SolidColorBrush x:Key="ForegroundColor_Yellow" Color="{StaticResource WolvenKitYellowColor}" />
     <SolidColorBrush x:Key="ForegroundColor_Red" Color="{StaticResource WolvenKitRedColor}" />
+    <SolidColorBrush x:Key="ForegroundColor_Red_Pale" Color="{StaticResource WolvenKitRedPaleColor}" />
 
     <SolidColorBrush x:Key="BackgroundColor_Cyan" Color="{StaticResource WolvenKitCyanShadow50Color}" />
     <SolidColorBrush x:Key="BackgroundColor_Yellow" Color="{StaticResource WolvenKitYellowShadow50Color}" />
@@ -91,7 +102,7 @@
 
     <SolidColorBrush x:Key="BackgroundColor_Control" Color="#252525" />
     <SolidColorBrush x:Key="BackgroundColor_Frame_Active" Color="#313131" />
-    <SolidColorBrush x:Key="BackgroundColor_Frame_Background" Color="#1F1F1F" />
+    <SolidColorBrush x:Key="BackgroundColor_Frame_Background" Color="{StaticResource WolvenkitControlBackgroundColor}" />
 
     <SolidColorBrush x:Key="BackgroundColor_Button_Inactive" Color="#969696" />
     <SolidColorBrush x:Key="BackgroundColor_Button_Active" Color="#313131" />
