@@ -424,7 +424,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private static void CheckForLongPathSupport()
     {
-        if (Core.NativeMethods.RtlAreLongPathsEnabled() != 0)
+        if (Core.CommonFunctions.AreLongPathsEnabled())
         {
             return;
         }
