@@ -341,8 +341,8 @@ namespace WolvenKit.Views.Documents
             if (!_archiveManager.GetModArchives().Any() && _archiveManager.IsInitialized)
             {
                 return;
-            } 
-            
+            }
+
 
             if (_settingsManager.CP77ExecutablePath is null)
             {
@@ -356,7 +356,7 @@ namespace WolvenKit.Views.Documents
             }
 
             _loggerService.Info("Reading mod archive file table, this may take a moment...");
-            await Task.Run(() => 
+            await Task.Run(() =>
             {
                 var ignoredArchives = _settingsManager.ArchiveNamesExcludeFromScan.Split(",").Select(m => m.Replace(".archive", ""))
                     .ToArray();
@@ -444,5 +444,50 @@ namespace WolvenKit.Views.Documents
         }
 
         private void OnKeystateChanged(object sender, KeyEventArgs e) => _modifierStateService.OnKeystateChanged(e);
+
+        private void SearchBar_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.Enter:
+                    SearchBar_OnSubmit(this, e);
+                    return;
+                case Key.Escape:
+                case Key.Back when ModifierViewStateService.IsShiftBeingHeld:
+                case Key.Delete when ModifierViewStateService.IsShiftBeingHeld:
+                    SearchBar_OnClear(this, e);
+                    return;
+                default:
+                    return;
+            }
+        }
+
+        private void SearchBar_OnSubmit(object sender, RoutedEventArgs e) => ViewModel?.OnSearchChanged(SearchBar?.Text ?? "");
+
+        private void SearchBar_OnClear(object sender, RoutedEventArgs e)
+        {
+            SearchBar?.Clear();
+            SearchBar_OnSubmit(this, e);
+        }
+
+        private void SearchBar_OnClick(object sender, MouseButtonEventArgs e)
+        {
+            if (ModifierViewStateService.IsShiftBeingHeld)
+            {
+                SearchBar?.SelectAll();
+            }
+            else if (ModifierViewStateService.IsCtrlBeingHeld)
+            {
+                SearchBar_OnClear(this, e);
+            }
+        }
+
+        private void SearchBar_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (SearchBar?.Text == "")
+            {
+                SearchBar_OnClear(this, e);
+            }
+        }
     }
 }

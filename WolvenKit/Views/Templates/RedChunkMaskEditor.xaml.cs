@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -20,7 +19,7 @@ namespace WolvenKit.Views.Editors
         {
             InitializeComponent();
             comboboxadv.SelectionChanged += CollectionChanged;
-            
+
             for (var i = 0; i < 64; i++)
             {
                 BindingCollection.Add(i.ToString());
@@ -95,6 +94,11 @@ namespace WolvenKit.Views.Editors
         private ObservableCollection<string> GetSelectFromRedValue()
         {
             var c = new ObservableCollection<string>();
+
+            if (RedNumber == null)
+            {
+                return c;
+            }
             for (var i = 0; i < 64; i++)
             {
                 if (((CUInt64)RedNumber & (1UL << i)) > 0)
@@ -107,7 +111,7 @@ namespace WolvenKit.Views.Editors
 
         private string GetTextFromRedValue()
         {
-            return ((ulong)(CUInt64)RedNumber).ToString();
+            return RedNumber == null ? "" : ((ulong)(CUInt64)RedNumber).ToString();
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)

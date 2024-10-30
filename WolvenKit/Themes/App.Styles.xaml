@@ -8,12 +8,15 @@
     xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
     xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:local="clr-namespace:WolvenKit.Views.Editors">
 
     <ResourceDictionary.MergedDictionaries>
         <sfskin:ResourceDictionaryProvider DictionaryName="Common" ThemeName="MaterialDark" />
         <sfskin:ResourceDictionaryProvider DictionaryName="Brushes" ThemeName="MaterialDark" />
         <ResourceDictionary Source="/Syncfusion.Themes.MaterialDark.WPF;component/DockingManager/DockingManager.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/basic/colors/dark.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <SolidColorBrush x:Key="CustomSliderForegroundBrush" Color="#FF1E91EA" />
@@ -91,6 +94,7 @@
     <SolidColorBrush x:Key="BackgroundColor_Frame_Background" Color="#1F1F1F" />
 
     <SolidColorBrush x:Key="BackgroundColor_Button_Inactive" Color="#969696" />
+    <SolidColorBrush x:Key="BackgroundColor_Button_Active" Color="#313131" />
 
     <Style
         x:Key="WolvenKitTabControl"
@@ -1370,5 +1374,32 @@
                 <Setter Property="Visibility" Value="Collapsed" />
             </Trigger>
         </Style.Triggers>
+    </Style>
+
+    <Style x:Key="SearchBarButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
+        <Setter Property="BorderBrush" Value="{StaticResource ForegroundColor_Grey_Dark}" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Light}" />
+            </Trigger>
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Light}" />
+            </Trigger>
+            <Trigger Property="IsFocused" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Light}" />
+            </Trigger>
+            <DataTrigger Binding="{Binding Path=(Validation.HasError), RelativeSource={RelativeSource Self}}" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Light}" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="SearchBarStyle" TargetType="{x:Type hc:SearchBar}" BasedOn="{StaticResource SearchBarPlus}">
+        <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Frame_Active}" />
+        <Style.Resources>
+            <Style TargetType="Button" BasedOn="{StaticResource SearchBarButtonStyle}" />
+        </Style.Resources>
     </Style>
 </ResourceDictionary>

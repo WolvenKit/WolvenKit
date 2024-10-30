@@ -191,7 +191,7 @@ public partial class ImportViewModel : AbstractImportExportViewModel
 
         _progressService.Completed();
 
-        _appViewModel.ReloadChangedFiles();
+        await Application.Current.Dispatcher.InvokeAsync(() => _appViewModel.ReloadChangedFiles());
     }
 
     private Task<bool> ImportWavs(List<string> wavs)
