@@ -188,23 +188,7 @@
                             x:Name="ItemNameTextBox"
                             Grid.Row="2"
                             Grid.Column="1"
-                            Style="{StaticResource TextBoxWithControlValidatorsStyle}"
-                            KeyUp="ItemName_OnKeyUp">
-                            <TextBox.Text>
-                                <Binding Path="ItemName" UpdateSourceTrigger="PropertyChanged">
-                                    <Binding.ValidationRules>
-                                        <validators:ItemNameValidationRule />
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
-                        </hc:TextBox>
-
-                        <controls:ValidationTextBlock
-                            BoundControl="{Binding ElementName=ItemNameTextBox}"
-                            DefaultText="Will be used to generate file names and internal properties."
-                            SecondaryText="Will be used to generate your control file names."
-                            UseSecondaryText="{Binding CreateFactory}"
-                            Style="{StaticResource TextboxStyle}"
+                            Style="{StaticResource WolvenkitTextBoxStyle}"
                             KeyUp="ItemName_OnKeyUp" />
                         <TextBlock
                             Visibility="{Binding CreateFactory, Converter={StaticResource InvertBooleanConverter}}"
