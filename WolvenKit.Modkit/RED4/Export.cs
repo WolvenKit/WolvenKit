@@ -58,15 +58,7 @@ namespace WolvenKit.Modkit.RED4
 
                 var relPath = cr2wFile.FullName.RelativePath(basedir);
 
-                var ret = UncookBuffers(fs, relPath, args, rawOutDir, forceBuffers);
-
-                if (args.Get<MorphTargetExportArgs>() is { ExportTextures: true, ExportMeshRelativePath: not null } morphtargetArgs)
-                {
-                    ret = ret && ExportMeshMaterial(cr2wFile, morphtargetArgs, basedir, rawOutDir, forceBuffers);
-                }
-
-                return ret;
-
+                return UncookBuffers(fs, relPath, args, rawOutDir, forceBuffers);
             }
             catch(System.Exception e)
             {
@@ -74,63 +66,6 @@ namespace WolvenKit.Modkit.RED4
                 _loggerService.Debug(e.ToString());
                 return false;
             }
-        }
-
-        private static readonly string s_archiveDirWithSeparators = Path.DirectorySeparatorChar + "archive" + Path.DirectorySeparatorChar;
-        private static readonly string s_rawDirWithSeparators = Path.DirectorySeparatorChar + "raw" + Path.DirectorySeparatorChar;
-
-        private bool ExportMeshMaterial(FileInfo cr2WFile, MorphTargetExportArgs morphtargetArgs,
-            DirectoryInfo basedir, DirectoryInfo rawOutDir, ECookedFileFormat[]? forceBuffers)
-        {
-            if (morphtargetArgs.ExportMeshRelativePath is null)
-            {
-                return false;
-            }
-
-            var absoluteMeshPath = Path.Join(basedir.FullName, morphtargetArgs.ExportMeshRelativePath);
-
-            if (!Export(new FileInfo(absoluteMeshPath), new GlobalExportArgs(), basedir, rawOutDir, forceBuffers))
-            {
-                return false;
-            }
-
-            var jsonMaterialSourcePath = Path.Join(rawOutDir.FullName, morphtargetArgs.ExportMeshRelativePath)
-                .Replace(".mesh", ".Material.json");
-
-            var absoluteMorphtargetPath = cr2WFile.FullName;
-            var jsonMaterialTargetPath = absoluteMorphtargetPath
-                .Replace(s_archiveDirWithSeparators, s_rawDirWithSeparators)
-                .Replace(".morphtarget", ".morphtarget.Material.json");
-
-            if (!File.Exists(jsonMaterialSourcePath))
-            {
-                return false;
-            }
-
-            File.Move(jsonMaterialSourcePath, jsonMaterialTargetPath, true);
-
-            if (!morphtargetArgs.DeleteMeshFileAfterExport || !File.Exists(absoluteMeshPath))
-            {
-                return true;
-            }
-
-            // Now clean up mesh files (if necessary)
-            File.Delete(absoluteMeshPath);
-            DeleteEmptyParentDir(absoluteMeshPath);
-
-            return true;
-        }
-
-        private static void DeleteEmptyParentDir(string fileOrDirectoryName)
-        {
-            if (Path.GetDirectoryName(fileOrDirectoryName) is not string parentDir || !Directory.Exists(parentDir) ||
-                Directory.GetFiles(parentDir).Length > 0)
-            {
-                return;
-            }
-
-            Directory.Delete(parentDir);
-            DeleteEmptyParentDir(parentDir);
         }
     }
 }
