@@ -26,6 +26,8 @@
         <Grid.Resources>
             <sys:Double x:Key="RowHeight">26</sys:Double>
             <SolidColorBrush x:Key="RedTypeColor" Color="{StaticResource WolvenKitTanColor}" />
+            <converters:MathConverter x:Key="MathConverter" />
+            <converters:IsLastItemInContainerConverter x:Key="IsLastItemInContainerConverter" />
             <Style x:Key="ArrayNameColumnWidth" TargetType="ColumnDefinition">
                 <Setter Property="Width" Value="218" />
                 <Style.Triggers>
@@ -45,6 +47,38 @@
                     </MultiDataTrigger>
                     <DataTrigger Binding="{Binding Path=IsHiddenByEditorDifficultyLevel}" Value="True">
                         <Setter Property="Visibility" Value="Collapsed" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="TextBox">
+                <Setter Property="Padding" Value="5,0" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="BorderThickness" Value="0" />
+            </Style>
+            <Style BasedOn="{StaticResource WPFComboBoxStyle}" TargetType="ComboBox">
+                <Setter Property="Padding" Value="5,0" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Background" Value="#252525" />
+            </Style>
+            <Style BasedOn="{StaticResource CheckBoxBaseStyle}" TargetType="CheckBox">
+                <Setter Property="Margin" Value="4,0" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="HorizontalAlignment" Value="Left" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="Background" Value="#252525" />
+            </Style>
+            <Style BasedOn="{StaticResource SyncfusionUpDownStyle}" TargetType="{x:Type syncfusion:UpDown}">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="FocusedBackground" Value="Transparent" />
+                <Setter Property="NegativeBackground" Value="Transparent" />
+                <Setter Property="ZeroColor" Value="White" />
+            </Style>
+            <Style x:Key="PGNameStyle" TargetType="TextBlock">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsDefault}" Value="True">
+                        <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
+                        <Setter Property="FontStyle" Value="Italic" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
@@ -325,16 +359,180 @@
                     </Button>
                 </StackPanel>
             </DataTemplate>
-            <Style x:Key="PGNameStyle" TargetType="TextBlock">
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding IsDefault}" Value="True">
-                        <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
-                        <Setter Property="FontStyle" Value="Italic" />
+            <DataTemplate x:Key="ItemTemplate">
+                <!--  ="{Binding Properties}"  -->
+                <Border
+                    x:Name="TopLine"
+                    Visibility="{Binding IsHiddenByEditorDifficultyLevel, Converter={StaticResource InvertBooleanConverter}}"
+                    MinHeight="27"
+                    BorderBrush="{StaticResource BorderAlt}"
+                    BorderThickness="0,1,0,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="NameColumn" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="1" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                            Grid.Column="0"
+                            Margin="6,5,6,0"
+                            VerticalAlignment="Top"
+                            Style="{StaticResource PGNameStyle}"
+                            Text="{Binding Name, Mode=OneTime}"
+                            TextTrimming="CharacterEllipsis"
+                            ToolTip="{Binding XPath, Mode=OneTime}" />
+                        <ContentPresenter
+                            x:Name="DeleteButtonWrapper"
+                            Grid.Column="1"
+                            Margin="0,6,0,0"
+                            VerticalAlignment="Top"
+                            ContentTemplate="{StaticResource DeleteButton}"
+                            DataContext="{Binding}" />
+                        <GridSplitter
+                            Grid.Column="2"
+                            HorizontalAlignment="Stretch"
+                            Background="{StaticResource BorderAlt}" />
+                        <ContentControl
+                            Grid.Column="3"
+                            MinHeight="27"
+                            VerticalAlignment="Top"
+                            Content="{Binding}"
+                            ContentTemplateSelector="{DynamicResource redEditorTemplates}"
+                            ToolTip="{Binding Type, Mode=OneTime}" />
+                    </Grid>
+                </Border>
+                <DataTemplate.Triggers>
+                    <DataTrigger
+                        Binding="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem}, Converter={StaticResource IsLastItemInContainerConverter}}"
+                        Value="True">
+                        <Setter TargetName="TopLine" Property="BorderThickness" Value="0,1,0,1" />
                     </DataTrigger>
-                </Style.Triggers>
-            </Style>
-            <converters:MathConverter x:Key="MathConverter" />
-            <converters:IsLastItemInContainerConverter x:Key="IsLastItemInContainerConverter" />
+                </DataTemplate.Triggers>
+                <!--HierarchicalDataTemplate.ItemTemplate>
+                    <DataTemplate>
+                        <Border
+                            x:Name="TopLine"
+                            MinHeight="27"
+                            Margin="160,0,0,0"
+                            BorderBrush="{StaticResource BorderAlt}"
+                            BorderThickness="1,1,0,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition>
+                                        <ColumnDefinition.Style>
+                                            <Style TargetType="ColumnDefinition">
+                                                <Setter Property="Width" Value="160" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsInArray}" Value="True">
+                                                        <Setter Property="Width" Value="{Binding ArrayIndexWidth}" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ColumnDefinition.Style>
+                                    </ColumnDefinition>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="1" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    Margin="6,5,0,0"
+                                    VerticalAlignment="Top"
+                                    Style="{StaticResource PGNameStyle}"
+                                    Text="{Binding Name, Mode=OneTime}"
+                                    TextTrimming="CharacterEllipsis"
+                                    ToolTip="{Binding XPath, Mode=OneTime}" />
+                                <ContentPresenter
+                                    x:Name="DeleteButtonWrapper"
+                                    Grid.Column="1"
+                                    Margin="0,6,0,0"
+                                    VerticalAlignment="Top"
+                                    ContentTemplate="{StaticResource DeleteButton}"
+                                    DataContext="{Binding}" />
+                                <GridSplitter
+                                    Grid.Column="2"
+                                    HorizontalAlignment="Stretch"
+                                    Background="{StaticResource BorderAlt}" />
+                                <ContentControl
+                                    Grid.Column="3"
+                                    Content="{Binding}"
+                                    ContentTemplateSelector="{DynamicResource redEditorTemplates}"
+                                    ToolTip="{Binding Type, Mode=OneTime}" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </HierarchicalDataTemplate.ItemTemplate-->
+            </DataTemplate>
+            <DataTemplate x:Key="ArrayHeaderDataTemplate">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Border
+                        Height="{DynamicResource RowHeight}"
+                        Margin="0,1,0,-1"
+                        BorderBrush="{StaticResource BorderAlt}"
+                        BorderThickness="0,0,0,1">
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconCodicons
+                                Width="15"
+                                Height="15"
+                                Margin="6,0,0,2"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Kind="SymbolClass" />
+                            <TextBlock
+                                Name="PropertyType"
+                                Margin="6,0,4,2"
+                                VerticalAlignment="Center"
+                                Foreground="{StaticResource WolvenKitTan}"
+                                Text="{Binding Type, Mode=OneTime}" />
+                            <StackPanel
+                                Margin="-4,0,4,0"
+                                VerticalAlignment="Center"
+                                Orientation="Horizontal">
+                                <StackPanel.Style>
+                                    <Style TargetType="StackPanel">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding TypesDiffer, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </StackPanel.Style>
+                                <iconPacks:PackIconCodicons
+                                    Height="7"
+                                    VerticalAlignment="Center"
+                                    Kind="ArrowRight" />
+                                <TextBlock
+                                    Margin="0,0,0,2"
+                                    Foreground="{StaticResource WolvenKitTan}"
+                                    Text="{Binding ResolvedType, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                            <TextBlock
+                                Margin="0,0,4,3"
+                                VerticalAlignment="Center"
+                                Text="{Binding Descriptor}">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Descriptor}" Value="">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                            <ContentPresenter ContentTemplate="{StaticResource AddToArrayButton}" />
+                            <ContentPresenter ContentTemplate="{StaticResource AddToCompiledDataButton}" />
+                            <ContentPresenter ContentTemplate="{StaticResource AddDynamicProperty}" />
+                            <ContentPresenter ContentTemplate="{StaticResource AddHandleButton}" />
+                            <ContentPresenter ContentTemplate="{StaticResource DeleteAllButton}" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </DataTemplate>
             <converters:RedEditorTemplateSelector x:Key="redEditorTemplates">
                 <converters:RedEditorTemplateSelector.RedStringEditor>
                     <DataTemplate>
@@ -346,7 +544,7 @@
                         <editors:RedCNameEditor RedString="{Binding Data, Mode=TwoWay}">
                             <editors:RedCNameEditor.Style>
                                 <Style TargetType="editors:RedCNameEditor">
-                                    <EventSetter Event="ValueChanged" Handler="RedCNameEditor_ValueChanged" />
+                                    <EventSetter Event="ValueChanged" Handler="RedTypeEditorChild_ValueChanged" />
                                 </Style>
                             </editors:RedCNameEditor.Style>
                         </editors:RedCNameEditor>
@@ -524,78 +722,22 @@
                 </converters:RedEditorTemplateSelector.RedTypeViewer>
                 <converters:RedEditorTemplateSelector.RedArrayEditor>
                     <DataTemplate>
+                        <ContentPresenter ContentTemplate="{StaticResource ArrayHeaderDataTemplate}" />
+                    </DataTemplate>
+                </converters:RedEditorTemplateSelector.RedArrayEditor>
+                <converters:RedEditorTemplateSelector.RedInlineArrayEditor>
+                    <DataTemplate>
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto"></RowDefinition>
+                                <RowDefinition Height="Auto"></RowDefinition>
                             </Grid.RowDefinitions>
-                            <Border
-                                Height="{DynamicResource RowHeight}"
-                                Margin="0,1,0,-1"
-                                BorderBrush="{StaticResource BorderAlt}"
-                                BorderThickness="0,0,0,1">
-                                <StackPanel Orientation="Horizontal">
-                                    <iconPacks:PackIconCodicons
-                                        Width="15"
-                                        Height="15"
-                                        Margin="6,0,0,2"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        Kind="SymbolClass" />
-                                    <TextBlock
-                                        Name="PropertyType"
-                                        Margin="6,0,4,2"
-                                        VerticalAlignment="Center"
-                                        Foreground="{StaticResource WolvenKitTan}"
-                                        Text="{Binding Type, Mode=OneTime}" />
-                                    <StackPanel
-                                        Margin="-4,0,4,0"
-                                        VerticalAlignment="Center"
-                                        Orientation="Horizontal">
-                                        <StackPanel.Style>
-                                            <Style TargetType="StackPanel">
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding TypesDiffer, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="False">
-                                                        <Setter Property="Visibility" Value="Collapsed" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </StackPanel.Style>
-                                        <iconPacks:PackIconCodicons
-                                            Height="7"
-                                            VerticalAlignment="Center"
-                                            Kind="ArrowRight" />
-                                        <TextBlock
-                                            Margin="0,0,0,2"
-                                            Foreground="{StaticResource WolvenKitTan}"
-                                            Text="{Binding ResolvedType, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
-                                    </StackPanel>
-                                    <TextBlock
-                                        Margin="0,0,4,3"
-                                        VerticalAlignment="Center"
-                                        Text="{Binding Descriptor}">
-                                        <TextBlock.Style>
-                                            <Style TargetType="TextBlock">
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Descriptor}" Value="">
-                                                        <Setter Property="Visibility" Value="Collapsed" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBlock.Style>
-                                    </TextBlock>
-                                    <ContentPresenter ContentTemplate="{StaticResource AddToArrayButton}" />
-                                    <ContentPresenter ContentTemplate="{StaticResource AddToCompiledDataButton}" />
-                                    <ContentPresenter ContentTemplate="{StaticResource AddDynamicProperty}" />
-                                    <ContentPresenter ContentTemplate="{StaticResource AddHandleButton}" />
-                                    <ContentPresenter ContentTemplate="{StaticResource DeleteAllButton}" />
-                                </StackPanel>
-                            </Border>
-                            <!--ListView
+                            <ContentPresenter ContentTemplate="{StaticResource ArrayHeaderDataTemplate}" Grid.Row="0" />
+                            <ListView
                                 Grid.Row="1"
                                 AlternationCount="{Binding RelativeSource={RelativeSource Self}, Path=Items.Count}"
                                 ItemTemplate="{StaticResource ItemTemplate}"
-                                ItemsSource="{Binding Properties}"
+                                ItemsSource="{Binding DisplayProperties}"
                                 ScrollViewer.CanContentScroll="False">
                                 <ListView.ItemsPanel>
                                     <ItemsPanelTemplate>
@@ -605,137 +747,12 @@
                                             VirtualizationMode="Recycling" />
                                     </ItemsPanelTemplate>
                                 </ListView.ItemsPanel>
-                            </ListView-->
+                            </ListView>
                         </Grid>
                     </DataTemplate>
-                </converters:RedEditorTemplateSelector.RedArrayEditor>
+                </converters:RedEditorTemplateSelector.RedInlineArrayEditor>
             </converters:RedEditorTemplateSelector>
-            <DataTemplate x:Key="ItemTemplate">
-                <!--  ="{Binding Properties}"  -->
-                <Border
-                    x:Name="TopLine"
-                    Visibility="{Binding IsHiddenByEditorDifficultyLevel, Converter={StaticResource InvertBooleanConverter}}"
-                    MinHeight="27"
-                    BorderBrush="{StaticResource BorderAlt}"
-                    BorderThickness="0,1,0,0">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="NameColumn" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="1" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock
-                            Grid.Column="0"
-                            Margin="6,5,6,0"
-                            VerticalAlignment="Top"
-                            Style="{StaticResource PGNameStyle}"
-                            Text="{Binding Name, Mode=OneTime}"
-                            TextTrimming="CharacterEllipsis"
-                            ToolTip="{Binding XPath, Mode=OneTime}" />
-                        <ContentPresenter
-                            x:Name="DeleteButtonWrapper"
-                            Grid.Column="1"
-                            Margin="0,6,0,0"
-                            VerticalAlignment="Top"
-                            ContentTemplate="{StaticResource DeleteButton}"
-                            DataContext="{Binding}" />
-                        <GridSplitter
-                            Grid.Column="2"
-                            HorizontalAlignment="Stretch"
-                            Background="{StaticResource BorderAlt}" />
-                        <ContentControl
-                            Grid.Column="3"
-                            MinHeight="27"
-                            VerticalAlignment="Top"
-                            Content="{Binding}"
-                            ContentTemplateSelector="{DynamicResource redEditorTemplates}"
-                            ToolTip="{Binding Type, Mode=OneTime}" />
-                    </Grid>
-                </Border>
-                <DataTemplate.Triggers>
-                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem}, Converter={StaticResource IsLastItemInContainerConverter}}" Value="True">
-                        <Setter TargetName="TopLine" Property="BorderThickness" Value="0,1,0,1" />
-                    </DataTrigger>
-                </DataTemplate.Triggers>
-                <!--HierarchicalDataTemplate.ItemTemplate>
-                    <DataTemplate>
-                        <Border
-                            x:Name="TopLine"
-                            MinHeight="27"
-                            Margin="160,0,0,0"
-                            BorderBrush="{StaticResource BorderAlt}"
-                            BorderThickness="1,1,0,0">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition>
-                                        <ColumnDefinition.Style>
-                                            <Style TargetType="ColumnDefinition">
-                                                <Setter Property="Width" Value="160" />
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding IsInArray}" Value="True">
-                                                        <Setter Property="Width" Value="{Binding ArrayIndexWidth}" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </ColumnDefinition.Style>
-                                    </ColumnDefinition>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="1" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock
-                                    Margin="6,5,0,0"
-                                    VerticalAlignment="Top"
-                                    Style="{StaticResource PGNameStyle}"
-                                    Text="{Binding Name, Mode=OneTime}"
-                                    TextTrimming="CharacterEllipsis"
-                                    ToolTip="{Binding XPath, Mode=OneTime}" />
-                                <ContentPresenter
-                                    x:Name="DeleteButtonWrapper"
-                                    Grid.Column="1"
-                                    Margin="0,6,0,0"
-                                    VerticalAlignment="Top"
-                                    ContentTemplate="{StaticResource DeleteButton}"
-                                    DataContext="{Binding}" />
-                                <GridSplitter
-                                    Grid.Column="2"
-                                    HorizontalAlignment="Stretch"
-                                    Background="{StaticResource BorderAlt}" />
-                                <ContentControl
-                                    Grid.Column="3"
-                                    Content="{Binding}"
-                                    ContentTemplateSelector="{DynamicResource redEditorTemplates}"
-                                    ToolTip="{Binding Type, Mode=OneTime}" />
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </HierarchicalDataTemplate.ItemTemplate-->
-            </DataTemplate>
-            <Style TargetType="TextBox">
-                <Setter Property="Padding" Value="5,0" />
-                <Setter Property="VerticalContentAlignment" Value="Center" />
-                <Setter Property="BorderThickness" Value="0" />
-            </Style>
-            <Style BasedOn="{StaticResource WPFComboBoxStyle}" TargetType="ComboBox">
-                <Setter Property="Padding" Value="5,0" />
-                <Setter Property="VerticalContentAlignment" Value="Center" />
-                <Setter Property="BorderThickness" Value="0" />
-                <Setter Property="Background" Value="#252525" />
-            </Style>
-            <Style BasedOn="{StaticResource CheckBoxBaseStyle}" TargetType="CheckBox">
-                <Setter Property="Margin" Value="4,0" />
-                <Setter Property="VerticalContentAlignment" Value="Center" />
-                <Setter Property="HorizontalAlignment" Value="Left" />
-                <Setter Property="BorderThickness" Value="1" />
-                <Setter Property="Background" Value="#252525" />
-            </Style>
-            <Style BasedOn="{StaticResource SyncfusionUpDownStyle}" TargetType="{x:Type syncfusion:UpDown}">
-                <Setter Property="Background" Value="Transparent" />
-                <Setter Property="FocusedBackground" Value="Transparent" />
-                <Setter Property="NegativeBackground" Value="Transparent" />
-                <Setter Property="ZeroColor" Value="White" />
-            </Style>
+
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

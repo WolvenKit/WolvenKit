@@ -26,7 +26,7 @@ namespace WolvenKit.Views.Editors
 
         public event EventHandler ValueChanged;
 
-        private void RedCNameEditor_ValueChanged(object sender, RoutedEventArgs e)
+        private void RedTypeEditorChild_ValueChanged(object sender, RoutedEventArgs e)
         {
             if (DataContext is not ChunkViewModel vm || e is not ValueChangedEventArgs args)
             {
