@@ -733,11 +733,13 @@
                                 <RowDefinition Height="Auto"></RowDefinition>
                             </Grid.RowDefinitions>
                             <ContentPresenter ContentTemplate="{StaticResource ArrayHeaderDataTemplate}" Grid.Row="0" />
+                            <!-- This is where I want to render an ItemTemplate for each of the DisplayProperties -->
                             <ListView
                                 Grid.Row="1"
                                 AlternationCount="{Binding RelativeSource={RelativeSource Self}, Path=Items.Count}"
                                 ItemTemplate="{StaticResource ItemTemplate}"
                                 ItemsSource="{Binding DisplayProperties}"
+                                Height="Auto"
                                 ScrollViewer.CanContentScroll="False">
                                 <ListView.ItemsPanel>
                                     <ItemsPanelTemplate>

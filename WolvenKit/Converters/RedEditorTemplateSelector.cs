@@ -187,12 +187,15 @@ namespace WolvenKit.Converters
 
             if (vm.HasChildren())
             {
-                // if (vm.Parent?.ResolvedData is meshMeshAppearance)
-                // {
-                //     return RedInlineArrayEditor;
-                // }
+                if (vm.Parent?.ResolvedData is not meshMeshAppearance)
+                {
+                    return RedArrayEditor;
+                }
 
-                return RedArrayEditor;
+                // array inline editor
+                vm.CalculateProperties();
+                return RedInlineArrayEditor;
+
             }
 
             return RedTypeViewer;
