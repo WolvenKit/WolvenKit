@@ -92,7 +92,8 @@ public static partial class ArchiveXlHelper
             return null;
         }
 
-        return ResolveDynamicPaths(depotPath).FirstOrDefault((f) =>
+        var potentialMatches = ResolveDynamicPaths(depotPath);
+        return potentialMatches.FirstOrDefault((f) =>
             File.Exists(Path.Combine(pathToArchiveFolder, f)) || File.Exists(Path.Combine(pathToGameFiles, f)));
     }
 

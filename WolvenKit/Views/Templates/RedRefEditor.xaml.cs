@@ -59,7 +59,6 @@ namespace WolvenKit.Views.Editors
             _updateTimer.Tick += OnUpdateTimerTick;
         }
 
-
         public IRedRef RedRef
         {
             get => (IRedRef)GetValue(RedRefProperty);
@@ -211,16 +210,16 @@ namespace WolvenKit.Views.Editors
                 return;
             }
 
-            if (ArchiveXlHelper.HasSubstitution(filePath) &&
-                ArchiveXlHelper.GetValuesForInvalidSubstitution(filePath) is string invalidSubstitutions)
-            {
-                SetCurrentValue(ScopeProperty, FileScope.InvalidSubstitution);
-                SetCurrentValue(TextBoxToolTipProperty, invalidSubstitutions);
-                return;
-            }
-
+            var hasArchiveXlMatch = false;
             if (ArchiveXlHelper.HasSubstitution(filePath))
             {
+                if (ArchiveXlHelper.GetValuesForInvalidSubstitution(filePath) is string invalidSubstitutions)
+                {
+                    SetCurrentValue(ScopeProperty, FileScope.InvalidSubstitution);
+                    SetCurrentValue(TextBoxToolTipProperty, invalidSubstitutions);
+                    return;
+                }
+
                 if (App.Helpers.ArchiveXlHelper.GetFirstExistingPath(filePath) is not string s)
                 {
                     SetCurrentValue(ScopeProperty, FileScope.NotFoundWarning);
@@ -228,10 +227,10 @@ namespace WolvenKit.Views.Editors
                     return;
                 }
 
-                filePath = s;
+                hasArchiveXlMatch = true;
             }
 
-            if (_archiveManager?.GetGameFile(RedRef.DepotPath, false, true) is not null)
+            if (hasArchiveXlMatch || _archiveManager?.GetGameFile(RedRef.DepotPath, false, true) is not null)
             {
                 SetCurrentValue(ScopeProperty, FileScope.GameOrMod);
                 SetCurrentValue(TextBoxToolTipProperty, "Valid depot path (game or same mod)");
