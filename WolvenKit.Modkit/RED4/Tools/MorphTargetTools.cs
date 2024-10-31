@@ -5,7 +5,9 @@ using System.Linq;
 using System.Text.Json;
 using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
+using WolvenKit.Common;
 using WolvenKit.Common.DDS;
+using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.RED4.GeneralStructs;
@@ -24,6 +26,7 @@ namespace WolvenKit.Modkit.RED4
         public bool ExportMorphTargets(
             CR2WFile cr2w,
             FileInfo outfile,
+            string materialRepository,
             bool isGLBinary = true,
             bool exportTextures = false,
             ValidationMode vMode = ValidationMode.TryFix
@@ -37,10 +40,19 @@ namespace WolvenKit.Modkit.RED4
 
             RawArmature? rig = null;
 
-            if (TryFindFile(morphBlob.BaseMesh.DepotPath, out var result) == FindFileResult.NoError && 
-                result.File is { RootChunk: CMesh { RenderResourceBlob.Chunk: rendRenderMeshBlob } baseMeshBlob })
+            if (TryFindFile(morphBlob.BaseMesh.DepotPath, out var result) == FindFileResult.NoError &&
+                result.File is { RootChunk: CMesh baseMeshBlob } file &&
+                baseMeshBlob.RenderResourceBlob.Chunk is rendRenderMeshBlob meshBlob)
             {
                 rig = MeshTools.GetOrphanRig(baseMeshBlob);
+
+
+                if (exportTextures)
+                {
+                    // TODO: this does not work yet
+                    var meshesinfo = MeshTools.GetMeshesinfo(meshBlob);
+                    ParseMaterials(cr2w, outfile, materialRepository, meshesinfo, EUncookExtension.png);
+                }
             }
 
             using var meshBuffer = new MemoryStream(rendBlob.RenderBuffer.Buffer.GetBytes());
@@ -76,9 +88,6 @@ namespace WolvenKit.Modkit.RED4
                 }
                 expTargets.Add(ContainRawTarget(diffsBuffer, mappingBuffer, tempNumVertexDiffsInEachChunk, tempNumVertexDiffsMappingInEachChunk, targetsInfo.TargetStartsInVertexDiffs[i], targetsInfo.TargetStartsInVertexDiffsMapping[i], targetsInfo.TargetPositionDiffOffset[i], targetsInfo.TargetPositionDiffScale[i], expMeshes.Count));
             }
-
-            // Only add textures to list if the setting is checked in the export
-            var textureStreams = exportTextures ? ContainTextureStreams(blob, texBuffer) : [];
                 
             var model = RawTargetsToGLTF(expMeshes, expTargets, targetsInfo.Names, rig);
 
@@ -88,20 +97,6 @@ namespace WolvenKit.Modkit.RED4
             }
 
             model.Save(GLTFHelper.PrepareFilePath(outfile.FullName, isGLBinary), new WriteSettings(vMode));
-
-            if (textureStreams.Count == 0)
-            {
-                return true;
-            }
-            
-            var dir = new DirectoryInfo(outfile.FullName.Replace(Path.GetExtension(outfile.FullName), string.Empty) + "_textures");
-
-            Directory.CreateDirectory(dir.FullName);
-
-            for (var i = 0; i < textureStreams.Count; i++)
-            {
-                File.WriteAllBytes(Path.Combine(dir.FullName, $"{Path.GetFileNameWithoutExtension(outfile.FullName)}_{i}.dds"), textureStreams[i].ToArray());
-            }
 
             return true;
         }

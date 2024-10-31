@@ -563,7 +563,9 @@ namespace WolvenKit.Modkit.RED4
                     // actual type extension we want it to...
                     var typePreservingOutfile = new FileInfo($"{outfile.FullName}");
 
-                    return ExportMorphTargets(cr2wFile, typePreservingOutfile,
+                    return ExportMorphTargets(cr2wFile,
+                        typePreservingOutfile,
+                        settings.Get<MorphTargetExportArgs>().MaterialRepo ?? Directory.CreateTempSubdirectory().FullName,
                         settings.Get<MorphTargetExportArgs>().IsBinary,
                         settings.Get<MorphTargetExportArgs>().ExportTextures);
 
@@ -906,11 +908,6 @@ namespace WolvenKit.Modkit.RED4
             }
 
             var meshesInfo = MeshTools.GetMeshesinfo(rendblob, cMesh);
-
-            if (Path.GetDirectoryName(outfile.FullName) is string parentDir && !Directory.Exists(parentDir))
-            {
-                Directory.CreateDirectory(parentDir);
-            }
 
             ParseMaterials(cr2w, outfile, meshExportArgs.MaterialRepo, meshesInfo, meshExportArgs.MaterialUncookExtension);
 

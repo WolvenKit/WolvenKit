@@ -1137,25 +1137,28 @@ namespace WolvenKit.Modkit.RED4.Tools
         }
         public static RawArmature? GetOrphanRig(CMesh meshBlob)
         {
-            if (meshBlob.RenderResourceBlob.Chunk is rendRenderMeshBlob rendMeshBlob)
+            if (meshBlob.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendMeshBlob)
             {
-                if (rendMeshBlob.Header.BonePositions.Count != 0)
-                {
-                    var boneCount = rendMeshBlob.Header.BonePositions.Count;
-                    var rig = new RawArmature
-                    {
-                        BoneCount = boneCount,
-                        LocalPosn = rendMeshBlob.Header.BonePositions.Select(p => new Vec3(p.X, p.Z, -p.Y)).ToArray(),
-                        LocalRot = Enumerable.Repeat(System.Numerics.Quaternion.Identity, boneCount).ToArray(),
-                        LocalScale = Enumerable.Repeat(Vec3.One, boneCount).ToArray(),
-                        Parent = Enumerable.Repeat<short>(-1, boneCount).ToArray(),
-                        Names = meshBlob.BoneNames.Select(x => x.GetResolvedText().NotNull()).ToArray()
-                    };
-                    return rig;
-                }
+                return null;
             }
 
-            return null;
+            if (rendMeshBlob.Header.BonePositions.Count == 0)
+            {
+                return null;
+            }
+
+            var boneCount = rendMeshBlob.Header.BonePositions.Count;
+            var rig = new RawArmature
+            {
+                BoneCount = boneCount,
+                LocalPosn = rendMeshBlob.Header.BonePositions.Select(p => new Vec3(p.X, p.Z, -p.Y)).ToArray(),
+                LocalRot = Enumerable.Repeat(System.Numerics.Quaternion.Identity, boneCount).ToArray(),
+                LocalScale = Enumerable.Repeat(Vec3.One, boneCount).ToArray(),
+                Parent = Enumerable.Repeat<short>(-1, boneCount).ToArray(),
+                Names = meshBlob.BoneNames.Select(x => x.GetResolvedText().NotNull()).ToArray()
+            };
+            return rig;
+
         }
 
         public static RawArmature? GetOrphanRig(ModelRoot model)
