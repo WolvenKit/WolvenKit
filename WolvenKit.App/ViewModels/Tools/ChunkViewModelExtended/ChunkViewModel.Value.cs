@@ -225,6 +225,24 @@ public partial class ChunkViewModel
                 Value = text;
                 IsValueExtrapolated = Value != "";
                 break;
+            case CMatrix when Parent?.Name == "boneRigMatrices" &&
+                              GetRootModel().GetPropertyFromPath("boneNames")?.ResolvedData is CArray<CName> boneNames &&
+                              boneNames.Count > NodeIdxInParent:
+                Value = boneNames[NodeIdxInParent].GetResolvedText();
+                IsValueExtrapolated = Value != "";
+                break;
+            case Vector4 when Parent?.Name == "bonePositions" &&
+                              GetRootModel().GetPropertyFromPath("boneNames")?.ResolvedData is CArray<CName> boneNames &&
+                              boneNames.Count > NodeIdxInParent:
+                Value = boneNames[NodeIdxInParent].GetResolvedText();
+                IsValueExtrapolated = Value != "";
+                break;
+            case CFloat when Parent?.Name == "boneVertexEpsilons" &&
+                             GetRootModel().GetPropertyFromPath("boneNames")?.ResolvedData is CArray<CName> boneNames &&
+                             boneNames.Count > NodeIdxInParent:
+                Value = boneNames[NodeIdxInParent].GetResolvedText();
+                IsValueExtrapolated = Value != "";
+                break;
             case scnSceneWorkspotDataId sceneWorkspotData when sceneWorkspotData.Id != 0:
                 Value = $"{sceneWorkspotData.Id}";
                 IsValueExtrapolated = sceneWorkspotData.Id != 0;
