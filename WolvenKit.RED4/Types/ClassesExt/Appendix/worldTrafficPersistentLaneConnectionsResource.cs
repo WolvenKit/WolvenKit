@@ -51,7 +51,30 @@ public partial class worldTrafficPersistentLaneConnectionsResource : IRedAppendi
         }
     }
 
-    public void Write(Red4Writer writer) => throw new NotImplementedException();
+    public void Write(Red4Writer writer)
+    {
+        writer.BaseWriter.Write(Data.Count);
+        foreach (var entry in Data)
+        {
+            writer.Write(entry.Index);
+
+            writer.BaseWriter.WriteVLQInt32(entry.Value.Outlanes.Count);
+            foreach (var outlane in entry.Value.Outlanes)
+            {
+                writer.Write(outlane.LaneIndex);
+                writer.Write(outlane.ExitProbabilityCompressed);
+                writer.Write(outlane.IsSharpAngle);
+                writer.Write(outlane.ThisLaneExitPosition);
+                writer.Write(outlane.NextLaneEntryPosition);
+            }
+
+            writer.BaseWriter.WriteVLQInt32(entry.Value.InLanes.Count);
+            foreach (var inlane in entry.Value.InLanes)
+            {
+                writer.Write(inlane.LaneIndex);
+            }
+        }
+    }
 }
 
 public class worldTrafficPersistentLaneConnectionsResource_Data : RedBaseClass

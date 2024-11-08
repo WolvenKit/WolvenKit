@@ -57,7 +57,29 @@ public partial class worldTrafficPersistentLanePolygonResource : IRedAppendix
         }
     }
 
-    public void Write(Red4Writer writer) => throw new NotImplementedException();
+    public void Write(Red4Writer writer)
+    {
+        writer.BaseWriter.Write(Data.Count);
+        foreach (var entry in Data)
+        {
+            writer.Write(entry.Index);
+
+            writer.BaseWriter.WriteVLQInt32(entry.Value.Outline.Count);
+            foreach (var outline in entry.Value.Outline)
+            {
+                writer.Write(outline.X);
+                writer.Write(outline.Y);
+                writer.Write(outline.Z);
+            }
+
+            writer.BaseWriter.WriteVLQInt32(entry.Value.Polygon.Count);
+            foreach (var polygon in entry.Value.Polygon)
+            {
+                writer.Write(polygon.X);
+                writer.Write(polygon.Y);
+            }
+        }
+    }
 }
 
 public class worldTrafficPersistentLanePolygonResource_Data : RedBaseClass
