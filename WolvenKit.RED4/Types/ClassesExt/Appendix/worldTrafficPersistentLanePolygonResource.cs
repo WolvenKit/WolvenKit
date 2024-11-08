@@ -5,17 +5,17 @@ namespace WolvenKit.RED4.Types;
 
 public partial class worldTrafficPersistentLanePolygonResource : IRedAppendix
 {
-    [RED("unk1")]
+    [RED("data")]
     [REDProperty(IsIgnored = true)]
-    public CArray<worldTrafficPersistentLanePolygonResource_Class1> Unk1
+    public CArray<worldTrafficPersistentLanePolygonResource_Data> Data
     {
-        get => GetPropertyValue<CArray<worldTrafficPersistentLanePolygonResource_Class1>>();
-        set => SetPropertyValue<CArray<worldTrafficPersistentLanePolygonResource_Class1>>(value);
+        get => GetPropertyValue<CArray<worldTrafficPersistentLanePolygonResource_Data>>();
+        set => SetPropertyValue<CArray<worldTrafficPersistentLanePolygonResource_Data>>(value);
     }
 
     partial void PostConstruct()
     {
-        Unk1 = new CArray<worldTrafficPersistentLanePolygonResource_Class1>();
+        Data = new CArray<worldTrafficPersistentLanePolygonResource_Data>();
     }
 
     public void Read(Red4Reader reader, uint size)
@@ -23,7 +23,7 @@ public partial class worldTrafficPersistentLanePolygonResource : IRedAppendix
         var entryCount = reader.BaseReader.ReadUInt32();
         for (var i = 0; i < entryCount; i++)
         {
-            var entry = new worldTrafficPersistentLanePolygonResource_Class1
+            var entry = new worldTrafficPersistentLanePolygonResource_Data
             {
                 Index = reader.ReadCUInt16()
             };
@@ -38,7 +38,7 @@ public partial class worldTrafficPersistentLanePolygonResource : IRedAppendix
                     Z = reader.ReadCFloat()
                 };
 
-                entry.Unk1.Add(subEntry);
+                entry.Value.Outline.Add(subEntry);
             }
 
             var cnt2 = reader.BaseReader.ReadVLQInt32();
@@ -50,17 +50,17 @@ public partial class worldTrafficPersistentLanePolygonResource : IRedAppendix
                     Y = reader.ReadCFloat()
                 };
 
-                entry.Unk2.Add(subEntry);
+                entry.Value.Polygon.Add(subEntry);
             }
 
-            Unk1.Add(entry);
+            Data.Add(entry);
         }
     }
 
     public void Write(Red4Writer writer) => throw new NotImplementedException();
 }
 
-public class worldTrafficPersistentLanePolygonResource_Class1 : RedBaseClass
+public class worldTrafficPersistentLanePolygonResource_Data : RedBaseClass
 {
     [RED("index")]
     public CUInt16 Index
@@ -69,23 +69,15 @@ public class worldTrafficPersistentLanePolygonResource_Class1 : RedBaseClass
         set => SetPropertyValue<CUInt16>(value);
     }
 
-    [RED("unk1")]
-    public CArray<Vector3> Unk1
+    [RED("value")]
+    public worldTrafficLanePolygonRepresentation Value
     {
-        get => GetPropertyValue<CArray<Vector3>>();
-        set => SetPropertyValue<CArray<Vector3>>(value);
+        get => GetPropertyValue<worldTrafficLanePolygonRepresentation>();
+        set => SetPropertyValue<worldTrafficLanePolygonRepresentation>(value);
     }
 
-    [RED("unk2")]
-    public CArray<Vector2> Unk2
+    public worldTrafficPersistentLanePolygonResource_Data()
     {
-        get => GetPropertyValue<CArray<Vector2>>();
-        set => SetPropertyValue<CArray<Vector2>>(value);
-    }
-
-    public worldTrafficPersistentLanePolygonResource_Class1()
-    {
-        Unk1 = new CArray<Vector3>();
-        Unk2 = new CArray<Vector2>();
+        Value = new worldTrafficLanePolygonRepresentation();
     }
 }
