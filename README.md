@@ -98,7 +98,7 @@ Developer | Role | Email
 
 WolvenKit is a direct result of the hard work and continuous support, financial and otherwise, of the many researchers, programmers, artists, contributors, and companies that have helped with this project. Without their outstanding work and generous support, we never would have been able to create WolvenKit for Cyberpunk 2077. A very special thank you goes out to...
 
-<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg" alt="JetBrains Logo (Main) logo." width="100" height="100">
+<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.png" alt="JetBrains logo." height="64">
 
 - [JetBrains](https://www.jetbrains.com) who supplied open source licences for our developers
 - [Syncfusion](https://www.syncfusion.com/company/about-us) who supplied an open source licence for the WPF controls we use
