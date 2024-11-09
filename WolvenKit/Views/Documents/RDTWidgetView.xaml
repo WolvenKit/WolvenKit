@@ -75,7 +75,7 @@
                         x:Name="WidgetPreview"
                         Style="{ StaticResource WidgetPreviewCanvasStyle }"
                         RenderTransformOrigin="0.5,0.5"
-                        Visibility="{Binding IsPixelGridSnappingEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Visibility="{Binding IsLoaded, Converter={StaticResource BooleanToVisibilityConverter}}"
                         RenderOptions.EdgeMode="Unspecified" />
 
                     <others:LoadingTextControl Grid.Column="0" VisibilityFlag="{Binding IsLoaded}" Small="True" />
