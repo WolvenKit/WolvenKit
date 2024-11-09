@@ -10,9 +10,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    xmlns:types="clr-namespace:WolvenKit.RED4.Types;assembly=WolvenKit.RED4.Types"
     xmlns:others="clr-namespace:WolvenKit.Views.Others"
-    xmlns:converters="clr-namespace:WolvenKit.Converters"
     Margin="0"
     d:DataContext="{d:DesignInstance Type={x:Type documents:RDTWidgetViewModel}}"
     d:DesignHeight="450"
@@ -25,26 +23,30 @@
     <Grid>
         <Grid.Resources>
             <ResourceDictionary>
-                <DrawingBrush x:Key="GridPatternBrush" TileMode="Tile" Viewport="-10,-10,40,40" ViewportUnits="Absolute">
+                <DrawingBrush
+                    x:Key="GridPatternBrush"
+                    TileMode="Tile"
+                    Viewport="0,0,48,48"
+                    ViewportUnits="Absolute">
                     <DrawingBrush.Drawing>
                         <GeometryDrawing>
                             <GeometryDrawing.Geometry>
-                                <RectangleGeometry Rect="0,0,50,50" />
+                                <RectangleGeometry Rect="0,0,48,48" />
                             </GeometryDrawing.Geometry>
+
                             <GeometryDrawing.Pen>
-                                <Pen Brush="{StaticResource WolvenKitCyanShadow25}" Thickness="1" />
+                                <Pen Brush="{StaticResource ForegroundColor}" Thickness="1" />
                             </GeometryDrawing.Pen>
                         </GeometryDrawing>
                     </DrawingBrush.Drawing>
+
+                    <DrawingBrush.Transform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleX="{Binding GridZoom}" ScaleY="{Binding GridZoom}" />
+                            <TranslateTransform X="{Binding GridOffset.X}" Y="{Binding GridOffset.Y}" />
+                        </TransformGroup>
+                    </DrawingBrush.Transform>
                 </DrawingBrush>
-                <Style x:Key="WidgetPreviewCanvasStyle" TargetType="Canvas">
-                    <Setter Property="Background" Value="{StaticResource GridPatternBrush}" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsPixelGridSnappingEnabled}" Value="False">
-                            <Setter Property="Background" Value="{StaticResource ContentBackground}" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
             </ResourceDictionary>
         </Grid.Resources>
         <Grid.ColumnDefinitions>
@@ -73,9 +75,15 @@
                 <Grid>
                     <Canvas
                         x:Name="WidgetPreview"
-                        Style="{ StaticResource WidgetPreviewCanvasStyle }"
-                        RenderTransformOrigin="0.5,0.5"
                         Visibility="{Binding IsLoaded, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        RenderOptions.EdgeMode="Unspecified" />
+
+                    <Canvas
+                        x:Name="WidgetPreviewGrid"
+                        Background="{StaticResource GridPatternBrush}"
+                        Opacity="0.25"
+                        Visibility="{Binding IsPixelGridSnappingEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        IsHitTestVisible="False"
                         RenderOptions.EdgeMode="Unspecified" />
 
                     <others:LoadingTextControl Grid.Column="0" VisibilityFlag="{Binding IsLoaded}" Small="True" />
