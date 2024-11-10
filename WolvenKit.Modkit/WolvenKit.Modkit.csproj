@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <VersionPrefix>8.15.1</VersionPrefix>
+    <VersionPrefix>8.15.1.1</VersionPrefix>
     <VersionSuffix>$(VersionSuffix)</VersionSuffix>
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 
@@ -49,15 +49,23 @@
   <ItemGroup>
     <Content Include="opus-tools\opusdec.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  <PackagePath>contentFiles\any\any\opus-tools;content\opus-tools</PackagePath>
+	  <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="opus-tools\opusenc.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  <PackagePath>contentFiles\any\any\opus-tools;content\opus-tools</PackagePath>
+	  <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="opus-tools\opusinfo.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  <PackagePath>contentFiles\any\any\opus-tools;content\opus-tools</PackagePath>
+	  <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="Resources\soundEvents.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  <PackagePath>contentFiles\any\any\Resources;content\Resources</PackagePath>
+	  <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
   </ItemGroup>
 
