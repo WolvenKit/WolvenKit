@@ -684,6 +684,7 @@
                         Margin="3,0,0,0"
                         Click="ExpandChildren_OnClick"
                         Style="{StaticResource UnhideOnShift}"
+                        IsEnabled="{Binding HasSelectedItem}"
                         ToolTip="Expand Children">
                         <iconPacks:PackIconBootstrapIcons
                             Width="13"
@@ -694,6 +695,7 @@
                         Margin="3,0,0,0"
                         Click="CollapseChildren_OnClick"
                         Style="{StaticResource UnhideOnShift}"
+                        IsEnabled="{Binding HasSelectedItem}"
                         ToolTip="Collapse Children">
                         <iconPacks:PackIconBootstrapIcons
                             Width="13"
@@ -702,6 +704,7 @@
                     </Button>
                     <Button
                         Margin="3,0,0,0"
+                        IsEnabled="{Binding CanScrollToOpenFile}"
                         Click="ScrollToOpenFile_OnClick"
                         ToolTip="Scroll to open file">
                         <iconPacks:Material

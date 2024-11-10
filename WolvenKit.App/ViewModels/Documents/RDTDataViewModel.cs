@@ -165,6 +165,8 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     [ObservableProperty] private IRedRef? _selectedImport;
 
+    [ObservableProperty] private string? _currentSearch;
+
     public bool ShowReferenceGraph => _settingsManager.ShowReferenceGraph;
 
     /// <summary>
@@ -172,9 +174,14 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     /// </summary>
     public List<ChunkViewModel> DirtyChunks { get; set; } = [];
 
+    public bool HasActiveSearch { get; set; }
+
+    public int NumSelectedItems => SelectedChunks is ObservableCollection<object> obs ? obs.Count : 0;
+
     public delegate void LayoutNodesDelegate();
 
     public LayoutNodesDelegate? LayoutNodes;
+    
 
     #endregion
 
@@ -548,6 +555,22 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         if (args.RedType == typeof(CMeshMaterialEntry))
         {
             GetRootChunk()?.OnMaterialNameChange(args.OldValue, args.NewValue);
+        }
+    }
+
+    public void OnSearchChanged(string searchBoxText)
+    {
+        HasActiveSearch = !string.IsNullOrEmpty(searchBoxText);
+        foreach (var chunkViewModel in Chunks)
+        {
+            chunkViewModel.SetVisibilityStatusBySearchString(searchBoxText);
+        }
+
+        CurrentSearch = searchBoxText;
+
+        if (string.IsNullOrEmpty(searchBoxText) && SelectedChunk is ChunkViewModel selectedChunk)
+        {
+            ScrollToNode(selectedChunk);
         }
     }
 }

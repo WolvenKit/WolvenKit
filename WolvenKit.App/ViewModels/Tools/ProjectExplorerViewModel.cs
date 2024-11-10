@@ -129,10 +129,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <summary>
     /// Set status of "scroll to open file" button, based on whether or not we have one opened
     /// </summary>
-    private void MainViewModel_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        CanScrollToOpenFile = _mainViewModel.ActiveDocument is not null;
-    }
+    private void MainViewModel_OnPropertyChanged(object? sender, PropertyChangedEventArgs e) =>
+        CanScrollToOpenFile = HasSelectedItem && _mainViewModel.ActiveDocument is not null;
 
     private bool _loading;
 
@@ -195,7 +193,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     partial void OnSelectedItemChanged(FileSystemModel? value)
     {
-        CanScrollToOpenFile = value is not null;
+        HasSelectedItem = value is not null;
+        CanScrollToOpenFile = HasSelectedItem && _mainViewModel.ActiveDocument is not null;
         if (value is null)
         {
             return;
@@ -253,6 +252,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [ObservableProperty] private int _selectedTabIndex;
 
     [ObservableProperty] private bool _canScrollToOpenFile;
+
+    [ObservableProperty] private bool _hasSelectedItem;
 
     #endregion properties
 

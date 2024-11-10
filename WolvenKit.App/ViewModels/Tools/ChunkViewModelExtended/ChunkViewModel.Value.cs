@@ -225,6 +225,35 @@ public partial class ChunkViewModel
                 Value = text;
                 IsValueExtrapolated = Value != "";
                 break;
+            case CMatrix when Parent?.Name == "boneRigMatrices" &&
+                              GetRootModel().GetPropertyFromPath("boneNames")?.ResolvedData is CArray<CName> boneNames &&
+                              boneNames.Count > NodeIdxInParent:
+                Value = boneNames[NodeIdxInParent].GetResolvedText();
+                IsValueExtrapolated = Value != "";
+                break;
+            case Vector4 when Parent?.Name == "bonePositions" &&
+                              GetRootModel().GetPropertyFromPath("boneNames")?.ResolvedData is CArray<CName> boneNames &&
+                              boneNames.Count > NodeIdxInParent:
+                Value = boneNames[NodeIdxInParent].GetResolvedText();
+                IsValueExtrapolated = Value != "";
+                break;
+            case CFloat when Parent?.Name == "boneVertexEpsilons" &&
+                             GetRootModel().GetPropertyFromPath("boneNames")?.ResolvedData is CArray<CName> boneNames &&
+                             boneNames.Count > NodeIdxInParent:
+                Value = boneNames[NodeIdxInParent].GetResolvedText();
+                IsValueExtrapolated = Value != "";
+                break;
+            case CInt16 boneIdx when Parent?.Name == "boneParentIndexes" &&
+                                     GetRootModel().GetPropertyFromPath("boneNames")?.ResolvedData is CArray<CName> boneNames &&
+                                     boneNames.Count > NodeIdxInParent:
+                Value = boneNames[NodeIdxInParent].GetResolvedText();
+                IsValueExtrapolated = Value != "";
+                if (boneIdx > 0 && boneIdx < boneNames.Count)
+                {
+                    Value = $"{Value} -> {boneNames[boneIdx].GetResolvedText()}";
+                }
+
+                break;
             case scnSceneWorkspotDataId sceneWorkspotData when sceneWorkspotData.Id != 0:
                 Value = $"{sceneWorkspotData.Id}";
                 IsValueExtrapolated = sceneWorkspotData.Id != 0;

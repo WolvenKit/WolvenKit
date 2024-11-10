@@ -1,6 +1,5 @@
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.Editors
@@ -35,13 +34,13 @@ namespace WolvenKit.Views.Editors
         // Bound to the editor
         public double XValue
         {
-            get => (double)X;
+            get => X;
             set => SetValue(XProperty, (CFloat)value);
         }
 
         public double YValue
         {
-            get => (double)Y;
+            get => Y;
             set => SetValue(YProperty, (CFloat)value);
         }
     }

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
@@ -101,7 +102,8 @@ public partial class ExportViewModel : AbstractImportExportViewModel
 
         await Parallel.ForEachAsync(toBeExported, async (item, cancellationToken) =>
         {
-            _appViewModel.SaveFile(item.BaseFile);
+            await Application.Current.Dispatcher.InvokeAsync(() => _appViewModel.SaveFile(item.BaseFile));
+
             if (await ExportSingleAsync(item, projectArchive))
             {
                 Interlocked.Increment(ref successful);
