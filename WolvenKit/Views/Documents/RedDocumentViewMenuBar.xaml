@@ -364,7 +364,6 @@
             FlowDirection="LeftToRight"
             SearchStarted="SearchBar_OnSubmit"
             TextChanged="SearchBar_OnTextChanged"
-            ShowClearButton="True"
             Style="{StaticResource SearchBarStyle}" />
             
     </Grid>

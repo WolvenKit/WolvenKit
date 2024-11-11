@@ -1,6 +1,7 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:WolvenKit.Views.Editors"

@@ -7,6 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
     xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:WolvenKit.Views.Tools"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:others="clr-namespace:WolvenKit.Views.Others"
@@ -14,7 +15,6 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     xmlns:tools="clr-namespace:WolvenKit.App.ViewModels.Tools;assembly=WolvenKit.App"
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     d:DataContext="{d:DesignInstance Type=tools:TweakBrowserViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -47,8 +47,6 @@
                     FlowDirection="LeftToRight"
                     IsRealTime="True"
                     KeyUp="TextBox_KeyEnterUpdate"
-                    hc:InfoElement.ShowClearButton="False"
-                    ShowClearButton="True"
                     Style="{StaticResource SearchBarPlus}"
                     Text="{Binding SearchText}" />
                 <Expander Grid.Row="1" Header="Filter...">
@@ -107,12 +105,18 @@
                         SelectedItem="{Binding SelectedRecordEntry, Mode=TwoWay}">
                         <ListBox.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Command="{Binding CopyName}" Header="Copy Tweak Name" Style="{StaticResource SyncfusionMenuItemStyle}">
+                                <MenuItem
+                                    Command="{Binding CopyName}"
+                                    Header="Copy Tweak Name"
+                                    Style="{StaticResource SyncfusionMenuItemStyle}">
                                     <MenuItem.Icon>
                                         <iconPacks:PackIconMaterial Kind="ContentCopy" Style="{StaticResource ContextMenuIconStyleMaterial}" />
                                     </MenuItem.Icon>
                                 </MenuItem>
-                                <MenuItem Command="{Binding ConvertToYAML}" Header="Add TweakXL Override" Style="{StaticResource SyncfusionMenuItemStyle}">
+                                <MenuItem
+                                    Command="{Binding ConvertToYAML}"
+                                    Header="Add TweakXL Override"
+                                    Style="{StaticResource SyncfusionMenuItemStyle}">
                                     <MenuItem.Icon>
                                         <iconPacks:PackIconMaterial Kind="ContentSaveEdit" Style="{StaticResource ContextMenuIconStyleMaterial}" />
                                     </MenuItem.Icon>

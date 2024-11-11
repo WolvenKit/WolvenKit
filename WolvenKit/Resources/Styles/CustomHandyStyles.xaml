@@ -252,8 +252,8 @@
                                 </hc:ButtonGroup>
                                 <hc:SearchBar
                                     x:Name="PART_SearchBar"
-                                    IsRealTime="True"
                                     hc:InfoElement.ShowClearButton="True"
+                                    IsRealTime="True"
                                     Style="{StaticResource SearchBarPlus}" />
                             </DockPanel>
                             <hc:PropertyItemsControl
