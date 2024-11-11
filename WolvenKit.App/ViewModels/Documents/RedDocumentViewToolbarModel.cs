@@ -273,4 +273,14 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     }
 
     #endregion
+
+    public void OnSearchChanged(string searchBoxText)
+    {
+        if (CurrentTab is not RDTDataViewModel rtdViewModel)
+        {
+            return;
+        }
+
+        rtdViewModel.OnSearchChanged(searchBoxText);
+    }
 }

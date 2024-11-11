@@ -14,6 +14,8 @@
         <sfskin:ResourceDictionaryProvider DictionaryName="Common" ThemeName="MaterialDark" />
         <sfskin:ResourceDictionaryProvider DictionaryName="Brushes" ThemeName="MaterialDark" />
         <ResourceDictionary Source="/Syncfusion.Themes.MaterialDark.WPF;component/DockingManager/DockingManager.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/basic/colors/dark.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <SolidColorBrush x:Key="CustomSliderForegroundBrush" Color="#FF1E91EA" />
@@ -36,6 +38,7 @@
     <Color x:Key="WolvenKitGreenColor">#3ae07d</Color>
 
     <Color x:Key="WolvenKitCyanShadow50Color">#7F4D8C9A</Color>
+    <Color x:Key="WolvenKitCyanShadow25Color">#203a40</Color>
     <Color x:Key="WolvenKitRedShadow50Color">#7F951C2D</Color>
     <Color x:Key="WolvenKitRedShadow25Color">#7F520e17</Color>
     <Color x:Key="WolvenKitYellowShadow50Color">#7FABA108</Color>
@@ -58,6 +61,7 @@
     <SolidColorBrush x:Key="WolvenKitRedShadow50" Color="{StaticResource WolvenKitRedShadow50Color}" />
     <SolidColorBrush x:Key="WolvenKitCyan50" Color="#7F52F1FF" />
     <SolidColorBrush x:Key="WolvenKitCyanShadow50" Color="{StaticResource WolvenKitCyanShadow50Color}" />
+    <SolidColorBrush x:Key="WolvenKitCyanShadow25" Color="{StaticResource WolvenKitCyanShadow25Color}" />
     <SolidColorBrush x:Key="WolvenKitYellow50" Color="#7FFFEA0A" />
     <SolidColorBrush x:Key="WolvenKitYellowShadow50" Color="{StaticResource WolvenKitYellowShadow50Color}" />
     <SolidColorBrush x:Key="WolvenKitPurple50" Color="#7F5760B3" />
@@ -89,6 +93,7 @@
     <SolidColorBrush x:Key="BackgroundColor_Frame_Background" Color="#1F1F1F" />
 
     <SolidColorBrush x:Key="BackgroundColor_Button_Inactive" Color="#969696" />
+    <SolidColorBrush x:Key="BackgroundColor_Button_Active" Color="#313131" />
 
     <Style
         x:Key="WolvenKitTabControl"
@@ -1376,5 +1381,38 @@
                 <Setter Property="Visibility" Value="Collapsed" />
             </Trigger>
         </Style.Triggers>
+    </Style>
+
+    <Style
+        x:Key="SearchBarButtonStyle"
+        BasedOn="{StaticResource {x:Type Button}}"
+        TargetType="Button">
+        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
+        <Setter Property="BorderBrush" Value="{StaticResource ForegroundColor_Grey_Dark}" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Light}" />
+            </Trigger>
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Light}" />
+            </Trigger>
+            <Trigger Property="IsFocused" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Light}" />
+            </Trigger>
+            <DataTrigger Binding="{Binding Path=(Validation.HasError), RelativeSource={RelativeSource Self}}" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Light}" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style
+        x:Key="SearchBarStyle"
+        BasedOn="{StaticResource SearchBarPlus}"
+        TargetType="{x:Type hc:SearchBar}">
+        <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Frame_Active}" />
+        <Style.Resources>
+            <Style BasedOn="{StaticResource SearchBarButtonStyle}" TargetType="Button" />
+        </Style.Resources>
     </Style>
 </ResourceDictionary>

@@ -9,18 +9,24 @@
                                 xmlns:documents="clr-namespace:WolvenKit.App.ViewModels.Documents;assembly=WolvenKit.App"
                                 xmlns:converters="clr-namespace:WolvenKit.Converters"
                                 xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                                xmlns:hc="https://handyorg.github.io/handycontrol"
                                 mc:Ignorable="d"
                                 d:DesignHeight="30" d:DesignWidth="800">
 
     <Grid>
 
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        
         <Grid.Resources>
 
             <converters:HasMenuChildrenVisibilityConverter x:Key="HasMenuChildrenVisibilityConverter" />
             
             <!-- styles the whole menu bar -->
             <Style x:Key="MenuStyle" TargetType="{x:Type Menu}">
-                <Setter Property="Height" Value="25" />
+                <Setter Property="Height" Value="29" />
                 <Setter Property="Margin" Value="0" />
                 <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
                 <Setter Property="Background" Value="{StaticResource BackgroundColor_Frame_Background}" />
@@ -104,6 +110,11 @@
                     <DataTrigger
                         Binding="{Binding  Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
                         Value="{x:Static documents:RedDocumentItemType.Mi}">
+                        <Setter Property="Visibility" Value="Visible" />
+                    </DataTrigger>
+                    <DataTrigger
+                        Binding="{Binding  Path=ContentType, UpdateSourceTrigger=PropertyChanged}"
+                        Value="{x:Static documents:RedDocumentItemType.Mlsetup}">
                         <Setter Property="Visibility" Value="Visible" />
                     </DataTrigger>
                     <DataTrigger
@@ -338,5 +349,23 @@
             
             
         </Menu>
+
+        <hc:SearchBar
+            x:Name="SearchBar"
+            Grid.Column="1"
+            Width="200"
+            Height="16"
+            Margin="3"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Right"
+            hc:InfoElement.Necessary="True"
+            hc:InfoElement.Placeholder="Search"
+            BorderThickness="0,0,0,0"
+            FlowDirection="LeftToRight"
+            SearchStarted="SearchBar_OnSubmit"
+            TextChanged="SearchBar_OnTextChanged"
+            ShowClearButton="True"
+            Style="{StaticResource SearchBarStyle}" />
+            
     </Grid>
 </reactiveUi:ReactiveUserControl>

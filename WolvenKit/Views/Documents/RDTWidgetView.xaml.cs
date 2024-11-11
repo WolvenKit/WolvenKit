@@ -145,8 +145,6 @@ namespace WolvenKit.Views.Documents
         private void SetupWidgetPreview()
         {
             var group = new TransformGroup();
-
-
             var xform = new ScaleTransform();
             //xform.ScaleY = -1;
             group.Children.Add(xform);
@@ -187,6 +185,8 @@ namespace WolvenKit.Views.Documents
             var v = start - Mouse.GetPosition(WidgetPreviewCanvas);
             tt.X = Math.Round(origin.X - v.X);
             tt.Y = Math.Round(origin.Y - v.Y);
+
+            ViewModel.GridOffset = new System.Windows.Point(tt.X, tt.Y);
         }
 
         private void WidgetPreview_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -202,26 +202,40 @@ namespace WolvenKit.Views.Documents
                 tt.X = Math.Round(origin.X);
                 tt.Y = Math.Round(origin.Y);
                 WidgetPreviewCanvas.SetCurrentValue(CursorProperty, Cursors.ScrollAll);
+
+                ViewModel.GridOffset = new System.Windows.Point(tt.X, tt.Y);
             }
         }
 
         private void WidgetPreview_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             var transformGroup = (TransformGroup)WidgetPreview.RenderTransform;
-            var transform = (ScaleTransform)transformGroup.Children[0];
+            var scale = (ScaleTransform)transformGroup.Children[0];
             var pan = (TranslateTransform)transformGroup.Children[1];
 
             var zoom = e.Delta > 0 ? 1.189207115 : (1 / 1.189207115);
+            var oldZoom = scale.ScaleX;
+            var newZoom = oldZoom * zoom;
 
-            var CursorPosCanvas = e.GetPosition(WidgetPreviewCanvas);
-            pan.X += Math.Round(-(CursorPosCanvas.X - (WidgetPreviewCanvas.RenderSize.Width / 2.0) - pan.X) * (zoom - 1.0));
-            pan.Y += Math.Round(-(CursorPosCanvas.Y - (WidgetPreviewCanvas.RenderSize.Height / 2.0) - pan.Y) * (zoom - 1.0));
+            if (newZoom is < 0.1 or > 4.0)
+            {
+                return;
+            }
+            var mousePos = e.GetPosition(WidgetPreviewCanvas);
+
+            pan.X = mousePos.X - ((mousePos.X - pan.X) * (newZoom / oldZoom));
+            pan.Y = mousePos.Y - ((mousePos.Y - pan.Y) * (newZoom / oldZoom));
             end.X = pan.X;
             end.Y = pan.Y;
 
-            transform.ScaleX = zoom * transform.ScaleX;
-            transform.ScaleY = transform.ScaleX;
-            UpdateZoomText(transform.ScaleX);
+            zoom *= scale.ScaleX;
+            scale.ScaleX = zoom;
+            scale.ScaleY = zoom;
+
+            ViewModel.GridZoom = zoom;
+            ViewModel.GridOffset = new System.Windows.Point(pan.X, pan.Y);
+
+            UpdateZoomText(zoom);
         }
 
         public void UpdateZoomText(double scale)
@@ -322,6 +336,16 @@ namespace WolvenKit.Views.Documents
             InkCache.Resources.Clear();
 
             Load();
+        }
+
+        private void TogglePixelGrid(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel is null)
+            {
+                return;
+            }
+
+            ViewModel.IsPixelGridSnappingEnabled = !ViewModel.IsPixelGridSnappingEnabled;
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

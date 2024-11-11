@@ -119,6 +119,7 @@
                         FlowDirection="LeftToRight"
                         SearchStarted="FileSearchBar_SearchStarted"
                         hc:InfoElement.ShowClearButton="False"
+                        ShowClearButton="True"
                         Style="{StaticResource SearchBarPlus}" />
 
                     <Button

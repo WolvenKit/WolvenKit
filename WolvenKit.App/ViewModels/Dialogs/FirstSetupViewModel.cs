@@ -61,7 +61,7 @@ public partial class FirstSetupViewModel : DialogWindowViewModel, INotifyDataErr
 
     [ObservableProperty] private string? _cP77ExePath;
 
-    public string WikiHelpLink = "https://wiki.redmodding.org/wolvenkit/getting-started/setup";
+    public string WikiHelpLink = "https://wiki.redmodding.org/wolvenkit/getting-started/download#first-launch-tl-dr";
 
     #endregion Properties
 

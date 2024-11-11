@@ -30,7 +30,7 @@ internal class Program
             return ConsoleFunctions.ERROR_GENERAL_ERROR;
         }
 
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Core.NativeMethods.RtlAreLongPathsEnabled() == 0)
+        if (!Core.CommonFunctions.AreLongPathsEnabled())
         {
             // TODO: Use logger for that. Tried it as middleware but doesn't get called at all then -.-
             var text = "Long path support is disabled in your OS!" + Environment.NewLine +

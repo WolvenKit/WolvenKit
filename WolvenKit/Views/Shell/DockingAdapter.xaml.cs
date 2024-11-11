@@ -444,13 +444,19 @@ namespace WolvenKit.Views.Shell
 
         private async void PART_DockingManager_OnCloseAllTabs(object sender, CloseTabEventArgs e)
         {
-            foreach (var item in e.ClosingTabItems)
-            {
-                if (item is TabItemExt { Content: ContentPresenter { Content: ContentControl { Content: DocumentViewModel vm } } })
+            var closeTasks = e.ClosingTabItems.OfType<TabItemExt>()
+                .Select(item => item.Content).OfType<ContentPresenter>()
+                .Select(contentPresenter => contentPresenter.Content).OfType<ContentControl>()
+                .Select(contentControl => contentControl.Content).OfType<DocumentViewModel>()
+                .Select(async vm =>
                 {
-                    e.Cancel = !await TryCloseDocument(vm);
-                }
-            }
+                    if (!await TryCloseDocument(vm))
+                    {
+                        e.Cancel = true;
+                    }
+                });
+
+            await Task.WhenAll(closeTasks);
         }
 
         public async Task<bool> CloseAll()
@@ -478,13 +484,19 @@ namespace WolvenKit.Views.Shell
 
         private async void PART_DockingManager_OnCloseOtherTabs(object sender, CloseTabEventArgs e)
         {
-            foreach (var item in e.ClosingTabItems)
-            {
-                if (item is TabItemExt { Content: ContentPresenter { Content: ContentControl { Content: DocumentViewModel vm } } })
+            var closeTasks = e.ClosingTabItems.OfType<TabItemExt>()
+                .Select(item => item.Content).OfType<ContentPresenter>()
+                .Select(contentPresenter => contentPresenter.Content).OfType<ContentControl>()
+                .Select(contentControl => contentControl.Content).OfType<DocumentViewModel>()
+                .Select(async vm =>
                 {
-                    e.Cancel = !await TryCloseDocument(vm);
-                }
-            }
+                    if (!await TryCloseDocument(vm))
+                    {
+                        e.Cancel = true;
+                    }
+                });
+
+            await Task.WhenAll(closeTasks);
         }
 
 

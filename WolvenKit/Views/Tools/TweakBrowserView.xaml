@@ -48,6 +48,7 @@
                     IsRealTime="True"
                     KeyUp="TextBox_KeyEnterUpdate"
                     hc:InfoElement.ShowClearButton="False"
+                    ShowClearButton="True"
                     Style="{StaticResource SearchBarPlus}"
                     Text="{Binding SearchText}" />
                 <Expander Grid.Row="1" Header="Filter...">

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.RED4.Types;
 
@@ -22,6 +23,12 @@ public partial class ChunkViewModel
     /// Fields are defined in <see cref="EditorDifficultyLevelFieldFactory"/>.
     /// </summary>
     [ObservableProperty] private bool _isHiddenByEditorDifficultyLevel;
+
+    /// <summary>
+    /// For view visibility - if the noob filter is enabled, only show properties that the user wants to edit.
+    /// Fields are defined in <see cref="EditorDifficultyLevelFieldFactory"/>.
+    /// </summary>
+    [ObservableProperty] private bool _isHiddenBySearch;
 
     private void CalculateUserInteractionStates()
     {
@@ -44,4 +51,47 @@ public partial class ChunkViewModel
     }
 
     private EditorDifficultyLevelInformation DifficultyLevelFieldInformation { get; set; }
+
+    public void SetVisibilityStatusBySearchString(string searchBoxText)
+    {
+        if (ResolvedData is RedDummy || TVProperties.Count == 0)
+        {
+            CalculateProperties();
+        }
+        
+        foreach (var chunkViewModel in TVProperties)
+        {
+            chunkViewModel.SetVisibilityStatusBySearchString(searchBoxText);
+        }
+
+        if (IsHiddenByEditorDifficultyLevel || Parent is null)
+        {
+            IsHiddenBySearch = false;
+            return;
+        }
+
+        if (TVProperties.Any(c => c is { IsHiddenBySearch: false }))
+        {
+            IsHiddenBySearch = false;
+            IsExpanded = !string.IsNullOrEmpty(searchBoxText);
+            return;
+        }
+
+        if (string.IsNullOrEmpty(searchBoxText))
+        {
+            IsHiddenBySearch = false;
+            IsExpanded = Parent is not null;
+            return;
+        }
+
+        IsHiddenBySearch = !(Value?.Contains(searchBoxText, StringComparison.OrdinalIgnoreCase) == true
+                             || Descriptor?.Contains(searchBoxText, StringComparison.OrdinalIgnoreCase) == true
+                             || StringHelper.StringifyRedType(ResolvedData).Contains(searchBoxText, StringComparison.OrdinalIgnoreCase));
+
+        if (IsHiddenBySearch)
+        {
+            IsExpanded = false;
+        }
+
+    }
 }
