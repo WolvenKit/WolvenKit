@@ -1407,7 +1407,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     {
         foreach (var file in DockedViews.OfType<IDocumentViewModel>())
         {
-            if (file.FilePath is null || file.FilePath != path)
+            if (file is not RedDocumentViewModel redDocumentViewModel || redDocumentViewModel.RelativePath != path)
             {
                 continue;
             }
