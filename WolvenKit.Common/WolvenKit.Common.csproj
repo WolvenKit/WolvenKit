@@ -8,9 +8,24 @@
     <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	<NoWarn>NU5100;NU5104</NoWarn>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <PackageId>WolvenKit.Common</PackageId>
+    <Product>WolvenKit.Common</Product>
+    <Description>Common functions for the WolvenKit Mod Editor.</Description>
+
+    <Company>WolvenKit</Company>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/WolvenKit/WolvenKit</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/WolvenKit/WolvenKit</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>wolvenkit, cyberpunk2077</PackageTags>
+
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageOutputPath>./nupkg</PackageOutputPath>
+    <NoWarn>NU5100;NU5104</NoWarn>
+  </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="Extensions\PropertyGridEditors\**" />
