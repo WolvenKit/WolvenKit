@@ -494,4 +494,9 @@ public partial class ChunkViewModel
             chunkViewModel.IsExpanded = false;
         }
     }
+
+    private void ExpandChildNodesByType()
+    {
+        throw new NotImplementedException();
+    }
 }
