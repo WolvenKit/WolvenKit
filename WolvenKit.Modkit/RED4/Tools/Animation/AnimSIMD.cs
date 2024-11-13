@@ -154,7 +154,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                 evalAlignedPositions[i] = br.ReadSingle();
             }
 
-            var scalesForFrame = new Vec3[animBufSimd.NumFrames, animBufSimd.NumJoints];
+            var scalesForFrame = new Vec3[animBufSimd.NumFrames, numJointsSimdAligned];
             if (animBufSimd.IsScaleConstant)
             {
                 // I guess these are aligned too?
