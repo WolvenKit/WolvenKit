@@ -290,22 +290,42 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
-        // expand / collapse "special" children, e.g. if the parent holds no properties we care for
-        if (ResolvedData is not meshMeshAppearance || TVProperties.FirstOrDefault() is not { Name: "chunkMaterials" } tvPropChild)
+        void InitializeChild(ChunkViewModel? tvPropChild)
         {
-            return;
-        }
+            if (tvPropChild?.ResolvedData is not RedDummy)
+            {
+                return;
+            }
 
-        if (tvPropChild.TVProperties.Count == 1 && tvPropChild.TVProperties.FirstOrDefault()?.ResolvedData is RedDummy)
-        {
-            tvPropChild.RecalculateProperties();
             foreach (var chunkViewModel in tvPropChild.TVProperties)
             {
-                chunkViewModel.RecalculateProperties();
+                if (chunkViewModel.ResolvedData is RedDummy)
+                {
+                    chunkViewModel.RecalculateProperties();
+                }
             }
         }
 
-        tvPropChild.IsExpanded = IsExpanded;
+        
+        // expand / collapse "special" children, e.g. if the parent holds no properties we care for
+        switch (ResolvedData)
+        {
+            case meshMeshAppearance when TVProperties.FirstOrDefault() is { Name: "chunkMaterials" } tvPropChild:
+            {
+                InitializeChild(tvPropChild);
+                tvPropChild.IsExpanded = IsExpanded;
+                break;
+            }
+            case CMaterialInstance when GetPropertyChild("values") is ChunkViewModel valueChild:
+            {
+                InitializeChild(valueChild);
+                valueChild.IsExpanded = IsExpanded;
+                break;
+            }
+            default:
+                break;
+        }
+
     }
 
     partial void OnDataChanged(IRedType value)

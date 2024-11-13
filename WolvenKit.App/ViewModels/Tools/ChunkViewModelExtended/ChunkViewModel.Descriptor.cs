@@ -316,14 +316,14 @@ public partial class ChunkViewModel
 
                 break;
             }
-            // animgraph - something is broken here. Why does the orange text go away? Why do I need the try/catch
-            // around the GetNodename?
+            case CMeshMaterialEntry materialEntry:
+                Descriptor = materialEntry.Name.GetResolvedText() ?? "";
+                break;
             // For local and external materials
-            case CMaterialInstance or CResourceAsyncReference<IMaterial> when NodeIdxInParent > -1
-                                                                              && GetRootModel().GetPropertyFromPath("materialEntries")
-                                                                                      ?.ResolvedData is CArray<CMeshMaterialEntry>
-                                                                                  materialEntries &&
-                                                                              materialEntries.Count > NodeIdxInParent:
+            case CMaterialInstance or CResourceAsyncReference<IMaterial>
+                when NodeIdxInParent > -1
+                     && GetRootModel().GetPropertyFromPath("materialEntries")?.ResolvedData is CArray<CMeshMaterialEntry> materialEntries
+                     && materialEntries.Count > NodeIdxInParent:
             {
                 var isLocalMaterial = ResolvedData is CMaterialInstance;
                 var entry = materialEntries[NodeIdxInParent];
