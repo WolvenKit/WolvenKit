@@ -33,6 +33,7 @@
 
         <!--  TOP FILE SELECTOR  -->
         <syncfusion:SfDataGrid
+            Grid.Row="0" Grid.Column="0"
             x:Name="Categories"
             Margin="5"
             AllowFiltering="False"
@@ -58,7 +59,7 @@
 
         <syncfusion:SfDataGrid
             x:Name="DataGrid"
-            Grid.Column="1"
+            Grid.Row="0" Grid.Column="1"
             Margin="5"
             AutoGenerateColumns="False"
             RowHeight="40">
@@ -113,6 +114,7 @@
             Grid.ColumnSpan="2"
             Margin="5">
             <hc:TextBox
+                IsEnabled="{Binding RequiresFilePath}"
                 x:Name="FileName"
                 hc:InfoElement.Title="Name: "
                 hc:InfoElement.TitlePlacement="Left"
