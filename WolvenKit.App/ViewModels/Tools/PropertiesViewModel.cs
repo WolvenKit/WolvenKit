@@ -95,9 +95,9 @@ public partial class PropertiesViewModel : ToolViewModel
     }
 
     #region properties
-    
+
     [ObservableProperty] private AudioObject? _audioObject;
-    
+
     [ObservableProperty] private int _selectedIndex;
 
     [ObservableProperty] private FileSystemModel? _pE_SelectedItem;

@@ -337,7 +337,6 @@
                             EnableRenderFrustum="True"
                             EnableRenderOrder="True"
                             FXAALevel="High"
-                            ShowCoordinateSystem="True"
                             UseDefaultGestures="False"
                             ZoomExtentsWhenLoaded="True">
                             <hx:Viewport3DX.InputBindings>
