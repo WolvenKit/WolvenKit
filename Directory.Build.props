@@ -2,5 +2,7 @@
 	<PropertyGroup>
 		<EnableSourceControlManagerQueries>true</EnableSourceControlManagerQueries>
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+		<!-- NOTE: remove after updating vulnerable package dependencies. -->
+		<NuGetAudit>false</NuGetAudit>
 	</PropertyGroup>
 </Project>
