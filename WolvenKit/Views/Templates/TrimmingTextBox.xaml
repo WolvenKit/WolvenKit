@@ -5,26 +5,37 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
-    x:Name="UserControl"
+    mc:Ignorable="d"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    mc:Ignorable="d"
-    BorderBrush="{Binding ElementName=UserControl, Path=BorderBrush}"
-    Background="{Binding ElementName=UserControl, Path=Background}">
+    x:Name="UserControl"
+    Background="{Binding ElementName=UserControl,
+                         Path=Background}"
+    BorderBrush="{Binding ElementName=UserControl,
+                          Path=BorderBrush}">
     <Grid>
-        <Border BorderBrush="{Binding ElementName=UserControl, Path=BorderBrush}" BorderThickness="1"
-                Background="{Binding ElementName=UserControl, Path=Background}">
+        <Border
+            Background="{Binding ElementName=UserControl,
+                                 Path=Background}"
+            BorderBrush="{Binding ElementName=UserControl,
+                                  Path=BorderBrush}"
+            BorderThickness="1">
             <TextBox
                 x:Name="RealTextBox"
-                ToolTip="{Binding ElementName=UserControl, Path=Tooltip}"
-                ScrollViewer.CanContentScroll="False"
+                Background="{Binding ElementName=UserControl,
+                                     Path=Background,
+                                     UpdateSourceTrigger=PropertyChanged}"
                 helpers:TextBoxBehavior.TripleClickSelectAll="True"
-                Text="{Binding ElementName=UserControl, Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                ToolTip="{Binding ElementName=UserControl,
+                                  Path=Tooltip}"
+                ScrollViewer.CanContentScroll="False"
+                Text="{Binding ElementName=UserControl,
+                               Path=Text,
+                               Mode=TwoWay,
+                               UpdateSourceTrigger=PropertyChanged}"
                 TextChanged="RealTextBox_OnTextChanged"
                 KeyUp="RealTextBox_OnKeyUp"
-                Background="{Binding ElementName=UserControl, Path=Background, UpdateSourceTrigger=PropertyChanged}"
-                DataObject.Pasting="RealTextBox_OnPasting">
-            </TextBox>
+                DataObject.Pasting="RealTextBox_OnPasting" />
         </Border>
         <Grid IsHitTestVisible="False">
             <Grid.ColumnDefinitions>
@@ -32,7 +43,10 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="15" />
             </Grid.ColumnDefinitions>
-            <Grid x:Name="StartTrimming" Grid.Column="0" Visibility="Hidden">
+            <Grid
+                x:Name="StartTrimming"
+                Grid.Column="0"
+                Visibility="Hidden">
                 <Rectangle>
                     <Rectangle.Fill>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
@@ -41,9 +55,16 @@
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
-                <TextBox Padding="0,0,0,0" Background="Transparent" Foreground="White" Text="…" />
+                <TextBox
+                    Padding="0,0,0,0"
+                    Background="Transparent"
+                    Foreground="White"
+                    Text="…" />
             </Grid>
-            <Grid x:Name="EndTrimming" Grid.Column="2" Visibility="Hidden">
+            <Grid
+                x:Name="EndTrimming"
+                Grid.Column="2"
+                Visibility="Hidden">
                 <Rectangle>
                     <Rectangle.Fill>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
@@ -52,7 +73,11 @@
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
-                <TextBox Padding="2,0,0,0" Background="Transparent" Foreground="White" Text="…" />
+                <TextBox
+                    Padding="2,0,0,0"
+                    Background="Transparent"
+                    Foreground="White"
+                    Text="…" />
             </Grid>
         </Grid>
     </Grid>

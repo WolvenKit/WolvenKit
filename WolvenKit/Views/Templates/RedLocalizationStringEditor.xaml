@@ -5,9 +5,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:WolvenKit.Views.Editors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
     d:DesignHeight="450"
-    d:DesignWidth="800"
-    mc:Ignorable="d">
+    d:DesignWidth="800">
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedLocalizationStringEditor}}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="27" />
@@ -29,7 +29,8 @@
             Grid.Row="0"
             Grid.Column="1"
             PreviewTextInput="NumberValidationTextBox"
-            Text="{Binding Unk1, UpdateSourceTrigger=PropertyChanged}" />
+            Text="{Binding Unk1,
+                           UpdateSourceTrigger=PropertyChanged}" />
         <TextBlock
             Grid.Row="1"
             Grid.Column="0"
@@ -40,6 +41,8 @@
             Grid.Row="1"
             Grid.Column="1"
             KeyboardNavigation.TabIndex="2"
-            Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            Text="{Binding Value,
+                           Mode=TwoWay,
+                           UpdateSourceTrigger=PropertyChanged}" />
     </Grid>
 </UserControl>

@@ -5,16 +5,20 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:WolvenKit.Views.Templates"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type={x:Type local:EnumTemplateView}}"
     d:DesignHeight="100"
-    d:DesignWidth="400"
-    mc:Ignorable="d">
+    d:DesignWidth="400">
 
     <Grid>
         <ComboBox
             x:Name="ComboBox"
-            DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnumTemplateView}}}"
-            ItemsSource="{Binding BindingCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            DataContext="{Binding Mode=OneWay,
+                                  RelativeSource={RelativeSource FindAncestor,
+                                                                 AncestorType={x:Type local:EnumTemplateView}}}"
+            ItemsSource="{Binding BindingCollection,
+                                  Mode=TwoWay,
+                                  UpdateSourceTrigger=PropertyChanged}"
             SelectedItem="{Binding SelectedItem}" />
     </Grid>
 </UserControl>

@@ -36,7 +36,9 @@
         </ResourceDictionary>
     </ResourceDictionary.MergedDictionaries>
 
-    <DrawingBrush x:Key="SortByCategoryDrawingBrush" o:Freeze="True">
+    <DrawingBrush
+        x:Key="SortByCategoryDrawingBrush"
+        o:Freeze="True">
         <DrawingBrush.Drawing>
             <DrawingGroup o:Freeze="True">
                 <GeometryDrawing
@@ -63,7 +65,9 @@
         </DrawingBrush.Drawing>
     </DrawingBrush>
 
-    <DrawingBrush x:Key="SortByNameDrawingBrush" o:Freeze="True">
+    <DrawingBrush
+        x:Key="SortByNameDrawingBrush"
+        o:Freeze="True">
         <DrawingBrush.Drawing>
             <DrawingGroup o:Freeze="True">
                 <GeometryDrawing
@@ -90,14 +94,16 @@
         </DrawingBrush.Drawing>
     </DrawingBrush>
 
-    <Style BasedOn="{StaticResource ButtonGroupBaseStyle}" TargetType="hc:ButtonGroup" />
+    <Style
+        BasedOn="{StaticResource ButtonGroupBaseStyle}"
+        TargetType="hc:ButtonGroup" />
 
     <Style
         x:Key="ButtonGroupSolid"
         BasedOn="{StaticResource ButtonGroupBaseStyle}"
         TargetType="hc:ButtonGroup">
-        <Setter Property="hc:VisualElement.HighlightBorderBrush" Value="{DynamicResource MahApps.Brushes.Accent}" />
         <Setter Property="hc:VisualElement.HighlightBackground" Value="{DynamicResource MahApps.Brushes.ThemeBackground}" />
+        <Setter Property="hc:VisualElement.HighlightBorderBrush" Value="{DynamicResource MahApps.Brushes.Accent}" />
         <Setter Property="hc:VisualElement.HighlightForeground" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
     </Style>
 
@@ -106,7 +112,6 @@
         BasedOn="{StaticResource {x:Type ToolTip}}"
         TargetType="ToolTip">
         <Setter Property="Padding" Value="10" />
-        <Setter Property="hc:BorderElement.CornerRadius" Value="2" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToolTip">
@@ -116,17 +121,28 @@
                         Background="{DynamicResource RegionBrush}"
                         BorderBrush="{DynamicResource BorderBrush}"
                         BorderThickness="1"
-                        CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}"
+                        CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius),
+                                               RelativeSource={RelativeSource TemplatedParent}}"
                         Effect="{StaticResource EffectShadow2}">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <ContentPresenter x:Name="Presenter" Margin="0,0,0,10" />
-                            <StackPanel Grid.Row="1" Orientation="Horizontal">
-                                <TextBlock FontWeight="Bold" Text="{Binding PropertyTypeName, RelativeSource={RelativeSource AncestorType=hc:PropertyItem}}" />
-                                <TextBlock Margin="6,0,0,0" Text="{Binding PropertyName, RelativeSource={RelativeSource AncestorType=hc:PropertyItem}}" />
+                            <ContentPresenter
+                                x:Name="Presenter"
+                                Margin="0,0,0,10" />
+                            <StackPanel
+                                Grid.Row="1"
+                                Orientation="Horizontal">
+                                <TextBlock
+                                    FontWeight="Bold"
+                                    Text="{Binding PropertyTypeName,
+                                                   RelativeSource={RelativeSource AncestorType=hc:PropertyItem}}" />
+                                <TextBlock
+                                    Margin="6,0,0,0"
+                                    Text="{Binding PropertyName,
+                                                   RelativeSource={RelativeSource AncestorType=hc:PropertyItem}}" />
                             </StackPanel>
                         </Grid>
                     </Border>
@@ -141,23 +157,31 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Setter Property="hc:BorderElement.CornerRadius" Value="2" />
     </Style>
 
-    <Style x:Key="PropertyItemBaseStyle" TargetType="hc:PropertyItem">
+    <Style
+        x:Key="PropertyItemBaseStyle"
+        TargetType="hc:PropertyItem">
         <Setter Property="Focusable" Value="False" />
         <Setter Property="Margin" Value="0,0,0,6" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="hc:PropertyItem">
-                    <GroupBox hc:TitleElement.TitlePlacement="Left" Style="{StaticResource GroupBoxOriginal}">
+                    <GroupBox
+                        Style="{StaticResource GroupBoxOriginal}"
+                        hc:TitleElement.TitlePlacement="Left">
                         <GroupBox.Header>
                             <TextBlock
-                                Width="{Binding Path=(hc:TitleElement.TitleWidth).Value, RelativeSource={RelativeSource TemplatedParent}}"
+                                Width="{Binding Path=(hc:TitleElement.TitleWidth).Value,
+                                                RelativeSource={RelativeSource TemplatedParent}}"
                                 Padding="0,0,10,0"
                                 Text="{TemplateBinding DisplayName}"
                                 TextTrimming="CharacterEllipsis">
                                 <TextBlock.ToolTip>
-                                    <ToolTip Content="{TemplateBinding Description}" Style="{StaticResource PropertyItemToolTipBaseStyle}" />
+                                    <ToolTip
+                                        Style="{StaticResource PropertyItemToolTipBaseStyle}"
+                                        Content="{TemplateBinding Description}" />
                                 </TextBlock.ToolTip>
                             </TextBlock>
                         </GroupBox.Header>
@@ -168,13 +192,17 @@
         </Setter>
     </Style>
 
-    <Style x:Key="PropertyItemsControlBaseStyle" TargetType="hc:PropertyItemsControl">
-        <Setter Property="ItemContainerStyle" Value="{StaticResource PropertyItemBaseStyle}" />
+    <Style
+        x:Key="PropertyItemsControlBaseStyle"
+        TargetType="hc:PropertyItemsControl">
         <Setter Property="Focusable" Value="False" />
+        <Setter Property="ItemContainerStyle" Value="{StaticResource PropertyItemBaseStyle}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="hc:PropertyItemsControl">
-                    <hc:ScrollViewer Focusable="false" HorizontalScrollBarVisibility="Disabled">
+                    <hc:ScrollViewer
+                        Focusable="false"
+                        HorizontalScrollBarVisibility="Disabled">
                         <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                     </hc:ScrollViewer>
                 </ControlTemplate>
@@ -187,7 +215,9 @@
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="PropertyGroupItemBaseStyle" TargetType="GroupItem">
+    <Style
+        x:Key="PropertyGroupItemBaseStyle"
+        TargetType="GroupItem">
         <Setter Property="Margin" Value="0,0,0,6" />
         <Setter Property="Padding" Value="10,6,6,0" />
         <Setter Property="Template">
@@ -213,13 +243,15 @@
         </Setter>
     </Style>
 
-    <Style x:Key="PropertyGridBaseStyle" TargetType="hc:PropertyGrid">
-        <Setter Property="MaxTitleWidth" Value="200" />
-        <Setter Property="MinTitleWidth" Value="120" />
-        <Setter Property="Focusable" Value="False" />
-        <Setter Property="Padding" Value="10" />
+    <Style
+        x:Key="PropertyGridBaseStyle"
+        TargetType="hc:PropertyGrid">
         <Setter Property="Background" Value="{DynamicResource RegionBrush}" />
         <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="MaxTitleWidth" Value="200" />
+        <Setter Property="MinTitleWidth" Value="120" />
+        <Setter Property="Padding" Value="10" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="hc:PropertyGrid">
@@ -232,12 +264,18 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition />
                             </Grid.RowDefinitions>
-                            <DockPanel Margin="0,0,0,6" LastChildFill="True">
+                            <DockPanel
+                                Margin="0,0,0,6"
+                                LastChildFill="True">
                                 <hc:ButtonGroup
                                     Margin="0,0,6,0"
                                     Style="{StaticResource ButtonGroupSolid}"
-                                    Visibility="{Binding ShowSortButton, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource Boolean2VisibilityConverter}}">
-                                    <RadioButton Command="hc:ControlCommands.SortByCategory" IsChecked="True">
+                                    Visibility="{Binding ShowSortButton,
+                                                         RelativeSource={RelativeSource TemplatedParent},
+                                                         Converter={StaticResource Boolean2VisibilityConverter}}">
+                                    <RadioButton
+                                        Command="hc:ControlCommands.SortByCategory"
+                                        IsChecked="True">
                                         <Rectangle
                                             Width="16"
                                             Height="16"
@@ -252,9 +290,9 @@
                                 </hc:ButtonGroup>
                                 <hc:SearchBar
                                     x:Name="PART_SearchBar"
+                                    Style="{StaticResource SearchBarPlus}"
                                     hc:InfoElement.ShowClearButton="True"
-                                    IsRealTime="True"
-                                    Style="{StaticResource SearchBarPlus}" />
+                                    IsRealTime="True" />
                             </DockPanel>
                             <hc:PropertyItemsControl
                                 x:Name="PART_ItemsControl"
@@ -271,14 +309,20 @@
         </Setter>
     </Style>
 
-    <Style BasedOn="{StaticResource WatermarkTextBoxBaseStyle}" TargetType="hc:WatermarkTextBox" />
+    <Style
+        BasedOn="{StaticResource WatermarkTextBoxBaseStyle}"
+        TargetType="hc:WatermarkTextBox" />
 
-    <Style BasedOn="{StaticResource TextBoxBaseStyle}" TargetType="TextBox" />
+    <Style
+        BasedOn="{StaticResource TextBoxBaseStyle}"
+        TargetType="TextBox" />
 
     <Style
         x:Key="TextBoxExtend"
         BasedOn="{StaticResource TextBoxExtendBaseStyle}"
         TargetType="TextBox" />
 
-    <Style BasedOn="{StaticResource TextBoxPlusBaseStyle}" TargetType="hc:TextBox" />
+    <Style
+        BasedOn="{StaticResource TextBoxPlusBaseStyle}"
+        TargetType="hc:TextBox" />
 </ResourceDictionary>

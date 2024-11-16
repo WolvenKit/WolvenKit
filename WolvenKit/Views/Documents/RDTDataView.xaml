@@ -1,9 +1,8 @@
 <reactiveUi:ReactiveUserControl
     x:Class="WolvenKit.Views.Documents.RDTDataView"
+    x:TypeArguments="documents:RDTDataViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:app="clr-namespace:WolvenKit.App;assembly=WolvenKit.App"
-    xmlns:converters="clr-namespace:WolvenKit.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:documents="clr-namespace:WolvenKit.App.ViewModels.Documents;assembly=WolvenKit.App"
     xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
@@ -15,16 +14,14 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:shell="clr-namespace:WolvenKit.App.ViewModels.Shell;assembly=WolvenKit.App"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     xmlns:tools="clr-namespace:WolvenKit.Views.Tools"
-    Margin="0"
+    mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type={x:Type documents:RDTDataViewModel}}"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    x:TypeArguments="documents:RDTDataViewModel"
+    Margin="0"
     BorderBrush="{StaticResource BorderAlt}"
-    BorderThickness="1,0,1,1"
-    mc:Ignorable="d">
+    BorderThickness="1,0,1,1">
 
     <Grid>
 
@@ -44,7 +41,7 @@
                     <Setter Property="CanGenerateUniqueItems" Value="False" />
                 </Style>
 
-                <!--  Start TreeView Styles & Templates  -->
+                <!-- Start TreeView Styles & Templates -->
 
             </ResourceDictionary>
         </Grid.Resources>
@@ -62,7 +59,9 @@
                     <Style TargetType="{x:Type RowDefinition}">
                         <Setter Property="Height" Value="5" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding ShowReferenceGraph}" Value="False">
+                            <DataTrigger
+                                Binding="{Binding ShowReferenceGraph}"
+                                Value="False">
                                 <Setter Property="Height" Value="0" />
                             </DataTrigger>
                         </Style.Triggers>
@@ -74,7 +73,9 @@
                     <Style TargetType="{x:Type RowDefinition}">
                         <Setter Property="Height" Value="*" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding ShowReferenceGraph}" Value="False">
+                            <DataTrigger
+                                Binding="{Binding ShowReferenceGraph}"
+                                Value="False">
                                 <Setter Property="Height" Value="0" />
                             </DataTrigger>
                         </Style.Triggers>
@@ -88,11 +89,15 @@
             Grid.Column="0"
             Margin="-1"
             ItemsSource="{Binding Chunks}"
-            SelectedItem="{Binding SelectedChunk, Mode=TwoWay}"
-            SelectedItems="{Binding SelectedChunks, Mode=TwoWay}" />
+            SelectedItem="{Binding SelectedChunk,
+                                   Mode=TwoWay}"
+            SelectedItems="{Binding SelectedChunks,
+                                    Mode=TwoWay}" />
 
-        <!--  Grid Splitter  -->
-        <syncfusion:SfGridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
+        <!-- Grid Splitter -->
+        <syncfusion:SfGridSplitter
+            Grid.Column="1"
+            HorizontalAlignment="Stretch" />
 
         <editors:RedTypeView
             x:Name="CustomPG"
@@ -104,8 +109,8 @@
             ViewModel="{Binding}"
         -->
 
-        <!--  ENABLE_NODE_EDITOR  -->
-        <!--  Grid Splitter  -->
+        <!-- ENABLE_NODE_EDITOR -->
+        <!-- Grid Splitter -->
 
         <GridSplitter
             Grid.Row="1"
@@ -113,7 +118,8 @@
             Height="5"
             HorizontalAlignment="Stretch"
             Background="{StaticResource BorderAlt}"
-            Visibility="{Binding ShowReferenceGraph, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            Visibility="{Binding ShowReferenceGraph,
+                                 Converter={StaticResource BooleanToVisibilityConverter}}" />
 
         <!--
             Offset="{Binding Location}"
@@ -134,15 +140,18 @@
             Grid.Row="2"
             Grid.ColumnSpan="3"
             Background="{StaticResource ContentBackground}"
+            Visibility="{Binding ShowReferenceGraph,
+                                 Converter={StaticResource BooleanToVisibilityConverter}}"
             Connections="{Binding References}"
             DisplayConnectionsOnTop="True"
             EnableRealtimeSelection="True"
-            ItemsSource="{Binding Nodes}"
-            Visibility="{Binding ShowReferenceGraph, Converter={StaticResource BooleanToVisibilityConverter}}">
+            ItemsSource="{Binding Nodes}">
 
             <editors:AutomaticNodifyEditor.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Click="AutolayoutNodes_MenuItem" Header="Rearrange Nodes" />
+                    <MenuItem
+                        Click="AutolayoutNodes_MenuItem"
+                        Header="Rearrange Nodes" />
                 </ContextMenu>
             </editors:AutomaticNodifyEditor.ContextMenu>
 
@@ -157,9 +166,9 @@
                         <nodify:Connection.Style>
                             <Style TargetType="{x:Type nodify:BaseConnection}">
                                 <Setter Property="Cursor" Value="Hand" />
-                                <Setter Property="ToolTip" Value="Double click to split" />
                                 <Setter Property="Stroke" Value="#33FFFFFF" />
                                 <Setter Property="StrokeThickness" Value="2" />
+                                <Setter Property="ToolTip" Value="Double click to split" />
                                 <!--Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
                                         <Setter Property="Stroke" Value="{StaticResource WolvenKitYellow}" />
@@ -178,33 +187,43 @@
             </editors:AutomaticNodifyEditor.ConnectionTemplate>
 
             <editors:AutomaticNodifyEditor.Resources>
-                <Style BasedOn="{StaticResource {x:Type nodify:Connector}}" TargetType="{x:Type nodify:Connector}">
+                <Style
+                    BasedOn="{StaticResource {x:Type nodify:Connector}}"
+                    TargetType="{x:Type nodify:Connector}">
                     <Setter Property="Anchor" Value="{Binding Anchor, Mode=OneWayToSource}" />
                     <Setter Property="IsConnected" Value="{Binding IsConnected}" />
                 </Style>
-                <Style BasedOn="{StaticResource {x:Type nodify:NodeInput}}" TargetType="{x:Type nodify:NodeInput}">
+                <Style
+                    BasedOn="{StaticResource {x:Type nodify:NodeInput}}"
+                    TargetType="{x:Type nodify:NodeInput}">
+                    <Setter Property="Anchor" Value="{Binding Anchor, Mode=OneWayToSource}" />
+                    <Setter Property="BorderBrush" Value="{StaticResource WolvenKitCyan}" />
                     <Setter Property="Header" Value="" />
-                    <Setter Property="Anchor" Value="{Binding Anchor, Mode=OneWayToSource}" />
                     <Setter Property="IsConnected" Value="{Binding IsConnected}" />
                     <Setter Property="Margin" Value="0" />
-                    <Setter Property="BorderBrush" Value="{StaticResource WolvenKitCyan}" />
                 </Style>
-                <Style BasedOn="{StaticResource {x:Type nodify:NodeOutput}}" TargetType="{x:Type nodify:NodeOutput}">
-                    <Setter Property="Header" Value="{Binding Property}" />
+                <Style
+                    BasedOn="{StaticResource {x:Type nodify:NodeOutput}}"
+                    TargetType="{x:Type nodify:NodeOutput}">
                     <Setter Property="Anchor" Value="{Binding Anchor, Mode=OneWayToSource}" />
-                    <Setter Property="IsConnected" Value="{Binding IsConnected}" />
-                    <Setter Property="HorizontalAlignment" Value="Right" />
-                    <Setter Property="Margin" Value="0" />
                     <Setter Property="BorderBrush" Value="{StaticResource WolvenKitCyan}" />
+                    <Setter Property="Header" Value="{Binding Property}" />
+                    <Setter Property="HorizontalAlignment" Value="Right" />
+                    <Setter Property="IsConnected" Value="{Binding IsConnected}" />
+                    <Setter Property="Margin" Value="0" />
                     <Setter Property="ToolTip" Value="{Binding Type}" />
                 </Style>
                 <DataTemplate x:Key="DetailedHeaderTemplate">
                     <StackPanel Orientation="Vertical">
-                        <TextBlock Margin="0" Text="{Binding Name}" />
+                        <TextBlock
+                            Margin="0"
+                            Text="{Binding Name}" />
                         <ItemsControl ItemsSource="{Binding Properties}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel MaxWidth="200" Orientation="Horizontal">
+                                    <StackPanel
+                                        MaxWidth="200"
+                                        Orientation="Horizontal">
                                         <TextBlock
                                             Margin="0,0,4,0"
                                             Foreground="#999999"
@@ -237,8 +256,8 @@
                                         Grid.Column="2"
                                         Margin="5,0,0,0"
                                         Background="Transparent"
-                                        Command="{Binding OpenSelfCommand}"
                                         Style="{StaticResource ButtonCustom}"
+                                        Command="{Binding OpenSelfCommand}"
                                         ToolTip="Open in new tab">
                                         <StackPanel Orientation="Horizontal">
 
@@ -250,10 +269,10 @@
                                             -->
 
                                             <iconPacks:PackIconVaadinIcons
+                                                Kind="ArrowCircleUp"
                                                 Padding="2"
                                                 VerticalAlignment="Center"
                                                 Foreground="{StaticResource WolvenKitCyan}"
-                                                Kind="ArrowCircleUp"
                                                 RotationAngle="45" />
                                         </StackPanel>
                                     </Button>
@@ -285,8 +304,8 @@
                                         Grid.Column="2"
                                         Margin="5,0,0,0"
                                         Background="Transparent"
-                                        Command="{Binding OpenRefCommand}"
                                         Style="{StaticResource ButtonCustom}"
+                                        Command="{Binding OpenRefCommand}"
                                         ToolTip="Open in new tab">
                                         <StackPanel Orientation="Horizontal">
 
@@ -298,10 +317,10 @@
                                             -->
 
                                             <iconPacks:PackIconVaadinIcons
+                                                Kind="ArrowCircleUp"
                                                 Padding="2"
                                                 VerticalAlignment="Center"
                                                 Foreground="{StaticResource WolvenKitCyan}"
-                                                Kind="ArrowCircleUp"
                                                 RotationAngle="45" />
                                         </StackPanel>
                                     </Button>
@@ -310,13 +329,15 @@
                         </nodify:Node.HeaderTemplate>
                         <nodify:Node.FooterTemplate>
                             <DataTemplate>
-                                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                                <StackPanel
+                                    HorizontalAlignment="Right"
+                                    Orientation="Horizontal">
                                     <Button
                                         Grid.Column="2"
                                         Margin="0,2,5,2"
                                         Background="Transparent"
-                                        Command="{Binding LoadRefCommand}"
                                         Style="{StaticResource ButtonCustom}"
+                                        Command="{Binding LoadRefCommand}"
                                         ToolTip="Load References">
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock
@@ -324,10 +345,10 @@
                                                 Foreground="{StaticResource WolvenKitYellow}"
                                                 Text="Load References" />
                                             <iconPacks:PackIconVaadinIcons
+                                                Kind="ArrowCircleRight"
                                                 Padding="2"
                                                 VerticalAlignment="Center"
-                                                Foreground="{StaticResource WolvenKitYellow}"
-                                                Kind="ArrowCircleRight" />
+                                                Foreground="{StaticResource WolvenKitYellow}" />
                                         </StackPanel>
                                     </Button>
                                 </StackPanel>
@@ -338,16 +359,18 @@
             </editors:AutomaticNodifyEditor.Resources>
 
             <editors:AutomaticNodifyEditor.ItemContainerStyle>
-                <Style BasedOn="{StaticResource {x:Type nodify:ItemContainer}}" TargetType="{x:Type nodify:ItemContainer}">
-                    <Setter Property="Location" Value="{Binding Location}" />
+                <Style
+                    BasedOn="{StaticResource {x:Type nodify:ItemContainer}}"
+                    TargetType="{x:Type nodify:ItemContainer}">
 
-                    <!--  Setter Property="IsSelected" Value="{Binding IsSelected}" /  -->
+                    <!-- Setter Property="IsSelected" Value="{Binding IsSelected}" / -->
 
                     <Setter Property="BorderBrush">
                         <Setter.Value>
                             <SolidColorBrush Opacity="0.5" Color="Black" />
                         </Setter.Value>
                     </Setter>
+                    <Setter Property="Location" Value="{Binding Location}" />
                     <Setter Property="SelectedBrush" Value="{StaticResource WolvenKitCyan}" />
                 </Style>
             </editors:AutomaticNodifyEditor.ItemContainerStyle>

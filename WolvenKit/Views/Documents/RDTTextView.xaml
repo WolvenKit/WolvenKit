@@ -1,5 +1,6 @@
 <reactiveUi:ReactiveUserControl
     x:Class="WolvenKit.Views.Documents.RDTTextView"
+    x:TypeArguments="documents:RDTTextViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
@@ -9,14 +10,13 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
-    Margin="0"
+    mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type={x:Type documents:RDTTextViewModel}}"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    x:TypeArguments="documents:RDTTextViewModel"
+    Margin="0"
     BorderBrush="{StaticResource BorderAlt}"
-    BorderThickness="1,0,1,1"
-    mc:Ignorable="d">
+    BorderThickness="1,0,1,1">
 
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
 
@@ -29,69 +29,72 @@
             </ResourceDictionary>
         </Grid.Resources>
 
-        <!--  TEXT EDITOR  -->
+        <!-- TEXT EDITOR -->
         <avalonEdit:TextEditor
             Name="textEditor"
             Grid.Row="1"
             Margin="0"
             Background="{StaticResource ContentBackground}"
-            Document="{Binding Document, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-            FontFamily="Consolas"
-            FontSize="10pt"
             Foreground="{StaticResource ContentForeground}"
+            FontSize="10pt"
+            FontFamily="Consolas"
+            Document="{Binding Document,
+                               Mode=OneWay,
+                               UpdateSourceTrigger=PropertyChanged}"
             ShowLineNumbers="True"
-            SyntaxHighlighting="{Binding HighlightingDefinition, Mode=OneWay}">
+            SyntaxHighlighting="{Binding HighlightingDefinition,
+                                         Mode=OneWay}">
             <avalonEdit:TextEditor.ContextMenu>
                 <ContextMenu>
                     <MenuItem Command="Undo">
                         <MenuItem.Icon>
                             <iconPacks:PackIconMaterial
+                                Kind="Undo"
                                 Width="13"
                                 Height="13"
                                 HorizontalAlignment="Center"
-                                VerticalAlignment="Stretch"
-                                Kind="Undo" />
+                                VerticalAlignment="Stretch" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Command="Redo">
                         <MenuItem.Icon>
                             <iconPacks:PackIconMaterial
+                                Kind="Redo"
                                 Width="13"
                                 Height="13"
                                 HorizontalAlignment="Center"
-                                VerticalAlignment="Stretch"
-                                Kind="Redo" />
+                                VerticalAlignment="Stretch" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator />
                     <MenuItem Command="Cut">
                         <MenuItem.Icon>
                             <iconPacks:PackIconMaterial
+                                Kind="ContentCut"
                                 Width="13"
                                 Height="13"
                                 HorizontalAlignment="Center"
-                                VerticalAlignment="Stretch"
-                                Kind="ContentCut" />
+                                VerticalAlignment="Stretch" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Command="Copy">
                         <MenuItem.Icon>
                             <iconPacks:PackIconMaterial
+                                Kind="ContentCopy"
                                 Width="13"
                                 Height="13"
                                 HorizontalAlignment="Center"
-                                VerticalAlignment="Stretch"
-                                Kind="ContentCopy" />
+                                VerticalAlignment="Stretch" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Command="Paste">
                         <MenuItem.Icon>
                             <iconPacks:PackIconMaterial
+                                Kind="ContentPaste"
                                 Width="13"
                                 Height="13"
                                 HorizontalAlignment="Center"
-                                VerticalAlignment="Stretch"
-                                Kind="ContentPaste" />
+                                VerticalAlignment="Stretch" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </ContextMenu>

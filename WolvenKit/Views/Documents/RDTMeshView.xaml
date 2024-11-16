@@ -1,26 +1,25 @@
 <reactiveUi:ReactiveUserControl
     x:Class="WolvenKit.Views.Documents.RDTMeshView"
+    x:TypeArguments="documents:RDTMeshViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:documents="clr-namespace:WolvenKit.App.ViewModels.Documents;assembly=WolvenKit.App"
     xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
     xmlns:hx="http://helix-toolkit.org/wpf/SharpDX"
-    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:others="clr-namespace:WolvenKit.Views.Others"
-    Margin="0"
+    mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type={x:Type documents:RDTMeshViewModel}}"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    x:TypeArguments="documents:RDTMeshViewModel"
+    Margin="0"
     BorderBrush="{StaticResource BorderAlt}"
-    BorderThickness="1,0,1,1"
-    mc:Ignorable="d">
-    
+    BorderThickness="1,0,1,1">
+
     <Grid>
         <Grid.Resources>
             <Style TargetType="ToolTip">
@@ -29,42 +28,64 @@
             </Style>
             <DataTemplate x:Key="WorldNodeIndexToolTipTemplate">
                 <Grid>
-                    <TextBlock Text="WorldNodeIndex" HorizontalAlignment="Center" />
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        Text="WorldNodeIndex" />
                 </Grid>
             </DataTemplate>
             <DataTemplate x:Key="WorldNodeDataIndicesToolTipTemplate">
                 <Grid>
-                    <TextBlock Text="WorldNodeDataIndices" HorizontalAlignment="Center" />
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        Text="WorldNodeDataIndices" />
                 </Grid>
             </DataTemplate>
             <DataTemplate x:Key="HeaderIconTemplate_WorldNodeIdx">
                 <iconPacks:PackIconMaterial
+                    Kind="Web"
                     Width="13"
                     Height="13"
                     HorizontalAlignment="Center"
-                    VerticalAlignment="Stretch"
-                    Kind="Web" />
+                    VerticalAlignment="Stretch" />
             </DataTemplate>
             <DataTemplate x:Key="HeaderIconTemplate_WorldNodeDataIdx">
                 <iconPacks:PackIconMaterial
+                    Kind="ResistorNodes"
                     Width="13"
                     Height="13"
                     HorizontalAlignment="Center"
-                    VerticalAlignment="Stretch"
-                    Kind="ResistorNodes" />
+                    VerticalAlignment="Stretch" />
             </DataTemplate>
         </Grid.Resources>
-        
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="5" />
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
-        <syncfusion:SfGridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
+
+        <StackPanel
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Top"
+            Orientation="Vertical">
+
+            <Expander
+                Style="{StaticResource BaseStyle}"
+                Visibility="Collapsed"
+                Header="Assimp info"
+                IsExpanded="False">
+                <TextBlock
+                    Name="FileFormatsTextBlock"
+                    Margin="10,5,10,0"
+                    Text=""
+                    TextWrapping="Wrap" />
+            </Expander>
+        </StackPanel>
 
         <hx:Viewport3DX
-            Grid.Column="0"
             Name="hxViewport"
+            Grid.Column="0"
+            IsEnabled="{Binding IsLoaded}"
             BackgroundColor="#121212"
             Camera="{Binding Camera}"
             CoordinateSystemLabelForeground="White"
@@ -75,55 +96,62 @@
             ShowCoordinateSystem="True"
             UseDefaultGestures="False"
             Loaded="Viewport3DX_Loaded"
-            ZoomExtentsWhenLoaded="True"
-            IsEnabled="{Binding IsLoaded}">
-            
+            ZoomExtentsWhenLoaded="True">
+
             <hx:Viewport3DX.InputBindings>
-                <MouseBinding Command="hx:ViewportCommands.Rotate" Gesture="LeftClick" />
-                <MouseBinding Command="hx:ViewportCommands.Pan" Gesture="MiddleClick" />
-                <MouseBinding Command="hx:ViewportCommands.Rotate" Gesture="Shift+MiddleClick" />
+                <MouseBinding
+                    Command="hx:ViewportCommands.Rotate"
+                    Gesture="LeftClick" />
+                <MouseBinding
+                    Command="hx:ViewportCommands.Pan"
+                    Gesture="MiddleClick" />
+                <MouseBinding
+                    Command="hx:ViewportCommands.Rotate"
+                    Gesture="Shift+MiddleClick" />
             </hx:Viewport3DX.InputBindings>
-            <hx:DirectionalLight3D Direction="0, -1, 0" Color="White" />
-            <hx:DirectionalLight3D Direction="0, 0, 1" Color="White" />
-            <hx:DirectionalLight3D Direction="0, 0, -1" Color="White" />
-            <hx:DirectionalLight3D Direction="1, 0, 0" Color="White" />
-            <hx:DirectionalLight3D Direction="-1, 0, 0" Color="White" />
-            <!--  hx:ShadowMap3D /  -->
+            <hx:DirectionalLight3D
+                Direction="0, -1, 0"
+                Color="White" />
+            <hx:DirectionalLight3D
+                Direction="0, 0, 1"
+                Color="White" />
+            <hx:DirectionalLight3D
+                Direction="0, 0, -1"
+                Color="White" />
+            <hx:DirectionalLight3D
+                Direction="1, 0, 0"
+                Color="White" />
+            <hx:DirectionalLight3D
+                Direction="-1, 0, 0"
+                Color="White" />
+            <!-- hx:ShadowMap3D / -->
             <hx:DynamicReflectionMap3D IsDynamicScene="True">
-                <!--  hx:EnvironmentMap3D Texture="{Binding EnvironmentMap}" /  -->
+                <!-- hx:EnvironmentMap3D Texture="{Binding EnvironmentMap}" / -->
                 <hx:ItemsModel3D x:Name="hxContentVisual" />
             </hx:DynamicReflectionMap3D>
-            <!--  hx:Element3DPresenter Content="{Binding GroupModel}" /  -->
+            <!-- hx:Element3DPresenter Content="{Binding GroupModel}" / -->
             <hx:Viewport3DX.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Click="ReloadModels" Header="Zoom to extents">
+                    <MenuItem
+                        Click="ReloadModels"
+                        Header="Zoom to extents">
                         <MenuItem.Icon>
-                            <iconPacks:PackIconCodicons Margin="5,0,0,0" Kind="ZoomOut" />
+                            <iconPacks:PackIconCodicons
+                                Kind="ZoomOut"
+                                Margin="5,0,0,0" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </ContextMenu>
             </hx:Viewport3DX.ContextMenu>
         </hx:Viewport3DX>
 
-        <others:LoadingTextControl Grid.Column="0" VisibilityFlag="{Binding IsLoaded}" Small="True" />
-
-        <StackPanel
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Top"
-            Orientation="Vertical">
-
-            <Expander
-                Header="Assimp info"
-                IsExpanded="False"
-                Style="{StaticResource BaseStyle}"
-                Visibility="Collapsed">
-                <TextBlock
-                    Name="FileFormatsTextBlock"
-                    Margin="10,5,10,0"
-                    Text=""
-                    TextWrapping="Wrap" />
-            </Expander>
-        </StackPanel>
+        <others:LoadingTextControl
+            Grid.Column="0"
+            VisibilityFlag="{Binding IsLoaded}"
+            Small="True" />
+        <syncfusion:SfGridSplitter
+            Grid.Column="1"
+            HorizontalAlignment="Stretch" />
 
         <Grid Grid.Column="2">
             <Grid.RowDefinitions>
@@ -132,8 +160,8 @@
             </Grid.RowDefinitions>
             <StackPanel
                 Width="Auto"
-                Grid.IsSharedSizeScope="True"
                 IsEnabled="{Binding IsLoaded}"
+                Grid.IsSharedSizeScope="True"
                 Orientation="Vertical">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -141,99 +169,127 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="30" />
                     </Grid.ColumnDefinitions>
-                    <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="1,0,1,1" />
+                    <Border
+                        BorderBrush="{StaticResource BorderAlt}"
+                        BorderThickness="1,0,1,1" />
                     <Border
                         Grid.Column="1"
                         BorderBrush="{StaticResource BorderAlt}"
                         BorderThickness="0,0,1,1" />
+                    <ComboBox
+                        Grid.Column="1"
+                        Height="30"
+                        Padding="10,0"
+                        DisplayMemberPath="Name"
+                        ItemsSource="{Binding Appearances,
+                                              Mode=OneWay}"
+                        SelectedItem="{Binding SelectedAppearance,
+                                               Mode=TwoWay,
+                                               UpdateSourceTrigger=PropertyChanged}" />
+
+                    <Button
+                        Grid.Column="2"
+                        Height="24"
+                        Margin="4"
+                        IsEnabled="{Binding IsAppearanceSelected}"
+                        Command="{Binding CopyAppearanceNameCommand}"
+                        ToolTip="Copy appearance name">
+                        <iconPacks:PackIconCodicons
+                            Kind="Copy"
+                            Width="15"
+                            Height="15" />
+                    </Button>
                     <TextBlock
                         Grid.Row="0"
                         Grid.Column="0"
                         Margin="5,0,0,0"
                         VerticalAlignment="Center"
                         Text="Appearance: " />
-                    <ComboBox
-                        Grid.Column="1"
-                        Height="30"
-                        Padding="10,0"
-                        DisplayMemberPath="Name"
-                        ItemsSource="{Binding Appearances, Mode=OneWay}"
-                        SelectedItem="{Binding SelectedAppearance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
-                    <Button Grid.Column="2"
-                            Height="24"
-                            Margin="4"
-                            Command="{Binding CopyAppearanceNameCommand}"
-                            ToolTip="Copy appearance name"
-                            IsEnabled="{Binding IsAppearanceSelected}">
-                        <iconPacks:PackIconCodicons
-                            Width="15"
-                            Height="15"
-                            Kind="Copy" />
-                    </Button>
                 </Grid>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition SharedSizeGroup="ColumnHeader" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="1,0,1,1" />
                     <Border
-                        Grid.Column="1"
                         BorderBrush="{StaticResource BorderAlt}"
-                        BorderThickness="0,0,1,1" />
+                        BorderThickness="1,0,1,1" />
                     <TextBlock
                         Grid.Column="0"
                         Margin="5,0"
                         VerticalAlignment="Center"
                         Text="Level of Detail: " />
-                    <ComboBox
-                        Grid.Column="1"
-                        Height="30"
-                        Padding="10,0"
-                        ItemsSource="{Binding SelectedAppearance.LODLUT.Keys, Mode=OneWay}"
-                        SelectedItem="{Binding SelectedAppearance.SelectedLOD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
-                </Grid>
-                <Grid Grid.Column="2" Visibility="{Binding PanelVisibility.ShowSelectionPanel, Converter={StaticResource VisibilityConverter}}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition SharedSizeGroup="ColumnHeader" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="1,0,1,1" />
                     <Border
                         Grid.Column="1"
                         BorderBrush="{StaticResource BorderAlt}"
                         BorderThickness="0,0,1,1" />
+                    <ComboBox
+                        Grid.Column="1"
+                        Height="30"
+                        Padding="10,0"
+                        ItemsSource="{Binding SelectedAppearance.LODLUT.Keys,
+                                              Mode=OneWay}"
+                        SelectedItem="{Binding SelectedAppearance.SelectedLOD,
+                                               Mode=TwoWay,
+                                               UpdateSourceTrigger=PropertyChanged}" />
+
+                </Grid>
+                <Grid
+                    Grid.Column="2"
+                    Visibility="{Binding PanelVisibility.ShowSelectionPanel,
+                                         Converter={StaticResource VisibilityConverter}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition SharedSizeGroup="ColumnHeader" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Border
+                        BorderBrush="{StaticResource BorderAlt}"
+                        BorderThickness="1,0,1,1" />
                     <TextBlock
                         Grid.Column="0"
                         Margin="5,7"
                         VerticalAlignment="Center"
                         Text="Selection: " />
+                    <Border
+                        Grid.Column="1"
+                        BorderBrush="{StaticResource BorderAlt}"
+                        BorderThickness="0,0,1,1" />
                     <StackPanel
                         Grid.Column="1"
                         Height="15"
                         Margin="0,7,0,3"
                         VerticalAlignment="Center"
-                        Orientation="Horizontal"
-                        Visibility="{Binding CurrentSelection.IsValid, Converter={StaticResource VisibilityConverter}}">
+                        Visibility="{Binding CurrentSelection.IsValid,
+                                             Converter={StaticResource VisibilityConverter}}"
+                        Orientation="Horizontal">
                         <iconPacks:PackIconCodicons
+                            Kind="SymbolClass"
                             Width="15"
                             Height="15"
                             Margin="6,0,0,2"
                             HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="SymbolClass" />
+                            VerticalAlignment="Center" />
 
                         <TextBlock
                             Margin="5,0,0,0"
                             Foreground="{StaticResource WolvenKitTan}"
                             Text="worldNodeData" />
-                        <TextBlock Margin="3,0,0,0" Text="{Binding CurrentSelection.WorldNodeIndex, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
-                        <TextBlock Margin="3,0,0,0" Text="{Binding CurrentSelection.Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBlock
+                            Margin="3,0,0,0"
+                            Text="{Binding CurrentSelection.WorldNodeIndex,
+                                           Mode=OneWay,
+                                           UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBlock
+                            Margin="3,0,0,0"
+                            Text="{Binding CurrentSelection.Name,
+                                           Mode=OneWay,
+                                           UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                 </Grid>
-                <StackPanel Orientation="Vertical" Visibility="{Binding PanelVisibility.ShowSearchPanel, Converter={StaticResource VisibilityConverter}}">
+                <StackPanel
+                    Visibility="{Binding PanelVisibility.ShowSearchPanel,
+                                         Converter={StaticResource VisibilityConverter}}"
+                    Orientation="Vertical">
                     <TextBlock
                         Margin="5,6,0,3"
                         VerticalAlignment="Center"
@@ -250,7 +306,9 @@
                         <editors:RedFloatEditor
                             Grid.Column="1"
                             Height="24"
-                            RedNumber="{Binding SearchPoint.X, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            RedNumber="{Binding SearchPoint.X,
+                                                Mode=TwoWay,
+                                                UpdateSourceTrigger=PropertyChanged}" />
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -264,7 +322,9 @@
                         <editors:RedFloatEditor
                             Grid.Column="1"
                             Height="24"
-                            RedNumber="{Binding SearchPoint.Y, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            RedNumber="{Binding SearchPoint.Y,
+                                                Mode=TwoWay,
+                                                UpdateSourceTrigger=PropertyChanged}" />
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -278,7 +338,9 @@
                         <editors:RedFloatEditor
                             Grid.Column="1"
                             Height="24"
-                            RedNumber="{Binding SearchPoint.Z, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            RedNumber="{Binding SearchPoint.Z,
+                                                Mode=TwoWay,
+                                                UpdateSourceTrigger=PropertyChanged}" />
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -313,24 +375,31 @@
                         <RowDefinition />
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                    <!-- Load Material button. Will switch text based on modifier state. --> 
+                    <!-- Load Material button. Will switch text based on modifier state. -->
                     <Button
                         Grid.Row="1"
                         Grid.Column="0"
                         Height="24"
-                        Padding="0"
                         Margin="0"
+                        Padding="0"
                         HorizontalAlignment="Stretch"
+                        IsEnabled="{Binding IsLoadingMaterials,
+                                            Converter={StaticResource InvertBooleanConverter}}"
                         Command="{Binding LoadMaterialsCommand}"
-                        IsEnabled="{Binding IsLoadingMaterials, Converter={StaticResource InvertBooleanConverter}}"
                         ToolTip="May take a while - watch log for completion (Hold Ctrl to clear cache)">
                         <Button.Style>
-                            <Style BasedOn="{StaticResource ButtonDefault}" TargetType="{x:Type Button}">
+                            <Style
+                                BasedOn="{StaticResource ButtonDefault}"
+                                TargetType="{x:Type Button}">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsCtrlKeyPressed}" Value="True">
+                                    <DataTrigger
+                                        Binding="{Binding IsCtrlKeyPressed}"
+                                        Value="True">
                                         <Setter Property="Content" Value="Clear Cache and regenerate" />
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding IsCtrlKeyPressed}" Value="False">
+                                    <DataTrigger
+                                        Binding="{Binding IsCtrlKeyPressed}"
+                                        Value="False">
                                         <Setter Property="Content" Value="Generate Materials (Experimental)" />
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -343,9 +412,10 @@
                         Height="24"
                         Margin="4"
                         HorizontalAlignment="Stretch"
+                        Visibility="{Binding PanelVisibility.ShowExportEntity,
+                                             Converter={StaticResource VisibilityConverter}}"
                         Command="{Binding ExportEntityCommand}"
-                        Content="Export Appearance with Rig (experimental)"
-                        Visibility="{Binding PanelVisibility.ShowExportEntity, Converter={StaticResource VisibilityConverter}}" />
+                        Content="Export Appearance with Rig (experimental)" />
                 </Grid>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -363,10 +433,11 @@
                         Height="24"
                         Margin="4"
                         HorizontalAlignment="Stretch"
+                        Visibility="{Binding PanelVisibility.ShowToggleCollision,
+                                             Converter={StaticResource VisibilityConverter}}"
                         Command="{Binding ToggleCollisionCommand}"
                         Content="Toggle Collision"
-                        ToolTip="Toggles the collision nodes"
-                        Visibility="{Binding PanelVisibility.ShowToggleCollision, Converter={StaticResource VisibilityConverter}}" />
+                        ToolTip="Toggles the collision nodes" />
                     <Button
                         x:Name="AddSectorsButton"
                         Grid.Row="0"
@@ -374,15 +445,16 @@
                         Height="24"
                         Margin="4"
                         HorizontalAlignment="Stretch"
+                        Visibility="{Binding PanelVisibility.ShowAddSectors,
+                                             Converter={StaticResource VisibilityConverter}}"
                         Command="{Binding AddSectorsToProjectCommand}"
                         Content="Add Sectors to Project"
-                        ToolTip="Adds the selected sectors to the project"
-                        Visibility="{Binding PanelVisibility.ShowAddSectors, Converter={StaticResource VisibilityConverter}}" />
+                        ToolTip="Adds the selected sectors to the project" />
                 </Grid>
 
-                <!--  Button Click="ReloadModels" Content="Zoom to Extents" /  -->
+                <!-- Button Click="ReloadModels" Content="Zoom to Extents" / -->
 
-                <!--  Button Command="{Binding ExtractShadersCommand}" Content="Export Shaders" /  -->
+                <!-- Button Command="{Binding ExtractShadersCommand}" Content="Export Shaders" / -->
 
             </StackPanel>
             <!--syncfusion:SfTreeGrid
@@ -431,7 +503,8 @@
                 CheckBoxMappingName="IsRendering"
                 ChildPropertyName="Children"
                 FilterLevel="Extended"
-                ItemsSource="{Binding SelectedModelGroup, Mode=TwoWay}"
+                ItemsSource="{Binding SelectedModelGroup,
+                                      Mode=TwoWay}"
                 LiveNodeUpdateMode="AllowDataShaping"
                 NodeCheckStateChanged="SfTreeGrid_NodeCheckStateChanged"
                 RowHeaderWidth="300"
@@ -440,22 +513,46 @@
                 TreeGridContextMenuOpening="SfTreeGrid_OnTreeGridContextMenuOpening">
                 <syncfusion:SfTreeGrid.ExpanderContextMenu>
                     <ContextMenu>
-                        <MenuItem Click="CollapseAllChildrenRecursiveMenuItem_OnClick" Header="Collapse All (Recursive)" />
-                        <MenuItem Click="ExpandAllChildrenRecursiveMenuItem_OnClick" Header="Expand All (Recursive)" />
-                        <MenuItem Click="CheckAllChildrenMenuItem_OnClick" Header="Check All Children" />
-                        <MenuItem Click="CheckAllChildrenRecursiveMenuItem_OnClick" Header="Check All Children (Recursive)" />
-                        <MenuItem Click="UncheckAllChildrenMenuItem_OnClick" Header="Uncheck All Children" />
-                        <MenuItem Click="UncheckAllChildrenRecursiveMenuItem_OnClick" Header="Uncheck All Children (Recursive)" />
+                        <MenuItem
+                            Click="CollapseAllChildrenRecursiveMenuItem_OnClick"
+                            Header="Collapse All (Recursive)" />
+                        <MenuItem
+                            Click="ExpandAllChildrenRecursiveMenuItem_OnClick"
+                            Header="Expand All (Recursive)" />
+                        <MenuItem
+                            Click="CheckAllChildrenMenuItem_OnClick"
+                            Header="Check All Children" />
+                        <MenuItem
+                            Click="CheckAllChildrenRecursiveMenuItem_OnClick"
+                            Header="Check All Children (Recursive)" />
+                        <MenuItem
+                            Click="UncheckAllChildrenMenuItem_OnClick"
+                            Header="Uncheck All Children" />
+                        <MenuItem
+                            Click="UncheckAllChildrenRecursiveMenuItem_OnClick"
+                            Header="Uncheck All Children (Recursive)" />
                     </ContextMenu>
                 </syncfusion:SfTreeGrid.ExpanderContextMenu>
                 <syncfusion:SfTreeGrid.RecordContextMenu>
                     <ContextMenu>
-                        <MenuItem Click="CollapseAllChildrenRecursiveMenuItem_OnClick" Header="Collapse All (Recursive)" />
-                        <MenuItem Click="ExpandAllChildrenRecursiveMenuItem_OnClick" Header="Expand All (Recursive)" />
-                        <MenuItem Click="CheckAllChildrenMenuItem_OnClick" Header="Check All Children" />
-                        <MenuItem Click="CheckAllChildrenRecursiveMenuItem_OnClick" Header="Check All Children (Recursive)" />
-                        <MenuItem Click="UncheckAllChildrenMenuItem_OnClick" Header="Uncheck All Children" />
-                        <MenuItem Click="UncheckAllChildrenRecursiveMenuItem_OnClick" Header="Uncheck All Children (Recursive)" />
+                        <MenuItem
+                            Click="CollapseAllChildrenRecursiveMenuItem_OnClick"
+                            Header="Collapse All (Recursive)" />
+                        <MenuItem
+                            Click="ExpandAllChildrenRecursiveMenuItem_OnClick"
+                            Header="Expand All (Recursive)" />
+                        <MenuItem
+                            Click="CheckAllChildrenMenuItem_OnClick"
+                            Header="Check All Children" />
+                        <MenuItem
+                            Click="CheckAllChildrenRecursiveMenuItem_OnClick"
+                            Header="Check All Children (Recursive)" />
+                        <MenuItem
+                            Click="UncheckAllChildrenMenuItem_OnClick"
+                            Header="Uncheck All Children" />
+                        <MenuItem
+                            Click="UncheckAllChildrenRecursiveMenuItem_OnClick"
+                            Header="Uncheck All Children (Recursive)" />
                     </ContextMenu>
                 </syncfusion:SfTreeGrid.RecordContextMenu>
                 <syncfusion:SfTreeGrid.Columns>

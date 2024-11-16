@@ -1,14 +1,16 @@
 <reactiveUi:ReactiveUserControl
     x:Class="WolvenKit.Views.HomePage.Pages.WelcomePageView"
+    x:TypeArguments="shared:WelcomePageViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:shared="clr-namespace:WolvenKit.App.ViewModels.HomePage.Pages;assembly=WolvenKit.App"
-    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    x:TypeArguments="shared:WelcomePageViewModel">
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf">
 
-    <Grid x:Name="topGrid" Margin="50,00,50,0">
+    <Grid
+        x:Name="topGrid"
+        Margin="50,00,50,0">
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Name="PercentageThing" Width="4*" />
@@ -37,8 +39,9 @@
                         </Trigger>
                     </Style.Triggers>
                 </Style>
-                <Style x:Key="CardViewItemStyle" TargetType="{x:Type syncfusion:CardViewItem}">
-                    <Setter Property="Width" Value="Auto" />
+                <Style
+                    x:Key="CardViewItemStyle"
+                    TargetType="{x:Type syncfusion:CardViewItem}">
                     <Setter Property="Margin" Value="0,0,0,10" />
                     <Setter Property="Template">
                         <Setter.Value>
@@ -49,10 +52,12 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
 
-                                    <!--  Header Alignment  -->
+                                    <!-- Header Alignment -->
                                     <Grid>
                                         <Grid.Resources>
-                                            <Style x:Key="CardItemBorder" TargetType="Border">
+                                            <Style
+                                                x:Key="CardItemBorder"
+                                                TargetType="Border">
                                                 <Setter Property="Background" Value="Transparent" />
                                                 <Style.Triggers>
                                                     <Trigger Property="IsMouseOver" Value="True">
@@ -69,7 +74,8 @@
                                             VerticalContentAlignment="Stretch"
                                             Background="Transparent"
                                             BorderThickness="0"
-                                            Command="{Binding ElementName=topGrid, Path=DataContext.OpenProjectCommand}"
+                                            Command="{Binding ElementName=topGrid,
+                                                              Path=DataContext.OpenProjectCommand}"
                                             CommandParameter="{Binding ProjectPath}"
                                             ToolTip="{Binding Path=ProjectPath}">
                                             <!--Button.OpacityMask>
@@ -81,25 +87,39 @@
                                                 Style="{StaticResource CardItemBorder}">
                                                 <Grid Width="300">
                                                     <Grid.Resources>
-                                                        <Style x:Key="ProjectIconBackground" TargetType="Border">
+                                                        <Style
+                                                            x:Key="ProjectIconBackground"
+                                                            TargetType="Border">
                                                             <Setter Property="Background" Value="{StaticResource WolvenKitYellow}" />
                                                             <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding ProjectColor}" Value="1">
+                                                                <DataTrigger
+                                                                    Binding="{Binding ProjectColor}"
+                                                                    Value="1">
                                                                     <Setter Property="Background" Value="{StaticResource WolvenKitYellow}" />
                                                                 </DataTrigger>
-                                                                <DataTrigger Binding="{Binding ProjectColor}" Value="2">
+                                                                <DataTrigger
+                                                                    Binding="{Binding ProjectColor}"
+                                                                    Value="2">
                                                                     <Setter Property="Background" Value="{StaticResource WolvenKitCyan}" />
                                                                 </DataTrigger>
-                                                                <DataTrigger Binding="{Binding ProjectColor}" Value="3">
+                                                                <DataTrigger
+                                                                    Binding="{Binding ProjectColor}"
+                                                                    Value="3">
                                                                     <Setter Property="Background" Value="{StaticResource WolvenKitRed}" />
                                                                 </DataTrigger>
-                                                                <DataTrigger Binding="{Binding ProjectColor}" Value="4">
+                                                                <DataTrigger
+                                                                    Binding="{Binding ProjectColor}"
+                                                                    Value="4">
                                                                     <Setter Property="Background" Value="{StaticResource WolvenKitRed}" />
                                                                 </DataTrigger>
-                                                                <DataTrigger Binding="{Binding ProjectColor}" Value="5">
+                                                                <DataTrigger
+                                                                    Binding="{Binding ProjectColor}"
+                                                                    Value="5">
                                                                     <Setter Property="Background" Value="{StaticResource WolvenKitPurple}" />
                                                                 </DataTrigger>
-                                                                <DataTrigger Binding="{Binding ProjectColor}" Value="6">
+                                                                <DataTrigger
+                                                                    Binding="{Binding ProjectColor}"
+                                                                    Value="6">
                                                                     <Setter Property="Background" Value="{StaticResource WolvenKitTan}" />
                                                                 </DataTrigger>
                                                             </Style.Triggers>
@@ -125,19 +145,21 @@
                                                         Margin="10,5,0,8"
                                                         VerticalAlignment="Center">
                                                         <TextBlock
+                                                            Foreground="White"
                                                             FontSize="16"
                                                             FontWeight="Bold"
-                                                            Foreground="White"
                                                             Text="{Binding Path=SafeName}"
                                                             TextTrimming="CharacterEllipsis" />
                                                         <TextBlock
                                                             Margin="0,1,0,2"
                                                             HorizontalAlignment="Left"
-                                                            FontSize="12"
                                                             Foreground="#999999"
+                                                            FontSize="12"
                                                             Text="{Binding Path=ProjectPath}"
                                                             TextTrimming="CharacterEllipsis" />
-                                                        <TextBlock FontSize="10" Text="{Binding CreationDate}" />
+                                                        <TextBlock
+                                                            FontSize="10"
+                                                            Text="{Binding CreationDate}" />
                                                     </StackPanel>
                                                 </Grid>
                                             </Border>
@@ -152,14 +174,18 @@
 
                                         <ToggleButton
                                             Padding="10,5"
-                                            IsChecked="{Binding IsPinned, Mode=TwoWay}"
                                             Style="{StaticResource ToggleButtonCustom}"
+                                            IsChecked="{Binding IsPinned,
+                                                                Mode=TwoWay}"
                                             ToolTip="Pin project">
                                             <ToggleButton.Resources>
                                                 <Style TargetType="{x:Type iconPacks:PackIconCodicons}">
                                                     <Setter Property="Kind" Value="StarEmpty" />
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=ToggleButton}}" Value="True">
+                                                        <DataTrigger
+                                                            Binding="{Binding IsChecked,
+                                                                              RelativeSource={RelativeSource AncestorType=ToggleButton}}"
+                                                            Value="True">
                                                             <Setter Property="Kind" Value="StarFull" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
@@ -170,52 +196,65 @@
 
                                         <Button
                                             Padding="10,5"
-                                            Command="{Binding ElementName=topGrid, Path=DataContext.OpenInExplorerCommand}"
-                                            CommandParameter="{Binding ProjectPath}"
                                             Style="{StaticResource ButtonCustom}"
+                                            Command="{Binding ElementName=topGrid,
+                                                              Path=DataContext.OpenInExplorerCommand}"
+                                            CommandParameter="{Binding ProjectPath}"
                                             ToolTip="Find in Explorer">
                                             <Button.Resources>
                                                 <Style TargetType="{x:Type iconPacks:PackIconCodicons}">
                                                     <Setter Property="Foreground" Value="White" />
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Button}}" Value="True">
+                                                        <DataTrigger
+                                                            Binding="{Binding IsMouseOver,
+                                                                              RelativeSource={RelativeSource AncestorType=Button}}"
+                                                            Value="True">
                                                             <Setter Property="Foreground" Value="#cccccc" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
                                             </Button.Resources>
-                                            <iconPacks:PackIconCodicons Width="16" Kind="FolderOpened" />
+                                            <iconPacks:PackIconCodicons
+                                                Kind="FolderOpened"
+                                                Width="16" />
                                         </Button>
 
                                         <Button
                                             x:Name="RUIDeleteProjectButton"
                                             Padding="10,5"
-                                            Command="{Binding ElementName=topGrid, Path=DataContext.DeleteProjectCommand}"
-                                            CommandParameter="{Binding ProjectPath}"
                                             Style="{StaticResource ButtonCustom}"
+                                            Command="{Binding ElementName=topGrid,
+                                                              Path=DataContext.DeleteProjectCommand}"
+                                            CommandParameter="{Binding ProjectPath}"
                                             ToolTip="Remove from Recents">
                                             <Button.Resources>
                                                 <Style TargetType="{x:Type iconPacks:PackIconCodicons}">
                                                     <Setter Property="Foreground" Value="{StaticResource WolvenKitRed}" />
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Button}}" Value="True">
+                                                        <DataTrigger
+                                                            Binding="{Binding IsMouseOver,
+                                                                              RelativeSource={RelativeSource AncestorType=Button}}"
+                                                            Value="True">
                                                             <Setter Property="Foreground" Value="{StaticResource WolvenKitRedShadow}" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
                                             </Button.Resources>
-                                            <iconPacks:PackIconCodicons Width="14" Kind="ChromeClose" />
+                                            <iconPacks:PackIconCodicons
+                                                Kind="ChromeClose"
+                                                Width="14" />
                                         </Button>
                                     </StackPanel>
                                 </Grid>
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
+                    <Setter Property="Width" Value="Auto" />
                 </Style>
             </ResourceDictionary>
         </Grid.Resources>
 
-        <!--  WK Text Logo  -->
+        <!-- WK Text Logo -->
         <Image
             Grid.Row="0"
             Grid.Column="1"
@@ -226,7 +265,7 @@
             Source="pack://application:,,,/Resources/Media/Images/Application/wkit_logo_text_singlestack_white.png" />
 
 
-        <!--  Left Column \ Projects  -->
+        <!-- Left Column \ Projects -->
         <Grid
             Grid.Row="1"
             Grid.Column="1"
@@ -236,14 +275,17 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <!--  Pinned Projects  -->
-            <Grid Grid.Row="0" Visibility="{Binding ShowPinned, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <!-- Pinned Projects -->
+            <Grid
+                Grid.Row="0"
+                Visibility="{Binding ShowPinned,
+                                     Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <!--  Header  -->
+                <!-- Header -->
                 <Grid Grid.Row="0">
                     <StackPanel
                         Margin="9,0,0,20"
@@ -251,11 +293,11 @@
                         Orientation="Horizontal">
                         <Border Width="{Binding ActualWidth, ElementName=PercentageThingHalf}" />
                         <iconPacks:PackIconCodicons
+                            Kind="StarFull"
                             Width="18"
                             Height="18"
                             VerticalAlignment="Center"
                             Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                            Kind="StarFull"
                             Spin="False"
                             SpinAutoReverse="False" />
 
@@ -269,17 +311,20 @@
                         Margin="9,0,0,20"
                         HorizontalAlignment="Right"
                         Orientation="Horizontal">
-                        <TextBox x:Name="PinnedFilter" Width="140" />
+                        <TextBox
+                            x:Name="PinnedFilter"
+                            Width="140" />
                         <ComboBox
                             x:Name="PinnedOrder"
                             Width="140"
                             DisplayMemberPath="Key"
-                            ItemsSource="{Binding SortMode, Mode=OneWay}"
+                            ItemsSource="{Binding SortMode,
+                                                  Mode=OneWay}"
                             SelectedValuePath="Value" />
                     </StackPanel>
                 </Grid>
 
-                <!--  Cards  -->
+                <!-- Cards -->
                 <syncfusion:CardView
                     Name="PinnedCardView"
                     Grid.Row="1"
@@ -293,7 +338,7 @@
                     Orientation="Horizontal"
                     ShowHeader="False">
                     <syncfusion:CardView.Resources>
-                        <!--  gets rid of margin around items  -->
+                        <!-- gets rid of margin around items -->
                         <Style TargetType="{x:Type ItemsPresenter}">
                             <Setter Property="Margin" Value="-10" />
                         </Style>
@@ -301,14 +346,14 @@
                 </syncfusion:CardView>
             </Grid>
 
-            <!--  Recent Projects  -->
+            <!-- Recent Projects -->
             <Grid Grid.Row="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <!--  Header  -->
+                <!-- Header -->
                 <Grid Grid.Row="0">
                     <StackPanel
                         Margin="9,0,0,20"
@@ -316,11 +361,11 @@
                         Orientation="Horizontal">
                         <Border Width="{Binding ActualWidth, ElementName=PercentageThingHalf}" />
                         <iconPacks:PackIconCodicons
+                            Kind="GoToFile"
                             Width="18"
                             Height="18"
                             VerticalAlignment="Center"
                             Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                            Kind="GoToFile"
                             Spin="False"
                             SpinAutoReverse="False" />
 
@@ -334,17 +379,20 @@
                         Margin="9,0,0,20"
                         HorizontalAlignment="Right"
                         Orientation="Horizontal">
-                        <TextBox x:Name="RecentFilter" Width="140" />
+                        <TextBox
+                            x:Name="RecentFilter"
+                            Width="140" />
                         <ComboBox
                             x:Name="RecentOrder"
                             Width="140"
                             DisplayMemberPath="Key"
-                            ItemsSource="{Binding SortMode, Mode=OneWay}"
+                            ItemsSource="{Binding SortMode,
+                                                  Mode=OneWay}"
                             SelectedValuePath="Value" />
                     </StackPanel>
                 </Grid>
 
-                <!--  Cards  -->
+                <!-- Cards -->
                 <syncfusion:CardView
                     Name="RecentCardView"
                     Grid.Row="1"
@@ -357,7 +405,7 @@
                     Orientation="Horizontal"
                     ShowHeader="False">
                     <syncfusion:CardView.Resources>
-                        <!--  gets rid of margin around items  -->
+                        <!-- gets rid of margin around items -->
                         <Style TargetType="{x:Type ItemsPresenter}">
                             <Setter Property="Margin" Value="-10" />
                         </Style>
@@ -367,8 +415,10 @@
         </Grid>
 
 
-        <!--  Right Column  -->
-        <Grid Grid.Row="1" Grid.Column="2">
+        <!-- Right Column -->
+        <Grid
+            Grid.Row="1"
+            Grid.Column="2">
             <Grid>
                 <Border
                     Margin="0,0,0,0"
@@ -395,18 +445,18 @@
                                         Width="250"
                                         Margin="0,4,50,0"
                                         HorizontalAlignment="Center"
-                                        FontSize="12"
                                         Foreground="Gray"
+                                        FontSize="12"
                                         Text="Get started with WolvenKit by creating a new mod project"
                                         TextWrapping="Wrap" />
                                 </StackPanel>
                                 <iconPacks:PackIconCodicons
+                                    Kind="Add"
                                     Width="36"
                                     Height="36"
                                     Margin="0,0,0,0"
                                     HorizontalAlignment="Right"
-                                    VerticalAlignment="Center"
-                                    Kind="Add" />
+                                    VerticalAlignment="Center" />
                             </Grid>
                         </Button>
 
@@ -430,18 +480,18 @@
                                         Width="250"
                                         Margin="0,4,50,0"
                                         HorizontalAlignment="Center"
-                                        FontSize="12"
                                         Foreground="Gray"
+                                        FontSize="12"
                                         Text="Open an existing .modproj file"
                                         TextWrapping="Wrap" />
                                 </StackPanel>
                                 <iconPacks:PackIconCodicons
+                                    Kind="GoToFile"
                                     Width="36"
                                     Height="36"
                                     Margin="0,0,0,0"
                                     HorizontalAlignment="Right"
-                                    VerticalAlignment="Center"
-                                    Kind="GoToFile" />
+                                    VerticalAlignment="Center" />
                             </Grid>
                         </Button>
 
@@ -466,22 +516,22 @@
                                         Width="250"
                                         Margin="0,4,50,0"
                                         HorizontalAlignment="Center"
-                                        FontSize="12"
                                         Foreground="Gray"
+                                        FontSize="12"
                                         Text="Access the WolvenKit Editor"
                                         TextWrapping="Wrap" />
                                 </StackPanel>
                                 <iconPacks:PackIconCodicons
+                                    Kind="ArrowRight"
                                     Width="36"
                                     Height="36"
                                     Margin="0,0,0,0"
                                     HorizontalAlignment="Right"
-                                    VerticalAlignment="Center"
-                                    Kind="ArrowRight" />
+                                    VerticalAlignment="Center" />
                             </Grid>
                         </Button>
 
-                        <!--  Socials Header  -->
+                        <!-- Socials Header -->
 
                         <StackPanel
                             Margin="3,20,0,20"
@@ -490,11 +540,11 @@
                             Orientation="Horizontal">
                             <StackPanel Orientation="Horizontal">
                                 <iconPacks:PackIconBoxIcons
+                                    Kind="RegularNetworkChart"
                                     Width="18"
                                     Height="18"
                                     VerticalAlignment="Center"
                                     Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                    Kind="RegularNetworkChart"
                                     Spin="False"
                                     SpinAutoReverse="False" />
 
@@ -507,13 +557,15 @@
                             </StackPanel>
                         </StackPanel>
 
-                        <Grid Margin="0,0,0,0" HorizontalAlignment="Stretch">
+                        <Grid
+                            Margin="0,0,0,0"
+                            HorizontalAlignment="Stretch">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
-                            <!--  Socials  -->
+                            <!-- Socials -->
 
                             <Button
                                 x:Name="DiscordLinkButton"
@@ -525,11 +577,11 @@
 
                                 <StackPanel Orientation="Horizontal">
                                     <iconPacks:PackIconBoxIcons
+                                        Kind="LogosDiscord"
                                         Width="16"
                                         Height="16"
                                         HorizontalAlignment="Left"
-                                        VerticalAlignment="Center"
-                                        Kind="LogosDiscord" />
+                                        VerticalAlignment="Center" />
                                     <TextBlock
                                         Margin="7,0,0,0"
                                         HorizontalAlignment="Left"
@@ -550,11 +602,11 @@
 
                                 <StackPanel Orientation="Horizontal">
                                     <iconPacks:PackIconBoxIcons
+                                        Kind="LogosYoutube"
                                         Width="18"
                                         Height="18"
                                         HorizontalAlignment="Left"
-                                        VerticalAlignment="Center"
-                                        Kind="LogosYoutube" />
+                                        VerticalAlignment="Center" />
                                     <TextBlock
                                         Margin="7,0,0,0"
                                         HorizontalAlignment="Left"
@@ -564,17 +616,17 @@
                                 </StackPanel>
                             </Button>
                         </Grid>
-                        <!--  Support Header  -->
+                        <!-- Support Header -->
                         <StackPanel
                             Margin="3,20,0,20"
                             FlowDirection="LeftToRight"
                             Orientation="Horizontal">
                             <iconPacks:PackIconBoxIcons
+                                Kind="RegularDonateHeart"
                                 Width="18"
                                 Height="18"
                                 VerticalAlignment="Center"
-                                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                Kind="RegularDonateHeart" />
+                                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" />
                             <TextBlock
                                 Margin="10,0,0,0"
                                 HorizontalAlignment="Left"
@@ -583,7 +635,7 @@
                                 Text="Support Us" />
                         </StackPanel>
 
-                        <!--  Support  -->
+                        <!-- Support -->
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -598,11 +650,11 @@
                                 Style="{StaticResource WelcomeButton}">
                                 <StackPanel Orientation="Horizontal">
                                     <iconPacks:PackIconBoxIcons
+                                        Kind="SolidDonateHeart"
                                         Width="16"
                                         Height="16"
                                         HorizontalAlignment="Left"
-                                        VerticalAlignment="Center"
-                                        Kind="SolidDonateHeart" />
+                                        VerticalAlignment="Center" />
                                     <TextBlock
                                         Margin="7,0,0,0"
                                         HorizontalAlignment="Left"
@@ -622,11 +674,11 @@
                                 Style="{StaticResource WelcomeButton}">
                                 <StackPanel Orientation="Horizontal">
                                     <iconPacks:PackIconBoxIcons
+                                        Kind="LogosPatreon"
                                         Width="16"
                                         Height="16"
                                         HorizontalAlignment="Left"
-                                        VerticalAlignment="Center"
-                                        Kind="LogosPatreon" />
+                                        VerticalAlignment="Center" />
                                     <TextBlock
                                         Margin="7,0,0,0"
                                         HorizontalAlignment="Left"

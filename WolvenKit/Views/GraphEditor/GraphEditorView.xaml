@@ -8,37 +8,51 @@
     xmlns:nodes="clr-namespace:WolvenKit.App.ViewModels.GraphEditor;assembly=WolvenKit.App"
     xmlns:nodify="https://miroiu.github.io/nodify"
     xmlns:scene="clr-namespace:WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;assembly=WolvenKit.App"
-    x:Name="uc"
+    mc:Ignorable="d"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    mc:Ignorable="d">
+    x:Name="uc">
     <Grid>
         <nodify:NodifyEditor
             x:Name="Editor"
             Background="{StaticResource ContentBackground}"
-            Connections="{Binding ElementName=uc, Path=Source.Connections}"
+            Connections="{Binding ElementName=uc,
+                                  Path=Source.Connections}"
             ContextMenuOpening="Editor_OnContextMenuOpening"
-            DisconnectConnectorCommand="{Binding ElementName=uc, Path=Source.DisconnectCommand}"
+            DisconnectConnectorCommand="{Binding ElementName=uc,
+                                                 Path=Source.DisconnectCommand}"
             DisplayConnectionsOnTop="True"
             EnableRealtimeSelection="True"
-            ItemsSource="{Binding ElementName=uc, Path=Source.Nodes}"
-            PendingConnection="{Binding ElementName=uc, Path=Source.PendingConnection}"
-            SelectedItem="{Binding ElementName=uc, Path=SelectedNode}"
-            SelectedItems="{Binding ElementName=uc, Path=SelectedNodes}"
-            ViewportLocation="{Binding ElementName=uc, Path=ViewportLocation}"
-            ItemsDragCompletedCommand="{Binding ElementName=uc, Path=Source.ItemsDragCompletedCommand}">
+            ItemsSource="{Binding ElementName=uc,
+                                  Path=Source.Nodes}"
+            PendingConnection="{Binding ElementName=uc,
+                                        Path=Source.PendingConnection}"
+            SelectedItem="{Binding ElementName=uc,
+                                   Path=SelectedNode}"
+            SelectedItems="{Binding ElementName=uc,
+                                    Path=SelectedNodes}"
+            ViewportLocation="{Binding ElementName=uc,
+                                       Path=ViewportLocation}"
+            ItemsDragCompletedCommand="{Binding ElementName=uc,
+                                                Path=Source.ItemsDragCompletedCommand}">
             <nodify:NodifyEditor.Resources>
                 <DataTemplate x:Key="HeaderTemplate">
-                    <TextBlock Margin="0" Text="{Binding}" />
+                    <TextBlock
+                        Margin="0"
+                        Text="{Binding}" />
                 </DataTemplate>
 
                 <DataTemplate x:Key="DetailedHeaderTemplate">
                     <StackPanel Orientation="Vertical">
-                        <TextBlock Margin="0" Text="{Binding Title}" />
+                        <TextBlock
+                            Margin="0"
+                            Text="{Binding Title}" />
                         <ItemsControl ItemsSource="{Binding Details}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel MaxWidth="1000" Orientation="Horizontal">
+                                    <StackPanel
+                                        MaxWidth="1000"
+                                        Orientation="Horizontal">
                                         <TextBlock
                                             Margin="0,0,4,0"
                                             Foreground="#999999"
@@ -72,7 +86,9 @@
                         <DataTemplate DataType="{x:Type scene:scnEndNodeWrapper}">
                             <StackPanel Orientation="Vertical">
                                 <TextBox Text="{Binding Name}" />
-                                <ComboBox ItemsSource="{Binding Types}" SelectedItem="{Binding Type}" />
+                                <ComboBox
+                                    ItemsSource="{Binding Types}"
+                                    SelectedItem="{Binding Type}" />
                             </StackPanel>
                         </DataTemplate>
                     </local:NodeTemplateSelector.SceneEndNode>
@@ -93,9 +109,13 @@
                         </nodify:Node.ContextMenu>
 
                         <nodify:Node.Style>
-                            <Style BasedOn="{StaticResource {x:Type nodify:Node}}" TargetType="{x:Type nodify:Node}">
+                            <Style
+                                BasedOn="{StaticResource {x:Type nodify:Node}}"
+                                TargetType="{x:Type nodify:Node}">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Details.Count}" Value="0">
+                                    <DataTrigger
+                                        Binding="{Binding Details.Count}"
+                                        Value="0">
                                         <Setter Property="Header" Value="{Binding Title}" />
                                         <Setter Property="HeaderTemplate" Value="{StaticResource HeaderTemplate}" />
                                     </DataTrigger>
@@ -106,7 +126,8 @@
                         <nodify:Node.InputConnectorTemplate>
                             <DataTemplate DataType="{x:Type nodes:InputConnectorViewModel}">
                                 <nodify:NodeInput
-                                    Anchor="{Binding Anchor, Mode=OneWayToSource}"
+                                    Anchor="{Binding Anchor,
+                                                     Mode=OneWayToSource}"
                                     Header="{Binding Title}"
                                     IsConnected="{Binding IsConnected}" />
                             </DataTemplate>
@@ -115,7 +136,8 @@
                         <nodify:Node.OutputConnectorTemplate>
                             <DataTemplate DataType="{x:Type nodes:OutputConnectorViewModel}">
                                 <nodify:NodeOutput
-                                    Anchor="{Binding Anchor, Mode=OneWayToSource}"
+                                    Anchor="{Binding Anchor,
+                                                     Mode=OneWayToSource}"
                                     Header="{Binding Title}"
                                     IsConnected="{Binding IsConnected}" />
                             </DataTemplate>
@@ -157,15 +179,20 @@
                 <DataTemplate DataType="{x:Type nodes:PendingConnectionViewModel}">
                     <nodify:PendingConnection
                         AllowOnlyConnectors="False"
-                        CompletedCommand="{Binding ElementName=uc, Path=Source.ConnectCommand}"
-                        Source="{Binding Source, Mode=OneWayToSource}"
-                        Target="{Binding Target, Mode=OneWayToSource}" />
+                        CompletedCommand="{Binding ElementName=uc,
+                                                   Path=Source.ConnectCommand}"
+                        Source="{Binding Source,
+                                         Mode=OneWayToSource}"
+                        Target="{Binding Target,
+                                         Mode=OneWayToSource}" />
                 </DataTemplate>
             </nodify:NodifyEditor.PendingConnectionTemplate>
             <nodify:NodifyEditor.ItemContainerStyle>
-                <Style BasedOn="{StaticResource {x:Type nodify:ItemContainer}}" TargetType="{x:Type nodify:ItemContainer}">
-                    <Setter Property="Location" Value="{Binding Location}" />
+                <Style
+                    BasedOn="{StaticResource {x:Type nodify:ItemContainer}}"
+                    TargetType="{x:Type nodify:ItemContainer}">
                     <Setter Property="ActualSize" Value="{Binding Size, Mode=OneWayToSource}" />
+                    <Setter Property="Location" Value="{Binding Location}" />
                 </Style>
             </nodify:NodifyEditor.ItemContainerStyle>
             <nodify:NodifyEditor.ContextMenu>

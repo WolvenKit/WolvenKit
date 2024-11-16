@@ -1,12 +1,11 @@
 <reactiveUi:ReactiveUserControl
     x:Class="WolvenKit.Views.Editors.RedTypeView"
+    x:TypeArguments="shell:ChunkViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
     xmlns:converters="clr-namespace:WolvenKit.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
-    xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
@@ -15,10 +14,9 @@
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     xmlns:tools="clr-namespace:WolvenKit.Views.Tools"
+    mc:Ignorable="d"
     d:DesignHeight="450"
-    d:DesignWidth="800"
-    x:TypeArguments="shell:ChunkViewModel"
-    mc:Ignorable="d">
+    d:DesignWidth="800">
     <Grid
         Background="{StaticResource ContentBackground}"
         IsSharedSizeScope="True"
@@ -26,16 +24,22 @@
         <Grid.Resources>
             <sys:Double x:Key="RowHeight">26</sys:Double>
             <SolidColorBrush x:Key="RedTypeColor" Color="{StaticResource WolvenKitTanColor}" />
-            <Style x:Key="ArrayNameColumnWidth" TargetType="ColumnDefinition">
+            <Style
+                x:Key="ArrayNameColumnWidth"
+                TargetType="ColumnDefinition">
                 <Setter Property="Width" Value="218" />
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding IsInArray}" Value="True">
+                    <DataTrigger
+                        Binding="{Binding IsInArray}"
+                        Value="True">
                         <Setter Property="Width" Value="{Binding ArrayIndexWidth}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
             <!-- Do not hide anything by style if it's hidden by search - we'll be filtering the item collection -->
-            <Style x:Key="HiddenByEditorModeStyle" TargetType="Grid">
+            <Style
+                x:Key="HiddenByEditorModeStyle"
+                TargetType="Grid">
                 <Style.Triggers>
                     <MultiDataTrigger>
                         <MultiDataTrigger.Conditions>
@@ -43,27 +47,34 @@
                         </MultiDataTrigger.Conditions>
                         <Setter Property="Visibility" Value="Visible" />
                     </MultiDataTrigger>
-                    <DataTrigger Binding="{Binding Path=IsHiddenByEditorDifficultyLevel}" Value="True">
+                    <DataTrigger
+                        Binding="{Binding Path=IsHiddenByEditorDifficultyLevel}"
+                        Value="True">
                         <Setter Property="Visibility" Value="Collapsed" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
-            <DataTemplate x:Key="AddHandleButton" DataType="{x:Type shell:ChunkViewModel}">
+            <DataTemplate
+                x:Key="AddHandleButton"
+                DataType="{x:Type shell:ChunkViewModel}">
                 <Button
                     Height="12"
                     Padding="0"
                     VerticalAlignment="Center"
                     Background="Transparent"
-                    Command="{Binding AddHandleCommand}"
                     Style="{StaticResource ButtonCustom}"
-                    ToolTip="Add Handle"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding AddHandleCommand}"
+                    ToolTip="Add Handle">
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconVaadinIcons
+                            Kind="PlusCircle"
                             Padding="2"
                             VerticalAlignment="Center"
-                            Foreground="{StaticResource WolvenKitYellow}"
-                            Kind="PlusCircle" />
+                            Foreground="{StaticResource WolvenKitYellow}" />
                         <TextBlock
                             Margin="1,0,4,0"
                             VerticalAlignment="Center"
@@ -72,22 +83,27 @@
                     </StackPanel>
                 </Button>
             </DataTemplate>
-            <DataTemplate x:Key="AddToCompiledDataButton" DataType="{x:Type shell:ChunkViewModel}">
+            <DataTemplate
+                x:Key="AddToCompiledDataButton"
+                DataType="{x:Type shell:ChunkViewModel}">
                 <Button
                     Height="12"
                     Padding="0"
                     VerticalAlignment="Center"
                     Background="Transparent"
-                    Command="{Binding AddItemToCompiledDataCommand}"
                     Style="{StaticResource ButtonCustom}"
-                    ToolTip="Add New Chunk"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding AddItemToCompiledDataCommand}"
+                    ToolTip="Add New Chunk">
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconVaadinIcons
+                            Kind="PlusCircle"
                             Padding="2"
                             VerticalAlignment="Center"
-                            Foreground="{StaticResource WolvenKitYellow}"
-                            Kind="PlusCircle" />
+                            Foreground="{StaticResource WolvenKitYellow}" />
                         <TextBlock
                             Margin="1,0,4,0"
                             VerticalAlignment="Center"
@@ -96,22 +112,27 @@
                     </StackPanel>
                 </Button>
             </DataTemplate>
-            <DataTemplate x:Key="AddDynamicProperty" DataType="{x:Type shell:ChunkViewModel}">
+            <DataTemplate
+                x:Key="AddDynamicProperty"
+                DataType="{x:Type shell:ChunkViewModel}">
                 <Button
                     Height="12"
                     Padding="0"
                     VerticalAlignment="Center"
                     Background="Transparent"
-                    Command="{Binding CreateDynamicPropertyCommand}"
                     Style="{StaticResource ButtonCustom}"
-                    ToolTip="Add Dynamic Property"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding CreateDynamicPropertyCommand}"
+                    ToolTip="Add Dynamic Property">
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconVaadinIcons
+                            Kind="PlusCircle"
                             Padding="2"
                             VerticalAlignment="Center"
-                            Foreground="{StaticResource WolvenKitYellow}"
-                            Kind="PlusCircle" />
+                            Foreground="{StaticResource WolvenKitYellow}" />
                         <TextBlock
                             Margin="1,0,4,0"
                             VerticalAlignment="Center"
@@ -120,22 +141,27 @@
                     </StackPanel>
                 </Button>
             </DataTemplate>
-            <DataTemplate x:Key="RenameDynamicClass" DataType="{x:Type shell:ChunkViewModel}">
+            <DataTemplate
+                x:Key="RenameDynamicClass"
+                DataType="{x:Type shell:ChunkViewModel}">
                 <Button
                     Height="12"
                     Padding="0"
                     VerticalAlignment="Center"
                     Background="Transparent"
-                    Command="{Binding RenameDynamicClassCommand}"
                     Style="{StaticResource ButtonCustom}"
-                    ToolTip="Rename Dynamic Class"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding RenameDynamicClassCommand}"
+                    ToolTip="Rename Dynamic Class">
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconVaadinIcons
+                            Kind="Cursor"
                             Padding="2"
                             VerticalAlignment="Center"
-                            Foreground="{StaticResource WolvenKitCyan}"
-                            Kind="Cursor" />
+                            Foreground="{StaticResource WolvenKitCyan}" />
                         <TextBlock
                             Margin="1,0,4,0"
                             VerticalAlignment="Center"
@@ -150,16 +176,19 @@
                     Padding="0"
                     VerticalAlignment="Center"
                     Background="Transparent"
-                    Command="{Binding AddItemToArrayCommand}"
                     Style="{StaticResource ButtonCustom}"
-                    ToolTip="Add New Element"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding AddItemToArrayCommand}"
+                    ToolTip="Add New Element">
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconVaadinIcons
+                            Kind="PlusCircle"
                             Padding="2"
                             VerticalAlignment="Center"
-                            Foreground="{StaticResource WolvenKitYellow}"
-                            Kind="PlusCircle" />
+                            Foreground="{StaticResource WolvenKitYellow}" />
                         <TextBlock
                             Margin="1,0,4,0"
                             VerticalAlignment="Center"
@@ -169,7 +198,10 @@
                 </Button>
             </DataTemplate>
             <DataTemplate x:Key="DeleteButton">
-                <StackPanel Orientation="Horizontal" Visibility="{Binding IsDeletable, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <StackPanel
+                    Visibility="{Binding IsDeletable,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Orientation="Horizontal">
                     <ToggleButton
                         x:Name="DeleteButton"
                         Margin="0,0,0,0"
@@ -179,7 +211,9 @@
                         IsChecked="{Binding IsDeleteReady}"
                         ToolTip="Delete Element">
                         <ToggleButton.Style>
-                            <Style BasedOn="{StaticResource ToggleButtonCustom}" TargetType="ToggleButton">
+                            <Style
+                                BasedOn="{StaticResource ToggleButtonCustom}"
+                                TargetType="ToggleButton">
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate>
@@ -188,17 +222,19 @@
                                                 Height="12"
                                                 Background="Transparent">
                                                 <iconPacks:PackIconVaadinIcons
+                                                    Kind="Trash"
                                                     Padding="2"
                                                     HorizontalAlignment="Left"
                                                     VerticalAlignment="Center"
-                                                    Foreground="{StaticResource WolvenKitRed}"
-                                                    Kind="Trash" />
+                                                    Foreground="{StaticResource WolvenKitRed}" />
                                             </Grid>
                                         </ControlTemplate>
                                     </Setter.Value>
                                 </Setter>
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsInArray}" Value="False">
+                                    <DataTrigger
+                                        Binding="{Binding IsInArray}"
+                                        Value="False">
                                         <Setter Property="Visibility" Value="Collapsed" />
                                     </DataTrigger>
                                     <Trigger Property="IsChecked" Value="True">
@@ -228,25 +264,34 @@
                         Command="{Binding DeleteItemCommand}"
                         ToolTip="Delete Element">
                         <Button.Style>
-                            <Style BasedOn="{StaticResource ButtonCustom}" TargetType="{x:Type Button}">
+                            <Style
+                                BasedOn="{StaticResource ButtonCustom}"
+                                TargetType="{x:Type Button}">
                                 <Setter Property="Visibility" Value="Collapsed" />
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsChecked, ElementName=DeleteButton}" Value="True">
+                                    <DataTrigger
+                                        Binding="{Binding IsChecked,
+                                                          ElementName=DeleteButton}"
+                                        Value="True">
                                         <Setter Property="Visibility" Value="Visible" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </Button.Style>
                         <iconPacks:PackIconVaadinIcons
+                            Kind="Trash"
                             Padding="2,0"
                             VerticalAlignment="Center"
-                            Foreground="{StaticResource WolvenKitRed}"
-                            Kind="Trash" />
+                            Foreground="{StaticResource WolvenKitRed}" />
                     </Button>
                 </StackPanel>
             </DataTemplate>
             <DataTemplate x:Key="DeleteAllButton">
-                <StackPanel Orientation="Horizontal" Visibility="{Binding IsEnabled, ElementName=RealDeleteButton, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <StackPanel
+                    Visibility="{Binding IsEnabled,
+                                         ElementName=RealDeleteButton,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Orientation="Horizontal">
                     <ToggleButton
                         x:Name="DeleteButton"
                         Margin="0,0,0,0"
@@ -256,17 +301,21 @@
                         IsChecked="{Binding IsDeleteReady}"
                         ToolTip="Delete All Items">
                         <ToggleButton.Style>
-                            <Style BasedOn="{StaticResource ToggleButtonCustom}" TargetType="ToggleButton">
+                            <Style
+                                BasedOn="{StaticResource ToggleButtonCustom}"
+                                TargetType="ToggleButton">
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate>
-                                            <Grid Height="12" Background="Transparent">
+                                            <Grid
+                                                Height="12"
+                                                Background="Transparent">
                                                 <StackPanel Orientation="Horizontal">
                                                     <iconPacks:PackIconVaadinIcons
+                                                        Kind="Trash"
                                                         Padding="2"
                                                         VerticalAlignment="Center"
-                                                        Foreground="{StaticResource WolvenKitRed}"
-                                                        Kind="Trash" />
+                                                        Foreground="{StaticResource WolvenKitRed}" />
                                                     <TextBlock
                                                         Margin="1,0,4,0"
                                                         VerticalAlignment="Center"
@@ -278,7 +327,9 @@
                                     </Setter.Value>
                                 </Setter>
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsArray}" Value="False">
+                                    <DataTrigger
+                                        Binding="{Binding IsArray}"
+                                        Value="False">
                                         <Setter Property="Visibility" Value="Collapsed" />
                                     </DataTrigger>
                                     <Trigger Property="IsChecked" Value="True">
@@ -308,28 +359,37 @@
                         Command="{Binding DeleteAllCommand}"
                         ToolTip="Delete All">
                         <Button.Style>
-                            <Style BasedOn="{StaticResource ButtonCustom}" TargetType="{x:Type Button}">
+                            <Style
+                                BasedOn="{StaticResource ButtonCustom}"
+                                TargetType="{x:Type Button}">
                                 <Setter Property="Visibility" Value="Collapsed" />
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsChecked, ElementName=DeleteButton}" Value="True">
+                                    <DataTrigger
+                                        Binding="{Binding IsChecked,
+                                                          ElementName=DeleteButton}"
+                                        Value="True">
                                         <Setter Property="Visibility" Value="Visible" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </Button.Style>
                         <iconPacks:PackIconVaadinIcons
+                            Kind="Trash"
                             Padding="2"
                             VerticalAlignment="Center"
-                            Foreground="{StaticResource WolvenKitRed}"
-                            Kind="Trash" />
+                            Foreground="{StaticResource WolvenKitRed}" />
                     </Button>
                 </StackPanel>
             </DataTemplate>
-            <Style x:Key="PGNameStyle" TargetType="TextBlock">
+            <Style
+                x:Key="PGNameStyle"
+                TargetType="TextBlock">
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding IsDefault}" Value="True">
-                        <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
+                    <DataTrigger
+                        Binding="{Binding IsDefault}"
+                        Value="True">
                         <Setter Property="FontStyle" Value="Italic" />
+                        <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
@@ -346,7 +406,9 @@
                         <editors:RedCNameEditor RedString="{Binding Data, Mode=TwoWay}">
                             <editors:RedCNameEditor.Style>
                                 <Style TargetType="editors:RedCNameEditor">
-                                    <EventSetter Event="ValueChanged" Handler="RedCNameEditor_ValueChanged" />
+                                    <EventSetter
+                                        Event="ValueChanged"
+                                        Handler="RedCNameEditor_ValueChanged" />
                                 </Style>
                             </editors:RedCNameEditor.Style>
                         </editors:RedCNameEditor>
@@ -369,23 +431,33 @@
                 </converters:RedEditorTemplateSelector.RedChunkMaskEditor>
                 <converters:RedEditorTemplateSelector.RedColorEditor>
                     <DataTemplate>
-                        <editors:RedColorEditor DataContext="{Binding}" RedColor="{Binding Data, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <editors:RedColorEditor
+                            DataContext="{Binding}"
+                            RedColor="{Binding Data,
+                                               Mode=TwoWay,
+                                               UpdateSourceTrigger=PropertyChanged}" />
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedColorEditor>
                 <converters:RedEditorTemplateSelector.RedVectorColorEditor>
                     <DataTemplate>
                         <editors:RedVectorColorEditor
-                            W="{Binding Data.W, Mode=TwoWay}"
-                            X="{Binding Data.X, Mode=TwoWay}"
-                            Y="{Binding Data.Y, Mode=TwoWay}"
-                            Z="{Binding Data.Z, Mode=TwoWay}" />
+                            W="{Binding Data.W,
+                                        Mode=TwoWay}"
+                            X="{Binding Data.X,
+                                        Mode=TwoWay}"
+                            Y="{Binding Data.Y,
+                                        Mode=TwoWay}"
+                            Z="{Binding Data.Z,
+                                        Mode=TwoWay}" />
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedVectorColorEditor>
                 <converters:RedEditorTemplateSelector.RedColorPicker>
                     <DataTemplate>
                         <tools:RedColorPicker
                             DataContext="{Binding}"
-                            RedHDRColor="{Binding Data, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            RedHDRColor="{Binding Data,
+                                                  Mode=TwoWay,
+                                                  UpdateSourceTrigger=PropertyChanged}"
                             ShowAlpha="False" />
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedColorPicker>
@@ -396,7 +468,11 @@
                 </converters:RedEditorTemplateSelector.RedCurveEditor>
                 <converters:RedEditorTemplateSelector.RedCurvePointEditor>
                     <DataTemplate>
-                        <editors:RedCurvePointEditor Point="{Binding Data.Point, Mode=TwoWay}" Value="{Binding Data.Value, Mode=TwoWay}" />
+                        <editors:RedCurvePointEditor
+                            Point="{Binding Data.Point,
+                                            Mode=TwoWay}"
+                            Value="{Binding Data.Value,
+                                            Mode=TwoWay}" />
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedCurvePointEditor>
                 <converters:RedEditorTemplateSelector.RedRefEditor>
@@ -440,33 +516,45 @@
                 <converters:RedEditorTemplateSelector.RedVector2Editor>
                     <DataTemplate>
                         <editors:RedVector2Editor
-                            X="{Binding Data.X, Mode=TwoWay}"
-                            Y="{Binding Data.Y, Mode=TwoWay}" />
+                            X="{Binding Data.X,
+                                        Mode=TwoWay}"
+                            Y="{Binding Data.Y,
+                                        Mode=TwoWay}" />
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedVector2Editor>
                 <converters:RedEditorTemplateSelector.RedVector3Editor>
                     <DataTemplate>
                         <editors:RedVector3Editor
-                            X="{Binding Data.X, Mode=TwoWay}"
-                            Y="{Binding Data.Y, Mode=TwoWay}"
-                            Z="{Binding Data.Z, Mode=TwoWay}" />
+                            X="{Binding Data.X,
+                                        Mode=TwoWay}"
+                            Y="{Binding Data.Y,
+                                        Mode=TwoWay}"
+                            Z="{Binding Data.Z,
+                                        Mode=TwoWay}" />
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedVector3Editor>
                 <converters:RedEditorTemplateSelector.RedWorldPositionEditor>
                     <DataTemplate>
                         <editors:RedWorldPositionEditor
-                            X="{Binding Data.X, Mode=TwoWay}"
-                            Y="{Binding Data.Y, Mode=TwoWay}"
-                            Z="{Binding Data.Z, Mode=TwoWay}" />
+                            X="{Binding Data.X,
+                                        Mode=TwoWay}"
+                            Y="{Binding Data.Y,
+                                        Mode=TwoWay}"
+                            Z="{Binding Data.Z,
+                                        Mode=TwoWay}" />
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedWorldPositionEditor>
                 <converters:RedEditorTemplateSelector.RedVector4Editor>
                     <DataTemplate>
                         <editors:RedVector4Editor
-                            W="{Binding Data.W, Mode=TwoWay}"
-                            X="{Binding Data.X, Mode=TwoWay}"
-                            Y="{Binding Data.Y, Mode=TwoWay}"
-                            Z="{Binding Data.Z, Mode=TwoWay}" />
+                            W="{Binding Data.W,
+                                        Mode=TwoWay}"
+                            X="{Binding Data.X,
+                                        Mode=TwoWay}"
+                            Y="{Binding Data.Y,
+                                        Mode=TwoWay}"
+                            Z="{Binding Data.Z,
+                                        Mode=TwoWay}" />
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedVector4Editor>
                 <converters:RedEditorTemplateSelector.RedQuaternionEditor>
@@ -499,7 +587,8 @@
                                 Margin="6,0,4,1"
                                 VerticalAlignment="Center"
                                 Foreground="{StaticResource RedTypeColor}"
-                                Text="{Binding Type, Mode=OneTime}" />
+                                Text="{Binding Type,
+                                               Mode=OneTime}" />
                             <TextBlock
                                 Margin="0,0,4,1"
                                 VerticalAlignment="Center"
@@ -508,7 +597,9 @@
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Descriptor}" Value="">
+                                            <DataTrigger
+                                                Binding="{Binding Descriptor}"
+                                                Value="">
                                                 <Setter Property="Visibility" Value="Collapsed" />
                                             </DataTrigger>
                                         </Style.Triggers>
@@ -536,18 +627,19 @@
                                 BorderThickness="0,0,0,1">
                                 <StackPanel Orientation="Horizontal">
                                     <iconPacks:PackIconCodicons
+                                        Kind="SymbolClass"
                                         Width="15"
                                         Height="15"
                                         Margin="6,0,0,2"
                                         HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        Kind="SymbolClass" />
+                                        VerticalAlignment="Center" />
                                     <TextBlock
                                         Name="PropertyType"
                                         Margin="6,0,4,2"
                                         VerticalAlignment="Center"
                                         Foreground="{StaticResource WolvenKitTan}"
-                                        Text="{Binding Type, Mode=OneTime}" />
+                                        Text="{Binding Type,
+                                                       Mode=OneTime}" />
                                     <StackPanel
                                         Margin="-4,0,4,0"
                                         VerticalAlignment="Center"
@@ -555,20 +647,26 @@
                                         <StackPanel.Style>
                                             <Style TargetType="StackPanel">
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding TypesDiffer, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                                    <DataTrigger
+                                                        Binding="{Binding TypesDiffer,
+                                                                          Mode=OneWay,
+                                                                          UpdateSourceTrigger=PropertyChanged}"
+                                                        Value="False">
                                                         <Setter Property="Visibility" Value="Collapsed" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
                                         </StackPanel.Style>
                                         <iconPacks:PackIconCodicons
+                                            Kind="ArrowRight"
                                             Height="7"
-                                            VerticalAlignment="Center"
-                                            Kind="ArrowRight" />
+                                            VerticalAlignment="Center" />
                                         <TextBlock
                                             Margin="0,0,0,2"
                                             Foreground="{StaticResource WolvenKitTan}"
-                                            Text="{Binding ResolvedType, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                                            Text="{Binding ResolvedType,
+                                                           Mode=OneWay,
+                                                           UpdateSourceTrigger=PropertyChanged}" />
                                     </StackPanel>
                                     <TextBlock
                                         Margin="0,0,4,3"
@@ -577,7 +675,9 @@
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Descriptor}" Value="">
+                                                    <DataTrigger
+                                                        Binding="{Binding Descriptor}"
+                                                        Value="">
                                                         <Setter Property="Visibility" Value="Collapsed" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
@@ -611,13 +711,14 @@
                 </converters:RedEditorTemplateSelector.RedArrayEditor>
             </converters:RedEditorTemplateSelector>
             <DataTemplate x:Key="ItemTemplate">
-                <!--  ="{Binding Properties}"  -->
+                <!-- ="{Binding Properties}" -->
                 <Border
                     x:Name="TopLine"
-                    Visibility="{Binding IsHiddenByEditorDifficultyLevel, Converter={StaticResource InvertBooleanConverter}}"
                     MinHeight="27"
                     BorderBrush="{StaticResource BorderAlt}"
-                    BorderThickness="0,1,0,0">
+                    BorderThickness="0,1,0,0"
+                    Visibility="{Binding IsHiddenByEditorDifficultyLevel,
+                                         Converter={StaticResource InvertBooleanConverter}}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="NameColumn" />
@@ -630,9 +731,11 @@
                             Margin="6,5,6,0"
                             VerticalAlignment="Top"
                             Style="{StaticResource PGNameStyle}"
-                            Text="{Binding Name, Mode=OneTime}"
+                            Text="{Binding Name,
+                                           Mode=OneTime}"
                             TextTrimming="CharacterEllipsis"
-                            ToolTip="{Binding XPath, Mode=OneTime}" />
+                            ToolTip="{Binding XPath,
+                                              Mode=OneTime}" />
                         <ContentPresenter
                             x:Name="DeleteButtonWrapper"
                             Grid.Column="1"
@@ -650,11 +753,15 @@
                             VerticalAlignment="Top"
                             Content="{Binding}"
                             ContentTemplateSelector="{DynamicResource redEditorTemplates}"
-                            ToolTip="{Binding Type, Mode=OneTime}" />
+                            ToolTip="{Binding Type,
+                                              Mode=OneTime}" />
                     </Grid>
                 </Border>
                 <DataTemplate.Triggers>
-                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem}, Converter={StaticResource IsLastItemInContainerConverter}}" Value="True">
+                    <DataTrigger
+                        Binding="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem},
+                                          Converter={StaticResource IsLastItemInContainerConverter}}"
+                        Value="True">
                         <Setter TargetName="TopLine" Property="BorderThickness" Value="0,1,0,1" />
                     </DataTrigger>
                 </DataTemplate.Triggers>
@@ -713,24 +820,30 @@
                 </HierarchicalDataTemplate.ItemTemplate-->
             </DataTemplate>
             <Style TargetType="TextBox">
+                <Setter Property="BorderThickness" Value="0" />
                 <Setter Property="Padding" Value="5,0" />
                 <Setter Property="VerticalContentAlignment" Value="Center" />
-                <Setter Property="BorderThickness" Value="0" />
             </Style>
-            <Style BasedOn="{StaticResource WPFComboBoxStyle}" TargetType="ComboBox">
-                <Setter Property="Padding" Value="5,0" />
-                <Setter Property="VerticalContentAlignment" Value="Center" />
-                <Setter Property="BorderThickness" Value="0" />
+            <Style
+                BasedOn="{StaticResource WPFComboBoxStyle}"
+                TargetType="ComboBox">
                 <Setter Property="Background" Value="#252525" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Padding" Value="5,0" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
             </Style>
-            <Style BasedOn="{StaticResource CheckBoxBaseStyle}" TargetType="CheckBox">
+            <Style
+                BasedOn="{StaticResource CheckBoxBaseStyle}"
+                TargetType="CheckBox">
+                <Setter Property="Background" Value="#252525" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="HorizontalAlignment" Value="Left" />
                 <Setter Property="Margin" Value="4,0" />
                 <Setter Property="VerticalContentAlignment" Value="Center" />
-                <Setter Property="HorizontalAlignment" Value="Left" />
-                <Setter Property="BorderThickness" Value="1" />
-                <Setter Property="Background" Value="#252525" />
             </Style>
-            <Style BasedOn="{StaticResource SyncfusionUpDownStyle}" TargetType="{x:Type syncfusion:UpDown}">
+            <Style
+                BasedOn="{StaticResource SyncfusionUpDownStyle}"
+                TargetType="{x:Type syncfusion:UpDown}">
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="FocusedBackground" Value="Transparent" />
                 <Setter Property="NegativeBackground" Value="Transparent" />
@@ -741,12 +854,16 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <!--  info at top  -->
-        <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,0,0,1">
+        <!-- info at top -->
+        <Border
+            BorderBrush="{StaticResource BorderAlt}"
+            BorderThickness="0,0,0,1">
             <Border.Style>
                 <Style TargetType="Border">
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding}" Value="{x:Null}">
+                        <DataTrigger
+                            Binding="{Binding}"
+                            Value="{x:Null}">
                             <Setter Property="Visibility" Value="Collapsed" />
                         </DataTrigger>
                     </Style.Triggers>
@@ -758,45 +875,66 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <TextBlock VerticalAlignment="Center" Text="{Binding Tab.File.RelativePath}" />
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Text="{Binding Tab.File.RelativePath}" />
                 <TextBlock
                     Grid.Row="1"
                     VerticalAlignment="Center"
                     FontWeight="SemiBold"
                     Text="{Binding XPath}" />
-                <StackPanel Grid.Row="2" Orientation="Horizontal">
+                <StackPanel
+                    Grid.Row="2"
+                    Orientation="Horizontal">
                     <TextBlock
                         Name="PropertyType"
                         Foreground="{StaticResource WolvenKitTan}"
-                        Text="{Binding Type, Mode=OneTime}" />
+                        Text="{Binding Type,
+                                       Mode=OneTime}" />
                     <StackPanel Orientation="Horizontal">
                         <StackPanel.Style>
                             <Style TargetType="StackPanel">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding TypesDiffer, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                    <DataTrigger
+                                        Binding="{Binding TypesDiffer,
+                                                          Mode=OneWay,
+                                                          UpdateSourceTrigger=PropertyChanged}"
+                                        Value="False">
                                         <Setter Property="Visibility" Value="Collapsed" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </StackPanel.Style>
                         <iconPacks:PackIconCodicons
+                            Kind="ArrowRight"
                             Height="7"
-                            VerticalAlignment="Center"
-                            Kind="ArrowRight" />
-                        <TextBlock Foreground="{StaticResource WolvenKitTan}" Text="{Binding ResolvedType, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                            VerticalAlignment="Center" />
+                        <TextBlock
+                            Foreground="{StaticResource WolvenKitTan}"
+                            Text="{Binding ResolvedType,
+                                           Mode=OneWay,
+                                           UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                     <ContentPresenter
                         Margin="5,0,0,0"
                         Content="{Binding}"
                         ContentTemplate="{StaticResource AddToCompiledDataButton}" />
-                    <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource AddToArrayButton}" />
-                    <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource AddDynamicProperty}" />
-                    <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource AddHandleButton}" />
-                    <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DeleteAllButton}" />
+                    <ContentPresenter
+                        Content="{Binding}"
+                        ContentTemplate="{StaticResource AddToArrayButton}" />
+                    <ContentPresenter
+                        Content="{Binding}"
+                        ContentTemplate="{StaticResource AddDynamicProperty}" />
+                    <ContentPresenter
+                        Content="{Binding}"
+                        ContentTemplate="{StaticResource AddHandleButton}" />
+                    <ContentPresenter
+                        Content="{Binding}"
+                        ContentTemplate="{StaticResource DeleteAllButton}" />
                 </StackPanel>
             </Grid>
         </Border>
-        <!--  main editor list  -->
+        <!-- main editor list -->
         <!--
             ScrollViewer
             Grid.Row="1"
@@ -809,10 +947,11 @@
             Grid.Row="1"
             Margin="0,-1,0,0"
             Padding="0,-1,0,0"
-            AlternationCount="{Binding RelativeSource={RelativeSource Self}, Path=Items.Count}"
             Background="{StaticResource ContentBackground}"
             BorderBrush="{StaticResource BorderAlt}"
             BorderThickness="0,1,0,0"
+            AlternationCount="{Binding RelativeSource={RelativeSource Self},
+                                       Path=Items.Count}"
             IsManipulationEnabled="False"
             ItemTemplate="{StaticResource ItemTemplate}"
             ItemsSource="{Binding DisplayProperties}"
@@ -828,8 +967,10 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="TreeViewItem">
-                                <Grid IsEnabled="{Binding IsReadOnly, Converter={StaticResource InvertBooleanConverter}}"
-                                      Style="{StaticResource HiddenByEditorModeStyle}">
+                                <Grid
+                                    Style="{StaticResource HiddenByEditorModeStyle}"
+                                    IsEnabled="{Binding IsReadOnly,
+                                                        Converter={StaticResource InvertBooleanConverter}}">
                                     <Grid>
                                         <ContentPresenter ContentSource="Header" />
                                     </Grid>
@@ -915,6 +1056,6 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate-->
         </TreeView>
-        <!--  /ScrollViewer  -->
+        <!-- /ScrollViewer -->
     </Grid>
 </reactiveUi:ReactiveUserControl>

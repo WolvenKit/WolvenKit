@@ -6,9 +6,9 @@
     xmlns:local="clr-namespace:WolvenKit.Views.Editors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    mc:Ignorable="d"
     d:DesignHeight="100"
     d:DesignWidth="400"
-    mc:Ignorable="d"
     KeyboardNavigation.TabNavigation="Contained">
 
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedVector3Editor}}}">
@@ -25,30 +25,36 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Text="X" />
-        <syncfusion:DoubleTextBox 
+        <syncfusion:DoubleTextBox
             Grid.Column="1"
             KeyboardNavigation.TabIndex="1"
             NumberDecimalDigits="4"
-            Value="{Binding XValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            Value="{Binding XValue,
+                            Mode=TwoWay,
+                            UpdateSourceTrigger=PropertyChanged}" />
         <TextBlock
             Grid.Column="2"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Text="Y" />
-        <syncfusion:DoubleTextBox 
+        <syncfusion:DoubleTextBox
             Grid.Column="3"
             KeyboardNavigation.TabIndex="2"
             NumberDecimalDigits="4"
-            Value="{Binding YValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            Value="{Binding YValue,
+                            Mode=TwoWay,
+                            UpdateSourceTrigger=PropertyChanged}" />
         <TextBlock
             Grid.Column="4"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Text="Z" />
         <syncfusion:DoubleTextBox
-            KeyboardNavigation.TabIndex="3"
             Grid.Column="5"
+            KeyboardNavigation.TabIndex="3"
             NumberDecimalDigits="4"
-            Value="{Binding ZValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            Value="{Binding ZValue,
+                            Mode=TwoWay,
+                            UpdateSourceTrigger=PropertyChanged}" />
     </Grid>
 </UserControl>

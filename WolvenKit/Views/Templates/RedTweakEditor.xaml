@@ -6,10 +6,9 @@
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     xmlns:local="clr-namespace:WolvenKit.Views.Editors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    mc:Ignorable="d"
     d:DesignHeight="100"
-    d:DesignWidth="400"
-    mc:Ignorable="d">
+    d:DesignWidth="400">
 
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedTweakEditor}}}">
         <Grid.ColumnDefinitions>
@@ -21,17 +20,21 @@
             x:Name="TextBox"
             Grid.Column="0"
             helpers:TextBoxBehavior.TripleClickSelectAll="True"
-            Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            Text="{Binding Text,
+                           UpdateSourceTrigger=PropertyChanged,
+                           Mode=TwoWay}" />
         <TextBox
             x:Name="HashBox"
             Grid.Column="1"
-            helpers:TextBoxBehavior.TripleClickSelectAll="True"
             Background="{StaticResource ContentBackgroundAlt}"
             BorderBrush="{StaticResource BorderAlt}"
             BorderThickness="1,0,0,0"
-            DataObject.Pasting="HashBox_OnPasting"
             Foreground="#666666"
+            helpers:TextBoxBehavior.TripleClickSelectAll="True"
+            DataObject.Pasting="HashBox_OnPasting"
             PreviewTextInput="HashBox_OnPreviewTextInput"
-            Text="{Binding Hash, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            Text="{Binding Hash,
+                           UpdateSourceTrigger=PropertyChanged,
+                           Mode=TwoWay}" />
     </Grid>
 </UserControl>

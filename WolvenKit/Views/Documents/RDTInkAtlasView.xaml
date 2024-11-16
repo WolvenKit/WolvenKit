@@ -7,10 +7,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:others="clr-namespace:WolvenKit.Views.Others"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type={x:Type documents:RDTInkTextureAtlasViewModel}}"
     d:DesignHeight="450"
-    d:DesignWidth="800"
-    mc:Ignorable="d">
+    d:DesignWidth="800">
     <Grid Background="Transparent">
         <Grid.Resources>
             <ResourceDictionary>
@@ -35,14 +35,20 @@
             ClipToBounds="True">
             <Border.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Click="ResetZoomPan" Header="Reset Zoom/Pan" />
+                    <MenuItem
+                        Click="ResetZoomPan"
+                        Header="Reset Zoom/Pan" />
                 </ContextMenu>
             </Border.ContextMenu>
-            <Canvas x:Name="ParentCanvas" IsEnabled="{Binding IsLoaded}">
+            <Canvas
+                x:Name="ParentCanvas"
+                IsEnabled="{Binding IsLoaded}">
                 <others:ImageCanvas
                     x:Name="ImageCanvasItem"
-                    Width="{Binding ElementName=ParentCanvas, Path=ActualWidth}"
-                    Height="{Binding ElementName=ParentCanvas, Path=ActualHeight}"
+                    Width="{Binding ElementName=ParentCanvas,
+                                    Path=ActualWidth}"
+                    Height="{Binding ElementName=ParentCanvas,
+                                     Path=ActualHeight}"
                     Source="{Binding Image}">
                     <others:ImageCanvas.Overlay>
                         <ListBox
@@ -57,17 +63,17 @@
                             </ListBox.ItemsPanel>
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
+                                    <Setter Property="BorderThickness" Value="0" />
                                     <Setter Property="Canvas.Left" Value="{Binding Left}" />
                                     <Setter Property="Canvas.Top" Value="{Binding Top}" />
-                                    <Setter Property="Width" Value="{Binding Width}" />
                                     <Setter Property="Height" Value="{Binding Height}" />
-                                    <Setter Property="ToolTip" Value="{Binding Name}" />
                                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
-                                    <Setter Property="Padding" Value="0" />
                                     <Setter Property="Margin" Value="0" />
                                     <Setter Property="Opacity" Value="0.5" />
-                                    <Setter Property="BorderThickness" Value="0" />
+                                    <Setter Property="Padding" Value="0" />
+                                    <Setter Property="ToolTip" Value="{Binding Name}" />
+                                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                                    <Setter Property="Width" Value="{Binding Width}" />
                                     <Style.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
                                             <Setter Property="Opacity" Value="1.0" />
@@ -88,8 +94,8 @@
                                             Margin="2,0,0,0"
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Bottom"
-                                            FontSize="8"
                                             Foreground="{StaticResource WolvenKitCyan50}"
+                                            FontSize="8"
                                             Text="{Binding Name}"
                                             TextTrimming="None" />
                                     </Border>
@@ -106,39 +112,60 @@
                     Width="100"
                     SelectionChanged="SlotSelection_OnSelectionChanged" />
             </Canvas>
-            
-            
+
+
         </Border>
 
-        <others:LoadingTextControl Grid.Column="0" VisibilityFlag="{Binding IsLoaded}" Small="True" />
+        <others:LoadingTextControl
+            Grid.Column="0"
+            VisibilityFlag="{Binding IsLoaded}"
+            Small="True" />
 
-        <syncfusion:SfGridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
+        <syncfusion:SfGridSplitter
+            Grid.Column="1"
+            HorizontalAlignment="Stretch" />
 
-        <StackPanel Grid.Column="2" Background="{StaticResource ContentBackgroundAlt}">
+        <StackPanel
+            Grid.Column="2"
+            Background="{StaticResource ContentBackgroundAlt}">
             <syncfusion:PropertyGrid
+                IsEnabled="{Binding IsLoaded}"
                 AutoGenerateItems="False"
                 ButtonPanelVisibility="Collapsed"
                 PropertyExpandMode="FlatMode"
                 PropertyNameColumnDefinition="100"
                 SearchBoxVisibility="Collapsed"
                 SelectedObject="{Binding SelectedItem}"
-                IsEnabled="{Binding IsLoaded}"
                 SortDirection="{x:Null}">
                 <syncfusion:PropertyGrid.Items>
-                    <syncfusion:PropertyGridItem IsReadOnly="True" PropertyName="AtlasPath" />
-                    <syncfusion:PropertyGridItem IsReadOnly="True" PropertyName="DepotPath" />
+                    <syncfusion:PropertyGridItem
+                        IsReadOnly="True"
+                        PropertyName="AtlasPath" />
+                    <syncfusion:PropertyGridItem
+                        IsReadOnly="True"
+                        PropertyName="DepotPath" />
                     <syncfusion:PropertyGridItem PropertyName="PartName" />
-                    <syncfusion:PropertyGridItem IsReadOnly="True" PropertyName="Top" />
-                    <syncfusion:PropertyGridItem IsReadOnly="True" PropertyName="Left" />
-                    <syncfusion:PropertyGridItem IsReadOnly="True" PropertyName="Width" />
-                    <syncfusion:PropertyGridItem IsReadOnly="True" PropertyName="Height" />
+                    <syncfusion:PropertyGridItem
+                        IsReadOnly="True"
+                        PropertyName="Top" />
+                    <syncfusion:PropertyGridItem
+                        IsReadOnly="True"
+                        PropertyName="Left" />
+                    <syncfusion:PropertyGridItem
+                        IsReadOnly="True"
+                        PropertyName="Width" />
+                    <syncfusion:PropertyGridItem
+                        IsReadOnly="True"
+                        PropertyName="Height" />
                 </syncfusion:PropertyGrid.Items>
             </syncfusion:PropertyGrid>
-            <TextBlock Padding="10,5" Text="Redscript Example" />
+            <TextBlock
+                Padding="10,5"
+                Text="Redscript Example" />
             <syncfusion:EditControl
                 FontFamily="Fira Code"
-                ShowLineNumber="False"
                 IsEnabled="{Binding IsLoaded}"
+                ShowLineNumber="False"
                 Text="{Binding SelectedItem.RedscriptExample}" />
             <Canvas IsEnabled="{Binding IsLoaded}">
                 <Image
@@ -150,7 +177,9 @@
                     Source="{Binding SelectedItem.Image}">
                     <Image.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Command="{Binding SelectedItem.SaveImageCommand}" Header="Save as PNG" />
+                            <MenuItem
+                                Command="{Binding SelectedItem.SaveImageCommand}"
+                                Header="Save as PNG" />
                         </ContextMenu>
                     </Image.ContextMenu>
                 </Image>

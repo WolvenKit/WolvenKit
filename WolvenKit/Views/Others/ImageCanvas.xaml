@@ -4,18 +4,20 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
     x:Name="uc"
-    MinHeight="800"
-    MinWidth="800"
-    VerticalAlignment="Stretch"
     Height="Auto"
-    mc:Ignorable="d">
+    MinWidth="800"
+    MinHeight="800"
+    VerticalAlignment="Stretch">
     <Border
         x:Name="ImagePreviewCanvas"
         Background="{StaticResource ContentBackground}"
         BorderThickness="1"
         ClipToBounds="True">
-        <Canvas x:Name="ImagePreview" RenderTransformOrigin="0.5,0.5">
+        <Canvas
+            x:Name="ImagePreview"
+            RenderTransformOrigin="0.5,0.5">
             <Canvas.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform x:Name="ScaleTransformItem" />
@@ -30,7 +32,8 @@
                 Opacity="1"
                 RenderOptions.BitmapScalingMode="NearestNeighbor"
                 RenderTransformOrigin="0.5,0.5"
-                Source="{Binding ElementName=uc, Path=Source}" />
+                Source="{Binding ElementName=uc,
+                                 Path=Source}" />
             <ContentControl Content="{Binding ElementName=uc, Path=Overlay}" />
         </Canvas>
     </Border>
