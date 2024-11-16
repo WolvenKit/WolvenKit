@@ -6,19 +6,16 @@
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     xmlns:local="clr-namespace:WolvenKit.Views.Editors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
     d:DesignHeight="100"
-    d:DesignWidth="400">
+    d:DesignWidth="400"
+    mc:Ignorable="d">
 
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedStringEditor}}}">
 
         <TextBox
             x:Name="TextBox"
             helpers:TextBoxBehavior.TripleClickSelectAll="True"
-            Text="{Binding Text,
-                           UpdateSourceTrigger=PropertyChanged,
-                           Mode=TwoWay}"
-            TextWrapping="Wrap" />
+            Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextWrapping="Wrap" />
 
     </Grid>
 </UserControl>

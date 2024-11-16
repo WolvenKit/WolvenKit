@@ -6,10 +6,10 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:WolvenKit.Views.Templates"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type={x:Type local:HandleTemplateView}}"
     d:DesignHeight="100"
-    d:DesignWidth="400">
+    d:DesignWidth="400"
+    mc:Ignorable="d">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -20,17 +20,11 @@
         <ComboBox
             x:Name="ComboBox"
             Background="{DynamicResource MahApps.Brushes.Accent3}"
-            Style="{DynamicResource MahApps.Styles.ComboBox.DataGrid.Editing}"
-            DataContext="{Binding Mode=OneWay,
-                                  RelativeSource={RelativeSource FindAncestor,
-                                                                 AncestorType={x:Type local:HandleTemplateView}}}"
-            ItemsSource="{Binding BindingCollection,
-                                  Mode=TwoWay,
-                                  UpdateSourceTrigger=PropertyChanged}"
-            SelectedItem="{Binding SelectedItem,
-                                   Mode=TwoWay,
-                                   UpdateSourceTrigger=PropertyChanged}"
-            SelectionChanged="ComboBox_OnSelectionChanged">
+            DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:HandleTemplateView}}}"
+            ItemsSource="{Binding BindingCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectionChanged="ComboBox_OnSelectionChanged"
+            Style="{DynamicResource MahApps.Styles.ComboBox.DataGrid.Editing}">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding}" />
@@ -42,14 +36,14 @@
             Grid.Column="1"
             Width="35"
             Background="{DynamicResource MahApps.Brushes.Accent}"
-            Foreground="Black"
             Click="ButtonBase_OnClick"
+            Foreground="Black"
             ToolTip="{Binding}">
             <Button.Content>
                 <iconPacks:Codicons
-                    Kind="ArrowRight"
                     Width="10"
-                    Height="15" />
+                    Height="15"
+                    Kind="ArrowRight" />
             </Button.Content>
         </Button>
     </Grid>

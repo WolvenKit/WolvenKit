@@ -5,9 +5,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
     d:DesignHeight="50"
-    d:DesignWidth="200">
+    d:DesignWidth="200"
+    mc:Ignorable="d">
 
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
 
@@ -28,10 +28,10 @@
             VerticalAlignment="Stretch"
             Click="ButtonBase_OnClick">
             <iconPacks:PackIconCodicons
-                Kind="Ellipsis"
                 Width="20"
                 Height="20"
-                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                Kind="Ellipsis" />
         </Button>
 
     </Grid>

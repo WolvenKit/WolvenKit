@@ -3,12 +3,12 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:converters="clr-namespace:Wolvenkit.App.Converters;assembly=WolvenKit.App"
-    Title="{Binding Title,
-                    RelativeSource={RelativeSource Self}}"
-    Padding="8"
+    Title="{Binding Title, RelativeSource={RelativeSource Self}}"
     SizeToContent="WidthAndHeight"
+    Padding="8"
     WindowStartupLocation="CenterOwner">
 
     <Grid
@@ -25,18 +25,14 @@
                 </ResourceDictionary.MergedDictionaries>
                 <converters:ListToStringConverter x:Key="ListToStringConverter" />
 
-                <Style
-                    x:Key="TextBlockHeaderStyle"
-                    TargetType="{x:Type TextBlock}">
+                <Style x:Key="TextBlockHeaderStyle" TargetType="{x:Type TextBlock}">
                     <Setter Property="FontSize" Value="30" />
+                    <Setter Property="Margin" Value="0 20 0 10" />
                     <Setter Property="Foreground" Value="{StaticResource WolvenKitCyan}" />
-                    <Setter Property="Margin" Value="0,20,0,10" />
                 </Style>
-                <Style
-                    x:Key="TextBlockTextStyle"
-                    TargetType="{x:Type TextBlock}">
+                <Style x:Key="TextBlockTextStyle" TargetType="{x:Type TextBlock}">
                     <Setter Property="FontSize" Value="16" />
-                    <Setter Property="Margin" Value="0,2" />
+                    <Setter Property="Margin" Value="0 2 " />
                 </Style>
             </ResourceDictionary>
 
@@ -52,6 +48,7 @@
                 FinishVisibility="Visible"
                 HelpVisibility="Collapsed"
                 NextVisibility="Collapsed"
+
                 PreviewKeyDown="WizardPage_PreviewKeyDown"
                 PageType="Exterior">
                 <Grid
@@ -65,31 +62,24 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <StackPanel
-                        Grid.Row="0"
-                        Orientation="Vertical">
+                    <StackPanel Grid.Row="0" Orientation="Vertical">
                         <TextBlock Style="{StaticResource TextBlockHeaderStyle}">This feature is experimental!</TextBlock>
                         <TextBlock Text="{Binding ReferencesCount, StringFormat='The following {0} files seem to hold broken references:'}" />
                     </StackPanel>
 
-                    <StackPanel
-                        Grid.Row="1"
-                        Orientation="Vertical">
-                        <TextBox
-                            x:Name="ContentTextBox"
-                            Width="Auto"
-                            Height="Auto"
-                            MinHeight="100"
-                            MaxHeight="400"
-                            VerticalAlignment="Top"
-                            VerticalContentAlignment="Top"
-                            Background="{StaticResource BackgroundColor_Frame_Background}"
-                            AcceptsReturn="True"
-                            TextWrapping="WrapWithOverflow"
-                            VerticalScrollBarVisibility="Auto"
-                            Text="{Binding References,
-                                           Converter={StaticResource ListToStringConverter},
-                                           Mode=TwoWay}" />
+                    <StackPanel Grid.Row="1" Orientation="Vertical">
+                        <TextBox x:Name="ContentTextBox"
+                                 Background="{StaticResource BackgroundColor_Frame_Background}"
+                                 Height="Auto"
+                                 Width="Auto"
+                                 MinHeight="100"
+                                 MaxHeight="400"
+                                 AcceptsReturn="True"
+                                 TextWrapping="WrapWithOverflow"
+                                 VerticalScrollBarVisibility="Auto"
+                                 VerticalAlignment="Top"
+                                 VerticalContentAlignment="Top"
+                                 Text="{Binding References, Converter={StaticResource ListToStringConverter}, Mode=TwoWay}" />
                     </StackPanel>
                 </Grid>
             </syncfusion:WizardPage>

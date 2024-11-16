@@ -3,9 +3,10 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    Title="{Binding Title,
-                    RelativeSource={RelativeSource Self}}"
+    xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
+    Title="{Binding Title, RelativeSource={RelativeSource Self}}"
     SizeToContent="WidthAndHeight"
     FocusManager.FocusedElement="{Binding ElementName=TextBox}"
     WindowStartupLocation="CenterScreen">
@@ -26,9 +27,7 @@
         </Grid.Resources>
 
 
-        <syncfusion:WizardControl
-            CancelButtonCancelsWindow="True"
-            FinishButtonClosesWindow="True">
+        <syncfusion:WizardControl CancelButtonCancelsWindow="True" FinishButtonClosesWindow="True">
             <syncfusion:WizardPage
                 BackVisibility="Collapsed"
                 CancelVisibility="Visible"

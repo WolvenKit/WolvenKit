@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     Title="Generate missing materials"
@@ -25,10 +26,7 @@
             </ResourceDictionary>
         </Grid.Resources>
 
-        <syncfusion:WizardControl
-            CancelButtonCancelsWindow="True"
-            FinishButtonClosesWindow="True"
-            Finish="WizardControl_OnFinish">
+        <syncfusion:WizardControl CancelButtonCancelsWindow="True" FinishButtonClosesWindow="True" Finish="WizardControl_OnFinish">
             <syncfusion:WizardPage
                 BackVisibility="Collapsed"
                 CancelVisibility="Visible"
@@ -51,63 +49,22 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <Label
-                        Grid.Column="0"
-                        HorizontalAlignment="Left"
-                        Background="#252525"
-                        BorderThickness="0"
-                        Content="Base material:" />
-                    <TextBox
-                        x:Name="BaseMaterialBox"
-                        Grid.Row="0"
-                        Grid.Column="1"
-                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
-                        KeyboardNavigation.TabIndex="1" />
+                    <Label Grid.Column="0" Content="Base material:" HorizontalAlignment="Left"
+                           Background="#252525" BorderThickness="0" />
+                    <TextBox x:Name="BaseMaterialBox" Grid.Column="1" Grid.Row="0" KeyboardNavigation.TabIndex="1"
+                             helpers:TextBoxBehavior.FocusGainedSelectAll="True" />
 
-                    <Label
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        HorizontalAlignment="Left"
-                        Background="#252525"
-                        BorderThickness="0"
-                        Content="Local material:" />
-                    <!-- Label for the CheckBox -->
-                    <CheckBox
-                        x:Name="LocalMaterialCheckBox"
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        KeyboardNavigation.TabIndex="2" />
-                    <!-- CheckBox -->
+                    <Label Grid.Row="1" Grid.Column="0" Content="Local material:" HorizontalAlignment="Left"
+                           Background="#252525" BorderThickness="0" /> <!-- Label for the CheckBox -->
+                    <CheckBox x:Name="LocalMaterialCheckBox" Grid.Column="1" Grid.Row="1" KeyboardNavigation.TabIndex="2" /> <!-- CheckBox -->
 
-                    <Label
-                        Grid.Row="2"
-                        Grid.Column="0"
-                        HorizontalAlignment="Left"
-                        Background="#252525"
-                        BorderThickness="0"
-                        Content="Resolve dynamic paths:" />
-                    <!-- Label for the CheckBox -->
-                    <CheckBox
-                        x:Name="ResolveDynamicCheckBox"
-                        Grid.Row="2"
-                        Grid.Column="1"
-                        KeyboardNavigation.TabIndex="3" />
-                    <!-- CheckBox -->
+                    <Label Grid.Row="2" Grid.Column="0" Content="Resolve dynamic paths:" HorizontalAlignment="Left"
+                           Background="#252525" BorderThickness="0" /> <!-- Label for the CheckBox -->
+                    <CheckBox x:Name="ResolveDynamicCheckBox" Grid.Column="1" Grid.Row="2" KeyboardNavigation.TabIndex="3" /> <!-- CheckBox -->
 
-                    <Label
-                        Grid.Row="3"
-                        Grid.Column="0"
-                        HorizontalAlignment="Left"
-                        Background="#252525"
-                        BorderThickness="0"
-                        Content="Remember selection:" />
-                    <!-- Label for the CheckBox -->
-                    <CheckBox
-                        x:Name="RememberValuesCheckBox"
-                        Grid.Row="3"
-                        Grid.Column="1"
-                        KeyboardNavigation.TabIndex="4" />
-                    <!-- CheckBox -->
+                    <Label Grid.Row="3" Grid.Column="0" Content="Remember selection:" HorizontalAlignment="Left"
+                           Background="#252525" BorderThickness="0" /> <!-- Label for the CheckBox -->
+                    <CheckBox x:Name="RememberValuesCheckBox" Grid.Column="1" Grid.Row="3" KeyboardNavigation.TabIndex="4" /> <!-- CheckBox -->
 
                 </Grid>
             </syncfusion:WizardPage>

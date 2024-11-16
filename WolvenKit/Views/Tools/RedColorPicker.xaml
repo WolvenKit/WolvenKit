@@ -4,11 +4,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:colorpicker="clr-namespace:ColorPicker;assembly=ColorPicker"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WolvenKit.Views.Tools"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
+    x:Name="rcp"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    x:Name="rcp">
+    mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -38,20 +39,15 @@
                 Margin="0"
                 Padding="0"
                 Panel.ZIndex="1"
-                Background="{Binding Path=Brush,
-                                     ElementName=rcp}"
+                Background="{Binding Path=Brush, ElementName=rcp}"
                 BorderThickness="0"
                 Style="{StaticResource ColorToggleButtonStyle}" />
         </Border>
         <Popup
             Name="Popup"
-            IsOpen="{Binding Path=IsChecked,
-                             ElementName=ToggleButton,
-                             Mode=TwoWay}"
+            IsOpen="{Binding Path=IsChecked, ElementName=ToggleButton, Mode=TwoWay}"
             StaysOpen="False">
-            <Border
-                BorderBrush="Black"
-                BorderThickness="2">
+            <Border BorderBrush="Black" BorderThickness="2">
                 <Grid Background="{StaticResource ContentBackground}">
                     <Grid.RowDefinitions>
                         <RowDefinition />
@@ -68,32 +64,20 @@
                         Grid.Column="0"
                         Margin="5,5,5,15"
                         VerticalAlignment="Stretch"
-                        ColorState="{Binding ElementName=rcp,
-                                             Path=ColorState,
-                                             Mode=TwoWay}" />
+                        ColorState="{Binding ElementName=rcp, Path=ColorState, Mode=TwoWay}" />
                     <DockPanel
                         Grid.Row="0"
                         Grid.Column="1"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top">
                         <Label Content="Hex" />
-                        <colorpicker:HexColorTextBox
-                            ColorState="{Binding ElementName=rcp,
-                                                 Path=ColorState,
-                                                 Mode=TwoWay}"
-                            ShowAlpha="{Binding ElementName=rcp,
-                                                Path=ShowAlpha,
-                                                Mode=TwoWay}" />
+                        <colorpicker:HexColorTextBox ColorState="{Binding ElementName=rcp, Path=ColorState, Mode=TwoWay}" ShowAlpha="{Binding ElementName=rcp, Path=ShowAlpha, Mode=TwoWay}" />
                     </DockPanel>
                     <colorpicker:ColorSliders
                         Grid.Row="1"
                         Grid.Column="1"
-                        ColorState="{Binding ElementName=rcp,
-                                             Path=ColorState,
-                                             Mode=TwoWay}"
-                        ShowAlpha="{Binding ElementName=rcp,
-                                            Path=ShowAlpha,
-                                            Mode=TwoWay}" />
+                        ColorState="{Binding ElementName=rcp, Path=ColorState, Mode=TwoWay}"
+                        ShowAlpha="{Binding ElementName=rcp, Path=ShowAlpha, Mode=TwoWay}" />
                 </Grid>
             </Border>
         </Popup>

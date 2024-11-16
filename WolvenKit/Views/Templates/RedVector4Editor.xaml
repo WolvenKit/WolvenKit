@@ -5,12 +5,12 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:WolvenKit.Views.Editors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    mc:Ignorable="d"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf" 
     d:DesignHeight="100"
     d:DesignWidth="400"
+    mc:Ignorable="d"
     KeyboardNavigation.TabNavigation="Contained">
-
+    
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedVector4Editor}}}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20" />
@@ -30,12 +30,10 @@
             VerticalAlignment="Center"
             Text="X" />
         <syncfusion:DoubleTextBox
-            Grid.Column="1"
             KeyboardNavigation.TabIndex="1"
+            Grid.Column="1"
             NumberDecimalDigits="4"
-            Value="{Binding XValue,
-                            Mode=TwoWay,
-                            UpdateSourceTrigger=PropertyChanged}" />
+            Value="{Binding XValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
         <!-- Y -->
         <TextBlock
@@ -44,12 +42,10 @@
             VerticalAlignment="Center"
             Text="Y" />
         <syncfusion:DoubleTextBox
-            Grid.Column="3"
             KeyboardNavigation.TabIndex="2"
+            Grid.Column="3"
             NumberDecimalDigits="4"
-            Value="{Binding YValue,
-                            Mode=TwoWay,
-                            UpdateSourceTrigger=PropertyChanged}" />
+            Value="{Binding YValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
         <!-- Z -->
         <TextBlock
@@ -58,12 +54,10 @@
             VerticalAlignment="Center"
             Text="Z" />
         <syncfusion:DoubleTextBox
-            Grid.Column="5"
             KeyboardNavigation.TabIndex="3"
+            Grid.Column="5"
             NumberDecimalDigits="4"
-            Value="{Binding ZValue,
-                            Mode=TwoWay,
-                            UpdateSourceTrigger=PropertyChanged}" />
+            Value="{Binding ZValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
         <!-- W -->
         <TextBlock
@@ -72,12 +66,10 @@
             VerticalAlignment="Center"
             Text="W" />
         <syncfusion:DoubleTextBox
-            Grid.Column="7"
             KeyboardNavigation.TabIndex="4"
+            Grid.Column="7"
             NumberDecimalDigits="4"
-            Value="{Binding WValue,
-                            Mode=TwoWay,
-                            UpdateSourceTrigger=PropertyChanged}" />
+            Value="{Binding WValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
     </Grid>
 </UserControl>

@@ -3,19 +3,19 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:adonisControls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
+    xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WolvenKit.Views.Templates"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:viewmodels="clr-namespace:WolvenKit.ViewModels"
-    mc:Ignorable="d"
     Title="Collection Editor"
     Width="960"
-    Height="640">
+    Height="640"
+    mc:Ignorable="d">
 
     <Window.Style>
-        <Style
-            BasedOn="{StaticResource {x:Type Window}}"
-            TargetType="Window" />
+        <Style BasedOn="{StaticResource {x:Type Window}}" TargetType="Window" />
     </Window.Style>
 
     <Window.DataContext>
@@ -39,16 +39,14 @@
         </Grid.RowDefinitions>
 
 
-        <Grid
-            Grid.Row="0"
-            Margin="0">
+        <Grid Grid.Row="0" Margin="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="300" MinWidth="20" />
                 <ColumnDefinition Width="5" />
                 <ColumnDefinition Width="*" MinWidth="20" />
             </Grid.ColumnDefinitions>
 
-            <!-- LeftSide -->
+            <!--  LeftSide  -->
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
@@ -58,9 +56,7 @@
                 <ListView
                     x:Name="ListView"
                     Grid.Row="0"
-                    ItemsSource="{Binding Elements,
-                                          Mode=TwoWay,
-                                          UpdateSourceTrigger=PropertyChanged}"
+                    ItemsSource="{Binding Elements, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     SelectedItem="{Binding SelectedElement}">
                     <ListView.View>
                         <GridView>
@@ -72,9 +68,7 @@
                     </ListView.View>
                 </ListView>
 
-                <StackPanel
-                    Grid.Row="1"
-                    Orientation="Horizontal">
+                <StackPanel Grid.Row="1" Orientation="Horizontal">
                     <Button
                         x:Name="AddElementButton"
                         Margin="6,6,6,6"
@@ -96,7 +90,7 @@
                 Width="5"
                 HorizontalAlignment="Stretch" />
 
-            <!-- RightSide -->
+            <!--  RightSide  -->
             <Grid Grid.Column="2">
 
                 <syncfusion:PropertyGrid
@@ -112,9 +106,9 @@
         </Grid>
 
 
-        <!-- Separator Grid.Row="1" Margin="10"/ -->
+        <!--  Separator Grid.Row="1" Margin="10"/  -->
 
-        <!-- Footer -->
+        <!--  Footer  -->
         <!--<Grid Grid.Row="2" Background="{DynamicResource BorderBrush}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>

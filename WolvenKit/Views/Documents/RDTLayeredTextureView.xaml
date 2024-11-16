@@ -6,11 +6,12 @@
     xmlns:documents="clr-namespace:WolvenKit.App.ViewModels.Documents;assembly=WolvenKit.App"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:others="clr-namespace:WolvenKit.Views.Others"
-    mc:Ignorable="d"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     d:DataContext="{d:DesignInstance Type={x:Type documents:RDTLayeredPreviewViewModel}}"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    Grid.IsSharedSizeScope="True">
+    Grid.IsSharedSizeScope="True"
+    mc:Ignorable="d">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -25,9 +26,7 @@
             ClipToBounds="True">
             <Border.ContextMenu>
                 <ContextMenu>
-                    <MenuItem
-                        Click="ResetZoomPan"
-                        Header="Reset Zoom/Pan" />
+                    <MenuItem Click="ResetZoomPan" Header="Reset Zoom/Pan" />
                 </ContextMenu>
             </Border.ContextMenu>
             <others:ImageCanvas x:Name="ImageCanvasItem" />
@@ -40,9 +39,7 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            Text="{Binding Name}" />
+                        <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
                         <Image
                             Width="150"
                             Height="150"

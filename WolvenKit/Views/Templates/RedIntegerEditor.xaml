@@ -6,14 +6,11 @@
     xmlns:local="clr-namespace:WolvenKit.Views.Editors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    mc:Ignorable="d"
     d:DesignHeight="100"
-    d:DesignWidth="400">
+    d:DesignWidth="400"
+    mc:Ignorable="d">
 
-    <Grid
-        Background="#252525"
-        DataContext="{Binding RelativeSource={RelativeSource FindAncestor,
-                                                             AncestorType={x:Type local:RedIntegerEditor}}}">
+    <Grid Background="#252525" DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedIntegerEditor}}}">
 
         <syncfusion:UpDown
             x:Name="UpDown"
@@ -22,12 +19,9 @@
             Background="Transparent"
             BorderThickness="0"
             IsScrollingOnCircle="False"
-            MaxValue="{Binding MaxValue,
-                               Mode=OneWay}"
-            MinValue="{Binding MinValue,
-                               Mode=OneWay}"
-            NumberDecimalDigits="{Binding NumberDecimalDigits,
-                                          Mode=OneWay}"
+            MaxValue="{Binding MaxValue, Mode=OneWay}"
+            MinValue="{Binding MinValue, Mode=OneWay}"
+            NumberDecimalDigits="{Binding NumberDecimalDigits, Mode=OneWay}"
             Value="{Binding Value}" />
 
     </Grid>

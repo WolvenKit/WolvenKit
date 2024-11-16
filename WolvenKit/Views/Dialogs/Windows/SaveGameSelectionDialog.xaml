@@ -5,16 +5,15 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    mc:Ignorable="d"
-    d:DesignHeight="600"
-    d:DesignWidth="800"
+    xmlns:syncfusion_xaml="clr-namespace:Syncfusion.UI.Xaml.Grid;assembly=Syncfusion.SfGrid.WPF"
     Title="Select Items"
     Width="800"
     Height="600"
-    Background="{StaticResource ContentBackgroundAlt3}">
-    <syncfusion:WizardControl
-        CancelButtonCancelsWindow="True"
-        FinishButtonClosesWindow="True">
+    d:DesignHeight="600"
+    d:DesignWidth="800"
+    Background="{StaticResource ContentBackgroundAlt3}"
+    mc:Ignorable="d">
+    <syncfusion:WizardControl CancelButtonCancelsWindow="True" FinishButtonClosesWindow="True">
         <syncfusion:WizardPage
             BackVisibility="Collapsed"
             CancelVisibility="Visible"
@@ -29,8 +28,8 @@
                 <syncfusion:SfDataGrid
                     x:Name="SaveDataGrid"
                     Margin="5"
-                    ColumnSizer="Star"
                     AllowEditing="False"
+                    ColumnSizer="Star"
                     AutoGenerateColumns="False"
                     FilterRowPosition="FixedTop"
                     GridLinesVisibility="None"
@@ -41,9 +40,9 @@
                     SelectionMode="Single">
                     <syncfusion:SfDataGrid.Columns>
                         <syncfusion:GridTemplateColumn
-                            Width="100"
                             HeaderText=" "
-                            MappingName="Screenshot">
+                            MappingName="Screenshot"
+                            Width="100">
                             <syncfusion:GridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Canvas>
@@ -53,7 +52,8 @@
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
                                             Opacity="1"
-                                            Source="{Binding Screenshot}" />
+                                            Source="{Binding Screenshot}">
+                                        </Image>
                                     </Canvas>
                                 </DataTemplate>
                             </syncfusion:GridTemplateColumn.CellTemplate>
@@ -78,15 +78,15 @@
                             <syncfusion:GridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock
-                                        Foreground="{StaticResource Border}"
-                                        Text="{Binding LastModified}" />
+                                        Text="{Binding LastModified}"
+                                        Foreground="{StaticResource Border}" />
                                 </DataTemplate>
                             </syncfusion:GridTemplateColumn.CellTemplate>
                         </syncfusion:GridTemplateColumn>
                     </syncfusion:SfDataGrid.Columns>
                 </syncfusion:SfDataGrid>
             </Grid>
-
+            
         </syncfusion:WizardPage>
     </syncfusion:WizardControl>
 </Window>

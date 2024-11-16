@@ -1,16 +1,18 @@
 <reactiveUi:ReactiveUserControl
     x:Class="WolvenKit.Views.Shell.StatusBarView"
-    x:TypeArguments="shell:StatusBarViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:shell="clr-namespace:WolvenKit.App.ViewModels.Shell;assembly=WolvenKit.App"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=shell:StatusBarViewModel}"
-    d:DesignWidth="800">
+    d:DesignWidth="800"
+    x:TypeArguments="shell:StatusBarViewModel"
+    mc:Ignorable="d">
 
     <Grid MouseLeftButtonDown="StatusBar_MouseLeftButtonDown">
 
@@ -19,21 +21,13 @@
             <RowDefinition Height="25" />
         </Grid.RowDefinitions>
 
-        <StatusBar
-            Grid.Row="1"
-            Background="{Binding BarColor}">
+        <StatusBar Grid.Row="1" Background="{Binding BarColor}">
 
-            <StatusBarItem
-                HorizontalAlignment="Left"
-                Background="Transparent">
-                <TextBlock
-                    Margin="6,0,0,4"
-                    Text="{Binding Status}" />
+            <StatusBarItem HorizontalAlignment="Left" Background="Transparent">
+                <TextBlock Margin="6,0,0,4" Text="{Binding Status}" />
             </StatusBarItem>
 
-            <StatusBarItem
-                HorizontalAlignment="Left"
-                Background="Transparent">
+            <StatusBarItem HorizontalAlignment="Left" Background="Transparent">
                 <syncfusion:SfLinearProgressBar
                     x:Name="StatusBarProgressBar"
                     Width="200"

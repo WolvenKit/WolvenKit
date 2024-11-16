@@ -1,6 +1,5 @@
 ﻿<reactiveUi:ReactiveUserControl
     x:Class="WolvenKit.Views.Documents.WScriptDocumentView"
-    x:TypeArguments="documents:WScriptDocumentViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
@@ -10,11 +9,12 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
-    mc:Ignorable="d"
+    x:Name="uc"
     d:DataContext="{d:DesignInstance Type=documents:WScriptDocumentViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    x:Name="uc">
+    x:TypeArguments="documents:WScriptDocumentViewModel"
+    mc:Ignorable="d">
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
 
         <Grid.Resources>
@@ -40,25 +40,22 @@
             <MenuItem
                 Height="25"
                 Padding="6,0,6,3"
-                Visibility="{Binding IsNormalScript,
-                                     Converter={StaticResource BooleanToVisibilityConverter}}"
                 Command="{Binding RunCommand}"
                 CommandParameter="{Binding Document.Text}"
-                Header="Run" />
+                Header="Run"
+                Visibility="{Binding IsNormalScript, Converter={StaticResource BooleanToVisibilityConverter}}" />
             <MenuItem
                 Height="25"
                 Padding="6,0,6,3"
-                Visibility="{Binding IsNormalScript,
-                                     Converter={StaticResource BooleanToVisibilityConverter}}"
                 Command="{Binding StopCommand}"
-                Header="Stop" />
+                Header="Stop"
+                Visibility="{Binding IsNormalScript, Converter={StaticResource BooleanToVisibilityConverter}}" />
             <MenuItem
                 Height="25"
                 Padding="6,0,6,3"
-                Visibility="{Binding IsUIScript,
-                                     Converter={StaticResource BooleanToVisibilityConverter}}"
                 Command="{Binding ReloadUICommand}"
-                Header="Reload UI" />
+                Header="Reload UI"
+                Visibility="{Binding IsUIScript, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </Menu>
 
         <avalonedit:TextEditor
@@ -66,9 +63,9 @@
             Grid.Row="1"
             Margin="0"
             Background="{StaticResource ContentBackground}"
-            Foreground="{StaticResource ContentForeground}"
-            FontSize="10pt"
             FontFamily="Consolas"
+            FontSize="10pt"
+            Foreground="{StaticResource ContentForeground}"
             ShowLineNumbers="True"
             SyntaxHighlighting="JavaScript DarkMode">
             <avalonedit:TextEditor.ContextMenu>
@@ -76,52 +73,52 @@
                     <MenuItem Command="Undo">
                         <MenuItem.Icon>
                             <iconPacks:PackIconMaterial
-                                Kind="Undo"
                                 Width="13"
                                 Height="13"
                                 HorizontalAlignment="Center"
-                                VerticalAlignment="Stretch" />
+                                VerticalAlignment="Stretch"
+                                Kind="Undo" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Command="Redo">
                         <MenuItem.Icon>
                             <iconPacks:PackIconMaterial
-                                Kind="Redo"
                                 Width="13"
                                 Height="13"
                                 HorizontalAlignment="Center"
-                                VerticalAlignment="Stretch" />
+                                VerticalAlignment="Stretch"
+                                Kind="Redo" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator />
                     <MenuItem Command="Cut">
                         <MenuItem.Icon>
                             <iconPacks:PackIconMaterial
-                                Kind="ContentCut"
                                 Width="13"
                                 Height="13"
                                 HorizontalAlignment="Center"
-                                VerticalAlignment="Stretch" />
+                                VerticalAlignment="Stretch"
+                                Kind="ContentCut" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Command="Copy">
                         <MenuItem.Icon>
                             <iconPacks:PackIconMaterial
-                                Kind="ContentCopy"
                                 Width="13"
                                 Height="13"
                                 HorizontalAlignment="Center"
-                                VerticalAlignment="Stretch" />
+                                VerticalAlignment="Stretch"
+                                Kind="ContentCopy" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Command="Paste">
                         <MenuItem.Icon>
                             <iconPacks:PackIconMaterial
-                                Kind="ContentPaste"
                                 Width="13"
                                 Height="13"
                                 HorizontalAlignment="Center"
-                                VerticalAlignment="Stretch" />
+                                VerticalAlignment="Stretch"
+                                Kind="ContentPaste" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </ContextMenu>

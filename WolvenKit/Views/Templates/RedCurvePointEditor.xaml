@@ -7,10 +7,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:tools="clr-namespace:WolvenKit.Views.Tools"
     xmlns:types="clr-namespace:WolvenKit.RED4.Types;assembly=WolvenKit.RED4"
-    mc:Ignorable="d"
+    x:Name="uc"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    x:Name="uc">
+    mc:Ignorable="d">
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedCurvePointEditor}}}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20" />
@@ -23,35 +23,25 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Text="X" />
-        <TextBox
-            Grid.Column="1"
-            Text="{Binding PointText}" />
+        <TextBox Grid.Column="1" Text="{Binding PointText}" />
         <TextBlock
             Grid.Column="2"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Text="Y" />
-        <ContentPresenter
-            Grid.Column="3"
-            Content="{Binding Value,
-                              Mode=TwoWay}">
+        <ContentPresenter Grid.Column="3" Content="{Binding Value, Mode=TwoWay}">
             <ContentPresenter.Resources>
                 <DataTemplate DataType="{x:Type types:CFloat}">
                     <local:RedFloatEditor RedNumber="{Binding ElementName=uc, Path=Value, Mode=TwoWay}" />
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type types:HDRColor}">
                     <tools:RedColorPicker
-                        DataContext="{Binding ElementName=uc,
-                                              Path=DataContext}"
-                        RedHDRColor="{Binding ElementName=uc,
-                                              Path=Value,
-                                              Mode=TwoWay}"
+                        DataContext="{Binding ElementName=uc, Path=DataContext}"
+                        RedHDRColor="{Binding ElementName=uc, Path=Value, Mode=TwoWay}"
                         ShowAlpha="False" />
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type types:Vector2}">
-                    <local:RedVector2Editor
-                        X="{Binding X}"
-                        Y="{Binding Y}" />
+                    <local:RedVector2Editor X="{Binding X}" Y="{Binding Y}" />
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type types:Vector3}">
                     <local:RedVector3Editor

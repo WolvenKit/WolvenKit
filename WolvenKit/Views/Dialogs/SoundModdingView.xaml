@@ -1,22 +1,23 @@
 <reactiveUi:ReactiveUserControl
     x:Class="WolvenKit.Views.Dialogs.SoundModdingView"
-    x:TypeArguments="dialogs:SoundModdingViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dialogs="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:local="clr-namespace:WolvenKit.Views.Dialogs"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    mc:Ignorable="d"
+    Width="800"
+    Height="600"
     d:DataContext="{d:DesignInstance Type=dialogs:SoundModdingViewModel}"
     d:DesignHeight="600"
     d:DesignWidth="800"
-    Width="800"
-    Height="600"
-    Background="{StaticResource ContentBackgroundAlt3}">
+    x:TypeArguments="dialogs:SoundModdingViewModel"
+    Background="{StaticResource ContentBackgroundAlt3}"
+    mc:Ignorable="d">
 
     <Grid Margin="20">
 
@@ -27,16 +28,16 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!-- Header -->
+        <!--  Header  -->
         <TextBlock
             Grid.Row="0"
             FontSize="24"
             Text="Sound Modding Tool" />
 
-        <!-- Separator -->
+        <!--  Separator  -->
         <Separator Grid.Row="1" />
 
-        <!-- Main grid -->
+        <!--  Main grid  -->
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
@@ -44,7 +45,7 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
-            <!-- Events grid -->
+            <!--  Events grid  -->
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -52,36 +53,33 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <!-- Filters -->
+                <!--  Filters  -->
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <Label
-                        VerticalAlignment="Center"
-                        Content="Filter events by tag: " />
+                    <Label VerticalAlignment="Center" Content="Filter events by tag: " />
                     <syncfusion:ComboBoxAdv
                         x:Name="ComboBoxTags"
                         Grid.Column="1"
                         AllowMultiSelect="true"
                         EnableToken="true"
                         IsEditable="true"
-                        ItemsSource="{Binding Tags,
-                                              Mode=OneWay}"
+                        ItemsSource="{Binding Tags, Mode=OneWay}"
                         SelectionChanged="ComboBoxAdv_SelectionChanged" />
                 </Grid>
 
-                <!-- DataGrid -->
+                <!--  DataGrid  -->
                 <syncfusion:SfDataGrid
                     x:Name="DataGridEvents"
                     Grid.Row="1"
                     Margin="5"
-                    ColumnSizer="Star"
                     AllowFiltering="True"
                     AllowResizingColumns="True"
                     AutoGenerateColumns="False"
+                    ColumnSizer="Star"
                     SelectionMode="Extended">
 
                     <syncfusion:SfDataGrid.Columns>
@@ -100,16 +98,16 @@
                                             Text="{Binding Name}" />
                                         <Button
                                             Grid.Column="1"
+                                            syncfusion:FocusManagerHelper.FocusedElement="True"
                                             Background="Transparent"
                                             BorderBrush="Transparent"
-                                            syncfusion:FocusManagerHelper.FocusedElement="True"
                                             Click="ButtonAdd_Click">
                                             <iconPacks:PackIconMaterial
-                                                Kind="Plus"
                                                 Width="17"
                                                 Height="13"
                                                 Padding="1"
-                                                Foreground="Green" />
+                                                Foreground="Green"
+                                                Kind="Plus" />
                                         </Button>
                                     </Grid>
                                 </DataTemplate>
@@ -119,25 +117,25 @@
 
                 </syncfusion:SfDataGrid>
 
-                <!-- Footer -->
+                <!--  Footer  -->
                 <StackPanel Grid.Row="2">
                     <Button
                         Height="25"
                         Margin="5,0,5,0"
-                        Foreground="Green"
                         Click="ButtonAddAll_Click"
-                        Content="Add selected events" />
+                        Content="Add selected events"
+                        Foreground="Green" />
                 </StackPanel>
             </Grid>
 
-            <!-- Separator -->
+            <!--  Separator  -->
             <syncfusion:SfGridSplitter
                 Grid.Column="1"
                 Width="auto"
                 HorizontalAlignment="Stretch"
                 ResizeBehavior="PreviousAndNext" />
 
-            <!-- Modded grid -->
+            <!--  Modded grid  -->
             <Grid Grid.Column="2">
 
                 <Grid.RowDefinitions>
@@ -146,15 +144,15 @@
                     <RowDefinition Height="165" />
                 </Grid.RowDefinitions>
 
-                <!-- Custom Events -->
+                <!--  Custom Events  -->
                 <syncfusion:SfDataGrid
                     x:Name="PluginList"
                     Grid.Row="0"
                     Margin="5"
-                    ColumnSizer="Star"
                     AllowFiltering="True"
                     AllowResizingColumns="True"
                     AutoGenerateColumns="False"
+                    ColumnSizer="Star"
                     ItemsSource="{Binding CustomEvents}"
                     SelectedItem="{Binding SelectedObject}"
                     SelectionMode="Extended">
@@ -175,14 +173,14 @@
                                             Text="{Binding Name}" />
                                         <Button
                                             Grid.Column="1"
+                                            syncfusion:FocusManagerHelper.FocusedElement="True"
                                             Background="Transparent"
                                             BorderBrush="Transparent"
-                                            syncfusion:FocusManagerHelper.FocusedElement="True"
                                             Click="ButtonDel_Click">
                                             <iconPacks:PackIconMaterial
-                                                Kind="Delete"
                                                 Height="12"
-                                                Foreground="#DF2935" />
+                                                Foreground="#DF2935"
+                                                Kind="Delete" />
                                         </Button>
                                     </Grid>
                                 </DataTemplate>
@@ -192,17 +190,15 @@
 
                 </syncfusion:SfDataGrid>
 
-                <!-- Separator -->
+                <!--  Separator  -->
                 <syncfusion:SfGridSplitter
                     Grid.Row="1"
                     Width="auto"
                     HorizontalAlignment="Stretch"
                     ResizeBehavior="PreviousAndNext" />
 
-                <!-- PropertyGrid -->
-                <Grid
-                    Grid.Row="2"
-                    Margin="5">
+                <!--  PropertyGrid  -->
+                <Grid Grid.Row="2" Margin="5">
                     <Grid.Resources>
                         <ResourceDictionary>
                             <ResourceDictionary.MergedDictionaries>
@@ -233,43 +229,41 @@
                         hc:InfoElement.Title="Type: "
                         hc:InfoElement.TitlePlacement="Left"
                         hc:InfoElement.TitleWidth="60"
-                        ItemsSource="{Binding Types,
-                                              Mode=OneWay}"
+                        ItemsSource="{Binding Types, Mode=OneWay}"
                         SelectedValue="{Binding SelectedObject.Type}" />
 
                     <hc:ComboBox
                         Grid.Row="2"
-                        IsEnabled="{Binding SelectedObject.IsEnabled}"
                         hc:InfoElement.Title="File: "
                         hc:InfoElement.TitlePlacement="Left"
                         hc:InfoElement.TitleWidth="60"
-                        ItemsSource="{Binding Files,
-                                              Mode=OneWay}"
+                        IsEnabled="{Binding SelectedObject.IsEnabled}"
+                        ItemsSource="{Binding Files, Mode=OneWay}"
                         SelectedValue="{Binding SelectedObject.File}" />
                     <hc:NumericUpDown
                         Grid.Row="3"
-                        Style="{StaticResource NumericUpDownExtend}"
-                        IsEnabled="{Binding SelectedObject.IsEnabled}"
                         hc:InfoElement.Title="Gain: "
                         hc:InfoElement.TitlePlacement="Left"
                         hc:InfoElement.TitleWidth="60"
                         DecimalPlaces="2"
+                        IsEnabled="{Binding SelectedObject.IsEnabled}"
+                        Style="{StaticResource NumericUpDownExtend}"
                         Value="{Binding SelectedObject.Gain}" />
                     <hc:NumericUpDown
                         Grid.Row="4"
-                        Style="{StaticResource NumericUpDownExtend}"
-                        IsEnabled="{Binding SelectedObject.IsEnabled}"
                         hc:InfoElement.Title="Pitch: "
                         hc:InfoElement.TitlePlacement="Left"
                         hc:InfoElement.TitleWidth="60"
                         DecimalPlaces="2"
+                        IsEnabled="{Binding SelectedObject.IsEnabled}"
+                        Style="{StaticResource NumericUpDownExtend}"
                         Value="{Binding SelectedObject.Pitch}" />
                 </Grid>
 
             </Grid>
         </Grid>
 
-        <!-- Footer -->
+        <!--  Footer  -->
         <Grid
             Grid.Row="3"
             Height="28"
