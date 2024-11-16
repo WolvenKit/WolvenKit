@@ -82,43 +82,49 @@
 
                 </ResourceDictionary>
 
-                <!--  Global Styles  -->
+                <!-- Global Styles -->
                 <ResourceDictionary>
-                    <Style x:Key="SidePanelContainerBorderStyle" TargetType="Border">
-                        <Setter Property="Margin" Value="0,16,20,-106" />
-                        <Setter Property="Padding" Value="16,10,6,16" />
+                    <Style
+                        x:Key="SidePanelContainerBorderStyle"
+                        TargetType="Border">
                         <Setter Property="Background" Value="Transparent" />
                         <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Gray.SemiTransparent}" />
                         <Setter Property="BorderThickness" Value="1" />
                         <Setter Property="DockPanel.Dock" Value="Right" />
+                        <Setter Property="Margin" Value="0,16,20,-106" />
+                        <Setter Property="Padding" Value="16,10,6,16" />
                     </Style>
 
-                    <!--  Menu icon  -->
-                    <Style x:Key="ContextMenuIconStyleCodicons" TargetType="{x:Type iconPacks:PackIconCodicons}">
-                        <Setter Property="Width" Value="13" />
+                    <!-- Menu icon -->
+                    <Style
+                        x:Key="ContextMenuIconStyleCodicons"
+                        TargetType="{x:Type iconPacks:PackIconCodicons}">
                         <Setter Property="Height" Value="13" />
-                        <Setter Property="Padding" Value="0,0,0,0" />
                         <Setter Property="HorizontalAlignment" Value="Center" />
+                        <Setter Property="Padding" Value="0,0,0,0" />
                         <Setter Property="VerticalAlignment" Value="Center" />
+                        <Setter Property="Width" Value="13" />
                     </Style>
 
-                    <!--  Menu icon  -->
-                    <Style x:Key="ContextMenuIconStyleMaterial" TargetType="{x:Type iconPacks:PackIconMaterial}">
-                        <Setter Property="Width" Value="13" />
+                    <!-- Menu icon -->
+                    <Style
+                        x:Key="ContextMenuIconStyleMaterial"
+                        TargetType="{x:Type iconPacks:PackIconMaterial}">
                         <Setter Property="Height" Value="13" />
-                        <Setter Property="Padding" Value="0,0,0,0" />
                         <Setter Property="HorizontalAlignment" Value="Center" />
+                        <Setter Property="Padding" Value="0,0,0,0" />
                         <Setter Property="VerticalAlignment" Value="Center" />
+                        <Setter Property="Width" Value="13" />
                     </Style>
                 </ResourceDictionary>
 
-                <!--  Converters  -->
+                <!-- Converters -->
                 <ResourceDictionary>
 
                     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
                 </ResourceDictionary>
 
-                <!--  Resource Dictionaries  -->
+                <!-- Resource Dictionaries -->
                 <ResourceDictionary Source="pack://application:,,,/WolvenKit;Component/Themes/App.Icons.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/WolvenKit;Component/Themes/App.Styles.xaml" />
 
@@ -130,7 +136,7 @@
                 <ResourceDictionary Source="pack://application:,,,/AdonisUI;component/ColorSchemes/Dark.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/AdonisUI.ClassicTheme;component/Resources.xaml" />
 
-                <!--  Theme setting  -->
+                <!-- Theme setting -->
                 <hc:ThemeResources RequestedTheme="Dark" />
                 <hc:Theme />
                 <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/WizardControl/WizardControl.xaml" />
@@ -166,10 +172,10 @@
                 x:Key="MessageBoxPrimaryButtonStyle"
                 BasedOn="{StaticResource {x:Type Button}}"
                 TargetType="{x:Type Button}">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Margin" Value="5,0" />
                 <Setter Property="MinWidth" Value="88" />
                 <Setter Property="Visibility" Value="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                <Setter Property="Margin" Value="5,0" />
-                <Setter Property="Background" Value="Transparent" />
             </Style>
 
             <DrawingBrush
@@ -200,15 +206,17 @@
                     <AdornedElementPlaceholder x:Name="textBox" />
                     <TextBlock
                         x:Name="ValidationText"
-                        MaxWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}"
+                        MaxWidth="{Binding ActualWidth,
+                                           RelativeSource={RelativeSource TemplatedParent}}"
                         Margin="150,0,60,0"
                         Padding="4"
                         Background="DarkRed"
                         FontSize="12"
-                        Text="{Binding ElementName=textBox, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"
+                        Visibility="Visible"
+                        Text="{Binding ElementName=textBox,
+                                       Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"
                         TextAlignment="Center"
-                        TextWrapping="Wrap"
-                        Visibility="Visible" />
+                        TextWrapping="Wrap" />
                 </StackPanel>
             </ControlTemplate>
         </ResourceDictionary>

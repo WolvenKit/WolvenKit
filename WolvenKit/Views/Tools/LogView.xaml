@@ -1,5 +1,6 @@
 <reactiveUi:ReactiveUserControl
     x:Class="WolvenKit.Views.Tools.LogView"
+    x:TypeArguments="tools:LogViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="clr-namespace:WolvenKit.Converters"
@@ -8,16 +9,13 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
-    xmlns:sfgrid="clr-namespace:Syncfusion.UI.Xaml.Grid;assembly=Syncfusion.SfGrid.WPF"
-    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:tools="clr-namespace:WolvenKit.App.ViewModels.Tools;assembly=WolvenKit.App"
     xmlns:tools1="clr-namespace:WolvenKit.Views.Tools"
-    x:Name="uc"
+    mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=tools:LogViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    x:TypeArguments="tools:LogViewModel"
-    mc:Ignorable="d">
+    x:Name="uc">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -58,11 +56,11 @@
                     x:Key="LogLevelButtonStyle"
                     BasedOn="{StaticResource WPFButtonStyle}"
                     TargetType="{x:Type Button}">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="0" />
                     <Setter Property="Focusable" Value="False" />
                     <Setter Property="Margin" Value="0,0,4,0" />
                     <Setter Property="Padding" Value="6" />
-                    <Setter Property="Background" Value="Transparent" />
-                    <Setter Property="BorderThickness" Value="0" />
 
                     <Style.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
@@ -80,48 +78,58 @@
                 Orientation="Horizontal">
                 <Button
                     x:Name="FilterErrorButton"
+                    Style="{StaticResource LogLevelButtonStyle}"
                     Command="{Binding ToggleFilterLevelCommand}"
                     CommandParameter="0"
-                    Style="{StaticResource LogLevelButtonStyle}"
                     ToolTip="Error">
-                    <iconPacks:PackIconMaterial Foreground="{StaticResource WolvenKitRed}" Kind="AlphaEBox" />
+                    <iconPacks:PackIconMaterial
+                        Kind="AlphaEBox"
+                        Foreground="{StaticResource WolvenKitRed}" />
                 </Button>
 
                 <Button
                     x:Name="FilterWarningButton"
+                    Style="{StaticResource LogLevelButtonStyle}"
                     Command="{Binding ToggleFilterLevelCommand}"
                     CommandParameter="1"
-                    Style="{StaticResource LogLevelButtonStyle}"
                     ToolTip="Warning">
-                    <iconPacks:PackIconMaterial Foreground="{StaticResource WolvenKitYellow}" Kind="AlphaWBox" />
+                    <iconPacks:PackIconMaterial
+                        Kind="AlphaWBox"
+                        Foreground="{StaticResource WolvenKitYellow}" />
                 </Button>
 
                 <Button
                     x:Name="FilterSuccessButton"
+                    Style="{StaticResource LogLevelButtonStyle}"
                     Command="{Binding ToggleFilterLevelCommand}"
                     CommandParameter="2"
-                    Style="{StaticResource LogLevelButtonStyle}"
                     ToolTip="Success">
-                    <iconPacks:PackIconMaterial Foreground="{StaticResource WolvenKitGreen}" Kind="AlphaSBox" />
+                    <iconPacks:PackIconMaterial
+                        Kind="AlphaSBox"
+                        Foreground="{StaticResource WolvenKitGreen}" />
                 </Button>
 
                 <Button
                     x:Name="FilterInfoButton"
+                    Style="{StaticResource LogLevelButtonStyle}"
                     Command="{Binding ToggleFilterLevelCommand}"
                     CommandParameter="3"
-                    Style="{StaticResource LogLevelButtonStyle}"
                     ToolTip="Normal / Important">
-                    <iconPacks:PackIconMaterial Foreground="White" Kind="AlphaIBox" />
+                    <iconPacks:PackIconMaterial
+                        Kind="AlphaIBox"
+                        Foreground="White" />
                 </Button>
 
                 <Button
                     x:Name="FilterDebugButton"
                     Margin="0"
+                    Style="{StaticResource LogLevelButtonStyle}"
                     Command="{Binding ToggleFilterLevelCommand}"
                     CommandParameter="4"
-                    Style="{StaticResource LogLevelButtonStyle}"
                     ToolTip="Debug">
-                    <iconPacks:PackIconMaterial Foreground="{StaticResource WolvenKitPurple}" Kind="AlphaDBox" />
+                    <iconPacks:PackIconMaterial
+                        Kind="AlphaDBox"
+                        Foreground="{StaticResource WolvenKitPurple}" />
                 </Button>
             </StackPanel>
 
@@ -143,7 +151,9 @@
                     VerticalAlignment="Top"
                     Command="{Binding UpdateScriptsCommand}"
                     ToolTip="Update scripts">
-                    <iconPacks:PackIconMaterial Foreground="White" Kind="Refresh" />
+                    <iconPacks:PackIconMaterial
+                        Kind="Refresh"
+                        Foreground="White" />
                 </Button>
 
                 <ComboBox
@@ -157,13 +167,20 @@
                     ToolTip="Select script">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Vertical" ToolTip="{Binding HoverInfo}">
+                            <StackPanel
+                                Orientation="Vertical"
+                                ToolTip="{Binding HoverInfo}">
                                 <TextBlock Text="{Binding Name}" />
-                                <TextBlock x:Name="Info" Text="{Binding SelectInfo}" />
+                                <TextBlock
+                                    x:Name="Info"
+                                    Text="{Binding SelectInfo}" />
                             </StackPanel>
 
                             <DataTemplate.Triggers>
-                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ComboBoxItem}}" Value="{x:Null}">
+                                <DataTrigger
+                                    Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                     AncestorType=ComboBoxItem}}"
+                                    Value="{x:Null}">
                                     <Setter TargetName="Info" Property="Visibility" Value="Collapsed" />
                                 </DataTrigger>
                             </DataTemplate.Triggers>
@@ -179,7 +196,9 @@
                                         BorderBrush="White"
                                         BorderThickness="0,0,0,1">
                                         <StackPanel Orientation="Vertical">
-                                            <TextBlock FontSize="14" Text="{Binding Name}" />
+                                            <TextBlock
+                                                FontSize="14"
+                                                Text="{Binding Name}" />
                                         </StackPanel>
                                     </Border>
                                 </DataTemplate>
@@ -193,11 +212,14 @@
                     Grid.Column="2"
                     Margin="0,0,4,0"
                     VerticalAlignment="Top"
-                    Command="{Binding RunScriptCommand}"
+                    Visibility="{Binding IsRunningScript,
+                                         Converter={StaticResource InvertBooleanVisibilityConverter}}"
                     IsEnabled="{Binding CanRunScript}"
-                    ToolTip="Reload and run"
-                    Visibility="{Binding IsRunningScript, Converter={StaticResource InvertBooleanVisibilityConverter}}">
-                    <iconPacks:PackIconMaterial Foreground="Green" Kind="Play" />
+                    Command="{Binding RunScriptCommand}"
+                    ToolTip="Reload and run">
+                    <iconPacks:PackIconMaterial
+                        Kind="Play"
+                        Foreground="Green" />
                 </Button>
 
                 <Button
@@ -205,10 +227,13 @@
                     Grid.Column="3"
                     Margin="0,0,4,0"
                     VerticalAlignment="Top"
+                    Visibility="{Binding IsRunningScript,
+                                         Converter={StaticResource BooleanVisibilityConverter}}"
                     Command="{Binding StopScriptCommand}"
-                    ToolTip="Stop running script"
-                    Visibility="{Binding IsRunningScript, Converter={StaticResource BooleanVisibilityConverter}}">
-                    <iconPacks:PackIconMaterial Foreground="{StaticResource WolvenKitRed}" Kind="Stop" />
+                    ToolTip="Stop running script">
+                    <iconPacks:PackIconMaterial
+                        Kind="Stop"
+                        Foreground="{StaticResource WolvenKitRed}" />
                 </Button>
             </Grid>
         </Grid>
@@ -216,7 +241,8 @@
         <ItemsControl
             Grid.Row="1"
             Grid.Column="0"
-            ItemsSource="{Binding ElementName=uc, Path=FilteredLogEntries}"
+            ItemsSource="{Binding ElementName=uc,
+                                  Path=FilteredLogEntries}"
             KeyUp="LogView_OnKeyUp"
             ScrollViewer.CanContentScroll="True"
             VirtualizingPanel.ScrollUnit="Pixel"
@@ -253,9 +279,9 @@
                             VerticalAlignment="Center"
                             Background="Transparent"
                             BorderThickness="0"
-                            FontFamily="Consolas"
-                            FontSize="12"
                             Foreground="{Binding TextColor}"
+                            FontSize="12"
+                            FontFamily="Consolas"
                             IsReadOnly="True"
                             Text="{Binding Path=Message}"
                             TextWrapping="Wrap" />
@@ -263,7 +289,8 @@
                         <TextBlock
                             Grid.Column="1"
                             Padding="0,0,5,0"
-                            Visibility="{Binding Uri, Converter={StaticResource NullVisibilityConverter}}">
+                            Visibility="{Binding Uri,
+                                                 Converter={StaticResource NullVisibilityConverter}}">
                             <Hyperlink
                                 NavigateUri="{Binding Uri}"
                                 RequestNavigate="Hyperlink_OnRequestNavigate"
@@ -277,14 +304,14 @@
                             Padding="0,0,12,0"
                             VerticalAlignment="Bottom"
                             BorderThickness="1"
-                            Click="CopyLine_OnClick"
                             Style="{StaticResource MahApps.Styles.Button.Chromeless}"
+                            Click="CopyLine_OnClick"
                             Tag="{Binding Message}"
                             ToolTip="Copy line">
                             <iconPacks:Octicons
+                                Kind="Paperclip"
                                 Width="12"
-                                Height="12"
-                                Kind="Paperclip" />
+                                Height="12" />
                         </Button>
                     </Grid>
                 </DataTemplate>
@@ -318,7 +345,9 @@
                 IsChecked="True"
                 Unchecked="AutoScroll_OnUnchecked">
                 <ToggleButton.Style>
-                    <Style BasedOn="{StaticResource MahApps.Styles.Button.Chromeless}" TargetType="{x:Type ToggleButton}">
+                    <Style
+                        BasedOn="{StaticResource MahApps.Styles.Button.Chromeless}"
+                        TargetType="{x:Type ToggleButton}">
                         <Setter Property="Foreground" Value="Red" />
                         <Setter Property="ToolTip" Value="Disable autoscroll" />
                         <Style.Triggers>
@@ -330,45 +359,45 @@
                     </Style>
                 </ToggleButton.Style>
                 <iconPacks:Unicons
+                    Kind="RepeatLine"
                     Width="15"
-                    Height="15"
-                    Kind="RepeatLine" />
+                    Height="15" />
             </ToggleButton>
 
             <Button
                 Padding="5"
                 BorderThickness="1"
-                Click="ScrollToBottom_OnClick"
                 Style="{StaticResource MahApps.Styles.Button.Chromeless}"
+                Click="ScrollToBottom_OnClick"
                 ToolTip="Scroll to bottom">
                 <iconPacks:MaterialDesign
+                    Kind="VerticalAlignBottom"
                     Width="15"
-                    Height="15"
-                    Kind="VerticalAlignBottom" />
+                    Height="15" />
             </Button>
 
             <Button
                 Padding="5"
                 BorderThickness="1"
-                Click="OpenLogFolder_Click"
                 Style="{StaticResource MahApps.Styles.Button.Chromeless}"
+                Click="OpenLogFolder_Click"
                 ToolTip="Open log folder">
                 <iconPacks:PackIconCodicons
+                    Kind="FolderOpened"
                     Width="15"
-                    Height="15"
-                    Kind="FolderOpened" />
+                    Height="15" />
             </Button>
 
             <Button
                 Padding="5"
                 BorderThickness="1"
-                Click="ClearAll_Click"
                 Style="{StaticResource MahApps.Styles.Button.Chromeless}"
+                Click="ClearAll_Click"
                 ToolTip="Clear log">
                 <iconPacks:PackIconCodicons
+                    Kind="ClearAll"
                     Width="15"
-                    Height="15"
-                    Kind="ClearAll" />
+                    Height="15" />
             </Button>
 
 

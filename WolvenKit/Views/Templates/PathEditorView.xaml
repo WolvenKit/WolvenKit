@@ -6,9 +6,9 @@
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
     d:DesignHeight="50"
-    d:DesignWidth="200"
-    mc:Ignorable="d">
+    d:DesignWidth="200">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -24,13 +24,13 @@
             Click="ButtonBase_OnClick">
             <iconPacks:PackIconCodicons
                 Grid.Row="0"
+                Kind="FolderOpened"
                 Width="15"
                 Height="15"
                 Margin="0,0,0,0"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                Kind="FolderOpened"
                 Spin="False"
                 SpinAutoReverse="False" />
         </Button>
@@ -40,13 +40,18 @@
             Margin="37,-7,0,3"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Center"
-            hc:InfoElement.Necessary="True"
             Style="{StaticResource TextBoxExtendCustom}"
-            Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnNotifyDataErrors=True}"
+            hc:InfoElement.Necessary="True"
+            Text="{Binding Text,
+                           Mode=TwoWay,
+                           UpdateSourceTrigger=PropertyChanged,
+                           ValidatesOnDataErrors=True,
+                           ValidatesOnNotifyDataErrors=True}"
             Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" />
         <Popup
             x:Name="notification"
-            Width="{Binding ActualWidth, ElementName=filePathTextBox}"
+            Width="{Binding ActualWidth,
+                            ElementName=filePathTextBox}"
             Placement="Bottom"
             PlacementTarget="{Binding ElementName=filePathTextBox}"
             StaysOpen="False">
