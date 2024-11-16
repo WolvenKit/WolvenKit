@@ -37,13 +37,14 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.ClearScript.V8" />
     <PackageReference Include="Microsoft.ClearScript.V8.Native.win-x64" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
     <PackageReference Include="Microsoft.Extensions.Options" />
     <PackageReference Include="NAudio.Lame" />
     <PackageReference Include="NAudio.Vorbis" />
     <PackageReference Include="SharpGLTF.Toolkit" />
     <PackageReference Include="YamlDotNet" />
     <PackageReference Include="NAudio" />
-
+    <PackageReference Include="System.Net.Http" />
   </ItemGroup>
 
   <ItemGroup>
