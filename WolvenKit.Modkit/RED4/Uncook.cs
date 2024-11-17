@@ -954,11 +954,11 @@ namespace WolvenKit.Modkit.RED4
 
             if (meshExportArgs.isGLBinary)
             {
-                model.SaveGLB(outfile.FullName, new WriteSettings(vmode));
+                model.SaveGLB($"{outfile.FullName}.glb", new WriteSettings(vmode));
             }
             else
             {
-                model.SaveGLTF(outfile.FullName, new WriteSettings(vmode));
+                model.SaveGLTF($"{outfile.FullName}.gltf", new WriteSettings(vmode));
             }
 
             rigStream.Dispose();
@@ -1023,11 +1023,11 @@ namespace WolvenKit.Modkit.RED4
 
             if (meshExportArgs.isGLBinary)
             {
-                model.SaveGLB(outfile.FullName, new WriteSettings(vmode));
+                model.SaveGLB($"{outfile.FullName}.glb", new WriteSettings(vmode));
             }
             else
             {
-                model.SaveGLTF(outfile.FullName, new WriteSettings(vmode));
+                model.SaveGLTF($"{outfile.FullName}.gltf", new WriteSettings(vmode));
             }
 
             return true;
@@ -1216,15 +1216,13 @@ namespace WolvenKit.Modkit.RED4
 
             void SaveMeshes(FileInfo file, ModelRoot modelsAndRigs)
             {
-                var typeExtPreservingFilename = $"{file.FullName}.thisextwillberemoved";
-
                 if (meshExportArgs.isGLBinary)
                 {
-                    modelsAndRigs.SaveGLB(typeExtPreservingFilename, new WriteSettings(validationMode));
+                    modelsAndRigs.SaveGLB($"{file.FullName}.glb", new WriteSettings(validationMode));
                 }
                 else
                 {
-                    modelsAndRigs.SaveGLTF(typeExtPreservingFilename, new WriteSettings(validationMode));
+                    modelsAndRigs.SaveGLTF($"{file.FullName}.gltf", new WriteSettings(validationMode));
                 }
             }
         }

@@ -266,7 +266,7 @@ namespace WolvenKit.Modkit.RED4
                         }
                     }
 
-                    root.SaveGLB(outfile.FullName);
+                    root.SaveGLB($"{outfile.FullName}.glb");
                     return true;
                 }
             }

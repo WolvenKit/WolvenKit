@@ -58,11 +58,11 @@ namespace WolvenKit.Modkit.RED4.Tools
 
             if (meshExportArgs.isGLBinary)
             {
-                model.SaveGLB(outfile.FullName, new WriteSettings(vMode));
+                model.SaveGLB($"{outfile.FullName}.glb", new WriteSettings(vMode));
             }
             else
             {
-                model.SaveGLTF(outfile.FullName, new WriteSettings(vMode));
+                model.SaveGLTF($"{outfile.FullName}.gltf", new WriteSettings(vMode));
             }
 
             return true;
@@ -171,11 +171,11 @@ namespace WolvenKit.Modkit.RED4.Tools
             }
             if (isGLBinary)
             {
-                model.SaveGLB(outfile.FullName, new WriteSettings(vMode));
+                model.SaveGLB($"{outfile.FullName}.glb", new WriteSettings(vMode));
             }
             else
             {
-                model.SaveGLTF(outfile.FullName, new WriteSettings(vMode));
+                model.SaveGLTF($"{outfile.FullName}.gltf", new WriteSettings(vMode));
             }
 
             return true;
@@ -218,11 +218,11 @@ namespace WolvenKit.Modkit.RED4.Tools
 
             if (isGLBinary)
             {
-                model.SaveGLB(outfile.FullName, new WriteSettings(vMode));
+                model.SaveGLB($"{outfile.FullName}.glb", new WriteSettings(vMode));
             }
             else
             {
-                model.SaveGLTF(outfile.FullName, new WriteSettings(vMode));
+                model.SaveGLTF($"{outfile.FullName}.gltf", new WriteSettings(vMode));
             }
 
             return true;
