@@ -23,6 +23,7 @@
   <PropertyGroup>
     <InterceptorsPreviewNamespaces>
       $(InterceptorsPreviewNamespaces);Microsoft.Extensions.Configuration.Binder.SourceGeneration</InterceptorsPreviewNamespaces>
+    <WindowsSdkPackageVersion>10.0.17763.41</WindowsSdkPackageVersion>
   </PropertyGroup>
 
   <PropertyGroup>
