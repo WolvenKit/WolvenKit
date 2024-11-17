@@ -236,30 +236,6 @@ public partial class ChunkViewModel
             case scnlocLocStoreEmbeddedVariantPayloadEntry locPayloadEmbedded:
                 Descriptor = locPayloadEmbedded.VariantId.Ruid.ToString();
                 break;
-            case CInt8 int8:
-                Descriptor = int8.ToString();
-                break;
-            case CInt16 int16:
-                Descriptor = int16.ToString();
-                break;
-            case CInt32 int32:
-                Descriptor = int32.ToString();
-                break;
-            case CInt64 int64:
-                Descriptor = int64.ToString();
-                break;
-            case CUInt8 int8:
-                Descriptor = int8.ToString();
-                break;
-            case CUInt16 int16:
-                Descriptor = int16.ToString();
-                break;
-            case CUInt32 int32:
-                Descriptor = int32.ToString();
-                break;
-            case CUInt64 int64:
-                Descriptor = int64.ToString();
-                break;
             case scnPropDef propDef:
             {
                 Descriptor = $"{propDef.PropName}";
