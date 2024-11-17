@@ -309,7 +309,7 @@ namespace WolvenKit.Modkit.RED4
                 // Right now it's not possible to add an empty array to a JsonContent.
                 // Can work around that elsewhere but... just don't implement your own
                 // JSON parser, kids.
-                gltfAnim.Extras = SharpGLTF.IO.JsonContent.Parse(JsonSerializer.Serialize(animExtras, SerializationOptions()));
+                gltfAnim.Extras = System.Text.Json.Nodes.JsonNode.Parse(JsonSerializer.Serialize(animExtras, SerializationOptions()));
             }
 
             if (stats.RootMotionConflicts > 0)
@@ -415,7 +415,7 @@ namespace WolvenKit.Modkit.RED4
 
                 // Prep and metadata
 
-                if (incomingAnim.Extras.Content is null)
+                if (incomingAnim.Extras is null)
                 {
                     throw new InvalidOperationException($"{gltfFileName}: animation `{incomingAnim.Name}` has no extra data, can't import!");
                 }
