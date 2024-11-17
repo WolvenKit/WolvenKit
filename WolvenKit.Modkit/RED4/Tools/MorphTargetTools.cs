@@ -90,11 +90,11 @@ namespace WolvenKit.Modkit.RED4
 
             if (isGLBinary)
             {
-                model.SaveGLB(outfile.FullName, new WriteSettings(vMode));
+                model.SaveGLB($"{outfile.FullName}.glb", new WriteSettings(vMode));
             }
             else
             {
-                model.SaveGLTF(outfile.FullName, new WriteSettings(vMode));
+                model.SaveGLTF($"{outfile.FullName}.gltf", new WriteSettings(vMode));
             }
 
             if (textureStreams.Count == 0)

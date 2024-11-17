@@ -18,9 +18,6 @@ namespace WolvenKit.Views.Dialogs
 
             this.WhenActivated(disposables =>
             {
-                _syncModName = true;
-                _autoUpdate = false;
-
                 this.Bind(ViewModel,
                         vm => vm.Author,
                         v => v.AuthorTextBox.Text).DisposeWith(disposables);
@@ -42,6 +39,14 @@ namespace WolvenKit.Views.Dialogs
                 this.BindCommand(ViewModel, 
                         x => x.CancelCommand, 
                         x => x.CancelButton).DisposeWith(disposables);
+
+                if (ViewModel is null)
+                {
+                    return;
+                }
+
+                _syncModName = true;
+                _autoUpdate = false;
 
                 ViewModel.ValidateProjectName();
                 ViewModel.ValidateProjectPath();
