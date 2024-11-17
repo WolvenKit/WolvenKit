@@ -4,68 +4,79 @@
     xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns:hc="https://handyorg.github.io/handycontrol">
 
-    <ControlTemplate x:Key="TextBoxExtendLeftTemplateCustom" TargetType="hc:TextBox">
+    <ControlTemplate
+        x:Key="TextBoxExtendLeftTemplateCustom"
+        TargetType="hc:TextBox">
         <hc:Badge
-         x:Name="badge"
-         Margin="0,10,10,0"
-         Background="Red"
-         DockPanel.Dock="Right"
-         Status="Processing"
-         TextElement.Foreground="{DynamicResource DangerBrush}"
-         Visibility="{Binding Path=(hc:InfoElement.Necessary), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <Grid Height="{Binding Path=(hc:InfoElement.ContentHeight), RelativeSource={RelativeSource TemplatedParent}}" MinHeight="{Binding Path=(hc:InfoElement.MinContentHeight), RelativeSource={RelativeSource TemplatedParent}}">
+            x:Name="badge"
+            Margin="0,10,10,0"
+            Background="Red"
+            Visibility="{Binding Path=(hc:InfoElement.Necessary),
+                                 RelativeSource={RelativeSource TemplatedParent},
+                                 Converter={StaticResource BooleanToVisibilityConverter}}"
+            DockPanel.Dock="Right"
+            Status="Processing"
+            TextElement.Foreground="{DynamicResource DangerBrush}">
+            <Grid
+                Height="{Binding Path=(hc:InfoElement.ContentHeight),
+                                 RelativeSource={RelativeSource TemplatedParent}}"
+                MinHeight="{Binding Path=(hc:InfoElement.MinContentHeight),
+                                    RelativeSource={RelativeSource TemplatedParent}}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="{Binding Path=(hc:InfoElement.TitleWidth), RelativeSource={RelativeSource TemplatedParent}}" />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <DockPanel
-                 Margin="0,7,6,7"
-                 VerticalAlignment="{Binding Path=(hc:TitleElement.VerticalAlignment), RelativeSource={RelativeSource TemplatedParent}}"
-                 LastChildFill="True"
-                 Visibility="{Binding Path=(hc:InfoElement.Title), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource String2VisibilityConverter}}">
+                    Margin="0,7,6,7"
+                    VerticalAlignment="{Binding Path=(hc:TitleElement.VerticalAlignment),
+                                                RelativeSource={RelativeSource TemplatedParent}}"
+                    Visibility="{Binding Path=(hc:InfoElement.Title),
+                                         RelativeSource={RelativeSource TemplatedParent},
+                                         Converter={StaticResource String2VisibilityConverter}}"
+                    LastChildFill="True">
                     <TextBlock
-                     hc:TextBlockAttach.AutoTooltip="True"
-                     Text="{Binding Path=(hc:InfoElement.Title), RelativeSource={RelativeSource TemplatedParent}}"
-                     TextTrimming="CharacterEllipsis"
-                     TextWrapping="NoWrap" />
+                        hc:TextBlockAttach.AutoTooltip="True"
+                        Text="{Binding Path=(hc:InfoElement.Title),
+                                       RelativeSource={RelativeSource TemplatedParent}}"
+                        TextTrimming="CharacterEllipsis"
+                        TextWrapping="NoWrap" />
                 </DockPanel>
                 <Border
-                 x:Name="border"
-                 Grid.Column="1"
-                 Background="{TemplateBinding Background}"
-                 BorderBrush="{TemplateBinding BorderBrush}"
-                 BorderThickness="{TemplateBinding BorderThickness}"
-                 CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}"
-                 SnapsToDevicePixels="True" />
+                    x:Name="border"
+                    Grid.Column="1"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius),
+                                           RelativeSource={RelativeSource TemplatedParent}}"
+                    SnapsToDevicePixels="True" />
                 <TextBlock
-                 x:Name="Placeholder"
-                 Grid.Column="1"
-                 Margin="{TemplateBinding Padding}"
-                 Padding="1"
-                 HorizontalAlignment="Stretch"
-                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                 Style="{StaticResource TextBlockDefaultThiLight}"
-                 Text="{Binding Path=(hc:InfoElement.Placeholder), RelativeSource={RelativeSource TemplatedParent}}"
-                 Visibility="{TemplateBinding Text,
-                                              Converter={StaticResource String2VisibilityReConverter}}" />
+                    x:Name="Placeholder"
+                    Grid.Column="1"
+                    Margin="{TemplateBinding Padding}"
+                    Padding="1"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                    Style="{StaticResource TextBlockDefaultThiLight}"
+                    Visibility="{TemplateBinding Text,
+                                                 Converter={StaticResource String2VisibilityReConverter}}"
+                    Text="{Binding Path=(hc:InfoElement.Placeholder),
+                                   RelativeSource={RelativeSource TemplatedParent}}" />
                 <ScrollViewer
-                 x:Name="PART_ContentHost"
-                 Grid.Column="1"
-                 Margin="-1,1"
-                 Padding="{TemplateBinding Padding}"
-                 Focusable="false"
-                 HorizontalScrollBarVisibility="Hidden"
-                 VerticalScrollBarVisibility="Hidden" />
+                    x:Name="PART_ContentHost"
+                    Grid.Column="1"
+                    Margin="-1,1"
+                    Padding="{TemplateBinding Padding}"
+                    Focusable="false"
+                    HorizontalScrollBarVisibility="Hidden"
+                    VerticalScrollBarVisibility="Hidden" />
             </Grid>
         </hc:Badge>
         <ControlTemplate.Triggers>
-            <Trigger Property="IsEnabled" Value="True">
-                <Setter Property="IsError" Value="True" />
-            </Trigger>
             <Trigger Property="IsEnabled" Value="false">
-                <Setter TargetName="border" Property="Opacity" Value="0.4" />
                 <Setter TargetName="PART_ContentHost" Property="Opacity" Value="0.4" />
                 <Setter TargetName="Placeholder" Property="Opacity" Value="0.4" />
+                <Setter TargetName="border" Property="Opacity" Value="0.4" />
             </Trigger>
             <Trigger SourceName="PART_ContentHost" Property="IsMouseOver" Value="true">
                 <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource SecondaryBorderBrush}" />
@@ -73,31 +84,23 @@
             <Trigger Property="IsFocused" Value="true">
                 <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource PrimaryBrush}" />
             </Trigger>
-            <Trigger Property="IsError" Value="True">
-                <Setter TargetName="badge" Property="Background" Value="Red" />
-                <Setter TargetName="badge" Property="Status" Value="Processing" />
-            </Trigger>
-            <Trigger Property="IsError" Value="False">
-                <Setter TargetName="badge" Property="Background" Value="Green" />
-                <Setter TargetName="badge" Property="Status" Value="Dot" />
-            </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
     <Style
-     x:Key="TextBoxExtendBaseStyleCustom"
-     BasedOn="{StaticResource TextBoxBaseStyle}"
-     TargetType="hc:TextBox">
+        x:Key="TextBoxExtendBaseStyleCustom"
+        BasedOn="{StaticResource TextBoxBaseStyle}"
+        TargetType="hc:TextBox">
+        <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+        <Setter Property="Height" Value="Auto" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="SelectionBrush" Value="{DynamicResource MahApps.Brushes.Accent}" />
+        <Setter Property="Template" Value="{StaticResource TextBoxExtendLeftTemplateCustom}" />
+        <Setter Property="Width" Value="Auto" />
         <Setter Property="hc:InfoElement.ContentHeight" Value="{x:Static system:Double.NaN}" />
         <Setter Property="hc:InfoElement.MinContentHeight" Value="{StaticResource DefaultControlHeight}" />
-        <Setter Property="Height" Value="Auto" />
-        <Setter Property="Width" Value="Auto" />
-        <Setter Property="HorizontalAlignment" Value="Stretch" />
-        <Setter Property="Template" Value="{StaticResource TextBoxExtendLeftTemplateCustom}" />
-        <Setter Property="Foreground" Value="{DynamicResource MahApps.Brushes.ThemeForeground}" />
-        <Setter Property="SelectionBrush" Value="{DynamicResource MahApps.Brushes.Accent}" />
     </Style>
     <Style
-     x:Key="TextBoxExtendCustom"
-     BasedOn="{StaticResource TextBoxExtendBaseStyleCustom}"
-     TargetType="hc:TextBox" />
+        x:Key="TextBoxExtendCustom"
+        BasedOn="{StaticResource TextBoxExtendBaseStyleCustom}"
+        TargetType="hc:TextBox" />
 </ResourceDictionary>

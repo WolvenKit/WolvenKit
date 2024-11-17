@@ -1,18 +1,26 @@
 <reactiveUi:ReactiveUserControl
     x:Class="WolvenKit.Views.HomePage.Pages.ModsView"
+    x:TypeArguments="homepage:ModsViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:hc="https://handyorg.github.io/handycontrol"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:homepage="clr-namespace:WolvenKit.App.ViewModels.HomePage.Pages;assembly=WolvenKit.App"
     xmlns:converters="clr-namespace:WolvenKit.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:homepage="clr-namespace:WolvenKit.App.ViewModels.HomePage.Pages;assembly=WolvenKit.App"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    d:DataContext="{d:DesignInstance Type=homepage:ModsViewModel}"
-    x:TypeArguments="homepage:ModsViewModel"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=homepage:ModsViewModel}">
+
+    <!-- Resources -->
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <shared:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
 
     <Grid>
         <Grid.Resources>
@@ -25,7 +33,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!--  Header  -->
+        <!-- Header -->
         <StackPanel
             Height="85"
             Margin="25,0,0,0"
@@ -33,9 +41,11 @@
             VerticalAlignment="Top"
             Orientation="Horizontal">
             <StackPanel.Resources>
-                <Style BasedOn="{StaticResource ButtonDefault}" TargetType="{x:Type Button}">
-                    <Setter Property="BorderThickness" Value="0" />
+                <Style
+                    BasedOn="{StaticResource ButtonDefault}"
+                    TargetType="{x:Type Button}">
                     <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt}" />
+                    <Setter Property="BorderThickness" Value="0" />
                     <Setter Property="Padding" Value="15,0" />
                 </Style>
             </StackPanel.Resources>
@@ -53,7 +63,7 @@
                 Orientation="Vertical" />
         </StackPanel>
 
-        <!--  Main grid  -->
+        <!-- Main grid -->
         <Grid Grid.Row="2">
 
             <Grid.RowDefinitions>
@@ -61,8 +71,10 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <!--  Toolbar  -->
-            <Grid Grid.Row="0" Margin="25,0,25,0">
+            <!-- Toolbar -->
+            <Grid
+                Grid.Row="0"
+                Margin="25,0,25,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
@@ -85,15 +97,22 @@
                     <syncfusion:RibbonButton.IconTemplate>
                         <DataTemplate>
                             <iconPacks:PackIconCodicons
+                                Kind="Refresh"
                                 Width="auto"
                                 Height="auto"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Stretch"
-                                Foreground="{StaticResource WolvenKitPurple}"
-                                Kind="Refresh" />
+                                Foreground="{StaticResource WolvenKitPurple}" />
                         </DataTemplate>
                     </syncfusion:RibbonButton.IconTemplate>
                 </syncfusion:RibbonButton>
+
+                <syncfusion:RibbonCheckBox
+                    x:Name="CheckBoxForce"
+                    Grid.Column="1"
+                    Margin="5"
+                    Content="Force Redeploy"
+                    IsChecked="{Binding IsForceEnabled}" />
 
                 <syncfusion:RibbonButton
                     x:Name="ButtonDeploy"
@@ -107,12 +126,12 @@
                     <syncfusion:RibbonButton.IconTemplate>
                         <DataTemplate>
                             <iconPacks:PackIconCodicons
+                                Kind="DesktopDownload"
                                 Width="auto"
                                 Height="auto"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Stretch"
-                                Foreground="{StaticResource WolvenKitRed}"
-                                Kind="DesktopDownload" />
+                                Foreground="{StaticResource WolvenKitRed}" />
                         </DataTemplate>
                     </syncfusion:RibbonButton.IconTemplate>
                 </syncfusion:RibbonButton>
@@ -129,22 +148,15 @@
                     <syncfusion:RibbonButton.IconTemplate>
                         <DataTemplate>
                             <iconPacks:PackIconCodicons
+                                Kind="DebugStart"
                                 Width="auto"
                                 Height="auto"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Stretch"
-                                Foreground="{StaticResource WolvenKitYellow}"
-                                Kind="DebugStart" />
+                                Foreground="{StaticResource WolvenKitYellow}" />
                         </DataTemplate>
                     </syncfusion:RibbonButton.IconTemplate>
                 </syncfusion:RibbonButton>
-
-                <syncfusion:RibbonCheckBox
-                    x:Name="CheckBoxForce"
-                    Grid.Column="1"
-                    Margin="5"
-                    Content="Force Redeploy"
-                    IsChecked="{Binding IsForceEnabled}" />
 
                 <syncfusion:RibbonButton
                     x:Name="ButtonOpenModFolder"
@@ -158,31 +170,31 @@
                     <syncfusion:RibbonButton.IconTemplate>
                         <DataTemplate>
                             <iconPacks:PackIconCodicons
+                                Kind="FolderOpened"
                                 Width="auto"
                                 Height="auto"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Stretch"
-                                Foreground="{StaticResource WolvenKitTan}"
-                                Kind="FolderOpened" />
+                                Foreground="{StaticResource WolvenKitTan}" />
                         </DataTemplate>
                     </syncfusion:RibbonButton.IconTemplate>
                 </syncfusion:RibbonButton>
 
             </Grid>
 
-            <!--  DataGrid  -->
+            <!-- DataGrid -->
             <syncfusion:SfDataGrid
+                d:ItemsSource="{d:SampleData ItemCount=5}"
                 x:Name="DataGridEvents"
                 Grid.Row="1"
                 Margin="25,0,25,25"
-                d:ItemsSource="{d:SampleData ItemCount=5}"
+                ColumnSizer="AutoLastColumnFill"
                 AllowDraggingColumns="True"
                 AllowDraggingRows="True"
                 AllowDrop="True"
                 AllowFiltering="True"
                 AllowResizingColumns="True"
                 AutoGenerateColumns="False"
-                ColumnSizer="AutoLastColumnFill"
                 ItemsSource="{Binding Mods}"
                 RowDropIndicatorMode="Line"
                 SelectedItem="{Binding SelectedMod}"
@@ -237,12 +249,13 @@
 
         </Grid>
 
-        <!--  Overlay  -->
-        <!--    -->
+        <!-- Overlay -->
+        <!--  -->
         <Grid
             Grid.Row="2"
             Background="{StaticResource ContentBackground}"
-            Visibility="{Binding IsProcessing, Converter={StaticResource boolToVisibilityConverter}}">
+            Visibility="{Binding IsProcessing,
+                                 Converter={StaticResource BoolToVisibilityConverter}}">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="2*" />
@@ -252,20 +265,31 @@
 
             <Grid Grid.Row="0">
 
-                <StackPanel VerticalAlignment="Center" Visibility="{Binding IsNotFinished, Converter={StaticResource boolToVisibilityConverter}}">
-                    <syncfusion:SfBusyIndicator AnimationType="Gear" ViewboxHeight="100" ViewboxWidth="100">
+                <StackPanel
+                    VerticalAlignment="Center"
+                    Visibility="{Binding IsNotFinished,
+                                         Converter={StaticResource BoolToVisibilityConverter}}">
+                    <syncfusion:SfBusyIndicator
+                        AnimationType="Gear"
+                        ViewboxHeight="100"
+                        ViewboxWidth="100">
                         <syncfusion:SfBusyIndicator.HeaderTemplate>
                             <DataTemplate>
-                                <TextBlock Text="REDMod mods are being deployed..."
-                                       TextAlignment="Center"
-                                       FontSize="20" />
+                                <TextBlock
+                                    FontSize="20"
+                                    Text="REDMod mods are being deployed..."
+                                    TextAlignment="Center" />
                             </DataTemplate>
                         </syncfusion:SfBusyIndicator.HeaderTemplate>
                     </syncfusion:SfBusyIndicator>
 
                 </StackPanel>
 
-                <StackPanel VerticalAlignment="Center" Visibility="{Binding IsFinished, Converter={StaticResource boolToVisibilityConverter}}" d:Visibility="Visible">
+                <StackPanel
+                    d:Visibility="Visible"
+                    VerticalAlignment="Center"
+                    Visibility="{Binding IsFinished,
+                                         Converter={StaticResource BoolToVisibilityConverter}}">
                     <TextBlock
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
@@ -276,13 +300,17 @@
                         Height="40"
                         Margin="0,40,0,0"
                         Command="{Binding ToggleLogCommand}">
-                        <TextBlock FontSize="14" Text="Show Log" />
+                        <TextBlock
+                            FontSize="14"
+                            Text="Show Log" />
                     </Button>
                     <Button
                         Height="40"
                         Margin="0,20,0,0"
                         Command="{Binding ConfirmCommand}">
-                        <TextBlock FontSize="14" Text="Close" />
+                        <TextBlock
+                            FontSize="14"
+                            Text="Close" />
                     </Button>
                 </StackPanel>
 
@@ -295,8 +323,9 @@
                 Margin="50"
                 AnimationDuration="0:0:0.75"
                 ItemsStretch="Fill"
-                SelectedItemStatus="{Binding IsNotFinished, Converter={StaticResource BoolToSfStepType}}"
-                SelectedIndex="{Binding Step}">
+                SelectedIndex="{Binding Step}"
+                SelectedItemStatus="{Binding IsNotFinished,
+                                             Converter={StaticResource BoolToSfStepType}}">
                 <syncfusion:SfStepProgressBar.ItemContainerStyle>
                     <Style TargetType="syncfusion:StepViewItem">
                         <Setter Property="Content" Value="{Binding Text}" />
@@ -304,7 +333,7 @@
                 </syncfusion:SfStepProgressBar.ItemContainerStyle>
                 <syncfusion:SfStepProgressBar.SecondaryContentTemplate>
                     <DataTemplate>
-                        <TextBlock Text=""/>
+                        <TextBlock Text="" />
                     </DataTemplate>
                 </syncfusion:SfStepProgressBar.SecondaryContentTemplate>
                 <syncfusion:StepViewItem Content="Initialization" />
@@ -318,10 +347,11 @@
                 Grid.Row="2"
                 Margin="5"
                 VerticalContentAlignment="Top"
-                Visibility="{Binding ShowLog, Converter={StaticResource boolToVisibilityConverter}}"
                 Background="{StaticResource ContentBackgroundAlt3}"
+                Visibility="{Binding ShowLog,
+                                     Converter={StaticResource BoolToVisibilityConverter}}"
                 Text="{Binding LogText}"
-                VerticalScrollBarVisibility="Auto"/>
+                VerticalScrollBarVisibility="Auto" />
 
         </Grid>
 

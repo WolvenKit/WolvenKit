@@ -143,12 +143,12 @@ namespace WolvenKit.Modkit.RED4.Animation
                 v3Extras.OptimizationHints
             );
         };
-        private static Func<JsonContent, AnimationExtrasForGltf> MigrateJsonFromV3toV4 = (maybeExtras) =>
-            MigrateFromV3toV4(JsonSerializer.Deserialize<Deprecated.AnimationExtrasForGltfV3>(maybeExtras.ToJson(), SerializationOptions()));
+        private static Func<System.Text.Json.Nodes.JsonNode, AnimationExtrasForGltf> MigrateJsonFromV3toV4 = (maybeExtras) =>
+            MigrateFromV3toV4(JsonSerializer.Deserialize<Deprecated.AnimationExtrasForGltfV3>(maybeExtras, SerializationOptions()));
 
-        private static Func<JsonContent, Deprecated.AnimationExtrasForGltfV3> MigrateJsonFromV2toV3 = (maybeExtras) =>
+        private static Func<System.Text.Json.Nodes.JsonNode, Deprecated.AnimationExtrasForGltfV3> MigrateJsonFromV2toV3 = (maybeExtras) =>
         {
-            var v2Extras = JsonSerializer.Deserialize<Deprecated.AnimationExtrasForGltfV2>(maybeExtras.ToJson(), SerializationOptions());
+            var v2Extras = JsonSerializer.Deserialize<Deprecated.AnimationExtrasForGltfV2>(maybeExtras, SerializationOptions());
 
             return new(
                 new(SchemaType, 3),
@@ -170,9 +170,9 @@ namespace WolvenKit.Modkit.RED4.Animation
             );
         };
 
-        public static Func<JsonContent, ValidationResult> TryMigrateAndValidate = (maybeExtras) =>
+        public static Func<System.Text.Json.Nodes.JsonNode, ValidationResult> TryMigrateAndValidate = (maybeExtras) =>
         {
-            var extras = JsonSerializer.Deserialize<AnimationExtrasForGltf>(maybeExtras.ToJson(), SerializationOptions());
+            var extras = JsonSerializer.Deserialize<AnimationExtrasForGltf>(maybeExtras, SerializationOptions());
 
             if (IsCurrentSchema(extras))
             {
