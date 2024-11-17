@@ -73,10 +73,7 @@
 
                 <MenuItem
                     x:Name="ConvertToJsonMenuItem"
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding ConvertToCommand}"
                     Header="Convert to JSON">
                     <MenuItem.Icon>
@@ -93,10 +90,7 @@
                 </MenuItem>
                 <MenuItem
                     x:Name="ConvertFromJsonMenuItem"
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding ConvertFromCommand}"
                     Header="Convert from JSON">
                     <MenuItem.Icon>
@@ -172,42 +166,27 @@
                 <!-- ======================================================================= -->
 
                 <MenuItem
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding CopyRelPathCommand}"
                     Header="Copy relative path to game file" />
 
                 <MenuItem
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding CopyAbsPathToCurrentFileCommand}"
                     Header="Copy absolute path" />
 
                 <MenuItem
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding CopyAbsPathToCurrentFolderCommand}"
                     Header="Copy absolute path to containing folder" />
 
                 <MenuItem
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding CopyAbsPathToRawFolderCommand}"
                     Header="Copy absolute path to raw folder" />
 
                 <MenuItem
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding CopyAbsPathToArchiveFolderCommand}"
                     Header="Copy absolute path to archive folder" />
 
@@ -219,10 +198,7 @@
 
                 <!-- Context menu: Open in Asset Browser -->
                 <MenuItem
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding OpenInAssetBrowserCommand}"
                     Header="Open in Asset Browser">
                     <MenuItem.Icon>
@@ -237,10 +213,7 @@
 
                 <!-- Context menu: Replace with original -->
                 <MenuItem
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding OverwriteWithGameFileCommand}"
                     Header="Replace with original">
                     <MenuItem.Icon>
@@ -255,10 +228,7 @@
 
                 <!-- Context menu: Add dependencies -->
                 <MenuItem
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding AddDependenciesCommand}"
                     Header="Add dependencies">
                     <MenuItem.Icon>
@@ -275,10 +245,7 @@
 
                 <!-- Context menu: Create new folder -->
                 <MenuItem
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=CreateNewDirectoryCommand}"
                     Header="Create new folder">
                     <MenuItem.Icon>
@@ -421,9 +388,7 @@
                         <helpers:TreeGridButton
                             BorderBrush="{StaticResource WolvenKitYellow}"
                             Style="{StaticResource WolvenKitTreeGridButtonDirectory}"
-                            Command="{Binding ViewModel.OpenInFileExplorerCommand,
-                                              RelativeSource={RelativeSource FindAncestor,
-                                                                             AncestorType={x:Type local:ProjectExplorerView}}}"
+                            Command="{Binding ViewModel.OpenInFileExplorerCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ProjectExplorerView}}}"
                             CommandParameter="{Binding}"
                             HoverBackground="{StaticResource WolvenKitYellowShadow}"
                             ToolTip="Open in Windows Explorer">
@@ -441,9 +406,7 @@
                         <helpers:TreeGridButton
                             BorderBrush="{StaticResource WolvenKitCyan}"
                             Style="{StaticResource WolvenKitTreeGridButton}"
-                            Command="{Binding ViewModel.OpenFileCommand,
-                                              RelativeSource={RelativeSource FindAncestor,
-                                                                             AncestorType={x:Type local:ProjectExplorerView}}}"
+                            Command="{Binding ViewModel.OpenFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ProjectExplorerView}}}"
                             CommandParameter="{Binding}"
                             HoverBackground="{StaticResource WolvenKitCyanShadow}"
                             ToolTip="Open this file">
@@ -462,9 +425,7 @@
                             BorderBrush="{StaticResource WolvenKitRed}"
                             Style="{StaticResource WolvenKitTreeGridButtonDirectory}"
                             syncfusion:FocusManagerHelper.FocusedElement="True"
-                            Command="{Binding ViewModel.DeleteFileCommand,
-                                              RelativeSource={RelativeSource FindAncestor,
-                                                                             AncestorType={x:Type local:ProjectExplorerView}}}"
+                            Command="{Binding ViewModel.DeleteFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ProjectExplorerView}}}"
                             HoverBackground="{StaticResource WolvenKitRedShadow}"
                             ToolTip="Delete this file/folder">
                             <helpers:TreeGridButton.Content>
@@ -621,11 +582,12 @@
             AllowDragDrop="False"
             AllowDrop="False"
             CloseButtonType="Hide"
+            EnableLabelEdit="False"
             SelectedIndex="{Binding SelectedTabIndex}"
             ShowTabItemContextMenu="False"
             TabListContextMenuOptions="Default">
 
-            <syncfusion:TabItemExt>
+            <syncfusion:TabItemExt Header="SOURCE">
                 <syncfusion:TabItemExt.Style>
                     <Style
                         BasedOn="{StaticResource SyncfusionTabItemExtStyle}"
@@ -670,7 +632,7 @@
             <syncfusion:TabItemExt
                 Style="{StaticResource WolvenKitPESourceTabs}"
                 Header="raw" />
-            <syncfusion:TabItemExt>
+            <syncfusion:TabItemExt Header="RESOURCES">
                 <syncfusion:TabItemExt.Style>
                     <Style
                         BasedOn="{StaticResource SyncfusionTabItemExtStyle}"
@@ -846,8 +808,7 @@
             Grid.Row="2"
             Margin="0,0,0,0"
             BorderThickness="0"
-            Visibility="{Binding IsFlatModeEnabled,
-                                 Converter={StaticResource BoolInvertConverter}}"
+            Visibility="{Binding IsFlatModeEnabled, Converter={StaticResource BoolInvertConverter}}"
             HeaderRowHeight="3"
             RowHeight="19"
             ColumnSizer="Star"
@@ -869,9 +830,7 @@
             RowDragDropTemplate="{StaticResource DragDropTemplate}"
             RowDropIndicatorMode="Line"
             SelectedItem="{Binding SelectedItem}"
-            SelectedItems="{Binding SelectedItems,
-                                    UpdateSourceTrigger=PropertyChanged,
-                                    Mode=TwoWay}"
+            SelectedItems="{Binding SelectedItems, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
             SelectionMode="Extended"
             SelfRelationRootValue="0"
             VirtualizingPanel.IsVirtualizing="True"
@@ -916,8 +875,7 @@
             Grid.Row="2"
             Margin="0,0,0,0"
             BorderThickness="0"
-            Visibility="{Binding IsFlatModeEnabled,
-                                 Converter={StaticResource BooleanToVisibilityConverter}}"
+            Visibility="{Binding IsFlatModeEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
             HeaderRowHeight="28"
             RowHeight="19"
             ColumnSizer="Star"
@@ -938,9 +896,7 @@
             LiveNodeUpdateMode="AllowDataShaping"
             ParentPropertyName="Hash"
             SelectedItem="{Binding SelectedItem}"
-            SelectedItems="{Binding SelectedItems,
-                                    UpdateSourceTrigger=PropertyChanged,
-                                    Mode=TwoWay}"
+            SelectedItems="{Binding SelectedItems, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
             SelectionMode="Extended"
             SelfRelationRootValue="0"
             VirtualizingPanel.IsVirtualizing="True"
