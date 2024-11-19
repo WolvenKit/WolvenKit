@@ -561,7 +561,7 @@ namespace WolvenKit.Modkit.RED4
                     // We're tacking on an extra file ext because ***SharpGLTF*** cuts off the ext
                     // when actually writing to disk way down the line. This way it'll save the
                     // actual type extension we want it to...
-                    var typePreservingOutfile = new FileInfo($"{outfile.FullName}.dummyextguardthatwillberemoved");
+                    var typePreservingOutfile = new FileInfo($"{outfile.FullName}");
 
                     return ExportMorphTargets(cr2wFile, typePreservingOutfile,
                         settings.Get<MorphTargetExportArgs>().IsBinary,
