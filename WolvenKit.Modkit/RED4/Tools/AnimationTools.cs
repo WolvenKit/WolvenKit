@@ -60,11 +60,11 @@ namespace WolvenKit.Modkit.RED4
 
             if (isGLBinary)
             {
-                model.SaveGLB($"{outfile.FullName}.anims.glb", new WriteSettings(vmode));
+                model.SaveGLB($"{outfile.FullName}.glb", new WriteSettings(vmode));
             }
             else
             {
-                model.SaveGLTF($"{outfile.FullName}.anims.gltf", new WriteSettings(vmode));
+                model.SaveGLTF($"{outfile.FullName}.gltf", new WriteSettings(vmode));
             }
 
             return true;
