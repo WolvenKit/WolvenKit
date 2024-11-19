@@ -344,7 +344,7 @@
                     x:Name="ToolbarPackInstallRedmodButton"
                     Visibility="{Binding ShowRedmodInRibbon,
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
-                    ToolTip="Pack as REDmod &amp; install to game. Not supported by HotReload.">
+                    ToolTip="Pack as REDmod &amp; install to game. Hold SHIFT to trigger deploy. Not supported by HotReload.">
                     <StackPanel Orientation="Horizontal">
                         <Grid>
                             <iconPacks:PackIconForkAwesome
