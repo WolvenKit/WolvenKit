@@ -468,7 +468,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private async Task PackInstallMod() => await LaunchAsync(new LaunchProfile() { Install = true });
 
     [RelayCommand(CanExecute = nameof(CanStartTask))]
-    private async Task PackInstallRedMod() => await LaunchAsync(new LaunchProfile() { Install = true, IsRedmod = true });
+    private async Task PackInstallRedMod() =>
+        await LaunchAsync(new LaunchProfile()
+        {
+            Install = true, IsRedmod = true, DeployWithRedmod = ModifierViewStateService.IsShiftBeingHeld
+        });
 
     [RelayCommand(CanExecute = nameof(CanStartTask))]
     private async Task PackInstallRun() => await LaunchAsync(new LaunchProfile() { Install = true, LaunchGame = true });

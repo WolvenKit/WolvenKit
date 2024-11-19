@@ -348,7 +348,6 @@ public class RED4Controller : ObservableObject, IGameController
         {
             _loggerService.Info($"{cp77Proj.Name} files cleaned up.");
         }
-
         
         // Pack it up
         if (!await PackProjectFiles(options, cp77Proj))
@@ -364,7 +363,6 @@ public class RED4Controller : ObservableObject, IGameController
             _notificationService.Error("Creating backup failed, aborting.");
             return false;
         }
-
 
         // Now install it
         if (options.Install && !await InstallProjectFiles(options, cp77Proj))
@@ -425,6 +423,9 @@ public class RED4Controller : ObservableObject, IGameController
         return true;
     }
 
+    /// <summary>
+    /// At this point, all necessary files should be present inside ModDir/packed. This method only copies them to the game dir.
+    /// </summary>
     private async Task<bool> InstallProjectFiles(LaunchProfile options, Cp77Project cp77Proj)
     {
         if (!options.Install)
@@ -433,8 +434,9 @@ public class RED4Controller : ObservableObject, IGameController
             return true;
         }
 
-        // install files: is always true (abort condition above)
-        if (!options.DeployWithRedmod && !InstallMod(cp77Proj))
+        var installPath = options.DeployWithRedmod ? $"mods/{cp77Proj.ModName}" : "archive/pc/mod";
+
+        if (!InstallMod(cp77Proj))
         {
             _progressService.IsIndeterminate = false;
             _loggerService.Error("Installing mod failed, aborting.");
@@ -442,28 +444,27 @@ public class RED4Controller : ObservableObject, IGameController
             return false;
         }
 
-        _loggerService.Success($"{cp77Proj.Name} installed to {_settingsManager.GetRED4GameRootDir()}");
         _notificationService.Success($"{cp77Proj.Name} installed!");
 
-        // deploy redmod
-        if (!options.DeployWithRedmod)
+        var successString = options.DeployWithRedmod ? "deployed as REDmod" : "installed";
+        _loggerService.Success($"{cp77Proj.Name} {successString} to {_settingsManager.GetRED4GameRootDir()}/{installPath}");
+
+        if (!options.DeployWithRedmod || await DeployRedmod())
         {
             return true;
         }
 
-        if (!await DeployRedmod())
-        {
-            _progressService.IsIndeterminate = false;
-            _loggerService.Error("Redmod deploy failed, aborting.");
-            _notificationService.Error("Redmod deploy failed, aborting.");
-            return false;
-        }
+        _progressService.IsIndeterminate = false;
+        _loggerService.Error("Redmod deploy failed, aborting.");
+        _notificationService.Error("Redmod deploy failed, aborting.");
+        return false;
 
-        _loggerService.Success($"{_projectManager.ActiveProject?.Name} Redmod deployed!");
 
-        return true;
     }
 
+    /// <summary>
+    /// This method will move everything into ModDirectory/packed.
+    /// </summary>
     private async Task<bool> PackProjectFiles(LaunchProfile options, Cp77Project cp77Proj)
     {
         if (options is { CreateZipFile: false, Install: false })
@@ -530,7 +531,7 @@ public class RED4Controller : ObservableObject, IGameController
         }
 
         // pack redmod files
-        if (!options.DeployWithRedmod && !(options is { CreateZipFile: true, IsRedmod: true }))
+        if (!options.IsRedmod)
         {
             return true;
         }
@@ -650,15 +651,14 @@ public class RED4Controller : ObservableObject, IGameController
     private bool PackRedmodFiles(Cp77Project cp77Proj)
     {
         // write info.json file if it not exists
-        var modinfo = Path.Combine(cp77Proj.ResourcesDirectory, "info.json");
-        var modInfoJsonPath = Path.Combine(cp77Proj.PackedRedModDirectory, "info.json");
+        var modinfo = Path.Combine(cp77Proj.PackedRedModDirectory, "info.json");
 
         if (File.Exists(modinfo))
         {
-            File.Copy(modinfo, modInfoJsonPath, true);
+            File.Delete(modinfo);
         }
-        
-        if (!File.Exists(modInfoJsonPath))
+
+        if (!File.Exists(modinfo))
         {
             JsonSerializerOptions jsonoptions = new()
             {
@@ -667,7 +667,7 @@ public class RED4Controller : ObservableObject, IGameController
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             };
             var jsonString = JsonSerializer.Serialize(cp77Proj.GetInfo(), jsonoptions);
-            File.WriteAllText(modInfoJsonPath, jsonString);
+            File.WriteAllText(modinfo, jsonString);
         }
 
         // sounds
@@ -894,19 +894,22 @@ public class RED4Controller : ObservableObject, IGameController
         }
 
         // compile with redmod
-        var redmodPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
-        if (File.Exists(redmodPath))
-        {
-            var rttiSchemaPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "metadata.json");
-            var args = $"deploy -root=\"{_settingsManager.GetRED4GameRootDir()}\"";
 
-            _loggerService.Info($"WorkDir: {redmodPath}");
-            _loggerService.Info($"Running commandlet: {args}");
-            var workingDir = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin");
-            return ProcessUtil.RunProcessAsync(redmodPath, args, workingDir);
+        var redmodPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod");
+        var executablePath = Path.Combine(redmodPath, "bin", "redMod.exe");
+        if (!File.Exists(executablePath))
+        {
+            return Task.FromResult(false);
         }
 
-        return Task.FromResult(true);
+        var rttiSchemaPath = Path.Combine(redmodPath, "metadata.json");
+        var args = $"deploy -root=\"{_settingsManager.GetRED4GameRootDir()}\"";
+
+        var workingDir = Path.Combine(redmodPath, "bin");
+        _loggerService.Info($"WorkDir: {workingDir}");
+        _loggerService.Info($"Running commandlet: {args}");
+        return ProcessUtil.RunProcessAsync(executablePath, args, workingDir);
+
     }
 
     #endregion
