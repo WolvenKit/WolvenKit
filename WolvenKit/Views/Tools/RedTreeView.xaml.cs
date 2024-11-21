@@ -367,24 +367,51 @@ namespace WolvenKit.Views.Tools
 
         #region commands
 
-        private void RefreshCommandStatus()
-        {
-            DuplicateSelectionCommand.NotifyCanExecuteChanged();
-        }
+        private void RefreshCommandStatus() => DuplicateSelectionCommand.NotifyCanExecuteChanged();
 
 
-        [RelayCommand]
-        private async Task DuplicateSelection()
+        private async Task DuplicateSelectedChunks(bool preserveIndex = false)
         {
             var chunks = GetSelectedChunks();
 
-            for (var i = 0; i < chunks.Count; i++)
+
+            var tasks = chunks.Select(cvm => cvm.DuplicateChunkAsync(preserveIndex ? -1 : cvm.NodeIdxInParent + chunks.Count)).ToList();
+
+            var duplicatedChunks = await Task.WhenAll(tasks);
+
+            var newChunks = duplicatedChunks.Where(newChunk => newChunk != null).ToList();
+
+
+            if (ItemsSource is not ICollectionView collectionView)
             {
-                var cvm = chunks[i];
-                cvm.NodeIdxInParent += i;
-                await cvm.DuplicateChunkAsync();
+                return;
+            }
+
+            using (collectionView.DeferRefresh())
+            {
+                foreach (var cvm in chunks)
+                {
+                    cvm.IsSelected = false;
+                }
+
+                foreach (var cvm in newChunks)
+                {
+                    cvm.IsSelected = true;
+                }
             }
         }
+
+        /// <summary>
+        /// Duplicates each chunk in selection, appending new changes after the selected items.
+        /// </summary>
+        [RelayCommand]
+        private async Task DuplicateSelection() => await DuplicateSelectedChunks(false);
+
+        /// <summary>
+        /// Duplicates each chunk in selection, adding every new chunk directly next to the original. 
+        /// </summary>
+        [RelayCommand]
+        private async Task DuplicateSelectionInPlace() => await DuplicateSelectedChunks(true);
 
         [RelayCommand]
         private async Task DuplicateSelectionAsNew()
@@ -396,6 +423,7 @@ namespace WolvenKit.Views.Tools
                 await cvm.DuplicateChunkAsNewAsync();
             }
         }
+
 
         public bool CanOpenSearchAndReplaceDialog => !_isContextMenuOpen &&
                                                      SelectedItem is ChunkViewModel { Parent: not null } &&
@@ -502,8 +530,16 @@ namespace WolvenKit.Views.Tools
         /// <summary>
         /// Gets all selected chunks. If none are selected / if selection is invalid, it will return an empty list.
         /// </summary>
-        private List<ChunkViewModel> GetSelectedChunks() =>
-            SelectedItems is not ObservableCollection<object> selection ? [] : selection.OfType<ChunkViewModel>().ToList();
+        private List<ChunkViewModel> GetSelectedChunks()
+        {
+            if (SelectedItems is not ObservableCollection<object> selection)
+            {
+                return [];
+            }
+
+            var uniqueItems = new HashSet<(object Parent, string Name)>();
+            return selection.OfType<ChunkViewModel>().Where(x => uniqueItems.Add((x.Parent, x.Name))).ToList();
+        }
 
         private void OnDoubleClick(object sender, MouseButtonEventArgs e)
         {

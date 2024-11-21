@@ -44,6 +44,7 @@ public partial class ChunkViewModel
     [ObservableProperty] private bool _shouldShowCreateExternalMatDef;
 
     [ObservableProperty] private bool _shouldShowDuplicateAsNew;
+    [ObservableProperty] private bool _shouldShowDuplicateInplace;
 
     #endregion
 
@@ -68,7 +69,8 @@ public partial class ChunkViewModel
             IsInArray && !IsShiftKeyPressed &&
             ResolvedData is worldCompiledEffectPlacementInfo or CMeshMaterialEntry;
 
-        ShouldShowDuplicate = !ShouldShowDuplicateAsNew && IsInArray;
+        ShouldShowDuplicateInplace = !ShouldShowDuplicateAsNew && IsInArray && !IsShiftKeyPressed;
+        ShouldShowDuplicate = !ShouldShowDuplicateAsNew && IsInArray && IsShiftKeyPressed;
 
         IsInArrayWithShiftKeyUp = IsInArray && !IsShiftKeyPressed;
         IsInArrayWithShiftKeyDown = IsInArray && IsShiftKeyPressed;

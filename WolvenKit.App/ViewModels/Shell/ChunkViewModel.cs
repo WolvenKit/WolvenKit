@@ -2499,12 +2499,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     }
 
 
-    public Task DuplicateChunkAsync()
-    {
-        DuplicateChunk();
-        return Task.CompletedTask;
-    }
-    
+    public Task<ChunkViewModel?> DuplicateChunkAsync(int index) => Task.FromResult(DuplicateChunk(index));
+
     private bool CanDuplicateChunk() => IsInArray && Parent is not null; // TODO RelayCommand check notify
 
     [RelayCommand(CanExecute = nameof(CanDuplicateChunk))]
