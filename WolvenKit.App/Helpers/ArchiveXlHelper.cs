@@ -61,11 +61,11 @@ public static partial class ArchiveXlHelper
         {
             return [depotPath];
         }
-        
-        // If the key is not in the dictionary, throw an exception
+
+        // If the key is not in the dictionary, return an empty array. This will result in a warning.
         if (!s_keysAndValues.TryGetValue(key, out var substitutionList))
         {
-            throw new Exception($"Key {key} not found in dictionary");
+            return [];
         }
 
         // For each value of this key, replace the key in the string with the value and recursively call the function
