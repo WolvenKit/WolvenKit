@@ -402,7 +402,8 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        public bool CanOpenSearchAndReplaceDialog => SelectedItem is ChunkViewModel { Parent: not null };
+        public bool CanOpenSearchAndReplaceDialog =>
+            SelectedItem is ChunkViewModel { Parent: not null } && !SearchAndReplaceDialog.IsInstanceOpen;
 
         // [RelayCommand(CanExecute = nameof(CanOpenSearchAndReplaceDialog))]
         [RelayCommand]
@@ -423,13 +424,17 @@ namespace WolvenKit.Views.Tools
             var searchText = dialog.ViewModel?.SearchText ?? "";
             var replaceText = dialog.ViewModel?.ReplaceText ?? "";
 
+            var cvm = selectedChunkViewModels.FirstOrDefault();
+
+            var expansionStates = selectedChunkViewModels
+                .Select(item => item.IsExpanded)
+                .ToList();
+
             var results = selectedChunkViewModels
                 .Select(item => item.SearchAndReplace(searchText, replaceText))
                 .ToList();
 
             var numReplaced = results.Count(r => r == true);
-
-            var cvm = selectedChunkViewModels.FirstOrDefault();
 
             if (numReplaced <= 0)
             {
@@ -439,6 +444,12 @@ namespace WolvenKit.Views.Tools
 
             cvm?.Tab?.Parent.SetIsDirty(true);
             _loggerService.Info($"Replaced {ChunkViewModel.NumReplacedEntries} occurrences of '{searchText}' with '{replaceText}'");
+
+            for (var i = 0; i < selectedChunkViewModels.Count; i++)
+            {
+                var expansionState = expansionStates.Count > i && expansionStates[i];
+                selectedChunkViewModels[i].IsExpanded = expansionState;
+            }
         }
 
 
@@ -510,9 +521,9 @@ namespace WolvenKit.Views.Tools
             {
                 chunk = parent;
             }
-            
+
             var expansionState = chunk.IsExpanded;
-            
+
             var expansionStates = chunk.GetAllProperties().Select((child) => child.IsExpanded).ToList();
             chunk.SetChildExpansionStates(!expansionStates.Contains(true));
 
@@ -525,7 +536,7 @@ namespace WolvenKit.Views.Tools
             {
                 return null;
             }
-            
+
             return selection.OfType<ChunkViewModel>().ToList().FirstOrDefault((cvm) => cvm.Parent is null);
         }
 
@@ -564,11 +575,19 @@ namespace WolvenKit.Views.Tools
 
         private void TreeView_OnKeyChanged(object sender, KeyEventArgs e)
         {
-            if (!_isContextMenuOpen)
+            if (_isContextMenuOpen) // key event will be handled by context menu listener
             {
-                _modifierViewStateSvc.OnKeystateChanged(e);
+                return;
             }
-        }
 
+            if (e.Key == Key.F2 && e.IsUp && CanOpenSearchAndReplaceDialog)
+            {
+                OpenSearchAndReplaceDialog();
+                return;
+            }
+
+            _modifierViewStateSvc.OnKeystateChanged(e);
+        }
     }
+    
 }
