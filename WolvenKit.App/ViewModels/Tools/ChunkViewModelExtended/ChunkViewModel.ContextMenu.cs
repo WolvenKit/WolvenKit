@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
+using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.RED4.Types;
 
@@ -48,15 +49,13 @@ public partial class ChunkViewModel
 
     #region methods
 
-    private void OnModifierChanged() => RefreshContextMenuFlags();
-
     public void RefreshContextMenuFlags()
     {
-        IsShiftKeyPressed = _modifierViewStateService.IsShiftKeyPressed;
-        IsCtrlKeyPressed = _modifierViewStateService.IsCtrlKeyPressed;
-        IsAltKeyPressed = _modifierViewStateService.IsAltKeyPressed;
+        IsShiftKeyPressed = ModifierViewStateService.IsShiftBeingHeld;
+        IsCtrlKeyPressed = ModifierViewStateService.IsCtrlBeingHeld;
+        IsAltKeyPressed = ModifierViewStateService.IsAltBeingHeld;
 
-        ShouldShowPasteOverwrite = IsInArray && _modifierViewStateService.IsShiftKeyPressedOnly && Tab?.SelectedChunk is not null;
+        ShouldShowPasteOverwrite = IsInArray && ModifierViewStateService.IsShiftBeingHeldOnly && Tab?.SelectedChunk is not null;
         ShouldShowOverwriteArray = ShouldShowArrayOps && ((IsArray && IsShiftKeyPressed) ||
                                                           (IsCtrlKeyPressed && !ShouldShowPasteOverwrite));
         ShouldShowPasteIntoArray = ShouldShowArrayOps && !(ShouldShowPasteOverwrite || ShouldShowOverwriteArray);

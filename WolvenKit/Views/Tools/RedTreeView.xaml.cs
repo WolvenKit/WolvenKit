@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData.Kernel;
+using HandyControl.Controls;
 using ReactiveUI;
 using Splat;
 using Syncfusion.UI.Xaml.TreeView;
@@ -140,23 +141,17 @@ namespace WolvenKit.Views.Tools
 
         private void OnSelectionChanged(object sender, Syncfusion.UI.Xaml.TreeView.ItemSelectionChangedEventArgs e)
         {
-            foreach (var removedItem in e.RemovedItems)
+            foreach (var removedItem in e.RemovedItems.OfType<ISelectableTreeViewItemModel>())
             {
-                if (removedItem is ISelectableTreeViewItemModel selectable)
-                {
-                    selectable.IsSelected = false;
-                }
+                removedItem.IsSelected = false;
             }
 
-            foreach (var removedItem in e.AddedItems)
+            foreach (var addedItem in e.AddedItems.OfType<ISelectableTreeViewItemModel>())
             {
-                if (removedItem is ISelectableTreeViewItemModel selectable)
-                {
-                    selectable.IsSelected = true;
-                }
+                addedItem.IsSelected = true;
             }
 
-            RefreshContextMenuFlags();
+            RefreshSelectedItemsContextMenuFlags();
             RefreshCommandStatus();
         }
 
@@ -402,21 +397,22 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        public bool CanOpenSearchAndReplaceDialog =>
-            SelectedItem is ChunkViewModel { Parent: not null } && !SearchAndReplaceDialog.IsInstanceOpen;
+        public bool CanOpenSearchAndReplaceDialog => !_isContextMenuOpen &&
+                                                     SelectedItem is ChunkViewModel { Parent: not null } &&
+                                                     !SearchAndReplaceDialog.IsInstanceOpen;
 
         // [RelayCommand(CanExecute = nameof(CanOpenSearchAndReplaceDialog))]
         [RelayCommand]
         private void OpenSearchAndReplaceDialog()
         {
-            if (SelectedItem is null && SelectedItems is null)
+            var selectedChunkViewModels = GetSelectedChunks();
+            if (selectedChunkViewModels.Count == 0)
             {
                 return;
             }
 
             var dialog = new SearchAndReplaceDialog();
-            var selectedChunkViewModels = GetSelectedChunks();
-            if (dialog.ShowDialog() != true || selectedChunkViewModels.Count == 0)
+            if (dialog.ShowDialog() != true)
             {
                 return;
             }
@@ -540,46 +536,37 @@ namespace WolvenKit.Views.Tools
             return selection.OfType<ChunkViewModel>().ToList().FirstOrDefault((cvm) => cvm.Parent is null);
         }
 
-        private void RefreshContextMenuFlags(bool oneItemOnly = false)
+        private void RefreshSelectedItemsContextMenuFlags()
         {
-            var selectedChunks = GetSelectedChunks();
-            if (selectedChunks.Count == 0 || (oneItemOnly && selectedChunks.Count != 1)) { return; }
-
-            foreach (var cvm in selectedChunks)
+            foreach (var chunkViewModel in GetSelectedChunks())
             {
-                cvm.RefreshContextMenuFlags();
+                chunkViewModel.RefreshContextMenuFlags();
             }
         }
 
         private void TreeViewContextMenu_OnOpened(object sender, RoutedEventArgs e)
         {
             _isContextMenuOpen = true;
-            _modifierViewStateSvc.RefreshModifierStates();
-            RefreshContextMenuFlags(true);
+            RefreshSelectedItemsContextMenuFlags();
         }
 
         private void TreeViewContextMenu_OnClosed(object sender, RoutedEventArgs e) => _isContextMenuOpen = false;
 
         private void TreeViewContextMenu_OnKeyChanged(object sender, KeyEventArgs e)
         {
-            if (!_isContextMenuOpen)
-            {
-                return;
-            }
-
             _modifierViewStateSvc.OnKeystateChanged(e);
-            RefreshContextMenuFlags();
+            RefreshSelectedItemsContextMenuFlags();
         }
 
         private bool _isContextMenuOpen;
 
         private void TreeView_OnKeyChanged(object sender, KeyEventArgs e)
         {
-            if (_isContextMenuOpen) // key event will be handled by context menu listener
+            if (_isContextMenuOpen)
             {
                 return;
             }
-
+            
             if (e.Key == Key.F2 && e.IsUp && CanOpenSearchAndReplaceDialog)
             {
                 OpenSearchAndReplaceDialog();
@@ -588,6 +575,8 @@ namespace WolvenKit.Views.Tools
 
             _modifierViewStateSvc.OnKeystateChanged(e);
         }
+        
+        
     }
     
 }

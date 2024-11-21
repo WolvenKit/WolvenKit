@@ -69,7 +69,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     private readonly ILocKeyService _locKeyService;
     private readonly Red4ParserService _parserService;
     private readonly CRUIDService _cruidService;
-    private readonly IModifierViewStateService _modifierViewStateService;
 
     private static readonly List<string> s_hiddenProperties = new()
     {
@@ -107,7 +106,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         IAppArchiveManager archiveManager,
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
-        IModifierViewStateService modifierViewStateService,
         Red4ParserService parserService,
         CRUIDService cruidService,
         EditorDifficultyLevel editorLevel,
@@ -127,7 +125,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         _locKeyService = locKeyService;
         _parserService = parserService;
         _cruidService = cruidService;
-        _modifierViewStateService = modifierViewStateService;
 
         _appViewModel = appViewModel;
         _data = data;
@@ -135,8 +132,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         _propertyName = name;
         _displayName = name;
         IsReadOnly = isReadOnly;
-
-        _modifierViewStateService.ModifierStateChanged += OnModifierChanged;
 
         _currentEditorDifficultyLevel = editorLevel;
         DifficultyLevelFieldInformation = EditorDifficultyLevelFieldFactory.GetInstance(editorLevel);
@@ -177,7 +172,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         IAppArchiveManager archiveManager,
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
-        IModifierViewStateService modifierViewStateService,
         Red4ParserService parserService,
         CRUIDService cruidService,
         EditorDifficultyLevel editorDifficultyLevel, 
@@ -185,7 +179,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         ) 
         : this(data, nameof(RDTDataViewModel), appViewModel,
             chunkViewmodelFactory, tabViewmodelFactory, hashService, loggerService, projectManager,
-            gameController, settingsManager, archiveManager, tweakDbService, locKeyService, modifierViewStateService, parserService,
+            gameController, settingsManager, archiveManager, tweakDbService, locKeyService, parserService,
             cruidService, editorDifficultyLevel, null, isReadOnly)
     {
         _tab = tab;
@@ -204,7 +198,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         IAppArchiveManager archiveManager,
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
-        IModifierViewStateService modifierViewStateService,
         Red4ParserService parserService,
         CRUIDService cruidService,
         EditorDifficultyLevel editorDifficultyLevel, 
@@ -212,7 +205,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         ) 
         : this(export, nameof(ReferenceSocket), appViewModel,
               chunkViewmodelFactory, tabViewmodelFactory, hashService, loggerService, projectManager,
-              gameController, settingsManager, archiveManager, tweakDbService, locKeyService, modifierViewStateService, parserService,
+              gameController, settingsManager, archiveManager, tweakDbService, locKeyService, parserService,
               cruidService, editorDifficultyLevel, null, isReadOnly
               )
     {
