@@ -1,3 +1,4 @@
+using System;
 using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Input;
@@ -11,6 +12,8 @@ namespace WolvenKit.Views.Dialogs.Windows
     {
         private static string s_lastSearch = "";
         private static string s_lastReplace = "";
+
+        public static bool IsInstanceOpen { get; private set; }
         
         public SearchAndReplaceDialog()
         {
@@ -50,6 +53,7 @@ namespace WolvenKit.Views.Dialogs.Windows
         public bool? ShowDialog(Window owner)
         {
             Owner = owner;
+            IsInstanceOpen = true;
             return ShowDialog();
         }
 
@@ -105,6 +109,12 @@ namespace WolvenKit.Views.Dialogs.Windows
             e.Handled = true;
             DialogResult = true;
             Close();
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            IsInstanceOpen = false;
+            base.OnClosed(e);
         }
 
         private void WizardControl_OnFinish(object sender, RoutedEventArgs e) => SaveLastSelection();
