@@ -1042,12 +1042,12 @@ namespace WolvenKit.Modkit.RED4.Tools
                 {
                     string[] arr = ["GarmentSupport"];
                     var obj = new { materialNames, targetNames = arr };
-                    mes.Extras = JsonSerializer.Serialize(obj);
+                    mes.Extras = JsonSerializer.SerializeToNode(obj);
                 }
                 else
                 {
                     var obj = new { materialNames };
-                    mes.Extras = JsonSerializer.Serialize(obj);
+                    mes.Extras = JsonSerializer.SerializeToNode(obj);
                 }
                 if (mesh.garmentMorph.Length > 0)
                 {
@@ -1068,7 +1068,7 @@ namespace WolvenKit.Modkit.RED4.Tools
         public static ModelRoot RawMeshesToGLTF(List<RawMeshContainer> meshes, RawArmature? rig, bool mergeMeshes = false, bool withMaterials = false)
         {
             var model = ModelRoot.CreateModel();
-            model.Extras = JsonSerializer.Serialize(new { ExperimentalMergedMeshes = mergeMeshes });
+            model.Extras = JsonSerializer.SerializeToNode(new { ExperimentalMergedMeshes = mergeMeshes });
 
             Skin? skin = null;
             if (rig is { BoneCount: > 0 })

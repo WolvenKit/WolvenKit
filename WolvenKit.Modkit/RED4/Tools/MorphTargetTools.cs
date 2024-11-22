@@ -641,7 +641,7 @@ namespace WolvenKit.Modkit.RED4
                 }
 
                 var obj = new { targetNames = names }; // anonymous variable/obj
-                mes.Extras = JsonSerializer.Serialize(obj);
+                mes.Extras = JsonSerializer.SerializeToNode(obj);
 
                 for (var i = 0; i < expTargets.Count; i++)
                 {
