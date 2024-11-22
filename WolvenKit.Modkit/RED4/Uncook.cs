@@ -24,7 +24,6 @@ using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.JSON;
 using WolvenKit.RED4.Types;
-
 using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
 using NAudio.Wave;
@@ -32,6 +31,7 @@ using NAudio.Lame;
 using WolvenKit.RED4.Archive.CR2W;
 using Newtonsoft.Json;
 using WolvenKit.Modkit.Exceptions;
+using WolvenKit.Modkit.RED4.Tools.Common;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -952,14 +952,7 @@ namespace WolvenKit.Modkit.RED4
                 return true;
             }
 
-            if (meshExportArgs.isGLBinary)
-            {
-                model.SaveGLB($"{outfile.FullName}.glb", new WriteSettings(vmode));
-            }
-            else
-            {
-                model.SaveGLTF($"{outfile.FullName}.gltf", new WriteSettings(vmode));
-            }
+            model.Save(GLTFHelper.PrepareFilePath(outfile.FullName, meshExportArgs.isGLBinary), new WriteSettings(vmode));
 
             rigStream.Dispose();
             rigStream.Close();
@@ -1021,14 +1014,7 @@ namespace WolvenKit.Modkit.RED4
                 return true;
             }
 
-            if (meshExportArgs.isGLBinary)
-            {
-                model.SaveGLB($"{outfile.FullName}.glb", new WriteSettings(vmode));
-            }
-            else
-            {
-                model.SaveGLTF($"{outfile.FullName}.gltf", new WriteSettings(vmode));
-            }
+            model.Save(GLTFHelper.PrepareFilePath(outfile.FullName, meshExportArgs.isGLBinary), new WriteSettings(vmode));
 
             return true;
         }
@@ -1216,14 +1202,7 @@ namespace WolvenKit.Modkit.RED4
 
             void SaveMeshes(FileInfo file, ModelRoot modelsAndRigs)
             {
-                if (meshExportArgs.isGLBinary)
-                {
-                    modelsAndRigs.SaveGLB($"{file.FullName}.glb", new WriteSettings(validationMode));
-                }
-                else
-                {
-                    modelsAndRigs.SaveGLTF($"{file.FullName}.gltf", new WriteSettings(validationMode));
-                }
+                modelsAndRigs.Save(GLTFHelper.PrepareFilePath(file.FullName, meshExportArgs.isGLBinary), new WriteSettings(validationMode));
             }
         }
 
