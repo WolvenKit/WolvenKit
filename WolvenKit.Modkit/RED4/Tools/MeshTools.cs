@@ -15,6 +15,7 @@ using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.Exceptions;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
+using WolvenKit.Modkit.RED4.Tools.Common;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
@@ -56,14 +57,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                 return true;
             }
 
-            if (meshExportArgs.isGLBinary)
-            {
-                model.SaveGLB($"{outfile.FullName}.glb", new WriteSettings(vMode));
-            }
-            else
-            {
-                model.SaveGLTF($"{outfile.FullName}.gltf", new WriteSettings(vMode));
-            }
+            model.Save(GLTFHelper.PrepareFilePath(outfile.FullName, meshExportArgs.isGLBinary), new WriteSettings(vMode));
 
             return true;
         }
@@ -169,14 +163,8 @@ namespace WolvenKit.Modkit.RED4.Tools
                 model.WriteGLB(new WriteSettings(vMode));
                 return true;
             }
-            if (isGLBinary)
-            {
-                model.SaveGLB($"{outfile.FullName}.glb", new WriteSettings(vMode));
-            }
-            else
-            {
-                model.SaveGLTF($"{outfile.FullName}.gltf", new WriteSettings(vMode));
-            }
+
+            model.Save(GLTFHelper.PrepareFilePath(outfile.FullName, isGLBinary), new WriteSettings(vMode));
 
             return true;
         }
@@ -216,14 +204,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                 return true;
             }
 
-            if (isGLBinary)
-            {
-                model.SaveGLB($"{outfile.FullName}.glb", new WriteSettings(vMode));
-            }
-            else
-            {
-                model.SaveGLTF($"{outfile.FullName}.gltf", new WriteSettings(vMode));
-            }
+            model.Save(GLTFHelper.PrepareFilePath(outfile.FullName, isGLBinary), new WriteSettings(vMode));
 
             return true;
         }
@@ -1042,12 +1023,12 @@ namespace WolvenKit.Modkit.RED4.Tools
                 {
                     string[] arr = ["GarmentSupport"];
                     var obj = new { materialNames, targetNames = arr };
-                    mes.Extras = JsonSerializer.Serialize(obj);
+                    mes.Extras = JsonSerializer.SerializeToNode(obj);
                 }
                 else
                 {
                     var obj = new { materialNames };
-                    mes.Extras = JsonSerializer.Serialize(obj);
+                    mes.Extras = JsonSerializer.SerializeToNode(obj);
                 }
                 if (mesh.garmentMorph.Length > 0)
                 {
@@ -1068,7 +1049,7 @@ namespace WolvenKit.Modkit.RED4.Tools
         public static ModelRoot RawMeshesToGLTF(List<RawMeshContainer> meshes, RawArmature? rig, bool mergeMeshes = false, bool withMaterials = false)
         {
             var model = ModelRoot.CreateModel();
-            model.Extras = JsonSerializer.Serialize(new { ExperimentalMergedMeshes = mergeMeshes });
+            model.Extras = JsonSerializer.SerializeToNode(new { ExperimentalMergedMeshes = mergeMeshes });
 
             Skin? skin = null;
             if (rig is { BoneCount: > 0 })
