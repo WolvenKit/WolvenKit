@@ -25,7 +25,7 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
 
 
     [ObservableProperty] public bool _isLoaded;
-    
+
     [ObservableProperty] private Dictionary<object, inkTextWidget> _textWidgets = new();
 
     [ObservableProperty] private List<string> _styleStates = new();
@@ -52,9 +52,13 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
 
     [ObservableProperty] private bool _isPixelGridSnappingEnabled;
 
+    [ObservableProperty] private double _gridZoom = 1.0;
+
+    [ObservableProperty] private System.Windows.Point _gridOffset = new(0.0, 0.0);
+
     public async Task LoadResources()
     {
-        IsLoaded = false; 
+        IsLoaded = false;
         await Task.Run(async () =>
         {
             var tasks = new List<Task>
@@ -82,7 +86,7 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
             await Task.WhenAll(tasks);
         });
 
-        IsLoaded = true; 
+        IsLoaded = true;
     }
 
     public Task LoadAnimations()

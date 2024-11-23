@@ -1,16 +1,12 @@
 <reactiveUi:ReactiveUserControl
     x:Class="WolvenKit.Views.Documents.CodeEditorView"
+    x:TypeArguments="tools:CodeEditorViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:interactivity="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:reactiveUi="http://reactiveui.net"
-    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    xmlns:system="clr-namespace:System;assembly=netstandard"
     xmlns:tools="clr-namespace:WolvenKit.App.ViewModels.Documents;assembly=WolvenKit.App"
-    x:TypeArguments="tools:CodeEditorViewModel"
     BorderBrush="{x:Null}">
 
 
@@ -18,11 +14,11 @@
     <Border
         Width="auto"
         Height="auto"
-        hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
         BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
-        BorderThickness="1">
+        BorderThickness="1"
+        hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
 
-        <Grid Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
+        <Grid Background="{DynamicResource MahApps.Brushes.Accent3}">
 
             <Grid.Resources>
                 <ResourceDictionary>
@@ -51,7 +47,7 @@
                 <Menu
                     Margin="50,0,0,0"
                     HorizontalAlignment="Left"
-                    Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}">
+                    Background="{DynamicResource MahApps.Brushes.Accent3}">
                     <MenuItem Header="File" />
                     <MenuItem Header="Edit" />
                     <MenuItem Header="View" />
@@ -59,17 +55,19 @@
                 </Menu>
 
                 <iconPacks:PackIconCodicons
+                    Kind="Code"
                     Width="23"
                     Height="23"
                     Margin="13,0,0,0"
                     HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    Kind="Code" />
+                    VerticalAlignment="Center" />
             </Grid>
 
             <Grid Margin="3,33,3,3">
 
-                <hc:TabControl Background="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Background}" ShowCloseButton="True">
+                <hc:TabControl
+                    Background="{DynamicResource MahApps.Brushes.Accent3}"
+                    ShowCloseButton="True">
                     <hc:TabItem Header="wat">
                         <Grid>
                             <Grid.Resources>
@@ -112,19 +110,23 @@
                                     <MenuItem
                                         Header="Accepts Tab"
                                         IsCheckable="True"
-                                        IsChecked="{Binding ElementName=editControl, Path=AcceptsTab}" />
+                                        IsChecked="{Binding ElementName=editControl,
+                                                            Path=AcceptsTab}" />
                                     <MenuItem
                                         Header="Is ReadOnly"
                                         IsCheckable="True"
-                                        IsChecked="{Binding ElementName=editControl, Path=IsReadOnly}" />
+                                        IsChecked="{Binding ElementName=editControl,
+                                                            Path=IsReadOnly}" />
                                     <MenuItem
                                         Header="Show Line Number"
                                         IsCheckable="True"
-                                        IsChecked="{Binding ElementName=editControl, Path=ShowLineNumber}" />
+                                        IsChecked="{Binding ElementName=editControl,
+                                                            Path=ShowLineNumber}" />
                                     <MenuItem
                                         Header="Show Default Context Menu"
                                         IsCheckable="True"
-                                        IsChecked="{Binding ElementName=editControl, Path=ShowDefaultContextMenu}" />
+                                        IsChecked="{Binding ElementName=editControl,
+                                                            Path=ShowDefaultContextMenu}" />
                                 </MenuItem>
                             </Menu>
                             <!--<ToolBar
@@ -271,7 +273,9 @@
                                     </interactivity:Interaction.Triggers>
                                 </syncfusion:ComboBoxAdv>
                             </ToolBar>-->
-                            <Border Grid.Row="2" BorderThickness="1">
+                            <Border
+                                Grid.Row="2"
+                                BorderThickness="1">
                                 <!--<syncfusion:EditControl
                                     Name="editControl"
                                     DocumentLanguage="{Binding Language}"

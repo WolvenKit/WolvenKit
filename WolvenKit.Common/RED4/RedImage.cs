@@ -47,6 +47,7 @@ public partial class RedImage : IDisposable
     public static ILoggerService? LoggerService { private get; set; }
 
     private static Device? s_device;
+    private static readonly object s_deviceLock = new();
     private static bool s_deviceNotSupported;
 
     private ScratchImage _scratchImage;
@@ -514,7 +515,10 @@ public partial class RedImage : IDisposable
                 or DXGI_FORMAT.BC7_UNORM_SRGB &&
             device != null)
         {
-            InternalScratchImage = InternalScratchImage.Compress(device.NativePointer, format, TEX_COMPRESS_FLAGS.DEFAULT, 1.0F);
+            lock (s_deviceLock)
+            {
+                InternalScratchImage = InternalScratchImage.Compress(device.NativePointer, format, TEX_COMPRESS_FLAGS.DEFAULT, 1.0F);
+            }
         }
         else
         {
@@ -719,7 +723,10 @@ public partial class RedImage : IDisposable
             var device = GetDevice();
             if ((DXGI_FORMAT)outImageFormat is DXGI_FORMAT.BC6H_UF16 or DXGI_FORMAT.BC6H_SF16 or DXGI_FORMAT.BC7_UNORM or DXGI_FORMAT.BC7_UNORM_SRGB && device != null)
             {
-                img = img.Compress(device.NativePointer, (DXGI_FORMAT)outImageFormat, TEX_COMPRESS_FLAGS.DEFAULT, 1.0F);
+                lock (s_deviceLock)
+                {
+                    img = img.Compress(device.NativePointer, (DXGI_FORMAT)outImageFormat, TEX_COMPRESS_FLAGS.DEFAULT, 1.0F);
+                }
             }
             else
             {

@@ -23,6 +23,7 @@
     </PropertyGroup>
     
   <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Json" />
       <PackageReference Include="Microsoft.Extensions.Hosting" />
       <PackageReference Include="Microsoft.NET.Test.Sdk" />

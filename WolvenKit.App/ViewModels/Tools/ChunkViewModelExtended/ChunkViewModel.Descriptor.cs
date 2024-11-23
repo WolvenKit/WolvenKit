@@ -236,30 +236,6 @@ public partial class ChunkViewModel
             case scnlocLocStoreEmbeddedVariantPayloadEntry locPayloadEmbedded:
                 Descriptor = locPayloadEmbedded.VariantId.Ruid.ToString();
                 break;
-            case CInt8 int8:
-                Descriptor = int8.ToString();
-                break;
-            case CInt16 int16:
-                Descriptor = int16.ToString();
-                break;
-            case CInt32 int32:
-                Descriptor = int32.ToString();
-                break;
-            case CInt64 int64:
-                Descriptor = int64.ToString();
-                break;
-            case CUInt8 int8:
-                Descriptor = int8.ToString();
-                break;
-            case CUInt16 int16:
-                Descriptor = int16.ToString();
-                break;
-            case CUInt32 int32:
-                Descriptor = int32.ToString();
-                break;
-            case CUInt64 int64:
-                Descriptor = int64.ToString();
-                break;
             case scnPropDef propDef:
             {
                 Descriptor = $"{propDef.PropName}";
@@ -316,14 +292,14 @@ public partial class ChunkViewModel
 
                 break;
             }
-            // animgraph - something is broken here. Why does the orange text go away? Why do I need the try/catch
-            // around the GetNodename?
+            case CMeshMaterialEntry materialEntry:
+                Descriptor = materialEntry.Name.GetResolvedText() ?? "";
+                break;
             // For local and external materials
-            case CMaterialInstance or CResourceAsyncReference<IMaterial> when NodeIdxInParent > -1
-                                                                              && GetRootModel().GetPropertyFromPath("materialEntries")
-                                                                                      ?.ResolvedData is CArray<CMeshMaterialEntry>
-                                                                                  materialEntries &&
-                                                                              materialEntries.Count > NodeIdxInParent:
+            case CMaterialInstance or CResourceAsyncReference<IMaterial>
+                when NodeIdxInParent > -1
+                     && GetRootModel().GetPropertyFromPath("materialEntries")?.ResolvedData is CArray<CMeshMaterialEntry> materialEntries
+                     && materialEntries.Count > NodeIdxInParent:
             {
                 var isLocalMaterial = ResolvedData is CMaterialInstance;
                 var entry = materialEntries[NodeIdxInParent];

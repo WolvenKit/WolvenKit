@@ -28,7 +28,6 @@ public class ChunkViewmodelFactory(
     IAppArchiveManager archiveManager,
     ITweakDBService tweakDbService,
     ILocKeyService locKeyService,
-    IModifierViewStateService modifierViewStateService,
     Red4ParserService parserService,
     CRUIDService cruidService)
     : IChunkViewmodelFactory, IFactory<ChunkViewModel>
@@ -46,7 +45,6 @@ public class ChunkViewmodelFactory(
             archiveManager,
             tweakDbService,
             locKeyService,
-            modifierViewStateService,
             parserService,
             cruidService,
             editorDifficultyLevel,
@@ -66,7 +64,6 @@ public class ChunkViewmodelFactory(
             archiveManager,
             tweakDbService,
             locKeyService,
-            modifierViewStateService,
             parserService,
             cruidService,
             editorDifficultyLevel,
@@ -85,7 +82,6 @@ public class ChunkViewmodelFactory(
             archiveManager,
             tweakDbService,
             locKeyService,
-            modifierViewStateService,
             parserService,
             cruidService,
             editorDifficultyLevel, 

@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
+using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.RED4.Types;
 
@@ -43,20 +44,19 @@ public partial class ChunkViewModel
     [ObservableProperty] private bool _shouldShowCreateExternalMatDef;
 
     [ObservableProperty] private bool _shouldShowDuplicateAsNew;
+    [ObservableProperty] private bool _shouldShowDuplicateInplace;
 
     #endregion
 
     #region methods
 
-    private void OnModifierChanged() => RefreshContextMenuFlags();
-
     public void RefreshContextMenuFlags()
     {
-        IsShiftKeyPressed = _modifierViewStateService.IsShiftKeyPressed;
-        IsCtrlKeyPressed = _modifierViewStateService.IsCtrlKeyPressed;
-        IsAltKeyPressed = _modifierViewStateService.IsAltKeyPressed;
+        IsShiftKeyPressed = ModifierViewStateService.IsShiftBeingHeld;
+        IsCtrlKeyPressed = ModifierViewStateService.IsCtrlBeingHeld;
+        IsAltKeyPressed = ModifierViewStateService.IsAltBeingHeld;
 
-        ShouldShowPasteOverwrite = IsInArray && _modifierViewStateService.IsShiftKeyPressedOnly && Tab?.SelectedChunk is not null;
+        ShouldShowPasteOverwrite = IsInArray && ModifierViewStateService.IsShiftBeingHeldOnly && Tab?.SelectedChunk is not null;
         ShouldShowOverwriteArray = ShouldShowArrayOps && ((IsArray && IsShiftKeyPressed) ||
                                                           (IsCtrlKeyPressed && !ShouldShowPasteOverwrite));
         ShouldShowPasteIntoArray = ShouldShowArrayOps && !(ShouldShowPasteOverwrite || ShouldShowOverwriteArray);
@@ -69,7 +69,8 @@ public partial class ChunkViewModel
             IsInArray && !IsShiftKeyPressed &&
             ResolvedData is worldCompiledEffectPlacementInfo or CMeshMaterialEntry;
 
-        ShouldShowDuplicate = !ShouldShowDuplicateAsNew && IsInArray;
+        ShouldShowDuplicateInplace = !ShouldShowDuplicateAsNew && IsInArray && !IsShiftKeyPressed;
+        ShouldShowDuplicate = !ShouldShowDuplicateAsNew && IsInArray && IsShiftKeyPressed;
 
         IsInArrayWithShiftKeyUp = IsInArray && !IsShiftKeyPressed;
         IsInArrayWithShiftKeyDown = IsInArray && IsShiftKeyPressed;

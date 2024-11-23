@@ -2,16 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.Extensions.Logging;
+using System.Text.Json;
 using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Services;
-using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.Modkit.RED4.Tools;
+using WolvenKit.Modkit.RED4.Tools.Common;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 using Vec3 = System.Numerics.Vector3;
@@ -87,14 +87,7 @@ namespace WolvenKit.Modkit.RED4
                 return true;
             }
 
-            if (isGLBinary)
-            {
-                model.SaveGLB(outfile.FullName, new WriteSettings(vMode));
-            }
-            else
-            {
-                model.SaveGLTF(outfile.FullName, new WriteSettings(vMode));
-            }
+            model.Save(GLTFHelper.PrepareFilePath(outfile.FullName, isGLBinary), new WriteSettings(vMode));
 
             if (textureStreams.Count == 0)
             {
@@ -640,7 +633,7 @@ namespace WolvenKit.Modkit.RED4
                 }
 
                 var obj = new { targetNames = names }; // anonymous variable/obj
-                mes.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
+                mes.Extras = JsonSerializer.SerializeToNode(obj);
 
                 for (var i = 0; i < expTargets.Count; i++)
                 {

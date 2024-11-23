@@ -390,9 +390,20 @@
                 <!-- Duplicate-->
                 <MenuItem
                     Command="{Binding DuplicateSelectionCommand, Source={x:Reference redTreeView}}"
-                    Header="Duplicate Item(s) in Array/Buffer"
+                    Header="Duplicate in Array/Buffer (append after selection)"
                     IsCheckable="False"
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowDuplicate, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Style="{StaticResource ContextMenuIconStyleMaterial}" Kind="ContentDuplicate" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <!-- Duplicate-->
+                <MenuItem
+                    Command="{Binding DuplicateSelectionInPlaceCommand, Source={x:Reference redTreeView}}"
+                    Header="Duplicate in Array/Buffer"
+                    IsCheckable="False"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowDuplicateInplace, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
                         <iconPacks:PackIconMaterial Style="{StaticResource ContextMenuIconStyleMaterial}" Kind="ContentDuplicate" />
                     </MenuItem.Icon>

@@ -2,12 +2,14 @@
 using System.IO;
 using WolvenKit.App.Factories;
 using WolvenKit.Common;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 
 public class questPhaseNodeDefinitionWrapper : questEmbeddedGraphNodeDefinitionWrapper<questPhaseNodeDefinition>, IGraphProvider
 {
+    private readonly ILoggerService _loggerService;
     private readonly INodeWrapperFactory _nodeWrapperFactory;
     private readonly IArchiveManager _archiveManager;
 
@@ -26,8 +28,9 @@ public class questPhaseNodeDefinitionWrapper : questEmbeddedGraphNodeDefinitionW
     }
 
 
-    public questPhaseNodeDefinitionWrapper(questPhaseNodeDefinition questPhaseNodeDefinition, INodeWrapperFactory nodeWrapperFactory, IArchiveManager archiveManager) : base(questPhaseNodeDefinition)
+    public questPhaseNodeDefinitionWrapper(questPhaseNodeDefinition questPhaseNodeDefinition, ILoggerService loggerService, INodeWrapperFactory nodeWrapperFactory, IArchiveManager archiveManager) : base(questPhaseNodeDefinition)
     {
+        _loggerService = loggerService;
         _nodeWrapperFactory = nodeWrapperFactory;
         _archiveManager = archiveManager;
 
@@ -47,10 +50,16 @@ public class questPhaseNodeDefinitionWrapper : questEmbeddedGraphNodeDefinitionW
         else if (_castedData.PhaseResource.DepotPath != ResourcePath.Empty)
         {
             var cr2w = _archiveManager.GetCR2WFile(_castedData.PhaseResource.DepotPath);
+            if (cr2w == null)
+            {
+                _loggerService.Error($"The file \"{_castedData.PhaseResource.DepotPath}\" could not be found!");
+                return;
+            }
 
             if (cr2w is not { RootChunk: questQuestPhaseResource res } || res.Graph?.Chunk == null)
             {
-                throw new Exception();
+                _loggerService.Error($"The file \"{_castedData.PhaseResource.DepotPath}\" could not be opened!");
+                return;
             }
 
             var fileName = ((ulong)_castedData.PhaseResource.DepotPath).ToString();

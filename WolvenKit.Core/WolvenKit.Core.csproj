@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Version>8.15.1</Version>
+    <Version>8.15.1.1</Version>
     <Platforms>x64</Platforms>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <Nullable>enable</Nullable>
@@ -24,6 +24,7 @@
 
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageOutputPath>./nupkg</PackageOutputPath>
+	<NoWarn>NU5100</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
@@ -38,26 +39,36 @@
 
 
   <ItemGroup>
-    <ContentWithTargetPath Include="lib\kraken.dll">
+    <Content Include="lib\kraken.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <TargetPath>kraken.dll</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="lib\libkraken.so">
+	  <PackagePath>contentFiles\any\any;content</PackagePath>
+	  <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+    <Content Include="lib\libkraken.so">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <TargetPath>libkraken.so</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="lib\libkraken.dylib">
+	  <PackagePath>contentFiles\any\any;content</PackagePath>
+	  <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+    <Content Include="lib\libkraken.dylib">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <TargetPath>libkraken.dylib</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="lib\wwtools.dll">
+	  <PackagePath>contentFiles\any\any;content</PackagePath>
+	  <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+    <Content Include="lib\wwtools.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <TargetPath>wwtools.dll</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="lib\libwwtools.so">
+	  <PackagePath>contentFiles\any\any;content</PackagePath>
+	  <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+    <Content Include="lib\libwwtools.so">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <TargetPath>libwwtools.so</TargetPath>
-    </ContentWithTargetPath>
+	  <PackagePath>contentFiles\any\any;content</PackagePath>
+	  <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

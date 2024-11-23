@@ -88,8 +88,13 @@ public partial class ArchiveXlHelper
             return "string must start with '*'";
         }
 
-        List<string> invalidSubstitutions = [];
+        if (s.Contains(s_materialWildcard))
+        {
+            return null;
+        }
 
+        List<string> invalidSubstitutions = [];
+        
         foreach (Match match in s_substitutionRegex().Matches(s))
         {
             if (s_substitutionMap.ContainsKey(match.Value))
@@ -104,6 +109,7 @@ public partial class ArchiveXlHelper
         {
             return null;
         }
+        
 
         return
             $"Invalid substitutions used: [{string.Join(',', invalidSubstitutions)}]. Valid substitutions are: [{string.Join(',', s_substitutionMap.Keys)}] ";

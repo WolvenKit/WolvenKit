@@ -95,6 +95,9 @@ public partial class ModifierViewStateService() : ObservableObject, IModifierVie
     public static bool IsCtrlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
     public static bool IsAltBeingHeld => Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt);
     public static bool IsNoModifierBeingHeld => !IsShiftBeingHeld && !IsCtrlBeingHeld && !IsAltBeingHeld;
+    public static bool IsShiftBeingHeldOnly => IsShiftBeingHeld && !IsCtrlBeingHeld && !IsAltBeingHeld;
+    public static bool IsCtrlBeingHeldOnly => !IsShiftBeingHeld && IsCtrlBeingHeld && !IsAltBeingHeld;
+    public static bool IsAltBeingHeldOnly => !IsShiftBeingHeld && !IsCtrlBeingHeld && IsAltBeingHeld;
 
     private readonly Dictionary<Key, bool> _keyStates = [];
 

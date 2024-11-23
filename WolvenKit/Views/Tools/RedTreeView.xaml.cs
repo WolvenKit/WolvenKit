@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData.Kernel;
+using HandyControl.Controls;
 using ReactiveUI;
 using Splat;
 using Syncfusion.UI.Xaml.TreeView;
@@ -140,23 +141,17 @@ namespace WolvenKit.Views.Tools
 
         private void OnSelectionChanged(object sender, Syncfusion.UI.Xaml.TreeView.ItemSelectionChangedEventArgs e)
         {
-            foreach (var removedItem in e.RemovedItems)
+            foreach (var removedItem in e.RemovedItems.OfType<ISelectableTreeViewItemModel>())
             {
-                if (removedItem is ISelectableTreeViewItemModel selectable)
-                {
-                    selectable.IsSelected = false;
-                }
+                removedItem.IsSelected = false;
             }
 
-            foreach (var removedItem in e.AddedItems)
+            foreach (var addedItem in e.AddedItems.OfType<ISelectableTreeViewItemModel>())
             {
-                if (removedItem is ISelectableTreeViewItemModel selectable)
-                {
-                    selectable.IsSelected = true;
-                }
+                addedItem.IsSelected = true;
             }
 
-            RefreshContextMenuFlags();
+            RefreshSelectedItemsContextMenuFlags();
             RefreshCommandStatus();
         }
 
@@ -372,24 +367,51 @@ namespace WolvenKit.Views.Tools
 
         #region commands
 
-        private void RefreshCommandStatus()
-        {
-            DuplicateSelectionCommand.NotifyCanExecuteChanged();
-        }
+        private void RefreshCommandStatus() => DuplicateSelectionCommand.NotifyCanExecuteChanged();
 
 
-        [RelayCommand]
-        private async Task DuplicateSelection()
+        private async Task DuplicateSelectedChunks(bool preserveIndex = false)
         {
             var chunks = GetSelectedChunks();
 
-            for (var i = 0; i < chunks.Count; i++)
+
+            var tasks = chunks.Select(cvm => cvm.DuplicateChunkAsync(preserveIndex ? -1 : cvm.NodeIdxInParent + chunks.Count)).ToList();
+
+            var duplicatedChunks = await Task.WhenAll(tasks);
+
+            var newChunks = duplicatedChunks.Where(newChunk => newChunk != null).ToList();
+
+
+            if (ItemsSource is not ICollectionView collectionView)
             {
-                var cvm = chunks[i];
-                cvm.NodeIdxInParent += i;
-                await cvm.DuplicateChunkAsync();
+                return;
+            }
+
+            using (collectionView.DeferRefresh())
+            {
+                foreach (var cvm in chunks)
+                {
+                    cvm.IsSelected = false;
+                }
+
+                foreach (var cvm in newChunks)
+                {
+                    cvm.IsSelected = true;
+                }
             }
         }
+
+        /// <summary>
+        /// Duplicates each chunk in selection, appending new changes after the selected items.
+        /// </summary>
+        [RelayCommand]
+        private async Task DuplicateSelection() => await DuplicateSelectedChunks(false);
+
+        /// <summary>
+        /// Duplicates each chunk in selection, adding every new chunk directly next to the original. 
+        /// </summary>
+        [RelayCommand]
+        private async Task DuplicateSelectionInPlace() => await DuplicateSelectedChunks(true);
 
         [RelayCommand]
         private async Task DuplicateSelectionAsNew()
@@ -402,20 +424,23 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        public bool CanOpenSearchAndReplaceDialog => SelectedItem is ChunkViewModel { Parent: not null };
+
+        public bool CanOpenSearchAndReplaceDialog => !_isContextMenuOpen &&
+                                                     SelectedItem is ChunkViewModel { Parent: not null } &&
+                                                     !SearchAndReplaceDialog.IsInstanceOpen;
 
         // [RelayCommand(CanExecute = nameof(CanOpenSearchAndReplaceDialog))]
         [RelayCommand]
         private void OpenSearchAndReplaceDialog()
         {
-            if (SelectedItem is null && SelectedItems is null)
+            var selectedChunkViewModels = GetSelectedChunks();
+            if (selectedChunkViewModels.Count == 0)
             {
                 return;
             }
 
             var dialog = new SearchAndReplaceDialog();
-            var selectedChunkViewModels = GetSelectedChunks();
-            if (dialog.ShowDialog() != true || selectedChunkViewModels.Count == 0)
+            if (dialog.ShowDialog() != true)
             {
                 return;
             }
@@ -423,13 +448,17 @@ namespace WolvenKit.Views.Tools
             var searchText = dialog.ViewModel?.SearchText ?? "";
             var replaceText = dialog.ViewModel?.ReplaceText ?? "";
 
+            var cvm = selectedChunkViewModels.FirstOrDefault();
+
+            var expansionStates = selectedChunkViewModels
+                .Select(item => item.IsExpanded)
+                .ToList();
+
             var results = selectedChunkViewModels
                 .Select(item => item.SearchAndReplace(searchText, replaceText))
                 .ToList();
 
             var numReplaced = results.Count(r => r == true);
-
-            var cvm = selectedChunkViewModels.FirstOrDefault();
 
             if (numReplaced <= 0)
             {
@@ -439,6 +468,12 @@ namespace WolvenKit.Views.Tools
 
             cvm?.Tab?.Parent.SetIsDirty(true);
             _loggerService.Info($"Replaced {ChunkViewModel.NumReplacedEntries} occurrences of '{searchText}' with '{replaceText}'");
+
+            for (var i = 0; i < selectedChunkViewModels.Count; i++)
+            {
+                var expansionState = expansionStates.Count > i && expansionStates[i];
+                selectedChunkViewModels[i].IsExpanded = expansionState;
+            }
         }
 
 
@@ -495,8 +530,16 @@ namespace WolvenKit.Views.Tools
         /// <summary>
         /// Gets all selected chunks. If none are selected / if selection is invalid, it will return an empty list.
         /// </summary>
-        private List<ChunkViewModel> GetSelectedChunks() =>
-            SelectedItems is not ObservableCollection<object> selection ? [] : selection.OfType<ChunkViewModel>().ToList();
+        private List<ChunkViewModel> GetSelectedChunks()
+        {
+            if (SelectedItems is not ObservableCollection<object> selection)
+            {
+                return [];
+            }
+
+            var uniqueItems = new HashSet<(object Parent, string Name)>();
+            return selection.OfType<ChunkViewModel>().Where(x => uniqueItems.Add((x.Parent, x.Name))).ToList();
+        }
 
         private void OnDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -510,9 +553,9 @@ namespace WolvenKit.Views.Tools
             {
                 chunk = parent;
             }
-            
+
             var expansionState = chunk.IsExpanded;
-            
+
             var expansionStates = chunk.GetAllProperties().Select((child) => child.IsExpanded).ToList();
             chunk.SetChildExpansionStates(!expansionStates.Contains(true));
 
@@ -525,50 +568,51 @@ namespace WolvenKit.Views.Tools
             {
                 return null;
             }
-            
+
             return selection.OfType<ChunkViewModel>().ToList().FirstOrDefault((cvm) => cvm.Parent is null);
         }
 
-        private void RefreshContextMenuFlags(bool oneItemOnly = false)
+        private void RefreshSelectedItemsContextMenuFlags()
         {
-            var selectedChunks = GetSelectedChunks();
-            if (selectedChunks.Count == 0 || (oneItemOnly && selectedChunks.Count != 1)) { return; }
-
-            foreach (var cvm in selectedChunks)
+            foreach (var chunkViewModel in GetSelectedChunks())
             {
-                cvm.RefreshContextMenuFlags();
+                chunkViewModel.RefreshContextMenuFlags();
             }
         }
 
         private void TreeViewContextMenu_OnOpened(object sender, RoutedEventArgs e)
         {
             _isContextMenuOpen = true;
-            _modifierViewStateSvc.RefreshModifierStates();
-            RefreshContextMenuFlags(true);
+            RefreshSelectedItemsContextMenuFlags();
         }
 
         private void TreeViewContextMenu_OnClosed(object sender, RoutedEventArgs e) => _isContextMenuOpen = false;
 
         private void TreeViewContextMenu_OnKeyChanged(object sender, KeyEventArgs e)
         {
-            if (!_isContextMenuOpen)
-            {
-                return;
-            }
-
             _modifierViewStateSvc.OnKeystateChanged(e);
-            RefreshContextMenuFlags();
+            RefreshSelectedItemsContextMenuFlags();
         }
 
         private bool _isContextMenuOpen;
 
         private void TreeView_OnKeyChanged(object sender, KeyEventArgs e)
         {
-            if (!_isContextMenuOpen)
+            if (_isContextMenuOpen)
             {
-                _modifierViewStateSvc.OnKeystateChanged(e);
+                return;
             }
-        }
+            
+            if (e.Key == Key.F2 && e.IsUp && CanOpenSearchAndReplaceDialog)
+            {
+                OpenSearchAndReplaceDialog();
+                return;
+            }
 
+            _modifierViewStateSvc.OnKeystateChanged(e);
+        }
+        
+        
     }
+    
 }

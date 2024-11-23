@@ -132,7 +132,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
     [NotifyCanExecuteChangedFor(nameof(DeleteEmptySubmeshesCommand))]
     [NotifyCanExecuteChangedFor(nameof(DeleteDuplicateEntriesCommand))]
-    [NotifyCanExecuteChangedFor(nameof(RegenerateVisibleControllersCommand))]
+    [NotifyCanExecuteChangedFor(nameof(RegenerateVisualControllersCommand))]
     [NotifyCanExecuteChangedFor(nameof(DeleteUnusedMaterialsCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateMissingMaterialsCommand))]
     [ObservableProperty]
@@ -146,7 +146,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(AddDependenciesCommand))]
     [NotifyCanExecuteChangedFor(nameof(AddDependenciesFullCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateNewCruidCommand))]
-    [NotifyCanExecuteChangedFor(nameof(RegenerateVisibleControllersCommand))]
+    [NotifyCanExecuteChangedFor(nameof(RegenerateVisualControllersCommand))]
     [NotifyCanExecuteChangedFor(nameof(ClearMaterialsCommand))]
     [NotifyCanExecuteChangedFor(nameof(ToggleEnableMaskCommand))]
     [NotifyCanExecuteChangedFor(nameof(ScrollToMaterialCommand))]
@@ -205,10 +205,10 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [RelayCommand(CanExecute = nameof(CanGenerateNewCruid))]
     private void GenerateNewCruid() => SelectedChunk?.GenerateCRUIDCommand.Execute(null);
 
-    private bool CanRegenerateVisibleControllers() => SelectedChunk is { Name: "components", Data: CArray<entIComponent> };
+    private bool CanRegenerateVisualControllers() => SelectedChunk is { Name: "components", Data: CArray<entIComponent> };
 
-    [RelayCommand(CanExecute = nameof(CanRegenerateVisibleControllers))]
-    private void RegenerateVisibleControllers() => SelectedChunk?.RegenerateVisualControllerCommand.Execute(null);
+    [RelayCommand(CanExecute = nameof(CanRegenerateVisualControllers))]
+    private void RegenerateVisualControllers() => SelectedChunk?.RegenerateVisualControllerCommand.Execute(null);
 
     private bool CanDeleteDuplicateEntries() => ContentType is RedDocumentItemType.Json;
 

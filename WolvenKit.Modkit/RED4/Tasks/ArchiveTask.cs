@@ -55,7 +55,7 @@ public partial class ConsoleFunctions
                     _loggerService.Error("Input file is not an .archive.");
                     return ConsoleFunctions.ERROR_BAD_ARGUMENTS;
                 }
-                _archiveManager.LoadModArchive(file.FullName);
+                _archiveManager.LoadModArchive(file.FullName, false);
 
                 break;
             case DirectoryInfo directory:

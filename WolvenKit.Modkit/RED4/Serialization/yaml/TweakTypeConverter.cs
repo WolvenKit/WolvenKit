@@ -23,8 +23,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.yaml
 
         public bool Accepts(Type type) => typeof(IRedType).IsAssignableFrom(type);
 
-
-        public object ReadYaml(IParser parser, Type xtype)
+        public object? ReadYaml(IParser parser, Type xtype, ObjectDeserializer rootDeserializer)
         {
             IRedType result;
 
@@ -73,7 +72,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.yaml
                 {
                     do
                     {
-                        var x = ReadYaml(parser, innertype);
+                        var x = ReadYaml(parser, innertype, rootDeserializer);
                         array.Add(x);
                     } while (parser.Current.GetType() != _sequenceEndType);
                 }
@@ -178,7 +177,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.yaml
             return result;
         }
 
-        public void WriteYaml(IEmitter emitter, object? value, Type type)
+        public void WriteYaml(IEmitter emitter, object? value, Type type, ObjectSerializer serializer)
         {
             if (value is not IRedType itype)
             {
@@ -203,7 +202,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.yaml
                 {
                     if (item is IRedType i)
                     {
-                        WriteYaml(emitter, i, i.GetType());
+                        WriteYaml(emitter, i, i.GetType(), serializer);
                     }
                     else
                     {

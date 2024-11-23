@@ -1,4 +1,7 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
@@ -14,8 +17,10 @@ namespace WolvenKit.App.ViewModels.Dialogs;
 /// <summary>
 /// During the first time setup it tries to automatically determine the missing paths and settings.
 /// </summary>
-public partial class FirstSetupViewModel : DialogWindowViewModel
+public partial class FirstSetupViewModel : DialogWindowViewModel, INotifyDataErrorInfo
 {
+    private readonly Dictionary<string, List<string>> _errorsByPropertyName = new();
+
     private readonly ISettingsManager _settingsManager;
     private readonly ILoggerService _loggerService;
 
@@ -209,5 +214,79 @@ public partial class FirstSetupViewModel : DialogWindowViewModel
         _settingsManager.Bounce();
     }
 
+    partial void OnCP77ExePathChanged(string? value) => ValidateCP77ExePath();
+
+    public void ValidateCP77ExePath()
+    {
+        ClearError(nameof(CP77ExePath));
+        if (File.Exists(CP77ExePath) && Path.GetFileName(CP77ExePath).Equals(Core.Constants.Red4Exe))
+        {
+            var oodle = Path.Combine(new FileInfo(CP77ExePath).Directory!.FullName, Core.Constants.Oodle);
+            if (!File.Exists(oodle))
+            {
+                AddError(nameof(CP77ExePath), $"Oodle dll was not found within the game installation. Please make sure you have {Core.Constants.Oodle} next to your game executable.");
+            }
+        }
+        else
+        {
+            AddError(nameof(CP77ExePath), "Locate game executable (.exe) for full WolvenKit functionality.");
+        }
+    }
+
+    partial void OnMaterialDepotPathChanged(string value) => ValidateMaterialDepotPath();
+
+    public void ValidateMaterialDepotPath()
+    {
+        ClearError(nameof(MaterialDepotPath));
+        if (!Directory.Exists(MaterialDepotPath))
+        {
+            AddError(nameof(MaterialDepotPath), "Selected path does not exist");
+        }
+    }
+
     #endregion Methods
+
+    #region INotifyDataErrorInfo
+
+    private void AddError(string propertyName, string error)
+    {
+        if (!_errorsByPropertyName.TryGetValue(propertyName, out var errorList))
+        {
+            errorList = new List<string>();
+            _errorsByPropertyName.Add(propertyName, errorList);
+        }
+
+        if (!errorList.Contains(error))
+        {
+            errorList.Add(error);
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+        }
+    }
+
+    private void ClearError(string propertyName)
+    {
+        if (!_errorsByPropertyName.ContainsKey(propertyName))
+        {
+            return;
+        }
+
+        _errorsByPropertyName.Remove(propertyName);
+        ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+    }
+
+    public IEnumerable GetErrors(string? propertyName)
+    {
+        if (!string.IsNullOrEmpty(propertyName) && _errorsByPropertyName.TryGetValue(propertyName, out var errorList))
+        {
+            return errorList;
+        }
+
+        return new List<string>();
+    }
+
+    public bool HasErrors => _errorsByPropertyName.Count > 0;
+
+    public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+
+    #endregion INotifyDataErrorInfo
 }

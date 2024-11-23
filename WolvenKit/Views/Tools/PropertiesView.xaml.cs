@@ -1,17 +1,10 @@
 using System;
 using System.Collections.Specialized;
-using System.IO;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using HelixToolkit.Wpf.SharpDX;
 using ReactiveUI;
 using Splat;
 using Syncfusion.Windows.PropertyGrid;
-using WolvenKit.App.Helpers;
-using WolvenKit.App.Models;
 using WolvenKit.App.ViewModels.Tools;
 
 namespace WolvenKit.Views.Tools
@@ -49,6 +42,19 @@ namespace WolvenKit.Views.Tools
             };
 
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+
+            hxViewport.SizeChanged += (_, args) =>
+            {
+                var size = args.NewSize;
+                var showGizmos = size.Width > 250 && size.Height > 100;
+                var scale = size.Width < size.Height ? size.Width : size.Height;
+
+                scale = (scale < 250.0) ? scale / 250.0 : 1.0;
+                hxViewport.SetCurrentValue(Viewport3DX.CoordinateSystemSizeProperty, scale);
+                hxViewport.SetCurrentValue(Viewport3DX.ViewCubeSizeProperty, scale);
+                hxViewport.SetCurrentValue(Viewport3DX.ShowCoordinateSystemProperty, showGizmos);
+                hxViewport.SetCurrentValue(Viewport3DX.ShowViewCubeProperty, showGizmos);
+            };
         }
 
         private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

@@ -4,14 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
-using NAudio.MediaFoundation;
 using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.RED4.Animation;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
-using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
@@ -21,19 +19,12 @@ using static WolvenKit.Modkit.RED4.Animation.Const;
 using static WolvenKit.Modkit.RED4.Animation.Fun;
 using static WolvenKit.Modkit.RED4.Animation.Gltf;
 
-using Quat = System.Numerics.Quaternion;
-using Vec3 = System.Numerics.Vector3;
 using WolvenKit.Common.Model.Arguments;
-
-using TranslationsAtTimes = System.Collections.Generic.Dictionary<float, System.Numerics.Vector3>;
-using RotationsAtTimes = System.Collections.Generic.Dictionary<float, System.Numerics.Quaternion>;
-using ScalesAtTimes = System.Collections.Generic.Dictionary<float, System.Numerics.Vector3>;
+using WolvenKit.Modkit.RED4.Tools.Common;
 
 using JointsTranslationsAtTimes = System.Collections.Generic.Dictionary<ushort, System.Collections.Generic.Dictionary<float, System.Numerics.Vector3>>;
 using JointsRotationsAtTimes = System.Collections.Generic.Dictionary<ushort, System.Collections.Generic.Dictionary<float, System.Numerics.Quaternion>>;
 using JointsScalesAtTimes = System.Collections.Generic.Dictionary<ushort, System.Collections.Generic.Dictionary<float, System.Numerics.Vector3>>;
-
-using JointWiseScaleList = System.Collections.Generic.Dictionary<ushort, System.Collections.Generic.List<(float, System.Numerics.Vector3)>>;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -58,14 +49,7 @@ namespace WolvenKit.Modkit.RED4
             var model = ModelRoot.CreateModel();
             GetAnimation(animsFile, result.File!, outfile.Name, ref model, true, additiveAddRelative, incRootMotion);
 
-            if (isGLBinary)
-            {
-                model.SaveGLB($"{outfile.FullName}.anims", new WriteSettings(vmode));
-            }
-            else
-            {
-                model.SaveGLTF($"{outfile.FullName}.anims", new WriteSettings(vmode));
-            }
+            model.Save(GLTFHelper.PrepareFilePath(outfile.FullName, isGLBinary), new WriteSettings(vmode));
 
             return true;
         }
@@ -309,7 +293,7 @@ namespace WolvenKit.Modkit.RED4
                 // Right now it's not possible to add an empty array to a JsonContent.
                 // Can work around that elsewhere but... just don't implement your own
                 // JSON parser, kids.
-                gltfAnim.Extras = SharpGLTF.IO.JsonContent.Parse(JsonSerializer.Serialize(animExtras, SerializationOptions()));
+                gltfAnim.Extras = JsonSerializer.SerializeToNode(animExtras);
             }
 
             if (stats.RootMotionConflicts > 0)
@@ -415,7 +399,7 @@ namespace WolvenKit.Modkit.RED4
 
                 // Prep and metadata
 
-                if (incomingAnim.Extras.Content is null)
+                if (incomingAnim.Extras is null)
                 {
                     throw new InvalidOperationException($"{gltfFileName}: animation `{incomingAnim.Name}` has no extra data, can't import!");
                 }

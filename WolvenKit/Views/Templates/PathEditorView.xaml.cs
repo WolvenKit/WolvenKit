@@ -1,3 +1,7 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 using System.Windows;
 using Microsoft.Win32;
@@ -19,8 +23,10 @@ namespace WolvenKit.Controls
     /// <summary>
     /// Interaction logic for PathEditorView.xaml
     /// </summary>
-    public partial class PathEditorView
+    public partial class PathEditorView : INotifyDataErrorInfo
     {
+        private readonly Dictionary<string, List<string>> _errorsByPropertyName = new();
+
         private readonly bool _isFolderPicker;
         private readonly bool _multiselect;
         private readonly PathEditorFilter[] _filters;
@@ -40,31 +46,15 @@ namespace WolvenKit.Controls
             set => SetValue(TextProperty, value);
         }
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register(
-            nameof(Text), typeof(string), typeof(PathEditorView), new PropertyMetadata(""));
+            nameof(Text), typeof(string), typeof(PathEditorView), new PropertyMetadata("", OnTextChanged));
 
-        private HandyControl.Data.OperationResult<bool> VerifyFile(string str)
+        private static void OnTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (_isFolderPicker)
-            {
-                if (System.IO.Directory.Exists(str))
-                {
-                    notification.SetCurrentValue(System.Windows.Controls.Primitives.Popup.IsOpenProperty, false);
-                    return HandyControl.Data.OperationResult.Success();
-                }
+            var view = (PathEditorView)d;
 
-                return HandyControl.Data.OperationResult.Failed();
-            }
-            else
-            {
-                if (System.IO.File.Exists(str))
-                {
-                    notification.SetCurrentValue(System.Windows.Controls.Primitives.Popup.IsOpenProperty, false);
-                    return HandyControl.Data.OperationResult.Success();
-                }
-
-                return HandyControl.Data.OperationResult.Failed();
-            }
+            view.ValidateText();
         }
+
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
@@ -152,5 +142,69 @@ namespace WolvenKit.Controls
                 }
             }
         }
+
+        public void ValidateText()
+        {
+            ClearError(nameof(Text));
+
+            if (_isFolderPicker)
+            {
+                if (!System.IO.Directory.Exists(Text))
+                {
+                    AddError(nameof(Text), "Directory doesn't exists");
+                }
+            }
+            else
+            {
+                if (!System.IO.File.Exists(Text))
+                {
+                    AddError(nameof(Text), "File doesn't exists");
+                }
+            }
+        }
+
+        #region INotifyDataErrorInfo
+
+        private void AddError(string propertyName, string error)
+        {
+            if (!_errorsByPropertyName.TryGetValue(propertyName, out var errorList))
+            {
+                errorList = new List<string>();
+                _errorsByPropertyName.Add(propertyName, errorList);
+            }
+
+            if (!errorList.Contains(error))
+            {
+                errorList.Add(error);
+                ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+            }
+        }
+
+        private void ClearError(string propertyName)
+        {
+            if (!_errorsByPropertyName.ContainsKey(propertyName))
+            {
+                return;
+            }
+
+            _errorsByPropertyName.Remove(propertyName);
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+        }
+
+        public IEnumerable GetErrors(string propertyName)
+        {
+            if (!string.IsNullOrEmpty(propertyName) && _errorsByPropertyName.TryGetValue(propertyName, out var errorList))
+            {
+                return errorList;
+            }
+
+            return new List<string>();
+        }
+
+        public bool HasErrors => _errorsByPropertyName.Count > 0;
+
+        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+        #endregion INotifyDataErrorInfo
     }
 }
