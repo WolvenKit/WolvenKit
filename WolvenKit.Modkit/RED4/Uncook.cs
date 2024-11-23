@@ -563,7 +563,9 @@ namespace WolvenKit.Modkit.RED4
                     // actual type extension we want it to...
                     var typePreservingOutfile = new FileInfo($"{outfile.FullName}");
 
-                    return ExportMorphTargets(cr2wFile, typePreservingOutfile,
+                    return ExportMorphTargets(cr2wFile,
+                        typePreservingOutfile,
+                        settings.Get<MorphTargetExportArgs>().MaterialRepo ?? Directory.CreateTempSubdirectory().FullName,
                         settings.Get<MorphTargetExportArgs>().IsBinary,
                         settings.Get<MorphTargetExportArgs>().ExportTextures);
 

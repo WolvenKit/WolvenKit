@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using SharpDX.DXGI;
 using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
@@ -8,13 +10,14 @@ using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Helpers;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.IO;
-using YamlDotNet.Serialization;
+using WolvenKit.RED4.Types;
 using EFileReadErrorCodes = WolvenKit.RED4.Archive.IO.EFileReadErrorCodes;
 
 namespace WolvenKit.App.Helpers;
@@ -27,6 +30,7 @@ public class ImportExportHelper
     private readonly IPluginService _pluginService;
     private readonly IModTools _modTools;
     private readonly IHookService _hookService;
+    
 
     public ImportExportHelper(
         ILoggerService loggerService,
@@ -169,7 +173,8 @@ public class ImportExportHelper
 
     #endregion RedMod
 
-    public async Task<bool> Export(FileInfo cr2wFile, GlobalExportArgs args, DirectoryInfo basedir, DirectoryInfo? rawoutdir = null, ECookedFileFormat[]? forcebuffers = null) =>
+    public async Task<bool> Export(FileInfo cr2wFile, GlobalExportArgs args, DirectoryInfo basedir, DirectoryInfo? rawoutdir = null,
+        ECookedFileFormat[]? forcebuffers = null) =>
         await Task.Run(async () =>
         {
             _hookService.OnExport(ref cr2wFile, ref args);

@@ -84,6 +84,12 @@ namespace WolvenKit.Common.Model.Arguments
         private bool _exportTextures = false;
 
         /// <summary>
+        /// Material Repository path for WithMaterials Mesh Export.
+        /// </summary>
+        [Browsable(false)]
+        public string? MaterialRepo { get; set; }
+
+        /// <summary>
         /// Binary Export Bool, Decides between GLB and GLTF
         /// </summary>
         [Category("Export Settings")]

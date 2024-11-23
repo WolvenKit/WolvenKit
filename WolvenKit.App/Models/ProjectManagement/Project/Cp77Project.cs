@@ -522,7 +522,7 @@ public sealed partial class Cp77Project(string location, string name, string mod
 
         return relPath;
     }
-
+    
     public ResourcePath GetRelativeResourcePath(string fullPath)
     {
         var ret = new ResourcePath();
