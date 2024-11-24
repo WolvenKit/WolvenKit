@@ -455,11 +455,33 @@
                     Header="Regenerate visual controllers"
                     Command="{Binding Path=RegenerateVisualControllersCommand}" />
 
-                <!-- Regenerate controllers -->
+                <!-- Hide chunks in bulk -->
                 <MenuItem
                     Style="{StaticResource MenuItemInAppFileStyle}"
                     Header="Change chunk view by component"
                     Click="OnChangeChunkMasksClick" />
+
+                <!-- Select animation path -->
+                <MenuItem
+                    Style="{StaticResource WolvenKitToolBarItem}"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Header="Change facial animations"
+                    Command="{Binding Path=ChangeAnimationComponentCommand}"
+                    Click="OnChangeAnimationClick" />
+
+                <!-- Convert to photo mode .app -->
+                <MenuItem
+                    Style="{StaticResource WolvenKitToolBarItem}"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Header="Convert to photo mode .app"
+                    Command="{Binding Path=ConvertToPhotoModeApp}"
+                    Click="OnConvertToPhotoModeClick" />
 
             </MenuItem>
 

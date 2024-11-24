@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Input;
+using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Splat;
@@ -54,7 +54,6 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     public CR2WFile? Cr2WFile => CurrentTab?.Parent.Cr2wFile;
 
     [ObservableProperty] private bool _showToolbar;
-
 
     public void RefreshMenuVisibility(bool forceRefreshContentType = false)
     {
@@ -126,7 +125,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
         SelectedChunk ??= RootChunk;
 
-        isEmptySubmeshesDeleted = false;
+        _isEmptySubmeshesDeleted = false;
     }
 
 
@@ -157,7 +156,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [ObservableProperty]
     private ChunkViewModel? _selectedChunk;
 
-    private List<ChunkViewModel> SelectedChunks { get; } = [];
+    public List<ChunkViewModel> SelectedChunks { get; } = [];
 
     private void RefreshMeshMenuItems()
     {
@@ -205,52 +204,119 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [RelayCommand(CanExecute = nameof(CanGenerateNewCruid))]
     private void GenerateNewCruid() => SelectedChunk?.GenerateCRUIDCommand.Execute(null);
 
-    private bool CanRegenerateVisualControllers() => SelectedChunk is { Name: "components", Data: CArray<entIComponent> };
+    #region appFile
 
+    /*
+     * Regenerate visual controllers
+     */
+    private bool CanRegenerateVisualControllers() => SelectedChunk is { Name: "components", Data: CArray<entIComponent> };
+    
     [RelayCommand(CanExecute = nameof(CanRegenerateVisualControllers))]
     private void RegenerateVisualControllers() => SelectedChunk?.RegenerateVisualControllerCommand.Execute(null);
 
+    private bool CanChangeAnimationComponent() => RootChunk is { };
+
+    /*
+     * Change animation component
+     */
+    [RelayCommand(CanExecute = nameof(CanChangeAnimationComponent))]
+    private void ChangeAnimationComponent()
+    {
+        // do nothing, we're handling this in view model's click 
+    }
+
+
+    [GeneratedRegex(@"^appearance_\d\d$")]
+    private static partial Regex PhotomodeAppNameRegex();
+
+    /*
+     * Convert to photo mode app
+     */
+
+    // are there any apps not named "appearance_xx"?
+    private bool CanConvertToPhotoModeApp() => RootChunk?.ResolvedData is appearanceAppearanceResource app && app.Appearances
+        .Select(x => x.Chunk)
+        .Select(x => x?.Name.GetResolvedText() ?? "")
+        .Any(x => !PhotomodeAppNameRegex().IsMatch(x));
+
+    [RelayCommand(CanExecute = nameof(CanConvertToPhotoModeApp))]
+    private void ConvertToPhotoModeApp()
+    {
+        // Do nothing, we're handling this in onClick of view model
+    }
+
+    #endregion
+
+    #region jsonFile
+
+    /*
+     * Delete duplicate entries
+     */
     private bool CanDeleteDuplicateEntries() => ContentType is RedDocumentItemType.Json;
 
     [RelayCommand(CanExecute = nameof(CanDeleteDuplicateEntries))]
     private void DeleteDuplicateEntries() => RootChunk?.DeleteDuplicateEntriesCommand.Execute(null);
 
-    private bool isEmptySubmeshesDeleted = false;
-    private bool CanDeleteEmptySubmeshes() => ContentType is RedDocumentItemType.Mesh && !isEmptySubmeshesDeleted;
+    #endregion
+
+    #region meshFile
+
+    /*
+     * Delete empty submeshes
+     */
+    private bool _isEmptySubmeshesDeleted;
+
+    private bool CanDeleteEmptySubmeshes() =>
+        !_isEmptySubmeshesDeleted && ContentType is RedDocumentItemType.Mesh && !_isEmptySubmeshesDeleted;
 
     [RelayCommand(CanExecute = nameof(CanDeleteEmptySubmeshes))]
     private void DeleteEmptySubmeshes()
     {
-        isEmptySubmeshesDeleted = true;
+        _isEmptySubmeshesDeleted = true;
         RootChunk?.DeleteEmptySubmeshesCommand.Execute(null);
     }
 
+    /*
+     * Scroll to material
+     */
     private bool CanScrollToMaterial() => SelectedChunk?.ShowScrollToMaterial == true;
 
     [RelayCommand(CanExecute = nameof(CanScrollToMaterial))]
     private void ScrollToMaterial() => SelectedChunk?.ScrollToMaterialCommand.Execute(null);
 
-    private bool CanToggleEnableMask() => SelectedChunk?.ResolvedData is CMaterialInstance or CArray<IMaterial>;
-
-    [RelayCommand(CanExecute = nameof(CanToggleEnableMask))]
-    private void ToggleEnableMask() => SelectedChunk?.ToggleEnableMaskedCommand.Execute(null);
-
+    /*
+     * mesh: convert preloadXXX to regular local materials
+     */
     private bool CanConvertPreloadMaterials() => RootChunk?.ResolvedData is CMesh mesh &&
                                                  (mesh.PreloadExternalMaterials.Count > 0 || mesh.PreloadLocalMaterialInstances.Count > 0);
 
     [RelayCommand(CanExecute = nameof(CanConvertPreloadMaterials))]
     private void ConvertPreloadMaterials() => RootChunk?.ConvertPreloadMaterialsCommand.Execute(null);
 
+    /*
+     * mesh: clear appearances
+     */
     private bool CanClearAppearances() => RootChunk?.CanClearMaterials() == true;
 
-    private bool HasMeshAppearances() => RootChunk?.ResolvedData is CMesh mesh && mesh.Appearances.Count > 0;
+    private bool HasMeshAppearances() => RootChunk?.ResolvedData is CMesh { Appearances.Count: > 0 };
 
     [RelayCommand(CanExecute = nameof(CanClearAppearances))]
     private void ClearMaterials() => RootChunk?.ClearMaterialsCommand.Execute(null);
 
-    public bool IsMaterialDefinition() => SelectedChunk?.IsMaterialDefinition() == true;
+    #region meshfile_materials
 
-    [RelayCommand(CanExecute = nameof(IsMaterialDefinition))]
+    /*
+     * Toggle "Enable mask"
+     */
+    private bool IsMaterialDefinitionOrParent() => SelectedChunk?.ResolvedData is CMaterialInstance or CArray<IMaterial>;
+
+    [RelayCommand(CanExecute = nameof(IsMaterialDefinitionOrParent))]
+    private void ToggleEnableMask() => SelectedChunk?.ToggleEnableMaskedCommand.Execute(null);
+
+    /*
+     * Toggle "Local instance"
+     */
+    [RelayCommand(CanExecute = nameof(IsMaterialDefinitionOrParent))]
     private void ToggleLocalInstance()
     {
         foreach (var chunk in SelectedChunks)
@@ -261,11 +327,14 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         SelectedChunks.LastOrDefault()?.Parent?.RecalculateProperties();
     }
 
+    #endregion
+
     private bool CanDeleteUnusedMaterials() => RootChunk?.ResolvedData is CMesh mesh && mesh.MaterialEntries.Count > 0;
 
     [RelayCommand(CanExecute = nameof(CanDeleteUnusedMaterials))]
     private void DeleteUnusedMaterials() => RootChunk?.DeleteUnusedMaterialsCommand.Execute(false);
 
+    #endregion
     [RelayCommand(CanExecute = nameof(HasMeshAppearances))]
     private void GenerateMissingMaterials()
     {

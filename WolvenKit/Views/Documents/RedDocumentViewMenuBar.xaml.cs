@@ -14,6 +14,7 @@ using WolvenKit.App;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Scripting;
 using WolvenKit.App.ViewModels.Shell;
@@ -49,8 +50,8 @@ namespace WolvenKit.Views.Documents
             _modifierStateService = Locator.Current.GetService<IModifierViewStateService>()!;
             
             InitializeComponent();
-            
-            RegisterFileValidationScript();
+
+            InitializeInstanceObjects();
 
             DataContext = new RedDocumentViewToolbarModel { CurrentTab = _currentTab };
             ViewModel = DataContext as RedDocumentViewToolbarModel;
@@ -75,7 +76,7 @@ namespace WolvenKit.Views.Documents
 
         private ScriptFileViewModel? _fileValidationScript;
 
-        private void RegisterFileValidationScript()
+        private void InitializeInstanceObjects()
         {
             _fileValidationScript = _scriptService.GetScripts(ISettingsManager.GetWScriptDir()).ToList()
                 .Where(s => s.Name == "run_FileValidation_on_active_tab")
@@ -86,6 +87,9 @@ namespace WolvenKit.Views.Documents
                 .Where(s => s.Name == "run_FileValidation_on_active_tab")
                 .Select(s => new ScriptFileViewModel(_settingsManager, ScriptSource.System, s))
                 .FirstOrDefault();
+
+            _facialSetups.Clear();
+            _facialSetups.AddRange(_archiveManager.Search(".facialsetup", ArchiveManagerScope.Basegame).Select(f => f.FileName).ToList());
         }
 
         public RedDocumentTabViewModel? CurrentTab
@@ -162,8 +166,6 @@ namespace WolvenKit.Views.Documents
             DispatcherHelper.RunOnMainThread(() => Task.Run(async () => await RunFileValidation()).GetAwaiter().GetResult());
         }
 
-        private void OnConvertLocalMaterialsClick(object _, RoutedEventArgs e) => RootChunk?.ConvertPreloadMaterialsCommand.Execute(null);
-
         private void OnGenerateMissingMaterialsClick(object _, RoutedEventArgs e)
         {
             var dialog = new CreateMaterialsDialog();
@@ -225,7 +227,7 @@ namespace WolvenKit.Views.Documents
 
             var destFolder = Interactions.AskForTextInput("Target folder for dependencies");
 
-            if (destFolder is not null)
+            if (!string.IsNullOrEmpty(destFolder))
             {
                 return destFolder;
             }
@@ -411,6 +413,8 @@ namespace WolvenKit.Views.Documents
 
         private MenuItem? _openMenu;
 
+        private static List<string> _facialSetups = [];
+
         private void RefreshChildMenuItems()
         {
             if (_openMenu is null)
@@ -488,6 +492,132 @@ namespace WolvenKit.Views.Documents
             {
                 SearchBar_OnClear(this, e);
             }
+        }
+
+        private void OnConvertToPhotoModeClick(object sender, RoutedEventArgs e)
+        {
+            if (RootChunk?.ResolvedData is not appearanceAppearanceResource app)
+            {
+                return;
+            }
+
+            var appearanceChildren =
+                (RootChunk.GetPropertyChild("appearances")?.Properties.ToList() ?? []).Where(cvm =>
+                    cvm.ResolvedData is appearanceAppearanceDefinition).ToList();
+
+            if (!appearanceChildren.Any())
+            {
+                return;
+            }
+
+            if (appearanceChildren.Count > 20)
+            {
+                _loggerService.Warning("Your .app has more than 20 appearances - Nibbles Replacer only supports 20.");
+                appearanceChildren = appearanceChildren.Take(20).ToList();
+            }
+
+            var counter = 01;
+            foreach (var appNode in appearanceChildren)
+            {
+                appNode.CalculateProperties();
+                // type check has already been done
+                ((appearanceAppearanceDefinition)appNode.ResolvedData).Name = $"appearance_{counter:D2}";
+                counter += 1;
+                RootChunk?.Tab?.Parent.SetIsDirty(true);
+                appNode.RecalculateProperties();
+            }
+        }
+
+        private void OnChangeAnimationClick(object sender, RoutedEventArgs e)
+        {
+            if (RootChunk?.ResolvedData is not appearanceAppearanceResource app)
+            {
+                return;
+            }
+
+            var appearanceChildren =
+                (RootChunk.GetPropertyChild("appearances")?.Properties.ToList() ?? []).Where(cvm =>
+                    cvm.ResolvedData is appearanceAppearanceDefinition).ToList();
+
+            if (!appearanceChildren.Any())
+            {
+                return;
+            }
+
+            var dialog = new SelectFacialAnimationPathDialog(_facialSetups);
+            if (dialog.ShowDialog() != true)
+            {
+                return;
+            }
+
+            var facialAnim = dialog.ViewModel?.SelectedAnimPath;
+            var animGraph = dialog.ViewModel?.SelectedGraphPath;
+
+            // make sure that the appearances are initialized, they might not be
+            if (appearanceChildren.FirstOrDefault()?.Properties.Any() != true)
+            {
+                foreach (var chunkViewModel in appearanceChildren)
+                {
+                    chunkViewModel.CalculateProperties();
+                }
+            }
+
+            foreach (var appNode in appearanceChildren)
+            {
+                if (appNode.GetPropertyChild("components") is not ChunkViewModel componentsNode)
+                {
+                    continue;
+                }
+
+                componentsNode.CalculateProperties();
+                var animationChildren =
+                    componentsNode.Properties.Where(prop => prop.ResolvedData is entAnimatedComponent).ToList() ?? [];
+
+                if (ChangeAnimation(animationChildren, animGraph, facialAnim))
+                {
+                    componentsNode.RecalculateProperties();
+                    RootChunk?.Tab?.Parent.SetIsDirty(true);
+                }
+            }
+        }
+
+        private static bool ChangeAnimation(List<ChunkViewModel> animNodes, string? selectedGraph, string? selectedFacialAnim)
+        {
+            if (animNodes.Count == 0 || (string.IsNullOrEmpty(selectedGraph) && string.IsNullOrEmpty(selectedFacialAnim)))
+            {
+                return false;
+            }
+
+            var isChanged = false;
+
+            foreach (var cvm in animNodes)
+            {
+                if (cvm.ResolvedData is not entAnimatedComponent comp || comp.Name.GetResolvedText() != "face_rig")
+                {
+                    continue;
+                }
+
+                var propertyChanged = false;
+                if (!string.IsNullOrEmpty(selectedFacialAnim))
+                {
+                    comp.Graph = new CResourceReference<animAnimGraph>(selectedFacialAnim);
+                    propertyChanged = true;
+                }
+
+                if (!string.IsNullOrEmpty(selectedGraph))
+                {
+                    comp.FacialSetup = new CResourceAsyncReference<animFacialSetup>(selectedGraph);
+                    propertyChanged = true;
+                }
+
+                if (propertyChanged)
+                {
+                    // force refresh
+                    cvm.RecalculateProperties();
+                }
+            }
+
+            return isChanged;
         }
     }
 }
