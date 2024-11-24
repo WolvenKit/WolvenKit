@@ -602,6 +602,22 @@ namespace WolvenKit.RED4.CR2W.Archive
             return Optional<IGameFile>.None;
         }
 
+        public List<IGameFile> Search(string search, ArchiveManagerScope searchScope) =>
+            Archives
+                .Items
+                .Where(x => searchScope switch
+                {
+                    ArchiveManagerScope.Basegame => x.Source is EArchiveSource.Base,
+                    ArchiveManagerScope.Mods => x.Source is EArchiveSource.Mod,
+                    ArchiveManagerScope.Everywhere => true,
+                    _ => false,
+                })
+                .SelectMany(x => x.Files.Values)
+                .Where(file => file.FileName.Contains(search))
+                .GroupBy(x => x.Key)
+                .Select(x => x.First())
+                .ToList();
+
         public IGameFile? GetGameFile(ResourcePath path, bool includeMods = true, bool includeProject = true)
         {
             var filePath = path.GetResolvedText() ?? "";
