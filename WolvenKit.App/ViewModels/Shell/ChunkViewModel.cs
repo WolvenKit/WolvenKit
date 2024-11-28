@@ -1688,6 +1688,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return this;
         }
 
+        CalculateProperties();
+
         if (TVProperties.FirstOrDefault(prop => prop.Name == propertyNames[0]) is not ChunkViewModel cvm)
         {
             return null;

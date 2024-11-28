@@ -472,17 +472,6 @@
                     Command="{Binding Path=ChangeAnimationComponentCommand}"
                     Click="OnChangeAnimationClick" />
 
-                <!-- Convert to photo mode .app -->
-                <MenuItem
-                    Style="{StaticResource WolvenKitToolBarItem}"
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Header="Convert to photo mode .app"
-                    Command="{Binding Path=ConvertToPhotoModeApp}"
-                    Click="OnConvertToPhotoModeClick" />
-
             </MenuItem>
 
             <!-- CRUIDs -->

@@ -6,7 +6,7 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:converters="clr-namespace:WolvenKit.Converters"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
-    Title="Change facian animation"
+    Title="Change facial animation"
     SizeToContent="WidthAndHeight"
     FocusManager.FocusedElement="{Binding ElementName=FacialAnimDropdown}"
     WindowStartupLocation="CenterScreen"
@@ -24,7 +24,11 @@
                     <hc:ThemeResources />
                     <hc:Theme />
                 </ResourceDictionary.MergedDictionaries>
-                <converters:IntToVisibilityConverter x:Key="IntToVisibilityConverter" />
+                <Style TargetType="{x:Type Label}">
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                </Style>
+
+
                 <converters:IntToVisibilityConverterInverted x:Key="IntToVisibilityConverterInverted" />
             </ResourceDictionary>
         </Grid.Resources>
@@ -44,66 +48,115 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="120" />
+                        <ColumnDefinition Width="140" />
                         <ColumnDefinition Width="300" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="10" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="15" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="10" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <Label Content="Animation set" HorizontalAlignment="Left"
+                    <Label Content="Animation set" 
                            Grid.Row="0"
                            Grid.Column="0"
+                           HorizontalAlignment="Left"
                            Background="#252525" BorderThickness="0" /> <!-- Label for the dropdown -->
 
-                    <ComboBox
-                        x:Name="FacialAnimDropdown"
-                        Grid.Row="0"
-                        Grid.Column="1"
-                        ItemsSource="{Binding FacialAnimOptions}"
-                        DisplayMemberPath="Key"
-                        SelectedValuePath="Value"
-                        SelectedValue="{Binding SelectedFacialAnim}" />
+                    <ComboBox x:Name="FacialAnimDropdown"
+                              Grid.Row="0"
+                              Grid.Column="1"
+                              ItemsSource="{Binding FacialAnimOptions}"
+                              SelectedValue="{Binding SelectedFacialAnim}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Key}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
 
-
-                    <Label Content="Expression set" HorizontalAlignment="Left"
+                    <Label Content="Expression set"
                            Grid.Row="2"
                            Grid.Column="0"
+                           HorizontalAlignment="Left"
                            Background="#252525"
                            BorderThickness="0" /> <!-- Label for the filter box -->
 
-                    <TextBox
-                        x:Name="ExpressionSearchBox"
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}"
-                        Foreground="{StaticResource ForegroundColor_Grey_Dark}"
-                        helpers:TextBoxBehavior.TripleClickSelectAll="True"
-                        Margin="0 10 0 0" />
+                    <TextBox x:Name="ExpressionSearchBox"
+                             Grid.Row="2"
+                             Grid.Column="1"
+                             Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}"
+                             Foreground="{StaticResource ForegroundColor_Grey_Dark}"
+                             helpers:TextBoxBehavior.TripleClickSelectAll="True"
+                             Margin="0 10 0 0" />
 
-                    <TextBlock
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        VerticalAlignment="Center"
-                        Padding="10, 0"
-                        Margin="0 10 0 0"
-                        Text="Filter"
-                        Foreground="{StaticResource ForegroundColor_Grey_Inactive}"
-                        Visibility="{Binding ElementName=ExpressionSearchBox, Path=Text.Length, Converter={StaticResource IntToVisibilityConverterInverted}}"
-                        IsHitTestVisible="False" />
+                    <TextBlock Text="Filter"
+                               Grid.Row="2"
+                               Grid.Column="1"
+                               VerticalAlignment="Center"
+                               Padding="10, 0"
+                               Margin="0 10 0 0"
+                               Foreground="{StaticResource ForegroundColor_Grey_Inactive}"
+                               Visibility="{Binding ElementName=ExpressionSearchBox, Path=Text.Length, Converter={StaticResource IntToVisibilityConverterInverted}}"
+                               IsHitTestVisible="False" />
 
-                    <ComboBox
-                        x:Name="AnimGraphDropdown"
-                        Grid.Row="2"
-                        Grid.Column="1"
-                        ItemsSource="{Binding FilteredGraphOptions, UpdateSourceTrigger=PropertyChanged}"
-                        DisplayMemberPath="Key"
-                        SelectedValuePath="Value"
-                        SelectedValue="{Binding SelectedGraph}">
+
+                    <ComboBox x:Name="AnimGraphDropdown"
+                              Grid.Row="4"
+                              Grid.Column="1"
+                              ItemsSource="{Binding FilteredGraphOptions, UpdateSourceTrigger=PropertyChanged}"
+                              SelectedValuePath="Value"
+                              SelectedValue="{Binding SelectedGraph}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Key}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
                     </ComboBox>
 
+
+                    <Label Content="Animation entries"
+                           Grid.Row="6"
+                           Grid.Column="0"
+                           Background="#252525"
+                           HorizontalAlignment="Left"
+                           BorderThickness="0" /> <!-- Label for the dropdown -->
+
+                    <ComboBox x:Name="AnimEntryDropdown"
+                              Grid.Row="6"
+                              Grid.Column="1"
+                              ItemsSource="{Binding AnimEntryOptions}"
+                              SelectedValue="{Binding SelectedAnimEntrySet}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Key}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <Label Content="Is photo mode .app"
+                           Grid.Row="8"
+                           Grid.Column="0"
+                           Background="#252525" BorderThickness="0"
+                           HorizontalAlignment="Left" /> <!-- Label for the dropdown -->
+
+                    <CheckBox x:Name="IsPhotomodeCheckbox"
+                              Grid.Row="8"
+                              Grid.Column="1"
+                              IsChecked="{Binding IsRenameAnimsForPhotomode}">
+                    </CheckBox>
                 </Grid>
             </syncfusion:WizardPage>
         </syncfusion:WizardControl>
