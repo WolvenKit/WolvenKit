@@ -1,9 +1,12 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.ClearScript.JavaScript;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Types;
 
@@ -24,7 +27,8 @@ public partial class SelectAnimationPathViewModel : ObservableObject
     [ObservableProperty] private List<string>? _selectedAnimEntries;
     [ObservableProperty] private bool _isRenameAnimsForPhotomode;
 
-    public SelectAnimationPathViewModel(List<string> facialSetupPaths) =>
+    public SelectAnimationPathViewModel(List<string> facialSetupPaths)
+    {
         facialSetupPaths.Where(path => !_animGraphOptions.ContainsValue(path)).ToList().ForEach(path =>
         {
             if (AnimNameRegex().Matches(path).FirstOrDefault()?.Value is not string animName)
@@ -42,8 +46,11 @@ public partial class SelectAnimationPathViewModel : ObservableObject
             }
 
             _animGraphOptions.Add(animKey, path);
-            FilteredGraphOptions = _animGraphOptions;
         });
+
+        UpdateFilteredGraphOptions();
+    }
+        
 
     private Dictionary<string, string> _facialAnimOptions = new()
     {
@@ -156,16 +163,28 @@ public partial class SelectAnimationPathViewModel : ObservableObject
         "base\\animations\\facial\\gameplay\\face_ma_gang_unarmed_reaction_death.anims",
     ];
 
+    private void UpdateFilteredGraphOptions()
+    {
+        var filteredOptions = _animGraphOptions
+            .Where(o => string.IsNullOrEmpty(FilterText) ||
+                        o.Key.Contains(FilterText, StringComparison.OrdinalIgnoreCase) ||
+                        o.Value.Contains(FilterText, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+
+        FilteredGraphOptions.Clear();
+        foreach (var option in filteredOptions)
+        {
+            FilteredGraphOptions.Add(option);
+        }
+    }
+    // .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
         switch (e.PropertyName)
         {
             case nameof(FilterText):
-                FilteredGraphOptions = string.IsNullOrEmpty(FilterText)
-                    ? _animGraphOptions
-                    : _animGraphOptions.Where(o =>
-                        o.Key.Contains(FilterText, StringComparison.OrdinalIgnoreCase) ||
-                        o.Value.Contains(FilterText, StringComparison.OrdinalIgnoreCase));
+                UpdateFilteredGraphOptions();
                 break;
             case nameof(SelectedAnimEntrySet):
                 switch (SelectedAnimEntrySet)
@@ -214,6 +233,11 @@ public partial class SelectAnimationPathViewModel : ObservableObject
     public string? SelectedGraphPath => SelectedGraph is null ? null : _animGraphOptions[SelectedGraph];
 
     [ObservableProperty] private string? _filterText;
+    private ObservableCollection<KeyValuePair<string, string>> _filteredGraphOptions = [];
 
-    [ObservableProperty] private IEnumerable<KeyValuePair<string, string>> _filteredGraphOptions = [];
+    public ObservableCollection<KeyValuePair<string, string>> FilteredGraphOptions
+    {
+        get => _filteredGraphOptions;
+        set => SetProperty(ref _filteredGraphOptions, value);
+    }
 }

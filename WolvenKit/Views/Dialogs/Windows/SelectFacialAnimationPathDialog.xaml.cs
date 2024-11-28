@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Input;
+using Microsoft.ClearScript.JavaScript;
 using ReactiveUI;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.RED4.Types;
@@ -26,6 +27,10 @@ namespace WolvenKit.Views.Dialogs.Windows
                         x => x.SelectedFacialAnim,
                         x => x.FacialAnimDropdown.Text)
                     .DisposeWith(disposables);
+                // this.Bind(ViewModel,
+                //         x => x.FilteredGraphOptions,
+                //         x => x.AnimGraphDropdown.ItemsSource)
+                //     .DisposeWith(disposables);
                 this.Bind(ViewModel,
                         x => x.SelectedGraph,
                         x => x.AnimGraphDropdown.Text)
