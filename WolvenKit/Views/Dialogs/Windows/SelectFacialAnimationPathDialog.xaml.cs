@@ -30,6 +30,14 @@ namespace WolvenKit.Views.Dialogs.Windows
                         x => x.SelectedGraph,
                         x => x.AnimGraphDropdown.Text)
                     .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        x => x.SelectedAnimEntrySet,
+                        x => x.AnimEntryDropdown.Text)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        x => x.IsRenameAnimsForPhotomode,
+                        x => x.IsPhotomodeCheckbox.IsChecked)
+                    .DisposeWith(disposables);
             });
         }
 

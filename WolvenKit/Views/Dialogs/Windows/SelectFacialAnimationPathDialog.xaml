@@ -44,10 +44,12 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="120" />
+                        <ColumnDefinition Width="140" />
                         <ColumnDefinition Width="300" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
@@ -104,6 +106,32 @@
                         SelectedValue="{Binding SelectedGraph}">
                     </ComboBox>
 
+
+                    <Label Content="Animation entries" HorizontalAlignment="Left"
+                           Grid.Row="3"
+                           Grid.Column="0"
+                           Background="#252525" BorderThickness="0" /> <!-- Label for the dropdown -->
+
+                    <ComboBox
+                        x:Name="AnimEntryDropdown"
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        ItemsSource="{Binding AnimEntryOptions}"
+                        DisplayMemberPath="Key"
+                        SelectedValuePath="Value"
+                        SelectedValue="{Binding SelectedAnimEntrySet}" />
+
+                    <Label Content="Is photo mode .app" HorizontalAlignment="Left"
+                           Grid.Row="4"
+                           Grid.Column="0"
+                           Background="#252525" BorderThickness="0" /> <!-- Label for the dropdown -->
+
+                    <CheckBox
+                        x:Name="IsPhotomodeCheckbox"
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        IsChecked="{Binding IsRenameAnimsForPhotomode}">
+                    </CheckBox>
                 </Grid>
             </syncfusion:WizardPage>
         </syncfusion:WizardControl>

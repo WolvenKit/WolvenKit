@@ -493,41 +493,7 @@ namespace WolvenKit.Views.Documents
                 SearchBar_OnClear(this, e);
             }
         }
-
-        private void OnConvertToPhotoModeClick(object sender, RoutedEventArgs e)
-        {
-            if (RootChunk?.ResolvedData is not appearanceAppearanceResource app)
-            {
-                return;
-            }
-
-            var appearanceChildren =
-                (RootChunk.GetPropertyChild("appearances")?.Properties.ToList() ?? []).Where(cvm =>
-                    cvm.ResolvedData is appearanceAppearanceDefinition).ToList();
-
-            if (!appearanceChildren.Any())
-            {
-                return;
-            }
-
-            if (appearanceChildren.Count > 20)
-            {
-                _loggerService.Warning("Your .app has more than 20 appearances - Nibbles Replacer only supports 20.");
-                appearanceChildren = appearanceChildren.Take(20).ToList();
-            }
-
-            var counter = 01;
-            foreach (var appNode in appearanceChildren)
-            {
-                appNode.CalculateProperties();
-                // type check has already been done
-                ((appearanceAppearanceDefinition)appNode.ResolvedData).Name = $"appearance_{counter:D2}";
-                counter += 1;
-                RootChunk?.Tab?.Parent.SetIsDirty(true);
-                appNode.RecalculateProperties();
-            }
-        }
-
+     
         private void OnChangeAnimationClick(object sender, RoutedEventArgs e)
         {
             if (RootChunk?.ResolvedData is not appearanceAppearanceResource app)
@@ -552,33 +518,107 @@ namespace WolvenKit.Views.Documents
 
             var facialAnim = dialog.ViewModel?.SelectedAnimPath;
             var animGraph = dialog.ViewModel?.SelectedGraphPath;
-
-            // make sure that the appearances are initialized, they might not be
-            if (appearanceChildren.FirstOrDefault()?.Properties.Any() != true)
-            {
-                foreach (var chunkViewModel in appearanceChildren)
-                {
-                    chunkViewModel.CalculateProperties();
-                }
-            }
+            var selectedAnims = dialog.ViewModel?.SelectedAnimEntries ?? [];
+            var renameAppearances = dialog.ViewModel?.IsRenameAnimsForPhotomode ?? false;
 
             foreach (var appNode in appearanceChildren)
             {
+                appNode.CalculateProperties();
                 if (appNode.GetPropertyChild("components") is not ChunkViewModel componentsNode)
                 {
                     continue;
                 }
 
                 componentsNode.CalculateProperties();
+                
                 var animationChildren =
                     componentsNode.Properties.Where(prop => prop.ResolvedData is entAnimatedComponent).ToList() ?? [];
+                var animationSetup =
+                    componentsNode.Properties.Where(prop => prop.ResolvedData is entAnimationSetupExtensionComponent).ToList() ?? [];
 
-                if (ChangeAnimation(animationChildren, animGraph, facialAnim))
+                var appearanceChanged = ChangeAnimation(animationChildren, animGraph, facialAnim);
+                var animationSetupsChanged = ChangeAnimationSetupEntries(animationSetup, selectedAnims);
+
+                if (!appearanceChanged && !animationSetupsChanged)
                 {
-                    componentsNode.RecalculateProperties();
-                    RootChunk?.Tab?.Parent.SetIsDirty(true);
+                    continue;
                 }
+
+                componentsNode.RecalculateProperties();
+                RootChunk?.Tab?.Parent.SetIsDirty(true);
             }
+
+            if (!renameAppearances)
+            {
+                return;
+            }
+
+            if (appearanceChildren.Count > 20)
+            {
+                _loggerService.Warning("Your .app has more than 20 appearances - Nibbles Replacer only supports 20.");
+                appearanceChildren = appearanceChildren.Take(20).ToList();
+            }
+
+            var counter = 01;
+            foreach (var appNode in appearanceChildren)
+            {
+                // type check has already been done
+                ((appearanceAppearanceDefinition)appNode.ResolvedData).Name = $"appearance_{counter:D2}";
+                counter += 1;
+                RootChunk?.Tab?.Parent.SetIsDirty(true);
+                appNode.RecalculateProperties();
+            }
+        }
+
+        private bool ChangeAnimationSetupEntries(List<ChunkViewModel> animNodes, List<string> selectedAnims)
+        {
+            if (animNodes.Count == 0 || selectedAnims.Count == 0)
+            {
+                return false;
+            }
+
+            var isChanged = false;
+
+            foreach (var cvm in animNodes)
+            {
+                cvm.CalculateProperties();
+                if (cvm.ResolvedData is not entAnimationSetupExtensionComponent comp)
+                {
+                    continue;
+                }
+
+
+                if (cvm.GetPropertyChild("animations", "gameplay") is not ChunkViewModel animationList ||
+                    animationList.ResolvedData is not CArray<animAnimSetupEntry> animArray)
+                {
+                    continue;
+                }
+
+                animArray.Clear();
+
+                foreach (var selectedAnim in selectedAnims)
+                {
+                    animArray.Add(new animAnimSetupEntry()
+                    {
+                        Priority = 200, AnimSet = new CResourceAsyncReference<animAnimSet>(selectedAnim), VariableNames = []
+                    });
+                }
+
+                animationList.Data = animArray;
+
+                var propertyChanged = true;
+
+                if (!propertyChanged)
+                {
+                    continue;
+                }
+
+                // force refresh
+                animationList.RecalculateProperties();
+                isChanged = isChanged || propertyChanged;
+            }
+
+            return isChanged;
         }
 
         private static bool ChangeAnimation(List<ChunkViewModel> animNodes, string? selectedGraph, string? selectedFacialAnim)
