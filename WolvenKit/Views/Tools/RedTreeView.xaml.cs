@@ -41,11 +41,13 @@ namespace WolvenKit.Views.Tools
     {
         private readonly IModifierViewStateService _modifierViewStateSvc;
         private ILoggerService _loggerService;
+        private IProgressService<double> _progresssService;
 
         public RedTreeView()
         {
             _modifierViewStateSvc = Locator.Current.GetService<IModifierViewStateService>();
-            _loggerService = Locator.Current.GetService<ILoggerService>(); 
+            _loggerService = Locator.Current.GetService<ILoggerService>();
+            _progresssService = Locator.Current.GetService<IProgressService<double>>(); 
             
             InitializeComponent();
 
@@ -195,7 +197,7 @@ namespace WolvenKit.Views.Tools
             {
                 await chunk.Refresh();
             }
-            catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
+            catch (Exception ex) { _loggerService.Error(ex); }
         }
 
 
@@ -429,7 +431,7 @@ namespace WolvenKit.Views.Tools
                                                      SelectedItem is ChunkViewModel { Parent: not null } &&
                                                      !SearchAndReplaceDialog.IsInstanceOpen;
 
-        // [RelayCommand(CanExecute = nameof(CanOpenSearchAndReplaceDialog))]
+        // [RelayCommand(CanExecute = nameof(CanOpenSearchAndReplaceDialog))] this doesn't work if item is called from menu
         [RelayCommand]
         private void OpenSearchAndReplaceDialog()
         {
@@ -439,41 +441,45 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
+            _progresssService.IsIndeterminate = true;
+            
             var dialog = new SearchAndReplaceDialog();
             if (dialog.ShowDialog() != true)
             {
+                _progresssService.IsIndeterminate = false;
                 return;
             }
 
             var searchText = dialog.ViewModel?.SearchText ?? "";
             var replaceText = dialog.ViewModel?.ReplaceText ?? "";
 
-            var cvm = selectedChunkViewModels.FirstOrDefault();
-
+            
             var expansionStates = selectedChunkViewModels
                 .Select(item => item.IsExpanded)
                 .ToList();
-
+            
             var results = selectedChunkViewModels
                 .Select(item => item.SearchAndReplace(searchText, replaceText))
                 .ToList();
 
-            var numReplaced = results.Count(r => r == true);
+            var numReplaced = results.Sum();
 
             if (numReplaced <= 0)
             {
-                _loggerService.Info("Nothing to replace!");
+                _progresssService.IsIndeterminate = false;
                 return;
             }
 
-            cvm?.Tab?.Parent.SetIsDirty(true);
-            _loggerService.Info($"Replaced {ChunkViewModel.NumReplacedEntries} occurrences of '{searchText}' with '{replaceText}'");
+            GetRoot().Tab?.Parent.SetIsDirty(true);
+            _loggerService.Info($"Replaced {numReplaced} occurrences of '{searchText}' with '{replaceText}'");
 
             for (var i = 0; i < selectedChunkViewModels.Count; i++)
             {
                 var expansionState = expansionStates.Count > i && expansionStates[i];
                 selectedChunkViewModels[i].IsExpanded = expansionState;
             }
+
+            _progresssService.IsIndeterminate = false;
         }
 
 
