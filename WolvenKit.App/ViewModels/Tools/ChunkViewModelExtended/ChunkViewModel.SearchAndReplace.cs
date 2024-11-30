@@ -124,7 +124,11 @@ public partial class ChunkViewModel
             var t = properties[i];
             try
             {
-                wasChanged = t.SearchAndReplaceInProperties(search, replace, isWholeWord, isRegex) || wasChanged;
+                if (t.SearchAndReplaceInProperties(search, replace, isWholeWord, isRegex))
+                {
+                    NumReplacedEntries += t.NumReplacedEntries;
+                    wasChanged = true;
+                }
             }
             catch (Exception e)
             {
@@ -162,7 +166,7 @@ public partial class ChunkViewModel
         var placeholder = Guid.NewGuid().ToString();
         if (isRegex)
         {
-            return Regex.Replace(input, Regex.Escape(searchOrPattern), placeholder).Replace(placeholder, replace);
+            return Regex.Replace(input, searchOrPattern, placeholder).Replace(placeholder, replace);
         }
 
         return input.Replace(searchOrPattern, placeholder).Replace(placeholder, replace);
