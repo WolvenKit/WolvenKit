@@ -22,13 +22,15 @@ public partial class ChunkViewModel
     /// </summary>
     /// <param name="search"></param>
     /// <param name="replace"></param>
+    /// <param name="isWholeWord"></param>
+    /// <param name="isRegex"></param>
     /// <returns></returns>
-    private int SearchAndReplaceInternal(string search, string replace)
+    private int SearchAndReplaceInternal(string search, string replace, bool isWholeWord, bool isRegex)
     {
         _resolvedHashes.Clear();
         NumReplacedEntries = 0;
 
-        if (!SearchAndReplaceInProperties(search, replace))
+        if (!SearchAndReplaceInProperties(search, replace, isWholeWord, isRegex))
         {
             return NumReplacedEntries;
         }
@@ -42,7 +44,7 @@ public partial class ChunkViewModel
 
 
     // Level 1 (will call itself recursively, so let's abort here if we can)
-    private bool SearchAndReplaceInProperties(string search, string replace)
+    private bool SearchAndReplaceInProperties(string search, string replace, bool isWholeWord, bool isRegex)
     {
         // this will enforce CalculateProperties to be called if it isn't
         var properties = GetProperties();
@@ -92,7 +94,7 @@ public partial class ChunkViewModel
             return false;
         }
 
-        if (SearchAndReplaceInObjectProperties(search, replace, scopedResolvedData, out var newType))
+        if (SearchAndReplaceInObjectProperties(search, replace, isWholeWord, isRegex, scopedResolvedData, out var newType))
         {
             if (Data is IRedHandle handle && newType is RedBaseClass newRedType)
             {
@@ -113,7 +115,7 @@ public partial class ChunkViewModel
         }
 
 
-        wasChanged = ReplaceInFields(search, replace) || wasChanged;
+        wasChanged = ReplaceInFields(search, replace, isWholeWord, isRegex) || wasChanged;
 
         // Now, replace in child properties
         // ReSharper disable once ForCanBeConvertedToForeach Not this time
@@ -122,7 +124,7 @@ public partial class ChunkViewModel
             var t = properties[i];
             try
             {
-                wasChanged = t.SearchAndReplaceInProperties(search, replace) || wasChanged;
+                wasChanged = t.SearchAndReplaceInProperties(search, replace, isWholeWord, isRegex) || wasChanged;
             }
             catch (Exception e)
             {
@@ -145,14 +147,28 @@ public partial class ChunkViewModel
     }
 
     // Duplicate-safe search and replace
-    private static string ReplaceInString(string input, string searchOrPattern, string replace)
+    private static string ReplaceInString(string input, string searchOrPattern, string replace, bool isWholeWord, bool isRegex)
     {
+        if (isWholeWord)
+        {
+            if (input == searchOrPattern)
+            {
+                return replace;
+            }
+
+            return input;
+        }
+        
         var placeholder = Guid.NewGuid().ToString();
-        var withPlaceholder = Regex.Replace(input, searchOrPattern, placeholder);
-        return withPlaceholder.Replace(placeholder, replace);
+        if (isRegex)
+        {
+            return Regex.Replace(input, Regex.Escape(searchOrPattern), placeholder).Replace(placeholder, replace);
+        }
+
+        return input.Replace(searchOrPattern, placeholder).Replace(placeholder, replace);
     }
 
-    private bool SearchAndReplaceInReference(string search, string replace,
+    private bool SearchAndReplaceInReference(string search, string replace, bool isWholeWord, bool isRegex,
         IRedRef reference, out IRedRef outReference)
     {
         // ReSharper disable once UnusedVariable Keep this for debugging
@@ -165,7 +181,7 @@ public partial class ChunkViewModel
             return false;
         }
 
-        var newValue = ReplaceInString(depotPath, search, replace);
+        var newValue = ReplaceInString(depotPath, search, replace, isWholeWord, isRegex);
         if (newValue == depotPath)
         {
             return false;
@@ -199,6 +215,7 @@ public partial class ChunkViewModel
     }
 
     private bool SearchAndReplaceInObjectProperties(string search, string replace,
+        bool isWholeWord, bool isRegex,
         IRedType original, out IRedType ret)
     {
         var wasChanged = false;
@@ -221,7 +238,7 @@ public partial class ChunkViewModel
                 }
 
                 var resolved = cname.GetResolvedText()!;
-                replaced = ReplaceInString(resolved, search, replace);
+                replaced = ReplaceInString(resolved, search, replace, isWholeWord, isRegex);
                 if (replaced == resolved)
                 {
                     return false;
@@ -238,7 +255,8 @@ public partial class ChunkViewModel
                     switch (o)
                     {
                         case IRedBaseHandle handle when handle.GetValue() is IRedType handleValue &&
-                                                        SearchAndReplaceInObjectProperties(search, replace, 
+                                                        SearchAndReplaceInObjectProperties(search, replace,
+                                                            isWholeWord, isRegex,
                                                             handleValue,
                                                             out var newHandleValue):
                         {
@@ -247,7 +265,8 @@ public partial class ChunkViewModel
                         }
                             break;
                         case IRedType redType:
-                            if (SearchAndReplaceInObjectProperties(search, replace, redType, out var newType))
+                            if (SearchAndReplaceInObjectProperties(search, replace,
+                                    isWholeWord, isRegex, redType, out var newType))
                             {
                                 redArray[i] = newType;
                                 wasChanged = true;
@@ -283,7 +302,7 @@ public partial class ChunkViewModel
 
             case IRedRef reference:
 
-                if (!SearchAndReplaceInReference(search, replace, reference, out var newReference))
+                if (!SearchAndReplaceInReference(search, replace, isWholeWord, isRegex, reference, out var newReference))
                 {
                     return false;
                 }
@@ -292,7 +311,7 @@ public partial class ChunkViewModel
                 return true;
             case CKeyValuePair keyValuePair:
                 var oldKey = keyValuePair.Key.GetResolvedText() ?? "";
-                var newKey = ReplaceInString(oldKey, search, replace);
+                var newKey = ReplaceInString(oldKey, search, replace, isWholeWord, isRegex);
                 if (oldKey != newKey)
                 {
                     NumReplacedEntries += 1;
@@ -301,7 +320,7 @@ public partial class ChunkViewModel
                 }
 
                 if (keyValuePair.Value is IRedRef valueRef &&
-                    SearchAndReplaceInReference(search, replace, valueRef, out var newRef))
+                    SearchAndReplaceInReference(search, replace, isWholeWord, isRegex, valueRef, out var newRef))
                 {
                     NumReplacedEntries += 1;
                     wasChanged = true;
@@ -313,7 +332,7 @@ public partial class ChunkViewModel
             case IRedBaseHandle handle when handle.GetValue() is IRedType handleValue:
 
             {
-                if (SearchAndReplaceInObjectProperties(search, replace, handleValue,
+                if (SearchAndReplaceInObjectProperties(search, replace, isWholeWord, isRegex, handleValue,
                         out var newHandleValue))
                 {
                     handle.SetValue((RedBaseClass)newHandleValue);
@@ -324,14 +343,14 @@ public partial class ChunkViewModel
             }
             case CMaterialInstance materialInstance:
 
-                if (SearchAndReplaceInReference(search, replace, materialInstance.BaseMaterial, out var newMaterial))
+                if (SearchAndReplaceInReference(search, replace, isWholeWord, isRegex, materialInstance.BaseMaterial, out var newMaterial))
                 {
                    
                     DispatcherHelper.RunOnMainThread(() =>  materialInstance.BaseMaterial = (CResourceReference<IMaterial>)newMaterial);
                     wasChanged = true;
                 }
 
-                if (SearchAndReplaceInObjectProperties(search, replace, materialInstance.Values, out var newValues))
+                if (SearchAndReplaceInObjectProperties(search, replace, isWholeWord, isRegex, materialInstance.Values, out var newValues))
                 {
                     DispatcherHelper.RunOnMainThread(() =>  materialInstance.Values = (CArray<CKeyValuePair>)newValues);
                     wasChanged = true;
@@ -343,14 +362,15 @@ public partial class ChunkViewModel
             case IRedMeshComponent meshComponent:
             {
                 var meshRet = false;
-                if (SearchAndReplaceInObjectProperties(search, replace, meshComponent.MeshAppearance, out var newAppearance) &&
+                if (SearchAndReplaceInObjectProperties(search, replace, isWholeWord, isRegex, meshComponent.MeshAppearance,
+                        out var newAppearance) &&
                     newAppearance is CName cname)
                 {
                     meshRet = true;
                     DispatcherHelper.RunOnMainThread(() =>   meshComponent.MeshAppearance = cname);
                 }
 
-                if (!SearchAndReplaceInReference(search, replace, meshComponent.Mesh, out var newMesh)
+                if (!SearchAndReplaceInReference(search, replace, isWholeWord, isRegex, meshComponent.Mesh, out var newMesh)
                     || newMesh is not CResourceAsyncReference<CMesh> meshRef)
                 {
                     return meshRet;
@@ -374,7 +394,7 @@ public partial class ChunkViewModel
 
                     // ReSharper disable UnusedVariable Keep for debugging
                     if (propValue is IRedRef { DepotPath: var depotPath } reference
-                        && SearchAndReplaceInReference(search, replace, reference, out var newRef2)
+                        && SearchAndReplaceInReference(search, replace, isWholeWord, isRegex, reference, out var newRef2)
                         && newRef2 is { DepotPath: var depotPath2 } rr2)
                     {
                         newValue = depotPath2.GetResolvedText() ?? "";
@@ -452,7 +472,7 @@ public partial class ChunkViewModel
     /// Without this, some items in CKeyValueArrays are being left out. I guess I'm leaving this in!
     /// </summary>
     /// <returns>true if a field value was changed</returns>
-    private bool ReplaceInFields(string search, string replace)
+    private bool ReplaceInFields(string search, string replace, bool isWholeWord, bool isRegex)
     {
         var wasChanged = false;
 
@@ -468,7 +488,7 @@ public partial class ChunkViewModel
 
                 if (propertyValue is not (List<CName> or CName) and IRedType redType)
                 {
-                    if (SearchAndReplaceInObjectProperties(search, replace, redType,
+                    if (SearchAndReplaceInObjectProperties(search, replace, isWholeWord, isRegex, redType,
                             out var newPropertyValue))
                     {
                         wasChanged = true;
@@ -486,7 +506,7 @@ public partial class ChunkViewModel
                         for (var i = 0; i < ary.Count; i++)
                         {
                             var oldValue = ary[i].GetResolvedText() ?? "";
-                            newValue = ReplaceInString(oldValue, search, replace);
+                            newValue = ReplaceInString(oldValue, search, replace, isWholeWord, isRegex);
                             if (oldValue == newValue)
                             {
                                 continue;
@@ -501,7 +521,7 @@ public partial class ChunkViewModel
                     }
                     case CName cname when cname.GetResolvedText() is string s:
 
-                        newValue = ReplaceInString(s, search, replace);
+                        newValue = ReplaceInString(s, search, replace, isWholeWord, isRegex);
                         if (s != newValue)
                         {
                             property.SetValue(ResolvedData, newValue);

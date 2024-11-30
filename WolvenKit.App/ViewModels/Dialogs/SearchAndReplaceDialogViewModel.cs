@@ -24,5 +24,17 @@ public partial class SearchAndReplaceDialogViewModel() : ObservableObject
     /// </summary>
     [ObservableProperty] private bool _rememberValues;
 
+    /// <summary>
+    /// Whole word only?
+    /// </summary>
+    [ObservableProperty] private bool _isWholeWord;
+
+    /// <summary>
+    /// Regular expression?
+    /// </summary>
+    [ObservableProperty] private bool _isRegex;
+    
+    
+
     public void SwapFields() => (SearchText, ReplaceText) = (ReplaceText, SearchText);
 }
