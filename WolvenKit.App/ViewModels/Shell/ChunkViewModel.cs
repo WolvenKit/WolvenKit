@@ -480,9 +480,21 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     // Full list of properties
     public ObservableCollectionExtended<ChunkViewModel> Properties { get; } = new();
 
+    private List<ChunkViewModel> GetProperties()
+    {
+        CalculateProperties();
+        return Properties.ToList();
+    }
+
     // Tree view properties (for the panel on the left)
     public ObservableCollectionExtended<ChunkViewModel> TVProperties => _propertiesLoaded ? Properties : TempList;
 
+    private List<ChunkViewModel> GetTvProperties()
+    {
+        CalculateProperties();
+        return TVProperties.ToList();
+    }
+    
     // DisplayProperties (for the panel on the right)
     public ObservableCollectionExtended<ChunkViewModel> DisplayProperties => MightHaveChildren() ? Properties : SelfList;
 
@@ -2226,9 +2238,22 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         catch (Exception ex) { _loggerService.Error(ex); }
     }
 
-    public Task<bool> SearchAndReplaceAsync(string searchText, string replaceText) =>
+    /// <summary>
+    /// Returns the number of replacements made, 0 if none
+    /// </summary>
+    /// <param name="searchText"></param>
+    /// <param name="replaceText"></param>
+    /// <returns></returns>
+    public Task<int> SearchAndReplaceAsync(string searchText, string replaceText) =>
         Task.FromResult(SearchAndReplaceInternal(searchText, replaceText));
-    public bool SearchAndReplace(string searchText, string replaceText) => SearchAndReplaceInternal(searchText, replaceText);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="searchText"></param>
+    /// <param name="replaceText"></param>
+    /// <returns></returns>
+    public int SearchAndReplace(string searchText, string replaceText) => SearchAndReplaceInternal(searchText, replaceText);
 
     private bool CanCopyHandle() => Data is IRedBaseHandle;   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanCopyHandle))]
@@ -2826,6 +2851,19 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         return null;
+    }
+
+    private void InitializePropertiesRecursive()
+    {
+        if (Properties.Count == 0 || Data is RedDummy)
+        {
+            CalculateProperties();
+        }
+
+        foreach (var child in Properties)
+        {
+            child.InitializePropertiesRecursive();
+        }
     }
 
     public void CalculateProperties()
@@ -3629,7 +3667,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         var result = this;
         foreach (var part in parts)
         {
-            if (result?.TVProperties.Count == 1 && result.TVProperties.FirstOrDefault()?.ResolvedData is RedDummy)
+            if (result?.GetTvProperties().Count == 1 && result.TVProperties.FirstOrDefault()?.ResolvedData is RedDummy)
             {
                 result.RecalculateProperties();
             }
@@ -3642,7 +3680,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public IEnumerable<ChunkViewModel> GetAllProperties()
     {
-        foreach (var property in Properties)
+        foreach (var property in GetProperties())
         {
             yield return property;
 
@@ -4742,5 +4780,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             appearanceNode.RecalculateProperties();
             Tab?.Parent.SetIsDirty(true);
         }
+    }
+
+    public override string ToString()
+    {
+        var parentString = Parent is null ? "" : $" in {Parent.Descriptor}";
+        return $"{Name}: {PropertyType.Name} ({Descriptor} {Value}){parentString}";
     }
 }
