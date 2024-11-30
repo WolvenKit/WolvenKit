@@ -2243,17 +2243,22 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     /// </summary>
     /// <param name="searchText"></param>
     /// <param name="replaceText"></param>
+    /// <param name="isWholeWord"></param>
+    /// <param name="isRegex"></param>
     /// <returns></returns>
-    public Task<int> SearchAndReplaceAsync(string searchText, string replaceText) =>
-        Task.FromResult(SearchAndReplaceInternal(searchText, replaceText));
+    public Task<int> SearchAndReplaceAsync(string searchText, string replaceText, bool isWholeWord, bool isRegex) =>
+        Task.FromResult(SearchAndReplaceInternal(searchText, replaceText, isWholeWord, isRegex));
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="searchText"></param>
     /// <param name="replaceText"></param>
+    /// <param name="isWholeWord"></param>
+    /// <param name="isRegex"></param>
     /// <returns></returns>
-    public int SearchAndReplace(string searchText, string replaceText) => SearchAndReplaceInternal(searchText, replaceText);
+    public int SearchAndReplace(string searchText, string replaceText, bool isWholeWord, bool isRegex) =>
+        SearchAndReplaceInternal(searchText, replaceText, isWholeWord, isRegex);
 
     private bool CanCopyHandle() => Data is IRedBaseHandle;   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanCopyHandle))]

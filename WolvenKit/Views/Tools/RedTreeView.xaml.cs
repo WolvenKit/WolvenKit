@@ -452,6 +452,8 @@ namespace WolvenKit.Views.Tools
 
             var searchText = dialog.ViewModel?.SearchText ?? "";
             var replaceText = dialog.ViewModel?.ReplaceText ?? "";
+            var isRegex = dialog.ViewModel?.IsRegex ?? false;
+            var isWholeWord = dialog.ViewModel?.IsWholeWord ?? false;
 
             
             var expansionStates = selectedChunkViewModels
@@ -459,7 +461,7 @@ namespace WolvenKit.Views.Tools
                 .ToList();
             
             var results = selectedChunkViewModels
-                .Select(item => item.SearchAndReplace(searchText, replaceText))
+                .Select(item => item.SearchAndReplace(searchText, replaceText, isWholeWord, isRegex))
                 .ToList();
 
             var numReplaced = results.Sum();

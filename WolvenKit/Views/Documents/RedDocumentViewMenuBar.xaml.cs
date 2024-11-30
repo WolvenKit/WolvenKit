@@ -319,7 +319,7 @@ namespace WolvenKit.Views.Documents
             {
                 foreach (var (oldPath, newPath) in pathReplacements)
                 {
-                    if (await childNode.SearchAndReplaceAsync(oldPath, newPath) == 0)
+                    if (await childNode.SearchAndReplaceAsync(oldPath, newPath, true, false) == 0)
                     {
                         continue;
                     }
