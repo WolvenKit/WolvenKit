@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Windows;
-using CommunityToolkit.Mvvm.ComponentModel;
-using DynamicData;
-using Microsoft.EntityFrameworkCore.Metadata;
+using System.Text.RegularExpressions;
+using System.Windows.Threading;
+using WolvenKit.App.Helpers;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
 
@@ -14,13 +10,10 @@ namespace WolvenKit.App.ViewModels.Shell;
 
 public partial class ChunkViewModel
 {
-    private readonly List<int> resolvedHashes = new();
+    private readonly List<int> _resolvedHashes = new();
 
-    public static int NumReplacedEntries = 0;
+    public int NumReplacedEntries;
 
-    private static void ResetReplacementCounter() => NumReplacedEntries = 0;
-
-    private static void IncrementReplacementCounter() => NumReplacedEntries += 1;
 
 
 
@@ -30,28 +23,31 @@ public partial class ChunkViewModel
     /// <param name="search"></param>
     /// <param name="replace"></param>
     /// <returns></returns>
-    private bool SearchAndReplaceInternal(string search, string replace)
+    private int SearchAndReplaceInternal(string search, string replace)
     {
-        resolvedHashes.Clear();
-        ResetReplacementCounter();
+        _resolvedHashes.Clear();
+        NumReplacedEntries = 0;
 
-        var result = SearchAndReplaceInProperties(search, replace);
-
-        if (result)
+        if (!SearchAndReplaceInProperties(search, replace))
         {
-            RecalculateProperties();
-            CalculateValue();
-            CalculateDescriptor();
+            return NumReplacedEntries;
         }
 
-        return result;
+        RecalculateProperties();
+        CalculateValue();
+        CalculateDescriptor();
+
+        return NumReplacedEntries;
     }
 
 
     // Level 1 (will call itself recursively, so let's abort here if we can)
     private bool SearchAndReplaceInProperties(string search, string replace)
     {
-        if (!IsInArray && resolvedHashes.Contains(ResolvedData.GetHashCode()))
+        // this will enforce CalculateProperties to be called if it isn't
+        var properties = GetProperties();
+
+        if (_resolvedHashes.Contains(GetHashCode()))
         {
             return false;
         }
@@ -61,8 +57,10 @@ public partial class ChunkViewModel
         // Log changed states from children
         var wasChanged = false;
 
-        var _data = Data;
-        var _resolvedData = ResolvedData;
+        // ReSharper disable once LocalVariableHidesMember
+        var scopedLocalData = Data;
+        // ReSharper disable once LocalVariableHidesMember
+        var scopedResolvedData = ResolvedData;
         
         switch (ResolvedData)
         {
@@ -94,36 +92,34 @@ public partial class ChunkViewModel
             return false;
         }
 
-        if (SearchAndReplaceInObjectProperties(search, replace, _resolvedData, out var newType))
+        if (SearchAndReplaceInObjectProperties(search, replace, scopedResolvedData, out var newType))
         {
             if (Data is IRedHandle handle && newType is RedBaseClass newRedType)
             {
                 handle.SetValue(newRedType);
-                IncrementReplacementCounter();
+                NumReplacedEntries += 1;
                 wasChanged = true;
             }
-            else if (newType.GetType().IsAssignableTo(_data.GetType()))
+            else if (newType.GetType().IsAssignableTo(scopedLocalData.GetType()))
             {
                 Data = newType;
-                IncrementReplacementCounter();
+                NumReplacedEntries += 1;
                 wasChanged = true;
             }
             else
             {
-                _loggerService.Debug($"failed to replace ${Data.GetType().Name} with ${newType.GetType().Name}");
+                _loggerService.Debug($"Search and replace: failed to replace ${Data.GetType().Name} with ${newType.GetType().Name}");
             }
         }
 
 
         wasChanged = ReplaceInFields(search, replace) || wasChanged;
 
-        // RecalculateProperties();
-
         // Now, replace in child properties
         // ReSharper disable once ForCanBeConvertedToForeach Not this time
-        for (var i = 0; i < Properties.Count; i++)
+        for (var i = 0; i < properties.Count; i++)
         {
-            var t = Properties[i];
+            var t = properties[i];
             try
             {
                 wasChanged = t.SearchAndReplaceInProperties(search, replace) || wasChanged;
@@ -136,33 +132,40 @@ public partial class ChunkViewModel
             Properties[i] = t;
         }
 
-        // CalculateValue();
-        // CalculateDescriptor();
-
         // Any changed properties will be expanded, let's re-fold to how it used to be
         IsExpanded = expansionState;
 
         // Certain types have the same hash as their children
         if (Properties.Count != 1)
         {
-            resolvedHashes.Add(ResolvedData.GetHashCode());
+            _resolvedHashes.Add(GetHashCode());
         }
 
         return wasChanged;
     }
 
+    // Duplicate-safe search and replace
+    private static string ReplaceInString(string input, string searchOrPattern, string replace)
+    {
+        var placeholder = Guid.NewGuid().ToString();
+        var withPlaceholder = Regex.Replace(input, searchOrPattern, placeholder);
+        return withPlaceholder.Replace(placeholder, replace);
+    }
+
     private bool SearchAndReplaceInReference(string search, string replace,
         IRedRef reference, out IRedRef outReference)
     {
+        // ReSharper disable once UnusedVariable Keep this for debugging
         var original = reference;
+        
         outReference = reference;
         if (reference.DepotPath.GetResolvedText() is not string depotPath ||
-            (!IsInArray && resolvedHashes.Contains(replace.GetHashCode())))
+            (!IsInArray && _resolvedHashes.Contains(reference.DepotPath.GetHashCode())))
         {
             return false;
         }
 
-        var newValue = depotPath.Replace(search, replace);
+        var newValue = ReplaceInString(depotPath, search, replace);
         if (newValue == depotPath)
         {
             return false;
@@ -188,10 +191,10 @@ public partial class ChunkViewModel
             return false;
         }
 
-        resolvedHashes.Add(replace.GetHashCode());
+        _resolvedHashes.Add(replace.GetHashCode());
             
         outReference = (IRedRef)constructor.Invoke([(ResourcePath)newValue]);
-        IncrementReplacementCounter();
+        NumReplacedEntries += 1;
         return true;
     }
 
@@ -218,14 +221,14 @@ public partial class ChunkViewModel
                 }
 
                 var resolved = cname.GetResolvedText()!;
-                replaced = resolved.Replace(search, replace);
+                replaced = ReplaceInString(resolved, search, replace);
                 if (replaced == resolved)
                 {
                     return false;
                 }
 
                 ret = (CName)replaced;
-                IncrementReplacementCounter();
+                NumReplacedEntries += 1;
                 return true;
             case IRedArray redArray:
                 wasChanged = false;
@@ -267,11 +270,11 @@ public partial class ChunkViewModel
                 {
                     case CString:
                         ret = (CString)replaced;
-                        IncrementReplacementCounter();
+                        NumReplacedEntries += 1;
                         return true;
                     case ResourcePath:
                         ret = (ResourcePath)replaced;
-                        IncrementReplacementCounter();
+                        NumReplacedEntries += 1;
                         return true;
                     default:
                         _loggerService.Info($"Search&Replace not yet implemented for IRedString {original.GetType().Name}");
@@ -288,20 +291,21 @@ public partial class ChunkViewModel
                 ret = newReference;
                 return true;
             case CKeyValuePair keyValuePair:
-                var newKey = keyValuePair.Key.GetResolvedText()?.Replace(search, replace);
-                if (newKey is not null && newKey != keyValuePair.Key.GetResolvedText())
+                var oldKey = keyValuePair.Key.GetResolvedText() ?? "";
+                var newKey = ReplaceInString(oldKey, search, replace);
+                if (oldKey != newKey)
                 {
-                    IncrementReplacementCounter();
+                    NumReplacedEntries += 1;
                     wasChanged = true;
-                    keyValuePair.Key = newKey;
+                    DispatcherHelper.RunOnMainThread(() =>  keyValuePair.Key = newKey);
                 }
 
                 if (keyValuePair.Value is IRedRef valueRef &&
                     SearchAndReplaceInReference(search, replace, valueRef, out var newRef))
                 {
-                    IncrementReplacementCounter();
+                    NumReplacedEntries += 1;
                     wasChanged = true;
-                    keyValuePair.Value = newRef;
+                    DispatcherHelper.RunOnMainThread(() => keyValuePair.Value = newRef);
                 }
 
                 return wasChanged;
@@ -322,13 +326,14 @@ public partial class ChunkViewModel
 
                 if (SearchAndReplaceInReference(search, replace, materialInstance.BaseMaterial, out var newMaterial))
                 {
-                    materialInstance.BaseMaterial = (CResourceReference<IMaterial>)newMaterial;
+                   
+                    DispatcherHelper.RunOnMainThread(() =>  materialInstance.BaseMaterial = (CResourceReference<IMaterial>)newMaterial);
                     wasChanged = true;
                 }
 
                 if (SearchAndReplaceInObjectProperties(search, replace, materialInstance.Values, out var newValues))
                 {
-                    materialInstance.Values = (CArray<CKeyValuePair>)newValues;
+                    DispatcherHelper.RunOnMainThread(() =>  materialInstance.Values = (CArray<CKeyValuePair>)newValues);
                     wasChanged = true;
                 }
 
@@ -342,7 +347,7 @@ public partial class ChunkViewModel
                     newAppearance is CName cname)
                 {
                     meshRet = true;
-                    meshComponent.MeshAppearance = cname;
+                    DispatcherHelper.RunOnMainThread(() =>   meshComponent.MeshAppearance = cname);
                 }
 
                 if (!SearchAndReplaceInReference(search, replace, meshComponent.Mesh, out var newMesh)
@@ -367,13 +372,15 @@ public partial class ChunkViewModel
 
                     var newValue = propValue.ToString()?.Replace(search, replace);
 
+                    // ReSharper disable UnusedVariable Keep for debugging
                     if (propValue is IRedRef { DepotPath: var depotPath } reference
                         && SearchAndReplaceInReference(search, replace, reference, out var newRef2)
-                        && newRef2 is IRedRef { DepotPath: var depotPath2 } rr2)
+                        && newRef2 is { DepotPath: var depotPath2 } rr2)
                     {
                         newValue = depotPath2.GetResolvedText() ?? "";
                         // TODO: This might require more attention
                     }
+                    // ReSharper enable UnusedVariable
 
                     if (propValue.ToString() == newValue)
                     {
@@ -384,7 +391,6 @@ public partial class ChunkViewModel
                     var propertyName = prop.RedName.TrimStart('_');
                     propertyName = char.ToUpper(propertyName[0]) + propertyName[1..];
 
-
                     if (irc.GetType().GetProperty(propertyName) is not { CanWrite: true } propInfo)
                     {
                         continue;
@@ -392,8 +398,8 @@ public partial class ChunkViewModel
 
                     if (propValue is CName && null != newValue)
                     {
-                        propInfo.SetValue(irc, (CName)newValue);
-                        IncrementReplacementCounter();
+                        DispatcherHelper.RunOnMainThread(() =>  propInfo.SetValue(irc, (CName)newValue));
+                        NumReplacedEntries += 1;
                         wasChanged = true;
                         continue;
                     }
@@ -414,7 +420,7 @@ public partial class ChunkViewModel
                     try
                     {
                         propInfo.SetValue(irc, newValue);
-                        IncrementReplacementCounter();
+                        NumReplacedEntries += 1;
                         wasChanged = true;
                     }
                     catch
@@ -455,12 +461,12 @@ public partial class ChunkViewModel
             try
             {
                 // Get the name of the property
-                string propertyName = property.Name;
+                var propertyName = property.Name;
 
                 // Get the value of the property
-                object? propertyValue = property.GetValue(ResolvedData);
+                var propertyValue = property.GetValue(ResolvedData);
 
-                if (propertyValue is not (List<CName> or CName) && propertyValue is IRedType redType)
+                if (propertyValue is not (List<CName> or CName) and IRedType redType)
                 {
                     if (SearchAndReplaceInObjectProperties(search, replace, redType,
                             out var newPropertyValue))
@@ -479,14 +485,15 @@ public partial class ChunkViewModel
                     {
                         for (var i = 0; i < ary.Count; i++)
                         {
-                            newValue = ary[i].GetResolvedText()?.Replace(search, replace);
-                            if (null == newValue || ary[i].GetResolvedText() == newValue)
+                            var oldValue = ary[i].GetResolvedText() ?? "";
+                            newValue = ReplaceInString(oldValue, search, replace);
+                            if (oldValue == newValue)
                             {
                                 continue;
                             }
 
                             ary[i] = (CName)newValue;
-                            IncrementReplacementCounter();
+                            NumReplacedEntries += 1;
                             wasChanged = true;
                         }
 
@@ -494,11 +501,11 @@ public partial class ChunkViewModel
                     }
                     case CName cname when cname.GetResolvedText() is string s:
 
-                        newValue = s.Replace(search, replace);
-                        if (!Equals(s, newValue))
+                        newValue = ReplaceInString(s, search, replace);
+                        if (s != newValue)
                         {
-                            property.SetValue(ResolvedData, s.Replace(search, replace));
-                            IncrementReplacementCounter();
+                            property.SetValue(ResolvedData, newValue);
+                            NumReplacedEntries += 1;
                             wasChanged = true;
                         }
 
