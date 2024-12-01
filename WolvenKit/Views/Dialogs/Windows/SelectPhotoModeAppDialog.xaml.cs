@@ -12,18 +12,26 @@ using Window = System.Windows.Window;
 
 namespace WolvenKit.Views.Dialogs.Windows
 {
-    public partial class SelectFacialAnimationPathDialog : IViewFor<SelectAnimationPathViewModel>
+    public partial class SelectPhotoModeAppDialog : IViewFor<SelectPhotoModeAppViewModel>
     {
-        public SelectFacialAnimationPathDialog(List<string> facialSetupPaths)
+        public SelectPhotoModeAppDialog()
         {
             InitializeComponent();
 
-            ViewModel = new SelectAnimationPathViewModel(facialSetupPaths);
+            ViewModel = new SelectPhotoModeAppViewModel();
             DataContext = ViewModel;
+
+            this.WhenActivated(disposables =>
+            {
+                this.Bind(ViewModel,
+                        x => x.RenameEntries,
+                        x => x.IsPhotomodeCheckbox.IsChecked)
+                    .DisposeWith(disposables);
+            });
         }
 
-        public SelectAnimationPathViewModel ViewModel { get; set; }
-        object IViewFor.ViewModel { get => ViewModel; set => ViewModel = (SelectAnimationPathViewModel)value; }
+        public SelectPhotoModeAppViewModel ViewModel { get; set; }
+        object IViewFor.ViewModel { get => ViewModel; set => ViewModel = (SelectPhotoModeAppViewModel)value; }
 
         public bool? ShowDialog(Window owner)
         {

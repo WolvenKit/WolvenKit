@@ -516,10 +516,9 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            var facialAnim = dialog.ViewModel?.SelectedAnimPath;
-            var animGraph = dialog.ViewModel?.SelectedGraphPath;
+            var facialAnim = dialog.ViewModel?.SelectedFacialAnim;
+            var animGraph = dialog.ViewModel?.SelectedGraph;
             var selectedAnims = dialog.ViewModel?.SelectedAnimEntries ?? [];
-            var renameAppearances = dialog.ViewModel?.IsRenameAnimsForPhotomode ?? false;
 
             foreach (var appNode in appearanceChildren)
             {
@@ -548,26 +547,6 @@ namespace WolvenKit.Views.Documents
                 RootChunk?.Tab?.Parent.SetIsDirty(true);
             }
 
-            if (!renameAppearances)
-            {
-                return;
-            }
-
-            if (appearanceChildren.Count > 20)
-            {
-                _loggerService.Warning("Your .app has more than 20 appearances - Nibbles Replacer only supports 20.");
-                appearanceChildren = appearanceChildren.Take(20).ToList();
-            }
-
-            var counter = 01;
-            foreach (var appNode in appearanceChildren)
-            {
-                // type check has already been done
-                ((appearanceAppearanceDefinition)appNode.ResolvedData).Name = $"appearance_{counter:D2}";
-                counter += 1;
-                RootChunk?.Tab?.Parent.SetIsDirty(true);
-                appNode.RecalculateProperties();
-            }
         }
 
         private bool ChangeAnimationSetupEntries(List<ChunkViewModel> animNodes, List<string> selectedAnims)
@@ -658,6 +637,84 @@ namespace WolvenKit.Views.Documents
             }
 
             return isChanged;
+        }
+
+        private void OnConvertToPhotoModeClick(object sender, RoutedEventArgs e)
+        {
+            if (RootChunk?.ResolvedData is not appearanceAppearanceResource)
+            {
+                return;
+            }
+
+            if (RootChunk.Tab?.Parent.IsDirty == true)
+            {
+                _loggerService.Error("File has un-saved changes! Please save before converting!");
+            }
+
+
+            var dialog = new SelectPhotoModeAppDialog();
+
+            if (dialog.ShowDialog() != true)
+            {
+                return;
+            }
+
+            var photoModeApp = dialog.ViewModel?.SelectedApp;
+            var renameAppearances = dialog.ViewModel?.RenameEntries ?? false;
+
+            if (!renameAppearances && string.IsNullOrEmpty(photoModeApp))
+            {
+                return;
+            }
+
+
+            if (renameAppearances)
+            {
+                var appearanceChildren =
+                    (RootChunk.GetPropertyChild("appearances")?.Properties.ToList() ?? []).Where(cvm =>
+                        cvm.ResolvedData is appearanceAppearanceDefinition).ToList();
+
+                if (!appearanceChildren.Any())
+                {
+                    return;
+                }
+
+                if (appearanceChildren.Count > 20)
+                {
+                    _loggerService.Warning("Your .app has more than 20 appearances - Nibbles Replacer only supports 20.");
+                    appearanceChildren = appearanceChildren.Take(20).ToList();
+                }
+
+                var counter = 01;
+                foreach (var appNode in appearanceChildren)
+                {
+                    // type check has already been done
+                    ((appearanceAppearanceDefinition)appNode.ResolvedData).Name = $"appearance_{counter:D2}";
+                    counter += 1;
+                    appNode.RecalculateProperties();
+                }
+            }
+
+            if (string.IsNullOrEmpty(photoModeApp))
+            {
+                return;
+            }
+
+            if (RootChunk.Tab is null || _projectManager.ActiveProject is null || RootChunk.Tab.FilePath is not string s || !File.Exists(s))
+            {
+                _loggerService.Error($"Can't automatically move your file. Please move it to the following path: ");
+                _loggerService.Error($"\t{photoModeApp}");
+                return;
+            }
+
+            RootChunk.Tab.Parent.SaveCommand.Execute(null);
+            var destPath = Path.Join(_projectManager.ActiveProject.ModDirectory, photoModeApp);
+            if (Path.GetDirectoryName(destPath) is string parentFolder && !Directory.Exists(parentFolder))
+            {
+                Directory.CreateDirectory(parentFolder);
+            }
+
+            File.Copy(s, destPath);
         }
     }
 }

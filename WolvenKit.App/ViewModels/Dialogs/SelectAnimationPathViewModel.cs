@@ -23,9 +23,7 @@ public partial class SelectAnimationPathViewModel : ObservableObject
 
     [ObservableProperty] private string? _rigPath = "";
     [ObservableProperty] private string? _animationPath = "";
-    [ObservableProperty] private string? _selectedAnimEntrySet = "";
     [ObservableProperty] private List<string>? _selectedAnimEntries;
-    [ObservableProperty] private bool _isRenameAnimsForPhotomode;
 
     public SelectAnimationPathViewModel(List<string> facialSetupPaths)
     {
@@ -75,9 +73,6 @@ public partial class SelectAnimationPathViewModel : ObservableObject
         { "Player Man", @"base\characters\head\pma\h0_001_ma_c__player\h0_001_ma_c__player_rigsetup.facialsetup" },
     };
 
-    private const string s_animEntryNpc = "NPC";
-    private const string s_animEntryPhotomodeM = "Photomode (male)";
-    private const string s_animEntryPhotomodeF = "Photomode (female)";
 
     private static readonly List<string> PhotomodeAnimEntriesFemale =
     [
@@ -102,7 +97,7 @@ public partial class SelectAnimationPathViewModel : ObservableObject
     private static readonly List<string> PhotomodeAnimEntriesMale = PhotomodeAnimEntriesFemale
         .Select(filePath => filePath.Replace("_female_", "_male")).ToList();
 
-    private readonly List<string> NPCAnimEntries =
+    private static readonly List<string> NPCAnimEntries =
     [
         "base\\animations\\facial\\male_average\\interactive_scene\\e3_male_average_custom_animations.anims",
         "base\\animations\\facial\\male_average\\interactive_scene\\generic_average_male_facial_idle.anims",
@@ -177,7 +172,6 @@ public partial class SelectAnimationPathViewModel : ObservableObject
             FilteredGraphOptions.Add(option);
         }
     }
-    // .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
@@ -185,23 +179,6 @@ public partial class SelectAnimationPathViewModel : ObservableObject
         {
             case nameof(FilterText):
                 UpdateFilteredGraphOptions();
-                break;
-            case nameof(SelectedAnimEntrySet):
-                switch (SelectedAnimEntrySet)
-                {
-                    case s_animEntryNpc:
-                        SelectedAnimEntries = NPCAnimEntries;
-                        break;
-                    case s_animEntryPhotomodeF:
-                        SelectedAnimEntries = PhotomodeAnimEntriesFemale;
-                        break;
-                    case s_animEntryPhotomodeM:
-                        SelectedAnimEntries = PhotomodeAnimEntriesMale;
-                        break;
-                    default:
-                        break;
-                }
-
                 break;
             default:
                 break;
@@ -211,7 +188,6 @@ public partial class SelectAnimationPathViewModel : ObservableObject
 
 
     [ObservableProperty] private string? _selectedFacialAnim;
-    public string? SelectedAnimPath => SelectedFacialAnim is null ? null : _facialAnimOptions[SelectedFacialAnim];
 
     // ReSharper disable once UnusedMember.Global used in xaml
     public Dictionary<string, string> FacialAnimOptions
@@ -220,17 +196,20 @@ public partial class SelectAnimationPathViewModel : ObservableObject
         set => SetProperty(ref _facialAnimOptions, value);
     }
 
+
+    private const string s_animEntryNpc = "NPC";
+    private const string s_animEntryPhotomodeM = "Photomode (male)";
+    private const string s_animEntryPhotomodeF = "Photomode (female)";
+    
     // ReSharper disable once UnusedMember.Global used in xaml
-    public Dictionary<string, string> AnimEntryOptions { get; } = new()
+    public Dictionary<string, List<string>> AnimEntryOptions { get; } = new()
     {
-        { s_animEntryNpc, s_animEntryNpc },
-        { s_animEntryPhotomodeF, s_animEntryPhotomodeF },
-        { s_animEntryPhotomodeM, s_animEntryPhotomodeM },
+        { s_animEntryNpc, NPCAnimEntries },
+        { s_animEntryPhotomodeF, PhotomodeAnimEntriesFemale },
+        { s_animEntryPhotomodeM, PhotomodeAnimEntriesMale },
     };
 
     [ObservableProperty] private string? _selectedGraph;
-
-    public string? SelectedGraphPath => SelectedGraph is null ? null : _animGraphOptions[SelectedGraph];
 
     [ObservableProperty] private string? _filterText;
     private ObservableCollection<KeyValuePair<string, string>> _filteredGraphOptions = [];
