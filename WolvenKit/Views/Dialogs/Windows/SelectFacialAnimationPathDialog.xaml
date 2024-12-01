@@ -59,8 +59,6 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="15" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="10" />
-                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <Label Content="Animation set" 
@@ -73,15 +71,9 @@
                               Grid.Row="0"
                               Grid.Column="1"
                               ItemsSource="{Binding FacialAnimOptions}"
-                              SelectedValue="{Binding SelectedFacialAnim}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Key}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
+                              SelectedValuePath="Value"
+                              DisplayMemberPath="Key"
+                              SelectedValue="{Binding SelectedFacialAnim}" />
 
                     <Label Content="Expression set"
                            Grid.Row="2"
@@ -114,15 +106,8 @@
                               Grid.Column="1"
                               ItemsSource="{Binding FilteredGraphOptions, UpdateSourceTrigger=PropertyChanged}"
                               SelectedValuePath="Value"
-                              SelectedValue="{Binding SelectedGraph}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Key}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
+                              DisplayMemberPath="Key"
+                              SelectedValue="{Binding SelectedGraph}" />
 
 
                     <Label Content="Animation entries"
@@ -135,28 +120,12 @@
                     <ComboBox x:Name="AnimEntryDropdown"
                               Grid.Row="6"
                               Grid.Column="1"
+                              SelectedValuePath="Value"
+                              DisplayMemberPath="Key"
                               ItemsSource="{Binding AnimEntryOptions}"
-                              SelectedValue="{Binding SelectedAnimEntrySet}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Key}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
+                              SelectedValue="{Binding SelectedAnimEntries}">
+                      
                     </ComboBox>
-
-                    <Label Content="Is photo mode .app"
-                           Grid.Row="8"
-                           Grid.Column="0"
-                           Background="#252525" BorderThickness="0"
-                           HorizontalAlignment="Left" /> <!-- Label for the dropdown -->
-
-                    <CheckBox x:Name="IsPhotomodeCheckbox"
-                              Grid.Row="8"
-                              Grid.Column="1"
-                              IsChecked="{Binding IsRenameAnimsForPhotomode}">
-                    </CheckBox>
                 </Grid>
             </syncfusion:WizardPage>
         </syncfusion:WizardControl>

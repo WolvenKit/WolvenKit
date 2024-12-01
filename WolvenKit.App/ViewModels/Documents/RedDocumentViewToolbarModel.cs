@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Splat;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Core.Services;
@@ -217,32 +218,22 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     private bool CanChangeAnimationComponent() => RootChunk is { };
 
     /*
-     * Change animation component
-     */
-    [RelayCommand(CanExecute = nameof(CanChangeAnimationComponent))]
-    private void ChangeAnimationComponent()
-    {
-        // do nothing, we're handling this in view model's click 
-    }
-
-
-    [GeneratedRegex(@"^appearance_\d\d$")]
-    private static partial Regex PhotomodeAppNameRegex();
-
-    /*
      * Convert to photo mode app
      */
-
-    // are there any apps not named "appearance_xx"?
-    private bool CanConvertToPhotoModeApp() => RootChunk?.ResolvedData is appearanceAppearanceResource app && app.Appearances
-        .Select(x => x.Chunk)
-        .Select(x => x?.Name.GetResolvedText() ?? "")
-        .Any(x => !PhotomodeAppNameRegex().IsMatch(x));
+    private bool CanConvertToPhotoModeApp() => RootChunk?.ResolvedData is appearanceAppearanceResource &&
+                                               (FilePath is not string filePath ||
+                                                !SelectPhotoModeAppViewModel.PhotomodeAppPaths.Contains(filePath));
 
     [RelayCommand(CanExecute = nameof(CanConvertToPhotoModeApp))]
     private void ConvertToPhotoModeApp()
     {
-        // Do nothing, we're handling this in onClick of view model
+        // do nothing, we're handling this in view model's click 
+    }
+    
+    [RelayCommand(CanExecute = nameof(CanChangeAnimationComponent))]
+    private void ChangeAnimationComponent()
+    {
+        // do nothing, we're handling this in view model's click 
     }
 
     #endregion
