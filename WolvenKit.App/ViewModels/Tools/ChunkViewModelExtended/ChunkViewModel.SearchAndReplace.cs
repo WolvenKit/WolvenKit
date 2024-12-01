@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System.Windows.Threading;
 using WolvenKit.App.Helpers;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
@@ -10,12 +9,20 @@ namespace WolvenKit.App.ViewModels.Shell;
 
 public partial class ChunkViewModel
 {
-    private readonly List<int> _resolvedHashes = new();
+    private static readonly List<int> s_resolvedHashes = [];
+
+    private static readonly List<string> s_replacedStrings = [];
 
     public int NumReplacedEntries;
 
-
-
+    /// <summary>
+    /// Resets the internal cache so that search and replace operations aren't run twice
+    /// </summary>
+    public static void SearchAndReplace_ResetCaches()
+    {
+        s_resolvedHashes.Clear();
+        s_replacedStrings.Clear();
+    }
 
     /// <summary>
     ///  Entry point for search/replace
@@ -27,10 +34,14 @@ public partial class ChunkViewModel
     /// <returns></returns>
     private int SearchAndReplaceInternal(string search, string replace, bool isWholeWord, bool isRegex)
     {
-        _resolvedHashes.Clear();
         NumReplacedEntries = 0;
+        var isExpanded = IsExpanded;
 
-        if (!SearchAndReplaceInProperties(search, replace, isWholeWord, isRegex))
+        // SearchAndReplaceInProperties can influence the expansion state, even if nothing was changed
+        var hasReplacement = SearchAndReplaceInProperties(search, replace, isWholeWord, isRegex);
+        IsExpanded = isExpanded;
+
+        if (hasReplacement)
         {
             return NumReplacedEntries;
         }
@@ -38,7 +49,6 @@ public partial class ChunkViewModel
         RecalculateProperties();
         CalculateValue();
         CalculateDescriptor();
-
         return NumReplacedEntries;
     }
 
@@ -49,7 +59,7 @@ public partial class ChunkViewModel
         // this will enforce CalculateProperties to be called if it isn't
         var properties = GetProperties();
 
-        if (_resolvedHashes.Contains(GetHashCode()))
+        if (s_resolvedHashes.Contains(GetHashCode()))
         {
             return false;
         }
@@ -113,8 +123,7 @@ public partial class ChunkViewModel
                 _loggerService.Debug($"Search and replace: failed to replace ${Data.GetType().Name} with ${newType.GetType().Name}");
             }
         }
-
-
+        
         wasChanged = ReplaceInFields(search, replace, isWholeWord, isRegex) || wasChanged;
 
         // Now, replace in child properties
@@ -144,7 +153,7 @@ public partial class ChunkViewModel
         // Certain types have the same hash as their children
         if (Properties.Count != 1)
         {
-            _resolvedHashes.Add(GetHashCode());
+            s_resolvedHashes.Add(GetHashCode());
         }
 
         return wasChanged;
@@ -153,23 +162,40 @@ public partial class ChunkViewModel
     // Duplicate-safe search and replace
     private static string ReplaceInString(string input, string searchOrPattern, string replace, bool isWholeWord, bool isRegex)
     {
-        if (isWholeWord)
+        if (s_replacedStrings.Contains(input))
         {
-            if (input == searchOrPattern)
-            {
-                return replace;
-            }
-
             return input;
         }
         
-        var placeholder = Guid.NewGuid().ToString();
-        if (isRegex)
+        if (isWholeWord)
         {
-            return Regex.Replace(input, searchOrPattern, placeholder).Replace(placeholder, replace);
+            if (input != searchOrPattern)
+            {
+                return input;
+            }
+
+            s_replacedStrings.Add(replace);
+            return replace;
+
         }
 
-        return input.Replace(searchOrPattern, placeholder).Replace(placeholder, replace);
+        string ret;
+        if (isRegex)
+        {
+            ret = Regex.Replace(input, searchOrPattern, replace);
+        }
+        else
+        {
+            ret = input.Replace(searchOrPattern, replace);
+        }
+
+        if (ret != input)
+        {
+            s_replacedStrings.Add(ret);
+        }
+
+        return ret;
+
     }
 
     private bool SearchAndReplaceInReference(string search, string replace, bool isWholeWord, bool isRegex,
@@ -179,8 +205,7 @@ public partial class ChunkViewModel
         var original = reference;
         
         outReference = reference;
-        if (reference.DepotPath.GetResolvedText() is not string depotPath ||
-            (!IsInArray && _resolvedHashes.Contains(reference.DepotPath.GetHashCode())))
+        if (reference.DepotPath.GetResolvedText() is not string depotPath)
         {
             return false;
         }
@@ -210,9 +235,7 @@ public partial class ChunkViewModel
         {
             return false;
         }
-
-        _resolvedHashes.Add(replace.GetHashCode());
-            
+        
         outReference = (IRedRef)constructor.Invoke([(ResourcePath)newValue]);
         NumReplacedEntries += 1;
         return true;
