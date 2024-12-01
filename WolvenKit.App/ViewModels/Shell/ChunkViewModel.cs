@@ -3187,8 +3187,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         IsDefault = IsDefault || ResolvedData switch
         {
-            entSkinnedMeshComponent skinnedMeshComponent => string.IsNullOrEmpty(skinnedMeshComponent.Mesh.DepotPath.GetResolvedText()),
-            entMeshComponent meshComponent => string.IsNullOrEmpty(meshComponent.Mesh.DepotPath.GetResolvedText()),
+            entSkinnedMeshComponent skinnedMeshComponent => string.IsNullOrEmpty(skinnedMeshComponent.Mesh.DepotPath.GetResolvedText()) ||
+                                                            skinnedMeshComponent.ChunkMask == 0,
+            entMeshComponent meshComponent => string.IsNullOrEmpty(meshComponent.Mesh.DepotPath.GetResolvedText()) ||
+                                              meshComponent.ChunkMask == 0,
             Multilayer_Layer layer => ((float)layer.Opacity) == 0.0,
             _ => IsDefault
         };
