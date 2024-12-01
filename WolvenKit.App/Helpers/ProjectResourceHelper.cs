@@ -347,37 +347,38 @@ public static class ProjectResourceHelper
                 File.Move(sourceInRaw, destAbsPath.Replace("archive", "raw"), true);
             }
             
-            return;
         }
-
-        /*
-         * We're moving a directory
-         */
-
-        try
+        else
         {
-            if (Directory.Exists(destAbsPath) && Directory.EnumerateFiles(destAbsPath).Any())
+            /*
+             * We're moving a directory
+             */
+            try
             {
-                var response = await Interactions.ShowMessageBoxAsync(
-                    $"Directory {destRelPath} already exists and is not empty. Do you want to overwrite existing files?",
-                    "Directory already exists!");
-                overwriteFiles = response is WMessageBoxResult.OK or WMessageBoxResult.Yes;
+                if (Directory.Exists(destAbsPath) && Directory.EnumerateFiles(destAbsPath).Any())
+                {
+                    var response = await Interactions.ShowMessageBoxAsync(
+                        $"Directory {destRelPath} already exists and is not empty. Do you want to overwrite existing files?",
+                        "Directory already exists!");
+                    overwriteFiles = response is WMessageBoxResult.OK or WMessageBoxResult.Yes;
+                }
+
+                FileHelper.MoveRecursively(sourceAbsPath, destAbsPath, overwriteFiles, GetLoggerService());
+
+                var sourceInRaw = sourceAbsPath.Replace("archive", "raw");
+                if (sourceInRaw != sourceAbsPath && Directory.Exists(sourceInRaw))
+                {
+                    FileHelper.MoveRecursively(sourceInRaw, destAbsPath.Replace("archive", "raw"), overwriteFiles, GetLoggerService());
+                }
+
+                GetLoggerService()?.Info($"Moved {sourceRelPath}{Path.DirectorySeparatorChar}* to {destRelPath}");
             }
 
-            FileHelper.MoveRecursively(sourceAbsPath, destAbsPath, overwriteFiles, GetLoggerService());
-
-            var sourceInRaw = sourceAbsPath.Replace("archive", "raw");
-            if (sourceInRaw != sourceAbsPath && Directory.Exists(sourceInRaw))
+            catch (Exception e)
             {
-                FileHelper.MoveRecursively(sourceInRaw, destAbsPath.Replace("archive", "raw"), overwriteFiles, GetLoggerService());
+                GetLoggerService()?.Info($"Error when trying to move {sourceRelPath}{Path.DirectorySeparatorChar}*: {e.Message}");
             }
 
-            GetLoggerService()?.Info($"Moved {sourceRelPath}{Path.DirectorySeparatorChar}* to {destRelPath}");
-        }
-
-        catch (Exception e)
-        {
-            GetLoggerService()?.Info($"Error when trying to move {sourceRelPath}{Path.DirectorySeparatorChar}*: {e.Message}");
         }
 
         if (!refactor)
@@ -463,7 +464,8 @@ public static class ProjectResourceHelper
                 return;
             }
 
-            foreach (var result in cr2W!.FindType(typeof(IRedRef)))
+            var refs = cr2W!.FindType(typeof(IRedRef));
+            foreach (var result in refs)
             {
                 if (result.Value is not IRedRef resourceReference || resourceReference.DepotPath == ResourcePath.Empty)
                 {

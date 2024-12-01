@@ -50,6 +50,27 @@ public partial class ChunkViewModel
         RecalculateProperties();
     }
 
+    private bool _isPropertiesInitialized;
+
+    /// <summary>
+    /// If we need a node to be fully initialized (e.g. if we run a search on it) 
+    /// </summary>
+    public void CalculatePropertiesRecursive()
+    {
+        if (_isPropertiesInitialized)
+        {
+            return;
+        }
+
+        _isPropertiesInitialized = true;
+        CalculateProperties();
+        foreach (var child in Properties)
+        {
+            child.CalculatePropertiesRecursive();
+        }
+    }
+
+
     private EditorDifficultyLevelInformation DifficultyLevelFieldInformation { get; set; }
 
     public void SetVisibilityStatusBySearchString(string searchBoxText)
@@ -57,6 +78,13 @@ public partial class ChunkViewModel
         if (ResolvedData is RedDummy || TVProperties.Count == 0)
         {
             CalculateProperties();
+        }
+
+        // some items are still RedDummies even after properties were calculated. Why?
+        if (ResolvedData is RedDummy || TVProperties.Count == 0)
+        {
+            IsHiddenBySearch = true;
+            return;
         }
         
         foreach (var chunkViewModel in TVProperties)
