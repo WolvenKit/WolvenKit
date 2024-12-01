@@ -64,7 +64,12 @@ public partial class ChunkViewModel
 
         _isPropertiesInitialized = true;
         CalculateProperties();
-        foreach (var child in Properties)
+        if (TVProperties.Count > 20)
+        {
+            return;
+        }
+
+        foreach (var child in TVProperties)
         {
             child.CalculatePropertiesRecursive();
         }
