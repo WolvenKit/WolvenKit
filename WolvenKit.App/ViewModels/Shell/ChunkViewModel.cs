@@ -2877,7 +2877,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             return;
         }
-
         CalculateDisplayName();
         
         _propertiesLoaded = true;
@@ -3598,11 +3597,30 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    public void RecalculateProperties(IRedType? selectChild = null, bool expand = true)
+
+    public void RecalculateProperties(IRedType selectChild)
+    {
+        RecalculateProperties();
+
+        if (!IsExpanded ||
+            Properties.FirstOrDefault(p => p.Data is not RedDummy && p.Data.GetHashCode() == selectChild.GetHashCode()) is not
+                ChunkViewModel prop)
+        {
+            return;
+        }
+
+        if (Tab is RDTDataViewModel dvm)
+        {
+            dvm.SelectedChunk = prop;
+        }
+    }
+
+    public void RecalculateProperties()
     {
         PropertyCount = -1;
         // might not be needed
         _propertiesLoaded = false;
+        var isExpanded = IsExpanded;
         //_resolvedDataCache = null;
         CalculateProperties();
         CalculateDescriptor();
@@ -3614,31 +3632,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         OnPropertyChanged(nameof(Data));
 
-        IsExpanded = expand;
-
         if (IsSelected)
         {
             RefreshContextMenuFlags();
         }
 
-        if (!expand || selectChild is null)
-        {
-            return;
-        }
-
-        if (Properties.FirstOrDefault(p => p.Data is not RedDummy && p.Data.GetHashCode() == selectChild.GetHashCode()) is not
-            ChunkViewModel prop)
-        {
-            return;
-        }
-
-        prop.IsExpanded = true;
-        prop.SetChildExpansionStates(true);
-
-        if (Tab is RDTDataViewModel dvm)
-        {
-            dvm.SelectedChunk = prop;
-        }
     }
 
     public IList<ReferenceSocket> Inputs

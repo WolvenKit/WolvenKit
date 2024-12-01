@@ -11,10 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
 using CommunityToolkit.Mvvm.Input;
-using DynamicData.Kernel;
-using HandyControl.Controls;
 using ReactiveUI;
 using Splat;
 using Syncfusion.UI.Xaml.TreeView;
@@ -22,15 +19,11 @@ using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
-using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.Types;
-using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
-using Point = System.Windows.Point;
-using TreeViewItem = System.Windows.Controls.TreeViewItem;
 
 namespace WolvenKit.Views.Tools
 {
@@ -40,14 +33,14 @@ namespace WolvenKit.Views.Tools
     public partial class RedTreeView : UserControl
     {
         private readonly IModifierViewStateService _modifierViewStateSvc;
-        private ILoggerService _loggerService;
-        private IProgressService<double> _progresssService;
+        private readonly ILoggerService _loggerService;
+        private readonly IProgressService<double> _progressService;
 
         public RedTreeView()
         {
             _modifierViewStateSvc = Locator.Current.GetService<IModifierViewStateService>();
             _loggerService = Locator.Current.GetService<ILoggerService>();
-            _progresssService = Locator.Current.GetService<IProgressService<double>>(); 
+            _progressService = Locator.Current.GetService<IProgressService<double>>(); 
             
             InitializeComponent();
 
@@ -141,7 +134,7 @@ namespace WolvenKit.Views.Tools
             set => SetValue(SelectedItemsProperty, value);
         }
 
-        private void OnSelectionChanged(object sender, Syncfusion.UI.Xaml.TreeView.ItemSelectionChangedEventArgs e)
+        private void OnSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
         {
             foreach (var removedItem in e.RemovedItems.OfType<ISelectableTreeViewItemModel>())
             {
@@ -167,8 +160,8 @@ namespace WolvenKit.Views.Tools
 
             chunk.SetChildExpansionStates(true);
         }
-        
-        public async void OnCollapsed(object sender, Syncfusion.UI.Xaml.TreeView.NodeExpandedCollapsedEventArgs e)
+
+        private async void OnCollapsed(object sender, NodeExpandedCollapsedEventArgs e)
         {
             if (e.Node.Content is not ChunkViewModel cvm)
             {
@@ -427,26 +420,28 @@ namespace WolvenKit.Views.Tools
         }
 
 
-        public bool CanOpenSearchAndReplaceDialog => !_isContextMenuOpen &&
-                                                     SelectedItem is ChunkViewModel { Parent: not null } &&
-                                                     !SearchAndReplaceDialog.IsInstanceOpen;
+        private bool CanOpenSearchAndReplaceDialog => !_isContextMenuOpen &&
+                                                      SelectedItem is ChunkViewModel { Parent: not null } &&
+                                                      !SearchAndReplaceDialog.IsInstanceOpen;
 
         // [RelayCommand(CanExecute = nameof(CanOpenSearchAndReplaceDialog))] this doesn't work if item is called from menu
         [RelayCommand]
         private void OpenSearchAndReplaceDialog()
         {
             var selectedChunkViewModels = GetSelectedChunks();
-            if (selectedChunkViewModels.Count == 0)
+            if (selectedChunkViewModels.Count == 0 || SelectedItem is not ChunkViewModel cvm)
             {
                 return;
             }
 
-            _progresssService.IsIndeterminate = true;
+            // cvm.PropertyChanged += OnCvmExpansionStateChange;
+
+            _progressService.IsIndeterminate = true;
             
             var dialog = new SearchAndReplaceDialog();
             if (dialog.ShowDialog() != true)
             {
-                _progresssService.IsIndeterminate = false;
+                _progressService.IsIndeterminate = false;
                 return;
             }
 
@@ -455,10 +450,7 @@ namespace WolvenKit.Views.Tools
             var isRegex = dialog.ViewModel?.IsRegex ?? false;
             var isWholeWord = dialog.ViewModel?.IsWholeWord ?? false;
 
-            
-            var expansionStates = selectedChunkViewModels
-                .Select(item => item.IsExpanded)
-                .ToList();
+            ChunkViewModel.SearchAndReplace_ResetCaches();
             
             var results = selectedChunkViewModels
                 .Select(item => item.SearchAndReplace(searchText, replaceText, isWholeWord, isRegex))
@@ -466,24 +458,18 @@ namespace WolvenKit.Views.Tools
 
             var numReplaced = results.Sum();
 
+            _loggerService.Info($"Replaced {numReplaced} occurrences of '{searchText}' with '{replaceText}'");
+            
             if (numReplaced <= 0)
             {
-                _progresssService.IsIndeterminate = false;
+                _progressService.IsIndeterminate = false;
                 return;
             }
 
             GetRoot().Tab?.Parent.SetIsDirty(true);
-            _loggerService.Info($"Replaced {numReplaced} occurrences of '{searchText}' with '{replaceText}'");
 
-            for (var i = 0; i < selectedChunkViewModels.Count; i++)
-            {
-                var expansionState = expansionStates.Count > i && expansionStates[i];
-                selectedChunkViewModels[i].IsExpanded = expansionState;
-            }
-
-            _progresssService.IsIndeterminate = false;
+            _progressService.IsIndeterminate = false;
         }
-
 
         [RelayCommand]
         private void DeleteSelection()
@@ -530,7 +516,7 @@ namespace WolvenKit.Views.Tools
 
             cvm.GenerateMissingMaterials(baseMaterial, isLocal, resolveSubstitutions);
 
-            cvm?.Tab?.Parent.SetIsDirty(true);
+            cvm.Tab?.Parent.SetIsDirty(true);
         }
 
         #endregion
