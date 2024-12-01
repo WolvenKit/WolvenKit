@@ -38,6 +38,7 @@ namespace WolvenKit.Views.Documents
         private readonly WatcherService _projectWatcher;
         private readonly IAppArchiveManager _archiveManager;
         private readonly IModifierViewStateService _modifierStateService;
+        private readonly AppViewModel _appViewModel;
 
         public RedDocumentViewMenuBar()
         {
@@ -48,6 +49,7 @@ namespace WolvenKit.Views.Documents
             _projectWatcher = (WatcherService)Locator.Current.GetService<IWatcherService>()!;
             _archiveManager = Locator.Current.GetService<IAppArchiveManager>()!;
             _modifierStateService = Locator.Current.GetService<IModifierViewStateService>()!;
+            _appViewModel = Locator.Current.GetService<AppViewModel>()!;
             
             InitializeComponent();
 
@@ -651,7 +653,6 @@ namespace WolvenKit.Views.Documents
                 _loggerService.Error("File has un-saved changes! Please save before converting!");
             }
 
-
             var dialog = new SelectPhotoModeAppDialog();
 
             if (dialog.ShowDialog() != true)
@@ -667,7 +668,17 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
+            var result = Interactions.ShowConfirmation((
+                "You can't un-do this. Are you sure?",
+                "Convert .app file?",
+                WMessageBoxImage.Question,
+                WMessageBoxButtons.YesNo));
 
+            if (result != WMessageBoxResult.Yes)
+            {
+                return;
+            }
+            
             if (renameAppearances)
             {
                 var appearanceChildren =
@@ -714,7 +725,13 @@ namespace WolvenKit.Views.Documents
                 Directory.CreateDirectory(parentFolder);
             }
 
-            File.Copy(s, destPath);
+            if (_appViewModel.ActiveDocument is not null)
+            {
+                _appViewModel.CloseFile(_appViewModel.ActiveDocument);
+            }
+
+            File.Move(s, destPath);
+            _appViewModel.OpenFileFromDepotPath(photoModeApp);
         }
     }
 }
