@@ -563,6 +563,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         HasActiveSearch = !string.IsNullOrEmpty(searchBoxText);
         foreach (var chunkViewModel in Chunks)
         {
+            chunkViewModel.CalculatePropertiesRecursive();
             chunkViewModel.SetVisibilityStatusBySearchString(searchBoxText);
         }
 
