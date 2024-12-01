@@ -2858,7 +2858,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         return null;
     }
 
-    private void InitializePropertiesRecursive()
+    public void InitializePropertiesRecursive()
     {
         if (Properties.Count == 0 || Data is RedDummy)
         {

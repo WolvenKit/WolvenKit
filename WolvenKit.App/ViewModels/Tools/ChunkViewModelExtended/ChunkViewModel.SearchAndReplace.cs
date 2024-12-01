@@ -56,7 +56,7 @@ public partial class ChunkViewModel
     // Level 1 (will call itself recursively, so let's abort here if we can)
     private bool SearchAndReplaceInProperties(string search, string replace, bool isWholeWord, bool isRegex)
     {
-        // this will enforce CalculateProperties to be called if it isn't
+        CalculateProperties();
         var properties = GetProperties();
 
         if (s_resolvedHashes.Contains(GetHashCode()))
