@@ -13,28 +13,42 @@ public class ArrayConverterFactory : JsonConverterFactory
     private readonly CArrayFixedSizeConverter _cArrayFixedSizeConverter = new();
     private readonly CStaticConverter _cStaticConverter = new();
 
-    public override bool CanConvert(Type typeToConvert) => typeof(IRedArray).IsAssignableFrom(typeToConvert);
+    public override bool CanConvert(Type typeToConvert) => GetConverter(typeToConvert) != null;
 
-    public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
+    private JsonConverter? GetConverter(Type typeToConvert)
     {
         if (typeToConvert == typeof(worldNodeDataBuffer))
         {
             return _cArrayConverter;
         }
 
-        if (typeToConvert.GetGenericTypeDefinition() == typeof(CArray<>))
+        if (typeToConvert.IsGenericType)
         {
-            return _cArrayConverter;
+            if (typeToConvert.GetGenericTypeDefinition() == typeof(CArray<>))
+            {
+                return _cArrayConverter;
+            }
+
+            if (typeToConvert.GetGenericTypeDefinition() == typeof(CArrayFixedSize<>))
+            {
+                return _cArrayFixedSizeConverter;
+            }
+
+            if (typeToConvert.GetGenericTypeDefinition() == typeof(CStatic<>))
+            {
+                return _cStaticConverter;
+            }
         }
 
-        if (typeToConvert.GetGenericTypeDefinition() == typeof(CArrayFixedSize<>))
-        {
-            return _cArrayFixedSizeConverter;
-        }
+        return null;
+    }
 
-        if (typeToConvert.GetGenericTypeDefinition() == typeof(CStatic<>))
+    public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
+    {
+        var converter = GetConverter(typeToConvert);
+        if (converter != null)
         {
-            return _cStaticConverter;
+            return converter;
         }
 
         throw new NotSupportedException("CreateConverter got called on a type that this converter factory doesn't support");

@@ -888,7 +888,7 @@ public class CLegacySingleChannelCurveConverterFactory : JsonConverterFactory
 {
     private readonly CLegacySingleChannelCurveConverter _cLegacySingleChannelCurveConverter = new();
 
-    public override bool CanConvert(Type typeToConvert) => typeof(IRedLegacySingleChannelCurve).IsAssignableFrom(typeToConvert) || typeof(IRedCurvePoint).IsAssignableFrom(typeToConvert);
+    public override bool CanConvert(Type typeToConvert) => typeof(IRedLegacySingleChannelCurve).IsAssignableFrom(typeToConvert);
 
     public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {
