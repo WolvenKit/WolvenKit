@@ -1,5 +1,32 @@
 namespace WolvenKit.RED4.Types;
 
+public static class CurvePoint
+{
+    public static IRedCurvePoint Create(Type innerType)
+    {
+        switch (innerType.Name)
+        {
+            case "CFloat":
+                return new CurvePoint<CFloat>(0, 0);
+
+            case "HDRColor":
+                return new CurvePoint<HDRColor>(0, new HDRColor());
+
+            case "Vector2":
+                return new CurvePoint<Vector2>(0, new Vector2());
+
+            case "Vector3":
+                return new CurvePoint<Vector3>(0, new Vector3());
+
+            case "Vector4":
+                return new CurvePoint<Vector4>(0, new Vector4());
+
+            default:
+                throw new NotSupportedException($"{innerType.Name} is not a valid curve value");
+        }
+    }
+}
+
 public class CurvePoint<T> : IRedCurvePoint<T>, IEquatable<CurvePoint<T>> where T : IRedType
 {
     public CFloat Point { get; set; }
