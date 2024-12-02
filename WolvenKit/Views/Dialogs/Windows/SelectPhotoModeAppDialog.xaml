@@ -6,7 +6,7 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:converters="clr-namespace:WolvenKit.Converters"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
-    Title="Change facial animation"
+    Title="Select Nibbles Replacer"
     SizeToContent="WidthAndHeight"
     FocusManager.FocusedElement="{Binding ElementName=FacialAnimDropdown}"
     WindowStartupLocation="CenterScreen"
@@ -57,7 +57,7 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <Label Content="Animation set"
+                    <Label Content="Select replacer"
                            Grid.Row="0"
                            Grid.Column="0"
                            HorizontalAlignment="Left"
