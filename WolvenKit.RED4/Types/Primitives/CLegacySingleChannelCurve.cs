@@ -53,10 +53,31 @@ public class CurvePoint<T> : IRedCurvePoint<T>, IEquatable<CurvePoint<T>> where 
     }
 
     public override int GetHashCode() => HashCode.Combine(Point, Value);
+
+    #region IRedCloneable
+
+    public object ShallowCopy() => MemberwiseClone();
+
+    public object DeepCopy()
+    {
+        if (Value.GetType().IsValueType)
+        {
+            return new CurvePoint<T>(Point, Value);
+        }
+
+        if (Value is IRedCloneable cloneable)
+        {
+            return new CurvePoint<T>(Point, (T)cloneable.DeepCopy());
+        }
+
+        throw new NotImplementedException();
+    }
+
+    #endregion IRedCloneable
 }
 
 [RED("curveData")]
-public class CLegacySingleChannelCurve<T> : List<IRedCurvePoint>, IRedLegacySingleChannelCurve<T>, IEquatable<CLegacySingleChannelCurve<T>> where T : IRedType
+public class CLegacySingleChannelCurve<T> : CArrayBase<IRedCurvePoint>, IRedLegacySingleChannelCurve<T>, IEquatable<CLegacySingleChannelCurve<T>> where T : IRedType
 {
     public Type ElementType => typeof(T);
     public string RedElementType => RedReflection.GetRedTypeFromCSType(typeof(T));
@@ -101,4 +122,24 @@ public class CLegacySingleChannelCurve<T> : List<IRedCurvePoint>, IRedLegacySing
     }
 
     public override int GetHashCode() => HashCode.Combine(base.GetHashCode(), InterpolationType.GetHashCode(), LinkType.GetHashCode());
+
+    #region IRedCloneable
+
+    public override object DeepCopy()
+    {
+        var ret = new CLegacySingleChannelCurve<T>
+        {
+            InterpolationType = InterpolationType,
+            LinkType = LinkType
+        };
+
+        foreach (var curvePoint in this)
+        {
+            ret.Add(curvePoint.DeepCopy());
+        }
+
+        return ret;
+    }
+
+    #endregion IRedCloneable
 }
