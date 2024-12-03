@@ -3,19 +3,16 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:hc="https://handyorg.github.io/handycontrol"
-    xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     Title="Rename"
+    MinWidth="{DynamicResource WolvenKitDialogWidthSmall}"
+    MinHeight="{DynamicResource WolvenKitDialogHeightSmall}"
     SizeToContent="WidthAndHeight"
-    MinWidth="500"
     WindowStartupLocation="CenterOwner">
-
     <Grid
-        Margin="5,5,2,5"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch"
         hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
-
         <Grid.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
@@ -25,8 +22,9 @@
             </ResourceDictionary>
         </Grid.Resources>
 
-
-        <syncfusion:WizardControl CancelButtonCancelsWindow="True" FinishButtonClosesWindow="True">
+        <syncfusion:WizardControl
+            CancelButtonCancelsWindow="True"
+            FinishButtonClosesWindow="True">
             <syncfusion:WizardPage
                 BackVisibility="Collapsed"
                 CancelVisibility="Visible"
@@ -35,23 +33,32 @@
                 NextVisibility="Collapsed"
                 PreviewKeyDown="WizardPage_PreviewKeyDown"
                 PageType="Exterior">
-                <StackPanel Orientation="Vertical">
-                    <hc:TextBox x:Name="TextBox" Style="{StaticResource TextBoxExtend}" />
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBlock Margin="2,6,5,0" Text="Update in project files?"
-                                   Visibility="{Binding ShowRefactoringCheckbox, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <StackPanel
+                    Margin="{DynamicResource WolvenKitMarginTiny}"
+                    Orientation="Vertical">
+                    <hc:TextBox x:Name="TextBox" />
+
+                    <StackPanel
+                        Margin="{DynamicResource WolvenKitMarginSmallVertical}"
+                        HorizontalAlignment="Right"
+                        Orientation="Horizontal">
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            Visibility="{Binding ShowRefactoringCheckbox,
+                                                 Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Text="Update in project files?" />
+
                         <CheckBox
                             x:Name="EnableRefactoringCheckbox"
-                            Margin="5,5,0,0"
-                            IsChecked="{Binding Path=EnableRefactoring, Mode=TwoWay}"
-                            ToolTip="Try updating references to this file? This will edit other files in your project."
-                            Visibility="{Binding ShowRefactoringCheckbox, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                            Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                            Visibility="{Binding ShowRefactoringCheckbox,
+                                                 Converter={StaticResource BooleanToVisibilityConverter}}"
+                            IsChecked="{Binding Path=EnableRefactoring,
+                                                Mode=TwoWay}"
+                            ToolTip="Try updating references to this file? This will edit other files in your project." />
                     </StackPanel>
                 </StackPanel>
-
             </syncfusion:WizardPage>
         </syncfusion:WizardControl>
-
     </Grid>
-    
 </Window>

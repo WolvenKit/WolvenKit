@@ -13,6 +13,7 @@
         <sfskin:ResourceDictionaryProvider
             DictionaryName="Common"
             ThemeName="MaterialDark" />
+
         <sfskin:ResourceDictionaryProvider
             DictionaryName="Brushes"
             ThemeName="MaterialDark" />
@@ -21,24 +22,18 @@
         <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <SolidColorBrush x:Key="CustomSliderForegroundBrush" Color="#FF1E91EA" />
-    <SolidColorBrush x:Key="CustomSliderBackgroundBrush" Color="#55ffffff" />
-    <SolidColorBrush x:Key="CustomSliderHighlightBrush" Color="#FFEFEFEF" />
-
-    <SolidColorBrush x:Key="WolvenKitSammyRed" Color="#DF2935" />
-    <SolidColorBrush x:Key="WolvenKitSammyRedShaded" Color="#B71C34" />
-    <SolidColorBrush x:Key="WolvenKitSammyBlack" Color="#292929" />
-
+    <!-- Colors -->
     <Color x:Key="WolvenKitRedColor">#DF2935</Color>
     <Color x:Key="WolvenKitRedShadowColor">#951C2D</Color>
+    <Color x:Key="WolvenKitGreenColor">#28DE55</Color>
+    <Color x:Key="WolvenKitGreenShadowColor">#1C9435</Color>
     <Color x:Key="WolvenKitCyanColor">#52F1FF</Color>
     <Color x:Key="WolvenKitCyanShadowColor">#4D8C9A</Color>
     <Color x:Key="WolvenKitYellowColor">#FFEA0A</Color>
     <Color x:Key="WolvenKitYellowShadowColor">#ABA108</Color>
-    <Color x:Key="WolvenKitPurpleColor">#5760B3</Color>
+    <Color x:Key="WolvenKitPurpleColor">CornflowerBlue</Color>
     <Color x:Key="WolvenKitDarkPinkColor">#AA336A</Color>
     <Color x:Key="WolvenKitTanColor">#D0A467</Color>
-    <Color x:Key="WolvenKitGreenColor">#3ae07d</Color>
 
     <Color x:Key="WolvenKitCyanShadow50Color">#7F4D8C9A</Color>
     <Color x:Key="WolvenKitCyanShadow25Color">#203a40</Color>
@@ -47,10 +42,19 @@
     <Color x:Key="WolvenKitYellowShadow50Color">#7FABA108</Color>
     <Color x:Key="WolvenKitYellowShadow25Color">#7F403c09</Color>
 
+    <!-- Brushes -->
+    <SolidColorBrush x:Key="CustomSliderForegroundBrush" Color="#FF1E91EA" />
+    <SolidColorBrush x:Key="CustomSliderBackgroundBrush" Color="#55ffffff" />
+    <SolidColorBrush x:Key="CustomSliderHighlightBrush" Color="#FFEFEFEF" />
 
+    <SolidColorBrush x:Key="WolvenKitSammyRed" Color="#DF2935" />
+    <SolidColorBrush x:Key="WolvenKitSammyRedShaded" Color="#B71C34" />
+    <SolidColorBrush x:Key="WolvenKitSammyBlack" Color="#292929" />
 
     <SolidColorBrush x:Key="WolvenKitRed" Color="{StaticResource WolvenKitRedColor}" />
     <SolidColorBrush x:Key="WolvenKitRedShadow" Color="{StaticResource WolvenKitRedShadowColor}" />
+    <SolidColorBrush x:Key="WolvenKitGreen" Color="{StaticResource WolvenKitGreenColor}" />
+    <SolidColorBrush x:Key="WolvenKitGreenShadow" Color="{StaticResource WolvenKitGreenShadowColor}" />
     <SolidColorBrush x:Key="WolvenKitCyan" Color="{StaticResource WolvenKitCyanColor}" />
     <SolidColorBrush x:Key="WolvenKitCyanShadow" Color="{StaticResource WolvenKitCyanShadowColor}" />
     <SolidColorBrush x:Key="WolvenKitYellow" Color="{StaticResource WolvenKitYellowColor}" />
@@ -58,7 +62,6 @@
     <SolidColorBrush x:Key="WolvenKitPurple" Color="{StaticResource WolvenKitPurpleColor}" />
     <SolidColorBrush x:Key="WolvenKitDarkPink" Color="{StaticResource WolvenKitDarkPinkColor}" />
     <SolidColorBrush x:Key="WolvenKitTan" Color="{StaticResource WolvenKitTanColor}" />
-    <SolidColorBrush x:Key="WolvenKitGreen" Color="{StaticResource WolvenKitGreenColor}" />
 
     <SolidColorBrush x:Key="WolvenKitRed50" Color="#7FDF2935" />
     <SolidColorBrush x:Key="WolvenKitRedShadow50" Color="{StaticResource WolvenKitRedShadow50Color}" />
@@ -67,7 +70,7 @@
     <SolidColorBrush x:Key="WolvenKitCyanShadow25" Color="{StaticResource WolvenKitCyanShadow25Color}" />
     <SolidColorBrush x:Key="WolvenKitYellow50" Color="#7FFFEA0A" />
     <SolidColorBrush x:Key="WolvenKitYellowShadow50" Color="{StaticResource WolvenKitYellowShadow50Color}" />
-    <SolidColorBrush x:Key="WolvenKitPurple50" Color="#7F5760B3" />
+    <SolidColorBrush x:Key="WolvenKitPurple50" Color="#7F6495ED" />
     <SolidColorBrush x:Key="WolvenKitTan25" Color="#FFA7967D" />
     <SolidColorBrush x:Key="WolvenKitTan50" Color="#7FD0A467" />
 
@@ -79,7 +82,6 @@
 
     <!-- e.g. the hash box -->
     <SolidColorBrush x:Key="ForegroundColor_Control_Secondary" Color="#666666" />
-
 
     <SolidColorBrush x:Key="ForegroundColor_Cyan" Color="{StaticResource WolvenKitCyanColor}" />
     <SolidColorBrush x:Key="ForegroundColor_Yellow" Color="{StaticResource WolvenKitYellowColor}" />
@@ -113,7 +115,6 @@
         <!-- Setter Property="TabPanelBackground" Value="#313131" / -->
     </Style>
 
-
     <!--
         Global style for nested syncfusion combobox, e.g. in ChunkMask editor.
         Doesn't work for base dropdown background yet
@@ -141,6 +142,7 @@
         <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
         <Setter Property="Margin" Value="3,4,3,0" />
         <Setter Property="Padding" Value="0,1,2,2" />
+
         <Style.Triggers>
             <DataTrigger
                 Binding="{Binding Path=IsEnabled,
@@ -149,6 +151,7 @@
                 <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
                 <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Inactive}" />
             </DataTrigger>
+
             <DataTrigger
                 Binding="{Binding Path=IsEnabled,
                                   RelativeSource={RelativeSource Self}}"
@@ -156,6 +159,7 @@
                 <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
                 <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Inactive}" />
             </DataTrigger>
+
             <DataTrigger
                 Binding="{Binding Path=IsFocused,
                                   RelativeSource={RelativeSource Self}}"
@@ -163,6 +167,7 @@
                 <Setter Property="Background" Value="{StaticResource BackgroundColor_Frame_Active}" />
                 <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Light}" />
             </DataTrigger>
+
             <DataTrigger
                 Binding="{Binding Path=IsMouseOver,
                                   RelativeSource={RelativeSource Self}}"
@@ -170,6 +175,7 @@
                 <Setter Property="Background" Value="{StaticResource BackgroundColor_Frame_Active}" />
                 <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Light}" />
             </DataTrigger>
+
             <DataTrigger
                 Binding="{Binding Path=IsPressed,
                                   RelativeSource={RelativeSource Self}}"
@@ -190,13 +196,14 @@
                 Value="True">
                 <Setter Property="BorderBrush" Value="{StaticResource ContentBackgroundAlt3}" />
             </DataTrigger>
+
             <DataTrigger
                 Binding="{Binding Path=IsValid}"
                 Value="False">
                 <Setter Property="BorderBrush" Value="{DynamicResource BackgroundColor_Yellow}" />
             </DataTrigger>
         </Style.Triggers>
-        <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TextBox}">
@@ -207,20 +214,24 @@
                         BorderThickness="1">
                         <ScrollViewer x:Name="PART_ContentHost" />
                     </Border>
+
                     <ControlTemplate.Triggers>
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
                                 <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsFocused}" Value="True" />
                                 <Condition Binding="{Binding Path=IsValid}" Value="False" />
                             </MultiDataTrigger.Conditions>
+
                             <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource BackgroundColor_Yellow}" />
                             <Setter TargetName="border" Property="BorderThickness" Value="2" />
                         </MultiDataTrigger>
+
                         <MultiDataTrigger>
                             <MultiDataTrigger.Conditions>
                                 <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver}" Value="True" />
                                 <Condition Binding="{Binding Path=IsValid}" Value="False" />
                             </MultiDataTrigger.Conditions>
+
                             <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource ForegroundColor_Yellow}" />
                             <Setter TargetName="border" Property="BorderThickness" Value="2" />
                         </MultiDataTrigger>
@@ -236,7 +247,6 @@
         TargetType="{x:Type TextBox}">
         <Setter Property="helpers:TextBoxBehavior.TripleClickSelectAll" Value="True" />
     </Style>
-
 
     <DrawingBrush
         x:Key="CloudDrawingBrushMain"
@@ -286,19 +296,23 @@
                 StrokeThickness="2.5"
                 UseLayoutRounding="True" />
         </Grid>
+
         <ControlTemplate.Triggers>
             <Trigger Property="IsDragging" Value="true">
                 <Setter TargetName="grip" Property="Fill" Value="{StaticResource CustomSliderForegroundBrush}" />
                 <Setter TargetName="grip" Property="Stroke" Value="{StaticResource CustomSliderForegroundBrush}" />
             </Trigger>
+
             <Trigger Property="IsEnabled" Value="false">
                 <Setter TargetName="grip" Property="Visibility" Value="Hidden" />
             </Trigger>
+
             <Trigger Property="IsKeyboardFocused" Value="true">
                 <Setter TargetName="grip" Property="Fill" Value="{StaticResource CustomSliderForegroundBrush}" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
+
     <ControlTemplate
         x:Key="PositionSliderTemplate"
         TargetType="{x:Type Slider}">
@@ -310,6 +324,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="{TemplateBinding MinHeight}" />
                 </Grid.RowDefinitions>
+
                 <DockPanel LastChildFill="True">
                     <Border
                         x:Name="PART_SelectionRange"
@@ -322,6 +337,7 @@
                             RadiusX="1"
                             RadiusY="1" />
                     </Border>
+
                     <Border
                         Height="3"
                         Visibility="Visible"
@@ -333,6 +349,7 @@
                             RadiusY="1" />
                     </Border>
                 </DockPanel>
+
                 <Track x:Name="PART_Track">
                     <Track.Thumb>
                         <Thumb
@@ -348,6 +365,7 @@
             </Grid>
         </Border>
     </ControlTemplate>
+
     <Style
         x:Key="PositionSliderStyle"
         TargetType="{x:Type Slider}">
@@ -386,18 +404,22 @@
                 StrokeThickness="0"
                 UseLayoutRounding="True" />
         </Grid>
+
         <ControlTemplate.Triggers>
             <Trigger Property="IsDragging" Value="true">
                 <Setter TargetName="grip" Property="Fill" Value="{StaticResource CustomSliderHighlightBrush}" />
             </Trigger>
+
             <Trigger Property="IsEnabled" Value="false">
                 <Setter TargetName="grip" Property="Fill" Value="{StaticResource CustomSliderBackgroundBrush}" />
             </Trigger>
+
             <Trigger Property="IsKeyboardFocused" Value="true">
                 <Setter TargetName="grip" Property="Fill" Value="{StaticResource CustomSliderForegroundBrush}" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
+
     <ControlTemplate
         x:Key="CustomSliderTemplate"
         TargetType="{x:Type Slider}">
@@ -409,6 +431,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="{TemplateBinding MinHeight}" />
                 </Grid.RowDefinitions>
+
                 <DockPanel LastChildFill="True">
                     <Border
                         x:Name="PART_SelectionRange"
@@ -421,6 +444,7 @@
                             RadiusX="1"
                             RadiusY="1" />
                     </Border>
+
                     <Border
                         Height="3"
                         Visibility="Visible"
@@ -433,6 +457,7 @@
                             RadiusY="1" />
                     </Border>
                 </DockPanel>
+
                 <Track x:Name="PART_Track">
                     <Track.Thumb>
                         <Thumb
@@ -457,6 +482,7 @@
             </DataTrigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
+
     <Style
         x:Key="CustomSliderStyle"
         TargetType="{x:Type Slider}">
@@ -497,18 +523,22 @@
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="#22FFFFFF" />
             </Trigger>
+
             <Trigger Property="IsPressed" Value="True">
                 <Setter Property="Background" Value="#44FFFFFF" />
             </Trigger>
+
             <Trigger Property="IsChecked" Value="True">
                 <Setter Property="Background" Value="#44FFFFFF" />
             </Trigger>
         </Style.Triggers>
+
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Foreground" Value="{StaticResource CustomSliderHighlightBrush}" />
         <Setter Property="Height" Value="45" />
         <Setter Property="Padding" Value="12" />
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
@@ -535,16 +565,19 @@
                 <Setter Property="Background" Value="#22FFFFFF" />
                 <Setter Property="Foreground" Value="{StaticResource CustomSliderHighlightBrush}" />
             </Trigger>
+
             <Trigger Property="IsPressed" Value="True">
                 <Setter Property="Background" Value="#44FFFFFF" />
                 <Setter Property="Foreground" Value="{StaticResource CustomSliderHighlightBrush}" />
             </Trigger>
         </Style.Triggers>
+
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Foreground" Value="{StaticResource CustomSliderHighlightBrush}" />
         <Setter Property="Height" Value="45" />
         <Setter Property="Padding" Value="12" />
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -586,6 +619,7 @@
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
                             Fill="Transparent" />
+
                         <Border
                             x:Name="Rectangle1"
                             Width="Auto"
@@ -595,6 +629,7 @@
                             Background="{TemplateBinding Background}"
                             CornerRadius="5" />
                     </Grid>
+
                     <ControlTemplate.Triggers>
                         <Trigger Property="Tag" Value="Horizontal">
                             <Setter TargetName="Rectangle1" Property="Height" Value="7" />
@@ -613,6 +648,7 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="#8c8c8c" />
         <Setter Property="Stylus.IsFlicksEnabled" Value="false" />
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ScrollBar}">
@@ -635,6 +671,7 @@
                                     Background="{TemplateBinding Foreground}"
                                     Style="{DynamicResource ScrollThumbs}" />
                             </Track.Thumb>
+
                             <Track.IncreaseRepeatButton>
                                 <RepeatButton
                                     x:Name="PageUp"
@@ -642,6 +679,7 @@
                                     Focusable="false"
                                     Opacity="0" />
                             </Track.IncreaseRepeatButton>
+
                             <Track.DecreaseRepeatButton>
                                 <RepeatButton
                                     x:Name="PageDown"
@@ -656,6 +694,7 @@
                         <Trigger SourceName="Thumb" Property="IsMouseOver" Value="true">
                             <Setter TargetName="Thumb" Property="Background" Value="{DynamicResource ButtonSelectBrush}" />
                         </Trigger>
+
                         <Trigger SourceName="Thumb" Property="IsDragging" Value="true">
                             <Setter TargetName="Thumb" Property="Background" Value="{DynamicResource DarkBrush}" />
                         </Trigger>
@@ -663,19 +702,23 @@
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter TargetName="Thumb" Property="Visibility" Value="Collapsed" />
                         </Trigger>
+
                         <Trigger Property="Orientation" Value="Horizontal">
                             <Setter Property="Height" Value="8" />
                             <Setter Property="Width" Value="Auto" />
+
                             <Setter TargetName="GridRoot" Property="LayoutTransform">
                                 <Setter.Value>
                                     <RotateTransform Angle="-90" />
                                 </Setter.Value>
                             </Setter>
+
                             <Setter TargetName="PART_Track" Property="LayoutTransform">
                                 <Setter.Value>
                                     <RotateTransform Angle="-90" />
                                 </Setter.Value>
                             </Setter>
+
                             <Setter TargetName="PageDown" Property="Command" Value="ScrollBar.PageLeftCommand" />
                             <Setter TargetName="PageUp" Property="Command" Value="ScrollBar.PageRightCommand" />
                             <Setter TargetName="Thumb" Property="Tag" Value="Horizontal" />
@@ -686,7 +729,6 @@
         </Setter>
         <Setter Property="Width" Value="8" />
     </Style>
-
 
     <Style
         x:Key="FileIconImageStyle"
@@ -2039,6 +2081,7 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+
     <Style
         x:Key="FileIconIconStyle"
         TargetType="{x:Type iconPacks:PackIconControl}">
@@ -2128,16 +2171,20 @@
         TargetType="Button">
         <Setter Property="BorderBrush" Value="{StaticResource ForegroundColor_Grey_Dark}" />
         <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
+
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Light}" />
             </Trigger>
+
             <Trigger Property="IsKeyboardFocused" Value="True">
                 <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Light}" />
             </Trigger>
+
             <Trigger Property="IsFocused" Value="True">
                 <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Light}" />
             </Trigger>
+
             <DataTrigger
                 Binding="{Binding Path=(Validation.HasError),
                                   RelativeSource={RelativeSource Self}}"
@@ -2153,6 +2200,8 @@
         TargetType="{x:Type hc:SearchBar}">
         <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
         <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Frame_Active}" />
+        <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
+
         <Style.Resources>
             <Style
                 BasedOn="{StaticResource SearchBarButtonStyle}"

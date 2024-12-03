@@ -24,6 +24,7 @@ using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
+using WolvenKit.Views.Templates;
 using RowColumnIndex = Syncfusion.UI.Xaml.ScrollAxis.RowColumnIndex;
 
 namespace WolvenKit.Views.Tools
@@ -47,7 +48,7 @@ namespace WolvenKit.Views.Tools
         public static readonly DependencyProperty FlatItemSourceProperty =
             DependencyProperty.Register(nameof(FlatItemSource), typeof(ObservableCollection<FileSystemModel>),
                 typeof(ProjectExplorerView), new PropertyMetadata(null));
-        
+
         public ObservableCollection<FileSystemModel> FlatItemSource
         {
             get => (ObservableCollection<FileSystemModel>)GetValue(FlatItemSourceProperty);
@@ -80,8 +81,8 @@ namespace WolvenKit.Views.Tools
             TreeGrid.NodeExpanded += TreeGrid_OnNodeExpanded;
             TreeGrid.NodeCollapsing += TreeGrid_OnNodeCollapsing;
             TreeGrid.NodeCollapsed += TreeGrid_OnNodeCollapsed;
-            
-            
+
+
             this.WhenActivated(disposables =>
             {
                 if (DataContext is ProjectExplorerViewModel vm)
@@ -89,7 +90,7 @@ namespace WolvenKit.Views.Tools
                     SetCurrentValue(ViewModelProperty, vm);
                     vm.OnProjectChanged += ResetUiElements;
                 }
-                
+
                 AddKeyUpEvent();
 
                 Interactions.DeleteFiles = _ =>
@@ -159,7 +160,7 @@ namespace WolvenKit.Views.Tools
 
                     return innerVm.Text;
                 };
-               
+
                 //EventBindings
                 Observable
                     .FromEventPattern(TreeGrid, nameof(TreeGrid.CellDoubleTapped))
@@ -175,7 +176,7 @@ namespace WolvenKit.Views.Tools
                         viewModel => viewModel.ToggleFlatModeCommand,
                         view => view.ToggleFlatModeButton)
                     .DisposeWith(disposables);
-                
+
                 this.BindCommand(ViewModel,
                     viewModel => viewModel.OpenRootFolderCommand,
                     view => view.OpenFolderButton);
@@ -244,7 +245,7 @@ namespace WolvenKit.Views.Tools
             _currentFolderQuery = "";
             // Set search bar to empty if it wasn't 
             PESearchBar?.SetCurrentValue(System.Windows.Controls.TextBox.TextProperty, "");
-            
+
             // now handle the grids
             if (TreeGridFlat.View is not null)
             {
@@ -440,7 +441,7 @@ namespace WolvenKit.Views.Tools
             {
                 return;
             }
-            if (e.Key == Key.F2 )
+            if (e.Key == Key.F2)
             {
                 ViewModel?.RenameFileCommand.SafeExecute(null);
                 return;
@@ -660,7 +661,7 @@ namespace WolvenKit.Views.Tools
         private async void RowDragDropController_Drop(object sender, TreeGridRowDropEventArgs e)
         {
             e.Handled = _isDragging; // which should be true at this point
-            
+
             // this should all be somewhere else, right?
             try
             {
@@ -703,7 +704,7 @@ namespace WolvenKit.Views.Tools
                             files.Add(sourceFile.FullName);
                         }
                     }
-                    
+
                     // 1146: addresses "prevent self-drag-and-drop" 
                     if (files.Count > 0 && files[0] == targetDirectory)
                     {
@@ -718,7 +719,7 @@ namespace WolvenKit.Views.Tools
                 Console.WriteLine(error.Message);
             }
         }
-        private void RowDragDropController_Dropped(object sender, TreeGridRowDroppedEventArgs e) => 
+        private void RowDragDropController_Dropped(object sender, TreeGridRowDroppedEventArgs e) =>
             _isDragging = false;
 
         /// <summary>
@@ -1090,6 +1091,17 @@ namespace WolvenKit.Views.Tools
         private void Main_OnKeystateChanged(object sender, KeyEventArgs e)
         {
             ViewModel?.ModifierStateService.OnKeystateChanged(e);
+        }
+
+        private void TreeIcon_Loaded(object sender, RoutedEventArgs e)
+        {
+            // NOTE: Margin="0" is not applied using XAML. This is likely due
+            //       to the use of virtualization and DataTemplate. This
+            //       workaround to define expected values after view is loaded.
+            var view = sender as IconBox;
+
+            view.SetCurrentValue(IconBox.MarginProperty, new Thickness(0));
+            view.SetResourceReference(IconBox.SizeProperty, "WolvenKitIconNano");
         }
     }
 }

@@ -5,15 +5,17 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    xmlns:syncfusion_xaml="clr-namespace:Syncfusion.UI.Xaml.Grid;assembly=Syncfusion.SfGrid.WPF"
-    Title="Select Items"
-    Width="800"
-    Height="600"
-    d:DesignHeight="600"
+    mc:Ignorable="d"
     d:DesignWidth="800"
+    d:DesignHeight="600"
+    Title="Select Items"
+    MinHeight="{DynamicResource WolvenKitDialogHeight}"
     Background="{StaticResource ContentBackgroundAlt3}"
-    mc:Ignorable="d">
-    <syncfusion:WizardControl CancelButtonCancelsWindow="True" FinishButtonClosesWindow="True">
+    SizeToContent="Width"
+    ResizeMode="NoResize">
+    <syncfusion:WizardControl
+        CancelButtonCancelsWindow="True"
+        FinishButtonClosesWindow="True">
         <syncfusion:WizardPage
             BackVisibility="Collapsed"
             CancelVisibility="Visible"
@@ -22,17 +24,17 @@
             NextVisibility="Collapsed"
             PreviewKeyDown="WizardPage_PreviewKeyDown"
             PageType="Exterior">
-
-            <Grid>
+            <Grid Margin="{DynamicResource WolvenKitMarginTiny}">
                 <!-- selector row -->
                 <syncfusion:SfDataGrid
                     x:Name="SaveDataGrid"
-                    Margin="5"
-                    AllowEditing="False"
+                    HeaderRowHeight="{DynamicResource WolvenKitTreeRowHeaderHeight}"
+                    RowHeight="{DynamicResource WolvenKitSaveGameSelectionRowHeight}"
                     ColumnSizer="Star"
+                    AllowEditing="False"
                     AutoGenerateColumns="False"
                     FilterRowPosition="FixedTop"
-                    GridLinesVisibility="None"
+                    GridLinesVisibility="Horizontal"
                     IsReadOnly="True"
                     ItemsSource="{Binding SaveGames}"
                     NavigationMode="Row"
@@ -40,26 +42,28 @@
                     SelectionMode="Single">
                     <syncfusion:SfDataGrid.Columns>
                         <syncfusion:GridTemplateColumn
-                            HeaderText=" "
-                            MappingName="Screenshot"
-                            Width="100">
+                            Width="{DynamicResource WolvenKitSaveGameSelectionImageWidth}"
+                            HeaderText="Preview"
+                            MappingName="Screenshot">
                             <syncfusion:GridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Canvas>
+                                    <Canvas
+                                        Width="{DynamicResource WolvenKitSaveGameSelectionImageWidth}"
+                                        Height="{DynamicResource WolvenKitSaveGameSelectionImageHeight}"
+                                        VerticalAlignment="Center">
                                         <Image
-                                            Width="100"
-                                            Height="70"
+                                            Width="{DynamicResource WolvenKitSaveGameSelectionImageWidth}"
+                                            Height="{DynamicResource WolvenKitSaveGameSelectionImageHeight}"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
-                                            Opacity="1"
-                                            Source="{Binding Screenshot}">
-                                        </Image>
+                                            Source="{Binding Screenshot}" />
                                     </Canvas>
                                 </DataTemplate>
                             </syncfusion:GridTemplateColumn.CellTemplate>
                         </syncfusion:GridTemplateColumn>
+
                         <syncfusion:GridTemplateColumn
-                            Width="200"
+                            Width="{DynamicResource WolvenKitSaveGameSelectionColumnWidth}"
                             AllowFiltering="True"
                             FilterRowCondition="Contains"
                             FilterRowEditorType="TextBox"
@@ -68,25 +72,31 @@
                             MappingName="DirName">
                             <syncfusion:GridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding DirName}" />
+                                    <TextBlock
+                                        Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding DirName}" />
                                 </DataTemplate>
                             </syncfusion:GridTemplateColumn.CellTemplate>
                         </syncfusion:GridTemplateColumn>
+
                         <syncfusion:GridTemplateColumn
+                            Width="{DynamicResource WolvenKitSaveGameSelectionColumnWidth}"
                             HeaderText="Last Modified"
                             MappingName="LastModified">
                             <syncfusion:GridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock
-                                        Text="{Binding LastModified}"
-                                        Foreground="{StaticResource Border}" />
+                                        Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                                        VerticalAlignment="Center"
+                                        Foreground="{StaticResource Border}"
+                                        Text="{Binding LastModified}" />
                                 </DataTemplate>
                             </syncfusion:GridTemplateColumn.CellTemplate>
                         </syncfusion:GridTemplateColumn>
                     </syncfusion:SfDataGrid.Columns>
                 </syncfusion:SfDataGrid>
             </Grid>
-            
         </syncfusion:WizardPage>
     </syncfusion:WizardControl>
 </Window>

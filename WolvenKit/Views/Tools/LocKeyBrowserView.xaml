@@ -5,18 +5,16 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:hc="https://handyorg.github.io/handycontrol"
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:tools="clr-namespace:WolvenKit.App.ViewModels.Tools;assembly=WolvenKit.App"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=tools:LocKeyBrowserViewModel}"
-    d:DesignHeight="450"
-    d:DesignWidth="800">
-
+    d:DesignWidth="800"
+    d:DesignHeight="450">
     <Grid Background="{StaticResource ContentBackgroundAlt3}">
-
         <Grid.Resources>
             <Style TargetType="syncfusion:FilterRowControl">
                 <Setter Property="Background" Value="{StaticResource WolvenKitCyanShadow50}" />
@@ -25,21 +23,20 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="4*" />
-            <RowDefinition Height="5" />
-            <RowDefinition Height="1*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="{DynamicResource WolvenKitColumnTiny}" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <hc:SearchBar
             Grid.Row="0"
-            Margin="3"
-            VerticalAlignment="Top"
+            Margin="{DynamicResource WolvenKitMarginTiny}"
+            Padding="{DynamicResource WolvenKitMarginTiny}"
             Style="{StaticResource SearchBarPlus}"
             hc:InfoElement.Placeholder="Search all localisation keys"
-            hc:TitleElement.Title=" Search for localisation: "
-            hc:TitleElement.TitlePlacement="Left"
             hc:InfoElement.ShowClearButton="True"
-            FlowDirection="LeftToRight"
+            hc:TitleElement.Title="Search for localisation:"
+            hc:TitleElement.TitlePlacement="Left"
             IsRealTime="True"
             KeyUp="TextBox_KeyEnterUpdate"
             Text="{Binding SearchText}" />
@@ -48,7 +45,8 @@
         <syncfusion:SfDataGrid
             Grid.Row="1"
             Margin="1"
-            RowHeight="40"
+            HeaderRowHeight="{DynamicResource WolvenKitTreeGridRowHeaderHeight}"
+            RowHeight="{DynamicResource WolvenKitTreeGridRowHeight}"
             ColumnSizer="AutoWithLastColumnFill"
             AllowFiltering="True"
             AllowResizingColumns="True"
@@ -60,22 +58,21 @@
             ItemsSource="{Binding LocKeys}"
             SelectedItem="{Binding SelectedLocKey}"
             SelectionMode="Extended">
-
             <syncfusion:SfDataGrid.Columns>
-
                 <syncfusion:GridNumericColumn
+                    ColumnSizer="Auto"
                     FilterRowCondition="Equals"
                     FilterRowEditorType="Numeric"
                     HeaderText="PrimaryKey"
                     ImmediateUpdateColumnFilter="True"
                     MappingName="PrimaryKey"
                     NumberDecimalDigits="0" />
+
                 <syncfusion:GridTextColumn
                     FilterRowCondition="Contains"
                     HeaderText="SecondaryKey"
                     ImmediateUpdateColumnFilter="True"
                     MappingName="SecondaryKey" />
-
             </syncfusion:SfDataGrid.Columns>
         </syncfusion:SfDataGrid>
 
@@ -91,107 +88,128 @@
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
 
-                <Grid Grid.Column="0">
+                <!-- Primary Key -->
+                <Grid Grid.Row="0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitLocKeyBrowserKeyLength}" />
+                        <ColumnDefinition Width="5*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
+
                     <Label
                         Grid.Column="0"
+                        Padding="{DynamicResource WolvenKitMarginSmallLeft}"
                         VerticalAlignment="Center"
-                        FontWeight="Bold"
+                        FontSize="{DynamicResource WolvenKitFontBody}"
                         Content="Primary Key: " />
+
                     <TextBlock
                         x:Name="primaryKeyTextBox"
                         Grid.Column="1"
-                        Padding="10"
-                        Background="{StaticResource ContentBackgroundAlt3}"
+                        Padding="{DynamicResource WolvenKitMarginSmallHorizontal}"
+                        VerticalAlignment="Center"
                         Foreground="Gold"
-                        FontSize="16"
+                        FontSize="{DynamicResource WolvenKitFontBody}"
                         Text="{Binding SelectedPrimaryKey,
                                        Mode=OneWay}" />
+
                     <Button
                         x:Name="primaryKeyBtn"
                         Grid.Column="2"
-                        Padding="10"
                         Background="Transparent"
                         Click="primaryKeyBtn_Click"
                         ToolTip="Copy">
-                        <iconPacks:PackIconCodicons
-                            Kind="Copy"
-                            Padding="0,0,2,2" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ContentCopy"
+                            Size="{DynamicResource WolvenKitTinyIconSize}"
+                            Foreground="White" />
                     </Button>
                 </Grid>
 
-                <Grid
-                    Grid.Column="1"
-                    Margin="15,0,0,0">
+                <!-- Secondary Key -->
+                <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitLocKeyBrowserKeyLength}" />
+                        <ColumnDefinition Width="5*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
+
                     <Label
                         Grid.Column="0"
+                        Padding="{DynamicResource WolvenKitMarginSmallLeft}"
                         VerticalAlignment="Center"
-                        FontWeight="Bold"
+                        FontSize="{DynamicResource WolvenKitFontBody}"
                         Content="Secondary Key: " />
+
                     <TextBlock
                         x:Name="secondaryKeyTextBox"
                         Grid.Column="1"
-                        Padding="10"
+                        Padding="{DynamicResource WolvenKitMarginSmallHorizontal}"
+                        VerticalAlignment="Center"
                         Background="{StaticResource ContentBackgroundAlt3}"
-                        Foreground="CornflowerBlue"
-                        FontSize="16"
+                        Foreground="{StaticResource WolvenKitPurple}"
+                        FontSize="{DynamicResource WolvenKitFontBody}"
                         Text="{Binding SelectedSecondaryKey,
                                        Mode=OneWay}" />
+
                     <Button
                         x:Name="secondaryKeyBtn"
                         Grid.Column="2"
-                        Padding="10"
                         Background="Transparent"
                         Click="secondaryKeyBtn_Click"
                         ToolTip="Copy">
-                        <iconPacks:PackIconCodicons
-                            Kind="Copy"
-                            Padding="0,0,2,2" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ContentCopy"
+                            Size="{DynamicResource WolvenKitTinyIconSize}"
+                            Foreground="White" />
                     </Button>
                 </Grid>
             </Grid>
 
             <Separator Grid.Row="1" />
 
+            <!-- LocKey Text -->
             <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
                 <TextBox
                     x:Name="contentTextBox"
-                    Padding="10"
+                    Grid.Column="0"
+                    Padding="{DynamicResource WolvenKitMarginTiny}"
                     VerticalContentAlignment="Top"
                     Background="{StaticResource ContentBackgroundAlt3}"
-                    FontSize="16"
-                    IsReadOnly="True"
+                    BorderThickness="0"
+                    FontSize="{DynamicResource WolvenKitFontBody}"
                     Text="{Binding SelectedContent,
                                    Mode=OneWay}"
+                    IsReadOnly="True"
+                    VerticalScrollBarVisibility="Auto"
                     TextWrapping="Wrap" />
+
                 <Button
                     x:Name="contentBtn"
-                    Padding="10"
-                    HorizontalAlignment="Right"
+                    Grid.Column="1"
                     VerticalAlignment="Top"
                     Background="Transparent"
                     Click="contentBtn_Click"
                     ToolTip="Copy">
-                    <iconPacks:PackIconCodicons
-                        Kind="Copy"
-                        Padding="0,0,2,2" />
+                    <templates:IconBox
+                        IconPack="Material"
+                        Kind="ContentCopy"
+                        Size="{DynamicResource WolvenKitTinyIconSize}"
+                        Foreground="White" />
                 </Button>
             </Grid>
         </Grid>
-
     </Grid>
 </reactiveUi:ReactiveUserControl>

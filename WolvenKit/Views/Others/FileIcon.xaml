@@ -4,24 +4,28 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:local="clr-namespace:WolvenKit.Views.Others"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
-    d:DesignHeight="450"
+    mc:Ignorable="d"
     d:DesignWidth="800"
-    mc:Ignorable="d">
+    d:DesignHeight="450">
     <UserControl.Resources>
         <ResourceDictionary />
     </UserControl.Resources>
+
     <Grid>
         <Image
-            Width="{Binding Width, RelativeSource={RelativeSource AncestorType=UserControl}}"
-            Height="{Binding Height, RelativeSource={RelativeSource AncestorType=UserControl}}"
+            Width="{Binding Width,
+                            RelativeSource={RelativeSource AncestorType=UserControl}}"
+            Height="{Binding Height,
+                             RelativeSource={RelativeSource AncestorType=UserControl}}"
             VerticalAlignment="Center"
             Style="{StaticResource FileIconImageStyle}" />
+
         <iconPacks:PackIconControl
-            Width="{Binding Width, RelativeSource={RelativeSource AncestorType=UserControl}}"
-            Height="{Binding Height, RelativeSource={RelativeSource AncestorType=UserControl}}"
+            Width="{Binding Width,
+                            RelativeSource={RelativeSource AncestorType=UserControl}}"
+            Height="{Binding Height,
+                             RelativeSource={RelativeSource AncestorType=UserControl}}"
             VerticalAlignment="Center"
             Style="{StaticResource FileIconIconStyle}" />
     </Grid>

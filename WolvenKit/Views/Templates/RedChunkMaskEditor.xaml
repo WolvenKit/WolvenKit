@@ -6,29 +6,40 @@
     xmlns:local="clr-namespace:WolvenKit.Views.Editors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    d:DesignHeight="100"
+    mc:Ignorable="d"
     d:DesignWidth="400"
-    mc:Ignorable="d">
-
+    d:DesignHeight="100">
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedChunkMaskEditor}}}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="{DynamicResource WolvenKitRedEditorHashWidth}" />
         </Grid.ColumnDefinitions>
+
+        <syncfusion:ComboBoxAdv
+            Name="comboboxadv"
+            Padding="{DynamicResource WolvenKitMarginTiny}"
+            Background="#252525"
+            BorderBrush="{StaticResource BorderAlt}"
+            BorderThickness="0,0,1,0"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+            AllowMultiSelect="True"
+            ItemsSource="{Binding BindingCollection,
+                                  Mode=TwoWay,
+                                  UpdateSourceTrigger=PropertyChanged}"
+            SelectedItems="{Binding SelectedItems,
+                                    Mode=TwoWay,
+                                    UpdateSourceTrigger=PropertyChanged}"
+            SelectedValueDelimiter=", " />
+
         <TextBox
             x:Name="TextBox"
             Grid.Column="1"
+            Padding="{DynamicResource WolvenKitMarginTiny}"
             BorderBrush="{StaticResource BorderAlt}"
-            BorderThickness="1,0,0,0"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
             PreviewTextInput="NumberValidationTextBox"
-            Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-        <syncfusion:ComboBoxAdv
-            Name="comboboxadv"
-            AllowMultiSelect="True"
-            Background="#252525"
-            ItemsSource="{Binding BindingCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            SelectedItems="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            SelectedValueDelimiter=", " />
-
+            Text="{Binding Text,
+                           Mode=TwoWay,
+                           UpdateSourceTrigger=PropertyChanged}" />
     </Grid>
 </UserControl>

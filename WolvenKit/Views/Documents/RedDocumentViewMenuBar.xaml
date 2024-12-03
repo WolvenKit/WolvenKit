@@ -8,158 +8,145 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:documents="clr-namespace:WolvenKit.App.ViewModels.Documents;assembly=WolvenKit.App"
     xmlns:converters="clr-namespace:WolvenKit.Converters"
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     mc:Ignorable="d"
-    d:DesignHeight="30"
     d:DesignWidth="800"
+    d:DesignHeight="36"
     x:Name="RedDocumentViewToolbarControl">
-
     <Grid>
-
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
+        <Grid.Resources>
             <converters:HasMenuChildrenVisibilityConverter x:Key="HasMenuChildrenVisibilityConverter" />
 
-            <!-- styles the whole menu bar -->
-            <Style
-                x:Key="MenuStyle"
-                TargetType="{x:Type Menu}">
+            <Style TargetType="{x:Type Menu}">
                 <Setter Property="Background" Value="{StaticResource BackgroundColor_Frame_Background}" />
-                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
-                <Setter Property="Height" Value="29" />
-                <Setter Property="Margin" Value="0" />
             </Style>
 
-            <!-- Editor Modes & Toggle -->
-            <Style
-                x:Key="EditorModeDisplayStyle"
-                TargetType="{x:Type MenuItem}"
-                BasedOn="{StaticResource WolvenKitToolBarItem}">
-                <Setter Property="Background" Value="{StaticResource BackgroundColor_Cyan}" />
-                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Cyan}" />
-                <Setter Property="Margin" Value="0" />
-                <Setter Property="Padding" Value="8" />
+            <Style TargetType="{x:Type hc:SearchBar}">
+                <Setter Property="Background" Value="{StaticResource BackgroundColor_Frame_Background}" />
             </Style>
 
             <Style
-                x:Key="WolvenKitToolBarItemWithChildren"
-                TargetType="{x:Type MenuItem}"
-                BasedOn="{StaticResource WolvenKitToolBarItem}">
-                <Setter Property="Visibility" Value="{Binding RelativeSource={RelativeSource Self}, Converter={StaticResource HasMenuChildrenVisibilityConverter}}" />
+                x:Key="MenuItemStyle"
+                TargetType="{x:Type MenuItem}">
+                <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
+
+                <Setter Property="HeaderTemplate">
+                    <Setter.Value>
+                        <DataTemplate>
+                            <TextBlock
+                                Margin="{DynamicResource WolvenKitMarginSmallRight}"
+                                VerticalAlignment="Center"
+                                FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                                Text="{Binding}" />
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Padding" Value="{DynamicResource WolvenKitMarginSmallVertical}" />
             </Style>
 
-            <!-- Menu Item Style (in dropdown) -->
             <Style
-                x:Key="WolvenKitNestedMenuItemStyle"
-                TargetType="{x:Type MenuItem}"
-                BasedOn="{StaticResource WolvenKitToolBarItem}">
-                <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Frame_Background}" />
-                <Setter Property="Height" Value="25" />
-                <Setter Property="Margin" Value="2,0" />
-                <Setter Property="Padding" Value="2,6,0,6" />
+                x:Key="NestedMenuItemStyle"
+                BasedOn="{StaticResource MenuItemStyle}"
+                TargetType="{x:Type MenuItem}">
                 <Style.Triggers>
                     <DataTrigger
                         Binding="{Binding Path=IsEnabled,
                                           RelativeSource={RelativeSource Self}}"
                         Value="False">
-                        <Setter Property="Background" Value="{StaticResource BackgroundColor_Button_Inactive}" />
-                        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
+                        <Setter Property="Background" Value="#121212" />
+                        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Inactive}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
 
-            <!-- ============================================================== -->
-            <!-- Visibility by file type -->
-            <!-- ============================================================== -->
-
-            <!-- menu item: Mesh -->
             <Style
-                x:Key="MenuItemInMeshFileStyle"
-                TargetType="{x:Type MenuItem}"
-                BasedOn="{StaticResource WolvenKitNestedMenuItemStyle}">
-                <Setter Property="Visibility" Value="Collapsed" />
+                x:Key="HasNestedMenuItemStyle"
+                BasedOn="{StaticResource MenuItemStyle}"
+                TargetType="{x:Type MenuItem}">
+                <Setter Property="Visibility" Value="{Binding RelativeSource={RelativeSource Self}, Converter={StaticResource HasMenuChildrenVisibilityConverter}}" />
+            </Style>
+
+            <!-- Editor Mode -->
+            <Style
+                x:Key="EditorModeStyle"
+                BasedOn="{StaticResource MenuItemStyle}"
+                TargetType="{x:Type MenuItem}">
+                <Setter Property="Foreground" Value="White" />
+
                 <Style.Triggers>
                     <DataTrigger
-                        Binding="{Binding Path=ContentType,
-                                          UpdateSourceTrigger=PropertyChanged}"
-                        Value="{x:Static documents:RedDocumentItemType.Mesh}">
-                        <Setter Property="Visibility" Value="Visible" />
+                        Binding="{Binding Path=EditorLevel}"
+                        Value="Easy">
+                        <Setter Property="Foreground" Value="{StaticResource WolvenKitCyan}" />
+                    </DataTrigger>
+
+                    <DataTrigger
+                        Binding="{Binding Path=EditorLevel}"
+                        Value="Default">
+                        <Setter Property="Foreground" Value="{StaticResource WolvenKitYellow}" />
+                    </DataTrigger>
+
+                    <DataTrigger
+                        Binding="{Binding Path=EditorLevel}"
+                        Value="Advanced">
+                        <Setter Property="Foreground" Value="{StaticResource WolvenKitRed}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
 
-            <!-- toolbar button: cleanup (mesh or json) -->
+            <!-- Materials: .mesh / .mi -->
             <Style
-                x:Key="CleanupMenuVisibilityStyle"
-                TargetType="{x:Type MenuItem}"
-                BasedOn="{StaticResource WolvenKitToolBarItemWithChildren}">
+                x:Key="ShowMaterialsMenuItemStyle"
+                BasedOn="{StaticResource MenuItemStyle}"
+                TargetType="{x:Type MenuItem}">
                 <Setter Property="Visibility" Value="Collapsed" />
-                <Style.Triggers>
-                    <DataTrigger
-                        Binding="{Binding Path=ContentType,
-                                          UpdateSourceTrigger=PropertyChanged}"
-                        Value="{x:Static documents:RedDocumentItemType.Mesh}">
-                        <Setter Property="Visibility" Value="Visible" />
-                    </DataTrigger>
-                    <DataTrigger
-                        Binding="{Binding Path=ContentType,
-                                          UpdateSourceTrigger=PropertyChanged}"
-                        Value="{x:Static documents:RedDocumentItemType.Json}">
-                        <Setter Property="Visibility" Value="Visible" />
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
 
-            <!-- toolbar button: (mesh or mi) -->
-            <Style
-                x:Key="ToolbarItemInMaterialFileStyle"
-                TargetType="{x:Type MenuItem}"
-                BasedOn="{StaticResource WolvenKitToolBarItemWithChildren}">
-                <Setter Property="Visibility" Value="Collapsed" />
                 <Style.Triggers>
                     <DataTrigger
                         Binding="{Binding Path=HasItems,
                                           RelativeSource={RelativeSource Self}}"
                         Value="True">
-                        <Setter Property="FlowDirection">
-                            <Setter.Value>
-                                <FlowDirection>RightToLeft</FlowDirection>
-                            </Setter.Value>
-                        </Setter>
                         <Setter Property="Icon">
                             <Setter.Value>
-                                <iconPacks:PackIconMaterial
-                                    Kind="ChevronDown"
-                                    Width="8"
-                                    Height="7"
-                                    Margin="6,2,0,0" />
+                                <templates:IconBox
+                                    IconPack="Material"
+                                    Kind="Palette"
+                                    Foreground="{StaticResource WolvenKitYellow}" />
                             </Setter.Value>
                         </Setter>
                     </DataTrigger>
+
                     <DataTrigger
                         Binding="{Binding Path=ContentType,
                                           UpdateSourceTrigger=PropertyChanged}"
                         Value="{x:Static documents:RedDocumentItemType.Mi}">
                         <Setter Property="Visibility" Value="Visible" />
                     </DataTrigger>
+
                     <DataTrigger
                         Binding="{Binding Path=ContentType,
                                           UpdateSourceTrigger=PropertyChanged}"
                         Value="{x:Static documents:RedDocumentItemType.Mlsetup}">
                         <Setter Property="Visibility" Value="Visible" />
                     </DataTrigger>
+
                     <DataTrigger
                         Binding="{Binding Path=ContentType,
                                           UpdateSourceTrigger=PropertyChanged}"
                         Value="{x:Static documents:RedDocumentItemType.Mesh}">
                         <Setter Property="Visibility" Value="Visible" />
                     </DataTrigger>
+
                     <DataTrigger
                         Binding="{Binding Path=ContentType,
                                           UpdateSourceTrigger=PropertyChanged}"
@@ -169,29 +156,21 @@
                 </Style.Triggers>
             </Style>
 
-            <!-- toolbar button: (mesh or mi) -->
+            <!-- Clean up: .mesh / .json -->
             <Style
-                x:Key="ToolbarItemInAppFileStyle"
-                TargetType="{x:Type MenuItem}"
-                BasedOn="{StaticResource WolvenKitToolBarItemWithChildren}">
+                x:Key="ShowCleanUpMenuItemStyle"
+                BasedOn="{StaticResource HasNestedMenuItemStyle}"
+                TargetType="{x:Type MenuItem}">
                 <Setter Property="Visibility" Value="Collapsed" />
+
                 <Style.Triggers>
                     <DataTrigger
                         Binding="{Binding Path=ContentType,
                                           UpdateSourceTrigger=PropertyChanged}"
-                        Value="{x:Static documents:RedDocumentItemType.App}">
+                        Value="{x:Static documents:RedDocumentItemType.Mesh}">
                         <Setter Property="Visibility" Value="Visible" />
                     </DataTrigger>
-                </Style.Triggers>
-            </Style>
 
-            <!-- menu item: JSON -->
-            <Style
-                x:Key="MenuItemInJsonFileStyle"
-                TargetType="{x:Type MenuItem}"
-                BasedOn="{StaticResource WolvenKitNestedMenuItemStyle}">
-                <Setter Property="Visibility" Value="Collapsed" />
-                <Style.Triggers>
                     <DataTrigger
                         Binding="{Binding Path=ContentType,
                                           UpdateSourceTrigger=PropertyChanged}"
@@ -201,12 +180,13 @@
                 </Style.Triggers>
             </Style>
 
-            <!-- menu item: .app -->
+            <!-- Appearances: .ent -->
             <Style
-                x:Key="MenuItemInAppFileStyle"
-                TargetType="{x:Type MenuItem}"
-                BasedOn="{StaticResource WolvenKitNestedMenuItemStyle}">
+                x:Key="ShowAppearancesMenuItemStyle"
+                BasedOn="{StaticResource HasNestedMenuItemStyle}"
+                TargetType="{x:Type MenuItem}">
                 <Setter Property="Visibility" Value="Collapsed" />
+
                 <Style.Triggers>
                     <DataTrigger
                         Binding="{Binding Path=ContentType,
@@ -217,13 +197,30 @@
                 </Style.Triggers>
             </Style>
 
-            <!-- ============================================================== -->
-
+            <!-- App file: .app -->
             <Style
-                x:Key="ShowInMeshFileStyle"
-                TargetType="{x:Type MenuItem}"
-                BasedOn="{StaticResource WolvenKitNestedMenuItemStyle}">
+                x:Key="ShowAppMenuItemStyle"
+                BasedOn="{StaticResource NestedMenuItemStyle}"
+                TargetType="{x:Type MenuItem}">
                 <Setter Property="Visibility" Value="Collapsed" />
+
+                <Style.Triggers>
+                    <DataTrigger
+                        Binding="{Binding Path=ContentType,
+                                          UpdateSourceTrigger=PropertyChanged}"
+                        Value="{x:Static documents:RedDocumentItemType.App}">
+                        <Setter Property="Visibility" Value="Visible" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <!-- Mesh file: .mesh -->
+            <Style
+                x:Key="ShowMeshMenuItemStyle"
+                BasedOn="{StaticResource MenuItemStyle}"
+                TargetType="{x:Type MenuItem}">
+                <Setter Property="Visibility" Value="Collapsed" />
+
                 <Style.Triggers>
                     <DataTrigger
                         Binding="{Binding Path=ContentType}"
@@ -233,123 +230,134 @@
                 </Style.Triggers>
             </Style>
 
+            <!-- JSON file: .json -->
             <Style
-                x:Key="EditorModeDisplayStyle_Yellow"
-                TargetType="{x:Type MenuItem}"
-                BasedOn="{StaticResource EditorModeDisplayStyle}">
-                <Setter Property="Background" Value="{StaticResource BackgroundColor_Yellow}" />
-                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Yellow}" />
-            </Style>
-            <Style
-                x:Key="EditorModeDisplayStyle_Red"
-                TargetType="{x:Type MenuItem}"
-                BasedOn="{StaticResource EditorModeDisplayStyle}">
-                <Setter Property="Background" Value="{StaticResource BackgroundColor_Red}" />
-                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Red}" />
-            </Style>
-
-
-            <Style
-                x:Key="EditorModeParentDisplayStyle"
+                x:Key="ShowJsonMenuItemStyle"
+                BasedOn="{StaticResource MenuItemStyle}"
                 TargetType="{x:Type MenuItem}">
-                <Setter Property="Header" Value="Editor Mode" />
-                <Setter Property="Margin" Value="0" />
-                <Setter Property="Opacity" Value="50" />
-                <Setter Property="Padding" Value="5" />
+                <Setter Property="Visibility" Value="Collapsed" />
+
                 <Style.Triggers>
                     <DataTrigger
-                        Binding="{Binding Path=EditorLevel}"
-                        Value="Easy">
-                        <Setter Property="Background" Value="{StaticResource BackgroundColor_Cyan}" />
-                        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Cyan}" />
-                    </DataTrigger>
-                    <DataTrigger
-                        Binding="{Binding Path=EditorLevel}"
-                        Value="Default">
-                        <Setter Property="Background" Value="{StaticResource BackgroundColor_Yellow}" />
-                        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Yellow}" />
-                    </DataTrigger>
-                    <DataTrigger
-                        Binding="{Binding Path=EditorLevel}"
-                        Value="Advanced">
-                        <Setter Property="Background" Value="{StaticResource BackgroundColor_Red}" />
-                        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Red}" />
+                        Binding="{Binding Path=ContentType,
+                                          UpdateSourceTrigger=PropertyChanged}"
+                        Value="{x:Static documents:RedDocumentItemType.Json}">
+                        <Setter Property="Visibility" Value="Visible" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
-
         </Grid.Resources>
 
         <Menu
             x:Name="MenuBar"
-            Style="{StaticResource MenuStyle}"
+            Grid.Row="0"
+            Grid.Column="0"
+            Margin="0,0,0,2"
             KeyDown="OnKeystateChanged"
             KeyUp="OnKeystateChanged"
             ContextMenuOpening="OnMenuOpened"
             ContextMenuClosing="OnMenuClosed">
-
+            <!-- Editor Mode -->
             <MenuItem
-                Padding="0,5,2,2"
-                Style="{StaticResource EditorModeParentDisplayStyle}"
-                FlowDirection="RightToLeft">
+                Style="{StaticResource EditorModeStyle}"
+                Header="Editor Mode">
                 <MenuItem.Icon>
-                    <iconPacks:PackIconMaterial
-                        Kind="ChevronDown"
-                        Width="8"
-                        Height="7"
-                        Margin="6,2,0,0" />
+                    <templates:IconBox
+                        IconPack="Material"
+                        Kind="EyeSettings" />
                 </MenuItem.Icon>
+
                 <MenuItem
-                    Style="{StaticResource EditorModeDisplayStyle}"
                     Header="Easy"
-                    Click="OnEditorModeClick_Easy" />
+                    Click="OnEditorModeClick_Easy">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="StarThreePoints"
+                            Foreground="{StaticResource WolvenKitCyan}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
                 <MenuItem
-                    Style="{StaticResource EditorModeDisplayStyle_Yellow}"
                     Header="Default"
-                    Click="OnEditorModeClick_Default" />
+                    Click="OnEditorModeClick_Default">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="StarFourPoints"
+                            Foreground="{StaticResource WolvenKitYellow}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
                 <MenuItem
-                    Style="{StaticResource EditorModeDisplayStyle_Red}"
                     Header="Advanced"
-                    Click="OnEditorModeClick_Advanced" />
+                    Click="OnEditorModeClick_Advanced">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Star"
+                            Foreground="{StaticResource WolvenKitRed}" />
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
 
-            <!-- Mesh file: Materials menu -->
+            <!-- Materials: mesh files -->
             <MenuItem
-                Style="{StaticResource ToolbarItemInMaterialFileStyle}"
+                Style="{StaticResource ShowMaterialsMenuItemStyle}"
                 Header="Materials"
                 SubmenuOpened="OnMenuOpened"
                 SubmenuClosed="OnMenuClosed">
-
-                <!-- Generate missing materials -->
                 <MenuItem
+                    Style="{StaticResource MenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
                                          RelativeSource={RelativeSource Self},
                                          Mode=OneWay,
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Header="Generate missing material entries"
                     Command="{Binding Path=GenerateMissingMaterialsCommand}"
-                    Click="OnGenerateMissingMaterialsClick" />
+                    Click="OnGenerateMissingMaterialsClick">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Autorenew"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
 
-                <!-- Scroll to material -->
                 <MenuItem
+                    Style="{StaticResource MenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
                                          RelativeSource={RelativeSource Self},
                                          Mode=OneWay,
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Header="Scroll to material"
-                    Command="{Binding Path=ScrollToMaterialCommand}" />
+                    Command="{Binding Path=ScrollToMaterialCommand}">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="FileEye"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
 
-                <!-- Toggle 'EnableMask' material property -->
                 <MenuItem
+                    Style="{StaticResource MenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
                                          RelativeSource={RelativeSource Self},
                                          Mode=OneWay,
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Header="Toggle 'EnableMask'"
-                    Command="{Binding Path=ToggleEnableMaskCommand}" />
+                    Command="{Binding Path=ToggleEnableMaskCommand}">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ToggleSwitchOutline"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
 
-                <!-- Toggle 'isLocalInstance' -->
                 <MenuItem
+                    Style="{StaticResource MenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
                                          RelativeSource={RelativeSource Self},
                                          Mode=OneWay,
@@ -357,120 +365,196 @@
                     IsEnabled="{Binding Path=IsMaterialDefinition,
                                         Mode=OneWay}"
                     Header="Toggle 'IsLocalInstance'"
-                    Command="{Binding Path=ToggleLocalInstanceCommand}" />
+                    Command="{Binding Path=ToggleLocalInstanceCommand}">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ToggleSwitchOutline"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
 
-                <!-- Shift: "Add material dependencies" -->
                 <MenuItem
-                    Style="{StaticResource ShowInMeshFileStyle}"
+                    Style="{StaticResource ShowMeshMenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
                                          RelativeSource={RelativeSource Self},
                                          Mode=OneWay,
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Header="Add material dependencies"
                     ToolTip="Will run 'delete unused materials' first"
-                    Command="{Binding Path=AddDependenciesCommand}" />
+                    Command="{Binding Path=AddDependenciesCommand}">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Graph"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
 
-                <!-- Shift: "Add material dependencies (include basegame files)" -->
                 <MenuItem
-                    Style="{StaticResource ShowInMeshFileStyle}"
+                    Style="{StaticResource ShowMeshMenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
                                          RelativeSource={RelativeSource Self},
                                          Mode=OneWay,
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Header="Add material dependencies (include basegame files)"
                     ToolTip="Will run 'delete unused materials' first"
-                    Command="{Binding Path=AddDependenciesFullCommand}" />
-
+                    Command="{Binding Path=AddDependenciesFullCommand}">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="GraphOutline"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
 
-            <!-- "Clean up" menu (.mesh / .json) -->
+            <!-- Clean up: .mesh / .json -->
             <MenuItem
-                Style="{StaticResource CleanupMenuVisibilityStyle}"
+                Style="{StaticResource ShowCleanUpMenuItemStyle}"
                 Header="Clean up"
                 SubmenuOpened="OnMenuOpened"
                 SubmenuClosed="OnMenuClosed">
+                <MenuItem.Icon>
+                    <templates:IconBox
+                        IconPack="Material"
+                        Kind="Recycle"
+                        Foreground="{StaticResource WolvenKitRed}" />
+                </MenuItem.Icon>
 
-                <!-- Convert preload materials -->
                 <MenuItem
-                    Style="{StaticResource MenuItemInMeshFileStyle}"
+                    Style="{StaticResource ShowMeshMenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
                                          RelativeSource={RelativeSource Self},
                                          Mode=OneWay,
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Header="Convert preload materials to local"
-                    Command="{Binding Path=ConvertPreloadMaterialsCommand}" />
+                    Command="{Binding Path=ConvertPreloadMaterialsCommand}">
+                    <MenuItem.Icon>
+                        <templates:IconBox IconPack="Empty" />
+                    </MenuItem.Icon>
+                </MenuItem>
 
-                <!-- No shift: "Delete unused Materials" -->
+                <!-- Without SHIFT -->
                 <MenuItem
-                    Style="{StaticResource WolvenKitNestedMenuItemStyle}"
+                    Style="{StaticResource NestedMenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
                                          RelativeSource={RelativeSource Self},
                                          Mode=OneWay,
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Header="Delete unused materials"
-                    Command="{Binding Path=DeleteUnusedMaterialsCommand}" />
+                    Command="{Binding Path=DeleteUnusedMaterialsCommand}">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ImageMinus"
+                            Foreground="{StaticResource WolvenKitRed}" />
+                    </MenuItem.Icon>
+                </MenuItem>
 
-                <!-- Shift: "Clear all Materials" -->
+                <!-- With SHIFT -->
                 <MenuItem
-                    Style="{StaticResource WolvenKitNestedMenuItemStyle}"
+                    Style="{StaticResource NestedMenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
                                          RelativeSource={RelativeSource Self},
                                          Mode=OneWay,
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Header="Clear all materials"
-                    Command="{Binding Path=ClearMaterialsCommand}" />
+                    Command="{Binding Path=ClearMaterialsCommand}">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Delete"
+                            Foreground="{StaticResource WolvenKitRed}" />
+                    </MenuItem.Icon>
+                </MenuItem>
 
-                <!-- "Delete empty submeshes" -->
                 <MenuItem
-                    Style="{StaticResource ShowInMeshFileStyle}"
+                    Style="{StaticResource ShowMeshMenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
                                          RelativeSource={RelativeSource Self},
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Header="Delete empty submeshes"
-                    Command="{Binding Path=DeleteEmptySubmeshesCommand}" />
+                    Command="{Binding Path=DeleteEmptySubmeshesCommand}">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="DatabaseMinus"
+                            Foreground="{StaticResource WolvenKitRed}" />
+                    </MenuItem.Icon>
+                </MenuItem>
 
-                <!-- JSON: Delete duplicate entries -->
                 <MenuItem
-                    Style="{StaticResource MenuItemInJsonFileStyle}"
+                    Style="{StaticResource ShowJsonMenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
                                          RelativeSource={RelativeSource Self},
                                          Mode=OneWay,
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Header="Delete duplicate entries"
-                    Command="{Binding Path=DeleteDuplicateEntriesCommand}" />
+                    Command="{Binding Path=DeleteDuplicateEntriesCommand}">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="MinusCircleMultiple"
+                            Foreground="{StaticResource WolvenKitRed}" />
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
 
-            <!-- Ent file: Appearances menu -->
+            <!-- Appearances: .ent -->
             <MenuItem
-                Style="{StaticResource ToolbarItemInAppFileStyle}"
+                Style="{StaticResource ShowAppearancesMenuItemStyle}"
                 Header="Appearances">
+                <MenuItem.Icon>
+                    <templates:IconBox
+                        IconPack="Material"
+                        Kind="PaletteSwatch"
+                        Foreground="White" />
+                </MenuItem.Icon>
 
-                <!-- Regenerate controllers -->
                 <MenuItem
-                    Style="{StaticResource WolvenKitToolBarItem}"
+                    Style="{StaticResource MenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
                                          RelativeSource={RelativeSource Self},
                                          Mode=OneWay,
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Header="Regenerate visual controllers"
-                    Command="{Binding Path=RegenerateVisualControllersCommand}" />
+                    Command="{Binding Path=RegenerateVisualControllersCommand}">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="CogRefresh"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
 
                 <!-- Hide chunks in bulk -->
                 <MenuItem
-                    Style="{StaticResource MenuItemInAppFileStyle}"
+                    Style="{StaticResource ShowAppMenuItemStyle}"
                     Header="Change chunk view by component"
-                    Click="OnChangeChunkMasksClick" />
+                    Click="OnChangeChunkMasksClick">
+                    <MenuItem.Icon>
+                        <templates:IconBox IconPack="Empty" />
+                    </MenuItem.Icon>
+                </MenuItem>
 
                 <!-- Select animation path -->
                 <MenuItem
-                    Style="{StaticResource WolvenKitToolBarItem}"
+                    Style="{StaticResource MenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
                                          RelativeSource={RelativeSource Self},
                                          Mode=OneWay,
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Header="Change facial animations"
                     Command="{Binding Path=ChangeAnimationComponentCommand}"
-                    Click="OnChangeAnimationClick" />
+                    Click="OnChangeAnimationClick">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="EmoticonHappy"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
 
                 <MenuItem
                     Style="{StaticResource WolvenKitToolBarItem}"
@@ -480,57 +564,64 @@
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Header="Convert to photo mode app"
                     Command="{Binding Path=ConvertToPhotoModeAppCommand}"
-                    Click="OnConvertToPhotoModeClick" />
-
+                    Click="OnConvertToPhotoModeClick">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Camera"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
 
-            <!-- CRUIDs -->
+            <!-- CRUID -->
             <MenuItem
-                Style="{StaticResource WolvenKitToolBarItem}"
+                Style="{StaticResource MenuItemStyle}"
                 Visibility="{Binding Path=IsEnabled,
                                      RelativeSource={RelativeSource Self},
                                      Mode=OneWay,
                                      Converter={StaticResource BooleanToVisibilityConverter}}"
                 Header="Generate CRUID"
-                Command="{Binding Path=GenerateNewCruidCommand}" />
-
-            <!-- Run file validation -->
-            <MenuItem
-                Padding="0,1,2,2"
-                Style="{StaticResource WolvenKitToolBarItem}"
-                Header="File Validation"
-                Click="OnFileValidationClick">
+                Command="{Binding Path=GenerateNewCruidCommand}">
                 <MenuItem.Icon>
-                    <iconPacks:PackIconMaterial
-                        Kind="Play"
-                        Width="13"
-                        Height="16"
-                        Margin="0,0,0,0"
-                        Padding="0,2,0,5"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Top"
-                        Foreground="{StaticResource WolvenKitGreen}" />
+                    <templates:IconBox
+                        IconPack="Material"
+                        Kind="Dice3"
+                        Foreground="White" />
                 </MenuItem.Icon>
             </MenuItem>
 
-
+            <!-- Run file validation -->
+            <MenuItem
+                Style="{StaticResource MenuItemStyle}"
+                Header="File Validation"
+                Click="OnFileValidationClick">
+                <MenuItem.Icon>
+                    <templates:IconBox
+                        IconPack="Material"
+                        Kind="Play"
+                        Foreground="{StaticResource WolvenKitGreen}" />
+                </MenuItem.Icon>
+            </MenuItem>
         </Menu>
 
         <hc:SearchBar
             x:Name="SearchBar"
+            Grid.Row="0"
             Grid.Column="1"
-            Width="200"
-            Height="16"
-            Margin="3"
+            Width="{DynamicResource WolvenKitRedDocumentSearchBarWidth}"
+            Margin="0,0,0,2"
             HorizontalAlignment="Right"
-            VerticalAlignment="Center"
-            BorderThickness="0,0,0,0"
+            Background="{StaticResource BackgroundColor_Frame_Background}"
+            BorderBrush="{StaticResource MahApps.Brushes.Gray.SemiTransparent}"
+            BorderThickness="1"
             Style="{StaticResource SearchBarStyle}"
+            hc:BorderElement.CornerRadius="0"
             hc:InfoElement.Necessary="True"
             hc:InfoElement.Placeholder="Search"
+            hc:InfoElement.ShowClearButton="True"
             FlowDirection="LeftToRight"
             SearchStarted="SearchBar_OnSubmit"
             TextChanged="SearchBar_OnTextChanged" />
-
     </Grid>
 </reactiveUi:ReactiveUserControl>

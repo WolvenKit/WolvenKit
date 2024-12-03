@@ -7,13 +7,12 @@
     xmlns:exporters="clr-namespace:WolvenKit.Views.Exporters"
     xmlns:exportvms="clr-namespace:WolvenKit.App.ViewModels.Exporters;assembly=WolvenKit.App"
     xmlns:hc="https://handyorg.github.io/handycontrol"
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:importers="clr-namespace:WolvenKit.Views.Importers"
     xmlns:importvms="clr-namespace:WolvenKit.App.ViewModels.Importers;assembly=WolvenKit.App"
     xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:tools="clr-namespace:WolvenKit.Views.Tools"
     xmlns:toolvm="clr-namespace:WolvenKit.App.ViewModels.Tools;assembly=WolvenKit.App">
-
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -94,39 +93,17 @@
                         <Setter Property="Margin" Value="0,16,20,-106" />
                         <Setter Property="Padding" Value="16,10,6,16" />
                     </Style>
-
-                    <!-- Menu icon -->
-                    <Style
-                        x:Key="ContextMenuIconStyleCodicons"
-                        TargetType="{x:Type iconPacks:PackIconCodicons}">
-                        <Setter Property="Height" Value="13" />
-                        <Setter Property="HorizontalAlignment" Value="Center" />
-                        <Setter Property="Padding" Value="0,0,0,0" />
-                        <Setter Property="VerticalAlignment" Value="Center" />
-                        <Setter Property="Width" Value="13" />
-                    </Style>
-
-                    <!-- Menu icon -->
-                    <Style
-                        x:Key="ContextMenuIconStyleMaterial"
-                        TargetType="{x:Type iconPacks:PackIconMaterial}">
-                        <Setter Property="Height" Value="13" />
-                        <Setter Property="HorizontalAlignment" Value="Center" />
-                        <Setter Property="Padding" Value="0,0,0,0" />
-                        <Setter Property="VerticalAlignment" Value="Center" />
-                        <Setter Property="Width" Value="13" />
-                    </Style>
                 </ResourceDictionary>
 
                 <!-- Converters -->
                 <ResourceDictionary>
-
                     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
                 </ResourceDictionary>
 
                 <!-- Resource Dictionaries -->
                 <ResourceDictionary Source="pack://application:,,,/WolvenKit;Component/Themes/App.Icons.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/WolvenKit;Component/Themes/App.Styles.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/WolvenKit;Component/Themes/App.Sizes.xaml" />
 
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Dark.Crimson.xaml" />
 
@@ -219,7 +196,13 @@
                         TextWrapping="Wrap" />
                 </StackPanel>
             </ControlTemplate>
-        </ResourceDictionary>
 
+            <Style
+                BasedOn="{StaticResource SyncfusionWizardNavigationAreaStyle}"
+                TargetType="{x:Type syncfusion:WizardNavigationArea}">
+                <Setter Property="MinHeight" Value="{DynamicResource WolvenKitWizardNavBarMinHeight}" />
+                <Setter Property="Padding" Value="{DynamicResource WolvenKitMarginSmallVertical}" />
+            </Style>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

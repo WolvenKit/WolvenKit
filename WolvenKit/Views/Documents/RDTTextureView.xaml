@@ -6,34 +6,84 @@
     xmlns:documents="clr-namespace:WolvenKit.App.ViewModels.Documents;assembly=WolvenKit.App"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:others="clr-namespace:WolvenKit.Views.Others"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type={x:Type documents:RDTTextureViewModel}}"
-    d:DesignHeight="450"
     d:DesignWidth="800"
-    mc:Ignorable="d">
+    d:DesignHeight="450"
+    BorderBrush="{StaticResource BorderAlt}"
+    BorderThickness="1">
     <StackPanel
-        Orientation="Vertical"
-        VerticalAlignment="Stretch"
         Height="Auto"
-        Background="{StaticResource ContentBackground}">
+        VerticalAlignment="Stretch"
+        Background="{StaticResource ContentBackground}"
+        Orientation="Vertical">
         <Border
             Padding="0"
-            BorderThickness="1"
-            ClipToBounds="True"
-            Visibility="{Binding IsRendered, Converter={StaticResource BooleanToVisibilityConverter}}">
+            Visibility="{Binding IsRendered,
+                                 Converter={StaticResource BooleanToVisibilityConverter}}"
+            ClipToBounds="True">
             <Border.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Click="ResetZoomPan" Header="Reset Zoom/Pan" />
-                    <MenuItem Click="SaveImage" Header="Save Image" />
-                    <MenuItem Command="{Binding ReplaceTextureCommand}" Header="Replace Texture" />
-                    <MenuItem Command="{Binding SaveAsCubeCommand}" Header="Save as cube" />
-                    <MenuItem Command="{Binding LoadFromCubeCommand}" Header="Load from cube" />
+                <ContextMenu Style="{StaticResource WPFContextMenuStyle}">
+                    <MenuItem
+                        Click="ResetZoomPan"
+                        Header="Reset Zoom/Pan">
+                        <MenuItem.Icon>
+                            <templates:IconBox
+                                IconPack="Material"
+                                Kind="Magnify"
+                                Foreground="White" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                    <MenuItem
+                        Click="SaveImage"
+                        Header="Save Image">
+                        <MenuItem.Icon>
+                            <templates:IconBox
+                                IconPack="Codicons"
+                                Kind="Save"
+                                Foreground="{StaticResource WolvenKitCyan}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                    <MenuItem
+                        Command="{Binding ReplaceTextureCommand}"
+                        Header="Replace Texture">
+                        <MenuItem.Icon>
+                            <templates:IconBox
+                                IconPack="Material"
+                                Kind="FileReplaceOutline"
+                                Foreground="White" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                    <MenuItem
+                        Command="{Binding SaveAsCubeCommand}"
+                        Header="Save as cube">
+                        <MenuItem.Icon>
+                            <templates:IconBox IconPack="Empty" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                    <MenuItem
+                        Command="{Binding LoadFromCubeCommand}"
+                        Header="Load from cube">
+                        <MenuItem.Icon>
+                            <templates:IconBox IconPack="Empty" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </ContextMenu>
             </Border.ContextMenu>
-            <others:ImageCanvas x:Name="ImageCanvasItem" Source="{Binding Image}" />
+
+            <others:ImageCanvas
+                x:Name="ImageCanvasItem"
+                Source="{Binding Image}" />
         </Border>
 
         <others:LoadingTextControl
-            Visibility="{Binding IsRendered, Converter={StaticResource BoolInvertConverter}}"
+            Visibility="{Binding IsRendered,
+                                 Converter={StaticResource BoolInvertConverter}}"
             VisibilityFlag="{Binding IsRendered}" />
     </StackPanel>
 </UserControl>

@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 using Nodify;
 using ReactiveUI;
@@ -17,6 +18,7 @@ using WolvenKit.App.ViewModels.GraphEditor;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.Views.Templates;
 
 namespace WolvenKit.Views.GraphEditor;
 /// <summary>
@@ -136,9 +138,9 @@ public partial class GraphEditorView : UserControl
                 .OrderBy(x => x.Name)
                 .ToList();
 
-            var addMenu = new MenuItem { Header = "Add ..." };
+            var addMenu = CreateAddMenuItem();
 
-            addMenu.Items.Add(CreateMenuItem("Open Dialog ...", async () =>
+            addMenu.Items.Add(CreateMenuItem("Open Dialog ...", "FolderOpen", "WolvenKitYellow", async () =>
             {
                 await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
                 {
@@ -171,9 +173,9 @@ public partial class GraphEditorView : UserControl
                 .OrderBy(x => x.Name)
                 .ToList();
 
-            var addMenu = new MenuItem { Header = "Add..." };
+            var addMenu = CreateAddMenuItem();
 
-            addMenu.Items.Add(CreateMenuItem("Open Dialog ...", async () =>
+            addMenu.Items.Add(CreateMenuItem("Open Dialog ...", "FolderOpen", "WolvenKitYellow", async () =>
             {
                 await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
                 {
@@ -198,7 +200,7 @@ public partial class GraphEditorView : UserControl
             nodifyEditor.ContextMenu.Items.Add(addMenu);
         }
 
-        nodifyEditor.ContextMenu.Items.Add(CreateMenuItem("Arrange Items", ArrangeNodes));
+        nodifyEditor.ContextMenu.Items.Add(CreateMenuItem("Arrange Items", "ViewDashboard", ArrangeNodes));
 
         nodifyEditor.ContextMenu.SetCurrentValue(ContextMenu.IsOpenProperty, true);
 
@@ -241,7 +243,7 @@ public partial class GraphEditorView : UserControl
 
         if (SelectedNodes.Count > 1)
         {
-            node.ContextMenu.Items.Add(CreateMenuItem("Remove Nodes", () => Source.RemoveNodes(SelectedNodes)));
+            node.ContextMenu.Items.Add(CreateMenuItem("Remove Nodes", "Delete", "WolvenKitRed", () => Source.RemoveNodes(SelectedNodes)));
             node.ContextMenu.SetCurrentValue(ContextMenu.IsOpenProperty, true);
 
             e.Handled = true;
@@ -250,44 +252,86 @@ public partial class GraphEditorView : UserControl
 
         if (node.DataContext is IDynamicInputNode dynamicInputNode)
         {
-            node.ContextMenu.Items.Add(CreateMenuItem("Add Input", () => dynamicInputNode.AddInput()));
+            node.ContextMenu.Items.Add(CreateMenuItem("Add Input", "PlusCircle", () => dynamicInputNode.AddInput()));
             node.ContextMenu.Items.Add(new Separator());
         }
 
         if (node.DataContext is IDynamicOutputNode dynamicOutputNode)
         {
-            node.ContextMenu.Items.Add(CreateMenuItem("Add Output", () => dynamicOutputNode.AddOutput()));
+            node.ContextMenu.Items.Add(CreateMenuItem("Add Output", "PlusCircle", () => dynamicOutputNode.AddOutput()));
             node.ContextMenu.Items.Add(new Separator());
         }
 
         if (node.DataContext is scnChoiceNodeWrapper choice)
         {
-            node.ContextMenu.Items.Add(CreateMenuItem("Add Choice", () => choice.AddChoice()));
+            node.ContextMenu.Items.Add(CreateMenuItem("Add Choice", "PlusCircle", () => choice.AddChoice()));
             node.ContextMenu.Items.Add(new Separator());
         }
 
         if (node.DataContext is IGraphProvider graphProvider)
         {
-            node.ContextMenu.Items.Add(CreateMenuItem("Recalculate sockets", () => Source.RecalculateSockets(graphProvider)));
+            node.ContextMenu.Items.Add(CreateMenuItem("Recalculate sockets", "Play", "WolvenKitGreen", () => Source.RecalculateSockets(graphProvider)));
             node.ContextMenu.Items.Add(new Separator());
         }
 
         if (node.DataContext is questSceneNodeDefinitionWrapper sceneNode)
         {
-            node.ContextMenu.Items.Add(CreateMenuItem("Add Scene To Project", () => sceneNode.AddSceneToProject()));
+            node.ContextMenu.Items.Add(CreateMenuItem(
+                "Add Scene To Project",
+                "ArrowLeftCircle",
+                "WolvenKitYellow",
+                () => sceneNode.AddSceneToProject()));
             node.ContextMenu.Items.Add(new Separator());
         }
 
-        node.ContextMenu.Items.Add(CreateMenuItem("Remove Node", () => Source.RemoveNode(nvm)));
+        node.ContextMenu.Items.Add(CreateMenuItem("Remove Node", "Delete", "WolvenKitRed", () => Source.RemoveNode(nvm)));
 
         node.ContextMenu.SetCurrentValue(ContextMenu.IsOpenProperty, true);
 
         e.Handled = true;
     }
 
-    private MenuItem CreateMenuItem(string header, Action click)
+    private static MenuItem CreateAddMenuItem() => new()
     {
-        var item = new MenuItem { Header = header };
+        Header = "Add ...",
+        Padding = (Thickness)Application.Current.Resources["WolvenKitMarginTiny"]!,
+        Icon = new IconBox
+        {
+            IconPack = IconPackType.Material,
+            Kind = "Plus",
+            Margin = (Thickness)Application.Current.Resources["WolvenKitMarginTiny"]!,
+            Size = (double)Application.Current.Resources["WolvenKitIconMicro"]!
+        }
+    };
+
+    private static MenuItem CreateMenuItem(string header, Action click) => CreateMenuItem(header, "Empty", null, click);
+
+    private static MenuItem CreateMenuItem(string header, string iconKind, Action click) => CreateMenuItem(header, iconKind, "", click);
+
+    private static MenuItem CreateMenuItem(string header, string iconKind, string iconColor, Action click)
+    {
+        var item = new MenuItem
+        {
+            Header = header,
+            Padding = (Thickness)Application.Current.Resources["WolvenKitMarginTiny"]!,
+        };
+
+        if (iconKind != null)
+        {
+            var icon = new IconBox
+            {
+                IconPack = (iconKind == "Empty") ? IconPackType.Empty : IconPackType.Material,
+                Kind = (iconKind == "Empty") ? "" : iconKind,
+                Margin = (Thickness)Application.Current.Resources["WolvenKitMarginTiny"]!,
+                Size = (double)Application.Current.Resources["WolvenKitIconMicro"]!
+            };
+
+            if (iconColor != null)
+            {
+                icon.Foreground = (Brush)Application.Current.Resources[iconColor] ?? Brushes.White;
+            }
+            item.Icon = icon;
+        }
         item.Click += (_, _) => click();
         return item;
     }

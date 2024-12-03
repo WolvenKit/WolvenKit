@@ -6,12 +6,14 @@
     xmlns:documents="clr-namespace:WolvenKit.App.ViewModels.Documents;assembly=WolvenKit.App"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:others="clr-namespace:WolvenKit.Views.Others"
-    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type={x:Type documents:RDTLayeredPreviewViewModel}}"
-    d:DesignHeight="450"
     d:DesignWidth="800"
-    Grid.IsSharedSizeScope="True"
-    mc:Ignorable="d">
+    d:DesignHeight="450"
+    BorderBrush="{StaticResource BorderAlt}"
+    BorderThickness="1"
+    Grid.IsSharedSizeScope="True">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -26,9 +28,19 @@
             ClipToBounds="True">
             <Border.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Click="ResetZoomPan" Header="Reset Zoom/Pan" />
+                    <MenuItem
+                        Click="ResetZoomPan"
+                        Header="Reset Zoom/Pan">
+                        <MenuItem.Icon>
+                            <templates:IconBox
+                                IconPack="Material"
+                                Kind="Magnify"
+                                Foreground="White" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </ContextMenu>
             </Border.ContextMenu>
+
             <others:ImageCanvas x:Name="ImageCanvasItem" />
         </Border>
 
@@ -39,11 +51,14 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            Text="{Binding Name}" />
+
                         <Image
                             Width="150"
                             Height="150"
-                            Margin="3"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
                             Source="{Binding Source}"
                             StretchDirection="DownOnly" />
                     </StackPanel>

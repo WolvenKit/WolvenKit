@@ -14,7 +14,7 @@ namespace WolvenKit.Converters
         public DataTemplate RedboolTemplate { get; set; }
         public DataTemplate NumericTemplate { get; set; }
         public DataTemplate EnumTemplate { get; set; }
-        public DataTemplate HandleTemplateView { get; set; }
+        //public DataTemplate HandleTemplateView { get; set; }
         public DataTemplate RefTemplateView { get; set; }
         public DataTemplate ColorTemplateView { get; set; }
         public DataTemplate SingleChannelCurveTemplate { get; set; }
@@ -33,7 +33,7 @@ namespace WolvenKit.Converters
                 NodeRef => NodeRefTemplateView,   //done in PG
                 IRedInteger => NumericTemplate, //done in PG
                 IRedEnum => EnumTemplate,           //done in PG
-                IRedBaseHandle => HandleTemplateView, //done in PG
+                //IRedBaseHandle => HandleTemplateView, //done in PG
                 IRedRef => RefTemplateView,         //done in PG
                 CColor x => ColorTemplateView,   //done in PG
                 IRedArray => CommmonTemplate,       //done in PG

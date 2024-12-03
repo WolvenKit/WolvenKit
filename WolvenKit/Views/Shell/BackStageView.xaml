@@ -6,9 +6,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     mc:Ignorable="d"
-    d:DesignHeight="450"
-    d:DesignWidth="800">
-
+    d:DesignWidth="800"
+    d:DesignHeight="450">
     <UserControl.Resources>
         <DrawingBrush
             x:Key="CloudDrawingBrushMain"
@@ -32,32 +31,22 @@
 
     <Grid>
         <Grid>
-
-
-
-
-
             <Grid
-                Grid.Row="1"
-                Grid.Column="1"
-                Margin="5"
+                Margin="{DynamicResource WolvenKitMarginTiny}"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch">
                 <Border
                     Background="{DynamicResource RegionBrush}"
-                    CornerRadius="10"
+                    CornerRadius="{DynamicResource WolvenKitRadius}"
                     Effect="{DynamicResource MahApps.DropShadowEffect.Menu}">
                     <Border
-                        Margin="5,55,5,5"
+                        Margin="{DynamicResource WolvenKitBackStageBgMargin}"
                         Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
-                        CornerRadius="5">
+                        CornerRadius="{DynamicResource WolvenKitSmallRadius}">
                         <!--<local11:RecentlyUsedItemsView Margin="5,-56,5,0" FontSize="14" />-->
                     </Border>
                 </Border>
             </Grid>
-
-
-
         </Grid>
     </Grid>
 </UserControl>

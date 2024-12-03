@@ -4,11 +4,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:hc="https://handyorg.github.io/handycontrol"
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     mc:Ignorable="d"
-    d:DesignHeight="50"
-    d:DesignWidth="200">
+    d:DesignWidth="240"
+    d:DesignHeight="42">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -16,30 +16,48 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
+
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
 
         <Button
-            Margin="0,0,0,0"
-            HorizontalAlignment="Left"
+            Grid.Column="0"
+            Margin="{DynamicResource WolvenKitMarginTinyTop}"
+            Padding="0"
+            VerticalAlignment="Bottom"
+            Style="{StaticResource WPFButtonStyle}"
             Click="ButtonBase_OnClick">
-            <iconPacks:PackIconCodicons
-                Grid.Row="0"
+            <templates:IconBox
+                IconPack="Codicons"
                 Kind="FolderOpened"
-                Width="15"
-                Height="15"
-                Margin="0,0,0,0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                Spin="False"
-                SpinAutoReverse="False" />
+                Margin="{DynamicResource WolvenKitMarginTiny}"
+                Size="{DynamicResource WolvenKitIconTiny}" />
         </Button>
+
+        <Popup
+            x:Name="notification"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Width="{Binding ActualWidth,
+                            ElementName=filePathTextBox}"
+            Placement="Bottom"
+            PlacementTarget="{Binding ElementName=filePathTextBox}"
+            StaysOpen="False">
+            <TextBlock
+                Background="{DynamicResource WolvenKitGreen}"
+                FontSize="{DynamicResource WolvenKitFontBody}"
+                TextAlignment="Center">
+                Saved!
+            </TextBlock>
+        </Popup>
+
         <hc:TextBox
             x:Name="filePathTextBox"
-            Width="auto"
-            Margin="37,-7,0,3"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Center"
+            Grid.Column="1"
+            Margin="{DynamicResource WolvenKitMarginTinyLeft}"
             Style="{StaticResource TextBoxExtendCustom}"
             hc:InfoElement.Necessary="True"
             Text="{Binding Text,
@@ -48,19 +66,5 @@
                            ValidatesOnDataErrors=True,
                            ValidatesOnNotifyDataErrors=True}"
             Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" />
-        <Popup
-            x:Name="notification"
-            Width="{Binding ActualWidth,
-                            ElementName=filePathTextBox}"
-            Placement="Bottom"
-            PlacementTarget="{Binding ElementName=filePathTextBox}"
-            StaysOpen="False">
-            <TextBlock
-                Background="Green"
-                FontSize="14"
-                TextAlignment="Center">
-                Saved!
-            </TextBlock>
-        </Popup>
     </Grid>
 </UserControl>

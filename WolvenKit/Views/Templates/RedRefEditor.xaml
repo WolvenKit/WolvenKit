@@ -7,62 +7,96 @@
     xmlns:local="clr-namespace:WolvenKit.Views.Editors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:global="clr-namespace:"
-    d:DesignHeight="100"
+    mc:Ignorable="d"
     d:DesignWidth="400"
-    KeyboardNavigation.TabNavigation="Local"
-    mc:Ignorable="d">
-
+    d:DesignHeight="100"
+    KeyboardNavigation.TabNavigation="Local">
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedRefEditor}}}">
         <Grid.Resources>
-
-            <Style x:Key="ValidatingDepotPathStyle" TargetType="{x:Type local:TrimmingTextBox}">
+            <Style
+                x:Key="ValidatingDepotPathStyle"
+                TargetType="{x:Type local:TrimmingTextBox}">
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding Scope}" Value="{x:Static global:FileScope.GameOrMod}">
+                    <DataTrigger
+                        Binding="{Binding Scope}"
+                        Value="{x:Static global:FileScope.GameOrMod}">
                         <Setter Property="BorderBrush" Value="{StaticResource ContentBackgroundAlt2}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Scope}" Value="{x:Static global:FileScope.Unknown}">
+                    <DataTrigger
+                        Binding="{Binding Scope}"
+                        Value="{x:Static global:FileScope.Unknown}">
                         <Setter Property="BorderBrush" Value="{StaticResource ContentBackgroundAlt2}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Scope}" Value="{x:Static global:FileScope.OtherMod}">
-                        <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Yellow}" />
+                    <DataTrigger
+                        Binding="{Binding Scope}"
+                        Value="{x:Static global:FileScope.OtherMod}">
                         <Setter Property="Background" Value="{StaticResource BackgroundColor_Yellow_Dark}" />
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding Scope}" Value="{x:Static global:FileScope.NotFoundWarning}">
                         <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Yellow}" />
+                    </DataTrigger>
+                    <DataTrigger
+                        Binding="{Binding Scope}"
+                        Value="{x:Static global:FileScope.NotFoundWarning}">
                         <Setter Property="Background" Value="{StaticResource BackgroundColor_Yellow_Dark}" />
+                        <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Yellow}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Scope}" Value="{x:Static global:FileScope.NotFound}">
-                        <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Red}" />
+                    <DataTrigger
+                        Binding="{Binding Scope}"
+                        Value="{x:Static global:FileScope.NotFound}">
                         <Setter Property="Background" Value="{StaticResource BackgroundColor_Red_Dark}" />
+                        <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Red}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Scope}" Value="{x:Static global:FileScope.InvalidSubstitution}">
-                        <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Red}" />
+                    <DataTrigger
+                        Binding="{Binding Scope}"
+                        Value="{x:Static global:FileScope.InvalidSubstitution}">
                         <Setter Property="Background" Value="{StaticResource BackgroundColor_Red_Dark}" />
+                        <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Red}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
         </Grid.Resources>
+
         <Grid.RowDefinitions>
-            <RowDefinition Height="27" />
-            <RowDefinition Height="27" />
+            <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
+
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="60" />
+            <ColumnDefinition Width="Auto" SharedSizeGroup="TextBlock" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="155" />
+            <ColumnDefinition Width="{DynamicResource WolvenKitRedEditorHashWidth}" />
         </Grid.ColumnDefinitions>
 
+        <Border
+            Grid.Row="0"
+            Grid.RowSpan="2"
+            Grid.Column="0"
+            BorderBrush="{StaticResource BorderAlt}"
+            BorderThickness="0,0,1,0" />
+
+        <Border
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            BorderBrush="{StaticResource BorderAlt}"
+            BorderThickness="0,0,0,1" />
+
+        <!-- DepotPath -->
         <TextBlock
             Grid.Row="0"
             Grid.Column="0"
-            HorizontalAlignment="Center"
+            Margin="{DynamicResource WolvenKitMarginTiny}"
+            Padding="0,0,0,1"
+            HorizontalAlignment="Right"
             VerticalAlignment="Center"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
             Text="DepotPath" />
 
         <local:TrimmingTextBox
-            Style="{StaticResource ValidatingDepotPathStyle}"
             Grid.Row="0"
             Grid.Column="1"
+            Margin="0,0,0,1"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+            Style="{StaticResource ValidatingDepotPathStyle}"
             helpers:TextBoxBehavior.TripleClickSelectAll="True"
             KeyboardNavigation.TabIndex="1"
             LostFocus="RefreshValidityAndTooltip"
@@ -70,34 +104,54 @@
             OnPaste="TrimmingTextbox_OnTextUpdate"
             OnKeyUp="TrimmingTextbox_OnKeyUp"
             Tooltip="{Binding Path=TextBoxToolTip}"
-            Text="{Binding DepotPath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            Text="{Binding DepotPath,
+                           UpdateSourceTrigger=PropertyChanged,
+                           Mode=TwoWay}" />
+
+        <Border
+            Grid.Row="0"
+            Grid.Column="2"
+            BorderBrush="{StaticResource BorderAlt}"
+            BorderThickness="1,0,0,0" />
+
         <TextBox
             x:Name="HashBox"
             Grid.Row="0"
             Grid.Column="2"
-            helpers:TextBoxBehavior.TripleClickSelectAll="True"
+            Margin="1,0,0,1"
+            VerticalContentAlignment="Center"
             Background="{StaticResource ContentBackgroundAlt}"
-            BorderBrush="{StaticResource BorderAlt}"
-            BorderThickness="1,0,0,0"
-            DataObject.Pasting="HashBox_OnPasting"
             Foreground="#666666"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+            helpers:TextBoxBehavior.TripleClickSelectAll="True"
+            DataObject.Pasting="HashBox_OnPasting"
             KeyboardNavigation.TabIndex="2"
             PreviewTextInput="HashBox_OnPreviewTextInput"
-            Text="{Binding Hash, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            Text="{Binding Hash,
+                           UpdateSourceTrigger=PropertyChanged,
+                           Mode=TwoWay}" />
 
+        <!-- Flags -->
         <TextBlock
             Grid.Row="1"
             Grid.Column="0"
-            HorizontalAlignment="Center"
+            Margin="{DynamicResource WolvenKitMarginTiny}"
+            Padding="0,0,0,1"
+            HorizontalAlignment="Right"
             VerticalAlignment="Center"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
             Text="Flags" />
+
         <ComboBox
             Name="FlagsComboBox"
             Grid.Row="1"
             Grid.Column="1"
             Grid.ColumnSpan="2"
+            Padding="{DynamicResource WolvenKitMarginTiny}"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
             ItemsSource="{Binding EnumValues}"
             KeyboardNavigation.TabIndex="3"
-            SelectedItem="{Binding RedRef.Flags, Mode=OneWay}" />
+            SelectedItem="{Binding RedRef.Flags,
+                                   Mode=OneWay}" />
     </Grid>
 </UserControl>
