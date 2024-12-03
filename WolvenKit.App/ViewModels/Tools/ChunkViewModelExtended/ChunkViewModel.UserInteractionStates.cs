@@ -86,7 +86,7 @@ public partial class ChunkViewModel
         }
 
         // some items are still RedDummies even after properties were calculated. Why?
-        if (ResolvedData is RedDummy || TVProperties.Count == 0)
+        if (!string.IsNullOrEmpty(searchBoxText) && (ResolvedData is RedDummy || TVProperties.Count == 0))
         {
             IsHiddenBySearch = true;
             return;
@@ -97,23 +97,18 @@ public partial class ChunkViewModel
             chunkViewModel.SetVisibilityStatusBySearchString(searchBoxText);
         }
 
-        if (IsHiddenByEditorDifficultyLevel || Parent is null)
+        if (string.IsNullOrEmpty(searchBoxText) || IsHiddenByEditorDifficultyLevel || Parent is null)
         {
             IsHiddenBySearch = false;
             return;
         }
 
-        if (TVProperties.Any(c => c is { IsHiddenBySearch: false }))
+        var visibleChildren = TVProperties.Where(c => !c.IsHiddenBySearch).ToList();
+
+        if (visibleChildren.Count != 0)
         {
             IsHiddenBySearch = false;
             IsExpanded = !string.IsNullOrEmpty(searchBoxText);
-            return;
-        }
-
-        if (string.IsNullOrEmpty(searchBoxText))
-        {
-            IsHiddenBySearch = false;
-            IsExpanded = Parent is not null;
             return;
         }
 

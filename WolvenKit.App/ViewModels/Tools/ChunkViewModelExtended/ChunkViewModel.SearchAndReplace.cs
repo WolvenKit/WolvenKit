@@ -13,6 +13,8 @@ public partial class ChunkViewModel
 
     private static readonly List<string> s_replacedStrings = [];
 
+    public static bool RunShallowReplace { get; set; }
+
     public int NumReplacedEntries;
 
     /// <summary>
@@ -56,7 +58,11 @@ public partial class ChunkViewModel
     // Level 1 (will call itself recursively, so let's abort here if we can)
     private bool SearchAndReplaceInProperties(string search, string replace, bool isWholeWord, bool isRegex)
     {
-        CalculateProperties();
+        // for performance reasons: if more than 10 nodes are selected, do not initialize properties
+        if (!RunShallowReplace)
+        {
+            CalculateProperties();
+        }
         var properties = GetProperties();
 
         if (s_resolvedHashes.Contains(GetHashCode()))
@@ -131,6 +137,10 @@ public partial class ChunkViewModel
         for (var i = 0; i < properties.Count; i++)
         {
             var t = properties[i];
+            if (t.IsHiddenBySearch)
+            {
+                continue;
+            }
             try
             {
                 if (t.SearchAndReplaceInProperties(search, replace, isWholeWord, isRegex))

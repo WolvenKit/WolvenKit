@@ -138,7 +138,6 @@ namespace WolvenKit.Views.Documents
             
         }
 
-
         private ChunkViewModel? SelectedChunk => ViewModel?.SelectedChunk;
 
         private ChunkViewModel? RootChunk => ViewModel?.RootChunk;

@@ -453,6 +453,7 @@ namespace WolvenKit.Views.Tools
             var isWholeWord = dialog.ViewModel?.IsWholeWord ?? false;
 
             ChunkViewModel.SearchAndReplace_ResetCaches();
+            ChunkViewModel.RunShallowReplace = selectedChunkViewModels.Count < 20;
             
             var results = selectedChunkViewModels
                 .Select(item => item.SearchAndReplace(searchText, replaceText, isWholeWord, isRegex))
