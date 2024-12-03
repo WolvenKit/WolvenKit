@@ -35,12 +35,14 @@ namespace WolvenKit.Views.Tools
         private readonly IModifierViewStateService _modifierViewStateSvc;
         private readonly ILoggerService _loggerService;
         private readonly IProgressService<double> _progressService;
+        private readonly AppViewModel _appViewModel;
 
         public RedTreeView()
         {
             _modifierViewStateSvc = Locator.Current.GetService<IModifierViewStateService>();
             _loggerService = Locator.Current.GetService<ILoggerService>();
-            _progressService = Locator.Current.GetService<IProgressService<double>>(); 
+            _progressService = Locator.Current.GetService<IProgressService<double>>();
+            _appViewModel = Locator.Current.GetService<AppViewModel>(); 
             
             InitializeComponent();
 
@@ -596,14 +598,19 @@ namespace WolvenKit.Views.Tools
             {
                 return;
             }
-            
-            if (e.Key == Key.F2 && e.IsUp && CanOpenSearchAndReplaceDialog)
-            {
-                OpenSearchAndReplaceDialog();
-                return;
-            }
 
-            _modifierViewStateSvc.OnKeystateChanged(e);
+            switch (e.Key)
+            {
+                case Key.F2 when e.IsUp && CanOpenSearchAndReplaceDialog:
+                    OpenSearchAndReplaceDialog();
+                    return;
+                case Key.W when e.IsDown && e.KeyboardDevice.Modifiers == ModifierKeys.Control && _appViewModel.ActiveDocument is not null:
+                    _appViewModel.CloseFile(_appViewModel.ActiveDocument);
+                    return;
+                default:
+                    _modifierViewStateSvc.OnKeystateChanged(e);
+                    break;
+            }
         }
         
         
