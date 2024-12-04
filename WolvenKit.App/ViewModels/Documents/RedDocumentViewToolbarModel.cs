@@ -210,19 +210,31 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     /*
      * Regenerate visual controllers
      */
-    private bool CanRegenerateVisualControllers() => SelectedChunk is { Name: "components", Data: CArray<entIComponent> };
+    private bool CanRegenerateVisualControllers() => ContentType is RedDocumentItemType.Ent ||
+                                                     (ContentType is RedDocumentItemType.App && SelectedChunk is
+                                                         { Name: "components", Data: CArray<entIComponent> });
     
     [RelayCommand(CanExecute = nameof(CanRegenerateVisualControllers))]
-    private void RegenerateVisualControllers() => SelectedChunk?.RegenerateVisualControllerCommand.Execute(null);
+    private void RegenerateVisualControllers()
+    {
+        if (SelectedChunk is { Name: "components", Data: CArray<entIComponent> })
+        {
+            SelectedChunk?.RegenerateVisualControllerCommand.Execute(null);
+            return;
+        }
 
-    private bool CanChangeAnimationComponent() => RootChunk is { };
+        // .ent file
+        RootChunk?.GetPropertyChild("components")?.RegenerateVisualControllerCommand.Execute(null);
+    }
+
+    private bool CanChangeAnimationComponent() => RootChunk?.ResolvedData is appearanceAppearanceResource;
 
     /*
      * Convert to photo mode app
      */
     private bool CanConvertToPhotoModeApp() => RootChunk?.ResolvedData is appearanceAppearanceResource &&
-                                               (FilePath is not string filePath ||
-                                                !SelectPhotoModeAppViewModel.PhotomodeAppPaths.Contains(filePath));
+                                               FilePath is string filePath &&
+                                               !SelectPhotoModeAppViewModel.PhotomodeAppPaths.Contains(filePath);
 
     [RelayCommand(CanExecute = nameof(CanConvertToPhotoModeApp))]
     private void ConvertToPhotoModeApp()
