@@ -182,20 +182,26 @@
 
             <!-- Appearances: .ent -->
             <Style
-                x:Key="ShowAppearancesMenuItemStyle"
+                x:Key="ShowComponentsAppearancesMenuItemStyle"
                 BasedOn="{StaticResource HasNestedMenuItemStyle}"
                 TargetType="{x:Type MenuItem}">
                 <Setter Property="Visibility" Value="Collapsed" />
-
                 <Style.Triggers>
                     <DataTrigger
-                        Binding="{Binding Path=ContentType,
-                                          UpdateSourceTrigger=PropertyChanged}"
+                        Binding="{Binding Path=ContentType}"
                         Value="{x:Static documents:RedDocumentItemType.App}">
+                        <Setter Property="Header" Value="Appearances" />
+                        <Setter Property="Visibility" Value="Visible" />
+                    </DataTrigger>
+                    <DataTrigger
+                        Binding="{Binding Path=ContentType}"
+                        Value="{x:Static documents:RedDocumentItemType.Ent}">
+                        <Setter Property="Header" Value="Components" />
                         <Setter Property="Visibility" Value="Visible" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
+
 
             <!-- App file: .app -->
             <Style
@@ -502,9 +508,8 @@
             </MenuItem>
 
             <!-- Appearances: .ent -->
-            <MenuItem
-                Style="{StaticResource ShowAppearancesMenuItemStyle}"
-                Header="Appearances">
+            <MenuItem Style="{StaticResource ShowComponentsAppearancesMenuItemStyle}">
+                <!-- Header: Apparances / Components is set in style -->
                 <MenuItem.Icon>
                     <templates:IconBox
                         IconPack="Material"
@@ -514,10 +519,6 @@
 
                 <MenuItem
                     Style="{StaticResource MenuItemStyle}"
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                     Header="Regenerate visual controllers"
                     Command="{Binding Path=RegenerateVisualControllersCommand}">
                     <MenuItem.Icon>

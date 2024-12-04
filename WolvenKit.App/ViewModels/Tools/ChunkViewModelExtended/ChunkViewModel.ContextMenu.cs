@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -29,14 +30,6 @@ public partial class ChunkViewModel
     
     [ObservableProperty] private bool _shouldShowDuplicate;
 
-    [ObservableProperty] private bool _shouldShowPasteIntoArray;
-
-    [ObservableProperty] private bool _shouldShowOverwriteArray;
-    [ObservableProperty] private bool _shouldShowPasteOverwrite;
-
-    [ObservableProperty] private bool _isInArrayWithShiftKeyDown;
-    [ObservableProperty] private bool _isInArrayWithShiftKeyUp;
-
     [ObservableProperty] private bool _isMaterial;
 
     [ObservableProperty] private bool _isMaterialArray;
@@ -46,7 +39,7 @@ public partial class ChunkViewModel
     [ObservableProperty] private bool _shouldShowDuplicateAsNew;
     [ObservableProperty] private bool _shouldShowDuplicateInplace;
 
-    [ObservableProperty] private bool _isComponentArray;
+    [ObservableProperty] private bool _isMultipleItemsSelected;
 
     #endregion
 
@@ -58,15 +51,9 @@ public partial class ChunkViewModel
         IsCtrlKeyPressed = ModifierViewStateService.IsCtrlBeingHeld;
         IsAltKeyPressed = ModifierViewStateService.IsAltBeingHeld;
 
-        ShouldShowPasteOverwrite = IsInArray && ModifierViewStateService.IsShiftBeingHeldOnly && Tab?.SelectedChunk is not null;
-        ShouldShowOverwriteArray = ShouldShowArrayOps && ((IsArray && IsShiftKeyPressed) ||
-                                                          (IsCtrlKeyPressed && !ShouldShowPasteOverwrite));
-        ShouldShowPasteIntoArray = ShouldShowArrayOps && !(ShouldShowPasteOverwrite || ShouldShowOverwriteArray);
-
         IsMaterial = ResolvedData is CMaterialInstance or CResourceAsyncReference<IMaterial>;
 
         IsMaterialArray = ResolvedData is CArray<IMaterial> or CArray<CResourceAsyncReference<IMaterial>>;
-        IsComponentArray = IsArray && Name == "components";
 
         ShouldShowDuplicateAsNew =
             IsInArray && !IsShiftKeyPressed &&
@@ -75,8 +62,7 @@ public partial class ChunkViewModel
         ShouldShowDuplicateInplace = !ShouldShowDuplicateAsNew && IsInArray && IsShiftKeyPressed;
         ShouldShowDuplicate = !ShouldShowDuplicateAsNew && IsInArray && !IsShiftKeyPressed;
 
-        IsInArrayWithShiftKeyUp = IsInArray && !IsShiftKeyPressed;
-        IsInArrayWithShiftKeyDown = IsInArray && IsShiftKeyPressed;
+        IsMultipleItemsSelected = Parent?.Tab?.SelectedChunks is ObservableCollection<object> chunks && chunks.Count > 1;
     }
 
     public void RefreshCommandStatus()
