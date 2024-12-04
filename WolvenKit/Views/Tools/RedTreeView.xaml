@@ -121,7 +121,7 @@
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
-
+            <converters:MultiBooleanToVisibilityConverter x:Key="MultiBooleanToVisibilityConverter" />
             <!-- Property name -->
             <DataTemplate
                 x:Key="PropertyNameTemplate"
@@ -806,6 +806,36 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <MenuItem
+                    Header="Regenerate visual controllers"
+                    DataContext="{Binding Path=PlacementTarget.Tag,
+                                          RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Command="{Binding Path=RegenerateVisualControllerCommand}">
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource WPFMenuItemStyle}"
+                            TargetType="MenuItem">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}}" Value="True" />
+                                        <Condition Binding="{Binding Path=IsCtrlKeyPressed}" Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
+
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="CogRefresh"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
                 <!-- Generate CRUID -->
                 <MenuItem
                     Visibility="{Binding Path=IsEnabled,
@@ -824,6 +854,71 @@
                             Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
+
+                <!-- Generate child CRUIDs -->
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.GenerateChildCruidsCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Generate CRUIDs for all children"
+                    IsCheckable="False">
+
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource WPFMenuItemStyle}"
+                            TargetType="MenuItem">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}}" Value="True" />
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsCtrlKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Dice3Outline"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <!-- Copy Names -->
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.CopyChildNamesCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Copy item names"
+                    IsCheckable="False">
+
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource WPFMenuItemStyle}"
+                            TargetType="MenuItem">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}}" Value="True" />
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ContentCopy"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
 
                 <!--
                     #########################################################

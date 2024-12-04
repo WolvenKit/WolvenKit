@@ -46,6 +46,8 @@ public partial class ChunkViewModel
     [ObservableProperty] private bool _shouldShowDuplicateAsNew;
     [ObservableProperty] private bool _shouldShowDuplicateInplace;
 
+    [ObservableProperty] private bool _isComponentArray;
+
     #endregion
 
     #region methods
@@ -64,16 +66,23 @@ public partial class ChunkViewModel
         IsMaterial = ResolvedData is CMaterialInstance or CResourceAsyncReference<IMaterial>;
 
         IsMaterialArray = ResolvedData is CArray<IMaterial> or CArray<CResourceAsyncReference<IMaterial>>;
+        IsComponentArray = IsArray && Name == "components";
 
         ShouldShowDuplicateAsNew =
             IsInArray && !IsShiftKeyPressed &&
             ResolvedData is worldCompiledEffectPlacementInfo or CMeshMaterialEntry;
 
-        ShouldShowDuplicateInplace = !ShouldShowDuplicateAsNew && IsInArray && !IsShiftKeyPressed;
-        ShouldShowDuplicate = !ShouldShowDuplicateAsNew && IsInArray && IsShiftKeyPressed;
+        ShouldShowDuplicateInplace = !ShouldShowDuplicateAsNew && IsInArray && IsShiftKeyPressed;
+        ShouldShowDuplicate = !ShouldShowDuplicateAsNew && IsInArray && !IsShiftKeyPressed;
 
         IsInArrayWithShiftKeyUp = IsInArray && !IsShiftKeyPressed;
         IsInArrayWithShiftKeyDown = IsInArray && IsShiftKeyPressed;
+    }
+
+    public void RefreshCommandStatus()
+    {
+        GenerateChildCruidsCommand.NotifyCanExecuteChanged();
+        CopyChildNamesCommand.NotifyCanExecuteChanged();
     }
 
     public bool IsMaterialDefinition()
@@ -237,6 +246,44 @@ public partial class ChunkViewModel
         return ret;
     }
 
+    private bool CanCopyChildNames() => IsArray;
+
+    [RelayCommand(CanExecute = nameof(CanCopyChildNames))]
+    private void CopyChildNames()
+    {
+        var names = Properties.Select(prop => prop.Descriptor).Where(s => !string.IsNullOrEmpty(s)).ToList();
+        if (names.Count == 0)
+        {
+            return;
+        }
+
+        System.Windows.Clipboard.SetText(string.Join("\n", names));
+    }
+
+    private bool CanGenerateCruids() => IsArray && Name == "components";
+
+    [RelayCommand(CanExecute = nameof(CanGenerateCruids))]
+    private void GenerateChildCruids()
+    {
+        var hasChange = false;
+        foreach (var child in Properties)
+        {
+            child.CalculateProperties();
+            foreach (var grandChild in child.Properties.Where(c => c.ResolvedData is CRUID))
+            {
+                hasChange = true;
+                grandChild.GenerateCRUID();
+                grandChild.RecalculateProperties();
+                grandChild.CalculateDescriptor();
+            }
+        }
+
+        if (hasChange)
+        {
+            Tab?.Parent.SetIsDirty(true);
+        }
+    }
+    
     private bool CanScrollToMaterial() => ShowScrollToMaterial || GetRootModel().ShowScrollToMaterial;
 
     [RelayCommand(CanExecute = nameof(CanScrollToMaterial))]

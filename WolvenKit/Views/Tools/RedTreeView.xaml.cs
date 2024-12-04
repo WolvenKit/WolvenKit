@@ -364,7 +364,14 @@ namespace WolvenKit.Views.Tools
 
         #region commands
 
-        private void RefreshCommandStatus() => DuplicateSelectionCommand.NotifyCanExecuteChanged();
+        private void RefreshCommandStatus()
+        {
+            DuplicateSelectionCommand.NotifyCanExecuteChanged();
+            if (SelectedItem is ChunkViewModel chunk)
+            {
+                chunk.RefreshCommandStatus();
+            }
+        }
 
 
         private async Task DuplicateSelectedChunks(bool preserveIndex = false)
