@@ -181,6 +181,7 @@
                 FontFamily="Fira Code"
                 IsEnabled="{Binding IsLoaded}"
                 ShowLineNumber="True"
+                IsReadOnly="True"
                 Text="{Binding SelectedItem.RedscriptExample}" />
 
             <Canvas IsEnabled="{Binding IsLoaded}">
