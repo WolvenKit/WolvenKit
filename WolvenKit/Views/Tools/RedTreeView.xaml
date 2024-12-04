@@ -857,39 +857,6 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!-- Copy Names -->
-                <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.CopyChildNamesCommand,
-                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Copy item names"
-                    IsCheckable="False">
-
-                    <MenuItem.Style>
-                        <Style
-                            BasedOn="{StaticResource WPFMenuItemStyle}"
-                            TargetType="MenuItem">
-                            <Setter Property="Visibility" Value="Collapsed" />
-                            <Style.Triggers>
-                                <MultiDataTrigger>
-                                    <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}}" Value="True" />
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
-                                    </MultiDataTrigger.Conditions>
-                                    <Setter Property="Visibility" Value="Visible" />
-                                </MultiDataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </MenuItem.Style>
-                    <MenuItem.Icon>
-                        <templates:IconBox
-                            IconPack="Material"
-                            Kind="ContentCopy"
-                            Margin="{DynamicResource WolvenKitMarginTiny}"
-                            Size="{DynamicResource WolvenKitIconMilli}" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-
                 <!--
                     #########################################################
                     ╔═╗┌─┐┌─┐┬ ┬ ┬ ╔═╗┌─┐┌─┐┌┬┐┌─┐
@@ -939,13 +906,26 @@
 
                 <!-- Copy -->
                 <MenuItem
-                    Visibility="{Binding Path=PlacementTarget.Tag.IsInArray,
-                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=PlacementTarget.Tag.CopyChunkCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Copy From Array/Buffer"
                     IsCheckable="False">
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource WPFMenuItemStyle}"
+                            TargetType="MenuItem">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsMultipleItemsSelected, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="False" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
@@ -957,13 +937,27 @@
 
                 <!-- Copy Selection -->
                 <MenuItem
-                    Visibility="{Binding Path=PlacementTarget.Tag.IsInArray,
-                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=PlacementTarget.Tag.CopySelectionCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Copy Selection From Array/Buffer"
                     IsCheckable="False">
+
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource WPFMenuItemStyle}"
+                            TargetType="MenuItem">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsMultipleItemsSelected, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
@@ -975,13 +969,30 @@
 
                 <!-- Paste Selection To Array/Buffer -->
                 <MenuItem
-                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowPasteIntoArray,
-                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=PlacementTarget.Tag.PasteSelectionCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Paste Selection To Array/Buffer"
                     IsCheckable="False">
+
+
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource WPFMenuItemStyle}"
+                            TargetType="MenuItem">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsMultipleItemsSelected, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="False" />
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsCtrlKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="False" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
 
                     <MenuItem.Icon>
                         <templates:IconBox
@@ -994,13 +1005,35 @@
 
                 <!-- Overwrite Array/Buffer With Selection -->
                 <MenuItem
-                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowOverwriteArray,
-                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=PlacementTarget.Tag.ClearAndPasteSelectionCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Overwrite Array/Buffer With Selection"
                     IsCheckable="False">
+
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource WPFMenuItemStyle}"
+                            TargetType="MenuItem">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.ShouldShowArrayOpts, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsCtrlKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
+
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
@@ -1012,13 +1045,26 @@
 
                 <!-- Overwrite Selection With Pasted -->
                 <MenuItem
-                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowPasteOverwrite,
-                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=PlacementTarget.Tag.OverwriteSelectionWithPasteCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Overwrite Current With Copied Selection"
                     IsCheckable="False">
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource WPFMenuItemStyle}"
+                            TargetType="MenuItem">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
@@ -1030,13 +1076,27 @@
 
                 <!-- Copy Array Contents -->
                 <MenuItem
-                    Visibility="{Binding Path=PlacementTarget.Tag.IsArray,
-                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=PlacementTarget.Tag.CopyArrayContentsCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Copy Array Contents"
                     IsCheckable="False">
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource WPFMenuItemStyle}"
+                            TargetType="MenuItem">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}}" Value="True" />
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="False" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
+
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
@@ -1045,6 +1105,39 @@
                             Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
+
+                <!-- Copy Names -->
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.CopyChildNamesCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Copy item names"
+                    IsCheckable="False">
+
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource WPFMenuItemStyle}"
+                            TargetType="MenuItem">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}}" Value="True" />
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ContentCopy"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
 
                 <!-- Paste Handle -->
                 <MenuItem
@@ -1067,14 +1160,30 @@
 
                 <!-- Paste Into Array/Buffer -->
                 <MenuItem
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=PlacementTarget.Tag.PasteChunkCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Paste Into Array/Buffer"
                     IsCheckable="False">
+
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource WPFMenuItemStyle}"
+                            TargetType="MenuItem">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.ShouldShowArrayOps, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="False" />
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsCtrlKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="False" />
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsMultipleItemsSelected, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="False" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
+
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
@@ -1086,13 +1195,28 @@
 
                 <!-- Clear Array/Buffer and Paste -->
                 <MenuItem
-                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowOverwriteArray,
-                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=PlacementTarget.Tag.ClearAndPasteChunkCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Clear Array/Buffer and Paste"
                     IsCheckable="False">
+
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource WPFMenuItemStyle}"
+                            TargetType="MenuItem">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.ShouldShowArrayOps, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsCtrlKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
+
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
@@ -1133,13 +1257,28 @@
 
                 <!-- Delete item -->
                 <MenuItem
-                    Visibility="{Binding Path=PlacementTarget.Tag.IsInArray,
-                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=PlacementTarget.Tag.DeleteItemCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Delete Item in Array/Buffer"
                     IsCheckable="False">
+
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource WPFMenuItemStyle}"
+                            TargetType="MenuItem">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsMultipleItemsSelected, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="False" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
+
                     <MenuItem.Icon>
                         <!-- Old icon Codicons#Remove -->
                         <templates:IconBox
@@ -1153,13 +1292,28 @@
 
                 <!-- Delete Selection -->
                 <MenuItem
-                    Visibility="{Binding Path=PlacementTarget.Tag.IsInArrayWithShiftKeyUp,
-                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=DeleteSelectionCommand,
                                       Source={x:Reference redTreeView}}"
                     Header="Delete Selection in Array/Buffer"
                     IsCheckable="False">
+
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource WPFMenuItemStyle}"
+                            TargetType="MenuItem">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsMultipleItemsSelected, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="False" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
+
                     <MenuItem.Icon>
                         <!-- Old icon Codicons#Remove -->
                         <templates:IconBox
@@ -1173,13 +1327,30 @@
 
                 <!-- Delete Everything But Selection -->
                 <MenuItem
-                    Visibility="{Binding Path=PlacementTarget.Tag.IsInArrayWithShiftKeyDown,
-                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=PlacementTarget.Tag.DeleteAllButSelectionCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Delete All but Selection in Array/Buffer"
                     IsCheckable="False">
+
+
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource WPFMenuItemStyle}"
+                            TargetType="MenuItem">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsMultipleItemsSelected, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
+
                     <MenuItem.Icon>
                         <!-- Old icon Codicons#Remove -->
                         <templates:IconBox

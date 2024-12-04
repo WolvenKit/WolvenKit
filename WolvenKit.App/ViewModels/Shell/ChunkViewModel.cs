@@ -2708,7 +2708,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         return RedDocumentTabViewModel.CopiedChunks.All(c => CheckTypeCompatibility(innerType!, c.GetType()) != TypeCompability.None);
     } // TODO RelayCommand check notify
 
-    private bool CanCopyArrayContents() => Properties.Count > 0 && !Properties[0].IsArray;
+    private bool CanCopyArrayContents() => IsArray && Properties.Count > 0 && !Properties[0].IsArray;
 
     [RelayCommand(CanExecute = nameof(CanCopyArrayContents))]
     private void CopyArrayContents()
