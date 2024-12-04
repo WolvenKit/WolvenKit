@@ -129,6 +129,7 @@
     <Compile Remove="Converters\BooleanConverter.cs" />
     <Compile Remove="GridVirtualizingCellsControl.xaml.cs" />
     <Page Remove="GridVirtualizingCellsControl.xaml" />
+      <Compile Remove="Converters\BindingProxy.cs"/>
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Views\Templates\RedFixedPointEditor.cs" />
