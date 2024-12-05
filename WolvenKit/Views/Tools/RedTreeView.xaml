@@ -967,113 +967,6 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!-- Paste Selection To Array/Buffer -->
-                <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.PasteSelectionCommand,
-                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Paste Selection To Array/Buffer"
-                    IsCheckable="False">
-
-
-                    <MenuItem.Style>
-                        <Style
-                            BasedOn="{StaticResource WPFMenuItemStyle}"
-                            TargetType="MenuItem">
-                            <Setter Property="Visibility" Value="Collapsed" />
-                            <Style.Triggers>
-                                <MultiDataTrigger>
-                                    <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsMultipleItemsSelected, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="False" />
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsCtrlKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="False" />
-                                    </MultiDataTrigger.Conditions>
-                                    <Setter Property="Visibility" Value="Visible" />
-                                </MultiDataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </MenuItem.Style>
-
-                    <MenuItem.Icon>
-                        <templates:IconBox
-                            IconPack="Material"
-                            Kind="ContentPaste"
-                            Margin="{DynamicResource WolvenKitMarginTiny}"
-                            Size="{DynamicResource WolvenKitIconMilli}" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-                <!-- Overwrite Array/Buffer With Selection -->
-                <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.ClearAndPasteSelectionCommand,
-                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Overwrite Array/Buffer With Selection"
-                    IsCheckable="False">
-
-                    <MenuItem.Style>
-                        <Style
-                            BasedOn="{StaticResource WPFMenuItemStyle}"
-                            TargetType="MenuItem">
-                            <Setter Property="Visibility" Value="Collapsed" />
-                            <Style.Triggers>
-                                <MultiDataTrigger>
-                                    <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
-                                    </MultiDataTrigger.Conditions>
-                                    <Setter Property="Visibility" Value="Visible" />
-                                </MultiDataTrigger>
-                                <MultiDataTrigger>
-                                    <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.ShouldShowArrayOpts, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsCtrlKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
-                                    </MultiDataTrigger.Conditions>
-                                    <Setter Property="Visibility" Value="Visible" />
-                                </MultiDataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </MenuItem.Style>
-
-                    <MenuItem.Icon>
-                        <templates:IconBox
-                            IconPack="Material"
-                            Kind="ClipboardArrowDownOutline"
-                            Margin="{DynamicResource WolvenKitMarginTiny}"
-                            Size="{DynamicResource WolvenKitIconMilli}" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-                <!-- Overwrite Selection With Pasted -->
-                <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.OverwriteSelectionWithPasteCommand,
-                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Overwrite Current With Copied Selection"
-                    IsCheckable="False">
-                    <MenuItem.Style>
-                        <Style
-                            BasedOn="{StaticResource WPFMenuItemStyle}"
-                            TargetType="MenuItem">
-                            <Setter Property="Visibility" Value="Collapsed" />
-                            <Style.Triggers>
-                                <MultiDataTrigger>
-                                    <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
-                                    </MultiDataTrigger.Conditions>
-                                    <Setter Property="Visibility" Value="Visible" />
-                                </MultiDataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </MenuItem.Style>
-                    <MenuItem.Icon>
-                        <templates:IconBox
-                            IconPack="Material"
-                            Kind="ClipboardArrowDownOutline"
-                            Margin="{DynamicResource WolvenKitMarginTiny}"
-                            Size="{DynamicResource WolvenKitIconMilli}" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
                 <!-- Copy Array Contents -->
                 <MenuItem
                     Command="{Binding Path=PlacementTarget.Tag.CopyArrayContentsCommand,
@@ -1158,9 +1051,9 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!-- Paste Into Array/Buffer -->
+                <!-- Paste Selection To Array/Buffer -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.PasteChunkCommand,
+                    Command="{Binding Path=PlacementTarget.Tag.PasteSelectionCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Paste Into Array/Buffer"
                     IsCheckable="False">
@@ -1173,10 +1066,17 @@
                             <Style.Triggers>
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.ShouldShowArrayOps, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
                                         <Condition Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="False" />
                                         <Condition Binding="{Binding Path=PlacementTarget.Tag.IsCtrlKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="False" />
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsMultipleItemsSelected, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="False" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="False" />
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsCtrlKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="False" />
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="Visibility" Value="Visible" />
                                 </MultiDataTrigger>
@@ -1193,11 +1093,11 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!-- Clear Array/Buffer and Paste -->
+                <!-- Overwrite Array/Buffer With Selection -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.ClearAndPasteChunkCommand,
+                    Command="{Binding Path=PlacementTarget.Tag.ClearAndPasteSelectionCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Clear Array/Buffer and Paste"
+                    Header="Overwrite Array/Buffer With Selection"
                     IsCheckable="False">
 
                     <MenuItem.Style>
@@ -1208,9 +1108,18 @@
                             <Style.Triggers>
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.ShouldShowArrayOps, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="False" />
                                         <Condition Binding="{Binding Path=PlacementTarget.Tag.IsCtrlKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
                                     </MultiDataTrigger.Conditions>
+                                    <Setter Property="Header" Value="Overwrite Parent With Selection" />
                                     <Setter Property="Visibility" Value="Visible" />
                                 </MultiDataTrigger>
                             </Style.Triggers>
@@ -1220,7 +1129,38 @@
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
-                            Kind="ContentPaste"
+                            Kind="ClipboardArrowDownOutline"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <!-- Overwrite Selection With Pasted -->
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.OverwriteSelectionWithPasteCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Overwrite Current Selection With Copied"
+                    IsCheckable="False">
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource WPFMenuItemStyle}"
+                            TargetType="MenuItem">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ClipboardArrowDownOutline"
                             Margin="{DynamicResource WolvenKitMarginTiny}"
                             Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>

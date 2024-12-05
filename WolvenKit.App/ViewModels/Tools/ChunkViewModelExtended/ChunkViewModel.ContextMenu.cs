@@ -40,6 +40,7 @@ public partial class ChunkViewModel
     [ObservableProperty] private bool _shouldShowDuplicateInplace;
 
     [ObservableProperty] private bool _isMultipleItemsSelected;
+    [ObservableProperty] private bool _isMultipleItemsCopied;
 
     #endregion
 
