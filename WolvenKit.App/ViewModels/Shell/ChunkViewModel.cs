@@ -2436,20 +2436,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     }
 
     [RelayCommand(CanExecute = nameof(CanPasteChunks))]
-    private void ClearAndPasteChunk()
-    {
-        var isExpanded = IsExpanded;
-        DeleteAll();
-        PasteChunk();
-        if (!IsCtrlKeyPressed)
-        {
-            SetChildExpansionStates(false);
-        }
-
-        IsExpanded = isExpanded;
-    }
-
-    [RelayCommand(CanExecute = nameof(CanPasteChunks))]
     private void PasteChunk()
     {
         try
@@ -2732,9 +2718,16 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     [RelayCommand(CanExecute = nameof(CanPasteSelection))]
     private void ClearAndPasteSelection()
     {
+        if (IsInArray && Parent is not null)
+        {
+            Parent.ClearAndPasteSelection();
+            return;
+        }
+
         DeleteAll();
-        PasteSelection();
+        PasteSelectionInternal(-1);
     }
+    
 
     [RelayCommand(CanExecute = nameof(CanPasteSelection))]
     private void OverwriteSelectionWithPaste()
@@ -2743,21 +2736,37 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         if (Tab?.SelectedChunks is IList lst)
         {
             insertAtIndex = lst.OfType<ChunkViewModel>().Where(chunk => chunk.IsSelected).FirstOrDefault()?.NodeIdxInParent ?? -1;
-            DeleteSelection();
         }
 
+        DeleteSelection();
         PasteSelectionInternal(insertAtIndex);
     }
 
     [RelayCommand(CanExecute = nameof(CanPasteSelection))]
-    private void PasteSelection() => PasteSelectionInternal(-1);
+    private void PasteSelection()
+    {
+        var insertAtIndex = -1;
+        if (Tab?.SelectedChunks is IList lst)
+        {
+            insertAtIndex = lst.OfType<ChunkViewModel>().Where(chunk => chunk.IsSelected).FirstOrDefault()?.NodeIdxInParent ?? -1;
+        }
+
+        PasteSelectionInternal(insertAtIndex);
+    }
 
 
     private void PasteSelectionInternal(int insertAtIndex = -1)
     {
         ArgumentNullException.ThrowIfNull(Parent);
 
-        if (RedDocumentTabViewModel.CopiedChunks.Count == 0)
+        var copiedChunks = RedDocumentTabViewModel.CopiedChunks;
+
+        if (copiedChunks.Count == 0 && RedDocumentTabViewModel.CopiedChunk is not null)
+        {
+            copiedChunks.Add(RedDocumentTabViewModel.CopiedChunk);
+        }
+
+        if (copiedChunks.Count == 0)
         {
             return;
         }
