@@ -10,7 +10,7 @@
     MinWidth="{DynamicResource WolvenKitDialogWidthSmall}"
     MinHeight="{DynamicResource WolvenKitDialogHeightSmall}"
     SizeToContent="WidthAndHeight"
-    FocusManager.FocusedElement="{Binding ElementName=BaseMaterialBox}"
+    FocusManager.FocusedElement="{Binding ElementName=ComponentNameBox}"
     WindowStartupLocation="CenterScreen">
     <Grid
         HorizontalAlignment="Stretch"

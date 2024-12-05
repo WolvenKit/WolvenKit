@@ -8,15 +8,17 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     mc:Ignorable="d"
     d:DesignWidth="400"
-    d:DesignHeight="100">
+    d:DesignHeight="100"
+    FocusManager.FocusedElement="{Binding ElementName=comboboxadv}">
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedChunkMaskEditor}}}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" MaxWidth="300" />
             <ColumnDefinition Width="{DynamicResource WolvenKitRedEditorHashWidth}" />
         </Grid.ColumnDefinitions>
 
         <syncfusion:ComboBoxAdv
             Name="comboboxadv"
+            Width="300"
             Padding="{DynamicResource WolvenKitMarginTiny}"
             Background="#252525"
             BorderBrush="{StaticResource BorderAlt}"

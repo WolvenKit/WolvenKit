@@ -133,12 +133,9 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     {
         get
         {
-            if (_chunks == null || _chunks.Count == 0)
+            if (_chunks.Count == 0 && _data is not RedDummy)
             {
-                _chunks = _data is null ? new() : new List<ChunkViewModel>
-                {
-                    GenerateChunks()
-                };
+                _chunks.Add(GenerateChunks());
             }
             return _chunks;
         }
@@ -202,7 +199,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     public void LookForReferences(ChunkViewModel cvm)
     {
-        if (cvm.Data is null)
+        if (cvm.Data is RedDummy)
         {
             return;
         }
@@ -221,10 +218,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
             }
         }
 
-        if (LayoutNodes != null)
-        {
-            LayoutNodes();
-        }
+        LayoutNodes?.Invoke();
     }
 
     public void LookForReferences(ChunkViewModel cvm, RedBaseClass data, string xpath)

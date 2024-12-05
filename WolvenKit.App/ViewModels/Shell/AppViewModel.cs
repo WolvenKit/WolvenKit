@@ -154,6 +154,14 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         DockedViews.CollectionChanged += DockedViews_OnCollectionChanged;
     }
 
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(ActiveDocument))
+        {
+            _lastActiveDocument = ActiveDocument;
+        }
+    }
+
     private void ClearMaterialCache()
     {
         if (!Directory.Exists(ISettingsManager.GetTemp_OBJPath()))
@@ -1669,6 +1677,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(SaveAllCommand))]
     private IDocumentViewModel? _activeDocument;
 
+    private IDocumentViewModel? _lastActiveDocument;
+
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(ShowProjectSettingsCommand))]
     [NotifyCanExecuteChangedFor(nameof(ShowSoundModdingToolCommand))]
@@ -2401,4 +2411,30 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     #endregion methods
+
+    public void CloseLastActiveDocument()
+    {
+        var documentToClose = ActiveDocument ?? _lastActiveDocument;
+        if (documentToClose is null)
+        {
+            return;
+        }
+
+        if (documentToClose.IsDirty)
+        {
+            var response = Interactions.ShowMessageBoxAsync(
+                $"Do you really want to close the file?",
+                "File has changes!").GetAwaiter().GetResult();
+
+            if (response is not (WMessageBoxResult.OK or WMessageBoxResult.Yes))
+            {
+                return;
+            }
+        }
+
+        CloseFile(documentToClose);
+
+        ActiveDocument = null;
+        _lastActiveDocument = null;
+    }
 }
