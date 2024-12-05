@@ -10,6 +10,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Input;
 using System.Windows.Threading;
 using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -33,6 +34,7 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.Archive;
 using Clipboard = System.Windows.Clipboard;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
 namespace WolvenKit.App.ViewModels.Tools;
 
@@ -55,7 +57,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private readonly IModTools _modTools;
     private readonly IProgressService<double> _progressService;
     private readonly IGameControllerFactory _gameController;
-    private readonly AppViewModel _mainViewModel;
+    private readonly AppViewModel _appViewModel;
     public readonly IModifierViewStateService ModifierStateService;
     private readonly IWatcherService _projectWatcher;
 
@@ -91,7 +93,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _archiveManager = archiveManager;
         ModifierStateService = modifierSvc;
 
-        _mainViewModel = appViewModel;
+        _appViewModel = appViewModel;
 
         _projectWatcher = Locator.Current.GetService<IWatcherService>()!;
 
@@ -101,14 +103,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         ModifierStateService.ModifierStateChanged += OnModifierUpdateEvent;
         
         SetupToolDefaults();
-        
-        _mainViewModel.PropertyChanged += MainViewModel_OnPropertyChanged;
+
+        _appViewModel.PropertyChanged += AppViewModelOnPropertyChanged;
 
         _projectManager.PropertyChanged += ProjectManager_OnPropertyChanged;
 
         SelectedTabIndex = ActiveProject?.ActiveTab ?? 0;
 
-        _mainViewModel.OnInitialProjectLoaded += (_, _) => RefreshProjectData();
+        _appViewModel.OnInitialProjectLoaded += (_, _) => RefreshProjectData();
 
         if (Locator.Current.GetService<AppIdleStateService>() is not AppIdleStateService svc)
         {
@@ -129,8 +131,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <summary>
     /// Set status of "scroll to open file" button, based on whether or not we have one opened
     /// </summary>
-    private void MainViewModel_OnPropertyChanged(object? sender, PropertyChangedEventArgs e) =>
-        CanScrollToOpenFile = HasSelectedItem && _mainViewModel.ActiveDocument is not null;
+    private void AppViewModelOnPropertyChanged(object? sender, PropertyChangedEventArgs e) =>
+        CanScrollToOpenFile = HasSelectedItem && _appViewModel.ActiveDocument is not null;
 
     private bool _loading;
 
@@ -194,13 +196,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     partial void OnSelectedItemChanged(FileSystemModel? value)
     {
         HasSelectedItem = value is not null;
-        CanScrollToOpenFile = HasSelectedItem && _mainViewModel.ActiveDocument is not null;
+        CanScrollToOpenFile = HasSelectedItem && _appViewModel.ActiveDocument is not null;
         if (value is null)
         {
             return;
         }
 
-        _mainViewModel.SelectFileCommand.SafeExecute(value);
+        _appViewModel.SelectFileCommand.SafeExecute(value);
     }
 
     #region properties
@@ -633,7 +635,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         // OK, we're done
         _progressService.Completed();
 
-        _mainViewModel.ReloadChangedFiles();
+        _appViewModel.ReloadChangedFiles();
     }
 
     /// <summary>
@@ -715,7 +717,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        await _mainViewModel.OpenFileAsync(model);
+        await _appViewModel.OpenFileAsync(model);
     }
 
     /// <summary>
@@ -814,7 +816,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
 
         await ProjectResourceHelper.MoveAndRefactor(_projectManager.ActiveProject, relativePath, newRelativePath, prefixPath, refactor);
-        _mainViewModel.ReloadChangedFiles();
+        _appViewModel.ReloadChangedFiles();
     }
 
 
@@ -944,7 +946,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         await _modTools.ConvertFromJsonAndWriteAsync(new FileInfo(file), new DirectoryInfo(outDirectoryPath));
 
-        _mainViewModel.ReloadChangedFiles();
+        _appViewModel.ReloadChangedFiles();
 
     }
 
@@ -955,8 +957,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [RelayCommand(CanExecute = nameof(CanOpenInAssetBrowser))]
     private void OpenInAssetBrowser()
     {
-        _mainViewModel.NotNull().GetToolViewModel<AssetBrowserViewModel>().IsVisible = true;
-        _mainViewModel.GetToolViewModel<AssetBrowserViewModel>().ShowFile(SelectedItem.NotNull());
+        _appViewModel.NotNull().GetToolViewModel<AssetBrowserViewModel>().IsVisible = true;
+        _appViewModel.GetToolViewModel<AssetBrowserViewModel>().ShowFile(SelectedItem.NotNull());
     }
 
     private static string GetSecondExtension(FileSystemModel model) => Path.GetExtension(Path.ChangeExtension(model.FullName, "").TrimEnd('.')).TrimStart('.');
@@ -1021,7 +1023,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     #region Methods
 
-    public AppViewModel GetAppViewModel() => _mainViewModel;
+    public AppViewModel GetAppViewModel() => _appViewModel;
 
     /// <summary>
     /// Initialize Avalondock specific defaults that are specific to this tool window.
@@ -1119,7 +1121,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         IsShiftKeyPressed = ModifierViewStateService.IsShiftBeingHeld;
     }
 
-    public IDocumentViewModel? GetActiveEditorFile() => _mainViewModel.ActiveDocument;
+    public IDocumentViewModel? GetActiveEditorFile() => _appViewModel.ActiveDocument;
 
     #endregion
 
@@ -1145,5 +1147,16 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             _projectWatcher.WatchProject(project);
             _projectWatcher.Refresh();
         }
+    }
+
+    public void OnKeyStateChanged(KeyEventArgs e)
+    {
+        if (e.Key == Key.W && (e.KeyboardDevice.Modifiers & ModifierKeys.Control) != 0)
+        {
+            _appViewModel.CloseLastActiveDocument();
+            return;
+        }
+
+        ModifierStateService.OnKeystateChanged(e);
     }
 }

@@ -378,6 +378,15 @@ namespace WolvenKit.Views.Tools
         {
             var chunks = GetSelectedChunks();
 
+            if (!preserveIndex)
+            {
+                var nodeIndices = chunks.Select(c => c.NodeIdxInParent).Order().ToList();
+                if (nodeIndices.Zip(nodeIndices.Skip(1), (a, b) => b - a).Any(diff => diff != 1))
+                {
+                    preserveIndex = true;
+                }
+            }
+            
 
             var tasks = chunks.Select(cvm => cvm.DuplicateChunkAsync(preserveIndex ? -1 : cvm.NodeIdxInParent + chunks.Count)).ToList();
 
@@ -612,8 +621,8 @@ namespace WolvenKit.Views.Tools
                 case Key.F2 when e.IsUp && CanOpenSearchAndReplaceDialog:
                     OpenSearchAndReplaceDialog();
                     return;
-                case Key.W when e.IsDown && e.KeyboardDevice.Modifiers == ModifierKeys.Control && _appViewModel.ActiveDocument is not null:
-                    _appViewModel.CloseFile(_appViewModel.ActiveDocument);
+                case Key.W when e.IsDown && e.KeyboardDevice.Modifiers == ModifierKeys.Control:
+                    _appViewModel.CloseLastActiveDocument();
                     return;
                 default:
                     _modifierViewStateSvc.OnKeystateChanged(e);

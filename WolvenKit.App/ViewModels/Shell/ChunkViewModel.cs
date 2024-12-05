@@ -345,7 +345,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 {
                     arr[index] = Data;
                     Tab.Parent.SetIsDirty(true);
-                    Parent.NotifyChain("Data");
+                    Parent.NotifyChain(nameof(Data));
                 }
 
                 Parent.CalculateDescriptor();
@@ -381,7 +381,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 }
 
                 Tab.Parent.SetIsDirty(true);
-                Parent.NotifyChain("Data");
+                Parent.NotifyChain(nameof(Data));
             }
             else
             {
@@ -400,7 +400,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     }
 
                     Tab.Parent.SetIsDirty(true);
-                    Parent.NotifyChain("Data");
+                    Parent.NotifyChain(nameof(Data));
                 }
             }
         }
@@ -451,16 +451,17 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
            )
         {
             Parent.CalculateDescriptor();
+            Parent.CalculateValue();
             Parent.CalculateIsDefault();
         }
-
-        if (Parent.IsValueExtrapolated)
+        else if (Parent.IsValueExtrapolated)
         {
             Parent.CalculateValue();
         }
 
         if (Parent.Parent?.IsValueExtrapolated is true)
         {
+            Parent.CalculateDescriptor();
             Parent.Parent.CalculateValue();
         }
     }
@@ -2341,17 +2342,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
-        IRedType data = new RedDummy();
-        if (ParentData is RedBaseClass redBaseClass)
+        if (ParentData is RedBaseClass redBaseClass && redBaseClass.GetPropertyDefaultValue(PropertyName) is IRedType defaultValue)
         {
-            var defaultValue = redBaseClass.GetPropertyDefaultValue(PropertyName);
-            if (defaultValue != null)
-            {
-                data = defaultValue;
-            }
+            Data = defaultValue;
+            RecalculateProperties(Data);
+            Parent.CalculateIsDefault();
+            return;
         }
 
-        Data = data;
+        Data = new RedDummy();
         RecalculateProperties(Data);
     }
 
@@ -2689,7 +2688,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     private bool CanPasteSelection()
     {
-        if (RedDocumentTabViewModel.CopiedChunks.Count == 0 ||
+        var copiedChunks = RedDocumentTabViewModel.CopiedChunks;
+        if (copiedChunks.Count == 0 && RedDocumentTabViewModel.CopiedChunk is not null)
+        {
+            copiedChunks.Add(RedDocumentTabViewModel.CopiedChunk);
+        }
+
+        if (copiedChunks.Count == 0 ||
             (ResolvedData is not IRedArray && Parent is not { ResolvedData: IRedArray }))
         {
             return false;
@@ -2705,7 +2710,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             innerType = pArr.InnerType;
         }
 
-        return RedDocumentTabViewModel.CopiedChunks.All(c => CheckTypeCompatibility(innerType!, c.GetType()) != TypeCompability.None);
+        return copiedChunks.All(c => CheckTypeCompatibility(innerType!, c.GetType()) != TypeCompability.None);
     } // TODO RelayCommand check notify
 
     private bool CanCopyArrayContents() => IsArray && Properties.Count > 0 && !Properties[0].IsArray;
@@ -3506,13 +3511,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 return false;
             }
 
-            //Name = null;
-            //PropertyCount = -1;
-            //CalculateDescriptor();
-            //PropertiesLoaded = false;
-            //CalculateProperties();
-            //Tab.File.SetIsDirty(true);
-
             RecalculateProperties(item);
 
             // re-number children
@@ -3553,12 +3551,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 return;
         }
 
-        OnPropertyChanged("Data");
+        OnPropertyChanged(nameof(Data));
 
         RecalculateProperties();
         CalculateValue();
         CalculateDescriptor();
     }
+
     /*
      * QOL: Increment index property in new child
      */

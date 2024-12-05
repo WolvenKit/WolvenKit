@@ -139,6 +139,7 @@ namespace WolvenKit.Views.Documents
         }
 
         private ChunkViewModel? SelectedChunk => ViewModel?.SelectedChunk;
+        private List<ChunkViewModel> SelectedChunks => ViewModel?.SelectedChunks ?? [];
 
         private ChunkViewModel? RootChunk => ViewModel?.RootChunk;
 
@@ -397,7 +398,7 @@ namespace WolvenKit.Views.Documents
         private void OnChangeChunkMasksClick(object _, RoutedEventArgs e)
         {
             var dialog = new ChangeComponentChunkMaskDialog();
-            if (ViewModel?.RootChunk is not ChunkViewModel cvm || dialog.ShowDialog() != true)
+            if (dialog.ShowDialog() != true)
             {
                 return;
             }
@@ -406,10 +407,18 @@ namespace WolvenKit.Views.Documents
             {
                 return;
             }
-
             var chunkMask = (CUInt64)dialog.ViewModel.ChunkMask;
 
-            cvm.ReplaceComponentChunkMasks(dialog.ViewModel.ComponentName!, chunkMask);
+            var selectedChunks = SelectedChunks;
+            if (selectedChunks.Count == 0 && RootChunk is ChunkViewModel cvm)
+            {
+                selectedChunks.Add(cvm);
+            }
+
+            foreach (var chunkViewModel in SelectedChunks)
+            {
+                chunkViewModel.ReplaceComponentChunkMasks(dialog.ViewModel.ComponentName!, chunkMask);
+            }  
         }
 
         private MenuItem? _openMenu;

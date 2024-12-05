@@ -1088,10 +1088,7 @@ namespace WolvenKit.Views.Tools
             ViewModel?.ModifierStateService.RefreshModifierStates();
         }
 
-        private void Main_OnKeystateChanged(object sender, KeyEventArgs e)
-        {
-            ViewModel?.ModifierStateService.OnKeystateChanged(e);
-        }
+        private void Main_OnKeystateChanged(object sender, KeyEventArgs e) => ViewModel?.OnKeyStateChanged(e);
 
         private void TreeIcon_Loaded(object sender, RoutedEventArgs e)
         {
