@@ -156,6 +156,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
+        base.OnPropertyChanged(e);
         if (e.PropertyName == nameof(ActiveDocument))
         {
             _lastActiveDocument = ActiveDocument;
