@@ -480,13 +480,13 @@
                     Visibility="{Binding Path=IsEnabled,
                                          RelativeSource={RelativeSource Self},
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Header="Delete empty submeshes"
-                    Command="{Binding Path=DeleteEmptySubmeshesCommand}">
+                    Header="Adjust submesh counts"
+                    Command="{Binding Path=AdjustSubmeshCountCommand}">
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
-                            Kind="DatabaseMinus"
-                            Foreground="{StaticResource WolvenKitRed}" />
+                            Kind="LayersTriple"
+                            Foreground="White" />
                     </MenuItem.Icon>
                 </MenuItem>
 
