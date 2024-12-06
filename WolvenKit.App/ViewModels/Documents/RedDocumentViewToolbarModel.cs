@@ -130,7 +130,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     }
 
 
-    [NotifyCanExecuteChangedFor(nameof(DeleteEmptySubmeshesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AdjustSubmeshCountCommand))]
     [NotifyCanExecuteChangedFor(nameof(DeleteDuplicateEntriesCommand))]
     [NotifyCanExecuteChangedFor(nameof(RegenerateVisualControllersCommand))]
     [NotifyCanExecuteChangedFor(nameof(DeleteUnusedMaterialsCommand))]
@@ -269,14 +269,14 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
      */
     private bool _isEmptySubmeshesDeleted;
 
-    private bool CanDeleteEmptySubmeshes() =>
+    private bool CanAdjustSubmeshCount() =>
         !_isEmptySubmeshesDeleted && ContentType is RedDocumentItemType.Mesh && !_isEmptySubmeshesDeleted;
 
-    [RelayCommand(CanExecute = nameof(CanDeleteEmptySubmeshes))]
-    private void DeleteEmptySubmeshes()
+    [RelayCommand(CanExecute = nameof(CanAdjustSubmeshCount))]
+    private void AdjustSubmeshCount()
     {
         _isEmptySubmeshesDeleted = true;
-        RootChunk?.DeleteEmptySubmeshesCommand.Execute(null);
+        RootChunk?.AdjustSubmeshCountCommand.Execute(null);
     }
 
     /*

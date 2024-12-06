@@ -1420,10 +1420,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         _loggerService.Info($"Deleted {numDuplicates} duplicate entries");
     }
 
-    private bool CanDeleteEmptySubmeshes() => ResolvedData is CMesh;
+    private bool CanAdjustSubmeshCount() => ResolvedData is CMesh;
 
-    [RelayCommand(CanExecute = nameof(CanDeleteEmptySubmeshes))]
-    private void DeleteEmptySubmeshes()
+    [RelayCommand(CanExecute = nameof(CanAdjustSubmeshCount))]
+    private void AdjustSubmeshCount()
     {
         if (ResolvedData is not CMesh mesh || mesh.Appearances.Count == 0 ||
             mesh.RenderResourceBlob.GetValue() is not rendRenderMeshBlob blob)
@@ -1465,14 +1465,27 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         // Find out how many chunk meshes we have 
         var numSubmeshes = blob.Header.RenderChunkInfos.Count;
         var wasDeleted = false;
+        var wasAdded = false;
         foreach (var meshAppearance in mesh.Appearances)
         {
-            if (meshAppearance.GetValue() is not meshMeshAppearance appearance || appearance.ChunkMaterials.Count <= numSubmeshes)
+            if (meshAppearance.GetValue() is not meshMeshAppearance appearance || appearance.ChunkMaterials.Count == numSubmeshes)
             {
                 continue;
             }
 
             var newMaterials = appearance.ChunkMaterials.Where((_, i) => i < numSubmeshes).ToList();
+            if (newMaterials.Count < numSubmeshes)
+            {
+                var sequenceIndex = GetIndexOfFirstNonRepeatingMaterial(newMaterials.Select(m => m.GetResolvedText() ?? "").ToList());
+
+                while (newMaterials.Count < numSubmeshes)
+                {
+                    newMaterials.Add(newMaterials[sequenceIndex]);
+                    wasAdded = true;
+                    sequenceIndex = (sequenceIndex + 1) % newMaterials.Count;
+                }
+            }
+            
             appearance.ChunkMaterials = new CArray<CName>();
             foreach (var t in newMaterials)
             {
@@ -1481,9 +1494,48 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             wasDeleted = true;
         }
 
-        if (wasDeleted)
+        if (wasAdded || wasDeleted)
         {
-            DeleteUnusedMaterials();
+            _loggerService.Info("Chunk material counts were adjusted. You can now delete unused materials.");
+            Tab?.Parent.SetIsDirty(true);
+        }
+        else if (!wasDeleted)
+        {
+            _loggerService.Info("No changes were made");
+        }
+
+        return;
+
+        int GetIndexOfFirstNonRepeatingMaterial(List<string> materials)
+        {
+            int numMaterials = materials.Count;
+
+            var materialCounts = new Dictionary<string, int>();
+            foreach (var material in materials)
+            {
+                if (materialCounts.ContainsKey(material))
+                {
+                    materialCounts[material]++;
+                }
+                else
+                {
+                    materialCounts[material] = 1;
+                }
+            }
+
+            int startIndex = 0;
+            for (int i = 0; i < numMaterials; i++)
+            {
+                if (materialCounts[materials[i]] != 1)
+                {
+                    continue;
+                }
+
+                startIndex = i;
+                break;
+            }
+
+            return startIndex;
         }
     }
 
