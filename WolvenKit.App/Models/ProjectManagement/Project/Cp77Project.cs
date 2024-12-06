@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Core.Extensions;
@@ -541,19 +542,26 @@ public sealed partial class Cp77Project(string location, string name, string mod
         return relPath;
     }
 
+    public Task<Dictionary<string, List<string>>> GetAllReferences(IProgressService<double> progressService,
+        ILoggerService loggerService) => GetAllReferences(progressService, loggerService, new List<string>());
+
     public async Task<Dictionary<string, List<string>>> GetAllReferences(IProgressService<double> progressService,
-        ILoggerService loggerService)
+        ILoggerService loggerService, List<string> filePaths)
     {
+        if (filePaths.Count == 0)
+        {
+            filePaths.AddRange(ModFiles);
+        }
         Dictionary<string, List<string>> references = new();
 
         progressService?.Report(0);
-        var totalFiles = ModFiles.Count;
+        var totalFiles = filePaths.Count;
         var processedFiles = 0;
         var progressIncrement = totalFiles > 0 ? 100.0 / totalFiles : 100;
 
         await Task.Run(() =>
         {
-            Parallel.ForEach(ModFiles, filePath =>
+            Parallel.ForEach(filePaths, filePath =>
             {
                 try
                 {
@@ -682,18 +690,24 @@ public sealed partial class Cp77Project(string location, string name, string mod
         });
         return references;
     }
-    
-    
+
+
+    public Task<Dictionary<string, List<string>>> ScanForBrokenReferencePathsAsync(IArchiveManager archiveManager,
+        ILoggerService loggerService, IProgressService<double> progressService) =>
+        ScanForBrokenReferencePathsAsync(archiveManager, loggerService, progressService, new Dictionary<string, List<string>>());
 
     public async Task<Dictionary<string, List<string>>> ScanForBrokenReferencePathsAsync(IArchiveManager archiveManager,
-        ILoggerService loggerService, IProgressService<double> progressService)
+        ILoggerService loggerService, IProgressService<double> progressService, Dictionary<string, List<string>> references)
     {
-        var references = await GetAllReferences(progressService, loggerService);
+        if (references.Count == 0)
+        {
+            references.AddRange(await GetAllReferences(progressService, loggerService, []));
+        }
         Dictionary<string, List<string>> brokenReferences = new();
 
         progressService.IsIndeterminate = true;
         progressService.Report(0);
-        var totalFiles = ModFiles.Count;
+        var totalFiles = references.Count;
         var processedFiles = 0;
         var progressIncrement = totalFiles > 0 ? 100.0 / totalFiles : 100;
         
@@ -718,7 +732,7 @@ public sealed partial class Cp77Project(string location, string name, string mod
                 progressService?.Report(currentProgress);
             });
         });
-        progressService?.Completed();
+        progressService.Completed();
         return brokenReferences;
     }
 

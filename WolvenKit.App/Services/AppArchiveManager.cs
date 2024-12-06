@@ -1,6 +1,7 @@
 ﻿using DynamicData;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -36,7 +37,8 @@ public class AppArchiveManager(
             .Select(archiveName => archiveName.Replace(".archive", "")).ToArray();
 
     public override string[] GetIgnoredArchiveNames() => _ignoredArchives;
-    
+
+    public static bool ArchivesNeedRescan = true;
 
     #endregion Fields
 
@@ -47,6 +49,15 @@ public class AppArchiveManager(
     public RedFileSystemModel? RootNode { get; set; }
 
     public List<RedFileSystemModel> ModRoots { get; set; } = new();
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        base.OnPropertyChanged(e);
+        if (e.PropertyName == nameof(IsModBrowserActive) && IsModBrowserActive)
+        {
+            ArchivesNeedRescan = true;
+        }
+    }
 
     #endregion
 
@@ -159,6 +170,11 @@ public class AppArchiveManager(
             innerCache.Clear();
             innerCache.Add(ModRoots);
         });
+
+        if (analyzeFiles)
+        {
+            ArchivesNeedRescan = false;
+        }
 
     }
 

@@ -595,14 +595,35 @@
             <!-- Run file validation -->
             <MenuItem
                 Style="{StaticResource MenuItemStyle}"
-                Header="File Validation"
-                Click="OnFileValidationClick">
+                Header="File Validation">
                 <MenuItem.Icon>
                     <templates:IconBox
                         IconPack="Material"
-                        Kind="Play"
-                        Foreground="{StaticResource WolvenKitGreen}" />
+                        Kind="TextSearch"
+                        Foreground="White" />
                 </MenuItem.Icon>
+                <MenuItem
+                    Style="{StaticResource MenuItemStyle}"
+                    Header="Run WScript"
+                    Click="OnFileValidationClick">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Play"
+                            Foreground="{StaticResource WolvenKitGreen}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    Style="{StaticResource MenuItemStyle}"
+                    Header="Find broken references"
+                    Click="OnFindBrokenReferencesClick">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="BookSearch"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
         </Menu>
 

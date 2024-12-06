@@ -39,7 +39,8 @@ namespace WolvenKit.Views.Documents
         private readonly IAppArchiveManager _archiveManager;
         private readonly IModifierViewStateService _modifierStateService;
         private readonly AppViewModel _appViewModel;
-
+        private readonly IProgressService<double> _progressService;
+        
         public RedDocumentViewMenuBar()
         {
             _scriptService = Locator.Current.GetService<AppScriptService>()!;
@@ -50,6 +51,7 @@ namespace WolvenKit.Views.Documents
             _archiveManager = Locator.Current.GetService<IAppArchiveManager>()!;
             _modifierStateService = Locator.Current.GetService<IModifierViewStateService>()!;
             _appViewModel = Locator.Current.GetService<AppViewModel>()!;
+            _progressService = Locator.Current.GetService<IProgressService<double>>()!;
             
             InitializeComponent();
 
@@ -143,6 +145,37 @@ namespace WolvenKit.Views.Documents
 
         private ChunkViewModel? RootChunk => ViewModel?.RootChunk;
 
+        private async void OnFindBrokenReferencesClick(object _, RoutedEventArgs e)
+        {
+            if (_projectManager.ActiveProject is null || CurrentTab?.FilePath is not string s || !File.Exists(s))
+            {
+                return;
+            }
+
+            _loggerService.Info("Scanning file for broken references. This is currently slow as foretold, please hold the line...");
+            var allReferences = await _projectManager.ActiveProject.GetAllReferences(
+                _progressService,
+                _loggerService,
+                [s.Replace(_projectManager.ActiveProject.ModDirectory, "")]
+            );
+
+            var brokenReferences = await _projectManager.ActiveProject.ScanForBrokenReferencePathsAsync(
+                _archiveManager,
+                _loggerService,
+                _progressService,
+                allReferences
+            );
+
+            if (brokenReferences.Keys.Count == 0)
+            {
+                _loggerService.Success("No broken references... that we can find!");
+                return;
+            }
+
+            _loggerService.Info("Done!");
+            Interactions.ShowBrokenReferencesList(("Broken references", brokenReferences));
+        }
+        
         private void OnFileValidationClick(object _, RoutedEventArgs e)
         {
             // in .app or root entity: warn with >5 appearances, because this can take a while 
@@ -342,11 +375,10 @@ namespace WolvenKit.Views.Documents
 
         private async Task LoadAndAnalyzeModArchives()
         {
-            if (!_archiveManager.GetModArchives().Any() && _archiveManager.IsInitialized)
+            if (!_archiveManager.GetModArchives().Any() && _archiveManager.IsInitialized || !AppArchiveManager.ArchivesNeedRescan)
             {
                 return;
             }
-
 
             if (_settingsManager.CP77ExecutablePath is null)
             {
