@@ -152,6 +152,7 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
+            _loggerService.Info("Scanning file for broken references. This is currently slow as foretold, please hold the line...");
             var allReferences = await _projectManager.ActiveProject.GetAllReferences(
                 _progressService,
                 _loggerService,
@@ -171,6 +172,7 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
+            _loggerService.Info("Done!");
             Interactions.ShowBrokenReferencesList(("Broken references", brokenReferences));
         }
         
