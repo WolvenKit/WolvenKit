@@ -1,5 +1,32 @@
 namespace WolvenKit.RED4.Types;
 
+public static class CurvePoint
+{
+    public static IRedCurvePoint Create(Type innerType)
+    {
+        switch (innerType.Name)
+        {
+            case "CFloat":
+                return new CurvePoint<CFloat>(0, 0);
+
+            case "HDRColor":
+                return new CurvePoint<HDRColor>(0, new HDRColor());
+
+            case "Vector2":
+                return new CurvePoint<Vector2>(0, new Vector2());
+
+            case "Vector3":
+                return new CurvePoint<Vector3>(0, new Vector3());
+
+            case "Vector4":
+                return new CurvePoint<Vector4>(0, new Vector4());
+
+            default:
+                throw new NotSupportedException($"{innerType.Name} is not a valid curve value");
+        }
+    }
+}
+
 public class CurvePoint<T> : IRedCurvePoint<T>, IEquatable<CurvePoint<T>> where T : IRedType
 {
     public CFloat Point { get; set; }
@@ -53,10 +80,31 @@ public class CurvePoint<T> : IRedCurvePoint<T>, IEquatable<CurvePoint<T>> where 
     }
 
     public override int GetHashCode() => HashCode.Combine(Point, Value);
+
+    #region IRedCloneable
+
+    public object ShallowCopy() => MemberwiseClone();
+
+    public object DeepCopy()
+    {
+        if (Value.GetType().IsValueType)
+        {
+            return new CurvePoint<T>(Point, Value);
+        }
+
+        if (Value is IRedCloneable cloneable)
+        {
+            return new CurvePoint<T>(Point, (T)cloneable.DeepCopy());
+        }
+
+        throw new NotImplementedException();
+    }
+
+    #endregion IRedCloneable
 }
 
 [RED("curveData")]
-public class CLegacySingleChannelCurve<T> : List<IRedCurvePoint>, IRedLegacySingleChannelCurve<T>, IEquatable<CLegacySingleChannelCurve<T>> where T : IRedType
+public class CLegacySingleChannelCurve<T> : CArrayBase<IRedCurvePoint>, IRedLegacySingleChannelCurve<T>, IEquatable<CLegacySingleChannelCurve<T>> where T : IRedType
 {
     public Type ElementType => typeof(T);
     public string RedElementType => RedReflection.GetRedTypeFromCSType(typeof(T));
@@ -101,4 +149,24 @@ public class CLegacySingleChannelCurve<T> : List<IRedCurvePoint>, IRedLegacySing
     }
 
     public override int GetHashCode() => HashCode.Combine(base.GetHashCode(), InterpolationType.GetHashCode(), LinkType.GetHashCode());
+
+    #region IRedCloneable
+
+    public override object DeepCopy()
+    {
+        var ret = new CLegacySingleChannelCurve<T>
+        {
+            InterpolationType = InterpolationType,
+            LinkType = LinkType
+        };
+
+        foreach (var curvePoint in this)
+        {
+            ret.Add(curvePoint.DeepCopy());
+        }
+
+        return ret;
+    }
+
+    #endregion IRedCloneable
 }
