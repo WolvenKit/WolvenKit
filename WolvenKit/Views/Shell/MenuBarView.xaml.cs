@@ -78,7 +78,7 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                 .DisposeWith(disposables);
             this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.ScanForBrokenReferencePathsCommand,
-                    view => view.ToolbarProjectScanFilepathsButton)
+                    view => view.ToolbarProjectScanFilePathsButton)
                 .DisposeWith(disposables);
             this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.FindUnusedFilesCommand,

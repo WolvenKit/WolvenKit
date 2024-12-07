@@ -192,13 +192,13 @@
                 <Separator />
 
                 <MenuItem
-                    x:Name="ToolbarProjectScanFilepathsButton"
+                    x:Name="ToolbarProjectScanFilePathsButton"
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
                     Header="Scan project for broken file references">
                     <MenuItem.Icon>
                         <local:IconBox
-                            IconPack="Codicons"
-                            Kind="Search"
+                            IconPack="Material"
+                            Kind="FileSearchOutline"
                             Size="{DynamicResource WolvenKitIconTiny}"
                             Foreground="White" />
                     </MenuItem.Icon>
@@ -210,8 +210,8 @@
                     Header="Scan for unused project files">
                     <MenuItem.Icon>
                         <local:IconBox
-                            IconPack="Codicons"
-                            Kind="Search"
+                            IconPack="Material"
+                            Kind="TextSearchVariant"
                             Size="{DynamicResource WolvenKitIconTiny}"
                             Foreground="White" />
                     </MenuItem.Icon>
@@ -220,13 +220,13 @@
                 <MenuItem
                     x:Name="ToolbarProjectDeleteEmptyFoldersButton"
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
-                    Header="Scan for unused project files">
+                    Header="Delete empty folders">
                     <MenuItem.Icon>
                         <local:IconBox
-                            IconPack="Codicons"
-                            Kind="Search"
+                            IconPack="Material"
+                            Kind="FolderRemove"
                             Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="White" />
+                            Foreground="{StaticResource WolvenKitRed}" />
                     </MenuItem.Icon>
                 </MenuItem>
 

@@ -467,6 +467,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(PackInstallRunCommand))]
     [NotifyCanExecuteChangedFor(nameof(PackInstallRedModRunCommand))]
     [NotifyCanExecuteChangedFor(nameof(ScanForBrokenReferencePathsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(DeleteEmptyFoldersCommand))]
     [NotifyCanExecuteChangedFor(nameof(FindUnusedFilesCommand))]
     [NotifyCanExecuteChangedFor(nameof(ImportFromEntitySpawnerCommand))]
     [NotifyCanExecuteChangedFor(nameof(RunFileValidationOnProjectCommand))]
@@ -934,6 +935,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
+    private void DeleteEmptyFolders() => _projectManager.ActiveProject?.DeleteEmptyFolders(_loggerService);
+
+    [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private async Task FindUnusedFiles()
     {
         _loggerService.Info($"Scanning {ActiveProject!.ModFiles.Count} files. Please wait...");
@@ -962,7 +966,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
 
         _progressService.Completed();
-        var (deleteFiles, _) =
+        var (deleteFiles, moveToPath) =
             Interactions.ShowDeleteOrMoveFilesList(("Delete or move un-used files?", potentiallyUnusedFiles, ActiveProject));
 
         if (deleteFiles.Count == 0)
@@ -977,13 +981,28 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             try
             {
                 var absolutePath = ActiveProject.GetAbsolutePath(filePath);
-                FileSystem.DeleteFile(absolutePath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
-
-                while (Path.GetDirectoryName(absolutePath) is string parentDir && !Directory.EnumerateFileSystemEntries(parentDir).Any())
+                if (string.IsNullOrEmpty(moveToPath))
                 {
-                    Directory.Delete(parentDir);
-                    absolutePath = parentDir;
+                    FileSystem.DeleteFile(absolutePath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+
+                    while (Path.GetDirectoryName(absolutePath) is string parentDir &&
+                           !Directory.EnumerateFileSystemEntries(parentDir).Any())
+                    {
+                        Directory.Delete(parentDir);
+                        absolutePath = parentDir;
+                    }
                 }
+                else
+                {
+                    var destPath = ActiveProject.GetAbsolutePath(moveToPath);
+                    if (!Directory.Exists(moveToPath))
+                    {
+                        Directory.CreateDirectory(moveToPath);
+                    }
+
+                    File.Move(absolutePath, destPath);
+                }
+               
             }
             catch
             {
@@ -993,11 +1012,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         if (failedDeletions.Count == 0)
         {
-            _loggerService.Info($"Deleted {deleteFiles.Count} files.");
+            _loggerService.Info($"Processed {deleteFiles.Count} files.");
             return;
         }
 
-        _loggerService.Warning($"Deleted {deleteFiles.Count - failedDeletions.Count} files. The following files failed to delete:");
+        _loggerService.Warning($"Deleted {deleteFiles.Count - failedDeletions.Count} files. The following files failed to process:");
         foreach (var failedDeletion in failedDeletions)
         {
             _loggerService.Warning($"  {failedDeletion}");
