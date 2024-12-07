@@ -52,7 +52,7 @@ public static class Interactions
     public static Func<(string, List<string>, Cp77Project), (List<string>, string? moveToPath)> ShowDeleteOrMoveFilesList { get; set; } =
         _ => throw new NotImplementedException();
 
-    public static Func<(string, Dictionary<string, List<string>>), bool> ShowBrokenReferencesList { get; set; } =
+    public static Func<(string, IDictionary<string, List<string>>), bool> ShowBrokenReferencesList { get; set; } =
         _ => throw new NotImplementedException();
 
     public static Func<string, string> AskForTextInput { get; set; } = _ => throw new NotImplementedException();
