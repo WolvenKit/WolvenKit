@@ -738,5 +738,28 @@ public sealed partial class Cp77Project(string location, string name, string mod
 
     [GeneratedRegex(@"((\w+\\\\?)+\w+\.\w+)")]
     private static partial Regex ResourceFilePathsRegex();
+
+    private int _numEmptyFolders = 0;
+
+    public void DeleteEmptyFolders(ILoggerService loggerService)
+    {
+        _numEmptyFolders = 0;
+        DeleteEmptyFolders(ModDirectory);
+        loggerService.Success($"Deleted {_numEmptyFolders} empty folders");
+    }
+
+    private void DeleteEmptyFolders(string directory)
+    {
+        foreach (var subdirectory in Directory.GetDirectories(directory))
+        {
+            DeleteEmptyFolders(subdirectory);
+
+            if (Directory.GetFiles(subdirectory).Length == 0 && Directory.GetDirectories(subdirectory).Length == 0)
+            {
+                _numEmptyFolders += 1;
+                Directory.Delete(subdirectory);
+            }
+        }
+    }
 }
     

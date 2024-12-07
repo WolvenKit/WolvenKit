@@ -1267,9 +1267,9 @@
 
                 <!-- Delete Everything But Selection -->
                 <MenuItem
+                    Header="Delete All but Selection in Array/Buffer"
                     Command="{Binding Path=PlacementTarget.Tag.DeleteAllButSelectionCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Delete All but Selection in Array/Buffer"
                     IsCheckable="False">
 
 
@@ -1282,7 +1282,6 @@
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
                                         <Condition Binding="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsMultipleItemsSelected, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
                                         <Condition Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="Visibility" Value="Visible" />

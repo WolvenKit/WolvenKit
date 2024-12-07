@@ -112,9 +112,17 @@ public partial class ChunkViewModel
             return;
         }
 
-        IsHiddenBySearch = !(Value?.Contains(searchBoxText, StringComparison.OrdinalIgnoreCase) == true
-                             || Descriptor?.Contains(searchBoxText, StringComparison.OrdinalIgnoreCase) == true
-                             || StringHelper.StringifyRedType(ResolvedData).Contains(searchBoxText, StringComparison.OrdinalIgnoreCase));
+        var shouldShow = Value?.Contains(searchBoxText, StringComparison.OrdinalIgnoreCase) == true
+                         || Descriptor?.Contains(searchBoxText, StringComparison.OrdinalIgnoreCase) == true
+                         || StringHelper.StringifyRedType(ResolvedData).Contains(searchBoxText, StringComparison.OrdinalIgnoreCase);
+
+        // if it's a ref, search in full depot path
+        shouldShow = shouldShow || (ResolvedData is IRedRef data &&
+                                    data.DepotPath.GetResolvedText()?.Contains(searchBoxText, StringComparison.OrdinalIgnoreCase) == true);
+
+        shouldShow = shouldShow || PropertyType.Name.Contains(searchBoxText, StringComparison.OrdinalIgnoreCase);
+
+        IsHiddenBySearch = !shouldShow;
 
         if (IsHiddenBySearch)
         {

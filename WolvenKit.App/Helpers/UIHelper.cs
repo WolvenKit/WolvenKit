@@ -76,5 +76,8 @@ public static class UIHelper
             pixelsPerDip: 96D).Width);
     }
 
+    public static double GetScreenHeight() => SystemParameters.PrimaryScreenHeight;
+    public static double GetScreenWidth() => SystemParameters.PrimaryScreenWidth;
+
     #endregion Methods
 }

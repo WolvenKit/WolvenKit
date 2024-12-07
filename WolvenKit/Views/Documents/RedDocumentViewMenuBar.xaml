@@ -538,6 +538,15 @@
                         <templates:IconBox IconPack="Empty" />
                     </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem
+                    Style="{StaticResource ShowAppMenuItemStyle}"
+                    Header="Find unused files in project"
+                    ToolTip="Will filter by extension: Only file extensions used in any references will be considered"
+                    Click="OnFindUnusedProjectFilesClick">
+                    <MenuItem.Icon>
+                        <templates:IconBox IconPack="Empty" />
+                    </MenuItem.Icon>
+                </MenuItem>
 
                 <!-- Select animation path -->
                 <MenuItem
