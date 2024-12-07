@@ -526,16 +526,21 @@ namespace WolvenKit.Views.Tools
 
             using (collectionView.DeferRefresh())
             {
-                foreach (var chunkSiblings in GetSelectedChunks()
-                             .GroupBy(chunk => chunk.Parent)
-                             .Select(group => group.ToList()))
+                foreach (var kvp in GetSelectedChunks()
+                             .GroupBy(chunk => chunk.Parent))
                 {
-                    if (chunkSiblings.Count == 0)
+                    if (!kvp.Any())
                     {
                         continue;
                     }
 
+                    var chunkSiblings = kvp.ToList();
                     chunkSiblings.First().DeleteNodesInParent(chunkSiblings);
+                    
+                    chunkSiblings.First().Tab?.Parent.SetIsDirty(true);
+                    
+                    ReapplySearch(kvp.Key);
+                    
                 }
             }
         }
@@ -561,10 +566,28 @@ namespace WolvenKit.Views.Tools
 
                     cvm.DeleteNodesInParent(group.ToList());
                     group.Key.PasteSelectionAtIndex(cvm.NodeIdxInParent);
+
+                    ReapplySearch(group.Key);
                 }
             }
         }
-        
+
+        private void ReapplySearch(ChunkViewModel chunk)
+        {
+            if (string.IsNullOrEmpty(RedDocumentViewToolbarModel.CurrentActiveSearch))
+            {
+                return;
+            }
+
+            // forde re-applying search
+            foreach (var chunkViewModel in chunk.Properties)
+            {
+                chunkViewModel.IsHiddenBySearch = false;
+            }
+
+            chunk.SetVisibilityStatusBySearchString(RedDocumentViewToolbarModel.CurrentActiveSearch);
+        }
+
         [RelayCommand(CanExecute = nameof(CanPasteSelection))]
         private void PasteSelection()
         {
@@ -584,8 +607,11 @@ namespace WolvenKit.Views.Tools
                     }
 
                     group.Key.PasteSelectionAtIndex(cvm.NodeIdxInParent);
+                    ReapplySearch(group.Key);
                 }
             }
+
+           
         }
 
         private bool CanDeleteSelection() => SelectedItem is ChunkViewModel;
@@ -613,6 +639,7 @@ namespace WolvenKit.Views.Tools
                     var chunksToDelete = cvm.Parent.TVProperties.Except(chunkSiblings).ToList();
 
                     cvm.DeleteNodesInParent(chunksToDelete);
+                    ReapplySearch(cvm.Parent);
                 }
             }
         }

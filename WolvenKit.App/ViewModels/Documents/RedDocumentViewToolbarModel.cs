@@ -346,8 +346,11 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
     #endregion
 
+    public static string CurrentActiveSearch = "";
+
     public void OnSearchChanged(string searchBoxText)
     {
+        CurrentActiveSearch = "";
         if (CurrentTab is not RDTDataViewModel rtdViewModel)
         {
             return;
