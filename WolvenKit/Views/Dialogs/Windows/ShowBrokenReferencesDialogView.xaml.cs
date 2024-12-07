@@ -25,7 +25,6 @@ public partial class ShowBrokenReferencesDialogView : IViewFor<ShowBrokenReferen
     public bool? ShowDialog(Window owner)
     {
         Owner = owner;
-        UIHelper.SetMaxHeightToScreenHeight(owner);
         return ShowDialog();
     }
 

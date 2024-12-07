@@ -218,6 +218,19 @@
                 </MenuItem>
 
                 <MenuItem
+                    x:Name="ToolbarProjectDeleteEmptyFoldersButton"
+                    Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                    Header="Scan for unused project files">
+                    <MenuItem.Icon>
+                        <local:IconBox
+                            IconPack="Codicons"
+                            Kind="Search"
+                            Size="{DynamicResource WolvenKitIconTiny}"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <MenuItem
                     x:Name="ToolbarProjectRunFileValidationButton"
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
                     Header="Run File Validation on the entire project">

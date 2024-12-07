@@ -8,6 +8,8 @@
     Title="{Binding Title}"
     MinWidth="{DynamicResource WolvenKitDialogWidthSmall}"
     MinHeight="{DynamicResource WolvenKitDialogHeight}"
+    MaxHeight="{Binding MaxHeight,
+                        RelativeSource={RelativeSource Self}}"
     SizeToContent="WidthAndHeight"
     WindowStartupLocation="CenterOwner">
     <Grid

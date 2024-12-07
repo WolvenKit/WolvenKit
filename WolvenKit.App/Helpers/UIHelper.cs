@@ -76,7 +76,8 @@ public static class UIHelper
             pixelsPerDip: 96D).Width);
     }
 
-    public static void SetMaxHeightToScreenHeight(Window window) => window.MaxHeight = SystemParameters.PrimaryScreenHeight * 0.9;
+    public static double GetScreenHeight() => SystemParameters.PrimaryScreenHeight;
+    public static double GetScreenWidth() => SystemParameters.PrimaryScreenWidth;
 
     #endregion Methods
 }

@@ -31,7 +31,6 @@ public partial class DeleteOrMoveFilesListDialogView : IViewFor<DeleteOrMoveFile
     public bool? ShowDialog(Window owner)
     {
         Owner = owner;
-        UIHelper.SetMaxHeightToScreenHeight(owner);
         return ShowDialog();
     }
 

@@ -85,6 +85,10 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                     view => view.ToolbarProjectFindUnusedFilesButton)
                 .DisposeWith(disposables);
             this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.DeleteEmptyFoldersCommand,
+                    view => view.ToolbarProjectDeleteEmptyFoldersButton)
+                .DisposeWith(disposables);
+            this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.RunFileValidationOnProjectCommand,
                     view => view.ToolbarProjectRunFileValidationButton)
                 .DisposeWith(disposables);
