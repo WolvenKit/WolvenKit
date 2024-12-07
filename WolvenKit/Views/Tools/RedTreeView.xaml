@@ -1212,6 +1212,7 @@
                                     <MultiDataTrigger.Conditions>
                                         <Condition Binding="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
                                         <Condition Binding="{Binding Path=PlacementTarget.Tag.IsMultipleItemsSelected, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="False" />
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="False" />
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="Visibility" Value="Visible" />
                                 </MultiDataTrigger>
@@ -1245,6 +1246,7 @@
                             <Style.Triggers>
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
                                         <Condition Binding="{Binding Path=PlacementTarget.Tag.IsMultipleItemsSelected, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
                                         <Condition Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="False" />
                                     </MultiDataTrigger.Conditions>
