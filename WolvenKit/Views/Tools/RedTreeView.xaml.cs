@@ -47,6 +47,7 @@ namespace WolvenKit.Views.Tools
             InitializeComponent();
 
             DataContextChanged += OnDataContextChanged;
+            RedDocumentTabViewModel.OnCopiedChunkChanged += RefreshCommandStatus;
 
             // Listen for the "UpdateFilteredItemsSource" message
             MessageBus.Current.Listen<string>("Command")
@@ -55,6 +56,8 @@ namespace WolvenKit.Views.Tools
 
             TreeView.ApplyTemplate();
         }
+
+        private void RefreshCommandStatus(object sender, EventArgs e) => RefreshCommandStatus();
 
         private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
@@ -367,6 +370,10 @@ namespace WolvenKit.Views.Tools
         private void RefreshCommandStatus()
         {
             DuplicateSelectionCommand.NotifyCanExecuteChanged();
+            OverwriteSelectionWithPasteCommand.NotifyCanExecuteChanged();
+            PasteSelectionCommand.NotifyCanExecuteChanged();
+            DeleteSelectionCommand.NotifyCanExecuteChanged();
+            DeleteAllButSelectionCommand.NotifyCanExecuteChanged();
             if (SelectedItem is ChunkViewModel chunk)
             {
                 chunk.RefreshCommandStatus();
@@ -533,6 +540,84 @@ namespace WolvenKit.Views.Tools
             }
         }
         
+        [RelayCommand(CanExecute = nameof(CanPasteSelection))]
+        private void OverwriteSelectionWithPaste()
+        {
+            if (ItemsSource is not ICollectionView collectionView)
+            {
+                return;
+            }
+
+            using (collectionView.DeferRefresh())
+            {
+                foreach (var group in GetSelectedChunks()
+                             .GroupBy(chunk => chunk.Parent))
+                {
+                    
+                    if (group.FirstOrDefault() is not ChunkViewModel cvm)
+                    {
+                        continue;
+                    }
+
+                    cvm.DeleteNodesInParent(group.ToList());
+                    group.Key.PasteSelectionAtIndex(cvm.NodeIdxInParent);
+                }
+            }
+        }
+        
+        [RelayCommand(CanExecute = nameof(CanPasteSelection))]
+        private void PasteSelection()
+        {
+            if (ItemsSource is not ICollectionView collectionView)
+            {
+                return;
+            }
+
+            using (collectionView.DeferRefresh())
+            {
+                foreach (var group in GetSelectedChunks()
+                             .GroupBy(chunk => chunk.Parent))
+                {
+                    if (group.FirstOrDefault() is not ChunkViewModel cvm )
+                    {
+                        continue;
+                    }
+
+                    group.Key.PasteSelectionAtIndex(cvm.NodeIdxInParent);
+                }
+            }
+        }
+
+        private bool CanDeleteSelection() => SelectedItem is ChunkViewModel;
+        private bool CanPasteSelection() => SelectedItem is ChunkViewModel cvm && cvm.CanPasteSelection();
+
+        [RelayCommand(CanExecute = nameof(CanDeleteSelection))]
+        private void DeleteAllButSelection()
+        {
+            if (ItemsSource is not ICollectionView collectionView)
+            {
+                return;
+            }
+
+            using (collectionView.DeferRefresh())
+            {
+                foreach (var chunkSiblings in GetSelectedChunks()
+                             .GroupBy(chunk => chunk.Parent)
+                             .Select(group => group.ToList()))
+                {
+                    if (chunkSiblings.FirstOrDefault() is not ChunkViewModel cvm || cvm.Parent is null)
+                    {
+                        continue;
+                    }
+
+                    var chunksToDelete = cvm.Parent.TVProperties.Except(chunkSiblings).ToList();
+
+                    cvm.DeleteNodesInParent(chunksToDelete);
+                }
+            }
+        }
+
+
         private bool CanGenerateMissingMaterials() => SelectedItem is ChunkViewModel
         {
             ResolvedData: CMesh,

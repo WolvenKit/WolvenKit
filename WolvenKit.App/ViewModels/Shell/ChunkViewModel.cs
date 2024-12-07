@@ -2349,7 +2349,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             if (Data is IRedBaseHandle irbh)
             {
-                RedDocumentTabViewModel.CopiedChunk = irbh;
+                RedDocumentTabViewModel.SetCopiedChunk(irbh);
             }
         }
         catch (Exception ex) { _loggerService.Error(ex); }
@@ -2386,7 +2386,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 {
                     destinationHandle.SetValue(sourceHandle.GetValue());
                     RecalculateProperties(destinationHandle);
-                    RedDocumentTabViewModel.CopiedChunk = null;
+                    RedDocumentTabViewModel.SetCopiedChunk(null);
                 }
 
                 break;
@@ -2398,13 +2398,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 {
                     Data = CHandle.Parse(sourceHandle.InnerType, sourceHandle.GetValue());
                     RecalculateProperties(Data);
-                    RedDocumentTabViewModel.CopiedChunk = null;
+                    RedDocumentTabViewModel.SetCopiedChunk(null);
                 }
                 else if (PropertyType.GetGenericTypeDefinition() == typeof(CWeakHandle<>))
                 {
                     Data = CWeakHandle.Parse(sourceHandle.InnerType, sourceHandle.GetValue());
                     RecalculateProperties(Data);
-                    RedDocumentTabViewModel.CopiedChunk = null;
+                    RedDocumentTabViewModel.SetCopiedChunk(null);
                 }
 
                 break;
@@ -2719,7 +2719,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             // can't be merged with next block; will cause compiler errors
             if (Parent.Data is IRedBufferPointer)
             {
-                RedDocumentTabViewModel.CopiedChunks.Clear();
+                RedDocumentTabViewModel.ClearCopiedChunks();
                 foreach (var i in fullselection)
                 {
                     AddToCopiedChunks(i);
@@ -2727,7 +2727,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
             else if (Parent.Data is IRedArray)
             {
-                RedDocumentTabViewModel.CopiedChunks.Clear();
+                RedDocumentTabViewModel.ClearCopiedChunks();
                 foreach (var i in fullselection)
                 {
                     AddToCopiedChunks(i);
@@ -2750,14 +2750,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         RefreshContextMenuFlags();
     }
 
-
-    private bool CanPasteSelection()
+    public bool CanPasteSelection()
     {
-        var copiedChunks = RedDocumentTabViewModel.CopiedChunks;
-        if (copiedChunks.Count == 0 && RedDocumentTabViewModel.CopiedChunk is not null)
-        {
-            copiedChunks.Add(RedDocumentTabViewModel.CopiedChunk);
-        }
+        var copiedChunks = RedDocumentTabViewModel.GetCopiedChunks();
 
         if (copiedChunks.Count == 0 ||
             (ResolvedData is not IRedArray && Parent is not { ResolvedData: IRedArray }))
@@ -2776,7 +2771,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         return copiedChunks.All(c => CheckTypeCompatibility(innerType!, c.GetType()) != TypeCompability.None);
-    } // TODO RelayCommand check notify
+    }
 
     private bool CanCopyArrayContents() => IsArray && Properties.Count > 0 && !Properties[0].IsArray;
 
@@ -2787,7 +2782,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             .Select(_ => _.Data.NotNull())
             .ToList();
 
-        RedDocumentTabViewModel.CopiedChunks.Clear();
+        RedDocumentTabViewModel.ClearCopiedChunks();;
         foreach (var i in fullselection)
         {
             AddToCopiedChunks(i);
@@ -2804,7 +2799,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         DeleteAll();
-        PasteSelectionInternal(-1);
+        PasteSelectionAtIndex(-1);
     }
     
 
@@ -2818,7 +2813,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         DeleteSelection();
-        PasteSelectionInternal(insertAtIndex);
+        PasteSelectionAtIndex(insertAtIndex);
     }
 
     [RelayCommand(CanExecute = nameof(CanPasteSelection))]
@@ -2830,20 +2825,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             insertAtIndex = lst.OfType<ChunkViewModel>().Where(chunk => chunk.IsSelected).FirstOrDefault()?.NodeIdxInParent ?? -1;
         }
 
-        PasteSelectionInternal(insertAtIndex);
+        PasteSelectionAtIndex(insertAtIndex);
     }
 
 
-    private void PasteSelectionInternal(int insertAtIndex = -1)
+    public void PasteSelectionAtIndex(int insertAtIndex = -1)
     {
         ArgumentNullException.ThrowIfNull(Parent);
 
-        var copiedChunks = RedDocumentTabViewModel.CopiedChunks;
-
-        if (copiedChunks.Count == 0 && RedDocumentTabViewModel.CopiedChunk is not null)
-        {
-            copiedChunks.Add(RedDocumentTabViewModel.CopiedChunk);
-        }
+        var copiedChunks = RedDocumentTabViewModel.GetCopiedChunks();
 
         if (copiedChunks.Count == 0)
         {
@@ -2859,9 +2849,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             var index = insertAtIndex >= 0 ? insertAtIndex : Parent.GetIndexOf(this) + 1;
 
-            for (var i = 0; i < RedDocumentTabViewModel.CopiedChunks.Count; i++)
+            for (var i = 0; i < copiedChunks.Count; i++)
             {
-                var e = RedDocumentTabViewModel.CopiedChunks[i];
+                var e = copiedChunks[i];
 
                 if (ResolvedData is IRedBufferPointer db)
                 {
@@ -2887,7 +2877,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
                 if (PropertyType.IsAssignableTo(typeof(IRedArray)))
                 {
-                    if (InsertChild(-1, e))
+                    if (index == -1 || index > Properties.Count)
+                    {
+                        index = Properties.Count;
+                    }
+                    if (InsertChild(index, e))
                     {
                         //RDTDataViewModel.CopiedChunk = null;
                     }
@@ -4089,11 +4083,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             if (elem.GetType().IsValueType)
             {
-                RedDocumentTabViewModel.CopiedChunks.Add(elem);
+                RedDocumentTabViewModel.AddToCopiedChunks(elem);
             }
             else if (elem is IRedCloneable irc)
             {
-                RedDocumentTabViewModel.CopiedChunks.Add((IRedType)irc.DeepCopy());
+                RedDocumentTabViewModel.AddToCopiedChunks((IRedType)irc.DeepCopy());
             }
             else if (elem is worldNodeData)
             {
@@ -4103,7 +4097,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 var copied = RedJsonSerializer.Deserialize<worldNodeData>(tr);
                 if (copied is not null)
                 {
-                    RedDocumentTabViewModel.CopiedChunks.Add(copied);
+                    RedDocumentTabViewModel.AddToCopiedChunks(copied);
                 }
             }
             else
