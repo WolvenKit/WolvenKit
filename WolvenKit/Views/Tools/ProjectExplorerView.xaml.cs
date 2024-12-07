@@ -277,10 +277,12 @@ namespace WolvenKit.Views.Tools
         private void ExpandAllNodes(TreeNode node)
         {
             TreeGrid.ExpandAllNodes(node);
-            if (ViewModel != null)
+            if (ViewModel != null && string.IsNullOrEmpty(_currentFolderQuery))
             {
                 RecursiveStateSave(node.ChildNodes);
             }
+
+            return;
 
             void RecursiveStateSave(TreeNodes childNodes)
             {
@@ -297,11 +299,13 @@ namespace WolvenKit.Views.Tools
 
         private void CollapseAllNodes(TreeNode node)
         {
-            if (ViewModel != null)
+            if (ViewModel != null && string.IsNullOrEmpty(_currentFolderQuery))
             {
                 RecursiveStateSave(node.ChildNodes);
             }
             TreeGrid.CollapseAllNodes(node);
+
+            return;
             void RecursiveStateSave(TreeNodes childNodes)
             {
                 foreach (var childNode in childNodes)
@@ -489,11 +493,11 @@ namespace WolvenKit.Views.Tools
                 }
             }
 
-            if (e.Action != NotifyCollectionChangedAction.Remove || e.OldItems == null)
+            if (e.Action != NotifyCollectionChangedAction.Remove || e.OldItems == null || !string.IsNullOrEmpty(_currentFolderQuery))
             {
                 return;
             }
-
+            
             foreach (var item in e.OldItems)
             {
                 if (item is not TreeNode { Item: FileSystemModel { IsDirectory: true } fileSystemModel })
