@@ -453,6 +453,47 @@ namespace WolvenKit.Views.Documents
             }  
         }
 
+        private async void OnFindUnusedProjectFilesClick(object _, RoutedEventArgs e)
+        {
+            if (_projectManager.ActiveProject is null || CurrentTab?.FilePath is not string currentFile || !File.Exists(currentFile))
+            {
+                return;
+            }
+
+            var relativePath = currentFile.Replace(_projectManager.ActiveProject.ModDirectory, "");
+            _loggerService.Info("Reading references from file...");
+            var allReferences = await _projectManager.ActiveProject.GetAllReferences(
+                _progressService,
+                _loggerService,
+                [relativePath]
+            );
+
+            if (!allReferences.TryGetValue(relativePath, out var tmp) || tmp is not List<string> allUsedPaths)
+            {
+                _loggerService.Warning($"Failed to read used file paths from {relativePath}");
+                return;
+            }
+
+            var fileExtensions = allReferences.Values
+                .SelectMany(list => list.Select(Path.GetExtension))
+                .Distinct()
+                .Where(x => x is not (".json" or ".ent"))
+                .ToList();
+
+            var allModFiles = _projectManager.ActiveProject.ModFiles.Where(f => fileExtensions.Contains(Path.GetExtension(f))).ToList();
+            var unusedMeshPaths = allModFiles.Where(f => !allUsedPaths.Contains(f)).ToList();
+
+            if (unusedMeshPaths.Count == 0)
+            {
+                _loggerService.Success("Nothing found! You're good!");
+                return;
+            }
+
+            _loggerService.Info("Done!");
+            Interactions.ShowBrokenReferencesList(("Unused files in project",
+                new Dictionary<string, List<string>>() { { relativePath, unusedMeshPaths } }));
+        }
+
         private MenuItem? _openMenu;
 
         private static List<string> _facialSetups = [];

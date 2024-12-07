@@ -6,6 +6,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using ReactiveUI;
 using Syncfusion.Windows.Controls.RichTextBoxAdv;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.ViewModels.Dialogs;
@@ -30,6 +31,7 @@ public partial class DeleteOrMoveFilesListDialogView : IViewFor<DeleteOrMoveFile
     public bool? ShowDialog(Window owner)
     {
         Owner = owner;
+        UIHelper.SetMaxHeightToScreenHeight(owner);
         return ShowDialog();
     }
 
