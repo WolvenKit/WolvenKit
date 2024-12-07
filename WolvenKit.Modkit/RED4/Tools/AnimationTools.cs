@@ -662,11 +662,15 @@ namespace WolvenKit.Modkit.RED4
                     //      Can steal code from export, but better to refactor it properly.
                     _ => throw new Exception("Unexpected animation buffer type"),
                 };
-
+            var inplaceBuffer = copiedAnim.Animation!.Chunk!.AnimBuffer!.Chunk! switch
+                {
+                    animAnimationBufferCompressed compressed => compressed.InplaceCompressedBuffer,
+                    animAnimationBufferSimd simd => simd.InplaceCompressedBuffer,
+                    _ => throw new Exception("Unexpected animation buffer type"),
+                };
             // Need to extract just the part of the old buffer we need
-            var oldChunk = anims.AnimationDataChunks[(int)(uint)copiedDataAddress.UnkIndex].Buffer.Buffer;
-            var span = oldChunk.GetBytes()[(int)(uint)copiedDataAddress.FsetInBytes..(int)(uint)(copiedDataAddress.FsetInBytes + copiedDataAddress.ZeInBytes)];
-
+            var oldChunk = inplaceBuffer == null ? anims.AnimationDataChunks[(int)(uint)copiedDataAddress.UnkIndex].Buffer.Buffer : inplaceBuffer.Buffer;
+            var span =  inplaceBuffer == null ? oldChunk.GetBytes()[(int)(uint)copiedDataAddress.FsetInBytes..(int)(uint)(copiedDataAddress.FsetInBytes + copiedDataAddress.ZeInBytes)] : oldChunk.GetBytes();
             // Individual chonker for every animation
             var newBuffer = new SerializationDeferredDataBuffer(span);
             var newChunk = new animAnimDataChunk() { Buffer = newBuffer, };
@@ -674,9 +678,7 @@ namespace WolvenKit.Modkit.RED4
             copiedDataAddress.UnkIndex = (uint)newAnimChunks.Count;
             copiedDataAddress.FsetInBytes = 0;
             copiedDataAddress.ZeInBytes = (uint)span.Length;
-
             // ...Do we need to polE3 morph to set TempBuffer also?
-
             // Otherwise should be peachy keen now, nobody gonna mess with our buffer...
             newAnimChunks.Add(newChunk);
             newAnimSetEntries.Add(copiedAnim);
