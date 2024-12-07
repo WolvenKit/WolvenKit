@@ -731,7 +731,8 @@ public sealed partial class Cp77Project(string location, string name, string mod
                 
                 // Update progress
                 var currentProgress = Interlocked.Increment(ref processedFiles) * progressIncrement;
-                progressService?.Report(currentProgress);
+                progressService.IsIndeterminate = false;
+                progressService.Report(currentProgress);
             });
         });
         progressService.Completed();

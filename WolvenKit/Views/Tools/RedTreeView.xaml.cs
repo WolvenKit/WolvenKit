@@ -376,25 +376,6 @@ namespace WolvenKit.Views.Tools
 
         private async Task DuplicateSelectedChunks(bool preserveIndex = false)
         {
-            var chunks = GetSelectedChunks();
-
-            if (!preserveIndex)
-            {
-                var nodeIndices = chunks.Select(c => c.NodeIdxInParent).Order().ToList();
-                if (nodeIndices.Zip(nodeIndices.Skip(1), (a, b) => b - a).Any(diff => diff != 1))
-                {
-                    preserveIndex = true;
-                }
-            }
-            
-
-            var tasks = chunks.Select(cvm => cvm.DuplicateChunkAsync(preserveIndex ? -1 : cvm.NodeIdxInParent + chunks.Count)).ToList();
-
-            var duplicatedChunks = await Task.WhenAll(tasks);
-
-            var newChunks = duplicatedChunks.Where(newChunk => newChunk != null).ToList();
-
-
             if (ItemsSource is not ICollectionView collectionView)
             {
                 return;
@@ -402,6 +383,24 @@ namespace WolvenKit.Views.Tools
 
             using (collectionView.DeferRefresh())
             {
+                var chunks = GetSelectedChunks();
+
+                if (!preserveIndex)
+                {
+                    var nodeIndices = chunks.Select(c => c.NodeIdxInParent).Order().ToList();
+                    if (nodeIndices.Zip(nodeIndices.Skip(1), (a, b) => b - a).Any(diff => diff != 1))
+                    {
+                        preserveIndex = true;
+                    }
+                }
+
+
+                var tasks = chunks.Select(cvm => cvm.DuplicateChunkAsync(preserveIndex ? -1 : cvm.NodeIdxInParent + chunks.Count)).ToList();
+
+                var duplicatedChunks = await Task.WhenAll(tasks);
+
+                var newChunks = duplicatedChunks.Where(newChunk => newChunk != null).ToList();
+
                 foreach (var cvm in chunks)
                 {
                     cvm.IsSelected = false;
@@ -429,11 +428,19 @@ namespace WolvenKit.Views.Tools
         [RelayCommand]
         private async Task DuplicateSelectionAsNew()
         {
-            var chunks = GetSelectedChunks();
-
-            foreach (var cvm in chunks)
+            if (ItemsSource is not ICollectionView collectionView)
             {
-                await cvm.DuplicateChunkAsNewAsync();
+                return;
+            }
+
+            using (collectionView.DeferRefresh())
+            {
+                var chunks = GetSelectedChunks();
+
+                foreach (var cvm in chunks)
+                {
+                    await cvm.DuplicateChunkAsNewAsync();
+                }
             }
         }
 
@@ -487,7 +494,19 @@ namespace WolvenKit.Views.Tools
 
             GetRoot().Tab?.Parent.SetIsDirty(true);
 
+            SetSelectedItems(selectedChunkViewModels);
+          
             _progressService.IsIndeterminate = false;
+        }
+
+        // Re-select nodes, enforcing change detection. Without setting it to null first, e.g. search&replace won't work.
+        private void SetSelectedItems(List<ChunkViewModel> selectedChunkViewModels)
+        {
+            SetCurrentValue(SelectedItemsProperty, null);
+            SetCurrentValue(SelectedItemProperty, null);
+
+            SetCurrentValue(SelectedItemsProperty, new ObservableCollection<object>(selectedChunkViewModels));
+            SetCurrentValue(SelectedItemProperty, selectedChunkViewModels.LastOrDefault());
         }
 
         [RelayCommand]
@@ -587,9 +606,22 @@ namespace WolvenKit.Views.Tools
 
         private void RefreshSelectedItemsContextMenuFlags()
         {
-            foreach (var chunkViewModel in GetSelectedChunks())
+            if (ItemsSource is not ICollectionView collectionView)
             {
-                chunkViewModel.RefreshContextMenuFlags();
+                foreach (var chunkViewModel in GetSelectedChunks())
+                {
+                    chunkViewModel.RefreshContextMenuFlags();
+                }
+
+                return;
+            }
+
+            using (collectionView.DeferRefresh())
+            {
+                foreach (var chunkViewModel in GetSelectedChunks())
+                {
+                    chunkViewModel.RefreshContextMenuFlags();
+                }
             }
         }
 
