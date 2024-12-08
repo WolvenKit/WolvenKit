@@ -28,16 +28,13 @@ public partial class ChunkViewModel
     [ObservableProperty] private bool _isCtrlKeyPressed;
     [ObservableProperty] private bool _isAltKeyPressed;
     
-    [ObservableProperty] private bool _shouldShowDuplicate;
-
     [ObservableProperty] private bool _isMaterial;
 
     [ObservableProperty] private bool _isMaterialArray;
     [ObservableProperty] private bool _shouldShowCreateMatDef;
     [ObservableProperty] private bool _shouldShowCreateExternalMatDef;
 
-    [ObservableProperty] private bool _shouldShowDuplicateAsNew;
-    [ObservableProperty] private bool _shouldShowDuplicateInplace;
+    [ObservableProperty] private bool _duplicatesAsNew;
 
     [ObservableProperty] private bool _isMultipleItemsSelected;
     [ObservableProperty] private bool _isMultipleItemsCopied;
@@ -56,12 +53,7 @@ public partial class ChunkViewModel
 
         IsMaterialArray = ResolvedData is CArray<IMaterial> or CArray<CResourceAsyncReference<IMaterial>>;
 
-        ShouldShowDuplicateAsNew =
-            IsInArray && !IsShiftKeyPressed &&
-            ResolvedData is worldCompiledEffectPlacementInfo or CMeshMaterialEntry;
-
-        ShouldShowDuplicateInplace = !ShouldShowDuplicateAsNew && IsInArray && IsShiftKeyPressed;
-        ShouldShowDuplicate = !ShouldShowDuplicateAsNew && IsInArray && !IsShiftKeyPressed;
+        DuplicatesAsNew = ResolvedData is worldCompiledEffectPlacementInfo or CMeshMaterialEntry;
 
         IsMultipleItemsSelected = Parent?.Tab?.SelectedChunks is ObservableCollection<object> chunks && chunks.Count > 1;
     }
@@ -70,12 +62,10 @@ public partial class ChunkViewModel
     {
         GenerateChildCruidsCommand.NotifyCanExecuteChanged();
         CopyChildNamesCommand.NotifyCanExecuteChanged();
+        ReindexChildDataIndexPropertiesCommand.NotifyCanExecuteChanged();
     }
 
-    public bool IsMaterialDefinition()
-    {
-        return ResolvedData is CArray<CMeshMaterialEntry> || Parent?.ResolvedData is CArray<CMeshMaterialEntry>;
-    }
+    public bool IsMaterialDefinition() => ResolvedData is CArray<CMeshMaterialEntry> || Parent?.ResolvedData is CArray<CMeshMaterialEntry>;
 
     [RelayCommand(CanExecute = nameof(IsMaterialDefinition))]
     private void ToggleMaterialDefinitionIsExternal()
@@ -122,7 +112,6 @@ public partial class ChunkViewModel
         CalculateDescriptor();
 
         // now rename the chunks
-
         var appCvm = Parent?.Parent?.GetRootModel().GetPropertyFromPath("appearances");
         if (appCvm?.ResolvedData is not CArray<CHandle<meshMeshAppearance>> appearances)
         {

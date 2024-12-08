@@ -2349,16 +2349,20 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             if (Data is IRedBaseHandle irbh)
             {
-                RedDocumentTabViewModel.SetCopiedChunk(irbh);
+                RedDocumentTabViewModel.CopiedChunk = irbh;
             }
         }
         catch (Exception ex) { _loggerService.Error(ex); }
     }
 
-    protected bool IsHandle() =>
-        PropertyType.IsAssignableTo(typeof(IRedBaseHandle)) && (
-        PropertyType.GetGenericTypeDefinition() == typeof(CHandle<>) ||
-        PropertyType.GetGenericTypeDefinition() == typeof(CWeakHandle<>));
+    public static bool IsHandle(IRedType? irb)
+    {
+        var propertyType = irb?.GetType();
+        return propertyType is not null &&
+               propertyType.IsAssignableTo(typeof(IRedBaseHandle)) && (
+                   propertyType.GetGenericTypeDefinition() == typeof(CHandle<>) ||
+                   propertyType.GetGenericTypeDefinition() == typeof(CWeakHandle<>));
+    }
 
     private bool CanPasteHandle()
     {
@@ -2367,49 +2371,53 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return false;
         }
 
-        return IsHandle();
-    } // TODO RelayCommand check notify
+        return PropertyType.GetGenericTypeDefinition() == typeof(CHandle<>) ||
+               PropertyType.GetGenericTypeDefinition() == typeof(CWeakHandle<>);
+    }
 
-    [RelayCommand(CanExecute = nameof(CanPasteHandle))]
-    private void PasteHandle()
+    public bool PasteHandle(IRedBaseHandle sourceHandle)
     {
-        if (RedDocumentTabViewModel.CopiedChunk is not IRedBaseHandle sourceHandle)
+        if (sourceHandle.GetValue() is not RedBaseClass value)
         {
-            return;
+            return false;
         }
 
         switch (Data)
         {
             case IRedBaseHandle destinationHandle:
             {
-                if (destinationHandle.InnerType.IsAssignableFrom(sourceHandle.GetValue().NotNull().GetType()))
+                if (!destinationHandle.InnerType.IsInstanceOfType(value.NotNull()))
                 {
-                    destinationHandle.SetValue(sourceHandle.GetValue());
-                    RecalculateProperties(destinationHandle);
-                    RedDocumentTabViewModel.SetCopiedChunk(null);
+                    return false;
                 }
 
-                break;
+                destinationHandle.SetValue(value);
+                RecalculateProperties(destinationHandle);
+
+                return true;
             }
             case RedDummy:
             case null:
             {
                 if (PropertyType.GetGenericTypeDefinition() == typeof(CHandle<>))
                 {
-                    Data = CHandle.Parse(sourceHandle.InnerType, sourceHandle.GetValue());
+                    Data = CHandle.Parse(sourceHandle.InnerType, value);
                     RecalculateProperties(Data);
-                    RedDocumentTabViewModel.SetCopiedChunk(null);
-                }
-                else if (PropertyType.GetGenericTypeDefinition() == typeof(CWeakHandle<>))
-                {
-                    Data = CWeakHandle.Parse(sourceHandle.InnerType, sourceHandle.GetValue());
-                    RecalculateProperties(Data);
-                    RedDocumentTabViewModel.SetCopiedChunk(null);
+                    return true;
                 }
 
-                break;
+                if (PropertyType.GetGenericTypeDefinition() == typeof(CWeakHandle<>))
+                {
+                    Data = CWeakHandle.Parse(sourceHandle.InnerType, value);
+                    RecalculateProperties(Data);
+                    return true;
+                }
+
+                return false;
             }
         }
+
+        return false;
     }
 
     private bool CanResetObject() => Parent != null;
@@ -2443,6 +2451,20 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             RefreshContextMenuFlags();
         }
         catch (Exception ex) { _loggerService.Error(ex); }
+    }
+
+    public IRedType? CopyData()
+    {
+        try
+        {
+            return Data is IRedCloneable irc ? (IRedType)irc.DeepCopy() : Data;
+        }
+        catch (Exception ex)
+        {
+            _loggerService.Error(ex);
+        }
+
+        return null;
     }
 
     private bool CanPasteChunks()
@@ -2696,7 +2718,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         Parent?.GetPropertyChild("localMaterialBuffer")?.GetPropertyChild("materials")?.RecalculateProperties();
     }
 
-    private bool CanCopySelection() => IsInArray && Parent is not null;   // TODO RelayCommand check notify
+    public bool CanCopySelection() => IsInArray && Parent is not null; // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanCopySelection))]
     private void CopySelection()
     {
@@ -2750,9 +2772,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         RefreshContextMenuFlags();
     }
 
-    public bool CanPasteSelection()
+    public bool CanPasteSelection(bool singleSelectOnly = false)
     {
-        var copiedChunks = RedDocumentTabViewModel.GetCopiedChunks();
+        if (singleSelectOnly && RedDocumentTabViewModel.CopiedChunk is null)
+        {
+            return false;
+        }
+
+        var copiedChunks = singleSelectOnly ? [RedDocumentTabViewModel.CopiedChunk!] : RedDocumentTabViewModel.GetCopiedChunks();
 
         if (copiedChunks.Count == 0 ||
             (ResolvedData is not IRedArray && Parent is not { ResolvedData: IRedArray }))
@@ -2770,7 +2797,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             innerType = pArr.InnerType;
         }
 
-        return copiedChunks.All(c => CheckTypeCompatibility(innerType!, c.GetType()) != TypeCompability.None);
+        return innerType is not null && copiedChunks.All(c => CheckTypeCompatibility(innerType, c.GetType()) != TypeCompability.None);
     }
 
     private bool CanCopyArrayContents() => IsArray && Properties.Count > 0 && !Properties[0].IsArray;
@@ -2789,53 +2816,51 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    [RelayCommand(CanExecute = nameof(CanPasteSelection))]
-    private void ClearAndPasteSelection()
-    {
-        if (IsInArray && Parent is not null)
-        {
-            Parent.ClearAndPasteSelection();
-            return;
-        }
-
-        DeleteAll();
-        PasteSelectionAtIndex(-1);
-    }
-    
-
-    [RelayCommand(CanExecute = nameof(CanPasteSelection))]
-    private void OverwriteSelectionWithPaste()
-    {
-        var insertAtIndex = -1;
-        if (Tab?.SelectedChunks is IList lst)
-        {
-            insertAtIndex = lst.OfType<ChunkViewModel>().Where(chunk => chunk.IsSelected).FirstOrDefault()?.NodeIdxInParent ?? -1;
-        }
-
-        DeleteSelection();
-        PasteSelectionAtIndex(insertAtIndex);
-    }
-
-    [RelayCommand(CanExecute = nameof(CanPasteSelection))]
-    private void PasteSelection()
-    {
-        var insertAtIndex = -1;
-        if (Tab?.SelectedChunks is IList lst)
-        {
-            insertAtIndex = lst.OfType<ChunkViewModel>().Where(chunk => chunk.IsSelected).FirstOrDefault()?.NodeIdxInParent ?? -1;
-        }
-
-        PasteSelectionAtIndex(insertAtIndex);
-    }
+    // [RelayCommand(CanExecute = nameof(CanPasteSelection))]
+    // private void ClearAndPasteSelection()
+    // {
+    //     if (IsInArray && Parent is not null)
+    //     {
+    //         Parent.ClearAndPasteSelection();
+    //         return;
+    //     }
+    //
+    //     DeleteAll();
+    //     PasteAtIndex(RedDocumentTabViewModel.GetCopiedChunks(), -1);
+    // }
 
 
-    public void PasteSelectionAtIndex(int insertAtIndex = -1)
+    // [RelayCommand(CanExecute = nameof(CanPasteSelection))]
+    // private void OverwriteSelectionWithPaste()
+    // {
+    //     var insertAtIndex = -1;
+    //     if (Tab?.SelectedChunks is IList lst)
+    //     {
+    //         insertAtIndex = lst.OfType<ChunkViewModel>().FirstOrDefault(chunk => chunk.IsSelected)?.NodeIdxInParent ?? -1;
+    //     }
+    //
+    //     DeleteSelection();
+    //     PasteAtIndex(RedDocumentTabViewModel.GetCopiedChunks(), insertAtIndex);
+    // }
+
+    // [RelayCommand(CanExecute = nameof(CanPasteSelection))]
+    // private void PasteSelection()
+    // {
+    //     var insertAtIndex = -1;
+    //     if (Tab?.SelectedChunks is IList lst)
+    //     {
+    //         insertAtIndex = lst.OfType<ChunkViewModel>().Where(chunk => chunk.IsSelected).FirstOrDefault()?.NodeIdxInParent ?? -1;
+    //     }
+    //
+    //     PasteAtIndex(RedDocumentTabViewModel.GetCopiedChunks(), insertAtIndex);
+    // }
+
+
+    public void PasteAtIndex(List<IRedType> copiedData, int insertAtIndex = -1)
     {
         ArgumentNullException.ThrowIfNull(Parent);
 
-        var copiedChunks = RedDocumentTabViewModel.GetCopiedChunks();
-
-        if (copiedChunks.Count == 0)
+        if (copiedData.Count == 0)
         {
             return;
         }
@@ -2849,9 +2874,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             var index = insertAtIndex >= 0 ? insertAtIndex : Parent.GetIndexOf(this) + 1;
 
-            for (var i = 0; i < copiedChunks.Count; i++)
+            for (var i = 0; i < copiedData.Count; i++)
             {
-                var e = copiedChunks[i];
+                var e = copiedData[i];
 
                 if (ResolvedData is IRedBufferPointer db)
                 {
@@ -3422,8 +3447,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private TypeCompability CheckTypeCompatibility(Type destType, Type srcType)
+    private TypeCompability CheckTypeCompatibility(Type? destType, Type? srcType)
     {
+        if (destType is null || srcType is null)
+        {
+            return TypeCompability.None;
+        }
+        
         if (destType.IsAssignableFrom(srcType))
         {
             return TypeCompability.Assignable;
