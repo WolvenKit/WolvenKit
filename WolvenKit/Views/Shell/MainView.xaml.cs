@@ -47,7 +47,8 @@ namespace WolvenKit.Views.Shell
                 Disposable.Create(dockingAdapter.SaveLayout).DisposeWith(disposables);
 
                 Interactions.ShowConfirmation = ShowConfirmation;
-
+                Interactions.ShowQuestionYesNo = ShowQuestionYesNo;
+                
                 Interactions.ShowLaunchProfilesView = () =>
                 {
                     LaunchProfilesView dialog = new();
@@ -118,6 +119,12 @@ namespace WolvenKit.Views.Shell
         private void FadeOut_Completed(object sender, EventArgs e) => ViewModel.FinishedClosingModal();
 
         #region interactions
+
+        private static bool ShowQuestionYesNo((string, string) input)
+        {
+            var messageResult = ShowConfirmation((input.Item1, input.Item2, WMessageBoxImage.Question, WMessageBoxButtons.YesNo));
+            return messageResult == WMessageBoxResult.Yes;
+        }
 
         private static WMessageBoxResult ShowConfirmation((string, string, WMessageBoxImage, WMessageBoxButtons) input)
         {

@@ -43,6 +43,8 @@ public static class Interactions
     public static Func<(string, string, WMessageBoxImage, WMessageBoxButtons), WMessageBoxResult> ShowConfirmation { get; set; } 
         = _ => throw new NotImplementedException();
 
+    public static Func<(string, string), bool> ShowQuestionYesNo { get; set; } = _ => throw new NotImplementedException();
+
     public static Func<IEnumerable<string>, bool> DeleteFiles { get; set; } = _ => throw new NotImplementedException();
 
     public static Func<string, string> Rename { get; set; } = _ => throw new NotImplementedException();
