@@ -722,6 +722,8 @@ namespace WolvenKit.Views.Documents
             return isChanged;
         }
 
+        private const int s_maxNumberReplacerAppearances = 100;
+
         private void OnConvertToPhotoModeClick(object sender, RoutedEventArgs e)
         {
             if (RootChunk?.ResolvedData is not appearanceAppearanceResource)
@@ -743,45 +745,47 @@ namespace WolvenKit.Views.Documents
 
             var photoModeApp = dialog.ViewModel?.SelectedApp;
             var renameAppearances = dialog.ViewModel?.RenameEntries ?? false;
+            var appearanceChildren = RootChunk.GetPropertyChild("appearances")?.Properties
+                .Where(cvm => cvm.ResolvedData is appearanceAppearanceDefinition)
+                .ToList() ?? [];
 
-            if (!renameAppearances && string.IsNullOrEmpty(photoModeApp))
+            // nothing to do
+            if (appearanceChildren.Count == 0 || (!renameAppearances && string.IsNullOrEmpty(photoModeApp)))
             {
                 return;
             }
 
-            var result = Interactions.ShowConfirmation((
-                "You can't un-do this. Are you sure?",
-                "Convert .app file?",
-                WMessageBoxImage.Question,
-                WMessageBoxButtons.YesNo));
-
-            if (result != WMessageBoxResult.Yes)
+            // user clicked cancel
+            if (!Interactions.ShowQuestionYesNo(("You can't un-do this. Are you sure?", "Convert .app file?")))
             {
                 return;
             }
             
             if (renameAppearances)
             {
-                var appearanceChildren =
-                    (RootChunk.GetPropertyChild("appearances")?.Properties.ToList() ?? []).Where(cvm =>
-                        cvm.ResolvedData is appearanceAppearanceDefinition).ToList();
-
-                if (!appearanceChildren.Any())
+                if (appearanceChildren.Count > s_maxNumberReplacerAppearances)
                 {
-                    return;
-                }
+                    var message = string.Join(Environment.NewLine,
+                    [
+                        $"Nibbles Replacer only supports {s_maxNumberReplacerAppearances} appearances.",
+                        "Your app has ${appearanceChildren.Count}.",
+                        "Do you want to convert the extra appearances anyway?",
+                    ]);
 
-                if (appearanceChildren.Count > 99)
-                {
-                    _loggerService.Warning("Your .app has more than 99 appearances - Nibbles Replacer only supports 99.");
-                    appearanceChildren = appearanceChildren.Take(99).ToList();
+                    if (!Interactions.ShowQuestionYesNo((message, "Too many appearances!")))
+                    {
+                        appearanceChildren = appearanceChildren.Take(s_maxNumberReplacerAppearances).ToList();
+                    }
+                    
                 }
 
                 var counter = 01;
                 foreach (var appNode in appearanceChildren)
                 {
-                    // type check has already been done
-                    ((appearanceAppearanceDefinition)appNode.ResolvedData).Name = $"appearance_{counter:D2}";
+                    // type check has already been done when selecting the nodes
+                    var resolvedData = (appearanceAppearanceDefinition)appNode.ResolvedData;
+
+                    resolvedData.Name = counter < 100 ? $"appearance_{counter:D2}" : $"appearance_{counter:D3}";
                     counter += 1;
                     appNode.RecalculateProperties();
                 }
