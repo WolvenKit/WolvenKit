@@ -47,6 +47,7 @@ namespace WolvenKit.Views.Tools
             InitializeComponent();
 
             DataContextChanged += OnDataContextChanged;
+            RedDocumentTabViewModel.OnCopiedChunkChanged += RefreshCommandStatus;
 
             // Listen for the "UpdateFilteredItemsSource" message
             MessageBus.Current.Listen<string>("Command")
@@ -55,6 +56,8 @@ namespace WolvenKit.Views.Tools
 
             TreeView.ApplyTemplate();
         }
+
+        private void RefreshCommandStatus(object sender, EventArgs e) => RefreshCommandStatus();
 
         private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
@@ -367,6 +370,10 @@ namespace WolvenKit.Views.Tools
         private void RefreshCommandStatus()
         {
             DuplicateSelectionCommand.NotifyCanExecuteChanged();
+            OverwriteSelectionWithPasteCommand.NotifyCanExecuteChanged();
+            PasteSelectionCommand.NotifyCanExecuteChanged();
+            DeleteSelectionCommand.NotifyCanExecuteChanged();
+            DeleteAllButSelectionCommand.NotifyCanExecuteChanged();
             if (SelectedItem is ChunkViewModel chunk)
             {
                 chunk.RefreshCommandStatus();
@@ -376,25 +383,6 @@ namespace WolvenKit.Views.Tools
 
         private async Task DuplicateSelectedChunks(bool preserveIndex = false)
         {
-            var chunks = GetSelectedChunks();
-
-            if (!preserveIndex)
-            {
-                var nodeIndices = chunks.Select(c => c.NodeIdxInParent).Order().ToList();
-                if (nodeIndices.Zip(nodeIndices.Skip(1), (a, b) => b - a).Any(diff => diff != 1))
-                {
-                    preserveIndex = true;
-                }
-            }
-            
-
-            var tasks = chunks.Select(cvm => cvm.DuplicateChunkAsync(preserveIndex ? -1 : cvm.NodeIdxInParent + chunks.Count)).ToList();
-
-            var duplicatedChunks = await Task.WhenAll(tasks);
-
-            var newChunks = duplicatedChunks.Where(newChunk => newChunk != null).ToList();
-
-
             if (ItemsSource is not ICollectionView collectionView)
             {
                 return;
@@ -402,6 +390,24 @@ namespace WolvenKit.Views.Tools
 
             using (collectionView.DeferRefresh())
             {
+                var chunks = GetSelectedChunks();
+
+                if (!preserveIndex)
+                {
+                    var nodeIndices = chunks.Select(c => c.NodeIdxInParent).Order().ToList();
+                    if (nodeIndices.Zip(nodeIndices.Skip(1), (a, b) => b - a).Any(diff => diff != 1))
+                    {
+                        preserveIndex = true;
+                    }
+                }
+
+
+                var tasks = chunks.Select(cvm => cvm.DuplicateChunkAsync(preserveIndex ? -1 : cvm.NodeIdxInParent + chunks.Count)).ToList();
+
+                var duplicatedChunks = await Task.WhenAll(tasks);
+
+                var newChunks = duplicatedChunks.Where(newChunk => newChunk != null).ToList();
+
                 foreach (var cvm in chunks)
                 {
                     cvm.IsSelected = false;
@@ -429,11 +435,19 @@ namespace WolvenKit.Views.Tools
         [RelayCommand]
         private async Task DuplicateSelectionAsNew()
         {
-            var chunks = GetSelectedChunks();
-
-            foreach (var cvm in chunks)
+            if (ItemsSource is not ICollectionView collectionView)
             {
-                await cvm.DuplicateChunkAsNewAsync();
+                return;
+            }
+
+            using (collectionView.DeferRefresh())
+            {
+                var chunks = GetSelectedChunks();
+
+                foreach (var cvm in chunks)
+                {
+                    await cvm.DuplicateChunkAsNewAsync();
+                }
             }
         }
 
@@ -487,7 +501,19 @@ namespace WolvenKit.Views.Tools
 
             GetRoot().Tab?.Parent.SetIsDirty(true);
 
+            SetSelectedItems(selectedChunkViewModels);
+          
             _progressService.IsIndeterminate = false;
+        }
+
+        // Re-select nodes, enforcing change detection. Without setting it to null first, e.g. search&replace won't work.
+        private void SetSelectedItems(List<ChunkViewModel> selectedChunkViewModels)
+        {
+            SetCurrentValue(SelectedItemsProperty, null);
+            SetCurrentValue(SelectedItemProperty, null);
+
+            SetCurrentValue(SelectedItemsProperty, new ObservableCollection<object>(selectedChunkViewModels));
+            SetCurrentValue(SelectedItemProperty, selectedChunkViewModels.LastOrDefault());
         }
 
         [RelayCommand]
@@ -500,20 +526,125 @@ namespace WolvenKit.Views.Tools
 
             using (collectionView.DeferRefresh())
             {
-                foreach (var chunkSiblings in GetSelectedChunks()
-                             .GroupBy(chunk => chunk.Parent)
-                             .Select(group => group.ToList()))
+                foreach (var kvp in GetSelectedChunks()
+                             .GroupBy(chunk => chunk.Parent))
                 {
-                    if (chunkSiblings.Count == 0)
+                    if (!kvp.Any())
                     {
                         continue;
                     }
 
+                    var chunkSiblings = kvp.ToList();
                     chunkSiblings.First().DeleteNodesInParent(chunkSiblings);
+                    
+                    chunkSiblings.First().Tab?.Parent.SetIsDirty(true);
+                    
+                    ReapplySearch(kvp.Key);
+                    
                 }
             }
         }
         
+        [RelayCommand(CanExecute = nameof(CanPasteSelection))]
+        private void OverwriteSelectionWithPaste()
+        {
+            if (ItemsSource is not ICollectionView collectionView)
+            {
+                return;
+            }
+
+            using (collectionView.DeferRefresh())
+            {
+                foreach (var group in GetSelectedChunks()
+                             .GroupBy(chunk => chunk.Parent))
+                {
+                    
+                    if (group.FirstOrDefault() is not ChunkViewModel cvm)
+                    {
+                        continue;
+                    }
+
+                    cvm.DeleteNodesInParent(group.ToList());
+                    group.Key.PasteSelectionAtIndex(cvm.NodeIdxInParent);
+
+                    ReapplySearch(group.Key);
+                }
+            }
+        }
+
+        private void ReapplySearch(ChunkViewModel chunk)
+        {
+            if (string.IsNullOrEmpty(RedDocumentViewToolbarModel.CurrentActiveSearch))
+            {
+                return;
+            }
+
+            // forde re-applying search
+            foreach (var chunkViewModel in chunk.Properties)
+            {
+                chunkViewModel.IsHiddenBySearch = false;
+            }
+
+            chunk.SetVisibilityStatusBySearchString(RedDocumentViewToolbarModel.CurrentActiveSearch);
+        }
+
+        [RelayCommand(CanExecute = nameof(CanPasteSelection))]
+        private void PasteSelection()
+        {
+            if (ItemsSource is not ICollectionView collectionView)
+            {
+                return;
+            }
+
+            using (collectionView.DeferRefresh())
+            {
+                foreach (var group in GetSelectedChunks()
+                             .GroupBy(chunk => chunk.Parent))
+                {
+                    if (group.FirstOrDefault() is not ChunkViewModel cvm )
+                    {
+                        continue;
+                    }
+
+                    group.Key.PasteSelectionAtIndex(cvm.NodeIdxInParent);
+                    ReapplySearch(group.Key);
+                }
+            }
+
+           
+        }
+
+        private bool CanDeleteSelection() => SelectedItem is ChunkViewModel;
+        private bool CanPasteSelection() => SelectedItem is ChunkViewModel cvm && cvm.CanPasteSelection();
+
+        [RelayCommand(CanExecute = nameof(CanDeleteSelection))]
+        private void DeleteAllButSelection()
+        {
+            if (ItemsSource is not ICollectionView collectionView)
+            {
+                return;
+            }
+
+            using (collectionView.DeferRefresh())
+            {
+                foreach (var chunkSiblings in GetSelectedChunks()
+                             .GroupBy(chunk => chunk.Parent)
+                             .Select(group => group.ToList()))
+                {
+                    if (chunkSiblings.FirstOrDefault() is not ChunkViewModel cvm || cvm.Parent is null)
+                    {
+                        continue;
+                    }
+
+                    var chunksToDelete = cvm.Parent.TVProperties.Except(chunkSiblings).ToList();
+
+                    cvm.DeleteNodesInParent(chunksToDelete);
+                    ReapplySearch(cvm.Parent);
+                }
+            }
+        }
+
+
         private bool CanGenerateMissingMaterials() => SelectedItem is ChunkViewModel
         {
             ResolvedData: CMesh,
@@ -587,9 +718,22 @@ namespace WolvenKit.Views.Tools
 
         private void RefreshSelectedItemsContextMenuFlags()
         {
-            foreach (var chunkViewModel in GetSelectedChunks())
+            if (ItemsSource is not ICollectionView collectionView)
             {
-                chunkViewModel.RefreshContextMenuFlags();
+                foreach (var chunkViewModel in GetSelectedChunks())
+                {
+                    chunkViewModel.RefreshContextMenuFlags();
+                }
+
+                return;
+            }
+
+            using (collectionView.DeferRefresh())
+            {
+                foreach (var chunkViewModel in GetSelectedChunks())
+                {
+                    chunkViewModel.RefreshContextMenuFlags();
+                }
             }
         }
 

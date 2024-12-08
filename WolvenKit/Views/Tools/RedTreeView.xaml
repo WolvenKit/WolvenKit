@@ -1053,8 +1053,8 @@
 
                 <!-- Paste Selection To Array/Buffer -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.PasteSelectionCommand,
-                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Command="{Binding Path=PasteSelectionCommand,
+                                      Source={x:Reference redTreeView}}"
                     Header="Paste Into Array/Buffer"
                     IsCheckable="False">
 
@@ -1095,8 +1095,8 @@
 
                 <!-- Overwrite Array/Buffer With Selection -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.ClearAndPasteSelectionCommand,
-                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Command="{Binding Path=ClearAndPasteSelectionCommand,
+                                      Source={x:Reference redTreeView}}"
                     Header="Overwrite Array/Buffer With Selection"
                     IsCheckable="False">
 
@@ -1137,8 +1137,8 @@
 
                 <!-- Overwrite Selection With Pasted -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.OverwriteSelectionWithPasteCommand,
-                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Command="{Binding Path=OverwriteSelectionWithPasteCommand,
+                                      Source={x:Reference redTreeView}}"
                     Header="Overwrite Current Selection With Copied"
                     IsCheckable="False">
                     <MenuItem.Style>
@@ -1197,8 +1197,8 @@
 
                 <!-- Delete item -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.DeleteItemCommand,
-                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Command="{Binding Path=DeleteSelectionCommand,
+                                      Source={x:Reference redTreeView}}"
                     Header="Delete Item in Array/Buffer"
                     IsCheckable="False">
 
@@ -1270,8 +1270,8 @@
                 <!-- Delete Everything But Selection -->
                 <MenuItem
                     Header="Delete All but Selection in Array/Buffer"
-                    Command="{Binding Path=PlacementTarget.Tag.DeleteAllButSelectionCommand,
-                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Command="{Binding Path=DeleteAllButSelectionCommand,
+                                      Source={x:Reference redTreeView}}"
                     IsCheckable="False">
 
 

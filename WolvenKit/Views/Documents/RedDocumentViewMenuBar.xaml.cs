@@ -771,10 +771,10 @@ namespace WolvenKit.Views.Documents
                     return;
                 }
 
-                if (appearanceChildren.Count > 20)
+                if (appearanceChildren.Count > 99)
                 {
-                    _loggerService.Warning("Your .app has more than 20 appearances - Nibbles Replacer only supports 20.");
-                    appearanceChildren = appearanceChildren.Take(20).ToList();
+                    _loggerService.Warning("Your .app has more than 99 appearances - Nibbles Replacer only supports 99.");
+                    appearanceChildren = appearanceChildren.Take(99).ToList();
                 }
 
                 var counter = 01;

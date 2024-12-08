@@ -122,6 +122,36 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
         }
     }
 
+    public static event EventHandler? OnCopiedChunkChanged;
+    public static void SetCopiedChunk(IRedType? chunk)
+    {
+        CopiedChunk = chunk;
+        OnCopiedChunkChanged?.Invoke(null, EventArgs.Empty);
+    }
+    
+    public static List<IRedType> GetCopiedChunks()
+    {
+        var ret = CopiedChunks ?? new List<IRedType>();
+        if (ret.Count == 0 && CopiedChunk is not null)
+        {
+            ret.Add(CopiedChunk);
+        }
+
+        return ret;
+    }
+    
+    public static void AddToCopiedChunks(IRedType chunk)
+    {
+        CopiedChunks.Add(chunk);
+        OnCopiedChunkChanged?.Invoke(null, EventArgs.Empty);
+    }
+    
+    public static void ClearCopiedChunks()
+    {
+        CopiedChunks.Clear();
+        OnCopiedChunkChanged?.Invoke(null, EventArgs.Empty);
+    }
+
     private bool CanRenameEmbeddedFile() => this is RDTDataViewModel data && data.IsEmbeddedFile;
     [RelayCommand(CanExecute = nameof(CanRenameEmbeddedFile))]
     private void RenameEmbeddedFile()
