@@ -542,17 +542,18 @@ public sealed partial class Cp77Project(string location, string name, string mod
         return relPath;
     }
 
-    public Task<Dictionary<string, List<string>>> GetAllReferences(IProgressService<double> progressService,
+    public Task<IDictionary<string, List<string>>> GetAllReferences(IProgressService<double> progressService,
         ILoggerService loggerService) => GetAllReferences(progressService, loggerService, new List<string>());
 
-    public async Task<Dictionary<string, List<string>>> GetAllReferences(IProgressService<double> progressService,
+    public async Task<IDictionary<string, List<string>>> GetAllReferences(IProgressService<double> progressService,
         ILoggerService loggerService, List<string> filePaths)
     {
         if (filePaths.Count == 0)
         {
             filePaths.AddRange(ModFiles);
         }
-        Dictionary<string, List<string>> references = new();
+
+        SortedDictionary<string, List<string>> references = new();
 
         progressService?.Report(0);
         var totalFiles = filePaths.Count;
@@ -688,24 +689,25 @@ public sealed partial class Cp77Project(string location, string name, string mod
                 }
             });
         });
-
+        
         // Order entries by file name
         return references.OrderBy(obj => obj.Key).ToDictionary(obj => obj.Key, obj => obj.Value);
     }
 
 
-    public Task<Dictionary<string, List<string>>> ScanForBrokenReferencePathsAsync(IArchiveManager archiveManager,
+    public Task<IDictionary<string, List<string>>> ScanForBrokenReferencePathsAsync(IArchiveManager archiveManager,
         ILoggerService loggerService, IProgressService<double> progressService) =>
-        ScanForBrokenReferencePathsAsync(archiveManager, loggerService, progressService, new Dictionary<string, List<string>>());
+        ScanForBrokenReferencePathsAsync(archiveManager, loggerService, progressService, new SortedDictionary<string, List<string>>());
 
-    public async Task<Dictionary<string, List<string>>> ScanForBrokenReferencePathsAsync(IArchiveManager archiveManager,
-        ILoggerService loggerService, IProgressService<double> progressService, Dictionary<string, List<string>> references)
+    public async Task<IDictionary<string, List<string>>> ScanForBrokenReferencePathsAsync(IArchiveManager archiveManager,
+        ILoggerService loggerService, IProgressService<double> progressService, IDictionary<string, List<string>> references)
     {
         if (references.Count == 0)
         {
             references.AddRange(await GetAllReferences(progressService, loggerService, []));
         }
-        Dictionary<string, List<string>> brokenReferences = new();
+
+        SortedDictionary<string, List<string>> brokenReferences = new();
 
         progressService.IsIndeterminate = true;
         progressService.Report(0);

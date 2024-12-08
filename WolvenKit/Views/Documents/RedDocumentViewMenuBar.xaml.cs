@@ -462,19 +462,19 @@ namespace WolvenKit.Views.Documents
 
             var relativePath = currentFile.Replace(_projectManager.ActiveProject.ModDirectory, "");
             _loggerService.Info("Reading references from file...");
-            var allReferences = await _projectManager.ActiveProject.GetAllReferences(
+            var referencesInFile = await _projectManager.ActiveProject.GetAllReferences(
                 _progressService,
                 _loggerService,
                 [relativePath]
             );
 
-            if (!allReferences.TryGetValue(relativePath, out var tmp) || tmp is not List<string> allUsedPaths)
+            if (!referencesInFile.TryGetValue(relativePath, out var tmp) || tmp is not List<string> allUsedPaths)
             {
                 _loggerService.Warning($"Failed to read used file paths from {relativePath}");
                 return;
             }
 
-            var fileExtensions = allReferences.Values
+            var fileExtensions = referencesInFile.Values
                 .SelectMany(list => list.Select(Path.GetExtension))
                 .Distinct()
                 .Where(x => x is not (".json" or ".ent"))
