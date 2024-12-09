@@ -393,9 +393,9 @@ public partial class ChunkViewModel
                 SetAppearanceChunkMask(appearance);
                 var componentsAryCvm = GetPropertyChild("components");
                 componentsAryCvm?.CalculateProperties();
-                if (componentsAryCvm?.Properties.FirstOrDefault(comp =>
-                        comp.ResolvedData is entMeshComponent m && m.Name == componentName) is ChunkViewModel
-                    componentCvm)
+                var matchingComponents = componentsAryCvm?.Properties.Where(comp =>
+                    comp.ResolvedData is entMeshComponent m && (componentName == "*" || m.Name == componentName)) ?? [];
+                foreach (var componentCvm in matchingComponents)
                 {
                     componentCvm.RecalculateProperties();
                     componentCvm.CalculateDescriptor();
@@ -420,45 +420,47 @@ public partial class ChunkViewModel
 
         void SetAppearanceChunkMask(appearanceAppearanceDefinition appDef)
         {
-            var component = appDef.Components.FirstOrDefault(comp => comp.Name == componentName);
-            if (component is not IRedMeshComponent meshComponent || (chunkMask is null && depotPath is null && meshAppearance is null))
+            foreach (var component in appDef.Components.Where(comp => componentName == "*" || comp.Name == componentName))
             {
-                return;
-            }
-
-            hasChanges = true;
-
-            if (chunkMask is CUInt64 value)
-            {
-                meshComponent.ChunkMask = value;
-            }
-
-
-            if (!string.IsNullOrEmpty(depotPath))
-            {
-                if (appDef.Components.FirstOrDefault(comp => comp.Name == depotPath) is IRedMeshComponent siblingComponent)
+                if (component is not IRedMeshComponent meshComponent || (chunkMask is null && depotPath is null && meshAppearance is null))
                 {
-                    meshComponent.Mesh = new CResourceAsyncReference<CMesh>(siblingComponent.Mesh.DepotPath);
+                    continue;
                 }
-                else
-                {
-                    meshComponent.Mesh = new CResourceAsyncReference<CMesh>((ResourcePath)depotPath);
-                }
-            }
 
-            if (!string.IsNullOrEmpty(meshAppearance))
-            {
-                if (appDef.Components.FirstOrDefault(comp => comp.Name == meshAppearance) is IRedMeshComponent siblingComponent)
+                hasChanges = true;
+
+                if (chunkMask is CUInt64 value)
                 {
-                    meshComponent.MeshAppearance = siblingComponent.MeshAppearance;
+                    meshComponent.ChunkMask = value;
                 }
-                else
+
+
+                if (!string.IsNullOrEmpty(depotPath))
                 {
-                    meshComponent.MeshAppearance = meshAppearance;
+                    if (appDef.Components.FirstOrDefault(comp => comp.Name == depotPath) is IRedMeshComponent siblingComponent)
+                    {
+                        meshComponent.Mesh = new CResourceAsyncReference<CMesh>(siblingComponent.Mesh.DepotPath);
+                    }
+                    else
+                    {
+                        meshComponent.Mesh = new CResourceAsyncReference<CMesh>((ResourcePath)depotPath);
+                    }
                 }
+
+                if (!string.IsNullOrEmpty(meshAppearance))
+                {
+                    if (appDef.Components.FirstOrDefault(comp => comp.Name == meshAppearance) is IRedMeshComponent siblingComponent)
+                    {
+                        meshComponent.MeshAppearance = siblingComponent.MeshAppearance;
+                    }
+                    else
+                    {
+                        meshComponent.MeshAppearance = meshAppearance;
+                    }
+                }
+
+                hasChanges = true;
             }
-            
-            hasChanges = true;
         }
     }
     #endregion
