@@ -36,6 +36,7 @@
                 HelpVisibility="Collapsed"
                 NextVisibility="Collapsed"
                 PreviewKeyDown="WizardPage_PreviewKeyDown"
+                Height="Auto"
                 PageType="Exterior">
                 <Grid
                     HorizontalAlignment="Stretch"
@@ -47,7 +48,15 @@
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="10" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="10" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="10" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="10" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="10" />
                     </Grid.RowDefinitions>
 
                     <Label
@@ -68,8 +77,42 @@
                         KeyboardNavigation.TabIndex="1" />
 
                     <Label
-                        Grid.Row="1"
+                        Grid.Row="2"
                         Grid.Column="0"
+                        Margin="{DynamicResource WolvenKitMarginTinyBottom}"
+                        HorizontalAlignment="Left"
+                        Background="#252525"
+                        BorderThickness="0"
+                        Content="Depot Path:" />
+
+                    <TextBox
+                        x:Name="DepotPathBox"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Margin="{DynamicResource WolvenKitMarginTinyBottom}"
+                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
+                        KeyboardNavigation.TabIndex="2" />
+
+                    <Label
+                        Grid.Row="4"
+                        Grid.Column="0"
+                        Margin="{DynamicResource WolvenKitMarginTinyBottom}"
+                        HorizontalAlignment="Left"
+                        Background="#252525"
+                        BorderThickness="0"
+                        Content="Mesh appearance:" />
+
+                    <TextBox
+                        x:Name="MeshAppearanceNameBox"
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        Margin="{DynamicResource WolvenKitMarginTinyBottom}"
+                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
+                        KeyboardNavigation.TabIndex="1" />
+
+                    <Label
+                        Grid.Row="6"
+                        Grid.Column="0" 
                         HorizontalAlignment="Left"
                         Background="#252525"
                         BorderThickness="0"
@@ -77,12 +120,25 @@
 
                     <editors:RedChunkMaskEditor
                         x:Name="ChunkmaskEditor"
-                        Grid.Row="1"
+                        Grid.Row="6"
                         Grid.Column="1"
                         KeyboardNavigation.TabIndex="2"
                         RedNumber="{Binding ChunkMask,
                                             Mode=TwoWay}"
                         PropertyChanged="On_Chunkmask_Changed" />
+                    <Label
+                        Grid.Row="8"
+                        Grid.Column="0"
+                        HorizontalAlignment="Left"
+                        Background="#252525"
+                        BorderThickness="0"
+                        Content="Remember values?" />
+
+                    <CheckBox
+                        x:Name="RememberValuesCheckBox"
+                        Grid.Row="8"
+                        Grid.Column="1"
+                        KeyboardNavigation.TabIndex="2" />
                 </Grid>
             </syncfusion:WizardPage>
         </syncfusion:WizardControl>

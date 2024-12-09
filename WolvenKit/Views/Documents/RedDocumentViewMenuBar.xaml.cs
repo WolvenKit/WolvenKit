@@ -440,6 +440,8 @@ namespace WolvenKit.Views.Documents
                 return;
             }
             var chunkMask = (CUInt64)dialog.ViewModel.ChunkMask;
+            var depotPath = dialog.ViewModel.DepotPath;
+            var meshAppearance = dialog.ViewModel.MeshAppearance;
 
             var selectedChunks = SelectedChunks;
             if (selectedChunks.Count == 0 && RootChunk is ChunkViewModel cvm)
@@ -449,7 +451,7 @@ namespace WolvenKit.Views.Documents
 
             foreach (var chunkViewModel in SelectedChunks)
             {
-                chunkViewModel.ReplaceComponentChunkMasks(dialog.ViewModel.ComponentName!, chunkMask);
+                chunkViewModel.ReplaceMeshComponentProperties(dialog.ViewModel.ComponentName!, chunkMask, depotPath, meshAppearance);
             }  
         }
 
