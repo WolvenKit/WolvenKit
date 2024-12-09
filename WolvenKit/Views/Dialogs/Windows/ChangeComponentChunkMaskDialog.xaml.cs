@@ -14,6 +14,8 @@ namespace WolvenKit.Views.Dialogs.Windows
     {
         private static string s_lastComponentName = "";
         private static IRedPrimitive<ulong> s_lastChunkMask;
+        private static string s_lastDepotPath = "";
+        private static string s_lastMeshAppearance = "";
 
         public ChangeComponentChunkMaskDialog()
         {
@@ -30,10 +32,18 @@ namespace WolvenKit.Views.Dialogs.Windows
                         x => x.ComponentName,
                         x => x.ComponentNameBox.Text)
                     .DisposeWith(disposables);
-                // this.Bind(ViewModel,
-                //         x => x.ChunkMask,
-                //         x => (ulong)(CUInt32)(IRedPrimitive)x.ChunkmaskEditor.RedNumber)
-                //     .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        x => x.DepotPath,
+                        x => x.DepotPathBox.Text)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        x => x.MeshAppearance,
+                        x => x.MeshAppearanceNameBox.Text)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        x => x.RememberValues,
+                        x => x.RememberValuesCheckBox.IsChecked)
+                    .DisposeWith(disposables);
             });
         }
 
@@ -59,6 +69,18 @@ namespace WolvenKit.Views.Dialogs.Windows
                 ViewModel.RememberValues = true;
             }
 
+            if (s_lastDepotPath != "")
+            {
+                ViewModel.DepotPath = s_lastDepotPath;
+                ViewModel.RememberValues = true;
+            }
+
+            if (s_lastMeshAppearance != "")
+            {
+                ViewModel.MeshAppearance = s_lastMeshAppearance;
+                ViewModel.RememberValues = true;
+            }
+
             if (s_lastChunkMask is not IRedPrimitive<ulong> value)
             {
                 return;
@@ -78,12 +100,16 @@ namespace WolvenKit.Views.Dialogs.Windows
             if (!ViewModel.RememberValues)
             {
                 s_lastComponentName = "";
+                s_lastDepotPath = "";
+                s_lastMeshAppearance = "";
                 s_lastChunkMask = null;
                 return;
             }
 
             s_lastComponentName = ViewModel.ComponentName;
             s_lastChunkMask = ViewModel.ChunkMask;
+            s_lastDepotPath = ViewModel.DepotPath;
+            s_lastMeshAppearance = ViewModel.MeshAppearance;
         }
 
         private void WizardPage_PreviewKeyDown(object sender, KeyEventArgs e)

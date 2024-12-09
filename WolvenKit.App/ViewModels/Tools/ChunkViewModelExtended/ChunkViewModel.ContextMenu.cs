@@ -28,16 +28,13 @@ public partial class ChunkViewModel
     [ObservableProperty] private bool _isCtrlKeyPressed;
     [ObservableProperty] private bool _isAltKeyPressed;
     
-    [ObservableProperty] private bool _shouldShowDuplicate;
-
     [ObservableProperty] private bool _isMaterial;
 
     [ObservableProperty] private bool _isMaterialArray;
     [ObservableProperty] private bool _shouldShowCreateMatDef;
     [ObservableProperty] private bool _shouldShowCreateExternalMatDef;
 
-    [ObservableProperty] private bool _shouldShowDuplicateAsNew;
-    [ObservableProperty] private bool _shouldShowDuplicateInplace;
+    [ObservableProperty] private bool _duplicatesAsNew;
 
     [ObservableProperty] private bool _isMultipleItemsSelected;
     [ObservableProperty] private bool _isMultipleItemsCopied;
@@ -56,12 +53,7 @@ public partial class ChunkViewModel
 
         IsMaterialArray = ResolvedData is CArray<IMaterial> or CArray<CResourceAsyncReference<IMaterial>>;
 
-        ShouldShowDuplicateAsNew =
-            IsInArray && !IsShiftKeyPressed &&
-            ResolvedData is worldCompiledEffectPlacementInfo or CMeshMaterialEntry;
-
-        ShouldShowDuplicateInplace = !ShouldShowDuplicateAsNew && IsInArray && IsShiftKeyPressed;
-        ShouldShowDuplicate = !ShouldShowDuplicateAsNew && IsInArray && !IsShiftKeyPressed;
+        DuplicatesAsNew = ResolvedData is worldCompiledEffectPlacementInfo or CMeshMaterialEntry;
 
         IsMultipleItemsSelected = Parent?.Tab?.SelectedChunks is ObservableCollection<object> chunks && chunks.Count > 1;
     }
@@ -70,12 +62,10 @@ public partial class ChunkViewModel
     {
         GenerateChildCruidsCommand.NotifyCanExecuteChanged();
         CopyChildNamesCommand.NotifyCanExecuteChanged();
+        ReindexChildDataIndexPropertiesCommand.NotifyCanExecuteChanged();
     }
 
-    public bool IsMaterialDefinition()
-    {
-        return ResolvedData is CArray<CMeshMaterialEntry> || Parent?.ResolvedData is CArray<CMeshMaterialEntry>;
-    }
+    public bool IsMaterialDefinition() => ResolvedData is CArray<CMeshMaterialEntry> || Parent?.ResolvedData is CArray<CMeshMaterialEntry>;
 
     [RelayCommand(CanExecute = nameof(IsMaterialDefinition))]
     private void ToggleMaterialDefinitionIsExternal()
@@ -122,7 +112,6 @@ public partial class ChunkViewModel
         CalculateDescriptor();
 
         // now rename the chunks
-
         var appCvm = Parent?.Parent?.GetRootModel().GetPropertyFromPath("appearances");
         if (appCvm?.ResolvedData is not CArray<CHandle<meshMeshAppearance>> appearances)
         {
@@ -384,7 +373,7 @@ public partial class ChunkViewModel
         return Task.CompletedTask;
     }
 
-    public void ReplaceComponentChunkMasks(string componentName, CUInt64 chunkMask)
+    public void ReplaceMeshComponentProperties(string componentName, CUInt64? chunkMask, string? depotPath, string? meshAppearance)
     {
         var hasChanges = false;
 
@@ -392,38 +381,82 @@ public partial class ChunkViewModel
         {
             case appearanceAppearanceResource { Appearances.Count: > 0 } appearanceResource:
             {
-                appearanceResource.Appearances.Where((handle) => handle.GetValue() is appearanceAppearanceDefinition)
-                    .Select(handle => (appearanceAppearanceDefinition)handle.GetValue()!)
-                    .Where(appDef => appDef.Components.Count > 0)
-                    .ToList()
-                    .ForEach(SetAppearanceChunkMask);
+                var appearanceChild = GetPropertyChild("appearances");
+                foreach (var appearanceNode in appearanceChild?.Properties ?? [])
+                {
+                    appearanceNode.ReplaceMeshComponentProperties(componentName, chunkMask, depotPath, meshAppearance);
+                }
                 break;
             }
             case appearanceAppearanceDefinition appearance:
                 SetAppearanceChunkMask(appearance);
+                var componentsAryCvm = GetPropertyChild("components");
+                componentsAryCvm?.CalculateProperties();
+                if (componentsAryCvm?.Properties.FirstOrDefault(comp =>
+                        comp.ResolvedData is entMeshComponent m && m.Name == componentName) is ChunkViewModel
+                    componentCvm)
+                {
+                    componentCvm.RecalculateProperties();
+                    componentCvm.CalculateIsDefault();
+                    componentCvm.CalculateDescriptor();
+                    componentCvm.CalculateValue();
+                }
                 break;
             default:
+                if (Parent is not null)
+                {
+                    GetRootModel().ReplaceMeshComponentProperties(componentName, chunkMask, depotPath, meshAppearance);
+                }
                 break;
         }
 
-        if (!hasChanges)
+        if (hasChanges)
         {
-            return;
+            Tab?.Parent.SetIsDirty(true);
         }
 
-        Tab?.Parent.SetIsDirty(true);
         return;
 
         void SetAppearanceChunkMask(appearanceAppearanceDefinition appDef)
         {
             var component = appDef.Components.FirstOrDefault(comp => comp.Name == componentName);
-            if (component is not IRedMeshComponent meshComponent)
+            if (component is not IRedMeshComponent meshComponent || (chunkMask is null && depotPath is null && meshAppearance is null))
             {
                 return;
             }
 
-            meshComponent.ChunkMask = chunkMask;
-            GetPropertyChild("appearances", appDef.Name.GetResolvedText() ?? "", "components", componentName)?.RecalculateProperties();
+            hasChanges = true;
+
+            if (chunkMask is CUInt64 value)
+            {
+                meshComponent.ChunkMask = value;
+            }
+
+
+            if (!string.IsNullOrEmpty(depotPath))
+            {
+                if (appDef.Components.FirstOrDefault(comp => comp.Name == depotPath) is IRedMeshComponent siblingComponent)
+                {
+                    meshComponent.Mesh = new CResourceAsyncReference<CMesh>(siblingComponent.Mesh.DepotPath);
+                }
+                else
+                {
+                    meshComponent.Mesh = new CResourceAsyncReference<CMesh>((ResourcePath)depotPath);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(meshAppearance))
+            {
+                if (appDef.Components.FirstOrDefault(comp => comp.Name == meshAppearance) is IRedMeshComponent siblingComponent)
+                {
+                    meshComponent.MeshAppearance = siblingComponent.MeshAppearance;
+                }
+                else
+                {
+                    meshComponent.MeshAppearance = meshAppearance;
+                }
+            }
+            
             hasChanges = true;
         }
     }

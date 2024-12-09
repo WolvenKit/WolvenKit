@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ReactiveUI;
 using Splat;
@@ -113,7 +114,16 @@ namespace WolvenKit.Views.Tools
                 redTreeView.UpdateFilteredItemsSource(e.NewValue);
             }
         }
-        
+
+        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
+        {
+            base.OnPropertyChanged(e);
+            if (e.Property == SelectedItem || e.Property == SelectedItems)
+            {
+                SetCurrentValue(HasSelectionProperty, GetSelectedChunks(true).Count > 0);
+            }
+        } 
+
         public object ItemsSource
         {
             get => GetValue(ItemsSourceProperty);
@@ -211,14 +221,32 @@ namespace WolvenKit.Views.Tools
             //    e.Cancel = true;
         }
 
-        public bool IsControlBeingHeld
+        public bool IsCtrlBeingHeld
         {
-            get => (bool)GetValue(IsControlBeingHeldProperty);
-            set => SetValue(IsControlBeingHeldProperty, value);
+            get => (bool)GetValue(IsCtrlBeingHeldProperty);
+            set => SetValue(IsCtrlBeingHeldProperty, value);
         }
 
-        public static readonly DependencyProperty IsControlBeingHeldProperty =
-            DependencyProperty.Register(nameof(IsControlBeingHeld), typeof(bool), typeof(RedTreeView));
+        public static readonly DependencyProperty IsCtrlBeingHeldProperty =
+            DependencyProperty.Register(nameof(IsCtrlBeingHeld), typeof(bool), typeof(RedTreeView));
+
+        public bool IsShiftBeingHeld
+        {
+            get => (bool)GetValue(IsShiftBeingHeldProperty);
+            set => SetValue(IsShiftBeingHeldProperty, value);
+        }
+
+        public static readonly DependencyProperty IsShiftBeingHeldProperty =
+            DependencyProperty.Register(nameof(IsShiftBeingHeld), typeof(bool), typeof(RedTreeView));
+
+        public bool HasSelection
+        {
+            get => (bool)GetValue(HasSelectionProperty);
+            set => SetValue(HasSelectionProperty, value);
+        }
+
+        public static readonly DependencyProperty HasSelectionProperty =
+            DependencyProperty.Register(nameof(HasSelection), typeof(bool), typeof(RedTreeView));
 
         private bool IsAllowDrop(TreeViewItemDragOverEventArgs e)
         {
@@ -230,7 +258,7 @@ namespace WolvenKit.Views.Tools
             }
 
 
-            switch (IsControlBeingHeld)
+            switch (IsCtrlBeingHeld)
             {
                 case false when !target.IsInArray:
                 case true when target.Parent.Data is IRedBufferPointer:
@@ -285,7 +313,7 @@ namespace WolvenKit.Views.Tools
             {
                 var source = (ChunkViewModel)node.Content;
 
-                if (IsControlBeingHeld && source.Data is IRedCloneable irc)
+                if (IsCtrlBeingHeld && source.Data is IRedCloneable irc)
                 {
                     if (await Interactions.ShowMessageBoxAsync($"Duplicate {source.Data.GetType().Name} here?",
                             "Duplicate Confirmation", WMessageBoxButtons.YesNo) == WMessageBoxResult.Yes)
@@ -370,8 +398,20 @@ namespace WolvenKit.Views.Tools
         private void RefreshCommandStatus()
         {
             DuplicateSelectionCommand.NotifyCanExecuteChanged();
-            OverwriteSelectionWithPasteCommand.NotifyCanExecuteChanged();
+
+            PasteHandleSingleCommand.NotifyCanExecuteChanged();
+
             PasteSelectionCommand.NotifyCanExecuteChanged();
+            PasteSingleSelectionCommand.NotifyCanExecuteChanged();
+
+            OverwriteSelectionWithSingleCommand.NotifyCanExecuteChanged();
+            OverwriteSelectionWithPasteCommand.NotifyCanExecuteChanged();
+
+            ClearAndPasteSingleCommand.NotifyCanExecuteChanged();
+            ClearAndPasteSelectionCommand.NotifyCanExecuteChanged();
+
+            CopySelectionCommand.NotifyCanExecuteChanged();
+            
             DeleteSelectionCommand.NotifyCanExecuteChanged();
             DeleteAllButSelectionCommand.NotifyCanExecuteChanged();
             if (SelectedItem is ChunkViewModel chunk)
@@ -381,6 +421,25 @@ namespace WolvenKit.Views.Tools
         }
 
 
+        [RelayCommand]
+        private async Task DuplicateSelectionAsNew()
+        {
+            if (ItemsSource is not ICollectionView collectionView)
+            {
+                return;
+            }
+
+            using (collectionView.DeferRefresh())
+            {
+                var chunks = GetSelectedChunks();
+
+                foreach (var cvm in chunks)
+                {
+                    await cvm.DuplicateChunkAsNewAsync();
+                }
+            }
+        }
+        
         private async Task DuplicateSelectedChunks(bool preserveIndex = false)
         {
             if (ItemsSource is not ICollectionView collectionView)
@@ -401,7 +460,6 @@ namespace WolvenKit.Views.Tools
                     }
                 }
 
-
                 var tasks = chunks.Select(cvm => cvm.DuplicateChunkAsync(preserveIndex ? -1 : cvm.NodeIdxInParent + chunks.Count)).ToList();
 
                 var duplicatedChunks = await Task.WhenAll(tasks);
@@ -421,35 +479,11 @@ namespace WolvenKit.Views.Tools
         }
 
         /// <summary>
-        /// Duplicates each chunk in selection, appending new changes after the selected items.
+        /// Duplicates each chunk in selection. Will preserve index order if shift key is pressed.
         /// </summary>
         [RelayCommand]
-        private async Task DuplicateSelection() => await DuplicateSelectedChunks(false);
+        private async Task DuplicateSelection() => await DuplicateSelectedChunks(ModifierViewStateService.IsShiftBeingHeld);
 
-        /// <summary>
-        /// Duplicates each chunk in selection, adding every new chunk directly next to the original. 
-        /// </summary>
-        [RelayCommand]
-        private async Task DuplicateSelectionInPlace() => await DuplicateSelectedChunks(true);
-
-        [RelayCommand]
-        private async Task DuplicateSelectionAsNew()
-        {
-            if (ItemsSource is not ICollectionView collectionView)
-            {
-                return;
-            }
-
-            using (collectionView.DeferRefresh())
-            {
-                var chunks = GetSelectedChunks();
-
-                foreach (var cvm in chunks)
-                {
-                    await cvm.DuplicateChunkAsNewAsync();
-                }
-            }
-        }
 
 
         private bool CanOpenSearchAndReplaceDialog => !_isContextMenuOpen &&
@@ -544,11 +578,105 @@ namespace WolvenKit.Views.Tools
                 }
             }
         }
+
+        public static readonly DependencyProperty HasMultipleItemsSelectedProperty =
+            DependencyProperty.Register(nameof(HasMultipleItemsSelected), typeof(bool), typeof(RedTreeView), new PropertyMetadata(false));
+
+        public bool HasMultipleItemsSelected
+        {
+            get => (bool)GetValue(HasMultipleItemsSelectedProperty);
+            set => SetValue(HasMultipleItemsSelectedProperty, value);
+        }
+
+        public static readonly DependencyProperty HasSingleItemCopiedProperty =
+            DependencyProperty.Register(nameof(HasSingleItemCopied), typeof(bool), typeof(RedTreeView), new PropertyMetadata(false));
+
+        public bool HasSingleItemCopied
+        {
+            get => (bool)GetValue(HasSingleItemCopiedProperty);
+            set => SetValue(HasSingleItemCopiedProperty, value);
+        }
+
+        public static readonly DependencyProperty HasHandleCopiedProperty =
+            DependencyProperty.Register(nameof(HasHandleCopied), typeof(bool), typeof(RedTreeView), new PropertyMetadata(false));
+
+        public bool HasHandleCopied
+        {
+            get => (bool)GetValue(HasHandleCopiedProperty);
+            set => SetValue(HasHandleCopiedProperty, value);
+        }
+
+        public static readonly DependencyProperty HasMultipleItemsCopiedProperty =
+            DependencyProperty.Register(nameof(HasMultipleItemsCopied), typeof(bool), typeof(RedTreeView), new PropertyMetadata(false));
+
+        public bool HasMultipleItemsCopied
+        {
+            get => (bool)GetValue(HasMultipleItemsCopiedProperty);
+            set => SetValue(HasMultipleItemsCopiedProperty, value);
+        }
+
+
+        public bool CanCopySelection() => GetSelectedChunks(true) is { Count: > 0 } list && list.All(cvm => cvm.CanCopySelection());
+
+        [RelayCommand(CanExecute = nameof(CanCopySelection))]
+        private void CopySelection()
+        {
+            var selection = GetSelectedChunks(true);
+
+            if (selection.Count == 1 && selection.First() is ChunkViewModel single)
+            {
+                RedDocumentTabViewModel.CopiedChunk = single.CopyData();
+                single.RefreshCommandStatus();
+                single.RefreshContextMenuFlags();
+                SetCurrentValue(HasSingleItemCopiedProperty, true);
+                SetCurrentValue(HasHandleCopiedProperty, IsHandle(RedDocumentTabViewModel.CopiedChunk));
+                RefreshCommandStatus();
+                return;
+            }
+
+            RedDocumentTabViewModel.ClearCopiedChunks();
+            foreach (var redType in selection.Select(cvm => cvm.CopyData()).Where(d => d is not null))
+            {
+                RedDocumentTabViewModel.AddToCopiedChunks(redType);
+            }
+
+            SetCurrentValue(HasMultipleItemsCopiedProperty, RedDocumentTabViewModel.GetCopiedChunks().Count > 0);
+
+            foreach (var cvm in selection)
+            {
+                cvm.RefreshContextMenuFlags();
+                cvm.RefreshCommandStatus();
+            }
+
+            RefreshCommandStatus();
+        }
+
+        private bool CanPasteSingleSelection() => SelectedItem is ChunkViewModel cvm && cvm.CanPasteSelection(true);
+        private bool CanPasteSelection() => SelectedItem is ChunkViewModel cvm && cvm.CanPasteSelection();
+
+        [RelayCommand(CanExecute = nameof(CanPasteSingleSelection))]
+        private void OverwriteSelectionWithSingle()
+        {
+            if (ItemsSource is not ICollectionView collectionView || SelectedItem is not ChunkViewModel cvm || cvm.Parent is null ||
+                RedDocumentTabViewModel.CopiedChunk is null)
+            {
+                return;
+            }
+
+            using (collectionView.DeferRefresh())
+            {
+                cvm.DeleteNodesInParent([cvm]);
+                cvm.Parent.PasteAtIndex([RedDocumentTabViewModel.CopiedChunk], cvm.NodeIdxInParent);
+
+                ReapplySearch(cvm.Parent);
+            }
+        }
         
         [RelayCommand(CanExecute = nameof(CanPasteSelection))]
         private void OverwriteSelectionWithPaste()
         {
-            if (ItemsSource is not ICollectionView collectionView)
+            var copiedChunks = RedDocumentTabViewModel.GetCopiedChunks();
+            if (ItemsSource is not ICollectionView collectionView || copiedChunks.Count == 0)
             {
                 return;
             }
@@ -556,6 +684,7 @@ namespace WolvenKit.Views.Tools
             using (collectionView.DeferRefresh())
             {
                 foreach (var group in GetSelectedChunks()
+                             .Where(cvm => cvm.CanPasteSelection())
                              .GroupBy(chunk => chunk.Parent))
                 {
                     
@@ -565,7 +694,53 @@ namespace WolvenKit.Views.Tools
                     }
 
                     cvm.DeleteNodesInParent(group.ToList());
-                    group.Key.PasteSelectionAtIndex(cvm.NodeIdxInParent);
+                    group.Key.PasteAtIndex(copiedChunks, cvm.NodeIdxInParent);
+
+                    ReapplySearch(group.Key);
+                }
+            }
+        }
+
+        [RelayCommand(CanExecute = nameof(CanPasteSelection))]
+        private void ClearAndPasteSingle()
+        {
+            if (ItemsSource is not ICollectionView collectionView || RedDocumentTabViewModel.CopiedChunk is not ChunkViewModel cvm ||
+                cvm.Parent is null)
+            {
+                return;
+            }
+
+            using (collectionView.DeferRefresh())
+            {
+                cvm.Parent.ClearChildren();
+                cvm.Parent.PasteAtIndex([cvm.Data], -1);
+
+                ReapplySearch(cvm.Parent);
+            }
+        }
+
+        [RelayCommand(CanExecute = nameof(CanPasteSelection))]
+        private void ClearAndPasteSelection()
+        {
+            var copiedChunks = RedDocumentTabViewModel.GetCopiedChunks();
+            if (ItemsSource is not ICollectionView collectionView || copiedChunks.Count == 0)
+            {
+                return;
+            }
+
+            using (collectionView.DeferRefresh())
+            {
+                foreach (var group in GetSelectedChunks()
+                             .Where(cvm => cvm.CanPasteSelection())
+                             .GroupBy(chunk => chunk.Parent))
+                {
+                    if (group.FirstOrDefault() is not ChunkViewModel cvm)
+                    {
+                        continue;
+                    }
+
+                    cvm.ClearChildren();
+                    group.Key.PasteAtIndex(copiedChunks, -1);
 
                     ReapplySearch(group.Key);
                 }
@@ -588,10 +763,95 @@ namespace WolvenKit.Views.Tools
             chunk.SetVisibilityStatusBySearchString(RedDocumentViewToolbarModel.CurrentActiveSearch);
         }
 
-        [RelayCommand(CanExecute = nameof(CanPasteSelection))]
-        private void PasteSelection()
+        #region handles
+
+        private static bool IsHandle(IRedType potentialHandle)
         {
-            if (ItemsSource is not ICollectionView collectionView)
+            if (potentialHandle is null)
+            {
+                return false;
+            }
+
+            var propertyType = potentialHandle.GetType();
+            return
+                propertyType.IsAssignableTo(typeof(IRedBaseHandle)) && (
+                    propertyType.GetGenericTypeDefinition() == typeof(CHandle<>) ||
+                    propertyType.GetGenericTypeDefinition() == typeof(CWeakHandle<>));
+        }
+
+        private bool CanPasteHandleSingle() => IsHandle(RedDocumentTabViewModel.CopiedChunk);
+
+        [RelayCommand(CanExecute = nameof(CanPasteHandleSingle))]
+        private void PasteHandleSingle()
+        {
+            var selectedChunks = GetSelectedChunks(true);
+
+            if (ItemsSource is not ICollectionView collectionView || !IsHandle(RedDocumentTabViewModel.CopiedChunk) ||
+                selectedChunks.Count != 1)
+            {
+                return;
+            }
+
+            using (collectionView.DeferRefresh())
+            {
+                var cvm = selectedChunks.FirstOrDefault();
+                if (cvm?.PasteHandle((IRedBaseHandle)RedDocumentTabViewModel.CopiedChunk!) != true)
+                {
+                    return;
+                }
+
+                cvm.SetVisibilityStatusBySearchString(RedDocumentViewToolbarModel.CurrentActiveSearch);
+                ReapplySearch(cvm.Parent);
+            }
+
+            RefreshSelectedItemsContextMenuFlags();
+            RefreshCommandStatus();
+        }
+
+        private bool CanPasteHandles() =>
+            RedDocumentTabViewModel.GetCopiedChunks() is List<IRedType> { Count: > 0 } lst && lst.All(IsHandle);
+
+        [RelayCommand(CanExecute = nameof(CanPasteHandles))]
+        private void PasteHandles()
+        {
+            var selectedChunks = GetSelectedChunks(true);
+
+            if (ItemsSource is not ICollectionView collectionView || !IsHandle(RedDocumentTabViewModel.CopiedChunk) ||
+                selectedChunks.Count != 1)
+            {
+                return;
+            }
+
+            using (collectionView.DeferRefresh())
+            {
+                var cvm = selectedChunks.FirstOrDefault();
+                if (cvm?.PasteHandle((IRedBaseHandle)RedDocumentTabViewModel.CopiedChunk!) != true)
+                {
+                    return;
+                }
+
+                cvm.SetVisibilityStatusBySearchString(RedDocumentViewToolbarModel.CurrentActiveSearch);
+                ReapplySearch(cvm.Parent);
+            }
+
+            RefreshSelectedItemsContextMenuFlags();
+            RefreshCommandStatus();
+        }
+
+        #endregion
+
+        [RelayCommand(CanExecute = nameof(CanPasteSelection))]
+        private void PasteSelection() => PasteSelectionInternal();
+
+
+        [RelayCommand(CanExecute = nameof(CanPasteSingleSelection))]
+        private void PasteSingleSelection() => PasteSelectionInternal(true);
+
+        private void PasteSelectionInternal(bool pasteSingleSelect = false)
+        {
+            if (ItemsSource is not ICollectionView collectionView
+                || (pasteSingleSelect && RedDocumentTabViewModel.CopiedChunk is null)
+                || (!pasteSingleSelect && RedDocumentTabViewModel.GetCopiedChunks().Count == 0))
             {
                 return;
             }
@@ -601,21 +861,29 @@ namespace WolvenKit.Views.Tools
                 foreach (var group in GetSelectedChunks()
                              .GroupBy(chunk => chunk.Parent))
                 {
-                    if (group.FirstOrDefault() is not ChunkViewModel cvm )
+                    if (group.FirstOrDefault() is not ChunkViewModel cvm)
                     {
                         continue;
                     }
 
-                    group.Key.PasteSelectionAtIndex(cvm.NodeIdxInParent);
-                    ReapplySearch(group.Key);
+                    var node = cvm.IsArray ? cvm : group.Key;
+                    var idx = cvm.IsArray ? -1 : cvm.NodeIdxInParent;
+
+                    if (pasteSingleSelect)
+                    {
+                        node.PasteAtIndex([RedDocumentTabViewModel.CopiedChunk], idx);
+                    }
+                    else
+                    {
+                        node.PasteAtIndex(RedDocumentTabViewModel.GetCopiedChunks(), idx);
+                    }
+
+                    ReapplySearch((cvm.IsArray ? cvm : group.Key));
                 }
             }
-
-           
         }
 
         private bool CanDeleteSelection() => SelectedItem is ChunkViewModel;
-        private bool CanPasteSelection() => SelectedItem is ChunkViewModel cvm && cvm.CanPasteSelection();
 
         [RelayCommand(CanExecute = nameof(CanDeleteSelection))]
         private void DeleteAllButSelection()
@@ -643,7 +911,6 @@ namespace WolvenKit.Views.Tools
                 }
             }
         }
-
 
         private bool CanGenerateMissingMaterials() => SelectedItem is ChunkViewModel
         {
@@ -674,14 +941,15 @@ namespace WolvenKit.Views.Tools
         /// <summary>
         /// Gets all selected chunks. If none are selected / if selection is invalid, it will return an empty list.
         /// </summary>
-        private List<ChunkViewModel> GetSelectedChunks()
+        private List<ChunkViewModel> GetSelectedChunks(bool includeSingleSelect = false)
         {
+            var uniqueItems = new HashSet<(object Parent, string Name)>();
+            
             if (SelectedItems is not ObservableCollection<object> selection)
             {
-                return [];
+                return includeSingleSelect && SelectedItem is ChunkViewModel cvm ? [cvm] : [];
             }
 
-            var uniqueItems = new HashSet<(object Parent, string Name)>();
             return selection.OfType<ChunkViewModel>().Where(x => uniqueItems.Add((x.Parent, x.Name))).ToList();
         }
 
@@ -741,6 +1009,7 @@ namespace WolvenKit.Views.Tools
         {
             _isContextMenuOpen = true;
             RefreshSelectedItemsContextMenuFlags();
+            RefreshCommandStatus();
         }
 
         private void TreeViewContextMenu_OnClosed(object sender, RoutedEventArgs e) => _isContextMenuOpen = false;
@@ -755,6 +1024,7 @@ namespace WolvenKit.Views.Tools
 
         private void TreeView_OnKeyChanged(object sender, KeyEventArgs e)
         {
+            
             if (_isContextMenuOpen)
             {
                 return;
@@ -770,6 +1040,8 @@ namespace WolvenKit.Views.Tools
                     return;
                 default:
                     _modifierViewStateSvc.OnKeystateChanged(e);
+                    SetCurrentValue(IsShiftBeingHeldProperty, ModifierViewStateService.IsShiftBeingHeld);
+                    SetCurrentValue(IsCtrlBeingHeldProperty, ModifierViewStateService.IsCtrlBeingHeld);
                     break;
             }
         }

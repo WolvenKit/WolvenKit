@@ -529,10 +529,10 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!-- Hide chunks in bulk -->
+                <!-- Mesh component properties -->
                 <MenuItem
                     Style="{StaticResource ShowAppMenuItemStyle}"
-                    Header="Change chunk view by component"
+                    Header="Change mesh component properties"
                     Click="OnChangeChunkMasksClick">
                     <MenuItem.Icon>
                         <templates:IconBox IconPack="Empty" />

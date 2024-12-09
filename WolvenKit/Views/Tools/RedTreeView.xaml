@@ -428,7 +428,44 @@
                 <ContextMenu.Resources>
                     <Style
                         BasedOn="{StaticResource WPFMenuItemStyle}"
-                        TargetType="MenuItem" />
+                        TargetType="MenuItem">
+                        <Setter Property="IsCheckable" Value="False" />
+                    </Style>
+                    <Style
+                        x:Key="TreeViewMenuItemStyle"
+                        BasedOn="{StaticResource WPFMenuItemStyle}"
+                        TargetType="MenuItem">
+                        <Setter Property="IsCheckable" Value="False" />
+                    </Style>
+                    <Style
+                        x:Key="ArrayItemWithoutModifiersStyle"
+                        BasedOn="{StaticResource TreeViewMenuItemStyle}"
+                        TargetType="MenuItem">
+                        <Setter Property="Visibility" Value="Visible" />
+                        <Style.Triggers>
+                            <DataTrigger
+                                Binding="{Binding PlacementTarget.Tag.ShouldShowArrayOpts,
+                                                  Mode=OneWay,
+                                                  UpdateSourceTrigger=PropertyChanged}"
+                                Value="False">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                            <DataTrigger
+                                Binding="{Binding PlacementTarget.Tag.IsShiftKeyPressed,
+                                                  Mode=OneWay,
+                                                  UpdateSourceTrigger=PropertyChanged}"
+                                Value="True">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                            <DataTrigger
+                                Binding="{Binding PlacementTarget.Tag.IsCtrlKeyPressed,
+                                                  Mode=OneWay,
+                                                  UpdateSourceTrigger=PropertyChanged}"
+                                Value="True">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
                 </ContextMenu.Resources>
 
                 <!-- TweakXL -->
@@ -444,8 +481,7 @@
                     Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowTweakXLMenu,
                                          RelativeSource={RelativeSource AncestorType=ContextMenu},
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Header="TweakXL"
-                    IsCheckable="False">
+                    Header="TweakXL">
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
@@ -458,8 +494,7 @@
                     <MenuItem
                         Command="{Binding Path=PlacementTarget.Tag.CreateTXLOverrideCommand,
                                           RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                        Header="Override Value"
-                        IsCheckable="False">
+                        Header="Override Value">
                         <MenuItem.Icon>
                             <templates:IconBox
                                 IconPack="Empty"
@@ -476,8 +511,7 @@
                                              Converter={StaticResource BooleanToVisibilityConverter}}"
                         Command="{Binding Path=PlacementTarget.Tag.CopyTXLOverrideCommand,
                                           RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                        Header="Copy to Clipboard"
-                        IsCheckable="False">
+                        Header="Copy to Clipboard">
                         <MenuItem.Icon>
                             <templates:IconBox
                                 IconPack="Material"
@@ -495,8 +529,7 @@
                                              Converter={StaticResource BooleanToVisibilityConverter}}"
                         Command="{Binding Path=PlacementTarget.Tag.CopyTXLOverrideNameCommand,
                                           RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                        Header="Copy Name to Clipboard"
-                        IsCheckable="False">
+                        Header="Copy Name to Clipboard">
                         <MenuItem.Icon>
                             <templates:IconBox
                                 IconPack="Material"
@@ -515,8 +548,7 @@
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=PlacementTarget.Tag.AddItemToCompiledDataCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Create Item In Buffer"
-                    IsCheckable="False">
+                    Header="Create Item In Buffer">
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
@@ -534,8 +566,7 @@
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=PlacementTarget.Tag.SaveBufferToDiskCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Save Buffer To Disk"
-                    IsCheckable="False">
+                    Header="Save Buffer To Disk">
                     <MenuItem.Icon>
                         <!-- Old icon Material#ContentSave -->
                         <templates:IconBox
@@ -555,8 +586,7 @@
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=PlacementTarget.Tag.LoadBufferFromDiskCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Load Buffer From Disk"
-                    IsCheckable="False">
+                    Header="Load Buffer From Disk">
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
@@ -574,8 +604,7 @@
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=PlacementTarget.Tag.OpenChunkCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Open in New Tab"
-                    IsCheckable="False">
+                    Header="Open in New Tab">
                     <MenuItem.Icon>
                         <!-- Old icon Codicons#References -->
                         <templates:IconBox
@@ -599,13 +628,47 @@
 
                 <!-- Duplicate -->
                 <MenuItem
-                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowDuplicate,
-                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding DuplicateSelectionCommand,
                                       Source={x:Reference redTreeView}}"
-                    Header="Duplicate in Array/Buffer"
-                    IsCheckable="False">
+                    Header="Duplicate in Array/Buffer">
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource TreeViewMenuItemStyle}"
+                            TargetType="MenuItem">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="False" />
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.DuplicatesAsNew, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="False" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.DuplicatesAsNew, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="False" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Header" Value="Duplicate in Array/Buffer (preserve index)" />
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
@@ -613,35 +676,35 @@
                             Margin="{DynamicResource WolvenKitMarginTiny}"
                             Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
-                </MenuItem>
 
-                <!-- Duplicate InPlace -->
-                <MenuItem
-                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowDuplicateInplace,
-                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Command="{Binding DuplicateSelectionInPlaceCommand,
-                                      Source={x:Reference redTreeView}}"
-                    Header="Duplicate in Array/Buffer (preserve index)"
-                    IsCheckable="False">
-                    <MenuItem.Icon>
-                        <templates:IconBox
-                            IconPack="Material"
-                            Kind="ContentDuplicate"
-                            Margin="{DynamicResource WolvenKitMarginTiny}"
-                            Size="{DynamicResource WolvenKitIconMilli}" />
-                    </MenuItem.Icon>
                 </MenuItem>
 
                 <!-- Duplicate As New Chunk -->
                 <MenuItem
-                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowDuplicateAsNew,
-                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding DuplicateSelectionAsNewCommand,
                                       Source={x:Reference redTreeView}}"
-                    Header="Duplicate as new Item(s)"
-                    IsCheckable="False">
+                    Header="Duplicate as new Item(s)">
+
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource TreeViewMenuItemStyle}"
+                            TargetType="MenuItem">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.DuplicatesAsNew, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
@@ -658,8 +721,7 @@
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=PlacementTarget.Tag.RenameDynamicClassCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Rename Class"
-                    IsCheckable="False">
+                    Header="Rename Class">
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
@@ -676,8 +738,7 @@
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=PlacementTarget.Tag.RenamePropertyCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Rename Property"
-                    IsCheckable="False">
+                    Header="Rename Property">
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
@@ -695,8 +756,7 @@
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=PlacementTarget.Tag.RenameMaterialCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Rename Material"
-                    IsCheckable="False">
+                    Header="Rename Material">
                     <MenuItem.Icon>
                         <!-- Old icon Material#RenameBox -->
                         <templates:IconBox
@@ -715,8 +775,7 @@
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=PlacementTarget.Tag.AddMaterialAndDefinitionCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Add material and definition"
-                    IsCheckable="False">
+                    Header="Add material and definition">
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
@@ -735,8 +794,7 @@
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=PlacementTarget.Tag.ToggleEnableMaskedCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Toggle 'EnableMask'"
-                    IsCheckable="False">
+                    Header="Toggle 'EnableMask'">
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
@@ -753,8 +811,7 @@
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding OpenSearchAndReplaceDialogCommand,
                                       Source={x:Reference redTreeView}}"
-                    Header="Search and Replace in Selection"
-                    IsCheckable="False">
+                    Header="Search and Replace in Selection">
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
@@ -769,13 +826,13 @@
                     Useful if you paste a bunch of material definitions from multiple sources
                 -->
                 <MenuItem
-                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowRenumberArrayIndexProperties,
-                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=PlacementTarget.Tag.ReindexChildDataIndexPropertiesCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Recalculate child index properties"
-                    IsCheckable="False">
+                    Header="Recalculate child index properties">
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
@@ -794,8 +851,7 @@
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=PlacementTarget.Tag.ScrollToMaterialCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Scroll to material"
-                    IsCheckable="False">
+                    Header="Scroll to material">
                     <MenuItem.Icon>
                         <!-- Old icon Material#ArrowRight -->
                         <templates:IconBox
@@ -814,8 +870,7 @@
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=PlacementTarget.Tag.GenerateCRUIDCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Generate new CRUID"
-                    IsCheckable="False">
+                    Header="Generate new CRUID">
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
@@ -829,12 +884,11 @@
                 <MenuItem
                     Command="{Binding Path=PlacementTarget.Tag.GenerateChildCruidsCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Generate CRUIDs for all children"
-                    IsCheckable="False">
+                    Header="Generate CRUIDs for all children">
 
                     <MenuItem.Style>
                         <Style
-                            BasedOn="{StaticResource WPFMenuItemStyle}"
+                            BasedOn="{StaticResource TreeViewMenuItemStyle}"
                             TargetType="MenuItem">
                             <Setter Property="Visibility" Value="Collapsed" />
                             <Style.Triggers>
@@ -874,8 +928,7 @@
                     Command="ApplicationCommands.Copy"
                     CommandParameter="{Binding}"
                     CommandTarget="{Binding}"
-                    Header="Copy Value to Clipboard"
-                    IsCheckable="False">
+                    Header="Copy Value to Clipboard">
                     <MenuItem.Icon>
                         <!-- Old icon Codicons#Copy -->
                         <templates:IconBox
@@ -886,33 +939,14 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!-- Copy Handle -->
-                <MenuItem
-                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowHandleOperations,
-                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Command="{Binding Path=PlacementTarget.Tag.CopyHandleCommand,
-                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Copy Handle"
-                    IsCheckable="False">
-                    <MenuItem.Icon>
-                        <templates:IconBox
-                            IconPack="Material"
-                            Kind="ContentCopy"
-                            Margin="{DynamicResource WolvenKitMarginTiny}"
-                            Size="{DynamicResource WolvenKitIconMilli}" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
                 <!-- Copy -->
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.CopyChunkCommand,
-                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Copy From Array/Buffer"
-                    IsCheckable="False">
+                    Command="{Binding Path=CopySelectionCommand,
+                                      Source={x:Reference redTreeView}}"
+                    Header="Copy from Array/Buffer">
                     <MenuItem.Style>
                         <Style
-                            BasedOn="{StaticResource WPFMenuItemStyle}"
+                            BasedOn="{StaticResource TreeViewMenuItemStyle}"
                             TargetType="MenuItem">
                             <Setter Property="Visibility" Value="Collapsed" />
                             <Style.Triggers>
@@ -921,38 +955,19 @@
                                         <Condition Binding="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
                                         <Condition Binding="{Binding Path=PlacementTarget.Tag.IsMultipleItemsSelected, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="False" />
                                     </MultiDataTrigger.Conditions>
+                                    <Setter Property="Header" Value="Copy From Array/Buffer" />
                                     <Setter Property="Visibility" Value="Visible" />
                                 </MultiDataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </MenuItem.Style>
-                    <MenuItem.Icon>
-                        <templates:IconBox
-                            IconPack="Material"
-                            Kind="ContentCopy"
-                            Margin="{DynamicResource WolvenKitMarginTiny}"
-                            Size="{DynamicResource WolvenKitIconMilli}" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-                <!-- Copy Selection -->
-                <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.CopySelectionCommand,
-                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Copy Selection From Array/Buffer"
-                    IsCheckable="False">
-
-                    <MenuItem.Style>
-                        <Style
-                            BasedOn="{StaticResource WPFMenuItemStyle}"
-                            TargetType="MenuItem">
-                            <Setter Property="Visibility" Value="Collapsed" />
-                            <Style.Triggers>
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsMultipleItemsSelected, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.IsMultipleItemsSelected, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="True" />
                                     </MultiDataTrigger.Conditions>
+                                    <Setter Property="Header" Value="Copy Selection from Array/Buffer" />
                                     <Setter Property="Visibility" Value="Visible" />
                                 </MultiDataTrigger>
                             </Style.Triggers>
@@ -971,18 +986,19 @@
                 <MenuItem
                     Command="{Binding Path=PlacementTarget.Tag.CopyArrayContentsCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Copy Array Contents"
-                    IsCheckable="False">
+                    Header="Copy Array Contents">
                     <MenuItem.Style>
                         <Style
-                            BasedOn="{StaticResource WPFMenuItemStyle}"
+                            BasedOn="{StaticResource TreeViewMenuItemStyle}"
                             TargetType="MenuItem">
                             <Setter Property="Visibility" Value="Collapsed" />
                             <Style.Triggers>
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
                                         <Condition Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}}" Value="True" />
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="False" />
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="False" />
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="Visibility" Value="Visible" />
                                 </MultiDataTrigger>
@@ -1003,19 +1019,20 @@
                 <MenuItem
                     Command="{Binding Path=PlacementTarget.Tag.CopyChildNamesCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Copy item names"
-                    IsCheckable="False">
+                    Header="Copy item names">
 
                     <MenuItem.Style>
                         <Style
-                            BasedOn="{StaticResource WPFMenuItemStyle}"
+                            BasedOn="{StaticResource TreeViewMenuItemStyle}"
                             TargetType="MenuItem">
                             <Setter Property="Visibility" Value="Collapsed" />
                             <Style.Triggers>
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
                                         <Condition Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}}" Value="True" />
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="True" />
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="Visibility" Value="Visible" />
                                 </MultiDataTrigger>
@@ -1033,15 +1050,118 @@
 
 
                 <!-- Paste Handle -->
+                <MenuItem Command="{Binding Path=PasteHandleSingleCommand, Source={x:Reference redTreeView}}"
+                          Header="Paste as Handle (overwrite data)">
+                    <!-- Hide this if we can only past multiselection -->
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource TreeViewMenuItemStyle}"
+                            TargetType="MenuItem">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=HasHandleCopied, Source={x:Reference redTreeView}}" Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
+                    
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ContentPaste"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <!-- Paste Single -->
                 <MenuItem
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Command="{Binding Path=PlacementTarget.Tag.PasteHandleCommand,
-                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Paste Handle"
-                    IsCheckable="False">
+                    Command="{Binding Path=PasteSingleSelectionCommand,
+                                      Source={x:Reference redTreeView}}"
+                    Header="Paste Into Array/Buffer">
+
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource ArrayItemWithoutModifiersStyle}"
+                            TargetType="MenuItem">
+                            <Style.Triggers>
+                                <!-- Hide this if we can only past multiselection -->
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=HasSingleItemCopied, ElementName=redTreeView}" Value="False" />
+                                        <Condition Binding="{Binding Path=HasMultipleItemsCopied, ElementName=redTreeView}" Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </MultiDataTrigger>
+
+                                <!-- "Overwrite Array/Buffer with selection" -->
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.IsArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                    <Setter Property="Header" Value="Clear Array/Buffer and Paste" />
+                                    <Setter Property="Command"
+                                            Value="{Binding Path=ClearAndPasteSingleCommand,
+                                      Source={x:Reference redTreeView}}" />
+                                </MultiDataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.IsCtrlKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Header" Value="Clear Parent And Paste" />
+                                    <Setter Property="Visibility" Value="Visible" />
+                                    <Setter Property="Command"
+                                            Value="{Binding Path=ClearAndPasteSingleCommand,
+                                      Source={x:Reference redTreeView}}" />
+                                </MultiDataTrigger>
+
+                                <!-- "Overwrite selection with current" -->
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.IsCtrlKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="False" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Header" Value="Overwrite With Copied" />
+                                    <Setter Property="Visibility" Value="Visible" />
+                                    <Setter Property="Command"
+                                            Value="{Binding Path=OverwriteSelectionWithSingleCommand,
+                                      Source={x:Reference redTreeView}}" />
+                                </MultiDataTrigger>
+
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
+
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
@@ -1055,31 +1175,77 @@
                 <MenuItem
                     Command="{Binding Path=PasteSelectionCommand,
                                       Source={x:Reference redTreeView}}"
-                    Header="Paste Into Array/Buffer"
-                    IsCheckable="False">
+                    Header="Paste Selection Into Array/Buffer">
 
                     <MenuItem.Style>
                         <Style
-                            BasedOn="{StaticResource WPFMenuItemStyle}"
+                            BasedOn="{StaticResource TreeViewMenuItemStyle}"
                             TargetType="MenuItem">
-                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Setter Property="Visibility" Value="Visible" />
                             <Style.Triggers>
+                                <!-- Hide this if we can only past single selection -->
+
+                                <DataTrigger
+                                    Binding="{Binding HasMultipleItemsCopied, ElementName=redTreeView}"
+                                    Value="False">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+
+                                <!-- "Clear array and paste selection" -->
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="False" />
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsCtrlKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="False" />
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.IsArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="True" />
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="Visibility" Value="Visible" />
+                                    <Setter Property="Header" Value="Clear Array/Buffer and Paste Selection" />
+                                    <Setter Property="Command"
+                                            Value="{Binding Path=ClearAndPasteSelectionCommand,
+                                      Source={x:Reference redTreeView}}" />
                                 </MultiDataTrigger>
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="False" />
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsCtrlKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="False" />
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="False" />
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.IsCtrlKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="True" />
                                     </MultiDataTrigger.Conditions>
+                                    <Setter Property="Header" Value="Clear Parent And Paste" />
                                     <Setter Property="Visibility" Value="Visible" />
+                                    <Setter Property="Command"
+                                            Value="{Binding Path=ClearAndPasteSelectionCommand,
+                                      Source={x:Reference redTreeView}}" />
                                 </MultiDataTrigger>
+
+                                <!-- "Overwrite selection with current" -->
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.IsCtrlKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="False" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Header" Value="Overwrite With Copied" />
+                                    <Setter Property="Visibility" Value="Visible" />
+                                    <Setter Property="Command"
+                                            Value="{Binding Path=OverwriteSelectionWithPasteCommand,
+                                      Source={x:Reference redTreeView}}" />
+                                </MultiDataTrigger>
+
                             </Style.Triggers>
                         </Style>
                     </MenuItem.Style>
@@ -1093,85 +1259,96 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!-- Overwrite Array/Buffer With Selection -->
-                <MenuItem
-                    Command="{Binding Path=ClearAndPasteSelectionCommand,
-                                      Source={x:Reference redTreeView}}"
-                    Header="Overwrite Array/Buffer With Selection"
-                    IsCheckable="False">
-
-                    <MenuItem.Style>
-                        <Style
-                            BasedOn="{StaticResource WPFMenuItemStyle}"
-                            TargetType="MenuItem">
-                            <Setter Property="Visibility" Value="Collapsed" />
-                            <Style.Triggers>
-                                <MultiDataTrigger>
-                                    <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
-                                    </MultiDataTrigger.Conditions>
-                                    <Setter Property="Visibility" Value="Visible" />
-                                </MultiDataTrigger>
-                                <MultiDataTrigger>
-                                    <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="False" />
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsCtrlKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
-                                    </MultiDataTrigger.Conditions>
-                                    <Setter Property="Header" Value="Overwrite Parent With Selection" />
-                                    <Setter Property="Visibility" Value="Visible" />
-                                </MultiDataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </MenuItem.Style>
-
-                    <MenuItem.Icon>
-                        <templates:IconBox
-                            IconPack="Material"
-                            Kind="ClipboardArrowDownOutline"
-                            Margin="{DynamicResource WolvenKitMarginTiny}"
-                            Size="{DynamicResource WolvenKitIconMilli}" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-                <!-- Overwrite Selection With Pasted -->
-                <MenuItem
-                    Command="{Binding Path=OverwriteSelectionWithPasteCommand,
-                                      Source={x:Reference redTreeView}}"
-                    Header="Overwrite Current Selection With Copied"
-                    IsCheckable="False">
-                    <MenuItem.Style>
-                        <Style
-                            BasedOn="{StaticResource WPFMenuItemStyle}"
-                            TargetType="MenuItem">
-                            <Setter Property="Visibility" Value="Collapsed" />
-                            <Style.Triggers>
-                                <MultiDataTrigger>
-                                    <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
-                                    </MultiDataTrigger.Conditions>
-                                    <Setter Property="Visibility" Value="Visible" />
-                                </MultiDataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </MenuItem.Style>
-                    <MenuItem.Icon>
-                        <templates:IconBox
-                            IconPack="Material"
-                            Kind="ClipboardArrowDownOutline"
-                            Margin="{DynamicResource WolvenKitMarginTiny}"
-                            Size="{DynamicResource WolvenKitIconMilli}" />
-                    </MenuItem.Icon>
-                </MenuItem>
+                <!-- ~1~ Overwrite Array/Buffer With Selection @1@ -->
+                <!-- <MenuItem -->
+                <!--     Command="{Binding Path=ClearAndPasteSelectionCommand, -->
+                <!--                       Source={x:Reference redTreeView}}" -->
+                <!--     Header="Overwrite Array/Buffer With Selection"> -->
+                <!-- -->
+                <!--     <MenuItem.Style> -->
+                <!--         <Style -->
+                <!--             BasedOn="{StaticResource TreeViewMenuItemStyle}" -->
+                <!--             TargetType="MenuItem"> -->
+                <!--             <Setter Property="Visibility" Value="Collapsed" /> -->
+                <!--             <Style.Triggers> -->
+                <!--                 <MultiDataTrigger> -->
+                <!--                     <MultiDataTrigger.Conditions> -->
+                <!--                         <Condition Binding="{Binding Path=PlacementTarget.Tag.IsArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" /> -->
+                <!--                         <Condition -->
+                <!--                             Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" -->
+                <!--                             Value="True" /> -->
+                <!--                     </MultiDataTrigger.Conditions> -->
+                <!--                     <Setter Property="Visibility" Value="Visible" /> -->
+                <!--                 </MultiDataTrigger> -->
+                <!--                 <MultiDataTrigger> -->
+                <!--                     <MultiDataTrigger.Conditions> -->
+                <!--                         <Condition Binding="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" /> -->
+                <!--                         <Condition -->
+                <!--                             Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" -->
+                <!--                             Value="False" /> -->
+                <!--                         <Condition Binding="{Binding Path=PlacementTarget.Tag.IsCtrlKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" /> -->
+                <!--                     </MultiDataTrigger.Conditions> -->
+                <!--                     <Setter Property="Header" Value="Overwrite Parent With Selection" /> -->
+                <!--                     <Setter Property="Visibility" Value="Visible" /> -->
+                <!--                 </MultiDataTrigger> -->
+                <!--             </Style.Triggers> -->
+                <!--         </Style> -->
+                <!--     </MenuItem.Style> -->
+                <!-- -->
+                <!--     <MenuItem.Icon> -->
+                <!--         <templates:IconBox -->
+                <!--             IconPack="Material" -->
+                <!--             Kind="ClipboardArrowDownOutline" -->
+                <!--             Margin="{DynamicResource WolvenKitMarginTiny}" -->
+                <!--             Size="{DynamicResource WolvenKitIconMilli}" /> -->
+                <!--     </MenuItem.Icon> -->
+                <!-- </MenuItem> -->
+                <!-- -->
+                <!-- ~1~ Overwrite Selection With Pasted @1@ -->
+                <!-- <MenuItem -->
+                <!--     Command="{Binding Path=OverwriteSelectionWithPasteCommand, -->
+                <!--                       Source={x:Reference redTreeView}}" -->
+                <!--     Header="Overwrite Current Selection With Copied"> -->
+                <!--     <MenuItem.Style> -->
+                <!--         <Style -->
+                <!--             BasedOn="{StaticResource TreeViewMenuItemStyle}" -->
+                <!--             TargetType="MenuItem"> -->
+                <!--             <Setter Property="Visibility" Value="Collapsed" /> -->
+                <!--             <Style.Triggers> -->
+                <!--                 <MultiDataTrigger> -->
+                <!--                     <MultiDataTrigger.Conditions> -->
+                <!--                         <Condition Binding="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" /> -->
+                <!--                         <Condition -->
+                <!--                             Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" -->
+                <!--                             Value="True" /> -->
+                <!--                     </MultiDataTrigger.Conditions> -->
+                <!--                     <Setter Property="Visibility" Value="Visible" /> -->
+                <!--                 </MultiDataTrigger> -->
+                <!--                 <MultiDataTrigger> -->
+                <!--                     <MultiDataTrigger.Conditions> -->
+                <!--                         <Condition Binding="{Binding Path=HasMultipleItemsCopied, ElementName=redTreeView}" Value="False" /> -->
+                <!--                         <Condition Binding="{Binding Path=HasHandleCopied, ElementName=redTreeView}" Value="True" /> -->
+                <!--                     </MultiDataTrigger.Conditions> -->
+                <!--                     <Setter Property="Visibility" Value="Visible" /> -->
+                <!--                 </MultiDataTrigger> -->
+                <!--             </Style.Triggers> -->
+                <!--         </Style> -->
+                <!--     </MenuItem.Style> -->
+                <!--     <MenuItem.Icon> -->
+                <!--         <templates:IconBox -->
+                <!--             IconPack="Material" -->
+                <!--             Kind="ClipboardArrowDownOutline" -->
+                <!--             Margin="{DynamicResource WolvenKitMarginTiny}" -->
+                <!--             Size="{DynamicResource WolvenKitIconMilli}" /> -->
+                <!--     </MenuItem.Icon> -->
+                <!-- </MenuItem> -->
 
                 <Separator />
 
                 <!--
                     #########################################################
                     ╔╦╗┌─┐┬  ┌─┐┌┬┐┌─┐  ┌─┐┌─┐┌─┐┬─┐┌─┐┌┬┐┬┌─┐┌┐┌┌─┐
-                    ║║├┤ │  ├┤  │ ├┤   │ │├─┘├┤ ├┬┘├─┤ │ ││ ││││└─┐
+                     ║║├┤ │  ├┤  │ ├┤   │ │├─┘├┤ ├┬┘├─┤ │ ││ ││││└─┐
                     ═╩╝└─┘┴─┘└─┘ ┴ └─┘  └─┘┴  └─┘┴└─┴ ┴ ┴ ┴└─┘┘└┘└─┘
                     #########################################################0
                 -->
@@ -1182,8 +1359,7 @@
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=PlacementTarget.Tag.DeletePropertyCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Delete Property"
-                    IsCheckable="False">
+                    Header="Delete Property">
                     <MenuItem.Icon>
                         <!-- Old icon Codicons#Remove -->
                         <templates:IconBox
@@ -1199,12 +1375,11 @@
                 <MenuItem
                     Command="{Binding Path=DeleteSelectionCommand,
                                       Source={x:Reference redTreeView}}"
-                    Header="Delete Item in Array/Buffer"
-                    IsCheckable="False">
+                    Header="Delete Item in Array/Buffer">
 
                     <MenuItem.Style>
                         <Style
-                            BasedOn="{StaticResource WPFMenuItemStyle}"
+                            BasedOn="{StaticResource TreeViewMenuItemStyle}"
                             TargetType="MenuItem">
                             <Setter Property="Visibility" Value="Collapsed" />
                             <Style.Triggers>
@@ -1212,7 +1387,9 @@
                                     <MultiDataTrigger.Conditions>
                                         <Condition Binding="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
                                         <Condition Binding="{Binding Path=PlacementTarget.Tag.IsMultipleItemsSelected, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="False" />
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="False" />
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="False" />
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="Visibility" Value="Visible" />
                                 </MultiDataTrigger>
@@ -1235,12 +1412,11 @@
                 <MenuItem
                     Command="{Binding Path=DeleteSelectionCommand,
                                       Source={x:Reference redTreeView}}"
-                    Header="Delete Selection in Array/Buffer"
-                    IsCheckable="False">
+                    Header="Delete Selection in Array/Buffer">
 
                     <MenuItem.Style>
                         <Style
-                            BasedOn="{StaticResource WPFMenuItemStyle}"
+                            BasedOn="{StaticResource TreeViewMenuItemStyle}"
                             TargetType="MenuItem">
                             <Setter Property="Visibility" Value="Collapsed" />
                             <Style.Triggers>
@@ -1248,7 +1424,9 @@
                                     <MultiDataTrigger.Conditions>
                                         <Condition Binding="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
                                         <Condition Binding="{Binding Path=PlacementTarget.Tag.IsMultipleItemsSelected, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="False" />
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="False" />
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="Visibility" Value="Visible" />
                                 </MultiDataTrigger>
@@ -1271,20 +1449,21 @@
                 <MenuItem
                     Header="Delete All but Selection in Array/Buffer"
                     Command="{Binding Path=DeleteAllButSelectionCommand,
-                                      Source={x:Reference redTreeView}}"
-                    IsCheckable="False">
+                                      Source={x:Reference redTreeView}}">
 
 
                     <MenuItem.Style>
                         <Style
-                            BasedOn="{StaticResource WPFMenuItemStyle}"
+                            BasedOn="{StaticResource TreeViewMenuItemStyle}"
                             TargetType="MenuItem">
                             <Setter Property="Visibility" Value="Collapsed" />
                             <Style.Triggers>
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
                                         <Condition Binding="{Binding Path=PlacementTarget.Tag.IsInArray, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.IsShiftKeyPressed, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="True" />
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="Visibility" Value="Visible" />
                                 </MultiDataTrigger>
@@ -1310,8 +1489,7 @@
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=PlacementTarget.Tag.DeleteAllCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Delete All Items in Array/Buffer"
-                    IsCheckable="False">
+                    Header="Delete All Items in Array/Buffer">
                     <MenuItem.Icon>
                         <!-- Old icon Material#NotificationClearAll -->
                         <templates:IconBox
@@ -1325,13 +1503,12 @@
 
                 <!-- Reset Object -->
                 <MenuItem
-                    Visibility="{Binding Path=!PlacementTarget.Tag.IsArray,
+                    Visibility="{Binding Path=PlacementTarget.Tag.IsArray,
                                          RelativeSource={RelativeSource AncestorType=ContextMenu},
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                                         Converter={StaticResource InvertBooleanVisibilityConverter}}"
                     Command="{Binding Path=PlacementTarget.Tag.ResetObjectCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Reset Object"
-                    IsCheckable="False">
+                    Header="Reset Object">
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
@@ -1356,8 +1533,7 @@
                 <MenuItem
                     Command="{Binding Path=PlacementTarget.Tag.ExportChunkCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Export to JSON"
-                    IsCheckable="False">
+                    Header="Export to JSON">
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
@@ -1374,8 +1550,7 @@
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=PlacementTarget.Tag.ExportNodeDataCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Export NodeData to JSON"
-                    IsCheckable="False">
+                    Header="Export NodeData to JSON">
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
@@ -1392,8 +1567,7 @@
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=PlacementTarget.Tag.ImportWorldNodeDataCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Import from JSON to worldStreamingSector"
-                    IsCheckable="False">
+                    Header="Import from JSON to worldStreamingSector">
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
@@ -1410,8 +1584,7 @@
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=PlacementTarget.Tag.ImportWorldNodeDataWithoutCoordsCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Import from JSON (no coords update)"
-                    IsCheckable="False">
+                    Header="Import from JSON (no coords update)">
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
@@ -1429,8 +1602,7 @@
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=PlacementTarget.Tag.AddToProjectCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Add to project"
-                    IsCheckable="False">
+                    Header="Add to project">
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Vaadin"
