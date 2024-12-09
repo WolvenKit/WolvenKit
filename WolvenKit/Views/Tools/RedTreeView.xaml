@@ -1503,9 +1503,9 @@
 
                 <!-- Reset Object -->
                 <MenuItem
-                    Visibility="{Binding Path=!PlacementTarget.Tag.IsArray,
+                    Visibility="{Binding Path=PlacementTarget.Tag.IsArray,
                                          RelativeSource={RelativeSource AncestorType=ContextMenu},
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                                         Converter={StaticResource InvertBooleanVisibilityConverter}}"
                     Command="{Binding Path=PlacementTarget.Tag.ResetObjectCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Reset Object">
