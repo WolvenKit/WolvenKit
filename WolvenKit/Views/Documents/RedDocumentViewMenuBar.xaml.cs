@@ -439,7 +439,8 @@ namespace WolvenKit.Views.Documents
             {
                 return;
             }
-            var chunkMask = (CUInt64)dialog.ViewModel.ChunkMask;
+
+            var chunkMask = dialog.ViewModel.ChunkMask;
             var depotPath = dialog.ViewModel.DepotPath;
             var meshAppearance = dialog.ViewModel.MeshAppearance;
 
