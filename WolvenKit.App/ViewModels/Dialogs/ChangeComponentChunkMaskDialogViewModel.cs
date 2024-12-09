@@ -27,7 +27,7 @@ public partial class ChangeComponentChunkMaskDialogViewModel() : ObservableObjec
     /// <summary>
     /// The chunk mask
     /// </summary>
-    [ObservableProperty] private IRedPrimitive<ulong> _chunkMask = (CUInt64)18446744073709551615;
+    [ObservableProperty] private IRedPrimitive<ulong>? _chunkMask;
 
     /// <summary>
     /// Remember the last selection

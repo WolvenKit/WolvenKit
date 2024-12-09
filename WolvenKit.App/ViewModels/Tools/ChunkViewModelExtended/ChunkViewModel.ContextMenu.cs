@@ -373,7 +373,8 @@ public partial class ChunkViewModel
         return Task.CompletedTask;
     }
 
-    public void ReplaceMeshComponentProperties(string componentName, CUInt64? chunkMask, string? depotPath, string? meshAppearance)
+    public void ReplaceMeshComponentProperties(string componentName, IRedPrimitive<ulong>? chunkMask, string? depotPath,
+        string? meshAppearance)
     {
         var hasChanges = false;
 
@@ -397,9 +398,9 @@ public partial class ChunkViewModel
                     componentCvm)
                 {
                     componentCvm.RecalculateProperties();
-                    componentCvm.CalculateIsDefault();
                     componentCvm.CalculateDescriptor();
                     componentCvm.CalculateValue();
+                    componentCvm.CalculateIsDefault();
                 }
                 break;
             default:
