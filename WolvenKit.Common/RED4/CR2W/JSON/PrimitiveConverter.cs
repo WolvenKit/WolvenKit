@@ -2,6 +2,7 @@ using System;
 using System.Buffers;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -134,18 +135,32 @@ public class HandleConverterFactory : JsonConverterFactory
 
     public HandleConverterFactory(ReferenceResolver<RedBaseClass> referenceResolver) => _handleConverter = new(referenceResolver);
 
-    public override bool CanConvert(Type typeToConvert) => typeof(IRedBaseHandle).IsAssignableFrom(typeToConvert);
+    public override bool CanConvert(Type typeToConvert) => GetConverter(typeToConvert) != null;
+
+    private JsonConverter? GetConverter(Type typeToConvert)
+    {
+        if (typeToConvert.IsGenericType)
+        {
+            if (typeToConvert.GetGenericTypeDefinition() == typeof(CHandle<>))
+            {
+                return _handleConverter;
+            }
+
+            if (typeToConvert.GetGenericTypeDefinition() == typeof(CWeakHandle<>))
+            {
+                return _handleConverter;
+            }
+        }
+
+        return null;
+    }
 
     public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {
-        if (typeToConvert.GetGenericTypeDefinition() == typeof(CHandle<>))
+        var converter = GetConverter(typeToConvert);
+        if (converter != null)
         {
-            return _handleConverter;
-        }
-
-        if (typeToConvert.GetGenericTypeDefinition() == typeof(CWeakHandle<>))
-        {
-            return _handleConverter;
+            return converter;
         }
 
         throw new NotSupportedException("CreateConverter got called on a type that this converter factory doesn't support");
