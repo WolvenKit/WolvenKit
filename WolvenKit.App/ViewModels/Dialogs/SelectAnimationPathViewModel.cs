@@ -70,11 +70,14 @@ public partial class SelectAnimationPathViewModel : ObservableObject
     {
         // more entries will be appended by list of paths from constructor
         { "Player Woman", @"base\characters\head\pma\h0_001_ma_c__player\h0_001_ma_c__player_rigsetup.facialsetup" },
-        { "Player Man", @"base\characters\head\pma\h0_001_ma_c__player\h0_001_ma_c__player_rigsetup.facialsetup" },
+        {
+            "Player Man",
+            @"base\characters\head\player_base_heads\player_man_average\h0_000_pma_c__basehead\h0_000_pma_c__basehead_rigsetup.facialsetup"
+        },
     };
 
 
-    private static readonly List<string> PhotomodeAnimEntriesFemale =
+    private static readonly List<string> PhotomodeAnimEntriesFemaleDefault =
     [
         "base\\animations\\ui\\photomode\\photomode_female_facial.anims",
         "base\\animations\\xbaebsae\\pm_facials\\fem\\xbae_pm_facials_01.anims",
@@ -93,9 +96,6 @@ public partial class SelectAnimationPathViewModel : ObservableObject
         "base\\animations\\xbaebsae\\pm_facials\\fem\\xbae_pm_facials_14.anims",
         "base\\animations\\xbaebsae\\pm_facials\\fem\\xbae_pm_facials_15.anims",
     ];
-
-    private static readonly List<string> PhotomodeAnimEntriesMale = PhotomodeAnimEntriesFemale
-        .Select(filePath => filePath.Replace("_female_", "_male")).ToList();
 
     private static readonly List<string> NPCAnimEntries =
     [
@@ -198,15 +198,12 @@ public partial class SelectAnimationPathViewModel : ObservableObject
 
 
     private const string s_animEntryNpc = "NPC";
-    private const string s_animEntryPhotomodeM = "Photomode (male)";
-    private const string s_animEntryPhotomodeF = "Photomode (female)";
+    private const string s_animEntryPhotomode = "Photomode";
     
     // ReSharper disable once UnusedMember.Global used in xaml
     public Dictionary<string, List<string>> AnimEntryOptions { get; } = new()
     {
-        { s_animEntryNpc, NPCAnimEntries },
-        { s_animEntryPhotomodeF, PhotomodeAnimEntriesFemale },
-        { s_animEntryPhotomodeM, PhotomodeAnimEntriesMale },
+        { s_animEntryNpc, NPCAnimEntries }, { s_animEntryPhotomode, PhotomodeAnimEntriesFemaleDefault },
     };
 
     [ObservableProperty] private string? _selectedGraph;
