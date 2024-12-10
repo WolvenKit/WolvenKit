@@ -944,7 +944,23 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         Directory.CreateDirectory(outDirectoryPath);
 
-        await _modTools.ConvertFromJsonAndWriteAsync(new FileInfo(file), new DirectoryInfo(outDirectoryPath));
+        try
+        {
+            await _modTools.ConvertFromJsonAndWriteAsync(new FileInfo(file), new DirectoryInfo(outDirectoryPath));
+        }
+        catch (JsonException err)
+        {
+            if (err.Message.Contains(" | LineNumber"))
+            {
+                _loggerService.Error($"Failed to parse JSON in {file}.");
+                _loggerService.Error($"The error is in LineNumber{err.Message.Split(" | LineNumber").LastOrDefault()}");
+            }
+            else
+            {
+                _loggerService.Error($"Something went _really_ wrong when trying to parse {file}:");
+                throw;
+            }
+        } 
 
         _appViewModel.ReloadChangedFiles();
 
