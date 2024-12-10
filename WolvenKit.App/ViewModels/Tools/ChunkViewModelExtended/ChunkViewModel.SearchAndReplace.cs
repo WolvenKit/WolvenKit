@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using WolvenKit.App.Helpers;
 using WolvenKit.Core.Extensions;
@@ -12,8 +13,6 @@ public partial class ChunkViewModel
     private static readonly List<int> s_resolvedHashes = [];
 
     private static readonly List<string> s_replacedStrings = [];
-
-    public static bool RunShallowReplace { get; set; }
 
     public int NumReplacedEntries;
 
@@ -58,12 +57,7 @@ public partial class ChunkViewModel
     // Level 1 (will call itself recursively, so let's abort here if we can)
     private bool SearchAndReplaceInProperties(string search, string replace, bool isWholeWord, bool isRegex)
     {
-        // for performance reasons: if more than 10 nodes are selected, do not initialize properties
-        if (!RunShallowReplace)
-        {
-            CalculateProperties();
-        }
-        var properties = GetProperties();
+        var properties = Properties.ToList();
 
         if (s_resolvedHashes.Contains(GetHashCode()))
         {

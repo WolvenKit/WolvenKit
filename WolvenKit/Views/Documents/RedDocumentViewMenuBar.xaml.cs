@@ -279,6 +279,8 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
+            RootChunk.ForceLoadPropertiesRecursive();
+            
             if (RootChunk.ResolvedData is CMesh)
             {
                 rootChunk.DeleteUnusedMaterialsCommand.Execute(true);
@@ -352,6 +354,7 @@ namespace WolvenKit.Views.Documents
             // await replacements
             await Task.WhenAll(childNodes.Select(async childNode =>
             {
+                childNode.ForceLoadPropertiesRecursive();
                 foreach (var (oldPath, newPath) in pathReplacements)
                 {
                     if (await childNode.SearchAndReplaceAsync(oldPath, newPath, true, false) == 0)
