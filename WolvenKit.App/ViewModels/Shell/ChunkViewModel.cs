@@ -2342,12 +2342,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         catch (Exception ex) { _loggerService.Error(ex); }
     }
 
-    public static bool IsHandle(IRedType? irb)
+    public static bool IsHandle(IRedType? irb, bool weakHandleOnly = false)
     {
         var propertyType = irb?.GetType();
         return propertyType is not null &&
                propertyType.IsAssignableTo(typeof(IRedBaseHandle)) && (
-                   propertyType.GetGenericTypeDefinition() == typeof(CHandle<>) ||
+                   (!weakHandleOnly && propertyType.GetGenericTypeDefinition() == typeof(CHandle<>)) ||
                    propertyType.GetGenericTypeDefinition() == typeof(CWeakHandle<>));
     }
 
@@ -2968,7 +2968,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     
     public void ForceLoadPropertiesRecursive()
     {
-        if (IsHandle(Data) && !s_InitializeAnyway.Contains(Parent?.Name ?? ""))
+        if (IsHandle(Data, true) && !s_InitializeAnyway.Contains(Parent?.Name ?? ""))
         {
             return;
         }
