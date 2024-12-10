@@ -517,7 +517,10 @@ namespace WolvenKit.Views.Tools
             var isWholeWord = dialog.ViewModel?.IsWholeWord ?? false;
 
             ChunkViewModel.SearchAndReplace_ResetCaches();
-            ChunkViewModel.RunShallowReplace = selectedChunkViewModels.Count < 20;
+            if (selectedChunkViewModels.Count < 20)
+            {
+                selectedChunkViewModels.ForEach(child => child.ForceLoadPropertiesRecursive());
+            }
             
             var results = selectedChunkViewModels
                 .Select(item => item.SearchAndReplace(searchText, replaceText, isWholeWord, isRegex))

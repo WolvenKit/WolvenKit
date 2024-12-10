@@ -479,12 +479,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     // Full list of properties
     public ObservableCollectionExtended<ChunkViewModel> Properties { get; } = new();
 
-    private List<ChunkViewModel> GetProperties()
-    {
-        CalculateProperties();
-        return Properties.ToList();
-    }
-
     // Tree view properties (for the panel on the left)
     public ObservableCollectionExtended<ChunkViewModel> TVProperties => _propertiesLoaded ? Properties : TempList;
 
@@ -2330,14 +2324,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     public Task<int> SearchAndReplaceAsync(string searchText, string replaceText, bool isWholeWord, bool isRegex) =>
         Task.FromResult(SearchAndReplaceInternal(searchText, replaceText, isWholeWord, isRegex));
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="searchText"></param>
-    /// <param name="replaceText"></param>
-    /// <param name="isWholeWord"></param>
-    /// <param name="isRegex"></param>
-    /// <returns></returns>
+    ///<inheritdoc cref="SearchAndReplaceAsync"/>
     public int SearchAndReplace(string searchText, string replaceText, bool isWholeWord, bool isRegex) =>
         SearchAndReplaceInternal(searchText, replaceText, isWholeWord, isRegex);
 
@@ -2355,12 +2342,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         catch (Exception ex) { _loggerService.Error(ex); }
     }
 
-    public static bool IsHandle(IRedType? irb)
+    public static bool IsHandle(IRedType? irb, bool weakHandleOnly = false)
     {
         var propertyType = irb?.GetType();
         return propertyType is not null &&
                propertyType.IsAssignableTo(typeof(IRedBaseHandle)) && (
-                   propertyType.GetGenericTypeDefinition() == typeof(CHandle<>) ||
+                   (!weakHandleOnly && propertyType.GetGenericTypeDefinition() == typeof(CHandle<>)) ||
                    propertyType.GetGenericTypeDefinition() == typeof(CWeakHandle<>));
     }
 
@@ -2971,8 +2958,21 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         return null;
     }
 
-    public void InitializePropertiesRecursive()
+    /// <summary>
+    /// Names of properties to initialize, even if they are handles
+    /// </summary>
+    private static List<string> s_InitializeAnyway =
+    [
+        "appearances", "externalMaterials"
+    ];
+    
+    public void ForceLoadPropertiesRecursive()
     {
+        if (IsHandle(Data, true) && !s_InitializeAnyway.Contains(Parent?.Name ?? ""))
+        {
+            return;
+        }
+
         if (Properties.Count == 0 || Data is RedDummy)
         {
             CalculateProperties();
@@ -2980,7 +2980,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         foreach (var child in Properties)
         {
-            child.InitializePropertiesRecursive();
+            child.ForceLoadPropertiesRecursive();
         }
     }
 
@@ -3795,9 +3795,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         return result;
     }
 
+    /// <summary>
+    /// Used to save expansion states. No need to calculate properties - anything not calculated is not expanded.
+    /// </summary>
+    /// <returns></returns>
     public IEnumerable<ChunkViewModel> GetAllProperties()
     {
-        foreach (var property in GetProperties())
+        foreach (var property in Properties.ToList())
         {
             yield return property;
 
