@@ -11,6 +11,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
+		[RED("appearancesToColorTemplate")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID AppearancesToColorTemplate
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
 		[RED("archetypeName")]
 		[REDProperty(IsIgnored = true)]
 		public CName ArchetypeName
@@ -75,6 +83,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
+		[RED("colorProfilesRestricted")]
+		[REDProperty(IsIgnored = true)]
+		public CBool ColorProfilesRestricted
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("crowdMemberSettings")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID CrowdMemberSettings
@@ -97,6 +113,30 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
+		}
+		
+		[RED("customizationMenuType")]
+		[REDProperty(IsIgnored = true)]
+		public CName CustomizationMenuType
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+		
+		[RED("customizationPreview")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID CustomizationPreview
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("customizeCarRims")]
+		[REDProperty(IsIgnored = true)]
+		public CBool CustomizeCarRims
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 		
 		[RED("debugStatusString")]
@@ -171,6 +211,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 		
+		[RED("excludedComponentsGeneric")]
+		[REDProperty(IsIgnored = true)]
+		public CArray<CName> ExcludedComponentsGeneric
+		{
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
+		}
+		
 		[RED("fxCollision")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID FxCollision
@@ -201,6 +249,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("genericCustomizationMask")]
+		[REDProperty(IsIgnored = true)]
+		public CResourceAsyncReference<CResource> GenericCustomizationMask
+		{
+			get => GetPropertyValue<CResourceAsyncReference<CResource>>();
+			set => SetPropertyValue<CResourceAsyncReference<CResource>>(value);
 		}
 		
 		[RED("hasSideWindows")]
@@ -465,6 +521,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("twintoneModelName")]
+		[REDProperty(IsIgnored = true)]
+		public CName TwintoneModelName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 		
 		[RED("type")]

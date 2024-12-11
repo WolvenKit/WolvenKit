@@ -35,6 +35,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 		
+		[RED("hasCustomization")]
+		[REDProperty(IsIgnored = true)]
+		public CBool HasCustomization
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("hasMachineGun")]
 		[REDProperty(IsIgnored = true)]
 		public CBool HasMachineGun
