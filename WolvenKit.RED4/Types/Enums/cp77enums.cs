@@ -2025,6 +2025,13 @@ public static partial class Enums
 		ArrowsDown = 2
 	}
 
+	public enum EFrameState
+	{
+		NoScreenshot = 0,
+		Loading = 1,
+		HasScreenshot = 2
+	}
+
 	public enum EFreeVectorAxes
 	{
 		FVA_One = 1,
@@ -2089,7 +2096,8 @@ public static partial class Enums
 		NPC = 27,
 		Clue = 28,
 		PlayerStash = 29,
-		Wardrobe = 30
+		Wardrobe = 30,
+		SmartFrame = 31
 	}
 
 	public enum EGenericNotificationPriority
@@ -2744,7 +2752,9 @@ public static partial class Enums
 		EMATMOD_WaterSim = 27,
 		EMATMOD_TransparencyClipParams = 28,
 		EMATMOD_FlatTireParams = 29,
-		EMATMOD_MAX = 30
+		EMATMOD_SecondMultilayerParams = 30,
+		EMATMOD_CrystalCoat = 31,
+		EMATMOD_MAX = 32
 	}
 
 	public enum EMaterialPriority : byte
@@ -3701,20 +3711,21 @@ public static partial class Enums
 		NoPlayerProfile = 18,
 		GameSaved = 19,
 		SaveFailed = 20,
-		UnavailableForGuest = 21,
-		EnableTelemetry = 22,
-		PointOfNoReturn = 23,
-		PointOfNoReturnWithReward = 24,
-		PointOfNoReturnLootAdded = 25,
-		GenericMenuError = 26,
-		ControllerReconnected = 27,
-		ControllerDisconnected = 28,
-		TrialPeriodEnded = 29,
-		TrialPeriodTimer = 30,
-		FailedToRemoveTransferredSave = 31,
-		LoadModdedSaveFile = 32,
-		MAX = 33,
-		FirstModalHighPriority = 27
+		ScreenshotSaved = 21,
+		UnavailableForGuest = 22,
+		EnableTelemetry = 23,
+		PointOfNoReturn = 24,
+		PointOfNoReturnWithReward = 25,
+		PointOfNoReturnLootAdded = 26,
+		GenericMenuError = 27,
+		ControllerReconnected = 28,
+		ControllerDisconnected = 29,
+		TrialPeriodEnded = 30,
+		TrialPeriodTimer = 31,
+		FailedToRemoveTransferredSave = 32,
+		LoadModdedSaveFile = 33,
+		MAX = 34,
+		FirstModalHighPriority = 28
 	}
 
 	public enum ESystems
@@ -4703,7 +4714,8 @@ public static partial class Enums
 	{
 		Codex = 0,
 		Tarot = 1,
-		Shards = 2
+		Shards = 2,
+		Gallery = 3
 	}
 
 	public enum HubMenuInventoryItems
@@ -4729,11 +4741,12 @@ public static partial class Enums
 		HubMenuItems = 10,
 		Codex = 11,
 		Shards = 12,
-		Tarot = 13,
-		Gear = 14,
-		Cyberware = 15,
-		VisualSets = 16,
-		Count = 17
+		Gallery = 13,
+		Tarot = 14,
+		Gear = 15,
+		Cyberware = 16,
+		VisualSets = 17,
+		Count = 18
 	}
 
 	public enum HubVendorMenuItems
@@ -5688,13 +5701,15 @@ public static partial class Enums
 		VehicleMass = 26,
 		VehicleState = 27,
 		VehicleInfo = 28,
-		QuickHackDescription = 29
+		QuickHackDescription = 29,
+		VehicleCustomizationTemplate = 30
 	}
 
 	public enum ScannerDetailTab
 	{
 		Data = 0,
-		Hacking = 1
+		Hacking = 1,
+		TwinTone = 2
 	}
 
 	public enum ScannerNetworkState
@@ -6000,6 +6015,12 @@ public static partial class Enums
 		Unlock = 2
 	}
 
+	public enum VehicleVisualCustomizationType
+	{
+		Generic = 0,
+		Unique = 1
+	}
+
 	public enum VehicleVisualCustomizationWidgetCarPart
 	{
 		Default = 0,
@@ -6010,7 +6031,7 @@ public static partial class Enums
 		Spoiler = 5,
 		SpoilerHidden = 6
 	}
-	
+
 	public enum VendorConfirmationPopupType
 	{
 		Default = 0,
@@ -8294,7 +8315,9 @@ public static partial class Enums
 		CP77_Patch_2_1 = 2100,
 		CP77_Patch_2_1_Hotfix1 = 2110,
 		CP77_Patch_2_1_Hotfix2 = 2120,
-		Current = 2120
+		CP77_Patch_2_1_Hotfix3 = 2137,
+		CP77_Patch_2_2 = 2200,
+		Current = 2200
 	}
 
 	public enum gameGameplayEventFlag
@@ -9172,7 +9195,9 @@ public static partial class Enums
 		Relic = 5,
 		Money = 6,
 		Reveal = 7,
-		Boss = 8
+		Boss = 8,
+		Twintone = 9,
+		Police = 10
 	}
 
 	public enum gameSmartObjectInstanceEntryType
@@ -10064,6 +10089,24 @@ public static partial class Enums
 		CpoTechieBuild = 61,
 		Count = 62,
 		Invalid = 63
+	}
+
+	public enum gamedataCharacterRandomizationCategory
+	{
+		Body = 0,
+		Eyebrows = 1,
+		Eyes = 2,
+		Face = 3,
+		FaceModification = 4,
+		FacialHair = 5,
+		Hair = 6,
+		Makeup = 7,
+		Nails = 8,
+		Scars = 9,
+		Skin = 10,
+		Tattoos = 11,
+		Count = 12,
+		Invalid = 13
 	}
 
 	public enum gamedataChargeStep
@@ -15842,7 +15885,8 @@ public static partial class Enums
 		Patch1600 = 1,
 		Patch2000 = 2,
 		Patch2000_EP1 = 3,
-		Patch2100 = 4
+		Patch2100 = 4,
+		Patch2200 = 5
 	}
 
 	public enum gameuiTutorialHiddenReason
@@ -16371,6 +16415,15 @@ public static partial class Enums
 		WindowActivate = 5
 	}
 
+	public enum inkGameScreenshotSortMode
+	{
+		DateAscending = 0,
+		DateDescending = 1,
+		RatioAscending = 2,
+		RatioDescending = 3,
+		Favorite = 4
+	}
+
 	public enum inkGradientMode : byte
 	{
 		Linear = 0,
@@ -16456,6 +16509,15 @@ public static partial class Enums
 		SplashScreen = 1,
 		Initial = 2,
 		FastTravel = 3
+	}
+
+	public enum inkMarketingConsentPopupType
+	{
+		None = 0,
+		ThirdParty = 1,
+		Newsletter = 2,
+		Both = 3,
+		SignIn = 4
 	}
 
 	public enum inkMaskDataSource : byte
@@ -18741,13 +18803,28 @@ public static partial class Enums
 		TPP = 1
 	}
 
+	public enum vehicleColorSelectorActiveInputMode
+	{
+		None = 0,
+		Gamepad = 1,
+		KBM = 2
+	}
+
 	public enum vehicleColorSelectorActiveMode
 	{
 		None = 0,
 		Primary = 1,
 		Secondary = 2,
-        Lights = 3
-    }
+		Lights = 3
+	}
+
+	public enum vehicleColorSelectorActiveTab
+	{
+		None = 0,
+		Both = 1,
+		Main = 2,
+		Twintone = 3
+	}
 
 	public enum vehicleColorSelectorMenuCloseReason
 	{
@@ -18755,7 +18832,14 @@ public static partial class Enums
 		Reset = 1,
 		Cancel = 2
 	}
-	
+
+	public enum vehicleColorSelectorSBBar
+	{
+		None = 0,
+		Saturation = 1,
+		Brightness = 2
+	}
+
 	public enum vehicleCoolExitImpulseLevel
 	{
 		NoExit = 0,

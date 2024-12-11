@@ -245,6 +245,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(30)] 
+		[RED("ScannerVehicleCustomization")] 
+		public gamebbScriptID_Variant ScannerVehicleCustomization
+		{
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
+		}
+
+		[Ordinal(31)] 
 		[RED("ObjectType")] 
 		public gamebbScriptID_Int32 ObjectType
 		{
@@ -284,6 +292,7 @@ namespace WolvenKit.RED4.Types
 			ScannerVehicleState = new gamebbScriptID_Variant();
 			ScannerVehicleInfo = new gamebbScriptID_Variant();
 			ScannerQuickHackDescription = new gamebbScriptID_Variant();
+			ScannerVehicleCustomization = new gamebbScriptID_Variant();
 			ObjectType = new gamebbScriptID_Int32();
 
 			PostConstruct();

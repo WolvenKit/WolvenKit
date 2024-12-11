@@ -213,6 +213,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(28)] 
+		[RED("twintoneOverride")] 
+		public CHandle<inkGameNotificationToken> TwintoneOverride
+		{
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
+		}
+
+		[Ordinal(29)] 
 		[RED("expansionToken")] 
 		public CHandle<inkGameNotificationToken> ExpansionToken
 		{
@@ -220,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("expansionErrorToken")] 
 		public CHandle<inkGameNotificationToken> ExpansionErrorToken
 		{
@@ -228,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("patchNotesToken")] 
 		public CHandle<inkGameNotificationToken> PatchNotesToken
 		{
@@ -236,7 +244,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
+		[RED("marketingConsentToken")] 
+		public CHandle<inkGameNotificationToken> MarketingConsentToken
+		{
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
+		}
+
+		[Ordinal(33)] 
+		[RED("signInToken")] 
+		public CHandle<inkGameNotificationToken> SignInToken
+		{
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
+		}
+
+		[Ordinal(34)] 
 		[RED("expansionStateToken")] 
 		public CHandle<inkGameNotificationToken> ExpansionStateToken
 		{
@@ -244,9 +268,17 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(35)] 
 		[RED("vehicleVisualCustomizationSelectorToken")] 
 		public CHandle<inkGameNotificationToken> VehicleVisualCustomizationSelectorToken
+		{
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
+		}
+
+		[Ordinal(36)] 
+		[RED("frameSwitcherToken")] 
+		public CHandle<inkGameNotificationToken> FrameSwitcherToken
 		{
 			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);

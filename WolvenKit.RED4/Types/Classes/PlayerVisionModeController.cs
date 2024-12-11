@@ -96,7 +96,7 @@ namespace WolvenKit.RED4.Types
 		{
 			GameplayActiveFlagsRefreshPolicy = new PlayerVisionModeControllerRefreshPolicy();
 			BlackboardIds = new PlayerVisionModeControllerBBIds();
-			BlackboardValuesIds = new PlayerVisionModeControllerBBValuesIds { Kerenzikov = new gamebbScriptID_Int32(), RestrictedScene = new gamebbScriptID_Int32(), Dead = new gamebbScriptID_Int32(), Takedown = new gamebbScriptID_Int32(), DeviceTakeover = new gamebbScriptID_EntityID(), BraindanceFPP = new gamebbScriptID_Bool(), BraindanceActive = new gamebbScriptID_Bool(), VeryHardLanding = new gamebbScriptID_Int32(), IsBriefingActive = new gamebbScriptID_Bool() };
+			BlackboardValuesIds = new PlayerVisionModeControllerBBValuesIds { Kerenzikov = new gamebbScriptID_Int32(), RestrictedScene = new gamebbScriptID_Int32(), Dead = new gamebbScriptID_Int32(), Takedown = new gamebbScriptID_Int32(), DeviceTakeover = new gamebbScriptID_EntityID(), BraindanceFPP = new gamebbScriptID_Bool(), BraindanceActive = new gamebbScriptID_Bool(), VeryHardLanding = new gamebbScriptID_Int32(), IsBriefingActive = new gamebbScriptID_Bool(), TwintoneOverrideShown = new gamebbScriptID_Bool() };
 			BlackboardListenersFunctions = new PlayerVisionModeControllerBlackboardListenersFunctions();
 			BlackboardListeners = new PlayerVisionModeControllerBBListeners();
 			GameplayActiveFlags = new PlayerVisionModeControllerActiveFlags();

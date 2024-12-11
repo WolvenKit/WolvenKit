@@ -5,11 +5,11 @@ namespace WolvenKit.RED4.Types
 	public partial class ExecuteVisualCustomizationWithDelay : redEvent
 	{
 		[Ordinal(0)] 
-		[RED("modSet")] 
-		public vehicleVisualModdingDefinition ModSet
+		[RED("template")] 
+		public VehicleVisualCustomizationTemplate Template
 		{
-			get => GetPropertyValue<vehicleVisualModdingDefinition>();
-			set => SetPropertyValue<vehicleVisualModdingDefinition>(value);
+			get => GetPropertyValue<VehicleVisualCustomizationTemplate>();
+			set => SetPropertyValue<VehicleVisualCustomizationTemplate>(value);
 		}
 
 		[Ordinal(1)] 
@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
 
 		public ExecuteVisualCustomizationWithDelay()
 		{
-			ModSet = new vehicleVisualModdingDefinition();
+			Template = new VehicleVisualCustomizationTemplate { GenericData = new GenericTemplatePersistentData(), UniqueData = new UniqueTemplateData { CustomMultilayers = new(), CustomDecals = new(), GlobalClearCoatOverrides = new vehicleVehicleClearCoatOverrides { Opacity = -1.000000F, CoatTintFwd = new CColor(), CoatTintSide = new CColor(), CoatTintFresnelBias = -1.000000F, CoatSpecularColor = new CColor(), CoatFresnelBias = -1.000000F }, PartsClearCoatOverrides = new() } };
 
 			PostConstruct();
 		}

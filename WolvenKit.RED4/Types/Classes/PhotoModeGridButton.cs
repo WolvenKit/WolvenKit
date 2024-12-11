@@ -93,6 +93,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(27)] 
+		[RED("alwaysVisible")] 
+		public CBool AlwaysVisible
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(28)] 
 		[RED("imageScalingSpeed")] 
 		public CFloat ImageScalingSpeed
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("opacityScalingSpeed")] 
 		public CFloat OpacityScalingSpeed
 		{

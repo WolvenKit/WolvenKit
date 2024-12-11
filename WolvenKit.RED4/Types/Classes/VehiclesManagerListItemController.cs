@@ -21,6 +21,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(20)] 
+		[RED("customizableIcon")] 
+		public inkImageWidgetReference CustomizableIcon
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(21)] 
 		[RED("repairTime")] 
 		public inkTextWidgetReference RepairTime
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("vehicleData")] 
 		public CHandle<VehicleListItemData> VehicleData
 		{
@@ -40,6 +48,7 @@ namespace WolvenKit.RED4.Types
 		{
 			Label = new inkTextWidgetReference();
 			TypeIcon = new inkImageWidgetReference();
+			CustomizableIcon = new inkImageWidgetReference();
 			RepairTime = new inkTextWidgetReference();
 
 			PostConstruct();
