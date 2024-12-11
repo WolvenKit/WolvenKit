@@ -108,6 +108,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameuiCharacterCustomizationAction>>(value);
 		}
 
+		[Ordinal(13)] 
+		[RED("randomizeCategory")] 
+		public CEnum<gamedataCharacterRandomizationCategory> RandomizeCategory
+		{
+			get => GetPropertyValue<CEnum<gamedataCharacterRandomizationCategory>>();
+			set => SetPropertyValue<CEnum<gamedataCharacterRandomizationCategory>>(value);
+		}
+
 		public gameuiCharacterCustomizationInfo()
 		{
 			PostConstruct();

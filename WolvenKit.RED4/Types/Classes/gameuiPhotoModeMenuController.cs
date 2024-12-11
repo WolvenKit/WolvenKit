@@ -29,6 +29,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
+		[RED("SetNpcImage")] 
+		public gameuiNpcImageCallback SetNpcImage
+		{
+			get => GetPropertyValue<gameuiNpcImageCallback>();
+			set => SetPropertyValue<gameuiNpcImageCallback>(value);
+		}
+
+		[Ordinal(6)] 
+		[RED("ChangeAspectRatio")] 
+		public gameuiChangeAspectRatioCallback ChangeAspectRatio
+		{
+			get => GetPropertyValue<gameuiChangeAspectRatioCallback>();
+			set => SetPropertyValue<gameuiChangeAspectRatioCallback>(value);
+		}
+
+		[Ordinal(7)] 
 		[RED("menuListRoot")] 
 		public inkWidgetReference MenuListRoot
 		{
@@ -36,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(8)] 
 		[RED("additionalListRoot")] 
 		public inkWidgetReference AdditionalListRoot
 		{
@@ -44,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(9)] 
 		[RED("radioButtons")] 
 		public inkCompoundWidgetReference RadioButtons
 		{
@@ -52,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(10)] 
 		[RED("listContainerId")] 
 		public CName ListContainerId
 		{
@@ -60,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(11)] 
 		[RED("menuArea")] 
 		public inkWidgetReference MenuArea
 		{
@@ -68,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(12)] 
 		[RED("additionalMenuArea")] 
 		public inkWidgetReference AdditionalMenuArea
 		{
@@ -76,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(13)] 
 		[RED("inputCameraControlKbd")] 
 		public inkWidgetReference InputCameraControlKbd
 		{
@@ -84,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(14)] 
 		[RED("inputCameraKbd")] 
 		public inkWidgetReference InputCameraKbd
 		{
@@ -92,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(15)] 
 		[RED("inputCameraControlPad")] 
 		public inkWidgetReference InputCameraControlPad
 		{
@@ -100,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(16)] 
 		[RED("inputCameraPad")] 
 		public inkWidgetReference InputCameraPad
 		{
@@ -108,7 +124,39 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(17)] 
+		[RED("inputLightControlKbd")] 
+		public inkWidgetReference InputLightControlKbd
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("inputLightKbd")] 
+		public inkWidgetReference InputLightKbd
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(19)] 
+		[RED("inputLightControlPad")] 
+		public inkWidgetReference InputLightControlPad
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(20)] 
+		[RED("inputLightPad")] 
+		public inkWidgetReference InputLightPad
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(21)] 
 		[RED("inputStickersKbd")] 
 		public inkWidgetReference InputStickersKbd
 		{
@@ -116,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(22)] 
 		[RED("inputStickersPad")] 
 		public inkWidgetReference InputStickersPad
 		{
@@ -124,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(23)] 
 		[RED("inputSaveLoadKbd")] 
 		public inkWidgetReference InputSaveLoadKbd
 		{
@@ -132,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(24)] 
 		[RED("inputSaveLoadPad")] 
 		public inkWidgetReference InputSaveLoadPad
 		{
@@ -140,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(25)] 
 		[RED("inputExit")] 
 		public inkWidgetReference InputExit
 		{
@@ -148,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(26)] 
 		[RED("inputScreenshot")] 
 		public inkWidgetReference InputScreenshot
 		{
@@ -156,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(27)] 
 		[RED("cameraLocation")] 
 		public inkWidgetReference CameraLocation
 		{
@@ -164,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(28)] 
 		[RED("inputBottomRoot")] 
 		public inkHorizontalPanelWidgetReference InputBottomRoot
 		{
@@ -172,7 +220,31 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkHorizontalPanelWidgetReference>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(29)] 
+		[RED("tabTitleText")] 
+		public inkRichTextBoxWidgetReference TabTitleText
+		{
+			get => GetPropertyValue<inkRichTextBoxWidgetReference>();
+			set => SetPropertyValue<inkRichTextBoxWidgetReference>(value);
+		}
+
+		[Ordinal(30)] 
+		[RED("tabTitleIcon")] 
+		public inkImageWidgetReference TabTitleIcon
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(31)] 
+		[RED("aspectRatioPanel")] 
+		public inkWidgetReference AspectRatioPanel
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(32)] 
 		[RED("ps4InputLibraryId")] 
 		public CName Ps4InputLibraryId
 		{
@@ -180,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(33)] 
 		[RED("xboxInputLibraryId")] 
 		public CName XboxInputLibraryId
 		{
@@ -188,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(34)] 
 		[RED("stadiaInputLibraryId")] 
 		public CName StadiaInputLibraryId
 		{
@@ -196,7 +268,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(35)] 
+		[RED("rootWidget")] 
+		public CWeakHandle<inkCompoundWidget> RootWidget
+		{
+			get => GetPropertyValue<CWeakHandle<inkCompoundWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkCompoundWidget>>(value);
+		}
+
+		[Ordinal(36)] 
 		[RED("ps4InputWidget")] 
 		public CWeakHandle<inkWidget> Ps4InputWidget
 		{
@@ -204,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(37)] 
 		[RED("xboxInputWidget")] 
 		public CWeakHandle<inkWidget> XboxInputWidget
 		{
@@ -212,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(38)] 
 		[RED("stadiaInputWidget")] 
 		public CWeakHandle<inkWidget> StadiaInputWidget
 		{
@@ -220,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(39)] 
 		[RED("menuPages")] 
 		public CArray<CWeakHandle<inkWidget>> MenuPages
 		{
@@ -228,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<inkWidget>>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(40)] 
 		[RED("topButtonsController")] 
 		public CWeakHandle<PhotoModeTopBarController> TopButtonsController
 		{
@@ -236,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PhotoModeTopBarController>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(41)] 
 		[RED("cameraLocationController")] 
 		public CWeakHandle<PhotoModeCameraLocation> CameraLocationController
 		{
@@ -244,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PhotoModeCameraLocation>>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(42)] 
 		[RED("currentPage")] 
 		public CUInt32 CurrentPage
 		{
@@ -252,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(43)] 
 		[RED("IsHoverOver")] 
 		public CBool IsHoverOver
 		{
@@ -260,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(44)] 
 		[RED("holdSafeguard")] 
 		public CBool HoldSafeguard
 		{
@@ -268,7 +348,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(45)] 
 		[RED("notificationUserData")] 
 		public CHandle<inkGameNotificationData> NotificationUserData
 		{
@@ -276,7 +356,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationData>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(46)] 
 		[RED("notificationToken")] 
 		public CHandle<inkGameNotificationToken> NotificationToken
 		{
@@ -284,7 +364,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(47)] 
 		[RED("loopAnimproxy")] 
 		public CHandle<inkanimProxy> LoopAnimproxy
 		{
@@ -292,7 +372,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(48)] 
 		[RED("uiVisiblityFadeAnim")] 
 		public CHandle<inkanimProxy> UiVisiblityFadeAnim
 		{
@@ -300,11 +380,21 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
+		[Ordinal(49)] 
+		[RED("currentNpc")] 
+		public CInt32 CurrentNpc
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
 		public gameuiPhotoModeMenuController()
 		{
 			SetAttributeOptionEnabled = new gameuiSetPhotoModeKeyEnabledCallback();
 			SetCategoryEnabled = new gameuiSetPhotoModeKeyEnabledCallback();
 			SetStickerImage = new gameuiStickerImageCallback();
+			SetNpcImage = new gameuiNpcImageCallback();
+			ChangeAspectRatio = new gameuiChangeAspectRatioCallback();
 			MenuListRoot = new inkWidgetReference();
 			AdditionalListRoot = new inkWidgetReference();
 			RadioButtons = new inkCompoundWidgetReference();
@@ -314,6 +404,10 @@ namespace WolvenKit.RED4.Types
 			InputCameraKbd = new inkWidgetReference();
 			InputCameraControlPad = new inkWidgetReference();
 			InputCameraPad = new inkWidgetReference();
+			InputLightControlKbd = new inkWidgetReference();
+			InputLightKbd = new inkWidgetReference();
+			InputLightControlPad = new inkWidgetReference();
+			InputLightPad = new inkWidgetReference();
 			InputStickersKbd = new inkWidgetReference();
 			InputStickersPad = new inkWidgetReference();
 			InputSaveLoadKbd = new inkWidgetReference();
@@ -322,6 +416,9 @@ namespace WolvenKit.RED4.Types
 			InputScreenshot = new inkWidgetReference();
 			CameraLocation = new inkWidgetReference();
 			InputBottomRoot = new inkHorizontalPanelWidgetReference();
+			TabTitleText = new inkRichTextBoxWidgetReference();
+			TabTitleIcon = new inkImageWidgetReference();
+			AspectRatioPanel = new inkWidgetReference();
 			MenuPages = new();
 
 			PostConstruct();

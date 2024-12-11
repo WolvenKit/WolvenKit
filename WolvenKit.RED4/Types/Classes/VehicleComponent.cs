@@ -389,11 +389,11 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(52)] 
-		[RED("customizableApperanceApplied")] 
-		public CBool CustomizableApperanceApplied
+		[RED("effectBlackboard")] 
+		public CHandle<worldEffectBlackboard> EffectBlackboard
 		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
+			get => GetPropertyValue<CHandle<worldEffectBlackboard>>();
+			set => SetPropertyValue<CHandle<worldEffectBlackboard>>(value);
 		}
 
 		[Ordinal(53)] 

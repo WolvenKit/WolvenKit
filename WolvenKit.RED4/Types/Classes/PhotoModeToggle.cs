@@ -29,6 +29,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(19)] 
+		[RED("FluffTextWidget")] 
+		public inkTextWidgetReference FluffTextWidget
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(20)] 
 		[RED("LabelWidget")] 
 		public inkTextWidgetReference LabelWidget
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("photoModeGroupController")] 
 		public CWeakHandle<PhotoModeTopBarController> PhotoModeGroupController
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PhotoModeTopBarController>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("fadeAnim")] 
 		public CHandle<inkanimProxy> FadeAnim
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("fade2Anim")] 
 		public CHandle<inkanimProxy> Fade2Anim
 		{
@@ -65,6 +73,7 @@ namespace WolvenKit.RED4.Types
 			SelectedWidget = new inkWidgetReference();
 			FrameWidget = new inkWidgetReference();
 			IconWidget = new inkImageWidgetReference();
+			FluffTextWidget = new inkTextWidgetReference();
 			LabelWidget = new inkTextWidgetReference();
 
 			PostConstruct();

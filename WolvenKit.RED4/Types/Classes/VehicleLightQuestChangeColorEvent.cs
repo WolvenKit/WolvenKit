@@ -20,6 +20,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<vehicleELightType>>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("forceOverrideEmissiveColor")] 
+		public CBool ForceOverrideEmissiveColor
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public VehicleLightQuestChangeColorEvent()
 		{
 			Color = new CColor();

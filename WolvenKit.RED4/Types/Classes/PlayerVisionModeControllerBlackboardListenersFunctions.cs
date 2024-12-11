@@ -76,6 +76,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
+		[Ordinal(9)] 
+		[RED("twintoneOverrideShown")] 
+		public CName TwintoneOverrideShown
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
 		public PlayerVisionModeControllerBlackboardListenersFunctions()
 		{
 			PostConstruct();
