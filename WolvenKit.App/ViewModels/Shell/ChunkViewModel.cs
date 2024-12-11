@@ -1212,7 +1212,16 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                         return;
                     }
 
-                    var newItem = RedTypeManager.CreateRedType(type);
+                    IRedType newItem;
+                    if (type == typeof(IRedCurvePoint))
+                    {
+                        newItem = CurvePoint.Create(arr.GetType().GetGenericArguments()[0]);
+                    }
+                    else
+                    {
+                        newItem = RedTypeManager.CreateRedType(type);
+                    }
+
                     if (newItem is IRedBaseHandle handle)
                     {
                         var pointee = RedTypeManager.CreateRedType(handle.InnerType);
@@ -1230,7 +1239,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
         }
 
-        if (PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)))
+        /*if (PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)))
         {
             if (!CreateArray())
             {
@@ -1242,7 +1251,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             var type = curve.ElementType;
             var newItem = RedTypeManager.CreateRedType(type);
             InsertChild(-1, newItem);
-        }
+        }*/
     }
 
     private bool CanSaveBufferToDisk() => Data is IRedBufferWrapper { Buffer.MemSize: > 0 };   // TODO RelayCommand check notify
@@ -3416,7 +3425,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         if (iraType.IsGenericType)
         {
             var arrayType = iraType.GetGenericTypeDefinition();
-            if (arrayType == typeof(CArray<>) || (arrayType == typeof(CStatic<>) && ira.Count < ira.MaxSize))
+            if (arrayType == typeof(CArray<>) || arrayType == typeof(CLegacySingleChannelCurve<>) || (arrayType == typeof(CStatic<>) && ira.Count < ira.MaxSize))
             {
                 if (index == -1 || index > ira.Count)
                 {
