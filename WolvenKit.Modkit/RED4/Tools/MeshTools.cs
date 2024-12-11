@@ -450,7 +450,7 @@ namespace WolvenKit.Modkit.RED4.Tools
 
                         // Z up to Y up and LHCS to RHCS
                         var vec1 = Vec3.Normalize(new Vec3(vec0.X, vec0.Z, -vec0.Y));
-                        meshContainer.tangents[i] = new Vec4(vec1.X, vec1.Y, vec1.Z, 1f);
+                        meshContainer.tangents[i] = new Vec4(vec1.X, vec1.Y, vec1.Z, vec0.W);
                     }
                 }
 
