@@ -1415,6 +1415,60 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 sm.Material = SetupPBRMaterial("DefaultMaterial");
             }
             list.Add(sm);
+
+            if (mesh.vehDmgPositions?.Length > 0)
+            {
+                var vehicleDmgPositions = new Vector3Collection(mesh.vehDmgPositions.Length);
+                for (var i = 0; i < mesh.vehDmgPositions.Length; i++)
+                {
+                    vehicleDmgPositions.Add(mesh.vehDmgPositions[i].ToVector3());
+                }
+
+                var vehicleDmgNormals = new Vector3Collection(mesh.vehDmgNormals!.Length);
+                for (var i = 0; i < mesh.vehDmgNormals.Length; i++)
+                {
+                    vehicleDmgNormals.Add(mesh.vehDmgNormals[i].ToVector3());
+                }
+
+                var vsm = new SubmeshComponent()
+                {
+                    Name = $"submesh_{index:D2}_LOD_{meshesinfo.LODLvl[index]:D2}_damaged",
+                    Text = $"submesh_{index:D2}_LOD_{meshesinfo.LODLvl[index]:D2}_damaged",
+                    LOD = meshesinfo.LODLvl[index],
+                    IsRendering = (chunkMask & 1UL << index) > 0 && meshesinfo.LODLvl[index] == (SelectedAppearance?.SelectedLOD ?? 1),
+                    EnabledWithMask = (chunkMask & 1UL << index) > 0,
+                    Geometry = new HelixToolkit.SharpDX.Core.MeshGeometry3D()
+                    {
+                        Positions = vehicleDmgPositions,
+                        Indices = indices,
+                        Normals = vehicleDmgNormals
+                    },
+                    DepthBias = -index * 2,
+                };
+
+                if (mesh.materialNames.Length > appearanceIndex)
+                {
+                    vsm.MaterialName = GetUniqueMaterialName(mesh.materialNames[appearanceIndex], cMesh);
+                    vsm.Material = SetupPBRMaterial(vsm.MaterialName);
+                    if (vsm.MaterialName.Contains("glass"))
+                    {
+                        vsm.DepthBias -= 10;
+                        vsm.IsTransparent = true;
+                    }
+                    if (vsm.MaterialName.Contains("sticker") || vsm.MaterialName.Contains("decal"))
+                    {
+                        vsm.DepthBias -= 15;
+                        vsm.IsTransparent = true;
+                    }
+                }
+                else
+                {
+                    vsm.Material = SetupPBRMaterial("DefaultMaterial");
+                }
+
+                list.Add(vsm);
+            }
+
             index++;
         }
 

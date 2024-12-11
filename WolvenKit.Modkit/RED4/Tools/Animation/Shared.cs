@@ -266,6 +266,11 @@ namespace WolvenKit.Modkit.RED4.Animation
         AnimationOptimizationHints OptimizationHints
     );
 
+    internal readonly record struct MeshExtras(
+        string[] materialNames,
+        string[] targetNames
+    );
+
     namespace Deprecated
     {
         // TODO: maybe explicit constructor for explicit defaults?
