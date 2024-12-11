@@ -85,16 +85,22 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
         public static Vector4 TenBitShifted(uint u32)
         {
             var dequant  = 1f / 1023f;
-            var dequantW = 1f / 3f;
 
             var x = Convert.ToSingle(u32 & 0x3ff);
             var y = Convert.ToSingle((u32 >> 10) & 0x3ff);
             var z = Convert.ToSingle((u32 >> 20) & 0x3ff);
-            var w = Convert.ToSingle((u32) >> 30);
             x = (x * 2 * dequant) - 1f;
             y = (y * 2 * dequant) - 1f;
             z = (z * 2 * dequant) - 1f;
-            w = (w * 2 * dequantW) - 1f;
+
+            // this is... crap, but for testing its enough
+            var w = (u32 >> 30) switch
+            {
+                0 => 1f,
+                3 => -1f,
+                _ => 0f // just for normals, doesn't matter there
+            };
+
             return new Vector4(x, y, z, w);
         }
         public static TargetVec4 TenBitUnsigned(uint u32)
@@ -164,8 +170,14 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
             var c = Convert.ToUInt32((v.Z + 1f) * quant * 0.5f);
             c = Math.Clamp(c, 0, 1023);
             c <<= 20;
-            var d = Convert.ToUInt32((v.W + 1f) * 3f * 0.5f);
-            d = Math.Clamp(d, 0, 3);
+
+            // still crap, but...
+            uint d = v.W switch
+            {
+                1f => 0,
+                -1f => 3,
+                _ => throw new InvalidOperationException()
+            };
             d <<= 30;
             
             return a | b | c | d;
