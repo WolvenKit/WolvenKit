@@ -84,15 +84,23 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
         }
         public static Vector4 TenBitShifted(uint u32)
         {
+            var dequant  = 1f / 1023f;
+
             var x = Convert.ToSingle(u32 & 0x3ff);
             var y = Convert.ToSingle((u32 >> 10) & 0x3ff);
             var z = Convert.ToSingle((u32 >> 20) & 0x3ff);
-            var w = Convert.ToSingle((u32) >> 30);
-            var dequant = 1f / 1023f;
             x = (x * 2 * dequant) - 1f;
             y = (y * 2 * dequant) - 1f;
             z = (z * 2 * dequant) - 1f;
-            w /= 3f;
+
+            // this is... crap, but for testing its enough
+            var w = (u32 >> 30) switch
+            {
+                0 => 1f,
+                3 => -1f,
+                _ => 0f // just for normals, doesn't matter there
+            };
+
             return new Vector4(x, y, z, w);
         }
         public static TargetVec4 TenBitUnsigned(uint u32)
@@ -129,6 +137,25 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
 
             return new Vector4(x / 512f, y / 512f, z / 512f, w / 3f);
         }
+
+        public static uint Vec3ToU32(Vector3 v) // reversing for 10bit nors and tans
+        {
+            v.X = Math.Clamp(v.X, -1f, 1f);
+            v.Y = Math.Clamp(v.Y, -1f, 1f);
+            v.Z = Math.Clamp(v.Z, -1f, 1f);
+            var quant = 1023f;
+            var a = Convert.ToUInt32((v.X + 1f) * quant * 0.5f);
+            a = Math.Clamp(a, 0, 1023);
+            var b = Convert.ToUInt32((v.Y + 1f) * quant * 0.5f);
+            b = Math.Clamp(b, 0, 1023);
+            b <<= 10;
+            var c = Convert.ToUInt32((v.Z + 1f) * quant * 0.5f);
+            c = Math.Clamp(c, 0, 1023);
+            c <<= 20;
+
+            return a | b | c;
+        }
+
         public static uint Vec4ToU32(Vector4 v) // reversing for 10bit nors and tans
         {
             v.X = Math.Clamp(v.X, -1f, 1f);
@@ -143,11 +170,15 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
             var c = Convert.ToUInt32((v.Z + 1f) * quant * 0.5f);
             c = Math.Clamp(c, 0, 1023);
             c <<= 20;
-            uint d = 0; // for tangents in bits its 00000000000000000000000000000000
-            if (v.W == 0)
+
+            // still crap, but...
+            uint d = v.W switch
             {
-                d = 1073741824;  // for normals in bits its 01000000000000000000000000000000
-            }
+                1f => 0,
+                -1f => 3,
+                _ => throw new InvalidOperationException()
+            };
+            d <<= 30;
             
             return a | b | c | d;
         }
