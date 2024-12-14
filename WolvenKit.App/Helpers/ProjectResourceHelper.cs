@@ -18,13 +18,18 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.Helpers;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
+using WolvenKit.RED4.CR2W.JSON;
 using WolvenKit.RED4.Types;
-using EFileReadErrorCodes = WolvenKit.Common.EFileReadErrorCodes;
+using static WolvenKit.Common.EFileReadErrorCodes;
 
 namespace WolvenKit.App.Helpers;
 
 public static class ProjectResourceHelper
 {
+    public static readonly string SourceSubdirWithSlashes = $"{Path.DirectorySeparatorChar}source{Path.DirectorySeparatorChar}";
+    public static readonly string ArchiveSubdirWithSlashes = $"{Path.DirectorySeparatorChar}archive{Path.DirectorySeparatorChar}";
+    public static readonly string RawSubdirWithSlashes = $"{Path.DirectorySeparatorChar}raw{Path.DirectorySeparatorChar}";
+    
     private static IProjectManager? s_projectManager;
     private static IProjectManager? GetProjectManager() => s_projectManager ??= Locator.Current.GetService<IProjectManager>();
 
@@ -45,6 +50,16 @@ public static class ProjectResourceHelper
             Locator.Current.GetService<RED4Controller>()!,
             Locator.Current.GetService<MockGameController>()!
         ).GetRed4Controller();
+    }
+
+    public static string SwitchArchiveRaw(string filePath)
+    {
+        if (filePath.Contains(ArchiveSubdirWithSlashes))
+        {
+            return filePath.Replace(ArchiveSubdirWithSlashes, RawSubdirWithSlashes);
+        }
+
+        return filePath.Replace(RawSubdirWithSlashes, ArchiveSubdirWithSlashes);
     }
 
     private static string GetUniqueSubfolderPath(IEnumerable<string> allFilePaths, string currentFilePath)
@@ -72,7 +87,13 @@ public static class ProjectResourceHelper
         Task.Run(() => AddDependenciesToProjectPath(destFolderRelativePath, resourcePaths));
 
     private static readonly SemaphoreSlim semaphore = new(1, 1);
-
+   
+    /// <summary>
+    /// Builds a dictionary of relative paths and project-relative destination paths
+    /// </summary>
+    /// <param name="destFolderRelativePath"></param>
+    /// <param name="resourcePaths"></param>
+    /// <returns></returns>
     private static async Task<Dictionary<string, string>> AddDependenciesToProjectPath(string destFolderRelativePath,
         HashSet<ResourcePath> resourcePaths)
     {
@@ -217,15 +238,17 @@ public static class ProjectResourceHelper
             controller.AddToMod(modFile.Value, ArchiveManagerScope.Mods);
         }
     }
-    
+
     private static void AddFileToProjectFolder(string projectRoot, ResourcePath resourcePath, ResourcePath targetResourcePath,
-        Dictionary<string, string> pathReplacements, bool overwriteFiles)
+        Dictionary<string, string>? pathReplacements, bool overwriteFiles = true)
     {
         if (resourcePath.GetResolvedText() is not string sourceRelativePath
             || string.IsNullOrEmpty(sourceRelativePath))
         {
             return;
         }
+
+        pathReplacements ??= [];
         
         var refPathHash = HashHelper.CalculateDepotPathHash(resourcePath);
 
@@ -459,7 +482,7 @@ public static class ProjectResourceHelper
         using (var fs = File.Open(filePath, FileMode.Open))
         using (var cr = new CR2WReader(fs))
         {
-            if (cr.ReadFile(out cr2W) != (RED4.Archive.IO.EFileReadErrorCodes)EFileReadErrorCodes.NoError)
+            if (cr.ReadFile(out cr2W) != (RED4.Archive.IO.EFileReadErrorCodes)NoError)
             {
                 return;
             }
