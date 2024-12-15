@@ -59,7 +59,7 @@ namespace WolvenKit.Views.Tools
         private void RedTreeView_Loaded(object sender, RoutedEventArgs e)
         {
             DataContextChanged += OnDataContextChanged;
-            RedDocumentTabViewModel.CopiedChunkChanged += OnCopiedChunkChanged;
+            RedDocumentTabViewModel.OnCopiedChunkChanged += OnCopiedChunkChanged;
 
             SyncPasteStatus();
         }
@@ -69,7 +69,7 @@ namespace WolvenKit.Views.Tools
         /// </summary>
         private void RedTreeView_Unloaded(object sender, RoutedEventArgs e)
         {
-            RedDocumentTabViewModel.CopiedChunkChanged -= OnCopiedChunkChanged;
+            RedDocumentTabViewModel.OnCopiedChunkChanged -= OnCopiedChunkChanged;
             DataContextChanged -= OnDataContextChanged;
         }
 
@@ -178,7 +178,7 @@ namespace WolvenKit.Views.Tools
             foreach (var addedItem in e.AddedItems.OfType<ISelectableTreeViewItemModel>())
             {
                 addedItem.IsSelected = true;
-            }
+            }  
 
             RefreshContextMenuFlags();
             RefreshSelectedItemsContextMenuFlags();
