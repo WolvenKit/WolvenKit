@@ -177,7 +177,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("Import Settings")]
         [Display(Name = "Import Inverse Binding")]
         [Description("Imports Inverse Binding data from mesh only")]
-        public bool ImportInverseBindingOnly { get; set; } = true;
+        public bool ImportInverseBindingOnly { get; set; } = false;
         /// <summary>
         /// Use object or node name as mesh name
         /// </summary>

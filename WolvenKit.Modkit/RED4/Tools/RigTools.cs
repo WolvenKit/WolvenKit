@@ -19,20 +19,32 @@ namespace WolvenKit.Modkit.RED4.RigFile
 {
     public class RIG
     {
+        private static void Swap<T>(IList<T> list, int indexA, int indexB)
+        {
+            T tmp = list[indexA];
+            list[indexA] = list[indexB];
+            list[indexB] = tmp;
+        }
         public static bool ImportRig(ref CR2WFile cr2w, ModelRoot model)
         {
+            if(cr2w.RootChunk is not animRig rig)
+            {
+                return false;
+            }
+            rig.BoneNames.Clear();
+            rig.BoneParentIndexes.Clear();
+            rig.BoneTransforms.Clear();
+
             var armature = model.LogicalSkins.First();
             var joints = Enumerable.Range(0, armature.JointsCount).Select(_ => armature.GetJoint(_).Joint).ToList();
 
             Dictionary<string,short> jointNames = new Dictionary<string,short>();
             jointNames[joints.First().VisualParent.Name] = -1;
+            
+            Enumerable.Range(0, joints.Count).Select(x => jointNames[joints[x].Name] = (short)x);
 
-            foreach (short x in Enumerable.Range(0, joints.Count))
-            {
-                jointNames[joints[x].Name] = x;
-            }
 
-            var rawRig = new RawArmature
+            var newRig = new RawArmature
             {
                 BoneCount = joints.Count,
                 Names = joints.Select(_ => _.Name).ToArray(),
@@ -42,25 +54,39 @@ namespace WolvenKit.Modkit.RED4.RigFile
                 LocalScale = joints.Select(p => new Vec3(p.LocalTransform.Scale.X, p.LocalTransform.Scale.Y, p.LocalTransform.Scale.Z)).ToArray()
             };
 
-            if(cr2w.RootChunk is not animRig rig)
+
+            for (int i = 0; i < rig.BoneNames.Count; i++)
             {
-                return false;
+                if (rig.BoneNames[i] != newRig.Names[i])
+                {
+                    int j = newRig.Names.IndexOf(rig.BoneNames[i].ToString());
+
+                    Swap(newRig.Names, i, j);
+                    Swap(newRig.Parent, i, j);
+                    Swap(newRig.LocalPosn, i, j);
+                    Swap(newRig.LocalRot, i, j);
+                    Swap(newRig.LocalScale, i, j);
+                }
             }
-            rig.BoneNames.Clear();
-            rig.BoneParentIndexes.Clear();
-            rig.BoneTransforms.Clear();
 
+            var jointNames1 = jointNames.ToDictionary(x => x.Value, x => x.Key);
 
-            foreach (var x in Enumerable.Range(0,rawRig.BoneCount))
+            for (int i = 0; i < newRig.BoneCount; i++)
             {
-                rig.BoneNames.Add((CName)rawRig.Names[x]);
-                rig.BoneParentIndexes.Add((CInt16)rawRig.Parent[x]);
+                var tmp = jointNames1[newRig.Parent[i]];
+                newRig.Parent[i] = (short)newRig.Names.IndexOf(tmp);
+            }
+
+            foreach (var x in Enumerable.Range(0, newRig.BoneCount))
+            {
+                rig.BoneNames.Add((CName)newRig.Names[x]);
+                rig.BoneParentIndexes.Add((CInt16)newRig.Parent[x]);
                 
                 var qsT = new QsTransform();
                 
-                qsT.Translation = new Vec4(rawRig.LocalPosn[x],1);
-                qsT.Scale = new Vec4(rawRig.LocalScale[x], 1);
-                qsT.Rotation = rawRig.LocalRot[x];
+                qsT.Translation = new Vec4(newRig.LocalPosn[x],1);
+                qsT.Scale = new Vec4(newRig.LocalScale[x], 1);
+                qsT.Rotation = newRig.LocalRot[x];
                 rig.BoneTransforms.Add(qsT);
             }
 

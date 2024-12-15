@@ -329,45 +329,40 @@ namespace WolvenKit.Modkit.RED4
 
             var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(args.ValidationMode));
 
+            VerifyGLTF(model, args);
+
             if (model.LogicalSkins.Count > 0 && args.ImportInverseBindingOnly)
             {
                 var joints = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_)).ToArray();
 
                 if (cr2w.RootChunk is CMesh root)
                 {
-                    for (var i = 0; i < root.BoneNames.Count; i++)
+                    var tempp = root.BoneNames.ToList();
+                    for (int idx = 0; idx < joints.Count(); idx++)
                     {
-                        for (int idxx = 0; idxx < joints.Count(); idxx++)
+                        var inMat = joints[idx].InverseBindMatrix;
+                        Mat4 outMat = new Mat4(
+                            inMat.M11, -inMat.M13, inMat.M12, inMat.M14,
+                            -inMat.M31, inMat.M33, -inMat.M32, inMat.M34,
+                            inMat.M21, -inMat.M23, inMat.M22, inMat.M24,
+                            inMat.M41, -inMat.M43, inMat.M42, inMat.M44);
+
+
+                        var idxx = tempp.FindIndex(x => x.ToString() == joints[idx].Joint.Name);
+
+                        if (idxx == -1)
                         {
-                            if (joints[idxx].Joint.Name == root.BoneNames[i])
-                            {
-
-                                var inMat = joints[idxx].InverseBindMatrix;
-                                Mat4 outMat = new Mat4(
-                                    inMat.M11, -inMat.M13, inMat.M12, inMat.M14,
-                                    -inMat.M31, inMat.M33, -inMat.M32, inMat.M34,
-                                    inMat.M21, -inMat.M23, inMat.M22, inMat.M24,
-                                    inMat.M41, -inMat.M43, inMat.M42, inMat.M44);
-
-                                root.BoneRigMatrices[i] = outMat;
-                                break;
-                            }
+                            root.BoneRigMatrices.Add(outMat);
+                            root.BoneNames.Add(joints[idx].Joint.Name);
+                            root.BoneVertexEpsilons.Add(0);
+                            root.LodBoneMask.Add(0);
                         }
+                        else
+                            root.BoneRigMatrices[idxx] = outMat;
                     }
                 }
 
-                var OnlyStream = new MemoryStream();
-                using var writer = new CR2WWriter(OnlyStream) { LoggerService = _loggerService };
-                writer.WriteFile(cr2w);
-
-
-                OnlyStream.Seek(0, SeekOrigin.Begin);
-                inMeshStream.SetLength(0);
-                OnlyStream.CopyTo(inMeshStream);
-                return true;
             }
-
-            VerifyGLTF(model, args);
 
             var meshes = new List<RawMeshContainer>();
             foreach (var node in model.LogicalNodes)
