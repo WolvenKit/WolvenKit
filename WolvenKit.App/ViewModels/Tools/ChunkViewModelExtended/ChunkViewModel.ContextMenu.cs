@@ -61,7 +61,6 @@ public partial class ChunkViewModel
     public void RefreshCommandStatus()
     {
         GenerateChildCruidsCommand.NotifyCanExecuteChanged();
-        CopyChildNamesCommand.NotifyCanExecuteChanged();
         ReindexChildDataIndexPropertiesCommand.NotifyCanExecuteChanged();
     }
 
@@ -220,20 +219,6 @@ public partial class ChunkViewModel
             ret = ret.Where(p => !_projectManager.ActiveProject.Files.Contains(p!)).ToHashSet();
         }
         return ret;
-    }
-
-    private bool CanCopyChildNames() => IsArray;
-
-    [RelayCommand(CanExecute = nameof(CanCopyChildNames))]
-    private void CopyChildNames()
-    {
-        var names = Properties.Select(prop => prop.Descriptor).Where(s => !string.IsNullOrEmpty(s)).ToList();
-        if (names.Count == 0)
-        {
-            return;
-        }
-
-        System.Windows.Clipboard.SetText(string.Join("\n", names));
     }
 
     private bool CanGenerateCruids() => IsArray && Name == "components";

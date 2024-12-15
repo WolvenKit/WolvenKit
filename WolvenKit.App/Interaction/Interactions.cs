@@ -9,7 +9,14 @@ namespace WolvenKit.App.Interaction;
 
 public static class Interactions
 {
-    // wrappers
+    /// <summary>
+    /// Async operation to show a message box
+    /// </summary>
+    /// <param name="text"></param>
+    /// <param name="caption"></param>
+    /// <param name="messageBoxButtons"></param>
+    /// <param name="image"></param>
+    /// <returns></returns>
     public static async Task<WMessageBoxResult> ShowMessageBoxAsync(
         string text,
         string caption,
@@ -19,6 +26,19 @@ public static class Interactions
         var result = WMessageBoxResult.None;
         DispatcherHelper.RunOnMainThread(() => result = ShowConfirmation((text, caption, image, messageBoxButtons)));
         return await Task.FromResult(result);
+    }
+
+    /// <inheritdoc cref="ShowMessageBoxAsync"/>
+    /// <returns>the task's result</returns>
+    public static WMessageBoxResult ShowMessageBox(
+        string text,
+        string caption,
+        WMessageBoxButtons messageBoxButtons = WMessageBoxButtons.OkCancel,
+        WMessageBoxImage image = WMessageBoxImage.Question)
+    {
+        var result = WMessageBoxResult.None;
+        DispatcherHelper.RunOnMainThread(() => result = ShowConfirmation((text, caption, image, messageBoxButtons)));
+        return Task.FromResult(result).GetAwaiter().GetResult();
     }
 
     // wrappers

@@ -2128,16 +2128,23 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         ArgumentNullException.ThrowIfNull(Parent);
         ArgumentNullException.ThrowIfNull(Tab);
 
+        Parent.DeleteNodes(nodes);
+    }
+
+    public void DeleteNodes(List<ChunkViewModel> nodes)
+    {
+        ArgumentNullException.ThrowIfNull(Tab);
+
         if (nodes.Count == 0) // Exception was seen in the wild, better catch this
         {
             return;
         }
 
         var indices = nodes.Select(_ => _.NodeIdxInParent).ToList();
-        
+
         try
         {
-            switch (Parent.Data)
+            switch (Data)
             {
                 case IRedBufferPointer db3 when db3.GetValue().Data is IRedArray dict:
                 {
@@ -2168,7 +2175,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     _loggerService.Warning($"Parent.Data is RedDummy");
                     return;
                 default:
-                    _loggerService.Warning($"Unsupported type : {Parent.Data.NotNull().GetType().Name}");
+                    _loggerService.Warning($"Unsupported type : {Data.NotNull().GetType().Name}");
                     return;
             }
         }
@@ -2177,13 +2184,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             _loggerService.Warning($"Something went wrong while trying to delete the selection : {ex}");
         }
 
-        Parent.RecalculateProperties();
-        var newSelectionIndex = Math.Min(indices.First(), Parent.TVProperties.Count) - 1;
+        RecalculateProperties();
+        var newSelectionIndex = Math.Min(indices.First(), TVProperties.Count) - 1;
         newSelectionIndex = Math.Max(0, newSelectionIndex);
-        newSelectionIndex = Math.Min(newSelectionIndex, Parent.TVProperties.Count - 1);
+        newSelectionIndex = Math.Min(newSelectionIndex, TVProperties.Count - 1);
         if (newSelectionIndex >= 0)
         {
-            Tab.SetSelection(Parent.TVProperties[newSelectionIndex]);
+            Tab.SetSelection(TVProperties[newSelectionIndex]);
         }
 
         Tab.Parent.SetIsDirty(true);
@@ -2854,11 +2861,17 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public void PasteAtIndex(List<IRedType> copiedData, int insertAtIndex = -1)
     {
+        // this is technically unnecessary, but we don't have root nodes that are arrays anyway
         ArgumentNullException.ThrowIfNull(Parent);
 
         if (copiedData.Count == 0)
         {
             return;
+        }
+
+        if (IsInArray)
+        {
+            Parent.PasteAtIndex(copiedData, insertAtIndex);
         }
 
         if (PropertyType.IsAssignableTo(typeof(IRedArray)) && ResolvedData is RedDummy && !CreateArray())
@@ -2868,8 +2881,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         try
         {
-            var index = insertAtIndex >= 0 ? insertAtIndex : Parent.GetIndexOf(this) + 1;
-
+            var index = insertAtIndex < 0 ? Properties.Count : insertAtIndex;
+            
             for (var i = 0; i < copiedData.Count; i++)
             {
                 var e = copiedData[i];
@@ -2898,32 +2911,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
                 if (PropertyType.IsAssignableTo(typeof(IRedArray)))
                 {
-                    if (index == -1 || index > Properties.Count)
-                    {
-                        index = Properties.Count;
-                    }
+                    // index boundary checking will happen in insertChild
+                    
                     if (InsertChild(index, e))
                     {
                         //RDTDataViewModel.CopiedChunk = null;
                     }
                 }
-
-                if (Parent.ResolvedData is IRedBufferPointer)
-                {
-                    if (Parent.InsertChild(index, e))
-                    {
-                        //RDTDataViewModel.CopiedChunk = null;
-                    }
-                }
-
-                if (Parent.PropertyType.IsAssignableTo(typeof(IRedArray)))
-                {
-                    if (Parent.InsertChild(index, e))
-                    {
-                        //RDTDataViewModel.CopiedChunk = null;
-                    }
-                }
-
+                
                 index++;
             }
         }
@@ -3537,6 +3532,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public bool InsertChild(int index, IRedType item)
     {
+        ArgumentNullException.ThrowIfNull(item);
         try
         {
             if (ResolvedData is IRedArray ira)
@@ -4099,7 +4095,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         Tab?.Parent.SetIsDirty(true);
-        Parent?.RecalculateProperties();
+        RecalculateProperties();
     }
 
     private void DeleteFullSelection(List<IRedType> l, IRedArray a)
@@ -4117,7 +4113,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         Tab?.Parent.SetIsDirty(true);
-        Parent?.RecalculateProperties();
+        RecalculateProperties();
     }
 
     private void AddToCopiedChunks(IRedType elem)

@@ -346,6 +346,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     public override void OnSelected()
     {
+        base.OnSelected();
         RefreshDirtyChunks();
 
         if (SelectedChunk is ChunkViewModel { ResolvedData: worldNode } cvm)

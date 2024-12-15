@@ -264,10 +264,9 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
         cw.WriteFile(new CR2WFile { RootChunk = embeddedFile.Content });
     }
 
-    public virtual void OnSelected()
-    {
 
-    }
+    public static event EventHandler? OnSelectionChanged;
+    public virtual void OnSelected() => OnSelectionChanged?.Invoke(this, EventArgs.Empty);
 
     // Do nothing, overwrite in inheriting classes
     public virtual void Load()
