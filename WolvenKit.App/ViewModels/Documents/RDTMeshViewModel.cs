@@ -3584,9 +3584,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 }
 
                 var appearanceDefs = aar.Appearances
-                    .Where((handle) => handle?.GetValue() is appearanceAppearanceDefinition)
-                    .Select((handle) => (appearanceAppearanceDefinition)handle.GetValue()!)
-                    .ToDictionary(value => value.Name.GetResolvedText() ?? "");
+                    .Where(handle => handle?.GetValue() is appearanceAppearanceDefinition)
+                    .Select(handle => (appearanceAppearanceDefinition)handle.GetValue()!)
+                    .GroupBy(value => value.Name.GetResolvedText()!)
+                    .ToDictionary(group => group.Key, group => group.First());
 
                 if (!appearanceDefs.TryGetValue(app.AppearanceName.GetResolvedText() ?? "invalid name", out var appDef) ||
                     appDef.CompiledData?.Data is not RedPackage appPkg)
