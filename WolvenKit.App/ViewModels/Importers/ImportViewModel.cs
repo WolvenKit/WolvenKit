@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Helpers;
@@ -108,7 +109,7 @@ public partial class ImportViewModel : AbstractImportExportViewModel
 
     protected override async Task ExecuteProcessBulk(bool all = false)
     {
-        if (_gameController.GetController() is not RED4Controller)
+        if (_gameController.GetController() is not RED4Controller || !Items.Any())
         {
             return;
         }
@@ -119,17 +120,12 @@ public partial class ImportViewModel : AbstractImportExportViewModel
             return;
         }
 
-        if (!Items.Any())
-        {
-            return;
-        }
-
         IsProcessing = true;
         var progress = 0;
         _progressService.Report(0.1);
 
         var total = 0;
-        var sucessful = 0;
+        var successful = 0;
 
         //prepare a list of failed items
         var failedItems = new List<string>();
@@ -142,20 +138,24 @@ public partial class ImportViewModel : AbstractImportExportViewModel
             .ToList();
 
         total = toBeImported.Count;
-        foreach (var item in toBeImported)
+        await Parallel.ForEachAsync(toBeImported, async (item, cancellationToken) =>
         {
+            await Application.Current.Dispatcher.InvokeAsync(() => _appViewModel.SaveFile(item.BaseFile));
             if (await ImportSingleAsync(item, projectArchive))
             {
-                sucessful++;
+                Interlocked.Increment(ref successful);
             }
-            else // not successful
+            else
             {
-                failedItems.Add(item.BaseFile);
+                lock (failedItems)
+                {
+                    failedItems.Add(item.BaseFile);
+                }
             }
 
             Interlocked.Increment(ref progress);
             _progressService.Report(progress / (float)total);
-        }
+        });
 
         await ImportWavs(Items.Where(importExportItem => importExportItem.IsChecked ||
                                                          (all && (VisibleItemPaths.Count == 0 ||
@@ -169,12 +169,12 @@ public partial class ImportViewModel : AbstractImportExportViewModel
 
         _progressService.IsIndeterminate = false;
 
-        if (sucessful > 0)
+        if (successful > 0)
         {
             _notificationService.Success(
-                $"{sucessful}/{total} files have been processed and are available in the Project Explorer's 'archive' section");
+                $"{successful}/{total} files have been processed and are available in the Project Explorer's 'archive' section");
             _loggerService.Success(
-                $"{sucessful}/{total} files have been processed and are available in the Project Explorer's 'archive' section");
+                $"{successful}/{total} files have been processed and are available in the Project Explorer's 'archive' section");
         }
 
         //We format the list of failed export/import items here
@@ -191,7 +191,7 @@ public partial class ImportViewModel : AbstractImportExportViewModel
 
         _progressService.Completed();
 
-        _appViewModel.ReloadChangedFiles();
+        await Application.Current.Dispatcher.InvokeAsync(() => _appViewModel.ReloadChangedFiles());
     }
 
     private Task<bool> ImportWavs(List<string> wavs)
@@ -291,7 +291,7 @@ public partial class ImportViewModel : AbstractImportExportViewModel
     private static bool CanImport(string filePath)
     {
         var fileExtension = Path.GetExtension(filePath).TrimStart('.');
-        if (!Enum.TryParse<ERawFileFormat>(fileExtension, out var _))
+        if (!Enum.TryParse<ERawFileFormat>(fileExtension.ToLower(), out var _))
         {
             return false;
         }

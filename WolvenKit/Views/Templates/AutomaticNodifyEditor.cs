@@ -23,7 +23,7 @@ namespace WolvenKit.Views.Editors
         public AutomaticNodifyEditor() : base()
         {
             // Only use the middle mouse for Panning so that right mouse can be used for other things.
-            EditorGestures.Pan = new MouseGesture(MouseAction.MiddleClick);
+            //EditorGestures.Mappings.Editor.Pan = new MouseGesture(MouseAction.MiddleClick);
         }
 
         /// <summary>

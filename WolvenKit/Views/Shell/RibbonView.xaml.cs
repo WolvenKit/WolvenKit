@@ -8,7 +8,7 @@ using Splat;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.Core.Services;
+using WolvenKit.Views.Templates;
 
 namespace WolvenKit.Views.Shell
 {
@@ -18,7 +18,7 @@ namespace WolvenKit.Views.Shell
         private readonly ILoggerService _loggerService;
 
         public const string LaunchOptionsString = "Launch Options";
-        
+
         public RibbonView()
         {
             ViewModel = Locator.Current.GetService<RibbonViewModel>();
@@ -61,7 +61,7 @@ namespace WolvenKit.Views.Shell
                         viewModel => viewModel.MainViewModel.PackInstallRedModCommand,
                         view => view.ToolbarPackInstallRedmodButton)
                     .DisposeWith(disposables);
-                
+
                 // pack legacy mod
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.MainViewModel.PackModCommand,
@@ -107,10 +107,10 @@ namespace WolvenKit.Views.Shell
             }
 
             _settingsManager.WhenAnyValue(x => x.LaunchProfiles).Subscribe(_ => GetLaunchProfiles());
-            
+
         }
 
-            
+
         private void GetLaunchProfiles()
         {
             // unsubscribe
@@ -136,7 +136,8 @@ namespace WolvenKit.Views.Shell
             {
                 MenuItem item = new()
                 {
-                    Header = name
+                    Header = name,
+                    Icon = new IconBox()
                 };
 
                 item.Click += LaunchMenu_MenuItem_Click;

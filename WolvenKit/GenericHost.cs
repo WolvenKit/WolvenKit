@@ -26,9 +26,7 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Tools;
-using WolvenKit.Modkit.Scripting;
 using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Services;
 using WolvenKit.ViewModels;
 using WolvenKit.Views.Dialogs;
@@ -39,7 +37,6 @@ using WolvenKit.Views.HomePage.Pages;
 using WolvenKit.Views.Importers;
 using WolvenKit.Views.Shell;
 using WolvenKit.Views.Tools;
-using WolvenKit.Views.Wizards;
 
 namespace WolvenKit
 {
@@ -64,7 +61,7 @@ namespace WolvenKit
                 .ConfigureServices((hostContext, services) =>
                 {
                     // services
-                    services.AddSingleton(typeof(ISettingsManager), SettingsManager.Load());    
+                    services.AddSingleton(typeof(ISettingsManager), SettingsManager.Load());
                     services.AddSingleton<IHashService, HashServiceExt>();                      // can this be transient?
                     services.AddSingleton<CRUIDService>();                                      // can this be transient?
                     services.AddSingleton<MySink>();                                            // can this be transient?
@@ -152,9 +149,6 @@ namespace WolvenKit
 
                     services.AddTransient<FirstSetupViewModel>();
                     services.AddTransient<IViewFor<FirstSetupViewModel>, FirstSetupView>();
-
-                    services.AddTransient<InstallerWizardViewModel>();
-                    services.AddTransient<IViewFor<InstallerWizardViewModel>, InstallerWizardView>();
 
                     services.AddTransient<ProjectWizardViewModel>();
                     services.AddTransient<IViewFor<ProjectWizardViewModel>, ProjectWizardView>();

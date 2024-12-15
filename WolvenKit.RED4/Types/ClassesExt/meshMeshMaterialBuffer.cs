@@ -12,7 +12,7 @@ public partial class meshMeshMaterialBuffer
     [REDProperty(IsIgnored = true)]
     public CArray<IMaterial> Materials
     {
-        get => GetPropertyValue<CArray<IMaterial>>();
-        set => SetPropertyValue<CArray<IMaterial>>(value);
+        get => GetPropertyValue<CArray<IMaterial>>() ?? [];
+        set => SetPropertyValue(value ?? []);
     }
 }

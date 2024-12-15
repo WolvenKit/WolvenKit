@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
@@ -71,6 +72,11 @@ public partial class ExportViewModel : AbstractImportExportViewModel
 
     protected override async Task ExecuteProcessBulk(bool all = false)
     {
+        if (!Items.Any())
+        {
+            return;
+        }
+        
         if (_archiveManager.ProjectArchive is not FileSystemArchive projectArchive)
         {
             _loggerService.Error("No project loaded!");
@@ -82,7 +88,7 @@ public partial class ExportViewModel : AbstractImportExportViewModel
         _progressService.Report(0.1);
 
         var total = 0;
-        var sucessful = 0;
+        var successful = 0;
 
         //prepare a list of failed items
         var failedItems = new List<string>();
@@ -93,32 +99,37 @@ public partial class ExportViewModel : AbstractImportExportViewModel
             .Cast<ExportableItemViewModel>()
             .ToList();
         total = toBeExported.Count;
-        foreach (var item in toBeExported)
+
+        await Parallel.ForEachAsync(toBeExported, async (item, cancellationToken) =>
         {
-            _appViewModel.SaveFile(item.BaseFile);
+            await Application.Current.Dispatcher.InvokeAsync(() => _appViewModel.SaveFile(item.BaseFile));
+
             if (await ExportSingleAsync(item, projectArchive))
             {
-                sucessful++;
+                Interlocked.Increment(ref successful);
             }
             else
             {
-                failedItems.Add(item.BaseFile);
+                lock (failedItems)
+                {
+                    failedItems.Add(item.BaseFile);
+                }
             }
 
             Interlocked.Increment(ref progress);
             _progressService.Report(progress / (float)total);
-        }
+        });
 
         IsProcessing = false;
 
         _progressService.IsIndeterminate = false;
 
-        if (sucessful > 0)
+        if (successful > 0)
         {
             _notificationService.Success(
-                $"{sucessful}/{total} files have been processed and are available in the Project Explorer's 'raw' section");
+                $"{successful}/{total} files have been processed and are available in the Project Explorer's 'raw' section");
             _loggerService.Success(
-                $"{sucessful}/{total} files have been processed and are available in the Project Explorer's 'raw' section");
+                $"{successful}/{total} files have been processed and are available in the Project Explorer's 'raw' section");
         }
 
         //We format the list of failed export/import items here
@@ -233,7 +244,7 @@ public partial class ExportViewModel : AbstractImportExportViewModel
         }
 
 
-        var info = OpusTools.GetOpusInfo(_archiveManager, opusExportArgs.UseMod);
+        var info = OpusTools.GetOpusInfo(_archiveManager, opusExportArgs.UseProject);
         if (info == null)
         {
             return;

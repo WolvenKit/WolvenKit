@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using System.Windows;
-using System.Windows.Input;
 using AdonisUI.Controls;
 using ReactiveUI;
 using Splat;
@@ -48,11 +46,9 @@ namespace WolvenKit.Views.Shell
             {
                 Disposable.Create(dockingAdapter.SaveLayout).DisposeWith(disposables);
 
-                Interactions.ShowConfirmation = input =>
-                {
-                    return ShowConfirmation(input);
-                };
-
+                Interactions.ShowConfirmation = ShowConfirmation;
+                Interactions.ShowQuestionYesNo = ShowQuestionYesNo;
+                
                 Interactions.ShowLaunchProfilesView = () =>
                 {
                     LaunchProfilesView dialog = new();
@@ -124,6 +120,12 @@ namespace WolvenKit.Views.Shell
 
         #region interactions
 
+        private static bool ShowQuestionYesNo((string, string) input)
+        {
+            var messageResult = ShowConfirmation((input.Item1, input.Item2, WMessageBoxImage.Question, WMessageBoxButtons.YesNo));
+            return messageResult == WMessageBoxResult.Yes;
+        }
+
         private static WMessageBoxResult ShowConfirmation((string, string, WMessageBoxImage, WMessageBoxButtons) input)
         {
             var text = input.Item1;
@@ -133,20 +135,19 @@ namespace WolvenKit.Views.Shell
 
             MessageBoxModel messageBox = new()
             {
-                Text = text,
-                Caption = caption,
-                Icon = GetAdonisImage(image),
-                Buttons = GetAdonisButtons(buttons)
+                Text = text, Caption = caption, Icon = GetAdonisImage(image), Buttons = GetAdonisButtons(buttons)
             };
 
             return (WMessageBoxResult)AdonisUI.Controls.MessageBox.Show(Application.Current.MainWindow, messageBox);
 
-            // local methods
-            AdonisUI.Controls.MessageBoxImage GetAdonisImage(WMessageBoxImage image) => (AdonisUI.Controls.MessageBoxImage)image;
 
-            IEnumerable<IMessageBoxButtonModel> GetAdonisButtons(WMessageBoxButtons buttons)
+
+            // local methods
+            AdonisUI.Controls.MessageBoxImage GetAdonisImage(WMessageBoxImage imageParam) => (AdonisUI.Controls.MessageBoxImage)imageParam;
+
+            IEnumerable<IMessageBoxButtonModel> GetAdonisButtons(WMessageBoxButtons buttonsParam)
             {
-                return buttons switch
+                return buttonsParam switch
                 {
                     WMessageBoxButtons.Ok => new IMessageBoxButtonModel[1] { MessageBoxButtons.Ok() },
                     WMessageBoxButtons.OkCancel => MessageBoxButtons.OkCancel(),
@@ -207,7 +208,5 @@ namespace WolvenKit.Views.Shell
         private void ChromelessWindow_Loaded(object sender, RoutedEventArgs e) { }
         // This is never called 
         private void ChromelessWindow_Closing(object sender, CancelEventArgs e) { }
-
-        private void OnKeyStateChanged(object sender, KeyEventArgs e) => _modifierViewStateService.OnKeystateChanged(e);
     }
 }

@@ -15,9 +15,19 @@ public partial class ChangeComponentChunkMaskDialogViewModel() : ObservableObjec
     [ObservableProperty] private string? _componentName = "";
 
     /// <summary>
+    /// Name of the component 
+    /// </summary>
+    [ObservableProperty] private string? _depotPath = "";
+
+    /// <summary>
+    /// Name of the component 
+    /// </summary>
+    [ObservableProperty] private string? _meshAppearance = "";
+
+    /// <summary>
     /// The chunk mask
     /// </summary>
-    [ObservableProperty] private IRedPrimitive<ulong> _chunkMask = (CUInt64)18446744073709551615;
+    [ObservableProperty] private IRedPrimitive<ulong>? _chunkMask;
 
     /// <summary>
     /// Remember the last selection

@@ -109,8 +109,8 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(13)] 
-		[RED("quickHackDescritpionVisible")] 
-		public gamebbScriptID_Bool QuickHackDescritpionVisible
+		[RED("quickhackPanelBlocked")] 
+		public gamebbScriptID_Bool QuickhackPanelBlocked
 		{
 			get => GetPropertyValue<gamebbScriptID_Bool>();
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
@@ -171,7 +171,7 @@ namespace WolvenKit.RED4.Types
 			ActiveQuickSlotItem = new gamebbScriptID_Variant();
 			QuickSlotsActiveWeaponIndex = new gamebbScriptID_Int32();
 			QuickhackPanelOpen = new gamebbScriptID_Bool();
-			QuickHackDescritpionVisible = new gamebbScriptID_Bool();
+			QuickhackPanelBlocked = new gamebbScriptID_Bool();
 			QuickHackDataSelected = new gamebbScriptID_Variant();
 			QuickhackPanelKeepContext = new gamebbScriptID_Bool();
 			DpadHintRefresh = new gamebbScriptID_Bool();

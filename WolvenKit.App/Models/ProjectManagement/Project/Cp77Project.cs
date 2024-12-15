@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Core.Extensions;
@@ -541,19 +542,27 @@ public sealed partial class Cp77Project(string location, string name, string mod
         return relPath;
     }
 
-    public async Task<Dictionary<string, List<string>>> GetAllReferences(IProgressService<double> progressService,
-        ILoggerService loggerService)
+    public Task<IDictionary<string, List<string>>> GetAllReferences(IProgressService<double> progressService,
+        ILoggerService loggerService) => GetAllReferences(progressService, loggerService, new List<string>());
+
+    public async Task<IDictionary<string, List<string>>> GetAllReferences(IProgressService<double> progressService,
+        ILoggerService loggerService, List<string> filePaths)
     {
-        Dictionary<string, List<string>> references = new();
+        if (filePaths.Count == 0)
+        {
+            filePaths.AddRange(ModFiles);
+        }
+
+        SortedDictionary<string, List<string>> references = new();
 
         progressService?.Report(0);
-        var totalFiles = ModFiles.Count;
+        var totalFiles = filePaths.Count;
         var processedFiles = 0;
         var progressIncrement = totalFiles > 0 ? 100.0 / totalFiles : 100;
 
         await Task.Run(() =>
         {
-            Parallel.ForEach(ModFiles, filePath =>
+            Parallel.ForEach(filePaths, filePath =>
             {
                 try
                 {
@@ -680,20 +689,29 @@ public sealed partial class Cp77Project(string location, string name, string mod
                 }
             });
         });
-        return references;
+        
+        // Order entries by file name
+        return references.OrderBy(obj => obj.Key).ToDictionary(obj => obj.Key, obj => obj.Value);
     }
-    
-    
 
-    public async Task<Dictionary<string, List<string>>> ScanForBrokenReferencePathsAsync(IArchiveManager archiveManager,
-        ILoggerService loggerService, IProgressService<double> progressService)
+
+    public Task<IDictionary<string, List<string>>> ScanForBrokenReferencePathsAsync(IArchiveManager archiveManager,
+        ILoggerService loggerService, IProgressService<double> progressService) =>
+        ScanForBrokenReferencePathsAsync(archiveManager, loggerService, progressService, new SortedDictionary<string, List<string>>());
+
+    public async Task<IDictionary<string, List<string>>> ScanForBrokenReferencePathsAsync(IArchiveManager archiveManager,
+        ILoggerService loggerService, IProgressService<double> progressService, IDictionary<string, List<string>> references)
     {
-        var references = await GetAllReferences(progressService, loggerService);
-        Dictionary<string, List<string>> brokenReferences = new();
+        if (references.Count == 0)
+        {
+            references.AddRange(await GetAllReferences(progressService, loggerService, []));
+        }
+
+        SortedDictionary<string, List<string>> brokenReferences = new();
 
         progressService.IsIndeterminate = true;
         progressService.Report(0);
-        var totalFiles = ModFiles.Count;
+        var totalFiles = references.Count;
         var processedFiles = 0;
         var progressIncrement = totalFiles > 0 ? 100.0 / totalFiles : 100;
         
@@ -715,14 +733,38 @@ public sealed partial class Cp77Project(string location, string name, string mod
                 
                 // Update progress
                 var currentProgress = Interlocked.Increment(ref processedFiles) * progressIncrement;
-                progressService?.Report(currentProgress);
+                progressService.IsIndeterminate = false;
+                progressService.Report(currentProgress);
             });
         });
-        progressService?.Completed();
+        progressService.Completed();
         return brokenReferences;
     }
 
     [GeneratedRegex(@"((\w+\\\\?)+\w+\.\w+)")]
     private static partial Regex ResourceFilePathsRegex();
+
+    private int _numEmptyFolders = 0;
+
+    public void DeleteEmptyFolders(ILoggerService loggerService)
+    {
+        _numEmptyFolders = 0;
+        DeleteEmptyFolders(ModDirectory);
+        loggerService.Success($"Deleted {_numEmptyFolders} empty folders");
+    }
+
+    private void DeleteEmptyFolders(string directory)
+    {
+        foreach (var subdirectory in Directory.GetDirectories(directory))
+        {
+            DeleteEmptyFolders(subdirectory);
+
+            if (Directory.GetFiles(subdirectory).Length == 0 && Directory.GetDirectories(subdirectory).Length == 0)
+            {
+                _numEmptyFolders += 1;
+                Directory.Delete(subdirectory);
+            }
+        }
+    }
 }
     

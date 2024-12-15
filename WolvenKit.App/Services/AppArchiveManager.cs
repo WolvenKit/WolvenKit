@@ -1,12 +1,12 @@
 ﻿using DynamicData;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
@@ -33,10 +33,12 @@ public class AppArchiveManager(
     private readonly SourceList<RedFileSystemModel> _modCache = new();
 
     private readonly string[] _ignoredArchives =
-        settings.ArchiveNamesExcludeFromScan.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+        settings.ArchiveNamesExcludeFromScan.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+            .Select(archiveName => archiveName.Replace(".archive", "")).ToArray();
 
     public override string[] GetIgnoredArchiveNames() => _ignoredArchives;
-    
+
+    public static bool ArchivesNeedRescan = true;
 
     #endregion Fields
 
@@ -47,6 +49,15 @@ public class AppArchiveManager(
     public RedFileSystemModel? RootNode { get; set; }
 
     public List<RedFileSystemModel> ModRoots { get; set; } = new();
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        base.OnPropertyChanged(e);
+        if (e.PropertyName == nameof(IsModBrowserActive) && IsModBrowserActive)
+        {
+            ArchivesNeedRescan = true;
+        }
+    }
 
     #endregion
 
@@ -97,9 +108,9 @@ public class AppArchiveManager(
             var lastNode = RootNode;
 
             var sb = new StringBuilder();
-            for (var i = 0; i < path.Length; i++)
+            foreach (var t in path)
             {
-                if (path[i] == '\\')
+                if (t == '\\')
                 {
                     var str = sb.ToString();
 
@@ -110,23 +121,25 @@ public class AppArchiveManager(
                     }
                     lastNode = tmpNode;
                 }
-                sb.Append(path[i]);
+
+                sb.Append(t);
             }
             lastNode.Files.Enqueue(file.Value);
         });
     }
 
     private string? GetGameDir() =>
-        settings?.GetRED4GameExecutablePath() is string executablePath && !string.IsNullOrEmpty(executablePath) &&
+        settings.GetRED4GameExecutablePath() is string executablePath && !string.IsNullOrEmpty(executablePath) &&
         Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(executablePath))) is string gameDir
             ? gameDir
             : null;
-
-    public override void LoadModsArchives(FileInfo executable, bool analyzeFiles = true)
+    public override void LoadModArchives(FileInfo executable, bool analyzeFiles = true, string[]? ignoredFiles = null)
     {
         _progressService.IsIndeterminate = true;
-        
-        base.LoadModsArchives(executable, analyzeFiles);
+
+        ignoredFiles ??= [];
+
+        base.LoadModArchives(executable, analyzeFiles, [.. ignoredFiles]);
         var gameDir = GetGameDir();
 
         foreach (var iGameArchive in Archives.Items)
@@ -136,8 +149,8 @@ public class AppArchiveManager(
                 iGameArchive.ArchiveRelativePath = iGameArchive.ArchiveAbsolutePath.Replace(gameDir, "");
             }
 
-            foreach (var redFileSystemModel in ModRoots.Where(redFileSystemModel =>
-                         iGameArchive.ArchiveAbsolutePath.StartsWith(redFileSystemModel.FullName)))
+            foreach (var redFileSystemModel in ModRoots.Where(fs =>
+                         iGameArchive.ArchiveAbsolutePath.StartsWith(fs.FullName)))
             {
                 iGameArchive.ArchiveRelativePath = iGameArchive.ArchiveAbsolutePath.Replace(redFileSystemModel.FullName, "");
             }
@@ -158,11 +171,16 @@ public class AppArchiveManager(
             innerCache.Add(ModRoots);
         });
 
+        if (analyzeFiles)
+        {
+            ArchivesNeedRescan = false;
+        }
+
     }
 
-    public override void LoadAdditionalModArchives(string archiveBasePath, bool analyzeFiles = true)
+    public override void LoadAdditionalModArchives(string archiveBasePath, bool analyzeFiles = true, string[]? ignoredFiles = null)
     {
-        base.LoadAdditionalModArchives(archiveBasePath, analyzeFiles);
+        base.LoadAdditionalModArchives(archiveBasePath, analyzeFiles, ignoredFiles);
 
         try
         {
@@ -196,14 +214,17 @@ public class AppArchiveManager(
             ArgumentNullException.ThrowIfNull(archive.ArchiveRelativePath,
                 $"{nameof(archive.ArchiveRelativePath)}, archive name: ${archive.Name}");
 
-            var modroot = new RedFileSystemModel(archive.ArchiveRelativePath);
+            if (_ignoredArchives.Contains(archive.Name.Replace(".archive", "")))
+            {
+                continue;
+            }
+
+            var modRoot = new RedFileSystemModel(archive.ArchiveRelativePath);
 
             // loop through all files
-            //Parallel.ForEach(archive.Files, item =>
-            foreach (var item in archive.Files)
+            foreach (var (_, model) in archive.Files)
             {
-                var currentNode = modroot;
-                var model = item.Value;
+                var currentNode = modRoot;
                 var parts = model.Name.Split('\\');
 
                 // loop through path
@@ -219,11 +240,10 @@ public class AppArchiveManager(
                 }
 
                 // add file to the last directory in path
-                currentNode.Files.Enqueue(item.Value);
+                currentNode.Files.Enqueue(model);
             }
-            //);
 
-            ModRoots.Add(modroot);
+            ModRoots.Add(modRoot);
         }
 
         _progressService.Completed();

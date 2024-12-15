@@ -2,31 +2,31 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Version>8.14.1</Version>
+    <Version>8.15.1</Version>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Platforms>x64</Platforms>
   </PropertyGroup>
 
-	<PropertyGroup>
-		<DebugType>pdbonly</DebugType>
-	</PropertyGroup>
+  <PropertyGroup>
+    <DebugType>pdbonly</DebugType>
+  </PropertyGroup>
 
-   <PropertyGroup>
-      <PackageId>WolvenKit.RED4</PackageId>
-      <Product>WolvenKit.RED4</Product>
-      <Description>Types for Cyberpunk 2077.</Description>
+  <PropertyGroup>
+    <PackageId>WolvenKit.RED4</PackageId>
+    <Product>WolvenKit.RED4</Product>
+    <Description>Types for Cyberpunk 2077.</Description>
 
-      <Company>WolvenKit</Company>
-      <PackageLicenseExpression>MIT</PackageLicenseExpression>
-      <PackageProjectUrl>https://github.com/WolvenKit/WolvenKit</PackageProjectUrl>
-      <RepositoryUrl>https://github.com/WolvenKit/WolvenKit</RepositoryUrl>
-      <RepositoryType>git</RepositoryType>
-      <PackageTags>wolvenkit, cyberpunk2077</PackageTags>
+    <Company>WolvenKit</Company>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/WolvenKit/WolvenKit</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/WolvenKit/WolvenKit</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>wolvenkit, cyberpunk2077</PackageTags>
 
-      <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-      <PackageOutputPath>./nupkg</PackageOutputPath>
-    </PropertyGroup>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageOutputPath>./nupkg</PackageOutputPath>
+  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="K4os.Compression.LZ4" />

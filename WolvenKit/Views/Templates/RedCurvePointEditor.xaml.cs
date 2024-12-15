@@ -55,7 +55,7 @@ namespace WolvenKit.Views.Editors
         private void SetPointValue(string value) => SetCurrentValue(PointProperty, (CFloat)float.Parse(value));
         private void SetValueValue(string value) => SetCurrentValue(ValueProperty, (CFloat)float.Parse(value));
 
-        private string GetValueFromPointValue() => ((float)Point).ToString("G9");
-        private string GetValueFromValueValue() => ((float)(CFloat)Value).ToString("G9");
+        private string GetValueFromPointValue() => ((float)Point).ToString("N6");
+        private string GetValueFromValueValue() => ((float)(CFloat)Value).ToString("N6");
     }
 }

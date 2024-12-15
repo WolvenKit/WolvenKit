@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using WolvenKit.Common;
@@ -23,6 +24,8 @@ public record UncookTaskOptions
     public string? meshExportMaterialRepo { get; init; }
     public bool? meshExportLodFilter { get; init; }
     public bool? meshExportExperimentalMergedExport { get; init; }
+    public List<uint>? opusHashes { get; set; }
+    public bool? opusExportAll { get; set; }
 }
 
 public partial class ConsoleFunctions
@@ -41,13 +44,13 @@ public partial class ConsoleFunctions
             return ERROR_BAD_ARGUMENTS;
         }
 
-        if (options.meshExportType != null && string.IsNullOrEmpty(options.meshExportMaterialRepo) && options.outpath is null)
+        if (options.meshExportType != null && string.IsNullOrEmpty(options.meshExportMaterialRepo))
         {
             _loggerService.Error("When using --mesh-export-type, the --outpath or the --mesh-export-material-repo must be specified.");
             return ERROR_INVALID_COMMAND_LINE;
         }
 
-        if (options.gamepath != null && options.gamepath.Exists)
+        if (options.gamepath is { Exists: true })
         {
             var exePath = new FileInfo(Path.Combine(options.gamepath.ToString(), "bin", "x64", "Cyberpunk2077.exe"));
             _archiveManager.LoadGameArchives(exePath);
@@ -71,7 +74,7 @@ public partial class ConsoleFunctions
                         _loggerService.Error("Input file is not an .archive.");
                         return ERROR_BAD_ARGUMENTS;
                     }
-                    _archiveManager.LoadModArchive(file.FullName);
+                    _archiveManager.LoadModArchive(file.FullName, false);
                     break;
                 case DirectoryInfo directory:
                     var archiveFileInfos = directory.GetFiles().Where(_ => _.Extension == ".archive").ToList();
@@ -151,6 +154,10 @@ public partial class ConsoleFunctions
 
         exportArgs.Get<GeneralExportArgs>().MaterialRepositoryPath = string.IsNullOrEmpty(options.meshExportMaterialRepo) ? outDir.FullName : options.meshExportMaterialRepo;
         exportArgs.Get<MeshExportArgs>().MaterialRepo = string.IsNullOrEmpty(options.meshExportMaterialRepo) ? outDir.FullName : options.meshExportMaterialRepo;
+
+        exportArgs.Get<OpusExportArgs>().UseMod = true;
+        exportArgs.Get<OpusExportArgs>().SelectedForExport = options.opusHashes ?? [];
+        exportArgs.Get<OpusExportArgs>().ExportAll = options.opusExportAll ?? false;
 
         var result = 0;
         foreach (var gameArchive in _archiveManager.Archives.Items)

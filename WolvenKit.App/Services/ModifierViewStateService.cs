@@ -91,9 +91,13 @@ public partial class ModifierViewStateService() : ObservableObject, IModifierVie
     [ObservableProperty]
     private bool _isCtrlKeyPressedOnly;
 
-    private static bool IsShiftBeingHeld => Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
-    private static bool IsCtrlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
-    private static bool IsAltBeingHeld => Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt);
+    public static bool IsShiftBeingHeld => Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
+    public static bool IsCtrlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+    public static bool IsAltBeingHeld => Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt);
+    public static bool IsNoModifierBeingHeld => !IsShiftBeingHeld && !IsCtrlBeingHeld && !IsAltBeingHeld;
+    public static bool IsShiftBeingHeldOnly => IsShiftBeingHeld && !IsCtrlBeingHeld && !IsAltBeingHeld;
+    public static bool IsCtrlBeingHeldOnly => !IsShiftBeingHeld && IsCtrlBeingHeld && !IsAltBeingHeld;
+    public static bool IsAltBeingHeldOnly => !IsShiftBeingHeld && !IsCtrlBeingHeld && IsAltBeingHeld;
 
     private readonly Dictionary<Key, bool> _keyStates = [];
 
@@ -103,7 +107,7 @@ public partial class ModifierViewStateService() : ObservableObject, IModifierVie
         {
             return;
         }
-        
+
         // If the key state hasn't changed, ignore the event
         if (_keyStates.TryGetValue(e.Key, out var value) && value == e.IsDown)
         {
@@ -120,7 +124,7 @@ public partial class ModifierViewStateService() : ObservableObject, IModifierVie
         IsCtrlKeyPressed = IsCtrlBeingHeld;
         IsShiftKeyPressed = IsShiftBeingHeld;
         IsAltKeyPressed = IsAltBeingHeld;
-        
+
         IsCtrlKeyPressedOnly = IsCtrlBeingHeld && !IsShiftBeingHeld && !IsAltBeingHeld;
         _keyStates[Key.LeftCtrl] = IsCtrlBeingHeld;
         _keyStates[Key.RightCtrl] = IsCtrlBeingHeld;

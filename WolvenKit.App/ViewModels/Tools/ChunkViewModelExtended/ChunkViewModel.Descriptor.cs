@@ -82,9 +82,7 @@ public partial class ChunkViewModel
             case null:
             case RedDummy:
                 return;
-
-            case worldNodeData sst when Tab is RDTDataViewModel dvm &&
-                                        dvm.Chunks[0].Data is worldStreamingSector wss && sst.NodeIndex < wss.Nodes.Count:
+            case worldNodeData sst when Parent?.Parent?.ResolvedData is worldStreamingSector wss && sst.NodeIndex < wss.Nodes.Count:
                 Descriptor = $"[{sst.NodeIndex}] {StringHelper.Stringify(wss.Nodes[sst.NodeIndex].Chunk)}";
                 return;
             case worldStreamingSectorDescriptor wssd:
@@ -213,6 +211,9 @@ public partial class ChunkViewModel
             case scnSectionNode sectionNode:
                 Descriptor = $"{sectionNode.NodeId.Id}";
                 return;
+            case gameAnimParamSlotsOption slotsOption:
+                Descriptor = $"{slotsOption.SlotID.GetResolvedText()}";
+                return;
             case scnInteractionShapeParams shapeParams:
                 Descriptor = $"{shapeParams.Preset}";
                 return;
@@ -291,14 +292,14 @@ public partial class ChunkViewModel
 
                 break;
             }
-            // animgraph - something is broken here. Why does the orange text go away? Why do I need the try/catch
-            // around the GetNodename?
+            case CMeshMaterialEntry materialEntry:
+                Descriptor = materialEntry.Name.GetResolvedText() ?? "";
+                break;
             // For local and external materials
-            case CMaterialInstance or CResourceAsyncReference<IMaterial> when NodeIdxInParent > -1
-                                                                              && GetRootModel().GetModelFromPath("materialEntries")
-                                                                                      ?.ResolvedData is CArray<CMeshMaterialEntry>
-                                                                                  materialEntries &&
-                                                                              materialEntries.Count > NodeIdxInParent:
+            case CMaterialInstance or CResourceAsyncReference<IMaterial>
+                when NodeIdxInParent > -1
+                     && GetRootModel().GetPropertyFromPath("materialEntries")?.ResolvedData is CArray<CMeshMaterialEntry> materialEntries
+                     && materialEntries.Count > NodeIdxInParent:
             {
                 var isLocalMaterial = ResolvedData is CMaterialInstance;
                 var entry = materialEntries[NodeIdxInParent];
@@ -490,7 +491,7 @@ public partial class ChunkViewModel
                 // mesh: boneTransforms (in different coordinate spaces)
                 if (NodeIdxInParent > -1 &&
                     Parent?.Name is "boneTransforms" or "aPoseLS" or "aPoseMS" &&
-                    GetRootModel().GetModelFromPath("boneNames")?.ResolvedData is CArray<CName> boneNames &&
+                    GetRootModel().GetPropertyFromPath("boneNames")?.ResolvedData is CArray<CName> boneNames &&
                     boneNames.Count > NodeIdxInParent)
                 {
                     Descriptor = boneNames[NodeIdxInParent];

@@ -7,19 +7,14 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:others="clr-namespace:WolvenKit.Views.Others"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type={x:Type documents:RDTInkTextureAtlasViewModel}}"
-    d:DesignHeight="450"
     d:DesignWidth="800"
-    mc:Ignorable="d">
+    d:DesignHeight="450"
+    BorderBrush="{StaticResource BorderAlt}"
+    BorderThickness="1">
     <Grid Background="Transparent">
-        <Grid.Resources>
-            <ResourceDictionary>
-                <ResourceDictionary.MergedDictionaries>
-                    <ResourceDictionary Source="pack://application:,,,/AdonisUI;component/ColorSchemes/Dark.xaml" />
-                    <ResourceDictionary Source="pack://application:,,,/AdonisUI.ClassicTheme;component/Resources.xaml" />
-                </ResourceDictionary.MergedDictionaries>
-            </ResourceDictionary>
-        </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*" />
             <ColumnDefinition Width="5" />
@@ -30,19 +25,33 @@
             Grid.Column="0"
             Padding="0"
             Background="{StaticResource ContentBackground}"
-            BorderThickness="1"
+            BorderThickness="0"
             IsEnabled="{Binding IsLoaded}"
             ClipToBounds="True">
             <Border.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Click="ResetZoomPan" Header="Reset Zoom/Pan" />
+                <ContextMenu Style="{StaticResource WPFContextMenuStyle}">
+                    <MenuItem
+                        Click="ResetZoomPan"
+                        Header="Reset Zoom/Pan">
+                        <MenuItem.Icon>
+                            <templates:IconBox
+                                IconPack="Material"
+                                Kind="Magnify"
+                                Foreground="White" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </ContextMenu>
             </Border.ContextMenu>
-            <Canvas x:Name="ParentCanvas" IsEnabled="{Binding IsLoaded}">
+
+            <Canvas
+                x:Name="ParentCanvas"
+                IsEnabled="{Binding IsLoaded}">
                 <others:ImageCanvas
                     x:Name="ImageCanvasItem"
-                    Width="{Binding ElementName=ParentCanvas, Path=ActualWidth}"
-                    Height="{Binding ElementName=ParentCanvas, Path=ActualHeight}"
+                    Width="{Binding ElementName=ParentCanvas,
+                                    Path=ActualWidth}"
+                    Height="{Binding ElementName=ParentCanvas,
+                                     Path=ActualHeight}"
                     Source="{Binding Image}">
                     <others:ImageCanvas.Overlay>
                         <ListBox
@@ -55,19 +64,20 @@
                                     <Canvas />
                                 </ItemsPanelTemplate>
                             </ListBox.ItemsPanel>
+
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
+                                    <Setter Property="BorderThickness" Value="0" />
                                     <Setter Property="Canvas.Left" Value="{Binding Left}" />
                                     <Setter Property="Canvas.Top" Value="{Binding Top}" />
-                                    <Setter Property="Width" Value="{Binding Width}" />
                                     <Setter Property="Height" Value="{Binding Height}" />
-                                    <Setter Property="ToolTip" Value="{Binding Name}" />
                                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
-                                    <Setter Property="Padding" Value="0" />
                                     <Setter Property="Margin" Value="0" />
                                     <Setter Property="Opacity" Value="0.5" />
-                                    <Setter Property="BorderThickness" Value="0" />
+                                    <Setter Property="Padding" Value="0" />
+                                    <Setter Property="ToolTip" Value="{Binding Name}" />
+                                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                                    <Setter Property="Width" Value="{Binding Width}" />
                                     <Style.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
                                             <Setter Property="Opacity" Value="1.0" />
@@ -75,21 +85,21 @@
                                     </Style.Triggers>
                                 </Style>
                             </ListBox.ItemContainerStyle>
+
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Border
-                                        Margin="-1"
                                         HorizontalAlignment="Stretch"
                                         VerticalAlignment="Stretch"
                                         Background="Transparent"
                                         BorderBrush="{StaticResource WolvenKitCyan50}"
                                         BorderThickness="1">
                                         <TextBlock
-                                            Margin="2,0,0,0"
+                                            Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Bottom"
-                                            FontSize="8"
                                             Foreground="{StaticResource WolvenKitCyan50}"
+                                            FontSize="{DynamicResource WolvenKitFontAltTitle}"
                                             Text="{Binding Name}"
                                             TextTrimming="None" />
                                     </Border>
@@ -101,45 +111,79 @@
 
                 <ComboBox
                     x:Name="SlotSelection"
-                    Canvas.Top="10"
-                    Canvas.Right="10"
-                    Width="100"
+                    Canvas.Top="12"
+                    Canvas.Right="12"
+                    Width="{DynamicResource WolvenKitInkAtlasComboWidth}"
                     SelectionChanged="SlotSelection_OnSelectionChanged" />
             </Canvas>
-            
-            
         </Border>
 
-        <others:LoadingTextControl Grid.Column="0" VisibilityFlag="{Binding IsLoaded}" Small="True" />
+        <others:LoadingTextControl
+            Grid.Column="0"
+            VisibilityFlag="{Binding IsLoaded}"
+            Small="True" />
 
-        <syncfusion:SfGridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
+        <syncfusion:SfGridSplitter
+            Grid.Column="1"
+            HorizontalAlignment="Stretch" />
 
-        <StackPanel Grid.Column="2" Background="{StaticResource ContentBackgroundAlt}">
+        <StackPanel
+            Grid.Column="2"
+            Background="{StaticResource ContentBackgroundAlt}">
             <syncfusion:PropertyGrid
+                Margin="0,-1,0,0"
+                BorderThickness="0"
+                IsEnabled="{Binding IsLoaded}"
                 AutoGenerateItems="False"
                 ButtonPanelVisibility="Collapsed"
                 PropertyExpandMode="FlatMode"
-                PropertyNameColumnDefinition="100"
+                PropertyNameColumnDefinition="{DynamicResource WolvenKitInkAtlasPropertyWidth}"
                 SearchBoxVisibility="Collapsed"
                 SelectedObject="{Binding SelectedItem}"
-                IsEnabled="{Binding IsLoaded}"
                 SortDirection="{x:Null}">
                 <syncfusion:PropertyGrid.Items>
-                    <syncfusion:PropertyGridItem IsReadOnly="True" PropertyName="AtlasPath" />
-                    <syncfusion:PropertyGridItem IsReadOnly="True" PropertyName="DepotPath" />
+                    <syncfusion:PropertyGridItem
+                        IsReadOnly="True"
+                        PropertyName="AtlasPath" />
+
+                    <syncfusion:PropertyGridItem
+                        IsReadOnly="True"
+                        PropertyName="DepotPath" />
+
                     <syncfusion:PropertyGridItem PropertyName="PartName" />
-                    <syncfusion:PropertyGridItem IsReadOnly="True" PropertyName="Top" />
-                    <syncfusion:PropertyGridItem IsReadOnly="True" PropertyName="Left" />
-                    <syncfusion:PropertyGridItem IsReadOnly="True" PropertyName="Width" />
-                    <syncfusion:PropertyGridItem IsReadOnly="True" PropertyName="Height" />
+
+                    <syncfusion:PropertyGridItem
+                        IsReadOnly="True"
+                        PropertyName="Top" />
+
+                    <syncfusion:PropertyGridItem
+                        IsReadOnly="True"
+                        PropertyName="Left" />
+
+                    <syncfusion:PropertyGridItem
+                        IsReadOnly="True"
+                        PropertyName="Width" />
+
+                    <syncfusion:PropertyGridItem
+                        IsReadOnly="True"
+                        PropertyName="Height" />
                 </syncfusion:PropertyGrid.Items>
             </syncfusion:PropertyGrid>
-            <TextBlock Padding="10,5" Text="Redscript Example" />
+
+            <TextBlock
+                Margin="{DynamicResource WolvenKitMarginSmall}"
+                FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                Text="Redscript Example:" />
+
             <syncfusion:EditControl
+                BorderThickness="0,0,0,1"
+                FontSize="{DynamicResource WolvenKitFontBody}"
                 FontFamily="Fira Code"
-                ShowLineNumber="False"
                 IsEnabled="{Binding IsLoaded}"
+                ShowLineNumber="True"
+                IsReadOnly="True"
                 Text="{Binding SelectedItem.RedscriptExample}" />
+
             <Canvas IsEnabled="{Binding IsLoaded}">
                 <Image
                     HorizontalAlignment="Center"
@@ -149,8 +193,17 @@
                     RenderTransformOrigin="0.5,0.5"
                     Source="{Binding SelectedItem.Image}">
                     <Image.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Command="{Binding SelectedItem.SaveImageCommand}" Header="Save as PNG" />
+                        <ContextMenu Style="{StaticResource WPFContextMenuStyle}">
+                            <MenuItem
+                                Command="{Binding SelectedItem.SaveImageCommand}"
+                                Header="Save as PNG">
+                                <MenuItem.Icon>
+                                    <templates:IconBox
+                                        IconPack="Codicons"
+                                        Kind="Save"
+                                        Foreground="{StaticResource WolvenKitCyan}" />
+                                </MenuItem.Icon>
+                            </MenuItem>
                         </ContextMenu>
                     </Image.ContextMenu>
                 </Image>

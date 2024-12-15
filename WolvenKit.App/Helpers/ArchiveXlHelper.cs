@@ -56,10 +56,16 @@ public static partial class ArchiveXlHelper
         var end = depotPath.IndexOf('}');
         var key = depotPath.Substring(start, end - start + 1);
 
-        // If the key is not in the dictionary, throw an exception
+        // TODO: We need to parse the yaml for this
+        if (key.Contains("variant"))
+        {
+            return [depotPath];
+        }
+
+        // If the key is not in the dictionary, return an empty array. This will result in a warning.
         if (!s_keysAndValues.TryGetValue(key, out var substitutionList))
         {
-            throw new Exception($"Key {key} not found in dictionary");
+            return [];
         }
 
         // For each value of this key, replace the key in the string with the value and recursively call the function
@@ -86,7 +92,8 @@ public static partial class ArchiveXlHelper
             return null;
         }
 
-        return ResolveDynamicPaths(depotPath).FirstOrDefault((f) =>
+        var potentialMatches = ResolveDynamicPaths(depotPath);
+        return potentialMatches.FirstOrDefault((f) =>
             File.Exists(Path.Combine(pathToArchiveFolder, f)) || File.Exists(Path.Combine(pathToGameFiles, f)));
     }
 

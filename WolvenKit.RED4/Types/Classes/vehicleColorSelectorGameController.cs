@@ -37,6 +37,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(6)] 
+		[RED("currentTemplateParentRef")] 
+		public inkWidgetReference CurrentTemplateParentRef
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("windowTitle")] 
+		public inkTextWidgetReference WindowTitle
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(8)] 
 		[RED("colorWheelColorA")] 
 		public inkWidgetReference ColorWheelColorA
 		{
@@ -44,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(9)] 
 		[RED("colorWheelColorB")] 
 		public inkWidgetReference ColorWheelColorB
 		{
@@ -52,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(10)] 
 		[RED("colorWheelColorLights")] 
 		public inkWidgetReference ColorWheelColorLights
 		{
@@ -60,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(11)] 
 		[RED("colorPickerA")] 
 		public vehicleColorSelectorPointerDef ColorPickerA
 		{
@@ -68,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<vehicleColorSelectorPointerDef>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(12)] 
 		[RED("selectedColorPointerA")] 
 		public vehicleColorSelectorPointerDef SelectedColorPointerA
 		{
@@ -76,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<vehicleColorSelectorPointerDef>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(13)] 
 		[RED("colorPickerB")] 
 		public vehicleColorSelectorPointerDef ColorPickerB
 		{
@@ -84,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<vehicleColorSelectorPointerDef>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(14)] 
 		[RED("selectedColorPointerB")] 
 		public vehicleColorSelectorPointerDef SelectedColorPointerB
 		{
@@ -92,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<vehicleColorSelectorPointerDef>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(15)] 
 		[RED("colorPickerLights")] 
 		public vehicleColorSelectorPointerDef ColorPickerLights
 		{
@@ -100,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<vehicleColorSelectorPointerDef>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(16)] 
 		[RED("selectedColorPointerLights")] 
 		public vehicleColorSelectorPointerDef SelectedColorPointerLights
 		{
@@ -108,7 +124,47 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<vehicleColorSelectorPointerDef>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(17)] 
+		[RED("swapColorHint")] 
+		public inkWidgetReference SwapColorHint
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("changeSliderHint")] 
+		public inkWidgetReference ChangeSliderHint
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(19)] 
+		[RED("twintoneApplyHintText")] 
+		public inkTextWidgetReference TwintoneApplyHintText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(20)] 
+		[RED("changeTabRightHint")] 
+		public inkWidgetReference ChangeTabRightHint
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(21)] 
+		[RED("changeTabLeftHint")] 
+		public inkWidgetReference ChangeTabLeftHint
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(22)] 
 		[RED("mouseHitColor1Ref")] 
 		public inkWidgetReference MouseHitColor1Ref
 		{
@@ -116,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(23)] 
 		[RED("mouseHitColor2Ref")] 
 		public inkWidgetReference MouseHitColor2Ref
 		{
@@ -124,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(24)] 
 		[RED("mouseHitLightsRef")] 
 		public inkWidgetReference MouseHitLightsRef
 		{
@@ -132,31 +188,79 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
-		[RED("targetColorPrintA")] 
-		public inkWidgetReference TargetColorPrintA
+		[Ordinal(25)] 
+		[RED("vehiclePreviewColorA")] 
+		public inkImageWidgetReference VehiclePreviewColorA
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(26)] 
+		[RED("vehiclePreviewColorB")] 
+		public inkImageWidgetReference VehiclePreviewColorB
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(27)] 
+		[RED("vehiclePreviewLightsCar")] 
+		public inkImageWidgetReference VehiclePreviewLightsCar
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(28)] 
+		[RED("vehiclePreviewLightsBike")] 
+		public inkImageWidgetReference VehiclePreviewLightsBike
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(29)] 
+		[RED("vehiclePreviewBackground")] 
+		public inkImageWidgetReference VehiclePreviewBackground
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(30)] 
+		[RED("vehiclePreviewForeground")] 
+		public inkImageWidgetReference VehiclePreviewForeground
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(31)] 
+		[RED("vehiclePreviewScalingCanvas")] 
+		public inkWidgetReference VehiclePreviewScalingCanvas
 		{
 			get => GetPropertyValue<inkWidgetReference>();
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
-		[RED("targetColorPrintB")] 
-		public inkWidgetReference TargetColorPrintB
+		[Ordinal(32)] 
+		[RED("lightsPreviewBeamA")] 
+		public inkImageWidgetReference LightsPreviewBeamA
 		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
-		[RED("targetColorPrintLights")] 
-		public CArray<inkWidgetReference> TargetColorPrintLights
+		[Ordinal(33)] 
+		[RED("lightsPreviewBeamB")] 
+		public inkImageWidgetReference LightsPreviewBeamB
 		{
-			get => GetPropertyValue<CArray<inkWidgetReference>>();
-			set => SetPropertyValue<CArray<inkWidgetReference>>(value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(34)] 
 		[RED("timeDilationProfile")] 
 		public CString TimeDilationProfile
 		{
@@ -164,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(35)] 
 		[RED("introAnimation")] 
 		public CName IntroAnimation
 		{
@@ -172,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(36)] 
 		[RED("cancelAnimation")] 
 		public CName CancelAnimation
 		{
@@ -180,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(37)] 
 		[RED("applyAnimation")] 
 		public CName ApplyAnimation
 		{
@@ -188,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(38)] 
 		[RED("titleTextMain")] 
 		public inkTextWidgetReference TitleTextMain
 		{
@@ -196,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(39)] 
 		[RED("titleTextNumber")] 
 		public inkTextWidgetReference TitleTextNumber
 		{
@@ -204,23 +308,71 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(27)] 
-		[RED("brightnessBarContainer")] 
-		public inkWidgetReference BrightnessBarContainer
+		[Ordinal(40)] 
+		[RED("mouseHitSaturationBar")] 
+		public inkWidgetReference MouseHitSaturationBar
 		{
 			get => GetPropertyValue<inkWidgetReference>();
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(28)] 
-		[RED("brightnessBarFill")] 
-		public inkWidgetReference BrightnessBarFill
+		[Ordinal(41)] 
+		[RED("saturationBarFill")] 
+		public inkWidgetReference SaturationBarFill
 		{
 			get => GetPropertyValue<inkWidgetReference>();
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(42)] 
+		[RED("saturationPointer")] 
+		public inkWidgetReference SaturationPointer
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(43)] 
+		[RED("saturationBarHighlight")] 
+		public inkImageWidgetReference SaturationBarHighlight
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(44)] 
+		[RED("saturationBarHint")] 
+		public inkWidgetReference SaturationBarHint
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(45)] 
+		[RED("brightnessBarHighlight")] 
+		public inkImageWidgetReference BrightnessBarHighlight
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(46)] 
+		[RED("brightnessBarHint")] 
+		public inkWidgetReference BrightnessBarHint
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(47)] 
+		[RED("mouseHitBrightnessBar")] 
+		public inkWidgetReference MouseHitBrightnessBar
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(48)] 
 		[RED("brightnessPointer")] 
 		public inkWidgetReference BrightnessPointer
 		{
@@ -228,23 +380,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(30)] 
-		[RED("sliderInputHintUp")] 
-		public inkWidgetReference SliderInputHintUp
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(31)] 
-		[RED("sliderInputHintDown")] 
-		public inkWidgetReference SliderInputHintDown
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(32)] 
+		[Ordinal(49)] 
 		[RED("modeChangeBack")] 
 		public inkWidgetReference ModeChangeBack
 		{
@@ -252,7 +388,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(50)] 
 		[RED("modeChangeNext")] 
 		public inkWidgetReference ModeChangeNext
 		{
@@ -260,7 +396,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(51)] 
 		[RED("applyContainerWidget")] 
 		public inkWidgetReference ApplyContainerWidget
 		{
@@ -268,7 +404,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(52)] 
 		[RED("resetContainerWidget")] 
 		public inkWidgetReference ResetContainerWidget
 		{
@@ -276,7 +412,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(53)] 
 		[RED("vehicleUnknownPane")] 
 		public inkWidgetReference VehicleUnknownPane
 		{
@@ -284,7 +420,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(54)] 
 		[RED("vehicleBrandIcon")] 
 		public inkImageWidgetReference VehicleBrandIcon
 		{
@@ -292,7 +428,71 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(55)] 
+		[RED("crackedCarGlitchMinimumInterval")] 
+		public CFloat CrackedCarGlitchMinimumInterval
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(56)] 
+		[RED("crackedCarGlitchMaximumInterval")] 
+		public CFloat CrackedCarGlitchMaximumInterval
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(57)] 
+		[RED("vehicleNameText")] 
+		public inkTextWidgetReference VehicleNameText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(58)] 
+		[RED("templatePreviewLibraryRef")] 
+		public inkWidgetLibraryReference TemplatePreviewLibraryRef
+		{
+			get => GetPropertyValue<inkWidgetLibraryReference>();
+			set => SetPropertyValue<inkWidgetLibraryReference>(value);
+		}
+
+		[Ordinal(59)] 
+		[RED("genericPatternsGrid")] 
+		public inkVirtualCompoundWidgetReference GenericPatternsGrid
+		{
+			get => GetPropertyValue<inkVirtualCompoundWidgetReference>();
+			set => SetPropertyValue<inkVirtualCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(60)] 
+		[RED("uniquePatternsGrid")] 
+		public inkVirtualCompoundWidgetReference UniquePatternsGrid
+		{
+			get => GetPropertyValue<inkVirtualCompoundWidgetReference>();
+			set => SetPropertyValue<inkVirtualCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(61)] 
+		[RED("saveProfileHint")] 
+		public inkWidgetReference SaveProfileHint
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(62)] 
+		[RED("deleteProfileHint")] 
+		public inkWidgetReference DeleteProfileHint
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(63)] 
 		[RED("popupData")] 
 		public CHandle<inkGameNotificationData> PopupData
 		{
@@ -300,7 +500,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationData>>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(64)] 
 		[RED("systemRequestsHandler")] 
 		public CWeakHandle<inkISystemRequestsHandler> SystemRequestsHandler
 		{
@@ -308,7 +508,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkISystemRequestsHandler>>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(65)] 
 		[RED("player")] 
 		public CWeakHandle<PlayerPuppet> Player
 		{
@@ -316,7 +516,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(66)] 
 		[RED("gameInstance")] 
 		public ScriptGameInstance GameInstance
 		{
@@ -324,7 +524,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<ScriptGameInstance>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(67)] 
 		[RED("timeSystem")] 
 		public CHandle<gameTimeSystem> TimeSystem
 		{
@@ -332,7 +532,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameTimeSystem>>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(68)] 
 		[RED("vehicle")] 
 		public CWeakHandle<vehicleBaseObject> Vehicle
 		{
@@ -340,15 +540,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<vehicleBaseObject>>(value);
 		}
 
-		[Ordinal(44)] 
-		[RED("vvcComponent")] 
-		public CWeakHandle<vehicleVisualCustomizationComponent> VvcComponent
-		{
-			get => GetPropertyValue<CWeakHandle<vehicleVisualCustomizationComponent>>();
-			set => SetPropertyValue<CWeakHandle<vehicleVisualCustomizationComponent>>(value);
-		}
-
-		[Ordinal(45)] 
+		[Ordinal(69)] 
 		[RED("animProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
@@ -356,7 +548,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(70)] 
 		[RED("fakeUpdateProxy")] 
 		public CHandle<inkanimProxy> FakeUpdateProxy
 		{
@@ -364,15 +556,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(47)] 
-		[RED("SBBarProxy")] 
-		public CHandle<inkanimProxy> SBBarProxy
+		[Ordinal(71)] 
+		[RED("sbBarsProxy")] 
+		public CHandle<inkanimProxy> SbBarsProxy
 		{
 			get => GetPropertyValue<CHandle<inkanimProxy>>();
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(72)] 
 		[RED("LightsFocusProxy")] 
 		public CHandle<inkanimProxy> LightsFocusProxy
 		{
@@ -380,7 +572,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(73)] 
 		[RED("stickersPage")] 
 		public CWeakHandle<inkWidget> StickersPage
 		{
@@ -388,7 +580,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(74)] 
 		[RED("isInMenuCallbackID")] 
 		public CHandle<redCallbackObject> IsInMenuCallbackID
 		{
@@ -396,7 +588,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(75)] 
 		[RED("activeMode")] 
 		public CEnum<vehicleColorSelectorActiveMode> ActiveMode
 		{
@@ -404,7 +596,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<vehicleColorSelectorActiveMode>>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(76)] 
 		[RED("previousMode")] 
 		public CEnum<vehicleColorSelectorActiveMode> PreviousMode
 		{
@@ -412,7 +604,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<vehicleColorSelectorActiveMode>>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(77)] 
+		[RED("activeInputMode")] 
+		public CEnum<vehicleColorSelectorActiveInputMode> ActiveInputMode
+		{
+			get => GetPropertyValue<CEnum<vehicleColorSelectorActiveInputMode>>();
+			set => SetPropertyValue<CEnum<vehicleColorSelectorActiveInputMode>>(value);
+		}
+
+		[Ordinal(78)] 
 		[RED("currentAngle")] 
 		public CFloat CurrentAngle
 		{
@@ -420,7 +620,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(79)] 
 		[RED("colorADefined")] 
 		public CBool ColorADefined
 		{
@@ -428,7 +628,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(80)] 
 		[RED("colorBDefined")] 
 		public CBool ColorBDefined
 		{
@@ -436,7 +636,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(81)] 
 		[RED("lightsDefined")] 
 		public CBool LightsDefined
 		{
@@ -444,7 +644,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(82)] 
 		[RED("targetColorAngleA")] 
 		public CFloat TargetColorAngleA
 		{
@@ -452,7 +652,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(83)] 
 		[RED("targetColorAngleB")] 
 		public CFloat TargetColorAngleB
 		{
@@ -460,7 +660,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(84)] 
 		[RED("targetColorAngleLights")] 
 		public CFloat TargetColorAngleLights
 		{
@@ -468,7 +668,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(85)] 
 		[RED("targetColorASaturation")] 
 		public CFloat TargetColorASaturation
 		{
@@ -476,7 +676,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(86)] 
 		[RED("targetColorBSaturation")] 
 		public CFloat TargetColorBSaturation
 		{
@@ -484,7 +684,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(87)] 
 		[RED("targetColorABrightness")] 
 		public CFloat TargetColorABrightness
 		{
@@ -492,7 +692,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(88)] 
 		[RED("targetColorBBrightness")] 
 		public CFloat TargetColorBBrightness
 		{
@@ -500,7 +700,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(89)] 
 		[RED("axisInputCache")] 
 		public Vector2 AxisInputCache
 		{
@@ -508,7 +708,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector2>(value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(90)] 
 		[RED("inputEnabled")] 
 		public CBool InputEnabled
 		{
@@ -516,23 +716,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(66)] 
-		[RED("sbBarShown")] 
-		public CBool SbBarShown
+		[Ordinal(91)] 
+		[RED("sbBarsShown")] 
+		public CBool SbBarsShown
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(67)] 
-		[RED("sbSliderLenght")] 
-		public CFloat SbSliderLenght
+		[Ordinal(92)] 
+		[RED("sbBarsLength")] 
+		public CFloat SbBarsLength
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(93)] 
 		[RED("axisInputThreshold")] 
 		public CFloat AxisInputThreshold
 		{
@@ -540,23 +740,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(69)] 
-		[RED("currentSBSliderPositionA")] 
-		public CFloat CurrentSBSliderPositionA
+		[Ordinal(94)] 
+		[RED("saturationPointerPosition")] 
+		public CFloat SaturationPointerPosition
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(70)] 
-		[RED("currentSBSliderPositionB")] 
-		public CFloat CurrentSBSliderPositionB
+		[Ordinal(95)] 
+		[RED("brightnessPointerPosition")] 
+		public CFloat BrightnessPointerPosition
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(71)] 
+		[Ordinal(96)] 
 		[RED("mouseInputEnabled")] 
 		public CBool MouseInputEnabled
 		{
@@ -564,47 +764,55 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(72)] 
-		[RED("hoveredOver")] 
-		public CBool HoveredOver
+		[Ordinal(97)] 
+		[RED("saturationSliderHolded")] 
+		public CBool SaturationSliderHolded
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(73)] 
-		[RED("SBSliderStepPad")] 
-		public CFloat SBSliderStepPad
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-
-		[Ordinal(74)] 
-		[RED("SBSliderStepMouse")] 
-		public CFloat SBSliderStepMouse
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-
-		[Ordinal(75)] 
-		[RED("sliderHold")] 
-		public CBool SliderHold
+		[Ordinal(98)] 
+		[RED("brightnessSliderHolded")] 
+		public CBool BrightnessSliderHolded
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(76)] 
-		[RED("sliderHoldDamp")] 
-		public CInt32 SliderHoldDamp
+		[Ordinal(99)] 
+		[RED("ChromaSliderStepPad")] 
+		public CFloat ChromaSliderStepPad
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(100)] 
+		[RED("ChromaSliderStepMouse")] 
+		public CFloat ChromaSliderStepMouse
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(101)] 
+		[RED("sliderHoldGamepad")] 
+		public CBool SliderHoldGamepad
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(102)] 
+		[RED("sliderHoldGamepadDamp")] 
+		public CInt32 SliderHoldGamepadDamp
 		{
 			get => GetPropertyValue<CInt32>();
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(77)] 
+		[Ordinal(103)] 
 		[RED("sliderPadHoldAccelerationTreshhold")] 
 		public CInt32 SliderPadHoldAccelerationTreshhold
 		{
@@ -612,7 +820,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(78)] 
+		[Ordinal(104)] 
 		[RED("storedSelectedColorID")] 
 		public CInt32 StoredSelectedColorID
 		{
@@ -620,7 +828,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(79)] 
+		[Ordinal(105)] 
 		[RED("cachedNewColorA")] 
 		public CColor CachedNewColorA
 		{
@@ -628,7 +836,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CColor>(value);
 		}
 
-		[Ordinal(80)] 
+		[Ordinal(106)] 
 		[RED("cachedNewColorB")] 
 		public CColor CachedNewColorB
 		{
@@ -636,7 +844,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CColor>(value);
 		}
 
-		[Ordinal(81)] 
+		[Ordinal(107)] 
 		[RED("cachedNewColorLights")] 
 		public CColor CachedNewColorLights
 		{
@@ -644,7 +852,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CColor>(value);
 		}
 
-		[Ordinal(82)] 
+		[Ordinal(108)] 
 		[RED("CloseReason")] 
 		public CEnum<vehicleColorSelectorMenuCloseReason> CloseReason
 		{
@@ -652,12 +860,116 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<vehicleColorSelectorMenuCloseReason>>(value);
 		}
 
-		[Ordinal(83)] 
+		[Ordinal(109)] 
 		[RED("unsupportedVehicle")] 
 		public CBool UnsupportedVehicle
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(110)] 
+		[RED("previewDataMissing")] 
+		public CBool PreviewDataMissing
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(111)] 
+		[RED("virtualGenericTemplateGridController")] 
+		public CWeakHandle<TwintoneTemplateGridController> VirtualGenericTemplateGridController
+		{
+			get => GetPropertyValue<CWeakHandle<TwintoneTemplateGridController>>();
+			set => SetPropertyValue<CWeakHandle<TwintoneTemplateGridController>>(value);
+		}
+
+		[Ordinal(112)] 
+		[RED("virtualUniqueTemplateGridController")] 
+		public CWeakHandle<TwintoneTemplateGridController> VirtualUniqueTemplateGridController
+		{
+			get => GetPropertyValue<CWeakHandle<TwintoneTemplateGridController>>();
+			set => SetPropertyValue<CWeakHandle<TwintoneTemplateGridController>>(value);
+		}
+
+		[Ordinal(113)] 
+		[RED("genericGridInitialized")] 
+		public CBool GenericGridInitialized
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(114)] 
+		[RED("uniqueGridInitialized")] 
+		public CBool UniqueGridInitialized
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(115)] 
+		[RED("currentTemplate")] 
+		public VehicleVisualCustomizationTemplate CurrentTemplate
+		{
+			get => GetPropertyValue<VehicleVisualCustomizationTemplate>();
+			set => SetPropertyValue<VehicleVisualCustomizationTemplate>(value);
+		}
+
+		[Ordinal(116)] 
+		[RED("toggledTemplate")] 
+		public VehicleVisualCustomizationTemplate ToggledTemplate
+		{
+			get => GetPropertyValue<VehicleVisualCustomizationTemplate>();
+			set => SetPropertyValue<VehicleVisualCustomizationTemplate>(value);
+		}
+
+		[Ordinal(117)] 
+		[RED("currentTemplatePreview")] 
+		public CWeakHandle<ColorTemplatePreviewDisplayController> CurrentTemplatePreview
+		{
+			get => GetPropertyValue<CWeakHandle<ColorTemplatePreviewDisplayController>>();
+			set => SetPropertyValue<CWeakHandle<ColorTemplatePreviewDisplayController>>(value);
+		}
+
+		[Ordinal(118)] 
+		[RED("activePanel")] 
+		public CEnum<vehicleColorSelectorActiveTab> ActivePanel
+		{
+			get => GetPropertyValue<CEnum<vehicleColorSelectorActiveTab>>();
+			set => SetPropertyValue<CEnum<vehicleColorSelectorActiveTab>>(value);
+		}
+
+		[Ordinal(119)] 
+		[RED("activeSBBar")] 
+		public CEnum<vehicleColorSelectorSBBar> ActiveSBBar
+		{
+			get => GetPropertyValue<CEnum<vehicleColorSelectorSBBar>>();
+			set => SetPropertyValue<CEnum<vehicleColorSelectorSBBar>>(value);
+		}
+
+		[Ordinal(120)] 
+		[RED("mainPanelAnimProxy")] 
+		public CHandle<inkanimProxy> MainPanelAnimProxy
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(121)] 
+		[RED("twintonePanelAnimProxy")] 
+		public CHandle<inkanimProxy> TwintonePanelAnimProxy
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(122)] 
+		[RED("carGlitchProxy")] 
+		public CHandle<inkanimProxy> CarGlitchProxy
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
 		public vehicleColorSelectorGameController()
@@ -666,6 +978,8 @@ namespace WolvenKit.RED4.Types
 			CursorRootOffsetPoint = new inkWidgetReference();
 			ColorPaletteRef = new inkWidgetReference();
 			StickerPaletteRef = new inkWidgetReference();
+			CurrentTemplateParentRef = new inkWidgetReference();
+			WindowTitle = new inkTextWidgetReference();
 			ColorWheelColorA = new inkWidgetReference();
 			ColorWheelColorB = new inkWidgetReference();
 			ColorWheelColorLights = new inkWidgetReference();
@@ -675,40 +989,62 @@ namespace WolvenKit.RED4.Types
 			SelectedColorPointerB = new vehicleColorSelectorPointerDef { PointerRoot = new inkWidgetReference(), PartToPaint = new inkWidgetReference() };
 			ColorPickerLights = new vehicleColorSelectorPointerDef { PointerRoot = new inkWidgetReference(), PartToPaint = new inkWidgetReference() };
 			SelectedColorPointerLights = new vehicleColorSelectorPointerDef { PointerRoot = new inkWidgetReference(), PartToPaint = new inkWidgetReference() };
+			SwapColorHint = new inkWidgetReference();
+			ChangeSliderHint = new inkWidgetReference();
+			TwintoneApplyHintText = new inkTextWidgetReference();
+			ChangeTabRightHint = new inkWidgetReference();
+			ChangeTabLeftHint = new inkWidgetReference();
 			MouseHitColor1Ref = new inkWidgetReference();
 			MouseHitColor2Ref = new inkWidgetReference();
 			MouseHitLightsRef = new inkWidgetReference();
-			TargetColorPrintA = new inkWidgetReference();
-			TargetColorPrintB = new inkWidgetReference();
-			TargetColorPrintLights = new();
+			VehiclePreviewColorA = new inkImageWidgetReference();
+			VehiclePreviewColorB = new inkImageWidgetReference();
+			VehiclePreviewLightsCar = new inkImageWidgetReference();
+			VehiclePreviewLightsBike = new inkImageWidgetReference();
+			VehiclePreviewBackground = new inkImageWidgetReference();
+			VehiclePreviewForeground = new inkImageWidgetReference();
+			VehiclePreviewScalingCanvas = new inkWidgetReference();
+			LightsPreviewBeamA = new inkImageWidgetReference();
+			LightsPreviewBeamB = new inkImageWidgetReference();
 			TimeDilationProfile = "radialMenu";
 			IntroAnimation = "Intro";
 			CancelAnimation = "Cancel";
 			ApplyAnimation = "Apply";
 			TitleTextMain = new inkTextWidgetReference();
 			TitleTextNumber = new inkTextWidgetReference();
-			BrightnessBarContainer = new inkWidgetReference();
-			BrightnessBarFill = new inkWidgetReference();
+			MouseHitSaturationBar = new inkWidgetReference();
+			SaturationBarFill = new inkWidgetReference();
+			SaturationPointer = new inkWidgetReference();
+			SaturationBarHighlight = new inkImageWidgetReference();
+			SaturationBarHint = new inkWidgetReference();
+			BrightnessBarHighlight = new inkImageWidgetReference();
+			BrightnessBarHint = new inkWidgetReference();
+			MouseHitBrightnessBar = new inkWidgetReference();
 			BrightnessPointer = new inkWidgetReference();
-			SliderInputHintUp = new inkWidgetReference();
-			SliderInputHintDown = new inkWidgetReference();
 			ModeChangeBack = new inkWidgetReference();
 			ModeChangeNext = new inkWidgetReference();
 			ApplyContainerWidget = new inkWidgetReference();
 			ResetContainerWidget = new inkWidgetReference();
 			VehicleUnknownPane = new inkWidgetReference();
 			VehicleBrandIcon = new inkImageWidgetReference();
+			VehicleNameText = new inkTextWidgetReference();
+			TemplatePreviewLibraryRef = new inkWidgetLibraryReference { WidgetLibrary = new inkWidgetLibraryResourceWrapper() };
+			GenericPatternsGrid = new inkVirtualCompoundWidgetReference();
+			UniquePatternsGrid = new inkVirtualCompoundWidgetReference();
+			SaveProfileHint = new inkWidgetReference();
+			DeleteProfileHint = new inkWidgetReference();
 			GameInstance = new ScriptGameInstance();
-			ActiveMode = Enums.vehicleColorSelectorActiveMode.Primary;
 			AxisInputCache = new Vector2();
-			SbSliderLenght = 756.000000F;
+			SbBarsLength = 756.000000F;
 			AxisInputThreshold = 0.100000F;
-			SBSliderStepPad = 18.000000F;
-			SBSliderStepMouse = 18.000000F;
+			ChromaSliderStepPad = 4.500000F;
+			ChromaSliderStepMouse = 18.000000F;
 			SliderPadHoldAccelerationTreshhold = 50;
 			CachedNewColorA = new CColor();
 			CachedNewColorB = new CColor();
 			CachedNewColorLights = new CColor();
+			CurrentTemplate = new VehicleVisualCustomizationTemplate { GenericData = new GenericTemplatePersistentData(), UniqueData = new UniqueTemplateData { CustomMultilayers = new(), CustomDecals = new(), GlobalClearCoatOverrides = new vehicleVehicleClearCoatOverrides { Opacity = -1.000000F, CoatTintFwd = new CColor(), CoatTintSide = new CColor(), CoatTintFresnelBias = -1.000000F, CoatSpecularColor = new CColor(), CoatFresnelBias = -1.000000F }, PartsClearCoatOverrides = new() } };
+			ToggledTemplate = new VehicleVisualCustomizationTemplate { GenericData = new GenericTemplatePersistentData(), UniqueData = new UniqueTemplateData { CustomMultilayers = new(), CustomDecals = new(), GlobalClearCoatOverrides = new vehicleVehicleClearCoatOverrides { Opacity = -1.000000F, CoatTintFwd = new CColor(), CoatTintSide = new CColor(), CoatTintFresnelBias = -1.000000F, CoatSpecularColor = new CColor(), CoatFresnelBias = -1.000000F }, PartsClearCoatOverrides = new() } };
 
 			PostConstruct();
 		}

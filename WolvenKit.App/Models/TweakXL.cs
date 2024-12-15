@@ -205,7 +205,7 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
 
     public bool Accepts(Type type) => type == typeof(TweakXLFile);
 
-    public object ReadYaml(IParser parser, Type type)
+    public object? ReadYaml(IParser parser, Type type, ObjectDeserializer rootDeserializer)
     {
         TweakXLFile result;
 
@@ -383,7 +383,7 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
 
     // TODO: Write a ChainedEventEmitter for the style switching
     // TODO: Maybe consider using WithTagMapping for "!append", "!append-once", etc.
-    public void WriteYaml(IEmitter emitter, object? value, Type type)
+    public void WriteYaml(IEmitter emitter, object? value, Type type, ObjectSerializer serializer)
     {
         emitter.Emit(new MappingStart(null, null, false, MappingStyle.Block));
         if (value is not TweakXLFile tweakValue)
@@ -679,4 +679,5 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
 
         return null;
     }
+
 }

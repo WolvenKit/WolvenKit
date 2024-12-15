@@ -12,14 +12,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(1)] 
-		[RED("noVFX")] 
-		public CBool NoVFX
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
 		public SwitchVehicleVisualCustomizationStateEvent()
 		{
 			PostConstruct();

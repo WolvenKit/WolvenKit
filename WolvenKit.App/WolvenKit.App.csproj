@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0-windows</TargetFramework>
-    <Version>8.14.1</Version>
+    <Version>8.15.1</Version>
     <Platforms>x64</Platforms>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-	<Nullable>enable</Nullable>
+    <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
 
   <ItemGroup>
@@ -42,9 +42,9 @@
   </ItemGroup>
 
   <ItemGroup>
-      <EmbeddedResource Include="Resources\launchprofiles.json">
-          <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      </EmbeddedResource>
+    <EmbeddedResource Include="Resources\launchprofiles.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\WolvenKitFileDefinitions.xml" />
   </ItemGroup>
 
@@ -56,21 +56,35 @@
   </ItemGroup>
 
   <ItemGroup>
-	<PackageReference Include="Octokit" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
+    <PackageReference Include="Octokit" />
     <PackageReference Include="CommunityToolkit.Mvvm" />
-	<PackageReference Include="Discord.Net" />
-	<PackageReference Include="DiscordRichPresence" />
-	
-	<PackageReference Include="NAudio" />
-	<PackageReference Include="NVorbis" />
-	<PackageReference Include="HelixToolkit.SharpDX.Core.Wpf" />
+    <PackageReference Include="Discord.Net" />
+    <PackageReference Include="DiscordRichPresence" />
+
+    <PackageReference Include="NAudio" />
+    <PackageReference Include="NVorbis" />
+    <PackageReference Include="HelixToolkit.SharpDX.Core.Wpf" />
     <PackageReference Include="AutomaticGraphLayout" />
     <PackageReference Include="Nodify" />
-    <PackageReference Include="Splat"/>
+    <PackageReference Include="Splat" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Resources\WolvenKitFileDefinitions.xml" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <NoWarn>$(NoWarn);IDE0010</NoWarn>
+  </PropertyGroup>
+
+  <Target Name="RemoveDuplicateAnalyzers" BeforeTargets="CoreCompile">
+    <!-- Work around https://github.com/dotnet/wpf/issues/6792 -->
+
+    <ItemGroup>
+        <FilteredAnalyzer Include="@(Analyzer->Distinct())" />
+        <Analyzer Remove="@(Analyzer)" />
+        <Analyzer Include="@(FilteredAnalyzer)" />
+    </ItemGroup>
+  </Target>
 </Project>

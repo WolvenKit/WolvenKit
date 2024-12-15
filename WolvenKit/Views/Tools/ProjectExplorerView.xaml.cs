@@ -9,6 +9,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using HandyControl.Data;
 using ReactiveUI;
@@ -17,11 +18,13 @@ using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
+using WolvenKit.Views.Templates;
 using RowColumnIndex = Syncfusion.UI.Xaml.ScrollAxis.RowColumnIndex;
 
 namespace WolvenKit.Views.Tools
@@ -45,7 +48,7 @@ namespace WolvenKit.Views.Tools
         public static readonly DependencyProperty FlatItemSourceProperty =
             DependencyProperty.Register(nameof(FlatItemSource), typeof(ObservableCollection<FileSystemModel>),
                 typeof(ProjectExplorerView), new PropertyMetadata(null));
-        
+
         public ObservableCollection<FileSystemModel> FlatItemSource
         {
             get => (ObservableCollection<FileSystemModel>)GetValue(FlatItemSourceProperty);
@@ -78,8 +81,8 @@ namespace WolvenKit.Views.Tools
             TreeGrid.NodeExpanded += TreeGrid_OnNodeExpanded;
             TreeGrid.NodeCollapsing += TreeGrid_OnNodeCollapsing;
             TreeGrid.NodeCollapsed += TreeGrid_OnNodeCollapsed;
-            
-            
+
+
             this.WhenActivated(disposables =>
             {
                 if (DataContext is ProjectExplorerViewModel vm)
@@ -87,7 +90,7 @@ namespace WolvenKit.Views.Tools
                     SetCurrentValue(ViewModelProperty, vm);
                     vm.OnProjectChanged += ResetUiElements;
                 }
-                
+
                 AddKeyUpEvent();
 
                 Interactions.DeleteFiles = _ =>
@@ -157,7 +160,7 @@ namespace WolvenKit.Views.Tools
 
                     return innerVm.Text;
                 };
-               
+
                 //EventBindings
                 Observable
                     .FromEventPattern(TreeGrid, nameof(TreeGrid.CellDoubleTapped))
@@ -173,7 +176,7 @@ namespace WolvenKit.Views.Tools
                         viewModel => viewModel.ToggleFlatModeCommand,
                         view => view.ToggleFlatModeButton)
                     .DisposeWith(disposables);
-                
+
                 this.BindCommand(ViewModel,
                     viewModel => viewModel.OpenRootFolderCommand,
                     view => view.OpenFolderButton);
@@ -242,7 +245,7 @@ namespace WolvenKit.Views.Tools
             _currentFolderQuery = "";
             // Set search bar to empty if it wasn't 
             PESearchBar?.SetCurrentValue(System.Windows.Controls.TextBox.TextProperty, "");
-            
+
             // now handle the grids
             if (TreeGridFlat.View is not null)
             {
@@ -259,7 +262,7 @@ namespace WolvenKit.Views.Tools
 
         private void TreeGrid_OnNodeExpanding(object sender, NodeExpandingEventArgs e)
         {
-            if (ViewModel is null || _automatic || !ViewModel.ModifierViewStateService.IsShiftKeyPressed)
+            if (ViewModel is null || _automatic || !ModifierViewStateService.IsCtrlBeingHeld)
             {
                 return;
             }
@@ -274,10 +277,12 @@ namespace WolvenKit.Views.Tools
         private void ExpandAllNodes(TreeNode node)
         {
             TreeGrid.ExpandAllNodes(node);
-            if (ViewModel != null)
+            if (ViewModel != null && string.IsNullOrEmpty(_currentFolderQuery))
             {
                 RecursiveStateSave(node.ChildNodes);
             }
+
+            return;
 
             void RecursiveStateSave(TreeNodes childNodes)
             {
@@ -294,11 +299,13 @@ namespace WolvenKit.Views.Tools
 
         private void CollapseAllNodes(TreeNode node)
         {
-            if (ViewModel != null)
+            if (ViewModel != null && string.IsNullOrEmpty(_currentFolderQuery))
             {
                 RecursiveStateSave(node.ChildNodes);
             }
             TreeGrid.CollapseAllNodes(node);
+
+            return;
             void RecursiveStateSave(TreeNodes childNodes)
             {
                 foreach (var childNode in childNodes)
@@ -331,7 +338,7 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            if (ViewModel.ModifierViewStateService.IsCtrlKeyPressed && e.Node.HasChildNodes)
+            if (ModifierViewStateService.IsCtrlBeingHeld && e.Node.HasChildNodes)
             {
                 _automatic = true;
                 e.Cancel = true;
@@ -339,7 +346,7 @@ namespace WolvenKit.Views.Tools
                 var state = e.Node.ChildNodes[0].IsExpanded;
                 foreach (var childNode in e.Node.ChildNodes)
                 {
-                    if (ViewModel.ModifierViewStateService.IsShiftKeyPressed)
+                    if (ModifierViewStateService.IsShiftBeingHeld)
                     {
                         if (state)
                         {
@@ -367,7 +374,7 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            if (!ViewModel.ModifierViewStateService.IsShiftKeyPressed)
+            if (!ModifierViewStateService.IsShiftBeingHeld)
             {
                 return;
             }
@@ -398,7 +405,6 @@ namespace WolvenKit.Views.Tools
 
             // register to KeyUp because KeyDown doesn't forward "F2"
             KeyUp += OnKeyUp;
-            KeyDown += OnKeyStateChanged; 
             ViewModel.IsKeyUpEventAssigned = true;
         }
 
@@ -431,25 +437,15 @@ namespace WolvenKit.Views.Tools
         }
 
         /// <summary>
-        /// Called from view on keyup/keydown event. Synchronises modifier state with ModifierViewStateModel.
-        /// </summary>
-        private void OnKeyStateChanged(object sender, KeyEventArgs e) => ViewModel?.RefreshModifierStates();
-
-        public void RefreshModifierStates(object sender, RoutedEventArgs routedEventArgs) => ViewModel?.RefreshModifierStates();
-
-        /// <summary>
         /// Called from view on key down event. Handles search bar and rename/delete commands.
         /// </summary>
         private void OnKeyUp(object sender, KeyEventArgs e)
         {
-            // For context menu switching
-            OnKeyStateChanged(sender, e);
-            
             if (PESearchBar.IsFocused)
             {
                 return;
             }
-            if (e.Key == Key.F2 )
+            if (e.Key == Key.F2)
             {
                 ViewModel?.RenameFileCommand.SafeExecute(null);
                 return;
@@ -497,11 +493,11 @@ namespace WolvenKit.Views.Tools
                 }
             }
 
-            if (e.Action != NotifyCollectionChangedAction.Remove || e.OldItems == null)
+            if (e.Action != NotifyCollectionChangedAction.Remove || e.OldItems == null || !string.IsNullOrEmpty(_currentFolderQuery))
             {
                 return;
             }
-
+            
             foreach (var item in e.OldItems)
             {
                 if (item is not TreeNode { Item: FileSystemModel { IsDirectory: true } fileSystemModel })
@@ -669,7 +665,7 @@ namespace WolvenKit.Views.Tools
         private async void RowDragDropController_Drop(object sender, TreeGridRowDropEventArgs e)
         {
             e.Handled = _isDragging; // which should be true at this point
-            
+
             // this should all be somewhere else, right?
             try
             {
@@ -712,7 +708,7 @@ namespace WolvenKit.Views.Tools
                             files.Add(sourceFile.FullName);
                         }
                     }
-                    
+
                     // 1146: addresses "prevent self-drag-and-drop" 
                     if (files.Count > 0 && files[0] == targetDirectory)
                     {
@@ -727,7 +723,7 @@ namespace WolvenKit.Views.Tools
                 Console.WriteLine(error.Message);
             }
         }
-        private void RowDragDropController_Dropped(object sender, TreeGridRowDroppedEventArgs e) => 
+        private void RowDragDropController_Dropped(object sender, TreeGridRowDroppedEventArgs e) =>
             _isDragging = false;
 
         /// <summary>
@@ -736,7 +732,7 @@ namespace WolvenKit.Views.Tools
         /// </summary>
         private async Task ProcessFileAction(IReadOnlyList<string> sourceFiles, string targetDirectory)
         {
-            var isCopy = ViewModel?.ModifierViewStateService.GetModifierState(ModifierKeys.Control) == true;
+            var isCopy = ModifierViewStateService.IsCtrlBeingHeld;
 
             // Abort if a directory is dragged on itself or its parent
             if (!isCopy && sourceFiles.Count == 1 &&
@@ -775,7 +771,7 @@ namespace WolvenKit.Views.Tools
                     if (targetFile == sourceFile && isCopy)
                     {
                         var directoryName = Path.GetFileName(Path.GetDirectoryName(sourceFile)) ?? "INVALID";
-                        relativePath = relativePath.Replace(directoryName, $"{directoryName} - Copy");
+                        relativePath = relativePath.Replace(directoryName, $"{directoryName}_copy");
                         targetFile = Path.Combine(targetDirectory, relativePath);
                     }
 
@@ -824,7 +820,7 @@ namespace WolvenKit.Views.Tools
                     }
 
                     var filenameWithoutExtension = Path.GetFileNameWithoutExtension(targetFile);
-                    targetFile = targetFile.Replace(filenameWithoutExtension, $"{filenameWithoutExtension} - Copy");
+                    targetFile = targetFile.Replace(filenameWithoutExtension, $"{filenameWithoutExtension}_copy");
                 }
 
                 var containingDirectory = Path.GetDirectoryName(targetFile) ?? "";
@@ -1033,14 +1029,34 @@ namespace WolvenKit.Views.Tools
             public ListSortDirection SortDirection { get; set; }
         }
 
+        private static TreeNode GetTreeNode(string filePath, TreeNode node)
+        {
+            if (node.Item is FileSystemModel model && model.FullName == filePath)
+            {
+                return node;
+            }
+
+            return node.ChildNodes.Aggregate<TreeNode, TreeNode>(null,
+                (current, nodeChildNode) => current ?? GetTreeNode(filePath, nodeChildNode));
+        }
+
         private void ScrollToOpenFile_OnClick(object sender, RoutedEventArgs e)
         {
-            if (ViewModel?.GetActiveEditorFile() is not IDocumentViewModel activeFile
-                || TreeGrid.View.Nodes.FirstOrDefault(node => node.Item is FileSystemModel model && model.FullName == activeFile.FilePath)
-                    is not TreeNode activeFileNode)
+            if (ViewModel?.GetActiveEditorFile() is not IDocumentViewModel activeFile)
             {
                 return;
             }
+
+            var activeFileNode =
+                TreeGrid.View.Nodes.FirstOrDefault(node => node.Item is FileSystemModel model && model.FullName == activeFile.FilePath);
+            activeFileNode ??= GetTreeNode(activeFile.FilePath, TreeGrid.View.Nodes.FirstOrDefault());
+
+            if (activeFileNode is null)
+            {
+                return;
+            }
+
+            ExpandParent(activeFileNode);
 
             TreeGrid.SetCurrentValue(Syncfusion.UI.Xaml.Grid.SfGridBase.SelectedItemProperty, activeFileNode);
 
@@ -1050,6 +1066,43 @@ namespace WolvenKit.Views.Tools
             var columnIndex = TreeGrid.ResolveToStartColumnIndex();
             TreeGrid.ScrollInView(new RowColumnIndex(rowIndex, columnIndex));
             TreeGrid.View.MoveCurrentToPosition(rowIndex);
+        }
+
+        private void ExpandParent(TreeNode activeFileNode)
+        {
+            if (activeFileNode.ParentNode is null)
+            {
+                TreeGrid?.ExpandNode(activeFileNode);
+                return;
+            }
+
+            ExpandParent(activeFileNode.ParentNode);
+            TreeGrid?.ExpandNode(activeFileNode.ParentNode);
+        }
+
+
+        private void ContextMenu_OnKeyStateChanged(object sender, KeyEventArgs e)
+        {
+            ViewModel?.ModifierStateService.OnKeystateChanged(e);
+            ViewModel?.ModifierStateService.RefreshModifierStates();
+        }
+
+        private void OnContextMenuOpen(object sender, ContextMenuEventArgs e)
+        {
+            ViewModel?.ModifierStateService.RefreshModifierStates();
+        }
+
+        private void Main_OnKeystateChanged(object sender, KeyEventArgs e) => ViewModel?.OnKeyStateChanged(e);
+
+        private void TreeIcon_Loaded(object sender, RoutedEventArgs e)
+        {
+            // NOTE: Margin="0" is not applied using XAML. This is likely due
+            //       to the use of virtualization and DataTemplate. This
+            //       workaround to define expected values after view is loaded.
+            var view = sender as IconBox;
+
+            view.SetCurrentValue(IconBox.MarginProperty, new Thickness(0));
+            view.SetResourceReference(IconBox.SizeProperty, "WolvenKitIconNano");
         }
     }
 }

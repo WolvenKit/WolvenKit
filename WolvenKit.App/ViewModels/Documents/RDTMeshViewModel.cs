@@ -39,6 +39,7 @@ using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 using IMaterial = WolvenKit.RED4.Types.IMaterial;
+using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 using Material = WolvenKit.App.Models.Material;
 
 namespace WolvenKit.App.ViewModels.Documents;
@@ -358,7 +359,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
     }
 
     [RelayCommand]
-    public void ExtractShaders()
+    private void ExtractShaders()
     {
         if (_settingsManager.CP77ExecutablePath is null)
         {
@@ -627,6 +628,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         var modelGroups = new List<Element3D>();
         foreach (var (name, rig) in Rigs)
         {
+            if (name is "deformations" or "root")
+            {
+                continue;
+            }
             var group = new GroupModel3DExt()
             {
                 Name = $"{rig.Name}",
@@ -873,7 +878,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             var name = GetUniqueMaterialName(me.Name.ToString().NotNull(), mesh);
             if (!me.IsLocalInstance)
             {
-                materials.Add(name, new Material(name));
+                materials.TryAdd(name, new Material(name));
                 continue;
             }
 
@@ -1482,11 +1487,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             Materials[name] = material;
         }
 
-        var filename_b = Path.Combine(ISettingsManager.GetTemp_OBJPath(), name + ".png");
-        var filename_bn = Path.Combine(ISettingsManager.GetTemp_OBJPath(), name + "_n.png");
-        var filename_rm = Path.Combine(ISettingsManager.GetTemp_OBJPath(), name + "_rm.png");
-        var filename_d = Path.Combine(ISettingsManager.GetTemp_OBJPath(), name + "_d.dds");
-        var filename_n = Path.Combine(ISettingsManager.GetTemp_OBJPath(), name + "_n.dds");
+        var (filename_b, filename_bn, filename_rm, filename_d, filename_n) = GetMaterialFilePathsFromCache(name);
+        
 
 
         if (File.Exists(filename_d))
@@ -1534,6 +1536,44 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             //material.DisplacementMap = material.AlbedoMap;
         }
         return Materials[name];
+    }
+
+    /// <summary>
+    /// Gets file paths from cache directory. If the files are broken, it will delete them.
+    /// </summary>
+    /// <param name="name">name of material</param>
+    /// <returns></returns>
+    private (string filename_b, string filename_bn, string filename_rm, string filename_d, string filename_n) GetMaterialFilePathsFromCache(
+        string name, bool deleteAll = false)
+    {
+        var filename_b = Path.Combine(ISettingsManager.GetTemp_OBJPath(), name + ".png");
+        CheckFile(filename_b);
+        var filename_bn = Path.Combine(ISettingsManager.GetTemp_OBJPath(), name + "_n.png");
+        CheckFile(filename_bn);
+        var filename_rm = Path.Combine(ISettingsManager.GetTemp_OBJPath(), name + "_rm.png");
+        CheckFile(filename_rm);
+        var filename_d = Path.Combine(ISettingsManager.GetTemp_OBJPath(), name + "_d.dds");
+        CheckFile(filename_d);
+        var filename_n = Path.Combine(ISettingsManager.GetTemp_OBJPath(), name + "_n.dds");
+        CheckFile(filename_n);
+
+        return (filename_b, filename_bn, filename_rm, filename_d, filename_n);
+
+        void CheckFile(string filePath)
+        {
+            var fileInfo = new FileInfo(filePath);
+            if (fileInfo.Exists && (deleteAll || fileInfo.Length == 0))
+            {
+                try
+                {
+                    File.Delete(filePath);
+                }
+                catch
+                {
+                    _loggerService.Error($"Failed to delete {filePath}. To clear the material cache, try deleting it by hand.");
+                }
+            }
+        }
     }
 
     public List<Material> GetMaterialsForAppearance(CMesh mesh, CName appearance)
@@ -1623,6 +1663,27 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
     public bool IsLoadingMaterials { get; set; }
 
+    private void DeleteMaterialCache()
+    {
+        if (!Directory.Exists(ISettingsManager.GetTemp_OBJPath()))
+        {
+            return;
+        }
+
+        try
+        {
+            var files = Directory.GetFiles(ISettingsManager.GetTemp_OBJPath());
+            foreach (var file in files)
+            {
+                File.Delete(file);
+            }
+        }
+        catch
+        {
+            // Don't delete, then
+        }
+    }
+
     [RelayCommand]
     public void LoadMaterials()
     {
@@ -1634,6 +1695,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         IsLoadingMaterials = true;
         if (CtrlKeyPressed)
         {
+            DeleteMaterialCache();
+            
             Parent.GetLoggerService().NotNull().Info($"Clearing material cache...");
             foreach (var (_, material) in SelectedAppearance.RawMaterials)
             {
@@ -1676,35 +1739,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             return;
         }
 
-        var filename_b = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + ".png");
-        if (File.Exists(filename_b))
-        {
-            File.Delete(filename_b);
-        }
-
-        var filename_bn = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_n.png");
-        if (File.Exists(filename_bn))
-        {
-            File.Delete(filename_bn);
-        }
-
-        var filename_rm = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_rm.png");
-        if (File.Exists(filename_rm))
-        {
-            File.Delete(filename_rm);
-        }
-
-        var filename_d = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_d.dds");
-        if (File.Exists(filename_d))
-        {
-            File.Delete(filename_d);
-        }
-
-        var filename_n = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_n.dds");
-        if (File.Exists(filename_n))
-        {
-            File.Delete(filename_n);
-        }
+        GetMaterialFilePathsFromCache(material.Name, true);
     }
 
     public async ValueTask LoadMaterial(WolvenKit.App.Models.Material? material)
@@ -1770,11 +1805,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         // set numeric roughness, metalness etc. values from textures
         adjustRoughness(dictionary, material);
 
-        var filename_b = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + ".png");
-        var filename_bn = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_n.png");
-        var filename_rm = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_rm.png");
-        var filename_d = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_d.dds");
-        var filename_n = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_n.dds");
+        var (filename_b, filename_bn, filename_rm, filename_d, filename_n) = GetMaterialFilePathsFromCache(material.Name);
 
         if (dictionary.TryGetValue("MultilayerSetup", out var mlsetup) && dictionary.TryGetValue("MultilayerMask", out var mlmask))
         {

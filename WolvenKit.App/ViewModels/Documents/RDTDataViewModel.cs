@@ -14,6 +14,7 @@ using WolvenKit.App.Factories;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.Nodify;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Events;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common.FNV1A;
@@ -132,12 +133,9 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     {
         get
         {
-            if (_chunks == null || _chunks.Count == 0)
+            if (_chunks.Count == 0 && _data is not RedDummy)
             {
-                _chunks = _data is null ? new() : new List<ChunkViewModel>
-                {
-                    GenerateChunks()
-                };
+                _chunks.Add(GenerateChunks());
             }
             return _chunks;
         }
@@ -164,6 +162,8 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     [ObservableProperty] private IRedRef? _selectedImport;
 
+    [ObservableProperty] private string? _currentSearch;
+
     public bool ShowReferenceGraph => _settingsManager.ShowReferenceGraph;
 
     /// <summary>
@@ -171,9 +171,14 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     /// </summary>
     public List<ChunkViewModel> DirtyChunks { get; set; } = [];
 
+    public bool HasActiveSearch { get; set; }
+
+    public int NumSelectedItems => SelectedChunks is ObservableCollection<object> obs ? obs.Count : 0;
+
     public delegate void LayoutNodesDelegate();
 
     public LayoutNodesDelegate? LayoutNodes;
+    
 
     #endregion
 
@@ -194,7 +199,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     public void LookForReferences(ChunkViewModel cvm)
     {
-        if (cvm.Data is null)
+        if (cvm.Data is RedDummy)
         {
             return;
         }
@@ -213,10 +218,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
             }
         }
 
-        if (LayoutNodes != null)
-        {
-            LayoutNodes();
-        }
+        LayoutNodes?.Invoke();
     }
 
     public void LookForReferences(ChunkViewModel cvm, RedBaseClass data, string xpath)
@@ -344,6 +346,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     public override void OnSelected()
     {
+        base.OnSelected();
         RefreshDirtyChunks();
 
         if (SelectedChunk is ChunkViewModel { ResolvedData: worldNode } cvm)
@@ -539,5 +542,34 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
         ExpandParentNodes(selectedNode);
         SetSelection(selectedNode);
+    }
+
+    // A material was renamed
+    public void OnCNameValueChanged(ValueChangedEventArgs args)
+    {
+        if (args.RedType == typeof(CMeshMaterialEntry))
+        {
+            GetRootChunk()?.OnMaterialNameChange(args.OldValue, args.NewValue);
+        }
+    }
+
+    public void OnSearchChanged(string searchBoxText)
+    {
+        HasActiveSearch = !string.IsNullOrEmpty(searchBoxText);
+        foreach (var chunkViewModel in Chunks)
+        {
+            if (_chunks.Count <= 20)
+            {
+                chunkViewModel.CalculatePropertiesRecursive();
+            }
+            chunkViewModel.SetVisibilityStatusBySearchString(searchBoxText);
+        }
+
+        CurrentSearch = searchBoxText;
+
+        if (string.IsNullOrEmpty(searchBoxText) && SelectedChunk is ChunkViewModel selectedChunk)
+        {
+            ScrollToNode(selectedChunk);
+        }
     }
 }

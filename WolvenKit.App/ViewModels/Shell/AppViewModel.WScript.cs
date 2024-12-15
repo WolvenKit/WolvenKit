@@ -88,7 +88,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
         var code = await File.ReadAllTextAsync(_fileValidationScript.Path);
 
-        foreach (var (_, file) in projArchive.Files)
+        foreach (var (_, file) in projArchive.Files.Where(kvp => kvp.Value.Extension != ".xbm"))
         {
             if (GetRedFile(file) is not { } fileViewModel)
             {

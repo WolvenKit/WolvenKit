@@ -100,6 +100,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(12)] 
+		[RED("twintoneOverrideShown")] 
+		public CBool TwintoneOverrideShown
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public PlayerVisionModeControllerActiveFlags()
 		{
 			PostConstruct();

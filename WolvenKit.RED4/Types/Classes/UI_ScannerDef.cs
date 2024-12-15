@@ -172,6 +172,38 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
+		[Ordinal(21)] 
+		[RED("scannerActiveTab")] 
+		public gamebbScriptID_Variant ScannerActiveTab
+		{
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
+		}
+
+		[Ordinal(22)] 
+		[RED("twintoneAvailable")] 
+		public gamebbScriptID_Bool TwintoneAvailable
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		[Ordinal(23)] 
+		[RED("twintoneApplyAvailable")] 
+		public gamebbScriptID_Bool TwintoneApplyAvailable
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		[Ordinal(24)] 
+		[RED("twintoneNoModelAvailable")] 
+		public gamebbScriptID_Bool TwintoneNoModelAvailable
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
 		public UI_ScannerDef()
 		{
 			Scannables = new gamebbScriptID_Variant();
@@ -195,6 +227,10 @@ namespace WolvenKit.RED4.Types
 			HudHintMessegeContent = new gamebbScriptID_String();
 			UIVisible = new gamebbScriptID_Bool();
 			ScannerLookAt = new gamebbScriptID_Bool();
+			ScannerActiveTab = new gamebbScriptID_Variant();
+			TwintoneAvailable = new gamebbScriptID_Bool();
+			TwintoneApplyAvailable = new gamebbScriptID_Bool();
+			TwintoneNoModelAvailable = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

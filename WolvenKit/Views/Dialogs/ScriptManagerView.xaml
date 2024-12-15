@@ -1,5 +1,6 @@
 ﻿<reactiveUi:ReactiveUserControl
     x:Class="WolvenKit.Views.Dialogs.ScriptManagerView"
+    x:TypeArguments="dialogs:ScriptManagerViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -9,16 +10,15 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    Width="800"
-    Height="600"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=dialogs:ScriptManagerViewModel}"
-    d:DesignHeight="450"
     d:DesignWidth="800"
-    x:TypeArguments="dialogs:ScriptManagerViewModel"
-    Background="{StaticResource ContentBackgroundAlt3}"
-    mc:Ignorable="d">
-
-    <Grid Margin="12">
+    d:DesignHeight="450"
+    Width="{DynamicResource WolvenKitDialogWidthMedium}"
+    Height="600"
+    Background="{StaticResource ContentBackgroundAlt3}">
+    <Grid Margin="{DynamicResource WolvenKitMarginSmall}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -27,50 +27,71 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!--  Header  -->
+        <!-- Header -->
         <DockPanel Grid.Row="0">
-            <TextBlock FontSize="24" Text="Script Manager" />
+            <TextBlock
+                FontSize="{DynamicResource WolvenKitFontHuge}"
+                Text="Script Manager" />
+
             <Button
                 x:Name="CloseButton"
-                Margin="0,0,0,10"
-                HorizontalAlignment="Right">
-                <iconPacks:PackIconMaterial
-                    Width="17"
-                    Height="13"
-                    Foreground="Gray"
-                    Kind="Close" />
+                HorizontalAlignment="Right"
+                Background="Transparent">
+                <templates:IconBox
+                    IconPack="Material"
+                    Kind="Close"
+                    Size="{DynamicResource WolvenKitIconMicro}" />
             </Button>
         </DockPanel>
 
-        <!--  Separator  -->
-        <Separator Grid.Row="1" />
+        <!-- Separator -->
+        <Separator
+            Grid.Row="1"
+            Margin="{DynamicResource WolvenKitMarginSmallVertical}" />
 
-        <!--  Main grid  -->
+        <!-- Main grid -->
         <TabControl
             x:Name="ScriptTypeTabControl"
             Grid.Row="2"
             SelectionChanged="TabControl_OnSelectionChanged">
-            <TabItem Header="General" />
-            <TabItem Header="Hook" />
-            <TabItem Header="Lib" />
-            <TabItem Header="UI" />
+            <TabItem
+                Height="{DynamicResource WolvenKitTabHeight}"
+                Padding="{DynamicResource WolvenKitMarginSmallHorizontal}"
+                Header="General" />
+            <TabItem
+                Height="{DynamicResource WolvenKitTabHeight}"
+                Padding="{DynamicResource WolvenKitMarginSmallHorizontal}"
+                Header="Hook" />
+            <TabItem
+                Height="{DynamicResource WolvenKitTabHeight}"
+                Padding="{DynamicResource WolvenKitMarginSmallHorizontal}"
+                Header="Lib" />
+            <TabItem
+                Height="{DynamicResource WolvenKitTabHeight}"
+                Padding="{DynamicResource WolvenKitMarginSmallHorizontal}"
+                Header="UI" />
         </TabControl>
 
-        <Grid Grid.Row="3">
+        <Grid
+            Grid.Row="3"
+            Margin="{DynamicResource WolvenKitMarginSmallBottom}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" MinWidth="450" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="{DynamicResource WolvenKitColumnTiny}" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <syncfusion:SfTreeGrid
                 x:Name="ScriptsTreeGrid"
                 Grid.Column="0"
-                MinHeight="450"
+                FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                HeaderRowHeight="{DynamicResource WolvenKitTreeRowHeaderHeight}"
+                RowHeight="{DynamicResource WolvenKitTreeRowHeight}"
+                ColumnSizer="FillColumn"
                 AutoExpandMode="AllNodesExpanded"
                 AutoGenerateColumns="False"
                 CellDoubleTapped="ScriptsTreeGrid_OnCellDoubleTapped"
                 ChildPropertyName="Files"
-                ColumnSizer="Star"
                 ItemsSource="{Binding Scripts}"
                 ItemsSourceChanged="ScriptsTreeGrid_OnItemsSourceChanged"
                 NavigationMode="Row"
@@ -80,40 +101,51 @@
                         ColumnSizer="FillColumn"
                         HeaderText="Name"
                         MappingName="Name" />
+
                     <syncfusion:TreeGridTextColumn
                         HeaderText="Version"
                         MappingName="Version"
                         TextAlignment="Center" />
-                    <syncfusion:TreeGridTemplateColumn AllowSorting="False" HeaderText="Action">
+
+                    <syncfusion:TreeGridTemplateColumn
+                        AllowSorting="False"
+                        HeaderText="Action">
                         <syncfusion:TreeGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
                                     <CheckBox
-                                        Margin="5,0,5,0"
+                                        Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
+                                        Visibility="{Binding CanEnable,
+                                                             Converter={StaticResource BooleanToVisibilityConverter}}"
                                         IsChecked="{Binding Enabled}"
-                                        ToolTip="Enabled"
-                                        Visibility="{Binding CanEnable, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                        ToolTip="Enabled" />
+
                                     <Button
-                                        Margin="5,0,5,0"
+                                        Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                                        Visibility="{Binding CanExecute,
+                                                             Converter={StaticResource BooleanToVisibilityConverter}}"
                                         Click="Run_OnClick"
-                                        ToolTip="Run"
-                                        Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        ToolTip="Run">
                                         <iconPacks:PackIconMaterial
-                                            Margin="6,0"
-                                            Padding="0,1,0,1"
-                                            Foreground="Green"
-                                            Kind="Play" />
+                                            Kind="Play"
+                                            Width="{DynamicResource WolvenKitIconMicro}"
+                                            Height="{DynamicResource WolvenKitIconMicro}"
+                                            Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
+                                            Foreground="{StaticResource WolvenKitGreen}" />
                                     </Button>
+
                                     <Button
-                                        Margin="5,0,5,0"
+                                        Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                                        Visibility="{Binding CanDelete,
+                                                             Converter={StaticResource BooleanToVisibilityConverter}}"
                                         Click="Delete_OnClick"
-                                        ToolTip="Delete"
-                                        Visibility="{Binding CanDelete, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        ToolTip="Delete">
                                         <iconPacks:PackIconMaterial
-                                            Margin="6,0"
-                                            Padding="0,1,0,1"
-                                            Foreground="Red"
-                                            Kind="Delete" />
+                                            Kind="Delete"
+                                            Width="{DynamicResource WolvenKitIconMicro}"
+                                            Height="{DynamicResource WolvenKitIconMicro}"
+                                            Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
+                                            Foreground="{StaticResource WolvenKitRed}" />
                                     </Button>
                                 </StackPanel>
                             </DataTemplate>
@@ -123,61 +155,119 @@
             </syncfusion:SfTreeGrid>
 
             <Border
-                Grid.Column="1"
+                Grid.Column="2"
                 BorderBrush="#373737"
                 BorderThickness="1">
-                <Grid
-                    MinWidth="250"
-                    Background="{StaticResource ContentBackground}"
-                    IsSharedSizeScope="True">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" SharedSizeGroup="Label" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
+                <ScrollViewer
+                    HorizontalScrollBarVisibility="Auto"
+                    VerticalScrollBarVisibility="Auto">
+                    <Grid
+                        Background="{StaticResource ContentBackground}"
+                        IsSharedSizeScope="True">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" SharedSizeGroup="Label" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
 
-                    <Label
-                        Grid.Row="0"
-                        Grid.Column="0"
-                        Content="Version: " />
-                    <Label
-                        x:Name="VersionLabel"
-                        Grid.Row="0"
-                        Grid.Column="1" />
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            HorizontalContentAlignment="Right"
+                            Content="Version: " />
+                        <Label
+                            x:Name="VersionLabel"
+                            Grid.Row="0"
+                            Grid.Column="1" />
 
-                    <Label
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        Content="Author: " />
-                    <Label
-                        x:Name="AuthorLabel"
-                        Grid.Row="1"
-                        Grid.Column="1" />
-                </Grid>
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            HorizontalContentAlignment="Right"
+                            Content="Author: " />
+                        <Label
+                            x:Name="AuthorLabel"
+                            Grid.Row="1"
+                            Grid.Column="1" />
+
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            HorizontalContentAlignment="Right"
+                            Content="Description: " />
+                        <Label
+                            x:Name="DescriptionLabel"
+                            Grid.Row="2"
+                            Grid.Column="1" />
+
+                        <Label
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            HorizontalContentAlignment="Right"
+                            Content="Usage: " />
+                        <Label
+                            x:Name="UsageLabel"
+                            Grid.Row="3"
+                            Grid.Column="1" />
+                    </Grid>
+                </ScrollViewer>
             </Border>
         </Grid>
 
         <DockPanel Grid.Row="4">
             <hc:TextBox
                 x:Name="FileNameTextBox"
-                Width="250"
+                Width="{DynamicResource WolvenKitScriptManagerFileNameWidth}"
                 hc:InfoElement.Title="Name: "
                 hc:InfoElement.TitlePlacement="Left"
                 FlowDirection="LeftToRight" />
+
             <Button
-                Width="70"
-                HorizontalAlignment="Left"
-                Click="Add_OnClick"
-                Content="Add" />
+                Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                Click="Add_OnClick">
+                <StackPanel
+                    Margin="{DynamicResource WolvenKitMarginSmallHorizontal}"
+                    Orientation="Horizontal">
+                    <templates:IconBox
+                        IconPack="Codicons"
+                        Kind="NewFile"
+                        Margin="{DynamicResource WolvenKitMarginTinyVertical}"
+                        Size="{DynamicResource WolvenKitIconTiny}"
+                        Foreground="{StaticResource WolvenKitYellow}" />
+
+                    <TextBlock
+                        Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                        VerticalAlignment="Center"
+                        Text="Add" />
+                </StackPanel>
+            </Button>
+
             <Button
-                Width="90"
+                Margin="{DynamicResource WolvenKitMarginSmallLeft}"
                 HorizontalAlignment="Right"
-                Command="{Binding UpdateScriptsCommand}"
-                Content="Update Scripts" />
+                Command="{Binding UpdateScriptsCommand}">
+                <StackPanel
+                    Margin="{DynamicResource WolvenKitMarginSmallHorizontal}"
+                    Orientation="Horizontal">
+                    <templates:IconBox
+                        IconPack="Material"
+                        Kind="Refresh"
+                        Margin="{DynamicResource WolvenKitMarginTinyVertical}"
+                        Size="{DynamicResource WolvenKitIconTiny}"
+                        Foreground="{StaticResource WolvenKitPurple}" />
+
+                    <TextBlock
+                        Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                        VerticalAlignment="Center"
+                        Text="Update Scripts" />
+                </StackPanel>
+            </Button>
         </DockPanel>
     </Grid>
 </reactiveUi:ReactiveUserControl>

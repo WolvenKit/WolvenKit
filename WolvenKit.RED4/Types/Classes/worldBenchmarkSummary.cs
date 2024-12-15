@@ -189,6 +189,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(23)] 
+		[RED("frameGenerationType")] 
+		public CUInt8 FrameGenerationType
+		{
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
+		}
+
+		[Ordinal(24)] 
 		[RED("DLAAEnabled")] 
 		public CBool DLAAEnabled
 		{
@@ -196,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("DLAASharpness")] 
 		public CFloat DLAASharpness
 		{
@@ -204,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("DLSSEnabled")] 
 		public CBool DLSSEnabled
 		{
@@ -212,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("DLSSDEnabled")] 
 		public CBool DLSSDEnabled
 		{
@@ -220,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("DLSSQuality")] 
 		public CInt32 DLSSQuality
 		{
@@ -228,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("DLSSSharpness")] 
 		public CFloat DLSSSharpness
 		{
@@ -236,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("DLSSFrameGenEnabled")] 
 		public CBool DLSSFrameGenEnabled
 		{
@@ -244,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("FSR2Enabled")] 
 		public CBool FSR2Enabled
 		{
@@ -252,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
 		[RED("FSR2Quality")] 
 		public CInt32 FSR2Quality
 		{
@@ -260,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(33)] 
 		[RED("FSR2Sharpness")] 
 		public CFloat FSR2Sharpness
 		{
@@ -268,7 +276,39 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(34)] 
+		[RED("FSR3Enabled")] 
+		public CBool FSR3Enabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(35)] 
+		[RED("FSR3Quality")] 
+		public CInt32 FSR3Quality
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(36)] 
+		[RED("FSR3Sharpness")] 
+		public CFloat FSR3Sharpness
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(37)] 
+		[RED("FSR3FrameGenEnabled")] 
+		public CBool FSR3FrameGenEnabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(38)] 
 		[RED("XeSSEnabled")] 
 		public CBool XeSSEnabled
 		{
@@ -276,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(39)] 
 		[RED("XeSSQuality")] 
 		public CInt32 XeSSQuality
 		{
@@ -284,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(40)] 
 		[RED("XeSSSharpness")] 
 		public CFloat XeSSSharpness
 		{
@@ -292,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(41)] 
 		[RED("DRSEnabled")] 
 		public CBool DRSEnabled
 		{
@@ -300,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(42)] 
 		[RED("DRSTargetFPS")] 
 		public CUInt32 DRSTargetFPS
 		{
@@ -308,7 +348,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(43)] 
 		[RED("DRSMinimalResolutionPercentage")] 
 		public CUInt32 DRSMinimalResolutionPercentage
 		{
@@ -316,7 +356,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(44)] 
 		[RED("DRSMaximalResolutionPercentage")] 
 		public CUInt32 DRSMaximalResolutionPercentage
 		{
@@ -324,7 +364,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(45)] 
 		[RED("CASSharpeningEnabled")] 
 		public CBool CASSharpeningEnabled
 		{
@@ -332,7 +372,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(46)] 
 		[RED("FSREnabled")] 
 		public CBool FSREnabled
 		{
@@ -340,7 +380,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(47)] 
 		[RED("FSRQuality")] 
 		public CInt32 FSRQuality
 		{
@@ -348,7 +388,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(48)] 
 		[RED("rayTracingEnabled")] 
 		public CBool RayTracingEnabled
 		{
@@ -356,7 +396,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(49)] 
 		[RED("rayTracedReflections")] 
 		public CBool RayTracedReflections
 		{
@@ -364,7 +404,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(50)] 
 		[RED("rayTracedSunShadows")] 
 		public CBool RayTracedSunShadows
 		{
@@ -372,7 +412,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(51)] 
 		[RED("rayTracedLocalShadows")] 
 		public CBool RayTracedLocalShadows
 		{
@@ -380,7 +420,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(52)] 
 		[RED("rayTracedLightingQuality")] 
 		public CInt32 RayTracedLightingQuality
 		{
@@ -388,7 +428,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(53)] 
 		[RED("rayTracedPathTracingEnabled")] 
 		public CBool RayTracedPathTracingEnabled
 		{

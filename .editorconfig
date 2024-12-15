@@ -269,3 +269,5 @@ csharp_style_prefer_extended_property_pattern = true:suggestion
 # Code analysis rules
 dotnet_diagnostic.IDE0010.severity = warning
 dotnet_diagnostic.IDE0072.severity = warning
+
+resharper_switch_statement_handles_some_known_enum_values_with_default_highlighting = none

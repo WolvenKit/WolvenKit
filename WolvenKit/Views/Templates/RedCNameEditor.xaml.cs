@@ -1,11 +1,15 @@
+using System;
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Splat;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Events;
 using WolvenKit.Modkit.Resources;
 using WolvenKit.RED4.Types;
 
@@ -30,11 +34,39 @@ namespace WolvenKit.Views.Editors
         public bool HasWarning { get; set; } = false;
         public bool HasError { get; set; } = false;
 
+        private string LastValue { get; set; } = "";
+
+
+        /// <summary>
+        /// A valid cname. Contains letters, numbers, underscores, @, &, =, and spaces. Must not start or end with a space.
+        /// </summary>
         [GeneratedRegex(@"^[a-zA-Z0-9_]+[a-zA-Z0-9_\s@\&\=]*[a-zA-Z0-9_]+$")]
         private static partial Regex s_validCharactersRegex();
 
+        /// <summary>
+        /// For "placeholder" or separator strings.
+        /// Starts with at least two of -_=, is then followed by any text with optional spaces and -_= at the end.
+        /// </summary>
+        /// <example>
+        /// ======= clothes ========
+        /// ----- blah outfit ------
+        /// </example>
+        [GeneratedRegex(@"^[-=_]{2,}\s?[a-zA-Z0-9-=_]*\s?[-=_]*")]
+        private static partial Regex s_placeholderRegex();
+
+        /// <summary>
+        /// A cname with dynamic variants. Like <see cref="s_validCharactersRegex"/>, but also includes substitutions: {}
+        /// </summary>
         [GeneratedRegex(@"^\*[a-z_-]*\{[a-z_-]+\.?[a-z0-9-_]+[a-z_-]*\}$")]
         private static partial Regex s_dynamicVariantRegex();
+
+        // keep them all in a list for iterating
+        private static readonly Regex[] s_regularExpressions =
+        [
+            s_validCharactersRegex(),
+            s_placeholderRegex(),
+            s_dynamicVariantRegex()
+        ]; 
 
         private void RecalculateValidityAndTooltip()
         {
@@ -50,7 +82,7 @@ namespace WolvenKit.Views.Editors
                 hasError = true;
                 TextBoxToolTip = $"Invalid dynamic appearance condition! {invalidConditions}";
             }
-            else if (!s_validCharactersRegex().IsMatch(Text) && !s_dynamicVariantRegex().IsMatch(Text))
+            else if (!s_regularExpressions.Any(r => r.IsMatch(Text)))
             {
                 hasWarning = true;
                 TextBoxToolTip = $"'{Text}' contains invalid characters, or leading/trailing spaces! (Ignore this if everything works)";
@@ -198,6 +230,29 @@ namespace WolvenKit.Views.Editors
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void OnTextboxFocusLost(object sender, RoutedEventArgs e) => RecalculateValidityAndTooltip();
+        public static readonly RoutedEvent ValueChangedEvent = EventManager.RegisterRoutedEvent(
+            nameof(ValueChanged), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(RedCNameEditor));
+
+        public event RoutedEventHandler ValueChanged
+        {
+            add => AddHandler(ValueChangedEvent, value);
+            remove => RemoveHandler(ValueChangedEvent, value);
+        }
+
+        private void OnTextboxFocusLost(object sender, RoutedEventArgs e)
+        {
+            RecalculateValidityAndTooltip();
+            RaiseEvent(new ValueChangedEventArgs(ValueChangedEvent, LastValue, RedString));
+        }
+
+        private void OnTextboxFocusGained(object sender, RoutedEventArgs e) => LastValue = RedString;
+
+        private void OnTextboxKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                OnTextboxFocusLost(sender, e);
+            }
+        }
     }
 }

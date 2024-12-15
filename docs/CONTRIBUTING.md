@@ -25,6 +25,108 @@ WolvenKit uses **WPF** as framework for its GUI and we are using the **MVVM** pa
 
 WolvenKit is supposed to be an IDE-like app for developing mods - its UI should **prioritize function over form**. Visual Studio 2022 is considered the model.
 
+#### XAML
+In order to keep consistent rules when formatting XAML, you must install the 
+extension **XAML Styler**. Settings are defined in `Settings.XamlStyler` file.
+It should automatically import settings of this file when opening the solution
+with Visual Studio or Rider.
+
+You can see settings in `Tools` > `Options...` > `XAML Styler`. If you want to 
+change settings, come and ask on Discord first. By default, it should run XAML 
+Styler rules when saving / closing a XAML file. This is related to options in 
+category `Misc`.
+
+**Additional rules:**
+> Following rules were introduced long time after WolvenKit was created. You
+> may find files not following these rules. Feel free to fix them when working
+> on them.
+
+**DO** explicitly define `Grid.Row` and `Grid.Column` properties. It makes it 
+easier to understand where a tag is in the grid. It is also easier when 
+updating the layout to only change values instead of adding/removing these 
+properties. Finally, XAML Styler will automatically organize tags based on 
+rows and columns.
+
+**DO** put a blank line between tags, when such tags are part of a parent:
+```xaml
+<Grid>
+  <Button />
+
+  <TextBlock />
+
+  <Grid>
+    <Button />
+
+    <TextBlock />
+  </Grid>
+
+  <!-- ... -->
+</Grid>
+```
+
+**DON'T** put a blank line between `<RowDefinition>`, `<ColumnDefinition>`, 
+`<Setter>` tags.
+
+**DO** put a blank line to separate a block of `<Setter>` and
+a `<Setter>` which has children, like for a template:
+```xaml
+<Grid>
+  <Grid.Resources>
+    <Setter Property="Foreground" Value="White" />
+    <Setter Property="Margin" Value="4" />
+
+    <Setter Property="Template">
+      <!-- ... -->
+    </Setter>
+  </Grid.Resources>
+
+  <Grid.RowDefinitions>
+    <RowDefinition />
+    <RowDefinition />
+    <RowDefinition />
+  </Grid.RowDefinitions>
+
+  <Grid.ColumnDefinitions>
+    <ColumnDefinition />
+    <ColumnDefinition />
+    <ColumnDefinition />
+  </Grid.ColumnDefinitions>
+
+  <!-- ... -->
+</Grid>
+```
+
+These rules are present to improve readiness of a XAML document. In some 
+cases, it makes sense to avoid blank lines. For example, when a `<Label>` is
+related to an input tag like `<TextBox>`. It is fine to keep them close to 
+quickly see and understand the relationship between both tags.
+
+**DO** use `<IconBox>` to show an icon in application. It provides properties
+to select which `IconPack` and `Kind` of icon to draw. You can change the size
+and color with respectively `Size` and `Foreground` properties. It uses a 
+default icon size and a white color, which should be good enough in most cases.
+
+**DO** use `WolvenKitFont...`, `WolvenKitIcon...`, `WolvenKitMargin...` and 
+other dynamic resources to draw a responsive UI. You can find plenty of them in
+codebase, for example:
+```xaml
+<TextBlock
+  Text="Hello World!"
+  FontSize="{DynamicResource WolvenKitFontBody}" />
+```
+
+**DO** check for existing dynamic resources in 
+`WolvenKit/Themes/App.Sizes.xaml`. It covers a lot of cases and you should find
+what you need. If not, you'll see that specific resources are defined and 
+scoped per view. Follow the current naming convention, it helps organize 
+resources. It is also easier to write them with IDE's autocompletion.
+
+**DO** keep in sync `App.Sizes.xaml` and 
+`WolvenKit.App/ViewModels/Shell/AppViewModel.cs` when adding/updating/removing 
+a dynamic resource. `XAML` file is to declare resources for autocompletion and 
+provide default value at a scale of 100% (1920 x 1080). `CS` file is to update 
+resources when scale option was changed by the user.
+
 ### Code Style
 
 The solution comes with an **editorconfig** file to use.

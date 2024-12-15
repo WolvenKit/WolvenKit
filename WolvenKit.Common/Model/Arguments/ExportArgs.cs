@@ -42,23 +42,35 @@ namespace WolvenKit.Common.Model.Arguments
 
     public class OpusExportArgs : ExportArgs
     {
-        private bool _useMod;
+        private bool _useProject;
         private List<uint> _selectedForExport = new();
 
         [Category("Export Settings")]
         [Display(Name = "Use Modified OpusInfo")]
-        [Description("If selected modified OpusInfo and paks within the Mod Project are used. If unchecked the original OpusInfo and paks will be exported.")]
+        [Description("If selected, modified OpusInfo and paks within the Mod Project are used. If unchecked the original OpusInfo and paks will be exported.")]
         [WkitScriptAccess()]
-        public bool UseMod { get => _useMod; set => SetProperty(ref _useMod, value); }
+        public bool UseProject { get => _useProject; set => SetProperty(ref _useProject, value); }
 
-        [Category("Export Settings")]
+        [Category("OpusPak settings")]
+        [Display(Name = "Hashes to Export")]
+        [Description("Which hashes should be exported.")]
         public List<uint> SelectedForExport { get => _selectedForExport; set => SetProperty(ref _selectedForExport, value); }
 
-        [Category("Export Settings")]
-        [Display(Name = "Dump all information inside OpusInfo to Json.")]
+        [Category("OpusPak settings")]
+        [Display(Name = "Export all")]
+        [Description("If checked, ignores the above list and exports ALL of the sounds in OpusPaks as .opus (no .wav). WARNING: May taky a considerable time and resources!")]
+        [Browsable(false)]
+        public bool ExportAll { get; set; }
+
+        [Category("Miscellaneous")]
+        [Display(Name = "Dump all information inside OpusInfo to a JSON.")]
         public bool DumpAllToJson { get; set; }
 
-        public override string ToString() => $"Wem Files | Use Modified OpusInfo :  {UseMod} | Selected :  {SelectedForExport.Count}";
+        [Browsable(false)]
+        [Description("Required for CLI uncooking.")]
+        public bool UseMod { get; set; }
+
+        public override string ToString() => $"Use Modified OpusInfo: {UseProject} | Selected: {SelectedForExport.Count}";
     }
 
     /// <summary>
@@ -375,7 +387,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// String Override to display info in datagrid.
         /// </summary>
         /// <returns>String</returns>
-        public override string ToString() => $"{(IsBinary ? "glb" : "gltf")}, Additive Anims Relative: { AdditiveRelativeToLocalTransform }, Root Motion: {incRootMotion}";
+        public override string ToString() => $"{(IsBinary ? "glb" : "gltf")}, Additive Anims Relative: {AdditiveRelativeToLocalTransform}, Root Motion: {incRootMotion}";
     }
 
     /// <summary>

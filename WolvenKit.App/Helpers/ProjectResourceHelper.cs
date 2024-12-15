@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Splat;
 using WolvenKit.App.Controllers;
@@ -70,87 +71,153 @@ public static class ProjectResourceHelper
         HashSet<ResourcePath> resourcePaths) =>
         Task.Run(() => AddDependenciesToProjectPath(destFolderRelativePath, resourcePaths));
 
-    public static Dictionary<string, string> AddDependenciesToProjectPath(string destFolderRelativePath,
+    private static readonly SemaphoreSlim semaphore = new(1, 1);
+
+    private static async Task<Dictionary<string, string>> AddDependenciesToProjectPath(string destFolderRelativePath,
         HashSet<ResourcePath> resourcePaths)
     {
-        Dictionary<string, string> pathReplacements = new();
-
-        if (resourcePaths.Count == 0 || GetProjectManager()?.ActiveProject is not { } currentProject)
+        if (resourcePaths.Count == 0)
         {
+            return [];
+        }
+        
+        await semaphore.WaitAsync();
+        try
+        {
+            Dictionary<string, string> pathReplacements = new();
+            List<string> filesNotFound = [];
+
+            var tcs = new TaskCompletionSource();
+
+            DispatcherHelper.RunOnMainThread(() =>
+            {
+                try
+                {
+                    if (resourcePaths.Count == 0 || GetProjectManager()?.ActiveProject is not { } currentProject)
+                    {
+                        tcs.SetResult();
+                        return;
+                    }
+
+                    var archiveRoot = currentProject.ModDirectory;
+                    var absoluteTargetFolder = Path.Combine(archiveRoot, destFolderRelativePath);
+
+                    if (!Directory.Exists(absoluteTargetFolder))
+                    {
+                        Directory.CreateDirectory(absoluteTargetFolder);
+                    }
+
+                    // Group files by their names to identify collisions
+                    var fileGroups = resourcePaths.GroupBy(r => Path.GetFileName(r.GetResolvedText() ?? "INVALID")).ToDictionary(
+                        group => group.Key,
+                        group => group.ToList()
+                    );
+                    var allFilePaths = resourcePaths.Select(r => r.GetResolvedText() ?? "").ToArray();
+
+                    Dictionary<string, string> pathsAndDestinations = new();
+
+                    foreach (var path in allFilePaths)
+                    {
+                        var uniqueSubfolderPath = "";
+
+                        if (fileGroups.TryGetValue(path, out var groups) && groups.Count <= 2)
+                        {
+                            uniqueSubfolderPath = Path.PathSeparator +
+                                                  GetUniqueSubfolderPath(allFilePaths, groups.First().GetResolvedText() ?? "");
+                        }
+
+                        var targetPath = $"{destFolderRelativePath}{uniqueSubfolderPath}";
+                        if (targetPath != path)
+                        {
+                            pathsAndDestinations[path] = targetPath;
+                        }
+                    }
+
+
+                    List<string> existingFiles = pathsAndDestinations.Where(kvp =>
+                    {
+                        var fileName = Path.GetFileName(kvp.Key);
+                        var absolutePath = Path.Combine(archiveRoot, kvp.Value);
+                        return File.Exists(Path.Combine(absolutePath, fileName)) && !Directory.Exists(Path.Combine(absolutePath, fileName));
+                    }).Select((kvp) => kvp.Key).ToList();
+
+                    var overwriteFiles = existingFiles.Count == 0 || Interactions.ShowConfirmation((
+                        $"The following files already exist in the project. Do you want to overwrite them?\n{string.Join('\n', existingFiles)}",
+                        "Files Already Exist",
+                        WMessageBoxImage.Question,
+                        WMessageBoxButtons.YesNo)) is WMessageBoxResult.Yes;
+
+                    List<string> filesToRemove = [];
+                    foreach (var kvp in pathsAndDestinations)
+                    {
+                        try
+                        {
+                            AddFileToProjectFolder(archiveRoot, kvp.Key, kvp.Value, pathReplacements, overwriteFiles);
+                        }
+                        catch (FileNotFoundException e)
+                        {
+                            filesNotFound.Add(e.Message);
+                            filesToRemove.Add(kvp.Key);
+                        }
+                    }
+
+                    foreach (var relPath in filesToRemove)
+                    {
+                        pathsAndDestinations.Remove(relPath);
+                        pathReplacements.Remove(relPath);
+                    }
+                }
+                finally
+                {
+                    tcs.SetResult();
+                }
+            });
+
+            await tcs.Task;
+
+            if (GetLoggerService() is not ILoggerService svc || filesNotFound.Count <= 0)
+            {
+                return pathReplacements;
+            }
+
+            svc.Warning("The following files could not be found. You can try switching to the Mod Browser and analyzing your archives:");
+            svc.Warning(string.Join('\n', filesNotFound));
+
             return pathReplacements;
         }
-
-        var archiveRoot = currentProject.ModDirectory;
-        var absoluteTargetFolder = Path.Combine(archiveRoot, destFolderRelativePath);
-
-        if (!Directory.Exists(absoluteTargetFolder))
+        finally
         {
-            Directory.CreateDirectory(absoluteTargetFolder);
+            semaphore.Release();
         }
-
-        // Group files by their names to identify collisions
-        var fileGroups = resourcePaths.GroupBy(r => Path.GetFileName(r.GetResolvedText() ?? "INVALID")).ToDictionary(
-            group => group.Key,
-            group => group.ToList()
-        );
-        var allFilePaths = resourcePaths.Select(r => r.GetResolvedText() ?? "").ToArray();
-
-        List<string> filesNotFound = [];
-
-        Dictionary<string, string> pathsAndDestinations = new(); 
-
-        foreach (var path in allFilePaths)
-        {
-            var uniqueSubfolderPath = "";
-
-            if (fileGroups.TryGetValue(path, out var groups) && groups.Count <= 2)
-            {
-                uniqueSubfolderPath = Path.PathSeparator + GetUniqueSubfolderPath(allFilePaths, groups.First().GetResolvedText() ?? "");
-            }
-
-            pathsAndDestinations[path] = $"{destFolderRelativePath}{uniqueSubfolderPath}";
-        }
-
-        //AddFileToProjectFolder(archiveRoot, path, Path.Combine(destFolderRelativePath, uniqueSubfolderPath), pathReplacements);
-
-        List<string> existingFiles = pathsAndDestinations.Where(kvp =>
-        {
-            var fileName = Path.GetFileName(kvp.Key);
-            var absolutePath = Path.Combine(archiveRoot, kvp.Value);
-            return File.Exists(Path.Combine(absolutePath, fileName));
-        }).Select((kvp) => kvp.Value).ToList();
-
-        var overwriteFiles = existingFiles.Count == 0 || Interactions.ShowConfirmation((
-            "The following files already exist in the project. Do you want to overwrite them?",
-            "Files Already Exist",
-            WMessageBoxImage.Question,
-            WMessageBoxButtons.YesNo)) is WMessageBoxResult.Yes;
-
-
-        foreach (var kvp in pathsAndDestinations)
-        {
-            try
-            {
-                AddFileToProjectFolder(archiveRoot, kvp.Key, kvp.Value, pathReplacements, overwriteFiles);
-            }
-            catch (FileNotFoundException e)
-            {
-                filesNotFound.Add(e.Message);
-            }
-        }
-      
-        if (GetLoggerService() is not ILoggerService svc || filesNotFound.Count <= 0)
-        {
-            return pathReplacements;
-        }
-
-        svc.Warning("The following files could not be found. You can try switching to the Mod Browser and analyzing your archives:");
-        svc.Warning(string.Join('\n', filesNotFound));
-
-        return pathReplacements;
     }
 
 
+    public static void AddToProject(ResourcePath resourcePath)
+    {
+        if (resourcePath.GetResolvedText() is not string sourceRelativePath
+            || string.IsNullOrEmpty(sourceRelativePath))
+        {
+            return;
+        }
+
+        var refPathHash = HashHelper.CalculateDepotPathHash(resourcePath);
+        // we can't add it
+        if (refPathHash is 0 || GetArchiveManager() is not IArchiveManager archiveManager ||
+            GetRed4Controller() is not RED4Controller controller)
+        {
+            return;
+        }
+
+        if (archiveManager.Lookup(refPathHash, ArchiveManagerScope.Basegame) is { HasValue: true } basegameFile)
+        {
+            controller.AddToMod(basegameFile.Value, ArchiveManagerScope.Basegame);
+        }
+        else if (archiveManager.Lookup(refPathHash, ArchiveManagerScope.Mods) is { HasValue: true } modFile)
+        {
+            controller.AddToMod(modFile.Value, ArchiveManagerScope.Mods);
+        }
+    }
+    
     private static void AddFileToProjectFolder(string projectRoot, ResourcePath resourcePath, ResourcePath targetResourcePath,
         Dictionary<string, string> pathReplacements, bool overwriteFiles)
     {
@@ -214,10 +281,10 @@ public static class ProjectResourceHelper
             Directory.CreateDirectory(targetAbsolutePath);
         }
 
+        File.Move(sourceAbsolutePath, targetAbsoluteFile, true);
+
         // pop it into our map
         pathReplacements.TryAdd(sourceRelativePath, Path.Combine(targetRelativePath, Path.GetFileName(sourceRelativePath)));
-
-        File.Move(sourceAbsolutePath, targetAbsoluteFile, true);
     }
 
 
@@ -235,22 +302,17 @@ public static class ProjectResourceHelper
 
         if (Path.IsPathRooted(destRelPath))
         {
-            destRelPath = activeProject.GetRelativePath(sourcePath);
+            (_, destRelPath) = activeProject.SplitFilePath(destPath);
         }
 
         // If we're given a directory here, make sure that we have a file path
         var destAbsPath = Path.Join(absoluteFolderPrefix, destRelPath);
-        if (Directory.Exists(destAbsPath))
-        {
-            destRelPath = Path.Join(destRelPath, Path.GetFileName(sourceRelPath));
-            destAbsPath = Path.Join(destAbsPath, Path.GetFileName(sourceRelPath));
-        }
 
+        // don't copy a directory on itself
         if (sourceRelPath == destRelPath)
         {
             return;
         }
-
 
         var sourceAbsPath = Path.Join(absoluteFolderPrefix, sourceRelPath);
         var sourceIsDirectory = Directory.Exists(sourceAbsPath);
@@ -278,31 +340,45 @@ public static class ProjectResourceHelper
             }
 
             File.Move(sourceAbsPath, destAbsPath);
-            return;
-        }
 
-        /*
-         * We're moving a directory
-         */
-
-        try
-        {
-            if (Directory.Exists(destRelPath) && Directory.EnumerateFiles(destRelPath).Any())
+            var sourceInRaw = sourceAbsPath.Replace("archive", "raw");
+            if (sourceInRaw != sourceAbsPath && File.Exists(sourceInRaw))
             {
-                var response = await Interactions.ShowMessageBoxAsync(
-                    $"Directory {destRelPath} already exists and is not empty. Do you want to overwrite existing files?",
-                    "Directory already exists!");
-                overwriteFiles = response is WMessageBoxResult.OK or WMessageBoxResult.Yes;
+                File.Move(sourceInRaw, destAbsPath.Replace("archive", "raw"), true);
+            }
+            
+        }
+        else
+        {
+            /*
+             * We're moving a directory
+             */
+            try
+            {
+                if (Directory.Exists(destAbsPath) && Directory.EnumerateFiles(destAbsPath).Any())
+                {
+                    var response = await Interactions.ShowMessageBoxAsync(
+                        $"Directory {destRelPath} already exists and is not empty. Do you want to overwrite existing files?",
+                        "Directory already exists!");
+                    overwriteFiles = response is WMessageBoxResult.OK or WMessageBoxResult.Yes;
+                }
+
+                FileHelper.MoveRecursively(sourceAbsPath, destAbsPath, overwriteFiles, GetLoggerService());
+
+                var sourceInRaw = sourceAbsPath.Replace("archive", "raw");
+                if (sourceInRaw != sourceAbsPath && Directory.Exists(sourceInRaw))
+                {
+                    FileHelper.MoveRecursively(sourceInRaw, destAbsPath.Replace("archive", "raw"), overwriteFiles, GetLoggerService());
+                }
+
+                GetLoggerService()?.Info($"Moved {sourceRelPath}{Path.DirectorySeparatorChar}* to {destRelPath}");
             }
 
-            FileHelper.MoveRecursively(sourceAbsPath, destAbsPath, overwriteFiles, GetLoggerService());
+            catch (Exception e)
+            {
+                GetLoggerService()?.Info($"Error when trying to move {sourceRelPath}{Path.DirectorySeparatorChar}*: {e.Message}");
+            }
 
-            GetLoggerService()?.Info($"Moved {sourceRelPath}{Path.DirectorySeparatorChar}* to {destRelPath}");
-        }
-
-        catch (Exception e)
-        {
-            GetLoggerService()?.Info($"Error when trying to move {sourceRelPath}{Path.DirectorySeparatorChar}*: {e.Message}");
         }
 
         if (!refactor)
@@ -388,7 +464,8 @@ public static class ProjectResourceHelper
                 return;
             }
 
-            foreach (var result in cr2W!.FindType(typeof(IRedRef)))
+            var refs = cr2W!.FindType(typeof(IRedRef));
+            foreach (var result in refs)
             {
                 if (result.Value is not IRedRef resourceReference || resourceReference.DepotPath == ResourcePath.Empty)
                 {
@@ -495,4 +572,5 @@ public static class ProjectResourceHelper
 
         cw.WriteFile(cr2W);
     }
+
 }

@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
+using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.RED4.Types;
 
@@ -14,57 +17,54 @@ public partial class ChunkViewModel
 {
     #region properties
 
-    /// <summary>
-    /// If shift is not being held, show "Duplicate Selection"
-    /// </summary>
-    [ObservableProperty] private bool _shouldShowDuplicate;
-
-    [ObservableProperty] private bool _shouldShowPasteIntoArray;
-
-    [ObservableProperty] private bool _shouldShowOverwriteArray;
-    [ObservableProperty] private bool _shouldShowPasteOverwrite;
-
+    [NotifyCanExecuteChangedFor(nameof(DuplicateChunkCommand))]
+    [NotifyCanExecuteChangedFor(nameof(DuplicateAsNewChunkCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ToggleEnableMaskedCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ConvertPreloadMaterialsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(DeleteUnusedMaterialsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ClearMaterialsCommand))]
+    [ObservableProperty] private bool _isShiftKeyPressed;
+    
+    [ObservableProperty] private bool _isCtrlKeyPressed;
+    [ObservableProperty] private bool _isAltKeyPressed;
+    
     [ObservableProperty] private bool _isMaterial;
 
     [ObservableProperty] private bool _isMaterialArray;
     [ObservableProperty] private bool _shouldShowCreateMatDef;
     [ObservableProperty] private bool _shouldShowCreateExternalMatDef;
 
-    private bool IsShiftKeyPressed => _modifierViewStateService.IsShiftKeyPressed;
-    private bool IsShiftKeyPressedOnly => _modifierViewStateService.IsShiftKeyPressedOnly;
-    private bool IsCtrlKeyPressed => _modifierViewStateService.IsCtrlKeyPressed;
+    [ObservableProperty] private bool _duplicatesAsNew;
 
-    [ObservableProperty] private bool _shouldShowDuplicateAsNew;
+    [ObservableProperty] private bool _isMultipleItemsSelected;
+    [ObservableProperty] private bool _isMultipleItemsCopied;
 
     #endregion
 
-    /// <summary>
-    /// Triggered externally from RedTreeView, since binding to the listener ourselves will cause an event avalanche
-    /// </summary>
+    #region methods
+
     public void RefreshContextMenuFlags()
     {
-        ShouldShowPasteOverwrite = ShouldShowArrayOps && IsShiftKeyPressedOnly && Tab?.SelectedChunk is not null;
-        ShouldShowOverwriteArray = ShouldShowArrayOps && IsCtrlKeyPressed && !ShouldShowPasteOverwrite;
-        ShouldShowPasteIntoArray = ShouldShowArrayOps && !(ShouldShowPasteOverwrite || ShouldShowOverwriteArray);
+        IsShiftKeyPressed = ModifierViewStateService.IsShiftBeingHeld;
+        IsCtrlKeyPressed = ModifierViewStateService.IsCtrlBeingHeld;
+        IsAltKeyPressed = ModifierViewStateService.IsAltBeingHeld;
 
         IsMaterial = ResolvedData is CMaterialInstance or CResourceAsyncReference<IMaterial>;
 
         IsMaterialArray = ResolvedData is CArray<IMaterial> or CArray<CResourceAsyncReference<IMaterial>>;
-   
-        ShouldShowDuplicateAsNew =
-            IsInArray && !IsShiftKeyPressedOnly &&
-            ResolvedData is worldCompiledEffectPlacementInfo or CMeshMaterialEntry;
 
-        ShouldShowDuplicate = !ShouldShowDuplicateAsNew && IsInArray;
+        DuplicatesAsNew = ResolvedData is worldCompiledEffectPlacementInfo or CMeshMaterialEntry;
+
+        IsMultipleItemsSelected = Parent?.Tab?.SelectedChunks is ObservableCollection<object> chunks && chunks.Count > 1;
     }
 
-
-    #region methods
-
-    public bool IsMaterialDefinition()
+    public void RefreshCommandStatus()
     {
-        return ResolvedData is CArray<CMeshMaterialEntry> || Parent?.ResolvedData is CArray<CMeshMaterialEntry>;
+        GenerateChildCruidsCommand.NotifyCanExecuteChanged();
+        ReindexChildDataIndexPropertiesCommand.NotifyCanExecuteChanged();
     }
+
+    public bool IsMaterialDefinition() => ResolvedData is CArray<CMeshMaterialEntry> || Parent?.ResolvedData is CArray<CMeshMaterialEntry>;
 
     [RelayCommand(CanExecute = nameof(IsMaterialDefinition))]
     private void ToggleMaterialDefinitionIsExternal()
@@ -86,7 +86,7 @@ public partial class ChunkViewModel
             return Task.CompletedTask;
         }
 
-        var materialEntries = Parent?.Parent?.GetRootModel().GetModelFromPath("materialEntries");
+        var materialEntries = Parent?.Parent?.GetRootModel().GetPropertyFromPath("materialEntries");
 
         if (materialEntries?.ResolvedData is not CArray<CMeshMaterialEntry> array)
         {
@@ -111,8 +111,7 @@ public partial class ChunkViewModel
         CalculateDescriptor();
 
         // now rename the chunks
-
-        var appCvm = Parent?.Parent?.GetRootModel().GetModelFromPath("appearances");
+        var appCvm = Parent?.Parent?.GetRootModel().GetPropertyFromPath("appearances");
         if (appCvm?.ResolvedData is not CArray<CHandle<meshMeshAppearance>> appearances)
         {
             return Task.CompletedTask;
@@ -149,10 +148,9 @@ public partial class ChunkViewModel
     /// <summary>
     /// Called from RedDocumentViewToolbar: returns all material dependencies in an array for adding them to the current project
     /// </summary>
-    public async Task<HashSet<ResourcePath>> GetMaterialDependenciesOutsideOfProject()
+    public async Task<HashSet<ResourcePath>> GetMaterialRefsFromFile()
     {
         HashSet<ResourcePath> ret = [];
-        _modifierViewStateService.RefreshModifierStates();
 
         switch (GetRootModel().ResolvedData)
         {
@@ -162,14 +160,22 @@ public partial class ChunkViewModel
                     switch (value.Value)
                     {
                         case IRedResourceReference rRef:
-                            AddRefPath(rRef.DepotPath);
+                            ret.Add(rRef.DepotPath);
                             break;
                         case IRedResourceAsyncReference raRef:
-                            AddRefPath(raRef.DepotPath);
+                            ret.Add(raRef.DepotPath);
                             break;
                         default:
                             break;
                     }
+                }
+
+                break;
+            case Multilayer_Setup mlsetup:
+                foreach (var layer in mlsetup.Layers)
+                {
+                    ret.Add(layer.Material.DepotPath);
+                    ret.Add(layer.Microblend.DepotPath);
                 }
 
                 break;
@@ -181,21 +187,21 @@ public partial class ChunkViewModel
 
                 foreach (var externalMaterial in mesh.ExternalMaterials)
                 {
-                    await Task.Run(() => AddRefPath(externalMaterial.DepotPath));
+                    await Task.Run(() => ret.Add(externalMaterial.DepotPath));
                 }
 
                 foreach (var localMaterial in (mesh.LocalMaterialBuffer?.Materials ?? []).OfType<CMaterialInstance>())
                 {
-                    await Task.Run(() => AddRefPath(localMaterial.BaseMaterial.DepotPath));
+                    ret.Add(localMaterial.BaseMaterial.DepotPath);
                     foreach (var value in localMaterial.Values)
                     {
                         switch (value.Value)
                         {
                             case IRedResourceReference rRef:
-                                AddRefPath(rRef.DepotPath);
+                                ret.Add(rRef.DepotPath);
                                 break;
                             case IRedResourceAsyncReference raRef:
-                                AddRefPath(raRef.DepotPath);
+                                ret.Add(raRef.DepotPath);
                                 break;
                             default:
                                 break;
@@ -207,39 +213,38 @@ public partial class ChunkViewModel
             default:
                 break;
         }
-        
-       
-        return ret;
 
-        void AddRefPath(ResourcePath refPath)
+        if (_projectManager.ActiveProject?.Files is not null)
         {
-            var refPathHash = HashHelper.CalculateDepotPathHash(refPath);
-            // empty depot path
-            if (refPathHash is 0)
-            {
-                return;
-            }
-
-            if (_projectManager.ActiveProject?.Files is not null && _projectManager.ActiveProject.Files.Contains(refPath!))
-            {
-                return;
-            }
-
-            if (_archiveManager.Lookup(refPathHash, ArchiveManagerScope.Mods).HasValue)
-            {
-                ret.Add(refPath);
-                return;
-            }
-
-            // base game file: Only add those if shift is down
-            if (_modifierViewStateService.IsShiftKeyPressed
-                && _archiveManager.Lookup(refPathHash, ArchiveManagerScope.Basegame).HasValue)
-            {
-                ret.Add(refPath);
-            }
+            ret = ret.Where(p => !_projectManager.ActiveProject.Files.Contains(p!)).ToHashSet();
         }
+        return ret;
     }
 
+    private bool CanGenerateCruids() => IsArray && Name == "components";
+
+    [RelayCommand(CanExecute = nameof(CanGenerateCruids))]
+    private void GenerateChildCruids()
+    {
+        var hasChange = false;
+        foreach (var child in Properties)
+        {
+            child.CalculateProperties();
+            foreach (var grandChild in child.Properties.Where(c => c.ResolvedData is CRUID))
+            {
+                hasChange = true;
+                grandChild.GenerateCRUID();
+                grandChild.RecalculateProperties();
+                grandChild.CalculateDescriptor();
+            }
+        }
+
+        if (hasChange)
+        {
+            Tab?.Parent.SetIsDirty(true);
+        }
+    }
+    
     private bool CanScrollToMaterial() => ShowScrollToMaterial || GetRootModel().ShowScrollToMaterial;
 
     [RelayCommand(CanExecute = nameof(CanScrollToMaterial))]
@@ -257,7 +262,7 @@ public partial class ChunkViewModel
 
         if (ResolvedData is CName data && Parent?.Name == "chunkMaterials" &&
             data.GetResolvedText() is string materialName &&
-            GetRootModel().FindPropertyNode("materialEntries") is
+            GetRootModel().GetPropertyFromPath("materialEntries") is
                 { ResolvedData: CArray<CMeshMaterialEntry> ary } materialEntries)
         {
             if (ary.FirstOrDefault(e => e.Name == materialName) is not CMeshMaterialEntry matDef)
@@ -287,18 +292,46 @@ public partial class ChunkViewModel
         }
     }
 
+    private bool CanToggleMask() => IsMaterialArray || IsMaterial;
+
+    [RelayCommand(CanExecute = nameof(CanToggleMask))]
+    private void ToggleEnableMasked()
+    {
+        switch (ResolvedData)
+        {
+            case CMaterialInstance material:
+                material.EnableMask = !material.EnableMask;
+                break;
+            case CArray<CMeshMaterialEntry>:
+            {
+                foreach (var property in TVProperties.Where(p => p.ResolvedData is CMaterialInstance))
+                {
+                    property.ToggleEnableMaskedCommand.Execute(null);
+                }
+
+                break;
+            }
+            default:
+                return;
+        }
+
+        RecalculateProperties();
+        Tab?.Parent.SetIsDirty(true);
+    }
+
+
     [RelayCommand]
     private async Task<Task> AddMaterialAndDefinition()
     {
         var newName = await Interactions.ShowInputBoxAsync("New material name", "");
 
-        var materialEntries = Parent?.GetRootModel().GetModelFromPath("materialEntries");
+        var materialEntries = Parent?.GetRootModel().GetPropertyFromPath("materialEntries");
         if (materialEntries?.ResolvedData is not CArray<CMeshMaterialEntry> array)
         {
             return Task.CompletedTask;
         }
 
-        var isLocalInstance = Parent?.ResolvedData is meshMeshMaterialBuffer || Name == "PreloadLocalMaterials";
+        var isLocalInstance = Parent?.ResolvedData is meshMeshMaterialBuffer || Name == PreloadMaterialPath;
 
         // Add the material definition
         var lastIndex = array.LastOrDefault((e) => e.IsLocalInstance == isLocalInstance)?.Index ?? -1;
@@ -325,37 +358,95 @@ public partial class ChunkViewModel
         return Task.CompletedTask;
     }
 
-    public void ReplaceComponentChunkMasks(string componentName, CUInt64 chunkMask)
+    public void ReplaceMeshComponentProperties(string componentName, IRedPrimitive<ulong>? chunkMask, string? depotPath,
+        string? meshAppearance)
     {
-        if (ResolvedData is not appearanceAppearanceResource appearanceResource || appearanceResource.Appearances.Count == 0)
-        {
-            return;
-        }
-
-        var appearances = appearanceResource.Appearances.Where((handle) => handle.GetValue() is appearanceAppearanceDefinition)
-            .Select(handle => (appearanceAppearanceDefinition)handle.GetValue()!)
-            .Where(appDef => appDef.Components.Count > 0);
-
         var hasChanges = false;
-        foreach (var appDef in appearances)
+
+        switch (ResolvedData)
         {
-            var component = appDef.Components.FirstOrDefault(comp => comp.Name == componentName);
-            if (component is null || component is not IRedMeshComponent meshComponent)
+            case appearanceAppearanceResource { Appearances.Count: > 0 } appearanceResource:
             {
-                continue;
+                var appearanceChild = GetPropertyChild("appearances");
+                foreach (var appearanceNode in appearanceChild?.Properties ?? [])
+                {
+                    appearanceNode.ReplaceMeshComponentProperties(componentName, chunkMask, depotPath, meshAppearance);
+                }
+                break;
             }
-
-            meshComponent.ChunkMask = chunkMask;
-            GetPropertyChild("appearances", appDef.Name.GetResolvedText() ?? "", "components", componentName)?.RecalculateProperties();
-            hasChanges = true;
+            case appearanceAppearanceDefinition appearance:
+                SetAppearanceChunkMask(appearance);
+                var componentsAryCvm = GetPropertyChild("components");
+                componentsAryCvm?.CalculateProperties();
+                var matchingComponents = componentsAryCvm?.Properties.Where(comp =>
+                    comp.ResolvedData is entMeshComponent m && (componentName == "*" || m.Name == componentName)) ?? [];
+                foreach (var componentCvm in matchingComponents)
+                {
+                    componentCvm.RecalculateProperties();
+                    componentCvm.CalculateDescriptor();
+                    componentCvm.CalculateValue();
+                    componentCvm.CalculateIsDefault();
+                }
+                break;
+            default:
+                if (Parent is not null)
+                {
+                    GetRootModel().ReplaceMeshComponentProperties(componentName, chunkMask, depotPath, meshAppearance);
+                }
+                break;
         }
 
-        if (!hasChanges)
+        if (hasChanges)
         {
-            return;
+            Tab?.Parent.SetIsDirty(true);
         }
 
-        Tab?.Parent.SetIsDirty(true);
+        return;
+
+        void SetAppearanceChunkMask(appearanceAppearanceDefinition appDef)
+        {
+            foreach (var component in appDef.Components.Where(comp => componentName == "*" || comp.Name == componentName))
+            {
+                if (component is not IRedMeshComponent meshComponent || (chunkMask is null && depotPath is null && meshAppearance is null))
+                {
+                    continue;
+                }
+
+                hasChanges = true;
+
+                if (chunkMask is CUInt64 value)
+                {
+                    meshComponent.ChunkMask = value;
+                }
+
+
+                if (!string.IsNullOrEmpty(depotPath))
+                {
+                    if (appDef.Components.FirstOrDefault(comp => comp.Name == depotPath) is IRedMeshComponent siblingComponent)
+                    {
+                        meshComponent.Mesh = new CResourceAsyncReference<CMesh>(siblingComponent.Mesh.DepotPath);
+                    }
+                    else
+                    {
+                        meshComponent.Mesh = new CResourceAsyncReference<CMesh>((ResourcePath)depotPath);
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(meshAppearance))
+                {
+                    if (appDef.Components.FirstOrDefault(comp => comp.Name == meshAppearance) is IRedMeshComponent siblingComponent)
+                    {
+                        meshComponent.MeshAppearance = siblingComponent.MeshAppearance;
+                    }
+                    else
+                    {
+                        meshComponent.MeshAppearance = meshAppearance;
+                    }
+                }
+
+                hasChanges = true;
+            }
+        }
     }
     #endregion
 

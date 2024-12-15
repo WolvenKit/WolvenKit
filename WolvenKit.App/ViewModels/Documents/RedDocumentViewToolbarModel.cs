@@ -3,11 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows;
+using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Microsoft.ClearScript.JavaScript;
+using CommunityToolkit.Mvvm.Input;
 using Splat;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Core.Services;
@@ -36,6 +37,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
         _modifierViewStateService = svc;
         svc.ModifierStateChanged += OnModifierChanged;
+        svc.PropertyChanged += (_, args) => OnPropertyChanged(args.PropertyName); 
 
         RefreshMenuVisibility(true);
     }
@@ -47,16 +49,12 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [ObservableProperty] private RedDocumentTabViewModel? _currentTab;
     [ObservableProperty] private EditorDifficultyLevel _editorLevel;
 
-    public ChunkViewModel? RootChunk { get; set; }
-    public ChunkViewModel? SelectedChunk { get; set; }
-    public List<ChunkViewModel> SelectedChunks { get; } = new();
+    public ChunkViewModel? RootChunk { get; private set; }
 
     public string? FilePath => CurrentTab?.FilePath;
     public CR2WFile? Cr2WFile => CurrentTab?.Parent.Cr2wFile;
 
     [ObservableProperty] private bool _showToolbar;
-
-    [ObservableProperty] private RedDocumentItemType _contentType;
 
     public void RefreshMenuVisibility(bool forceRefreshContentType = false)
     {
@@ -108,12 +106,15 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
     private void OnRtdModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName is not (nameof(RDTDataViewModel.SelectedChunk) or nameof(RDTDataViewModel.SelectedChunks)
-                or nameof(RDTDataViewModel.FilePath)) ||
-            sender is not RDTDataViewModel dataViewModel)
+        if (sender is not RDTDataViewModel dataViewModel || e.PropertyName is not
+                (nameof(RDTDataViewModel.SelectedChunk)
+                or nameof(RDTDataViewModel.SelectedChunks)
+                or nameof(RDTDataViewModel.FilePath))
+           )
         {
             return;
         }
+
         SelectedChunk = (ChunkViewModel?)dataViewModel.SelectedChunk;
         SelectedChunks.Clear();
         if (dataViewModel.SelectedChunks is IList list)
@@ -122,83 +123,239 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         }
 
         RefreshMeshMenuItems();
+
+        SelectedChunk ??= RootChunk;
+
+        _isEmptySubmeshesDeleted = false;
     }
+
+
+    [NotifyCanExecuteChangedFor(nameof(AdjustSubmeshCountCommand))]
+    [NotifyCanExecuteChangedFor(nameof(DeleteDuplicateEntriesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(RegenerateVisualControllersCommand))]
+    [NotifyCanExecuteChangedFor(nameof(DeleteUnusedMaterialsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(GenerateMissingMaterialsCommand))]
+    [ObservableProperty]
+    private RedDocumentItemType _contentType;
     
-    [ObservableProperty] private bool _isFileValidationMenuVisible;
-
-
-    [ObservableProperty] private bool _isGenerateMaterialCommandEnabled;
-    [ObservableProperty] private bool _isDeleteUnusedMaterialCommandEnabled;
-    [ObservableProperty] private bool _isRegenerateMaterialCommandEnabled;
-    [ObservableProperty] private bool _isScrollToMaterialCommandEnabled;
-
-    /*
-     * Cleanup
-     */
-    [ObservableProperty] private bool _isConvertMaterialMenuEnabled;
-    
-    [ObservableProperty] private bool _isGenerateNewCruidCommandEnabled;
-    [ObservableProperty] private bool _isMaterialDefinition;
-
-    [ObservableProperty] private bool _isAddDependenciesCommandEnabled;
-    [ObservableProperty] private bool _isAddDependenciesCommandEnabledAndShiftKeyDown;
-    
+    [NotifyCanExecuteChangedFor(nameof(AddDependenciesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddDependenciesFullCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ClearMaterialsCommand))]
     [ObservableProperty] private bool _isShiftKeyDown;
 
+    [NotifyCanExecuteChangedFor(nameof(AddDependenciesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddDependenciesFullCommand))]
+    [NotifyCanExecuteChangedFor(nameof(GenerateNewCruidCommand))]
+    [NotifyCanExecuteChangedFor(nameof(RegenerateVisualControllersCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ClearMaterialsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ToggleEnableMaskCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ScrollToMaterialCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ToggleLocalInstanceCommand))]
+    [NotifyCanExecuteChangedFor(nameof(DeleteDuplicateEntriesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(DeleteUnusedMaterialsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ConvertPreloadMaterialsCommand))]
+    [ObservableProperty]
+    private ChunkViewModel? _selectedChunk;
+
+    public List<ChunkViewModel> SelectedChunks { get; } = [];
 
     private void RefreshMeshMenuItems()
     {
-        IsFileValidationMenuVisible = false;
-        IsConvertMaterialMenuEnabled = false;
-        IsGenerateMaterialCommandEnabled = false;
-        IsDeleteUnusedMaterialCommandEnabled = false;
-        IsRegenerateMaterialCommandEnabled = false;
-        IsScrollToMaterialCommandEnabled = false;
-        IsGenerateNewCruidCommandEnabled = false;
-        IsMaterialDefinition = false;
+
+        IsShiftKeyDown = _modifierViewStateService?.IsShiftKeyPressed ?? false;
 
         if (!ShowToolbar || CurrentTab is null)
         {
             return;
         }
 
-        IsRegenerateMaterialCommandEnabled = SelectedChunk is { Name: "components", Data: CArray<entIComponent> };
-
-        IsGenerateNewCruidCommandEnabled = SelectedChunk?.PropertyType == typeof(CRUID);
-        IsMaterialDefinition = SelectedChunk?.IsMaterialDefinition() == true;
-
-        _modifierViewStateService?.RefreshModifierStates();
-
-        var enableDependencyCommand = CurrentTab?.GetContentType() is RedDocumentItemType.Mesh ||
-                                      CurrentTab?.GetContentType() is RedDocumentItemType.Mi;
-
-        IsAddDependenciesCommandEnabled = enableDependencyCommand && !IsShiftKeyDown;
-        IsAddDependenciesCommandEnabledAndShiftKeyDown = enableDependencyCommand && IsShiftKeyDown;
-
-        IsFileValidationMenuVisible = true;
-        
-        if (RootChunk?.ResolvedData is not CMesh mesh)
-        {
-            return;
-        }
-
-        IsConvertMaterialMenuEnabled = mesh.PreloadExternalMaterials.Count > 0 || mesh.PreloadLocalMaterialInstances.Count > 0;
-        IsGenerateMaterialCommandEnabled = mesh.Appearances.Count > 0;
-        IsDeleteUnusedMaterialCommandEnabled = mesh.Appearances.Count > 0 || mesh.MaterialEntries.Count > 0;
-        IsScrollToMaterialCommandEnabled = SelectedChunk?.ShowScrollToMaterial == true;
-        IsMaterialDefinition = SelectedChunk?.IsMaterialDefinition() == true;
+        ConvertPreloadMaterialsCommand.NotifyCanExecuteChanged();
     }
 
-    public void SetCurrentTab(RedDocumentTabViewModel value)
+    public void SetCurrentTab(RedDocumentTabViewModel? value)
     {
         CurrentTab = value;
         RefreshMenuVisibility();
     }
 
-
     public void SetEditorLevel(EditorDifficultyLevel level)
     {
         EditorLevel = level;
         RootChunk?.SetEditorLevel(level);
+    }
+
+    private bool HasDependencies() => ContentType is RedDocumentItemType.Mesh or RedDocumentItemType.Mi or RedDocumentItemType.Mlsetup;
+
+    public event EventHandler? OnAddDependencies;
+
+    #region commands
+
+    private bool CanAddDependencies() => HasDependencies() && !IsShiftKeyDown;
+
+    [RelayCommand(CanExecute = nameof(CanAddDependencies))]
+    private void AddDependencies() => OnAddDependencies?.Invoke(this, EventArgs.Empty);
+
+    private bool CanAddDependenciesFull() => HasDependencies() && IsShiftKeyDown;
+
+    [RelayCommand(CanExecute = nameof(CanAddDependenciesFull))]
+    private void AddDependenciesFull() => OnAddDependencies?.Invoke(this, EventArgs.Empty);
+
+    private bool CanGenerateNewCruid() => SelectedChunk?.PropertyType == typeof(CRUID);
+
+    [RelayCommand(CanExecute = nameof(CanGenerateNewCruid))]
+    private void GenerateNewCruid() => SelectedChunk?.GenerateCRUIDCommand.Execute(null);
+
+    #region appFile
+
+    /*
+     * Regenerate visual controllers
+     */
+    private bool CanRegenerateVisualControllers() => ContentType is RedDocumentItemType.Ent ||
+                                                     (ContentType is RedDocumentItemType.App && SelectedChunk is
+                                                         { Name: "components", Data: CArray<entIComponent> });
+    
+    [RelayCommand(CanExecute = nameof(CanRegenerateVisualControllers))]
+    private void RegenerateVisualControllers()
+    {
+        if (SelectedChunk is { Name: "components", Data: CArray<entIComponent> })
+        {
+            SelectedChunk?.RegenerateVisualControllerCommand.Execute(null);
+            return;
+        }
+
+        // .ent file
+        RootChunk?.GetPropertyChild("components")?.RegenerateVisualControllerCommand.Execute(null);
+    }
+
+    private bool CanChangeAnimationComponent() => RootChunk?.ResolvedData is appearanceAppearanceResource;
+
+    /*
+     * Convert to photo mode app
+     */
+    private bool CanConvertToPhotoModeApp() => RootChunk?.ResolvedData is appearanceAppearanceResource &&
+                                               FilePath is string filePath &&
+                                               !SelectPhotoModeAppViewModel.PhotomodeAppPaths.Contains(filePath);
+
+    [RelayCommand(CanExecute = nameof(CanConvertToPhotoModeApp))]
+    private void ConvertToPhotoModeApp()
+    {
+        // do nothing, we're handling this in view model's click 
+    }
+    
+    [RelayCommand(CanExecute = nameof(CanChangeAnimationComponent))]
+    private void ChangeAnimationComponent()
+    {
+        // do nothing, we're handling this in view model's click 
+    }
+
+    #endregion
+
+    #region jsonFile
+
+    /*
+     * Delete duplicate entries
+     */
+    private bool CanDeleteDuplicateEntries() => ContentType is RedDocumentItemType.Json;
+
+    [RelayCommand(CanExecute = nameof(CanDeleteDuplicateEntries))]
+    private void DeleteDuplicateEntries() => RootChunk?.DeleteDuplicateEntriesCommand.Execute(null);
+
+    #endregion
+
+    #region meshFile
+
+    /*
+     * Delete empty submeshes
+     */
+    private bool _isEmptySubmeshesDeleted;
+
+    private bool CanAdjustSubmeshCount() =>
+        !_isEmptySubmeshesDeleted && ContentType is RedDocumentItemType.Mesh && !_isEmptySubmeshesDeleted;
+
+    [RelayCommand(CanExecute = nameof(CanAdjustSubmeshCount))]
+    private void AdjustSubmeshCount()
+    {
+        _isEmptySubmeshesDeleted = true;
+        RootChunk?.AdjustSubmeshCountCommand.Execute(null);
+    }
+
+    /*
+     * Scroll to material
+     */
+    private bool CanScrollToMaterial() => SelectedChunk?.ShowScrollToMaterial == true;
+
+    [RelayCommand(CanExecute = nameof(CanScrollToMaterial))]
+    private void ScrollToMaterial() => SelectedChunk?.ScrollToMaterialCommand.Execute(null);
+
+    /*
+     * mesh: convert preloadXXX to regular local materials
+     */
+    private bool CanConvertPreloadMaterials() => RootChunk?.ResolvedData is CMesh mesh &&
+                                                 (mesh.PreloadExternalMaterials.Count > 0 || mesh.PreloadLocalMaterialInstances.Count > 0);
+
+    [RelayCommand(CanExecute = nameof(CanConvertPreloadMaterials))]
+    private void ConvertPreloadMaterials() => RootChunk?.ConvertPreloadMaterialsCommand.Execute(null);
+
+    /*
+     * mesh: clear appearances
+     */
+    private bool CanClearAppearances() => RootChunk?.CanClearMaterials() == true;
+
+    private bool HasMeshAppearances() => RootChunk?.ResolvedData is CMesh { Appearances.Count: > 0 };
+
+    [RelayCommand(CanExecute = nameof(CanClearAppearances))]
+    private void ClearMaterials() => RootChunk?.ClearMaterialsCommand.Execute(null);
+
+    #region meshfile_materials
+
+    /*
+     * Toggle "Enable mask"
+     */
+    private bool IsMaterialDefinitionOrParent() => SelectedChunk?.ResolvedData is CMaterialInstance or CArray<IMaterial>;
+
+    [RelayCommand(CanExecute = nameof(IsMaterialDefinitionOrParent))]
+    private void ToggleEnableMask() => SelectedChunk?.ToggleEnableMaskedCommand.Execute(null);
+
+    /*
+     * Toggle "Local instance"
+     */
+    [RelayCommand(CanExecute = nameof(IsMaterialDefinitionOrParent))]
+    private void ToggleLocalInstance()
+    {
+        foreach (var chunk in SelectedChunks)
+        {
+            chunk.ToggleMaterialDefinitionIsExternalCommand.Execute(null);
+        }
+
+        SelectedChunks.LastOrDefault()?.Parent?.RecalculateProperties();
+    }
+
+    #endregion
+
+    private bool CanDeleteUnusedMaterials() => RootChunk?.ResolvedData is CMesh mesh && mesh.MaterialEntries.Count > 0;
+
+    [RelayCommand(CanExecute = nameof(CanDeleteUnusedMaterials))]
+    private void DeleteUnusedMaterials() => RootChunk?.DeleteUnusedMaterialsCommand.Execute(false);
+
+    #endregion
+    [RelayCommand(CanExecute = nameof(HasMeshAppearances))]
+    private void GenerateMissingMaterials()
+    {
+        // Do nothing, we just need the command for the hook. Logic will trigger from view's OnClick
+    }
+
+    #endregion
+
+    public static string CurrentActiveSearch = "";
+
+    public void OnSearchChanged(string searchBoxText)
+    {
+        CurrentActiveSearch = "";
+        if (CurrentTab is not RDTDataViewModel rtdViewModel)
+        {
+            return;
+        }
+
+        rtdViewModel.OnSearchChanged(searchBoxText);
     }
 }

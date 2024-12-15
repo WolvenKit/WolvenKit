@@ -298,6 +298,9 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
+            // https://github.com/WolvenKit/WolvenKit/issues/1870
+            rendBlob.Header.OpacityMicromaps.Clear();
+            
             var originalRig = args.Rig?.FirstOrDefault();
 
             if (File.Exists(Path.ChangeExtension(inGltfFile.FullName, ".Material.json")) && (args.ImportMaterialOnly || args.ImportMaterials))
@@ -749,8 +752,8 @@ namespace WolvenKit.Modkit.RED4
             re4Mesh.Nor32s = new uint[vertCount];
             for (var i = 0; i < vertCount; i++)
             {
-                var v = new Vec4(mesh.normals[i], 0); // for normal w == 0
-                re4Mesh.Nor32s[i] = Converters.Vec4ToU32(v);
+                var v = mesh.normals[i]; // for normal w == 0
+                re4Mesh.Nor32s[i] = Converters.Vec3ToU32(v);
             }
 
             // converting tangents struct
@@ -1889,6 +1892,7 @@ namespace WolvenKit.Modkit.RED4
             ArgumentNullException.ThrowIfNull(mesh.positions, nameof(mesh));
             ArgumentNullException.ThrowIfNull(mesh.indices, nameof(mesh));
             ArgumentNullException.ThrowIfNull(mesh.garmentMorph, nameof(mesh));
+            ArgumentNullException.ThrowIfNull(mesh.texCoords0, nameof(mesh));
 
             var vertBuffer = new MemoryStream();
             var vertBw = new BinaryWriter(vertBuffer);
@@ -1901,6 +1905,9 @@ namespace WolvenKit.Modkit.RED4
 
             var flagBuffer = new MemoryStream();
             var flagBw = new BinaryWriter(flagBuffer);
+
+            var uvBuffer = new MemoryStream();
+            var uvBw = new BinaryWriter(uvBuffer);
 
             var capVertices = new CArray<CUInt32>();
 
@@ -1923,6 +1930,9 @@ namespace WolvenKit.Modkit.RED4
                 {
                     capVertices.Add(Convert.ToUInt32(v));
                 }
+
+                uvBw.Write(mesh.texCoords0[v].X);
+                uvBw.Write(mesh.texCoords0[v].Y);
             }
 
             foreach (var i in mesh.indices)
@@ -1938,6 +1948,7 @@ namespace WolvenKit.Modkit.RED4
                 Indices = new DataBuffer(indBuffer.ToArray()),
                 MorphOffsets = new DataBuffer(morphBuffer.ToArray()),
                 Vertices = new DataBuffer(vertBuffer.ToArray()),
+                Uv = new DataBuffer(uvBuffer.ToArray()),
                 NumVertices = Convert.ToUInt32(mesh.positions.Length),
                 LodMask = 1
             });

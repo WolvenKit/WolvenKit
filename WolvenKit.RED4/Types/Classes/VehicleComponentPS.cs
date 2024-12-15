@@ -213,6 +213,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(133)] 
+		[RED("vehicleApperanceCustomizationInDistanceTermination")] 
+		public CBool VehicleApperanceCustomizationInDistanceTermination
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(134)] 
 		[RED("vehicleAppearanceCustomizationBlockedByDamage")] 
 		public CBool VehicleAppearanceCustomizationBlockedByDamage
 		{
@@ -220,7 +228,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(134)] 
+		[Ordinal(135)] 
+		[RED("vehicleVisualCustomizationTemplate")] 
+		public SavedVehicleVisualCustomizationTemplate VehicleVisualCustomizationTemplate
+		{
+			get => GetPropertyValue<SavedVehicleVisualCustomizationTemplate>();
+			set => SetPropertyValue<SavedVehicleVisualCustomizationTemplate>(value);
+		}
+
+		[Ordinal(136)] 
 		[RED("vehicleApperanceDefinition")] 
 		public vehicleVisualModdingDefinition VehicleApperanceDefinition
 		{
@@ -228,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<vehicleVisualModdingDefinition>(value);
 		}
 
-		[Ordinal(135)] 
+		[Ordinal(137)] 
 		[RED("ready")] 
 		public CBool Ready
 		{
@@ -236,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(136)] 
+		[Ordinal(138)] 
 		[RED("isPlayerPerformingBodyDisposal")] 
 		public CBool IsPlayerPerformingBodyDisposal
 		{
@@ -244,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(137)] 
+		[Ordinal(139)] 
 		[RED("submergedTimestamp")] 
 		public CFloat SubmergedTimestamp
 		{
@@ -252,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(138)] 
+		[Ordinal(140)] 
 		[RED("vehicleControllerPS")] 
 		public CHandle<vehicleControllerPS> VehicleControllerPS
 		{
@@ -262,9 +278,9 @@ namespace WolvenKit.RED4.Types
 
 		public VehicleComponentPS()
 		{
-			ExposeQuickHacks = true;
 			NpcOccupiedSlots = new();
 			PreviousInteractionState = new();
+			VehicleVisualCustomizationTemplate = new SavedVehicleVisualCustomizationTemplate { GenericData = new GenericTemplatePersistentData() };
 			VehicleApperanceDefinition = new vehicleVisualModdingDefinition();
 
 			PostConstruct();

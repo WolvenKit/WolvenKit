@@ -4,7 +4,9 @@ using System.Globalization;
 using System.Linq;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
+using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Pools;
 
@@ -62,7 +64,7 @@ public partial class ChunkViewModel
             Value = f.ToBitFieldString();
         }
         else if (NodeIdxInParent > -1 && Parent?.Name == "referenceTracks" &&
-                 GetRootModel().GetModelFromPath("trackNames")?.ResolvedData is CArray<CName> trackNames)
+                 GetRootModel().GetPropertyFromPath("trackNames")?.ResolvedData is CArray<CName> trackNames)
         {
             Value = trackNames[NodeIdxInParent].GetResolvedText();
             IsValueExtrapolated = true;
@@ -223,9 +225,43 @@ public partial class ChunkViewModel
                 Value = text;
                 IsValueExtrapolated = Value != "";
                 break;
+            case CMatrix when Parent?.Name == "boneRigMatrices" &&
+                              GetRootModel().GetPropertyFromPath("boneNames")?.ResolvedData is CArray<CName> boneNames &&
+                              boneNames.Count > NodeIdxInParent:
+                Value = boneNames[NodeIdxInParent].GetResolvedText();
+                IsValueExtrapolated = Value != "";
+                break;
+            case Vector4 when Parent?.Name == "bonePositions" &&
+                              GetRootModel().GetPropertyFromPath("boneNames")?.ResolvedData is CArray<CName> boneNames &&
+                              boneNames.Count > NodeIdxInParent:
+                Value = boneNames[NodeIdxInParent].GetResolvedText();
+                IsValueExtrapolated = Value != "";
+                break;
+            case CFloat when Parent?.Name == "boneVertexEpsilons" &&
+                             GetRootModel().GetPropertyFromPath("boneNames")?.ResolvedData is CArray<CName> boneNames &&
+                             boneNames.Count > NodeIdxInParent:
+                Value = boneNames[NodeIdxInParent].GetResolvedText();
+                IsValueExtrapolated = Value != "";
+                break;
+            case CInt16 boneIdx when Parent?.Name == "boneParentIndexes" &&
+                                     GetRootModel().GetPropertyFromPath("boneNames")?.ResolvedData is CArray<CName> boneNames &&
+                                     boneNames.Count > NodeIdxInParent:
+                Value = boneNames[NodeIdxInParent].GetResolvedText();
+                IsValueExtrapolated = Value != "";
+                if (boneIdx > 0 && boneIdx < boneNames.Count)
+                {
+                    Value = $"{Value} -> {boneNames[boneIdx].GetResolvedText()}";
+                }
+
+                break;
             case scnSceneWorkspotDataId sceneWorkspotData when sceneWorkspotData.Id != 0:
                 Value = $"{sceneWorkspotData.Id}";
                 IsValueExtrapolated = sceneWorkspotData.Id != 0;
+                break;
+            case worldNodeData sst when Parent?.Parent?.ResolvedData is worldStreamingSector wss && sst.NodeIndex < wss.Nodes.Count:
+                var node = wss.Nodes[sst.NodeIndex].Chunk;
+                Value = node?.GetType().Name ?? "";
+                IsValueExtrapolated = Value != "";
                 break;
             case worldNode worldNode:
                 Value = StringHelper.Stringify(worldNode, true);
@@ -253,6 +289,22 @@ public partial class ChunkViewModel
                 break;
             case workWorkEntryId id:
                 Value = $"{id.Id}";
+                IsValueExtrapolated = true;
+                break;
+            case CArray<entSlot> entSlots:
+                var entSlotDescriptors = entSlots
+                    .Select(slotsOption => slotsOption.SlotName.GetResolvedText() ?? "")
+                    .Where(e => !string.IsNullOrEmpty(e))
+                    .ToList();
+                Value = $"{string.Join(", ", entSlotDescriptors)}";
+                IsValueExtrapolated = true;
+                break;
+            case CArray<gameAnimParamSlotsOption> slotsOptions:
+                var childDescriptors = slotsOptions
+                    .Select(slotsOption => slotsOption.SlotID.GetResolvedText() ?? "")
+                    .Where(e => !string.IsNullOrEmpty(e))
+                    .ToList();
+                Value = $"{string.Join(", ", childDescriptors)}";
                 IsValueExtrapolated = true;
                 break;
             case questFactsDBCondition condition:
@@ -309,6 +361,26 @@ public partial class ChunkViewModel
                 break;
             case scnVoicesetComponent voiceset:
                 Value = voiceset.CombatVoSettingsName.GetResolvedText() ?? "";
+                IsValueExtrapolated = Value != "";
+                break;
+            case CMaterialParameterTexture cTexPar:
+                Value = cTexPar.Texture.DepotPath.GetResolvedText() ?? "";
+                IsValueExtrapolated = Value != "";
+                break;
+            case CMaterialParameterScalar cNumPar:
+                Value = $"{cNumPar.Min}..{cNumPar.Max}";
+                IsValueExtrapolated = Value != "";
+                break;
+            case CMaterialParameterVector cVecPar:
+                Value = StringHelper.Stringify(cVecPar.Vector);
+                IsValueExtrapolated = Value != "";
+                break;
+            case CMaterialParameterColor cColorPar:
+                Value = StringHelper.Stringify(cColorPar.Color);
+                IsValueExtrapolated = Value != "";
+                break;
+            case CMaterialParameterInfo cInfoPar:
+                Value = cInfoPar.Type.ToString();
                 IsValueExtrapolated = Value != "";
                 break;
             case entTemplateAppearance entAppearance:
@@ -391,19 +463,23 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = Value != "";
                 break;
             case entAnimatedComponent animComp:
-                if (animComp.FacialSetup.DepotPath.GetResolvedText() is string path)
+                List<string> values = [];
+                if (animComp.FacialSetup.DepotPath != ResourcePath.Empty)
                 {
-                    Value = path;
-                }
-                else if (animComp.Graph.DepotPath.GetResolvedText() is string graphPath)
-                {
-                    Value = graphPath;
-                }
-                else
-                {
-                    Value = $"{animComp.Rig.DepotPath.GetResolvedText()}";
+                    values.Add(StringHelper.Stringify(animComp.FacialSetup.DepotPath, true));
                 }
 
+                if (animComp.Graph.DepotPath != ResourcePath.Empty)
+                {
+                    values.Add(StringHelper.Stringify(animComp.Graph.DepotPath, true));
+                }
+
+                if (animComp.Rig.DepotPath != ResourcePath.Empty)
+                {
+                    values.Add(StringHelper.Stringify(animComp.Rig.DepotPath, true));
+                }
+
+                Value = string.Join(", ", values);
                 IsValueExtrapolated = Value != "";
                 break;
             case entSlotComponent slotComponent when
@@ -457,6 +533,10 @@ public partial class ChunkViewModel
                 break;
             case CEvaluatorFloatConst floatConst:
                 Value = $"{floatConst.Value}";
+                break;
+            case QsTransform transform:
+                Value = StringHelper.Stringify(transform);
+                IsValueExtrapolated = Value != "";
                 break;
             case CArray<TweakDBID> tweakIds:
                 Value = StringHelper.Stringify(tweakIds);
@@ -652,6 +732,17 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = Value != "";
                 break;
             }
+            case entMorphTargetSkinnedMeshComponent morphtargetComponent:
+            {
+                Value = StringHelper.Stringify(morphtargetComponent.MorphResource.DepotPath, true);
+                if (morphtargetComponent.MeshAppearance.GetResolvedText() is string app and (not "default" or "") && Value != "")
+                {
+                    Value = $"{Value} ({app})";
+                }
+
+                IsValueExtrapolated = Value != "";
+                break;
+            }
             case locVoiceoverLengthMap lengthMap:
                 Value = $"[{lengthMap.Entries.Count}]";
                 IsValueExtrapolated = Value != "";
@@ -692,7 +783,7 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = true;
                 break;
             case physicsRagdollBodyInfo when
-                NodeIdxInParent > -1 && GetRootModel().GetModelFromPath("ragdollNames")?.ResolvedData is
+                NodeIdxInParent > -1 && GetRootModel().GetPropertyFromPath("ragdollNames")?.ResolvedData is
                     CArray<physicsRagdollBodyNames> ragdollNames:
                 var rN = ragdollNames[NodeIdxInParent];
                 Value = $"{rN.ParentAnimName.GetResolvedText() ?? ""} -> {rN.ChildAnimName.GetResolvedText() ?? ""}";

@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 using DynamicData.Kernel;
 using HandyControl.Tools.Extension;
 using Splat;
@@ -36,6 +37,9 @@ namespace WolvenKit.Views.Editors
         private readonly ISettingsManager _settingsManager;
         private readonly IAppArchiveManager _archiveManager;
 
+        // We need this to update after onPaste
+        private DispatcherTimer _updateTimer;
+
         public IEnumerable<InternalEnums.EImportFlags> EnumValues => Enum.GetValues(typeof(InternalEnums.EImportFlags)).Cast<InternalEnums.EImportFlags>();
 
 
@@ -46,8 +50,14 @@ namespace WolvenKit.Views.Editors
             _archiveManager = Locator.Current.GetService<IAppArchiveManager>();
 
             FlagsComboBox.SelectionChanged += FlagsComboBox_OnSelectionChanged;
-        }
 
+            // Initialize the DispatcherTimer
+            _updateTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(500) // Set the delay interval (e.g., 500 milliseconds)
+            };
+            _updateTimer.Tick += OnUpdateTimerTick;
+        }
 
         public IRedRef RedRef
         {
@@ -114,10 +124,9 @@ namespace WolvenKit.Views.Editors
                 {
                     return RedRef.DepotPath.GetRedHash().ToString("X");
                 }
-                else
-                {
-                    return RedRef.DepotPath.GetRedHash().ToString();
-                }
+
+                return RedRef.DepotPath.GetRedHash().ToString();
+                
             }
             set
             {
@@ -148,40 +157,34 @@ namespace WolvenKit.Views.Editors
 
         private void HashBox_OnPasting(object sender, DataObjectPastingEventArgs e)
         {
-            if (e.DataObject.GetDataPresent(typeof(string)))
-            {
-                var text = (string)e.DataObject.GetData(typeof(string));
-                var full = HashBox.Text.Remove(HashBox.SelectionStart, HashBox.SelectionLength).Insert(HashBox.CaretIndex, text!);
-
-                if (_settingsManager.ShowResourcePathAsHex)
-                {
-                    if (!ulong.TryParse(full, NumberStyles.HexNumber, CultureInfo.CurrentCulture, out _))
-                    {
-                        e.CancelCommand();
-                    }
-                }
-                else
-                {
-                    if (!ulong.TryParse(full, out _))
-                    {
-                        e.CancelCommand();
-                    }
-                }
-            }
-            else
+            if (!e.DataObject.GetDataPresent(typeof(string)))
             {
                 e.CancelCommand();
+                return;
             }
+
+            var text = (string)e.DataObject.GetData(typeof(string));
+            var full = HashBox.Text.Remove(HashBox.SelectionStart, HashBox.SelectionLength).Insert(HashBox.CaretIndex, text!);
+
+            if ((!_settingsManager.ShowResourcePathAsHex || ulong.TryParse(full, NumberStyles.HexNumber, CultureInfo.CurrentCulture, out _))
+                && (_settingsManager.ShowResourcePathAsHex || ulong.TryParse(full, out _)))
+            {
+                return;
+            }
+
+            e.CancelCommand();
         }
 
         private void FlagsComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (sender is ComboBox { SelectedItem: InternalEnums.EImportFlags flags })
+            if (sender is not ComboBox { SelectedItem: InternalEnums.EImportFlags flags })
             {
-                if (RedRef != null && RedRef.Flags != flags)
-                {
-                    SetCurrentValue(RedRefProperty, (IRedRef)RedTypeManager.CreateRedType(RedRef.RedType, RedRef.DepotPath, flags));
-                }
+                return;
+            }
+
+            if (RedRef != null && RedRef.Flags != flags)
+            {
+                SetCurrentValue(RedRefProperty, (IRedRef)RedTypeManager.CreateRedType(RedRef.RedType, RedRef.DepotPath, flags));
             }
         }
 
@@ -207,23 +210,16 @@ namespace WolvenKit.Views.Editors
                 return;
             }
 
-            if (ArchiveXlHelper.HasSubstitution(filePath) &&
-                ArchiveXlHelper.GetValuesForInvalidSubstitution(filePath) is string invalidSubstitutions)
-            {
-                SetCurrentValue(ScopeProperty, FileScope.InvalidSubstitution);
-                SetCurrentValue(TextBoxToolTipProperty, invalidSubstitutions);
-                return;
-            }
-
-            if (!ArchiveXlHelper.HasSubstitution(filePath) && _archiveManager?.GetGameFile(RedRef.DepotPath, false, true) is not null)
-            {
-                SetCurrentValue(ScopeProperty, FileScope.GameOrMod);
-                SetCurrentValue(TextBoxToolTipProperty, "Valid depot path (game or same mod)");
-                return;
-            }
-
+            var hasArchiveXlMatch = false;
             if (ArchiveXlHelper.HasSubstitution(filePath))
             {
+                if (ArchiveXlHelper.GetValuesForInvalidSubstitution(filePath) is string invalidSubstitutions)
+                {
+                    SetCurrentValue(ScopeProperty, FileScope.InvalidSubstitution);
+                    SetCurrentValue(TextBoxToolTipProperty, invalidSubstitutions);
+                    return;
+                }
+
                 if (App.Helpers.ArchiveXlHelper.GetFirstExistingPath(filePath) is not string s)
                 {
                     SetCurrentValue(ScopeProperty, FileScope.NotFoundWarning);
@@ -231,28 +227,43 @@ namespace WolvenKit.Views.Editors
                     return;
                 }
 
-                if (_archiveManager?.GetGameFile(s, false, true) is not null)
-                {
-                    SetCurrentValue(ScopeProperty, FileScope.GameOrMod);
-                    SetCurrentValue(TextBoxToolTipProperty, "Valid depot path (game or same mod)");
-                    return;
-                }
+                hasArchiveXlMatch = true;
+            }
 
-                if (_archiveManager?.Lookup(s, ArchiveManagerScope.Mods).HasValue is true)
-                {
-                    SetCurrentValue(ScopeProperty, FileScope.OtherMod);
-                    SetCurrentValue(TextBoxToolTipProperty, "Valid depot path (another mod)");
-                    return;
-                }
+            if (hasArchiveXlMatch || _archiveManager?.GetGameFile(RedRef.DepotPath, false, true) is not null)
+            {
+                SetCurrentValue(ScopeProperty, FileScope.GameOrMod);
+                SetCurrentValue(TextBoxToolTipProperty, "Valid depot path (game or same mod)");
+                return;
+            }
+
+            if (_archiveManager?.GetGameFile(RedRef.DepotPath, true, false) is not null)
+            {
+                SetCurrentValue(ScopeProperty, FileScope.OtherMod);
+                SetCurrentValue(TextBoxToolTipProperty, "Valid depot path (another mod)");
+                return;
             }
 
             SetCurrentValue(ScopeProperty, FileScope.NotFound);
             SetCurrentValue(TextBoxToolTipProperty, "Invalid depot path (not found)");
         }
 
-        public void TrimmingTextbox_OnTextUpdate(object sender, EventArgs e) =>
-            RefreshValidityAndTooltip(sender, new RoutedEventArgs());
+        private object _updateSender;
 
+        public void TrimmingTextbox_OnTextUpdate(object sender, EventArgs e)
+        {
+            _updateSender = sender;
+            _updateTimer.Stop();
+            _updateTimer.Start();
+        }
+
+
+        private void OnUpdateTimerTick(object sender, EventArgs e)
+        {
+            _updateTimer.Stop();
+            RefreshValidityAndTooltip(_updateSender, new RoutedEventArgs());
+        }
+        
         public void TrimmingTextbox_OnKeyUp(object sender, EventArgs e)
         {
             if (e is not KeyEventArgs { Key: Key.Enter or Key.Tab })

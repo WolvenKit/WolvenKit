@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
-using CommunityToolkit.Mvvm.ComponentModel;
+using System.Threading;
+using System.Windows;
 using DynamicData.Binding;
 using WolvenKit.RED4.Types;
 
@@ -25,33 +26,24 @@ public class CustomLoopException : Exception
 
 public partial class ChunkViewModel
 {
-    private ChunkViewModel? FindPropertyNode(string propName)
+    private ChunkViewModel? GetTvPropertyFromPath(string path)
     {
-        var ret = Properties.FirstOrDefault(p => p.Name == propName);
-        if (ret is not null && ret.TVProperties.Count == 1 && ret.TVProperties.FirstOrDefault()?.ResolvedData is RedDummy)
+        var parts = path.Split('.');
+
+        var result = this;
+        foreach (var part in parts)
         {
-            ret.RecalculateProperties();
+            if (result?.TVProperties.Count == 1 && result.TVProperties.FirstOrDefault()?.ResolvedData is RedDummy)
+            {
+                result.RecalculateProperties();
+            }
+
+            result = result?.TVProperties.FirstOrDefault(x => x.Name == part);
         }
 
-        return ret;
+        return result;
     }
 
-    private ChunkViewModel? FindTvPropertyChild(string propName)
-    {
-        var ret = TVProperties.FirstOrDefault(p => p.Name == propName);
-        if (ret is not null && ret.TVProperties.Count == 1 && ret.TVProperties.FirstOrDefault()?.ResolvedData is RedDummy)
-        {
-            ret.RecalculateProperties();
-        }
-
-        return ret;
-    }
-
-    private bool FindTvPropertyChild(string propName, out ChunkViewModel? property)
-    {
-        property = TVProperties.FirstOrDefault(p => p.Name == propName);
-        return property != null;
-    }
     
     /// <summary>
     /// Helper method to expand and select a child node.
@@ -99,67 +91,97 @@ public partial class ChunkViewModel
         switch (Data)
         {
             // .mi file
-            case CMaterialInstance when FindTvPropertyChild("values") is ChunkViewModel child:
+            case CMaterialInstance when GetTvPropertyFromPath("values") is ChunkViewModel child:
                 ExpandAndSelect(child, true);
                 break;
             // .mlsetup file
-            case Multilayer_Setup when FindTvPropertyChild("layers") is ChunkViewModel child:
+            case Multilayer_Setup when GetTvPropertyFromPath("layers") is ChunkViewModel child:
                 ExpandAndSelect(child, true);
                 break;
             // .inkatlas
-            case inkTextureAtlas when FindTvPropertyChild("slots") is ChunkViewModel child:
+            case inkTextureAtlas when GetTvPropertyFromPath("slots") is ChunkViewModel child:
                 ExpandAndSelect(child, true);
-                if (child.FindTvPropertyChild("0") is ChunkViewModel grandChild)
+                if (child.GetTvPropertyFromPath("0") is ChunkViewModel grandChild)
                 {
                     grandChild.IsExpanded = true;
-                    if (grandChild.FindTvPropertyChild("parts") is ChunkViewModel parts)
+                    if (grandChild.GetTvPropertyFromPath("parts") is ChunkViewModel parts)
                     {
                         parts.IsExpanded = true;
                     }
                 }
                 break;
             // .app file
-            case appearanceAppearanceResource when FindTvPropertyChild("appearances") is ChunkViewModel child:
+            case appearanceAppearanceResource when GetTvPropertyFromPath("appearances") is ChunkViewModel child:
                 ExpandAndSelect(child, false, true);
                 break;
             // .ent file
             case entEntityTemplate template:
-                
-                var appearances = FindTvPropertyChild("appearances");
-                var components = FindTvPropertyChild("components");
+
+                var appearances = GetTvPropertyFromPath("appearances");
+                var components = GetTvPropertyFromPath("components");
                 var nodeToExpand = template.Appearances.Count == 0 ? components : appearances;
                 ExpandAndSelect(nodeToExpand, true, true);
                 break;
             // .mesh file
             case CMesh:
-                if (FindTvPropertyChild("appearances") is { TVProperties.Count: > 0 } meshAppearances)
+                if (GetTvPropertyFromPath("appearances") is { TVProperties.Count: > 0 } meshAppearances)
                 {
                     meshAppearances.IsExpanded = true;
                 }
 
-                if (FindTvPropertyChild("preloadLocalMaterialInstances") is { TVProperties.Count: > 0 and > 0 } preloadMaterials)
+                if (GetTvPropertyFromPath("preloadLocalMaterialInstances") is { TVProperties.Count: > 0 and > 0 } preloadMaterials)
                 {
                     preloadMaterials.IsExpanded = true;
                 }
-                else if (FindTvPropertyChild("externalMaterials") is { TVProperties.Count: > 0 } externalMaterials)
+                else if (GetTvPropertyFromPath("externalMaterials") is { TVProperties.Count: > 0 } externalMaterials)
                 {
                     externalMaterials.IsExpanded = true;
                 }
 
-                if (FindTvPropertyChild("localMaterialBuffer")?.FindTvPropertyChild("materials") is { TVProperties.Count: > 0 } materials)
+                if (GetTvPropertyFromPath("localMaterialBuffer")?.GetTvPropertyFromPath("materials") is
+                    { TVProperties.Count: > 0 } materials)
                 {
                     materials.IsExpanded = true;
                 }
 
                 break;
             // .csv
-            case C2dArray when FindPropertyNode("compiledData") is ChunkViewModel child:
+            case C2dArray when GetPropertyFromPath("compiledData") is ChunkViewModel child:
                 ExpandAndSelect(child, true);
                 break;
             // .json
-            case JsonResource when FindPropertyNode("root") is ChunkViewModel child:
+            case JsonResource when GetPropertyFromPath("root") is ChunkViewModel child:
                 ExpandAndSelect(child, true);
                 break;
+            // streamingsector
+            case worldStreamingSector:
+                // will run into stack overflow due to race conditions if we do this straight away. Let's wait a bit!
+                var newThread = new Thread(() =>
+                {
+                    if (GetPropertyFromPath("nodes") is ChunkViewModel nodes)
+                    {
+                        Thread.Sleep(10);
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            nodes.CalculateProperties();
+                            nodes.IsExpanded = true;
+                        });
+                    }
+
+                    if (GetPropertyFromPath("nodeData") is not ChunkViewModel data)
+                    {
+                        return;
+                    }
+
+                    Thread.Sleep(40);
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        ExpandAndSelect(data, Tab?.SelectedChunk is not ChunkViewModel);
+                    });
+                });
+
+                newThread.Start();
+                break;  
             default:
                 break;
         }
@@ -186,7 +208,14 @@ public partial class ChunkViewModel
             return;
         }
 
-        SetChildExpansionStatesInternal(isExpanded, skipRecursion ? 99 : -1);
+        try
+        {
+            SetChildExpansionStatesInternal(isExpanded, skipRecursion ? 99 : -1);
+        }
+        catch
+        {
+            // Don't set expansion states. Sometimes, this can cause threaded exception
+        }
     }
 
     /// <summary>
@@ -464,5 +493,10 @@ public partial class ChunkViewModel
         {
             chunkViewModel.IsExpanded = false;
         }
+    }
+
+    private void ExpandChildNodesByType()
+    {
+        throw new NotImplementedException();
     }
 }

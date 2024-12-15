@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Reactive.Disposables;
 using ReactiveUI;
 using Syncfusion.UI.Xaml.Grid;
@@ -29,6 +30,8 @@ public partial class ExportView : ReactiveUserControl<ExportViewModel>
                 SetCurrentValue(ViewModelProperty, viewModel);
             }
 
+            ViewModel.OnRefresh += RefreshFilter;
+
             this.OneWayBind(ViewModel,
                     x => x.SelectedObject.Properties,
                     x => x.OverlayPropertyGrid.SelectedObject)
@@ -46,6 +49,8 @@ public partial class ExportView : ReactiveUserControl<ExportViewModel>
         });
     }
 
+
+    private void RefreshFilter(object sender, EventArgs e) => Datagrid_FilterChanged(ExportGrid, null);
     private void Datagrid_FilterChanged(object sender, GridFilterEventArgs e)
     {
         if (sender is not SfDataGrid grid || ViewModel is null)

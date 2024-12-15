@@ -4,15 +4,14 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using WolvenKit.Common;
-using WolvenKit.Common.FNV1A;
 
 namespace WolvenKit.Modkit.RED4.Opus
 {
     public class OpusTools
     {
-        public static OpusInfo? GetOpusInfo(IArchiveManager archiveManager, bool useMod)
+        public static OpusInfo? GetOpusInfo(IArchiveManager archiveManager, bool useProject)
         {
-            var opusInfo = archiveManager.GetGameFile(@"base\sound\soundbanks\sfx_container.opusinfo", false, useMod);
+            var opusInfo = archiveManager.GetGameFile(@"base\sound\soundbanks\sfx_container.opusinfo", false, useProject);
             if (opusInfo == null)
             {
                 return null;
@@ -23,27 +22,42 @@ namespace WolvenKit.Modkit.RED4.Opus
             return new OpusInfo(infoStream);
         }
 
-        public static bool ExportOpusUsingHash(IArchiveManager archiveManager, List<uint> ids, bool useMod, DirectoryInfo rawOutDir)
+        public static IEnumerable<double> ExportAllOpus(OpusInfo info, IArchiveManager archiveManager, bool useMod, bool useProject, DirectoryInfo rawOutDir)
         {
-            var info = GetOpusInfo(archiveManager, useMod);
-            if (info == null)
+            var maxPak = info.PackIndices.Last();
+            double progress;
+
+            for (var i = 0; i < maxPak; i++) // This could be parallel but it eats into RAM
             {
-                return false; 
+                progress = (i + 1) / (double)maxPak;
+
+                var opusPak = archiveManager.GetGameFile(@$"base\sound\soundbanks\sfx_container_{i}.opuspak", useMod, useProject);
+                if (opusPak != null)
+                {
+                    var ms = new MemoryStream();
+                    opusPak.Extract(ms);
+                    info.WriteAllOpusFromPak(i, ms, rawOutDir);
+                }
+
+                yield return progress;
             }
-            
+        }
+
+        public static bool ExportOpusUsingHash(OpusInfo info, IArchiveManager archiveManager, List<uint> ids, bool useMod, bool useProject, DirectoryInfo rawOutDir)
+        {
             for (uint i = 0; i < info.OpusCount; i++)
             {
                 if (ids.Contains(info.OpusHashes[i]))
                 {
-                    var opusPak = archiveManager.GetGameFile(@$"base\sound\soundbanks\sfx_container_{info.PackIndices[i]}.opuspak", false, false);
+                    var opusPak = archiveManager.GetGameFile(@$"base\sound\soundbanks\sfx_container_{info.PackIndices[i]}.opuspak", useMod, useProject);
                     if (opusPak == null)
                     {
                         continue;
                     }
-                    
+
                     var ms = new MemoryStream();
                     opusPak.Extract(ms);
-                    
+
                     info.WriteOpusFromPak(ms, rawOutDir, i);
                 }
             }
@@ -154,7 +168,7 @@ namespace WolvenKit.Modkit.RED4.Opus
 
                         modDictionary.Add(pakIdx, modStream);
                     }
-                            
+
                     modDictionary[pakIdx] = info.WriteOpusToPak(new MemoryStream(File.ReadAllBytes(name)), modDictionary[pakIdx], id, new MemoryStream(File.ReadAllBytes(name.Replace("opus", "wav"))));
                 }
             }
@@ -171,7 +185,7 @@ namespace WolvenKit.Modkit.RED4.Opus
 
                 writeInfo = true;
             }
-            
+
             if (writeInfo)
             {
                 info.WriteOpusInfo(new DirectoryInfo(Path.Combine(modOutDir.FullName, "base\\sound\\soundbanks")));
