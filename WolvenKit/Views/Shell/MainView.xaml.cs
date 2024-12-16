@@ -187,6 +187,11 @@ namespace WolvenKit.Views.Shell
                 pe.StopWatcher();
             }
 
+            if (ViewModel?.GetToolViewModel<PropertiesViewModel>() is { } p)
+            {
+                p.EffectsManager.Dispose();
+            }
+
             if (Locator.Current.GetService<IProjectManager>() is ProjectManager pm)
             {
                 await pm.SaveAsync();
