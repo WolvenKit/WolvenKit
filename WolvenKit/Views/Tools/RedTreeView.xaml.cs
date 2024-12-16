@@ -540,8 +540,9 @@ namespace WolvenKit.Views.Tools
                              .Where(cvm => cvm.IsInArray)
                              .GroupBy(chunk => chunk.Parent))
                 {
+                    var pasteIndex = group.FirstOrDefault()?.NodeIdxInParent ?? -2;
                     group.Key.DeleteNodes(selectedNodes);
-                    group.Key.PasteAtIndex(copiedChunks, group.FirstOrDefault()?.NodeIdxInParent ?? -1);
+                    group.Key.PasteAtIndex(copiedChunks, pasteIndex + 1);
                     ReapplySearch(group.Key);
                 }
             }

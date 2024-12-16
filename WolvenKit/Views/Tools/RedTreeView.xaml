@@ -1407,6 +1407,14 @@
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="Visibility" Value="Visible" />
                                 </MultiDataTrigger>
+
+                                <!-- Change label if we have multiple items selected -->
+                                <DataTrigger
+                                    Binding="{Binding Path=HasMultipleItemsCopied,
+                                                      ElementName=redTreeView}"
+                                    Value="True">
+                                    <Setter Property="Header" Value="Delete Selection in Array/Buffer" />
+                                </DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </MenuItem.Style>
