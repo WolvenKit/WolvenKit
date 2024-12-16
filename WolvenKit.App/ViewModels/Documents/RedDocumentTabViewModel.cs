@@ -133,12 +133,12 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
         {
             s_copiedChunk = value;
             IsLastCopyOperationSingle = value is not null;
-            OnCopiedChunkChanged?.Invoke(null, EventArgs.Empty);
+            CopiedChunkChanged?.Invoke(null, EventArgs.Empty);
         }
     }
 
     private static List<IRedType> CopiedChunks { get; } = [];
-    public static event EventHandler? OnCopiedChunkChanged;
+    public static event EventHandler? CopiedChunkChanged;
 
     public static List<IRedType> GetCopiedChunks(bool includeSingleCopy = false)
     {
@@ -169,20 +169,20 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
             CopiedChunks.AddRange(chunks);
         }
 
-        OnCopiedChunkChanged?.Invoke(null, EventArgs.Empty);
+        CopiedChunkChanged?.Invoke(null, EventArgs.Empty);
     }
 
     public static void AddToCopiedChunks(IRedType chunk)
     {
         CopiedChunks.Add(chunk);
         IsLastCopyOperationSingle = false;
-        OnCopiedChunkChanged?.Invoke(null, EventArgs.Empty);
+        CopiedChunkChanged?.Invoke(null, EventArgs.Empty);
     }
     
     public static void ClearCopiedChunks()
     {
         CopiedChunks.Clear();
-        OnCopiedChunkChanged?.Invoke(null, EventArgs.Empty);
+        CopiedChunkChanged?.Invoke(null, EventArgs.Empty);
     }
 
     #endregion

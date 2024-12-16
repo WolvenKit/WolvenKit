@@ -47,19 +47,28 @@ namespace WolvenKit.Views.Tools
             
             InitializeComponent();
 
-            DataContextChanged += OnDataContextChanged;
-            RedDocumentTabViewModel.OnCopiedChunkChanged += AfterCopied_RefreshCommandStatus;
-
-            // Listen for the "UpdateFilteredItemsSource" message
-            MessageBus.Current.Listen<string>("Command")
-                .Where(x => x == "UpdateFilteredItemsSource")
-                .Subscribe(_ => UpdateFilteredItemsSource(ItemsSource));
-
             TreeView.ApplyTemplate();
+
+            Loaded += RedTreeView_Loaded;
+            Unloaded += RedTreeView_Unloaded;
         }
 
+        private void RedTreeView_Loaded(object sender, RoutedEventArgs e)
+        {
+            DataContextChanged += OnDataContextChanged;
+            RedDocumentTabViewModel.CopiedChunkChanged += AfterCopied_RefreshCommandStatus;
+        }
 
-        private void AfterCopied_RefreshCommandStatus(object sender, EventArgs e) => RefreshPasteCommandStatus();
+        private void RedTreeView_Unloaded(object sender, RoutedEventArgs e)
+        {
+            RedDocumentTabViewModel.CopiedChunkChanged -= AfterCopied_RefreshCommandStatus;
+            DataContextChanged -= OnDataContextChanged;
+        }
+
+        private void AfterCopied_RefreshCommandStatus(object sender, EventArgs e)
+        {
+            RefreshPasteCommandStatus();
+        }
 
         private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
@@ -1169,7 +1178,7 @@ namespace WolvenKit.Views.Tools
         }
 
         #endregion
-        
+
     }
     
 }
