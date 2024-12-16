@@ -1269,6 +1269,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         //});
     }
 
+    [RelayCommand(CanExecute = nameof(CanNewFile))]
+    private void NewNpc(string? _) => Interactions.ShowNpvCreationDialogue();
+
     private bool CanImportArchive(string inputDir) => ActiveProject is not null && !IsDialogShown;
 
     [RelayCommand(CanExecute = nameof(CanImportArchive))]
@@ -1324,7 +1327,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         await Task.Run(() => OpenFromNewFileAsync(file)).ContinueWith(async (_) =>
         {
-            if (file.FullPath is not null && File.Exists(file.FullPath))
+            if (file.FullPath is not null)
             {
                 await Task.Run(() => RequestFileOpen(file.FullPath));
             }
@@ -1404,11 +1407,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                     writer.WriteFile(cr2W);
                 }
                 break;
-            // These should be handled by ComplexAction
-            case EWolvenKitFile.Complex_NPV:
-            case EWolvenKitFile.Complex_XL_Control:
-            case EWolvenKitFile.Complex_XL_Item:
-            // Where's this handled?
             case EWolvenKitFile.WScript:
                 throw new NotImplementedException();
             default:
@@ -2044,9 +2042,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             case EWolvenKitFile.ArchiveXl:
             case EWolvenKitFile.RedScript:
             case EWolvenKitFile.CETLua:
-            case EWolvenKitFile.Complex_NPV:
-            case EWolvenKitFile.Complex_XL_Control:
-            case EWolvenKitFile.Complex_XL_Item:
             default:
                 break;
         }

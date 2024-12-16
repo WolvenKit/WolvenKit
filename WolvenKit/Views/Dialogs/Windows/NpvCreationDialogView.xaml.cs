@@ -25,7 +25,7 @@ public partial class NpvCreationDialogView : IViewFor<NpvCreationDialogViewModel
         InitializeComponent();
 
         _npvCreationService = Locator.Current.GetService<INpvCreationService>();
-        
+
         ViewModel = new NpvCreationDialogViewModel();
         DataContext = ViewModel;
 
@@ -75,7 +75,6 @@ public partial class NpvCreationDialogView : IViewFor<NpvCreationDialogViewModel
 
     private void RefreshSaveButtonState(object sender, RoutedEventArgs e) => ViewModel?.RefreshVisibility();
 
-
     public bool ShowDialog(Window owner)
     {
         Owner = owner;
@@ -99,18 +98,20 @@ public partial class NpvCreationDialogView : IViewFor<NpvCreationDialogViewModel
 
     private void OnKeyDown(object sender, KeyEventArgs e)
     {
-        if (e.Key == Key.Enter)
+        if (e.Key != Key.Enter || ViewModel is null)
+        {
+            return;
+        }
+
+        if (ViewModel.CurrentPage == 0 && ViewModel.PageComplete)
+        {
+            OnNextButtonClick(null, null);
+        }
+
+        if ((ViewModel.CurrentPage == 1 && ViewModel.CanSave))
         {
             OnOkButtonClick(null, null);
-            return;
         }
-
-        if (e.Key != Key.Escape)
-        {
-            return;
-        }
-
-        OnCancelButtonClick(null, null);
     }
 
     private void OnOkButtonClick(object sender, RoutedEventArgs e)
@@ -118,5 +119,11 @@ public partial class NpvCreationDialogView : IViewFor<NpvCreationDialogViewModel
         DialogResult = true;
         Close();
         _npvCreationService.CreateNpv(ViewModel!);
+    }
+
+    private void OnNextButtonClick(object sender, RoutedEventArgs e)
+    {
+        ViewModel.CurrentPage = 1;
+        throw new NotImplementedException();
     }
 }
