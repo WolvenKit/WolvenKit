@@ -1154,6 +1154,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         //});
     }
 
+    [RelayCommand(CanExecute = nameof(CanNewFile))]
+    private void NewNpc(string? _) => Interactions.ShowNpvCreationDialogue();
+
     private bool CanImportArchive(string inputDir) => ActiveProject is not null && !IsDialogShown;
 
     [RelayCommand(CanExecute = nameof(CanImportArchive))]
@@ -1342,7 +1345,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         return result == WMessageBoxResult.Yes;
     }
-
+    
     public void ReloadChangedFiles()
     {
         for (var i = DockedViews.Count - 1; i >= 0; i--)

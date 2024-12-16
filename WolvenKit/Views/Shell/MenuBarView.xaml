@@ -45,11 +45,12 @@
                 Padding="{DynamicResource WolvenKitMarginHorizontal}"
                 FontSize="{DynamicResource WolvenKitFontSubTitle}"
                 Header="File">
+
                 <MenuItem
                     x:Name="MenuItemNewFile"
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
                     Header="New File"
-                    ToolTip="New File">
+                    ToolTip="Shows file creation dialogue">
                     <MenuItem.Icon>
                         <local:IconBox
                             IconPack="Codicons"
@@ -57,6 +58,33 @@
                             Size="{DynamicResource WolvenKitIconTiny}"
                             Foreground="{StaticResource WolvenKitYellow}" />
                     </MenuItem.Icon>
+                </MenuItem>
+
+                <MenuItem
+                    x:Name="MenuItemNewComplexItem"
+                    Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                    Header="New..."
+                    ToolTip="Adds a complex item to your Wolvenkit project">
+                    <MenuItem.Icon>
+                        <local:IconBox
+                            IconPack="Codicons"
+                            Kind="PuzzlePlus"
+                            Size="{DynamicResource WolvenKitIconTiny}"
+                            Foreground="{StaticResource WolvenKitYellow}" />
+                    </MenuItem.Icon>
+
+                    <MenuItem
+                        x:Name="MenuItemNewNpc"
+                        Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                        Header="New NPC">
+                        <MenuItem.Icon>
+                            <local:IconBox
+                                IconPack="Material"
+                                Kind="AccountPlus"
+                                Size="{DynamicResource WolvenKitIconTiny}"
+                                Foreground="{StaticResource WolvenKitCyan}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
 
                 <MenuItem

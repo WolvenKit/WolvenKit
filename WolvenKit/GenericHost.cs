@@ -87,6 +87,7 @@ namespace WolvenKit
                     services.AddTransient<IModTools, ModTools>();
                     services.AddTransient<MockGameController>();
                     services.AddTransient<RED4Controller>();
+                    services.AddSingleton<INpvCreationService, NpvCreationService>();
                     services.AddTransient<IGameControllerFactory, GameControllerFactory>();
                     services.AddSingleton<IPluginService, PluginService>();
                     services.AddSingleton<IModifierViewStateService, ModifierViewStateService>();
