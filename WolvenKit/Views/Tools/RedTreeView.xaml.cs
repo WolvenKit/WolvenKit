@@ -47,19 +47,42 @@ namespace WolvenKit.Views.Tools
             
             InitializeComponent();
 
-            DataContextChanged += OnDataContextChanged;
-            RedDocumentTabViewModel.OnCopiedChunkChanged += AfterCopied_RefreshCommandStatus;
-
-            // Listen for the "UpdateFilteredItemsSource" message
-            MessageBus.Current.Listen<string>("Command")
-                .Where(x => x == "UpdateFilteredItemsSource")
-                .Subscribe(_ => UpdateFilteredItemsSource(ItemsSource));
-
             TreeView.ApplyTemplate();
+
+            Loaded += RedTreeView_Loaded;
+            Unloaded += RedTreeView_Unloaded;
         }
 
+        /// <summary>
+        /// Called when editor tab gains focus. 
+        /// </summary>
+        private void RedTreeView_Loaded(object sender, RoutedEventArgs e)
+        {
+            DataContextChanged += OnDataContextChanged;
+            RedDocumentTabViewModel.CopiedChunkChanged += OnCopiedChunkChanged;
 
-        private void AfterCopied_RefreshCommandStatus(object sender, EventArgs e) => RefreshPasteCommandStatus();
+            SyncPasteStatus();
+        }
+
+        /// <summary>
+        /// Called when editor tab loses focus.
+        /// </summary>
+        private void RedTreeView_Unloaded(object sender, RoutedEventArgs e)
+        {
+            RedDocumentTabViewModel.CopiedChunkChanged -= OnCopiedChunkChanged;
+            DataContextChanged -= OnDataContextChanged;
+        }
+
+        private void OnCopiedChunkChanged(object sender, EventArgs e) => SyncPasteStatus();
+
+        private void SyncPasteStatus()
+        {
+            SetCurrentValue(HasSingleItemCopiedProperty, true);
+            SetCurrentValue(HasHandleCopiedProperty, IsHandle(RedDocumentTabViewModel.CopiedChunk));
+            SetCurrentValue(HasMultipleItemsCopiedProperty, RedDocumentTabViewModel.GetCopiedChunks().Count > 1);
+
+            RefreshPasteCommandStatus();
+        }
 
         private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
@@ -1170,7 +1193,7 @@ namespace WolvenKit.Views.Tools
         }
 
         #endregion
-        
+
     }
     
 }
