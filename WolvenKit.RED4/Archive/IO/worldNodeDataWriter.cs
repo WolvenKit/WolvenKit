@@ -15,40 +15,40 @@ public class worldNodeDataWriter : Red4Writer
     {
         foreach (var t in ssb)
         {
-            _writer.Write(t.Position.X);
-            _writer.Write(t.Position.Y);
-            _writer.Write(t.Position.Z);
-            _writer.Write(t.Position.W);
+            _writer.Write(t.Transform.Position.X);
+            _writer.Write(t.Transform.Position.Y);
+            _writer.Write(t.Transform.Position.Z);
+            _writer.Write(t.Transform.Position.W);
 
-            _writer.Write(t.Orientation.I);
-            _writer.Write(t.Orientation.J);
-            _writer.Write(t.Orientation.K);
-            _writer.Write(t.Orientation.R);
+            _writer.Write(t.Transform.Orientation.I);
+            _writer.Write(t.Transform.Orientation.J);
+            _writer.Write(t.Transform.Orientation.K);
+            _writer.Write(t.Transform.Orientation.R);
 
             _writer.Write(t.Scale.X);
             _writer.Write(t.Scale.Y);
             _writer.Write(t.Scale.Z);
 
-            _writer.Write(t.Pivot.X);
-            _writer.Write(t.Pivot.Y);
-            _writer.Write(t.Pivot.Z);
+            _writer.Write(t.SecondaryRefPointPosition.X);
+            _writer.Write(t.SecondaryRefPointPosition.Y);
+            _writer.Write(t.SecondaryRefPointPosition.Z);
 
-            _writer.Write(t.Bounds.Min.X);
-            _writer.Write(t.Bounds.Min.Y);
-            _writer.Write(t.Bounds.Min.Z);
+            _writer.Write(t.StreamingRefPoint.X);
+            _writer.Write(t.StreamingRefPoint.Y);
+            _writer.Write(t.StreamingRefPoint.Z);
 
-            _writer.Write(t.Bounds.Max.X);
-            _writer.Write(t.Bounds.Max.Y);
-            _writer.Write(t.Bounds.Max.Z);
+            _writer.Write(t.Uk08.X);
+            _writer.Write(t.Uk08.Y);
+            _writer.Write(t.Uk08.Z);
 
             _writer.Write(t.Id);
 
-            _writer.Write((ulong)t.QuestPrefabRefHash);
-            _writer.Write((ulong)t.UkHash1);
+            _writer.Write((ulong)t.GlobalNodeId.Hash);
+            _writer.Write((ulong)t.Uk09);
             _writer.Write((ulong)t.CookedPrefabData.DepotPath.GetRedHash());
 
-            _writer.Write(t.MaxStreamingDistance);
-            _writer.Write(t.UkFloat1);
+            _writer.Write(t.SecondaryRefPointDistance);
+            _writer.Write(t.StreamingDistance);
 
             _writer.Write(t.NodeIndex);
             _writer.Write(t.Uk10);

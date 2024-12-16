@@ -258,7 +258,7 @@ public partial class ChunkViewModel
                 Value = $"{sceneWorkspotData.Id}";
                 IsValueExtrapolated = sceneWorkspotData.Id != 0;
                 break;
-            case worldNodeData sst when Parent?.Parent?.ResolvedData is worldStreamingSector wss && sst.NodeIndex < wss.Nodes.Count:
+            case worldCompiledNodeInstanceSetupInfo sst when Parent?.Parent?.ResolvedData is worldStreamingSector wss && sst.NodeIndex < wss.Nodes.Count:
                 var node = wss.Nodes[sst.NodeIndex].Chunk;
                 Value = node?.GetType().Name ?? "";
                 IsValueExtrapolated = Value != "";
