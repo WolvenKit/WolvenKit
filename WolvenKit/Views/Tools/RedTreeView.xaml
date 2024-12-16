@@ -1522,9 +1522,7 @@
                 <!-- Reset Object -->
                 <MenuItem
                     Style="{StaticResource TreeViewMenuItemStyle}"
-                    Visibility="{Binding Path=PlacementTarget.Tag.IsArray,
-                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
-                                         Converter={StaticResource InvertBooleanVisibilityConverter}}"
+                    Visibility="Visible"
                     Header="Reset Object"
                     Command="{Binding Path=PlacementTarget.Tag.ResetObjectCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}">
