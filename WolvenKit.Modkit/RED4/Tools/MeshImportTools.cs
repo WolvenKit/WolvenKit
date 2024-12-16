@@ -338,7 +338,7 @@ namespace WolvenKit.Modkit.RED4
             {
                 var joints = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_)).ToArray();
 
-                if (cr2w.RootChunk is CMesh root)
+                if (cr2w.RootChunk is CMesh root && root.RenderResourceBlob.Chunk is rendRenderMeshBlob rendblob)
                 {
                     var tempp = root.BoneNames.ToList();
                     for (int idx = 0; idx < joints.Count(); idx++)
@@ -353,15 +353,20 @@ namespace WolvenKit.Modkit.RED4
 
                         var idxx = tempp.FindIndex(x => x.ToString() == joints[idx].Joint.Name);
 
+                        var inPos = joints[idx].Joint.WorldMatrix.Translation;
                         if (idxx == -1)
                         {
                             root.BoneRigMatrices.Add(outMat);
                             root.BoneNames.Add(joints[idx].Joint.Name);
                             root.BoneVertexEpsilons.Add(0);
                             root.LodBoneMask.Add(0);
+                            rendblob.Header.BonePositions.Add(new Vec4(inPos.X, -inPos.Z, inPos.Y, 1));
                         }
                         else
+                        {
                             root.BoneRigMatrices[idxx] = outMat;
+                            rendblob.Header.BonePositions[idxx] = new Vec4(inPos.X, -inPos.Z, inPos.Y, 1);
+                        }
                     }
                 }
 

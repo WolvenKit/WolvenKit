@@ -31,9 +31,6 @@ namespace WolvenKit.Modkit.RED4.RigFile
             {
                 return false;
             }
-            rig.BoneNames.Clear();
-            rig.BoneParentIndexes.Clear();
-            rig.BoneTransforms.Clear();
 
             var armature = model.LogicalSkins.First();
             var joints = Enumerable.Range(0, armature.JointsCount).Select(_ => armature.GetJoint(_).Joint).ToList();
@@ -41,7 +38,10 @@ namespace WolvenKit.Modkit.RED4.RigFile
             Dictionary<string,short> jointNames = new Dictionary<string,short>();
             jointNames[joints.First().VisualParent.Name] = -1;
             
-            Enumerable.Range(0, joints.Count).Select(x => jointNames[joints[x].Name] = (short)x);
+            foreach(var x in Enumerable.Range(0, joints.Count))
+            {
+                jointNames[joints[x].Name] = (short)x;
+            }
 
 
             var newRig = new RawArmature
@@ -76,6 +76,10 @@ namespace WolvenKit.Modkit.RED4.RigFile
                 var tmp = jointNames1[newRig.Parent[i]];
                 newRig.Parent[i] = (short)newRig.Names.IndexOf(tmp);
             }
+
+            rig.BoneNames.Clear();
+            rig.BoneParentIndexes.Clear();
+            rig.BoneTransforms.Clear();
 
             foreach (var x in Enumerable.Range(0, newRig.BoneCount))
             {
