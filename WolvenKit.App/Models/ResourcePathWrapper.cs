@@ -20,13 +20,13 @@ public partial class ResourcePathWrapper : ObservableObject, INode<ReferenceSock
     private readonly IChunkViewmodelFactory _chunkViewmodelFactory;
     private readonly ISettingsManager? _settingsManager;
 
-    public ResourcePathWrapper(RDTDataViewModel vm, ReferenceSocket socket, AppViewModel appViewModel, IChunkViewmodelFactory chunkViewmodelFactory)
+    public ResourcePathWrapper(/*RDTDataViewModel vm, */ReferenceSocket socket, AppViewModel appViewModel, IChunkViewmodelFactory chunkViewmodelFactory)
     {
         _appViewModel = appViewModel;
         _chunkViewmodelFactory = chunkViewmodelFactory;
         _settingsManager = Locator.Current.GetService<ISettingsManager>();
 
-        DataViewModel = vm;
+        //DataViewModel = vm;
         _socket = socket;
         
     }
@@ -60,10 +60,12 @@ public partial class ResourcePathWrapper : ObservableObject, INode<ReferenceSock
 
     public IList<ReferenceSocket> Outputs { get; set; } = new List<ReferenceSocket>();
 
-    public RDTDataViewModel DataViewModel { get; set; }
+    //public RDTDataViewModel DataViewModel { get; set; }
 
 
-    private bool CanOpenRef() => !ResourcePath.IsNullOrEmpty(Socket.File) && DataViewModel.Parent.RelativePath != Socket.File;
+    private bool CanOpenRef() => !ResourcePath.IsNullOrEmpty(Socket.File)
+        //&& DataViewModel.Parent.RelativePath != Socket.File
+        ;
     [RelayCommand(CanExecute = nameof(CanOpenRef))]
     private void OpenRef()
     {
@@ -74,22 +76,22 @@ public partial class ResourcePathWrapper : ObservableObject, INode<ReferenceSock
     [RelayCommand(CanExecute = nameof(CanLoadRef))]
     private void LoadRef()
     {
-        if (Socket.File.GetResolvedText() is not string path || ArchiveXlHelper.GetFirstExistingPath(path) is not string existingPath)
-        {
-            return;
-        }
+        //if (Socket.File.GetResolvedText() is not string path || ArchiveXlHelper.GetFirstExistingPath(path) is not string existingPath)
+        //{
+        //    return;
+        //}
 
-        var cr2w = DataViewModel.Parent.GetFileFromDepotPathOrCache(existingPath);
-        if (cr2w is not { RootChunk: not null })
-        {
-            return;
-        }
+        //var cr2w = DataViewModel.Parent.GetFileFromDepotPathOrCache(existingPath);
+        //if (cr2w is not { RootChunk: not null })
+        //{
+        //    return;
+        //}
 
-        var chunk = _chunkViewmodelFactory.ChunkViewModel(cr2w.RootChunk, Socket, _appViewModel,
-            _settingsManager?.DefaultEditorDifficultyLevel ?? EditorDifficultyLevel.Easy);
-        chunk.Location = Location;
-        DataViewModel.Nodes.Remove(this);
-        DataViewModel.Nodes.Add(chunk);
-        DataViewModel.LookForReferences(chunk);
+        //var chunk = _chunkViewmodelFactory.ChunkViewModel(cr2w.RootChunk, Socket, _appViewModel,
+        //    _settingsManager?.DefaultEditorDifficultyLevel ?? EditorDifficultyLevel.Easy);
+        //chunk.Location = Location;
+        //DataViewModel.Nodes.Remove(this);
+        //DataViewModel.Nodes.Add(chunk);
+        //DataViewModel.LookForReferences(chunk);
     }
 }

@@ -122,7 +122,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
                     int.TryParse(_selectedWorldNodeIndex, out var worldNodeIndex);
                     model.AddToSelection(model.FindWorldNode(worldNodeIndex));
                 }
-                model.OnReloadRequired += OnReloadTabs;
+                //model.OnReloadRequired += OnReloadTabs;
                 break;
             case RDTMeshViewModel meshViewModel:
                 meshViewModel.SelectedNodeIndex = _selectedWorldNodeIndex;

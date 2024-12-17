@@ -115,19 +115,6 @@
             Background="{StaticResource BorderAlt}"
             Visibility="{Binding ShowReferenceGraph,
                                  Converter={StaticResource BooleanToVisibilityConverter}}" />
-        <!--
-            Offset="{Binding Location}"
-            Connections="{Binding Connections}"
-            FooterTemplate="{StaticResource FooterTemplate}"
-            <editors:AutomaticNodifyEditor.Style>
-                <Style BasedOn="{StaticResource {x:Type editors:AutomaticNodifyEditor}}" TargetType="{x:Type editors:AutomaticNodifyEditor}">
-                    <Setter Property="ConnectionTemplate" Value="{StaticResource ConnectionTemplate}" />
-                </Style>
-            </editors:AutomaticNodifyEditor.Style>
-                    Style="{StaticResource ConnectionStyle}"
-                    Target="{Binding Input.Anchor}"
-                    Source="{Binding Output.Anchor}"
-        -->
 
         <editors:AutomaticNodifyEditor
             x:Name="Editor"
@@ -171,18 +158,6 @@
                                 <Setter Property="Stroke" Value="#33FFFFFF" />
                                 <Setter Property="StrokeThickness" Value="2" />
                                 <Setter Property="ToolTip" Value="Double click to split" />
-
-                                <!--Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Stroke" Value="{StaticResource WolvenKitYellow}" />
-                                    </Trigger>
-                                    <DataTrigger Binding="{Binding Input.Node.IsSelected, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                        <Setter Property="Stroke" Value="{StaticResource WolvenKitCyan}" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding Output.Node.IsSelected, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                        <Setter Property="Stroke" Value="{StaticResource WolvenKitCyan}" />
-                                    </DataTrigger>
-                                </Style.Triggers-->
                             </Style>
                         </nodify:Connection.Style>
                     </nodify:Connection>

@@ -12,7 +12,7 @@ namespace WolvenKit.Converters
     public class HasMenuChildrenVisibilityConverter : IValueConverter
     {
         private List<string> subscribedChildNames = new();
-        private bool isSubscribed;
+        //private bool isSubscribed;
         
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -21,11 +21,11 @@ namespace WolvenKit.Converters
                 return Visibility.Collapsed;
             }
 
-            if (!isSubscribed && parentMenuItem.Items is INotifyCollectionChanged collection)
-            {
-                collection.CollectionChanged += (sender, args) => SubscribeToChildren(parentMenuItem, true);
-                isSubscribed = true;
-            }
+            //if (!isSubscribed && parentMenuItem.Items is INotifyCollectionChanged collection)
+            //{
+            //    collection.CollectionChanged += (sender, args) => SubscribeToChildren(parentMenuItem, true);
+            //    isSubscribed = true;
+            //}
 
             SubscribeToChildren(parentMenuItem);
             return GetVisibility(parentMenuItem);
@@ -34,14 +34,14 @@ namespace WolvenKit.Converters
 
         private void SubscribeToChildren(MenuItem parentMenuItem, bool calledFromEvent = false)
         {
-            foreach (var child in parentMenuItem.Items.OfType<MenuItem>().Where(c => !subscribedChildNames.Contains(c.Name)))
-            {
-                child.IsVisibleChanged += (_, _) =>
-                    parentMenuItem.SetCurrentValue(UIElement.VisibilityProperty, GetVisibility(parentMenuItem, true));
-                child.IsEnabledChanged += (_, _) =>
-                    parentMenuItem.SetCurrentValue(UIElement.VisibilityProperty, GetVisibility(parentMenuItem, true));
-                subscribedChildNames.Add(child.Name);
-            }
+            //foreach (var child in parentMenuItem.Items.OfType<MenuItem>().Where(c => !subscribedChildNames.Contains(c.Name)))
+            //{
+            //    child.IsVisibleChanged += (_, _) =>
+            //        parentMenuItem.SetCurrentValue(UIElement.VisibilityProperty, GetVisibility(parentMenuItem, true));
+            //    child.IsEnabledChanged += (_, _) =>
+            //        parentMenuItem.SetCurrentValue(UIElement.VisibilityProperty, GetVisibility(parentMenuItem, true));
+            //    subscribedChildNames.Add(child.Name);
+            //}
         }
 
         private Visibility GetVisibility(MenuItem parentMenuItem, bool calledFromEvent = false) =>

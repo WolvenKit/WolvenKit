@@ -211,22 +211,19 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             }
         }
 
-        if (e.NewItems == null)
+        if (e.NewItems != null)
         {
-            return;
-        }
-
-        foreach (var item in e.NewItems)
-        {
-            if (item is not IDockElement dockElement)
+            foreach (var item in e.NewItems)
             {
-                continue;
+                if (item is not IDockElement dockElement)
+                {
+                    continue;
+                }
+
+                DockedViewVisibleChanged?.Invoke(sender, new DockedViewVisibleChangedEventArgs(dockElement));
+                dockElement.PropertyChanged += DockedView_OnPropertyChanged;
             }
-
-            DockedViewVisibleChanged?.Invoke(sender, new DockedViewVisibleChangedEventArgs(dockElement));
-            dockElement.PropertyChanged += DockedView_OnPropertyChanged;
         }
-
     }
 
     public class DockedViewVisibleChangedEventArgs(IDockElement element)

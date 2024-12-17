@@ -53,9 +53,11 @@ public partial class RedDocumentViewToolbarModel : ObservableObject, IActivatabl
               handler => _modifierViewStateService.PropertyChanged -= handler)
                 .Subscribe(e => OnPropertyChanged(e.EventArgs.PropertyName))
                 .DisposeWith(disposables);
+
+            RefreshMenuVisibility(true);
         });
 
-        RefreshMenuVisibility(true);
+        
     }
 
     // IActivatableViewModel
@@ -113,7 +115,12 @@ public partial class RedDocumentViewToolbarModel : ObservableObject, IActivatabl
         if (CurrentTab is RDTDataViewModel rtdViewModel)
         {
             RootChunk = rtdViewModel.GetRootChunk();
-            rtdViewModel.PropertyChanged += OnRtdModelPropertyChanged;
+            
+            Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
+              handler => rtdViewModel.PropertyChanged += handler,
+              handler => rtdViewModel.PropertyChanged -= handler)
+                .Subscribe(e => OnRtdModelPropertyChanged(e.Sender, e.EventArgs));
+
             if (rtdViewModel.SelectedChunk is ChunkViewModel cvm)
             {
                 SelectedChunk = cvm;

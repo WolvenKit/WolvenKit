@@ -56,7 +56,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
         EditorDifficultyLevel = Parent.EditorDifficultyLevel;
 
-        Nodes.Add(new ResourcePathWrapper(this, new ReferenceSocket(Chunks[0].RelativePath), _appViewModel, _chunkViewmodelFactory));
+        Nodes.Add(new ResourcePathWrapper(new ReferenceSocket(Chunks[0].RelativePath), _appViewModel, _chunkViewmodelFactory));
         _nodePaths.Add(Chunks[0].RelativePath);
 
         
@@ -224,7 +224,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
             {
                 if (reference.Destination.File != ResourcePath.Empty)
                 {
-                    Nodes.Add(new ResourcePathWrapper(this, reference.Destination, _appViewModel, _chunkViewmodelFactory));
+                    Nodes.Add(new ResourcePathWrapper(reference.Destination, _appViewModel, _chunkViewmodelFactory));
                     _nodePaths.Add(reference.Destination.File);
                 }
             }
