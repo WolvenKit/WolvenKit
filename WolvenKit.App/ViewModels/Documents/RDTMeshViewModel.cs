@@ -212,7 +212,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     }
                     catch (Exception e)
                     {
-                        _loggerService.Error($"Failed to render entity. Please open a ticket: \n${e}");
+                        _loggerService.Error(
+                            $"Failed to render entity. Please ensure that all your component names are unique. If they are, open a ticket: \n${e}");
                     }
 
                     break;
@@ -3443,7 +3444,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         }
         catch (Exception e)
         {
-            _loggerService.Error($"Failed to render entity. Please open a ticket: \n${e}");
+            _loggerService.Error(
+                $"Failed to render entity. Please ensure that all your component names are unique. If they are, open a ticket:  \n${e}");
         }
     }
 
