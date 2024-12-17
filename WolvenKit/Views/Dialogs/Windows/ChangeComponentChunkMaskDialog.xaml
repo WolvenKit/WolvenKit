@@ -30,13 +30,13 @@
             FinishButtonClosesWindow="True"
             Finish="WizardControl_OnFinish">
             <syncfusion:WizardPage
+                Height="Auto"
                 BackVisibility="Collapsed"
                 CancelVisibility="Visible"
                 FinishVisibility="Visible"
                 HelpVisibility="Collapsed"
                 NextVisibility="Collapsed"
                 PreviewKeyDown="WizardPage_PreviewKeyDown"
-                Height="Auto"
                 PageType="Exterior">
                 <Grid
                     HorizontalAlignment="Stretch"
@@ -124,7 +124,7 @@
 
                     <Label
                         Grid.Row="6"
-                        Grid.Column="0" 
+                        Grid.Column="0"
                         HorizontalAlignment="Left"
                         Background="#252525"
                         BorderThickness="0"

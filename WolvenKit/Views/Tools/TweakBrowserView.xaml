@@ -16,6 +16,7 @@
     d:DataContext="{d:DesignInstance Type=tools:TweakBrowserViewModel}"
     d:DesignWidth="800"
     d:DesignHeight="450">
+
     <Grid Background="{StaticResource ContentBackground}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

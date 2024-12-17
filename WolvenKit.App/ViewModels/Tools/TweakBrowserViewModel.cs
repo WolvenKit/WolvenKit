@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Factories;
@@ -23,6 +25,7 @@ using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
 using YamlDotNet.Serialization;
+using ReactiveUI;
 
 namespace WolvenKit.App.ViewModels.Tools;
 
@@ -86,9 +89,62 @@ public partial class TweakBrowserViewModel : ToolViewModel
         _loggerService = loggerService;
         _tweakDB = tweakDbService;
         _locKeyService = locKeyService;
-        _tweakDB.Loaded += Load;
 
-        PropertyChanged += InternalPropertyChanged;
+        this.WhenActivated(disposables =>
+        {
+            Observable.FromEventPattern<EventHandler, EventArgs>(
+              handler => _tweakDB.Loaded += handler,
+              handler => _tweakDB.Loaded -= handler)
+                .Subscribe(e => Load())
+                .DisposeWith(disposables);
+
+            Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
+              handler => PropertyChanged += handler,
+              handler => PropertyChanged -= handler)
+                .Subscribe(e => InternalPropertyChanged(e.Sender, e.EventArgs))
+                .DisposeWith(disposables);
+        });
+    }
+
+    #endregion constructors
+
+    #region Properties
+
+    [ObservableProperty] private ICollectionView _records = new CollectionView(new List<object>());
+    [ObservableProperty] private ICollectionView _flats = new CollectionView(new List<object>());
+    [ObservableProperty] private ICollectionView _queries = new CollectionView(new List<object>());
+    [ObservableProperty] private ICollectionView _groupTags = new CollectionView(new List<object>());
+
+    [ObservableProperty] private List<string> _recordTypes = new();
+
+    public string RecordsHeader => $"Records ({Records.Cast<object>().Count()})";
+    public string FlatsHeader => $"Flats ({Flats.Cast<object>().Count()})";
+    public string QueriesHeader => $"Queries ({Queries.Cast<object>().Count()})";
+    public string GroupTagsHeader => $"GroupTags ({GroupTags.Cast<object>().Count()})";
+
+    public ObservableCollection<ChunkViewModel> SelectedRecord { get; set; } = new();
+    [ObservableProperty] private ChunkViewModel? _selectedFlat;
+    [ObservableProperty] private ChunkViewModel? _selectedQuery;
+    [ObservableProperty] private ChunkViewModel? _selectedGroupTag;
+
+    #endregion
+
+    #region Methods
+
+    public void LoadTweakDB()
+    {
+        if (_tweakDB.IsLoaded)
+        {
+            return;
+        }
+
+        var dbPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb_ep1.bin");
+        if (!File.Exists(dbPath))
+        {
+            dbPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin");
+        }
+
+        _tweakDB.LoadDB(dbPath);
     }
 
     private void InternalPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -179,48 +235,8 @@ public partial class TweakBrowserViewModel : ToolViewModel
         }
     }
 
-    #endregion constructors
 
-    #region Properties
-
-    [ObservableProperty] private ICollectionView _records = new CollectionView(new List<object>());
-    [ObservableProperty] private ICollectionView _flats = new CollectionView(new List<object>());
-    [ObservableProperty] private ICollectionView _queries = new CollectionView(new List<object>());
-    [ObservableProperty] private ICollectionView _groupTags = new CollectionView(new List<object>());
-
-    [ObservableProperty] private List<string> _recordTypes = new();
-
-    public string RecordsHeader => $"Records ({Records.Cast<object>().Count()})";
-    public string FlatsHeader => $"Flats ({Flats.Cast<object>().Count()})";
-    public string QueriesHeader => $"Queries ({Queries.Cast<object>().Count()})";
-    public string GroupTagsHeader => $"GroupTags ({GroupTags.Cast<object>().Count()})";
-
-    public ObservableCollection<ChunkViewModel> SelectedRecord { get; set; } = new();
-    [ObservableProperty] private ChunkViewModel? _selectedFlat;
-    [ObservableProperty] private ChunkViewModel? _selectedQuery;
-    [ObservableProperty] private ChunkViewModel? _selectedGroupTag;
-
-    #endregion
-
-    #region Methods
-
-    public void LoadTweakDB()
-    {
-        if (_tweakDB.IsLoaded)
-        {
-            return;
-        }
-
-        var dbPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb_ep1.bin");
-        if (!File.Exists(dbPath))
-        {
-            dbPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin");
-        }
-
-        _tweakDB.LoadDB(dbPath);
-    }
-
-    private void Load(object? sender, EventArgs eventArgs)
+    private void Load()
     {
         var records = PrepareList(TweakDBService.GetRecords(), true);
         var flats = PrepareList(TweakDBService.GetFlats());

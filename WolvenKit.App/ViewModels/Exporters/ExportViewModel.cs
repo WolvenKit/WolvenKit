@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using CommunityToolkit.Mvvm.Input;
+using ReactiveUI;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
@@ -46,7 +50,14 @@ public partial class ExportViewModel : AbstractImportExportViewModel
         _progressService = progressService;
         _importExportHelper = importExportHelper;
 
-        PropertyChanged += ImportExportViewModel_PropertyChanged;
+        this.WhenActivated(disposables =>
+        {
+            Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
+              handler => PropertyChanged += handler,
+              handler => PropertyChanged -= handler)
+                .Subscribe(e => ImportExportViewModel_PropertyChanged(e.Sender, e.EventArgs))
+                .DisposeWith(disposables);
+        });
     }
 
     #region Commands
@@ -61,7 +72,7 @@ public partial class ExportViewModel : AbstractImportExportViewModel
                 continue;
             }
 
-            if (Activator.CreateInstance(item.Properties.GetType()) is ImportExportArgs a)
+            if (System.Activator.CreateInstance(item.Properties.GetType()) is ImportExportArgs a)
             {
                 item.SetProperties(a);
             }

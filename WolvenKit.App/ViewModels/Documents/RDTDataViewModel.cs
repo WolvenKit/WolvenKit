@@ -6,9 +6,11 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using ReactiveUI;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Factories;
 using WolvenKit.App.Models;
@@ -57,7 +59,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         Nodes.Add(new ResourcePathWrapper(this, new ReferenceSocket(Chunks[0].RelativePath), _appViewModel, _chunkViewmodelFactory));
         _nodePaths.Add(Chunks[0].RelativePath);
 
-        SubscribeToChunkPropertyChanges();
+        
         
         if (SelectedChunk == null && Chunks.Count > 0)
         {
@@ -68,19 +70,29 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
             }
         }
 
-        parent.PropertyChanged += RDTDataViewModel_PropertyChanged;
-    }
-
-    private void SubscribeToChunkPropertyChanges()
-    {
-        if (GetRootChunk() is not ChunkViewModel cvm || cvm.ResolvedData is not inkTextureAtlas ||
-            cvm.GetPropertyChild("slots", "0") is not ChunkViewModel firstSlot || firstSlot.ResolvedData is not inkTextureSlot slot ||
-            slot.Texture.DepotPath != ResourcePath.Empty)
+        this.WhenActivated(disposables =>
         {
-            return;
-        }
+            if (
+                GetRootChunk() is ChunkViewModel cvm &&
+                cvm.ResolvedData is inkTextureAtlas &&
+                cvm.GetPropertyChild("slots", "0") is ChunkViewModel firstSlot &&
+                firstSlot.ResolvedData is inkTextureSlot slot &&
+                slot.Texture.DepotPath == ResourcePath.Empty
+                )
+            {
+                Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
+                  handler => firstSlot.PropertyChanged += handler,
+                  handler => firstSlot.PropertyChanged -= handler)
+                    .Subscribe(e => WaitForTexturePath(e.Sender, e.EventArgs))
+                    .DisposeWith(disposables);
+            }
 
-        firstSlot.PropertyChanged += WaitForTexturePath;
+            Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
+              handler => parent.PropertyChanged += handler,
+              handler => parent.PropertyChanged -= handler)
+                .Subscribe(e => RDTDataViewModel_PropertyChanged(e.Sender, e.EventArgs))
+                .DisposeWith(disposables);
+        });
     }
 
     public event EventHandler? OnReloadRequired;
@@ -92,7 +104,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
             return;
         }
 
-        cvm.PropertyChanged -= WaitForTexturePath;
+        //cvm.PropertyChanged -= WaitForTexturePath;
         OnReloadRequired?.Invoke(this, EventArgs.Empty);
     }
 

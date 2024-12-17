@@ -1,11 +1,14 @@
-<UserControl
+<reactiveUi:ReactiveUserControl
     x:Class="WolvenKit.Views.Tools.RedTreeView"
+    x:TypeArguments="tools:RedTreeViewViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="clr-namespace:WolvenKit.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:tools="clr-namespace:WolvenKit.App.ViewModels.Tools;assembly=WolvenKit.App"
     xmlns:shell="clr-namespace:WolvenKit.App.ViewModels.Shell;assembly=WolvenKit.App"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:treeViewEngine="clr-namespace:Syncfusion.UI.Xaml.TreeView.Engine;assembly=Syncfusion.SfTreeView.WPF"
@@ -16,6 +19,7 @@
     x:Name="redTreeView"
     KeyDown="TreeView_OnKeyChanged"
     KeyUp="TreeView_OnKeyChanged">
+
     <UserControl.Resources>
         <ResourceDictionary>
             <!-- StackPanel: empty value style -->
@@ -1903,4 +1907,5 @@
                 IsExpandedPropertyName="IsExpanded" />
         </syncfusion:SfTreeView.HierarchyPropertyDescriptors>
     </syncfusion:SfTreeView>
-</UserControl>
+
+</reactiveUi:ReactiveUserControl>

@@ -67,6 +67,7 @@
     <PackageReference Include="HelixToolkit.SharpDX.Core.Wpf" />
     <PackageReference Include="AutomaticGraphLayout" />
     <PackageReference Include="Nodify" />
+    <PackageReference Include="ReactiveUI" />
     <PackageReference Include="Splat" />
   </ItemGroup>
 
@@ -82,7 +83,7 @@
     <!-- Work around https://github.com/dotnet/wpf/issues/6792 -->
 
     <ItemGroup>
-        <FilteredAnalyzer Include="@(Analyzer->Distinct())" />
+        <FilteredAnalyzer Include="@(Analyzer-&gt;Distinct())" />
         <Analyzer Remove="@(Analyzer)" />
         <Analyzer Include="@(FilteredAnalyzer)" />
     </ItemGroup>

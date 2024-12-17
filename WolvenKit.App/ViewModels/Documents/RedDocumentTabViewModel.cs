@@ -1,10 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
+using ReactiveUI;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Archive.CR2W;
@@ -36,7 +40,7 @@ public enum RedDocumentItemType
     None,
 }
 
-public abstract partial class RedDocumentTabViewModel : ObservableObject
+public abstract partial class RedDocumentTabViewModel : ObservableObject, IActivatableViewModel
 {
     protected RedDocumentTabViewModel(RedDocumentViewModel parent, string header)
     {
@@ -45,7 +49,14 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
         RelativeFilePath = parent.RelativePath;
         Header = header;
 
-        PropertyChanged += RedDocumentTabViewModel_PropertyChanged;
+        this.WhenActivated(disposables =>
+        {
+            Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
+              handler => PropertyChanged += handler,
+              handler => PropertyChanged -= handler)
+                .Subscribe(e => RedDocumentTabViewModel_PropertyChanged(e.Sender, e.EventArgs))
+                .DisposeWith(disposables);
+        });
     }
 
     private void RedDocumentTabViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -88,6 +99,8 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
 
     [ObservableProperty] private bool _canClose;
 
+    // IActivatableViewModel
+    public ViewModelActivator Activator { get; } = new ViewModelActivator();
 
     private bool CanDeleteEmbeddedFile() => this is RDTDataViewModel data && data.IsEmbeddedFile;
     [RelayCommand(CanExecute = nameof(CanDeleteEmbeddedFile))]

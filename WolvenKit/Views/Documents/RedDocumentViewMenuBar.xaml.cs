@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -60,9 +62,7 @@ namespace WolvenKit.Views.Documents
             DataContext = new RedDocumentViewToolbarModel { CurrentTab = _currentTab };
             ViewModel = DataContext as RedDocumentViewToolbarModel;
 
-            _modifierStateService.ModifierStateChanged += OnModifierStateChanged;
-
-            this.WhenActivated(_ =>
+            this.WhenActivated(disposables =>
             {
                 if (DataContext is not RedDocumentViewToolbarModel vm)
                 {
@@ -70,7 +70,18 @@ namespace WolvenKit.Views.Documents
                 }
 
                 vm.RefreshMenuVisibility(true);
-                vm.OnAddDependencies += OnAddDependencies;
+
+                Observable.FromEventPattern<EventHandler, EventArgs>(
+                  handler => vm.OnAddDependencies += handler,
+                  handler => vm.OnAddDependencies -= handler)
+                    .Subscribe(e => OnAddDependencies())
+                    .DisposeWith(disposables);
+
+                Observable.FromEventPattern<EventHandler, EventArgs>(
+                  handler => _modifierStateService.ModifierStateChanged += handler,
+                  handler => _modifierStateService.ModifierStateChanged -= handler)
+                    .Subscribe(e => OnModifierStateChanged())
+                    .DisposeWith(disposables);
             });
         }
 
@@ -410,7 +421,7 @@ namespace WolvenKit.Views.Documents
             });
         }
 
-        private async void OnAddDependencies(object? _, EventArgs eventArgs)
+        private async void OnAddDependencies()
         {
             if (_projectManager.ActiveProject is null || ViewModel?.RootChunk is not ChunkViewModel cvm)
             {

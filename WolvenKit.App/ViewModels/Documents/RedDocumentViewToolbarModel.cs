@@ -3,9 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using ReactiveUI;
 using Splat;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
@@ -17,7 +20,7 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.Documents;
 
-public partial class RedDocumentViewToolbarModel : ObservableObject
+public partial class RedDocumentViewToolbarModel : ObservableObject, IActivatableViewModel
 {
     public RedDocumentViewToolbarModel()
     {
@@ -36,13 +39,29 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         }
 
         _modifierViewStateService = svc;
-        svc.ModifierStateChanged += OnModifierChanged;
-        svc.PropertyChanged += (_, args) => OnPropertyChanged(args.PropertyName); 
+
+        this.WhenActivated(disposables =>
+        {
+            Observable.FromEventPattern<EventHandler, EventArgs>(
+              handler => _modifierViewStateService.ModifierStateChanged += handler,
+              handler => _modifierViewStateService.ModifierStateChanged -= handler)
+                .Subscribe(e => OnModifierStateChanged())
+                .DisposeWith(disposables);
+
+            Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
+              handler => _modifierViewStateService.PropertyChanged += handler,
+              handler => _modifierViewStateService.PropertyChanged -= handler)
+                .Subscribe(e => OnPropertyChanged(e.EventArgs.PropertyName))
+                .DisposeWith(disposables);
+        });
 
         RefreshMenuVisibility(true);
     }
 
-    private void OnModifierChanged() => IsShiftKeyDown = _modifierViewStateService?.IsShiftKeyPressed ?? false;
+    // IActivatableViewModel
+    public ViewModelActivator Activator { get; } = new ViewModelActivator();
+
+    private void OnModifierStateChanged() => IsShiftKeyDown = _modifierViewStateService?.IsShiftKeyPressed ?? false;
 
     private readonly IModifierViewStateService? _modifierViewStateService;
 

@@ -6,6 +6,8 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -19,6 +21,7 @@ using DynamicData.Kernel;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
 using Microsoft.Win32;
+using ReactiveUI;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
@@ -81,12 +84,19 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         _geometryCacheService = geometryCacheService;
         _modifierSvc = modifierSvc;
 
-        _modifierSvc.ModifierStateChanged += ModifierStateChanged;
+        this.WhenActivated(disposables =>
+        {
+            Observable.FromEventPattern<EventHandler, EventArgs>(
+              handler => _modifierSvc.ModifierStateChanged += handler,
+              handler => _modifierSvc.ModifierStateChanged -= handler)
+                .Subscribe(e => OnModifierStateChanged())
+                .DisposeWith(disposables);
+        });
 
         Parent = parent;
     }
 
-    private void ModifierStateChanged() => IsCtrlKeyPressed = _modifierSvc.IsCtrlKeyPressed;
+    private void OnModifierStateChanged() => IsCtrlKeyPressed = _modifierSvc.IsCtrlKeyPressed;
 
     // TODO refactor this into inherited viewmodels
 

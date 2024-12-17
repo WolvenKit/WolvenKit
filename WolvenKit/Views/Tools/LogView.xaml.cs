@@ -1,5 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Disposables;
@@ -37,12 +39,10 @@ namespace WolvenKit.Views.Tools
 
         public LogView()
         {
-            InitializeComponent();
-
             ViewModel = Locator.Current.GetService<LogViewModel>();
             DataContext = ViewModel;
 
-            LogEntries.CollectionChanged += LogEntries_CollectionChanged;
+            InitializeComponent();
 
             var sink = Locator.Current.GetService<MySink>();
             _ = sink.Connect()
@@ -65,6 +65,12 @@ namespace WolvenKit.Views.Tools
                     .DisposeWith(disposables);
                 this.WhenAnyValue(v => v.ViewModel.FilterByLevel)
                     .Subscribe(_ => LogEntries_CollectionChanged(null, null))
+                    .DisposeWith(disposables);
+
+                Observable.FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
+                  handler => LogEntries.CollectionChanged += handler,
+                  handler => LogEntries.CollectionChanged -= handler)
+                    .Subscribe(e => LogEntries_CollectionChanged(e.Sender, e.EventArgs))
                     .DisposeWith(disposables);
             });
         }

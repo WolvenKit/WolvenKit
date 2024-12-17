@@ -1015,8 +1015,6 @@
             IsManipulationEnabled="False"
             ItemTemplate="{StaticResource ItemTemplate}"
             ItemsSource="{Binding DisplayProperties}"
-            ScrollViewer.CanContentScroll="True"
-            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
             VirtualizingPanel.IsVirtualizing="True"
             VirtualizingPanel.ScrollUnit="Pixel"
             VirtualizingPanel.VirtualizationMode="Recycling">

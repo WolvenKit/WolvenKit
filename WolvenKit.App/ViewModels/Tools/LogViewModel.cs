@@ -76,12 +76,6 @@ public partial class LogViewModel : ToolViewModel
         ScriptFiles.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
         ScriptFiles.Source = _scriptFiles;
         GetScriptFiles();
-
-        //filter, sort and populate reactive list,
-        // _loggerService.Connect() //connect to the cache
-        //     .ObserveOn(RxApp.MainThreadScheduler)
-        //     .Bind(out _logEntries)
-        //     .Subscribe(OnNext);
     }
 
     [RelayCommand]

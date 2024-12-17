@@ -26,10 +26,10 @@ public partial class ModifierViewStateService() : ObservableObject, IModifierVie
     {
         base.OnPropertyChanged(e);
 
-        ModifierStateChanged?.Invoke();
+        ModifierStateChanged?.Invoke(this, new EventArgs());
     }
 
-    public event Action? ModifierStateChanged;
+    public event EventHandler? ModifierStateChanged;
 
     /// <summary>
     /// Use for view state binding as observable. From the model, please use GetKeyState(Modifiers.None) instead.
@@ -146,7 +146,7 @@ public partial class ModifierViewStateService() : ObservableObject, IModifierVie
             return;
         }
 
-        ModifierStateChanged?.Invoke();
+        ModifierStateChanged?.Invoke(this, new EventArgs());
     }
 
     /// <summary>

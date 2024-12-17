@@ -22,14 +22,6 @@ public partial class RDTGraphViewModel : RedDocumentTabViewModel
     public RDTGraphViewModel(IRedType data, RedDocumentViewModel file) : base(file, "Graph Editor")
     {
         _data = data;
-
-        //SelectedNodes.CollectionChanged += (object? sender, NotifyCollectionChangedEventArgs e) =>
-        //{
-        //    if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems is not null && e.NewItems[0] is NodeViewModel fnvm)
-        //    {
-        //        //SelectedChunk = new ChunkViewModel(fnvm.RedNode, (RDTDataViewModel)File.TabItemViewModels[0]);
-        //    }
-        //};
     }
 
     protected readonly IRedType _data;

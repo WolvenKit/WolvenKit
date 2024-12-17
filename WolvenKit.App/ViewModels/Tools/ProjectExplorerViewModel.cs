@@ -1121,7 +1121,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <summary>
     /// Reacts to ModifierViewStatesModel's emitted events
     /// </summary>
-    private void OnModifierUpdateEvent()
+    private void OnModifierUpdateEvent(object? sender, EventArgs e)
     {
         IsShowAbsolutePathToRawFolder = ModifierStateService.IsCtrlShiftOnlyPressed && IsInArchiveFolder(SelectedItem);
         IsShowAbsolutePathToArchiveFolder = ModifierStateService.IsCtrlShiftOnlyPressed && IsInRawFolder(SelectedItem);

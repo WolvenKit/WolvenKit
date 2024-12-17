@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -19,7 +20,12 @@ namespace WolvenKit.Views.Editors
         public RedChunkMaskEditor()
         {
             InitializeComponent();
-            comboboxadv.SelectionChanged += CollectionChanged;
+
+            Observable.FromEventPattern<SelectionChangedEventHandler, SelectionChangedEventArgs>(
+                  handler => comboboxadv.SelectionChanged += handler,
+                  handler => comboboxadv.SelectionChanged -= handler)
+                    .Subscribe(e => CollectionChanged())
+                    ;
 
             for (var i = 0; i < 64; i++)
             {
@@ -40,14 +46,9 @@ namespace WolvenKit.Views.Editors
         public static readonly DependencyProperty RedNumberProperty = DependencyProperty.Register(
             nameof(RedNumber), typeof(IRedPrimitive<ulong>), typeof(RedChunkMaskEditor), new PropertyMetadata(default(IRedPrimitive<ulong>)));
 
-        void OnPropertyChanged(String prop)
+        private void OnPropertyChanged(String prop)
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
-
-            if (handler != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -66,7 +67,7 @@ namespace WolvenKit.Views.Editors
 
         public ObservableCollection<string> BindingCollection { get; set; } = new();
 
-        public void CollectionChanged(object sender, SelectionChangedEventArgs e) => SetRedValueFromSelect(comboboxadv.SelectedItems.Cast<string>());
+        public void CollectionChanged() => SetRedValueFromSelect(comboboxadv.SelectedItems.Cast<string>());
 
         private void SetRedValueFromSelect(IEnumerable<string> value)
         {

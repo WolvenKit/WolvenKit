@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Text.RegularExpressions;
@@ -344,7 +345,7 @@ namespace WolvenKit.Views.Tools
             vm.Refresh();
         }
 
-        private void OnModifierStateChanged() => ViewModel?.RefreshModifierStates();
+        private void OnModifierStateChanged(object sender, EventArgs e) => ViewModel?.RefreshModifierStates();
 
         private bool _isMenuOpen;
 

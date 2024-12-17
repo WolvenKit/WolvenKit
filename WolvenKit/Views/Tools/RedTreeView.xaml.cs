@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,6 +21,7 @@ using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
@@ -31,7 +33,7 @@ namespace WolvenKit.Views.Tools
     /// <summary>
     /// Interaction logic for RedTreeView.xaml
     /// </summary>
-    public partial class RedTreeView : UserControl
+    public partial class RedTreeView : ReactiveUserControl<RedTreeViewViewModel>
     {
         private readonly IModifierViewStateService _modifierViewStateSvc;
         private readonly ILoggerService _loggerService;
@@ -43,31 +45,41 @@ namespace WolvenKit.Views.Tools
             _modifierViewStateSvc = Locator.Current.GetService<IModifierViewStateService>();
             _loggerService = Locator.Current.GetService<ILoggerService>();
             _progressService = Locator.Current.GetService<IProgressService<double>>();
-            _appViewModel = Locator.Current.GetService<AppViewModel>(); 
-            
+            _appViewModel = Locator.Current.GetService<AppViewModel>();
+
+            ViewModel = Locator.Current.GetService<RedTreeViewViewModel>();
+            //DataContext = ViewModel;
+
             InitializeComponent();
 
+            this.WhenActivated(disposables =>
+            {
+                Observable.FromEventPattern<EventHandler, EventArgs>(
+                  handler => RedDocumentTabViewModel.CopiedChunkChanged += handler,
+                  handler => RedDocumentTabViewModel.CopiedChunkChanged -= handler)
+                    .Subscribe(e => AfterCopied_RefreshCommandStatus())
+                    .DisposeWith(disposables);
+
+                Observable.FromEventPattern<DependencyPropertyChangedEventHandler, DependencyPropertyChangedEventArgs>(
+                  handler => DataContextChanged += handler,
+                  handler => DataContextChanged -= handler)
+                    .Subscribe(e => OnDataContextChanged(e.Sender, e.EventArgs))
+                    .DisposeWith(disposables);
+            });
+
             TreeView.ApplyTemplate();
-
-            Loaded += RedTreeView_Loaded;
-            Unloaded += RedTreeView_Unloaded;
         }
 
-        private void RedTreeView_Loaded(object sender, RoutedEventArgs e)
+        ~RedTreeView()
         {
-            DataContextChanged += OnDataContextChanged;
-            RedDocumentTabViewModel.CopiedChunkChanged += AfterCopied_RefreshCommandStatus;
+            _loggerService.Debug("~RedTreeView");
         }
 
-        private void RedTreeView_Unloaded(object sender, RoutedEventArgs e)
-        {
-            RedDocumentTabViewModel.CopiedChunkChanged -= AfterCopied_RefreshCommandStatus;
-            DataContextChanged -= OnDataContextChanged;
-        }
-
-        private void AfterCopied_RefreshCommandStatus(object sender, EventArgs e)
+        private void AfterCopied_RefreshCommandStatus()
         {
             RefreshPasteCommandStatus();
+
+            _loggerService.Debug("AfterCopied_RefreshCommandStatus");
         }
 
         private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -828,8 +840,6 @@ namespace WolvenKit.Views.Tools
             {
                 return;
             }
-
-            // cvm.PropertyChanged += OnCvmExpansionStateChange;
 
             _progressService.IsIndeterminate = true;
 

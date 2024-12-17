@@ -1,4 +1,7 @@
 using System;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Windows;
 using System.Windows.Input;
 using ReactiveUI;
 using Syncfusion.Windows.Tools.Controls;
@@ -14,9 +17,6 @@ namespace WolvenKit.Views.Documents
         {
             InitializeComponent();
 
-            TabControl.SelectedItemChangedEvent += TabControl_OnSelectedItemChangedEvent;
-            RedDocumentViewToolbar.EditorDifficultChanged += OnEditorDifficultyChanged;
-
             this.WhenActivated(disposables =>
             {
                 if (DataContext is not RedDocumentViewModel vm)
@@ -26,6 +26,18 @@ namespace WolvenKit.Views.Documents
 
                 SetCurrentValue(ViewModelProperty, vm);
                 RedDocumentViewToolbar.CurrentTab = vm.SelectedTabItemViewModel;
+
+                Observable.FromEventPattern<SelectedItemChangedEventHandler, SelectedItemChangedEventArgs>(
+                    handler => TabControl.SelectedItemChangedEvent += handler,
+                    handler => TabControl.SelectedItemChangedEvent -= handler)
+                    .Subscribe(e => TabControl_OnSelectedItemChangedEvent(e.Sender, e.EventArgs))
+                    .DisposeWith(disposables);
+
+                Observable.FromEventPattern<EventHandler<EditorDifficultyLevel>, EditorDifficultyLevel>(
+                    handler => RedDocumentViewToolbar.EditorDifficultChanged += handler,
+                    handler => RedDocumentViewToolbar.EditorDifficultChanged -= handler)
+                    .Subscribe(e => OnEditorDifficultyChanged(e.Sender, e.EventArgs))
+                    .DisposeWith(disposables);
             });
         }
 

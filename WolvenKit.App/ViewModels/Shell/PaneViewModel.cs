@@ -1,9 +1,10 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using ReactiveUI;
 using WolvenKit.App.Models.Docking;
 
 namespace WolvenKit.App.ViewModels.Shell;
 
-public abstract partial class PaneViewModel : ObservableObject, IDockElement
+public abstract partial class PaneViewModel : ObservableObject, IDockElement, IActivatableViewModel
 {
     protected PaneViewModel(string header, string contentId)
     {
@@ -18,12 +19,6 @@ public abstract partial class PaneViewModel : ObservableObject, IDockElement
     [ObservableProperty] private DockSide _sideInDockedMode;
 
     [ObservableProperty] private string _contentId;
-
-    //public ImageSource IconSource
-    //{
-    //    get;
-    //    protected set;
-    //}
 
     [ObservableProperty] private bool _isActive;
 
@@ -41,4 +36,8 @@ public abstract partial class PaneViewModel : ObservableObject, IDockElement
             OnPropertyChanged();
         }
     }
+
+    // IActivatableViewModel
+    public ViewModelActivator Activator { get; } = new ViewModelActivator();
+
 }

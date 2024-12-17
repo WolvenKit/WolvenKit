@@ -172,9 +172,6 @@ namespace WolvenKit
                     services.AddTransient<AssetBrowserViewModel>();
                     services.AddTransient<IViewFor<AssetBrowserViewModel>, AssetBrowserView>();
 
-                    services.AddTransient<LogViewModel>();
-                    services.AddTransient<IViewFor<LogViewModel>, LogView>();
-
                     services.AddSingleton<ProjectExplorerViewModel>();
                     services.AddTransient<IViewFor<ProjectExplorerViewModel>, ProjectExplorerView>();
 
@@ -196,6 +193,12 @@ namespace WolvenKit
 
                     services.AddTransient<HashToolViewModel>();
                     services.AddTransient<IViewFor<HashToolViewModel>, HashToolView>();
+
+                    services.AddTransient<LogViewModel>();
+                    services.AddTransient<IViewFor<LogViewModel>, LogView>();
+
+                    services.AddTransient<RedTreeViewViewModel>();
+                    services.AddTransient<IViewFor<RedTreeViewViewModel>, RedTreeView>();
 
                     #endregion
 

@@ -37,5 +37,5 @@ public interface IModifierViewStateService: INotifyPropertyChanged
     public abstract bool IsCtrlAltOnlyPressed { get; }
     public abstract bool IsAltShiftOnlyPressed { get; }
 
-    public abstract event Action? ModifierStateChanged;
+    public abstract event EventHandler? ModifierStateChanged;
 }

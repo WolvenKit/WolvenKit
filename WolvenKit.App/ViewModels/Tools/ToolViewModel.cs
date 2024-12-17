@@ -1,6 +1,11 @@
 using System.ComponentModel;
+using ReactiveUI;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using WolvenKit.App.Models.Docking;
 using WolvenKit.App.ViewModels.Shell;
+using System;
+using WolvenKit.RED4.TweakDB;
 
 namespace WolvenKit.App.ViewModels.Tools;
 
@@ -17,13 +22,20 @@ public abstract class ToolViewModel : PaneViewModel
 
         Name = name;
 
-        PropertyChanged += delegate (object? sender, PropertyChangedEventArgs args)
+        this.WhenActivated(disposables =>
         {
-            if (args.PropertyName == nameof(State))
-            {
-                OnPropertyChanged(nameof(IsVisible));
-            }
-        };
+            Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
+              handler => PropertyChanged += handler,
+              handler => PropertyChanged -= handler)
+                .Subscribe(e =>
+                {
+                    if (e.EventArgs.PropertyName == nameof(State))
+                    {
+                        OnPropertyChanged(nameof(IsVisible));
+                    }
+                })
+                .DisposeWith(disposables);
+        });
     }
 
 
