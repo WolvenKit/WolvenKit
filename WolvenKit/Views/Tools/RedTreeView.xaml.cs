@@ -541,13 +541,40 @@ namespace WolvenKit.Views.Tools
             {
                 foreach (var group in selectedNodes
                              .Where(cvm => cvm.CanPasteSelection())
-                             .Where(cvm => cvm.IsInArray)
                              .GroupBy(chunk => chunk.Parent))
                 {
-                    var pasteIndex = group.FirstOrDefault()?.NodeIdxInParent ?? -2;
-                    group.Key.DeleteNodes(selectedNodes);
-                    group.Key.PasteAtIndex(copiedChunks, pasteIndex + 1);
-                    ReapplySearch(group.Key);
+                    if (group.Key.IsArray)
+                    {
+                        group.Key.DeleteNodes(selectedNodes);
+                        var pasteIndex = group.FirstOrDefault()?.NodeIdxInParent ?? -2;
+                        group.Key.PasteAtIndex(copiedChunks, pasteIndex + 1);
+                        ReapplySearch(group.Key);
+                        continue;
+                    }
+
+                    foreach (var chunkViewModel in group)
+                    {
+                        var targetNode = chunkViewModel;
+
+                        if (!chunkViewModel.IsArray)
+                        {
+                            if (chunkViewModel.Parent is null)
+                            {
+                                continue;
+                            }
+
+                            targetNode = chunkViewModel.Parent;
+                            targetNode.DeleteNodes(selectedNodes);
+                        }
+                        else
+                        {
+                            targetNode.ClearChildren();
+                        }
+
+                        var pasteIndex = group.FirstOrDefault()?.NodeIdxInParent ?? -2;
+                        targetNode.PasteAtIndex(copiedChunks, pasteIndex + 1);
+                        ReapplySearch(targetNode);
+                    }
                 }
             }
         }

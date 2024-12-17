@@ -2862,7 +2862,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     public void PasteAtIndex(List<IRedType> copiedData, int insertAtIndex = -1)
     {
         // this is technically unnecessary, but we don't have root nodes that are arrays anyway
-        ArgumentNullException.ThrowIfNull(Parent);
 
         if (copiedData.Count == 0)
         {
@@ -2871,7 +2870,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         if (IsInArray)
         {
-            Parent.PasteAtIndex(copiedData, insertAtIndex);
+            ArgumentNullException.ThrowIfNull(Parent);
+            Parent.PasteAtIndex(copiedData, NodeIdxInParent + 1);
+            return;
         }
 
         if (PropertyType.IsAssignableTo(typeof(IRedArray)) && ResolvedData is RedDummy && !CreateArray())
