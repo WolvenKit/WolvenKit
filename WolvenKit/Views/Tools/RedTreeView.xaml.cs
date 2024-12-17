@@ -58,11 +58,12 @@ namespace WolvenKit.Views.Tools
         /// </summary>
         private void RedTreeView_Loaded(object sender, RoutedEventArgs e)
         {
-            DataContextChanged += OnDataContextChanged;
+            RDTDataViewModel.OnSearchStringChanged += OnCurrentSearchChanged;
             RedDocumentTabViewModel.OnCopiedChunkChanged += OnCopiedChunkChanged;
 
             SyncPasteStatus();
         }
+
 
         /// <summary>
         /// Called when editor tab loses focus.
@@ -70,10 +71,12 @@ namespace WolvenKit.Views.Tools
         private void RedTreeView_Unloaded(object sender, RoutedEventArgs e)
         {
             RedDocumentTabViewModel.OnCopiedChunkChanged -= OnCopiedChunkChanged;
-            DataContextChanged -= OnDataContextChanged;
+            RDTDataViewModel.OnSearchStringChanged -= OnCurrentSearchChanged;
         }
 
         private void OnCopiedChunkChanged(object sender, EventArgs e) => SyncPasteStatus();
+
+        private void OnCurrentSearchChanged(object _, List<ChunkViewModel> e) => UpdateFilteredItemsSource(e);
 
         private void SyncPasteStatus()
         {
@@ -83,28 +86,6 @@ namespace WolvenKit.Views.Tools
 
             RefreshPasteCommandStatus();
         }
-
-        private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (e.OldValue is INotifyPropertyChanged oldViewModel)
-            {
-                oldViewModel.PropertyChanged -= OnViewModelPropertyChanged;
-            }
-
-            if (e.NewValue is INotifyPropertyChanged newViewModel)
-            {
-                newViewModel.PropertyChanged += OnViewModelPropertyChanged;
-            }
-        }
-
-        private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (sender is RDTDataViewModel dtm && e.PropertyName == nameof(dtm.CurrentSearch))
-            {
-                UpdateFilteredItemsSource(dtm.Chunks);
-            }
-        }
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void UpdateFilteredItemsSource(object value)
