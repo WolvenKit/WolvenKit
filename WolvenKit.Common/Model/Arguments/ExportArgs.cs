@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
+using SharpGLTF.Validation;
 
 namespace WolvenKit.Common.Model.Arguments
 {
@@ -212,6 +213,14 @@ namespace WolvenKit.Common.Model.Arguments
         public MeshExportType meshExportType { get => _meshExportType; set => SetProperty(ref _meshExportType, value); }
 
         /// <summary>
+        /// Validation type for the selected GLB/GLTF.
+        /// </summary>
+        [Category("Default Export Settings")]
+        [Display(Name = "GLTF Validation Checks")]
+        [Description("Optional validation check for glb/glTF files")]
+        public ValidationMode validationMode { get; set; } = ValidationMode.Skip;
+
+        /// <summary>
         /// If lodfilter = true, only exports the highest quality geometry, if false export all the geometry.
         /// </summary>
         [Category("Default Export Settings")]
@@ -270,6 +279,14 @@ namespace WolvenKit.Common.Model.Arguments
         [Display(Name = "Select Rig")]
         [Description("Select a rig to export within the mesh.")]
         public List<FileEntry> Rig { get; set; } = new();
+
+        /// <summary>
+        /// If useAposeRig = true, APose Rig is used for export (if present) instead of TPose Rig.
+        /// </summary>
+        [Category("WithRig Settings")]
+        [Display(Name = "Use APose Rig")]
+        [Description("If Checked, APose Rig will be used(if present) else TPose Rig will be used.")]
+        public bool useAposeRig { get; set; } = true;
 
         /// <summary>
         /// Uncook Format for material files. (DDS,TGA,PNG Etc)
