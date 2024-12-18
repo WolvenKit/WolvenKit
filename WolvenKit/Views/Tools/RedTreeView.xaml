@@ -968,15 +968,6 @@
                                     <Setter Property="Visibility" Value="Collapsed" />
                                 </DataTrigger>
 
-                                <!-- If shift not pressed: Copy array contents -->
-                                <MultiDataTrigger>
-                                    <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding Path=IsShiftBeingHeld, Source={x:Reference redTreeView}}" Value="False" />
-                                    </MultiDataTrigger.Conditions>
-                                    <Setter Property="Command" Value="{Binding Path=PlacementTarget.Tag.CopyArrayContentsCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
-                                    <Setter Property="Header" Value="Copy Array Contents" />
-                                </MultiDataTrigger>
-
                                 <!-- If shift pressed: Copy names -->
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
@@ -984,6 +975,59 @@
                                         <Condition Binding="{Binding Path=IsShiftBeingHeld, Source={x:Reference redTreeView}}" Value="True" />
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="Command" Value="{Binding Path=CopySelectionNamesCommand, Source={x:Reference redTreeView}}" />
+                                    <Setter Property="Header" Value="Copy item names" />
+                                </MultiDataTrigger>
+
+
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
+
+
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ContentCopy"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <!-- Copy: Array -->
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.CopyArrayContentsCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Copy Array Contents">
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource TreeViewMenuItemStyle}"
+                            TargetType="MenuItem">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition
+                                            Binding="{Binding Path=IsArraySelected, Source={x:Reference redTreeView}}"
+                                            Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=IsShiftBeingHeld, Source={x:Reference redTreeView}}"
+                                            Value="False" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+
+                                <!-- If shift pressed: Copy names -->
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition
+                                            Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}}"
+                                            Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=IsShiftBeingHeld, Source={x:Reference redTreeView}}"
+                                            Value="True" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Command"
+                                            Value="{Binding Path=CopySelectionNamesCommand, Source={x:Reference redTreeView}}" />
                                     <Setter Property="Header" Value="Copy item names" />
                                 </MultiDataTrigger>
 
@@ -1407,6 +1451,14 @@
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="Visibility" Value="Visible" />
                                 </MultiDataTrigger>
+
+                                <!-- Change label if we have multiple items selected -->
+                                <DataTrigger
+                                    Binding="{Binding Path=HasMultipleItemsCopied,
+                                                      ElementName=redTreeView}"
+                                    Value="True">
+                                    <Setter Property="Header" Value="Delete Selection in Array/Buffer" />
+                                </DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </MenuItem.Style>
@@ -1514,9 +1566,7 @@
                 <!-- Reset Object -->
                 <MenuItem
                     Style="{StaticResource TreeViewMenuItemStyle}"
-                    Visibility="{Binding Path=PlacementTarget.Tag.IsArray,
-                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
-                                         Converter={StaticResource InvertBooleanVisibilityConverter}}"
+                    Visibility="Visible"
                     Header="Reset Object"
                     Command="{Binding Path=PlacementTarget.Tag.ResetObjectCommand,
                                       RelativeSource={RelativeSource AncestorType=ContextMenu}}">

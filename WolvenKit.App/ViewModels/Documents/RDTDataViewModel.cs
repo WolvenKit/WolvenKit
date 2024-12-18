@@ -553,6 +553,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         }
     }
 
+    public static event EventHandler<List<ChunkViewModel>>? OnSearchStringChanged;
     public void OnSearchChanged(string searchBoxText)
     {
         HasActiveSearch = !string.IsNullOrEmpty(searchBoxText);
@@ -567,6 +568,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
         CurrentSearch = searchBoxText;
 
+        OnSearchStringChanged?.Invoke(this, Chunks);
         if (string.IsNullOrEmpty(searchBoxText) && SelectedChunk is ChunkViewModel selectedChunk)
         {
             ScrollToNode(selectedChunk);

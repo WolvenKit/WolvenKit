@@ -387,6 +387,8 @@ public partial class ChunkViewModel
                     componentCvm.CalculateValue();
                     componentCvm.CalculateIsDefault();
                 }
+
+                componentsAryCvm?.RecalculateProperties();
                 break;
             default:
                 if (Parent is not null)

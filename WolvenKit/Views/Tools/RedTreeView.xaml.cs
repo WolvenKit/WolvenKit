@@ -47,41 +47,45 @@ namespace WolvenKit.Views.Tools
             
             InitializeComponent();
 
-            DataContextChanged += OnDataContextChanged;
-            RedDocumentTabViewModel.OnCopiedChunkChanged += AfterCopied_RefreshCommandStatus;
-
-            // Listen for the "UpdateFilteredItemsSource" message
-            MessageBus.Current.Listen<string>("Command")
-                .Where(x => x == "UpdateFilteredItemsSource")
-                .Subscribe(_ => UpdateFilteredItemsSource(ItemsSource));
-
             TreeView.ApplyTemplate();
+
+            Loaded += RedTreeView_Loaded;
+            Unloaded += RedTreeView_Unloaded;
         }
 
-
-        private void AfterCopied_RefreshCommandStatus(object sender, EventArgs e) => RefreshPasteCommandStatus();
-
-        private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        /// <summary>
+        /// Called when editor tab gains focus. 
+        /// </summary>
+        private void RedTreeView_Loaded(object sender, RoutedEventArgs e)
         {
-            if (e.OldValue is INotifyPropertyChanged oldViewModel)
-            {
-                oldViewModel.PropertyChanged -= OnViewModelPropertyChanged;
-            }
+            RDTDataViewModel.OnSearchStringChanged += OnCurrentSearchChanged;
+            RedDocumentTabViewModel.OnCopiedChunkChanged += OnCopiedChunkChanged;
 
-            if (e.NewValue is INotifyPropertyChanged newViewModel)
-            {
-                newViewModel.PropertyChanged += OnViewModelPropertyChanged;
-            }
+            SyncPasteStatus();
         }
 
-        private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+
+        /// <summary>
+        /// Called when editor tab loses focus.
+        /// </summary>
+        private void RedTreeView_Unloaded(object sender, RoutedEventArgs e)
         {
-            if (sender is RDTDataViewModel dtm && e.PropertyName == nameof(dtm.CurrentSearch))
-            {
-                UpdateFilteredItemsSource(dtm.Chunks);
-            }
+            RedDocumentTabViewModel.OnCopiedChunkChanged -= OnCopiedChunkChanged;
+            RDTDataViewModel.OnSearchStringChanged -= OnCurrentSearchChanged;
         }
 
+        private void OnCopiedChunkChanged(object sender, EventArgs e) => SyncPasteStatus();
+
+        private void OnCurrentSearchChanged(object _, List<ChunkViewModel> e) => UpdateFilteredItemsSource(e);
+
+        private void SyncPasteStatus()
+        {
+            SetCurrentValue(HasSingleItemCopiedProperty, true);
+            SetCurrentValue(HasHandleCopiedProperty, IsHandle(RedDocumentTabViewModel.CopiedChunk));
+            SetCurrentValue(HasMultipleItemsCopiedProperty, RedDocumentTabViewModel.GetCopiedChunks().Count > 1);
+
+            RefreshPasteCommandStatus();
+        }
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void UpdateFilteredItemsSource(object value)
@@ -155,7 +159,7 @@ namespace WolvenKit.Views.Tools
             foreach (var addedItem in e.AddedItems.OfType<ISelectableTreeViewItemModel>())
             {
                 addedItem.IsSelected = true;
-            }
+            }  
 
             RefreshContextMenuFlags();
             RefreshSelectedItemsContextMenuFlags();
@@ -537,12 +541,40 @@ namespace WolvenKit.Views.Tools
             {
                 foreach (var group in selectedNodes
                              .Where(cvm => cvm.CanPasteSelection())
-                             .Where(cvm => cvm.IsInArray)
                              .GroupBy(chunk => chunk.Parent))
                 {
-                    group.Key.DeleteNodes(selectedNodes);
-                    group.Key.PasteAtIndex(copiedChunks, group.FirstOrDefault()?.NodeIdxInParent ?? -1);
-                    ReapplySearch(group.Key);
+                    if (group.Key.IsArray)
+                    {
+                        group.Key.DeleteNodes(selectedNodes);
+                        var pasteIndex = group.FirstOrDefault()?.NodeIdxInParent ?? -2;
+                        group.Key.PasteAtIndex(copiedChunks, pasteIndex + 1);
+                        ReapplySearch(group.Key);
+                        continue;
+                    }
+
+                    foreach (var chunkViewModel in group)
+                    {
+                        var targetNode = chunkViewModel;
+
+                        if (!chunkViewModel.IsArray)
+                        {
+                            if (chunkViewModel.Parent is null)
+                            {
+                                continue;
+                            }
+
+                            targetNode = chunkViewModel.Parent;
+                            targetNode.DeleteNodes(selectedNodes);
+                        }
+                        else
+                        {
+                            targetNode.ClearChildren();
+                        }
+
+                        var pasteIndex = group.FirstOrDefault()?.NodeIdxInParent ?? -2;
+                        targetNode.PasteAtIndex(copiedChunks, pasteIndex + 1);
+                        ReapplySearch(targetNode);
+                    }
                 }
             }
         }
@@ -1169,7 +1201,7 @@ namespace WolvenKit.Views.Tools
         }
 
         #endregion
-        
+
     }
     
 }
