@@ -10,12 +10,14 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ReactiveUI;
 using Splat;
 using Syncfusion.UI.Xaml.TreeView;
+using WolvenKit.App.Extensions;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
@@ -51,6 +53,14 @@ namespace WolvenKit.Views.Tools
 
             Loaded += RedTreeView_Loaded;
             Unloaded += RedTreeView_Unloaded;
+
+
+            var tt = Locator.Current.GetService<AppViewModel>();
+
+            if (tt.ActiveDocument is RedDocumentViewModel { SelectedTabItemViewModel: RDTDataViewModel rdtd })
+            {
+                _rdtDataViewModel = rdtd;
+            }
         }
 
         /// <summary>
@@ -135,15 +145,8 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            var tt = Locator.Current.GetService<AppViewModel>();
-
-            if (tt.ActiveDocument is not RedDocumentViewModel { SelectedTabItemViewModel: RDTDataViewModel rdtd })
-            {
-                return;
-            }
-
-            var chunk = rdtd.Chunks.First();
-            chunk.Refresh().GetAwaiter().GetResult();
+            var chunk = _rdtDataViewModel?.Chunks.First();
+            chunk?.Refresh().GetAwaiter().GetResult();
         }
 
 
@@ -244,6 +247,8 @@ namespace WolvenKit.Views.Tools
         public static readonly DependencyProperty SelectedItemProperty =
             DependencyProperty.Register(nameof(SelectedItem), typeof(object), typeof(RedTreeView));
 
+
+        /// <summary>Bound to <see cref="RDTDataViewModel.SelectedChunk"/> </summary>
         public object SelectedItem
         {
             get => GetValue(SelectedItemProperty);
@@ -254,6 +259,7 @@ namespace WolvenKit.Views.Tools
         public static readonly DependencyProperty SelectedItemsProperty =
             DependencyProperty.Register(nameof(SelectedItems), typeof(object), typeof(RedTreeView));
 
+        /// <summary>Bound to <see cref="RDTDataViewModel.SelectedChunks"/> </summary>
         public object SelectedItems
         {
             get => GetValue(SelectedItemsProperty);
@@ -270,7 +276,7 @@ namespace WolvenKit.Views.Tools
             set => SetValue(IsArraySelectedProperty, value);
         }
 
-        /// <summary>Identifies the <see cref="SelectedItems"/> dependency property.</summary>
+        /// <summary>Identifies the <see cref="IsArrayItemSelected"/> dependency property.</summary>
         public static readonly DependencyProperty IsArrayItemSelectedProperty =
             DependencyProperty.Register(nameof(IsArrayItemSelected), typeof(object), typeof(RedTreeView));
 
@@ -278,6 +284,16 @@ namespace WolvenKit.Views.Tools
         {
             get => GetValue(IsArrayItemSelectedProperty);
             set => SetValue(IsArrayItemSelectedProperty, value);
+        }
+
+        /// <summary>Identifies the <see cref="IsHandleSelected"/> dependency property.</summary>
+        public static readonly DependencyProperty IsHandleSelectedProperty =
+            DependencyProperty.Register(nameof(IsHandleSelected), typeof(object), typeof(RedTreeView));
+
+        public object IsHandleSelected
+        {
+            get => GetValue(IsHandleSelectedProperty);
+            set => SetValue(IsHandleSelectedProperty, value);
         }
 
 
@@ -539,46 +555,34 @@ namespace WolvenKit.Views.Tools
 
             using (collectionView.DeferRefresh())
             {
-                foreach (var group in selectedNodes
-                             .Where(cvm => cvm.CanPasteSelection())
-                             .GroupBy(chunk => chunk.Parent))
+                foreach (var group in GroupByArrayOrParent(selectedNodes, (cvm) => cvm.CanPasteSelection(useSingle))
+                             .Where(group => group.Key.IsArray))
                 {
-                    if (group.Key.IsArray)
-                    {
-                        group.Key.DeleteNodes(selectedNodes);
-                        var pasteIndex = group.FirstOrDefault()?.NodeIdxInParent ?? -2;
-                        group.Key.PasteAtIndex(copiedChunks, pasteIndex + 1);
-                        ReapplySearch(group.Key);
-                        continue;
-                    }
-
-                    foreach (var chunkViewModel in group)
-                    {
-                        var targetNode = chunkViewModel;
-
-                        if (!chunkViewModel.IsArray)
-                        {
-                            if (chunkViewModel.Parent is null)
-                            {
-                                continue;
-                            }
-
-                            targetNode = chunkViewModel.Parent;
-                            targetNode.DeleteNodes(selectedNodes);
-                        }
-                        else
-                        {
-                            targetNode.ClearChildren();
-                        }
-
-                        var pasteIndex = group.FirstOrDefault()?.NodeIdxInParent ?? -2;
-                        targetNode.PasteAtIndex(copiedChunks, pasteIndex + 1);
-                        ReapplySearch(targetNode);
-                    }
+                    group.Key.DeleteNodes(selectedNodes);
+                    var pasteIndex = group.FirstOrDefault()?.NodeIdxInParent ?? -2;
+                    group.Key.PasteAtIndex(copiedChunks, pasteIndex + 1);
+                    ReapplySearch(group.Key);
                 }
             }
         }
-        
+
+        /// <summary>
+        /// Will group list by next array in hierarchy (if the node is an array, it will be used for grouping)
+        /// </summary>
+        /// <param name="items">list of items (from selection)</param>
+        /// <param name="callback">Optional: A callback to filter by</param>
+        /// <returns></returns>
+        private static IEnumerable<IGrouping<ChunkViewModel, ChunkViewModel>>
+            GroupByArrayOrParent(List<ChunkViewModel> items, Func<ChunkViewModel, bool> callback = null)
+        {
+            // If we selected a bunch of nodes and the array they are in
+            var itemParents = items.Select(chunk => chunk.Parent).ToList();
+            return items
+                .Except(itemParents)
+                .Where((chunk) => callback is null || callback(chunk))
+                .GroupBy(chunk => chunk.IsArray ? chunk : chunk.Parent);
+        }
+
         [RelayCommand(CanExecute = nameof(CanPasteSingleSelection))]
         private void OverwriteSelectionWithSingle() => OverwriteSelectedInternal(true);
 
@@ -594,24 +598,13 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
+            var groupByArrayOrParent = GroupByArrayOrParent(GetSelectedChunks());
             using (collectionView.DeferRefresh())
             {
-                foreach (var group in GetSelectedChunks()
-                             .Where(cvm => cvm.CanPasteSelection())
-                             .GroupBy(chunk => chunk.Parent))
+                foreach (var group in groupByArrayOrParent.Where(g => g.Key.IsArray))
                 {
-                    if (group.Key.IsArray)
-                    {
-                        group.Key.ClearChildren();
-                        ReapplySearch(group.Key);
-                        continue;
-                    }
-
-
-                    foreach (var cvm in group.Where(cvm => cvm.IsArray))
-                    {
-                        cvm.ClearChildren();
-                    }
+                    group.Key.ClearChildren();
+                    ReapplySearch(group.Key);
                 }
             }
         }
@@ -627,26 +620,13 @@ namespace WolvenKit.Views.Tools
 
             using (collectionView.DeferRefresh())
             {
-                foreach (var group in GetSelectedChunks()
-                             .Where(cvm => cvm.CanPasteSelection())
-                             .GroupBy(chunk => chunk.Parent))
+                foreach (var group in GroupByArrayOrParent(GetSelectedChunks(), cvm => cvm.CanPasteSelection())
+                             .Where(group => group.Key.IsArray))
                 {
-                    if (group.Key.IsArray)
-                    {
-                        group.Key.ClearChildren();
-                        group.Key.PasteAtIndex(copiedChunks, -1);
-                        ReapplySearch(group.Key);
-                        continue;
-                    }
-
-                    if (group.FirstOrDefault() is not ChunkViewModel cvm || !cvm.IsInArray || cvm.Parent is null)
-                    {
-                        continue;
-                    }
-
-                    cvm.Parent.ClearChildren();
-                    cvm.Parent.PasteAtIndex(copiedChunks, -1);
-                    ReapplySearch(cvm.Parent);
+                    group.Key.ClearChildren();
+                    group.Key.PasteAtIndex(copiedChunks, -1);
+                    group.Key.RecalculateProperties();
+                    ReapplySearch(group.Key);
                 }
             
             }
@@ -658,26 +638,24 @@ namespace WolvenKit.Views.Tools
         [RelayCommand(CanExecute = nameof(CanPasteSingleSelection))]
         private void ClearAndPasteSingle()
         {
-            var copiedChunks = RedDocumentTabViewModel.GetCopiedChunks();
-            if (ItemsSource is not ICollectionView collectionView || SelectedItem is not ChunkViewModel cvm ||
+            var selectedChunks = GetSelectedChunks(true);
+            if (ItemsSource is not ICollectionView collectionView || selectedChunks.Count == 0 ||
                 RedDocumentTabViewModel.CopiedChunk is null)
             {
                 return;
             }
 
+            _rdtDataViewModel?.ClearSelection();
+            
             using (collectionView.DeferRefresh())
             {
-                if (cvm.IsInArray && cvm.Parent is not null)
+                foreach (var group in GroupByArrayOrParent(selectedChunks, i => i.CanPasteSelection(true))
+                             .Where(group => group.Key.IsArray))
                 {
-                    cvm.Parent.ClearChildren();
-                    cvm.Parent.PasteAtIndex([RedDocumentTabViewModel.CopiedChunk], -1);
-                    ReapplySearch(cvm.Parent);
-                }
-                else if (cvm.IsArray)
-                {
-                    cvm.ClearChildren();
-                    cvm.PasteAtIndex([RedDocumentTabViewModel.CopiedChunk], -1);
-                    ReapplySearch(cvm.Parent);
+                    group.Key.ClearChildren();
+                    group.Key.PasteAtIndex([RedDocumentTabViewModel.CopiedChunk], -1);
+                    group.Key.RecalculateProperties();
+                    ReapplySearch(group.Key);
                 }
             }
         }
@@ -692,31 +670,57 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
+            var selectedChunks = GetSelectedChunks();
+            
             using (collectionView.DeferRefresh())
             {
-                foreach (var group in GetSelectedChunks()
-                             .GroupBy(chunk => chunk.Parent))
+                foreach (var group in GroupByArrayOrParent(selectedChunks))
                 {
                     if (group.FirstOrDefault() is not ChunkViewModel cvm)
                     {
-                        continue;
-                    }
+                        if (!group.Key.IsArray)
+                        {
+                            continue;
+                        }
 
-                    var node = cvm.IsArray ? cvm : group.Key;
+                        cvm = group.Key;
+                    }
+                    
                     var idx = cvm.IsArray ? -1 : cvm.NodeIdxInParent + 1;
 
                     if (pasteSingleSelect)
                     {
-                        node.PasteAtIndex([RedDocumentTabViewModel.CopiedChunk], idx);
+                        cvm.PasteAtIndex([RedDocumentTabViewModel.CopiedChunk], idx);
                     }
                     else
                     {
-                        node.PasteAtIndex(copiedChunks, idx);
+                        cvm.PasteAtIndex(copiedChunks, idx);
                     }
 
-                    ReapplySearch((cvm.IsArray ? cvm : group.Key));
+                    ReapplySearch(cvm);
                 }
+
+                ReapplySelection(selectedChunks);
             }
+
+        }
+
+        private void ReapplySelection(List<ChunkViewModel> oldSelection)
+        {
+            var newSelection = GetSelectedChunks(true);
+            newSelection.AddRange(oldSelection);
+
+            // If we have an array and several children selected, deselect everything but the array
+            var selectionChildren = newSelection.Where(x => newSelection.Contains(x.Parent)).ToList();
+
+            foreach (var cvm in selectionChildren)
+            {
+                cvm.IsSelected = false;
+            }
+
+            newSelection = newSelection.Except(selectionChildren).ToList();
+
+            _rdtDataViewModel.SetSelection(newSelection);
         }
 
         [RelayCommand(CanExecute = nameof(CanPasteSelection))]
@@ -733,6 +737,7 @@ namespace WolvenKit.Views.Tools
             PasteSelectionCommand.NotifyCanExecuteChanged();
             PasteSingleSelectionCommand.NotifyCanExecuteChanged();
 
+            ClearArrayCommand.NotifyCanExecuteChanged();
             ClearAndPasteSingleCommand.NotifyCanExecuteChanged();
             ClearAndPasteSelectionCommand.NotifyCanExecuteChanged();
 
@@ -752,6 +757,7 @@ namespace WolvenKit.Views.Tools
             var isInArray = selectedItem?.IsInArray == true;
             SetCurrentValue(IsArraySelectedProperty, isArray);
             SetCurrentValue(IsArrayItemSelectedProperty, isInArray);
+            SetCurrentValue(IsHandleSelectedProperty, IsHandle(selectedItem?.Data));
             SetCurrentValue(ShouldShowArrayOpsProperty, isArray || isInArray);
         }
 
@@ -790,6 +796,8 @@ namespace WolvenKit.Views.Tools
                 {
                     await cvm.DuplicateChunkAsNewAsync();
                 }
+
+                _rdtDataViewModel?.ClearSelection();
             }
         }
 
@@ -800,10 +808,11 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
+            var chunks = GetSelectedChunks();
+            ChunkViewModel[] duplicatedChunks = [];
+                
             using (collectionView.DeferRefresh())
             {
-                var chunks = GetSelectedChunks();
-
                 if (!preserveIndex)
                 {
                     var nodeIndices = chunks.Select(c => c.NodeIdxInParent).Order().ToList();
@@ -815,20 +824,10 @@ namespace WolvenKit.Views.Tools
 
                 var tasks = chunks.Select(cvm => cvm.DuplicateChunkAsync(preserveIndex ? -1 : cvm.NodeIdxInParent + chunks.Count)).ToList();
 
-                var duplicatedChunks = await Task.WhenAll(tasks);
-
-                var newChunks = duplicatedChunks.Where(newChunk => newChunk != null).ToList();
-
-                foreach (var cvm in chunks)
-                {
-                    cvm.IsSelected = false;
-                }
-
-                foreach (var cvm in newChunks)
-                {
-                    cvm.IsSelected = true;
-                }
+                duplicatedChunks = await Task.WhenAll(tasks);
             }
+
+            SetSelectedItems([..duplicatedChunks]);
         }
 
         /// <summary>
@@ -898,11 +897,20 @@ namespace WolvenKit.Views.Tools
         // Re-select nodes, enforcing change detection. Without setting it to null first, e.g. search&replace won't work.
         private void SetSelectedItems(List<ChunkViewModel> selectedChunkViewModels)
         {
+
             SetCurrentValue(SelectedItemsProperty, null);
             SetCurrentValue(SelectedItemProperty, null);
 
-            SetCurrentValue(SelectedItemsProperty, new ObservableCollection<object>(selectedChunkViewModels));
-            SetCurrentValue(SelectedItemProperty, selectedChunkViewModels.LastOrDefault());
+            if (_rdtDataViewModel is not null)
+            {
+                _rdtDataViewModel.SetSelection(selectedChunkViewModels);
+            }
+            else
+            {
+                SetCurrentValue(SelectedItemsProperty, new ObservableCollection<object>(selectedChunkViewModels));
+                SetCurrentValue(SelectedItemProperty, selectedChunkViewModels.LastOrDefault());
+            }
+            
         }
 
 
@@ -939,7 +947,8 @@ namespace WolvenKit.Views.Tools
                     propertyType.GetGenericTypeDefinition() == typeof(CWeakHandle<>));
         }
 
-        private bool CanPasteHandleSingle() => IsHandle(RedDocumentTabViewModel.CopiedChunk);
+        private bool CanPasteHandleSingle() => IsHandle(RedDocumentTabViewModel.CopiedChunk) &&
+                                               SelectedItem is ChunkViewModel cvm && cvm.CanPasteSelection(true);
 
         [RelayCommand(CanExecute = nameof(CanPasteHandleSingle))]
         private void PasteHandleSingle()
@@ -1096,7 +1105,9 @@ namespace WolvenKit.Views.Tools
                 return includeSingleSelect && SelectedItem is ChunkViewModel cvm ? [cvm] : [];
             }
 
-            return selection.OfType<ChunkViewModel>().Where(x => uniqueItems.Add((x.Parent, x.Name))).ToList();
+            return selection.OfType<ChunkViewModel>()
+                .Where(x => x.IsSelected)
+                .Where(x => uniqueItems.Add((x.Parent, x.Name))).ToList();
         }
 
         private void OnDoubleClick(object sender, MouseButtonEventArgs e)
@@ -1133,6 +1144,8 @@ namespace WolvenKit.Views.Tools
         #region context_menu_and_keystates
 
         private bool _isContextMenuOpen;
+
+        private readonly RDTDataViewModel _rdtDataViewModel;
 
 
         private void RefreshSelectedItemsContextMenuFlags()
