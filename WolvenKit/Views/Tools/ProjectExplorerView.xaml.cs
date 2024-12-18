@@ -18,6 +18,7 @@ using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
+using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Documents;
@@ -205,6 +206,7 @@ namespace WolvenKit.Views.Tools
             if (dialog.ViewModel is not null)
             {
                 dialog.ViewModel.Text = input;
+                dialog.ViewModel.Title = "Enter new file name";
             }
 
             if (dialog.ViewModel is not RenameDialogViewModel innerVm
@@ -786,7 +788,36 @@ namespace WolvenKit.Views.Tools
             // If we have 0 - 10 files, we'll show one dialogue. Otherwise, we'll ask for each file individually.
             var isOverwrite = existingFiles.Count == 0;
             var isAskIndividually = existingFiles.Count > 10;
+            var skipDialogue = false;
 
+            // We're copying or moving a file on itself - offer rename operation
+            if (fileMap.Count == 1 && existingFiles.Count == 1 &&
+                ViewModel?.ActiveProject is Cp77Project project)
+            {
+                var filePath = fileMap.Keys.First();
+                var relativePath = filePath.Replace($"{project.ModDirectory}{Path.DirectorySeparatorChar}", "");
+                var destPath = Interactions.Rename(relativePath);
+                if (string.IsNullOrEmpty(destPath))
+                {
+                    // user cancelled dialogue
+                    return;
+                }
+
+                if (destPath != relativePath)
+                {
+                    fileMap[filePath] = filePath.Replace(relativePath, destPath);
+                    existingFiles.Clear();
+                }
+                else
+                {
+                    // we can't overwrite a file with itself, so we'll create a copy
+                    isCopy = true;
+                    skipDialogue = true;
+                }
+            }
+
+
+            // 1 - 10 files: Show a single dialogue that asks for confirmation
             if (existingFiles.Count is < 10 and > 0)
             {
                 var messageBoxResult = await Interactions.ShowMessageBoxAsync(
@@ -808,7 +839,7 @@ namespace WolvenKit.Views.Tools
                 var canWriteToTargetFile =
                     !File.Exists(targetFile)
                     || isOverwrite
-                    || (isAskIndividually && await Interactions.ShowMessageBoxAsync(
+                    || (!skipDialogue && isAskIndividually && await Interactions.ShowMessageBoxAsync(
                         $"Overwrite the following file? {targetFile}",
                         "File Overwrite Confirmation",
                         WMessageBoxButtons.YesNo) == WMessageBoxResult.Yes);
