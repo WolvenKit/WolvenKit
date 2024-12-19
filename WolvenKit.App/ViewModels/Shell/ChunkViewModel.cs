@@ -2652,10 +2652,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         Tab?.Parent.SetIsDirty(true);
 
+        var newSibling = Parent.GetChildNode(Math.Min(index, Parent.TVProperties.Count - 1));
+        
         // Unless shift key is pressed, we want to regenerate CRUIDs
-        if (IsShiftKeyPressed || Parent.GetChildNode(index) is not ChunkViewModel newSibling)
+        if (IsShiftKeyPressed || newSibling is null)
         {
-            return null;
+            return newSibling;
         }
 
         newSibling.RecalculateProperties();
@@ -4079,10 +4081,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private void DeleteFullSelection(List<int> l, IRedArray a)
+    private void DeleteFullSelection(List<int> indices, IRedArray a)
     {
-        var sortedList = l.OrderByDescending(x => x).ToList();
+        var sortedList = indices.OrderByDescending(x => x).ToList();
 
+        if (sortedList is [-1])
+        {
+            a.Clear();
+            return;
+        }
         foreach (var i in sortedList)
         {
             try
