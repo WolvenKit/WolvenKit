@@ -472,13 +472,16 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         if (SelectedChunks is not IList lst)
         {
             return;
-        }     
+        }
 
-        foreach (var chunkViewModel in chunks)
+        var uniqueChunks = new HashSet<ChunkViewModel>(chunks);
+        SelectedChunk = uniqueChunks.LastOrDefault();
+
+        // remove duplicates
+        foreach (var chunkViewModel in uniqueChunks)
         {
             lst.Add(chunkViewModel);
             chunkViewModel.IsSelected = true;
-            SelectedChunk = chunkViewModel;
         }
     }
     
