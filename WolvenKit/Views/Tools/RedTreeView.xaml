@@ -1415,6 +1415,44 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <!--Array: Clear -->
+                <MenuItem
+                    Header="Clear Array/Buffer"
+                    Command="{Binding Path=ClearArrayCommand,
+                                      Source={x:Reference redTreeView}}">
+
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource TreeViewMenuItemStyle}"
+                            TargetType="MenuItem">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition
+                                            Binding="{Binding Path=IsArraySelected, Source={x:Reference redTreeView}}"
+                                            Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=IsShiftBeingHeld, Source={x:Reference redTreeView}}"
+                                            Value="False" />
+                                        <Condition
+                                            Binding="{Binding Path=IsCtrlBeingHeld, Source={x:Reference redTreeView}}"
+                                            Value="False" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="DeleteSweep"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
                 <Separator />
 
                 <!--
