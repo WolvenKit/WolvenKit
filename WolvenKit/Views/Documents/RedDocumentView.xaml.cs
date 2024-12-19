@@ -30,7 +30,10 @@ namespace WolvenKit.Views.Documents
                 Observable.FromEventPattern<SelectedItemChangedEventHandler, SelectedItemChangedEventArgs>(
                     handler => TabControl.SelectedItemChangedEvent += handler,
                     handler => TabControl.SelectedItemChangedEvent -= handler)
-                    .Subscribe(e => TabControl_OnSelectedItemChangedEvent(e.Sender, e.EventArgs))
+                    .Subscribe(e =>
+                    {
+                        TabControl_OnSelectedItemChangedEvent(e.Sender, e.EventArgs);
+                    })
                     .DisposeWith(disposables);
 
                 Observable.FromEventPattern<EventHandler<EditorDifficultyLevel>, EditorDifficultyLevel>(

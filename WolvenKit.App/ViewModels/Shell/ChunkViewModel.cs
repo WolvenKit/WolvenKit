@@ -647,12 +647,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    // Used by RedTreeView.xaml
-    public int Level => Parent == null ? 0 : Parent.Level + 1;
-
-    // Used by RedEditorTemplateSelector
-    public int DetailsLevel => IsSelected || Parent == null ? 0 : Parent.DetailsLevel + 1;
-
     public Type PropertyType
     {
         get

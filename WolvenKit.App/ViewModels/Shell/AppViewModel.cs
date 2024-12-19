@@ -326,7 +326,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 DockedViews.Add(_paneViewModelFactory.AssetBrowserViewModel(this));
                 return true;
             case EDockedViews.TweakBrowserViewModel:
-                DockedViews.Add(_paneViewModelFactory.TweakBrowserViewModel(this));
+                //DockedViews.Add(_paneViewModelFactory.TweakBrowserViewModel(this));
                 return true;
             case EDockedViews.LocKeyBrowserViewModel:
                 DockedViews.Add(_paneViewModelFactory.LocKeyBrowserViewModel());

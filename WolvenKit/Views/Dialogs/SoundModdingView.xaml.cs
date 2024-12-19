@@ -50,20 +50,20 @@ namespace WolvenKit.Views.Dialogs
         }
 
         private List<string> _selectedtems = new();
-        private void ComboBoxAdv_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            _selectedtems = new List<string>();
-            foreach (var item in ComboBoxTags.SelectedItems)
-            {
-                if (item is string tag)
-                {
-                    _selectedtems.Add(tag);
-                }
-            }
+        //private void ComboBoxAdv_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        //{
+        //    _selectedtems = new List<string>();
+        //    foreach (var item in ComboBoxTags.SelectedItems)
+        //    {
+        //        if (item is string tag)
+        //        {
+        //            _selectedtems.Add(tag);
+        //        }
+        //    }
 
-            DataGridEvents.View.Filter = FilterRecords;
-            DataGridEvents.View.RefreshFilter();
-        }
+        //    DataGridEvents.View.Filter = FilterRecords;
+        //    DataGridEvents.View.RefreshFilter();
+        //}
 
         public bool FilterRecords(object o)
         {

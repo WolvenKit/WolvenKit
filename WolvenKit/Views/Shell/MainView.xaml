@@ -28,7 +28,7 @@
     TitleTextAlignment="Right"
     UseLayoutRounding="True"
     UseNativeChrome="True">
-    <!-- TextBlock Text="{Binding Title}" FontSize="{Binding TitileFontSize}" VerticalAlignment="Center" Margin="10,0,0,0" Opacity="{Binding Opacity, ElementName=ModalOverlay}"/ -->
+
     <syncfusion:ChromelessWindow.Resources>
         <shell:MyObservableCollection x:Key="leftHeaderItems">
             <shell:MenuBarView />

@@ -157,12 +157,7 @@ namespace WolvenKit.Converters
                 {
                     return RedArrayEditor;
                 }
-                //if (vm.ResolvedData is RedBaseClass && (
-                //    ((vm.Properties == null || vm.Properties.Count < 5) && vm.DetailsLevel <= 0) ||
-                //    (vm.ForceLoadProperties && vm.DetailsLevel <= 2)) && (vm.Properties == null || vm.Properties.Count < 500))
-                //{
-                //    return RedArrayEditor;
-                //}
+
                 return RedTypeViewer;
             }
             return null;

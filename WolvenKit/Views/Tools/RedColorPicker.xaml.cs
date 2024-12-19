@@ -19,7 +19,8 @@ namespace WolvenKit.Views.Tools
         {
             InitializeComponent();
 
-            Color.PropertyChanged += OnColorPropertyChanged;
+            // TODO MB
+            //Color.PropertyChanged += OnColorPropertyChanged;
         }
 
         public bool ShowAlpha

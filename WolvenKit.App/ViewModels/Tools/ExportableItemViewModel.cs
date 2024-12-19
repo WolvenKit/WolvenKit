@@ -8,11 +8,13 @@ namespace WolvenKit.App.ViewModels.Tools;
 
 public class ExportableItemViewModel : ImportExportItemViewModel
 {
-    public ExportableItemViewModel(string fileName) : base(fileName, DecideExportOptions(Path.GetExtension(fileName).TrimStart('.'))) =>
+    public ExportableItemViewModel(string fileName) : base(fileName, DecideExportOptions(Path.GetExtension(fileName).TrimStart('.')))
+    {
         Properties.PropertyChanged += delegate (object? sender, PropertyChangedEventArgs args)
         {
             OnPropertyChanged(nameof(Properties));
         };
+    }
 
     private static ExportArgs DecideExportOptions(string extension)
     {

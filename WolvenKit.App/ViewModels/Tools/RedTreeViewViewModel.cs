@@ -29,3 +29,8 @@ public partial class RedTreeViewViewModel : ObservableObject
 {
 
 }
+
+public partial class RedChunkMaskEditorViewModel : ObservableObject
+{
+
+}

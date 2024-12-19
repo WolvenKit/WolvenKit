@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Windows;
 using HelixToolkit.Wpf.SharpDX;
 using ReactiveUI;
@@ -23,38 +26,57 @@ namespace WolvenKit.Views.Tools
             ViewModel = Locator.Current.GetService<PropertiesViewModel>();
             DataContext = ViewModel;
 
-            ViewModel.ModelGroup.CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
+            this.WhenActivated(disposables =>
             {
-                if (e.Action != NotifyCollectionChangedAction.Reset)
-                {
-                    return;
-                }
+                Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
+                  handler => ViewModel.PropertyChanged += handler,
+                  handler => ViewModel.PropertyChanged -= handler)
+                    .Subscribe(e => ViewModel_PropertyChanged(e.Sender, e.EventArgs))
+                    .DisposeWith(disposables);
 
-                if (ViewModel.ModelGroup.Count == 0)
-                {
-                    return;
-                }
+                Observable.FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
+                  handler => ViewModel.ModelGroup.CollectionChanged += handler,
+                  handler => ViewModel.ModelGroup.CollectionChanged -= handler)
+                    .Subscribe(e => ModelGroup_CollectionChanged(e.Sender, e.EventArgs))
+                    .DisposeWith(disposables);
 
-                if (!hxViewport.IsInitialized)
-                {
-                    return;
-                }
-            };
+                Observable.FromEventPattern<SizeChangedEventHandler, SizeChangedEventArgs>(
+                  handler => hxViewport.SizeChanged += handler,
+                  handler => hxViewport.SizeChanged -= handler)
+                    .Subscribe(e => HxViewport_SizeChanged(e.Sender, e.EventArgs))
+                    .DisposeWith(disposables);
+            });
+        }
 
-            ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+        private void HxViewport_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            var size = e.NewSize;
+            var showGizmos = size.Width > 250 && size.Height > 100;
+            var scale = size.Width < size.Height ? size.Width : size.Height;
 
-            hxViewport.SizeChanged += (_, args) =>
+            scale = (scale < 250.0) ? scale / 250.0 : 1.0;
+            hxViewport.SetCurrentValue(Viewport3DX.CoordinateSystemSizeProperty, scale);
+            hxViewport.SetCurrentValue(Viewport3DX.ViewCubeSizeProperty, scale);
+            hxViewport.SetCurrentValue(Viewport3DX.ShowCoordinateSystemProperty, showGizmos);
+            hxViewport.SetCurrentValue(Viewport3DX.ShowViewCubeProperty, showGizmos);
+        }
+
+        private void ModelGroup_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action != NotifyCollectionChangedAction.Reset)
             {
-                var size = args.NewSize;
-                var showGizmos = size.Width > 250 && size.Height > 100;
-                var scale = size.Width < size.Height ? size.Width : size.Height;
+                return;
+            }
 
-                scale = (scale < 250.0) ? scale / 250.0 : 1.0;
-                hxViewport.SetCurrentValue(Viewport3DX.CoordinateSystemSizeProperty, scale);
-                hxViewport.SetCurrentValue(Viewport3DX.ViewCubeSizeProperty, scale);
-                hxViewport.SetCurrentValue(Viewport3DX.ShowCoordinateSystemProperty, showGizmos);
-                hxViewport.SetCurrentValue(Viewport3DX.ShowViewCubeProperty, showGizmos);
-            };
+            if (ViewModel.ModelGroup.Count == 0)
+            {
+                return;
+            }
+
+            if (!hxViewport.IsInitialized)
+            {
+                return;
+            }
         }
 
         private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

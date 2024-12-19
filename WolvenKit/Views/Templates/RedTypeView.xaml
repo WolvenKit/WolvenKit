@@ -801,60 +801,6 @@
                                               Mode=OneTime}" />
                     </Grid>
                 </Border>
-
-                <!--HierarchicalDataTemplate.ItemTemplate>
-                    <DataTemplate>
-                        <Border
-                            x:Name="TopLine"
-                            MinHeight="27"
-                            Margin="160,0,0,0"
-                            BorderBrush="{StaticResource BorderAlt}"
-                            BorderThickness="1,1,0,0">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition>
-                                        <ColumnDefinition.Style>
-                                            <Style TargetType="ColumnDefinition">
-                                                <Setter Property="Width" Value="160" />
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding IsInArray}" Value="True">
-                                                        <Setter Property="Width" Value="{Binding ArrayIndexWidth}" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </ColumnDefinition.Style>
-                                    </ColumnDefinition>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="1" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock
-                                    Margin="6,5,0,0"
-                                    VerticalAlignment="Top"
-                                    Style="{StaticResource PGNameStyle}"
-                                    Text="{Binding Name, Mode=OneTime}"
-                                    TextTrimming="CharacterEllipsis"
-                                    ToolTip="{Binding XPath, Mode=OneTime}" />
-                                <ContentPresenter
-                                    x:Name="DeleteButtonWrapper"
-                                    Grid.Column="1"
-                                    Margin="0,6,0,0"
-                                    VerticalAlignment="Top"
-                                    ContentTemplate="{StaticResource DeleteButton}"
-                                    DataContext="{Binding}" />
-                                <GridSplitter
-                                    Grid.Column="2"
-                                    HorizontalAlignment="Stretch"
-                                    Background="{StaticResource BorderAlt}" />
-                                <ContentControl
-                                    Grid.Column="3"
-                                    Content="{Binding}"
-                                    ContentTemplateSelector="{DynamicResource redEditorTemplates}"
-                                    ToolTip="{Binding Type, Mode=OneTime}" />
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </HierarchicalDataTemplate.ItemTemplate-->
             </DataTemplate>
 
             <Style TargetType="TextBox">

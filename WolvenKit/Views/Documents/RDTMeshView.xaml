@@ -522,48 +522,7 @@
                         Content="Add Sectors to Project"
                         ToolTip="Adds the selected sectors to the project" />
                 </Grid>
-
-                <!-- Button Click="ReloadModels" Content="Zoom to Extents" / -->
-
-                <!-- Button Command="{Binding ExtractShadersCommand}" Content="Export Shaders" / -->
             </StackPanel>
-
-            <!--syncfusion:SfTreeGrid
-                Grid.Row="1"
-                AllowResizingColumns="True"
-                AutoExpandMode="AllNodesExpanded"
-                AutoGenerateColumns="False"
-                CheckBoxMappingName="IsEnabled"
-                ChildPropertyName="BindName"
-                ItemsSource="{Binding SelectedAppearance.Models, Mode=TwoWay}"
-                NodeCheckStateChanged="SfTreeGrid_NodeCheckStateChanged"
-                ParentPropertyName="Name"
-                RowHeaderWidth="300"
-                ShowCheckBox="True">
-                <syncfusion:SfTreeGrid.Columns>
-                    <syncfusion:TreeGridTextColumn
-                        HeaderText="Component Name"
-                        MappingName="Name"
-                        MinimumWidth="300" />
-                    <syncfusion:TreeGridTemplateColumn HeaderText="Chunk Mask">
-                        <syncfusion:TreeGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <syncfusion:ComboBoxAdv
-                                    AllowMultiSelect="True"
-                                    Background="#252525"
-                                    BorderThickness="0"
-                                    ItemsSource="{Binding AllChunks, Mode=OneTime}"
-                                    SelectedItems="{Binding EnabledChunks, Mode=TwoWay}"
-                                    SelectedValueDelimiter=", "
-                                    SelectionChanged="ComboBoxAdv_SelectionChanged" />
-                            </DataTemplate>
-                        </syncfusion:TreeGridTemplateColumn.CellTemplate>
-                    </syncfusion:TreeGridTemplateColumn>
-                    <syncfusion:TreeGridTextColumn HeaderText="Bind Name" MappingName="BindName" />
-                    <syncfusion:TreeGridTextColumn HeaderText="Slot Name" MappingName="SlotName" />
-                    <syncfusion:TreeGridTextColumn HeaderText="Material" MappingName="Materials[0].Name" />
-                </syncfusion:SfTreeGrid.Columns>
-            </syncfusion:SfTreeGrid-->
 
             <syncfusion:SfTreeGrid
                 x:Name="NodeTreeGrid"
@@ -582,7 +541,6 @@
                 ItemsSource="{Binding SelectedModelGroup,
                                       Mode=TwoWay}"
                 LiveNodeUpdateMode="AllowDataShaping"
-                NodeCheckStateChanged="SfTreeGrid_NodeCheckStateChanged"
                 SelectedItem="{Binding SelectedItem}"
                 ShowCheckBox="True"
                 TreeGridContextMenuOpening="SfTreeGrid_OnTreeGridContextMenuOpening">
@@ -728,21 +686,6 @@
                         HeaderText="Name"
                         MappingName="Text"
                         MinimumWidth="100" />
-
-                    <!--syncfusion:TreeGridTemplateColumn HeaderText="Chunk Mask">
-                        <syncfusion:TreeGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <syncfusion:ComboBoxAdv
-                                    AllowMultiSelect="True"
-                                    Background="#252525"
-                                    BorderThickness="0"
-                                    ItemsSource="{Binding AllChunks, Mode=OneTime}"
-                                    SelectedItems="{Binding EnabledChunks, Mode=TwoWay}"
-                                    SelectedValueDelimiter=", "
-                                    SelectionChanged="ComboBoxAdv_SelectionChanged" />
-                            </DataTemplate>
-                        </syncfusion:TreeGridTemplateColumn.CellTemplate>
-                    </syncfusion:TreeGridTemplateColumn-->
 
                     <syncfusion:TreeGridTextColumn
                         ColumnSizer="SizeToCells"

@@ -32,7 +32,8 @@ public partial class ScriptManagerView : ReactiveUserControl<ScriptManagerViewMo
     {
         if (ScriptsTreeGrid.View != null)
         {
-            ScriptsTreeGrid.View.NodeCollectionChanged += ScriptsTreeGridView_OnNodeCollectionChanged;
+            // TODO MB
+            //ScriptsTreeGrid.View.NodeCollectionChanged += ScriptsTreeGridView_OnNodeCollectionChanged;
 
             ScriptsTreeGrid.View.Filter = IsScriptType;
             ScriptsTreeGrid.View.RefreshFilter();

@@ -1656,12 +1656,12 @@
                             ContextMenu="{StaticResource TreeViewContextMenu}"
                             Tag="{Binding}"
                             ToolTip="{Binding Type}">
-                            <Grid.CommandBindings>
+                            <!--<Grid.CommandBindings>
                                 <CommandBinding
                                     CanExecute="Copy_CanExecute"
                                     Command="ApplicationCommands.Copy"
                                     Executed="Copy_Executed" />
-                            </Grid.CommandBindings>
+                            </Grid.CommandBindings>-->
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Style="{StaticResource ArrayNameColumnWidth}" />
                                 <ColumnDefinition Width="Auto" />
@@ -1821,23 +1821,13 @@
         AllowEditing="False"
         AutoExpandMode="RootNodes"
         ItemHeight="{DynamicResource WolvenKitTreeRowHeight}"
-        ItemDragOver="SfTreeView_ItemDragOver"
-        ItemDragStarting="SfTreeView_ItemDragStarting"
-        ItemDropping="SfTreeView_ItemDropping"
         ItemTemplateSelector="{StaticResource itemTemplateSelector}"
-        ItemsSource="{Binding ElementName=redTreeView,
-                              Path=ItemsSource,
+        ItemsSource="{Binding ItemsSource,
                               Mode=TwoWay}"
-        NodeCollapsed="OnCollapsed"
-        NodeExpanded="OnExpanded"
-        SelectedItem="{Binding ElementName=redTreeView,
-                               Path=SelectedItem,
+        SelectedItem="{Binding SelectedItem,
                                Mode=TwoWay}"
-        SelectedItems="{Binding ElementName=redTreeView,
-                                Path=SelectedItems,
+        SelectedItems="{Binding SelectedItems,
                                 Mode=TwoWay}"
-        SelectionChanged="OnSelectionChanged"
-        MouseDoubleClick="OnDoubleClick"
         SelectionMode="Extended"
         ShowLines="True"
         VirtualizingPanel.IsVirtualizing="True"

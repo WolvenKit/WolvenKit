@@ -16,8 +16,9 @@ public class ImportableItemViewModel : ImportExportItemViewModel
 {
     public ImportableItemViewModel(string fileName, IArchiveManager archiveManager, IProjectManager projectManager,
         Red4ParserService parserService)
-        : base(fileName, DecideImportOptions(fileName, archiveManager, projectManager, parserService)) =>
-        Properties.PropertyChanged += delegate(object? _, PropertyChangedEventArgs args)
+        : base(fileName, DecideImportOptions(fileName, archiveManager, projectManager, parserService))
+    {
+        Properties.PropertyChanged += delegate (object? _, PropertyChangedEventArgs args)
         {
             OnPropertyChanged(nameof(Properties));
 
@@ -35,6 +36,7 @@ public class ImportableItemViewModel : ImportExportItemViewModel
             importArgs.GenerateMipMaps = propArgs.GenerateMipMaps;
             importArgs.IsStreamable = propArgs.IsStreamable;
         };
+    }
 
     private static ImportArgs DecideImportOptions(string fileName, IArchiveManager archiveManager, IProjectManager projectManager, Red4ParserService parserService)
     {

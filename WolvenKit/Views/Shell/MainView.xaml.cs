@@ -46,58 +46,60 @@ namespace WolvenKit.Views.Shell
             {
                 Disposable.Create(dockingAdapter.SaveLayout).DisposeWith(disposables);
 
-                Interactions.ShowConfirmation = ShowConfirmation;
-                Interactions.ShowQuestionYesNo = ShowQuestionYesNo;
-                
-                Interactions.ShowLaunchProfilesView = () =>
-                {
-                    LaunchProfilesView dialog = new();
+                //Interactions.ShowConfirmation = ShowConfirmation;
+                //Interactions.ShowQuestionYesNo = ShowQuestionYesNo;
 
-                    if (dialog.ViewModel is not null && dialog.ShowDialog(this) == true)
-                    {
-                        ViewModel.SetLaunchProfiles(dialog.ViewModel.LaunchProfiles);
-                    }
+                // TODO MB
+                //Interactions.ShowLaunchProfilesView = () =>
+                //{
+                //    LaunchProfilesView dialog = new();
 
-                    return true;
-                };
+                //    if (dialog.ViewModel is not null && dialog.ShowDialog(this) == true)
+                //    {
+                //        ViewModel.SetLaunchProfiles(dialog.ViewModel.LaunchProfiles);
+                //    }
 
-                Interactions.ShowSelectSaveView = (string currentSaveGame) =>
-                {
-                    SaveGameSelectionDialog dialog = new(currentSaveGame);
+                //    return true;
+                //};
 
-                    if (dialog.ShowDialog(this) == true)
-                    {
-                        return dialog.ViewModel?.SelectedEntry?.DirName;
-                    }
+                //Interactions.ShowSelectSaveView = (string currentSaveGame) =>
+                //{
+                //    SaveGameSelectionDialog dialog = new(currentSaveGame);
 
-                    return null;
-                };
+                //    if (dialog.ShowDialog(this) == true)
+                //    {
+                //        return dialog.ViewModel?.SelectedEntry?.DirName;
+                //    }
 
-                Interactions.ShowMaterialRepositoryView = () =>
-                {
-                    MaterialsRepositoryView dialog = new();
+                //    return null;
+                //};
 
-                    if (dialog.ShowDialog(this) == true)
-                    {
-                    }
+                //Interactions.ShowMaterialRepositoryView = () =>
+                //{
+                //    MaterialsRepositoryView dialog = new();
 
-                    return true;
-                };
+                //    if (dialog.ShowDialog(this) == true)
+                //    {
+                //    }
 
-                Interactions.ShowCollectionView = input =>
-                {
-                    ChooseCollectionView dialog = new();
-                    dialog.ViewModel.SetAvailableItems(input.Item1);
-                    dialog.ViewModel.SetSelectedItems(input.Item2);
+                //    return true;
+                //};
 
-                    IEnumerable<IDisplayable> result = null;
-                    if (dialog.ShowDialog(this) == true)
-                    {
-                        result = dialog.ViewModel.SelectedItems;
-                    }
 
-                    return result;
-                };
+                //Interactions.ShowCollectionView = input =>
+                //{
+                //    ChooseCollectionView dialog = new();
+                //    dialog.ViewModel.SetAvailableItems(input.Item1);
+                //    dialog.ViewModel.SetSelectedItems(input.Item2);
+
+                //    IEnumerable<IDisplayable> result = null;
+                //    if (dialog.ShowDialog(this) == true)
+                //    {
+                //        result = dialog.ViewModel.SelectedItems;
+                //    }
+
+                //    return result;
+                //};
 
 
                 this.Bind(ViewModel,
@@ -109,7 +111,9 @@ namespace WolvenKit.Views.Shell
                     v => v.dockingAdapter.ItemsSource)
                     .DisposeWith(disposables);
 
-                this.WhenAnyValue(x => x.ViewModel.ActiveProject).Subscribe(_ => dockingAdapter.OnActiveProjectChanged());
+                this.WhenAnyValue(x => x.ViewModel.ActiveProject)
+                .Subscribe(_ => dockingAdapter.OnActiveProjectChanged())
+                .DisposeWith(disposables);
 
                 //set ready status
                 ViewModel.SetStatusReady();
@@ -165,6 +169,7 @@ namespace WolvenKit.Views.Shell
         private void Overlay_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
+
             var mainWindow = (MainView)Locator.Current.GetService<IViewFor<AppViewModel>>();
             if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
             {

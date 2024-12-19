@@ -10,8 +10,9 @@
     d:DataContext="{d:DesignInstance Type={x:Type local:BitfieldTemplateView}}"
     d:DesignWidth="400"
     d:DesignHeight="64">
+
     <Grid>
-        <syncfusion:ComboBoxAdv
+        <!--<syncfusion:ComboBoxAdv
             Name="comboboxadv"
             Padding="{DynamicResource WolvenKitMarginTiny}"
             Background="#252525"
@@ -26,6 +27,6 @@
             SelectedItems="{Binding SelectedItems,
                                     Mode=TwoWay,
                                     UpdateSourceTrigger=PropertyChanged}"
-            SelectedValueDelimiter=", " />
+            SelectedValueDelimiter=", " />-->
     </Grid>
 </UserControl>

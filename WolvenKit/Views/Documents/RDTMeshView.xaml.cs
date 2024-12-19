@@ -113,19 +113,6 @@ namespace WolvenKit.Views.Documents
 
         private void HxViewport_MouseDown3D(object sender, RoutedEventArgs e) => throw new System.NotImplementedException();
         private void ReloadModels(object sender, RoutedEventArgs e) => hxViewport.ZoomExtents();//if (ViewModel != null)//    LoadModels(ViewModel.SelectedAppearance);
-        private void ComboBoxAdv_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //if (ViewModel != null)
-            //    //LoadModels(ViewModel.SelectedAppearance);
-            //    ShowAppearance(ViewModel.SelectedAppearance, true);
-        }
-
-        private void SfTreeGrid_NodeCheckStateChanged(object sender, Syncfusion.UI.Xaml.TreeGrid.NodeCheckStateChangedEventArgs e)
-        {
-            //if (ViewModel != null)
-            //    ShowAppearance(ViewModel.SelectedAppearance, true);
-            ////LoadModels(ViewModel.SelectedAppearance);
-        }
 
         private void CollapseAllChildrenRecursiveMenuItem_OnClick(object sender, RoutedEventArgs e) => 
             _currentNode?.TreeGrid.CollapseAllNodes(_currentNode.TreeNode);

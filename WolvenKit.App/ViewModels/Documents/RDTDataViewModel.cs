@@ -72,20 +72,21 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
         this.WhenActivated(disposables =>
         {
-            if (
-                GetRootChunk() is ChunkViewModel cvm &&
-                cvm.ResolvedData is inkTextureAtlas &&
-                cvm.GetPropertyChild("slots", "0") is ChunkViewModel firstSlot &&
-                firstSlot.ResolvedData is inkTextureSlot slot &&
-                slot.Texture.DepotPath == ResourcePath.Empty
-                )
-            {
-                Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
-                  handler => firstSlot.PropertyChanged += handler,
-                  handler => firstSlot.PropertyChanged -= handler)
-                    .Subscribe(e => WaitForTexturePath(e.Sender, e.EventArgs))
-                    .DisposeWith(disposables);
-            }
+            // TODO MB
+            //if (
+            //    GetRootChunk() is ChunkViewModel cvm &&
+            //    cvm.ResolvedData is inkTextureAtlas &&
+            //    cvm.GetPropertyChild("slots", "0") is ChunkViewModel firstSlot &&
+            //    firstSlot.ResolvedData is inkTextureSlot slot &&
+            //    slot.Texture.DepotPath == ResourcePath.Empty
+            //    )
+            //{
+            //    Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
+            //      handler => firstSlot.PropertyChanged += handler,
+            //      handler => firstSlot.PropertyChanged -= handler)
+            //        .Subscribe(e => WaitForTexturePath(e.Sender, e.EventArgs))
+            //        .DisposeWith(disposables);
+            //}
 
             Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
               handler => parent.PropertyChanged += handler,
@@ -259,7 +260,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
                     {
                         IsConnected = true
                     };
-                    References.Add(new RedReference(this, sourceSocket, destSocket));
+                    References.Add(new RedReference(sourceSocket, destSocket));
                 }
             }
             else

@@ -1,8 +1,13 @@
-﻿using System.Windows;
+﻿
+
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.GraphEditor;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
@@ -14,17 +19,22 @@ namespace WolvenKit.Views.Documents;
 /// <summary>
 /// Interaktionslogik für RDTGraphView2.xaml
 /// </summary>
-public partial class RDTGraphView2
+public partial class RDTGraphView2 : ReactiveUserControl<RDTGraphViewModel2>
 {
     public RDTGraphView2()
     {
         InitializeComponent();
 
-        KeyDown += OnKeyDown;
-
         this.WhenActivated(disposables =>
         {
-            BuildBreadcrumb();
+            Disposable.Create(BuildBreadcrumb).DisposeWith(disposables);
+            
+
+            //Observable.FromEventPattern<KeyEventHandler, KeyEventArgs>(
+            //    handler => KeyDown += handler,
+            //    handler => KeyDown -= handler)
+            //    .Subscribe(e => OnKeyDown(e.Sender, e.EventArgs))
+            //    .DisposeWith(disposables);
         });
     }
 
@@ -109,7 +119,7 @@ public partial class RDTGraphView2
             }
 
             var tmp = new TextBlock { Text = text, Tag = graph };
-            tmp.PreviewMouseDown += BreadcrumbElement_OnPreviewMouseDown;
+            //TODO MB tmp.PreviewMouseDown += BreadcrumbElement_OnPreviewMouseDown;
 
             Breadcrumb.Children.Add(tmp);
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Windows;
@@ -235,10 +236,10 @@ public partial class ChunkViewModel
         // Possible that we're calling this recursively
         IsExpanded = isExpanded;
 
-        ObservableCollectionExtended<ChunkViewModel> treeViewProperties = Properties;
+        List<ChunkViewModel> treeViewProperties = Properties.ToList();
         if (treeViewProperties.Count == 0 && TVProperties.Count > 0)
         {
-            treeViewProperties = TVProperties;
+            treeViewProperties = TVProperties.ToList();
         }
 
         if (treeViewProperties.Count == 0)

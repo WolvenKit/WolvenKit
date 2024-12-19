@@ -5,15 +5,15 @@ namespace WolvenKit.App.Models.Nodify;
 
 public partial class RedReference : ObservableObject, INodeConnection<ReferenceSocket>
 {
-    [ObservableProperty] private RDTDataViewModel _graph;
+    //[ObservableProperty] private RDTDataViewModel _graph;
 
     [ObservableProperty] private ReferenceSocket _destination;
 
     [ObservableProperty] private ReferenceSocket _source;
 
-    public RedReference(RDTDataViewModel graph, ReferenceSocket source, ReferenceSocket destination)
+    public RedReference(/*RDTDataViewModel graph, */ReferenceSocket source, ReferenceSocket destination)
     {
-        _graph = graph;
+        //_graph = graph;
         _source = source;
         _destination = destination;
     }

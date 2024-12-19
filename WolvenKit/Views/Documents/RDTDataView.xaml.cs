@@ -21,17 +21,17 @@ namespace WolvenKit.Views.Documents
         {
             InitializeComponent();
 
-            this.WhenActivated(disposables =>
-            {
-                var globals = Locator.Current.GetService<IOptions<Globals>>();
-                if (globals.Value.ENABLE_NODE_EDITOR)
-                {
-                    Editor.LayoutNodes();
-                }
-            });
+            //this.WhenActivated(disposables =>
+            //{
+            //    var globals = Locator.Current.GetService<IOptions<Globals>>();
+            //    if (globals.Value.ENABLE_NODE_EDITOR)
+            //    {
+            //        AutomaticNodifyEditor.LayoutNodes();
+            //    }
+            //});
         }
 
-        private void AutolayoutNodes_MenuItem(object sender, RoutedEventArgs e) => Editor.LayoutNodes();
+        //private void AutolayoutNodes_MenuItem(object sender, RoutedEventArgs e) => AutomaticNodifyEditor.LayoutNodes();
 
         private void RedTypeView_OnValueChanged(object sender, EventArgs e)
         {

@@ -33,7 +33,7 @@ namespace WolvenKit.Views.Tools
     /// <summary>
     /// Interaction logic for RedTreeView.xaml
     /// </summary>
-    public partial class RedTreeView : ReactiveUserControl<RedTreeViewViewModel>
+    public partial class RedTreeView : ReactiveUserControl<RedTreeViewViewModel>//, INotifyPropertyChanged
     {
         private readonly IModifierViewStateService _modifierViewStateSvc;
         private readonly ILoggerService _loggerService;
@@ -47,7 +47,7 @@ namespace WolvenKit.Views.Tools
             _progressService = Locator.Current.GetService<IProgressService<double>>();
             _appViewModel = Locator.Current.GetService<AppViewModel>();
 
-            ViewModel = Locator.Current.GetService<RedTreeViewViewModel>();
+            //ViewModel = Locator.Current.GetService<RedTreeViewViewModel>();
             //DataContext = ViewModel;
 
             InitializeComponent();
@@ -65,14 +65,52 @@ namespace WolvenKit.Views.Tools
                 //  handler => DataContextChanged -= handler)
                 //    .Subscribe(e => OnDataContextChanged(e.Sender, e.EventArgs))
                 //    .DisposeWith(disposables);
+
+                // TreeView
+                Observable.FromEventPattern<EventHandler<TreeViewItemDragOverEventArgs>, TreeViewItemDragOverEventArgs>(
+                 handler => TreeView.ItemDragOver += handler,
+                 handler => TreeView.ItemDragOver -= handler)
+                   .Subscribe(e => SfTreeView_ItemDragOver(e.Sender, e.EventArgs))
+                   .DisposeWith(disposables);
+
+                Observable.FromEventPattern<EventHandler<TreeViewItemDragStartingEventArgs>, TreeViewItemDragStartingEventArgs>(
+                 handler => TreeView.ItemDragStarting += handler,
+                 handler => TreeView.ItemDragStarting -= handler)
+                   .Subscribe(e => SfTreeView_ItemDragStarting(e.Sender, e.EventArgs))
+                   .DisposeWith(disposables);
+
+                Observable.FromEventPattern<EventHandler<TreeViewItemDroppingEventArgs>, TreeViewItemDroppingEventArgs>(
+                 handler => TreeView.ItemDropping += handler,
+                 handler => TreeView.ItemDropping -= handler)
+                   .Subscribe(e => SfTreeView_ItemDropping(e.Sender, e.EventArgs))
+                   .DisposeWith(disposables);
+
+                Observable.FromEventPattern<EventHandler<NodeExpandedCollapsedEventArgs>, NodeExpandedCollapsedEventArgs>(
+                 handler => TreeView.NodeCollapsed += handler,
+                 handler => TreeView.NodeCollapsed -= handler)
+                   .Subscribe(e => OnCollapsed(e.Sender, e.EventArgs))
+                   .DisposeWith(disposables);
+
+                Observable.FromEventPattern<EventHandler<NodeExpandedCollapsedEventArgs>, NodeExpandedCollapsedEventArgs>(
+                 handler => TreeView.NodeExpanded += handler,
+                 handler => TreeView.NodeExpanded -= handler)
+                   .Subscribe(e => OnExpanded(e.Sender, e.EventArgs))
+                   .DisposeWith(disposables);
+
+                Observable.FromEventPattern<EventHandler<ItemSelectionChangedEventArgs>, ItemSelectionChangedEventArgs>(
+                 handler => TreeView.SelectionChanged += handler,
+                 handler => TreeView.SelectionChanged -= handler)
+                   .Subscribe(e => OnSelectionChanged(e.Sender, e.EventArgs))
+                   .DisposeWith(disposables);
+
+                Observable.FromEventPattern<MouseButtonEventHandler, MouseButtonEventArgs>(
+                 handler => TreeView.MouseDoubleClick += handler,
+                 handler => TreeView.MouseDoubleClick -= handler)
+                   .Subscribe(e => OnDoubleClick(e.Sender, e.EventArgs))
+                   .DisposeWith(disposables);
             });
 
             TreeView.ApplyTemplate();
-        }
-
-        ~RedTreeView()
-        {
-            _loggerService.Debug("~RedTreeView");
         }
 
         private void AfterCopied_RefreshCommandStatus()
@@ -101,7 +139,7 @@ namespace WolvenKit.Views.Tools
         //    }
         //}
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        //public event PropertyChangedEventHandler PropertyChanged;
 
         private void UpdateFilteredItemsSource(object value)
         {
@@ -120,7 +158,7 @@ namespace WolvenKit.Views.Tools
                 SetCurrentValue(ItemsSourceProperty, collectionView);
             }
 
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ItemsSource)));
+            //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ItemsSource)));
         }
 
         private void OnExpanded(object sender, NodeExpandedCollapsedEventArgs e)
@@ -243,6 +281,7 @@ namespace WolvenKit.Views.Tools
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
             base.OnPropertyChanged(e);
+
             if (e.Property == SelectedItem || e.Property == SelectedItems)
             {
                 SetCurrentValue(HasSelectionProperty, GetSelectedChunks(true).Count > 0);

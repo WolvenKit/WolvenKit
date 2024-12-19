@@ -130,14 +130,14 @@
                         BorderThickness="0"
                         Content="Chunkmask" />
 
+                    <!-- TODO MB PropertyChanged="On_Chunkmask_Changed" -->
                     <editors:RedChunkMaskEditor
                         x:Name="ChunkmaskEditor"
                         Grid.Row="6"
                         Grid.Column="1"
                         KeyboardNavigation.TabIndex="4"
                         RedNumber="{Binding ChunkMask,
-                                            Mode=TwoWay}"
-                        PropertyChanged="On_Chunkmask_Changed" />
+                                            Mode=TwoWay}" />
                     <Label
                         Grid.Row="8"
                         Grid.Column="0"

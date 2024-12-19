@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using ReactiveUI;
+using Syncfusion.Data;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.Editors
@@ -15,17 +20,20 @@ namespace WolvenKit.Views.Editors
     /// <summary>
     /// Interaction logic for RedChunkMaskEditor.xaml
     /// </summary>
-    public partial class RedChunkMaskEditor : UserControl, INotifyPropertyChanged
+    public partial class RedChunkMaskEditor : ReactiveUserControl<RedChunkMaskEditorViewModel>, INotifyPropertyChanged
     {
         public RedChunkMaskEditor()
         {
             InitializeComponent();
 
-            Observable.FromEventPattern<SelectionChangedEventHandler, SelectionChangedEventArgs>(
-                  handler => comboboxadv.SelectionChanged += handler,
-                  handler => comboboxadv.SelectionChanged -= handler)
-                    .Subscribe(e => CollectionChanged())
-                    ;
+            //this.WhenActivated(disposables =>
+            //{
+            //    Observable.FromEventPattern<SelectionChangedEventHandler, SelectionChangedEventArgs>(
+            //      handler => comboboxadv.SelectionChanged += handler,
+            //      handler => comboboxadv.SelectionChanged -= handler)
+            //        .Subscribe(e => CollectionChanged())
+            //        .DisposeWith(disposables);
+            //});
 
             for (var i = 0; i < 64; i++)
             {
@@ -39,17 +47,13 @@ namespace WolvenKit.Views.Editors
             set
             {
                 SetValue(RedNumberProperty, value);
-                // OnPropertyChanged("RedNumber");
             }
         }
 
         public static readonly DependencyProperty RedNumberProperty = DependencyProperty.Register(
             nameof(RedNumber), typeof(IRedPrimitive<ulong>), typeof(RedChunkMaskEditor), new PropertyMetadata(default(IRedPrimitive<ulong>)));
 
-        private void OnPropertyChanged(String prop)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
-        }
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -59,15 +63,18 @@ namespace WolvenKit.Views.Editors
             set => SetRedValueFromText(value);
         }
 
-        public ObservableCollection<string> SelectedItems
-        {
-            get => GetSelectFromRedValue();
-            set => SetRedValueFromSelect(value);
-        }
+        //public List<string> SelectedItems
+        //{
+        //    get => GetSelectFromRedValue();
+        //    set => SetRedValueFromSelect(value);
+        //}
 
         public ObservableCollection<string> BindingCollection { get; set; } = new();
 
-        public void CollectionChanged() => SetRedValueFromSelect(comboboxadv.SelectedItems.Cast<string>());
+        public void CollectionChanged()
+        {
+            //SetRedValueFromSelect(comboboxadv.SelectedItems.Cast<string>());
+        }
 
         private void SetRedValueFromSelect(IEnumerable<string> value)
         {
@@ -81,13 +88,13 @@ namespace WolvenKit.Views.Editors
                 {
                     // a box was checked
                     SetCurrentValue(RedNumberProperty, (CUInt64)ulong.MaxValue);
-                    OnPropertyChanged("SelectedItems");
+                    //OnPropertyChanged(nameof(SelectedItems));
                 }
                 else
                 {
                     // a box was unchecked
                     SetCurrentValue(RedNumberProperty, (CUInt64)0);
-                    OnPropertyChanged("SelectedItems");
+                    //OnPropertyChanged(nameof(SelectedItems));
                 }
             }
             else
@@ -95,7 +102,7 @@ namespace WolvenKit.Views.Editors
                 SetCurrentValue(RedNumberProperty, (CUInt64)numericValue);
             }
 
-            OnPropertyChanged("Text");
+            OnPropertyChanged(nameof(Text));
         }
 
         private ulong TextToNumber(string value = "")
@@ -118,12 +125,12 @@ namespace WolvenKit.Views.Editors
         private void SetRedValueFromText(string value)
         {
             SetCurrentValue(RedNumberProperty, (CUInt64)ulong.Parse(value));
-            OnPropertyChanged("SelectedItems");
+            //OnPropertyChanged(nameof(SelectedItems));
         }
 
-        private ObservableCollection<string> GetSelectFromRedValue()
+        private List<string> GetSelectFromRedValue()
         {
-            var c = new ObservableCollection<string>();
+            var c = new List<string>();
 
             if (RedNumber == null)
             {
@@ -156,5 +163,7 @@ namespace WolvenKit.Views.Editors
                 e.Handled = !ulong.TryParse(tb.Text.Insert(tb.CaretIndex, e.Text), out _);
             }
         }
+
+        public void OnPropertyChanged(object sender, PropertyChangedEventArgs e) => throw new NotImplementedException();
     }
 }

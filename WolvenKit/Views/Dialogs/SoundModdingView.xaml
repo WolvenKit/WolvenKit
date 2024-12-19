@@ -66,6 +66,7 @@
                         VerticalAlignment="Center"
                         Content="Filter events by tag: " />
 
+                    <!-- TODO MB SelectionChanged="ComboBoxAdv_SelectionChanged" -->
                     <syncfusion:ComboBoxAdv
                         x:Name="ComboBoxTags"
                         Grid.Column="1"
@@ -73,8 +74,7 @@
                         EnableToken="true"
                         IsEditable="true"
                         ItemsSource="{Binding Tags,
-                                              Mode=OneWay}"
-                        SelectionChanged="ComboBoxAdv_SelectionChanged" />
+                                              Mode=OneWay}" />
                 </Grid>
 
                 <!-- DataGrid -->
