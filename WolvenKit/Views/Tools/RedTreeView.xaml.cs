@@ -559,8 +559,8 @@ namespace WolvenKit.Views.Tools
                              .Where(group => group.Key.IsArray))
                 {
                     group.Key.DeleteNodes(selectedNodes);
-                    var pasteIndex = group.FirstOrDefault()?.NodeIdxInParent ?? -2;
-                    group.Key.PasteAtIndex(copiedChunks, pasteIndex + 1);
+                    var pasteIndex = group.FirstOrDefault()?.NodeIdxInParent ?? -1;
+                    group.Key.PasteAtIndex(copiedChunks, pasteIndex);
                     ReapplySearch(group.Key);
                 }
             }
