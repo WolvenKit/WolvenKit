@@ -53,11 +53,12 @@ public partial class ChunkViewModel
     private bool _isPropertiesInitialized;
 
     /// <summary>
-    /// If we need a node to be fully initialized (e.g. if we run a search on it) 
+    /// If we need a node to be fully initialized (e.g. if we run a search on it)
+    /// Cap it off arbitrarily at recursion level 8 (because why not)
     /// </summary>
-    public void CalculatePropertiesRecursive()
+    public void CalculatePropertiesRecursive(int recursionLevel = 0)
     {
-        if (_isPropertiesInitialized)
+        if (_isPropertiesInitialized || recursionLevel > 8)
         {
             return;
         }
@@ -71,7 +72,7 @@ public partial class ChunkViewModel
 
         foreach (var child in TVProperties)
         {
-            child.CalculatePropertiesRecursive();
+            child.CalculatePropertiesRecursive(recursionLevel + 1);
         }
     }
 
@@ -80,13 +81,13 @@ public partial class ChunkViewModel
 
     public void SetVisibilityStatusBySearchString(string searchBoxText)
     {
-        if (ResolvedData is RedDummy || TVProperties.Count == 0)
+        if (ResolvedData is RedDummy)
         {
             CalculateProperties();
         }
 
         // some items are still RedDummies even after properties were calculated. Why?
-        if (!string.IsNullOrEmpty(searchBoxText) && (ResolvedData is RedDummy || TVProperties.Count == 0))
+        if (!string.IsNullOrEmpty(searchBoxText) && ResolvedData is RedDummy)
         {
             IsHiddenBySearch = true;
             return;
@@ -97,7 +98,7 @@ public partial class ChunkViewModel
             chunkViewModel.SetVisibilityStatusBySearchString(searchBoxText);
         }
 
-        if (string.IsNullOrEmpty(searchBoxText) || IsHiddenByEditorDifficultyLevel || Parent is null)
+        if (string.IsNullOrEmpty(searchBoxText) || Parent is null)
         {
             IsHiddenBySearch = false;
             return;
@@ -108,9 +109,10 @@ public partial class ChunkViewModel
         if (visibleChildren.Count != 0)
         {
             IsHiddenBySearch = false;
-            IsExpanded = !string.IsNullOrEmpty(searchBoxText);
+            IsExpanded = true;
             return;
         }
+        
 
         var shouldShow = Value?.Contains(searchBoxText, StringComparison.OrdinalIgnoreCase) == true
                          || Descriptor?.Contains(searchBoxText, StringComparison.OrdinalIgnoreCase) == true
@@ -122,6 +124,13 @@ public partial class ChunkViewModel
 
         shouldShow = shouldShow || PropertyType.Name.Contains(searchBoxText, StringComparison.OrdinalIgnoreCase);
 
+        // Hiding cnames that are part of the parent property's description
+        if (shouldShow && ResolvedData is CName cname && cname.GetResolvedText() is string s &&
+            (Parent.Descriptor?.Contains(s) == true || Parent.Value?.Contains(s) == true))
+        {
+            shouldShow = false;
+        }
+        
         IsHiddenBySearch = !shouldShow;
 
         if (IsHiddenBySearch)

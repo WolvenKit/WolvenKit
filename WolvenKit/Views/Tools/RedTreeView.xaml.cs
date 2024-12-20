@@ -120,12 +120,26 @@ namespace WolvenKit.Views.Tools
 
         private void OnExpanded(object sender, NodeExpandedCollapsedEventArgs e)
         {
-            if (!ModifierViewStateService.IsShiftBeingHeld || e.Node.Content is not ChunkViewModel chunk)
+            if (e.Node.Content is not ChunkViewModel chunk)
             {
                 return;
             }
 
-            chunk.SetChildExpansionStates(true);
+            if (ModifierViewStateService.IsShiftBeingHeld)
+            {
+                chunk.SetChildExpansionStates(true);
+            }
+
+            if (!ModifierViewStateService.IsCtrlBeingHeld)
+            {
+                return;
+            }
+
+            foreach (var child in chunk.TVProperties)
+            {
+                child.IsExpanded = true;
+            }
+
         }
 
         private void OnCollapsed(object sender, NodeExpandedCollapsedEventArgs e)
@@ -138,6 +152,16 @@ namespace WolvenKit.Views.Tools
             if (ModifierViewStateService.IsShiftBeingHeld)
             {
                 cvm.SetChildExpansionStates(false);
+            }
+
+            if (ModifierViewStateService.IsCtrlBeingHeld)
+            {
+                foreach (var child in cvm.TVProperties)
+                {
+                    child.IsExpanded = false;
+                }
+
+                return;
             }
 
             if (e.Node.Level != 0 || cvm.ResolvedData is not worldStreamingSector)
