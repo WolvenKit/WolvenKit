@@ -23,6 +23,8 @@ public static class LogCodeHelper
             "https://wiki.redmodding.org/cyberpunk-2077-modding/modding-guides/textures-and-luts/images-importing-editing-exporting#all-images-must-be-the-same-size");
         s_mapping.Add(0x2004, // morphtarget: no chunks
             "https://wiki.redmodding.org/cyberpunk-2077-modding/modding-guides/npcs/a-new-head-for-v#step-6-optional-disabling-the-character-creator");
+        s_mapping.Add(0x2005, // mesh: bone mismatch
+            "https://wiki.redmodding.org/cyberpunk-2077-modding/for-mod-creators-theory/3d-modelling/troubleshooting-your-mesh-edits#bones-not-found-in-import-mesh-es");
 
         // 3: modKit stuff
 

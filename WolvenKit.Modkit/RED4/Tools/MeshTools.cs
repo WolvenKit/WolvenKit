@@ -11,6 +11,7 @@ using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.Exceptions;
 using WolvenKit.Modkit.RED4.GeneralStructs;
@@ -711,8 +712,8 @@ namespace WolvenKit.Modkit.RED4.Tools
 
             if (bonesNotFound.Any())
             {
-                throw new Exception(
-                    $"Bones not found in import mesh(es): {string.Join("\n", bonesNotFound)}");
+                throw new WolvenKitException(0x2005,
+                    $"You're trying to import bones into a mesh that doesn't have them. Wolvenkit can't create bones — please remove them in Blender, or import into a different .mesh file.\n{string.Join("\n", bonesNotFound)}");
             }
         }
 
