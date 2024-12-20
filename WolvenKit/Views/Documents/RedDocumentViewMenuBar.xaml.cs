@@ -59,21 +59,17 @@ namespace WolvenKit.Views.Documents
 
             InitializeInstanceObjects();
 
-            DataContext = new RedDocumentViewToolbarModel { CurrentTab = _currentTab };
-            ViewModel = DataContext as RedDocumentViewToolbarModel;
+            ViewModel = new RedDocumentViewToolbarModel { CurrentTab = _currentTab };
+            DataContext = ViewModel;
 
             this.WhenActivated(disposables =>
             {
-                if (DataContext is not RedDocumentViewToolbarModel vm)
-                {
-                    return;
-                }
 
-                vm.RefreshMenuVisibility(true);
+                ViewModel.RefreshMenuVisibility(true);
 
                 Observable.FromEventPattern<EventHandler, EventArgs>(
-                  handler => vm.OnAddDependencies += handler,
-                  handler => vm.OnAddDependencies -= handler)
+                  handler => ViewModel.OnAddDependencies += handler,
+                  handler => ViewModel.OnAddDependencies -= handler)
                     .Subscribe(e => OnAddDependencies())
                     .DisposeWith(disposables);
 

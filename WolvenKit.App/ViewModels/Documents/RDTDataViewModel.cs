@@ -136,6 +136,19 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         IGameControllerFactory gameController) 
         : this(data, file, appViewModel, chunkViewmodelFactory, settingsManager, gameController) => Header = header;
 
+    public override void Dispose()
+    {
+        _data = null!;
+
+        foreach (var chunk in Chunks)
+        {
+            chunk.Dispose();
+        }
+        _chunks.Clear();
+        _nodePaths.Clear();
+        DirtyChunks.Clear();
+    }
+
     #region properties
 
     public IRedType GetData() => _data;
@@ -186,7 +199,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     public bool HasActiveSearch { get; set; }
 
-    public int NumSelectedItems => SelectedChunks is ObservableCollection<object> obs ? obs.Count : 0;
+    public int NumSelectedItems => SelectedChunks is IList<object> obs ? obs.Count : 0;
 
     public delegate void LayoutNodesDelegate();
 

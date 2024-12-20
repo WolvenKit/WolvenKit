@@ -153,8 +153,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
     }
 
     public string? SelectedNodeIndex;
-    
-    
+
+    public override void Dispose()
+    {
+        // TODO MB
+    }
 
     public override void Load()
     {

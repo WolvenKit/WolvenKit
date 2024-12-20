@@ -9,7 +9,7 @@ using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 
 namespace WolvenKit.App.ViewModels.Documents;
 
-public abstract partial class DocumentViewModel : PaneViewModel, IDocumentViewModel
+public abstract partial class DocumentViewModel : PaneViewModel, IDocumentViewModel, IDisposable
 {
     protected bool _isInitialized;
 
@@ -61,6 +61,5 @@ public abstract partial class DocumentViewModel : PaneViewModel, IDocumentViewMo
     public abstract void SaveAs(object parameter);
 
     public abstract bool Reload(bool force);
-
-
+    public abstract void Dispose();
 }

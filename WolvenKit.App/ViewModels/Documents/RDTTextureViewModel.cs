@@ -66,6 +66,11 @@ public partial class RDTTextureViewModel : RedDocumentTabViewModel
 
     public override void OnSelected() => Render.Invoke();
 
+    public override void Dispose()
+    {
+        _redImage?.Dispose();
+    }
+
     protected void SetupImage()
     {
         if (IsRendered || _redImage == null)

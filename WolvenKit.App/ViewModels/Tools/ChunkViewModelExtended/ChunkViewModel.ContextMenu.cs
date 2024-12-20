@@ -55,7 +55,7 @@ public partial class ChunkViewModel
 
         DuplicatesAsNew = ResolvedData is worldCompiledEffectPlacementInfo or CMeshMaterialEntry;
 
-        IsMultipleItemsSelected = Parent?.Tab?.SelectedChunks is ObservableCollection<object> chunks && chunks.Count > 1;
+        IsMultipleItemsSelected = Parent?.Tab?.SelectedChunks is IList<object> chunks && chunks.Count > 1;
     }
 
     public void RefreshCommandStatus()

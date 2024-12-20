@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
+using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Controllers;
@@ -27,6 +28,12 @@ namespace WolvenKit.App.ViewModels.Tools;
 
 public partial class RedTreeViewViewModel : ObservableObject
 {
+
+
+    [ObservableProperty] private object? _itemsSource;
+    [ObservableProperty] private object? _selectedItem;
+    [ObservableProperty] private object? _selectedItems;
+
 
 }
 

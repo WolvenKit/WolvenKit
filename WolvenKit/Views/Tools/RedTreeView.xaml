@@ -418,16 +418,18 @@
             </Style>
 
             <!-- Context menu -->
+            <!--
+                Opened="TreeViewContextMenu_OnOpened"
+                Closed="TreeViewContextMenu_OnClosed"
+                KeyUp="TreeViewContextMenu_OnKeyChanged"
+                KeyDown="TreeViewContextMenu_OnKeyChanged"
+            -->
             <ContextMenu
                 x:Key="TreeViewContextMenu"
                 Name="TreeViewContextMenu"
                 Style="{StaticResource WPFContextMenuStyle}"
                 DataContext="{Binding Path=PlacementTarget,
-                                      RelativeSource={RelativeSource Self}}"
-                Opened="TreeViewContextMenu_OnOpened"
-                Closed="TreeViewContextMenu_OnClosed"
-                KeyUp="TreeViewContextMenu_OnKeyChanged"
-                KeyDown="TreeViewContextMenu_OnKeyChanged">
+                                      RelativeSource={RelativeSource Self}}">
                 <ContextMenu.Resources>
                     <!-- Named style for sub-style's basedOn -->
                     <Style
@@ -1633,6 +1635,7 @@
             <converters:TreeViewItemTemplateSelector
                 x:Key="itemTemplateSelector"
                 x:Name="itemTemplateSelector">
+
                 <converters:TreeViewItemTemplateSelector.GroupedTemplate>
                     <DataTemplate>
                         <Grid
@@ -1774,15 +1777,17 @@
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Center"
                                 ContentTemplate="{StaticResource PropertyValueTemplate}" />
-
-                            <Button
+                            <!-- TODO MB -->
+                            <!--<Button
                                 Grid.Column="2"
                                 Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                                 Background="Transparent"
                                 Style="{StaticResource ButtonCustom}"
                                 Command="{Binding OpenRefCommand}"
                                 ToolTip="Open in new tab">
-                                <!-- Old icon Vaadin#ArrowCircleUp#45deg -->
+                            -->
+                            <!-- Old icon Vaadin#ArrowCircleUp#45deg -->
+                            <!--
                                 <iconPacks:PackIconMaterial
                                     Kind="TabPlus"
                                     Width="{DynamicResource WolvenKitIconMilli}"
@@ -1803,7 +1808,7 @@
                                     Width="{DynamicResource WolvenKitIconMilli}"
                                     Height="{DynamicResource WolvenKitIconMilli}"
                                     Foreground="{StaticResource WolvenKitYellow}" />
-                            </Button>
+                            </Button>-->
                         </Grid>
                     </DataTemplate>
                 </converters:TreeViewItemTemplateSelector.RefTemplate>
@@ -1816,28 +1821,18 @@
         Margin="-1"
         Background="{StaticResource ContentBackground}"
         BorderThickness="0"
-        Visibility="Visible"
         AllowDragging="True"
         AllowEditing="False"
         AutoExpandMode="RootNodes"
         ItemHeight="{DynamicResource WolvenKitTreeRowHeight}"
         ItemTemplateSelector="{StaticResource itemTemplateSelector}"
-        ItemsSource="{Binding ItemsSource,
-                              Mode=TwoWay}"
-        SelectedItem="{Binding SelectedItem,
-                               Mode=TwoWay}"
-        SelectedItems="{Binding SelectedItems,
-                                Mode=TwoWay}"
         SelectionMode="Extended"
         ShowLines="True"
+        ChildPropertyName="TVProperties"
+        NotificationSubscriptionMode="PropertyChange"
         VirtualizingPanel.IsVirtualizing="True"
         VirtualizingPanel.ScrollUnit="Pixel"
         VirtualizingPanel.VirtualizationMode="Recycling">
-        <!--
-            LoadOnDemandCommand="{Binding OnDemandLoadingCommand}"
-            QueryNodeSize="TreeView_QueryNodeSize"
-        -->
-        <syncfusion:SfTreeView.Resources />
 
         <syncfusion:SfTreeView.DragPreviewTemplate>
             <DataTemplate DataType="{x:Type syncfusion:TreeViewDragInfo}">
@@ -1885,17 +1880,6 @@
             </DataTemplate>
         </syncfusion:SfTreeView.DragPreviewTemplate>
 
-        <syncfusion:SfTreeView.HierarchyPropertyDescriptors>
-            <treeViewEngine:HierarchyPropertyDescriptor
-                TargetType="{x:Type shell:ChunkViewModel}"
-                ChildPropertyName="TVProperties"
-                IsExpandedPropertyName="IsExpanded" />
-
-            <treeViewEngine:HierarchyPropertyDescriptor
-                TargetType="{x:Type shell:GroupedChunkViewModel}"
-                ChildPropertyName="TVProperties"
-                IsExpandedPropertyName="IsExpanded" />
-        </syncfusion:SfTreeView.HierarchyPropertyDescriptors>
     </syncfusion:SfTreeView>
 
 </reactiveUi:ReactiveUserControl>

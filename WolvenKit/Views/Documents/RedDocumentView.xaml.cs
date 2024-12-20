@@ -25,7 +25,8 @@ namespace WolvenKit.Views.Documents
                 }
 
                 SetCurrentValue(ViewModelProperty, vm);
-                RedDocumentViewToolbar.CurrentTab = vm.SelectedTabItemViewModel;
+                // TODO MB
+                //RedDocumentViewToolbar.CurrentTab = vm.SelectedTabItemViewModel;
 
                 Observable.FromEventPattern<SelectedItemChangedEventHandler, SelectedItemChangedEventArgs>(
                     handler => TabControl.SelectedItemChangedEvent += handler,
@@ -36,11 +37,11 @@ namespace WolvenKit.Views.Documents
                     })
                     .DisposeWith(disposables);
 
-                Observable.FromEventPattern<EventHandler<EditorDifficultyLevel>, EditorDifficultyLevel>(
-                    handler => RedDocumentViewToolbar.EditorDifficultChanged += handler,
-                    handler => RedDocumentViewToolbar.EditorDifficultChanged -= handler)
-                    .Subscribe(e => OnEditorDifficultyChanged(e.Sender, e.EventArgs))
-                    .DisposeWith(disposables);
+                //Observable.FromEventPattern<EventHandler<EditorDifficultyLevel>, EditorDifficultyLevel>(
+                //    handler => RedDocumentViewToolbar.EditorDifficultChanged += handler,
+                //    handler => RedDocumentViewToolbar.EditorDifficultChanged -= handler)
+                //    .Subscribe(e => OnEditorDifficultyChanged(e.Sender, e.EventArgs))
+                //    .DisposeWith(disposables);
             });
         }
 
@@ -77,12 +78,14 @@ namespace WolvenKit.Views.Documents
             
             if (e?.NewSelectedItem?.DataContext is RedDocumentTabViewModel newTab)
             {
-                RedDocumentViewToolbar.CurrentTab = newTab;
+                // TODO MB
+                //RedDocumentViewToolbar.CurrentTab = newTab;
                 newTab.Load();
             }
             else
             {
-                RedDocumentViewToolbar.CurrentTab = null;
+                // TODO MB
+                //RedDocumentViewToolbar.CurrentTab = null;
             }
 
             if (e?.OldSelectedItem?.DataContext is RedDocumentTabViewModel oldTab)

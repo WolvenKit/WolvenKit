@@ -83,4 +83,8 @@ public partial class RDTGraphViewModel2 : RedDocumentTabViewModel
 
         MainGraph = mainGraph;
     }
+    public override void Dispose()
+    {
+        MainGraph.Dispose();
+    }
 }

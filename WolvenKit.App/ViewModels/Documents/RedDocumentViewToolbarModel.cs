@@ -22,6 +22,8 @@ namespace WolvenKit.App.ViewModels.Documents;
 
 public partial class RedDocumentViewToolbarModel : ObservableObject, IActivatableViewModel
 {
+    private readonly IModifierViewStateService _modifierViewStateService;
+
     public RedDocumentViewToolbarModel()
     {
         if (Locator.Current.GetService<ISettingsManager>() is ISettingsManager settingsSvc)
@@ -33,12 +35,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject, IActivatabl
             EditorLevel = EditorDifficultyLevel.Easy;
         }
 
-        if (Locator.Current.GetService<IModifierViewStateService>() is not IModifierViewStateService svc)
-        {
-            return;
-        }
-
-        _modifierViewStateService = svc;
+        _modifierViewStateService = Locator.Current.GetService<IModifierViewStateService>()!;
 
         this.WhenActivated(disposables =>
         {
@@ -64,8 +61,6 @@ public partial class RedDocumentViewToolbarModel : ObservableObject, IActivatabl
     public ViewModelActivator Activator { get; } = new ViewModelActivator();
 
     private void OnModifierStateChanged() => IsShiftKeyDown = _modifierViewStateService?.IsShiftKeyPressed ?? false;
-
-    private readonly IModifierViewStateService? _modifierViewStateService;
 
     [ObservableProperty] private RedDocumentTabViewModel? _currentTab;
     [ObservableProperty] private EditorDifficultyLevel _editorLevel;
@@ -116,10 +111,11 @@ public partial class RedDocumentViewToolbarModel : ObservableObject, IActivatabl
         {
             RootChunk = rtdViewModel.GetRootChunk();
             
-            Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
-              handler => rtdViewModel.PropertyChanged += handler,
-              handler => rtdViewModel.PropertyChanged -= handler)
-                .Subscribe(e => OnRtdModelPropertyChanged(e.Sender, e.EventArgs));
+            // TODO MB
+            //Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
+            //  handler => rtdViewModel.PropertyChanged += handler,
+            //  handler => rtdViewModel.PropertyChanged -= handler)
+            //    .Subscribe(e => OnRtdModelPropertyChanged(e.Sender, e.EventArgs));
 
             if (rtdViewModel.SelectedChunk is ChunkViewModel cvm)
             {
@@ -364,6 +360,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject, IActivatabl
     private void DeleteUnusedMaterials() => RootChunk?.DeleteUnusedMaterialsCommand.Execute(false);
 
     #endregion
+    
     [RelayCommand(CanExecute = nameof(HasMeshAppearances))]
     private void GenerateMissingMaterials()
     {
@@ -372,11 +369,13 @@ public partial class RedDocumentViewToolbarModel : ObservableObject, IActivatabl
 
     #endregion
 
-    public static string CurrentActiveSearch = "";
+    // TODO MB
+    //public static string CurrentActiveSearch = "";
 
     public void OnSearchChanged(string searchBoxText)
     {
-        CurrentActiveSearch = "";
+        // TODO MB
+        //CurrentActiveSearch = "";
         if (CurrentTab is not RDTDataViewModel rtdViewModel)
         {
             return;

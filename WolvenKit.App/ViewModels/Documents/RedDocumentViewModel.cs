@@ -101,6 +101,15 @@ public partial class RedDocumentViewModel : DocumentViewModel
         PopulateItems();
     }
 
+    public override void Dispose()
+    {
+        foreach (var tab in TabItemViewModels)
+        {
+            tab.Dispose();
+        }
+        TabItemViewModels.Clear();
+    }
+
     #region properties
 
     public CR2WFile Cr2wFile { get; set; }
@@ -631,8 +640,6 @@ public partial class RedDocumentViewModel : DocumentViewModel
         return tab;
     }
 
-
     #endregion
-
 }
 

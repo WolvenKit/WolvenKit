@@ -84,11 +84,12 @@
             Grid.Row="0"
             Grid.Column="0"
             Margin="0"
-            ItemsSource="{Binding Chunks}"
+            ItemsSource="{Binding Chunks,
+                                  Mode=TwoWay,
+                                  UpdateSourceTrigger=PropertyChanged}"
             SelectedItem="{Binding SelectedChunk,
-                                   Mode=TwoWay}"
-            SelectedItems="{Binding SelectedChunks,
-                                    Mode=TwoWay}" />
+                                   Mode=TwoWay,
+                                   UpdateSourceTrigger=PropertyChanged}" />
 
         <!-- Grid Splitter -->
         <syncfusion:SfGridSplitter
@@ -101,8 +102,7 @@
             Grid.Row="0"
             Grid.Column="2"
             DataContext="{Binding SelectedChunk}"
-            ViewModel="{Binding SelectedChunk}"
-            ValueChanged="RedTypeView_OnValueChanged" />
+            ViewModel="{Binding SelectedChunk}" />
 
     </Grid>
 </reactiveUi:ReactiveUserControl>

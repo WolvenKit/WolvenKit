@@ -1,5 +1,6 @@
 using System;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Windows;
 using Microsoft.Extensions.Options;
 using ReactiveUI;
@@ -21,14 +22,22 @@ namespace WolvenKit.Views.Documents
         {
             InitializeComponent();
 
-            //this.WhenActivated(disposables =>
-            //{
-            //    var globals = Locator.Current.GetService<IOptions<Globals>>();
-            //    if (globals.Value.ENABLE_NODE_EDITOR)
-            //    {
-            //        AutomaticNodifyEditor.LayoutNodes();
-            //    }
-            //});
+            this.WhenActivated(disposables =>
+            {
+                //    var globals = Locator.Current.GetService<IOptions<Globals>>();
+                //    if (globals.Value.ENABLE_NODE_EDITOR)
+                //    {
+                //        AutomaticNodifyEditor.LayoutNodes();
+                //    }
+
+
+                // ValueChanged="RedTypeView_OnValueChanged"
+                Observable.FromEventPattern<EventHandler, EventArgs>(
+                  handler => CustomPG.ValueChanged += handler,
+                  handler => CustomPG.ValueChanged -= handler)
+                    .Subscribe(e => RedTypeView_OnValueChanged(e.Sender, e.EventArgs))
+                    .DisposeWith(disposables);
+            });
         }
 
         //private void AutolayoutNodes_MenuItem(object sender, RoutedEventArgs e) => AutomaticNodifyEditor.LayoutNodes();

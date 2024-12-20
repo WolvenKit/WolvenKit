@@ -7,15 +7,15 @@ namespace WolvenKit.App.ViewModels.Shell;
 
 public partial class GroupedChunkViewModel : ObservableObject, ISelectableTreeViewItemModel
 {
-    public string Name { get; }
+    //public string Name { get; }
     public string DisplayName { get; }
-    public ObservableCollection<ChunkViewModel> TVProperties { get; }
+    //public List<ChunkViewModel> TVProperties { get; }
 
-    public GroupedChunkViewModel(string range, IEnumerable<ChunkViewModel> chunkViewModels)
+    public GroupedChunkViewModel(string range)
     {
-        Name = range;
-        DisplayName = Name;
-        TVProperties = new ObservableCollection<ChunkViewModel>(chunkViewModels);
+        //Name = range;
+        DisplayName = range;
+        //TVProperties = new List<ChunkViewModel>(chunkViewModels);
     }
 
     [ObservableProperty] private bool _isExpanded;

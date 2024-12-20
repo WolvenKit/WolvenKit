@@ -71,6 +71,11 @@ public class RDTLayeredPreviewViewModel : RedDocumentTabViewModel
         }
     }
 
+    public override void Dispose()
+    {
+       // TODO MB
+    }
+
     public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.W2rcBuffer;
 
     public class ImageEntry

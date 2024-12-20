@@ -140,17 +140,16 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         _scriptService.SetAppViewModel(this);
 
-        _progressService.PropertyChanged += ProgressService_PropertyChanged;
-
-        SettingsManager.WhenPropertyChanged(settings => settings.UiScale)
-            .Subscribe(settings => OnUiScaleChanged());
-
         UpdateTitle();
 
         ShowFirstTimeSetup();
 
         ClearMaterialCache();
 
+        SettingsManager.WhenPropertyChanged(settings => settings.UiScale)
+            .Subscribe(settings => OnUiScaleChanged());
+
+        _progressService.PropertyChanged += ProgressService_PropertyChanged;
         DockedViews.CollectionChanged += DockedViews_OnCollectionChanged;
     }
 

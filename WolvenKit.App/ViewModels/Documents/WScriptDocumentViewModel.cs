@@ -178,4 +178,6 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
             IsNormalScript = true;
         }
     }
+
+    public override void Dispose() { }
 }

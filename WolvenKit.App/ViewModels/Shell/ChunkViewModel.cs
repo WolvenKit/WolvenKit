@@ -52,7 +52,7 @@ using Vec4 = System.Numerics.Vector4;
 
 namespace WolvenKit.App.ViewModels.Shell;
 
-public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemModel, INode<ReferenceSocket>
+public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemModel, INode<ReferenceSocket>, IDisposable
 {
     private readonly IChunkViewmodelFactory _chunkViewmodelFactory;
     private readonly IDocumentTabViewmodelFactory _tabViewmodelFactory;
@@ -140,11 +140,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             NodeIdxInParent = arrayIndex;
         }
 
-        SelfList = new ObservableCollectionExtended<ChunkViewModel>(new[] { this });
+        SelfList = new ObservableCollection<ChunkViewModel>(new[] { this });
 
         if (HasChildren())
         {
-            TempList = new ObservableCollectionExtended<ChunkViewModel>(new[]
+            TempList = new ObservableCollection<ChunkViewModel>(new[]
             {
                 chunkViewmodelFactory.ChunkViewModel(new RedDummy(), nameof(RedDummy), _appViewModel, editorLevel, this)
             });
@@ -470,17 +470,27 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     #endregion Constructors
 
+    public void Dispose()
+    {
+        SelfList.Clear();
+        TempList.Clear();
+        Properties.Clear();
+        TVProperties.Clear();
+
+        //_tab?.Dispose();
+    }
+
     #region Properties
 
-    public ObservableCollectionExtended<ChunkViewModel> SelfList { get; set; } = new();
+    public ObservableCollection<ChunkViewModel> SelfList { get; set; } = new();
 
-    public ObservableCollectionExtended<ChunkViewModel> TempList { get; set; } = new();
+    public ObservableCollection<ChunkViewModel> TempList { get; set; } = new();
 
     // Full list of properties
-    public ObservableCollectionExtended<ChunkViewModel> Properties { get; } = new();
+    public ObservableCollection<ChunkViewModel> Properties { get; } = new();
 
     // Tree view properties (for the panel on the left)
-    public ObservableCollectionExtended<ChunkViewModel> TVProperties => _propertiesLoaded ? Properties : TempList;
+    public ObservableCollection<ChunkViewModel> TVProperties => _propertiesLoaded ? Properties : TempList;
 
     private List<ChunkViewModel> GetTvProperties()
     {
@@ -489,7 +499,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     }
     
     // DisplayProperties (for the panel on the right)
-    public ObservableCollectionExtended<ChunkViewModel> DisplayProperties => MightHaveChildren() ? Properties : SelfList;
+    public ObservableCollection<ChunkViewModel> DisplayProperties => MightHaveChildren() ? Properties : SelfList;
 
     // Fix annoying "Property not found" error spam
     public bool IsDeletable => true;
@@ -3515,7 +3525,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     /// <returns>ChunkViewModel or null</returns>
     public ChunkViewModel? GetChildNode(int index)
     {
-        if (!IsArray || Properties is not ObservableCollectionExtended<ChunkViewModel> children ||
+        if (!IsArray || Properties is not ObservableCollection<ChunkViewModel> children ||
             index >= children.Count)
         {
             return null;

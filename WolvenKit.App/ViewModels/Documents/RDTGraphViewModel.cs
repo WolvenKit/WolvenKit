@@ -191,6 +191,8 @@ public partial class RDTGraphViewModel : RedDocumentTabViewModel
         }
     }
 
+    public override void Dispose() { }
+
     public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.MainFile;
 
     public string GraphText { get; set; } = "";

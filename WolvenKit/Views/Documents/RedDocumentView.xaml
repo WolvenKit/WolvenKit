@@ -14,6 +14,7 @@
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type={x:Type docVM:RedDocumentViewModel}}"
     d:DesignWidth="600">
+
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
         <Grid.Resources>
             <DataTemplate DataType="{x:Type docVM:RDTDataViewModel}">
@@ -40,10 +41,6 @@
                 <docV:RDTWidgetView ViewModel="{Binding}" />
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type docVM:RDTGraphViewModel}">
-                <docV:RDTGraphView ViewModel="{Binding}" />
-            </DataTemplate>
-
             <DataTemplate DataType="{x:Type docVM:RDTGraphViewModel2}">
                 <docV:RDTGraphView2 ViewModel="{Binding}" />
             </DataTemplate>
@@ -54,10 +51,10 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <docV:RedDocumentViewMenuBar
+        <!--<docV:RedDocumentViewMenuBar
             x:Name="RedDocumentViewToolbar"
             Grid.Row="0"
-            ViewModel="{Binding}" />
+            ViewModel="{Binding}" />-->
 
         <syncfusion:TabControlExt
             x:Name="TabControl"

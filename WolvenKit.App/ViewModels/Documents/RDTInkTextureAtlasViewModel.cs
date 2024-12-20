@@ -41,6 +41,11 @@ public partial class RDTInkTextureAtlasViewModel : RedDocumentTabViewModel
         RenderAtlas(0);
     }
 
+    public override void Dispose()
+    {
+
+    }
+
     public event ChangeEventHandler? ChangeEvent;
 
     public List<string> GetUsedSlotNames()

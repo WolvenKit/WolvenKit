@@ -40,10 +40,11 @@ public partial class ScriptManagerView : ReactiveUserControl<ScriptManagerViewMo
         }
     }
 
-    private void ScriptsTreeGridView_OnNodeCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-    {
-        ScriptsTreeGrid.ExpandAllNodes();
-    }
+    // TODO MB
+    //private void ScriptsTreeGridView_OnNodeCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    //{
+    //    ScriptsTreeGrid.ExpandAllNodes();
+    //}
 
     private void TabControl_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {

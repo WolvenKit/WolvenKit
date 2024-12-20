@@ -23,6 +23,10 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
 
     public RDTWidgetViewModel(inkWidgetLibraryResource data, RedDocumentViewModel file) : base(file, "Widget Preview") => library = data;
 
+    public override void Dispose()
+    {
+        // TODO MB
+    }
 
     [ObservableProperty] public bool _isLoaded;
 

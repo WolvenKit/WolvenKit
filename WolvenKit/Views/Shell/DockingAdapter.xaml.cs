@@ -309,6 +309,8 @@ namespace WolvenKit.Views.Shell
             //vm.Close.Execute().Subscribe();
 
             (ItemsSource as IList).Remove(vm);
+            vm.Dispose();
+
             _viewModel.UpdateTitle();
 
             return true;

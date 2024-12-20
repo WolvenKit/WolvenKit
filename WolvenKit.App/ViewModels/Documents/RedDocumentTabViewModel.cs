@@ -40,7 +40,7 @@ public enum RedDocumentItemType
     None,
 }
 
-public abstract partial class RedDocumentTabViewModel : ObservableObject, IActivatableViewModel
+public abstract partial class RedDocumentTabViewModel : ObservableObject, IActivatableViewModel, IDisposable
 {
     protected RedDocumentTabViewModel(RedDocumentViewModel parent, string header)
     {
@@ -296,5 +296,5 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject, IActiv
     {
     }
 
-
+    public abstract void Dispose();
 }

@@ -20,6 +20,10 @@ public partial class RDTTextViewModel : RedDocumentTabViewModel
             .Subscribe();
     }
 
+    public override void Dispose()
+    {
+    }
+
     public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.W2rcBuffer;
 
     [ObservableProperty] private string _text;
