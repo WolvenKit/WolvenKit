@@ -87,7 +87,7 @@ namespace WolvenKit.Views.Tools
 
             InitializeComponent();
 
-            TreeView.ApplyTemplate();
+            //TreeView.ApplyTemplate();
 
             this.WhenActivated(disposables =>
             {
@@ -129,58 +129,58 @@ namespace WolvenKit.Views.Tools
                     v => v.TreeView.ItemsSource)
                     .DisposeWith(disposables);
 
-                this.Bind(ViewModel,
-                   vm => vm.SelectedItem,
-                   v => v.TreeView.SelectedItem)
-                   .DisposeWith(disposables);
+                //this.Bind(ViewModel,
+                //   vm => vm.SelectedItem,
+                //   v => v.TreeView.SelectedItem)
+                //   .DisposeWith(disposables);
 
-                this.Bind(ViewModel,
-                   vm => vm.SelectedItems,
-                   v => v.TreeView.SelectedItems)
-                   .DisposeWith(disposables);
+                //this.Bind(ViewModel,
+                //   vm => vm.SelectedItems,
+                //   v => v.TreeView.SelectedItems)
+                //   .DisposeWith(disposables);
 
 
-                Observable.FromEventPattern<EventHandler<TreeViewItemDragOverEventArgs>, TreeViewItemDragOverEventArgs>(
-                 handler => TreeView.ItemDragOver += handler,
-                 handler => TreeView.ItemDragOver -= handler)
-                   .Subscribe(e => SfTreeView_ItemDragOver(e.Sender, e.EventArgs))
-                   .DisposeWith(disposables);
+                //Observable.FromEventPattern<EventHandler<TreeViewItemDragOverEventArgs>, TreeViewItemDragOverEventArgs>(
+                // handler => TreeView.ItemDragOver += handler,
+                // handler => TreeView.ItemDragOver -= handler)
+                //   .Subscribe(e => SfTreeView_ItemDragOver(e.Sender, e.EventArgs))
+                //   .DisposeWith(disposables);
 
-                Observable.FromEventPattern<EventHandler<TreeViewItemDragStartingEventArgs>, TreeViewItemDragStartingEventArgs>(
-                 handler => TreeView.ItemDragStarting += handler,
-                 handler => TreeView.ItemDragStarting -= handler)
-                   .Subscribe(e => SfTreeView_ItemDragStarting(e.Sender, e.EventArgs))
-                   .DisposeWith(disposables);
+                //Observable.FromEventPattern<EventHandler<TreeViewItemDragStartingEventArgs>, TreeViewItemDragStartingEventArgs>(
+                // handler => TreeView.ItemDragStarting += handler,
+                // handler => TreeView.ItemDragStarting -= handler)
+                //   .Subscribe(e => SfTreeView_ItemDragStarting(e.Sender, e.EventArgs))
+                //   .DisposeWith(disposables);
 
-                Observable.FromEventPattern<EventHandler<TreeViewItemDroppingEventArgs>, TreeViewItemDroppingEventArgs>(
-                 handler => TreeView.ItemDropping += handler,
-                 handler => TreeView.ItemDropping -= handler)
-                   .Subscribe(e => SfTreeView_ItemDropping(e.Sender, e.EventArgs))
-                   .DisposeWith(disposables);
+                //Observable.FromEventPattern<EventHandler<TreeViewItemDroppingEventArgs>, TreeViewItemDroppingEventArgs>(
+                // handler => TreeView.ItemDropping += handler,
+                // handler => TreeView.ItemDropping -= handler)
+                //   .Subscribe(e => SfTreeView_ItemDropping(e.Sender, e.EventArgs))
+                //   .DisposeWith(disposables);
 
-                Observable.FromEventPattern<EventHandler<NodeExpandedCollapsedEventArgs>, NodeExpandedCollapsedEventArgs>(
-                 handler => TreeView.NodeCollapsed += handler,
-                 handler => TreeView.NodeCollapsed -= handler)
-                   .Subscribe(e => OnCollapsed(e.Sender, e.EventArgs))
-                   .DisposeWith(disposables);
+                //Observable.FromEventPattern<EventHandler<NodeExpandedCollapsedEventArgs>, NodeExpandedCollapsedEventArgs>(
+                // handler => TreeView.NodeCollapsed += handler,
+                // handler => TreeView.NodeCollapsed -= handler)
+                //   .Subscribe(e => OnCollapsed(e.Sender, e.EventArgs))
+                //   .DisposeWith(disposables);
 
-                Observable.FromEventPattern<EventHandler<NodeExpandedCollapsedEventArgs>, NodeExpandedCollapsedEventArgs>(
-                 handler => TreeView.NodeExpanded += handler,
-                 handler => TreeView.NodeExpanded -= handler)
-                   .Subscribe(e => OnExpanded(e.Sender, e.EventArgs))
-                   .DisposeWith(disposables);
+                //Observable.FromEventPattern<EventHandler<NodeExpandedCollapsedEventArgs>, NodeExpandedCollapsedEventArgs>(
+                // handler => TreeView.NodeExpanded += handler,
+                // handler => TreeView.NodeExpanded -= handler)
+                //   .Subscribe(e => OnExpanded(e.Sender, e.EventArgs))
+                //   .DisposeWith(disposables);
 
-                Observable.FromEventPattern<EventHandler<ItemSelectionChangedEventArgs>, ItemSelectionChangedEventArgs>(
-                 handler => TreeView.SelectionChanged += handler,
-                 handler => TreeView.SelectionChanged -= handler)
-                   .Subscribe(e => OnSelectionChanged(e.Sender, e.EventArgs))
-                   .DisposeWith(disposables);
+                //Observable.FromEventPattern<EventHandler<ItemSelectionChangedEventArgs>, ItemSelectionChangedEventArgs>(
+                // handler => TreeView.SelectionChanged += handler,
+                // handler => TreeView.SelectionChanged -= handler)
+                //   .Subscribe(e => OnSelectionChanged(e.Sender, e.EventArgs))
+                //   .DisposeWith(disposables);
 
-                Observable.FromEventPattern<MouseButtonEventHandler, MouseButtonEventArgs>(
-                 handler => TreeView.MouseDoubleClick += handler,
-                 handler => TreeView.MouseDoubleClick -= handler)
-                   .Subscribe(e => OnDoubleClick(e.Sender, e.EventArgs))
-                   .DisposeWith(disposables);
+                //Observable.FromEventPattern<MouseButtonEventHandler, MouseButtonEventArgs>(
+                // handler => TreeView.MouseDoubleClick += handler,
+                // handler => TreeView.MouseDoubleClick -= handler)
+                //   .Subscribe(e => OnDoubleClick(e.Sender, e.EventArgs))
+                //   .DisposeWith(disposables);
             });
 
             

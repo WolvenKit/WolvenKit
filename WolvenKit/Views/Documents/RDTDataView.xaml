@@ -97,12 +97,12 @@
             Grid.Column="1"
             HorizontalAlignment="Stretch" />
 
-        <editors:RedTypeView
+        <!--<editors:RedTypeView
             x:Name="CustomPG"
             Grid.Row="0"
             Grid.Column="2"
             DataContext="{Binding SelectedChunk}"
-            ViewModel="{Binding SelectedChunk}" />
+            ViewModel="{Binding SelectedChunk}" />-->
 
     </Grid>
 </reactiveUi:ReactiveUserControl>

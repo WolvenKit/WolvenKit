@@ -15,7 +15,7 @@
     d:DataContext="{d:DesignInstance Type={x:Type docVM:RedDocumentViewModel}}"
     d:DesignWidth="600">
 
-    <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
+    <Grid>
         <Grid.Resources>
             <DataTemplate DataType="{x:Type docVM:RDTDataViewModel}">
                 <docV:RDTDataView ViewModel="{Binding}" />

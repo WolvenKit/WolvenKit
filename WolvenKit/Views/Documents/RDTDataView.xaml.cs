@@ -32,11 +32,11 @@ namespace WolvenKit.Views.Documents
 
 
                 // ValueChanged="RedTypeView_OnValueChanged"
-                Observable.FromEventPattern<EventHandler, EventArgs>(
-                  handler => CustomPG.ValueChanged += handler,
-                  handler => CustomPG.ValueChanged -= handler)
-                    .Subscribe(e => RedTypeView_OnValueChanged(e.Sender, e.EventArgs))
-                    .DisposeWith(disposables);
+                //Observable.FromEventPattern<EventHandler, EventArgs>(
+                //  handler => CustomPG.ValueChanged += handler,
+                //  handler => CustomPG.ValueChanged -= handler)
+                //    .Subscribe(e => RedTypeView_OnValueChanged(e.Sender, e.EventArgs))
+                //    .DisposeWith(disposables);
             });
         }
 
