@@ -868,7 +868,7 @@ namespace WolvenKit.Views.Tools
             var isWholeWord = dialog.ViewModel?.IsWholeWord ?? false;
 
             ChunkViewModel.SearchAndReplace_ResetCaches();
-            if (selectedChunkViewModels.Count < 20)
+            if (IsShiftBeingHeld)
             {
                 selectedChunkViewModels.ForEach(child => child.ForceLoadPropertiesRecursive());
             }
