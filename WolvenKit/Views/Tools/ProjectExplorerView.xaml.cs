@@ -792,7 +792,8 @@ namespace WolvenKit.Views.Tools
 
             // We're copying or moving a file on itself - offer rename operation
             if (fileMap.Count == 1 && existingFiles.Count == 1 &&
-                ViewModel?.ActiveProject is Cp77Project project)
+                ViewModel?.ActiveProject is Cp77Project project &&
+                targetDirectory == Path.GetDirectoryName(fileMap.Keys.First()))
             {
                 var filePath = fileMap.Keys.First();
                 var relativePath = filePath.Replace($"{project.ModDirectory}{Path.DirectorySeparatorChar}", "");
