@@ -206,6 +206,10 @@ namespace WolvenKit.Common.Services
             TweakDBIDPool.SetNative(dict);
         }
 
+        public virtual bool AddResourcePath(string resourcePath) => false;
+
+        public virtual bool AddTweakName(string tweakName) => false;
+        
         #endregion Methods
     }
 }

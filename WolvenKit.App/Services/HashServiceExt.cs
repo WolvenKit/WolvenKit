@@ -17,7 +17,7 @@ public class HashServiceExt : HashService
     private readonly ConcurrentDictionary<string, byte> _projectTweakCache = new();
 
 
-    public bool AddResourcePath(string resourcePath)
+    public override bool AddResourcePath(string resourcePath)
     {
         if (ResourcePathPool.IsNative(resourcePath))
         {
@@ -30,7 +30,7 @@ public class HashServiceExt : HashService
         return true;
     }
 
-    public bool AddTweakName(string tweakName)
+    public override bool AddTweakName(string tweakName)
     {
         if (TweakDBIDPool.IsNative(tweakName))
         {

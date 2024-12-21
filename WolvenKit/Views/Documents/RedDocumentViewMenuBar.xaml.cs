@@ -9,12 +9,12 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using ReactiveUI;
+using SharpDX.Direct2D1;
 using Splat;
 using WolvenKit.App;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
-using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Scripting;
 using WolvenKit.App.ViewModels.Shell;
@@ -24,6 +24,7 @@ using WolvenKit.Common.Extensions;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
+using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.Types;
 using WolvenKit.Views.Dialogs.Windows;
 
@@ -41,6 +42,7 @@ namespace WolvenKit.Views.Documents
         private readonly AppViewModel _appViewModel;
         private readonly IProgressService<double> _progressService;
         
+        
         public RedDocumentViewMenuBar()
         {
             _scriptService = Locator.Current.GetService<AppScriptService>()!;
@@ -52,12 +54,17 @@ namespace WolvenKit.Views.Documents
             _modifierStateService = Locator.Current.GetService<IModifierViewStateService>()!;
             _appViewModel = Locator.Current.GetService<AppViewModel>()!;
             _progressService = Locator.Current.GetService<IProgressService<double>>()!;
+
+            // Enforce instance generation and service injection. One would assume that registering a singleton
+            // is enough. One would be wrong.
+            Locator.Current.GetService<DocumentTools>();
             
             InitializeComponent();
 
             InitializeInstanceObjects();
 
-            DataContext = new RedDocumentViewToolbarModel { CurrentTab = _currentTab };
+            DataContext =
+                new RedDocumentViewToolbarModel(_settingsManager, _modifierStateService) { CurrentTab = _currentTab };
             ViewModel = DataContext as RedDocumentViewToolbarModel;
 
             _modifierStateService.ModifierStateChanged += OnModifierStateChanged;
@@ -751,7 +758,18 @@ namespace WolvenKit.Views.Documents
 
             var photoModeApp = dialog.ViewModel?.SelectedApp;
             var renameAppearances = dialog.ViewModel?.RenameEntries ?? false;
-            var appearanceChildren = RootChunk.GetPropertyChild("appearances")?.Properties
+
+            var appearanceChild = RootChunk.GetPropertyChild("appearances");
+            if (appearanceChild is not null)
+            {
+                appearanceChild.CalculateProperties();
+                foreach (var grandchild in appearanceChild.Properties)
+                {
+                    grandchild.CalculateProperties();
+                }
+            }
+
+            var appearanceChildren = appearanceChild?.Properties
                 .Where(cvm => cvm.ResolvedData is appearanceAppearanceDefinition)
                 .ToList() ?? [];
 
@@ -761,12 +779,32 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            // user clicked cancel
-            if (!Interactions.ShowQuestionYesNo(("You can't un-do this. Are you sure?", "Convert .app file?")))
+            var absolutePath = _projectManager.ActiveProject?.ModDirectory;
+
+            if (!string.IsNullOrEmpty(absolutePath) && !string.IsNullOrEmpty(photoModeApp))
             {
-                return;
+                absolutePath = Path.Combine(absolutePath, photoModeApp);
+                if (File.Exists(absolutePath))
+                {
+                    if (!Interactions.ShowQuestionYesNo(($"The file {photoModeApp} already exists. Overwrite it?",
+                            "Overwrite photo mode .app?")))
+                    {
+                        return;
+                    }
+
+                    try
+                    {
+                        File.Delete(absolutePath);
+                    }
+                    catch
+                    {
+                        _loggerService.Error(
+                            $"Can't overwrite ${absolutePath}. Please make sure that it's not open anywhere!");
+                        return;
+                    }
+                }
             }
-            
+           
             if (renameAppearances)
             {
                 if (appearanceChildren.Count > s_maxNumberReplacerAppearances)
@@ -790,6 +828,10 @@ namespace WolvenKit.Views.Documents
                 {
                     // type check has already been done when selecting the nodes
                     var resolvedData = (appearanceAppearanceDefinition)appNode.ResolvedData;
+                    if (DocumentTools.PlaceholderRegex.IsMatch(resolvedData.Name.GetResolvedText() ?? ""))
+                    {
+                        continue;
+                    }
 
                     resolvedData.Name = counter < 100 ? $"appearance_{counter:D2}" : $"appearance_{counter:D3}";
                     counter += 1;
@@ -802,27 +844,21 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            if (RootChunk.Tab is null || _projectManager.ActiveProject is null || RootChunk.Tab.FilePath is not string s || !File.Exists(s))
+            if (RootChunk.Tab?.Parent.Cr2wFile is null ||
+                !DocumentTools.SaveCr2W(RootChunk.Tab.Parent.Cr2wFile, absolutePath))
             {
-                _loggerService.Error($"Can't automatically move your file. Please move it to the following path: ");
+                _loggerService.Error(
+                    $"Can't automatically move your file. Please create a copy and move it to the following path, then run the command from inside the file: ");
                 _loggerService.Error($"\t{photoModeApp}");
                 return;
             }
 
-            RootChunk.Tab.Parent.SaveCommand.Execute(null);
-            var destPath = Path.Join(_projectManager.ActiveProject.ModDirectory, photoModeApp);
-            if (Path.GetDirectoryName(destPath) is string parentFolder && !Directory.Exists(parentFolder))
-            {
-                Directory.CreateDirectory(parentFolder);
-            }
-
-            if (_appViewModel.ActiveDocument is not null)
-            {
-                _appViewModel.CloseFile(_appViewModel.ActiveDocument);
-            }
-
-            File.Move(s, destPath);
             _appViewModel.OpenFileFromDepotPath(photoModeApp);
+
+            RootChunk.Tab?.Parent?.Reload(true);
         }
+        
+        
+
     }
 }
