@@ -175,6 +175,7 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
             uint d = v.W switch
             {
                 1f => 0,
+                0f => 0,
                 -1f => 3,
                 _ => throw new InvalidOperationException()
             };
