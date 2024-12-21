@@ -21,6 +21,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Helpers;
+using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
@@ -189,74 +190,15 @@ public partial class RedDocumentViewModel : DocumentViewModel
         await Task.CompletedTask;
     }
 
-    public void SaveSync(object? parameter)
+    public void SaveSync(object? _)
     {
-        var ms = new MemoryStream();
-        var file = GetMainFile();
-
-        try
+        if (GetMainFile() is null || !DocumentTools.SaveCr2W(Cr2wFile, FilePath))
         {
-            if (file is not null && Cr2wFile != null)
-            {
-                var cr2w = Cr2wFile;
-                if (_hookService is AppHookService appHookService && !appHookService.OnSave(FilePath, ref cr2w))
-                {
-                    _loggerService.Error($"Error while processing onSave hooks");
-                    return;
-                }
-
-                SaveHashedValues(cr2w);
-
-                using var writer = new CR2WWriter(ms, Encoding.UTF8, true) { LoggerService = _loggerService };
-                writer.WriteFile(cr2w);
-            }
-        }
-        catch (Exception e)
-        {
-            _loggerService.Error($"Error while saving {FilePath}");
-            _loggerService.Error(e);
-
             return;
         }
 
-        if (FileHelper.SafeWrite(ms, FilePath, _loggerService))
-        {
-            LastWriteTime = File.GetLastWriteTime(FilePath);
-        }
-
+        LastWriteTime = File.GetLastWriteTime(FilePath);
         SetIsDirty(false);
-        _loggerService.Success($"Saved file {FilePath}");
-    }
-
-    private void SaveHashedValues(CR2WFile file)
-    {
-        if (_hashService is not HashServiceExt hashService)
-        {
-            return;
-        }
-
-        foreach (var (path, value) in file.RootChunk.GetEnumerator())
-        {
-            if (value is IRedRef redRef && redRef.DepotPath != ResourcePath.Empty)
-            {
-                if (!redRef.DepotPath.TryGetResolvedText(out var refPath))
-                {
-                    continue;
-                }
-
-                hashService.AddResourcePath(refPath);
-            }
-
-            if (value is TweakDBID tweakDbId && tweakDbId != TweakDBID.Empty)
-            {
-                if (!tweakDbId.TryGetResolvedText(out var tweakName))
-                {
-                    continue;
-                }
-
-                hashService.AddTweakName(tweakName);
-            }
-        }
     }
 
     public override void SaveAs(object parameter) => throw new NotImplementedException();
@@ -268,14 +210,13 @@ public partial class RedDocumentViewModel : DocumentViewModel
             return false;
         }
 
-
         using var fs = File.Open(FilePath, FileMode.Open);
-        if (!_parserService.TryReadRed4File(fs, out var cr2wFile))
+        if (!_parserService.TryReadRed4File(fs, out var cr2WFile))
         {
             return false;
         }
 
-        Cr2wFile = cr2wFile;
+        Cr2wFile = cr2WFile;
         PopulateItems();
 
         SetIsDirty(false);

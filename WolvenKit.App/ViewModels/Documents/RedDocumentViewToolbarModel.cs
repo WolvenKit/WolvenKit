@@ -3,10 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Splat;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
@@ -19,25 +17,16 @@ namespace WolvenKit.App.ViewModels.Documents;
 
 public partial class RedDocumentViewToolbarModel : ObservableObject
 {
-    public RedDocumentViewToolbarModel()
+    public RedDocumentViewToolbarModel(
+        ISettingsManager settingsSvc,
+        IModifierViewStateService modifierSvc
+    )
     {
-        if (Locator.Current.GetService<ISettingsManager>() is ISettingsManager settingsSvc)
-        {
-            EditorLevel = settingsSvc.DefaultEditorDifficultyLevel;
-        }
-        else
-        {
-            EditorLevel = EditorDifficultyLevel.Easy;
-        }
+        EditorLevel = settingsSvc.DefaultEditorDifficultyLevel;
 
-        if (Locator.Current.GetService<IModifierViewStateService>() is not IModifierViewStateService svc)
-        {
-            return;
-        }
-
-        _modifierViewStateService = svc;
-        svc.ModifierStateChanged += OnModifierChanged;
-        svc.PropertyChanged += (_, args) => OnPropertyChanged(args.PropertyName); 
+        _modifierViewStateService = modifierSvc;
+        modifierSvc.ModifierStateChanged += OnModifierChanged;
+        modifierSvc.PropertyChanged += (_, args) => OnPropertyChanged(args.PropertyName);
 
         RefreshMenuVisibility(true);
     }
