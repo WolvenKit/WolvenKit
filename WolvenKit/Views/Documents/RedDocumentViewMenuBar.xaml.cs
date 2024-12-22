@@ -12,6 +12,7 @@ using ReactiveUI;
 using SharpDX.Direct2D1;
 using Splat;
 using WolvenKit.App;
+using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
@@ -839,17 +840,23 @@ namespace WolvenKit.Views.Documents
                 }
             }
 
-            if (string.IsNullOrEmpty(photoModeApp))
+            if (string.IsNullOrEmpty(photoModeApp) || RootChunk.Tab?.Parent is null)
             {
                 return;
             }
 
-            if (RootChunk.Tab?.Parent.Cr2wFile is null ||
-                !DocumentTools.SaveCr2W(RootChunk.Tab.Parent.Cr2wFile, absolutePath))
+            try
+            {
+                RootChunk.Tab.Parent.SaveAsCommand.SafeExecute(new SaveAsParameters(RootChunk.Tab.Parent, absolutePath!,
+                    true));
+            }
+            catch
             {
                 _loggerService.Error(
                     $"Can't automatically move your file. Please create a copy and move it to the following path, then run the command from inside the file: ");
                 _loggerService.Error($"\t{photoModeApp}");
+
+                RootChunk.Tab?.Parent?.Reload(true);
                 return;
             }
 

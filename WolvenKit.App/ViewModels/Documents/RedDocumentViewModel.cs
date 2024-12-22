@@ -18,6 +18,7 @@ using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Helpers;
@@ -190,18 +191,34 @@ public partial class RedDocumentViewModel : DocumentViewModel
         await Task.CompletedTask;
     }
 
-    public void SaveSync(object? _)
+    protected override void SaveAs(SaveAsParameters saveParams)
     {
-        if (GetMainFile() is null || !DocumentTools.SaveCr2W(Cr2wFile, FilePath))
+        var cr2W = Cr2wFile;
+        if (!saveParams.SkipOnSaveHook && _hookService is AppHookService appHookService &&
+            !appHookService.OnSave(FilePath, ref cr2W))
         {
-            return;
+            _loggerService.Error($"Error while processing onSave hooks");
         }
 
-        LastWriteTime = File.GetLastWriteTime(FilePath);
-        SetIsDirty(false);
+        if (!SaveSync(saveParams.OriginalObject, saveParams.AbsoluteFilePath))
+        {
+            throw new Exception($"Failed to save {saveParams.AbsoluteFilePath}");
+        }
     }
 
-    public override void SaveAs(object parameter) => throw new NotImplementedException();
+    public bool SaveSync(object? _, string? filePath = null)
+    {
+        filePath ??= FilePath;
+        if (GetMainFile() is null || !DocumentTools.SaveCr2W(Cr2wFile, filePath))
+        {
+            return false;
+        }
+
+        LastWriteTime = File.GetLastWriteTime(filePath);
+        SetIsDirty(false);
+        return true;
+    }
+
 
     public override bool Reload(bool force)
     {
