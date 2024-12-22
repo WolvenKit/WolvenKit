@@ -4,18 +4,11 @@ using WolvenKit.App.Models.Docking;
 
 namespace WolvenKit.App.ViewModels.Documents;
 
-public class SaveAsParameters
+public class SaveAsParameters(object originalObject, string absoluteFilePath, bool skipOnSaveHook = false)
 {
-    public object OriginalObject { get; set; }
-    public string AbsoluteFilePath { get; set; }
-    public bool SkipOnSaveHook { get; set; }
-
-    public SaveAsParameters(object originalObject, string absoluteFilePath, bool skipOnSaveHook = false)
-    {
-        OriginalObject = originalObject;
-        AbsoluteFilePath = absoluteFilePath;
-        SkipOnSaveHook = skipOnSaveHook;
-    }
+    public object OriginalObject { get; set; } = originalObject;
+    public string AbsoluteFilePath { get; set; } = absoluteFilePath;
+    public bool SkipOnSaveHook { get; set; } = skipOnSaveHook;
 }
 
 public interface IDocumentViewModel : IDockElement
@@ -26,10 +19,7 @@ public interface IDocumentViewModel : IDockElement
     string? FilePath { get; set; }
     bool IsReadOnly { get; set; }
 
-    public bool IsDirty
-    {
-        get;
-    }
+    public bool IsDirty { get; }
     
     DateTime LastWriteTime { get; }
 

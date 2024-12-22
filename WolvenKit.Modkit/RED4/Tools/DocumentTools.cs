@@ -1,5 +1,5 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿#nullable enable
+using System;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -10,7 +10,7 @@ using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
 
-namespace WolvenKit.Modkit.RED4.Tools;
+namespace WolvenKit.Modkit.RED4;
 
 public class DocumentTools
 {
@@ -81,7 +81,7 @@ public class DocumentTools
             return;
         }
 
-        foreach (var (path, value) in file.RootChunk.GetEnumerator())
+        foreach (var (_, value) in file.RootChunk.GetEnumerator())
         {
             switch (value)
             {
@@ -92,8 +92,6 @@ public class DocumentTools
                 case TweakDBID tweakDbId
                     when tweakDbId != TweakDBID.Empty && tweakDbId.TryGetResolvedText(out var tweakName):
                     hashService.AddTweakName(tweakName);
-                    break;
-                default:
                     break;
             }
         }
