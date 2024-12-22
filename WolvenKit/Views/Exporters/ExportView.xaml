@@ -194,8 +194,45 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
+
+            <StackPanel
+                Grid.Column="0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Width="Auto"
+                Orientation="Vertical">
+                <TextBlock
+                    Visibility="{Binding Path=HasItems,
+                                         Converter={StaticResource InvertBooleanVisibilityConverter}}"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Background="{StaticResource BackgroundColor_Control}"
+                    Foreground="Gray"
+                    FontSize="{DynamicResource WolvenKitFontHeader}"
+                    Opacity="0.8"
+                    Width="Auto"
+                    Margin="{DynamicResource WolvenKitMargin}"
+                    TextWrapping="Wrap"
+                    Text="No exportable files" />
+                <TextBlock
+                    Visibility="{Binding Path=HasItems,
+                                         Converter={StaticResource InvertBooleanVisibilityConverter}}"
+                    Background="{StaticResource BackgroundColor_Control}"
+                    Foreground="Gray"
+                    FontSize="{DynamicResource WolvenKitFontMedium}"
+                    Opacity="0.8"
+                    Width="Auto"
+                    Margin="{DynamicResource WolvenKitMargin}"
+                    TextWrapping="Wrap"
+                    Text="Add files to your Wolvenkit Project to export them" />
+
+            </StackPanel>
+            
             <!-- Data Grid Exports -->
             <syncfusion:SfDataGrid
+                Visibility="{Binding Path=HasItems,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+
                 x:Name="ExportGrid"
                 Grid.Column="0"
                 BorderThickness="0,1,0,0"
