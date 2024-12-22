@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
@@ -29,6 +30,8 @@ public partial class ExportViewModel : AbstractImportExportViewModel
     private readonly IProjectManager _projectManager;
     private readonly IProgressService<double> _progressService;
     private readonly ImportExportHelper _importExportHelper;
+
+    [ObservableProperty] private bool _hasItems;
 
     public ExportViewModel(
         AppViewModel appViewModel,
@@ -194,6 +197,7 @@ public partial class ExportViewModel : AbstractImportExportViewModel
 
         ProcessAllCommand.NotifyCanExecuteChanged();
         _progressService.IsIndeterminate = false;
+        HasItems = Items.Any();
     }
 
     private static bool CanExport(string x) => Enum.TryParse<ECookedFileFormat>(Path.GetExtension(x).TrimStart('.'), out var _);
