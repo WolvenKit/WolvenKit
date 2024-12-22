@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using WolvenKit.App.Services;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Helpers;
@@ -10,7 +11,7 @@ using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
 
-namespace WolvenKit.Modkit.RED4;
+namespace WolvenKit.App.Helpers;
 
 public class DocumentTools
 {
@@ -76,12 +77,12 @@ public class DocumentTools
 
     private static void SaveHashedValues(CR2WFile file)
     {
-        if (s_hashServiceInstance is not HashService hashService)
+        if (s_hashServiceInstance is not HashServiceExt hashService)
         {
             return;
         }
 
-        foreach (var (_, value) in file.RootChunk.GetEnumerator())
+        foreach (var (path, value) in file.RootChunk.GetEnumerator())
         {
             switch (value)
             {
@@ -92,6 +93,8 @@ public class DocumentTools
                 case TweakDBID tweakDbId
                     when tweakDbId != TweakDBID.Empty && tweakDbId.TryGetResolvedText(out var tweakName):
                     hashService.AddTweakName(tweakName);
+                    break;
+                default:
                     break;
             }
         }
