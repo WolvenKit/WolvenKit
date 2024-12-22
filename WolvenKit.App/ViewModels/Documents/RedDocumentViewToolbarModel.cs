@@ -133,7 +133,6 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(AdjustSubmeshCountCommand))]
     [NotifyCanExecuteChangedFor(nameof(DeleteDuplicateEntriesCommand))]
     [NotifyCanExecuteChangedFor(nameof(RegenerateVisualControllersCommand))]
-    [NotifyCanExecuteChangedFor(nameof(DeleteUnusedMaterialsCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateMissingMaterialsCommand))]
     [ObservableProperty]
     private RedDocumentItemType _contentType;
@@ -152,7 +151,6 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(ScrollToMaterialCommand))]
     [NotifyCanExecuteChangedFor(nameof(ToggleLocalInstanceCommand))]
     [NotifyCanExecuteChangedFor(nameof(DeleteDuplicateEntriesCommand))]
-    [NotifyCanExecuteChangedFor(nameof(DeleteUnusedMaterialsCommand))]
     [NotifyCanExecuteChangedFor(nameof(ConvertPreloadMaterialsCommand))]
     [ObservableProperty]
     private ChunkViewModel? _selectedChunk;
@@ -299,12 +297,21 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     /*
      * mesh: clear appearances
      */
-    private bool CanClearAppearances() => RootChunk?.CanClearMaterials() == true;
+    private bool CanClearMaterials() => RootChunk?.ResolvedData is CMesh;
 
     private bool HasMeshAppearances() => RootChunk?.ResolvedData is CMesh { Appearances.Count: > 0 };
 
-    [RelayCommand(CanExecute = nameof(CanClearAppearances))]
-    private void ClearMaterials() => RootChunk?.ClearMaterialsCommand.Execute(null);
+    [RelayCommand(CanExecute = nameof(CanClearMaterials))]
+    private void ClearMaterials()
+    {
+        if (RootChunk?.ResolvedData is not CMesh mesh)
+        {
+            return;
+        }
+
+        mesh.Appearances.Clear();
+        RootChunk.DeleteUnusedMaterialsCommand.Execute(false);
+    }
 
     #region meshfile_materials
 

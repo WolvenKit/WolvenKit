@@ -21,8 +21,6 @@ public partial class ChunkViewModel
     [NotifyCanExecuteChangedFor(nameof(DuplicateAsNewChunkCommand))]
     [NotifyCanExecuteChangedFor(nameof(ToggleEnableMaskedCommand))]
     [NotifyCanExecuteChangedFor(nameof(ConvertPreloadMaterialsCommand))]
-    [NotifyCanExecuteChangedFor(nameof(DeleteUnusedMaterialsCommand))]
-    [NotifyCanExecuteChangedFor(nameof(ClearMaterialsCommand))]
     [ObservableProperty] private bool _isShiftKeyPressed;
     
     [ObservableProperty] private bool _isCtrlKeyPressed;
@@ -306,7 +304,7 @@ public partial class ChunkViewModel
             {
                 foreach (var property in TVProperties.Where(p => p.ResolvedData is CMaterialInstance))
                 {
-                    property.ToggleEnableMaskedCommand.Execute(null);
+                    property.ToggleEnableMasked();
                 }
 
                 break;
@@ -370,6 +368,7 @@ public partial class ChunkViewModel
                 var appearanceChild = GetPropertyChild("appearances");
                 foreach (var appearanceNode in appearanceChild?.Properties ?? [])
                 {
+                    appearanceNode.CalculateProperties(); // needs to be initialized
                     appearanceNode.ReplaceMeshComponentProperties(componentName, chunkMask, depotPath, meshAppearance);
                 }
                 break;

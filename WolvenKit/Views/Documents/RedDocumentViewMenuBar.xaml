@@ -443,13 +443,28 @@
 
                 <!-- Without SHIFT -->
                 <MenuItem
-                    Style="{StaticResource NestedMenuItemStyle}"
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                     Header="Delete unused materials"
                     Command="{Binding Path=DeleteUnusedMaterialsCommand}">
+
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource NestedMenuItemStyle}"
+                            TargetType="MenuItem">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=IsShiftKeyDown}" Value="False" />
+                                        <Condition
+                                            Binding="{Binding Path=ContentType,
+                                          UpdateSourceTrigger=PropertyChanged}"
+                                            Value="{x:Static documents:RedDocumentItemType.Mesh}" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
@@ -460,13 +475,28 @@
 
                 <!-- With SHIFT -->
                 <MenuItem
-                    Style="{StaticResource NestedMenuItemStyle}"
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                     Header="Clear all materials"
                     Command="{Binding Path=ClearMaterialsCommand}">
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource NestedMenuItemStyle}"
+                            TargetType="MenuItem">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Path=IsShiftKeyDown}" Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=ContentType,
+                                          UpdateSourceTrigger=PropertyChanged}"
+                                            Value="{x:Static documents:RedDocumentItemType.Mesh}" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
+                    
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"

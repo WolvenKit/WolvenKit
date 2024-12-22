@@ -1573,23 +1573,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         return appearances;
     }
 
-    public bool CanClearMaterials() => IsShiftKeyPressed && GetRootModel().ResolvedData is CMesh;
-
-    [RelayCommand(CanExecute = nameof(CanClearMaterials))]
-    private void ClearMaterials()
-    {
-        if (ResolvedData is not CMesh mesh)
-        {
-            return;
-        }
-
-        mesh.Appearances.Clear();
-        DeleteUnusedMaterials();
-    }
-
-    public bool CanDeleteUnusedMaterials() => !IsShiftKeyPressed && GetRootModel().ResolvedData is CMesh;
-
-    [RelayCommand(CanExecute = nameof(CanDeleteUnusedMaterials))]
+    [RelayCommand]
     private void DeleteUnusedMaterials(bool suppressLogOutput = false)
     {
         if (GetRootModel() is not { ResolvedData: CMesh mesh } rootChunk)
@@ -1705,7 +1689,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         if (numTemplateProperties > 0)
         {
-            _loggerService.Info($"Deleted {numTemplateProperties} template properties.");
+            _loggerService.Info($"Deleted {numTemplateProperties} properties from outdated templates.");
         }
 
         return;
