@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using HandyControl.Tools.Extension;
 using ReactiveUI;
 using SharpDX.Direct2D1;
 using Splat;
@@ -15,6 +16,7 @@ using WolvenKit.App;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
+using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Scripting;
@@ -509,6 +511,95 @@ namespace WolvenKit.Views.Documents
                 new Dictionary<string, List<string>>() { { relativePath, unusedMeshPaths } }));
         }
 
+        private async void OnConnectToEntFileClick(object _, RoutedEventArgs e)
+        {
+            try
+            {
+                if (_projectManager.ActiveProject is not Cp77Project activeProject || RootChunk is not ChunkViewModel
+                    {
+                        ResolvedData: appearanceAppearanceResource app
+                    })
+                {
+                    return;
+                }
+
+                var appFilePath = RootChunk.Tab?.FilePath;
+                if (string.IsNullOrEmpty(appFilePath))
+                {
+                    _loggerService.Error($"Can't read current .app file!");
+                    return;
+                }
+
+                var entFilePath = await Interactions.ShowInputBoxAsync("Enter .ent file path", "");
+                if (string.IsNullOrEmpty(entFilePath))
+                {
+                    return;
+                }
+
+
+                if (!activeProject.Files.Contains(entFilePath.StartsWith("archive")
+                        ? entFilePath
+                        : $"archive{Path.DirectorySeparatorChar}{entFilePath}"))
+                {
+                    _loggerService.Error($"Can't find .ent file {entFilePath}!");
+                    return;
+                }
+
+                if (!Path.IsPathRooted(entFilePath))
+                {
+                    entFilePath = Path.Combine(_projectManager.ActiveProject.ModDirectory, entFilePath);
+                }
+
+                var cr2WFile = DocumentTools.ReadCr2W(entFilePath);
+                if (cr2WFile.RootChunk is not entEntityTemplate ent)
+                {
+                    _loggerService.Error($"invalid .ent file: {entFilePath}!");
+                    return;
+                }
+
+                var appAppearanceNames = app.Appearances.Select(a => a.Chunk?.Name.GetResolvedText())
+                    .Where(s => !string.IsNullOrEmpty(s))
+                    .Select(s => s!)
+                    .Where(s => !DocumentTools.PlaceholderRegex.IsMatch(s))
+                    .ToList();
+
+                var entAppearanceNames = ent.Appearances.Select(a => a.AppearanceName.GetResolvedText())
+                    .Where(s => !string.IsNullOrEmpty(s))
+                    .Select(s => s!)
+                    .ToList();
+
+                var missingAppearances = appAppearanceNames.Except(entAppearanceNames).ToList();
+                if (missingAppearances.Count == 0)
+                {
+                    return;
+                }
+
+                var appearancePrefix = ent.Appearances
+                    .Where(eA => appAppearanceNames.Contains(eA.AppearanceName.GetResolvedText() ?? ""))
+                    .Select(eA =>
+                        (eA.Name.GetResolvedText() ?? "").Replace((eA.AppearanceName.GetResolvedText() ?? ""), ""))
+                    .FirstOrDefault(s => !s.IsNullOrEmpty()) ?? "";
+
+                foreach (var appName in appAppearanceNames.Except(entAppearanceNames))
+                {
+                    var newAppearance = new entTemplateAppearance()
+                    {
+                        AppearanceName = appName,
+                        Name = $"{appearancePrefix}{appName}",
+                        AppearanceResource = new CResourceAsyncReference<appearanceAppearanceResource>(appFilePath)
+                    };
+                    ent.Appearances.Add(newAppearance);
+                }
+
+                DocumentTools.SaveCr2W(cr2WFile, entFilePath);
+            }
+            catch (Exception err)
+            {
+                _loggerService.Error("Failed to connect .app to .ent file! An exception was thrown:");
+                _loggerService.Error(err);
+            }
+        }
+        
         private MenuItem? _openMenu;
 
         private static List<string> _facialSetups = [];

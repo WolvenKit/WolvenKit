@@ -215,7 +215,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     }
 
     private bool CanChangeAnimationComponent() => RootChunk?.ResolvedData is appearanceAppearanceResource;
-
+    
     /*
      * Convert to photo mode app
      */

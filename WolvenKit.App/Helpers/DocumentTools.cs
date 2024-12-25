@@ -4,11 +4,13 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using WolvenKit.App.Services;
+using WolvenKit.Common.Exceptions;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Helpers;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
+using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Helpers;
@@ -17,15 +19,18 @@ public class DocumentTools
 {
     private readonly ILoggerService _loggerService;
     private readonly IHashService _hashService;
+    private readonly Red4ParserService _parserService;
 
     private static ILoggerService s_loggerServiceInstance = null!;
     private static IHashService s_hashServiceInstance = null!;
+    private static Red4ParserService s_parserServiceInstance = null!;
 
-    public static Regex PlaceholderRegex { get; } = new Regex(@"^[-=_]+$");
+    public static Regex PlaceholderRegex { get; } = new Regex(@"^[—-=_]+$");
 
     public DocumentTools(
         ILoggerService loggerService,
-        IHashService hashService
+        IHashService hashService,
+        Red4ParserService parserService
     )
     {
         _loggerService = loggerService;
@@ -33,6 +38,9 @@ public class DocumentTools
 
         _hashService = hashService;
         s_hashServiceInstance = hashService;
+
+        _parserService = parserService;
+        s_parserServiceInstance = parserService;
     }
 
     public static bool SaveCr2W(CR2WFile cr2WFile, string? absolutePath)
@@ -98,5 +106,22 @@ public class DocumentTools
                     break;
             }
         }
+    }
+
+    public static CR2WFile ReadCr2W(string absolutePath)
+    {
+        if (!File.Exists(absolutePath))
+        {
+            throw new InvalidDataException($"File does not exist: {absolutePath}");
+        }
+
+        using var fs = new FileStream(absolutePath, FileMode.Open);
+
+        if (!s_parserServiceInstance.TryReadRed4File(fs, out var cr2WFile))
+        {
+            throw new InvalidFileTypeException($"Can't read file: {absolutePath}");
+        }
+
+        return cr2WFile;
     }
 }
