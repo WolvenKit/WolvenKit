@@ -25,7 +25,7 @@ public class DocumentTools
     private static IHashService s_hashServiceInstance = null!;
     private static Red4ParserService s_parserServiceInstance = null!;
 
-    public static Regex PlaceholderRegex { get; } = new Regex(@"^[—-=_]+$");
+    public static Regex PlaceholderRegex { get; } = new Regex(@"^[-=_]+$");
 
     public DocumentTools(
         ILoggerService loggerService,
