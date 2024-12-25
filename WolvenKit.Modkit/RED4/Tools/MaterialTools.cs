@@ -68,7 +68,14 @@ namespace WolvenKit.Modkit.RED4
         {
             var matData = SetupMaterial(cr2w, matRepo, info, eUncookExtension);
             var str = RedJsonSerializer.Serialize(matData);
-            File.WriteAllText(Path.ChangeExtension(outfile.FullName, ".Material.json"), str);
+
+            var materialsFile = Path.GetExtension(outfile.Name) switch
+            {
+                ".morphtarget" => $"{outfile.FullName}.Material.json",
+                _ => Path.ChangeExtension(outfile.FullName, ".Material.json"),
+            };
+
+            File.WriteAllText(materialsFile, str);
         }
 
         private IRedType? GetMaterialParameterValue(Type materialParameterType, object? obj)

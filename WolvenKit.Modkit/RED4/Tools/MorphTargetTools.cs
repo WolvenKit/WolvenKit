@@ -7,6 +7,7 @@ using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
+using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.RED4.GeneralStructs;
@@ -48,9 +49,8 @@ namespace WolvenKit.Modkit.RED4
 
                 if (exportTextures)
                 {
-                    // TODO: this does not work yet
-                    var meshCollectionInfo = MeshTools.GetMeshesinfo(meshBlob);
-                    ParseMaterials(cr2w, outfile, materialRepository, meshCollectionInfo, EUncookExtension.png);
+                    ExportMaterials(result.File, outfile,
+                        new MeshExportArgs { MaterialRepo = materialRepository, withMaterials = true });
                 }
             }
 
