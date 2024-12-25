@@ -41,11 +41,9 @@ namespace WolvenKit.Modkit.RED4
             RawArmature? rig = null;
 
             if (TryFindFile(morphBlob.BaseMesh.DepotPath, out var result) == FindFileResult.NoError &&
-                result.File is { RootChunk: CMesh baseMeshBlob } &&
-                baseMeshBlob.RenderResourceBlob.Chunk is rendRenderMeshBlob meshBlob)
+                result.File is { RootChunk: CMesh { RenderResourceBlob.Chunk: rendRenderMeshBlob } baseMeshBlob })
             {
                 rig = MeshTools.GetOrphanRig(baseMeshBlob);
-
 
                 if (exportTextures)
                 {
@@ -267,57 +265,6 @@ namespace WolvenKit.Modkit.RED4
             }
 
             return rawTarget;
-        }
-
-        private static List<MemoryStream> ContainTextureStreams(rendRenderMorphTargetMeshBlob blob, MemoryStream texbuffer)
-        {
-            var textureStreams = new List<MemoryStream>();
-
-            var count = blob.Header.TargetTextureDiffsData.Count;
-            var texCount = 0;
-            var targetDiffsDataOffset = new List<uint>();
-            var targetDiffsDataSize = new List<uint>();
-            var targetDiffsMipLevelCounts = new List<uint>();
-            var targetDiffsWidth = new List<uint>();
-
-            for (var i = 0; i < count; i++)
-            {
-                var diff = blob.Header.TargetTextureDiffsData[i];
-
-                if (diff.TargetDiffsDataSize.Count == 0)
-                {
-                    break;
-                }
-
-                if (diff.TargetDiffsDataSize[0] == 0)
-                {
-                    continue;
-                }
-
-                targetDiffsDataOffset.Add(diff.TargetDiffsDataOffset[0]);
-                targetDiffsDataSize.Add(diff.TargetDiffsDataSize[0]);
-                targetDiffsMipLevelCounts.Add(diff.TargetDiffsMipLevelCounts[0]);
-                targetDiffsWidth.Add(diff.TargetDiffsWidth[0]);
-                texCount++;
-            }
-
-            var texBr = new BinaryReader(texbuffer);
-            for (var i = 0; i < texCount; i++)
-            {
-                texbuffer.Position = targetDiffsDataOffset[i];
-                var bytes = texBr.ReadBytes((int)targetDiffsDataSize[i]);
-
-                var ms = new MemoryStream();
-                var metadata = new DDSMetadata(
-                    targetDiffsWidth[i], targetDiffsWidth[i],
-                    1, 1, targetDiffsMipLevelCounts[i], 0, 0, DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, 16, true);
-                DDSUtils.GenerateAndWriteHeader(ms, metadata);
-                var bw = new BinaryWriter(ms);
-                bw.Write(bytes);
-                textureStreams.Add(ms);
-            }
-
-            return textureStreams;
         }
 
         private static ModelRoot RawTargetsToGLTF(List<RawMeshContainer> meshes, List<RawTargetContainer[]> expTargets, string[] names, RawArmature? rig)

@@ -92,16 +92,16 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("Export Settings")]
         [Display(Name = "Is Binary")]
-        [Description("If selected the mesh will be exported as GLB, if unchecked as GLTF")]
+        [Description("If selected, the mesh will be exported as GLB, if unchecked as GLTF")]
         [WkitScriptAccess("Binary")]
         public bool IsBinary { get => _isBinary; set => SetProperty(ref _isBinary, value); }
 
         /// <summary>
-        /// Export morphtarget's textures (pngs)
+        /// Export materials? (from linked .mesh)
         /// </summary>
         [Category("Export Settings")]
-        [Display(Name = "Export textures (pngs)")]
-        [Description("If selected, the morphtarget's textures will be exported.")]
+        [Display(Name = "Export materials (from mesh)")]
+        [Description("export materials from linked mesh?")]
         [WkitScriptAccess(nameof(ExportTextures))]
         public bool ExportTextures { get => _exportTextures; set => SetProperty(ref _exportTextures, value); }
 
@@ -109,7 +109,8 @@ namespace WolvenKit.Common.Model.Arguments
         /// String Override to display info in data grid.
         /// </summary>
         /// <returns>String</returns>
-        public override string ToString() => $"{(IsBinary ? "glb" : "gltf")} | Textures: {ExportTextures}";
+        public override string ToString() =>
+            $"{(IsBinary ? "glb" : "gltf")} | {(ExportTextures ? "with" : "without")} materials";
 
     }
 
