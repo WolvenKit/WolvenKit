@@ -25,6 +25,8 @@ public static class LogCodeHelper
             "https://wiki.redmodding.org/cyberpunk-2077-modding/modding-guides/npcs/a-new-head-for-v#step-6-optional-disabling-the-character-creator");
 
         // 3: modKit stuff
+        s_mapping.Add(0x3003,
+            "https://wiki.redmodding.org/cyberpunk-2077-modding/for-mod-creators/core-mods-explained/archivexl/archivexl-resource-patching");
 
         // 4: project stuff
         s_mapping.Add(0x4001, "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/settings#additional-mod-directory");

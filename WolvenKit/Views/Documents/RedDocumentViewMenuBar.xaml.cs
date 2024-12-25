@@ -545,6 +545,12 @@ namespace WolvenKit.Views.Documents
                     return;
                 }
 
+                if (_archiveManager.GetGameFile(entFilePath) is not null)
+                {
+                    throw new WolvenKitException(0x3003,
+                        $"Please don't overwrite base game files! Use ArchiveXL resource patching instead!");
+                }
+
                 if (!Path.IsPathRooted(entFilePath))
                 {
                     entFilePath = Path.Combine(_projectManager.ActiveProject.ModDirectory, entFilePath);
