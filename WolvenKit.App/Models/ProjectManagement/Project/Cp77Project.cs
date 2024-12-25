@@ -11,8 +11,6 @@ using WolvenKit.Common;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
-using WolvenKit.Modkit.RED4.Serialization;
-using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
 
@@ -27,7 +25,7 @@ public sealed partial class Cp77Project(string location, string name, string mod
     /// <summary>
     /// Location of active project (the folder containing the .cdproj file)
     /// </summary>
-    public string Location { get; set; } = location;
+    public string Location { get; init; } = location;
 
     public string ModName { get; set; } = modName;
 
@@ -499,9 +497,9 @@ public sealed partial class Cp77Project(string location, string name, string mod
         other is not null && (ReferenceEquals(this, other) || string.Equals(Location, other.Location));
 
     public override bool Equals(object? obj) =>
-        obj is not null && (ReferenceEquals(this, obj) || obj.GetType() == GetType() && Equals((Cp77Project)obj));
+        obj is not null && (ReferenceEquals(this, obj) || (obj.GetType() == GetType() && Equals((Cp77Project)obj)));
 
-    public override int GetHashCode() => Location != null ? Location.GetHashCode() : 0;
+    public override int GetHashCode() => Location.GetHashCode();
 
     public ModInfo GetInfo()
     {
@@ -545,7 +543,7 @@ public sealed partial class Cp77Project(string location, string name, string mod
      public Task<IDictionary<string, List<string>>> GetAllReferences(IProgressService<double> progressService,
         ILoggerService loggerService) => GetAllReferences(progressService, loggerService, new List<string>());
 
-    public async Task<IDictionary<string, List<string>>> GetAllReferences(IProgressService<double> progressService,
+     public async Task<IDictionary<string, List<string>>> GetAllReferences(IProgressService<double>? progressService,
         ILoggerService loggerService, List<string> filePaths)
     {
         if (filePaths.Count == 0)
@@ -553,7 +551,7 @@ public sealed partial class Cp77Project(string location, string name, string mod
             filePaths.AddRange(ModFiles);
         }
 
-        SortedDictionary<string, List<string>> references = new();
+        SortedDictionary<string, List<string>> references = [];
 
         progressService?.Report(0);
         var totalFiles = filePaths.Count;
@@ -566,13 +564,13 @@ public sealed partial class Cp77Project(string location, string name, string mod
             {
                 try
                 {
-                    CR2WFile? cr2WFile;
                     List<string> resourcePaths = [];
 
                     using (var fs = File.Open(GetAbsolutePath(filePath), FileMode.Open))
                     using (var cr = new CR2WReader(fs))
                     {
-                        if (cr.ReadFile(out cr2WFile) != RED4.Archive.IO.EFileReadErrorCodes.NoError || cr2WFile is null)
+                        if (cr.ReadFile(out var cr2WFile) != RED4.Archive.IO.EFileReadErrorCodes.NoError ||
+                            cr2WFile is null)
                         {
                             return;
                         }
@@ -581,11 +579,11 @@ public sealed partial class Cp77Project(string location, string name, string mod
                         if (cr2WFile.RootChunk is C2dArray { CompiledData: CArray<CArray<CString>> data })
                         {
                             // Grab the second string from CompiledData, if it's a depotPath
-                            var filePaths = data
+                            var _filePaths = data
                                 .Where(c => c.Count == 3).Select(cStrings => cStrings[1])
                                 .Where(potentialDepotPath => potentialDepotPath.GetString().Contains(Path.DirectorySeparatorChar))
                                 .Select(potentialDepotPath => (string)potentialDepotPath).ToList();
-                            resourcePaths.AddRange(filePaths);
+                            resourcePaths.AddRange(_filePaths);
                         }
                         else
                         {
@@ -716,10 +714,10 @@ public sealed partial class Cp77Project(string location, string name, string mod
         
         await Task.Run(() =>
         {
-            Parallel.ForEach(references, (kvp, state) =>
+            Parallel.ForEach(references, (kvp, _) =>
             {
                 var pathsNotFound = kvp.Value
-                    .Where(filePath => !ModFiles.Contains(filePath) && archiveManager.GetGameFile(filePath, true, true) is null)
+                    .Where(filePath => !ModFiles.Contains(filePath) && archiveManager.GetGameFile(filePath) is null)
                     .ToList();
 
                 if (pathsNotFound.Count > 0)
@@ -743,7 +741,7 @@ public sealed partial class Cp77Project(string location, string name, string mod
     [GeneratedRegex(@"((\w+\\\\?)+\w+\.\w+)")]
     private static partial Regex ResourceFilePathsRegex();
 
-    private int _numEmptyFolders = 0;
+    private int _numEmptyFolders;
 
     public void DeleteEmptyFolders(ILoggerService loggerService)
     {

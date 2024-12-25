@@ -7,7 +7,6 @@ using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
-using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.RED4.GeneralStructs;
@@ -41,7 +40,7 @@ namespace WolvenKit.Modkit.RED4
             RawArmature? rig = null;
 
             if (TryFindFile(morphBlob.BaseMesh.DepotPath, out var result) == FindFileResult.NoError &&
-                result.File is { RootChunk: CMesh baseMeshBlob } file &&
+                result.File is { RootChunk: CMesh baseMeshBlob } &&
                 baseMeshBlob.RenderResourceBlob.Chunk is rendRenderMeshBlob meshBlob)
             {
                 rig = MeshTools.GetOrphanRig(baseMeshBlob);
@@ -50,8 +49,8 @@ namespace WolvenKit.Modkit.RED4
                 if (exportTextures)
                 {
                     // TODO: this does not work yet
-                    var meshesinfo = MeshTools.GetMeshesinfo(meshBlob);
-                    ParseMaterials(cr2w, outfile, materialRepository, meshesinfo, EUncookExtension.png);
+                    var meshCollectionInfo = MeshTools.GetMeshesinfo(meshBlob);
+                    ParseMaterials(cr2w, outfile, materialRepository, meshCollectionInfo, EUncookExtension.png);
                 }
             }
 
@@ -112,8 +111,8 @@ namespace WolvenKit.Modkit.RED4
             {
                 if (morphBlob.Targets.Count == 0)
                 {
-                    throw new ArgumentOutOfRangeException("blob.header.numTargets", rendMorphBlob.Header.NumTargets,
-                        "`numTargets` is 0 and there are no `targets` defined, this doesn't look like a valid .morphtarget");
+                    throw new InvalidDataException(
+                        $"'blob.header.numTargets' is 0 and there are no 'targets' defined, this doesn't look like a valid .morphtarget");
                 }
 
                 numTargets = (uint)morphBlob.Targets.Count;

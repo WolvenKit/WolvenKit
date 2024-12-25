@@ -59,7 +59,7 @@ public partial class ExportViewModel : AbstractImportExportViewModel
     {
         foreach (var item in Items.Where(x => x.IsChecked))
         {
-            if (item.Properties is not ExportArgs args)
+            if (item.Properties is not ExportArgs _)
             {
                 continue;
             }
@@ -90,7 +90,6 @@ public partial class ExportViewModel : AbstractImportExportViewModel
         var progress = 0;
         _progressService.Report(0.1);
 
-        var total = 0;
         var successful = 0;
 
         //prepare a list of failed items
@@ -101,9 +100,9 @@ public partial class ExportViewModel : AbstractImportExportViewModel
                                        (all && (VisibleItemPaths.Count == 0 || VisibleItemPaths.Contains(importExportItem.BaseFile))))
             .Cast<ExportableItemViewModel>()
             .ToList();
-        total = toBeExported.Count;
+        var total = toBeExported.Count;
 
-        await Parallel.ForEachAsync(toBeExported, async (item, cancellationToken) =>
+        await Parallel.ForEachAsync(toBeExported, async (item, _) =>
         {
             await Application.Current.Dispatcher.InvokeAsync(() => _appViewModel.SaveFile(item.BaseFile));
 
@@ -176,10 +175,12 @@ public partial class ExportViewModel : AbstractImportExportViewModel
             return;
         }
 
-        var files = Directory.GetFiles(_projectManager.ActiveProject.ModDirectory, "*", SearchOption.AllDirectories).Where(CanExport);
+        var files = Directory.GetFiles(_projectManager.ActiveProject.ModDirectory, "*", SearchOption.AllDirectories)
+            .Where(CanExport)
+            .ToList();
 
         // do not refresh if the files are the same
-        if (Enumerable.SequenceEqual(Items.Select(x => x.BaseFile), files))
+        if (Items.Select(x => x.BaseFile).SequenceEqual(files))
         {
             return;
         }
@@ -222,7 +223,6 @@ public partial class ExportViewModel : AbstractImportExportViewModel
                 InitOpusCollectionEditor(args, opusExportArgs);
                 break;
             }
-
             default:
                 break;
         }
@@ -232,7 +232,7 @@ public partial class ExportViewModel : AbstractImportExportViewModel
 
     private void InitOpusCollectionEditor(CallbackArguments args, OpusExportArgs opusExportArgs)
     {
-        List<uint> selectedEntries = new();
+        List<uint> selectedEntries = [];
         switch (args.PropertyName)
         {
             case nameof(OpusExportArgs.SelectedForExport):
@@ -242,12 +242,8 @@ public partial class ExportViewModel : AbstractImportExportViewModel
                 break;
         }
         // TODO init collectionEditor with this
-        List<CollectionItemViewModel<uint>> selectedItems = new();
-        if (selectedEntries is not null)
-        {
-            selectedItems = selectedEntries.Select(x => new CollectionItemViewModel<uint>(x)).ToList();
-        }
-
+        var selectedItems = selectedEntries.Select(x => new CollectionItemViewModel<uint>(x)).ToList();
+      
 
         var info = OpusTools.GetOpusInfo(_archiveManager, opusExportArgs.UseProject);
         if (info == null)
@@ -259,19 +255,15 @@ public partial class ExportViewModel : AbstractImportExportViewModel
 
         // open dialogue
         var result = Interactions.ShowCollectionView((availableItems, selectedItems));
-        if (result is not null)
+        switch (args.PropertyName)
         {
-            switch (args.PropertyName)
-            {
-                case nameof(OpusExportArgs.SelectedForExport):
-                    opusExportArgs.SelectedForExport =
-                        new List<uint>(result.Cast<CollectionItemViewModel<uint>>().Select(_ => _.Model));
-                    _notificationService.Success($"Selected opus items were added.");
-                    break;
-                default:
-                    break;
-            }
-
+            case nameof(OpusExportArgs.SelectedForExport):
+                opusExportArgs.SelectedForExport =
+                    [..result.Cast<CollectionItemViewModel<uint>>().Select(x => x.Model)];
+                _notificationService.Success($"Selected opus items were added.");
+                break;
+            default:
+                break;
         }
     }
 
@@ -300,49 +292,45 @@ public partial class ExportViewModel : AbstractImportExportViewModel
                 break;
         }
 
-        IEnumerable<CollectionItemViewModel<FileEntry>>? selectedItems = null;
-        if (selectedEntries is not null)
-        {
-            selectedItems = selectedEntries.Select(_ => new CollectionItemViewModel<FileEntry>(_));
-        }
-
+        var selectedItems = selectedEntries.Select(x => new CollectionItemViewModel<FileEntry>(x));
+      
         var availableItems = _archiveManager
             .GetGroupedFiles()[$".{fetchExtension}"]
             .Cast<FileEntry>()
-            .Select(_ => new CollectionItemViewModel<FileEntry>(_)).GroupBy(x => x.Name)
+            .Select(e => new CollectionItemViewModel<FileEntry>(e)).GroupBy(x => x.Name)
             .Select(x => x.First());
 
         // open dialogue
         var result = Interactions.ShowCollectionView((availableItems, selectedItems));
-        if (result is not null)
+        switch (args.PropertyName)
         {
-            switch (args.PropertyName)
-            {
-                case nameof(MeshExportArgs.MultiMeshMeshes):
-                    meshExportArgs.MultiMeshMeshes = result.Cast<CollectionItemViewModel<FileEntry>>().Select(_ => _.Model).ToList();
-                    _notificationService.Success($"Selected Meshes were added to MultiMesh arguments.");
-                    meshExportArgs.meshExportType = MeshExportType.Multimesh;
-                    break;
+            case nameof(MeshExportArgs.MultiMeshMeshes):
+                meshExportArgs.MultiMeshMeshes =
+                    result.Cast<CollectionItemViewModel<FileEntry>>().Select(m => m.Model).ToList();
+                _notificationService.Success($"Selected Meshes were added to MultiMesh arguments.");
+                meshExportArgs.meshExportType = MeshExportType.Multimesh;
+                break;
 
-                case nameof(MeshExportArgs.MultiMeshRigs):
-                    meshExportArgs.MultiMeshRigs = result.Cast<CollectionItemViewModel<FileEntry>>().Select(_ => _.Model).ToList();
-                    _notificationService.Success($"Selected Rigs were added to MultiMesh arguments.");
-                    meshExportArgs.meshExportType = MeshExportType.Multimesh;
-                    break;
+            case nameof(MeshExportArgs.MultiMeshRigs):
+                meshExportArgs.MultiMeshRigs =
+                    result.Cast<CollectionItemViewModel<FileEntry>>().Select(m => m.Model).ToList();
+                _notificationService.Success($"Selected Rigs were added to MultiMesh arguments.");
+                meshExportArgs.meshExportType = MeshExportType.Multimesh;
+                break;
 
-                case nameof(MeshExportArgs.Rig):
-                    var rig = result.Cast<CollectionItemViewModel<FileEntry>>().Select(_ => _.Model).FirstOrDefault();
-                    if (rig is not null)
-                    {
-                        meshExportArgs.Rig = new List<FileEntry>() { rig };
-                        _notificationService.Success($"Selected Rigs were added to WithRig arguments.");
-                    }
-                    meshExportArgs.meshExportType = MeshExportType.WithRig;
-                    break;
+            case nameof(MeshExportArgs.Rig):
+                var rig = result.Cast<CollectionItemViewModel<FileEntry>>().Select(m => m.Model).FirstOrDefault();
+                if (rig is not null)
+                {
+                    meshExportArgs.Rig = [rig];
+                    _notificationService.Success($"Selected Rigs were added to WithRig arguments.");
+                }
 
-                default:
-                    break;
-            }
+                meshExportArgs.meshExportType = MeshExportType.WithRig;
+                break;
+
+            default:
+                break;
         }
     }
 

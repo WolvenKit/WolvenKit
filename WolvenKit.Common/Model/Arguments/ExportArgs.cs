@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.CompilerServices;
-using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
 
 namespace WolvenKit.Common.Model.Arguments
@@ -12,12 +11,11 @@ namespace WolvenKit.Common.Model.Arguments
     /// Tags a property as accessible in a WolvenKit Script
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    public class WkitScriptAccess : Attribute
+    public class WkitScriptAccess([CallerMemberName] string scriptName = "") : Attribute
     {
-        public string ScriptName { get; }
+        public string ScriptName { get; } = scriptName;
 
         // by default the script name is the name of the property or class
-        public WkitScriptAccess([CallerMemberName] string scriptName = "") => ScriptName = scriptName;
     }
 
     /// <summary>
@@ -81,7 +79,7 @@ namespace WolvenKit.Common.Model.Arguments
         private bool _isBinary = true;
 
         // Export textures?
-        private bool _exportTextures = false;
+        private bool _exportTextures;
 
         /// <summary>
         /// Material Repository path for WithMaterials Mesh Export.
@@ -104,11 +102,11 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("Export Settings")]
         [Display(Name = "Export textures (pngs)")]
         [Description("If selected, the morphtarget's textures will be exported.")]
-        [WkitScriptAccess("ExportTextures")]
+        [WkitScriptAccess(nameof(ExportTextures))]
         public bool ExportTextures { get => _exportTextures; set => SetProperty(ref _exportTextures, value); }
 
         /// <summary>
-        /// String Override to display info in datagrid.
+        /// String Override to display info in data grid.
         /// </summary>
         /// <returns>String</returns>
         public override string ToString() => $"{(IsBinary ? "glb" : "gltf")} | Textures: {ExportTextures}";
@@ -142,7 +140,7 @@ namespace WolvenKit.Common.Model.Arguments
         public bool AsList { get; set; } = true;
 
         /// <summary>
-        /// String Override to display info in datagrid.
+        /// String Override to display info in data grid.
         /// </summary>
         /// <returns>String</returns>
         public override string ToString() => $"{UncookExtension}";
@@ -169,7 +167,7 @@ namespace WolvenKit.Common.Model.Arguments
         public EUncookExtension UncookExtension { get => _uncookExtension; set => SetProperty(ref _uncookExtension, value); }
 
         /// <summary>
-        /// String Override to display info in datagrid.
+        /// String Override to display info in data grid.
         /// </summary>
         /// <returns>String</returns>
         public override string ToString() => $"{UncookExtension}";
@@ -180,7 +178,7 @@ namespace WolvenKit.Common.Model.Arguments
     public class EntityExportArgs : ExportArgs
     {
         /// <summary>
-        /// String Override to display info in datagrid.
+        /// String Override to display info in data grid.
         /// </summary>
         /// <returns>String</returns>
         public override string ToString() => "Entity";
@@ -299,7 +297,7 @@ namespace WolvenKit.Common.Model.Arguments
         public bool ExperimentalMergedExport { get; set; } = false;
 
         /// <summary>
-        /// String Override to display info in datagrid.
+        /// String Override to display info in data grid.
         /// </summary>
         /// <returns>String</returns>
         public override string ToString()
@@ -335,7 +333,7 @@ namespace WolvenKit.Common.Model.Arguments
         public string? FileName { get; set; }
 
         /// <summary>
-        /// String Override to display info in datagrid.
+        /// String Override to display info in data grid.
         /// </summary>
         /// <returns>String</returns>
         public override string ToString() => wemExportType.ToString();
@@ -373,7 +371,7 @@ namespace WolvenKit.Common.Model.Arguments
         public bool incRootMotion { get; set; } = false;
 
         /// <summary>
-        /// String Override to display info in datagrid.
+        /// String Override to display info in data grid.
         /// </summary>
         /// <returns>String</returns>
         public override string ToString() => $"{(IsBinary ? "glb" : "gltf")}, Additive Anims Relative: {AdditiveRelativeToLocalTransform}, Root Motion: {incRootMotion}";

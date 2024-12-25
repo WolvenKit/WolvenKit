@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using SharpDX.DXGI;
 using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
@@ -10,44 +8,24 @@ using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
-using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Helpers;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.IO;
-using WolvenKit.RED4.Types;
 using EFileReadErrorCodes = WolvenKit.RED4.Archive.IO.EFileReadErrorCodes;
 
 namespace WolvenKit.App.Helpers;
 
-public class ImportExportHelper
+public class ImportExportHelper(
+    ILoggerService loggerService,
+    IProjectManager projectManager,
+    ISettingsManager settingsManager,
+    IPluginService pluginService,
+    IModTools modTools,
+    IHookService hookService)
 {
-    private readonly ILoggerService _loggerService;
-    private readonly IProjectManager _projectManager;
-    private readonly ISettingsManager _settingsManager;
-    private readonly IPluginService _pluginService;
-    private readonly IModTools _modTools;
-    private readonly IHookService _hookService;
-    
-
-    public ImportExportHelper(
-        ILoggerService loggerService,
-        IProjectManager projectManager,
-        ISettingsManager settingsManager,
-        IPluginService pluginService,
-        IModTools modTools,
-        IHookService hookService)
-    {
-        _loggerService = loggerService;
-        _projectManager = projectManager;
-        _settingsManager = settingsManager;
-        _pluginService = pluginService;
-        _modTools = modTools;
-        _hookService = hookService;
-    }
-
     #region FinalizeArgs
 
     public bool Finalize(GlobalExportArgs args) =>
@@ -56,14 +34,14 @@ public class ImportExportHelper
 
     public bool Finalize(GeneralExportArgs args)
     {
-        args.MaterialRepositoryPath = _settingsManager.MaterialRepositoryPath;
+        args.MaterialRepositoryPath = settingsManager.MaterialRepositoryPath;
 
         return true;
     }
 
     public bool Finalize(MeshExportArgs args)
     {
-        args.MaterialRepo = _settingsManager.MaterialRepositoryPath;
+        args.MaterialRepo = settingsManager.MaterialRepositoryPath;
 
         return true;
     }
@@ -73,20 +51,20 @@ public class ImportExportHelper
 
     public bool Finalize(ReImportArgs args)
     {
-        if (_projectManager.ActiveProject is not { } proj)
+        if (projectManager.ActiveProject is not { } proj)
         {
-            _loggerService.Error("No project loaded");
+            loggerService.Error("No project loaded");
             return false;
         }
 
-        if (!_pluginService.IsInstalled(EPlugin.redmod))
+        if (!pluginService.IsInstalled(EPlugin.redmod))
         {
-            _loggerService.Error("Redmod plugin needs to be installed to import animations");
+            loggerService.Error("Redmod plugin needs to be installed to import animations");
             return false;
         }
 
         args.Depot = proj.ModDirectory;
-        args.RedMod = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
+        args.RedMod = Path.Combine(settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
 
         return true;
     }
@@ -101,13 +79,14 @@ public class ImportExportHelper
     /// <param name="depot"></param>
     /// <param name="inputFile"></param>
     /// <param name="outDirectory"></param>
+    /// <param name="meshExportArgs"></param>
     /// <returns></returns>
     public async Task<bool> Export(DirectoryInfo depot, FileInfo inputFile, DirectoryInfo outDirectory, MeshExportArgs meshExportArgs)
     {
-        var redModPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
+        var redModPath = Path.Combine(settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
         if (!File.Exists(redModPath))
         {
-            _loggerService.Error("redMod.exe not found");
+            loggerService.Error("redMod.exe not found");
             return false;
         }
 
@@ -122,18 +101,21 @@ public class ImportExportHelper
         var args = RedMod.GetExportArgs(depot, redRelative.RelativePath, new FileInfo(outputPath.FullPath));
         var result = await ExecuteAsync(redModPath, args);
 
-        if (result && meshExportArgs.withMaterials)
+        if (!result || !meshExportArgs.withMaterials)
         {
-            await using var fs = File.Open(inputFile.FullName, FileMode.Open);
-            using var cr = new CR2WReader(fs);
-
-            if (cr.ReadFile(out var cr2w) != EFileReadErrorCodes.NoError)
-            {
-                throw new Exception();
-            }
-            _modTools.ExportMaterials(cr2w!, outputPath.ToFileInfo(), meshExportArgs);
+            return result;
         }
-        
+
+        await using var fs = File.Open(inputFile.FullName, FileMode.Open);
+        using var cr = new CR2WReader(fs);
+
+        if (cr.ReadFile(out var cr2W) != EFileReadErrorCodes.NoError)
+        {
+            throw new Exception();
+        }
+
+        modTools.ExportMaterials(cr2W!, outputPath.ToFileInfo(), meshExportArgs);
+
         return result;
     }
 
@@ -145,10 +127,10 @@ public class ImportExportHelper
     /// <returns></returns>
     public async Task<bool> Import(DirectoryInfo depot, RedRelativePath inputRelative)
     {
-        var redModPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
+        var redModPath = Path.Combine(settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
         if (!File.Exists(redModPath))
         {
-            _loggerService.Error("redMod.exe not found");
+            loggerService.Error("redMod.exe not found");
             return false;
         }
 
@@ -166,35 +148,36 @@ public class ImportExportHelper
     {
         var workingDir = Path.GetDirectoryName(redModPath);
 
-        _loggerService.Info($"WorkDir: {workingDir}");
-        _loggerService.Info($"Running commandlet: {args}");
+        loggerService.Info($"WorkDir: {workingDir}");
+        loggerService.Info($"Running commandlet: {args}");
         return await ProcessUtil.RunProcessAsync(redModPath, args, workingDir);
     }
 
     #endregion RedMod
 
-    public async Task<bool> Export(FileInfo cr2wFile, GlobalExportArgs args, DirectoryInfo basedir, DirectoryInfo? rawoutdir = null,
-        ECookedFileFormat[]? forcebuffers = null) =>
+    public async Task<bool> Export(FileInfo cr2WFile, GlobalExportArgs args, DirectoryInfo basedir,
+        DirectoryInfo? rawOutDir = null,
+        ECookedFileFormat[]? forceBuffers = null) =>
         await Task.Run(async () =>
         {
-            _hookService.OnExport(ref cr2wFile, ref args);
+            hookService.OnExport(ref cr2WFile, ref args);
             if (args.Get<MeshExportArgs>().MeshExporter == MeshExporterType.REDmod)
             {
-                return await Export(basedir, cr2wFile, rawoutdir!, args.Get<MeshExportArgs>());
+                return await Export(basedir, cr2WFile, rawOutDir!, args.Get<MeshExportArgs>());
             }
 
-            return _modTools.Export(cr2wFile, args, basedir, rawoutdir, forcebuffers);
+            return modTools.Export(cr2WFile, args, basedir, rawOutDir, forceBuffers);
         });
 
     public async Task<bool> Import(RedRelativePath rawRelative, GlobalImportArgs args, DirectoryInfo? outDir = null)
     {
-        _hookService.OnPreImport(ref rawRelative, ref args, ref outDir);
+        hookService.OnPreImport(ref rawRelative, ref args, ref outDir);
         if (rawRelative.Extension == ERawFileFormat.fbx.ToString())
         {
             return await Import(outDir!, rawRelative);
         }
 
-        return await _modTools.Import(rawRelative, args, outDir, _settingsManager.ShowVerboseLogOutput);
+        return await modTools.Import(rawRelative, args, outDir, settingsManager.ShowVerboseLogOutput);
         //_hookService.OnPostImport(ref cr2wFile, ref args);
     }
 }
