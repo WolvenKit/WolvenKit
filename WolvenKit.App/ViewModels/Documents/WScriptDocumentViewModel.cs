@@ -120,7 +120,7 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
         await Task.CompletedTask;
     }
 
-    public override void SaveAs(object parameter) => throw new NotImplementedException();
+    protected override void SaveAs(SaveAsParameters saveParams) => throw new NotImplementedException();
     public override bool Reload(bool force)
     {
         if (!File.Exists(FilePath))
