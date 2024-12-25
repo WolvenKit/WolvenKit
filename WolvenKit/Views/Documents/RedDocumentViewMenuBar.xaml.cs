@@ -523,7 +523,7 @@ namespace WolvenKit.Views.Documents
                     return;
                 }
 
-                var appFilePath = RootChunk.Tab?.FilePath;
+                var appFilePath = RootChunk.Tab?.FilePath.Replace(activeProject.ModDirectory, "");
                 if (string.IsNullOrEmpty(appFilePath))
                 {
                     _loggerService.Error($"Can't read current .app file!");
