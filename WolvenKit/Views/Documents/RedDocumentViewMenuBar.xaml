@@ -559,25 +559,45 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!-- Mesh component properties -->
-                <MenuItem
-                    Style="{StaticResource ShowAppMenuItemStyle}"
-                    Header="Change mesh component properties"
-                    Click="OnChangeChunkMasksClick">
-                    <MenuItem.Icon>
-                        <templates:IconBox IconPack="Empty" />
-                    </MenuItem.Icon>
-                </MenuItem>   
                 <MenuItem
                     Style="{StaticResource ShowAppMenuItemStyle}"
                     Header="Find unused files in project"
                     ToolTip="Will filter by extension: Only file extensions used in any references will be considered"
                     Click="OnFindUnusedProjectFilesClick">
                     <MenuItem.Icon>
-                        <templates:IconBox IconPack="Empty" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="TextSearchVariant"
+                            Foreground="White" />
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <!-- Mesh component properties -->
+                <MenuItem
+                    Style="{StaticResource ShowAppMenuItemStyle}"
+                    Header="Change mesh component properties"
+                    Click="OnChangeChunkMasksClick">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="OctagramEditOutline"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <!-- Connect to .ent file -->
+                <MenuItem
+                    Style="{StaticResource ShowAppMenuItemStyle}"
+                    Header="Connect to .ent file"
+                    Click="OnConnectToEntFileClick">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Connection"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                
                 <!-- Select animation path -->
                 <MenuItem
                     Style="{StaticResource MenuItemStyle}"
@@ -588,19 +608,6 @@
                     Header="Change facial animations"
                     Command="{Binding Path=ChangeAnimationComponentCommand}"
                     Click="OnChangeAnimationClick">
-                    <MenuItem.Icon>
-                        <templates:IconBox
-                            IconPack="Material"
-                            Kind="EmoticonHappy"
-                            Foreground="White" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-                <!-- Connect to .ent file -->
-                <MenuItem
-                    Style="{StaticResource ShowAppMenuItemStyle}"
-                    Header="Connect to .ent file"
-                    Click="OnConnectToEntFileClick">
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
