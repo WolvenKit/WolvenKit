@@ -512,7 +512,15 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            Clipboard.SetText(string.Join("\n", names));
+            if (ModifierViewStateService.IsCtrlBeingHeld)
+            {
+                Clipboard.SetText(string.Join(",\n", names.Select(name => $"\"{name}\"")));
+            }
+            else
+            {
+                Clipboard.SetText(string.Join("\n", names));
+            }
+            
         }
 
         public bool CanCopySelection() => GetSelectedChunks(true) is { Count: > 0 } list && list.All(cvm => cvm.CanCopySelection());
