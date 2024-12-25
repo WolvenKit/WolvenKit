@@ -205,7 +205,15 @@ public partial class RedDocumentViewModel : DocumentViewModel
     public bool SaveSync(object? _, string? filePath = null)
     {
         filePath ??= FilePath;
-        if (GetMainFile() is null || !DocumentTools.SaveCr2W(Cr2wFile, filePath))
+        var cr2w = Cr2wFile;
+
+        if (_hookService is AppHookService appHookService && !appHookService.OnSave(FilePath, ref cr2w))
+        {
+            _loggerService.Error($"Error while processing onSave hooks");
+            return false;
+        }
+
+        if (GetMainFile() is null || !DocumentTools.SaveCr2W(cr2w, filePath))
         {
             return false;
         }
