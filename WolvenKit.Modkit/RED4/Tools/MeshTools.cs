@@ -13,6 +13,7 @@ using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.Exceptions;
+using WolvenKit.Modkit.RED4.Animation;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.Modkit.RED4.Tools.Common;
@@ -1023,12 +1024,12 @@ namespace WolvenKit.Modkit.RED4.Tools
                 {
                     string[] arr = ["GarmentSupport"];
                     var obj = new { materialNames, targetNames = arr };
-                    mes.Extras = JsonSerializer.SerializeToNode(obj);
+                    mes.Extras = JsonSerializer.SerializeToNode(obj, Gltf.SerializationOptions());
                 }
                 else
                 {
                     var obj = new { materialNames };
-                    mes.Extras = JsonSerializer.SerializeToNode(obj);
+                    mes.Extras = JsonSerializer.SerializeToNode(obj, Gltf.SerializationOptions());
                 }
                 if (mesh.garmentMorph.Length > 0)
                 {
@@ -1049,7 +1050,7 @@ namespace WolvenKit.Modkit.RED4.Tools
         public static ModelRoot RawMeshesToGLTF(List<RawMeshContainer> meshes, RawArmature? rig, bool mergeMeshes = false, bool withMaterials = false)
         {
             var model = ModelRoot.CreateModel();
-            model.Extras = JsonSerializer.SerializeToNode(new { ExperimentalMergedMeshes = mergeMeshes });
+            model.Extras = JsonSerializer.SerializeToNode(new { ExperimentalMergedMeshes = mergeMeshes }, Gltf.SerializationOptions());
 
             Skin? skin = null;
             if (rig is { BoneCount: > 0 })

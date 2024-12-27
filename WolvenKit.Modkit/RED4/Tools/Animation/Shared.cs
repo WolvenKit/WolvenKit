@@ -172,7 +172,7 @@ namespace WolvenKit.Modkit.RED4.Animation
 
         public static Func<System.Text.Json.Nodes.JsonNode, ValidationResult> TryMigrateAndValidate = (maybeExtras) =>
         {
-            var extras = maybeExtras.Deserialize<AnimationExtrasForGltf>();
+            var extras = maybeExtras.Deserialize<AnimationExtrasForGltf>(SerializationOptions());
 
             if (IsCurrentSchema(extras))
             {
