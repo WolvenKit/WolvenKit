@@ -23,9 +23,7 @@
             ItemsSource="{Binding BindingCollection,
                                   Mode=TwoWay,
                                   UpdateSourceTrigger=PropertyChanged}"
-            SelectedItems="{Binding SelectedItems,
-                                    Mode=TwoWay,
-                                    UpdateSourceTrigger=PropertyChanged}"
+            SelectedItems="{Binding SelectedItems}"
             SelectedValueDelimiter=", " />
     </Grid>
 </UserControl>
