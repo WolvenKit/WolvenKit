@@ -197,7 +197,73 @@ public partial class ChunkViewModel
                 }
 
                 break;
-            
+            case inkanimDefinition animDef:
+                Value = StringHelper.Stringify(animDef);
+                IsValueExtrapolated = Value != "";
+                break;
+
+            case inkanimInterpolator inkAnimInt:
+                Value = StringHelper.Stringify(inkAnimInt);
+                IsValueExtrapolated = true;
+                break;
+            case inkanimSequenceTargetInfo targetInfo:
+                Value = $"[{string.Join(", ", targetInfo.Path)}]";
+                IsValueExtrapolated = true;
+                break;
+
+            case CurvePoint<CFloat> cP:
+                Value = $"Point: {cP.Point}, Value: {cP.Value}";
+                IsValueExtrapolated = true;
+                break;
+            case effectTrackItemDecal dec:
+                Value = $"{dec.Material.DepotPath.GetResolvedText()}";
+                IsValueExtrapolated = Value != "";
+                break;
+            case effectLoopData dec:
+                Value = $"{dec.StartTime} => {dec.EndTime}";
+                IsValueExtrapolated = Value != "";
+                break;
+            case effectTrackItemPointLight light:
+                Value = $"{StringHelper.Stringify(light.Color)}, EV: {light.EV}";
+                IsValueExtrapolated = Value != "";
+                break;
+            case effectTrack track:
+                Value = $"[{track.Items.Count}]";
+                IsValueExtrapolated = true;
+                break;
+
+
+            case worldCompiledEffectPlacementInfo epI when Parent?.Parent?.ResolvedData is worldCompiledEffectInfo info:
+                if (info.RelativePositions.Count > epI.RelativePositionIndex)
+                {
+                    Value = $"pos: {StringHelper.Stringify(info.RelativePositions[epI.RelativePositionIndex])}";
+                }
+
+                if (info.RelativeRotations.Count > epI.RelativeRotationIndex)
+                {
+                    if (Value != "")
+                    {
+                        Value = $"{Value}, ";
+                    }
+
+                    Value = $"{Value}rot: {StringHelper.Stringify(info.RelativeRotations[epI.RelativeRotationIndex])}";
+                }
+
+                IsValueExtrapolated = Value != "";
+                break;
+
+            case CUInt8 when Parent?.ResolvedData is worldCompiledEffectPlacementInfo epI:
+                if (Name == "relativePositionIndex" && Parent.Value?.Contains("pos:") == true)
+                {
+                    Value = Parent.Value.Split(", ")[0];
+                }
+                else if (Name == "relativeRotationIndex" && Parent.Value?.Contains("rot:") == true)
+                {
+                    Value = Parent.Value.Split(", ").LastOrDefault() ?? "";
+                }
+
+                IsValueExtrapolated = Value != "";
+                break;
             case meshMeshAppearance { ChunkMaterials: not null } appearance:
                 Value = string.Join(", ", appearance.ChunkMaterials);
                 Value = $"[{appearance.ChunkMaterials.Count}] {Value}";

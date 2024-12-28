@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Windows.Media;
+using DynamicData;
 using WolvenKit.App.Helpers.StringHelpers;
 using WolvenKit.RED4.Types;
 
@@ -228,4 +230,64 @@ public abstract partial class StringHelper
 
         return (string?)methodInfo.Invoke(null, [redType]) ?? "";
     }
+
+    public static string? Stringify(inkanimInterpolator item)
+    {
+        List<string> values = [$"{item.InterpolationMode}"];
+
+
+        if (item.Duration > 0.0)
+        {
+            values.Add($"duration: {item.Duration}");
+        }
+
+        if (item.StartDelay > 0.0)
+        {
+            values.Add($"delay: {item.StartDelay}");
+        }
+
+        if (item.IsAdditive)
+        {
+            values.Add("additive");
+        }
+
+        if (item.UseRelativeDuration)
+        {
+            values.Add("relative");
+        }
+
+        if (values.Count == 0)
+        {
+            return null;
+        }
+
+        return string.Join(", ", values);
+    }
+
+    public static string Stringify(Vector2 vector) => $"[{vector.X}, {vector.Y}]";
+
+    public static string Stringify(HDRColor color) =>
+        $"R: {color.Red}, G: {color.Green}, B: {color.Blue}, A: {color.Alpha}";
+
+    public static string Stringify(inkMargin margin) =>
+        $"top: {margin.Top}, right: {margin.Right}, bottom: {margin.Bottom}, left: {margin.Left}";
+
+    public static string? Stringify(inkanimDefinition animDef)
+    {
+        if (animDef.Events.Count > 0 && animDef.Interpolators.Count == 0)
+        {
+            return $"[{animDef.Events.Count}]";
+        }
+
+        if (animDef.Interpolators.Count > 0 && animDef.Events.Count == 0)
+        {
+            return $"[{animDef.Interpolators.Count}]";
+        }
+
+        return $"Events:[{animDef.Events.Count}] Interpolators[{animDef.Interpolators.Count}]";
+    }
+
+    public static string Stringify(Vector3 v3) => $"{v3.X}, {v3.Y}, {v3.Z}";
+
+    public static string Stringify(Quaternion q) => $"{q.I}, {q.J}, {q.K}, {q.R}";
 }

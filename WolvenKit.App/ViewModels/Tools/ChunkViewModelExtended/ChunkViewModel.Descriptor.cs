@@ -106,6 +106,68 @@ public partial class ChunkViewModel
                 }
 
                 break;
+
+            # region inkanim
+
+            case inkanimScaleInterpolator scaleInt:
+                Descriptor =
+                    $"{StringHelper.Stringify(scaleInt.StartValue)} => {StringHelper.Stringify(scaleInt.EndValue)}";
+                break;
+            case inkanimAnchorInterpolator scaleInt:
+                Descriptor =
+                    $"{StringHelper.Stringify(scaleInt.StartValue)} => {StringHelper.Stringify(scaleInt.EndValue)}";
+                break;
+            case inkanimTransparencyInterpolator transInt:
+                Descriptor = $"{transInt.StartValue} => {transInt.EndValue}";
+                break;
+            case inkanimColorInterpolator transInt:
+                Descriptor =
+                    $"{StringHelper.Stringify(transInt.StartValue)} => {StringHelper.Stringify(transInt.EndValue)}";
+                break;
+            case inkanimEffectInterpolator transInt:
+                Descriptor = $"{transInt.StartValue} => {transInt.EndValue}";
+                break;
+            case inkanimRotationInterpolator transInt:
+                Descriptor = $"{transInt.StartValue} => {transInt.EndValue}";
+                break;
+            case inkanimMarginInterpolator transInt:
+                Descriptor =
+                    $"{StringHelper.Stringify(transInt.StartValue)} => {StringHelper.Stringify(transInt.EndValue)}";
+                break;
+            case inkanimPaddingInterpolator transInt:
+                Descriptor =
+                    $"{StringHelper.Stringify(transInt.StartValue)} => {StringHelper.Stringify(transInt.EndValue)}";
+                break;
+            case inkanimPivotInterpolator transInt:
+                Descriptor =
+                    $"{StringHelper.Stringify(transInt.StartValue)} => {StringHelper.Stringify(transInt.EndValue)}";
+                break;
+            case inkanimShearInterpolator transInt:
+                Descriptor =
+                    $"{StringHelper.Stringify(transInt.StartValue)} => {StringHelper.Stringify(transInt.EndValue)}";
+                break;
+            case inkanimSizeInterpolator transInt:
+                Descriptor =
+                    $"{StringHelper.Stringify(transInt.StartValue)} => {StringHelper.Stringify(transInt.EndValue)}";
+                break;
+            case inkanimTranslationInterpolator transInt:
+                Descriptor =
+                    $"{StringHelper.Stringify(transInt.StartValue)} => {StringHelper.Stringify(transInt.EndValue)}";
+                break;
+            case inkanimShapeBorderTransparencyInterpolator transInt:
+                Descriptor = $"{transInt.StartValue} => {transInt.EndValue}";
+                break;
+            case inkanimShapeFillTransparencyInterpolator transInt:
+                Descriptor = $"{transInt.StartValue} => {transInt.EndValue}";
+                break;
+            case inkanimTextInterpolator transInt:
+                Descriptor = $"{transInt.StartValue} => {transInt.EndValue}";
+                break;
+            case inkanimVideoInterpolator transInt:
+                Descriptor = $"{transInt.StartValue} => {transInt.EndValue}";
+                break;
+
+            # endregion
             // csv files
             case IRedArray { Count: > 0 } csvAry when Parent is { Name: "compiledData" } && GetRootModel().Data is C2dArray csv:
 
