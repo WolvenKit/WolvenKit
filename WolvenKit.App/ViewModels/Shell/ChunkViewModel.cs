@@ -1152,6 +1152,18 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             var allowCreating = handle.InnerType.IsAssignableTo(typeof(inkWidgetLogicController)) ||
                                 handle.InnerType.IsAssignableTo(typeof(inkIWidgetController));
 
+            if (!allowCreating)
+            {
+                switch (types.Count)
+                {
+                    case 0:
+                        return;
+                    case 1:
+                        HandlePointer((Type)types[0].UserData!);
+                        return;
+                }
+            }
+
             await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types, allowCreating) { DialogHandler = HandlePointer });
         }
     }
@@ -3833,35 +3845,45 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         _appViewModel.CloseDialogCommand.Execute(null);
         if (sender is TypeSelectorDialogViewModel { SelectedEntry: TypeEntry selectedEntry } && selectedEntry.UserData is Type selectedType)
         {
-            var instance = RedTypeManager.Create(selectedType);
-            if (instance is DynamicBaseClass dbc)
-            {
-                dbc.ClassName = selectedEntry.Name;
-            }
-
-            var data = RedTypeManager.CreateRedType(PropertyType);
-            if (data is IRedBaseHandle handle)
-            {
-                handle.SetValue(instance);
-                Data = data;
-
-                if (Parent?.ResolvedData is RedBaseClass rbc)
-                {
-                    rbc.SetProperty(PropertyName, Data);
-                }
-
-                PropertyCount = -1;
-                // might not be needed
-                CalculateDescriptor();
-                _propertiesLoaded = false;
-                CalculateProperties();
-                OnPropertyChanged(nameof(Data));
-                Tab?.Parent.SetIsDirty(true);
-            }
+            HandlePointer(selectedType, selectedEntry.Name);
         }
         else
         {
             _loggerService.Error("Could not create handle");
+        }
+    }
+
+    private void HandlePointer(Type type, string customName = "")
+    {
+        var instance = RedTypeManager.Create(type);
+        if (instance is DynamicBaseClass dbc)
+        {
+            if (string.IsNullOrEmpty(customName))
+            {
+                throw new ArgumentNullException(nameof(customName), "The name of DynamicClass needs to be set");
+            }
+
+            dbc.ClassName = customName;
+        }
+
+        var data = RedTypeManager.CreateRedType(PropertyType);
+        if (data is IRedBaseHandle handle)
+        {
+            handle.SetValue(instance);
+            Data = data;
+
+            if (Parent?.ResolvedData is RedBaseClass rbc)
+            {
+                rbc.SetProperty(PropertyName, Data);
+            }
+
+            PropertyCount = -1;
+            // might not be needed
+            CalculateDescriptor();
+            _propertiesLoaded = false;
+            CalculateProperties();
+            OnPropertyChanged(nameof(Data));
+            Tab?.Parent.SetIsDirty(true);
         }
     }
 
