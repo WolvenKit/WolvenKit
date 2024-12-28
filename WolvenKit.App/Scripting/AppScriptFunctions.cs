@@ -103,6 +103,7 @@ public class AppScriptFunctions : ScriptFunctions
                 using FileStream fs = new(s, FileMode.Create);
                 gameFile.Extract(fs);
             },
+            null => throw new ArgumentNullException(nameof(file)),
             _ => throw new NotSupportedException($"The file type \"{file.GetType()}\" is not supported for SaveToProject")
         };
 
