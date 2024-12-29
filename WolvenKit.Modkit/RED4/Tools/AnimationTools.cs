@@ -293,7 +293,7 @@ namespace WolvenKit.Modkit.RED4
                 // Right now it's not possible to add an empty array to a JsonContent.
                 // Can work around that elsewhere but... just don't implement your own
                 // JSON parser, kids.
-                gltfAnim.Extras = JsonSerializer.SerializeToNode(animExtras);
+                gltfAnim.Extras = JsonSerializer.SerializeToNode(animExtras, Gltf.SerializationOptions());
             }
 
             if (stats.RootMotionConflicts > 0)

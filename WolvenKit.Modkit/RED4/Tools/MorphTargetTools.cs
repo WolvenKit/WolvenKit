@@ -8,6 +8,7 @@ using SharpGLTF.Validation;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
+using WolvenKit.Modkit.RED4.Animation;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.Modkit.RED4.Tools;
@@ -633,7 +634,7 @@ namespace WolvenKit.Modkit.RED4
                 }
 
                 var obj = new { targetNames = names }; // anonymous variable/obj
-                mes.Extras = JsonSerializer.SerializeToNode(obj);
+                mes.Extras = JsonSerializer.SerializeToNode(obj, Gltf.SerializationOptions());
 
                 for (var i = 0; i < expTargets.Count; i++)
                 {
