@@ -45,11 +45,13 @@ using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
+using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
+using YamlDotNet.RepresentationModel;
 using FileSystem = Microsoft.VisualBasic.FileIO.FileSystem;
 using NativeMethods = WolvenKit.App.Helpers.NativeMethods;
 using Rect = System.Windows.Rect;
@@ -77,6 +79,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly Red4ParserService _parser;
     private readonly AppScriptService _scriptService;
     private readonly IWatcherService _watcherService;
+    private readonly DocumentTools _documentTools;
 
     // expose to view
     public ISettingsManager SettingsManager { get; init; }
@@ -123,6 +126,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _watcherService = watcherService;
         _scriptService = scriptService;
 
+        // make sure that this is initialized 
+        _documentTools = new DocumentTools(_loggerService, _hashService, _parser);
+        
         _fileValidationScript = _scriptService.GetScripts(ISettingsManager.GetWScriptDir()).ToList()
             .Where(s => s.Name == "run_FileValidation_on_active_tab")
             .Select(s => new ScriptFileViewModel(SettingsManager, ScriptSource.User, s))
