@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -20,10 +19,8 @@ using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.Helpers;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
-using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 
@@ -189,77 +186,42 @@ public partial class RedDocumentViewModel : DocumentViewModel
         await Task.CompletedTask;
     }
 
-    public void SaveSync(object? parameter)
+    protected override void SaveAs(SaveAsParameters saveParams)
     {
-        var ms = new MemoryStream();
-        var file = GetMainFile();
-
-        try
+        var cr2W = Cr2wFile;
+        if (!saveParams.SkipOnSaveHook && _hookService is AppHookService appHookService &&
+            !appHookService.OnSave(FilePath, ref cr2W))
         {
-            if (file is not null && Cr2wFile != null)
-            {
-                var cr2w = Cr2wFile;
-                if (_hookService is AppHookService appHookService && !appHookService.OnSave(FilePath, ref cr2w))
-                {
-                    _loggerService.Error($"Error while processing onSave hooks");
-                    return;
-                }
-
-                SaveHashedValues(cr2w);
-
-                using var writer = new CR2WWriter(ms, Encoding.UTF8, true) { LoggerService = _loggerService };
-                writer.WriteFile(cr2w);
-            }
-        }
-        catch (Exception e)
-        {
-            _loggerService.Error($"Error while saving {FilePath}");
-            _loggerService.Error(e);
-
-            return;
+            _loggerService.Error($"Error while processing onSave hooks");
         }
 
-        if (FileHelper.SafeWrite(ms, FilePath, _loggerService))
+        if (!SaveSync(saveParams.OriginalObject, saveParams.AbsoluteFilePath))
         {
-            LastWriteTime = File.GetLastWriteTime(FilePath);
+            throw new Exception($"Failed to save {saveParams.AbsoluteFilePath}");
+        }
+    }
+
+    public bool SaveSync(object? _, string? filePath = null)
+    {
+        filePath ??= FilePath;
+        var cr2w = Cr2wFile;
+
+        if (_hookService is AppHookService appHookService && !appHookService.OnSave(FilePath, ref cr2w))
+        {
+            _loggerService.Error($"Error while processing onSave hooks");
+            return false;
         }
 
+        if (GetMainFile() is null || !DocumentTools.WriteCr2W(cr2w, filePath))
+        {
+            return false;
+        }
+
+        LastWriteTime = File.GetLastWriteTime(filePath);
         SetIsDirty(false);
-        _loggerService.Success($"Saved file {FilePath}");
+        return true;
     }
 
-    private void SaveHashedValues(CR2WFile file)
-    {
-        if (_hashService is not HashServiceExt hashService)
-        {
-            return;
-        }
-
-        foreach (var (path, value) in file.RootChunk.GetEnumerator())
-        {
-            if (value is IRedRef redRef && redRef.DepotPath != ResourcePath.Empty)
-            {
-                if (!redRef.DepotPath.TryGetResolvedText(out var refPath))
-                {
-                    continue;
-                }
-
-                hashService.AddResourcePath(refPath);
-            }
-
-            if (value is TweakDBID tweakDbId && tweakDbId != TweakDBID.Empty)
-            {
-                if (!tweakDbId.TryGetResolvedText(out var tweakName))
-                {
-                    continue;
-                }
-
-                hashService.AddTweakName(tweakName);
-            }
-        }
-    }
-
-    public override void SaveAs(object parameter) => throw new NotImplementedException();
 
     public override bool Reload(bool force)
     {
@@ -268,14 +230,13 @@ public partial class RedDocumentViewModel : DocumentViewModel
             return false;
         }
 
-
         using var fs = File.Open(FilePath, FileMode.Open);
-        if (!_parserService.TryReadRed4File(fs, out var cr2wFile))
+        if (!_parserService.TryReadRed4File(fs, out var cr2WFile))
         {
             return false;
         }
 
-        Cr2wFile = cr2wFile;
+        Cr2wFile = cr2WFile;
         PopulateItems();
 
         SetIsDirty(false);
