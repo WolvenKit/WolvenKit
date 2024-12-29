@@ -458,9 +458,24 @@ public partial class ChunkViewModel
                 Value = StringHelper.Stringify(tBinding);
                 IsValueExtrapolated = Value != "";
                 break;
-            case entAnimationSetupExtensionComponent animSetupComp when
-                animSetupComp.ControlBinding.GetValue() is entAnimationControlBinding controlBinding:
-                Value = $"{controlBinding.BindName.GetResolvedText()}";
+            case entAnimationSetupExtensionComponent animSetupComp:
+                Value = "";
+                if (animSetupComp.Animations.Cinematics.Count > 0)
+                {
+                    Value = $"{Value}c:[{animSetupComp.Animations.Cinematics.Count}] ";
+                }
+
+                if (animSetupComp.Animations.Gameplay.Count > 0)
+                {
+                    Value = $"{Value}g:[{animSetupComp.Animations.Gameplay.Count}] ";
+                }
+
+                if (animSetupComp.ControlBinding.GetValue() is entAnimationControlBinding controlBinding &&
+                    controlBinding.BindName.GetResolvedText() is string bindName && bindName != string.Empty)
+                {
+                    Value = $"binding: {Value}{bindName}";
+                }
+                
                 IsValueExtrapolated = Value != "";
                 break;
             case entVisualControllerDependency controllerDep:
