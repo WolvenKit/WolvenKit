@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
-using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
@@ -252,15 +251,14 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = Value != "";
                 break;
 
-            case CUInt8 when Parent?.ResolvedData is worldCompiledEffectPlacementInfo epI:
-                if (Name == "relativePositionIndex" && Parent.Value?.Contains("pos:") == true)
+            case CUInt8 when Parent?.ResolvedData is worldCompiledEffectPlacementInfo:
+                Value = Name switch
                 {
-                    Value = Parent.Value.Split(", ")[0];
-                }
-                else if (Name == "relativeRotationIndex" && Parent.Value?.Contains("rot:") == true)
-                {
-                    Value = Parent.Value.Split(", ").LastOrDefault() ?? "";
-                }
+                    "relativePositionIndex" when Parent.Value?.Contains("pos:") == true => Parent.Value.Split(", ")[0],
+                    "relativeRotationIndex" when Parent.Value?.Contains("rot:") == true => Parent.Value.Split(", ")
+                        .LastOrDefault() ?? "",
+                    _ => Value
+                };
 
                 IsValueExtrapolated = Value != "";
                 break;
@@ -281,6 +279,7 @@ public partial class ChunkViewModel
             // Material instance (mesh): "[2] - engine\materials\multilayered.mt" (show #keyValuePairs)
             case CMaterialInstance { BaseMaterial: { } cResourceReference } material:
             {
+                // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract yeah right
                 var numMaterials = $"[{material.Values?.Count ?? 0}] - ";
                 Value = $"{numMaterials}{cResourceReference.DepotPath.GetResolvedText() ?? "none"}";
                 IsValueExtrapolated = Value != "";
