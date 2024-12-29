@@ -78,40 +78,36 @@ public class AppScriptFunctions : ScriptFunctions
     }
 
     /// <summary>
-    /// Add the specified cr2w file to the project from the game archives.
+    /// Add the specified <see cref="CR2WFile"/> or <see cref="IGameFile"/> file to the project.
     /// </summary>
     /// <param name="path">The file to write to</param>
-    /// <param name="cr2w">File to be saved</param>
-    public virtual void SaveToProject(string path, CR2WFile cr2w)
+    /// <param name="file"><see cref="CR2WFile"/> or <see cref="IGameFile"/> to be saved</param>
+    /// <exception cref="NotSupportedException">Unsupported type of file</exception>
+    public virtual void SaveToProject(string path, object file)
     {
         if (_projectManager.ActiveProject is null)
         {
             return;
         }
-        SaveAs(Path.Combine(_projectManager.ActiveProject.ModDirectory, path), s =>
-        {
-            using FileStream fs = new(s, FileMode.Create);
-            using var writer = new CR2WWriter(fs) { LoggerService = _loggerService };
-            writer.WriteFile(cr2w);
-        });
-    }
 
-    /// <summary>
-    /// Add the specified gameFile file to the project from the game archives.
-    /// </summary>
-    /// <param name="path">The file to write to</param>
-    /// <param name="gameFile">File to be saved</param>
-    public virtual void SaveToProject(string path, IGameFile gameFile)
-    {
-        if (_projectManager.ActiveProject is null)
+        Action<string> callback = file switch
         {
-            return;
-        }
-        SaveAs(Path.Combine(_projectManager.ActiveProject.ModDirectory, path), s =>
-        {
-            using FileStream fs = new(s, FileMode.Create);
-            gameFile.Extract(fs);
-        });
+            CR2WFile cr2w => s =>
+            {
+                using FileStream fs = new(s, FileMode.Create);
+                using var writer = new CR2WWriter(fs) { LoggerService = _loggerService };
+                writer.WriteFile(cr2w);
+            },
+            IGameFile gameFile => s =>
+            {
+                using FileStream fs = new(s, FileMode.Create);
+                gameFile.Extract(fs);
+            },
+            null => throw new ArgumentNullException(nameof(file)),
+            _ => throw new NotSupportedException($"The file type \"{file.GetType()}\" is not supported for SaveToProject")
+        };
+
+        SaveAs(Path.Combine(_projectManager.ActiveProject.ModDirectory, path), callback);
     }
 
     /// <summary>
