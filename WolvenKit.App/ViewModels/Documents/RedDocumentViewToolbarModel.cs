@@ -3,10 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Splat;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
@@ -19,25 +17,16 @@ namespace WolvenKit.App.ViewModels.Documents;
 
 public partial class RedDocumentViewToolbarModel : ObservableObject
 {
-    public RedDocumentViewToolbarModel()
+    public RedDocumentViewToolbarModel(
+        ISettingsManager settingsSvc,
+        IModifierViewStateService modifierSvc
+    )
     {
-        if (Locator.Current.GetService<ISettingsManager>() is ISettingsManager settingsSvc)
-        {
-            EditorLevel = settingsSvc.DefaultEditorDifficultyLevel;
-        }
-        else
-        {
-            EditorLevel = EditorDifficultyLevel.Easy;
-        }
+        EditorLevel = settingsSvc.DefaultEditorDifficultyLevel;
 
-        if (Locator.Current.GetService<IModifierViewStateService>() is not IModifierViewStateService svc)
-        {
-            return;
-        }
-
-        _modifierViewStateService = svc;
-        svc.ModifierStateChanged += OnModifierChanged;
-        svc.PropertyChanged += (_, args) => OnPropertyChanged(args.PropertyName); 
+        _modifierViewStateService = modifierSvc;
+        modifierSvc.ModifierStateChanged += OnModifierChanged;
+        modifierSvc.PropertyChanged += (_, args) => OnPropertyChanged(args.PropertyName);
 
         RefreshMenuVisibility(true);
     }
@@ -211,8 +200,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
      * Regenerate visual controllers
      */
     private bool CanRegenerateVisualControllers() => ContentType is RedDocumentItemType.Ent ||
-                                                     (ContentType is RedDocumentItemType.App && SelectedChunk is
-                                                         { Name: "components", Data: CArray<entIComponent> });
+                                                     ContentType is RedDocumentItemType.App;
     
     [RelayCommand(CanExecute = nameof(CanRegenerateVisualControllers))]
     private void RegenerateVisualControllers()
@@ -223,18 +211,30 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             return;
         }
 
+        // app file
+        if (RootChunk?.ResolvedData is appearanceAppearanceResource appRoot &&
+            RootChunk.GetPropertyChild("appearances") is ChunkViewModel appearances)
+        {
+            appearances.CalculateProperties();
+            foreach (var app in appearances.TVProperties.Where(x => x.ResolvedData is appearanceAppearanceDefinition))
+            {
+                app.RegenerateVisualControllerCommand.Execute(null);
+            }
+
+            return;
+        }
+
         // .ent file
         RootChunk?.GetPropertyChild("components")?.RegenerateVisualControllerCommand.Execute(null);
     }
 
     private bool CanChangeAnimationComponent() => RootChunk?.ResolvedData is appearanceAppearanceResource;
-
+    
     /*
      * Convert to photo mode app
      */
     private bool CanConvertToPhotoModeApp() => RootChunk?.ResolvedData is appearanceAppearanceResource &&
-                                               FilePath is string filePath &&
-                                               !SelectPhotoModeAppViewModel.PhotomodeAppPaths.Contains(filePath);
+                                               !string.IsNullOrEmpty(FilePath);
 
     [RelayCommand(CanExecute = nameof(CanConvertToPhotoModeApp))]
     private void ConvertToPhotoModeApp()

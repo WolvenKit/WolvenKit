@@ -19,4 +19,18 @@ internal static class HashHelper
     public static ulong CalculateDepotPathHash(ResourcePath resourcePath) => CalculateDepotPathHash(resourcePath.GetResolvedText());
 
 
+    /// <summary>
+    /// Returns the TweakDB hash in the format of 0x00000000, 00
+    /// </summary>
+    /// <param name="tweakDbEntryName"></param>
+    /// <returns></returns>
+    public static string GetTweakDbId(string tweakDbEntryName)
+
+    {
+        var hexValue = TweakDBID.CalculateHash(tweakDbEntryName).ToString("X16");
+        return $"0x{hexValue[^8..]}, {int.Parse(hexValue[^10..8], System.Globalization.NumberStyles.HexNumber)}";
+    }
+    
+
+
 }

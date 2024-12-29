@@ -1,6 +1,4 @@
-﻿#nullable enable
-
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -16,6 +14,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Helpers;
+using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
@@ -33,6 +32,11 @@ public static class ProjectResourceHelper
 
     private static ILoggerService? s_loggerService;
     private static ILoggerService? GetLoggerService() => s_loggerService ??= Locator.Current.GetService<ILoggerService>();
+
+    private static ISettingsManager? s_settingsService;
+
+    private static ISettingsManager? GetSettingsService() =>
+        s_settingsService ??= Locator.Current.GetService<ISettingsManager>();
     private static RED4Controller GetRed4Controller()
     {
         if (GameControllerFactory.GetInstance() is GameControllerFactory factory)
@@ -47,6 +51,18 @@ public static class ProjectResourceHelper
         ).GetRed4Controller();
     }
 
+
+    public static string AppendPersonalDirectory(params string[] filePathParts)
+    {
+        var filePath = string.Join(Path.DirectorySeparatorChar, filePathParts);
+        if (GetSettingsService()?.ModderName is string modderName && modderName != $"")
+        {
+            return Path.Join(filePath, modderName.ToFileName());
+        }
+
+        return filePath.Trim();
+    }
+    
     private static string GetUniqueSubfolderPath(IEnumerable<string> allFilePaths, string currentFilePath)
     {
         var fileName = Path.GetFileName(currentFilePath);
@@ -73,6 +89,21 @@ public static class ProjectResourceHelper
 
     private static readonly SemaphoreSlim semaphore = new(1, 1);
 
+    public static FileInfo GetFileInfo(string path)
+    {
+        if (!Path.IsPathRooted(path) && s_projectManager?.ActiveProject is Cp77Project project)
+        {
+            path = Path.Join(project.ModDirectory, path);
+        }
+
+        if (!File.Exists(path))
+        {
+            throw new InvalidDataException($"failed to read ${path}");
+        }
+
+        return new FileInfo(path);
+    }
+    
     private static async Task<Dictionary<string, string>> AddDependenciesToProjectPath(string destFolderRelativePath,
         HashSet<ResourcePath> resourcePaths)
     {
@@ -217,7 +248,18 @@ public static class ProjectResourceHelper
             controller.AddToMod(modFile.Value, ArchiveManagerScope.Mods);
         }
     }
-    
+
+    /// <summary>
+    /// Adds a file to the project, then moves it to the target path
+    /// </summary>
+    /// <param name="projectRoot">the mod directory (e.g. activeProject.ModDirectory) </param>
+    /// <param name="resourcePath">Path of original resource</param>
+    /// <param name="targetResourcePath">Path of target resource (the original resource will be moved here)</param>
+    /// <exception cref="FileNotFoundException"></exception>
+    public static void AddFileToProjectFolder(string projectRoot, ResourcePath resourcePath,
+        ResourcePath targetResourcePath) =>
+        AddFileToProjectFolder(projectRoot, resourcePath, targetResourcePath, [], true);
+
     private static void AddFileToProjectFolder(string projectRoot, ResourcePath resourcePath, ResourcePath targetResourcePath,
         Dictionary<string, string> pathReplacements, bool overwriteFiles)
     {
@@ -430,9 +472,10 @@ public static class ProjectResourceHelper
     }
 
 
-    public static void ReplacePathInFile(Cp77Project? activeProject, string filePath, ResourcePath oldPath, ResourcePath newPath)
+    public static void ReplacePathInFile(Cp77Project? activeProject, string absoluteFilePath, ResourcePath oldPath,
+        ResourcePath newPath)
     {
-        if (oldPath == newPath || !File.Exists(filePath) || activeProject is null)
+        if (oldPath == newPath || !File.Exists(absoluteFilePath) || activeProject is null)
         {
             return;
         }
@@ -455,15 +498,14 @@ public static class ProjectResourceHelper
             newPathStr += ResourcePath.DirectorySeparatorChar;
         }
 
-
-        using (var fs = File.Open(filePath, FileMode.Open))
+        using (var fs = File.Open(absoluteFilePath, FileMode.Open))
         using (var cr = new CR2WReader(fs))
         {
             if (cr.ReadFile(out cr2W) != (RED4.Archive.IO.EFileReadErrorCodes)EFileReadErrorCodes.NoError)
             {
                 return;
             }
-
+            
             var refs = cr2W!.FindType(typeof(IRedRef));
             foreach (var result in refs)
             {
@@ -529,7 +571,7 @@ public static class ProjectResourceHelper
                         throw new Exception();
                     }
 
-                    GetLoggerService()?.Debug($"Replaced \"{result.Path}\" in \"{filePath}\"");
+                    GetLoggerService()?.Debug($"Replaced \"{result.Path}\" in \"{absoluteFilePath}\"");
                     arr[index] = newValue;
                 }
                 else
@@ -555,7 +597,7 @@ public static class ProjectResourceHelper
                             throw new NotImplementedException($"Can't replace in property type {parentClass.Item2?.GetType().Name}");
                     }
 
-                    GetLoggerService()?.Debug($"Replaced \"{result.Path}\" in \"{filePath}\"");
+                    GetLoggerService()?.Debug($"Replaced \"{result.Path}\" in \"{absoluteFilePath}\"");
                 }
 
                 wasModified = true;
@@ -567,7 +609,7 @@ public static class ProjectResourceHelper
             return;
         }
 
-        using var fs2 = File.Open(filePath, FileMode.Create);
+        using var fs2 = File.Open(absoluteFilePath, FileMode.Create);
         using var cw = new CR2WWriter(fs2);
 
         cw.WriteFile(cr2W);

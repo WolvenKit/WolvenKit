@@ -81,6 +81,24 @@ public sealed partial class Cp77Project(string location, string name, string mod
         }
     }
 
+    /// <summary>
+    /// Returns all files inside <see cref="ResourcesDirectory"/> 
+    /// </summary>
+    public List<string> ResourceFiles
+    {
+        get
+        {
+            if (!Directory.Exists(ResourcesDirectory))
+            {
+                Directory.CreateDirectory(ResourcesDirectory);
+            }
+
+            return Directory.EnumerateFiles(ResourcesDirectory, "*", SearchOption.AllDirectories)
+                .Select(file => file[(ResourcesDirectory.Length + 1)..])
+                .ToList();
+        }
+    }
+
 
     /// <summary>
     /// Returns all files inside <see cref="RawDirectory"/> 

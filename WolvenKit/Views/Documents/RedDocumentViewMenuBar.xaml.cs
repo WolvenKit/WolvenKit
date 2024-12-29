@@ -13,11 +13,12 @@ using Splat;
 using WolvenKit.App;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
+using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
-using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Scripting;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
@@ -38,8 +39,10 @@ namespace WolvenKit.Views.Documents
         private readonly WatcherService _projectWatcher;
         private readonly IAppArchiveManager _archiveManager;
         private readonly IModifierViewStateService _modifierStateService;
+        private readonly ProjectExplorerViewModel _projectExplorer;
         private readonly AppViewModel _appViewModel;
         private readonly IProgressService<double> _progressService;
+        
         
         public RedDocumentViewMenuBar()
         {
@@ -52,12 +55,18 @@ namespace WolvenKit.Views.Documents
             _modifierStateService = Locator.Current.GetService<IModifierViewStateService>()!;
             _appViewModel = Locator.Current.GetService<AppViewModel>()!;
             _progressService = Locator.Current.GetService<IProgressService<double>>()!;
+            _projectExplorer = Locator.Current.GetService<ProjectExplorerViewModel>()!;
+
+            // Enforce instance generation and service injection. One would assume that registering a singleton
+            // is enough. One would be wrong.
+            Locator.Current.GetService<DocumentTools>();
             
             InitializeComponent();
 
             InitializeInstanceObjects();
 
-            DataContext = new RedDocumentViewToolbarModel { CurrentTab = _currentTab };
+            DataContext =
+                new RedDocumentViewToolbarModel(_settingsManager, _modifierStateService) { CurrentTab = _currentTab };
             ViewModel = DataContext as RedDocumentViewToolbarModel;
 
             _modifierStateService.ModifierStateChanged += OnModifierStateChanged;
@@ -500,6 +509,62 @@ namespace WolvenKit.Views.Documents
                 new Dictionary<string, List<string>>() { { relativePath, unusedMeshPaths } }));
         }
 
+        private async void OnConnectToEntFileClick(object _, RoutedEventArgs e)
+        {
+            try
+            {
+                if (_projectManager.ActiveProject is not Cp77Project activeProject || RootChunk is not ChunkViewModel
+                    {
+                        ResolvedData: appearanceAppearanceResource app
+                    })
+                {
+                    return;
+                }
+
+                var appFilePath = RootChunk.Tab?.FilePath;
+                if (string.IsNullOrEmpty(appFilePath))
+                {
+                    _loggerService.Error($"Can't read current .app file!");
+                    return;
+                }
+
+                var entFilePath = await Interactions.ShowInputBoxAsync("Enter .ent file path", "");
+                if (string.IsNullOrEmpty(entFilePath))
+                {
+                    return;
+                }
+
+
+                if (!activeProject.Files.Contains(entFilePath.StartsWith("archive")
+                        ? entFilePath
+                        : $"archive{Path.DirectorySeparatorChar}{entFilePath}"))
+                {
+                    _loggerService.Error($"Can't find .ent file {entFilePath}!");
+                    return;
+                }
+
+                if (!Path.IsPathRooted(entFilePath))
+                {
+                    entFilePath = Path.Combine(_projectManager.ActiveProject.ModDirectory, entFilePath);
+                }
+
+                var cr2WFile = DocumentTools.ReadCr2W(entFilePath);
+                if (cr2WFile.RootChunk is not entEntityTemplate ent)
+                {
+                    _loggerService.Error($"invalid .ent file: {entFilePath}!");
+                    return;
+                }
+
+                DocumentTools.ConnectAppToEntFile(Path.Combine(_projectManager.ActiveProject.ModDirectory, appFilePath),
+                    entFilePath);
+            }
+            catch (Exception err)
+            {
+                _loggerService.Error("Failed to connect .app to .ent file! An exception was thrown:");
+                _loggerService.Error(err);
+            }
+        }
+        
         private MenuItem? _openMenu;
 
         private static List<string> _facialSetups = [];
@@ -585,18 +650,15 @@ namespace WolvenKit.Views.Documents
      
         private void OnChangeAnimationClick(object sender, RoutedEventArgs e)
         {
-            if (RootChunk?.ResolvedData is not appearanceAppearanceResource app)
+            if (RootChunk?.Tab is null || RootChunk?.ResolvedData is not appearanceAppearanceResource app ||
+                !File.Exists(RootChunk.Tab.FilePath))
             {
                 return;
             }
 
-            var appearanceChildren =
-                (RootChunk.GetPropertyChild("appearances")?.Properties.ToList() ?? []).Where(cvm =>
-                    cvm.ResolvedData is appearanceAppearanceDefinition).ToList();
-
-            if (!appearanceChildren.Any())
+            if (RootChunk.Tab.Parent.IsDirty)
             {
-                return;
+                _loggerService.Error("Please save the file before changing animations!");
             }
 
             var dialog = new SelectFacialAnimationPathDialog(_facialSetups);
@@ -605,224 +667,9 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            var facialAnim = dialog.ViewModel?.SelectedFacialAnim;
-            var animGraph = dialog.ViewModel?.SelectedGraph;
-            var selectedAnims = dialog.ViewModel?.SelectedAnimEntries ?? [];
-
-            foreach (var appNode in appearanceChildren)
-            {
-                appNode.CalculateProperties();
-                if (appNode.GetPropertyChild("components") is not ChunkViewModel componentsNode)
-                {
-                    continue;
-                }
-
-                componentsNode.CalculateProperties();
-                
-                var animationChildren =
-                    componentsNode.Properties.Where(prop => prop.ResolvedData is entAnimatedComponent).ToList() ?? [];
-                var animationSetup =
-                    componentsNode.Properties.Where(prop => prop.ResolvedData is entAnimationSetupExtensionComponent).ToList() ?? [];
-
-                var appearanceChanged = ChangeAnimation(animationChildren, animGraph, facialAnim);
-                var animationSetupsChanged = ChangeAnimationSetupEntries(animationSetup, selectedAnims);
-
-                if (!appearanceChanged && !animationSetupsChanged)
-                {
-                    continue;
-                }
-
-                componentsNode.RecalculateProperties();
-                RootChunk?.Tab?.Parent.SetIsDirty(true);
-            }
-
-        }
-
-        private bool ChangeAnimationSetupEntries(List<ChunkViewModel> animNodes, List<string> selectedAnims)
-        {
-            if (animNodes.Count == 0 || selectedAnims.Count == 0)
-            {
-                return false;
-            }
-
-            var isChanged = false;
-
-            foreach (var cvm in animNodes)
-            {
-                cvm.CalculateProperties();
-                if (cvm.ResolvedData is not entAnimationSetupExtensionComponent comp)
-                {
-                    continue;
-                }
-
-
-                if (cvm.GetPropertyChild("animations", "gameplay") is not ChunkViewModel animationList ||
-                    animationList.ResolvedData is not CArray<animAnimSetupEntry> animArray)
-                {
-                    continue;
-                }
-
-                animArray.Clear();
-
-                foreach (var selectedAnim in selectedAnims)
-                {
-                    animArray.Add(new animAnimSetupEntry()
-                    {
-                        Priority = 200, AnimSet = new CResourceAsyncReference<animAnimSet>(selectedAnim), VariableNames = []
-                    });
-                }
-
-                animationList.Data = animArray;
-
-                var propertyChanged = true;
-
-                if (!propertyChanged)
-                {
-                    continue;
-                }
-
-                // force refresh
-                animationList.RecalculateProperties();
-                isChanged = isChanged || propertyChanged;
-            }
-
-            return isChanged;
-        }
-
-        private static bool ChangeAnimation(List<ChunkViewModel> animNodes, string? selectedGraph, string? selectedFacialAnim)
-        {
-            if (animNodes.Count == 0 || (string.IsNullOrEmpty(selectedGraph) && string.IsNullOrEmpty(selectedFacialAnim)))
-            {
-                return false;
-            }
-
-            var isChanged = false;
-
-            foreach (var cvm in animNodes)
-            {
-                if (cvm.ResolvedData is not entAnimatedComponent comp || comp.Name.GetResolvedText() != "face_rig")
-                {
-                    continue;
-                }
-
-                var propertyChanged = false;
-                if (!string.IsNullOrEmpty(selectedFacialAnim))
-                {
-                    comp.Graph = new CResourceReference<animAnimGraph>(selectedFacialAnim);
-                    propertyChanged = true;
-                }
-
-                if (!string.IsNullOrEmpty(selectedGraph))
-                {
-                    comp.FacialSetup = new CResourceAsyncReference<animFacialSetup>(selectedGraph);
-                    propertyChanged = true;
-                }
-
-                if (propertyChanged)
-                {
-                    // force refresh
-                    cvm.RecalculateProperties();
-                }
-            }
-
-            return isChanged;
-        }
-
-        private const int s_maxNumberReplacerAppearances = 100;
-
-        private void OnConvertToPhotoModeClick(object sender, RoutedEventArgs e)
-        {
-            if (RootChunk?.ResolvedData is not appearanceAppearanceResource)
-            {
-                return;
-            }
-
-            if (RootChunk.Tab?.Parent.IsDirty == true)
-            {
-                _loggerService.Error("File has un-saved changes! Please save before converting!");
-            }
-
-            var dialog = new SelectPhotoModeAppDialog();
-
-            if (dialog.ShowDialog() != true)
-            {
-                return;
-            }
-
-            var photoModeApp = dialog.ViewModel?.SelectedApp;
-            var renameAppearances = dialog.ViewModel?.RenameEntries ?? false;
-            var appearanceChildren = RootChunk.GetPropertyChild("appearances")?.Properties
-                .Where(cvm => cvm.ResolvedData is appearanceAppearanceDefinition)
-                .ToList() ?? [];
-
-            // nothing to do
-            if (appearanceChildren.Count == 0 || (!renameAppearances && string.IsNullOrEmpty(photoModeApp)))
-            {
-                return;
-            }
-
-            // user clicked cancel
-            if (!Interactions.ShowQuestionYesNo(("You can't un-do this. Are you sure?", "Convert .app file?")))
-            {
-                return;
-            }
+            DocumentTools.SetFacialAnimations(RootChunk.Tab.FilePath, dialog.ViewModel?.SelectedFacialAnim,
+                dialog.ViewModel?.SelectedGraph, dialog.ViewModel?.SelectedAnimEntries ?? []);
             
-            if (renameAppearances)
-            {
-                if (appearanceChildren.Count > s_maxNumberReplacerAppearances)
-                {
-                    var message = string.Join(Environment.NewLine,
-                    [
-                        $"Nibbles Replacer only supports {s_maxNumberReplacerAppearances} appearances.",
-                        "Your app has ${appearanceChildren.Count}.",
-                        "Do you want to convert the extra appearances anyway?",
-                    ]);
-
-                    if (!Interactions.ShowQuestionYesNo((message, "Too many appearances!")))
-                    {
-                        appearanceChildren = appearanceChildren.Take(s_maxNumberReplacerAppearances).ToList();
-                    }
-                    
-                }
-
-                var counter = 01;
-                foreach (var appNode in appearanceChildren)
-                {
-                    // type check has already been done when selecting the nodes
-                    var resolvedData = (appearanceAppearanceDefinition)appNode.ResolvedData;
-
-                    resolvedData.Name = counter < 100 ? $"appearance_{counter:D2}" : $"appearance_{counter:D3}";
-                    counter += 1;
-                    appNode.RecalculateProperties();
-                }
-            }
-
-            if (string.IsNullOrEmpty(photoModeApp))
-            {
-                return;
-            }
-
-            if (RootChunk.Tab is null || _projectManager.ActiveProject is null || RootChunk.Tab.FilePath is not string s || !File.Exists(s))
-            {
-                _loggerService.Error($"Can't automatically move your file. Please move it to the following path: ");
-                _loggerService.Error($"\t{photoModeApp}");
-                return;
-            }
-
-            RootChunk.Tab.Parent.SaveCommand.Execute(null);
-            var destPath = Path.Join(_projectManager.ActiveProject.ModDirectory, photoModeApp);
-            if (Path.GetDirectoryName(destPath) is string parentFolder && !Directory.Exists(parentFolder))
-            {
-                Directory.CreateDirectory(parentFolder);
-            }
-
-            if (_appViewModel.ActiveDocument is not null)
-            {
-                _appViewModel.CloseFile(_appViewModel.ActiveDocument);
-            }
-
-            File.Move(s, destPath);
-            _appViewModel.OpenFileFromDepotPath(photoModeApp);
         }
     }
 }

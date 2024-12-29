@@ -48,13 +48,18 @@ public partial class SelectAnimationPathViewModel : ObservableObject
 
         UpdateFilteredGraphOptions();
     }
-        
+
+    public const string FacialAnimPathFemale =
+        @"base\animations\facial\_facial_graphs\player_woman_photomode_sermo.animgraph";
+
+    public const string FacialAnimPathMale =
+        @"base\animations\facial\_facial_graphs\player_woman_photomode_sermo.animgraph";
 
     private Dictionary<string, string> _facialAnimOptions = new()
     {
         // Photo mode
-        { "Photo Mode: Player Woman", @"base\animations\facial\_facial_graphs\player_woman_photomode_sermo.animgraph" },
-        { "Photo Mode: Player Man", @"base\animations\facial\_facial_graphs\player_man_photomode_sermo.animgraph" },
+        { "Photo Mode: Player Woman", FacialAnimPathFemale },
+        { "Photo Mode: Player Man", FacialAnimPathMale },
 
         // Spawned NPC
         { "NPV: Woman Player", @"base\animations\facial\_facial_graphs\player_woman_paperdoll_sermo.animgraph" },
@@ -77,7 +82,7 @@ public partial class SelectAnimationPathViewModel : ObservableObject
     };
 
 
-    private static readonly List<string> PhotomodeAnimEntriesFemaleDefault =
+    public static readonly List<string> PhotomodeAnimEntriesFemaleDefault =
     [
         "base\\animations\\ui\\photomode\\photomode_female_facial.anims",
         "base\\animations\\xbaebsae\\pm_facials\\fem\\xbae_pm_facials_01.anims",

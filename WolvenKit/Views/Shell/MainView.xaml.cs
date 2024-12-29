@@ -14,6 +14,7 @@ using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Services;
+using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
 
 namespace WolvenKit.Views.Shell
@@ -97,6 +98,17 @@ namespace WolvenKit.Views.Shell
                     }
 
                     return result;
+                };
+
+                Interactions.ShowPhotoModeDialogue = (param) =>
+                {
+                    var dialog = new CreatePhotoModeAppDialog(param.activeProject, param.settingsManager);
+                    if (dialog.ShowDialog() != true)
+                    {
+                        return null;
+                    }
+
+                    return dialog.ViewModel;
                 };
 
 

@@ -46,15 +46,15 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             ? "photomode_preview_icon.inkatlas"
             : dialogModel.InkatlasFileName;
         var relativeInkatlasFilePath = GetRelativePath(inkatlasFileName);
+
+        ProjectExplorerViewModel.SuspendFileWatcherStatic();
+        
         /*
          * Copy and connect .app and .ent file
          */
-
-        ProjectExplorerViewModel.SuspendFileWatcherStatic();
         try
         {
-            
-            var appearanceNames = TemplateFileHelper.CreatePhotoModeAppAndEnt(
+            TemplateFileHelper.CreatePhotoModeAppAndEnt(
                 _projectManager.ActiveProject, _loggerService,
                 new PhotomodeEntAppOptions()
                 {

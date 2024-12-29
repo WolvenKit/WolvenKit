@@ -12,6 +12,8 @@ namespace WolvenKit.Common.Services;
 
 public class CRUIDService
 {
+    private static CRUIDService? s_Instance;
+    
     #region Fields
 
     private const string s_used = "WolvenKit.Common.Resources.basecruids.kark";
@@ -28,6 +30,7 @@ public class CRUIDService
     public CRUIDService()
     {
         Load();
+        s_Instance = this;
     }
 
     #endregion Constructors
@@ -72,6 +75,8 @@ public class CRUIDService
 
     #region Public Methods
 
+    public static CRUID GenerateRandomCRUID() => s_Instance?.GenerateNewCRUID() ?? new CRUID();
+    
     public void SaveUserCRUIDS()
     {
         var dataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit");
