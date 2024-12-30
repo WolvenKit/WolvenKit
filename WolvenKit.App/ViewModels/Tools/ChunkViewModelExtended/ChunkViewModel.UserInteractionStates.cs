@@ -129,5 +129,16 @@ public partial class ChunkViewModel
             IsExpanded = false;
         }
 
+        // For nodes that are visible because they directly match the search, unhide all their children
+        UnhideChildrenRecursive();
+    }
+
+    private void UnhideChildrenRecursive()
+    {
+        IsHiddenBySearch = false;
+        foreach (var child in TVProperties)
+        {
+            UnhideChildrenRecursive();
+        }
     }
 }
