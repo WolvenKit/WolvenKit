@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.App.Extensions;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
 using WolvenKit.Interfaces.Extensions;
@@ -63,6 +64,20 @@ public partial class CreatePhotoModeAppViewModel : ObservableObject
             activeProject.ModFiles
                 .Where(fp => fp.EndsWith(".ent"))
         );
+
+        if (string.IsNullOrEmpty(SelectedApp))
+        {
+            SelectedApp = PhotomodeAppOptions.FirstOrDefault(f => f.Contains($"{AppFileName}.")) ??
+                          PhotomodeAppOptions.FirstOrDefault(f => f.Contains(s_photomodeSubDir)) ??
+                          PhotomodeAppOptions.FirstOrDefault() ?? "";
+        }
+
+        if (string.IsNullOrEmpty(SelectedEnt))
+        {
+            SelectedEnt = PhotomodeEntOptions.FirstOrDefault(f => f.Contains($"{EntFileName}.")) ??
+                          PhotomodeEntOptions.FirstOrDefault(f => f.Contains(s_photomodeSubDir)) ??
+                          PhotomodeEntOptions.FirstOrDefault() ?? "";
+        }
     }
 
     public bool IsAppNameTouched { get; set; }
@@ -73,58 +88,17 @@ public partial class CreatePhotoModeAppViewModel : ObservableObject
     public bool IsXlNameTouched { get; set; }
     public bool IsPhotoModeDirectoryTouched { get; set; }
 
+    public bool IsNpcNameTouched { get; set; }
+
     public void AutoSetValues()
     {
-        // Dialogue can't even be shown if modder name is not set
-        var photomodeDirectory = Path.GetDirectoryName(SelectedEnt) ??
-                                 Path.GetDirectoryName(SelectedApp) ??
-                                 _settingsManager.ModderName!;
+        UpdateAppFileNameAndCheckbox();
 
-        if (string.IsNullOrEmpty(PhotomodeRelativeFolder) || !IsPhotoModeDirectoryTouched)
-        {
-            if (!photomodeDirectory.Contains(s_photomodeSubDir))
-            {
-                photomodeDirectory = Path.Join(photomodeDirectory, s_photomodeSubDir);
-            }
+        UpdateEntFileNameAndCheckbox();
 
-            PhotomodeRelativeFolder = photomodeDirectory;
-        }
-
-        if (string.IsNullOrEmpty(SelectedApp))
-        {
-            SelectedApp = PhotomodeAppOptions.FirstOrDefault(f => f.Contains(s_photomodeSubDir)) ??
-                          PhotomodeAppOptions.FirstOrDefault() ?? "";
-        }
-
-        if (string.IsNullOrEmpty(SelectedEnt))
-        {
-            SelectedEnt = PhotomodeEntOptions.FirstOrDefault(f => f.Contains(s_photomodeSubDir)) ??
-                          PhotomodeEntOptions.FirstOrDefault() ?? "";
-        }
-
-        if (!IsAppNameTouched && string.IsNullOrEmpty(AppFileName) && !string.IsNullOrEmpty(SelectedApp))
-        {
-            var fileName = Path.GetFileNameWithoutExtension(SelectedApp);
-            var suffix = fileName.Contains("photomode") ? "" : "_photomode";
-            AppFileName = $"{fileName}{suffix}.app";
-        }
-
-        if (!IsEntNameTouched && string.IsNullOrEmpty(EntFileName) && !string.IsNullOrEmpty(SelectedEnt))
-        {
-            var fileName = Path.GetFileNameWithoutExtension(SelectedEnt);
-            var suffix = fileName.Contains("photomode") ? "" : "_photomode";
-            EntFileName = $"{fileName}{suffix}.ent";
-        }
-
-        if (!IsAppNameTouched && Path.Join(PhotomodeRelativeFolder, AppFileName) == SelectedApp)
-        {
-            IsCreateAppFile = false;
-        }
-
-        if (!IsEntNameTouched && Path.Join(PhotomodeRelativeFolder, EntFileName) == SelectedEnt)
-        {
-            IsCreateEntFile = false;
-        }
+        UpdateNpcName();
+        
+        UpdatePhotoModeDirectory();
 
         SetJsonFileName();
 
@@ -133,6 +107,81 @@ public partial class CreatePhotoModeAppViewModel : ObservableObject
         SetYamlFileName();
 
         SetXlFileName();
+    }
+
+    private void UpdateAppFileNameAndCheckbox()
+    {
+        if ((IsAppNameTouched && !string.IsNullOrEmpty(SelectedApp)) || string.IsNullOrEmpty(SelectedApp))
+        {
+            return;
+        }
+
+        var fileName = Path.GetFileNameWithoutExtension(SelectedApp);
+        var suffix = fileName.Contains("photomode") ? "" : "_photomode";
+        AppFileName = $"{fileName}{suffix}.app";
+
+        if (Path.Join(PhotomodeRelativeFolder, AppFileName) == SelectedApp)
+        {
+            IsCreateAppFile = false;
+        }
+    }
+
+    private void UpdateEntFileNameAndCheckbox()
+    {
+        if ((IsEntNameTouched && !string.IsNullOrEmpty(SelectedEnt)) || string.IsNullOrEmpty(SelectedEnt))
+        {
+            return;
+        }
+
+        var fileName = Path.GetFileNameWithoutExtension(SelectedEnt);
+        var suffix = fileName.Contains("photomode") ? "" : "_photomode";
+        EntFileName = $"{fileName}{suffix}.ent";
+
+        if (Path.Join(PhotomodeRelativeFolder, EntFileName) == SelectedEnt)
+        {
+            IsCreateEntFile = false;
+        }
+    }
+
+    private void UpdatePhotoModeDirectory()
+    {
+        if (IsPhotoModeDirectoryTouched)
+        {
+            return;
+        }
+
+        // Dialogue can't even be shown if modder name is not set
+        var photomodeDirectory = Path.Join(_settingsManager.ModderName!.ToFileName(), s_photomodeSubDir);
+        if (!string.IsNullOrEmpty(NpcName) && !photomodeDirectory.Contains(NpcName.ToFileName()))
+        {
+            photomodeDirectory = Path.Join(photomodeDirectory, NpcName.ToFileName());
+        }
+
+        if (string.IsNullOrEmpty(PhotomodeRelativeFolder) || !IsPhotoModeDirectoryTouched)
+        {
+            PhotomodeRelativeFolder = photomodeDirectory;
+        }
+    }
+
+    private void UpdateNpcName()
+    {
+        if (IsNpcNameTouched && !string.IsNullOrEmpty(NpcName))
+        {
+            return;
+        }
+
+        if (SelectedEnt.Contains("photo"))
+        {
+            NpcName = Path.GetFileNameWithoutExtension(SelectedEnt).Split("photo").First().ToHumanFriendlyString();
+        }
+        else if (SelectedApp.Contains("photo"))
+        {
+            NpcName = Path.GetFileNameWithoutExtension(SelectedApp).Split("photo").First().ToHumanFriendlyString();
+        }
+        else
+        {
+            NpcName = _activeProject.ModName.ToHumanFriendlyString();
+        }
     }
 
     private void SetXlFileName()
@@ -144,7 +193,7 @@ public partial class CreatePhotoModeAppViewModel : ObservableObject
 
         var xlFiles = _activeProject.ResourceFiles.Where(fp => fp.EndsWith(".xl")).ToList();
 
-        if (xlFiles.Count == 1)
+        if (xlFiles.Count == 1 && !IsXlNameTouched)
         {
             XlFileName = xlFiles.First();
             IsCreateXlFile = false;
@@ -159,17 +208,12 @@ public partial class CreatePhotoModeAppViewModel : ObservableObject
 
     private void SetYamlFileName()
     {
-        if (IsYamlNameTouched)
-        {
-            return;
-        }
-
         var yamlFiles = _activeProject.ResourceFiles.Where(fp => fp.EndsWith(".yaml")).ToList();
 
-        if (yamlFiles.Count == 1)
+        if (yamlFiles.Count == 1 && !IsYamlNameTouched)
         {
             IsCreateYamlFile = false;
-            YamlFileName = yamlFiles.First();
+            YamlFileName = Path.GetFileName(yamlFiles.First());
         }
         else if (!string.IsNullOrEmpty(NpcName) && string.IsNullOrEmpty(YamlFileName))
         {
@@ -181,17 +225,13 @@ public partial class CreatePhotoModeAppViewModel : ObservableObject
 
     private void SetInkatlasFileName()
     {
-        if (IsInkatlasNameTouched)
-        {
-            return;
-        }
 
         var inkatlasFiles = _activeProject.ModFiles.Where(fp => fp.EndsWith(".inkatlas")).ToList();
 
-        if (inkatlasFiles.Count == 1)
+        if (inkatlasFiles.Count == 1 && !IsInkatlasNameTouched)
         {
             IsCreateInkatlasFile = false;
-            InkatlasFileName = inkatlasFiles.First();
+            InkatlasFileName = Path.GetFileName(inkatlasFiles.First());
         }
         else if (!string.IsNullOrEmpty(NpcName) && string.IsNullOrEmpty(InkatlasFileName))
         {
@@ -203,17 +243,17 @@ public partial class CreatePhotoModeAppViewModel : ObservableObject
 
     private void SetJsonFileName()
     {
-        if (IsJsonNameTouched)
+        if (!string.IsNullOrEmpty(JsonFileName))
         {
             return;
         }
 
         var jsonFiles = _activeProject.ModFiles.Where(fp => fp.EndsWith(".json")).ToList();
 
-        if (jsonFiles.Count == 1)
+        if (jsonFiles.Count == 1 && !IsJsonNameTouched)
         {
             IsCreateJsonFile = false;
-            JsonFileName = jsonFiles.First();
+            JsonFileName = Path.GetFileName(jsonFiles.First());
         }
         else if (!string.IsNullOrEmpty(NpcName) && string.IsNullOrEmpty(JsonFileName))
         {
@@ -226,8 +266,46 @@ public partial class CreatePhotoModeAppViewModel : ObservableObject
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
         base.OnPropertyChanged(e);
+        switch (e.PropertyName)
+        {
+            case nameof(SelectedApp):
+            case nameof(AppFileName) when string.IsNullOrEmpty(AppFileName):
+                UpdateAppFileNameAndCheckbox();
+                break;
+            case nameof(SelectedEnt):
+            case nameof(EntFileName) when string.IsNullOrEmpty(EntFileName):
+                UpdateEntFileNameAndCheckbox();
+                break;
+            case nameof(JsonFileName) when string.IsNullOrEmpty(JsonFileName):
+                SetJsonFileName();
+                break;
+            case nameof(InkatlasFileName) when string.IsNullOrEmpty(InkatlasFileName):
+                SetInkatlasFileName();
+                break;
+            case nameof(IsCreateInkatlasFile) when !IsOverwrite && IsCreateInkatlasFile:
+                IsOverwrite =
+                    File.Exists(ProjectResourceHelper.GetAbsolutePath(InkatlasFileName, PhotomodeRelativeFolder));
+                break;
+            case nameof(IsCreateAppFile) when !IsOverwrite && IsCreateAppFile:
+                IsOverwrite = File.Exists(ProjectResourceHelper.GetAbsolutePath(AppFileName, PhotomodeRelativeFolder));
+                break;
+            case nameof(IsCreateEntFile) when !IsOverwrite && IsCreateEntFile:
+                IsOverwrite = File.Exists(ProjectResourceHelper.GetAbsolutePath(EntFileName, PhotomodeRelativeFolder));
+                break;
+            case nameof(IsCreateJsonFile) when !IsOverwrite && IsCreateJsonFile:
+                IsOverwrite = File.Exists(ProjectResourceHelper.GetAbsolutePath(JsonFileName, PhotomodeRelativeFolder));
+                break;
+            case nameof(IsCreateYamlFile) when !IsOverwrite && IsCreateYamlFile:
+                IsOverwrite = File.Exists(ProjectResourceHelper.GetAbsolutePath(YamlFileName, "", true));
+                break;
+            case nameof(IsCreateXlFile) when !IsOverwrite && IsCreateXlFile:
+                IsOverwrite = File.Exists(ProjectResourceHelper.GetAbsolutePath(XlFileName));
+                break;
+        }
         SetSaveButtonState();
     }
+
+    
 
     private void SetSaveButtonState()
     {
@@ -283,7 +361,7 @@ public partial class CreatePhotoModeAppViewModel : ObservableObject
     /// AutoSetValues will be called when NPC name is written back
     /// </summary>
     /// <param name="boxText"></param>
-    public void PreselectAppFromNpcName(string boxText)
+    public void PreselectAppAndEntFromNpcName(string boxText)
     {
         var npcNameFileName = boxText.ToFileName();
         var entPath = PhotomodeEntOptions.FirstOrDefault(x => x.Contains(npcNameFileName)) ?? null;
@@ -298,18 +376,6 @@ public partial class CreatePhotoModeAppViewModel : ObservableObject
             SelectedApp = appPath;
         }
 
-        var photomodeFolderPath = entPath ?? appPath;
-        if (IsPhotoModeDirectoryTouched || string.IsNullOrEmpty(photomodeFolderPath) ||
-            Path.GetDirectoryName(photomodeFolderPath) is not string dir)
-        {
-            return;
-        }
-
-        if (!dir.Contains(s_photomodeSubDir))
-        {
-            dir = Path.Join(dir, s_photomodeSubDir);
-        }
-
-        PhotomodeRelativeFolder = dir;
+        UpdatePhotoModeDirectory();
     }
 }

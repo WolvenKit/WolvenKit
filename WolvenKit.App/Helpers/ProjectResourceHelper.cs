@@ -51,6 +51,38 @@ public static class ProjectResourceHelper
         ).GetRed4Controller();
     }
 
+    public static string GetAbsolutePath(string fileName, string rootRelativeFolder = "",
+        bool appendModderNameFromSettings = false)
+    {
+        if (s_settingsService is null || s_projectManager?.ActiveProject is null)
+        {
+            return "";
+        }
+
+        if (string.IsNullOrEmpty(rootRelativeFolder))
+        {
+            rootRelativeFolder = Path.GetExtension(fileName) switch
+            {
+                ".yaml" => Path.Join("r6", "tweaks"),
+                _ => ""
+            };
+        }
+
+
+        if (appendModderNameFromSettings && !string.IsNullOrEmpty(s_settingsService.ModderName) &&
+            !rootRelativeFolder.Contains(s_settingsService.ModderName!))
+        {
+            rootRelativeFolder = AppendPersonalDirectory(rootRelativeFolder);
+        }
+
+        return Path.GetExtension(fileName) switch
+        {
+            "xl" => Path.Join(s_projectManager.ActiveProject.ResourcesDirectory, fileName),
+            "yaml" => Path.Join(s_projectManager.ActiveProject.ResourcesDirectory, rootRelativeFolder, fileName),
+            _ => Path.Join(s_projectManager.ActiveProject.ModDirectory, rootRelativeFolder, fileName)
+        };
+    }
+
 
     public static string AppendPersonalDirectory(params string[] filePathParts)
     {

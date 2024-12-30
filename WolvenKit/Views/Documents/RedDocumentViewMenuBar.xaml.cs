@@ -548,7 +548,7 @@ namespace WolvenKit.Views.Documents
                     entFilePath = Path.Combine(_projectManager.ActiveProject.ModDirectory, entFilePath);
                 }
 
-                var cr2WFile = DocumentTools.ReadCr2W(entFilePath);
+                var cr2WFile = Cr2WTools.ReadCr2W(entFilePath);
                 if (cr2WFile.RootChunk is not entEntityTemplate ent)
                 {
                     _loggerService.Error($"invalid .ent file: {entFilePath}!");

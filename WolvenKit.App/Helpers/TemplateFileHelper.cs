@@ -168,19 +168,44 @@ public abstract class TemplateFileHelper
             {
                 File.Copy(entOriginalAbsPath, entTargetAbsPath, true);
             }
-
-            AddPhotomodeComponents(entTargetAbsPath, options.BodyGender, loggerService);
         }
 
-        if (!File.Exists(appTargetAbsPath) || !File.Exists(entTargetAbsPath))
+        List<string> warnings = [];
+
+        if (!File.Exists(entTargetAbsPath) && options.WriteEntFile)
         {
-            loggerService.Error(".app file or .ent file could not be added");
+            warnings.Add($"Failed to write .ent file to {entTargetAbsPath}");
         }
+
+        if (!File.Exists(appTargetAbsPath) && options.WriteAppFile)
+        {
+            warnings.Add($"Failed to write .app file to {appTargetAbsPath}");
+        }
+
+        foreach (var warning in warnings)
+        {
+            loggerService.Error(warning);
+        }
+
+        if (!File.Exists(entTargetAbsPath))
+        {
+            return;
+        }
+
+        AddPhotomodeComponentsToEnt(entTargetAbsPath, options.BodyGender, loggerService);
+
+        if (!File.Exists(appTargetAbsPath))
+        {
+            return;
+        }
+
+        DocumentTools.SetFacialAnimations(appTargetAbsPath, options.BodyGender);
 
         DocumentTools.ConnectAppToEntFile(appTargetAbsPath, entTargetAbsPath, true);
     }
 
-    private static void AddPhotomodeComponents(string entTargetAbsPath, PhotomodeBodyGender bodyGender,
+
+    private static void AddPhotomodeComponentsToEnt(string entTargetAbsPath, PhotomodeBodyGender bodyGender,
         ILoggerService loggerService)
     {
         if (!File.Exists(entTargetAbsPath))
@@ -189,22 +214,103 @@ public abstract class TemplateFileHelper
             return;
         }
 
-        if (DocumentTools.ReadCr2W(entTargetAbsPath) is not { RootChunk: entEntityTemplate ent } cr2w)
+        if (Cr2WTools.ReadCr2W(entTargetAbsPath) is not { RootChunk: entEntityTemplate ent } cr2W)
         {
             loggerService.Error($"invalid .ent: {entTargetAbsPath}");
             return;
         }
 
-        if (!ent.Components.OfType<PhotoModePlayerEntityComponent>().Any())
+        if (ent.Components.OfType<PhotoModePlayerEntityComponent>().All(comp => comp.Name != "PhotoModePlayerEntity"))
         {
             ent.Components.Add(
                 new PhotoModePlayerEntityComponent()
                 {
-                    Name = "PhotomodePlayerEntity", Id = CRUIDService.GenerateRandomCRUID(),
+                    Name = "PhotoModePlayerEntity", Id = CRUIDService.GenerateRandomCRUID(),
                 });
         }
 
-        // female: Needs "Ultimate Edition Animsets" (this is not present in other .ent files)
+        // add animations to root component
+        var rootComponent = ent.Components.OfType<entAnimatedComponent>().FirstOrDefault(c => c.Name == "root");
+
+        if (rootComponent is not null && bodyGender is not PhotomodeBodyGender.Cat)
+        {
+            var gameplay = new CArray<animAnimSetupEntry>();
+
+            var anims = bodyGender switch
+            {
+                PhotomodeBodyGender.Female => PhotomodeEntityAnimations.RootComponentFemale,
+                PhotomodeBodyGender.Male => PhotomodeEntityAnimations.RootComponentMale,
+                PhotomodeBodyGender.Massive => PhotomodeEntityAnimations.RootComponentMassive,
+                PhotomodeBodyGender.Big => PhotomodeEntityAnimations.RootComponentBig,
+                PhotomodeBodyGender.Cat => PhotomodeEntityAnimations.RootComponentCat,
+                _ => PhotomodeEntityAnimations.RootComponentCat
+            };
+            rootComponent.Animations.Gameplay.Clear();
+
+            foreach (var se in anims)
+            {
+                rootComponent.Animations.Gameplay.Add(new animAnimSetupEntry()
+                {
+                    AnimSet = new CResourceAsyncReference<animAnimSet>(se)
+                });
+            }
+        }
+
+        // add animations to Character Entity Animation Setup
+        var specialAnimComponent = ent.Components.OfType<entAnimationSetupExtensionComponent>()
+            .FirstOrDefault(c => c.Name == "Character Entity Animation Setup");
+
+        if (specialAnimComponent is not null && bodyGender is not PhotomodeBodyGender.Cat)
+        {
+            var gameplay = new CArray<animAnimSetupEntry>();
+
+            var anims = bodyGender switch
+            {
+                PhotomodeBodyGender.Female => PhotomodeEntityAnimations.SpecialLocomotionSetupFemale,
+                PhotomodeBodyGender.Male => PhotomodeEntityAnimations.SpecialLocomotionSetupMale,
+                PhotomodeBodyGender.Massive => PhotomodeEntityAnimations.SpecialLocomotionSetupMassive,
+                PhotomodeBodyGender.Big => PhotomodeEntityAnimations.SpecialLocomotionSetupBig,
+                PhotomodeBodyGender.Cat => [],
+                _ => PhotomodeEntityAnimations.RootComponentCat
+            };
+            specialAnimComponent.Animations.Gameplay.Clear();
+
+            foreach (var se in anims)
+            {
+                specialAnimComponent.Animations.Gameplay.Add(new animAnimSetupEntry()
+                {
+                    AnimSet = new CResourceAsyncReference<animAnimSet>(se)
+                });
+            }
+        }
+
+        // add animations to Special Locomotion Setup
+        var specialLocomotionSetup = ent.Components.OfType<entAnimationSetupExtensionComponent>()
+            .FirstOrDefault(c => c.Name == "Special Locomotion Setup");
+
+        if (specialLocomotionSetup is not null && bodyGender is not PhotomodeBodyGender.Cat)
+        {
+            var anims = bodyGender switch
+            {
+                PhotomodeBodyGender.Female => PhotomodeEntityAnimations.SpecialLocomotionSetupFemale,
+                PhotomodeBodyGender.Male => PhotomodeEntityAnimations.SpecialLocomotionSetupMale,
+                PhotomodeBodyGender.Massive => PhotomodeEntityAnimations.SpecialLocomotionSetupMassive,
+                PhotomodeBodyGender.Big => PhotomodeEntityAnimations.SpecialLocomotionSetupBig,
+                PhotomodeBodyGender.Cat => [],
+                _ => PhotomodeEntityAnimations.RootComponentCat
+            };
+            specialLocomotionSetup.Animations.Gameplay.Clear();
+
+            foreach (var se in anims)
+            {
+                specialLocomotionSetup.Animations.Gameplay.Add(new animAnimSetupEntry()
+                {
+                    AnimSet = new CResourceAsyncReference<animAnimSet>(se)
+                });
+            }
+        }
+
+        // female: "Ultimate Edition Animsets" (this is not present in other .ent files)
         if (bodyGender == PhotomodeBodyGender.Female && ent.Components.OfType<entAnimationSetupExtensionComponent>()
                 .All(c => c.Name != "Ultimate Edition Animsets"))
         {
@@ -220,8 +326,8 @@ public abstract class TemplateFileHelper
                         }
                 });
         }
-        
-        DocumentTools.WriteCr2W(cr2w, entTargetAbsPath);
+
+        Cr2WTools.WriteCr2W(cr2W, entTargetAbsPath);
     }
 
     public static void CreateOrAppendToJsonFile(
@@ -233,7 +339,7 @@ public abstract class TemplateFileHelper
         CR2WFile cr2W;
         if (File.Exists(absoluteFilePath))
         {
-            cr2W = DocumentTools.ReadCr2W(absoluteFilePath);
+            cr2W = Cr2WTools.ReadCr2W(absoluteFilePath);
         }
         else
         {
@@ -254,22 +360,21 @@ public abstract class TemplateFileHelper
         var existingSecondaryKeys = chunk.Entries.ToDictionary(x => x.SecondaryKey, x => x.FemaleVariant);
 
         List<string> nameCollisions = [];
-        
-        foreach (var keyValuePair in entries)
+
+        foreach (var kvp in entries)
         {
-            if (!overwrite && existingSecondaryKeys.ContainsKey(keyValuePair.Key))
+            if (!overwrite && existingSecondaryKeys.ContainsKey(kvp.Key))
             {
-                if (existingSecondaryKeys[keyValuePair.Key] != keyValuePair.Value)
+                if (existingSecondaryKeys[kvp.Key] != kvp.Value)
                 {
-                    nameCollisions.Add(
-                        $"{keyValuePair.Key}: {existingSecondaryKeys[keyValuePair.Key]} (supposed to be {keyValuePair.Value})");
+                    nameCollisions.Add($"{kvp.Key}: {existingSecondaryKeys[kvp.Key]} (supposed to be {kvp.Value})");
                 }
 
                 continue;
             }
             chunk.Entries.Add(new localizationPersistenceOnScreenEntry()
             {
-                SecondaryKey = keyValuePair.Key, FemaleVariant = keyValuePair.Value,
+                SecondaryKey = kvp.Key, FemaleVariant = kvp.Value,
             });
         }
 
@@ -280,7 +385,7 @@ public abstract class TemplateFileHelper
             }");
         }
 
-        DocumentTools.WriteCr2W(cr2W, absoluteFilePath);
+        Cr2WTools.WriteCr2W(cr2W, absoluteFilePath);
     }
 }
 

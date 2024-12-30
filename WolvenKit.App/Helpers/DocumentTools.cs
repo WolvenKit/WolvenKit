@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Common.Exceptions;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
@@ -21,108 +22,10 @@ public class DocumentTools
 {
 
     private static ILoggerService s_loggerServiceInstance = null!;
-    private static IHashService s_hashServiceInstance = null!;
-    private static Red4ParserService s_parserServiceInstance = null!;
 
     public static Regex PlaceholderRegex { get; } = new Regex(@"^[-=_]+$");
 
-    public DocumentTools(
-        ILoggerService loggerService,
-        IHashService hashService,
-        Red4ParserService parserService
-    )
-    {
-        s_loggerServiceInstance = loggerService;
-        s_hashServiceInstance = hashService;
-        s_parserServiceInstance = parserService;
-    }
-
-    #region cr2w
-
-    public static bool WriteCr2W(CR2WFile cr2WFile, string? absolutePath)
-    {
-        if (string.IsNullOrEmpty(absolutePath))
-        {
-            s_loggerServiceInstance.Error("No file path provided!");
-            return false;
-        }
-
-        var fileDirectory = Path.GetDirectoryName(absolutePath);
-        if (fileDirectory is not null && !Directory.Exists(fileDirectory))
-        {
-            Directory.CreateDirectory(fileDirectory);
-        }
-
-        using (var ms = new MemoryStream())
-        {
-            try
-            {
-                using var writer = new CR2WWriter(ms, Encoding.UTF8, true) { LoggerService = s_loggerServiceInstance };
-                writer.WriteFile(cr2WFile);
-                if (!FileHelper.SafeWrite(ms, absolutePath, s_loggerServiceInstance))
-                {
-                    return false;
-                }
-
-                SaveHashedValues(cr2WFile);
-            }
-            catch (Exception e)
-            {
-                s_loggerServiceInstance.Error($"Error while saving {absolutePath}");
-                s_loggerServiceInstance.Error(e);
-
-                return false;
-            }
-        }
-
-        s_loggerServiceInstance.Success($"Saved file {absolutePath}");
-        return true;
-    }
-
-    public static CR2WFile ReadCr2W(string absolutePath)
-    {
-        if (!File.Exists(absolutePath))
-        {
-            throw new InvalidDataException($"File does not exist: {absolutePath}");
-        }
-
-        using var fs = new FileStream(absolutePath, FileMode.Open);
-
-        if (!s_parserServiceInstance.TryReadRed4File(fs, out var cr2WFile))
-        {
-            throw new InvalidFileTypeException($"Can't read file: {absolutePath}");
-        }
-
-        return cr2WFile;
-    }
-
-    #endregion
-
-
-    private static void SaveHashedValues(CR2WFile file)
-    {
-        if (s_hashServiceInstance is not HashServiceExt hashService)
-        {
-            return;
-        }
-
-        foreach (var (_, value) in file.RootChunk.GetEnumerator())
-        {
-            switch (value)
-            {
-                case IRedRef redRef when redRef.DepotPath != ResourcePath.Empty &&
-                                         redRef.DepotPath.TryGetResolvedText(out var refPath):
-                    hashService.AddResourcePath(refPath);
-                    break;
-                case TweakDBID tweakDbId
-                    when tweakDbId != TweakDBID.Empty && tweakDbId.TryGetResolvedText(out var tweakName):
-                    hashService.AddTweakName(tweakName);
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
+    public DocumentTools(ILoggerService loggerService) => s_loggerServiceInstance = loggerService;
 
 
     # region appfile
@@ -142,8 +45,8 @@ public class DocumentTools
             return [];
         }
 
-        var appCr2W = ReadCr2W(absoluteAppFilePath);
-        var entCr2W = ReadCr2W(absoluteEntFilePath);
+        var appCr2W = Cr2WTools.ReadCr2W(absoluteAppFilePath);
+        var entCr2W = Cr2WTools.ReadCr2W(absoluteEntFilePath);
 
         if (entCr2W.RootChunk is not entEntityTemplate ent)
         {
@@ -203,10 +106,24 @@ public class DocumentTools
             ent.DefaultAppearance = ent.Appearances.LastOrDefault()?.Name.GetResolvedText() ?? "";
         }
 
-        WriteCr2W(entCr2W, absoluteEntFilePath);
+        Cr2WTools.WriteCr2W(entCr2W, absoluteEntFilePath);
         return appAppearanceNames;
     }
 
+
+    public static void SetFacialAnimations(string absoluteAppFilePath, PhotomodeBodyGender bodyGender)
+    {
+        var facialAnim = SelectAnimationPathViewModel.FacialAnimPathMale;
+        if (bodyGender is PhotomodeBodyGender.Female)
+        {
+            facialAnim = SelectAnimationPathViewModel.FacialAnimPathFemale;
+        }
+
+        var selectedAnims = SelectAnimationPathViewModel.PhotomodeAnimEntriesFemaleDefault;
+
+        SetFacialAnimations(absoluteAppFilePath, facialAnim, null, selectedAnims);
+    }
+    
     public static void SetFacialAnimations(string absoluteAppFilePath, string? facialAnim, string? animGraph,
         List<string> selectedAnims)
     {
@@ -221,7 +138,7 @@ public class DocumentTools
             return;
         }
 
-        var appCr2W = ReadCr2W(absoluteAppFilePath);
+        var appCr2W = Cr2WTools.ReadCr2W(absoluteAppFilePath);
 
         if (appCr2W.RootChunk is not appearanceAppearanceResource app)
         {
@@ -229,7 +146,8 @@ public class DocumentTools
             return;
         }
 
-        foreach (var appearance in app.Appearances.Where(a => a.Chunk is not null))
+        foreach (var appearance in app.Appearances
+                     .Where(a => a.Chunk is not null))
         {
             foreach (var anim in appearance.Chunk!.Components.OfType<entAnimatedComponent>())
             {
@@ -264,8 +182,10 @@ public class DocumentTools
             }
         }
 
-        WriteCr2W(appCr2W, absoluteAppFilePath);
+        s_loggerServiceInstance?.Success($"changed facial anims to {facialAnim}");
+        Cr2WTools.WriteCr2W(appCr2W, absoluteAppFilePath);
     }
 
     # endregion
+
 }

@@ -45,13 +45,11 @@ using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
-using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
-using YamlDotNet.RepresentationModel;
 using FileSystem = Microsoft.VisualBasic.FileIO.FileSystem;
 using NativeMethods = WolvenKit.App.Helpers.NativeMethods;
 using Rect = System.Windows.Rect;
@@ -74,12 +72,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly IProgressService<double> _progressService;
     private readonly IPluginService _pluginService;
     private readonly IArchiveManager _archiveManager;
-    private readonly IHashService _hashService;
     private readonly ITweakDBService _tweakDBService;
     private readonly Red4ParserService _parser;
     private readonly AppScriptService _scriptService;
-    private readonly IWatcherService _watcherService;
-    private readonly DocumentTools _documentTools;
 
     // expose to view
     public ISettingsManager SettingsManager { get; init; }
@@ -104,7 +99,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         IHashService hashService,
         ITweakDBService tweakDBService,
         Red4ParserService parserService,
-        IWatcherService watcherService,
         AppScriptService scriptService)
     {
         _documentViewmodelFactory = documentViewmodelFactory;
@@ -120,14 +114,17 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _progressService = progressService;
         _pluginService = pluginService;
         _archiveManager = archiveManager;
-        _hashService = hashService;
         _tweakDBService = tweakDBService;
         _parser = parserService;
-        _watcherService = watcherService;
         _scriptService = scriptService;
 
-        // make sure that this is initialized 
-        _documentTools = new DocumentTools(_loggerService, _hashService, _parser);
+        // make sure that these are initialized 
+        // ReSharper disable once ObjectCreationAsStatement
+#pragma warning disable CA1806
+        new DocumentTools(_loggerService);
+        // ReSharper disable once ObjectCreationAsStatement
+        new Cr2WTools(_loggerService, hashService, _parser);
+#pragma warning restore CA1806
         
         _fileValidationScript = _scriptService.GetScripts(ISettingsManager.GetWScriptDir()).ToList()
             .Where(s => s.Name == "run_FileValidation_on_active_tab")
@@ -139,7 +136,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             .Select(s => new ScriptFileViewModel(SettingsManager, ScriptSource.User, s))
             .FirstOrDefault();
 
-        if (_hashService is HashServiceExt hashServiceExt)
+        if (hashService is HashServiceExt hashServiceExt)
         {
             hashServiceExt.LoadGlobalCache();
         }
@@ -149,7 +146,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _progressService.PropertyChanged += ProgressService_PropertyChanged;
 
         SettingsManager.WhenPropertyChanged(settings => settings.UiScale)
-            .Subscribe(settings => OnUiScaleChanged());
+            .Subscribe(_ => OnUiScaleChanged());
 
         UpdateTitle();
 
@@ -554,7 +551,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
         Directory.CreateDirectory(resourceDir.FullName);
 
-        // download zipfile
+        // download zip file
         var contentUrl = $@"https://wolvenkit.github.io/Wolvenkit-Resources/scripts.zip";
         response = await client.GetAsync(new Uri(contentUrl));
         try
@@ -644,10 +641,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             // old style update
             // TODO use inno
             var url = $"https://github.com/{owner}/{name}/releases/latest";
-            var res = await Interactions.ShowMessageBoxAsync(
-                $"Update available: {remoteVersion}\nYou are on the {SettingsManager.UpdateChannel} release channel.\n\nVisit {url} ?",
-                name, WMessageBoxButtons.OkCancel);
-            if (res == WMessageBoxResult.OK)
+
+            if (Interactions.ShowQuestionYesNo((
+                    $"Update available: {remoteVersion}\nYou are on the {SettingsManager.UpdateChannel} release channel.\n\nVisit {url} ?",
+                    name)))
             {
                 Process.Start("explorer", url);
             }
@@ -1447,10 +1444,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         using MemoryStream stream = new();
         file.Extract(stream);
 
-        if (OpenStream(stream, file.FileName, out var redfile))
+        if (OpenStream(stream, file.FileName, out var redFile))
         {
-            return _documentViewmodelFactory.RedDocumentViewModel(redfile, Path.Combine(projArchive.Project.ModDirectory, file.FileName),
-                this, false);
+            return _documentViewmodelFactory.RedDocumentViewModel(redFile,
+                Path.Combine(projArchive.Project.ModDirectory, file.FileName),
+                this);
         }
 
         return null;
@@ -1720,7 +1718,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(SaveAllCommand))]
     private ObservableCollection<IDockElement> _dockedViews = new();
 
-    private double _uiScalePercentage => (double)SettingsManager.UiScale / 100.0;
+    private double UiScalePercentage => SettingsManager.UiScale / 100.0;
 
     #endregion properties
 
@@ -1884,7 +1882,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             case EWolvenKitFile.Cr2w:
                 if (OpenFile(fullPath, out var file))
                 {
-                    fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(file, fullPath, this, false);
+                    fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(file, fullPath, this);
                     result = fileViewModel.IsInitialized();
                 }
                 break;
@@ -2075,12 +2073,12 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                     // TODO: port winforms
                     //if (!File.Exists(fullpath) || Path.GetExtension(fullpath) != ".usm")
                     //    return;
-                    //var usmplayer = new frmUsmPlayer(fullpath);
-                    //usmplayer.Show(dockPanel, DockState.Document);
+                    //var usmPlayer = new frmUsmPlayer(fullpath);
+                    //usmPlayer.Show(dockPanel, DockState.Document);
                     break;
                 }
                 //case ".BNK":
-                // TODO SPLIT WEMS TO PLAYLIST FROM BNK
+                // TODO SPLIT WEMs TO PLAYLIST FROM BNK
                 default:
                     return Task.Run(OpenRedengineFile);
             }
@@ -2118,20 +2116,30 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 return;
             }
 
-            DispatcherHelper.RunOnMainThread(async () =>
+            DispatcherHelper.RunOnMainThread(async void () =>
             {
-                if (await Open(fullpath, type) is not IDocumentViewModel document)
+                try
                 {
-                    return;
-                }
+                    if (await Open(fullpath, type) is not IDocumentViewModel document)
+                    {
+                        return;
+                    }
 
-                if (!DockedViews.Contains(document))
+                    if (!DockedViews.Contains(document))
+                    {
+                        DockedViews.Add(document);
+                    }
+
+                    ActiveDocument = document;
+                    UpdateTitle();
+                }
+                catch (Exception e)
                 {
-                    DockedViews.Add(document);
-                }
+                    _loggerService.Error($"Could not open file: {e.Message}");
 
-                ActiveDocument = document;
-                UpdateTitle();
+                    _loggerService.Error(
+                        $"Please open a ticket (with the file attached) under {Core.Constants.IssueTrackerUrl}");
+                }
             });
         }
 
@@ -2160,7 +2168,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         void PolymorphExecute(string path, string extension)
         {
-            File.WriteAllBytes(Path.GetTempPath() + "asd." + extension, new byte[] { 0x01 });
+            File.WriteAllBytes(Path.GetTempPath() + "asd." + extension, [0x01]);
             StringBuilder programName = new();
             _ = NativeMethods.FindExecutable("asd." + extension, Path.GetTempPath(), programName);
             if (programName.ToString().ToUpper().Contains(".EXE"))
@@ -2200,240 +2208,240 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         var resources = Application.Current.Resources;
 
         // Fonts
-        resources["WolvenKitFontAltTitle"] = 10 * _uiScalePercentage;
-        resources["WolvenKitFontSubTitle"] = 12 * _uiScalePercentage;
-        resources["WolvenKitFontBody"] = 14 * _uiScalePercentage;
-        resources["WolvenKitFontMedium"] = 16 * _uiScalePercentage;
-        resources["WolvenKitFontTitle"] = 18 * _uiScalePercentage;
-        resources["WolvenKitFontHeader"] = 20 * _uiScalePercentage;
-        resources["WolvenKitFontHuge"] = 24 * _uiScalePercentage;
-        resources["WolvenKitFontMega"] = 36 * _uiScalePercentage;
-        resources["WolvenKitFontGiga"] = 58 * _uiScalePercentage;
+        resources["WolvenKitFontAltTitle"] = 10 * UiScalePercentage;
+        resources["WolvenKitFontSubTitle"] = 12 * UiScalePercentage;
+        resources["WolvenKitFontBody"] = 14 * UiScalePercentage;
+        resources["WolvenKitFontMedium"] = 16 * UiScalePercentage;
+        resources["WolvenKitFontTitle"] = 18 * UiScalePercentage;
+        resources["WolvenKitFontHeader"] = 20 * UiScalePercentage;
+        resources["WolvenKitFontHuge"] = 24 * UiScalePercentage;
+        resources["WolvenKitFontMega"] = 36 * UiScalePercentage;
+        resources["WolvenKitFontGiga"] = 58 * UiScalePercentage;
 
         // Icons
-        resources["WolvenKitIconPico"] = 8 * _uiScalePercentage;
-        resources["WolvenKitIconNano"] = 10 * _uiScalePercentage;
-        resources["WolvenKitIconMicro"] = 12 * _uiScalePercentage;
-        resources["WolvenKitIconMilli"] = 14 * _uiScalePercentage;
-        resources["WolvenKitIconTiny"] = 16 * _uiScalePercentage;
-        resources["WolvenKitIconSmall"] = 18 * _uiScalePercentage;
-        resources["WolvenKitIcon"] = 20 * _uiScalePercentage;
-        resources["WolvenKitIconBig"] = 26 * _uiScalePercentage;
-        resources["WolvenKitIconHuge"] = 36 * _uiScalePercentage;
+        resources["WolvenKitIconPico"] = 8 * UiScalePercentage;
+        resources["WolvenKitIconNano"] = 10 * UiScalePercentage;
+        resources["WolvenKitIconMicro"] = 12 * UiScalePercentage;
+        resources["WolvenKitIconMilli"] = 14 * UiScalePercentage;
+        resources["WolvenKitIconTiny"] = 16 * UiScalePercentage;
+        resources["WolvenKitIconSmall"] = 18 * UiScalePercentage;
+        resources["WolvenKitIcon"] = 20 * UiScalePercentage;
+        resources["WolvenKitIconBig"] = 26 * UiScalePercentage;
+        resources["WolvenKitIconHuge"] = 36 * UiScalePercentage;
 
         // Layouts
-        resources["WolvenKitMargin"] = new Thickness(15).Mul(_uiScalePercentage);
-        resources["WolvenKitMarginLeft"] = new Thickness(15, 0, 0, 0).Mul(_uiScalePercentage);
-        resources["WolvenKitMarginRight"] = new Thickness(0, 0, 15, 0).Mul(_uiScalePercentage);
-        resources["WolvenKitMarginTop"] = new Thickness(0, 15, 0, 0).Mul(_uiScalePercentage);
-        resources["WolvenKitMarginBottom"] = new Thickness(0, 0, 0, 15).Mul(_uiScalePercentage);
-        resources["WolvenKitMarginHorizontal"] = new Thickness(15, 0, 15, 0).Mul(_uiScalePercentage);
-        resources["WolvenKitMarginVertical"] = new Thickness(0, 15, 0, 15).Mul(_uiScalePercentage);
-        resources["WolvenKitMarginLeftBottom"] = new Thickness(15, 0, 0, 15).Mul(_uiScalePercentage);
+        resources["WolvenKitMargin"] = new Thickness(15).Mul(UiScalePercentage);
+        resources["WolvenKitMarginLeft"] = new Thickness(15, 0, 0, 0).Mul(UiScalePercentage);
+        resources["WolvenKitMarginRight"] = new Thickness(0, 0, 15, 0).Mul(UiScalePercentage);
+        resources["WolvenKitMarginTop"] = new Thickness(0, 15, 0, 0).Mul(UiScalePercentage);
+        resources["WolvenKitMarginBottom"] = new Thickness(0, 0, 0, 15).Mul(UiScalePercentage);
+        resources["WolvenKitMarginHorizontal"] = new Thickness(15, 0, 15, 0).Mul(UiScalePercentage);
+        resources["WolvenKitMarginVertical"] = new Thickness(0, 15, 0, 15).Mul(UiScalePercentage);
+        resources["WolvenKitMarginLeftBottom"] = new Thickness(15, 0, 0, 15).Mul(UiScalePercentage);
 
-        resources["WolvenKitMarginSmall"] = new Thickness(8).Mul(_uiScalePercentage);
-        resources["WolvenKitMarginSmallLeft"] = new Thickness(8, 0, 0, 0).Mul(_uiScalePercentage);
-        resources["WolvenKitMarginSmallRight"] = new Thickness(0, 0, 8, 0).Mul(_uiScalePercentage);
-        resources["WolvenKitMarginSmallTop"] = new Thickness(0, 8, 0, 0).Mul(_uiScalePercentage);
-        resources["WolvenKitMarginSmallBottom"] = new Thickness(0, 0, 0, 8).Mul(_uiScalePercentage);
-        resources["WolvenKitMarginSmallHorizontal"] = new Thickness(8, 0, 8, 0).Mul(_uiScalePercentage);
-        resources["WolvenKitMarginSmallVertical"] = new Thickness(0, 8, 0, 8).Mul(_uiScalePercentage);
-        resources["WolvenKitMarginSmallHeader"] = new Thickness(8, 8, 8, 0).Mul(_uiScalePercentage);
-        resources["WolvenKitMarginSmallFooter"] = new Thickness(8, 0, 8, 8).Mul(_uiScalePercentage);
-        resources["WolvenKitMarginSmallLeftSide"] = new Thickness(8, 8, 0, 8).Mul(_uiScalePercentage);
-        resources["WolvenKitMarginSmallRightSide"] = new Thickness(0, 8, 8, 8).Mul(_uiScalePercentage);
+        resources["WolvenKitMarginSmall"] = new Thickness(8).Mul(UiScalePercentage);
+        resources["WolvenKitMarginSmallLeft"] = new Thickness(8, 0, 0, 0).Mul(UiScalePercentage);
+        resources["WolvenKitMarginSmallRight"] = new Thickness(0, 0, 8, 0).Mul(UiScalePercentage);
+        resources["WolvenKitMarginSmallTop"] = new Thickness(0, 8, 0, 0).Mul(UiScalePercentage);
+        resources["WolvenKitMarginSmallBottom"] = new Thickness(0, 0, 0, 8).Mul(UiScalePercentage);
+        resources["WolvenKitMarginSmallHorizontal"] = new Thickness(8, 0, 8, 0).Mul(UiScalePercentage);
+        resources["WolvenKitMarginSmallVertical"] = new Thickness(0, 8, 0, 8).Mul(UiScalePercentage);
+        resources["WolvenKitMarginSmallHeader"] = new Thickness(8, 8, 8, 0).Mul(UiScalePercentage);
+        resources["WolvenKitMarginSmallFooter"] = new Thickness(8, 0, 8, 8).Mul(UiScalePercentage);
+        resources["WolvenKitMarginSmallLeftSide"] = new Thickness(8, 8, 0, 8).Mul(UiScalePercentage);
+        resources["WolvenKitMarginSmallRightSide"] = new Thickness(0, 8, 8, 8).Mul(UiScalePercentage);
 
-        resources["WolvenKitMarginTiny"] = new Thickness(4).Mul(_uiScalePercentage);
-        resources["WolvenKitMarginTinyRight"] = new Thickness(0, 0, 4, 0).Mul(_uiScalePercentage);
-        resources["WolvenKitMarginTinyTop"] = new Thickness(0, 4, 0, 0).Mul(_uiScalePercentage);
-        resources["WolvenKitMarginTinyBottom"] = new Thickness(0, 0, 0, 4).Mul(_uiScalePercentage);
-        resources["WolvenKitMarginTinyHorizontal"] = new Thickness(4, 0, 4, 0).Mul(_uiScalePercentage);
-        resources["WolvenKitMarginTinyVertical"] = new Thickness(0, 4, 0, 4).Mul(_uiScalePercentage);
-        resources["WolvenKitMarginTinyHeader"] = new Thickness(4, 4, 4, 0).Mul(_uiScalePercentage);
-        resources["WolvenKitMarginTinyFooter"] = new Thickness(4, 0, 4, 4).Mul(_uiScalePercentage);
-        resources["WolvenKitMarginTinyLeftSide"] = new Thickness(4, 4, 0, 4).Mul(_uiScalePercentage);
-        resources["WolvenKitMarginTinyRightSide"] = new Thickness(0, 4, 4, 4).Mul(_uiScalePercentage);
+        resources["WolvenKitMarginTiny"] = new Thickness(4).Mul(UiScalePercentage);
+        resources["WolvenKitMarginTinyRight"] = new Thickness(0, 0, 4, 0).Mul(UiScalePercentage);
+        resources["WolvenKitMarginTinyTop"] = new Thickness(0, 4, 0, 0).Mul(UiScalePercentage);
+        resources["WolvenKitMarginTinyBottom"] = new Thickness(0, 0, 0, 4).Mul(UiScalePercentage);
+        resources["WolvenKitMarginTinyHorizontal"] = new Thickness(4, 0, 4, 0).Mul(UiScalePercentage);
+        resources["WolvenKitMarginTinyVertical"] = new Thickness(0, 4, 0, 4).Mul(UiScalePercentage);
+        resources["WolvenKitMarginTinyHeader"] = new Thickness(4, 4, 4, 0).Mul(UiScalePercentage);
+        resources["WolvenKitMarginTinyFooter"] = new Thickness(4, 0, 4, 4).Mul(UiScalePercentage);
+        resources["WolvenKitMarginTinyLeftSide"] = new Thickness(4, 4, 0, 4).Mul(UiScalePercentage);
+        resources["WolvenKitMarginTinyRightSide"] = new Thickness(0, 4, 4, 4).Mul(UiScalePercentage);
 
-        resources["WolvenKitMarginMicro"] = new Thickness(2).Mul(_uiScalePercentage);
-        resources["WolvenKitMarginMicroLeft"] = new Thickness(2, 0, 0, 0).Mul(_uiScalePercentage);
-        resources["WolvenKitMarginMicroHorizontal"] = new Thickness(2, 0, 2, 0).Mul(_uiScalePercentage);
-        resources["WolvenKitMarginMicroVertical"] = new Thickness(0, 2, 0, 2).Mul(_uiScalePercentage);
+        resources["WolvenKitMarginMicro"] = new Thickness(2).Mul(UiScalePercentage);
+        resources["WolvenKitMarginMicroLeft"] = new Thickness(2, 0, 0, 0).Mul(UiScalePercentage);
+        resources["WolvenKitMarginMicroHorizontal"] = new Thickness(2, 0, 2, 0).Mul(UiScalePercentage);
+        resources["WolvenKitMarginMicroVertical"] = new Thickness(0, 2, 0, 2).Mul(UiScalePercentage);
 
-        resources["WolvenKitSmallRadius"] = new CornerRadius(5).Mul(_uiScalePercentage);
-        resources["WolvenKitRadius"] = new CornerRadius(10).Mul(_uiScalePercentage);
+        resources["WolvenKitSmallRadius"] = new CornerRadius(5).Mul(UiScalePercentage);
+        resources["WolvenKitRadius"] = new CornerRadius(10).Mul(UiScalePercentage);
 
-        resources["WolvenKitColumnTiny"] = new GridLength(5).Mul(_uiScalePercentage);
+        resources["WolvenKitColumnTiny"] = new GridLength(5).Mul(UiScalePercentage);
 
-        resources["WolvenKitRowText"] = new GridLength(20).Mul(_uiScalePercentage);
+        resources["WolvenKitRowText"] = new GridLength(20).Mul(UiScalePercentage);
 
         // Views
-        resources["WolvenKitDividerHeight"] = 45 * _uiScalePercentage;
+        resources["WolvenKitDividerHeight"] = 45 * UiScalePercentage;
 
-        resources["WolvenKitDataGridRowHeight"] = 24 * _uiScalePercentage;
+        resources["WolvenKitDataGridRowHeight"] = 24 * UiScalePercentage;
 
-        resources["WolvenKitTreeGridColumnIconWidth"] = new GridLength(13).Mul(_uiScalePercentage);
-        resources["WolvenKitTreeGridIconHeight"] = 13 * _uiScalePercentage;
-        resources["WolvenKitTreeGridRowHeight"] = 20 * _uiScalePercentage;
-        resources["WolvenKitTreeGridRowHeaderHeight"] = 28 * _uiScalePercentage;
-        resources["WolvenKitTreeGridCheckboxWidth"] = 32 * _uiScalePercentage;
+        resources["WolvenKitTreeGridColumnIconWidth"] = new GridLength(13).Mul(UiScalePercentage);
+        resources["WolvenKitTreeGridIconHeight"] = 13 * UiScalePercentage;
+        resources["WolvenKitTreeGridRowHeight"] = 20 * UiScalePercentage;
+        resources["WolvenKitTreeGridRowHeaderHeight"] = 28 * UiScalePercentage;
+        resources["WolvenKitTreeGridCheckboxWidth"] = 32 * UiScalePercentage;
 
-        resources["WolvenKitTreeRowHeight"] = 24 * _uiScalePercentage;
-        resources["WolvenKitTreeRowHeaderHeight"] = 30 * _uiScalePercentage;
+        resources["WolvenKitTreeRowHeight"] = 24 * UiScalePercentage;
+        resources["WolvenKitTreeRowHeaderHeight"] = 30 * UiScalePercentage;
 
-        resources["WolvenKitTabHeight"] = 25 * _uiScalePercentage;
+        resources["WolvenKitTabHeight"] = 25 * UiScalePercentage;
 
-        resources["WolvenKitPropertyColumnWidth"] = new GridLength(100).Mul(_uiScalePercentage);
+        resources["WolvenKitPropertyColumnWidth"] = new GridLength(100).Mul(UiScalePercentage);
 
-        resources["WolvenKitContextMenuColumnIconWidth"] = new GridLength(13).Mul(_uiScalePercentage);
+        resources["WolvenKitContextMenuColumnIconWidth"] = new GridLength(13).Mul(UiScalePercentage);
 
-        resources["WolvenKitDragDropTooltipWidth"] = 250 * _uiScalePercentage;
+        resources["WolvenKitDragDropTooltipWidth"] = 250 * UiScalePercentage;
 
-        resources["WolvenKitWizardNavBarMinHeight"] = 44 * _uiScalePercentage;
+        resources["WolvenKitWizardNavBarMinHeight"] = 44 * UiScalePercentage;
 
-        resources["WolvenKitFieldHeight"] = 120 * _uiScalePercentage;
+        resources["WolvenKitFieldHeight"] = 120 * UiScalePercentage;
 
-        resources["WolvenKitButtonHeight"] = 32 * _uiScalePercentage;
+        resources["WolvenKitButtonHeight"] = 32 * UiScalePercentage;
 
-        resources["WolvenKitGridSize"] = new Rect(0, 0, 48, 48).Mul(_uiScalePercentage);
+        resources["WolvenKitGridSize"] = new Rect(0, 0, 48, 48).Mul(UiScalePercentage);
 
         // HomePageView
-        resources["WolvenKitHomeSideBarWidth"] = (200 * _uiScalePercentage).ToString();
-        resources["WolvenKitHomeSideBarLength"] = new GridLength(200).Mul(_uiScalePercentage);
-        resources["WolvenKitHomeButtonWidth"] = 160 * _uiScalePercentage;
-        resources["WolvenKitHomeButtonHeight"] = 44 * _uiScalePercentage;
-        resources["WolvenKitHomeVersionMargin"] = new Thickness(6).Mul(_uiScalePercentage);
+        resources["WolvenKitHomeSideBarWidth"] = (200 * UiScalePercentage).ToString();
+        resources["WolvenKitHomeSideBarLength"] = new GridLength(200).Mul(UiScalePercentage);
+        resources["WolvenKitHomeButtonWidth"] = 160 * UiScalePercentage;
+        resources["WolvenKitHomeButtonHeight"] = 44 * UiScalePercentage;
+        resources["WolvenKitHomeVersionMargin"] = new Thickness(6).Mul(UiScalePercentage);
 
-        resources["WolvenKitHomeSharedHeaderWidth"] = 140 * _uiScalePercentage;
-        resources["WolvenKitHomeSharedButtonHeight"] = 40 * _uiScalePercentage;
-        resources["WolvenKitHomeSharedPaddingLeft"] = new Thickness(10, 0, 0, 0).Mul(_uiScalePercentage);
+        resources["WolvenKitHomeSharedHeaderWidth"] = 140 * UiScalePercentage;
+        resources["WolvenKitHomeSharedButtonHeight"] = 40 * UiScalePercentage;
+        resources["WolvenKitHomeSharedPaddingLeft"] = new Thickness(10, 0, 0, 0).Mul(UiScalePercentage);
 
         // WelcomePageView
-        resources["WolvenKitWelcomeRightLength"] = new GridLength(380).Mul(_uiScalePercentage);
-        resources["WolvenKitWelcomeOrderWidth"] = 140 * _uiScalePercentage;
-        resources["WolvenKitWelcomeCardSammyWidth"] = new GridLength(70).Mul(_uiScalePercentage);
-        resources["WolvenKitWelcomeCardSammyHeight"] = 70 * _uiScalePercentage;
-        resources["WolvenKitWelcomeCardSammyClipHeight"] = 50 * _uiScalePercentage;
-        resources["WolvenKitWelcomeTogglePadding"] = new Thickness(10, 5, 10, 5).Mul(_uiScalePercentage);
+        resources["WolvenKitWelcomeRightLength"] = new GridLength(380).Mul(UiScalePercentage);
+        resources["WolvenKitWelcomeOrderWidth"] = 140 * UiScalePercentage;
+        resources["WolvenKitWelcomeCardSammyWidth"] = new GridLength(70).Mul(UiScalePercentage);
+        resources["WolvenKitWelcomeCardSammyHeight"] = 70 * UiScalePercentage;
+        resources["WolvenKitWelcomeCardSammyClipHeight"] = 50 * UiScalePercentage;
+        resources["WolvenKitWelcomeTogglePadding"] = new Thickness(10, 5, 10, 5).Mul(UiScalePercentage);
 
-        resources["WolvenKitWelcomeButtonWidth"] = 250 * _uiScalePercentage;
-        resources["WolvenKitWelcomeButtonHeight"] = 100 * _uiScalePercentage;
-        resources["WolvenKitWelcomeButtonMargin"] = new Thickness(0, 0, 0, 8).Mul(_uiScalePercentage);
-        resources["WolvenKitWelcomeButtonPadding"] = new Thickness(25, 0, 25, 0).Mul(_uiScalePercentage);
-        resources["WolvenKitWelcomeStackHeight"] = 70 * _uiScalePercentage;
-        resources["WolvenKitWelcomeStackMargin"] = new Thickness(0, 4, 50, 0).Mul(_uiScalePercentage);
-        resources["WolvenKitWelcomeSocialButtonHeight"] = 50 * _uiScalePercentage;
+        resources["WolvenKitWelcomeButtonWidth"] = 250 * UiScalePercentage;
+        resources["WolvenKitWelcomeButtonHeight"] = 100 * UiScalePercentage;
+        resources["WolvenKitWelcomeButtonMargin"] = new Thickness(0, 0, 0, 8).Mul(UiScalePercentage);
+        resources["WolvenKitWelcomeButtonPadding"] = new Thickness(25, 0, 25, 0).Mul(UiScalePercentage);
+        resources["WolvenKitWelcomeStackHeight"] = 70 * UiScalePercentage;
+        resources["WolvenKitWelcomeStackMargin"] = new Thickness(0, 4, 50, 0).Mul(UiScalePercentage);
+        resources["WolvenKitWelcomeSocialButtonHeight"] = 50 * UiScalePercentage;
 
         // SettingsPageView
-        resources["WolvenKitSettingsGridLabelWidth"] = new GridLength(200).Mul(_uiScalePercentage);
+        resources["WolvenKitSettingsGridLabelWidth"] = new GridLength(200).Mul(UiScalePercentage);
 
         // PluginsToolView
-        resources["WolvenKitPluginsToolIconButtonSize"] = 50 * _uiScalePercentage;
-        resources["WolvenKitPluginsToolButtonWidth"] = 110 * _uiScalePercentage;
-        resources["WolvenKitPluginsToolButtonHeight"] = 20 * _uiScalePercentage;
-        resources["WolvenKitPluginsToolProgressBarHeight"] = 10 * _uiScalePercentage;
+        resources["WolvenKitPluginsToolIconButtonSize"] = 50 * UiScalePercentage;
+        resources["WolvenKitPluginsToolButtonWidth"] = 110 * UiScalePercentage;
+        resources["WolvenKitPluginsToolButtonHeight"] = 20 * UiScalePercentage;
+        resources["WolvenKitPluginsToolProgressBarHeight"] = 10 * UiScalePercentage;
 
         // LogView
-        resources["WolvenKitLogScriptMinWidth"] = 240 * _uiScalePercentage;
-        resources["WolvenKitLogLineMinHeight"] = 16 * _uiScalePercentage;
+        resources["WolvenKitLogScriptMinWidth"] = 240 * UiScalePercentage;
+        resources["WolvenKitLogLineMinHeight"] = 16 * UiScalePercentage;
 
         // BackStageView
-        resources["WolvenKitBackStageBgMargin"] = new Thickness(5, 55, 5, 5).Mul(_uiScalePercentage);
+        resources["WolvenKitBackStageBgMargin"] = new Thickness(5, 55, 5, 5).Mul(UiScalePercentage);
 
         // DockingAdapter
-        resources["WolvenKitDockingAdapterViewport"] = new Rect(0, 0, 90, 90).Mul(_uiScalePercentage);
-        resources["WolvenKitDockingAdapterSammy"] = new Rect(0, 0, 70, 80).Mul(_uiScalePercentage);
+        resources["WolvenKitDockingAdapterViewport"] = new Rect(0, 0, 90, 90).Mul(UiScalePercentage);
+        resources["WolvenKitDockingAdapterSammy"] = new Rect(0, 0, 70, 80).Mul(UiScalePercentage);
 
         // MenuBarView
-        resources["WolvenKitMenuBarItemMarginHorizontal"] = new Thickness(4, 2, 4, 2).Mul(_uiScalePercentage);
+        resources["WolvenKitMenuBarItemMarginHorizontal"] = new Thickness(4, 2, 4, 2).Mul(UiScalePercentage);
 
         // RibbonView
-        resources["WolvenKitRibbonMenuIconMargin"] = new Thickness(0, 2, 4, 2).Mul(_uiScalePercentage);
+        resources["WolvenKitRibbonMenuIconMargin"] = new Thickness(0, 2, 4, 2).Mul(UiScalePercentage);
 
         // StatusBarView
-        resources["WolvenKitStatusBarRowHeight"] = new GridLength(25).Mul(_uiScalePercentage);
-        resources["WolvenKitStatusBarProgressBarWidth"] = 200 * _uiScalePercentage;
-        resources["WolvenKitStatusBarProgressBarHeight"] = 16 * _uiScalePercentage;
+        resources["WolvenKitStatusBarRowHeight"] = new GridLength(25).Mul(UiScalePercentage);
+        resources["WolvenKitStatusBarProgressBarWidth"] = 200 * UiScalePercentage;
+        resources["WolvenKitStatusBarProgressBarHeight"] = 16 * UiScalePercentage;
 
         // AudioPlayerView
-        resources["WolvenKitAudioPlayerVisualizationWidth"] = 200 * _uiScalePercentage;
+        resources["WolvenKitAudioPlayerVisualizationWidth"] = 200 * UiScalePercentage;
 
         // LocKeyBrowserView
-        resources["WolvenKitLocKeyBrowserKeyLength"] = new GridLength(110).Mul(_uiScalePercentage);
+        resources["WolvenKitLocKeyBrowserKeyLength"] = new GridLength(110).Mul(UiScalePercentage);
 
         // TweakBrowserView
-        resources["WolvenKitTweakBrowserTabColumnWidth"] = new GridLength(300).Mul(_uiScalePercentage);
+        resources["WolvenKitTweakBrowserTabColumnWidth"] = new GridLength(300).Mul(UiScalePercentage);
 
         // RedTreeView
-        resources["WolvenKitRedTreeIconColumnWidth"] = new GridLength(20).Mul(_uiScalePercentage);
-        resources["WolvenKitRedTreeArrayColumnWidthLvl0"] = new GridLength(218).Mul(_uiScalePercentage);
-        resources["WolvenKitRedTreeArrayColumnWidthLvl1"] = new GridLength(200).Mul(_uiScalePercentage);
-        resources["WolvenKitRedTreeArrayColumnWidthLvl2"] = new GridLength(180).Mul(_uiScalePercentage);
-        resources["WolvenKitRedTreeArrayColumnWidthLvl3"] = new GridLength(160).Mul(_uiScalePercentage);
-        resources["WolvenKitRedTreeArrayColumnWidthLvl4"] = new GridLength(140).Mul(_uiScalePercentage);
-        resources["WolvenKitRedTreeArrayColumnWidthLvl5"] = new GridLength(120).Mul(_uiScalePercentage);
-        resources["WolvenKitRedTreeArrayColumnWidthLvl6"] = new GridLength(100).Mul(_uiScalePercentage);
+        resources["WolvenKitRedTreeIconColumnWidth"] = new GridLength(20).Mul(UiScalePercentage);
+        resources["WolvenKitRedTreeArrayColumnWidthLvl0"] = new GridLength(218).Mul(UiScalePercentage);
+        resources["WolvenKitRedTreeArrayColumnWidthLvl1"] = new GridLength(200).Mul(UiScalePercentage);
+        resources["WolvenKitRedTreeArrayColumnWidthLvl2"] = new GridLength(180).Mul(UiScalePercentage);
+        resources["WolvenKitRedTreeArrayColumnWidthLvl3"] = new GridLength(160).Mul(UiScalePercentage);
+        resources["WolvenKitRedTreeArrayColumnWidthLvl4"] = new GridLength(140).Mul(UiScalePercentage);
+        resources["WolvenKitRedTreeArrayColumnWidthLvl5"] = new GridLength(120).Mul(UiScalePercentage);
+        resources["WolvenKitRedTreeArrayColumnWidthLvl6"] = new GridLength(100).Mul(UiScalePercentage);
 
         // DialogView
-        resources["WolvenKitDialogWidthSmall"] = 480 * _uiScalePercentage;
-        resources["WolvenKitDialogHeightSmall"] = 190 * _uiScalePercentage;
-        resources["WolvenKitDialogWidth"] = 640 * _uiScalePercentage;
-        resources["WolvenKitDialogHeight"] = 320 * _uiScalePercentage;
-        resources["WolvenKitDialogWidthMedium"] = 800 * _uiScalePercentage;
-        resources["WolvenKitDialogHeightMedium"] = 600 * _uiScalePercentage;
-        resources["WolvenKitDialogWidthLarge"] = 1024 * _uiScalePercentage;
-        resources["WolvenKitDialogHeightLarge"] = 768 * _uiScalePercentage;
-        resources["WolvenKitDialogLabelColumnWidth"] = new GridLength(112).Mul(_uiScalePercentage);
-        resources["WolvenKitDialogLabelColumnWidthMedium"] = new GridLength(140).Mul(_uiScalePercentage);
-        resources["WolvenKitDialogSammySize"] = 40 * _uiScalePercentage;
+        resources["WolvenKitDialogWidthSmall"] = 480 * UiScalePercentage;
+        resources["WolvenKitDialogHeightSmall"] = 190 * UiScalePercentage;
+        resources["WolvenKitDialogWidth"] = 640 * UiScalePercentage;
+        resources["WolvenKitDialogHeight"] = 320 * UiScalePercentage;
+        resources["WolvenKitDialogWidthMedium"] = 800 * UiScalePercentage;
+        resources["WolvenKitDialogHeightMedium"] = 600 * UiScalePercentage;
+        resources["WolvenKitDialogWidthLarge"] = 1024 * UiScalePercentage;
+        resources["WolvenKitDialogHeightLarge"] = 768 * UiScalePercentage;
+        resources["WolvenKitDialogLabelColumnWidth"] = new GridLength(112).Mul(UiScalePercentage);
+        resources["WolvenKitDialogLabelColumnWidthMedium"] = new GridLength(140).Mul(UiScalePercentage);
+        resources["WolvenKitDialogSammySize"] = 40 * UiScalePercentage;
 
         // FirstSetupView
-        resources["WolvenKitFirstSetupWidth"] = 720 * _uiScalePercentage;
-        resources["WolvenKitFirstSetupHeight"] = 278 * _uiScalePercentage;
+        resources["WolvenKitFirstSetupWidth"] = 720 * UiScalePercentage;
+        resources["WolvenKitFirstSetupHeight"] = 278 * UiScalePercentage;
 
         // MaterialsRepositoryDialog
-        resources["WolvenKitMaterialsRepositoryHeight"] = 354 * _uiScalePercentage;
-        resources["WolvenKitMaterialsRepositoryButtonWidth"] = 180 * _uiScalePercentage;
-        resources["WolvenKitMaterialsRepositoryComboBoxWidth"] = 80 * _uiScalePercentage;
+        resources["WolvenKitMaterialsRepositoryHeight"] = 354 * UiScalePercentage;
+        resources["WolvenKitMaterialsRepositoryButtonWidth"] = 180 * UiScalePercentage;
+        resources["WolvenKitMaterialsRepositoryComboBoxWidth"] = 80 * UiScalePercentage;
 
         // MaterialsRepositoryDialog
-        resources["WolvenKitSaveGameSelectionColumnWidth"] = 160 * _uiScalePercentage;
-        resources["WolvenKitSaveGameSelectionRowHeight"] = 64 * _uiScalePercentage;
-        resources["WolvenKitSaveGameSelectionImageWidth"] = 100 * _uiScalePercentage;
-        resources["WolvenKitSaveGameSelectionImageHeight"] = 56 * _uiScalePercentage;
+        resources["WolvenKitSaveGameSelectionColumnWidth"] = 160 * UiScalePercentage;
+        resources["WolvenKitSaveGameSelectionRowHeight"] = 64 * UiScalePercentage;
+        resources["WolvenKitSaveGameSelectionImageWidth"] = 100 * UiScalePercentage;
+        resources["WolvenKitSaveGameSelectionImageHeight"] = 56 * UiScalePercentage;
 
         // NewFileView
-        resources["WolvenKitNewFileRowHeight"] = 42 * _uiScalePercentage;
-        resources["WolvenKitNewFileIconWidth"] = new GridLength(36).Mul(_uiScalePercentage);
+        resources["WolvenKitNewFileRowHeight"] = 42 * UiScalePercentage;
+        resources["WolvenKitNewFileIconWidth"] = new GridLength(36).Mul(UiScalePercentage);
 
         // ScriptManagerView
-        resources["WolvenKitScriptManagerFileNameWidth"] = 248 * _uiScalePercentage;
-        resources["WolvenKitScriptManagerRowHeight"] = 24 * _uiScalePercentage;
+        resources["WolvenKitScriptManagerFileNameWidth"] = 248 * UiScalePercentage;
+        resources["WolvenKitScriptManagerRowHeight"] = 24 * UiScalePercentage;
 
         // SoundModdingView
-        resources["WolvenKitSoundModdingLabelWidth"] = new GridLength(64).Mul(_uiScalePercentage);
+        resources["WolvenKitSoundModdingLabelWidth"] = new GridLength(64).Mul(UiScalePercentage);
 
         // CurveEditorWindow
-        resources["WolvenKitCurveEditorMargin"] = new Thickness(38).Mul(_uiScalePercentage);
-        resources["WolvenKitCurveEditorCanvasMargin"] = new Thickness(48, 0, 12, 30).Mul(_uiScalePercentage);
-        resources["WolvenKitCurveEditorRangeWidth"] = 98 * _uiScalePercentage;
-        resources["WolvenKitCurveEditorRangeLength"] = new GridLength(98).Mul(_uiScalePercentage);
-        resources["WolvenKitCurveEditorPointSize"] = 8 * _uiScalePercentage;
+        resources["WolvenKitCurveEditorMargin"] = new Thickness(38).Mul(UiScalePercentage);
+        resources["WolvenKitCurveEditorCanvasMargin"] = new Thickness(48, 0, 12, 30).Mul(UiScalePercentage);
+        resources["WolvenKitCurveEditorRangeWidth"] = 98 * UiScalePercentage;
+        resources["WolvenKitCurveEditorRangeLength"] = new GridLength(98).Mul(UiScalePercentage);
+        resources["WolvenKitCurveEditorPointSize"] = 8 * UiScalePercentage;
 
         // Red...Editor
-        resources["WolvenKitRedEditorHashWidth"] = new GridLength(166).Mul(_uiScalePercentage);
-        resources["WolvenKitRedEditorComponentWidth"] = new GridLength(24).Mul(_uiScalePercentage);
-        resources["WolvenKitRedEditorTrimmingWidth"] = new GridLength(16).Mul(_uiScalePercentage);
+        resources["WolvenKitRedEditorHashWidth"] = new GridLength(166).Mul(UiScalePercentage);
+        resources["WolvenKitRedEditorComponentWidth"] = new GridLength(24).Mul(UiScalePercentage);
+        resources["WolvenKitRedEditorTrimmingWidth"] = new GridLength(16).Mul(UiScalePercentage);
 
         // RedTreeView
-        resources["WolvenKitRedTreeRowMinHeight"] = 27 * _uiScalePercentage;
-        resources["WolvenKitRedTreeMarginDeleteTop"] = new Thickness(0, 6, 0, 0).Mul(_uiScalePercentage);
+        resources["WolvenKitRedTreeRowMinHeight"] = 27 * UiScalePercentage;
+        resources["WolvenKitRedTreeMarginDeleteTop"] = new Thickness(0, 6, 0, 0).Mul(UiScalePercentage);
 
         // RedDocument...View
-        resources["WolvenKitRedDocumentSearchBarWidth"] = 248 * _uiScalePercentage;
+        resources["WolvenKitRedDocumentSearchBarWidth"] = 248 * UiScalePercentage;
 
         // RDTInkAtlasView
-        resources["WolvenKitInkAtlasComboWidth"] = 100 * _uiScalePercentage;
-        resources["WolvenKitInkAtlasPropertyWidth"] = new GridLength(100).Mul(_uiScalePercentage);
+        resources["WolvenKitInkAtlasComboWidth"] = 100 * UiScalePercentage;
+        resources["WolvenKitInkAtlasPropertyWidth"] = new GridLength(100).Mul(UiScalePercentage);
     }
 
     #endregion methods

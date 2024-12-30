@@ -1,7 +1,6 @@
 using System;
 using System.ComponentModel;
-using System.IO;
-using System.Reactive.Disposables;
+
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -44,6 +43,8 @@ namespace WolvenKit.Views.Dialogs
 
             ViewModel = new CreatePhotoModeAppViewModel(activeProject, settingsManager)
             {
+                AppFileName = s_lastAppFileName,
+                EntFileName = s_lastEntFileName,
                 SelectedBodyGender = s_lastBodyGender,
                 PhotomodeRelativeFolder = s_lastPhotomodeFolder,
                 NpcName = s_lastNpcName,
@@ -81,6 +82,16 @@ namespace WolvenKit.Views.Dialogs
             if (ViewModel is null)
             {
                 return;
+            }
+
+            if (!string.IsNullOrEmpty(ViewModel.AppFileName))
+            {
+                s_lastAppFileName = ViewModel.AppFileName;
+            }
+
+            if (!string.IsNullOrEmpty(ViewModel.EntFileName))
+            {
+                s_lastEntFileName = ViewModel.EntFileName;
             }
 
             if (!string.IsNullOrEmpty(ViewModel.XlFileName))
@@ -169,7 +180,8 @@ namespace WolvenKit.Views.Dialogs
                 return;
             }
 
-            ViewModel.PreselectAppFromNpcName(box.Text);
+            ViewModel.IsNpcNameTouched = true;
+            ViewModel.PreselectAppAndEntFromNpcName(box.Text);
 
             ViewModel.PropertyChanged += OnNpcNameChanged;
         }
@@ -270,5 +282,6 @@ namespace WolvenKit.Views.Dialogs
                 ViewModel.IsPhotoModeDirectoryTouched = true;
             }
         }
+
     }
 }

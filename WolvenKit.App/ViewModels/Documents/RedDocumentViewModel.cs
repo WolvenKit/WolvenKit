@@ -212,7 +212,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
             return false;
         }
 
-        if (GetMainFile() is null || !DocumentTools.WriteCr2W(cr2w, filePath))
+        if (GetMainFile() is null || !Cr2WTools.WriteCr2W(cr2w, filePath))
         {
             return false;
         }

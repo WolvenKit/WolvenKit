@@ -141,5 +141,7 @@ namespace WolvenKit.Interfaces.Extensions
         public static string ToFileName(this string target) =>
             new Regex("[^a-zA-Z0-9]").Replace(target, "_").ToLower();
 #pragma warning restore SYSLIB1045
+
+        public static string ToHumanFriendlyString(this string target) => target.Replace("_", " ").CapitalizeEachWord();
     }
 }

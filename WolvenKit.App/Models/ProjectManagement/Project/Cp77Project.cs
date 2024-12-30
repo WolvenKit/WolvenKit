@@ -120,7 +120,7 @@ public sealed partial class Cp77Project(string location, string name, string mod
 
 
     /// <summary>
-    /// Path to root level directory (where the .csproj file is)
+    /// Absolute path to root level directory (where the .csproj file is)
     /// </summary>
     public string ProjectDirectory
     {
@@ -133,7 +133,7 @@ public sealed partial class Cp77Project(string location, string name, string mod
 
 
     /// <summary>
-    /// Path to /source/raw
+    /// Absolute path to /source
     /// </summary>
     public string FileDirectory
     {
@@ -156,7 +156,7 @@ public sealed partial class Cp77Project(string location, string name, string mod
     }
 
     /// <summary>
-    /// Path to /source/archive
+    /// Absolute path to /source/archive
     /// </summary>
     public string ModDirectory
     {
@@ -196,7 +196,7 @@ public sealed partial class Cp77Project(string location, string name, string mod
     }
 
     /// <summary>
-    /// Path to /source/raw
+    /// Absolute path to /source/raw
     /// </summary>
     public string RawDirectory
     {
@@ -220,7 +220,7 @@ public sealed partial class Cp77Project(string location, string name, string mod
 
 
     /// <summary>
-    /// Path to /source/customSounds
+    /// Absolute path to /source/customSounds
     /// </summary>
     public string SoundDirectory
     {
@@ -237,7 +237,7 @@ public sealed partial class Cp77Project(string location, string name, string mod
     }
 
     /// <summary>
-    /// Path to /source/resources
+    /// Absolute path to /source/resources
     /// </summary>
     public string ResourcesDirectory
     {
