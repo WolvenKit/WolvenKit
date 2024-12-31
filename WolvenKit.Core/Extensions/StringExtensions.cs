@@ -142,7 +142,8 @@ namespace WolvenKit.Interfaces.Extensions
         /// Generates redengine friendly file name 
         /// </summary>
         public static string ToFileName(this string target) =>
-            new Regex("[^a-zA-Z0-9]").Replace(target, "_").ToLower();
+            new string(target.Where(c => !Path.GetInvalidFileNameChars().Contains(c)).ToArray()).Replace(" ", "_")
+                .ToLower();
 #pragma warning restore SYSLIB1045
 
         public static string ToHumanFriendlyString(this string target) => target.Replace("_", " ").CapitalizeEachWord();
