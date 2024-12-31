@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Splat;
-using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.Interfaces.Extensions;
 
 namespace WolvenKit.App.Helpers;
 

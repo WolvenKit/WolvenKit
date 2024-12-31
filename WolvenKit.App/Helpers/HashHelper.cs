@@ -20,7 +20,7 @@ internal static class HashHelper
 
 
     /// <summary>
-    /// Returns the TweakDB hash in the format of 0x00000000, 00
+    /// Returns the TweakDBID hash in the format of 0x00000000, 00 
     /// </summary>
     /// <param name="tweakDbEntryName"></param>
     /// <returns></returns>

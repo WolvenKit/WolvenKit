@@ -86,10 +86,10 @@ public static class ProjectResourceHelper
 
     public static string AppendPersonalDirectory(params string[] filePathParts)
     {
-        var filePath = string.Join(Path.DirectorySeparatorChar, filePathParts);
+        var filePath = Path.Join(filePathParts);
         if (GetSettingsService()?.ModderName is string modderName && modderName != $"")
         {
-            return Path.Join(filePath, modderName.ToFileName());
+            filePath = Path.Join(filePath, modderName.ToFileName());
         }
 
         return filePath.Trim();

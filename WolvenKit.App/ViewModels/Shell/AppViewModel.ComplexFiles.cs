@@ -91,7 +91,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             {
                 var yamlTargetDir =
                     ProjectResourceHelper.AppendPersonalDirectory(
-                        Path.Combine(_projectManager.ActiveProject.ResourcesDirectory, "r6", "tweaks"));
+                        Path.Join(_projectManager.ActiveProject.ResourcesDirectory, "r6", "tweaks"));
 
                 TemplateFileHelper.CreatePhotomodeYaml(new PhotomodeYamlOptions()
                 {
@@ -111,16 +111,16 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             if (!string.IsNullOrEmpty(dialogModel.JsonFileName))
             {
                 jsonFileRelativePath = dialogModel.JsonFileName.StartsWith(relativePhotoModeFolder)
-                    ? dialogModel.JsonFileName 
-                : Path.Combine(relativePhotoModeFolder, dialogModel.JsonFileName);
+                    ? dialogModel.JsonFileName
+                    : Path.Join(relativePhotoModeFolder, dialogModel.JsonFileName);
             }
 
             if (dialogModel.IsCreateJsonFile)
             {
                 var locKey =
                     $"{modderName.ToFileName()}_{dialogModel.NpcName.ToFileName()}_photomode_i18n";
-                
-                var jsonFileAbsolutePath = Path.Combine(activeProject.ModDirectory, jsonFileRelativePath);
+
+                var jsonFileAbsolutePath = Path.Join(activeProject.ModDirectory, jsonFileRelativePath);
 
                 if (File.Exists(jsonFileAbsolutePath) && dialogModel.IsOverwrite)
                 {
@@ -137,7 +137,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
             if (dialogModel.IsCreateXlFile && !string.IsNullOrEmpty(dialogModel.XlFileName))
             {
-                var xlPath = Path.Combine(activeProject.ResourcesDirectory, $"{dialogModel.XlFileName}");
+                var xlPath = Path.Join(activeProject.ResourcesDirectory, $"{dialogModel.XlFileName}");
                 if (File.Exists(xlPath) && dialogModel.IsOverwrite)
                 {
                     File.Delete(xlPath);
@@ -196,10 +196,10 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
             if (pathOrFileName.EndsWith(".yaml"))
             {
-                return Path.Combine(ProjectResourceHelper.AppendPersonalDirectory("r6", "tweaks"), pathOrFileName);
+                return Path.Join(ProjectResourceHelper.AppendPersonalDirectory("r6", "tweaks"), pathOrFileName);
             }
 
-            return Path.Combine(relativePhotoModeFolder, pathOrFileName);
+            return Path.Join(relativePhotoModeFolder, pathOrFileName);
         }
     }
 }

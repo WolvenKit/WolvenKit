@@ -53,9 +53,10 @@ namespace WolvenKit.Views.Documents
             _projectWatcher = (WatcherService)Locator.Current.GetService<IWatcherService>()!;
             _archiveManager = Locator.Current.GetService<IAppArchiveManager>()!;
             _modifierStateService = Locator.Current.GetService<IModifierViewStateService>()!;
-            _appViewModel = Locator.Current.GetService<AppViewModel>()!;
             _progressService = Locator.Current.GetService<IProgressService<double>>()!;
             _projectExplorer = Locator.Current.GetService<ProjectExplorerViewModel>()!;
+
+            _appViewModel = Locator.Current.GetService<AppViewModel>()!;
 
             // Enforce instance generation and service injection. One would assume that registering a singleton
             // is enough. One would be wrong.
@@ -65,8 +66,10 @@ namespace WolvenKit.Views.Documents
 
             InitializeInstanceObjects();
 
-            DataContext =
-                new RedDocumentViewToolbarModel(_settingsManager, _modifierStateService) { CurrentTab = _currentTab };
+            DataContext = new RedDocumentViewToolbarModel(
+                _settingsManager,
+                _modifierStateService,
+                _projectManager) { CurrentTab = _currentTab };
             ViewModel = DataContext as RedDocumentViewToolbarModel;
 
             _modifierStateService.ModifierStateChanged += OnModifierStateChanged;
@@ -246,40 +249,8 @@ namespace WolvenKit.Views.Documents
 
         private void OnEditorModeClick_Advanced(object _, RoutedEventArgs e) => OnEditorModeClick(EditorDifficultyLevel.Advanced);
 
-        private string GetTextureDirForDependencies(bool useTextureSubfolder)
-        {
-            if (_projectManager.ActiveProject?.ModDirectory is string modDir
-                && ViewModel?.FilePath?.RelativePath(new DirectoryInfo(modDir)) is string activeFilePath
-                && Path.GetDirectoryName(activeFilePath) is string dirName && !string.IsNullOrEmpty(dirName))
-            {
-                // we're in a .mi file
-                if (!useTextureSubfolder)
-                {
-                    return dirName;
-                }
-
-                if (_currentTab?.FilePath is not string filePath || Directory.GetFiles(Path.Combine(filePath, ".."), "*.mesh").Length <= 1)
-                {
-                    return Path.Combine(dirName, "textures");
-                }
-
-                // if the folder contains more than one .mesh file, add a subdirectory inside "textures"
-                var fileName = Path.GetFileName(_currentTab.FilePath.Split('.').FirstOrDefault() ?? "").Replace(' ', '_').ToLower();
-                return Path.Combine(dirName, "textures", fileName);
-
-            }
-
-            var destFolder = Interactions.AskForTextInput("Target folder for dependencies");
-
-            if (!string.IsNullOrEmpty(destFolder))
-            {
-                return destFolder;
-            }
-
-            var projectName = _projectManager.ActiveProject?.Name ?? "yourProject";
-            var subfolder = _settingsManager.ModderName ?? "YourName";
-            return Path.Join(subfolder, projectName, "dependencies");
-        }
+        private string GetTextureDirForDependencies(bool useTextureSubfolder) =>
+            ViewModel?.GetTextureDirForDependencies(useTextureSubfolder) ?? "";
 
         private async Task AddDependenciesToFile(ChunkViewModel _)
         {
