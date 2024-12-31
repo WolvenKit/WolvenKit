@@ -138,6 +138,9 @@ namespace WolvenKit.Interfaces.Extensions
 
 #pragma warning disable SYSLIB1045
         // Generated regex attribute means the class can't be abstract anymore
+        /// <summary>
+        /// Generates redengine friendly file name 
+        /// </summary>
         public static string ToFileName(this string target) =>
             new Regex("[^a-zA-Z0-9]").Replace(target, "_").ToLower();
 #pragma warning restore SYSLIB1045

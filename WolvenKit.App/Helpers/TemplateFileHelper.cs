@@ -13,7 +13,7 @@ using PhotoModePlayerEntityComponent = WolvenKit.RED4.Types.PhotoModePlayerEntit
 
 namespace WolvenKit.App.Helpers;
 
-public abstract class TemplateFileHelper
+public static class TemplateFileHelper
 {
     public static string? CopyInkatlasTemplateSingle(Cp77Project activeProject,
         string inkatlasAbsolutePath, bool forceOverwrite)
