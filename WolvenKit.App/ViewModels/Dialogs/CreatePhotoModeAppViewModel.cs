@@ -217,7 +217,7 @@ public partial class CreatePhotoModeAppViewModel : ObservableObject
         }
         else if (!string.IsNullOrEmpty(NpcName) && string.IsNullOrEmpty(YamlFileName))
         {
-            YamlFileName = $"{NpcName.ToFileName()}_npc_photomode.yaml";
+            YamlFileName = $"{NpcName.ToFileName()}_npc.yaml";
             IsCreateYamlFile =
                 !File.Exists(Path.Join(_activeProject.ModDirectory, PhotomodeRelativeFolder, YamlFileName));
         }

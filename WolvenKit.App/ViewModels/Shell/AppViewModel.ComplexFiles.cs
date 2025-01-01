@@ -85,8 +85,8 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             if (dialogModel.IsCreateYamlFile)
             {
                 var yamlTargetDir =
-                    ProjectResourceTools.AppendPersonalDirectory(
-                        Path.Join(_projectManager.ActiveProject.ResourcesDirectory, "r6", "tweaks"));
+                    Path.Join(_projectManager.ActiveProject.ResourcesDirectory,
+                        ProjectResourceTools.AppendPersonalDirectory("r6", "tweaks"), "photomode");
 
                 TemplateFileTools.CreatePhotomodeYaml(new PhotomodeYamlOptions()
                 {
@@ -95,7 +95,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
                     IconName = "custom_icon",
                     ModderName = modderName,
                     BodyGender = dialogModel.SelectedBodyGender,
-                    YamlFileAbsolutePath = Path.Join(yamlTargetDir, "photomode", dialogModel.YamlFileName),
+                    YamlFileAbsolutePath = Path.Join(yamlTargetDir, dialogModel.YamlFileName),
                     EntFilePath = relativeEntFilePath,
                     Overwrite = dialogModel.IsOverwrite
                 });
