@@ -123,12 +123,12 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         InitializeHelperServiceSingletons(hashService, modTools);
 
-        _fileValidationScript = _scriptService.GetScripts(ISettingsManager.GetWScriptDir()).ToList()
+        _fileValidationScript = _scriptService.GetScripts().ToList()
             .Where(s => s.Name == "run_FileValidation_on_active_tab")
             .Select(s => new ScriptFileViewModel(SettingsManager, ScriptSource.User, s))
             .FirstOrDefault();
 
-        _entSpawnerImportScript = _scriptService.GetScripts(ISettingsManager.GetWScriptDir()).ToList()
+        _entSpawnerImportScript = _scriptService.GetScripts().ToList()
             .Where(s => s.Name == "run_object_spawner_on_active_tab")
             .Select(s => new ScriptFileViewModel(SettingsManager, ScriptSource.User, s))
             .FirstOrDefault();
