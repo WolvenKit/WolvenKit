@@ -149,7 +149,8 @@ public class DocumentTools
         foreach (var appearance in app.Appearances
                      .Where(a => a.Chunk is not null))
         {
-            foreach (var anim in appearance.Chunk!.Components.OfType<entAnimatedComponent>())
+            foreach (var anim in appearance.Chunk!.Components.OfType<entAnimatedComponent>()
+                         .Where(c => c.Name == "face_rig"))
             {
                 if (!string.IsNullOrEmpty(facialAnim))
                 {
