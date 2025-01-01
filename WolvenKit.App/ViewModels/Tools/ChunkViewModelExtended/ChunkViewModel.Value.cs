@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
-using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
@@ -197,7 +196,72 @@ public partial class ChunkViewModel
                 }
 
                 break;
-            
+            case inkanimDefinition animDef:
+                Value = StringHelper.Stringify(animDef);
+                IsValueExtrapolated = Value != "";
+                break;
+
+            case inkanimInterpolator inkAnimInt:
+                Value = StringHelper.Stringify(inkAnimInt);
+                IsValueExtrapolated = true;
+                break;
+            case inkanimSequenceTargetInfo targetInfo:
+                Value = $"[{string.Join(", ", targetInfo.Path)}]";
+                IsValueExtrapolated = true;
+                break;
+
+            case CurvePoint<CFloat> cP:
+                Value = $"Point: {cP.Point}, Value: {cP.Value}";
+                IsValueExtrapolated = true;
+                break;
+            case effectTrackItemDecal dec:
+                Value = $"{dec.Material.DepotPath.GetResolvedText()}";
+                IsValueExtrapolated = Value != "";
+                break;
+            case effectLoopData dec:
+                Value = $"{dec.StartTime} => {dec.EndTime}";
+                IsValueExtrapolated = Value != "";
+                break;
+            case effectTrackItemPointLight light:
+                Value = $"{StringHelper.Stringify(light.Color)}, EV: {light.EV}";
+                IsValueExtrapolated = Value != "";
+                break;
+            case effectTrack track:
+                Value = $"[{track.Items.Count}]";
+                IsValueExtrapolated = true;
+                break;
+
+
+            case worldCompiledEffectPlacementInfo epI when Parent?.Parent?.ResolvedData is worldCompiledEffectInfo info:
+                if (info.RelativePositions.Count > epI.RelativePositionIndex)
+                {
+                    Value = $"pos: {StringHelper.Stringify(info.RelativePositions[epI.RelativePositionIndex])}";
+                }
+
+                if (info.RelativeRotations.Count > epI.RelativeRotationIndex)
+                {
+                    if (Value != "")
+                    {
+                        Value = $"{Value}, ";
+                    }
+
+                    Value = $"{Value}rot: {StringHelper.Stringify(info.RelativeRotations[epI.RelativeRotationIndex])}";
+                }
+
+                IsValueExtrapolated = Value != "";
+                break;
+
+            case CUInt8 when Parent?.ResolvedData is worldCompiledEffectPlacementInfo:
+                Value = Name switch
+                {
+                    "relativePositionIndex" when Parent.Value?.Contains("pos:") == true => Parent.Value.Split(", ")[0],
+                    "relativeRotationIndex" when Parent.Value?.Contains("rot:") == true => Parent.Value.Split(", ")
+                        .LastOrDefault() ?? "",
+                    _ => Value
+                };
+
+                IsValueExtrapolated = Value != "";
+                break;
             case meshMeshAppearance { ChunkMaterials: not null } appearance:
                 Value = string.Join(", ", appearance.ChunkMaterials);
                 Value = $"[{appearance.ChunkMaterials.Count}] {Value}";
@@ -215,6 +279,7 @@ public partial class ChunkViewModel
             // Material instance (mesh): "[2] - engine\materials\multilayered.mt" (show #keyValuePairs)
             case CMaterialInstance { BaseMaterial: { } cResourceReference } material:
             {
+                // ReSharper disable once ConditionalAccessQualifierIsNonNullableAccordingToAPIContract yeah right
                 var numMaterials = $"[{material.Values?.Count ?? 0}] - ";
                 Value = $"{numMaterials}{cResourceReference.DepotPath.GetResolvedText() ?? "none"}";
                 IsValueExtrapolated = Value != "";
@@ -392,9 +457,24 @@ public partial class ChunkViewModel
                 Value = StringHelper.Stringify(tBinding);
                 IsValueExtrapolated = Value != "";
                 break;
-            case entAnimationSetupExtensionComponent animSetupComp when
-                animSetupComp.ControlBinding.GetValue() is entAnimationControlBinding controlBinding:
-                Value = $"{controlBinding.BindName.GetResolvedText()}";
+            case entAnimationSetupExtensionComponent animSetupComp:
+                Value = "";
+                if (animSetupComp.Animations.Cinematics.Count > 0)
+                {
+                    Value = $"{Value}c:[{animSetupComp.Animations.Cinematics.Count}] ";
+                }
+
+                if (animSetupComp.Animations.Gameplay.Count > 0)
+                {
+                    Value = $"{Value}g:[{animSetupComp.Animations.Gameplay.Count}] ";
+                }
+
+                if (animSetupComp.ControlBinding.GetValue() is entAnimationControlBinding controlBinding &&
+                    controlBinding.BindName.GetResolvedText() is string bindName && bindName != string.Empty)
+                {
+                    Value = $"binding: {Value}{bindName}";
+                }
+                
                 IsValueExtrapolated = Value != "";
                 break;
             case entVisualControllerDependency controllerDep:
