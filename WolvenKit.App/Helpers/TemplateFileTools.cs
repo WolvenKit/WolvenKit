@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.App.Services;
+using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Interfaces.Extensions;
@@ -11,50 +14,143 @@ using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 using PhotoModePlayerEntityComponent = WolvenKit.RED4.Types.PhotoModePlayerEntityComponent;
 
+// ReSharper disable UnreachableSwitchArmDueToIntegerAnalysis
+
 namespace WolvenKit.App.Helpers;
 
-public static class TemplateFileHelper
+public class TemplateFileTools
 {
-    public static string? CopyInkatlasTemplateSingle(Cp77Project activeProject,
-        string inkatlasAbsolutePath, bool forceOverwrite)
+    private static ILoggerService s_loggerService = null!;
+    private static IProjectManager s_projectManager = null!;
+    private static IModTools s_modTools = null!;
+
+    public TemplateFileTools(ILoggerService loggerService, IProjectManager projectManager, IModTools modTools)
     {
-        var inkatlasTemplatePath = Path.Combine(AppContext.BaseDirectory, "Resources", "TemplateFiles", "inkatlas",
-            "single_item_template.inkatlas");
-
-        var targetFolderAbsolutePath = Path.GetDirectoryName(inkatlasAbsolutePath);
-
-        if (targetFolderAbsolutePath is not null && !Directory.Exists(targetFolderAbsolutePath))
-        {
-            Directory.CreateDirectory(targetFolderAbsolutePath);
-        }
-
-        if (File.Exists(inkatlasAbsolutePath) && !forceOverwrite && !Interactions.ShowQuestionYesNo((
-                $"File {inkatlasAbsolutePath} already exists. Overwrite it?", "Overwrite file?")))
-        {
-            return null;
-        }
-
-        File.Copy(inkatlasTemplatePath, inkatlasAbsolutePath, overwrite: true);
-
-        var inkatlasFileName = Path.GetFileNameWithoutExtension(inkatlasAbsolutePath);
-        
-        // Copy the xbm file
-        var xbmDestAbsPath = Path.Join(targetFolderAbsolutePath, $"{inkatlasFileName}.xbm");
-        if (!File.Exists(xbmDestAbsPath))
-        {
-            var xbmTemplatePath = inkatlasTemplatePath.Replace(".inkatlas", ".xbm");
-            File.Copy(xbmTemplatePath, xbmDestAbsPath);
-
-        }
-
-        var relativeXbmPath = activeProject.GetRelativePath(xbmDestAbsPath);
-
-        ProjectResourceHelper.ReplacePathInFile(activeProject, inkatlasAbsolutePath, "your_depot_path_here.xbm",
-            relativeXbmPath);
-
-        return inkatlasAbsolutePath;
+        s_loggerService = loggerService;
+        s_projectManager = projectManager;
+        s_modTools = modTools;
     }
 
+    public static void CopyInkatlasTemplateSingle(string inkatlasRelativePath, bool forceOverwrite)
+    {
+        if (s_projectManager.ActiveProject is not Cp77Project activeProject)
+        {
+            return;
+        }
+
+        var inkatlasResourcePath = Path.Join("inkatlas", "single_item_template.inkatlas.json");
+        var targetFolderRelativePath = Path.GetDirectoryName(inkatlasRelativePath);
+
+        var inkatlasExists = CopyResource(inkatlasResourcePath, inkatlasRelativePath, forceOverwrite) &&
+                             File.Exists(Path.Join(activeProject.ModDirectory, inkatlasRelativePath));
+
+        var inkatlasFileName = Path.GetFileNameWithoutExtension(inkatlasRelativePath);
+        
+        // Copy the xbm file
+        var xbmResourcePath = Path.Join("inkatlas", "single_item_template.xbm");
+        var xbmDestPath = Path.Join(targetFolderRelativePath, $"{inkatlasFileName}.xbm");
+        var xbmExists = CopyResource(xbmResourcePath, xbmDestPath);
+
+        var inkatlasAbsolutePath = Path.Join(activeProject.ModDirectory, inkatlasRelativePath);
+        if (!inkatlasExists || !xbmExists || Cr2WTools.ReadCr2W(inkatlasAbsolutePath) is
+                not { RootChunk: inkTextureAtlas atlas } cr2W)
+        {
+            return;
+        }
+
+        foreach (var inkTextureSlot in atlas.Slots)
+        {
+            inkTextureSlot.Texture = new CResourceAsyncReference<CBitmapTexture>(xbmDestPath);
+        }
+
+        Cr2WTools.WriteCr2W(cr2W, inkatlasAbsolutePath);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="resourceRelativePath">Path under Resources/TemplateFiles</param>
+    /// <param name="targetRelativePath">Relative path of target file</param>
+    /// <param name="forceOverwrite"></param>
+    /// <param name="askOverwrite"></param>
+    private static bool CopyResource(string resourceRelativePath, string targetRelativePath,
+        bool forceOverwrite = false, bool askOverwrite = false)
+    {
+        if (s_projectManager.ActiveProject is not Cp77Project activeProject)
+        {
+            return false;
+        }
+
+        var resourcePath = Path.Join("Resources", "TemplateFiles");
+        var sourceAbsolutePath = Path.Combine(AppContext.BaseDirectory, "Resources", "TemplateFiles",
+            resourceRelativePath.Replace(resourcePath, ""));
+
+        if (!File.Exists(sourceAbsolutePath))
+        {
+            s_loggerService.Error($"Failed to read resource from files: {resourceRelativePath}");
+            return false;
+        }
+
+        var targetAbsolutePath = Path.Join(activeProject.ModDirectory, targetRelativePath);
+        if (File.Exists(targetAbsolutePath) && !(forceOverwrite || (askOverwrite && !Interactions.ShowQuestionYesNo((
+                $"File {targetAbsolutePath} already exists. Overwrite it?", "Overwrite file?")))))
+        {
+            return false;
+        }
+
+        var absoluteDestDir = Path.GetDirectoryName(targetAbsolutePath) ?? "";
+
+        var targetFileName = Path.GetFileName(targetAbsolutePath);
+
+        try
+        {
+            if (resourceRelativePath.EndsWith(".json"))
+            {
+                s_loggerService.Info($"Adding and converting {resourceRelativePath}...");
+                var sourceFileName = Path.GetFileName(sourceAbsolutePath).Replace(".json", "");
+
+                if (!s_modTools.ConvertFromJsonAndWrite(sourceAbsolutePath, absoluteDestDir))
+                {
+                    return false;
+                }
+
+                if (targetFileName == sourceFileName)
+                {
+                    return true;
+                }
+
+                File.Move(Path.Join(absoluteDestDir, sourceFileName), Path.Join(absoluteDestDir, targetFileName),
+                    true);
+                return true;
+            }
+
+            if (!Directory.Exists(absoluteDestDir))
+            {
+                Directory.CreateDirectory(absoluteDestDir);
+            }
+
+            File.Copy(sourceAbsolutePath, targetAbsolutePath, true);
+            return true;
+        }
+        catch (JsonException err)
+        {
+            var relativePath = activeProject.GetRelativePath(sourceAbsolutePath);
+
+            if (err.Message.Contains(" | LineNumber"))
+            {
+                s_loggerService.Error($"Failed to parse JSON in {relativePath}.");
+                s_loggerService.Error(
+                    $"The error is in LineNumber{err.Message.Split(" | LineNumber").LastOrDefault()}");
+            }
+            else
+            {
+                s_loggerService.Error($"Something went _really_ wrong when trying to parse {relativePath}:");
+                throw;
+            }
+        }
+
+        return false;
+    }
 
     public static void CreatePhotomodeYaml(PhotomodeYamlOptions options)
     {
@@ -134,13 +230,15 @@ public static class TemplateFileHelper
     /// <summary>
     /// Copies an .app and .ent file, sets them up for photo mode, and connects them.
     /// </summary>
-    /// <param name="activeProject">The active Wolvenkit project</param>
-    /// <param name="loggerService">Logger service instance</param>
     /// <param name="options">option object</param>
     /// <returns>A list with all appearances in the .ent file</returns>
-    public static void CreatePhotoModeAppAndEnt(Cp77Project activeProject, ILoggerService loggerService,
-        PhotomodeEntAppOptions options)
+    public static void CreatePhotoModeAppAndEnt(PhotomodeEntAppOptions options)
     {
+        if (s_projectManager.ActiveProject is not Cp77Project activeProject)
+        {
+            return;
+        }
+        
         var absolutePhotomodeFolder = Path.Join(activeProject.ModDirectory, options.TargetDir);
 
         if (!Directory.Exists(absolutePhotomodeFolder))
@@ -184,7 +282,7 @@ public static class TemplateFileHelper
 
         foreach (var warning in warnings)
         {
-            loggerService.Error(warning);
+            s_loggerService.Error(warning);
         }
 
         if (!File.Exists(entTargetAbsPath))
@@ -192,7 +290,7 @@ public static class TemplateFileHelper
             return;
         }
 
-        AddPhotomodeComponentsToEnt(entTargetAbsPath, options.BodyGender, loggerService);
+        AddPhotomodeComponentsToEnt(entTargetAbsPath, options.BodyGender);
 
         if (!File.Exists(appTargetAbsPath))
         {
@@ -205,18 +303,17 @@ public static class TemplateFileHelper
     }
 
 
-    private static void AddPhotomodeComponentsToEnt(string entTargetAbsPath, PhotomodeBodyGender bodyGender,
-        ILoggerService loggerService)
+    private static void AddPhotomodeComponentsToEnt(string entTargetAbsPath, PhotomodeBodyGender bodyGender)
     {
         if (!File.Exists(entTargetAbsPath))
         {
-            loggerService.Error($"File not found: {entTargetAbsPath}");
+            s_loggerService.Error($"File not found: {entTargetAbsPath}");
             return;
         }
 
         if (Cr2WTools.ReadCr2W(entTargetAbsPath) is not { RootChunk: entEntityTemplate ent } cr2W)
         {
-            loggerService.Error($"invalid .ent: {entTargetAbsPath}");
+            s_loggerService.Error($"invalid .ent: {entTargetAbsPath}");
             return;
         }
 
@@ -234,8 +331,6 @@ public static class TemplateFileHelper
 
         if (rootComponent is not null && bodyGender is not PhotomodeBodyGender.Cat)
         {
-            var gameplay = new CArray<animAnimSetupEntry>();
-
             var anims = bodyGender switch
             {
                 PhotomodeBodyGender.Female => PhotomodeEntityAnimations.RootComponentFemale,
@@ -262,8 +357,6 @@ public static class TemplateFileHelper
 
         if (specialAnimComponent is not null && bodyGender is not PhotomodeBodyGender.Cat)
         {
-            var gameplay = new CArray<animAnimSetupEntry>();
-
             var anims = bodyGender switch
             {
                 PhotomodeBodyGender.Female => PhotomodeEntityAnimations.SpecialLocomotionSetupFemale,

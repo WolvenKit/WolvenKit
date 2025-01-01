@@ -291,7 +291,7 @@ namespace WolvenKit.Views.Documents
 
             var destFolder = GetTextureDirForDependencies(true);
             // Use search and replace to fix file paths
-            var pathReplacements = await ProjectResourceHelper.AddDependenciesToProjectPathAsync(
+            var pathReplacements = await ProjectResourceTools.AddDependenciesToProjectPathAsync(
                 destFolder, materialDependencies
             );
 

@@ -54,9 +54,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
          */
         try
         {
-            TemplateFileHelper.CreatePhotoModeAppAndEnt(
-                _projectManager.ActiveProject, _loggerService,
-                new PhotomodeEntAppOptions()
+            TemplateFileTools.CreatePhotoModeAppAndEnt(new PhotomodeEntAppOptions()
                 {
                     AppSourceRelPath = dialogModel.SelectedApp,
                     AppDestRelPath = relativeAppFilePath,
@@ -78,10 +76,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
              */
             if (dialogModel.IsCreateInkatlasFile)
             {
-                TemplateFileHelper.CopyInkatlasTemplateSingle(
-                    activeProject,
-                    Path.Join(activeProject.ModDirectory, relativeInkatlasFilePath),
-                    dialogModel.IsOverwrite);
+                TemplateFileTools.CopyInkatlasTemplateSingle(relativeInkatlasFilePath, dialogModel.IsOverwrite);
             }
 
             /*
@@ -90,23 +85,23 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             if (dialogModel.IsCreateYamlFile)
             {
                 var yamlTargetDir =
-                    ProjectResourceHelper.AppendPersonalDirectory(
+                    ProjectResourceTools.AppendPersonalDirectory(
                         Path.Join(_projectManager.ActiveProject.ResourcesDirectory, "r6", "tweaks"));
 
-                TemplateFileHelper.CreatePhotomodeYaml(new PhotomodeYamlOptions()
+                TemplateFileTools.CreatePhotomodeYaml(new PhotomodeYamlOptions()
                 {
                     NpcName = dialogModel.NpcName,
                     InkatlasPath = relativeInkatlasFilePath,
                     IconName = "custom_icon",
                     ModderName = modderName,
                     BodyGender = dialogModel.SelectedBodyGender,
-                    YamlFileAbsolutePath = Path.Join(yamlTargetDir, dialogModel.YamlFileName),
+                    YamlFileAbsolutePath = Path.Join(yamlTargetDir, "photomode", dialogModel.YamlFileName),
                     EntFilePath = relativeEntFilePath,
                     Overwrite = dialogModel.IsOverwrite
                 });
             }
 
-            // keep outside of if loop because we need this for the .xl file generation
+            // keep outside of if check because we need this for the .xl file generation
             var jsonFileRelativePath = @"path\to\your\file.json";
             if (!string.IsNullOrEmpty(dialogModel.JsonFileName))
             {
@@ -126,8 +121,8 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
                 {
                     File.Delete(jsonFileAbsolutePath);
                 }
-                
-                TemplateFileHelper.CreateOrAppendToJsonFile(
+
+                TemplateFileTools.CreateOrAppendToJsonFile(
                     jsonFileAbsolutePath,
                     new Dictionary<string, string> { { locKey, dialogModel.NpcName } },
                     dialogModel.IsOverwrite,
@@ -196,7 +191,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
             if (pathOrFileName.EndsWith(".yaml"))
             {
-                return Path.Join(ProjectResourceHelper.AppendPersonalDirectory("r6", "tweaks"), pathOrFileName);
+                return Path.Join(ProjectResourceTools.AppendPersonalDirectory("r6", "tweaks"), pathOrFileName);
             }
 
             return Path.Join(relativePhotoModeFolder, pathOrFileName);

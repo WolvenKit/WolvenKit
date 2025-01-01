@@ -284,33 +284,30 @@ public partial class CreatePhotoModeAppViewModel : ObservableObject
                 break;
             case nameof(IsCreateInkatlasFile) when !IsOverwrite && IsCreateInkatlasFile:
                 IsOverwrite =
-                    File.Exists(ProjectResourceHelper.GetAbsolutePath(InkatlasFileName, PhotomodeRelativeFolder));
+                    File.Exists(ProjectResourceTools.GetAbsolutePath(InkatlasFileName, PhotomodeRelativeFolder));
                 break;
             case nameof(IsCreateAppFile) when !IsOverwrite && IsCreateAppFile:
-                IsOverwrite = File.Exists(ProjectResourceHelper.GetAbsolutePath(AppFileName, PhotomodeRelativeFolder));
+                IsOverwrite = File.Exists(ProjectResourceTools.GetAbsolutePath(AppFileName, PhotomodeRelativeFolder));
                 break;
             case nameof(IsCreateEntFile) when !IsOverwrite && IsCreateEntFile:
-                IsOverwrite = File.Exists(ProjectResourceHelper.GetAbsolutePath(EntFileName, PhotomodeRelativeFolder));
+                IsOverwrite = File.Exists(ProjectResourceTools.GetAbsolutePath(EntFileName, PhotomodeRelativeFolder));
                 break;
             case nameof(IsCreateJsonFile) when !IsOverwrite && IsCreateJsonFile:
-                IsOverwrite = File.Exists(ProjectResourceHelper.GetAbsolutePath(JsonFileName, PhotomodeRelativeFolder));
+                IsOverwrite = File.Exists(ProjectResourceTools.GetAbsolutePath(JsonFileName, PhotomodeRelativeFolder));
                 break;
             case nameof(IsCreateYamlFile) when !IsOverwrite && IsCreateYamlFile:
-                IsOverwrite = File.Exists(ProjectResourceHelper.GetAbsolutePath(YamlFileName, "", true));
+                IsOverwrite = File.Exists(ProjectResourceTools.GetAbsolutePath(YamlFileName, "", true));
                 break;
             case nameof(IsCreateXlFile) when !IsOverwrite && IsCreateXlFile:
-                IsOverwrite = File.Exists(ProjectResourceHelper.GetAbsolutePath(XlFileName));
+                IsOverwrite = File.Exists(ProjectResourceTools.GetAbsolutePath(XlFileName));
                 break;
         }
         SetSaveButtonState();
     }
 
-    
-
     private void SetSaveButtonState()
     {
-        if (string.IsNullOrEmpty(SelectedApp) || string.IsNullOrEmpty(SelectedEnt) ||
-            string.IsNullOrEmpty(NpcName) || NpcName.Length < 4)
+        if (string.IsNullOrEmpty(SelectedApp) || string.IsNullOrEmpty(SelectedEnt))
         {
             CanSave = false;
             return;

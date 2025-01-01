@@ -40,6 +40,7 @@ using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
 using WolvenKit.Common.Extensions;
+using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
@@ -99,7 +100,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         IHashService hashService,
         ITweakDBService tweakDBService,
         Red4ParserService parserService,
-        AppScriptService scriptService)
+        AppScriptService scriptService,
+        IModTools modTools
+    )
     {
         _documentViewmodelFactory = documentViewmodelFactory;
         _paneViewModelFactory = paneViewModelFactory;
@@ -118,14 +121,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _parser = parserService;
         _scriptService = scriptService;
 
-        // make sure that these are initialized 
-        // ReSharper disable once ObjectCreationAsStatement
-#pragma warning disable CA1806
-        new DocumentTools(_loggerService);
-        // ReSharper disable once ObjectCreationAsStatement
-        new Cr2WTools(_loggerService, hashService, _parser);
-#pragma warning restore CA1806
-        
+        InitializeHelperServiceSingletons(hashService, modTools);
+
         _fileValidationScript = _scriptService.GetScripts(ISettingsManager.GetWScriptDir()).ToList()
             .Where(s => s.Name == "run_FileValidation_on_active_tab")
             .Select(s => new ScriptFileViewModel(SettingsManager, ScriptSource.User, s))
@@ -156,6 +153,22 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         DockedViews.CollectionChanged += DockedViews_OnCollectionChanged;
     }
+
+#pragma warning disable CA1806
+    /// <summary>
+    /// A bunch of service singletons that must be instantiated once. Registering them via DI container will not
+    /// create an instance unless they are injected at least once, so we'll do this by hand here.
+    /// </summary>
+    private void InitializeHelperServiceSingletons(IHashService hashService, IModTools modTools)
+    {
+        // ReSharper disable ObjectCreationAsStatement
+        new DocumentTools(_loggerService);
+        new Cr2WTools(_loggerService, hashService, _parser);
+        new TemplateFileTools(_loggerService, _projectManager, modTools);
+        new ProjectResourceTools(_projectManager, _archiveManager, _loggerService, SettingsManager);
+        // ReSharper enable ObjectCreationAsStatement
+    }
+#pragma warning restore CA1806
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {

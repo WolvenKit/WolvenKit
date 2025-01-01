@@ -828,7 +828,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        await ProjectResourceHelper.MoveAndRefactor(_projectManager.ActiveProject, relativePath, newRelativePath, prefixPath, refactor);
+        await ProjectResourceTools.MoveAndRefactor(_projectManager.ActiveProject, relativePath, newRelativePath,
+            prefixPath, refactor);
         _appViewModel.ReloadChangedFiles();
     }
 
