@@ -926,11 +926,13 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         if (brokenReferences.Keys.Count == 0)
         {
+            _loggerService.Info("No broken references in project... that we can find");
             _notificationService.ShowNotification("No broken references in project... that we can find", ENotificationType.Success,
                 ENotificationCategory.App);
             return;
         }
 
+        _loggerService.Info("Done scanning");
         Interactions.ShowBrokenReferencesList(("Broken references", brokenReferences));
     }
 

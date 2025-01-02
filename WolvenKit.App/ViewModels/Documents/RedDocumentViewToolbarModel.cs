@@ -3,10 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Splat;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
@@ -19,25 +17,16 @@ namespace WolvenKit.App.ViewModels.Documents;
 
 public partial class RedDocumentViewToolbarModel : ObservableObject
 {
-    public RedDocumentViewToolbarModel()
+    public RedDocumentViewToolbarModel(
+        ISettingsManager settingsSvc,
+        IModifierViewStateService modifierSvc
+    )
     {
-        if (Locator.Current.GetService<ISettingsManager>() is ISettingsManager settingsSvc)
-        {
-            EditorLevel = settingsSvc.DefaultEditorDifficultyLevel;
-        }
-        else
-        {
-            EditorLevel = EditorDifficultyLevel.Easy;
-        }
+        EditorLevel = settingsSvc.DefaultEditorDifficultyLevel;
 
-        if (Locator.Current.GetService<IModifierViewStateService>() is not IModifierViewStateService svc)
-        {
-            return;
-        }
-
-        _modifierViewStateService = svc;
-        svc.ModifierStateChanged += OnModifierChanged;
-        svc.PropertyChanged += (_, args) => OnPropertyChanged(args.PropertyName); 
+        _modifierViewStateService = modifierSvc;
+        modifierSvc.ModifierStateChanged += OnModifierChanged;
+        modifierSvc.PropertyChanged += (_, args) => OnPropertyChanged(args.PropertyName);
 
         RefreshMenuVisibility(true);
     }
@@ -133,7 +122,6 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(AdjustSubmeshCountCommand))]
     [NotifyCanExecuteChangedFor(nameof(DeleteDuplicateEntriesCommand))]
     [NotifyCanExecuteChangedFor(nameof(RegenerateVisualControllersCommand))]
-    [NotifyCanExecuteChangedFor(nameof(DeleteUnusedMaterialsCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateMissingMaterialsCommand))]
     [ObservableProperty]
     private RedDocumentItemType _contentType;
@@ -152,7 +140,6 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(ScrollToMaterialCommand))]
     [NotifyCanExecuteChangedFor(nameof(ToggleLocalInstanceCommand))]
     [NotifyCanExecuteChangedFor(nameof(DeleteDuplicateEntriesCommand))]
-    [NotifyCanExecuteChangedFor(nameof(DeleteUnusedMaterialsCommand))]
     [NotifyCanExecuteChangedFor(nameof(ConvertPreloadMaterialsCommand))]
     [ObservableProperty]
     private ChunkViewModel? _selectedChunk;
@@ -228,7 +215,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     }
 
     private bool CanChangeAnimationComponent() => RootChunk?.ResolvedData is appearanceAppearanceResource;
-
+    
     /*
      * Convert to photo mode app
      */
@@ -299,12 +286,21 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     /*
      * mesh: clear appearances
      */
-    private bool CanClearAppearances() => RootChunk?.CanClearMaterials() == true;
+    private bool CanClearMaterials() => RootChunk?.ResolvedData is CMesh;
 
     private bool HasMeshAppearances() => RootChunk?.ResolvedData is CMesh { Appearances.Count: > 0 };
 
-    [RelayCommand(CanExecute = nameof(CanClearAppearances))]
-    private void ClearMaterials() => RootChunk?.ClearMaterialsCommand.Execute(null);
+    [RelayCommand(CanExecute = nameof(CanClearMaterials))]
+    private void ClearMaterials()
+    {
+        if (RootChunk?.ResolvedData is not CMesh mesh)
+        {
+            return;
+        }
+
+        mesh.Appearances.Clear();
+        RootChunk.DeleteUnusedMaterialsCommand.Execute(false);
+    }
 
     #region meshfile_materials
 

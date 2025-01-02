@@ -8,13 +8,16 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using HandyControl.Tools.Extension;
 using ReactiveUI;
+using SharpDX.Direct2D1;
 using Splat;
 using WolvenKit.App;
+using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
+using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
-using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Scripting;
 using WolvenKit.App.ViewModels.Shell;
@@ -24,6 +27,8 @@ using WolvenKit.Common.Extensions;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
+using WolvenKit.Helpers;
+using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.Types;
 using WolvenKit.Views.Dialogs.Windows;
 
@@ -41,6 +46,7 @@ namespace WolvenKit.Views.Documents
         private readonly AppViewModel _appViewModel;
         private readonly IProgressService<double> _progressService;
         
+        
         public RedDocumentViewMenuBar()
         {
             _scriptService = Locator.Current.GetService<AppScriptService>()!;
@@ -52,12 +58,17 @@ namespace WolvenKit.Views.Documents
             _modifierStateService = Locator.Current.GetService<IModifierViewStateService>()!;
             _appViewModel = Locator.Current.GetService<AppViewModel>()!;
             _progressService = Locator.Current.GetService<IProgressService<double>>()!;
+
+            // Enforce instance generation and service injection. One would assume that registering a singleton
+            // is enough. One would be wrong.
+            Locator.Current.GetService<DocumentTools>();
             
             InitializeComponent();
 
             InitializeInstanceObjects();
 
-            DataContext = new RedDocumentViewToolbarModel { CurrentTab = _currentTab };
+            DataContext =
+                new RedDocumentViewToolbarModel(_settingsManager, _modifierStateService) { CurrentTab = _currentTab };
             ViewModel = DataContext as RedDocumentViewToolbarModel;
 
             _modifierStateService.ModifierStateChanged += OnModifierStateChanged;
@@ -500,6 +511,101 @@ namespace WolvenKit.Views.Documents
                 new Dictionary<string, List<string>>() { { relativePath, unusedMeshPaths } }));
         }
 
+        private async void OnConnectToEntFileClick(object _, RoutedEventArgs e)
+        {
+            try
+            {
+                if (_projectManager.ActiveProject is not Cp77Project activeProject || RootChunk is not ChunkViewModel
+                    {
+                        ResolvedData: appearanceAppearanceResource app
+                    })
+                {
+                    return;
+                }
+
+                var appFilePath = RootChunk.Tab?.FilePath.Replace(activeProject.ModDirectory, "");
+                if (string.IsNullOrEmpty(appFilePath))
+                {
+                    _loggerService.Error($"Can't read current .app file!");
+                    return;
+                }
+
+                var entFilePath = await Interactions.ShowInputBoxAsync("Enter .ent file path", "");
+                if (string.IsNullOrEmpty(entFilePath))
+                {
+                    return;
+                }
+
+
+                if (!activeProject.Files.Contains(entFilePath.StartsWith("archive")
+                        ? entFilePath
+                        : $"archive{Path.DirectorySeparatorChar}{entFilePath}"))
+                {
+                    _loggerService.Error($"Can't find .ent file {entFilePath}!");
+                    return;
+                }
+
+                if (_archiveManager.GetGameFile(entFilePath, false, false) is not null)
+                {
+                    throw new WolvenKitException(0x3003,
+                        $"Please don't overwrite base game files! Use ArchiveXL resource patching instead!");
+                }
+
+                if (!Path.IsPathRooted(entFilePath))
+                {
+                    entFilePath = Path.Combine(_projectManager.ActiveProject.ModDirectory, entFilePath);
+                }
+
+                var cr2WFile = DocumentTools.ReadCr2W(entFilePath);
+                if (cr2WFile.RootChunk is not entEntityTemplate ent)
+                {
+                    _loggerService.Error($"invalid .ent file: {entFilePath}!");
+                    return;
+                }
+
+                var appAppearanceNames = app.Appearances.Select(a => a.Chunk?.Name.GetResolvedText())
+                    .Where(s => !string.IsNullOrEmpty(s))
+                    .Select(s => s!)
+                    .Where(s => !DocumentTools.PlaceholderRegex.IsMatch(s))
+                    .ToList();
+
+                var entAppearanceNames = ent.Appearances.Select(a => a.AppearanceName.GetResolvedText())
+                    .Where(s => !string.IsNullOrEmpty(s))
+                    .Select(s => s!)
+                    .ToList();
+
+                var missingAppearances = appAppearanceNames.Except(entAppearanceNames).ToList();
+                if (missingAppearances.Count == 0)
+                {
+                    return;
+                }
+
+                var appearancePrefix = ent.Appearances
+                    .Where(eA => appAppearanceNames.Contains(eA.AppearanceName.GetResolvedText() ?? ""))
+                    .Select(eA =>
+                        (eA.Name.GetResolvedText() ?? "").Replace((eA.AppearanceName.GetResolvedText() ?? ""), ""))
+                    .FirstOrDefault(s => !s.IsNullOrEmpty()) ?? "";
+
+                foreach (var appName in appAppearanceNames.Except(entAppearanceNames))
+                {
+                    var newAppearance = new entTemplateAppearance()
+                    {
+                        AppearanceName = appName,
+                        Name = $"{appearancePrefix}{appName}",
+                        AppearanceResource = new CResourceAsyncReference<appearanceAppearanceResource>(appFilePath)
+                    };
+                    ent.Appearances.Add(newAppearance);
+                }
+
+                DocumentTools.SaveCr2W(cr2WFile, entFilePath);
+            }
+            catch (Exception err)
+            {
+                _loggerService.Error("Failed to connect .app to .ent file! An exception was thrown:");
+                _loggerService.Error(err);
+            }
+        }
+        
         private MenuItem? _openMenu;
 
         private static List<string> _facialSetups = [];
@@ -751,7 +857,18 @@ namespace WolvenKit.Views.Documents
 
             var photoModeApp = dialog.ViewModel?.SelectedApp;
             var renameAppearances = dialog.ViewModel?.RenameEntries ?? false;
-            var appearanceChildren = RootChunk.GetPropertyChild("appearances")?.Properties
+
+            var appearanceChild = RootChunk.GetPropertyChild("appearances");
+            if (appearanceChild is not null)
+            {
+                appearanceChild.CalculateProperties();
+                foreach (var grandchild in appearanceChild.Properties)
+                {
+                    grandchild.CalculateProperties();
+                }
+            }
+
+            var appearanceChildren = appearanceChild?.Properties
                 .Where(cvm => cvm.ResolvedData is appearanceAppearanceDefinition)
                 .ToList() ?? [];
 
@@ -761,12 +878,32 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            // user clicked cancel
-            if (!Interactions.ShowQuestionYesNo(("You can't un-do this. Are you sure?", "Convert .app file?")))
+            var absolutePath = _projectManager.ActiveProject?.ModDirectory;
+
+            if (!string.IsNullOrEmpty(absolutePath) && !string.IsNullOrEmpty(photoModeApp))
             {
-                return;
+                absolutePath = Path.Combine(absolutePath, photoModeApp);
+                if (File.Exists(absolutePath))
+                {
+                    if (!Interactions.ShowQuestionYesNo(($"The file {photoModeApp} already exists. Overwrite it?",
+                            "Overwrite photo mode .app?")))
+                    {
+                        return;
+                    }
+
+                    try
+                    {
+                        File.Delete(absolutePath);
+                    }
+                    catch
+                    {
+                        _loggerService.Error(
+                            $"Can't overwrite ${absolutePath}. Please make sure that it's not open anywhere!");
+                        return;
+                    }
+                }
             }
-            
+           
             if (renameAppearances)
             {
                 if (appearanceChildren.Count > s_maxNumberReplacerAppearances)
@@ -790,6 +927,10 @@ namespace WolvenKit.Views.Documents
                 {
                     // type check has already been done when selecting the nodes
                     var resolvedData = (appearanceAppearanceDefinition)appNode.ResolvedData;
+                    if (DocumentTools.PlaceholderRegex.IsMatch(resolvedData.Name.GetResolvedText() ?? ""))
+                    {
+                        continue;
+                    }
 
                     resolvedData.Name = counter < 100 ? $"appearance_{counter:D2}" : $"appearance_{counter:D3}";
                     counter += 1;
@@ -797,32 +938,32 @@ namespace WolvenKit.Views.Documents
                 }
             }
 
-            if (string.IsNullOrEmpty(photoModeApp))
+            if (string.IsNullOrEmpty(photoModeApp) || RootChunk.Tab?.Parent is null)
             {
                 return;
             }
 
-            if (RootChunk.Tab is null || _projectManager.ActiveProject is null || RootChunk.Tab.FilePath is not string s || !File.Exists(s))
+            try
             {
-                _loggerService.Error($"Can't automatically move your file. Please move it to the following path: ");
+                RootChunk.Tab.Parent.SaveAsCommand.SafeExecute(new SaveAsParameters(RootChunk.Tab.Parent, absolutePath!,
+                    true));
+            }
+            catch
+            {
+                _loggerService.Error(
+                    $"Can't automatically move your file. Please create a copy and move it to the following path, then run the command from inside the file: ");
                 _loggerService.Error($"\t{photoModeApp}");
+
+                RootChunk.Tab?.Parent?.Reload(true);
                 return;
             }
 
-            RootChunk.Tab.Parent.SaveCommand.Execute(null);
-            var destPath = Path.Join(_projectManager.ActiveProject.ModDirectory, photoModeApp);
-            if (Path.GetDirectoryName(destPath) is string parentFolder && !Directory.Exists(parentFolder))
-            {
-                Directory.CreateDirectory(parentFolder);
-            }
-
-            if (_appViewModel.ActiveDocument is not null)
-            {
-                _appViewModel.CloseFile(_appViewModel.ActiveDocument);
-            }
-
-            File.Move(s, destPath);
             _appViewModel.OpenFileFromDepotPath(photoModeApp);
+
+            RootChunk.Tab?.Parent?.Reload(true);
         }
+        
+        
+
     }
 }

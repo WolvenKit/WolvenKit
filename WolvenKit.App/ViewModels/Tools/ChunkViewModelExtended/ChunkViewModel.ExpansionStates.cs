@@ -456,7 +456,8 @@ public partial class ChunkViewModel
                     or CArray<CHandle<meshMeshAppearance>>
                     or CArray<IMaterial>
                     or CArray<CHandle<appearanceAppearanceDefinition>>
-                    or CArray<CHandle<entEffectDesc>>:
+                    or CArray<CHandle<entEffectDesc>>
+                    or IRedArray:
                 {
                     if (recursionLevel == 99)
                     {

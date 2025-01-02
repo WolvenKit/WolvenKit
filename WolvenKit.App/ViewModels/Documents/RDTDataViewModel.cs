@@ -472,13 +472,16 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         if (SelectedChunks is not IList lst)
         {
             return;
-        }     
+        }
 
-        foreach (var chunkViewModel in chunks)
+        var uniqueChunks = new HashSet<ChunkViewModel>(chunks);
+        SelectedChunk = uniqueChunks.LastOrDefault();
+
+        // remove duplicates
+        foreach (var chunkViewModel in uniqueChunks)
         {
             lst.Add(chunkViewModel);
             chunkViewModel.IsSelected = true;
-            SelectedChunk = chunkViewModel;
         }
     }
     
@@ -559,7 +562,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         HasActiveSearch = !string.IsNullOrEmpty(searchBoxText);
         foreach (var chunkViewModel in Chunks)
         {
-            if (_chunks.Count <= 20)
+            if (ModifierViewStateService.IsShiftBeingHeld)
             {
                 chunkViewModel.CalculatePropertiesRecursive();
             }

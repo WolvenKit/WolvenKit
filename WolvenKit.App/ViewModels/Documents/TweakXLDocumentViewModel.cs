@@ -11,6 +11,6 @@ public class TweakXLDocumentViewModel : DocumentViewModel
     }
 
     public override Task Save(object parameter) => throw new NotImplementedException();
-    public override void SaveAs(object parameter) => throw new NotImplementedException();
+    protected override void SaveAs(SaveAsParameters saveParams) => throw new NotImplementedException();
     public override bool Reload(bool parameter) => throw new NotImplementedException();
 }

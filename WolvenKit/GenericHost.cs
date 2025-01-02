@@ -24,6 +24,7 @@ using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
+using WolvenKit.Helpers;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.CR2W;
@@ -197,6 +198,7 @@ namespace WolvenKit
                     services.AddTransient<HashToolViewModel>();
                     services.AddTransient<IViewFor<HashToolViewModel>, HashToolView>();
 
+                    services.AddSingleton<DocumentTools>();
                     #endregion
 
                     #region homepage

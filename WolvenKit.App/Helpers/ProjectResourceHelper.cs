@@ -73,6 +73,21 @@ public static class ProjectResourceHelper
 
     private static readonly SemaphoreSlim semaphore = new(1, 1);
 
+    public static FileInfo GetFileInfo(string path)
+    {
+        if (!Path.IsPathRooted(path) && s_projectManager?.ActiveProject is Cp77Project project)
+        {
+            path = Path.Join(project.ModDirectory, path);
+        }
+
+        if (!File.Exists(path))
+        {
+            throw new InvalidDataException($"failed to read ${path}");
+        }
+
+        return new FileInfo(path);
+    }
+    
     private static async Task<Dictionary<string, string>> AddDependenciesToProjectPath(string destFolderRelativePath,
         HashSet<ResourcePath> resourcePaths)
     {
