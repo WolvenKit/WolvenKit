@@ -51,16 +51,6 @@ public static class ProjectResourceHelper
         ).GetRed4Controller();
     }
 
-    public static string SwitchArchiveRaw(string filePath)
-    {
-        if (filePath.Contains(ArchiveSubdirWithSlashes))
-        {
-            return filePath.Replace(ArchiveSubdirWithSlashes, RawSubdirWithSlashes);
-        }
-
-        return filePath.Replace(RawSubdirWithSlashes, ArchiveSubdirWithSlashes);
-    }
-
     private static string GetUniqueSubfolderPath(IEnumerable<string> allFilePaths, string currentFilePath)
     {
         var fileName = Path.GetFileName(currentFilePath);
