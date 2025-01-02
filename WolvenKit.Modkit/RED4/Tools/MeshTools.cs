@@ -11,6 +11,7 @@ using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.Exceptions;
 using WolvenKit.Modkit.RED4.Animation;
@@ -653,6 +654,7 @@ namespace WolvenKit.Modkit.RED4.Tools
 
         public static void UpdateMeshJoints(ref List<RawMeshContainer> meshes, RawArmature? existingJoints, RawArmature? incomingJoints, string fileName = "")
         {
+            HashSet<string> bonesNotFound = [];
             // updating mesh bone indices
             if (existingJoints is { BoneCount: > 0 } && incomingJoints is { BoneCount: > 0 })
             {
@@ -664,6 +666,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                     ArgumentNullException.ThrowIfNull(mesh.positions);
                     ArgumentNullException.ThrowIfNull(mesh.boneindices);
 
+
                     for (var e = 0; e < mesh.positions.Length; e++)
                     {
                         for (var eye = 0; eye < mesh.weightCount; eye++)
@@ -674,20 +677,24 @@ namespace WolvenKit.Modkit.RED4.Tools
                                 mesh.boneindices[e, eye] = 0;
                             }
 
+                            var boneName = incomingJoints.Names[mesh.boneindices[e, eye]];
+                            
                             var found = false;
                             for (ushort r = 0; r < existingJoints.BoneCount; r++)
                             {
-                                if (existingJoints.Names[r] == incomingJoints.Names[mesh.boneindices[e, eye]])
+                                if (existingJoints.Names[r] != boneName)
                                 {
-                                    mesh.boneindices[e, eye] = r;
-                                    found = true;
-                                    break;
+                                    continue;
                                 }
+
+                                mesh.boneindices[e, eye] = r;
+                                found = true;
+                                break;
                             }
-                            if (!found)
+
+                            if (!found && !bonesNotFound.Contains(boneName))
                             {
-                                throw new Exception(
-                                    $"Bone: {incomingJoints.Names[mesh.boneindices[e, eye]]} not present in export Rig(s)/Import Mesh {(!fileName.Equals("") ? $"({fileName})" : "")}");
+                                bonesNotFound.Add(boneName);
                             }
                         }
                     }
@@ -702,6 +709,12 @@ namespace WolvenKit.Modkit.RED4.Tools
                         mesh.weightCount = 0;
                     }
                 }
+            }
+
+            if (bonesNotFound.Any())
+            {
+                throw new WolvenKitException(0x2005,
+                    $"You're trying to import bones into a mesh that doesn't have them. Wolvenkit can't create bones — please remove them in Blender, or import into a different .mesh file.\n{string.Join("\n", bonesNotFound)}");
             }
         }
 
