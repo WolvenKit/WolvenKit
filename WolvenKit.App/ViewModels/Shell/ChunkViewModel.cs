@@ -2729,11 +2729,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         Parent?.GetPropertyChild("localMaterialBuffer")?.GetPropertyChild("materials")?.RecalculateProperties();
     }
 
-    public bool CanCopySelection() => IsInArray && Parent is not null; // TODO RelayCommand check notify
+    public bool CanCopySelection() => (IsInArray && Parent is not null) || IsHandle(Data);
     [RelayCommand(CanExecute = nameof(CanCopySelection))]
     private void CopySelection()
     {
-        if (Parent is not { } || Tab is not { SelectedChunks: IList lst })
+        if (Parent is null || Tab is not { SelectedChunks: IList lst })
         {
             return;
         }

@@ -284,35 +284,35 @@ namespace WolvenKit.Views.Tools
 
         /// <summary>Identifies the <see cref="IsArraySelected"/> dependency property.</summary>
         public static readonly DependencyProperty IsArraySelectedProperty =
-            DependencyProperty.Register(nameof(IsArraySelected), typeof(object), typeof(RedTreeView));
+            DependencyProperty.Register(nameof(IsArraySelected), typeof(bool), typeof(RedTreeView));
 
         /// <summary>Updates with <see cref="RDTDataViewModel.SelectedChunk"/> </summary>
 
-        public object IsArraySelected
+        public bool IsArraySelected
         {
-            get => GetValue(IsArraySelectedProperty);
+            get => (bool)GetValue(IsArraySelectedProperty);
             set => SetValue(IsArraySelectedProperty, value);
         }
 
         /// <summary>Identifies the <see cref="IsArrayItemSelected"/> dependency property.</summary>
         public static readonly DependencyProperty IsArrayItemSelectedProperty =
-            DependencyProperty.Register(nameof(IsArrayItemSelected), typeof(object), typeof(RedTreeView));
+            DependencyProperty.Register(nameof(IsArrayItemSelected), typeof(bool), typeof(RedTreeView));
 
         /// <summary>Updates with <see cref="RDTDataViewModel.SelectedChunk"/> </summary>
-        public object IsArrayItemSelected
+        public bool IsArrayItemSelected
         {
-            get => GetValue(IsArrayItemSelectedProperty);
+            get => (bool)GetValue(IsArrayItemSelectedProperty);
             set => SetValue(IsArrayItemSelectedProperty, value);
         }
 
         /// <summary>Identifies the <see cref="IsHandleSelected"/> dependency property.</summary>
         public static readonly DependencyProperty IsHandleSelectedProperty =
-            DependencyProperty.Register(nameof(IsHandleSelected), typeof(object), typeof(RedTreeView));
+            DependencyProperty.Register(nameof(IsHandleSelected), typeof(bool), typeof(RedTreeView));
 
         /// <summary>Updates with <see cref="RDTDataViewModel.SelectedChunk"/> </summary>
-        public object IsHandleSelected
+        public bool IsHandleSelected
         {
-            get => GetValue(IsHandleSelectedProperty);
+            get => (bool)GetValue(IsHandleSelectedProperty);
             set => SetValue(IsHandleSelectedProperty, value);
         }
 
@@ -562,8 +562,11 @@ namespace WolvenKit.Views.Tools
 
         #region paste
 
-        private bool CanPasteSingleSelection() => HasSingleItemCopied && SelectedItem is ChunkViewModel cvm && cvm.CanPasteSelection(true);
-        private bool CanPasteSelection() => HasMultipleItemsCopied && SelectedItem is ChunkViewModel cvm && cvm.CanPasteSelection();
+        private bool CanPasteSingleSelection() => HasSingleItemCopied && SelectedItem is ChunkViewModel cvm &&
+                                                  cvm.CanPasteSelection(true);
+
+        private bool CanPasteSelection() => HasMultipleItemsCopied && SelectedItem is ChunkViewModel cvm &&
+                                            cvm.CanPasteSelection();
 
         private void OverwriteSelectedInternal(bool useSingle = false)
         {
@@ -947,7 +950,6 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-
         private static void ReapplySearch(ChunkViewModel chunk)
         {
             if (string.IsNullOrEmpty(RedDocumentViewToolbarModel.CurrentActiveSearch))
@@ -966,8 +968,7 @@ namespace WolvenKit.Views.Tools
 
         #region handles
 
-        private bool CanPasteHandleSingle() => ChunkViewModel.IsHandle(RedDocumentTabViewModel.CopiedChunk) &&
-                                               SelectedItem is ChunkViewModel cvm && cvm.CanPasteSelection(true);
+        private bool CanPasteHandleSingle() => IsHandleSelected && HasHandleCopied;
 
         [RelayCommand(CanExecute = nameof(CanPasteHandleSingle))]
         private void PasteHandleSingle()
