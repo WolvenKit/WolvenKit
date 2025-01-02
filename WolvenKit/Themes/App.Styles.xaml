@@ -42,6 +42,11 @@
     <Color x:Key="WolvenKitYellowShadow50Color">#7FABA108</Color>
     <Color x:Key="WolvenKitYellowShadow25Color">#7F403c09</Color>
 
+    <Color x:Key="WolvenKitGraphGridColor">#0DFFFFFF</Color>
+    <Color x:Key="WolvenKitGraphAxisColor">Black</Color>
+    <Color x:Key="WolvenKitGraphLabelColor">White</Color>
+    <Color x:Key="WolvenKitGraphCurveColor">White</Color>
+
     <!-- Brushes -->
     <SolidColorBrush x:Key="CustomSliderForegroundBrush" Color="#FF1E91EA" />
     <SolidColorBrush x:Key="CustomSliderBackgroundBrush" Color="#55ffffff" />
@@ -99,6 +104,12 @@
 
     <SolidColorBrush x:Key="BackgroundColor_Button_Inactive" Color="#969696" />
     <SolidColorBrush x:Key="BackgroundColor_Button_Active" Color="#313131" />
+
+    <!-- Graph and Curve Editors -->
+    <SolidColorBrush x:Key="WolvenKitGraphGrid" Color="{StaticResource WolvenKitGraphGridColor}" />
+    <SolidColorBrush x:Key="WolvenKitGraphAxis" Color="{StaticResource WolvenKitGraphAxisColor}" />
+    <SolidColorBrush x:Key="WolvenKitGraphLabel" Color="{StaticResource WolvenKitGraphLabelColor}" />
+    <SolidColorBrush x:Key="WolvenKitGraphCurve" Color="{StaticResource WolvenKitGraphCurveColor}" />
 
     <Style
         x:Key="WolvenKitTabControl"

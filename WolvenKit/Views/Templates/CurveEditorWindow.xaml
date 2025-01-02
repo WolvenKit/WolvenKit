@@ -221,7 +221,7 @@
 
                                             <GeometryDrawing.Pen>
                                                 <Pen
-                                                    Brush="Gray"
+                                                    Brush="{StaticResource WolvenKitGraphGrid}"
                                                     Thickness="1" />
                                             </GeometryDrawing.Pen>
                                         </GeometryDrawing>
@@ -235,8 +235,8 @@
                             x:Name="CanvasLinearCurve"
                             Visibility="Collapsed">
                             <Path
-                                Stroke="Black"
-                                StrokeThickness="1">
+                                Stroke="{StaticResource WolvenKitGraphCurve}"
+                                StrokeThickness="2">
                                 <Path.Data>
                                     <GeometryGroup>
                                         <PathGeometry>
@@ -262,8 +262,8 @@
                             x:Name="CanvasQuadraticCurve"
                             Visibility="Collapsed">
                             <Path
-                                Stroke="Black"
-                                StrokeThickness="1">
+                                Stroke="{StaticResource WolvenKitGraphCurve}"
+                                StrokeThickness="2">
                                 <Path.Data>
                                     <GeometryGroup>
                                         <PathGeometry>
@@ -289,8 +289,8 @@
                             x:Name="CanvasCubicCurve"
                             Visibility="Collapsed">
                             <Path
-                                Stroke="Black"
-                                StrokeThickness="1">
+                                Stroke="{StaticResource WolvenKitGraphCurve}"
+                                StrokeThickness="2">
                                 <Path.Data>
                                     <GeometryGroup>
                                         <PathGeometry>

@@ -1002,7 +1002,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
                     File.Move(absolutePath, destPath);
                 }
-               
+
             }
             catch
             {
