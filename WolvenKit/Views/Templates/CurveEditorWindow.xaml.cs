@@ -376,7 +376,6 @@ namespace WolvenKit.Views.Editors
             {
                 var p = new Ellipse
                 {
-                    Stroke = Brushes.Black,
                     Fill = GetPointColor(generalizedPoint),
                     Width = pointSize,
                     Height = pointSize,
@@ -450,7 +449,7 @@ namespace WolvenKit.Views.Editors
                 var xaxisPath = new Path
                 {
                     StrokeThickness = 2,
-                    Stroke = Brushes.Black,
+                    Stroke = (SolidColorBrush)FindResource("WolvenKitGraphAxis"),
                     Data = xaxisGeom
                 };
 
@@ -495,7 +494,7 @@ namespace WolvenKit.Views.Editors
                 var yaxisPath = new Path
                 {
                     StrokeThickness = 2,
-                    Stroke = Brushes.Black,
+                    Stroke = (SolidColorBrush)FindResource("WolvenKitGraphAxis"),
                     Data = yaxisGeom
                 };
 
@@ -503,13 +502,14 @@ namespace WolvenKit.Views.Editors
             }
         }
 
-        private static void DrawLabels(Panel can, string text, Point location, double fontSize, HorizontalAlignment halign, VerticalAlignment valign)
+        private void DrawLabels(Panel can, string text, Point location, double fontSize, HorizontalAlignment halign, VerticalAlignment valign)
         {
             // Make the label.
             var label = new Label
             {
                 Content = text,
                 FontSize = fontSize,
+                Foreground = (SolidColorBrush)FindResource("WolvenKitGraphLabel"),
                 Background = Brushes.Transparent,
                 BorderBrush = Brushes.Transparent
             };
