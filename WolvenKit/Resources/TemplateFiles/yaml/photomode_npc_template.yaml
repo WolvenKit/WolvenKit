@@ -3,6 +3,7 @@
   entityTemplatePath: ENTITY_TEMPLATE_PATH
   displayName: DISPLAY_NAME
   persistentName: PhotomodePuppet
+  attachmentSlots: [ AttachmentSlots.WeaponRight, AttachmentSlots.WeaponLeft ]
   visualTags: [ !append GENDER ]
 
 Character.NPC_NAME_Photomode_Puppet.icon:
