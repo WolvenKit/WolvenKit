@@ -1793,14 +1793,15 @@
                 <converters:TreeViewItemTemplateSelector.RefTemplate>
                     <DataTemplate>
                         <Grid
-                            HorizontalAlignment="Left"
+                            Width="Auto"
+                            HorizontalAlignment="Stretch"
                             Background="Transparent"
                             ContextMenu="{StaticResource TreeViewContextMenu}"
                             Tag="{Binding}"
                             ToolTip="{Binding Type}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Style="{StaticResource ArrayNameColumnWidth}" />
-                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" MinWidth="20" />
                                 <ColumnDefinition Width="Auto" MinWidth="20" />
                             </Grid.ColumnDefinitions>
@@ -1812,8 +1813,8 @@
                                 ContentTemplate="{StaticResource PropertyNameTemplate}" />
 
                             <!--iconPacks:PackIconCodicons Kind="References" Height="14" Grid.Column="1"
-                                    Width="14" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="0,0,6,0" />
-                                <TextBlock Text="{Binding Value}" Grid.Column="2" /-->
+                                        Width="14" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="0,0,6,0" />
+                                    <TextBlock Text="{Binding Value}" Grid.Column="2" /-->
 
                             <ContentPresenter
                                 Grid.Column="1"
@@ -1828,7 +1829,6 @@
                                 Style="{StaticResource ButtonCustom}"
                                 Command="{Binding OpenRefCommand}"
                                 ToolTip="Open in new tab">
-                                <!-- Old icon Vaadin#ArrowCircleUp#45deg -->
                                 <iconPacks:PackIconMaterial
                                     Kind="TabPlus"
                                     Width="{DynamicResource WolvenKitIconMilli}"
@@ -1839,7 +1839,7 @@
 
                             <Button
                                 Grid.Column="3"
-                                Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                                Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
                                 Background="Transparent"
                                 Style="{StaticResource ButtonCustom}"
                                 Command="{Binding AddRefCommand}"
