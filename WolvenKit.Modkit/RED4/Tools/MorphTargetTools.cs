@@ -5,7 +5,9 @@ using System.Linq;
 using System.Text.Json;
 using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
+using WolvenKit.Common;
 using WolvenKit.Common.DDS;
+using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.RED4.Animation;
@@ -25,6 +27,7 @@ namespace WolvenKit.Modkit.RED4
         public bool ExportMorphTargets(
             CR2WFile cr2w,
             FileInfo outfile,
+            string materialRepository,
             bool isGLBinary = true,
             bool exportTextures = false,
             ValidationMode vMode = ValidationMode.TryFix
@@ -38,10 +41,16 @@ namespace WolvenKit.Modkit.RED4
 
             RawArmature? rig = null;
 
-            if (TryFindFile(morphBlob.BaseMesh.DepotPath, out var result) == FindFileResult.NoError && 
+            if (TryFindFile(morphBlob.BaseMesh.DepotPath, out var result) == FindFileResult.NoError &&
                 result.File is { RootChunk: CMesh { RenderResourceBlob.Chunk: rendRenderMeshBlob } baseMeshBlob })
             {
                 rig = MeshTools.GetOrphanRig(baseMeshBlob);
+
+                if (exportTextures)
+                {
+                    ExportMaterials(result.File, outfile,
+                        new MeshExportArgs { MaterialRepo = materialRepository, withMaterials = true });
+                }
             }
 
             using var meshBuffer = new MemoryStream(rendBlob.RenderBuffer.Buffer.GetBytes());
@@ -77,9 +86,6 @@ namespace WolvenKit.Modkit.RED4
                 }
                 expTargets.Add(ContainRawTarget(diffsBuffer, mappingBuffer, tempNumVertexDiffsInEachChunk, tempNumVertexDiffsMappingInEachChunk, targetsInfo.TargetStartsInVertexDiffs[i], targetsInfo.TargetStartsInVertexDiffsMapping[i], targetsInfo.TargetPositionDiffOffset[i], targetsInfo.TargetPositionDiffScale[i], expMeshes.Count));
             }
-
-            // Only add textures to list if the setting is checked in the export
-            var textureStreams = exportTextures ? ContainTextureStreams(blob, texBuffer) : [];
                 
             var model = RawTargetsToGLTF(expMeshes, expTargets, targetsInfo.Names, rig);
 
@@ -89,20 +95,6 @@ namespace WolvenKit.Modkit.RED4
             }
 
             model.Save(GLTFHelper.PrepareFilePath(outfile.FullName, isGLBinary), new WriteSettings(vMode));
-
-            if (textureStreams.Count == 0)
-            {
-                return true;
-            }
-            
-            var dir = new DirectoryInfo(outfile.FullName.Replace(Path.GetExtension(outfile.FullName), string.Empty) + "_textures");
-
-            Directory.CreateDirectory(dir.FullName);
-
-            for (var i = 0; i < textureStreams.Count; i++)
-            {
-                File.WriteAllBytes(Path.Combine(dir.FullName, $"{Path.GetFileNameWithoutExtension(outfile.FullName)}_{i}.dds"), textureStreams[i].ToArray());
-            }
 
             return true;
         }
@@ -118,8 +110,8 @@ namespace WolvenKit.Modkit.RED4
             {
                 if (morphBlob.Targets.Count == 0)
                 {
-                    throw new ArgumentOutOfRangeException("blob.header.numTargets", rendMorphBlob.Header.NumTargets,
-                        "`numTargets` is 0 and there are no `targets` defined, this doesn't look like a valid .morphtarget");
+                    throw new InvalidDataException(
+                        $"'blob.header.numTargets' is 0 and there are no 'targets' defined, this doesn't look like a valid .morphtarget");
                 }
 
                 numTargets = (uint)morphBlob.Targets.Count;
@@ -156,8 +148,9 @@ namespace WolvenKit.Modkit.RED4
 
             var names = new string[numTargets];
             var regionNames = new string[numTargets];
-            string baseMesh = morphBlob.BaseMesh.DepotPath.GetResolvedText().NotNull();
-            string baseTexture = morphBlob.BaseTexture.DepotPath.GetResolvedText().NotNull();
+            var baseMesh = morphBlob.BaseMesh.DepotPath.GetResolvedText().NotNull();
+            var baseTexture = morphBlob.BaseTexture.DepotPath.GetResolvedText() ??
+                              @"base\gameplay\gui\widgets\vehicle\makigai\uvchecker.xbm";
 
             for (var i = 0; i < numTargets; i++)
             {
@@ -273,57 +266,6 @@ namespace WolvenKit.Modkit.RED4
             }
 
             return rawTarget;
-        }
-
-        private static List<MemoryStream> ContainTextureStreams(rendRenderMorphTargetMeshBlob blob, MemoryStream texbuffer)
-        {
-            var textureStreams = new List<MemoryStream>();
-
-            var count = blob.Header.TargetTextureDiffsData.Count;
-            var texCount = 0;
-            var targetDiffsDataOffset = new List<uint>();
-            var targetDiffsDataSize = new List<uint>();
-            var targetDiffsMipLevelCounts = new List<uint>();
-            var targetDiffsWidth = new List<uint>();
-
-            for (var i = 0; i < count; i++)
-            {
-                var diff = blob.Header.TargetTextureDiffsData[i];
-
-                if (diff.TargetDiffsDataSize.Count == 0)
-                {
-                    break;
-                }
-
-                if (diff.TargetDiffsDataSize[0] == 0)
-                {
-                    continue;
-                }
-
-                targetDiffsDataOffset.Add(diff.TargetDiffsDataOffset[0]);
-                targetDiffsDataSize.Add(diff.TargetDiffsDataSize[0]);
-                targetDiffsMipLevelCounts.Add(diff.TargetDiffsMipLevelCounts[0]);
-                targetDiffsWidth.Add(diff.TargetDiffsWidth[0]);
-                texCount++;
-            }
-
-            var texBr = new BinaryReader(texbuffer);
-            for (var i = 0; i < texCount; i++)
-            {
-                texbuffer.Position = targetDiffsDataOffset[i];
-                var bytes = texBr.ReadBytes((int)targetDiffsDataSize[i]);
-
-                var ms = new MemoryStream();
-                var metadata = new DDSMetadata(
-                    targetDiffsWidth[i], targetDiffsWidth[i],
-                    1, 1, targetDiffsMipLevelCounts[i], 0, 0, DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, 16, true);
-                DDSUtils.GenerateAndWriteHeader(ms, metadata);
-                var bw = new BinaryWriter(ms);
-                bw.Write(bytes);
-                textureStreams.Add(ms);
-            }
-
-            return textureStreams;
         }
 
         private static ModelRoot RawTargetsToGLTF(List<RawMeshContainer> meshes, List<RawTargetContainer[]> expTargets, string[] names, RawArmature? rig)
