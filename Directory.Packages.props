@@ -7,7 +7,7 @@
     <PackageVersion Include="AdonisUI.ClassicTheme" Version="1.17.1" />
     <PackageVersion Include="AutomaticGraphLayout" Version="1.1.12" />
     <PackageVersion Include="AvalonEdit" Version="6.3.0.90" />
-    <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.3.2" />
+    <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageVersion Include="Discord.Net" Version="3.16.0" />
     <PackageVersion Include="DiscordRichPresence" Version="1.2.1.24" />
     <PackageVersion Include="DrawStringLineHeight" Version="1.0.0" />
@@ -46,7 +46,7 @@
     <PackageVersion Include="NAudio.Lame" Version="2.1.0" />
     <PackageVersion Include="NAudio.Vorbis" Version="1.5.0" />
     <PackageVersion Include="NVorbis" Version="0.10.5" />
-    <PackageVersion Include="Nodify" Version="6.5.0" />
+    <PackageVersion Include="Nodify" Version="6.6.0" />
     <PackageVersion Include="Octokit" Version="13.0.1" />
     <PackageVersion Include="PixiEditor.ColorPicker" Version="3.4.1" />
     <PackageVersion Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
@@ -66,23 +66,23 @@
     <PackageVersion Include="Splat" Version="15.2.22" />
     <PackageVersion Include="Splat.Microsoft.Extensions.DependencyInjection" Version="15.2.22" />
     <PackageVersion Include="Splat.Microsoft.Extensions.Logging" Version="15.2.22" />
-    <PackageVersion Include="Syncfusion.Edit.WPF" Version="27.2.2" />
-    <PackageVersion Include="Syncfusion.PropertyGrid.WPF" Version="27.2.2" />
-    <PackageVersion Include="Syncfusion.SfAccordion.WPF" Version="27.2.2" />
-    <PackageVersion Include="Syncfusion.SfBusyIndicator.WPF" Version="27.2.2" />
-    <PackageVersion Include="Syncfusion.SfGrid.WPF" Version="27.2.2" />
-    <PackageVersion Include="Syncfusion.SfHubTile.WPF" Version="27.2.2" />
-    <PackageVersion Include="Syncfusion.SfImageEditor.WPF" Version="27.2.2" />
-    <PackageVersion Include="Syncfusion.SfInput.WPF" Version="27.2.2" />
-    <PackageVersion Include="Syncfusion.SfNavigationDrawer.WPF" Version="27.2.2" />
-    <PackageVersion Include="Syncfusion.SfProgressBar.WPF" Version="27.2.2" />
-    <PackageVersion Include="Syncfusion.SfRadialMenu.WPF" Version="27.2.2" />
-    <PackageVersion Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="27.2.2" />
-    <PackageVersion Include="Syncfusion.SfSkinManager.WPF" Version="27.2.2" />
-    <PackageVersion Include="Syncfusion.SfTextInputLayout.WPF" Version="27.2.2" />
-    <PackageVersion Include="Syncfusion.SfTreeNavigator.WPF" Version="27.2.2" />
-    <PackageVersion Include="Syncfusion.SfTreeView.WPF" Version="27.2.2" />
-    <PackageVersion Include="Syncfusion.Themes.MaterialDark.WPF" Version="27.2.2" />
+    <PackageVersion Include="Syncfusion.Edit.WPF" Version="28.1.37" />
+    <PackageVersion Include="Syncfusion.PropertyGrid.WPF" Version="28.1.37" />
+    <PackageVersion Include="Syncfusion.SfAccordion.WPF" Version="28.1.37" />
+    <PackageVersion Include="Syncfusion.SfBusyIndicator.WPF" Version="28.1.37" />
+    <PackageVersion Include="Syncfusion.SfGrid.WPF" Version="28.1.37" />
+    <PackageVersion Include="Syncfusion.SfHubTile.WPF" Version="28.1.37" />
+    <PackageVersion Include="Syncfusion.SfImageEditor.WPF" Version="28.1.37" />
+    <PackageVersion Include="Syncfusion.SfInput.WPF" Version="28.1.37" />
+    <PackageVersion Include="Syncfusion.SfNavigationDrawer.WPF" Version="28.1.37" />
+    <PackageVersion Include="Syncfusion.SfProgressBar.WPF" Version="28.1.37" />
+    <PackageVersion Include="Syncfusion.SfRadialMenu.WPF" Version="28.1.37" />
+    <PackageVersion Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="28.1.37" />
+    <PackageVersion Include="Syncfusion.SfSkinManager.WPF" Version="28.1.37" />
+    <PackageVersion Include="Syncfusion.SfTextInputLayout.WPF" Version="28.1.37" />
+    <PackageVersion Include="Syncfusion.SfTreeNavigator.WPF" Version="28.1.37" />
+    <PackageVersion Include="Syncfusion.SfTreeView.WPF" Version="28.1.37" />
+    <PackageVersion Include="Syncfusion.Themes.MaterialDark.WPF" Version="28.1.37" />
     <PackageVersion Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
     <PackageVersion Include="System.CommandLine.Hosting" Version="0.4.0-alpha.22272.1" />
     <PackageVersion Include="System.Drawing.Common" Version="9.0.0" />
