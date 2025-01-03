@@ -17,6 +17,4 @@ internal static class HashHelper
     /// <param name="resourcePath"></param>
     /// <returns></returns>
     public static ulong CalculateDepotPathHash(ResourcePath resourcePath) => CalculateDepotPathHash(resourcePath.GetResolvedText());
-
-
 }

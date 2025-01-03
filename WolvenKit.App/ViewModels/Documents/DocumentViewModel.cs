@@ -58,8 +58,8 @@ public abstract partial class DocumentViewModel : PaneViewModel, IDocumentViewMo
     public abstract Task Save(object parameter);
 
     [RelayCommand]
-    public abstract void SaveAs(object parameter);
-
+    protected abstract void SaveAs(SaveAsParameters saveParams);
+        
     public abstract bool Reload(bool force);
 
 

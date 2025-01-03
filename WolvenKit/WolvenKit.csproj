@@ -195,6 +195,9 @@
     <Content Include="Resources\Media\Images\Icons\Files\tweak.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\TemplateFiles\**\*.*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
 
     <Resource Include="Resources\Media\Images\Application\Sammy_Alpha_Mask.png" />
     <Resource Include="Resources\Media\Images\Application\Sammy_Grayscale.png" />

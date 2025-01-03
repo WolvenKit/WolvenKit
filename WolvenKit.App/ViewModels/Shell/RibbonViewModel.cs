@@ -69,28 +69,16 @@ public partial class RibbonViewModel : ObservableObject
 
 
     [RelayCommand]
-    private void NewFile()
-    {
-        MainViewModel.NewFileCommand.SafeExecute(null);
-    }
+    private void NewFile() => MainViewModel.NewFileCommand.SafeExecute(null);
 
     [RelayCommand]
-    private void SaveFile()
-    {
-        MainViewModel.SaveFileCommand.SafeExecute();
-    }
-    
-    [RelayCommand]
-    private void SaveAs()
-    {
-        MainViewModel.SaveAsCommand.SafeExecute();
-    }
+    private void SaveFile() => MainViewModel.SaveFileCommand.SafeExecute();
 
     [RelayCommand]
-    private void SaveAll()
-    {
-        MainViewModel.SaveAllCommand.SafeExecute();
-    }
+    private void SaveAs() => MainViewModel.SaveAsCommand.SafeExecute();
+
+    [RelayCommand]
+    private void SaveAll() => MainViewModel.SaveAllCommand.SafeExecute();
 
     private bool CanStartTask() => MainViewModel.TaskStatus == EStatus.Ready;
 

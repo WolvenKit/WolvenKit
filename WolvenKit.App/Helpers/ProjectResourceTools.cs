@@ -1,6 +1,4 @@
-﻿#nullable enable
-
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -16,6 +14,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Helpers;
+using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
@@ -23,16 +22,26 @@ using EFileReadErrorCodes = WolvenKit.Common.EFileReadErrorCodes;
 
 namespace WolvenKit.App.Helpers;
 
-public static class ProjectResourceHelper
+public class ProjectResourceTools
 {
-    private static IProjectManager? s_projectManager;
-    private static IProjectManager? GetProjectManager() => s_projectManager ??= Locator.Current.GetService<IProjectManager>();
+    private static IProjectManager s_projectManager = null!;
 
-    private static IArchiveManager? s_archiveManager;
-    private static IArchiveManager? GetArchiveManager() => s_archiveManager ??= Locator.Current.GetService<IArchiveManager>();
+    private static IArchiveManager s_archiveManager = null!;
 
-    private static ILoggerService? s_loggerService;
-    private static ILoggerService? GetLoggerService() => s_loggerService ??= Locator.Current.GetService<ILoggerService>();
+    private static ILoggerService s_loggerService = null!;
+
+    private static ISettingsManager s_settingsService = null!;
+
+    public ProjectResourceTools(IProjectManager projectManager, IArchiveManager archiveManager,
+        ILoggerService loggerService, ISettingsManager settingsManager)
+    {
+        s_projectManager = projectManager;
+        s_archiveManager = archiveManager;
+        s_loggerService = loggerService;
+        s_settingsService = settingsManager;
+    }
+
+
     private static RED4Controller GetRed4Controller()
     {
         if (GameControllerFactory.GetInstance() is GameControllerFactory factory)
@@ -41,12 +50,40 @@ public static class ProjectResourceHelper
         }
 
         return GameControllerFactory.CreateInstance(
-            GetProjectManager()!,
+            s_projectManager,
             Locator.Current.GetService<RED4Controller>()!,
             Locator.Current.GetService<MockGameController>()!
         ).GetRed4Controller();
     }
 
+    public static string GetAbsolutePath(string fileName, string rootRelativeFolder = "",
+        bool appendModderNameFromSettings = false)
+    {
+        if (s_projectManager.ActiveProject is not Cp77Project activeProject)
+        {
+            return "";
+        }
+
+        if (appendModderNameFromSettings)
+        {
+            rootRelativeFolder = AppendPersonalDirectory(rootRelativeFolder);
+        }
+        
+        return activeProject.GetAbsolutePath(fileName, rootRelativeFolder);
+
+    }
+
+    public static string AppendPersonalDirectory(params string[] filePathParts)
+    {
+        var filePath = Path.Join(filePathParts);
+        if (s_settingsService.ModderName is string modderName && modderName != "" && !filePath.Contains(modderName)) 
+        {
+            filePath = Path.Join(filePath, modderName.ToFileName());
+        }
+
+        return filePath.Trim();
+    }
+    
     private static string GetUniqueSubfolderPath(IEnumerable<string> allFilePaths, string currentFilePath)
     {
         var fileName = Path.GetFileName(currentFilePath);
@@ -73,6 +110,21 @@ public static class ProjectResourceHelper
 
     private static readonly SemaphoreSlim semaphore = new(1, 1);
 
+    public static FileInfo GetFileInfo(string path)
+    {
+        if (!Path.IsPathRooted(path) && s_projectManager?.ActiveProject is Cp77Project project)
+        {
+            path = Path.Join(project.ModDirectory, path);
+        }
+
+        if (!File.Exists(path))
+        {
+            throw new InvalidDataException($"failed to read ${path}");
+        }
+
+        return new FileInfo(path);
+    }
+    
     private static async Task<Dictionary<string, string>> AddDependenciesToProjectPath(string destFolderRelativePath,
         HashSet<ResourcePath> resourcePaths)
     {
@@ -93,7 +145,7 @@ public static class ProjectResourceHelper
             {
                 try
                 {
-                    if (resourcePaths.Count == 0 || GetProjectManager()?.ActiveProject is not { } currentProject)
+                    if (resourcePaths.Count == 0 || s_projectManager.ActiveProject is not Cp77Project currentProject)
                     {
                         tcs.SetResult();
                         return;
@@ -134,7 +186,7 @@ public static class ProjectResourceHelper
                     }
 
 
-                    List<string> existingFiles = pathsAndDestinations.Where(kvp =>
+                    var existingFiles = pathsAndDestinations.Where(kvp =>
                     {
                         var fileName = Path.GetFileName(kvp.Key);
                         var absolutePath = Path.Combine(archiveRoot, kvp.Value);
@@ -175,13 +227,14 @@ public static class ProjectResourceHelper
 
             await tcs.Task;
 
-            if (GetLoggerService() is not ILoggerService svc || filesNotFound.Count <= 0)
+            if (filesNotFound.Count <= 0)
             {
                 return pathReplacements;
             }
 
-            svc.Warning("The following files could not be found. You can try switching to the Mod Browser and analyzing your archives:");
-            svc.Warning(string.Join('\n', filesNotFound));
+            s_loggerService.Warning(
+                "The following files could not be found. You can try switching to the Mod Browser and analyzing your archives:");
+            s_loggerService.Warning(string.Join('\n', filesNotFound));
 
             return pathReplacements;
         }
@@ -202,22 +255,32 @@ public static class ProjectResourceHelper
 
         var refPathHash = HashHelper.CalculateDepotPathHash(resourcePath);
         // we can't add it
-        if (refPathHash is 0 || GetArchiveManager() is not IArchiveManager archiveManager ||
-            GetRed4Controller() is not RED4Controller controller)
+        if (refPathHash is 0 || GetRed4Controller() is not RED4Controller controller)
         {
             return;
         }
 
-        if (archiveManager.Lookup(refPathHash, ArchiveManagerScope.Basegame) is { HasValue: true } basegameFile)
+        if (s_archiveManager.Lookup(refPathHash, ArchiveManagerScope.Basegame) is { HasValue: true } basegameFile)
         {
             controller.AddToMod(basegameFile.Value, ArchiveManagerScope.Basegame);
         }
-        else if (archiveManager.Lookup(refPathHash, ArchiveManagerScope.Mods) is { HasValue: true } modFile)
+        else if (s_archiveManager.Lookup(refPathHash, ArchiveManagerScope.Mods) is { HasValue: true } modFile)
         {
             controller.AddToMod(modFile.Value, ArchiveManagerScope.Mods);
         }
     }
-    
+
+    /// <summary>
+    /// Adds a file to the project, then moves it to the target path
+    /// </summary>
+    /// <param name="projectRoot">the mod directory (e.g. activeProject.ModDirectory) </param>
+    /// <param name="resourcePath">Path of original resource</param>
+    /// <param name="targetResourcePath">Path of target resource (the original resource will be moved here)</param>
+    /// <exception cref="FileNotFoundException"></exception>
+    public static void AddFileToProjectFolder(string projectRoot, ResourcePath resourcePath,
+        ResourcePath targetResourcePath) =>
+        AddFileToProjectFolder(projectRoot, resourcePath, targetResourcePath, [], true);
+
     private static void AddFileToProjectFolder(string projectRoot, ResourcePath resourcePath, ResourcePath targetResourcePath,
         Dictionary<string, string> pathReplacements, bool overwriteFiles)
     {
@@ -230,8 +293,7 @@ public static class ProjectResourceHelper
         var refPathHash = HashHelper.CalculateDepotPathHash(resourcePath);
 
         // we can't add it
-        if (refPathHash is 0 || GetArchiveManager() is not IArchiveManager archiveManager ||
-            GetRed4Controller() is not RED4Controller controller)
+        if (refPathHash is 0 || GetRed4Controller() is not RED4Controller controller)
         {
             return;
         }
@@ -243,16 +305,16 @@ public static class ProjectResourceHelper
         }
 
         // We already have this file
-        if (GetProjectManager()?.ActiveProject?.Files.Contains(resourcePath!) == true)
+        if (s_projectManager.ActiveProject?.Files.Contains(resourcePath!) == true)
         {
             return;
         }
 
-        if (archiveManager.Lookup(refPathHash, ArchiveManagerScope.Mods) is { HasValue: true } modFile)
+        if (s_archiveManager.Lookup(refPathHash, ArchiveManagerScope.Mods) is { HasValue: true } modFile)
         {
             controller.AddToMod(modFile.Value, ArchiveManagerScope.Mods);
         }
-        else if (archiveManager.Lookup(refPathHash, ArchiveManagerScope.Basegame) is { HasValue: true } basegameFile)
+        else if (s_archiveManager.Lookup(refPathHash, ArchiveManagerScope.Basegame) is { HasValue: true } basegameFile)
         {
             controller.AddToMod(basegameFile.Value, ArchiveManagerScope.Basegame);
         }
@@ -363,20 +425,22 @@ public static class ProjectResourceHelper
                     overwriteFiles = response is WMessageBoxResult.OK or WMessageBoxResult.Yes;
                 }
 
-                FileHelper.MoveRecursively(sourceAbsPath, destAbsPath, overwriteFiles, GetLoggerService());
+                FileHelper.MoveRecursively(sourceAbsPath, destAbsPath, overwriteFiles, s_loggerService);
 
                 var sourceInRaw = sourceAbsPath.Replace("archive", "raw");
                 if (sourceInRaw != sourceAbsPath && Directory.Exists(sourceInRaw))
                 {
-                    FileHelper.MoveRecursively(sourceInRaw, destAbsPath.Replace("archive", "raw"), overwriteFiles, GetLoggerService());
+                    FileHelper.MoveRecursively(sourceInRaw, destAbsPath.Replace("archive", "raw"), overwriteFiles,
+                        s_loggerService);
                 }
 
-                GetLoggerService()?.Info($"Moved {sourceRelPath}{Path.DirectorySeparatorChar}* to {destRelPath}");
+                s_loggerService?.Info($"Moved {sourceRelPath}{Path.DirectorySeparatorChar}* to {destRelPath}");
             }
 
             catch (Exception e)
             {
-                GetLoggerService()?.Info($"Error when trying to move {sourceRelPath}{Path.DirectorySeparatorChar}*: {e.Message}");
+                s_loggerService?.Info(
+                    $"Error when trying to move {sourceRelPath}{Path.DirectorySeparatorChar}*: {e.Message}");
             }
 
         }
@@ -425,14 +489,15 @@ public static class ProjectResourceHelper
             return;
         }
 
-        GetLoggerService()?.Error($"Failed to auto-update references in the following files:");
-        failedFiles.ForEach((path) => GetLoggerService()?.Error($"  {path}"));
+        s_loggerService?.Error($"Failed to auto-update references in the following files:");
+        failedFiles.ForEach((path) => s_loggerService?.Error($"  {path}"));
     }
 
 
-    public static void ReplacePathInFile(Cp77Project? activeProject, string filePath, ResourcePath oldPath, ResourcePath newPath)
+    public static void ReplacePathInFile(Cp77Project? activeProject, string absoluteFilePath, ResourcePath oldPath,
+        ResourcePath newPath)
     {
-        if (oldPath == newPath || !File.Exists(filePath) || activeProject is null)
+        if (oldPath == newPath || !File.Exists(absoluteFilePath) || activeProject is null)
         {
             return;
         }
@@ -455,15 +520,14 @@ public static class ProjectResourceHelper
             newPathStr += ResourcePath.DirectorySeparatorChar;
         }
 
-
-        using (var fs = File.Open(filePath, FileMode.Open))
+        using (var fs = File.Open(absoluteFilePath, FileMode.Open))
         using (var cr = new CR2WReader(fs))
         {
             if (cr.ReadFile(out cr2W) != (RED4.Archive.IO.EFileReadErrorCodes)EFileReadErrorCodes.NoError)
             {
                 return;
             }
-
+            
             var refs = cr2W!.FindType(typeof(IRedRef));
             foreach (var result in refs)
             {
@@ -529,7 +593,7 @@ public static class ProjectResourceHelper
                         throw new Exception();
                     }
 
-                    GetLoggerService()?.Debug($"Replaced \"{result.Path}\" in \"{filePath}\"");
+                    s_loggerService?.Debug($"Replaced \"{result.Path}\" in \"{absoluteFilePath}\"");
                     arr[index] = newValue;
                 }
                 else
@@ -555,7 +619,7 @@ public static class ProjectResourceHelper
                             throw new NotImplementedException($"Can't replace in property type {parentClass.Item2?.GetType().Name}");
                     }
 
-                    GetLoggerService()?.Debug($"Replaced \"{result.Path}\" in \"{filePath}\"");
+                    s_loggerService?.Debug($"Replaced \"{result.Path}\" in \"{absoluteFilePath}\"");
                 }
 
                 wasModified = true;
@@ -567,7 +631,7 @@ public static class ProjectResourceHelper
             return;
         }
 
-        using var fs2 = File.Open(filePath, FileMode.Create);
+        using var fs2 = File.Open(absoluteFilePath, FileMode.Create);
         using var cw = new CR2WWriter(fs2);
 
         cw.WriteFile(cr2W);

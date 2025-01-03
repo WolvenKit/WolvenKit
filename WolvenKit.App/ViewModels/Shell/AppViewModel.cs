@@ -40,6 +40,7 @@ using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
 using WolvenKit.Common.Extensions;
+using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
@@ -72,11 +73,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly IProgressService<double> _progressService;
     private readonly IPluginService _pluginService;
     private readonly IArchiveManager _archiveManager;
-    private readonly IHashService _hashService;
     private readonly ITweakDBService _tweakDBService;
     private readonly Red4ParserService _parser;
     private readonly AppScriptService _scriptService;
-    private readonly IWatcherService _watcherService;
 
     // expose to view
     public ISettingsManager SettingsManager { get; init; }
@@ -101,8 +100,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         IHashService hashService,
         ITweakDBService tweakDBService,
         Red4ParserService parserService,
-        IWatcherService watcherService,
-        AppScriptService scriptService)
+        AppScriptService scriptService,
+        IModTools modTools
+    )
     {
         _documentViewmodelFactory = documentViewmodelFactory;
         _paneViewModelFactory = paneViewModelFactory;
@@ -117,23 +117,23 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _progressService = progressService;
         _pluginService = pluginService;
         _archiveManager = archiveManager;
-        _hashService = hashService;
         _tweakDBService = tweakDBService;
         _parser = parserService;
-        _watcherService = watcherService;
         _scriptService = scriptService;
 
-        _fileValidationScript = _scriptService.GetScripts(ISettingsManager.GetWScriptDir()).ToList()
+        InitializeHelperServiceSingletons(hashService, modTools);
+
+        _fileValidationScript = _scriptService.GetScripts().ToList()
             .Where(s => s.Name == "run_FileValidation_on_active_tab")
             .Select(s => new ScriptFileViewModel(SettingsManager, ScriptSource.User, s))
             .FirstOrDefault();
 
-        _entSpawnerImportScript = _scriptService.GetScripts(ISettingsManager.GetWScriptDir()).ToList()
+        _entSpawnerImportScript = _scriptService.GetScripts().ToList()
             .Where(s => s.Name == "run_object_spawner_on_active_tab")
             .Select(s => new ScriptFileViewModel(SettingsManager, ScriptSource.User, s))
             .FirstOrDefault();
 
-        if (_hashService is HashServiceExt hashServiceExt)
+        if (hashService is HashServiceExt hashServiceExt)
         {
             hashServiceExt.LoadGlobalCache();
         }
@@ -143,7 +143,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _progressService.PropertyChanged += ProgressService_PropertyChanged;
 
         SettingsManager.WhenPropertyChanged(settings => settings.UiScale)
-            .Subscribe(settings => OnUiScaleChanged());
+            .Subscribe(_ => OnUiScaleChanged());
 
         UpdateTitle();
 
@@ -153,6 +153,22 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         DockedViews.CollectionChanged += DockedViews_OnCollectionChanged;
     }
+
+#pragma warning disable CA1806
+    /// <summary>
+    /// A bunch of service singletons that must be instantiated once. Registering them via DI container will not
+    /// create an instance unless they are injected at least once, so we'll do this by hand here.
+    /// </summary>
+    private void InitializeHelperServiceSingletons(IHashService hashService, IModTools modTools)
+    {
+        // ReSharper disable ObjectCreationAsStatement
+        new DocumentTools(_loggerService);
+        new Cr2WTools(_loggerService, hashService, _parser);
+        new TemplateFileTools(_loggerService, _projectManager, modTools);
+        new ProjectResourceTools(_projectManager, _archiveManager, _loggerService, SettingsManager);
+        // ReSharper enable ObjectCreationAsStatement
+    }
+#pragma warning restore CA1806
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
@@ -548,7 +564,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
         Directory.CreateDirectory(resourceDir.FullName);
 
-        // download zipfile
+        // download zip file
         var contentUrl = $@"https://wolvenkit.github.io/Wolvenkit-Resources/scripts.zip";
         response = await client.GetAsync(new Uri(contentUrl));
         try
@@ -638,10 +654,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             // old style update
             // TODO use inno
             var url = $"https://github.com/{owner}/{name}/releases/latest";
-            var res = await Interactions.ShowMessageBoxAsync(
-                $"Update available: {remoteVersion}\nYou are on the {SettingsManager.UpdateChannel} release channel.\n\nVisit {url} ?",
-                name, WMessageBoxButtons.OkCancel);
-            if (res == WMessageBoxResult.OK)
+
+            if (Interactions.ShowQuestionYesNo((
+                    $"Update available: {remoteVersion}\nYou are on the {SettingsManager.UpdateChannel} release channel.\n\nVisit {url} ?",
+                    name)))
             {
                 Process.Start("explorer", url);
             }
@@ -1441,10 +1457,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         using MemoryStream stream = new();
         file.Extract(stream);
 
-        if (OpenStream(stream, file.FileName, out var redfile))
+        if (OpenStream(stream, file.FileName, out var redFile))
         {
-            return _documentViewmodelFactory.RedDocumentViewModel(redfile, Path.Combine(projArchive.Project.ModDirectory, file.FileName),
-                this, false);
+            return _documentViewmodelFactory.RedDocumentViewModel(redFile,
+                Path.Combine(projArchive.Project.ModDirectory, file.FileName),
+                this);
         }
 
         return null;
@@ -1714,7 +1731,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(SaveAllCommand))]
     private ObservableCollection<IDockElement> _dockedViews = new();
 
-    private double _uiScalePercentage => (double)SettingsManager.UiScale / 100.0;
+    private double _uiScalePercentage => SettingsManager.UiScale / 100.0;
 
     #endregion properties
 
@@ -1878,7 +1895,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             case EWolvenKitFile.Cr2w:
                 if (OpenFile(fullPath, out var file))
                 {
-                    fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(file, fullPath, this, false);
+                    fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(file, fullPath, this);
                     result = fileViewModel.IsInitialized();
                 }
                 break;
@@ -2069,12 +2086,12 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                     // TODO: port winforms
                     //if (!File.Exists(fullpath) || Path.GetExtension(fullpath) != ".usm")
                     //    return;
-                    //var usmplayer = new frmUsmPlayer(fullpath);
-                    //usmplayer.Show(dockPanel, DockState.Document);
+                    //var usmPlayer = new frmUsmPlayer(fullpath);
+                    //usmPlayer.Show(dockPanel, DockState.Document);
                     break;
                 }
                 //case ".BNK":
-                // TODO SPLIT WEMS TO PLAYLIST FROM BNK
+                // TODO SPLIT WEMs TO PLAYLIST FROM BNK
                 default:
                     return Task.Run(OpenRedengineFile);
             }
@@ -2112,20 +2129,30 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 return;
             }
 
-            DispatcherHelper.RunOnMainThread(async () =>
+            DispatcherHelper.RunOnMainThread(async void () =>
             {
-                if (await Open(fullpath, type) is not IDocumentViewModel document)
+                try
                 {
-                    return;
-                }
+                    if (await Open(fullpath, type) is not IDocumentViewModel document)
+                    {
+                        return;
+                    }
 
-                if (!DockedViews.Contains(document))
+                    if (!DockedViews.Contains(document))
+                    {
+                        DockedViews.Add(document);
+                    }
+
+                    ActiveDocument = document;
+                    UpdateTitle();
+                }
+                catch (Exception e)
                 {
-                    DockedViews.Add(document);
-                }
+                    _loggerService.Error($"Could not open file: {e.Message}");
 
-                ActiveDocument = document;
-                UpdateTitle();
+                    _loggerService.Error(
+                        $"Please open a ticket (with the file attached) under {Core.Constants.IssueTrackerUrl}");
+                }
             });
         }
 
@@ -2154,7 +2181,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         void PolymorphExecute(string path, string extension)
         {
-            File.WriteAllBytes(Path.GetTempPath() + "asd." + extension, new byte[] { 0x01 });
+            File.WriteAllBytes(Path.GetTempPath() + "asd." + extension, [0x01]);
             StringBuilder programName = new();
             _ = NativeMethods.FindExecutable("asd." + extension, Path.GetTempPath(), programName);
             if (programName.ToString().ToUpper().Contains(".EXE"))

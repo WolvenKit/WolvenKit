@@ -128,6 +128,21 @@ public partial class ChunkViewModel
         {
             IsExpanded = false;
         }
+        else if (shouldShow && visibleChildren.Count < TVProperties.Count)
+        {
+            // For nodes that are visible because they directly match the search, unhide all their children
+            UnhideRecursively();
+        }
+ 
+        
+    }
 
+    private void UnhideRecursively()
+    {
+        IsHiddenBySearch = false;
+        foreach (var child in TVProperties.Where(cvm => cvm.IsHiddenBySearch))
+        {
+            child.UnhideRecursively();
+        }
     }
 }

@@ -3964,7 +3964,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         if (PropertyType.IsAssignableTo(typeof(IRedRef)))
         {
-            ProjectResourceHelper.AddToProject(((IRedRef)ResolvedData).DepotPath);
+            ProjectResourceTools.AddToProject(((IRedRef)ResolvedData).DepotPath);
         }
 
         return Task.CompletedTask;

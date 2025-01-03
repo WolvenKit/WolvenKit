@@ -35,21 +35,31 @@ public class FileHelper
         return true;
     }
 
-    public static bool SafeDelete(string filePath, ILoggerService? logger = null)
+    public static bool SafeDelete(string path, ILoggerService? logger = null)
     {
-        if (!File.Exists(filePath))
+        if (File.Exists(path))
         {
-            return true;
+            try
+            {
+                File.Delete(path);
+            }
+            catch (Exception)
+            {
+                logger?.Error($"Error while deleting file \"{path}\"");
+                return false;
+            }
         }
-
-        try
+        else if (Directory.Exists(path))
         {
-            File.Delete(filePath);
-        }
-        catch (Exception)
-        {
-            logger?.Error($"Error while deleting \"{filePath}\"");
-            return false;
+            try
+            {
+                Directory.Delete(path, true); // true allows recursive deletion
+            }
+            catch (Exception)
+            {
+                logger?.Error($"Error while deleting directory \"{path}\"");
+                return false;
+            }
         }
 
         return true;

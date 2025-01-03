@@ -1,0 +1,12 @@
+﻿Character.NPC_NAME_Photomode_Puppet:
+  $type: Character
+  entityTemplatePath: ENTITY_TEMPLATE_PATH
+  displayName: DISPLAY_NAME
+  persistentName: PhotomodePuppet
+  attachmentSlots: [ AttachmentSlots.WeaponRight, AttachmentSlots.WeaponLeft ]
+  visualTags: [ !append GENDER ]
+
+Character.NPC_NAME_Photomode_Puppet.icon:
+  $type: PhotoModeSticker
+  atlasName: INKATLAS_PATH
+  imagePartName: INKATLAS_ICON

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using WolvenKit.Core;
 
 namespace WolvenKit.Helpers;
 
@@ -36,7 +37,7 @@ public static class LogCodeHelper
         // 5: everything else
         s_mapping.Add(0x5000, "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/error-codes#id-0x5000-invalid-settings");
         s_mapping.Add(0x5001, "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/error-codes#id-0x5001-invalid-game-file-executable");
-        s_mapping.Add(0x5002, "https://github.com/WolvenKit/Wolvenkit/issues");
+        s_mapping.Add(0x5002, Constants.IssueTrackerUrl);
         
     }
 

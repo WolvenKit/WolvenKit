@@ -48,6 +48,11 @@ public partial class WatcherService : ObservableObject, IWatcherService
         ".PDNSAVE"
     ];
 
+    private bool _isWatcherStopped;
+
+
+    public bool IsWatcherStopped => _isWatcherStopped;
+
     #endregion
 
     public WatcherService(ILoggerService? loggerService)
@@ -75,9 +80,14 @@ public partial class WatcherService : ObservableObject, IWatcherService
         Refresh();
     }
 
+
     public void Resume() => _modsWatcher.EnableRaisingEvents = true;
 
-    public void UnwatchProject(Cp77Project? project) => UnwatchLocation();
+    public void UnwatchProject(Cp77Project? project)
+    {
+        _isWatcherStopped = true;
+        UnwatchLocation();
+    }
 
     private void WatchLocation()
     {
@@ -266,7 +276,10 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
             if (!_fileLookup.TryGetValue(e.Name, out var item))
             {
-                _loggerService?.Error($"Failed to refresh file {e.Name}{Environment.NewLine}Try a manual refresh of the project explorer.");
+                if (!_isWatcherStopped)
+                {
+                    _loggerService?.Warning($"Failed to refresh {e.Name}. This is just a UI glitch!");
+                }
                 return;
             }
 

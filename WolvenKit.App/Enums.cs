@@ -1,3 +1,6 @@
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
 namespace WolvenKit.App;
 
 /// <summary>
@@ -45,4 +48,19 @@ public enum ScriptSource
 {
     System,
     User
+}
+
+public enum PhotomodeBodyGender
+{
+    [Display(Description = "Female")] Female,
+    [Display(Description = "Male")] Male,
+
+    [Display(Description = "Big (e.g. Jackie)")]
+    Big,
+
+    [Display(Description = "Massive (Smasher)")]
+    Massive,
+
+    [Display(Description = "Cat (Nibbles)")]
+    Cat
 }

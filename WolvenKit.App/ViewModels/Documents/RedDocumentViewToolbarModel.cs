@@ -2,16 +2,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Splat;
+using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Core.Services;
+using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 
@@ -19,32 +21,27 @@ namespace WolvenKit.App.ViewModels.Documents;
 
 public partial class RedDocumentViewToolbarModel : ObservableObject
 {
-    public RedDocumentViewToolbarModel()
+    private readonly IProjectManager _projectManager;
+    private readonly ISettingsManager _settingsManager;
+    private readonly IModifierViewStateService? _modifierViewStateService;
+
+    public RedDocumentViewToolbarModel(ISettingsManager settingsManager,
+        IModifierViewStateService modifierSvc, IProjectManager projectManager)
     {
-        if (Locator.Current.GetService<ISettingsManager>() is ISettingsManager settingsSvc)
-        {
-            EditorLevel = settingsSvc.DefaultEditorDifficultyLevel;
-        }
-        else
-        {
-            EditorLevel = EditorDifficultyLevel.Easy;
-        }
+        EditorLevel = settingsManager.DefaultEditorDifficultyLevel;
 
-        if (Locator.Current.GetService<IModifierViewStateService>() is not IModifierViewStateService svc)
-        {
-            return;
-        }
+        _modifierViewStateService = modifierSvc;
+        modifierSvc.ModifierStateChanged += OnModifierChanged;
+        modifierSvc.PropertyChanged += (_, args) => OnPropertyChanged(args.PropertyName);
 
-        _modifierViewStateService = svc;
-        svc.ModifierStateChanged += OnModifierChanged;
-        svc.PropertyChanged += (_, args) => OnPropertyChanged(args.PropertyName); 
-
+        _projectManager = projectManager;
+        _settingsManager = settingsManager;
+        
         RefreshMenuVisibility(true);
     }
 
     private void OnModifierChanged() => IsShiftKeyDown = _modifierViewStateService?.IsShiftKeyPressed ?? false;
 
-    private readonly IModifierViewStateService? _modifierViewStateService;
 
     [ObservableProperty] private RedDocumentTabViewModel? _currentTab;
     [ObservableProperty] private EditorDifficultyLevel _editorLevel;
@@ -211,8 +208,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
      * Regenerate visual controllers
      */
     private bool CanRegenerateVisualControllers() => ContentType is RedDocumentItemType.Ent ||
-                                                     (ContentType is RedDocumentItemType.App && SelectedChunk is
-                                                         { Name: "components", Data: CArray<entIComponent> });
+                                                     ContentType is RedDocumentItemType.App;
     
     [RelayCommand(CanExecute = nameof(CanRegenerateVisualControllers))]
     private void RegenerateVisualControllers()
@@ -223,18 +219,30 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             return;
         }
 
+        // app file
+        if (RootChunk?.ResolvedData is appearanceAppearanceResource appRoot &&
+            RootChunk.GetPropertyChild("appearances") is ChunkViewModel appearances)
+        {
+            appearances.CalculateProperties();
+            foreach (var app in appearances.TVProperties.Where(x => x.ResolvedData is appearanceAppearanceDefinition))
+            {
+                app.RegenerateVisualControllerCommand.Execute(null);
+            }
+
+            return;
+        }
+
         // .ent file
         RootChunk?.GetPropertyChild("components")?.RegenerateVisualControllerCommand.Execute(null);
     }
 
     private bool CanChangeAnimationComponent() => RootChunk?.ResolvedData is appearanceAppearanceResource;
-
+    
     /*
      * Convert to photo mode app
      */
     private bool CanConvertToPhotoModeApp() => RootChunk?.ResolvedData is appearanceAppearanceResource &&
-                                               FilePath is string filePath &&
-                                               !SelectPhotoModeAppViewModel.PhotomodeAppPaths.Contains(filePath);
+                                               !string.IsNullOrEmpty(FilePath);
 
     [RelayCommand(CanExecute = nameof(CanConvertToPhotoModeApp))]
     private void ConvertToPhotoModeApp()
@@ -357,5 +365,45 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         }
 
         rtdViewModel.OnSearchChanged(searchBoxText);
+    }
+
+    /// <summary>
+    /// Gets the texture directory for dependencies from current project's active file
+    /// </summary>
+    /// <param name="useTextureSubfolder"></param>
+    /// <returns></returns>
+    public string GetTextureDirForDependencies(bool useTextureSubfolder)
+    {
+        if (_projectManager.ActiveProject?.ModDirectory is string modDir
+            && FilePath?.RelativePath(new DirectoryInfo(modDir)) is string activeFilePath
+            && Path.GetDirectoryName(activeFilePath) is string dirName && !string.IsNullOrEmpty(dirName))
+        {
+            // we're in a .mi file
+            if (!useTextureSubfolder)
+            {
+                return dirName;
+            }
+
+            if (CurrentTab?.FilePath is not string filePath ||
+                Directory.GetFiles(Path.Combine(filePath, ".."), "*.mesh").Length <= 1)
+            {
+                return Path.Combine(dirName, "textures");
+            }
+
+            // if the folder contains more than one .mesh file, add a subdirectory inside "textures"
+            var fileName = Path.GetFileName(CurrentTab.FilePath.Split('.').FirstOrDefault() ?? "").ToFileName();
+            return Path.Combine(dirName, "textures", fileName);
+        }
+
+        var destFolder = Interactions.AskForTextInput("Target folder for dependencies");
+
+        if (!string.IsNullOrEmpty(destFolder))
+        {
+            return destFolder;
+        }
+
+        var projectName = _projectManager.ActiveProject?.Name ?? "yourProject";
+        var subfolder = _settingsManager.ModderName ?? "YourName";
+        return Path.Join(subfolder, projectName, "dependencies");
     }
 }

@@ -60,6 +60,32 @@
                 </MenuItem>
 
                 <MenuItem
+                    Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                    Header="Add files..."
+                    ToolTip="New complex file">
+                    <MenuItem.Icon>
+                        <local:IconBox
+                            IconPack="Empty"
+                            Size="{DynamicResource WolvenKitIconTiny}" />
+                    </MenuItem.Icon>
+
+                    <!-- Photo mode files -->
+                    <MenuItem
+                        x:Name="MenuItemNewPhotoModeFiles"
+                        Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                        Header="Add Photo Mode files"
+                        ToolTip="Adds .app, .ent, .inkatlas, .xbm, and .yaml">
+                        <MenuItem.Icon>
+                            <local:IconBox
+                                IconPack="Codicons"
+                                Kind="NewFile"
+                                Size="{DynamicResource WolvenKitIconTiny}"
+                                Foreground="{StaticResource WolvenKitYellow}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+
+                <MenuItem
                     x:Name="Import"
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
                     Header="Import">
