@@ -1937,7 +1937,7 @@ namespace WolvenKit.Modkit.RED4
                 Indices = new DataBuffer(indBuffer.ToArray()),
                 MorphOffsets = new DataBuffer(morphBuffer.ToArray()),
                 Vertices = new DataBuffer(vertBuffer.ToArray()),
-                Uv = new DataBuffer(uvBuffer.ToArray()),
+                //Uv = new DataBuffer(uvBuffer.ToArray()),
                 NumVertices = Convert.ToUInt32(mesh.positions.Length),
                 LodMask = 1
             });
