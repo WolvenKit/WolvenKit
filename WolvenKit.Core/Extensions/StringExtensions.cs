@@ -146,6 +146,7 @@ namespace WolvenKit.Interfaces.Extensions
                 .Replace(" ", "_").ToLower();
 #pragma warning restore SYSLIB1045
 
-        public static string ToHumanFriendlyString(this string target) => target.Replace("_", " ").CapitalizeEachWord();
+        public static string ToHumanFriendlyString(this string? target) =>
+            string.IsNullOrEmpty(target) ? "" : target.Replace("_", " ").CapitalizeEachWord();
     }
 }
