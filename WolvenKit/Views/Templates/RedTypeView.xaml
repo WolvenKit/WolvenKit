@@ -56,19 +56,12 @@
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding AddHandleCommand}"
                     ToolTip="Add Handle">
-                    <StackPanel Orientation="Horizontal">
-                        <templates:IconBox
-                            IconPack="Material"
-                            Kind="PlusCircle"
-                            Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
-                            Size="{DynamicResource WolvenKitIconMilli}"
-                            Foreground="{StaticResource WolvenKitYellow}" />
-
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            Foreground="{StaticResource WolvenKitYellow}"
-                            Text="Create Handle" />
-                    </StackPanel>
+                    <templates:IconBox
+                        IconPack="Material"
+                        Kind="PlusCircle"
+                        Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                        Size="{DynamicResource WolvenKitIconMilli}"
+                        Foreground="{StaticResource WolvenKitYellow}" />
                 </Button>
             </DataTemplate>
 
@@ -86,19 +79,12 @@
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding AddItemToCompiledDataCommand}"
                     ToolTip="Add New Chunk">
-                    <StackPanel Orientation="Horizontal">
-                        <templates:IconBox
-                            IconPack="Material"
-                            Kind="PlusCircle"
-                            Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
-                            Size="{DynamicResource WolvenKitIconMilli}"
-                            Foreground="{StaticResource WolvenKitYellow}" />
-
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            Foreground="{StaticResource WolvenKitYellow}"
-                            Text="Create Item In Buffer" />
-                    </StackPanel>
+                    <templates:IconBox
+                        IconPack="Material"
+                        Kind="PlusCircle"
+                        Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                        Size="{DynamicResource WolvenKitIconMilli}"
+                        Foreground="{StaticResource WolvenKitYellow}" />
                 </Button>
             </DataTemplate>
 
@@ -116,19 +102,12 @@
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding CreateDynamicPropertyCommand}"
                     ToolTip="Add Dynamic Property">
-                    <StackPanel Orientation="Horizontal">
-                        <templates:IconBox
-                            IconPack="Material"
-                            Kind="PlusCircle"
-                            Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
-                            Size="{DynamicResource WolvenKitIconMilli}"
-                            Foreground="{StaticResource WolvenKitYellow}" />
-
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            Foreground="{StaticResource WolvenKitYellow}"
-                            Text="Add Property" />
-                    </StackPanel>
+                    <templates:IconBox
+                        IconPack="Material"
+                        Kind="PlusCircle"
+                        Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                        Size="{DynamicResource WolvenKitIconMilli}"
+                        Foreground="{StaticResource WolvenKitYellow}" />
                 </Button>
             </DataTemplate>
 
@@ -146,19 +125,12 @@
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding RenameDynamicClassCommand}"
                     ToolTip="Rename Dynamic Class">
-                    <StackPanel Orientation="Horizontal">
-                        <templates:IconBox
-                            IconPack="Material"
-                            Kind="CursorDefault"
-                            Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
-                            Size="{DynamicResource WolvenKitIconMilli}"
-                            Foreground="{StaticResource WolvenKitCyan}" />
-
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            Foreground="{StaticResource WolvenKitCyan}"
-                            Text="Rename Dynamic Class" />
-                    </StackPanel>
+                    <templates:IconBox
+                        IconPack="Material"
+                        Kind="CursorDefault"
+                        Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                        Size="{DynamicResource WolvenKitIconMilli}"
+                        Foreground="{StaticResource WolvenKitCyan}" />
                 </Button>
             </DataTemplate>
 
@@ -174,19 +146,12 @@
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding AddItemToArrayCommand}"
                     ToolTip="Add New Element">
-                    <StackPanel Orientation="Horizontal">
-                        <templates:IconBox
-                            IconPack="Material"
-                            Kind="PlusCircle"
-                            Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
-                            Size="{DynamicResource WolvenKitIconMilli}"
-                            Foreground="{StaticResource WolvenKitYellow}" />
-
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            Foreground="{StaticResource WolvenKitYellow}"
-                            Text="Create Item In Array" />
-                    </StackPanel>
+                    <templates:IconBox
+                        IconPack="Material"
+                        Kind="PlusCircle"
+                        Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                        Size="{DynamicResource WolvenKitIconMilli}"
+                        Foreground="{StaticResource WolvenKitYellow}" />
                 </Button>
             </DataTemplate>
 
@@ -272,7 +237,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="Delete"
-                            Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
+                            Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                             Size="{DynamicResource WolvenKitIconMilli}"
                             Foreground="{StaticResource WolvenKitRed}" />
                     </Button>
@@ -300,21 +265,12 @@
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate>
-                                            <Grid Background="Transparent">
-                                                <StackPanel Orientation="Horizontal">
-                                                    <templates:IconBox
-                                                        IconPack="Material"
-                                                        Kind="Delete"
-                                                        Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
-                                                        Size="{DynamicResource WolvenKitIconMilli}"
-                                                        Foreground="{StaticResource WolvenKitRed}" />
-
-                                                    <TextBlock
-                                                        VerticalAlignment="Center"
-                                                        Foreground="{StaticResource WolvenKitRed}"
-                                                        Text="Delete All Items" />
-                                                </StackPanel>
-                                            </Grid>
+                                            <templates:IconBox
+                                                IconPack="Material"
+                                                Kind="Delete"
+                                                Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                                                Size="{DynamicResource WolvenKitIconMilli}"
+                                                Foreground="{StaticResource WolvenKitRed}" />
                                         </ControlTemplate>
                                     </Setter.Value>
                                 </Setter>
@@ -371,7 +327,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="Delete"
-                            Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
+                            Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                             Size="{DynamicResource WolvenKitIconMilli}"
                             Foreground="{StaticResource WolvenKitRed}" />
                     </Button>
@@ -605,57 +561,102 @@
 
                 <converters:RedEditorTemplateSelector.RedTypeViewer>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <templates:IconBox
-                                IconPack="Empty"
-                                Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
-                                Size="{DynamicResource WolvenKitIconMicro}" />
+                        <Grid
+                            Margin="{DynamicResource WolvenKitMarginSmallRight}"
+                            HorizontalAlignment="Stretch">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
 
-                            <TextBlock
-                                Margin="{DynamicResource WolvenKitMarginTinyRight}"
+                            <StackPanel
+                                Grid.Column="0"
+                                Grid.ColumnSpan="2"
                                 VerticalAlignment="Center"
-                                Foreground="{StaticResource RedTypeColor}"
-                                FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                                Text="{Binding Type,
-                                               Mode=OneTime}" />
+                                Orientation="Horizontal">
+                                <templates:IconBox
+                                    IconPack="Empty"
+                                    Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
+                                    Size="{DynamicResource WolvenKitIconMicro}" />
 
-                            <TextBlock
-                                Margin="{DynamicResource WolvenKitMarginTinyRight}"
-                                VerticalAlignment="Center"
-                                Foreground="White"
-                                FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                                Text="{Binding Descriptor}">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Style.Triggers>
-                                            <DataTrigger
-                                                Binding="{Binding Descriptor}"
-                                                Value="">
-                                                <Setter Property="Visibility" Value="Collapsed" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
+                                <TextBlock
+                                    Margin="{DynamicResource WolvenKitMarginTinyRight}"
+                                    VerticalAlignment="Center"
+                                    Foreground="{StaticResource RedTypeColor}"
+                                    FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                                    Text="{Binding Type,
+                                                   Mode=OneTime}" />
 
-                            <ContentPresenter ContentTemplate="{StaticResource AddToCompiledDataButton}" />
-                            <ContentPresenter ContentTemplate="{StaticResource AddDynamicProperty}" />
-                            <ContentPresenter ContentTemplate="{StaticResource AddHandleButton}" />
-                            <ContentPresenter ContentTemplate="{StaticResource DeleteAllButton}" />
-                        </StackPanel>
+                                <TextBlock
+                                    Margin="{DynamicResource WolvenKitMarginTinyRight}"
+                                    VerticalAlignment="Center"
+                                    Foreground="White"
+                                    FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                                    Text="{Binding Descriptor}">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Style.Triggers>
+                                                <DataTrigger
+                                                    Binding="{Binding Descriptor}"
+                                                    Value="">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </StackPanel>
+
+                            <ContentPresenter
+                                Grid.Column="2"
+                                Content="{Binding}"
+                                ContentTemplate="{StaticResource AddToCompiledDataButton}" />
+                            <ContentPresenter
+                                Grid.Column="3"
+                                Content="{Binding}"
+                                ContentTemplate="{StaticResource AddDynamicProperty}" />
+                            <ContentPresenter
+                                Grid.Column="4"
+                                Content="{Binding}"
+                                ContentTemplate="{StaticResource AddHandleButton}" />
+                            <ContentPresenter
+                                Grid.Column="5"
+                                Content="{Binding}"
+                                ContentTemplate="{StaticResource DeleteAllButton}" />
+                        </Grid>
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedTypeViewer>
 
                 <converters:RedEditorTemplateSelector.RedArrayEditor>
                     <DataTemplate>
-                        <Grid VerticalAlignment="Center">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
+                        <Grid
+                            Margin="{DynamicResource WolvenKitMarginSmallRight}"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
 
+                            <!--
+                                NOTE:
+                                Width="*" + Grid.Column + Grid.ColumSpan does the
+                                trick to force last columns to stick on the right.
+                            -->
                             <StackPanel
-                                Grid.Row="0"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="2"
+                                Margin="0"
+                                VerticalAlignment="Center"
                                 Orientation="Horizontal">
                                 <templates:IconBox
                                     IconPack="Codicons"
@@ -722,28 +723,28 @@
                                         </Style>
                                     </TextBlock.Style>
                                 </TextBlock>
-
-                                <ContentPresenter ContentTemplate="{StaticResource AddToArrayButton}" />
-                                <ContentPresenter ContentTemplate="{StaticResource AddToCompiledDataButton}" />
-                                <ContentPresenter ContentTemplate="{StaticResource AddDynamicProperty}" />
-                                <ContentPresenter ContentTemplate="{StaticResource AddHandleButton}" />
-                                <ContentPresenter ContentTemplate="{StaticResource DeleteAllButton}" />
                             </StackPanel>
-                            <!--ListView
-                                Grid.Row="1"
-                                AlternationCount="{Binding RelativeSource={RelativeSource Self}, Path=Items.Count}"
-                                ItemTemplate="{StaticResource ItemTemplate}"
-                                ItemsSource="{Binding Properties}"
-                                ScrollViewer.CanContentScroll="False">
-                                <ListView.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <VirtualizingStackPanel
-                                            IsVirtualizing="True"
-                                            Orientation="Vertical"
-                                            VirtualizationMode="Recycling" />
-                                    </ItemsPanelTemplate>
-                                </ListView.ItemsPanel>
-                            </ListView-->
+
+                            <ContentPresenter
+                                Grid.Column="2"
+                                Content="{Binding}"
+                                ContentTemplate="{StaticResource AddToArrayButton}" />
+                            <ContentPresenter
+                                Grid.Column="3"
+                                Content="{Binding}"
+                                ContentTemplate="{StaticResource AddToCompiledDataButton}" />
+                            <ContentPresenter
+                                Grid.Column="4"
+                                Content="{Binding}"
+                                ContentTemplate="{StaticResource AddDynamicProperty}" />
+                            <ContentPresenter
+                                Grid.Column="5"
+                                Content="{Binding}"
+                                ContentTemplate="{StaticResource AddHandleButton}" />
+                            <ContentPresenter
+                                Grid.Column="6"
+                                Content="{Binding}"
+                                ContentTemplate="{StaticResource DeleteAllButton}" />
                         </Grid>
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedArrayEditor>
@@ -899,6 +900,8 @@
 
         <!-- info at top -->
         <Border
+            Grid.Row="0"
+            HorizontalAlignment="Stretch"
             BorderBrush="{StaticResource BorderAlt}"
             BorderThickness="0,0,0,2">
             <Border.Style>
@@ -913,39 +916,60 @@
                 </Style>
             </Border.Style>
 
-            <Grid Margin="{DynamicResource WolvenKitMarginTiny}">
+            <Grid
+                Margin="{DynamicResource WolvenKitMarginTiny}"
+                HorizontalAlignment="Stretch">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
                 <TextBlock
                     Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3"
                     VerticalAlignment="Center"
                     FontSize="{DynamicResource WolvenKitFontSubTitle}"
                     Text="{Binding Tab.File.RelativePath}" />
 
                 <TextBlock
                     Grid.Row="1"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3"
                     VerticalAlignment="Center"
                     FontSize="{DynamicResource WolvenKitFontSubTitle}"
                     FontWeight="SemiBold"
                     Text="{Binding XPath}" />
 
-                <StackPanel
+                <Grid
                     Grid.Row="2"
-                    Margin="{DynamicResource WolvenKitMarginTinyTop}"
-                    Orientation="Horizontal">
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="{DynamicResource WolvenKitMarginTinyTop}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
                     <TextBlock
                         Name="PropertyType"
+                        Grid.Column="0"
                         VerticalAlignment="Center"
                         Foreground="{StaticResource WolvenKitTan}"
                         FontSize="{DynamicResource WolvenKitFontSubTitle}"
                         Text="{Binding Type,
                                        Mode=OneTime}" />
 
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel
+                        Grid.Column="1"
+                        Orientation="Horizontal">
                         <StackPanel.Style>
                             <Style TargetType="StackPanel">
                                 <Style.Triggers>
@@ -973,24 +997,43 @@
                                            Mode=OneWay,
                                            UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
+                </Grid>
+
+                <Grid
+                    Grid.Row="2"
+                    Grid.Column="2"
+                    Margin="{DynamicResource WolvenKitMarginTinyTop}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitColumnTiny}" />
+                    </Grid.ColumnDefinitions>
 
                     <ContentPresenter
+                        Grid.Column="0"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         Content="{Binding}"
                         ContentTemplate="{StaticResource AddToCompiledDataButton}" />
                     <ContentPresenter
+                        Grid.Column="1"
                         Content="{Binding}"
                         ContentTemplate="{StaticResource AddToArrayButton}" />
                     <ContentPresenter
+                        Grid.Column="2"
                         Content="{Binding}"
                         ContentTemplate="{StaticResource AddDynamicProperty}" />
                     <ContentPresenter
+                        Grid.Column="3"
                         Content="{Binding}"
                         ContentTemplate="{StaticResource AddHandleButton}" />
                     <ContentPresenter
+                        Grid.Column="4"
                         Content="{Binding}"
                         ContentTemplate="{StaticResource DeleteAllButton}" />
-                </StackPanel>
+                </Grid>
             </Grid>
         </Border>
 
