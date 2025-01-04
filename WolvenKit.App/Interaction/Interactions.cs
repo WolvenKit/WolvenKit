@@ -49,7 +49,6 @@ public static class Interactions
         return await Task.FromResult(result);
     }
 
-    // wrappers
     public static async Task<string> ShowRenameBoxAsync(string originalName)
     {
         string result = "";
@@ -57,11 +56,34 @@ public static class Interactions
         return await Task.FromResult(result);
     }
 
-
+    /// <summary>
+    /// Shows a message box with an extra button to open a weblink
+    /// </summary>
+    /// <param name="title">Dialogue title</param>
+    /// <param name="message">Dialogue message (auto-wrapping)</param>
+    /// <param name="hyperlink">hyperlink URL (no validation)</param>
+    /// <param name="buttonText">Optional: Button text (default: Open Wiki)</param>
+    /// <param name="image">Optional: Image (default: Information)</param>
+    /// <returns>result of the task</returns>
+    public static async Task<WMessageBoxResult> ShowPopupWithWeblinkAsync(string title, string message,
+        string hyperlink, string buttonText = "Open Wiki", WMessageBoxImage image = WMessageBoxImage.Information)
+    {
+        var result = WMessageBoxResult.None;
+        DispatcherHelper.RunOnMainThread(() =>
+            result = ShowPopupWithWeblink((title, message, hyperlink, buttonText, image)));
+        return await Task.FromResult(result);
+    }
 
     // classic popups
     public static Func<(string, string, WMessageBoxImage, WMessageBoxButtons), WMessageBoxResult> ShowConfirmation { get; set; } 
         = _ => throw new NotImplementedException();
+
+    /// <inheritdoc cref="ShowPopupWithWeblinkAsync"/>
+    public static Func<(string, string, string, string, WMessageBoxImage), WMessageBoxResult> ShowPopupWithWeblink
+    {
+        get;
+        set;
+    } = _ => throw new NotImplementedException();
 
     public static Func<(string, string), bool> ShowQuestionYesNo { get; set; } = _ => throw new NotImplementedException();
 
