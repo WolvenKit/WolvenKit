@@ -363,7 +363,9 @@
             </ContextMenu>
 
             <DataTemplate x:Key="TreeGridCellTemplate">
-                <Grid>
+                <Grid
+                    Margin="{DynamicResource WolvenKitMarginRight}"
+                    HorizontalAlignment="Stretch">
                     <Grid.Resources>
                         <Style
                             x:Key="WolvenKitTreeGridButton"
@@ -532,11 +534,6 @@
                                     Loaded="TreeIcon_Loaded" />
                             </helpers:TreeGridButton.Content>
                         </helpers:TreeGridButton>
-
-                        <helpers:TreeGridButton
-                            Width="0"
-                            Margin="{DynamicResource WolvenKitMarginSmallBottom}"
-                            Style="{StaticResource WolvenKitTreeGridButtonDirectory}" />
                     </StackPanel>
                 </Grid>
             </DataTemplate>
