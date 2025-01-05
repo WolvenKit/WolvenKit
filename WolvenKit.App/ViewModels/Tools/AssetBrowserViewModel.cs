@@ -381,34 +381,47 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
         await Task.Run(async () =>
         {
-            using RedDBContext db = new();
-
-            if (RightSelectedItem is RedFileViewModel file && db.Files is not null)
+            try
             {
-                var hash = file.GetGameFile().Key;
+                using RedDBContext db = new();
+
+                if (RightSelectedItem is RedFileViewModel file && db.Files is not null)
+                {
+                    var hash = file.GetGameFile().Key;
 
 #pragma warning disable CS8604 // Possible null reference argument.
-                var uses = await db.Files.Include("Archive").Include("Uses")
-                    .Where(x => x.Archive != null && x.Archive.Name == file.ArchiveName && x.Archive.Source == file.ArchiveSource.ToString() && x.Hash == hash)
-                    .Where(x => x.Uses != null)
-                    .Select(x => x.Uses.Select(y => y.Hash))
-                    .ToListAsync();
+                    var uses = await db.Files.Include("Archive").Include("Uses")
+                        .Where(x => x.Archive != null && x.Archive.Name == file.ArchiveName &&
+                                    x.Archive.Source == file.ArchiveSource.ToString() && x.Hash == hash)
+                        .Where(x => x.Uses != null)
+                        .Select(x => x.Uses.Select(y => y.Hash))
+                        .ToListAsync();
 #pragma warning restore CS8604 // Possible null reference argument.
 
-                //add all found items to
-                _archiveManager.Archives
-                    .Connect()
-                    .TransformMany(x => x.Files.Values, y => y.Key)
-                    .Filter(x => uses.Any(y => y.Contains(x.Key)))
-                    .Transform(x => new RedFileViewModel(x))
-                    .Bind(out var list)
-                    .Subscribe()
-                    .Dispose();
+                    //add all found items to
+                    _archiveManager.Archives
+                        .Connect()
+                        .TransformMany(x => x.Files.Values, y => y.Key)
+                        .Filter(x => uses.Any(y => y.Contains(x.Key)))
+                        .Transform(x => new RedFileViewModel(x))
+                        .Bind(out var list)
+                        .Subscribe()
+                        .Dispose();
 
-                RightItems.Clear();
-                RightItems.AddRange(list);
+                    RightItems.Clear();
+                    RightItems.AddRange(list);
+                }
             }
-
+            catch
+            {
+                _loggerService.Error(
+                    "Something went wrong when searching for uses. It is possible that your WolvenkitResourcesPlugin");
+                _loggerService.Error(
+                    "  has become corrupted. Try reinstalling it. If that doesn't resolve the problem, please ");
+                _loggerService.Error(
+                    "  create a ticket under https://github.com/WolvenKit/WolvenKit/issues/ with the following:");
+                throw;
+            }
             await Task.CompletedTask;
         });
 
