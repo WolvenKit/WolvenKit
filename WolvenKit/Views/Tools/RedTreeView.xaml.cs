@@ -10,7 +10,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
-using DynamicData;
 using Splat;
 using Syncfusion.UI.Xaml.TreeView;
 using WolvenKit.App.Helpers;
@@ -52,9 +51,10 @@ namespace WolvenKit.Views.Tools
             Loaded += RedTreeView_Loaded;
             Unloaded += RedTreeView_Unloaded;
 
-            var tt = Locator.Current.GetService<AppViewModel>();
-
-            if (tt.ActiveDocument is RedDocumentViewModel { SelectedTabItemViewModel: RDTDataViewModel rdtd })
+            if (_appViewModel.ActiveDocument is RedDocumentViewModel
+                {
+                    SelectedTabItemViewModel: RDTDataViewModel rdtd
+                })
             {
                 _rdtDataViewModel = rdtd;
             }
@@ -306,17 +306,6 @@ namespace WolvenKit.Views.Tools
         {
             get => (bool)GetValue(IsArrayItemSelectedProperty);
             set => SetValue(IsArrayItemSelectedProperty, value);
-        }
-
-        /// <summary>Identifies the <see cref="IsHandleSelected"/> dependency property.</summary>
-        public static readonly DependencyProperty IsHandleSelectedProperty =
-            DependencyProperty.Register(nameof(IsHandleSelected), typeof(bool), typeof(RedTreeView));
-
-        /// <summary>Updates with <see cref="RDTDataViewModel.SelectedChunk"/> </summary>
-        public bool IsHandleSelected
-        {
-            get => (bool)GetValue(IsHandleSelectedProperty);
-            set => SetValue(IsHandleSelectedProperty, value);
         }
 
 
@@ -710,8 +699,6 @@ namespace WolvenKit.Views.Tools
 
             var selectedChunks = GetSelectedChunks();
 
-            _rdtDataViewModel?.ClearSelection();
-            
             using (collectionView.DeferRefresh())
             {
                 foreach (var group in GroupByArrayOrParent(selectedChunks))
@@ -796,7 +783,7 @@ namespace WolvenKit.Views.Tools
             var isInArray = selectedItem?.IsInArray == true;
             SetCurrentValue(IsArraySelectedProperty, isArray);
             SetCurrentValue(IsArrayItemSelectedProperty, isInArray);
-            SetCurrentValue(IsHandleSelectedProperty, ChunkViewModel.IsHandle(selectedItem?.Data));
+            SetCurrentValue(IsHandleSelectedProperty, IsHandle(selectedItem?.Data));
             SetCurrentValue(ShouldShowArrayOpsProperty, isArray || isInArray);
         }
 
@@ -848,7 +835,6 @@ namespace WolvenKit.Views.Tools
             }
 
             var chunks = GetSelectedChunks();
-            _rdtDataViewModel?.ClearSelection();
 
             ChunkViewModel[] duplicatedChunks = [];
                 
@@ -961,6 +947,7 @@ namespace WolvenKit.Views.Tools
                 SetCurrentValue(SelectedItemsProperty, new ObservableCollection<object>(selectedChunkViewModels));
                 SetCurrentValue(SelectedItemProperty, selectedChunkViewModels.LastOrDefault());
             }
+            
         }
 
         private static void ReapplySearch(ChunkViewModel chunk)
