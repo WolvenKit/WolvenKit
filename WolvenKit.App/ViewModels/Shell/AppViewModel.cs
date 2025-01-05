@@ -457,12 +457,23 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             return;
         }
 
-        var text = "Long path support is disabled in your OS!" + Environment.NewLine +
-                   "Please do so to ensure that WolvenKit works properly." + Environment.NewLine + Environment.NewLine +
-                   "For more information:" + Environment.NewLine +
-                   "https://wiki.redmodding.org/wolvenkit/help/faq/long-file-path-support";
+        List<string> warningText =
+        [
+            "Hey, choom! This is just a heads-up:",
+            "",
+            "You don't have long path support enabled in your OS.",
+            "This can cause issues when packing your mods.",
+            "",
+            "Click the 'Open Wiki' button to see a solution."
+        ];
 
-        DispatcherHelper.RunOnMainThread(() => Interactions.ShowConfirmation((text, "Long path support", WMessageBoxImage.Warning, WMessageBoxButtons.Ok)));
+        DispatcherHelper.RunOnMainThread(() => _ = Interactions.ShowPopupWithWeblink((
+            string.Join('\n', warningText),
+            "Long path support",
+            "https://wiki.redmodding.org/wolvenkit/help/faq/long-file-path-support",
+            "Open Wiki",
+            WMessageBoxImage.Warning
+        )));
     }
 
     #endregion init
