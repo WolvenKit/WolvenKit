@@ -76,6 +76,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly ITweakDBService _tweakDBService;
     private readonly Red4ParserService _parser;
     private readonly AppScriptService _scriptService;
+    private readonly DocumentTools _documentTools;
+    private readonly Cr2WTools _cr2WTools;
+    private readonly TemplateFileTools _templateFileTools;
+    private readonly ProjectResourceTools _projectResourceTools;
 
     // expose to view
     public ISettingsManager SettingsManager { get; init; }
@@ -101,7 +105,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         ITweakDBService tweakDBService,
         Red4ParserService parserService,
         AppScriptService scriptService,
-        IModTools modTools
+        IModTools modTools,
+        DocumentTools documentTools,
+        Cr2WTools cr2WTools,
+        TemplateFileTools templateFileTools,
+        ProjectResourceTools projectResourceTools
     )
     {
         _documentViewmodelFactory = documentViewmodelFactory;
@@ -120,8 +128,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _tweakDBService = tweakDBService;
         _parser = parserService;
         _scriptService = scriptService;
-
-        InitializeHelperServiceSingletons(hashService, modTools);
+        _documentTools = documentTools;
+        _cr2WTools = cr2WTools;
+        _templateFileTools = templateFileTools;
+        _projectResourceTools = projectResourceTools;
 
         _fileValidationScript = _scriptService.GetScripts().ToList()
             .Where(s => s.Name == "run_FileValidation_on_active_tab")
@@ -154,21 +164,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         DockedViews.CollectionChanged += DockedViews_OnCollectionChanged;
     }
 
-#pragma warning disable CA1806
-    /// <summary>
-    /// A bunch of service singletons that must be instantiated once. Registering them via DI container will not
-    /// create an instance unless they are injected at least once, so we'll do this by hand here.
-    /// </summary>
-    private void InitializeHelperServiceSingletons(IHashService hashService, IModTools modTools)
-    {
-        // ReSharper disable ObjectCreationAsStatement
-        new DocumentTools(_loggerService);
-        new Cr2WTools(_loggerService, hashService, _parser);
-        new TemplateFileTools(_loggerService, _projectManager, modTools);
-        new ProjectResourceTools(_projectManager, _archiveManager, _loggerService, SettingsManager);
-        // ReSharper enable ObjectCreationAsStatement
-    }
-#pragma warning restore CA1806
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {

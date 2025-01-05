@@ -1707,8 +1707,7 @@
                                          Mode=OneWay,
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Header="Add to project"
-                    Command="{Binding Path=PlacementTarget.Tag.AddToProjectCommand,
-                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+                    Command="{Binding Path=AddToProjectCommand, Source={x:Reference redTreeView}}">
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Vaadin"

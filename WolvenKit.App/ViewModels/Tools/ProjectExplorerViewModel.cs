@@ -15,6 +15,7 @@ using System.Windows.Threading;
 using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Octokit;
 using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
@@ -34,6 +35,7 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.Archive;
 using Clipboard = System.Windows.Clipboard;
+using FileMode = System.IO.FileMode;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
 namespace WolvenKit.App.ViewModels.Tools;
@@ -67,6 +69,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private readonly ISettingsManager _settingsManager;
     private readonly IArchiveManager _archiveManager;
+    private readonly ProjectResourceTools _projectResourceTools;
 
     #endregion fields
 
@@ -81,7 +84,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         IPluginService pluginService,
         ISettingsManager settingsManager,
         IModifierViewStateService modifierSvc,
-        IArchiveManager archiveManager
+        IArchiveManager archiveManager,
+        ProjectResourceTools projectResourceTools
     ) : base(s_toolTitle)
     {
         _projectManager = projectManager;
@@ -92,6 +96,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _pluginService = pluginService;
         _settingsManager = settingsManager;
         _archiveManager = archiveManager;
+        _projectResourceTools = projectResourceTools;
         ModifierStateService = modifierSvc;
 
         _appViewModel = appViewModel;
@@ -828,7 +833,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        await ProjectResourceTools.MoveAndRefactor(_projectManager.ActiveProject, relativePath, newRelativePath,
+        await _projectResourceTools.MoveAndRefactor(_projectManager.ActiveProject, relativePath, newRelativePath,
             prefixPath, refactor);
         _appViewModel.ReloadChangedFiles();
     }

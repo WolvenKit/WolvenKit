@@ -15,9 +15,9 @@ namespace WolvenKit.App.Helpers;
 
 public class Cr2WTools
 {
-    private static ILoggerService s_loggerServiceInstance = null!;
-    private static IHashService s_hashServiceInstance = null!;
-    private static Red4ParserService s_parserServiceInstance = null!;
+    private ILoggerService _loggerService;
+    private IHashService _hashService;
+    private Red4ParserService _parserService;
 
     public Cr2WTools(
         ILoggerService loggerService,
@@ -25,19 +25,19 @@ public class Cr2WTools
         Red4ParserService parserService
     )
     {
-        s_loggerServiceInstance = loggerService;
-        s_hashServiceInstance = hashService;
-        s_parserServiceInstance = parserService;
+        _loggerService = loggerService;
+        _hashService = hashService;
+        _parserService = parserService;
     }
 
 
     #region cr2w
 
-    public static bool WriteCr2W(CR2WFile cr2WFile, string? absolutePath)
+    public bool WriteCr2W(CR2WFile cr2WFile, string? absolutePath)
     {
         if (string.IsNullOrEmpty(absolutePath))
         {
-            s_loggerServiceInstance.Error("No file path provided!");
+            _loggerService.Error("No file path provided!");
             return false;
         }
 
@@ -52,10 +52,10 @@ public class Cr2WTools
         {
             try
             {
-                using var writer = new CR2WWriter(ms, Encoding.UTF8, true) { LoggerService = s_loggerServiceInstance };
+                using var writer = new CR2WWriter(ms, Encoding.UTF8, true) { LoggerService = _loggerService };
                 writer.WriteFile(cr2WFile);
 
-                if (!FileHelper.SafeWrite(ms, absolutePath, s_loggerServiceInstance))
+                if (!FileHelper.SafeWrite(ms, absolutePath, _loggerService))
                 {
                     return false;
                 }
@@ -64,8 +64,8 @@ public class Cr2WTools
             }
             catch (Exception e)
             {
-                s_loggerServiceInstance.Error($"Error while saving {absolutePath}");
-                s_loggerServiceInstance.Error(e);
+                _loggerService.Error($"Error while saving {absolutePath}");
+                _loggerService.Error(e);
 
                 return false;
             }
@@ -75,11 +75,11 @@ public class Cr2WTools
             }
         }
 
-        s_loggerServiceInstance.Success($"Saved file {absolutePath}");
+        _loggerService.Success($"Saved file {absolutePath}");
         return true;
     }
 
-    public static CR2WFile ReadCr2W(string absolutePath)
+    public CR2WFile ReadCr2W(string absolutePath)
     {
         if (!File.Exists(absolutePath))
         {
@@ -88,7 +88,7 @@ public class Cr2WTools
 
         using var fs = new FileStream(absolutePath, FileMode.Open);
 
-        if (!s_parserServiceInstance.TryReadRed4File(fs, out var cr2WFile))
+        if (!_parserService.TryReadRed4File(fs, out var cr2WFile))
         {
             throw new InvalidFileTypeException($"Can't read file: {absolutePath}");
         }
@@ -98,9 +98,9 @@ public class Cr2WTools
 
     #endregion
 
-    private static void SaveHashedValues(CR2WFile file)
+    private void SaveHashedValues(CR2WFile file)
     {
-        if (s_hashServiceInstance is not HashServiceExt hashService)
+        if (_hashService is not HashServiceExt hashService)
         {
             return;
         }

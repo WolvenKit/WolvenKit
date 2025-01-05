@@ -7,6 +7,7 @@ using System.Windows;
 using AdonisUI.Controls;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
@@ -24,6 +25,7 @@ namespace WolvenKit.Views.Shell
     public partial class MainView : IViewFor<AppViewModel>
     {
         private readonly IModifierViewStateService _modifierViewStateService;
+        private readonly ProjectResourceTools _projectResourceTools;
         public AppViewModel ViewModel { get; set; }
 
         object IViewFor.ViewModel
@@ -34,10 +36,12 @@ namespace WolvenKit.Views.Shell
 
         public MainView(
             IModifierViewStateService modifierViewStateService,
+            ProjectResourceTools projectResourceTools,
             AppViewModel vm = null
         )
         {
             _modifierViewStateService = modifierViewStateService;
+            _projectResourceTools = projectResourceTools;
             ViewModel = vm ?? Locator.Current.GetService<AppViewModel>();
             DataContext = ViewModel;
 
@@ -102,7 +106,8 @@ namespace WolvenKit.Views.Shell
 
                 Interactions.ShowPhotoModeDialogue = (param) =>
                 {
-                    var dialog = new CreatePhotoModeAppDialog(param.activeProject, param.settingsManager);
+                    var dialog = new CreatePhotoModeAppDialog(param.activeProject, param.settingsManager,
+                        _projectResourceTools);
                     if (dialog.ShowDialog() != true)
                     {
                         return null;

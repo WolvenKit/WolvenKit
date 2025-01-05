@@ -49,11 +49,14 @@ public partial class CreatePhotoModeAppViewModel : ObservableObject
 
     private readonly Cp77Project _activeProject;
     private readonly ISettingsManager _settingsManager;
+    private readonly ProjectResourceTools _projectResourceTools;
 
-    public CreatePhotoModeAppViewModel(Cp77Project activeProject, ISettingsManager settingsManager)
+    public CreatePhotoModeAppViewModel(Cp77Project activeProject, ISettingsManager settingsManager,
+        ProjectResourceTools projectResourceTools)
     {
         _activeProject = activeProject;
         _settingsManager = settingsManager;
+        _projectResourceTools = projectResourceTools;
         
         PhotomodeAppOptions.AddRange<string>(
             activeProject.ModFiles
@@ -284,22 +287,22 @@ public partial class CreatePhotoModeAppViewModel : ObservableObject
                 break;
             case nameof(IsCreateInkatlasFile) when !IsOverwrite && IsCreateInkatlasFile:
                 IsOverwrite =
-                    File.Exists(ProjectResourceTools.GetAbsolutePath(InkatlasFileName, PhotomodeRelativeFolder));
+                    File.Exists(_projectResourceTools.GetAbsolutePath(InkatlasFileName, PhotomodeRelativeFolder));
                 break;
             case nameof(IsCreateAppFile) when !IsOverwrite && IsCreateAppFile:
-                IsOverwrite = File.Exists(ProjectResourceTools.GetAbsolutePath(AppFileName, PhotomodeRelativeFolder));
+                IsOverwrite = File.Exists(_projectResourceTools.GetAbsolutePath(AppFileName, PhotomodeRelativeFolder));
                 break;
             case nameof(IsCreateEntFile) when !IsOverwrite && IsCreateEntFile:
-                IsOverwrite = File.Exists(ProjectResourceTools.GetAbsolutePath(EntFileName, PhotomodeRelativeFolder));
+                IsOverwrite = File.Exists(_projectResourceTools.GetAbsolutePath(EntFileName, PhotomodeRelativeFolder));
                 break;
             case nameof(IsCreateJsonFile) when !IsOverwrite && IsCreateJsonFile:
-                IsOverwrite = File.Exists(ProjectResourceTools.GetAbsolutePath(JsonFileName, PhotomodeRelativeFolder));
+                IsOverwrite = File.Exists(_projectResourceTools.GetAbsolutePath(JsonFileName, PhotomodeRelativeFolder));
                 break;
             case nameof(IsCreateYamlFile) when !IsOverwrite && IsCreateYamlFile:
-                IsOverwrite = File.Exists(ProjectResourceTools.GetAbsolutePath(YamlFileName, "", true));
+                IsOverwrite = File.Exists(_projectResourceTools.GetAbsolutePath(YamlFileName, "", true));
                 break;
             case nameof(IsCreateXlFile) when !IsOverwrite && IsCreateXlFile:
-                IsOverwrite = File.Exists(ProjectResourceTools.GetAbsolutePath(XlFileName));
+                IsOverwrite = File.Exists(_projectResourceTools.GetAbsolutePath(XlFileName));
                 break;
         }
         SetSaveButtonState();

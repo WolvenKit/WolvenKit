@@ -45,7 +45,8 @@ public partial class RedDocumentViewModel : DocumentViewModel
     private readonly IArchiveManager _archiveManager;
     private readonly IHookService _hookService;
     private readonly INodeWrapperFactory _nodeWrapperFactory;
-    private readonly IHashService _hashService;
+    private readonly Cr2WTools _cr2WTools;
+
 
     private readonly AppViewModel _appViewModel;
 
@@ -63,8 +64,8 @@ public partial class RedDocumentViewModel : DocumentViewModel
         IArchiveManager archiveManager,
         IHookService hookService,
         INodeWrapperFactory nodeWrapperFactory,
-        IHashService hashService,
         EditorDifficultyLevel editorMode,
+        Cr2WTools cr2WTools,
         bool isReadyOnly = false) : base(path)
     {
         _documentTabViewmodelFactory = documentTabViewmodelFactory;
@@ -76,7 +77,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
         _archiveManager = archiveManager;
         _hookService = hookService;
         _nodeWrapperFactory = nodeWrapperFactory;
-        _hashService = hashService;
+        _cr2WTools = cr2WTools;
 
         _appViewModel = appViewModel;
         _embedHashSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
@@ -212,7 +213,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
             return false;
         }
 
-        if (GetMainFile() is null || !Cr2WTools.WriteCr2W(cr2w, filePath))
+        if (GetMainFile() is null || !_cr2WTools.WriteCr2W(cr2w, filePath))
         {
             return false;
         }

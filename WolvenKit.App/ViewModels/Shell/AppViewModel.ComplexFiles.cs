@@ -54,7 +54,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
          */
         try
         {
-            TemplateFileTools.CreatePhotoModeAppAndEnt(new PhotomodeEntAppOptions()
+            _templateFileTools.CreatePhotoModeAppAndEnt(new PhotomodeEntAppOptions()
                 {
                     AppSourceRelPath = dialogModel.SelectedApp,
                     AppDestRelPath = relativeAppFilePath,
@@ -76,7 +76,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
              */
             if (dialogModel.IsCreateInkatlasFile)
             {
-                TemplateFileTools.CopyInkatlasTemplateSingle(relativeInkatlasFilePath, dialogModel.IsOverwrite);
+                _templateFileTools.CopyInkatlasTemplateSingle(relativeInkatlasFilePath, dialogModel.IsOverwrite);
             }
 
             /*
@@ -86,9 +86,9 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             {
                 var yamlTargetDir =
                     Path.Join(_projectManager.ActiveProject.ResourcesDirectory,
-                        ProjectResourceTools.AppendPersonalDirectory("r6", "tweaks"), "photomode");
+                        _projectResourceTools.AppendPersonalDirectory("r6", "tweaks"), "photomode");
 
-                TemplateFileTools.CreatePhotomodeYaml(new PhotomodeYamlOptions()
+                _templateFileTools.CreatePhotomodeYaml(new PhotomodeYamlOptions()
                 {
                     NpcName = dialogModel.NpcName,
                     InkatlasPath = relativeInkatlasFilePath,
@@ -122,7 +122,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
                     File.Delete(jsonFileAbsolutePath);
                 }
 
-                TemplateFileTools.CreateOrAppendToJsonFile(
+                _templateFileTools.CreateOrAppendToJsonFile(
                     jsonFileAbsolutePath,
                     new Dictionary<string, string> { { locKey, dialogModel.NpcName } },
                     dialogModel.IsOverwrite,
@@ -169,7 +169,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
                     PhotomodeBodyGender.Cat => SelectAnimationPathViewModel.FacialAnimPathFemale,
                     _ => SelectAnimationPathViewModel.FacialAnimPathFemale,
                 };
-                DocumentTools.SetFacialAnimations(absoluteAppFilePath, facialAnim,
+                _documentTools.SetFacialAnimations(absoluteAppFilePath, facialAnim,
                     null, SelectAnimationPathViewModel.PhotomodeAnimEntriesFemaleDefault);
             }
 
@@ -191,7 +191,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
             if (pathOrFileName.EndsWith(".yaml"))
             {
-                return Path.Join(ProjectResourceTools.AppendPersonalDirectory("r6", "tweaks"), pathOrFileName);
+                return Path.Join(_projectResourceTools.AppendPersonalDirectory("r6", "tweaks"), pathOrFileName);
             }
 
             return Path.Join(relativePhotoModeFolder, pathOrFileName);

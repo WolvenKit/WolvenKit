@@ -7,6 +7,7 @@ using System.Windows.Input;
 using HandyControl.Tools.Extension;
 using ReactiveUI;
 using WolvenKit.App;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
@@ -37,11 +38,12 @@ namespace WolvenKit.Views.Dialogs
         private static bool s_lastCreateInkatlasFile = true;
         private static bool s_lastOverwrite;
 
-        public CreatePhotoModeAppDialog(Cp77Project activeProject, ISettingsManager settingsManager)
+        public CreatePhotoModeAppDialog(Cp77Project activeProject, ISettingsManager settingsManager,
+            ProjectResourceTools projectResourceTools)
         {
             InitializeComponent();
 
-            ViewModel = new CreatePhotoModeAppViewModel(activeProject, settingsManager)
+            ViewModel = new CreatePhotoModeAppViewModel(activeProject, settingsManager, projectResourceTools)
             {
                 AppFileName = s_lastAppFileName,
                 EntFileName = s_lastEntFileName,

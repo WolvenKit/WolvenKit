@@ -198,6 +198,9 @@ namespace WolvenKit
                     services.AddTransient<IViewFor<HashToolViewModel>, HashToolView>();
 
                     services.AddSingleton<DocumentTools>();
+                    services.AddSingleton<TemplateFileTools>();
+                    services.AddSingleton<Cr2WTools>();
+                    services.AddSingleton<ProjectResourceTools>();
                     #endregion
 
                     #region homepage

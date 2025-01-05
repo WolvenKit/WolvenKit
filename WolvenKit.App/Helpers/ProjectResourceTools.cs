@@ -24,25 +24,25 @@ namespace WolvenKit.App.Helpers;
 
 public class ProjectResourceTools
 {
-    private static IProjectManager s_projectManager = null!;
+    private readonly IProjectManager _projectManager;
 
-    private static IArchiveManager s_archiveManager = null!;
+    private readonly IArchiveManager _archiveManager;
 
-    private static ILoggerService s_loggerService = null!;
+    private readonly ILoggerService _loggerService;
 
-    private static ISettingsManager s_settingsService = null!;
+    private readonly ISettingsManager _settingsService;
 
     public ProjectResourceTools(IProjectManager projectManager, IArchiveManager archiveManager,
         ILoggerService loggerService, ISettingsManager settingsManager)
     {
-        s_projectManager = projectManager;
-        s_archiveManager = archiveManager;
-        s_loggerService = loggerService;
-        s_settingsService = settingsManager;
+        _projectManager = projectManager;
+        _archiveManager = archiveManager;
+        _loggerService = loggerService;
+        _settingsService = settingsManager;
     }
 
 
-    private static RED4Controller GetRed4Controller()
+    private RED4Controller GetRed4Controller()
     {
         if (GameControllerFactory.GetInstance() is GameControllerFactory factory)
         {
@@ -50,16 +50,16 @@ public class ProjectResourceTools
         }
 
         return GameControllerFactory.CreateInstance(
-            s_projectManager,
+            _projectManager,
             Locator.Current.GetService<RED4Controller>()!,
             Locator.Current.GetService<MockGameController>()!
         ).GetRed4Controller();
     }
 
-    public static string GetAbsolutePath(string fileName, string rootRelativeFolder = "",
+    public string GetAbsolutePath(string fileName, string rootRelativeFolder = "",
         bool appendModderNameFromSettings = false)
     {
-        if (s_projectManager.ActiveProject is not Cp77Project activeProject)
+        if (_projectManager.ActiveProject is not Cp77Project activeProject)
         {
             return "";
         }
@@ -73,18 +73,18 @@ public class ProjectResourceTools
 
     }
 
-    public static string AppendPersonalDirectory(params string[] filePathParts)
+    public string AppendPersonalDirectory(params string[] filePathParts)
     {
         var filePath = Path.Join(filePathParts);
-        if (s_settingsService.ModderName is string modderName && modderName != "" && !filePath.Contains(modderName)) 
+        if (_settingsService.ModderName is string modderName && modderName != "" && !filePath.Contains(modderName)) 
         {
             filePath = Path.Join(filePath, modderName.ToFileName());
         }
 
         return filePath.Trim();
     }
-    
-    private static string GetUniqueSubfolderPath(IEnumerable<string> allFilePaths, string currentFilePath)
+
+    private string GetUniqueSubfolderPath(IEnumerable<string> allFilePaths, string currentFilePath)
     {
         var fileName = Path.GetFileName(currentFilePath);
         var conflictingPaths = allFilePaths.Where(path => Path.GetFileName(path) == fileName).ToList();
@@ -104,15 +104,15 @@ public class ProjectResourceTools
         return Path.GetDirectoryName(currentFilePath) ?? "";
     }
 
-    public static Task<Dictionary<string, string>> AddDependenciesToProjectPathAsync(string destFolderRelativePath,
+    public Task<Dictionary<string, string>> AddDependenciesToProjectPathAsync(string destFolderRelativePath,
         HashSet<ResourcePath> resourcePaths) =>
         Task.Run(() => AddDependenciesToProjectPath(destFolderRelativePath, resourcePaths));
 
-    private static readonly SemaphoreSlim semaphore = new(1, 1);
+    private readonly SemaphoreSlim _semaphore = new(1, 1);
 
-    public static FileInfo GetFileInfo(string path)
+    public FileInfo GetFileInfo(string path)
     {
-        if (!Path.IsPathRooted(path) && s_projectManager?.ActiveProject is Cp77Project project)
+        if (!Path.IsPathRooted(path) && _projectManager.ActiveProject is Cp77Project project)
         {
             path = Path.Join(project.ModDirectory, path);
         }
@@ -124,16 +124,16 @@ public class ProjectResourceTools
 
         return new FileInfo(path);
     }
-    
-    private static async Task<Dictionary<string, string>> AddDependenciesToProjectPath(string destFolderRelativePath,
+
+    private async Task<Dictionary<string, string>> AddDependenciesToProjectPath(string destFolderRelativePath,
         HashSet<ResourcePath> resourcePaths)
     {
         if (resourcePaths.Count == 0)
         {
             return [];
         }
-        
-        await semaphore.WaitAsync();
+
+        await _semaphore.WaitAsync();
         try
         {
             Dictionary<string, string> pathReplacements = new();
@@ -145,7 +145,7 @@ public class ProjectResourceTools
             {
                 try
                 {
-                    if (resourcePaths.Count == 0 || s_projectManager.ActiveProject is not Cp77Project currentProject)
+                    if (resourcePaths.Count == 0 || _projectManager.ActiveProject is not Cp77Project currentProject)
                     {
                         tcs.SetResult();
                         return;
@@ -232,20 +232,20 @@ public class ProjectResourceTools
                 return pathReplacements;
             }
 
-            s_loggerService.Warning(
+            _loggerService.Warning(
                 "The following files could not be found. You can try switching to the Mod Browser and analyzing your archives:");
-            s_loggerService.Warning(string.Join('\n', filesNotFound));
+            _loggerService.Warning(string.Join('\n', filesNotFound));
 
             return pathReplacements;
         }
         finally
         {
-            semaphore.Release();
+            _semaphore.Release();
         }
     }
 
 
-    public static void AddToProject(ResourcePath resourcePath)
+    public void AddToProject(ResourcePath resourcePath)
     {
         if (resourcePath.GetResolvedText() is not string sourceRelativePath
             || string.IsNullOrEmpty(sourceRelativePath))
@@ -260,11 +260,11 @@ public class ProjectResourceTools
             return;
         }
 
-        if (s_archiveManager.Lookup(refPathHash, ArchiveManagerScope.Basegame) is { HasValue: true } basegameFile)
+        if (_archiveManager.Lookup(refPathHash, ArchiveManagerScope.Basegame) is { HasValue: true } basegameFile)
         {
             controller.AddToMod(basegameFile.Value, ArchiveManagerScope.Basegame);
         }
-        else if (s_archiveManager.Lookup(refPathHash, ArchiveManagerScope.Mods) is { HasValue: true } modFile)
+        else if (_archiveManager.Lookup(refPathHash, ArchiveManagerScope.Mods) is { HasValue: true } modFile)
         {
             controller.AddToMod(modFile.Value, ArchiveManagerScope.Mods);
         }
@@ -277,11 +277,11 @@ public class ProjectResourceTools
     /// <param name="resourcePath">Path of original resource</param>
     /// <param name="targetResourcePath">Path of target resource (the original resource will be moved here)</param>
     /// <exception cref="FileNotFoundException"></exception>
-    public static void AddFileToProjectFolder(string projectRoot, ResourcePath resourcePath,
+    public void AddFileToProjectFolder(string projectRoot, ResourcePath resourcePath,
         ResourcePath targetResourcePath) =>
         AddFileToProjectFolder(projectRoot, resourcePath, targetResourcePath, [], true);
 
-    private static void AddFileToProjectFolder(string projectRoot, ResourcePath resourcePath, ResourcePath targetResourcePath,
+    private void AddFileToProjectFolder(string projectRoot, ResourcePath resourcePath, ResourcePath targetResourcePath,
         Dictionary<string, string> pathReplacements, bool overwriteFiles)
     {
         if (resourcePath.GetResolvedText() is not string sourceRelativePath
@@ -305,16 +305,16 @@ public class ProjectResourceTools
         }
 
         // We already have this file
-        if (s_projectManager.ActiveProject?.Files.Contains(resourcePath!) == true)
+        if (_projectManager.ActiveProject?.Files.Contains(resourcePath!) == true)
         {
             return;
         }
 
-        if (s_archiveManager.Lookup(refPathHash, ArchiveManagerScope.Mods) is { HasValue: true } modFile)
+        if (_archiveManager.Lookup(refPathHash, ArchiveManagerScope.Mods) is { HasValue: true } modFile)
         {
             controller.AddToMod(modFile.Value, ArchiveManagerScope.Mods);
         }
-        else if (s_archiveManager.Lookup(refPathHash, ArchiveManagerScope.Basegame) is { HasValue: true } basegameFile)
+        else if (_archiveManager.Lookup(refPathHash, ArchiveManagerScope.Basegame) is { HasValue: true } basegameFile)
         {
             controller.AddToMod(basegameFile.Value, ArchiveManagerScope.Basegame);
         }
@@ -350,7 +350,8 @@ public class ProjectResourceTools
     }
 
 
-    public static async Task MoveAndRefactor(Cp77Project activeProject, string sourcePath, string destPath, string absoluteFolderPrefix,
+    public async Task MoveAndRefactor(Cp77Project activeProject, string sourcePath, string destPath,
+        string absoluteFolderPrefix,
         bool refactor)
     {
         var sourceRelPath = sourcePath;
@@ -425,21 +426,21 @@ public class ProjectResourceTools
                     overwriteFiles = response is WMessageBoxResult.OK or WMessageBoxResult.Yes;
                 }
 
-                FileHelper.MoveRecursively(sourceAbsPath, destAbsPath, overwriteFiles, s_loggerService);
+                FileHelper.MoveRecursively(sourceAbsPath, destAbsPath, overwriteFiles, _loggerService);
 
                 var sourceInRaw = sourceAbsPath.Replace("archive", "raw");
                 if (sourceInRaw != sourceAbsPath && Directory.Exists(sourceInRaw))
                 {
                     FileHelper.MoveRecursively(sourceInRaw, destAbsPath.Replace("archive", "raw"), overwriteFiles,
-                        s_loggerService);
+                        _loggerService);
                 }
 
-                s_loggerService?.Info($"Moved {sourceRelPath}{Path.DirectorySeparatorChar}* to {destRelPath}");
+                _loggerService.Info($"Moved {sourceRelPath}{Path.DirectorySeparatorChar}* to {destRelPath}");
             }
 
             catch (Exception e)
             {
-                s_loggerService?.Info(
+                _loggerService.Info(
                     $"Error when trying to move {sourceRelPath}{Path.DirectorySeparatorChar}*: {e.Message}");
             }
 
@@ -456,7 +457,7 @@ public class ProjectResourceTools
         ReplacePathInProject(activeProject, oldRelPath, newRelPath);
     }
 
-    public static void ReplacePathInProject(Cp77Project? activeProject, ResourcePath oldPath, ResourcePath newPath)
+    public void ReplacePathInProject(Cp77Project? activeProject, ResourcePath oldPath, ResourcePath newPath)
     {
         if (oldPath == newPath || activeProject is null)
         {
@@ -489,12 +490,12 @@ public class ProjectResourceTools
             return;
         }
 
-        s_loggerService?.Error($"Failed to auto-update references in the following files:");
-        failedFiles.ForEach((path) => s_loggerService?.Error($"  {path}"));
+        _loggerService.Error($"Failed to auto-update references in the following files:");
+        failedFiles.ForEach((path) => _loggerService.Error($"  {path}"));
     }
 
 
-    public static void ReplacePathInFile(Cp77Project? activeProject, string absoluteFilePath, ResourcePath oldPath,
+    public void ReplacePathInFile(Cp77Project? activeProject, string absoluteFilePath, ResourcePath oldPath,
         ResourcePath newPath)
     {
         if (oldPath == newPath || !File.Exists(absoluteFilePath) || activeProject is null)
@@ -593,7 +594,7 @@ public class ProjectResourceTools
                         throw new Exception();
                     }
 
-                    s_loggerService?.Debug($"Replaced \"{result.Path}\" in \"{absoluteFilePath}\"");
+                    _loggerService?.Debug($"Replaced \"{result.Path}\" in \"{absoluteFilePath}\"");
                     arr[index] = newValue;
                 }
                 else
@@ -619,7 +620,7 @@ public class ProjectResourceTools
                             throw new NotImplementedException($"Can't replace in property type {parentClass.Item2?.GetType().Name}");
                     }
 
-                    s_loggerService?.Debug($"Replaced \"{result.Path}\" in \"{absoluteFilePath}\"");
+                    _loggerService?.Debug($"Replaced \"{result.Path}\" in \"{absoluteFilePath}\"");
                 }
 
                 wasModified = true;

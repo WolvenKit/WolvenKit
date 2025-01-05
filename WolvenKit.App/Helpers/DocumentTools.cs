@@ -20,43 +20,47 @@ namespace WolvenKit.App.Helpers;
 
 public class DocumentTools
 {
-
-    private static ILoggerService s_loggerServiceInstance = null!;
+    private ILoggerService _loggerService;
+    private Cr2WTools _cr2wTools;
 
     public static Regex PlaceholderRegex { get; } = new Regex(@"^[-=_]+$");
 
-    public DocumentTools(ILoggerService loggerService) => s_loggerServiceInstance = loggerService;
+    public DocumentTools(ILoggerService loggerService, Cr2WTools cr2wTools)
+    {
+        _loggerService = loggerService;
+        _cr2wTools = cr2wTools;
+    }
 
 
     # region appfile
 
-    public static List<string> ConnectAppToEntFile(string absoluteAppFilePath, string absoluteEntFilePath,
+    public List<string> ConnectAppToEntFile(string absoluteAppFilePath, string absoluteEntFilePath,
         bool clearExistingEntries = false)
     {
         if (!File.Exists(absoluteAppFilePath))
         {
-            s_loggerServiceInstance.Error("App file does not exist.");
+            _loggerService.Error("App file does not exist.");
             return [];
         }
 
         if (!File.Exists(absoluteEntFilePath))
         {
-            s_loggerServiceInstance.Error("Ent file does not exist.");
+            _loggerService.Error("Ent file does not exist.");
             return [];
         }
 
-        var appCr2W = Cr2WTools.ReadCr2W(absoluteAppFilePath);
-        var entCr2W = Cr2WTools.ReadCr2W(absoluteEntFilePath);
+        var appCr2W = _cr2wTools.ReadCr2W(absoluteAppFilePath);
+        var entCr2W = _cr2wTools.ReadCr2W(absoluteEntFilePath);
 
         if (entCr2W.RootChunk is not entEntityTemplate ent)
         {
-            s_loggerServiceInstance.Error($"invalid .ent file: {absoluteEntFilePath}!");
+            _loggerService.Error($"invalid .ent file: {absoluteEntFilePath}!");
             return [];
         }
 
         if (appCr2W.RootChunk is not appearanceAppearanceResource app)
         {
-            s_loggerServiceInstance.Error($"invalid .app file: {absoluteAppFilePath}!");
+            _loggerService.Error($"invalid .app file: {absoluteAppFilePath}!");
             return [];
         }
 
@@ -106,12 +110,12 @@ public class DocumentTools
             ent.DefaultAppearance = ent.Appearances.LastOrDefault()?.Name.GetResolvedText() ?? "";
         }
 
-        Cr2WTools.WriteCr2W(entCr2W, absoluteEntFilePath);
+        _cr2wTools.WriteCr2W(entCr2W, absoluteEntFilePath);
         return appAppearanceNames;
     }
 
 
-    public static void SetFacialAnimations(string absoluteAppFilePath, PhotomodeBodyGender bodyGender)
+    public void SetFacialAnimations(string absoluteAppFilePath, PhotomodeBodyGender bodyGender)
     {
         var facialAnim = SelectAnimationPathViewModel.FacialAnimPathMale;
         if (bodyGender is PhotomodeBodyGender.Female)
@@ -123,8 +127,8 @@ public class DocumentTools
 
         SetFacialAnimations(absoluteAppFilePath, facialAnim, null, selectedAnims);
     }
-    
-    public static void SetFacialAnimations(string absoluteAppFilePath, string? facialAnim, string? animGraph,
+
+    public void SetFacialAnimations(string absoluteAppFilePath, string? facialAnim, string? animGraph,
         List<string> selectedAnims)
     {
         if (string.IsNullOrEmpty(facialAnim) && string.IsNullOrEmpty(animGraph) && selectedAnims.Count == 0)
@@ -134,15 +138,15 @@ public class DocumentTools
 
         if (!File.Exists(absoluteAppFilePath))
         {
-            s_loggerServiceInstance.Error($".app file {absoluteAppFilePath} does not exist.");
+            _loggerService.Error($".app file {absoluteAppFilePath} does not exist.");
             return;
         }
 
-        var appCr2W = Cr2WTools.ReadCr2W(absoluteAppFilePath);
+        var appCr2W = _cr2wTools.ReadCr2W(absoluteAppFilePath);
 
         if (appCr2W.RootChunk is not appearanceAppearanceResource app)
         {
-            s_loggerServiceInstance.Error($"invalid .app file: {absoluteAppFilePath}!");
+            _loggerService.Error($"invalid .app file: {absoluteAppFilePath}!");
             return;
         }
 
@@ -183,8 +187,8 @@ public class DocumentTools
             }
         }
 
-        s_loggerServiceInstance?.Success($"changed facial anims to {facialAnim}");
-        Cr2WTools.WriteCr2W(appCr2W, absoluteAppFilePath);
+        _loggerService?.Success($"changed facial anims to {facialAnim}");
+        _cr2wTools.WriteCr2W(appCr2W, absoluteAppFilePath);
     }
 
     # endregion

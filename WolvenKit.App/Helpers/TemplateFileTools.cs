@@ -20,20 +20,25 @@ namespace WolvenKit.App.Helpers;
 
 public class TemplateFileTools
 {
-    private static ILoggerService s_loggerService = null!;
-    private static IProjectManager s_projectManager = null!;
-    private static IModTools s_modTools = null!;
+    private readonly ILoggerService _loggerService;
+    private readonly IProjectManager _projectManager;
+    private readonly IModTools _modTools;
+    private readonly Cr2WTools _cr2WTools;
+    private readonly DocumentTools _documentTools;
 
-    public TemplateFileTools(ILoggerService loggerService, IProjectManager projectManager, IModTools modTools)
+    public TemplateFileTools(ILoggerService loggerService, IProjectManager projectManager, IModTools modTools,
+        Cr2WTools cr2WTools, DocumentTools documentTools)
     {
-        s_loggerService = loggerService;
-        s_projectManager = projectManager;
-        s_modTools = modTools;
+        _loggerService = loggerService;
+        _projectManager = projectManager;
+        _modTools = modTools;
+        _cr2WTools = cr2WTools;
+        _documentTools = documentTools;
     }
 
-    public static void CopyInkatlasTemplateSingle(string inkatlasRelativePath, bool forceOverwrite)
+    public void CopyInkatlasTemplateSingle(string inkatlasRelativePath, bool forceOverwrite)
     {
-        if (s_projectManager.ActiveProject is not Cp77Project activeProject)
+        if (_projectManager.ActiveProject is not Cp77Project activeProject)
         {
             return;
         }
@@ -52,7 +57,7 @@ public class TemplateFileTools
         var xbmExists = CopyResource(xbmResourcePath, xbmDestPath);
 
         var inkatlasAbsolutePath = Path.Join(activeProject.ModDirectory, inkatlasRelativePath);
-        if (!inkatlasExists || !xbmExists || Cr2WTools.ReadCr2W(inkatlasAbsolutePath) is
+        if (!inkatlasExists || !xbmExists || _cr2WTools.ReadCr2W(inkatlasAbsolutePath) is
                 not { RootChunk: inkTextureAtlas atlas } cr2W)
         {
             return;
@@ -63,7 +68,7 @@ public class TemplateFileTools
             inkTextureSlot.Texture = new CResourceAsyncReference<CBitmapTexture>(xbmDestPath);
         }
 
-        Cr2WTools.WriteCr2W(cr2W, inkatlasAbsolutePath);
+        _cr2WTools.WriteCr2W(cr2W, inkatlasAbsolutePath);
     }
 
     /// <summary>
@@ -73,10 +78,10 @@ public class TemplateFileTools
     /// <param name="targetRelativePath">Relative path of target file</param>
     /// <param name="forceOverwrite"></param>
     /// <param name="askOverwrite"></param>
-    private static bool CopyResource(string resourceRelativePath, string targetRelativePath,
+    private bool CopyResource(string resourceRelativePath, string targetRelativePath,
         bool forceOverwrite = false, bool askOverwrite = false)
     {
-        if (s_projectManager.ActiveProject is not Cp77Project activeProject)
+        if (_projectManager.ActiveProject is not Cp77Project activeProject)
         {
             return false;
         }
@@ -87,7 +92,7 @@ public class TemplateFileTools
 
         if (!File.Exists(sourceAbsolutePath))
         {
-            s_loggerService.Error($"Failed to read resource from files: {resourceRelativePath}");
+            _loggerService.Error($"Failed to read resource from files: {resourceRelativePath}");
             return false;
         }
 
@@ -106,10 +111,10 @@ public class TemplateFileTools
         {
             if (resourceRelativePath.EndsWith(".json"))
             {
-                s_loggerService.Info($"Adding and converting {resourceRelativePath}...");
+                _loggerService.Info($"Adding and converting {resourceRelativePath}...");
                 var sourceFileName = Path.GetFileName(sourceAbsolutePath).Replace(".json", "");
 
-                if (!s_modTools.ConvertFromJsonAndWrite(sourceAbsolutePath, absoluteDestDir))
+                if (!_modTools.ConvertFromJsonAndWrite(sourceAbsolutePath, absoluteDestDir))
                 {
                     return false;
                 }
@@ -138,13 +143,13 @@ public class TemplateFileTools
 
             if (err.Message.Contains(" | LineNumber"))
             {
-                s_loggerService.Error($"Failed to parse JSON in {relativePath}.");
-                s_loggerService.Error(
+                _loggerService.Error($"Failed to parse JSON in {relativePath}.");
+                _loggerService.Error(
                     $"The error is in LineNumber{err.Message.Split(" | LineNumber").LastOrDefault()}");
             }
             else
             {
-                s_loggerService.Error($"Something went _really_ wrong when trying to parse {relativePath}:");
+                _loggerService.Error($"Something went _really_ wrong when trying to parse {relativePath}:");
                 throw;
             }
         }
@@ -152,7 +157,7 @@ public class TemplateFileTools
         return false;
     }
 
-    public static void CreatePhotomodeYaml(PhotomodeYamlOptions options)
+    public void CreatePhotomodeYaml(PhotomodeYamlOptions options)
     {
         if (string.IsNullOrEmpty(options.NpcName))
         {
@@ -232,9 +237,9 @@ public class TemplateFileTools
     /// </summary>
     /// <param name="options">option object</param>
     /// <returns>A list with all appearances in the .ent file</returns>
-    public static void CreatePhotoModeAppAndEnt(PhotomodeEntAppOptions options)
+    public void CreatePhotoModeAppAndEnt(PhotomodeEntAppOptions options)
     {
-        if (s_projectManager.ActiveProject is not Cp77Project activeProject)
+        if (_projectManager.ActiveProject is not Cp77Project activeProject)
         {
             return;
         }
@@ -282,7 +287,7 @@ public class TemplateFileTools
 
         foreach (var warning in warnings)
         {
-            s_loggerService.Error(warning);
+            _loggerService.Error(warning);
         }
 
         if (!File.Exists(entTargetAbsPath))
@@ -297,23 +302,23 @@ public class TemplateFileTools
             return;
         }
 
-        DocumentTools.SetFacialAnimations(appTargetAbsPath, options.BodyGender);
+        _documentTools.SetFacialAnimations(appTargetAbsPath, options.BodyGender);
 
-        DocumentTools.ConnectAppToEntFile(appTargetAbsPath, entTargetAbsPath, true);
+        _documentTools.ConnectAppToEntFile(appTargetAbsPath, entTargetAbsPath, true);
     }
 
 
-    private static void AddPhotomodeComponentsToEnt(string entTargetAbsPath, PhotomodeBodyGender bodyGender)
+    private void AddPhotomodeComponentsToEnt(string entTargetAbsPath, PhotomodeBodyGender bodyGender)
     {
         if (!File.Exists(entTargetAbsPath))
         {
-            s_loggerService.Error($"File not found: {entTargetAbsPath}");
+            _loggerService.Error($"File not found: {entTargetAbsPath}");
             return;
         }
 
-        if (Cr2WTools.ReadCr2W(entTargetAbsPath) is not { RootChunk: entEntityTemplate ent } cr2W)
+        if (_cr2WTools.ReadCr2W(entTargetAbsPath) is not { RootChunk: entEntityTemplate ent } cr2W)
         {
-            s_loggerService.Error($"invalid .ent: {entTargetAbsPath}");
+            _loggerService.Error($"invalid .ent: {entTargetAbsPath}");
             return;
         }
 
@@ -420,10 +425,10 @@ public class TemplateFileTools
                 });
         }
 
-        Cr2WTools.WriteCr2W(cr2W, entTargetAbsPath);
+        _cr2WTools.WriteCr2W(cr2W, entTargetAbsPath);
     }
 
-    public static void CreateOrAppendToJsonFile(
+    public void CreateOrAppendToJsonFile(
         string absoluteFilePath,
         Dictionary<string, string> entries,
         bool overwrite,
@@ -432,7 +437,7 @@ public class TemplateFileTools
         CR2WFile cr2W;
         if (File.Exists(absoluteFilePath))
         {
-            cr2W = Cr2WTools.ReadCr2W(absoluteFilePath);
+            cr2W = _cr2WTools.ReadCr2W(absoluteFilePath);
         }
         else
         {
@@ -478,7 +483,7 @@ public class TemplateFileTools
             }");
         }
 
-        Cr2WTools.WriteCr2W(cr2W, absoluteFilePath);
+        _cr2WTools.WriteCr2W(cr2W, absoluteFilePath);
     }
 }
 

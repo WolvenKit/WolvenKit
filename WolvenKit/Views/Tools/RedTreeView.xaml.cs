@@ -16,6 +16,7 @@ using CommunityToolkit.Mvvm.Input;
 using ReactiveUI;
 using Splat;
 using Syncfusion.UI.Xaml.TreeView;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
@@ -37,13 +38,15 @@ namespace WolvenKit.Views.Tools
         private readonly ILoggerService _loggerService;
         private readonly IProgressService<double> _progressService;
         private readonly AppViewModel _appViewModel;
+        private readonly ProjectResourceTools _projectResourceTools;
 
         public RedTreeView()
         {
             _modifierViewStateSvc = Locator.Current.GetService<IModifierViewStateService>();
             _loggerService = Locator.Current.GetService<ILoggerService>();
             _progressService = Locator.Current.GetService<IProgressService<double>>();
-            _appViewModel = Locator.Current.GetService<AppViewModel>(); 
+            _appViewModel = Locator.Current.GetService<AppViewModel>();
+            _projectResourceTools = Locator.Current.GetService<ProjectResourceTools>(); 
             
             InitializeComponent();
 
@@ -837,6 +840,16 @@ namespace WolvenKit.Views.Tools
         [RelayCommand]
         private async Task DuplicateSelection() => await DuplicateSelectedChunks(ModifierViewStateService.IsShiftBeingHeld);
 
+        [RelayCommand]
+        private Task AddToProject()
+        {
+            if (SelectedItem is ChunkViewModel cvm && cvm.PropertyType.IsAssignableTo(typeof(IRedRef)))
+            {
+                _projectResourceTools.AddToProject(((IRedRef)cvm.ResolvedData).DepotPath);
+            }
+
+            return Task.CompletedTask;
+        }
 
         private bool CanOpenSearchAndReplaceDialog => !_isContextMenuOpen &&
                                                       SelectedItem is ChunkViewModel { Parent: not null } &&

@@ -42,6 +42,9 @@ namespace WolvenKit.Views.Documents
         private readonly ProjectExplorerViewModel _projectExplorer;
         private readonly AppViewModel _appViewModel;
         private readonly IProgressService<double> _progressService;
+        private readonly ProjectResourceTools _projectResourceTools;
+        private readonly DocumentTools _documentTools;
+        private readonly Cr2WTools _cr2WTools;
         
         
         public RedDocumentViewMenuBar()
@@ -55,6 +58,9 @@ namespace WolvenKit.Views.Documents
             _modifierStateService = Locator.Current.GetService<IModifierViewStateService>()!;
             _progressService = Locator.Current.GetService<IProgressService<double>>()!;
             _projectExplorer = Locator.Current.GetService<ProjectExplorerViewModel>()!;
+            _projectResourceTools = Locator.Current.GetService<ProjectResourceTools>()!;
+            _documentTools = Locator.Current.GetService<DocumentTools>()!;
+            _cr2WTools = Locator.Current.GetService<Cr2WTools>()!;
 
             _appViewModel = Locator.Current.GetService<AppViewModel>()!;
 
@@ -291,7 +297,7 @@ namespace WolvenKit.Views.Documents
 
             var destFolder = GetTextureDirForDependencies(true);
             // Use search and replace to fix file paths
-            var pathReplacements = await ProjectResourceTools.AddDependenciesToProjectPathAsync(
+            var pathReplacements = await _projectResourceTools.AddDependenciesToProjectPathAsync(
                 destFolder, materialDependencies
             );
 
@@ -519,14 +525,15 @@ namespace WolvenKit.Views.Documents
                     entFilePath = Path.Combine(_projectManager.ActiveProject.ModDirectory, entFilePath);
                 }
 
-                var cr2WFile = Cr2WTools.ReadCr2W(entFilePath);
+                var cr2WFile = _cr2WTools.ReadCr2W(entFilePath);
                 if (cr2WFile.RootChunk is not entEntityTemplate ent)
                 {
                     _loggerService.Error($"invalid .ent file: {entFilePath}!");
                     return;
                 }
 
-                DocumentTools.ConnectAppToEntFile(Path.Combine(_projectManager.ActiveProject.ModDirectory, appFilePath),
+                _documentTools.ConnectAppToEntFile(
+                    Path.Combine(_projectManager.ActiveProject.ModDirectory, appFilePath),
                     entFilePath);
             }
             catch (Exception err)
@@ -638,7 +645,7 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            DocumentTools.SetFacialAnimations(RootChunk.Tab.FilePath, dialog.ViewModel?.SelectedFacialAnim,
+            _documentTools.SetFacialAnimations(RootChunk.Tab.FilePath, dialog.ViewModel?.SelectedFacialAnim,
                 dialog.ViewModel?.SelectedGraph, dialog.ViewModel?.SelectedAnimEntries ?? []);
             
         }
