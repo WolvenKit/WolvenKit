@@ -529,9 +529,13 @@ namespace WolvenKit.Views.Documents
                     entFilePath = Path.Combine(_projectManager.ActiveProject.ModDirectory, entFilePath);
                 }
 
-                _documentTools.ConnectAppToEntFile(
-                    Path.Combine(_projectManager.ActiveProject.ModDirectory, appFilePath),
-                    entFilePath);
+                var appFilePath = RootChunk.Tab.FilePath;
+                if (!Path.IsPathRooted(appFilePath))
+                {
+                    appFilePath = Path.Combine(_projectManager.ActiveProject.ModDirectory, appFilePath);
+                }
+
+                _documentTools.ConnectAppToEntFile(appFilePath, entFilePath);
             }
             catch (Exception err)
             {

@@ -308,6 +308,16 @@ namespace WolvenKit.Views.Tools
             set => SetValue(IsArrayItemSelectedProperty, value);
         }
 
+        /// <summary>Identifies the <see cref="IsHandleSelected"/> dependency property.</summary>
+        public static readonly DependencyProperty IsHandleSelectedProperty =
+            DependencyProperty.Register(nameof(IsHandleSelected), typeof(object), typeof(RedTreeView));
+
+        public object IsHandleSelected
+        {
+            get => GetValue(IsHandleSelectedProperty);
+            set => SetValue(IsHandleSelectedProperty, value);
+        }
+
 
         /// <summary>Identifies the <see cref="IsCtrlBeingHeld"/> dependency property.</summary>
         public static readonly DependencyProperty IsCtrlBeingHeldProperty =
@@ -975,7 +985,22 @@ namespace WolvenKit.Views.Tools
 
         #region handles
 
-        private bool CanPasteHandleSingle() => IsHandleSelected && HasHandleCopied;
+        private static bool IsHandle(IRedType potentialHandle)
+        {
+            if (potentialHandle is null)
+            {
+                return false;
+            }
+
+            var propertyType = potentialHandle.GetType();
+            return
+                propertyType.IsAssignableTo(typeof(IRedBaseHandle)) && (
+                    propertyType.GetGenericTypeDefinition() == typeof(CHandle<>) ||
+                    propertyType.GetGenericTypeDefinition() == typeof(CWeakHandle<>));
+        }
+
+        private bool CanPasteHandleSingle() => IsHandle(RedDocumentTabViewModel.CopiedChunk) &&
+                                               SelectedItem is ChunkViewModel cvm && cvm.CanPasteSelection(true);
 
         [RelayCommand(CanExecute = nameof(CanPasteHandleSingle))]
         private void PasteHandleSingle()
