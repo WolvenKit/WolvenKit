@@ -81,6 +81,24 @@ public sealed partial class Cp77Project(string location, string name, string mod
         }
     }
 
+    /// <summary>
+    /// Returns all files inside <see cref="ResourcesDirectory"/> 
+    /// </summary>
+    public List<string> ResourceFiles
+    {
+        get
+        {
+            if (!Directory.Exists(ResourcesDirectory))
+            {
+                Directory.CreateDirectory(ResourcesDirectory);
+            }
+
+            return Directory.EnumerateFiles(ResourcesDirectory, "*", SearchOption.AllDirectories)
+                .Select(file => file[(ResourcesDirectory.Length + 1)..])
+                .ToList();
+        }
+    }
+
 
     /// <summary>
     /// Returns all files inside <see cref="RawDirectory"/> 
@@ -102,7 +120,7 @@ public sealed partial class Cp77Project(string location, string name, string mod
 
 
     /// <summary>
-    /// Path to root level directory (where the .csproj file is)
+    /// Absolute path to root level directory (where the .csproj file is)
     /// </summary>
     public string ProjectDirectory
     {
@@ -115,7 +133,7 @@ public sealed partial class Cp77Project(string location, string name, string mod
 
 
     /// <summary>
-    /// Path to /source/raw
+    /// Absolute path to /source
     /// </summary>
     public string FileDirectory
     {
@@ -138,7 +156,7 @@ public sealed partial class Cp77Project(string location, string name, string mod
     }
 
     /// <summary>
-    /// Path to /source/archive
+    /// Absolute path to /source/archive
     /// </summary>
     public string ModDirectory
     {
@@ -178,7 +196,7 @@ public sealed partial class Cp77Project(string location, string name, string mod
     }
 
     /// <summary>
-    /// Path to /source/raw
+    /// Absolute path to /source/raw
     /// </summary>
     public string RawDirectory
     {
@@ -202,7 +220,7 @@ public sealed partial class Cp77Project(string location, string name, string mod
 
 
     /// <summary>
-    /// Path to /source/customSounds
+    /// Absolute path to /source/customSounds
     /// </summary>
     public string SoundDirectory
     {
@@ -219,7 +237,7 @@ public sealed partial class Cp77Project(string location, string name, string mod
     }
 
     /// <summary>
-    /// Path to /source/resources
+    /// Absolute path to /source/resources
     /// </summary>
     public string ResourcesDirectory
     {
@@ -396,21 +414,26 @@ public sealed partial class Cp77Project(string location, string name, string mod
         _ = ResourcesDirectory;
     }
 
-    public (string, string) SplitFilePath(string fullPath) => (GetPrefixPath(fullPath), GetRelativePath(fullPath));
+    public (string, string) SplitFilePath(string fullPath) =>
+        (GetAbsoluteSubDirPath(fullPath), GetRelativePath(fullPath));
 
-    public string GetPrefixPath(string absolutePath)
+    /// <returns>The absolute path to the subdirectory containing the file, e.g. C:\CyberpunkFiles\...\source\archive</returns>
+    private string GetAbsoluteSubDirPath(string absolutePath)
     {
-        if (absolutePath.StartsWith(ModDirectory, StringComparison.Ordinal))
+        if (absolutePath.StartsWith(ModDirectory, StringComparison.Ordinal) ||
+            absolutePath.StartsWith(s_relativeModDir))
         {
             return ModDirectory;
         }
 
-        if (absolutePath.StartsWith(RawDirectory, StringComparison.Ordinal))
+        if (absolutePath.StartsWith(RawDirectory, StringComparison.Ordinal) ||
+            absolutePath.StartsWith(s_relativeRawDir))
         {
             return RawDirectory;
         }
 
-        if (absolutePath.StartsWith(PackedRootDirectory, StringComparison.Ordinal))
+        if (absolutePath.StartsWith(PackedRootDirectory, StringComparison.Ordinal) ||
+            absolutePath.StartsWith(s_relativePackedDir))
         {
             return PackedRootDirectory;
         }
@@ -428,12 +451,29 @@ public sealed partial class Cp77Project(string location, string name, string mod
         return "";
     }
 
-    public string GetAbsolutePath(string fullPath)
+    private static bool IsResourceFile(string fileNameOrPath) =>
+        Path.GetExtension(fileNameOrPath) switch
+        {
+            ".xl" => true,
+            ".yaml" => true,
+            ".yml" => true,
+            ".lua" => true,
+            ".reds" => true,
+            _ => false,
+        };
+
+
+    public string GetAbsolutePath(string relativeOrAbsolutePath)
     {
-        var (prefix, relativePath) = SplitFilePath(fullPath);
+        if (Path.IsPathRooted(relativeOrAbsolutePath))
+        {
+            return relativeOrAbsolutePath;
+        }
+
+        var (prefix, relativePath) = SplitFilePath(relativeOrAbsolutePath);
         prefix = prefix.Replace(ProjectDirectory, "");
 
-        if (relativePath == fullPath)
+        if (relativePath == relativeOrAbsolutePath)
         {
             return Path.Join(ModDirectory, prefix, relativePath);
         }
@@ -446,6 +486,36 @@ public sealed partial class Cp77Project(string location, string name, string mod
         return Path.Join(prefix, relativePath);
     }
 
+
+    private static readonly string s_tweakSubfolder = Path.Join("r6", "tweaks");
+
+    public string GetAbsolutePath(string fileName, string? rootRelativeFolder)
+    {
+        rootRelativeFolder ??= "";
+        switch (Path.GetExtension(fileName))
+        {
+            case ".yaml" when string.IsNullOrEmpty(rootRelativeFolder):
+                rootRelativeFolder = s_tweakSubfolder;
+                break;
+            case ".yaml" when !rootRelativeFolder.StartsWith(s_tweakSubfolder):
+                rootRelativeFolder = Path.Join(s_tweakSubfolder, rootRelativeFolder);
+                break;
+            default:
+                break;
+        }
+
+        return Path.GetExtension(fileName) switch
+        {
+            ".xl" => Path.Join(ResourcesDirectory, fileName),
+            ".yaml" => Path.Join(ResourcesDirectory, rootRelativeFolder, fileName),
+            _ => Path.Join(ModDirectory, rootRelativeFolder, fileName)
+        };
+    }
+
+    private const string s_relativeModDir = "wkitmoddir";
+    private const string s_relativeRawDir = "wkitrawdir";
+    private const string s_relativePackedDir = "wkitpackeddir";
+
     public string GetRelativePath(string absolutePath)
     {
         if (absolutePath.Equals(FileDirectory, StringComparison.Ordinal))
@@ -456,20 +526,20 @@ public sealed partial class Cp77Project(string location, string name, string mod
         // hack so that we get proper hashes
         if (absolutePath.Equals(ModDirectory, StringComparison.Ordinal))
         {
-            return "wkitmoddir";
+            return s_relativeModDir;
         }
 
         if (absolutePath.Equals(RawDirectory, StringComparison.Ordinal))
         {
-            return "wkitrawdir";
+            return s_relativeRawDir;
         }
 
         if (absolutePath.Equals(PackedRootDirectory, StringComparison.Ordinal))
         {
-            return "wkitpackeddir";
+            return s_relativePackedDir;
         }
 
-        if (GetPrefixPath(absolutePath) is string s && s != "")
+        if (GetAbsoluteSubDirPath(absolutePath) is string s && s != "")
         {
             return absolutePath[(s.Length + 1)..];
         }
@@ -766,5 +836,6 @@ public sealed partial class Cp77Project(string location, string name, string mod
             }
         }
     }
+
 }
     

@@ -180,7 +180,7 @@
                 </Style.Triggers>
             </Style>
 
-            <!-- Appearances: .ent -->
+            <!-- Appearances: .app/.ent -->
             <Style
                 x:Key="ShowComponentsAppearancesMenuItemStyle"
                 BasedOn="{StaticResource HasNestedMenuItemStyle}"
@@ -537,7 +537,7 @@
                     <MenuItem.Icon>
                         <templates:IconBox IconPack="Empty" />
                     </MenuItem.Icon>
-                </MenuItem>
+                </MenuItem>   
                 <MenuItem
                     Style="{StaticResource ShowAppMenuItemStyle}"
                     Header="Find unused files in project"
@@ -566,19 +566,15 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <!-- Connect to .ent file -->
                 <MenuItem
-                    Style="{StaticResource WolvenKitToolBarItem}"
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Header="Convert to photo mode app"
-                    Command="{Binding Path=ConvertToPhotoModeAppCommand}"
-                    Click="OnConvertToPhotoModeClick">
+                    Style="{StaticResource ShowAppMenuItemStyle}"
+                    Header="Connect to .ent file"
+                    Click="OnConnectToEntFileClick">
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
-                            Kind="Camera"
+                            Kind="EmoticonHappy"
                             Foreground="White" />
                     </MenuItem.Icon>
                 </MenuItem>

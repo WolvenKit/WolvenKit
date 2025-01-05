@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 
 namespace WolvenKit.App.Interaction;
@@ -113,4 +114,7 @@ public static class Interactions
 
     public static Func<string?, string?> ShowSelectSaveView { get; set; } =
         (string? currentSaveGame) => throw new NotImplementedException();
+
+    public static Func<(Cp77Project activeProject, ISettingsManager settingsManager), CreatePhotoModeAppViewModel?>
+        ShowPhotoModeDialogue { get; set; } = _ => throw new NotImplementedException();
 }

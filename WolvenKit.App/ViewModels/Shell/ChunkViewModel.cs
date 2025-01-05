@@ -2130,11 +2130,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     [RelayCommand(CanExecute = nameof(CanImportWorldNodeData))]   // TODO RelayCommand check notify
     private Task ImportWorldNodeDataWithoutCoordsAsync() => ImportWorldNodeDataTask(false);
 
-    private bool CanAddToProject() => PropertyType.IsAssignableTo(typeof(IRedRef));
-
-    [RelayCommand(CanExecute = nameof(CanAddToProject))]
-    private Task AddToProject() => AddToProjectTask();
-
     public void DeleteNodesInParent(List<ChunkViewModel> nodes)
     {
         ArgumentNullException.ThrowIfNull(Parent);
@@ -3954,16 +3949,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         RecalculateProperties();
 
         DeleteAllCommand.NotifyCanExecuteChanged();
-    }
-
-    private Task AddToProjectTask()
-    {
-        if (PropertyType.IsAssignableTo(typeof(IRedRef)))
-        {
-            ProjectResourceHelper.AddToProject(((IRedRef)ResolvedData).DepotPath);
-        }
-
-        return Task.CompletedTask;
     }
 
     private Task<bool> ImportWorldNodeDataTask(bool updatecoords)

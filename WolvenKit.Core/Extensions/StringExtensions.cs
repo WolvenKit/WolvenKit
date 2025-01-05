@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using WolvenKit.Common;
 
 namespace WolvenKit.Interfaces.Extensions
@@ -128,5 +129,24 @@ namespace WolvenKit.Interfaces.Extensions
 
             return result;
         }
+
+        public static bool IsNullOrEmptyOrEndsWith(this string? target, string value) =>
+            string.IsNullOrEmpty(target) || target.EndsWith(value);
+
+        public static bool IsEmptyOrEndsWith(this string target, string value) =>
+            target == "" || target.EndsWith(value);
+
+#pragma warning disable SYSLIB1045
+        // Generated regex attribute means the class can't be abstract anymore
+        /// <summary>
+        /// Generates redengine friendly file name 
+        /// </summary>
+        public static string ToFileName(this string target) =>
+            new string(target.Where(c => !Path.GetInvalidFileNameChars().Contains(c)).ToArray()).Trim()
+                .Replace(" ", "_").ToLower();
+#pragma warning restore SYSLIB1045
+
+        public static string ToHumanFriendlyString(this string? target) =>
+            string.IsNullOrEmpty(target) ? "" : target.Replace("_", " ").CapitalizeEachWord();
     }
 }

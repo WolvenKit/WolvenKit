@@ -18,5 +18,6 @@ public interface IWatcherService
     public void UnwatchProject(Cp77Project? project);
     public void WatchProject(Cp77Project project);
 
+    public bool IsWatcherStopped { get; }
 
 }

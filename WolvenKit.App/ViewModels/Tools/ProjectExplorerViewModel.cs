@@ -15,6 +15,7 @@ using System.Windows.Threading;
 using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Octokit;
 using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
@@ -34,6 +35,7 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.Archive;
 using Clipboard = System.Windows.Clipboard;
+using FileMode = System.IO.FileMode;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
 namespace WolvenKit.App.ViewModels.Tools;
@@ -67,9 +69,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private readonly ISettingsManager _settingsManager;
     private readonly IArchiveManager _archiveManager;
+    private readonly ProjectResourceTools _projectResourceTools;
 
     #endregion fields
 
+    private static ProjectExplorerViewModel? s_instance;
     public ProjectExplorerViewModel(
         AppViewModel appViewModel,
         IProjectManager projectManager,
@@ -80,7 +84,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         IPluginService pluginService,
         ISettingsManager settingsManager,
         IModifierViewStateService modifierSvc,
-        IArchiveManager archiveManager
+        IArchiveManager archiveManager,
+        ProjectResourceTools projectResourceTools
     ) : base(s_toolTitle)
     {
         _projectManager = projectManager;
@@ -91,6 +96,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _pluginService = pluginService;
         _settingsManager = settingsManager;
         _archiveManager = archiveManager;
+        _projectResourceTools = projectResourceTools;
         ModifierStateService = modifierSvc;
 
         _appViewModel = appViewModel;
@@ -119,6 +125,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         svc.ThreadIdleTenSeconds += (_, _) => SaveProjectExplorerExpansionStateIfDirty();
         svc.ThreadIdleTenSeconds += (_, _) => SaveProjectExplorerTabIfDirty();
+
+        s_instance = this;
     }
 
 
@@ -280,7 +288,17 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     private bool CanRefresh() => ActiveProject != null;
     [RelayCommand(CanExecute = nameof(CanRefresh))]
-    private void Refresh() => _projectWatcher.Refresh();
+    private void Refresh()
+    {
+        if (_projectWatcher.IsWatcherStopped)
+        {
+            ResumeFileWatcher();
+        }
+        else
+        {
+            _projectWatcher.Refresh();
+        }
+    }
 
     public string GetActiveFolderPath() => SelectedTabIndex switch
     {
@@ -815,7 +833,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        await ProjectResourceHelper.MoveAndRefactor(_projectManager.ActiveProject, relativePath, newRelativePath, prefixPath, refactor);
+        await _projectResourceTools.MoveAndRefactor(_projectManager.ActiveProject, relativePath, newRelativePath,
+            prefixPath, refactor);
         _appViewModel.ReloadChangedFiles();
     }
 
@@ -1149,20 +1168,44 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     public void SuspendFileWatcher()
     {
-        if (ActiveProject is Cp77Project project)
+        if (ActiveProject is not Cp77Project project)
+        {
+            return;
+        }
+
+        try
         {
             _projectWatcher.UnwatchProject(project);
             _projectWatcher.ForceStop();
         }
+        catch
+        {
+            _loggerService.Error("Failed to suspend file watcher. Please ignore any errors.");
+        }
     }
+
+    public static void SuspendFileWatcherStatic() => s_instance?.SuspendFileWatcher();
+    public static void ResumeFileWatcherStatic() => s_instance?.ResumeFileWatcher();
 
     public void ResumeFileWatcher()
     {
-        if (ActiveProject is Cp77Project project)
+        if (ActiveProject is not Cp77Project project)
+        {
+            return;
+        }
+
+        try
         {
             _projectWatcher.WatchProject(project);
             _projectWatcher.Refresh();
         }
+        catch
+        {
+            _loggerService.Error(
+                "Failed to resume file watcher. Please hit the refresh button in the project browser.");
+            _loggerService.Error("If that doesn't solve the problem, restart WolvenKit.");
+        }
+        
     }
 
     public void OnKeyStateChanged(KeyEventArgs e)

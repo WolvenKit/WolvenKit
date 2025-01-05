@@ -4,6 +4,20 @@ using WolvenKit.App.Models.Docking;
 
 namespace WolvenKit.App.ViewModels.Documents;
 
+public class SaveAsParameters
+{
+    public object OriginalObject { get; set; }
+    public string AbsoluteFilePath { get; set; }
+    public bool SkipOnSaveHook { get; set; }
+
+    public SaveAsParameters(object originalObject, string absoluteFilePath, bool skipOnSaveHook = false)
+    {
+        OriginalObject = originalObject;
+        AbsoluteFilePath = absoluteFilePath;
+        SkipOnSaveHook = skipOnSaveHook;
+    }
+}
+
 public interface IDocumentViewModel : IDockElement
 {
     /// <summary>
@@ -20,7 +34,7 @@ public interface IDocumentViewModel : IDockElement
     DateTime LastWriteTime { get; }
 
     IAsyncRelayCommand<object> SaveCommand { get; }
-    IRelayCommand<object> SaveAsCommand { get; }
+    IRelayCommand<SaveAsParameters> SaveAsCommand { get; }
     
     //public ICommand Close { get; set; }
 

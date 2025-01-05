@@ -127,4 +127,5 @@ public static partial class ArchiveXlHelper
 
         return Substitute(depotPath);
     }
+
 }
