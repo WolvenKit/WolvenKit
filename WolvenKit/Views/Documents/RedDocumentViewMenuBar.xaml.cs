@@ -21,7 +21,6 @@ using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common;
-using WolvenKit.Common.Extensions;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
@@ -498,8 +497,7 @@ namespace WolvenKit.Views.Documents
                     return;
                 }
 
-                var appFilePath = RootChunk.Tab?.FilePath;
-                if (string.IsNullOrEmpty(appFilePath))
+                if (string.IsNullOrEmpty(RootChunk.Tab?.FilePath))
                 {
                     _loggerService.Error($"Can't read current .app file!");
                     return;
@@ -514,10 +512,16 @@ namespace WolvenKit.Views.Documents
 
                 if (!activeProject.Files.Contains(entFilePath.StartsWith("archive")
                         ? entFilePath
-                        : $"archive{Path.DirectorySeparatorChar}{entFilePath}"))
+                        : Path.Join("archive", entFilePath)))
                 {
                     _loggerService.Error($"Can't find .ent file {entFilePath}!");
                     return;
+                }
+
+                if (_archiveManager.GetGameFile(entFilePath, false, false) is not null)
+                {
+                    throw new WolvenKitException(0x3003,
+                        $"Don't overwrite base game files! Use ArchiveXL resource patching instead!");
                 }
 
                 if (!Path.IsPathRooted(entFilePath))
@@ -525,16 +529,13 @@ namespace WolvenKit.Views.Documents
                     entFilePath = Path.Combine(_projectManager.ActiveProject.ModDirectory, entFilePath);
                 }
 
-                var cr2WFile = _cr2WTools.ReadCr2W(entFilePath);
-                if (cr2WFile.RootChunk is not entEntityTemplate ent)
+                var appFilePath = RootChunk.Tab.FilePath;
+                if (!Path.IsPathRooted(appFilePath))
                 {
-                    _loggerService.Error($"invalid .ent file: {entFilePath}!");
-                    return;
+                    appFilePath = Path.Combine(_projectManager.ActiveProject.ModDirectory, appFilePath);
                 }
 
-                _documentTools.ConnectAppToEntFile(
-                    Path.Combine(_projectManager.ActiveProject.ModDirectory, appFilePath),
-                    entFilePath);
+                _documentTools.ConnectAppToEntFile(appFilePath, entFilePath);
             }
             catch (Exception err)
             {
@@ -649,5 +650,8 @@ namespace WolvenKit.Views.Documents
                 dialog.ViewModel?.SelectedGraph, dialog.ViewModel?.SelectedAnimEntries ?? []);
             
         }
+        
+        
+
     }
 }

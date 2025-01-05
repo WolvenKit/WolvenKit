@@ -21,15 +21,19 @@ namespace WolvenKit.App.ViewModels.Documents;
 
 public partial class RedDocumentViewToolbarModel : ObservableObject
 {
+    
     private readonly IProjectManager _projectManager;
     private readonly ISettingsManager _settingsManager;
     private readonly IModifierViewStateService? _modifierViewStateService;
 
-    public RedDocumentViewToolbarModel(ISettingsManager settingsManager,
-        IModifierViewStateService modifierSvc, IProjectManager projectManager)
+    public RedDocumentViewToolbarModel(
+        ISettingsManager settingsManager,
+        IModifierViewStateService modifierSvc,
+        IProjectManager projectManager
+    )
     {
         EditorLevel = settingsManager.DefaultEditorDifficultyLevel;
-
+   
         _modifierViewStateService = modifierSvc;
         modifierSvc.ModifierStateChanged += OnModifierChanged;
         modifierSvc.PropertyChanged += (_, args) => OnPropertyChanged(args.PropertyName);
@@ -130,26 +134,22 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(AdjustSubmeshCountCommand))]
     [NotifyCanExecuteChangedFor(nameof(DeleteDuplicateEntriesCommand))]
     [NotifyCanExecuteChangedFor(nameof(RegenerateVisualControllersCommand))]
-    [NotifyCanExecuteChangedFor(nameof(DeleteUnusedMaterialsCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateMissingMaterialsCommand))]
     [ObservableProperty]
     private RedDocumentItemType _contentType;
     
     [NotifyCanExecuteChangedFor(nameof(AddDependenciesCommand))]
     [NotifyCanExecuteChangedFor(nameof(AddDependenciesFullCommand))]
-    [NotifyCanExecuteChangedFor(nameof(ClearMaterialsCommand))]
     [ObservableProperty] private bool _isShiftKeyDown;
 
     [NotifyCanExecuteChangedFor(nameof(AddDependenciesCommand))]
     [NotifyCanExecuteChangedFor(nameof(AddDependenciesFullCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateNewCruidCommand))]
     [NotifyCanExecuteChangedFor(nameof(RegenerateVisualControllersCommand))]
-    [NotifyCanExecuteChangedFor(nameof(ClearMaterialsCommand))]
     [NotifyCanExecuteChangedFor(nameof(ToggleEnableMaskCommand))]
     [NotifyCanExecuteChangedFor(nameof(ScrollToMaterialCommand))]
     [NotifyCanExecuteChangedFor(nameof(ToggleLocalInstanceCommand))]
     [NotifyCanExecuteChangedFor(nameof(DeleteDuplicateEntriesCommand))]
-    [NotifyCanExecuteChangedFor(nameof(DeleteUnusedMaterialsCommand))]
     [NotifyCanExecuteChangedFor(nameof(ConvertPreloadMaterialsCommand))]
     [ObservableProperty]
     private ChunkViewModel? _selectedChunk;
@@ -307,12 +307,21 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     /*
      * mesh: clear appearances
      */
-    private bool CanClearAppearances() => RootChunk?.CanClearMaterials() == true;
+    private bool CanClearMaterials() => RootChunk?.ResolvedData is CMesh;
 
     private bool HasMeshAppearances() => RootChunk?.ResolvedData is CMesh { Appearances.Count: > 0 };
 
-    [RelayCommand(CanExecute = nameof(CanClearAppearances))]
-    private void ClearMaterials() => RootChunk?.ClearMaterialsCommand.Execute(null);
+    [RelayCommand(CanExecute = nameof(CanClearMaterials))]
+    private void ClearMaterials()
+    {
+        if (RootChunk?.ResolvedData is not CMesh mesh)
+        {
+            return;
+        }
+
+        mesh.Appearances.Clear();
+        RootChunk.DeleteUnusedMaterialsCommand.Execute(false);
+    }
 
     #region meshfile_materials
 

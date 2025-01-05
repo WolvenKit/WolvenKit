@@ -10,7 +10,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
-using DynamicData;
 using Splat;
 using Syncfusion.UI.Xaml.TreeView;
 using WolvenKit.App.Helpers;
@@ -52,9 +51,10 @@ namespace WolvenKit.Views.Tools
             Loaded += RedTreeView_Loaded;
             Unloaded += RedTreeView_Unloaded;
 
-            var tt = Locator.Current.GetService<AppViewModel>();
-
-            if (tt.ActiveDocument is RedDocumentViewModel { SelectedTabItemViewModel: RDTDataViewModel rdtd })
+            if (_appViewModel.ActiveDocument is RedDocumentViewModel
+                {
+                    SelectedTabItemViewModel: RDTDataViewModel rdtd
+                })
             {
                 _rdtDataViewModel = rdtd;
             }
@@ -310,12 +310,11 @@ namespace WolvenKit.Views.Tools
 
         /// <summary>Identifies the <see cref="IsHandleSelected"/> dependency property.</summary>
         public static readonly DependencyProperty IsHandleSelectedProperty =
-            DependencyProperty.Register(nameof(IsHandleSelected), typeof(bool), typeof(RedTreeView));
+            DependencyProperty.Register(nameof(IsHandleSelected), typeof(object), typeof(RedTreeView));
 
-        /// <summary>Updates with <see cref="RDTDataViewModel.SelectedChunk"/> </summary>
-        public bool IsHandleSelected
+        public object IsHandleSelected
         {
-            get => (bool)GetValue(IsHandleSelectedProperty);
+            get => GetValue(IsHandleSelectedProperty);
             set => SetValue(IsHandleSelectedProperty, value);
         }
 
@@ -710,8 +709,6 @@ namespace WolvenKit.Views.Tools
 
             var selectedChunks = GetSelectedChunks();
 
-            _rdtDataViewModel?.ClearSelection();
-            
             using (collectionView.DeferRefresh())
             {
                 foreach (var group in GroupByArrayOrParent(selectedChunks))
@@ -796,7 +793,7 @@ namespace WolvenKit.Views.Tools
             var isInArray = selectedItem?.IsInArray == true;
             SetCurrentValue(IsArraySelectedProperty, isArray);
             SetCurrentValue(IsArrayItemSelectedProperty, isInArray);
-            SetCurrentValue(IsHandleSelectedProperty, ChunkViewModel.IsHandle(selectedItem?.Data));
+            SetCurrentValue(IsHandleSelectedProperty, IsHandle(selectedItem?.Data));
             SetCurrentValue(ShouldShowArrayOpsProperty, isArray || isInArray);
         }
 
@@ -847,28 +844,34 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            var chunks = GetSelectedChunks();
-            _rdtDataViewModel?.ClearSelection();
-
-            ChunkViewModel[] duplicatedChunks = [];
-                
+            List<Task<List<ChunkViewModel>>> tasks = [];
+            
             using (collectionView.DeferRefresh())
             {
-                if (!preserveIndex)
+                List<ChunkViewModel> chunksByParent = [];
+                foreach (var chunks in GetSelectedChunks()
+                             .GroupBy(chunk => chunk.Parent))
                 {
-                    var nodeIndices = chunks.Select(c => c.NodeIdxInParent).Order().ToList();
-                    if (nodeIndices.Zip(nodeIndices.Skip(1), (a, b) => b - a).Any(diff => diff != 1))
+                    if (!preserveIndex)
                     {
-                        preserveIndex = true;
+                        foreach (var cvm in chunks.OrderBy(cvm => cvm.NodeIdxInParent))
+                        {
+                            // ReSharper disable once MethodHasAsyncOverload no!
+                            chunksByParent.Add(cvm.DuplicateChunk(cvm.NodeIdxInParent + chunks.Count()));
+                        }
                     }
+                    else
+                    {
+                        chunksByParent.AddRange(chunks.Select(cvm => cvm.DuplicateChunk(-1)));
+                    }
+
+                    tasks.Add(Task.FromResult(chunksByParent));
                 }
-
-                var tasks = chunks.Select(cvm => cvm.DuplicateChunkAsync(preserveIndex ? -1 : cvm.NodeIdxInParent + chunks.Count)).ToList();
-
-                duplicatedChunks.AddRange(await Task.WhenAll(tasks));
             }
 
-            SetSelectedItems([..duplicatedChunks]);
+            var groupResults = await Task.WhenAll(tasks);
+            SetSelectedItems([..groupResults.SelectMany(g => g).ToList()]);
+
         }
 
         /// <summary>
@@ -961,6 +964,7 @@ namespace WolvenKit.Views.Tools
                 SetCurrentValue(SelectedItemsProperty, new ObservableCollection<object>(selectedChunkViewModels));
                 SetCurrentValue(SelectedItemProperty, selectedChunkViewModels.LastOrDefault());
             }
+            
         }
 
         private static void ReapplySearch(ChunkViewModel chunk)
@@ -981,7 +985,22 @@ namespace WolvenKit.Views.Tools
 
         #region handles
 
-        private bool CanPasteHandleSingle() => IsHandleSelected && HasHandleCopied;
+        private static bool IsHandle(IRedType potentialHandle)
+        {
+            if (potentialHandle is null)
+            {
+                return false;
+            }
+
+            var propertyType = potentialHandle.GetType();
+            return
+                propertyType.IsAssignableTo(typeof(IRedBaseHandle)) && (
+                    propertyType.GetGenericTypeDefinition() == typeof(CHandle<>) ||
+                    propertyType.GetGenericTypeDefinition() == typeof(CWeakHandle<>));
+        }
+
+        private bool CanPasteHandleSingle() => IsHandle(RedDocumentTabViewModel.CopiedChunk) &&
+                                               SelectedItem is ChunkViewModel cvm && cvm.CanPasteSelection(true);
 
         [RelayCommand(CanExecute = nameof(CanPasteHandleSingle))]
         private void PasteHandleSingle()

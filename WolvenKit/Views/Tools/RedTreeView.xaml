@@ -601,7 +601,7 @@
 
                 <Separator />
 
-                <!-- Duplicate -->
+                <!-- Duplicate (without shift) -->
                 <MenuItem
                     Header="Duplicate in Array/Buffer"
                     Command="{Binding DuplicateSelectionCommand,
@@ -619,14 +619,44 @@
                                         <Condition Binding="{Binding Path=PlacementTarget.Tag.DuplicatesAsNew, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="False" />
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="Visibility" Value="Visible" />
+                                    <Setter Property="Header" Value="Duplicate in Array/Buffer" />
                                 </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ContentDuplicate"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
+                    </MenuItem.Icon>
+
+                </MenuItem>
+
+                <!-- Duplicate (with shift; preserve index) -->
+                <MenuItem
+                    Header="Duplicate in Array/Buffer (preserve index)"
+                    Command="{Binding DuplicateSelectionCommand,
+                                      Source={x:Reference redTreeView}}">
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource TreeViewMenuItemStyle}"
+                            TargetType="MenuItem">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding Path=IsArrayItemSelected, Source={x:Reference redTreeView}}" Value="True" />
-                                        <Condition Binding="{Binding Path=IsShiftBeingHeld, Source={x:Reference redTreeView}}" Value="True" />
-                                        <Condition Binding="{Binding Path=PlacementTarget.Tag.DuplicatesAsNew, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Value="False" />
+                                        <Condition
+                                            Binding="{Binding Path=IsArrayItemSelected, Source={x:Reference redTreeView}}"
+                                            Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=IsShiftBeingHeld, Source={x:Reference redTreeView}}"
+                                            Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=PlacementTarget.Tag.DuplicatesAsNew, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Value="False" />
                                     </MultiDataTrigger.Conditions>
-                                    <Setter Property="Header" Value="Duplicate in Array/Buffer (preserve index)" />
                                     <Setter Property="Visibility" Value="Visible" />
                                 </MultiDataTrigger>
                             </Style.Triggers>
@@ -1059,6 +1089,27 @@
                                         <Condition
                                             Binding="{Binding Path=IsCtrlBeingHeld, Source={x:Reference redTreeView}}"
                                             Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=IsCtrlBeingHeld, Source={x:Reference redTreeView}}"
+                                            Value="False" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Command"
+                                            Value="{Binding Path=CopySelectionNamesCommand, Source={x:Reference redTreeView}}" />
+                                    <Setter Property="Header" Value="Copy item names (as quoted list)" />
+                                </MultiDataTrigger>
+
+                                <!-- If shift pressed: Copy names (as quoted list) -->
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition
+                                            Binding="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}}"
+                                            Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=IsShiftBeingHeld, Source={x:Reference redTreeView}}"
+                                            Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=IsCtrlBeingHeld, Source={x:Reference redTreeView}}"
+                                            Value="True" />
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="Command"
                                             Value="{Binding Path=CopySelectionNamesCommand, Source={x:Reference redTreeView}}" />
@@ -1210,6 +1261,67 @@
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="Header" Value="Overwrite Array/Buffer with Single" />
                                     <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
+
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ContentPaste"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <!-- Shift: Overwrite selected with selection -->
+                <MenuItem
+                    Header="Overwrite with Selection"
+                    Command="{Binding Path=OverwriteSelectionWithPasteCommand,
+                                      Source={x:Reference redTreeView}}">
+
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource TreeViewMenuItemStyle}"
+                            TargetType="MenuItem">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition
+                                            Binding="{Binding Path=IsArraySelected, Source={x:Reference redTreeView}}"
+                                            Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=HasMultipleItemsCopied, Source={x:Reference redTreeView}}"
+                                            Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=IsShiftBeingHeld, Source={x:Reference redTreeView}}"
+                                            Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=IsCtrlBeingHeld, Source={x:Reference redTreeView}}"
+                                            Value="False" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition
+                                            Binding="{Binding Path=IsArrayItemSelected, Source={x:Reference redTreeView}}"
+                                            Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=HasMultipleItemsCopied, Source={x:Reference redTreeView}}"
+                                            Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=IsShiftBeingHeld, Source={x:Reference redTreeView}}"
+                                            Value="True" />
+                                        <Condition
+                                            Binding="{Binding Path=IsCtrlBeingHeld, Source={x:Reference redTreeView}}"
+                                            Value="False" />
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible" />
+                                    <Setter Property="Header" Value="Overwrite with Selection" />
                                 </MultiDataTrigger>
                             </Style.Triggers>
                         </Style>
