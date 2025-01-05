@@ -88,7 +88,7 @@ public class FileHelper
         }
         try
         {
-            if (!Directory.EnumerateFiles(sourceDir).Any())
+            if (Directory.Exists(sourceDir) && !Directory.EnumerateFileSystemEntries(sourceDir).Any())
             {
                 if (Directory.Exists(destinationDir))
                 {
