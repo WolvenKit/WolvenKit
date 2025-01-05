@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Reactive.Disposables;
 using System.Windows;
 using AdonisUI.Controls;
@@ -15,6 +16,7 @@ using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Services;
 using WolvenKit.Views.Dialogs.Windows;
+using MessageBoxResult = AdonisUI.Controls.MessageBoxResult;
 
 namespace WolvenKit.Views.Shell
 {
@@ -33,11 +35,11 @@ namespace WolvenKit.Views.Shell
 
         public MainView(
             IModifierViewStateService modifierViewStateService,
-            AppViewModel vm = null
+            AppViewModel viewModel = null
         )
         {
             _modifierViewStateService = modifierViewStateService;
-            ViewModel = vm ?? Locator.Current.GetService<AppViewModel>();
+            ViewModel = viewModel ?? Locator.Current.GetService<AppViewModel>();
             DataContext = ViewModel;
 
             InitializeComponent();
@@ -48,6 +50,8 @@ namespace WolvenKit.Views.Shell
 
                 Interactions.ShowConfirmation = ShowConfirmation;
                 Interactions.ShowQuestionYesNo = ShowQuestionYesNo;
+
+                Interactions.ShowPopupWithWeblink = ShowConfirmationWithLink;
                 
                 Interactions.ShowLaunchProfilesView = () =>
                 {
@@ -61,7 +65,7 @@ namespace WolvenKit.Views.Shell
                     return true;
                 };
 
-                Interactions.ShowSelectSaveView = (string currentSaveGame) =>
+                Interactions.ShowSelectSaveView = currentSaveGame =>
                 {
                     SaveGameSelectionDialog dialog = new(currentSaveGame);
 
@@ -87,11 +91,18 @@ namespace WolvenKit.Views.Shell
                 Interactions.ShowCollectionView = input =>
                 {
                     ChooseCollectionView dialog = new();
-                    dialog.ViewModel.SetAvailableItems(input.Item1);
-                    dialog.ViewModel.SetSelectedItems(input.Item2);
+                    if (input.Item1 is not null)
+                    {
+                        dialog.ViewModel?.SetAvailableItems(input.Item1);
+                    }
+
+                    if (input.Item2 is not null)
+                    {
+                        dialog.ViewModel?.SetSelectedItems(input.Item2);
+                    }
 
                     IEnumerable<IDisplayable> result = null;
-                    if (dialog.ShowDialog(this) == true)
+                    if (dialog.ShowDialog(this) == true && dialog.ViewModel is not null)
                     {
                         result = dialog.ViewModel.SelectedItems;
                     }
@@ -116,7 +127,7 @@ namespace WolvenKit.Views.Shell
             });
         }
 
-        private void FadeOut_Completed(object sender, EventArgs e) => ViewModel.FinishedClosingModal();
+        private void FadeOut_Completed(object sender, EventArgs e) => ViewModel?.FinishedClosingModal();
 
         #region interactions
 
@@ -125,6 +136,10 @@ namespace WolvenKit.Views.Shell
             var messageResult = ShowConfirmation((input.Item1, input.Item2, WMessageBoxImage.Question, WMessageBoxButtons.YesNo));
             return messageResult == WMessageBoxResult.Yes;
         }
+
+        // local methods
+        private static AdonisUI.Controls.MessageBoxImage GetAdonisImage(WMessageBoxImage imageParam) =>
+            (AdonisUI.Controls.MessageBoxImage)imageParam;
 
         private static WMessageBoxResult ShowConfirmation((string, string, WMessageBoxImage, WMessageBoxButtons) input)
         {
@@ -141,24 +156,42 @@ namespace WolvenKit.Views.Shell
             return (WMessageBoxResult)AdonisUI.Controls.MessageBox.Show(Application.Current.MainWindow, messageBox);
 
 
-
-            // local methods
-            AdonisUI.Controls.MessageBoxImage GetAdonisImage(WMessageBoxImage imageParam) => (AdonisUI.Controls.MessageBoxImage)imageParam;
-
-            IEnumerable<IMessageBoxButtonModel> GetAdonisButtons(WMessageBoxButtons buttonsParam)
+            static IEnumerable<IMessageBoxButtonModel> GetAdonisButtons(WMessageBoxButtons buttonsParam)
             {
                 return buttonsParam switch
                 {
-                    WMessageBoxButtons.Ok => new IMessageBoxButtonModel[1] { MessageBoxButtons.Ok() },
+                    WMessageBoxButtons.Ok => [MessageBoxButtons.Ok()],
                     WMessageBoxButtons.OkCancel => MessageBoxButtons.OkCancel(),
-                    WMessageBoxButtons.Yes => new IMessageBoxButtonModel[1] { MessageBoxButtons.Yes() },
+                    WMessageBoxButtons.Yes => [MessageBoxButtons.Yes()],
                     WMessageBoxButtons.YesNo => MessageBoxButtons.YesNo(),
                     WMessageBoxButtons.YesNoCancel => MessageBoxButtons.YesNoCancel(),
-                    WMessageBoxButtons.No => new IMessageBoxButtonModel[1] { MessageBoxButtons.No() },
+                    WMessageBoxButtons.No => [MessageBoxButtons.No()],
                     _ => throw new ArgumentOutOfRangeException(nameof(buttons)),
                 };
             }
         }
+
+        /// <inheritdoc cref="Interactions.ShowPopupWithWeblinkAsync"/>
+        private static WMessageBoxResult ShowConfirmationWithLink(
+            (string, string, string, string, WMessageBoxImage) input)
+        {
+            MessageBoxModel messageBox = new()
+            {
+                Text = input.Item1,
+                Caption = input.Item2,
+                Buttons = [MessageBoxButtons.Custom(input.Item4), MessageBoxButtons.Ok()],
+                Icon = GetAdonisImage(input.Item5),
+            };
+
+            var ret = AdonisUI.Controls.MessageBox.Show(Application.Current.MainWindow, messageBox);
+            if (ret == MessageBoxResult.Custom && input.Item3 is string link && !string.IsNullOrEmpty(link))
+            {
+                Process.Start(new ProcessStartInfo { FileName = link, UseShellExecute = true });
+            }
+
+            return (WMessageBoxResult)ret;
+        }
+
 
         #endregion
 
