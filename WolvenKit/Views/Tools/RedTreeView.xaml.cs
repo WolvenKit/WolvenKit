@@ -834,27 +834,34 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            var chunks = GetSelectedChunks();
-
-            ChunkViewModel[] duplicatedChunks = [];
-                
+            List<Task<List<ChunkViewModel>>> tasks = [];
+            
             using (collectionView.DeferRefresh())
             {
-                if (!preserveIndex)
+                List<ChunkViewModel> chunksByParent = [];
+                foreach (var chunks in GetSelectedChunks()
+                             .GroupBy(chunk => chunk.Parent))
                 {
-                    var nodeIndices = chunks.Select(c => c.NodeIdxInParent).Order().ToList();
-                    if (nodeIndices.Zip(nodeIndices.Skip(1), (a, b) => b - a).Any(diff => diff != 1))
+                    if (!preserveIndex)
                     {
-                        preserveIndex = true;
+                        foreach (var cvm in chunks.OrderBy(cvm => cvm.NodeIdxInParent))
+                        {
+                            // ReSharper disable once MethodHasAsyncOverload no!
+                            chunksByParent.Add(cvm.DuplicateChunk(cvm.NodeIdxInParent + chunks.Count()));
+                        }
                     }
+                    else
+                    {
+                        chunksByParent.AddRange(chunks.Select(cvm => cvm.DuplicateChunk(-1)));
+                    }
+
+                    tasks.Add(Task.FromResult(chunksByParent));
                 }
-
-                var tasks = chunks.Select(cvm => cvm.DuplicateChunkAsync(preserveIndex ? -1 : cvm.NodeIdxInParent + chunks.Count)).ToList();
-
-                duplicatedChunks.AddRange(await Task.WhenAll(tasks));
             }
 
-            SetSelectedItems([..duplicatedChunks]);
+            var groupResults = await Task.WhenAll(tasks);
+            SetSelectedItems([..groupResults.SelectMany(g => g).ToList()]);
+
         }
 
         /// <summary>

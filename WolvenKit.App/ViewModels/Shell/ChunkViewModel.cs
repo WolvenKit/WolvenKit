@@ -2613,9 +2613,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     private bool CanDuplicateChunk() => IsInArray && Parent is not null; // TODO RelayCommand check notify
 
     [RelayCommand(CanExecute = nameof(CanDuplicateChunk))]
+  
     private void DuplicateChunk() => DuplicateChunk(-1);
 
-    private ChunkViewModel? DuplicateChunk(int index)
+    public ChunkViewModel? DuplicateChunk(int index)
     {
         if (Parent is null || Data is RedDummy)
         {
