@@ -15,9 +15,9 @@ namespace WolvenKit.App.Helpers;
 
 public class Cr2WTools
 {
-    private ILoggerService _loggerService;
-    private IHashService _hashService;
-    private Red4ParserService _parserService;
+    private readonly ILoggerService _loggerService;
+    private readonly IHashService _hashService;
+    private readonly Red4ParserService _parserService;
 
     public Cr2WTools(
         ILoggerService loggerService,
