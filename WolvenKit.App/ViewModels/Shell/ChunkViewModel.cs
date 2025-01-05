@@ -2370,25 +2370,21 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         catch (Exception ex) { _loggerService.Error(ex); }
     }
 
-    public static bool IsHandle(IRedType? irb, bool weakHandleOnly = false)
+    public static bool IsHandle(IRedType? irb) => IsHandle(irb, false);
+
+    private static bool IsHandle(IRedType? irb, bool weakHandleOnly)
     {
         var propertyType = irb?.GetType();
-        return propertyType is not null &&
-               propertyType.IsAssignableTo(typeof(IRedBaseHandle)) && (
-                   (!weakHandleOnly && propertyType.GetGenericTypeDefinition() == typeof(CHandle<>)) ||
-                   propertyType.GetGenericTypeDefinition() == typeof(CWeakHandle<>));
-    }
-
-    private bool CanPasteHandle()
-    {
-        if (RedDocumentTabViewModel.CopiedChunk is not IRedBaseHandle || Parent is { Data: worldNodeData })
+        if (propertyType?.IsAssignableTo(typeof(IRedBaseHandle)) != true)
         {
             return false;
         }
 
-        return PropertyType.GetGenericTypeDefinition() == typeof(CHandle<>) ||
-               PropertyType.GetGenericTypeDefinition() == typeof(CWeakHandle<>);
+        var gt = propertyType.GetGenericTypeDefinition();
+        return (weakHandleOnly && gt == typeof(CWeakHandle<>)) || gt == typeof(CHandle<>);
     }
+    
+
 
     public bool PasteHandle(IRedBaseHandle sourceHandle)
     {
@@ -2421,14 +2417,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     return true;
                 }
 
-                if (PropertyType.GetGenericTypeDefinition() == typeof(CWeakHandle<>))
+                if (PropertyType.GetGenericTypeDefinition() != typeof(CWeakHandle<>))
                 {
-                    Data = CWeakHandle.Parse(sourceHandle.InnerType, value);
-                    RecalculateProperties(Data);
-                    return true;
+                    return false;
                 }
 
-                return false;
+                Data = CWeakHandle.Parse(sourceHandle.InnerType, value);
+                RecalculateProperties(Data);
+                return true;
             }
         }
 
@@ -2733,11 +2729,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         Parent?.GetPropertyChild("localMaterialBuffer")?.GetPropertyChild("materials")?.RecalculateProperties();
     }
 
-    public bool CanCopySelection() => IsInArray && Parent is not null; // TODO RelayCommand check notify
+    public bool CanCopySelection() => (IsInArray && Parent is not null) || IsHandle(Data);
     [RelayCommand(CanExecute = nameof(CanCopySelection))]
     private void CopySelection()
     {
-        if (Parent is not { } || Tab is not { SelectedChunks: IList lst })
+        if (Parent is null || Tab is not { SelectedChunks: IList lst })
         {
             return;
         }
@@ -4413,6 +4409,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         return w;
     }
 
+    public void RefreshSync() => Refresh().GetAwaiter().GetResult();
     public async Task Refresh()
     {
         var document = _appViewModel.ActiveDocument;
