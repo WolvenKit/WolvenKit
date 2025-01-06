@@ -82,10 +82,12 @@ public class FileHelper
 
     public static void MoveRecursively(string sourceDir, string destinationDir, bool overwrite, ILoggerService? logger = null)
     {
-        if (Path.GetDirectoryName(destinationDir) == sourceDir)
+        if (sourceDir.Equals(Path.GetDirectoryName(destinationDir), StringComparison.OrdinalIgnoreCase))
         {
             return;
         }
+
+        var destDirTemp = $"{destinationDir}_temp";
         try
         {
             if (Directory.Exists(sourceDir) && !Directory.EnumerateFileSystemEntries(sourceDir).Any())
@@ -96,14 +98,16 @@ public class FileHelper
                     return;
                 }
 
-                Directory.Move(sourceDir, destinationDir);
+                // Deal with case changes in folders
+                Directory.Move(sourceDir, destDirTemp);
+                Directory.Move(destDirTemp, destinationDir);
                 return;
             } 
             
             // Ensure the destination directory exists
-            if (!Directory.Exists(destinationDir))
+            if (!Directory.Exists(destDirTemp))
             {
-                Directory.CreateDirectory(destinationDir);
+                Directory.CreateDirectory(destDirTemp);
             }
 
             // Move all files
@@ -113,19 +117,14 @@ public class FileHelper
                 var relativePath = Path.GetRelativePath(sourceDir, file);
                 var destFile = Path.Combine(destinationDir, relativePath);
                 var destDir = Path.GetDirectoryName(destFile);
-
+                
                 if (destDir is not null && !Directory.Exists(destDir))
                 {
                     Directory.CreateDirectory(destDir);
                 }
 
-                if (File.Exists(destFile) && !overwrite)
-                {
-                    logger?.Info($"Skipping existing file {destFile}");
-                    continue;
-                }
-
-                File.Move(file, destFile, true); // true allows overwriting of files
+                File.Move(file, $"{destFile}.tmp", true);
+                File.Move($"{destFile}.tmp", destFile, true);
             }
 
             // Move all directories by recursively calling this method
@@ -137,8 +136,11 @@ public class FileHelper
                 MoveRecursively(directory, destDir, overwrite, logger);
             }
 
-            // Optionally, remove the source directory if it's now empty
-            Directory.Delete(sourceDir, true); // true allows recursive deletion
+            // recursive delete the source directory - all our files are in destDirTemp
+            Directory.Delete(sourceDir, true);
+
+            Directory.Move(destDirTemp, destinationDir);
+
         }
         catch (IOException e)
         {
