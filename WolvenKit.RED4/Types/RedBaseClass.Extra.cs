@@ -35,56 +35,90 @@ public partial class RedBaseClass
 
     public (bool, IRedType?) GetFromXPath(string[] xPath)
     {
+        if (xPath.Length == 0)
+        {
+            return (true, this);
+        }
+        
         IRedType? result = this;
         var currentProps = _properties;
-        foreach (var part in xPath)
+
+        foreach (var partial in xPath)
         {
-            if (currentProps == null)
+            // after the loop, we should have currentProps from a base class, and a result
+            if (result == null || currentProps == null)
             {
                 return (false, null);
             }
 
-            var arrPath = part.Split(':');
+            var arrPath = partial.Split(':');
 
-            if (arrPath.Length != 2 || !int.TryParse(arrPath[1], out var index))
+            if (!currentProps.TryGetValue(arrPath.First(), out var child))
             {
-                index = -1;
+                return (false, null);
             }
 
+            result = child;
 
-            if (currentProps.ContainsKey(arrPath[0]))
+            // we'll look in the child's properties next
+            if (result is RedBaseClass rbc)
             {
-                result = currentProps[arrPath[0]];
-
+                currentProps = rbc._properties;
+            }
+            else
+            {
                 currentProps = null;
+            }
 
+            if (arrPath.Length == 1)
+            {
+                continue;
+            }
+
+            // We have leftover array indices and need to go down
+            arrPath = arrPath.Skip(1).ToArray();
+
+            while (arrPath.Length > 0)
+            {
+                var firstArrayProp = arrPath.First();
+                arrPath = arrPath.Skip(1).ToArray();
+
+                if (currentProps?.TryGetValue(firstArrayProp, out var grandChild) == true)
+                {
+                    result = grandChild;
+                    if (result is RedBaseClass rbc2)
+                    {
+                        currentProps = rbc2._properties;
+                    }
+
+                    continue;
+                }
+
+                if (!int.TryParse(firstArrayProp, out var index) || index < 0)
+                {
+                    return (false, null);
+                }
+
+                // also covers IRedArray
                 if (result is IList lst)
                 {
-                    if (index >= 0)
+                    if (index >= lst.Count)
                     {
-                        if (index >= lst.Count)
-                        {
-                            return (false, null);
-                        }
-
-                        result = (IRedType?)lst[index];
+                        return (false, null);
                     }
-                }
-                
-                if (result is RedBaseClass subCls)
-                {
-                    currentProps = subCls._properties;
+
+                    result = (IRedType?)lst[index];
                 }
 
-                if (result is IRedBaseHandle handle)
+                switch (result)
                 {
-                    var cCls = handle.GetValue();
-                    currentProps = cCls?._properties;
-                }
-
-                if (result is IRedBufferWrapper { Data: RedPackage redPackage })
-                {
-                    if (index >= 0)
+                    case RedBaseClass subCls:
+                        currentProps = subCls._properties;
+                        continue;
+                    case IRedBaseHandle handle:
+                        currentProps = handle.GetValue()?._properties;
+                        continue;
+                    case IRedBufferWrapper { Data: RedPackage redPackage }:
                     {
                         if (index >= redPackage.Chunks.Count)
                         {
@@ -93,13 +127,14 @@ public partial class RedBaseClass
 
                         result = redPackage.Chunks[index];
                         currentProps = ((RedBaseClass)result)._properties;
+                        break;
                     }
+                    default:
+                        break;
                 }
-                
-                continue;
             }
 
-            return (false, null);
+
         }
 
         return (true, result);
