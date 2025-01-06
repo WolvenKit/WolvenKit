@@ -990,7 +990,7 @@ public class AppScriptFunctions : ScriptFunctions
     /// Pauses the execution of the script for the specified amount of milliseconds.
     /// </summary>
     /// <param name="milliseconds">The number of milliseconds to sleep.</param>
-    public void Sleep(int milliseconds)
+    public virtual void Sleep(int milliseconds)
     {
         if (milliseconds < 0)
         {
