@@ -987,14 +987,14 @@ public class AppScriptFunctions : ScriptFunctions
     }
 
     /// <summary>
-    /// Pauses the execution of the script for the specified amount of milliseconds without blocking the rendering thread.
+    /// Pauses the execution of the script for the specified amount of milliseconds.
     /// </summary>
     /// <param name="milliseconds">The number of milliseconds to sleep.</param>
     public void Sleep(int milliseconds)
     {
         if (milliseconds < 0)
         {
-            throw new ArgumentException("Sleep duration must be non-negative.", nameof(milliseconds));
+            throw new WolvenKitException(0x2000, "Milliseconds cannot be negative");
         }
         Task.Run(async () => await Task.Delay(milliseconds)).Wait();
     }
