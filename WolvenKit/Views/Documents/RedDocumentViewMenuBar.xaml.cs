@@ -520,7 +520,7 @@ namespace WolvenKit.Views.Documents
 
                 if (_archiveManager.GetGameFile(entFilePath, false, false) is not null)
                 {
-                    throw new WolvenKitException(0x3003,
+                    throw new WolvenKitException(0x3001,
                         $"Don't overwrite base game files! Use ArchiveXL resource patching instead!");
                 }
 
