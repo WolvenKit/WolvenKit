@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
@@ -13,8 +12,6 @@ namespace WolvenKit.App.ViewModels.GraphEditor;
 public partial class RedGraph
 {
     private static List<Type>? s_sceneNodeTypes;
-
-    public static Regex NodeIdRegex { get; } = new Regex(@"\d+");
 
     public List<Type> GetSceneNodeTypes()
     {
@@ -372,9 +369,12 @@ public partial class RedGraph
 
                 foreach (var destination in sceneOutputConnector.Data.Destinations)
                 {
-                    try
-                    {
-                        var targetNode = nodeCache[destination.NodeId.Id];
+                        nodeCache.TryGetValue(destination.NodeId.Id, out var targetNode);
+                        if (targetNode is null)
+                        {
+                            _loggerService?.Error($"NodeId {destination.NodeId.Id} is missing. Delete all existing connections to this NodeId");
+                            continue;
+                        }
                         if (targetNode is IDynamicInputNode dynamicInputNode)
                         {
                             while (dynamicInputNode.Input.Count <= destination.IsockStamp.Ordinal)
@@ -390,14 +390,6 @@ public partial class RedGraph
                         }
 
                         graph.Connections.Add(new SceneConnectionViewModel(outputConnector, targetNode.Input[destination.IsockStamp.Ordinal]));
-                    } catch (KeyNotFoundException ex)
-                    {
-                        var match = RedGraph.NodeIdRegex.Match(ex.Message);
-                        foreach (var matchedEntry in match.Groups)
-                        {
-                            _loggerService?.Error($"NodeID {matchedEntry} is missing. Delete all existing connections to this NodeID");
-                        }
-                    }
                 }
             }
         }
