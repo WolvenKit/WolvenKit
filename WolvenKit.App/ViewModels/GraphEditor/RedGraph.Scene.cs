@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DynamicData;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
@@ -370,22 +369,27 @@ public partial class RedGraph
 
                 foreach (var destination in sceneOutputConnector.Data.Destinations)
                 {
-                    var targetNode = nodeCache[destination.NodeId.Id];
-                    if (targetNode is IDynamicInputNode dynamicInputNode)
-                    {
-                        while (dynamicInputNode.Input.Count <= destination.IsockStamp.Ordinal)
+                        nodeCache.TryGetValue(destination.NodeId.Id, out var targetNode);
+                        if (targetNode is null)
                         {
-                            dynamicInputNode.AddInput();
+                            _loggerService?.Error($"NodeId {destination.NodeId.Id} is missing. Delete all existing connections to this NodeId");
+                            continue;
                         }
-                    }
+                        if (targetNode is IDynamicInputNode dynamicInputNode)
+                        {
+                            while (dynamicInputNode.Input.Count <= destination.IsockStamp.Ordinal)
+                            {
+                                dynamicInputNode.AddInput();
+                            }
+                        }
 
-                    if (destination.IsockStamp.Ordinal >= targetNode.Input.Count)
-                    {
-                        _loggerService?.Warning($"Output isock ordinal ({destination.IsockStamp.Ordinal}) of node {sceneNode.UniqueId} is higher than node {targetNode.UniqueId} input max ordinal ({targetNode.Input.Count - 1}). Some connections may be missing in graph view. File: " + title);
-                        continue;
-                    }
+                        if (destination.IsockStamp.Ordinal >= targetNode.Input.Count)
+                        {
+                            _loggerService?.Warning($"Output isock ordinal ({destination.IsockStamp.Ordinal}) of node {sceneNode.UniqueId} is higher than node {targetNode.UniqueId} input max ordinal ({targetNode.Input.Count - 1}). Some connections may be missing in graph view. File: " + title);
+                            continue;
+                        }
 
-                    graph.Connections.Add(new SceneConnectionViewModel(outputConnector, targetNode.Input[destination.IsockStamp.Ordinal]));
+                        graph.Connections.Add(new SceneConnectionViewModel(outputConnector, targetNode.Input[destination.IsockStamp.Ordinal]));
                 }
             }
         }
