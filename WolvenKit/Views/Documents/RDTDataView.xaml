@@ -83,6 +83,7 @@
             Grid.Row="0"
             Grid.Column="0"
             Margin="0"
+            HorizontalAlignment="Left"
             ItemsSource="{Binding Chunks}"
             SelectedItem="{Binding SelectedChunk,
                                    Mode=TwoWay}"
@@ -99,6 +100,7 @@
             x:Name="CustomPG"
             Grid.Row="0"
             Grid.Column="2"
+            HorizontalAlignment="Stretch"
             DataContext="{Binding SelectedChunk}"
             ViewModel="{Binding SelectedChunk}"
             ValueChanged="RedTypeView_OnValueChanged" />

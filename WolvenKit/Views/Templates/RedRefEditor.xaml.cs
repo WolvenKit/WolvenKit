@@ -8,12 +8,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
-using DynamicData.Kernel;
 using HandyControl.Tools.Extension;
 using Splat;
 using WolvenKit.App.Services;
-using WolvenKit.Common;
-using WolvenKit.Common.Extensions;
 using WolvenKit.Modkit.Resources;
 using WolvenKit.RED4.Types;
 
@@ -126,7 +123,7 @@ namespace WolvenKit.Views.Editors
                 }
 
                 return RedRef.DepotPath.GetRedHash().ToString();
-                
+
             }
             set
             {
@@ -140,6 +137,8 @@ namespace WolvenKit.Views.Editors
                 }
             }
         }
+
+        public string TypeName => RedRef.RedType;
 
         private void HashBox_OnPreviewTextInput(object sender, TextCompositionEventArgs e)
         {
@@ -263,7 +262,7 @@ namespace WolvenKit.Views.Editors
             _updateTimer.Stop();
             RefreshValidityAndTooltip(_updateSender, new RoutedEventArgs());
         }
-        
+
         public void TrimmingTextbox_OnKeyUp(object sender, EventArgs e)
         {
             if (e is not KeyEventArgs { Key: Key.Enter or Key.Tab })

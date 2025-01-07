@@ -146,12 +146,28 @@
             Name="FlagsComboBox"
             Grid.Row="1"
             Grid.Column="1"
-            Grid.ColumnSpan="2"
             Padding="{DynamicResource WolvenKitMarginTiny}"
             FontSize="{DynamicResource WolvenKitFontSubTitle}"
             ItemsSource="{Binding EnumValues}"
             KeyboardNavigation.TabIndex="3"
             SelectedItem="{Binding RedRef.Flags,
                                    Mode=OneWay}" />
+
+        <Border
+            Grid.Row="1"
+            Grid.Column="2"
+            BorderBrush="{StaticResource BorderAlt}"
+            BorderThickness="1,0,0,0" />
+
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="2"
+            Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+            VerticalAlignment="Center"
+            Foreground="{StaticResource WolvenKitTan}"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+            Text="{Binding TypeName,
+                           UpdateSourceTrigger=PropertyChanged,
+                           Mode=OneWay}" />
     </Grid>
 </UserControl>
