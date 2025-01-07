@@ -28,8 +28,10 @@ public static class LogCodeHelper
             "https://wiki.redmodding.org/cyberpunk-2077-modding/for-mod-creators-theory/3d-modelling/troubleshooting-your-mesh-edits#bones-not-found-in-import-mesh-es");
 
         // 3: modKit stuff
-        s_mapping.Add(0x3003,
+        s_mapping.Add(0x3001,
             "https://wiki.redmodding.org/cyberpunk-2077-modding/for-mod-creators/core-mods-explained/archivexl/archivexl-resource-patching");
+        s_mapping.Add(0x3002,
+            "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/error-codes##id-0x3002-resources-plugin");
 
         // 4: project stuff
         s_mapping.Add(0x4001, "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/settings#additional-mod-directory");
