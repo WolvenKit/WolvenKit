@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DynamicData;
+using System.Text.RegularExpressions;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
@@ -13,6 +13,8 @@ namespace WolvenKit.App.ViewModels.GraphEditor;
 public partial class RedGraph
 {
     private static List<Type>? s_sceneNodeTypes;
+
+    public static Regex NodeIdRegex { get; } = new Regex(@"\d+");
 
     public List<Type> GetSceneNodeTypes()
     {
@@ -370,22 +372,32 @@ public partial class RedGraph
 
                 foreach (var destination in sceneOutputConnector.Data.Destinations)
                 {
-                    var targetNode = nodeCache[destination.NodeId.Id];
-                    if (targetNode is IDynamicInputNode dynamicInputNode)
+                    try
                     {
-                        while (dynamicInputNode.Input.Count <= destination.IsockStamp.Ordinal)
+                        var targetNode = nodeCache[destination.NodeId.Id];
+                        if (targetNode is IDynamicInputNode dynamicInputNode)
                         {
-                            dynamicInputNode.AddInput();
+                            while (dynamicInputNode.Input.Count <= destination.IsockStamp.Ordinal)
+                            {
+                                dynamicInputNode.AddInput();
+                            }
+                        }
+
+                        if (destination.IsockStamp.Ordinal >= targetNode.Input.Count)
+                        {
+                            _loggerService?.Warning($"Output isock ordinal ({destination.IsockStamp.Ordinal}) of node {sceneNode.UniqueId} is higher than node {targetNode.UniqueId} input max ordinal ({targetNode.Input.Count - 1}). Some connections may be missing in graph view. File: " + title);
+                            continue;
+                        }
+
+                        graph.Connections.Add(new SceneConnectionViewModel(outputConnector, targetNode.Input[destination.IsockStamp.Ordinal]));
+                    } catch (KeyNotFoundException ex)
+                    {
+                        var match = RedGraph.NodeIdRegex.Match(ex.Message);
+                        foreach (var matchedEntry in match.Groups)
+                        {
+                            _loggerService?.Error($"NodeID {matchedEntry} is missing. Delete all existing connections to this NodeID");
                         }
                     }
-
-                    if (destination.IsockStamp.Ordinal >= targetNode.Input.Count)
-                    {
-                        _loggerService?.Warning($"Output isock ordinal ({destination.IsockStamp.Ordinal}) of node {sceneNode.UniqueId} is higher than node {targetNode.UniqueId} input max ordinal ({targetNode.Input.Count - 1}). Some connections may be missing in graph view. File: " + title);
-                        continue;
-                    }
-
-                    graph.Connections.Add(new SceneConnectionViewModel(outputConnector, targetNode.Input[destination.IsockStamp.Ordinal]));
                 }
             }
         }
