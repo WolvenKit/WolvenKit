@@ -11,9 +11,13 @@
     d:DesignWidth="240"
     d:DesignHeight="48">
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedCurveEditor}}}">
+        <!-- Direct access as a field in RedTypeView -->
         <Button
             x:Name="CurveEditorButton"
             Margin="{DynamicResource WolvenKitMarginTinyVertical}"
+            Visibility="{Binding Path=ShowQuickAccess,
+                                 Mode=OneWay,
+                                 Converter={StaticResource InvertBooleanVisibilityConverter}}"
             syncfusion:FocusManagerHelper.FocusedElement="True"
             Click="CurveEditorButton_OnClick">
             <StackPanel Orientation="Horizontal">
@@ -29,6 +33,24 @@
                     VerticalAlignment="Center"
                     Text="Open Curve Editor" />
             </StackPanel>
+        </Button>
+
+        <!-- Quick access in "info top" of RedTypeView -->
+        <Button
+            VerticalAlignment="Center"
+            Background="Transparent"
+            Style="{StaticResource ButtonCustom}"
+            Visibility="{Binding Path=ShowQuickAccess,
+                                 Mode=OneWay,
+                                 Converter={StaticResource BooleanToVisibilityConverter}}"
+            Click="CurveEditorButton_OnClick"
+            ToolTip="Open Curve Editor">
+            <templates:IconBox
+                IconPack="Material"
+                Kind="ChartBellCurve"
+                Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                Size="{DynamicResource WolvenKitIconMilli}"
+                Foreground="{StaticResource WolvenKitCyan}" />
         </Button>
     </Grid>
 </UserControl>

@@ -334,6 +334,16 @@
                 </StackPanel>
             </DataTemplate>
 
+            <DataTemplate
+                x:Key="OpenCurveEditorButton"
+                DataType="{x:Type shell:ChunkViewModel}">
+                <editors:RedCurveEditor
+                    Visibility="{Binding Path=IsCurve,
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    ShowQuickAccess="True" />
+            </DataTemplate>
+
             <Style
                 x:Key="PGNameStyle"
                 TargetType="TextBlock">
@@ -1009,28 +1019,38 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="{DynamicResource WolvenKitColumnTiny}" />
                     </Grid.ColumnDefinitions>
 
+                    <!-- Cyan to open/run -->
                     <ContentPresenter
                         Grid.Column="0"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         Content="{Binding}"
-                        ContentTemplate="{StaticResource AddToCompiledDataButton}" />
+                        ContentTemplate="{StaticResource OpenCurveEditorButton}" />
+
+                    <!-- Yellow to add/create -->
                     <ContentPresenter
                         Grid.Column="1"
                         Content="{Binding}"
-                        ContentTemplate="{StaticResource AddToArrayButton}" />
+                        ContentTemplate="{StaticResource AddToCompiledDataButton}" />
                     <ContentPresenter
                         Grid.Column="2"
                         Content="{Binding}"
-                        ContentTemplate="{StaticResource AddDynamicProperty}" />
+                        ContentTemplate="{StaticResource AddToArrayButton}" />
                     <ContentPresenter
                         Grid.Column="3"
                         Content="{Binding}"
-                        ContentTemplate="{StaticResource AddHandleButton}" />
+                        ContentTemplate="{StaticResource AddDynamicProperty}" />
                     <ContentPresenter
                         Grid.Column="4"
+                        Content="{Binding}"
+                        ContentTemplate="{StaticResource AddHandleButton}" />
+
+                    <!-- Red to delete/reset -->
+                    <ContentPresenter
+                        Grid.Column="5"
                         Content="{Binding}"
                         ContentTemplate="{StaticResource DeleteAllButton}" />
                 </Grid>
