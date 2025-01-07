@@ -985,4 +985,17 @@ public class AppScriptFunctions : ScriptFunctions
             throw new WolvenKitException(0x2000, "String to be hashed cannot be null or empty");
         }
     }
+
+    /// <summary>
+    /// Pauses the execution of the script for the specified amount of milliseconds.
+    /// </summary>
+    /// <param name="milliseconds">The number of milliseconds to sleep.</param>
+    public virtual void Sleep(int milliseconds)
+    {
+        if (milliseconds < 0)
+        {
+            throw new WolvenKitException(0x2000, "Milliseconds cannot be negative");
+        }
+        Task.Run(async () => await Task.Delay(milliseconds)).Wait();
+    }
 }
