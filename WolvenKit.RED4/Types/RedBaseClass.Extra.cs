@@ -51,9 +51,10 @@ public partial class RedBaseClass
                 return (false, null);
             }
 
+            // In case of (nested) lists, we need to process the index structure below
             var arrPath = partial.Split(':');
 
-            if (!currentProps.TryGetValue(arrPath.First(), out var child))
+            if (!currentProps.TryGetValue(arrPath[0], out var child))
             {
                 return (false, null);
             }
@@ -78,12 +79,9 @@ public partial class RedBaseClass
             // We have leftover array indices and need to go down
             arrPath = arrPath.Skip(1).ToArray();
 
-            while (arrPath.Length > 0)
+            foreach (var arrayProp in arrPath)
             {
-                var firstArrayProp = arrPath.First();
-                arrPath = arrPath.Skip(1).ToArray();
-
-                if (currentProps?.TryGetValue(firstArrayProp, out var grandChild) == true)
+                if (currentProps?.TryGetValue(arrayProp, out var grandChild) == true)
                 {
                     result = grandChild;
                     if (result is RedBaseClass rbc2)
@@ -94,7 +92,7 @@ public partial class RedBaseClass
                     continue;
                 }
 
-                if (!int.TryParse(firstArrayProp, out var index) || index < 0)
+                if (!int.TryParse(arrayProp, out var index) || index < 0)
                 {
                     return (false, null);
                 }
