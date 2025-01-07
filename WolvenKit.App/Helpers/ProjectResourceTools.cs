@@ -397,11 +397,12 @@ public class ProjectResourceTools
 
             var parentDir = Path.GetDirectoryName(destAbsPath);
 
-            if (!Directory.Exists(parentDir) && parentDir is not null)
+            if (parentDir is not null && !Directory.Exists(parentDir))
             {
                 Directory.CreateDirectory(parentDir);
             }
 
+            // moving a file from filename.ext to Filename.ext will delete the file, so move it to .tmp first 
             File.Move(sourceAbsPath, $"{destAbsPath}.tmp", true);
             File.Move($"{destAbsPath}.tmp", destAbsPath, true);
 
