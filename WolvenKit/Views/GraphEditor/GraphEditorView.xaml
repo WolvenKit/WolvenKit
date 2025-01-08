@@ -159,7 +159,8 @@
                         SourceOffsetMode="Static"
                         Target="{Binding Target.Anchor}"
                         TargetOffset="7,0"
-                        TargetOffsetMode="Static">
+                        TargetOffsetMode="Static"
+                        IsSelectable="True">
                         <nodify:Connection.Style>
                             <Style TargetType="{x:Type nodify:BaseConnection}">
                                 <Setter Property="Cursor" Value="Hand" />
@@ -169,6 +170,9 @@
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
                                         <Setter Property="Stroke" Value="{StaticResource WolvenKitYellow}" />
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Stroke" Value="{StaticResource WolvenKitGreen}" />
                                     </Trigger>
 
                                     <!--
