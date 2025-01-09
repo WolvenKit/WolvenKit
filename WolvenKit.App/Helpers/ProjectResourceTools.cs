@@ -390,26 +390,29 @@ public class ProjectResourceTools
                     $"Do you want to overwrite the existing file {destRelPath}?",
                     "File already exists!");
 
-                if (response is WMessageBoxResult.OK or WMessageBoxResult.Yes)
+                if (response is not (WMessageBoxResult.OK or WMessageBoxResult.Yes))
                 {
-                    File.Delete(destAbsPath);
+                    return;
                 }
             }
 
             var parentDir = Path.GetDirectoryName(destAbsPath);
 
-            if (!Directory.Exists(parentDir) && parentDir is not null)
+            if (parentDir is not null && !Directory.Exists(parentDir))
             {
                 Directory.CreateDirectory(parentDir);
             }
 
-            File.Move(sourceAbsPath, destAbsPath);
+            // moving a file from filename.ext to Filename.ext will delete the file, so move it to .tmp first 
+            File.Move(sourceAbsPath, $"{destAbsPath}.tmp", true);
+            File.Move($"{destAbsPath}.tmp", destAbsPath, true);
 
             var sourceInRaw = sourceAbsPath.Replace("archive", "raw");
             if (sourceInRaw != sourceAbsPath && File.Exists(sourceInRaw))
             {
                 File.Move(sourceInRaw, destAbsPath.Replace("archive", "raw"), true);
             }
+            
             
         }
         else

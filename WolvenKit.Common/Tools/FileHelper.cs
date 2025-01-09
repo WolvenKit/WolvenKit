@@ -80,69 +80,72 @@ public class FileHelper
         return true;
     }
 
-    public static void MoveRecursively(string sourceDir, string destinationDir, bool overwrite, ILoggerService? logger = null)
+    public static void MoveRecursively(string sourceDirAbsPath, string destDirAbsPath, bool overwrite,
+        ILoggerService? logger = null)
     {
-        if (Path.GetDirectoryName(destinationDir) == sourceDir)
+        // Abort if something is dragged on its own parent (this happens to mana a lot because she can't click) 
+        if (sourceDirAbsPath.Equals(Path.GetDirectoryName(destDirAbsPath), StringComparison.OrdinalIgnoreCase))
         {
             return;
         }
+
+        var destDirTemp = $"{destDirAbsPath}_temp";
         try
         {
-            if (Directory.Exists(sourceDir) && !Directory.EnumerateFileSystemEntries(sourceDir).Any())
+            // source dir is an empty directory
+            if (Directory.Exists(sourceDirAbsPath) && !Directory.EnumerateFileSystemEntries(sourceDirAbsPath).Any())
             {
-                if (Directory.Exists(destinationDir))
+                if (!Directory.Exists(destDirAbsPath))
                 {
-                    Directory.Delete(sourceDir);
-                    return;
+                    Directory.CreateDirectory(destDirAbsPath);
                 }
 
-                Directory.Move(sourceDir, destinationDir);
+                Directory.Delete(sourceDirAbsPath);
                 return;
             } 
             
             // Ensure the destination directory exists
-            if (!Directory.Exists(destinationDir))
+            if (!Directory.Exists(destDirTemp))
             {
-                Directory.CreateDirectory(destinationDir);
+                Directory.CreateDirectory(destDirTemp);
             }
 
             // Move all files
-            var files = Directory.GetFiles(sourceDir, "*", SearchOption.AllDirectories);
+            var files = Directory.GetFiles(sourceDirAbsPath, "*", SearchOption.AllDirectories);
             foreach (var file in files)
             {
-                var relativePath = Path.GetRelativePath(sourceDir, file);
-                var destFile = Path.Combine(destinationDir, relativePath);
+                var relativePath = Path.GetRelativePath(sourceDirAbsPath, file);
+                var destFile = Path.Combine(destDirAbsPath, relativePath);
                 var destDir = Path.GetDirectoryName(destFile);
-
+                
                 if (destDir is not null && !Directory.Exists(destDir))
                 {
                     Directory.CreateDirectory(destDir);
                 }
 
-                if (File.Exists(destFile) && !overwrite)
-                {
-                    logger?.Info($"Skipping existing file {destFile}");
-                    continue;
-                }
-
-                File.Move(file, destFile, true); // true allows overwriting of files
+                // renaming file.ext to File.ext will delete it, so rename it to .tmp first
+                File.Move(file, $"{destFile}.tmp", true);
+                File.Move($"{destFile}.tmp", destFile, true);
             }
 
             // Move all directories by recursively calling this method
-            var directories = Directory.GetDirectories(sourceDir, "*", SearchOption.AllDirectories);
+            var directories = Directory.GetDirectories(sourceDirAbsPath, "*", SearchOption.AllDirectories);
             foreach (var directory in directories)
             {
-                var relativePath = Path.GetRelativePath(sourceDir, directory);
-                var destDir = Path.Combine(destinationDir, relativePath);
-                MoveRecursively(directory, destDir, overwrite, logger);
+                var relativePath = Path.GetRelativePath(sourceDirAbsPath, directory);
+                var destSubDirAbsPath = Path.Combine(destDirAbsPath, relativePath);
+                MoveRecursively(directory, destSubDirAbsPath, overwrite, logger);
             }
 
-            // Optionally, remove the source directory if it's now empty
-            Directory.Delete(sourceDir, true); // true allows recursive deletion
+            // recursive delete the source directory - all our files are in destDirTemp
+            Directory.Delete(sourceDirAbsPath, true);
+
+            Directory.Move(destDirTemp, destDirAbsPath);
+
         }
         catch (IOException e)
         {
-            logger?.Error($"Error when trying to move {sourceDir}");
+            logger?.Error($"Error when trying to move {sourceDirAbsPath}");
             logger?.Error(e);
         }
     }

@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Reactive.Disposables;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using ReactiveUI;
@@ -106,5 +107,17 @@ namespace WolvenKit.Views.Dialogs.Windows
         private void WizardControl_OnFinish(object sender, RoutedEventArgs e) => SaveLastSelection();
 
         private void SaveLastSelection() => s_lastShowRefactorCheckbox = ViewModel?.EnableRefactoring == true;
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (sender is not TextBox textBox || textBox.Text.ToLower() == textBox.Text)
+            {
+                return;
+            }
+
+            var caretIndex = textBox.CaretIndex;
+            textBox.Text = textBox.Text.ToLower();
+            textBox.CaretIndex = caretIndex;
+        }
     }
 }

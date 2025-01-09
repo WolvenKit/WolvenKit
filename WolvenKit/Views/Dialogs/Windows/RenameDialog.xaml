@@ -36,7 +36,7 @@
                 <StackPanel
                     Margin="{DynamicResource WolvenKitMarginTiny}"
                     Orientation="Vertical">
-                    <hc:TextBox x:Name="TextBox" />
+                    <hc:TextBox x:Name="TextBox" TextChanged="TextBox_TextChanged" />
 
                     <StackPanel
                         Margin="{DynamicResource WolvenKitMarginSmallVertical}"
