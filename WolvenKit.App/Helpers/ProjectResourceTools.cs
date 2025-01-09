@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using DynamicData;
 using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Interaction;
@@ -485,9 +486,13 @@ public class ProjectResourceTools
             }
         });
 
+
         if (oldPath.GetResolvedText() is string oldPathStr && !string.IsNullOrEmpty(oldPathStr) &&
             newPath.GetResolvedText() is string newPathStr && !string.IsNullOrEmpty(newPathStr))
         {
+            var oldPathWithForwardSlashes = oldPathStr.Replace("\\", "/");
+            var newPathWithForwardSlashes = newPathStr.Replace("\\", "/");
+            
             var resourceFiles =
                 Directory.GetFiles(activeProject.ResourcesDirectory, "*.*", SearchOption.AllDirectories);
             Parallel.ForEach(resourceFiles, absoluteFilePath =>
@@ -495,14 +500,19 @@ public class ProjectResourceTools
                 try
                 {
                     var fileContent = File.ReadLines(absoluteFilePath).ToArray();
-
-                    var oldPathWithForwardSlashes = oldPathStr.Replace("\\", "/");
-                    var newPathWithForwardSlashes = oldPathStr.Replace("\\", "/");
+                  
 
                     // replace both forward and backward slashes (LUA / reds)
-                    var newFileContent = fileContent.Select(line =>
-                        line.Replace(oldPathStr, newPathStr)
-                            .Replace(oldPathWithForwardSlashes, newPathWithForwardSlashes)).ToArray();
+                    var newFileContent = fileContent.Select(line => line
+                        .Replace(@"\\", @"\") // for lua files
+                        .Replace(oldPathStr, newPathStr)
+                        .Replace(oldPathWithForwardSlashes, newPathWithForwardSlashes)
+                    ).ToArray();
+
+                    if (absoluteFilePath.EndsWith(".lua"))
+                    {
+                        newFileContent = newFileContent.Select(line => line.Replace(@"\", @"\\")).ToArray();
+                    }
 
                     if (newFileContent.All(line => fileContent.Contains(line)))
                     {
