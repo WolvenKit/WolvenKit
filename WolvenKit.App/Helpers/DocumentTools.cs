@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using WolvenKit.App.Extensions;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Common.Exceptions;
@@ -34,6 +35,12 @@ public class DocumentTools
 
     # region appfile
 
+    public List<string> GetAllComponentNames(List<appearanceAppearanceDefinition> appearances)
+    {
+        return appearances.SelectMany(app => app.Components)
+            .Select(c => c.Name.GetResolvedText() ?? "").Where(c => !string.IsNullOrEmpty(c)).Distinct().ToList();
+    }
+    
     public List<string> ConnectAppToEntFile(string absoluteAppFilePath, string absoluteEntFilePath,
         bool clearExistingEntries = false)
     {
@@ -150,6 +157,10 @@ public class DocumentTools
             return;
         }
 
+        var facialAnimWritten = false;
+        var facialGraphWritten = false;
+        var animationsWritten = false;
+
         foreach (var appearance in app.Appearances
                      .Where(a => a.Chunk is not null))
         {
@@ -159,11 +170,13 @@ public class DocumentTools
                 if (!string.IsNullOrEmpty(facialAnim))
                 {
                     anim.Graph = new CResourceReference<animAnimGraph>(facialAnim);
+                    facialAnimWritten = true;
                 }
 
                 if (!string.IsNullOrEmpty(animGraph))
                 {
                     anim.FacialSetup = new CResourceAsyncReference<animFacialSetup>(animGraph);
+                    facialGraphWritten = true;
                 }
             }
 
@@ -185,9 +198,30 @@ public class DocumentTools
                     });
                 }
             }
+
+            animationsWritten = true;
         }
 
-        _loggerService?.Success($"changed facial anims to {facialAnim}");
+        if (!facialAnimWritten && !facialGraphWritten && !animationsWritten)
+        {
+            return;
+        }
+
+        if (facialAnimWritten)
+        {
+            _loggerService?.Success($"set facial animation to {facialAnim}");
+        }
+
+        if (facialGraphWritten)
+        {
+            _loggerService?.Success($"set animgraph to {animGraph}");
+        }
+
+        if (animationsWritten)
+        {
+            _loggerService?.Success($"Wrote {selectedAnims.Count} animations");
+        }
+
         _cr2wTools.WriteCr2W(appCr2W, absoluteAppFilePath);
     }
 

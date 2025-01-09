@@ -415,6 +415,143 @@ namespace WolvenKit.Views.Documents
             });
         }
 
+        private void OnDuplicateComponentAsNewClick(object _, RoutedEventArgs e)
+        {
+            if (RootChunk?.ResolvedData is not appearanceAppearanceResource appResource)
+            {
+                return;
+            }
+
+            List<appearanceAppearanceDefinition> appearances = [];
+            if (SelectedChunk?.ResolvedData is appearanceAppearanceDefinition app)
+            {
+                appearances.Add(app);
+            }
+            else
+            {
+                appearances.AddRange(appResource.Appearances.Select(a => a.Chunk)
+                    .OfType<appearanceAppearanceDefinition>());
+            }
+
+            var componentNames = _documentTools.GetAllComponentNames(appearances);
+            var componentModel = Interactions.ShowDeleteOrDuplicateComponentDialogue((componentNames, false));
+
+            var selectedChunks = SelectedChunks;
+
+            if (!selectedChunks.All(c => c.ResolvedData is appearanceAppearanceDefinition))
+            {
+                selectedChunks.Clear();
+            }
+
+            if (selectedChunks.Count == 0)
+            {
+                selectedChunks.Add(RootChunk);
+            }
+
+            if (componentModel is null || string.IsNullOrEmpty(componentModel.ComponentName) ||
+                string.IsNullOrEmpty(componentModel.NewComponentName))
+            {
+                return;
+            }
+
+            foreach (var chunkViewModel in selectedChunks.SelectMany(cvm =>
+                         GetComponentsByName(cvm, componentModel.ComponentName)).ToList())
+            {
+                var newNode = chunkViewModel.DuplicateChunk(chunkViewModel.NodeIdxInParent);
+
+                if (newNode?.Data is not entIComponent component)
+                {
+                    continue;
+                }
+
+                component.Name = componentModel.NewComponentName;
+                newNode.GetPropertyChild(componentModel.NewComponentName)?.RecalculateProperties();
+                newNode.Parent?.RecalculateProperties();
+            }
+        }
+
+        private void OnDeleteComponentByNameClick(object _, RoutedEventArgs e)
+        {
+            if (RootChunk?.ResolvedData is not appearanceAppearanceResource appResource)
+            {
+                return;
+            }
+
+            List<appearanceAppearanceDefinition> appearances = [];
+            if (SelectedChunk?.ResolvedData is appearanceAppearanceDefinition app)
+            {
+                appearances.Add(app);
+            }
+            else
+            {
+                appearances.AddRange(appResource.Appearances.Select(a => a.Chunk)
+                    .OfType<appearanceAppearanceDefinition>());
+            }
+
+            var componentNames = _documentTools.GetAllComponentNames(appearances);
+            var componentModel = Interactions.ShowDeleteOrDuplicateComponentDialogue((componentNames, true));
+
+            var selectedChunks = SelectedChunks;
+            if (!selectedChunks.All(c => c.ResolvedData is appearanceAppearanceDefinition))
+            {
+                selectedChunks.Clear();
+            }
+
+            if (selectedChunks.Count == 0)
+            {
+                selectedChunks.Add(RootChunk);
+            }
+
+
+            if (componentModel is null || string.IsNullOrEmpty(componentModel.ComponentName) ||
+                string.IsNullOrEmpty(componentModel.NewComponentName))
+            {
+                return;
+            }
+
+            foreach (var chunkViewModel in SelectedChunks.SelectMany(cvm =>
+                         GetComponentsByName(cvm, componentModel.ComponentName)).ToList())
+            {
+                chunkViewModel.DeleteNodesInParent([chunkViewModel]);
+            }
+        }
+
+        private List<ChunkViewModel> GetComponentsByName(ChunkViewModel cvm, string componentName)
+        {
+            List<ChunkViewModel> ret = [];
+            cvm.CalculateProperties();
+            switch (cvm.ResolvedData)
+            {
+                case appearanceAppearanceDefinition:
+                    if (cvm.GetPropertyChild("components") is ChunkViewModel child)
+                    {
+                        child.CalculateProperties();
+                        foreach (var grandChild in child.TVProperties)
+                        {
+                            grandChild.CalculateProperties();
+                        }
+
+                        ret.AddRange(child.TVProperties.Where(c =>
+                            c.ResolvedData is entIComponent component && component.Name == componentName));
+                    }
+
+                    break;
+                case appearanceAppearanceResource app
+                    when cvm.GetPropertyChild("appearances") is ChunkViewModel appearances:
+                    appearances.CalculateProperties();
+                    ret.AddRange(
+                        appearances.TVProperties.SelectMany(
+                            appearance => GetComponentsByName(appearance, componentName)));
+                    break;
+                case CArray<CHandle<appearanceAppearanceDefinition>> array:
+                    ret.AddRange(cvm.GetPropertyChild("appearances")?.TVProperties
+                        .SelectMany(handle => GetComponentsByName(handle, componentName)) ?? []);
+                    break;
+            }
+
+            return ret;
+        }
+
         private void OnChangeChunkMasksClick(object _, RoutedEventArgs e)
         {
             var dialog = new ChangeComponentChunkMaskDialog();
@@ -441,7 +578,7 @@ namespace WolvenKit.Views.Documents
             foreach (var chunkViewModel in SelectedChunks)
             {
                 chunkViewModel.ReplaceMeshComponentProperties(dialog.ViewModel.ComponentName!, chunkMask, depotPath, meshAppearance);
-            }  
+            }
         }
 
         private async void OnFindUnusedProjectFilesClick(object _, RoutedEventArgs e)
