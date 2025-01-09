@@ -17,9 +17,11 @@ namespace WolvenKit.Views.Dialogs.Windows
         public SelectFacialAnimationPathDialog(List<string> facialSetupPaths)
         {
             InitializeComponent();
-
+            
             ViewModel = new SelectAnimationPathViewModel(facialSetupPaths);
             DataContext = ViewModel;
+
+            FilterableDropdownMenu.Options = ViewModel.AnimGraphOptions;
         }
 
         public SelectAnimationPathViewModel ViewModel { get; set; }
@@ -41,6 +43,17 @@ namespace WolvenKit.Views.Dialogs.Windows
             e.Handled = true;
             DialogResult = true;
             Close();
+        }
+
+        private void OnFilterableDropdownMenuPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (ViewModel is null || sender is not Editors.FilterableDropdownMenu d ||
+                e.PropertyName != nameof(Editors.FilterableDropdownMenu.SelectedOption))
+            {
+                return;
+            }
+
+            ViewModel.SelectedGraph = d.SelectedOption;
         }
     }
 }

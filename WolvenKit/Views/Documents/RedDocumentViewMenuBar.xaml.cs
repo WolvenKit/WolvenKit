@@ -415,6 +415,33 @@ namespace WolvenKit.Views.Documents
             });
         }
 
+        private void OnDuplicateComponentAsNewClick(object _, RoutedEventArgs e)
+        {
+        }
+
+        private void OnDeleteComponentByNameClick(object _, RoutedEventArgs e)
+        {
+            var componentName = Interactions.AskForTextInput("Enter component name to delete");
+
+            var selectedChunks = SelectedChunks;
+            if (selectedChunks.Count == 0 && RootChunk is ChunkViewModel root)
+            {
+                selectedChunks.Add(root);
+            }
+
+            foreach (var chunkViewModel in SelectedChunks.Select(cvm => GetComponentByName(cvm, componentName))
+                         .Where(cvm => cvm is not null))
+            {
+                chunkViewModel!.DeleteNodesInParent([chunkViewModel]);
+            }
+        }
+
+
+        private ChunkViewModel? GetComponentByName(ChunkViewModel cvm, string componentName)
+        {
+            return null;
+        }
+
         private void OnChangeChunkMasksClick(object _, RoutedEventArgs e)
         {
             var dialog = new ChangeComponentChunkMaskDialog();
@@ -441,7 +468,7 @@ namespace WolvenKit.Views.Documents
             foreach (var chunkViewModel in SelectedChunks)
             {
                 chunkViewModel.ReplaceMeshComponentProperties(dialog.ViewModel.ComponentName!, chunkMask, depotPath, meshAppearance);
-            }  
+            }
         }
 
         private async void OnFindUnusedProjectFilesClick(object _, RoutedEventArgs e)

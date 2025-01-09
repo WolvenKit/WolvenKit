@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
+using DynamicData;
 using Microsoft.ClearScript.JavaScript;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Types;
@@ -25,9 +26,20 @@ public partial class SelectAnimationPathViewModel : ObservableObject
     [ObservableProperty] private string? _animationPath = "";
     [ObservableProperty] private List<string>? _selectedAnimEntries;
 
+    [ObservableProperty] private Dictionary<string, string> _animGraphOptions = new()
+    {
+        // more entries will be appended by list of paths from constructor
+        { "Player Woman", @"base\characters\head\pma\h0_001_ma_c__player\h0_001_ma_c__player_rigsetup.facialsetup" },
+        {
+            "Player Man",
+            @"base\characters\head\player_base_heads\player_man_average\h0_000_pma_c__basehead\h0_000_pma_c__basehead_rigsetup.facialsetup"
+        },
+    };
+    
     public SelectAnimationPathViewModel(List<string> facialSetupPaths)
     {
-        facialSetupPaths.Where(path => !_animGraphOptions.ContainsValue(path)).ToList().ForEach(path =>
+        var animGraphOpts = _animGraphOptions.ToDictionary();
+        facialSetupPaths.Where(path => !animGraphOpts.ContainsValue(path)).ToList().ForEach(path =>
         {
             if (AnimNameRegex().Matches(path).FirstOrDefault()?.Value is not string animName)
             {
@@ -37,16 +49,19 @@ public partial class SelectAnimationPathViewModel : ObservableObject
             var bodyGender = path.Contains("_wa_") || path.Contains("_pwa_") ? "Woman" : "Man";
             animName = animName.Replace("_", " ").CapitalizeEachWord();
             var animKey = $"{bodyGender} - {animName}";
-            var numDuplicates = _animGraphOptions.Keys.Count((item) => item.StartsWith(animKey));
+            var numDuplicates = animGraphOpts.Keys.Count((item) => item.StartsWith(animKey));
             if (numDuplicates > 0)
             {
                 animKey = $"{animKey} {numDuplicates}";
             }
 
-            _animGraphOptions.Add(animKey, path);
+            animGraphOpts.Add(animKey, path);
         });
 
-        UpdateFilteredGraphOptions();
+
+        AnimGraphOptions = animGraphOpts;
+        OnPropertyChanged(nameof(AnimGraphOptions));
+
     }
 
     public const string FacialAnimPathFemale =
@@ -70,18 +85,7 @@ public partial class SelectAnimationPathViewModel : ObservableObject
         { "NPV: Man Average", @"base\animations\facial\_facial_graphs\man_average_sermo.animgraph" },
         { "NPV: Fat", @"base\animations\facial\_facial_graphs\man_fat_sermo.animgraph" },
     };
-
-    private readonly Dictionary<string, string> _animGraphOptions = new()
-    {
-        // more entries will be appended by list of paths from constructor
-        { "Player Woman", @"base\characters\head\pma\h0_001_ma_c__player\h0_001_ma_c__player_rigsetup.facialsetup" },
-        {
-            "Player Man",
-            @"base\characters\head\player_base_heads\player_man_average\h0_000_pma_c__basehead\h0_000_pma_c__basehead_rigsetup.facialsetup"
-        },
-    };
-
-
+   
     public static readonly List<string> PhotomodeAnimEntriesFemaleDefault =
     [
         "base\\animations\\ui\\photomode\\photomode_female_facial.anims",
@@ -161,34 +165,6 @@ public partial class SelectAnimationPathViewModel : ObservableObject
         "base\\animations\\facial\\gameplay\\face_ma_gang_unarmed_reaction_death.anims",
     ];
 
-    private void UpdateFilteredGraphOptions()
-    {
-        var filteredOptions = _animGraphOptions
-            .Where(o => string.IsNullOrEmpty(FilterText) ||
-                        o.Key.Contains(FilterText, StringComparison.OrdinalIgnoreCase) ||
-                        o.Value.Contains(FilterText, StringComparison.OrdinalIgnoreCase))
-            .ToList();
-
-        FilteredGraphOptions.Clear();
-        foreach (var option in filteredOptions)
-        {
-            FilteredGraphOptions.Add(option);
-        }
-    }
-
-    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
-    {
-        switch (e.PropertyName)
-        {
-            case nameof(FilterText):
-                UpdateFilteredGraphOptions();
-                break;
-            default:
-                break;
-        }
-    }
-
-
 
     [ObservableProperty] private string? _selectedFacialAnim;
 
@@ -198,7 +174,6 @@ public partial class SelectAnimationPathViewModel : ObservableObject
         get => _facialAnimOptions;
         set => SetProperty(ref _facialAnimOptions, value);
     }
-
 
     private const string s_animEntryNpc = "NPC";
     private const string s_animEntryPhotomode = "Photomode";
@@ -211,12 +186,4 @@ public partial class SelectAnimationPathViewModel : ObservableObject
 
     [ObservableProperty] private string? _selectedGraph;
 
-    [ObservableProperty] private string? _filterText;
-    private ObservableCollection<KeyValuePair<string, string>> _filteredGraphOptions = [];
-
-    public ObservableCollection<KeyValuePair<string, string>> FilteredGraphOptions
-    {
-        get => _filteredGraphOptions;
-        set => SetProperty(ref _filteredGraphOptions, value);
-    }
 }
