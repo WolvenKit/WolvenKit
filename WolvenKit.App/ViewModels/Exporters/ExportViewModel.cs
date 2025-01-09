@@ -93,6 +93,8 @@ public partial class ExportViewModel : AbstractImportExportViewModel
         var total = 0;
         var successful = 0;
 
+        _importExportHelper.ClearFileLookup();
+
         //prepare a list of failed items
         var failedItems = new List<string>();
 
