@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using WolvenKit.App.Extensions;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Common.Exceptions;
@@ -34,6 +35,12 @@ public class DocumentTools
 
     # region appfile
 
+    public List<string> GetAllComponentNames(List<appearanceAppearanceDefinition> appearances)
+    {
+        return appearances.SelectMany(app => app.Components)
+            .Select(c => c.Name.GetResolvedText() ?? "").Where(c => !string.IsNullOrEmpty(c)).Distinct().ToList();
+    }
+    
     public List<string> ConnectAppToEntFile(string absoluteAppFilePath, string absoluteEntFilePath,
         bool clearExistingEntries = false)
     {

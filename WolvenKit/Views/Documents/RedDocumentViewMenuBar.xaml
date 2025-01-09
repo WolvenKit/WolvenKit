@@ -13,8 +13,9 @@
     mc:Ignorable="d"
     d:DesignWidth="800"
     d:DesignHeight="36"
-    DataContext="{Binding RelativeSource={RelativeSource Self}, Path=ViewModel}"
-    x:Name="RedDocumentViewToolbarControl">
+    x:Name="RedDocumentViewToolbarControl"
+    DataContext="{Binding RelativeSource={RelativeSource Self},
+                          Path=ViewModel}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -454,10 +455,7 @@
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
                                         <Condition Binding="{Binding Path=IsShiftKeyDown}" Value="False" />
-                                        <Condition
-                                            Binding="{Binding Path=ContentType,
-                                          UpdateSourceTrigger=PropertyChanged}"
-                                            Value="{x:Static documents:RedDocumentItemType.Mesh}" />
+                                        <Condition Binding="{Binding Path=ContentType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Static documents:RedDocumentItemType.Mesh}" />
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="Visibility" Value="Visible" />
                                 </MultiDataTrigger>
@@ -485,17 +483,14 @@
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
                                         <Condition Binding="{Binding Path=IsShiftKeyDown}" Value="True" />
-                                        <Condition
-                                            Binding="{Binding Path=ContentType,
-                                          UpdateSourceTrigger=PropertyChanged}"
-                                            Value="{x:Static documents:RedDocumentItemType.Mesh}" />
+                                        <Condition Binding="{Binding Path=ContentType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Static documents:RedDocumentItemType.Mesh}" />
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="Visibility" Value="Visible" />
                                 </MultiDataTrigger>
                             </Style.Triggers>
                         </Style>
                     </MenuItem.Style>
-                    
+
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
@@ -602,8 +597,8 @@
                         <MenuItem.Icon>
                             <templates:IconBox
                                 IconPack="Material"
-                                Kind="LibraryAdd"
-                                Foreground="White" />
+                                Kind="ContentCopy"
+                                Foreground="{StaticResource WolvenKitGraphLabel}" />
                         </MenuItem.Icon>
                     </MenuItem>
 
@@ -615,11 +610,11 @@
                         <MenuItem.Icon>
                             <templates:IconBox
                                 IconPack="Material"
-                                Kind="LayersClear"
+                                Kind="DeleteSweep"
                                 Foreground="{StaticResource WolvenKitRed}" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    
+
                 </MenuItem>
 
 
@@ -635,7 +630,7 @@
                             Foreground="White" />
                     </MenuItem.Icon>
                 </MenuItem>
-                
+
                 <!-- Select animation path -->
                 <MenuItem
                     Style="{StaticResource MenuItemStyle}"

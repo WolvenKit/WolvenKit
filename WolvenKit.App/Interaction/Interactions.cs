@@ -97,6 +97,10 @@ public static class Interactions
     public static Func<(string, List<string>, Cp77Project), (List<string>, string? moveToPath)> ShowDeleteOrMoveFilesList { get; set; } =
         _ => throw new NotImplementedException();
 
+    public static Func<(List<string>, bool), DeleteOrDuplicateComponentDialogViewModel?>
+        ShowDeleteOrDuplicateComponentDialogue { get; set; } =
+        _ => throw new NotImplementedException();
+
     public static Func<(string, IDictionary<string, List<string>>), bool> ShowBrokenReferencesList { get; set; } =
         _ => throw new NotImplementedException();
 

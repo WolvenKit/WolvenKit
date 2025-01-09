@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.RED4.Types;
 
@@ -10,7 +12,7 @@ namespace WolvenKit.App.ViewModels.Dialogs;
 /// </summary>
 public partial class DeleteOrDuplicateComponentDialogViewModel() : ObservableObject
 {
-    [ObservableProperty] private List<string> _componentNames = [];
+    [ObservableProperty] private Dictionary<string, string> _componentNames = [];
 
     /// <summary>
     /// Name of the component 
@@ -26,4 +28,30 @@ public partial class DeleteOrDuplicateComponentDialogViewModel() : ObservableObj
     /// remember values? (from dialog) 
     /// </summary>
     [ObservableProperty] private bool _rememberValues;
+
+    /// <summary>
+    /// remember values? (from dialog) 
+    /// </summary>
+    [ObservableProperty] private bool _isDeleting;
+
+    public DeleteOrDuplicateComponentDialogViewModel(List<string> componentNames, bool isDeleting) : this()
+    {
+        foreach (var componentName in componentNames)
+        {
+            ComponentNames.Add(componentName, componentName);
+        }
+
+        OnPropertyChanged(nameof(ComponentNames));
+        IsDeleting = isDeleting;
+        OnPropertyChanged(nameof(IsDeleting));
+    }
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        base.OnPropertyChanged(e);
+        if (e.PropertyName is nameof(ComponentName))
+        {
+            NewComponentName = $"{ComponentName}_copy";
+        }
+    }
 }
