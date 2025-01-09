@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Input;
@@ -15,13 +17,14 @@ namespace WolvenKit.Views.Dialogs.Windows
         private static string s_lastComponentName = "";
         private static string s_lastNewComponentName = "";
 
-        public DeleteOrDuplicateComponentDialog()
+        public DeleteOrDuplicateComponentDialog(List<string> componentNames, bool isDeleting = false)
         {
             InitializeComponent();
 
-            ViewModel = new DeleteOrDuplicateComponentDialogViewModel();
+            ViewModel = new DeleteOrDuplicateComponentDialogViewModel(componentNames, isDeleting);
             DataContext = ViewModel;
 
+            FilterableDropdownMenu.Options = componentNames.ToDictionary(s => s, s => s);
             LoadLastSelection();
         }
 
@@ -91,5 +94,14 @@ namespace WolvenKit.Views.Dialogs.Windows
         }
 
         private void WizardControl_OnFinish(object sender, RoutedEventArgs e) => SaveLastSelection();
+
+        private void OnFilterableDropdownChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (ViewModel is not null && sender is FilterableDropdownMenu f &&
+                e.PropertyName is nameof(FilterableDropdownMenu.SelectedOption))
+            {
+                ViewModel.ComponentName = f.SelectedOption;
+            }
+        }
     }
 }

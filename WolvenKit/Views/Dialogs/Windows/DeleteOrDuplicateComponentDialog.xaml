@@ -11,7 +11,8 @@
     MinHeight="{DynamicResource WolvenKitDialogHeightSmall}"
     SizeToContent="WidthAndHeight"
     FocusManager.FocusedElement="{Binding ElementName=ComponentNameBox}"
-    DataContext="{Binding RelativeSource={RelativeSource Self}, Path=ViewModel}"
+    DataContext="{Binding RelativeSource={RelativeSource Self},
+                          Path=ViewModel}"
     WindowStartupLocation="CenterScreen">
 
 
@@ -33,19 +34,19 @@
             FinishButtonClosesWindow="True"
             Finish="WizardControl_OnFinish">
             <syncfusion:WizardPage
+                Height="Auto"
                 BackVisibility="Collapsed"
                 CancelVisibility="Visible"
                 FinishVisibility="Visible"
                 HelpVisibility="Collapsed"
                 NextVisibility="Collapsed"
                 PreviewKeyDown="WizardPage_PreviewKeyDown"
-                Height="Auto"
                 PageType="Exterior">
                 <Grid
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                        <ColumnDefinition Width="{StaticResource WolvenKitDialogLabelColumnWidthMedium}" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
@@ -54,30 +55,44 @@
                         <RowDefinition Height="10" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="10" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="10" />
                     </Grid.RowDefinitions>
 
 
-                    <editors:FilterableDropdownMenu Grid.Row="0" Grid.Column="0"
-                                                    Grid.RowSpan="2"
-                                                    Grid.ColumnSpan="2"
-                                                    Height="Auto"
-                                                    Label="Expression set"
-                                                    Options="{Binding ComponentNames}"
-                                                    SelectedOption="{Binding ComponentName}" />
+                    <editors:FilterableDropdownMenu
+                        x:Name="FilterableDropdownMenu"
+                        Grid.Row="0"
+                        Grid.RowSpan="2"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Height="Auto"
+                        Label="original component:"
+                        Options="{Binding ComponentNames}"
+                        SelectedOption="{Binding ComponentName}"
+                        PropertyChanged="OnFilterableDropdownChanged" />
+
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Margin="{DynamicResource WolvenKitMarginTinyBottom}"
+                        HorizontalAlignment="Left"
+                        Background="#252525"
+                        BorderThickness="0"
+                        Visibility="{Binding IsDeleting,
+                                             Converter={StaticResource InvertBooleanVisibilityConverter}}"
+                        Content="New component name" />
 
                     <TextBox
-                        x:Name="New"
+                        x:Name="ComponentNameBox"
                         Grid.Row="2"
                         Grid.Column="1"
                         Margin="{DynamicResource WolvenKitMarginTinyBottom}"
+                        Visibility="{Binding IsDeleting,
+                                             Converter={StaticResource InvertBooleanVisibilityConverter}}"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
-                        KeyboardNavigation.TabIndex="2">
-                        <TextBox.ToolTip>
-                            <ToolTip>
-                                Can take a depot path or the name of a sibling component. Will check for sibling component first.
-                            </ToolTip>
-                        </TextBox.ToolTip>
-                    </TextBox>
+                        Text="{Binding NewComponentName}"
+                        KeyboardNavigation.TabIndex="3" />
 
                     <Label
                         Grid.Row="4"
@@ -86,26 +101,17 @@
                         HorizontalAlignment="Left"
                         Background="#252525"
                         BorderThickness="0"
-                        Content="Mesh appearance:" />
-
-                    <TextBox
-                        x:Name="MeshAppearanceNameBox"
-                        Grid.Row="4"
-                        Grid.Column="1"
-                        Margin="{DynamicResource WolvenKitMarginTinyBottom}"
-                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
-                        KeyboardNavigation.TabIndex="3">
-                        <TextBox.ToolTip>
-                            <ToolTip>
-                                Can take an appearance or the name of a sibling component. Will check for sibling component first.
-                            </ToolTip>
-                        </TextBox.ToolTip>
-                    </TextBox>
+                        Visibility="{Binding IsDeleting,
+                                             Converter={StaticResource InvertBooleanVisibilityConverter}}"
+                        Content="Remember?" />
 
                     <CheckBox
                         x:Name="RememberValuesCheckBox"
-                        Grid.Row="8"
+                        Grid.Row="4"
                         Grid.Column="1"
+                        Visibility="{Binding IsDeleting,
+                                             Converter={StaticResource InvertBooleanVisibilityConverter}}"
+                        IsChecked="{Binding RememberValues}"
                         KeyboardNavigation.TabIndex="2" />
                 </Grid>
             </syncfusion:WizardPage>

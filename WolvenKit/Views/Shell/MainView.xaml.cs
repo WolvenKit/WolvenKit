@@ -57,6 +57,16 @@ namespace WolvenKit.Views.Shell
                 Interactions.ShowQuestionYesNo = ShowQuestionYesNo;
 
                 Interactions.ShowPopupWithWeblink = ShowConfirmationWithLink;
+                Interactions.ShowDeleteOrDuplicateComponentDialogue = (args) =>
+                {
+                    var dialog = new DeleteOrDuplicateComponentDialog(args.Item1, args.Item2);
+                    if (dialog.ViewModel is not null && dialog.ShowDialog(this) == true)
+                    {
+                        return dialog.ViewModel;
+                    }
+
+                    return null;
+                };
                 
                 Interactions.ShowLaunchProfilesView = () =>
                 {
