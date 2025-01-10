@@ -169,6 +169,11 @@ public class ImportExportHelper
 
     #endregion RedMod
 
+    /// <summary>
+    /// Clears the lookup table for already exported file.
+    /// </summary>
+    public void ClearFileLookup() => _modTools.ClearFileLookup();
+
     public async Task<bool> Export(FileInfo cr2wFile, GlobalExportArgs args, DirectoryInfo basedir, DirectoryInfo? rawoutdir = null, ECookedFileFormat[]? forcebuffers = null) =>
         await Task.Run(async () =>
         {
