@@ -365,8 +365,7 @@ public partial class RedGraph
         }
         else
         {
-            _loggerService?.Error("Scene graph failed to initialize. Check the scene for references to nonexistent resources.");
-            _loggerService?.Error("Possible places: screenplayStore sceneGraph");
+            _loggerService?.Error("Scene graph failed to initialize. Check that the sceneGraph is created.");
         }
 
         foreach (var node in graph.Nodes)
