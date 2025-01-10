@@ -819,6 +819,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
+        StopWatcher();
         var (prefixPath, relativePath) = _projectManager.ActiveProject.SplitFilePath(absolutePath);
 
         if (absolutePath.StartsWith(_projectManager.ActiveProject.ModDirectory))
@@ -836,6 +837,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         await _projectResourceTools.MoveAndRefactor(_projectManager.ActiveProject, relativePath, newRelativePath,
             prefixPath, refactor);
         _appViewModel.ReloadChangedFiles();
+        ResumeFileWatcher();
     }
 
 
