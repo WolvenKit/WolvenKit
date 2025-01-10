@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using DynamicData;
 using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Interaction;
@@ -457,6 +458,7 @@ public class ProjectResourceTools
         ReplacePathInProject(activeProject, oldRelPath, newRelPath);
     }
 
+    private static readonly List<string> s_replaceInRawFileExtensions = [".lua", ".xl", ".json", ".yaml", ".yml"];
     public void ReplacePathInProject(Cp77Project? activeProject, ResourcePath oldPath, ResourcePath newPath)
     {
         if (oldPath == newPath || activeProject is null)
@@ -484,6 +486,53 @@ public class ProjectResourceTools
                 failedFiles.Add(file.RelativePath(activeProject.ModDirectory));
             }
         });
+
+
+        if (oldPath.GetResolvedText() is string oldPathStr && !string.IsNullOrEmpty(oldPathStr) &&
+            newPath.GetResolvedText() is string newPathStr && !string.IsNullOrEmpty(newPathStr))
+        {
+            var oldPathWithForwardSlashes = oldPathStr.Replace("\\", "/");
+            var newPathWithForwardSlashes = newPathStr.Replace("\\", "/");
+            
+            var resourceFiles =
+                Directory.GetFiles(activeProject.ResourcesDirectory, "*.*", SearchOption.AllDirectories);
+            Parallel.ForEach(resourceFiles, absoluteFilePath =>
+            {
+                if (!s_replaceInRawFileExtensions.Contains(Path.GetExtension(absoluteFilePath)))
+                {
+                    return;
+                }
+                try
+                {
+                    var fileContent = File.ReadLines(absoluteFilePath).ToArray();
+                  
+
+                    // replace both forward and backward slashes (LUA / reds)
+                    var newFileContent = fileContent.Select(line => line
+                        .Replace(@"\\", @"\") // for lua files
+                        .Replace(oldPathStr, newPathStr)
+                        .Replace(oldPathWithForwardSlashes, newPathWithForwardSlashes)
+                    ).ToArray();
+
+                    if (absoluteFilePath.EndsWith(".lua"))
+                    {
+                        newFileContent = newFileContent.Select(line => line.Replace(@"\", @"\\")).ToArray();
+                    }
+
+                    if (newFileContent.All(line => fileContent.Contains(line)))
+                    {
+                        return;
+                    }
+
+                    File.WriteAllLines(absoluteFilePath, newFileContent);
+                }
+                catch (Exception)
+                {
+                    failedFiles.Add(absoluteFilePath.RelativePath(activeProject.ResourcesDirectory));
+                }
+            });
+        }
+        
 
         if (failedFiles.Count <= 0)
         {
@@ -528,7 +577,71 @@ public class ProjectResourceTools
             {
                 return;
             }
-            
+
+            if (cr2W!.RootChunk is JsonResource or C2dArray)
+            {
+                ReplaceInStrings();
+            }
+            else
+            {
+                ReplaceInIRedRefs();
+            }
+        }
+
+        if (!wasModified)
+        {
+            return;
+        }
+
+        using var fs2 = File.Open(absoluteFilePath, FileMode.Create);
+        using var cw = new CR2WWriter(fs2);
+
+        cw.WriteFile(cr2W);
+
+        return;
+
+        void ReplaceInStrings()
+        {
+            if (oldPathStr is null || newPathStr is null)
+            {
+                return;
+            }
+
+            var refs = cr2W!.FindType(typeof(IRedString));
+            foreach (var result in refs)
+            {
+                var stringValue = result.Value switch
+                {
+                    CString resourcePath => resourcePath.GetString(),
+                    _ => result.Value.ToString() ?? ""
+                };
+
+                if (string.IsNullOrEmpty(stringValue) || !stringValue.Contains(oldPathStr))
+                {
+                    continue;
+                }
+
+                // we need to get the parent node by xpath
+                var resultName = result.Path.Split([':', '.']).LastOrDefault();
+                if (string.IsNullOrEmpty(resultName))
+                {
+                    continue;
+                }
+
+                var searchResult = cr2W.GetFromXPath(result.Path[..^(resultName.Length + 1)]);
+                if (searchResult.Item2 is not IRedType parent || parent is not IList list ||
+                    !int.TryParse(resultName, out var idx))
+                {
+                    continue;
+                }
+
+                list[idx] = (CString)stringValue.Replace(oldPathStr, newPathStr);
+                wasModified = true;
+            }
+        }
+
+        void ReplaceInIRedRefs()
+        {
             var refs = cr2W!.FindType(typeof(IRedRef));
             foreach (var result in refs)
             {
@@ -578,7 +691,8 @@ public class ProjectResourceTools
 
                 var parentPath = string.Join('.', result.Path.Split('.')[..^1]);
 
-                var newValue = (IRedRef)RedTypeManager.CreateRedType(resourceReference.RedType, newDepotPath, resourceReference.Flags);
+                var newValue = (IRedRef)RedTypeManager.CreateRedType(resourceReference.RedType, newDepotPath,
+                    resourceReference.Flags);
 
                 if (result.Name.Contains(':'))
                 {
@@ -617,7 +731,8 @@ public class ProjectResourceTools
                             kvp.Value = newValue;
                             break;
                         default:
-                            throw new NotImplementedException($"Can't replace in property type {parentClass.Item2?.GetType().Name}");
+                            throw new NotImplementedException(
+                                $"Can't replace in property type {parentClass.Item2?.GetType().Name}");
                     }
 
                     _loggerService?.Debug($"Replaced \"{result.Path}\" in \"{absoluteFilePath}\"");
@@ -626,16 +741,6 @@ public class ProjectResourceTools
                 wasModified = true;
             }
         }
-
-        if (!wasModified)
-        {
-            return;
-        }
-
-        using var fs2 = File.Open(absoluteFilePath, FileMode.Create);
-        using var cw = new CR2WWriter(fs2);
-
-        cw.WriteFile(cr2W);
     }
 
 }
