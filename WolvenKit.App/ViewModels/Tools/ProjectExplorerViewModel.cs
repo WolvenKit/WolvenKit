@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -9,13 +8,11 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Threading;
 using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Octokit;
 using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
@@ -148,8 +145,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <summary>
     /// Set status of "scroll to open file" button, based on whether or not we have one opened
     /// </summary>
-    private void AppViewModelOnPropertyChanged(object? sender, PropertyChangedEventArgs e) =>
+    private void AppViewModelOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
         CanScrollToOpenFile = HasSelectedItem && _appViewModel.ActiveDocument is not null;
+        if (e.PropertyName == nameof(AppViewModel.ActiveDocument))
+        {
+            SaveOpenFilePath(_appViewModel.ActiveDocument?.FilePath);
+        }
+    }
 
     private bool _loading;
 
@@ -192,14 +195,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             ActiveProject = _projectManager.ActiveProject;
             if (ActiveProject is not null)
             {
-                LoadFileTreeState(ActiveProject);
+                _loadingProjectData = true;
+                ReadProjectStateFromFiles(ActiveProject);
                 _projectWatcher.WatchProject(ActiveProject);
+                _loadingProjectData = false;
             }
 
             OnProjectChanged?.Invoke();
         }, DispatcherPriority.ContextIdle);
-
-
     }
 
     public DispatchedObservableCollection<FileSystemModel> FileTree => _projectWatcher.FileTree;
@@ -309,7 +312,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
     }
 
-    public string GetActiveFolderPath() => SelectedTabIndex switch
+    private string GetActiveFolderPath() => SelectedTabIndex switch
     {
         0 => ActiveProject.NotNull().FileDirectory,
         1 => ActiveProject.NotNull().ModDirectory,
@@ -408,6 +411,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private bool _hasUnsavedFileTreeChanges;
 
     private bool _projectExplorerTabChanged;
+    private bool _loadingProjectData;
 
 
     [GeneratedRegex(@".*\.\S+\.glb$")]
@@ -1085,18 +1089,81 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     // IconSource = bi;
 
 
+    private const string s_projectFilesDirName = ".projectFiles";
+    private const string s_openFilesList = "openFilesList.json";
+
+
     private const string s_treestateFileName = "fileTreeState.json";
-    private void LoadFileTreeState(Cp77Project project)
+
+    private void ReadProjectStateFromFiles(Cp77Project project)
     {
-        var statePath = GetTreeStateFilePath(project);
-        if (File.Exists(statePath))
+        var projectFilesDir = Path.Combine(project.ProjectDirectory, s_projectFilesDirName);
+        if (!Directory.Exists(projectFilesDir))
+        {
+            Directory.CreateDirectory(projectFilesDir);
+        }
+
+        // make sure to move the treestate file into the subfolder
+        var oldTreeStateFile = Path.Combine(project.ProjectDirectory, s_treestateFileName);
+        var newTreeStateFile = Path.Combine(projectFilesDir, s_treestateFileName);
+        if (File.Exists(oldTreeStateFile) && !File.Exists(newTreeStateFile))
+        {
+            File.Move(oldTreeStateFile, projectFilesDir);
+        }
+        else if (File.Exists(newTreeStateFile))
+        {
+            File.Delete(oldTreeStateFile);
+        }
+
+        // read tree state from file
+        if (File.Exists(newTreeStateFile))
         {
             _hasUnsavedFileTreeChanges = false;
-            ExpansionStateDictionary = JsonSerializer.Deserialize<Dictionary<string, bool>>(File.ReadAllText(statePath)) ?? new();
+            ExpansionStateDictionary =
+                JsonSerializer.Deserialize<Dictionary<string, bool>>(File.ReadAllText(newTreeStateFile)) ?? new();
         }
         else
         {
             ExpansionStateDictionary = [];
+        }
+
+        // read last opened files from file
+        var lastFilesPath = Path.Join(project.ProjectDirectory, s_projectFilesDirName, s_openFilesList);
+        if (!File.Exists(lastFilesPath))
+        {
+            return;
+        }
+
+        var lastFilePaths = File.ReadLines(lastFilesPath)
+            .Where(path => File.Exists(project.GetAbsolutePath(path)))
+            .TakeLast(_settingsManager.NumFilesToReopen)
+            .ToList();
+
+        foreach (var path in lastFilePaths)
+        {
+            _appViewModel.OpenFileFromDepotPath(path);
+        }
+
+        // write back the last X entries
+        File.WriteAllLines(lastFilesPath, lastFilePaths);
+    }
+
+    private void SaveOpenFilePath(string? filePath)
+    {
+        if (_loadingProjectData || string.IsNullOrEmpty(filePath) || ActiveProject is null)
+        {
+            return;
+        }
+
+        var listFile = Path.Combine(ActiveProject.ProjectDirectory, s_projectFilesDirName, s_openFilesList);
+        var relativePath = ActiveProject.GetRelativePath(filePath);
+        if (!File.Exists(listFile))
+        {
+            File.WriteAllText(listFile, relativePath);
+        }
+        else
+        {
+            File.AppendAllLines(listFile, [relativePath]);
         }
     }
 
@@ -1111,9 +1178,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _projectExplorerTabChanged = false;
     }
 
-    public void SaveProjectExplorerExpansionStateIfDirty() => SaveProjectExplorerExpansionStateIfDirty(ActiveProject);
-
-    private static string GetTreeStateFilePath(Cp77Project project) => Path.Combine(project.ProjectDirectory, s_treestateFileName);
+    private void SaveProjectExplorerExpansionStateIfDirty() => SaveProjectExplorerExpansionStateIfDirty(ActiveProject);
 
     private void SaveProjectExplorerExpansionStateIfDirty(Cp77Project? project)
     {
@@ -1122,7 +1187,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        File.WriteAllText(GetTreeStateFilePath(project), JsonSerializer.Serialize(ExpansionStateDictionary));
+        File.WriteAllText(Path.Join(project.ProjectDirectory, s_projectFilesDirName, s_treestateFileName),
+            JsonSerializer.Serialize(ExpansionStateDictionary));
         _hasUnsavedFileTreeChanges = false;
     }
 
