@@ -47,6 +47,8 @@
     <Color x:Key="WolvenKitGraphLabelColor">White</Color>
     <Color x:Key="WolvenKitGraphCurveColor">White</Color>
 
+    <Color x:Key="WolvenKitLabelColor">White</Color>
+
     <!-- Brushes -->
     <SolidColorBrush x:Key="CustomSliderForegroundBrush" Color="#FF1E91EA" />
     <SolidColorBrush x:Key="CustomSliderBackgroundBrush" Color="#55ffffff" />
@@ -78,7 +80,7 @@
     <SolidColorBrush x:Key="WolvenKitPurple50" Color="#7F6495ED" />
     <SolidColorBrush x:Key="WolvenKitTan25" Color="#FFA7967D" />
     <SolidColorBrush x:Key="WolvenKitTan50" Color="#7FD0A467" />
-
+    
     <SolidColorBrush x:Key="ForegroundColor" Color="#EBEBEB" />
     <SolidColorBrush x:Key="ForegroundColor_Grey_Light" Color="#cacaca" />
     <SolidColorBrush x:Key="ForegroundColor_Grey1" Color="#ababab" />
@@ -111,6 +113,31 @@
     <SolidColorBrush x:Key="WolvenKitGraphLabel" Color="{StaticResource WolvenKitGraphLabelColor}" />
     <SolidColorBrush x:Key="WolvenKitGraphCurve" Color="{StaticResource WolvenKitGraphCurveColor}" />
 
+    <!-- Dialog Label styles -->
+    <Style
+        x:Key="WolvenkitDialogLabelStyle"
+        TargetType="{x:Type Label}" BasedOn="{StaticResource  {x:Type Label}}">
+        <Setter Property="Foreground" Value="{StaticResource WolvenKitLabelColor}"></Setter>
+        <Setter Property="Width" Value="{StaticResource WolvenKitDialogLabelColumnWidth}"></Setter>
+        <Setter Property="HorizontalAlignment" Value="Right"></Setter>
+    </Style>
+
+    <Style
+        x:Key="WolvenkitDialogLabelStyleMedium"
+        TargetType="{x:Type Label}" BasedOn="{StaticResource  WolvenkitDialogLabelStyle}">
+        <Setter Property="Width" Value="{StaticResource WolvenKitDialogLabelColumnWidthMedium}"></Setter>
+    </Style>
+
+    <!-- Placeholder texts -->
+    <Style x:Key="WolvenkitPlaceholderStyle" TargetType="{x:Type TextBlock}"
+           BasedOn="{StaticResource {x:Type TextBlock}}">
+        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Inactive}"></Setter>
+        <Setter Property="VerticalAlignment" Value="Center"></Setter>
+        <Setter Property="IsHitTestVisible" Value="False"></Setter>
+        <Setter Property="Margin" Value="0"></Setter>
+        <Setter Property="Padding" Value="10, 0"></Setter>
+    </Style>
+    
     <Style
         x:Key="WolvenKitTabControl"
         BasedOn="{StaticResource SyncfusionDocumentTabControlExtStyle}"

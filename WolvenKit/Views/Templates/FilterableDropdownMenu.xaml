@@ -4,7 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     xmlns:hc="https://handyorg.github.io/handycontrol"
-    xmlns:converters="clr-namespace:WolvenKit.Converters">
+    xmlns:converters="clr-namespace:WolvenKit.Converters"
+    FocusManager.FocusedElement="{Binding ElementName=FilterTextBox}">
     <Grid>
         <Grid.Resources>
             <ResourceDictionary>
@@ -12,11 +13,11 @@
                     <hc:ThemeResources />
                     <hc:Theme />
                 </ResourceDictionary.MergedDictionaries>
-                <Style TargetType="{x:Type Label}">
-                    <Setter Property="VerticalAlignment" Value="Center" />
+                <Style TargetType="{x:Type Label}" BasedOn="{StaticResource WolvenkitDialogLabelStyleMedium}">
                 </Style>
-
-
+                <Style TargetType="{x:Type Grid}">
+                    <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}"></Setter>
+                </Style>
                 <converters:IntToVisibilityConverterInverted x:Key="IntToVisibilityConverterInverted" />
             </ResourceDictionary>
         </Grid.Resources>
@@ -32,14 +33,21 @@
             <RowDefinition Height="5" />
         </Grid.RowDefinitions>
 
+        <!-- ====================================== -->
+        <!--                Label                   -->
+        <!-- ====================================== -->
         <Label
             Grid.Row="0"
             Grid.Column="0"
             HorizontalAlignment="Left"
             Background="#252525"
             BorderThickness="0"
+            Width="{StaticResource WolvenKitLabelWidthMedium}"
             Content="{Binding Label}" />
 
+        <!-- ====================================== -->
+        <!--               Filter                   -->
+        <!-- ====================================== -->
         <TextBox
             x:Name="FilterTextBox"
             Grid.Row="0"
@@ -47,22 +55,23 @@
             Margin="0"
             Foreground="{StaticResource ForegroundColor_Grey_Dark}"
             helpers:TextBoxBehavior.TripleClickSelectAll="True"
+            KeyboardNavigation.TabIndex="1"
             Text="{Binding FilterText,
                            UpdateSourceTrigger=PropertyChanged}" />
 
+        <!-- Placeholder text -->
         <TextBlock
             Grid.Row="0"
             Grid.Column="1"
-            Margin="0,0,0,0"
-            Padding="10,0"
-            VerticalAlignment="Center"
-            Foreground="{StaticResource ForegroundColor_Grey_Inactive}"
+            Text="Filter"
+            Style="{StaticResource WolvenkitPlaceholderStyle}"
             Visibility="{Binding ElementName=FilterTextBox,
                                  Path=Text.Length,
-                                 Converter={StaticResource IntToVisibilityConverterInverted}}"
-            Text="Filter"
-            IsHitTestVisible="False" />
+                                 Converter={StaticResource IntToVisibilityConverterInverted}}" />
 
+        <!-- ====================================== -->
+        <!--             Dropdown                   -->
+        <!-- ====================================== -->
         <ComboBox
             x:Name="Dropdown"
             Grid.Row="2"
@@ -70,6 +79,8 @@
             Height="{StaticResource WolvenKitTabHeight}"
             ItemsSource="{Binding FilteredOptions,
                                   Mode=OneWay}"
+
+            KeyboardNavigation.TabIndex="2"
             SelectedValuePath="Value"
             DisplayMemberPath="Key"
             SelectedValue="{Binding SelectedOption}" />

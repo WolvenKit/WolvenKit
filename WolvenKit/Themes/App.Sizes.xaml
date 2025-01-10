@@ -188,10 +188,17 @@
     <system:Double x:Key="WolvenKitDialogHeightMedium">600</system:Double>
     <system:Double x:Key="WolvenKitDialogWidthLarge">1024</system:Double>
     <system:Double x:Key="WolvenKitDialogHeightLarge">768</system:Double>
+    
     <GridLength x:Key="WolvenKitDialogLabelColumnWidth">112</GridLength>
     <GridLength x:Key="WolvenKitDialogLabelColumnWidthMedium">140</GridLength>
-    <system:Double x:Key="WolvenKitDialogSammySize">40</system:Double>
+    <GridLength x:Key="WolvenKitDialogLabelColumnWidthLarge">180</GridLength>
 
+    <system:Double x:Key="WolvenKitLabelWidth">112</system:Double>
+    <system:Double x:Key="WolvenKitLabelWidthMedium">140</system:Double>
+    <system:Double x:Key="WolvenKitLabelWidthLarge">180</system:Double>
+    
+    <system:Double x:Key="WolvenKitDialogSammySize">40</system:Double>
+    
     <!-- FirstSetupView -->
     <system:Double x:Key="WolvenKitFirstSetupWidth">720</system:Double>
     <system:Double x:Key="WolvenKitFirstSetupHeight">278</system:Double>

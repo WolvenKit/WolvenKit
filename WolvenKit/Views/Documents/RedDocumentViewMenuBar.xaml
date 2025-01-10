@@ -580,7 +580,7 @@
                     <MenuItem
                         Style="{StaticResource ShowAppMenuItemStyle}"
                         Header="Change mesh component properties"
-                        Click="OnChangeChunkMasksClick">
+                        Click="OnChangeComponentPropertiesClick">
                         <MenuItem.Icon>
                             <templates:IconBox
                                 IconPack="Material"

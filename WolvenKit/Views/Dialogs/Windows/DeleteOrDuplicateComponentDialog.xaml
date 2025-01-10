@@ -69,8 +69,7 @@
                         Height="Auto"
                         Label="original component:"
                         Options="{Binding ComponentNames}"
-                        SelectedOption="{Binding ComponentName}"
-                        PropertyChanged="OnFilterableDropdownChanged" />
+                        SelectedOption="{Binding ComponentName}" />
 
                     <Label
                         Grid.Row="2"

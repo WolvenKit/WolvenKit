@@ -35,11 +35,9 @@ public class DocumentTools
 
     # region appfile
 
-    public List<string> GetAllComponentNames(List<appearanceAppearanceDefinition> appearances)
-    {
-        return appearances.SelectMany(app => app.Components)
+    public static List<string> GetAllComponentNames(List<appearanceAppearanceDefinition> appearances) => appearances
+        .SelectMany(app => app.Components)
             .Select(c => c.Name.GetResolvedText() ?? "").Where(c => !string.IsNullOrEmpty(c)).Distinct().ToList();
-    }
     
     public List<string> ConnectAppToEntFile(string absoluteAppFilePath, string absoluteEntFilePath,
         bool clearExistingEntries = false)

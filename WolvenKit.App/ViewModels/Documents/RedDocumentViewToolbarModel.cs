@@ -131,6 +131,29 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     }
 
 
+    public void ClearSelection()
+    {
+        if (CurrentTab is not RDTDataViewModel viewModel)
+        {
+            return;
+        }
+
+        viewModel.ClearSelection();
+    }
+
+    public void SetSelection(List<ChunkViewModel> chunks)
+    {
+        if (CurrentTab is not RDTDataViewModel viewModel)
+        {
+            return;
+        }
+
+        viewModel.ClearSelection();
+        viewModel.SetSelection(chunks
+            .Where(x => x.Parent is null || x.Parent.IsExpanded)
+            .ToList());
+    }
+
     [NotifyCanExecuteChangedFor(nameof(AdjustSubmeshCountCommand))]
     [NotifyCanExecuteChangedFor(nameof(DeleteDuplicateEntriesCommand))]
     [NotifyCanExecuteChangedFor(nameof(RegenerateVisualControllersCommand))]
@@ -415,4 +438,5 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         var subfolder = _settingsManager.ModderName ?? "YourName";
         return Path.Join(subfolder, projectName, "dependencies");
     }
+
 }

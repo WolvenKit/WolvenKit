@@ -6,6 +6,21 @@ using System.Windows.Controls;
 
 namespace WolvenKit.Views.Editors
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <example>
+    /// Two-way binding doesn't work, needs to bind like this:
+    /// <code>
+    /// this.WhenActivated(disposables =>
+    /// {
+    ///    this.Bind(ViewModel,
+    ///            x => x.ComponentName,
+    ///            x => x.FilterableDropdownMenu.SelectedOption)
+    ///        .DisposeWith(disposables);
+    ///});
+    /// </code>
+    /// </example>
     public partial class FilterableDropdownMenu : UserControl, INotifyPropertyChanged
     {
         public FilterableDropdownMenu()
@@ -131,11 +146,16 @@ namespace WolvenKit.Views.Editors
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// bind to SelectedOption in whenActivated
+        /// </summary>
         protected virtual void OnPropertyChanged(string propertyName)
         {
-            if (propertyName == nameof(Options) || propertyName == nameof(FilterText))
+            switch (propertyName)
             {
-                UpdateFilteredOptions();
+                case (nameof(Options)) or (nameof(FilterText)):
+                    UpdateFilteredOptions();
+                    break;
             }
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
