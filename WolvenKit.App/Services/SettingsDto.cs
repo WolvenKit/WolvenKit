@@ -80,6 +80,7 @@ public class SettingsDto : ISettingsDto
         ShowRedmodInRibbon = settings.ShowRedmodInRibbon;
         UseValidatingEditor = settings.UseValidatingEditor;
         ReopenLastProject = settings.ReopenLastProject;
+        NumFilesToReopen = settings.NumFilesToReopen;
         ShowVerboseLogOutput = settings.ShowVerboseLogOutput;
         ArchiveNamesExcludeFromScan = settings.ArchiveNamesExcludeFromScan;
 
@@ -153,6 +154,8 @@ public class SettingsDto : ISettingsDto
     public bool ShowRedmodInRibbon { get; set; }
     public bool UseValidatingEditor { get; set; } = true;
     public bool ReopenLastProject { get; set; }
+
+    public int NumFilesToReopen { get; set; }
     public bool ShowVerboseLogOutput { get; set; }
     public string ArchiveNamesExcludeFromScan { get; set; } = "basegame_AMM_Props";
 
@@ -215,6 +218,7 @@ public class SettingsDto : ISettingsDto
         settingsManager.ShowRedmodInRibbon = ShowRedmodInRibbon;
         settingsManager.UseValidatingEditor = UseValidatingEditor;
         settingsManager.ReopenLastProject = ReopenLastProject;
+        settingsManager.NumFilesToReopen = NumFilesToReopen;
         settingsManager.ShowVerboseLogOutput = ShowVerboseLogOutput;
         settingsManager.ArchiveNamesExcludeFromScan = ArchiveNamesExcludeFromScan;
 
