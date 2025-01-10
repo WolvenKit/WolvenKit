@@ -141,7 +141,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         CanScrollToOpenFile = HasSelectedItem && _appViewModel.ActiveDocument is not null;
         if (e.PropertyName == nameof(AppViewModel.ActiveDocument))
         {
-            SaveOpenFilePath(_appViewModel.ActiveDocument?.FilePath);
+            SaveOpenFilePaths();
         }
     }
 
@@ -176,12 +176,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         {
             _hasUnsavedFileTreeChanges = true;
             SaveProjectExplorerExpansionStateIfDirty();
-            var filePaths = _appViewModel.DockedViews.OfType<IDocumentViewModel>()
-                .Select(x => x.FilePath)
-                .Where(x => x is not null)
-                .Select(x => x!)
-                .ToList();
-            SaveOpenFilePaths(filePaths);
+            SaveOpenFilePaths();
             _projectWatcher.UnwatchProject(ActiveProject);
         }
         
@@ -1147,32 +1142,19 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         File.WriteAllLines(lastFilesPath, lastFilePaths);
     }
 
-    private void SaveOpenFilePath(string? filePath)
-    {
-        if (_loadingProjectData || string.IsNullOrEmpty(filePath) || ActiveProject is null)
-        {
-            return;
-        }
-
-        var lastFilesPath = Path.Combine(ActiveProject.ProjectDirectory, s_projectFilesDirName, s_openFilesList);
-        var relativePath = ActiveProject.GetRelativePath(filePath);
-        if (!File.Exists(lastFilesPath))
-        {
-            File.WriteAllLines(lastFilesPath, [relativePath]);
-        }
-        else
-        {
-            File.AppendAllLines(lastFilesPath, [relativePath]);
-        }
-    }
-
-    private void SaveOpenFilePaths(List<string> filePaths)
+    private void SaveOpenFilePaths()
     {
         if (_loadingProjectData || ActiveProject is null)
         {
             return;
         }
 
+        var filePaths = _appViewModel.DockedViews.OfType<IDocumentViewModel>()
+            .Select(x => x.FilePath)
+            .Where(x => x is not null)
+            .Select(x => x!)
+            .ToList();
+        
         var projectFileDir = Path.Combine(ActiveProject.ProjectDirectory, s_projectFilesDirName);
         if (!Directory.Exists(projectFileDir))
         {
@@ -1180,7 +1162,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
 
         var lastFilesPath = Path.Combine(projectFileDir, s_openFilesList);
-        File.WriteAllLines(lastFilesPath, filePaths);
+        try
+        {
+            File.WriteAllLines(lastFilesPath, filePaths);
+        }
+        catch
+        {
+            // I guess we don't write :))
+        }
     }
 
     public void SaveProjectExplorerTabIfDirty()
