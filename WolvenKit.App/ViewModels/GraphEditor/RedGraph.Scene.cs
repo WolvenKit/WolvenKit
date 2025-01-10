@@ -338,25 +338,35 @@ public partial class RedGraph
         var graph = new RedGraph(title, sceneResource);
 
         var nodeCache = new Dictionary<uint, BaseSceneViewModel>();
-        foreach (var nodeHandle in sceneResource.SceneGraph.Chunk!.Graph)
+        var sceneGraph = sceneResource.SceneGraph?.Chunk!.Graph;
+        if (sceneGraph != null)
         {
-            ArgumentNullException.ThrowIfNull(nodeHandle.Chunk);
 
-            var node = nodeHandle.Chunk;
-
-            var nvm = graph.WrapSceneNode(node);
-
-            if (!nodeCache.ContainsKey(nvm.UniqueId))
+            foreach (var nodeHandle in sceneGraph)
             {
-                nodeCache.Add(nvm.UniqueId, nvm);
-                graph.Nodes.Add(nvm);
+                ArgumentNullException.ThrowIfNull(nodeHandle.Chunk);
 
-                graph._currentSceneNodeId = Math.Max(graph._currentSceneNodeId, nvm.UniqueId);
+                var node = nodeHandle.Chunk;
+
+                var nvm = graph.WrapSceneNode(node);
+
+                if (!nodeCache.ContainsKey(nvm.UniqueId))
+                {
+                    nodeCache.Add(nvm.UniqueId, nvm);
+                    graph.Nodes.Add(nvm);
+
+                    graph._currentSceneNodeId = Math.Max(graph._currentSceneNodeId, nvm.UniqueId);
+                }
+                else
+                {
+                    _loggerService?.Warning("Duplicate node ID: " + nvm.UniqueId.ToString() + ". Some nodes may be missing in graph view. File: " + title);
+                }
             }
-            else
-            {
-                _loggerService?.Warning("Duplicate node ID: " + nvm.UniqueId.ToString() + ". Some nodes may be missing in graph view. File: " + title);
-            }
+        }
+        else
+        {
+            _loggerService?.Error("Scene graph failed to initialize. Check the scene for references to nonexistent resources.");
+            _loggerService?.Error("Possible places: screenplayStore sceneGraph");
         }
 
         foreach (var node in graph.Nodes)
