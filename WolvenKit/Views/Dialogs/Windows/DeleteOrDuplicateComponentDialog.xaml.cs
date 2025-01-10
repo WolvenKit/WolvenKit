@@ -97,8 +97,7 @@ namespace WolvenKit.Views.Dialogs.Windows
 
         private void OnFilterableDropdownChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (ViewModel is not null && sender is FilterableDropdownMenu f &&
-                e.PropertyName is nameof(FilterableDropdownMenu.SelectedOption))
+            if (ViewModel is not null && sender is FilterableDropdownMenu f)
             {
                 ViewModel.ComponentName = f.SelectedOption;
             }

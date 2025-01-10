@@ -92,7 +92,7 @@
                                           UpdateSourceTrigger=PropertyChanged}"
                         SelectedOption="{Binding SelectedGraph,
                                                  UpdateSourceTrigger=PropertyChanged}"
-                        PropertyChanged="OnFilterableDropdownMenuPropertyChanged" />
+                        SelectionChanged="OnFilterableDropdownMenuSelectionChanged" />
 
                     <!--  -->
                     <!-- <ComboBox x:Name="AnimGraphDropdown" -->
