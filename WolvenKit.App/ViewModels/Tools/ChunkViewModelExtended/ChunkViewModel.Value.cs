@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
@@ -262,6 +263,48 @@ public partial class ChunkViewModel
 
                 IsValueExtrapolated = Value != "";
                 break;
+
+            case worldStreamingBlockIndex wsbI:
+                Value = wsbI.RldGridCell.ToString();
+                IsValueExtrapolated = true;
+                return;
+
+            case worldStreamingSectorDescriptor wssd:
+                List<string> valueParts = [];
+                if (wssd.NumNodeRanges > 1)
+                {
+                    valueParts.Add($"#{wssd.NumNodeRanges}");
+                }
+
+                if (wssd.Level > 0)
+                {
+                    valueParts.Add($"L{wssd.Level}");
+                }
+
+                if (wssd.Variants.Count > 0)
+                {
+                    valueParts.Add($"{wssd.Variants.Count} variants");
+                }
+
+                if (StringHelper.Stringify(wssd.QuestPrefabNodeRef) is string nodeStr && !string.IsNullOrEmpty(nodeStr))
+                {
+                    valueParts.Add($"{nodeStr.Split("/").Last()}");
+                }
+                else if (StringHelper.Stringify(wssd.Data.DepotPath) is string depotPath && depotPath != string.Empty)
+                {
+                    valueParts.Add(
+                        $"{depotPath.Split(Path.DirectorySeparatorChar).Last()}".Replace(".streamingsector", ""));
+                }
+
+                Value = string.Join(", ", valueParts);
+                IsValueExtrapolated = Value != string.Empty;
+                return;
+
+            case Box box:
+                Value = $"{StringHelper.Stringify(box.Min)} - {StringHelper.Stringify(box.Max)}";
+                IsValueExtrapolated = true;
+                return;
+            
             case meshMeshAppearance { ChunkMaterials: not null } appearance:
                 Value = string.Join(", ", appearance.ChunkMaterials);
                 Value = $"[{appearance.ChunkMaterials.Count}] {Value}";
@@ -325,13 +368,27 @@ public partial class ChunkViewModel
                 break;
             case worldNodeData sst when Parent?.Parent?.ResolvedData is worldStreamingSector wss && sst.NodeIndex < wss.Nodes.Count:
                 var node = wss.Nodes[sst.NodeIndex].Chunk;
-                Value = node?.GetType().Name ?? "";
-                IsValueExtrapolated = Value != "";
-                break;
+                Value = $"#{sst.NodeIndex}";
+                if (node?.GetType().Name is string nodeName && !string.IsNullOrEmpty(nodeName))
+                {
+                    Value = $"{Value} => {nodeName}";
+                }
+
+                IsValueExtrapolated = true;
+                return;
             case worldNode worldNode:
                 Value = StringHelper.Stringify(worldNode, true);
                 IsValueExtrapolated = Value != "";
                 break;
+            case worldStreamingSectorVariant sectorVar:
+                Value = $"#{sectorVar.RangeIndex}";
+                if (sectorVar.NodeRef != NodeRef.Empty)
+                {
+                    Value = $"{Value} => {sectorVar.NodeRef.GetResolvedText()!}";
+                }
+
+                IsValueExtrapolated = true;
+                return;
             case graphGraphNodeDefinition nodeDef:
                 Value = $"[{nodeDef.Sockets.Count}]";
                 IsValueExtrapolated = true;

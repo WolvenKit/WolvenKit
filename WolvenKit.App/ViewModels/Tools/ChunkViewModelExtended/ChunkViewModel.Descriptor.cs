@@ -50,13 +50,6 @@ public partial class ChunkViewModel
 
                 return true;
             }
-            //if (ResolvedData is CMaterialInstance && Parent is not null)
-            //{
-            //    if (Parent.Parent is not null && Parent.Parent.Parent is not null && Parent.Parent.Data is CMesh mesh)
-            //    {
-            //        Descriptor = mesh.MaterialEntries[int.Parse(Name)].Name;
-            //    }
-            //}
             case Vector3 v3:
                 Descriptor = $"{v3.X}, {v3.Y}, {v3.Z}";
                 return true;
@@ -82,13 +75,12 @@ public partial class ChunkViewModel
             case null:
             case RedDummy:
                 return;
+            case worldStreamingSectorDescriptor:
+                // handled by default name resolution below
+                break;
             case worldNodeData sst when Parent?.Parent?.ResolvedData is worldStreamingSector wss && sst.NodeIndex < wss.Nodes.Count:
                 Descriptor = $"[{sst.NodeIndex}] {StringHelper.Stringify(wss.Nodes[sst.NodeIndex].Chunk)}";
                 return;
-            case worldStreamingSectorDescriptor wssd:
-                Descriptor = (wssd.Data.DepotPath.GetResolvedText() ?? "")
-                    .Replace(@"base\worlds\03_night_city\_compiled\default\", "").Replace(".streamingsector", "");
-                break;
             case worldNode worldNode when StringHelper.Stringify(worldNode) is string s && s != "":
                 Descriptor = s;
                 return;

@@ -290,4 +290,6 @@ public abstract partial class StringHelper
     public static string Stringify(Vector3 v3) => $"{v3.X}, {v3.Y}, {v3.Z}";
 
     public static string Stringify(Quaternion q) => $"{q.I}, {q.J}, {q.K}, {q.R}";
+
+    public static string Stringify(NodeRef nodeRef) => nodeRef.GetResolvedText() ?? "";
 }
