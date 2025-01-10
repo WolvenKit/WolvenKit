@@ -129,13 +129,20 @@ namespace WolvenKit.Views.Editors
             control.OnPropertyChanged(e.Property.Name);
         }
 
+        public event PropertyChangedEventHandler SelectionChanged;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)
         {
-            if (propertyName == nameof(Options) || propertyName == nameof(FilterText))
+            switch (propertyName)
             {
-                UpdateFilteredOptions();
+                case (nameof(Options)) or (nameof(FilterText)):
+                    UpdateFilteredOptions();
+                    break;
+                case nameof(SelectedOption):
+                    SelectionChanged?.Invoke(this, new PropertyChangedEventArgs(SelectedOption));
+                    break;
             }
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
