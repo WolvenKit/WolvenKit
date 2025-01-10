@@ -30,7 +30,6 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.Core.Services;
 using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.Buffer;
@@ -297,7 +296,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
         }
 
-        
+
         // expand / collapse "special" children, e.g. if the parent holds no properties we care for
         switch (ResolvedData)
         {
@@ -487,7 +486,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         CalculateProperties();
         return TVProperties.ToList();
     }
-    
+
     // DisplayProperties (for the panel on the right)
     public ObservableCollectionExtended<ChunkViewModel> DisplayProperties => MightHaveChildren() ? Properties : SelfList;
 
@@ -760,8 +759,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                                ResolvedPropertyType.IsAssignableTo(typeof(IList))
                                || ResolvedPropertyType.IsAssignableTo(typeof(CR2WList))
                                || ResolvedPropertyType.IsAssignableTo(typeof(RedPackage))));
-    
-    
+
+    public bool IsCurve => (ResolvedPropertyType is not null &&
+                            ResolvedPropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)));
+
+
     public int PropertyCount
     {
         get
@@ -1500,7 +1502,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     sequenceIndex = (sequenceIndex + 1) % newMaterials.Count;
                 }
             }
-            
+
             appearance.ChunkMaterials = new CArray<CName>();
             foreach (var t in newMaterials)
             {
@@ -2362,7 +2364,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         var gt = propertyType.GetGenericTypeDefinition();
         return (weakHandleOnly && gt == typeof(CWeakHandle<>)) || gt == typeof(CHandle<>);
     }
-    
+
 
 
     public bool PasteHandle(IRedBaseHandle sourceHandle)
@@ -2613,7 +2615,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     private bool CanDuplicateChunk() => IsInArray && Parent is not null; // TODO RelayCommand check notify
 
     [RelayCommand(CanExecute = nameof(CanDuplicateChunk))]
-  
+
     private void DuplicateChunk() => DuplicateChunk(-1);
 
     public ChunkViewModel? DuplicateChunk(int index)
@@ -2641,7 +2643,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         Tab?.Parent.SetIsDirty(true);
 
         var newSibling = Parent.GetChildNode(Math.Min(index, Parent.TVProperties.Count - 1));
-        
+
         // Unless shift key is pressed, we want to regenerate CRUIDs
         if (IsShiftKeyPressed || newSibling is null)
         {
@@ -2672,7 +2674,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         return Task.CompletedTask;
     }
 
-    
+
     [RelayCommand(CanExecute = nameof(CanDuplicateChunk))]
     private void DuplicateAsNewChunk()
     {
@@ -2802,7 +2804,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             .Select(_ => _.Data.NotNull())
             .ToList();
 
-        RedDocumentTabViewModel.ClearCopiedChunks();;
+        RedDocumentTabViewModel.ClearCopiedChunks();
         foreach (var i in fullselection)
         {
             AddToCopiedChunks(i);
@@ -2873,7 +2875,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         try
         {
             var index = insertAtIndex < 0 ? Properties.Count : insertAtIndex;
-            
+
             for (var i = 0; i < copiedData.Count; i++)
             {
                 var e = copiedData[i];
@@ -2903,13 +2905,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 if (PropertyType.IsAssignableTo(typeof(IRedArray)))
                 {
                     // index boundary checking will happen in insertChild
-                    
+
                     if (InsertChild(index, e))
                     {
                         //RDTDataViewModel.CopiedChunk = null;
                     }
                 }
-                
+
                 index++;
             }
         }
@@ -2960,7 +2962,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     [
         "appearances", "externalMaterials"
     ];
-    
+
     public void ForceLoadPropertiesRecursive()
     {
         if (IsHandle(Data, true) && !s_InitializeAnyway.Contains(Parent?.Name ?? ""))
@@ -3448,7 +3450,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             return TypeCompability.None;
         }
-        
+
         if (destType.IsAssignableFrom(srcType))
         {
             return TypeCompability.Assignable;
