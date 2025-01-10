@@ -87,6 +87,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(ShowRedmodInRibbon),
             nameof(UseValidatingEditor),
             nameof(ReopenLastProject),
+            nameof(NumFilesToReopen),
             nameof(ShowVerboseLogOutput)
             )
           .Subscribe(_ =>
@@ -363,6 +364,12 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
         GroupName = "Interface")]
     [ObservableProperty]
     private bool _reopenLastProject;
+
+    [Display(Name = "Number of files to reopen",
+        Description = "Increase the number at your own risk!",
+        GroupName = "Interface")]
+    [ObservableProperty]
+    private int _numFilesToReopen;
 
     [Display(Name = "Show verbose log output",
         Description = "Will give you all the information",
