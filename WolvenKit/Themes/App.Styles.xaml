@@ -119,6 +119,7 @@
         TargetType="{x:Type Label}" BasedOn="{StaticResource  {x:Type Label}}">
         <Setter Property="Foreground" Value="{StaticResource WolvenKitLabelColor}"></Setter>
         <Setter Property="Width" Value="{StaticResource WolvenKitDialogLabelColumnWidth}"></Setter>
+        <Setter Property="HorizontalAlignment" Value="Right"></Setter>
     </Style>
 
     <Style

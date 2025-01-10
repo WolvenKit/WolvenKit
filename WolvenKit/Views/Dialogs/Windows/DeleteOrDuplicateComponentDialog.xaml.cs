@@ -24,8 +24,17 @@ namespace WolvenKit.Views.Dialogs.Windows
             ViewModel = new DeleteOrDuplicateComponentDialogViewModel(componentNames, isDeleting);
             DataContext = ViewModel;
 
-            FilterableDropdownMenu.Options = componentNames.ToDictionary(s => s, s => s);
-            LoadLastSelection();
+            this.WhenActivated(disposables =>
+            {
+                this.Bind(ViewModel,
+                        x => x.ComponentName,
+                        x => x.FilterableDropdownMenu.SelectedOption)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        x => x.ComponentNames,
+                        x => x.FilterableDropdownMenu.Options)
+                    .DisposeWith(disposables);
+            });
         }
 
         public DeleteOrDuplicateComponentDialogViewModel ViewModel { get; set; }
