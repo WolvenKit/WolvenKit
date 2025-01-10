@@ -415,6 +415,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         }
 
         SelectedChunk = null;
+        OnPropertyChanged(nameof(SelectedChunk));
     }
 
     public void AddToSelection(ChunkViewModel? chunk)
@@ -431,6 +432,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         }
 
         SelectedChunk = chunk;
+        OnPropertyChanged(nameof(SelectedChunk));
     }
 
     public void RemoveFromSelection(ChunkViewModel? chunk)

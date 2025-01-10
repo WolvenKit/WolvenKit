@@ -450,7 +450,7 @@ namespace WolvenKit.Views.Documents
             var componentNames = DocumentTools.GetAllComponentNames(GetAppearancesFromSelectionOrRoot());
             var componentModel = Interactions.ShowDeleteOrDuplicateComponentDialogue((componentNames, false));
 
-            var selectedChunks = SelectedChunks;
+            var selectedChunks = SelectedChunks.ToList();
 
             if (!selectedChunks.All(c => c.ResolvedData is appearanceAppearanceDefinition))
             {
@@ -468,6 +468,8 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
+            ViewModel?.ClearSelection();
+            
             List<ChunkViewModel> newNodes = [];
             
             foreach (var chunkViewModel in selectedChunks.SelectMany(cvm =>
@@ -481,7 +483,7 @@ namespace WolvenKit.Views.Documents
                 }
 
                 component.Name = componentModel.NewComponentName;
-                newNode.GetPropertyChild(componentModel.NewComponentName)?.RecalculateProperties();
+                newNode.RecalculateProperties();
                 newNode.Parent?.RecalculateProperties();
 
                 newNodes.Add(newNode);
@@ -500,7 +502,7 @@ namespace WolvenKit.Views.Documents
             var componentNames = DocumentTools.GetAllComponentNames(GetAppearancesFromSelectionOrRoot());
             var componentModel = Interactions.ShowDeleteOrDuplicateComponentDialogue((componentNames, true));
 
-            var selectedChunks = SelectedChunks;
+            var selectedChunks = SelectedChunks.ToList();
             if (!selectedChunks.All(c => c.ResolvedData is appearanceAppearanceDefinition))
             {
                 selectedChunks.Clear();
@@ -585,7 +587,7 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            var selectedChunks = SelectedChunks;
+            var selectedChunks = SelectedChunks.ToList();
             if (!selectedChunks.All(c => c.ResolvedData is appearanceAppearanceDefinition))
             {
                 selectedChunks.Clear();
