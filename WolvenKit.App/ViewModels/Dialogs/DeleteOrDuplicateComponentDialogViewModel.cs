@@ -1,9 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
-using WolvenKit.RED4.Types;
-
 
 namespace WolvenKit.App.ViewModels.Dialogs;
 
@@ -49,9 +46,15 @@ public partial class DeleteOrDuplicateComponentDialogViewModel() : ObservableObj
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
         base.OnPropertyChanged(e);
-        if (e.PropertyName is nameof(ComponentName))
+        if (e.PropertyName is not nameof(ComponentName) || string.IsNullOrEmpty(ComponentName))
         {
-            NewComponentName = $"{ComponentName}_copy";
+            return;
         }
+
+        NewComponentName = ComponentName;
+        while (ComponentNames.ContainsKey(NewComponentName))
+        {
+            NewComponentName = $"{NewComponentName}_copy";
+        } 
     }
 }

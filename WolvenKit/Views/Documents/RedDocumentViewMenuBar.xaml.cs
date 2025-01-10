@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
 using ReactiveUI;
 using Splat;
@@ -26,6 +27,8 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.Types;
 using WolvenKit.Views.Dialogs.Windows;
+using appearanceAppearanceDefinition = WolvenKit.RED4.Types.appearanceAppearanceDefinition;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
 namespace WolvenKit.Views.Documents
 {
@@ -109,8 +112,9 @@ namespace WolvenKit.Views.Documents
                 .Select(s => new ScriptFileViewModel(_settingsManager, ScriptSource.System, s))
                 .FirstOrDefault();
 
-            _facialSetups.Clear();
-            _facialSetups.AddRange(_archiveManager.Search(".facialsetup", ArchiveManagerScope.Basegame).Select(f => f.FileName).ToList());
+            s_facialSetups.Clear();
+            s_facialSetups.AddRange(_archiveManager.Search(".facialsetup", ArchiveManagerScope.Basegame)
+                .Select(f => f.FileName).ToList());
         }
 
         public RedDocumentTabViewModel? CurrentTab
@@ -200,17 +204,13 @@ namespace WolvenKit.Views.Documents
                 && ((cvm.ResolvedData is appearanceAppearanceResource app && app.Appearances.Count > 5) ||
                     (cvm.ResolvedData is entEntityTemplate ent && ent.Appearances.Count > 5)))
             {
-                var result = Interactions.ShowConfirmation((
-                    "Run file validation now? (Wolvenkit will be unresponsive)",
-                    "Wolvenkit may be unresponsive",
-                    WMessageBoxImage.Question,
-                    WMessageBoxButtons.YesNo));
-                if (result != WMessageBoxResult.Yes)
+                if (Interactions.ShowQuestionYesNo((
+                        "Run file validation now? (Wolvenkit will be unresponsive)",
+                        "Validate files now?")))
                 {
                     return;
                 }
             }
-           
             
             // This needs to be inside the DispatcherHelper, or the UI button will make everything explode
             DispatcherHelper.RunOnMainThread(
@@ -363,7 +363,8 @@ namespace WolvenKit.Views.Documents
 
         private async Task LoadAndAnalyzeModArchives()
         {
-            if (!_archiveManager.GetModArchives().Any() && _archiveManager.IsInitialized || !AppArchiveManager.ArchivesNeedRescan)
+            if (!AppArchiveManager.ArchivesNeedRescan ||
+                (!_archiveManager.GetModArchives().Any() && _archiveManager.IsInitialized))
             {
                 return;
             }
@@ -415,25 +416,38 @@ namespace WolvenKit.Views.Documents
             });
         }
 
-        private void OnDuplicateComponentAsNewClick(object _, RoutedEventArgs e)
+        private List<appearanceAppearanceDefinition> GetAppearancesFromSelectionOrRoot()
         {
             if (RootChunk?.ResolvedData is not appearanceAppearanceResource appResource)
+            {
+                return [];
+            }
+
+            var ret = SelectedChunks
+                .Where(chunk => chunk.ResolvedData is appearanceAppearanceDefinition)
+                .Select(chunk => chunk.ResolvedData as appearanceAppearanceDefinition)
+                .Select(app => app!)
+                .ToList();
+
+            if (ret.Count == 0)
+            {
+                ret.AddRange(
+                    appResource.Appearances.Select(appHandle => appHandle.Chunk)
+                        .Where(app => app is not null)
+                        .Select(app => app!)
+                );
+            }
+
+            return ret;
+        }
+        private void OnDuplicateComponentAsNewClick(object _, RoutedEventArgs e)
+        {
+            if (RootChunk?.ResolvedData is not appearanceAppearanceResource)
             {
                 return;
             }
 
-            List<appearanceAppearanceDefinition> appearances = [];
-            if (SelectedChunk?.ResolvedData is appearanceAppearanceDefinition app)
-            {
-                appearances.Add(app);
-            }
-            else
-            {
-                appearances.AddRange(appResource.Appearances.Select(a => a.Chunk)
-                    .OfType<appearanceAppearanceDefinition>());
-            }
-
-            var componentNames = _documentTools.GetAllComponentNames(appearances);
+            var componentNames = DocumentTools.GetAllComponentNames(GetAppearancesFromSelectionOrRoot());
             var componentModel = Interactions.ShowDeleteOrDuplicateComponentDialogue((componentNames, false));
 
             var selectedChunks = SelectedChunks;
@@ -454,6 +468,8 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
+            List<ChunkViewModel> newNodes = [];
+            
             foreach (var chunkViewModel in selectedChunks.SelectMany(cvm =>
                          GetComponentsByName(cvm, componentModel.ComponentName)).ToList())
             {
@@ -467,28 +483,21 @@ namespace WolvenKit.Views.Documents
                 component.Name = componentModel.NewComponentName;
                 newNode.GetPropertyChild(componentModel.NewComponentName)?.RecalculateProperties();
                 newNode.Parent?.RecalculateProperties();
+
+                newNodes.Add(newNode);
             }
+
+            ViewModel?.SetSelection(newNodes);
         }
 
         private void OnDeleteComponentByNameClick(object _, RoutedEventArgs e)
         {
-            if (RootChunk?.ResolvedData is not appearanceAppearanceResource appResource)
+            if (RootChunk?.ResolvedData is not appearanceAppearanceResource)
             {
                 return;
             }
 
-            List<appearanceAppearanceDefinition> appearances = [];
-            if (SelectedChunk?.ResolvedData is appearanceAppearanceDefinition app)
-            {
-                appearances.Add(app);
-            }
-            else
-            {
-                appearances.AddRange(appResource.Appearances.Select(a => a.Chunk)
-                    .OfType<appearanceAppearanceDefinition>());
-            }
-
-            var componentNames = _documentTools.GetAllComponentNames(appearances);
+            var componentNames = DocumentTools.GetAllComponentNames(GetAppearancesFromSelectionOrRoot());
             var componentModel = Interactions.ShowDeleteOrDuplicateComponentDialogue((componentNames, true));
 
             var selectedChunks = SelectedChunks;
@@ -502,21 +511,23 @@ namespace WolvenKit.Views.Documents
                 selectedChunks.Add(RootChunk);
             }
 
-
             if (componentModel is null || string.IsNullOrEmpty(componentModel.ComponentName) ||
                 string.IsNullOrEmpty(componentModel.NewComponentName))
             {
                 return;
             }
 
-            foreach (var chunkViewModel in SelectedChunks.SelectMany(cvm =>
+            ViewModel?.ClearSelection();
+
+            foreach (var chunkViewModel in selectedChunks.SelectMany(cvm =>
                          GetComponentsByName(cvm, componentModel.ComponentName)).ToList())
             {
                 chunkViewModel.DeleteNodesInParent([chunkViewModel]);
             }
+
         }
 
-        private List<ChunkViewModel> GetComponentsByName(ChunkViewModel cvm, string componentName)
+        private static List<ChunkViewModel> GetComponentsByName(ChunkViewModel cvm, string componentName)
         {
             List<ChunkViewModel> ret = [];
             cvm.CalculateProperties();
@@ -536,7 +547,7 @@ namespace WolvenKit.Views.Documents
                     }
 
                     break;
-                case appearanceAppearanceResource app
+                case appearanceAppearanceResource
                     when cvm.GetPropertyChild("appearances") is ChunkViewModel appearances:
                     appearances.CalculateProperties();
                     ret.AddRange(
@@ -552,32 +563,44 @@ namespace WolvenKit.Views.Documents
             return ret;
         }
 
-        private void OnChangeChunkMasksClick(object _, RoutedEventArgs e)
+        private void OnChangeComponentPropertiesClick(object _, RoutedEventArgs e)
         {
-            var dialog = new ChangeComponentChunkMaskDialog();
+            if (RootChunk?.ResolvedData is not appearanceAppearanceResource)
+            {
+                return;
+            }
+
+            RootChunk.CalculatePropertiesRecursive();
+
+            var componentNames = DocumentTools.GetAllComponentNames(GetAppearancesFromSelectionOrRoot());
+
+            var dialog = new ChangeComponentPropertiesDialog(componentNames);
             if (dialog.ShowDialog() != true)
             {
                 return;
             }
 
             if (dialog.ViewModel is null || string.IsNullOrEmpty(dialog.ViewModel.ComponentName))
-            {
+            {   
                 return;
             }
 
-            var chunkMask = dialog.ViewModel.ChunkMask;
-            var depotPath = dialog.ViewModel.DepotPath;
-            var meshAppearance = dialog.ViewModel.MeshAppearance;
-
             var selectedChunks = SelectedChunks;
+            if (!selectedChunks.All(c => c.ResolvedData is appearanceAppearanceDefinition))
+            {
+                selectedChunks.Clear();
+            }
             if (selectedChunks.Count == 0 && RootChunk is ChunkViewModel cvm)
             {
                 selectedChunks.Add(cvm);
             }
 
-            foreach (var chunkViewModel in SelectedChunks)
+            ViewModel?.ClearSelection();
+            foreach (var chunkViewModel in selectedChunks)
             {
-                chunkViewModel.ReplaceMeshComponentProperties(dialog.ViewModel.ComponentName!, chunkMask, depotPath, meshAppearance);
+                chunkViewModel.ReplaceEntIComponentProperties(dialog.ViewModel.ComponentName!,
+                    dialog.ViewModel.ChunkMask, dialog.ViewModel.DepotPath,
+                    dialog.ViewModel.MeshAppearance, dialog.ViewModel.NewComponentName);
             }
         }
 
@@ -626,9 +649,9 @@ namespace WolvenKit.Views.Documents
         {
             try
             {
-                if (_projectManager.ActiveProject is not Cp77Project activeProject || RootChunk is not ChunkViewModel
+                if (_projectManager.ActiveProject is not Cp77Project activeProject || RootChunk is not
                     {
-                        ResolvedData: appearanceAppearanceResource app
+                        ResolvedData: appearanceAppearanceResource
                     })
                 {
                     return;
@@ -683,7 +706,7 @@ namespace WolvenKit.Views.Documents
         
         private MenuItem? _openMenu;
 
-        private static List<string> _facialSetups = [];
+        private static readonly List<string> s_facialSetups = [];
 
         private void RefreshChildMenuItems()
         {
@@ -777,7 +800,7 @@ namespace WolvenKit.Views.Documents
                 _loggerService.Error("Please save the file before changing animations!");
             }
 
-            var dialog = new SelectFacialAnimationPathDialog(_facialSetups);
+            var dialog = new SelectFacialAnimationPathDialog(s_facialSetups);
             if (dialog.ShowDialog() != true)
             {
                 return;

@@ -1,27 +1,32 @@
 <Window
-    x:Class="WolvenKit.Views.Dialogs.Windows.ChangeComponentChunkMaskDialog"
+    x:Class="WolvenKit.Views.Dialogs.Windows.ChangeComponentPropertiesDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
-    Title="Change component chunk mask"
-    MinWidth="{DynamicResource WolvenKitDialogWidthSmall}"
-    MinHeight="{DynamicResource WolvenKitDialogHeightSmall}"
+    Title="Change component properties"
+    MinWidth="{StaticResource WolvenKitDialogWidthSmall}"
+    MinHeight="{StaticResource WolvenKitDialogHeightSmall}"
     SizeToContent="WidthAndHeight"
-    FocusManager.FocusedElement="{Binding ElementName=ComponentNameBox}"
+    Width="{StaticResource WolvenKitDialogWidth}"
+    FocusManager.FocusedElement="{Binding ElementName=FilterableDropdownMenu}"
+    DataContext="{Binding RelativeSource={RelativeSource Self}, Path=ViewModel}"
     WindowStartupLocation="CenterScreen">
     <Grid
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch"
-        hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
+        hc:ThemeManager.RequestedAccentColor="{StaticResource MahApps.Brushes.Accent3}">
         <Grid.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
                     <hc:ThemeResources />
                     <hc:Theme />
                 </ResourceDictionary.MergedDictionaries>
+
+                <Style TargetType="{x:Type Label}" BasedOn="{StaticResource WolvenkitDialogLabelStyleMedium}">
+                </Style>
             </ResourceDictionary>
         </Grid.Resources>
 
@@ -42,11 +47,15 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidth}" />
+                        <ColumnDefinition Width="{StaticResource WolvenKitDialogLabelColumnWidthMedium}" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="10" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="10" />
                         <RowDefinition Height="Auto" />
@@ -59,39 +68,56 @@
                         <RowDefinition Height="10" />
                     </Grid.RowDefinitions>
 
-                    <Label
+                    <editors:FilterableDropdownMenu
+                        x:Name="FilterableDropdownMenu"
                         Grid.Row="0"
                         Grid.Column="0"
-                        Margin="{DynamicResource WolvenKitMarginTinyBottom}"
-                        HorizontalAlignment="Left"
-                        Background="#252525"
-                        BorderThickness="0"
-                        Content="Component name:" />
+                        Grid.ColumnSpan="2"
+                        Label="Component name:"
+                        Options="{Binding ComponentNames, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedOption="{Binding ComponentName, Mode=TwoWay}"
+                        KeyboardNavigation.TabIndex="1">
+                    </editors:FilterableDropdownMenu>
 
-                    <TextBox
-                        x:Name="ComponentNameBox"
-                        Grid.Row="0"
-                        Grid.Column="1"
-                        Margin="{DynamicResource WolvenKitMarginTinyBottom}"
-                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
-                        KeyboardNavigation.TabIndex="1" />
-
+                    <!-- new component name -->
                     <Label
                         Grid.Row="2"
                         Grid.Column="0"
-                        Margin="{DynamicResource WolvenKitMarginTinyBottom}"
+                        Margin="{StaticResource WolvenKitMarginTinyBottom}"
                         HorizontalAlignment="Left"
                         Background="#252525"
                         BorderThickness="0"
-                        Content="Depot Path:" />
+                        Width="{StaticResource WolvenKitLabelWidthMedium}"
+                        Content="New name:"
+                        KeyboardNavigation.TabIndex="3" />
 
+                    <TextBox
+                        x:Name="NewComponentNameBox"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Margin="{StaticResource WolvenKitMarginTinyBottom}"
+                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
+                        KeyboardNavigation.TabIndex="4">
+                    </TextBox>
+
+
+                    <!-- Depot Path -->
+                    <Label
+                        Grid.Row="4"
+                        Grid.Column="0"
+                        Margin="{StaticResource WolvenKitMarginTinyBottom}"
+                        HorizontalAlignment="Left"
+                        Background="#252525"
+                        BorderThickness="0"
+                        Width="{StaticResource WolvenKitLabelWidthMedium}"
+                        Content="Depot Path:" />
                     <TextBox
                         x:Name="DepotPathBox"
-                        Grid.Row="2"
+                        Grid.Row="4"
                         Grid.Column="1"
-                        Margin="{DynamicResource WolvenKitMarginTinyBottom}"
+                        Margin="{StaticResource WolvenKitMarginTinyBottom}"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
-                        KeyboardNavigation.TabIndex="2">
+                        KeyboardNavigation.TabIndex="5">
                         <TextBox.ToolTip>
                             <ToolTip>
                                 Can take a depot path or the name of a sibling component. Will check for sibling component first.
@@ -99,22 +125,24 @@
                         </TextBox.ToolTip>
                     </TextBox>
 
+                    <!-- mesh appearance -->
                     <Label
-                        Grid.Row="4"
+                        Grid.Row="6"
                         Grid.Column="0"
-                        Margin="{DynamicResource WolvenKitMarginTinyBottom}"
+                        Margin="{StaticResource WolvenKitMarginTinyBottom}"
                         HorizontalAlignment="Left"
                         Background="#252525"
                         BorderThickness="0"
+                        Width="{StaticResource WolvenKitLabelWidthMedium}"
                         Content="Mesh appearance:" />
 
                     <TextBox
                         x:Name="MeshAppearanceNameBox"
-                        Grid.Row="4"
+                        Grid.Row="6"
                         Grid.Column="1"
-                        Margin="{DynamicResource WolvenKitMarginTinyBottom}"
+                        Margin="{StaticResource WolvenKitMarginTinyBottom}"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
-                        KeyboardNavigation.TabIndex="3">
+                        KeyboardNavigation.TabIndex="6">
                         <TextBox.ToolTip>
                             <ToolTip>
                                 Can take an appearance or the name of a sibling component. Will check for sibling component first.
@@ -122,35 +150,42 @@
                         </TextBox.ToolTip>
                     </TextBox>
 
+
+                    <!--Chunkmask -->
                     <Label
-                        Grid.Row="6"
+                        Grid.Row="8"
                         Grid.Column="0" 
                         HorizontalAlignment="Left"
                         Background="#252525"
                         BorderThickness="0"
+                        Width="{StaticResource WolvenKitLabelWidthMedium}"
                         Content="Chunkmask" />
 
                     <editors:RedChunkMaskEditor
                         x:Name="ChunkmaskEditor"
-                        Grid.Row="6"
+                        Grid.Row="8"
                         Grid.Column="1"
-                        KeyboardNavigation.TabIndex="4"
+                        KeyboardNavigation.TabIndex="7"
                         RedNumber="{Binding ChunkMask,
                                             Mode=TwoWay}"
                         PropertyChanged="On_Chunkmask_Changed" />
+
+
+                    <!-- Remember values? -->
                     <Label
-                        Grid.Row="8"
+                        Grid.Row="10"
                         Grid.Column="0"
                         HorizontalAlignment="Left"
                         Background="#252525"
                         BorderThickness="0"
+                        Width="{StaticResource WolvenKitLabelWidthMedium}"
                         Content="Remember values?" />
 
                     <CheckBox
                         x:Name="RememberValuesCheckBox"
-                        Grid.Row="8"
+                        Grid.Row="10"
                         Grid.Column="1"
-                        KeyboardNavigation.TabIndex="2" />
+                        KeyboardNavigation.TabIndex="8" />
                 </Grid>
             </syncfusion:WizardPage>
         </syncfusion:WizardControl>
