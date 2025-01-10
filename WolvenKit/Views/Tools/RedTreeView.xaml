@@ -10,6 +10,7 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:treeViewEngine="clr-namespace:Syncfusion.UI.Xaml.TreeView.Engine;assembly=Syncfusion.SfTreeView.WPF"
     xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
     mc:Ignorable="d"
     d:DesignWidth="800"
     d:DesignHeight="450"
@@ -2052,6 +2053,41 @@
                         </Grid>
                     </DataTemplate>
                 </converters:TreeViewItemTemplateSelector.RefTemplate>
+
+                <converters:TreeViewItemTemplateSelector.CurveTemplate>
+                    <DataTemplate>
+                        <Grid
+                            Width="Auto"
+                            HorizontalAlignment="Stretch"
+                            Background="Transparent"
+                            ContextMenu="{StaticResource TreeViewContextMenu}"
+                            Tag="{Binding}"
+                            ToolTip="{Binding Type}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Style="{StaticResource ArrayNameColumnWidth}" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" MinWidth="20" />
+                            </Grid.ColumnDefinitions>
+
+                            <ContentPresenter
+                                Grid.Column="0"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center"
+                                ContentTemplate="{StaticResource PropertyNameTemplate}" />
+
+                            <ContentPresenter
+                                Grid.Column="1"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center"
+                                ContentTemplate="{StaticResource PropertyValueTemplate}" />
+
+                            <editors:RedCurveEditor
+                                Grid.Column="2"
+                                Margin="{DynamicResource WolvenKitMarginTinyRight}"
+                                ShowQuickAccess="True" />
+                        </Grid>
+                    </DataTemplate>
+                </converters:TreeViewItemTemplateSelector.CurveTemplate>
             </converters:TreeViewItemTemplateSelector>
         </ResourceDictionary>
     </UserControl.Resources>
