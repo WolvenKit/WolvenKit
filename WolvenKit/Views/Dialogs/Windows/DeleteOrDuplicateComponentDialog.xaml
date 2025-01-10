@@ -70,7 +70,7 @@
                         Label="original component:"
                         Options="{Binding ComponentNames}"
                         SelectedOption="{Binding ComponentName}"
-                        PropertyChanged="OnFilterableDropdownChanged" />
+                        SelectionChanged="OnFilterableDropdownChanged" />
 
                     <Label
                         Grid.Row="2"

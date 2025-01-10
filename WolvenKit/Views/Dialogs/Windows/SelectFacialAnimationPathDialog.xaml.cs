@@ -45,10 +45,9 @@ namespace WolvenKit.Views.Dialogs.Windows
             Close();
         }
 
-        private void OnFilterableDropdownMenuPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void OnFilterableDropdownMenuSelectionChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (ViewModel is null || sender is not Editors.FilterableDropdownMenu d ||
-                e.PropertyName != nameof(Editors.FilterableDropdownMenu.SelectedOption))
+            if (ViewModel is null || sender is not Editors.FilterableDropdownMenu d)
             {
                 return;
             }
