@@ -516,6 +516,11 @@ namespace WolvenKit.Modkit.RED4
             return InternalUncookBuffers(cr2wFile, relPath, outfile, settings, rawOutDir);
         }
 
+        /// <summary>
+        /// Clears the lookup table for already exported file.
+        /// </summary>
+        public void ClearFileLookup() => _uncookedLookup.Clear();
+
         public bool IsUncooked(string? depotPath, string destName, string relPath)
         {
             if (!string.IsNullOrEmpty(depotPath) &&

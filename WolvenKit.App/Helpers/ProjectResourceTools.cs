@@ -461,6 +461,7 @@ public class ProjectResourceTools
         ReplacePathInProject(activeProject, oldRelPath, newRelPath);
     }
 
+    private static readonly List<string> s_replaceInRawFileExtensions = [".lua", ".xl", ".json", ".yaml", ".yml"];
     public void ReplacePathInProject(Cp77Project? activeProject, ResourcePath oldPath, ResourcePath newPath)
     {
         if (oldPath == newPath || activeProject is null)
@@ -500,6 +501,10 @@ public class ProjectResourceTools
                 Directory.GetFiles(activeProject.ResourcesDirectory, "*.*", SearchOption.AllDirectories);
             Parallel.ForEach(resourceFiles, absoluteFilePath =>
             {
+                if (!s_replaceInRawFileExtensions.Contains(Path.GetExtension(absoluteFilePath)))
+                {
+                    return;
+                }
                 try
                 {
                     var fileContent = File.ReadLines(absoluteFilePath).ToArray();

@@ -1,6 +1,5 @@
 using System.Windows;
 using System.Windows.Controls;
-using ReactiveUI;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Types;
 
@@ -17,6 +16,19 @@ namespace WolvenKit.Views.Editors
         {
             InitializeComponent();
         }
+
+        public bool ShowQuickAccess
+        {
+            get => (bool)GetValue(ShowQuickAccessProperty);
+            set => SetValue(ShowQuickAccessProperty, value);
+        }
+
+        public static readonly DependencyProperty ShowQuickAccessProperty = DependencyProperty.Register(
+            nameof(ShowQuickAccess),
+            typeof(bool),
+            typeof(RedCurveEditor),
+            new PropertyMetadata(false)
+            );
 
         //public IRedLegacySingleChannelCurve RedCurve
         //{

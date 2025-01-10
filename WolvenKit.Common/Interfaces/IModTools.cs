@@ -74,6 +74,8 @@ namespace WolvenKit.Common.Interfaces
 
         public bool ExportEntity(CR2WFile entFile, CName appearance, FileInfo outfile);
         public bool ExportMaterials(CR2WFile cr2w, FileInfo outfile, MeshExportArgs meshExportArgs);
+
+        public void ClearFileLookup();
     }
 
 }

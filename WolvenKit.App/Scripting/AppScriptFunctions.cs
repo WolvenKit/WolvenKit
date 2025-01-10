@@ -454,6 +454,11 @@ public class AppScriptFunctions : ScriptFunctions
     }
 
     /// <summary>
+    /// Clears the lookup for exported depot files.
+    /// </summary>
+    public void ClearExportFileLookup() => _importExportHelper.ClearFileLookup();
+
+    /// <summary>
     /// Exports a list of files as you would with the export tool.
     /// </summary>
     /// <param name="fileList"></param>
