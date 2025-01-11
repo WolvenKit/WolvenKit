@@ -141,7 +141,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         CanScrollToOpenFile = HasSelectedItem && _appViewModel.ActiveDocument is not null;
         if (e.PropertyName == nameof(AppViewModel.ActiveDocument))
         {
-            SaveOpenFilePath(_appViewModel.ActiveDocument?.FilePath);
+            SaveOpenFilePaths();
         }
     }
 
@@ -176,6 +176,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         {
             _hasUnsavedFileTreeChanges = true;
             SaveProjectExplorerExpansionStateIfDirty();
+            SaveOpenFilePaths();
             _projectWatcher.UnwatchProject(ActiveProject);
         }
         
@@ -1126,35 +1127,48 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
 
         var lastFilePaths = File.ReadLines(lastFilesPath)
-            .Where(path => File.Exists(project.GetAbsolutePath(path)))
+            .Select(project.GetAbsolutePath)
+            .Where(File.Exists)
+            .Distinct()
             .TakeLast(_settingsManager.NumFilesToReopen)
             .ToList();
 
         foreach (var path in lastFilePaths)
         {
-            _appViewModel.OpenFileFromDepotPath(path);
+            _appViewModel.RequestFileOpen(path);
         }
 
         // write back the last X entries
         File.WriteAllLines(lastFilesPath, lastFilePaths);
     }
 
-    private void SaveOpenFilePath(string? filePath)
+    private void SaveOpenFilePaths()
     {
-        if (_loadingProjectData || string.IsNullOrEmpty(filePath) || ActiveProject is null)
+        if (_loadingProjectData || ActiveProject is null)
         {
             return;
         }
 
-        var listFile = Path.Combine(ActiveProject.ProjectDirectory, s_projectFilesDirName, s_openFilesList);
-        var relativePath = ActiveProject.GetRelativePath(filePath);
-        if (!File.Exists(listFile))
+        var filePaths = _appViewModel.DockedViews.OfType<IDocumentViewModel>()
+            .Select(x => x.FilePath)
+            .Where(x => x is not null)
+            .Select(x => x!)
+            .ToList();
+        
+        var projectFileDir = Path.Combine(ActiveProject.ProjectDirectory, s_projectFilesDirName);
+        if (!Directory.Exists(projectFileDir))
         {
-            File.WriteAllText(listFile, relativePath);
+            Directory.CreateDirectory(projectFileDir);
         }
-        else
+
+        var lastFilesPath = Path.Combine(projectFileDir, s_openFilesList);
+        try
         {
-            File.AppendAllLines(listFile, [relativePath]);
+            File.WriteAllLines(lastFilesPath, filePaths);
+        }
+        catch
+        {
+            // I guess we don't write :))
         }
     }
 
