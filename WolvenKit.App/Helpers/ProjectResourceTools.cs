@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using DynamicData;
 using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Interaction;
@@ -455,77 +454,122 @@ public class ProjectResourceTools
             return;
         }
 
-        var oldRelPath = activeProject.GetResourcePathFromRoot(sourceAbsPath);
+     
         var newRelPath = activeProject.GetResourcePathFromRoot(destAbsPath);
 
-        ReplacePathInProject(activeProject, oldRelPath, newRelPath);
+        ReplacePathInProject(activeProject, sourceAbsPath, newRelPath);
     }
 
-    private static readonly List<string> s_replaceInRawFileExtensions = [".lua", ".xl", ".json", ".yaml", ".yml"];
-    public void ReplacePathInProject(Cp77Project? activeProject, ResourcePath oldPath, ResourcePath newPath)
+    /// <summary>
+    /// File extensions in resources that we want to update  
+    /// </summary>
+    private static readonly List<string> s_resourceFileExtensions = [".lua", ".xl", ".json", ".yaml", ".yml", ".reds"];
+
+    /// <summary>
+    /// Extensions of files that we don't need to update 
+    /// </summary>
+    private static readonly List<string> s_fileExtensionsWithoutPaths = [".xbm", ".mlmask"];
+
+    /// <summary>
+    /// File extensions from source/archive that require updating of resource files  
+    /// </summary>
+    private static readonly List<string> s_replaceInResourceFileExtensions =
+        [".ent", ".app", ".csv", ".json", ".anims", ".workspot"];
+
+    public void ReplacePathInProject(Cp77Project? activeProject, string oldAbsolutePath, ResourcePath newPath)
     {
-        if (oldPath == newPath || activeProject is null)
+        if (activeProject is null || oldAbsolutePath.Contains(activeProject.RawDirectory))
+        {
+            return;
+        }
+
+        var oldPath = activeProject.GetResourcePathFromRoot(oldAbsolutePath);
+        if (string.Equals(oldPath, newPath, StringComparison.Ordinal))
         {
             return;
         }
 
         List<string> failedFiles = [];
 
-        var files = Directory.GetFiles(activeProject.ModDirectory, "*.*", SearchOption.AllDirectories);
-        Parallel.ForEach(files, file =>
+        ReplaceInCr2WFiles();
+
+
+        ReplaceInResourceFiles();
+
+
+        if (failedFiles.Count <= 0)
         {
-            var hash = activeProject.GetResourcePathFromRoot(file);
-            if (hash == newPath)
+            return;
+        }
+
+        _loggerService.Error($"Failed to auto-update references in the following files:");
+        failedFiles.ForEach((path) => _loggerService.Error($"  {path}"));
+
+        return;
+
+        void ReplaceInResourceFiles()
+        {
+            // if it's not a cr2W file from archive, the resource files won't care
+            if (!oldAbsolutePath.Contains(activeProject.ModDirectory))
             {
                 return;
             }
 
-            try
-            {
-                ReplacePathInFile(activeProject, file, oldPath, newPath);
-            }
-            catch (Exception)
-            {
-                failedFiles.Add(file.RelativePath(activeProject.ModDirectory));
-            }
-        });
+            var fileExtension = Path.GetExtension(oldAbsolutePath);
 
+            // Check if we're moving either a folder, or moving a file extension we care about
+            var replaceInResourceFiles = string.IsNullOrEmpty(fileExtension) ||
+                                         s_replaceInResourceFileExtensions.Contains(fileExtension);
 
-        if (oldPath.GetResolvedText() is string oldPathStr && !string.IsNullOrEmpty(oldPathStr) &&
-            newPath.GetResolvedText() is string newPathStr && !string.IsNullOrEmpty(newPathStr))
-        {
+            if (!replaceInResourceFiles ||
+                oldPath.GetResolvedText() is not string oldPathStr || string.IsNullOrEmpty(oldPathStr) ||
+                newPath.GetResolvedText() is not string newPathStr || string.IsNullOrEmpty(newPathStr))
+            {
+                return;
+            }
+
             var oldPathWithForwardSlashes = oldPathStr.Replace("\\", "/");
             var newPathWithForwardSlashes = newPathStr.Replace("\\", "/");
-            
+
             var resourceFiles =
                 Directory.GetFiles(activeProject.ResourcesDirectory, "*.*", SearchOption.AllDirectories);
+
             Parallel.ForEach(resourceFiles, absoluteFilePath =>
             {
-                if (!s_replaceInRawFileExtensions.Contains(Path.GetExtension(absoluteFilePath)))
+                if (!string.IsNullOrEmpty(fileExtension) && !s_resourceFileExtensions.Contains(fileExtension))
                 {
                     return;
                 }
+
                 try
                 {
                     var fileContent = File.ReadLines(absoluteFilePath).ToArray();
-                  
 
-                    // replace both forward and backward slashes (LUA / reds)
+                    // remove duplicate backslashes
+                    var hasDuplicateBackslashes = fileContent.Any(s => s.Contains(@"\\"));
+
+                    if (hasDuplicateBackslashes)
+                    {
+                        fileContent = fileContent.Select(str => str.Replace(@"\\", @"\")).ToArray();
+                    }
+
+                    // replace both forward and backward slashes
                     var newFileContent = fileContent.Select(line => line
-                        .Replace(@"\\", @"\") // for lua files
                         .Replace(oldPathStr, newPathStr)
                         .Replace(oldPathWithForwardSlashes, newPathWithForwardSlashes)
                     ).ToArray();
-
-                    if (absoluteFilePath.EndsWith(".lua"))
-                    {
-                        newFileContent = newFileContent.Select(line => line.Replace(@"\", @"\\")).ToArray();
-                    }
 
                     if (newFileContent.All(line => fileContent.Contains(line)))
                     {
                         return;
                     }
+
+                    // put duplicate backslashes back
+                    if (hasDuplicateBackslashes || absoluteFilePath.EndsWith(".lua"))
+                    {
+                        newFileContent = newFileContent.Select(line => line.Replace(@"\", @"\\")).ToArray();
+                    }
+
 
                     File.WriteAllLines(absoluteFilePath, newFileContent);
                 }
@@ -535,15 +579,42 @@ public class ProjectResourceTools
                 }
             });
         }
-        
 
-        if (failedFiles.Count <= 0)
+        void ReplaceInCr2WFiles()
         {
-            return;
-        }
+            if (!oldAbsolutePath.Contains(activeProject.ModDirectory))
+            {
+                return;
+            }
 
-        _loggerService.Error($"Failed to auto-update references in the following files:");
-        failedFiles.ForEach((path) => _loggerService.Error($"  {path}"));
+            // if it's a resource or raw file, no need to refactor it in mod files 
+            var files = Directory.GetFiles(activeProject.ModDirectory, "*.*", SearchOption.AllDirectories);
+
+            Parallel.ForEach(files, file =>
+            {
+                // Don't process files that will never hold paths
+                if (Path.GetExtension(file) is string s && !string.IsNullOrEmpty(s) &&
+                    s_fileExtensionsWithoutPaths.Contains(s))
+                {
+                    return;
+                }
+
+                var hash = activeProject.GetResourcePathFromRoot(file);
+                if (hash == newPath)
+                {
+                    return;
+                }
+
+                try
+                {
+                    ReplacePathInFile(activeProject, file, oldPath, newPath);
+                }
+                catch (Exception)
+                {
+                    failedFiles.Add(file.RelativePath(activeProject.ModDirectory));
+                }
+            });
+        }
     }
 
 
@@ -576,12 +647,13 @@ public class ProjectResourceTools
         using (var fs = File.Open(absoluteFilePath, FileMode.Open))
         using (var cr = new CR2WReader(fs))
         {
-            if (cr.ReadFile(out cr2W) != (RED4.Archive.IO.EFileReadErrorCodes)EFileReadErrorCodes.NoError)
+            if (cr.ReadFile(out cr2W) != (RED4.Archive.IO.EFileReadErrorCodes)EFileReadErrorCodes.NoError ||
+                cr2W is null)
             {
                 return;
             }
 
-            if (cr2W!.RootChunk is JsonResource or C2dArray)
+            if (cr2W.RootChunk is JsonResource or C2dArray)
             {
                 ReplaceInStrings();
             }
@@ -610,7 +682,7 @@ public class ProjectResourceTools
                 return;
             }
 
-            var refs = cr2W!.FindType(typeof(IRedString));
+            var refs = cr2W.FindType(typeof(IRedString));
             foreach (var result in refs)
             {
                 var stringValue = result.Value switch
@@ -645,7 +717,7 @@ public class ProjectResourceTools
 
         void ReplaceInIRedRefs()
         {
-            var refs = cr2W!.FindType(typeof(IRedRef));
+            var refs = cr2W.FindType(typeof(IRedRef));
             foreach (var result in refs)
             {
                 if (result.Value is not IRedRef resourceReference || resourceReference.DepotPath == ResourcePath.Empty)
