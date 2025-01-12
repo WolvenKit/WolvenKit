@@ -46,6 +46,7 @@ public class AppScriptFunctions : ScriptFunctions
     private readonly ImportExportHelper _importExportHelper;
     private readonly IGameControllerFactory _gameController;
     private readonly GeometryCacheService _geometryCacheService;
+    private readonly ISettingsManager _settingsManager;
 
     public AppViewModel? AppViewModel;
 
@@ -57,7 +58,8 @@ public class AppScriptFunctions : ScriptFunctions
         IModTools modTools,
         ImportExportHelper importExportHelper,
         IGameControllerFactory gameController,
-        GeometryCacheService geometryCacheService)
+        GeometryCacheService geometryCacheService,
+        ISettingsManager settingsManager)
         : base(loggerService, archiveManager, parserService)
     {
         _projectManager = projectManager;
@@ -65,6 +67,8 @@ public class AppScriptFunctions : ScriptFunctions
         _importExportHelper = importExportHelper;
         _gameController = gameController;
         _geometryCacheService = geometryCacheService;
+        _settingsManager = settingsManager;
+        
     }
 
     /// <summary>
@@ -1002,5 +1006,14 @@ public class AppScriptFunctions : ScriptFunctions
             throw new WolvenKitException(0x2000, "Milliseconds cannot be negative");
         }
         Task.Run(async () => await Task.Delay(milliseconds)).Wait();
+    }
+
+    /// <summary>
+    /// Returns the current wolvenkit version
+    /// </summary>
+    /// <retruns>string</retruns>
+    public virtual string ProgramVersion()
+    {
+        return _settingsManager.GetVersionNumber();
     }
 }
