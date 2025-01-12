@@ -1012,7 +1012,7 @@ public class AppScriptFunctions : ScriptFunctions
     /// Returns the current wolvenkit version
     /// </summary>
     /// <retruns>string</retruns>
-    public virtual string Version()
+    public virtual string ProgramVersion()
     {
         return _settingsManager.GetVersionNumber();
     }
