@@ -405,7 +405,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
         if (_updateTask != null)
         {
             _updateThreadCancellationTokenSource.Cancel();
-            if (!_updateTask.Wait(1000))
+            if (!_updateTask.IsCanceled && !_updateTask.Wait(1000))
             {
                 throw new Exception();
             }
