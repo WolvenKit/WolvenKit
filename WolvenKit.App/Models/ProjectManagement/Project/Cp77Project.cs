@@ -11,7 +11,6 @@ using WolvenKit.Common;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
-using WolvenKit.Modkit.RED4.Serialization;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
@@ -130,8 +129,7 @@ public sealed partial class Cp77Project(string location, string name, string mod
             return Directory.Exists(oldDir) ? oldDir : Path.GetDirectoryName(Location).NotNull();
         }
     }
-
-
+    
     /// <summary>
     /// Absolute path to /source
     /// </summary>
@@ -339,6 +337,66 @@ public sealed partial class Cp77Project(string location, string name, string mod
         }
     }
 
+
+    #region project_state_files
+
+    private const string s_projectFilesDirName = ".projectFiles";
+    private const string s_projectTreeStateFileName = "fileTreeState.json";
+    private const string s_openFilesList = "openFilesList.json";
+
+    /// <summary>
+    /// Path to <see cref="ProjectDirectory"/>/<see cref="s_projectFilesDirName"/>, where we store temp files
+    /// with interface states (e.g. file tree, open files, etc.)
+    ///
+    /// If we create many more files, we may need to expose this and handle the paths somewhere else
+    /// </summary>
+    private string InterfaceStateFileDirectory
+    {
+        get
+        {
+            var directory = Path.Combine(ProjectDirectory, s_projectFilesDirName);
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
+            return directory;
+        }
+    }
+
+    /// <summary>
+    /// Path to <see cref="InterfaceStateFileDirectory"/>/<see cref="s_projectTreeStateFileName"/>
+    /// where we store the serialized project explorer tree state
+    /// </summary>
+    public string InterfaceProjectTreeStatePath
+    {
+        get
+        {
+            var oldPath = Path.Combine(ProjectDirectory, s_projectTreeStateFileName);
+            var newPath = Path.Combine(InterfaceStateFileDirectory, s_projectTreeStateFileName);
+            if (File.Exists(oldPath))
+            {
+                if (!File.Exists(newPath))
+                {
+                    File.Move(oldPath, newPath, true);
+                }
+                else
+                {
+                    File.Delete(oldPath);
+                }
+            }
+
+            return newPath;
+        }
+    }
+
+    /// <summary>
+    /// Path to <see cref="InterfaceStateFileDirectory"/>/<see cref="s_openFilesList"/>
+    /// where we store the file paths for the most recently opened tabs  
+    /// </summary>
+    public string InterfaceOpenFilesListPath => Path.Combine(InterfaceStateFileDirectory, s_openFilesList);
+
+    #endregion    
 
     /// <summary>
     /// Path to /packed/archive/pc/mod or /packed/mods
