@@ -25,11 +25,15 @@ public abstract partial class DocumentViewModel : PaneViewModel, IDocumentViewMo
         {
             LastWriteTime = File.GetLastWriteTime(path);
         }
+
+        OpenedAt = DateTime.Now;
     }
 
     [ObservableProperty] private string _filePath;
     [ObservableProperty] private bool _isReadOnly;
     [ObservableProperty] private bool _showToolbar;
+
+    public DateTime OpenedAt { get; init; }
 
     private bool _isDirty;
 
