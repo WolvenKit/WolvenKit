@@ -470,12 +470,12 @@ namespace WolvenKit.Views.Documents
 
             ViewModel?.ClearSelection();
             
-            List<ChunkViewModel> newNodes = [];
             
             foreach (var chunkViewModel in selectedChunks.SelectMany(cvm =>
                          GetComponentsByName(cvm, componentModel.ComponentName)).ToList())
             {
-                var newNode = chunkViewModel.DuplicateChunk(chunkViewModel.NodeIdxInParent);
+                // insert after existing node, not before
+                var newNode = chunkViewModel.DuplicateChunk(chunkViewModel.NodeIdxInParent + 1);
 
                 if (newNode?.Data is not entIComponent component)
                 {
@@ -485,11 +485,10 @@ namespace WolvenKit.Views.Documents
                 component.Name = componentModel.NewComponentName;
                 newNode.RecalculateProperties();
                 newNode.Parent?.RecalculateProperties();
-
-                newNodes.Add(newNode);
             }
 
-            ViewModel?.SetSelection(newNodes);
+            // clear selection to work around invalid selection bug
+            ViewModel?.ClearSelection();
         }
 
         private void OnDeleteComponentByNameClick(object _, RoutedEventArgs e)
