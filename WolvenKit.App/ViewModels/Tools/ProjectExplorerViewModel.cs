@@ -1279,7 +1279,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         try
         {
             _projectWatcher.WatchProject(project);
-            _projectWatcher.Refresh();
         }
         catch
         {
