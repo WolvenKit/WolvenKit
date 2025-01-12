@@ -1090,38 +1090,18 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     // IconSource = bi;
 
 
-    private const string s_projectFilesDirName = ".projectFiles";
-    private const string s_openFilesList = "openFilesList.json";
 
-
-    private const string s_treestateFileName = "fileTreeState.json";
 
     private void ReadProjectStateFromFiles(Cp77Project project)
     {
-        var projectFilesDir = Path.Combine(project.ProjectDirectory, s_projectFilesDirName);
-        if (!Directory.Exists(projectFilesDir))
-        {
-            Directory.CreateDirectory(projectFilesDir);
-        }
-
-        // make sure to move the treestate file into the subfolder
-        var oldTreeStateFile = Path.Combine(project.ProjectDirectory, s_treestateFileName);
-        var newTreeStateFile = Path.Combine(projectFilesDir, s_treestateFileName);
-        if (File.Exists(oldTreeStateFile) && !File.Exists(newTreeStateFile))
-        {
-            File.Move(oldTreeStateFile, projectFilesDir);
-        }
-        else if (File.Exists(newTreeStateFile))
-        {
-            File.Delete(oldTreeStateFile);
-        }
-
+        
         // read tree state from file
-        if (File.Exists(newTreeStateFile))
+        if (File.Exists(project.InterfaceProjectTreeStatePath))
         {
             _hasUnsavedFileTreeChanges = false;
             ExpansionStateDictionary =
-                JsonSerializer.Deserialize<Dictionary<string, bool>>(File.ReadAllText(newTreeStateFile)) ?? new();
+                JsonSerializer.Deserialize<Dictionary<string, bool>>(
+                    File.ReadAllText(project.InterfaceProjectTreeStatePath)) ?? [];
         }
         else
         {
@@ -1129,13 +1109,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
 
         // read last opened files from file
-        var lastFilesPath = Path.Join(project.ProjectDirectory, s_projectFilesDirName, s_openFilesList);
-        if (!File.Exists(lastFilesPath))
+        if (!File.Exists(project.InterfaceOpenFilesListPath))
         {
             return;
         }
 
-        var lastFilePaths = File.ReadLines(lastFilesPath)
+        var lastFilePaths = File.ReadAllLines(project.InterfaceOpenFilesListPath)
             .Select(project.GetAbsolutePath)
             .Where(File.Exists)
             .Distinct()
@@ -1146,34 +1125,24 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         {
             _appViewModel.RequestFileOpen(path);
         }
-
-        // write back the last X entries
-        File.WriteAllLines(lastFilesPath, lastFilePaths);
     }
 
     private void SaveOpenFilePaths()
     {
-        if (_loadingProjectData || ActiveProject is null)
+        if (_loadingProjectData || ActiveProject is not Cp77Project project)
         {
             return;
         }
 
         var filePaths = _appViewModel.DockedViews.OfType<IDocumentViewModel>()
-            .Select(x => x.FilePath)
-            .Where(x => x is not null)
-            .Select(x => x!)
+            .OrderBy(x => x.OpenedAt)
+            .Where(x => x.FilePath is not null)
+            .Select(x => project.GetRelativePath(x.FilePath!))
             .ToList();
-        
-        var projectFileDir = Path.Combine(ActiveProject.ProjectDirectory, s_projectFilesDirName);
-        if (!Directory.Exists(projectFileDir))
-        {
-            Directory.CreateDirectory(projectFileDir);
-        }
 
-        var lastFilesPath = Path.Combine(projectFileDir, s_openFilesList);
         try
         {
-            File.WriteAllLines(lastFilesPath, filePaths);
+            File.WriteAllLines(project.InterfaceOpenFilesListPath, filePaths);
         }
         catch
         {
@@ -1201,8 +1170,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        File.WriteAllText(Path.Join(project.ProjectDirectory, s_projectFilesDirName, s_treestateFileName),
-            JsonSerializer.Serialize(ExpansionStateDictionary));
+        File.WriteAllText(project.InterfaceProjectTreeStatePath, JsonSerializer.Serialize(ExpansionStateDictionary));
         _hasUnsavedFileTreeChanges = false;
     }
 
