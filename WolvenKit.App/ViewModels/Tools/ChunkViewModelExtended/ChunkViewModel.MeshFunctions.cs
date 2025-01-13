@@ -307,23 +307,16 @@ public partial class ChunkViewModel
 
         int GetIndexOfFirstNonRepeatingMaterial(List<string> materials)
         {
-            int numMaterials = materials.Count;
+            var numMaterials = materials.Count;
 
             var materialCounts = new Dictionary<string, int>();
-            foreach (var material in materials)
+            foreach (var material in materials.Where(material => !materialCounts.TryAdd(material, 1)))
             {
-                if (materialCounts.ContainsKey(material))
-                {
-                    materialCounts[material]++;
-                }
-                else
-                {
-                    materialCounts[material] = 1;
-                }
+                materialCounts[material]++;
             }
 
-            int startIndex = 0;
-            for (int i = 0; i < numMaterials; i++)
+            var startIndex = 0;
+            for (var i = 0; i < numMaterials; i++)
             {
                 if (materialCounts[materials[i]] != 1)
                 {
@@ -412,13 +405,13 @@ public partial class ChunkViewModel
         if (mesh.LocalMaterialBuffer?.Materials is not null && mesh.LocalMaterialBuffer.Materials.Count > 0)
         {
             keepLocal = mesh.LocalMaterialBuffer.Materials
-                .Where((material, i) => localMatIdxList.Contains(i)).ToArray();
+                .Where((_, i) => localMatIdxList.Contains(i)).ToArray();
         }
 
         if (mesh.ExternalMaterials is not null && mesh.ExternalMaterials.Count > 0)
         {
             keepExternal = mesh.ExternalMaterials
-                .Where((material, i) => externalMatIdxList.Contains(i)).ToArray();
+                .Where((_, i) => externalMatIdxList.Contains(i)).ToArray();
         }
 
         var usedMaterialDefinitions = mesh.MaterialEntries.Where(me =>
@@ -522,6 +515,53 @@ public partial class ChunkViewModel
         }
     }
 
+    public void OnMaterialNameChange(string argsOldValue, string argsNewValue)
+    {
+        if (ResolvedData is not CMesh || GetPropertyChild("appearances") is not ChunkViewModel appearances ||
+            GetPropertyChild("materialEntries") is not { ResolvedData: CArray<CMeshMaterialEntry> materials })
+        {
+            return;
+        }
+
+        var materialsWithOldName = materials.Count(x => x.Name == argsOldValue);
+        var materialsWithNewName = materials.Count(x => x.Name == argsNewValue);
+        if (materialsWithOldName > 1 || materialsWithNewName > 0)
+        {
+            return;
+        }
+
+        foreach (var appearanceNode in appearances.TVProperties)
+        {
+            var wasChanged = false;
+            if (appearanceNode.ResolvedData is not meshMeshAppearance app)
+            {
+                continue;
+            }
+
+            CArray<CName> chunkMaterials = [];
+            foreach (var appChunkMaterial in app.ChunkMaterials)
+            {
+                if (appChunkMaterial == argsOldValue)
+                {
+                    chunkMaterials.Add(argsNewValue);
+                    wasChanged = true;
+                }
+                else
+                {
+                    chunkMaterials.Add(appChunkMaterial);
+                }
+            }
+
+            if (!wasChanged)
+            {
+                continue;
+            }
+
+            app.ChunkMaterials = chunkMaterials;
+            appearanceNode.RecalculateProperties();
+            Tab?.Parent.SetIsDirty(true);
+        }
+    }
 
 
     /// <summary>
