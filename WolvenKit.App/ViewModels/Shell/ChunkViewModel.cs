@@ -656,20 +656,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         get
         {
-            var type = Data?.GetType() ?? typeof(RedDummy);
+            var type = Data.GetType();
             if (Parent is null)
             {
                 return type;
             }
 
-            //var parent = Parent.Data;
             var parentType = Parent.ResolvedPropertyType;
-            // handles aren't the true parent type of these props, so need to get that
-            //if (Parent.Data is IRedBaseHandle handle && handle is not null)
-            //{
-            //    parent = handle.GetValue();
-            //    parentType = handle.GetValue().GetType();
-            //}
+            
             if ((GetPropertyByRedName(parentType, PropertyName) ?? null) is not ExtendedPropertyInfo propInfo)
             {
                 return type;
@@ -773,128 +767,138 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 return _propertyCountCache;
             }
 
-            var count = 0;
-            if (ResolvedData is IRedArray ary)
+            _propertyCountCache = 0;
+            switch (ResolvedData)
             {
-                count += ary.Count;
+                case IRedRef:
+                case RedDummy:
+                    // ignore
+                    break;
+                case IRedArray ary:
+                    _propertyCountCache += ary.Count;
+                    return _propertyCountCache;
+                case CKeyValuePair:
+                    _propertyCountCache += 2;
+                    return _propertyCountCache;
+                //else if (ResolvedData is inkWidgetReference)
+                //{
+                //    count += 1; // TODO
+                //}
+                default:
+                    break;
             }
-            else if (ResolvedData is IRedRef)
+
+            switch (Data)
             {
-                // ignore
-            }
-            else if (ResolvedData is CKeyValuePair)
-            {
-                count += 2;
-            }
-            //else if (ResolvedData is inkWidgetReference)
-            //{
-            //    count += 1; // TODO
-            //}
-            else if (Data is TweakDBID tdb)
-            {
-                // not actual
-                if (TweakDBService.Exists(tdb))
-                {
-                    count += 1;
-                }
-            }
-            else if (Data is LocalizationString)
-            {
-                // ignore
-            }
-            else if (ResolvedData is IRedString str)
-            {
-                var s = str.GetString();
-                if (s is not null && s.StartsWith("LocKey#") && ulong.TryParse(s[7..], out var locKey))
+                case LocalizationString:
+                case RedDummy:
+                    // ignore
+                    break;
+                case TweakDBID tdb:
                 {
                     // not actual
-                    count += 1;
-                }
-            }
-            else if (ResolvedData is gamedataLocKeyWrapper locKey)
-            {
-                // not actual
-                count += 1;
-            }
-            else if (ResolvedData is RedBaseClass redClass)
-            {
-                var pis = GetTypeInfo(redClass).PropertyInfos;
-                count += pis.Count;
+                    if (TweakDBService.Exists(tdb))
+                    {
+                        _propertyCountCache += 1;
+                    }
 
-                var dps = redClass.GetDynamicPropertyNames();
-                count += dps.Count;
-            }
-            else if (ResolvedData is SerializationDeferredDataBuffer sddb)
-            {
-                if (sddb.Data is RedPackage p4)
-                {
-                    count += p4.Chunks.Count;
-                }
-                else if (sddb.Data is not null)
-                {
-                    count += sddb.Data.GetType().GetProperties(s_defaultLookup).Count();
+                    return _propertyCountCache;
                 }
             }
-            else if (ResolvedData is SharedDataBuffer sdb)
+
+            switch (ResolvedData)
             {
-                if (sdb.Data is RedPackage p42)
+                case IRedString str:
                 {
-                    count += p42.Chunks.Count;
+                    var s = str.GetString();
+                    if (s?.StartsWith("LocKey#") == true && ulong.TryParse(s[7..], out var _))
+                    {
+                        // not actual
+                        _propertyCountCache += 1;
+                    }
+
+                    return _propertyCountCache;
+                }
+                case gamedataLocKeyWrapper:
+                    // not actual
+                    _propertyCountCache += 1;
+                    return _propertyCountCache;
+                case RedBaseClass redClass:
+                {
+                    var pis = GetTypeInfo(redClass).PropertyInfos;
+                    _propertyCountCache += pis.Count;
+
+                    var dps = redClass.GetDynamicPropertyNames();
+                    _propertyCountCache += dps.Count;
+                    return _propertyCountCache;
+                }
+                case SerializationDeferredDataBuffer { Data: RedPackage p4 }:
+                    _propertyCountCache += p4.Chunks.Count;
+                    return _propertyCountCache;
+                case SerializationDeferredDataBuffer { Data: not null } sddb:
+                {
+                    _propertyCountCache += sddb.Data.GetType().GetProperties(s_defaultLookup).Count();
                 }
 
-                if (sdb.Data is not null)
+                    return _propertyCountCache;
+
+                case SharedDataBuffer sdb:
                 {
-                    count += 1; // needs refinement?
+                    if (sdb.Data is RedPackage p42)
+                    {
+                        _propertyCountCache += p42.Chunks.Count;
+                    }
+
+                    if (sdb.Data is not null)
+                    {
+                        _propertyCountCache += 1; // needs refinement?
+                    }
+
+                    return _propertyCountCache;
+                }
+                case DataBuffer { Data: RedPackage p43 }:
+                    _propertyCountCache += p43.Chunks.Count;
+                    return _propertyCountCache;
+                case DataBuffer { Data: CR2WList cl }:
+                    _propertyCountCache += cl.Files.Count;
+                    return _propertyCountCache;
+                case DataBuffer { Data: IList list }:
+                    _propertyCountCache += list.Count;
+                    return _propertyCountCache;
+                case DataBuffer db:
+                {
+                    if (db.Data is not null)
+                    {
+                        _propertyCountCache += 1; // needs refinement?
+                    }
+
+                    return _propertyCountCache;
                 }
             }
-            else if (ResolvedData is DataBuffer db)
+
+            switch (Data)
             {
-                if (db.Data is RedPackage p43)
-                {
-                    count += p43.Chunks.Count;
-                }
-                else if (db.Data is CR2WList cl)
-                {
-                    count += cl.Files.Count;
-                }
-                else if (db.Data is IList list)
-                {
-                    count += list.Count;
-                }
-                else if (db.Data is not null)
-                {
-                    count += 1; // needs refinement?
-                }
-            }
-            else if (ResolvedData is not RedDummy)
-            {
-                if (Data is IBrowsableDictionary ibd)
+                case worldNodeData:
+                    _propertyCountCache += 1;
+                    return _propertyCountCache;
+                case IBrowsableDictionary ibd:
                 {
                     var pns = ibd.GetPropertyNames();
-                    count += pns.Count();
+                    _propertyCountCache += pns.Count();
+                    return _propertyCountCache;
                 }
-                else if (Data is IList list)
-                {
-                    count += list.Count;
-                }
-                else if (Data is Dictionary<string, object> dict)
-                {
-                    count += dict.Count;
-                }
-                else if (Data is not RedDummy)
-                {
-                    var pis = Data.GetType().GetProperties(s_defaultLookup);
-                    count += pis.Length;
-                }
-
-                if (Data is worldNodeData)
-                {
-                    count += 1;
-                }
+                case IList list:
+                    _propertyCountCache += list.Count;
+                    return _propertyCountCache;
+                case Dictionary<string, object> dict:
+                    _propertyCountCache += dict.Count;
+                    return _propertyCountCache;
             }
 
-            _propertyCountCache = count;
-            //this.RaisePropertyChanged("PropertyCount");
+            if (Data is not RedDummy)
+            {
+                _propertyCountCache += Data.GetType().GetProperties(s_defaultLookup).Length;
+            }
 
             return _propertyCountCache;
         }
@@ -1008,7 +1012,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     private TweakXL GetTXL()
     {
         var recordName = Name;
-        IRedType? tdbEntry = null;
+        IRedType? tdbEntry;
 
         var txl = new TweakXL();
 
@@ -1461,14 +1465,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     [RelayCommand(CanExecute = nameof(CanCreateDynamicProperty))]
     private async Task CreateDynamicProperty()
     {
-        if (ResolvedData is not RedBaseClass rbc)
+        if (ResolvedData is not RedBaseClass)
         {
             return;
         }
 
         var types = AppDomain.CurrentDomain.GetAssemblies()
             .SelectMany(s => s.GetTypes())
-            .Where(p => typeof(inkWidgetReference).IsAssignableFrom(p) && p.IsClass && !p.IsAbstract)
+            .Where(p => typeof(inkWidgetReference).IsAssignableFrom(p) && p is { IsClass: true, IsAbstract: false })
             .Select(x => new TypeEntry(x.Name, "", x))
             .ToList();
         await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
@@ -3423,8 +3427,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         IsDeleteReady = false;
         Tab?.Parent.SetIsDirty(true);
         RecalculateProperties();
-
-        DeleteAllCommand.NotifyCanExecuteChanged();
     }
 
     private Task<bool> ImportWorldNodeDataTask(bool updatecoords)
