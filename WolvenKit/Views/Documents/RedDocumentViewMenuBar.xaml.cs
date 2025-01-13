@@ -235,6 +235,82 @@ namespace WolvenKit.Views.Documents
             cvm.Tab?.Parent.SetIsDirty(true);
         }
 
+        private void OnUnDynamifyMaterialsClick(object _, RoutedEventArgs e)
+        {
+            if (ViewModel?.RootChunk is not ChunkViewModel cvm || cvm.ResolvedData is not CMesh mesh)
+            {
+                return;
+            }
+
+            cvm.ConvertPreloadMaterialsCommand.Execute(null);
+
+            var appearancesByName = cvm.UnDynamifyAppearances();
+            if (appearancesByName.Count == 0)
+            {
+                return;
+            }
+
+            cvm.GetPropertyChild("materials")?.CalculateProperties();
+            cvm.GetPropertyChild("localMaterialBuffer", "materials")?.CalculateProperties();
+
+            foreach (var (matName, resolvedMatNames) in appearancesByName)
+            {
+                var material = mesh.MaterialEntries.FirstOrDefault(m => m.Name == $"@{matName}");
+                if (material is null || mesh.LocalMaterialBuffer.Materials.Count < material.Index)
+                {
+                    _loggerService.Warning($"Failed to resolve dynamic material {matName}");
+                    continue;
+                }
+
+
+                var matInstance = (CMaterialInstance)mesh.LocalMaterialBuffer.Materials[material.Index];
+                var baseMaterialPath = matInstance.BaseMaterial.DepotPath.GetResolvedText() ?? "";
+
+                var maxIndex = mesh.MaterialEntries.Where(m => m.IsLocalInstance.Equals(material.IsLocalInstance))
+                    .Select(m => m.Index).Max();
+
+                foreach (var newMatName in resolvedMatNames)
+                {
+                    maxIndex += 1;
+                    mesh.MaterialEntries.Add(new CMeshMaterialEntry()
+                    {
+                        Name = newMatName, Index = maxIndex, IsLocalInstance = material.IsLocalInstance
+                    });
+
+
+                    var newMaterialInstance = new CMaterialInstance()
+                    {
+                        BaseMaterial = new CResourceReference<IMaterial>(
+                            baseMaterialPath.Replace("{material}", newMatName).Replace("*", ""),
+                            InternalEnums.EImportFlags.Default),
+                    };
+                    foreach (var cvp in matInstance.Values)
+                    {
+                        var value = cvp.Value switch
+                        {
+                            IRedResourceReference val => new CResourceReference<CResource>(
+                                (val.DepotPath.GetResolvedText() ?? "").Replace("{material}", newMatName)
+                                .Replace("*", ""), InternalEnums.EImportFlags.Default),
+                            IRedResourceAsyncReference asyncVal => new CResourceAsyncReference<CResource>(
+                                (asyncVal.DepotPath.GetResolvedText() ?? "").Replace("{material}", newMatName)
+                                .Replace("*", ""), InternalEnums.EImportFlags.Default),
+                            _ => cvp.Value
+                        };
+
+                        newMaterialInstance.Values.Add(new CKeyValuePair(cvp.Key, value));
+                    }
+
+                    mesh.LocalMaterialBuffer.Materials.Add(newMaterialInstance);
+                }
+            }
+
+            cvm.GetPropertyChild("materialEntries")?.RecalculateProperties();
+            cvm.GetPropertyChild("localMaterialBuffer", "materials")?.RecalculateProperties();
+
+            cvm.DeleteUnusedMaterialsCommand.Execute(true);
+            cvm.Tab?.Parent.SetIsDirty(true);
+        }
+
         public event EventHandler<EditorDifficultyLevel>? EditorDifficultChanged;
 
         private void OnEditorModeClick(EditorDifficultyLevel level)
