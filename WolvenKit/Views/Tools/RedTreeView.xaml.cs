@@ -964,7 +964,6 @@ namespace WolvenKit.Views.Tools
                 SetCurrentValue(SelectedItemsProperty, new ObservableCollection<object>(selectedChunkViewModels));
                 SetCurrentValue(SelectedItemProperty, selectedChunkViewModels.LastOrDefault());
             }
-            
         }
 
         private static void ReapplySearch(ChunkViewModel chunk)
@@ -1262,6 +1261,13 @@ namespace WolvenKit.Views.Tools
                     return;
                 default:
                     _modifierViewStateSvc.OnKeystateChanged(e);
+                    // update shift key state
+                    if (IsShiftBeingHeld != ModifierViewStateService.IsShiftBeingHeld)
+                    {
+                        var scrollMode = ModifierViewStateService.IsShiftBeingHeld ? ScrollUnit.Item : ScrollUnit.Pixel;
+                        TreeView.SetCurrentValue(VirtualizingPanel.ScrollUnitProperty, scrollMode);
+                    }
+                    
                     SetCurrentValue(IsShiftBeingHeldProperty, ModifierViewStateService.IsShiftBeingHeld);
                     SetCurrentValue(IsCtrlBeingHeldProperty, ModifierViewStateService.IsCtrlBeingHeld);
                     break;
