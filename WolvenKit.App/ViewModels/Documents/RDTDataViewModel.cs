@@ -24,7 +24,6 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.Documents;
 
-
 public partial class RDTDataViewModel : RedDocumentTabViewModel
 {
     private readonly ISettingsManager _settingsManager;
@@ -148,9 +147,9 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     [ObservableProperty]
     private bool _isEmbeddedFile;
 
-    [ObservableProperty] private object? _selectedChunk;
+    [ObservableProperty] private ChunkViewModel? _selectedChunk;
 
-    [ObservableProperty] private object? _selectedChunks;
+    [ObservableProperty] private List<ChunkViewModel>? _selectedChunks;
 
     [ObservableProperty] private EditorDifficultyLevel _editorDifficultyLevel;
 
@@ -173,7 +172,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     public bool HasActiveSearch { get; set; }
 
-    public int NumSelectedItems => SelectedChunks is ObservableCollection<object> obs ? obs.Count : 0;
+    public int NumSelectedItems => SelectedChunks?.Count ?? 0;
 
     public delegate void LayoutNodesDelegate();
 
@@ -404,32 +403,30 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     public void ClearSelection()
     {
-        if (SelectedChunks is IList lst)
+        foreach (var cvm in SelectedChunks ?? [])
         {
-            foreach (var obj in lst.OfType<ChunkViewModel>())
-            {
-                obj.IsSelected = false;
-            }
-
-            lst.Clear();
+            cvm.IsSelected = false;
         }
 
+        SelectedChunks?.Clear();
         SelectedChunk = null;
     }
 
+    
     public void AddToSelection(ChunkViewModel? chunk)
     {
+        var selectedChunks = SelectedChunks?.ToList() ?? [];
+        ClearSelection();
         if (chunk is null)
         {
             return;
         }
 
+        ExpandParentNodes(chunk);
         chunk.IsSelected = true;
-        if (SelectedChunks is IList lst)
-        {
-            lst.Add(chunk);
-        }
 
+        selectedChunks.Add(chunk);
+        SelectedChunks = selectedChunks;
         SelectedChunk = chunk;
     }
 
@@ -438,51 +435,57 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         if (chunk is not null)
         {
             chunk.IsSelected = false;
+            SelectedChunks?.Remove(chunk);
         }
-
-        if (SelectedChunks is IList lst && chunk is not null)
-        {
-            lst.Remove(chunk);
-        }
-
+        
         SelectedChunk = null;
     }
 
-
-    public void SetSelection(ChunkViewModel chunk)
+    public void SetSelection(ChunkViewModel chunk, bool addToPrevious = false)
     {
+        var previousSelection = (addToPrevious ? SelectedChunks?.ToList() : []) ?? [];
         ClearSelection();
+
+        ExpandParentNodes(chunk);
         chunk.IsSelected = true;
-        SelectedChunk = chunk;
-        if (SelectedChunks is IList lst)
+
+        if (addToPrevious || previousSelection.Count == 0)
         {
-            lst.Add(chunk);
+            previousSelection.Add(chunk);
         }
 
-        // clear IsSelected property again, because it'll be "stuck" otherwise 
-        chunk.IsSelected = false;
-        
+        SelectedChunks = previousSelection;
+
+        SelectedChunk = chunk;
+    }
+
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        base.OnPropertyChanged(e);
+        Console.WriteLine($"PropertyChanged: {e.PropertyName}");
     }
 
     public void SetSelection(List<ChunkViewModel> chunks)
     {
         ClearSelection();
-
-        // should never happen, but alas, it's nullable
-        if (SelectedChunks is not IList lst)
+        if (chunks.Count == 0)
         {
             return;
         }
 
-        var uniqueChunks = new HashSet<ChunkViewModel>(chunks);
-        SelectedChunk = uniqueChunks.LastOrDefault();
-
         // remove duplicates
-        foreach (var chunkViewModel in uniqueChunks)
+        var uniqueChunks = new HashSet<ChunkViewModel>(chunks);
+
+        foreach (var cvm in uniqueChunks)
         {
-            lst.Add(chunkViewModel);
-            chunkViewModel.IsSelected = true;
+            cvm.IsSelected = true;
+            ExpandParentNodes(cvm);
         }
+
+        // SelectedChunks = [.. uniqueChunks];
+
+        SelectedChunk = uniqueChunks.LastOrDefault();
     }
     
     public event EventHandler<string>? OnSectorNodeSelected;
@@ -498,14 +501,11 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         {
             return null;
         }
-        var root = RootChunk;
 
+        var root = RootChunk ?? _chunks.FirstOrDefault();
+
+        // ReSharper disable once UseNullPropagation this does not help readability
         if (root is null)
-        {
-            root = _chunks.FirstOrDefault();
-        }
-
-        if (root is not ChunkViewModel)
         {
             return null;
         }
@@ -525,7 +525,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     
     #endregion
 
-    private void ExpandParentNodes(ChunkViewModel cvm)
+    private static void ExpandParentNodes(ChunkViewModel cvm)
     {
         if (cvm.Parent is null)
         {
@@ -536,15 +536,14 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         ExpandParentNodes(cvm.Parent);
     }
 
-    public void ScrollToNode(ChunkViewModel? selectedNode)
+    public void ScrollToNode(ChunkViewModel? selectedNode, bool addToSelection = false)
     {
         if (selectedNode is null)
         {
             return;
         }
 
-        ExpandParentNodes(selectedNode);
-        SetSelection(selectedNode);
+        SetSelection(selectedNode, addToSelection);
     }
 
     // A material was renamed

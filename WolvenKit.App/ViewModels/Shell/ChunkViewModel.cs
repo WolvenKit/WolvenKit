@@ -3733,9 +3733,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         // might not be needed
         _propertiesLoaded = false;
         var isExpanded = IsExpanded;
-        //_resolvedDataCache = null;
+        
         CalculateProperties();
         CalculateDescriptor();
+        CalculateValue();
 
         if (IsArray)
         {

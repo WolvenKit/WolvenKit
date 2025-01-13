@@ -1,13 +1,8 @@
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Reactive.Disposables;
-using System.Windows;
 using System.Windows.Input;
-using Microsoft.ClearScript.JavaScript;
 using ReactiveUI;
 using WolvenKit.App.ViewModels.Dialogs;
-using WolvenKit.RED4.Types;
-using WolvenKit.Views.Editors;
 using Window = System.Windows.Window;
 
 namespace WolvenKit.Views.Dialogs.Windows
@@ -17,9 +12,22 @@ namespace WolvenKit.Views.Dialogs.Windows
         public SelectFacialAnimationPathDialog(List<string> facialSetupPaths)
         {
             InitializeComponent();
-
+            
             ViewModel = new SelectAnimationPathViewModel(facialSetupPaths);
             DataContext = ViewModel;
+
+            this.WhenActivated(disposables =>
+            {
+                // bind to filteredDropdownMenu
+                this.Bind(ViewModel,
+                        x => x.AnimGraphOptions,
+                        x => x.FilterableDropdownMenu.Options)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        x => x.SelectedGraph,
+                        x => x.FilterableDropdownMenu.SelectedOption)
+                    .DisposeWith(disposables);
+            });
         }
 
         public SelectAnimationPathViewModel ViewModel { get; set; }
@@ -42,5 +50,6 @@ namespace WolvenKit.Views.Dialogs.Windows
             DialogResult = true;
             Close();
         }
+
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reactive.Disposables;
 using System.Windows;
@@ -10,31 +11,42 @@ using Window = System.Windows.Window;
 
 namespace WolvenKit.Views.Dialogs.Windows
 {
-    public partial class ChangeComponentChunkMaskDialog : IViewFor<ChangeComponentChunkMaskDialogViewModel>
+    public partial class ChangeComponentPropertiesDialog : IViewFor<ChangeComponentPropertiesDialogViewModel>
     {
         private static string s_lastComponentName = "";
         private static IRedPrimitive<ulong> s_lastChunkMask;
         private static string s_lastDepotPath = "";
         private static string s_lastMeshAppearance = "";
 
-        public ChangeComponentChunkMaskDialog()
+        public ChangeComponentPropertiesDialog(List<string> componentNames)
         {
             InitializeComponent();
 
-            ViewModel = new ChangeComponentChunkMaskDialogViewModel();
+            ViewModel = new ChangeComponentPropertiesDialogViewModel(componentNames);
             DataContext = ViewModel;
 
             LoadLastSelection();
 
             this.WhenActivated(disposables =>
             {
+                // bind to filteredDropdownMenu
+                this.Bind(ViewModel,
+                        x => x.ComponentNames,
+                        x => x.FilterableDropdownMenu.Options)
+                    .DisposeWith(disposables);
                 this.Bind(ViewModel,
                         x => x.ComponentName,
-                        x => x.ComponentNameBox.Text)
+                        x => x.FilterableDropdownMenu.SelectedOption)
                     .DisposeWith(disposables);
+
+                // bind rest of properties
                 this.Bind(ViewModel,
                         x => x.DepotPath,
                         x => x.DepotPathBox.Text)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        x => x.NewComponentName,
+                        x => x.NewComponentNameBox.Text)
                     .DisposeWith(disposables);
                 this.Bind(ViewModel,
                         x => x.MeshAppearance,
@@ -47,8 +59,13 @@ namespace WolvenKit.Views.Dialogs.Windows
             });
         }
 
-        public ChangeComponentChunkMaskDialogViewModel ViewModel { get; set; }
-        object IViewFor.ViewModel { get => ViewModel; set => ViewModel = (ChangeComponentChunkMaskDialogViewModel)value; }
+        public ChangeComponentPropertiesDialogViewModel ViewModel { get; set; }
+
+        object IViewFor.ViewModel
+        {
+            get => ViewModel;
+            set => ViewModel = (ChangeComponentPropertiesDialogViewModel)value;
+        }
 
         public bool? ShowDialog(Window owner)
         {

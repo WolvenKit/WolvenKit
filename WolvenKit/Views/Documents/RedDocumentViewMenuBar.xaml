@@ -13,8 +13,9 @@
     mc:Ignorable="d"
     d:DesignWidth="800"
     d:DesignHeight="36"
-    DataContext="{Binding RelativeSource={RelativeSource Self}, Path=ViewModel}"
-    x:Name="RedDocumentViewToolbarControl">
+    x:Name="RedDocumentViewToolbarControl"
+    DataContext="{Binding RelativeSource={RelativeSource Self},
+                          Path=ViewModel}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -454,10 +455,7 @@
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
                                         <Condition Binding="{Binding Path=IsShiftKeyDown}" Value="False" />
-                                        <Condition
-                                            Binding="{Binding Path=ContentType,
-                                          UpdateSourceTrigger=PropertyChanged}"
-                                            Value="{x:Static documents:RedDocumentItemType.Mesh}" />
+                                        <Condition Binding="{Binding Path=ContentType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Static documents:RedDocumentItemType.Mesh}" />
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="Visibility" Value="Visible" />
                                 </MultiDataTrigger>
@@ -485,17 +483,14 @@
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
                                         <Condition Binding="{Binding Path=IsShiftKeyDown}" Value="True" />
-                                        <Condition
-                                            Binding="{Binding Path=ContentType,
-                                          UpdateSourceTrigger=PropertyChanged}"
-                                            Value="{x:Static documents:RedDocumentItemType.Mesh}" />
+                                        <Condition Binding="{Binding Path=ContentType, UpdateSourceTrigger=PropertyChanged}" Value="{x:Static documents:RedDocumentItemType.Mesh}" />
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="Visibility" Value="Visible" />
                                 </MultiDataTrigger>
                             </Style.Triggers>
                         </Style>
                     </MenuItem.Style>
-                    
+
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
@@ -571,18 +566,57 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!-- Mesh component properties -->
                 <MenuItem
                     Style="{StaticResource ShowAppMenuItemStyle}"
-                    Header="Change mesh component properties"
-                    Click="OnChangeChunkMasksClick">
+                    Header="Edit components">
                     <MenuItem.Icon>
                         <templates:IconBox
-                            IconPack="Material"
-                            Kind="OctagramEditOutline"
-                            Foreground="White" />
+                            IconPack="Empty"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
+
+                    <!-- Mesh component properties -->
+                    <MenuItem
+                        Style="{StaticResource ShowAppMenuItemStyle}"
+                        Header="Change mesh component properties"
+                        Click="OnChangeComponentPropertiesClick">
+                        <MenuItem.Icon>
+                            <templates:IconBox
+                                IconPack="Material"
+                                Kind="OctagramEditOutline"
+                                Foreground="White" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                    <!-- Create new component from existing -->
+                    <MenuItem
+                        Style="{StaticResource ShowAppMenuItemStyle}"
+                        Header="Create new component from existing"
+                        Click="OnDuplicateComponentAsNewClick">
+                        <MenuItem.Icon>
+                            <templates:IconBox
+                                IconPack="Material"
+                                Kind="ContentCopy"
+                                Foreground="{StaticResource WolvenKitGraphLabel}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                    <!-- Delete component in all appearances -->
+                    <MenuItem
+                        Style="{StaticResource ShowAppMenuItemStyle}"
+                        Header="Delete component by name"
+                        Click="OnDeleteComponentByNameClick">
+                        <MenuItem.Icon>
+                            <templates:IconBox
+                                IconPack="Material"
+                                Kind="DeleteSweep"
+                                Foreground="{StaticResource WolvenKitRed}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
                 </MenuItem>
+
 
                 <!-- Connect to .ent file -->
                 <MenuItem
@@ -596,7 +630,7 @@
                             Foreground="White" />
                     </MenuItem.Icon>
                 </MenuItem>
-                
+
                 <!-- Select animation path -->
                 <MenuItem
                     Style="{StaticResource MenuItemStyle}"
@@ -607,32 +641,6 @@
                     Header="Change facial animations"
                     Command="{Binding Path=ChangeAnimationComponentCommand}"
                     Click="OnChangeAnimationClick">
-                    <MenuItem.Icon>
-                        <templates:IconBox
-                            IconPack="Material"
-                            Kind="EmoticonHappy"
-                            Foreground="White" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-                <!-- Connect to .ent file -->
-                <MenuItem
-                    Header="Connect to .ent file"
-                    Click="OnConnectToEntFileClick">
-                    <MenuItem.Style>
-                        <Style
-                            BasedOn="{StaticResource ShowAppMenuItemStyle}"
-                            TargetType="MenuItem">
-                            <Style.Triggers>
-                                <DataTrigger
-                                    Binding="{Binding Path=IsShiftKeyDown}"
-                                    Value="True">
-                                    <Setter Property="Header" Value="Connect to .ent file (overwrite)" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </MenuItem.Style>
-                    
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"

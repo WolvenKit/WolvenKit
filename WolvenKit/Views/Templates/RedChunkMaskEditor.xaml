@@ -28,6 +28,7 @@
             SelectedItems="{Binding SelectedItems,
                                     Mode=TwoWay,
                                     UpdateSourceTrigger=PropertyChanged}"
+            KeyboardNavigation.TabIndex="1"
             SelectedValueDelimiter=", " />
 
         <Border
@@ -42,6 +43,7 @@
             Padding="{DynamicResource WolvenKitMarginTiny}"
             FontSize="{DynamicResource WolvenKitFontSubTitle}"
             PreviewTextInput="NumberValidationTextBox"
+            KeyboardNavigation.TabIndex="7"
             Text="{Binding Text,
                            Mode=TwoWay,
                            UpdateSourceTrigger=PropertyChanged}" />
