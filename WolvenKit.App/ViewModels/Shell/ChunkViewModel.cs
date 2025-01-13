@@ -471,7 +471,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     #region Properties
 
-    public ObservableCollectionExtended<ChunkViewModel> SelfList { get; set; } = [];
+    public ObservableCollectionExtended<ChunkViewModel> SelfList { get; set; }
 
     public ObservableCollectionExtended<ChunkViewModel> TempList { get; set; } = [];
 
@@ -2362,10 +2362,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             var index = insertAtIndex < 0 ? Properties.Count : insertAtIndex;
 
-            for (var i = 0; i < copiedData.Count; i++)
+            foreach (var e in copiedData)
             {
-                var e = copiedData[i];
-
                 if (ResolvedData is IRedBufferPointer db)
                 {
                     if (db.GetValue().Data is RedPackage pkg)
@@ -2893,12 +2891,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private bool InsertArrayItem(IRedArray ira, int index, IRedType item)
+    private void InsertArrayItem(IRedArray ira, int index, IRedType item)
     {
         // can't insert into array that is full
         if (ira.Count >= ira.MaxSize)
         {
-            return false;
+            return;
         }
         
         var iraType = ira.GetType();
@@ -2908,7 +2906,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             if (arrayType != typeof(CArray<>) && arrayType != typeof(CLegacySingleChannelCurve<>) &&
                 (arrayType != typeof(CStatic<>)))
             {
-                return false;
+                return;
             }
 
             if (index == -1 || index > ira.Count)
@@ -2918,12 +2916,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
             ira.Insert(index, item);
 
-            return true;
+            return;
         }
 
         if (Data is not IRedBufferPointer)
         {
-            return false;
+            return;
         }
 
         if (index == -1 || index > ira.Count)
@@ -2932,8 +2930,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         ira.Insert(index, item);
-
-        return true;
 
     }
 
@@ -3595,24 +3591,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         RecalculateProperties();
     }
 
-    private void DeleteFullSelection(List<IRedType> l, IRedArray a)
-    {
-        foreach (var i in l)
-        {
-            try
-            {
-                a.Remove(i);
-            }
-            catch (Exception ex)
-            {
-                _loggerService.Error(ex);
-            }
-        }
-
-        Tab?.Parent.SetIsDirty(true);
-        RecalculateProperties();
-    }
-
     private void AddToCopiedChunks(IRedType elem)
     {
         try
@@ -3698,18 +3676,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         return new Vec4(cX, cY, cZ, 1);
     }
 
-    //private static Vec4 GetPos(Prop line)
-    //{
-    //    var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
-    //    return new Vec4()
-    //    {
-    //        X = float.Parse(posandrot.x),
-    //        Y = float.Parse(posandrot.y),
-    //        Z = float.Parse(posandrot.z),
-    //        W = float.Parse(posandrot.w)
-    //    };
-    //}
-
     private static List<Vec4> GetPos(List<Prop> props)
     {
         var posList = new List<Vec4>();
@@ -3769,115 +3735,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         return (v, q);
     }
     
-    //private (List<Vec4>, List<Quat>) GetPosRot(List<Prop> props)
-    //{
-    //    var poslist = new List<Vec4>();
-    //    var rotlist = new List<Quat>();
-
-    //    foreach (var line in props)
-    //    {
-    //        var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
-    //        var v = new Vec4()
-    //        {
-    //            X = float.Parse(posandrot.x),
-    //            Y = float.Parse(posandrot.y),
-    //            Z = float.Parse(posandrot.z),
-    //            W = float.Parse(posandrot.w)
-    //        };
-    //        poslist.Add(v);
-
-    //        var euler = new Vec3()
-    //        {
-    //            X = (float)(Math.PI / 180) * float.Parse(posandrot.yaw),
-    //            Y = (float)(Math.PI / 180) * float.Parse(posandrot.pitch),
-    //            Z = (float)(Math.PI / 180) * float.Parse(posandrot.roll)
-    //        };
-    //        var q = FixRotation(euler);
-
-    //        rotlist.Add(q);
-    //    }
-    //    return (poslist, rotlist);
-    //}
-
-    //private (List<Vec4>, List<Quat>, List<string>) GetPosRotApp(List<Prop> props)
-    //{
-    //    var poslist = new List<Vec4>();
-    //    var rotlist = new List<Quat>();
-    //    var applist = new List<string>();
-
-    //    foreach (var line in props)
-    //    {
-    //        var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
-    //        var v = new Vec4()
-    //        {
-    //            X = float.Parse(posandrot.x),
-    //            Y = float.Parse(posandrot.y),
-    //            Z = float.Parse(posandrot.z),
-    //            W = float.Parse(posandrot.w)
-    //        };
-    //        poslist.Add(v);
-
-    //        var euler = new Vec3()
-    //        {
-    //            X = (float)(Math.PI / 180) * float.Parse(posandrot.yaw),
-    //            Y = (float)(Math.PI / 180) * float.Parse(posandrot.pitch),
-    //            Z = (float)(Math.PI / 180) * float.Parse(posandrot.roll)
-    //        };
-
-    //        var q = FixRotation(euler);
-
-    //        // (q.Y, q.Z) = (-q.Z, -q.Y);
-    //        rotlist.Add(q);
-
-    //        applist.Add(line.app);
-    //    }
-    //    return (poslist, rotlist, applist);
-    //}
-
-    private (List<Vec4>, List<Quat>, List<string>) GetPosRotApp(List<Child> props)
-    {
-        var poslist = new List<Vec4>();
-        var rotlist = new List<Quat>();
-        var applist = new List<string>();
-
-        foreach (var line in props)
-        {
-            var pos = line.pos;
-            var rot = line.rot;
-            var v = new Vec4()
-            {
-                X = pos.x,
-                Y = pos.y,
-                Z = pos.z,
-                W = pos.w
-            };
-            poslist.Add(v);
-
-            var euler = new Vec3()
-            {
-                X = (float)(Math.PI / 180) * rot.yaw,
-                Y = (float)(Math.PI / 180) * rot.pitch,
-                Z = (float)(Math.PI / 180) * rot.roll
-            };
-
-            var q = FixRotation(euler);
-
-            rotlist.Add(q);
-
-            if (line.app != null)
-            {
-                var app = line.app == "" ? "default" : line.app;
-                applist.Add(app);
-            }
-            else
-            {
-                applist.Add("default");
-            }
-        }
-
-        return (poslist, rotlist, applist);
-    }
-
     private static string PutQuotes(string w)
     {
         w = w.Replace("{", "{\"");
@@ -3902,7 +3759,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     }
 
 
-    public static Quat FixRotation(Vec3 euler) =>
+    private static Quat FixRotation(Vec3 euler) =>
         Quat.CreateFromRotationMatrix(
             Mat4.Identity
             * Mat4.CreateFromAxisAngle(Vec3.UnitY, euler.Z)
@@ -3910,7 +3767,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             * Mat4.CreateFromAxisAngle(Vec3.UnitZ, euler.X)
             );
 
-    public static Quat FixRotation2(Vec3 euler) =>
+    private static Quat FixRotation2(Vec3 euler) =>
         Quat.CreateFromRotationMatrix(
             Mat4.Identity
             * Mat4.CreateFromAxisAngle(Vec3.UnitZ, (float)Math.PI)
@@ -3929,39 +3786,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         return pos;
     }
-
-    private static List<Vec4> UpdateCoords(List<Vec4> poslist, Vec4 center)
-    {
-        for (var i = 0; i < poslist.Count; i++)
-        {
-            var pos = poslist[i];
-            pos.X -= center.X;
-            pos.Y -= center.Y;
-            pos.Z -= center.Z;
-            //pos.W -= center.W;
-            poslist[i] = pos;
-        }
-
-        return poslist;
-    }
-
-    //private void AddToData(string tr, Prop line, string ff = "", bool updatecoords = true)
-    //{
-    //    if (Parent.Parent is not null &&
-    //        Parent.Parent.Data is not null &&
-    //        Parent.Parent.Data is worldStreamingSector)
-    //    {
-    //        //loads the mesh when found and scaled
-    //        if (GetScale(line) == Vec3.One)
-    //        {
-    //            AddEntity(tr, line, updatecoords);
-    //        }
-    //        else if (ff != "")
-    //        {
-    //            AddMesh(tr, line, updatecoords);
-    //        }
-    //    }
-    //}
 
     private void AddEntity(string tr, Prop line, bool updateCoords = true, bool visible = true)
     {
