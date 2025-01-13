@@ -450,7 +450,7 @@ namespace WolvenKit.Views.Documents
             var componentNames = DocumentTools.GetAllComponentNames(GetAppearancesFromSelectionOrRoot());
             var componentModel = Interactions.ShowDeleteOrDuplicateComponentDialogue((componentNames, false));
 
-            var selectedChunks = SelectedChunks;
+            var selectedChunks = SelectedChunks.ToList();
 
             if (!selectedChunks.All(c => c.ResolvedData is appearanceAppearanceDefinition))
             {
@@ -468,12 +468,14 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            List<ChunkViewModel> newNodes = [];
+            ViewModel?.ClearSelection();
+            
             
             foreach (var chunkViewModel in selectedChunks.SelectMany(cvm =>
                          GetComponentsByName(cvm, componentModel.ComponentName)).ToList())
             {
-                var newNode = chunkViewModel.DuplicateChunk(chunkViewModel.NodeIdxInParent);
+                // insert after existing node, not before
+                var newNode = chunkViewModel.DuplicateChunk(chunkViewModel.NodeIdxInParent + 1);
 
                 if (newNode?.Data is not entIComponent component)
                 {
@@ -481,13 +483,12 @@ namespace WolvenKit.Views.Documents
                 }
 
                 component.Name = componentModel.NewComponentName;
-                newNode.GetPropertyChild(componentModel.NewComponentName)?.RecalculateProperties();
+                newNode.RecalculateProperties();
                 newNode.Parent?.RecalculateProperties();
-
-                newNodes.Add(newNode);
             }
 
-            ViewModel?.SetSelection(newNodes);
+            // clear selection to work around invalid selection bug
+            ViewModel?.ClearSelection();
         }
 
         private void OnDeleteComponentByNameClick(object _, RoutedEventArgs e)
@@ -500,7 +501,7 @@ namespace WolvenKit.Views.Documents
             var componentNames = DocumentTools.GetAllComponentNames(GetAppearancesFromSelectionOrRoot());
             var componentModel = Interactions.ShowDeleteOrDuplicateComponentDialogue((componentNames, true));
 
-            var selectedChunks = SelectedChunks;
+            var selectedChunks = SelectedChunks.ToList();
             if (!selectedChunks.All(c => c.ResolvedData is appearanceAppearanceDefinition))
             {
                 selectedChunks.Clear();
