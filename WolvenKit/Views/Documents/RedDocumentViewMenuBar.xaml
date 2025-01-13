@@ -315,6 +315,8 @@
                 Header="Materials"
                 SubmenuOpened="OnMenuOpened"
                 SubmenuClosed="OnMenuClosed">
+
+                <!-- Creates material definitions and -entries for missing materials -->
                 <MenuItem
                     Style="{StaticResource MenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
