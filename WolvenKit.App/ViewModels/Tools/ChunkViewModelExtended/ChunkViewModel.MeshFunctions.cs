@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Extensions;
 using HelixToolkit.SharpDX.Core;
 using WolvenKit.RED4.Types;
+using IMaterial = WolvenKit.RED4.Types.IMaterial;
 
 // ReSharper disable once CheckNamespace
 namespace WolvenKit.App.ViewModels.Shell;
