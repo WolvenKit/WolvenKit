@@ -173,14 +173,23 @@ namespace WolvenKit.Views.Tools
 
         private void OnSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
         {
+            SelectedItems ??= [];
             foreach (var removedItem in e.RemovedItems.OfType<ISelectableTreeViewItemModel>())
             {
                 removedItem.IsSelected = false;
+                if (removedItem is ChunkViewModel cvm)
+                {
+                    SelectedItems.Remove(cvm);
+                }
             }
 
             foreach (var addedItem in e.AddedItems.OfType<ISelectableTreeViewItemModel>())
             {
                 addedItem.IsSelected = true;
+                if (addedItem is ChunkViewModel cvm)
+                {
+                    SelectedItems.Add(cvm);
+                }
             }  
 
             RefreshContextMenuFlags();
