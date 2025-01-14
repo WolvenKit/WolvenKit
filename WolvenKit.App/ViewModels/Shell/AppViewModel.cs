@@ -816,7 +816,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 $"{newProjectName}{Cp77Project.ProjectFileExtension}"
             );
 
-            Cp77Project np = new(projectLocation, newProjectName, newModName)
+            Cp77Project np = new(projectLocation, newProjectName, newModName, [])
             {
                 Author = project.Author,
                 Email = project.Email,
