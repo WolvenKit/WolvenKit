@@ -66,15 +66,12 @@ public class FlatsPool : IEnumerable<(TweakDBID id, IRedType value)>
         var recordName = string.Join('.', parts[..^1]);
         if (!_recordLookUp.ContainsKey(recordName))
         {
-            _recordLookUp.Add(recordName, new List<string>());
+            _recordLookUp.Add(recordName, []);
         }
         _recordLookUp[recordName].Add(parts[^1]);
     }
 
-    public bool Exists(ulong id)
-    {
-        return _flatDictionary.ContainsKey(id);
-    }
+    public bool Exists(ulong id) => _flatDictionary.ContainsKey(id);
 
     public List<TweakDBID> GetRecords() =>
         _flatDictionary.Keys
@@ -87,30 +84,23 @@ public class FlatsPool : IEnumerable<(TweakDBID id, IRedType value)>
         return GetValue(id);
     }
 
-    public IRedType? GetValue(ulong id)
-    {
-        if (_flatDictionary.ContainsKey(id))
-        {
-            return _flatDictionary[id];
-        }
-
-        return null;
-    }
+    public IRedType? GetValue(ulong id) => _flatDictionary.GetValueOrDefault(id);
 
     public Dictionary<string, IRedType> GetRecordValues(string recordName)
     {
         var result = new Dictionary<string, IRedType>();
 
-        if (_recordLookUp.ContainsKey(recordName))
+        if (!_recordLookUp.TryGetValue(recordName, out var properties))
         {
-            var properties = _recordLookUp[recordName];
-            foreach (var property in properties)
-            {
-                var flatName = string.Join('.', recordName, property);
-                var flatHash = Crc32Algorithm.Compute(flatName) + ((ulong)flatName.Length << 32);
+            return result;
+        }
 
-                result.Add(property, _flatDictionary[flatHash]);
-            }
+        foreach (var property in properties)
+        {
+            var flatName = string.Join('.', recordName, property);
+            var flatHash = Crc32Algorithm.Compute(flatName) + ((ulong)flatName.Length << 32);
+
+            result.Add(property, _flatDictionary[flatHash]);
         }
 
         return result;
