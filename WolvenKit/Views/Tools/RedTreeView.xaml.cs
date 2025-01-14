@@ -1149,11 +1149,18 @@ namespace WolvenKit.Views.Tools
         /// </summary>
         private List<ChunkViewModel> GetSelectedChunks()
         {
-            if (SelectedItems is null)
+            if (SelectedItems is not null)
             {
-                return [];
+                return SelectedItems.ToList();
             }
-            return SelectedItems.OfType<ChunkViewModel>().ToList();
+
+            if (SelectedItem is not null)
+            {
+                return [SelectedItem];
+            }
+
+            return [];
+
         }
 
         private void OnDoubleClick(object sender, MouseButtonEventArgs e)
