@@ -173,14 +173,23 @@ namespace WolvenKit.Views.Tools
 
         private void OnSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
         {
+            SelectedItems ??= [];
             foreach (var removedItem in e.RemovedItems.OfType<ISelectableTreeViewItemModel>())
             {
                 removedItem.IsSelected = false;
+                if (removedItem is ChunkViewModel cvm)
+                {
+                    SelectedItems.Remove(cvm);
+                }
             }
 
             foreach (var addedItem in e.AddedItems.OfType<ISelectableTreeViewItemModel>())
             {
                 addedItem.IsSelected = true;
+                if (addedItem is ChunkViewModel cvm)
+                {
+                    SelectedItems.Add(cvm);
+                }
             }  
 
             RefreshContextMenuFlags();
@@ -565,9 +574,9 @@ namespace WolvenKit.Views.Tools
 
         #region paste
 
-        private bool CanPasteSingleSelection() => HasSingleItemCopied && SelectedItem.CanPasteSelection(true);
+        private bool CanPasteSingleSelection() => HasSingleItemCopied && SelectedItem?.CanPasteSelection(true) == true;
 
-        private bool CanPasteSelection() => HasMultipleItemsCopied && SelectedItem.CanPasteSelection();
+        private bool CanPasteSelection() => HasMultipleItemsCopied && SelectedItem?.CanPasteSelection() == true;
 
         private void OverwriteSelectedInternal(bool useSingle = false)
         {
@@ -808,7 +817,7 @@ namespace WolvenKit.Views.Tools
             DeleteSelectionCommand.NotifyCanExecuteChanged();
             DeleteAllButSelectionCommand.NotifyCanExecuteChanged();
 
-            SelectedItem.RefreshCommandStatus();
+            SelectedItem?.RefreshCommandStatus();
         }
 
 
@@ -879,7 +888,7 @@ namespace WolvenKit.Views.Tools
         [RelayCommand]
         private Task AddToProject()
         {
-            if (SelectedItem.PropertyType.IsAssignableTo(typeof(IRedRef)))
+            if (SelectedItem?.PropertyType.IsAssignableTo(typeof(IRedRef)) == true)
             {
                 _projectResourceTools.AddToProject(((IRedRef)SelectedItem.ResolvedData).DepotPath);
             }
@@ -995,7 +1004,7 @@ namespace WolvenKit.Views.Tools
         }
 
         private bool CanPasteHandleSingle() => IsHandle(RedDocumentTabViewModel.CopiedChunk) &&
-                                               SelectedItem.CanPasteSelection(true);
+                                               SelectedItem?.CanPasteSelection(true) == true;
 
         [RelayCommand(CanExecute = nameof(CanPasteHandleSingle))]
         private void PasteHandleSingle()
@@ -1149,16 +1158,27 @@ namespace WolvenKit.Views.Tools
         /// </summary>
         private List<ChunkViewModel> GetSelectedChunks()
         {
-            if (SelectedItems is null)
+            if (SelectedItems is not null)
             {
-                return [];
+                return SelectedItems.ToList();
             }
-            return SelectedItems.OfType<ChunkViewModel>().ToList();
+
+            if (SelectedItem is not null)
+            {
+                return [SelectedItem];
+            }
+
+            return [];
+
         }
 
         private void OnDoubleClick(object sender, MouseButtonEventArgs e)
         {
-
+            if (SelectedItem is null)
+            {
+                return;
+            }
+            
             // If the current chunk is not expanded, collapse all of its siblings
             if (!SelectedItem.IsExpanded && SelectedItem.Parent is ChunkViewModel parent)
             {
@@ -1192,7 +1212,8 @@ namespace WolvenKit.Views.Tools
 
         private void RefreshSelectedItemsContextMenuFlags()
         {
-            SetCurrentValue(ShouldShowArrayOpsProperty, SelectedItem.IsInArray || SelectedItem.IsArray);
+            SetCurrentValue(ShouldShowArrayOpsProperty,
+                SelectedItem?.IsInArray == true || SelectedItem?.IsArray == true);
             
             if (ItemsSource is not ICollectionView collectionView)
             {
