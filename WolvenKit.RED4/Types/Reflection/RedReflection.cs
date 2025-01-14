@@ -36,12 +36,12 @@ public static class RedReflection
 
     public static ExtendedTypeInfo GetTypeInfo(IRedType value)
     {
-        if (value is IDynamicClass dbc)
+        if (value is IDynamicClass { ClassName: { } className })
         {
-            if (!s_dynamicTypeInfoCache.TryGetValue(dbc.ClassName, out var result))
+            if (!s_dynamicTypeInfoCache.TryGetValue(className!, out var result))
             {
                 result = new ExtendedTypeInfo();
-                s_dynamicTypeInfoCache.TryAdd(dbc.ClassName, result);
+                s_dynamicTypeInfoCache.TryAdd(className!, result);
             }
 
             return result;
@@ -290,49 +290,47 @@ public static class RedReflection
 
     public static bool AddRedType(Type type)
     {
-        // hack skipping custom types derived from IRedType
-        if (type.FullName.StartsWith("WolvenKit.RED4.Archive.Buffer"))
+        if (type.FullName is null
+            || type.FullName.StartsWith("WolvenKit.RED4.Archive.Buffer") // hack: skip custom types derived f. IRedType
+            || !typeof(IRedType).IsAssignableFrom(type))
         {
             return false;
         }
 
-        if (typeof(IRedType).IsAssignableFrom(type))
+        var redAttr = type.GetCustomAttribute<REDAttribute>();
+        if (redAttr != null)
         {
-            var redAttr = type.GetCustomAttribute<REDAttribute>();
-            if (redAttr != null)
+            if (s_redTypeCache.ContainsKey(redAttr.Name))
             {
-                if (s_redTypeCache.ContainsKey(redAttr.Name))
-                {
-                    Debugger.Break();
-                }
-                if (s_redTypeCacheReverse.ContainsKey(type))
-                {
-                    Debugger.Break();
-                }
-
-                s_redTypeCache.TryAdd(redAttr.Name, type);
-                s_redTypeCacheReverse.TryAdd(type, redAttr.Name);
-            }
-            else
-            {
-                if (s_redTypeCache.ContainsKey(type.Name))
-                {
-                    Debugger.Break();
-                }
-                if (s_redTypeCacheReverse.ContainsKey(type))
-                {
-                    Debugger.Break();
-                }
-
-                s_redTypeCache.TryAdd(type.Name, type);
-                s_redTypeCacheReverse.TryAdd(type, type.Name);
+                Debugger.Break();
             }
 
-            BuildTypeCache(type);
-            return true;
+            if (s_redTypeCacheReverse.ContainsKey(type))
+            {
+                Debugger.Break();
+            }
+
+            s_redTypeCache.TryAdd(redAttr.Name, type);
+            s_redTypeCacheReverse.TryAdd(type, redAttr.Name);
+        }
+        else
+        {
+            if (s_redTypeCache.ContainsKey(type.Name))
+            {
+                Debugger.Break();
+            }
+
+            if (s_redTypeCacheReverse.ContainsKey(type))
+            {
+                Debugger.Break();
+            }
+
+            s_redTypeCache.TryAdd(type.Name, type);
+            s_redTypeCacheReverse.TryAdd(type, type.Name);
         }
 
-        return false;
+        BuildTypeCache(type);
+        return true;
 
         static void BuildTypeCache(Type innerType)
         {

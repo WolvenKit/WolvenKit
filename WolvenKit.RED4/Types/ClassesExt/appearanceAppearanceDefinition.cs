@@ -12,7 +12,9 @@ public partial class appearanceAppearanceDefinition
     [REDProperty(IsIgnored = true)]
     public CArray<entIComponent> Components
     {
-        get => GetPropertyValue<CArray<entIComponent>>();
-        set => SetPropertyValue<CArray<entIComponent>>(value);
+        get => GetPropertyValue<CArray<entIComponent>>()!; // set in PostConstruct, so not nullable
+        set => SetPropertyValue(value);
     }
+
+    partial void PostConstruct() => Components ??= [];
 }

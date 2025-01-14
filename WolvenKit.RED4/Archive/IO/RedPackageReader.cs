@@ -3,6 +3,7 @@ using System.Text;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.Buffer;
+using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
@@ -53,9 +54,9 @@ public partial class RedPackageReader : Red4Reader
 
                 var propRedType = RedReflection.GetRedTypeFromCSType(prop.Type, prop.Flags);
 
-                if (propRedType != redTypeName)
+                if (redTypeName != CName.Empty && propRedType != redTypeName)
                 {
-                    if (TryReadValue(varName, redTypeName, compiledPropertyData, out value))
+                    if (TryReadValue(varName, redTypeName!, compiledPropertyData, out value))
                     {
                         var args = new InvalidRTTIEventArgs(fullName, propRedType, redTypeName!, value);
                         if (!HandleParsingError(args))

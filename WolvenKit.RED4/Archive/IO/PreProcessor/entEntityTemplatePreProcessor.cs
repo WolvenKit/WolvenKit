@@ -25,18 +25,16 @@ public class entEntityTemplatePreProcessor : IPreProcessor
             flags = entEntityTemplate.CompiledData.Buffer.Flags;
         }
 
-        if (entEntityTemplate.Entity is { Chunk: { } })
+        if (entEntityTemplate.Entity is { Chunk: not null })
         {
-            rp.Chunks.Add(entEntityTemplate.Entity);
+            rp.Chunks.Add(entEntityTemplate.Entity!);
         }
 
-        if (entEntityTemplate.Components != null)
+        foreach (var component in entEntityTemplate.Components)
         {
-            foreach (var component in entEntityTemplate.Components)
-            {
-                rp.Chunks.Add(component);
-            }
+            rp.Chunks.Add(component);
         }
+      
 
         if (rp.Chunks.Count > 0)
         {
