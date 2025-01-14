@@ -102,7 +102,6 @@
             Grid.Column="2"
             HorizontalAlignment="Stretch"
             DataContext="{Binding SelectedChunk}"
-            ViewModel="{Binding SelectedChunk}"
             ValueChanged="RedTypeView_OnValueChanged" />
 
         <!-- ENABLE_NODE_EDITOR -->

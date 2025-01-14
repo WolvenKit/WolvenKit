@@ -250,9 +250,9 @@ namespace WolvenKit.Views.Tools
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
             base.OnPropertyChanged(e);
-            if (e.Property == SelectedItem || e.Property == SelectedItems)
+            if (e.Property.Name is (nameof(SelectedItem)) or (nameof(SelectedItems)))
             {
-                SetCurrentValue(HasSelectionProperty, GetSelectedChunks(true).Count > 0);
+                SetCurrentValue(HasSelectionProperty, GetSelectedChunks().Count > 0);
             }
         }
 
@@ -264,24 +264,24 @@ namespace WolvenKit.Views.Tools
 
         /// <summary>Identifies the <see cref="SelectedItem"/> dependency property.</summary>
         public static readonly DependencyProperty SelectedItemProperty =
-            DependencyProperty.Register(nameof(SelectedItem), typeof(object), typeof(RedTreeView));
+            DependencyProperty.Register(nameof(SelectedItem), typeof(ChunkViewModel), typeof(RedTreeView));
 
 
         /// <summary>Bound to <see cref="RDTDataViewModel.SelectedChunk"/> </summary>
-        public object SelectedItem
+        public ChunkViewModel SelectedItem
         {
-            get => GetValue(SelectedItemProperty);
+            get => (ChunkViewModel)GetValue(SelectedItemProperty);
             set => SetValue(SelectedItemProperty, value);
         }
 
         /// <summary>Identifies the <see cref="SelectedItems"/> dependency property.</summary>
         public static readonly DependencyProperty SelectedItemsProperty =
-            DependencyProperty.Register(nameof(SelectedItems), typeof(object), typeof(RedTreeView));
+            DependencyProperty.Register(nameof(SelectedItems), typeof(ObservableCollection<ChunkViewModel>), typeof(RedTreeView));
 
         /// <summary>Bound to <see cref="RDTDataViewModel.SelectedChunks"/> </summary>
-        public object SelectedItems
+        public ObservableCollection<ChunkViewModel> SelectedItems
         {
-            get => GetValue(SelectedItemsProperty);
+            get => (ObservableCollection<ChunkViewModel>)GetValue(SelectedItemsProperty);
             set => SetValue(SelectedItemsProperty, value);
         }
 
@@ -503,11 +503,10 @@ namespace WolvenKit.Views.Tools
         [RelayCommand]
         private void CopySelectionNames()
         {
-            var names = GetSelectedChunks(true)
+            var names = GetSelectedChunks()
                 .SelectMany(cvm => cvm.Properties.Select(prop => prop.Descriptor))
+                .Where(s => !string.IsNullOrEmpty(s))
                 .ToList();
-
-            names.RemoveAll(string.IsNullOrEmpty);
 
             if (names.Count == 0)
             {
@@ -522,15 +521,17 @@ namespace WolvenKit.Views.Tools
             {
                 Clipboard.SetText(string.Join("\n", names));
             }
-            
         }
 
-        public bool CanCopySelection() => GetSelectedChunks(true) is { Count: > 0 } list && list.All(cvm => cvm.CanCopySelection());
+        public bool CanCopySelection()
+        {
+            return GetSelectedChunks() is { Count: > 0 } list && list.All(cvm => cvm.CanCopySelection());
+        }
 
         [RelayCommand(CanExecute = nameof(CanCopySelection))]
         private void CopySelection()
         {
-            var selection = GetSelectedChunks(true);
+            var selection = GetSelectedChunks();
 
             if (selection.Count == 1 && selection.First() is ChunkViewModel single)
             {
@@ -564,11 +565,9 @@ namespace WolvenKit.Views.Tools
 
         #region paste
 
-        private bool CanPasteSingleSelection() => HasSingleItemCopied && SelectedItem is ChunkViewModel cvm &&
-                                                  cvm.CanPasteSelection(true);
+        private bool CanPasteSingleSelection() => HasSingleItemCopied && SelectedItem.CanPasteSelection(true);
 
-        private bool CanPasteSelection() => HasMultipleItemsCopied && SelectedItem is ChunkViewModel cvm &&
-                                            cvm.CanPasteSelection();
+        private bool CanPasteSelection() => HasMultipleItemsCopied && SelectedItem.CanPasteSelection();
 
         private void OverwriteSelectedInternal(bool useSingle = false)
         {
@@ -629,7 +628,7 @@ namespace WolvenKit.Views.Tools
         [RelayCommand]
         private void ClearArray()
         {
-            var chunkViewModels = GetSelectedChunks(true);
+            var chunkViewModels = GetSelectedChunks();
             if (ItemsSource is not ICollectionView collectionView || chunkViewModels.Count == 0)
             {
                 return;
@@ -675,7 +674,7 @@ namespace WolvenKit.Views.Tools
         [RelayCommand(CanExecute = nameof(CanPasteSingleSelection))]
         private void ClearAndPasteSingle()
         {
-            var selectedChunks = GetSelectedChunks(true);
+            var selectedChunks = GetSelectedChunks();
             if (ItemsSource is not ICollectionView collectionView || selectedChunks.Count == 0 ||
                 RedDocumentTabViewModel.CopiedChunk is null)
             {
@@ -743,7 +742,7 @@ namespace WolvenKit.Views.Tools
 
         private void ReapplySelection(List<ChunkViewModel> oldSelection)
         {
-            var newSelection = GetSelectedChunks(true);
+            var newSelection = GetSelectedChunks();
             newSelection.AddRange(oldSelection);
 
             // If we have an array and several children selected, deselect everything but the array
@@ -783,7 +782,7 @@ namespace WolvenKit.Views.Tools
 
         private void RefreshContextMenuFlags()
         {
-            var selectedItems = GetSelectedChunks(true);
+            var selectedItems = GetSelectedChunks();
             var selectedItem = selectedItems.FirstOrDefault();
 
             SetCurrentValue(HasSelectionProperty, selectedItems.Count > 0);
@@ -809,10 +808,7 @@ namespace WolvenKit.Views.Tools
             DeleteSelectionCommand.NotifyCanExecuteChanged();
             DeleteAllButSelectionCommand.NotifyCanExecuteChanged();
 
-            if (SelectedItem is ChunkViewModel chunk)
-            {
-                chunk.RefreshCommandStatus();
-            }
+            SelectedItem.RefreshCommandStatus();
         }
 
 
@@ -883,9 +879,9 @@ namespace WolvenKit.Views.Tools
         [RelayCommand]
         private Task AddToProject()
         {
-            if (SelectedItem is ChunkViewModel cvm && cvm.PropertyType.IsAssignableTo(typeof(IRedRef)))
+            if (SelectedItem.PropertyType.IsAssignableTo(typeof(IRedRef)))
             {
-                _projectResourceTools.AddToProject(((IRedRef)cvm.ResolvedData).DepotPath);
+                _projectResourceTools.AddToProject(((IRedRef)SelectedItem.ResolvedData).DepotPath);
             }
 
             return Task.CompletedTask;
@@ -900,7 +896,7 @@ namespace WolvenKit.Views.Tools
         private void OpenSearchAndReplaceDialog()
         {
             var selectedChunkViewModels = GetSelectedChunks();
-            if (selectedChunkViewModels.Count == 0 || SelectedItem is not ChunkViewModel)
+            if (selectedChunkViewModels.Count == 0)
             {
                 return;
             }
@@ -961,7 +957,7 @@ namespace WolvenKit.Views.Tools
             }
             else
             {
-                SetCurrentValue(SelectedItemsProperty, new ObservableCollection<object>(selectedChunkViewModels));
+                SetCurrentValue(SelectedItemsProperty, new ObservableCollection<ChunkViewModel>(selectedChunkViewModels));
                 SetCurrentValue(SelectedItemProperty, selectedChunkViewModels.LastOrDefault());
             }
         }
@@ -999,12 +995,12 @@ namespace WolvenKit.Views.Tools
         }
 
         private bool CanPasteHandleSingle() => IsHandle(RedDocumentTabViewModel.CopiedChunk) &&
-                                               SelectedItem is ChunkViewModel cvm && cvm.CanPasteSelection(true);
+                                               SelectedItem.CanPasteSelection(true);
 
         [RelayCommand(CanExecute = nameof(CanPasteHandleSingle))]
         private void PasteHandleSingle()
         {
-            var selectedChunks = GetSelectedChunks(true);
+            var selectedChunks = GetSelectedChunks();
 
             if (ItemsSource is not ICollectionView collectionView ||
                 !ChunkViewModel.IsHandle(RedDocumentTabViewModel.CopiedChunk) ||
@@ -1037,18 +1033,16 @@ namespace WolvenKit.Views.Tools
         [RelayCommand(CanExecute = nameof(CanPasteHandles))]
         private void PasteHandles()
         {
-            var selectedChunks = GetSelectedChunks(true);
-
             if (ItemsSource is not ICollectionView collectionView ||
                 !ChunkViewModel.IsHandle(RedDocumentTabViewModel.CopiedChunk) ||
-                selectedChunks.Count != 1)
+                GetSelectedChunks().Count != 1)
             {
                 return;
             }
 
             using (collectionView.DeferRefresh())
             {
-                var cvm = selectedChunks.FirstOrDefault();
+                var cvm = GetSelectedChunks().FirstOrDefault();
                 if (cvm?.PasteHandle((IRedBaseHandle)RedDocumentTabViewModel.CopiedChunk!) != true)
                 {
                     return;
@@ -1064,7 +1058,7 @@ namespace WolvenKit.Views.Tools
 
         #endregion
         
-        private bool CanDeleteSelection() => SelectedItem is ChunkViewModel;
+        private bool CanDeleteSelection() => SelectedItem is not null;
 
         [RelayCommand(CanExecute = nameof(CanDeleteSelection))]
         private void DeleteAllButSelection()
@@ -1121,11 +1115,14 @@ namespace WolvenKit.Views.Tools
                 }
             }
         }
-        private bool CanGenerateMissingMaterials() => SelectedItem is ChunkViewModel
+        private bool CanGenerateMissingMaterials()
         {
-            ResolvedData: CMesh,
-            Parent: null
-        };
+            return SelectedItem is ChunkViewModel
+            {
+                ResolvedData: CMesh,
+                Parent: null
+            };
+        }
 
         [RelayCommand(CanExecute = nameof(CanGenerateMissingMaterials))]
         private void OpenGenerateMaterialsDialog()
@@ -1150,39 +1147,30 @@ namespace WolvenKit.Views.Tools
         /// <summary>
         /// Gets all selected chunks. If none are selected / if selection is invalid, it will return an empty list.
         /// </summary>
-        private List<ChunkViewModel> GetSelectedChunks(bool includeSingleSelect = false)
+        private List<ChunkViewModel> GetSelectedChunks()
         {
-            var uniqueItems = new HashSet<(object Parent, string Name)>();
-            
-            if (SelectedItems is not ObservableCollection<object> selection)
+            if (SelectedItems is null)
             {
-                return includeSingleSelect && SelectedItem is ChunkViewModel cvm ? [cvm] : [];
+                return [];
             }
-
-            return selection.OfType<ChunkViewModel>()
-                .Where(x => x.IsSelected)
-                .Where(x => uniqueItems.Add((x.Parent, x.Name))).ToList();
+            return SelectedItems.OfType<ChunkViewModel>().ToList();
         }
 
         private void OnDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (SelectedItem is not ChunkViewModel chunk)
-            {
-                return;
-            }
 
             // If the current chunk is not expanded, collapse all of its siblings
-            if (!chunk.IsExpanded && chunk.Parent is ChunkViewModel parent)
+            if (!SelectedItem.IsExpanded && SelectedItem.Parent is ChunkViewModel parent)
             {
-                chunk = parent;
+                SetCurrentValue(SelectedItemProperty, parent);
             }
 
-            var expansionState = chunk.IsExpanded;
+            var expansionState = SelectedItem.IsExpanded;
 
-            var expansionStates = chunk.GetAllProperties().Select((child) => child.IsExpanded).ToList();
-            chunk.SetChildExpansionStates(!expansionStates.Contains(true));
+            var expansionStates = SelectedItem.GetAllProperties().Select((child) => child.IsExpanded).ToList();
+            SelectedItem.SetChildExpansionStates(!expansionStates.Contains(true));
 
-            chunk.IsExpanded = expansionState;
+            SelectedItem.IsExpanded = expansionState;
         }
 
         private ChunkViewModel GetRoot()
@@ -1204,7 +1192,7 @@ namespace WolvenKit.Views.Tools
 
         private void RefreshSelectedItemsContextMenuFlags()
         {
-            SetCurrentValue(ShouldShowArrayOpsProperty, SelectedItem is ChunkViewModel cvm && (cvm.IsInArray || cvm.IsArray));
+            SetCurrentValue(ShouldShowArrayOpsProperty, SelectedItem.IsInArray || SelectedItem.IsArray);
             
             if (ItemsSource is not ICollectionView collectionView)
             {
