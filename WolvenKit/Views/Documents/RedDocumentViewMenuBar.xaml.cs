@@ -218,6 +218,9 @@ namespace WolvenKit.Views.Documents
             DispatcherHelper.RunOnMainThread(() => Task.Run(async () => await RunFileValidation()).GetAwaiter().GetResult());
         }
 
+        /// <summary>
+        /// Will generate material definitions and -instances for any undefined material names used by chunks  
+        /// </summary>
         private void OnGenerateMissingMaterialsClick(object _, RoutedEventArgs e)
         {
             var dialog = new CreateMaterialsDialog();
