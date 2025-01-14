@@ -58,17 +58,17 @@ public class FlatsPool : IEnumerable<(TweakDBID id, IRedType value)>
         }
 
         var parts = name.Split('.');
-        if (parts.Length != 3)
+        if (parts.Length < 2)
         {
             return;
         }
 
-        var recordName = string.Join('.', parts[..2]);
+        var recordName = string.Join('.', parts[..^1]);
         if (!_recordLookUp.ContainsKey(recordName))
         {
             _recordLookUp.Add(recordName, new List<string>());
         }
-        _recordLookUp[recordName].Add(parts[2]);
+        _recordLookUp[recordName].Add(parts[^1]);
     }
 
     public bool Exists(ulong id)
