@@ -414,7 +414,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private bool _hasUnsavedFileTreeChanges;
 
     private bool _projectExplorerTabChanged;
-    private bool _loadingProjectData;
 
     [GeneratedRegex(@".*\.\S+\.glb$")]
     private static partial Regex TypedGlbRegex();
