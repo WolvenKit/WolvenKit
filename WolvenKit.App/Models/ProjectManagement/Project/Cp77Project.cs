@@ -17,18 +17,36 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Models.ProjectManagement.Project;
 
-public sealed partial class Cp77Project(string location, string name, string modName) : IEquatable<Cp77Project>, ICloneable
+public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
 {
     public const string ProjectFileExtension = ".cpmodproj";
-    
-    public string Name { get; set; } = name;
+
+    public Cp77Project(string location, string name, string modName, Dictionary<DateTime, string> openProjectFiles)
+    {
+        Location = location;
+        Name = name;
+        ModName = modName;
+        OpenProjectFiles = openProjectFiles;
+    }
+
+    public Cp77Project(string location, string name, string modName) : this(location, name, modName, [])
+    {
+        // use other constructor
+    }
+
+    public string Name { get; set; }
+
+    /// <summary>
+    /// Relative paths to currently open files. Will be written to <see cref="ProjectFileExtension"/> file. 
+    /// </summary>
+    public Dictionary<DateTime, string> OpenProjectFiles { get; set; } = [];
 
     /// <summary>
     /// Location of active project (the folder containing the .cdproj file)
     /// </summary>
-    public string Location { get; set; } = location;
+    public string Location { get; set; }
 
-    public string ModName { get; set; } = modName;
+    public string ModName { get; set; }
 
     public int ActiveTab { get; set; } = 0;
 
@@ -342,7 +360,6 @@ public sealed partial class Cp77Project(string location, string name, string mod
 
     private const string s_projectFilesDirName = ".projectFiles";
     private const string s_projectTreeStateFileName = "fileTreeState.json";
-    private const string s_openFilesList = "openFilesList.json";
 
     /// <summary>
     /// Path to <see cref="ProjectDirectory"/>/<see cref="s_projectFilesDirName"/>, where we store temp files
@@ -386,15 +403,14 @@ public sealed partial class Cp77Project(string location, string name, string mod
                 }
             }
 
+            if (!File.Exists(newPath))
+            {
+                File.WriteAllLines(newPath, ["{}"]);
+            }
+
             return newPath;
         }
     }
-
-    /// <summary>
-    /// Path to <see cref="InterfaceStateFileDirectory"/>/<see cref="s_openFilesList"/>
-    /// where we store the file paths for the most recently opened tabs  
-    /// </summary>
-    public string InterfaceOpenFilesListPath => Path.Combine(InterfaceStateFileDirectory, s_openFilesList);
 
     #endregion    
 
@@ -615,7 +631,10 @@ public sealed partial class Cp77Project(string location, string name, string mod
 
     public object Clone()
     {
-        Cp77Project clone = new(Location, Name, ModName) { Author = Author, Email = Email, Version = Version };
+        Cp77Project clone = new(Location, Name, ModName)
+        {
+            Author = Author, Email = Email, Version = Version, OpenProjectFiles = OpenProjectFiles
+        };
         return clone;
     }
 
