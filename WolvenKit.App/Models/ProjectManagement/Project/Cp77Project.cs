@@ -360,7 +360,6 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
 
     private const string s_projectFilesDirName = ".projectFiles";
     private const string s_projectTreeStateFileName = "fileTreeState.json";
-    private const string s_openFilesList = "openFilesList.json";
 
     /// <summary>
     /// Path to <see cref="ProjectDirectory"/>/<see cref="s_projectFilesDirName"/>, where we store temp files
@@ -402,6 +401,11 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
                 {
                     File.Delete(oldPath);
                 }
+            }
+
+            if (!File.Exists(newPath))
+            {
+                File.WriteAllLines(newPath, ["{}"]);
             }
 
             return newPath;
