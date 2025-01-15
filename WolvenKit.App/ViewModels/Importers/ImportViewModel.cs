@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Helpers;
@@ -60,6 +61,7 @@ public partial class ImportViewModel : AbstractImportExportViewModel
         _importExportHelper = importExportHelper;
 
         PropertyChanged += ImportExportViewModel_PropertyChanged;
+        _appViewModel.OnInitialProjectLoaded += AppViewModel_OnInitialProjectLoaded;
     }
 
     #region Commands
@@ -400,4 +402,11 @@ public partial class ImportViewModel : AbstractImportExportViewModel
         }
     }
 
+    private void AppViewModel_OnInitialProjectLoaded(object? sender, EventArgs e)
+    {
+        DispatcherHelper.RunOnMainThread(async () =>
+        {
+            await Refresh();
+        }, DispatcherPriority.ContextIdle);
+    }
 }

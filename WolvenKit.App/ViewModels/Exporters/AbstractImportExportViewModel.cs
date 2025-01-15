@@ -92,7 +92,7 @@ public abstract partial class AbstractImportExportViewModel : FloatingPaneViewMo
     }
 
     [RelayCommand]
-    private async Task Refresh()
+    protected async Task Refresh()
     {
         if (_refreshtask is null || (_refreshtask is not null && _refreshtask.IsCompleted))
         {

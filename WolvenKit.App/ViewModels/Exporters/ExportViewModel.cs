@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Helpers;
@@ -50,6 +51,7 @@ public partial class ExportViewModel : AbstractImportExportViewModel
         _importExportHelper = importExportHelper;
 
         PropertyChanged += ImportExportViewModel_PropertyChanged;
+        _appViewModel.OnInitialProjectLoaded += AppViewModel_OnInitialProjectLoaded;
     }
 
     #region Commands
@@ -196,9 +198,12 @@ public partial class ExportViewModel : AbstractImportExportViewModel
                 Items.Add(vm);
             }
         }
+        
+            ProcessAllCommand.NotifyCanExecuteChanged();
+       
 
-        ProcessAllCommand.NotifyCanExecuteChanged();
         _progressService.IsIndeterminate = false;
+        
         HasItems = Items.Any();
     }
 
@@ -347,4 +352,11 @@ public partial class ExportViewModel : AbstractImportExportViewModel
         }
     }
 
+    private void AppViewModel_OnInitialProjectLoaded(object? sender, EventArgs e)
+    {
+        DispatcherHelper.RunOnMainThread(async () =>
+        {
+            await Refresh();
+        }, DispatcherPriority.ContextIdle);
+    }
 }
