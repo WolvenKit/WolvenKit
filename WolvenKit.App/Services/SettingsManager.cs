@@ -88,6 +88,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(UseValidatingEditor),
             nameof(ReopenLastProject),
             nameof(NumFilesToReopen),
+            nameof(ReopenFiles),
             nameof(ShowVerboseLogOutput)
             )
           .Subscribe(_ =>
@@ -313,6 +314,28 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
 
     #endregion
 
+    #region Project
+
+    [Display(Name = "Open last project on launch?",
+        Description = "Will re-open the last project",
+        GroupName = "Project")]
+    [ObservableProperty]
+    private bool _reopenLastProject;
+
+    [Display(Name = "Re-open files on project open?",
+        Description = "Deactivate to disable",
+        GroupName = "Project")]
+    [ObservableProperty]
+    private bool _reopenFiles;
+
+    [Display(Name = "Number of files to reopen",
+        Description = "Increase the number at your own risk!",
+        GroupName = "Project")]
+    [ObservableProperty]
+    private int _numFilesToReopen;
+
+    #endregion
+    
     #region Interface
 
     private int _uiScale;
@@ -358,18 +381,6 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
         GroupName = "Interface")]
     [ObservableProperty]
     private bool _useValidatingEditor;
-
-    [Display(Name = "Open last project on launch?",
-        Description = "Will re-open the last project",
-        GroupName = "Interface")]
-    [ObservableProperty]
-    private bool _reopenLastProject;
-
-    [Display(Name = "Number of files to reopen",
-        Description = "Increase the number at your own risk!",
-        GroupName = "Interface")]
-    [ObservableProperty]
-    private int _numFilesToReopen;
 
     [Display(Name = "Show verbose log output",
         Description = "Will give you all the information",
