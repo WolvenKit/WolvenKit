@@ -1107,7 +1107,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
 
         // Abort if user doesn't want to reopen any files 
-        if (_settingsManager.NumFilesToReopen == 0 || project.OpenProjectFiles.Count == 0)
+        if (!_settingsManager.ReopenFiles || _settingsManager.NumFilesToReopen == 0 ||
+            project.OpenProjectFiles.Count == 0)
         {
             return;
         }
