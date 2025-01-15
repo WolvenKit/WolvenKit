@@ -113,19 +113,28 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         SelectedTabIndex = ActiveProject?.ActiveTab ?? 0;
 
-        _appViewModel.OnInitialProjectLoaded += (_, _) => RefreshProjectData();
+        _appViewModel.OnInitialProjectLoaded += AppViewModel_OnInitialProjectLoaded;
 
         if (Locator.Current.GetService<AppIdleStateService>() is not AppIdleStateService svc)
         {
             return;
         }
 
-        svc.ThreadIdleTenSeconds += (_, _) => SaveProjectExplorerExpansionStateIfDirty();
-        svc.ThreadIdleTenSeconds += (_, _) => SaveProjectExplorerTabIfDirty();
+        svc.ThreadIdleTenSeconds += Svc_ThreadIdleTenSeconds;
 
         s_instance = this;
     }
 
+    private void Svc_ThreadIdleTenSeconds(object? sender, EventArgs e)
+    {
+        SaveProjectExplorerExpansionStateIfDirty();
+        SaveProjectExplorerTabIfDirty();
+    }
+
+    private void AppViewModel_OnInitialProjectLoaded(object? sender, EventArgs e)
+    {
+        RefreshProjectData();
+    }
 
     public Dictionary<string, bool> ExpansionStateDictionary = new();
 
@@ -134,12 +143,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     public bool? GetExpansionStateOrNull(string relPath) => ExpansionStateDictionary.TryGetValue(relPath, out var state) ? state : null;
 
     /// <summary>
-    /// Set status of "scroll to open file" button, based on whether or not we have one opened
+    /// Set status of "scroll to open file" button (disable if we don't have one open)
     /// </summary>
     private void AppViewModelOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         CanScrollToOpenFile = HasSelectedItem && _appViewModel.ActiveDocument is not null;
-        if (e.PropertyName == nameof(AppViewModel.ActiveDocument))
+        if (e.PropertyName == nameof(AppViewModel.ActiveDocument) && _appViewModel.ActiveDocument?.FilePath is not null)
         {
             SaveOpenFilePaths();
         }
@@ -184,13 +193,15 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         DispatcherHelper.RunOnMainThread(() =>
         {
+            if (ActiveProject?.Equals(_projectManager.ActiveProject) == true)
+            {
+                return;
+            }
             ActiveProject = _projectManager.ActiveProject;
             if (ActiveProject is not null)
             {
-                _loadingProjectData = true;
-                ReadProjectStateFromFiles(ActiveProject);
+                RestoreProjectState(ActiveProject);
                 _projectWatcher.WatchProject(ActiveProject);
-                _loadingProjectData = false;
             }
 
             OnProjectChanged?.Invoke();
@@ -404,7 +415,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private bool _projectExplorerTabChanged;
     private bool _loadingProjectData;
-
 
     [GeneratedRegex(@".*\.\S+\.glb$")]
     private static partial Regex TypedGlbRegex();
@@ -1081,9 +1091,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     // IconSource = bi;
 
 
-
-
-    private void ReadProjectStateFromFiles(Cp77Project project)
+    private void RestoreProjectState(Cp77Project project)
     {
         
         // read tree state from file
@@ -1099,13 +1107,16 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             ExpansionStateDictionary = [];
         }
 
-        // read last opened files from file
-        if (!File.Exists(project.InterfaceOpenFilesListPath))
+        // Abort if user doesn't want to reopen any files 
+        if (!_settingsManager.ReopenFiles || _settingsManager.NumFilesToReopen == 0 ||
+            project.OpenProjectFiles.Count == 0)
         {
             return;
         }
 
-        var lastFilePaths = File.ReadAllLines(project.InterfaceOpenFilesListPath)
+        var lastFilePaths = project.OpenProjectFiles
+            .OrderBy(x => x.Key) // order by timestamp
+            .Select(x => x.Value) // select relative file path
             .Select(project.GetAbsolutePath)
             .Where(File.Exists)
             .Distinct()
@@ -1118,26 +1129,33 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
     }
 
-    private void SaveOpenFilePaths()
+    private async void SaveOpenFilePaths()
     {
-        if (_loadingProjectData || ActiveProject is not Cp77Project project)
-        {
-            return;
-        }
-
-        var filePaths = _appViewModel.DockedViews.OfType<IDocumentViewModel>()
-            .OrderBy(x => x.OpenedAt)
-            .Where(x => x.FilePath is not null)
-            .Select(x => project.GetRelativePath(x.FilePath!))
-            .ToList();
-
         try
         {
-            File.WriteAllLines(project.InterfaceOpenFilesListPath, filePaths);
+            if (ActiveProject is not Cp77Project project)
+            {
+                return;
+            }
+
+            var openProjectFiles = _appViewModel.DockedViews.OfType<IDocumentViewModel>()
+                .Where(x => x.FilePath is not null)
+                .OrderBy(x => x.OpenedAt)
+                .ToDictionary(x => x.OpenedAt, x => project.GetRelativePath(x.FilePath!));
+
+            // only write if we had a change
+            if (project.OpenProjectFiles.Equals(openProjectFiles))
+            {
+                return;
+            }
+
+            project.OpenProjectFiles = openProjectFiles;
+
+            await _projectManager.SaveAsync();
         }
         catch
         {
-            // I guess we don't write :))
+            // guess we're not saving
         }
     }
 
@@ -1169,15 +1187,15 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(State) && State == DockState.Hidden)
+        switch (e.PropertyName)
         {
-            IsVisible = false;
-        }
-        
-        if (e.PropertyName == nameof(SelectedTabIndex) && ActiveProject is not null)
-        {
-            ActiveProject.ActiveTab = SelectedTabIndex;
-            _projectExplorerTabChanged = true;
+            case nameof(State) when State == DockState.Hidden:
+                IsVisible = false;
+                break;
+            case nameof(SelectedTabIndex) when ActiveProject is not null:
+                ActiveProject.ActiveTab = SelectedTabIndex;
+                _projectExplorerTabChanged = true;
+                break;
         }
 
         base.OnPropertyChanged(e);
