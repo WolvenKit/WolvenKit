@@ -113,19 +113,28 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         SelectedTabIndex = ActiveProject?.ActiveTab ?? 0;
 
-        _appViewModel.OnInitialProjectLoaded += (_, _) => RefreshProjectData();
+        _appViewModel.OnInitialProjectLoaded += AppViewModel_OnInitialProjectLoaded;
 
         if (Locator.Current.GetService<AppIdleStateService>() is not AppIdleStateService svc)
         {
             return;
         }
 
-        svc.ThreadIdleTenSeconds += (_, _) => SaveProjectExplorerExpansionStateIfDirty();
-        svc.ThreadIdleTenSeconds += (_, _) => SaveProjectExplorerTabIfDirty();
+        svc.ThreadIdleTenSeconds += Svc_ThreadIdleTenSeconds;
 
         s_instance = this;
     }
 
+    private void Svc_ThreadIdleTenSeconds(object? sender, EventArgs e)
+    {
+        SaveProjectExplorerExpansionStateIfDirty();
+        SaveProjectExplorerTabIfDirty();
+    }
+
+    private void AppViewModel_OnInitialProjectLoaded(object? sender, EventArgs e)
+    {
+        RefreshProjectData();
+    }
 
     public Dictionary<string, bool> ExpansionStateDictionary = new();
 
