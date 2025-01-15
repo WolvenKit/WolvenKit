@@ -194,33 +194,40 @@ public class RED4Controller : ObservableObject, IGameController
 
         var hotDirectory = Path.Combine(_settingsManager.GetRED4GameRootDir(), "archive", "pc", "hot");
 
-        // create hot directory
-        if (!Directory.Exists(hotDirectory))
+        try
         {
-            Directory.CreateDirectory(hotDirectory);
-            _loggerService.Info($"Created hot directory at {hotDirectory}");
+            // create hot directory
+            if (!Directory.Exists(hotDirectory))
+            {
+                Directory.CreateDirectory(hotDirectory);
+                _loggerService.Info($"Created hot directory at {hotDirectory}");
+            }
+
+            var gameDirectoryInfo = new DirectoryInfo(_settingsManager.GetRED4GameRootDir());
+            var packedDirectoryInfo = new DirectoryInfo(currentProject.PackedRootDirectory);
+
+            if (!await PackProjectFiles(new LaunchProfile { Install = true }, currentProject))
+            {
+                return false;
+            }
+
+            if (!_modTools.InstallFiles(packedDirectoryInfo, gameDirectoryInfo, true))
+            {
+                return false;
+            }
+
+            // Clean all residual files
+            CleanAll();
+
+            _loggerService.Success($"{currentProject.ModName} packed into {hotDirectory}");
+            _notificationService.Success($"{currentProject.ModName} packed into {hotDirectory}");
+
+            return true;
         }
-
-        var gameDirectoryInfo = new DirectoryInfo(_settingsManager.GetRED4GameRootDir());
-        var packedDirectoryInfo = new DirectoryInfo(currentProject.PackedRootDirectory);
-
-        if (!await PackProjectFiles(new LaunchProfile { Install = true }, currentProject))
+        catch
         {
             return false;
         }
-
-        if (!_modTools.InstallFiles(packedDirectoryInfo, gameDirectoryInfo, true))
-        {
-            return false;
-        }
-        
-        // Clean all residual files
-        CleanAll();
-
-        _loggerService.Success($"{currentProject.ModName} packed into {hotDirectory}");
-        _notificationService.Success($"{currentProject.ModName} packed into {hotDirectory}");
-
-        return true;
     }
 
     /// <summary>
@@ -348,65 +355,67 @@ public class RED4Controller : ObservableObject, IGameController
         {
             _loggerService.Info($"{cp77Proj.Name} files cleaned up.");
         }
-        
-        // Pack it up
-        if (!await PackProjectFiles(options, cp77Proj))
-        {
-            return false;
-        }
-        
-        // backup
-        if (options.CreateZipFile && !CreateZipfile(cp77Proj, false))
-        {
-            _progressService.IsIndeterminate = false;
-            _loggerService.Error("Failed to bundle up your .archive, aborting.");
-            _notificationService.Error("Creating backup failed, aborting.");
-            return false;
-        }
 
-        // Now install it
-        if (options.Install && !await InstallProjectFiles(options, cp77Proj))
-        {
-            return false;
-        }
-
-        if (options.CleanAllPostBuild && !await Task.Run(() => Cleanup(cp77Proj, options, true)))
-        {
-            _loggerService.Warning("Failed to clean your project after build. The next build might fail.");
-        }
-
-        _progressService.IsIndeterminate = false;
-
-        // launch game
-        if (!options.LaunchGame)
-        {
-            return true;
-        }
-
-        if (_settingsManager.GetRED4GameLaunchCommand() is not string launchCommand || string.IsNullOrEmpty(launchCommand))
-        {
-            throw new WolvenKitException(0x5001, "No game executable set");
-        }
-
-        var arguments = $"{_settingsManager.GetRED4GameLaunchOptions()} {options.GameArguments ?? ""}";
-
-        // Shift prevents save game load (CET doesn't initialize
-        if (!_modifierService.IsShiftKeyPressed && options.LoadLastSave && ISettingsManager.GetLastSaveName() is string lastSavegame)
-        {
-            arguments = $"{arguments} -save={lastSavegame}";            
-        }
-        else if (!_modifierService.IsShiftKeyPressed && options.LoadSaveName is string savegame)
-        {
-            arguments = $"{arguments} -save={savegame}";
-        }
-
-        // -save can come from the launch options, or from the user settings 
-        if (arguments.Contains("-save"))
-        {
-            _loggerService.Warning("Warning: Loading a save via start-up options may break CET entity spawn!");
-        }
         try
         {
+            // Pack it up
+            if (!await PackProjectFiles(options, cp77Proj))
+            {
+                return false;
+            }
+
+            // backup
+            if (options.CreateZipFile && !CreateZipfile(cp77Proj, false))
+            {
+                _progressService.IsIndeterminate = false;
+                _loggerService.Error("Failed to bundle up your .archive, aborting.");
+                _notificationService.Error("Creating backup failed, aborting.");
+                return false;
+            }
+
+            // Now install it
+            if (options.Install && !await InstallProjectFiles(options, cp77Proj))
+            {
+                return false;
+            }
+
+            if (options.CleanAllPostBuild && !await Task.Run(() => Cleanup(cp77Proj, options, true)))
+            {
+                _loggerService.Warning("Failed to clean your project after build. The next build might fail.");
+            }
+
+            _progressService.IsIndeterminate = false;
+
+            // launch game
+            if (!options.LaunchGame)
+            {
+                return true;
+            }
+
+            if (_settingsManager.GetRED4GameLaunchCommand() is not string launchCommand ||
+                string.IsNullOrEmpty(launchCommand))
+            {
+                throw new WolvenKitException(0x5001, "No game executable set");
+            }
+
+            var arguments = $"{_settingsManager.GetRED4GameLaunchOptions()} {options.GameArguments ?? ""}";
+
+            // Shift prevents save game load (CET doesn't initialize
+            if (!_modifierService.IsShiftKeyPressed && options.LoadLastSave &&
+                ISettingsManager.GetLastSaveName() is string lastSavegame)
+            {
+                arguments = $"{arguments} -save={lastSavegame}";
+            }
+            else if (!_modifierService.IsShiftKeyPressed && options.LoadSaveName is string savegame)
+            {
+                arguments = $"{arguments} -save={savegame}";
+            }
+
+            // -save can come from the launch options, or from the user settings 
+            if (arguments.Contains("-save"))
+            {
+                _loggerService.Warning("Warning: Loading a save via start-up options may break CET entity spawn!");
+            }
             Process.Start(new ProcessStartInfo
             {
                 FileName = launchCommand,
@@ -519,7 +528,7 @@ public class RED4Controller : ObservableObject, IGameController
         files = GetResourceFiles(cp77Proj);
         if (files.Count != 0)
         {
-            if (!PackResources(cp77Proj, files))
+            if (!PackResources(cp77Proj, files, options))
             {
                 _progressService.IsIndeterminate = false;
                 _loggerService.Error("Packing other resource files failed, aborting.");
@@ -612,14 +621,22 @@ public class RED4Controller : ObservableObject, IGameController
     private bool PackArchives(Cp77Project cp77Proj, LaunchProfile options) => 
         _modTools.Pack(new DirectoryInfo(cp77Proj.ModDirectory), new DirectoryInfo(cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)), cp77Proj.ModName);
 
-    private static bool PackResources(Cp77Project cp77Proj, IEnumerable<string> files)
+    private static bool PackResources(Cp77Project cp77Proj, IEnumerable<string> files, LaunchProfile options)
     {
+        var r6FileSubPath = $"{Path.DirectorySeparatorChar}r6{Path.DirectorySeparatorChar}";
+        
         //All such files goes into the root of the cp77Proj.PackedRootDirectory
         foreach (var file in files)
         {
             var fileName = Path.GetFileName(file);
             var fileRelativeDir = Path.GetRelativePath(cp77Proj.ResourcesDirectory, Path.GetDirectoryName(file).NotNull());
             var fileOutputDir = Path.Combine(cp77Proj.PackedRootDirectory, fileRelativeDir);
+
+            // If we're packing as redmod: r6 files to into the redmod root
+            if (options.IsRedmod && file.Contains(r6FileSubPath))
+            {
+                fileOutputDir = Path.Combine(cp77Proj.PackedRedModDirectory, fileRelativeDir);
+            }
             var fileOutputPath = Path.Combine(fileOutputDir, fileName);
             if (!Directory.Exists(fileOutputDir))
             {
@@ -651,23 +668,23 @@ public class RED4Controller : ObservableObject, IGameController
     private bool PackRedmodFiles(Cp77Project cp77Proj)
     {
         // write info.json file if it not exists
-        var modinfo = Path.Combine(cp77Proj.PackedRedModDirectory, "info.json");
+        var modInfo = Path.Combine(cp77Proj.PackedRedModDirectory, "info.json");
 
-        if (File.Exists(modinfo))
+        if (File.Exists(modInfo))
         {
-            File.Delete(modinfo);
+            File.Delete(modInfo);
         }
 
-        if (!File.Exists(modinfo))
+        if (!File.Exists(modInfo))
         {
-            JsonSerializerOptions jsonoptions = new()
+            JsonSerializerOptions jsonOptions = new()
             {
                 WriteIndented = true,
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             };
-            var jsonString = JsonSerializer.Serialize(cp77Proj.GetInfo(), jsonoptions);
-            File.WriteAllText(modinfo, jsonString);
+            var jsonString = JsonSerializer.Serialize(cp77Proj.GetInfo(), jsonOptions);
+            File.WriteAllText(modInfo, jsonString);
         }
 
         // sounds
@@ -676,50 +693,7 @@ public class RED4Controller : ObservableObject, IGameController
             _loggerService.Info($"{cp77Proj.Name} redmod sound files packed into {cp77Proj.PackedRedModDirectory}");
         }
 
-        // tweaks
-        var files = GetTweakFiles(cp77Proj);
-        if (files.Count != 0)
-        {
-            foreach (var file in files)
-            {
-                var fileName = Path.GetFileName(file);
-                var fileRelativeDir = Path.GetRelativePath(cp77Proj.ResourcesDirectory, Path.GetDirectoryName(file).NotNull());
-                var fileOutputDir = Path.Combine(cp77Proj.PackedRedModDirectory, fileRelativeDir);
-                var fileOutputPath = Path.Combine(fileOutputDir, fileName);
-                if (!Directory.Exists(fileOutputDir))
-                {
-                    Directory.CreateDirectory(fileOutputDir);
-                }
-
-                // copy files, with overwriting
-                File.Copy(file, fileOutputPath, true);
-            }
-            _loggerService.Info($"{cp77Proj.Name} redmod tweak files packed into {cp77Proj.PackedRedModDirectory}");
-        }
-
-        // scripts
-        files = GetScriptFiles(cp77Proj);
-        if (files.Count == 0)
-        {
-            return true;
-        }
-
-        foreach (var file in files)
-        {
-            var fileName = Path.GetFileName(file);
-            var fileRelativeDir = Path.GetRelativePath(cp77Proj.ResourcesDirectory, Path.GetDirectoryName(file).NotNull());
-            var fileOutputDir = Path.Combine(cp77Proj.PackedRedModDirectory, fileRelativeDir);
-            var fileOutputPath = Path.Combine(fileOutputDir, fileName);
-            if (!Directory.Exists(fileOutputDir))
-            {
-                Directory.CreateDirectory(fileOutputDir);
-            }
-
-            // copy files, with overwriting
-            File.Copy(file, fileOutputPath, true);
-        }
-
-        _loggerService.Info($"{cp77Proj.Name} redmod script files packed into {cp77Proj.PackedRedModDirectory}");
+        _loggerService.Info($"{cp77Proj.Name} redmod resource files packed into {cp77Proj.PackedRedModDirectory}");
 
         return true;
     }

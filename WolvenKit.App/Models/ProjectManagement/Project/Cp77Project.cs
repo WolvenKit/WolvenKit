@@ -530,6 +530,7 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
         {
             ".xl" => true,
             ".yaml" => true,
+            ".tweak" => true,
             ".yml" => true,
             ".lua" => true,
             ".reds" => true,
@@ -549,7 +550,8 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
 
         if (relativePath == relativeOrAbsolutePath)
         {
-            return Path.Join(ModDirectory, prefix, relativePath);
+            var absolutePath = IsResourceFile(relativeOrAbsolutePath) ? ResourcesDirectory : ModDirectory;
+            return Path.Join(absolutePath, prefix, relativePath);
         }
 
         if (prefix != "")
