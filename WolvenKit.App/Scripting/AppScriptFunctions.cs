@@ -742,13 +742,14 @@ public class AppScriptFunctions : ScriptFunctions
         }
 
         var absoluteFilePath = Path.Combine(baseFolder, filepath);
-        if (!File.Exists(baseFolder))
+        if (!File.Exists(absoluteFilePath))
         {
             return false;
         }
 
         File.Delete(absoluteFilePath);
-        return !File.Exists(baseFolder);
+        ProjectResourceTools.DeleteEmptyParents(absoluteFilePath, proj);
+        return !File.Exists(absoluteFilePath);
     }
 
     #region TweakDB
