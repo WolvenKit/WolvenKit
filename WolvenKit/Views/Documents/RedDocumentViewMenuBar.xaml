@@ -338,6 +338,23 @@
                                          RelativeSource={RelativeSource Self},
                                          Mode=OneWay,
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Header="Un-dynamify materials"
+                    Command="{Binding Path=UnDynamifyMaterialsCommand}"
+                    Click="OnUnDynamifyMaterialsClick">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ArrowUpBox"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <MenuItem
+                    Style="{StaticResource MenuItemStyle}"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                     Header="Scroll to material"
                     Command="{Binding Path=ScrollToMaterialCommand}">
                     <MenuItem.Icon>

@@ -1603,8 +1603,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             Type t when t == typeof(TweakBrowserViewModel) => (T)(_paneViewModelFactory.TweakBrowserViewModel(this) as IDockElement),
             Type t when t == typeof(LocKeyBrowserViewModel) => (T)(_paneViewModelFactory.LocKeyBrowserViewModel() as IDockElement),
 
-            Type t when t == typeof(ImportViewModel) => (T)(_paneViewModelFactory.LogViewModel() as IDockElement),
-            Type t when t == typeof(ExportViewModel) => (T)(_paneViewModelFactory.LogViewModel() as IDockElement),
+            Type t when t == typeof(ImportViewModel) => (T)(_paneViewModelFactory.ImportViewModel(this) as IDockElement),
+            Type t when t == typeof(ExportViewModel) => (T)(_paneViewModelFactory.ExportViewModel(this) as IDockElement),
 
             _ => throw new NotImplementedException(),
         };
