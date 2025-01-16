@@ -15,7 +15,9 @@
     d:DataContext="{d:DesignInstance Type=tools:LogViewModel}"
     d:DesignWidth="800"
     d:DesignHeight="450"
-    x:Name="uc">
+    x:Name="uc"
+    MinWidth="348"
+    SizeChanged="LogView_OnSizeChanged">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -38,6 +40,22 @@
 
         <Grid.Resources>
             <converters:NullVisibilityConverter x:Key="NullVisibilityConverter" />
+
+            <Style
+                x:Key="LogLevelButtonStyle"
+                BasedOn="{StaticResource WPFButtonStyle}"
+                TargetType="{x:Type Button}">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Focusable" Value="False" />
+                <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginTinyRight}" />
+
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="#10FFFFFF" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
         </Grid.Resources>
 
         <Grid
@@ -45,33 +63,16 @@
             Grid.Row="0"
             Grid.Column="0">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="{DynamicResource WolvenKitColumnTiny}" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-
-            <Grid.Resources>
-                <Style
-                    x:Key="LogLevelButtonStyle"
-                    BasedOn="{StaticResource WPFButtonStyle}"
-                    TargetType="{x:Type Button}">
-                    <Setter Property="Background" Value="Transparent" />
-                    <Setter Property="BorderThickness" Value="0" />
-                    <Setter Property="Focusable" Value="False" />
-                    <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginTinyRight}" />
-
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="#10FFFFFF" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </Grid.Resources>
 
             <StackPanel
                 x:Name="LogLevelFilter"
                 Grid.Column="0"
                 Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 Orientation="Horizontal">
                 <Button
@@ -131,7 +132,6 @@
 
                 <Button
                     x:Name="FilterDebugButton"
-                    Margin="0"
                     Style="{StaticResource LogLevelButtonStyle}"
                     Command="{Binding ToggleFilterLevelCommand}"
                     CommandParameter="4"
@@ -151,7 +151,7 @@
                 Margin="{DynamicResource WolvenKitMarginTinyBottom}"
                 HorizontalAlignment="Right">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" MinWidth="240" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
@@ -363,6 +363,7 @@
         </ItemsControl>
 
         <StackPanel
+            x:Name="LogPanelButtons"
             Grid.Row="1"
             Grid.Column="1"
             Orientation="Vertical">

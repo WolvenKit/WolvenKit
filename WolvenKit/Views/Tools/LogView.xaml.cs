@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Navigation;
 using DynamicData;
 using HandyControl.Tools.Extension;
+using MahApps.Metro.Controls;
 using ReactiveUI;
 using Serilog.Events;
 using Splat;
@@ -199,11 +200,6 @@ namespace WolvenKit.Views.Tools
 
         private void ScrollToBottom_OnClick(object sender, RoutedEventArgs e) => _scrollViewer?.ScrollToBottom();
 
-        private void LogView_OnKeyUp(object sender, KeyEventArgs e)
-        {
-            // TODO: Implement scrolling and copy
-        }
-
         private void ScrollViewer_OnKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.PageUp)
@@ -213,6 +209,46 @@ namespace WolvenKit.Views.Tools
             else if (e.Key == Key.PageDown)
             {
                 _scrollViewer?.PageDown();
+            }
+        }
+
+        private void LogView_OnKeyUp(object sender, KeyEventArgs e)
+        {
+            // TODO: Implement scrolling and copy
+        }
+
+        private void LogView_OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            var breakpoint = (double)FindResource("WolvenKitLogBreakpointWidth");
+
+            if (e.NewSize.Width > breakpoint && LogLevelFilter.Orientation != Orientation.Horizontal)
+            {
+                LogPanelButtons.Children.Remove(LogLevelFilter);
+                LogViewHeader.Children.Add(LogLevelFilter);
+
+                LogLevelFilter.SetCurrentValue(Grid.ColumnProperty, 0);
+                LogLevelFilter.SetCurrentValue(HorizontalAlignmentProperty, HorizontalAlignment.Left);
+                LogLevelFilter.SetCurrentValue(VerticalAlignmentProperty, VerticalAlignment.Center);
+                LogLevelFilter.SetCurrentValue(StackPanel.OrientationProperty, Orientation.Horizontal);
+                ChangeMargin((Thickness)FindResource("WolvenKitMarginTinyRight"));
+            }
+            else if (e.NewSize.Width <= breakpoint && LogLevelFilter.Orientation != Orientation.Vertical)
+            {
+                LogViewHeader.Children.Remove(LogLevelFilter);
+                LogPanelButtons.Children.Add(LogLevelFilter);
+
+                LogLevelFilter.ClearValue(Grid.ColumnProperty);
+                LogLevelFilter.SetCurrentValue(HorizontalAlignmentProperty, HorizontalAlignment.Center);
+                LogLevelFilter.SetCurrentValue(VerticalAlignmentProperty, VerticalAlignment.Top);
+                LogLevelFilter.SetCurrentValue(StackPanel.OrientationProperty, Orientation.Vertical);
+                ChangeMargin((Thickness)FindResource("WolvenKitMarginTinyTop"));
+            }
+
+            return;
+
+            void ChangeMargin(Thickness margin)
+            {
+                LogLevelFilter.FindChildren<Button>().ForEach(button => button.SetCurrentValue(MarginProperty, margin));
             }
         }
     }
