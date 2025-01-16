@@ -2364,6 +2364,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         // LogView
         resources["WolvenKitLogScriptMinWidth"] = 240 * _uiScalePercentage;
         resources["WolvenKitLogLineMinHeight"] = 16 * _uiScalePercentage;
+        resources["WolvenKitLogBreakpointWidth"] = 504 * _uiScalePercentage;
 
         // BackStageView
         resources["WolvenKitBackStageBgMargin"] = new Thickness(5, 55, 5, 5).Mul(_uiScalePercentage);
