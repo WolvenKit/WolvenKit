@@ -310,6 +310,10 @@ public class AppScriptFunctions : ScriptFunctions
                 baseFolder = _projectManager.ActiveProject.RawDirectory;
                 break;
 
+            case "resources":
+                baseFolder = _projectManager.ActiveProject.ResourcesDirectory;
+                break;
+
             default:
                 _loggerService.Error($"Unsupported folder type \"{folderType}\"");
                 return result;
