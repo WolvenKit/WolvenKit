@@ -206,37 +206,22 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _loggerService.Error($"\t{filenames}");
     }
 
+    public event EventHandler? OpenDocumentChanged;
     private void DockedViews_OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        if (e.OldItems != null)
+        foreach (var dockElement in (e.OldItems ?? Array.Empty<object>()).OfType<IDockElement>())
         {
-            foreach (var item in e.OldItems)
-            {
-                if (item is not IDockElement dockElement)
-                {
-                    continue;
-                }
-
-                dockElement.PropertyChanged -= DockedView_OnPropertyChanged;
-                DockedViewVisibleChanged?.Invoke(sender, new DockedViewVisibleChangedEventArgs(dockElement));
-            }
+            dockElement.PropertyChanged -= DockedView_OnPropertyChanged;
+            DockedViewVisibleChanged?.Invoke(sender, new DockedViewVisibleChangedEventArgs(dockElement));
         }
 
-        if (e.NewItems == null)
+        foreach (var dockElement in (e.NewItems ?? Array.Empty<object>()).OfType<IDockElement>())
         {
-            return;
-        }
-
-        foreach (var item in e.NewItems)
-        {
-            if (item is not IDockElement dockElement)
-            {
-                continue;
-            }
-
             DockedViewVisibleChanged?.Invoke(sender, new DockedViewVisibleChangedEventArgs(dockElement));
             dockElement.PropertyChanged += DockedView_OnPropertyChanged;
         }
+
+        OpenDocumentChanged?.Invoke(this, EventArgs.Empty);
 
     }
 
@@ -245,6 +230,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         public IDockElement Element { get; } = element;
     }
 
+    
     public event EventHandler<DockedViewVisibleChangedEventArgs>? DockedViewVisibleChanged;
 
     private void DockedView_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)

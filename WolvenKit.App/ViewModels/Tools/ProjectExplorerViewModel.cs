@@ -108,6 +108,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         SetupToolDefaults();
 
         _appViewModel.PropertyChanged += AppViewModelOnPropertyChanged;
+        _appViewModel.OpenDocumentChanged += OnOpenDocumentChanged;
 
         _projectManager.PropertyChanged += ProjectManager_OnPropertyChanged;
 
@@ -126,24 +127,23 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         s_instance = this;
     }
 
+    /// <summary>
+    /// Whenever the document changes, save open file paths to <see cref="Cp77Project.ProjectFileExtension"/> file 
+    /// </summary>
+    private void OnOpenDocumentChanged(object? sender, EventArgs e) => SaveOpenFilePaths();
 
-    public Dictionary<string, bool> ExpansionStateDictionary = new();
-
-    public bool GetExpansionState(string relPath) => GetExpansionStateOrNull(relPath) ?? false;
+    /// <summary>
+    /// Save project browser expansion state (will be written to <see cref="Cp77Project.InterfaceProjectTreeStatePath"/>)
+    /// </summary>
+    public Dictionary<string, bool> ExpansionStateDictionary = [];
 
     public bool? GetExpansionStateOrNull(string relPath) => ExpansionStateDictionary.TryGetValue(relPath, out var state) ? state : null;
 
     /// <summary>
     /// Set status of "scroll to open file" button (disable if we don't have one open)
     /// </summary>
-    private void AppViewModelOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
+    private void AppViewModelOnPropertyChanged(object? sender, PropertyChangedEventArgs e) =>
         CanScrollToOpenFile = HasSelectedItem && _appViewModel.ActiveDocument is not null;
-        if (e.PropertyName == nameof(AppViewModel.ActiveDocument) && _appViewModel.ActiveDocument?.FilePath is not null)
-        {
-            SaveOpenFilePaths();
-        }
-    }
 
     private bool _loading;
 
@@ -176,7 +176,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         {
             _hasUnsavedFileTreeChanges = true;
             SaveProjectExplorerExpansionStateIfDirty();
-            SaveOpenFilePaths();
             _projectWatcher.UnwatchProject(ActiveProject);
         }
         
