@@ -298,21 +298,9 @@ public class AppScriptFunctions : ScriptFunctions
             return result;
         }
 
-        string baseFolder;
-
-        switch (folderType)
+        if (GetBaseFolder(folderType) is not string baseFolder)
         {
-            case "archive":
-                baseFolder = _projectManager.ActiveProject.ModDirectory;
-                break;
-
-            case "raw":
-                baseFolder = _projectManager.ActiveProject.RawDirectory;
-                break;
-
-            default:
-                _loggerService.Error($"Unsupported folder type \"{folderType}\"");
-                return result;
+            return result;
         }
 
         foreach (var file in Directory.GetFiles(baseFolder, "*.*", SearchOption.AllDirectories))
@@ -321,6 +309,27 @@ public class AppScriptFunctions : ScriptFunctions
         }
 
         return result;
+    }
+
+    private string? GetBaseFolder(string folderType)
+    {
+        if (_projectManager.ActiveProject is null)
+        {
+            throw new WolvenKitException(0x4003, "No project loaded");
+        }
+
+        switch (folderType)
+        {
+            case "archive":
+                return _projectManager.ActiveProject.ModDirectory;
+            case "raw":
+                return _projectManager.ActiveProject.RawDirectory;
+            case "resources":
+                return _projectManager.ActiveProject.ResourcesDirectory;
+            default:
+                _loggerService.Error($"Unsupported folder type \"{folderType}\"");
+                return null;
+        }
     }
 
     private T ParseExportSettings<T>(ScriptObject scriptSettingsObject) where T : ExportArgs, new()
@@ -712,6 +721,35 @@ public class AppScriptFunctions : ScriptFunctions
 
         var file = new FileInfo(Path.Combine(proj.RawDirectory, filepath));
         return file.Exists;
+    }
+
+    /// <summary>
+    /// Deletes a file from the project, if it exists.
+    /// </summary>
+    /// <param name="filepath">relative filepath to be deleted</param>
+    /// <param name="folderType">project subfolder type (archive|raw|resources)</param>
+    /// <returns>true if the file was deleted</returns>
+    public virtual bool DeleteFile(string filepath, string folderType)
+    {
+        if (_projectManager.ActiveProject is not { } proj)
+        {
+            throw new WolvenKitException(0x4003, "No project loaded");
+        }
+
+        if (GetBaseFolder(folderType) is not string baseFolder)
+        {
+            return false;
+        }
+
+        var absoluteFilePath = Path.Combine(baseFolder, filepath);
+        if (!File.Exists(absoluteFilePath))
+        {
+            return false;
+        }
+
+        File.Delete(absoluteFilePath);
+        ProjectResourceTools.DeleteEmptyParents(absoluteFilePath, proj);
+        return !File.Exists(absoluteFilePath);
     }
 
     #region TweakDB
