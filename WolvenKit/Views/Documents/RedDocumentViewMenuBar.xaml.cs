@@ -665,7 +665,7 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            var selectedChunks = SelectedChunks;
+            var selectedChunks = SelectedChunks.ToList();
             if (!selectedChunks.All(c => c.ResolvedData is appearanceAppearanceDefinition))
             {
                 selectedChunks.Clear();
