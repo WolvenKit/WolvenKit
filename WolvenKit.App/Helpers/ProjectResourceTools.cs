@@ -832,16 +832,16 @@ public class ProjectResourceTools
             absoluteFolderPath = Path.GetDirectoryName(absolutePath);
         }
 
-        // Do not delete anything under the source directory
-        if (absoluteFolderPath == activeProject.FileDirectory ||
-            Path.GetDirectoryName(absoluteFolderPath) == activeProject.FileDirectory)
+        // No directory to delete
+        if (absoluteFolderPath is null || !Directory.Exists(absoluteFolderPath))
         {
             return;
         }
 
-
-        // No directory to delete
-        if (absoluteFolderPath is null || !Directory.Exists(absoluteFolderPath))
+        // Do not delete anything directly under the source directory or outside of the project
+        if (absoluteFolderPath == activeProject.FileDirectory ||
+            Path.GetDirectoryName(absoluteFolderPath) == activeProject.FileDirectory ||
+            !absoluteFolderPath.StartsWith(activeProject.FileDirectory))
         {
             return;
         }
