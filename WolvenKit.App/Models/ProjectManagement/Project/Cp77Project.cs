@@ -18,18 +18,25 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Models.ProjectManagement.Project;
 
-public sealed partial class Cp77Project(string location, string name, string modName) : IEquatable<Cp77Project>, ICloneable
+public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
 {
     public const string ProjectFileExtension = ".cpmodproj";
-    
-    public string Name { get; set; } = name;
+
+    public Cp77Project(string location, string name, string modName)
+    {
+        Name = name;
+        Location = location;
+        ModName = modName;
+    }
+
+    public string Name { get; set; }
 
     /// <summary>
     /// Location of active project (the folder containing the .cdproj file)
     /// </summary>
-    public string Location { get; set; } = location;
+    public string Location { get; set; }
 
-    public string ModName { get; set; } = modName;
+    public string ModName { get; set; }
 
     public int ActiveTab { get; set; } = 0;
 

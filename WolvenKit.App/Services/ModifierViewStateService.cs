@@ -20,8 +20,12 @@ namespace WolvenKit.App.Services;
 /// _modifierViewStates.ModifierStateChanged += OnModifierStateChanged;
 /// </code>
 /// </example>
-public partial class ModifierViewStateService() : ObservableObject, IModifierViewStateService
+public partial class ModifierViewStateService : ObservableObject, IModifierViewStateService
 {
+    public ModifierViewStateService()
+    {
+    }
+    
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
         base.OnPropertyChanged(e);

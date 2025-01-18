@@ -8,28 +8,38 @@ using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
 
-public class OpenFileViewModel(
-    ISettingsManager settingsManager,
-    IProjectManager projectManager,
-    ILoggerService loggerService)
-    : DialogViewModel
+public class OpenFileViewModel : DialogViewModel
 {
+    private readonly ISettingsManager _settingsManager;
+    private readonly IProjectManager _projectManager;
+    private readonly ILoggerService _loggerService;
+
+    public OpenFileViewModel(
+        ISettingsManager settingsManager,
+        IProjectManager projectManager,
+        ILoggerService loggerService)
+    {
+        _settingsManager = settingsManager;
+        _projectManager = projectManager;
+        _loggerService = loggerService;
+    }
+    
     public async Task<string?> OpenFile()
     {
-        if (!projectManager.IsProjectLoaded)
+        if (!_projectManager.IsProjectLoaded)
         {
             throw new WolvenKitException(0x4003, "No project loaded");
         }
 
-        if (settingsManager.ExtraModDirPath is null)
+        if (_settingsManager.ExtraModDirPath is null)
         {
             throw new WolvenKitException(0x4001, "No extra mod directory configured");
         }
 
-        if (!Directory.Exists(settingsManager.ExtraModDirPath))
+        if (!Directory.Exists(_settingsManager.ExtraModDirPath))
         {
             throw new FileNotFoundException(
-                $"Directory not found: {settingsManager.ExtraModDirPath}. Please make sure the directory exists and is writable.");
+                $"Directory not found: {_settingsManager.ExtraModDirPath}. Please make sure the directory exists and is writable.");
         }
 
         var openFileDialog = new OpenFileDialog { Filter = Filter, Title = Title };
@@ -41,7 +51,7 @@ public class OpenFileViewModel(
 
         if (openFileDialog.FileName is not string filePath)
         {
-            loggerService.Info("No file selected.");
+            _loggerService.Info("No file selected.");
             return null;
         }
 
@@ -54,9 +64,9 @@ public class OpenFileViewModel(
 
     private async Task<bool> CopyFile(string filePath, string fileName)
     {
-        var modDirPath = Path.Join(settingsManager.GetRED4GameRootDir(), "archive", "pc", "mod");
+        var modDirPath = Path.Join(_settingsManager.GetRED4GameRootDir(), "archive", "pc", "mod");
 
-        var destPath = Path.Join(settingsManager.ExtraModDirPath, fileName);
+        var destPath = Path.Join(_settingsManager.ExtraModDirPath, fileName);
 
         if (File.Exists(destPath))
         {
