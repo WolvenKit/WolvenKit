@@ -26,6 +26,7 @@ namespace WolvenKit.Common.Model
         {
             Name = name;
             Description = description;
+            FullText = $"Name: {name}, Extension: {extension}, Description: {description}";
             Extension = extension;
             Type = type;
             Template = template;
@@ -36,5 +37,8 @@ namespace WolvenKit.Common.Model
         public string? Extension { get; set; }
         public EWolvenKitFile Type { get; set; }
         public string? Template { get; set; }
+
+        // Just for filtering
+        public string? FullText { get; init; }
     }
 }
