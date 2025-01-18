@@ -59,15 +59,23 @@
             Grid.Column="2"
             HeaderRowHeight="{DynamicResource WolvenKitTreeGridRowHeaderHeight}"
             RowHeight="{DynamicResource WolvenKitNewFileRowHeight}"
+            FilterRowPosition="FixedTop"
             AutoGenerateColumns="False">
             <syncfusion:SfDataGrid.Columns>
+
                 <syncfusion:GridTemplateColumn
                     ColumnSizer="AutoLastColumnFill"
                     AllowFiltering="True"
                     AllowSorting="True"
                     HeaderText="File"
                     IsReadOnly="True"
-                    MappingName="Name">
+                    MappingName="Name"
+                    UseBindingValue="True"
+                    ValueBinding="{Binding Path=FullText}"
+                    FilterRowEditorType="TextBox"
+                    FilterRowCondition="Contains"
+                    ImmediateUpdateColumnFilter="True">
+
                     <syncfusion:GridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Grid
