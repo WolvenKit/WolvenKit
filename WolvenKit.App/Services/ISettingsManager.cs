@@ -192,5 +192,8 @@ public interface ISettingsManager : ISettingsDto, INotifyPropertyChanged
 
     bool ReopenLastProject { get; set; }
 
+    bool ReopenFiles { get; set; }
+    int NumFilesToReopen { get; set; }
+
     bool ShowVerboseLogOutput { get; set; }
 }

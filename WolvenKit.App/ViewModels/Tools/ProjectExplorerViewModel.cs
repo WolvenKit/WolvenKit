@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -9,13 +8,11 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Threading;
 using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Octokit;
 using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
@@ -111,6 +108,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         SetupToolDefaults();
 
         _appViewModel.PropertyChanged += AppViewModelOnPropertyChanged;
+        _appViewModel.OpenDocumentChanged += OnOpenDocumentChanged;
 
         _projectManager.PropertyChanged += ProjectManager_OnPropertyChanged;
 
@@ -128,6 +126,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         s_instance = this;
     }
 
+    /// <summary>
+    /// Whenever the document changes, save open file paths to <see cref="Cp77Project.ProjectFileExtension"/> file 
+    /// </summary>
+    private void OnOpenDocumentChanged(object? sender, EventArgs e) => SaveOpenFilePaths();
+    
     private void Svc_ThreadIdleTenSeconds(object? sender, EventArgs e)
     {
         SaveProjectExplorerExpansionStateIfDirty();
@@ -139,14 +142,15 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         RefreshProjectData();
     }
 
-    public Dictionary<string, bool> ExpansionStateDictionary = new();
-
-    public bool GetExpansionState(string relPath) => GetExpansionStateOrNull(relPath) ?? false;
+    /// <summary>
+    /// Save project browser expansion state (will be written to <see cref="Cp77Project.InterfaceProjectTreeStatePath"/>)
+    /// </summary>
+    public Dictionary<string, bool> ExpansionStateDictionary = [];
 
     public bool? GetExpansionStateOrNull(string relPath) => ExpansionStateDictionary.TryGetValue(relPath, out var state) ? state : null;
 
     /// <summary>
-    /// Set status of "scroll to open file" button, based on whether or not we have one opened
+    /// Set status of "scroll to open file" button (disable if we don't have one open)
     /// </summary>
     private void AppViewModelOnPropertyChanged(object? sender, PropertyChangedEventArgs e) =>
         CanScrollToOpenFile = HasSelectedItem && _appViewModel.ActiveDocument is not null;
@@ -189,17 +193,19 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         DispatcherHelper.RunOnMainThread(() =>
         {
+            if (ActiveProject?.Equals(_projectManager.ActiveProject) == true)
+            {
+                return;
+            }
             ActiveProject = _projectManager.ActiveProject;
             if (ActiveProject is not null)
             {
-                LoadFileTreeState(ActiveProject);
+                RestoreProjectState(ActiveProject);
                 _projectWatcher.WatchProject(ActiveProject);
             }
 
             OnProjectChanged?.Invoke();
         }, DispatcherPriority.ContextIdle);
-
-
     }
 
     public DispatchedObservableCollection<FileSystemModel> FileTree => _projectWatcher.FileTree;
@@ -309,7 +315,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
     }
 
-    public string GetActiveFolderPath() => SelectedTabIndex switch
+    private string GetActiveFolderPath() => SelectedTabIndex switch
     {
         0 => ActiveProject.NotNull().FileDirectory,
         1 => ActiveProject.NotNull().ModDirectory,
@@ -408,7 +414,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private bool _hasUnsavedFileTreeChanges;
 
     private bool _projectExplorerTabChanged;
-
 
     [GeneratedRegex(@".*\.\S+\.glb$")]
     private static partial Regex TypedGlbRegex();
@@ -1085,18 +1090,71 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     // IconSource = bi;
 
 
-    private const string s_treestateFileName = "fileTreeState.json";
-    private void LoadFileTreeState(Cp77Project project)
+    private void RestoreProjectState(Cp77Project project)
     {
-        var statePath = GetTreeStateFilePath(project);
-        if (File.Exists(statePath))
+        
+        // read tree state from file
+        if (File.Exists(project.InterfaceProjectTreeStatePath))
         {
             _hasUnsavedFileTreeChanges = false;
-            ExpansionStateDictionary = JsonSerializer.Deserialize<Dictionary<string, bool>>(File.ReadAllText(statePath)) ?? new();
+            ExpansionStateDictionary =
+                JsonSerializer.Deserialize<Dictionary<string, bool>>(
+                    File.ReadAllText(project.InterfaceProjectTreeStatePath)) ?? [];
         }
         else
         {
             ExpansionStateDictionary = [];
+        }
+
+        // Abort if user doesn't want to reopen any files 
+        if (!_settingsManager.ReopenFiles || _settingsManager.NumFilesToReopen == 0 ||
+            project.OpenProjectFiles.Count == 0)
+        {
+            return;
+        }
+
+        var lastFilePaths = project.OpenProjectFiles
+            .OrderBy(x => x.Key) // order by timestamp
+            .Select(x => x.Value) // select relative file path
+            .Select(project.GetAbsolutePath)
+            .Where(File.Exists)
+            .Distinct()
+            .TakeLast(_settingsManager.NumFilesToReopen)
+            .ToList();
+
+        foreach (var path in lastFilePaths)
+        {
+            _appViewModel.RequestFileOpen(path);
+        }
+    }
+
+    private async void SaveOpenFilePaths()
+    {
+        try
+        {
+            if (ActiveProject is not Cp77Project project)
+            {
+                return;
+            }
+
+            var openProjectFiles = _appViewModel.DockedViews.OfType<IDocumentViewModel>()
+                .Where(x => x.FilePath is not null)
+                .OrderBy(x => x.OpenedAt)
+                .ToDictionary(x => x.OpenedAt, x => project.GetRelativePath(x.FilePath!));
+
+            // only write if we had a change
+            if (project.OpenProjectFiles.Equals(openProjectFiles))
+            {
+                return;
+            }
+
+            project.OpenProjectFiles = openProjectFiles;
+
+            await _projectManager.SaveAsync();
+        }
+        catch
+        {
+            // guess we're not saving
         }
     }
 
@@ -1111,9 +1169,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _projectExplorerTabChanged = false;
     }
 
-    public void SaveProjectExplorerExpansionStateIfDirty() => SaveProjectExplorerExpansionStateIfDirty(ActiveProject);
-
-    private static string GetTreeStateFilePath(Cp77Project project) => Path.Combine(project.ProjectDirectory, s_treestateFileName);
+    private void SaveProjectExplorerExpansionStateIfDirty() => SaveProjectExplorerExpansionStateIfDirty(ActiveProject);
 
     private void SaveProjectExplorerExpansionStateIfDirty(Cp77Project? project)
     {
@@ -1122,7 +1178,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        File.WriteAllText(GetTreeStateFilePath(project), JsonSerializer.Serialize(ExpansionStateDictionary));
+        File.WriteAllText(project.InterfaceProjectTreeStatePath, JsonSerializer.Serialize(ExpansionStateDictionary));
         _hasUnsavedFileTreeChanges = false;
     }
 
@@ -1130,15 +1186,15 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(State) && State == DockState.Hidden)
+        switch (e.PropertyName)
         {
-            IsVisible = false;
-        }
-        
-        if (e.PropertyName == nameof(SelectedTabIndex) && ActiveProject is not null)
-        {
-            ActiveProject.ActiveTab = SelectedTabIndex;
-            _projectExplorerTabChanged = true;
+            case nameof(State) when State == DockState.Hidden:
+                IsVisible = false;
+                break;
+            case nameof(SelectedTabIndex) when ActiveProject is not null:
+                ActiveProject.ActiveTab = SelectedTabIndex;
+                _projectExplorerTabChanged = true;
+                break;
         }
 
         base.OnPropertyChanged(e);

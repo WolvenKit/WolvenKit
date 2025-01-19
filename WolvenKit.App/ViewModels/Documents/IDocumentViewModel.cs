@@ -26,6 +26,11 @@ public interface IDocumentViewModel : IDockElement
     string? FilePath { get; set; }
     bool IsReadOnly { get; set; }
 
+    /// <summary>
+    /// Set in constructor to keep track of which tabs were opened most recently
+    /// </summary>
+    DateTime OpenedAt { get; init; }
+
     public bool IsDirty
     {
         get;

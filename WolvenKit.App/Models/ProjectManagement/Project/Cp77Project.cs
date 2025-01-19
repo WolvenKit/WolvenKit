@@ -11,25 +11,42 @@ using WolvenKit.Common;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
-using WolvenKit.Modkit.RED4.Serialization;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Models.ProjectManagement.Project;
 
-public sealed partial class Cp77Project(string location, string name, string modName) : IEquatable<Cp77Project>, ICloneable
+public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
 {
     public const string ProjectFileExtension = ".cpmodproj";
-    
-    public string Name { get; set; } = name;
+
+    public Cp77Project(string location, string name, string modName, Dictionary<DateTime, string> openProjectFiles)
+    {
+        Location = location;
+        Name = name;
+        ModName = modName;
+        OpenProjectFiles = openProjectFiles;
+    }
+
+    public Cp77Project(string location, string name, string modName) : this(location, name, modName, [])
+    {
+        // use other constructor
+    }
+
+    public string Name { get; set; }
+
+    /// <summary>
+    /// Relative paths to currently open files. Will be written to <see cref="ProjectFileExtension"/> file. 
+    /// </summary>
+    public Dictionary<DateTime, string> OpenProjectFiles { get; set; } = [];
 
     /// <summary>
     /// Location of active project (the folder containing the .cdproj file)
     /// </summary>
-    public string Location { get; set; } = location;
+    public string Location { get; set; }
 
-    public string ModName { get; set; } = modName;
+    public string ModName { get; set; }
 
     public int ActiveTab { get; set; } = 0;
 
@@ -130,8 +147,7 @@ public sealed partial class Cp77Project(string location, string name, string mod
             return Directory.Exists(oldDir) ? oldDir : Path.GetDirectoryName(Location).NotNull();
         }
     }
-
-
+    
     /// <summary>
     /// Absolute path to /source
     /// </summary>
@@ -339,6 +355,64 @@ public sealed partial class Cp77Project(string location, string name, string mod
         }
     }
 
+
+    #region project_state_files
+
+    private const string s_projectFilesDirName = ".projectFiles";
+    private const string s_projectTreeStateFileName = "fileTreeState.json";
+
+    /// <summary>
+    /// Path to <see cref="ProjectDirectory"/>/<see cref="s_projectFilesDirName"/>, where we store temp files
+    /// with interface states (e.g. file tree, open files, etc.)
+    ///
+    /// If we create many more files, we may need to expose this and handle the paths somewhere else
+    /// </summary>
+    private string InterfaceStateFileDirectory
+    {
+        get
+        {
+            var directory = Path.Combine(ProjectDirectory, s_projectFilesDirName);
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
+            return directory;
+        }
+    }
+
+    /// <summary>
+    /// Path to <see cref="InterfaceStateFileDirectory"/>/<see cref="s_projectTreeStateFileName"/>
+    /// where we store the serialized project explorer tree state
+    /// </summary>
+    public string InterfaceProjectTreeStatePath
+    {
+        get
+        {
+            var oldPath = Path.Combine(ProjectDirectory, s_projectTreeStateFileName);
+            var newPath = Path.Combine(InterfaceStateFileDirectory, s_projectTreeStateFileName);
+            if (File.Exists(oldPath))
+            {
+                if (!File.Exists(newPath))
+                {
+                    File.Move(oldPath, newPath, true);
+                }
+                else
+                {
+                    File.Delete(oldPath);
+                }
+            }
+
+            if (!File.Exists(newPath))
+            {
+                File.WriteAllLines(newPath, ["{}"]);
+            }
+
+            return newPath;
+        }
+    }
+
+    #endregion    
 
     /// <summary>
     /// Path to /packed/archive/pc/mod or /packed/mods
@@ -557,7 +631,10 @@ public sealed partial class Cp77Project(string location, string name, string mod
 
     public object Clone()
     {
-        Cp77Project clone = new(Location, Name, ModName) { Author = Author, Email = Email, Version = Version };
+        Cp77Project clone = new(Location, Name, ModName)
+        {
+            Author = Author, Email = Email, Version = Version, OpenProjectFiles = OpenProjectFiles
+        };
         return clone;
     }
 
