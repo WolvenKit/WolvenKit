@@ -875,6 +875,7 @@ namespace WolvenKit.Views.Documents
             if (RootChunk.Tab.Parent.IsDirty)
             {
                 _loggerService.Error("Please save the file before changing animations!");
+                return;
             }
 
             var dialog = new SelectFacialAnimationPathDialog(s_facialSetups);
@@ -885,7 +886,14 @@ namespace WolvenKit.Views.Documents
 
             _documentTools.SetFacialAnimations(RootChunk.Tab.FilePath, dialog.ViewModel?.SelectedFacialAnim,
                 dialog.ViewModel?.SelectedGraph, dialog.ViewModel?.SelectedAnimEntries ?? []);
-            
+
+            // refresh components
+            foreach (var cvm in (RootChunk.GetPropertyChild("appearances")?.TVProperties ?? []).SelectMany(appearance =>
+                         appearance.GetPropertyChild("components")?.TVProperties ?? [])
+                     .SelectMany(cvm => cvm.TVProperties).Where(cvm => cvm.ResolvedData is IRedRef))
+            {
+                cvm.RecalculateProperties();
+            }
         }
         
         
