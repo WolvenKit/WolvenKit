@@ -195,9 +195,10 @@ public class DocumentTools
                         VariableNames = []
                     });
                 }
+
+                animationsWritten = true;
             }
 
-            animationsWritten = true;
         }
 
         if (!facialAnimWritten && !facialGraphWritten && !animationsWritten)

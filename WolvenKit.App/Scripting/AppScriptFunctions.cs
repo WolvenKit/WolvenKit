@@ -736,20 +736,20 @@ public class AppScriptFunctions : ScriptFunctions
             throw new WolvenKitException(0x4003, "No project loaded");
         }
 
-        if (GetBaseFolder(folderType) is not string baseFolder)
+        if (GetBaseFolder(folderType) is not string baseFolder || !Directory.Exists(baseFolder))
         {
             return false;
         }
 
-        var absoluteFilePath = Path.Combine(baseFolder, filepath);
+        var sanitizedFilePath = Path.GetFullPath(filepath).Replace("..", string.Empty);
+        var absoluteFilePath = Path.Combine(baseFolder, sanitizedFilePath);
         if (!File.Exists(absoluteFilePath))
         {
             return false;
         }
-
+        
         File.Delete(absoluteFilePath);
-        ProjectResourceTools.DeleteEmptyParents(absoluteFilePath, proj);
-        return !File.Exists(absoluteFilePath);
+        return !File.Exists(baseFolder);
     }
 
     #region TweakDB

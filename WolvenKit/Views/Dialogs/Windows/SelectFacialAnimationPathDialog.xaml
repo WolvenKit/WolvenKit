@@ -6,12 +6,12 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
     Title="Change facial animation"
+    Width="{StaticResource WolvenKitDialogWidthMedium}"
     SizeToContent="WidthAndHeight"
     DataContext="{Binding RelativeSource={RelativeSource Self},
                           Path=ViewModel}"
     FocusManager.FocusedElement="{Binding ElementName=FacialAnimDropdown}"
     WindowStartupLocation="CenterScreen"
-    Width="{StaticResource WolvenKitDialogWidthSmall}"
     Topmost="True">
 
     <Grid
@@ -53,8 +53,9 @@
                                 <hc:ThemeResources />
                                 <hc:Theme />
                             </ResourceDictionary.MergedDictionaries>
-                            <Style TargetType="{x:Type Label}"
-                                   BasedOn="{StaticResource WolvenkitDialogLabelStyleMedium}" />
+                            <Style
+                                BasedOn="{StaticResource WolvenkitDialogLabelStyleMedium}"
+                                TargetType="{x:Type Label}" />
                         </ResourceDictionary>
                     </Grid.Resources>
                     <Grid.ColumnDefinitions>
@@ -73,10 +74,10 @@
                     <Label
                         Grid.Row="0"
                         Grid.Column="0"
+                        Width="{StaticResource WolvenKitLabelWidthMedium}"
                         HorizontalAlignment="Left"
                         Background="#252525"
                         BorderThickness="0"
-                        Width="{StaticResource WolvenKitLabelWidthMedium}"
                         Content="Animation set" />
                     <!-- Label for the dropdown -->
 
@@ -104,10 +105,10 @@
                     <Label
                         Grid.Row="4"
                         Grid.Column="0"
+                        Width="{StaticResource WolvenKitLabelWidthMedium}"
                         HorizontalAlignment="Left"
                         Background="#252525"
                         BorderThickness="0"
-                        Width="{StaticResource WolvenKitLabelWidthMedium}"
                         Content="Animation entries" />
                     <!-- Label for the dropdown -->
 

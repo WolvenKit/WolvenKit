@@ -177,20 +177,20 @@ namespace WolvenKit.Views.Tools
             foreach (var removedItem in e.RemovedItems.OfType<ChunkViewModel>())
             {
                 removedItem.IsSelected = false;
-                SelectedItems.Remove(removedItem);
-               
+                // make sure we don't end up with duplicates
+                while (SelectedItems.Contains(removedItem))
+                {
+                    SelectedItems.Remove(removedItem);
+                }
+              
             }
 
-            foreach (var addedItem in e.AddedItems.OfType<ChunkViewModel>())
+            // make sure we don't end up with duplicates
+            foreach (var addedItem in e.AddedItems.OfType<ChunkViewModel>().Where(cvm => !SelectedItems.Contains(cvm)))
             {
                 addedItem.IsSelected = true;
                 SelectedItems.Add(addedItem);
-            }
-
-            if (SelectedItem is null)
-            {
-                SetCurrentValue(SelectedItemProperty, e.AddedItems.OfType<ChunkViewModel>().LastOrDefault());
-            }
+            }  
 
             RefreshContextMenuFlags();
             RefreshSelectedItemsContextMenuFlags();
