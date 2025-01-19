@@ -80,6 +80,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly Cr2WTools _cr2WTools;
     private readonly TemplateFileTools _templateFileTools;
     private readonly ProjectResourceTools _projectResourceTools;
+    private readonly IDialogService _dialogService;
 
     // expose to view
     public ISettingsManager SettingsManager { get; init; }
@@ -109,7 +110,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         DocumentTools documentTools,
         Cr2WTools cr2WTools,
         TemplateFileTools templateFileTools,
-        ProjectResourceTools projectResourceTools
+        ProjectResourceTools projectResourceTools,
+        IDialogService dialogService
     )
     {
         _documentViewmodelFactory = documentViewmodelFactory;
@@ -132,6 +134,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _cr2WTools = cr2WTools;
         _templateFileTools = templateFileTools;
         _projectResourceTools = projectResourceTools;
+        _dialogService = dialogService;
 
         _fileValidationScript = _scriptService.GetScripts().ToList()
             .Where(s => s.Name == "run_FileValidation_on_active_tab")
@@ -1122,29 +1125,13 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private bool CanShowSoundModdingTool() => !IsDialogShown && ActiveProject != null;
     [RelayCommand(CanExecute = nameof(CanShowSoundModdingTool))]
-    private async Task ShowSoundModdingTool()
+    private void ShowSoundModdingTool()
     {
         var vm = _dialogViewModelFactory.SoundModdingViewModel();
         if (vm != null)
         {
-            vm.FileHandler = OpenSoundModdingView;
-            await SetActiveDialog(vm);
+            _dialogService.ShowModal(vm);
         }
-
-        //var vm = new SoundModdingViewModel
-        //{
-        //    FileHandler = OpenSoundModdingView
-        //};
-    }
-
-    private async Task OpenSoundModdingView(SoundModdingViewModel? file)
-    {
-        CloseModalCommand.Execute(null);
-        if (file == null)
-        {
-            return;
-        }
-        await Task.CompletedTask;
     }
 
     private bool CanShowScriptManager() => !IsDialogShown;
