@@ -604,6 +604,95 @@ namespace WolvenKit.Views.Documents
 
         }
 
+        /// <summary>
+        /// Filter selected chunks by type. If none are selected, the root chunk will be returned.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private List<ChunkViewModel> GetSelectedChunks(Type type)
+        {
+            var selectedChunks = SelectedChunks.ToList();
+            if (!selectedChunks.All(c => c.PropertyType.IsAssignableTo(type)))
+            {
+                selectedChunks.Clear();
+            }
+
+            if (selectedChunks.Count == 0 && RootChunk is not null)
+            {
+                selectedChunks.Add(RootChunk);
+            }
+
+            return selectedChunks;
+        }
+
+        /// <summary>
+        /// Called from view: remove all partsOverrides from appearances
+        /// </summary>
+        private void OnClearPartsOverridesClick(object _, RoutedEventArgs e)
+        {
+            if (RootChunk?.ResolvedData is not appearanceAppearanceResource app ||
+                RootChunk.GetPropertyChild("appearances") is not ChunkViewModel appearances)
+            {
+                return;
+            }
+
+            var numDeletions = 0;
+            foreach (var appAppearance in app.Appearances.Where(a => (a.Chunk?.PartsOverrides.Count ?? 0) > 0))
+            {
+                appAppearance.Chunk!.PartsOverrides.Clear();
+                numDeletions += 1;
+            }
+
+            if (numDeletions == 0)
+            {
+                _loggerService.Success("No partsOverrides in your .app file!");
+                return;
+            }
+
+            appearances.RecalculateProperties();
+            foreach (var appearance in appearances.TVProperties)
+            {
+                appearance.RecalculateProperties();
+            }
+
+            _loggerService.Success($"Cleared {numDeletions} PartsOverrides");
+            _currentTab?.Parent.SetIsDirty(true);
+        }
+
+        /// <summary>
+        /// Called from view: remove all partsOverrides from appearances
+        /// </summary>
+        private void OnClearPartsValuesClick(object _, RoutedEventArgs e)
+        {
+            if (RootChunk?.ResolvedData is not appearanceAppearanceResource app ||
+                RootChunk.GetPropertyChild("appearances") is not ChunkViewModel appearances)
+            {
+                return;
+            }
+
+            var numDeletions = 0;
+            foreach (var appAppearance in app.Appearances.Where(a => (a.Chunk?.PartsValues.Count ?? 0) > 0))
+            {
+                appAppearance.Chunk!.PartsValues.Clear();
+                numDeletions += 1;
+            }
+
+            if (numDeletions == 0)
+            {
+                _loggerService.Success("No partsValues in your .app file!");
+                return;
+            }
+
+            appearances.RecalculateProperties();
+            foreach (var appearance in appearances.TVProperties)
+            {
+                appearance.RecalculateProperties();
+            }
+
+            _loggerService.Success($"Cleared {numDeletions} partsValues");
+            _currentTab?.Parent.SetIsDirty(true);
+        }
+
         private static List<ChunkViewModel> GetComponentsByName(ChunkViewModel cvm, string componentName)
         {
             List<ChunkViewModel> ret = [];
@@ -662,15 +751,7 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            var selectedChunks = SelectedChunks.ToList();
-            if (!selectedChunks.All(c => c.ResolvedData is appearanceAppearanceDefinition))
-            {
-                selectedChunks.Clear();
-            }
-            if (selectedChunks.Count == 0 && RootChunk is ChunkViewModel cvm)
-            {
-                selectedChunks.Add(cvm);
-            }
+            var selectedChunks = GetSelectedChunks(typeof(appearanceAppearanceDefinition));
 
             ViewModel?.ClearSelection();
             foreach (var chunkViewModel in selectedChunks)
