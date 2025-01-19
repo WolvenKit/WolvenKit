@@ -741,9 +741,8 @@ public class AppScriptFunctions : ScriptFunctions
             return false;
         }
 
-        var sanitizedFilePath = Path.GetFullPath(filepath).Replace("..", string.Empty);
-        var absoluteFilePath = Path.Combine(baseFolder, sanitizedFilePath);
-        if (!File.Exists(absoluteFilePath))
+        var absoluteFilePath = Path.GetFullPath(Path.Combine(baseFolder, filepath));
+        if (!absoluteFilePath.StartsWith(proj.ModDirectory) || !File.Exists(absoluteFilePath))
         {
             return false;
         }
