@@ -34,6 +34,8 @@
     <Color x:Key="WolvenKitPurpleColor">CornflowerBlue</Color>
     <Color x:Key="WolvenKitDarkPinkColor">#AA336A</Color>
     <Color x:Key="WolvenKitTanColor">#D0A467</Color>
+    <Color x:Key="WolvenKitOrangeColor">#FFA359</Color>
+    <Color x:Key="WolvenKitOrangeShadowColor">#8C5A31</Color>
 
     <Color x:Key="WolvenKitCyanShadow50Color">#7F4D8C9A</Color>
     <Color x:Key="WolvenKitCyanShadow25Color">#203a40</Color>
@@ -69,6 +71,8 @@
     <SolidColorBrush x:Key="WolvenKitPurple" Color="{StaticResource WolvenKitPurpleColor}" />
     <SolidColorBrush x:Key="WolvenKitDarkPink" Color="{StaticResource WolvenKitDarkPinkColor}" />
     <SolidColorBrush x:Key="WolvenKitTan" Color="{StaticResource WolvenKitTanColor}" />
+    <SolidColorBrush x:Key="WolvenKitOrange" Color="{StaticResource WolvenKitOrangeColor}" />
+    <SolidColorBrush x:Key="WolvenKitOrangeShadow" Color="{StaticResource WolvenKitOrangeShadowColor}" />
 
     <SolidColorBrush x:Key="WolvenKitRed50" Color="#7FDF2935" />
     <SolidColorBrush x:Key="WolvenKitRedShadow50" Color="{StaticResource WolvenKitRedShadow50Color}" />
