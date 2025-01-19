@@ -818,4 +818,42 @@ public class ProjectResourceTools
         }
     }
 
+    /// <summary>
+    /// Deletes empty parent directories of a given file or folder path.
+    /// </summary>
+    /// <param name="absolutePath">Absolute path to file or folder</param>
+    /// <param name="activeProject">Current Wolvenkit project (so we don't delete too many folders)</param>
+    public static void DeleteEmptyParents(string? absolutePath, Cp77Project activeProject)
+    {
+        var absoluteFolderPath = absolutePath;
+
+        if (Path.HasExtension(absolutePath) || !Directory.Exists(absolutePath))
+        {
+            absoluteFolderPath = Path.GetDirectoryName(absolutePath);
+        }
+
+        // No directory to delete
+        if (absoluteFolderPath is null || !Directory.Exists(absoluteFolderPath))
+        {
+            return;
+        }
+
+        // Do not delete anything directly under the source directory or outside of the project
+        if (absoluteFolderPath == activeProject.FileDirectory ||
+            Path.GetDirectoryName(absoluteFolderPath) == activeProject.FileDirectory ||
+            !absoluteFolderPath.StartsWith(activeProject.FileDirectory))
+        {
+            return;
+        }
+
+        // directory is not empty, return;
+        if (Directory.GetFiles(absoluteFolderPath).Length + Directory.GetDirectories(absoluteFolderPath).Length > 0)
+        {
+            return;
+        }
+
+        Directory.Delete(absoluteFolderPath);
+        DeleteEmptyParents(absoluteFolderPath, activeProject);
+    } 
+
 }
