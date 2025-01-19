@@ -88,7 +88,7 @@ public partial class ChunkViewModel
             return this;
         }
 
-        switch (Data)
+        switch (ResolvedData)
         {
             // .mi file
             case CMaterialInstance when GetTvPropertyFromPath("values") is ChunkViewModel child:
@@ -181,8 +181,20 @@ public partial class ChunkViewModel
                 });
 
                 newThread.Start();
-                break;  
+                break;
+            // .inkcharactercustomization
+            case gameuiSwitcherInfo when GetPropertyFromPath("options") is ChunkViewModel child:
+                ExpandAndSelect(child, true);
+                break;
+            // .inkcharactercustomization
+            case gameuiOptionsGroup when GetPropertyFromPath("options") is ChunkViewModel child:
+                ExpandAndSelect(child, true);
+                break;
             default:
+                if (TVProperties.Count == 1)
+                {
+                    ExpandAndSelect(TVProperties[0], true);
+                }
                 break;
         }
 
