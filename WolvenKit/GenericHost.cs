@@ -68,6 +68,8 @@ namespace WolvenKit
                     services.AddSingleton<ILoggerService, SerilogWrapper>();                    // can this be transient?
                     services.AddSingleton<ITweakDBService, TweakDBService>();
 
+                    services.AddSingleton<IDialogService, DialogService>();
+
                     // scripting
                     services.AddSingleton<IHookService, AppHookService>();
                     services.AddSingleton<AppScriptService>();
@@ -105,7 +107,7 @@ namespace WolvenKit
                     #region shell
 
                     services.AddSingleton<AppViewModel>();
-                    services.AddTransient<IViewFor<AppViewModel>, MainView>();
+                    services.AddSingleton<IViewFor<AppViewModel>, MainView>();
 
                     services.AddTransient<RibbonViewModel>();
                     services.AddTransient<IViewFor<RibbonViewModel>, RibbonView>();

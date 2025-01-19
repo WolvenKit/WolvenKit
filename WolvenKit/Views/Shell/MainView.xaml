@@ -10,6 +10,8 @@
     xmlns:shell="clr-namespace:WolvenKit.Views.Shell"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:syncfusionskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
+    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:services="clr-namespace:WolvenKit.Services"
     Title="{Binding Title}"
     MinWidth="960"
     MinHeight="600"
@@ -29,6 +31,10 @@
     UseLayoutRounding="True"
     UseNativeChrome="True">
     <!-- TextBlock Text="{Binding Title}" FontSize="{Binding TitileFontSize}" VerticalAlignment="Center" Margin="10,0,0,0" Opacity="{Binding Opacity, ElementName=ModalOverlay}"/ -->
+    <b:Interaction.Behaviors>
+        <services:DialogService />
+    </b:Interaction.Behaviors>
+
     <syncfusion:ChromelessWindow.Resources>
         <shell:MyObservableCollection x:Key="leftHeaderItems">
             <shell:MenuBarView />
@@ -374,7 +380,9 @@
                                 Margin="20,10"
                                 FontSize="{DynamicResource WolvenKitFontMedium}"
                                 Text="Loading..." />
-                            <ContentControl Content="{Binding ActiveDialog}" />
+                            <ContentControl
+                                x:Name="ModalContent"
+                                Content="{Binding ActiveDialog}" />
                             <Border
                                 BorderBrush="{StaticResource BorderAlt}"
                                 BorderThickness="1"
