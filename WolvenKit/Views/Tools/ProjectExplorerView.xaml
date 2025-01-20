@@ -471,11 +471,32 @@
                         VerticalAlignment="Center"
                         Text="{Binding Path=Name}" />
 
-                    <!-- Open in Windows Explorer - Open file - Delete -->
+                    <!-- Copy relative path - Open in Windows Explorer - Open file - Delete -->
                     <StackPanel
                         Grid.Column="2"
                         Background="{StaticResource ContentBackground}"
                         Orientation="Horizontal">
+                        
+                        <!-- Copy relative path-->
+                        <helpers:TreeGridButton
+                            BorderBrush="{StaticResource WolvenKitOrange}"
+                            Style="{StaticResource WolvenKitTreeGridButtonDirectory}"
+                            Command="{Binding ViewModel.CopyRelPathCommand,
+                                                   RelativeSource={RelativeSource FindAncestor,
+                                                 AncestorType={x:Type local:ProjectExplorerView}}}"
+                            CommandParameter="{Binding}"
+                            HoverBackground="{StaticResource WolvenKitOrangeShadow}"
+                            ToolTip="Copy relative path to game file">
+                            <helpers:TreeGridButton.Content>
+                                <templates:IconBox
+                                      IconPack="Material"
+                                      Kind="ContentCopy"
+                                      Size="{DynamicResource WolvenKitIconNano}"
+                                      Foreground="#222"
+                                      Loaded="TreeIcon_Loaded" />
+                            </helpers:TreeGridButton.Content>
+                        </helpers:TreeGridButton>
+                        
                         <!-- Open in Explorer -->
                         <helpers:TreeGridButton
                             BorderBrush="{StaticResource WolvenKitYellow}"
