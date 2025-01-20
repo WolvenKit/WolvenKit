@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using Microsoft.VisualBasic;
 using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Helpers;
@@ -142,6 +143,10 @@ public class FileHelper
 
             Directory.Move(destDirTemp, destDirAbsPath);
 
+            if (Directory.Exists(destDirTemp) && !Directory.EnumerateFileSystemEntries(destDirTemp).Any())
+            {
+                Directory.Delete(destDirTemp);
+            }
         }
         catch (IOException e)
         {
