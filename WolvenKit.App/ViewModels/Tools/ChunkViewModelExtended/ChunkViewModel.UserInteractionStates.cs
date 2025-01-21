@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.App.Helpers;
@@ -56,7 +55,7 @@ public partial class ChunkViewModel
     /// If we need a node to be fully initialized (e.g. if we run a search on it)
     /// Cap it off arbitrarily at recursion level 8 (because why not)
     /// </summary>
-    public void CalculatePropertiesRecursive(int recursionLevel = 0)
+    public void CalculatePropertiesRecursive(int recursionLevel = 0, int countLimit = 20)
     {
         if (_isPropertiesInitialized || recursionLevel > 8)
         {
@@ -65,7 +64,7 @@ public partial class ChunkViewModel
 
         _isPropertiesInitialized = true;
         CalculateProperties();
-        if (TVProperties.Count > 20)
+        if (TVProperties.Count > countLimit)
         {
             return;
         }
@@ -78,6 +77,23 @@ public partial class ChunkViewModel
 
 
     private EditorDifficultyLevelInformation DifficultyLevelFieldInformation { get; set; }
+
+
+    /// <summary>
+    /// Check for quest and scenes types
+    /// Added additional search by propertyTypeName to work inside the graph
+    /// </summary>
+    private bool QuestAndScenesSearchHandler(string searchBoxText)
+    {
+        var result = false;
+        // Checking for a resolved property type for scenes and quests graphs
+        if (ResolvedPropertyType is not null)
+        {
+            result = ResolvedPropertyType.Name.Contains(searchBoxText, StringComparison.OrdinalIgnoreCase);
+        }
+
+        return result;
+    }
 
     public void SetVisibilityStatusBySearchString(string searchBoxText)
     {
@@ -124,13 +140,15 @@ public partial class ChunkViewModel
 
         shouldShow = shouldShow || PropertyType.Name.Contains(searchBoxText, StringComparison.OrdinalIgnoreCase);
 
+        shouldShow = shouldShow || QuestAndScenesSearchHandler(searchBoxText);
+
         // Hiding cnames that are part of the parent property's description
         if (shouldShow && ResolvedData is CName cname && cname.GetResolvedText() is string s &&
             (Parent.Descriptor?.Contains(s) == true || Parent.Value?.Contains(s) == true))
         {
             shouldShow = false;
         }
-        
+
         IsHiddenBySearch = !shouldShow;
 
         if (IsHiddenBySearch)

@@ -565,7 +565,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         {
             if (ModifierViewStateService.IsShiftBeingHeld)
             {
-                chunkViewModel.CalculatePropertiesRecursive();
+                chunkViewModel.CalculatePropertiesRecursive(0, 100);
             }
             chunkViewModel.SetVisibilityStatusBySearchString(searchBoxText);
         }
