@@ -76,7 +76,7 @@ public class MaterialExtractor
         var localMaterials = (cMesh.LocalMaterialBuffer.Materials ?? []).ToList();
 
         // Collect material entries. Consider ArchiveXL dynamic materials.
-        foreach (var materialEntry in cMesh.MaterialEntries)
+        foreach (var materialEntry in cMesh.MaterialEntries.OrderBy(m => m.Index))
         {
             var materialName = materialEntry.Name.GetResolvedText()!;
             var indexName = materialEntry.IsLocalInstance ? $"l_{materialEntry.Index}" : $"e_{materialEntry.Index}";
