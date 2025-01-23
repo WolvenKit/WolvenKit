@@ -76,6 +76,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<VehicleVisualCustomizationTemplate>(value);
 		}
 
+		[Ordinal(11)] 
+		[RED("outroAnimProxy")] 
+		public CHandle<inkanimProxy> OutroAnimProxy
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
 		public TwintoneOverrideGameController()
 		{
 			OverrideButtonHit = new inkWidgetReference();

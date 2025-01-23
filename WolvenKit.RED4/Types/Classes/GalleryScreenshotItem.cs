@@ -45,22 +45,30 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(6)] 
-		[RED("errorText")] 
-		public inkWidgetReference ErrorText
+		[RED("errorVisual")] 
+		public inkWidgetReference ErrorVisual
 		{
 			get => GetPropertyValue<inkWidgetReference>();
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(7)] 
-		[RED("selectedBoder")] 
-		public inkWidgetReference SelectedBoder
+		[RED("selectedBorder")] 
+		public inkWidgetReference SelectedBorder
 		{
 			get => GetPropertyValue<inkWidgetReference>();
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(8)] 
+		[RED("galleryMenuGameController")] 
+		public CWeakHandle<GalleryMenuGameController> GalleryMenuGameController
+		{
+			get => GetPropertyValue<CWeakHandle<GalleryMenuGameController>>();
+			set => SetPropertyValue<CWeakHandle<GalleryMenuGameController>>(value);
+		}
+
+		[Ordinal(9)] 
 		[RED("preloader")] 
 		public CWeakHandle<inkCompoundWidget> Preloader
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkCompoundWidget>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("basePreviewSize")] 
 		public Vector2 BasePreviewSize
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector2>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("screenshotData")] 
 		public CHandle<GalleryScreenshotPreviewData> ScreenshotData
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<GalleryScreenshotPreviewData>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("buttonHintsController")] 
 		public CWeakHandle<ButtonHints> ButtonHintsController
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ButtonHints>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("isHovered")] 
 		public CBool IsHovered
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("canBeHoveredOver")] 
 		public CBool CanBeHoveredOver
 		{
@@ -115,8 +123,8 @@ namespace WolvenKit.RED4.Types
 			HoverFrame = new inkWidgetReference();
 			FavoriteIcon = new inkWidgetReference();
 			EmptyBackground = new inkWidgetReference();
-			ErrorText = new inkWidgetReference();
-			SelectedBoder = new inkWidgetReference();
+			ErrorVisual = new inkWidgetReference();
+			SelectedBorder = new inkWidgetReference();
 			BasePreviewSize = new Vector2();
 			CanBeHoveredOver = true;
 

@@ -461,6 +461,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(63)] 
+		[RED("introComplete")] 
+		public CBool IntroComplete
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(64)] 
 		[RED("isPresetHoveredOver")] 
 		public CBool IsPresetHoveredOver
 		{
@@ -468,7 +476,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(65)] 
+		[RED("randomizationSettingsNavController")] 
+		public CWeakHandle<inkDiscreteNavigationController> RandomizationSettingsNavController
+		{
+			get => GetPropertyValue<CWeakHandle<inkDiscreteNavigationController>>();
+			set => SetPropertyValue<CWeakHandle<inkDiscreteNavigationController>>(value);
+		}
+
+		[Ordinal(66)] 
+		[RED("randomizationNavController")] 
+		public CWeakHandle<inkDiscreteNavigationController> RandomizationNavController
+		{
+			get => GetPropertyValue<CWeakHandle<inkDiscreteNavigationController>>();
+			set => SetPropertyValue<CWeakHandle<inkDiscreteNavigationController>>(value);
+		}
+
+		[Ordinal(67)] 
 		[RED("maxColorPickerHeight")] 
 		public CFloat MaxColorPickerHeight
 		{
@@ -476,7 +500,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(68)] 
 		[RED("minColorPickerHeight")] 
 		public CFloat MinColorPickerHeight
 		{
@@ -484,7 +508,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(69)] 
 		[RED("colorPickerHeightPerRow")] 
 		public CFloat ColorPickerHeightPerRow
 		{
