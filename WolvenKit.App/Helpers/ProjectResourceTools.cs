@@ -609,8 +609,9 @@ public class ProjectResourceTools
                 {
                     ReplacePathInFile(activeProject, file, oldPath, newPath);
                 }
-                catch (Exception)
+                catch (Exception err)
                 {
+                    _loggerService.Error(err.Message);
                     failedFiles.Add(file.RelativePath(activeProject.ModDirectory));
                 }
             });
@@ -805,9 +806,16 @@ public class ProjectResourceTools
                         case CKeyValuePair kvp:
                             kvp.Value = newValue;
                             break;
+                        case IRedHandle handle when handle.GetValue() is gameuiAppearanceInfo appInfo:
+                            appInfo.Resource =
+                                new CResourceAsyncReference<appearanceAppearanceResource>(newValue.DepotPath);
+                            break;
+                        case IRedHandle ira:
+                            throw new NotImplementedException(
+                                $"Can't replace in IRedHandle property type {ira.RedType}, please file a ticket");
                         default:
                             throw new NotImplementedException(
-                                $"Can't replace in property type {parentClass.Item2?.GetType().Name}");
+                                $"Can't replace in property type {parentClass.Item2?.GetType().Name}, please file a ticket");
                     }
 
                     _loggerService?.Debug($"Replaced \"{result.Path}\" in \"{absoluteFilePath}\"");
