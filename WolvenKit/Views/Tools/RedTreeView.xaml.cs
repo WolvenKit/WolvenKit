@@ -111,6 +111,12 @@ namespace WolvenKit.Views.Tools
                     (item as ChunkViewModel)?.IsHiddenBySearch != true;
                 SetCurrentValue(ItemsSourceProperty, collectionView);
             }
+            else
+            {
+                // Reloading/reopening file should clear selected properties
+                SelectedItems.Clear();
+                SetCurrentValue(SelectedItemProperty, null);
+            }
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ItemsSource)));
         }
@@ -174,22 +180,22 @@ namespace WolvenKit.Views.Tools
         private void OnSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
         {
             SelectedItems ??= [];
-            foreach (var removedItem in e.RemovedItems.OfType<ISelectableTreeViewItemModel>())
+
+            // make sure we don't end up with duplicates
+            foreach (var removedItem in e.RemovedItems.OfType<ChunkViewModel>())
             {
                 removedItem.IsSelected = false;
-                if (removedItem is ChunkViewModel cvm)
+                while (SelectedItems.Contains(removedItem))
                 {
-                    SelectedItems.Remove(cvm);
+                    SelectedItems.Remove(removedItem);
                 }
             }
 
-            foreach (var addedItem in e.AddedItems.OfType<ISelectableTreeViewItemModel>())
+            // We won't have duplicate selections anymore, because we removed everything
+            foreach (var addedItem in e.AddedItems.OfType<ChunkViewModel>())
             {
                 addedItem.IsSelected = true;
-                if (addedItem is ChunkViewModel cvm)
-                {
-                    SelectedItems.Add(cvm);
-                }
+                SelectedItems.Add(addedItem);
             }  
 
             RefreshContextMenuFlags();
@@ -792,7 +798,7 @@ namespace WolvenKit.Views.Tools
         private void RefreshContextMenuFlags()
         {
             var selectedItems = GetSelectedChunks();
-            var selectedItem = selectedItems.FirstOrDefault();
+            var selectedItem = selectedItems.LastOrDefault();
 
             SetCurrentValue(HasSelectionProperty, selectedItems.Count > 0);
             SetCurrentValue(HasMultipleItemsSelectedProperty, selectedItems.Count > 1);
@@ -1160,7 +1166,7 @@ namespace WolvenKit.Views.Tools
         {
             if (SelectedItems is not null)
             {
-                return SelectedItems.ToList();
+                return [.. SelectedItems];
             }
 
             if (SelectedItem is not null)
