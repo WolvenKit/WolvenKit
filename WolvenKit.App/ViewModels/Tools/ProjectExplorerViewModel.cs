@@ -204,6 +204,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 _projectWatcher.WatchProject(ActiveProject);
             }
 
+            Refresh();
             OnProjectChanged?.Invoke();
         }, DispatcherPriority.ContextIdle);
     }
