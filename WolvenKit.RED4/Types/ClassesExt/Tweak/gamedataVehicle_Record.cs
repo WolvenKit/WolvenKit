@@ -211,6 +211,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 		
+		[RED("excludedComponentsCustomization")]
+		[REDProperty(IsIgnored = true)]
+		public CArray<CName> ExcludedComponentsCustomization
+		{
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
+		}
+		
 		[RED("excludedComponentsGeneric")]
 		[REDProperty(IsIgnored = true)]
 		public CArray<CName> ExcludedComponentsGeneric

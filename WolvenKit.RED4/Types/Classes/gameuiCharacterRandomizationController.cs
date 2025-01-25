@@ -92,6 +92,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameuiICharacterCustomizationSystem>>(value);
 		}
 
+		[Ordinal(12)] 
+		[RED("punkSliderController")] 
+		public CWeakHandle<PunkScoreSelectorControllerInt> PunkSliderController
+		{
+			get => GetPropertyValue<CWeakHandle<PunkScoreSelectorControllerInt>>();
+			set => SetPropertyValue<CWeakHandle<PunkScoreSelectorControllerInt>>(value);
+		}
+
 		public gameuiCharacterRandomizationController()
 		{
 			PunkSlider = new inkWidgetReference();

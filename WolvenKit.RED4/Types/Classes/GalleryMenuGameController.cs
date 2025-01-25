@@ -77,6 +77,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(12)] 
+		[RED("noPermissionWidget")] 
+		public inkWidgetReference NoPermissionWidget
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(13)] 
+		[RED("noPermissionController")] 
+		public CWeakHandle<GalleryPopup> NoPermissionController
+		{
+			get => GetPropertyValue<CWeakHandle<GalleryPopup>>();
+			set => SetPropertyValue<CWeakHandle<GalleryPopup>>(value);
+		}
+
+		[Ordinal(14)] 
 		[RED("globalPreloader")] 
 		public CWeakHandle<inkWidget> GlobalPreloader
 		{
@@ -84,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(15)] 
 		[RED("paginationController")] 
 		public CWeakHandle<PaginationController> PaginationController
 		{
@@ -92,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PaginationController>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(16)] 
 		[RED("buttonHintsController")] 
 		public CWeakHandle<ButtonHints> ButtonHintsController
 		{
@@ -100,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ButtonHints>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(17)] 
 		[RED("systemHandler")] 
 		public CWeakHandle<inkISystemRequestsHandler> SystemHandler
 		{
@@ -108,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkISystemRequestsHandler>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(18)] 
 		[RED("gameInstance")] 
 		public ScriptGameInstance GameInstance
 		{
@@ -116,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<ScriptGameInstance>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(19)] 
 		[RED("screenshotInfos")] 
 		public CArray<inkGameScreenshotInfo> ScreenshotInfos
 		{
@@ -124,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<inkGameScreenshotInfo>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("sortedScreenshotInfos")] 
 		public CArray<inkGameScreenshotInfo> SortedScreenshotInfos
 		{
@@ -132,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<inkGameScreenshotInfo>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(21)] 
 		[RED("screenshotFullPreviewPopupToken")] 
 		public CHandle<inkGameNotificationToken> ScreenshotFullPreviewPopupToken
 		{
@@ -140,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(22)] 
 		[RED("filterTypes")] 
 		public CArray<CEnum<inkGameScreenshotSortMode>> FilterTypes
 		{
@@ -148,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CEnum<inkGameScreenshotSortMode>>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(23)] 
 		[RED("activeSort")] 
 		public CWeakHandle<GalleryFilterController> ActiveSort
 		{
@@ -156,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<GalleryFilterController>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(24)] 
 		[RED("isFavoriteFiltering")] 
 		public CBool IsFavoriteFiltering
 		{
@@ -164,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(25)] 
 		[RED("screenshotItems")] 
 		public CArray<CWeakHandle<GalleryScreenshotItem>> ScreenshotItems
 		{
@@ -172,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<GalleryScreenshotItem>>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(26)] 
 		[RED("pageCount")] 
 		public CInt32 PageCount
 		{
@@ -180,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(27)] 
 		[RED("currentPage")] 
 		public CInt32 CurrentPage
 		{
@@ -188,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(28)] 
 		[RED("tooltipsManager")] 
 		public CWeakHandle<gameuiTooltipsManager> TooltipsManager
 		{
@@ -196,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameuiTooltipsManager>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(29)] 
 		[RED("favoriteManager")] 
 		public CWeakHandle<GalleryFavoriteManager> FavoriteManager
 		{
@@ -204,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<GalleryFavoriteManager>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(30)] 
 		[RED("onInputDeviceChangedCallbackID")] 
 		public CHandle<redCallbackObject> OnInputDeviceChangedCallbackID
 		{
@@ -212,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(31)] 
 		[RED("deleteConfirmationToken")] 
 		public CHandle<inkGameNotificationToken> DeleteConfirmationToken
 		{
@@ -220,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(32)] 
 		[RED("deleteScreenshotId")] 
 		public CInt32 DeleteScreenshotId
 		{
@@ -228,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(33)] 
 		[RED("visualStateName")] 
 		public CName VisualStateName
 		{
@@ -236,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(34)] 
 		[RED("isSecondaryActionEnabled")] 
 		public CBool IsSecondaryActionEnabled
 		{
@@ -244,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(35)] 
 		[RED("filterButtons")] 
 		public CArray<CWeakHandle<GalleryFilterController>> FilterButtons
 		{
@@ -252,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<GalleryFilterController>>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(36)] 
 		[RED("canInteract")] 
 		public CBool CanInteract
 		{
@@ -260,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(37)] 
 		[RED("playerObj")] 
 		public CWeakHandle<gameObject> PlayerObj
 		{
@@ -268,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(38)] 
 		[RED("pageToDisplayOnLoad")] 
 		public CInt32 PageToDisplayOnLoad
 		{
@@ -286,6 +302,7 @@ namespace WolvenKit.RED4.Types
 			FiltersGrid = new inkWidgetReference();
 			PaginationWidget = new inkCompoundWidgetReference();
 			GlobalPreloaderContainer = new inkWidgetReference();
+			NoPermissionWidget = new inkWidgetReference();
 			GameInstance = new ScriptGameInstance();
 			ScreenshotInfos = new();
 			SortedScreenshotInfos = new();
