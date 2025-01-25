@@ -111,6 +111,12 @@ namespace WolvenKit.Views.Tools
                     (item as ChunkViewModel)?.IsHiddenBySearch != true;
                 SetCurrentValue(ItemsSourceProperty, collectionView);
             }
+            else
+            {
+                // Reloading/reopening file should clear selected properties
+                SelectedItems.Clear();
+                SetCurrentValue(SelectedItemProperty, null);
+            }
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ItemsSource)));
         }
@@ -175,11 +181,8 @@ namespace WolvenKit.Views.Tools
         {
             SelectedItems ??= [];
 
-            // make sure we don't end up with duplicates, e
-            var itemsToRemove = e.RemovedItems.OfType<ChunkViewModel>().ToList();
-            itemsToRemove.AddRange(e.AddedItems.OfType<ChunkViewModel>());
-
-            foreach (var removedItem in itemsToRemove)
+            // make sure we don't end up with duplicates
+            foreach (var removedItem in e.RemovedItems.OfType<ChunkViewModel>())
             {
                 removedItem.IsSelected = false;
                 while (SelectedItems.Contains(removedItem))
@@ -795,7 +798,7 @@ namespace WolvenKit.Views.Tools
         private void RefreshContextMenuFlags()
         {
             var selectedItems = GetSelectedChunks();
-            var selectedItem = selectedItems.FirstOrDefault();
+            var selectedItem = selectedItems.LastOrDefault();
 
             SetCurrentValue(HasSelectionProperty, selectedItems.Count > 0);
             SetCurrentValue(HasMultipleItemsSelectedProperty, selectedItems.Count > 1);
@@ -1163,7 +1166,7 @@ namespace WolvenKit.Views.Tools
         {
             if (SelectedItems is not null)
             {
-                return SelectedItems.ToList();
+                return [.. SelectedItems];
             }
 
             if (SelectedItem is not null)
