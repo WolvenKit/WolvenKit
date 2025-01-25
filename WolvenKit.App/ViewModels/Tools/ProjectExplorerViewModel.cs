@@ -143,6 +143,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         RefreshProjectData();
 
         // On first project load, we're already initialized, so this won't fire
+        Refresh();
         OnProjectChanged?.Invoke();
     }
 
