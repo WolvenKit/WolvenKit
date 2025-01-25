@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -140,6 +141,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private void AppViewModel_OnInitialProjectLoaded(object? sender, EventArgs e)
     {
         RefreshProjectData();
+
+        // On first project load, we're already initialized, so this won't fire
+        OnProjectChanged?.Invoke();
     }
 
     /// <summary>
@@ -204,7 +208,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 _projectWatcher.WatchProject(ActiveProject);
             }
 
-            Refresh();
             OnProjectChanged?.Invoke();
         }, DispatcherPriority.ContextIdle);
     }
