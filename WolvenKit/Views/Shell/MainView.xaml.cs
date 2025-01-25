@@ -51,7 +51,7 @@ namespace WolvenKit.Views.Shell
             
             this.WhenActivated(disposables =>
             {
-                Disposable.Create(dockingAdapter.SaveLayout).DisposeWith(disposables);
+                Disposable.Create(() => dockingAdapter.SaveLayout()).DisposeWith(disposables);
 
                 Interactions.ShowConfirmation = ShowConfirmation;
                 Interactions.ShowQuestionYesNo = ShowQuestionYesNo;
