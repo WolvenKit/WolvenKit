@@ -174,19 +174,22 @@ namespace WolvenKit.Views.Tools
         private void OnSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
         {
             SelectedItems ??= [];
-            foreach (var removedItem in e.RemovedItems.OfType<ChunkViewModel>())
+
+            // make sure we don't end up with duplicates, e
+            var itemsToRemove = e.RemovedItems.OfType<ChunkViewModel>().ToList();
+            itemsToRemove.AddRange(e.AddedItems.OfType<ChunkViewModel>());
+
+            foreach (var removedItem in itemsToRemove)
             {
                 removedItem.IsSelected = false;
-                // make sure we don't end up with duplicates
                 while (SelectedItems.Contains(removedItem))
                 {
                     SelectedItems.Remove(removedItem);
                 }
-              
             }
 
-            // make sure we don't end up with duplicates
-            foreach (var addedItem in e.AddedItems.OfType<ChunkViewModel>().Where(cvm => !SelectedItems.Contains(cvm)))
+            // We won't have duplicate selections anymore, because we removed everything
+            foreach (var addedItem in e.AddedItems.OfType<ChunkViewModel>())
             {
                 addedItem.IsSelected = true;
                 SelectedItems.Add(addedItem);
