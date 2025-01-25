@@ -1,8 +1,10 @@
+using System.IO;
 using System.Reactive.Disposables;
 using System.Windows;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App.Interaction;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
 
 namespace WolvenKit.Views.Shell;
@@ -258,5 +260,9 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
 
     private void SetLayoutToDefault(object sender, RoutedEventArgs e) => DockingAdapter.G_Dock.LoadDefaultLayout();
     private void SaveLayoutToProject(object sender, RoutedEventArgs e) => DockingAdapter.G_Dock.SaveLayout();
+
+    private void ResetDefaultLayout(object sender, RoutedEventArgs e) => DockingAdapter.G_Dock.ResetDefaultLayout();
+
+    private void SaveCurrentLayoutToDefault(object sender, RoutedEventArgs e) => DockingAdapter.G_Dock.SaveLayout(true);
     private void GenerateMaterialRepoButton_Click(object sender, RoutedEventArgs e) => Interactions.ShowMaterialRepositoryView();
 }

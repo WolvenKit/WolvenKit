@@ -38,6 +38,8 @@ public partial class MenuBarViewModel : ObservableObject
         
         MainViewModel.DockedViewVisibleChanged += MainViewModel_OnDockedViewVisibleChanged;
         SettingsManager.PropertyChanged += SettingsManager_PropertyChanged;
+
+        appViewModel.PropertyChanged += AppViewModel_PropertyChanged;
     }
 
     private void SettingsManager_PropertyChanged(object? sender, PropertyChangedEventArgs e) =>
@@ -151,4 +153,16 @@ public partial class MenuBarViewModel : ObservableObject
 
         MainViewModel.GetToolViewModel<LocKeyBrowserViewModel>().IsVisible = value;
     }
+
+    [ObservableProperty] private bool? _hasOpenProject;
+
+    private void AppViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        HasOpenProject ??= MainViewModel.ActiveProject != null;
+        if (e.PropertyName == nameof(AppViewModel.ActiveProject))
+        {
+            HasOpenProject = true;
+        }
+    }        
+    
 }
