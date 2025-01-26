@@ -57,6 +57,7 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
                 RenameEmbeddedFileCommand.NotifyCanExecuteChanged();
                 break;
             case nameof(RDTDataViewModel.SelectedChunk):
+            case nameof(RDTDataViewModel.SelectedChunks):
                 OnSelected();
                 break;
             case nameof(RDTDataViewModel.CurrentSearch):
@@ -265,7 +266,7 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
     }
 
 
-    public static event EventHandler? OnSelectionChanged;
+    public event EventHandler? OnSelectionChanged;
     public virtual void OnSelected() => OnSelectionChanged?.Invoke(this, EventArgs.Empty);
 
     // Do nothing, overwrite in inheriting classes
