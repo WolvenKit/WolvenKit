@@ -382,6 +382,11 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
     private void InternalRefresh()
     {
+        if (string.IsNullOrEmpty(_projectDirectory))
+        {
+            return;
+        }
+        
         ForceStop();
         Clear();
 

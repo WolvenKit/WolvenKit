@@ -485,30 +485,73 @@
 
                 <Separator />
 
+                <!-- sub-menu "default layout" -->
                 <MenuItem
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
-                    Click="SaveLayoutToProject"
-                    Header="Save Layout to Project">
-                    <MenuItem.Icon>
-                        <local:IconBox
-                            IconPack="Codicons"
-                            Kind="Save"
-                            Size="{DynamicResource WolvenKitIconTiny}" />
-                    </MenuItem.Icon>
-                </MenuItem>
+                    Header="Layout">
 
-                <MenuItem
-                    Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
-                    Click="SetLayoutToDefault"
-                    Header="Reset Layout">
                     <MenuItem.Icon>
                         <local:IconBox
-                            IconPack="MaterialDesign"
-                            Kind="Refresh"
+                            IconPack="Empty"
                             Size="{DynamicResource WolvenKitIconTiny}" />
                     </MenuItem.Icon>
+
+
+                    <MenuItem
+                        Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                        IsEnabled="{Binding HasOpenProject}"
+                        Click="SaveLayoutToProject"
+                        Header="Save Layout to Project">
+                        <MenuItem.Icon>
+                            <local:IconBox
+                                IconPack="Codicons"
+                                Kind="Save"
+                                Size="{DynamicResource WolvenKitIconTiny}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                    <MenuItem
+                        Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                        IsEnabled="{Binding HasOpenProject}"
+                        Click="SetLayoutToDefault"
+                        Header="Reset Project Layout">
+                        <MenuItem.Icon>
+                            <local:IconBox
+                                IconPack="MaterialDesign"
+                                Kind="Refresh"
+                                Size="{DynamicResource WolvenKitIconTiny}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                    <Separator />
+
+                    <MenuItem
+                        Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                        Click="SaveCurrentLayoutToDefault"
+                        Header="Save Default Layout">
+                        <MenuItem.Icon>
+                            <local:IconBox
+                                IconPack="MaterialDesign"
+                                Kind="Save"
+                                Size="{DynamicResource WolvenKitIconTiny}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                    <MenuItem
+                        Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                        Click="ResetDefaultLayout"
+                        Header="Reset Default Layout">
+                        <MenuItem.Icon>
+                            <local:IconBox
+                                IconPack="MaterialDesign"
+                                Kind="ResetTv"
+                                Size="{DynamicResource WolvenKitIconTiny}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
             </MenuItem>
+
+
 
             <!-- Tools -->
             <MenuItem

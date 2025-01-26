@@ -609,8 +609,9 @@ public class ProjectResourceTools
                 {
                     ReplacePathInFile(activeProject, file, oldPath, newPath);
                 }
-                catch (Exception)
+                catch (Exception err)
                 {
+                    _loggerService.Error(err.Message);
                     failedFiles.Add(file.RelativePath(activeProject.ModDirectory));
                 }
             });
@@ -805,9 +806,16 @@ public class ProjectResourceTools
                         case CKeyValuePair kvp:
                             kvp.Value = newValue;
                             break;
+                        case IRedHandle handle when handle.GetValue() is gameuiAppearanceInfo appInfo:
+                            appInfo.Resource =
+                                new CResourceAsyncReference<appearanceAppearanceResource>(newValue.DepotPath);
+                            break;
+                        case IRedHandle ira:
+                            throw new NotImplementedException(
+                                $"Can't replace in IRedHandle property type {ira.RedType}, please file a ticket");
                         default:
                             throw new NotImplementedException(
-                                $"Can't replace in property type {parentClass.Item2?.GetType().Name}");
+                                $"Can't replace in property type {parentClass.Item2?.GetType().Name}, please file a ticket");
                     }
 
                     _loggerService?.Debug($"Replaced \"{result.Path}\" in \"{absoluteFilePath}\"");
@@ -817,5 +825,43 @@ public class ProjectResourceTools
             }
         }
     }
+
+    /// <summary>
+    /// Deletes empty parent directories of a given file or folder path.
+    /// </summary>
+    /// <param name="absolutePath">Absolute path to file or folder</param>
+    /// <param name="activeProject">Current Wolvenkit project (so we don't delete too many folders)</param>
+    public static void DeleteEmptyParents(string? absolutePath, Cp77Project activeProject)
+    {
+        var absoluteFolderPath = absolutePath;
+
+        if (Path.HasExtension(absolutePath) || !Directory.Exists(absolutePath))
+        {
+            absoluteFolderPath = Path.GetDirectoryName(absolutePath);
+        }
+
+        // No directory to delete
+        if (absoluteFolderPath is null || !Directory.Exists(absoluteFolderPath))
+        {
+            return;
+        }
+
+        // Do not delete anything directly under the source directory or outside of the project
+        if (absoluteFolderPath == activeProject.FileDirectory ||
+            Path.GetDirectoryName(absoluteFolderPath) == activeProject.FileDirectory ||
+            !absoluteFolderPath.StartsWith(activeProject.FileDirectory))
+        {
+            return;
+        }
+
+        // directory is not empty, return;
+        if (Directory.GetFiles(absoluteFolderPath).Length + Directory.GetDirectories(absoluteFolderPath).Length > 0)
+        {
+            return;
+        }
+
+        Directory.Delete(absoluteFolderPath);
+        DeleteEmptyParents(absoluteFolderPath, activeProject);
+    } 
 
 }

@@ -87,14 +87,14 @@ namespace WolvenKit.Views.Shell
 
         #region methods
 
-        public void SaveLayout()
+        public void SaveLayout(bool saveAsDefault = false)
         {
             if (ItemsSource == null)
             {
                 return;
             }
 
-            if (DataContext is AppViewModel { ActiveProject: { } project })
+            if (!saveAsDefault && DataContext is AppViewModel { ActiveProject: { } project })
             {
                 SaveLayout(Path.Combine(project.ProjectDirectory, "layout.xml"));
             }
@@ -103,7 +103,7 @@ namespace WolvenKit.Views.Shell
                 SaveLayout(Path.Combine(ISettingsManager.GetAppData(), "DockStates.xml"));
             }
         }
-
+        
         private void SaveLayout(string filePath)
         {
             var tmpPath = Path.ChangeExtension(filePath, ".tmp");
@@ -164,6 +164,19 @@ namespace WolvenKit.Views.Shell
             }
         }
 
+        public void ResetDefaultLayout()
+        {
+            var appDataLayoutPath = Path.Combine(ISettingsManager.GetAppData(), "DockStates.xml");
+            if (!File.Exists(appDataLayoutPath))
+            {
+                _logger.Info("You don't have a custom default layout");
+                return;
+            }
+
+            File.Delete(appDataLayoutPath);
+            _logger.Success("Your custom default layout was reset");
+        }        
+        
         public void LoadDefaultLayout()
         {
             if (DataContext is AppViewModel { ActiveProject: { } project })

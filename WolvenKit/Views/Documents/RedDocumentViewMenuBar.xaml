@@ -600,6 +600,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <!-- App file: edit components -->
                 <MenuItem
                     Style="{StaticResource ShowAppMenuItemStyle}"
                     Header="Edit components">
@@ -635,6 +636,21 @@
                                 Foreground="{StaticResource WolvenKitGraphLabel}" />
                         </MenuItem.Icon>
                     </MenuItem>
+                </MenuItem>
+
+                <!-- App file: delete things -->
+                <MenuItem
+                    Style="{StaticResource ShowAppMenuItemStyle}"
+                    Header="Delete...">
+
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Delete..."
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}"
+                            Foreground="{DynamicResource WolvenKitRed}" />
+                    </MenuItem.Icon>
 
                     <!-- Delete component in all appearances -->
                     <MenuItem
@@ -649,8 +665,33 @@
                         </MenuItem.Icon>
                     </MenuItem>
 
-                </MenuItem>
+                    <!-- Clear PartsOverrides in all appearances -->
+                    <MenuItem
+                        Style="{StaticResource ShowAppMenuItemStyle}"
+                        Header="Clear PartsOverrides"
+                        Click="OnClearPartsOverridesClick">
+                        <MenuItem.Icon>
+                            <templates:IconBox
+                                IconPack="Material"
+                                Kind="PlaylistRemove"
+                                Foreground="{StaticResource WolvenKitRed}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
 
+                    <!-- Clear PartsValues in all appearances -->
+                    <MenuItem
+                        Style="{StaticResource ShowAppMenuItemStyle}"
+                        Header="Clear PartsValues"
+                        Click="OnClearPartsValuesClick">
+                        <MenuItem.Icon>
+                            <templates:IconBox
+                                IconPack="Material"
+                                Kind="PlaylistRemove"
+                                Foreground="{StaticResource WolvenKitRed}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                </MenuItem>
 
                 <!-- Connect to .ent file -->
                 <MenuItem
