@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types;
 
 [RED("Float")]
 [DebuggerDisplay("{_value,nq}", Type = "CFloat")]
-public readonly struct CFloat : IRedPrimitive<float>, IEquatable<CFloat>, IRedInteger
+public readonly struct CFloat : IRedPrimitive<float>, IComparable, IComparable<CFloat>, IEquatable<CFloat>, IRedInteger
 {
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private readonly float _value;
@@ -45,4 +45,46 @@ public readonly struct CFloat : IRedPrimitive<float>, IEquatable<CFloat>, IRedIn
 
     public override string ToString() => _value.ToString("G9");
     public string ToString(CultureInfo cultureInfo) => _value.ToString("G9", cultureInfo);
+
+    #region IComparable, IComparable<CFloat>
+
+    public int CompareTo(object? value)
+    {
+        if (value == null)
+        {
+            return 1;
+        }
+        if (value is CFloat f)
+        {
+            return CompareTo(f);
+        }
+        throw new ArgumentException("Value is not a CFloat", nameof(value));
+    }
+
+    public int CompareTo(CFloat value)
+    {
+        if (_value < value)
+        {
+            return -1;
+        }
+
+        if (_value > value)
+        {
+            return 1;
+        }
+
+        if (_value == value._value)
+        {
+            return 0;
+        }
+
+        if (float.IsNaN(_value))
+        {
+            return float.IsNaN(value._value) ? 0 : -1;
+        }
+
+        return 1;
+    }
+
+    #endregion IComparable, IComparable<CFloat>
 }
