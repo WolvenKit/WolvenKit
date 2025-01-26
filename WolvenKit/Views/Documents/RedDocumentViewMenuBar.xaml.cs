@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
+using DynamicData.Kernel;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App;
@@ -310,7 +311,34 @@ namespace WolvenKit.Views.Documents
             cvm.DeleteUnusedMaterialsCommand.Execute(true);
             cvm.Tab?.Parent.SetIsDirty(true);
         }
+        
+        private void OnConvertToCCXLMaterials(object _, RoutedEventArgs e) 
+        {
+            if (ViewModel?.RootChunk is not ChunkViewModel cvm || RootChunk?.ResolvedData is not CMesh mesh)
+            {
+                return;
+            }
+            cvm.GetPropertyChild("appearances")?.CalculateProperties();
+            cvm.GetPropertyChild("materialEntries")?.CalculateProperties();
+            cvm.GetPropertyChild("externalMaterials")?.CalculateProperties();
+            var app = mesh.Appearances.First();
+            
+            mesh.Appearances.Clear();
+            mesh.MaterialEntries.Clear();
+            mesh.ExternalMaterials.Clear();
 
+            var material = new CMeshMaterialEntry() { Name = "@context", Index = (CUInt16)0, IsLocalInstance = true };
+            app.Chunk!.ChunkMaterials.Clear();
+            app.Chunk!.ChunkMaterials = ["@context"];
+            mesh.MaterialEntries.Add(material);
+            mesh.Appearances.Add(app);
+
+            cvm.GetPropertyChild("appearances")?.RecalculateProperties();
+            cvm.GetPropertyChild("materialEntries")?.RecalculateProperties();
+            cvm.GetPropertyChild("externalMaterials")?.RecalculateProperties();
+            _loggerService.Success("Mesh converted to CCXL!");
+            _currentTab?.Parent.SetIsDirty(true);
+        }
         public event EventHandler<EditorDifficultyLevel>? EditorDifficultChanged;
 
         private void OnEditorModeClick(EditorDifficultyLevel level)
@@ -603,6 +631,77 @@ namespace WolvenKit.Views.Documents
             }
 
         }
+
+        /// <summary>
+        /// Filter selected chunks by type. If none are selected, the root chunk will be returned.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private List<ChunkViewModel> GetSelectedChunks(Type type)
+        {
+            var selectedChunks = SelectedChunks.ToList();
+            if (!selectedChunks.All(c => c.PropertyType.IsAssignableTo(type)))
+            {
+                selectedChunks.Clear();
+            }
+
+            if (selectedChunks.Count == 0 && RootChunk is not null)
+            {
+                selectedChunks.Add(RootChunk);
+            }
+
+            return selectedChunks;
+        }
+
+        private void ClearAppearancePropertyChild(string propertyName)
+        {
+            if (RootChunk?.ResolvedData is not appearanceAppearanceResource ||
+                RootChunk.GetPropertyChild("appearances") is not ChunkViewModel appearances)
+            {
+                return;
+            }
+
+            var numDeletions = 0;
+            foreach (var propertyChild in appearances.TVProperties
+                         .Select(a => a.GetPropertyChild(propertyName))
+                         .Where(cvm => cvm is not null)
+                         .Select(cvm => cvm!)
+                    )
+            {
+                propertyChild.CalculateProperties();
+                if (propertyChild.TVProperties.Count == 0)
+                {
+                    continue;
+                }
+
+                propertyChild!.ClearChildren();
+                numDeletions += 1;
+                propertyChild!.RecalculateProperties();
+            }
+
+            if (numDeletions == 0)
+            {
+                _loggerService.Success($"No '{propertyName}' in your .app file!");
+                return;
+            }
+
+            appearances.RecalculateProperties();
+
+            _loggerService.Success($"Cleared '{propertyName}' in {numDeletions} appearances");
+            _currentTab?.Parent.SetIsDirty(true);
+        }
+        
+        /// <summary>
+        /// Called from view: remove all partsOverrides from appearances
+        /// </summary>
+        private void OnClearPartsOverridesClick(object _, RoutedEventArgs e) =>
+            ClearAppearancePropertyChild("partsOverrides");
+
+        /// <summary>
+        /// Called from view: remove all partsValues from appearances
+        /// </summary>
+        private void OnClearPartsValuesClick(object _, RoutedEventArgs e) =>
+            ClearAppearancePropertyChild("partsValues");
 
         private static List<ChunkViewModel> GetComponentsByName(ChunkViewModel cvm, string componentName)
         {
