@@ -114,7 +114,7 @@ namespace WolvenKit.Views.Tools
             else
             {
                 // Reloading/reopening file should clear selected properties
-                SelectedItems.Clear();
+                SelectedItems?.Clear();
                 SetCurrentValue(SelectedItemProperty, null);
             }
 
