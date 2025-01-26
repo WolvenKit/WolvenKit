@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types;
 
 [RED("Int32")]
 [DebuggerDisplay("{_value,nq}", Type = "CInt32")]
-public readonly struct CInt32 : IRedPrimitive<int>, IEquatable<CInt32>, IRedInteger
+public readonly struct CInt32 : IRedPrimitive<int>, IComparable, IComparable<CInt32>, IEquatable<CInt32>, IRedInteger
 {
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private readonly int _value;
@@ -45,4 +45,36 @@ public readonly struct CInt32 : IRedPrimitive<int>, IEquatable<CInt32>, IRedInte
 
     public override string ToString() => _value.ToString();
     public string ToString(CultureInfo cultureInfo) => _value.ToString(cultureInfo);
+
+    #region IComparable, IComparable<CInt32>
+
+    public int CompareTo(object? value)
+    {
+        if (value == null)
+        {
+            return 1;
+        }
+        if (value is CInt32 i)
+        {
+            return CompareTo(i);
+        }
+        throw new ArgumentException("Value is not a CInt32", nameof(value));
+    }
+
+    public int CompareTo(CInt32 value)
+    {
+        if (_value < value)
+        {
+            return -1;
+        }
+
+        if (_value > value)
+        {
+            return 1;
+        }
+
+        return 0;
+    }
+
+    #endregion IComparable, IComparable<CInt32>
 }

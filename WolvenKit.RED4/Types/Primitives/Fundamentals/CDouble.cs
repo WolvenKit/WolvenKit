@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types;
 
 [RED("Double")]
 [DebuggerDisplay("{_value,nq}", Type = "CDouble")]
-public readonly struct CDouble : IRedPrimitive<double>, IEquatable<CDouble>, IRedInteger
+public readonly struct CDouble : IRedPrimitive<double>, IComparable, IComparable<CDouble>, IEquatable<CDouble>, IRedInteger
 {
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private readonly double _value;
@@ -45,4 +45,46 @@ public readonly struct CDouble : IRedPrimitive<double>, IEquatable<CDouble>, IRe
 
     public override string ToString() => _value.ToString("G17");
     public string ToString(CultureInfo cultureInfo) => _value.ToString("G17", cultureInfo);
+
+    #region IComparable, IComparable<CDouble>
+
+    public int CompareTo(object? value)
+    {
+        if (value == null)
+        {
+            return 1;
+        }
+        if (value is CDouble d)
+        {
+            return CompareTo(d);
+        }
+        throw new ArgumentException("Value is not a CDouble", nameof(value));
+    }
+
+    public int CompareTo(CDouble value)
+    {
+        if (_value < value)
+        {
+            return -1;
+        }
+
+        if (_value > value)
+        {
+            return 1;
+        }
+
+        if (_value == value._value)
+        {
+            return 0;
+        }
+
+        if (double.IsNaN(_value))
+        {
+            return double.IsNaN(value._value) ? 0 : -1;
+        }
+
+        return 1;
+    }
+
+    #endregion
 }
