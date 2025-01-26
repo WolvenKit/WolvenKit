@@ -1,4 +1,6 @@
 using System;
+using System.ComponentModel;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Windows;
 using Microsoft.Extensions.Options;
@@ -8,6 +10,7 @@ using WolvenKit.App;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Events;
 using WolvenKit.Views.Editors;
+using WolvenKit.Views.Tools;
 
 namespace WolvenKit.Views.Documents
 {
@@ -27,7 +30,26 @@ namespace WolvenKit.Views.Documents
                 {
                     Editor.LayoutNodes();
                 }
+
+                RedTreeView.PropertyChanged += RedTreeView_OnPropertyChanged;
             });
+        }
+
+        /// <summary>
+        /// We need to sync our view model's selection with the tree. For some reason,
+        /// that doesn't happen automatically anymore.
+        /// </summary>
+        private void RedTreeView_OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (sender is not RedTreeView tree || e.PropertyName is not nameof(RedTreeView.SelectedItems) ||
+                ViewModel is null)
+            {
+                return;
+            }
+
+            ViewModel.SelectedChunks ??= [];
+            ViewModel.SelectedChunks.Clear();
+            ViewModel.SelectedChunks.AddRange(tree.SelectedItems.ToList());
         }
 
         private void AutolayoutNodes_MenuItem(object sender, RoutedEventArgs e) => Editor.LayoutNodes();

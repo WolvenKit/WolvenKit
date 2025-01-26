@@ -12,6 +12,7 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using Splat;
 using Syncfusion.UI.Xaml.TreeView;
+using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
@@ -179,15 +180,16 @@ namespace WolvenKit.Views.Tools
 
         private void OnSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
         {
-            SelectedItems ??= [];
-
+            var oldSelectedItems = SelectedItems?.ToList() ?? [];
+            var newSelectedItems = oldSelectedItems.ToList();
+            
             // make sure we don't end up with duplicates
             foreach (var removedItem in e.RemovedItems.OfType<ChunkViewModel>())
             {
                 removedItem.IsSelected = false;
-                while (SelectedItems.Contains(removedItem))
+                while (newSelectedItems.Contains(removedItem))
                 {
-                    SelectedItems.Remove(removedItem);
+                    newSelectedItems.Remove(removedItem);
                 }
             }
 
@@ -195,12 +197,18 @@ namespace WolvenKit.Views.Tools
             foreach (var addedItem in e.AddedItems.OfType<ChunkViewModel>())
             {
                 addedItem.IsSelected = true;
-                SelectedItems.Add(addedItem);
-            }  
+                newSelectedItems.Add(addedItem);
+            }
+
+            SelectedItems ??= [];
+            SelectedItems.Clear();
+            SelectedItems.AddRange(newSelectedItems);
 
             RefreshContextMenuFlags();
             RefreshSelectedItemsContextMenuFlags();
             RefreshCommandStatus();
+
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedItems)));
         }
 
 

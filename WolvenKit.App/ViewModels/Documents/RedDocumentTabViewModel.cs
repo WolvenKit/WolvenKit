@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -48,7 +49,7 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
         PropertyChanged += RedDocumentTabViewModel_PropertyChanged;
     }
 
-    private void RedDocumentTabViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void RedDocumentTabViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         switch (e.PropertyName)
         {
@@ -58,7 +59,7 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
                 break;
             case nameof(RDTDataViewModel.SelectedChunk):
             case nameof(RDTDataViewModel.SelectedChunks):
-                OnSelected();
+                OnSelected(e);
                 break;
             case nameof(RDTDataViewModel.CurrentSearch):
                 OnSearchChanged();
@@ -266,9 +267,9 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
     }
 
 
-    public event EventHandler? OnSelectionChanged;
-    public virtual void OnSelected() => OnSelectionChanged?.Invoke(this, EventArgs.Empty);
-
+    public static event PropertyChangedEventHandler? OnSelectionChanged;
+    public virtual void OnSelected(PropertyChangedEventArgs e) => OnSelectionChanged?.Invoke(this, e);
+   
     // Do nothing, overwrite in inheriting classes
     public virtual void Load()
     {
