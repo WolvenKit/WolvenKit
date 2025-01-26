@@ -37,7 +37,7 @@ internal class Program
                        "Please do so to ensure that WolvenKit works properly." + Environment.NewLine + Environment.NewLine +
                        "For more informations:" + Environment.NewLine +
                        "https://wiki.redmodding.org/wolvenkit/help/faq/long-file-path-support" + Environment.NewLine + Environment.NewLine;
-            
+
             Console.Error.Write(text);
         }
 
@@ -56,6 +56,7 @@ internal class Program
 
             new HashCommand(),
             new OodleCommand(),
+            new ScriptCommand(),
 
             new SettingsCommand(),
 

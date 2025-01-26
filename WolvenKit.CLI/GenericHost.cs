@@ -59,6 +59,7 @@ internal static class GenericHost
                 services.AddScoped<MeshTools>();        //RIG, Cp77FileService
                 services.AddSingleton<IArchiveManager, ArchiveManager>();
                 services.AddSingleton<IModTools, ModTools>();
+                services.AddSingleton<ScriptService>();
 
                 //services.AddScoped<MaterialTools>();    //ModTools, Cp77FileService, CookingUtilities
 
