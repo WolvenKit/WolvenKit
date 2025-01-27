@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types;
 
 [RED("Uint8")]
 [DebuggerDisplay("{_value,nq}", Type = "CUInt8")]
-public readonly struct CUInt8 : IRedPrimitive<byte>, IEquatable<CUInt8>, IRedInteger
+public readonly struct CUInt8 : IRedPrimitive<byte>, IComparable, IComparable<CUInt8>, IEquatable<CUInt8>, IRedInteger
 {
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private readonly byte _value;
@@ -50,4 +50,23 @@ public readonly struct CUInt8 : IRedPrimitive<byte>, IEquatable<CUInt8>, IRedInt
 
     public override string ToString() => _value.ToString();
     public string ToString(CultureInfo cultureInfo) => _value.ToString(cultureInfo);
+
+    #region IComparable, IComparable<CUInt8>
+
+    public int CompareTo(object? value)
+    {
+        if (value == null)
+        {
+            return 1;
+        }
+        if (value is CUInt8 u)
+        {
+            return CompareTo(u);
+        }
+        throw new ArgumentException("Value is not a CUInt8", nameof(value));
+    }
+
+    public int CompareTo(CUInt8 value) => _value - value._value;
+
+    #endregion IComparable, IComparable<CUInt8>
 }

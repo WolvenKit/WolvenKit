@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types;
 
 [RED("Int8")]
 [DebuggerDisplay("{_value,nq}", Type = "CInt8")]
-public readonly struct CInt8 : IRedPrimitive<sbyte>, IEquatable<CInt8>, IRedInteger
+public readonly struct CInt8 : IRedPrimitive<sbyte>, IComparable, IComparable<CInt8>, IEquatable<CInt8>, IRedInteger
 {
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private readonly sbyte _value;
@@ -45,4 +45,23 @@ public readonly struct CInt8 : IRedPrimitive<sbyte>, IEquatable<CInt8>, IRedInte
 
     public override string ToString() => _value.ToString();
     public string ToString(CultureInfo cultureInfo) => _value.ToString(cultureInfo);
+
+    #region IComparable, IComparable<CInt8>
+
+    public int CompareTo(object? value)
+    {
+        if (value == null)
+        {
+            return 1;
+        }
+        if (value is CInt8 i)
+        {
+            return CompareTo(i);
+        }
+        throw new ArgumentException("Value is not a CInt8", nameof(value));
+    }
+
+    public int CompareTo(CInt8 value) => _value - value._value;
+
+    #endregion IComparable, IComparable<CInt8>
 }

@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types;
 
 [RED("Uint32")]
 [DebuggerDisplay("{_value,nq}", Type = "CUInt32")]
-public readonly struct CUInt32 : IRedPrimitive<uint>, IEquatable<CUInt32>, IRedInteger
+public readonly struct CUInt32 : IRedPrimitive<uint>, IComparable, IComparable<CUInt32>, IEquatable<CUInt32>, IRedInteger
 {
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private readonly uint _value;
@@ -45,4 +45,36 @@ public readonly struct CUInt32 : IRedPrimitive<uint>, IEquatable<CUInt32>, IRedI
 
     public override string ToString() => _value.ToString();
     public string ToString(CultureInfo cultureInfo) => _value.ToString(cultureInfo);
+
+    #region IComparable, IComparable<CUInt32>
+
+    public int CompareTo(object? value)
+    {
+        if (value == null)
+        {
+            return 1;
+        }
+        if (value is CUInt32 i)
+        {
+            return CompareTo(i);
+        }
+        throw new ArgumentException("Value is not a CUInt32", nameof(value));
+    }
+
+    public int CompareTo(CUInt32 value)
+    {
+        if (_value < value)
+        {
+            return -1;
+        }
+
+        if (_value > value)
+        {
+            return 1;
+        }
+
+        return 0;
+    }
+
+    #endregion IComparable, IComparable<CUInt32>
 }

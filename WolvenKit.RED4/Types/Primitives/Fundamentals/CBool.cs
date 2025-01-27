@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types;
 
 [RED("Bool")]
 [DebuggerDisplay("{(bool)this,nq}", Type = "CBool")]
-public readonly struct CBool : IRedPrimitive<bool>, IEquatable<CBool>
+public readonly struct CBool : IRedPrimitive<bool>, IComparable, IComparable<CBool>, IEquatable<CBool>
 {
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private readonly byte _value;
@@ -40,4 +40,37 @@ public readonly struct CBool : IRedPrimitive<bool>, IEquatable<CBool>
     public override int GetHashCode() => _value.GetHashCode();
 
     public override string ToString() => _value != 0 ? "True" : "False";
+
+    #region IComparable, IComparable<CBool>
+
+    public int CompareTo(object? value)
+    {
+        if (value == null)
+        {
+            return 1;
+        }
+        if (value is CBool b)
+        {
+            return CompareTo(b);
+        }
+
+        throw new ArgumentException("Value is not a CBool", nameof(value));
+    }
+
+    public int CompareTo(CBool value)
+    {
+        if ((_value == 0) == (value._value == 0))
+        {
+            return 0;
+        }
+
+        if (_value == 0)
+        {
+            return -1;
+        }
+
+        return 1;
+    }
+
+    #endregion IComparable, IComparable<CBool>
 }
