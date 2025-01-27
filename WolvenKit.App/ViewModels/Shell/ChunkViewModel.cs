@@ -2776,8 +2776,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         var copiedChunks = singleSelectOnly ? [RedDocumentTabViewModel.CopiedChunk!] : RedDocumentTabViewModel.GetCopiedChunks();
 
+        // multiple items: only allow pasting from/to arrays
         if (copiedChunks.Count == 0 ||
-            (ResolvedData is not IRedArray && Parent is not { ResolvedData: IRedArray }))
+            (!singleSelectOnly && ResolvedData is not IRedArray && Parent is not { ResolvedData: IRedArray }))
         {
             return false;
         }
