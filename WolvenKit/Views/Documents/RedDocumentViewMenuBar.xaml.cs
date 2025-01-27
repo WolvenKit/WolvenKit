@@ -48,8 +48,8 @@ namespace WolvenKit.Views.Documents
         private readonly ProjectResourceTools _projectResourceTools;
         private readonly DocumentTools _documentTools;
         private readonly Cr2WTools _cr2WTools;
-        
-        
+
+
         public RedDocumentViewMenuBar()
         {
             _scriptService = Locator.Current.GetService<AppScriptService>()!;
@@ -70,7 +70,7 @@ namespace WolvenKit.Views.Documents
             // Enforce instance generation and service injection. One would assume that registering a singleton
             // is enough. One would be wrong.
             Locator.Current.GetService<DocumentTools>();
-            
+
             InitializeComponent();
 
             InitializeInstanceObjects();
@@ -78,7 +78,8 @@ namespace WolvenKit.Views.Documents
             DataContext = new RedDocumentViewToolbarModel(
                 _settingsManager,
                 _modifierStateService,
-                _projectManager) { CurrentTab = _currentTab };
+                _projectManager)
+            { CurrentTab = _currentTab };
             ViewModel = DataContext as RedDocumentViewToolbarModel;
 
             _modifierStateService.ModifierStateChanged += OnModifierStateChanged;
@@ -159,7 +160,7 @@ namespace WolvenKit.Views.Documents
             {
                 _isRunning = false;
             }
-            
+
         }
 
         private ChunkViewModel? SelectedChunk => ViewModel?.SelectedChunk;
@@ -197,7 +198,7 @@ namespace WolvenKit.Views.Documents
             _loggerService.Info("Done!");
             Interactions.ShowBrokenReferencesList(("Broken references", brokenReferences));
         }
-        
+
         private void OnFileValidationClick(object _, RoutedEventArgs e)
         {
             // in .app or root entity: warn with >5 appearances, because this can take a while 
@@ -212,7 +213,7 @@ namespace WolvenKit.Views.Documents
                     return;
                 }
             }
-            
+
             // This needs to be inside the DispatcherHelper, or the UI button will make everything explode
             DispatcherHelper.RunOnMainThread(
                 () => _loggerService.Info("Running file validation, please wait. The UI will be unresponsive."));
@@ -275,7 +276,9 @@ namespace WolvenKit.Views.Documents
                     maxIndex += 1;
                     mesh.MaterialEntries.Add(new CMeshMaterialEntry()
                     {
-                        Name = newMatName, Index = maxIndex, IsLocalInstance = material.IsLocalInstance
+                        Name = newMatName,
+                        Index = maxIndex,
+                        IsLocalInstance = material.IsLocalInstance
                     });
 
 
@@ -311,34 +314,70 @@ namespace WolvenKit.Views.Documents
             cvm.DeleteUnusedMaterialsCommand.Execute(true);
             cvm.Tab?.Parent.SetIsDirty(true);
         }
-        
-        private void OnConvertToCCXLMaterials(object _, RoutedEventArgs e) 
+
+        private void OnConvertToCCXLMaterials(object _, RoutedEventArgs e)
         {
             if (ViewModel?.RootChunk is not ChunkViewModel cvm || RootChunk?.ResolvedData is not CMesh mesh)
             {
                 return;
             }
+            var app = mesh.Appearances.First();
+            CName appName = ((meshMeshAppearance)app!).Name;
+
             cvm.GetPropertyChild("appearances")?.CalculateProperties();
             cvm.GetPropertyChild("materialEntries")?.CalculateProperties();
             cvm.GetPropertyChild("externalMaterials")?.CalculateProperties();
-            var app = mesh.Appearances.First();
+
+
+            cvm.AdjustSubmeshCountCommand.Execute(true);
+            ViewModel.ClearMaterialsCommand.Execute(true);
+
+            var mainminame = "@long";
+            var capminame = "@cap";
+
+            app.Chunk!.ChunkMaterials = [appName + mainminame, appName + capminame];
+
+
+            mesh.MaterialEntries.Add(new CMeshMaterialEntry() { Name = "@context", Index = (CUInt16)0, IsLocalInstance = true });
+            var mainmi = new CMeshMaterialEntry() { Name = mainminame, Index = (CUInt16)1, IsLocalInstance = true };
+            var capmi = new CMeshMaterialEntry() { Name = capminame, Index = (CUInt16)2, IsLocalInstance = true };
+
+            var mainmipath = (CName)(@"your_modder_name\ccxl\your_first_addition\materials\your_first_hair_wa_long.mi");
+            var capmipath = (CName)(@"your_modder_name\ccxl\your_first_addition\materials\your_first_hair_wa_cap.mi");
+            mesh.MaterialEntries.Add(mainmi);
+
+            mesh.MaterialEntries.Add(capmi);
             
-            mesh.Appearances.Clear();
-            mesh.MaterialEntries.Clear();
-            mesh.ExternalMaterials.Clear();
+            mesh.LocalMaterialBuffer.Materials.Add(new CMaterialInstance { Values = [new CKeyValuePair(mainminame, mainmipath), new CKeyValuePair(capminame, capmipath)] });
 
-            var material = new CMeshMaterialEntry() { Name = "@context", Index = (CUInt16)0, IsLocalInstance = true };
-            app.Chunk!.ChunkMaterials.Clear();
-            app.Chunk!.ChunkMaterials = ["@context"];
-            mesh.MaterialEntries.Add(material);
+
+            CResourceReference<CResource> longvalues = new CResourceReference<CResource>(@"*base\characters\common\hair\textures\hair_profiles\{material}.hp", InternalEnums.EImportFlags.Soft);
+            mesh.LocalMaterialBuffer.Materials.Add(new CMaterialInstance
+            {
+                BaseMaterial = new CResourceReference<IMaterial>(@"your_modder_name\ccxl\your_first_addition\materials\your_first_hair_wa_long.mi", InternalEnums.EImportFlags.Soft),
+                Values = [new CKeyValuePair("GradientMap", longvalues)]
+            }
+            );
+
+            CResourceReference<CResource> capvalues = new CResourceReference<CResource>(@"*base\characters\common\hair\textures\cap_gradiants\hh_cap_grad__{material}.xbm", InternalEnums.EImportFlags.Soft);
+            mesh.LocalMaterialBuffer.Materials.Add(new CMaterialInstance
+            {
+                BaseMaterial = new CResourceReference<IMaterial>(@"your_modder_name\ccxl\your_first_addition\materials\your_first_hair_wa_cap.mi", InternalEnums.EImportFlags.Soft),
+                Values = [new CKeyValuePair("GradientMap", capvalues)]
+            }
+            );
+
+
             mesh.Appearances.Add(app);
-
             cvm.GetPropertyChild("appearances")?.RecalculateProperties();
             cvm.GetPropertyChild("materialEntries")?.RecalculateProperties();
             cvm.GetPropertyChild("externalMaterials")?.RecalculateProperties();
+
             _loggerService.Success("Mesh converted to CCXL!");
             _currentTab?.Parent.SetIsDirty(true);
         }
+
+
         public event EventHandler<EditorDifficultyLevel>? EditorDifficultChanged;
 
         private void OnEditorModeClick(EditorDifficultyLevel level)
@@ -369,7 +408,7 @@ namespace WolvenKit.Views.Documents
             }
 
             RootChunk.ForceLoadPropertiesRecursive();
-            
+
             if (RootChunk.ResolvedData is CMesh)
             {
                 rootChunk.DeleteUnusedMaterialsCommand.Execute(true);
@@ -396,7 +435,7 @@ namespace WolvenKit.Views.Documents
                     }
                 )
                 .ToHashSet();
-            
+
 
             var destFolder = GetTextureDirForDependencies(true);
             // Use search and replace to fix file paths
@@ -573,8 +612,8 @@ namespace WolvenKit.Views.Documents
             }
 
             ViewModel?.ClearSelection();
-            
-            
+
+
             foreach (var chunkViewModel in selectedChunks.SelectMany(cvm =>
                          GetComponentsByName(cvm, componentModel.ComponentName)).ToList())
             {
@@ -690,7 +729,7 @@ namespace WolvenKit.Views.Documents
             _loggerService.Success($"Cleared '{propertyName}' in {numDeletions} appearances");
             _currentTab?.Parent.SetIsDirty(true);
         }
-        
+
         /// <summary>
         /// Called from view: remove all partsOverrides from appearances
         /// </summary>
@@ -757,7 +796,7 @@ namespace WolvenKit.Views.Documents
             }
 
             if (dialog.ViewModel is null || string.IsNullOrEmpty(dialog.ViewModel.ComponentName))
-            {   
+            {
                 return;
             }
 
@@ -871,7 +910,7 @@ namespace WolvenKit.Views.Documents
                 _loggerService.Error(err);
             }
         }
-        
+
         private MenuItem? _openMenu;
 
         private static readonly List<string> s_facialSetups = [];
@@ -884,14 +923,14 @@ namespace WolvenKit.Views.Documents
             }
 
             ViewModel?.RefreshMenuVisibility();
-            
+
             foreach (var item in _openMenu.Items.OfType<MenuItem>())
             {
                 // Force the submenu items to re-evaluate their bindings
                 var bindingExpression = item.GetBindingExpression(VisibilityProperty);
                 bindingExpression?.UpdateTarget();
             }
-            
+
         }
 
         private void OnMenuClosed(object sender, RoutedEventArgs e) => _openMenu = null;
@@ -954,7 +993,7 @@ namespace WolvenKit.Views.Documents
                 SearchBar_OnClear(this, e);
             }
         }
-     
+
         private void OnChangeAnimationClick(object sender, RoutedEventArgs e)
         {
             if (RootChunk?.Tab is null || RootChunk?.ResolvedData is not appearanceAppearanceResource app ||
@@ -986,8 +1025,8 @@ namespace WolvenKit.Views.Documents
                 cvm.RecalculateProperties();
             }
         }
-        
-        
+
+
 
     }
 }
