@@ -2784,6 +2784,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         Type? innerType = null;
+   
         if (ResolvedData is IRedArray arr)
         {
             innerType = arr.InnerType;
@@ -2792,6 +2793,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             innerType = pArr.InnerType;
         }
+        else if (IsHandle(Data) && singleSelectOnly)
+        {
+            innerType = ResolvedPropertyType;
+        }
+        
 
         return innerType is not null && copiedChunks.All(c => CheckTypeCompatibility(innerType, c.GetType()) != TypeCompability.None);
     }
