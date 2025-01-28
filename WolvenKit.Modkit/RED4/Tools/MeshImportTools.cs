@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using DynamicData;
 using SharpGLTF.Schema2;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Extensions;
@@ -23,269 +24,269 @@ namespace WolvenKit.Modkit.RED4
     public partial class ModTools
     {
         //WIP does not do the thing yet
-        public bool ImportRig(FileInfo inGltfFile, Stream rigStream, GltfImportArgs args)
-        {
-            var cr2w = _parserService.ReadRed4File(rigStream);
+        //public bool ImportRig(FileInfo inGltfFile, Stream rigStream, GltfImportArgs args)
+        //{
+        //    var cr2w = _parserService.ReadRed4File(rigStream);
 
-            if (cr2w is not { RootChunk: animRig rig })
-            {
-                return false;
-            }
+        //    if (cr2w is not { RootChunk: animRig rig })
+        //    {
+        //        return false;
+        //    }
 
-            var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(args.ValidationMode));
+        //    var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(args.ValidationMode));
 
-            //VerifyGLTF(model);
+        //    //VerifyGLTF(model);
 
-            List<LogicalChildOfRoot> armature;
+        //    List<LogicalChildOfRoot> armature;
 
-            var joints = new List<(Node Joint, Mat4 InverseBindMatrix)>();
-            var jointlist = new List<Node>();
-            var jointnames = new List<string>();
-            var jointparentnames = new List<string>();
-            var ibm = new List<Mat4>();
-            var wm = new List<Mat4>();
-
-
-            if (model.LogicalSkins.Count > 0)
-            {
-                armature = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => (LogicalChildOfRoot)model.LogicalSkins[0]).ToList();
-                joints = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_)).ToList();
-                jointlist = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).Joint).ToList();
-                jointnames = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).Joint.Name).ToList();
-                jointparentnames = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).Joint.VisualParent.Name).ToList();
-                ibm = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).InverseBindMatrix).ToList();
-                wm = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).Joint.WorldMatrix).ToList();
-            }
-            else
-            {
-                if (model.LogicalNodes.Count > 0)
-                {
-                    armature = Enumerable.Range(0, model.LogicalNodes.Count).Select(_ => (LogicalChildOfRoot)model.LogicalNodes[_]).ToList();
-                    jointlist = Enumerable.Range(0, armature.Count).Select(_ => (Node)armature[_]).ToList();
-                    jointnames = Enumerable.Range(0, armature.Count).Select(_ => ((Node)armature[_]).Name).ToList();
-                    jointparentnames = Enumerable.Range(0, armature.Count).Select(_ => ((Node)armature[_]).VisualParent is null
-                                                                        ? "firstbone" : ((Node)armature[_]).VisualParent.Name).ToList();
-                    wm = Enumerable.Range(0, armature.Count).Select(_ => ((Node)armature[_]).WorldMatrix).ToList();
-
-                    for (var i = 0; i < wm.Count; i++)
-                    {
-                        var temp = new Mat4();
-                        Mat4.Invert(wm[i], out temp);
-                        ibm.Add(temp);
-                    }
-                    //ibm = Enumerable.Range(0, wm.Count).Select(_ => Mat4.Invert( wm[_], out ibm[_] )).ToList();
-                    joints = Enumerable.Range(0, armature.Count).Select(_ => (jointlist[_], ibm[_])).ToList();
-                }
-            }
-
-            int[]? GetLevels(string root = "Root")
-            {
-                var rootIndex = jointnames.IndexOf("Root");
-                var treeLevel = new int[jointnames.Count];
-
-                if (jointparentnames[rootIndex].Contains("Armature"))
-                {
-                    void rec(string parent, int level)
-                    {
-                        var tIndex = Enumerable.Range(0, jointnames.Count).Where(i => jointparentnames[i] == parent).ToList();
-                        foreach (var ind in tIndex)
-                        {
-                            treeLevel[ind] = level;
-                            rec(jointnames[ind], level + 1);
-                        }
-                    }
-                    rec(root, 0);
-                    return treeLevel;
-                }
-                return null;
-            }
-
-            Mat4.Invert(joints[1].Joint.WorldMatrix, out var inversedWorldMatrix);
-            Mat4.Invert(joints[1].Joint.LocalMatrix, out var inversedLocalMatrix);
-
-            var oriRotM = Mat4.CreateFromQuaternion(joints[1].Joint.LocalTransform.Rotation);
-            var oriScaM = Mat4.CreateScale(joints[1].Joint.LocalTransform.Scale);
-            var oriTraM = Mat4.CreateTranslation(joints[1].Joint.LocalTransform.Translation);
-
-            var rotM = oriScaM * joints[1].InverseBindMatrix * oriTraM;
-            Mat4.Invert(rotM, out rotM);
-
-            var manualTRS = oriTraM * oriRotM * oriScaM;
-            Mat4.Invert(manualTRS, out var inversedManualTRS);
-
-            var manualRotM = oriScaM * inversedManualTRS * oriTraM;
-            Mat4.Invert(manualRotM, out manualRotM);
-
-            var inv2 = oriTraM * rotM * oriScaM;
-
-            var localInvRotM = oriScaM * inversedLocalMatrix * oriTraM;
-            Mat4.Invert(localInvRotM, out localInvRotM);
-
-            var rotationVector = Quat.CreateFromRotationMatrix(rotM);
-            var manualRotationVector = Quat.CreateFromRotationMatrix(manualRotM);
-            var localRotationVector = Quat.CreateFromRotationMatrix(localInvRotM);
-
-            var levels = GetLevels("Root");
-            if (levels is not null)
-            {
-                for (var i = 0; i < rig.BoneNames.Count; i++)
-                {
-                    var currentBone = rig.BoneNames[i];
-                    var index = jointnames.IndexOf(currentBone.ToString().NotNull());
-                    var parindex = jointnames.IndexOf(jointlist[index].VisualParent.Name);
-                    var transform = rig.BoneTransforms[i].NotNull();
-
-                    {
-                        /*
-                        transform.Rotation.I = jointlist[index].LocalTransform.Rotation.X;
-                        transform.Rotation.J = -jointlist[index].LocalTransform.Rotation.Z;
-                        transform.Rotation.K = jointlist[index].LocalTransform.Rotation.Y;
-                        transform.Rotation.R = jointlist[index].LocalTransform.Rotation.W;
-
-                        transform.Scale.W = 1;
-                        transform.Scale.X = jointlist[index].LocalTransform.Scale.X;
-                        transform.Scale.Y = jointlist[index].LocalTransform.Scale.Y;
-                        transform.Scale.Z = jointlist[index].LocalTransform.Scale.Z;
-
-                        transform.Translation.W = i == 0 ? 1 : 0;
-                        transform.Translation.X = jointlist[index].LocalTransform.Translation.X;
-                        transform.Translation.Y = -jointlist[index].LocalTransform.Translation.Z;
-                        transform.Translation.Z = jointlist[index].LocalTransform.Translation.Y;
-                        */
-                    } //gotta figure out those rotations
-
-                    var oriR = transform.Rotation;
-                    var oriRquat = new Quat(oriR.I, oriR.J, oriR.K, oriR.R);
-                    var newR = jointlist[index].LocalTransform.Rotation;
-                    var parR = jointlist[index].VisualParent.LocalTransform.Rotation;
-
-                    var oriT = transform.Translation;
-                    var oriTvec = new Vec4(oriT.X, oriT.Y, oriT.Z, oriT.W);
-                    var newT = jointlist[index].LocalTransform.Translation;
-                    var parT = jointlist[index].VisualParent.LocalTransform.Translation;
-
-                    var herewegoagane = parR * newR;
+        //    var joints = new List<(Node Joint, Mat4 InverseBindMatrix)>();
+        //    var jointlist = new List<Node>();
+        //    var jointnames = new List<string>();
+        //    var jointparentnames = new List<string>();
+        //    var ibm = new List<Mat4>();
+        //    var wm = new List<Mat4>();
 
 
-                    var quatM = Mat4.CreateFromQuaternion(oriRquat);
+        //    if (model.LogicalSkins.Count > 0)
+        //    {
+        //        armature = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => (LogicalChildOfRoot)model.LogicalSkins[0]).ToList();
+        //        joints = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_)).ToList();
+        //        jointlist = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).Joint).ToList();
+        //        jointnames = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).Joint.Name).ToList();
+        //        jointparentnames = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).Joint.VisualParent.Name).ToList();
+        //        ibm = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).InverseBindMatrix).ToList();
+        //        wm = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).Joint.WorldMatrix).ToList();
+        //    }
+        //    else
+        //    {
+        //        if (model.LogicalNodes.Count > 0)
+        //        {
+        //            armature = Enumerable.Range(0, model.LogicalNodes.Count).Select(_ => (LogicalChildOfRoot)model.LogicalNodes[_]).ToList();
+        //            jointlist = Enumerable.Range(0, armature.Count).Select(_ => (Node)armature[_]).ToList();
+        //            jointnames = Enumerable.Range(0, armature.Count).Select(_ => ((Node)armature[_]).Name).ToList();
+        //            jointparentnames = Enumerable.Range(0, armature.Count).Select(_ => ((Node)armature[_]).VisualParent is null
+        //                                                                ? "firstbone" : ((Node)armature[_]).VisualParent.Name).ToList();
+        //            wm = Enumerable.Range(0, armature.Count).Select(_ => ((Node)armature[_]).WorldMatrix).ToList();
 
-                    var d = newR - oriRquat + new Quat(0, 0, 0, 1);
-                    var p = newR * oriRquat;
-                    var e = d == p;
-                    var esmall = (d - p).Length() < 0.001;
+        //            for (var i = 0; i < wm.Count; i++)
+        //            {
+        //                var temp = new Mat4();
+        //                Mat4.Invert(wm[i], out temp);
+        //                ibm.Add(temp);
+        //            }
+        //            //ibm = Enumerable.Range(0, wm.Count).Select(_ => Mat4.Invert( wm[_], out ibm[_] )).ToList();
+        //            joints = Enumerable.Range(0, armature.Count).Select(_ => (jointlist[_], ibm[_])).ToList();
+        //        }
+        //    }
 
-                    var level = levels[index];
+        //    int[]? GetLevels(string root = "Root")
+        //    {
+        //        var rootIndex = jointnames.IndexOf("Root");
+        //        var treeLevel = new int[jointnames.Count];
 
-                    {/*
-                        var nya = System.Numerics.Vector3.Transform(tr, parR);
+        //        if (jointparentnames[rootIndex].Contains("Armature"))
+        //        {
+        //            void rec(string parent, int level)
+        //            {
+        //                var tIndex = Enumerable.Range(0, jointnames.Count).Where(i => jointparentnames[i] == parent).ToList();
+        //                foreach (var ind in tIndex)
+        //                {
+        //                    treeLevel[ind] = level;
+        //                    rec(jointnames[ind], level + 1);
+        //                }
+        //            }
+        //            rec(root, 0);
+        //            return treeLevel;
+        //        }
+        //        return null;
+        //    }
 
-                        //var rr = jointlist[index].VisualParent.VisualParent.LocalTransform.Rotation;
-                        var nye = System.Numerics.Vector3.Transform(tr, parR * rr);
-                        var rrr = jointlist[index].VisualParent.VisualParent.VisualParent.LocalTransform.Rotation;
-                        var ya = System.Numerics.Vector3.Transform(tr, parR * rr * rrr);
+        //    Mat4.Invert(joints[1].Joint.WorldMatrix, out var inversedWorldMatrix);
+        //    Mat4.Invert(joints[1].Joint.LocalMatrix, out var inversedLocalMatrix);
 
-                        var (r, s, t) = (new Quat(), new Vec3(), new Vec3());
-                        var tinverse = new Mat4();
-                        Mat4.Invert(jointlist[index].VisualParent.WorldMatrix, out tinverse);
-                        Mat4.Decompose(tinverse, out s, out r, out t);
+        //    var oriRotM = Mat4.CreateFromQuaternion(joints[1].Joint.LocalTransform.Rotation);
+        //    var oriScaM = Mat4.CreateScale(joints[1].Joint.LocalTransform.Scale);
+        //    var oriTraM = Mat4.CreateTranslation(joints[1].Joint.LocalTransform.Translation);
 
-                        var yaya = System.Numerics.Vector3.Transform(tr, r * parR);*/
-                    }
+        //    var rotM = oriScaM * joints[1].InverseBindMatrix * oriTraM;
+        //    Mat4.Invert(rotM, out rotM);
 
-                    /*Mat4 TRSFromRig(QsTransform parTr)
-                    {
-                        var (r, s, t) = (parTr.Rotation, parTr.Scale, parTr.Translation);
+        //    var manualTRS = oriTraM * oriRotM * oriScaM;
+        //    Mat4.Invert(manualTRS, out var inversedManualTRS);
 
-                        var R = Mat4.CreateFromQuaternion(new Quat(r.R, r.I, r.J, r.K));
-                        var S = Mat4.CreateScale(new Vec3(s.X, s.Y, s.Z));
-                        var T = Mat4.CreateTranslation(new Vec3(t.X, t.Y, t.Z));
-                        var M = T * R * S;
-                        return M;
-                    }
+        //    var manualRotM = oriScaM * inversedManualTRS * oriTraM;
+        //    Mat4.Invert(manualRotM, out manualRotM);
 
-                    if (index > -1 && parindex > -1)
-                    {
-                        var parM = TRSFromRig(rig.BoneTransforms[parindex]);
-                        Mat4.Invert(parM, out var parMinv);
-                        var M = TRSFromRig(rig.BoneTransforms[index]);
-                        Mat4.Invert(jointlist[index].VisualParent.WorldMatrix, out var tinverse);
-                        Mat4.Decompose(parMinv * M, out var s, out var r, out var t);
-                    }*/
+        //    var inv2 = oriTraM * rotM * oriScaM;
 
-                    Quat AllOriginalRotations(int i)
-                    {
-                        var wquat = transform.Rotation;
-                        var quat = new Quat(wquat.I, wquat.J, wquat.K, wquat.R);
-                        return (rig.BoneNames[i] == "Root") ? quat : AllOriginalRotations(rig.BoneParentIndexes[i]) * quat;
-                    }
+        //    var localInvRotM = oriScaM * inversedLocalMatrix * oriTraM;
+        //    Mat4.Invert(localInvRotM, out localInvRotM);
 
-                    var oriAllR = AllOriginalRotations(i);
-                    var oriParAllR = oriAllR * Quat.Inverse(oriRquat);
-                    var yetatr = Vec4.Transform(newT, oriAllR);
+        //    var rotationVector = Quat.CreateFromRotationMatrix(rotM);
+        //    var manualRotationVector = Quat.CreateFromRotationMatrix(manualRotM);
+        //    var localRotationVector = Quat.CreateFromRotationMatrix(localInvRotM);
 
-                    Quat AllRotations(Node node)
-                    {
-                        var quat = node.LocalTransform.Rotation;
-                        return (node.Name == "Root") ? quat : AllRotations(node.VisualParent) * quat;
-                    }
+        //    var levels = GetLevels("Root");
+        //    if (levels is not null)
+        //    {
+        //        for (var i = 0; i < rig.BoneNames.Count; i++)
+        //        {
+        //            var currentBone = rig.BoneNames[i];
+        //            var index = jointnames.IndexOf(currentBone.ToString().NotNull());
+        //            var parindex = jointnames.IndexOf(jointlist[index].VisualParent.Name);
+        //            var transform = rig.BoneTransforms[i].NotNull();
 
-                    var infinya = AllRotations(jointlist[index]);
-                    var finit = Vec4.Transform(newT, infinya);
-                    var aynifni = Vec4.Transform(newT, Quat.Inverse(infinya));
+        //            {
+        //                /*
+        //                transform.Rotation.I = jointlist[index].LocalTransform.Rotation.X;
+        //                transform.Rotation.J = -jointlist[index].LocalTransform.Rotation.Z;
+        //                transform.Rotation.K = jointlist[index].LocalTransform.Rotation.Y;
+        //                transform.Rotation.R = jointlist[index].LocalTransform.Rotation.W;
+
+        //                transform.Scale.W = 1;
+        //                transform.Scale.X = jointlist[index].LocalTransform.Scale.X;
+        //                transform.Scale.Y = jointlist[index].LocalTransform.Scale.Y;
+        //                transform.Scale.Z = jointlist[index].LocalTransform.Scale.Z;
+
+        //                transform.Translation.W = i == 0 ? 1 : 0;
+        //                transform.Translation.X = jointlist[index].LocalTransform.Translation.X;
+        //                transform.Translation.Y = -jointlist[index].LocalTransform.Translation.Z;
+        //                transform.Translation.Z = jointlist[index].LocalTransform.Translation.Y;
+        //                */
+        //            } //gotta figure out those rotations
+
+        //            var oriR = transform.Rotation;
+        //            var oriRquat = new Quat(oriR.I, oriR.J, oriR.K, oriR.R);
+        //            var newR = jointlist[index].LocalTransform.Rotation;
+        //            var parR = jointlist[index].VisualParent.LocalTransform.Rotation;
+
+        //            var oriT = transform.Translation;
+        //            var oriTvec = new Vec4(oriT.X, oriT.Y, oriT.Z, oriT.W);
+        //            var newT = jointlist[index].LocalTransform.Translation;
+        //            var parT = jointlist[index].VisualParent.LocalTransform.Translation;
+
+        //            var herewegoagane = parR * newR;
 
 
-                    var before = transform.Translation.DeepCopy();
+        //            var quatM = Mat4.CreateFromQuaternion(oriRquat);
 
-                    //level = 0;
+        //            var d = newR - oriRquat + new Quat(0, 0, 0, 1);
+        //            var p = newR * oriRquat;
+        //            var e = d == p;
+        //            var esmall = (d - p).Length() < 0.001;
 
-                    var x90 = Quat.CreateFromAxisAngle(Vec3.UnitX, (float)Math.PI / 2);
-                    var y90 = Quat.CreateFromAxisAngle(Vec3.UnitY, (float)Math.PI / 2);
-                    var z90 = Quat.CreateFromAxisAngle(Vec3.UnitZ, (float)Math.PI / 2);
+        //            var level = levels[index];
+
+        //            {/*
+        //                var nya = System.Numerics.Vector3.Transform(tr, parR);
+
+        //                //var rr = jointlist[index].VisualParent.VisualParent.LocalTransform.Rotation;
+        //                var nye = System.Numerics.Vector3.Transform(tr, parR * rr);
+        //                var rrr = jointlist[index].VisualParent.VisualParent.VisualParent.LocalTransform.Rotation;
+        //                var ya = System.Numerics.Vector3.Transform(tr, parR * rr * rrr);
+
+        //                var (r, s, t) = (new Quat(), new Vec3(), new Vec3());
+        //                var tinverse = new Mat4();
+        //                Mat4.Invert(jointlist[index].VisualParent.WorldMatrix, out tinverse);
+        //                Mat4.Decompose(tinverse, out s, out r, out t);
+
+        //                var yaya = System.Numerics.Vector3.Transform(tr, r * parR);*/
+        //            }
+
+        //            /*Mat4 TRSFromRig(QsTransform parTr)
+        //            {
+        //                var (r, s, t) = (parTr.Rotation, parTr.Scale, parTr.Translation);
+
+        //                var R = Mat4.CreateFromQuaternion(new Quat(r.R, r.I, r.J, r.K));
+        //                var S = Mat4.CreateScale(new Vec3(s.X, s.Y, s.Z));
+        //                var T = Mat4.CreateTranslation(new Vec3(t.X, t.Y, t.Z));
+        //                var M = T * R * S;
+        //                return M;
+        //            }
+
+        //            if (index > -1 && parindex > -1)
+        //            {
+        //                var parM = TRSFromRig(rig.BoneTransforms[parindex]);
+        //                Mat4.Invert(parM, out var parMinv);
+        //                var M = TRSFromRig(rig.BoneTransforms[index]);
+        //                Mat4.Invert(jointlist[index].VisualParent.WorldMatrix, out var tinverse);
+        //                Mat4.Decompose(parMinv * M, out var s, out var r, out var t);
+        //            }*/
+
+        //            Quat AllOriginalRotations(int i)
+        //            {
+        //                var wquat = transform.Rotation;
+        //                var quat = new Quat(wquat.I, wquat.J, wquat.K, wquat.R);
+        //                return (rig.BoneNames[i] == "Root") ? quat : AllOriginalRotations(rig.BoneParentIndexes[i]) * quat;
+        //            }
+
+        //            var oriAllR = AllOriginalRotations(i);
+        //            var oriParAllR = oriAllR * Quat.Inverse(oriRquat);
+        //            var yetatr = Vec4.Transform(newT, oriAllR);
+
+        //            Quat AllRotations(Node node)
+        //            {
+        //                var quat = node.LocalTransform.Rotation;
+        //                return (node.Name == "Root") ? quat : AllRotations(node.VisualParent) * quat;
+        //            }
+
+        //            var infinya = AllRotations(jointlist[index]);
+        //            var finit = Vec4.Transform(newT, infinya);
+        //            var aynifni = Vec4.Transform(newT, Quat.Inverse(infinya));
 
 
-                    //works only for the rig of the kusanagi bike
-                    transform.Translation = level == 1 ? Vec4.Transform(newT, x90) :
-                                                        level is 3 or
-                                                        4 ? Vec4.Transform(newT, new Quat(0, 1, 0, 0) * x90) :
-                                                        level == 5 ? Vec4.Transform(newT, x90) :
-                                                        level == 6 ? Vec4.Transform(newT, z90) :
-                                                        level == 8 ? Vec4.Transform(newT, y90 * new Quat(0, 0, 0, 1)) : // Quat(0, 0, 0, 1) is z90 * z90
-                                                        new Vec4(newT.X, newT.Y, newT.Z, 0);
+        //            var before = transform.Translation.DeepCopy();
 
-                    transform.Translation.W = i == 0 ? 1 : 0;
+        //            //level = 0;
 
-                    /*
-                    transform.Translation.X = level == 6 ? -newT.Y :
-                                                          level == 8 ? newT.Z :
-                                                          newT.X;
-                    transform.Translation.Y = level == 1 ? newT.Z :
-                                                          level == 3 ? -newT.Z :
-                                                          level == 4 ? -newT.Z :
-                                                          level == 5 ? -newT.Z :
-                                                          level == 6 ? newT.X :
-                                                          level == 8 ? -newT.Y :
-                                                          newT.Y;
-                    transform.Translation.Z = level == 1 ? newT.Y :
-                                                          level == 3 ? -newT.Y :
-                                                          level == 4 ? -newT.Y :
-                                                          level == 5 ? newT.Y :
-                                                          level == 8 ? newT.X :
-                                                          newT.Z;
-                    */
+        //            var x90 = Quat.CreateFromAxisAngle(Vec3.UnitX, (float)Math.PI / 2);
+        //            var y90 = Quat.CreateFromAxisAngle(Vec3.UnitY, (float)Math.PI / 2);
+        //            var z90 = Quat.CreateFromAxisAngle(Vec3.UnitZ, (float)Math.PI / 2);
 
-                    var after = transform.Translation;
-                }
-            }
-            var ms = new MemoryStream();
-            using var writer = new CR2WWriter(ms, Encoding.UTF8, true) { LoggerService = _loggerService };
-            writer.WriteFile(cr2w);
-            ms.Seek(0, SeekOrigin.Begin);
 
-            rigStream.SetLength(0);
-            ms.CopyTo(rigStream);
+        //            //works only for the rig of the kusanagi bike
+        //            transform.Translation = level == 1 ? Vec4.Transform(newT, x90) :
+        //                                                level is 3 or
+        //                                                4 ? Vec4.Transform(newT, new Quat(0, 1, 0, 0) * x90) :
+        //                                                level == 5 ? Vec4.Transform(newT, x90) :
+        //                                                level == 6 ? Vec4.Transform(newT, z90) :
+        //                                                level == 8 ? Vec4.Transform(newT, y90 * new Quat(0, 0, 0, 1)) : // Quat(0, 0, 0, 1) is z90 * z90
+        //                                                new Vec4(newT.X, newT.Y, newT.Z, 0);
 
-            return true;
-        }
+        //            transform.Translation.W = i == 0 ? 1 : 0;
+
+        //            /*
+        //            transform.Translation.X = level == 6 ? -newT.Y :
+        //                                                  level == 8 ? newT.Z :
+        //                                                  newT.X;
+        //            transform.Translation.Y = level == 1 ? newT.Z :
+        //                                                  level == 3 ? -newT.Z :
+        //                                                  level == 4 ? -newT.Z :
+        //                                                  level == 5 ? -newT.Z :
+        //                                                  level == 6 ? newT.X :
+        //                                                  level == 8 ? -newT.Y :
+        //                                                  newT.Y;
+        //            transform.Translation.Z = level == 1 ? newT.Y :
+        //                                                  level == 3 ? -newT.Y :
+        //                                                  level == 4 ? -newT.Y :
+        //                                                  level == 5 ? newT.Y :
+        //                                                  level == 8 ? newT.X :
+        //                                                  newT.Z;
+        //            */
+
+        //            var after = transform.Translation;
+        //        }
+        //    }
+        //    var ms = new MemoryStream();
+        //    using var writer = new CR2WWriter(ms, Encoding.UTF8, true) { LoggerService = _loggerService };
+        //    writer.WriteFile(cr2w);
+        //    ms.Seek(0, SeekOrigin.Begin);
+
+        //    rigStream.SetLength(0);
+        //    ms.CopyTo(rigStream);
+
+        //    return true;
+        //}
 
 
         public bool ImportMesh(FileInfo inGltfFile, Stream inMeshStream, GltfImportArgs args)
@@ -331,30 +332,45 @@ namespace WolvenKit.Modkit.RED4
 
             var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(args.ValidationMode));
 
-            if (model.LogicalSkins.Count > 0 && originalRig != null)
+            VerifyGLTF(model, args);
+
+            if (model.LogicalSkins.Count > 0 && args.ImportInverseBindingOnly)
             {
-                var jointArray = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint).ToArray();
+                var joints = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_)).ToArray();
 
-                if (cr2w.RootChunk is CMesh root)
+                if (cr2w.RootChunk is CMesh root && root.RenderResourceBlob.Chunk is rendRenderMeshBlob rendblob)
                 {
-                    for (var i = 0; i < root.BoneNames.Count; i++)
+                    var tempp = root.BoneNames.ToList();
+                    for (int idx = 0; idx < joints.Count(); idx++)
                     {
-                        var foundBone = jointArray.FirstOrDefault(x => root.BoneNames[i] == x.Name);
-                        if (foundBone is not null)
-                        {
-                            System.Numerics.Matrix4x4.Invert(foundBone.WorldMatrix, out var inversedWorldMatrix);
+                        var inMat = joints[idx].InverseBindMatrix;
+                        Mat4 outMat = new Mat4(
+                            inMat.M11, -inMat.M13, inMat.M12, inMat.M14,
+                            -inMat.M31, inMat.M33, -inMat.M32, inMat.M34,
+                            inMat.M21, -inMat.M23, inMat.M22, inMat.M24,
+                            inMat.M41, -inMat.M43, inMat.M42, inMat.M44);
 
-                            root.BoneRigMatrices[i] = inversedWorldMatrix;
-                            root.BoneRigMatrices[i].NotNull().W.Y = -inversedWorldMatrix.M43;
-                            root.BoneRigMatrices[i].NotNull().W.Z = inversedWorldMatrix.M42;
-                            //component Y and -Z are being swapped in vector W
-                            //should probably figure out why
+
+                        var idxx = tempp.FindIndex(x => x.ToString() == joints[idx].Joint.Name);
+
+                        var inPos = joints[idx].Joint.WorldMatrix.Translation;
+                        if (idxx == -1)
+                        {
+                            root.BoneRigMatrices.Add(outMat);
+                            root.BoneNames.Add(joints[idx].Joint.Name);
+                            root.BoneVertexEpsilons.Add(0);
+                            root.LodBoneMask.Add(0);
+                            rendblob.Header.BonePositions.Add(new Vec4(inPos.X, -inPos.Z, inPos.Y, 1));
+                        }
+                        else
+                        {
+                            root.BoneRigMatrices[idxx] = outMat;
+                            rendblob.Header.BonePositions[idxx] = new Vec4(inPos.X, -inPos.Z, inPos.Y, 1);
                         }
                     }
                 }
-            }
 
-            VerifyGLTF(model, args);
+            }
 
             var meshes = new List<RawMeshContainer>();
             foreach (var node in model.LogicalNodes)
@@ -402,7 +418,7 @@ namespace WolvenKit.Modkit.RED4
 
             var quantScale = new Vec4((max.X - min.X) / 2, (max.Y - min.Y) / 2, (max.Z - min.Z) / 2, 0);
             var quantTrans = new Vec4((max.X + min.X) / 2, (max.Y + min.Y) / 2, (max.Z + min.Z) / 2, 1);
-            
+
 
             RawArmature? incomingJoints = null;
             RawArmature? existingJoints = null;
