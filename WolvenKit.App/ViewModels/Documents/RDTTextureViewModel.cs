@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
@@ -64,7 +65,7 @@ public partial class RDTTextureViewModel : RedDocumentTabViewModel
     [ObservableProperty] private bool _isDragging;
     [ObservableProperty] public bool _isRendered;
 
-    public override void OnSelected() => Render.Invoke();
+    public override void OnSelected(PropertyChangedEventArgs e) => Render.Invoke();
 
     protected void SetupImage()
     {
