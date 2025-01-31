@@ -12,6 +12,8 @@ using WolvenKit.App.ViewModels.Events;
 using WolvenKit.Views.Editors;
 using WolvenKit.Views.Tools;
 
+#nullable enable
+
 namespace WolvenKit.Views.Documents
 {
     /// <summary>
@@ -26,7 +28,7 @@ namespace WolvenKit.Views.Documents
             this.WhenActivated(disposables =>
             {
                 var globals = Locator.Current.GetService<IOptions<Globals>>();
-                if (globals.Value.ENABLE_NODE_EDITOR)
+                if (globals?.Value?.ENABLE_NODE_EDITOR == true)
                 {
                     Editor.LayoutNodes();
                 }
@@ -39,7 +41,7 @@ namespace WolvenKit.Views.Documents
         /// We need to sync our view model's selection with the tree. For some reason,
         /// that doesn't happen automatically anymore.
         /// </summary>
-        private void RedTreeView_OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void RedTreeView_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (sender is not RedTreeView tree || e.PropertyName is not nameof(RedTreeView.SelectedItems) ||
                 ViewModel is null)
