@@ -42,6 +42,36 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         _settingsManager = settingsManager;
         
         RefreshMenuVisibility(true);
+
+        RedDocumentTabViewModel.OnSelectionChanged += OnNodeSelectionChanged;
+    }
+
+    private void OnNodeSelectionChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (sender is not RDTDataViewModel tab)
+        {
+            return;
+        }
+
+        switch (e.PropertyName)
+        {
+            case nameof(RDTDataViewModel.SelectedChunk):
+                SelectedChunk = tab.SelectedChunk;
+                OnPropertyChanged(nameof(SelectedChunk));
+                break;
+            case nameof(RDTDataViewModel.SelectedChunks):
+            {
+                SelectedChunks = tab.SelectedChunks ?? [];
+                if (SelectedChunks.Count == 0 && tab.SelectedChunk is not null)
+                {
+                    SelectedChunks.Add(tab.SelectedChunk);
+                }
+                OnPropertyChanged(nameof(SelectedChunks));
+
+                break;
+            }
+        }
+
     }
 
     private void OnModifierChanged() => IsShiftKeyDown = _modifierViewStateService?.IsShiftKeyPressed ?? false;
@@ -95,7 +125,6 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         if (CurrentTab is RDTDataViewModel rtdViewModel)
         {
             RootChunk = rtdViewModel.GetRootChunk();
-            rtdViewModel.PropertyChanged += OnRtdModelPropertyChanged;
             if (rtdViewModel.SelectedChunk is ChunkViewModel cvm)
             {
                 SelectedChunk = cvm;
@@ -105,27 +134,33 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         RefreshMeshMenuItems();
     }
 
-    private void OnRtdModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+
+    private void OnTabSelectionChanged(object? sender, EventArgs e)
     {
-        if (sender is not RDTDataViewModel dataViewModel || e.PropertyName is not
-                (nameof(RDTDataViewModel.SelectedChunk)
-                or nameof(RDTDataViewModel.SelectedChunks)
-                or nameof(RDTDataViewModel.FilePath))
-           )
+        if (sender is not RDTDataViewModel dataViewModel)
         {
             return;
         }
 
-        SelectedChunk = (ChunkViewModel?)dataViewModel.SelectedChunk;
+        SelectedChunk = dataViewModel.SelectedChunk;
         SelectedChunks.Clear();
         if (dataViewModel.SelectedChunks is IList list)
         {
             SelectedChunks.AddRange(list.OfType<ChunkViewModel>());
         }
 
-        RefreshMeshMenuItems();
-
         SelectedChunk ??= RootChunk;
+    }
+
+    private void OnRtdModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (sender is not RDTDataViewModel || e.PropertyName is not (nameof(RDTDataViewModel.FilePath))
+           )
+        {
+            return;
+        }
+
+        RefreshMeshMenuItems();
 
         _isEmptySubmeshesDeleted = false;
     }
@@ -177,7 +212,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [ObservableProperty]
     private ChunkViewModel? _selectedChunk;
 
-    public List<ChunkViewModel> SelectedChunks { get; } = [];
+    public List<ChunkViewModel> SelectedChunks { get; private set; } = [];
 
     private void RefreshMeshMenuItems()
     {
@@ -194,7 +229,18 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
     public void SetCurrentTab(RedDocumentTabViewModel? value)
     {
+        if (CurrentTab is RDTDataViewModel rtdViewModel)
+        {
+            rtdViewModel.PropertyChanged -= OnRtdModelPropertyChanged;
+        }
+        
         CurrentTab = value;
+
+        if (CurrentTab is RDTDataViewModel newModel)
+        {
+            newModel.PropertyChanged += OnRtdModelPropertyChanged;
+        }
+
         RefreshMenuVisibility();
     }
 
