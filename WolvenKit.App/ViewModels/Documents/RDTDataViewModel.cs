@@ -343,9 +343,9 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     }
 
-    public override void OnSelected()
+    public override void OnSelected(PropertyChangedEventArgs e)
     {
-        base.OnSelected();
+        base.OnSelected(e);
         RefreshDirtyChunks();
 
         if (SelectedChunk is ChunkViewModel { ResolvedData: worldNode } cvm)
@@ -410,6 +410,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
         SelectedChunks?.Clear();
         SelectedChunk = null;
+        OnPropertyChanged(nameof(SelectedChunks));
     }
 
     
@@ -459,13 +460,6 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         SelectedChunk = chunk;
     }
 
-
-    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
-    {
-        base.OnPropertyChanged(e);
-        Console.WriteLine($"PropertyChanged: {e.PropertyName}");
-    }
-
     public void SetSelection(List<ChunkViewModel> chunks)
     {
         ClearSelection();
@@ -476,7 +470,10 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
         // remove duplicates
         var uniqueChunks = new HashSet<ChunkViewModel>(chunks);
-        SelectedChunk = uniqueChunks.LastOrDefault();
+        if (SelectedChunk is null || !uniqueChunks.Contains(SelectedChunk))
+        {
+            SelectedChunk = uniqueChunks.LastOrDefault();
+        }
 
         foreach (var cvm in uniqueChunks)
         {
@@ -488,6 +485,8 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
                 SelectedChunks.Add(cvm);
             }
         }
+
+        OnPropertyChanged(nameof(SelectedChunks));
     }
     
     public event EventHandler<string>? OnSectorNodeSelected;

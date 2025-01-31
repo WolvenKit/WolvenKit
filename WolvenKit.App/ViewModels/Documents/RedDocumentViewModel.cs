@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -129,7 +130,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
 
         ShowMenuToolbar = value?.FilePath.EndsWith(".mesh") == true;
-        value?.OnSelected();
+        value?.OnSelected(new PropertyChangedEventArgs(nameof(SelectedTabItemViewModel)));
     }
 
     private void OnReloadTabs(object? sender, EventArgs e)
