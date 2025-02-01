@@ -11,6 +11,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using Splat;
+using Syncfusion.Data.Extensions;
 using Syncfusion.UI.Xaml.TreeView;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
@@ -179,24 +180,17 @@ namespace WolvenKit.Views.Tools
 
         private void OnSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
         {
-            SelectedItems ??= [];
-
             // make sure we don't end up with duplicates
-            foreach (var removedItem in e.RemovedItems.OfType<ChunkViewModel>())
+            foreach (var removedItem in e.RemovedItems.Cast<ChunkViewModel>())
             {
                 removedItem.IsSelected = false;
-                while (SelectedItems.Contains(removedItem))
-                {
-                    SelectedItems.Remove(removedItem);
-                }
             }
 
             // We won't have duplicate selections anymore, because we removed everything
-            foreach (var addedItem in e.AddedItems.OfType<ChunkViewModel>())
+            foreach (var addedItem in e.AddedItems.Cast<ChunkViewModel>())
             {
                 addedItem.IsSelected = true;
-                SelectedItems.Add(addedItem);
-            }  
+            }
 
             RefreshContextMenuFlags();
             RefreshSelectedItemsContextMenuFlags();
@@ -291,12 +285,12 @@ namespace WolvenKit.Views.Tools
 
         /// <summary>Identifies the <see cref="SelectedItems"/> dependency property.</summary>
         public static readonly DependencyProperty SelectedItemsProperty =
-            DependencyProperty.Register(nameof(SelectedItems), typeof(ObservableCollection<ChunkViewModel>), typeof(RedTreeView));
+            DependencyProperty.Register(nameof(SelectedItems), typeof(ObservableCollection<object>), typeof(RedTreeView));
 
         /// <summary>Bound to <see cref="RDTDataViewModel.SelectedChunks"/> </summary>
-        public ObservableCollection<ChunkViewModel> SelectedItems
+        public ObservableCollection<object> SelectedItems
         {
-            get => (ObservableCollection<ChunkViewModel>)GetValue(SelectedItemsProperty);
+            get => (ObservableCollection<object>)GetValue(SelectedItemsProperty);
             set => SetValue(SelectedItemsProperty, value);
         }
 
@@ -856,12 +850,10 @@ namespace WolvenKit.Views.Tools
             }
 
             List<Task<List<ChunkViewModel>>> tasks = [];
-            
             using (collectionView.DeferRefresh())
             {
                 List<ChunkViewModel> chunksByParent = [];
-                foreach (var chunks in GetSelectedChunks()
-                             .GroupBy(chunk => chunk.Parent))
+                foreach (var chunks in GetSelectedChunks().GroupBy(chunk => chunk.Parent))
                 {
                     if (!preserveIndex)
                     {
@@ -878,11 +870,10 @@ namespace WolvenKit.Views.Tools
 
                     tasks.Add(Task.FromResult(chunksByParent));
                 }
+
+                var groupResults = await Task.WhenAll(tasks);
+                SetSelectedItems([.. groupResults.SelectMany(g => g).ToList()]);
             }
-
-            var groupResults = await Task.WhenAll(tasks);
-            SetSelectedItems([..groupResults.SelectMany(g => g).ToList()]);
-
         }
 
         /// <summary>
@@ -972,7 +963,7 @@ namespace WolvenKit.Views.Tools
             }
             else
             {
-                SetCurrentValue(SelectedItemsProperty, new ObservableCollection<ChunkViewModel>(selectedChunkViewModels));
+                SetCurrentValue(SelectedItemsProperty, new ObservableCollection<object>(selectedChunkViewModels));
                 SetCurrentValue(SelectedItemProperty, selectedChunkViewModels.LastOrDefault());
             }
         }
@@ -1166,7 +1157,7 @@ namespace WolvenKit.Views.Tools
         {
             if (SelectedItems is not null)
             {
-                return [.. SelectedItems];
+                return [.. SelectedItems.Cast<ChunkViewModel>()];
             }
 
             if (SelectedItem is not null)
@@ -1202,11 +1193,11 @@ namespace WolvenKit.Views.Tools
         private ChunkViewModel GetRoot()
         {
             if (ItemsSource is not ListCollectionView selection)
-            {
+            {   
                 return null;
             }
 
-            return selection.OfType<ChunkViewModel>().ToList().FirstOrDefault((cvm) => cvm.Parent is null);
+            return selection.Cast<ChunkViewModel>().ToList().FirstOrDefault((cvm) => cvm.Parent is null);
         }
 
         #region context_menu_and_keystates
