@@ -211,6 +211,20 @@ public partial class RedGraph
         return nodeWrapper;
     }
 
+    private DynamicQuestViewModel WrapDynamicQuestNode(DynamicBaseClass node, bool isNew)
+    {
+        var nodeWrapper = new DynamicQuestViewModel(node);
+
+        if (isNew)
+        {
+            nodeWrapper.CreateDefaultSockets();
+        }
+
+        nodeWrapper.GenerateSockets();
+
+        return nodeWrapper;
+    }
+
     private void ConnectQuest(QuestOutputConnectorViewModel questSource, QuestInputConnectorViewModel questTarget)
     {
         for (var i = Connections.Count - 1; i >= 0; i--)
@@ -458,18 +472,23 @@ public partial class RedGraph
         var nodeCache = new Dictionary<uint, BaseQuestViewModel>();
         foreach (var nodeHandle in questGraph.Nodes)
         {
-            ArgumentNullException.ThrowIfNull(nodeHandle.Chunk);
-
-            var node = nodeHandle.Chunk;
-            var nodeID = 0;
+            var node = nodeHandle.GetValue();
+            if (node is null)
+            {
+                throw new Exception("Empty nodes aren't supported!");
+            }
 
             if (node is questNodeDefinition nodeDefinition)
             {
                 graph._currentQuestNodeId = Math.Max(graph._currentQuestNodeId, nodeDefinition.Id);
-                nodeID = nodeDefinition.Id;
             }
 
-            var nvm = graph.WrapQuestNode(node, false);
+            var nvm = node switch
+            {
+                DynamicBaseClass dynamicBaseClass => graph.WrapDynamicQuestNode(dynamicBaseClass, false),
+                graphGraphNodeDefinition graphGraphNodeDefinition => graph.WrapQuestNode(graphGraphNodeDefinition, false),
+                _ => throw new Exception($"Node of type \"{node.GetType()}\" isn't supported!")
+            };
 
             nodeCache.Add(nvm.UniqueId, nvm);
             graph.Nodes.Add(nvm);

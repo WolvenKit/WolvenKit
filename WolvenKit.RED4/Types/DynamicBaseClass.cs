@@ -99,3 +99,25 @@ public class DynamicWidgetLogicController : inkWidgetLogicController, IDynamicCl
         set => SetPropertyValue<CName>(value);
     }
 }
+
+public class DynamicGraphNodeDefinition : graphGraphNodeDefinition, IDynamicClass
+{
+    [RED("className")]
+    [REDProperty(IsIgnored = true)]
+    public CName ClassName
+    {
+        get => GetPropertyValue<CName>();
+        set => SetPropertyValue<CName>(value);
+    }
+}
+
+public class DynamicSceneGraphNode : scnSceneGraphNode, IDynamicClass
+{
+    [RED("className")]
+    [REDProperty(IsIgnored = true)]
+    public CName ClassName
+    {
+        get => GetPropertyValue<CName>();
+        set => SetPropertyValue<CName>(value);
+    }
+}

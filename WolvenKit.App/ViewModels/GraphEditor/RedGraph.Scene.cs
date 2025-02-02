@@ -218,6 +218,15 @@ public partial class RedGraph
         return nodeWrapper;
     }
 
+    private DynamicSceneViewModel WrapDynamicSceneNode(DynamicBaseClass node)
+    {
+        var nodeWrapper = new DynamicSceneViewModel(node);
+
+        nodeWrapper.GenerateSockets();
+
+        return nodeWrapper;
+    }
+
     private void ConnectScene(SceneOutputConnectorViewModel sceneSource, SceneInputConnectorViewModel sceneTarget)
     {
         for (var i = Connections.Count - 1; i >= 0; i--)
@@ -340,11 +349,18 @@ public partial class RedGraph
         var nodeCache = new Dictionary<uint, BaseSceneViewModel>();
         foreach (var nodeHandle in sceneResource.SceneGraph.Chunk!.Graph)
         {
-            ArgumentNullException.ThrowIfNull(nodeHandle.Chunk);
+            var node = nodeHandle.GetValue();
+            if (node is null)
+            {
+                throw new Exception("Empty nodes aren't supported!");
+            }
 
-            var node = nodeHandle.Chunk;
-
-            var nvm = graph.WrapSceneNode(node);
+            var nvm = node switch
+            {
+                DynamicBaseClass dynamicBaseClass => graph.WrapDynamicSceneNode(dynamicBaseClass),
+                scnSceneGraphNode scnSceneGraphNode => graph.WrapSceneNode(scnSceneGraphNode),
+                _ => throw new Exception($"Node of type \"{node.GetType()}\" isn't supported!")
+            };
 
             if (!nodeCache.ContainsKey(nvm.UniqueId))
             {
