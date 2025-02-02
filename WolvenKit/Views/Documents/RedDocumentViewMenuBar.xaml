@@ -437,8 +437,8 @@
                                          RelativeSource={RelativeSource Self},
                                          Mode=OneWay,
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Header="Convert to CCXL materials"
-                    ToolTip="(Implemented currently for hair meshes) This will run adjust submesh counts first"
+                    Header="Convert hair to CCXL material"
+                    ToolTip="This will run adjust submesh counts first "
                     Click="OnConvertToCCXLMaterials">
                     <MenuItem.Icon>
                         <templates:IconBox

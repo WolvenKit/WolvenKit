@@ -316,7 +316,14 @@ namespace WolvenKit.Views.Documents
         }
         private void OnConvertToCCXLMaterials(object _, RoutedEventArgs e)
         {
-            if (ViewModel?.RootChunk is not ChunkViewModel cvm || RootChunk?.ResolvedData is not CMesh mesh)
+            
+            if (ViewModel?.RootChunk is not ChunkViewModel cvm || RootChunk?.ResolvedData is not CMesh mesh || _projectManager.ActiveProject is not Cp77Project activeProject)
+            {
+                return;
+            }
+
+            var dialog = new ConvertToCCXLMaterialsDialog(activeProject);
+            if (dialog.ShowDialog() is null)
             {
                 return;
             }
