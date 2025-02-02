@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.App.Extensions;
@@ -8,15 +9,13 @@ using static System.Net.Mime.MediaTypeNames;
 namespace WolvenKit.App.ViewModels.Dialogs;
 public partial class ConvertToCCXLMaterialsDialogViewModel : ObservableObject
 {
-    [ObservableProperty] private string _selectedMi = "";
+    [ObservableProperty] private string _selectedMiFile = "";
 
-    [ObservableProperty] private string _mainhairMiFile = "";
-
-    [ObservableProperty] private string _mainhairMiMaterialType = "";
+    [ObservableProperty] private string _selectedMiType = "";
 
     [ObservableProperty] private bool _IsCap = false;
 
-    [ObservableProperty] private string _caphairMiFile = "";
+    [ObservableProperty] private string _selectedCapMiFile = "";
 
     public ConvertToCCXLMaterialsDialogViewModel(Cp77Project activeProject) 
     {
@@ -24,8 +23,22 @@ public partial class ConvertToCCXLMaterialsDialogViewModel : ObservableObject
         MiFileOption.AddRange<string>(
             activeProject.ModFiles
                 .Where(fp => fp.EndsWith(".mi"))
+
         );
+        SelectedMiFile = MiFileOption.LastOrDefault() ?? "";
+
+        MainMiMaterialTypeList = new List<string> { "Braid", "Cap", "Cap01", "Curls", "Dread", "Long", "Short", "Brows", "Lashes" };
+        SelectedMiType = "Long" ?? MainMiMaterialTypeList.LastOrDefault();
+
+        SelectedCapMiFile = MiFileOption.FirstOrDefault() ?? ""; 
 
     }
     [ObservableProperty] private List<string> _miFileOption = [];
+    [ObservableProperty] private List<string> _mainMiMaterialTypeList = [];
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        base.OnPropertyChanged(e);
+
+    }
+
 }

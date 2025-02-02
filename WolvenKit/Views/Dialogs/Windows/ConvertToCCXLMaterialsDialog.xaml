@@ -64,7 +64,7 @@
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
                         ItemsSource="{Binding MiFileOption,
                                               UpdateSourceTrigger=PropertyChanged}"
-                        SelectedItem="{Binding SelectedMi}"
+                        SelectedItem="{Binding SelectedMiFile}"
                         KeyboardNavigation.TabIndex="1" />
                     <Label
                         Grid.Row="1"
@@ -72,12 +72,15 @@
                         HorizontalAlignment="Left"
                         Background="#252525"
                         BorderThickness="0"
-                        Content="Hair style material:" />
+                        Content="Main style material:" />
                     <ComboBox
                         x:Name="MainMiMaterialTypeBox"
                         Grid.Row="1"
                         Grid.Column="2"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
+                        ItemsSource="{Binding MainMiMaterialTypeList,
+                                              UpdateSourceTrigger=PropertyChanged}"
+                        SelectedItem="{Binding SelectedMiType}"
                         KeyboardNavigation.TabIndex="1" />
                     <Label
                         Grid.Row="3"
@@ -85,7 +88,7 @@
                         HorizontalAlignment="Left"
                         Background="#252525"
                         BorderThickness="0"
-                        Content="Custom cap .mi file:" />
+                        Content="Include a Cap .mi file:" />
                     <CheckBox
                         x:Name="CustomCap"
                         Grid.Row="3"
@@ -97,6 +100,9 @@
                         Grid.Row="3"
                         Grid.Column="2"
                         IsEnabled="{Binding IsCap}"
+                        ItemsSource="{Binding MiFileOption,
+                                              UpdateSourceTrigger=PropertyChanged}"
+                        SelectedItem="{Binding SelectedCapMiFile}"
                         KeyboardNavigation.TabIndex="2" />
                 </Grid>
             </syncfusion:WizardPage>

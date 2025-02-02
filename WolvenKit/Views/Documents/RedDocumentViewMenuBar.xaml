@@ -430,7 +430,7 @@
                             Foreground="White" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <!-- Generate CCXL Materials for hairs(for now) -->
+                <!-- Generate CCXL Materials for hairs -->
                 <MenuItem
                     Style="{StaticResource MenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
@@ -444,7 +444,7 @@
                         <templates:IconBox
                             IconPack="MaterialDesign"
                             Kind="SwitchAccessShortcut"
-                            Foreground="DeepSkyBlue" />
+                            Foreground="White" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>

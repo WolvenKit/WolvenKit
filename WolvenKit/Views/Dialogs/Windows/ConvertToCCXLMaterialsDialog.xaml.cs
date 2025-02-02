@@ -24,7 +24,6 @@ public partial class ConvertToCCXLMaterialsDialog : IViewFor<ConvertToCCXLMateri
         };
         DataContext = ViewModel;
 
-        MainMiMaterialTypeBox.ItemsSource = new List<string> { "braid", "cap", "cap01", "curls", "dread", "long", "short", "brows", "lashes" };
         
     }
 
