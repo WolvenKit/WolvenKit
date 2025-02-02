@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Text.RegularExpressions;
+using NAudio.CoreAudioApi;
 using WolvenKit.Common;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
@@ -24,6 +25,7 @@ public partial class ScriptFile
 
     public HookType HookType { get; private set; } = HookType.None;
     public ImmutableList<string> HookExtensions { get; private set; } = null!;
+    public int HookPriority { get; private set; } = 100;
 
     public string? Version { get; private set; }
     public string? Author { get; private set; }
@@ -124,6 +126,15 @@ public partial class ScriptFile
                             hookExtensions.Add(part);
                         }
                         HookExtensions = ImmutableList.Create(hookExtensions.ToArray());
+                        break;
+
+                    case "hook_priority":
+                        if (!int.TryParse(match.Groups[2].Value, out var priority))
+                        {
+                            loggerService?.Error($"Invalid hook priority \"{match.Groups[2].Value}\". Value needs to be an integer");
+                            continue;
+                        }
+                        HookPriority = priority;
                         break;
 
                     case "description":

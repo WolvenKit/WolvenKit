@@ -37,6 +37,7 @@ public partial class AppScriptService
             .Where(scriptFile => scriptFile.Type == ScriptType.Hook)
             .Where(scriptFile => scriptFile.HookType.HasFlag(hookType))
             .Where(scriptFile => scriptFile.IsHookExtensionSupported(ext))
+            .OrderByDescending(scriptFile => scriptFile.HookPriority)
             .ToList();
 
     private bool OnSaveHook(string filePath, ref CR2WFile cr2wFile)
@@ -54,7 +55,8 @@ public partial class AppScriptService
 
         _settingsManager.ScriptStatus ??= new();
 
-        ScriptFile? script = null;
+        string? jsonContent = null;
+
         foreach (var scriptFile in GetHookScripts(HookType.Save, extStr))
         {
             if (_settingsManager.ScriptStatus.TryGetValue(scriptFile.Path, out var enabled) && !enabled)
@@ -62,39 +64,32 @@ public partial class AppScriptService
                 continue;
             }
 
-            script = scriptFile;
-            break;
-        }
+            jsonContent ??= RedJsonSerializer.Serialize(new RedFileDto(cr2wFile) { Header = { ArchiveFileName = filePath } });
 
-        if (script == null)
-        {
-            return true;
-        }
-
-        var dto = new RedFileDto(cr2wFile) { Header = { ArchiveFileName = filePath } };
-
-        var (success, json) = OnSaveExecute(script, extStr, RedJsonSerializer.Serialize(dto));
-        switch (success)
-        {
-            case Enums.EBOOL.UNINITIALZED:
-                return true;
-            case Enums.EBOOL.TRUE:
+            var (success, json) = OnSaveExecute(scriptFile, extStr, jsonContent);
+            if (success == Enums.EBOOL.UNINITIALZED)
             {
-                if (!RedJsonSerializer.TryDeserialize(json, out RedFileDto? newDto) || newDto?.Data == null)
-                {
-                    _loggerService.Error("Couldn't deserialize return value");
-                    return false;
-                }
-
-                cr2wFile = newDto.Data;
-
-                return true;
+                _loggerService.Warning($"\"{scriptFile.Name}\" returned an invalid result. Skipping");
+                continue;
             }
 
-            case Enums.EBOOL.FALSE:
-            default:
+            if (success == Enums.EBOOL.FALSE)
+            {
+                _loggerService.Error($"\"{scriptFile.Name}\" returned an error. Aborting");
                 return false;
+            }
+
+            jsonContent = json;
         }
+
+        if (string.IsNullOrEmpty(jsonContent) || !RedJsonSerializer.TryDeserialize(jsonContent, out RedFileDto? newDto) || newDto?.Data == null)
+        {
+            _loggerService.Error("Couldn't deserialize return value");
+            return false;
+        }
+
+        cr2wFile = newDto.Data;
+        return true;
     }
 
     public bool RunFileValidation(string filePath, ref CR2WFile cr2wFile) => OnSaveHook(filePath, ref cr2wFile);
@@ -121,12 +116,7 @@ public partial class AppScriptService
         }
 
 
-        if (success)
-        {
-            return (Enums.EBOOL.TRUE, file);
-        }
-
-        return (Enums.EBOOL.FALSE, "");
+        return success ? (Enums.EBOOL.TRUE, file) : (Enums.EBOOL.FALSE, "");
     }
 
     private void OnExportHook(ref FileInfo fileInfo, ref GlobalExportArgs args)
