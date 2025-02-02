@@ -15,7 +15,7 @@ public interface IHookService
     public void OnPreImport(ref RedRelativePath rawRelative, ref GlobalImportArgs args, ref DirectoryInfo? outDir);
 
     public void RegisterOnImportFromJson(OnImportFromJsonHook hook);
-    public void OnImportFromJson(ref string jsonText);
+    public void OnImportFromJson(ref string jsonText, string redExtension);
 
     public void RegisterOnParsingError(OnParsingErrorHook hook);
     public bool OnParsingError(ParsingErrorEventArgs eventData);

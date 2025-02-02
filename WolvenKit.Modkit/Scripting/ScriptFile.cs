@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Text.RegularExpressions;
+using WolvenKit.Common;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.RED4.Archive;
 
 namespace WolvenKit.Modkit.Scripting;
 
@@ -18,7 +21,9 @@ public partial class ScriptFile
     public string Name { get; }
 
     public ScriptType Type { get; private set; } = ScriptType.General;
-    public string? HookExtension { get; private set; }
+
+    public HookType HookType { get; private set; } = HookType.None;
+    public ImmutableList<string> HookExtensions { get; private set; } = null!;
 
     public string? Version { get; private set; }
     public string? Author { get; private set; }
@@ -68,6 +73,10 @@ public partial class ScriptFile
                         if (Enum.TryParse<ScriptType>(match.Groups[2].Value, true, out var scriptType))
                         {
                             Type = scriptType;
+                            if (Type == ScriptType.Hook)
+                            {
+                                HookType = HookType.Global;
+                            }
                         }
                         else
                         {
@@ -76,8 +85,45 @@ public partial class ScriptFile
                         }
                         break;
 
+                    case "hook_type":
+                    case "hook_types":
+                        Type = ScriptType.Hook;
+
+                        foreach (var part in match.Groups[2].Value.Split(','))
+                        {
+                            if (!Enum.TryParse<HookType>(part, true, out var type))
+                            {
+                                loggerService?.Error($"Unknown hook type \"{part}\"");
+                                continue;
+                            }
+
+                            HookType |= type;
+                        }
+
+                        break;
+
                     case "hook_extension":
-                        HookExtension = match.Groups[2].Value;
+                    case "hook_extensions":
+                        var hookExtensions = new List<string>();
+                        foreach (var part in match.Groups[2].Value.Split(','))
+                        {
+                            if (part != "global" && 
+                                !Enum.TryParse<ERedExtension>(part, true, out _) &&
+                                !Enum.TryParse<ERawFileFormat>(part, true, out _))
+                            {
+                                loggerService?.Error($"Unknown hook extension \"{part}\"");
+                                continue;
+                            }
+
+                            if (part == "global")
+                            {
+                                hookExtensions = ["global"];
+                                break;
+                            }
+
+                            hookExtensions.Add(part);
+                        }
+                        HookExtensions = ImmutableList.Create(hookExtensions.ToArray());
                         break;
 
                     case "description":
@@ -89,6 +135,7 @@ public partial class ScriptFile
                         break;
 
                     default:
+                        loggerService?.Error($"Unknown tag \"{match.Groups[1].Value}\"");
                         break;
                 }
             }
@@ -99,10 +146,19 @@ public partial class ScriptFile
             }
         }
 
-        if (Type == ScriptType.Hook && string.IsNullOrEmpty(HookExtension))
+        if (Type == ScriptType.Hook)
         {
-            loggerService?.Error($"Could not load \"{Path}\". Field \"hook_extension\" is not set");
-            return false;
+            if (HookType == HookType.None)
+            {
+                loggerService?.Error($"Could not load \"{Path}\". Field \"hook_type(s)\" is not set");
+                return false;
+            }
+
+            if (HookExtensions.Count == 0)
+            {
+                loggerService?.Error($"Could not load \"{Path}\". Field \"hook_extension(s)\" is not set");
+                return false;
+            }
         }
 
         Content = File.ReadAllText(Path);
@@ -137,6 +193,26 @@ public partial class ScriptFile
         }
     }
 
+    public bool IsHookExtensionSupported(string? extension)
+    {
+        if (HookExtensions[0] == "global")
+        {
+            return true;
+        }
+
+        if (string.IsNullOrWhiteSpace(extension))
+        {
+            return false;
+        }
+
+        if (extension.Length > 0 && extension[0] == '.')
+        {
+            extension = extension[1..];
+        }
+
+        return HookExtensions.Contains(extension);
+    }
+
     [GeneratedRegex("^// @([^\\s]+)\\s?([^\\s]*)$")]
     private static partial Regex InfoHeaderRegex();
 
@@ -154,4 +230,19 @@ public enum ScriptType
     Hook,
     Lib,
     Ui
+}
+
+[Flags]
+public enum HookType
+{
+    None = 0x00,
+
+    Save = 0x01,
+    Export = 0x02,
+    PreImport = 0x04,
+    ImportJson = 0x08,
+
+    ParseError = 0x8000,
+
+    Global = Save | Export | PreImport | ImportJson | ParseError
 }

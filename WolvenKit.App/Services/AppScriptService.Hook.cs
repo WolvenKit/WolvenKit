@@ -32,6 +32,13 @@ public partial class AppScriptService
         }
     }
 
+    private IList<ScriptFile> GetHookScripts(HookType hookType = HookType.Global, string? ext = null) => 
+        GetScripts()
+            .Where(scriptFile => scriptFile.Type == ScriptType.Hook)
+            .Where(scriptFile => scriptFile.HookType.HasFlag(hookType))
+            .Where(scriptFile => scriptFile.IsHookExtensionSupported(ext))
+            .ToList();
+
     private bool OnSaveHook(string filePath, ref CR2WFile cr2wFile)
     {
         if (string.IsNullOrEmpty(filePath))
@@ -48,18 +55,8 @@ public partial class AppScriptService
         _settingsManager.ScriptStatus ??= new();
 
         ScriptFile? script = null;
-        foreach (var scriptFile in GetScripts())
+        foreach (var scriptFile in GetHookScripts(HookType.Save, extStr))
         {
-            if (scriptFile.Type != ScriptType.Hook)
-            {
-                continue;
-            }
-
-            if (scriptFile.HookExtension != "global"/* && scriptFile.HookExtension != extStr*/)
-            {
-                continue;
-            }
-
             if (_settingsManager.ScriptStatus.TryGetValue(scriptFile.Path, out var enabled) && !enabled)
             {
                 continue;
@@ -134,15 +131,14 @@ public partial class AppScriptService
 
     private void OnExportHook(ref FileInfo fileInfo, ref GlobalExportArgs args)
     {
-        foreach (var scriptFile in GetScripts())
+        var extStr = fileInfo.Extension[1..];
+
+        foreach (var scriptFile in GetHookScripts(HookType.Export, extStr))
         {
-            if (scriptFile.HookExtension == "global")
+            var (status, newArgs) = OnExportExecute(scriptFile, fileInfo, args);
+            if (status == Enums.EBOOL.TRUE)
             {
-                var (status, newArgs) = OnExportExecute(scriptFile, fileInfo, args);
-                if (status == Enums.EBOOL.TRUE)
-                {
-                    args = newArgs!;
-                }
+                args = newArgs!;
             }
         }
     }
@@ -174,15 +170,12 @@ public partial class AppScriptService
 
     public void OnPreImportHook(ref RedRelativePath rawRelative, ref GlobalImportArgs args, ref DirectoryInfo? outDir)
     {
-        foreach (var scriptFile in GetScripts())
+        foreach (var scriptFile in GetHookScripts(HookType.PreImport, rawRelative.Extension))
         {
-            if (scriptFile.HookExtension == "global")
+            var (status, newArgs) = OnPreImportExecute(scriptFile, rawRelative, args, outDir);
+            if (status == Enums.EBOOL.TRUE)
             {
-                var (status, newArgs) = OnPreImportExecute(scriptFile, rawRelative, args, outDir);
-                if (status == Enums.EBOOL.TRUE)
-                {
-                    args = newArgs!;
-                }
+                args = newArgs!;
             }
         }
     }
@@ -212,17 +205,14 @@ public partial class AppScriptService
         return (Enums.EBOOL.TRUE, args);
     }
 
-    private void OnImportFromJson(ref string jsonText)
+    private void OnImportFromJson(ref string jsonText, string redExtension)
     {
-        foreach (var scriptFile in GetScripts())
+        foreach (var scriptFile in GetHookScripts(HookType.ImportJson, redExtension))
         {
-            if (scriptFile.HookExtension == "global")
+            var (status, newJsonText) = OnImportFromJsonExecute(scriptFile, jsonText);
+            if (status == Enums.EBOOL.TRUE)
             {
-                var (status, newJsonText) = OnImportFromJsonExecute(scriptFile, jsonText);
-                if (status == Enums.EBOOL.TRUE)
-                {
-                    jsonText = newJsonText!;
-                }
+                jsonText = newJsonText!;
             }
         }
     }
@@ -247,15 +237,12 @@ public partial class AppScriptService
 
     private bool OnParsingError(ParsingErrorEventArgs eventData)
     {
-        foreach (var scriptFile in GetScripts())
+        foreach (var scriptFile in GetHookScripts(HookType.ParseError))
         {
-            if (scriptFile.HookExtension == "global")
+            var status = OnParsingErrorExecute(scriptFile, eventData);
+            if (status == Enums.EBOOL.TRUE)
             {
-                var status = OnParsingErrorExecute(scriptFile, eventData);
-                if (status == Enums.EBOOL.TRUE)
-                {
-                    return true;
-                }
+                return true;
             }
         }
 
