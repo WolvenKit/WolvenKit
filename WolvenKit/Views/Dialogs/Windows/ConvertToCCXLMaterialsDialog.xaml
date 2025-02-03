@@ -46,8 +46,11 @@
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Label
@@ -67,7 +70,7 @@
                         SelectedItem="{Binding SelectedMiFile}"
                         KeyboardNavigation.TabIndex="1" />
                     <Label
-                        Grid.Row="1"
+                        Grid.Row="2"
                         Grid.Column="0"
                         HorizontalAlignment="Left"
                         Background="#252525"
@@ -75,7 +78,7 @@
                         Content="Main style material:" />
                     <ComboBox
                         x:Name="MainMiMaterialTypeBox"
-                        Grid.Row="1"
+                        Grid.Row="2"
                         Grid.Column="2"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
                         ItemsSource="{Binding MainMiMaterialTypeList,
@@ -83,7 +86,7 @@
                         SelectedItem="{Binding SelectedMiType}"
                         KeyboardNavigation.TabIndex="1" />
                     <Label
-                        Grid.Row="3"
+                        Grid.Row="4"
                         Grid.Column="0"
                         HorizontalAlignment="Left"
                         Background="#252525"
@@ -91,13 +94,13 @@
                         Content="Include a Cap .mi file:" />
                     <CheckBox
                         x:Name="CustomCap"
-                        Grid.Row="3"
+                        Grid.Row="4"
                         Grid.Column="1"
                         IsChecked="{Binding IsCap}"
                         KeyboardNavigation.TabIndex="2" />
                     <ComboBox
                         x:Name="CustomCapDropdown"
-                        Grid.Row="3"
+                        Grid.Row="4"
                         Grid.Column="2"
                         IsEnabled="{Binding IsCap}"
                         ItemsSource="{Binding MiFileOption,
