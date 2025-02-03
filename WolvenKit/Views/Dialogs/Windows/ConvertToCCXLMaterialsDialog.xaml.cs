@@ -2,9 +2,7 @@
 using ReactiveUI;
 using System.Windows;
 using WolvenKit.App.ViewModels.Dialogs;
-using System.Collections.Generic;
 using WolvenKit.App.Models.ProjectManagement.Project;
-using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace WolvenKit.Views.Dialogs.Windows;
 /// <summary>

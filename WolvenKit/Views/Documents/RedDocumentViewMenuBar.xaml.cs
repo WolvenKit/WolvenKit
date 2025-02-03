@@ -328,18 +328,22 @@ namespace WolvenKit.Views.Documents
                 return;
             }
             var app = mesh.Appearances.First();
+            if (app is null)
+            {
+                _loggerService.Error("Cannot convert to CCXL, invalid mesh setup");
+                return;
+            }
             CName appName = ((meshMeshAppearance)app!).Name;
 
-            var mainhairmifile = dialog.ViewModel?.SelectedMiFile;
+            var mainHairMiFile = dialog.ViewModel?.SelectedMiFile;
+            var mainHairMiType = dialog.ViewModel?.SelectedMiType;
+            var mainMiPath = (CName)(mainHairMiFile!);
 
-            var mainhairmitype = dialog.ViewModel?.SelectedMiType;
-            var caphairmifile = dialog.ViewModel?.SelectedCapMiFile;
-            //TODO-couple cap commands together with if IsCap so as to make sure that all cap stuff is added together   
-            if (caphairmifile == "Cap01")
+            if (mainHairMiType is "Cap01")
             {
-                caphairmifile = "Cap";
+                mainHairMiType = "Cap";
             }
-            var capminametype = "Cap";
+            
 
             cvm.GetPropertyChild("appearances")?.CalculateProperties();
             cvm.GetPropertyChild("materialEntries")?.CalculateProperties();
@@ -348,55 +352,95 @@ namespace WolvenKit.Views.Documents
             cvm.AdjustSubmeshCountCommand.Execute(true);
             ViewModel.ClearMaterialsCommand.Execute(true);
 
-            app.Chunk!.ChunkMaterials = [appName + "@" + mainhairmitype!.ToLower(), appName + "@cap"];
+            app.Chunk!.ChunkMaterials = 
+                [
+                appName + "@" + mainHairMiType!.ToLower()
+                ];
 
 
-            mesh.MaterialEntries.Add(new CMeshMaterialEntry() { Name = "@context", Index = (CUInt16)0, IsLocalInstance = true });
-            var mainmi = new CMeshMaterialEntry() 
-            { 
-                Name = "@" + mainhairmitype!.ToLower(), Index = (CUInt16)1, IsLocalInstance = true
-            };
-            var capmi = new CMeshMaterialEntry() 
-            { 
-                Name = "@" + capminametype.ToLower(), Index = (CUInt16)2, IsLocalInstance = true 
-            };
-
-
-            var mainmipath = (CName)(mainhairmifile!);
-            var capmipath = (CName)(caphairmifile!);
-
-            mesh.MaterialEntries.Add(mainmi);
-
-            mesh.MaterialEntries.Add(capmi);
-
-            mesh.LocalMaterialBuffer.Materials.Add(new CMaterialInstance 
-            { Values = [new CKeyValuePair(mainhairmitype! + "BaseMaterial", mainmipath), 
-                        new CKeyValuePair(capminametype! + "BaseMaterial", capmipath)] 
+            mesh.MaterialEntries.Add(new CMeshMaterialEntry() {
+                Name = "@context", 
+                Index = (CUInt16)0, 
+                IsLocalInstance = true 
             });
 
+            var mainMi = new CMeshMaterialEntry() 
+            { 
+                Name = "@" + mainHairMiType!.ToLower(), 
+                Index = (CUInt16)1, 
+                IsLocalInstance = true
+            };
+                     
 
-            CResourceReference<CResource> mainmivalue = new CResourceReference<CResource>(
-                @"*base\characters\common\hair\textures\hair_profiles\{material}.hp", 
+            mesh.MaterialEntries.Add(mainMi);
+
+
+
+
+            CResourceReference<CHairProfile> mainMiValue = new CResourceReference<CHairProfile>(
+                @"*base\characters\common\hair\textures\hair_profiles\{material}.hp",
                     InternalEnums.EImportFlags.Soft);
 
 
             mesh.LocalMaterialBuffer.Materials.Add(new CMaterialInstance
             {
-                BaseMaterial = new CResourceReference<IMaterial>(mainhairmifile!, InternalEnums.EImportFlags.Soft),
-                Values = [new CKeyValuePair("GradientMap", mainmivalue)]
-            }
-            );
-
-            CResourceReference<CResource> capvalues = new CResourceReference<CResource>(
-                @"*base\characters\common\hair\textures\cap_gradiants\hh_cap_grad__{material}.xbm", 
-                    InternalEnums.EImportFlags.Soft);
+                Values = [new CKeyValuePair(mainHairMiType! + "BaseMaterial", mainMiPath)]
+            });
 
             mesh.LocalMaterialBuffer.Materials.Add(new CMaterialInstance
             {
-                BaseMaterial = new CResourceReference<IMaterial>(caphairmifile!, InternalEnums.EImportFlags.Soft),
-                Values = [new CKeyValuePair("GradientMap", capvalues)]
+                BaseMaterial = new CResourceReference<IMaterial>(mainHairMiFile!, InternalEnums.EImportFlags.Default),
+                Values = [new CKeyValuePair("HairProfile", mainMiValue)]
             }
             );
+
+            
+
+            if (dialog.ViewModel?.IsCap is true)
+            {
+                app.Chunk!.ChunkMaterials =
+               [
+                appName + "@" + mainHairMiType!.ToLower(),
+                appName + "@cap"
+               ];
+
+                var capHairMiFile = dialog.ViewModel?.SelectedCapMiFile;
+                var capMiNameType = "Cap";
+                var capMiPath = (CName)(capHairMiFile!);
+
+
+                mesh.LocalMaterialBuffer.Materials.RemoveAt(0);
+
+                mesh.LocalMaterialBuffer.Materials.Insert(0, new CMaterialInstance
+                {
+                    Values = [new CKeyValuePair(mainHairMiType! + "BaseMaterial", mainMiPath),
+                        new CKeyValuePair(capMiNameType! + "BaseMaterial", capMiPath)]
+                });
+
+
+                var capMi = new CMeshMaterialEntry()
+                {
+                    Name = "@" + capMiNameType.ToLower(),
+                    Index = (CUInt16)2,
+                    IsLocalInstance = true
+                };
+
+                mesh.MaterialEntries.Add(capMi);
+
+
+                CResourceReference<ITexture> capValues = new CResourceReference<ITexture>(
+                    @"*base\characters\common\hair\textures\cap_gradiants\hh_cap_grad__{material}.xbm",
+                        InternalEnums.EImportFlags.Soft);
+                mesh.LocalMaterialBuffer.Materials.Add(new CMaterialInstance
+                {
+                    BaseMaterial = new CResourceReference<IMaterial>(capHairMiFile!, InternalEnums.EImportFlags.Default),
+                    Values = [new CKeyValuePair("GradientMap", capValues)]
+                }
+
+                );
+
+            }
+           
 
             mesh.Appearances.Add(app);
             cvm.GetPropertyChild("appearances")?.RecalculateProperties();
