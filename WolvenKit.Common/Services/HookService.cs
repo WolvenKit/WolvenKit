@@ -19,7 +19,7 @@ public class HookService : IHookService
     public void OnPreImport(ref RedRelativePath rawRelative, ref GlobalImportArgs args, ref DirectoryInfo? outDir) => _onImportHook?.Invoke(ref rawRelative, ref args, ref outDir);
 
     public void RegisterOnImportFromJson(OnImportFromJsonHook hook) => _onImportFromJsonHook = hook;
-    public void OnImportFromJson(ref string jsonText) => _onImportFromJsonHook?.Invoke(ref jsonText);
+    public void OnImportFromJson(ref string jsonText, string redExtension) => _onImportFromJsonHook?.Invoke(ref jsonText, redExtension);
 
     public void RegisterOnParsingError(OnParsingErrorHook hook) => _onParsingErrorHook = hook;
     public bool OnParsingError(ParsingErrorEventArgs eventData) => _onParsingErrorHook != null && _onParsingErrorHook.Invoke(eventData);
@@ -28,7 +28,7 @@ public class HookService : IHookService
 
     public delegate void OnExportHook(ref FileInfo fileInfo, ref GlobalExportArgs args);
     public delegate void OnPreImportHook(ref RedRelativePath rawRelative, ref GlobalImportArgs args, ref DirectoryInfo? outDir);
-    public delegate void OnImportFromJsonHook(ref string jsonText);
+    public delegate void OnImportFromJsonHook(ref string jsonText, string redExtension);
     public delegate bool OnParsingErrorHook(ParsingErrorEventArgs eventData);
 
     #endregion

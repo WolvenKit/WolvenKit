@@ -136,6 +136,7 @@ public partial class ScriptService : ObservableObject
             if (!scriptFile.Reload(_loggerService))
             {
                 _scriptCache.Remove(file, out _);
+                continue;
             }
 
             result.Add(scriptFile);
