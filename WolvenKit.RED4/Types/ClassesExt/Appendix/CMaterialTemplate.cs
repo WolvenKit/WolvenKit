@@ -10,7 +10,7 @@ public partial class CMaterialTemplate : IRedAppendix
     [REDProperty(IsIgnored = true)]
     public CArray<CArray<CMaterialParameterInfo>> ParameterInfo
     {
-        get => GetPropertyValue<CArray<CArray<CMaterialParameterInfo>>>();
+        get => GetPropertyValue<CArray<CArray<CMaterialParameterInfo>>>()!; // set in PostConstruct, so not nullable
         set => SetPropertyValue<CArray<CArray<CMaterialParameterInfo>>>(value);
     }
 

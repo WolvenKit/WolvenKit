@@ -8,5 +8,5 @@ public sealed class Record
 
     public Dictionary<string, IRedType> Members { get; set; } = new();
 
-    public override string ToString() => $"[{Type}] {string.Join(',', Members.Keys)}";
+    public override string ToString() => $"[{Type ?? "NO_TYPE"}] {string.Join(',', Members.Keys)}";
 }
