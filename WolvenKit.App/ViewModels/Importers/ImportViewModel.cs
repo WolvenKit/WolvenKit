@@ -109,7 +109,7 @@ public partial class ImportViewModel : AbstractImportExportViewModel
 
     #endregion
 
-    protected override async Task ExecuteProcessBulk(bool all = false)
+    protected override async Task ExecuteProcessBulkAsync(bool all = false)
     {
         if (_gameController.GetController() is not RED4Controller || !Items.Any())
         {
