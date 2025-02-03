@@ -9,7 +9,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
-using DynamicData.Kernel;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App;
@@ -48,8 +47,8 @@ namespace WolvenKit.Views.Documents
         private readonly ProjectResourceTools _projectResourceTools;
         private readonly DocumentTools _documentTools;
         private readonly Cr2WTools _cr2WTools;
-
-
+        
+        
         public RedDocumentViewMenuBar()
         {
             _scriptService = Locator.Current.GetService<AppScriptService>()!;
@@ -70,7 +69,7 @@ namespace WolvenKit.Views.Documents
             // Enforce instance generation and service injection. One would assume that registering a singleton
             // is enough. One would be wrong.
             Locator.Current.GetService<DocumentTools>();
-
+            
             InitializeComponent();
 
             InitializeInstanceObjects();
@@ -78,8 +77,7 @@ namespace WolvenKit.Views.Documents
             DataContext = new RedDocumentViewToolbarModel(
                 _settingsManager,
                 _modifierStateService,
-                _projectManager)
-            { CurrentTab = _currentTab };
+                _projectManager) { CurrentTab = _currentTab };
             ViewModel = DataContext as RedDocumentViewToolbarModel;
 
             _modifierStateService.ModifierStateChanged += OnModifierStateChanged;
@@ -160,7 +158,7 @@ namespace WolvenKit.Views.Documents
             {
                 _isRunning = false;
             }
-
+            
         }
 
         private ChunkViewModel? SelectedChunk => ViewModel?.SelectedChunk;
@@ -198,7 +196,7 @@ namespace WolvenKit.Views.Documents
             _loggerService.Info("Done!");
             Interactions.ShowBrokenReferencesList(("Broken references", brokenReferences));
         }
-
+        
         private void OnFileValidationClick(object _, RoutedEventArgs e)
         {
             // in .app or root entity: warn with >5 appearances, because this can take a while 
@@ -213,7 +211,7 @@ namespace WolvenKit.Views.Documents
                     return;
                 }
             }
-
+            
             // This needs to be inside the DispatcherHelper, or the UI button will make everything explode
             DispatcherHelper.RunOnMainThread(
                 () => _loggerService.Info("Running file validation, please wait. The UI will be unresponsive."));
@@ -276,9 +274,7 @@ namespace WolvenKit.Views.Documents
                     maxIndex += 1;
                     mesh.MaterialEntries.Add(new CMeshMaterialEntry()
                     {
-                        Name = newMatName,
-                        Index = maxIndex,
-                        IsLocalInstance = material.IsLocalInstance
+                        Name = newMatName, Index = maxIndex, IsLocalInstance = material.IsLocalInstance
                     });
 
 
@@ -314,6 +310,7 @@ namespace WolvenKit.Views.Documents
             cvm.DeleteUnusedMaterialsCommand.Execute(true);
             cvm.Tab?.Parent.SetIsDirty(true);
         }
+
         private void OnConvertToCCXLMaterials(object _, RoutedEventArgs e)
         {
 
@@ -343,7 +340,7 @@ namespace WolvenKit.Views.Documents
             {
                 mainHairMiType = "Cap";
             }
-            
+
 
             cvm.GetPropertyChild("appearances")?.CalculateProperties();
             cvm.GetPropertyChild("materialEntries")?.CalculateProperties();
@@ -352,25 +349,26 @@ namespace WolvenKit.Views.Documents
             cvm.AdjustSubmeshCountCommand.Execute(true);
             ViewModel.ClearMaterialsCommand.Execute(true);
 
-            app.Chunk!.ChunkMaterials = 
+            app.Chunk!.ChunkMaterials =
                 [
                 appName + "@" + mainHairMiType!.ToLower()
                 ];
 
 
-            mesh.MaterialEntries.Add(new CMeshMaterialEntry() {
-                Name = "@context", 
-                Index = (CUInt16)0, 
-                IsLocalInstance = true 
+            mesh.MaterialEntries.Add(new CMeshMaterialEntry()
+            {
+                Name = "@context",
+                Index = (CUInt16)0,
+                IsLocalInstance = true
             });
 
-            var mainMi = new CMeshMaterialEntry() 
-            { 
-                Name = "@" + mainHairMiType!.ToLower(), 
-                Index = (CUInt16)1, 
+            var mainMi = new CMeshMaterialEntry()
+            {
+                Name = "@" + mainHairMiType!.ToLower(),
+                Index = (CUInt16)1,
                 IsLocalInstance = true
             };
-                     
+
 
             mesh.MaterialEntries.Add(mainMi);
 
@@ -394,7 +392,7 @@ namespace WolvenKit.Views.Documents
             }
             );
 
-            
+
 
             if (dialog.ViewModel?.IsCap is true)
             {
@@ -440,7 +438,7 @@ namespace WolvenKit.Views.Documents
                 );
 
             }
-           
+
 
             mesh.Appearances.Add(app);
             cvm.GetPropertyChild("appearances")?.RecalculateProperties();
@@ -450,7 +448,6 @@ namespace WolvenKit.Views.Documents
             _loggerService.Success("Hair mesh converted to CCXL!");
             cvm.Tab?.Parent.SetIsDirty(true);
         }
-
 
         public event EventHandler<EditorDifficultyLevel>? EditorDifficultChanged;
 
@@ -482,7 +479,7 @@ namespace WolvenKit.Views.Documents
             }
 
             RootChunk.ForceLoadPropertiesRecursive();
-
+            
             if (RootChunk.ResolvedData is CMesh)
             {
                 rootChunk.DeleteUnusedMaterialsCommand.Execute(true);
@@ -509,7 +506,7 @@ namespace WolvenKit.Views.Documents
                     }
                 )
                 .ToHashSet();
-
+            
 
             var destFolder = GetTextureDirForDependencies(true);
             // Use search and replace to fix file paths
@@ -686,8 +683,8 @@ namespace WolvenKit.Views.Documents
             }
 
             ViewModel?.ClearSelection();
-
-
+            
+            
             foreach (var chunkViewModel in selectedChunks.SelectMany(cvm =>
                          GetComponentsByName(cvm, componentModel.ComponentName)).ToList())
             {
@@ -803,7 +800,7 @@ namespace WolvenKit.Views.Documents
             _loggerService.Success($"Cleared '{propertyName}' in {numDeletions} appearances");
             _currentTab?.Parent.SetIsDirty(true);
         }
-
+        
         /// <summary>
         /// Called from view: remove all partsOverrides from appearances
         /// </summary>
@@ -870,7 +867,7 @@ namespace WolvenKit.Views.Documents
             }
 
             if (dialog.ViewModel is null || string.IsNullOrEmpty(dialog.ViewModel.ComponentName))
-            {
+            {   
                 return;
             }
 
@@ -984,7 +981,7 @@ namespace WolvenKit.Views.Documents
                 _loggerService.Error(err);
             }
         }
-
+        
         private MenuItem? _openMenu;
 
         private static readonly List<string> s_facialSetups = [];
@@ -997,14 +994,14 @@ namespace WolvenKit.Views.Documents
             }
 
             ViewModel?.RefreshMenuVisibility();
-
+            
             foreach (var item in _openMenu.Items.OfType<MenuItem>())
             {
                 // Force the submenu items to re-evaluate their bindings
                 var bindingExpression = item.GetBindingExpression(VisibilityProperty);
                 bindingExpression?.UpdateTarget();
             }
-
+            
         }
 
         private void OnMenuClosed(object sender, RoutedEventArgs e) => _openMenu = null;
@@ -1067,7 +1064,7 @@ namespace WolvenKit.Views.Documents
                 SearchBar_OnClear(this, e);
             }
         }
-
+     
         private void OnChangeAnimationClick(object sender, RoutedEventArgs e)
         {
             if (RootChunk?.Tab is null || RootChunk?.ResolvedData is not appearanceAppearanceResource app ||
@@ -1099,8 +1096,8 @@ namespace WolvenKit.Views.Documents
                 cvm.RecalculateProperties();
             }
         }
-
-
+        
+        
 
     }
 }
