@@ -75,7 +75,7 @@ public partial class ExportViewModel : AbstractImportExportViewModel
 
     #endregion
 
-    protected override async Task ExecuteProcessBulk(bool all = false)
+    protected override async Task ExecuteProcessBulkAsync(bool all = false)
     {
         if (!Items.Any())
         {

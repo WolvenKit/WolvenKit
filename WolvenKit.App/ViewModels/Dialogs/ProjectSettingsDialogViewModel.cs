@@ -34,13 +34,11 @@ public partial class ProjectSettingsDialogViewModel : DialogViewModel
     }
 
     [RelayCommand]
-    private async Task<Unit> Ok()
+    private async Task Ok()
     {
         await _projectManager.SaveAsync();
 
         _appViewModel.CloseModalCommand.Execute(null);
-
-        return Unit.Default;
     }
 
     [RelayCommand]

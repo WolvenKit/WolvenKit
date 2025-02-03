@@ -1135,7 +1135,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         if (Data is IRedRef r)
         {
-            await _gameController.GetController().AddFileToModModal(r.DepotPath.GetRedHash());
+            await _gameController.GetController().AddFileToModModalAsync(r.DepotPath.GetRedHash());
         }
     }
 
@@ -1923,6 +1923,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 .Where(p => typeof(inkWidgetReference).IsAssignableFrom(p) && p.IsClass && !p.IsAbstract)
                 .Select(x => new TypeEntry(x.Name, "", x))
                 .ToList();
+
             await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
             {
                 DialogHandler = HandleNewDynamicProperty
@@ -1962,8 +1963,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private bool CanAddItemToCompiledData() =>
-        ResolvedPropertyType is not null && PropertyType.IsAssignableTo(typeof(IRedBufferPointer)); // TODO RelayCommand check notify
+    private bool CanAddItemToCompiledData()
+    {
+        return ResolvedPropertyType is not null && PropertyType.IsAssignableTo(typeof(IRedBufferPointer)); // TODO RelayCommand check notify
+    }
+
     [RelayCommand(CanExecute = nameof(CanAddItemToCompiledData))]
     private async Task AddItemToCompiledData()
     {
@@ -2111,10 +2115,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     private bool CanImportWorldNodeData() => Data is worldNodeData && PropertyCount > 0;   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanImportWorldNodeData))]
-    private Task ImportWorldNodeDataAsync() => ImportWorldNodeDataTask(true);
+    private async Task ImportWorldNodeData() => await ImportWorldNodeDataAsync(true);
 
     [RelayCommand(CanExecute = nameof(CanImportWorldNodeData))]   // TODO RelayCommand check notify
-    private Task ImportWorldNodeDataWithoutCoordsAsync() => ImportWorldNodeDataTask(false);
+    private async Task ImportWorldNodeDataWithoutCoords() => await ImportWorldNodeDataAsync(false);
 
     public void DeleteNodesInParent(List<ChunkViewModel> nodes)
     {
@@ -2609,9 +2613,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-
-    public Task<ChunkViewModel?> DuplicateChunkAsync(int index) => Task.FromResult(DuplicateChunk(index));
-
     private bool CanDuplicateChunk() => IsInArray && Parent is not null; // TODO RelayCommand check notify
 
     [RelayCommand(CanExecute = nameof(CanDuplicateChunk))]
@@ -2668,15 +2669,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         return newSibling;
     }
 
-    public Task DuplicateChunkAsNewAsync()
-    {
-        DuplicateAsNewChunk();
-        return Task.CompletedTask;
-    }
-
-
     [RelayCommand(CanExecute = nameof(CanDuplicateChunk))]
-    private void DuplicateAsNewChunk()
+    public void DuplicateAsNewChunk()
     {
         if (Parent is null || DuplicateChunk(Parent.Properties.Count) is not ChunkViewModel newChunk)
         {
@@ -3941,7 +3935,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         DeleteAllCommand.NotifyCanExecuteChanged();
     }
 
-    private Task<bool> ImportWorldNodeDataTask(bool updatecoords)
+    private async Task<bool> ImportWorldNodeDataAsync(bool updatecoords)
     {
         var openFileDialog = new OpenFileDialog
         {
@@ -3955,17 +3949,17 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             try
             {
-                return AddFromJSON(openFileDialog, updatecoords);
+                return await AddFromJsonAsync(openFileDialog, updatecoords);
             }
             catch (Exception ex)
             {
                 _loggerService.Error(ex);
             }
         }
-        return Task.FromResult(false);
+        return false;
     }
 
-    public async Task<bool> AddFromJSON(OpenFileDialog openFileDialog, bool updatecoords)
+    public async Task<bool> AddFromJsonAsync(OpenFileDialog openFileDialog, bool updatecoords)
     {
         ArgumentNullException.ThrowIfNull(Data);
 

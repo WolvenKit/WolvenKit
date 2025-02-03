@@ -394,7 +394,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             // open files
             if (Enum.TryParse<ERedExtension>(Path.GetExtension(filePath)[1..], out var _))
             {
-                _ = RequestFileOpen(filePath); // TODO
+                RequestFileOpen(filePath);
                 ret = true;
             }
             else
@@ -494,20 +494,27 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private async Task PackInstallMod() => await LaunchAsync(new LaunchProfile() { Install = true });
 
     [RelayCommand(CanExecute = nameof(CanStartTask))]
-    private async Task PackInstallRedMod() =>
+    private async Task PackInstallRedMod()
+    {
         await LaunchAsync(new LaunchProfile()
         {
             Install = true,
             IsRedmod = true,
             DeployWithRedmod = ModifierViewStateService.IsShiftBeingHeld
         });
+    }
 
     [RelayCommand(CanExecute = nameof(CanStartTask))]
-    private async Task PackInstallRun() => await LaunchAsync(new LaunchProfile() { Install = true, LaunchGame = true });
+    private async Task PackInstallRun()
+    {
+        await LaunchAsync(new LaunchProfile() { Install = true, LaunchGame = true });
+    }
 
     [RelayCommand(CanExecute = nameof(CanStartTask))]
-    private async Task PackInstallRedModRun() => await LaunchAsync(new LaunchProfile() { Install = true, LaunchGame = true, IsRedmod = true, DeployWithRedmod = true });
-
+    private async Task PackInstallRedModRun()
+    {
+        await LaunchAsync(new LaunchProfile() { Install = true, LaunchGame = true, IsRedmod = true, DeployWithRedmod = true });
+    }
 
     [RelayCommand]
     private async Task CheckForScriptUpdates()
@@ -706,7 +713,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         if (File.Exists(location))
         {
             CloseModal();
-            await LoadProjectFromPath(location);
+            await LoadProjectFromPathAsync(location);
             return;
         }
 
@@ -745,7 +752,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     public event EventHandler? OnInitialProjectLoaded;
 
-    private async Task LoadProjectFromPath(string location)
+    private async Task LoadProjectFromPathAsync(string location)
     {
         var p = await _projectManager.LoadAsync(location);
         if (p is null)
@@ -772,12 +779,14 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     [RelayCommand]
-    private async Task NewProject() =>
+    private async Task NewProject()
+    {
         //IsOverlayShown = false;
         await SetActiveDialog(new ProjectWizardViewModel(SettingsManager)
         {
             FileHandler = NewProject
         });
+    }
 
     private async Task NewProject(ProjectWizardViewModel? project)
     {
@@ -815,7 +824,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             await _projectManager.SaveAsync();
             np.CreateDefaultDirectories();
 
-            await LoadProjectFromPath(projectLocation);
+            await LoadProjectFromPathAsync(projectLocation);
         }
         catch (Exception ex)
         {
@@ -916,11 +925,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private bool CanShowHomePage() => !IsDialogShown;
     [RelayCommand(CanExecute = nameof(CanShowHomePage))]
-    private async Task ShowHomePage() => await ShowHomePage(EHomePage.Welcome);
+    private async Task ShowHomePage() => await ShowHomePageAsync(EHomePage.Welcome);
 
     private bool CanShowSettings() => !IsDialogShown;
     [RelayCommand(CanExecute = nameof(CanShowSettings))]
-    private async Task ShowSettings() => await ShowHomePage(EHomePage.Settings);
+    private async Task ShowSettings() => await ShowHomePageAsync(EHomePage.Settings);
 
     private bool CanShowProjectActions() =>
         !IsDialogShown && ActiveProject is not null && Status != EAppStatus.Busy && Status is EAppStatus.Ready;
@@ -952,7 +961,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     {
         _loggerService.Info($"Scanning {ActiveProject!.ModFiles.Count} files. Please wait...");
 
-        var allReferencePaths = await ActiveProject!.GetAllReferences(_progressService, _loggerService);
+        var allReferencePaths = await ActiveProject!.GetAllReferencesAsync(_progressService, _loggerService, []);
         _loggerService.Info($"Scanning {ActiveProject!.Files.Count(f => f.StartsWith("archive"))} files. Please wait...");
 
         var referencesHashSet = new HashSet<string>(allReferencePaths.SelectMany((r) => r.Value));
@@ -1143,11 +1152,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private bool CanShowPlugin() => !IsDialogShown;
     [RelayCommand(CanExecute = nameof(CanShowPlugin))]
-    private async Task ShowPlugin() => await ShowHomePage(EHomePage.Plugins);
+    private async Task ShowPlugin() => await ShowHomePageAsync(EHomePage.Plugins);
 
     private bool CanShowModsView() => !IsDialogShown;
     [RelayCommand(CanExecute = nameof(CanShowModsView))]
-    private async Task ShowModsView() => await ShowHomePage(EHomePage.Mods);
+    private async Task ShowModsView() => await ShowHomePageAsync(EHomePage.Mods);
 
     private bool CanNewFile(string inputDir) => ActiveProject is not null && !IsDialogShown;
     [RelayCommand(CanExecute = nameof(CanNewFile))]
@@ -1167,7 +1176,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private bool CanImportArchive(string inputDir) => ActiveProject is not null && !IsDialogShown;
 
     [RelayCommand(CanExecute = nameof(CanImportArchive))]
-    private async Task<Task> ImportArchive(string? inputDir)
+    private async Task ImportArchive(string? inputDir)
     {
         var vm = new OpenFileViewModel(SettingsManager, _projectManager, _loggerService)
         {
@@ -1177,7 +1186,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         if (await vm.OpenFile() is not string result)
         {
-            return Task.CompletedTask;
+            return;
         }
 
         var assetBrowser = GetToolViewModel<AssetBrowserViewModel>();
@@ -1206,7 +1215,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             await assetBrowser.PerformSearch($"archive:{result}");
         }
 
-        return Task.CompletedTask;
+        return;
     }
 
     private async Task OpenFromNewFile(NewFileViewModel? file)
@@ -1217,16 +1226,16 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             return;
         }
 
-        await Task.Run(() => OpenFromNewFileTask(file)).ContinueWith(async (_) =>
+        await Task.Run(() => OpenFromNewFileAsync(file)).ContinueWith(async (_) =>
         {
             if (file.FullPath is not null)
             {
-                await RequestFileOpen(file.FullPath);
+                await Task.Run(() => RequestFileOpen(file.FullPath));
             }
         });
     }
 
-    private static async Task OpenFromNewFileTask(NewFileViewModel file)
+    private static async Task OpenFromNewFileAsync(NewFileViewModel file)
     {
         if (file.SelectedFile is null || file.FullPath is null)
         {
@@ -1308,7 +1317,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _progressService.IsIndeterminate = true;
         try
         {
-            await RequestFileOpen(model.FullName);
+            await Task.Run(() => RequestFileOpen(model.FullName));
         }
         catch (Exception e)
         {
@@ -1532,7 +1541,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     public bool HasActiveProject() => ActiveProject is not null;
 
     [RelayCommand]
-    private Task CleanAllAsync() => Task.Run(() => _gameControllerFactory.GetController().CleanAll());
+    private async Task CleanAllAsync()
+    {
+        await Task.Run(() => _gameControllerFactory.GetController().CleanAll());
+    }
 
     private async Task LaunchAsync(LaunchProfile profile)
     {
@@ -1541,11 +1553,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             return;
         }
 
-        await _gameControllerFactory.GetController().LaunchProject(profile);
+        await _gameControllerFactory.GetController().LaunchProjectAsync(profile);
     }
 
     [RelayCommand]
-    private Task HotInstallModAsync() => _gameControllerFactory.GetController().InstallProjectHot();
+    private async Task HotInstallModAsync() => await _gameControllerFactory.GetController().InstallProjectHotAsync();
 
     [RelayCommand]
     private void LaunchOptions() => Interactions.ShowLaunchProfilesView();
@@ -1772,7 +1784,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         ShouldOverlayShow = true;
     }
 
-    public async Task ShowHomePage(EHomePage page)
+    public async Task ShowHomePageAsync(EHomePage page)
     {
         var homePage = _pageViewModelFactory.HomePageViewModel(this);
         homePage.SelectedIndex = (int)page;
@@ -1995,10 +2007,106 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private bool IsInRawFolder(string path) => _projectManager.ActiveProject is not null && path.Contains(_projectManager.ActiveProject.RawDirectory);
     private bool IsInResourceFolder(string path) => _projectManager.ActiveProject is not null && path.Contains(_projectManager.ActiveProject.ResourcesDirectory);
 
+    private void OpenRedengineFile(string fullpath, string ext)
+    {
+        var trimmedExt = ext.TrimStart('.').ToUpper();
+        var type = EWolvenKitFile.Cr2w;
+
+        var isRedEngineFile = Enum.GetNames<ERedExtension>().Any(x => x.ToUpper().Equals(trimmedExt, StringComparison.Ordinal)) || trimmedExt == "";
+        if (isRedEngineFile)
+        {
+            type = EWolvenKitFile.Cr2w;
+        }
+
+        var isTweakFile = Enum.GetNames<ETweakExtension>().Any(x => x.ToUpper().Equals(trimmedExt, StringComparison.Ordinal));
+        if (isTweakFile)
+        {
+            type = EWolvenKitFile.TweakXl;
+            isRedEngineFile = true;
+        }
+
+        var isWScriptFile = Enum.GetNames<EWScriptExtension>().Any(x => x.ToUpper().Equals(trimmedExt, StringComparison.Ordinal));
+        if (isWScriptFile)
+        {
+            type = EWolvenKitFile.WScript;
+            isRedEngineFile = true;
+        }
+
+        if (!isRedEngineFile)
+        {
+            return;
+        }
+
+        DispatcherHelper.RunOnMainThread(async void () =>
+        {
+            try
+            {
+                if (await Open(fullpath, type) is not IDocumentViewModel document)
+                {
+                    return;
+                }
+
+                if (!DockedViews.Contains(document))
+                {
+                    DockedViews.Add(document);
+                }
+
+                ActiveDocument = document;
+                UpdateTitle();
+            }
+            catch (Exception e)
+            {
+                _loggerService.Error($"Could not open file: {e.Message}");
+
+                _loggerService.Error(
+                    $"Please open a ticket (with the file attached) under {Core.Constants.IssueTrackerUrl}");
+            }
+        });
+    }
+
+    private static void OpenAudioFile()
+    {
+        // commented for testing
+
+        //var z = (AudioToolViewModel)ServiceLocator.Default.ResolveType<AudioToolViewModel>();
+        //ExecuteAudioTool();
+        //z.AddAudioItem(full);
+    }
+
+    private void ShellExecute(string fullpath)
+    {
+        try
+        {
+            ProcessStartInfo proc = new(fullpath.ToEscapedPath()) { UseShellExecute = true };
+            Process.Start(proc);
+        }
+        catch (Win32Exception)
+        {
+            // eat this: no default app set for filetype
+            _loggerService.Error($"No default program set in Windows to open file extension {Path.GetExtension(fullpath)}");
+        }
+    }
+
+    private static void PolymorphExecute(string path, string extension)
+    {
+        File.WriteAllBytes(Path.GetTempPath() + "asd." + extension, [0x01]);
+        StringBuilder programName = new();
+        _ = NativeMethods.FindExecutable("asd." + extension, Path.GetTempPath(), programName);
+        if (programName.ToString().ToUpper().Contains(".EXE"))
+        {
+            Process.Start(programName.ToString(), path.ToEscapedPath());
+        }
+        else
+        {
+            throw new InvalidFileTypeException("Invalid file type");
+        }
+    }
+
+
     /// <param name="fullpath">Absolute path of the file</param>
     /// <param name="ignoreIgnoredExtension">Sometimes, we need to open files for internal script use. Set this flag to true for this case.</param>
     /// <exception cref="InvalidFileTypeException"></exception>
-    public Task RequestFileOpen(string fullpath, bool ignoreIgnoredExtension = false)
+    public void RequestFileOpen(string fullpath, bool ignoreIgnoredExtension = false)
     {
         var ext = Path.GetExtension(fullpath).ToLower();
 
@@ -2010,7 +2118,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             .Any(entry => entry.ToLower().Trim().Equals(ext));
         if (isAnIgnoredExtension && !ignoreIgnoredExtension)
         {
-            ShellExecute();
+            ShellExecute(fullpath);
         }
         // double click
         else
@@ -2056,13 +2164,20 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 case ".reds":
                 case ".yaml":
                 case ".tweak":
-                    ShellExecute();
+                    ShellExecute(fullpath);
                     break;
                 // double file formats
                 case ".csv":
                 case ".json":
-                    return IsInRawFolder(fullpath) || IsInResourceFolder(fullpath) ? Task.Run(ShellExecute) : Task.Run(OpenRedengineFile);
-
+                    if (IsInRawFolder(fullpath) || IsInResourceFolder(fullpath))
+                    {
+                        ShellExecute(fullpath);
+                    }
+                    else
+                    {
+                        OpenRedengineFile(fullpath, ext);
+                    }
+                    break;
                 // VIDEO
                 case ".bk2":
                     break;
@@ -2070,11 +2185,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 // AUDIO
 
                 case ".wem":
-                    return Task.Run(OpenAudioFile);
-
+                    OpenAudioFile();
+                    break;
                 case ".subs":
-                    return Task.Run(() => PolymorphExecute(fullpath, ".txt"));
-
+                    PolymorphExecute(fullpath, ".txt");
+                    break;
                 case ".usm":
                 {
                     // TODO: port winforms
@@ -2087,104 +2202,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 //case ".BNK":
                 // TODO SPLIT WEMs TO PLAYLIST FROM BNK
                 default:
-                    return Task.Run(OpenRedengineFile);
-            }
-        }
-
-        return Task.Run(() => true);
-
-        void OpenRedengineFile()
-        {
-            var trimmedExt = ext.TrimStart('.').ToUpper();
-            var type = EWolvenKitFile.Cr2w;
-
-            var isRedEngineFile = Enum.GetNames<ERedExtension>().Any(x => x.ToUpper().Equals(trimmedExt, StringComparison.Ordinal)) || trimmedExt == "";
-            if (isRedEngineFile)
-            {
-                type = EWolvenKitFile.Cr2w;
-            }
-
-            var isTweakFile = Enum.GetNames<ETweakExtension>().Any(x => x.ToUpper().Equals(trimmedExt, StringComparison.Ordinal));
-            if (isTweakFile)
-            {
-                type = EWolvenKitFile.TweakXl;
-                isRedEngineFile = true;
-            }
-
-            var isWScriptFile = Enum.GetNames<EWScriptExtension>().Any(x => x.ToUpper().Equals(trimmedExt, StringComparison.Ordinal));
-            if (isWScriptFile)
-            {
-                type = EWolvenKitFile.WScript;
-                isRedEngineFile = true;
-            }
-
-            if (!isRedEngineFile)
-            {
-                return;
-            }
-
-            DispatcherHelper.RunOnMainThread(async void () =>
-            {
-                try
-                {
-                    if (await Open(fullpath, type) is not IDocumentViewModel document)
-                    {
-                        return;
-                    }
-
-                    if (!DockedViews.Contains(document))
-                    {
-                        DockedViews.Add(document);
-                    }
-
-                    ActiveDocument = document;
-                    UpdateTitle();
-                }
-                catch (Exception e)
-                {
-                    _loggerService.Error($"Could not open file: {e.Message}");
-
-                    _loggerService.Error(
-                        $"Please open a ticket (with the file attached) under {Core.Constants.IssueTrackerUrl}");
-                }
-            });
-        }
-
-        void OpenAudioFile()
-        {
-            // commented for testing
-
-            //var z = (AudioToolViewModel)ServiceLocator.Default.ResolveType<AudioToolViewModel>();
-            //ExecuteAudioTool();
-            //z.AddAudioItem(full);
-        }
-
-        void ShellExecute()
-        {
-            try
-            {
-                ProcessStartInfo proc = new(fullpath.ToEscapedPath()) { UseShellExecute = true };
-                Process.Start(proc);
-            }
-            catch (Win32Exception)
-            {
-                // eat this: no default app set for filetype
-                _loggerService.Error($"No default program set in Windows to open file extension {Path.GetExtension(fullpath)}");
-            }
-        }
-
-        void PolymorphExecute(string path, string extension)
-        {
-            File.WriteAllBytes(Path.GetTempPath() + "asd." + extension, [0x01]);
-            StringBuilder programName = new();
-            _ = NativeMethods.FindExecutable("asd." + extension, Path.GetTempPath(), programName);
-            if (programName.ToString().ToUpper().Contains(".EXE"))
-            {
-                Process.Start(programName.ToString(), path.ToEscapedPath());
-            }
-            else
-            {
-                throw new InvalidFileTypeException("Invalid file type");
+                    OpenRedengineFile(fullpath, ext);
+                    break;
             }
         }
     }
@@ -2212,7 +2231,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private void UpdateScalesResource()
     {
         // NOTE: keep in sync with App.Sizes.xaml
-        var resources = Application.Current.Resources;
+        var resources = System.Windows.Application.Current.Resources;
 
         // Fonts
         resources["WolvenKitFontAltTitle"] = 10 * _uiScalePercentage;

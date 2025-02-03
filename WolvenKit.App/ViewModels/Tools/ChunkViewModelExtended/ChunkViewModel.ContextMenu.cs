@@ -75,25 +75,25 @@ public partial class ChunkViewModel
     }
 
     [RelayCommand]
-    private async Task<Task> RenameMaterial()
+    private async Task RenameMaterial()
     {
         if (!IsMaterial)
         {
-            return Task.CompletedTask;
+            return;
         }
 
         var materialEntries = Parent?.Parent?.GetRootModel().GetPropertyFromPath("materialEntries");
 
         if (materialEntries?.ResolvedData is not CArray<CMeshMaterialEntry> array)
         {
-            return Task.CompletedTask;
+            return;
         }
 
         var isLocalMaterial = ResolvedData is CMaterialInstance;
         var entry = array.FirstOrDefault(e => e.IsLocalInstance == isLocalMaterial && e.Index == NodeIdxInParent);
         if (entry is null)
         {
-            return Task.CompletedTask;
+            return;
         }
 
         var oldName = entry.Name;
@@ -110,7 +110,7 @@ public partial class ChunkViewModel
         var appCvm = Parent?.Parent?.GetRootModel().GetPropertyFromPath("appearances");
         if (appCvm?.ResolvedData is not CArray<CHandle<meshMeshAppearance>> appearances)
         {
-            return Task.CompletedTask;
+            return;
         }
 
         foreach (var appearanceHandle in appearances)
@@ -137,8 +137,6 @@ public partial class ChunkViewModel
 
         appCvm.RecalculateProperties();
         appCvm.CalculateValue();
-        
-        return Task.CompletedTask;
     }
 
     /// <summary>
@@ -317,14 +315,14 @@ public partial class ChunkViewModel
 
 
     [RelayCommand]
-    private async Task<Task> AddMaterialAndDefinition()
+    private async Task AddMaterialAndDefinition()
     {
         var newName = await Interactions.ShowInputBoxAsync("New material name", "");
 
         var materialEntries = Parent?.GetRootModel().GetPropertyFromPath("materialEntries");
         if (materialEntries?.ResolvedData is not CArray<CMeshMaterialEntry> array)
         {
-            return Task.CompletedTask;
+            return;
         }
 
         var isLocalInstance = Parent?.ResolvedData is meshMeshMaterialBuffer || Name == PreloadMaterialPath;
@@ -350,8 +348,6 @@ public partial class ChunkViewModel
 
         materialEntries.RecalculateProperties();
         RecalculateProperties();
-
-        return Task.CompletedTask;
     }
 
     public void ReplaceEntIComponentProperties(
