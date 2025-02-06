@@ -2666,7 +2666,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                             {
                                 CreateNormals = true
                             };
-                            mb.AddBox(new SharpDX.Vector3(0f, 0f, 0f), simpleShape.Size.X * 2, simpleShape.Size.Z * 2, simpleShape.Size.Y * 2);
+                            mb.AddBox(new SharpDX.Vector3(0f, 0f, 0f), simpleShape.Size.X * 2, simpleShape.Size.Y * 2, simpleShape.Size.Z * 2);
 
                             mb.ComputeNormalsAndTangents(MeshFaces.Default, true);
 
@@ -2803,7 +2803,13 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                         };
 
                         var shapeMatrix = new Matrix3D();
-                        shapeMatrix.Rotate(ToQuaternion(shape.Rotation));
+                        
+                        var shapeQuat = new System.Numerics.Quaternion(shape.Rotation.I, shape.Rotation.J, shape.Rotation.K, shape.Rotation.R);
+                        var conversionQuat =
+                            System.Numerics.Quaternion.CreateFromAxisAngle(System.Numerics.Vector3.UnitX, -MathF.PI / 2);
+                        var adjustedQuat = conversionQuat * shapeQuat;
+                        
+                        shapeMatrix.Rotate(new System.Windows.Media.Media3D.Quaternion(adjustedQuat.X, adjustedQuat.Y, adjustedQuat.Z, adjustedQuat.W));
                         shapeMatrix.Translate(ToVector3D(shape.Position));
 
                         shapeGroup.Transform = new MatrixTransform3D(shapeMatrix);
