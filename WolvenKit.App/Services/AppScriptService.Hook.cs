@@ -83,7 +83,7 @@ public partial class AppScriptService
         }
 
         // no hook was executed
-        if (string.IsNullOrEmpty(jsonContent))
+        if (jsonContent == null)
         {
             return true;
         }
