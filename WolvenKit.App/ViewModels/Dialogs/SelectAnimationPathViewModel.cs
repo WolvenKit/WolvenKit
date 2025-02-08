@@ -68,7 +68,7 @@ public partial class SelectAnimationPathViewModel : ObservableObject
         @"base\animations\facial\_facial_graphs\player_woman_photomode_sermo.animgraph";
 
     public const string FacialAnimPathMale =
-        @"base\animations\facial\_facial_graphs\player_woman_photomode_sermo.animgraph";
+        @"base\animations\facial\_facial_graphs\player_man_photomode_sermo.animgraph";
     
     private Dictionary<string, string> _facialAnimOptions = new()
     {
