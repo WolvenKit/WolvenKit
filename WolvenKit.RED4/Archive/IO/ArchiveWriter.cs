@@ -9,6 +9,7 @@ using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types.Pools;
 
 namespace WolvenKit.RED4.Archive.IO;
 
@@ -99,7 +100,7 @@ public class ArchiveWriter
                 var sanitizedPath = ResourcePath.SanitizePath(relPath);
                 hash = FNV1A64HashAlgorithm.HashString(sanitizedPath);
 
-                if (!TweakDBIDPool.IsNative(sanitizedPath))
+                if (!ResourcePathPool.IsNative(sanitizedPath))
                 {
                     customPaths.Add(sanitizedPath);
                 }

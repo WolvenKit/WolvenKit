@@ -82,7 +82,13 @@ public partial class AppScriptService
             jsonContent = json;
         }
 
-        if (string.IsNullOrEmpty(jsonContent) || !RedJsonSerializer.TryDeserialize(jsonContent, out RedFileDto? newDto) || newDto?.Data == null)
+        // no hook was executed
+        if (jsonContent == null)
+        {
+            return true;
+        }
+
+        if (!RedJsonSerializer.TryDeserialize(jsonContent, out RedFileDto? newDto) || newDto?.Data == null)
         {
             _loggerService.Error("Couldn't deserialize return value");
             return false;
