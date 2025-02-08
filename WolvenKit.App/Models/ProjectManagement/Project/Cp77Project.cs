@@ -795,9 +795,9 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
                         references.Add(filePath, updatedResourcePaths);
                     }
                 }
-                catch
+                catch (Exception e)
                 {
-                    loggerService.Error($"Failed to read {filePath}. Results will be incomplete!");
+                    loggerService.Error($"Results will be incomplete: Failed to read {filePath} ({e.Message})");
                 }
                 
                 // Update progress
