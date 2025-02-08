@@ -184,12 +184,12 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     #region commands
     
     [RelayCommand]
-    private Task OpenImport(ICR2WImport input)
+    private async Task OpenImport(ICR2WImport input)
     {
         var depotpath = input.DepotPath;
         var key = FNV1A64HashAlgorithm.HashString(depotpath.GetResolvedText().NotNull());
 
-        return _gameController.GetController().AddFileToModModal(key);
+        await _gameController.GetController().AddFileToModModalAsync(key);
     }
 
     #endregion

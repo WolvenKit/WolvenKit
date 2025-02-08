@@ -822,7 +822,7 @@ namespace WolvenKit.Views.Tools
 
 
         [RelayCommand]
-        private async Task DuplicateSelectionAsNew()
+        private void DuplicateSelectionAsNew()
         {
             if (ItemsSource is not ICollectionView collectionView)
             {
@@ -835,21 +835,20 @@ namespace WolvenKit.Views.Tools
 
                 foreach (var cvm in chunks)
                 {
-                    await cvm.DuplicateChunkAsNewAsync();
+                    cvm.DuplicateAsNewChunk();
                 }
 
                 _rdtDataViewModel?.ClearSelection();
             }
         }
 
-        private async Task DuplicateSelectedChunks(bool preserveIndex = false)
+        private void DuplicateSelectedChunks(bool preserveIndex = false)
         {
             if (ItemsSource is not ICollectionView collectionView)
             {
                 return;
             }
 
-            List<Task<List<ChunkViewModel>>> tasks = [];
             using (collectionView.DeferRefresh())
             {
                 List<ChunkViewModel> chunksByParent = [];
@@ -859,20 +858,27 @@ namespace WolvenKit.Views.Tools
                     {
                         foreach (var cvm in chunks.OrderBy(cvm => cvm.NodeIdxInParent))
                         {
-                            // ReSharper disable once MethodHasAsyncOverload no!
-                            chunksByParent.Add(cvm.DuplicateChunk(cvm.NodeIdxInParent + chunks.Count()));
+                            var newChunk = cvm.DuplicateChunk(cvm.NodeIdxInParent + chunks.Count());
+                            if (newChunk is not null)
+                            {
+                                chunksByParent.Add(newChunk);
+                            }
                         }
                     }
                     else
                     {
-                        chunksByParent.AddRange(chunks.Select(cvm => cvm.DuplicateChunk(-1)));
+                        foreach (var cvm in chunks)
+                        {
+                            var newChunk = cvm.DuplicateChunk(-1);
+                            if (newChunk is not null)
+                            {
+                                chunksByParent.Add(newChunk);
+                            }
+                        }
                     }
-
-                    tasks.Add(Task.FromResult(chunksByParent));
                 }
 
-                var groupResults = await Task.WhenAll(tasks);
-                SetSelectedItems([.. groupResults.SelectMany(g => g).ToList()]);
+                SetSelectedItems(chunksByParent);
             }
         }
 
@@ -880,17 +886,15 @@ namespace WolvenKit.Views.Tools
         /// Duplicates each chunk in selection. Will preserve index order if shift key is pressed.
         /// </summary>
         [RelayCommand]
-        private async Task DuplicateSelection() => await DuplicateSelectedChunks(ModifierViewStateService.IsShiftBeingHeld);
+        private void DuplicateSelection() => DuplicateSelectedChunks(ModifierViewStateService.IsShiftBeingHeld);
 
         [RelayCommand]
-        private Task AddToProject()
+        private void AddToProject()
         {
             if (SelectedItem?.PropertyType.IsAssignableTo(typeof(IRedRef)) == true)
             {
                 _projectResourceTools.AddToProject(((IRedRef)SelectedItem.ResolvedData).DepotPath);
             }
-
-            return Task.CompletedTask;
         }
 
         private bool CanOpenSearchAndReplaceDialog => !_isContextMenuOpen &&

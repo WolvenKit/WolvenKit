@@ -179,7 +179,7 @@ public class RED4Controller : ObservableObject, IGameController
 
     #region Packing
 
-    public async Task<bool> InstallProjectHot()
+    public async Task<bool> InstallProjectHotAsync()
     {
         if (_projectManager.ActiveProject is not Cp77Project currentProject)
         {
@@ -204,7 +204,7 @@ public class RED4Controller : ObservableObject, IGameController
         var gameDirectoryInfo = new DirectoryInfo(_settingsManager.GetRED4GameRootDir());
         var packedDirectoryInfo = new DirectoryInfo(currentProject.PackedRootDirectory);
 
-        if (!await PackProjectFiles(new LaunchProfile { Install = true }, currentProject))
+        if (!await PackProjectFilesAsync(new LaunchProfile { Install = true }, currentProject))
         {
             return false;
         }
@@ -295,7 +295,7 @@ public class RED4Controller : ObservableObject, IGameController
     /// Pack mod with options
     /// </summary>
     /// <returns></returns>
-    public async Task<bool> LaunchProject(LaunchProfile options)
+    public async Task<bool> LaunchProjectAsync(LaunchProfile options)
     {
         _progressService.IsIndeterminate = true;
 
@@ -350,7 +350,7 @@ public class RED4Controller : ObservableObject, IGameController
         }
         
         // Pack it up
-        if (!await PackProjectFiles(options, cp77Proj))
+        if (!await PackProjectFilesAsync(options, cp77Proj))
         {
             return false;
         }
@@ -465,7 +465,7 @@ public class RED4Controller : ObservableObject, IGameController
     /// <summary>
     /// This method will move everything into ModDirectory/packed.
     /// </summary>
-    private async Task<bool> PackProjectFiles(LaunchProfile options, Cp77Project cp77Proj)
+    private async Task<bool> PackProjectFilesAsync(LaunchProfile options, Cp77Project cp77Proj)
     {
         if (options is { CreateZipFile: false, Install: false })
         {
@@ -915,28 +915,28 @@ public class RED4Controller : ObservableObject, IGameController
     #endregion
 
     /// <Inheritdoc />
-    public Task<bool> AddFileToModModal(ulong hash)
+    public async Task<bool> AddFileToModModalAsync(ulong hash)
     {
         var scope = _archiveManager.IsModBrowserActive ? ArchiveManagerScope.Mods : ArchiveManagerScope.Basegame;
-        return AddFileToModModal(hash, scope);
+        return await AddFileToModModalAsync(hash, scope);
     }
 
     /// <Inheritdoc />
-    public async Task<bool> AddFileToModModal(ulong hash, ArchiveManagerScope searchScope)
+    public async Task<bool> AddFileToModModalAsync(ulong hash, ArchiveManagerScope searchScope)
     {
         var file = _archiveManager.Lookup(hash);
-        return file.HasValue && await AddFileToModModal(file.Value, searchScope);
+        return file.HasValue && await AddFileToModModalAsync(file.Value, searchScope);
     }
 
     /// <Inheritdoc />
-    public Task<bool> AddFileToModModal(IGameFile file)
+    public async Task<bool> AddFileToModModalAsync(IGameFile file)
     {
         var scope = _archiveManager.IsModBrowserActive ? ArchiveManagerScope.Mods : ArchiveManagerScope.Basegame;
-        return AddFileToModModal(file, scope);
+        return await AddFileToModModalAsync(file, scope);
     }
 
     /// <Inheritdoc />
-    public async Task<bool> AddFileToModModal(IGameFile file, ArchiveManagerScope searchScope)
+    public async Task<bool> AddFileToModModalAsync(IGameFile file, ArchiveManagerScope searchScope)
     {
         if (_projectManager.ActiveProject is null)
         {
