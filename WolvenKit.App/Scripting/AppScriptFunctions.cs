@@ -1053,4 +1053,33 @@ public class AppScriptFunctions : ScriptFunctions
     {
         return _settingsManager.GetVersionNumber();
     }
+
+    /// <summary>
+    /// Shows the settings dialog for the supplied data
+    /// </summary>
+    /// <param name="data">A JavaScript object containing data</param>
+    /// <returns>Returns true when the user changed the settings, otherwise it returns false</returns>
+    public virtual bool ShowSettings(ScriptObject data)
+    {
+        var dict = ScriptSettingsDictionary.FromScriptObject(data);
+        if (dict == null)
+        {
+            _loggerService.Error("Failed to process settings");
+            return false;
+        }
+
+        var success = false;
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            success = Interactions.ShowScriptSettingsView(dict);
+        });
+
+        if (!success)
+        {
+            return false;
+        }
+
+        dict.ToScriptObject(data);
+        return true;
+    }
 }
