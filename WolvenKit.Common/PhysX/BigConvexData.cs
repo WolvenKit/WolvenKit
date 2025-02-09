@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace WolvenKit.App.PhysX;
+namespace WolvenKit.Common.PhysX;
 
 public class BigConvexData
 {
