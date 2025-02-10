@@ -430,6 +430,24 @@
                             Foreground="White" />
                     </MenuItem.Icon>
                 </MenuItem>
+                <!-- Generate CCXL Materials for hairs -->
+                <MenuItem
+                    Style="{StaticResource MenuItemStyle}"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Header="Convert hair to CCXL material"
+                    ToolTip="This will run adjust submesh counts first"
+                    Command="{Binding Path=ConvertHairToCCXLCommand}"
+                    Click="OnConvertHairToCCXLMaterials">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="MaterialDesign"
+                            Kind="SwitchAccessShortcut"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
 
             <!-- Clean up: .mesh / .json -->

@@ -384,6 +384,11 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         // Do nothing, we just need the command for the hook. Logic will trigger from view's OnClick
     }
 
+    [RelayCommand(CanExecute = nameof(HasMeshAppearances))]
+    private void ConvertHairToCCXL() { 
+        // This is just to hide the button from the .mi toolbar
+    }
+
     #endregion
 
     public static string CurrentActiveSearch = "";
