@@ -1,5 +1,5 @@
 ﻿<Window
-    x:Class="WolvenKit.Views.Dialogs.Windows.ConvertToCCXLMaterialsDialog"
+    x:Class="WolvenKit.Views.Dialogs.Windows.ConvertHairToCCXLMaterialsDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:hc="https://handyorg.github.io/handycontrol"

@@ -438,8 +438,9 @@
                                          Mode=OneWay,
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Header="Convert hair to CCXL material"
-                    ToolTip="This will run adjust submesh counts first "
-                    Click="OnConvertToCCXLMaterials">
+                    ToolTip="This will run adjust submesh counts first"
+                    Command="{Binding Path=ConvertHairToCCXLCommand}"
+                    Click="OnConvertHairToCCXLMaterials">
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="MaterialDesign"

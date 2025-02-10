@@ -7,7 +7,7 @@ using WolvenKit.App.Models.ProjectManagement.Project;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
-public partial class ConvertToCCXLMaterialsDialogViewModel : ObservableObject
+public partial class ConvertHairToCCXLMaterialsDialogViewModel : ObservableObject
 {
     [ObservableProperty] private string _selectedMiFile = "";
 
@@ -17,7 +17,7 @@ public partial class ConvertToCCXLMaterialsDialogViewModel : ObservableObject
 
     [ObservableProperty] private string _selectedCapMiFile = "";
 
-    public ConvertToCCXLMaterialsDialogViewModel(Cp77Project activeProject) 
+    public ConvertHairToCCXLMaterialsDialogViewModel(Cp77Project activeProject) 
     {
 
         MiFileOption.AddRange<string>(

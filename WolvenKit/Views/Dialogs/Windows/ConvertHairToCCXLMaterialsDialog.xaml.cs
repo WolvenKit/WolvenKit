@@ -8,14 +8,14 @@ namespace WolvenKit.Views.Dialogs.Windows;
 /// <summary>
 /// Interaction logic for ConvertToCCXLMaterials.xaml
 /// </summary>
-public partial class ConvertToCCXLMaterialsDialog : IViewFor<ConvertToCCXLMaterialsDialogViewModel>
+public partial class ConvertHairToCCXLMaterialsDialog : IViewFor<ConvertHairToCCXLMaterialsDialogViewModel>
 {
     private static bool s_IsCap = false;
 
-    public ConvertToCCXLMaterialsDialog(Cp77Project activeProject)
+    public ConvertHairToCCXLMaterialsDialog(Cp77Project activeProject)
     {
         InitializeComponent();
-        ViewModel = new ConvertToCCXLMaterialsDialogViewModel(activeProject)
+        ViewModel = new ConvertHairToCCXLMaterialsDialogViewModel(activeProject)
         {
             IsCap = s_IsCap
 
@@ -25,8 +25,8 @@ public partial class ConvertToCCXLMaterialsDialog : IViewFor<ConvertToCCXLMateri
         
     }
 
-    public ConvertToCCXLMaterialsDialogViewModel ViewModel { get; set; }
-    object IViewFor.ViewModel { get => ViewModel; set => ViewModel = (ConvertToCCXLMaterialsDialogViewModel)value; }
+    public ConvertHairToCCXLMaterialsDialogViewModel ViewModel { get; set; }
+    object IViewFor.ViewModel { get => ViewModel; set => ViewModel = (ConvertHairToCCXLMaterialsDialogViewModel)value; }
     public bool? ShowDialog(Window owner)
     {
         Owner = owner;

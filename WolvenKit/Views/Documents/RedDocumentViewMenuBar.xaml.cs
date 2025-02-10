@@ -311,7 +311,7 @@ namespace WolvenKit.Views.Documents
             cvm.Tab?.Parent.SetIsDirty(true);
         }
 
-        private void OnConvertToCCXLMaterials(object _, RoutedEventArgs e)
+        private void OnConvertHairToCCXLMaterials(object _, RoutedEventArgs e)
         {
 
             if (ViewModel?.RootChunk is not ChunkViewModel cvm || cvm.ResolvedData is not CMesh mesh || _projectManager.ActiveProject is not Cp77Project activeProject)
@@ -319,17 +319,26 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            var dialog = new ConvertToCCXLMaterialsDialog(activeProject);
+            
+
+            var dialog = new ConvertHairToCCXLMaterialsDialog(activeProject);
             if (dialog.ShowDialog() != true)
             {
                 return;
             }
-            var app = mesh.Appearances.First();
-            if (app is null)
+            
+            if (mesh.Appearances.Count == 0)
             {
-                _loggerService.Error("Cannot convert to CCXL, invalid mesh setup");
-                return;
+                _loggerService.Info("No appearance found for CCXL, adding an appearance");
+                meshMeshAppearance newMeshApp = new meshMeshAppearance();
+                newMeshApp.Name = "black_carbon";
+                mesh.Appearances.Add(newMeshApp);
+
             }
+
+
+            var app = mesh.Appearances.First();
+
             CName appName = ((meshMeshAppearance)app!).Name;
 
             var mainHairMiFile = dialog.ViewModel?.SelectedMiFile;
@@ -346,8 +355,9 @@ namespace WolvenKit.Views.Documents
             cvm.GetPropertyChild("materialEntries")?.CalculateProperties();
             cvm.GetPropertyChild("externalMaterials")?.CalculateProperties();
 
-            cvm.AdjustSubmeshCountCommand.Execute(true);
             ViewModel.ClearMaterialsCommand.Execute(true);
+            
+            mesh.Appearances.Clear();
 
             app.Chunk!.ChunkMaterials =
                 [
@@ -441,6 +451,8 @@ namespace WolvenKit.Views.Documents
 
 
             mesh.Appearances.Add(app);
+            cvm.AdjustSubmeshCountCommand.Execute(true);
+
             cvm.GetPropertyChild("appearances")?.RecalculateProperties();
             cvm.GetPropertyChild("materialEntries")?.RecalculateProperties();
             cvm.GetPropertyChild("externalMaterials")?.RecalculateProperties();
