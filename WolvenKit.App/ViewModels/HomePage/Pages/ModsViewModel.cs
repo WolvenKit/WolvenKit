@@ -200,7 +200,7 @@ public partial class ModsViewModel : PageViewModel
             {
                 case WMessageBoxResult.OK:
                 case WMessageBoxResult.Yes:
-                    await _appViewModel.ShowHomePage(EHomePage.Plugins);
+                    await _appViewModel.ShowHomePageAsync(EHomePage.Plugins);
                     break;
                 case WMessageBoxResult.None:
                 case WMessageBoxResult.Cancel:
@@ -258,7 +258,7 @@ public partial class ModsViewModel : PageViewModel
             {
                 case WMessageBoxResult.OK:
                 case WMessageBoxResult.Yes:
-                    await _appViewModel.ShowHomePage(EHomePage.Plugins);
+                    await _appViewModel.ShowHomePageAsync(EHomePage.Plugins);
                     break;
                 case WMessageBoxResult.None:
                 case WMessageBoxResult.Cancel:

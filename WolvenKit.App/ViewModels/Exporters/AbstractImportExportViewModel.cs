@@ -51,10 +51,10 @@ public abstract partial class AbstractImportExportViewModel : FloatingPaneViewMo
     #region commands
 
     [RelayCommand(CanExecute = nameof(IsAnyFile))] // TODO NotifyCanExecuteChangedFor
-    private async Task ProcessAll() => await Task.Run(() => ExecuteProcessBulk(true));
+    private async Task ProcessAll() => await ExecuteProcessBulkAsync(true);
 
     [RelayCommand(CanExecute = nameof(IsAnyFileSelected))] // TODO NotifyCanExecuteChangedFor
-    private async Task ProcessSelected() => await Task.Run(() => ExecuteProcessBulk());
+    private async Task ProcessSelected() => await ExecuteProcessBulkAsync();
 
     [RelayCommand(CanExecute = nameof(IsAnyFileSelected))] // TODO NotifyCanExecuteChangedFor
     private void CopyArgumentsTemplateTo()
@@ -128,7 +128,7 @@ public abstract partial class AbstractImportExportViewModel : FloatingPaneViewMo
 
     }
 
-    protected abstract Task ExecuteProcessBulk(bool all = false);
+    protected abstract Task ExecuteProcessBulkAsync(bool all = false);
 
     protected abstract Task LoadFilesAsync();
 

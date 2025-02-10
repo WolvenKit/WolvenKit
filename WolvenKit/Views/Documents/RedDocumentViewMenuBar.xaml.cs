@@ -174,7 +174,7 @@ namespace WolvenKit.Views.Documents
             }
 
             _loggerService.Info("Scanning file for broken references. This is currently slow as foretold, please hold the line...");
-            var allReferences = await _projectManager.ActiveProject.GetAllReferences(
+            var allReferences = await _projectManager.ActiveProject.GetAllReferencesAsync(
                 _progressService,
                 _loggerService,
                 [s.Replace(_projectManager.ActiveProject.ModDirectory, "")]
@@ -903,7 +903,7 @@ namespace WolvenKit.Views.Documents
 
             var relativePath = currentFile.Replace(_projectManager.ActiveProject.ModDirectory, "");
             _loggerService.Info("Reading references from file...");
-            var referencesInFile = await _projectManager.ActiveProject.GetAllReferences(
+            var referencesInFile = await _projectManager.ActiveProject.GetAllReferencesAsync(
                 _progressService,
                 _loggerService,
                 [relativePath]

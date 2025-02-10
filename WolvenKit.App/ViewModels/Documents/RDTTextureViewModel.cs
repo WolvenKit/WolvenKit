@@ -132,7 +132,7 @@ public partial class RDTTextureViewModel : RedDocumentTabViewModel
                 return;
             }
 
-            await ReplaceXBM(image);
+            await ReplaceXbmAsync(image);
         }
     }
 
@@ -160,11 +160,11 @@ public partial class RDTTextureViewModel : RedDocumentTabViewModel
                 return;
             }
 
-            await ReplaceXBM(image);
+            await ReplaceXbmAsync(image);
         }
     }
 
-    private async Task ReplaceXBM(RedImage newImage)
+    private async Task ReplaceXbmAsync(RedImage newImage)
     {
         if (_data is not CBitmapTexture bitmap)
         {
